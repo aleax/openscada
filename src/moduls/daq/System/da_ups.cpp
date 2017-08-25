@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.System file: da_ups.cpp
 /***************************************************************************
- *   Copyright (C) 2014-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2014-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -230,19 +230,19 @@ string UPS::reqUPS( const string &addr, const string &req, const string &debCat 
     }
     else tr = SYS->transport().at().at(tTr).at().outAt(nTr);
 
-    ResAlloc resN(tr.at().nodeRes(), true);
+    MtxAlloc resN(tr.at().reqRes(), true);
     if(tr.at().addr() != "TCP:"+host) tr.at().setAddr("TCP:"+host);
     if(!tr.at().startStat()) tr.at().start();
 
     if(debCat.size()) mess_debug_(debCat.c_str(), _("REQ -> '%s'"), req.c_str());
 
     //Request
-    int resp_len = tr.at().messIO(req.data(), req.size(), buf, sizeof(buf), 0, true);
+    int resp_len = tr.at().messIO(req.data(), req.size(), buf, sizeof(buf));
     val.assign(buf, resp_len);
 
     //Wait tail
     while(resp_len) {
-	try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &err) { break; }
+	try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf)); } catch(TError &err) { break; }
 	val.append(buf, resp_len);
     }
 

@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.5.1"
+#define MOD_VER		"1.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -746,7 +746,7 @@ void TSocketOut::start( int tmCon )
     string	cfile;
     char	err[255];
 
-    ResAlloc res(wres, true);
+    MtxAlloc res(reqRes(), true);
     if(runSt) return;
 
     ctx = NULL;
@@ -920,7 +920,7 @@ void TSocketOut::start( int tmCon )
 
 void TSocketOut::stop( )
 {
-    ResAlloc res(wres, true);
+    MtxAlloc res(reqRes(), true);
     if(!runSt) return;
 
     //Status clear
@@ -944,7 +944,7 @@ void TSocketOut::stop( )
     TTransportOut::stop();
 }
 
-int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, bool noRes )
+int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 {
     string err = _("Unknown error");
     int	 ret = 0, reqTry = 0;;
@@ -953,9 +953,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
 	 writeReq = false;
     time = abs(time);
 
-    ResAlloc resN(nodeRes());
-    if(!noRes) resN.lock(true);
-    ResAlloc res(wres, true);
+    MtxAlloc res(reqRes(), true);
 
     if(!runSt) throw TError(nodePath().c_str(), _("Transport is not started!"));
 
@@ -970,12 +968,10 @@ repeate:
 	do { ret = BIO_write(conn, oBuf, oLen); } while(ret < 0 && SSL_get_error(ssl,ret) == SSL_ERROR_WANT_WRITE);
 	if(ret <= 0) {
 	    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
-	    res.release();
 	    stop();
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Write error: %s"), err.c_str());
 	    if(noReq) throw TError(nodePath().c_str(), _("Write error: %s"), err.c_str());
 	    start();
-	    res.request(true);
 	    goto repeate;
 	}
 
@@ -993,12 +989,10 @@ repeate:
 	if(ret > 0) trIn += ret;
 	else if(ret == 0) {
 	    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
-	    res.release();
 	    stop();
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
 	    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
 	    start();
-	    res.request(true);
 	    goto repeate;
 	}
 	else if(ret < 0 && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_READ && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_WRITE) {
@@ -1016,14 +1010,12 @@ repeate:
 	    FD_ZERO(&rd_fd); FD_SET(sock_fd, &rd_fd);
 	    kz = select(sock_fd+1, &rd_fd, NULL, NULL, &tv);
 	    if(kz == 0) {
-		res.release();
 		if(writeReq && !noReq) stop();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read timeouted."));
 		throw TError(nodePath().c_str(),_("Timeouted!"));
 	    }
 	    else if(kz < 0) {
 		err = TSYS::strMess("%s (%d)", strerror(errno), errno);
-		res.release();
 		stop();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
 		throw TError(nodePath().c_str(),_("Read (select) error: %s"), err.c_str());
@@ -1034,13 +1026,11 @@ repeate:
 		    while((ret=BIO_read(conn,iBuf,iLen)) == -1) sched_yield();
 		if(ret < 0) {
 		    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
-		    res.release();
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
 		    // * Pass to retry into the request mode and on the successful writing
 		    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
 		    start();
-		    res.request(true);
 		    goto repeate;
 		}
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,ret)).c_str());

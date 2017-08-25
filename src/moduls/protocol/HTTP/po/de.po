@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-15 12:08+0300\n"
+"POT-Creation-Date: 2017-08-25 15:38+0300\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -43,6 +43,7 @@ msgstr ""
 "10).\n"
 "\n"
 
+#, c-format
 msgid "HTML template '%s' for language '%s' load error: %s"
 msgstr "HTML-Templates '%s' für die Sprache '%s' load error: %s"
 
@@ -90,6 +91,9 @@ msgstr "HTML-Hauptseitevorlage"
 
 msgid "Life time of the authentication (min)"
 msgstr "Lebensdauer der Authentifizierung (Min)"
+
+msgid "List of users allowed for auth, separated by ';'"
+msgstr "Liste der Benutzer erlaubt für auth, getrennt durch ';'"
 
 msgid "Auto login"
 msgstr "Auto Login"
@@ -158,18 +162,22 @@ msgstr "Einloggen"
 msgid "You are logged in as \"<b>%s</b>\"."
 msgstr "Sie sind eingeloggt als \"<b>%s</b>\"."
 
+#, c-format
 msgid ""
 "Select the necessary Web-module from the list below, <a href='%s'>logout</a> "
 "or <a href='%s'>login as an another user</a>."
 msgstr ""
-"Wählen Sie den Web-Modul aus der Liste unten, <a href='%s'>ausloggen</"
-"a> oder <a href='%s'>einloggen als anderer Benutzer</a>."
+"Wählen Sie den Web-Modul aus der Liste unten, <a href='%s'>ausloggen</a> "
+"oder <a href='%s'>einloggen als anderer Benutzer</a>."
 
 msgid "You are not logged in the system!"
 msgstr "Sie sind nicht eingeloggt!"
 
+#, c-format
 msgid "To use some modules you must be logged in. <a href='%s'>Login now</a>."
-msgstr "Zum Bedienen einiger Module müssen Sie sich einloggen. <a href='%s'>Jetzt einloggen</a>."
+msgstr ""
+"Zum Bedienen einiger Module müssen Sie sich einloggen. <a href='%s'>Jetzt "
+"einloggen</a>."
 
 #, c-format
 msgid ""

@@ -60,19 +60,19 @@ INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_grph_panel','scale
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_grph_panel','line3','/wlb_Main/wdg_grph_panel/wdg_line3','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_grph_panel','zoomOut','/wlb_Main/wdg_grph_panel/wdg_zoomOut','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','tiPer','/wlb_Main/wdg_cntrRegul/wdg_tiPer','value;',2);
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','doc','/wlb_doc/wdg_docGasNodeMgn/wdg_doc','pDP;pF;pP;pQ;pT;',2);
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','doc','/wlb_doc/wdg_docGasNodeMgn/wdg_doc','pDP;pF;pP;pQ;pT;pTitle;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','txt_h2','/wlb_Main/wdg_cntrRegul/wdg_txt_h2','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','txt_tiMin','/wlb_Main/wdg_cntrRegul/wdg_txt_tiMin','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','trnd','/wlb_Main/wdg_cntrRegul/wdg_trnd','curSek;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_2','doc','/wlb_doc/wdg_docUsersSet/wdg_doc','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','kd','/wlb_Main/wdg_cntrRegul/wdg_kd','value;',2);
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','doc','/wlb_doc/wdg_docGasNodeDayA/wdg_doc','pDP;pDS;pP;pQ;pT;',2);
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','doc','/wlb_doc/wdg_docGasNodeDayA/wdg_doc','pDP;pDS;pP;pQ;pT;pTitle;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','td','/wlb_Main/wdg_cntrRegul/wdg_td','value;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','doc','/wlb_Main/wdg_cntrRegul/wdg_doc','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','kp','/wlb_Main/wdg_cntrRegul/wdg_kp','value;',2);
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','doc','/wlb_doc/wdg_docGasNodeMonthA/wdg_doc','pDP;pDS;pP;pQ;pT;',2);
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','doc','/wlb_doc/wdg_docGasNodeMonthA/wdg_doc','pDP;pDS;pP;pQ;pT;pTitle;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','info','/wlb_Main/wdg_cntrRegul/wdg_info','',2);
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','doc','/wlb_doc/wdg_docGasNodeDayOrder/wdg_doc','cDPup;cDTr;cKL;cKsh;cKtup;cMoldN;cMolsCO2;cPatm;cPots;cPperekl;cSotn;cVsDin;pDP;pDS;pP;pQ;pT;сDSu;сOtbTp;',2);
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','doc','/wlb_doc/wdg_docGasNodeDayOrder/wdg_doc','cDPup;cDTr;cKL;cKsh;cKtup;cMoldN;cMolsCO2;cPatm;cPots;cPperekl;cSotn;cVsDin;pDP;pDS;pP;pQ;pT;сDSu;сOtbTp;pEnterpr;pTitle;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_ElCadr','pnl_pid','/wlb_Main/wdg_ElCadr/wdg_pnl_pid','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','El_round_square1','/wlb_AGLKS/wdg_KCH_MN1/wdg_El_round_square1','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','El_Pipe_simple_gr3','/wlb_AGLKS/wdg_KCH_MN1/wdg_El_Pipe_simple_gr3','',2);
@@ -1744,26 +1744,26 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','min','0
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','max','100',42,'Parameter|max','prm:/LogicLev/experiment/F_PP1/max','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','сDSu','60',33,'','60','doc','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','pgNoOpenProc','1',0,'','','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','pDP','<EVAL>',34,'Node|dP','prm:/LogicLev/experiment/gN1/dP','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','pDS','<EVAL>',34,'Node|DS','prm:/LogicLev/experiment/gN1/DS','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','pP','<EVAL>',34,'Node|P','prm:/LogicLev/experiment/gN1/P','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','pT','<EVAL>',34,'Node|T','prm:/LogicLev/experiment/gN1/T','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','pQ','<EVAL>',34,'Node|Q','prm:/LogicLev/experiment/gN1/Q','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','pDP',NULL,34,'Node|dP','prm:/LogicLev/experiment/gN1/dP','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','pDS',NULL,34,'Node|DS','prm:/LogicLev/experiment/gN1/DS','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','pP',NULL,34,'Node|P','prm:/LogicLev/experiment/gN1/P','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','pT',NULL,34,'Node|T','prm:/LogicLev/experiment/gN1/T','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','pQ',NULL,34,'Node|Q','prm:/LogicLev/experiment/gN1/Q','doc','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','pgNoOpenProc','1',0,'','','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','pDP','<EVAL>',34,'Node|dP','prm:/LogicLev/experiment/gN1/dP','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','pDS','<EVAL>',34,'Node|DS','prm:/LogicLev/experiment/gN1/DS','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','pP','<EVAL>',34,'Node|P','prm:/LogicLev/experiment/gN1/P','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','pT','<EVAL>',34,'Node|T','prm:/LogicLev/experiment/gN1/T','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','pQ','<EVAL>',34,'Node|Q','prm:/LogicLev/experiment/gN1/Q','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','pDP',NULL,34,'Node|dP','prm:/LogicLev/experiment/gN1/dP','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','pDS',NULL,34,'Node|DS','prm:/LogicLev/experiment/gN1/DS','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','pP',NULL,34,'Node|P','prm:/LogicLev/experiment/gN1/P','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','pT',NULL,34,'Node|T','prm:/LogicLev/experiment/gN1/T','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','pQ',NULL,34,'Node|Q','prm:/LogicLev/experiment/gN1/Q','doc','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','pgNoOpenProc','1',0,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','cDPup','150',33,'','150','doc','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','cDTr','100',33,'','100','doc','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','cKL','0.3',33,'','0.3','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','pT','<EVAL>',34,'Node|T','prm:/LogicLev/experiment/gN1/T','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','pQ','<EVAL>',34,'Node|Q','prm:/LogicLev/experiment/gN1/Q','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','pP','<EVAL>',34,'Node|P','prm:/LogicLev/experiment/gN1/P','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','pDS','<EVAL>',34,'Node|DS','prm:/LogicLev/experiment/gN1/DS','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','pDP','<EVAL>',34,'Node|dP','prm:/LogicLev/experiment/gN1/dP','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','pT',NULL,34,'Node|T','prm:/LogicLev/experiment/gN1/T','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','pQ',NULL,34,'Node|Q','prm:/LogicLev/experiment/gN1/Q','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','pP',NULL,34,'Node|P','prm:/LogicLev/experiment/gN1/P','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','pDS',NULL,34,'Node|DS','prm:/LogicLev/experiment/gN1/DS','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','pDP',NULL,34,'Node|dP','prm:/LogicLev/experiment/gN1/dP','doc','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','cKsh','0.2',33,'','0.2','doc','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','cKtup','0.1',33,'','0.1','doc','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','cMoldN','70',33,'','70','doc','','','','','','');
@@ -2013,11 +2013,11 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','st_close','<EVAL>',38,'Parameter|st_close','prm:/BlockCalc/Anast1to2node/КШ7/st_close','KSH7','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_doc_panel','value','0',8,'','','size','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_doc_panel','value','0',8,'','','date','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','pDP','<EVAL>',34,'Node|dP','prm:/LogicLev/experiment/gN1/dP','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','pF','<EVAL>',34,'Node|F','prm:/LogicLev/experiment/gN1/F','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','pP','<EVAL>',34,'Node|P','prm:/LogicLev/experiment/gN1/P','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','pQ','<EVAL>',34,'Node|Q','prm:/LogicLev/experiment/gN1/Q','doc','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','pT','<EVAL>',34,'Node|T','prm:/LogicLev/experiment/gN1/T','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','pDP',NULL,34,'Node|dP','prm:/LogicLev/experiment/gN1/dP','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','pF',NULL,34,'Node|F','prm:/LogicLev/experiment/gN1/F','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','pP',NULL,34,'Node|P','prm:/LogicLev/experiment/gN1/P','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','pQ',NULL,34,'Node|Q','prm:/LogicLev/experiment/gN1/Q','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','pT',NULL,34,'Node|T','prm:/LogicLev/experiment/gN1/T','doc','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','сOtbTp','Angle',33,'','Angle','doc','Кутовий','','Кутовий','Угловой','','Угловой');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pVal','0',34,'Parameter|var','prm:/LogicLev/experiment/Ti/var','Ti','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pName','F',33,'Parameter|NAME','F','F_PP1','','','','','','');
@@ -3969,6 +3969,15 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspOld','geomZ'
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspOld','pName',NULL,42,'<page>|NAME','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspOld','owner','root:UI',32,'','','doc','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','sclWin','0',160,'','','trnd1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','pTitle','Diaphragm PP1',33,'','Diaphragm PP1','doc','Діафрагма PP1','','Діафрагма PP1','Диафрагма PP1','','Диафрагма PP1');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','name','Instantaneous values of PP1',32,'','','','Миттєві значення PP1','','','Мгновенные значения PP1','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','name','Hour-averaged values of PP1',32,'','','','Середні за годину значення PP1','','','Средние за час значения PP1','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_3','pTitle','Diaphragm PP1',33,'','Diaphragm PP1','doc','Діафрагма PP1','','Діафрагма PP1','Диафрагма PP1','','Диафрагма PP1');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','name','Day-averaged values of PP1',32,'','','','Середні за добу значення PP1','','','Средние за сутки значения PP1','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_4','pTitle','Diaphragm PP1',33,'','Diaphragm PP1','doc','Діафрагма PP1','','Діафрагма PP1','Диафрагма PP1','','Диафрагма PP1');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','name','Day report of PP1',32,'','','','Добовий звіт для PP1','','','Суточный отчёт для PP1','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','pEnterpr','Anastasievska Gas Compressing Station',33,'','Anastasievska Gas Compressing Station','doc','Анастасіївська Газо Компресорна Станція','','Анастасіївська Газо Компресорна Станція','Анастасиевская Газо Компрессорная Станция','','Анастасиевская Газо Компрессорная Станция');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_5','pTitle','Diaphragm PP1',33,'','Diaphragm PP1','doc','Діафрагма PP1','','Діафрагма PP1','Диафрагма PP1','','Диафрагма PP1');
 CREATE TABLE 'prj_AGLKS_stl' ("ID" TEXT DEFAULT '' ,"V_0" TEXT DEFAULT '' ,"V_1" TEXT DEFAULT '' ,"V_2" TEXT DEFAULT '' ,"V_3" TEXT DEFAULT '' ,"V_4" TEXT DEFAULT '' ,"V_5" TEXT DEFAULT '' ,"V_6" TEXT DEFAULT '' ,"V_7" TEXT DEFAULT '' ,"V_8" TEXT DEFAULT '' ,"V_9" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "prj_AGLKS_stl" VALUES('<Styles>','Default;root;UI;0444','Ivory','','','','','','','','');
 INSERT INTO "prj_AGLKS_stl" VALUES('backColor','gray','ivory','','','','','','','','');
@@ -6551,20 +6560,20 @@ else c1 = (pVar<1) ? "red" : "green";','JavaLikeCalc.JavaScript
 if( pVar.isEVal() ) c1 = "grey";
 else c1 = (pVar<1) ? "red" : "green";',1000,'name;geomW;geomH;fillColor;elLst;c1;','');
 CREATE TABLE 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1494527301);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1494527301);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1503590517);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1503590517);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1494527301);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1494527301);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','2','','..',1,'','','',-1,0,'name;dscr;grpName;',1414589842);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','doc','','root',1,'
 ','
 ','
-',-1,5,'name;dscr;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','1','','/wlb_doc/wdg_docGasNodeMgn',1,'','','',-1,0,'geomYsc;',1400852515);
+',-1,5,'name;dscr;',1503590517);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','1','','/wlb_doc/wdg_docGasNodeMgn',1,'','','',-1,0,'name;geomYsc;',1503584811);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','2','','/wlb_doc/wdg_docUsersSet',1,'','','',-1,0,'geomYsc;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docGasNodeDayA',1,'','','',-1,0,'geomYsc;pgNoOpenProc;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docGasNodeMonthA',1,'','','',-1,0,'geomYsc;pgNoOpenProc;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','5','','/wlb_doc/wdg_docGasNodeDayOrder',1,'','','',-1,0,'geomYsc;pgNoOpenProc;',1400852515);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docGasNodeDayA',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1503585460);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docGasNodeMonthA',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1503585460);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','5','','/wlb_doc/wdg_docGasNodeDayOrder',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1503589930);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','mn','','root',1,'','','',-1,5,'name;dscr;',1435132568);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','1','','/wlb_AGLKS/wdg_KCH_MN1',1,'','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1435132568);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','10','','/wlb_test/wdg_mn_gen',1,'','','',-1,0,'pgNoOpenProc;pgGrp;',1414521219);
@@ -6653,7 +6662,7 @@ INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep
 INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','stBarNoShow','','No show status bar',131072,'0',128,'','');
 INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',128,'','');
 CREATE TABLE 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
-INSERT INTO "VCAPrjs" VALUES('AGLKS','','','','The project of visualisation AGLKS.
+INSERT INTO "VCAPrjs" VALUES('AGLKS','AGLKS','АГЛКС','АГЛКС','The project of visualisation AGLKS.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.1.0','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.
 Автор: Роман Савоченко <rom_as@oscada.org>

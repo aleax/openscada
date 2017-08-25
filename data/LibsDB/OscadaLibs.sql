@@ -1428,10 +1428,10 @@ INSERT INTO "tmplib_base_io" VALUES('digitBlock','last_cmd','Last command',1,1,'
 INSERT INTO "tmplib_base_io" VALUES('digitBlock','w_tm','Process command counter',2,1,'0',7,'Лічильник опрацювання команди','','Счётчик отраб. команды','');
 INSERT INTO "tmplib_base_io" VALUES('gasPoint','DS','Density (kg/m3)',2,16,'0',5,'Щильність (кг/м3)','','Плотность (кг/м3)','');
 INSERT INTO "tmplib_base_io" VALUES('gasPoint','dP','Differential pressure (kgH/m2)',2,16,'0',4,'Перепад (кГс/м2)','','Перепад (кГс/м2)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','T','Temperature (°C)',2,16,'0',3,'Температура (°С)','','Температура (°С)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','P','Pressure (kgH/sm2)',2,16,'0',2,'Тиск (кГс/см2)','','Давление (кГс/см2)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','Q','Volume (1000 x m3)',2,16,'0',1,'Об''єм (тис.м3)','','Объём (тыс.м3)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','F','Flow (1000 x m3/h)',2,16,'0',0,'Витрати (тис.м3)','','Расход (тыс.м3)','');
+INSERT INTO "tmplib_base_io" VALUES('gasPoint','T','Temperature (°C)',2,144,'T|var',3,'Температура (°С)','','Температура (°С)','');
+INSERT INTO "tmplib_base_io" VALUES('gasPoint','P','Pressure (kgH/sm2)',2,144,'P|var',2,'Тиск (кГс/см2)','','Давление (кГс/см2)','');
+INSERT INTO "tmplib_base_io" VALUES('gasPoint','Q','Volume (m3)',2,16,'0',1,'Об''єм (м3)','','Объём (м3)','');
+INSERT INTO "tmplib_base_io" VALUES('gasPoint','F','Flow (m3/h)',2,144,'F|var',0,'Витрати (м3/ч)','','Расход (м3/ч)','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','inout','Input/Output',2,129,'Parameter|var',0,'Вхід/Вихід','','Вход/Выход','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','var','Variable',2,16,'0',1,'Змінна','','Переменная','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','ed','Dimension',0,32,' ',3,'Од. виміру',' ','Ед. измерения',' ');
@@ -6469,13 +6469,14 @@ else {
 	}
 }','','',1416656400);
 INSERT INTO "tmplib_base" VALUES('gasPoint','Flow control point','Витрато-вимірювальний вузол','Расходомерный узел',' ',' ','',10,0,'JavaLikeCalc.JavaScript
-F=200+(rand(5)-2.5);
-Q+=F/3600;
-P=9+(rand(2)-1);
-T=15+(rand(2)-1);
-dP=F/33;
-DS=1+(rand(0.2)-0.1);
-','','',1416656424);
+if(f_start)	Q = 0;
+//F=200+(rand(5)-2.5);
+Q += F.isEVal() ? 0 : F/3600;
+//P=9+(rand(2)-1);
+//T=15+(rand(2)-1);
+dP = F.isEVal() ? 0 : F/33;
+DS = 1+(rand(0.2)-0.1);
+','','',1503582557);
 INSERT INTO "tmplib_base" VALUES('manInUnif','Manual input (Unif)','Ручний ввід (Уніф)','Ручной ввод (Униф)','Unified template for manual input signals.','Уніфікований шаблон для ручного вводу значень сигналів.','Унифицированный шаблон ручного ввода сигнала.',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	f_err = "0";
 

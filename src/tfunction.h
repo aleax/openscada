@@ -169,11 +169,13 @@ class TValFunc
 	virtual ~TValFunc( );
 
 	string user( )				{ return mUser; }
+	string lang( )				{ return mLang; }
 	const string &vfName( )			{ return mName; }
 
 	bool blk( )				{ return mBlk; }
 	bool mdfChk( )				{ return mMdfChk; }
-	void setUser( const string &iuser )	{ mUser = iuser; }
+	void setUser( const string &vl )	{ mUser = vl; }
+	void setLang( const string &vl )	{ mLang = vl; }
 	void setVfName( const string &inm )	{ mName = inm; }
 
 	void setMdfChk( bool set );
@@ -256,7 +258,8 @@ class TValFunc
 
 	//Attributes
 	string	mName,			//Value name
-		mUser;			//Link to user
+		mUser,			//Link to user
+		mLang;			//Force language
 	unsigned short	mBlk	:1;	//Blocked values screen
 	unsigned short	mMdfChk	:1;	//Modify attributes check
 

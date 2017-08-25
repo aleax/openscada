@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.System file: da_hddtemp.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -107,7 +107,7 @@ string Hddtemp::getHDDTemp( )
     if(!SYS->transport().at().at(t_tr).at().outPresent(n_tr)) SYS->transport().at().at(t_tr).at().outAdd(n_tr);
     AutoHD<TTransportOut> tr = SYS->transport().at().at(t_tr).at().outAt(n_tr);
 
-    ResAlloc resN(tr.at().nodeRes(), true);
+    MtxAlloc resN(tr.at().reqRes(), true);
     tr.at().setName(_("Parameter Hddtemp"));
     tr.at().setAddr("TCP:127.0.0.1:7634");
     tr.at().setTimings("5:0.01");
@@ -118,7 +118,7 @@ string Hddtemp::getHDDTemp( )
     //Request
     int len;
     do {
-	len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true);
+	len = tr.at().messIO(NULL, 0, buf, sizeof(buf));
 	val.append(buf,len);
     }while(len);
 

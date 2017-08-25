@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.0.0"
+#define MOD_VER		"3.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -71,7 +71,9 @@ using namespace PrHTTP;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : TProtocol(MOD_ID), mDeny(dataRes()), mAllow(dataRes()), mTmpl(dataRes()), mTmplMainPage(dataRes()), lstSesChk(0), mTAuth(10)
+TProt::TProt( string name ) : TProtocol(MOD_ID),
+    mDeny(dataRes()), mAllow(dataRes()), mTmpl(dataRes()), mTmplMainPage(dataRes()), mAllowUsersAuth(dataRes()),
+    lstSesChk(0), mTAuth(10)
 {
     mod = this;
 
@@ -109,6 +111,7 @@ void TProt::load_( )
     setAllow(TBDS::genDBGet(nodePath()+"Allow",allow()));
     setTmpl(TBDS::genDBGet(nodePath()+"Tmpl",tmpl()));
     setTmplMainPage(TBDS::genDBGet(nodePath()+"TmplMainPage",tmplMainPage()));
+    setAllowUsersAuth(TBDS::genDBGet(nodePath()+"AllowUsersAuth",allowUsersAuth()));
     setAuthTime(s2i(TBDS::genDBGet(nodePath()+"AuthTime",i2s(authTime()))));
     // Load auto-login config
     MtxAlloc res(dataRes(), true);
@@ -129,6 +132,7 @@ void TProt::save_( )
     TBDS::genDBSet(nodePath()+"Allow", allow());
     TBDS::genDBSet(nodePath()+"Tmpl", tmpl());
     TBDS::genDBSet(nodePath()+"TmplMainPage", tmplMainPage());
+    TBDS::genDBSet(nodePath()+"AllowUsersAuth",allowUsersAuth());
     TBDS::genDBSet(nodePath()+"AuthTime", i2s(authTime()));
 
     //Save auto-login config
@@ -349,7 +353,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     if(uri.empty()) uri = "/";
     XMLNode *nd;
 
-    ResAlloc resN(tro.nodeRes(), true);
+    MtxAlloc resN(tro.reqRes(), true);
 
     try {
 	//Get host address from transport
@@ -406,7 +410,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	if(!tro.startStat()) tro.start();
 
 	//Put request
-	int resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),0,true);
+	int resp_len = tro.messIO(req.c_str(), req.size(), buf, sizeof(buf));
 	resp.assign(buf,resp_len);
 
 	//Process response
@@ -414,9 +418,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	// Parse first record
 	int pos = 0;
 	tw = TSYS::strLine(resp,0,&pos);
-	string protocol	= TSYS::strParse(tw,0," ");
-	string rcod	= TSYS::strParse(tw,1," ");
-	string rstr	= TSYS::strParse(tw,2," ");
+	string protocol	= TSYS::strParse(tw, 0, " ");
+	string rcod	= TSYS::strParse(tw, 1, " ");
+	string rstr	= TSYS::strParse(tw, 2, " ");
 	if((protocol != "HTTP/1.0" && protocol != "HTTP/1.1") || rcod.empty() || rstr.empty())
 	    throw TError(nodePath().c_str(),_("HTTP respond error"));
 	io.setAttr("Protocol",protocol)->setAttr("RezCod",rcod)->setAttr("RezStr",rstr);
@@ -447,9 +451,9 @@ next_ch:
 	while(ch_ln > 0 && ((int)(resp.size()-pos) < ch_ln ||
 	    (c_lng == -2 && ((int)(resp.size()-pos) < (ch_ln+5) || resp.find("\x0D\x0A",pos+ch_ln+2) == string::npos))))
 	{
-	    resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
-	    if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond."));
-	    resp.append(buf,resp_len);
+	    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf));
+	    if(!resp_len) throw TError(nodePath().c_str(), _("Not full respond."));
+	    resp.append(buf, resp_len);
 	}
 
 	// Put body
@@ -478,6 +482,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/tmplMainPage",_("HTML main page template"),RWRWR_,"root",SPRT_ID,3,
 		    "tp","str", "dest","sel_ed", "select","/prm/cfg/tmplMainPageList");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of the authentication (min)"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/aUsers",_("List of users allowed for auth, separated by ';'"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		if(ctrMkNode("table",opt,-1,"/prm/cfg/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins",
 		    "help",_("For address field you can use address templates list, for example \"192.168.1.*;192.168.2.*\".")))
 		{
@@ -518,6 +523,10 @@ void TProt::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/lf_tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(authTime()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAuthTime(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/aUsers") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(allowUsersAuth());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAllowUsersAuth(opt->text());
     }
     else if(a_path == "/prm/cfg/alog") {
 	int idrow = s2i(opt->attr("row"));
@@ -692,7 +701,8 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		    if((cntEl=cnt.find("pass")) != cnt.end())	pass = cntEl->second;
 
 		    if(mod->autoLogGet(sender) == user ||
-			(SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass)))
+			((!mod->allowUsersAuth().size() || TRegExp("(^|;)"+user+"(;|$)").test(mod->allowUsersAuth())) &&
+			    SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass)))
 		    {
 			mess_info(owner().nodePath().c_str(), _("Auth OK from user '%s'. Host: %s. User agent: %s."),
 			    user.c_str(), sender.c_str(), userAgent.c_str());

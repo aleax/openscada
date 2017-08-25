@@ -132,7 +132,7 @@ void MBD::enable( )
 	stChar = TSYS::strParse(sets, 0, "-"),
 	stColl = TSYS::strParse(sets, 1, "-"),
 	stEngine = TSYS::strParse(sets, 2, "-");
-    string tms = TSYS::strParse(addr(),0,";",&off);
+    string tms = TSYS::strParse(addr(), 0, ";" , &off);
     cd_pg  = codePage().size() ? codePage() : Mess->charset();
 
     //API init

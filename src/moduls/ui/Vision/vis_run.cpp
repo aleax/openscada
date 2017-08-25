@@ -283,13 +283,15 @@ VisRun::~VisRun( )
 
 string VisRun::user( )		{ return mWUser->user(); }
 
+bool VisRun::userSel( const string &hint )	{ return mWUser->userSel(hint); }
+
 string VisRun::password( )	{ return mWUser->pass(); }
 
 string VisRun::VCAStation( )	{ return mWUser->VCAStation(); }
 
 int VisRun::style( )		{ return mStlBar->style(); }
 
-void VisRun::setStyle( int istl )	{ mStlBar->setStyle(istl); }
+void VisRun::setStyle( int istl )		{ mStlBar->setStyle(istl); }
 
 int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 {
@@ -405,7 +407,6 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 
 	    isResizeManual = false;
 	}
-
 
 	mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
     }
@@ -961,7 +962,7 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     pgCacheClear();
     bool oldMenuVis = menuBar()->isVisible();
     QApplication::processEvents();
-    if(master_pg) {
+    if(masterPg()) {
 	if(oldMenuVis != menuBar()->isVisible() && (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen)) {
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
@@ -1417,6 +1418,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fwinPosCntrSave")->
 				     setAttr("aNm", _("Windows position control and save"))->
 				     setAttr("aTp", i2s(TFld::Boolean));
+	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fuserSetVis");
 	cntrIfCmd(reqSpc);
 
 	// Create widget view
@@ -1784,7 +1786,7 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 	}
     }
     else {
-	// Prepare internal procedure
+	// Prepare an internal procedure
 	TFunction funcIO("sesRun_"+owner()->workSess()+"_ntf"+i2s(tp));
 	//funcIO.setStor(DB());
 	funcIO.ioIns(new IO("en",_("Enabled notification"),IO::Boolean,IO::Default), IFA_en);

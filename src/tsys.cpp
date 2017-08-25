@@ -2576,16 +2576,16 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			"help",_("Enable common translation manage which cause full reloading for all built messages obtain."));
 	    }
 	    if(Mess->translEnMan()) {
-		ctrMkNode("fld",opt,-1,"/tr/langs",_("Languages"),RWRWR_,"root","root",2,"tp","str",
+		ctrMkNode("fld",opt,-1,"/tr/langs",_("Languages"),RWRW__,"root","root",2,"tp","str",
 		    "help",_("Processed languages list by two symbols code and separated symbol ';'."));
-		ctrMkNode("fld",opt,-1,"/tr/fltr",_("Source filter"),RWRWR_,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/tr/chkUnMatch",_("Check for mismatch"),RWRWR_,"root","root",1,"tp","bool");
-		if(ctrMkNode("table",opt,-1,"/tr/mess",_("Messages"),RWRWR_,"root","root",1,"key","base")) {
-		    ctrMkNode("list",opt,-1,"/tr/mess/base",Mess->lang2CodeBase().c_str(),RWRWR_,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/tr/fltr",_("Source filter"),RWRW__,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/tr/chkUnMatch",_("Check for mismatch"),RWRW__,"root","root",1,"tp","bool");
+		if(ctrMkNode("table",opt,-1,"/tr/mess",_("Messages"),RWRW__,"root","root",1,"key","base")) {
+		    ctrMkNode("list",opt,-1,"/tr/mess/base",Mess->lang2CodeBase().c_str(),RWRW__,"root","root",1,"tp","str");
 		    string lngEl;
 		    for(int off = 0; (lngEl=strParse(Mess->translLangs(),0,";",&off)).size(); )
 			if(lngEl.size() == 2 && lngEl != Mess->lang2CodeBase())
-			    ctrMkNode("list",opt,-1,("/tr/mess/"+lngEl).c_str(),lngEl.c_str(),RWRWR_,"root","root",1,"tp","str");
+			    ctrMkNode("list",opt,-1,("/tr/mess/"+lngEl).c_str(),lngEl.c_str(),RWRW__,"root","root",1,"tp","str");
 		    ctrMkNode("list",opt,-1,"/tr/mess/src",_("Source"),R_R_R_,"root","root",1,"tp","str");
 		}
 	    }
@@ -2871,29 +2871,29 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setTranslEnMan(s2i(opt->text()));
     }
     else if(a_path == "/tr/langs") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->translLangs());
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setTranslLangs(opt->text());
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(Mess->translLangs());
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	Mess->setTranslLangs(opt->text());
     }
     else if(a_path == "/tr/fltr") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrFltr",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrFltr",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/tr/chkUnMatch") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrChkUnMatch","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrChkUnMatch",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrChkUnMatch","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrChkUnMatch",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/tr/mess") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD)) {
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD)) {
 	    bool chkUnMatch = s2i(TBDS::genDBGet(nodePath()+"TrChkUnMatch","0",opt->attr("user")));
 	    string tStr, trFltr = TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user"));
 	    TConfig req;
 	    vector<XMLNode*> ns;
 
 	    // Columns list prepare
-	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/base","",RWRWR_,"root","root"));
+	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/base","",RWRW__,"root","root"));
 	    for(int off = 0; (tStr=strParse(Mess->translLangs(),0,";",&off)).size(); )
 		if(tStr.size() == 2 && tStr != Mess->lang2CodeBase())
-		    ns.push_back(ctrMkNode("list",opt,-1,("/tr/mess/"+tStr).c_str(),tStr.c_str(),RWRWR_,"root","root"));
+		    ns.push_back(ctrMkNode("list",opt,-1,("/tr/mess/"+tStr).c_str(),tStr.c_str(),RWRW__,"root","root"));
 	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/src","",R_R_R_,"root","root"));
 
 	    // Values request from first source
@@ -2964,7 +2964,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		}
 	    }
 	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR)) {
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR)) {
 	    bool needReload = false;
 	    Mess->translSet(opt->attr("key_base"), ((opt->attr("col")=="base")?Mess->lang2CodeBase():opt->attr("col")), opt->text(), &needReload);
 	    if(!needReload) opt->setAttr("noReload","1");

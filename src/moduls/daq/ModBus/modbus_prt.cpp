@@ -244,7 +244,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     string mbap, err, rez;
     char buf[1000];
 
-    ResAlloc resN(tro.nodeRes(), true);
+    MtxAlloc resN(tro.reqRes(), true);
 
     string prt   = io.name();
     string sid   = io.attr("id");
@@ -268,7 +268,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap += pdu;
 
 	    //Send request
-	    int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
+	    int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm);
 	    rez.assign(buf,resp_len);
 	    if(rez.size() < 7)	err = _("13:Error server respond");
 	    else {
@@ -276,7 +276,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 		//Wait tail
 		while(rez.size() < (resp_sz+6)) {
-		    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), reqTm, true);
+		    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), reqTm);
 		    if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond"));
 		    rez.append(buf, resp_len);
 		}
@@ -294,11 +294,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    //Send request
 	    for(int i_tr = 0, resp_len = 0; i_tr < reqTry; i_tr++) {
 		try {
-		    resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
+		    resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm);
 		    rez.assign(buf, resp_len);
 		    //Wait tail
 		    while(resp_len) {
-			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &err) { break; }
+			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf)); } catch(TError &err) { break; }
 			rez.append(buf, resp_len);
 		    }
 		} catch(TError &er) {	//By possible the send request breakdown and no response
@@ -325,11 +325,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    //Send request
 	    for(int i_tr = 0, resp_len = 0; i_tr < reqTry; i_tr++) {
 		try {
-		    resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
+		    resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm);
 		    rez.assign(buf, resp_len);
 		    //Wait tail
 		    while(resp_len && (rez.size() < 3 || rez.substr(rez.size()-2,2) != "\x0D\x0A")) {
-			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &err) { break; }
+			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf)); } catch(TError &err) { break; }
 			rez.append(buf, resp_len);
 		    }
 		} catch(TError &er) {	//By possible the send request breakdown and no response

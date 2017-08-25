@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SMH2Gi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2012-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -300,7 +300,7 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
 	    tro.at().setAddr(MC?(cfg("MC_DEV").getS()+":230400:8N1"):(cfg("MR_DEV").getS()+":230400:8N2"));
 	}
 
-	ResAlloc resN(tro.at().nodeRes(), true);
+	MtxAlloc resN(tro.at().reqRes(), true);
 
 	//Start stoped transport
 	if(!tro.at().startStat()) tro.at().start();
@@ -316,12 +316,12 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
 	for(int i_tr = 0; i_tr < connTry; i_tr++) {
 	    if(messLev() == TMess::Debug)
 		mess_debug_(nodePath().c_str(), _("ModBUS REQ -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
-	    int resp_len = tro.at().messIO(mbap.data(), mbap.size(), (broadCast?NULL:buf), sizeof(buf), 0, true);
+	    int resp_len = tro.at().messIO(mbap.data(), mbap.size(), (broadCast?NULL:buf), sizeof(buf));
 	    if(broadCast) { err = ""; break; }
 	    rez.assign(buf, resp_len);
 	    //Wait tail
 	    while(resp_len) {
-		try{ resp_len = tro.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &err) { break; }
+		try{ resp_len = tro.at().messIO(NULL, 0, buf, sizeof(buf)); } catch(TError &err) { break; }
 		rez.append(buf, resp_len);
 	    }
 

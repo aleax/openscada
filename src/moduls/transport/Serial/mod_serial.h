@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Serial file: mod_serial.h
 /***************************************************************************
- *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -164,7 +164,7 @@ class TTrOut: public TTransportOut
 
 	void check( );
 
-	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0, bool noRes = false );
+	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 );
 
     protected:
 	//Methods

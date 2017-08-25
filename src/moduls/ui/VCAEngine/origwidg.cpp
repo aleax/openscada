@@ -1306,6 +1306,9 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     SessWdg *sw = dynamic_cast<SessWdg*>(cfg.owner());
     if(!sw) return Widget::attrChange(cfg,prev);
 
+    string u, l;
+    if(sw) { u = sw->ownerSess()->reqUser(); l = sw->ownerSess()->reqLang(); }
+
     //Make document after time set
     if(cfg.id() == "time" && (cfg.getI() != prev.getI() || (!cfg.getI() && prev.getI()))) {
 	if(!cfg.getI() && prev.getI()) cfg.setI(prev.getI(),false,true);
@@ -1342,7 +1345,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	if(cfg.getI() < 0) cfg.setI(((prev.getI()+1) >= n) ? 0 : (prev.getI()+1), false, true);
 	else if(cfg.getI() >= n) cfg.setI(n-1, false, true);
 	if(cfg.getI() != prev.getI()) {
-	    cfg.owner()->attrAt("aDoc").at().setS(trL(cfg.owner()->attrAt("tmpl").at().getS(),sw->ownerSess()->user()));
+	    cfg.owner()->attrAt("aDoc").at().setS(trLU(cfg.owner()->attrAt("tmpl").at().getS(),l,u));
 	    if(prev.getI() == cfg.owner()->attrAt("vCur").at().getI())
 		cfg.owner()->attrAt("vCur").at().setI(cfg.getI());
 
@@ -1480,13 +1483,18 @@ TVariant OrigDocument::objFuncCall_w( const string &iid, vector<TVariant> &prms,
 
 string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 {
+    SessWdg *sw = (SessWdg*)wdg;
+    string  u = sw->ownerSess()->reqUser(),
+	    l = sw->ownerSess()->reqLang();
+
     XMLNode xdoc;
     string iLang;				//Process instruction language
     string wProgO;				//Object of work program
     time_t lstTime = 0;				//Last time
     TFunction funcIO(TSYS::path2sepstr(wdg->path(),'_'));
     funcIO.setStor(wdg->calcProgStors("doc"));
-    TValFunc funcV(wdg->id()+"_doc",NULL,false);
+    TValFunc funcV(wdg->id()+"_doc", NULL, false);
+    funcV.setUser(u); funcV.setLang(l);
     vector<string> als;
 
     //Parse template
@@ -1744,19 +1752,21 @@ void OrigDocument::nodeClear( XMLNode *xcur )
 void *OrigDocument::DocTask( void *param )
 {
     SessWdg *sw = (SessWdg*)param;
+    string  u = sw->ownerSess()->reqUser(),
+	    l = sw->ownerSess()->reqLang();
 
     // The document generation
     string mkDk;
     if(!sw->attrAt("n").at().getI()) {
 	mkDk = sw->attrAt("doc").at().getS();
-	if(mkDk.empty()) mkDk = trU(sw->attrAt("tmpl").at().getS(), sw->ownerSess()->user());
+	if(mkDk.empty()) mkDk = trLU(sw->attrAt("tmpl").at().getS(), l, u);
 	mkDk = OrigDocument::makeDoc(mkDk,sw);
 	sw->attrAt("doc").at().setS(mkDk);
     }
     else {
 	int aCur = sw->attrAt("aCur").at().getI();
 	mkDk = sw->attrAt("aDoc").at().getS();
-	if(mkDk.empty()) mkDk = trU(sw->attrAt("tmpl").at().getS(), sw->ownerSess()->user());
+	if(mkDk.empty()) mkDk = trLU(sw->attrAt("tmpl").at().getS(), l, u);
 
 	mkDk = makeDoc(mkDk,sw);
 	sw->attrAt("aDoc").at().setS(mkDk);

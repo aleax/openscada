@@ -83,12 +83,14 @@ class TProt: public TProtocol
 	string allow( )			{ return mAllow; }
 	string tmpl( )			{ return mTmpl; }
 	string tmplMainPage( )		{ return mTmplMainPage; }
+	string allowUsersAuth( )	{ return mAllowUsersAuth; }
 	int authTime( )			{ return mTAuth; }
 
 	void setDeny( const string &vl )	{ mDeny = vl; modif(); }
 	void setAllow( const string &vl )	{ mAllow = vl; modif(); }
 	void setTmpl( const string &vl )	{ mTmpl = vl; modif(); }
 	void setTmplMainPage( const string &vl ){ mTmplMainPage = vl; modif(); }
+	void setAllowUsersAuth( const string &vl ) { mAllowUsersAuth = vl; modif(); }
 	void setAuthTime( int vl )		{ mTAuth = vmax(1,vl); modif(); }
 
 	void outMess( XMLNode &io, TTransportOut &tro );
@@ -149,7 +151,7 @@ class TProt: public TProtocol
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	MtxString	mDeny, mAllow, mTmpl, mTmplMainPage;
+	MtxString	mDeny, mAllow, mTmpl, mTmplMainPage, mAllowUsersAuth;
 	map<int, SAuth>	mAuth;
 	int		mTAuth;
 	time_t		lstSesChk;

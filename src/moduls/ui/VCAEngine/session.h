@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: session.h
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,7 +49,10 @@ class Session : public TCntrNode
 	string	ico( ) const;
 	string	id( ) const	{ return mId.c_str(); }		//Identifier
 	string	projNm( )	{ return mPrjnm; }		//Project's name
-	string	user( )		{ return mUser; }		//Open session user
+	string	user( )		{ return mUser; }		//Open session and last modification user
+	string	reqUser( )	{ return mReqUser; }		//Last request user
+	string	reqLang( )	{ return mReqLang; }		//Last request language
+	time_t	userActTm( )	{ return mUserActTm; }		//User action time
 	string	owner( ) const	{ return mOwner; }		//Source project owner
 	string	grp( ) const	{ return mGrp; }		//Source project group
 	short	permit( ) const	{ return mPermit; }		//Permission for access to source project
@@ -63,8 +66,12 @@ class Session : public TCntrNode
 	AutoHD<Project> parent( ) const;
 	int stlCurent( )	{ return mStyleIdW; }
 
-	void setProjNm( const string &it )	{ mPrjnm = it; }
-	void setUser( const string &it );
+	void setProjNm( const string &vl )	{ mPrjnm = vl; }
+	void setUser( const string &vl );
+	void setReqUser( const string &vl )	{ mReqUser = vl; }
+	void setReqLang( const string &vl )	{ mReqLang = vl; }
+
+	void setUserActTm( )			{ mUserActTm = time(NULL); }
 	void setPeriod( int val )		{ mPer = val; }
 	void setEnable( bool val );
 	void setStart( bool val );
@@ -204,7 +211,7 @@ class Session : public TCntrNode
 	int	mPage;
 	const string mId;
 	string	mPrjnm, mOwner, mGrp;
-	MtxString mUser;
+	MtxString mUser, mReqUser, mReqLang;
 	int	mPer, mPermit;
 	bool	mEnable, mStart, endrunReq;	//Enabled, Started and endrun stats
 	bool	mBackgrnd;			//Backgrounded execution of a session
@@ -212,7 +219,7 @@ class Session : public TCntrNode
 	map<int, bool> mCons;			//Identifiers of the connections
 
 	unsigned	mCalcClk;		//Calc clock
-	time_t		mReqTm;
+	time_t		mReqTm, mUserActTm;	//Time of request and user action
 	AutoHD<Project>	mParent;
 
 	vector<string>	mOpen;
@@ -221,7 +228,7 @@ class Session : public TCntrNode
 
 	// Styles
 	int		mStyleIdW;
-	map<string,string>	mStProp;	//Styles' properties
+	map<string, string>	mStProp;	//Styles' properties
 };
 
 //************************************************

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.3.5"
+#define MOD_VER		"2.4.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -896,7 +896,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //* TSocketOut                                   *
 //************************************************
 TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) :
-    TTransportOut(name, idb, el), mMSS(0), sockFd(-1), wres(true), mLstReqTm(0)
+    TTransportOut(name, idb, el), mMSS(0), sockFd(-1), mLstReqTm(0)
 {
     setAddr("TCP:localhost:10002");
     setTimings("5:1");
@@ -949,7 +949,7 @@ void TSocketOut::save_( )
 
 void TSocketOut::start( int itmCon )
 {
-    MtxAlloc res(wres, true);
+    MtxAlloc res(reqRes(), true);
 
     if(runSt) return;
 
@@ -1104,7 +1104,7 @@ void TSocketOut::start( int itmCon )
 
 void TSocketOut::stop( )
 {
-    MtxAlloc res(wres, true);
+    MtxAlloc res(reqRes(), true);
 
     if(!runSt) return;
 
@@ -1121,7 +1121,7 @@ void TSocketOut::stop( )
     TTransportOut::stop();
 }
 
-int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, bool noRes )
+int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 {
     string err = _("Unknown error");
     ssize_t kz = 0;
@@ -1133,9 +1133,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
 	 writeReq = false;
     time = abs(time);
 
-    ResAlloc resN(nodeRes());
-    if(!noRes) resN.lock(true);
-    MtxAlloc res(wres, true);
+    MtxAlloc res(reqRes(), true);
 
     int prevTmOut = 0;
     if(time) { prevTmOut = tmCon(); setTmCon(time); }
@@ -1166,12 +1164,10 @@ repeate:
 			if(kz > 0 && FD_ISSET(sockFd,&rw_fd)) { kz = 0; continue; }
 		    }
 		    err = (kz < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data wrote");
-		    res.unlock();
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Write error: %s"), err.c_str());
 		    if(noReq) throw TError(nodePath().c_str(),_("Write error: %s"), err.c_str());
 		    start();
-		    res.lock();
 		    goto repeate;
 		} else trOut += kz;
 
@@ -1188,7 +1184,6 @@ repeate:
 	    FD_ZERO(&rw_fd); FD_SET(sockFd, &rw_fd);
 	    kz = select(sockFd+1, &rw_fd, NULL, NULL, &tv);
 	    if(kz == 0) {
-		res.unlock();
 		if(writeReq && !noReq) stop();
 		mLstReqTm = TSYS::curTime();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read timeouted."));
@@ -1196,7 +1191,6 @@ repeate:
 	    }
 	    else if(kz < 0) {
 		err = TSYS::strMess("%s (%d)", strerror(errno), errno);
-		res.unlock();
 		stop();
 		mLstReqTm = TSYS::curTime();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
@@ -1219,13 +1213,11 @@ repeate:
 		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode
 		if(iB < 0 || (iB == 0 && writeReq && !noReq)) {
 		    err = (iB < 0) ? TSYS::strMess("%s (%d)", strerror(errno), errno): _("No data");
-		    res.unlock();
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
 		    // * Pass to retry into the request mode and on the successful writing
 		    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
 		    start();
-		    res.lock();
 		    goto repeate;
 		}
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,iB)).c_str());

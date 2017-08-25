@@ -2,7 +2,7 @@
 //OpenSCADA system module DAQ.DCON file: DCON_client.cpp
 /***************************************************************************
  *   Copyright (C) 2008-2011 by Almaz Karimov                              *
- *		   2008-2016 by Roman Savochenko, rom_as@oscada.org        *
+ *		   2008-2017 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.7"
+#define MOD_VER		"1.2.8"
 #define AUTHORS		_("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	_("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -253,16 +253,16 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 	if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("REQ -> '%s'"), pdu.c_str());
 	pdu += "\r";
 
-	ResAlloc resN(tr.at().nodeRes(), true);
+	MtxAlloc resN(tr.at().reqRes(), true);
 
 	for(int i_tr = 0, resp_len = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++) {
 	    try {
-		resp_len = tr.at().messIO(pdu.data(), pdu.size(), buf, sizeof(buf), 0, true);
+		resp_len = tr.at().messIO(pdu.data(), pdu.size(), buf, sizeof(buf));
 		rez.assign(buf,resp_len);
 
 		//Wait tail
 		while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r')) {
-		    try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &er) { break; }
+		    try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf)); } catch(TError &er) { break; }
 		    rez.append(buf, resp_len);
 		}
 	    } catch(TError &er) {	//By possible the send request breakdown and no response

@@ -1,3 +1,28 @@
+2017-08-25 Roman (stable)
+- DB.LibsDB.OscadaLibs: The template base.gasPoint was expanded for connection to a real diaphragm.
+- !!:DB.LibsDB.vcaBase: doc.{docGasNodeDayA,docGasNodeMgn,docGasNodeDayOrder} was adapted to generic nodes link as a template and
+    the translations were fixed.
+    All documents of the library "Documents" were some updated and their procedures were set to not translated.
+- FIX:DB.Model.AGLKS.{St,vca}: Generic flow-account node was linked to diphragm PP1 of the model of the technological process AGLKS both
+    for the DAQ object and its documents.
+- SYS.TFunction: Expanded by a field language for functions lang(), setLang().
+    OpenSCADA control items from "/tr/langs" of the tab "Translation" of the main page were moved to permition RWRW__.
+- !!!!:SYS.Transports,Transports.*,DAQ.{AMRDevs,DCON,MMS,OPC_UA,SMH2Gi,Siemens},Protocol.{ModBus,HTTP,SelfSystem,UserProtocol}:
+    The generic accessing resource was moved to mutex and an argument "noRes" was removed from function messIO()
+    to prevent from unexpected outcomes from the requesting critical section.
+- DAQ.JavaLikeCalc: Expanded in translation command tr() for set and use force language.
+- !:Protocol.HTTP: Expanded by a list of users allowed for auth.
+- !!!!:Transport.{SSL,Sockets}.out: The widget's functional resource was merged with reqRes().
+- Transport.Serial.out: Input buffer clear set to double one and moved closer before same writing.
+- !!:UI.VCAEngine: Next level of improving of dynamic messages translation for requesting user and language:
+	into primitive "Document" and its procedure, session attributes.
+    !: Add control for user action by its last action time.
+    Appended by user functions of the session space: reqTm(), reqUser(), reqLang(), userActTm().
+    FIX: Restored for values and configurations translation of user's attributes.
+- !!: UI.Vision: Added control for user changing by a visualizer specific attribute "userSetVis" of the main page
+    and by expanding of the user's status widget and selection dialog.
+
+
 2017-08-18 Roman (stable)
 - FIX:DB.Model.AGLKS.vca: Signal objects KM101 name translation was also fixed.
 - !!!!:SYS,DB.*,DAQ.{BFN,BlockCalc,JavaLikeCalc,LogicLev,ModBus},Protocol.{ModBus,OPC_UA,UserProtocol},UI.VCAEngine:

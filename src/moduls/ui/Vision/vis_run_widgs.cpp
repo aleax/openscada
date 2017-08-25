@@ -228,6 +228,12 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 	    else if(attr == "keepAspectRatio")	mainWin()->setKeepAspectRatio(s2i(val));
 	    else if(attr == "stBarNoShow")	mainWin()->statusBar()->setVisible(!s2i(val));
 	    else if(attr == "winPosCntrSave")	mainWin()->setWinPosCntrSave(s2i(val));
+	    else if(attr == "userSetVis") {
+		if(val.size() && val != mainWin()->user() && val != property("userSetVis").toString().toStdString()) {
+		    setProperty("userSetVis", QString(val.c_str()));
+		    mainWin()->userSel(val);
+		} else setProperty("userSetVis", QString(val.c_str()));
+	    }
 	    else break;
 	    return true;
 	case A_PG_NAME:	setWindowTitle(val.c_str());	break;

@@ -229,18 +229,18 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 
 	mbap = ePrm->RC5Encr(mbap, ePrm->key);
 
-	ResAlloc resN(trO.at().nodeRes(), true);
+	MtxAlloc resN(trO.at().reqRes(), true);
 	//Send request
 	if(p->owner().messLev() == TMess::Debug)
 	    mess_debug_(p->nodePath().c_str(), _("Request (enc): '%s'"), TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
 
-	int resp_len = trO.at().messIO(mbap.data(), mbap.size(), buf, sizeof(buf), 0, true);
+	int resp_len = trO.at().messIO(mbap.data(), mbap.size(), buf, sizeof(buf));
 
 	//Wait tail
 	mbap.assign(buf, resp_len);
 	while(resp_len)
 	    try {
-		resp_len = trO.at().messIO(NULL, 0, buf, sizeof(buf), 0, true);
+		resp_len = trO.at().messIO(NULL, 0, buf, sizeof(buf));
 		mbap.append(buf, resp_len);
 	    } catch(TError &err) { break; }
 

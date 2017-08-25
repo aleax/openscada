@@ -51,7 +51,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.6.4"
+#define MOD_VER		"1.7.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -835,7 +835,7 @@ void TTrOut::setTimings( const string &vl )
 
 void TTrOut::start( int tmCon )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(reqRes(), true);
     if(runSt) return;
 
     //Statuses clear
@@ -1024,7 +1024,7 @@ void TTrOut::start( int tmCon )
 
 void TTrOut::stop( )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(reqRes(), true);
     if(!runSt) return;
 
     mess_debug(nodePath().c_str(), _("Stopping."));
@@ -1055,12 +1055,12 @@ void TTrOut::stop( )
 void TTrOut::check( )
 {
     bool reRs = false;
-    bool toStop = (mMdmMode && mMdmDataMode && (reRs=nodeRes().resTryW()) && (TSYS::curTime()-mLstReqTm)/1000000 > mdmLifeTime());
-    if(reRs) nodeRes().resRelease();
+    bool toStop = (mMdmMode && mMdmDataMode && (reRs=reqRes().tryLock()) && (TSYS::curTime()-mLstReqTm)/1000000 > mdmLifeTime());
+    if(reRs) reqRes().unlock();
     if(toStop) stop();
 }
 
-int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, bool noRes )
+int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 {
     string err = _("Unknown error");
     ssize_t blen = 0;
@@ -1070,8 +1070,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
     bool noReq = (time < 0);
     time = abs(time);
 
-    ResAlloc res(nodeRes());
-    if(!noRes) res.lock(true);
+    MtxAlloc res(reqRes(), true);
 
     if(!runSt) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
@@ -1102,8 +1101,14 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 
     //Write request
     if(oBuf && oLen > 0) {
-	if(!noReq && !mI2C) tcflush(fd, TCIOFLUSH);
-	if((tmW-mLstReqTm) < (reqRetrMult*wCharTm)) kz = TSYS::sysSleep(1e-6*((reqRetrMult*wCharTm)-(tmW-mLstReqTm)));
+	// Wait for char based timeout
+	if((tmW-mLstReqTm) < (reqRetrMult*wCharTm)) TSYS::sysSleep(1e-6*((reqRetrMult*wCharTm)-(tmW-mLstReqTm)));
+
+	// Input buffer clear
+	if(!noReq && !mI2C) {
+	    tcflush(fd, TCIOFLUSH);
+	    char tbuf[30]; while(read(fd,tbuf,sizeof(tbuf)) > 0) ;
+	}
 
 	// Pure RS-485 flow control: Clear RTS for transfer allow
 	if(mRTSfc) {
@@ -1205,7 +1210,7 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     // bool TS(bool rts = EVAL) - To Send control by set request <rts> and return Clear CTS state
     //  rts - Request value RTS
     if(iid == "TS") {
-	ResAlloc res(nodeRes(), true);
+	MtxAlloc res(reqRes(), true);
 	if(!runSt) return EVAL_BOOL;
 	int tiocm;
 	//Get TIOCM current status
@@ -1224,7 +1229,7 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     // bool DR(bool dtr = EVAL) - Device ready to communicate control by set Terminal Ready <dtr> and return Set Ready DSR state
     //  dtr - Terminal ready value DTR
     if(iid == "DR") {
-	ResAlloc res(nodeRes(), true);
+	MtxAlloc res(reqRes(), true);
 	if(!runSt) return EVAL_BOOL;
 	int tiocm;
 	//Get TIOCM current status
@@ -1242,7 +1247,7 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     }
     // bool DCD() - Data Carrier Detect control
     if(iid == "DCD") {
-	ResAlloc res(nodeRes(), true);
+	MtxAlloc res(reqRes(), true);
 	if(!runSt) return EVAL_BOOL;
 	int tiocm;
 	//Get TIOCM current status
@@ -1251,7 +1256,7 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     }
     // bool RI() - Ring Indicator control
     if(iid == "RI") {
-	ResAlloc res(nodeRes(), true);
+	MtxAlloc res(reqRes(), true);
 	if(!runSt) return EVAL_BOOL;
 	int tiocm;
 	//Get TIOCM current status
@@ -1260,7 +1265,7 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     }
     // int sendbreak(int duration = 0)
     if(iid == "sendbreak") {
-	ResAlloc res(nodeRes(), true);
+	MtxAlloc res(reqRes(), true);
 	if(!runSt) return (int64_t)EVAL_INT;
 	return tcsendbreak(fd, prms.size() ? prms[0].getI() : 0);
     }

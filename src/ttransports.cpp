@@ -863,7 +863,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()),
-    mDB(idb), mStartTm(0), mPrm1(0), mPrm2(0)
+    mDB(idb), mStartTm(0), mPrm1(0), mPrm2(0), mReqRes(true)
 {
     mId = iid;
 }
@@ -1120,14 +1120,14 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    int inBufSz = s2i(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(STR_BUF_LEN),opt->attr("user")));
 	    char buf[inBufSz];
 	    if(!startStat()) start();
-	    ResAlloc resN(nodeRes(), true);
-	    int resp_len = messIO(req.data(), req.size(), buf, inBufSz, 0, true);
+	    MtxAlloc resN(reqRes(), true);
+	    int resp_len = messIO(req.data(), req.size(), buf, inBufSz);
 	    if(inBufSz) {
 		answ.assign(buf, resp_len);
 
 		bool ToTmOut = (bool)s2i(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
 		while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < STD_INTERF_TM) {
-		    try { resp_len = messIO(NULL, 0, buf, inBufSz, 0, true); } catch(TError &err) { break; }
+		    try { resp_len = messIO(NULL, 0, buf, inBufSz); } catch(TError &err) { break; }
 		    answ.append(buf, resp_len);
 		}
 	    }

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Sockets file: socket.h
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -192,7 +192,7 @@ class TSocketOut: public TTransportOut
 	void start( int time = 0 );
 	void stop( );
 
-	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0, bool noRes = false );
+	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 );
 
     protected:
 	//Methods
@@ -218,7 +218,6 @@ class TSocketOut: public TTransportOut
 
 	// Status atributes
 	uint64_t	trIn, trOut;		//Traffic in and out counter
-	ResMtx		wres;
 	int64_t		mLstReqTm;
 };
 

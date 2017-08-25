@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-26 11:17+0300\n"
+"POT-Creation-Date: 2017-08-25 16:36+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -312,7 +312,7 @@ msgid "Set value"
 msgstr "Sollwert"
 
 msgid "Multiple selection"
-msgstr ""
+msgstr "Mehrfachauswahl"
 
 msgid "Check"
 msgstr "Prüfung"
@@ -1390,7 +1390,7 @@ msgstr "Fehler der Berechnung der Sitzung '%s'."
 
 #, c-format
 msgid "Unregistered connection %d on the session."
-msgstr ""
+msgstr "Unregistrierte Verbindung %d auf der Sitzung."
 
 msgid "Session: "
 msgstr "Sitzung: "
@@ -1419,8 +1419,11 @@ msgstr "Rechenzeit der Sitzung"
 msgid "Connections counter"
 msgstr "Verbindungzähler"
 
-msgid "Last request"
-msgstr "Letzte Anfrage"
+msgid "Last request time, user, language"
+msgstr "Letzte Anfrage Zeit, Benutzer, Sprache"
+
+msgid "Last user action"
+msgstr "Letzte Benutzeraktion"
 
 msgid "Left to force close (s)"
 msgstr "Links nach Nähe zu zwingen (s)"

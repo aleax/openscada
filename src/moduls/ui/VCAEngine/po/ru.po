@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-26 11:17+0300\n"
+"POT-Creation-Date: 2017-08-25 16:36+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1391,7 +1391,7 @@ msgstr "Ошибка вычисления сессии '%s'."
 
 #, c-format
 msgid "Unregistered connection %d on the session."
-msgstr ""
+msgstr "Незарегистрированное подключени %d на сеансе."
 
 msgid "Session: "
 msgstr "Сеанс: "
@@ -1420,8 +1420,11 @@ msgstr "Время вычисления сеанса"
 msgid "Connections counter"
 msgstr "Счётчик подключений"
 
-msgid "Last request"
-msgstr "Последнее обращение"
+msgid "Last request time, user, language"
+msgstr "Время, пользователь, язык последн. запроса"
+
+msgid "Last user action"
+msgstr "Последнее действие пользователя"
 
 msgid "Left to force close (s)"
 msgstr "Осталось до принудительного закрытия (с)"
@@ -2065,3 +2068,6 @@ msgstr "Установка атрибута"
 
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
+
+#~ msgid "Last request"
+#~ msgstr "Последнее обращение"

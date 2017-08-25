@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.UserProtocol file: user_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.8.6"
+#define MOD_VER		"0.8.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
 #define LICENSE		"GPL2"
@@ -176,7 +176,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     // Restore starting the function for stopped early by safety timeout
     if(funcV.func() && !funcV.func()->startStat()) funcV.func()->setStart(true);
 
-    ResAlloc res(tro.nodeRes(), true);
+    MtxAlloc res(tro.reqRes(), true);
 
     //Load inputs
     AutoHD<XMLNodeObj> xnd(new XMLNodeObj());

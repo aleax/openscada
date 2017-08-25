@@ -158,7 +158,7 @@ void InputDlg::showEvent( QShowEvent * event )
 //*************************************************
 //* User select dialog                            *
 //*************************************************
-DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent, const string &lang ) :
+DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent, const string &hint, const string &lang ) :
     QDialog(parent), VCAstat(iVCAstat)
 {
     setWindowTitle(_("Select user"));
@@ -200,14 +200,25 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
 
     connect(this, SIGNAL(finished(int)), this, SLOT(finish(int)));
 
+    users->setEditText(mod->userStart().c_str());
+
+    if(hint == "$") { mAutoRes = (user() == iuser) ? SelCancel : SelOK; return; }
+
+    mAutoRes = NoAuto;
+    bool chckHintUser = hint.size() && hint != "*";
+
     //Fill users list
     XMLNode req("get");
     req.setAttr("path","/Security/%2fusgr%2fusers");
     if(!mod->cntrIfCmd(req,iuser.toStdString(),ipass.toStdString(),iVCAstat.toStdString(),true))
-	for(unsigned i_u = 0; i_u < req.childSize(); i_u++)
-	    users->addItem(req.childGet(i_u)->text().c_str());
-
-    users->setEditText(mod->userStart().c_str());
+	for(unsigned iU = 0; iU < req.childSize(); iU++) {
+	    users->addItem(req.childGet(iU)->text().c_str());
+	    if(chckHintUser && hint == req.childGet(iU)->text()) {
+		users->setEditText(hint.c_str());
+		mAutoRes = SelOK;
+		break;
+	    }
+	}
 }
 
 QString DlgUser::user( )	{ return users->currentText(); }
@@ -261,12 +272,12 @@ bool UserStBar::event( QEvent *event )
     return QLabel::event(event);
 }
 
-bool UserStBar::userSel( )
+bool UserStBar::userSel( const string &hint )
 {
     string lang = dynamic_cast<VisRun*>(window()) ? ((VisRun*)window())->lang() : "";
 
-    DlgUser d_usr(user().c_str(), pass().c_str(), VCAStation().c_str(), parentWidget(), lang);
-    int rez = d_usr.exec();
+    DlgUser d_usr(user().c_str(), pass().c_str(), VCAStation().c_str(), parentWidget(), hint, lang);
+    int rez = (d_usr.autoRes() == DlgUser::NoAuto) ? d_usr.exec() : d_usr.autoRes();
     if(rez == DlgUser::SelOK && d_usr.user().toStdString() != user()) {
 	QString old_user = user().c_str(), old_pass = pass().c_str();
 	setUser(d_usr.user().toStdString());

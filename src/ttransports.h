@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -154,14 +154,14 @@ class TTransportOut : public TCntrNode, public TConfig
 	virtual void start( int time = 0 );
 	virtual void stop( )			{ };
 
-	virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0, bool noRes = false )
+	virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 )
 	{ return 0; }
 
 	void messProtIO( XMLNode &io, const string &prot );
 
 	TTypeTransport &owner( ) const;
 
-	ResRW &nodeRes( )			{ return nRes; }
+	ResMtx &reqRes( )			{ return mReqRes; }
 
     protected:
 	//Methods
@@ -191,7 +191,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	// Reserve parameters
 	time_t	mStartTm;
 	int64_t	mPrm1, mPrm2;
-	ResRW	nRes;
+	ResMtx	mReqRes;
 };
 
 //************************************************

@@ -98,16 +98,12 @@ CREATE TABLE 'DAQ_AMRDevs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NA
 INSERT INTO "DAQ_AMRDevs" VALUES('test','','','','',1,0,0,'<high>','AMRDevsPrm_test','1',0,'',0,30,3);
 CREATE TABLE 'DAQ_BFN' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '' ,"START" INTEGER DEFAULT '' ,"REDNT" INTEGER DEFAULT '' ,"REDNT_RUN" TEXT DEFAULT '' ,"PRM_BD" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '' ,"PRIOR" INTEGER DEFAULT '' ,"SYNCPER" DOUBLE DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"HOUSE" TEXT DEFAULT '' ,"USER" TEXT DEFAULT '' ,"PASS" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_BFN" VALUES('test','','','','',0,0,0,'<high>','TmplPrm_test','* * * * *',0,600.0,'Sockets.BFN','','admin','fowl2008');
-CREATE TABLE 'DAQ_DCON' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '' ,"START" INTEGER DEFAULT '' ,"REDNT" INTEGER DEFAULT '' ,"REDNT_RUN" TEXT DEFAULT '' ,"PRM_BD" TEXT DEFAULT '' ,"PERIOD" DOUBLE DEFAULT '' ,"PRIOR" INTEGER DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"REQ_TRY" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "DAQ_DCON" VALUES('test','','','','',1,0,0,'<high>','DCONPrm_test',1.0,0,'testModBus',1);
 CREATE TABLE 'DAQ_DiamondBoards' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '' ,"START" INTEGER DEFAULT '' ,"BOARD" INTEGER DEFAULT '' ,"PRM_BD_A" TEXT DEFAULT '' ,"PRM_BD_D" TEXT DEFAULT '' ,"DATA_EMUL" INTEGER DEFAULT '' ,"ADDR" INTEGER DEFAULT '' ,"INT" INTEGER DEFAULT '' ,"DIO_CFG" INTEGER DEFAULT '' ,"ADMODE" INTEGER DEFAULT '' ,"ADRANGE" INTEGER DEFAULT '' ,"ADPOLAR" INTEGER DEFAULT '' ,"ADGAIN" INTEGER DEFAULT '' ,"ADCONVRATE" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"REDNT" INTEGER DEFAULT '' ,"REDNT_RUN" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_DiamondBoards" VALUES('test','','',0,0,25,'DiamPrmA_test','DiamPrmD_test',0,640,5,0,1,1,0,1,500,'','',0,'<high>','','');
 CREATE TABLE 'DAQ_ICP_DAS' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '' ,"START" INTEGER DEFAULT '' ,"REDNT" INTEGER DEFAULT '' ,"REDNT_RUN" TEXT DEFAULT '' ,"PRM_BD" TEXT DEFAULT '' ,"PERIOD" DOUBLE DEFAULT '' ,"PRIOR" INTEGER DEFAULT '' ,"BUS" INTEGER DEFAULT '' ,"BAUD" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_ICP_DAS" VALUES('test','','','','',1,0,0,'<high>','DCONPrm_test',1.0,0,0,2400);
 CREATE TABLE 'DAQ_SNMP' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '' ,"START" INTEGER DEFAULT '' ,"PRM_BD" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '' ,"PRIOR" INTEGER DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"COMM" TEXT DEFAULT '' ,"PATTR_LIM" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"REDNT" INTEGER DEFAULT '' ,"REDNT_RUN" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_SNMP" VALUES('localhost','','',0,0,'SNMPPrm_localhost',10,0,'localhost','public',100,'','',0,'<high>','','');
-CREATE TABLE 'DAQ_Siemens' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '' ,"START" INTEGER DEFAULT '' ,"PRM_BD" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '' ,"PRIOR" INTEGER DEFAULT '' ,"ASINC_WR" INTEGER DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"SLOT" INTEGER DEFAULT '' ,"CIF_DEV" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"REDNT" INTEGER DEFAULT '' ,"REDNT_RUN" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "DAQ_Siemens" VALUES('test','','',1,0,'CIFPrm_test',1000,0,0,1,'192.168.2.12',2,0,'','',0,'<high>','','');
 CREATE TABLE 'DAQ_SoundCard' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '' ,"START" INTEGER DEFAULT '' ,"PRM_BD" TEXT DEFAULT '' ,"CARD" TEXT DEFAULT '' ,"SMPL_RATE" INTEGER DEFAULT '' ,"SMPL_TYPE" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"REDNT" INTEGER DEFAULT '' ,"REDNT_RUN" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_SoundCard" VALUES('test','','',1,0,'SoundCard_test','NVidia nForce3: NVid',8000,1,'','',0,'<high>','','');
 CREATE TABLE 'DAQ_System' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '' ,"START" INTEGER DEFAULT '' ,"AUTO_FILL" INTEGER DEFAULT '' ,"PRM_BD" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '' ,"PRIOR" INTEGER DEFAULT '' ,"REDNT" INTEGER DEFAULT '' ,"REDNT_RUN" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
@@ -196,7 +192,7 @@ CREATE TABLE 'DCONPrm_test' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"u
 INSERT INTO "DCONPrm_test" VALUES('test','','','','',1,0,'','',1,0,8,0,0,0,0,0,0);
 CREATE TABLE 'LogLevPrm_experiment_io' ("PRM_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("PRM_ID","ID"));
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','in','BlockCalc.Anast1to2node.F3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','var','45.2974719922495','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','var','45.2098911525976','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','max','100','','');
@@ -207,11 +203,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','wMax','80','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','iAdd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','in','BlockCalc.Anast1to2node.F4.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','var','52.9958135116769','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','var','53.0702722663304','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','max','100','','');
@@ -222,11 +218,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','wMax','80','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','iAdd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','in','BlockCalc.Anast1to2node.T_PP1.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','var','20.3965286159618','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','var','20.4003492333554','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','ed','°C','°C','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','max','50','','');
@@ -237,11 +233,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','wMax','30','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','iAdd','-270','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','in','BlockCalc.Anast1to2node.T_PP3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','var','32.1894006028634','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','var','32.19045379906','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','ed','°C','°C','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','max','100','','');
@@ -252,11 +248,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','wMax','40','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','iAdd','-273','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','in','BlockCalc.Anast1to2node.T_PP5.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','var','32.0498467401737','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','var','32.0504805089668','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','ed','°C','°C','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','max','100','','');
@@ -267,11 +263,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','wMax','40','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','iAdd','-273','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','in','BlockCalc.Anast1to2node.P_PP1.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','var','5.65106374704748','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','var','5.65164341958776','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','ed','at','ата','ата');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','max','10','','');
@@ -282,11 +278,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','wMax','7','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','iAdd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','in','BlockCalc.Anast1to2node.P_PP3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','var','24.2679614756189','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','var','24.2998454701741','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','max','50','','');
@@ -297,11 +293,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','wMax','25','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','iAdd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','in','BlockCalc.Anast1to2node.P_PP5.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','var','23.7368757490343','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','var','23.7687339187717','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','max','50','','');
@@ -312,18 +308,18 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','wMax','25','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','iAdd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','alrm_md','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','alrm_mess','The crane closed!','Клапан закрито!','Клапан закрыт!');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','in','BlockCalc.Anast1to2node.КШ6.st_open','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','in','BlockCalc.Anast1to2node.P3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','var','22.9189352715096','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','var','22.9511139257957','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','max','100','','');
@@ -334,11 +330,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','wMax','80','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','iAdd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','in','BlockCalc.Anast1to2node.P4.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','var','23.7368757490343','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','var','23.7687339190643','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','max','50','','');
@@ -349,11 +345,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','wMax','15','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','iAdd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','in','BlockCalc.Anast1to2node.Pi.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','var','9.02780079530754','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','var','9.02351546106089','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','max','20','','');
@@ -364,7 +360,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','wMax','10','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','iAdd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','in','BlockCalc.Anast1to2node.Ti.var','','');
@@ -379,11 +375,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','wMax','30','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','iAdd','-273','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','in','BlockCalc.Anast1to2node.PT0503.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','var','5.80423553859919','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','var','5.80474125885576','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','max','10','','');
@@ -394,11 +390,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','wMax','7','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','iAdd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','in','BlockCalc.Anast1to2node.F_PP1.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','var','101.755690645348','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','var','101.735351535367','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','max','150','','');
@@ -409,11 +405,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','wMax','105','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','iAdd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','in','BlockCalc.Anast1to2node.F_PP3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','var','98.8279165712111','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','var','98.7933373261477','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','max','150','','');
@@ -424,11 +420,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','wMax','100','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','iAdd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','in','BlockCalc.Anast1to2node.F_PP5.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','var','52.9965661190942','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','var','53.0709874362244','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','max','100','','');
@@ -439,19 +435,19 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','wMax','80','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','iAdd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','f_err','0','0','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_frq','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_frq','1.00001013278961','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_err','0','0','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','F','199.055510890463','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','Q','10661.6084826645','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','P','9.07064644762811','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','T','14.4770729963095','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','dP','6.03198517849888','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','DS','0.984854088483776','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','F','LogicLev.experiment.F_PP1.var','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','Q','9.3812735456396','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','P','LogicLev.experiment.P_PP1.var','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','T','LogicLev.experiment.T_PP1.var','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','dP','3.08288944046567','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','DS','0.972442006912288','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','speed','0','','');
@@ -752,10 +748,10 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','this','<TCntrNodeObj path=
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','SHIFR','T_PP3','T_PP3','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','NAME','T_PP3','T_PP3','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','DESCR','The gas temperature at the diaphragm PP3','Температура газу на діафрагмі PP3','Температура газа на диафрагме PP3');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','alrm','0:4:The crane KSH6 closed!','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','SHIFR','КШ6close','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','NAME','Close KSH6','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','DESCR','Alarm for closing the valve KSH6','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','alrm','0:4:The crane KSH6 closed!','0:4:The crane KSH6 closed!','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','SHIFR','КШ6close','КШ6close','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','NAME','Close KSH6','Закриття КШ6','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','DESCR','Alarm for closing the valve KSH6','Сигналізація по закриттю крана КШ6','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_КШ6close/"/>','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','log','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','log','0','','');
@@ -776,25 +772,42 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','log','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','stInv','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','st_open','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','st_close','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','alDelay','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','inProc','','','');
 CREATE TABLE 'ModBus_node_io' ("NODE_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("NODE_ID","ID"));
 INSERT INTO "ModBus_node_io" VALUES('test','R0','Register 0',1,0,'1000',0,'Регістр 0','1000','Регистр 0','1000');
 INSERT INTO "ModBus_node_io" VALUES('test','R3w','Register 3 (write)',1,0,'10',2,'Регістр 3 (запис)','10','Регистр 3 (запись)','10');
 INSERT INTO "ModBus_node_io" VALUES('test','R1','Register 1',1,16,'LogicLev.experiment.F3.var',1,'Регістр 1','LogicLev.experiment.F3.var','Регистр 1','LogicLev.experiment.F3.var');
 INSERT INTO "ModBus_node_io" VALUES('test','C3','Bit 3',3,0,'1',10,'Біт 3','1','Бит 3','1');
 INSERT INTO "ModBus_node_io" VALUES('test','C6','Bit 6',3,16,'BlockCalc.Anast1to2node.КШ1.st_open',12,'Біт 6','BlockCalc.Anast1to2node.КШ1.st_open','Бит 6','BlockCalc.Anast1to2node.КШ1.st_open');
-INSERT INTO "ModBus_node_io" VALUES('test','R4','Register 4',1,0,'75464',3,'Регістр 4','30695','Регистр 4','43186');
-INSERT INTO "ModBus_node_io" VALUES('test','C4','Bit 4',3,0,'0',11,'Біт 4','1','Бит 4','1');
+INSERT INTO "ModBus_node_io" VALUES('test','R4','Register 4',1,0,'75779',3,'Регістр 4','30695','Регистр 4','43186');
+INSERT INTO "ModBus_node_io" VALUES('test','C4','Bit 4',3,0,'1',11,'Біт 4','1','Бит 4','1');
 INSERT INTO "ModBus_node_io" VALUES('test','C8w','Bit 8',3,0,'0',13,'Біт 8','0','Бит 8','0');
-INSERT INTO "ModBus_node_io" VALUES('test','AT101_1_Ti','AT101_1.Ti',2,16,'BlockCalc.KM101.AT101_1.Ti',14,'','BlockCalc.KM101.AT101_1.Ti','','BlockCalc.KM101.AT101_1.Ti');
-INSERT INTO "ModBus_node_io" VALUES('test','AT101_1_To','AT101_1.To',2,16,'BlockCalc.KM101.AT101_1.To',15,'','BlockCalc.KM101.AT101_1.To','','BlockCalc.KM101.AT101_1.To');
-INSERT INTO "ModBus_node_io" VALUES('test','AT101_2_Ti','AT101_2.Ti',2,16,'BlockCalc.KM101.AT101_2.Ti',16,'','BlockCalc.KM101.AT101_2.Ti','','BlockCalc.KM101.AT101_2.Ti');
-INSERT INTO "ModBus_node_io" VALUES('test','AT101_2_To','AT101_2.To',2,16,'BlockCalc.KM101.AT101_2.To',17,'','BlockCalc.KM101.AT101_2.To','','BlockCalc.KM101.AT101_2.To');
-INSERT INTO "ModBus_node_io" VALUES('test','R100','AT101_1.Ti code',1,0,'25391',18,'','25392','','25395');
-INSERT INTO "ModBus_node_io" VALUES('test','R101','AT101_1.To code',1,0,'16572',19,'','16566','','16572');
-INSERT INTO "ModBus_node_io" VALUES('test','R102w','AT101_1.Wc',1,16,'BlockCalc.KM101.AT101_1.Wc',20,'','BlockCalc.KM101.AT101_1.Wc','','BlockCalc.KM101.AT101_1.Wc');
-INSERT INTO "ModBus_node_io" VALUES('test','R103','AT101_2.Ti code',1,0,'54881',21,'','54878','','54884');
-INSERT INTO "ModBus_node_io" VALUES('test','R104','AT101_2.To code',1,0,'21700',22,'','21683','','21695');
-INSERT INTO "ModBus_node_io" VALUES('test','R105w','AT101_2.Wc',1,16,'BlockCalc.KM101.AT101_2.Wc',23,'','BlockCalc.KM101.AT101_2.Wc','','BlockCalc.KM101.AT101_2.Wc');
+INSERT INTO "ModBus_node_io" VALUES('test','AT101_1_Ti','AT101_1.Ti',2,16,'BlockCalc.KM101.AT101_1.Ti',14,'AT101_1.Ti','BlockCalc.KM101.AT101_1.Ti','','BlockCalc.KM101.AT101_1.Ti');
+INSERT INTO "ModBus_node_io" VALUES('test','AT101_1_To','AT101_1.To',2,16,'BlockCalc.KM101.AT101_1.To',15,'AT101_1.To','BlockCalc.KM101.AT101_1.To','','BlockCalc.KM101.AT101_1.To');
+INSERT INTO "ModBus_node_io" VALUES('test','AT101_2_Ti','AT101_2.Ti',2,16,'BlockCalc.KM101.AT101_2.Ti',16,'AT101_2.Ti','BlockCalc.KM101.AT101_2.Ti','','BlockCalc.KM101.AT101_2.Ti');
+INSERT INTO "ModBus_node_io" VALUES('test','AT101_2_To','AT101_2.To',2,16,'BlockCalc.KM101.AT101_2.To',17,'AT101_2.To','BlockCalc.KM101.AT101_2.To','','BlockCalc.KM101.AT101_2.To');
+INSERT INTO "ModBus_node_io" VALUES('test','R100','AT101_1.Ti code',1,0,'25407',18,'AT101_1.Ti code','25392','','25395');
+INSERT INTO "ModBus_node_io" VALUES('test','R101','AT101_1.To code',1,0,'16575',19,'AT101_1.To code','16566','','16572');
+INSERT INTO "ModBus_node_io" VALUES('test','R102w','AT101_1.Wc',1,16,'BlockCalc.KM101.AT101_1.Wc',20,'AT101_1.Wc','BlockCalc.KM101.AT101_1.Wc','','BlockCalc.KM101.AT101_1.Wc');
+INSERT INTO "ModBus_node_io" VALUES('test','R103','AT101_2.Ti code',1,0,'54900',21,'AT101_2.Ti code','54878','','54884');
+INSERT INTO "ModBus_node_io" VALUES('test','R104','AT101_2.To code',1,0,'21707',22,'AT101_2.To code','21683','','21695');
+INSERT INTO "ModBus_node_io" VALUES('test','R105w','AT101_2.Wc',1,16,'BlockCalc.KM101.AT101_2.Wc',23,'AT101_2.Wc','BlockCalc.KM101.AT101_2.Wc','','BlockCalc.KM101.AT101_2.Wc');
 INSERT INTO "ModBus_node_io" VALUES('test','C100w','КШ2.com',3,16,'BlockCalc.Anast1to2node.КШ2.com',24,'КШ2.com','BlockCalc.Anast1to2node.КШ2.com','','BlockCalc.KM101.КШ102.com');
 INSERT INTO "ModBus_node_io" VALUES('test','C101','КШ2.st_open',3,16,'BlockCalc.Anast1to2node.КШ2.st_open',25,'КШ2.st_open','BlockCalc.Anast1to2node.КШ2.st_open','','BlockCalc.KM101.КШ102.st_open');
 INSERT INTO "ModBus_node_io" VALUES('test','C102','КШ2.st_close',3,16,'BlockCalc.Anast1to2node.КШ2.st_close',26,'КШ2.st_close','BlockCalc.Anast1to2node.КШ2.st_close','','BlockCalc.KM101.КШ102.st_close');
@@ -803,7 +816,7 @@ INSERT INTO "ModBus_node_io" VALUES('test','R_f8w','Register 8,9',2,0,'3.1415926
 INSERT INTO "ModBus_node_io" VALUES('test','R_i8:10:w','Register 10,13',1,0,'123456789',6,'Регістр 10,13','21474836470','Регистр 10,13','123456789');
 INSERT INTO "ModBus_node_io" VALUES('test','R_d:14:w','Register 14-17',2,0,'3.14159265',7,'Регістр 14-17','3.14159265','Регистр 14-17','3.14159265');
 INSERT INTO "ModBus_node_io" VALUES('test','R_d18w','Register 18-21',2,0,'2.7',8,'Регістр 18-21','2.7','Регистр 18-21','2.7');
-INSERT INTO "ModBus_node_io" VALUES('test','R_s110,10w','Register 110-120',0,0,'abcdefghijkl',9,'','','','');
+INSERT INTO "ModBus_node_io" VALUES('test','R_s110,10w','Register 110-120',0,0,'abcdefghijkl',9,'Register 110-120','abcdefghijkl','','');
 CREATE TABLE 'ModBus_sdevs' ("ID" TEXT DEFAULT '' ,"SPEED" INTEGER DEFAULT '' ,"LEN" INTEGER DEFAULT '' ,"TWOSTOP" INTEGER DEFAULT '' ,"PARITY" INTEGER DEFAULT '' ,"TM_FRM" INTEGER DEFAULT '' ,"TM_CHAR" DOUBLE DEFAULT '' ,"TM_REQ" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "ModBus_sdevs" VALUES('/dev/ttyS0',19200,8,1,0,320,1.88,640);
 CREATE TABLE 'OPC_UA_ep' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"SerialzType" INTEGER DEFAULT '' ,"URL" TEXT DEFAULT '' ,"ServCert" TEXT DEFAULT '' ,"ServPvKey" TEXT DEFAULT '' ,"SecPolicies" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
@@ -1074,7 +1087,7 @@ INSERT INTO "Transport_out" VALUES('DAQRedundantloop','Sockets','','','TCP:local
 INSERT INTO "Transport_out" VALUES('DAQGatetestloop','Sockets','','','TCP:localhost:10005',0,'','','1000','','','','','');
 INSERT INTO "Transport_out" VALUES('testModem','Serial','Test Modem',' ','/dev/ttyACM0:38400:8N1::0679859815',0,'','','','Тест модему',' ','Тест модема','','<prms TMS="5000:1000" MdmTm="30" MdmLifeTime="30" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitStr2="" MdmInitResp="OK" MdmDialStr="ATDT" MdmCnctResp="CONNECT" MdmBusyResp="BUSY" MdmNoCarResp="NO CARRIER" MdmNoDialToneResp="NO DIALTONE" MdmHangUp="+++ATH" MdmHangUpResp="OK"/>
 ');
-INSERT INTO "Transport_out" VALUES('HDDTemp','Sockets','Parameter Hddtemp','','TCP:127.0.0.1:7634',0,'','','','Параметр Hddtemp','','Параметр Hddtemp','','<prms tms="5:0.01" />
+INSERT INTO "Transport_out" VALUES('HDDTemp','Sockets','Parameter Hddtemp','','TCP:127.0.0.1:7634',0,'','','','Параметр Hddtemp','','Параметр Hddtemp','','<prms tms="5:0.01" MSS="0" />
 ');
 INSERT INTO "Transport_out" VALUES('OPCUAtest','Sockets','','OPC UA automatic created transport for controller ''test''.','TCP:127.0.0.1:4841',0,'','','','','OPC UA автоматично створений транспорт для контроллеру ''test''.','','OPC UA автоматически созданный транспорт для контроллера ''test''.','<prms tms="5:0.1" />
 ');
@@ -1226,7 +1239,7 @@ INSERT INTO "LogLevPrm_experiment" VALUES('PT0503','','PT0503','','PT0503','The 
 INSERT INTO "LogLevPrm_experiment" VALUES('F_PP1','','F_PP1','','F_PP1','Gas flow through the diaphragm PP1','Расход через диафрагму PP1','Витрати газу через діафрагму PP1',1,'base.anUnif');
 INSERT INTO "LogLevPrm_experiment" VALUES('F_PP3','','F_PP3','','F_PP3','Gas flow through the diaphragm PP3','Расход газа через диафрагму PP3','Витрати газу через діафрагму PP3',1,'base.anUnif');
 INSERT INTO "LogLevPrm_experiment" VALUES('F_PP5','','F_PP5','','F_PP5','Gas flow through the diaphragm PP5','Расход через диафрагму PP5','Витрати газу через діафрагму PP5',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('gN1','','Account node 1','Узел учёта 1','Вузол обліку 1',' ',' ',' ',1,'base.gasPoint');
+INSERT INTO "LogLevPrm_experiment" VALUES('gN1','','Account diafragm PP1','Учёт диафрагмы PP1','Облік діафрагми PP1',' ',' ',' ',1,'base.gasPoint');
 CREATE TABLE 'DAQ_OPC_UA' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"SYNCPER" DOUBLE DEFAULT '60' ,"EndPoint" TEXT DEFAULT 'opc.tcp://localhost' ,"SecPolicy" TEXT DEFAULT 'None' ,"SecMessMode" INTEGER DEFAULT '1' ,"Cert" TEXT DEFAULT '' ,"PvKey" TEXT DEFAULT '' ,"AuthUser" TEXT DEFAULT '' ,"AuthPass" TEXT DEFAULT '' ,"AttrsLimit" INTEGER DEFAULT '100' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_OPC_UA" VALUES('test','','','','','','',1,1,3,0,'<high>','OPC_UA_Prm_test','1',0,60.0,'opc.tcp://127.0.0.1:4841/OSCADA_OPC/None','None',1,'-----BEGIN CERTIFICATE-----
 MIIEhDCCA2ygAwIBAgIJAJtukvCfqH7fMA0GCSqGSIb3DQEBBQUAMIGhMQswCQYD
@@ -1313,176 +1326,6 @@ INSERT INTO "DAQ_ModBus" VALUES('testTCP','','','','','','',1,1,3,0,'<high>','Mo
 CREATE TABLE 'DAQ_DAQGate' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"TM_REST" INTEGER DEFAULT '30' ,"TM_REST_DT" DOUBLE DEFAULT '1' ,"GATH_MESS_LEV" INTEGER DEFAULT '1' ,"SYNCPER" DOUBLE DEFAULT '0' ,"STATIONS" TEXT DEFAULT '' ,"CNTRPRM" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_DAQGate" VALUES('test','Test','Тест','Тест',' ',' ',' ',1,1,3,0,'<high>','DAQGatePrm_test',0,'1',0,30,1.0,1,60.0,'loop','System.AutoDA
 ModBus.testTCP.test');
-CREATE TABLE 'DAQGatePrm_test' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM_ADDR" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
-INSERT INTO "DAQGatePrm_test" VALUES('CPU0Load','','CPU Load: 0','Нагрузка процессора: 0','Навантаження CPU: 0','','','',1,'System/AutoDA/prm_CPU0Load','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="load" nm="Load (%)" tp="4" flg="772" />
-<a id="sys" nm="System (%)" tp="4" flg="772" />
-<a id="user" nm="User (%)" tp="4" flg="772" />
-<a id="idle" nm="Idle (%)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('CPU1Load','','CPU Load: 1','Нагрузка процессора: 1','Навантаження CPU: 1','','','',1,'System/AutoDA/prm_CPU1Load','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="load" nm="Load (%)" tp="4" flg="772" />
-<a id="sys" nm="System (%)" tp="4" flg="772" />
-<a id="user" nm="User (%)" tp="4" flg="772" />
-<a id="idle" nm="Idle (%)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('CPULoad','','Full CPU Load','Общая нагрузка процессора','Повне навантаження процесору','','','',1,'System/AutoDA/prm_CPULoad','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="load" nm="Load (%)" tp="4" flg="772" />
-<a id="sys" nm="System (%)" tp="4" flg="772" />
-<a id="user" nm="User (%)" tp="4" flg="772" />
-<a id="idle" nm="Idle (%)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('Interface_eth0','','Interface statistic: eth0','Статистика интерфейсов: eth0','Статистика інтерфейсу: eth0','','','',1,'System/AutoDA/prm_Interface_eth0','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="rcv" nm="Receive (B)" tp="4" flg="772" />
-<a id="rcvSp" nm="Receive speed (B/s)" tp="4" flg="772" />
-<a id="trns" nm="Transmit (B)" tp="4" flg="772" />
-<a id="trnsSp" nm="Transmit speed (B/s)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('Interface_lo','','Interface statistic: lo','Статистика интерфейсов: lo','Статистика інтерфейсу: lo','','','',1,'System/AutoDA/prm_Interface_lo','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="rcv" nm="Receive (B)" tp="4" flg="772" />
-<a id="rcvSp" nm="Receive speed (B/s)" tp="4" flg="772" />
-<a id="trns" nm="Transmit (B)" tp="4" flg="772" />
-<a id="trnsSp" nm="Transmit speed (B/s)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('Interface_wlan0','','Interface statistic: wlan0','Статистика интерфейсов: wlan0','Статистика інтерфейсу: wlan0','','','',1,'System/AutoDA/prm_Interface_wlan0','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="rcv" nm="Receive (B)" tp="4" flg="772" />
-<a id="rcvSp" nm="Receive speed (B/s)" tp="4" flg="772" />
-<a id="trns" nm="Transmit (B)" tp="4" flg="772" />
-<a id="trnsSp" nm="Transmit speed (B/s)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('MemInfo','','Memory info','Информация про память','Інформація про пам''ять','','','',1,'System/AutoDA/prm_MemInfo','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="free" nm="Free (kB)" tp="1" flg="772" />
-<a id="total" nm="Total (kB)" tp="1" flg="772" />
-<a id="use" nm="Use (kB)" tp="1" flg="772" />
-<a id="buff" nm="Buffers (kB)" tp="1" flg="772" />
-<a id="cache" nm="Cached (kB)" tp="1" flg="772" />
-<a id="sw_free" nm="Swap free (kB)" tp="1" flg="772" />
-<a id="sw_total" nm="Swap total (kB)" tp="1" flg="772" />
-<a id="sw_use" nm="Swap use (kB)" tp="1" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('SensorsData','','Data sensors','Данные сенсоров','Дані сенсорів','','','',1,'System/AutoDA/prm_SensorsData','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="thinkpad_fan1" nm="thinkpad fan1" tp="4" flg="772" />
-<a id="thinkpad_temp1" nm="thinkpad temp1" tp="4" flg="772" />
-<a id="thinkpad_temp2" nm="thinkpad temp2" tp="4" flg="772" />
-<a id="thinkpad_temp3" nm="thinkpad temp3" tp="4" flg="772" />
-<a id="thinkpad_temp4" nm="thinkpad temp4" tp="4" flg="772" />
-<a id="thinkpad_temp5" nm="thinkpad temp5" tp="4" flg="772" />
-<a id="thinkpad_temp6" nm="thinkpad temp6" tp="4" flg="772" />
-<a id="thinkpad_temp7" nm="thinkpad temp7" tp="4" flg="772" />
-<a id="thinkpad_temp8" nm="thinkpad temp8" tp="4" flg="772" />
-<a id="k8temp_temp1" nm="k8temp temp1" tp="4" flg="772" />
-<a id="k8temp_temp2" nm="k8temp temp2" tp="4" flg="772" />
-<a id="k8temp_temp3" nm="k8temp temp3" tp="4" flg="772" />
-<a id="k8temp_temp4" nm="k8temp temp4" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda','','HDD statistic: sda','Статистика НЖМД: sda','Статистика НЖМД: sda','','','',1,'System/AutoDA/prm_Statistic_sda','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="rd" nm="Read (B)" tp="4" flg="772" />
-<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
-<a id="wr" nm="Write (B)" tp="4" flg="772" />
-<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda1','','HDD statistic: sda1','Статистика НЖМД: sda1','Статистика НЖМД: sda1','','','',1,'System/AutoDA/prm_Statistic_sda1','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="rd" nm="Read (B)" tp="4" flg="772" />
-<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
-<a id="wr" nm="Write (B)" tp="4" flg="772" />
-<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda2','','HDD statistic: sda2','Статистика НЖМД: sda2','Статистика НЖМД: sda2','','','',1,'System/AutoDA/prm_Statistic_sda2','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="rd" nm="Read (B)" tp="4" flg="772" />
-<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
-<a id="wr" nm="Write (B)" tp="4" flg="772" />
-<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('UpTimeStation','','Station up time','Время работы станции','Час роботи станції','','','',1,'System/AutoDA/prm_UpTimeStation','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="full" nm="Full seconds" tp="1" flg="772" />
-<a id="sec" nm="Seconds" tp="1" flg="772" />
-<a id="min" nm="Minutes" tp="1" flg="772" />
-<a id="hour" nm="Hours" tp="1" flg="772" />
-<a id="day" nm="Days" tp="1" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('UpTimeSystem','','System up time','Время работы системы','Час роботи системи','','','',1,'System/AutoDA/prm_UpTimeSystem','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="full" nm="Full seconds" tp="1" flg="772" />
-<a id="sec" nm="Seconds" tp="1" flg="772" />
-<a id="min" nm="Minutes" tp="1" flg="772" />
-<a id="hour" nm="Hours" tp="1" flg="772" />
-<a id="day" nm="Days" tp="1" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('test','','','','','','','',1,'ModBus/testTCP/prm_test','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="reg0" nm="Register 0" tp="1" flg="772" />
-<a id="reg1" nm="Register 1" tp="1" flg="772" />
-<a id="reg3" nm="Register 3" tp="1" flg="768" />
-<a id="reg4" nm="Register 4" tp="1" flg="772" />
-<a id="coil3" nm="Bit" tp="0" flg="768" />
-<a id="coil8" nm="Bit" tp="0" flg="768" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('test1','test','','','','','','',1,'ModBus/testTCP/prm_test/prm_test1','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="i6" nm="Integer32 [6,7]" tp="1" flg="768" />
-<a id="u6" nm="Integer32 (unsigned) [6,7]" tp="1" flg="772" />
-<a id="i10" nm="Integer64 [10-13]" tp="1" flg="772" />
-<a id="f8" nm="Float [8,9]" tp="4" flg="768" />
-<a id="d14" nm="Double [14-17]" tp="4" flg="768" />
-<a id="d18" nm="Double [18-21]" tp="4" flg="768" />
-</Attrs>
-');
 CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PR_TR" INTEGER DEFAULT '1' ,"InPROG" TEXT DEFAULT '' ,"uk#InPROG" TEXT DEFAULT '' ,"ru#InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"uk#OutPROG" TEXT DEFAULT '' ,"ru#OutPROG" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserProtocol_uPrt" VALUES('test','','','','','','',1,0,'JavaLikeCalc.JavaScript
 SYS.messDebug("TEST Self",request);
@@ -1491,7 +1334,7 @@ return 0;','','','JavaLikeCalc.JavaScript
 io.setText(tr.messIO(io.text()));','','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_JavaLikeCalc" VALUES('testCalc','Test calculator','Тестовий обчислювач','Тестовый вычислитель','Test calculator','Тестовий обчислювач','Тестовый вычислитель',1,0,3,0,'<high>','testCalc_prm','Controller.test','10',0,1);
-INSERT INTO "DAQ_JavaLikeCalc" VALUES('prescr','Prescriptions','','','','','',1,1,3,0,'<high>','JavaLikePrm_prescr','Controller.prescr','0.2',0,1);
+INSERT INTO "DAQ_JavaLikeCalc" VALUES('prescr','Prescriptions','Prescriptions','','','','',1,1,3,0,'<high>','JavaLikePrm_prescr','Controller.prescr','0.2',0,1);
 CREATE TABLE 'prescr_val' ("ID" TEXT DEFAULT '' ,"VAL" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "prescr_val" VALUES('f_frq','5');
 INSERT INTO "prescr_val" VALUES('f_start','0');
@@ -1518,49 +1361,22 @@ INSERT INTO "prescr_val" VALUES('work','<XMLNodeObj:prg name="abcd" seekPos="1" 
 </XMLNodeObj:prg>
 ');
 INSERT INTO "prescr_val" VALUES('comLs','<TVarObj>
-<TVarObj p=''Background timer''>
-<str p=''arg1''>Time (s)</str>
-<str p=''descr''>Background timer. Updating parallel with current command.</str>
-<str p=''prmID''>backTimer</str>
-</TVarObj>
 <TVarObj p=''Timer''>
-<str p=''arg1''>Time (s)</str>
+<str p=''arg1''>Час (сек.)</str>
 <str p=''descr''>Typical timer. Hold run up to time elapse.</str>
 <str p=''prmID''>timer</str>
 </TVarObj>
+<TVarObj p=''Фоновий таймер''>
+<str p=''arg1''>Час (сек.)</str>
+<str p=''descr''>Фоновий таймер. Оновлення паралельно із поточною командой.</str>
+<str p=''prmID''>backTimer</str>
+</TVarObj>
 </TVarObj>
 ');
-INSERT INTO "prescr_val" VALUES('clcCnt','10315008');
+INSERT INTO "prescr_val" VALUES('clcCnt','10316577');
 CREATE TABLE 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_LogicLev" VALUES('experiment','Experimental','Експериментальний','Экспериментальный','It have the group of experimental parameters.','Містить групу експериментальних параметрів.','Содержит группу экспериментальных параметров.',1,1,3,0,'<high>','LogLevPrm_experiment','',0,'1',0);
 INSERT INTO "DAQ_LogicLev" VALUES('prescription','Prescription commands','','','','','',1,1,3,0,'<high>','LogLevPrm_prescription','LogLevPrmRefl_prescription',0,'0.2',0);
-CREATE TABLE 'LogLevPrm_prescription_io' ("PRM_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"VALUE" TEXT DEFAULT '' , PRIMARY KEY ("PRM_ID","ID"));
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','start','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','stop','1');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','error','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','abort','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','run','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','pause','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','rez','1');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','arg1','10');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','tmp1','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_stop','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_frq','5');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_err','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_start','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','start','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','stop','1');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','error','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','abort','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','run','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','pause','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','rez','1');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','arg1','20');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','tmp1','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_stop','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_frq','5');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_err','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_start','0');
 CREATE TABLE 'BFN_SymbCode' ("ID" INTEGER DEFAULT '' ,"TEXT" TEXT DEFAULT '' ,"ru#TEXT" TEXT DEFAULT '' ,"uk#TEXT" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "BFN_SymbCode" VALUES(1,'Партия - часы','Партия - часы','');
 INSERT INTO "BFN_SymbCode" VALUES(2,'Часы реального времени','Часы реального времени','');
@@ -1916,7 +1732,7 @@ INSERT INTO "BFN_SymbCode" VALUES(9006,'Расход корма В, всего',
 INSERT INTO "BFN_SymbCode" VALUES(12920,'Set temperature tunnel','Set temperature tunnel','');
 CREATE TABLE 'LogLevPrm_prescription' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
 INSERT INTO "LogLevPrm_prescription" VALUES('backTimer','','Background timer','Background timer. Updating parallel with current command.',1,'PrescrTempl.backTimer','Фоновий таймер','Фоновый таймер','Фоновий таймер. Оновлення паралельно із поточною командой.','Фоновый таймер. Обновление параллельно с текущей командой.');
-INSERT INTO "LogLevPrm_prescription" VALUES('timer','','Timer','Typical timer. Hold run up to time elapse.',1,'PrescrTempl.timer','','','','');
+INSERT INTO "LogLevPrm_prescription" VALUES('timer','','Timer','Typical timer. Hold run up to time elapse.',1,'PrescrTempl.timer','Timer','','Typical timer. Hold run up to time elapse.','');
 CREATE TABLE 'JavaLikePrm_prescr' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"FLD" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
 INSERT INTO "JavaLikePrm_prescr" VALUES('cntr','','Control','',1,'mode
 prog
@@ -1947,9 +1763,6 @@ R101 = 65536*(AT101_1_To-273)/100;
 R103 = 65536*(AT101_2_Ti-273)/150;
 R104 = 65536*(AT101_2_To-273)/100;','','Serial.exlar','RTU',10);
 INSERT INTO "ModBus_node" VALUES('gate','','','','','','',0,2,'Sockets.testModBus','*',1,1.0,1,'','','','Serial.exlar','RTU',1);
-CREATE TABLE 'SYS' ("user" TEXT DEFAULT '' ,"id" TEXT DEFAULT '' ,"val" TEXT DEFAULT '' , PRIMARY KEY ("user","id"));
-INSERT INTO "SYS" VALUES('root','/sub_Protocol/mod_HTTP/AuthTime','10');
-INSERT INTO "SYS" VALUES('root','/sub_Protocol/mod_HTTP/AutoLogin','<aLog><it addrs="*" user="user" /></aLog>');
 CREATE TABLE 'Archive_val_proc' ("ID" TEXT DEFAULT '' ,"MODUL" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '0' ,"ADDR" TEXT DEFAULT '' ,"V_PER" DOUBLE DEFAULT '1' ,"A_PER" INTEGER DEFAULT '60' ,"SEL_PR" INTEGER DEFAULT '10' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODUL"));
 INSERT INTO "Archive_val_proc" VALUES('1m','FSArch','','','','Minute''s archive','Хвилинний архів','Минутный архив',1,'ARCHIVES/VAL/1m',60.0,60,10,'<prms TmSize="8600" NFiles="100" MaxCapacity="1000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="0" />
 ');
@@ -2067,4 +1880,241 @@ INSERT INTO "Archive_val" VALUES('SurgeKM302_var','','','','','','',1,2,'BlockCa
 INSERT INTO "Archive_val" VALUES('SurgeKM302_out','','','','','','',1,2,'BlockCalc.Anast1to2node_cntr.SurgeKM302.out',0,4,1.0,100,1,0,0,'FSArch.1s;');
 INSERT INTO "Archive_val" VALUES('SurgeKM302_auto','','','','','','',1,2,'BlockCalc.Anast1to2node_cntr.SurgeKM302.auto',0,0,1.0,100,1,0,0,'FSArch.1s;');
 INSERT INTO "Archive_val" VALUES('test_t1_1','','','','','','',1,0,'',0,4,1.0,100,1,0,0,'FSArch.1h;');
+INSERT INTO "Archive_val" VALUES('gN2_P1','','','','','','',1,0,'',0,4,1.0,100,1,0,0,'FSArch.1m;FSArch.1h;');
+INSERT INTO "Archive_val" VALUES('gN2_P2','','','','','','',1,0,'',0,4,1.0,100,1,0,0,'FSArch.1m;FSArch.1h;');
+INSERT INTO "Archive_val" VALUES('gN2_To','','','','','','',1,0,'',0,4,1.0,100,1,0,0,'FSArch.1m;FSArch.1h;');
+INSERT INTO "Archive_val" VALUES('gN2_Tp','','','','','','',1,0,'',0,4,1.0,100,1,0,0,'FSArch.1m;FSArch.1h;');
+INSERT INTO "Archive_val" VALUES('gN2_Txv','','','','','','',1,0,'',0,4,1.0,100,1,0,0,'FSArch.1m;FSArch.1h;');
+INSERT INTO "Archive_val" VALUES('gN2_V','','','','','','',1,0,'',0,4,1.0,100,1,0,0,'FSArch.1m;FSArch.1h;');
+INSERT INTO "Archive_val" VALUES('gN2_V1','','','','','','',1,0,'',0,4,1.0,100,1,0,0,'FSArch.1m;FSArch.1h;');
+INSERT INTO "Archive_val" VALUES('gN2_V2','','','','','','',1,0,'',0,4,1.0,100,1,0,0,'FSArch.1m;FSArch.1h;');
+INSERT INTO "Archive_val" VALUES('test123','','','','','','',1,0,'',0,5,1.0,100,1,0,0,'FSArch.1m;');
+INSERT INTO "Archive_val" VALUES('test1234','','','','','','',1,0,'',0,1,1.0,100,1,0,0,'FSArch.1m;');
+INSERT INTO "Archive_val" VALUES('testArch_cntr','','','','','','',1,0,'',0,1,1.0,100,1,0,0,'FSArch.1s;FSArch.1m;');
+INSERT INTO "Archive_val" VALUES('test_reg4','','','','','','',1,0,'',0,1,1.0,100,1,0,0,'FSArch.1s;');
+CREATE TABLE 'SYS' ("user" TEXT DEFAULT '' ,"id" TEXT DEFAULT '' ,"val" TEXT DEFAULT '' ,"uk#val" TEXT DEFAULT '' , PRIMARY KEY ("user","id"));
+INSERT INTO "SYS" VALUES('root','/sub_Protocol/mod_HTTP/AuthTime','10','');
+INSERT INTO "SYS" VALUES('root','/sub_Protocol/mod_HTTP/AutoLogin','<aLog><it addrs="*" user="user" /></aLog>','');
+CREATE TABLE 'DAQ_Siemens' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"TM_REST" INTEGER DEFAULT '30' ,"ASINC_WR" INTEGER DEFAULT '0' ,"TYPE" INTEGER DEFAULT '0' ,"ADDR" TEXT DEFAULT '10' ,"ADDR_TR" TEXT DEFAULT '' ,"SLOT" INTEGER DEFAULT '2' ,"CIF_DEV" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+INSERT INTO "DAQ_Siemens" VALUES('test','','','','','','',1,0,3,0,'<high>','CIFPrm_test',0,'1',0,30,0,1,'192.168.2.12','',2,0);
+CREATE TABLE 'DAQGatePrm_test' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM_ADDR" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"STATS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
+INSERT INTO "DAQGatePrm_test" VALUES('CPU0Load','','CPU Load: 0','Нагрузка процессора: 0','Навантаження CPU: 0','','','',1,'System/AutoDA/prm_CPU0Load','<Attrs>
+<a id="load" nm="Load (%)" tp="4" flg="772" />
+<a id="sys" nm="System (%)" tp="4" flg="772" />
+<a id="user" nm="User (%)" tp="4" flg="772" />
+<a id="idle" nm="Idle (%)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('CPU1Load','','CPU Load: 1','Нагрузка процессора: 1','Навантаження CPU: 1','','','',1,'System/AutoDA/prm_CPU1Load','<Attrs>
+<a id="load" nm="Load (%)" tp="4" flg="772" />
+<a id="sys" nm="System (%)" tp="4" flg="772" />
+<a id="user" nm="User (%)" tp="4" flg="772" />
+<a id="idle" nm="Idle (%)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('CPULoad','','Full CPU Load','Общая нагрузка процессора','Повне навантаження процесору','','','',1,'System/AutoDA/prm_CPULoad','<Attrs>
+<a id="load" nm="Load (%)" tp="4" flg="772" />
+<a id="sys" nm="System (%)" tp="4" flg="772" />
+<a id="user" nm="User (%)" tp="4" flg="772" />
+<a id="idle" nm="Idle (%)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('Interface_eth0','','Interface statistic: eth0','Статистика интерфейсов: eth0','Статистика інтерфейсу: eth0','','','',1,'System/AutoDA/prm_Interface_eth0','<Attrs>
+<a id="rcv" nm="Receive (B)" tp="4" flg="772" />
+<a id="rcvSp" nm="Receive speed (B/s)" tp="4" flg="772" />
+<a id="trns" nm="Transmit (B)" tp="4" flg="772" />
+<a id="trnsSp" nm="Transmit speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('Interface_lo','','Interface statistic: lo','Статистика интерфейсов: lo','Статистика інтерфейсу: lo','','','',1,'System/AutoDA/prm_Interface_lo','<Attrs>
+<a id="rcv" nm="Receive (B)" tp="4" flg="772" />
+<a id="rcvSp" nm="Receive speed (B/s)" tp="4" flg="772" />
+<a id="trns" nm="Transmit (B)" tp="4" flg="772" />
+<a id="trnsSp" nm="Transmit speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('Interface_wlan0','','Interface statistic: wlan0','Статистика интерфейсов: wlan0','Статистика інтерфейсу: wlan0','','','',1,'System/AutoDA/prm_Interface_wlan0','<Attrs>
+<a id="rcv" nm="Receive (B)" tp="4" flg="772" />
+<a id="rcvSp" nm="Receive speed (B/s)" tp="4" flg="772" />
+<a id="trns" nm="Transmit (B)" tp="4" flg="772" />
+<a id="trnsSp" nm="Transmit speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('MemInfo','','Memory info','Информация про память','Інформація про пам''ять','','','',1,'System/AutoDA/prm_MemInfo','<Attrs>
+<a id="free" nm="Free (kB)" tp="1" flg="772" />
+<a id="total" nm="Total (kB)" tp="1" flg="772" />
+<a id="use" nm="Use (kB)" tp="1" flg="772" />
+<a id="buff" nm="Buffers (kB)" tp="1" flg="772" />
+<a id="cache" nm="Cached (kB)" tp="1" flg="772" />
+<a id="sw_free" nm="Swap free (kB)" tp="1" flg="772" />
+<a id="sw_total" nm="Swap total (kB)" tp="1" flg="772" />
+<a id="sw_use" nm="Swap use (kB)" tp="1" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('SensorsData','','Data sensors','Данные сенсоров','Дані сенсорів','','','',1,'System/AutoDA/prm_SensorsData','<Attrs>
+<a id="thinkpad_fan1" nm="thinkpad fan1" tp="4" flg="772" />
+<a id="thinkpad_temp1" nm="thinkpad temp1" tp="4" flg="772" />
+<a id="thinkpad_temp2" nm="thinkpad temp2" tp="4" flg="772" />
+<a id="thinkpad_temp3" nm="thinkpad temp3" tp="4" flg="772" />
+<a id="thinkpad_temp4" nm="thinkpad temp4" tp="4" flg="772" />
+<a id="thinkpad_temp5" nm="thinkpad temp5" tp="4" flg="772" />
+<a id="thinkpad_temp6" nm="thinkpad temp6" tp="4" flg="772" />
+<a id="thinkpad_temp7" nm="thinkpad temp7" tp="4" flg="772" />
+<a id="thinkpad_temp8" nm="thinkpad temp8" tp="4" flg="772" />
+<a id="k8temp_temp1" nm="k8temp temp1" tp="4" flg="772" />
+<a id="k8temp_temp2" nm="k8temp temp2" tp="4" flg="772" />
+<a id="k8temp_temp3" nm="k8temp temp3" tp="4" flg="772" />
+<a id="k8temp_temp4" nm="k8temp temp4" tp="4" flg="772" />
+<a id="pch_wildcat_point_temp1" nm="pch_wildcat_point temp1" tp="4" flg="772" />
+<a id="acpitz_temp1" nm="acpitz temp1" tp="4" flg="772" />
+<a id="coretemp_temp1" nm="coretemp temp1" tp="4" flg="772" />
+<a id="coretemp_temp2" nm="coretemp temp2" tp="4" flg="772" />
+<a id="coretemp_temp3" nm="coretemp temp3" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda','','HDD statistic: sda','Статистика НЖМД: sda','Статистика НЖМД: sda','','','',1,'System/AutoDA/prm_Statistic_sda','<Attrs>
+<a id="rd" nm="Read (B)" tp="4" flg="772" />
+<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
+<a id="wr" nm="Write (B)" tp="4" flg="772" />
+<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda1','','HDD statistic: sda1','Статистика НЖМД: sda1','Статистика НЖМД: sda1','','','',1,'System/AutoDA/prm_Statistic_sda1','<Attrs>
+<a id="rd" nm="Read (B)" tp="4" flg="772" />
+<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
+<a id="wr" nm="Write (B)" tp="4" flg="772" />
+<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda2','','HDD statistic: sda2','Статистика НЖМД: sda2','Статистика НЖМД: sda2','','','',1,'System/AutoDA/prm_Statistic_sda2','<Attrs>
+<a id="rd" nm="Read (B)" tp="4" flg="772" />
+<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
+<a id="wr" nm="Write (B)" tp="4" flg="772" />
+<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('UpTimeStation','','Station up time','Время работы станции','Час роботи станції','','','',1,'System/AutoDA/prm_UpTimeStation','<Attrs>
+<a id="full" nm="Full seconds" tp="1" flg="772" />
+<a id="sec" nm="Seconds" tp="1" flg="772" />
+<a id="min" nm="Minutes" tp="1" flg="772" />
+<a id="hour" nm="Hours" tp="1" flg="772" />
+<a id="day" nm="Days" tp="1" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('UpTimeSystem','','System up time','Время работы системы','Час роботи системи','','','',1,'System/AutoDA/prm_UpTimeSystem','<Attrs>
+<a id="full" nm="Full seconds" tp="1" flg="772" />
+<a id="sec" nm="Seconds" tp="1" flg="772" />
+<a id="min" nm="Minutes" tp="1" flg="772" />
+<a id="hour" nm="Hours" tp="1" flg="772" />
+<a id="day" nm="Days" tp="1" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('test','','','','','','','',1,'ModBus/testTCP/prm_test','<Attrs>
+<a id="reg0" nm="Register 0" tp="1" flg="772" />
+<a id="reg1" nm="Register 1" tp="1" flg="772" />
+<a id="reg3" nm="Register 3" tp="1" flg="768" />
+<a id="reg4" nm="Register 4" tp="1" flg="772" />
+<a id="coil3" nm="Bit" tp="0" flg="768" />
+<a id="coil8" nm="Bit" tp="0" flg="768" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('test1','test','','','','','','',1,'ModBus/testTCP/prm_test/prm_test1','<Attrs>
+<a id="i6" nm="Integer32 [6,7]" tp="1" flg="768" />
+<a id="u6" nm="Integer32 (unsigned) [6,7]" tp="1" flg="772" />
+<a id="i10" nm="Integer64 [10-13]" tp="1" flg="772" />
+<a id="f8" nm="Float [8,9]" tp="4" flg="768" />
+<a id="d14" nm="Double [14-17]" tp="4" flg="768" />
+<a id="d18" nm="Double [18-21]" tp="4" flg="768" />
+<a id="s10" nm="String [110-120]" tp="5" flg="768" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('CPU2Load','','Навантаження CPU: 2','','Навантаження CPU: 2','','','',1,'System/AutoDA/prm_CPU2Load','<Attrs>
+<a id="load" nm="Завантаження (%)" tp="4" flg="772" />
+<a id="sys" nm="Система (%)" tp="4" flg="772" />
+<a id="user" nm="Користувач (%)" tp="4" flg="772" />
+<a id="idle" nm="Бездія (%)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('CPU3Load','','Навантаження CPU: 3','','Навантаження CPU: 3','','','',1,'System/AutoDA/prm_CPU3Load','<Attrs>
+<a id="load" nm="Завантаження (%)" tp="4" flg="772" />
+<a id="sys" nm="Система (%)" tp="4" flg="772" />
+<a id="user" nm="Користувач (%)" tp="4" flg="772" />
+<a id="idle" nm="Бездія (%)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('FS_','','Файлова система: ''/''','','Файлова система: ''/''','','','',1,'System/AutoDA/prm_FS_','<Attrs>
+<a id="total" nm="Разом (ГБ)" tp="4" flg="772" />
+<a id="used" nm="Використано (ГБ)" tp="4" flg="772" />
+<a id="free" nm="Вільно (ГБ)" tp="4" flg="772" />
+<a id="totalN" nm="Разом файлових вузлів" tp="1" flg="772" />
+<a id="usedN" nm="Використано файлових вузлів" tp="1" flg="772" />
+<a id="freeN" nm="Вільно файлових вузлів" tp="1" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('FS_data','','Файлова система: ''/data''','','Файлова система: ''/data''','','','',1,'System/AutoDA/prm_FS_data','<Attrs>
+<a id="total" nm="Разом (ГБ)" tp="4" flg="772" />
+<a id="used" nm="Використано (ГБ)" tp="4" flg="772" />
+<a id="free" nm="Вільно (ГБ)" tp="4" flg="772" />
+<a id="totalN" nm="Разом файлових вузлів" tp="1" flg="772" />
+<a id="usedN" nm="Використано файлових вузлів" tp="1" flg="772" />
+<a id="freeN" nm="Вільно файлових вузлів" tp="1" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('Interface_wwan0','','Статистика інтерфейсу: wwan0','','Статистика інтерфейсу: wwan0','','','',1,'System/AutoDA/prm_Interface_wwan0','<Attrs>
+<a id="rcv" nm="Прийнято (Б)" tp="4" flg="772" />
+<a id="rcvSp" nm="Швидкість прийому (Б/с)" tp="4" flg="772" />
+<a id="trns" nm="Передано (Б)" tp="4" flg="772" />
+<a id="trnsSp" nm="Швидкість передавання (Б/с)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda3','','Статистика НЖМД: sda3','','Статистика НЖМД: sda3','','','',1,'System/AutoDA/prm_Statistic_sda3','<Attrs>
+<a id="rd" nm="Прочитано (Б)" tp="4" flg="772" />
+<a id="rdSp" nm="Швидкість читання (Б/с)" tp="4" flg="772" />
+<a id="wr" nm="Записано (Б)" tp="4" flg="772" />
+<a id="wrSp" nm="Швидкість запису (Б/с)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda4','','Статистика НЖМД: sda4','','Статистика НЖМД: sda4','','','',1,'System/AutoDA/prm_Statistic_sda4','<Attrs>
+<a id="rd" nm="Прочитано (Б)" tp="4" flg="772" />
+<a id="rdSp" nm="Швидкість читання (Б/с)" tp="4" flg="772" />
+<a id="wr" nm="Записано (Б)" tp="4" flg="772" />
+<a id="wrSp" nm="Швидкість запису (Б/с)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda5','','Статистика НЖМД: sda5','','Статистика НЖМД: sda5','','','',1,'System/AutoDA/prm_Statistic_sda5','<Attrs>
+<a id="rd" nm="Прочитано (Б)" tp="4" flg="772" />
+<a id="rdSp" nm="Швидкість читання (Б/с)" tp="4" flg="772" />
+<a id="wr" nm="Записано (Б)" tp="4" flg="772" />
+<a id="wrSp" nm="Швидкість запису (Б/с)" tp="4" flg="772" />
+</Attrs>
+','loop;');
+CREATE TABLE 'DAQ_DCON' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ADDR" TEXT DEFAULT '' ,"REQ_TRY" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
+INSERT INTO "DAQ_DCON" VALUES('test','','','','','','',1,0,3,0,'<high>','DCONPrm_test',0,'1',0,'testModBus',1);
+CREATE TABLE 'LogLevPrm_prescription_io' ("PRM_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("PRM_ID","ID"));
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','start','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','stop','1','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','error','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','abort','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','run','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','pause','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','rez','1','1');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','arg1','10','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','tmp1','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_stop','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_frq','5.00122404098511','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_err','0','0');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_start','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','start','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','stop','1','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','error','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','abort','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','run','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','pause','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','rez','1','1');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','arg1','20','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','tmp1','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_stop','0','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_frq','5.00122404098511','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_err','0','0');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_start','0','');
 COMMIT;

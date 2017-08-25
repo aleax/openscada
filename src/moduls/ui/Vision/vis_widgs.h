@@ -94,13 +94,16 @@ namespace VISION
 
 	public:
 	    //Data
-	    enum Results { SelCancel, SelOK, SelErr };
+	    enum Results { SelCancel, SelOK, SelErr, NoAuto };
 
 	    //Methods
-	    DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent = 0, const string &lang = "" );
+	    DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent = 0,
+		const string &hint = "", const string &lang = "" );
 
-	    QString user();
-	    QString password();
+	    QString user( );
+	    QString password( );
+
+	    Results autoRes( )	{ return mAutoRes; }
 
 	protected:
 	    void showEvent( QShowEvent * event );
@@ -112,6 +115,7 @@ namespace VISION
 	    QComboBox	*users;
 	    QLineEdit	*passwd;
 	    QString	VCAstat;
+	    Results	mAutoRes;
     };
 
     //*********************************************
@@ -162,7 +166,7 @@ namespace VISION
 	    void setPass( const string &val )		{ userPass = val; }
 	    void setVCAStation( const string &val )	{ VCAStat = val.empty() ? "." : val; }
 
-	    bool userSel( );
+	    bool userSel( const string &hint = "" );
 
 	signals:
 	    void userChanged( const QString &oldUser, const QString &oldPass );

@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.15"
+#define MOD_VER		"2.0.16"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
  and Libnodave library, or self, for the rest.")
@@ -842,7 +842,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		ADSread->len = buffer.size();
 
 		//Request
-		int resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true);
+		int resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res));
 		int full_len = resp_len;
 		if(full_len < (int)sizeof(AMS_TCP_HEAD))	throw TError(_("ReadDB"), _("Error server respond."));
 		AmsTcpHD = (AMS_TCP_HEAD *)res;
@@ -850,7 +850,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 
 		//Wait tail
 		while(full_len < (int)(resp_sz+sizeof(AMS_TCP_HEAD))) {
-		    resp_len = tr.at().messIO(NULL, 0, res+full_len, sizeof(res)-full_len, 0, true);
+		    resp_len = tr.at().messIO(NULL, 0, res+full_len, sizeof(res)-full_len);
 		    if(!resp_len) throw TError(_("ReadDB"), _("Not full respond."));
 		    full_len += resp_len;
 		}
@@ -991,14 +991,14 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		memcpy(ADSreq+1, buffer.data(), buffer.size());
 
 		//Request
-		int resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true);
+		int resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res));
 		int full_len = resp_len;
 		if(full_len < (int)sizeof(AMS_TCP_HEAD)) throw TError(_("WriteDB"), _("Error server respond."));
 		AmsTcpHD = (AMS_TCP_HEAD *)res;
 		unsigned resp_sz = AmsHD->len;
 		//Wait tail
 		while(full_len < (int)(resp_sz+sizeof(AMS_TCP_HEAD))) {
-		    resp_len = tr.at().messIO(NULL, 0, res+full_len, sizeof(res)-full_len, 0, true);
+		    resp_len = tr.at().messIO(NULL, 0, res+full_len, sizeof(res)-full_len);
 		    if(!resp_len) throw TError(_("WriteDB"), _("Not full respond."));
 		    full_len += resp_len;
 		}
@@ -1060,7 +1060,7 @@ void TMdContr::protIO( XMLNode &io )
     int sCd = 0;
     char buf[1000];
 
-    ResAlloc resN(tr.at().nodeRes(), true);
+    MtxAlloc resN(tr.at().reqRes(), true);
     try {
 	if(io.name() != "ISO-TCP")	throw TError("", _("Unknown target protocol '%s'."), io.name().c_str());
 
@@ -1262,7 +1262,7 @@ void TMdContr::protIO( XMLNode &io )
 
 int TMdContr::messIO( const char *oBuf, int oLen, char *iBuf, int iLen )
 {
-    return tr.at().messIO(oBuf, oLen, iBuf, iLen, ((enableStat() && !isReload)?0:1000), true);
+    return tr.at().messIO(oBuf, oLen, iBuf, iLen, ((enableStat() && !isReload)?0:1000));
 }
 
 void TMdContr::reset( )

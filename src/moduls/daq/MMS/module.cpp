@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.MMS file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2013-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.11"
+#define MOD_VER		"1.3.12"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -194,7 +194,7 @@ void TMdContr::reqService( MMS::XML_N &io )
 
 void TMdContr::protIO( MMS::XML_N &io )
 {
-    ResAlloc resN(tr.at().nodeRes(), true);
+    MtxAlloc resN(tr.at().reqRes(), true);
     if(messLev() == TMess::Debug) io.setAttr("debug", "1");
     try { Client::protIO(io); }
     catch(TError &er) { io.setAttr("err", TSYS::strMess("%s:%s", _("Remote host error"), er.mess.c_str())); }
@@ -202,7 +202,7 @@ void TMdContr::protIO( MMS::XML_N &io )
 
 int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
 {
-    return tr.at().messIO(obuf, len_ob, ibuf, len_ib, ((enableStat() && !isReload)?0:1000), true);
+    return tr.at().messIO(obuf, len_ob, ibuf, len_ib, ((enableStat() && !isReload)?0:1000));
 }
 
 void TMdContr::debugMess( const string &mess )	{ mess_debug_(nodePath().c_str(), "%s", mess.c_str()); }

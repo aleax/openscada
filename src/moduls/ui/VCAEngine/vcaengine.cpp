@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"4.0.0"
+#define MOD_VER		"4.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main visual control area engine.")
 #define LICENSE		"GPL2"
@@ -495,7 +495,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 
 	if(!SYS->db().at().dataGet(wdb,nodePath()+tbl,cEl,false,true)) continue;
 
-	attr.at().setS(cEl.cfg("IO_VAL").getS(),true);
+	attr.at().setS(cEl.cfg("IO_VAL").getS(), true);
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)cEl.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(cEl.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(cEl.cfg("CFG_VAL").getS());

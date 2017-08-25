@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: session.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,8 +34,9 @@ using namespace VCA;
 //* Session: Project's session			 *
 //************************************************
 Session::Session( const string &iid, const string &iproj ) : mAlrmRes(true), mCalcRes(true),
-    mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser(dataRes()), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
-    endrunReq(false), mBackgrnd(false), mConnects(0), mCalcClk(1), mStyleIdW(-1)
+    mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser(dataRes()), mReqUser(dataRes()), mReqLang(dataRes()),
+    mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
+    endrunReq(false), mBackgrnd(false), mConnects(0), mCalcClk(1), mReqTm(0), mUserActTm(0), mStyleIdW(-1)
 {
     mUser = "root";
     mPage = grpAdd("pg_");
@@ -110,8 +111,8 @@ void Session::setEnable( bool val )
 
 	    //Pages enable
 	    list(pg_ls);
-	    for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
-		try{ at(pg_ls[i_ls]).at().setEnable(true); }
+	    for(unsigned iLs = 0; iLs < pg_ls.size(); iLs++)
+		try{ at(pg_ls[iLs]).at().setEnable(true); }
 		catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Enable root pages time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
@@ -126,12 +127,12 @@ void Session::setEnable( bool val )
 
 	//Pages disable
 	list(pg_ls);
-	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
-	    at(pg_ls[i_ls]).at().setEnable(false);
+	for(unsigned iLs = 0; iLs < pg_ls.size(); iLs++)
+	    at(pg_ls[iLs]).at().setEnable(false);
 
 	//Delete pages
-	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
-	    del(pg_ls[i_ls]);
+	for(unsigned iLs = 0; iLs < pg_ls.size(); iLs++)
+	    del(pg_ls[iLs]);
 
 	//Disconnect from project
 	mParent.free();
@@ -171,8 +172,8 @@ void Session::setStart( bool val )
 
 	//Process all pages to on
 	list(pg_ls);
-	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
-	    at(pg_ls[i_ls]).at().setProcess(true);
+	for(unsigned iLs = 0; iLs < pg_ls.size(); iLs++)
+	    at(pg_ls[iLs]).at().setProcess(true);
 
 	if(mess_lev() == TMess::Debug) {
 	    mess_debug(nodePath().c_str(), _("Process on for all root pages time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
@@ -202,8 +203,8 @@ void Session::setStart( bool val )
 
 	//Process all pages to off
 	list(pg_ls);
-	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
-	    at(pg_ls[i_ls]).at().setProcess(false);
+	for(unsigned iLs = 0; iLs < pg_ls.size(); iLs++)
+	    at(pg_ls[iLs]).at().setProcess(false);
     }
 }
 
@@ -320,15 +321,15 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 		}
 		else {
 		    curEl = curEl.substr(3);
-		    int i_l;
-		    for(i_l = 0; i_l < (int)pls.size(); i_l++)
-			if(curEl == pls[i_l]) break;
-		    if(i_l < (int)pls.size()) {
+		    int iL;
+		    for(iL = 0; iL < (int)pls.size(); iL++)
+			if(curEl == pls[iL]) break;
+		    if(iL < (int)pls.size()) {
 			if(curPtEl == "$") {
-			    if(com == "next") i_l++;
-			    if(com == "prev") i_l--;
-			    i_l = (i_l < 0) ? (int)pls.size()-1 : (i_l >= (int)pls.size()) ? 0 : i_l;
-			    opPg = pls[i_l];
+			    if(com == "next") iL++;
+			    if(com == "prev") iL--;
+			    iL = (iL < 0) ? (int)pls.size()-1 : (iL >= (int)pls.size()) ? 0 : iL;
+			    opPg = pls[iL];
 			    if(opPg == curEl) return;
 			}
 			else opPg = curEl;
@@ -471,11 +472,11 @@ void *Session::Task( void *icontr )
     ses.list(pls);
     while(!ses.endrunReq) {
 	//Calc session pages and all other items at recursion
-	for(unsigned i_l = 0; i_l < pls.size(); i_l++)
-	    try { ses.at(pls[i_l]).at().calc(false, false); }
+	for(unsigned iL = 0; iL < pls.size(); iL++)
+	    try { ses.at(pls[iL]).at().calc(false, false); }
 	    catch(TError &err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(ses.nodePath().c_str(),_("Session '%s' calculate error."),pls[i_l].c_str());
+		mess_err(ses.nodePath().c_str(),_("Session '%s' calculate error."),pls[iL].c_str());
 	    }
 
 	//VCA server's notifications processing
@@ -544,7 +545,7 @@ bool Session::stlPropSet( const string &pid, const string &vl )
 
 TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms, const string &cuser )
 {
-    // string user( ) - the session user
+    // string user( ) - the session user or last command user
     if(iid == "user")	return user();
     // int alrmQuittance( int quit_tmpl, string wpath = "", bool ret = false ) -
     //        alarm quittance, or return for <ret>, <wpath> with template <quit_tmpl>. If <wpath> is empty string then make global quittance.
@@ -555,6 +556,14 @@ TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	alarmQuittance((prms.size()>=2) ? prms[1].getS() : "", ~prms[0].getI(), (prms.size()>=3) ? prms[2].getB() : false);
 	return 0;
     }
+    // int reqTm( ) - Last request time
+    if(iid == "reqTm")		return reqTm();
+    // string reqUser( ) - Last request user
+    if(iid == "reqUser")	return reqUser();
+    // string reqLang( ) - Last request language
+    if(iid == "reqLang")	return reqLang();
+    // int userActTm( ) - Last user action time
+    if(iid == "userActTm")	return userActTm();
 
     return TCntrNode::objFuncCall(iid,prms,cuser);
 }
@@ -599,6 +608,8 @@ void Session::cntrCmdProc( XMLNode *opt )
 	else if(ctrChkNode(opt,"close",RWRWRW,owner().c_str(),grp().c_str(),SEC_WR))		//Close open pages
 	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(false);
 	mReqTm = time(NULL);
+	setReqUser(opt->attr("user"));
+	setReqLang(opt->attr("lang"));
 	return;
     }
     else if(a_path == "/serv/alarm") {	//Alarm operations
@@ -648,7 +659,10 @@ void Session::cntrCmdProc( XMLNode *opt )
 		if(start()) {
 		    ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Calculate session time"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("fld",opt,-1,"/obj/st/connect",_("Connections counter"),R_R_R_,"root",SUI_ID,1,"tp","int");
-		    ctrMkNode("fld",opt,-1,"/obj/st/reqTime",_("Last request"),R_R_R_,"root",SUI_ID,1,"tp","time");
+		    ctrMkNode("fld",opt,-1,"/obj/st/reqTime",_("Last request time, user, language"),R_R_R_,"root",SUI_ID,1,"tp","time");
+		    ctrMkNode("fld",opt,-1,"/obj/st/reqUser","",R_R_R_,"root",SUI_ID,1,"tp","str");
+		    ctrMkNode("fld",opt,-1,"/obj/st/reqLang","",R_R_R_,"root",SUI_ID,1,"tp","str");
+		    ctrMkNode("fld",opt,-1,"/obj/st/userActTime",_("Last user action"),R_R_R_,"root",SUI_ID,1,"tp","time");
 		    if(!backgrnd()) ctrMkNode("fld",opt,-1,"/obj/st/leftToClose",_("Left to force close (s)"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 		}
 	    }
@@ -692,6 +706,9 @@ void Session::cntrCmdProc( XMLNode *opt )
 	opt->setText(tm2s(SYS->taskUtilizTm(nodePath('.',true)))+"["+tm2s(SYS->taskUtilizTm(nodePath('.',true),true))+"]");
     else if(a_path == "/obj/st/connect" && ctrChkNode(opt))	opt->setText(i2s(connects()));
     else if(a_path == "/obj/st/reqTime" && ctrChkNode(opt))	opt->setText(i2s(reqTm()));
+    else if(a_path == "/obj/st/reqUser" && ctrChkNode(opt))	opt->setText(reqUser());
+    else if(a_path == "/obj/st/reqLang" && ctrChkNode(opt))	opt->setText(reqLang());
+    else if(a_path == "/obj/st/userActTime" && ctrChkNode(opt))	opt->setText(i2s(userActTm()));
     else if(a_path == "/obj/st/leftToClose" && ctrChkNode(opt))	opt->setText(i2s(vmax(0,DIS_SES_TM-(time(NULL)-reqTm()))));
     else if(a_path == "/obj/prj_ls" && ctrChkNode(opt)) {
 	vector<string> lst;
@@ -1062,8 +1079,8 @@ void SessPage::setEnable( bool val, bool force )
 
 	    //Enable included pages
 	    pageList(pg_ls);
-	    for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
-		try{ pageAt(pg_ls[i_l]).at().setEnable(true); }
+	    for(unsigned iL = 0; iL < pg_ls.size(); iL++)
+		try{ pageAt(pg_ls[iL]).at().setEnable(true); }
 		catch(TError &err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	}
 	mToEn = false;
@@ -1077,12 +1094,12 @@ void SessPage::setEnable( bool val, bool force )
 
 	//Disable include pages
 	pageList(pg_ls);
-	for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
-	    pageAt(pg_ls[i_l]).at().setEnable(false);
+	for(unsigned iL = 0; iL < pg_ls.size(); iL++)
+	    pageAt(pg_ls[iL]).at().setEnable(false);
 
 	//Delete included pages
-	for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
-	    pageDel(pg_ls[i_l]);
+	for(unsigned iL = 0; iL < pg_ls.size(); iL++)
+	    pageDel(pg_ls[iL]);
 
 	SessWdg::setEnable(false);
 	mDisMan = true;
@@ -1095,8 +1112,8 @@ void SessPage::setProcess( bool val, bool lastFirstCalc )
     //!!!! Need for rewrite by process included to containers but not included to the subtree !!!!
     vector<string> ls;
     pageList(ls);
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	pageAt(ls[i_l]).at().setProcess(val, lastFirstCalc);
+    for(unsigned iL = 0; iL < ls.size(); iL++)
+	pageAt(ls[iL]).at().setProcess(val, lastFirstCalc);
 
     if(!enable()) return;
 
@@ -1174,8 +1191,8 @@ void SessPage::calc( bool first, bool last )
     if(!first && !last) {	//Only for ordinal calls by first's and last's calls direct from setProcess() gone.
 	vector<string> ls;
 	pageList(ls);
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    pageAt(ls[i_l]).at().calc(first, last);
+	for(unsigned iL = 0; iL < ls.size(); iL++)
+	    pageAt(ls[iL]).at().calc(first, last);
     }
 }
 
@@ -1477,8 +1494,8 @@ void SessWdg::setEnable( bool val, bool force )
 	//Delete included widgets
 	vector<string> ls;
 	wdgList(ls);
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    wdgDel(ls[i_l]);
+	for(unsigned iL = 0; iL < ls.size(); iL++)
+	    wdgDel(ls[iL]);
     }
 
     SessWdg *sw;
@@ -1569,8 +1586,8 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
     //Change process for included widgets
     vector<string> ls;
     wdgList(ls);
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	((AutoHD<SessWdg>)wdgAt(ls[i_l])).at().setProcess(val, false);
+    for(unsigned iL = 0; iL < ls.size(); iL++)
+	((AutoHD<SessWdg>)wdgAt(ls[iL])).at().setProcess(val, false);
 
     mProc = val;
 
@@ -1776,8 +1793,8 @@ void SessWdg::prcElListUpdate( )
     wdgList(ls);
     MtxAlloc resDt(ownerSess()->dataRes(), true);
     mWdgChldAct.clear();
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	try { if(((AutoHD<SessWdg>)wdgAt(ls[i_l])).at().process()) mWdgChldAct.push_back(ls[i_l]); }
+    for(unsigned iL = 0; iL < ls.size(); iL++)
+	try { if(((AutoHD<SessWdg>)wdgAt(ls[iL])).at().process()) mWdgChldAct.push_back(ls[iL]); }
 	catch(TError &err) { }
     resDt.unlock();
 
@@ -1796,9 +1813,9 @@ void SessWdg::getUpdtWdg( const string &ipath, unsigned int tm, vector<string> &
     if(modifChk(tm,mMdfClc)) els.push_back(wpath);
 
     MtxAlloc resDt(ownerSess()->dataRes(), true);
-    for(unsigned i_ch = 0; i_ch < mWdgChldAct.size(); i_ch++)
+    for(unsigned iCh = 0; iCh < mWdgChldAct.size(); iCh++)
 	try {
-	    AutoHD<SessWdg> wdg = wdgAt(mWdgChldAct[i_ch]);
+	    AutoHD<SessWdg> wdg = wdgAt(mWdgChldAct[iCh]);
 	    resDt.unlock();
 	    wdg.at().getUpdtWdg(wpath, tm, els);
 	    resDt.lock();
@@ -1829,9 +1846,9 @@ void SessWdg::calc( bool first, bool last )
 
     //Calculate include widgets
     MtxAlloc resDt(ownerSess()->dataRes(), true);
-    for(unsigned i_l = 0; i_l < mWdgChldAct.size(); i_l++)
+    for(unsigned iL = 0; iL < mWdgChldAct.size(); iL++)
 	try {
-	    AutoHD<SessWdg> wdg = wdgAt(mWdgChldAct[i_l]);
+	    AutoHD<SessWdg> wdg = wdgAt(mWdgChldAct[iL]);
 	    resDt.unlock();
 	    wdg.at().calc(first, last);
 	    resDt.lock();
@@ -1851,9 +1868,9 @@ void SessWdg::calc( bool first, bool last )
 	    AutoHD<Attr> attr;
 	    AutoHD<TVal> vl;
 	    inLnkGet = true;
-	    for(unsigned i_a = 0; i_a < mAttrLnkLs.size(); i_a++) {
-		attr = attrAt(mAttrLnkLs[i_a]);
-		if(attr.at().flgSelf()&Attr::CfgConst && !attr.at().cfgVal().empty())	attr.at().setS(attr.at().cfgVal());
+	    for(unsigned iA = 0; iA < mAttrLnkLs.size(); iA++) {
+		attr = attrAt(mAttrLnkLs[iA]);
+		if(attr.at().flgSelf()&Attr::CfgConst && !attr.at().cfgVal().empty())	attr.at().setS(trLU(attr.at().cfgVal(),ownerSess()->reqLang(),ownerSess()->reqUser()));
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty()) {
 		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':') + ":";
 		    if(obj_tp == "val:")	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
@@ -2095,7 +2112,12 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  fromSess - read attribute from session table.
     if(iid == "attr" && prms.size()) {
 	if(prms.size() > 1 && prms[1].getB())	return sessAttr(prms[0].getS());
-	else if(attrPresent(prms[0].getS()))	return attrAt(prms[0].getS()).at().get();
+	else if(attrPresent(prms[0].getS())){
+	    TVariant rez = attrAt(prms[0].getS()).at().get();
+	    if(rez.type() == TVariant::String)	return trLU(rez.getS(),ownerSess()->reqLang(),ownerSess()->reqUser());
+	    return rez;
+	    //return attrAt(prms[0].getS()).at().get();
+	}
 	return string("");
     }
     // TCntrNodeObj attrSet(string attr, ElTp vl, bool toSess = false) - set attribute <attr> to value <vl> or to the session table <toSess>.
@@ -2197,11 +2219,11 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		AutoHD<Attr> attr;
 		vector<string> als;
 		attrList(als);
-		for(unsigned i_l = 0; i_l < als.size(); i_l++) {
-		    attr = attrAt(als[i_l]);
+		for(unsigned iL = 0; iL < als.size(); iL++) {
+		    attr = attrAt(als[iL]);
 		    if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec) &&
 			    modifChk(tm,attr.at().modif()))
-			opt->childAdd("el")->setAttr("id", als[i_l].c_str())->
+			opt->childAdd("el")->setAttr("id", als[iL].c_str())->
 					     setAttr("p", attr.at().fld().reserve())->
 					     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
 		}
@@ -2209,8 +2231,9 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	}
 	else if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR)) {	//Set values
 	    if(ownerSess()->user() != u) ownerSess()->setUser(u);
-	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++) {
-		XMLNode *aN = opt->childGet(i_ch);
+	    ownerSess()->setUserActTm();
+	    for(unsigned iCh = 0; iCh < opt->childSize(); iCh++) {
+		XMLNode *aN = opt->childGet(iCh);
 		string aid = aN->attr("id");
 		if(aid == "event") eventAdd(aN->text()+"\n");
 		else attrAt(aid).at().setS(aN->text());
@@ -2231,11 +2254,11 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    AutoHD<Attr> attr;
 	    vector<string> als;
 	    attrList(als);
-	    for(unsigned i_l = 0; i_l < als.size(); i_l++) {
-		attr = attrAt(als[i_l]);
+	    for(unsigned iL = 0; iL < als.size(); iL++) {
+		attr = attrAt(als[iL]);
 		if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec) &&
 			modifChk(tm,attr.at().modif()))
-		    opt->childAdd("el")->setAttr("id", als[i_l].c_str())->
+		    opt->childAdd("el")->setAttr("id", als[iL].c_str())->
 				     setAttr("p", attr.at().fld().reserve())->
 				     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
 	    }

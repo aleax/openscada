@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2588,7 +2588,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 #ifdef OSC_DEBUG
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "%ph: Function %d=tr(%d).", cprg, ptr->rez, ptr->a);
 #endif
-		reg[ptr->rez] = Mess->translGetU(getValS(val,reg[ptr->a]),val->user(),"uapi:"+val->func()->stor());
+		reg[ptr->rez] = Mess->translGetLU(getValS(val,reg[ptr->a]),val->lang(),val->user(),"uapi:"+val->func()->stor());
 		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::CProc:
@@ -2602,6 +2602,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		    TValFunc *vfnc = val->ctxGet(ctxId);
 		    if(!vfnc) {
 			vfnc = new TValFunc("JavaLikeFuncCalc", fromR ? &reg[ptr->f_r].val().f->at() : &mFncs[ptr->f].at());
+			vfnc->setUser(val->user()); vfnc->setLang(val->lang());
 			val->ctxSet(ctxId, vfnc);
 		    }
 #ifdef OSC_DEBUG

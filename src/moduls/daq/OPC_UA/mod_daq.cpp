@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -205,7 +205,7 @@ void TMdContr::stop_( )
 
 void TMdContr::protIO( XML_N &io )
 {
-    ResAlloc resN(tr.at().nodeRes(), true);
+    MtxAlloc resN(tr.at().reqRes(), true);
     if(messLev() == TMess::Debug) io.setAttr("debug", "1");
     try { Client::protIO(io); }
     catch(TError &er)
@@ -215,7 +215,7 @@ void TMdContr::protIO( XML_N &io )
 int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
 {
     if(!connect()) connect(true);
-    return tr.at().messIO(obuf, len_ob, ibuf, len_ib, 0, true);
+    return tr.at().messIO(obuf, len_ob, ibuf, len_ib);
 }
 
 void TMdContr::debugMess( const string &mess )	{ mess_debug_(nodePath().c_str(), "%s", mess.c_str()); }
