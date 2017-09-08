@@ -1,5 +1,4 @@
 # OpenSCADA.DB.SQLite translate to German.
-# Copyright (C) 2008-2010 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DB.SQLite module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.

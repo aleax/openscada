@@ -1,5 +1,4 @@
 # OpenSCADA.DB.SQLite translate to Russian.
-# Copyright (C) 2003-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DB.SQLite package module.
 #
 # Roman Savochenko <rom_as@oscada.org>, 2003-2010.

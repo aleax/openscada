@@ -334,7 +334,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     bool first_sel = true, next = false, trPresent = false;
     for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
 	sid = tblStrct[iFld][1];
-	TCfg *u_cfg = cfg.at(sid,true);
+	TCfg *u_cfg = cfg.at(sid, true);
 	if(!u_cfg && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
 	    u_cfg = cfg.at(sid.substr(3),true);
 	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;

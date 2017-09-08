@@ -1,0 +1,89 @@
+# OpenSCADA.DB.LDAP translate to German.
+# This file is distributed under the same license as the OpenSCADA.DB.SQLite module.
+#
+# Roman Savochenko <rom_as@oscada.org>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DB.LDAP 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-08 12:21+0300\n"
+"PO-Revision-Date: 2017-09-04 16:18+0300\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: de <>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Directory by LDAP"
+msgstr "Verzeichnis von LDAP"
+
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+msgid "BD module. Provides support of directories by LDAP."
+msgstr "BD-Modul. Bietet Unterstützung von Verzeichnissen durch LDAP."
+
+#, c-format
+msgid "INIT: %s"
+msgstr "INIT: %s"
+
+#, c-format
+msgid "OPT_PROTOCOL_VERSION: set %d error."
+msgstr "OPT_PROTOCOL_VERSION: setze %d Fehler."
+
+#, c-format
+msgid "OPT_TIMEOUT: %g error."
+msgstr "OPT_TIMEOUT: %g Fehler."
+
+#, c-format
+msgid "BIND: %s"
+msgstr "BIND: %s"
+
+#, c-format
+msgid "Error open table '%s'. DB is disabled."
+msgstr "Fehler beim Öffnen der Tabelle '%s'. Datenbank ist abgeschaltet."
+
+#, c-format
+msgid "SEARCH: %s"
+msgstr "SEARCH: %s"
+
+#, c-format
+msgid "OpenTable '%s': missed."
+msgstr "OpenTable '%s': verpasst."
+
+msgid ""
+"Directory server address as \"ldap[s]://{host}[:{port}];bdn[;{adn};{pass}[;"
+"{tm}]]\".\n"
+"Where:\n"
+"  host - hostname of the directory service;\n"
+"  port - port, default 389;\n"
+"  bdn  - base DN, an entry which sub-entries means as tables of the database "
+"with RDN attribute \"ou\" presents;\n"
+"  adn  - Distinguished Name of the auth user, omiting the user and next "
+"password will cause to anonymous connection;\n"
+"  pass - password of the Distinguished Name of the auth user;\n"
+"  tm   - network and generic timeout in seconds by real number."
+msgstr ""
+"Verzeichnis-Server-Adresse als \"ldap[s]://{host}[:{port}];bdn[;{adn};{pass}"
+"[;{tm}]]\".\n"
+"Where:\n"
+"  host - Hostname des Verzeichnisdienstes;\n"
+"  port - Port, Standard 389;\n"
+"  bdn  - Basis DN, ein Eintrag, den Untereinträge als Tabellen der Datenbank mit RDN-Attribut \"ou\" präsentieren;\n"
+"  adn  - Distinguished Name of the auth user, das Weglassen und das nächste Passwort wird zu einer anonymen Verbindung führen;\n"
+"  pass - Distinguished Name des auth Benutzers;\n"
+"  tm   - Netzwerk und generisches Timeout in Sekunden durch reale Zahl."
+
+#, c-format
+msgid "Entry \"%s\" is not present."
+msgstr "Eintrag \"%s\" ist nicht vorhanden."
+
+#, c-format
+msgid "Get DN of the entry \"%s\" error."
+msgstr "Erhalten Sie DN des Eintrags \"%s\" Fehler."
+
+#, c-format
+msgid "MODIFY: %s"
+msgstr "ÄNDERN:  %s"

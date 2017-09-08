@@ -10047,7 +10047,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMgn','tmpl','<body docProcLang="JavaL
 <h1>Table of accumulation instantaneous values of "<b><?dp return pTitle;?></b>"</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR align="left" valign="center"><TH colspan="7">Accumulated values for: DD MM YYYY<?dp return "Accumulated values for: "+Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TH></TR>
-  <TR><TH>Date</TH><TH>Time</TH><TH>Flow</TH><TH>Day capacity</TH><TH>Pressure</TH><TH>Temperatura</TH><TH>Pressure diff.</TH></TR>
+  <TR><TH>Date</TH><TH>Time</TH><TH>Flow</TH><TH>Capacity</TH><TH>Pressure</TH><TH>Temperatura</TH><TH>Pressure diff.</TH></TR>
   <TR><TH colspan="2">&nbsp;</TH><TH>m3/h</TH><TH>m3</TH><TH>kgF/cm2</TH><TH>grad.C</TH><TH>kgF/cm2</TH></TR>
   <TR docRept="1">
 	<?dp return "<TD>"+Special.FLibSYS.tmFStr(rTime,"%d %m %Y")+"</TD>"+
@@ -10063,8 +10063,8 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMgn','tmpl','<body docProcLang="JavaL
 <h1>Таблиця накопичення миттевих значень "<b><?dp return pTitle;?></b>"</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR align="left" valign="center"><TH colspan="7">Накопичені значення за обч. # тр-пров # за: DD MM YYYY<?dp return "Накопичені значення за обч. # тр-пров # за: "+Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TH></TR>
-  <TR><TH>Дата</TH><TH>Час</TH><TH>Витрати</TH><TH>Доб. Об''єм</TH><TH>Тиск</TH><TH>Температура</TH><TH>Перепад</TH></TR>
-  <TR><TH colspan="2">&nbsp;</TH><TH>тис.м3/ч</TH><TH>тис.м3</TH><TH>кГс/см2</TH><TH>град.С</TH><TH>кГс/см2</TH></TR>
+  <TR><TH>Дата</TH><TH>Час</TH><TH>Витрати</TH><TH>Об''єм</TH><TH>Тиск</TH><TH>Температура</TH><TH>Перепад</TH></TR>
+  <TR><TH colspan="2">&nbsp;</TH><TH>м3/ч</TH><TH>м3</TH><TH>кГс/см2</TH><TH>град.С</TH><TH>кГс/см2</TH></TR>
   <TR docRept="1">
 	<?dp return "<TD>"+Special.FLibSYS.tmFStr(rTime,"%d %m %Y")+"</TD>"+
 		"<TD>"+Special.FLibSYS.tmFStr(rTime,"%H:%M:%S")+"</TD>"+
@@ -10079,8 +10079,8 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMgn','tmpl','<body docProcLang="JavaL
 <h1>Таблица накопленных мгновенных значений "<b><?dp return pTitle;?></b>"</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR align="left" valign="center"><TH colspan="7">Накопленые значения по выч. # тр-пров # за: DD MM YYYY<?dp return "Накопленые значения по выч. # тр-пров # за: "+Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TH></TR>
-  <TR><TH>Дата</TH><TH>Время</TH><TH>Расход</TH><TH>Сут. Объём</TH><TH>давл.</TH><TH>Температура</TH><TH>Перепад</TH></TR>
-  <TR><TH colspan="2">&nbsp;</TH><TH>тыс.м3/ч</TH><TH>тыс.м3</TH><TH>кГс/см2</TH><TH>град.С</TH><TH>кГс/см2</TH></TR>
+  <TR><TH>Дата</TH><TH>Время</TH><TH>Расход</TH><TH>Объём</TH><TH>давл.</TH><TH>Температура</TH><TH>Перепад</TH></TR>
+  <TR><TH colspan="2">&nbsp;</TH><TH>м3/ч</TH><TH>м3</TH><TH>кГс/см2</TH><TH>град.С</TH><TH>кГс/см2</TH></TR>
   <TR docRept="1">
 	<?dp return "<TD>"+Special.FLibSYS.tmFStr(rTime,"%d %m %Y")+"</TD>"+
 		"<TD>"+Special.FLibSYS.tmFStr(rTime,"%H:%M:%S")+"</TD>"+

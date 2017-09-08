@@ -1,0 +1,88 @@
+# OpenSCADA.DB.SQLite translate to Ukrainian.
+# This file is distributed under the same license as the OpenSCADA.DB.SQLite module.
+#
+# Roman Savochenko <rom_as@oscada.org>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DB.LDAP 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-08 12:21+0300\n"
+"PO-Revision-Date: 2017-09-04 16:18+0300\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: <uk@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Directory by LDAP"
+msgstr "Директорія LDAP"
+
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+msgid "BD module. Provides support of directories by LDAP."
+msgstr "Модуль БД. Надає підтримку директорій за посередництвом LDAP."
+
+#, c-format
+msgid "INIT: %s"
+msgstr "INIT: %s"
+
+#, c-format
+msgid "OPT_PROTOCOL_VERSION: set %d error."
+msgstr "OPT_PROTOCOL_VERSION: помилка встановлення %d."
+
+#, c-format
+msgid "OPT_TIMEOUT: %g error."
+msgstr "OPT_TIMEOUT: помилка %g."
+
+#, c-format
+msgid "BIND: %s"
+msgstr "BIND: %s"
+
+#, c-format
+msgid "Error open table '%s'. DB is disabled."
+msgstr "Помилка відкриття таблиці '%s'. БД вимкнено."
+
+#, c-format
+msgid "SEARCH: %s"
+msgstr "SEARCH: %s"
+
+#, c-format
+msgid "OpenTable '%s': missed."
+msgstr "ВідкрТаблиці '%s': відсутня."
+
+msgid ""
+"Directory server address as \"ldap[s]://{host}[:{port}];bdn[;{adn};{pass}[;"
+"{tm}]]\".\n"
+"Where:\n"
+"  host - hostname of the directory service;\n"
+"  port - port, default 389;\n"
+"  bdn  - base DN, an entry which sub-entries means as tables of the database "
+"with RDN attribute \"ou\" presents;\n"
+"  adn  - Distinguished Name of the auth user, omiting the user and next "
+"password will cause to anonymous connection;\n"
+"  pass - password of the Distinguished Name of the auth user;\n"
+"  tm   - network and generic timeout in seconds by real number."
+msgstr ""
+"Адреса серверу директорій як \"ldap[s]://{host}[:{port}];bdn[;{adn};{pass}[;"
+"{tm}]]\".\n"
+"Де:\n"
+"  host - ім'я хосту сервісу директорій;\n"
+"  port - порт, типово 389;\n"
+"  bdn  - базовий DN запису, підзаписи якого представляють таблиці бази даних, за наявністю RDN атрибуту \"ou\";\n"
+"  adn  - Визначене Ім'я (DN) користувача автентифікації, опускання користувача та подальшого паролю призведе до анонімного підключення;\n"
+"  pass - пароль Визначеного Ім'я (DN) користувача автентифікації;\n"
+"  tm   - мережевий та загальний таймаут у секундах реальним числом."
+
+#, c-format
+msgid "Entry \"%s\" is not present."
+msgstr "Запис \"%s\" відсутній."
+
+#, c-format
+msgid "Get DN of the entry \"%s\" error."
+msgstr "Помилка отримання DN запису \"%s\"."
+
+#, c-format
+msgid "MODIFY: %s"
+msgstr "MODIFY: %s"

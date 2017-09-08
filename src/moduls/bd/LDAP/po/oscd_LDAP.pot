@@ -1,0 +1,78 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-08 12:21+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Directory by LDAP"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "BD module. Provides support of directories by LDAP."
+msgstr ""
+
+#, c-format
+msgid "INIT: %s"
+msgstr ""
+
+#, c-format
+msgid "OPT_PROTOCOL_VERSION: set %d error."
+msgstr ""
+
+#, c-format
+msgid "OPT_TIMEOUT: %g error."
+msgstr ""
+
+#, c-format
+msgid "BIND: %s"
+msgstr ""
+
+#, c-format
+msgid "Error open table '%s'. DB is disabled."
+msgstr ""
+
+#, c-format
+msgid "SEARCH: %s"
+msgstr ""
+
+#, c-format
+msgid "OpenTable '%s': missed."
+msgstr ""
+
+msgid ""
+"Directory server address as \"ldap[s]://{host}[:{port}];bdn[;{adn};{pass}[;{tm}]]\".\n"
+"Where:\n"
+"  host - hostname of the directory service;\n"
+"  port - port, default 389;\n"
+"  bdn  - base DN, an entry which sub-entries means as tables of the database with RDN attribute \"ou\" presents;\n"
+"  adn  - Distinguished Name of the auth user, omiting the user and next password will cause to anonymous connection;\n"
+"  pass - password of the Distinguished Name of the auth user;\n"
+"  tm   - network and generic timeout in seconds by real number."
+msgstr ""
+
+#, c-format
+msgid "Entry \"%s\" is not present."
+msgstr ""
+
+#, c-format
+msgid "Get DN of the entry \"%s\" error."
+msgstr ""
+
+#, c-format
+msgid "MODIFY: %s"
+msgstr ""

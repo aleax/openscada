@@ -1,3 +1,8 @@
+2017-09-08 Roman (stable)
+- !!:DB.LibsDB.vcaBase: doc.docGasNodeMgn fixed for the table title.
+- !!!!:DB: A new module LDAP was added.
+
+
 2017-08-25 Roman (stable)
 - !!!!:SYS.Transports,Transports.*,DAQ.{AMRDevs,DCON,MMS,OPC_UA,SMH2Gi,Siemens,ICP_DAS,FT3},Protocol.{ModBus,HTTP,SelfSystem,UserProtocol}:
     The generic accessing resource was moved to mutex and an argument "noRes" was removed from function messIO()
