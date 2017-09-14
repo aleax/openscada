@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodule.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -154,7 +154,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Module: ")+modId(),R_R_R_,"root","root",1,
-	    "doc",("Modules/"+owner().subId()+"."+modId()+"|"+modId()).c_str());
+	    "doc",("Modules/"+owner().subId()+"."+modId()+"|Modules/"+modId()).c_str());
 	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
 	if(TUIS::icoGet(owner().subId()+"."+modId(),NULL,true).size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("area",opt,-1,"/module",_("Module")))

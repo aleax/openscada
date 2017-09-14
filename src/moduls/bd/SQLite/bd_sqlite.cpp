@@ -33,11 +33,13 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.3.3"
+#define MOD_VER		"2.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
 //******************************************************************************
+
+#define SEEK_PRELOAD_LIM	100
 
 BDSQLite::BDMod *BDSQLite::mod;
 
@@ -353,20 +355,21 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     }
 
     //Request
-    if(!full || !full->size() || row == 0) {
+    if(!full || !full->size() || (row%SEEK_PRELOAD_LIM) == 0) {
 	if(first_sel) return false;
 	req += " FROM '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "' " + ((next)?req_where:"");
 	if(!full) req += " LIMIT " +  i2s(row) + ",1";
+	else req += " LIMIT " + i2s((row/SEEK_PRELOAD_LIM)*SEEK_PRELOAD_LIM) + "," + i2s(SEEK_PRELOAD_LIM);
 	req += ";";
 
 	tbl.clear();
 	owner().sqlReq(req, &tbl/*, false*/);	// For seek to deletion into save context do not set to "false"
     }
 
-    if(tbl.size() < 2 || (full && (row+1) >= tbl.size())) return false;
+    row = full ? (row%SEEK_PRELOAD_LIM)+1 : 1;
+    if(tbl.size() < 2 || (full && row >= tbl.size())) return false;
 
     //Processing of the query
-    row = full ? row+1 : 1;
     for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
 	sid = tbl[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);

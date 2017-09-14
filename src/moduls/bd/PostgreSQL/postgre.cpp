@@ -33,11 +33,13 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.8.2"
+#define MOD_VER		"1.9.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
 //************************************************
+
+#define SEEK_PRELOAD_LIM	100
 
 BDPostgreSQL::BDMod *BDPostgreSQL::mod;
 
@@ -566,19 +568,20 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     }
 
     //Request
-    if(!full || !full->size() || row == 0) {
+    if(!full || !full->size() || (row%SEEK_PRELOAD_LIM) == 0) {
 	if(first_sel) return false;
 	string req = "SELECT "+req_sel+" FROM \""+TSYS::strEncode(name(),TSYS::SQL,"\"")+"\" "+(next?req_where:"")+" ORDER BY "+req_sel;
-	if(!full) req += " LIMIT 1 OFFSET "+i2s(row);
+	if(!full) req += " LIMIT 1 OFFSET " + i2s(row);
+	else req += " LIMIT " + i2s(SEEK_PRELOAD_LIM) +" OFFSET "+i2s((row/SEEK_PRELOAD_LIM)*SEEK_PRELOAD_LIM);
 
 	tbl.clear();
 	owner().sqlReq(req, &tbl, false);
     }
 
-    if(tbl.size() < 2 || (full && (row+1) >= tbl.size())) return false;
+    row = full ? (row%SEEK_PRELOAD_LIM)+1 : 1;
+    if(tbl.size() < 2 || (full && row >= tbl.size())) return false;
 
     //Processing of the query
-    row = full ? row+1 : 1;
     for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
 	sid = tbl[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);

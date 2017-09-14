@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.MySQL file: my_sql.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,11 +34,13 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.6.2"
+#define MOD_VER		"2.7.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD MySQL.")
 #define MOD_LICENSE	"GPL2"
 //************************************************
+
+#define SEEK_PRELOAD_LIM	100
 
 BDMySQL::BDMod *BDMySQL::mod;
 
@@ -449,19 +451,20 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     }
 
     //Request
-    if(!full || !full->size() || row == 0) {
+    if(!full || !full->size() || (row%SEEK_PRELOAD_LIM) == 0) {
 	if(first_sel) return false;
 	req += " FROM `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "` " + ((next)?req_where:"");
 	if(!full) req += " LIMIT " + i2s(row) + ",1";
+	else req += " LIMIT " + i2s((row/SEEK_PRELOAD_LIM)*SEEK_PRELOAD_LIM) + "," + i2s(SEEK_PRELOAD_LIM);
 
 	tbl.clear();
 	owner().sqlReq(req, &tbl, false);
     }
 
-    if(tbl.size() < 2 || (full && (row+1) >= tbl.size())) return false;
+    row = full ? (row%SEEK_PRELOAD_LIM)+1 : 1;
+    if(tbl.size() < 2 || (full && row >= tbl.size())) return false;
 
     //Processing of the query
-    row = full ? row+1 : 1;
     for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
 	sid = tbl[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);

@@ -108,20 +108,20 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //  Vision manual
     if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
     QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(mod->modId().c_str()),this);
-    actManual->setProperty("doc", "Modules/UI.Vision|Vision");
+    actManual->setProperty("doc", "Modules/UI.Vision|Modules/Vision");
     actManual->setShortcut(Qt::Key_F1);
     actManual->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(mod->modId().c_str()));
     actManual->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(mod->modId().c_str()));
     connect(actManual, SIGNAL(triggered()), this, SLOT(enterManual()));
     //  VCAEngine manual
     QAction *actManualVCA = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg("VCAEngine"),this);
-    actManualVCA->setProperty("doc", "Modules/UI.VCAEngine|VCAEngine");
+    actManualVCA->setProperty("doc", "Modules/UI.VCAEngine|Modules/VCAEngine");
     actManualVCA->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg("VCAEngine"));
     actManualVCA->setStatusTip(QString(_("Press to get the using %1 manual.")).arg("VCAEngine"));
     connect(actManualVCA, SIGNAL(triggered()), this, SLOT(enterManual()));
     //  OpenSCADA manual index
     QAction *actManualSYS = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(PACKAGE_STRING),this);
-    actManualSYS->setProperty("doc", "index|/");
+    actManualSYS->setProperty("doc", "index|Documents");
     actManualSYS->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(PACKAGE_STRING));
     actManualSYS->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(PACKAGE_STRING));
     connect(actManualSYS, SIGNAL(triggered()), this, SLOT(enterManual()));

@@ -484,7 +484,7 @@ function pageDisplay( path )
 
     actEnable('actManual', root.getAttribute("doc"));
     if(root.getAttribute("doc"))
-	actManual.setAttribute("href", nodeText(servGet("/doc/"+root.getAttribute("doc").split("|")[1])));
+	actManual.setAttribute("href", nodeText(servGet("/doc/"+root.getAttribute("doc").split("|")[1].replace("/","%2f"))));
 
     //Complex request form and it result use
     genReqs = crDoc();

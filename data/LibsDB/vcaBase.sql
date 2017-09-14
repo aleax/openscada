@@ -9662,7 +9662,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','geomZ','1',32,'','','doc','','
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Table of average over hour values of "<b><?dp return pTitle;?></b>"</h1>
 
-<TABLE class="data" width="100%">
+<TABLE class="data" width="100%" export="1">
 	<TR align="left" valign="center"><TH colspan="7">The operation date over XXX Calculator # Pipeline #.<?dp return "The operation date over "+SYS.strftime(time,"%d %m %Y")+" Calculator # Pipeline #.";?>
 	</TH></TR>
 	<TR><TH>Date</TH><TH>Time</TH><TH>Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH></TR>
@@ -9691,7 +9691,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','tmpl','<body docProcLang="Java
 </body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Таблиця усереднених за годину значень для "<b><?dp return pTitle;?></b>"</h1>
 
-<TABLE class="data" width="100%">
+<TABLE class="data" width="100%" export="1">
 	<TR align="left" valign="center"><TH colspan="7">Оперативні дані за XXX Обчислювач # Трубопровід #.
 <?dp return "Оперативні дані за "+SYS.strftime(time,"%d %m %Y")+" Обчислювач # Трубопровід #.";?>
 	</TH></TR>
@@ -9721,7 +9721,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','tmpl','<body docProcLang="Java
 </body>','','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Таблица среднечасовых значений для "<b><?dp return pTitle;?></b>"</h1>
 
-<TABLE class="data" width="100%">
+<TABLE class="data" width="100%" export="1">
 	<TR align="left" valign="center"><TH colspan="7">Оперативные данные за XXX Вычислитель # Трубопровод #.
 <?dp return "Оперативные данные за "+SYS.strftime(time,"%d %m %Y")+" Вычислитель # Трубопровод #.";?>
 	</TH></TR>
@@ -9758,7 +9758,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','geomZ','1',32,'','','doc',''
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Table of average over day values of "<b><?dp return pTitle;?></b>"</h1>
 
-<TABLE class="data" width="100%">
+<TABLE class="data" width="100%" export="1">
 	<TR align="left" valign="center"><TH colspan="7">Days data over XXXXX Calculator # Pipeline #.<?dp return "Day data over "+SYS.strftime(time,"%m %Y")+" Calculator # Pipeline #.";?>
   </TH></TR>
 	<TR><TH>Date</TH><TH colspan="2">Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH></TR>
@@ -9786,7 +9786,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','tmpl','<body docProcLang="Ja
 </body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Таблиця середньодобових значень для "<b><?dp return pTitle;?></b>"</h1>
 
-<TABLE class="data" width="100%">
+<TABLE class="data" width="100%" export="1">
 	<TR align="left" valign="center"><TH colspan="7">Добові дані за XXXXX Обчислювач # Трубопровід #.
 <?dp return "Добові дані за "+SYS.strftime(time,"%m %Y")+" Обчислювач # Трубопровід #.";?>
   </TH></TR>
@@ -9815,7 +9815,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','tmpl','<body docProcLang="Ja
 </body>','','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Таблица среднесуточных значений для "<b><?dp return pTitle;?></b>"</h1>
 
-<TABLE class="data" width="100%">
+<TABLE class="data" width="100%" export="1">
 	<TR align="left" valign="center"><TH colspan="7">Суточные данные за XXXXX Вычислитель # Трубопровод #.
 <?dp return "Суточные данные за "+SYS.strftime(time,"%m %Y")+" Вычислитель # Трубопровод #.";?>
   </TH></TR>
@@ -10045,7 +10045,7 @@ INSERT INTO "wlb_doc_io" VALUES('doc','geomX','3',32,'','','doc','','','','','',
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMgn','name','Gas contol instantaneous values table',32,'','','','Таблиця миттевих значень витратовимірювального вузла','','Таблица мгновенных значений расходомерного узла','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMgn','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Table of accumulation instantaneous values of "<b><?dp return pTitle;?></b>"</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
+<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data" export="1">
   <TR align="left" valign="center"><TH colspan="7">Accumulated values for: DD MM YYYY<?dp return "Accumulated values for: "+Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TH></TR>
   <TR><TH>Date</TH><TH>Time</TH><TH>Flow</TH><TH>Capacity</TH><TH>Pressure</TH><TH>Temperatura</TH><TH>Pressure diff.</TH></TR>
   <TR><TH colspan="2">&nbsp;</TH><TH>m3/h</TH><TH>m3</TH><TH>kgF/cm2</TH><TH>grad.C</TH><TH>kgF/cm2</TH></TR>
@@ -10061,7 +10061,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMgn','tmpl','<body docProcLang="JavaL
 </TABLE>
 </body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Таблиця накопичення миттевих значень "<b><?dp return pTitle;?></b>"</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
+<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data" export="1">
   <TR align="left" valign="center"><TH colspan="7">Накопичені значення за обч. # тр-пров # за: DD MM YYYY<?dp return "Накопичені значення за обч. # тр-пров # за: "+Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TH></TR>
   <TR><TH>Дата</TH><TH>Час</TH><TH>Витрати</TH><TH>Об''єм</TH><TH>Тиск</TH><TH>Температура</TH><TH>Перепад</TH></TR>
   <TR><TH colspan="2">&nbsp;</TH><TH>м3/ч</TH><TH>м3</TH><TH>кГс/см2</TH><TH>град.С</TH><TH>кГс/см2</TH></TR>
@@ -10077,7 +10077,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMgn','tmpl','<body docProcLang="JavaL
 </TABLE>
 </body>','','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Таблица накопленных мгновенных значений "<b><?dp return pTitle;?></b>"</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
+<TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data" export="1">
   <TR align="left" valign="center"><TH colspan="7">Накопленые значения по выч. # тр-пров # за: DD MM YYYY<?dp return "Накопленые значения по выч. # тр-пров # за: "+Special.FLibSYS.tmFStr(time,"%d %m %Y");?></TH></TR>
   <TR><TH>Дата</TH><TH>Время</TH><TH>Расход</TH><TH>Объём</TH><TH>давл.</TH><TH>Температура</TH><TH>Перепад</TH></TR>
   <TR><TH colspan="2">&nbsp;</TH><TH>м3/ч</TH><TH>м3</TH><TH>кГс/см2</TH><TH>град.С</TH><TH>кГс/см2</TH></TR>
@@ -10147,7 +10147,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayOrder','tmpl','<body docProcLang="
 </table>
 
 <h3>Hours data</h3>
-<TABLE border="1" cellpadding="2" cellspacing="0" class="data">
+<TABLE border="1" cellpadding="2" cellspacing="0" class="data" export="1">
   <TR valign="center">
     <TH>Date</TH><TH colspan="2">Time</TH><TH rowspan="2">Capacity,<br />m3</TH>
    <TH rowspan="2">Aver. pressure diff.,<br/>kgF/m2</TH><TH rowspan="2">Average pressure,<br/>kgF/cm</TH><TH rowspan="2">Average temperatura,<br/>°С</TH><TH rowspan="2">Average density ,<br/>kg.m<sup>3</sup></TH></TR>
@@ -10258,7 +10258,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayOrder','tmpl','<body docProcLang="
 </table>
 
 <h3>Дані за годину</h3>
-<TABLE border="1" cellpadding="2" cellspacing="0" class="data">
+<TABLE border="1" cellpadding="2" cellspacing="0" class="data" export="1">
   <TR align="center" valign="center">
     <TH>Дата</TH><TH colspan="2">Час</TH><TH rowspan="2">Об''єм,<br />м3</TH>
    <TH rowspan="2">Сер. різниця тиску,<br/>кГс/м2</TH><TH rowspan="2">Середній тиск,<br/>кГс/см</TH><TH rowspan="2">Середня температура,<br/>°С</TH><TH rowspan="2">Середня щільність,<br/>кг.м<sup>3</sup></TH></TR>
@@ -10368,7 +10368,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayOrder','tmpl','<body docProcLang="
 </table>
 
 <h3>Часовые данные</h3>
-<TABLE border="1" cellpadding="2" cellspacing="0" class="data">
+<TABLE border="1" cellpadding="2" cellspacing="0" class="data" export="1">
   <TR align="center" valign="center">
     <TH>Дата</TH><TH colspan="2">Время</TH><TH rowspan="2">Объём,<br />м3</TH>
    <TH rowspan="2">Ср. разность давления,<br/>кГс/м2</TH><TH rowspan="2">Среднее давление,<br/>кГс/см</TH><TH rowspan="2">Средняя температура,<br/>°С</TH><TH rowspan="2">Средняя плотность,<br/>кг.м<sup>3</sup></TH></TR>

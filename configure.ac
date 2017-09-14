@@ -207,7 +207,10 @@ AX_MOD_DB_EN(ODBC, [disable or enable[=incl] compilation module DB.ODBC], enable
 	AC_MSG_ERROR([DB.ODBC: iODBC developing resources aren't found. Install or check the iODBC development package!]);
     fi
 ])
-AX_MOD_DB_EN(LDAP, [disable or enable[=incl] compilation module DB.LDAP], enable, incl)
+AX_MOD_DB_EN(LDAP, [disable or enable[=incl] compilation module DB.LDAP], enable, incl, [
+    AC_CHECK_HEADERS([ldap.h], [],
+	AC_MSG_ERROR([DB.LDAP: OpenLDAP developing resources aren't found. Install or check the iODBC development package!]))
+])
 
 # DAQ modules
 AX_MOD_DAQ_EN(JavaLikeCalc, [disable or enable[=incl] compilation module DAQ.BlockCalc], disable, incl, [

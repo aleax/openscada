@@ -67,6 +67,7 @@
 
 #define CH_REFR_TM	100
 #define TOOL_TIP_LIM	150
+#define TOOL_TIP_ADD	"Shift+F1"
 
 using namespace QTCFG;
 
@@ -306,14 +307,14 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     // QTCfg manual
     if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
     QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(mod->modId().c_str()),this);
-    actManual->setProperty("doc", "Modules/UI.QTCfg|QTCfg");
+    actManual->setProperty("doc", "Modules/UI.QTCfg|Modules/QTCfg");
     actManual->setShortcut(Qt::Key_F1);
     actManual->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(mod->modId().c_str()));
     actManual->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(mod->modId().c_str()));
     connect(actManual, SIGNAL(triggered()), this, SLOT(enterManual()));
     // OpenSCADA manual index
     QAction *actManualSYS = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(PACKAGE_STRING),this);
-    actManualSYS->setProperty("doc", "index|/");
+    actManualSYS->setProperty("doc", "index|Documents");
     actManualSYS->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(PACKAGE_STRING));
     actManualSYS->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(PACKAGE_STRING));
     connect(actManualSYS, SIGNAL(triggered()), this, SLOT(enterManual()));
@@ -1173,7 +1174,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    //  Fill list
 	    lab->setText((t_s.attr("dscr")+":").c_str());
 	    string helpVl = t_s.attr("help");
-	    lstbox->setToolTip(TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str()).c_str());
+	    lstbox->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
 	    if(helpVl.size() > TOOL_TIP_LIM) lstbox->setWhatsThis(helpVl.c_str());
 	    XMLNode req("get");
 	    req.setAttr("path",br_path);
@@ -1223,7 +1224,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 	    //  Fill the table
 	    string helpVl = t_s.attr("help");
-	    tbl->setToolTip(TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str()).c_str());
+	    tbl->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
 	    if(helpVl.size() > TOOL_TIP_LIM) tbl->setWhatsThis(helpVl.c_str());
 	    XMLNode req("get"); req.setAttr("path",br_path);
 	    if((rez=cntrIfCmd(req)) > 0) mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
@@ -1380,7 +1381,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    //  Set image
 	    lab->setText((t_s.attr("dscr")+":").c_str());
 	    string helpVl = t_s.attr("help");
-	    img->setToolTip(TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str()).c_str());
+	    img->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
 	    if(helpVl.size() > TOOL_TIP_LIM) img->setWhatsThis(helpVl.c_str());
 
 	    XMLNode req("get");
@@ -1438,7 +1439,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    //  Fill command
 	    button->setText(t_s.attr("dscr").c_str());
 	    string helpVl = t_s.attr("help");
-	    button->setToolTip(TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str()).c_str());
+	    button->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
 	    if(helpVl.size() > TOOL_TIP_LIM) button->setWhatsThis(helpVl.c_str());
 	}
     }
@@ -1512,7 +1513,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	if(lab) lab->setText((t_s.attr("dscr")+":").c_str());
 	if(val_w || val_r) {
 	    string helpVl = t_s.attr("help");
-	    (val_w?(QWidget*)val_w:(QWidget*)val_r)->setToolTip(TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str()).c_str());
+	    (val_w?(QWidget*)val_w:(QWidget*)val_r)->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
 	    if(helpVl.size() > TOOL_TIP_LIM) (val_w?(QWidget*)val_w:(QWidget*)val_r)->setWhatsThis(helpVl.c_str());
 	    if(val_w) val_w->clear();
 
@@ -1614,7 +1615,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if(val_w && rezReq >= 0) {
 		string helpVl = t_s.attr("help");
-		val_w->setToolTip(TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str()).c_str());
+		val_w->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
 		if(helpVl.size() > TOOL_TIP_LIM) val_w->setWhatsThis(helpVl.c_str());
 		val_w->blockSignals(true);
 		if(data_req.text() == "<EVAL>") val_w->setCheckState(Qt::PartiallyChecked);
@@ -1624,7 +1625,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    }
 	    if(val_r && rezReq >= 0) {
 		string helpVl = t_s.attr("help");
-		val_r->setToolTip(TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str()).c_str());
+		val_r->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
 		if(helpVl.size() > TOOL_TIP_LIM) val_r->setWhatsThis(helpVl.c_str());
 		val_r->setText((string("<b>")+TSYS::strEncode((data_req.text() == "<EVAL>")?_("<EVAL>"):
 		    (s2i(data_req.text())?_("On"):_("Off")),TSYS::Html)+"</b>").c_str());
@@ -1669,7 +1670,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if(edit && !edit->isChanged()) {
 		if(rezReq >= 0) {
 		    string helpVl = t_s.attr("help");
-		    edit->setToolTip(TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str()).c_str());
+		    edit->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
 		    if(helpVl.size() > TOOL_TIP_LIM) edit->setWhatsThis(helpVl.c_str());
 		    edit->setText(getPrintVal(data_req.text()).c_str());
 		}
@@ -1746,13 +1747,13 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		QDateTime dtm;
 		dtm.setTime_t(tm_t);
 		string helpVl = t_s.attr("help");
-		val_r->setToolTip(TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str()).c_str());
+		val_r->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
 		if(helpVl.size() > TOOL_TIP_LIM) val_r->setWhatsThis(helpVl.c_str());
 		val_r->setText( "<b>"+dtm.toString("dd.MM.yyyy hh:mm:ss")+"</b>" );
 	    }
 	    if(val_w && rezReq >= 0 && !val_w->isEdited()) {
 		string helpVl = t_s.attr("help");
-		val_w->setToolTip(TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str()).c_str());
+		val_w->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
 		if(helpVl.size() > TOOL_TIP_LIM) val_w->setWhatsThis(helpVl.c_str());
 		val_w->setValue(data_req.text().c_str());
 	    }
@@ -1871,14 +1872,14 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if(val_r) {
 		string helpVl = t_s.attr("help");
-		val_r->setToolTip(TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str()).c_str());
+		val_r->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
 		if(helpVl.size() > TOOL_TIP_LIM) val_r->setWhatsThis(helpVl.c_str());
 		val_r->setText((string("<b>")+TSYS::strEncode(sval,TSYS::Html)+"</b>").c_str());
 	    }
 	    if(val_w && !val_w->isEdited()) {
 		if(rezReq >= 0) {
 		    string helpVl = t_s.attr("help");
-		    val_w->setToolTip(TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str()).c_str());
+		    val_w->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
 		    if(helpVl.size() > TOOL_TIP_LIM) val_w->setWhatsThis(helpVl.c_str());
 		    val_w->setValue(sval.c_str());
 		}

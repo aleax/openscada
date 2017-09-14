@@ -884,7 +884,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTable                                       *
 //************************************************
-TTable::TTable( const string &name ) : mName(name), notFullShow(false), tblOff(0)
+TTable::TTable( const string &name ) : mName(name), notFullShow(false), tblOff(0), tblSz(100)
 {
     modifClr();
     mLstUse = time(NULL);
@@ -1001,7 +1001,8 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,0,"/prm",_("Table"))) {
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",_("Name"),R_R___,"root",SDB_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/prm/tblOff",_("Table offset"),RWRW__,"root",SDB_ID,2,"tp","dec","min","0");
+	    ctrMkNode("fld",opt,-1,"/prm/tblOff",_("Table offset, size"),RWRW__,"root",SDB_ID,2,"tp","dec","min","0");
+	    ctrMkNode("fld",opt,-1,"/prm/tblSz","",RWRW__,"root",SDB_ID,3,"tp","dec","min","10","max","10000");
 	    XMLNode *tbl;
 	    if((tbl=ctrMkNode("table",opt,-1,"/prm/tbl",_("Data"),RWRW__,"root",SDB_ID,1,"s_com","add,del"))) {
 		TConfig req;
@@ -1025,6 +1026,10 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(i2s(tblOff));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	tblOff = s2i(opt->text());
     }
+    else if(a_path == "/prm/tblSz") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(i2s(tblSz));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	tblSz = s2i(opt->text());
+    }
     else if(a_path == "/prm/tbl") {
 	TConfig req;
 	string eid;
@@ -1033,7 +1038,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	    time_t upTo = time(NULL)+STD_INTERF_TM;
 	    bool firstRow = true;
 	    vector< vector<string> > full;
-	    for(unsigned iR = vmax(0,tblOff); time(NULL) < upTo && fieldSeek(iR,req,&full); iR++, firstRow = false)
+	    for(unsigned iR = vmax(0,tblOff); (iR-tblOff) < tblSz && time(NULL) < upTo && fieldSeek(iR,req,&full); iR++, firstRow = false)
 		for(unsigned iF = 0; iF < req.elem().fldSize(); iF++) {
 		    eid = req.elem().fldAt(iF).name();
 		    if(firstRow) ctrMkNode("list",opt,-1,("/prm/tbl/"+eid).c_str(),"",RWRWR_);

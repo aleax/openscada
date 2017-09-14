@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tuis.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -110,41 +110,11 @@ string TUIS::docGet( const string &inm, string *tp, unsigned opt )
 
     //Find the online document into network
     if(rez.empty() && (nm=TSYS::strParse(inm,1,"|")).size()) {
-	const char  *docHost = "wiki.oscada.org", *docURI = "/Doc",
-		    *tTr = "Sockets", *nTr = "docCheck";
+	const char  *docHost = "oscada.org/wiki";
 
-	if(opt&GetPathURL) rez = string("http://") + docHost + "/HomePageEn" + docURI + "/" + nm;
+	if(opt&GetPathURL) rez = string("http://") + docHost + "/" + nm;
 	else if(opt&GetContent) ;//rez = req.text();
-	else rez = string("xdg-open ") + "http://" + docHost + "/HomePageEn" + docURI + "/" + nm + " &";
-
-	//!!!!	Translation checking for presence disabled by that is sometimes long and wrong.
-	//	The manual sets to the default language but further the behaviour can be changed with the documenttion moving to MediaWiki.
-	/*transl.clear(); transl.push_back((Mess->lang2Code()=="ru")?"":Mess->lang2Code()); transl.push_back("en");
-
-	try {
-	    //Check connect and start
-	    AutoHD<TTransportOut> tr;
-	    if(!SYS->transport().at().at(tTr).at().outPresent(nTr)) {
-		SYS->transport().at().at(tTr).at().outAdd(nTr);
-		tr = SYS->transport().at().at(tTr).at().outAt(nTr);
-		tr.at().setName(_("Doc check"));
-	    }
-	    else tr = SYS->transport().at().at(tTr).at().outAt(nTr);
-
-	    XMLNode req("GET");
-	    for(iTr = 0; iTr < transl.size(); ++iTr) {
-		req.setAttr("URI", (transl[iTr].size()?"/HomePage"+transl[iTr]:"/")+docURI+"/"+nm+"?tm="+i2s(SYS->sysTm()))->
-		    setAttr("Host", string(docHost)+":80")->
-		    setAttr("onlyHeader", (opt&GetContent) ? "0" : "1");
-		tr.at().messProtIO(req, "HTTP");
-		if(s2i(req.attr("RezCod")) == 200) {
-		    if(opt&GetPathURL) rez = string("http://")+docHost+TSYS::strParse(req.attr("URI"),0,"?");
-		    else if(opt&GetContent) rez = req.text();
-		    else rez = string("xdg-open ")+"http://"+docHost+TSYS::strParse(req.attr("URI"),0,"?")+" &";
-		    break;
-		}
-	    }
-	} catch(TError&) { }*/
+	else rez = string("xdg-open ") + "http://" + docHost + "/" + nm + " &";
     }
 
     return rez;

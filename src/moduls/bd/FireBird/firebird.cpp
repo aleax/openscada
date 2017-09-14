@@ -31,11 +31,13 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.4.2"
+#define MOD_VER		"1.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
 //******************************************************************************
+
+#define SEEK_PRELOAD_LIM	100
 
 FireBird::BDMod *FireBird::mod;
 
@@ -534,6 +536,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     //Make WHERE
     string req = "SELECT ", req_where = "WHERE ", sid;
     if(!full) req += "FIRST 1 SKIP " + i2s(row) + " ";
+    else req += "FIRST " + i2s(SEEK_PRELOAD_LIM) + " SKIP " + i2s((row/SEEK_PRELOAD_LIM)*SEEK_PRELOAD_LIM) + " ";
     // Add use keys to list
     bool first_sel = true, next = false, trPresent = false;
     for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
@@ -557,7 +560,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     }
 
     //Request
-    if(!full || !full->size() || row == 0) {
+    if(!full || !full->size() || (row%SEEK_PRELOAD_LIM) == 0) {
 	if(first_sel) return false;
 	req += " FROM \"" + mod->sqlReqCode(name(),'"') + "\" " + (next?req_where:"");
 
@@ -565,10 +568,10 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 	owner().sqlReq(req, &tbl, false);
     }
 
-    if(tbl.size() < 2 || (full && (row+1) >= tbl.size())) return false;
+    row = full ? (row%SEEK_PRELOAD_LIM)+1 : 1;
+    if(tbl.size() < 2 || (full && row >= tbl.size())) return false;
 
     //Processing of query
-    row = full ? row+1 : 1;
     for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
 	sid = tbl[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);

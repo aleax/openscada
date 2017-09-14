@@ -1,3 +1,15 @@
+2017-09-14 Roman (stable)
+- DB.LibsDB.vcaBase: export="1" for all documents with values was added.
+- SYS: Checking for ldap.h for module DB.LDAP was added.
+- SYS: data/debian/control: Appended by a commented dependency for libldap2-dev.
+- !:SYS,UI.{QTCfg,QTStarted,Vision}: The online documentation call was switched for call ones from the new Wiki but some pages are not alowed here now before them moving.
+- !!:DB: Tables' content display set to configurable limited, by default it is 100 rows.
+- FIX:SYS.TRegExp fix in function match(), for hang and crash prevent.
+- !!:DB.{SQLite,MySQL,PostgreSQL,FireBird}: Preloading of fieldSeek() set limited on 100 records, for long unterminated hangs prevent.
+- UI.QTCfg: Shorted long helps for ToolTips were appended by "Shift+F1".
+- UI.WebCfgD: Adapted to hierarchical help pages, for symbol "/" encoding.
+
+
 2017-09-08 Roman (stable)
 - !!:DB.LibsDB.vcaBase: doc.docGasNodeMgn fixed for the table title.
 - !!!!:DB: A new module LDAP was added.

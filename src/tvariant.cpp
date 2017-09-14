@@ -816,7 +816,7 @@ TArrayObj *TRegExp::match( const string &vl, bool all )
     if(!regex) return rez;
 
     if(all && global)
-	for(int curPos = 0, iN = 0; pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz) > 0; curPos = capv[1], iN++)
+	for(int curPos = 0, iN = 0; pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz) > 0 && capv[1] > capv[0]; curPos = capv[1], iN++)
 	    rez->arSet(iN, string(vl.data()+capv[0],capv[1]-capv[0]));
     else {
 	int n = pcre_exec((pcre*)regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
