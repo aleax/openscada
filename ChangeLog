@@ -1,4 +1,5 @@
 2017-09-14 Roman (stable)
+- FIX:SYS: Disable wrong DB.LDAP building for all Debian based.
 - DB.LibsDB.vcaBase: export="1" for all documents with values was added.
 - SYS: Checking for ldap.h for module DB.LDAP was added.
 - SYS: data/debian/control: Appended by a commented dependency for libldap2-dev.

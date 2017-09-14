@@ -35,7 +35,7 @@ configure-stamp:
 	    --enable-DBF=incl --enable-SQLite=incl --enable-JavaLikeCalc=incl --enable-LogicLev=incl \
 	    --enable-Sockets=incl --enable-Serial=incl --enable-SelfSystem=incl --enable-UserProtocol=incl \
 	    --enable-FLibComplex1=incl --enable-FLibSYS=incl \
-	    --enable-MMS --enable-DiamondBoards --enable-Comedi --enable-ICP_DAS --enable-BFN --enable-LDAP
+	    --enable-MMS --enable-DiamondBoards --enable-Comedi --enable-ICP_DAS --enable-BFN
 	touch $@
 build-stamp: configure-stamp
 	dh_testdir
