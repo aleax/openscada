@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.4.0"
+#define MOD_VER		"2.5.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -141,7 +141,7 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return
 //* TSocketIn                                    *
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), sockRes(true), mMode(0), mMSS(0), mMaxQueue(10), mMaxFork(20), mMaxForkPerHost(0), mBufLen(5),
+    TTransportIn(name,idb,el), sockRes(true), wrToRes(true), mMode(0), mMSS(0), mMaxQueue(10), mMaxFork(20), mMaxForkPerHost(0), mBufLen(5),
     mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), clFree(true)
 {
     setAddr("TCP:localhost:10002:0");
@@ -379,6 +379,8 @@ void TSocketIn::start( )
     runSt = true;
 
     TTransportIn::start();
+
+    if(logLen()) pushLogMess(_("Started"));
 }
 
 void TSocketIn::stop( )
@@ -398,6 +400,8 @@ void TSocketIn::stop( )
     if(type == SOCK_UNIX) remove(path.c_str());
 
     TTransportIn::stop();
+
+    if(logLen()) pushLogMess(_("Stopped"));
 }
 
 void TSocketIn::check( )
@@ -432,7 +436,7 @@ int TSocketIn::writeTo( const string &sender, const string &data )
     fd_set		rw_fd;
     struct timeval	tv;
 
-    ResAlloc resN(nodeRes(), true);	//Prevent simultaneous writing
+    MtxAlloc resN(wrToRes, true);	//Prevent simultaneous writing
 
     switch(type) {
 	case SOCK_TCP: case SOCK_UNIX: {
@@ -464,6 +468,7 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 		map<int, SSockIn*>::iterator cI = clId.find(sId);
 		if(cI != clId.end()) cI->second->trOut += vmax(0, wL);
 		sockRes.unlock();
+		if(wL > 0 && logLen()) pushLogMess(TSYS::strMess(_("%d:Transmitted directly to '%s'\n"),sId,TSYS::strLine(sender,0).c_str()) + string(data.data()+wOff,wL));
 	    }
 	    return wOff;
 	}
@@ -674,6 +679,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(s.s->nodePath().c_str(), _("Read message %s from '%s'."), TSYS::cpct2str(r_len).c_str(), s.sender.c_str());
 	    req.assign(buf, r_len);
+	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Received from '%s'\n"),s.sock,s.sender.c_str()) + req);
 
 	    s.s->messPut(s.sock, req, answ, s.sender, prot_in);
 
@@ -692,12 +698,15 @@ void *TSocketIn::ClTask( void *s_inf )
 			    if(kz > 0 && FD_ISSET(s.sock,&rw_fd)) { wL = 0; continue; }
 			    //???? May be some flush ????
 			}
-			mess_err(s.s->nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
+			string err = TSYS::strMess(_("Write: error '%s (%d)'!"), strerror(errno), errno);
+			if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("Transmitting error: %s"),err.c_str()));
+			mess_err(s.s->nodePath().c_str(), "%s", err.c_str());
 			break;
 		    }
 		    s.s->dataRes().lock();
 		    s.s->trOut += vmax(0, wL); s.trOut += vmax(0, wL);
 		    s.s->dataRes().unlock();
+		    if(wL > 0 && s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Transmitted to '%s'\n"),s.sock,s.sender.c_str()) + string(answ.data()+wOff,wL));
 		}
 		answ = "";
 	    }
@@ -712,6 +721,7 @@ void *TSocketIn::ClTask( void *s_inf )
     } catch(TError &err) {
 	if(mess_lev() == TMess::Debug)
 	    mess_debug(s.s->nodePath().c_str(), _("Has been terminated by execution: %s"), err.mess.c_str());
+	if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Has been terminated by execution: %s"),s.sock,err.mess.c_str()));
     }
 
     //Close protocol on broken connection
@@ -782,6 +792,8 @@ void TSocketIn::clientReg( SSockIn *so )
     clId[so->sock] = so;
     clS[so->sender]++;
     clFree = false;
+
+    if(logLen()) pushLogMess(TSYS::strMess(_("A new client %d from '%s' connected"),so->sock,so->sender.c_str()));
 }
 
 void TSocketIn::clientUnreg( SSockIn *so )
@@ -789,6 +801,8 @@ void TSocketIn::clientUnreg( SSockIn *so )
     MtxAlloc res(sockRes, true);
     for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
 	if(iId->second == so) {
+	    if(logLen()) pushLogMess(TSYS::strMess(_("Client %d from '%s' disconnected"),so->sock,so->sender.c_str()));
+
 	    shutdown(iId->first, SHUT_RDWR);
 	    close(iId->first);
 	    clS[iId->second->sender]--;
@@ -1100,6 +1114,8 @@ void TSocketOut::start( int itmCon )
     runSt = true;
 
     TTransportOut::start();
+
+    if(logLen()) pushLogMess(_("Started"));
 }
 
 void TSocketOut::stop( )
@@ -1119,6 +1135,8 @@ void TSocketOut::stop( )
     runSt = false;
 
     TTransportOut::stop();
+
+    if(logLen()) pushLogMess(_("Stopped"));
 }
 
 int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
@@ -1166,10 +1184,15 @@ repeate:
 		    err = (kz < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data wrote");
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Write error: %s"), err.c_str());
+		    if(logLen()) pushLogMess(TSYS::strMess(_("Transmitting error: %s"), err.c_str()));
 		    if(noReq) throw TError(nodePath().c_str(),_("Write error: %s"), err.c_str());
 		    start();
 		    goto repeate;
-		} else trOut += kz;
+		}
+		else {
+		    trOut += kz;
+		    if(logLen()) pushLogMess(_("Transmitted to\n") + string(oBuf+wOff,kz));
+		}
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
 
@@ -1187,6 +1210,7 @@ repeate:
 		if(writeReq && !noReq) stop();
 		mLstReqTm = TSYS::curTime();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read timeouted."));
+		if(logLen()) pushLogMess(_("Receiving timeouted"));
 		throw TError(nodePath().c_str(),_("Timeouted!"));
 	    }
 	    else if(kz < 0) {
@@ -1194,6 +1218,7 @@ repeate:
 		stop();
 		mLstReqTm = TSYS::curTime();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
+		if(logLen()) pushLogMess(TSYS::strMess(_("Receiving (select) error: %s"), err.c_str()));
 		throw TError(nodePath().c_str(),_("Read (select) error: %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sockFd,&rw_fd)) {
@@ -1212,15 +1237,17 @@ repeate:
 		// * Retry if any data was wrote but no a reply there into the request mode
 		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode
 		if(iB < 0 || (iB == 0 && writeReq && !noReq)) {
-		    err = (iB < 0) ? TSYS::strMess("%s (%d)", strerror(errno), errno): _("No data");
+		    err = (iB < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data");
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+		    if(logLen()) pushLogMess(TSYS::strMess(_("Receiving error: %s"), err.c_str()));
 		    // * Pass to retry into the request mode and on the successful writing
 		    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
 		    start();
 		    goto repeate;
 		}
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,iB)).c_str());
+		if(iB > 0 && logLen()) pushLogMess(_("Received from\n") + string(iBuf,iB));
 		trIn += vmax(0, iB);
 	    }
 	}

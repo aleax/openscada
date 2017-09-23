@@ -391,7 +391,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 void TProt::setPrtLen( int vl )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
 
     while((int)mPrt.size() > vl) mPrt.pop_back();
 
@@ -400,7 +400,7 @@ void TProt::setPrtLen( int vl )
 
 void TProt::pushPrtMess( const string &vl )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
 
     if(!prtLen()) return;
 
@@ -420,7 +420,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","n_","idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,1,"/rep",_("Report"))) {
 	    ctrMkNode("fld",opt,-1,"/rep/repLen",_("Report length"),RWRWR_,"root",SPRT_ID,4,"tp","dec","min","0","max","10000",
-		"help",_("Zero use for report disabling"));
+		"help",_("Use zero for the report disabling"));
 	    if(prtLen())
 		ctrMkNode("fld",opt,-1,"/rep/rep",_("Report"),R_R_R_,"root",SPRT_ID,3,"tp","str","cols","90","rows","20");
 	}
@@ -447,9 +447,9 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setPrtLen(s2i(opt->text()));
     }
     else if(a_path == "/rep/rep" && ctrChkNode(opt)) {
-	ResAlloc res(nodeRes(),true);
-	for(unsigned i_p = 0; i_p < mPrt.size(); i_p++)
-	    opt->setText(opt->text() + mPrt[i_p] + "\n");
+	MtxAlloc res(dataRes(), true);
+	for(unsigned iP = 0; iP < mPrt.size(); iP++)
+	    opt->setText(opt->text() + mPrt[iP] + "\n");
     }
     else TProtocol::cntrCmdProc(opt);
 }
@@ -752,14 +752,14 @@ void Node::load_( TConfig *icfg )
     }
 
     //Remove holes
-    for(unsigned i_p = 0; i_p < u_pos.size(); )
-	if(u_pos[i_p].empty()) u_pos.erase(u_pos.begin()+i_p);
-	else i_p++;
+    for(unsigned iP = 0; iP < u_pos.size(); )
+	if(u_pos[iP].empty()) u_pos.erase(u_pos.begin()+iP);
+	else iP++;
 
     //Position fixing
-    for(int i_p = 0; i_p < (int)u_pos.size(); i_p++) {
-	int iid = ioId(u_pos[i_p]);
-	if(iid != i_p) try{ ioMove(iid,i_p); } catch(...){ }
+    for(int iP = 0; iP < (int)u_pos.size(); iP++) {
+	int iid = ioId(u_pos[iP]);
+	if(iid != iP) try{ ioMove(iid,iP); } catch(...){ }
     }
 
     if(en_prev && !enableStat()) setEnable(true);

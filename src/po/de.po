@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-14 15:57+0300\n"
+"POT-Creation-Date: 2017-09-22 16:50+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -2253,6 +2253,18 @@ msgstr "Eingangsübertragung: "
 
 msgid "Transport DB"
 msgstr "Datenbank der Übertragung"
+
+msgid "IO log"
+msgstr "IO log"
+
+msgid "Log length"
+msgstr "Protokolllänge"
+
+msgid "Use zero for the log disabling"
+msgstr "Verwenden Sie für die Protokollsperre Null"
+
+msgid "Log"
+msgstr "Log"
 
 #, c-format
 msgid "Established: %s. "

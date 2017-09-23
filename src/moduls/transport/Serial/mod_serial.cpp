@@ -51,7 +51,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.7.0"
+#define MOD_VER		"1.8.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -434,6 +434,8 @@ void TTrIn::start( )
     SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
 
     TTransportIn::start();
+
+    if(logLen()) pushLogMess(_("Started"));
 }
 
 void TTrIn::stop( )
@@ -454,6 +456,8 @@ void TTrIn::stop( )
     fd = -1;
 
     TTransportIn::stop();
+
+    if(logLen()) pushLogMess(_("Stopped"));
 }
 
 void *TTrIn::Task( void *tr_in )
@@ -526,6 +530,7 @@ void *TTrIn::Task( void *tr_in )
 
 	if(mess_lev() == TMess::Debug)
 	    mess_debug(tr->nodePath().c_str(), _("Serial received message '%d'."), req.size());
+	if(tr->logLen()) tr->pushLogMess(_("Received from\n") + req);
 
 	//Check for device lock and RING request from modem
 	if(tr->mMdmMode && !tr->mMdmDataMode) {
@@ -581,7 +586,8 @@ void *TTrIn::Task( void *tr_in )
 		    mess_err(tr->nodePath().c_str(), _("Write: error '%s (%d)'."), strerror(errno), errno);
 		    break;
 		}
-		tr->trOut += vmax(0,wL);
+		tr->trOut += vmax(0, wL);
+		if(wL > 0 && tr->logLen()) tr->pushLogMess(_("Transmitted to\n") + string(answ.data()+wOff,wL));
 	    }
 
 	    // Hard read for wait request echo and transfer disable
@@ -1020,6 +1026,8 @@ void TTrOut::start( int tmCon )
     runSt = true;
 
     TTransportOut::start();
+
+    if(logLen()) pushLogMess(_("Started"));
 }
 
 void TTrOut::stop( )
@@ -1050,6 +1058,8 @@ void TTrOut::stop( )
     mMdmMode = false;
 
     TTransportOut::stop();
+
+    if(logLen()) pushLogMess(_("Stopped"));
 }
 
 void TTrOut::check( )
@@ -1135,8 +1145,13 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 		mLstReqTm = TSYS::curTime();
 		if(!noStopOnProceed()) stop();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Write error: %s"), err.c_str());
+		if(logLen()) pushLogMess(TSYS::strMess(_("Transmitting error: %s"), err.c_str()));
 		throw TError(nodePath().c_str(), _("Write error: %s"), err.c_str());
-	    } else trOut += kz;
+	    }
+	    else {
+		trOut += kz;
+		if(logLen()) pushLogMess(_("Transmitted to\n") + string(oBuf+wOff,kz));
+	    }
 
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
 
@@ -1172,6 +1187,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 	if(kz == 0) {
 	    mLstReqTm = TSYS::curTime();
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read timeouted."));
+	    if(logLen()) pushLogMess(_("Receiving timeouted"));
 	    throw TError(nodePath().c_str(), _("Read timeouted."));
 	}
 	else if(kz < 0) {
@@ -1179,6 +1195,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 	    mLstReqTm = TSYS::curTime();
 	    if(!noStopOnProceed()) stop();
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
+	    if(logLen()) pushLogMess(TSYS::strMess(_("Receiving (select) error: %s"), err.c_str()));
 	    throw TError(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
 	}
 	else if(FD_ISSET(fd,&rw_fd)) {
@@ -1194,9 +1211,11 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 		mLstReqTm = TSYS::curTime();
 		if(!noStopOnProceed()) stop();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+		if(logLen()) pushLogMess(TSYS::strMess(_("Receiving error: %s"), err.c_str()));
 		throw TError(nodePath().c_str(), _("Read error: %s"), err.c_str());
 	    }
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,blen)).c_str());
+	    if(blen > 0 && logLen()) pushLogMess(_("Received from\n") + string(iBuf,blen));
 	    trIn += vmax(0, blen);
 	}
     }

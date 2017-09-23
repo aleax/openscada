@@ -78,9 +78,12 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	vector<AutoHD<TTransportOut> > assTrs( bool checkForCleanDisabled = false );	//Assigned transports
 
-	TTypeTransport &owner( ) const;
+	// IO log
+	int logLen( )	{ return mLogLen; }
+	void setLogLen( int vl );
+	void pushLogMess( const string &vl );
 
-	ResRW &nodeRes( )	{ return nRes; }
+	TTypeTransport &owner( ) const;
 
     protected:
 	//Methods
@@ -108,8 +111,13 @@ class TTransportIn : public TCntrNode, public TConfig
 	TCfg	&mId;
 	char	&mStart;
 	string	mDB;
-	ResRW	nRes;
+
+	ResMtx	assTrRes;
 	vector<AutoHD<TTransportOut> >	mAssTrO;
+
+	// IO log
+	int		mLogLen;
+	deque<string>	mLog;
 };
 
 //************************************************
@@ -159,6 +167,11 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void messProtIO( XMLNode &io, const string &prot );
 
+	// IO log
+	int logLen( )	{ return mLogLen; }
+	void setLogLen( int vl );
+	void pushLogMess( const string &vl );
+
 	TTypeTransport &owner( ) const;
 
 	ResMtx &reqRes( )			{ return mReqRes; }
@@ -192,6 +205,10 @@ class TTransportOut : public TCntrNode, public TConfig
 	time_t	mStartTm;
 	int64_t	mPrm1, mPrm2;
 	ResMtx	mReqRes;
+
+	// IO log
+	int		mLogLen;
+	deque<string>	mLog;
 };
 
 //************************************************

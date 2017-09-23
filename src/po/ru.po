@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-14 15:57+0300\n"
+"POT-Creation-Date: 2017-09-22 16:50+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -2242,6 +2242,18 @@ msgstr "Входной транспорт: "
 
 msgid "Transport DB"
 msgstr "БД транспорта"
+
+msgid "IO log"
+msgstr "Лог ВВ"
+
+msgid "Log length"
+msgstr "Длина лога"
+
+msgid "Use zero for the log disabling"
+msgstr "Используйте ноль для отключения лога"
+
+msgid "Log"
+msgstr "Лог"
 
 #, c-format
 msgid "Established: %s. "

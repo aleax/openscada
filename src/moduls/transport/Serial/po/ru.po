@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-27 17:23+0200\n"
+"POT-Creation-Date: 2017-09-22 17:17+0300\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -86,13 +86,23 @@ msgstr "Ошибка в количестве стоп битов '%d'."
 msgid "No response to initial request '%s'."
 msgstr "Нет ответа на запрос инициализации '%s'."
 
+msgid "Started"
+msgstr "Запущен"
+
+msgid "Stopped"
+msgstr "Остановлен"
+
 #, c-format
 msgid "Serial received message '%d'."
 msgstr "Serial получил сообщение '%d'."
 
+msgid "Received from\n"
+msgstr "Получено\n"
+
 msgid "Error request to protocol."
 msgstr "Ошибка запроса к протоколу."
 
+#, c-format
 msgid "Serial is replied by message '%d'."
 msgstr "Serial ответил сообщением '%d'."
 
@@ -102,6 +112,9 @@ msgstr "Запись: ответ ноль байт."
 #, c-format
 msgid "Write: error '%s (%d)'."
 msgstr "Запись: ошибка '%s (%d)'."
+
+msgid "Transmitted to\n"
+msgstr "Передано\n"
 
 msgid ""
 "Serial transport has address format: \"dev:speed:format[:fc[:mdm]]\". "
@@ -247,6 +260,9 @@ msgstr "Не записано данных"
 msgid "Write error: %s"
 msgstr "Ошибка записи: %s"
 
+msgid "Transmitting error: %s"
+msgstr "Ошибка передачи: %s"
+
 #, c-format
 msgid "Wrote %s."
 msgstr "Записано %s."
@@ -260,9 +276,15 @@ msgstr "Ошибка чтения эхо запроса."
 msgid "Read timeouted."
 msgstr "Время ожидания чтения истекло!"
 
+msgid "Receiving timeouted"
+msgstr "Время ожидания получения истекло!"
+
 #, c-format
 msgid "Read (select) error: %s"
 msgstr "Ошибка чтения (select): %s"
+
+msgid "Receiving (select) error: %s"
+msgstr "Ошибка получения (select): %s"
 
 msgid "No data"
 msgstr "Нет данных"
@@ -270,6 +292,9 @@ msgstr "Нет данных"
 #, c-format
 msgid "Read error: %s"
 msgstr "Ошибка чтения: %s"
+
+msgid "Receiving error: %s"
+msgstr "Ошибка получения: %s"
 
 #, c-format
 msgid "Read %s."

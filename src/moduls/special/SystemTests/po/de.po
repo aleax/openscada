@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-04 20:16+0300\n"
+"POT-Creation-Date: 2017-09-23 18:25+0300\n"
 "PO-Revision-Date: 2010-10-19 20:56+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -26,9 +26,8 @@ msgstr "Roman Savotschenko"
 msgid "Provides the group of tests to the OpenSCADA system."
 msgstr "Gewährt die Gruppe von Testen für das System OpenSCADA."
 
-#, c-format
 msgid ""
-"======================= The module <%s:%s> options =======================\n"
+"======================= Module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
 "All tests main options:\n"
 "  id           test's id;\n"
@@ -335,6 +334,7 @@ msgstr "Suche Aufzeichnungen."
 msgid "Sought %d records for time %f sec."
 msgstr "Gesucht %d Aufzeichnungen für die Zeit %f sek."
 
+#, c-format
 msgid "Sought %d records in preload for time %f sec."
 msgstr "Gesucht %d Aufzeichnungen in Vorspannung für die Zeit %f sek."
 

@@ -1,3 +1,15 @@
+2017-09-23 Roman (stable)
+- SYS.DB: Height of the field of the SQL requests decreased to 2 rows.
+- SYS: Binaries decoding expanded by an argument's value "<text>" for text field in right forming.
+- FIX:SYS: Call for online documentation fixed for correct translation of opened document's page and for some pages: "Documents/Program_manual".
+- !!!!:SYS.Transports,Transports.*: Generic IO log for both input and output transports added in core and all transport modules.
+    Resource object nRes renamed to assTrRes, its type changed to ResMtx and function nodeRes() removed for the input transport object.
+    Manual requests result of the output transports in binary mode switched to the new variant "<text>".
+- Protocol.ModBus: Resource object nodeRes() (nRes) replaced by system one dataRes().
+- Protocol.SelfSystem: Some renamed.
+- Archive.FSArch,Protocol.{ModBus,HTTP},UI.{QTCfg,QTStarter,Vision,WebVision},Special.SystemTests: Some source codes cleaned.
+
+
 2017-09-14 Roman (stable)
 - FIX:SYS: Disable wrong DB.LDAP building for all Debian based.
 - DB.LibsDB.vcaBase: export="1" for all documents with values was added.

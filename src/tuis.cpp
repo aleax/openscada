@@ -110,7 +110,7 @@ string TUIS::docGet( const string &inm, string *tp, unsigned opt )
 
     //Find the online document into network
     if(rez.empty() && (nm=TSYS::strParse(inm,1,"|")).size()) {
-	const char  *docHost = "oscada.org/wiki";
+	const char  *docHost = "oscada.org/wiki/Special:MyLanguage";
 
 	if(opt&GetPathURL) rez = string("http://") + docHost + "/" + nm;
 	else if(opt&GetContent) ;//rez = req.text();

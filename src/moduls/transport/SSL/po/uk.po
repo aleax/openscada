@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-25 09:20+0300\n"
+"POT-Creation-Date: 2017-09-22 17:08+0300\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -42,6 +42,12 @@ msgstr ""
 "Підключень %d, відкрито %d. Трафік вхідний %s, вихідний %s. Закрито з'єднань "
 "за лімітом %d."
 
+msgid "Started"
+msgstr "Запущено"
+
+msgid "Stopped"
+msgstr "Зупинено"
+
 #, c-format
 msgid "Open temporary file '%s' error: '%s'"
 msgstr "Помилка відкриття тимчасового файлу '%s': '%s'"
@@ -73,16 +79,26 @@ msgid "The message is received with the size '%d'."
 msgstr "Отримано повідомлення розміром '%d'."
 
 #, c-format
+msgid "%d:Received from '%s'\n"
+msgstr "%d:Отримано з '%s'\n"
+
+#, c-format
 msgid "The message is replied with the size '%d'."
 msgstr "Відповідь повідомленням розміром '%d'."
 
 #, c-format
-msgid "Socket has been disconnected by '%s'!"
-msgstr "Сокет було відєднано від '%s'!"
+msgid "%d:Transmitted to '%s'\n"
+msgstr "%d:Передано до '%s'\n"
+
+msgid "Has been disconnected by '%s'!"
+msgstr "Відєднано від '%s'!"
 
 #, c-format
 msgid "Socket has been terminated by execution: %s"
 msgstr "Сокет було перервано виключенням: %s"
+
+msgid "%d:Has been terminated by execution: %s"
+msgstr "%d:Перервано виключенням: %s"
 
 #, c-format
 msgid "New input protocol's object '%s' created!"
@@ -90,6 +106,14 @@ msgstr "Новий об'єкт вхідного протоколу '%s' ство
 
 msgid "Error request to protocol."
 msgstr "Помилка запиту до протоколу."
+
+#, c-format
+msgid "A new client %d from '%s' connected"
+msgstr "Підключено новий клієнт %d з %s"
+
+#, c-format
+msgid "Client %d from '%s' disconnected"
+msgstr "Відключено клієнт %d з %s"
 
 msgid "State"
 msgstr "Стан"
@@ -99,7 +123,7 @@ msgstr "Активні підключення"
 
 msgid ""
 "SSL input transport has address format:\n"
-"  [addr]:[port]:[mode] - where:\n"
+"  {addr}:{port}[:{mode}] - where:\n"
 "    addr - address for SSL to be opened, '*' address opens for all "
 "interfaces;\n"
 "    port - network port (/etc/services);\n"
@@ -107,12 +131,12 @@ msgid ""
 "DTLSv1)."
 msgstr ""
 "Формат адреси вхідного SSL транспорту:\n"
-"  [addr]:[port]:[mode] - де:\n"
+"  {addr}:{port}[:{mode}] - де:\n"
 "    addr - адреса для відкриття SSL, '*' адреса відкриває для усіх "
 "інтерфейсів;\n"
 "    port - мережевий порт (/etc/services);\n"
-"    mode - SSL режим та версія (SSLv3, SSLv23, TLSv1, TLSv1_1, "
-"TLSv1_2, DTLSv1)."
+"    mode - SSL режим та версія (SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, "
+"DTLSv1)."
 
 msgid "Certificates and private key"
 msgstr "Сертифікати та приватний ключ"
@@ -216,13 +240,25 @@ msgstr "Помилка запиту: %s"
 msgid "Write error: %s"
 msgstr "Помилка запису: %s"
 
+msgid "Transmitting error: %s"
+msgstr "Помилка передавання: %s"
+
 #, c-format
 msgid "Wrote %s."
 msgstr "Записано %s."
 
+msgid "Transmitted to\n"
+msgstr "Передано\n"
+
+msgid "No data"
+msgstr "Немає даних"
+
 #, c-format
 msgid "Read error: %s"
 msgstr "Помилка читання: %s"
+
+msgid "Receiving error: %s"
+msgstr "Помилка отримання: %s"
 
 msgid "Read timeouted."
 msgstr "Перевищено час очікування читання!"
@@ -234,24 +270,30 @@ msgstr "Перевищено час очікування!"
 msgid "Read (select) error: %s"
 msgstr "Помилка читання (select): %s"
 
+msgid "Receiving (select) error: %s"
+msgstr "Помилка отримання (select): %s"
+
 #, c-format
 msgid "Read %s."
 msgstr "Прочитано %s."
 
+msgid "Received from\n"
+msgstr "Отримано\n"
+
 msgid ""
 "SSL output transport has address format:\n"
-"  [addr]:[port]:[mode] - where:\n"
+"  {addr}:{port}[:{mode}] - where:\n"
 "    addr - remote SSL host address;\n"
 "    port - network port (/etc/services);\n"
 "    mode - SSL mode and version (SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, "
 "DTLSv1)."
 msgstr ""
 "Формат адреси вихідного SSL транспорту:\n"
-"  [addr]:[port]:[mode] - де:\n"
+"  {addr}:{port}[:{mode}] - де:\n"
 "    addr - адреса віддаленого SSL хосту;\n"
 "    port - мережевий порт (/etc/services);\n"
-"    mode - SSL режим та версія (SSLv3, SSLv23, TLSv1, TLSv1_1, "
-"TLSv1_2, DTLSv1)."
+"    mode - SSL режим та версія (SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, "
+"DTLSv1)."
 
 msgid "Timings"
 msgstr "Інтервали часу"

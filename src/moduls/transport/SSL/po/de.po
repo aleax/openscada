@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-25 09:20+0300\n"
+"POT-Creation-Date: 2017-09-22 17:08+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -27,8 +27,8 @@ msgid ""
 "SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported."
 msgstr ""
 "Gewährt den auf der Schicht von sicheren Sockets begründeten Transport. Es "
-"werden benutzt OpenSSL und unterstützt SSLv3, TLSv1, TLSv1.1, "
-"TLSv1.2, DTLSv1."
+"werden benutzt OpenSSL und unterstützt SSLv3, TLSv1, TLSv1.1, TLSv1.2, "
+"DTLSv1."
 
 msgid "Addition parameters"
 msgstr "Weitere Optionen"
@@ -43,6 +43,12 @@ msgid ""
 msgstr ""
 "Verbindungen %d, eröffnet %d. Eingangstreffik %s, Ausgangs %s. Closed-"
 "Verbindungen aufgrund der Begrenzung %d."
+
+msgid "Started"
+msgstr "Gestartet"
+
+msgid "Stopped"
+msgstr "Gestoppt"
 
 #, c-format
 msgid "Open temporary file '%s' error: '%s'"
@@ -75,16 +81,26 @@ msgid "The message is received with the size '%d'."
 msgstr "Die Nachricht ist bekommen von der Größe '%d'."
 
 #, c-format
+msgid "%d:Received from '%s'\n"
+msgstr "%d:Empfangen von '%s'\n"
+
+#, c-format
 msgid "The message is replied with the size '%d'."
 msgstr "Es wurde beantwortet mit der Nachricht von der Größe  '%d'."
 
 #, c-format
-msgid "Socket has been disconnected by '%s'!"
-msgstr "Socket wurde von abgeklemmt '%s'!"
+msgid "%d:Transmitted to '%s'\n"
+msgstr "%d:Übertragen in '%s'\n"
+
+msgid "Has been disconnected by '%s'!"
+msgstr "Wurde von abgeklemmt '%s'!"
 
 #, c-format
 msgid "Socket has been terminated by execution: %s"
 msgstr "Socket wurde durch die Ausführung beendet wurde: %s"
+
+msgid "%d:Has been terminated by execution: %s"
+msgstr "%d:Wurde durch die Ausführung beendet wurde: %s"
 
 #, c-format
 msgid "New input protocol's object '%s' created!"
@@ -92,6 +108,14 @@ msgstr "Neue Eingangsprotokoll-Objekt '%s' erstellt!"
 
 msgid "Error request to protocol."
 msgstr "Fehler der Anfrage ans Protokoll."
+
+#, c-format
+msgid "A new client %d from '%s' connected"
+msgstr "Ein neuer Kunde %d aus '%s' verbunden"
+
+#, c-format
+msgid "Client %d from '%s' disconnected"
+msgstr "Client %d aus '%s' getrennt"
 
 msgid "State"
 msgstr "Staats"
@@ -101,7 +125,7 @@ msgstr "Aktive Verbindungen"
 
 msgid ""
 "SSL input transport has address format:\n"
-"  [addr]:[port]:[mode] - where:\n"
+"  {addr}:{port}[:{mode}] - where:\n"
 "    addr - address for SSL to be opened, '*' address opens for all "
 "interfaces;\n"
 "    port - network port (/etc/services);\n"
@@ -109,12 +133,12 @@ msgid ""
 "DTLSv1)."
 msgstr ""
 "Das Format der Adresse des SSL Eingangstransports:\n"
-"  [addr]:[port]:[mode] - wo:\n"
+"  {addr}:{port}[:{mode}] - wo:\n"
 "    addr - die Adresse der Eröffnung SSL, '*' Adresse eröffnet für alle "
 "Interfaces;\n"
 "    port - Netzwerk-Port (/etc/services);\n"
-"    mode - SSL Regime und Version (SSLv3, SSLv23, TLSv1, TLSv1_1, "
-"TLSv1_2, DTLSv1)."
+"    mode - SSL Regime und Version (SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, "
+"DTLSv1)."
 
 msgid "Certificates and private key"
 msgstr "Zertifikate und Privatschlüssel"
@@ -221,13 +245,25 @@ msgstr "Request-Fehler: %s"
 msgid "Write error: %s"
 msgstr "Fehler beim Schreiben: %s"
 
+msgid "Transmitting error: %s"
+msgstr "Übertragungsfehler: %s"
+
 #, c-format
 msgid "Wrote %s."
 msgstr "Schrieb %s."
 
+msgid "Transmitted to\n"
+msgstr "Übertragen an\n"
+
+msgid "No data"
+msgstr "Keine Daten"
+
 #, c-format
 msgid "Read error: %s"
 msgstr "Lesefehler: %s"
+
+msgid "Receiving error: %s"
+msgstr "Empfangsfehler: %s"
 
 msgid "Read timeouted."
 msgstr "Lesen timeouted."
@@ -239,20 +275,26 @@ msgstr "Die Wartezeit ist aus!"
 msgid "Read (select) error: %s"
 msgstr "Lesefehler (select): %s"
 
+msgid "Receiving (select) error: %s"
+msgstr "Empfangen (select) Fehler: %s"
+
 #, c-format
 msgid "Read %s."
 msgstr "Lesen Sie %s."
 
+msgid "Received from\n"
+msgstr "Empfangen von\n"
+
 msgid ""
 "SSL output transport has address format:\n"
-"  [addr]:[port]:[mode] - where:\n"
+"  {addr}:{port}[:{mode}] - where:\n"
 "    addr - remote SSL host address;\n"
 "    port - network port (/etc/services);\n"
 "    mode - SSL mode and version (SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, "
 "DTLSv1)."
 msgstr ""
 "Das Format der Adresse des SSL-Ausgangstransport:\n"
-"  [addr]:[port]:[mode] - wo:\n"
+"  {addr}:{port}[:{mode}] - wo:\n"
 "    addr - Die Adresse des entfernten SSL Hostes;\n"
 "    port - Der Netzwerk Port (/etc/services);\n"
 "    mode - Das SSL-Regime und Version (SSLv3, SSLv23, TLSv1, TLSv1_1, "

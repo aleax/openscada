@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-27 17:23+0200\n"
+"POT-Creation-Date: 2017-09-22 17:17+0300\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -89,13 +89,23 @@ msgstr "Fehler in der Anzahl der Stopbits '%d'."
 msgid "No response to initial request '%s'."
 msgstr "Keine Antwort auf die Initialisierungsanfrage '%s'."
 
+msgid "Started"
+msgstr "Gestartet"
+
+msgid "Stopped"
+msgstr "Gestoppt"
+
 #, c-format
 msgid "Serial received message '%d'."
 msgstr "Die Serielle Schnittstelle hat eine Nachricht empfangen '%d'."
 
+msgid "Received from\n"
+msgstr "Empfangen von\n"
+
 msgid "Error request to protocol."
 msgstr "Fehler in der Protokollanfrage."
 
+#, c-format
 msgid "Serial is replied by message '%d'."
 msgstr "Die Serielle Schnittstelle hat die Nachricht bestätigt '%d'."
 
@@ -105,6 +115,9 @@ msgstr "Schreiben: Antwort für Null-Bytes."
 #, c-format
 msgid "Write: error '%s (%d)'."
 msgstr "Schreiben: Fehler '%s (%d)'."
+
+msgid "Transmitted to\n"
+msgstr "Übertragen an\n"
 
 msgid ""
 "Serial transport has address format: \"dev:speed:format[:fc[:mdm]]\". "
@@ -250,6 +263,9 @@ msgstr "Keine Daten geschrieben"
 msgid "Write error: %s"
 msgstr "Fehler beim Schreiben: %s"
 
+msgid "Transmitting error: %s"
+msgstr "Übertragungsfehler: %s"
+
 #, c-format
 msgid "Wrote %s."
 msgstr "Schrieb %s."
@@ -263,9 +279,15 @@ msgstr "Fehler beim Lesen der Echo-Request."
 msgid "Read timeouted."
 msgstr "Lesen timeouted."
 
+msgid "Receiving timeouted"
+msgstr "Empfangen zeitgesteuert"
+
 #, c-format
 msgid "Read (select) error: %s"
 msgstr "Lesefehler (select): %s"
+
+msgid "Receiving (select) error: %s"
+msgstr "Empfangen (select) Fehler: %s"
 
 msgid "No data"
 msgstr "Keine Daten"
@@ -273,6 +295,9 @@ msgstr "Keine Daten"
 #, c-format
 msgid "Read error: %s"
 msgstr "Lesefehler: %s"
+
+msgid "Receiving error: %s"
+msgstr "Empfangsfehler: %s"
 
 #, c-format
 msgid "Read %s."

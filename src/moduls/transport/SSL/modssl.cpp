@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.6.0"
+#define MOD_VER		"1.7.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -234,6 +234,8 @@ void TSocketIn::start( )
     SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
 
     TTransportIn::start();
+
+    if(logLen()) pushLogMess(_("Started"));
 }
 
 void TSocketIn::stop( )
@@ -249,6 +251,8 @@ void TSocketIn::stop( )
     SYS->taskDestroy(nodePath('.',true), &endrun);
 
     TTransportIn::stop();
+
+    if(logLen()) pushLogMess(_("Stopped"));
 }
 
 unsigned TSocketIn::forksPerHost( const string &sender )
@@ -439,8 +443,6 @@ void *TSocketIn::ClTask( void *s_inf )
     AutoHD<TProtocolIn> prot_in;
     SSL		*ssl;
 
-    s.s->clientReg(&s);
-
     if(mess_lev() == TMess::Debug)
 	mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by '%s'!"), s.sender.c_str());
 
@@ -457,12 +459,14 @@ void *TSocketIn::ClTask( void *s_inf )
 	    //BIO_reset(s.bio);
 	    //close(s.sock); BIO_free(s.bio);
 	    BIO_free_all(s.bio);
-	    s.s->clientUnreg(&s);
 	    return NULL;
 	}
     }
 
     s.sock = BIO_get_fd(s.bio, NULL);
+
+    s.s->clientReg(&s);
+
     BIO_get_ssl(s.bio, &ssl);
 
     //Select mode
@@ -494,6 +498,8 @@ void *TSocketIn::ClTask( void *s_inf )
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(s.s->nodePath().c_str(), _("The message is received with the size '%d'."), rez);
 	    req.assign(buf, rez);
+	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Received from '%s'\n"),s.sock,s.sender.c_str()) + req);
+
 	    s.s->dataRes().lock();
 	    s.s->trIn += rez; s.trIn += rez;
 	    s.s->dataRes().unlock();
@@ -504,9 +510,11 @@ void *TSocketIn::ClTask( void *s_inf )
 		    mess_debug(s.s->nodePath().c_str(), _("The message is replied with the size '%d'."), answ.size());
 		do { rez = BIO_write(s.bio, answ.data(), answ.size()); }
 		while(rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE);
+
 		s.s->dataRes().lock();
 		s.s->trOut += vmax(0, rez); s.trOut += vmax(0, rez);
 		s.s->dataRes().unlock();
+		if(rez > 0 && s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Transmitted to '%s'\n"),s.sock,s.sender.c_str()) + string(answ.data(),rez));
 		answ = "";
 	    }
 	    cnt++;
@@ -516,10 +524,11 @@ void *TSocketIn::ClTask( void *s_inf )
 		(!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()));
 
 	if(mess_lev() == TMess::Debug)
-	    mess_debug(s.s->nodePath().c_str(), _("Socket has been disconnected by '%s'!"), s.sender.c_str());
+	    mess_debug(s.s->nodePath().c_str(), _("Has been disconnected by '%s'!"), s.sender.c_str());
     } catch(TError &err) {
 	if(mess_lev() == TMess::Debug)
 	    mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by execution: %s"), err.mess.c_str());
+	if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Has been terminated by execution: %s"),s.sock,err.mess.c_str()));
     }
 
     BIO_flush(s.bio);
@@ -591,8 +600,9 @@ void TSocketIn::clientReg( SSockIn *so )
 
     clId.push_back(so);
     clS[so->sender]++;
-
     clFree = false;
+
+    if(logLen()) pushLogMess(TSYS::strMess(_("A new client %d from '%s' connected"),so->sock,so->sender.c_str()));
 }
 
 void TSocketIn::clientUnreg( SSockIn *so )
@@ -601,6 +611,8 @@ void TSocketIn::clientUnreg( SSockIn *so )
 
     for(unsigned iId = 0; iId < clId.size(); iId++)
 	if(clId[iId] == so) {
+	    if(logLen()) pushLogMess(TSYS::strMess(_("Client %d from '%s' disconnected"),so->sock,so->sender.c_str()));
+
 	    clS[so->sender]--;
 	    clId.erase(clId.begin()+iId);
 	    delete so;
@@ -620,7 +632,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"help",
 	    _("SSL input transport has address format:\n"
-	    "  [addr]:[port]:[mode] - where:\n"
+	    "  {addr}:{port}[:{mode}] - where:\n"
 	    "    addr - address for SSL to be opened, '*' address opens for all interfaces;\n"
 	    "    port - network port (/etc/services);\n"
 	    "    mode - SSL mode and version (SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, DTLSv1)."));
@@ -916,6 +928,8 @@ void TSocketOut::start( int tmCon )
     runSt = true;
 
     TTransportOut::start();
+
+    if(logLen()) pushLogMess(_("Started"));
 }
 
 void TSocketOut::stop( )
@@ -942,6 +956,8 @@ void TSocketOut::stop( )
     runSt = false;
 
     TTransportOut::stop();
+
+    if(logLen()) pushLogMess(_("Stopped"));
 }
 
 int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
@@ -970,12 +986,14 @@ repeate:
 	    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
 	    stop();
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Write error: %s"), err.c_str());
+	    if(logLen()) pushLogMess(TSYS::strMess(_("Transmitting error: %s"), err.c_str()));
 	    if(noReq) throw TError(nodePath().c_str(), _("Write error: %s"), err.c_str());
 	    start();
 	    goto repeate;
 	}
 
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
+	if(logLen()) pushLogMess(_("Transmitted to\n") + string(oBuf,ret));
 
 	trOut += ret;
 	writeReq = true;
@@ -988,9 +1006,10 @@ repeate:
 	ret = BIO_read(conn, iBuf, iLen);
 	if(ret > 0) trIn += ret;
 	else if(ret == 0) {
-	    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
+	    err = errno ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data");
 	    stop();
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+	    if(logLen()) pushLogMess(TSYS::strMess(_("Receiving error: %s"), err.c_str()));
 	    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
 	    start();
 	    goto repeate;
@@ -1018,6 +1037,7 @@ repeate:
 		err = TSYS::strMess("%s (%d)", strerror(errno), errno);
 		stop();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
+		if(logLen()) pushLogMess(TSYS::strMess(_("Receiving (select) error: %s"), err.c_str()));
 		throw TError(nodePath().c_str(),_("Read (select) error: %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sock_fd,&rd_fd)) {
@@ -1025,17 +1045,19 @@ repeate:
 		if(ret == -1)
 		    while((ret=BIO_read(conn,iBuf,iLen)) == -1) sched_yield();
 		if(ret < 0) {
-		    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
+		    err = (ret < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data");
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+		    if(logLen()) pushLogMess(TSYS::strMess(_("Receiving error: %s"),err.c_str()));
 		    // * Pass to retry into the request mode and on the successful writing
 		    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
 		    start();
 		    goto repeate;
 		}
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,ret)).c_str());
 		trIn += vmax(0, ret);
 	    }
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,ret)).c_str());
+	    if(ret > 0 && logLen()) pushLogMess(_("Received from\n") + string(iBuf,ret));
 	}
     }
 
@@ -1050,7 +1072,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,1,"help",
 	    _("SSL output transport has address format:\n"
-	    "  [addr]:[port]:[mode] - where:\n"
+	    "  {addr}:{port}[:{mode}] - where:\n"
 	    "    addr - remote SSL host address;\n"
 	    "    port - network port (/etc/services);\n"
 	    "    mode - SSL mode and version (SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, DTLSv1)."));

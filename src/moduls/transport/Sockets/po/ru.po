@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.Sockets translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-17 10:21+0300\n"
+"POT-Creation-Date: 2017-09-22 16:55+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -79,6 +79,12 @@ msgstr "Ошибка связывания с %s сокетом: '%s (%d)'!"
 msgid "RAWCAN socket binded '%s'!"
 msgstr "RAWCAN сокет подключен к '%s'!"
 
+msgid "Started"
+msgstr "Запущен"
+
+msgid "Stopped"
+msgstr "Остановлен"
+
 #, c-format
 msgid "Restart by no ingoing activity to '%s'."
 msgstr "Перезапуск по причине отсутствия активности по '%s'."
@@ -93,6 +99,10 @@ msgstr "Запись: ответ ноль байт."
 #, c-format
 msgid "Write: error '%s (%d)'!"
 msgstr "Запись: ошибка '%s (%d)'!"
+
+#, c-format
+msgid "%d:Transmitted directly to '%s'\n"
+msgstr "%d:Прямо передано на '%s'\n"
 
 #, c-format
 msgid "Close input transport by error: '%s (%d)'"
@@ -132,8 +142,19 @@ msgid "Read message %s from '%s'."
 msgstr "Прочитано сообщение %s из '%s'."
 
 #, c-format
+msgid "%d:Received from '%s'\n"
+msgstr "%d:Принято из '%s'\n"
+
+#, c-format
 msgid "Wrote message %s to '%s'."
 msgstr "Записано сообщение %s на '%s'."
+
+msgid "Transmitting error: %s"
+msgstr "Ошибка передачи: %s"
+
+#, c-format
+msgid "%d:Transmitted to '%s'\n"
+msgstr "%d:Передано на '%s'\n"
 
 #, c-format
 msgid "Has been disconnected by '%s'!"
@@ -142,6 +163,9 @@ msgstr "Отключено '%s'!"
 #, c-format
 msgid "Has been terminated by execution: %s"
 msgstr "Разорвано исключением: %s"
+
+msgid "%d:Has been terminated by execution: %s"
+msgstr "%d:Разорвано исключением: %s"
 
 #, c-format
 msgid "New input protocol's object '%s' created!"
@@ -153,6 +177,14 @@ msgstr "Объект входящего протокола '%s' закрылся
 
 msgid "Error request to protocol."
 msgstr "Ошибка запроса к протоколу."
+
+#, c-format
+msgid "A new client %d from '%s' connected"
+msgstr "Подключен новый клиент %d из '%s'"
+
+#, c-format
+msgid "Client %d from '%s' disconnected"
+msgstr "Отключен клиент %d из '%s'"
 
 msgid "State"
 msgstr "Состояние"
@@ -319,12 +351,18 @@ msgstr "Не записаны данные"
 msgid "Write error: %s"
 msgstr "Ошибка записи: %s"
 
+msgid "Transmitted to\n"
+msgstr "Передано\n"
+
 #, c-format
 msgid "Wrote %s."
 msgstr "Записано %s."
 
 msgid "Read timeouted."
 msgstr "Время ожидания чтения истекло!"
+
+msgid "Receiving timeouted"
+msgstr "Истекло время ожидания получения"
 
 msgid "Timeouted!"
 msgstr "Время ожидания истекло!"
@@ -333,6 +371,9 @@ msgstr "Время ожидания истекло!"
 msgid "Read (select) error: %s"
 msgstr "Ошибка чтения (select): %s"
 
+msgid "Receiving (select) error: %s"
+msgstr "Ошибка получения (select): %s"
+
 msgid "No data"
 msgstr "Нет данных"
 
@@ -340,9 +381,15 @@ msgstr "Нет данных"
 msgid "Read error: %s"
 msgstr "Ошибка чтения: %s"
 
+msgid "Receiving error: %s"
+msgstr "Ошибка получения: %s"
+
 #, c-format
 msgid "Read %s."
 msgstr "Прочитано %s."
+
+msgid "Received from\n"
+msgstr "Получено\n"
 
 msgid ""
 "Socket's output transport has address format:\n"

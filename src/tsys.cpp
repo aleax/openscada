@@ -1204,8 +1204,24 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 		iSz += 4;
 	    }
 	    break;
+	//Binary decoding to hex bytes string. Option <opt1> uses for:
+	//  "<text>" - includes the text part in right
+	//  "{sep}" - short separator
 	case TSYS::Bin: {
 	    sout.reserve(in.size()*2);
+	    if(opt1 == "<text>") {
+		char buf[3];
+		string txt;
+		for(iSz = 0; iSz < in.size() || (iSz%16); ) {
+		    if(iSz < in.size()) {
+			snprintf(buf, sizeof(buf), "%02X", (unsigned char)in[iSz]);
+			txt += isprint(in[iSz]) ? in[iSz] : '.';
+		    } else strcpy(buf, "  ");
+		    if((++iSz)%16) sout = sout + buf + " ";
+		    else { sout = sout + buf + "   " + txt + ((iSz<in.size())?"\n":""); txt = ""; }
+		}
+		break;
+	    }
 	    char buf[3+opt1.size()];
 	    for(iSz = 0; iSz < in.size(); iSz++) {
 		snprintf(buf, sizeof(buf), "%s%02X", (iSz&&opt1.size())?(((iSz)%16)?opt1.c_str():"\n"):"", (unsigned char)in[iSz]);
@@ -2489,7 +2505,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
 	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,trLU(name(),l,u).c_str());
-	ctrMkNode("oscada_cntr",opt,-1,"/",buf,R_R_R_)->setAttr("doc","AboutOpenSCADA|ProgramManual");
+	ctrMkNode("oscada_cntr",opt,-1,"/",buf,R_R_R_)->setAttr("doc","AboutOpenSCADA|Documents/Program_manual");
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),R_R_R_,"root","root",1,"idm","1");
 	if(TUIS::icoGet(id(),NULL,true).size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);

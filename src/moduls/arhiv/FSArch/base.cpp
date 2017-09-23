@@ -129,7 +129,7 @@ string ModArch::unPackArch( const string &anm, bool replace )
 string ModArch::optDescr( )
 {
     return TSYS::strMess(_(
-	"======================= The module <%s:%s> options =======================\n"
+	"======================= Module <%s:%s> options =======================\n"
 	"    --noArchLimit        Disable archives limit to the file number. Use for see archives mode, not work.\n"
 	"\n"), MOD_TYPE,MOD_ID);
 }
