@@ -319,7 +319,7 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
 	if(replStr) { rez += replStr; continue; }
 	else if((len=Mess->getUTF8(s,iSz,&symb)) >= 2) {
 	    switch(symb) {
-		case 0xA0: rez += "&nbsp;";	break;
+		case 0xA0: rez += "&#x00A0;" /* "&nbsp;" */;	break;
 		default: rez.append(s,iSz,len);	break;
 	    }
 	    iSz += len-1;

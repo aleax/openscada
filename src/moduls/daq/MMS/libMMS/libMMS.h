@@ -1,7 +1,7 @@
 
 //OpenSCADA MMS(IEC-9506) implementation library file: libMMS.h
 /******************************************************************************
- *   Copyright (C) 2014-2015 by Roman Savochenko, <rom_as@oscada.org>	      *
+ *   Copyright (C) 2014-2017 by Roman Savochenko, <rom_as@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -74,6 +74,7 @@ extern string int2s( int val );
 extern string uint2s( unsigned val );
 extern string ll2s( int64_t val );
 extern string r2s( double val, int prec = 15, char tp = 'g' );
+extern double s2r( const string &val );
 extern string strParse( const string &path, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
 extern string strMess( const char *fmt, ... );
 extern void setBS( string &vl, uint32_t n );

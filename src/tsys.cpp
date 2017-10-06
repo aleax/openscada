@@ -319,6 +319,52 @@ string TSYS::cpct2str( double cnt )
     return r2s(cnt,3,'g')+_("B");
 }
 
+double TSYS::str2real( const string &val )
+{
+    const char *chChr = val.c_str();
+
+    //Pass spaces before
+    for( ; true; ++chChr) {
+	switch(*chChr) {
+	    case ' ': case '\t': continue;
+	}
+	break;
+    }
+
+    //Check and process the base
+    bool isNeg = false, isExpNeg = false;
+    double tVl = 0;
+    int16_t nAftRdx = 0, tAftRdx = 0;
+    if(*chChr && ((*chChr >= '0' && *chChr <= '9') || *chChr == '-' || *chChr == '+')) {
+	if(*chChr == '+')	++chChr;
+	else if(*chChr == '-')	{ isNeg = true; ++chChr; }
+	for(bool notFirst = false; *chChr >= '0' && *chChr <= '9'; ++chChr, notFirst = true) {
+	    if(notFirst) tVl *= 10;
+	    tVl += *chChr - '0';
+	}
+    }
+    if(*chChr == '.' || *chChr == ',') {
+	for(++chChr; *chChr >= '0' && *chChr <= '9'; ++chChr, ++nAftRdx)
+	    tVl = tVl*10 + (*chChr - '0');
+    }
+    if(isNeg) tVl *= -1;
+
+    //Read exponent
+    if(*chChr && (*chChr == 'e' || *chChr == 'E')) {
+	++chChr;
+	if(*chChr == '+')	++chChr;
+	else if(*chChr == '-')	{ isExpNeg = true; ++chChr; }
+	for(bool notFirst = false; *chChr >= '0' && *chChr <= '9'; ++chChr, notFirst = true) {
+	    if(notFirst) tAftRdx *= 10;
+	    tAftRdx += *chChr - '0';
+	}
+	if(isExpNeg) tAftRdx *= -1;
+    }
+
+    //Combine
+    return tVl * pow(10, tAftRdx-nAftRdx);
+}
+
 string TSYS::addr2str( void *addr )
 {
     char buf[sizeof(void*)*2+3];
@@ -399,7 +445,7 @@ string TSYS::optDescr( )
 	"===========================================================================\n"
 	"==================== Generic options ======================================\n"
 	"===========================================================================\n"
-	"-h, --help		Info message about the system options.\n"
+	"-h, --help		Info message about the program options.\n"
 	"    --lang=<LANG>	The station language, in view \"uk_UA.UTF-8\".\n"
 	"    --config=<file>	The station configuration file.\n"
 	"    --station=<id>	The station identifier.\n"
@@ -431,8 +477,8 @@ string TSYS::optDescr( )
 	"Lang2CodeBase <lang>	Base language for variable texts translation, two symbols code.\n"
 	"MainCPUs   <list>	Main used CPUs list (separated by ':').\n"
 	"ClockRT    <0|1>	Set for use REALTIME (else MONOTONIC) clock, some problematic with the system clock modification.\n"
-	"SaveAtExit <0|1>	Save the system at exit.\n"
-	"SavePeriod <sec>	Save the system period.\n"
+	"SaveAtExit <0|1>	Save the program at exit.\n"
+	"SavePeriod <sec>	Save the program period.\n"
 	"RdStLevel  <lev>	Level of redundancy current station.\n"
 	"RdTaskPer  <s>		Call period of the redundant task.\n"
 	"RdRestConnTm <s>	Restore connection timeout of try to the \"dead\" reserve stations.\n"
@@ -798,7 +844,7 @@ void TSYS::clkCalc( )
 	//Try read file cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq for current CPU frequency get
 	if(!mSysclc && (fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq", "r"))) {
 	    size_t rez = fread(buf, 1, sizeof(buf)-1, fp); buf[rez] = 0;
-	    mSysclc = uint64_t(atof(buf)*1e3);
+	    mSysclc = uint64_t(s2r(buf)*1e3);
 	    fclose(fp);
 	}
 
@@ -1211,8 +1257,9 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 	    sout.reserve(in.size()*2);
 	    if(opt1 == "<text>") {
 		char buf[3];
-		string txt;
+		string txt, offForm = TSYS::strMess("%%0%dx  ", vmax(2,(int)ceil(log(in.size())/log(16))));
 		for(iSz = 0; iSz < in.size() || (iSz%16); ) {
+		    if(offForm.size() && (iSz%16) == 0) sout += TSYS::strMess(offForm.c_str(), iSz);
 		    if(iSz < in.size()) {
 			snprintf(buf, sizeof(buf), "%02X", (unsigned char)in[iSz]);
 			txt += isprint(in[iSz]) ? in[iSz] : '.';
@@ -2174,13 +2221,13 @@ reload:
 TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     bool alt1 = false;
-    // int message(string cat, int level, string mess) - formation of the system message <mess> with the category <cat>, level <level>
+    // int message(string cat, int level, string mess) - formation of the program message <mess> with the category <cat>, level <level>
     //  cat - message category
     //  level - message level
     //  mess - message text
     if(iid == "message" && prms.size() >= 3)	{ message(prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str()); return 0; }
     // int mess{Debug,Info,Note,Warning,Err,Crit,Alert,Emerg}(string cat, string mess) -
-    //		formation of the system message <mess> with the category <cat> and the appropriate level
+    //		formation of the program message <mess> with the category <cat> and the appropriate level
     //  cat - message category
     //  mess - message text
     if(iid == "messDebug" && prms.size() >= 2)	{ mess_debug(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
@@ -2237,7 +2284,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // XMLNodeObj XMLNode(string name = "") - creation of the XML node object with the name <name>
     //  name - XML node name
     if(iid == "XMLNode") return new XMLNodeObj((prms.size()>=1) ? prms[0].getS() : "");
-    // string cntrReq(XMLNodeObj req, string stat = "") - request of the control interface to the system via XML
+    // string cntrReq(XMLNodeObj req, string stat = "") - request of the control interface to the program via XML
     //  req - request's XML node
     //  stat - remote OpenSCADA-station for request
     if(iid == "cntrReq" && prms.size() >= 1) {
@@ -2532,16 +2579,16 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		"help",_("Separate directory paths with documents by symbol ';'."));
 	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
 		"help",_("Work DB address in format [<DB module>.<DB name>].\nChange it field if you want save or reload all system from other DB."));
-	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save the system at exit"),RWRWR_,"root","root",2,"tp","bool",
+	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save the program at exit"),RWRWR_,"root","root",2,"tp","bool",
 		"help",_("Select for automatic system saving to DB on exit."));
-	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save the system period"),RWRWR_,"root","root",2,"tp","dec",
+	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save the program period"),RWRWR_,"root","root",2,"tp","dec",
 		"help",_("Use no zero period (seconds) for periodic saving of changed systems parts to DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",1,"tp","str");
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_)) {
 		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",6,"tp","dec","len","1","dest","select",
 		    "sel_id","0;1;2;3;4;5;6;7",
 		    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
-		    "help",_("Least messages level which process by the system."));
+		    "help",_("Least messages level which process by the program."));
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_sysl",_("To syslog"),RWRWR_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_stdo",_("To stdout"),RWRWR_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_stde",_("To stderr"),RWRWR_,"root","root",1,"tp","bool");

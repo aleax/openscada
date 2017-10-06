@@ -2186,7 +2186,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	return (int)prms[1].getS().size();
     }
     // int mess{Debug,Info,Note,Warning,Err,Crit,Alert,Emerg} -
-    //		formation of the system message <mess> with the category by the widget path and the appropriate level
+    //		formation of the program message <mess> with the category by the widget path and the appropriate level
     //  mess - message text
     if(iid == "messDebug" && prms.size())	{ mess_debug(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
     if(iid == "messInfo" && prms.size())	{ mess_info(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
@@ -2230,8 +2230,10 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    }
 	}
 	else if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR)) {	//Set values
-	    if(ownerSess()->user() != u) ownerSess()->setUser(u);
-	    ownerSess()->setUserActTm();
+	    if(!s2i(opt->attr("noUser"))) {
+		if(ownerSess()->user() != u) ownerSess()->setUser(u);
+		ownerSess()->setUserActTm();
+	    }
 	    for(unsigned iCh = 0; iCh < opt->childSize(); iCh++) {
 		XMLNode *aN = opt->childGet(iCh);
 		string aid = aN->attr("id");

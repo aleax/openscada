@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: da_87x.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2012-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -186,7 +186,7 @@ void da_87x::getVal( TMdPrm *p )
     //AO back processing ($AA8N)
     for(unsigned i_v = 0; i_v < ePrm->dev.AO; i_v++) {
 	if(!rez.empty()) rez = p->owner().serReq(TSYS::strMess("$%02X8%d",(int)((p->owner().bus()==0)?0:p->modAddr),i_v), p->modSlot, CRC);
-	p->vlAt(TSYS::strMess("ao%d",i_v)).at().setR((rez.size() != 10 || rez[0]!='!') ? EVAL_REAL : atof(rez.data()+3), 0, true);
+	p->vlAt(TSYS::strMess("ao%d",i_v)).at().setR((rez.size() != 10 || rez[0]!='!') ? EVAL_REAL : s2r(rez.data()+3), 0, true);
     }
 
     //AI processing
@@ -194,12 +194,12 @@ void da_87x::getVal( TMdPrm *p )
 	// #AA
 	if(!rez.empty()) rez = p->owner().serReq(TSYS::strMess("#%02X",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
 	for(unsigned i_a = 0; i_a < (ePrm->dev.AI&0xFF); i_a++)
-	    p->vlAt(TSYS::strMess("ai%d",i_a)).at().setR(((1+(i_a+1)*7) > rez.size() || rez[0] != '>') ? EVAL_REAL : atof(rez.data()+1+7*i_a), 0, true);
+	    p->vlAt(TSYS::strMess("ai%d",i_a)).at().setR(((1+(i_a+1)*7) > rez.size() || rez[0] != '>') ? EVAL_REAL : s2r(rez.data()+1+7*i_a), 0, true);
 
 	// $AA3
 	if((ePrm->dev.AI>>8) == 1) {
 	    if(!rez.empty()) rez = p->owner().serReq(TSYS::strMess("$%02X3",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
-	    p->vlAt("cvct").at().setR((rez.size() != 8 || rez[0] != '>') ? EVAL_REAL : atof(rez.data()+1), 0, true);
+	    p->vlAt("cvct").at().setR((rez.size() != 8 || rez[0] != '>') ? EVAL_REAL : s2r(rez.data()+1), 0, true);
 	}
     }
 

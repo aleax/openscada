@@ -377,7 +377,7 @@ int TBasaDBF::ModifiFieldIt( int posItems, char *NameField, const char *str )
 
 // if((db_field_ptr+posField)->tip_fild=='N')
 // {
-//  temp=atof(str); fcvt(temp,(db_field_ptr+posField)->dec_field,str);
+//  temp=s2r(str); fcvt(temp,(db_field_ptr+posField)->dec_field,str);
 // }
     strncpy((char*)items[posItems]+rec_len, str, (db_field_ptr+posField)->len_fild);
 

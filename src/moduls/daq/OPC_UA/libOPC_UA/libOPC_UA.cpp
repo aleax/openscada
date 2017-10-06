@@ -82,6 +82,52 @@ string real2str( double val, int prec, char tp )
     return buf;
 }
 
+double str2real( const string &val )
+{
+    const char *chChr = val.c_str();
+
+    //Pass spaces before
+    for( ; true; ++chChr) {
+	switch(*chChr) {
+	    case ' ': case '\t': continue;
+	}
+	break;
+    }
+
+    //Check and process the base
+    bool isNeg = false, isExpNeg = false;
+    double tVl = 0;
+    int16_t nAftRdx = 0, tAftRdx = 0;
+    if(*chChr && ((*chChr >= '0' && *chChr <= '9') || *chChr == '-' || *chChr == '+')) {
+	if(*chChr == '+')       ++chChr;
+	else if(*chChr == '-')  { isNeg = true; ++chChr; }
+	for(bool notFirst = false; *chChr >= '0' && *chChr <= '9'; ++chChr, notFirst = true) {
+	    if(notFirst) tVl *= 10;
+	    tVl += *chChr - '0';
+	}
+    }
+    if(*chChr == '.' || *chChr == ',') {
+	for(++chChr; *chChr >= '0' && *chChr <= '9'; ++chChr, ++nAftRdx)
+	    tVl = tVl*10 + (*chChr - '0');
+    }
+    if(isNeg) tVl *= -1;
+
+    //Read exponent
+    if(*chChr && (*chChr == 'e' || *chChr == 'E')) {
+	++chChr;
+	if(*chChr == '+')       ++chChr;
+	else if(*chChr == '-')  { isExpNeg = true; ++chChr; }
+	for(bool notFirst = false; *chChr >= '0' && *chChr <= '9'; ++chChr, notFirst = true) {
+	    if(notFirst) tAftRdx *= 10;
+	    tAftRdx += *chChr - '0';
+	}
+	if(isExpNeg) tAftRdx *= -1;
+    }
+
+    //Combine
+    return tVl * pow(10, tAftRdx-nAftRdx);
+}
+
 string strParse( const string &path, int level, const string &sep, int *off, bool mergeSepSymb )
 {
     int an_dir = off ? *off : 0;
@@ -774,8 +820,8 @@ void UA::oDataValue( string &buf, uint8_t eMsk, const string &vl, uint8_t vEMsk,
 		case OpcUa_UInt32:	oNu(buf, strtoul(setVl.c_str(),NULL,10), 4);	break;
 		case OpcUa_Int64:	oN(buf, strtoll(setVl.c_str(),NULL,10), 8);	break;
 		case OpcUa_UInt64:	oNu(buf, strtoull(setVl.c_str(),NULL,10), 8);	break;
-		case OpcUa_Float:	oR(buf, atof(setVl.c_str()), 4);	break;
-		case OpcUa_Double:	oR(buf, atof(setVl.c_str()), 8);	break;
+		case OpcUa_Float:	oR(buf, str2real(setVl), 4);		break;
+		case OpcUa_Double:	oR(buf, str2real(setVl), 8);		break;
 		case OpcUa_String:
 		case OpcUa_ByteString:	oS(buf, setVl);				break;
 		case OpcUa_NodeId:	oNodeId(buf, NodeId::fromAddr(setVl));	break;
@@ -1391,7 +1437,7 @@ void Client::protIO( XML_N &io )
 		    io.setAttr("Nonce", randBytes(32));			//???? check for policy
 		    oS(mReq, io.attr("Nonce"));				//clientNonce
 		    oS(mReq, certPEM2DER(io.childGet("ClientCert")->text()));	//clientCertificate
-		    oR(mReq, atof(io.attr("sesTm").c_str()), 8);	//Requested SessionTimeout, ms
+		    oR(mReq, str2real(io.attr("sesTm")), 8);		//Requested SessionTimeout, ms
 		    oNu(mReq, 0x1000000, 4);				//maxResponse MessageSize
 		}
 		else if(io.attr("id") == "ActivateSession") {
@@ -1445,8 +1491,8 @@ void Client::protIO( XML_N &io )
 		}
 		else if(io.attr("id") == "Read") {
 		    iTpId = OpcUa_ReadRequest;
-		    oR(mReq, atof(io.attr("maxAge").c_str()), 8);	//maxAge 0 ms
-		    oN(mReq, atoi(io.attr("timestampsToReturn").c_str()), 4);//timestampsTo Return (SERVER_1)
+		    oR(mReq, str2real(io.attr("maxAge")), 8);		//maxAge 0 ms
+		    oN(mReq, str2real(io.attr("timestampsToReturn")), 4);//timestampsTo Return (SERVER_1)
 									//> nodesToRead []
 		    oNu(mReq, std::min(25u,io.childSize()-stIdx), 4);	//nodes
 		    for(unsigned i_n = stIdx; i_n < io.childSize() && (i_n-stIdx) < 25; i_n++) {
@@ -1908,7 +1954,7 @@ void Client::reqService( XML_N &io )
 	if(!req.attr("err").empty())	{ io.setAttr("err",req.attr("err")); sess.clearFull(); return; }
 	sess.sesId = req.attr("sesId");
 	sess.authTkId = req.attr("authTokenId");
-	sess.sesLifeTime = atof(req.attr("sesTm").c_str());
+	sess.sesLifeTime = str2real(req.attr("sesTm"));
 
 	// Send ActivateSession message
 	req.setAttr("id", "ActivateSession")->setAttr("SeqNumber", uint2str(++sess.sqNumb))->setAttr("SeqReqId", uint2str(++sess.sqReqId));
@@ -3893,7 +3939,7 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 	uint32_t rez = reqData(OpcUa_ReadRequest, req);
 	if(rez == OpcUa_BadNodeIdUnknown)		mIt.nd = NodeId();
 	else if(rez == OpcUa_BadAttributeIdInvalid)	mIt.aid = Aid_Error;
-	if(smplItv == 0 || isnan(smplItv)) smplItv = atof(req.attr("dtPer").c_str())*1000;
+	if(smplItv == 0 || isnan(smplItv)) smplItv = str2real(req.attr("dtPer"))*1000;
 	if(smplItv == -1) smplItv = ss.publInterv;
 	if(smplItv != -2) mIt.smplItv = ceil(std::max(smplItv,subscrProcPer())/subscrProcPer())*subscrProcPer();
     }

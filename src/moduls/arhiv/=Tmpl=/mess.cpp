@@ -84,7 +84,7 @@ void ModMArch::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(mAPrms);
-	vl = prmNd.attr("Size"); if( !vl.empty() ) setMaxSize(atof(vl.c_str()));
+	vl = prmNd.attr("Size"); if( !vl.empty() ) setMaxSize(s2r(vl));
     } catch(...) { }
 }
 
@@ -154,7 +154,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/sz")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::real2str(maxSize()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMaxSize(atof(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMaxSize(s2r(opt->text()));
     }
     else TMArchivator::cntrCmdProc(opt);
 }

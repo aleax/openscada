@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.10"
+#define MOD_VER		"0.1.11"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -389,7 +389,7 @@ void TMdContr::enable_()
 void TMdContr::start_()
 {
 //> Schedule process
-    mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0, (int64_t ) (1e9 * atof(cron().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0, (int64_t ) (1e9 * s2r(cron()))) : 0;
 
 //> Start the gathering data task
     SYS->taskCreate(nodePath('.', true), mPrior, TMdContr::Task, this);

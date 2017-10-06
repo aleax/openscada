@@ -900,7 +900,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	    opt->setAttr("font","Courier");
 	    opt->childAdd("rule")->setAttr("expr","^\\[[^\\]]+.+$")->setAttr("color","blue")->setAttr("font_italic","1")->
 		childAdd("rule")->setAttr("expr","^\\[[^\\]]+\\]")->setAttr("color","darkblue")->setAttr("font_weight","1");
-	    opt->childAdd("rule")->setAttr("expr","^[0-9a-fA-F]{2} .+$")->setAttr("color","black");
+	    opt->childAdd("rule")->setAttr("expr","^[0-9a-fA-F]{2,} .+$")->setAttr("color","black");
 	}
     }
     else TCntrNode::cntrCmdProc(opt);
@@ -1238,7 +1238,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    opt->setAttr("font","Courier");
 	    opt->childAdd("rule")->setAttr("expr","^\\[[^\\]]+.+$")->setAttr("color","blue")->setAttr("font_italic","1")->
 		childAdd("rule")->setAttr("expr","^\\[[^\\]]+\\]")->setAttr("color","darkblue")->setAttr("font_weight","1");
-	    opt->childAdd("rule")->setAttr("expr","^[0-9a-fA-F]{2} .+$")->setAttr("color","black");
+	    opt->childAdd("rule")->setAttr("expr","^[0-9a-fA-F]{2,} .+$")->setAttr("color","black");
 	}
     }
     else TCntrNode::cntrCmdProc(opt);

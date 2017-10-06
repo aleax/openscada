@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibSYS file: varchfnc.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -152,23 +152,35 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	prms[1].setI(vtm%1000000); prms[1].setModify();
 	return vl;
     }
-    //bool set( ValObj val, int sec, int usec ) - writing of the value <val> to the archive buffer for the time <sec>:<usec>.
+    //bool set( ValObj val, int sec, int usec, string archivator = "" ) - writing of the value <val> to the archive for the time <sec>:<usec> for the archivator <archivator>.
     if(id == "set" && prms.size() >= 3) {
-	if(isArch())
-	    switch(arch().at().valType()) {
-		case TFld::Boolean:	arch().at().setB(prms[0].getB(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::Integer:	arch().at().setI(prms[0].getI(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::Real:	arch().at().setR(prms[0].getR(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::String:	arch().at().setS(prms[0].getS(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
-		default: break;
+	if(isArch()) {
+	    TFld::Type tp = TFld::String;
+	    switch(prms[0].type()) {
+		case TVariant::Boolean:	tp = TFld::Boolean;	break;
+		case TVariant::Integer:	tp = TFld::Integer;	break;
+		case TVariant::Real:	tp = TFld::Real;	break;
 	    }
+	    TValBuf buf(tp, 10, arch().at().period(), true, true); buf.set(prms[0], (int64_t)prms[1].getI()*1000000+prms[2].getI());
+	    arch().at().setVals(buf, buf.begin(), buf.end(), (prms.size()>=4)?prms[3].getS():"");
+	    /*switch(arch().at().valType()) {
+		case TFld::Boolean:	arch().at().setB(prms[0].getB(), (int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::Integer:	arch().at().setI(prms[0].getI(), (int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::Real:
+		    printf("TEST 00: %g\n", prms[0].getR());
+		    arch().at().setR(prms[0].getR(), (int64_t)prms[1].getI()*1000000+prms[2].getI());
+		    break;
+		case TFld::String:	arch().at().setS(prms[0].getS(), (int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		default: break;
+	    }*/
+	}
 	else {
 	    if(!buf()) return false;
 	    switch(buf()->valType()) {
-		case TFld::Boolean:	buf()->setB(prms[0].getB(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::Integer:	buf()->setI(prms[0].getI(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::Real:	buf()->setR(prms[0].getR(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::String:	buf()->setS(prms[0].getS(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::Boolean:	buf()->setB(prms[0].getB(), (int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::Integer:	buf()->setI(prms[0].getI(), (int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::Real:	buf()->setR(prms[0].getR(), (int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
+		case TFld::String:	buf()->setS(prms[0].getS(), (int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
 		default: break;
 	    }
 	}

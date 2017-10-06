@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsecurity.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -319,7 +319,7 @@ void TUser::setPass( const string &n_pass )
     string tPass = n_pass;
 #if defined(HAVE_CRYPT_H)
     string salt = "$1$"+name();		//Use MD5
-# if defined(__USE_GNU)
+# if defined(__USE_GNU) && !defined(__UCLIBC__)
     crypt_data data;
     data.initialized = 0;
     tPass = crypt_r(n_pass.c_str(), salt.c_str(), &data);
@@ -339,7 +339,7 @@ bool TUser::auth( const string &ipass, string *hash )
     string salt = (pass.compare(0,3,"$1$") == 0) ? "$1$"+name() : name();	//Check for MD5 or the old method
     if(ipass.compare(0,TSecurity::pHashMagic.size(),TSecurity::pHashMagic) == 0)
 	return (ipass.compare(TSecurity::pHashMagic.size(),pass.size(),pass) == 0);
-# if defined(__USE_GNU)
+# if defined(__USE_GNU) && !defined(__UCLIBC__)
     crypt_data data;
     data.initialized = 0;
     if(hash) *hash = crypt_r(ipass.c_str(),salt.c_str(),&data);

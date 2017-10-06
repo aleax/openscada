@@ -209,19 +209,19 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 
 bool OrigElFigure::attrChange( Attr &cfg, TVariant prev )
 {
-    if(cfg.flgGlob()&Attr::Active && cfg.id() == "elLst") {
+    if((cfg.flgGlob()&Attr::Active) && cfg.id() == "elLst") {
 	string sel, sel1;
 	string ls_prev = prev.getS();
 	map<int,char> pntls, pntls_prev, wls, wls_prev, clrls, clrls_prev, imgls, imgls_prev, lstls, lstls_prev;
 
 	//Parse last attributes list and make point list
-	for(int i_p = 0; i_p < 2; i_p++) {
-	    string ls_w = (i_p == 0) ? ls_prev : cfg.getS();
-	    map<int,char> &pntls_w = (i_p == 0) ? pntls_prev : pntls;
-	    map<int,char> &wls_w = (i_p == 0) ? wls_prev : wls;
-	    map<int,char> &clrls_w = (i_p == 0) ? clrls_prev : clrls;
-	    map<int,char> &imgls_w = (i_p == 0) ? imgls_prev : imgls;
-	    map<int,char> &lstls_w = (i_p == 0) ? lstls_prev : lstls;
+	for(int iP = 0; iP < 2; iP++) {
+	    string ls_w = (iP == 0) ? ls_prev : cfg.getS();
+	    map<int,char> &pntls_w = (iP == 0) ? pntls_prev : pntls;
+	    map<int,char> &wls_w = (iP == 0) ? wls_prev : wls;
+	    map<int,char> &clrls_w = (iP == 0) ? clrls_prev : clrls;
+	    map<int,char> &imgls_w = (iP == 0) ? imgls_prev : imgls;
+	    map<int,char> &lstls_w = (iP == 0) ? lstls_prev : lstls;
 	    for(int off = 0; (sel=TSYS::strSepParse(ls_w,0,'\n',&off)).size(); ) {
 		int offe = 0;
 		string fTp = TSYS::strSepParse(sel,0,':',&offe);
@@ -703,28 +703,28 @@ bool OrigText::attrChange( Attr &cfg, TVariant prev )
 	if(cfg.id() == "numbArg") {
 	    string fid("arg"), fnm(_("Argument ")), fidp, fnmp;
 	    //Delete specific unnecessary attributes of parameters
-	    for(int i_p = 0; true; i_p++) {
-		fidp = fid+i2s(i_p);
+	    for(int iP = 0; true; iP++) {
+		fidp = fid+i2s(iP);
 		if(!cfg.owner()->attrPresent(fidp+"val")) break;
-		else if(i_p >= cfg.getI()) {
+		else if(iP >= cfg.getI()) {
 		    cfg.owner()->attrDel(fidp+"val");
 		    cfg.owner()->attrDel(fidp+"tp");
 		    cfg.owner()->attrDel(fidp+"cfg");
 		}
 	    }
 	    //Create ullage attributes of parameters
-	    for(int i_p = 0; i_p < cfg.getI(); i_p++) {
-		fidp = fid+i2s(i_p);
-		fnmp = fnm+i2s(i_p);
+	    for(int iP = 0; iP < cfg.getI(); iP++) {
+		fidp = fid+i2s(iP);
+		fnmp = fnm+i2s(iP);
 		if(cfg.owner()->attrPresent(fidp+"val")) continue;
 		cfg.owner()->attrAdd(new TFld((fidp+"tp").c_str(),(fnmp+_(": type")).c_str(),
 		    TFld::Real,TFld::Selected|Attr::Mutable|Attr::Active,"","0",
 			TSYS::strMess("%d;%d;%d",FT_INT,FT_REAL,FT_STR).c_str(),_("Integer;Real;String"),
-			i2s(A_TextArs+A_TextArsTp+A_TextArsSz*i_p).c_str()));
+			i2s(A_TextArs+A_TextArsTp+A_TextArsSz*iP).c_str()));
 		cfg.owner()->attrAdd(new TFld((fidp+"val").c_str(),(fnmp+_(": value")).c_str(),
-		    TFld::Integer,Attr::Mutable,"","","","",i2s(A_TextArs+A_TextArsVal+A_TextArsSz*i_p).c_str()));
+		    TFld::Integer,Attr::Mutable,"","","","",i2s(A_TextArs+A_TextArsVal+A_TextArsSz*iP).c_str()));
 		cfg.owner()->attrAdd(new TFld((fidp+"cfg").c_str(),(fnmp+_(": config")).c_str(),
-		    TFld::String,Attr::Mutable,"","","","",i2s(A_TextArs+A_TextArsCfg+A_TextArsSz*i_p).c_str()));
+		    TFld::String,Attr::Mutable,"","","","",i2s(A_TextArs+A_TextArsCfg+A_TextArsSz*iP).c_str()));
 	    }
 	}
 	else if(aid >= A_TextArs && (aid%A_TextArsSz) == A_TextArsTp && prev.getI() != cfg.getI()) {
@@ -852,26 +852,26 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 	else if(cfg.id() == "areas") {
 	    string fid("area"), fnm(_("Area ")), fidp, fnmp;
 	    //Delete specific unnecessary attributes of map areas
-	    for(int i_p = 0; true; i_p++) {
-		fidp = fid+i2s(i_p);
+	    for(int iP = 0; true; iP++) {
+		fidp = fid+i2s(iP);
 		if(!cfg.owner()->attrPresent(fidp+"shp"))	break;
-		else if(i_p >= cfg.getI()) {
+		else if(iP >= cfg.getI()) {
 		    cfg.owner()->attrDel(fidp+"shp");
 		    cfg.owner()->attrDel(fidp+"coord");
 		    cfg.owner()->attrDel(fidp+"title");
 		}
 	    }
 	    //Create ullage attributes of map areas
-	    for(int i_p = 0; i_p < cfg.getI(); i_p++) {
-		fidp = fid+i2s(i_p);
-		fnmp = fnm+i2s(i_p);
+	    for(int iP = 0; iP < cfg.getI(); iP++) {
+		fidp = fid+i2s(iP);
+		fnmp = fnm+i2s(iP);
 		if(cfg.owner()->attrPresent(fidp+"shp")) continue;
 		cfg.owner()->attrAdd(new TFld((fidp+"shp").c_str(),(fnmp+_(": shape")).c_str(),TFld::Integer,TFld::Selected|Attr::Mutable,"1","0",
-		    TSYS::strMess("%d;%d;%d",FM_RECT,FM_POLY,FM_CIRCLE).c_str(),_("Rect;Poly;Circle"),i2s(A_MediaArs+A_MediaArShape+A_MediaArsSz*i_p).c_str()));
+		    TSYS::strMess("%d;%d;%d",FM_RECT,FM_POLY,FM_CIRCLE).c_str(),_("Rect;Poly;Circle"),i2s(A_MediaArs+A_MediaArShape+A_MediaArsSz*iP).c_str()));
 		cfg.owner()->attrAdd(new TFld((fidp+"coord").c_str(),(fnmp+_(": coordinates")).c_str(),TFld::String,Attr::Mutable,"","",
-		    "","",i2s(A_MediaArs+A_MediaArCoord+A_MediaArsSz*i_p).c_str()));
+		    "","",i2s(A_MediaArs+A_MediaArCoord+A_MediaArsSz*iP).c_str()));
 		cfg.owner()->attrAdd(new TFld((fidp+"title").c_str(),(fnmp+_(": title")).c_str(),TFld::String,TFld::TransltText|Attr::Mutable,"","",
-		    "","",i2s(A_MediaArs+A_MediaArTitle+A_MediaArsSz*i_p).c_str()));
+		    "","",i2s(A_MediaArs+A_MediaArTitle+A_MediaArsSz*iP).c_str()));
 	    }
 	}
     }
@@ -1018,10 +1018,10 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
     else if(cfg.id() == "parNum") {
 	string fid("prm"), fnm(_("Parameter ")), fidp, fnmp;
 	//Delete specific unnecessary attributes of parameters
-	for(int i_p = 0; true; i_p++) {
-	    fidp = fid+i2s(i_p);
+	for(int iP = 0; true; iP++) {
+	    fidp = fid+i2s(iP);
 	    if(!cfg.owner()->attrPresent(fidp+"addr"))	break;
-	    else if(i_p >= cfg.getI()) {
+	    else if(iP >= cfg.getI()) {
 		cfg.owner()->attrDel(fidp+"addr");
 		cfg.owner()->attrDel(fidp+"bordL");
 		cfg.owner()->attrDel(fidp+"bordU");
@@ -1034,27 +1034,27 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	    }
 	}
 	//Create ullage attributes of parameters
-	for(int i_p = 0; i_p < cfg.getI(); i_p++) {
-	    fidp = fid+i2s(i_p);
-	    fnmp = fnm+i2s(i_p);
+	for(int iP = 0; iP < cfg.getI(); iP++) {
+	    fidp = fid+i2s(iP);
+	    fnmp = fnm+i2s(iP);
 	    if(cfg.owner()->attrPresent(fidp+"addr")) continue;
 	    cfg.owner()->attrAdd(new TFld((fidp+"addr").c_str(),(fnmp+_(": address")).c_str(),
-		TFld::String,Attr::Address|Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrAddr+A_DiagramTrsSz*i_p).c_str()));
+		TFld::String,Attr::Address|Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrAddr+A_DiagramTrsSz*iP).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"bordL").c_str(),(fnmp+_(": view border: lower")).c_str(),
-		TFld::Real,Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrBordL+A_DiagramTrsSz*i_p).c_str()));
+		TFld::Real,Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrBordL+A_DiagramTrsSz*iP).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"bordU").c_str(),(fnmp+_(": view border: upper")).c_str(),
-		TFld::Real,Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrBordU+A_DiagramTrsSz*i_p).c_str()));
+		TFld::Real,Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrBordU+A_DiagramTrsSz*iP).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"color").c_str(),(fnmp+_(": color")).c_str(),
-		TFld::String,Attr::Color|Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrClr+A_DiagramTrsSz*i_p).c_str()));
+		TFld::String,Attr::Color|Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrClr+A_DiagramTrsSz*iP).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"width").c_str(),(fnmp+_(": width")).c_str(),
-		TFld::Integer,Attr::Mutable,"","1","1;10","",i2s(A_DiagramTrs+A_DiagramTrWdth+A_DiagramTrsSz*i_p).c_str()));
+		TFld::Integer,Attr::Mutable,"","1","1;10","",i2s(A_DiagramTrs+A_DiagramTrWdth+A_DiagramTrsSz*iP).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"scl").c_str(),(fnmp+_(": scale")).c_str(),TFld::Integer,Attr::Mutable|TFld::Selected,
 		"","0","0;2;3;6;7",_("Global;Markers;Grid and markers;Markers (log);Grid and markers (log)"),
-		i2s(A_DiagramTrs+A_DiagramTrScl+A_DiagramTrsSz*i_p).c_str()));
+		i2s(A_DiagramTrs+A_DiagramTrScl+A_DiagramTrsSz*iP).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"val").c_str(),(fnmp+_(": value")).c_str(),
-		TFld::Real,Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrVal+A_DiagramTrsSz*i_p).c_str()));
+		TFld::Real,Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrVal+A_DiagramTrsSz*iP).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"prop").c_str(),(fnmp+_(": properties")).c_str(),
-		TFld::String,Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrProp+A_DiagramTrsSz*i_p).c_str()));
+		TFld::String,Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrProp+A_DiagramTrsSz*iP).c_str()));
 	}
     }
 
@@ -1085,9 +1085,9 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			break;
 		}
 	    }
-	    for(int i_p = 0; i_p < src->attrAt("parNum").at().getI(); i_p++) {
-		if((el=ctrId(root,TSYS::strMess("/prm%dcolor",i_p),true))) el->setAttr("help",Widget::helpColor());
-		if((el=ctrId(root,TSYS::strMess("/prm%daddr",i_p),true))) el->setAttr("help",
+	    for(int iP = 0; iP < src->attrAt("parNum").at().getI(); iP++) {
+		if((el=ctrId(root,TSYS::strMess("/prm%dcolor",iP),true))) el->setAttr("help",Widget::helpColor());
+		if((el=ctrId(root,TSYS::strMess("/prm%daddr",iP),true))) el->setAttr("help",
 		    _("Full address to DAQ attribute of a parameter or to an archive.\n"
 		      "Also supported direct data set by the prefixes:\n"
 		      "  \"data:{XMLNodeData}\" - drawing from the direct set data;\n"
@@ -1103,7 +1103,7 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		      "      at pass \"tm\" and \"tm_grnd\" it will sets values from the diagram range,\n"
 		      "      and also by set attribute \"s\" it will allows the time set into seconds;\n"
 		      "  \"line:3.14159265\" - horizontal line into value \"3.14159265\"."));
-		if((el=ctrId(root,TSYS::strMess("/prm%dprop",i_p),true))) el->setAttr("help",
+		if((el=ctrId(root,TSYS::strMess("/prm%dprop",iP),true))) el->setAttr("help",
 		    _("Real archive properties in form \"{BegArh}:{EndArh}:{DataPeriod}\", where:\n"
 		      "  \"BegArh\", \"EndArh\", \"DataPeriod\" - begin, end and period archive's data in seconds,\n"
 		      "                  real up to microseconds (1e-6)."));
@@ -1155,10 +1155,10 @@ bool OrigProtocol::attrChange( Attr &cfg, TVariant prev )
 	    string fid("it"), fnm(_("Item ")), fidp, fnmp;
 
 	    //Delete specific unnecessary items
-	    for(int i_p = 0; true; i_p++) {
-		fidp = fid + i2s(i_p);
+	    for(int iP = 0; true; iP++) {
+		fidp = fid + i2s(iP);
 		if(!cfg.owner()->attrPresent(fidp+"lev")) break;
-		else if(i_p >= cfg.getI()) {
+		else if(iP >= cfg.getI()) {
 		    cfg.owner()->attrDel(fidp+"lev");
 		    cfg.owner()->attrDel(fidp+"tmpl");
 		    cfg.owner()->attrDel(fidp+"fnt");
@@ -1167,18 +1167,18 @@ bool OrigProtocol::attrChange( Attr &cfg, TVariant prev )
 	    }
 
 	    //Create ullage items
-	    for(int i_p = 0; i_p < cfg.getI(); i_p++) {
-		fidp = fid + i2s(i_p);
-		fnmp = fnm + i2s(i_p);
+	    for(int iP = 0; iP < cfg.getI(); iP++) {
+		fidp = fid + i2s(iP);
+		fnmp = fnm + i2s(iP);
 		if(cfg.owner()->attrPresent(fidp+"lev")) continue;
 		cfg.owner()->attrAdd(new TFld((fidp+"lev").c_str(),(fnmp+_(": level")).c_str(),
-		    TFld::Integer,Attr::Mutable,"","0","0;7","",i2s(A_ProtProps+A_ProtPropLev+A_ProtPropsSz*i_p).c_str()));
+		    TFld::Integer,Attr::Mutable,"","0","0;7","",i2s(A_ProtProps+A_ProtPropLev+A_ProtPropsSz*iP).c_str()));
 		cfg.owner()->attrAdd(new TFld((fidp+"tmpl").c_str(),(fnmp+_(": template")).c_str(),
-		    TFld::String,Attr::Mutable,"","","","",i2s(A_ProtProps+A_ProtPropTmpl+A_ProtPropsSz*i_p).c_str()));
+		    TFld::String,Attr::Mutable,"","","","",i2s(A_ProtProps+A_ProtPropTmpl+A_ProtPropsSz*iP).c_str()));
 		cfg.owner()->attrAdd(new TFld((fidp+"fnt").c_str(),(fnmp+_(": font")).c_str(),
-		    TFld::String,Attr::Font|Attr::Mutable,"","","","",i2s(A_ProtProps+A_ProtPropFnt+A_ProtPropsSz*i_p).c_str()));
+		    TFld::String,Attr::Font|Attr::Mutable,"","","","",i2s(A_ProtProps+A_ProtPropFnt+A_ProtPropsSz*iP).c_str()));
 		cfg.owner()->attrAdd( new TFld((fidp+"color").c_str(),(fnmp+_(": color")).c_str(),
-		    TFld::String,Attr::Color|Attr::Mutable,"","","","",i2s(A_ProtProps+A_ProtPropClr+A_ProtPropsSz*i_p).c_str()));
+		    TFld::String,Attr::Color|Attr::Mutable,"","","","",i2s(A_ProtProps+A_ProtPropClr+A_ProtPropsSz*iP).c_str()));
 	    }
 	}
     }
@@ -1222,10 +1222,10 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			break;
 		}
 	    }
-	    for(int i_p = 0; i_p < src->attrAt("itProp").at().getI(); i_p++) {
-		if((el=ctrId(root,TSYS::strMess("/it%dcolor",i_p),true))) el->setAttr("help",Widget::helpColor());
-		if((el=ctrId(root,TSYS::strMess("/it%dfnt",i_p),true))) el->setAttr("help",Widget::helpFont());
-		if((el=ctrId(root,TSYS::strMess("/it%dtmpl",i_p),true))) el->setAttr("help",
+	    for(int iP = 0; iP < src->attrAt("itProp").at().getI(); iP++) {
+		if((el=ctrId(root,TSYS::strMess("/it%dcolor",iP),true))) el->setAttr("help",Widget::helpColor());
+		if((el=ctrId(root,TSYS::strMess("/it%dfnt",iP),true))) el->setAttr("help",Widget::helpFont());
+		if((el=ctrId(root,TSYS::strMess("/it%dtmpl",iP),true))) el->setAttr("help",
 		    _("Category template or regular expression \"/{re}/\". For template reserved special symbols:\n"
 		    "  '*' - any multiply symbols group;\n"
 		    "  '?' - any one symbol;\n"

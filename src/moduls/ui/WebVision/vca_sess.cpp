@@ -6163,8 +6163,7 @@ void VCADiagram::makeXYPicture( SSess &ses )
 	// Draw curent point
 	int iVpos = cP.val(aVend);
 	int iVposX = cPX.val(aVend);
-	if(iVpos < (int)cP.val().size() && iVposX < (int)cPX.val().size() && cP.val()[iVpos].val != EVAL_REAL && cPX.val()[iVposX].val != EVAL_REAL)
-	{
+	if(iVpos < (int)cP.val().size() && iVposX < (int)cPX.val().size() && cP.val()[iVpos].val != EVAL_REAL && cPX.val()[iVposX].val != EVAL_REAL) {
 	    curVl = vsPercT ? 100*(cP.val()[iVpos].val-bordL)/(bordU-bordL) : cP.val()[iVpos].val;
 	    curVlX = hsPercT ? 100*(cPX.val()[iVposX].val-xBordL)/(xBordU-xBordL) : cPX.val()[iVposX].val;
 	    c_vpos = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,curVl)):curVl)-vsMinT)/(vsMaxT-vsMinT))));
@@ -6173,7 +6172,7 @@ void VCADiagram::makeXYPicture( SSess &ses )
 	    gdImageLine(im, c_hpos-lnWdth*5, c_vpos+lnWdth*5, c_hpos+lnWdth*5, c_vpos-lnWdth*5, clr_t);
 
 	    XMLNode req("set");
-	    req.setAttr("path",path()+"/%2fserv%2fattr");
+	    req.setAttr("path",path()+"/%2fserv%2fattr")->setAttr("noUser", "1");
 	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iT))->setText(r2s(cP.val()[iVpos].val,6));
 	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iT+1))->setText(r2s(cPX.val()[iVposX].val,6));
 	    req.childAdd("el")->setAttr("id","curSek")->setText(i2s(aVend/1000000));
@@ -6337,7 +6336,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	holdCur = (curTime==tTime);
 
 	XMLNode req("set");
-	req.setAttr("path", path()+"/%2fserv%2fattr");
+	req.setAttr("path", path()+"/%2fserv%2fattr")->setAttr("noUser", "1");
 	req.childAdd("el")->setAttr("id","curSek")->setText(i2s(curTime/1000000));
 	req.childAdd("el")->setAttr("id","curUSek")->setText(i2s(curTime%1000000));
 
@@ -6361,7 +6360,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	float curFrq = vmax(vmin(1e6/(float)itm,fftEnd),fftBeg);
 
 	XMLNode req("set");
-	req.setAttr("path", path()+"/%2fserv%2fattr");
+	req.setAttr("path", path()+"/%2fserv%2fattr")->setAttr("noUser", "1");
 	req.childAdd("el")->setAttr("id","curSek")->setText(i2s(((int64_t)(1e6/curFrq))/1000000));
 	req.childAdd("el")->setAttr("id","curUSek")->setText(i2s(((int64_t)(1e6/curFrq))%1000000));
 

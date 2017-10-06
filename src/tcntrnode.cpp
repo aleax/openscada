@@ -821,7 +821,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  from_root - path forming from root tree and do not include station ID.
     if(iid == "nodePath")
 	return nodePath(((prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : 0), ((prms.size() >= 2) ? prms[1].getB() : true));
-    // int messSys(int level, string mess) - formation of the system message <mess> with the <level>
+    // int messSys(int level, string mess) - formation of the program message <mess> with the <level>
     //		with the node path as a category and with the human readable path before the message.
     //  level - message level;
     //  mess - message text.

@@ -3,7 +3,7 @@
 /********************************************************************************
  *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>		*
  *										*
- *   Version: 1.2.2								*
+ *   Version: 1.2.3								*
  *      * Hello/Acknowledge properties set configurable and client's ones	*
  *	  also storing.								*
  *	* New OPCAlloc object is added for mutex handle and its automatic free	*
@@ -314,6 +314,7 @@ extern string int2str( int val );
 extern string uint2str( unsigned val );
 extern string ll2str( int64_t val );
 extern string real2str( double val, int prec = 15, char tp = 'g' );
+extern double str2real( const string &val );
 extern string strParse( const string &path, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
 extern string strLine( const string &str, int level, int *off = NULL );
 extern string strMess( const char *fmt, ... );

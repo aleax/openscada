@@ -90,7 +90,7 @@ if test $target_cpu = "i386" -o $target_cpu = "i486" -o $target_cpu = "i586" -o 
     $target_cpu = "pentium4"; then ix86=yes;
 fi
 
-AM_CONDITIONAL(ResourcesAllow, [test -d data])
+AM_CONDITIONAL([ResourcesAllow], [test -d data])
 
 # Check for functions of libraries
 AC_FUNC_CLOSEDIR_VOID
@@ -123,10 +123,12 @@ fi
 
 AC_CONFIG_FILES([Makefile openscada.pc src/Makefile src_call/Makefile])
 
-if test -d data; then
-    AC_CONFIG_FILES([data/openscada.desktop data/openscada_start data/oscada.xml
-	data/ModelsDB/AGLKS/openscada_AGLKS.desktop data/ModelsDB/Boiler/openscada_Boiler.desktop])
-fi
+COND_CONFIG_FILES=
+AM_COND_IF([ResourcesAllow], [
+    COND_CONFIG_FILES="data/openscada.desktop data/openscada_start data/oscada.xml data/ModelsDB/AGLKS/openscada_AGLKS.desktop data/ModelsDB/Boiler/openscada_Boiler.desktop"
+])
+# AC_SUBST([COND_CONFIG_FILES])
+AC_CONFIG_FILES([${COND_CONFIG_FILES}])
 
 #====== Generic functions enable/disable ======
 AC_ARG_ENABLE(CrossCompile, AC_HELP_STRING([--enable-CrossCompile],[enable the crosscompile build]), [],
@@ -149,8 +151,9 @@ if test $enable_CrossCompile = no; then
 fi
 AC_SEARCH_LIBS(sin, [m], [], AC_MSG_ERROR([The mathematic library isn't found. Install or check the GLibC core package!]))
 AC_SEARCH_LIBS(dlopen, [dl], [], AC_MSG_ERROR([The dynamic linking library isn't found. Install or check the GLibC core package!]))
-AC_SEARCH_LIBS(clock_gettime, [rt])
-AC_CHECK_HEADERS([crypt.h], AC_SEARCH_LIBS(crypt_r,[crypt]), AC_MSG_NOTICE([crypt.h header isn't found. Using disabled!]))
+# AC_SEARCH_LIBS(clock_gettime, [rt])
+AC_SEARCH_LIBS(clock_nanosleep, [rt])
+AC_CHECK_HEADERS([crypt.h], AC_SEARCH_LIBS(crypt,[crypt]), AC_MSG_NOTICE([crypt.h header isn't found. Using disabled!]))
 AC_SEARCH_LIBS(deflate, [z], [], AC_MSG_ERROR([Z library isn't found. Install or check the libz package!]))
 
 # Check for the PCRE library using in the OpenSCADA core

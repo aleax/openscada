@@ -615,7 +615,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		scrlArea = document.getElementById('gen-pnl-right');
 		sclIts = document.querySelectorAll(".elem textarea, .elem div.table, .elem select.list");
 		sclFitSz = scrlArea.clientHeight-scrlArea.children[0].offsetHeight;
-		for(fitStp = 5, iScN = 0; sclFitSz > fitStp; ) {
+		for(fitStp = Math.max(5,sclFitSz/(10*Math.max(1,sclIts.length))), iScN = 0; sclFitSz > fitStp; ) {
 		    sclIt = null;
 		    sclFromBeg = (iScN == 0);
 		    for( ; iScN < sclIts.length && !sclIt; iScN++) {

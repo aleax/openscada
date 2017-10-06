@@ -1075,7 +1075,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    QList<TextEdit*> texts = scrl->findChildren<TextEdit*>();
 		    QList<QTableWidget*> tbls = scrl->findChildren<QTableWidget*>();
 		    QList<ListView*> lsts = scrl->findChildren<ListView*>();
-		    for(int fitStp = 5, iScN = 0; sclFitSz > fitStp; ) {
+		    for(int fitStp = vmax(5, sclFitSz/(10*vmax(1,texts.length()+tbls.length()+lsts.length()))), iScN = 0; sclFitSz > fitStp; ) {
 			QAbstractScrollArea *sclIt = NULL, *tEl = NULL;
 			bool sclFromBeg = (iScN == 0);
 			for( ; iScN < (texts.length()+tbls.length()+lsts.length()) && !sclIt; iScN++) {

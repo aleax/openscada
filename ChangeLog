@@ -1,3 +1,26 @@
+2017-10-06 Roman (stable)
+- SYS: In way of adaption to build for OpenWrt and with uCLibC there was made:
+    - resourcesAllow true checking for build without the resources (folders "data" and "doc"), mostly by problems at "automake" here execution;
+    - librt checking changed from the function clock_gettime() to clock_nanosleep();
+    - for libcrypt checking there used function "crypt";
+    - including <stdarg.h> to src/tmess.h;
+    - checking for __UCLIBC__ into TUser::auth();
+    - iconv buffer set to "const char *".
+- SYS,UI.QTStarter: Word "system" mostly replaced by the word "program".
+- !!!!:SYS,DAQ.{AMRDevs,FastWel,ICP_DAS,SMH2Gi}: Self implementation was added and used for function atof() and strtod() by the function TSYS::str2real() and its shortcut s2r()
+    and for understand both radix symbols of float point value that is "." and ",".
+    That doing was made in way of switching to native LC_NUMERIC value but here yet present other problems: scanf() for floats and external
+    environments work, like JavaScript of WWW.
+- DAQ.{MMS.libMMS,OPC_UA.libOPC_UA}: the function TSYS::str2real() and its shortcut s2r() placed and used to the independent libraries.
+- FIX:SYS: Call for online documentation fixed for the main page "Documents/".
+- SYS,Transport: Offset part in left added to binaries decoding by the argument's value "<text>".
+- FIX:SYS.XMLNode: Encoding UTF code 0xA0 to "&nbsp;" replaced to "&#x00A0;" but "&nbsp;" caused errors on pure XML (not XHTML), observed on UI.WebCfgD.
+- DAQ.BlockCalc: Attributes description format some rewrote.
+- !!:Special.FLibSYS: VArch::set() expanded for single value writing to an archivator of an archive.
+- UI.{QTCfg,WebCfgD}: Set optimal for scalable items vertical fitting, but straight increasing per 5 pixels too slow on some graphical environments like virtual machines and VNC.
+- FIX:UI.{VCAEngine,Vision,WebVision}: Adapted to mark service commands, like promitive's "Diagram" tracing", to "noUser" and doesn't perform updating UserActTm on their.
+
+
 2017-09-23 Roman (stable)
 - SYS.DB: Height of the field of the SQL requests decreased to 2 rows.
 - SYS: Binaries decoding expanded by an argument's value "<text>" for text field in right forming.

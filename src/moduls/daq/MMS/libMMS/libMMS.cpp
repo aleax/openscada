@@ -1,7 +1,7 @@
 
 //OpenSCADA MMS(IEC-9506) implementation library file: libMMS.cpp
 /******************************************************************************
- *   Copyright (C) 2014-2015 by Roman Savochenko, <rom_as@oscada.org>	      *
+ *   Copyright (C) 2014-2017 by Roman Savochenko, <rom_as@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -84,6 +84,52 @@ string r2s( double val, int prec, char tp )
     }
 
     return buf;
+}
+
+double s2r( const string &val )
+{
+    const char *chChr = val.c_str();
+
+    //Pass spaces before
+    for( ; true; ++chChr) {
+	switch(*chChr) {
+	    case ' ': case '\t': continue;
+	}
+	break;
+    }
+
+    //Check and process the base
+    bool isNeg = false, isExpNeg = false;
+    double tVl = 0;
+    int16_t nAftRdx = 0, tAftRdx = 0;
+    if(*chChr && ((*chChr >= '0' && *chChr <= '9') || *chChr == '-' || *chChr == '+')) {
+	if(*chChr == '+')       ++chChr;
+	else if(*chChr == '-')  { isNeg = true; ++chChr; }
+	for(bool notFirst = false; *chChr >= '0' && *chChr <= '9'; ++chChr, notFirst = true) {
+	    if(notFirst) tVl *= 10;
+	    tVl += *chChr - '0';
+	}
+    }
+    if(*chChr == '.' || *chChr == ',') {
+	for(++chChr; *chChr >= '0' && *chChr <= '9'; ++chChr, ++nAftRdx)
+	    tVl = tVl*10 + (*chChr - '0');
+    }
+    if(isNeg) tVl *= -1;
+
+    //Read exponent
+    if(*chChr && (*chChr == 'e' || *chChr == 'E')) {
+	++chChr;
+	if(*chChr == '+')       ++chChr;
+	else if(*chChr == '-')  { isExpNeg = true; ++chChr; }
+	for(bool notFirst = false; *chChr >= '0' && *chChr <= '9'; ++chChr, notFirst = true) {
+	    if(notFirst) tAftRdx *= 10;
+	    tAftRdx += *chChr - '0';
+	}
+	if(isExpNeg) tAftRdx *= -1;
+    }
+
+    //Combine
+    return tVl * pow(10, tAftRdx-nAftRdx);
 }
 
 string strParse( const string &path, int level, const string &sep, int *off, bool mergeSepSymb )
@@ -727,7 +773,7 @@ void Client::protIO( XML_N &io )
 				    case VT_Bool: ASN_oN(rez, dTp, (bool)atoi(itN->text().c_str()));	break;
 				    case VT_Int: ASN_oN(rez, dTp, atoi(itN->text().c_str()));		break;
 				    case VT_UInt: ASN_oN(rez, dTp, (unsigned)atoi(itN->text().c_str()));break;
-				    case VT_Float: ASN_oR(rez, dTp, atof(itN->text().c_str()));		break;
+				    case VT_Float: ASN_oR(rez, dTp, s2r(itN->text()));			break;
 				    case VT_BitString: {	//!!!! Need for test
 					string srcS = itN->text(), rezBS;
 					for(unsigned i_s = 0; i_s < srcS.size(); i_s++)
@@ -750,8 +796,8 @@ void Client::protIO( XML_N &io )
 					    switch((dTp1=atoi(icN->attr("dataType").c_str()))) {
 						case VT_Bool: ASN_oN(rez, dTp1, (bool)atoi(icN->text().c_str()));	break;
 						case VT_Int: ASN_oN(rez, dTp1, atoi(icN->text().c_str()));		break;
-						case VT_UInt: ASN_oN(rez, dTp1, (unsigned)atoi(icN->text().c_str()));break;
-						case VT_Float: ASN_oR(rez, dTp1, atof(icN->text().c_str()));		break;
+						case VT_UInt: ASN_oN(rez, dTp1, (unsigned)atoi(icN->text().c_str()));	break;
+						case VT_Float: ASN_oR(rez, dTp1, s2r(icN->text()));			break;
 					    }
 					}
 					ASN_oC(rez, dTp, offTmp1);

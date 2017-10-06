@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.6"
+#define MOD_VER		"1.0.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/smh_2gi) hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -255,7 +255,7 @@ void TMdContr::disable_( )
 void TMdContr::start_( )
 {
     //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
     //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this);

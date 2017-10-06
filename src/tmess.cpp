@@ -483,7 +483,12 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     //Make convert to blocks 1000 bytes
     string buf;
     buf.reserve(mess.size());
-    char   *ibuf, outbuf[1000], *obuf;
+# if defined(__UCLIBC__)
+    const char	*ibuf;
+# else
+    char	*ibuf;
+# endif
+    char	outbuf[1000], *obuf;
     size_t ilen, olen, chwrcnt = 0;
     iconv_t hd;
 

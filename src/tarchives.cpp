@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tarchives.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -845,7 +845,7 @@ void *TArchiveS::ArhValTask( void *param )
 TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     // Array messGet(int btm, int etm, string cat = "", int lev = 0, string arch = "", int upTm = 0);
-    //     - request of the system messages for the time from <btm>
+    //     - request of the program messages for the time from <btm>
     //       to <etm> for the category <cat>, level <lev> and archivers <arch>
     //  btm - begin time
     //  etm - end time
