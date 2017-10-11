@@ -86,8 +86,8 @@ string r2s( double val, int prec, char tp )
     return buf;
 }
 
-double s2r( const string &val )
-{
+double s2r( const string &val )	{ return atof(val.c_str()); }
+/*{
     const char *chChr = val.c_str();
 
     //Pass spaces before
@@ -130,7 +130,7 @@ double s2r( const string &val )
 
     //Combine
     return tVl * pow(10, tAftRdx-nAftRdx);
-}
+}*/
 
 string strParse( const string &path, int level, const string &sep, int *off, bool mergeSepSymb )
 {

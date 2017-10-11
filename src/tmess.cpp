@@ -58,7 +58,7 @@ using namespace OSCADA;
 //*************************************************
 TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_ARCHIVE),
     mConvCode(true), mIsUTF8(true), mTranslDyn(false), mTranslDynPlan(false), mTranslEnMan(false), mTranslSet(false),
-    mRes(true), getMessRes(true)
+    mRes(true), mLang2CodeBase(mRes), mLang2Code(mRes), getMessRes(true)
 {
     openlog(PACKAGE, 0, LOG_USER);
 
@@ -73,12 +73,13 @@ TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_A
     textdomain(PACKAGE);
 #endif
 
-    mLang2Code = lang();
-    if(mLang2Code.size() < 2 || mLang2Code == "POSIX" || mLang2Code == "C") mLang2Code = "en";
-    else mLang2Code = mLang2Code.substr(0,2);
+    string tLng = lang();
+    mLang2Code = tLng;
+    if(mLang2Code.size() < 2 || mLang2Code.getVal() == "POSIX" || mLang2Code.getVal() == "C") mLang2Code = "en";
+    else mLang2Code = mLang2Code.getVal().substr(0,2);
     mIsUTF8 = (IOCharSet == "UTF-8" || IOCharSet == "UTF8" || IOCharSet == "utf8");
 
-    if(mLang2Code == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "US-ASCII"))
+    if(tLng == "C" || (mLang2Code.getVal() == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "ASCII" || IOCharSet == "US-ASCII")))
 	mConvCode = false;
 }
 
@@ -199,9 +200,9 @@ string TMess::translFld( const string &lng, const string &fld, bool isCfg )	{ re
 void TMess::setLang2CodeBase( const string &vl )
 {
     mLang2CodeBase = vl;
-    if((!mLang2CodeBase.empty() && mLang2CodeBase.size() < 2) || mLang2CodeBase == "POSIX" || mLang2CodeBase == "C")
+    if((!mLang2CodeBase.empty() && mLang2CodeBase.size() < 2) || mLang2CodeBase.getVal() == "POSIX" || mLang2CodeBase.getVal() == "C")
 	mLang2CodeBase = "en";
-    else mLang2CodeBase = mLang2CodeBase.substr(0,2);
+    else mLang2CodeBase = mLang2CodeBase.getVal().substr(0,2);
 
     SYS->modif();
 }
@@ -466,10 +467,13 @@ void TMess::setLang( const string &lng, bool init )
     IOCharSet = nl_langinfo(CODESET);
 #endif
 
-    mLang2Code = lang();
-    if(mLang2Code.size() < 2 || mLang2Code == "POSIX" || mLang2Code == "C") mLang2Code = "en";
-    else mLang2Code = mLang2Code.substr(0, 2);
+    string tLng = lang();
+    mLang2Code = tLng;
+    if(mLang2Code.size() < 2 || mLang2Code.getVal() == "POSIX" || mLang2Code.getVal() == "C") mLang2Code = "en";
+    else mLang2Code = mLang2Code.getVal().substr(0, 2);
     mIsUTF8 = (IOCharSet == "UTF-8" || IOCharSet == "UTF8" || IOCharSet == "utf8");
+
+    mConvCode = !(tLng == "C" || (mLang2Code.getVal() == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "ASCII" || IOCharSet == "US-ASCII")));
 
     if(init) SYS->sysModifFlgs &= ~TSYS::MDF_LANG;
     else { SYS->sysModifFlgs |= TSYS::MDF_LANG; SYS->modif(); }

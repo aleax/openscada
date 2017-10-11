@@ -185,9 +185,9 @@ class TMess
 	unsigned mTranslEnMan	:1;
 	unsigned mTranslSet	:1;
 
-	string	mLang2CodeBase, mLang2Code;
-
 	ResMtx	mRes;
+
+	MtxString	mLang2CodeBase, mLang2Code;
 
 	map<string, bool>	debugCats;
 	vector<string>		selectDebugCats;

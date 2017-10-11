@@ -442,7 +442,7 @@ inline string tm2s( double tm )					{ return TSYS::time2str(tm); }
 
 inline int s2i( const string &val )		{ return atoi(val.c_str()); }
 inline long long s2ll( const string &val )	{ return atoll(val.c_str()); }
-inline double s2r( const string &val )		{ return TSYS::str2real(val); }	//atof(val.c_str()); }
+inline double s2r( const string &val )		{ return /*TSYS::str2real(val); }*/ atof(val.c_str()); }
 
 inline string sTrm( const string &val, const string &cfg = " \n\t\r") { return TSYS::strTrim(val, cfg); }
 

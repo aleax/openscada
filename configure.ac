@@ -123,12 +123,10 @@ fi
 
 AC_CONFIG_FILES([Makefile openscada.pc src/Makefile src_call/Makefile])
 
-COND_CONFIG_FILES=
-AM_COND_IF([ResourcesAllow], [
+if test -d data; then
     COND_CONFIG_FILES="data/openscada.desktop data/openscada_start data/oscada.xml data/ModelsDB/AGLKS/openscada_AGLKS.desktop data/ModelsDB/Boiler/openscada_Boiler.desktop"
-])
-# AC_SUBST([COND_CONFIG_FILES])
-AC_CONFIG_FILES([${COND_CONFIG_FILES}])
+    AC_CONFIG_FILES([${COND_CONFIG_FILES}])
+fi
 
 #====== Generic functions enable/disable ======
 AC_ARG_ENABLE(CrossCompile, AC_HELP_STRING([--enable-CrossCompile],[enable the crosscompile build]), [],

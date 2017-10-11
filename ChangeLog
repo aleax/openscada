@@ -1,3 +1,11 @@
+2017-10-11 Roman (stable)
+- SYS,DAQ.{MMS.libMMS,OPC_UA.libOPC_UA}: After adaption to build for OpenWrt and with uCLibC, resourcesAllow true checking some changed but it has yet problems with Automake 1.9.
+- FIX:SYS.Mess: {mLang2CodeBase,mLang2Code} moved under the data resource. Strings' encoding disabled for language "C" and the encoding "ASCII".
+- FIX:SYS.Security: Fixed for crash on try login at not initiated empty password with its hashing support.
+    Functions crypt_r() and crypt() processing was added.
+- Special.FLibSYS: Function str2real() moved to use s2r().
+
+
 2017-10-06 Roman (stable)
 - SYS: In way of adaption to build for OpenWrt and with uCLibC there was made:
     - resourcesAllow true checking for build without the resources (folders "data" and "doc"), mostly by problems at "automake" here execution;

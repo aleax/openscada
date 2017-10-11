@@ -82,8 +82,8 @@ string real2str( double val, int prec, char tp )
     return buf;
 }
 
-double str2real( const string &val )
-{
+double str2real( const string &val )	{ return atof(val.c_str()); }
+/*{
     const char *chChr = val.c_str();
 
     //Pass spaces before
@@ -126,7 +126,7 @@ double str2real( const string &val )
 
     //Combine
     return tVl * pow(10, tAftRdx-nAftRdx);
-}
+}*/
 
 string strParse( const string &path, int level, const string &sep, int *off, bool mergeSepSymb )
 {

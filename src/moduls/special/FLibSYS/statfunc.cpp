@@ -36,7 +36,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.5.0"
+#define MOD_VER		"1.5.1"
 #define MOD_AUTOR	_("Roman Savochenko")
 #define MOD_DESCR	_("Provides the library of system API functions of user programming area.")
 #define MOD_LICENSE	"GPL2"

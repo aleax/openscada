@@ -440,7 +440,7 @@ class str2real : public TFunction
 	string name( )	{ return _("String: String to real"); }
 	string descr( )	{ return _("Convert string to real."); }
 
-	void calc( TValFunc *val )	{ val->setR(0,atof(val->getS(1).c_str())); }
+	void calc( TValFunc *val )	{ val->setR(0,s2r(val->getS(1))); }
 };
 
 //*************************************************

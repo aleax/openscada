@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <errno.h>
 #include <unistd.h>
 
 #include "tsys.h"
@@ -296,6 +297,10 @@ TUser::TUser( const string &nm, const string &idb, TElem *el ) : TConfig(el), mN
     mDB(idb), mSysIt(false)
 {
     mName = nm;
+
+#if defined(HAVE_CRYPT_H)
+    setPass("");
+#endif
 }
 
 TUser::~TUser( )
@@ -316,17 +321,21 @@ TCntrNode &TUser::operator=( const TCntrNode &node )
 
 void TUser::setPass( const string &n_pass )
 {
+    char *tRez = NULL;
     string tPass = n_pass;
 #if defined(HAVE_CRYPT_H)
     string salt = "$1$"+name();		//Use MD5
 # if defined(__USE_GNU) && !defined(__UCLIBC__)
     crypt_data data;
     data.initialized = 0;
-    tPass = crypt_r(n_pass.c_str(), salt.c_str(), &data);
+    tRez = crypt_r(n_pass.c_str(), salt.c_str(), &data);
+    if(!tRez)	throw TError(_("Error crypt_r(): %s (%d)"), strerror(errno), errno);
+    tPass = tRez;
 # else
-    dataRes().lock();
-    tPass = crypt(n_pass.c_str(), salt.c_str());
-    dataRes().unlock();
+    MtxAlloc res(dataRes(), true);
+    tRez = crypt(n_pass.c_str(), salt.c_str());
+    if(!tRez)	throw TError(_("Error crypt_r(): %s (%d)"), strerror(errno), errno);
+    tPass = tRez;
 # endif
 #endif
     cfg("PASS").setS(tPass);
@@ -334,6 +343,7 @@ void TUser::setPass( const string &n_pass )
 
 bool TUser::auth( const string &ipass, string *hash )
 {
+    char *tRez = NULL;
 #if defined(HAVE_CRYPT_H)
     string pass = cfg("PASS").getS();
     string salt = (pass.compare(0,3,"$1$") == 0) ? "$1$"+name() : name();	//Check for MD5 or the old method
@@ -342,12 +352,24 @@ bool TUser::auth( const string &ipass, string *hash )
 # if defined(__USE_GNU) && !defined(__UCLIBC__)
     crypt_data data;
     data.initialized = 0;
-    if(hash) *hash = crypt_r(ipass.c_str(),salt.c_str(),&data);
-    return (pass == crypt_r(ipass.c_str(),salt.c_str(),&data));
+    if(hash) {
+	tRez = crypt_r(ipass.c_str(), salt.c_str(), &data);
+	if(!tRez) { mess_sys(TMess::Error, _("Error crypt_r(): %s (%d)"), strerror(errno), errno); return false; }
+	*hash = tRez;
+    }
+    tRez = crypt_r(ipass.c_str(), salt.c_str(), &data);
+    if(!tRez) { mess_sys(TMess::Error, _("Error crypt_r(): %s (%d)"), strerror(errno), errno); return false; }
+    return (pass == tRez);
 # else
     MtxAlloc res(dataRes(), true);
-    if(hash) *hash = crypt(ipass.c_str(), salt.c_str());
-    return (pass == crypt(ipass.c_str(), salt.c_str()));
+    if(hash) {
+	tRez = crypt(ipass.c_str(), salt.c_str());
+	if(!tRez) { mess_sys(TMess::Error, _("Error crypt(): %s (%d)"), strerror(errno), errno); return false; }
+	*hash = tRez;
+    }
+    tRez = crypt(ipass.c_str(), salt.c_str());
+    if(!tRez) { mess_sys(TMess::Error, _("Error crypt(): %s (%d)"), strerror(errno), errno); return false; }
+    return (pass == tRez);
 # endif
 #else
     return (ipass == cfg("PASS").getS());
