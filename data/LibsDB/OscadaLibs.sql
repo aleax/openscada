@@ -51,7 +51,7 @@ Version: 1.0.0
 License: GPL','flb_regEl','Елементи регулювання','Бібліотека елементів регулювання','Элементы регулирования','Библиотека элементов регулирования',0);
 INSERT INTO "UserFuncLibs" VALUES('Controller','Controllers','Library of programs of controllers based on JavaLikeCalc.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0
+Version: 1.1.1
 License: GPL','lib_Controllers','Контролери','Програми контролерів базованих на JavaLikeCalc.','Контроллеры','Программы контроллеров основанных на JavaLikeCalc.',0);
 INSERT INTO "UserFuncLibs" VALUES('web','XHTML-template','Pages processing functions library for XHTML-template user''s Web-interface.
 Author: Roman Savochenko
@@ -6930,7 +6930,7 @@ CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"r
 INSERT INTO "lib_Controllers" VALUES('prescr','Prescriptions manager','','','Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsor: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
-Version: 1.0.0','','',1,10,0,'clcCnt++;
+Version: 1.1.0','','',1,10,0,'clcCnt++;
 
 if(f_start)	work = SYS.XMLNode("prg");
 
@@ -7011,12 +7011,12 @@ if(curMode <= 0 && mode == 1 && prog.length) {
 	}
 }
 //Pause and other process
-else if((mode == 0 && curMode < 0) || (curMode == 1 && mode == 2) || (curMode == 2 && mode == 1)) {
-	curMode = mode;
-	if((curMode == 1 || curMode == 2) && comCntrO) {
+else if((mode == 0 && curMode < 0) || (curMode == 1 && mode == 2) || (curMode == 2 && (mode == 0 || mode == 1))) {
+	//curMode = mode;
+	if((mode == 0 || mode == 1 || mode == 2) && comCntrO) {
 		var cL = comCntrO.nodeList("prm_");
 		for(i_c = 0; i_c < cL.length; i_c++)
-			comCntrO[cL[i_c]].pause.set(curMode==2);
+			comCntrO[cL[i_c]].pause.set(mode==2);
 	}
 }
 
@@ -7037,7 +7037,7 @@ if(curMode == 1 || curMode == 2) {
 	//Internal commands call
 	if(!comCntrO) {
 		if(mode == 3 && curCom >= 0 && curCom < work.childSize()) {
-			work.childGet(curCom).setAttr("rez","-10:"+tr("Step missed"));
+			work.childGet(curCom).setAttr("rez", "-10:"+tr("Step missed"));
 			curCom++;
 		}
 		if(curCom >= 0 && curCom < work.childSize()) {
@@ -7112,7 +7112,9 @@ if(curMode == 1 || curMode == 2) {
 	//External commands call
 	else {
 		// Get current command parameter-object		
-		toNext = false;
+		toNext = toStop = toPass = false;
+		isRun = actBackGrnd = false;
+
 		curComPrm = EVAL_BOOL;
 		if(curComPos >= 0 && curComPos < curComNd.childSize()) {
 			if(!(comId=comLs[curComNd.childGet(curComPos).attr("id")]).isEVal()) curComPrm = comCntrO["prm_"+comId.prmID];
@@ -7123,16 +7125,18 @@ if(curMode == 1 || curMode == 2) {
 			}
 		}
 		if(mode == 3 && curComPos >= 0 && curComPos < curComNd.childSize()) {
-			curComNd.childGet(curComPos).setAttr("rez","-10:"+tr("Step missed"));
-			curComPrm.run.set(false);
+			//curComNd.childGet(curComPos).setAttr("rez","-10:"+tr("Step missed"));
+			//curComPrm.run.set(false);
 			mode = curMode;
-			toNext = true;
+			toNext = toPass = true;
 		}
 		else if(curComPos >= 0 && curComPos < curComNd.childSize()) {
 			comEl = curComNd.childGet(curComPos);
+
 			//Stop process
 			if(mode == 0) {
-				comEl.setAttr("rez","-12:"+tr("Program terminated"));
+				toStop = true;
+				//comEl.setAttr("rez","-12:"+tr("Program terminated"));
 				// Stop all typical and set "abort" flag
 				var cL = comCntrO.nodeList("prm_");
 				for(i_c = 0; i_c < cL.length; i_c++) {
@@ -7141,7 +7145,7 @@ if(curMode == 1 || curMode == 2) {
 					cLi.start.set(false);
 					cLi.abort.set(true);
 				}
-				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+				SYS.messInfo("uprg"+prog, tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 				curMode = mode = -3;
 			}
 			//Commands process
@@ -7156,50 +7160,64 @@ if(curMode == 1 || curMode == 2) {
 					curComPrm.rez.set(0);
 					curComPrm.run.set(true);
 				}
-				//Update steps status, up to current comand
-				for(comElN = work, comPos = 0, comLev = 0, comCur = true; true; comPos++) {
-					if(comPos >= comElN.childSize()) {
-						if((comElN=comElN.parent())) {
-							comLev--;
-							comPos = comElN.attr("seekPos").toInt();
-							comCur = comElN.attr("comCur").toInt();
-							continue;
-						}
-						break;
-					}
-					comElI = comElN.childGet(comPos);
-					isCurCmd = comCur && comLev == (curComLev-1) && curCom.parse(comLev,":").toInt() == comPos;
-					curComPI = comCntrO["prm_"+comLs[comElI.attr("id")].prmID];
-					if(isCurCmd || (curComPI.run.get() && comElI.attr("rez").toInt() != 1 && comElI.attr("rez").toInt() > -10))
-					{
-						rez = curComPI.rez.get();
-						if(isCurCmd && rez.toInt() > 0) toNext = true;
-						if(rez.toInt() < 0) {
-							// Stop all typical and call "error" command
-							var cL = comCntrO.nodeList("prm_");
-							for(i_c = 0; i_c < cL.length; i_c++) {
-								var cLi = comCntrO[cL[i_c]];
-								cLi.run.set(false);
-								cLi.start.set(false);
-								cLi.error.set(true);
-							}
-							SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-							curMode = mode = -1;
-						}
-						comElI.setAttr("rez",rez);
-						for(i_a = 1; i_a <= 5; i_a++)
-							if(!(comA=curComPI["arg"+i_a]).isEVal())
-								comElI.setAttr("arg"+i_a, comA.get());
-					}
-					if(isCurCmd) break;
-					if(comElI.childSize()) {
-						comElN.setAttr("seekPos",comPos);
-						comElN.setAttr("comCur",comCur);
-						comElN = comElI;
-						comCur = comCur && comLev < curComLev && curCom.parse(comLev,":").toInt() == comPos;
-						comPos = -1; comLev++;
-					}
+				isRun = true;
+			}
+		}
+		//Update steps status, up to the current comand
+		isCurCmd = false;
+		for(comElN = work, comPos = 0, comLev = 0, comCur = true; isRun || toPass || toStop; comPos++) {
+			if(comPos >= comElN.childSize()) {
+				if((comElN=comElN.parent())) {
+					comLev--;
+					comPos = comElN.attr("seekPos").toInt();
+					comCur = comElN.attr("comCur").toInt();
+					continue;
 				}
+				if(actBackGrnd && toNext) toNext = false;
+				break;
+			}
+			comElI = comElN.childGet(comPos);
+			isBackgrnd = comElI.attr("backgrnd").toInt();
+			if(!isBackgrnd && actBackGrnd)	toNext = false;
+			if(isCurCmd) break;
+			isCurCmd = comCur && comLev == (curComLev-1) && curCom.parse(comLev,":").toInt() == comPos;
+			curComPI = comCntrO["prm_"+comLs[comElI.attr("id")].prmID];
+			rez = curComPI.rez.get();
+			if(isCurCmd || ((toStop || curComPI.run.get()) && comElI.attr("rez").toInt() != 1 && comElI.attr("rez").toInt() > -10)) {
+				if(toStop)	rez = "-12:" + tr("Program terminated");
+				else if(toPass) {
+					rez = "-10:" + tr("Step missed");
+					curComPI.run.set(false);
+				}
+				else if(rez.toInt() < 0) {
+					// Stop all typical and call "error" command
+					var cL = comCntrO.nodeList("prm_");
+					for(i_c = 0; i_c < cL.length; i_c++) {
+						var cLi = comCntrO[cL[i_c]];
+						cLi.run.set(false);
+						cLi.start.set(false);
+						cLi.error.set(true);
+					}
+					SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+					curMode = mode = -1;
+				}
+				if(!actBackGrnd && isBackgrnd && rez.toInt() == 0) actBackGrnd = true;
+				if(isCurCmd && (rez.toInt() > 0 || isBackgrnd) && !toStop)	toNext = true;
+				comElI.setAttr("rez", rez);
+				for(i_a = 1; i_a <= 5; i_a++)
+					if(!(comA=curComPI["arg"+i_a]).isEVal())
+						comElI.setAttr("arg"+i_a, comA.get());
+			}
+			if(isCurCmd) continue;
+			//Force backgrounded rezult update for running
+			if(rez.toInt() != 0 && comElI.attr("rez").toInt() == 0)	comElI.setAttr("rez", rez);
+
+			if(comElI.childSize()) {
+				comElN.setAttr("seekPos", comPos);
+				comElN.setAttr("comCur", comCur);
+				comElN = comElI;
+				comCur = comCur && comLev < curComLev && curCom.parse(comLev,":").toInt() == comPos;
+				comPos = -1; comLev++;
 			}
 		}
 
@@ -7238,7 +7256,8 @@ if(curMode == 1 || curMode == 2) {
 		}
 	}
 }
-mode = curMode;','','',1479055738);
+curMode = mode;
+//mode = curMode;','','',1508607633);
 INSERT INTO "lib_Controllers" VALUES('test','test','test','','Different tests of the JavaLikeCalc language for execution into the controller mode.
 Author: Roman Savochenko
 Version: 1.0.0

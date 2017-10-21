@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-06 16:07+0300\n"
+"POT-Creation-Date: 2017-10-11 18:02+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1498,6 +1498,14 @@ msgstr "Пользователи и группы пользователей"
 msgid "Groups"
 msgstr "Группы пользователей"
 
+#, c-format
+msgid "Error crypt_r(): %s (%d)"
+msgstr "Ошибка crypt_r(): %s (%d)"
+
+#, c-format
+msgid "Error crypt(): %s (%d)"
+msgstr "Ошибка crypt(): %s (%d)"
+
 msgid "User "
 msgstr "Пользователь "
 
@@ -1621,6 +1629,7 @@ msgstr "КиБ"
 msgid "B"
 msgstr "Б"
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"

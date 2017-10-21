@@ -735,7 +735,11 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	    if(!((LineEdit*)shD->addrWdg)->isEdited()) ((LineEdit*)shD->addrWdg)->setValue(val.c_str());
 	    break;
 	case F_TEXT_ED: ((TextEdit*)shD->addrWdg)->setText(val.c_str());	break;
-	case F_CHECK_BOX: ((QCheckBox*)shD->addrWdg)->setChecked(s2i(val));	break;
+	case F_CHECK_BOX:
+	    shD->addrWdg->blockSignals(true);
+	    ((QCheckBox*)shD->addrWdg)->setChecked(s2i(val));
+	    shD->addrWdg->blockSignals(false);
+	    break;
 	case F_BUTTON: {
 	    QPushButton *wdg = (QPushButton*)shD->addrWdg;
 	    wdg->setCheckable(false);

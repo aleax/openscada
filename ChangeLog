@@ -1,3 +1,10 @@
+2017-10-21 Roman (stable)
+- !!!!:DB.LibsDB.{OscadaLibs,vcaBase}: JavaLikeCalc.Controllers.prescr and Main.{prescrEdit,prescrRun,prescrRunSimple}
+    expanded for backgrounded steps support and some fixes about pauses.
+- FIX:UI.Vision: View "CheckBox" of the primitive "FormEl" processing fixed for signals preventing at set value from the model.
+- FIX:UI.VCAEngine: Attribute "var{X}val" of the primitive "Text" set to translated for strings.
+
+
 2017-10-11 Roman (stable)
 - SYS,DAQ.{MMS.libMMS,OPC_UA.libOPC_UA}: After adaption to build for OpenWrt and with uCLibC, resourcesAllow true checking some changed but it has yet problems with Automake 1.9.
 - FIX:SYS.Mess: {mLang2CodeBase,mLang2Code} moved under the data resource. Strings' encoding disabled for language "C" and the encoding "ASCII".

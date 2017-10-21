@@ -736,7 +736,7 @@ bool OrigText::attrChange( Attr &cfg, TVariant prev )
 	    cfg.owner()->attrDel(fid);
 	    cfg.owner()->attrAdd(new TFld(fid.c_str(),fnm.c_str(),
 			(cfg.getI()==1) ? TFld::Real : ((cfg.getI()==2) ? TFld::String : TFld::Integer),
-			Attr::Mutable,"","","","",i2s(A_TextArs+A_TextArsSz*narg).c_str()), apos);
+			((cfg.getI()==2)?TFld::TransltText:0)|Attr::Mutable,"","","","",i2s(A_TextArs+A_TextArsSz*narg).c_str()), apos);
 	    cfg.owner()->attrAt(fid).at().setFlgSelf(sflg);
 	}
     }

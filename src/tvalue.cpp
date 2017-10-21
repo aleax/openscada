@@ -813,7 +813,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    if(prms.size() >= 2) tm += prms[1].getI();
 	    bool isSys = false;
 	    if(prms.size() >= 3) isSys = prms[2].getB();
-	    rez = get(&tm,isSys);
+	    rez = get(&tm, isSys);
 	    if(prms.size() >= 1) { prms[0].setI(tm/1000000); prms[0].setModify(); }
 	    if(prms.size() >= 2) { prms[1].setI(tm%1000000); prms[1].setModify(); }
 
