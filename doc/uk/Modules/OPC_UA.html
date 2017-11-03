@@ -1,0 +1,811 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/OPC UA - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/OPC UA</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FOPC+UA&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/OPC_UA" title="Modules/OPC UA">Modules/OPC UA</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/OPC_UA" title="Modules/OPC UA (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/OPC_UA/ru" title="Модули/OPC UA (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
+<td> Клієнт OPC-UA </td>
+<td> 1.6 </td>
+<td> GPL2 </td>
+<td> daq_OPC_UA.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Збір Даних </td>
+<td> Роман Савоченко </td>
+<td> Надає реалізацію OPC-UA клієнтського сервісу.
+</td></tr>
+
+<tr>
+<td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
+<td> Сервер OPC-UA </td>
+<td> 1.8 </td>
+<td> GPL2 </td>
+<td> daq_OPC_UA.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Протокол </td>
+<td> Роман Савоченко </td>
+<td> Надає реалізацію OPC-UA сервісу серверу.
+</td></tr>
+
+<tr>
+<td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
+<td> Бібліотека реалізації OPC-UA у OpenSCADA </td>
+<td> 1.2 </td>
+<td> LGPL3 </td>
+<td> libOPC_UA.{h,cpp} </td>
+<td> en </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Бібліотека </td>
+<td> Роман Савоченко </td>
+<td> Надає реалізацію протоколу OPC-UA в частині клієнта та серверу, у вигляді окремої бібліотеки.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB_OPC-UA"><span class="tocnumber">1</span> <span class="toctext">Протокол OPC-UA</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D1.80.D0.B5.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.97_.D1.81.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83"><span class="tocnumber">2</span> <span class="toctext">Модуль реалізації серверу</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.9E.D0.B1.D1.81.D0.BB.D1.83.D0.B3.D0.BE.D0.B2.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2_.D0.BF.D0.BE_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_OPC-UA"><span class="tocnumber">2.1</span> <span class="toctext">Обслуговування запитів по протоколу OPC-UA</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.B7.D0.B1.D0.BE.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="tocnumber">3</span> <span class="toctext">Модуль збору даних</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="tocnumber">3.1</span> <span class="toctext">Об'єкт контролеру даних</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="tocnumber">3.2</span> <span class="toctext">Параметри</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#.D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_libOPC_UA"><span class="tocnumber">4</span> <span class="toctext">Бібліотека libOPC_UA</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#.D0.A1.D0.BB.D1.83.D0.B6.D0.B1.D0.BE.D0.B2.D1.96_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D0.B8.2C_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D1.82.D0.B0_.D0.BA.D0.BB.D0.B0.D1.81_UA"><span class="tocnumber">4.1</span> <span class="toctext">Службові об'єкти, функції та клас UA</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#.D0.94.D0.B0.D0.BD.D1.96"><span class="tocnumber">4.1.1</span> <span class="toctext">Дані</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#.D0.97.D0.BE.D0.B2.D0.BD.D1.96.D1.88.D0.BD.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97"><span class="tocnumber">4.1.2</span> <span class="toctext">Зовнішні функції</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B0.D0.B2.D1.82.D0.BE.D0.BC.D0.B0.D1.82.D0.B8.D1.87.D0.BD.D0.BE.D0.B3.D0.BE_.D1.80.D0.BE.D0.B7.D0.B1.D0.BB.D0.BE.D0.BA.D0.BE.D0.B2.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_POSIX_.D0.BC.D1.8E.D1.82.D0.B5.D0.BA.D1.81.D1.83_.D0.B4.D0.BB.D1.8F_OPC_.28OPCAlloc.29"><span class="tocnumber">4.1.3</span> <span class="toctext">Об'єкт автоматичного розблоковування POSIX мютексу для OPC (OPCAlloc)</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#.D0.9F.D0.BE.D0.BC.D0.B8.D0.BB.D0.BA.D0.B0_OPC_.28OPCError.29"><span class="tocnumber">4.1.4</span> <span class="toctext">Помилка OPC (OPCError)</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#XML-.D1.82.D0.B5.D0.B3_.28XML_N.29"><span class="tocnumber">4.1.5</span> <span class="toctext">XML-тег (XML_N)</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0_OPC-UA_.28NodeId.29"><span class="tocnumber">4.1.6</span> <span class="toctext">Об'єкт вузла OPC-UA (NodeId)</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#.D0.9A.D0.BE.D1.80.D0.B5.D0.BD.D0.B5.D0.B2.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_OPC-UA_.28UA.29"><span class="tocnumber">4.1.7</span> <span class="toctext">Кореневий об'єкт протоколу OPC-UA (UA)</span></a>
+<ul>
+<li class="toclevel-4 tocsection-16"><a href="#.D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.96.D0.B2_.D0.B1.D0.B5.D0.B7.D0.BF.D0.B5.D0.BA.D0.B8_.28SecuritySetting.29"><span class="tocnumber">4.1.7.1</span> <span class="toctext">Включений об'єкт параметрів безпеки (SecuritySetting)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-17"><a href="#.D0.9E.D1.81.D0.BD.D0.BE.D0.B2.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BB.D1.96.D1.94.D0.BD.D1.82.D0.B0_.28Client-.3EUA.29"><span class="tocnumber">4.2</span> <span class="toctext">Основний об'єкт клієнта (Client-&gt;UA)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-18"><a href="#.D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D1.81.D0.B5.D0.B0.D0.BD.D1.81.D1.83_.D0.BA.D0.BB.D1.96.D1.94.D0.BD.D1.82.D0.B0_.28SClntSess.29"><span class="tocnumber">4.2.1</span> <span class="toctext">Включений об'єкт сеансу клієнта (SClntSess)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-19"><a href="#.D0.9E.D1.81.D0.BD.D0.BE.D0.B2.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D1.81.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D0.B0_.28Server-.3EUA.29"><span class="tocnumber">4.3</span> <span class="toctext">Основний об'єкт сервера (Server-&gt;UA)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-20"><a href="#.D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.B0.D0.BD.D0.B0.D0.BB.D1.83_.D0.B1.D0.B5.D0.B7.D0.BF.D0.B5.D0.BA.D0.B8_.28SecCnl.29"><span class="tocnumber">4.3.1</span> <span class="toctext">Включений об'єкт каналу безпеки (SecCnl)</span></a></li>
+<li class="toclevel-3 tocsection-21"><a href="#.D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D1.81.D0.B5.D0.B0.D0.BD.D1.81.D1.83_.28Sess.29"><span class="tocnumber">4.3.2</span> <span class="toctext">Включений об'єкт сеансу (Sess)</span></a>
+<ul>
+<li class="toclevel-4 tocsection-22"><a href="#.D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D1.82.D0.BE.D1.87.D0.BA.D0.B8_.D0.BF.D1.80.D0.BE.D0.B4.D0.BE.D0.B2.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BE.D0.B3.D0.BB.D1.8F.D0.B4.D1.83_.28ContPoint.29"><span class="tocnumber">4.3.2.1</span> <span class="toctext">Включений об'єкт точки продовження огляду (ContPoint)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-23"><a href="#.D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D1.96.D0.B4.D0.BF.D0.B8.D1.81.D0.BA.D0.B8_.28Subscr.29"><span class="tocnumber">4.3.3</span> <span class="toctext">Включений об'єкт підписки (Subscr)</span></a>
+<ul>
+<li class="toclevel-4 tocsection-24"><a href="#.D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.83_.D0.BC.D0.BE.D0.BD.D1.96.D1.82.D0.BE.D1.80.D0.B8.D0.BD.D0.B3.D1.83_.28MonitItem.29"><span class="tocnumber">4.3.3.1</span> <span class="toctext">Включений об'єкт елементу моніторингу (MonitItem)</span></a>
+<ul>
+<li class="toclevel-5 tocsection-25"><a href="#.D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.83_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.BD.D1.8F_.28Val.29"><span class="tocnumber">4.3.3.1.1</span> <span class="toctext">Включений об'єкт елементу значення (Val)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-26"><a href="#.D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D1.96.D0.BD.D1.86.D0.B5.D0.B2.D0.BE.D1.97_.D1.82.D0.BE.D1.87.D0.BA.D0.B8_.28EP.29"><span class="tocnumber">4.3.4</span> <span class="toctext">Включений об'єкт кінцевої точки (EP)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-27"><a href="#.D0.9F.D1.80.D0.B8.D0.B2.D0.B0.D1.82.D0.BD.D1.96_.D0.BA.D0.BB.D1.8E.D1.87.D1.96_.D1.82.D0.B0_.D1.81.D0.B5.D1.80.D1.82.D0.B8.D1.84.D1.96.D0.BA.D0.B0.D1.82.D0.B8"><span class="tocnumber">5</span> <span class="toctext">Приватні ключі та сертифікати</span></a></li>
+<li class="toclevel-1 tocsection-28"><a href="#.D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Зауваження</span></a></li>
+<li class="toclevel-1 tocsection-29"><a href="#.D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8F_.D1.81.D1.83.D0.BC.D1.96.D1.81.D0.BD.D0.BE.D1.81.D1.82.D1.96_.D1.96.D0.B7_.D1.80.D0.B5.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.8F.D0.BC.D0.B8_OPC-UA_.D1.96.D0.BD.D1.88.D0.B8.D1.85_.D0.B2.D0.B8.D1.80.D0.BE.D0.B1.D0.BD.D0.B8.D0.BA.D1.96.D0.B2"><span class="tocnumber">7</span> <span class="toctext"><span>Таблиця сумісності із реалізаціями OPC-UA інших виробників</span></span></a></li>
+</ul>
+</div>
+
+<p>OPC (OLE for Process Control) — це сімейство протоколів та технологій, які надають єдиний інтерфейс для управління об'єктами автоматизації та технологічними процесами. Створення та підтримку специфікацій OPC координує міжнародна некомерційна організація <a class="external text" href="http://opcfoundation.org" rel="nofollow noreferrer noopener" target="_blank">OPC Foundation</a>, яку створено у 1994 році провідними виробниками засобів промислової автоматизації.
+</p><p>У зв'язку з тим, що значний вплив у організації OPC Foundation має корпорація Microsoft, протоколи OPC до останнього часу були одноплатформними та закритими, з причини прив'язки до закритих технологій MS Windows. Однак, із недавніх пір, організацією OPC Foundation були створені такі багатоплатформні рішення, як OPC XML-DA та OPC-UA. Найбільший інтерес із них представляє OPC-UA, як уніфікуючий всі протоколи ранніх версій у межах відкритих та багатоплатформних технологій. 
+</p><p>Цей модуль реалізує підтримку інтерфейсу та протоколу OPC-UA як у вигляді клієнтського сервісу, так і у вигляді серверу OPC-UA. Клієнтський сервіс OPC-UA реалізується однойменним модулем підсистеми "Збір даних", а сервер реалізується модулем підсистеми "Протоколи". Весь код реалізації цим модулем специфіки протоколу OPC-UA було винесено, за проханням користувачів, у окрему бібліотеку, яка розповсюджується під ліцензією LGPL3.
+</p><p>У поточній версії цих модулів та бібліотеки реалізуються бінарна частина протоколу та базові сервіси у небезпечному режимі та безпечних режимах політик "Base128Rsa15" та "Base256". Надалі планується розширення модуля для роботи через HTTP/SOAP та реалізації решти сервісів OPC-UA, за потребою.
+</p><p>Хоча протокол OPC-UA і є багатоплатформним, його специфікація та SDK не є вільно-доступними, а надаються тільки членам організації OPC Foundation. З цієї причини реалізація даних модулів стикнулася зі значними перепонами та проблемами.
+</p><p>По перше, протокол OPC-UA складний та реалізація його взагалі без специфікації дуже працемістка. З цієї причини роботи над даними модулями тривалий час не починалися, та тільки завдяки спонсорської допомоги однієї із організацій-члену OPC Foundation проект OpenSCADA отримав документацію специфікації. При цьому SDK та вихідні тексти ANSIC-API протоколу OPC-UA отримано не було з причини несумісності їх ліцензії із GPL та, як наслідок, потенційної загрози порушення ліцензії при роботі із вихідними текстами, що могло призвести до подальших юридичних проблем при вільному розповсюджені цих модулів.
+</p><p>По друге, навіть наявність специфікації не дозволяє вирішити низку технічних питань без прикладів реалізації та можливості перевірки на робочому прототипі клієнта та сервера OPC-UA. Наприклад, саме технічні особливості реалізації алгоритмів симетричного шифрування та отримання ключів для них не дозволили реалізувати підтримку політик безпеки одразу.
+</p><p>Для налагодження функціювання модулів використовувалося демонстраційне ПЗ фірми <a class="external text" href="http://www.unified-automation.com" rel="nofollow noreferrer noopener" target="_blank">Unified Automation</a>, у складі OPC-UA клієнту — UAExpert та серверу — "OPC-UA Demo Server", із пакету SDK. У зв'язку із постійним розвитком самого клієнту "UAExpert", у плані інтерпретації специфікації OPC-UA, нові його версії часто мають проблеми при роботі із сервером OPC-UA від OpenSCADA. В цілому результати сумісності роботи із клієнтами та серверами різних виробників можна отримати у <a href="#TableOfCompat">таблиці сумісності</a>.
+</p>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB_OPC-UA"><span class="mw-headline-number">1</span> Протокол OPC-UA</span></h2>
+<p>OPC-UA — це платформо-незалежний стандарт, за допомогою якого системи та пристрої різного типу можуть взаємодіяти шляхом відправки повідомлень між клієнтом та сервером через різноманітні типи мереж. Протокол підтримує безпечну взаємодію шляхом валідації клієнтів та серверів, а також протидії атакам. OPC-UA визначає поняття <i>Сервіси</i>, які сервери можуть надавати, а також сервіси, які сервер підтримує для клієнту. Інформація передається у вигляді типів даних, визначених OPC-UA та виробником, крім того сервера визначають об'єктну модель, для якої клієнти можуть здійснювати динамічний огляд.
+</p><p>OPC-UA надає поєднання інтегрованого адресного простору та сервісної моделі. Це дозволяє серверу інтегрувати дані, порушення (Alarms), повідомлень (Events) та історію у цьому адресному просторі, а також надавати доступ до них за посередництвом інтегрованих сервісів. Сервіси також надають інтегровану модель безпеки.
+</p><p>OPC-UA дозволяє серверам надавати для клієнтів визначення типів, для доступу до об'єктів із адресного простору. OPC-UA допускає надання даних у різних форматах, включаючи бінарні структури та XML-документи. Через адресний простір клієнти можуть запитати у сервера метадані, які описують формат даних.
+</p><p>OPC-UA додає підтримку множинної зв'язності між вузлами замість простого обмеження ієрархічністю. Така гнучкість у комбінації із визначенням типів дозволяє застосовувати OPC-UA для вирішення задач у широкому просторі проблем.
+</p><p>OPC-UA спроектовано для забезпечення надійної видачі даних. Основна особливість всіх OPC серверів — спроможність видавати данні та повідомлення.
+</p><p>OPC-UA спроектовано для підтримки широкого діапазону серверів, від простіших ПЛК до промислових серверів. Ці сервери характеризуються широким спектром розмірів, продуктивності, платформ виконання та функційної ємкості. Відтак, OPC-UA визначає вичерпну множину можливостей, та сервер може імплементувати підмножини цих можливостей. Для забезпечення сумісності OPC-UA визначає підмножини, іменовані <i>Профілями</i>, які сервери можуть вказувати для погодження. Клієнти можуть згодом виконувати огляд профілів серверу та прокидати взаємодію із сервером, основаним на профілях.
+</p><p>OPC-UA специфікація спроектована як ядро у шарі, ізольованому від підлеглих комп'ютерних технологій та мережевих транспортів. Це дозволяє OPC-UA при потребі розширятися на майбутні технології без відторгнення основи дизайну. На цей час специфікацією визначено два способи кодування даних: XML/text та UA Binary. Додатково, визначено два типи транспортного шару: TCP та HTTP/SOAP.
+</p><p>OPC-UA спроектовано як рішення для міграції із OPC клієнтів та серверів, які основані на Microsoft COM технологіях. OPC COM сервери (DA, HDA та A&amp;E) можуть бути легко віддзеркалені у OPС-UA. Виробники можуть самостійно здійснювати таку міграцію або ж рекомендувати користувачам використовувати обгортки та конвертори між цими протоколами. OPC-UA уніфікує попередні моделі у єдиному адресному просторі з єдиною множиною сервісів.
+</p>
+<h2><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D1.80.D0.B5.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.97_.D1.81.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83"><span class="mw-headline-number">2</span> Модуль реалізації серверу</span></h2>
+<p>Модуль серверу містить код реалізації серверної частини OPC-UA — серверних сервісів, у частині специфічній для OpenSCADA, та використовуючи бібліотеку для OPC-UA специфічної частини. Для побудови OPC-UA серверу достатньо створити вхідний транспорт, за звичай це TCP-транспорт модуля <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>, та обрати в ньому модуль даного протоколу, а також сконфігурувати хоча б один кінцевий вузол модуля протоколу, про що нижче.
+</p>
+<h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.81.D0.BB.D1.83.D0.B3.D0.BE.D0.B2.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2_.D0.BF.D0.BE_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_OPC-UA"><span class="mw-headline-number">2.1</span> Обслуговування запитів по протоколу OPC-UA</span></h3>
+<p>Вхідні запити до модуля-протоколу обробляються модулем у відповідності зі сконфігурованими кінцевими вузлами OPC-UA (EndPoints) (рис.1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:620px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_eps_uk.png"><img class="thumbimage" height="485" src="../files/OPC-UA_prt_eps_uk.png" width="618" /></a>  <div class="thumbcaption">Рис.1. Кінцеві вузли протоколу.</div></div></div></div>
+<p>Кінцевий вузол протоколу OPC-UA це фактично об'єкт серверу OPC-UA. Кінцеві вузли у OPC-UA можуть бути як локальними, так і віддаленими. Локальний кінцевий вузол призначено для надання ресурсів станції OpenSCADA за протоколом OPC-UA, в той-же час віддалені кінцеві вузли слугують для виконання як сервісу огляду доступних OPC-UA вузлів, так і для шлюзування запитів до віддалених станцій. У цій версії модуля підтримується тільки конфігурація локальних кінцевих вузлів.
+</p><p>Загальна конфігурація кінцевого вузла здійснюється на головній вкладці сторінки кінцевого вузла (рис.2) параметрами:
+</p>
+<ul><li> Стан вузла, а саме: статус, "Включено" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, Ім'я та опис вузла.</li>
+<li> Стан, у який переводити вузол при завантажені: "Включено".</li>
+<li> Тип кодування протоколу. На цей час це тільки "Бінарний".</li>
+<li> URL кінцевої точки.</li>
+<li> Сертифікат серверу у форматі PEM.</li>
+<li> Приватний ключ у форматі PEM.</li>
+<li> Політики безпеки серверу.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:906px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main_uk.png"><img class="thumbimage" height="717" src="../files/OPC-UA_prt_ep_main_uk.png" width="904" /></a>  <div class="thumbcaption">Рис.2. Головна вкладка сторінки кінцевого вузла.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.B7.D0.B1.D0.BE.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">3</span> Модуль збору даних</span></h2>
+<p>Модуль збору даних надає можливість опитування та запису атрибутів значення(13) вузлів типу "Змінна".
+</p>
+<h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">3.1</span> Об'єкт контролеру даних</span></h3>
+<p>Для додання джерела даних OPC-UA створюється та конфігурується об'єкт контролеру у системі OpenSCADA. Приклад вкладки конфігурації об'єкту контролеру даного типу зображено на рисунку 3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:860px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main_uk.png"><img class="thumbimage" height="717" src="../files/OPC-UA_cntr_main_uk.png" width="858" /></a>  <div class="thumbcaption">Рис.3. Вкладка конфігурації об'єкту контролера.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> Стан контролеру, а сам: Статус, "Включено", Запущено" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис контролеру.</li>
+<li> Стан, в який переводити контролер при завантажені: "Включено" та "Запущено".</li>
+<li> Ім'я таблиці для збереження конфігурації параметрів контролеру.</li>
+<li> Політика планування та пріоритет задачі збору даних.</li>
+<li> Період синхронізації конфігурації атрибутів параметрів з віддаленою станцією, а також час повтору спроб відновлення підключення.</li>
+<li> URL кінцевого вузла віддаленої станції — сервера OPC-UA. На початку цю адресу можна вказати у вигляді "opc.tcp://{IP|name}:{port}", після чого, у випадку включення об'єкту контролера та наявності вказаного OPC-UA вузла, з'явиться можливість обрати уточнену адресу.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Часто зустрічається ситуація, коли уточнена адреса є символьною, який у цій мережі не резолвиться, через некоректне налаштування серверу. У таких випадках потрібно залишити початкову IP-адресу або ім'я яке резолвиться у IP правильно.</dd></dl>
+<ul><li> Політика безпеки та режим безпеки повідомлення.</li>
+<li> Сертифікат клієнту та приватний ключ у форматі PEM.</li>
+<li> Користувач та пароль для аутентифікації на сервері. Порожнє значення включає анонімний доступ.</li>
+<li> Обмеження кількості атрибутів у параметрі.</li></ul>
+<p>З метою полегшення ідентифікації вузлів на віддаленій станції, а також вибору їх для вставки у об'єкті параметру контролеру, в самому об'єкту контролеру передбачено вкладку навігації за вузлам віддаленої станції "Огляд вузлів серверу", де можна пройтися за деревом об'єктів та ознайомитися з їх атрибутами (рис.4).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:763px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_browse_uk.png"><img class="thumbimage" height="667" src="../files/OPC-UA_cntr_browse_uk.png" width="761" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Огляд вузлів серверу" сторінки об'єкту контролеру.</div></div></div></div>
+<h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">3.2</span> Параметри</span></h3>
+<p>Модуль збору даних надає лише один тип параметрів — "Стандарт". Додатковим конфігураційним полем параметру даного модуля (рис.5) є перелік вузлів OPC-UA та поле навігації за вузлами OPC-UA у один рядок, для вставки обраних вузлів типу "Змінна" до визначеного переліку. Атрибут у цьому переліку записується наступним чином: <b>{ns}:{id}</b>.
+</p>
+<dl><dd>Де:
+<dl><dd><i>ns</i> — простір імен, числом; нульове значення може бути опущено;</dd>
+<dd><i>id</i> — ідентифікатор вузла, числом, рядком, рядком байт або GUID.</dd></dl></dd>
+<dd>Приклади:
+<dl><dd><b>84</b> — кореневий вузол;</dd>
+<dd><b>3:"BasicDevices2"</b> — вузол базових пристроїв у просторі імен 3 та у вигляді рядка;</dd>
+<dd><b>4:"61626364"</b> — вузол у просторі імен 4 та у вигляді рядка байт;</dd>
+<dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}</b> — вузол у просторі імен 4 і у вигляді GUID.</dd></dl></dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:695px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_uk.png"><img class="thumbimage" height="675" src="../files/OPC-UA_prm_uk.png" width="693" /></a>  <div class="thumbcaption">Рис.5. Вкладка конфігурації об'єкту параметра.</div></div></div></div>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Вузли типу "Змінна" зі значенням у вигляді структури прочитати цілком зазвичай не можна тому потрібно її елементи вставляти до переліку вузлів читання окремо.
+</p><p>У відповідності із вказаним переліком вузлів виконується опитування та створення атрибутів параметру (рис.6).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:695px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr_uk.png"><img class="thumbimage" height="574" src="../files/OPC-UA_prm_atr_uk.png" width="693" /></a>  <div class="thumbcaption">Рис.6. Вкладка атрибутів параметру.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_libOPC_UA"><span class="mw-headline-number">4</span> Бібліотека libOPC_UA</span></h2>
+<p>Ґрунтуючись на напрацюваннях цього модуля протокольний код OPC-UA було винесено до окремої бібліотеки та опубліковано під ліцензією LGPLv3. Такі дії виконано з метою надати можливість простого додання підтримки протоколу OPC-UA стороннім проектам. Бібліотека представлена двома файлами libOPC_UA.h, libOPC_UA.cpp; підтримується та міститься у складі цього модуля, тобто останню версію Ви можете завантажити тут: <a class="external free" href="http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA</a>.
+</p><p>Бібліотеку, як і цей модуль, написано на мові програмування C++. Статичну діаграму класів, яка відображає архітектуру бібліотеки, приведена на рисунку 7. Згідно діаграмі класів бібліотеку виконано у просторі імен "OPC", а архітектурно її можна поділити на клієнтську "Client" та серверну "Server" частини, які успадковані від загального класу протоколу "UA". Крім безпосередньо класів протоколу "OPC-UA" бібліотека включає в себе набір функцій та класів для обробки або збереження даних протоколу, окремо з яких треба відзначити клас вузла мови XML "XML_N", використаний для уніфікації звернень до API бібліотеки.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:399px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="249" src="../files/OPC-UA_libOPCUA_class.png" width="397" /></a>  <div class="thumbcaption">Рис.7. Статична діаграма класів бібліотеки libOPC_UA.</div></div></div></div>
+<p>Використання бібліотеки, в цілому, полягає у спадкуванні класу "Client" та/або "Server", згідно із функціями кінцевої програми, та наступної реалізації віртуальних функцій властивостей клієнта/сервера, у контексті протоколу OPC-UA, а також транспортної частини комунікації, тобто підключення/відкриття до TCP-сокету та передачу/читання неструктурованого потоку даних. Наступні запити та обробка запитів даних (для серверу) здійснюється через виклик функції <i>reqService()</i>, запит до сервісу, та/або обробки віртуальної функції <i>reqData()</i> запиту до даних, тобто фактично інтеграція у модель даних додатку.
+</p>
+<h3><span class="mw-headline" id=".D0.A1.D0.BB.D1.83.D0.B6.D0.B1.D0.BE.D0.B2.D1.96_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D0.B8.2C_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D1.82.D0.B0_.D0.BA.D0.BB.D0.B0.D1.81_UA"><span class="mw-headline-number">4.1</span> Службові об'єкти, функції та клас UA</span></h3>
+<h4><span class="mw-headline" id=".D0.94.D0.B0.D0.BD.D1.96"><span class="mw-headline-number">4.1.1</span> Дані</span></h4>
+<p>Типи реалізацій (enum — SerializerType):
+</p>
+<ul><li> <i>ST_Binary = 0</i> — бінарний.</li></ul>
+<p>Тип запису відкриття каналу безпеки (enum — SC_ReqTP):
+</p>
+<ul><li> <i>SC_ISSUE = 0</i> — вихідний;</li>
+<li> <i>SC_RENEW = 1</i> — оновлюючий.</li></ul>
+<p>Режим безпеки повідомлення (enum — MessageSecurityMode):
+</p>
+<ul><li> <i>MS_None = 1</i> — без безпеки;</li>
+<li> <i>MS_Sign = 2</i> — підпис;</li>
+<li> <i>MS_SignAndEncrypt = 3</i> — підпис та шифрування.</li></ul>
+<p>Тип аутентифікації (enum — AuthTp):
+</p>
+<ul><li> <i>A_Anon = 0</i> — анонімно;</li>
+<li> <i>A_UserNm = 1</i> — користувач+пароль;</li>
+<li> <i>A_Cert = 2</i> — сертифікат.</li></ul>
+<p>Класи вузлів (enum — NodeClasses):
+</p>
+<ul><li> <i>NC_Object = 1</i> — об'єкт;</li>
+<li> <i>NC_Variable = 2</i> — змінна;</li>
+<li> <i>NC_Method = 4</i> — метод;</li>
+<li> <i>NC_ObjectType = 8</i> — тип об'єкта;</li>
+<li> <i>NC_VariableType = 16</i> — тип змінної;</li>
+<li> <i>NC_ReferenceType = 32</i> — тип посилання;</li>
+<li> <i>NC_DataType = 64</i> — тип даних;</li>
+<li> <i>NC_View = 128</i> — вид.</li></ul>
+<p>Напрям огляду (enum — BrowseDirection):
+</p>
+<ul><li> <i>BD_FORWARD = 0</i> — вперед;</li>
+<li> <i>BD_INVERSE = 1</i> — назад;</li>
+<li> <i>BD_BOTH = 2</i> — вперед та назад.</li></ul>
+<p>Мітка часу повернення (enum — TimestampsToReturn):
+</p>
+<ul><li> <i>TS_SOURCE = 0</i> — джерела;</li>
+<li> <i>TS_SERVER = 1</i> — сервера;</li>
+<li> <i>TS_BOTH = 2</i> — джерела та сервера;</li>
+<li> <i>TS_NEITHER = 3</i> — відсутнє.</li></ul>
+<p>Доступ (enum — Access):
+</p>
+<ul><li> <i>ACS_Read = 0x01</i> — читання;</li>
+<li> <i>ACS_Write = 0x02</i> — запис;</li>
+<li> <i>ACS_HistRead = 0x04</i> — читання історії;</li>
+<li> <i>ACS_HistWrite = 0x08</i> — запис історії;</li>
+<li> <i>ACS_SemChange = 0x10</i> —&nbsp;?.</li></ul>
+<p>Елементи маски опису оглядового запиту (enum — RefDscrResMask):
+</p>
+<ul><li> <i>RdRm_RefType = 0x01</i> — тип посилання;</li>
+<li> <i>RdRm_IsForward = 0x02</i> — напрямок;</li>
+<li> <i>RdRm_NodeClass = 0x04</i> — клас вузла;</li>
+<li> <i>RdRm_BrowseName = 0x08</i> — ім'я огляду;</li>
+<li> <i>RdRm_DisplayName = 0x10</i> — ім'я відображення;</li>
+<li> <i>RdRm_TypeDef = 0x20</i> — тип визначення.</li></ul>
+<p>Ідентифікатори атрибутів вузла (enum — AttrIds):
+</p>
+<ul><li> <i>Aid_Error = 0</i> — помилка;</li>
+<li> <i>AId_NodeId = 1</i> — ідентифікатор вузла;</li>
+<li> <i>AId_NodeClass = 2</i> — клас вузла;</li>
+<li> <i>AId_BrowseName = 3</i> — ім'я огляду;</li>
+<li> <i>AId_DisplayName = 4</i> — ім'я відображення;</li>
+<li> <i>AId_Descr = 5</i> — опис;</li>
+<li> <i>AId_WriteMask = 6</i> — маска запису;</li>
+<li> <i>AId_UserWriteMask = 7</i> — маска запису користувача;</li>
+<li> <i>AId_IsAbstract = 8</i> — абстрактність;</li>
+<li> <i>AId_Symmetric = 9</i> — симетричність;</li>
+<li> <i>AId_InverseName = 10</i> — інверсне ім'я;</li>
+<li> <i>AId_ContainsNoLoops = 11</i> — відсутність петель;</li>
+<li> <i>AId_EventNotifier = 12</i> — повідомлення подій;</li>
+<li> <i>AId_Value = 13</i> — значення;</li>
+<li> <i>AId_DataType = 14</i> — тип даних;</li>
+<li> <i>AId_ValueRank = 15</i> — ранг значення;</li>
+<li> <i>AId_ArrayDimensions = 16</i> — розмірність масиву;</li>
+<li> <i>AId_AccessLevel = 17</i> — рівень доступу;</li>
+<li> <i>AId_UserAccessLevel = 18</i> — рівень доступу користувача;</li>
+<li> <i>AId_MinimumSamplingInterval = 19</i> — мінімальний інтервал вимірювання;</li>
+<li> <i>AId_Historizing</i> — архівування;</li>
+<li> <i>AId_Executable</i> — виконуваний;</li>
+<li> <i>AId_UserExecutable</i> — виконуваний користувачем.</li></ul>
+<p>Стан підписки (enum — SubScrSt):
+</p>
+<ul><li> <i>SS_CUR = 0</i> — поточне (не міняти командою);</li>
+<li> <i>SS_CLOSED = 1</i> — закрито;</li>
+<li> <i>SS_CREATING = 2</i> — створення;</li>
+<li> <i>SS_NORMAL = 3</i> — нормальний;</li>
+<li> <i>SS_LATE = 4</i> — запізнілий;</li>
+<li> <i>SS_KEEPALIVE = 5</i> — збереження живим.</li></ul>
+<p>Режими моніторингу (enum — MonitoringMode):
+</p>
+<ul><li> <i>MM_CUR = -1</i> — поточне (не міняти командою);</li>
+<li> <i>MM_DISABLED = 0</i> — відімкнене;</li>
+<li> <i>MM_SAMPLING = 1</i> — вимірювання;</li>
+<li> <i>MM_REPORTING = 2</i> — звітність.</li></ul>
+<h4><span class="mw-headline" id=".D0.97.D0.BE.D0.B2.D0.BD.D1.96.D1.88.D0.BD.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97"><span class="mw-headline-number">4.1.2</span> Зовнішні функції</span></h4>
+<p>До бібліотеки включено низку зовнішніх функцій об'єкту <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h894-2" rel="nofollow noreferrer noopener" target="_blank">TSYS</a> ядра OpenSCADA, для спрощення та уніфікації низки внутрішніх операцій:
+</p>
+<ul><li> <i>int64_t curTime( );</i> — Поточний час у мікросекундах з початку епохи Unix (01.01.1970).</li>
+<li> <i>string int2str( int val );</i> — Перетворення цілого знакового у рядок, в десятковому представлені.</li>
+<li> <i>string uint2str( unsigned val );</i> — Перетворення цілого беззнакового у рядок, у десятковому представлені.</li>
+<li> <i>string ll2str( int64_t val );</i> — Перетворення довгого цілого (64біт) у рядок, у десятковому представлені.</li>
+<li> <i>string real2str( double val, int prec = 15, char tp = 'g' );</i> — Перетворення реального із точністю <i>prec</i> знаків і типом <i>tp</i> у рядок.</li>
+<li> <i>string strParse( const string &amp;path, int level, const string &amp;sep, int *off = NULL, bool mergeSepSymb = false );</i> — Розбір рядку <i>path</i> на складові, відокремлені роздільником <i>sep</i>, об'єднуючи односимвольні <i>mergeSepSymb</i>, починаючи зі зміщення <i>off</i> і контролюючи зміщення кінця елементу в ньому ж.</li>
+<li> <i>string strMess( const char *fmt, ... );</i> — Формування рядка за шаблоном <i>fmt</i> та аргументами. Реалізовано на основі "printf".</li></ul>
+<h4><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B0.D0.B2.D1.82.D0.BE.D0.BC.D0.B0.D1.82.D0.B8.D1.87.D0.BD.D0.BE.D0.B3.D0.BE_.D1.80.D0.BE.D0.B7.D0.B1.D0.BB.D0.BE.D0.BA.D0.BE.D0.B2.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_POSIX_.D0.BC.D1.8E.D1.82.D0.B5.D0.BA.D1.81.D1.83_.D0.B4.D0.BB.D1.8F_OPC_.28OPCAlloc.29"><span class="mw-headline-number">4.1.3</span> Об'єкт автоматичного розблоковування POSIX мютексу для OPC (OPCAlloc)</span></h4>
+<p>Цей об'єкт керування мютексом є копією об'єкту "MtxAlloc" для ядра OpenSCADA.
+</p><p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>OPCAlloc( pthread_mutex_t &amp;iM, bool ilock = false );</i> — Ініціалізація об'єкту автоматичного розблокування мютексу <i>iM</i>, створеного раніш. Із блокуванням при створені за <i>lock</i>.</li>
+<li> <i>int lock( );</i> — Захоплення ресурсу. Повернення нуля при вдалому виконанні.</li>
+<li> <i>int unlock( );</i> — Звільнення ресурсу. Повернення нуля при вдалому виконанні.</li>
+<li> <i>int tryLock( );</i> — Спроба захоплення ресурсу, без очікування звільнення. Повернення нуля при вдалому виконанні.</li></ul>
+<h4><span class="mw-headline" id=".D0.9F.D0.BE.D0.BC.D0.B8.D0.BB.D0.BA.D0.B0_OPC_.28OPCError.29"><span class="mw-headline-number">4.1.4</span> Помилка OPC (OPCError)</span></h4>
+<p>Об'єкт помилки "OPCError" є урізаною копією об'єкту "TError" ядра OpenSCADA.
+</p><p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>OPCError( const char *fmt, ... );</i> — Конструктор типової помилки, без коду.</li>
+<li> <i>OPCError( int cod, const char *fmt, ... );</i> — Конструктор типової помилки, із кодом помилки.</li></ul>
+<p><b>Публічні атрибути:</b>
+</p>
+<ul><li> <i>int cod;</i> — Код помилки.</li>
+<li> <i>string  mess;</i> — Текст помилки.</li></ul>
+<h4><span class="mw-headline" id="XML-.D1.82.D0.B5.D0.B3_.28XML_N.29"><span class="mw-headline-number">4.1.5</span> XML-тег (XML_N)</span></h4>
+<p>Об'єкт "XML_N" є урізаною копією об'єкту <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h921-2" rel="nofollow noreferrer noopener" target="_blank">XMLNode</a> ядра OpenSCADA.
+</p><p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>XML_N( const string &amp;name = "" );</i> — Ініціалізація тегу з іменем <i>name</i>.</li>
+<li> <i>XML_N( const XML_N &amp;nd );</i> — Копіюючий конструктор.</li>
+<li> <i>XML_N &amp;operator=( const XML_N &amp;prm );</i> — Копіювання гілки XML-дерева із <i>prm</i>.</li>
+<li> <i>string name( ) const;</i> — Ім'я тегу.</li>
+<li> <i>XML_N* setName( const string &amp;s );</i> — Встановлення ім'я тегу у <i>s</i>.</li>
+<li> <i>string text( bool childs = false, bool recursive = false ) const;</i> — Текст тегу. <i>childs</i> — для отримання тексту із спеціалізованих вузлів тексту.</li>
+<li> <i>XML_N* setText( const string &amp;s, bool childs = false );</i> — Встановлення тексту тегу у <i>s</i>. <i>childs</i> — для встановлення тексту у спеціалізованих вузол тексту.</li>
+<li> <i>void attrList( vector&lt;string&gt; &amp; list ) const;</i> — Перелік атрибутів <i>list</i> у тегу.</li>
+<li> <i>XML_N* attrDel( const string &amp;name );</i> — Видалення атрибуту <i>name</i>.</li>
+<li> <i>void attrClear( );</i> — Очищення атрибутів тегу.</li>
+<li> <i>string attr( const string &amp;name, bool caseSens = true ) const;</i> — Отримання атрибуту <i>name</i>.</li>
+<li> <i>XML_N* setAttr( const string &amp;name, const string &amp;val );</i> — Встановлення/створення атрибуту <i>name</i> зі значенням <i>val</i>.</li>
+<li> <i>XML_N* clear( );</i> — Очищення тегу (рекурсивно, включаючи всі вкладення).</li>
+<li> <i>bool childEmpty( ) const;</i> — Перевірка на відсутність вкладених тегів.</li>
+<li> <i>unsigned childSize( ) const;</i> — Кількість вкладених тегів.</li>
+<li> <i>void childAdd( XML_N *nd ); XML_N* childAdd( const string &amp;name = "" );</i> — Додання вкладеного тегу.</li>
+<li> <i>int childIns( unsigned id, XML_N *nd );</i> — Вставка вкладеного тегу <i>nd</i> у позицію <i>id</i>. Негативне значення <i>id</i> веде відлік з кінця.</li>
+<li> <i>XML_N* childIns( unsigned id, const string &amp;name = "" );</i> — Вставка вкладеного тегу з ім'ям <i>name</i> у позицію <i>id</i>. Негативне значення <i>id</i> веде відлік з кінця.</li>
+<li> <i>void childDel( const unsigned id );</i> — Видалення вкладеного тегу <i>id</i>. Негативне значення <i>id</i> веде відлік з кінця.</li>
+<li> <i>void childDel( XML_N *nd );</i> — Видалення вкладеного тегу за його адресою <i>nd</i>.</li>
+<li> <i>void childClear( const string &amp;name = "" );</i> — Очищення вкладеного тегу <i>name</i>.</li>
+<li> <i>XML_N* childGet( const int, bool noex = false ) const;</i> — отримання вкладеного тегу за порядковим номером.</li>
+<li> <i>XML_N* childGet( const string &amp;name, const int numb = 0, bool noex = false ) const;</i> — Отримання вкладеного <i>numb</i> порядкового тегу за іменем тегу <i>name</i>. <i>noex</i> вказує на заборону генерації виключення у випадку відсутності тегу.</li>
+<li> <i>XML_N* childGet( const string &amp;attr, const string &amp;name, bool noex = false ) const;</i> — Отримання вкладеного <i>numb</i> порядкового тегу за значенням <i>name</i> атрибуту <i>attr</i>. <i>noex</i> вказує на заборону генерації виключення у випадку відсутності тегу.</li>
+<li> <i>XML_N* getElementBy( const string &amp;attr, const string &amp;val );</i> — Пошук вкладеного вузла за значенням <i>val</i> атрибуту <i>attr</i>.</li>
+<li> <i>XML_N* parent( );</i> — Батьківський тег цього тегу.</li>
+<li> <i>XML_N* root( );</i> — Кореневий тег цього тегу.</li></ul>
+<h4><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0_OPC-UA_.28NodeId.29"><span class="mw-headline-number">4.1.6</span> Об'єкт вузла OPC-UA (NodeId)</span></h4>
+<p><b>Дані:</b><br />
+Типи даних (enum — NodeId::Type):
+</p>
+<ul><li> <i>NodeId::Numeric</i> — номер.</li>
+<li> <i>NodeId::String</i> — рядок.</li>
+<li> <i>NodeId::Guid</i> — глобальний унікальний ідентифікатор.</li>
+<li> <i>NodeId::Opaque</i> — opaque.</li></ul>
+<p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>NodeId( uint32_t in, uint16_t ins = 0 );</i> — Чисельний ініціюючий конструктор, для числа <i>in</i> у просторі назв <i>ins</i>.</li>
+<li> <i>NodeId( const string &amp;istr, uint16_t ins = 0, Type tp = String );</i> — Строковий ініціюючий конструктор, для рядка <i>istr</i> у просторі назв <i>ins</i>, з типом <i>tp</i>.</li>
+<li> <i>NodeId( const NodeId &amp;node );</i> — Копіюючий конструктор об'єкту.</li>
+<li> <i>NodeId( );</i> — Деструктор.</li>
+<li> <i>NodeId &amp;operator=( const NodeId &amp;node );</i> — Копіювання об'єкту.</li>
+<li> <i>Type type( ) const;</i> — Тип вузла.</li>
+<li> <i>bool isNull( ) const;</i> — Вузол нульовий — неініційований.</li>
+<li> <i>uint16_t ns( ) const;</i> — Простір назв.</li>
+<li> <i>uint32_t numbVal( ) const;</i> — Чисельні значення.</li>
+<li> <i>string  strVal( ) const;</i> — Строкові значення.</li>
+<li> <i>void setNs( uint16_t ins );</i> — Встановлення простору назв у <i>ins</i>.</li>
+<li> <i>void setNumbVal( uint32_t in );</i> — Встановлення чисельного значення <i>in</i>.</li>
+<li> <i>void setStrVal( const string &amp;istr, Type tp = String );</i> — Встановлення строкового значення <i>istr</i> з типом <i>tp</i>.</li>
+<li> <i>static NodeId fromAddr( const string &amp;strAddr );</i> — Формування об'єкту вузла із адреси <i>strAddr</i>.</li>
+<li> <i>string toAddr( ) const;</i> — Отримання адреси об'єкту вузла.</li></ul>
+<h4><span class="mw-headline" id=".D0.9A.D0.BE.D1.80.D0.B5.D0.BD.D0.B5.D0.B2.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_OPC-UA_.28UA.29"><span class="mw-headline-number">4.1.7</span> Кореневий об'єкт протоколу OPC-UA (UA)</span></h4>
+<p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>virtual string lang2CodeSYS( );</i> — дво-символьний код мови оточення.</li>
+<li> <i>virtual void debugMess( const string &amp;mess )</i> — розташування налагоджувальних повідомлень.</li>
+<li> <i>virtual uint32_t rcvBufSz( );</i> — розмір буферу приймача, більш за 8192.</li>
+<li> <i>virtual uint32_t sndBufSz( );</i> — розмір буферу передавача, більш за 8192.</li>
+<li> <i>virtual uint32_t msgMaxSz( );</i> — максимальний розмір повідомлення, 0 для відсутності обмеження.</li>
+<li> <i>virtual uint32_t chunkMaxCnt( );</i> — максимальна кількість шматків, 0 для відсутності обмеження.</li>
+<li> <i>static string iErr( const string &amp;buf, int &amp;off );</i> — читання помилки із потоку <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static const char *iVal( const string &amp;buf, int &amp;off, char vSz );</i> — читання значення розміром <i>vSz</i>, як ділянку даних, із потоку <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static int64_t iN( const string &amp;rb, int &amp;off, char vSz );</i> — читання знакового цілого розміром <i>vSz</i> (1, 2, 4, 8) із потоку <i>rb</i> за зміщенням <i>off</i>.</li>
+<li> <i>static uint64_t iNu( const string &amp;rb, int &amp;off, char vSz );</i> — читання беззнакового цілого розміром <i>vSz</i> (1, 2, 4, 8) із потоку <i>rb</i> за зміщенням <i>off</i>.</li>
+<li> <i>static double iR( const string &amp;rb, int &amp;off, char vSz = 4 );</i> — читання реального розміром <i>vSz</i> (4, 8) із потоку <i>rb</i> за зміщенням <i>off</i>.</li>
+<li> <i>static string iS( const string &amp;buf, int &amp;off );</i> — читання рядка із потоку <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static string iSl( const string &amp;buf, int &amp;off, string *locale = NULL );</i> — читання локалізованого <i>locale</i> рядка із потоку <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static string iSqlf( const string &amp;buf, int &amp;off, uint16_t *nsIdx = NULL );</i> — читання рядку із кваліфікатором <i>nsIdx</i> із потоку <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static int64_t iTm( const string &amp;buf, int &amp;off );</i> — читання часу, із перетворенням у епоху UNIX, із потоку <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static NodeId iNodeId( const string &amp;buf, int &amp;off );</i> — читання ідентифікатору вузла із потоку <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static string iVariant( const string &amp;buf, int &amp;off, uint8_t *tp = NULL );</i> — читання типу варіант із потоку <i>buf</i> за зміщенням <i>off</i>. Повертає варіант у строковому вигляді для типу <i>tp</i>.</li>
+<li> <i>static void iDataValue( const string &amp;buf, int &amp;off, XML_N &amp;nVal );</i> — читання комплексного значення (структура DataValue) у <i>nVal</i> із потоку <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static void oN( string &amp;buf, int64_t val, char sz, int off = -1 );</i> — запис знакового цілого <i>val</i> розміром <i>sz</i> (1, 2, 4, 8) у потік <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static void oNu( string &amp;buf, uint64_t val, char sz, int off = -1 );</i> — запис беззнакового цілого <i>val</i> розміром <i>sz</i> (1, 2, 4, 8) у потік <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static void oR( string &amp;buf, double val, char sz = 4 );</i> — запис реального <i>val</i> розміром <i>sz</i> (4, 8) у потік <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static void oS( string &amp;buf, const string &amp;val, int off = -1 );</i> — запис рядку <i>val</i> у потік <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static void oSl( string &amp;buf, const string &amp;val, const string &amp;locale = "" );</i> — запис локалізованого <i>locale</i> рядка <i>val</i> у потік <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static void oSqlf( string &amp;buf, const string &amp;val, uint16_t nsIdx = 0 );</i> — запис рядка <i>val</i> із кваліфікатором <i>nsIdx</i> у потік <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static void oTm( string &amp;buf, int64_t val );</i> — запис часу <i>val</i>, у епосі UNIX, у потік <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static void oNodeId( string &amp;buf, const NodeId &amp;val );</i> — запис ідентифікатору вузла <i>val</i> у потік <i>buf</i> за зміщенням <i>off</i>.</li>
+<li> <i>static void oRef( string &amp;buf, uint32_t resMask, const NodeId &amp;nodeId, const NodeId &amp;refTypeId, bool isForward, const string &amp;name, uint32_t nodeClass, const NodeId &amp;typeDef );</i> — запис у потік <i>buf</i> опису огляду (структура ReferenceDescription) для маски результату <i>resMask</i>, вузла <i>nodeId</i>, типу посилання <i>refTypeId</i>, напрямку <i>isForward</i>, імені <i>name</i>, класу вузла <i>nodeClass</i>, типу визначення <i>typeDef</i>.</li>
+<li> <i>void oDataValue( string &amp;buf, uint8_t eMsk, const string &amp;vl, uint8_t vEMsk = 0, int64_t srcTmStmp = 0 );</i> — запис комплексного значення (структура DataValue) у потік <i>buf</i> для маски кодування <i>eMsk</i>, значення <i>vl</i>, маски значення <i>vEMsk</i>, часу джерела <i>srcTmStmp</i>.</li>
+<li> <i>static string randBytes( int num );</i> — генерація потоку випадкових даних у кількості <i>num</i>.</li>
+<li> <i>static string certPEM2DER( const string &amp;certPem );</i> — перетворення сертифікату із формату PEM <i>certPem</i> у формат DER.</li>
+<li> <i>static string certDER2PEM( const string &amp;certDer );</i> — перетворення сертифікату із формату DER <i>certDer</i> у формат PEM.</li>
+<li> <i>static string certThumbprint( const string &amp;certPem );</i> — отримання підпису із сертифікату PEM <i>certPem</i>.</li>
+<li> <i>static string asymmetricEncrypt( const string &amp;mess, const string &amp;certPem, const string &amp;secPolicy );</i> — асиметричне кодування потоку повідомлення <i>mess</i> сертифікатом <i>certPem</i> (відкритим ключем) для політики <i>secPolicy</i>.</li>
+<li> <i>static string asymmetricDecrypt( const string &amp;mess, const string &amp;pvKeyPem, const string &amp;secPolicy );</i> — асиметричне декодування потоку повідомлення <i>mess</i> ключем <i>pvKeyPem</i> для політики <i>secPolicy</i>.</li>
+<li> <i>static bool asymmetricVerify( const string &amp;mess, const string &amp;sign, const string &amp;certPem );</i> — асиметрична верифікація підпису <i>sign</i> повідомлення <i>mess</i> сертифікатом <i>certPem</i>.</li>
+<li> <i>static string asymmetricSign( const string &amp;mess, const string &amp;pvPem );</i> — отримання асиметричного підпису закритим ключем сертифікату <i>pvPem</i> для повідомлення <i>mess</i>.</li>
+<li> <i>static int asymmetricKeyLength( const string &amp;keyCertPem );</i> — отримання довжини ключа сертифікату <i>keyCertPem</i>.</li>
+<li> <i>static string deriveKey( const string &amp;secret, const string &amp;seed, int keyLen );</i> — вилучення ключа розміром <i>keyLen</i> із секрету <i>secret</i> та <i>seed</i>.</li>
+<li> <i>static string symmetricEncrypt( const string &amp;mess, const string &amp;keySet, const string &amp;secPolicy );</i> — симетричне шифрування потоку повідомлення <i>mess</i> ключем <i>keySet</i> для політики <i>secPolicy</i>.</li>
+<li> <i>static string symmetricDecrypt( const string &amp;mess, const string &amp;keySet, const string &amp;secPolicy );</i> — асиметричне дешифрування потоку повідомлення <i>mess</i> ключем <i>keySet</i> для політики <i>secPolicy</i>.</li>
+<li> <i>static string symmetricSign( const string &amp;mess, const string &amp;keySet, const string &amp;secPolicy );</i> — отримання симетричного підпису ключем <i>keySet</i> для повідомлення <i>mess</i> та політики <i>secPolicy</i>.</li></ul>
+<h5><span class="mw-headline" id=".D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.96.D0.B2_.D0.B1.D0.B5.D0.B7.D0.BF.D0.B5.D0.BA.D0.B8_.28SecuritySetting.29"><span class="mw-headline-number">4.1.7.1</span> Включений об'єкт параметрів безпеки (SecuritySetting)</span></h5>
+<p><b>Отримані дані:</b>
+</p>
+<ul><li> <i>string policy</i> — політика безпеки;</li>
+<li> <i>MessageSecurityMode messageMode</i> — режим повідомлення.</li></ul>
+<p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>SecuritySetting( const string &amp;iplc, int8_t imMode )</i> — конструктор об'єкту із політикою безпеки <i>iplc</i> та режимом повідомлення <i>imMode</i>.</li>
+<li> <i>SecuritySetting( )</i> — конструктор об'єкту із політикою безпеки "None" та режимом повідомлення <i>MS_None</i>.</li></ul>
+<h3><span class="mw-headline" id=".D0.9E.D1.81.D0.BD.D0.BE.D0.B2.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BB.D1.96.D1.94.D0.BD.D1.82.D0.B0_.28Client-.3EUA.29"><span class="mw-headline-number">4.2</span> Основний об'єкт клієнта (Client-&gt;UA)</span></h3>
+<p><b>Застосування:</b> Прямо успадковується користувацьким об'єктом — клієнт OPC-UA.
+</p><p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>virtual string applicationUri( ) = 0;</i> — URI додатку.</li>
+<li> <i>virtual string productUri( ) = 0;</i> — URI продукту.</li>
+<li> <i>virtual string applicationName( ) = 0;</i> — ім'я додатку.</li>
+<li> <i>virtual string sessionName( ) = 0;</i> — ім'я сеансу.</li>
+<li> <i>virtual string endPoint( ) = 0;</i> — кінцева точка.</li>
+<li> <i>virtual string secPolicy( ) = 0;</i> — політика безпеки.</li>
+<li> <i>virtual int secMessMode( ) = 0;</i> — режим безпеки повідомлення.</li>
+<li> <i>virtual string cert( ) = 0;</i> — сертифікат.</li>
+<li> <i>virtual string pvKey( ) = 0;</i> — приватний ключ.</li>
+<li> <i>virtual string authData( ) = 0;</i> — дані аутентифікації:
+<ul><li> "&lt;Empty&gt;" — анонімний;</li>
+<li> "{User}\n{Password}" — за користувачем та паролем.</li></ul></li>
+<li> <i>virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 ) = 0;</i> — обмін повідомленням, передача запиту та очікування відповіді.</li>
+<li> <i>virtual bool connect( int8_t est = -1 );</i> — отримання статусу підключення, встановлення підключення для <i>est</i> = 1, відключення для <i>est</i> = 0.</li>
+<li> <i>virtual void protIO( XML_N &amp;io );</i> — обробка запиту до протоколу.</li>
+<li> <i>virtual void reqService( XML_N &amp;io );</i> — запит сервісу.</li></ul>
+<p><b>Захищені атрибути:</b>
+</p>
+<ul><li> <i>SClntSess sess;</i> — дані сеансу.</li></ul>
+<h4><span class="mw-headline" id=".D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D1.81.D0.B5.D0.B0.D0.BD.D1.81.D1.83_.D0.BA.D0.BB.D1.96.D1.94.D0.BD.D1.82.D0.B0_.28SClntSess.29"><span class="mw-headline-number">4.2.1</span> Включений об'єкт сеансу клієнта (SClntSess)</span></h4>
+<p><b>Публічні дані:</b>
+</p>
+<ul><li> <i>string endPoint;</i> — кінцева точка;</li>
+<li> <i>XML_N endPointDscr;</i> — опис активної кінцевої точки;</li>
+<li> <i>uint32_t secChnl;</i> — індекс каналу безпеки;</li>
+<li> <i>uint32_t secToken;</i> — талон безпеки сеансу;</li>
+<li> <i>uint32_t sqNumb;</i> — номер послідовності;</li>
+<li> <i>uint32_t sqReqId;</i> — порядковий номер запиту;</li>
+<li> <i>uint32_t reqHndl;</i> — хандлер запиту;</li>
+<li> <i>int secLifeTime;</i> — час життя каналу безпеки;</li>
+<li> <i>string sesId;</i> — ідентифікатор сеансу;</li>
+<li> <i>string authTkId;</i> — талон аутентифікації;</li>
+<li> <i>int64_t sessOpen;</i> — час відкриття сеансу;</li>
+<li> <i>double sesLifeTime;</i> — час життя сеансу;</li>
+<li> <i>string servCert;</i> — сертифікат серверу;</li>
+<li> <i>string secPolicy;</i> — політика безпеки;</li>
+<li> <i>char secMessMode;</i> — режим безпеки повідомлення;</li>
+<li> <i>string clKey, servKey;</i> — ключі клієнта та сервера.</li></ul>
+<p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>void clearSess( )</i> — очищення сеансу.</li>
+<li> <i>void clearFull( bool inclEPdescr = false )</i> — повне очищення сеансу, включаючи опис кінцевої точки <i>inclEPdescr</i>.</li></ul>
+<h3><span class="mw-headline" id=".D0.9E.D1.81.D0.BD.D0.BE.D0.B2.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D1.81.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D0.B0_.28Server-.3EUA.29"><span class="mw-headline-number">4.3</span> Основний об'єкт сервера (Server-&gt;UA)</span></h3>
+<p><b>Застосування:</b> Прямо успадковується користувацьким об'єктом — сервер OPC-UA.
+</p><p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>virtual bool debug( );</i> — активовано налаштування.</li>
+<li> <i>virtual string applicationUri( ) = 0;</i> — URI додатку.</li>
+<li> <i>virtual string productUri( ) = 0;</i> — URI продукту.</li>
+<li> <i>virtual string applicationName( ) = 0;</i> — ім'я додатку.</li>
+<li> <i>virtual uint32_t clientRcvBufSz( const string &amp;inPrtId ) = 0;</i> — отриманий від клієнта розмір буферу приймача, для підключення <i>inPrtId</i>.</li>
+<li> <i>virtual uint32_t clientSndBufSz( const string &amp;inPrtId ) = 0;</i> — отриманий від клієнта розмір буферу передавача, для підключення <i>inPrtId</i>.</li>
+<li> <i>virtual uint32_t clientMsgMaxSz( const string &amp;inPrtId ) = 0;</i> — отриманий від клієнта максимальний розмір повідомлення, для підключення <i>inPrtId</i>.</li>
+<li> <i>virtual uint32_t clientChunkMaxCnt( const string &amp;inPrtId ) = 0;</i> — отримана від клієнта максимальна кількість шматків, для підключення <i>inPrtId</i>.</li>
+<li> <i>virtual void discoveryUrls( vector&lt;string&gt; &amp;ls ) = 0;</i> — URLи серверів огляду у <i>ls</i>.</li>
+<li> <i>virtual bool inReq( string &amp;request, const string &amp;inPrtId, string *answ = NULL );</i> — обробник вхідних запитів <i>request</i> екземпляру протоколу <i>inPrtId</i> та відповіді у <i>answ</i>.</li>
+<li> <i>virtual int writeToClient( const string &amp;threadId, const string &amp;data ) = 0;</i> — прямий запис підключеному клієнту.</li>
+<li> <i>virtual string clientAddr( const string &amp;threadId ) = 0;</i> — адреса клієнта.</li>
+<li> <i>virtual void clientRcvBufSzSet( const string &amp;inPrtId, uint32_t vl ) = 0;</i> — встановлення отриманого від клієнта розміру буферу приймача у значення <i>vl</i>, для підключення <i>inPrtId</i>.</li>
+<li> <i>virtual void clientSndBufSzSet( const string &amp;inPrtId, uint32_t vl ) = 0;</i> — встановлення отриманого від клієнта розміру буферу передавача у значення <i>vl</i>, для підключення <i>inPrtId</i>.</li>
+<li> <i>virtual void clientMsgMaxSzSet( const string &amp;inPrtId, uint32_t vl ) = 0;</i> — встановлення отриманого від клієнта максимального розміру повідомлення у значення <i>vl</i>, для підключення <i>inPrtId</i>.</li>
+<li> <i>virtual void clientChunkMaxCntSet( const string &amp;inPrtId, uint32_t vl ) = 0;</i> — встановлення отриманої від клієнта максимальної кількості шматків у значення <i>vl</i>, для підключення <i>inPrtId</i>.</li>
+<li> <i>int chnlSet( int cid, const string &amp;iEp, int32_t lifeTm = 0, const string&amp; iClCert = "", const string &amp;iSecPolicy = "None", char iSecMessMode = 1, const string &amp;iclAddr = "", uint32_t iseqN = 1 );</i> — встановлення каналу безпеки із ідентифікатором <i>cid</i> (ненульове значення для оновлення) для кінцевої точки <i>iEp</i>, часу життя <i>lifeTm</i>, клієнтського сертифікату <i>iClCert</i>, політики безпеки <i>iSecPolicy</i>, режиму безпеки повідомлення <i>iSecMessMode</i>, адреси клієнта <i>iclAddr</i>, номеру послідовності пакета <i>iseqN</i>.</li>
+<li> <i>void chnlClose( int cid );</i> — закриття каналу безпеки <i>cid</i>.</li>
+<li> <i>SecCnl chnlGet( int cid ); SecCnl &amp;chnlGet_( int cid );</i> — отримання копії та доступу до об'єкту каналу безпеки <i>cid</i>.</li>
+<li> <i>void chnlSecSet( int cid, const string &amp;servKey, const string &amp;clKey );</i> — встановлення для каналу безпеки <i>cid</i> серверного <i>servKey</i> та клієнтського <i>clKey</i> ключа.</li>
+<li> <i>static string mkError( uint32_t errId, const string &amp;err = "" );</i> — формування помилки з ідентифікатором <i>errId</i> та повідомленням <i>err</i>.</li></ul>
+<p><b>Захищені методи:</b>
+</p>
+<ul><li> <i>virtual void epEnList( vector&lt;string&gt; &amp;ls ) = 0;</i> — обробник запиту переліку кінцевих вузлів.</li>
+<li> <i>virtual EP *epEnAt( const string &amp;ep ) = 0;</i> — обробник запиту об'єкту кінцевої точки.</li></ul>
+<h4><span class="mw-headline" id=".D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.B0.D0.BD.D0.B0.D0.BB.D1.83_.D0.B1.D0.B5.D0.B7.D0.BF.D0.B5.D0.BA.D0.B8_.28SecCnl.29"><span class="mw-headline-number">4.3.1</span> Включений об'єкт каналу безпеки (SecCnl)</span></h4>
+<p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>SecCnl( const string &amp;iEp, uint32_t iTokenId, int32_t iLifeTm, const string &amp;iClCert, const string &amp;iSecPolicy, char iSecMessMode, const string &amp;iclAddr, uint32_t isecN );</i> — конструктор об'єкта каналу безпеки для: кінцевої точки <i>iEp</i>, талону безпеки <i>iTokenId</i>, часу життя <i>iLifeTm</i>, клієнтського сертифікату <i>iClCert</i>, політики безпеки <i>iSecPolicy</i>, режиму безпеки повідомлення <i>iSecMessMode</i>, адреси клієнта <i>iclAddr</i>, номеру послідовності створення каналу безпеки <i>isecN</i>.</li></ul>
+<p><b>Публічні атрибути:</b>
+</p>
+<ul><li> <i>string endPoint;</i> — кінцева точка;</li>
+<li> <i>string secPolicy;</i> — політика безпеки;</li>
+<li> <i>char secMessMode;</i> — режим безпеки повідомлення;</li>
+<li> <i>int64_t tCreate;</i> — час створення;</li>
+<li> <i>int32_t tLife;</i> — час життя;</li>
+<li> <i>uint32_t TokenId, TokenIdPrev;</i> — поточний і попередній ідентифікатори талону;</li>
+<li> <i>string clCert, clAddr;</i> — сертифікат та адреса клієнту;</li>
+<li> <i>string servKey, clKey;</i> — ключ сервера та клієнта;</li>
+<li> <i>uint32_t servSeqN, clSeqN, startClSeqN;</i> — поточний серверний, клієнтський та стартовий номер послідовності пакету.</li></ul>
+<h4><span class="mw-headline" id=".D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D1.81.D0.B5.D0.B0.D0.BD.D1.81.D1.83_.28Sess.29"><span class="mw-headline-number">4.3.2</span> Включений об'єкт сеансу (Sess)</span></h4>
+<p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>Sess( const string &amp;iName, double iTInact );</i> — конструктор об'єкту для ім'я <i>iName</i> та таймауту неактивності <i>iTInact</i>.</li></ul>
+<p><b>Публічні атрибути:</b>
+</p>
+<ul><li> <i>string name, inPrtId, idPolicyId, user;</i> — ім'я, ідентифікатор вхідного протоколу, ідентифікатор політики безпеки та користувач;</li>
+<li> <i>vector&lt;uint32_t&gt; secCnls;</i> — перелік каналів безпеки;</li>
+<li> <i>double tInact;</i> — час неактивності;</li>
+<li> <i>int64_t tAccess;</i> — час доступу;</li>
+<li> <i>string servNonce;</i> — випадкова послідовність серверу;</li>
+<li> <i>map&lt;string, ContPoint&gt; cntPnts;</i> — точки продовження запиту огляду;</li>
+<li> <i>deque&lt;string&gt; publishReqs;</i> — перелік запитів публікації.</li></ul>
+<h5><span class="mw-headline" id=".D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D1.82.D0.BE.D1.87.D0.BA.D0.B8_.D0.BF.D1.80.D0.BE.D0.B4.D0.BE.D0.B2.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BE.D0.B3.D0.BB.D1.8F.D0.B4.D1.83_.28ContPoint.29"><span class="mw-headline-number">4.3.2.1</span> Включений об'єкт точки продовження огляду (ContPoint)</span></h5>
+<p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>ContPoint( const string &amp;i_brNode, const string &amp;i_lstNode, uint32_t i_brDir, uint32_t i_refPerN, const string &amp;i_refTypeId, uint32_t i_nClassMask, uint32_t i_resMask )</i> — конструктор об'єкту для вузла гілки продовження огляду <i>i_brNode</i>, вузла списку <i>i_lstNode</i>, напрямку огляду <i>i_brDir</i>, числа спроб на вузол <i>i_refPerN</i>, ідентифікатору посилання <i>i_refTypeId</i>, маски класу вузла <i>i_nClassMask</i> та маски результату <i>i_resMask</i>.</li>
+<li> <i>bool empty( ) const;</i> — точка продовження порожня.</li></ul>
+<p><b>Публічні атрибути:</b>
+</p>
+<ul><li> <i>uint32_t brDir, refPerN, nClassMask, resMask;</i> — напрямок огляду, число спроб на вузол, маска класу вузла, маска результату;</li>
+<li> <i>string brNode, lstNode, refTypeId;</i> — гілка вузлів, перелік вузла та ідентифікатор типу посилання.</li></ul>
+<h4><span class="mw-headline" id=".D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D1.96.D0.B4.D0.BF.D0.B8.D1.81.D0.BA.D0.B8_.28Subscr.29"><span class="mw-headline-number">4.3.3</span> Включений об'єкт підписки (Subscr)</span></h4>
+<p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>Subscr copy( bool noWorkData = true );</i> — копія об'єкту підписки, без робочих даних <i>noWorkData</i>.</li>
+<li> <i>SubScrSt setState( SubScrSt st = SS_CUR );</i> — встановлення стану у <i>st</i>.</li></ul>
+<p><b>Публічні атрибути:</b>
+</p>
+<ul><li> <i>SubScrSt st;</i> — статус підписки;</li>
+<li> <i>int sess;</i> — сеанс підписки;</li>
+<li> <i>bool en;</i> — статус "Включено";</li>
+<li> <i>double publInterv;</i> — інтервал публікації (мс);</li>
+<li> <i>uint32_t seqN;</i> — номер послідовності для відповідей, завертання через 1, не інкрементується на KeepAlive повідомленнях;</li>
+<li> <i>uint32_t cntrLifeTime, wLT;</i> — лічильник, за вичерпанням якого на протязі відсутності повідомлення від клієнту потрібно видаляти цей об'єкт;</li>
+<li> <i>uint32_t cntrKeepAlive, wKA;</i> — лічильник, за вичерпанням якого потрібно надсилати порожню відповідь публікації та встановлювати StatusChangeNotification у Bad_Timeout;</li>
+<li> <i>uint32_t maxNotPerPubl;</i> — максимальна кількість повідомлень на одну відповідь публікації;</li>
+<li> <i>uint8_t pr;</i> — пріоритет;</li>
+<li> <i>vector&lt;MonitItem&gt; mItems;</i> — перелік елементів моніторингу;</li>
+<li> <i>deque&lt;string&gt; retrQueue;</i> — черга перенадсилання; використовується запитом перенадсилання (Republish); очищується на глибину згідно KeepAlive або прямим запитом у наборі підтвердження.</li></ul>
+<h5><span class="mw-headline" id=".D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.83_.D0.BC.D0.BE.D0.BD.D1.96.D1.82.D0.BE.D1.80.D0.B8.D0.BD.D0.B3.D1.83_.28MonitItem.29"><span class="mw-headline-number">4.3.3.1</span> Включений об'єкт елементу моніторингу (MonitItem)</span></h5>
+<p><b>Публічні атрибути:</b>
+</p>
+<ul><li> <i>MonitoringMode md;</i> — режим моніторингу;</li>
+<li> <i>NodeId nd;</i> — цільовий вузол;</li>
+<li> <i>uint32_t aid;</i> — ідентифікатор атрибуту вузла;</li>
+<li> <i>TimestampsToReturn tmToRet;</i> — меткі часу для повернення;</li>
+<li> <i>double smplItv;</i> — інтервал вимірювання;</li>
+<li> <i>uint32_t qSz;</i> — розмір черги;</li>
+<li> <i>bool dO;</i> — відкидати старі;</li>
+<li> <i>uint32_t cH;</i> — вказівник клієнту;</li>
+<li> <i>XML_N fltr;</i> — фільтр;</li>
+<li> <i>int vTp;</i> — тип значень;</li>
+<li> <i>int64_t dtTm;</i> — час останнього значення;</li>
+<li> <i>deque&lt;Val&gt; vQueue;</i> — черга значень.</li></ul>
+<h6><span class="mw-headline" id=".D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.83_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.BD.D1.8F_.28Val.29"><span class="mw-headline-number">4.3.3.1.1</span> Включений об'єкт елементу значення (Val)</span></h6>
+<p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>Val( const string &amp;ivl, int64_t itm )</i> — конструктор об'єкта значень <i>ivl</i> на час <i>tm</i>.</li></ul>
+<p><b>Публічні атрибути:</b>
+</p>
+<ul><li> <i>string vl;</i> — значення;</li>
+<li> <i>int64_t tm;</i> — час значення.</li></ul>
+<h4><span class="mw-headline" id=".D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D1.96.D0.BD.D1.86.D0.B5.D0.B2.D0.BE.D1.97_.D1.82.D0.BE.D1.87.D0.BA.D0.B8_.28EP.29"><span class="mw-headline-number">4.3.4</span> Включений об'єкт кінцевої точки (EP)</span></h4>
+<p><b>Публічні методи:</b>
+</p>
+<ul><li> <i>EP( Server *serv );</i> — конструктор об'єкту, прив'язаного до серверу <i>serv</i>.</li>
+<li> <i>virtual string id( ) = 0;</i> — ідентифікатор;</li>
+<li> <i>virtual string url( ) = 0;</i> — URL;</li>
+<li> <i>virtual string cert( ) = 0;</i> — сертифікат, рядком формату PEM;</li>
+<li> <i>virtual string pvKey( ) = 0;</i> — приватний ключ, рядком формату PEM;</li>
+<li> <i>virtual double subscrProcPer( ) = 0;</i> — загальний мінімальний період циклу публікації та обробки його даних;</li>
+<li> <i>virtual uint32_t limSubScr( );</i> — обмеження на кількість підписок;</li>
+<li> <i>virtual uint32_t limMonitItms( );</i> — обмеження кількості елементів моніторингу;</li>
+<li> <i>virtual uint32_t limRetrQueueTm( );</i> — обмеження часу на глибину черги повторної передачі;</li>
+<li> <i>bool enableStat( );</i> — стан "Включено";</li>
+<li> <i>virtual bool publishInPool( ) = 0;</i> — публікація у режимі пулу транспорту, інакше із зовнішнього завдання;</li>
+<li> <i>virtual void setEnable( bool vl );</i> — встановити у "Включено";</li>
+<li> <i>virtual void setPublish( const string &amp;inPrtId );</i> — запустити задачу публікації або виклик subScrCycle() у вхідному запиті;</li>
+<li> <i>void subScrCycle( unsigned cntr, string *answ = NULL, const string &amp;inPrtId = "" );</i> — функція виклику циклу обробки підписок на кроку <i>cntr</i> для відповіді у <i>answ</i> у режимі пула; <i>inPrtId</i> встановлюється для опрацювання підписок вказаного вхідного транспорту (підключення) у режимі пулу або порожнє для опрацювання всіх підписок у спеціальному завдані;</li>
+<li> <i>int secSize( );</i> — кількість політик безпеки;</li>
+<li> <i>string secPolicy( int isec );</i> — отримання опису політики безпеки <i>isec</i>;</li>
+<li> <i>MessageSecurityMode secMessageMode( int isec );</i> — режим безпеки повідомлення політики безпеки <i>isec</i>;</li>
+<li> <i>int sessCreate( const string &amp;iName, double iTInact );</i> — сотворення сеансу з ім'ям <i>iName</i> та таймаутом неактивності <i>iTInact</i>, повертає ідентифікатор сеансу;</li>
+<li> <i>void sessServNonceSet( int sid, const string &amp;servNonce );</i> — встановлення послідовності безпечності сеансу <i>sid</i> серверу у <i>servNonce</i>;</li>
+<li> <i>virtual uint32_t sessActivate( int sid, uint32_t secCnl, bool check = false, const string &amp;inPrtId = "", const XML_N &amp;identTkn = XML_N() );</i> — активація сеансу <i>sid</i> для зв'язування із каналом безпеки <i>secCnl</i>, з перевіркою <i>check</i> на можливість-потребу переназначення, після розриву попереднього каналу безпеки, повертає помилку (0 - помилки немає);</li>
+<li> <i>void sessClose( int sid );</i> — закриття сеансу <i>sid</i>;</li>
+<li> <i>Sess sessGet( int sid );</i> — отримання екземпляра об'єкту сеансу для <i>sid</i>;</li>
+<li> <i>Sess::ContPoint sessCpGet( int sid, const string &amp;cpId );</i> — отримання точки продовження бравзингу <i>cpId</i> сеансу <i>sid</i>;</li>
+<li> <i>void sessCpSet( int sid, const string &amp;cpId, const Sess::ContPoint &amp;cp = Sess::ContPoint() );</i> — встановлення точки продовження бравзингу <i>cp</i> для сеансу <i>sid</i> та ідентифікатору <i>cpId</i>;</li>
+<li> <i>uint32_t subscrSet( uint32_t ssId, SubScrSt st, bool en = false, int sess = -1, double publInterv = 0, uint32_t cntrLifeTime = 0, uint32_t cntrKeepAlive = 0, uint32_t maxNotePerPubl = OpcUa_NPosID, int pr = -1 );</i> — встановлення-створення підписки <i>ssId</i> для: стану <i>st</i>, увімкнення <i>en</i>, сеансу <i>sess</i>, інтервалу публікації <i>publInterv</i>, лічильнику часу життя <i>cntrLifeTime</i>, лічильника збереження "живим" <i>cntrKeepAlive</i>, максимальної кількості повідомлень у публікації <i>maxNotePerPubl</i>, пріоритету <i>pr</i>;</li>
+<li> <i>Subscr subscrGet( uint32_t ssId, bool noWorkData = true );</i> — отримання екземпляру підписки <i>ssId</i>, без робочих даних <i>noWorkData</i>;</li>
+<li> <i>uint32_t mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md = MM_CUR, const NodeId &amp;nd = NodeId(), uint32_t aid = OpcUa_NPosID, TimestampsToReturn tmToRet = TimestampsToReturn(-1), double smplItv = -2, uint32_t qSz = OpcUa_NPosID, int8_t dO = -1, uint32_t cH = OpcUa_NPosID, XML_N *fltr = NULL );</i> — встановлення-сотворення елементу моніторингу <i>mItId</i> сеансу <i>ssId</i> для: режиму <i>md</i>, вузла <i>nd</i>, атрибуту <i>aid</i>, профілю мітки часу <i>tmToRet</i>, інтервалу вимірювання <i>smplItv</i>, розміру черги <i>qSz</i>, відкидання старих <i>dO</i>, вказівника клієнту <i>cH</i>, фільтру <i>fltr</i>;</li>
+<li> <i>Subscr::MonitItem mItGet( uint32_t ssId, uint32_t mItId );</i> — отримання екземпляру елементу моніторингу <i>mItId</i> для сеансу <i>ssId</i>;</li>
+<li> <i>virtual uint32_t reqData( int reqTp, XML_N &amp;req );</i> — обробник запиту даних, запит до дерева вузлів серверу.</li></ul>
+<p><b>Захищені методи:</b>
+</p>
+<ul><li> <i>XML_N *nodeReg( const NodeId &amp;parent, const NodeId &amp;ndId, const string &amp;name, int ndClass, const NodeId &amp;refTypeId, const NodeId &amp;typeDef = 0 );</i> — реєстрація вузла <i>ndId</i> у дереві вузлів серверу для: батька <i>parent</i>, класу вузла <i>ndClass</i>, ідентифікатору типу посилання <i>refTypeId</i> та типу визначення <i>typeDef</i>;</li>
+<li> <i>Sess *sessGet_( int sid );</i> — отримання посилання на об'єкт сеансу <i>sid</i>, доступ не захищено захопленням ресурсу.</li></ul>
+<p><b>Захищені атрибути:</b>
+</p>
+<ul><li> <i>char mEn;</i> — стан "Включено";</li>
+<li> <i>uint64_t cntReq;</i> — лічильник запитів;</li>
+<li> <i>vector&lt;SecuritySetting&gt; mSec;</i> — перелік політик безпеки кінцевого вузла;</li>
+<li> <i>vector&lt;Sess&gt; mSess;</i> — перелік відкритих сеансів;</li>
+<li> <i>vector&lt;Subscr&gt; mSubScr;</i> — перелік підписок;</li>
+<li> <i>XML_N objTree;</i> — дерево вузлів серверу;</li>
+<li> <i>map&lt;string, XML_N*&gt; ndMap;</i> — карта посилань на вузли дерева;</li>
+<li> <i>pthread_mutex_t&gt; mtxData;</i> — мютекс для блокування багатопотокового доступу;</li>
+<li> <i>Server *serv;</i> — посилання на сервер, контейнер об'єкту кінцевої точки.</li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B8.D0.B2.D0.B0.D1.82.D0.BD.D1.96_.D0.BA.D0.BB.D1.8E.D1.87.D1.96_.D1.82.D0.B0_.D1.81.D0.B5.D1.80.D1.82.D0.B8.D1.84.D1.96.D0.BA.D0.B0.D1.82.D0.B8"><span class="mw-headline-number">5</span> Приватні ключі та сертифікати</span></h2>
+<p>Для роботи клієнтської та протокольної частини OPC-UA потрібно створення та розташування приватного ключа та сертифікату у конфігурації об'єкту клієнта та сервера. У загальному випадку достатньо створення звичайного самопідписаного сертифікату та приватного ключа без пароля, однак для виключення попереджувальних повідомлень потрібно додати низку службових полів до сертифікату. Це можна зробити взявши <a class="external" href="http://oscada.org/wiki/File:OPC-UA_openssl.cnf" title="File:OPC-UA openssl.cnf">файл конфігурації створення сертифікату</a> та виконати наступну процедуру:
+</p>
+<pre style="white-space: pre-wrap;">
+# Створення приватного ключа:
+$ openssl genrsa -out key_c.pem -des3 -rand /var/log/messages 2048
+# Створення приватного ключа без пароля:
+$ openssl rsa -in key_c.pem -out key_c1.pem
+# Створення самопідписаного сертифікату:
+$ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.cnf -days 3650
+# Розташувати вміст файлу key_c1.pem у поле приватного ключа та cert_c.pem у поле сертифікату!
+</pre>
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">6</span> Зауваження</span></h2>
+<p>У процесі реалізації модулів підтримки OPC-UA було виявлено низку невідповідностей офіційного SDK зі специфікацією OPC-UA:
+</p>
+<ul><li> OPC-UA Part 6 на сторінці 27 містить зображення процесу рукостискання для встановлення безпечного каналу. Пакет створення сесії, виходячи із цього процесу, підписується клієнтським симетричним ключем, а кодування серверним. На справді і підпис і шифрування здійснюється серверним ключем.</li>
+<li> OPC-UA Part 4 на сторінці 141 містить опис структури даних підпису, де перший йдуть дані підпису, а потім рядок алгоритму. На справді реалізовано зворотня послідовність.</li></ul>
+<h2><span class="mw-headline" id=".D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8F_.D1.81.D1.83.D0.BC.D1.96.D1.81.D0.BD.D0.BE.D1.81.D1.82.D1.96_.D1.96.D0.B7_.D1.80.D0.B5.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.8F.D0.BC.D0.B8_OPC-UA_.D1.96.D0.BD.D1.88.D0.B8.D1.85_.D0.B2.D0.B8.D1.80.D0.BE.D0.B1.D0.BD.D0.B8.D0.BA.D1.96.D0.B2"><span class="mw-headline-number">7</span> <span id="TableOfCompat" title="#TableOfCompat">Таблиця сумісності із реалізаціями OPC-UA інших виробників</span></span></h2>
+<table class="wikitable">
+
+<tr>
+<th> ПЗ </th>
+<th> Ядро </th>
+<th> Огляд </th>
+<th> Читання </th>
+<th> Запис </th>
+<th> Публікація </th>
+<th> Зауваження
+</th></tr>
+<tr>
+<td colspan="7"> <i>OpenSCADA parts</i>
+</td></tr>
+<tr>
+<td> OpenSCADA OPC-UA Client (libOPC_UA client part) </td>
+<td> + </td>
+<td> + </td>
+<td> + </td>
+<td> + </td>
+<td> - </td>
+<td> IO requests by XML implemented: HEL (HELLO), OPN (OpenSecureChannel), CLO (CloseSecureChannel), FindServers, GetEndpoints, CreateSession, ActivateSession, CloseSession, Read, Write, Browse
+</td></tr>
+<tr>
+<td> OpenSCADA OPC-UA Server (libOPC_UA server part) </td>
+<td> + </td>
+<td> + </td>
+<td> + </td>
+<td> + </td>
+<td> + </td>
+<td> The requests implemented: HELF, OPNF, CLOF, MSGF: FindServers, GetEndpoints, CreateSession, ActivateSession, CloseSession, CreateSubscription, ModifySubscription, DeleteSubscriptions, MonitoredItems, ModifyMonitoredItems, SetMonitoringMode, DeleteMonitoredItems, SetPublishingMode, TranslateBrowsePathsToNodeIds, RegisterNodes, UnregisterNodes, Browse, BrowseNext, Read,  Write, Publish, Republish. Chunks implemented.
+</td></tr>
+<tr>
+<td colspan="7"> <i>Clients</i>
+</td></tr>
+<tr>
+<td> UAExpert 1.2, 1.3 </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td>
+</td></tr>
+<tr>
+<td> Indusoft web studio 7.1 </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td>
+</td></tr>
+<tr>
+<td> Iconics genesis64 10.8 </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td>
+</td></tr>
+<tr>
+<td> Insat masterscada 3.7 </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td>
+</td></tr>
+<tr>
+<td> <a class="external text" href="https://opcfoundation.org/developer-tools/developer-kits-unified-architecture/sample-applications" rel="nofollow noreferrer noopener" target="_blank">Sample Applications of Unified Architecture</a> </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> <span style="color: blue">Not tested</span> </td>
+<td> Pass </td>
+<td>
+</td></tr>
+<tr>
+<td> Wonderware System Platform </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> <span style="color: blue">Not tested</span> </td>
+<td> Pass </td>
+<td> Result mask processing fix into the service "Browse" for nodes of OpenSCADA data model. ...
+</td></tr>
+<tr>
+<td> Kepware </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Specific value types OpcUa_IntAuto and OpcUa_UIntAuto was added for adaptive integer type selection, mostly for provide integer not fixed as int64. Time stamp was removed from "Write" package but the client tell 0x80730000(OpcUa_BadWriteNotSupported)
+</td></tr>
+<tr>
+<td> UAExpert 1.4 </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Packages sequence number split from it's request and set self managing.
+</td></tr>
+<tr>
+<td colspan="7"> <i>Servers</i>
+</td></tr>
+<tr>
+<td> IgnitionOPC_UA </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> <span style="color: blue">Not tested</span> </td>
+<td> <span style="color: blue">NA</span> </td>
+<td>
+</td></tr>
+<tr>
+<td> B&amp;R Embedded OPC-UA Server </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> <span style="color: blue">Not tested</span> </td>
+<td> <span style="color: blue">NA</span> </td>
+<td> The authenticate process fixed by the server provides self specific identifiers to its. The string of bytes wrong interpretation fixed.
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

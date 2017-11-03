@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/BlockCalc - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/BlockCalc</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FBlockCalc&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/BlockCalc" title="Modules/BlockCalc (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/BlockCalc/ru" title="Модули/Блоковый вычислитель (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/BlockCalc/uk" title="Модулі/Блоковий обчислювач (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> </td>
+<td> Block calculator </td>
+<td> 1.7 </td>
+<td> GPL2 </td>
+<td> daq_BlockCalc.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009,2012) — the page translation </td>
+<td> Provides a block calculator.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#The_controller_of_the_module"><span class="tocnumber">1</span> <span class="toctext">The controller of the module</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#The_block_scheme_of_the_controller"><span class="tocnumber">2</span> <span class="toctext">The block scheme of the controller</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Parameters_of_the_controller"><span class="tocnumber">3</span> <span class="toctext">Parameters of the controller</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Copying_of_the_block_schemes"><span class="tocnumber">4</span> <span class="toctext">Copying of the block schemes</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#User_programming_API"><span class="tocnumber">5</span> <span class="toctext">User programming API</span></a></li>
+</ul>
+</div>
+
+<p>The module of subsystems "DAQ" BlockCalc provides the system OpenSCADA with the mechanism for creating custom calculations. The mechanism of calculations based on the formal language of block circuits(functional blocks).
+</p><p>Also, the module implements the functions of the horizontal reservation, namely, working in conjunction with the remote station of the same level. In addition to the synchronization of the archives of values and archives of attributes of parameters the module implements synchronization of computational templates, in order to shockless catch of the algorithms.
+</p><p>Languages of block programming based on the notion of  circuits(functional blocks). Moreover, depending on the substance of the block, block circuits may include: logic, relay logic circuits, a model of technological process, and more. The essence of the block circuit is that it contains a list of blocks and relations between them.
+</p><p>From a formal point of view a block is an element(function), which has inputs, outputs, and an algorithm for computing. Basing on the concept of programming area, block is a frame of values associated with the object of function.
+</p><p>Of course, the inputs and outputs of blocks may be needed to be connected for a solid block scheme. The following types of links are provided:
+</p>
+<ul><li> Interblock, connecting the input of one block to the output of another one, the input of one block to another one's input and output of one block to the input of another one;</li>
+<li> Interblock remote, connection of blocks of controllers of different block circuits of the module;</li>
+<li> Coefficients, the transformation of input into the constant, all inputs / outputs by default are initiated as a constant;</li>
+<li> External attribute of the parameter.</li></ul>
+<p>Conditionally, connections of blocks can be represented as links between the blocks as a whole(Fig. 1) or detailing of the links(Fig. 2). In the process of binding parameters of blocks the connection of parameters of any type is acceptable. Thus, in the process of computation automatically casting of types will be done.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:598px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_model.png"><img class="thumbimage" height="210" src="../files/BlockCalc_model.png" width="596" /></a>  <div class="thumbcaption">Fig. 1. General connections between blocks of a block scheme.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:601px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_links.png"><img class="thumbimage" height="162" src="../files/BlockCalc_links.png" width="599" /></a>  <div class="thumbcaption">Fig. 2. Detailed links between blocks.</div></div></div></div>
+<h2><span class="mw-headline" id="The_controller_of_the_module"><span class="mw-headline-number">1</span> The controller of the module</span></h2>
+<p>Each controller of this module contains the block circuit, which he computes with the specified period. In order to provide calculated data in the system OpenSCADA the parameters can be created in the controller. Example of the configuration tab of the controller of the given type depicted in Fig. 3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_cntr.png"><img class="thumbimage" height="659" src="../files/BlockCalc_cntr.png" width="780" /></a>  <div class="thumbcaption">Fig. 3. Configuration tab of a controller.</div></div></div></div>
+<p>From this tab you can set:
+</p>
+<ul><li> The state controller, as follows: State, "Enable", "Run" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the controller.</li>
+<li> The state, in which the controller is to be translated at boot time: "To enabled" and "To start".</li>
+<li> The names of tables to store the parameters and blocks of the controller.</li>
+<li> The calculation schedule policy, priority and number of iterations in one cycle of calculating task of the block scheme of the controller.</li></ul>
+<h2><span class="mw-headline" id="The_block_scheme_of_the_controller"><span class="mw-headline-number">2</span> The block scheme of the controller</span></h2>
+<p>The block scheme is formed by means of the tab controller's blocks, configuration of the block (Figure 4) and its connections (Fig. 5).
+</p><p>Blocks of block scheme can connect both among themselves and to the attributes of the parameters. Blocks themselves do not contain the structure of input/output(IO), but contain values, based on the IO-structure of related function. Function for linking with a block is used from the object model of the system OpenSCADA.
+</p><p>Any block may at any time be removed from the process and be reconfigured and then may be again included in the process. Communications between the blocks can be configured without exception blocks from the processing and stopping of the controller. All IO values without connections can be changed during processing.
+</p><p>Using tab of the blocks you can:
+</p>
+<ul><li> Add/remove a block in the block scheme. </li>
+<li> To monitor the total number, number of enabled and the number of processing blocks.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:773px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_cfg.png"><img class="thumbimage" height="589" src="../files/BlockCalc_cfg.png" width="771" /></a>  <div class="thumbcaption">Fig. 4. Configuration tab of a block scheme.</div></div></div></div>
+<p>Using the form of block configuration it can be set: 
+</p>
+<ul><li> The state of the block, as follows: "Enable" and "Process".</li>
+<li> Id, name and description of the block. </li>
+<li> The state in which the block is to be translated at boot time: "To enable" and "To process". </li>
+<li> Set block which must calculate before this block.</li>
+<li> Appoint a working function from the object model. Back to the function for familiarization.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:755px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_blk_lnk.png"><img class="thumbimage" height="622" src="../files/BlockCalc_blk_lnk.png" width="753" /></a>  <div class="thumbcaption">Fig. 5. Configuration tab of links of a block of a block scheme.</div></div></div></div>
+<p>Using the configuration tab of links of the block of the block scheme the links can be set for the parameter of each block separately.
+</p><p>The following types of links are supported:
+</p>
+<ul><li> Inter-block. Connecting the block input to the output of another block, the input of one block to another's input and output of one block to the input of another.</li>
+<li> Distant inter-block. The connection of blocks from various controllers of the module.</li>
+<li> Ratio. The transformation of the input to a constant. All inputs/outputs by default are initiated as constants.</li>
+<li> External attribute of the parameter.</li></ul>
+<p>To set values for the parameter of the block there is the corresponding tab (Fig.6).
+</p><p>In accordance with the custom functions in the system OpenSCADA the four main types of IO are supported: integer, float, boolean and string.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:755px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_blk_val.png"><img class="thumbimage" height="622" src="../files/BlockCalc_blk_val.png" width="753" /></a>  <div class="thumbcaption">Fig. 6. Configuration tab of values of parameters of a block of a block scheme.</div></div></div></div>
+<p>The module provides a special treatment of a number of IO of the block:
+</p>
+<ul><li> <i>f_frq</i> — Frequency computation or the time after the last calculation of the block, the negative in seconds for scheduling of CRON, read-only.</li>
+<li> <i>f_start</i> — First calculate of the block, start, read-only.</li>
+<li> <i>f_stop</i> — Last calculate of the block, stop, read-only.</li>
+<li> <i>this</i> — The block object.</li></ul>
+<h2><span class="mw-headline" id="Parameters_of_the_controller"><span class="mw-headline-number">3</span> Parameters of the controller</span></h2>
+<p>The module provides only one type of parameters — the "Standard". The parameter used to reflect the data, calculated in the blocks, on the attributes of the controller's parameters. Example of the configuration tab of the parameter is shown in Fig.7.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:622px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_prm.png"><img class="thumbimage" height="579" src="../files/BlockCalc_prm.png" width="620" /></a>  <div class="thumbcaption">Fig. 7. Configuration tab of values of parameters of a controller.</div></div></div></div>
+<p>From this tab you can set:  
+</p>
+<ul><li> The state of the parameter, as follows: "Enable" and type of the parameter.</li>
+<li> Id, name and description of the parameter.</li>
+<li> The state in which the parameter must be translated at boot time: "To enable".</li>
+<li> The list of attributes that are reflected on the parameters of the blocks. It is created as the list of elements in the format: <i> {BLK}.{BLK_IO}[:{AID}:{ANM}]</i>. Where:</li></ul>
+<dl><dd><i>{BLK}</i> — block ID, block schemes ID; for constant value set to:
+<dl><dd>'*s' — string type;</dd>
+<dd>'*i' — integer type;</dd>
+<dd>'*r' — real type;</dd>
+<dd>'*b' — boolean type.</dd></dl></dd>
+<dd><i>{BLK_IO}</i> — parameter of the block or of the the block scheme; for constant value set to attribute value;</dd>
+<dd><i>{AID}</i> — attribute of the parameter ID;</dd>
+<dd><i>{ANM}</i> — name of the attribute of parameter.</dd></dl>
+<h2><span class="mw-headline" id="Copying_of_the_block_schemes"><span class="mw-headline-number">4</span> Copying of the block schemes</span></h2>
+<p>To simplify and expedite the development of complex and repetitive block schemes the mechanism of copying of the elements of block scheme both individually and block schemes entirely is provided. The mechanism of copying is integrated into the kernel of OpenSCADA and operates transparently.
+</p>
+<h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">5</span> User programming API</span></h2>
+<p>Some objects of the module provides functions for user's programming.
+</p><p><b>The object "Block" (SYS.DAQ.BlockCalc["cntr"]["blk_block"])</b>
+</p>
+<ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
+<li> <i>TCntrNodeObj cntr( )</i> — return the object of controller for the parameter nesting independent.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

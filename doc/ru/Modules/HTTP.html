@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/HTTP - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/HTTP</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FHTTP&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/HTTP" title="Modules/HTTP">Modules/HTTP</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/HTTP" title="Modules/HTTP (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/HTTP/uk" title="Модулі/HTTP (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
+<td> HTTP-реализация </td>
+<td> 3.1 </td>
+<td> GPL2 </td>
+<td> prot_HTTP.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Протокол </td>
+<td> Роман Савоченко </td>
+<td> Предоставляет поддержку протокола HTTP для WWW-основанных пользовательских интерфейсов.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.90.D1.83.D1.82.D0.B5.D0.BD.D1.82.D0.B8.D1.84.D0.B8.D0.BA.D0.B0.D1.86.D0.B8.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Аутентификация</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D0.B8_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_WEB-.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B0"><span class="tocnumber">2</span> <span class="toctext">Модули пользовательского WEB-интерфейса</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#API_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D1.8F.D1.89.D0.B8.D1.85_.D0.B7.D0.B0.D0.BF.D1.80.D0.BE.D1.81.D0.BE.D0.B2"><span class="tocnumber">3</span> <span class="toctext">API функции исходящих запросов</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#API_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F"><span class="tocnumber">4</span> <span class="toctext">API программирования пользователя</span></a></li>
+</ul>
+</div>
+
+<p>Модуль транспортного протокола HTTP предназначен для реализации поддержки сетевого протокола HTTP(Hypertext Transfer Protocol) в OpenSCADA.
+</p><p>Протокол HTTP используется для передачи содержимого WWW. Так, через HTTP передаются следующие типы документов: html, xhtml, png, java и многие другие. Добавление поддержки HTTP в систему OpenSCADA в комплексе с транспортом Sockets позволяет реализовывать различные пользовательские функции на основе WWW интерфейса. Модуль HTTP реализует два основных метода протокола HTTP: GET и POST. Модуль HTTP обеспечивает контроль целостности HTTP-запросов и, совместно с транспортом Sockets, позволяет "собирать" целостные запросы из их фрагментов, а также обеспечивать сохранение соединения живым (Keep-Alive).
+</p><p>Для гибкого подключения пользовательских интерфейсов к данному модулю используется модульный механизм в рамках самого модуля "HTTP". В роли модулей используются модули подсистемы “Пользовательские интерфейсы” с дополнительным информационным полем "SubType", имеющим значение "WWW".
+</p><p>В запросах к Web ресурсам принято использовать URL(Universal Resource Locator), следовательно URL передаётся как основной параметр через HTTP. Первый элемент запрашиваемого URL используется для идентификации модуля UI. Например URL "http://localhost:10002/WebCfg" означает обращение к модулю "WebCfg" на хосте "http://localhost:10002". В случае ошибочного указания идентификатора модуля или при обращении вообще без идентификатора "HTTP" модуль генерирует диалог информации о входе и с предоставлением выбора одного из доступных пользовательских интерфейсов. Пример диалога показан на рисунке 1. 
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:727px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_select_ru.png"><img class="thumbimage" height="447" src="../files/HTTP_select_ru.png" width="725" /></a>  <div class="thumbcaption">Рис.1. Диалог выбора модуля WWW-интерфейса.</div></div></div></div>
+<p>Модулем поддерживается многоязычность, которая включается <a class="external" href="http://oscada.org/wiki/Documents/Program_manual/ru#.D0.9A.D0.BE.D0.BD.D1.84.D0.B8.D0.B3.D1.83.D1.80.D0.B0.D1.86.D0.B8.D1.8F_.D0.B8_.D0.BD.D0.B0.D1.81.D1.82.D1.80.D0.BE.D0.B9.D0.BA.D0.B0_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D1.8B" title="Documents/Program manual/ru">динамическим переводом сообщений OpenSCADA</a>.
+</p><p>Язык конечного пользователя интерфейса определяется путём и в последовательности:
+</p>
+<ul><li> URL параметр "lang".</li>
+<li> Язык пользователя, который вошёл.</li>
+<li> Язык Web-браузера из HTTP свойства "Accept-Language".</li>
+<li> Общий язык процесса OpenSCADA.</li></ul>
+<p>Полученный таким образом язык используется для построения интерфейсов этого модуля и передаётся WWW под-модулям в HTTP свойстве "oscd_lang", через аргумент "vars" <a class="external" href="http://oscada.org/wiki/Modules/HTTP/ru#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D0.B8_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_WEB-.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B0" title="Modules/HTTP/ru">функций "GET" и "POST"</a>.
+</p><p>Для конфигурации и управления этим модулем предоставляется конфигурационная страница интерфейса управления OpenSCADA (Рис.3) где Вы можете осуществлять:
+</p>
+<ul><li> Контроль за активными сеансами аутентификации.</li>
+<li> Конфигурацию:
+<ul><li> Правила доступа для запрета и разрешения. Каждая строка является отдельным правилом и в каждом правиле доступа Вы можете использовать шаблоны (вроде "*/WebVision/*") и регулярные выражения (вроде "/[^/]+/WebVision/.+/").</li>
+<li> HTML-шаблон пользовательского интерфейса и пользовательской главной страницы. В полях HTML-шаблона должен указываться адрес к файлу HTML/XHTML, который будет использован для формирования внутренних/сервисных интерфейсов и главной страницы. Внутренние/сервисные интерфейсы, это например: выбор модулей, страницы авторизации и подобное у WEB-модулей. От шаблона требуется корректность XHTML, которая позволяет разобрать файл XML-парсером, а также наличие метки "#####CONTEXT#####" в месте размещения динамического содержимого, что обязательно для внутренних/сервисных интерфейсов. Ресурсные файлы шаблонов представлены изображениями, CSS и JavaScript файлами, и которые ищутся от директории в которой указано размещение файла шаблона и от текущей директории. В случае обнаружения в шаблоне ошибок будет использован стандартный встроенный интерфейс. Для другого файла шаблона по языку Вы можете добавить суффикс языка в конец этого файла "{Мой Шаблон}_{язык}.html" однако выбирать в конфигурационных полях основной-базовый файл шаблона "{Мой Шаблон}.html". В качестве примера шаблонов Вы можете посмотреть такие наиболее используемые:
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada.html.gz" title="File:HTTP webopenscada.html.gz">Шаблон внутреннего/сервисного интерфейса и главной страницы (включая индекс модулей)</a>.</li>
+<li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada_main.html.gz" title="File:HTTP webopenscada main.html.gz">Шаблон главной страницы</a> с прямой ссылкой на главный интерфейс <a class="external text" href="http://wiki.oscada.org/Using/ModelAGLKS" rel="nofollow noreferrer noopener" target="_blank">AGLKS</a> с помощью модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a> и без индекса WEB-модулей.</li>
+<li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada_goto.html.gz" title="File:HTTP webopenscada goto.html.gz">Шаблон главной страницы</a> с прямым перенаправлением на главный интерфейс <a class="external text" href="http://wiki.oscada.org/Using/ModelAGLKS" rel="nofollow noreferrer noopener" target="_blank">AGLKS</a> с помощью модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>.</li></ul></li>
+<li> Время жизни, перечень пользователей разрешённых к аутентификации и установка автоматического входа. </li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:993px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_mod_ru.png"><img class="thumbimage" height="836" src="../files/HTTP_mod_ru.png" width="991" /></a>  <div class="thumbcaption">Рис.3. Страница настройки модуля.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.90.D1.83.D1.82.D0.B5.D0.BD.D1.82.D0.B8.D1.84.D0.B8.D0.BA.D0.B0.D1.86.D0.B8.D1.8F"><span class="mw-headline-number">1</span> Аутентификация</span></h2>
+<p>Модулем поддерживается аутентификация в системе OpenSCADA при предоставлении доступа к модулям WEB-интерфейсов (рис.2).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:369px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth_ru.png"><img class="thumbimage" height="254" src="../files/HTTP_auth_ru.png" width="367" /></a>  <div class="thumbcaption">Рис.2. Диалог авторизации в OpenSCADA.</div></div></div></div>
+<p>Для облегчения работы с Web-интерфейсами модуль предусматривает возможность автоматического входа от имени указанного пользователя. Конфигурация автоматического входа осуществляется на странице настройки модуля (рис.3). Автоматический вход осуществляется по совпадению адреса, указанного в колонке "Адреса", от имени пользователя, указанного в колонке "Пользователь".
+</p><p>Для большей безопасности Вы можете определить только Web-пользователей, в перечне пользователей разрешённых к аутентификации.
+</p>
+<h2><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D0.B8_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_WEB-.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B0"><span class="mw-headline-number">2</span> Модули пользовательского WEB-интерфейса</span></h2>
+<p>Модули пользовательского интерфейса (UI), предназначенные для совместной работы с модулем HTTP, должны устанавливать информационное поле "SubType" значением "WWW" и поле "Auth" значением "1", если модуль требует аутентификации при входе. Для связи модуля HTTP и модулей UI используется расширенный механизм коммуникации. Этот механизм подразумевает экспорт интерфейсных функций. В данном случае UI модули должны экспортировать функции:
+</p>
+<ul><li> <b>void HTTP_GET(const string &amp;url, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b> ИЛИ</li></ul>
+<dl><dd><b>void HttpGet( const string &amp;url, string &amp;page, const string &amp;sender, vector&lt;string&gt; &amp;vars, const string &amp;user );</b> — Метод GET c параметрами:
+<dl><dd><i>url</i> — адрес запроса;</dd>
+<dd><i>page</i> — страница с ответом;</dd>
+<dd><i>sender</i> — адрес отправителя;</dd>
+<dd><i>vars</i> — переменные запроса;</dd>
+<dd><i>user</i> — пользователь системы;</dd>
+<dd><i>iprt</i> — ссылка на объект входной части протокола.</dd></dl></dd></dl>
+<ul><li> <b>void HTTP_POST(const string &amp;url, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b> ИЛИ</li></ul>
+<dl><dd><b>void HttpPost( const string &amp;url, string &amp;page, const string &amp;sender, vector&lt;string&gt; &amp;vars, const string &amp;user );</b> — метод POST c параметрами:
+<dl><dd><i>url</i> — адрес запроса;</dd>
+<dd><i>page</i> — страница с ответом и содержимым тела запроса POST;</dd>
+<dd><i>sender</i> — адрес отправителя;</dd>
+<dd><i>vars</i> — переменные запроса;</dd>
+<dd><i>user</i> — пользователь системы;</dd>
+<dd><i>iprt</i> — ссылка на объект входной части протокола.</dd></dl></dd></dl>
+<p>Далее, в случае поступления HTTP запроса "GET" будет вызываться функция "HTTP_GET" или "HttpGet", а в случае запроса "POST" будет вызываться функция "HTTP_POST" или "HttpPost" в соответствующем модуле UI.
+</p>
+<h2><span class="mw-headline" id="API_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D1.8F.D1.89.D0.B8.D1.85_.D0.B7.D0.B0.D0.BF.D1.80.D0.BE.D1.81.D0.BE.D0.B2"><span class="mw-headline-number">3</span> API функции исходящих запросов</span></h2>
+<p>Функция исходящих запросов (<a class="external" href="http://oscada.org/wiki/Documents/Program_manual/ru#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.8B.22_.28SYS.Transport.29" title="Documents/Program manual/ru">messIO()</a>) оперирует обменом содержимым HTTP-запросов, завёрнутыми в XML-пакеты. Структура запроса имеет вид:
+</p>
+<pre style="white-space: pre-wrap;">
+&lt;req Host="host" URI="uri"&gt;
+  &lt;prm id="pId"&gt;pVal&lt;/prm&gt;
+  &lt;cnt name="cName" filename="cFileName"&gt;
+    &lt;prm id="cpId"&gt;cpVal&lt;/prm&gt;
+    cVal
+  &lt;/cnt&gt;
+  reqVal
+&lt;/req&gt;
+</pre>
+<dl><dd>Где:
+<ul><li> <i>req</i> — метод запроса, поддерживаются методы "GET" и "POST".</li>
+<li> <i>host</i> — адрес узла http-сервера в формате <i>{HostAddr}:{HostIp}</i>. Если данное поле опущено то используется адрес узла, указанный в поле адреса транспорта.</li>
+<li> <i>uri</i> — адрес ресурса, обычно файл или директория, на http-сервере.</li>
+<li> <i>pId</i>, <i>pVal</i> — идентификатор и значение дополнительного http-параметра. Http-параметров может быть указано множество, отдельными <i>prm</i> тегами.</li>
+<li> <i>cName</i>, <i>cFileName</i>, <i>cVal</i> — имя, имя-файла и значение элемента содержимого POST-запроса. Элементов содержимого может быть указано множество, отдельными <i>cnt</i> тегами.</li>
+<li> <i>cpId</i>, <i>cpVal</i> — идентификатор и значение дополнительного параметра содержимого. Параметров содержимого может быть указано множество, отдельными <i>prm</i> тегами;</li>
+<li> <i>reqVal</i> — одиночное содержимое POST запроса.</li></ul></dd></dl>
+<p>Результатом запроса является ответ со структурой:
+</p>
+<pre style="white-space: pre-wrap;">
+&lt;req Host="host" URI="uri" err="err" Protocol="prt" RezCod="rCod" RezStr="rStr"&gt;
+    &lt;prm id="pId"&gt;pVal&lt;/prm&gt;
+    respVal
+&lt;/req&gt;
+</pre>
+<dl><dd>Где:
+<ul><li> <i>req</i> — метод запроса.</li>
+<li> <i>host</i> — адрес узла http-сервера.</li>
+<li> <i>uri</i> — адрес ресурса.</li>
+<li> <i>err</i> — ошибка, возникшая во время запроса. В случае успешного запроса это поле пустое.</li>
+<li> <i>RezCod</i>, <i>RezStr</i> — результат запроса в виде кода и текста. </li>
+<li> <i>pId</i>, <i>pVal</i> — идентификатор и значение дополнительного http-параметра, ответа. Http-параметров может быть множество, определённые отдельными <i>prm</i> тегами.</li>
+<li> <i>respVal</i> — содержимое ответа.</li></ul></dd></dl>
+<p>В качестве примера использования данной функции в пользовательских процедурах приведём формирование GET и POST запросов на языке JavaLikeCalc.JavaScript:
+</p>
+<pre style="white-space: pre-wrap;">
+//GET запрос HTML страницы
+req = SYS.XMLNode("GET");
+req.setAttr("URI","/");
+SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
+test = req.text();
+
+//GET запрос файла и сохранение
+req = SYS.XMLNode("GET");
+req.setAttr("URI","/oscadaArch/Work/openscada-0.9-r2188.tar.lzma");
+SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
+if(!req.attr("err").length) SYS.fileWrite("/var/tmp/recvFile.tmp", req.text());
+
+//POST запрос
+req = SYS.XMLNode("POST");
+req.setAttr("URI","/WebUser/FlowTec.txt");
+cntNode = req.childAdd("cnt").setAttr("name","pole0").setAttr("filename","Object2-k001-100309-17.txt");
+cntNode.childAdd("prm").setAttr("id","Content-Type").setText("text/plain");
+cntText = "Object2-k001\r\n";
+cntText += "\r\n";
+cntText += "v002\r\n";
+cntText += " n1\r\n";
+cntText += "  09.03.10 16   Polnyj    7155.25    216.0  32.000  17.5\r\n";
+cntText += "v005\r\n";
+cntText += " n1\r\n";
+cntText += "  09.03.10 16   Polnyj     188.81    350.0   4.000  40.0\r\n";
+cntText += "\r\n";
+cntNode.setText(cntText);
+SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
+</pre>
+<h2><span class="mw-headline" id="API_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F"><span class="mw-headline-number">4</span> API программирования пользователя</span></h2>
+<p><b>Именно этот объект модуля "Protocol.HTTP" [SYS.Protocol.HTTP.pgCreator()]</b>
+</p>
+<ul><li> <i>bool pgAccess(string URL)</i> — проверка доступности страницы определённой в <i>URL</i>.
+<ul><li> <i>URL</i> — URL страницы которая проверяется.</li></ul></li>
+<li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "", string lang = "" )</i> — формирование страницы или ресурса из содержимого <i>cnt</i>, обёрнутого в HTTP с результатом <i>rcode</i>, с дополнительными атрибутами HTTP <i>httpattrs</i>, дополнительным элементом заголовка HTML <i>htmlHeadEls</i> и использованием файла шаблона <i>forceTmplFile</i>.
+<ul><li> <i>cnt</i> — содержимое страницы или ресурса (изображения, XML, CSS, JavaScript, ...);</li>
+<li> <i>rcode</i> — результирующий код HTTP, вроде "200 OK"; пустое значение выключает добавление HTTP заголовка;</li>
+<li> <i>httpattrs</i> — дополнительные атрибуты HTTP, в основном это "Content-Type" со значением по умолчанию "text/html;charset={SYS}"; только для "Content-Type: text/html" будет осуществляться заворачивание во внутренний/сервисный или определённый <i>forceTmplFile</i> HTML-шаблон;</li>
+<li> <i>htmlHeadEls</i> — дополнительный тег заголовка HTML, в основном это META с "Refresh" для указанного URL;</li>
+<li> <i>forceTmplFile</i> — файл прямо определённого шаблона для перекрытия внутреннего/сервисного шаблоном главной страницы или другим.</li>
+<li> <i>lang</i> — язык интерфейса, который формируется.</li></ul></li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-23 18:16+0300\n"
+"POT-Creation-Date: 2017-11-03 18:12+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -15,13 +15,13 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Compress error!"
-msgstr "Ошибка сжатия!"
+msgid "Compressing for '%s' error %d!"
+msgstr "Ошибка сжатия '%s': %d!"
+
+msgid "Decompressing for '%s' error %d!"
+msgstr "Ошибка распаковки '%s': %d!"
 
 #, c-format
-msgid "Decompress error: '%s'!"
-msgstr "Ошибка распаковки: '%s'!"
-
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "    --noArchLimit        Disable archives limit to the file number. Use for "
@@ -392,8 +392,13 @@ msgstr "Двойной, вещ."
 msgid "String"
 msgstr "Строка"
 
-#, c-format
-msgid "Archive file '%s' no opened!"
+msgid "Read parameters of the archive file '%s' error!"
+msgstr "Ошибка чтения параметров архивного файла '%s'!"
+
+msgid "Parameters of the archive file '%s' are error!"
+msgstr "Параметры архивного файла '%s' ошибочны!"
+
+msgid "Archive file '%s' is not opened!"
 msgstr "Файл архива '%s' не открыт!"
 
 #, c-format

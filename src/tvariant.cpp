@@ -751,8 +751,9 @@ TVariant TArrayObj::arGet( int vid )
 
 void TArrayObj::arSet( int vid, TVariant val )
 {
-    if(vid < 0) return;//throw TError("ArrayObj", _("Negative id is not allow for array."));
+    //if(vid < 0) return;//throw TError("ArrayObj", _("Negative id is not allow for array."));
     dataM.lock();
+    if(vid < 0) vid = mEls.size();
     while(vid >= (int)mEls.size()) mEls.push_back(TVariant());
     mEls[vid] = val;
     dataM.unlock();
@@ -1233,6 +1234,16 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 	if(rez.freeStat()) return TVariant();
 	return AutoHD<TVarObj>(rez);
     }
+    // TArrayObj<XMLNodeObj> getElementsBy( string tag, string attrVal = "", string attr = "id" ) -
+    //    get elements array from the tree by <tag> and attribute <attr> value <attrVal>.
+    //  tag - tag name, empty for all;
+    //  attrVal - attribute value to find, empty for pass;
+    //  attr - attribute name to find it value.
+    if(id == "getElementsBy" && prms.size()) {
+	TArrayObj *rez = new TArrayObj();
+	getElementsBy(prms[0].getS(), ((prms.size() >= 3) ? prms[2].getS() : "id"), ((prms.size() >= 2)?prms[1].getS():""), rez);
+	return rez;
+    }
 
     return TVarObj::funcCall(id, prms);
 }
@@ -1274,9 +1285,20 @@ AutoHD<XMLNodeObj> XMLNodeObj::getElementBy( const string &attr, const string &v
 
     AutoHD<XMLNodeObj> rez;
     for(unsigned iCh = 0; rez.freeStat() && iCh < childSize(); iCh++)
-	rez = childGet(iCh).at().getElementBy(attr,val);
+	rez = childGet(iCh).at().getElementBy(attr, val);
 
     return rez;
+}
+
+void XMLNodeObj::getElementsBy( const string &tag, const string &attr, const string &val, TArrayObj *rez )
+{
+    if(!tag.size() && (!attr.size() || !val.size()))	return;
+    if((!tag.size() || tag == name()) && (!attr.size() || !val.size() || propGet(attr).getS() == val)) rez->arSet(-1, this);
+
+    dataM.lock();
+    for(unsigned iCh = 0; iCh < childSize(); iCh++)
+	childGet(iCh).at().getElementsBy(tag, attr, val, rez);
+    dataM.unlock();
 }
 
 //***********************************************************

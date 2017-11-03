@@ -258,46 +258,47 @@ string XMLNode::save( unsigned flg, const string &cp ) const
 void XMLNode::saveNode( unsigned flg, string &xml, const string &cp ) const
 {
     //Text block
-    if(name() == "<*>")	{ encode(Mess->codeConvOut(cp,mText), xml, true); return; }
+    if(name() == "<*>")	{ encode(Mess->codeConvOut(cp,mText), xml, true, flg); return; }
     //Commentary block
     if(name() == "<!>")	{ if(!(flg&Clean)) xml += "<!--"+Mess->codeConvOut(cp,mText)+"-->"; return; }
     //Process special block <? ... ?>
     if(name().compare(0,2,"<?") == 0)
-    { if(!(flg&Clean)) xml += name()+" "+Mess->codeConvOut(cp,mText)+(flg&XMLNode::BrSpecBlkPast?"?>\n":"?>"); return; }
+    { if(!(flg&Clean)) xml += name()+" "+Mess->codeConvOut(cp,mText)+(flg&BrSpecBlkPast?"?>\n":"?>"); return; }
 
-    xml.append((flg&XMLNode::BrOpenPrev && xml.size() && xml[xml.size()-1] != '\n') ? "\n<" : "<");
-    if(flg&XMLNode::MissTagEnc) xml.append(name());
-    else encode(name(), xml);
+    xml.append((flg&BrOpenPrev && xml.size() && xml[xml.size()-1] != '\n') ? "\n<" : "<");
+    if(flg&MissTagEnc) xml.append(name());
+    else encode(name(), xml, false, flg);
 
     for(unsigned i_a = 0; i_a < mAttr.size(); i_a++) {
 	if(mAttr[i_a].second.empty()) continue;
 	xml.append(" ");
-	if(flg&XMLNode::MissAttrEnc) xml.append(mAttr[i_a].first);
-	else encode(mAttr[i_a].first, xml);
+	if(flg&MissAttrEnc) xml.append(mAttr[i_a].first);
+	else encode(mAttr[i_a].first, xml, false, flg);
 	xml.append("=\"");
-	encode(Mess->codeConvOut(cp,mAttr[i_a].second), xml);
+	encode(Mess->codeConvOut(cp,mAttr[i_a].second), xml, false, flg);
 	xml.append("\"");
     }
 
-    if(childEmpty() && mText.empty()) xml.append((flg&(XMLNode::BrOpenPast|XMLNode::BrClosePast)) ? " />\n" : " />");
+    if(childEmpty() && mText.empty())
+	xml.append((((flg&XHTMLHeader)&&(name()=="script"||name()=="div"))?"></"+name()+">":" />") + ((flg&(BrOpenPast|BrClosePast))?"\n":""));
     else {
-	xml.append((flg&XMLNode::BrOpenPast) ? ">\n" : ">");
+	xml.append((flg&BrOpenPast) ? ">\n" : ">");
 	//Save text
 	if(!mText.empty()) {
-	    encode(Mess->codeConvOut(cp,mText), xml, true);
-	    xml.append(flg&XMLNode::BrTextPast ? "\n" : "");
+	    encode(Mess->codeConvOut(cp,mText), xml, true, flg);
+	    xml.append(flg&BrTextPast ? "\n" : "");
 	}
 	//Save included childs
-	for(unsigned i_c = 0; i_c < childSize(); i_c++) childGet(i_c)->saveNode(flg,xml,cp);
+	for(unsigned iC = 0; iC < childSize(); iC++) childGet(iC)->saveNode(flg, xml, cp);
 	//Close tag
 	xml.append("</");
-	if(flg&XMLNode::MissTagEnc) xml.append(name() );
-	else encode(name(), xml);
-	xml.append(flg&XMLNode::BrClosePast ? ">\n" : ">");
+	if(flg&MissTagEnc) xml.append(name() );
+	else encode(name(), xml, false, flg);
+	xml.append(flg&BrClosePast ? ">\n" : ">");
     }
 }
 
-void XMLNode::encode( const string &s, string &rez, bool text ) const
+void XMLNode::encode( const string &s, string &rez, bool text, unsigned flg ) const
 {
     int	len;
     int32_t symb;
@@ -311,15 +312,15 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
 	    //case 0:	replStr = "&#000;";	break;
 	    case '>':	replStr = "&gt;";	break;
 	    case '<':	replStr = "&lt;";	break;
-	    case '"':	replStr = "&quot;";	break;
 	    case '&':	replStr = "&amp;";	break;
-	    case '\'':	replStr = "&#039;";	break;
-	    case '\n':	if(!text) replStr = "&#010;"; break;
+	    case '\'':	if(!text) replStr = "&#039;";	break;
+	    case '"':	if(!text) replStr = "&quot;";	break;
+	    case '\n':	if(!text) replStr = "&#010;";	break;
 	}
 	if(replStr) { rez += replStr; continue; }
 	else if((len=Mess->getUTF8(s,iSz,&symb)) >= 2) {
 	    switch(symb) {
-		case 0xA0: rez += "&#x00A0;" /* "&nbsp;" */;	break;
+		case 0xA0: rez += (flg&XHTMLHeader) ? "&nbsp;" : "&#x00A0;";	break;
 		default: rez.append(s,iSz,len);	break;
 	    }
 	    iSz += len-1;

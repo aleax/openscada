@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/SQLite - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/SQLite</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSQLite&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SQLite" title="Modules/SQLite (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SQLite/ru" title="Модули/SQLite (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SQLite/uk" title="Модулі/SQLite (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a> </td>
+<td> DB SQLite </td>
+<td> 2.3 </td>
+<td> GPL2 </td>
+<td> bd_SQLite.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DB </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> DB module. It provides the support for DB SQLite.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Operations_over_the_database"><span class="tocnumber">1</span> <span class="toctext">Operations over the database</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Operations_over_the_table"><span class="tocnumber">2</span> <span class="toctext">Operations over the table</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Operations_over_the_contents_of_the_table"><span class="tocnumber">3</span> <span class="toctext">Operations over the contents of the table</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Access_rights"><span class="tocnumber">4</span> <span class="toctext">Access rights</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Productivity_of_the_DB"><span class="tocnumber">5</span> <span class="toctext">Productivity of the DB</span></a></li>
+</ul>
+</div>
+
+<p>Module "SQLite" gives to OpenSCADA support of DB SQLite. DB SQLite is a small, embedded database which supports the SQL-queries. SQLite DB is distributed under a free license. To familiarize with the database it is possible on the website of the database — <a class="external free" href="http://sqlite.org" rel="nofollow noreferrer noopener" target="_blank">http://sqlite.org</a>. The module is based on the library with API of the manufacturer of DB SQLite on the language "C". The module allows you to perform operations over databases, tables and contents of tables.
+</p>
+<h2><span class="mw-headline" id="Operations_over_the_database"><span class="mw-headline-number">1</span> Operations over the database</span></h2>
+<p>The operations of opening and closing of the database is supported, with the possibility of creating a new database when you open and delete existing at the close. In terms of the subsystem "DB" of OpenSCADA opening of DB is its registration for further using of it in the system. It also supports the operation of requesting the list of tables in the database.
+</p><p>SQLite database is addressed by specifying the name of the database file in the following format "<b>{FileDBPath}</b>". Where:
+</p>
+<ul><li> <i>FileDBPath</i> — full path to DB file (./oscada/Main.db). </li></ul>
+<dl><dd>Use empty path for a private, temporary on-disk database create.</dd>
+<dd>Use ":memory:" for a private, temporary in-memory database create.</dd></dl>
+<h2><span class="mw-headline" id="Operations_over_the_table"><span class="mw-headline-number">2</span> Operations over the table</span></h2>
+<p>The operations of opening and closing of the table with the possibility of creating a new table when you open and deleting the existing one at the closing, and also the operation of the requesting of the table's structure are supported.
+</p>
+<h2><span class="mw-headline" id="Operations_over_the_contents_of_the_table"><span class="mw-headline-number">3</span> Operations over the contents of the table</span></h2>
+<ul><li> scanning of the records of the table;</li>
+<li> request the values of these records;</li>
+<li> setting the values of these records;</li>
+<li> removing the records.</li></ul>
+<p>API of subsystem "DB" suppose the access to the contents of the table on the value of key(s) fields. Thus, the operation of request of the record implies the preset of key columns of the object TConfig, which will fulfill the request. Creating a new record(string) is the installation of the values of record, which does not exist.
+</p><p>The module allows you to dynamically change the structure of the database tables SQLite. Thus, in the event of a discrepancy of the table and the structure determined by record, the structure of the table will be set to the required structure of record. In the case of the request of the value of the record, and mismatching of the structures of record and the table there will be available only to the values of common elements of the record and table. The module does not track the order of the elements in the record and in the structure of the table!
+</p><p>The module is implement support multilanguage text variables. For fields with multilanguage text variable create the column of separated language in format "<b>{lang}#{FldID}</b>" (en#NAME). In this time the base column contain value for base language. The columns of separated languages created by needs, in time saving to DB and execution OpenSCADA in correspond language. If for work language value no present then will used value for base language.
+</p><p>The types of the elements of DB SQLite correspond to types of elements of system OpenSCADA in the following way:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> The types of fields of the system OpenSCADA </th>
+<th> Types of fields of database SQLite
+</th></tr>
+<tr>
+<td> TFld::String </td>
+<td> TEXT
+</td></tr>
+<tr>
+<td> TFld::Integer, TFld::Boolean </td>
+<td> INTEGER
+</td></tr>
+<tr>
+<td> TFld::Real </td>
+<td> DOUBLE
+</td></tr></table>
+<h2><span class="mw-headline" id="Access_rights"><span class="mw-headline-number">4</span> Access rights</span></h2>
+<p>Access rights to the database are defined by the rights of access to the separately taken file of the database. Module supports the work with SQLite database files in read-only mode, such as demonstrations.
+</p>
+<h2><span class="mw-headline" id="Productivity_of_the_DB"><span class="mw-headline-number">5</span> Productivity of the DB</span></h2>
+<p>Measurement of productivity of DB were carried out by the test "DB" of the module of system tests "SystemTests", by performing operations over the records of the structure: "<b>name char (20), descr char (50), val double (10.2), id int (7), stat bool, reqKey string, reqVal string</b>".
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Operation </th>
+<th> Nokia N800, SD 4GClass6<br />Nokia N900 </th>
+<th> RPi2 Debian8 Class10 UHS1;<br />RPi3 Debian8 Class10 UHS1;<br />OrangePiZero Debian8 Class2 </th>
+<th> AMD Turion L625 1.6, 2G [HDD; SSD]<br />Intel(R) Core(TM) i3 CPU 1.33GHz, 3G [HDD; SSD];<br />Intel(R) Core(TM) i7 CPU 2.6GHz, 12G FastSSD
+</th></tr>
+<tr>
+<td> <i>Creation of the 1000 records, seconds:</i> </td>
+<td> 3.3; 1.96 </td>
+<td> 0.78; 0.43; 0.48 </td>
+<td> [0.49; 0.2]; [0.39; 0.22]; 0.056
+</td></tr>
+<tr>
+<td> <i>Updating of the 1000 records, seconds:</i> </td>
+<td> 3.2; 2.47 </td>
+<td> 0.7; 0.41; 0.45 </td>
+<td> [0.48; 0.19]; [0.40; 0.21]; 0.053
+</td></tr>
+<tr>
+<td> <i>Getting of the 1000 records, seconds:</i> </td>
+<td> 2.6; 1.81 </td>
+<td> 0.69; 0.38; 0.45 </td>
+<td> [0.36; 0.19]; [0.31; 0.21]; 0.051
+</td></tr>
+<tr>
+<td> <i>Seeking of the 1000 records, seconds:</i> </td>
+<td> 3.1; 1.48 </td>
+<td> 0.76; 0.42; 0.51 </td>
+<td> [-; 0.22]; [0.21; 0.22]; 0.052
+</td></tr>
+<tr>
+<td> <i>Seeking in preload of the 1000 records, seconds:</i> </td>
+<td> 0.53; 0.29 </td>
+<td> 0.13; 0.071; 0.088 </td>
+<td> [-; 0.028]; [0.027; 0.028]; 0.0073
+</td></tr>
+<tr>
+<td> <i>Deleting of the 1000 record, seconds:</i> </td>
+<td> 1.18; 0.43 </td>
+<td> 0.20; 0.10; 0.13 </td>
+<td> [0.08; 0.058]; [0.067; 0.069]; 0.012
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

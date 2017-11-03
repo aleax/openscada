@@ -1,0 +1,364 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/ModBus - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/ModBus</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FModBus&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/ModBus" title="Modules/ModBus (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/ModBus/ru" title="Модули/ModBus (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/ModBus/uk" title="Модулі/ModBus (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
+<td> ModBus </td>
+<td> 1.8 </td>
+<td> GPL2 </td>
+<td> daq_ModBus.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Provides implementation of client service of the protocol ModBus. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.
+</td></tr>
+
+<tr>
+<td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
+<td> ModBus </td>
+<td> 1.0 </td>
+<td> GPL2 </td>
+<td> daq_ModBus.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Protocol </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Provides implementation of protocols ModBus. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#General_description_of_the_ModBus_protocol"><span class="tocnumber">1</span> <span class="toctext">General description of the ModBus protocol</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Addressing"><span class="tocnumber">1.1</span> <span class="toctext">Addressing</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Standard_codes_of_functions"><span class="tocnumber">1.2</span> <span class="toctext">Standard codes of functions</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Module_of_the_implementation_of_the_protocol"><span class="tocnumber">2</span> <span class="toctext">Module of the implementation of the protocol</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#API_functions_of_outgoing_requests"><span class="tocnumber">2.1</span> <span class="toctext">API functions of outgoing requests</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Servicing_of_the_requests_for_ModBus_protocol"><span class="tocnumber">2.2</span> <span class="toctext">Servicing of the requests for ModBus protocol</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#The_mode_of_the_node_of_the_protocol_.22Data.22"><span class="tocnumber">2.2.1</span> <span class="toctext">The mode of the node of the protocol "Data"</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Mode_.22Gateway_of_the_node.22_of_a_node_of_the_protocol"><span class="tocnumber">2.2.2</span> <span class="toctext">Mode "Gateway of the node" of a node of the protocol</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Mode_.22Gateway_of_the_network.22_of_the_node_of_the_protocol"><span class="tocnumber">2.2.3</span> <span class="toctext">Mode "Gateway of the network" of the node of the protocol</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-10"><a href="#Report_of_the_ModBus_requests"><span class="tocnumber">2.3</span> <span class="toctext">Report of the ModBus requests</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#Data_acquisition_module"><span class="tocnumber">3</span> <span class="toctext">Data acquisition module</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#Controller_of_data"><span class="tocnumber">3.1</span> <span class="toctext">Controller of data</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Parameters"><span class="tocnumber">3.2</span> <span class="toctext">Parameters</span></a>
+<ul>
+<li class="toclevel-3 tocsection-14"><a href="#Standard_parameter_type.28std.29"><span class="tocnumber">3.2.1</span> <span class="toctext">Standard parameter type(std)</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Logical_parameter_type.28logic.29"><span class="tocnumber">3.2.2</span> <span class="toctext">Logical parameter type(logic)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-16"><a href="#User_programming_API"><span class="tocnumber">3.3</span> <span class="toctext">User programming API</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<p>ModBus — communication protocol based on the client-server architecture. It was developed by Modicon for using in the programmable logic controllers (PLC). It became the de facto standard in the industry and is widely used for the connection of industrial electronic equipment. Used to transfer data via serial line RS-485, RS-422, RS-232, and network TCP/IP. Currently supported non-profit organization ModBus-IDA.
+</p><p>There are three modes of the protocol: ModBus/RTU, ModBus/ASCII and ModBus/TCP. The first two use the serial communication lines (mostly RS-485, less RS-422/RS-232), the last uses TCP/IP network to transfer data.
+</p><p>The module of the data acquisition provides an opportunity to gather the information from various devices by means of the protocol ModBus in all modes. Also, the module implements the functions of the horizontal reservation, namely, working in conjunction with the remote station of the same level. At the same time, the module of the protocol allows you to create and issue data by means of the protocol ModBus in various modes, and through interfaces that are supported by modules of subsystem "Transports".
+</p>
+<h2><span class="mw-headline" id="General_description_of_the_ModBus_protocol"><span class="mw-headline-number">1</span> General description of the ModBus protocol</span></h2>
+<p>Protocol ModBus/RTU requires one lead(requesting) device in the line(master), which can send commands to one or more driven devices(slave), referring to them by a unique in the line address. Syntax of the commands of the protocol allows to address 247 devices on the one connection line of standard RS-485(less RS-422 or RS-232). In the case of TCP addressing mode is excluded from the protocol, as it is implemented in the TCP/IP stack.
+</p><p>Initiative of exchange always comes from the leading device. Slave devices listen the line. Master request (package, the sequence of bytes) in the line and turns into a listening line. Slave device responds to the request, which came to him. 
+</p><p>The end of sending the response is determined by the mode. In RTU mode, the end of massage is determined by time interval between end of receive the previous byte and start receiving following, the time symbol. If this interval exceeds the time required to receiving one and a half bytes on a given rate of transmission then receiving a frame response is considered complete. In ASCII mode, the criterion of end of the massage is the character '\r', and in the mode of TCP — the expected size of the massage, information about which present in the packet header.
+</p>
+<h3><span class="mw-headline" id="Addressing"><span class="mw-headline-number">1.1</span> Addressing</span></h3>
+<p>All data operations are tied to zero, each type of data (register, bit, register of input or bit of input) addresses begin with <b>0</b> and ends <b>65535</b>.
+</p>
+<h3><span class="mw-headline" id="Standard_codes_of_functions"><span class="mw-headline-number">1.2</span> Standard codes of functions</span></h3>
+<p>In ModBus protocol it can be divided into several subsets of commands(Table 1).
+</p><p><b>Table 1:</b> The subset of commands of ModBus protocol
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Subset </th>
+<th> Range of codes
+</th></tr>
+<tr>
+<td> Standard </td>
+<td> 1-21
+</td></tr>
+<tr>
+<td> Reserve for advanced features </td>
+<td> 22-64
+</td></tr>
+<tr>
+<td> Custom </td>
+<td> 65-119
+</td></tr>
+<tr>
+<td> Reserve for own needs </td>
+<td> 120-255
+</td></tr></table>
+<p>Data acquisition module uses commands 0x03 and 0x06(0x10) for read and write registers, 0x01 and 0x05(0x0F) for read and write bits, 0x02 and 0x04 for read bit and register of input accordingly. For other atypical commands implementation the module provides <a href="#User_programming_API">function of user programming API</a>, which you can call from the template's procedure, sending arbitrary PDU packages and process received.
+</p><p>Protocol module process the requests by the commands 0x03 and 0x06(0x10) for reading and writing registers, 0x01 and 0x05(0x0F) for reading and writing bits.
+</p>
+<h2><span class="mw-headline" id="Module_of_the_implementation_of_the_protocol"><span class="mw-headline-number">2</span> Module of the implementation of the protocol</span></h2>
+<p>ModBus protocol module contains the code implementing of the protocol part of ModBus, namely particular variants of protocols ModBus/TCP, ModBus/RTU and ModBus/ASCII. Module of the protocol in conjunction with the selected transport is actively used by the data acquisition module for direct queries implementation. Because of the module of the protocol is independent, by using of it you can create additional modules for data acquisition by non-standard functions of the expansion of ModBus of various automation equipment.
+</p>
+<h3><span class="mw-headline" id="API_functions_of_outgoing_requests"><span class="mw-headline-number">2.1</span> API functions of outgoing requests</span></h3>
+<p>API functions for outgoing queries (<a class="external" href="http://oscada.org/wiki/Documents/User_API#Subsystem_.22Transports.22_.28SYS.Transport.29" title="Documents/User API">messIO()</a>) operate with the exchange of blocks PDU, XML-wrapped in packages with the following structure:
+</p>
+<ul><li> <b>&lt;prt id="sId" reqTm="reqTm" node="node" reqTry="reqTry"&gt;{pdu}&lt;/prt&gt;</b></li></ul>
+<dl><dd>Where:
+<ul><li> <i>prt</i> — name of the tag with the name of the used variant of the protocol (TCP, RTU or ASCII).</li>
+<li> <i>sId</i> — identifier of the source of the query. Used for placing to <a href="#Report_of_the_ModBus_requests">the report</a> of the output protocol.</li>
+<li> <i>reqTm</i> — time of the request, namely the time during which the answer is expected, in milliseconds.</li>
+<li> <i>node</i> — number of the destination node or the identifier of the unit ModBus/TCP.</li>
+<li> <i>reqTry</i> — number of attempts of repeating the request with the error in the answer. Only for ModBus/RTU and ModBus/ASCII.</li>
+<li> <i>pdu</i> — directly block of the unit of the protocol data (PDU) ModBus.</li></ul></dd></dl>
+<p>The resulting <i>pdu</i> replaces the request <i>pdu</i> in the XML-package, and set the attribute "err" to the code and text of the errors, if it is took place.
+</p>
+<h3><span class="mw-headline" id="Servicing_of_the_requests_for_ModBus_protocol"><span class="mw-headline-number">2.2</span> Servicing of the requests for ModBus protocol</span></h3>
+<p>Input part of servicing of the requests to the module of the protocol realizes verification and processing of the requests through objects of the nodes, provided by the module(Fig. 1). Actually, the mechanism is implemented, that allow OpenSCADA to perform the role of the ModBus/TCP server or the  slave device of ModBus/RTU and ModBus/ASCII. Thus the system OpenSCADA gets an opportunity to serve the role of any participant of the ModBus networks.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:583px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_nodes.png"><img class="thumbimage" height="457" src="../files/ModBus_prt_nodes.png" width="581" /></a>  <div class="thumbcaption">Fig.1. Tab of the list of the nodes of servicing incoming requests of the protocol.</div></div></div></div>
+<p>The node of the protocol is equivalent to the physical node of the device of ModBus network. Node of the protocol can operate in three modes:
+</p>
+<ul><li> "Data" — mode of the reflection of data of OpenSCADA on arrays of registers and bits of ModBus to transfer them at the request of the client node or master.</li>
+<li> "Gateway of the node" — mode of the redirecting of the requests to the node of the another ModBus network through this node.</li>
+<li> "Gateway of the network" — mode of the redirecting of the requests to any node in another ModBus network, actually carrying out the integration of several ModBus networks into one.</li></ul>
+<p>Since the protocol nodes can be created a great number, it turns out that on the one interface, ie in the one network, one station on the basis of OpenSCADA can clear provide multiple nodes of ModBus network with different data.
+</p><p>Lets consider particular configuration of the node of the protocol in various modes.
+</p>
+<h4><span class="mw-headline" id="The_mode_of_the_node_of_the_protocol_.22Data.22"><span class="mw-headline-number">2.2.1</span> The mode of the node of the protocol "Data"</span></h4>
+<p>The mode is used to reflect the data of OpenSCADA on arrays of registers and bits of ModBus. The overall configuration of the node is made in the tab "Node"(Fig. 2) by the parameters:
+</p>
+<ul><li> The state of the node, as follows: "Enable" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the node.</li>
+<li> The state, in which the node must be translated at boot: "To enable".</li>
+<li> Address of the node in the ModBus network from 1 to 247.</li>
+<li> Inbound traffic, to the network of which the node is  belonged to. It is selected from the list of input transport of the subsystem "Transports" of OpenSCADA. Specifying as the transport the symbol "*" makes this node a participant of any ModBus network with the processing of requests from any transport.</li>
+<li> Variant of the ModBus protocol, requests in which must be processed by the node from the list: All, RTU, ASCII, TCP/IP.</li>
+<li> The choice of the mode, in this case the mode "Data".</li>
+<li> Period of calculation of data in seconds. Specifies the frequency of processing of forming for the requests data, namely: data tables of ModBus, calculation of data programs and servicing of links to the data of OpenSCADA.</li></ul>
+<p>Node in this mode process the following standars commands of the ModBus protocol:
+</p>
+<ul><li> <i>0x01</i> — reading of the group of bits;</li>
+<li> <i>0x02</i> — reading of the group of input bits;</li>
+<li> <i>0x03</i> — reading of the group of registers;</li>
+<li> <i>0x04</i> — reading of the group of input registers;</li>
+<li> <i>0x05</i> — settig of the single bit;</li>
+<li> <i>0x06</i> — settig of the single register;</li>
+<li> <i>0x0F</i> — settig of the group of bits;</li>
+<li> <i>0x10</i> — settig of the group of registers.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:638px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_node.png"><img class="thumbimage" height="607" src="../files/ModBus_prt_node_node.png" width="636" /></a>  <div class="thumbcaption">Fig.2. Tab "Node" of the configuration page of a node of the protocol in the "Data" mode.</div></div></div></div>
+<p>To form the table of the reflection of the data of ModBus network, namely, registers and bits the tab "Data" is provided(Fig.3). The tab "Data" contains a table of parameters and program for processing of the parameters with the specified programming language, which is available in OpenSCADA. Table contains the parameters with the properties:
+</p>
+<ul><li> <i>Id</i> — ID of the parameter. It is the key for the formation of the tables of registers and bits of ModBus. Registers and bits of ModBus set as follows:</li></ul>
+<dl><dd><ul><li> <b>R{N}[w]</b>, <b>RI{N}[w]</b> — specific register (and input) form, can expanded by suffixes: "i"—Int32, "f"—Float, "d"—Double, "s"—String (size by default is 10 and up to 100 registers);</li>
+<li> <b>R:{N}:[w]</b>, <b>RI:{N}:[w]</b> — classic register (and input) form, can expanded by suffixes: "i4"—Int32, "i8"—Int64, "f"—Float, "d"—Double, "s"—String</li>
+<li> <b>C{N}[w]</b>, <b>CI{N}[w]</b>, <b>C:{N}:[w]</b>, <b>CI:{N}:[w]</b> — coil (and input).</li></ul></dd>
+<dd>Where:
+<ul><li> <b>{N}</b> — ModBus device's data address (decimal, hexadecimal or octal) [0...65535];</li>
+<li> <b>w</b> — optional symbol for writing allow indicate.</li></ul></dd>
+<dd>Examples:
+<dl><dd>"R0x300w" — register access;</dd>
+<dd>"C100w" — coin access, allow for write;</dd>
+<dd>"R_f200" — get float from registers 200 and 201;</dd>
+<dd>"R_i400,300" — get int32 from registers 400 and 300;</dd>
+<dd>"R_s15,20" — get string, registers block, from register 15 and size 20.</dd>
+<dd>"R_i8:0x10:w" — get and set int64 into registers [0x10-0x13];</dd>
+<dd>"R_d:0x20,0x30" — get double float point (8 byte) from registers [0x20,0x30-0x32].</dd></dl></dd></dl>
+<dl><dt> All other parameters are internal and are used for a variety of intermediate calculations, processing, conversion and their values can be operative control and changed from the table into execution mode.</dt></dl>
+<ul><li> <i>Name</i> — The name of the parameter is used for the naming of the connection.</li>
+<li> <i>Type</i> — Type of the parameter from the list: "Real", "Integer", "Boolean" and "String". For the registers and bits of ModBus it makes sense to set "Integer" and "Boolean" type, respectively. For the registers expanded by prefixes "f" and "s" need set types "Real" and "String", respectively.</li>
+<li> <i>Connection</i> — Sign that this option should be to connect with the attribute of the parameter of subsystem "Data acquisition". These connections are set in the "Connection" tab.</li>
+<li> <i>Value</i> — The original or current, if the node is switched on, the value of the parameter.</li></ul>
+<p>The table by default identifies several parameters of special appointment:
+</p>
+<ul><li> <i>f_frq</i> — frequency of computing the table by the program;</li>
+<li> <i>f_start</i> — sign of the first computing — the start up of the program.</li>
+<li> <i>f_stop</i> — sign of the last execution — the stop of the program.</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> By into sets registers of expanded types can be used inaccessible symbol ',' then access to its from the procedure you can take only alternatively method, by object "arguments":
+</p>
+<pre style="white-space: pre-wrap;">
+arguments["R_s10,5w"] = "9876543210";</pre>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:714px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_data.png"><img class="thumbimage" height="684" src="../files/ModBus_prt_node_data.png" width="712" /></a>  <div class="thumbcaption">Fig.3. Tab "Data" of the configuration page of a node of the protocol in the "Data" mode.</div></div></div></div>
+<p>For the parameter which are signed as links above it can be set the links only to switched off node of the protocol in the tab "Connections"(Figure 4).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:616px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_lnk.png"><img class="thumbimage" height="524" src="../files/ModBus_prt_node_lnk.png" width="614" /></a>  <div class="thumbcaption">Fig.4. Tab "Links" of the configuration page of a node of the protocol in the "Data" mode.</div></div></div></div>
+<h4><span class="mw-headline" id="Mode_.22Gateway_of_the_node.22_of_a_node_of_the_protocol"><span class="mw-headline-number">2.2.2</span> Mode "Gateway of the node" of a node of the protocol</span></h4>
+<p>Mode is used to carryover the requests to a separate device in the other ModBus network from the ModBus network, in which this node is configured. The overall configuration of the node is made in the tab "Node"(Fig. 5) by the parameters:
+</p>
+<ul><li> The state of the node, as follows: Status, "Enable" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the node.</li>
+<li> The state, in which the node must be translated at boot: "To enable".</li>
+<li> Address of the node in the ModBus source network from 1 to 247.</li>
+<li> Inbound traffic, to the network of which the node is  belonged to. It is selected from the list of input transport of the subsystem "Transports" of OpenSCADA. Specifying as the transport the symbol "*" makes this node a participant of any ModBus network with the processing of requests from any transport.</li>
+<li> Variant of the ModBus protocol, requests in which must be processed by the node from the list: All, RTU, ASCII, TCP/IP.</li>
+<li> The choice of the mode, in this case the mode "Gateway of the node".</li>
+<li> Transport, in which the request must be redirected, from the list of outgoing transports of subsystem "Transports".</li>
+<li> Protocol in which to redirect the request.</li>
+<li> Address of the node of ModBus network from 1 to 247, in which the request is forwarded to.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:631px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_nodeGwNode.png"><img class="thumbimage" height="636" src="../files/ModBus_prt_node_nodeGwNode.png" width="629" /></a>  <div class="thumbcaption">Fig.5. Tab "Node" of the configuration page of a node of the protocol in the "Gateway of the node" mode.</div></div></div></div>
+<h4><span class="mw-headline" id="Mode_.22Gateway_of_the_network.22_of_the_node_of_the_protocol"><span class="mw-headline-number">2.2.3</span> Mode "Gateway of the network" of the node of the protocol</span></h4>
+<p>Mode is used to carryover the requests of the network at whole to the other ModBus network from the ModBus network, in which this node is configured. Ie request to the device with any address will be sent to another network, without diverting. The overall configuration of the node is made in the tab "Node"(Fig. 6) by the parameters:
+</p>
+<ul><li> The state of the node, as follows: "Enable" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the node.</li>
+<li> The state, in which the node must be translated at boot: "To enable".</li>
+<li> Incoming transport of the network, from which the requests are transfered.It is selected from the list of input transport of the subsystem "Transports" of OpenSCADA.</li>
+<li> Variant of the ModBus protocol, requests in which must be processed by the node from the list: All, RTU, ASCII, TCP/IP.</li>
+<li> The choice of the mode, in this case the mode "Gateway of the network".</li>
+<li> Transport, in which the request must be redirected, from the list of outgoing transports of subsystem "Transports".</li>
+<li> Protocol in which to redirect the request.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:631px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_nodeGwNet.png"><img class="thumbimage" height="593" src="../files/ModBus_prt_node_nodeGwNet.png" width="629" /></a>  <div class="thumbcaption">Fig.6. Tab "Node" of the configuration page of a node of the protocol in the "Gateway of the network" mode.</div></div></div></div>
+<h3><span class="mw-headline" id="Report_of_the_ModBus_requests"><span class="mw-headline-number">2.3</span> Report of the ModBus requests</span></h3>
+<p>To be able to monitor and to diagnosing the correct implementation of requests to the various components the a module provides an opportunity to incorporate the report of the requests that pass through the protocol module. The report included by indication of non zero number of entries in the tab "Report" of the page of the module of the protocol(Fig.7).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:683px;"><a class="image" href="http://oscada.org/wiki/File:Modbus_prt_rep.png"><img class="thumbimage" height="639" src="../files/Modbus_prt_rep.png" width="681" /></a>  <div class="thumbcaption">Fig.7. Tab "Report" of the page of the module of the protocol.</div></div></div></div>
+<h2><span class="mw-headline" id="Data_acquisition_module"><span class="mw-headline-number">3</span> Data acquisition module</span></h2>
+<p>The data acquisition module provides an opportunity to interrogate and write registers and bits of devices through protocol modes TCP, RTU, ASCII and commands of request 0x01 — 0x06, 0x0F, 0x10.
+</p>
+<h3><span class="mw-headline" id="Controller_of_data"><span class="mw-headline-number">3.1</span> Controller of data</span></h3>
+<p>For addition of a ModBus data source the controller is created and configured in OpenSCADA. Example of the configuration tab of the controller is depicted in Fig.8.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:804px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr.png"><img class="thumbimage" height="659" src="../files/ModBus_cntr.png" width="802" /></a>  <div class="thumbcaption">Fig.8. Configuration tab of a controller.</div></div></div></div>
+<p>Using this tab you can set:
+</p>
+<ul><li> The state of the controller, as follows: Status, "Enable", "Run" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the controller.</li>
+<li> The state, in which the controller must be translated at boot: "To enable" and "To start".</li>
+<li> Names of tables to store the configuration of the parameters of the controller for standard and logical types.</li>
+<li> The acquisition schedule policy and the priority of the task of data acquisition.</li>
+<li> ModBus protocol, used for request to real device (TCP/IP, RTU or ASCII).</li>
+<li> Address of <a class="external" href="http://oscada.org/wiki/Documents/Program_manual#Subsystem_.22Transports.22" title="Documents/Program manual">outbound transport</a> from the list of configured outbound transports in the subsystem "Transports" of OpenSCADA.</li>
+<li> ModBus destination node. In the case of protocols RTU and ASCII this is the unique address of the physical device, and when TCP/IP — the identifier of the unity.</li>
+<li> Combining fragments of the registers. Standard functions 01-04 let to request at once multiple adjacent registers or bits. This strategy often allows to optimize the traffic and time. However, the required registers are not always located adjacent to each other, this option allows you to collect them in blocks of up to 100 registers, or 1600 bits.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The installing of this parameter must be approached with caution, since not all devices support access to registers between fragments.</dd></dl>
+<ul><li> Use multi-items write functions (0x0F,0x10). Instead one-item write will used multi-items functions.</li>
+<li> Connection timeout in milliseconds. Specifies the time interval during which the answer is expected. If there is zero waiting time by default the transport waiting time is used. Allows taking into account individual properties of the controller in the common network.</li>
+<li> Time of connection recovery in seconds. Specifies the time interval after which the re-attempt of the request to previously inaccessible device is done.</li>
+<li> Attempts of request for the protocols RTU and ASCII. Indicates the number of attempts by the repetition of the request in case of incomplete or damaged answer.</li>
+<li> Maximum request block size (bytes). Maximum size (bytes) of registers and coils blocks set. This usefull for controllers with like limits.</li></ul>
+<h3><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3.2</span> Parameters</span></h3>
+<p>Data acquisition module provides two types of parameter: "Standard"(std) and "logical"(logic). Additional configuration fields, the parameters of this module are:
+</p>
+<ul><li> <i>"Standard"(std)</i>:
+<ul><li> <b>Attributes list</b> — contains a structured list of configuration for the attributes ModBus.</li></ul></li>
+<li> <i>"logical"(logic)</i>:
+<ul><li> <b>Parameter template</b> — DAQ parameter's template address.</li></ul></li></ul>
+<h4><span class="mw-headline" id="Standard_parameter_type.28std.29"><span class="mw-headline-number">3.2.1</span> Standard parameter type(std)</span></h4>
+<p>Main page of configuration parameters of the standard type is shown in Figure 9.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:730px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm.png"><img class="thumbimage" height="624" src="../files/ModBus_prm.png" width="728" /></a>  <div class="thumbcaption">Fig.9. Configuration tab of the standard parameter type.</div></div></div></div>
+<p>Structure of the attribute in the parameter list of attributes can be written as follows: "<b>{dt}:{numb}:{rw}:{id}:{name}</b>".<br />
+Where:
+</p>
+<ul><li> <b>dt</b> — Modbus data type ("R"—register[3,6(16)], "C"—coil[1,5(15)], "RI" — input register[4], "CI"—input coil[2]);</li></ul>
+<dl><dd>"R" and "RI" can be expanded by suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "s"—String (size by default is 10 and up to 100 registers);</dd></dl>
+<ul><li> <b>numb</b> — ModBus device's data address (decimal, hexadecimal or octal) [0...65535];</li>
+<li> <b>rw</b> — read/write mode ("r"—read; "w"—write; "rw"—readwrite);</li>
+<li> <b>id</b> — created attribute identifier;</li>
+<li> <b>name</b> — created attribute name.</li></ul>
+<p>Examples:
+</p>
+<dl><dd>"R:0x300:rw:var:Variable" — register access;</dd>
+<dd>"C:100:rw:var1:Variable 1" — coin access;</dd>
+<dd>"R_f:200:r:float:Float" — get float from registers 200 and 201;</dd>
+<dd>"R_i4:400,300:r:int32:Int32" — get int32 from registers 400 and 300;</dd>
+<dd>"R_b10:25:r:rBit:Reg bit" — get bit 10 from register 25;</dd>
+<dd>"R_s:15,20:r:str:Reg blk" — get string, registers block, from register 15 and size 20."</dd></dl>
+<p>Line which start at symbol '#' is commentary and processing for it pass.
+</p><p>In accordance with a specified list of attributes interrogation and the creation of the attributes of the parameter is carried out(Figure 10).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:669px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_atr.png"><img class="thumbimage" height="532" src="../files/ModBus_prm_atr.png" width="667" /></a>  <div class="thumbcaption">Fig.10. Tab of the attributes of the standard parameter type.</div></div></div></div>
+<h4><span class="mw-headline" id="Logical_parameter_type.28logic.29"><span class="mw-headline-number">3.2.2</span> Logical parameter type(logic)</span></h4>
+<p>Main page of configuration parameters of the logical type is shown in Figure 11.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:669px;"><a class="image" href="http://oscada.org/wiki/File:ModBusLog_prm.png"><img class="thumbimage" height="478" src="../files/ModBusLog_prm.png" width="667" /></a>  <div class="thumbcaption">Рис.11. Configuration tab of the logical parameter type.</div></div></div></div>
+<p>When forming a template for the logical type of the parameter of the controller, do not take into account the reference format template, since it is not used and can be omitted. Same reference value, when configuring the the template (Fig. 12), written in the format: "<b>{dt}:{numb}:{rw}</b>".<br />
+Where:
+</p>
+<ul><li> <b>dt</b> — ModBus data type ("R"—register[3,6(16)], "C"—coil[1,5(15)], "RI"—input register[4], "CI"—input coil[2]);</li></ul>
+<dl><dd>"R" and "RI" can be expanded by suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "s"—String (size by default is 10 and up to 100 registers);</dd></dl>
+<ul><li> <b>numb</b> — ModBus device's data address (decimal, hexadecimal or octal) [0...65535];</li>
+<li> <b>rw</b> — read/write mode ("r"—read; "w"—write; "rw"—readwrite).</li></ul>
+<p>Examples:
+</p>
+<dl><dd>"R:0x300:rw" — register access;</dd>
+<dd>"C:100:rw" — coin access;</dd>
+<dd>"R_f:200:r" — get float from registers 200 and 201;</dd>
+<dd>"R_i4:400,300:r" — get int32 from registers 400 and 300;</dd>
+<dd>"R_b10:25:r" — get bit 10 from register 25;</dd>
+<dd>"R_s:15,20:r" — get string, registers block, from register 15 and size 20.</dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:665px;"><a class="image" href="http://oscada.org/wiki/File:ModbusLog_tmpl.png"><img class="thumbimage" height="462" src="../files/ModbusLog_tmpl.png" width="663" /></a>  <div class="thumbcaption">Рис.12. Tab "Template configuration" of the logical parameter type.</div></div></div></div>
+<p>This module provides a special treatment of a number of attributes of the template:
+</p>
+<ul><li> <i>f_frq</i> — Frequency computation procedure template, or the time after the last calculation, the negative, in seconds, for scheduling of CRON, read-only.</li>
+<li> <i>f_start</i> — First calculate of template's procedure, start, read-only.</li>
+<li> <i>f_stop</i> — Last calculate of template's procedure, stop, read-only.</li>
+<li> <i>f_err</i> — The parameter error, full access. Value of the attribute is set to the parameter's error attribute "err".</li>
+<li> <i>SHIFR</i> — The parameter code, read-only.</li>
+<li> <i>NAME</i> — The parameter name, read-only.</li>
+<li> <i>DESCR</i> — The parameter description, read-only.</li>
+<li> <i>this</i> — The parameter object, allow access to attributes of the parameter, for example to their archives access.</li></ul>
+<p>In accordance with the pattern underlying parameter, we get a set of attributes of the parameter Fig.13.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:665px;"><a class="image" href="http://oscada.org/wiki/File:ModbusLog_prm_atr.png"><img class="thumbimage" height="462" src="../files/ModbusLog_prm_atr.png" width="663" /></a>  <div class="thumbcaption">Fig.13. Tab of the attributes of the logical parameter type.</div></div></div></div>
+<h3><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">3.3</span> User programming API</span></h3>
+<p>In view of the module support logical type parameters make sense to provide a number of functions the user API to call from a template of logical parameter.
+</p><p><b>The object "Controller" [this.cntr()]</b>
+</p>
+<ul><li> <i>string messIO(string pdu)</i> — sending <i>pdu</i> through the transport of controller object by means of ModBus protocol. PDU query result is placed instead of the query <i>pdu</i>, and the error returned by the function.</li></ul>
+<p><b>The object "Parameter" [this]</b>
+</p>
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — attribute <i>id</i> and <i>name</i> for type <i>tp</i> add. If the attribute already present then will apply properties allowed to hot changing: name, selection mode and the selection mode parameters.
+<ul><li> <i>id, name</i> — new attribute id and name;</li>
+<li> <i>tp</i> — attribute type [boolean | integer | real | string | text | object] + selection mode [sel | seled] + read-only [ro];</li>
+<li> <i>selValsNms</i> — two lines with values in first and it's names in first (separated by ";").</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — attribute <i>id</i> remove.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

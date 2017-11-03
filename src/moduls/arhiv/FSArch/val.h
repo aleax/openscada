@@ -50,7 +50,7 @@ class VFileArch
 
 	void attach( const string &name );
 
-	string	&name( )	{ return mName; }
+	string	name( )		{ return mName; }
 	int	size( )		{ return mSize; }
 	int64_t	begin( )	{ return mBeg; }
 	int64_t	end( )		{ return mEnd; }
@@ -103,7 +103,9 @@ class VFileArch
 	void repairFile( int hd );
 
 	// Base parameters
-	string	mName;		//Name Archive file
+	ResMtx	dtRes;
+
+	MtxString mName;	//Name Archive file
 	int	mSize;		//Archive size
 	TFld::Type mTp;		//Value type
 	int64_t	mBeg;		//Begin of archive file

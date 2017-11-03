@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/DBF - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/DBF</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FDBF&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DBF" title="Modules/DBF (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DBF/ru" title="Модули/DBF (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DBF/uk" title="Модулі/DBF (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/DBF.html" title="Special:MyLanguage/Modules/DBF">DBF</a> </td>
+<td> DB DBF </td>
+<td> 2.2 </td>
+<td> GPL2 </td>
+<td> bd_DBF.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DB </td>
+<td> Roman Savochenko<br />Maxim Lysenko, 2009 — the page translation </td>
+<td> DB module. It provides the support of *.dbf files, version 3.0.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Operations_over_the_database"><span class="tocnumber">1</span> <span class="toctext">Operations over the database</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Operations_over_the_table"><span class="tocnumber">2</span> <span class="toctext">Operations over the table</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Operations_over_the_contents_of_the_table"><span class="tocnumber">3</span> <span class="toctext">Operations over the contents of the table</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Productivity_of_DB"><span class="tocnumber">4</span> <span class="toctext">Productivity of DB</span></a></li>
+</ul>
+</div>
+
+<p>The module is designed to provide in OpenSCADA support of the type of database files *.dbf. The module is based on the library for work with dbf files for "Complex2" firm "DIYA" Ltd. The module allows you to perform operations on databases, tables and contents of tables.
+</p>
+<h2><span class="mw-headline" id="Operations_over_the_database"><span class="mw-headline-number">1</span> Operations over the database</span></h2>
+<p>The operations of opening and closing of the database is supported, with the possibility of creating a new database when you open and delete existing at the close. In terms of the subsystem "DB" of system OpenSCADA opening of DB is its registration for further using of it in the system.
+</p><p>Under the DB, in the case of the dbf-files it is meant the directory containing the dbf-files. Therefore, operation of the creating and deleting of the database - creates and deletes the directory where the table (dbf-files) are stored. The role of the address of database plays the full name of the directory with dbf-files. Access to the database is defined by the system rights of access to the directory.
+</p>
+<h2><span class="mw-headline" id="Operations_over_the_table"><span class="mw-headline-number">2</span> Operations over the table</span></h2>
+<p>The operations of opening and closing of the table with the possibility of creating a new table when you open and deleting the existing one at the closing are supported.
+</p><p>Actually dbf-file is the table. Creation and deletion of tables implies creation and deletion of dbf-file. Table name is the name of dbf-file in the directory of DB. Access to the table are define by the rights of access to dbf-file.
+</p>
+<h2><span class="mw-headline" id="Operations_over_the_contents_of_the_table"><span class="mw-headline-number">3</span> Operations over the contents of the table</span></h2>
+<ul><li> Scanning of the records of the table; </li>
+<li> Request the values of these records; </li>
+<li> Setting the values of these records; </li>
+<li> Removing the records.</li></ul>
+<p>API of subsystem "DB" suppose the access to the contents of the table on the value of key(s) fields. Thus, the operation of request of the record implies the preset of key columns of the object TConfig, which will fulfill the request. Creating a new record(string) is the installation of the values of record, which does not exist.
+</p><p>The module allows you to dynamically change the structure of the database tables DBF. Thus, in the event of a discrepancy of the table and the structure determined by record, the structure of the table will be reduced to the the required structure of record. In the case of the request of the value of the record, and mismatching of the structures of record and the table there will be available only to the values of common elements of the record and table. The module does not track the order of the elements in the record and in the structure of the table!
+</p><p>While access to the values of the tables the synchronization is used by through the capture of the resource to have access to the table. This avoids the destruction of data in the case of multi-access!
+</p><p>The types of the elements of dbf-file that correspond to types of elements of system OpenSCADA in the following way:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> The types of fields of system OpenSCADA </th>
+<th> Type of field of dbf-file
+</th></tr>
+<tr>
+<td>TFld::String </td>
+<td> "C"
+</td></tr>
+<tr>
+<td>TFld::Integer, TFld::Real </td>
+<td> "N"
+</td></tr>
+<tr>
+<td>TFld::Boolean </td>
+<td> "L"
+</td></tr></table>
+<h2><span class="mw-headline" id="Productivity_of_DB"><span class="mw-headline-number">4</span> Productivity of DB</span></h2>
+<p>Measurement of productivity of DB were carried out by the test "DB" of the module of system tests "SystemTests", by performing operations over the records of the structure: "<b>name char (20), descr char (50), val double (10.2), id int (7), stat bool, reqKey string, reqVal string</b>".
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Operation </th>
+<th> K8-3000+,256M,120G </th>
+<th> Nokia N800, SD 2G </th>
+<th> Intel(R) Core(TM) i3 CPU 1.33GHz, 3G, HDD
+</th></tr>
+<tr>
+<td> <i>Creation of the 1000 records (sec.):</i>  </td>
+<td> 1.07 </td>
+<td> 37 </td>
+<td> 0.382
+</td></tr>
+<tr>
+<td> <i>Updating of the 1000 records (sec.):</i> </td>
+<td> 1.6 </td>
+<td> 33.8 </td>
+<td> 0.368
+</td></tr>
+<tr>
+<td> <i>Getting of the 1000 records (sec.):</i> </td>
+<td> 1.0 </td>
+<td> 34.32 </td>
+<td> 0.362
+</td></tr>
+<tr>
+<td> <i>Seeking of the 1000 records (sec.):</i> </td>
+<td> - </td>
+<td> - </td>
+<td> 0.064
+</td></tr>
+<tr>
+<td> <i>Seeking in preload of the 1000 records (sec.):</i> </td>
+<td> - </td>
+<td> - </td>
+<td> 0.064
+</td></tr>
+<tr>
+<td> <i>Deleting of the 1000 record (sec.):</i> </td>
+<td> 0.95 </td>
+<td> 37 </td>
+<td> 0.371
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

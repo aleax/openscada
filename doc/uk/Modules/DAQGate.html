@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/Шлюз збору даних - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/Шлюз збору даних</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FDAQGate&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/DAQGate" title="Modules/DAQGate">Modules/DAQGate</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DAQGate" title="Modules/DAQGate (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DAQGate/ru" title="Модули/Шлюз сбора данных (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> </td>
+<td> Шлюз джерел даних </td>
+<td> 1.7 </td>
+<td> GPL2 </td>
+<td> daq_DAQGate.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Роман Савоченко </td>
+<td> Дозволяє виконувати шлюзування джерел даних віддалених OpenSCADA станцій на локальну.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="tocnumber">1</span> <span class="toctext">Контролер даних</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Параметри</span></a></li>
+</ul>
+</div>
+
+<p>Основною функцією цього модуля є відображення даних підсистеми "Збір даних" віддалених OpenSCADA станцій на локальні. В своїй роботі модуль використовує власний протокол OpenSCADA (SelfSystem) та сервісні функції підсистеми "Збір даних".
+</p><p>Модулем реалізуються наступні функції:
+</p>
+<ul><li> Відображення структури параметрів підсистеми "Збір даних" віддаленої станції. Структура при роботі може періодично синхронізуватися.</li>
+<li> Доступ до конфігурації параметрів. Конфігурація параметрів контролерів віддалених станцій прозоро відображається, що дозволяє міняти їх віддалено.</li>
+<li> Доступ до поточних значень атрибутів параметрів та можливість їх модифікації. Значення атрибутів параметрів оновлюються з періодичністю виконання локального контролеру. Запити на модифікацію атрибутів транслюються на віддалену станцію.</li>
+<li> Відображення архівів значень окремих атрибутів параметрів. Реалізовано відображення архівів двома способами. Перший спосіб передбачає створення локального архіву для атрибута та його синхронізацію з віддаленим, при цьому підтримується відновлення архіву на час зупинки станції. Другий спосіб передбачає трансляцію запитів локального архіву до архіву віддаленої станції.</li>
+<li> Відображення повідомлень обраних джерел даних віддаленої станції в локальному архіві повідомлень з префіксом "<b>{Станція}:</b>", включаючи й порушення (повідомлення з негативним рівнем). </li>
+<li> Надання реалізації механізму вертикального резервування, а саме можливість відображення даних з декількох станцій одного рівня.</li>
+<li> Реалізація функції горизонтального резервування, а саме спільної роботи з віддаленою станцією цього ж рівня.</li></ul>
+<p>Використання доступних схем резервування наочно представлено на рис.1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:569px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_red_uk.png"><img class="thumbimage" height="378" src="../files/DAQ_red_uk.png" width="567" /></a>  <div class="thumbcaption">Рис.1. Горизонтальне та вертикальне резервування.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">1</span> Контролер даних</span></h2>
+<p>Для додання джерела даних створюється та налаштовується об'єкт контролеру у системі OpenSCADA. Приклад вкладки конфігурації контролеру даного типу зображено на рис.2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:866px;"><a class="image" href="http://oscada.org/wiki/File:DAQGate_tr_cntr_uk.png"><img class="thumbimage" height="768" src="../files/DAQGate_tr_cntr_uk.png" width="864" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфігурації контролеру.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> Стан контролеру, а саме: Статус: "Включено", Запущено" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис контролеру.</li>
+<li> Стан, в який переводити контролер при завантажені: "Включено" та "Запущено".</li>
+<li> Таблиця для зберігання кешу параметрів, які створюються навіть при відсутності джерела даних.</li>
+<li> Політика планування та пріоритет задачі збору даних.</li>
+<li> Інтервал часу повторення спроби відновлення зв'язку із втраченою станцією в секундах.</li>
+<li> Максимальна глибина даних архіву значень та повідомлень для відновлення при запуску, в годинах. Нуль для вимкнення доступу до архівів.</li>
+<li> Рівень запитаних повідомлень джерел даних.</li>
+<li> Період синхронізації з віддаленою станцією в секундах. Нуль для відключення періодичної синхронізації.</li>
+<li> Перелік віддалених станцій що відображаються. Декілька станцій у переліку включають механізм вертикального резервування.</li>
+<li> Перелік контролерів та параметрів що відображаються. У переліку можна вказувати як тільки контролери, для відображення всіх їх параметрів, так і окремо взяті параметри.</li>
+<li> Команда переходу до конфігурації переліку віддалених станцій.</li>
+<li> Здійснювати автоматичне видалення параметрів та атрибутів для актуалізації до поточного стану. У виробничому режимі краще цю опцію вимикати!</li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">2</span> Параметри</span></h2>
+<p>Модуль хоча й надає можливість створення параметрів вручну, однак це позбавлено сенсу оскільки такий параметр, при відсутності його на сервері, буде порожнім. Всі параметри створюються автоматично з урахуванням переліку контролерів та параметрів для відображення. Параметри можуть бути збережені в кеш для наступного їх створення навіть при відсутності зв'язку із сервером. Приклад відображеного параметра наведено на рис. 3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:820px;"><a class="image" href="http://oscada.org/wiki/File:DAQGate_tr_prm_uk.png"><img class="thumbimage" height="648" src="../files/DAQGate_tr_prm_uk.png" width="818" /></a>  <div class="thumbcaption">Рис.3. Вкладка конфігурації відображеного параметру.</div></div></div></div>
+
+
+
+
+
+
+</div></body>
+</html>

@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/Собственный Системный Протокол - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/Собственный Системный Протокол</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSelfSystem&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SelfSystem" title="Modules/SelfSystem">Modules/SelfSystem</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SelfSystem" title="Modules/SelfSystem (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SelfSystem/uk" title="Модулі/Власний Системний Протокол (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a> </td>
+<td> Собственный протокол OpenSCADA </td>
+<td> 1.2 </td>
+<td> GPL2 </td>
+<td> prot_SelfSystem.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Протокол </td>
+<td> Роман Савоченко </td>
+<td> Предоставляет собственный протокол основанный на XML и интерфейсе управления OpenSCADA.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.A1.D0.B8.D0.BD.D1.82.D0.B0.D0.BA.D1.81.D0.B8.D1.81_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0"><span class="tocnumber">1</span> <span class="toctext">Синтаксис протокола</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.92.D0.BD.D1.83.D1.82.D1.80.D0.B5.D0.BD.D0.BD.D1.8F.D1.8F_.D1.81.D1.82.D1.80.D1.83.D0.BA.D1.82.D1.83.D1.80.D0.B0_.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D1.8F.D1.89.D0.B5.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0"><span class="tocnumber">2</span> <span class="toctext">Внутренняя структура исходящего протокола</span></a></li>
+</ul>
+</div>
+
+<p>Модуль транспортного протокола SelfSystem предназначен для отражения интерфейса управления системы OpenSCADA в сеть с целью предоставления возможности внешним системам взаимодействовать с системой OpenSCADA, а также для взаимодействия между собой станций, построенных на основе OpenSCADA.
+</p><p>Первым опытом использования функций данного модуля стала поддержка возможности удалённого конфигурирования одной OpenSCADA станции из другой через сеть посредством модуля конфигурирования QTCfg.
+</p>
+<h2><span class="mw-headline" id=".D0.A1.D0.B8.D0.BD.D1.82.D0.B0.D0.BA.D1.81.D0.B8.D1.81_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0"><span class="mw-headline-number">1</span> Синтаксис протокола</span></h2>
+<p>Протокол построен по механизму запрос-ответ. Запросы и их структура сведены в таблице 1.
+</p><p><b>Таблица 1</b> Структура запроса.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Запросы
+</th></tr>
+<tr>
+<td>
+<p><b>REQ:</b> "SES_OPEN {user} {password}\n"<br />
+<b>REZ OK:</b> "REZ 0 {ses_id}\n"<br />
+<b>REZ ERR:</b> "REZ 1 Auth error. User or password error.\n"
+Запрос на открытие сессии от имени пользователя <i>user</i> с паролем <i>password</i>. В случае удачи будет получен идентификатор сессии, иначе — код и сообщение об ошибке.
+</p>
+</td></tr>
+<tr>
+<td>
+<p><b>REQ:</b> "SES_CLOSE {ses_id}\n"<br />
+<b>REZ:</b> "REZ 0\n"
+Закрытие сессии. Результат всегда удачен.
+</p>
+</td></tr>
+<tr>
+<td>
+<p><b>REQ 1:</b> "REQ {ses_id} {req_size}\n{control interface command}"<br />
+<b>REQ 2:</b> "REQDIR {user} {password} {req_size}\n{control interface command}"<br />
+<b>REZ OK:</b> "REZ 0 {rez_size}\n{control interface command result}"<br />
+<b>REZ ERR:</b> "REZ 1 Auth error. Session no valid.\n"<br />
+<b>REZ ERR:</b> "REZ 2 {control interface err}"
+Основные запросы: сеансовый и прямой. Реализуются путём отправки стандартной команды <a class="external text" href="http://wiki.oscada.org/Doc/API" rel="nofollow noreferrer noopener" target="_blank">интерфейса управления OpenSCADA</a> в поле <i>control interface command</i>. В результате будет получен ответ интерфейса управления <i>control interface command result</i> или одна из ошибок.
+</p>
+</td></tr>
+<tr>
+<td>
+<p><b>REQ:</b> "ERR REQUEST"<br />
+<b>REZ ERR:</b> "REZ 3 Command format error.\n"
+Любой некорректный запрос.
+</p>
+</td></tr></table>
+<p>Протоколом поддерживается возможность упаковки трафика. Пакуются только данные интерфейса управления <i>control interface command</i> и <i>control interface command result</i>. Факт прихода упакованного запроса или ответа определяется отрицательным значением размера запроса <i>req_size</i> или ответа <i>rez_size</i>.
+</p><p>Для управления параметрами упаковки модулем предоставляется форма конфигурации (рис.1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:876px;"><a class="image" href="http://oscada.org/wiki/File:SelfSystem_compr_ru.png"><img class="thumbimage" height="514" src="../files/SelfSystem_compr_ru.png" width="874" /></a>  <div class="thumbcaption">Рис.1. Форма конфигурации параметров модуля.</div></div></div></div>
+<p>На данной форме можно:
+</p>
+<ul><li> Изучить активные сеансы аутентификации.</li>
+<li> Указать время жизни сессии в минутах.</li>
+<li> Указать предел подключений одного пользователя от одного хоста.</li>
+<li> Указать уровень компрессии протокола в диапазоне от 0 до 9 (0-отключение компрессии, -1-оптимальный по производительности и качеству уровень компрессии).</li>
+<li> Указать нижнюю границу компрессии — порог использования компрессии. Выключает компрессию мелких запросов.</li></ul>
+<h2><span class="mw-headline" id=".D0.92.D0.BD.D1.83.D1.82.D1.80.D0.B5.D0.BD.D0.BD.D1.8F.D1.8F_.D1.81.D1.82.D1.80.D1.83.D0.BA.D1.82.D1.83.D1.80.D0.B0_.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D1.8F.D1.89.D0.B5.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0"><span class="mw-headline-number">2</span> Внутренняя структура исходящего протокола</span></h2>
+<p>Внутренняя структура формируется деревом XML запросов языка <a class="external text" href="http://wiki.oscada.org/Doc/API#h154-1" rel="nofollow noreferrer noopener" target="_blank">интерфейса управления OpenSCADA</a> с резервированием дополнительных служебных атрибутов протокола в корневом теге:
+</p>
+<dl><dd><i>rqDir</i> — признак отправки сообщения, минуя процедуру открытия сеанса (0-открывать сеанс, 1-отсылать сразу);</dd>
+<dd><i>rqUser</i> — пользователь;</dd>
+<dd><i>rqPass</i> — пароль;</dd>
+<dd><i>rqAuthForce</i> — принудительно обновить аутентификацию;</dd>
+<dd><i>conTm</i> — принудительный таймаут подключения.</dd></dl>
+<p>Результатом запроса также является дерево XML языка интерфейса управления OpenSCADA.
+</p>
+
+
+
+
+
+</div></body>
+</html>

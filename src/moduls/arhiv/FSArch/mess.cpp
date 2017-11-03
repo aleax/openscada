@@ -241,10 +241,16 @@ void ModMArch::checkArchivator( bool now )
 	while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
 	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
 	    string NameArhFile = addr() + "/" + scan_rez->d_name;
+
 	    stat(NameArhFile.c_str(), &file_stat);
 	    if((file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0) continue;
-	    // Check for info files
+
+	    // Remove for empty files mostly after wrong or limited FSs
+	    if(file_stat.st_size == 0) { remove(NameArhFile.c_str()); remove((NameArhFile+".info").c_str()); continue; }
+
+	    // Pass info and other improper files
 	    if(NameArhFile.compare(NameArhFile.size()-4,4,".msg") != 0 && NameArhFile.compare(NameArhFile.size()-7,7,".msg.gz") != 0) continue;
+
 	    // Check all files
 	    unsigned iF;
 	    res.request(false);
@@ -473,7 +479,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 //* FSArch::MFileArch - Messages archivator file  *
 //*************************************************
 MFileArch::MFileArch( ModMArch *owner ) :
-    scan(false), mXML(true), mSize(0), mChars("UTF-8"), mErr(false), mWrite(false), mLoad(false), mPack(false),
+    dtRes(true), scan(false), mName(dtRes), mXML(true), mSize(0), mChars("UTF-8"), mErr(false), mWrite(false), mLoad(false), mPack(false),
     mBeg(0), mEnd(0), mNode(NULL), mOwner(owner)
 {
     cach_pr.tm = cach_pr.off = 0;
@@ -481,9 +487,10 @@ MFileArch::MFileArch( ModMArch *owner ) :
 }
 
 MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const string &icharset, bool ixml ) :
-    scan(false), mName(iname), mXML(ixml), mSize(0), mChars(icharset), mErr(false), mWrite(false), mLoad(false), mPack(false),
+    dtRes(true), scan(false), mName(dtRes), mXML(ixml), mSize(0), mChars(icharset), mErr(false), mWrite(false), mLoad(false), mPack(false),
     mBeg(ibeg), mEnd(ibeg), mNode(NULL), mOwner(iowner)
 {
+    mName = iname;
     cach_pr.tm = cach_pr.off = 0;
 
     int hd = open(name().c_str(), O_RDWR|O_CREAT|O_TRUNC, 0666);
@@ -508,9 +515,10 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
     }
     else {
 	//Prepare plain text file
-	char s_buf[STR_BUF_LEN];
-	snprintf(s_buf, sizeof(s_buf), "%s %s %s %8x %8x\n", MOD_ID, MOD_VER, mChars.c_str(), (unsigned int)mBeg, (unsigned int)mEnd);
-	fOK = (write(hd,s_buf,strlen(s_buf)) == (int)strlen(s_buf));
+	int bufSz = STR_BUF_LEN;
+	char buf[bufSz+1]; buf[bufSz] = 0;
+	snprintf(buf, bufSz, "%s %s %s %8x %8x\n", MOD_ID, MOD_VER, mChars.c_str(), (unsigned int)mBeg, (unsigned int)mEnd);
+	fOK = (write(hd,buf,strlen(buf)) == (int)strlen(buf));
     }
     close(hd);
     //if(!fOK) throw owner().err_sys(_("Write to file '%s' error"), name().c_str());
@@ -539,7 +547,8 @@ void MFileArch::delFile( )
 void MFileArch::attach( const string &iname, bool full )
 {
     FILE *f = NULL;
-    char buf[STR_BUF_LEN];
+    int bufSz = STR_BUF_LEN;
+    char buf[bufSz+1]; buf[bufSz] = 0;
     ResAlloc res(mRes, true);
 
     mErr = false;
@@ -555,8 +564,8 @@ void MFileArch::attach( const string &iname, bool full )
 	    // Get archive info from info file
 	    int hd = open((name()+".info").c_str(), O_RDONLY);
 	    if(hd > 0) {
-		int rsz = read(hd, buf, sizeof(buf));
-		if(rsz > 0 && rsz < (int)sizeof(buf)) {
+		int rsz = read(hd, buf, bufSz);
+		if(rsz > 0 && rsz < bufSz) {
 		    buf[rsz] = 0;
 		    char bChars[100];
 		    if(sscanf(buf,"%lx %lx %99s %hhd",&mBeg,&mEnd,bChars,&mXML) == 4) { mChars = bChars; infoOK = true; }
@@ -593,7 +602,7 @@ void MFileArch::attach( const string &iname, bool full )
 
 	char s_char[100];
 	//Check to plain text archive
-	if(fgets(buf,sizeof(buf),f) == NULL)
+	if(fgets(buf,bufSz,f) == NULL)
 	    throw owner().err_sys(_("File '%s' header error!"), name().c_str());
 	string s_tmpl = MOD_ID "%*s %99s %x %x";
 	if(sscanf(buf,s_tmpl.c_str(),s_char,&mBeg,&mEnd) == 3) {
@@ -619,7 +628,7 @@ void MFileArch::attach( const string &iname, bool full )
 		string s_buf;
 
 		// Read full file to buffer
-		while((r_cnt=fread(buf,1,sizeof(buf),f))) s_buf.append(buf,r_cnt);
+		while((r_cnt=fread(buf,1,bufSz,f))) s_buf.append(buf, r_cnt);
 		fclose(f); f = NULL;
 
 		// Parse full file
@@ -709,7 +718,7 @@ bool MFileArch::put( TMess::SRec mess )
 	res.release(); attach(mName); res.request(true);
 	if(mErr || !mLoad) {
 	    mErr = true;
-	    throw owner().err_sys(_("Archive file '%s' isn't attached!"), mName.c_str());
+	    throw owner().err_sys(_("Archive file '%s' isn't attached!"), name().c_str());
 	}
     }
 
@@ -745,12 +754,13 @@ bool MFileArch::put( TMess::SRec mess )
     else {
 	unsigned int tTm, tTmU;
 	long mv_beg = 0, mv_off = 0;
-	char buf[STR_BUF_LEN];
+	int bufSz = STR_BUF_LEN;
+	char buf[bufSz+1]; buf[bufSz] = 0;
 	//Check to empty category and message
 	if(!mess.categ.size())	mess.categ = " ";
 	if(!mess.mess.size())	mess.mess = " ";
 	//Open file
-	FILE *f = fopen(mName.c_str(), "r+");
+	FILE *f = fopen(name().c_str(), "r+");
 	if(f == NULL) { mErr = true; return false; }
 	bool fOK = true;
 
@@ -764,9 +774,9 @@ bool MFileArch::put( TMess::SRec mess )
 	if(mess.time <= mEnd && (owner().prevDbl() || owner().prevDblTmCatLev())) {
 	    long c_off = cacheGet(FTM(mess));
 	    if(c_off) fseek(f, c_off, SEEK_SET);
-	    else fOK = (fgets(buf,sizeof(buf),f) != NULL);
+	    else fOK = (fgets(buf,bufSz,f) != NULL);
 
-	    while(fgets(buf,sizeof(buf),f) != NULL) {
+	    while(fgets(buf,bufSz,f) != NULL) {
 		int tLev = 0;
 		char tCat[1001];
 		if((sscanf(buf,"%x:%d %d %1000s",&tTm,&tTmU,&tLev,tCat)) < 4) continue;
@@ -792,7 +802,7 @@ bool MFileArch::put( TMess::SRec mess )
 	    //Update header
 	    if(mess.time != mEnd) {
 		mEnd = mess.time;
-		snprintf(buf, sizeof(buf), "%s %s %s %8x %8x\n", MOD_ID, MOD_VER, mChars.c_str(), (unsigned int)mBeg, (unsigned int)mEnd);
+		snprintf(buf, bufSz, "%s %s %s %8x %8x\n", MOD_ID, MOD_VER, mChars.c_str(), (unsigned int)mBeg, (unsigned int)mEnd);
 		fOK = (fwrite(buf,strlen(buf),1,f) == 1);
 	    }
 	    //Put mess to end file
@@ -805,12 +815,12 @@ bool MFileArch::put( TMess::SRec mess )
 		// Get want position
 		long c_off = cacheGet(FTM(mess));
 		if(c_off) fseek(f,c_off,SEEK_SET);
-		else fOK = (fgets(buf,sizeof(buf),f) != NULL);
+		else fOK = (fgets(buf,bufSz,f) != NULL);
 
 		// Check mess records
 		int pass_cnt = 0;
 		time_t last_tm = 0;
-		while(!mv_beg && fgets(buf,sizeof(buf),f) != NULL) {
+		while(!mv_beg && fgets(buf,bufSz,f) != NULL) {
 		    sscanf(buf, "%x:%d %*d", &tTm, &tTmU);
 		    if(tTm > mess.time || (tTm == mess.time && (int)tTmU > mess.utime)) mv_beg = ftell(f) - strlen(buf);
 		    //  Add too big position to cache
@@ -827,12 +837,12 @@ bool MFileArch::put( TMess::SRec mess )
 		    int mv_end = ftell(f);
 		    int beg_cur;
 		    do {
-			beg_cur = ((mv_end-mv_beg) >= (int)sizeof(buf)) ? mv_end-sizeof(buf) : mv_beg;
+			beg_cur = ((mv_end-mv_beg) >= bufSz) ? mv_end-bufSz : mv_beg;
 			fseek(f, beg_cur, SEEK_SET);
 			fOK = fOK && (fread(buf, mv_end-beg_cur,1,f) == 1);
 			fseek(f, beg_cur+mv_off, SEEK_SET);
 			fOK = fOK && (fwrite(buf,mv_end-beg_cur,1,f) == 1);
-			mv_end -= sizeof(buf);
+			mv_end -= bufSz;
 		    } while(fOK && beg_cur != mv_beg);
 		}
 		//  Write a new message
@@ -846,7 +856,7 @@ bool MFileArch::put( TMess::SRec mess )
 	fseek(f, 0, SEEK_END);
 	mSize = ftell(f);
 	fclose(f);
-	if(!fOK) owner().mess_sys(TMess::Error, _("Write to the archive file '%s' error: %s(%d)"), mName.c_str(), strerror(errno), errno);
+	if(!fOK) owner().mess_sys(TMess::Error, _("Write to the archive file '%s' error: %s(%d)"), name().c_str(), strerror(errno), errno);
 
 	return fOK;
     }
@@ -909,20 +919,21 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 	}
     }
     else {
-	char buf[102000];
+	int bufSz = 102000;
+	char buf[bufSz+1]; buf[bufSz] = 0;
 	//Open file
-	FILE *f = fopen(mName.c_str(), "r");
+	FILE *f = fopen(name().c_str(), "r");
 	if(f == NULL) { mErr = true; return eTm; }
 
 	//Get want position
 	bool rdOK = true;
 	long c_off = cacheGet((int64_t)bTm*1000000);
 	if(c_off) fseek(f, c_off, SEEK_SET);
-	else rdOK = (fgets(buf,sizeof(buf),f) != NULL);
+	else rdOK = (fgets(buf,bufSz,f) != NULL);
 	//Check mess records
 	int pass_cnt = 0;
 	time_t last_tm = 0;
-	while((rdOK=(fgets(buf,sizeof(buf),f)!=NULL)) && time(NULL) < upTo) {
+	while((rdOK=(fgets(buf,bufSz,f)!=NULL)) && time(NULL) < upTo) {
 	    char stm[51]; int off = 0, bLev;
 	    if(sscanf(buf,"%50s %d",stm,&bLev) != 2) continue;
 	    bRec.level = (TMess::Type)bLev;
@@ -968,12 +979,12 @@ void MFileArch::check( bool free )
     ResAlloc res(mRes, true);
     if(!mErr && mLoad && xmlM()) {
 	if(mWrite) {
-	    int hd = open(mName.c_str(), O_RDWR|O_TRUNC);
+	    int hd = open(name().c_str(), O_RDWR|O_TRUNC);
 	    if(hd > 0) {
 		string x_cf = mNode->save(XMLNode::XMLHeader|XMLNode::BrOpenPrev);
 		mSize = x_cf.size();
 		mWrite = !(write(hd,x_cf.c_str(),mSize) == mSize);
-		if(mWrite) owner().mess_sys(TMess::Error, _("Write to '%s' error!"), mName.c_str());
+		if(mWrite) owner().mess_sys(TMess::Error, _("Write to '%s' error!"), name().c_str());
 		close(hd);
 	    }
 	}

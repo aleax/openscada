@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/DBF - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/DBF</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FDBF&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/DBF" title="Modules/DBF">Modules/DBF</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DBF" title="Modules/DBF (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DBF/uk" title="Модулі/DBF (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/DBF.html" title="Special:MyLanguage/Modules/DBF">DBF</a> </td>
+<td> БД DBF </td>
+<td> 2.2 </td>
+<td> GPL2 </td>
+<td> bd_DBF.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> БД </td>
+<td> Роман Савоченко </td>
+<td> Модуль БД. Предоставляет поддержку *.dbf файлов, версии 3.0.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="tocnumber">1</span> <span class="toctext">Операции над БД</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D0.B5.D0.B9"><span class="tocnumber">2</span> <span class="toctext">Операции над таблицей</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D1.81.D0.BE.D0.B4.D0.B5.D1.80.D0.B6.D0.B8.D0.BC.D1.8B.D0.BC_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8B"><span class="tocnumber">3</span> <span class="toctext">Операции над содержимым таблицы</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.9F.D1.80.D0.BE.D0.B8.D0.B7.D0.B2.D0.BE.D0.B4.D0.B8.D1.82.D0.B5.D0.BB.D1.8C.D0.BD.D0.BE.D1.81.D1.82.D1.8C_.D0.91.D0.94"><span class="tocnumber">4</span> <span class="toctext">Производительность БД</span></a></li>
+</ul>
+</div>
+
+<p>Модуль предназначен для предоставление в систему OpenSCADA поддержки файлов БД типа *.dbf. Модуль основан на библиотеке для работы с dbf файлами ПО "Complex2" фирмы НИП "ДIЯ". Модуль позволяет выполнять действия над базами данных, таблицами и содержимым таблиц.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="mw-headline-number">1</span> Операции над БД</span></h2>
+<p>Поддерживаются операции открытия и закрытия БД с возможностью создания новой БД при открытии и удаления существующей при закрытии. В терминах подсистемы "БД" системы OpenSCADA открытием БД является её регистрация для последующего использования в системе.
+</p><p>Под БД, в случае с dbf-файлами, подразумевается директория, содержащая dbf-файлы. Следовательно, операции создания и удаления БД - создают и удаляют директории, где таблицы (dbf-файлы) хранятся. В роли адреса БД выступает полное имя директории с dbf-файлами. Доступ к БД определяется системными правами доступа к директории.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D0.B5.D0.B9"><span class="mw-headline-number">2</span> Операции над таблицей</span></h2>
+<p>Поддерживаются операции открытия и закрытия таблицы с возможностью создания новой таблицы при открытии и удаления существующей при закрытии.
+</p><p>Собственно dbf-файл и является таблицей. Создание и удаления таблицы подразумевает создание и удаление dbf-файла. Имя таблицы представляет собой имя dbf-файла в директории БД. Права доступа к таблице определяются правами доступа к dbf-файлу.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D1.81.D0.BE.D0.B4.D0.B5.D1.80.D0.B6.D0.B8.D0.BC.D1.8B.D0.BC_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8B"><span class="mw-headline-number">3</span> Операции над содержимым таблицы</span></h2>
+<ul><li> сканирование записей таблицы;</li>
+<li> запрос значений указанных записей;</li>
+<li> установка значений указанных записей;</li>
+<li> удаление записей.</li></ul>
+<p>API подсистемы "БД" предполагает доступ к содержимому таблицы по значению ключевого(ых) поля(ей). Так, операция запроса записи подразумевает предварительную установку ключевых колонок объекта TConfig, по которым и будет выполнен запрос. Создание новой записи(строки) производится операцией установки значений записи, которая отсутствует.
+</p><p>Модуль позволяет динамически менять структуру таблиц БД DBF. Так, в случае несоответствия структуры таблицы и структуры устанавливаемой записи структура таблицы будет приведена к требуемой структуре записи. В случае запроса значений записи и несоответствия структур записи и таблицы будут получены только значения общих элементов записи и таблицы. Модуль не отслеживает порядка расположения элементов в записи и структуре таблицы!
+</p><p>При доступе к значениям таблиц используется синхронизация путём захвата ресурса на доступ к таблице. Это позволяет избежать разрушения данных в случае многопоточного доступа!
+</p><p>Типы элементов dbf-файлов следующим образом соответствуют типам элементов системы OpenSCADA:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Типы полей системы OpenSCADA </th>
+<th> Тип поля dbf-файла
+</th></tr>
+<tr>
+<td>TFld::String </td>
+<td> "С"
+</td></tr>
+<tr>
+<td>TFld::Integer, TFld::Real </td>
+<td> "N"
+</td></tr>
+<tr>
+<td>TFld::Boolean </td>
+<td> "L"
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B8.D0.B7.D0.B2.D0.BE.D0.B4.D0.B8.D1.82.D0.B5.D0.BB.D1.8C.D0.BD.D0.BE.D1.81.D1.82.D1.8C_.D0.91.D0.94"><span class="mw-headline-number">4</span> Производительность БД</span></h2>
+<p>Замер производительности БД выполнялся тестом "БД", модуля системных тестов "SystemTests" путём выполнения операций над записями структурой: "<b>name char (20), descr char (50), val double (10.2), id int (7), stat bool, reqKey string, reqVal string</b>".
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Operation </th>
+<th> K8-3000+,256M,120G </th>
+<th> Nokia N800, SD 2G </th>
+<th> Intel(R) Core(TM) i3 CPU 1.33GHz, 3G, HDD
+</th></tr>
+<tr>
+<td> <i>Creation of the 1000 records (sec.):</i>  </td>
+<td> 1.07 </td>
+<td> 37 </td>
+<td> 0.382
+</td></tr>
+<tr>
+<td> <i>Updating of the 1000 records (sec.):</i> </td>
+<td> 1.6 </td>
+<td> 33.8 </td>
+<td> 0.368
+</td></tr>
+<tr>
+<td> <i>Getting of the 1000 records (sec.):</i> </td>
+<td> 1.0 </td>
+<td> 34.32 </td>
+<td> 0.362
+</td></tr>
+<tr>
+<td> <i>Seeking of the 1000 records (sec.):</i> </td>
+<td> - </td>
+<td> - </td>
+<td> 0.064
+</td></tr>
+<tr>
+<td> <i>Seeking in preload of the 1000 records (sec.):</i> </td>
+<td> - </td>
+<td> - </td>
+<td> 0.064
+</td></tr>
+<tr>
+<td> <i>Deleting of the 1000 record (sec.):</i> </td>
+<td> 0.95 </td>
+<td> 37 </td>
+<td> 0.371
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

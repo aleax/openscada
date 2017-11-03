@@ -1,0 +1,235 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/MySQL - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/MySQL</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FMySQL&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/MySQL" title="Modules/MySQL">Modules/MySQL</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/MySQL" title="Modules/MySQL (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/MySQL/uk" title="Модулі/MySQL (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a> </td>
+<td> БД MySQL  </td>
+<td> 2.6 </td>
+<td> GPL2 </td>
+<td> bd_MySQL.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> БД </td>
+<td> Роман Савоченко </td>
+<td> Модуль БД. Предоставляет поддержку БД MySQL.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="tocnumber">1</span> <span class="toctext">Операции над БД</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D0.B5.D0.B9"><span class="tocnumber">2</span> <span class="toctext">Операции над таблицей</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D1.81.D0.BE.D0.B4.D0.B5.D1.80.D0.B6.D0.B8.D0.BC.D1.8B.D0.BC_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8B"><span class="tocnumber">3</span> <span class="toctext">Операции над содержимым таблицы</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.94.D0.BE.D1.81.D1.82.D1.83.D0.BF_.D0.BA_.D0.91.D0.94"><span class="tocnumber">4</span> <span class="toctext">Доступ к БД</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.9F.D1.80.D0.BE.D0.B8.D0.B7.D0.B2.D0.BE.D0.B4.D0.B8.D1.82.D0.B5.D0.BB.D1.8C.D0.BD.D0.BE.D1.81.D1.82.D1.8C_.D0.91.D0.94"><span class="tocnumber">5</span> <span class="toctext">Производительность БД</span></a></li>
+</ul>
+</div>
+
+<p>Модуль "MySQL" предоставляет в OpenSCADA поддержку БД MySQL. БД MySQL является мощной реляционной и многоплатформенной БД, доступной по свободной лицензии. Настоящим разработчиком <a class="external text" href="http://www.mysql.com" rel="nofollow noreferrer noopener" target="_blank">БД MySQL</a> является <a class="external text" href="http://oracle.com" rel="nofollow noreferrer noopener" target="_blank">Корпорация Oracle</a>. Полностью свободной реализацией MySQL является проект <a class="external text" href="http://mariadb.org" rel="nofollow noreferrer noopener" target="_blank">MariaDB</a>. Модуль основан на библиотеке API БД MySQL на языке "С". Модуль позволяет выполнять действия над базами данных, таблицами и содержимым таблиц.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="mw-headline-number">1</span> Операции над БД</span></h2>
+<p>Поддерживаются операции открытия и закрытия БД с возможностью создания новой БД при открытии и удаления существующей при закрытии. В терминах подсистемы "БД" системы OpenSCADA открытием БД является её регистрация для последующего использования в системе. Также поддерживается операция запроса списка таблиц в БД.
+</p><p>БД MySQL адресуется строкой следующего типа: "<b>{host};{user};{pass};{db};{port}[;{u_sock}[;{charset-collation}[;{tms}]]]</b>". Где:
+</p>
+<ul><li> <i>host</i> — имя хоста на котором работает сервер БД MySQL;</li>
+<li> <i>user</i> — имя пользователя БД;</li>
+<li> <i>pass</i> — пароль пользователя для доступа к БД;</li>
+<li> <i>bd</i> — имя БД;</li>
+<li> <i>port</i> — порт, который слушает сервер БД (по умолчанию 3306);</li>
+<li> <i>u_sock</i> — имя UNIX-сокета в случае локального доступа к БД (/var/lib/mysql/mysql.sock);</li>
+<li> <i>charset-collation-engine</i> — <a class="external text" href="https://dev.mysql.com/doc/refman/5.5/en/charset-charsets.html" rel="nofollow noreferrer noopener" target="_blank">таблица символов, режим сравнения</a> и <a class="external text" href="https://dev.mysql.com/doc/refman/5.5/en/storage-engines.html" rel="nofollow noreferrer noopener" target="_blank">движок хранилища</a> БД для "CREATE DATABASE" и "SET";</li>
+<li> <i>tms</i> — таймауты MySQL в формате "<b>{connect},{read},{write}</b>" и секундах.</li></ul>
+<p>В случае локального доступа к БД, в пределах одного хоста, нужно использовать UNIX сокет. Например: "<b>;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8-utf8_general_ci-MyISAM;5,2,2</b>"
+</p><p>В случае удалённого доступа к БД нужно использовать имя хоста и порт сервера БД. Например: "<b>server.nm.org;roman;123456;OpenSCADA;3306</b>"
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D0.B5.D0.B9"><span class="mw-headline-number">2</span> Операции над таблицей</span></h2>
+<p>Поддерживаются операции открытия, закрытия таблицы с возможностью создания новой таблицы при открытии и удаления существующей при закрытии, а также запрос структуры таблицы.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D1.81.D0.BE.D0.B4.D0.B5.D1.80.D0.B6.D0.B8.D0.BC.D1.8B.D0.BC_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8B"><span class="mw-headline-number">3</span> Операции над содержимым таблицы</span></h2>
+<ul><li> сканирование записей таблицы;</li>
+<li> запрос значений указанных записей;</li>
+<li> установка значения указанных записей;</li>
+<li> удаление записей.</li></ul>
+<p>API подсистемы "БД" предполагает доступ к содержимому таблицы по значению ключевого(ых) поля(ей). Так, операция запроса записи подразумевает предварительную установку ключевых колонок объекта TConfig, по которым будет выполнен запрос. Создание новой записи(строки) производится операцией установки значений записи, которая отсутствует.
+</p><p>Модуль позволяет динамически изменять структуру таблиц БД MySQL. Так, в случае несоответствия структуры таблицы и структуры устанавливаемой записи, структура таблицы будет приведена к требуемой структуре записи. В случае запроса значений записи и несоответствия структур записи и таблицы, будут получены только значения общих элементов записи и таблицы. Модуль не отслеживает порядок расположения элементов в записи и структуре таблицы!
+</p><p>Модулем реализуется механизм поддержки многоязыковых текстовых переменных. Для полей с многоязыковой текстовой переменной создаются колонки отдельных языков в формате <b>{lang}#{FldID}</b> (en#NAME). При этом базовая колонка содержит значение для базового языка. Колонки отдельных языков создаются по надобности, в момент сохранения в БД и при исполнении OpenSCADA в соответствующей локали. В случае отсутствия значения для конкретного языка будет использоваться значение для базового языка.
+</p><p>Типы элементов БД MySQL следующим образом соответствуют типам элементов системы OpenSCADA:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Типы полей системы OpenSCADA </th>
+<th> Типы полей БД MySQL
+</th></tr>
+<tr>
+<td>TFld::String </td>
+<td> char(n), text, mediumtext
+</td></tr>
+<tr>
+<td>TFld::Integer </td>
+<td> int(n), DATETIME [для полей с флагом TFld::DateTimeDec]
+</td></tr>
+<tr>
+<td>TFld::Real </td>
+<td> double(n,m)
+</td></tr>
+<tr>
+<td>TFld::Boolean </td>
+<td> tinyint(1)
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.94.D0.BE.D1.81.D1.82.D1.83.D0.BF_.D0.BA_.D0.91.D0.94"><span class="mw-headline-number">4</span> Доступ к БД</span></h2>
+<p>БД MySQL содержит мощный механизм разделения доступа, который заключается в выборочном указании доступа пользователя БД к отдельным SQL-командам. В таблице ниже перечислены операции над БД и требуемый доступ к командам для этих операций.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Операция </th>
+<th> SQL-команды
+</th></tr>
+<tr>
+<td>Создание БД и таблиц</td>
+<td>CREATE
+</td></tr>
+<tr>
+<td>Удаление БД и таблиц</td>
+<td>DROP
+</td></tr>
+<tr>
+<td>Добавление записей</td>
+<td>INSERT
+</td></tr>
+<tr>
+<td>Удаление записей</td>
+<td>DELETE
+</td></tr>
+<tr>
+<td>Получение значений записей</td>
+<td>SELECT
+</td></tr>
+<tr>
+<td>Установка значений записей</td>
+<td>UPDATE
+</td></tr>
+<tr>
+<td>Манипуляция структурой таблицы</td>
+<td>ALTER
+</td></tr></table>
+<p>Кратко рассмотрим процедуру первичной настройки сервера MySQL с целью подключения к нему с помощью данного модуля:
+</p>
+<ul>
+<li>Установка сервера СУБД MySQL в виде пакета или сборкой.</li>
+<li>Запуск сервера БД, если не запустился сразу:
+<pre style="white-space: pre-wrap;">
+$ service mysqld start</pre></li>
+<li>Устанавливаем нужный пароль для системного пользователя "root":
+<pre style="white-space: pre-wrap;">
+$ mysqladmin -u root password '123456'</pre></li>
+<ul><li> Подключаемся к серверу БД локально с помощью данного модуля, введя адрес БД: <b>"localhost;root;123456;test;;;utf8"</b></li></ul>
+<li>Разрешаем внешний доступ:<ul>
+ <li><b>my.cnf</b>: Меняем значение "bind-address" на "0.0.0.0" для доступа со всех интерфейсов.</li>
+ <li>Подключаемся к СУБД локально, для управления пользователями "$ mysql -u root -p":<ul>
+  <li>Получаем перечень пользователей: "SELECT Host,User,Password FROM mysql.user;"</li>
+  <li>Добавляем пользователя: "CREATE USER 'newuser'@'%' IDENTIFIED BY 'password';"</li>
+  <li>Удаляем пользователя: "DROP USER 'newuser'@'%';"</li>
+  <li>Изменить пароль: "UPDATE mysql.user SET Password=PASSWORD('newpass') WHERE User='newuser';</li>
+  <li>Устанавливаем пользователю все права: "GRANT ALL PRIVILEGES ON *.* TO 'newuser'@'%';"</li>
+  <li>Применяем привилегии: "FLUSH PRIVILEGES;"</li>
+ </ul></li>
+</ul></li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B8.D0.B7.D0.B2.D0.BE.D0.B4.D0.B8.D1.82.D0.B5.D0.BB.D1.8C.D0.BD.D0.BE.D1.81.D1.82.D1.8C_.D0.91.D0.94"><span class="mw-headline-number">5</span> Производительность БД</span></h2>
+<p>Замер производительности БД выполнялся тестом "БД" модуля системных тестов "SystemTests", путём выполнения операций над записями структурой: "<b>name char (20), descr char (50), val double (10.2), id int (7), stat bool, reqKey string, reqVal string</b>".
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Operation </th>
+<th> Nokia N800, MySQL 5.0.89 MyISAM WLAN
+</th>
+<th>
+<p>AMD Turion L625 1.6, 2G, MySQL<br />
+[5.0.51 MyISAM 100Base-TX; WLAN];<br />
+[5.1.62 MyISAM local; 100Base-TX];<br />
+[5.5.41 MyISAM local; InnoDB; MyISAM 100Base-TX; InnoDB]
+</p>
+</th>
+<th>
+<p>Intel(R) Core(TM) i3 CPU 1.33GHz, 3G, HDD<br />
+[5.5.49 MyISAM 100Base-TX; InnoDB]
+</p>
+</th></tr>
+<tr>
+<td> <i>Creation of the 1000 records (sec.):</i>  </td>
+<td> 4.53 </td>
+<td> [1.1; 3.6]; [0.7; 1.00]; [0.57; 0.73; 2.1; 2.0] </td>
+<td> [1.68; 1.56]
+</td></tr>
+<tr>
+<td> <i>Updating of the 1000 records (sec.):</i> </td>
+<td> 4.2 </td>
+<td> [1.12; 3.8]; [0.7; 1.07]; [0.6; 0.66; 2.0; 2.0] </td>
+<td> [1.75; 1.87]
+</td></tr>
+<tr>
+<td> <i>Getting of the 1000 records (sec.):</i> </td>
+<td> 2.88 </td>
+<td> [0.8; 2.1]; [0.38; 0.69]; [0.38; 0.4; 1.3; 1.4] </td>
+<td> [1.056; 1.12]
+</td></tr>
+<tr>
+<td> <i>Seeking of the 1000 records (sec.):</i> </td>
+<td> - </td>
+<td> - </td>
+<td> [1.89; 2.23]
+</td></tr>
+<tr>
+<td> <i>Seeking in preload of the 1000 records (sec.):</i> </td>
+<td> - </td>
+<td> - </td>
+<td> [0.03; 0.03]
+</td></tr>
+<tr>
+<td> <i>Deleting of the 1000 record (sec.):</i> </td>
+<td> 1.47 </td>
+<td> [0.43; 1.7]; [0.27; 0.42]; [0.23; 0.2; 0.79; 0.6] </td>
+<td> [0.66; 0.67]
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

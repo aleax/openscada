@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/FireBird - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/FireBird</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FFireBird&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/FireBird" title="Modules/FireBird">Modules/FireBird</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FireBird" title="Modules/FireBird (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FireBird/ru" title="Модули/FireBird (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/FireBird.html" title="Special:MyLanguage/Modules/FireBird">FireBird</a> </td>
+<td> БД FireBird </td>
+<td> 1.4 </td>
+<td> GPL2 </td>
+<td> bd_FireBird.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> БД </td>
+<td> Роман Савоченко </td>
+<td> Модуль БД. Надає підтримку БД FireBird.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="tocnumber">1</span> <span class="toctext">Операції над БД</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BD.D0.B0.D0.B4_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D0.B5.D1.8E"><span class="tocnumber">2</span> <span class="toctext">Операції над таблицею</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BD.D0.B0.D0.B4_.D0.B2.D0.BC.D1.96.D1.81.D1.82.D0.BE.D0.BC_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.96"><span class="tocnumber">3</span> <span class="toctext">Операції над вмістом таблиці</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.94.D0.BE.D1.81.D1.82.D1.83.D0.BF_.D0.B4.D0.BE_.D0.91.D0.94"><span class="tocnumber">4</span> <span class="toctext">Доступ до БД</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.9F.D1.80.D0.BE.D0.B4.D1.83.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.96.D1.81.D1.82.D1.8C_.D0.A1.D0.A3.D0.91.D0.94"><span class="tocnumber">5</span> <span class="toctext">Продуктивність СУБД</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Зауваження</span></a></li>
+</ul>
+</div>
+
+<p>Модуль "FireBird" надає до OpenSCADA підтримку БД FireBird та InterBase. БД FireBird є невеликою вбудованою БД з функціями мережевої БД, яка підтримує SQL-запити. БД FireBird побудована на основі комерційної СУБД Interbase та розповсюджується за вільною ліцензією. Ознайомитися з СУБД можна на сайті <a class="external free" href="http://www.firebirdsql.org" rel="nofollow noreferrer noopener" target="_blank">http://www.firebirdsql.org</a>. Модуль засновано на бібліотеці API виробника СУБД на мові "С". Модуль дозволяє виконувати дії над базами даних, таблицями та вмістом таблиць.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="mw-headline-number">1</span> Операції над БД</span></h2>
+<p>Підтримуються операції відкриття та закриття БД з можливістю створення нової БД при відкритті та видалення існуючої при закритті. У термінах підсистеми "БД" системи OpenSCADA відкриттям БД є її реєстрація для подальшого використання у системі. Також підтримується операція запиту переліку таблиць у БД.
+</p><p>БД FireBird адресується шляхом визначення ім'я файлу БД, користувача та пароля. Загалом адреса БД записується наступним чином: "<b>{file};{user};{pass}[;{conTm}]</b>".
+Де:
+</p>
+<ul><li> <i>file</i> — повне ім'я файлу БД;</li>
+<li> <i>user</i> — користувач БД, від ім'я якого здійснюється доступ;</li>
+<li> <i>pass</i> — пароль користувача, від ім'я якого здійснюється доступ;</li>
+<li> <i>conTm</i> — таймаут підключення (с).</li></ul>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BD.D0.B0.D0.B4_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D0.B5.D1.8E"><span class="mw-headline-number">2</span> Операції над таблицею</span></h2>
+<p>Підтримуються операції відкриття, закриття таблиці з можливістю створення нової таблиці при відкритті та видалення існуючої при закритті, а також запит структури таблиці.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BD.D0.B0.D0.B4_.D0.B2.D0.BC.D1.96.D1.81.D1.82.D0.BE.D0.BC_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.96"><span class="mw-headline-number">3</span> Операції над вмістом таблиці</span></h2>
+<ul><li> сканування записів таблиці;</li>
+<li> запит значень вказаних записів;</li>
+<li> встановлення значень вказаних записів;</li>
+<li> видалення записів.</li></ul>
+<p>API підсистеми "БД" надає доступ до вмісту таблиці за значенням ключового(их) поля(ів). Так, операція запиту запису передбачає попереднє встановлення ключових стовпчиків об'єкту TConfig, за якими буде здійснено запит. Створення нового запису(рядка) здійснюється операцією встановлення значень запису, які відсутні.
+</p><p>Модуль дозволяє динамічно змінювати структуру таблиць БД FireBird. Так, у випадку невідповідності структури таблиці та структури запису що встановлюється, структуру таблиці буде приведено до потрібної структури запису. У випадку запиту значень запису та невідповідності структур записи та таблиці, буде отримано тільки значення загальних елементів запису та таблиці. Модуль не відстежує послідовності розташування елементів у запису та структурі таблиці, крім цього операція зміни типу стовпчика не є безпечною та дані у стовпчиках що змінюються буде втрачено!
+</p><p>Модулем реалізується механізм підтримки багатомовних текстових змінних. Для полів з багатомовною текстовою змінною створюються стовпчики окремих мов у форматі <b>{lang}#{FldID}</b> (en#NAME). При цьому базовий стовпчик містить значення для базової мови. Стовпчики окремих мов створюються за потреби, у момент збереження до БД та при виконанні OpenSCADA у відповідній локалі. У випадку відсутності значення для конкретної мови буде використано значення для базової мови.
+</p><p>Типи елементів БД FireBird наступним чином відповідають типам елементів системи OpenSCADA:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Типи полів системи OpenSCADA </th>
+<th> Типи полів БД FireBird
+</th></tr>
+<tr>
+<td> TFld::String </td>
+<td> VARCHAR, BLOB SUBTYPE TEXT
+</td></tr>
+<tr>
+<td> TFld::Integer </td>
+<td> INTEGER
+</td></tr>
+<tr>
+<td> TFld::Real </td>
+<td> DOUBLE
+</td></tr>
+<tr>
+<td> TFld::Boolean </td>
+<td> SMALLINT
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.94.D0.BE.D1.81.D1.82.D1.83.D0.BF_.D0.B4.D0.BE_.D0.91.D0.94"><span class="mw-headline-number">4</span> Доступ до БД</span></h2>
+<p>Права доступу до БД визначаються правами файлу БД.
+</p><p>Коротко розглянемо процедуру первинного налаштування серверу FireBird з метою підключення до нього за допомогою цього модуля:
+</p>
+<ul>
+<li>Встановлення серверу СУБД FireBird у вигляді пакету або збіркою.</li>
+<li>Запуск серверу БД:
+<pre style="white-space: pre-wrap;">
+# Запуск класичного серверу
+$ service firebird start
+# Запуск у супер-сервері
+$ service xinetd restart</pre></li>
+<li>Встановлюємо потрібний пароль для системного користувача "sysdba":
+<pre style="white-space: pre-wrap;">
+$ gsec -user sysdba -pass masterkey -mo sysdba -pw 123456</pre></li>
+<li>Підключаймося до серверу БД за допомогою цього модуля, ввівши адресу БД: <b>"/var/tmp/test.fbd;sysdba;123456"</b></li>
+</ul>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B4.D1.83.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.96.D1.81.D1.82.D1.8C_.D0.A1.D0.A3.D0.91.D0.94"><span class="mw-headline-number">5</span> Продуктивність СУБД</span></h2>
+<p>Вимірювання продуктивності БД здійснювалося тестом "БД" модуля системних тестів "SystemTests" шляхом виконання операцій над записами структурою: "<b>name char (20), descr char (50), val double (10.2), id int (7), stat bool, reqKey string, reqVal string</b>".
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Operation </th>
+<th> AMD Turion L625 1.6, 2G, FireBird [2.1.3 Local SuperServer; 100Base-TX; 2.5.2 100Base-TX SuperServer ForcedWrites=Off; ForcedWrites=On] </th>
+<th> Intel(R) Core(TM) i3 CPU 1.33GHz, 3G, HDD [2.5.2 100Base-TX SuperServer ForcedWrites=Off; ForcedWrites=On]
+</th></tr>
+<tr>
+<td> <i>Creation of the 1000 records (sec.):</i> </td>
+<td> 0.93; 1.15; 4.4; 5.2 </td>
+<td> 3.68; 4.67
+</td></tr>
+<tr>
+<td> <i>Updating of the 1000 records (sec.):</i> </td>
+<td> 2.74; 2.94; 5.1; 5.2 </td>
+<td> 3.88; 4.54
+</td></tr>
+<tr>
+<td> <i>Getting of the 1000 records (sec.):</i> </td>
+<td> 1.64; 2.22; 5.0; <span style="color: red">27.8</span> </td>
+<td> 3.69; <span style="color: red">28.8</span>
+</td></tr>
+<tr>
+<td> <i>Seeking of the 1000 records (sec.):</i> </td>
+<td> - </td>
+<td> 5.36; <span style="color: red">32</span>
+</td></tr>
+<tr>
+<td> <i>Seeking in preload of the 1000 records (sec.):</i> </td>
+<td> - </td>
+<td> 0.045; 0.065
+</td></tr>
+<tr>
+<td> <i>Deleting of the 1000 record (sec.):</i> </td>
+<td> 0.65; 1.04; 2.0; 2.4 </td>
+<td> 1.69; 1.66
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">6</span> Зауваження</span></h2>
+<p>СУБД FireBird має багато архітектурних обмежень та проблем у зв'язку із спадковістю InterBase та батьківської ОС MS Windows, які заважають її широкому використанню у багатьох задачах. Відомі проблеми:
+</p>
+<ul><li> СУБД повільніше у порівнянні з MySQL або PostgreSQL, див. попередній розділ. Особливо у режимі ForcedWrites On(sync).</li>
+<li> СУБД має фіксоване обмеження на розмір виразу SQL у 65536 кБ, яке заважає розташуванню великого вмісту виключно за посередництвом SQL.</li>
+<li> Класичний сервер на Linux, у режимі вимикання ForcedWrites, може намертво зависати.</li>
+<li> Відсутній контроль за лімітами часу підключення, що призводить до тривалого та неконтрольованого очікування у клієнтських додатках.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

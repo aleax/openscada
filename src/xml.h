@@ -53,10 +53,10 @@ class XMLNode
 	    BrSpecBlkPast	= 0x10,		//Break after special block
 	    BrAllPast		= 0x1E,		//Break after all
 	    XMLHeader		= 0x20,		//Include standard XML header
-	    XHTMLHeader		= 0x40,		//Incluse standard XHTML header
+	    XHTMLHeader		= 0x40,		//Include standard XHTML header
 	    Clean		= 0x80,		//Clean service tags: <??>, <!-- -->
-	    MissTagEnc		= 0x100,	//Miss tag name encode
-	    MissAttrEnc		= 0x200		//Miss attribute name encode
+	    MissTagEnc		= 0x100,	//Miss for tag's name encoding
+	    MissAttrEnc		= 0x200		//Miss for attribute's name encoding
 	};
 
 	//Methods
@@ -102,7 +102,7 @@ class XMLNode
     private:
 	//Methods
 	void saveNode( unsigned flg, string &xml, const string &cp ) const;
-	void encode( const string &s, string &rez, bool text = false ) const;
+	void encode( const string &s, string &rez, bool text = false, unsigned flg = 0 ) const;
 
 	//Attributes
 	string mName;

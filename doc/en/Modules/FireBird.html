@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/FireBird - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/FireBird</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FFireBird&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FireBird" title="Modules/FireBird (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FireBird/ru" title="Модули/FireBird (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FireBird/uk" title="Модулі/FireBird (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/FireBird.html" title="Special:MyLanguage/Modules/FireBird">FireBird</a> </td>
+<td> DB FireBird </td>
+<td> 1.4 </td>
+<td> GPL2 </td>
+<td> bd_FireBird.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DB </td>
+<td> Roman Savochenko<br />Maxim Lysenko, 2009 — the page translation </td>
+<td> DB module. It provides the support for DB FireBird.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Operations_over_the_database"><span class="tocnumber">1</span> <span class="toctext">Operations over the database</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Operations_over_the_table"><span class="tocnumber">2</span> <span class="toctext">Operations over the table</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Operations_over_the_contents_of_the_table"><span class="tocnumber">3</span> <span class="toctext">Operations over the contents of the table</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#DB_access"><span class="tocnumber">4</span> <span class="toctext">DB access</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Productivity_of_the_DBMS"><span class="tocnumber">5</span> <span class="toctext">Productivity of the DBMS</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Notes"><span class="tocnumber">6</span> <span class="toctext">Notes</span></a></li>
+</ul>
+</div>
+
+<p>Module "FireBird" gives OpenSCADA support of DB FireBird and InterBase. DB FireBird is a small, embedded database, with the functions of a network database that supports SQL-queries. DB FireBird is built on a commercial DBMS Interbase and distributed under a free license. To familiarize with the DBMS it is possible on the website <a class="external free" href="http://www.firebirdsql.org" rel="nofollow noreferrer noopener" target="_blank">http://www.firebirdsql.org</a>. The module is based on the library with API of the manufacturer of DBMS on the language "C". The module allows you to perform operations over databases, tables and contents of tables.
+</p>
+<h2><span class="mw-headline" id="Operations_over_the_database"><span class="mw-headline-number">1</span> Operations over the database</span></h2>
+<p>The operations of opening and closing of the database is supported, with the possibility of creating a new database when you open and delete existing at the close. In terms of the subsystem "DB" of system OpenSCADA opening of DB is its registration for further using of it in the system. It also supported the operation of requesting the list of tables in the database.
+</p><p>DB FireBird is addressed by specifying the database file name, user name and password. In general, the address database is written in this way: "<b>{file};{user};{pass}[;{conTm}]</b>". Where:
+</p>
+<ul><li> <i>file</i> — the full name of the database file;</li>
+<li> <i>user</i> — user of the database on behalf of which the access is made;</li>
+<li> <i>pass</i> — password for the user on behalf of which the access is made;</li>
+<li> <i>conTm</i> — connection timeout (s).</li></ul>
+<h2><span class="mw-headline" id="Operations_over_the_table"><span class="mw-headline-number">2</span> Operations over the table</span></h2>
+<p>The operations of opening and closing of the table with the possibility of creating a new table when you open and deleting the existing one at the closing, and also the operation of the requesting of the table's structure are supported.
+</p>
+<h2><span class="mw-headline" id="Operations_over_the_contents_of_the_table"><span class="mw-headline-number">3</span> Operations over the contents of the table</span></h2>
+<ul><li> scanning of the records of the table;</li>
+<li> request the values of these records;</li>
+<li> setting the values of these records;</li>
+<li> removing the records.</li></ul>
+<p>API of subsystem “DB” suppose the access to the contents of the table on the value of key(s) fields. Thus, the operation of request of the record implies the preset of key columns of the object TConfig, which will fulfill the request. Creating a new record(string) is the installation of the values of record, which does not exist.
+</p><p>The module allows you to dynamically change the structure of the database tables FireBird. Thus, in the event of a discrepancy of the table and the structure determined by record, the structure of the table will be set to the required structure of record. In the case of the request of the value of the record, and mismatching of the structures of record and the table there will be available only to the values of common elements of the record and table. The module does not track the order of the elements in the record and in the structure of the table!
+</p><p>The module is implement support multilanguage text variables. For fields with multilanguage text variable create the column of separated language in format <b>{lang}#{FldID}</b> (en#NAME). In this time the base column contain value for base language. The columns of separated languages created by needs, in time saving to DB and execution OpenSCADA in correspond language. If for work language value no present then will used value for base language.
+</p><p>The types of the elements of DB FireBird correspond to types of elements of system OpenSCADA in the following way:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> The types of fields of the system OpenSCADA </th>
+<th> Types of fields of database FireBird
+</th></tr>
+<tr>
+<td>TFld::String</td>
+<td>VARCHAR, BLOB SUBTYPE TEXT
+</td></tr>
+<tr>
+<td>TFld::Integer</td>
+<td>INTEGER
+</td></tr>
+<tr>
+<td>TFld::Real</td>
+<td>DOUBLE
+</td></tr>
+<tr>
+<td>TFld::Boolean</td>
+<td>SMALLINT
+</td></tr></table>
+<h2><span class="mw-headline" id="DB_access"><span class="mw-headline-number">4</span> DB access</span></h2>
+<p>Access rights to the database are defined by the rights to DB file.
+</p><p>Briefly we will look at the initial configuration of the MySQL server to connect for it using by this module:
+</p>
+<ul>
+<li>Install FireBird DBMS server by the package or by build.</li>
+<li>Start DB server:
+<pre style="white-space: pre-wrap;">
+# Start classic server
+$ service firebird start
+# Start by superserver processing
+$ service xinetd restart</pre></li>
+<li>Setup need pasword for system user "sysdba":
+<pre style="white-space: pre-wrap;">
+$ gsec -user sysdba -pass masterkey -mo sysdba -pw 123456</pre></li>
+<li>Connect to DB by the module help, enter DB address: <b>"/var/tmp/test.fbd;sysdba;123456"</b></li>
+</ul>
+<h2><span class="mw-headline" id="Productivity_of_the_DBMS"><span class="mw-headline-number">5</span> Productivity of the DBMS</span></h2>
+<p>Measurement of productivity of DB were carried out by the test "DB" of the module of system tests "SystemTests", by performing operations over the records of the structure: "<b>name char (20), descr char (50), val double (10.2), id int (7), stat bool, reqKey string, reqVal string</b>".
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Operation </th>
+<th> AMD Turion L625 1.6, 2G, FireBird [2.1.3 Local SuperServer; 100Base-TX; 2.5.2 100Base-TX SuperServer ForcedWrites=Off; ForcedWrites=On] </th>
+<th> Intel(R) Core(TM) i3 CPU 1.33GHz, 3G, HDD [2.5.2 100Base-TX SuperServer ForcedWrites=Off; ForcedWrites=On]
+</th></tr>
+<tr>
+<td> <i>Creation of the 1000 records (sec.):</i> </td>
+<td> 0.93; 1.15; 4.4; 5.2 </td>
+<td> 3.68; 4.67
+</td></tr>
+<tr>
+<td> <i>Updating of the 1000 records (sec.):</i> </td>
+<td> 2.74; 2.94; 5.1; 5.2 </td>
+<td> 3.88; 4.54
+</td></tr>
+<tr>
+<td> <i>Getting of the 1000 records (sec.):</i> </td>
+<td> 1.64; 2.22; 5.0; <span style="color: red">27.8</span> </td>
+<td> 3.69; <span style="color: red">28.8</span>
+</td></tr>
+<tr>
+<td> <i>Seeking of the 1000 records (sec.):</i> </td>
+<td> - </td>
+<td> 5.36; <span style="color: red">32</span>
+</td></tr>
+<tr>
+<td> <i>Seeking in preload of the 1000 records (sec.):</i> </td>
+<td> - </td>
+<td> 0.045; 0.065
+</td></tr>
+<tr>
+<td> <i>Deleting of the 1000 record (sec.):</i> </td>
+<td> 0.65; 1.04; 2.0; 2.4 </td>
+<td> 1.69; 1.66
+</td></tr></table>
+<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">6</span> Notes</span></h2>
+<p>The DBMS FireBird has more architecture's limits and problems by the InterBase inheritance and from parent OS MS Windows which prevent it wide using for more tasks. Known limits and problems:
+</p>
+<ul><li> The DBMS is slow comparing to MySQL or PostgreSQL, see to previous chapter. Especially for mode ForcedWrites On.</li>
+<li> The DBMS has fixed limit for plain SQL statement size to 65536 kB, which prevents for big content placing just SQL.</li>
+<li> Classic server on Linux for mode ForcedWrites Off can dead hang.</li>
+<li> Time limits control for the connections miss, which caused to long and uncontrolled waiting for client applications.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

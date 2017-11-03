@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/System - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/System</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSystem&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/System" title="Modules/System (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/System/ru" title="Модули/Система (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/System/uk" title="Модулі/Система (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/System.html" title="Special:MyLanguage/Modules/System">System</a> </td>
+<td> System DA </td>
+<td> 2.1 </td>
+<td> GPL2 </td>
+<td> daq_System.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#The_controller_of_data"><span class="tocnumber">1</span> <span class="toctext">The controller of data</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Parameters"><span class="tocnumber">2</span> <span class="toctext">Parameters</span></a></li>
+</ul>
+</div>
+
+<p>The module is a sort of gateway between the system OpenSCADA and OS (operating system). The module receives data from various data sources of the OS and allows to manage components of the OS.
+</p><p>The module provides the ability to automatically search for the supported and active data sources with the establishment of parameters for access to them as well as the implementation of the function of the horizontal reservation, that is working in conjunction with the remote station of the same level.
+</p>
+<h2><span class="mw-headline" id="The_controller_of_data"><span class="mw-headline-number">1</span> The controller of data</span></h2>
+<p>To add a data source of operating system there is created and configured the controller in the system OpenSCADA. Example of the configuration tab of the controller of the given type shown in Fig. 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:706px;"><a class="image" href="http://oscada.org/wiki/File:System_cntr.png"><img class="thumbimage" height="629" src="../files/System_cntr.png" width="704" /></a>  <div class="thumbcaption">Fig.1. Tab of configuration of a controller.</div></div></div></div>
+<p>From this tab you can set:
+</p>
+<ul><li> The state of the controller, as follows: Status, "Enable","Run" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the controller. </li>
+<li> The state in which the parameter to be switched at boot time: "To enable", "To start".</li>
+<li> Automatic search of active data sources and the creation of parameters for them for modes: "Manual", "Fast sources", "Slow sources", "All sources".</li>
+<li> Name of the table to store the configuration of the controller parameters.</li>
+<li> The acquisition schedule policy and the priority of the task of data acquisition.</li></ul>
+<h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
+<p>Module <i>System</i> provides only one type of parameters — "All parameters". Additional configuration fields of the parameters of the module (Fig. 2) are:
+</p>
+<ul><li> part of the system; </li>
+<li> optional (depending on the data source).</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:799px;"><a class="image" href="http://oscada.org/wiki/File:System_prm.png"><img class="thumbimage" height="588" src="../files/System_prm.png" width="797" /></a>  <div class="thumbcaption">Fig.2. Tab of configuration of a parameter.</div></div></div></div>
+<p>The table below there is a list of supported data sources of the operating system, the value of the additional configuration field and attributes of the parameters.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Data source </th>
+<th> Value of the additional configuration field </th>
+<th> Attributes of the parameter </th>
+<th> Demands
+</th></tr>
+<tr>
+<td> Processor unit (CPU) </td>
+<td> Name/number of the process. It can be a number of processor or to be "in general" for all processors &lt;gen&gt;. </td>
+<td>
+<ul><li> [real] load: Load (%)</li>
+<li> [real] sys: System (%)</li>
+<li> [real] user: User (%)</li>
+<li> [real] idle: Idle (%)</li></ul>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> Memory (MEM) </td>
+<td> Not used </td>
+<td>
+<ul><li> [dec] free: Free (кБ);</li>
+<li> [dec] total: Total (кБ);</li>
+<li> [dec] use: Used (кБ);</li>
+<li> [dec] buff: Buffers (кБ);</li>
+<li> [dec] cache: Cache (кБ);</li>
+<li> [dec] sw_free: Swap, free (кБ);</li>
+<li> [dec] sw_total: Swap, total (кБ);</li>
+<li> [dec] sw_use: Swap, used (кБ).</li></ul>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> Sensors (sensors) </td>
+<td> Not used </td>
+<td> Attributes are defined by sensors that are available on the motherboard. For each sensor the unique attribute is created. </td>
+<td> The library libsensors or program mbmon is used. Higher priority in the use is given to the library libsensors, because mbmon has problems on multicore architectures.
+</td></tr>
+<tr>
+<td> HDD temperature (hddtemp) </td>
+<td> HDD. Disks, available in the system. </td>
+<td>
+<ul><li> [string] disk: Name;</li>
+<li> [string] ed: Unit of measurement;</li>
+<li> [real] t: Temperature.</li></ul>
+</td>
+<td> It must be installed configured and running as a service program hddtemp
+</td></tr>
+<tr>
+<td> Uptime (uptime) </td>
+<td> Uptime:
+<ul><li> System;</li>
+<li> Station.</li></ul>
+</td>
+<td>
+<ul><li> [dec] full: Seconds full;</li>
+<li> [dec] sec: Seconds;</li>
+<li> [dec] min: Minutes;</li>
+<li> [dec] hour: Houres;</li>
+<li> [dec] day: Days.</li></ul>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> HDD Smart (hddsmart), slow </td>
+<td> Disk. Disks, available in the system. </td>
+<td> Attributes are defined by SMART-fields available for this disc. For each field the unique attribute is created. </td>
+<td> It must be installed and available smartctl utility.
+</td></tr>
+<tr>
+<td> HDD statistics (hddstat) </td>
+<td> Disk or partition. Disks or partitions, available in the system. </td>
+<td>
+<ul><li> [real] rd: Read (B), reset on value 2.2<sup>12</sup>;</li>
+<li> [real] rdSp: Read speed (B/s);</li>
+<li> [real] wr: Written (B), reset on value 2.2<sup>12</sup>;</li>
+<li> [real] wrSp: Write speed (B/s).</li></ul>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> Net statistics (netstat) </td>
+<td> Network interface. Network interfaces, available in the system. </td>
+<td>
+<ul><li> [real] rcv: Recieved (B), reset on value 4.3<sup>9</sup>;</li>
+<li> [real] rcvSp: Receive speed (B/s);</li>
+<li> [real] trns: Transfered (B), reset on value 4.3<sup>9</sup>;</li>
+<li> [real] trnsSp: Transmit speed (B/s).</li></ul>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> UPS (NUT) (ups), slow </td>
+<td> UPS. Accessible into the system or the network UPS. </td>
+<td> Attributes are defined by provided the UPS fields. For each field the unique attribute is created. </td>
+<td> Into the system or the network (is not detected automatic and the address you need set directly) must be accessible the demon NUT "upsd".
+</td></tr>
+<tr>
+<td> File system (FS) </td>
+<td> File Systems. Mounted file systems. </td>
+<td>
+<ul><li> [real] total: Total (GB);</li>
+<li> [real] used: Used (GB);</li>
+<li> [real] free: Free (GB);</li>
+<li> [dec] totalN: Total file nodes;</li>
+<li> [dec] usedN: Used file nodes;</li>
+<li> [dec] freeN: Free file nodes.</li></ul>
+</td>
+<td>
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

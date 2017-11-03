@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/Протокол пользователя - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/Протокол пользователя</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FUserProtocol&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/UserProtocol" title="Modules/UserProtocol">Modules/UserProtocol</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/UserProtocol" title="Modules/UserProtocol (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/UserProtocol/uk" title="Модулі/Протокол користувача (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> Пользовательский протокол </td>
+<td> 0.8 </td>
+<td> GPL2 </td>
+<td> prot_UserProtocol.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Протокол </td>
+<td> Роман Савоченко </td>
+<td> Позволяет создавать собственные пользовательские протоколы на любом OpenSCADA языке.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.A7.D0.B0.D1.81.D1.82.D1.8C_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0_.D0.B4.D0.BB.D1.8F_.D0.B2.D1.85.D0.BE.D0.B4.D1.8F.D1.89.D0.B8.D1.85_.D0.B7.D0.B0.D0.BF.D1.80.D0.BE.D1.81.D0.BE.D0.B2"><span class="tocnumber">1</span> <span class="toctext">Часть протокола для входящих запросов</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.A7.D0.B0.D1.81.D1.82.D1.8C_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0_.D0.B4.D0.BB.D1.8F_.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D1.8F.D1.89.D0.B8.D1.85_.D0.B7.D0.B0.D0.BF.D1.80.D0.BE.D1.81.D0.BE.D0.B2"><span class="tocnumber">2</span> <span class="toctext">Часть протокола для исходящих запросов</span></a></li>
+</ul>
+</div>
+
+<p>Модуль транспортного протокола UserProtocol предназначен для предоставления пользователю возможности создания реализаций различных протоколов собственными силами на одном из внутренних языков OpenSCADA, обычно <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, не прибегая к низкоуровневому программированию OpenSCADA.
+</p><p>Основная цель модуля — упростить задачу подключения к OpenSCADA устройств источников данных, которые имеют незначительное распространение и/или предоставляют доступ к собственным данным по специфическому протоколу, обычно достаточно простому для реализации на внутреннем языке OpenSCADA. Для реализации этого предоставляется механизм формирования протокола исходящего запроса.
+</p><p>Кроме механизма протокола исходящего запроса предоставляется механизм протокола входящего запроса, который позволяет OpenSCADA обслуживать запросы на получение данных по специфическим протоколам, которые достаточно просто могут быть реализованы на внутреннем языке OpenSCADA.
+</p><p>Модуль предоставляет возможность создания реализаций множества различных протоколов в объекте "Пользовательский протокол" (рис.1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:UserProtocol_up_main_ru.png"><img class="thumbimage" height="518" src="../files/UserProtocol_up_main_ru.png" width="711" /></a>  <div class="thumbcaption">Рис.1. Основная вкладка объекта "Пользовательский протокол".</div></div></div></div>
+<p>Главная вкладка содержит основные настройки пользовательского протокола:
+</p>
+<ul><li> Раздел "Состояние" — содержит свойства, характеризующие состояние протокола:
+<ul><li> <i>Состояние</i> — текущее состояние протокола.</li>
+<li> <i>Включен</i> — состояние протокола "Включен".</li>
+<li> <i>БД</i> — БД, в которой хранится конфигурация.</li></ul></li>
+<li> Раздел "Конфигурация" — непосредственно содержит поля конфигурации:
+<ul><li> <i>ID</i> — информация об идентификаторе протокола.</li>
+<li> <i>Имя</i> — указывает имя протокола.</li>
+<li> <i>Описание</i> — краткое описание протокола и его назначения.</li>
+<li> <i>Включать</i> — указывает на состояние "Включен", в которое переводить протокол при загрузке.</li></ul></li></ul>
+<h2><span class="mw-headline" id=".D0.A7.D0.B0.D1.81.D1.82.D1.8C_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0_.D0.B4.D0.BB.D1.8F_.D0.B2.D1.85.D0.BE.D0.B4.D1.8F.D1.89.D0.B8.D1.85_.D0.B7.D0.B0.D0.BF.D1.80.D0.BE.D1.81.D0.BE.D0.B2"><span class="mw-headline-number">1</span> Часть протокола для входящих запросов</span></h2>
+<p>Протокол входящих запросов работает в кооперации с входящим транспортом, и отдельный объект "Пользовательского протокола" указывается в поле конфигурации протокола  транспорта вместе с именем модуля UserProtocol. В дальнейшем все запросы к транспорту будут направляться в процедуру обработки запроса протокола (рис.2).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:717px;"><a class="image" href="http://oscada.org/wiki/File:UserProtocol_up_in_ru.png"><img class="thumbimage" height="527" src="../files/UserProtocol_up_in_ru.png" width="715" /></a>  <div class="thumbcaption">Рис.2. Вкладка процедуры обработки входящих запросов.</div></div></div></div>
+<p>Вкладка процедуры обработки входящих запросов содержит:
+</p>
+<ul><li> Время ожидания запроса в миллисекундах. Используйте это поле для включения режима пулинга, установкой в ненулевое значение. В режиме пулинга входной транспорт будет вызывать протокол с пустым запросом, в случае отсутствия запроса в течении указанного времени.</li>
+<li> Поле для выбора внутреннего языка программирования OpenSCADA и поле ввода текста процедуры обработки.</li></ul>
+<p>Для процедуры обработки предопределены следующие переменные обмена с входящим транспортом:
+</p>
+<ul><li> <i>rez</i> — результат обработки (false-полный запрос; true-не полный запрос);</li>
+<li> <i>request</i> — сообщение запроса;</li>
+<li> <i>answer</i> — сообщение ответа;</li>
+<li> <i>sender</i> — отправитель запроса.</li></ul>
+<p>Общий сценарий обработки входящих запросов:
+</p>
+<ul><li> Запрос формируется удалённой станцией и через сеть попадает на транспорт OpenSCADA.</li>
+<li> OpenSCADA транспорт передаёт запрос выбранному в поле протокола модулю UserProtocol и объекту пользовательского протокола в виде значений переменной "request" — для блока запроса и "sender" — для адреса отправителя запроса.</li>
+<li> Запускается выполнение процедуры протокола входящего запроса, в процессе которой анализируется содержимое переменной "request" и формируется ответ в переменной "answer". По окончанию выполнения процедуры формируется переменная "rez", которая указывает транспорту на факт получения полноценного запроса и формирование корректного ответа (false) или необходимость транспорту ожидать оставшихся данных (true).</li>
+<li> Если в результате процедуры обработки переменная "rez" равна 'false' и ответ в переменной "answer" ненулевой, то транспорт отправляет ответ и обнуляет накопление "request".</li>
+<li> Если в результате процедуры обработки переменная "rez" равна 'true', то транспорт продолжает ожидать данные. При получении следующей порции данных они добавляются к переменной "request" и выполнение процедуры повторяется.</li></ul>
+<p>В качестве примера рассмотрим реализацию обработки запросов по протоколу DCON, для некоторых запросов к источнику данных с адресом "10":
+</p>
+<pre style="white-space: pre-wrap;">
+//SYS.messDebug("TEST REQ: ",request);
+//Проверка запроса на полноту
+if(request.length &lt; 4 || request[request.length-1]&nbsp;!= "\r")
+{
+  if(request.length &gt; 10) request = "";
+  return true;
+}
+//Проверка запроса на целостность (CRC) и адрес
+CRC = 0;
+for(i = 0; i &lt; (request.length-3); i++) CRC += request.charCodeAt(i);
+if(CRC&nbsp;!= request.slice(request.length-3,request.length-1).toInt(16) || request.slice(1,3).toInt(16)&nbsp;!= 10) return false;
+//Анализ запроса и подготовка ответа
+if(request.charCodeAt(0) == "#") answer = "&gt;+05.123+04.153+07.234-02.356+10.000-05.133+02.345+08.234";
+else if(request.charCodeAt(0) == "@") answer = "&gt;AB3C";
+else answer = "?";
+//Завершение ответа
+CRC = 0;
+for(i=0; i &lt; answer.length; i++) CRC += answer.charCodeAt(i);
+answer += (CRC&amp;0xFF).toString(16)+"\r";
+//SYS.messDebug("TEST ANSV: "+answer.charCodeAt(0),answer);
+return 0;
+</pre>
+<h2><span class="mw-headline" id=".D0.A7.D0.B0.D1.81.D1.82.D1.8C_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0_.D0.B4.D0.BB.D1.8F_.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D1.8F.D1.89.D0.B8.D1.85_.D0.B7.D0.B0.D0.BF.D1.80.D0.BE.D1.81.D0.BE.D0.B2"><span class="mw-headline-number">2</span> Часть протокола для исходящих запросов</span></h2>
+<p>Протокол исходящих запросов работает в кооперации с исходящим транспортом и отдельным объектом "Пользовательского протокола". Источником запроса через протокол может выступать функция общесистемного API пользовательского программирования  исходящего  транспорта <i>int messIO( XMLNodeObj req, string prt );</i>, в параметрах которой указывается:
+</p>
+<ul><li> <i>req</i> — запрос в виде дерева XML со структурой, соответствующей входному формату реализованного протокола;</li>
+<li> <i>prt</i> — имя модуля "UserProtocol".</li></ul>
+<p>Запрос, отправленный вышеуказанным образом, направляться в процедуру обработки запроса протокола (рис.3) с идентификатором пользовательского протокола, указываемым в атрибуте req.attr("ProtIt").
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:867px;"><a class="image" href="http://oscada.org/wiki/File:UserProtocol_up_out_ru.png"><img class="thumbimage" height="518" src="../files/UserProtocol_up_out_ru.png" width="865" /></a>  <div class="thumbcaption">Рис.3. Вкладка процедуры обслуживания исходящих запросов.</div></div></div></div>
+<p>Вкладка процедуры обработки исходящих запросов содержит поле для выбора внутреннего языка программирования OpenSCADA и поле ввода текста процедуры обработки.
+</p><p>Для процедуры обработки предопределены следующие переменные обмена:
+</p>
+<ul><li> <i>io</i> — XML узел обмена с клиентом, через который протокол принимает запросы и в который помещает результат с форматом, реализуемым в процедуре;</li>
+<li> <i>tr</i> — объект транспорта, предназначен для вызова функции транспорта <i>string messIO( string mess, real timeOut = 1000 );</i> "tr.messIO(req)".</li></ul>
+<p>Общий сценарий формирования исходящего запроса:
+</p>
+<ul><li> Формирование XML-дерева в соответствии со структурой, реализуемой протоколом, и указание идентификатора пользовательского протокола в атрибуте "ProtIt".</li>
+<li> Отправка запроса к транспорту через протокол <i>SYS.Transport["Modul"]["OutTransp"].messIO(req,"UserProtocol");</i>.</li>
+<li> Выбор пользовательского интерфейса в соответствии с req.attr("ProtIt") и инициализация переменных исходящего транспорта io — соответственно к первому аргументу messIO() и tr — объект "OutTransp".</li>
+<li> Вызов процедуры на исполнение, которая, обработав структуру "io", формирует прямой запрос транспорту <i>tr.messIO(req);</i>, результат которого обрабатывается и помещается назад в io.</li></ul>
+<p>Суть выделения протокольной части кода в процедуру пользовательского протокола заключается в упрощении интерфейса клиентского обмена при многократном использовании и предполагает формирование структуры XML-узла обмена в виде атрибутов адресов удалённых станций, адресов читаемых и записываемых переменных, а также значений самих переменных. При этом весь груз непосредственного кодирования запроса и декодирования ответа возлагается на процедуру пользовательского протокола.
+</p><p>В качестве примера рассмотрим реализацию запросов посредством протокола DCON, к обработчику, реализованному в предыдущем разделе. Начнём с реализации протокольной части:
+</p>
+<pre style="white-space: pre-wrap;">
+//Формирование конечного запроса
+request = io.name().slice(0,1)+io.attr("addr").toInt().toString(16,2)+io.text();
+CRC = 0;
+for(i=0; i &lt; request.length; i++) CRC += request.charCodeAt(i);
+request += (CRC&amp;0xFF).toString(16)+"\r";
+//Отправка запроса
+resp = tr.messIO(request);
+while(resp[resp.length-1]&nbsp;!= "\r")
+{
+  tresp = tr.messIO("");
+  if(!tresp.length) break;
+  resp += tresp;
+}
+//Анализ ответа
+if(resp.length &lt; 4 || resp[resp.length-1]&nbsp;!= "\r") { io.setAttr("err","10:Ошибка или нет ответа."); return; }
+//Проверка ответа на целостность (CRC)
+CRC = 0;
+for(i = 0; i &lt; (resp.length-3); i++) CRC += resp.charCodeAt(i);
+if(CRC&nbsp;!= resp.slice(resp.length-3,resp.length-1).toInt(16)) { io.setAttr("err","11:Ошибка CRC."); return; }
+if(resp[0]&nbsp;!= "&gt;") { io.setAttr("err","12:"+resp[0]+":Ошибка DCON."); return; }
+//Возврат результата
+io.setAttr("err","");
+io.setText(resp.slice(1,resp.length-3));
+</pre>
+<p>И процедура непосредственной отправки DCON запроса, через предыдущую процедуру протокола. Эту процедуру необходимо поместить в нужную задачу или промежуточную функцию OpenSCADA, например, в процедуру контроллера <a class="external" href="http://oscada.org/wiki/Modules/JavaLikeCalc/ru#.D0.9F.D1.80.D0.B8.D0.BC.D0.B5.D1.80.D1.8B_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D1.8B_.D0.BD.D0.B0_.D1.8F.D0.B7.D1.8B.D0.BA.D0.B5" title="Modules/JavaLikeCalc/ru">DAQ.JavaLikeCalc</a>:
+</p>
+<pre style="white-space: pre-wrap;">
+//Подготовка запроса
+req = SYS.XMLNode("#").setAttr("ProtIt","DCON").setAttr("addr",10);
+//Отправка запроса
+SYS.Transport["Serial"]["out_TestDCON"].messIO(req,"UserProtocol");
+if(!req.attr("err").length) SYS.messDebug("TEST REQ","RES: "+req.text());
+
+//Подготовка второго запроса
+req = SYS.XMLNode("@").setAttr("ProtIt","DCON").setAttr("addr",10);
+//Отправка второго запроса
+SYS.Transport["Serial"]["out_TestDCON"].messIO(req,"UserProtocol");
+if(!req.attr("err").length) SYS.messDebug("TEST REQ","RES: "+req.text());
+</pre>
+
+
+
+
+
+
+</div></body>
+</html>

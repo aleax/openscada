@@ -1,0 +1,1540 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/FLibSYS - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/FLibSYS</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FFLibSYS&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/FLibSYS" title="Modules/FLibSYS">Modules/FLibSYS</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibSYS" title="Modules/FLibSYS (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibSYS/uk" title="Модулі/FLibSYS (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">FLibSYS</a> </td>
+<td> Библиотека функций системного API </td>
+<td> 1.5 </td>
+<td> GPL2 </td>
+<td> spec_FLibSYS.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Специальные </td>
+<td> Роман Савоченко </td>
+<td> Предоставляет библиотеку системного API среды пользовательского программирования.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.B1.D1.89.D0.B5.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D1.8B.D0.B5_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8"><span class="tocnumber">1</span> <span class="toctext">Общесистемные функции</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#.D0.92.D1.8B.D0.B7.D0.BE.D0.B2_.D0.BA.D0.BE.D0.BD.D1.81.D0.BE.D0.BB.D1.8C.D0.BD.D1.8B.D1.85_.D0.BA.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4_.D0.B8_.D1.83.D1.82.D0.B8.D0.BB.D0.B8.D1.82_.D0.BE.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.BE.D0.BD.D0.BD.D0.BE.D0.B9_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.28sysCall.29"><span class="tocnumber">1.1</span> <span class="toctext">Вызов консольных команд и утилит операционной системы (sysCall)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#DB:_SQL_.D0.B7.D0.B0.D0.BF.D1.80.D0.BE.D1.81_.28dbReqSQL.29"><span class="tocnumber">1.2</span> <span class="toctext">DB: SQL запрос (dbReqSQL)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.A3.D0.B7.D0.B5.D0.BB_XML_.28xmlNode.29"><span class="tocnumber">1.3</span> <span class="toctext">Узел XML (xmlNode)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.D0.97.D0.B0.D0.BF.D1.80.D0.BE.D1.81_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B0_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F_.28xmlCntrReq.29"><span class="tocnumber">1.4</span> <span class="toctext">Запрос интерфейса управления (xmlCntrReq)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#.D0.90.D1.80.D1.85.D0.B8.D0.B2_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.28vArh.29"><span class="tocnumber">1.5</span> <span class="toctext">Архив значений (vArh)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_VArchObj"><span class="tocnumber">1.5.1</span> <span class="toctext">Объект VArchObj</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-8"><a href="#.D0.91.D1.83.D1.84.D0.B5.D1.80_.D0.B0.D1.80.D1.85.D0.B8.D0.B2.D0.B0_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.28vArhBuf.29"><span class="tocnumber">1.6</span> <span class="toctext">Буфер архива значений (vArhBuf)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#.D0.92.D0.B2.D0.BE.D0.B4.2F.D0.92.D1.8B.D0.B2.D0.BE.D0.B4_.28IO.29"><span class="tocnumber">1.7</span> <span class="toctext">Ввод/Вывод (IO)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-10"><a href="#IO_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82"><span class="tocnumber">1.7.1</span> <span class="toctext">IO объект</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D0.B4.D0.BB.D1.8F_.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D1.8B_.D1.81_.D0.B0.D1.81.D1.82.D1.80.D0.BE.D0.BD.D0.BE.D0.BC.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.BC_.D0.B2.D1.80.D0.B5.D0.BC.D0.B5.D0.BD.D0.B5.D0.BC"><span class="tocnumber">2</span> <span class="toctext">Функции для работы с астрономическим временем</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#.D0.A1.D1.82.D1.80.D0.BE.D0.BA.D0.B0_.D0.B2.D1.80.D0.B5.D0.BC.D0.B5.D0.BD.D0.B8_.28tmFStr.29_.3C3047.3E"><span class="tocnumber">2.1</span> <span class="toctext">Строка времени (tmFStr) &lt;3047&gt;</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#.D0.9F.D0.BE.D0.BB.D0.BD.D0.B0.D1.8F_.D0.B4.D0.B0.D1.82.D0.B0_.28tmDate.29_.3C973.3E"><span class="tocnumber">2.2</span> <span class="toctext">Полная дата (tmDate) &lt;973&gt;</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#.D0.90.D0.B1.D1.81.D0.BE.D0.BB.D1.8E.D1.82.D0.BD.D0.BE.D0.B5_.D0.B2.D1.80.D0.B5.D0.BC.D1.8F_.28tmTime.29_.3C220.3E"><span class="tocnumber">2.3</span> <span class="toctext">Абсолютное время (tmTime) &lt;220&gt;</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#.D0.9A.D0.BE.D0.BD.D0.B2.D0.B5.D1.80.D1.82.D0.B0.D1.86.D0.B8.D1.8F_.D0.B2.D1.80.D0.B5.D0.BC.D0.B5.D0.BD.D0.B8_.D0.B8.D0.B7_.D1.81.D0.B8.D0.BC.D0.B2.D0.BE.D0.BB.D1.8C.D0.BD.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.B5.D0.B4.D1.81.D1.82.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B8_.D0.B2.D0.BE_.D0.B2.D1.80.D0.B5.D0.BC.D1.8F_.D0.B2_.D1.81.D0.B5.D0.BA.D1.83.D0.BD.D0.B4.D0.B0.D1.85.2C_.D0.BE.D1.82_.D1.8D.D0.BF.D0.BE.D1.85.D0.B8_1.1.1970_.28tmStrPTime.29_.3C2600.3E"><span class="tocnumber">2.4</span> <span class="toctext">Конвертация времени из символьного представлении во время в секундах, от эпохи 1.1.1970 (tmStrPTime) &lt;2600&gt;</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#.D0.9F.D0.BB.D0.B0.D0.BD.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D0.B2.D1.80.D0.B5.D0.BC.D0.B5.D0.BD.D0.B8_.D0.B2_.D1.84.D0.BE.D1.80.D0.BC.D0.B0.D1.82.D0.B5_Cron_.28tmCron.29"><span class="tocnumber">2.5</span> <span class="toctext">Планирование времени в формате Cron (tmCron)</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#.D0.A1.D0.BE.D0.BD_.28tmSleep.29"><span class="tocnumber">2.6</span> <span class="toctext">Сон (tmSleep)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-18"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D1.8B_.D1.81_.D1.81.D0.BE.D0.BE.D0.B1.D1.89.D0.B5.D0.BD.D0.B8.D1.8F.D0.BC.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Функции работы с сообщениями</span></a>
+<ul>
+<li class="toclevel-2 tocsection-19"><a href="#.D0.97.D0.B0.D0.BF.D1.80.D0.BE.D1.81_.D1.81.D0.BE.D0.BE.D0.B1.D1.89.D0.B5.D0.BD.D0.B8.D0.B9_.28messGet.29"><span class="tocnumber">3.1</span> <span class="toctext">Запрос сообщений (messGet)</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#.D0.93.D0.B5.D0.BD.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D1.8F_.D1.81.D0.BE.D0.BE.D0.B1.D1.89.D0.B5.D0.BD.D0.B8.D1.8F_.28messPut.29"><span class="tocnumber">3.2</span> <span class="toctext">Генерация сообщения (messPut)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D1.8B_.D1.81_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B0.D0.BC.D0.B8"><span class="tocnumber">4</span> <span class="toctext">Функции работы с строками</span></a>
+<ul>
+<li class="toclevel-2 tocsection-22"><a href="#.D0.9F.D0.BE.D0.BB.D1.83.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.D1.80.D0.B0.D0.B7.D0.BC.D0.B5.D1.80.D0.B0_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.28strSize.29_.3C114.3E"><span class="tocnumber">4.1</span> <span class="toctext">Получение размера строки (strSize) &lt;114&gt;</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#.D0.9F.D0.BE.D0.BB.D1.83.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.D1.87.D0.B0.D1.81.D1.82.D0.B8_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.28strSubstr.29_.3C413.3E"><span class="tocnumber">4.2</span> <span class="toctext">Получение части строки (strSubstr) &lt;413&gt;</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#.D0.92.D1.81.D1.82.D0.B0.D0.B2.D0.BA.D0.B0_.D0.BE.D0.B4.D0.BD.D0.BE.D0.B9_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.D0.B2_.D0.B4.D1.80.D1.83.D0.B3.D1.83.D1.8E_.28strInsert.29_.3C1200.3E"><span class="tocnumber">4.3</span> <span class="toctext">Вставка одной строки в другую (strInsert) &lt;1200&gt;</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#.D0.97.D0.B0.D0.BC.D0.B5.D0.BD.D0.B0_.D1.87.D0.B0.D1.81.D1.82.D0.B8_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.D0.B4.D1.80.D1.83.D0.B3.D0.BE.D0.B9_.28strReplace.29_.3C531.3E"><span class="tocnumber">4.4</span> <span class="toctext">Замена части строки другой (strReplace) &lt;531&gt;</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#.D0.A0.D0.B0.D0.B7.D0.B1.D0.BE.D1.80_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.D0.BF.D0.BE_.D1.80.D0.B0.D0.B7.D0.B4.D0.B5.D0.BB.D0.B8.D1.82.D0.B5.D0.BB.D1.8E_.28strParse.29_.3C537.3E"><span class="tocnumber">4.5</span> <span class="toctext">Разбор строки по разделителю (strParse) &lt;537&gt;</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#.D0.A0.D0.B0.D0.B7.D0.B1.D0.BE.D1.80_.D0.BF.D1.83.D1.82.D0.B8_.28strParsePath.29_.3C300.3E"><span class="tocnumber">4.6</span> <span class="toctext">Разбор пути (strParsePath) &lt;300&gt;</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#.D0.9F.D1.83.D1.82.D1.8C_.D0.B2_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D1.83_.D1.81_.D1.80.D0.B0.D0.B7.D0.B4.D0.B5.D0.BB.D0.B8.D1.82.D0.B5.D0.BB.D0.B5.D0.BC_.28strPath2Sep.29"><span class="tocnumber">4.7</span> <span class="toctext">Путь в строку с разделителем (strPath2Sep)</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#.D0.9A.D0.BE.D0.B4.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.D0.B2_HTML_.28strEnc2HTML.29"><span class="tocnumber">4.8</span> <span class="toctext">Кодирование строки в HTML (strEnc2HTML)</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#.D0.9A.D0.BE.D0.B4.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D0.B0_.D0.B2_.D0.B1.D0.B8.D0.BD.D0.B0.D1.80.D0.BD.D1.8B.D0.B9_.D0.B2.D0.B8.D0.B4_.28strEnc2Bin.29"><span class="tocnumber">4.9</span> <span class="toctext">Кодирование текста в бинарный вид (strEnc2Bin)</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#.D0.94.D0.B5.D0.BA.D0.BE.D0.B4.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D0.B0_.D0.B8.D0.B7_.D0.B1.D0.B8.D0.BD.D0.B0.D1.80.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D0.B8.D0.B4.D0.B0_.28strDec4Bin.29"><span class="tocnumber">4.10</span> <span class="toctext">Декодирование текста из бинарного вида (strDec4Bin)</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#.D0.9F.D1.80.D0.B5.D0.BE.D0.B1.D1.80.D0.B0.D0.B7.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D0.B2.D0.B5.D1.89.D0.B5.D1.81.D1.82.D0.B2.D0.B5.D0.BD.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D1.83_.28real2str.29"><span class="tocnumber">4.11</span> <span class="toctext">Преобразование вещественного в строку (real2str)</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#.D0.9F.D1.80.D0.B5.D0.BE.D0.B1.D1.80.D0.B0.D0.B7.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.86.D0.B5.D0.BB.D0.BE.D0.B3.D0.BE_.D0.B2_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D1.83_.28int2str.29"><span class="tocnumber">4.12</span> <span class="toctext">Преобразование целого в строку (int2str)</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#.D0.9F.D1.80.D0.B5.D0.BE.D0.B1.D1.80.D0.B0.D0.B7.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.D0.B2_.D0.B2.D0.B5.D1.89.D0.B5.D1.81.D1.82.D0.B2.D0.B5.D0.BD.D0.BD.D0.BE.D0.B5_.28str2real.29"><span class="tocnumber">4.13</span> <span class="toctext">Преобразование строки в вещественное (str2real)</span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#.D0.9F.D1.80.D0.B5.D0.BE.D0.B1.D1.80.D0.B0.D0.B7.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.D0.B2_.D1.86.D0.B5.D0.BB.D0.BE.D0.B5_.28str2int.29"><span class="tocnumber">4.14</span> <span class="toctext">Преобразование строки в целое (str2int)</span></a></li>
+<li class="toclevel-2 tocsection-36"><a href="#.D0.A6.D0.B8.D0.BA.D0.BB.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B9_.D0.98.D0.B7.D0.B1.D1.8B.D1.82.D0.BE.D1.87.D0.BD.D1.8B.D0.B9_.D0.9A.D0.BE.D0.B4_.28CRC.29"><span class="tocnumber">4.15</span> <span class="toctext">Циклический Избыточный Код (CRC)</span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#.D0.A1.D0.BB.D0.B5.D0.BF.D0.BE.D0.BA_.D1.81.D0.BE.D0.BE.D0.B1.D1.89.D0.B5.D0.BD.D0.B8.D1.8F_5_.28MD5.29"><span class="tocnumber">4.16</span> <span class="toctext">Слепок сообщения 5 (MD5)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-38"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D1.8B_.D1.81_.D0.B2.D0.B5.D1.89.D0.B5.D1.81.D1.82.D0.B2.D0.B5.D0.BD.D0.BD.D1.8B.D0.BC"><span class="tocnumber">5</span> <span class="toctext">Функции работы с вещественным</span></a>
+<ul>
+<li class="toclevel-2 tocsection-39"><a href="#Float:_.D0.A0.D0.B0.D0.B7.D0.B4.D0.B5.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.D0.BD.D0.B0_.D1.81.D0.BB.D0.BE.D0.B2.D0.B0_.28floatSplitWord.29"><span class="tocnumber">5.1</span> <span class="toctext">Float: Разделение на слова (floatSplitWord)</span></a></li>
+<li class="toclevel-2 tocsection-40"><a href="#Float:_.D0.9E.D0.B1.D1.8A.D0.B5.D0.B4.D0.B8.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_.D0.B8.D0.B7_.D1.81.D0.BB.D0.BE.D0.B2_.28floatMergeWord.29"><span class="tocnumber">5.2</span> <span class="toctext">Float: Объединение из слов (floatMergeWord)</span></a></li>
+<li class="toclevel-2 tocsection-41"><a href="#Float:_.D0.98.D0.B7.D0.B2.D0.BB.D0.B5.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.28floatExtract.29"><span class="tocnumber">5.3</span> <span class="toctext">Float: Извлечение (floatExtract)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-42"><a href="#API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">6</span> <span class="toctext">API пользовательского программирования</span></a></li>
+</ul>
+</div>
+
+<p>Специальный модуль FLibSYS предоставляет в систему OpenSCADA статическую библиотеку функций для работы с системой OpenSCADA на уровне её системного API. Эти функции могут использоваться в среде пользовательского программирования системы OpenSCADA для организации неординарных алгоритмов взаимодействия.
+</p><p>Для адресации к функциям этой библиотеки можно использовать статический адрес вызова "<b>Special.FLibSYS.{Func}()</b>" или динамический "<b>SYS.Special.FLibSYS["{Func}"].call()</b>", "<b>SYS.Special.FLibSYS.{Func}()</b>". Где <i>{Func}</i> — идентификатор функции в библиотеке.
+</p><p>Ниже приведено описание каждой функции библиотеки. Для каждой функции производилась оценка времени исполнения. Измерение производилось на системе со следующими параметрами: Athlon 64 3000+ (ALTLinux 4.0(32бит)) путём замера общего времени исполнения функции при вызове её 1000 раз. Выборка производилась из пяти вычислений с округлением до меньшего целого. Время заключается в угловые скобки и измеряется в микросекундах. 
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.89.D0.B5.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D1.8B.D0.B5_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8"><span class="mw-headline-number">1</span> Общесистемные функции</span></h2>
+<h3><span class="mw-headline" id=".D0.92.D1.8B.D0.B7.D0.BE.D0.B2_.D0.BA.D0.BE.D0.BD.D1.81.D0.BE.D0.BB.D1.8C.D0.BD.D1.8B.D1.85_.D0.BA.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4_.D0.B8_.D1.83.D1.82.D0.B8.D0.BB.D0.B8.D1.82_.D0.BE.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.BE.D0.BD.D0.BD.D0.BE.D0.B9_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.28sysCall.29"><span class="mw-headline-number">1.1</span> Вызов консольных команд и утилит операционной системы (sysCall)</span></h3>
+<p><i>Описание:</i> Осуществляет вызовы консольных команд ОС. Функция открывает широкие возможности пользователю OpenSCADA путём вызова любых системных программ, утилит и скриптов, а также получения посредством них доступа к огромному объёму системных данных. Например команда "ls -l" вернёт детализированное содержимое рабочей директории.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> com </td>
+<td> Команда </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr></table>
+<p><i>Пример:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+test=sysCall("ls -l");
+messPut("Example",0,"Example: "+test);</pre>
+<h3><span class="mw-headline" id="DB:_SQL_.D0.B7.D0.B0.D0.BF.D1.80.D0.BE.D1.81_.28dbReqSQL.29"><span class="mw-headline-number">1.2</span> DB: SQL запрос (dbReqSQL)</span></h3>
+<p><i>Описание:</i> Формирование SQL-запроса <i>req</i> к БД <i>addr</i>, внутри (<i>trans</i>=true), вне (<i>trans</i>=false) или безразлично (<i>trans</i>=EVAL) к транзакции. В случае ошибки её значение помещается в свойство "err" результата.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Объект(Массив) </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Адрес БД, "{TypeDB}.{DB}" </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr>
+<tr>
+<td> req </td>
+<td> SQL-запрос </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr>
+<tr>
+<td> trans </td>
+<td> Транзакция </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> EVAL
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.A3.D0.B7.D0.B5.D0.BB_XML_.28xmlNode.29"><span class="mw-headline-number">1.3</span> Узел XML (xmlNode)</span></h3>
+<p><i>Описание:</i> Создание объекта узла XML.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Объект(XMLNodeObj) </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> name </td>
+<td> Имя </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr></table>
+<p><i>Пример:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+//Создание объекта "get" узла XML.
+req = xmlNode("get");
+//Создание объекта "get" узла XML с созданием атрибутов.
+//sub_DAQ/mod_ModBus/cntr_1/prm_1 — путь согласно структуре проекта
+req = xmlNode("get").setAttr("path","/sub_DAQ/mod_ModBus/cntr_1/prm_1/%2fprm%2fst%2fen");</pre>
+<h3><span class="mw-headline" id=".D0.97.D0.B0.D0.BF.D1.80.D0.BE.D1.81_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B0_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F_.28xmlCntrReq.29"><span class="mw-headline-number">1.4</span> Запрос интерфейса управления (xmlCntrReq)</span></h3>
+<p><i>Описание:</i> Запрос интерфейса управления к системе посредством XML. Обычный запрос записывается в виде "<b>&lt;get path="/OPath/%2felem"/&gt;</b>". При указании станции осуществляется запрос к внешней станции.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> req </td>
+<td> Запрос </td>
+<td> Объект(XMLNodeObj) </td>
+<td> Выход </td>
+<td>
+</td></tr>
+<tr>
+<td> stat </td>
+<td> Станция </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr></table>
+<p><i>Пример:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+//Получение признака "Включен/Выключен" параметра "1" контроллера "1" модуля "ModBus".
+//sub_DAQ/mod_ModBus/cntr_1/prm_1 — путь согласно структуре проекта
+req = xmlNode("get").setAttr("path","/sub_DAQ/mod_ModBus/cntr_1/prm_1/%2fprm%2fst%2fen");
+rez = xmlCntrReq(req);
+messPut("test",0,"Значение: "+req.text());
+
+//Установка признака "Включен" параметра "1" контроллера "1" модуля "ModBus".
+req = xmlNode("set").setAttr("path","/sub_DAQ/mod_ModBus/cntr_1/prm_1/%2fprm%2fst%2fen").setText(1);
+rez = xmlCntrReq(req);
+
+//Установка признака "Выключен" параметра "1" контроллера "1" модуля "ModBus".
+req = xmlNode("set").setAttr("path","/sub_DAQ/mod_ModBus/cntr_1/prm_1/%2fprm%2fst%2fen").setText(0);
+rez = xmlCntrReq(req);
+</pre>
+<h3><span class="mw-headline" id=".D0.90.D1.80.D1.85.D0.B8.D0.B2_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.28vArh.29"><span class="mw-headline-number">1.5</span> Архив значений (vArh)</span></h3>
+<p><i>Описание:</i> Получение объекта архива значений (VArchObj) путём подключения к архиву по его адресу.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Объект(VArchObj) </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> name </td>
+<td> Имя, адрес к атрибуту параметра с архивом (<b>DAQ.{Module}.{Cntr}.{Prm}.{Attr}</b>) или непосредственно к архиву значений (<b>Archive.va_{ValArchive}</b>). </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr></table>
+<h4><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_VArchObj"><span class="mw-headline-number">1.5.1</span> Объект VArchObj</span></h4>
+<p>Функции:
+</p>
+<ul><li> <i>bool isNull()</i> — объект не инициирован.</li>
+<li> <i>int begin( int usec = 0, string archivator = "" )</i> — получение времени начала архива путём возврата секунд и микросекунд <i>usec</i> для архиватора <i>archivator</i>.</li>
+<li> <i>int end( int usec = 0, string archivator = "" )</i> — получение времени окончания архива путём возврата секунд и микросекунд <i>usec</i> для архиватора <i>archivator</i>.</li>
+<li> <i>int period( int usec = 0, string archivator = "" )</i> — получение периодичности архива путём возврата секунд и микросекунд <i>usec</i> для архиватора <i>archivator</i>.</li>
+<li> <i>ValObj get( int sec, int usec, bool upOrd = false, string archivator = "" )</i> — получение значения из архива на время <i>sec</i>:<i>usec</i> с привязкой к верху <i>upOrd</i> и для архиватора <i>archivator</i>. Реальное время полученного значения устанавливается в <i>sec</i>:<i>usec</i>.</li>
+<li> <i>bool set( ValObj val, int sec, int usec, string archivator = "" )</i> — запись значения <i>val</i> в архив на время <i>sec</i>:<i>usec</i> для архиватора <i>archivator</i>.</li>
+<li> <i>bool copy( VArchObj src, int begSec, int begUSec, int endSec, int endUSec, string archivator = "" )</i> — копирование части исходного <i>src</i> архива или его буфера в текущий начиная с <i>begSec</i>:<i>begUSec</i> и заканчивая <i>endSec</i>:<i>endUSec</i> для архиватора <i>archivator</i>.</li>
+<li> <i>ArrayObj FFT( int tm, real size, string archivator = "", int tm_usec = 0 )</i> — выполняет разложение в ряд Фурье с помощью FFT алгоритма. Возвращается массив амплитуд частот для окна значений из архива с временем начала <i>tm:tm_usec</i> (секунды:микросекунды), глубиной в историю архива <i>size</i> (секунд) и для архиватора <i>archivator</i>.<br /></li></ul>
+<p><i>Пример:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+val = vArh(strPath2Sep(addr)).get(time,uTime,0,archivator);
+return val.isEval()&nbsp;? "Пусто"&nbsp;: real2str(val,prec);</pre>
+<h3><span class="mw-headline" id=".D0.91.D1.83.D1.84.D0.B5.D1.80_.D0.B0.D1.80.D1.85.D0.B8.D0.B2.D0.B0_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.28vArhBuf.29"><span class="mw-headline-number">1.6</span> Буфер архива значений (vArhBuf)</span></h3>
+<p><i>Описание:</i> Получение объекта буфера архива значений (VArchObj) для выполнения промежуточных операций над кадрами данных.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Объект(VArchObj) </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> tp </td>
+<td> Тип значений архива (0-Boolean, 1-Integer, 4-Real, 5-String) </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 1
+</td></tr>
+<tr>
+<td> sz </td>
+<td> Максимальный размер буфера </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 100
+</td></tr>
+<tr>
+<td> per </td>
+<td> Периодичность буфера (в микросекундах) </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 1000000
+</td></tr>
+<tr>
+<td> hgrd </td>
+<td> Режим "Жесткая сетка времени" </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> 0
+</td></tr>
+<tr>
+<td> hres </td>
+<td> Режим "Высокого разрешения времени (микросекунды)" </td>
+<td> Логический </td>
+<td> Вход </td>
+<td> 0
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.92.D0.B2.D0.BE.D0.B4.2F.D0.92.D1.8B.D0.B2.D0.BE.D0.B4_.28IO.29"><span class="mw-headline-number">1.7</span> Ввод/Вывод (IO)</span></h3>
+<p><i>Описание:</i> Ввод/Вывод в: файл, строковый поток.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Объект(IO) </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> name </td>
+<td> Имя файла или данные (для строкового потока) </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr>
+<tr>
+<td> accs </td>
+<td> Доступ к файлу (""-строковый поток;"r[+]"-чтение;"w[+]"-запись с нуля;"a[+]"-добавление;...) </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr>
+<tr>
+<td> mFormat </td>
+<td> Формат данных машины ('n'-сист. порядок;'b'-BigEndian;'l'-LittleEndian) </td>
+<td> Целое </td>
+<td> Вход </td>
+<td> "n"
+</td></tr>
+<tr>
+<td> enc </td>
+<td> Кодировка строки в файле </td>
+<td> Логический </td>
+<td> Вход </td>
+<td>
+</td></tr></table>
+<h4><span class="mw-headline" id="IO_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82"><span class="mw-headline-number">1.7.1</span> IO объект</span></h4>
+<p>Значения:
+</p>
+<ul><li> <i>valType</i> — типы значений:
+<ul><li> "uchar", "unsigned char", "char", "schar", "signed char";</li>
+<li> "uint8";</li>
+<li> "uint16", "ushort";</li>
+<li> "uint32", "uint", "ulong";</li>
+<li> "uint64";</li>
+<li> "char", "int8", "schar", "signed char", "integer*1";</li>
+<li> "int16", "integer*2";</li>
+<li> "int32", "int", "long", "integer*4", "integer";</li>
+<li> "int64", "integer*8";</li>
+<li> "float", "float32", "single", "real*4";</li>
+<li> "double", "float64", "real*8", "real";</li></ul></li>
+<li> <i>accs</i> — режим доступа и тип:
+<ul><li> <i> — строковый поток;</i></li>
+<li> 'r[+]' — чтение;</li>
+<li> 'w[+]' — запись с нуля;</li>
+<li> 'a[+]' — добавление.</li></ul></li>
+<li> <i>mFormat</i> — формат данных машины:
+<ul><li> 'n' — нативный;</li>
+<li> 'l' — LittleEndian;</li>
+<li> 'b' — BigEndian.</li></ul></li></ul>
+<p>Свойства:
+</p>
+<ul><li> <i>length</i> — длина потока;</li>
+<li> <i>pos</i> (w) — позиция чтения/записи потока.</li>
+<li> <i>string</i> (w) — полное значение строкового потока;</li>
+<li> <i>mFormat</i> (w) — формат данных машины;</li>
+<li> <i>stringEncode</i> (w) — кодировка подстрок файла/строки.</li></ul>
+<p>Функции:
+</p>
+<ul><li> <i>bool open(string name = "", string accs = "", string mFormat = "n", string enc = "");</i> — Открытие нового потока для строки или файла <i>name</i>.</li>
+<li> <i>bool close();</i> — Закрытие потока.</li>
+<li> <i>{string|int|real|Array[int|real]} read(string valType = "char", int cnt = -1, string mFormatEnc = "n|NoEnc");</i> — Чтение значения типа <i>valType</i> в количестве <i>cnt</i> для формата машины или входной кодировки строки <i>mFormatEnc</i>.</li>
+<li> <i>{int|IO} {write|wr}({string|int|double|Array} vals, string valType = "char", string mFormatEnc = "n|NoEnc", int cnt = 1);</i> — Запись значения(ий) <i>vals</i> для типа <i>valType</i> для формата машины или входной кодировки строки <i>mFormatEnc</i>, и повтора скалярных значений в количестве <i>cnt</i>.</li></ul>
+<h2><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D0.B4.D0.BB.D1.8F_.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D1.8B_.D1.81_.D0.B0.D1.81.D1.82.D1.80.D0.BE.D0.BD.D0.BE.D0.BC.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.BC_.D0.B2.D1.80.D0.B5.D0.BC.D0.B5.D0.BD.D0.B5.D0.BC"><span class="mw-headline-number">2</span> Функции для работы с астрономическим временем</span></h2>
+<h3><span class="mw-headline" id=".D0.A1.D1.82.D1.80.D0.BE.D0.BA.D0.B0_.D0.B2.D1.80.D0.B5.D0.BC.D0.B5.D0.BD.D0.B8_.28tmFStr.29_.3C3047.3E"><span class="mw-headline-number">2.1</span> Строка времени (tmFStr) &lt;3047&gt;</span></h3>
+<p><i>Описание:</i> Преобразует абсолютное время в строку нужного формата. Запись формата соответствует POSIX-функции strftime.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>val</td>
+<td>Строка полной даты</td>
+<td>Строка</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>sec</td>
+<td>Секунды</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>form</td>
+<td>Формат</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>%Y-%m-%d&nbsp;%H:%M:%S
+</td></tr></table>
+<p><i>Пример:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+test=tmFStr(SYS.time(),"%d&nbsp;%m&nbsp;%Y");
+messPut("Example",0,"tmFStr(): "+test);</pre>
+<h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.BB.D0.BD.D0.B0.D1.8F_.D0.B4.D0.B0.D1.82.D0.B0_.28tmDate.29_.3C973.3E"><span class="mw-headline-number">2.2</span> Полная дата (tmDate) &lt;973&gt;</span></h3>
+<p><i>Описание:</i> Возвращает полную дату в секундах, минутах, часах и т.д, исходя из абсолютного времени в секундах от эпохи 1.1.1970.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>fullsec</td>
+<td>Полные секунды</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>sec</td>
+<td>Секунды [0...59]</td>
+<td>Целый</td>
+<td>Выход</td>
+<td>0
+</td></tr>
+<tr>
+<td>min</td>
+<td>Минуты [0...59]</td>
+<td>Целый</td>
+<td>Выход</td>
+<td>0
+</td></tr>
+<tr>
+<td>hour</td>
+<td>Часы [0...23]</td>
+<td>Целый</td>
+<td>Выход</td>
+<td>0
+</td></tr>
+<tr>
+<td>mday</td>
+<td>День месяца [1...31]</td>
+<td>Целый</td>
+<td>Выход</td>
+<td>0
+</td></tr>
+<tr>
+<td>month</td>
+<td>Месяц [0...11]</td>
+<td>Целый</td>
+<td>Выход</td>
+<td>0
+</td></tr>
+<tr>
+<td>year</td>
+<td>Год, от 1900</td>
+<td>Целый</td>
+<td>Выход</td>
+<td>0
+</td></tr>
+<tr>
+<td>wday</td>
+<td>День недели [0...6]</td>
+<td>Целый</td>
+<td>Выход</td>
+<td>0
+</td></tr>
+<tr>
+<td>yday</td>
+<td>День в году [0...365]</td>
+<td>Целый</td>
+<td>Выход</td>
+<td>0
+</td></tr>
+<tr>
+<td>isdst</td>
+<td>Летнее время</td>
+<td>Целый</td>
+<td>Выход</td>
+<td>0
+</td></tr></table>
+<p><i>Пример:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+curMin=curHour=curDay=curMonth=curYear=0;
+tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
+messPut("test",0,"Текущая минута: "+curMin);
+messPut("test",0,"Текущий час&nbsp;: "+curHour);
+messPut("test",0,"Текущий день: "+curDay);
+messPut("test",0,"Текущий месяц: "+curMonth);
+messPut("test",0,"Текущий год: "+curYear);
+</pre>
+<h3><span class="mw-headline" id=".D0.90.D0.B1.D1.81.D0.BE.D0.BB.D1.8E.D1.82.D0.BD.D0.BE.D0.B5_.D0.B2.D1.80.D0.B5.D0.BC.D1.8F_.28tmTime.29_.3C220.3E"><span class="mw-headline-number">2.3</span> Абсолютное время (tmTime) &lt;220&gt;</span></h3>
+<p><i>Описание:</i> Возвращает абсолютное время в секундах от эпохи 1.1.1970 и микросекундах, если <i>usec</i> установлен в неотрицательное значение.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>sec</td>
+<td>Секунды</td>
+<td>Целый</td>
+<td>Возврат</td>
+<td>0
+</td></tr>
+<tr>
+<td>usec</td>
+<td>Микросекунды</td>
+<td>Целый</td>
+<td>Выход</td>
+<td>-1
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D0.B2.D0.B5.D1.80.D1.82.D0.B0.D1.86.D0.B8.D1.8F_.D0.B2.D1.80.D0.B5.D0.BC.D0.B5.D0.BD.D0.B8_.D0.B8.D0.B7_.D1.81.D0.B8.D0.BC.D0.B2.D0.BE.D0.BB.D1.8C.D0.BD.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.B5.D0.B4.D1.81.D1.82.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B8_.D0.B2.D0.BE_.D0.B2.D1.80.D0.B5.D0.BC.D1.8F_.D0.B2_.D1.81.D0.B5.D0.BA.D1.83.D0.BD.D0.B4.D0.B0.D1.85.2C_.D0.BE.D1.82_.D1.8D.D0.BF.D0.BE.D1.85.D0.B8_1.1.1970_.28tmStrPTime.29_.3C2600.3E"><span class="mw-headline-number">2.4</span> Конвертация времени из символьного представлении во время в секундах, от эпохи 1.1.1970 (tmStrPTime) &lt;2600&gt;</span></h3>
+<p><i>Описание:</i> Возвращает время в секундах от эпохи 1.1.1970, исходя из строковой записи времени, в соответствии с указанным шаблоном. Например, шаблону "%Y-%m-%d&nbsp;%H:%M:%S" соответствует время "2006-08-08 11:21:55". Описание формата шаблона можно получить из документации на POSIX-функцию "strptime".<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>sec</td>
+<td>Секунды</td>
+<td>Целый</td>
+<td>Возврат</td>
+<td>0
+</td></tr>
+<tr>
+<td>str</td>
+<td>Строка даты</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>form</td>
+<td>Формат записи даты</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>%Y-%m-%d&nbsp;%H:%M:%S
+</td></tr></table>
+<p><i>Пример:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+curMin=curHour=curDay=curMonth=curYear=0;
+tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
+test = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d&nbsp;%H:%M:%S");
+messPut("Example",0,"tmStrPTime(): "+test);</pre>
+<h3><span class="mw-headline" id=".D0.9F.D0.BB.D0.B0.D0.BD.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D0.B2.D1.80.D0.B5.D0.BC.D0.B5.D0.BD.D0.B8_.D0.B2_.D1.84.D0.BE.D1.80.D0.BC.D0.B0.D1.82.D0.B5_Cron_.28tmCron.29"><span class="mw-headline-number">2.5</span> Планирование времени в формате Cron (tmCron)</span></h3>
+<p><i>Описание:</i> Возвращает время спланированное в формате стандарта Cron начиная от базового времени или от текущего если базовое не указано.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> res </td>
+<td> Результат </td>
+<td> Целый </td>
+<td> Возврат </td>
+<td> 0
+</td></tr>
+<tr>
+<td> str </td>
+<td> Запись в стандарте Cron </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> * * * * *
+</td></tr>
+<tr>
+<td> base </td>
+<td> Базовое время </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 0
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.A1.D0.BE.D0.BD_.28tmSleep.29"><span class="mw-headline-number">2.6</span> Сон (tmSleep)</span></h3>
+<p><i>Описание:</i> Короткий сон от наносекунд и до STD_INTERF_TM (5 секунд).<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> res </td>
+<td> Результат </td>
+<td> Целый </td>
+<td> Возврат </td>
+<td> 0
+</td></tr>
+<tr>
+<td> tm </td>
+<td> Время </td>
+<td> Вещественный </td>
+<td> Вход </td>
+<td> 0
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D1.8B_.D1.81_.D1.81.D0.BE.D0.BE.D0.B1.D1.89.D0.B5.D0.BD.D0.B8.D1.8F.D0.BC.D0.B8"><span class="mw-headline-number">3</span> Функции работы с сообщениями</span></h2>
+<h3><span class="mw-headline" id=".D0.97.D0.B0.D0.BF.D1.80.D0.BE.D1.81_.D1.81.D0.BE.D0.BE.D0.B1.D1.89.D0.B5.D0.BD.D0.B8.D0.B9_.28messGet.29"><span class="mw-headline-number">3.1</span> Запрос сообщений (messGet)</span></h3>
+<p><i>Описание:</i> Запрос системных сообщений.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Результат</td>
+<td>Объект(Массив)</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>btm</td>
+<td>Время начала</td>
+<td>Целое</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>etm</td>
+<td>Время конца</td>
+<td>Целое</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>cat</td>
+<td>Категория сообщения</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>lev</td>
+<td>Уровень сообщения</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>arch</td>
+<td>Архиватор</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.93.D0.B5.D0.BD.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D1.8F_.D1.81.D0.BE.D0.BE.D0.B1.D1.89.D0.B5.D0.BD.D0.B8.D1.8F_.28messPut.29"><span class="mw-headline-number">3.2</span> Генерация сообщения (messPut)</span></h3>
+<p><i>Описание:</i> Формирование системного сообщения.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>cat</td>
+<td>Категория сообщения</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>lev</td>
+<td>Уровень сообщения</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>mess</td>
+<td>Текст сообщения</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr></table>
+<p><i>Пример:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+rnd_sq_gr11_lineClr="red";
+Special.FLibSYS.messPut("Example",1,"Event: "+rnd_sq_gr12_leniClr);
+</pre>
+<h2><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D1.8B_.D1.81_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B0.D0.BC.D0.B8"><span class="mw-headline-number">4</span> Функции работы с строками</span></h2>
+<h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.BB.D1.83.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.D1.80.D0.B0.D0.B7.D0.BC.D0.B5.D1.80.D0.B0_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.28strSize.29_.3C114.3E"><span class="mw-headline-number">4.1</span> Получение размера строки (strSize) &lt;114&gt;</span></h3>
+<p><i>Описание:</i> Используется для получения размера.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Результат</td>
+<td>Целый</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>str</td>
+<td>Строка</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr></table>
+<p><i>Пример:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+Special.FLibSYS.messPut("Example",1,"ReturnString: "+strSize("Example"));
+</pre>
+<h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.BB.D1.83.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.D1.87.D0.B0.D1.81.D1.82.D0.B8_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.28strSubstr.29_.3C413.3E"><span class="mw-headline-number">4.2</span> Получение части строки (strSubstr) &lt;413&gt;</span></h3>
+<p><i>Описание:</i> Используется для получения части строки.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Результат</td>
+<td>Строка</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>str</td>
+<td>Строка</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>pos</td>
+<td>Позиция</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>n</td>
+<td>Количество</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>-1
+</td></tr></table>
+<p><i>Пример:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+test=strSubstr("Example", 0, strSize("Example")-1);
+messPut("Example",1,"ReturnString: "+test);</pre>
+<h3><span class="mw-headline" id=".D0.92.D1.81.D1.82.D0.B0.D0.B2.D0.BA.D0.B0_.D0.BE.D0.B4.D0.BD.D0.BE.D0.B9_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.D0.B2_.D0.B4.D1.80.D1.83.D0.B3.D1.83.D1.8E_.28strInsert.29_.3C1200.3E"><span class="mw-headline-number">4.3</span> Вставка одной строки в другую (strInsert) &lt;1200&gt;</span></h3>
+<p><i>Описание:</i> Используется для вставки одной строки в другую.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>str</td>
+<td>Строка</td>
+<td>Строка</td>
+<td>Выход</td>
+<td>
+</td></tr>
+<tr>
+<td>pos</td>
+<td>Позиция</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>ins</td>
+<td>Вставляемая строка</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.97.D0.B0.D0.BC.D0.B5.D0.BD.D0.B0_.D1.87.D0.B0.D1.81.D1.82.D0.B8_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.D0.B4.D1.80.D1.83.D0.B3.D0.BE.D0.B9_.28strReplace.29_.3C531.3E"><span class="mw-headline-number">4.4</span> Замена части строки другой (strReplace) &lt;531&gt;</span></h3>
+<p><i>Описание:</i> Используется для замены части строки другой строкой.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>str</td>
+<td>Строка</td>
+<td>Строка</td>
+<td>Выход</td>
+<td>
+</td></tr>
+<tr>
+<td>pos</td>
+<td>Позиция</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>n</td>
+<td>Количество</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>-1
+</td></tr>
+<tr>
+<td>repl</td>
+<td>Заменяющая строка</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.A0.D0.B0.D0.B7.D0.B1.D0.BE.D1.80_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.D0.BF.D0.BE_.D1.80.D0.B0.D0.B7.D0.B4.D0.B5.D0.BB.D0.B8.D1.82.D0.B5.D0.BB.D1.8E_.28strParse.29_.3C537.3E"><span class="mw-headline-number">4.5</span> Разбор строки по разделителю (strParse) &lt;537&gt;</span></h3>
+<p><i>Описание:</i> Используется в разборе строки по разделителю.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Результат</td>
+<td>Строка</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>str</td>
+<td>Строка</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>lev</td>
+<td>Уровень</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>sep</td>
+<td>Разделитель</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>"."
+</td></tr>
+<tr>
+<td>off</td>
+<td>Смещение</td>
+<td>Целый</td>
+<td>Выход</td>
+<td>
+</td></tr></table>
+<p><i>Пример:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+ExapleString="Example:123";
+test=strParse(ExapleString,1,":");
+messPut("Example",0,"strParse(): "+test);</pre>
+<h3><span class="mw-headline" id=".D0.A0.D0.B0.D0.B7.D0.B1.D0.BE.D1.80_.D0.BF.D1.83.D1.82.D0.B8_.28strParsePath.29_.3C300.3E"><span class="mw-headline-number">4.6</span> Разбор пути (strParsePath) &lt;300&gt;</span></h3>
+<p><i>Описание:</i> Используется в разборе пути на элементы.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Результат</td>
+<td>Строка</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>path</td>
+<td>Путь</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>lev</td>
+<td>Уровень</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>off</td>
+<td>Смещение</td>
+<td>Целый</td>
+<td>Выход</td>
+<td>
+</td></tr></table>
+<p><i>Пример:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+test=strParsePath(path,0,"/");
+messPut("Example",1,"strParsePath(): "+test);</pre>
+<h3><span class="mw-headline" id=".D0.9F.D1.83.D1.82.D1.8C_.D0.B2_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D1.83_.D1.81_.D1.80.D0.B0.D0.B7.D0.B4.D0.B5.D0.BB.D0.B8.D1.82.D0.B5.D0.BB.D0.B5.D0.BC_.28strPath2Sep.29"><span class="mw-headline-number">4.7</span> Путь в строку с разделителем (strPath2Sep)</span></h3>
+<p><i>Описание:</i> Используется для преобразования пути в строку с разделителем.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Результат</td>
+<td>Строка</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>src</td>
+<td>Источник</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>sep</td>
+<td>Разделитель</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>"."
+</td></tr></table>
+<p><i>Пример:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+//Преобразуем значение "/ses_AGLKS/pg_so" атрибута "path" в значение "ses_AGLKS.pg_so"
+using Special.FLibSYS;
+test = strPath2Sep(path);
+messPut("Example",0,"path: "+path);
+messPut("Example",0,"strPath2Sep(): "+test);</pre>
+<h3><span class="mw-headline" id=".D0.9A.D0.BE.D0.B4.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.D0.B2_HTML_.28strEnc2HTML.29"><span class="mw-headline-number">4.8</span> Кодирование строки в HTML (strEnc2HTML)</span></h3>
+<p><i>Описание:</i> Используется для кодирования строки для использования в исходнике HTML.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Результат</td>
+<td>Строка</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>src</td>
+<td>Источник</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.9A.D0.BE.D0.B4.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D0.B0_.D0.B2_.D0.B1.D0.B8.D0.BD.D0.B0.D1.80.D0.BD.D1.8B.D0.B9_.D0.B2.D0.B8.D0.B4_.28strEnc2Bin.29"><span class="mw-headline-number">4.9</span> Кодирование текста в бинарный вид (strEnc2Bin)</span></h3>
+<p><i>Описание:</i> Используется для кодирования текста в бинарный вид, из формата &lt;00 A0 FA DE&gt;.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Результат</td>
+<td>Строка</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>src</td>
+<td>Источник</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.94.D0.B5.D0.BA.D0.BE.D0.B4.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D0.B0_.D0.B8.D0.B7_.D0.B1.D0.B8.D0.BD.D0.B0.D1.80.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D0.B8.D0.B4.D0.B0_.28strDec4Bin.29"><span class="mw-headline-number">4.10</span> Декодирование текста из бинарного вида (strDec4Bin)</span></h3>
+<p><i>Описание:</i> Используется для декодирования текста из бинарного вида в формат &lt;00 A0 FA DE&gt;.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Результат</td>
+<td>Строка</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>src</td>
+<td>Источник</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.9F.D1.80.D0.B5.D0.BE.D0.B1.D1.80.D0.B0.D0.B7.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D0.B2.D0.B5.D1.89.D0.B5.D1.81.D1.82.D0.B2.D0.B5.D0.BD.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D1.83_.28real2str.29"><span class="mw-headline-number">4.11</span> Преобразование вещественного в строку (real2str)</span></h3>
+<p><i>Описание:</i> Используется для преобразования вещественного в строку.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Результат</td>
+<td>Строка</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>val</td>
+<td>Значение</td>
+<td>Вещественное</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>prc</td>
+<td>Точность</td>
+<td>Целое</td>
+<td>Вход</td>
+<td>4
+</td></tr>
+<tr>
+<td>tp</td>
+<td>Тип</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>"f"
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.9F.D1.80.D0.B5.D0.BE.D0.B1.D1.80.D0.B0.D0.B7.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.86.D0.B5.D0.BB.D0.BE.D0.B3.D0.BE_.D0.B2_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D1.83_.28int2str.29"><span class="mw-headline-number">4.12</span> Преобразование целого в строку (int2str)</span></h3>
+<p><i>Описание:</i> Используется для преобразования целого в строку.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Результат</td>
+<td>Строка</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>val</td>
+<td>Значение</td>
+<td>Целое</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>base</td>
+<td>База, поддерживаются: 8, 10, 16</td>
+<td>Целое</td>
+<td>Вход</td>
+<td>10
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.9F.D1.80.D0.B5.D0.BE.D0.B1.D1.80.D0.B0.D0.B7.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.D0.B2_.D0.B2.D0.B5.D1.89.D0.B5.D1.81.D1.82.D0.B2.D0.B5.D0.BD.D0.BD.D0.BE.D0.B5_.28str2real.29"><span class="mw-headline-number">4.13</span> Преобразование строки в вещественное (str2real)</span></h3>
+<p><i>Описание:</i> Используется для преобразования строки в вещественное.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Результат</td>
+<td>Вещественное</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>val</td>
+<td>Значение</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.9F.D1.80.D0.B5.D0.BE.D0.B1.D1.80.D0.B0.D0.B7.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8_.D0.B2_.D1.86.D0.B5.D0.BB.D0.BE.D0.B5_.28str2int.29"><span class="mw-headline-number">4.14</span> Преобразование строки в целое (str2int)</span></h3>
+<p><i>Описание:</i> Используется для преобразования строки в целое.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Результат</td>
+<td>Целое</td>
+<td>Возврат</td>
+<td>
+</td></tr>
+<tr>
+<td>val</td>
+<td>Значение</td>
+<td>Строка</td>
+<td>Вход</td>
+<td>
+</td></tr>
+<tr>
+<td>base</td>
+<td>Основа</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>0
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.A6.D0.B8.D0.BA.D0.BB.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B9_.D0.98.D0.B7.D0.B1.D1.8B.D1.82.D0.BE.D1.87.D0.BD.D1.8B.D0.B9_.D0.9A.D0.BE.D0.B4_.28CRC.29"><span class="mw-headline-number">4.15</span> Циклический Избыточный Код (CRC)</span></h3>
+<p><i>Описание:</i> Реализация Циклического Избыточного Кода для длин 8-64 бит.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Целое </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> data </td>
+<td> Данные </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr>
+<tr>
+<td> poly </td>
+<td> Полином (реверсивный) </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 40961 (0xA001)
+</td></tr>
+<tr>
+<td> width </td>
+<td> Ширина </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 16
+</td></tr>
+<tr>
+<td> init </td>
+<td> Инициализация </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> -1 (0xFFFFFFFFFFFFFFFF)
+</td></tr></table>
+<h3><span class="mw-headline" id=".D0.A1.D0.BB.D0.B5.D0.BF.D0.BE.D0.BA_.D1.81.D0.BE.D0.BE.D0.B1.D1.89.D0.B5.D0.BD.D0.B8.D1.8F_5_.28MD5.29"><span class="mw-headline-number">4.16</span> Слепок сообщения 5 (MD5)</span></h3>
+<p><i>Описание:</i> Расчёт слепка сообщения 5.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> data </td>
+<td> Данные </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D1.8B_.D1.81_.D0.B2.D0.B5.D1.89.D0.B5.D1.81.D1.82.D0.B2.D0.B5.D0.BD.D0.BD.D1.8B.D0.BC"><span class="mw-headline-number">5</span> Функции работы с вещественным</span></h2>
+<h3><span class="mw-headline" id="Float:_.D0.A0.D0.B0.D0.B7.D0.B4.D0.B5.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.D0.BD.D0.B0_.D1.81.D0.BB.D0.BE.D0.B2.D0.B0_.28floatSplitWord.29"><span class="mw-headline-number">5.1</span> Float: Разделение на слова (floatSplitWord)</span></h3>
+<p><i>Описание:</i> Разделение float (4 байтов) на слова (2 байта).<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> val </td>
+<td> Значение </td>
+<td> Вещественное </td>
+<td> Вход </td>
+<td>
+</td></tr>
+<tr>
+<td> w1 </td>
+<td> Слово 1 </td>
+<td> Целый </td>
+<td> Выход </td>
+<td>
+</td></tr>
+<tr>
+<td> w2 </td>
+<td> Слово 2 </td>
+<td> Целый </td>
+<td> Выход </td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id="Float:_.D0.9E.D0.B1.D1.8A.D0.B5.D0.B4.D0.B8.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_.D0.B8.D0.B7_.D1.81.D0.BB.D0.BE.D0.B2_.28floatMergeWord.29"><span class="mw-headline-number">5.2</span> Float: Объединение из слов (floatMergeWord)</span></h3>
+<p><i>Описание:</i> Объединение float (4 байтов) из слов (2 байта).<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Вещественное </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> w1 </td>
+<td> Слово 1 </td>
+<td> Целый </td>
+<td> Вход </td>
+<td>
+</td></tr>
+<tr>
+<td> w2 </td>
+<td> Слово 2 </td>
+<td> Целый </td>
+<td> Вход </td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id="Float:_.D0.98.D0.B7.D0.B2.D0.BB.D0.B5.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.28floatExtract.29"><span class="mw-headline-number">5.3</span> Float: Извлечение (floatExtract)</span></h3>
+<p><i>Описание:</i> Извлечение мантиссы и экспоненты из вещественного значения.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> magn </td>
+<td> Размер </td>
+<td> Вещественный </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> val </td>
+<td> Значение </td>
+<td> Вещественный </td>
+<td> Вход </td>
+<td>
+</td></tr>
+<tr>
+<td> exp </td>
+<td> Экспонента </td>
+<td> Целый </td>
+<td> Выход </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id="API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">6</span> API пользовательского программирования</span></h2>
+<p>Некоторые объекты модуля предоставляют функции пользовательского программирования.
+</p><p><b>Объект "Библиотека функций" (SYS.Special.FLibSYS)</b>
+</p>
+<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — вызов функции библиотеки <i>{funcID}</i>. Возвращает результат вызываемой функции.</li></ul>
+<p><b>Объект "Пользовательская функция" (SYS.Special.FLibSYS["funcID"])</b>
+</p>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — вызов данной функции с параметрами <i>&lt;prm{N}&gt;</i>. Возвращает результат вызываемой функции.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

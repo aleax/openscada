@@ -1,0 +1,585 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Функции и требования - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Функции и требования</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Functions+and+demands&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Functions_and_demands" title="Functions and demands">Functions and demands</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Functions_and_demands" title="Functions and demands (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Functions_and_demands/uk" title="Функції та вимоги (100% translated)">українська</a></div></div>
+<p>Страница содержит информацию, позволяющую получить общее представление о функциях, которые может выполнять система OpenSCADA на текущий момент. Функции сгруппированы по сферам применения системы OpenSCADA. Для получения картины в целом включены также функции запланированные или реализуемые на данный момент. Страница также содержит требования системы OpenSCADA для её исполнения и сборки.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.A1.D1.84.D0.B5.D1.80.D0.B0_.D0.BF.D1.80.D0.B8.D0.BC.D0.B5.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F_OpenSCADA"><span class="tocnumber">1</span> <span class="toctext">Сфера применения OpenSCADA</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80_SCADA_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B"><span class="tocnumber">1.1</span> <span class="toctext">Сервер SCADA системы</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.A1.D1.82.D0.B0.D0.BD.D1.86.D0.B8.D1.8F_.D0.BE.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D0.B0_.D1.82.D0.B5.D1.85.D0.BD.D0.BE.D0.BB.D0.BE.D0.B3.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D1.86.D0.B5.D1.81.D1.81.D0.B0.2C_.D0.BF.D1.83.D0.BB.D1.8C.D1.82_.D0.B4.D0.B8.D1.81.D0.BF.D0.B5.D1.82.D1.87.D0.B5.D1.80.D0.B0.2C_.D0.BF.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.BC.D0.BE.D0.BD.D0.B8.D1.82.D0.BE.D1.80.D0.B8.D0.BD.D0.B3.D0.B0_.D0.B8_.D0.B4.D1.80.D1.83.D0.B3.D0.BE.D0.B5"><span class="tocnumber">1.2</span> <span class="toctext">Станция оператора технологического процесса, пульт диспетчера, панель мониторинга и другое</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.A1.D1.80.D0.B5.D0.B4.D0.B0_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.BE.D0.B2_.28.D0.9F.D0.9B.D0.9A.29"><span class="tocnumber">1.3</span> <span class="toctext">Среда исполнения контроллеров (ПЛК)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.D0.A3.D0.BD.D0.B8.D0.B2.D0.B5.D1.80.D1.81.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B9_OPC-UA_.D1.81.D0.B5.D1.80.D0.B2.D0.B5.D1.80"><span class="tocnumber">1.4</span> <span class="toctext">Универсальный OPC-UA сервер</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.A2.D1.80.D0.B5.D0.B1.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_OpenSCADA"><span class="tocnumber">2</span> <span class="toctext">Требования OpenSCADA</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#.D0.98.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5"><span class="tocnumber">2.1</span> <span class="toctext">Исполнение</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#.D0.A1.D0.B1.D0.BE.D1.80.D0.BA.D0.B0"><span class="tocnumber">2.2</span> <span class="toctext"><span>Сборка</span></span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id=".D0.A1.D1.84.D0.B5.D1.80.D0.B0_.D0.BF.D1.80.D0.B8.D0.BC.D0.B5.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F_OpenSCADA"><span class="mw-headline-number">1</span> Сфера применения OpenSCADA</span></h2>
+<p>Разбиение на сферы применения выполнено для упрощения восприятия функциональных возможностей системы в свете традиционной области для проекта OpenSCADA — автоматизация технологических процессов. Хотя возможна как смешанная, так и более специализированная конфигурация систем работы с данными в реального времени, например, в сферах: ERP, Билинг, Умный дом и др.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:497px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use_ru.png"><img class="thumbimage" height="670" src="files/Oscada_use_ru.png" width="495" /></a>  <div class="thumbcaption">Рис. 1. Роли системы OpenSCADA.</div></div></div></div>
+<hr />
+<h3><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80_SCADA_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B"><span class="mw-headline-number">1.1</span> Сервер SCADA системы</span></h3>
+<ul><li> Визуальный контроль и управление посредством интерфейсов:
+<ul><li> Удалённый сервер визуализации на основе движка визуализации и управления СВУ <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>. Локальный запуск модуля UI.Vision, подключенного к серверу визуализации.</li>
+<li> Удалённый WEB интерфейс. Посредством WEB-браузера, модуля визуализации <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> и модуля ядра среды визуализации и управления <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
+<li> Простые удалённые Web-интерфейсы пользователя. Посредством WEB-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebUser" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
+<li> Сбор данных (DAQ) из источников:
+<ul><li> Информация про платформу (программно-аппаратную) на которой работает сервер. С помощью модуля <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>.</li>
+<li> Сбор данных из источников, которые поддерживают протокол SNMP (Простой Протокол Управления Сетью). С помощью DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SNMP" title="Special:MyLanguage/Modules/SNMP">SNMP</a>.</li>
+<li> Сбор данных промышленных контроллеров фирмы Siemens серии S7. С помощью DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Siemens" title="Special:MyLanguage/Modules/Siemens">Siemens</a>.</li>
+<li> Сбор данных промышленных контроллеров по протоколу ModBus. С помощью DAQ-модуля <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
+<li> Сбор данных промышленных контролеров по протоколу DCON. С помощью DAQ-модуля <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>.</li>
+<li> Формирование производных структур параметров основываясь на шаблонах параметров и данных других источников. С помощью DAQ-модуля <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a>.</li>
+<li> Сбор данных с других серверов и ПЛК, построенных на OpenSCADA, возможно для дублирования. С помощью DAQ-модуля <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>.</li>
+<li> Сбор данных через входные каналы звуковых контроллеров. Посредством DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SoundCard" title="Special:MyLanguage/Modules/SoundCard">SoundCard</a>.</li>
+<li> Сбор данных оборудования фирмы <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>. Посредством DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ICP_DAS" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>.</li>
+<li> Сбор данных с источников, которые поддерживают протокол OPC-UA. Посредством DAQ-модуля <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a>.</li>
+<li> Сбор данных с автоматики птицеводства фирмы "Big Dutchman". Посредством DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/BFN" title="Special:MyLanguage/Modules/BFN">BFN</a>.</li>
+<li> Сбор данных с источников DAQ-плат на шинах ISA, PCI, PCMCIA и USB посредством библиотеки проекта Comedi и DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Comedi" title="Special:MyLanguage/Modules/Comedi">Comedi</a>.</li>
+<li> Сбор данных из источников различного типа, которые имеют утилиты для доступа к данным или доступны посредством простых специализированных сетевых протоколов. Осуществляется путём написания процедуры получения данных на языке пользовательского программирования DAQ-модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, а также модуля транспортного протокола "<a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">Пользовательский протокол</a>". Реализация наиболее известных протоколов как <a class="external text" href="http://wiki.oscada.org/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">Протокол пользователя</a>: SMS, SMTP, Elemer TM510x, EDWARDS TURBOMOLECULAR PUMPS (SCU750), Компьютер учёта тепла VKT7, Sycon Multi Drop Protocol, Блок питания турбо-молекулярных насосов (TMP-xx03), Измеритель температуры IT-3, OWEN, IVE-452HS-02, OPTRIS CT/CTL, CTR 100-101, IEC-60870-104, I2C чипы (PCF8591, PCF8574, DS3231, AT24CXX), 1Wire чипы через адаптеры DS9097 и DS9097U (DS1820, DS1820/DS18S20/DS1920, DS1822, DS2413, DS2408, DS2450, DS2438), Низкоуровневые устройства через GPIO (DHT, 1602A), другое.</li></ul></li>
+<li> Предоставление данных системам верхнего уровня:
+<ul><li> Посредством интерфейсов:
+<ul><li> Последовательного интерфейса (RS232, RS485, Modem, ...), с помощью модуля транспорта <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>.</li>
+<li> Сокетов IP-сетей и протоколов сетевого уровня TCP, UDP и Unix, с помощью модуля транспорта <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Сокеты</a>.</li>
+<li> Слоя безопасных сокетов (SSL), с помощью модуля транспорта <a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>.</li></ul></li>
+<li> Посредством протоколов:
+<ul><li> Собственный протокол OpenSCADA, с помощью модуля транспортного протокола <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li>
+<li> Протоколов семейства ModBus (TCP, RTU и ASCII), с помощью модуля транспортного протокола <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
+<li> Протокола "OPC-UA", с помощью модуля транспортного протокола <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a>.</li>
+<li> Простых специализированных протоколов, разработанных посредством модуля транспортного протоколу "<a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">Протокол Пользователя</a>".</li></ul></li></ul></li>
+<li> Выполнение вычислений пользователя на языках:
+<ul><li> Язык блочных схем. С помощью DAQ-модуля <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a>.</li>
+<li> На подобном на Java языке высокого уровня. С помощью DAQ-модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.</li></ul></li>
+<li> Архивация сообщений по разным категориям и уровням с помощью механизмов:
+<ul><li> Файлы в XML-формате или плоском тексте, и упаковкой устаревших архивов. С помощью модуля архивации <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a>.</li>
+<li> В таблицах архивных БД. С помощью модуля архивации <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li>
+<li> <span style="color: red">Запланировано.</span> На другой сервер, возможно удалённый сервер архивации, основанных на OpenSCADA.</li></ul></li>
+<li> Архивация значений собранных данных с помощью механизмов:
+<ul><li> Файлы с двойной упаковкой: последовательной и стандартным архиватором gzip. Посредством модуля архивации <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a>.</li>
+<li> В таблицах архивных БД. Посредством модуля архивации <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li></ul></li>
+<li> Конфигурация и управление сервером через:
+<ul><li> WEB-интерфейс. Посредством Web-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> или <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
+<li> С удалённой конфигурационной станции. Посредством UI-модуля на конфигурационной станции <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/QTCfg" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> и интерфейса управления OpenSCADA, отражённого в протоколе <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
+<li> Сохранение данных сервера в БД типов:
+<ul><li> MySQL. Посредством модуля БД <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a>.</li>
+<li> SQLite. Посредством модуля БД <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a>.</li>
+<li> PostgreSQL. Посредством модуля БД <a href="Modules/PostgreSQL.html" title="Special:MyLanguage/Modules/PostgreSQL">PostgreSQL</a>.</li>
+<li> DBF. Посредством модуля БД <a href="Modules/DBF.html" title="Special:MyLanguage/Modules/DBF">DBF</a>.</li>
+<li> FireBird. Посредством модуля БД <a href="Modules/FireBird.html" title="Special:MyLanguage/Modules/FireBird">FireBird</a>.</li>
+<li> Директории через LDAP. Посредством модуля БД <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/LDAP" title="Special:MyLanguage/Modules/LDAP">LDAP</a>.</li>
+<li> <span style="color: red">Запланировано.</span> БД, которые доступны на другом сервере, основанном на OpenSCADA.</li></ul></li></ul>
+<hr />
+<h3><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD.D1.86.D0.B8.D1.8F_.D0.BE.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D0.B0_.D1.82.D0.B5.D1.85.D0.BD.D0.BE.D0.BB.D0.BE.D0.B3.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D1.86.D0.B5.D1.81.D1.81.D0.B0.2C_.D0.BF.D1.83.D0.BB.D1.8C.D1.82_.D0.B4.D0.B8.D1.81.D0.BF.D0.B5.D1.82.D1.87.D0.B5.D1.80.D0.B0.2C_.D0.BF.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.BC.D0.BE.D0.BD.D0.B8.D1.82.D0.BE.D1.80.D0.B8.D0.BD.D0.B3.D0.B0_.D0.B8_.D0.B4.D1.80.D1.83.D0.B3.D0.BE.D0.B5"><span class="mw-headline-number">1.2</span> Станция оператора технологического процесса, пульт диспетчера, панель мониторинга и другое</span></h3>
+<ul><li> Визуальный контроль и управление посредством интерфейсов:
+<ul><li> Локальный (быстрый) интерфейс, который основан на библиотеке Qt. Посредством модуля визуализации <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision" title="Special:MyLanguage/Modules/Vision">Vision</a> и модуля ядра среды визуализации и управления <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> с возможностью визуализации с удалённого движка СВУ, сервера визуализации.</li>
+<li> Удалённый WEB интерфейс. Посредством WEB-браузера, модуля визуализации <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> и модуля ядра среды визуализации и управления <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
+<li> Простые удалённые Web-интерфейсы пользователя. Посредством WEB-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebUser" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
+<li> Сбор данных (DAQ) из источников:
+<ul><li> Сбор данных с других серверов и ПЛК, построенных на OpenSCADA, для пробрасывания данных серверов и дублирования. С помощью DAQ-модуля <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>.</li>
+<li> Сбор данных из источников, которые поддерживают протокол SNMP (Простой Протокол Управления Сетью). С помощью DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SNMP" title="Special:MyLanguage/Modules/SNMP">SNMP</a>.</li>
+<li> Сбор данных с источников, которые поддерживают протокол OPC-UA. Посредством DAQ-модуля <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a>.</li></ul></li>
+<li> Выполнение вычислений пользователя на языках:
+<ul><li> Язык блочных схем. С помощью DAQ-модуля <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a>.</li>
+<li> На подобном на Java языке высокого уровня. С помощью DAQ-модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.</li></ul></li>
+<li> Архивация локальных сообщений по разным категориям и уровням с помощью механизмов:
+<ul><li> Файлы в XML-формате или плоском тексте, и упаковкой устаревших архивов. С помощью модуля архивации <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a>.</li>
+<li> В таблицах архивных БД. С помощью модуля архивации <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li>
+<li> <span style="color: red">Запланировано.</span> На другой сервер, возможно удалённый сервер архивации, основанных на OpenSCADA.</li></ul></li>
+<li> Конфигурация и управление сервером через:
+<ul><li> WEB-интерфейс. Посредством Web-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> или <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
+<li> Qt-интерфейс. Посредством UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/QTCfg" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a>.</li>
+<li> С удалённой конфигурационной станции. Посредством UI-модуля на конфигурационной станции <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/QTCfg" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> и интерфейса управления OpenSCADA, отражённого в протоколе <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
+<li> Сохранение данных сервера в БД типов:
+<ul><li> MySQL. Посредством модуля БД <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a>.</li>
+<li> SQLite. Посредством модуля БД <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a>.</li>
+<li> PostgreSQL. Посредством модуля БД <a href="Modules/PostgreSQL.html" title="Special:MyLanguage/Modules/PostgreSQL">PostgreSQL</a>.</li>
+<li> DBF. Посредством модуля БД <a href="Modules/DBF.html" title="Special:MyLanguage/Modules/DBF">DBF</a>.</li>
+<li> FireBird. Посредством модуля БД <a href="Modules/FireBird.html" title="Special:MyLanguage/Modules/FireBird">FireBird</a>.</li>
+<li> Директории через LDAP. Посредством модуля БД <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/LDAP" title="Special:MyLanguage/Modules/LDAP">LDAP</a>.</li>
+<li> <span style="color: red">Запланировано.</span> БД, которые доступны на другом сервере, основанном на OpenSCADA.</li></ul></li></ul>
+<hr />
+<h3><span class="mw-headline" id=".D0.A1.D1.80.D0.B5.D0.B4.D0.B0_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.BE.D0.B2_.28.D0.9F.D0.9B.D0.9A.29"><span class="mw-headline-number">1.3</span> Среда исполнения контроллеров (ПЛК)</span></h3>
+<ul><li> Сбор данных (DAQ) из источников:
+<ul><li> Платы сбора данных <a class="external text" href="http://diamondsystems.com/" rel="nofollow noreferrer noopener" target="_blank">Diamond Systems</a>. Посредством DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/DiamondBoards" title="Special:MyLanguage/Modules/DiamondBoards">DiamondBoards</a>.</li>
+<li> Информация про платформу (программно-аппаратную) на которой работает сервер. С помощью модуля <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>.</li>
+<li> Сбор данных из источников, которые поддерживают протокол SNMP (Простой Протокол Управления Сетью). С помощью DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SNMP" title="Special:MyLanguage/Modules/SNMP">SNMP</a>.</li>
+<li> Сбор данных промышленных контроллеров по протоколу ModBus. С помощью DAQ-модуля <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
+<li> Сбор данных промышленных контролеров по протоколу DCON. С помощью DAQ-модуля <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>.</li>
+<li> Формирование производных структур параметров основываясь на шаблонах параметров и данных других источников. С помощью DAQ-модуля <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a>.</li>
+<li> Сбор данных с других серверов и ПЛК, построенных на OpenSCADA, возможно для дублирования. С помощью DAQ-модуля <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>.</li>
+<li> Сбор данных через входные каналы звуковых контроллеров. Посредством DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SoundCard" title="Special:MyLanguage/Modules/SoundCard">SoundCard</a>.</li>
+<li> Сбор данных оборудования фирмы <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>. Посредством DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ICP_DAS" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>.</li>
+<li> Сбор данных с источников, которые поддерживают протокол OPC-UA. Посредством DAQ-модуля <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a>.</li>
+<li> Сбор данных с источников DAQ-плат на шинах ISA, PCI, PCMCIA и USB посредством библиотеки проекта Comedi и DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Comedi" title="Special:MyLanguage/Modules/Comedi">Comedi</a>.</li>
+<li> Сбор данных из источников различного типа, которые имеют утилиты для доступа к данным или доступны посредством простых специализированных сетевых протоколов. Осуществляется путём написания процедуры получения данных на языке пользовательского программирования DAQ-модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, а также модуля транспортного протокола "<a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">Пользовательский протокол</a>". Реализация наиболее известных протоколов как <a class="external text" href="http://wiki.oscada.org/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">Протокол пользователя</a>: SMS, SMTP, Elemer TM510x, EDWARDS TURBOMOLECULAR PUMPS (SCU750), Компьютер учёта тепла VKT7, Sycon Multi Drop Protocol, Блок питания турбо-молекулярных насосов (TMP-xx03), Измеритель температуры IT-3, OWEN, IVE-452HS-02, OPTRIS CT/CTL, CTR 100-101, IEC-60870-104, I2C чипы (PCF8591, PCF8574, DS3231, AT24CXX), 1Wire чипы через адаптеры DS9097 и DS9097U (DS1820, DS1820/DS18S20/DS1920, DS1822, DS2413, DS2408, DS2450, DS2438), Низкоуровневые устройства через GPIO (DHT, 1602A), другое.</li></ul></li>
+<li> Предоставление данных системам верхнего уровня:
+<ul><li> Посредством интерфейсов:
+<ul><li> Последовательного интерфейса (RS232, RS485, Modem, ...), с помощью модуля транспорта <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>.</li>
+<li> Сокетов IP-сетей и протоколов сетевого уровня TCP, UDP и Unix, с помощью модуля транспорта <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Сокеты</a>.</li>
+<li> Слоя безопасных сокетов (SSL), с помощью модуля транспорта <a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>.</li></ul></li>
+<li> Посредством протоколов:
+<ul><li> Собственный протокол OpenSCADA, с помощью модуля транспортного протокола <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li>
+<li> Протоколов семейства ModBus (TCP, RTU и ASCII), с помощью модуля транспортного протокола <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
+<li> Протокола "OPC-UA", с помощью модуля транспортного протокола <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a>.</li>
+<li> Простых специализированных протоколов, разработанных посредством модуля транспортного протоколу "<a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">Протокол Пользователя</a>".</li></ul></li></ul></li>
+<li> Управление, регулирование и выполнение других вычислений пользователя на языках:
+<ul><li> Язык блочных схем. С помощью DAQ-модуля <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a>.</li>
+<li> На подобном на Java языке высокого уровня. С помощью DAQ-модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.</li></ul></li>
+<li> Архивация сообщений по разным категориям и уровням с помощью механизмов:
+<ul><li> Файлы в XML-формате или плоском тексте, и упаковкой устаревших архивов. С помощью модуля архивации <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a>.</li>
+<li> В таблицах архивных БД. С помощью модуля архивации <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li>
+<li> <span style="color: red">Запланировано.</span> На другой сервер, возможно удалённый сервер архивации, основанных на OpenSCADA.</li></ul></li>
+<li> Архивация значений собранных данных с помощью механизмов:
+<ul><li> Буфера в памяти указанной длины. С помощью встроенного механизма архивации значений ядра OpenSCADA.</li>
+<li> Файлы с двойной упаковкой: последовательной и стандартным архиватором gzip. Посредством модуля архивации <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a>.</li>
+<li> В таблицах архивных БД. Посредством модуля архивации <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li></ul></li>
+<li> Конфигурация и управление ПЛК через:
+<ul><li> WEB-интерфейс. Посредством Web-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> или <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
+<li> С удалённой конфигурационной станции. Посредством UI-модуля на конфигурационной станции <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/QTCfg" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> и интерфейса управления OpenSCADA, отражённого в протоколе <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
+<li> Сохранение данных ПЛК в БД типов:
+<ul><li> Все данные в конфигурационном файле.</li>
+<li> MySQL. Посредством модуля БД <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a>.</li>
+<li> SQLite. Посредством модуля БД <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a>.</li>
+<li> PostgreSQL. Посредством модуля БД <a href="Modules/PostgreSQL.html" title="Special:MyLanguage/Modules/PostgreSQL">PostgreSQL</a>.</li>
+<li> DBF. Посредством модуля БД <a href="Modules/DBF.html" title="Special:MyLanguage/Modules/DBF">DBF</a>.</li>
+<li> FireBird. Посредством модуля БД <a href="Modules/FireBird.html" title="Special:MyLanguage/Modules/FireBird">FireBird</a>.</li>
+<li> Директории через LDAP. Посредством модуля БД <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/LDAP" title="Special:MyLanguage/Modules/LDAP">LDAP</a>.</li>
+<li> <span style="color: red">Запланировано.</span> БД, которые доступны на другом сервере, основанном на OpenSCADA.</li></ul></li></ul>
+<h3><span class="mw-headline" id=".D0.A3.D0.BD.D0.B8.D0.B2.D0.B5.D1.80.D1.81.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B9_OPC-UA_.D1.81.D0.B5.D1.80.D0.B2.D0.B5.D1.80"><span class="mw-headline-number">1.4</span> Универсальный OPC-UA сервер</span></h3>
+<p>Благодаря реализации протокола OPC-UA в режиме агента OpenSCADA может предоставлять распространённую функцию OPC-сервера на клиентские протоколы, поддерживаемые и прямо реализуемые в OpenSCADA. Данная функция широко используется на платформе MS Windows®, а многие SCADA-системы на ней работают исключительно с OPC—серверами, как источниками данных. Таким образом OpenSCADA может выступать универсальным OPC-сервером на платформе Linux (рис.2).
+</p><p><span style="color: red">В планах.</span> С адаптацией OpenSCADA для работы на платформе MS Windows® и реализацией работы с OPC-DA посредством системного DCOM, появится возможность применения OpenSCADA в роли шлюза OPC-DA -&gt; OPC-UA, а значит и доступной интеграции устаревших систем в новые или аккумулирующие системы.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:556px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use_opcua_ru.png"><img class="thumbimage" height="529" src="files/Oscada_use_opcua_ru.png" width="554" /></a>  <div class="thumbcaption">Рис. 2. Роль системы OpenSCADA как "OPC-UA Сервер".</div></div></div></div>
+<p>Источники данных и протоколы, доступные посредством универсального OPC-UA сервера:
+</p>
+<ul><li> Промышленные контроллеры фирмы <a class="external text" href="http://s7automation.com" rel="nofollow noreferrer noopener" target="_blank">Siemens GMBH</a> серии S7, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Siemens" title="Special:MyLanguage/Modules/Siemens">DAQ.Siemens</a>.</li>
+<li> Оборудование фирмы <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ICP_DAS" title="Special:MyLanguage/Modules/ICP DAS">DAQ.ICP_DAS</a>.</li>
+<li> Платы сбора данных фирмы <a class="external text" href="http://diamondsystems.com/" rel="nofollow noreferrer noopener" target="_blank">Diamond Systems</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/DiamondBoards" title="Special:MyLanguage/Modules/DiamondBoards">DAQ.DiamondBoards</a>.</li>
+<li> Широкий спектр DAQ-плат УСО разных производителей на шинах ISA, PCI, PCMCIA и USB посредством библиотеки проекта <a class="external text" href="http://comedi.org" rel="nofollow noreferrer noopener" target="_blank">Comedi</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Comedi" title="Special:MyLanguage/Modules/Comedi">DAQ.Comedi</a>.</li>
+<li> Широкий спектр промышленных контроллеров и других источников данных по протоколу ModBus, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a>.</li>
+<li> Широкий спектр промышленных контроллеров и других источников данных по протоколу DCON, <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>.</li>
+<li> Широкий спектр данных сетевого оборудования по протоколу "Простой Протокол Управления Сетью (SNMP)", <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SNMP" title="Special:MyLanguage/Modules/SNMP">DAQ.SNMP</a>.</li>
+<li> Источники данных, которые поддерживают протокол OPC-UA (шлюзование "OPC-UA") или широкий спектр источников данных, которые доступны для всех разновидностей OPC посредством соответствующего шлюза в OPC-UA, <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">DAQ.OPC_UA</a>.</li>
+<li> Широкий спектр промышленных контроллеров и других источников данных по протоколу MMS(IEC-9506), DAQ.MMS.</li>
+<li> Данные других серверов и ПЛК, основанных на OpenSCADA, <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.DAQGate</a>.</li>
+<li> Работа в середине контролера SMH 2Gi фирмы <a class="external text" href="http://segnetics.com" rel="nofollow noreferrer noopener" target="_blank">Segnetics</a>, с его УСО, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SMH2Gi" title="Special:MyLanguage/Modules/SMH2Gi">DAQ.SMH2Gi</a>.</li>
+<li> Автоматика птицеводства фирмы <a class="external text" href="http://bigdutchman.com" rel="nofollow noreferrer noopener" target="_blank">Big Dutchman</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/BFN" title="Special:MyLanguage/Modules/BFN">DAQ.BFN</a>.</li>
+<li> Данные устройств коммерческого учёта и простого учёта ресурсов с достаточно сложными протоколами обмена, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/AMRDevs" title="Special:MyLanguage/Modules/AMRDevs">DAQ.AMRDevs</a>.</li>
+<li> Сенсоры платформы(программно-аппаратной) на которой работает сервер, <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">DAQ.System</a>.</li>
+<li> Данные входов звуковых контроллеров ПК, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SoundCard" title="Special:MyLanguage/Modules/SoundCard">DAQ.SoundCard</a>.</li>
+<li> Расчётные, внутренние или промежуточные данные посредством <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">внутреннего языка программирования высокого уровня (DAQ.JavaLikeCalc)</a> и <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">языка блочных схем (DAQ.BlockCalc)</a>.</li>
+<li> Производные структуры параметров-объектов на основе шаблонов параметров и данных других источников, <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a>.</li>
+<li> Источники данных различных типов, которые имеют консольные утилиты для доступа к этим данным или доступны посредством простых специализированных сетевых протоколов. Осуществляется путём написания процедуры получения данных на <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">языке пользовательского программирования (DAQ.JavaLikeCalc)</a>, а также <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модуля транспортного протокола (Protocol.UserProtocol)</a>, смотри <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">библиотеку</a>.</li></ul>
+<h2><span class="mw-headline" id=".D0.A2.D1.80.D0.B5.D0.B1.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_OpenSCADA"><span class="mw-headline-number">2</span> Требования OpenSCADA</span></h2>
+<h3><span class="mw-headline" id=".D0.98.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">2.1</span> Исполнение</span></h3>
+<p>Аппаратные требования системы OpenSCADA для её исполнения в различных ролях приведены в таблице 1. Программные требования для исполнения системы OpenSCADA и её модулей представлены в таблице 2.
+</p><p><b>Таблица 1.</b> Аппаратные требования системы OpenSCADA и её модулей.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Роль </th>
+<th> Требования
+</th></tr>
+<tr>
+<td> Сервер SCADA системы </td>
+<td>
+<p><b>CPU:</b> x86_32 (более i586), x86_64 или ARM, частотой более 500 МГц<br />
+<b>MEM:</b> 128 МБ<br />
+<b>HDD:</b> 10 ГБ включая ОС и место для архивов
+</p>
+</td></tr>
+<tr>
+<td> Станция оператора технологического процесса, пульт диспетчера, панель мониторинга и другое </td>
+<td>
+<p><b>CPU:</b> x86_32 (более i586), x86_64 или ARM, частотой более 1 ГГц<br />
+<b>MEM:</b> 512 МБ<br />
+<b>HDD:</b> 4 ГБ включая ОС и без архивов
+</p>
+</td></tr>
+<tr>
+<td> Среда исполнения контроллеров (ПЛК) </td>
+<td>
+<p><b>CPU:</b> x86_32 (более i586), x86_64 или ARM, частотой более 133 МГц<br />
+<b>MEM:</b> 32 МБ<br />
+<b>HDD:</b> 32 МБ включая ОС и без архивов
+</p>
+</td></tr></table>
+<p><b>Таблица 2.</b> Программные требования системы OpenSCADA и её модулей.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Компонент </th>
+<th> Описание
+</th></tr>
+<tr>
+<td colspan="2"> <i>Зависимости ядра системы OpenSCADA</i>
+</td></tr>
+<tr>
+<td> ОС Linux </td>
+<td> Дистрибутив операционной системы Linux (ALTLinux, SuSELinux, Mandriva, ASPLinux, Fedora, Debian, Ubuntu ...)
+</td></tr>
+<tr>
+<td> "Стандартные библиотеки" </td>
+<td> Стандартный набор библиотек: GLibC (&gt;= 2.3) или uCLibC (&gt;= 0.9.32) и libstdc++ (&gt;= 3.3). Обычно уже присутствует на установленном дистрибутиве. Особое требование это использование "родной" библиотеки потоков NPTL, уже используется во всех современных дистрибутивах ОС Linux </td>
+<td>
+</td></tr>
+<tr>
+<td> zlib </td>
+<td> Библиотека компрессии.
+</td></tr>
+<tr>
+<td> libpcre </td>
+<td> Библиотека работы с регулярными выражениями, совместимая с Perl.
+</td></tr>
+<tr>
+<td> libgd (опц: --enable-LibGD) </td>
+<td> Графическая библиотека GD версии 2, желательно без поддержки XPM (исключена зависимость на библиотеку X-сервера) и с поддержкой FontConfig.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DB.SQLite</i>
+</td></tr>
+<tr>
+<td> libsqlite3 </td>
+<td> Библиотека доступа к встроенной БД SQLite версии 3.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DB.MySQL</i>
+</td></tr>
+<tr>
+<td> libMySQL </td>
+<td> Библиотека доступа к СУБД MySQL.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DB.PostgreSQL</i>
+</td></tr>
+<tr>
+<td> libpq </td>
+<td> Библиотека доступа к СУБД PostgreSQL версии более 8.3.0.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DB.FireBird</i>
+</td></tr>
+<tr>
+<td> FirebirdSS </td>
+<td> СУБД FireBird версии 2. Часто отсутствует в дистрибутивах Linux и требует индивидуальной загрузки с официального сайта (<a class="external free" href="http://www.firebirdsql.org" rel="nofollow noreferrer noopener" target="_blank">http://www.firebirdsql.org</a>)!
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DB.ODBC</i>
+</td></tr>
+<tr>
+<td> iodbc </td>
+<td> iODBC библиотека управления драйверами.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DAQ.System</i>
+</td></tr>
+<tr>
+<td> libsensors (опц: авт.) </td>
+<td> Библиотека сенсоров аппаратуры версии 2 или 3.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DAQ.OPC_UA</i>
+</td></tr>
+<tr>
+<td> libssl </td>
+<td> Библиотека шифрования OpenSSL.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DAQ.SNMP</i>
+</td></tr>
+<tr>
+<td> libsnmp </td>
+<td> Библиотека доступа к устройствам сети по протоколу SNMP.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DAQ.Comedi</i>
+</td></tr>
+<tr>
+<td> libcomedi </td>
+<td> Библиотека реализации поддержки DAQ-плат различных производителей на шинах ISA, PCI, PCMCIA и USB.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DAQ.SoundCard</i>
+</td></tr>
+<tr>
+<td> libportaudio </td>
+<td> Библиотека многоплатформенного доступа к звуковым контроллерам версии <span style="color:red">19 и более (не 18)</span>.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль Transport.SSL</i>
+</td></tr>
+<tr>
+<td> libssl </td>
+<td> Библиотека шифрования OpenSSL.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модули: UI.QTStarter, UI.QTCfg</i>
+</td></tr>
+<tr>
+<td> libQt4 (libQtGui) или<br />libQt5 (libQt5Widgets,libQt5PrintSupport) </td>
+<td> Библиотеки построения графического интерфейса пользователя Qt версии 4.3 и выше или 5.1 и выше.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль UI.Vision</i>
+</td></tr>
+<tr>
+<td> libQt4 (libQtGui) или<br />libQt5 (libQt5Widgets,libQt5PrintSupport) </td>
+<td> Библиотеки построения графического интерфейса пользователя Qt версии 4.3 и выше или 5.1 и выше.
+</td></tr>
+<tr>
+<td> libQtWebKit или libqt5webkit5 (опц: авт.) </td>
+<td> Библиотека движка Web-рендеринга WebKit.
+</td></tr>
+<tr>
+<td> libfftw3 (опц: авт.) </td>
+<td> Библиотека быстрого разложения сигнала в ряд Фурье.
+</td></tr>
+<tr>
+<td> libphonon или libphonon4qt5 (опц: авт.) </td>
+<td> Библиотека воспроизведения полноформатного видео и аудио.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль UI.WebCfgD</i>
+</td></tr>
+<tr>
+<td> libgd (опц: --enable-LibGD) </td>
+<td> Графическая библиотека GD версии 2, желательно без поддержки XPM (исключена зависимость на библиотеку X-сервера) и с поддержкой FontConfig.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль UI.WebVision</i>
+</td></tr>
+<tr>
+<td> libgd </td>
+<td> Графическая библиотека GD версии 2, желательно без поддержки XPM (исключена зависимость на библиотеку X-сервера) и с поддержкой FontConfig.
+</td></tr>
+<tr>
+<td> libfftw3 (опц: авт.) </td>
+<td> Библиотека быстрого разложения сигнала в ряд Фурье.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль Special.FLibSYS</i>
+</td></tr>
+<tr>
+<td> libssl (опц: авт.) </td>
+<td> Библиотека шифрования OpenSSL.
+</td></tr>
+<tr>
+<td> libfftw3 (опц: авт.) </td>
+<td> Библиотека быстрого разложения сигнала в ряд Фурье.
+</td></tr></table>
+<p>* "опц: авт." — предусматривает отключение использования библиотеки в случае отсутствия её при сборке.
+</p>
+<h3><span class="mw-headline" id=".D0.A1.D0.B1.D0.BE.D1.80.D0.BA.D0.B0"><span class="mw-headline-number">2.2</span> <span id="Building" title="#Building">Сборка</span></span></h3>
+<p>Программные требования системы OpenSCADA для сборки ядра OpenSCADA и её модулей приведены в таблице ниже.
+</p><p><b>Таблица 3.</b> Зависимости сборки OpenSCADA и её модулей.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Компонент </th>
+<th> Описание
+</th></tr>
+<tr>
+<td colspan="2"> <i>Общие требования для сборки OpenSCADA</i>
+</td></tr>
+<tr>
+<td> ОС Linux </td>
+<td> Дистрибутив операционной системы Linux (ALTLinux, SuSELinux, Mandriva, ASPLinux, Fedora, Debian, Ubuntu ...)
+</td></tr>
+<tr>
+<td> g++ </td>
+<td> Компилятор языка C++ версии 3.3 или выше с коллекции компиляторов GCC, включая библиотеку GLibC (&gt;=2.3), uCLibC (&gt;= 0.9.32) или Android BioniC.
+</td></tr>
+<tr>
+<td> autotools (autoconf, automake, libtool, pkg-config) </td>
+<td> Инструменты формирования сборочного окружения OpenSCADA. Нужны только в случае смены сборочного окружения OpenSCADA, например для добавления нового модуля или смены фиксированных параметров сборки. Automake &gt;= 1.9.
+</td></tr>
+<tr>
+<td> gettext </td>
+<td> Группа утилит для приготовления и компиляции переводов интерфейса программы на разные языки в соответствии со стандартом интернационализации I18N.
+</td></tr>
+<tr>
+<td> sqlite3 </td>
+<td> Утилита управления файлами БД SQLite3.
+</td></tr>
+<tr>
+<td> zlib (devel) </td>
+<td> Библиотека компрессии, пакет для разработки.
+</td></tr>
+<tr>
+<td> libpcre (devel) </td>
+<td> Библиотека работы с регулярными выражениям, совместима с Perl, пакет для разработки.
+</td></tr>
+<tr>
+<td> libgd (devel, опц: --enable-LibGD) </td>
+<td> Графическая библиотека GD версии 2, пакет для разработки, желательно без поддержки XPM (исключена зависимость от библиотеки X-сервера). Используется для построения трендов и других изображений в формате PNG, GIF и JPEG.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DB.SQLite</i>
+</td></tr>
+<tr>
+<td> libsqlite3 (devel) </td>
+<td> Библиотека доступа к встроенной БД SQLite версии 3, пакет для разработки.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DB.MySQL</i>
+</td></tr>
+<tr>
+<td> libMySQL (devel) </td>
+<td> Библиотека доступа к СУБД MySQL, пакет для разработки на языке C.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DB.PostgreSQL</i>
+</td></tr>
+<tr>
+<td> libpq </td>
+<td> Библиотека доступа к СУБД PostgreSQL версии более 8.3.0, пакет для разработки.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DB.FireBird</i>
+</td></tr>
+<tr>
+<td> FirebirdSS </td>
+<td> СУБД FireBird версии 2, пакет для разработки. Часто отсутствует в дистрибутивах Linux и требует индивидуальной загрузки с официального сайта (<a class="external free" href="http://www.firebirdsql.org" rel="nofollow noreferrer noopener" target="_blank">http://www.firebirdsql.org</a>)!
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DB.ODBC</i>
+</td></tr>
+<tr>
+<td> iodbc </td>
+<td> iODBC библиотека контроля драйверов, пакет для разработки.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DAQ.JavaLikeCalc</i>
+</td></tr>
+<tr>
+<td> bison </td>
+<td> Программа генерации синтаксических анализаторов на основе грамматики языка.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DAQ.System</i>
+</td></tr>
+<tr>
+<td> libsensors (devel, опц: авт.) </td>
+<td> Библиотека сенсоров аппаратуры версий 2 ил 3, пакет для разработки.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DAQ.OPC_UA</i>
+</td></tr>
+<tr>
+<td> libssl (devel) </td>
+<td> Библиотека шифрования OpenSSL, пакет для разработки.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DAQ.SNMP</i>
+</td></tr>
+<tr>
+<td> libsnmp (devel) </td>
+<td> Библиотека доступа к данным устройств сети по протоколу SNMP, пакет для разработки.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DAQ.Comedi</i>
+</td></tr>
+<tr>
+<td> libcomedi (devel) </td>
+<td> Библиотека реализации поддержки DAQ-плат разных производителей на шинах ISA, PCI, PCMCIA и USB, пакет для разработки.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль DAQ.SoundCard</i>
+</td></tr>
+<tr>
+<td> libportaudio (devel) </td>
+<td> Библиотека многоплатформенного доступа к звуковым контроллерам, пакет для разработки версии <span style="color:red">19 та выше (не 18)</span>.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль Transport.SSL</i>
+</td></tr>
+<tr>
+<td> libssl (devel) </td>
+<td> Библиотека шифрования OpenSSL, пакет для разработки.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модули: UI.QTStarter, UI.QTCfg</i>
+</td></tr>
+<tr>
+<td> libQt4 или libQt5 (devel) </td>
+<td> Библиотека построения пользовательского графического интерфейса Qt версии 4.3 и выше или 5.1 и выше, пакет для разработки.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль UI.Vision</i>
+</td></tr>
+<tr>
+<td> libQt4 или libQt5 (devel) </td>
+<td> Библиотека построения пользовательского графического интерфейса Qt версии 4.3 и выше или 5.1 и выше, пакет для разработки.
+</td></tr>
+<tr>
+<td> libQtWebKit или libqt5webkit5 (devel, опц: авт.) </td>
+<td> Библиотека движка Web-рендеринга WebKit, пакет для разработки.
+</td></tr>
+<tr>
+<td> libfftw3 (devel, опц: авт.) </td>
+<td> Библиотека быстрого разложения сигнала в ряд Фурье, пакет для разработки.
+</td></tr>
+<tr>
+<td> libphonon или libphonon4qt5 (devel, опц: авт.) </td>
+<td> Библиотека воспроизведения полноформатного видео и аудио, пакет для разработки.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль UI.WebCfgD</i>
+</td></tr>
+<tr>
+<td> libgd (devel, опц: --enable-LibGD) </td>
+<td> Графическая библиотека GD версии 2, пакет для разработки, желательно без поддержки XPM (исключена зависимость от библиотеки X-сервера). Используется для построения трендов и других изображений в формате PNG, GIF и JPEG.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль UI.WebVision</i>
+</td></tr>
+<tr>
+<td> libgd (devel) </td>
+<td> Графическая библиотека GD версии 2, пакет для разработки, желательно без поддержки XPM (исключена зависимость от библиотеки X-сервера). Используется для построения трендов и других изображений в формате PNG, GIF и JPEG.
+</td></tr>
+<tr>
+<td> libfftw3 (devel, опц: авт.) </td>
+<td> Библиотека быстрого разложения сигнала в ряд Фурье, пакет для разработки.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Модуль Special.FLibSYS</i>
+</td></tr>
+<tr>
+<td> libssl (devel, опц: авт.) </td>
+<td> Библиотека шифрования OpenSSL, пакет для разработки.
+</td></tr>
+<tr>
+<td> libfftw3 (devel, опц: авт.) </td>
+<td> Библиотека быстрого разложения сигнала в ряд Фурье, пакет для разработки.
+</td></tr></table>
+<p>* "опц: авт." — предусматривает отключение использования библиотеки в случае отсутствия её при сборке.
+</p>
+
+
+
+
+
+</div></body>
+</html>

@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/Система - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/Система</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSystem&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/System" title="Modules/System">Modules/System</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/System" title="Modules/System (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/System/ru" title="Модули/Система (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/System.html" title="Special:MyLanguage/Modules/System">System</a> </td>
+<td> Збір даних ОС </td>
+<td> 2.1 </td>
+<td> GPL2 </td>
+<td> daq_System.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Роман Савоченко </td>
+<td> Надає збір даних із ОС. Підтримуються джерела даних ОС Linux: HDDTemp, Sensors, Uptime, Memory, CPU, ДБЖ та інше.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="tocnumber">1</span> <span class="toctext">Контролер даних</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Параметри</span></a></li>
+</ul>
+</div>
+
+<p>Модуль є своєрідним шлюзом між системою OpenSCADA та ОС(операційною системою). Модуль отримує дані із різних джерел даних ОС та дозволяє керувати компонентами ОС.
+</p><p>Модуль надає можливість автоматичного пошуку підтримуваних та активних джерел даних із створенням параметрів для доступу до низ, а також реалізацію функції горизонтального резервування, а саме спільної роботи з віддаленою станцією цього-ж рівня.
+</p>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">1</span> Контролер даних</span></h2>
+<p>Для додання джерела даних ОС створюється та конфігурується контролер у системі OpenSCADA. Приклад вкладки конфігурації контролера цього типу зображено на рис.1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:826px;"><a class="image" href="http://oscada.org/wiki/File:System_cntr_uk.png"><img class="thumbimage" height="627" src="../files/System_cntr_uk.png" width="824" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфігурації контролеру.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> Стан контролеру, а саме: Статус, "Включений", Запущений" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис контролеру.</li>
+<li> Стан, у який переводити контролер при завантажені: "Включений" та "Запущений".</li>
+<li> Автоматичний пошук активних джерел даних та створення параметрів для них, для режимів: "Ручний", "Швидкі джерела", "Повільні джерела", "Всі джерела".</li>
+<li> Ім'я таблиці для зберігання конфігурації параметрів контролеру.</li>
+<li> Політика планування та пріоритет задачі збору даних.</li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">2</span> Параметри</span></h2>
+<p>Модуль <i>System</i> надає тільки один тип параметрів — "Всі параметри". Додатковими конфігураційними полями параметрів цього модуля (рис.2) є:
+</p>
+<ul><li> частина системи;</li>
+<li> додатковий (залежить від джерела даних).</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:826px;"><a class="image" href="http://oscada.org/wiki/File:System_prm_uk.png"><img class="thumbimage" height="591" src="../files/System_prm_uk.png" width="824" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфігурації параметру.</div></div></div></div>
+<p>В таблиці нижче наведено перелік підтримуваних джерел даних ОС, значення додаткового конфігураційного поля та атрибути параметрів.
+</p><p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Джерело даних </th>
+<th> Значення додаткового конфіг. поля </th>
+<th> Атрибути параметру </th>
+<th> Вимоги
+</th></tr>
+<tr>
+<td> Процесор (CPU) </td>
+<td> Ім'я/номер процесору. Може містити значення номеру процесору або бути "Взагалі" за всіма процесорами &lt;gen&gt;. </td>
+<td>
+<ul><li> [real] load: Завантаження (%)</li>
+<li> [real] sys: Система (%)</li>
+<li> [real] user: Користувач (%)</li>
+<li> [real] idle: Бездія (%)</li></ul>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> Пам'ять (MEM) </td>
+<td> Не використовується </td>
+<td>
+<ul><li> [dec] free: Вільно (кБ);</li>
+<li> [dec] total: Усього (кБ);</li>
+<li> [dec] use: Використано (кБ);</li>
+<li> [dec] buff: Буфера (кБ);</li>
+<li> [dec] cache: Кеш (кБ);</li>
+<li> [dec] sw_free: Своп вільно (кБ);</li>
+<li> [dec] sw_total: Своп усього (кБ);</li>
+<li> [dec] sw_use: Своп використано (кБ).</li></ul>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> Сенсори (sensors) </td>
+<td> Не використовується </td>
+<td> Атрибути визначаються сенсорами, доступними на материнській платі. Для кожного сенсору створюється окремий атрибут. </td>
+<td> Для роботи використовується бібліотека libsensors або програма mbmon. Більш пріоритетною у використанні є бібліотека libsensors, оскільки mbmon має проблеми на багатоядерних архітектурах.
+</td></tr>
+<tr>
+<td> Температура HDD (hddtemp) </td>
+<td> Диск. Доступні у системі диски. </td>
+<td>
+<ul><li> [string] disk: Ім'я;</li>
+<li> [string] ed: Одиниця виміру;</li>
+<li> [real] t: Температура.</li></ul>
+</td>
+<td> Має бути встановлена, сконфігурована та запущена як сервіс програма hddtemp.
+</td></tr>
+<tr>
+<td> Час роботи (uptime) </td>
+<td> Час роботи:
+<ul><li> Система;</li>
+<li> Станція.</li></ul>
+</td>
+<td>
+<ul><li> [dec] full: Секунди повністю;</li>
+<li> [dec] sec: Секунди;</li>
+<li> [dec] min: Хвилини;</li>
+<li> [dec] hour: Години;</li>
+<li> [dec] day: Дні.</li></ul>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> HDD Smart (hddsmart), повільний </td>
+<td> Диск. Доступні в системі диски. </td>
+<td> Атрибути визначаються SMART-полями доступними для визначеного диску. Для кожного поля створюється окремий атрибут. </td>
+<td> Має бути встановлена та доступна утиліта smartctl.
+</td></tr>
+<tr>
+<td> Статистика HDD (hddstat) </td>
+<td> Диск або розділ. Доступні в системі диски та розділи. </td>
+<td>
+<ul><li> [real] rd: Прочитано (Б), скид на значенні 2.2<sup>12</sup>;</li>
+<li> [real] rdSp: Швидкість читання (Б/с);</li>
+<li> [rela] wr: Записано (Б), скид на значенні 2.2<sup>12</sup>;</li>
+<li> [real] wrSp: Швидкість запису (Б/с).</li></ul>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> Статистика мережі (netstat) </td>
+<td> Мережевий інтерфейс. Мережеві інтерфейси доступні у системі. </td>
+<td>
+<ul><li> [real] rcv: Прийнято (Б), скид на значенні 4.3<sup>9</sup>;</li>
+<li> [real] rcvSp: Швидкість отримання (Б/c);</li>
+<li> [real] trns: Передано (Б), Скид на значенні 4.3<sup>9</sup>;</li>
+<li> [real] trnsSp: Швидкість передачі (Б/c).</li></ul>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> ДБЖ (NUT) (ups), повільний </td>
+<td> ДБЖ. Доступні в системі та мережі ДБЖ. </td>
+<td> Атрибути визначаються доступними у ДБЖ властивостями. Для кожної властивості створюється окремий атрибут. </td>
+<td> У системі або мережі (не виявляється автоматично та адресу треба визначати прямо) має бути доступним демон NUT "upsd".
+</td></tr>
+<tr>
+<td> Файлова система (FS) </td>
+<td> Файлові Системи. Підключені файлові системи. </td>
+<td>
+<ul><li> [real] total: Разом (ГБ);</li>
+<li> [real] used: Використано (ГБ);</li>
+<li> [real] free: Вільно (ГБ);</li>
+<li> [dec] totalN: Разом файлових вузлів;</li>
+<li> [dec] usedN: Використано файлових вузлів;</li>
+<li> [dec] freeN: Вільно файлових вузлів.</li></ul>
+</td>
+<td>
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

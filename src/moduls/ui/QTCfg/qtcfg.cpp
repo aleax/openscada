@@ -307,7 +307,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     // QTCfg manual
     if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
     QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(mod->modId().c_str()),this);
-    actManual->setProperty("doc", "Modules/UI.QTCfg|Modules/QTCfg");
+    actManual->setProperty("doc", "Modules/QTCfg|Modules/QTCfg");
     actManual->setShortcut(Qt::Key_F1);
     actManual->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(mod->modId().c_str()));
     actManual->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(mod->modId().c_str()));
@@ -1934,7 +1934,7 @@ void ConfApp::pageDisplay( const string &path )
 	// Stop refresh
 	pageCyclRefrStop();
 
-	//???? Check for no apply editable widgets
+	// Check for no apply editable widgets
 	vector<QWidget*> prcW;
 	QList<LineEdit*> lines = tabs->findChildren<LineEdit*>();
 	for(int iIt = 0; iIt < lines.size(); ++iIt)
@@ -2275,7 +2275,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	int rez = cntrIfCmdHosts(node);
 	//int rez = SYS->transport().at().cntrIfCmd(node,"UIQtCfg",wUser->user().toStdString());
 
-	// Multiple requests to selected nodes into the tree ????
+	// Multiple requests to selected nodes into the tree
 	if((node.name() == "set" || node.name() == "load" || node.name() == "save") && CtrTree->selectedItems().size() >= 2) {
 	    string reqPath = node.attr("path"), reqPathEl, selNds;
 	    size_t reqElPos = reqPath.rfind("/");
@@ -2324,11 +2324,12 @@ int ConfApp::cntrIfCmdHosts( XMLNode &node )
 	return s2i(node.attr("rez"));
     }
 
-    //Main-first request
+    //???? Main-first request
     inHostReq++;
     while(iHost->reqBusy()) {
 	reqPrgrsSet(0, QString(_("Wait for reply from host '%1'")).arg(hostId.c_str()), iHost->reqTmMax);
 	qApp->processEvents();
+	TSYS::sysSleep(0.01);
     }
     if(!iHost->reqDo(node)) {
 	reqPrgrsSet(0, QString(_("Wait for reply from host '%1'")).arg(hostId.c_str()), iHost->reqTmMax);
@@ -2339,6 +2340,7 @@ int ConfApp::cntrIfCmdHosts( XMLNode &node )
 	    reqPrgrsSet(vmax(0,SYS->sysTm()-stTm));
 	    if(reqPrgrs && reqPrgrs->wasCanceled()) iHost->sendSIGALRM();
 	    qApp->processEvents();
+	    TSYS::sysSleep(0.01);
 	}
     }
     inHostReq--;

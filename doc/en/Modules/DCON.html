@@ -1,0 +1,480 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/DCON - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/DCON</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FDCON&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DCON" title="Modules/DCON (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DCON/ru" title="Модули/DCON (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DCON/uk" title="Модулі/DCON (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a> </td>
+<td> DCON client </td>
+<td> 1.2 </td>
+<td> GPL2 </td>
+<td> daq_DCON.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko, Almaz Kharimov<br />Maxim Lysenko (2009,2011) — the page translation </td>
+<td> Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#General_description_of_the_protocol_DCON"><span class="tocnumber">1</span> <span class="toctext">General description of the protocol DCON</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Module"><span class="tocnumber">2</span> <span class="toctext">Module</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Data_controller"><span class="tocnumber">2.1</span> <span class="toctext">Data controller</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Parameters"><span class="tocnumber">2.2</span> <span class="toctext">Parameters</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Compatibility_table_of_input.2Foutput_modules_of_different_manufacturers"><span class="tocnumber">3</span> <span class="toctext">Compatibility table of input/output modules of different manufacturers</span></a></li>
+</ul>
+</div>
+
+<p>DCON — the protocol of controllers' family ADAM(<a class="external free" href="http://www.advantech.com" rel="nofollow noreferrer noopener" target="_blank">http://www.advantech.com</a>, <a class="external free" href="http://ipc2u.ru" rel="nofollow noreferrer noopener" target="_blank">http://ipc2u.ru</a>), ICP DAS(<a class="external free" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">http://www.icpdas.com</a>, <a class="external free" href="http://ipc2u.ru" rel="nofollow noreferrer noopener" target="_blank">http://ipc2u.ru</a>), RealLab (<a class="external free" href="http://www.RLDA.ru" rel="nofollow noreferrer noopener" target="_blank">http://www.RLDA.ru</a>) and the like ones. It uses serial lines RS-485 to transfer data.
+</p><p>This module provides the ability of input/output of information from various devices on the protocol DCON. Also, the module implements the functions of the horizontal reservation, namely, working in conjunction with the remote station of the same level.
+</p>
+<h2><span class="mw-headline" id="General_description_of_the_protocol_DCON"><span class="mw-headline-number">1</span> General description of the protocol DCON</span></h2>
+<p>DCON protocol requires one lead(requesting) device in the line (master), which can send commands to one or more driven devices (slave), referring to them by a unique address in the line. Syntax of the commands of the protocol allows the address 255 devices at one line of standard RS-485.
+</p><p>Initiative to exchange always comes from the leading device. Slave devices listen the line. Master request (package, the sequence of bytes) in the line and turns into a listening the line. Slave device responds to the request, which came to him.
+</p>
+<h2><span class="mw-headline" id="Module"><span class="mw-headline-number">2</span> Module</span></h2>
+<p>This module provides the ability of clear interrogation and record of input-output ports of devices that are compatible with ICP DAS I-7000. On the settings tabs of DCON module the necessary settings are inserted, and on the attributes tabs the corresponding  to the given parameters variables of input-output appear.
+</p>
+<h3><span class="mw-headline" id="Data_controller"><span class="mw-headline-number">2.1</span> Data controller</span></h3>
+<p>For addition of the DCON data source the controller is created and configured in the system  OpenSCADA. Example of the configuration tab of the controller of the type is depicted in Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:738px;"><a class="image" href="http://oscada.org/wiki/File:DCON_cntr.png"><img class="thumbimage" height="631" src="../files/DCON_cntr.png" width="736" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller object.</div></div></div></div>
+<p>From this tab you can set:
+</p>
+<ul><li> The state of the controller, as follows: Status, "Enable", "Run" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the controller.</li>
+<li> The state, in which the controller must be translated at boot: "To enable" and "To start".</li>
+<li> Name of table to store the configuration of the parameters of the controller.</li>
+<li> The acquisition schedule policy and the priority of the task of data acquisition.</li>
+<li> Name of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Transports" title="Special:MyLanguage/Documents/Program manual">the outgoing transport</a>, typical is transport of <a href="../Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">serial interfaces</a>.</li>
+<li> Request tries.</li></ul>
+<h3><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2.2</span> Parameters</span></h3>
+<p>Module <i>DCON</i> provides only one type of parameters — "Standard". On the parameters tab you can set:
+</p>
+<ul><li> The state of the parameter "Enable": requires disabling-enabling for the changes on this tab take effect.</li>
+<li> Id, name and description of the parameter.</li>
+<li> The state, in which the parameter must be translated at boot: "To enable".</li>
+<li> Address of the device in the RS-485 network. In decimal from 0 to 255.</li>
+<li> Flag of the checksum control. It must match to the specified in the I/O device.</li>
+<li> The host signal. It is provided for the control of the host by the devices of the network. It must match the watchdog settings of the devices.</li>
+<li> The method of the analog inputs (AI) reading or the lack thereof.</li>
+<li> The range of the analog inputs (AI). It participates in the work only for the given method of the analog inputs reading and should match the device settings.</li>
+<li> The method of analog outputs (AO) writing or the lack thereof.</li>
+<li> The range of the analog outputs (AO). It participates in the work only for the given method of analog outputs writing and should match the device settings.</li>
+<li> The method of the digital inputs (DI) reading or the lack thereof.</li>
+<li> The method of digital outputs (DO) writing or the lack thereof.</li>
+<li> The method of the counter inputs (CI) reading or the lack thereof.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:691px;"><a class="image" href="http://oscada.org/wiki/File:DCON_prm.png"><img class="thumbimage" height="616" src="../files/DCON_prm.png" width="689" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a parameter object.</div></div></div></div>
+<p>In accordance with the settings of the parameter and the interrogation and creation of the attributes is carried out(Fig. 3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:613px;"><a class="image" href="http://oscada.org/wiki/File:DCON_prm_atr.png"><img class="thumbimage" height="554" src="../files/DCON_prm_atr.png" width="611" /></a>  <div class="thumbcaption">Fig.3. Tab of attributes of a parameter.</div></div></div></div>
+<h2><span class="mw-headline" id="Compatibility_table_of_input.2Foutput_modules_of_different_manufacturers"><span class="mw-headline-number">3</span> Compatibility table of input/output modules of different manufacturers</span></h2>
+<table class="wikitable">
+
+<tr>
+<th> # </th>
+<th> IO (DCON Method) </th>
+<th> NILAP (<a class="external free" href="http://www.rlda.ru/" rel="nofollow noreferrer noopener" target="_blank">http://www.rlda.ru/</a>) </th>
+<th> ICPDAS (<a class="external free" href="http://www.icpdas.com/" rel="nofollow noreferrer noopener" target="_blank">http://www.icpdas.com/</a>) </th>
+<th> Advantech (<a class="external free" href="http://www.advantech.com/" rel="nofollow noreferrer noopener" target="_blank">http://www.advantech.com/</a>)
+</th></tr>
+<tr>
+<td> 1 </td>
+<td> 1AI(#AA), 1AI(#AAN) </td>
+<td> NL-1RTD </td>
+<td> I-7013 </td>
+<td> ADAM-4011, ADAM-4013, ADAM-4012, ADAM-4016
+</td></tr>
+<tr>
+<td> 2 </td>
+<td> 1AI(#AA), 1AI(#AAN), 3DO(^AADOVVV) </td>
+<td> NL-1RTD </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> 4AI(#AA), 4AI(#AAN) </td>
+<td> NL-4RTD </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> 4 </td>
+<td> 4AI(#AA), 4AI(#AAN), 3DO(^AADOVVV) </td>
+<td> NL-4RTD, CL-4RTD </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> 5 </td>
+<td> 1AI(#AA), 1AI(#AAN), 1DI(@AADI), 2DO(@AADO) </td>
+<td> </td>
+<td> I-7011, I-7012, I-7014 </td>
+<td>
+</td></tr>
+<tr>
+<td> 6 </td>
+<td> 1AI(#AA), 1AI(#AAN), 1DI(@AADI), 4DO(@AADO) </td>
+<td> </td>
+<td> I-7016P </td>
+<td>
+</td></tr>
+<tr>
+<td> 7 </td>
+<td> 2AI(#AA), 2AI(#AAN), 1DI(@AADI), 4DO(@AADO) </td>
+<td> </td>
+<td> I-7016 </td>
+<td>
+</td></tr>
+<tr>
+<td> 8 </td>
+<td> 8AI(#AA), 8AI(#AAN), 6DO(@AADODD)</td>
+<td> </td>
+<td>I-7005</td>
+<td>
+</td></tr>
+<tr>
+<td>9</td>
+<td>3AI(#AA), 3AI(#AAN)</td>
+<td> </td>
+<td>I-7033</td>
+<td>
+</td></tr>
+<tr>
+<td>10</td>
+<td>6AI(#AA), 6AI(#AAN)</td>
+<td> </td>
+<td>I-7015</td>
+<td>ADAM-4015
+</td></tr>
+<tr>
+<td>11</td>
+<td>8AI(#AA), 8AI(#AAN)</td>
+<td>NL-8AI, NL-8TI</td>
+<td>I-7017, I-7018, I-7019R</td>
+<td>ADAM-4017, ADAM-4018, ADAM-4019
+</td></tr>
+<tr>
+<td>12</td>
+<td>8AI(#AA), 8AI(#AAN), 2DO(^AADOVVV)</td>
+<td>CL-8TI</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td>13</td>
+<td>8AI(#AA), 8AI(#AAN), 3DO(^AADOVVV)</td>
+<td>NL-8AI, NL-8TI, CL-8AI</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td>14</td>
+<td>10AI(#AA), 10AI(#AANN)</td>
+<td> </td>
+<td>I-7017Z, I-7018Z</td>
+<td>
+</td></tr>
+<tr>
+<td>15</td>
+<td>16AI(#AA^AA), 16AI(#AAN^AAN)</td>
+<td>NL-8AI</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td>16</td>
+<td>16AI(#AA^AA), 16AI(#AAN^AAN), 3DO(^AADOVVV)</td>
+<td>NL-8AI, RL-16AIF</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td>17</td>
+<td>20AI(#AA), 20AI(#AANN)</td>
+<td> </td>
+<td>I-7017Z</td>
+<td>
+</td></tr>
+<tr>
+<td>18</td>
+<td>1AO(#AA)</td>
+<td>NL-1AO</td>
+<td>I-7021</td>
+<td>ADAM-4021
+</td></tr>
+<tr>
+<td>19</td>
+<td>2AO(#AAN)</td>
+<td>NL-2AO, CL-2AO</td>
+<td>I-7022</td>
+<td>
+</td></tr>
+<tr>
+<td>20</td>
+<td>4AO(#AAN)</td>
+<td>NL-4AO, CL-4AO</td>
+<td>I-7024</td>
+<td>
+</td></tr>
+<tr>
+<td>21</td>
+<td>4AO(#AACN)</td>
+<td> </td>
+<td> </td>
+<td>ADAM-4024
+</td></tr>
+<tr>
+<td>22</td>
+<td>14DI($AA6)</td>
+<td> </td>
+<td>I-7041</td>
+<td>
+</td></tr>
+<tr>
+<td>23</td>
+<td>16DI($AA6)</td>
+<td>NL-16DI, NL-16HV</td>
+<td>I-7051, I-7053</td>
+<td>ADAM-4051, ADAM-4053
+</td></tr>
+<tr>
+<td>24</td>
+<td>16DI($AA6), 2DO(^AADOVVV)</td>
+<td>NL-16DI, NL-16HV, CL-16DI</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td>25</td>
+<td>8DI($AA6,FF00)</td>
+<td>NL-8DI</td>
+<td>I-7052, I-7058, I-7059</td>
+<td>ADAM-4052
+</td></tr>
+<tr>
+<td>26</td>
+<td>8DI($AA6), 2DO(^AADOVVV)</td>
+<td>NL-8DI, CL-8DI</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td>27</td>
+<td>2DO(@AA,0300)</td>
+<td>NL-2R</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td>28</td>
+<td>4DO(@AA,0F00)</td>
+<td>NL-4R, NL-4DO, CL-4DO</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td>29</td>
+<td>4DO(#AA000F)</td>
+<td> </td>
+<td> </td>
+<td>ADAM-4060
+</td></tr>
+<tr>
+<td>30</td>
+<td>3DI($AA6), 4DO(@AA,0F00)</td>
+<td>NL-4DO</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td>31</td>
+<td>8DO(@AA,FF00)</td>
+<td>NL-8R, NL-8DO, RL-8RC, CL-8DO, CL-8RC</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td>31</td>
+<td>8DO(#AA00FF)</td>
+<td> </td>
+<td> </td>
+<td>ADAM-4068, ADAM-4069
+</td></tr>
+<tr>
+<td>32</td>
+<td>3DI($AA6), 8DO(@AA,FF00)</td>
+<td>NL-8DO</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td>33</td>
+<td>13DO(@AA,1FFF)</td>
+<td> </td>
+<td>I-7042</td>
+<td>
+</td></tr>
+<tr>
+<td>34</td>
+<td>16DO(@AA,FFFF)</td>
+<td>NL-16DO, CL-16DO</td>
+<td>I-7043, I-7045</td>
+<td>
+</td></tr>
+<tr>
+<td>35</td>
+<td>3DI($AA6), 16DO(@AA,FFFF)</td>
+<td>NL-16DO</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td>36</td>
+<td>4DI($AA6), 8DO(@AA,FF)</td>
+<td> </td>
+<td>I-7044</td>
+<td>
+</td></tr>
+<tr>
+<td>37</td>
+<td>7DI($AA6), 8DO(@AA,FF)</td>
+<td> </td>
+<td>I-7050</td>
+<td>
+</td></tr>
+<tr>
+<td>38</td>
+<td>7DI($AA6), 8DO(#AA00FF)</td>
+<td> </td>
+<td> </td>
+<td>ADAM-4050
+</td></tr>
+<tr>
+<td>39</td>
+<td>8DI($AA6), 8DO(@AA,FF)</td>
+<td> </td>
+<td>I-7055</td>
+<td>
+</td></tr>
+<tr>
+<td>40</td>
+<td>8DI($AA6), 8DO(#AA00FF)</td>
+<td> </td>
+<td> </td>
+<td>ADAM-4055
+</td></tr>
+<tr>
+<td>41</td>
+<td>4DI($AA6), 4DO(@AA,F)</td>
+<td> </td>
+<td>I-7060</td>
+<td>
+</td></tr>
+<tr>
+<td>42</td>
+<td>12DO(@AA,0FFF)</td>
+<td> </td>
+<td>I-7061</td>
+<td>
+</td></tr>
+<tr>
+<td>43</td>
+<td>12DO(#AA000FFF)</td>
+<td> </td>
+<td> </td>
+<td>ADAM-4056
+</td></tr>
+<tr>
+<td>44</td>
+<td>8DI($AA6), 3DO(@AA,7)</td>
+<td> </td>
+<td>I-7063</td>
+<td>
+</td></tr>
+<tr>
+<td>45</td>
+<td>4DI($AA6), 5DO(@AA,1F)</td>
+<td> </td>
+<td>I-7065</td>
+<td>
+</td></tr>
+<tr>
+<td>46</td>
+<td>7DO(@AA,7F)</td>
+<td> </td>
+<td>I-7066, I-7067</td>
+<td>
+</td></tr>
+<tr>
+<td>47</td>
+<td>2CI(#AA)</td>
+<td>NL-2C</td>
+<td> </td>
+<td>ADAM-4080
+</td></tr>
+<tr>
+<td>48</td>
+<td>2CI(#AA), 2DO(@AADO0D)</td>
+<td> </td>
+<td>I-7080</td>
+<td>
+</td></tr>
+<tr>
+<td>49</td>
+<td>2CI(#AA), 4DO(@(^)AADO0D)</td>
+<td>NL-2C</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td>50</td>
+<td>3CI(#AA)</td>
+<td> </td>
+<td>I-7083</td>
+<td>
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

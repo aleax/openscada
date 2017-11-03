@@ -1,0 +1,1536 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/FLibSYS - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/FLibSYS</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FFLibSYS&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibSYS" title="Modules/FLibSYS (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibSYS/ru" title="Модули/FLibSYS (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibSYS/uk" title="Модулі/FLibSYS (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">FLibSYS</a> </td>
+<td> System API functions </td>
+<td> 1.5 </td>
+<td> GPL2 </td>
+<td> spec_FLibSYS.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Special </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Provides the library of system API functions of user programming area.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#System-wide_functions"><span class="tocnumber">1</span> <span class="toctext">System-wide functions</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Calling_the_console_commands_and_operating_system_utilities_.28sysCall.29"><span class="tocnumber">1.1</span> <span class="toctext">Calling the console commands and operating system utilities (sysCall)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#DB:_SQL_request_.28dbReqSQL.29"><span class="tocnumber">1.2</span> <span class="toctext">DB: SQL request (dbReqSQL)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#XML_node_.28xmlNode.29"><span class="tocnumber">1.3</span> <span class="toctext">XML node (xmlNode)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Request_of_the_management_interface_.28xmlCntrReq.29"><span class="tocnumber">1.4</span> <span class="toctext">Request of the management interface (xmlCntrReq)</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Values_archive_.28vArh.29"><span class="tocnumber">1.5</span> <span class="toctext">Values archive (vArh)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#VArchObj_object"><span class="tocnumber">1.5.1</span> <span class="toctext">VArchObj object</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-8"><a href="#Buffer_of_the_values_archive_.28vArhBuf.29"><span class="tocnumber">1.6</span> <span class="toctext">Buffer of the values archive (vArhBuf)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Input.2FOutput_.28IO.29"><span class="tocnumber">1.7</span> <span class="toctext">Input/Output (IO)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-10"><a href="#IO_object"><span class="tocnumber">1.7.1</span> <span class="toctext">IO object</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#Functions_for_the_astronomical_time_processing"><span class="tocnumber">2</span> <span class="toctext">Functions for the astronomical time processing</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#Time_string_.28tmFStr.29_.3C3047.3E"><span class="tocnumber">2.1</span> <span class="toctext">Time string (tmFStr) &lt;3047&gt;</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Full_Date_.28tmDate.29_.3C973.3E"><span class="tocnumber">2.2</span> <span class="toctext">Full Date (tmDate) &lt;973&gt;</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Absolute_time_.28tmTime.29_.3C220.3E"><span class="tocnumber">2.3</span> <span class="toctext">Absolute time (tmTime) &lt;220&gt;</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Conversion_the_time_from_the_symbolic_representation_to_the_time_in_seconds_from_the_epoch_of_1.2F1.2F1970_.28tmStrPTime.29_.3C2600.3E"><span class="tocnumber">2.4</span> <span class="toctext">Conversion the time from the symbolic representation to the time in seconds from the epoch of 1/1/1970 (tmStrPTime) &lt;2600&gt;</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Planning_of_the_time_in_the_Cron_format_.28tmCron.29"><span class="tocnumber">2.5</span> <span class="toctext">Planning of the time in the Cron format (tmCron)</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Sleep_.28tmSleep.29"><span class="tocnumber">2.6</span> <span class="toctext">Sleep (tmSleep)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-18"><a href="#Functions_of_the_messages_processing"><span class="tocnumber">3</span> <span class="toctext">Functions of the messages processing</span></a>
+<ul>
+<li class="toclevel-2 tocsection-19"><a href="#Messages_request_.28messGet.29"><span class="tocnumber">3.1</span> <span class="toctext">Messages request (messGet)</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Generation_of_the_message_.28messPut.29"><span class="tocnumber">3.2</span> <span class="toctext">Generation of the message (messPut)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#Functions_of_the_strings_processing"><span class="tocnumber">4</span> <span class="toctext">Functions of the strings processing</span></a>
+<ul>
+<li class="toclevel-2 tocsection-22"><a href="#Getting_the_size_of_the_string_.28strSize.29_.3C114.3E"><span class="tocnumber">4.1</span> <span class="toctext">Getting the size of the string (strSize) &lt;114&gt;</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#Getting_the_part_of_the_string_.28strSubstr.29_.3C413.3E"><span class="tocnumber">4.2</span> <span class="toctext">Getting the part of the string (strSubstr) &lt;413&gt;</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#Insert_of_the_on_string_to_the_another_.28strInsert.29_.3C1200.3E"><span class="tocnumber">4.3</span> <span class="toctext">Insert of the on string to the another (strInsert) &lt;1200&gt;</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#Change_the_part_of_the_string_with_the_another_one_.28strReplace.29_.3C531.3E"><span class="tocnumber">4.4</span> <span class="toctext">Change the part of the string with the another one (strReplace) &lt;531&gt;</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#Parsing_the_string_on_separator_.28strParse.29_.3C537.3E"><span class="tocnumber">4.5</span> <span class="toctext">Parsing the string on separator (strParse) &lt;537&gt;</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#Path_parsing_.28strParsePath.29_.3C300.3E"><span class="tocnumber">4.6</span> <span class="toctext">Path parsing (strParsePath) &lt;300&gt;</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#Path_to_the_string_with_the_separator_.28strPath2Sep.29"><span class="tocnumber">4.7</span> <span class="toctext">Path to the string with the separator (strPath2Sep)</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#Coding_of_the_string_to_HTML_.28strEnc2HTML.29"><span class="tocnumber">4.8</span> <span class="toctext">Coding of the string to HTML (strEnc2HTML)</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#Encode_text_to_bin_.28strEnc2Bin.29"><span class="tocnumber">4.9</span> <span class="toctext">Encode text to bin (strEnc2Bin)</span></a></li>
+<li class="toclevel-2 tocsection-31"><a href="#Decode_text_from_bin_.28strDec4Bin.29"><span class="tocnumber">4.10</span> <span class="toctext">Decode text from bin (strDec4Bin)</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#Convert_real_to_string_.28real2str.29"><span class="tocnumber">4.11</span> <span class="toctext">Convert real to string (real2str)</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#Convert_integer_to_string_.28int2str.29"><span class="tocnumber">4.12</span> <span class="toctext">Convert integer to string (int2str)</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#Convert_the_string_to_real_.28str2real.29"><span class="tocnumber">4.13</span> <span class="toctext">Convert the string to real (str2real)</span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#Convert_the_to_integer_.28str2int.29"><span class="tocnumber">4.14</span> <span class="toctext">Convert the to integer (str2int)</span></a></li>
+<li class="toclevel-2 tocsection-36"><a href="#Cyclic_Redundancy_Code_.28CRC.29"><span class="tocnumber">4.15</span> <span class="toctext">Cyclic Redundancy Code (CRC)</span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#Message_Digest_5_.28MD5.29"><span class="tocnumber">4.16</span> <span class="toctext">Message Digest 5 (MD5)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-38"><a href="#Functions_for_the_real_processing"><span class="tocnumber">5</span> <span class="toctext">Functions for the real processing</span></a>
+<ul>
+<li class="toclevel-2 tocsection-39"><a href="#Float:_Split_to_words_.28floatSplitWord.29"><span class="tocnumber">5.1</span> <span class="toctext">Float: Split to words (floatSplitWord)</span></a></li>
+<li class="toclevel-2 tocsection-40"><a href="#Float:_Merge_from_words_.28floatMergeWord.29"><span class="tocnumber">5.2</span> <span class="toctext">Float: Merge from words (floatMergeWord)</span></a></li>
+<li class="toclevel-2 tocsection-41"><a href="#Float:_Extract_.28floatExtract.29"><span class="tocnumber">5.3</span> <span class="toctext">Float: Extract (floatExtract)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-42"><a href="#User_programming_API"><span class="tocnumber">6</span> <span class="toctext">User programming API</span></a></li>
+</ul>
+</div>
+
+<p>Special module FLibSYS provides static library of functions for working with the OpenSCADA system at the level of its system API. These functions can be used in an user programming area of OpenSCADA system for the organization of not ordinary interaction algorithms.
+</p><p>To address the functions of the library you can use static call address "<b>Special.FLibSYS.{Func}()</b>" or dynamic "<b>SYS.Special.FLibSYS["{Func}"].call()</b>", "<b>SYS.Special.FLibSYS.{Func}()</b>". Where <i>{Func}</i> — function identifier in the library.
+</p><p>Below is the description of each function of the library. For each function it was evaluated the execution time. Measurements were made on the system with the following parameters: Athlon 64 3000 + (ALTLinux 4.0 (32bit)) by measuring the total execution time of the function when you call it 1000 times. Sampling was carried out of the five calculations, rounded to integer. Time is in angle brackets and is measured in microseconds. 
+</p>
+<h2><span class="mw-headline" id="System-wide_functions"><span class="mw-headline-number">1</span> System-wide functions</span></h2>
+<h3><span class="mw-headline" id="Calling_the_console_commands_and_operating_system_utilities_.28sysCall.29"><span class="mw-headline-number">1.1</span> Calling the console commands and operating system utilities (sysCall)</span></h3>
+<p><i>Description:</i>Call the console commands of the OS. The function offers great opportunities to the OpenSCADA user by calling any system software, utilities and scripts, as well as getting the access to the huge volume of system data by means of them. For example the command "ls-l" returns the detailed contents of the working directory.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> String </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> com </td>
+<td> Command </td>
+<td> String </td>
+<td> In </td>
+<td>
+</td></tr></table>
+<p><i>Example:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+test=sysCall("ls -l");
+messPut("Example",0,"Example: "+test);</pre>
+<h3><span class="mw-headline" id="DB:_SQL_request_.28dbReqSQL.29"><span class="mw-headline-number">1.2</span> DB: SQL request (dbReqSQL)</span></h3>
+<p><i>Description:</i> Formation of the SQL-request <i>req</i> to the DB <i>addr</i>, inside (<i>trans</i>=true), outside (<i>trans</i>=false) or no matter (<i>trans</i>=EVAL) to a transaction. At an error the result's property "err" sets to the error value.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> Object(Array) </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> addr </td>
+<td> DB address, "{TypeDB}.{DB}" </td>
+<td> String </td>
+<td> In </td>
+<td>
+</td></tr>
+<tr>
+<td> req </td>
+<td> SQL request </td>
+<td> String </td>
+<td> In </td>
+<td>
+</td></tr>
+<tr>
+<td> trans </td>
+<td> Transaction </td>
+<td> Boolean </td>
+<td> In </td>
+<td> EVAL
+</td></tr></table>
+<h3><span class="mw-headline" id="XML_node_.28xmlNode.29"><span class="mw-headline-number">1.3</span> XML node (xmlNode)</span></h3>
+<p><i>Description:</i> Creation of the XML node object.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> Object(XMLNodeObj) </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> name </td>
+<td> Name </td>
+<td> String </td>
+<td> In </td>
+<td>
+</td></tr></table>
+<p><i>Example:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+//Creating the "get"  object of the XML node.
+req = xmlNode("get");
+//Creating the "get" object of the XML node with creating attributes.
+//sub_DAQ/mod_ModBus/cntr_1/prm_1 — The path in accord of project structure.
+req = xmlNode("get").setAttr("path","/sub_DAQ/mod_ModBus/cntr_1/prm_1/%2fprm%2fst%2fen");</pre>
+<h3><span class="mw-headline" id="Request_of_the_management_interface_.28xmlCntrReq.29"><span class="mw-headline-number">1.4</span> Request of the management interface (xmlCntrReq)</span></h3>
+<p><i>Description:</i> Request of the management interface to the system via XML. The usual request is written in the form "<b>&lt;get path="/OPat/%2felem"/&gt;</b>". When we indicate the station the request to the external station is made.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> String </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> req </td>
+<td> Request </td>
+<td> Object(XMLNodeObj) </td>
+<td> Out </td>
+<td>
+</td></tr>
+<tr>
+<td> stat </td>
+<td> Station </td>
+<td> String </td>
+<td> In</td>
+<td>
+</td></tr></table>
+<p><i>Example:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+//Geting status "Off/On" of the parameter "1" of the controller "1" of the module "ModBus".
+//sub_DAQ/mod_ModBus/cntr_1/prm_1 —  The path in accord of project structure.
+req = xmlNode("get").setAttr("path","/sub_DAQ/mod_ModBus/cntr_1/prm_1/%2fprm%2fst%2fen");
+rez = xmlCntrReq(req);
+messPut("test",0,"Example: "+req.text());
+
+//Setting status "On" of the parameter "1" of the controller "1" of the module "ModBus".
+req = xmlNode("set").setAttr("path","/sub_DAQ/mod_ModBus/cntr_1/prm_1/%2fprm%2fst%2fen").setText(1);
+rez = xmlCntrReq(req);
+
+//Setting status "Off of the parameter "1" of the controller "1" of the module "ModBus".
+req = xmlNode("set").setAttr("path","/sub_DAQ/mod_ModBus/cntr_1/prm_1/%2fprm%2fst%2fen").setText(0);
+rez = xmlCntrReq(req);</pre>
+<h3><span class="mw-headline" id="Values_archive_.28vArh.29"><span class="mw-headline-number">1.5</span> Values archive (vArh)</span></h3>
+<p><i>Description:</i> Getting the object of the values archive (VArchObj) by connecting to the archive using its address.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> Object(VArchObj) </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> name </td>
+<td> Name and address to the attribute of the parameter (<b>DAQ.{Module}.{Cntr}.{Prm}.{Attr}</b>) with the archive or directly to the archive of values (<b>Archive.va_{ValArchive}</b>). </td>
+<td> String </td>
+<td> In </td>
+<td>
+</td></tr></table>
+<h4><span class="mw-headline" id="VArchObj_object"><span class="mw-headline-number">1.5.1</span> VArchObj object</span></h4>
+<p>Functions:
+</p>
+<ul><li> <i>bool isNull()</i> — no initiated object.</li>
+<li> <i>int begin( int usec = 0, string archivator = "" )</i> — getting the start time of the archive through the return of seconds and microseconds <i>usec</i> for the archivator <i>archivator</i>.</li>
+<li> <i>int end( int usec = 0, string archivator = "" )</i> — getting the end time of the archive through the return of seconds and microseconds <i>usec</i> for the archivator <i>archivator</i>.</li>
+<li> <i>int period( int usec = 0, string archivator = "" )</i> — getting the periodicity of the archive through the return of seconds and microseconds <i>usec</i> for the archivator <i>archivator</i>.</li>
+<li> <i>ValObj get( int sec, int usec, bool upOrd = false, string archivator = "" )</i> — getting the value from the archive at the time <i>sec</i>:<i>usec</i> linked to the top <i>upOrd</i> for the archivator <i>archivator</i>. Real time of the value obtained is set in <i>sec</i>:<i>usec</i>.</li>
+<li> <i>bool set( ValObj val, int sec, int usec, string archivator = "" )</i> — writing of the value <i>val</i> to the archive for the time <i>sec</i>:<i>usec</i> for the archivator <i>archivator</i>.</li>
+<li> <i>bool copy( VArchObj src, int begSec, int begUSec, int endSec, int endUSec, string archivator = "" )</i> — copying of the part of the source archive <i>src</i> or its buffer in the current beginning from <i>begSec</i>:<i>begUSec</i> and ending with <i>endSec</i>:<i>endUSec</i> for the archivator <i>archivator</i>.</li>
+<li> <i>ArrayObj FFT( int tm, real size, string archivator = "", int tm_usec = 0 )</i> — performs the Fast Fourier Transformation using the FFT algorithm. Returns an array of amplitudes of the frequencies for archive's values window for begin time <i>tm:tm_usec</i> (seconds:microseconds), depth to history <i>size</i> (seconds) and for archivator <i>archivator</i>.<br /></li></ul>
+<p><i>Example:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+val = vArh(strPath2Sep(addr)).get(time,uTime,0,archtor);
+return val.isEval()&nbsp;? "Empty"&nbsp;: real2str(val,prec);</pre>
+<h3><span class="mw-headline" id="Buffer_of_the_values_archive_.28vArhBuf.29"><span class="mw-headline-number">1.6</span> Buffer of the values archive (vArhBuf)</span></h3>
+<p><i>Description:</i> Getting the object of the buffer of the values archive (VArchObj) to perform the intermediate operations on frames of data.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> Object(VArchObj) </td>
+<td> Return</td>
+<td>
+</td></tr>
+<tr>
+<td> tp </td>
+<td> Type of the values of the archive (0-Boolean, 1-Integer, 4-Real, 5-String) </td>
+<td> Integer </td>
+<td> In</td>
+<td> 1
+</td></tr>
+<tr>
+<td> sz </td>
+<td> Maximum buffer size </td>
+<td> Integer </td>
+<td> In </td>
+<td> 100
+</td></tr>
+<tr>
+<td> per </td>
+<td> periodicity of buffer (in microseconds) </td>
+<td> Integer </td>
+<td> In </td>
+<td> 1000000
+</td></tr>
+<tr>
+<td> hgrd </td>
+<td> Mode "Hard time grid" </td>
+<td> Boolean </td>
+<td> In </td>
+<td> 0
+</td></tr>
+<tr>
+<td> hres </td>
+<td> Mode "High time resolution (microseconds)" </td>
+<td> Boolean </td>
+<td> In </td>
+<td> 0
+</td></tr></table>
+<h3><span class="mw-headline" id="Input.2FOutput_.28IO.29"><span class="mw-headline-number">1.7</span> Input/Output (IO)</span></h3>
+<p><i>Description:</i> Input/Output to: file, string stream.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> Object(IO) </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> name </td>
+<td> File name or data (for string stream) </td>
+<td> String </td>
+<td> In</td>
+<td>
+</td></tr>
+<tr>
+<td> accs </td>
+<td> File access (""-string stream;"r[+]"-read;"w[+]"-write from zero;"a[+]"-append;...) </td>
+<td> String </td>
+<td> In </td>
+<td>
+</td></tr>
+<tr>
+<td> mFormat </td>
+<td> Machine data format ('n'-sys order;'b'-BigEndian;'l'-LittleEndian) </td>
+<td> Integer </td>
+<td> In </td>
+<td> "n"
+</td></tr>
+<tr>
+<td> enc </td>
+<td> String encoding in file </td>
+<td> Boolean </td>
+<td> In </td>
+<td>
+</td></tr></table>
+<h4><span class="mw-headline" id="IO_object"><span class="mw-headline-number">1.7.1</span> IO object</span></h4>
+<p>Values:
+</p>
+<ul><li> <i>valType</i> — value types:
+<ul><li> "uchar", "unsigned char", "char", "schar", "signed char";</li>
+<li> "uint8";</li>
+<li> "uint16", "ushort";</li>
+<li> "uint32", "uint", "ulong";</li>
+<li> "uint64";</li>
+<li> "int8", "integer*1";</li>
+<li> "int16", "short", "integer*2";</li>
+<li> "int32", "int", "long", "integer*4", "integer";</li>
+<li> "int64", "integer*8";</li>
+<li> "float", "float32", "single", "real*4";</li>
+<li> "double", "float64", "real*8", "real";</li></ul></li>
+<li> <i>accs</i> — access mode and type:
+<ul><li> <i> — string stream;</i></li>
+<li> 'r[+]' — read;</li>
+<li> 'w[+]' — write from zero;</li>
+<li> 'a[+]' — append.</li></ul></li>
+<li> <i>mFmt</i> — machine format:
+<ul><li> 'n' — native;</li>
+<li> 'l' — LittleEndian;</li>
+<li> 'b' — BigEndian.</li></ul></li></ul>
+<p>Properties:
+</p>
+<ul><li> <i>length</i> — stream length;</li>
+<li> <i>pos</i> (w) — stream read/write position;</li>
+<li> <i>string</i> (w) — string stream full value;</li>
+<li> <i>mFormat</i> (w) — machine data format;</li>
+<li> <i>stringEncode</i> (w) — file/stream substring encoding.</li></ul>
+<p>Functions:
+</p>
+<ul><li> <i>bool open(string name = "", string accs = "", string mFormat = "n", string enc = "");</i> — Open for new stream by string or file <i>name</i>.</li>
+<li> <i>bool close();</i> — Close current stream.</li>
+<li> <i>{string|int|real|Array[int|real]} read(string valType = "char", int cnt = -1, string mFormatEnc = "n|NoEnc");</i> — Read value <i>valType</i> in <i>cnt</i> for machine format or string encodeIn <i>mFormatEnc</i>.</li>
+<li> <i>{int|IO} {write|wr}({string|int|double|Array} vals, string valType = "char", string mFormatEnc = "n|NoEnc", int cnt = 1);</i> — Write value[s] <i>vals</i> for type <i>valType</i> for machine format or string encodeIn <i>mFormatEnc</i>, and scalar values repeat for <i>cnt</i>.</li></ul>
+<h2><span class="mw-headline" id="Functions_for_the_astronomical_time_processing"><span class="mw-headline-number">2</span> Functions for the astronomical time processing</span></h2>
+<h3><span class="mw-headline" id="Time_string_.28tmFStr.29_.3C3047.3E"><span class="mw-headline-number">2.1</span> Time string (tmFStr) &lt;3047&gt;</span></h3>
+<p><i>Description:</i> Converts an absolute time in the string of the required format. Recording of the format corresponds to the POSIX-function strftime.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>val</td>
+<td>Full date string</td>
+<td>String</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>sec</td>
+<td>Seconds</td>
+<td>Integer</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>form</td>
+<td>Format</td>
+<td>String</td>
+<td>In</td>
+<td>%Y-%m-%d&nbsp;%H:%M:%S
+</td></tr></table>
+<p><i>Example:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+test=tmFStr(SYS.time(),"%d&nbsp;%m&nbsp;%Y");
+messPut("Example",0,"tmFStr(): "+test);</pre>
+<h3><span class="mw-headline" id="Full_Date_.28tmDate.29_.3C973.3E"><span class="mw-headline-number">2.2</span> Full Date (tmDate) &lt;973&gt;</span></h3>
+<p><i>Description:</i> Returns the full date in seconds, minutes, hours, etc., based on the absolute time in seconds from the epoch of 1/1/1970.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>fullsec</td>
+<td>Full seconds</td>
+<td>Integer</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>sec</td>
+<td>Seconds [0...59]</td>
+<td>Integer</td>
+<td>Out</td>
+<td>0
+</td></tr>
+<tr>
+<td>min</td>
+<td>Minutes [0...59]</td>
+<td>Integer</td>
+<td>Out</td>
+<td>0
+</td></tr>
+<tr>
+<td>hour</td>
+<td>Hours [0...23]</td>
+<td>Integer</td>
+<td>Out</td>
+<td>0
+</td></tr>
+<tr>
+<td>mday</td>
+<td>Day of the month [1...31]</td>
+<td>Integer</td>
+<td>Out</td>
+<td>0
+</td></tr>
+<tr>
+<td>month</td>
+<td>Month [0...11]</td>
+<td>Integer</td>
+<td>Out</td>
+<td>0
+</td></tr>
+<tr>
+<td>year</td>
+<td>Year, from 1900</td>
+<td>Integer</td>
+<td>Out</td>
+<td>0
+</td></tr>
+<tr>
+<td>wday</td>
+<td>Day of the week [0...6]</td>
+<td>Integer</td>
+<td>Out</td>
+<td>0
+</td></tr>
+<tr>
+<td>yday</td>
+<td>Day of the year [0...365]</td>
+<td>Integer</td>
+<td>Out</td>
+<td>0
+</td></tr>
+<tr>
+<td>isdst</td>
+<td>Daylight saving time</td>
+<td>Integer</td>
+<td>Out</td>
+<td>0
+</td></tr></table>
+<p><i>Example:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+curMin=curHour=curDay=curMonth=curYear=0;
+tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
+messPut("test",0,"Current minute: "+curMin);
+messPut("test",0,"Current hour: "+curHour);
+messPut("test",0,"Current day: "+curDay);
+messPut("test",0,"Current month: "+curMonth);
+messPut("test",0,"Current Year: "+curYear);</pre>
+<h3><span class="mw-headline" id="Absolute_time_.28tmTime.29_.3C220.3E"><span class="mw-headline-number">2.3</span> Absolute time (tmTime) &lt;220&gt;</span></h3>
+<p><i>Description:</i> Returns the absolute time in seconds from the epoch and in microseconds, if <i>usec</i> is installed in a non-negative value.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>sec</td>
+<td>Seconds</td>
+<td>Integer</td>
+<td>Return</td>
+<td>0
+</td></tr>
+<tr>
+<td>usec</td>
+<td>Microseconds</td>
+<td>Integer</td>
+<td>Out</td>
+<td>-1
+</td></tr></table>
+<h3><span class="mw-headline" id="Conversion_the_time_from_the_symbolic_representation_to_the_time_in_seconds_from_the_epoch_of_1.2F1.2F1970_.28tmStrPTime.29_.3C2600.3E"><span class="mw-headline-number">2.4</span> Conversion the time from the symbolic representation to the time in seconds from the epoch of 1/1/1970 (tmStrPTime) &lt;2600&gt;</span></h3>
+<p><i>Description:</i> Returns the time in seconds from the epoch of 1/1/1970, based on the string record of time, in accordance with the specified template. For example, template "%Y-%m-%d&nbsp;%H:%M:%S" corresponds the time "2006-08-08 11:21:55". Description of the format of the template can be obtained from the documentation on POSIX-function "strptime".<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>sec</td>
+<td>Seconds</td>
+<td>Integer</td>
+<td>Return</td>
+<td>0
+</td></tr>
+<tr>
+<td>str</td>
+<td>Date string</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>form</td>
+<td>Date record format</td>
+<td>String</td>
+<td>In</td>
+<td>%Y-%m-%d&nbsp;%H:%M:%S
+</td></tr></table>
+<p><i>Example:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+curMin=curHour=curDay=curMonth=curYear=0;
+tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
+test = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d&nbsp;%H:%M:%S");
+messPut("Example",0,"tmStrPTime(): "+test);</pre>
+<h3><span class="mw-headline" id="Planning_of_the_time_in_the_Cron_format_.28tmCron.29"><span class="mw-headline-number">2.5</span> Planning of the time in the Cron format (tmCron)</span></h3>
+<p><i>Description:</i> Returns the time planned in the format of the Cron standard beginning from the base time of from the current time, if the base is not specified.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> res </td>
+<td> Result </td>
+<td> Integer </td>
+<td> Return </td>
+<td> 0
+</td></tr>
+<tr>
+<td> str </td>
+<td> Record in the Cron standard </td>
+<td> String </td>
+<td> In </td>
+<td> * * * * *
+</td></tr>
+<tr>
+<td> base </td>
+<td> Base time </td>
+<td> Integer </td>
+<td> In </td>
+<td> 0
+</td></tr></table>
+<h3><span class="mw-headline" id="Sleep_.28tmSleep.29"><span class="mw-headline-number">2.6</span> Sleep (tmSleep)</span></h3>
+<p><i>Description:</i> Short sleep from nanoseconds and up to STD_INTERF_TM (5 seconds).<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> res </td>
+<td> Result </td>
+<td> Integer </td>
+<td> Return </td>
+<td> 0
+</td></tr>
+<tr>
+<td> tm </td>
+<td> Time </td>
+<td> Real </td>
+<td> In </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id="Functions_of_the_messages_processing"><span class="mw-headline-number">3</span> Functions of the messages processing</span></h2>
+<h3><span class="mw-headline" id="Messages_request_.28messGet.29"><span class="mw-headline-number">3.1</span> Messages request (messGet)</span></h3>
+<p><i>Description:</i> Request of the system messages.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Result</td>
+<td>Object(Array)</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>btm</td>
+<td>Start time</td>
+<td>Integer</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>etm</td>
+<td>End time</td>
+<td>Integer</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>cat</td>
+<td>Category of the message</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>lev</td>
+<td>Level of the message</td>
+<td>Integer</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>arch</td>
+<td>Archivator</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id="Generation_of_the_message_.28messPut.29"><span class="mw-headline-number">3.2</span> Generation of the message (messPut)</span></h3>
+<p><i>Description:</i> Formation of the system message.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>cat</td>
+<td>Category of the message</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>lev</td>
+<td>Level of the message</td>
+<td>Integer</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>mess</td>
+<td>Text of the message</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr></table>
+<p><i>Example:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+rnd_sq_gr11_lineClr="red";
+Special.FLibSYS.messPut("Example",1,"Event: "+rnd_sq_gr12_leniClr);</pre>
+<h2><span class="mw-headline" id="Functions_of_the_strings_processing"><span class="mw-headline-number">4</span> Functions of the strings processing</span></h2>
+<h3><span class="mw-headline" id="Getting_the_size_of_the_string_.28strSize.29_.3C114.3E"><span class="mw-headline-number">4.1</span> Getting the size of the string (strSize) &lt;114&gt;</span></h3>
+<p><i>Descroption:</i> It is used to get the size.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Result</td>
+<td>Integer</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>str</td>
+<td>String</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr></table>
+<p><i>Example:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+Special.FLibSYS.messPut("Example",1,"ReturnString: "+strSize("Example"));</pre>
+<h3><span class="mw-headline" id="Getting_the_part_of_the_string_.28strSubstr.29_.3C413.3E"><span class="mw-headline-number">4.2</span> Getting the part of the string (strSubstr) &lt;413&gt;</span></h3>
+<p><i>Description:</i> It is used to det the part of the string.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Result</td>
+<td>String</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>str</td>
+<td>String</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>pos</td>
+<td>Position</td>
+<td>Integer</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>n</td>
+<td>Quantity</td>
+<td>Integer</td>
+<td>In</td>
+<td>-1
+</td></tr></table>
+<p><i>Example:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+test=strSubstr("Example", 0, strSize("Example")-1);
+messPut("Example",1,"ReturnString: "+test);</pre>
+<h3><span class="mw-headline" id="Insert_of_the_on_string_to_the_another_.28strInsert.29_.3C1200.3E"><span class="mw-headline-number">4.3</span> Insert of the on string to the another (strInsert) &lt;1200&gt;</span></h3>
+<p><i>Description:</i> It is used to insert of the on string to the another.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>str</td>
+<td>String</td>
+<td>String</td>
+<td>Out </td>
+<td>
+</td></tr>
+<tr>
+<td>pos</td>
+<td>Position</td>
+<td>Integer</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>ins</td>
+<td>Inserting string</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id="Change_the_part_of_the_string_with_the_another_one_.28strReplace.29_.3C531.3E"><span class="mw-headline-number">4.4</span> Change the part of the string with the another one (strReplace) &lt;531&gt;</span></h3>
+<p><i>Description:</i> It is used to change the part of the string with the another one.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>str</td>
+<td>String</td>
+<td>String</td>
+<td>Out</td>
+<td>
+</td></tr>
+<tr>
+<td>pos</td>
+<td>Позиция</td>
+<td>Integer</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>n</td>
+<td>Quantity</td>
+<td>Integer</td>
+<td>In</td>
+<td>-1
+</td></tr>
+<tr>
+<td>repl</td>
+<td>Changing string</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id="Parsing_the_string_on_separator_.28strParse.29_.3C537.3E"><span class="mw-headline-number">4.5</span> Parsing the string on separator (strParse) &lt;537&gt;</span></h3>
+<p><i>Description:</i> It is used to parse the string on separator.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Result</td>
+<td>String</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>str</td>
+<td>String</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>lev</td>
+<td>Level</td>
+<td>Integer</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>sep</td>
+<td>Separator</td>
+<td>String</td>
+<td>In</td>
+<td>"."
+</td></tr>
+<tr>
+<td>off</td>
+<td>Offset</td>
+<td>Integer</td>
+<td>Out</td>
+<td>
+</td></tr></table>
+<p><i>Example:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+ExapleString="Example:123";
+test=strParse(ExapleString,1,":");
+messPut("Example",0,"strParse(): "+test);</pre>
+<h3><span class="mw-headline" id="Path_parsing_.28strParsePath.29_.3C300.3E"><span class="mw-headline-number">4.6</span> Path parsing (strParsePath) &lt;300&gt;</span></h3>
+<p><i>Description:</i> It is used for the parsing the path on the elements.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Result</td>
+<td>String</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>path</td>
+<td>Path</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>lev</td>
+<td>Level</td>
+<td>Integer</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>off</td>
+<td>Offset</td>
+<td>Integer</td>
+<td>Out</td>
+<td>
+</td></tr></table>
+<p><i>Example:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+using Special.FLibSYS;
+test=strParsePath(path,0,"/");
+messPut("Example",1,"strParsePath(): "+test);</pre>
+<h3><span class="mw-headline" id="Path_to_the_string_with_the_separator_.28strPath2Sep.29"><span class="mw-headline-number">4.7</span> Path to the string with the separator (strPath2Sep)</span></h3>
+<p><i>Description:</i> It is used to convert the path to the string with the separator.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Result</td>
+<td>String</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>src</td>
+<td>Source</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>sep</td>
+<td>Separator</td>
+<td>String</td>
+<td>In</td>
+<td>"."
+</td></tr></table>
+<p><i>Example:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+//Converting value "/ses_AGLKS/pg_so" of the attribute "path" into value "ses_AGLKS.pg_so"
+using Special.FLibSYS;
+test = strPath2Sep(path);
+messPut("Example",0,"path: "+path);
+messPut("Example",0,"strPath2Sep(): "+test);</pre>
+<h3><span class="mw-headline" id="Coding_of_the_string_to_HTML_.28strEnc2HTML.29"><span class="mw-headline-number">4.8</span> Coding of the string to HTML (strEnc2HTML)</span></h3>
+<p><i>Description:</i> It is used to code the string for using in the HTML source.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Result</td>
+<td>String</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>src</td>
+<td>Source</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id="Encode_text_to_bin_.28strEnc2Bin.29"><span class="mw-headline-number">4.9</span> Encode text to bin (strEnc2Bin)</span></h3>
+<p><i>Description:</i> Use for encode text to bin, from format &lt;00 A0 FA DE&gt;.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Result</td>
+<td>String</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>src</td>
+<td>Source</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id="Decode_text_from_bin_.28strDec4Bin.29"><span class="mw-headline-number">4.10</span> Decode text from bin (strDec4Bin)</span></h3>
+<p><i>Description:</i> Use for decode text from bin to format &lt;00 A0 FA DE&gt;.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Result</td>
+<td>String</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>src</td>
+<td>Source</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id="Convert_real_to_string_.28real2str.29"><span class="mw-headline-number">4.11</span> Convert real to string (real2str)</span></h3>
+<p><i>Description:</i> It is used to  convert real to string.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Result</td>
+<td>String</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>val</td>
+<td>Value</td>
+<td>Real</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>prc</td>
+<td>Precision</td>
+<td>Integer</td>
+<td>In</td>
+<td>4
+</td></tr>
+<tr>
+<td>tp</td>
+<td>Type</td>
+<td>String</td>
+<td>In</td>
+<td>"f"
+</td></tr></table>
+<h3><span class="mw-headline" id="Convert_integer_to_string_.28int2str.29"><span class="mw-headline-number">4.12</span> Convert integer to string (int2str)</span></h3>
+<p><i>Description:</i> It is used to  convert integer to string.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Result</td>
+<td>String</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>val</td>
+<td>Value</td>
+<td>Integer</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>base</td>
+<td>Base, supported: 8, 10, 16</td>
+<td>Integer</td>
+<td>In</td>
+<td>10
+</td></tr></table>
+<h3><span class="mw-headline" id="Convert_the_string_to_real_.28str2real.29"><span class="mw-headline-number">4.13</span> Convert the string to real (str2real)</span></h3>
+<p><i>Description:</i> It is used to  convert string to real.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Result</td>
+<td>Real</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>val</td>
+<td>Value</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id="Convert_the_to_integer_.28str2int.29"><span class="mw-headline-number">4.14</span> Convert the to integer (str2int)</span></h3>
+<p><i>Description:</i> It is used to  convert string to integer.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>rez</td>
+<td>Result</td>
+<td>Integer</td>
+<td>Return</td>
+<td>
+</td></tr>
+<tr>
+<td>val</td>
+<td>Value</td>
+<td>String</td>
+<td>In</td>
+<td>
+</td></tr>
+<tr>
+<td>base</td>
+<td>Base</td>
+<td>Integer</td>
+<td>In</td>
+<td>0
+</td></tr></table>
+<h3><span class="mw-headline" id="Cyclic_Redundancy_Code_.28CRC.29"><span class="mw-headline-number">4.15</span> Cyclic Redundancy Code (CRC)</span></h3>
+<p><i>Description:</i> Unified Cyclic Redundancy Code implement for 8-64 bits width.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> Integer </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> data </td>
+<td> Data </td>
+<td> String </td>
+<td> Input </td>
+<td>
+</td></tr>
+<tr>
+<td> poly </td>
+<td> Polynomial (reversion) </td>
+<td> Integer </td>
+<td> Input </td>
+<td> 40961 (0xA001)
+</td></tr>
+<tr>
+<td> width </td>
+<td> Width </td>
+<td> Integer </td>
+<td> Input </td>
+<td> 16
+</td></tr>
+<tr>
+<td> init </td>
+<td> Initial </td>
+<td> Integer </td>
+<td> Input </td>
+<td> -1 (0xFFFFFFFFFFFFFFFF)
+</td></tr></table>
+<h3><span class="mw-headline" id="Message_Digest_5_.28MD5.29"><span class="mw-headline-number">4.16</span> Message Digest 5 (MD5)</span></h3>
+<p><i>Description:</i> Message Digest 5 calculation.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> String </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> data </td>
+<td> Data </td>
+<td> String </td>
+<td> Input </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id="Functions_for_the_real_processing"><span class="mw-headline-number">5</span> Functions for the real processing</span></h2>
+<h3><span class="mw-headline" id="Float:_Split_to_words_.28floatSplitWord.29"><span class="mw-headline-number">5.1</span> Float: Split to words (floatSplitWord)</span></h3>
+<p><i>Description:</i> Splitting the float (4 bites) to the words (2 bites).<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> val </td>
+<td> Value </td>
+<td> Real </td>
+<td> In </td>
+<td>
+</td></tr>
+<tr>
+<td> w1 </td>
+<td> Word 1 </td>
+<td> Integer </td>
+<td> Out </td>
+<td>
+</td></tr>
+<tr>
+<td> w2 </td>
+<td> Word 2 </td>
+<td> Integer </td>
+<td> Out </td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id="Float:_Merge_from_words_.28floatMergeWord.29"><span class="mw-headline-number">5.2</span> Float: Merge from words (floatMergeWord)</span></h3>
+<p><i>Description:</i> Merging the float (4 bites) from words (2 bites).<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> Real </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> w1 </td>
+<td> Word 1 </td>
+<td> Integer </td>
+<td> In </td>
+<td>
+</td></tr>
+<tr>
+<td> w2 </td>
+<td> Word 2 </td>
+<td> Integer </td>
+<td> In </td>
+<td>
+</td></tr></table>
+<h3><span class="mw-headline" id="Float:_Extract_.28floatExtract.29"><span class="mw-headline-number">5.3</span> Float: Extract (floatExtract)</span></h3>
+<p><i>Description:</i> Extract mantissa and exponent from the float value.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> magn </td>
+<td> Magnitude </td>
+<td> Real </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> val </td>
+<td> Value </td>
+<td> Real </td>
+<td> In </td>
+<td>
+</td></tr>
+<tr>
+<td> exp </td>
+<td> Exponent </td>
+<td> Integer </td>
+<td> Out </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">6</span> User programming API</span></h2>
+<p>Some objects of the module provides functions for user's programming.
+</p><p><b>The object "Functions library" (SYS.Special.FLibMath)</b>
+</p>
+<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — call the library function <i>{funcID}</i>. Return result of the called function.</li></ul>
+<p><b>The object "User function" (SYS.Special.FLibMath["funcID"])</b>
+</p>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — call the function with parameters <i>prm{N}</i>. Return result of the called function.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

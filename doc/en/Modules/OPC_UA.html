@@ -1,0 +1,811 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/OPC UA - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/OPC UA</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FOPC+UA&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/OPC_UA" title="Modules/OPC UA (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/OPC_UA/ru" title="Модули/OPC UA (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/OPC_UA/uk" title="Модулі/OPC UA (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
+<td> Client OPC-UA </td>
+<td> 1.6 </td>
+<td> GPL2 </td>
+<td> daq_OPC_UA.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2010) — the page translation </td>
+<td> Provides OPC-UA client service implementation.
+</td></tr>
+
+<tr>
+<td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
+<td> Server OPC-UA </td>
+<td> 1.8 </td>
+<td> GPL2 </td>
+<td> daq_OPC_UA.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Protocol </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2010) — the page translation </td>
+<td> Provides OPC-UA server service implementation.
+</td></tr>
+
+<tr>
+<td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
+<td> Library of implementing OPC-UA into OpenSCADA </td>
+<td> 1.2 </td>
+<td> LGPL3 </td>
+<td> libOPC_UA.{h,cpp} </td>
+<td> en </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Library </td>
+<td> Roman Savochenko </td>
+<td> Provides the protocol OPC-UA implementing into parts of client and server, as a separated library.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#The_OPC-UA_protocol"><span class="tocnumber">1</span> <span class="toctext">The OPC-UA protocol</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Module_of_the_server_implementation"><span class="tocnumber">2</span> <span class="toctext">Module of the server implementation</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Service_of_requests_on_the_OPC-UA_protocol"><span class="tocnumber">2.1</span> <span class="toctext">Service of requests on the OPC-UA protocol</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Module_of_the_data_acquisition"><span class="tocnumber">3</span> <span class="toctext">Module of the data acquisition</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Data_controller.27s_object"><span class="tocnumber">3.1</span> <span class="toctext">Data controller's object</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Parameters"><span class="tocnumber">3.2</span> <span class="toctext">Parameters</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#libOPC_UA_library"><span class="tocnumber">4</span> <span class="toctext">libOPC_UA library</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Service_objects.2C_functions_and_the_class_UA"><span class="tocnumber">4.1</span> <span class="toctext">Service objects, functions and the class UA</span></a>
+<ul>
+<li class="toclevel-3 tocsection-9"><a href="#Data"><span class="tocnumber">4.1.1</span> <span class="toctext">Data</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#External_functions"><span class="tocnumber">4.1.2</span> <span class="toctext">External functions</span></a></li>
+<li class="toclevel-3 tocsection-11"><a href="#Automatic_POSIX_mutex_unlock_object_for_OPC_.28OPCAlloc.29"><span class="tocnumber">4.1.3</span> <span class="toctext">Automatic POSIX mutex unlock object for OPC (OPCAlloc)</span></a></li>
+<li class="toclevel-3 tocsection-12"><a href="#Error_of_OPC_.28OPCError.29"><span class="tocnumber">4.1.4</span> <span class="toctext">Error of OPC (OPCError)</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#XML-tag_.28XML_N.29"><span class="tocnumber">4.1.5</span> <span class="toctext">XML-tag (XML_N)</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#Node.27s_object_of_OPC-UA_.28NodeId.29"><span class="tocnumber">4.1.6</span> <span class="toctext">Node's object of OPC-UA (NodeId)</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Root_object_of_the_OPC-UA_protocol_.28UA.29"><span class="tocnumber">4.1.7</span> <span class="toctext">Root object of the OPC-UA protocol (UA)</span></a>
+<ul>
+<li class="toclevel-4 tocsection-16"><a href="#Security_parameters_included_object_.28SecuritySetting.29"><span class="tocnumber">4.1.7.1</span> <span class="toctext">Security parameters included object (SecuritySetting)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-17"><a href="#Client.27s_main_object_.28Client-.3EUA.29"><span class="tocnumber">4.2</span> <span class="toctext">Client's main object (Client-&gt;UA)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-18"><a href="#Client.27s_session_included_object_.28SClntSess.29"><span class="tocnumber">4.2.1</span> <span class="toctext">Client's session included object (SClntSess)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-19"><a href="#Server.27s_main_object_.28Server-.3EUA.29"><span class="tocnumber">4.3</span> <span class="toctext">Server's main object (Server-&gt;UA)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-20"><a href="#Security_channel_included_object_.28SecCnl.29"><span class="tocnumber">4.3.1</span> <span class="toctext">Security channel included object (SecCnl)</span></a></li>
+<li class="toclevel-3 tocsection-21"><a href="#Session_included_object_.28Sess.29"><span class="tocnumber">4.3.2</span> <span class="toctext">Session included object (Sess)</span></a>
+<ul>
+<li class="toclevel-4 tocsection-22"><a href="#Browse.27s_continuation_point_included_object_.28ContPoint.29"><span class="tocnumber">4.3.2.1</span> <span class="toctext">Browse's continuation point included object (ContPoint)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-23"><a href="#Subscription_included_object_.28Subscr.29"><span class="tocnumber">4.3.3</span> <span class="toctext">Subscription included object (Subscr)</span></a>
+<ul>
+<li class="toclevel-4 tocsection-24"><a href="#Monitored_item_included_object_.28MonitItem.29"><span class="tocnumber">4.3.3.1</span> <span class="toctext">Monitored item included object (MonitItem)</span></a>
+<ul>
+<li class="toclevel-5 tocsection-25"><a href="#Value_element_included_object_.28Val.29"><span class="tocnumber">4.3.3.1.1</span> <span class="toctext">Value element included object (Val)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-26"><a href="#Endpoint_included_object_.28EP.29"><span class="tocnumber">4.3.4</span> <span class="toctext">Endpoint included object (EP)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-27"><a href="#Private_keys_and_certificates"><span class="tocnumber">5</span> <span class="toctext">Private keys and certificates</span></a></li>
+<li class="toclevel-1 tocsection-28"><a href="#Notes"><span class="tocnumber">6</span> <span class="toctext">Notes</span></a></li>
+<li class="toclevel-1 tocsection-29"><a href="#Table_of_compatibility_of_implementations_of_OPC-UA_from_other_developers"><span class="tocnumber">7</span> <span class="toctext"><span>Table of compatibility of implementations of OPC-UA from other developers</span></span></a></li>
+</ul>
+</div>
+
+<p>OPC (OLE for Process Control) — it is the family of protocols and technologies that provide the single interface to control the objects of automation and technological processes. The creating and support of specifications of OPC coordinates an international nonprofit organization <a class="external text" href="http://opcfoundation.org" rel="nofollow noreferrer noopener" target="_blank">OPC Foundation</a>, established in 1994 by the leading manufacturers of industrial automation.
+</p><p>In view of the fact that a significant influence in the OPC Foundation organization has the Microsoft corporation, OPC protocols, until recently, was single platform and closed, due to binding to the closed technologies of MS Windows. However, more recently, the OPC Foundation organization has created multi-platform solutions such as OPC XML-DA and OPC-UA. Most interesting of them is the OPC-UA, as a solution unifying all the earlier protocols in an open and multi-platform technologies. 
+</p><p>This module implements the interface and protocol support for OPC-UA in the form of client service, and as the OPC-UA server. Client service of OPC-UA is implemented by the same name module of the subsystem "Data acquisition", and the server is implemented by the subsystem's "Protocols" module. The OPC-UA protocol's specific implementing code by the module was moved to a separated library under the LGPL3 license, by the users requests.
+</p><p>In the current version of these modules and the library it is implemented the binary part of the protocol and basic services in unsafe mode and safe mode of policies "Base128Rsa15" and "Base256". Later it is planned to extend the module to work via HTTP/SOAP and implementation of other OPC-UA services.
+</p><p>Although the OPC-UA protocol is multi-platform, its specification and SDK are not freely available, but are provided only to members of the OPC Foundation organization. For this reason, the implementation of these modules has faced significant obstacles and problems.
+</p><p>Firstly, the protocol OPC-UA is complex and its realization in general without specification an extremely laborious. For this reason, the work on these modules for a long time was not started, and only thanks to sponsorship by an organization-member of OPC Foundation the OpenSCADA project received documentation of the specification. The SDK and source code ANSIC-API of the OPC-UA protocol have not been received due to their incompatibility with the GPL license and as a consequence, the potential threat of violation of the license when working with the source code, which could lead to subsequent legal problems with the free distribution of these modules.
+</p><p>Secondly, even the presence of the specification does not allow to solve some technical question without an example of implementation and possibility of test the working prototype of the client and server of OPC-UA. For example, it is the technical features of the implementation of symmetric encryption algorithms and the keys for them do not allowed to make the implementation of support for security policy at once.
+</p><p>To debug the operation of the modules the demonstration software of company <a class="external text" href="http://www.unified-automation.com" rel="nofollow noreferrer noopener" target="_blank">Unified Automation</a> was used, in consist of the OPC-UA client — UAExpert and Server — "OPC-UA Demo Server", from the SDK package. In view of the constantly developing process of same "UAExpert" client, as the OPC-UA specification implementing, it's new versions often have problems in work with the OPC-UA server from OpenSCADA. Generically the results of compatibility in work with clients and servers of the different developers you can get in <a href="#TableOfCompat">the table of compatibility</a>.
+</p>
+<h2><span class="mw-headline" id="The_OPC-UA_protocol"><span class="mw-headline-number">1</span> The OPC-UA protocol</span></h2>
+<p>OPC-UA — it is the platform-independent standard by means of which the systems and devices of various types can interact by sending messages between the client and the server through various types of networks. The protocol supports secure communication through the validation of clients and servers, as well as the counteraction to attacks. OPC-UA defines the concept <i>Services</i> that the servers can provide, as well as services that the server supports for the client. Information is transmitted as the data types defined by OPC-UA and it producer, in addition the servers define object model, for which the clients can implement the dynamic review.
+</p><p>OPC-UA provides the combination of integrated address space with service model. This allows the server to integrate data alarms and events, the history in this address space, as well as provide access to them through the integrated services. Services also provide an integrated security model.
+</p><p>OPC-UA allows servers to provide for clients the definitions of types for access to the objects of the address space. OPC-UA supports the provision of data in various formats, including binary structures and XML-documents. Through the address space clients can request the server metadata that describe the data format.
+</p><p>OPC-UA appending the support for multiple connections between nodes instead of a simple hierarchy. Such flexibility in combination with types' definition allows to use OPC-UA for solving problems in the wide problem area.
+</p><p>OPC-UA is designed to provide the reliable output of data. Main feature of all OPC servers — the ability to issue the data and events.
+</p><p>OPC-UA is designed to support the wide range of servers, from simple PLC to industrial servers. These servers are characterized by the wide range of sizes, performance, platforms and functional capacity. Consequently, the OPC-UA defines the comprehensive set of possibilities, and the server can implement the subset of these possibilities. To compatibility ensure the OPC-UA defines subsets, named the <i>Profiles</i> that the server can indicate for agreement. Clients may subsequently make the review of server's profiles and make the interaction with the server, based on the profiles.
+</p><p>OPC-UA specification is designed as the core in the layer, isolated from the underlying computer technologies and network transports. This allows for OPC-UA if necessary to expand on the future technologies without excluding the framework of design. Currently, the specification defines two ways to data encode: XML/text and UA Binary. In addition, the two types of transport layer are defined: TCP and HTTP/SOAP.
+</p><p>OPC-UA is designed as the solution for migration from OPC clients and servers, which are based on Microsoft COM technologies. OPC COM servers (DA, HDA and A&amp;E) can be easily reflected in the OPC-UA. Producers can independently make such migration or recommend users to use wrappers and converters between these protocols. OPC-UA unifies the previous models in the single address space with the single set of services.
+</p>
+<h2><span class="mw-headline" id="Module_of_the_server_implementation"><span class="mw-headline-number">2</span> Module of the server implementation</span></h2>
+<p>The server module contains an implementation code for the server part of the OPC-UA — server services, in part of the OpenSCADA specific, and using the library in part of the OPC-UA specific. To construct the OPC-UA server it is enough to create an incoming transport, for ordinarily it is TCP-transport of module <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>, and select in it the module of the protocol, and also configure although one endpoint node of the protocol module, about it bellow.
+</p>
+<h3><span class="mw-headline" id="Service_of_requests_on_the_OPC-UA_protocol"><span class="mw-headline-number">2.1</span> Service of requests on the OPC-UA protocol</span></h3>
+<p>Incoming requests to the module-protocol are processed by the module in accordance with configured endpoint nodes of OPC-UA (EndPoints) (Fig. 1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:623px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_eps.png"><img class="thumbimage" height="511" src="../files/OPC-UA_prt_eps.png" width="621" /></a>  <div class="thumbcaption">Fig.1. Endpoint nodes of the protocol.</div></div></div></div>
+<p>The endpoint node of the OPC-UA protocol is actually the server object of OPC-UA. Endpoint nodes in OPC-UA can be either local or remote. The local one is designed to provide resources of OpenSCADA station to protocol OPC-UA, while the remote endpoint nodes are both for the service and review of available OPC-UA units, and to forwarding of the requests to remote stations. In this version of the module is only supported the configuration of the local endpoint nodes.
+</p><p>General configuration of the endpoint node is made on the main tab of the endpoint node's page (Fig. 2) with parameters:
+</p>
+<ul><li> Node status, as follow: Status, "Enable" and the name of the database containing the configuration.</li>
+<li> ID, name and description of the node.</li>
+<li> State, in which to transfer the node at the start: "Enable".</li>
+<li> Type of the protocol encoding. At the moment it is only "Binary".</li>
+<li> URL of the endpoint node.</li>
+<li> Server certificate in the PEM format.</li>
+<li> Private key in the PEM format.</li>
+<li> Security Server Policy.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:874px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main.png"><img class="thumbimage" height="717" src="../files/OPC-UA_prt_ep_main.png" width="872" /></a>  <div class="thumbcaption">Fig.2. Main tab of the endpoint node's page.</div></div></div></div>
+<h2><span class="mw-headline" id="Module_of_the_data_acquisition"><span class="mw-headline-number">3</span> Module of the data acquisition</span></h2>
+<p>The data acquisition module provides ability of acquisition and writing the value's attributes (13) of points with the "Variable" type.
+</p>
+<h3><span class="mw-headline" id="Data_controller.27s_object"><span class="mw-headline-number">3.1</span> Data controller's object</span></h3>
+<p>To append the OPC-UA data source the controller's object into the OpenSCADA system is created and configured. An example of the configuration tab of the controller's object is shown in Figure 3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:859px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main.png"><img class="thumbimage" height="717" src="../files/OPC-UA_cntr_main.png" width="857" /></a>  <div class="thumbcaption">Fig.3. Configuration tab of a controller object.</div></div></div></div>
+<p>From this tab you can set:
+</p>
+<ul><li> The state controller, as follow: Status, "Enable", "Run" and the name of the database containing the configuration.</li>
+<li> ID, name and description of the controller.</li>
+<li> State, in which to transfer the controller at start: "Enable", "Run".</li>
+<li> Name of the table to store the configuration of parameters of the controller.</li>
+<li> Scheduling policy and priority of the task of the data acquisition.</li>
+<li> Period of synchronization of the configuration of attributes of the parameters with the remote station, and try time for the connection restore.</li>
+<li> URL of the endpoint node of the remote station — OPC-UA server. In begin the address you can point in view "opc.tcp://{IP|name}:{port}", after that, at the controller's object enable and allowing the pointed OPC-UA node will emerge to select the refined address.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Often there meets a situation when the refined address is symbolic which does not resolve into the network by the server incorrect configuration. In this cases you need to keep the original IP-address or the name which resolved to the correct IP.</dd></dl>
+<ul><li> Security policy and mode of the messaging security.</li>
+<li> Client certificate and private key in the PEM format.</li>
+<li> User and password to authenticate on the server. Empty value here enable the anonymous access.</li>
+<li> Limit to number of attributes into the parameter.</li></ul>
+<p>To facilitate the identification of nodes on the remote station, as well as their choice to be inserted in the parameter of the controller in the controller's object it is provided the navigation on the remote station's nodes tab, where you can walk through the tree of objects and familiar with their attributes (Figure 4).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:720px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_browse.png"><img class="thumbimage" height="664" src="../files/OPC-UA_cntr_browse.png" width="718" /></a>  <div class="thumbcaption">Fig.4. The "Server nodes browser" tab of a controller's object page.</div></div></div></div>
+<h3><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3.2</span> Parameters</span></h3>
+<p>The data acquisition module provides only one type of parameters — "Standard". Additional configuration field of the parameter of the module (Fig. 5) is the list of OPC-UA nodes and the field of navigation by OPC-UA nodes in single line, for the selected nodes of type "Variable" insertion to the defined list. Attribute in this list is written as follows: <b>{ns}:{id}</b>.
+</p>
+<dl><dd>Where:
+<dl><dd><i>ns</i> — name space, number; zero value can be omitted;</dd>
+<dd><i>id</i> — node identifier by number, string, bytes string and GUID.</dd></dl></dd>
+<dd>Examples:
+<dl><dd><b>84</b> — root directory;</dd>
+<dd><b>3:"BasicDevices2"</b> — basic devices node in the name space 3 and the string view;</dd>
+<dd><b>4:"61626364"</b> — node in the names space 4 and the byte string view;</dd>
+<dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}</b> — node in the names space 4 and the GUID view.</dd></dl></dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:694px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm.png"><img class="thumbimage" height="675" src="../files/OPC-UA_prm.png" width="692" /></a>  <div class="thumbcaption">Fig.5. Configuration tab of a parameter's object.</div></div></div></div>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Nodes in type "Variable" with the value view as a structure are impossible typically to read entirely then you need it's elements insert separately to the reading nodes list.
+</p><p>In accordance with the specified list of nodes performs acquisition and creation of the parameter's attributes (Fig. 6).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:694px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr.png"><img class="thumbimage" height="492" src="../files/OPC-UA_prm_atr.png" width="692" /></a>  <div class="thumbcaption">Fig.6. Tab of attributes of a parameter.</div></div></div></div>
+<h2><span class="mw-headline" id="libOPC_UA_library"><span class="mw-headline-number">4</span> libOPC_UA library</span></h2>
+<p>Grounding on workouts of the module the protocol OPC-UA code was moved to different library and published on the LGPLv3 license. That was done to provide possibility of easy appending of support the OPC-UA protocol by external projects. The library represents by two files libOPC_UA.h, libOPC_UA.cpp; supported and hosted into the module content, then it's last version you can get here: <a class="external free" href="http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA</a>.
+</p><p>The library, like this module code, wrote on C++ programming language. Statistic classes diagram which represents the library architecture shown on Figure 7. According to the classes diagram the library implemented into the name space "OPC" and architecturally it can be divided to client "Client" and server "Server" parts which inherited from common class "UA". Besides the direct classes of the protocol "OPC-UA" the library includes to self a set of functions and classes for processing or storing the protocol data, specialty from which it should be noted class of a node of language XML "XML_N" used for requests to the library API unification.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:399px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="249" src="../files/OPC-UA_libOPCUA_class.png" width="397" /></a>  <div class="thumbcaption">Fig.7. Static class diagram of the library libOPC_UA.</div></div></div></div>
+<p>The library using at all lies in inheriting of the class "Client" and/or "Server", according to the end-program functions, and next implementing of the virtual function for the client/server properties, into the OPC-UA protocol context and the transport communication part, that is connect/open a TCP-socket and write/read of unstructured data stream. Next requests and the requested data processing (for server) performed through the function call <i>reqService()</i>, request to a service, and/or processing of the virtual function <i>reqData()</i> of a data requesting then in fact there is integration to the data model of the application.
+</p>
+<h3><span class="mw-headline" id="Service_objects.2C_functions_and_the_class_UA"><span class="mw-headline-number">4.1</span> Service objects, functions and the class UA</span></h3>
+<h4><span class="mw-headline" id="Data"><span class="mw-headline-number">4.1.1</span> Data</span></h4>
+<p>Implementations types (enum — SerializerType):
+</p>
+<ul><li> <i>ST_Binary = 0</i> — binary.</li></ul>
+<p>Open secure channel request's type (enum — SC_ReqTP):
+</p>
+<ul><li> <i>SC_ISSUE = 0</i> — issue;</li>
+<li> <i>SC_RENEW = 1</i> — renewal.</li></ul>
+<p>Security mode of message (enum — MessageSecurityMode):
+</p>
+<ul><li> <i>MS_None = 1</i> — without a security;</li>
+<li> <i>MS_Sign = 2</i> — sign;</li>
+<li> <i>MS_SignAndEncrypt = 3</i> — sign and encrypt.</li></ul>
+<p>Type of authentication (enum — AuthTp):
+</p>
+<ul><li> <i>A_Anon = 0</i> — anonymous;</li>
+<li> <i>A_UserNm = 1</i> — user+password;</li>
+<li> <i>A_Cert = 2</i> — certificate.</li></ul>
+<p>Node classes (enum — NodeClasses):
+</p>
+<ul><li> <i>NC_Object = 1</i> — object;</li>
+<li> <i>NC_Variable = 2</i> — variable;</li>
+<li> <i>NC_Method = 4</i> — method;</li>
+<li> <i>NC_ObjectType = 8</i> — object type;</li>
+<li> <i>NC_VariableType = 16</i> — variable type;</li>
+<li> <i>NC_ReferenceType = 32</i> — reference type;</li>
+<li> <i>NC_DataType = 64</i> — data type;</li>
+<li> <i>NC_View = 128</i> — view.</li></ul>
+<p>Browse direction (enum — BrowseDirection):
+</p>
+<ul><li> <i>BD_FORWARD = 0</i> — forward;</li>
+<li> <i>BD_INVERSE = 1</i> — inverse;</li>
+<li> <i>BD_BOTH = 2</i> — forward and inverse.</li></ul>
+<p>Time stamp to return (enum — TimestampsToReturn):
+</p>
+<ul><li> <i>TS_SOURCE = 0</i> — source;</li>
+<li> <i>TS_SERVER = 1</i> — server;</li>
+<li> <i>TS_BOTH = 2</i> — source and server;</li>
+<li> <i>TS_NEITHER = 3</i> — neither.</li></ul>
+<p>Access (enum — Access):
+</p>
+<ul><li> <i>ACS_Read = 0x01</i> — read;</li>
+<li> <i>ACS_Write = 0x02</i> — write;</li>
+<li> <i>ACS_HistRead = 0x04</i> — history read;</li>
+<li> <i>ACS_HistWrite = 0x08</i> — history write;</li>
+<li> <i>ACS_SemChange = 0x10</i> —&nbsp;?.</li></ul>
+<p>References description result mask (enum — RefDscrResMask):
+</p>
+<ul><li> <i>RdRm_RefType = 0x01</i> — reference type;</li>
+<li> <i>RdRm_IsForward = 0x02</i> — is forward;</li>
+<li> <i>RdRm_NodeClass = 0x04</i> — node class;</li>
+<li> <i>RdRm_BrowseName = 0x08</i> — browse name;</li>
+<li> <i>RdRm_DisplayName = 0x10</i> — display name;</li>
+<li> <i>RdRm_TypeDef = 0x20</i> — type of reference.</li></ul>
+<p>Identificators of attribute of node (enum — AttrIds):
+</p>
+<ul><li> <i>Aid_Error = 0</i> — error;</li>
+<li> <i>AId_NodeId = 1</i> — node identifier;</li>
+<li> <i>AId_NodeClass = 2</i> — node class;</li>
+<li> <i>AId_BrowseName = 3</i> — browse name;</li>
+<li> <i>AId_DisplayName = 4</i> — display name;</li>
+<li> <i>AId_Descr = 5</i> — description;</li>
+<li> <i>AId_WriteMask = 6</i> — write access mask;</li>
+<li> <i>AId_UserWriteMask = 7</i> — write access mask of user;</li>
+<li> <i>AId_IsAbstract = 8</i> — is abstract;</li>
+<li> <i>AId_Symmetric = 9</i> — symmetric;</li>
+<li> <i>AId_InverseName = 10</i> — inverse name;</li>
+<li> <i>AId_ContainsNoLoops = 11</i> — contains no loops;</li>
+<li> <i>AId_EventNotifier = 12</i> — event notifier;</li>
+<li> <i>AId_Value = 13</i> — value;</li>
+<li> <i>AId_DataType = 14</i> — data type;</li>
+<li> <i>AId_ValueRank = 15</i> — value rank;</li>
+<li> <i>AId_ArrayDimensions = 16</i> — array dimensions;</li>
+<li> <i>AId_AccessLevel = 17</i> — access level;</li>
+<li> <i>AId_UserAccessLevel = 18</i> — access level of user;</li>
+<li> <i>AId_MinimumSamplingInterval = 19</i> — minimal sampling interval;</li>
+<li> <i>AId_Historizing</i> — historizing;</li>
+<li> <i>AId_Executable</i> — executable;</li>
+<li> <i>AId_UserExecutable</i> — executable by user.</li></ul>
+<p>Subscription stats (enum — SubScrSt):
+</p>
+<ul><li> <i>SS_CUR = 0</i> — current (do not change by command);</li>
+<li> <i>SS_CLOSED = 1</i> — closed;</li>
+<li> <i>SS_CREATING = 2</i> — creating;</li>
+<li> <i>SS_NORMAL = 3</i> — normal;</li>
+<li> <i>SS_LATE = 4</i> — later;</li>
+<li> <i>SS_KEEPALIVE = 5</i> — keep alive.</li></ul>
+<p>Monitoring modes (enum — MonitoringMode):
+</p>
+<ul><li> <i>MM_CUR = -1</i> — current (do not change by command);</li>
+<li> <i>MM_DISABLED = 0</i> — disabled;</li>
+<li> <i>MM_SAMPLING = 1</i> — sampling;</li>
+<li> <i>MM_REPORTING = 2</i> — reporting.</li></ul>
+<h4><span class="mw-headline" id="External_functions"><span class="mw-headline-number">4.1.2</span> External functions</span></h4>
+<p>To the library included range of external functions of the object <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h894-2" rel="nofollow noreferrer noopener" target="_blank">TSYS</a> of OpenSCADA core to make simply and unified of the internal operations range:
+</p>
+<ul><li> <i>int64_t curTime( );</i> — Current time in microseconds from the Unix epoch (01.01.1970).</li>
+<li> <i>string int2str( int val );</i> — Conversion of the signed integer to string, into the decimal representing.</li>
+<li> <i>string uint2str( unsigned val );</i> — Conversion of the unsigned integer to string, into the decimal representing.</li>
+<li> <i>string ll2str( int64_t val );</i> — Conversion of the signed long integer (64bit) to string, into the decimal representing.</li>
+<li> <i>string real2str( double val, int prec = 15, char tp = 'g' );</i> — Conversion of the real value in double precision with precision <i>prec</i> of signs and type <i>tp</i> to string.</li>
+<li> <i>string strParse( const string &amp;path, int level, const string &amp;sep, int *off = NULL, bool mergeSepSymb = false );</i> — String <i>path</i> parsing to the components, which separated by <i>sep</i>, in single symbols merging <i>mergeSepSymb</i>, starting from the offset <i>off</i> and with control to the item's offset end in self.</li>
+<li> <i>string strMess( const char *fmt, ... );</i> — String forming by template <i>fmt</i> and the arguments. Base on "printf" implemented.</li></ul>
+<h4><span class="mw-headline" id="Automatic_POSIX_mutex_unlock_object_for_OPC_.28OPCAlloc.29"><span class="mw-headline-number">4.1.3</span> Automatic POSIX mutex unlock object for OPC (OPCAlloc)</span></h4>
+<p>The mutex management object is a copy of the "MtxAlloc" object of core OpenSCADA.
+</p><p><b>Public methods:</b>
+</p>
+<ul><li> <i>OPCAlloc( pthread_mutex_t &amp;iM, bool ilock = false );</i> — Initialization of automatic unlock mutex for early allocated one <i>iM</i>. With the <i>lock</i> set at a creation.</li>
+<li> <i>int lock( );</i> — The resource lock. Return zero at the success.</li>
+<li> <i>int unlock( );</i> — The resource unlock. Return zero at the success.</li>
+<li> <i>int tryLock( );</i> — The resource try lock, without wait for free. Return zero at the success.</li></ul>
+<h4><span class="mw-headline" id="Error_of_OPC_.28OPCError.29"><span class="mw-headline-number">4.1.4</span> Error of OPC (OPCError)</span></h4>
+<p>The error object "OPCError" is a trimmed copy of the "TError" object of core OpenSCADA.
+</p><p><b>Public methods:</b>
+</p>
+<ul><li> <i>OPCError( const char *fmt, ... );</i> — Typical error's constructor, without a code.</li>
+<li> <i>OPCError( int cod, const char *fmt, ... );</i> — Typical error's constructor, with the code <i>cod</i>.</li></ul>
+<p><b>Public attributes:</b>
+</p>
+<ul><li> <i>int cod;</i> — Error code.</li>
+<li> <i>string  mess;</i> — Error text.</li></ul>
+<h4><span class="mw-headline" id="XML-tag_.28XML_N.29"><span class="mw-headline-number">4.1.5</span> XML-tag (XML_N)</span></h4>
+<p>The object "XML_N" is trimmed copy of <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h921-2" rel="nofollow noreferrer noopener" target="_blank">the object of OpenSCADA core</a>.
+</p><p><b>Public methods:</b>
+</p>
+<ul><li> <i>XML_N( const string &amp;name = "" );</i> — Initialization of the tag with the <i>name</i>.</li>
+<li> <i>XML_N( const XML_N &amp;nd );</i> — Copy constructor.</li>
+<li> <i>XML_N &amp;operator=( const XML_N &amp;prm );</i> — Copying a branch of the XML-tree from <i>prm</i>.</li>
+<li> <i>string name( ) const;</i> — Tag's name.</li>
+<li> <i>XML_N* setName( const string &amp;s );</i> — Setting the tag's name to <i>s</i>.</li>
+<li> <i>string text( bool childs = false, bool recursive = false ) const;</i> — Tag's text. <i>childs</i> — for text getting from special text nodes.</li>
+<li> <i>XML_N* setText( const string &amp;s, bool childs = false );</i> — Setting the tag's text to <i>s</i>. <i>childs</i> — for set text to special text node.</li>
+<li> <i>void attrList( vector&lt;string&gt; &amp; list ) const;</i> — <i>List</i> of attributes in the tag.</li>
+<li> <i>XML_N* attrDel( const string &amp;name );</i> — Deleting of the attribute <i>name</i>.</li>
+<li> <i>void attrClear( );</i> — Clean up the tag's attributes.</li>
+<li> <i>string attr( const string &amp;name, bool caseSens = true ) const;</i> — Getting the attribute <i>name</i>.</li>
+<li> <i>XML_N* setAttr( const string &amp;name, const string &amp;val );</i> — Setting/creation of the attribute <i>name</i> with the value <i>val</i>.</li>
+<li> <i>XML_N* clear( );</i> — Clear the tag (recursively, including all childs).</li>
+<li> <i>bool childEmpty( ) const;</i> — Check for empty included tags.</li>
+<li> <i>unsigned childSize( ) const;</i> — Number of included tags.</li>
+<li> <i>void childAdd( XML_N *nd ); XML_N* childAdd( const string &amp;name = "" );</i> — Adding the included tag.</li>
+<li> <i>int childIns( unsigned id, XML_N *nd );</i> — Insert of the included tag <i>nd</i> to the position <i>id</i>. Negative <i>id</i> counts from end.</li>
+<li> <i>XML_N* childIns( unsigned id, const string &amp;name = "" );</i> — Insert of the included tag with the name <i>name</i> to the position <i>id</i>. Negative <i>id</i> counts from end.</li>
+<li> <i>void childDel( const unsigned id );</i> — Deleting of the included tag <i>id</i>. Negative <i>id</i> counts from end.</li>
+<li> <i>void childDel( XML_N *nd );</i> — Deleting of the included tag using its address <i>nd</i>.</li>
+<li> <i>void childClear( const string &amp;name = "" );</i> — Clean up of the included tag <i>name</i>.</li>
+<li> <i>XML_N* childGet( const int, bool noex = false ) const;</i> — Getting the included tag by its index number.</li>
+<li> <i>XML_N* childGet( const string &amp;name, const int numb = 0, bool noex = false ) const;</i> — Getting of the included <i>numb</i> indexed tag by the tag's name <i>name</i>. <i>noex</i> indicates the prohibition of the generation of exception in the case of absence of the tag.</li>
+<li> <i>XML_N* childGet( const string &amp;attr, const string &amp;name, bool noex = false ) const;</i> — Getting the included <i>numb</i> indexed tag by its value <i>name</i> of the attribute <i>attr</i>. <i>noex</i> indicates the prohibition of the generation of exception in the case of absence of the tag.</li>
+<li> <i>XML_N* getElementBy( const string &amp;attr, const string &amp;val );</i> — Included node search by the value <i>val</i> of the attribute <i>attr</i>.</li>
+<li> <i>XML_N* parent( );</i> — Parent tag of the tag.</li>
+<li> <i>XML_N* root( );</i> — Root tag of the tag.</li></ul>
+<h4><span class="mw-headline" id="Node.27s_object_of_OPC-UA_.28NodeId.29"><span class="mw-headline-number">4.1.6</span> Node's object of OPC-UA (NodeId)</span></h4>
+<p><b>Data:</b><br />
+Data types (enum — NodeId::Type):
+</p>
+<ul><li> <i>NodeId::Numeric</i> — number.</li>
+<li> <i>NodeId::String</i> — string.</li>
+<li> <i>NodeId::Guid</i> — global unique identifier.</li>
+<li> <i>NodeId::Opaque</i> — opaque.</li></ul>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>NodeId( uint32_t in, uint16_t ins = 0 );</i> — Numerical initial constructor, for number <i>in</i> in the namespace <i>ins</i>.</li>
+<li> <i>NodeId( const string &amp;istr, uint16_t ins = 0, Type tp = String );</i> — String initial constructor, for string <i>istr</i> into the namespace <i>ins</i>, with the type <i>tp</i>.</li>
+<li> <i>NodeId( const NodeId &amp;node );</i> — The object copy constructor.</li>
+<li> <i>NodeId( );</i> — Destructor.</li>
+<li> <i>NodeId &amp;operator=( const NodeId &amp;node );</i> — Copy object.</li>
+<li> <i>Type type( ) const;</i> — Node type.</li>
+<li> <i>bool isNull( ) const;</i> — Node is zero — uninitialized.</li>
+<li> <i>uint16_t ns( ) const;</i> — Namespace.</li>
+<li> <i>uint32_t numbVal( ) const;</i> — Number value.</li>
+<li> <i>string  strVal( ) const;</i> — String value.</li>
+<li> <i>void setNs( uint16_t ins );</i> — Name space set to <i>ins</i>.</li>
+<li> <i>void setNumbVal( uint32_t in );</i> — Number value set to <i>in</i>.</li>
+<li> <i>void setStrVal( const string &amp;istr, Type tp = String );</i> — String value set to <i>istr</i> with type <i>tp</i>.</li>
+<li> <i>static NodeId fromAddr( const string &amp;strAddr );</i> — Node's object forming from the address <i>strAddr</i>.</li>
+<li> <i>string toAddr( ) const;</i> — Node's object address getting.</li></ul>
+<h4><span class="mw-headline" id="Root_object_of_the_OPC-UA_protocol_.28UA.29"><span class="mw-headline-number">4.1.7</span> Root object of the OPC-UA protocol (UA)</span></h4>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>virtual string lang2CodeSYS( );</i> — two-symbol language code of the environment.</li>
+<li> <i>virtual void debugMess( const string &amp;mess )</i> — debug messages placing.</li>
+<li> <i>virtual uint32_t rcvBufSz( );</i> — receiver buffer size, great for 8192.</li>
+<li> <i>virtual uint32_t sndBufSz( );</i> — transmitter buffer size, great for 8192.</li>
+<li> <i>virtual uint32_t msgMaxSz( );</i> — maximum message size, 0 for unlimited.</li>
+<li> <i>virtual uint32_t chunkMaxCnt( );</i> — maximum chunks counter, 0 for unlimited.</li>
+<li> <i>static string iErr( const string &amp;buf, int &amp;off );</i> — error reading from the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static const char *iVal( const string &amp;buf, int &amp;off, char vSz );</i> — value in size <i>vSz</i> reading, as a data part, from the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static int64_t iN( const string &amp;rb, int &amp;off, char vSz );</i> — value of signed integer in size <i>vSz</i> (1, 2, 4, 8) reading from the stream <i>rb</i> by the offset <i>off</i>.</li>
+<li> <i>static uint64_t iNu( const string &amp;rb, int &amp;off, char vSz );</i> — value of unsigned integer in size <i>vSz</i> (1, 2, 4, 8) reading from the stream <i>rb</i> by the offset <i>off</i>.</li>
+<li> <i>static double iR( const string &amp;rb, int &amp;off, char vSz = 4 );</i> — value of real in size <i>vSz</i> (4, 8) reading from the stream <i>rb</i> by the offset <i>off</i>.</li>
+<li> <i>static string iS( const string &amp;buf, int &amp;off );</i> — string reading from the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static string iSl( const string &amp;buf, int &amp;off, string *locale = NULL );</i> — localized <i>locale</i> string reading from the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static string iSqlf( const string &amp;buf, int &amp;off, uint16_t *nsIdx = NULL );</i> — string with the qualify <i>nsIdx</i> reading from the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static int64_t iTm( const string &amp;buf, int &amp;off );</i> — time reading, with conversion it to the UNIX epoch, from the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static NodeId iNodeId( const string &amp;buf, int &amp;off );</i> — node identifier reading from the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static string iVariant( const string &amp;buf, int &amp;off, uint8_t *tp = NULL );</i> — variant type reading from the stream <i>buf</i> by the offset <i>off</i>. Returns the variant in string representing of type <i>tp</i>.</li>
+<li> <i>static void iDataValue( const string &amp;buf, int &amp;off, XML_N &amp;nVal );</i> — complex value (structure DataValue) reading to <i>nVal</i> from the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static void oN( string &amp;buf, int64_t val, char sz, int off = -1 );</i> — value of signed integer <i>val</i> in size <i>sz</i> (1, 2, 4, 8) writing to the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static void oNu( string &amp;buf, uint64_t val, char sz, int off = -1 );</i> — value of unsigned integer <i>val</i> in size <i>sz</i> (1, 2, 4, 8) writing to the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static void oR( string &amp;buf, double val, char sz = 4 );</i> — value of real <i>val</i> in size <i>sz</i> (4, 8) writing to the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static void oS( string &amp;buf, const string &amp;val, int off = -1 );</i> — string <i>val</i> writing to the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static void oSl( string &amp;buf, const string &amp;val, const string &amp;locale = "" );</i> — localized <i>locale</i> string <i>val</i> writing to the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static void oSqlf( string &amp;buf, const string &amp;val, uint16_t nsIdx = 0 );</i> — string <i>val</i> with the qualify <i>nsIdx</i> writing to the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static void oTm( string &amp;buf, int64_t val );</i> — time <i>val</i>, in the UNIX epoch, writing to the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static void oNodeId( string &amp;buf, const NodeId &amp;val );</i> — node identifier <i>val</i> writing to the stream <i>buf</i> by the offset <i>off</i>.</li>
+<li> <i>static void oRef( string &amp;buf, uint32_t resMask, const NodeId &amp;nodeId, const NodeId &amp;refTypeId, bool isForward, const string &amp;name, uint32_t nodeClass, const NodeId &amp;typeDef );</i> — writing to the stream <i>buf</i> of browsing description (structure ReferenceDescription) for the result mask <i>resMask</i>, the node <i>nodeId</i>, the reference type <i>refTypeId</i>, the forward direction <i>isForward</i>, the name <i>name</i>, the node class <i>nodeClass</i>, the definition type <i>typeDef</i>.</li>
+<li> <i>void oDataValue( string &amp;buf, uint8_t eMsk, const string &amp;vl, uint8_t vEMsk = 0, int64_t srcTmStmp = 0 );</i> — complex value (structure DataValue) writing to the stream <i>buf</i> for the encoding mask <i>eMsk</i>, the value <i>vl</i>, the value mask <i>vEMsk</i>, the source time <i>srcTmStmp</i>.</li>
+<li> <i>static string randBytes( int num );</i> — random data stream generation in the number <i>num</i>.</li>
+<li> <i>static string certPEM2DER( const string &amp;certPem );</i> — certificate conversion from PEM <i>certPem</i> to DER form.</li>
+<li> <i>static string certDER2PEM( const string &amp;certDer );</i> — certificate conversion from DER <i>certDer</i> to PEM form.</li>
+<li> <i>static string certThumbprint( const string &amp;certPem );</i> — sign getting from the certificate PEM <i>certPem</i>.</li>
+<li> <i>static string asymmetricEncrypt( const string &amp;mess, const string &amp;certPem, const string &amp;secPolicy );</i> — asymmetric encryption of the message <i>mess</i> stream by the certificate <i>certPem</i> (by the open key) for the policy <i>secPolicy</i>.</li>
+<li> <i>static string asymmetricDecrypt( const string &amp;mess, const string &amp;pvKeyPem, const string &amp;secPolicy );</i> — asymmetric decryption of the message <i>mess</i> stream by the key <i>pvKeyPem</i> for the certificate <i>secPolicy</i>.</li>
+<li> <i>static bool asymmetricVerify( const string &amp;mess, const string &amp;sign, const string &amp;certPem );</i> — asymmetric verifying of the <i>sign</i> of the message <i>mess</i> by the certificate <i>certPem</i>.</li>
+<li> <i>static string asymmetricSign( const string &amp;mess, const string &amp;pvPem );</i> — asymmetric subscription getting by the private key of the certificate <i>pvPem</i> for the message <i>mess</i>.</li>
+<li> <i>static int asymmetricKeyLength( const string &amp;keyCertPem );</i> — key's length of the certificate <i>keyCertPem</i> getting.</li>
+<li> <i>static string deriveKey( const string &amp;secret, const string &amp;seed, int keyLen );</i> — key of the length <i>keyLen</i> derive from the <i>secret</i> and the <i>seed</i>.</li>
+<li> <i>static string symmetricEncrypt( const string &amp;mess, const string &amp;keySet, const string &amp;secPolicy );</i> — symmetric encryption of the message <i>mess</i> stream by the key <i>keySet</i> for the policy <i>secPolicy</i>.</li>
+<li> <i>static string symmetricDecrypt( const string &amp;mess, const string &amp;keySet, const string &amp;secPolicy );</i> — symmetric decryption the message <i>mess</i> stream by the key <i>keySet</i> for the policy <i>secPolicy</i>.</li>
+<li> <i>static string symmetricSign( const string &amp;mess, const string &amp;keySet, const string &amp;secPolicy );</i> — symmetric sign by key <i>keySet</i> getting for the message <i>mess</i> and the policy <i>secPolicy</i>.</li></ul>
+<h5><span class="mw-headline" id="Security_parameters_included_object_.28SecuritySetting.29"><span class="mw-headline-number">4.1.7.1</span> Security parameters included object (SecuritySetting)</span></h5>
+<p><b>Public data:</b>
+</p>
+<ul><li> <i>string policy</i> — security policy;</li>
+<li> <i>MessageSecurityMode messageMode</i> — message mode.</li></ul>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>SecuritySetting( const string &amp;iplc, int8_t imMode )</i> — object constructor for the security policy <i>iplc</i> and the messages mode <i>imMode</i>.</li>
+<li> <i>SecuritySetting( )</i> — object constructor with the security policy "None" and the messages mode <i>MS_None</i>.</li></ul>
+<h3><span class="mw-headline" id="Client.27s_main_object_.28Client-.3EUA.29"><span class="mw-headline-number">4.2</span> Client's main object (Client-&gt;UA)</span></h3>
+<p><b>Application:</b> Direct inheritance by a user object — OPC-UA client.
+</p><p><b>Public methods:</b>
+</p>
+<ul><li> <i>virtual string applicationUri( ) = 0;</i> — application's URI.</li>
+<li> <i>virtual string productUri( ) = 0;</i> — product's URI.</li>
+<li> <i>virtual string applicationName( ) = 0;</i> — application name.</li>
+<li> <i>virtual string sessionName( ) = 0;</i> — session name.</li>
+<li> <i>virtual string endPoint( ) = 0;</i> — endpoint.</li>
+<li> <i>virtual string secPolicy( ) = 0;</i> — security policy.</li>
+<li> <i>virtual int secMessMode( ) = 0;</i> — security mode of message.</li>
+<li> <i>virtual string cert( ) = 0;</i> — certificate.</li>
+<li> <i>virtual string pvKey( ) = 0;</i> — private key.</li>
+<li> <i>virtual string authData( ) = 0;</i> — authentication data:
+<ul><li> "&lt;Empty&gt;" — anonymous;</li>
+<li> "{User}\n{Password}" — by user and password.</li></ul></li>
+<li> <i>virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 ) = 0;</i> — messages exchange, send a request and wait a response.</li>
+<li> <i>virtual bool connect( int8_t est = -1 );</i> — connection status get, the connection establish at for <i>est</i> = 1, disconnecting for <i>est</i> = 0.</li>
+<li> <i>virtual void protIO( XML_N &amp;io );</i> — request to the protocol processing.</li>
+<li> <i>virtual void reqService( XML_N &amp;io );</i> — service request.</li></ul>
+<p><b>Protected attributes:</b>
+</p>
+<ul><li> <i>SClntSess sess;</i> — session data.</li></ul>
+<h4><span class="mw-headline" id="Client.27s_session_included_object_.28SClntSess.29"><span class="mw-headline-number">4.2.1</span> Client's session included object (SClntSess)</span></h4>
+<p><b>Public data:</b>
+</p>
+<ul><li> <i>string endPoint;</i> — endpoint;</li>
+<li> <i>XML_N endPointDscr;</i> — active endpoint description;</li>
+<li> <i>uint32_t secChnl;</i> — security channel's index;</li>
+<li> <i>uint32_t secToken;</i> — token of session security;</li>
+<li> <i>uint32_t sqNumb;</i> — sequence number;</li>
+<li> <i>uint32_t sqReqId;</i> — sequence number of request;</li>
+<li> <i>uint32_t reqHndl;</i> — request handler;</li>
+<li> <i>int secLifeTime;</i> — secure channel lifetime;</li>
+<li> <i>string sesId;</i> — session identifier;</li>
+<li> <i>string authTkId;</i> — token of authentication;</li>
+<li> <i>int64_t sessOpen;</i> — open time of session;</li>
+<li> <i>double sesLifeTime;</i> — session lifetime;</li>
+<li> <i>string servCert;</i> — server certificate;</li>
+<li> <i>string secPolicy;</i> — security policy;</li>
+<li> <i>char secMessMode;</i> — message's security mode;</li>
+<li> <i>string clKey, servKey;</i> — keys of client and server.</li></ul>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>void clearSess( )</i> — session clean up.</li>
+<li> <i>void clearFull( bool inclEPdescr = false )</i> — session full clean up, include the endpoint description <i>inclEPdescr</i>.</li></ul>
+<h3><span class="mw-headline" id="Server.27s_main_object_.28Server-.3EUA.29"><span class="mw-headline-number">4.3</span> Server's main object (Server-&gt;UA)</span></h3>
+<p><b>Application:</b> Direct inheritance by a user object — OPC-UA server.
+</p><p><b>Public methods:</b>
+</p>
+<ul><li> <i>virtual bool debug( );</i> — debugging is activated.</li>
+<li> <i>virtual string applicationUri( ) = 0;</i> — application URI.</li>
+<li> <i>virtual string productUri( ) = 0;</i> — product URI.</li>
+<li> <i>virtual string applicationName( ) = 0;</i> — application name.</li>
+<li> <i>virtual uint32_t clientRcvBufSz( const string &amp;inPrtId ) = 0;</i> — taken from client receiver buffer size, for the connection <i>inPrtId</i>.</li>
+<li> <i>virtual uint32_t clientSndBufSz( const string &amp;inPrtId ) = 0;</i> — taken from client transmitter buffer size, for the connection <i>inPrtId</i>.</li>
+<li> <i>virtual uint32_t clientMsgMaxSz( const string &amp;inPrtId ) = 0;</i> — taken from client maximum message size, for the connection <i>inPrtId</i>.</li>
+<li> <i>virtual uint32_t clientChunkMaxCnt( const string &amp;inPrtId ) = 0;</i> — taken from client maximum chunks counter, for the connection <i>inPrtId</i>.</li>
+<li> <i>virtual void discoveryUrls( vector&lt;string&gt; &amp;ls ) = 0;</i> — discovery server's URLs in <i>ls</i>.</li>
+<li> <i>virtual bool inReq( string &amp;request, const string &amp;inPrtId, string *answ = NULL );</i> — input requests <i>request</i> handler for the protocol's object <i>inPrtId</i> and the answer <i>answ</i>.</li>
+<li> <i>virtual int writeToClient( const string &amp;threadId, const string &amp;data ) = 0;</i> — direct writing to the connected client.</li>
+<li> <i>virtual string clientAddr( const string &amp;threadId ) = 0;</i> — client address.</li>
+<li> <i>virtual void clientRcvBufSzSet( const string &amp;inPrtId, uint32_t vl ) = 0;</i> — set taken from client receiver buffer size to <i>vl</i>, for the connection <i>inPrtId</i>.</li>
+<li> <i>virtual void clientSndBufSzSet( const string &amp;inPrtId, uint32_t vl ) = 0;</i> — set taken from client transmitter buffer size to <i>vl</i>, for the connection <i>inPrtId</i>.</li>
+<li> <i>virtual void clientMsgMaxSzSet( const string &amp;inPrtId, uint32_t vl ) = 0;</i> — set taken from client maximum message size to <i>vl</i>, for the connection <i>inPrtId</i>.</li>
+<li> <i>virtual void clientChunkMaxCntSet( const string &amp;inPrtId, uint32_t vl ) = 0;</i> — set taken from client maximum chunks counter to <i>vl</i>, for the connection <i>inPrtId</i>.</li>
+<li> <i>int chnlSet( int cid, const string &amp;iEp, int32_t lifeTm = 0, const string&amp; iClCert = "", const string &amp;iSecPolicy = "None", char iSecMessMode = 1, const string &amp;iclAddr = "", uint32_t iseqN = 1 );</i> — security channel setting with the identifier <i>cid</i> (nonzero value for updating) for the endpoint <i>iEp</i>, the lifetime <i>lifeTm</i>, the client certificate <i>iClCert</i>, the security policy <i>iSecPolicy</i>, the messages security mode <i>iSecMessMode</i>, the client address <i>iclAddr</i>, the package's sequence number <i>iseqN</i>.</li>
+<li> <i>void chnlClose( int cid );</i> — security channel <i>cid</i> closing.</li>
+<li> <i>SecCnl chnlGet( int cid ); SecCnl &amp;chnlGet_( int cid );</i> — security channel's <i>cid</i> access and it's copy getting.</li>
+<li> <i>void chnlSecSet( int cid, const string &amp;servKey, const string &amp;clKey );</i> — security channel <i>cid</i> setting to the keys of server <i>servKey</i> and client <i>clKey</i>.</li>
+<li> <i>static string mkError( uint32_t errId, const string &amp;err = "" );</i> — error forming for the identifier <i>errId</i> and the message <i>err</i>.</li></ul>
+<p><b>Protected methods:</b>
+</p>
+<ul><li> <i>virtual void epEnList( vector&lt;string&gt; &amp;ls ) = 0;</i> — handler of request to list of endpoint nodes.</li>
+<li> <i>virtual EP *epEnAt( const string &amp;ep ) = 0;</i> — handler of request to the endpoint object.</li></ul>
+<h4><span class="mw-headline" id="Security_channel_included_object_.28SecCnl.29"><span class="mw-headline-number">4.3.1</span> Security channel included object (SecCnl)</span></h4>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>SecCnl( const string &amp;iEp, uint32_t iTokenId, int32_t iLifeTm, const string &amp;iClCert, const string &amp;iSecPolicy, char iSecMessMode, const string &amp;iclAddr, uint32_t isecN );</i> — security channel object constructor for: the endpoint <i>iEp</i>, the security token <i>iTokenId</i>, the lifetime <i>iLifeTm</i>, the client's certificate <i>iClCert</i>, the security policy <i>iSecPolicy</i>, the message's security mode <i>iSecMessMode</i>, the client's address <i>iclAddr</i>, the sequence number <i>isecN</i> of creation the security channel.</li></ul>
+<p><b>Public attributes:</b>
+</p>
+<ul><li> <i>string endPoint;</i> — endpoint;</li>
+<li> <i>string secPolicy;</i> — security policy;</li>
+<li> <i>char secMessMode;</i> — security mode of message;</li>
+<li> <i>int64_t tCreate;</i> — creation time;</li>
+<li> <i>int32_t tLife;</i> — lifetime;</li>
+<li> <i>uint32_t TokenId, TokenIdPrev;</i> — current and previous the tokens identifiers;</li>
+<li> <i>string clCert, clAddr;</i> — client's certificate and address;</li>
+<li> <i>string servKey, clKey;</i> — keys of the server and the client;</li>
+<li> <i>uint32_t servSeqN, clSeqN, startClSeqN;</i> — current server's, client's and start number of the package's sequence.</li></ul>
+<h4><span class="mw-headline" id="Session_included_object_.28Sess.29"><span class="mw-headline-number">4.3.2</span> Session included object (Sess)</span></h4>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>Sess( const string &amp;iName, double iTInact );</i> — the object constructor for name <i>iName</i> and timeout of the activity <i>iTInact</i>.</li></ul>
+<p><b>Public attributes:</b>
+</p>
+<ul><li> <i>string name, inPrtId, idPolicyId, user;</i> — name, input protocol identifier and user;</li>
+<li> <i>vector&lt;uint32_t&gt; secCnls;</i> — security channels list;</li>
+<li> <i>double tInact;</i> — inactivity time;</li>
+<li> <i>int64_t tAccess;</i> — access time;</li>
+<li> <i>string servNonce;</i> — random sequence of the server;</li>
+<li> <i>map&lt;string, ContPoint&gt; cntPnts;</i> — browse's continuation points;</li>
+<li> <i>deque&lt;string&gt; publishReqs;</i> — publish requests list.</li></ul>
+<h5><span class="mw-headline" id="Browse.27s_continuation_point_included_object_.28ContPoint.29"><span class="mw-headline-number">4.3.2.1</span> Browse's continuation point included object (ContPoint)</span></h5>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>ContPoint( const string &amp;i_brNode, const string &amp;i_lstNode, uint32_t i_brDir, uint32_t i_refPerN, const string &amp;i_refTypeId, uint32_t i_nClassMask, uint32_t i_resMask )</i> — object of the continuation node's point <i>i_brNode</i> constructor, of the list node <i>i_lstNode</i>, of the direction browsing <i>i_brDir</i>, of the number of references <i>i_refPerN</i> to a node, of the reference identifier <i>i_refTypeId</i>, of the node class mask <i>i_nClassMask</i> and the result mask <i>i_resMask</i>.</li>
+<li> <i>bool empty( ) const;</i> — the continuation point is empty.</li></ul>
+<p><b>Public attributes:</b>
+</p>
+<ul><li> <i>uint32_t brDir, refPerN, nClassMask, resMask;</i> — browsing direction, references number to node, class mask of the node, results mask;</li>
+<li> <i>string brNode, lstNode, refTypeId;</i> — nodes branch, nodes list and the reference's type identifier.</li></ul>
+<h4><span class="mw-headline" id="Subscription_included_object_.28Subscr.29"><span class="mw-headline-number">4.3.3</span> Subscription included object (Subscr)</span></h4>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>Subscr copy( bool noWorkData = true );</i> — copy of the subscription object, without a work data <i>noWorkData</i>.</li>
+<li> <i>SubScrSt setState( SubScrSt st = SS_CUR );</i> — state setting to <i>st</i>.</li></ul>
+<p><b>Public attributes:</b>
+</p>
+<ul><li> <i>SubScrSt st;</i> — subscription state;</li>
+<li> <i>int sess;</i> — subscription's session;</li>
+<li> <i>bool en;</i> — state "Enabled";</li>
+<li> <i>double publInterv;</i> — publish interval (ms);</li>
+<li> <i>uint32_t seqN;</i> — sequence number for responds, wrapped through 1, no increments at the KeepAlive messages;</li>
+<li> <i>uint32_t cntrLifeTime, wLT;</i> — counter at it exhausting and a message miss from client the server needs to the object erase;</li>
+<li> <i>uint32_t cntrKeepAlive, wKA;</i> — counter at it exhausting the server needs to send an empty publish respond and set the state StatusChangeNotification to Bad_Timeout;</li>
+<li> <i>uint32_t maxNotPerPubl;</i> — maximum number of the notifications to a single respond of publishing;</li>
+<li> <i>uint8_t pr;</i> — priority;</li>
+<li> <i>vector&lt;MonitItem&gt; mItems;</i> — monitoring elements list;</li>
+<li> <i>deque&lt;string&gt; retrQueue;</i> — retransmission queue, used by a retransmission queue request (Republish); cleaned up to depth accorded to the KeepAlive or a direct request into the acquire set.</li></ul>
+<h5><span class="mw-headline" id="Monitored_item_included_object_.28MonitItem.29"><span class="mw-headline-number">4.3.3.1</span> Monitored item included object (MonitItem)</span></h5>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>MonitoringMode md;</i> — monitoring mode;</li>
+<li> <i>NodeId nd;</i> — target node;</li>
+<li> <i>uint32_t aid;</i> — node's attribute identifier;</li>
+<li> <i>TimestampsToReturn tmToRet;</i> — timestamp to return;</li>
+<li> <i>double smplItv;</i> — sampling interval;</li>
+<li> <i>uint32_t qSz;</i> — queue size;</li>
+<li> <i>bool dO;</i> — to drop old;</li>
+<li> <i>uint32_t cH;</i> — client's handler;</li>
+<li> <i>XML_N fltr;</i> — filter;</li>
+<li> <i>int vTp;</i> — value type;</li>
+<li> <i>int64_t dtTm;</i> — last value time;</li>
+<li> <i>deque&lt;Val&gt; vQueue;</i> — values queue.</li></ul>
+<h6><span class="mw-headline" id="Value_element_included_object_.28Val.29"><span class="mw-headline-number">4.3.3.1.1</span> Value element included object (Val)</span></h6>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>Val( const string &amp;ivl, int64_t itm )</i> — object constructor of the value <i>ivl</i> for the time <i>tm</i>.</li></ul>
+<p><b>Публичные атрибуты:</b>
+</p>
+<ul><li> <i>string vl;</i> — value;</li>
+<li> <i>int64_t tm;</i> — value time.</li></ul>
+<h4><span class="mw-headline" id="Endpoint_included_object_.28EP.29"><span class="mw-headline-number">4.3.4</span> Endpoint included object (EP)</span></h4>
+<p><b>Public methods:</b>
+</p>
+<ul><li> <i>EP( Server *serv );</i> — object constructor referred to the server <i>serv</i>.</li>
+<li> <i>virtual string id( ) = 0;</i> — identifier;</li>
+<li> <i>virtual string url( ) = 0;</i> — URL;</li>
+<li> <i>virtual string cert( ) = 0;</i> — certificate, by string in PEM form;</li>
+<li> <i>virtual string pvKey( ) = 0;</i> — private key, by string in PEM form;</li>
+<li> <i>virtual double subscrProcPer( ) = 0;</i> — common minimal period of the publishing and the data processing cycle;</li>
+<li> <i>virtual uint32_t limSubScr( );</i> — limit to subscriptions number;</li>
+<li> <i>virtual uint32_t limMonitItms( );</i> — limit to monitoring elements number;</li>
+<li> <i>virtual uint32_t limRetrQueueTm( );</i> — time limit to the retransmission queue depth;</li>
+<li> <i>bool enableStat( );</i> — state "Enabled";</li>
+<li> <i>virtual bool publishInPool( ) = 0;</i> — publish in the pool mode of transport, otherwise that is an external task;</li>
+<li> <i>virtual void setEnable( bool vl );</i> — set to "Enabled";</li>
+<li> <i>virtual void setPublish( const string &amp;inPrtId );</i> — start a publish task or input request's pool of subScrCycle();</li>
+<li> <i>void subScrCycle( unsigned cntr, string *answ = NULL, const string &amp;inPrtId = "" );</i> — function of the subscriptions list processing call cycle in step <i>cntr</i> for answer into <i>answ</i> in the pool mode; <i>inPrtId</i> set to the input transport's (connection) subscriptions process into the pool mode or it is empty for all subscriptions processing into a specified task;</li>
+<li> <i>int secSize( );</i> — security policies number;</li>
+<li> <i>string secPolicy( int isec );</i> — getting of the security policy <i>isec</i> description;</li>
+<li> <i>MessageSecurityMode secMessageMode( int isec );</i> — messages security mode for the security policy <i>isec</i>;</li>
+<li> <i>int sessCreate( const string &amp;iName, double iTInact );</i> — session creation with the name <i>iName</i> and the inactivity timeout <i>iTInact</i>, returns the session identifier;</li>
+<li> <i>void sessServNonceSet( int sid, const string &amp;servNonce );</i> — session's <i>sid</i> of the server the security sequence setting to <i>servNonce</i>;</li>
+<li> <i>virtual uint32_t sessActivate( int sid, uint32_t secCnl, bool check = false, const string &amp;inPrtId = "", const XML_N &amp;identTkn = XML_N() );</i> — session <i>sid</i> activation for link to the security channel <i>secCnl</i>, with the checking <i>check</i> to possibility-need for reassigning, after closing of the previous security channel, returns error (0 - no an error);</li>
+<li> <i>void sessClose( int sid );</i> — session <i>sid</i> close;</li>
+<li> <i>Sess sessGet( int sid );</i> — getting of the session's <i>sid</i> object copy;</li>
+<li> <i>Sess::ContPoint sessCpGet( int sid, const string &amp;cpId );</i> — continuation point <i>cpId</i> of browsing getting for the session <i>sid</i>;</li>
+<li> <i>void sessCpSet( int sid, const string &amp;cpId, const Sess::ContPoint &amp;cp = Sess::ContPoint() );</i> — continuation point <i>cp</i> of browsing setting for the session <i>sid</i> and the identifier <i>cpId</i>;</li>
+<li> <i>uint32_t subscrSet( uint32_t ssId, SubScrSt st, bool en = false, int sess = -1, double publInterv = 0, uint32_t cntrLifeTime = 0, uint32_t cntrKeepAlive = 0, uint32_t maxNotePerPubl = OpcUa_NPosID, int pr = -1 );</i> — subscription <i>ssId</i> creation/setting for: the state <i>st</i>, the enabling <i>en</i>, the session <i>sess</i>, the publication interval <i>publInterv</i>, the counter of lifetime <i>cntrLifeTime</i>, the counter of keep "alive" <i>cntrKeepAlive</i>, the maximum number of notifications into single publication <i>maxNotePerPubl</i>, the priority <i>pr</i>;</li>
+<li> <i>Subscr subscrGet( uint32_t ssId, bool noWorkData = true );</i> — subscription <i>ssId</i> copy getting, without a working data <i>noWorkData</i>;</li>
+<li> <i>uint32_t mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md = MM_CUR, const NodeId &amp;nd = NodeId(), uint32_t aid = OpcUa_NPosID, TimestampsToReturn tmToRet = TimestampsToReturn(-1), double smplItv = -2, uint32_t qSz = OpcUa_NPosID, int8_t dO = -1, uint32_t cH = OpcUa_NPosID, XML_N *fltr = NULL );</i> — element of monitoring item <i>mItId</i> creation/setting of the session <i>ssId</i> for: the mode <i>md</i>, the node <i>nd</i>, the attribute <i>aid</i>, the timestamp profile <i>tmToRet</i>, the sampling interval <i>smplItv</i>, the queue size <i>qSz</i>, the old dropping <i>dO</i>, the client handler <i>cH</i>, the filter <i>fltr</i>;</li>
+<li> <i>Subscr::MonitItem mItGet( uint32_t ssId, uint32_t mItId );</i> — getting of copy of element of the monitoring item <i>mItId</i> for the session <i>ssId</i>;</li>
+<li> <i>virtual uint32_t reqData( int reqTp, XML_N &amp;req );</i> — data requests handler, the requests to the nodes tree of the server.</li></ul>
+<p><b>Protected methods:</b>
+</p>
+<ul><li> <i>XML_N *nodeReg( const NodeId &amp;parent, const NodeId &amp;ndId, const string &amp;name, int ndClass, const NodeId &amp;refTypeId, const NodeId &amp;typeDef = 0 );</i> — node <i>ndId</i> register into the nodes of the server tree for: of the parent <i>parent</i>, of the node class <i>ndClass</i>, of the reference type identifier <i>refTypeId</i> and the definition type <i>typeDef</i>;</li>
+<li> <i>Sess *sessGet_( int sid );</i> — link to the session object <i>sid</i> getting, the access is not protected by a resource locking.</li></ul>
+<p><b>Protected attributes:</b>
+</p>
+<ul><li> <i>char mEn;</i> — state "Enabled";</li>
+<li> <i>uint64_t cntReq;</i> — requests counter;</li>
+<li> <i>vector&lt;SecuritySetting&gt; mSec;</i> — list of security politics of the endpoint node;</li>
+<li> <i>vector&lt;Sess&gt; mSess;</i> — list of the opened sessions;</li>
+<li> <i>vector&lt;Subscr&gt; mSubScr;</i> — list of subscriptions;</li>
+<li> <i>XML_N objTree;</i> — tree of nodes of the server;</li>
+<li> <i>map&lt;string, XML_N*&gt; ndMap;</i> — references map to nodes of the tree;</li>
+<li> <i>pthread_mutex_t&gt; mtxData;</i> — mutex for multithreads access lock;</li>
+<li> <i>Server *serv;</i> — reference to the server, container of the endpoint's object.</li></ul>
+<h2><span class="mw-headline" id="Private_keys_and_certificates"><span class="mw-headline-number">5</span> Private keys and certificates</span></h2>
+<p>For the client and server parts of OPC-UA working you need to create and to place the private key and the certificate into configuration of client or server object. In general be enough to create an ordinal selfsigned certificate and a private key without password, but for exclude warning messages you need to add range of service fields to to the certificate. That you can do taking <a class="external" href="http://oscada.org/wiki/File:OPC-UA_openssl.cnf" title="File:OPC-UA openssl.cnf">the file of configuration of the certificate creation</a> and executing next procedure:
+</p>
+<pre style="white-space: pre-wrap;">
+# Private key creation:
+$ openssl genrsa -out key_c.pem -des3 -rand /var/log/messages 2048
+# Private key without the password creation:
+$ openssl rsa -in key_c.pem -out key_c1.pem
+# Selfsigned certificate creation:
+$ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.cnf -days 3650
+# Files content place, for the file key_c1.pem to the field of private key and the file cert_c.pem to the certificate field!
+</pre>
+<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">6</span> Notes</span></h2>
+<p>During implementation of the modules of supporting OPC-UA was detected several inconsistencies with the official SDK specification OPC-UA:
+</p>
+<ul><li> OPC-UA Part 6 on page 27 contains an image of a handshake to establish a secure channel. The creation message of session signed by a symmetric key of the client and encrypted by server's. In fact, both signature and encryption of the server key made.</li>
+<li> OPC-UA Part 4 on page 141 contains a description of the data structure signatures, where first goes the data signature, and then the string algorithm. In fact, the reverse order is implemented here.</li></ul>
+<h2><span class="mw-headline" id="Table_of_compatibility_of_implementations_of_OPC-UA_from_other_developers"><span class="mw-headline-number">7</span> <span id="TableOfCompat" title="#TableOfCompat">Table of compatibility of implementations of OPC-UA from other developers</span></span></h2>
+<table class="wikitable">
+
+<tr>
+<th> Software </th>
+<th> Core </th>
+<th> Browse </th>
+<th> Read </th>
+<th> Write </th>
+<th> Publish </th>
+<th> Notes
+</th></tr>
+<tr>
+<td colspan="7"> <i>OpenSCADA parts</i>
+</td></tr>
+<tr>
+<td> OpenSCADA OPC-UA Client (libOPC_UA client part) </td>
+<td> + </td>
+<td> + </td>
+<td> + </td>
+<td> + </td>
+<td> - </td>
+<td> IO requests by XML implemented: HEL (HELLO), OPN (OpenSecureChannel), CLO (CloseSecureChannel), FindServers, GetEndpoints, CreateSession, ActivateSession, CloseSession, Read, Write, Browse
+</td></tr>
+<tr>
+<td> OpenSCADA OPC-UA Server (libOPC_UA server part) </td>
+<td> + </td>
+<td> + </td>
+<td> + </td>
+<td> + </td>
+<td> + </td>
+<td> The requests implemented: HELF, OPNF, CLOF, MSGF: FindServers, GetEndpoints, CreateSession, ActivateSession, CloseSession, CreateSubscription, ModifySubscription, DeleteSubscriptions, MonitoredItems, ModifyMonitoredItems, SetMonitoringMode, DeleteMonitoredItems, SetPublishingMode, TranslateBrowsePathsToNodeIds, RegisterNodes, UnregisterNodes, Browse, BrowseNext, Read,  Write, Publish, Republish. Chunks implemented.
+</td></tr>
+<tr>
+<td colspan="7"> <i>Clients</i>
+</td></tr>
+<tr>
+<td> UAExpert 1.2, 1.3 </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td>
+</td></tr>
+<tr>
+<td> Indusoft web studio 7.1 </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td>
+</td></tr>
+<tr>
+<td> Iconics genesis64 10.8 </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td>
+</td></tr>
+<tr>
+<td> Insat masterscada 3.7 </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td>
+</td></tr>
+<tr>
+<td> <a class="external text" href="https://opcfoundation.org/developer-tools/developer-kits-unified-architecture/sample-applications" rel="nofollow noreferrer noopener" target="_blank">Sample Applications of Unified Architecture</a> </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> <span style="color: blue">Not tested</span> </td>
+<td> Pass </td>
+<td>
+</td></tr>
+<tr>
+<td> Wonderware System Platform </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> <span style="color: blue">Not tested</span> </td>
+<td> Pass </td>
+<td> Result mask processing fix into the service "Browse" for nodes of OpenSCADA data model. ...
+</td></tr>
+<tr>
+<td> Kepware </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Specific value types OpcUa_IntAuto and OpcUa_UIntAuto was added for adaptive integer type selection, mostly for provide integer not fixed as int64. Time stamp was removed from "Write" package but the client tell 0x80730000(OpcUa_BadWriteNotSupported)
+</td></tr>
+<tr>
+<td> UAExpert 1.4 </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Packages sequence number split from it's request and set self managing.
+</td></tr>
+<tr>
+<td colspan="7"> <i>Servers</i>
+</td></tr>
+<tr>
+<td> IgnitionOPC_UA </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> <span style="color: blue">Not tested</span> </td>
+<td> <span style="color: blue">NA</span> </td>
+<td>
+</td></tr>
+<tr>
+<td> B&amp;R Embedded OPC-UA Server </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> <span style="color: blue">Not tested</span> </td>
+<td> <span style="color: blue">NA</span> </td>
+<td> The authenticate process fixed by the server provides self specific identifiers to its. The string of bytes wrong interpretation fixed.
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

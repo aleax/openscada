@@ -1307,7 +1307,7 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 	    //Put output links
 	    for(int iL = 0; iL < lCtx->lnkSize(); iL++)
 		if(lCtx->ioMdf(lCtx->lnk(iL).ioId))
-		    if(!owner().setVal(lCtx->get(lCtx->lnk(iL).ioId), lCtx->lnk(iL).real, w_err))
+		    if(!owner().setVal(lCtx->get(lCtx->lnk(iL).ioId),lCtx->lnk(iL).real,w_err))
 			lCtx->setS(lCtx->lnk(iL).ioId, EVAL_STR);
 
 	    //Put fixed system attributes

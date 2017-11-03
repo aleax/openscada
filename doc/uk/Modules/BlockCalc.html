@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/Блоковий обчислювач - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/Блоковий обчислювач</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FBlockCalc&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/BlockCalc" title="Modules/BlockCalc">Modules/BlockCalc</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/BlockCalc" title="Modules/BlockCalc (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/BlockCalc/ru" title="Модули/Блоковый вычислитель (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> </td>
+<td> Блоковий обчислювач </td>
+<td> 1.7 </td>
+<td> GPL2 </td>
+<td> daq_BlockCalc.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Роман Савоченко<br />Максим Лисенко (2012) — переклад цієї сторінки </td>
+<td> Надає блоковий обчислювач.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Контролер модуля</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.91.D0.BB.D0.BE.D0.BA.D0.BE.D0.B2.D0.B0_.D1.81.D1.85.D0.B5.D0.BC.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">2</span> <span class="toctext">Блокова схема контролера</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="tocnumber">3</span> <span class="toctext">Параметри контролеру</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.9A.D0.BE.D0.BF.D1.96.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B1.D0.BB.D0.BE.D0.BA.D0.BE.D0.B2.D0.B8.D1.85_.D1.81.D1.85.D0.B5.D0.BC"><span class="tocnumber">4</span> <span class="toctext">Копіювання блокових схем</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">5</span> <span class="toctext">API користувацького програмування</span></a></li>
+</ul>
+</div>
+
+<p>Модуль підсистеми "DAQ" BlockCalc надає в систему OpenSCADA механізм створення користувацьких обчислень. Механізм обчислень ґрунтується на формальній мові блокових схем (функціональних блоків).
+</p><p>Також модулем реалізуються функції горизонтального резервування, а саме спільної роботи з віддаленою станцією цього ж рівня. Крім синхронізації значень і архівів атрибутів параметрів модулем здійснюється синхронізація значень блоків блокової схеми, з метою безударного підхоплення алгоритмів.
+</p><p>Мови блокового програмування ґрунтуються на понятті блокових схем (функціональних блоків). При чому в залежності від сутності блоку блокові схеми можуть бути: логічними схемами, схемами релейного логіки, моделлю технологічного процесу та інше. Суть блокової схеми полягає в тому, що вона містить перелік блоків і зв'язки між ними.
+</p><p>З формальної точки зору блок — це елемент (функція), який має входи, виходи і алгоритм обчислення. Виходячи з концепції середовища програмування, блок — це кадр значень, асоційований з об'єктом функції.
+</p><p>Звісно, входи і виходи блоків потрібно з'єднувати для отримання цілісної блокової схеми. Передбачено наступні типи зв'язків:
+</p>
+<ul><li> міжблокові, підключення входу одного блоку до виходу іншого, входу одного блоку до входу іншого і вихід одного блоку до входу іншого;</li>
+<li> далекі міжблокові, з'єднання блоків контролерів різних блокових схем даного модуля;</li>
+<li> коефіцієнти, перетворення входу в постійну, всі входи/виходи за замовчуванням ініціюються як постійні;</li>
+<li> зовнішній атрибут параметра.</li></ul>
+<p>Умовно з'єднання блоків можна зобразити як зв'язки між блоками в цілому (рис. 1) або деталізація зв'язків (рис. 2). В процесі зв'язування параметрів блоків допустимо з'єднання параметрів будь-якого типу. При цьому, в процесі обчислення буде виконуватися автоматичне приведення типів.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:639px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_model_uk.png"><img class="thumbimage" height="210" src="../files/BlockCalc_model_uk.png" width="637" /></a>  <div class="thumbcaption">Рис. 1. Загальні зв'язки між блоками блокової схеми.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:601px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_links.png"><img class="thumbimage" height="162" src="../files/BlockCalc_links.png" width="599" /></a>  <div class="thumbcaption">Рис. 2. Деталізовані зв'язки між блоками.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="mw-headline-number">1</span> Контролер модуля</span></h2>
+<p>Кожен контролер цього модуля містить блокову схему, яку він обраховує із зазначеним періодом. Для надання обчислених даних в систему OpenSCADA в контролері можуть створюватися параметри. Приклад вкладки конфігурації контролера даного типу зображений на рис.3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:814px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_cntr_uk.png"><img class="thumbimage" height="683" src="../files/BlockCalc_cntr_uk.png" width="812" /></a>  <div class="thumbcaption">Рис. 3. Вкладка конфігурації контролера.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> стан контролера, а саме: Статус, "Ввімкнено", "Запущено" та ім'я БД, яка містить конфігурацію;</li>
+<li> ідентифікатор, ім'я та опис контролера;</li>
+<li> стан, в який переводити контролер при завантаженні: "Вмикати" і "Запускати";</li>
+<li> імена таблиць для зберігання параметрів і блоків контролера;</li>
+<li> політику планування обчислення, пріоритет і число ітерацій в одному циклі завдання обчислення блокової схеми контролера.</li></ul>
+<h2><span class="mw-headline" id=".D0.91.D0.BB.D0.BE.D0.BA.D0.BE.D0.B2.D0.B0_.D1.81.D1.85.D0.B5.D0.BC.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">2</span> Блокова схема контролера</span></h2>
+<p>Блокова схема формується за допомогою вкладки блоків контролера, конфігурації блоку (рис.4) та його зв'язків (рис.5).
+</p><p>Блоки блокової схеми можуть зв'язуватися як між собою, так і підключатися до атрибутів параметрів. Самі блоки при цьому не містять структури входів/виходів (IO), а містять значення, виходячи зі структури IO пов'язаної функції. Функції для зв'язування з блоком використовуються з об'єктної моделі системи OpenSCADA.
+</p><p>Будь-який блок може в будь-який момент виключений з обробки та  переконфігурований, після чого може бути знову включений в обробку. Зв'язки між блоками можуть конфігуруватися без винятку блоків з обробки та зупинки контролера. Значення всіх IO, не охоплених зв'язками, можуть бути змінені в процесі обробки.
+</p><p>За допомогою вкладки блоків можна:
+</p>
+<ul><li> додати блок в блокову схему;</li>
+<li> видалити блок з блокової схеми;</li>
+<li> проконтролювати загальну кількість, кількість включених і кількість оброблюваних блоків.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:747px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_cfg_uk.png"><img class="thumbimage" height="575" src="../files/BlockCalc_cfg_uk.png" width="745" /></a>  <div class="thumbcaption">Рис. 4. Вкладка конфігурації блоку блокової схеми.</div></div></div></div>
+<p>За допомогою форми конфігурації блоку можна встановити:
+</p>
+<ul><li> стан блоку, а саме: "Ввімкнений" і "Обробляється";</li>
+<li> ідентифікатор, ім'я та опис блоку;</li>
+<li> стан, в який переводити блок при завантаженні: "Вмикати" і "Обробляти";</li>
+<li> вказати блок, який повинен обов'язково виконуватись перед даними;</li>
+<li> призначити робочу функцію з об'єктної моделі, перейти до функції для ознайомлення.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:747px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_blk_lnk_uk.png"><img class="thumbimage" height="575" src="../files/BlockCalc_blk_lnk_uk.png" width="745" /></a>  <div class="thumbcaption">Рис. 5. Вкладка конфігурації зв'язків блоку блокової схеми.</div></div></div></div>
+<p>За допомогою вкладки конфігурації зв'язків блоку блокової схеми можна встановити зв'язки для кожного параметра блоку окремо.
+</p><p>Підтримуються наступні типи зв'язків:
+</p>
+<ul><li> міжблокові: підключення входу блоку до виходу іншого блоку, входу одного блоку до входу іншого і виходу одного блоку до входу іншого;</li>
+<li> дальні міжблокові; з'єднання блоків з різних контролерів даного модуля;</li>
+<li> коефіцієнт; перетворення входу в константу, всі входи/виходи за замовчуванням ініційовані як константи;</li>
+<li> зовнішній атрибут параметра.</li></ul>
+<p>Для установки значень параметрів блоку призначена відповідна вкладка (рис.6).
+</p><p>Відповідно з реалізацією функцій користувача в системі OpenSCADA підтримуються чотири основних типи IO: ціле, дійсне, логічне і рядок.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:747px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_blk_val_uk.png"><img class="thumbimage" height="575" src="../files/BlockCalc_blk_val_uk.png" width="745" /></a>  <div class="thumbcaption">Рис. 6. Вкладка конфігурації значень параметрів блоку блокової схеми.</div></div></div></div>
+<p>Модулем передбачено особливу обробку низки входів/виходів блоку:
+</p>
+<ul><li> <i>f_frq</i> — Частота обчислення або час після останнього обчислення блоку, негативне у секундах, для планування за CRON, тільки читання.</li>
+<li> <i>f_start</i> — Прапорець першого виконання блоку, запуск, тільки читання.</li>
+<li> <i>f_stop</i> — Прапорець останнього виконання блоку, зупинка, тільки читання.</li>
+<li> <i>this</i> — Об'єкт цього блоку.</li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="mw-headline-number">3</span> Параметри контролеру</span></h2>
+<p>Модуль надає тільки один тип параметрів "Стандартний". Параметр слугує для відображення обчислених в блоках даних на атрибути параметрів контролера. Приклад вкладки конфігурації параметра наведено на рис.7.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:785px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_prm_uk.png"><img class="thumbimage" height="646" src="../files/BlockCalc_prm_uk.png" width="783" /></a>  <div class="thumbcaption">Рис. 7. Вкладка конфігурації значень параметрів контролера.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> стан параметра, а саме: "Включений" і тип параметра;</li>
+<li> ідентифікатор, ім'я та опис параметра;</li>
+<li> стан, в який переводити параметр при завантаженні: "Включений";</li>
+<li> перелік атрибутів, відображених на параметри блоків. Формується у вигляді списку елементів у форматі: {BLK}.{BLK_IO}[:{AID}:{ANM}]. Де:</li></ul>
+<dl><dd><i>{BLK}</i> — ідентифікатор блоку, блокової схеми; для постійної значення встановлюється:
+<dl><dd>'*s' — строковий тип;</dd>
+<dd>'*i' — цілочисельний тип;</dd>
+<dd>'*r' — дійсний тип;</dd>
+<dd>'*b' — логічний тип.</dd></dl></dd>
+<dd><i>{BLK_IO}</i> — параметр блоку, блокової схеми; для постійної значень встановлюється в значення атрибуту;</dd>
+<dd><i>{AID}</i> — ідентифікатор атрибуту параметра;</dd>
+<dd><i>{ANM}</i> — ім'я атрибута параметра.</dd></dl>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BF.D1.96.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B1.D0.BB.D0.BE.D0.BA.D0.BE.D0.B2.D0.B8.D1.85_.D1.81.D1.85.D0.B5.D0.BC"><span class="mw-headline-number">4</span> Копіювання блокових схем</span></h2>
+<p>Для спрощення і прискорення процедури розробки складних і повторюваних блокових схем передбачено механізм копіювання елементів блокової схеми як окремо, так і блокових схем цілком. Механізм копіювання інтегрований в ядро OpenSCADA і працює прозоро.
+</p>
+<h2><span class="mw-headline" id="API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">5</span> API користувацького програмування</span></h2>
+<p>Деякі об'єкти модуля надають функції користувацького програмування.
+</p><p><b>Об'єкт "Блок" (SYS.DAQ.BlockCalc["cntr"]["blk_block"])</b>
+</p>
+<ul><li> <i>ElTp cfg(string nm)</i> — отримання значення конфігураційного поля <i>nm</i> об'єкта.</li>
+<li> <i>bool cfgSet(string nm, ElTp val)</i> — установка конфігураційного поля <i>nm</i> об'єкта у значення <i>val</i>.</li>
+<li> <i>TCntrNodeObj cntr()</i> — повертає об'єкт контролеру цього параметру, незалежно від вкладеності.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

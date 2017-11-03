@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/DBArch - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/DBArch</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FDBArch&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DBArch" title="Modules/DBArch (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DBArch/ru" title="Модули/Архивация на БД (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DBArch/uk" title="Модулі/Архівація на БД (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a> </td>
+<td> Arhivator on the DB </td>
+<td> 2.4 </td>
+<td> GPL2 </td>
+<td> arh_DBArch.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Archive </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> The archiver module. Provides functions for messages and values archiving to DB.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Messages_Archiver"><span class="tocnumber">1</span> <span class="toctext">Messages Archiver</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Values_Archiver"><span class="tocnumber">2</span> <span class="toctext">Values Archiver</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Informational_table_of_the_archival_tables"><span class="tocnumber">3</span> <span class="toctext">Informational table of the archival tables</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Efficiency"><span class="tocnumber">4</span> <span class="toctext">Efficiency</span></a></li>
+</ul>
+</div>
+
+<p>The module designed for archiving messages and values of OpenSCADA to a database maintained by OpenSCADA.
+</p><p>Any SCADA system provides the ability to archive the collected data, i.e. formation of history of the changes (dynamics) of processes. Archives conditionally can be divided into two types: archives of messages and archives of values.
+</p><p>A feature of the archives of messages is that so-called events are archived. The characteristic feature of the events is its time of occurrence. The archives of messages are usually used for archiving messages in the system, that is logging and reports. Depending on the source the messages can be classified according to different criteria. For example, this may be the reports of emergency situations, the reports of actions of the operators, reports of the connection lost and others.
+</p><p>A feature of the archives of values is their frequency, measured in the time lag between two adjacent values. Archives of values are used for archiving the history of continuous processes. As the process is continuous, it can only be archived by introducing the notion of quantization of time gathering, because otherwise we get the archives of infinite dimensions in view of continuity of the nature of the process. In addition, practically, we can get value from the time limited by the data sources. For example, a fairly high-quality data sources in the industry, are rarely allowed to receive data at a frequency of more than 1kHz. And this is without taking into account of the sensors themselves, which have even less qualitative characteristics.
+</p><p>For archiving in the system OpenSCADA the subsystem "Archives" is provided. This subsystem, according to the types of archives, consists two parts: an archives of messages and archives of values. The subsystem, in general, is a module that allows you to create archives based on the different nature and methods of storing of data. This module provides a mechanism for the archiving on the data base for both: for the flow of messages, and for the flow of values.
+</p>
+<h2><span class="mw-headline" id="Messages_Archiver"><span class="mw-headline-number">1</span> Messages Archiver</span></h2>
+<p>Archives of messages are formed by an archiver. There can be the set of archivers, with individual settings, allowing to share archiving of different classes of messages.
+</p><p>The archiver of messages of this module stores data in a database table, which is named "DBAMsg_{ArchID}", where:
+</p>
+<ul><li> <i>ArchID</i> — archiver identifier.</li></ul>
+<p>Module provides additional settings for the archiving process (Fig. 1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:793px;"><a class="image" href="http://oscada.org/wiki/File:DBArch_mess_a_prm.png"><img class="thumbimage" height="665" src="../files/DBArch_mess_a_prm.png" width="791" /></a>  <div class="thumbcaption">Fig.1. Additional settings of the archiving process of messages.</div></div></div></div>
+<p>Those additional parameters represents by:
+</p>
+<ul><li> <i>Archive size (days)</i> — determines the size of the archive over time. After exceeding the limit the old records will be deleted! Set to 0 for the limit disable and some performance rise.</li>
+<li> <i>Force time as string</i> — store messages time in the readable form. Only for DBs it supports by a specific data type like to "datetime" into MySQL. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The option isn't compatible then you will lost present archives after its change.</li></ul>
+<p>The table of the database archiver has structure <b>{__MIN__, __TM__, __TMU__, __CATEG__, MESS, LEV}</b>, where:
+</p>
+<ul><li> <i>MIN</i> — UTC time, in minutes, uses on reading by minutes, to rapid.</li>
+<li> <i>TM</i> — UTC time of the message, seconds from (01.01.1970). In the DB, containing a specialized type of storage date and time, can be used this specialized type, for the option "Force time as string".</li>
+<li> <i>TMU</i> — microseconds of time.</li>
+<li> <i>CATEG</i> — message category.</li>
+<li> <i>MESS</i> — text of the message.</li>
+<li> <i>LEV</i> — level of the message.</li></ul>
+<h2><span class="mw-headline" id="Values_Archiver"><span class="mw-headline-number">2</span> Values Archiver</span></h2>
+<p>Archives of values, by default, are formed particularly by archivers of the values for each registered archive. There can be a lot of archivers with individual settings that allow to divide the archives by various parameters, such as the accuracy and depth. The parameter's archives of one archivator can be grouped, a single table, for pointed limit of the parameters quantity. The grouping allows significant increase the archiving productivity by sending to DB single request which values of parameters into the group.
+</p><p>Archive of values is an independent component, which includes buffer processed by archivers. The main parameter of archive of value is a source of data. As a source of data may make the attributes of the parameters of subsystem "Data acquisition", as well as other external data sources (passive mode). Other sources of data could be: network archivers of remote OpenSCADA systems, the environment of programming of systems OpenSCADA etc. No less important parameters are the parameters of the archive buffer. From the parameters of the buffer the opportunity of working of archivers depends on. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Thus, the periodicity of values in the buffer should be no more than the periodicity of the fastest archiver, a buffer size not less than double the amount for the slowest archiver. Otherwise, the possible loss of data.
+</p><p>The overall scheme of archival of values clearly shown in Fig. 2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:621px;"><a class="image" href="http://oscada.org/wiki/File:Arch_val_sh.png"><img class="thumbimage" height="391" src="../files/Arch_val_sh.png" width="619" /></a>  <div class="thumbcaption">Fig.2. Overall scheme of the process of archiving.</div></div></div></div>
+<p>Archive of this module stores data in a database table, which is called in way "DBAVl_{ArchivatorID}_{ArchiveID}", for the single mode, and "DBAVl_{ArchivatorID}_&lt;GRP&gt;{N}", for the group mode, where: 
+</p>
+<ul><li> <i>ArchivatorID</i> — identifier of the archiver of values. </li>
+<li> <i>ArchiveID</i> — identifier of the archive.</li>
+<li> <i>N</i> — group number, passed for first one.</li></ul>
+<p>The module provides additional settings for the archiving process (Fig. 3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:DBArch_val_a_prm.png"><img class="thumbimage" height="629" src="../files/DBArch_val_a_prm.png" width="808" /></a>  <div class="thumbcaption">Fig.3. Additional settings of the archiving process of values.</div></div></div></div>
+<p>Those additional parameters represents by:
+</p>
+<ul><li> <i>Archive size (days)</i> — determines the size of the archive over time. After exceeding the limit the old records will be deleted! Set to 0 for the limit disable and some performance rise.</li>
+<li> <i>Force time as string</i> — store values time in the readable form. Only for DBs it supports by a specific data type like to "datetime" into MySQL. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The option isn't compatible then you will lost present archives after its change.</li>
+<li> <i>Grouping parameters limit</i> — nonzero value here enables the grouped archivation and determines of the limit to parameters number per group/table.</li></ul>
+<p>The table of database archiver of values has structure: <b>{__MARK__, __TM__, VAL)</b>, for the single mode, and <b>{__MARK__, __TM__, {PRM1}, {PRM2}, {PRMN}}</b>, for the grouping mode, where: 
+</p>
+<ul><li> <i>MARK</i> — fast accessing/reading mark of the archive, {TM}/(10*{period}).</li>
+<li> <i>TM</i> — UTC time of the value, the second from (01.01.1970). In the DB, containing a specialized type of storage date and time, can be used this specialized type, for the option "Force time as string".</li>
+<li> <i>VAL</i> — The parameter value into the single mode, type of the value determines to type of the column (Integer, Real, String).</li>
+<li> <i>PRM1...PRMN</i> — Value of parameter with the identifier into the column name into the grouping mode, type of the value determines to type of the column (Integer, Real, String).</li></ul>
+<h2><span class="mw-headline" id="Informational_table_of_the_archival_tables"><span class="mw-headline-number">3</span> Informational table of the archival tables</span></h2>
+<p>To store the beginning, end and other service information of archives in archival tables the informational table with the name of the module is created: "DBArch". This table has the structure <b>{__TBL__, BEGIN, END, PRM1, PRM2, PRM3)</b>, where:
+</p>
+<ul><li> <i>TBL</i> — Name of the table of the archive.</li>
+<li> <i>BEGIN</i> — Beginning of data in the archive. Seconds for messages and microseconds for values UNIX epoch (01.01.1970).</li>
+<li> <i>END</i> — End of data in the archive. Seconds for messages and microseconds for values UNIX epoch (01.01.1970).</li>
+<li> <i>PRM1</i> — Optional parameter 1: values periodicity, in microseconds.</li>
+<li> <i>PRM2</i> — Optional parameter 2: type of values of the parameter into the single mode or list of parameters into the group <b>{Type}:{ArchiveId}</b> for the group mode.</li>
+<li> <i>PRM3</i> — Optional parameter 3.</li></ul>
+<p>According to information into the table for the value archivators the archive objects restoring and creation supported.
+</p>
+<h2><span class="mw-headline" id="Efficiency"><span class="mw-headline-number">4</span> Efficiency</span></h2>
+<p>In the design and implementation of the module it wasn't included any mechanisms of improving the process of archiving but presenting of objective limits into the same data bases and its accessing interfaces. Then the efficiency of archiving to DB mostly related to the DB and its accessing interface. From the most effective interfaces and approaches of the performance increasing there need to mark the following ones:
+</p>
+<ul><li> Reading from DB of several records not by a single/concrete command SELECT, but the grouping SELECT requests, that is for DB minimum in ten times faster. For that behavior using the layer of accessing to DB into OpenSCADA, in the request "dataSeek()", is expanded to support preloading to <i>full</i> of all records of respond to the request. The behavior also now is used by the module and allowed to get data often faster then it is processed further, although giving way to <a href="../Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">the archiving to file system</a>.</li>
+<li> Writing to DB of a different column also significant faster then a different record. The behavior is used by the module in a part of values archiving and the grouping mode, that is values of each signal write to a different column.</li></ul>
+<p>Results of measurement of the performance of archiving placed to the following table:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Test / Environment and DB </th>
+<th> Intel Core3 1.3GHz, Local PostgreSQL 9.3, SSD </th>
+<th> AMD A8 3.5GHz, Local PostgreSQL 9.3, HDD
+</th></tr>
+<tr>
+<td> Values archiving, 60 records, 1 signal (seconds) </td>
+<td> 53...63 </td>
+<td> 13...14
+</td></tr>
+<tr>
+<td> Values archiving, 60 records, 10 signal (seconds) </td>
+<td> 65...67 </td>
+<td> 16...19
+</td></tr>
+<tr>
+<td> Values archiving, 60 records, 100 signal (seconds) </td>
+<td> 154...163 </td>
+<td> 52...60
+</td></tr>
+<tr>
+<td> <i>Result:</i> average time of writing 60 values of signal (millisecond),<br />
+<p>maximum number of the archiving signals in periodicity 1 second
+</p>
+</td>
+<td> 1, 60000 </td>
+<td> 0.4, 150000
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

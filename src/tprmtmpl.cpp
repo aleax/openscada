@@ -270,7 +270,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/4",_("Attribute"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,TPrmTempl::AttrRead,TPrmTempl::AttrFull).c_str(),
 		    "sel_list",_("Not attribute;Read only;Full access"));
-		ctrMkNode("list",opt,-1,"/io/io/5",_("Configure"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
+		ctrMkNode("list",opt,-1,"/io/io/5",_("Configuration"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,TPrmTempl::CfgConst,TPrmTempl::CfgLink).c_str(),
 		    "sel_list",_("Variable;Constant;Link"));
 		ctrMkNode("list",opt,-1,"/io/io/6",_("Value"),RWRWR_,"root",SDAQ_ID,1,"tp","str");

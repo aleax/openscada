@@ -309,6 +309,7 @@ class XMLNodeObj : public TVarObj
 	void fromXMLNode( XMLNode &nd );
 
 	AutoHD<XMLNodeObj> getElementBy( const string &attr, const string &val );
+	void getElementsBy( const string &tag, const string &attr, const string &val, TArrayObj *rez );
 
     private:
 	//Attributes

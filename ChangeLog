@@ -1,3 +1,27 @@
+2017-11-03 Roman (stable)
+- !!!!:DOC: OpenSCADA switched to a new scheme of the project off-line documentation forming directly from the project Wiki just by the OpenSCADA procedure "docOffLine" execution.
+    Then folders doc/{en,uk,ru} of the source texts tree of the project were cleaned from previous old documentation in PDF and generated for a new one in HTML.
+    The new off-line documentation is not a completed one and will be appended in way of readiness of the documentation sorce on Wiki of the project!
+- !!!!:DB.LibsDB.OscadaLibs: The part of low level devices of the parameters template "DevLib" disjoined into a different library "LowDevLib"
+	and the remained part was mostly updated and translated.
+    JavaLikeCalc library "Service procedures(servProc)" appended by the function "wacko2media" of Wiki syntax convertion from WackoWiki to MediaWiki and
+	by the function "docOffLine" of the project offline documentation generation from the project Wiki.
+- !:SYS: Original messages of the program core some updated and number of calculations of internal procedures set to 1, by default.
+- !:SYS,UI.{QTCfg,QTStarter,Vision}: Off-line documentation call adapted to the new new scheme of the project off-line documentation forming.
+- !!!:SYS.XMLNodeObj: Appended by an user API function getElementsBy() of XML nodes list obtaining by tag name or some attribute value.
+- SYS.TArrayObj: arSet() adapted to the array end appending by negative index.
+- !!:FIX:SYS.XMLNode: Unified and fixed in serialization to XHTML for: preventing self-finished tags for "script", "div;
+    preventing of symbols "'" and '"' encoding into text (also for generic XML);
+    UTF8 symbol 0xA0 encoding to "&nbsp;".
+- !!:FIX:Archive.FSArch: Some messages expanded for more information.
+    Name of objects of archive files moved under resource by using MtxString.
+    Added checking and clearing for zero archive files.
+    Buffers of archivation of messages and of info-files of values set safer, for possible random data reading.
+    Checking for parameters of value archives added to prevent crashes at wrong ones of deep broken archives.
+- DAQ.JavaLikeCalc: Original messages some updated.
+- FIX:UI.QTCfg: Prevented from high load at the respond waiting progress dialog.
+
+
 2017-10-21 Roman (stable)
 - !!!!:DB.LibsDB.{OscadaLibs,vcaBase}: JavaLikeCalc.Controllers.prescr and Main.{prescrEdit,prescrRun,prescrRunSimple}
     expanded for backgrounded steps support and some fixes about pauses.

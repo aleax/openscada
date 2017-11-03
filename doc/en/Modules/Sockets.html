@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/Sockets - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/Sockets</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSockets&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/ru" title="Модули/Sockets (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/uk" title="Модулі/Sockets (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> </td>
+<td> Sockets </td>
+<td> 2.3 </td>
+<td> GPL2 </td>
+<td> tr_Sockets.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Transport </td>
+<td> Roman Savochenko, Maxim Kochetkov<br />Maxim Lysenko (2009-2010) — the page translation </td>
+<td> Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Incoming_transports"><span class="tocnumber">1</span> <span class="toctext">Incoming transports</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Outgoing_transports"><span class="tocnumber">2</span> <span class="toctext">Outgoing transports</span></a></li>
+</ul>
+</div>
+
+<p>Transport module Sockets provides support of transport based on the socket to the system. incoming and outgoing transport, based on internet sockets: TCP, UDP and UNIX sockets are supported. Addition of the new incoming and outgoing sockets can be done through the configuration of the transport subsystem in any system configurator of OpenSCADA.
+</p>
+<h2><span class="mw-headline" id="Incoming_transports"><span class="mw-headline-number">1</span> Incoming transports</span></h2>
+<p>Configured and running incoming transport opens the server socket for the expectation of connection of the clients, besides initiative connection. In the case of the UNIX socket, the UNIX socket file is created. TCP and UNIX sockets are multi-stream, ie when the client connects to a socket of these type, the client socket  and the new stream in which the client is served are created. Server socket in this moment switches to the waiting for the request from the new client. Thus the parallel service of the clients is achieved. RAWCAN socket realize receiving for CAN frames from the interface according to the configured filter.
+</p><p>Each incoming socket is associated with one of the available transport protocols, to which incoming messages are transmitted. In conjunction with the transport protocol is supported by a mechanism of the combining of pieces of requests, disparate while transferring.
+</p><p>Configuration dialog of the incoming socket is depicted in Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="717" src="../files/Sockets_in.png" width="808" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the incoming socket.</div></div></div></div>
+<p>Using this dialog you can set:
+</p>
+<ul><li> State of the transport, namely: "Status", "Running", name of the database (containing the configuration) and list with information about the active connections.</li>
+<li> Id, name and description of transport.</li>
+<li> Address of the transport. The format of the address is listed in the table below.</li>
+<li> Choice of transport protocol.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Empty value for the protocol selection switch the transport to mode of creation associated output transports for each connection to the input transport.</dd>
+<dd>The associated output transports mode for the input transport demands allowing some external for the transport procedure which serve as the protocol which must go through all associated output transports, and do requests to read or write-read.</dd>
+<dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The procedure missing will necessarily come to growing the associated output transports by miss an essence causes the closed connection transport stopping and next allowing for remove the stopped output transports by the input transport.</dd></dl>
+<ul><li> State, in which the transport must be switched at boot: "To start". </li>
+<li> Length of the queue of sockets, maximum number of clients to serve, maximum number of clients to serve per host and the size of the input buffer.</li>
+<li> Transport's tasks priority.</li>
+<li> Maximum segment size (MSS), for limit size of transmitted packages (segments TCP) on bad link channels. Set to 0 for disable the user limit for size.</li>
+<li> Keep alive requests. Close the connection after specified requests. Zero value for disable (not close ever).</li>
+<li> Keep alive timeout (sek.). Close the connection after no requests at specified timeout. Zero value for disable (not close ever).</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> We do not recommend disable the function by the TCP/IP network's properties does not guarantee notice the server about the connection disable, for example after power supply lost on the client. As result the opened client connections will left <span style="color: red">forever</span> and after its number achieve to the limit server will drop new connections!</dd></dl>
+<p>Features of the formation of addresses of incoming sockets are shown in the table below:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Socket's type </th>
+<th> Address
+</th></tr>
+<tr>
+<td>TCP</td>
+<td>
+<p><i>TCP:{address}:{port}:{mode}</i><br />
+where:
+</p>
+<ul><li> address – Address, on which the socket is opened. It must be one of the addresses of the host. If nothing is specified, the socket will be available in all the host interfaces. There may be as symbolic as well as IP presentation of address.</li>
+<li> port – Network port, on which the socket is opened. Indication of the character name of the port (according to /etc/services) is available.</li>
+<li> mode – mode of working of the incoming socket:
+<ul><li> '0' — Force closing the connection after the session reception-response.</li>
+<li> '1' — Do not close, only by KeepAlive parameters.</li>
+<li> '2' — Initiative connection. Enables mode for initiative the input transport connection to remote host (the address instead of locale) and go to waiting for requests from the host. Value "Keep alive timeout (sek.)" uses as timeout for the transport reconnection by activity lack, for restoring possible the connection lose.<br /></li></ul></li></ul>
+<p>Example: "<i>TCP::10001:1</i>" — TCP-socket is available on all interfaces, is opened on port 10001 and doesn't close the connection.
+</p>
+</td></tr>
+<tr>
+<td>UDP</td>
+<td>
+<p><i>UDP:{address}:{port}</i><br />
+where:
+</p>
+<ul><li> address — the same as in the TCP;</li>
+<li> port — the same as in the TCP.<br /></li></ul>
+<p>Example: "<i>UDP:localhost:10001</i>" — UDP-socket is only available on the "localhost" interface and is opened on the port 10001.
+</p>
+</td></tr>
+<tr>
+<td>RAWCAN</td>
+<td>
+<p><i>RAWCAN:{interface}:{mask}:{identifier}</i><br />
+where:
+</p>
+<ul><li> interface — CAN interface's name;</li>
+<li> mask, identifier — mask and identifier for filtering CAN frames.<br /></li></ul>
+<p>Example: "<i>RAWCAN:can0:0:0</i>" — receiving all CAN frames at the interface can0.
+</p>
+</td></tr>
+<tr>
+<td>UNIX</td>
+<td>
+<p><i>UNIX:{name}:{mode}</i><br />
+where:
+</p>
+<ul><li> name — UNIX socket file name;</li>
+<li> mode — the same as in the TCP.<br /></li></ul>
+<p>Example: "<i>UNIX:/tmp/oscada:1</i>" — UNIX-socket is available through the file "/tmp/oscada" and it doesn't close the connection.
+</p>
+</td></tr></table>
+<h2><span class="mw-headline" id="Outgoing_transports"><span class="mw-headline-number">2</span> Outgoing transports</span></h2>
+<p>Configured and running outgoing transport opens a connection to the specified server. In the case of destroying of the connection, outgoing transport is disconnected. In order to resume the connection transport must be re-run.
+</p><p>Main tab of the configuration page of outgoing socket is shown in Fig.2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:663px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="542" src="../files/Sockets_out.png" width="661" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of the outgoing socket.</div></div></div></div>
+<p>Using this dialog you can set:
+</p>
+<ul><li> The state of transport, namely: "Status", "Running" and the name of the database, containing the configuration.</li>
+<li> Id, name and description of transport.</li>
+<li> Address of the transport. The format of the addresses is listed in the table below.</li>
+<li> The state, in which the transport must be translated at boot: «To start». </li>
+<li> Maximum segment size (MSS), for limit size of transmitted packages (segments TCP) on bad link channels. Set to 0 for disable the user limit for size.</li>
+<li> Connection timings in format: "<b>conn:next[:rep]</b>". Where:
+<ul><li> <i>conn</i> — maximum time for connection respond wait, in seconds;</li>
+<li> <i>next</i> — maximum time for continue respond wait, in seconds;</li>
+<li> <i>rep</i> — minimum repeat timeout, in seconds.</li></ul></li></ul>
+<p>The addresses of outgoing sockets of different types are formed as follows:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Socket's type </th>
+<th> Address
+</th></tr>
+<tr>
+<td>TCP/UDP</td>
+<td>
+<p><i>TCP:{address}:{port}</i><br />
+<i>UDP:{address}:{port}</i><br />
+where:
+</p>
+<ul><li> address — Address to which the connection is performed. There may be as the symbolic representation as well as IP one of the address.</li>
+<li> port — Network port, with which the connection is made. Indication of the character name of the port is available(according to /etc/services).<br /></li></ul>
+<p>Example: "<i>TCP:127.0.0.1:7634</i>" — To connect to the port 7634 on the host 127.0.0.1.
+</p>
+</td></tr>
+<tr>
+<td>RAWCAN</td>
+<td>
+<p><i>RAWCAN:{interface}:{mask}:{identifier}</i><br />
+where:
+</p>
+<ul><li> interface — CAN interface's name;</li>
+<li> mask, identifier — mask and identifier of the CAN frames.<br /></li></ul>
+<p>Example: "<i>RAWCAN:can0:0:0</i>" — receiving all CAN frames at the interface can0.
+</p>
+</td></tr>
+<tr>
+<td>UNIX</td>
+<td>
+<p><i>UNIX:{name}</i><br />
+where:
+</p>
+<ul><li> name — UNIX socket file name.<br /></li></ul>
+<p>Example: "<i>UNIX:/tmp/oscada</i>" — to connect to the UNIX-socket through the file /tmp/oscada.
+</p>
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/SSL - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/SSL</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSSL&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SSL" title="Modules/SSL (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SSL/ru" title="Модули/SSL (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SSL/uk" title="Модулі/SSL (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a> </td>
+<td> SSL </td>
+<td> 1.5 </td>
+<td> GPL2 </td>
+<td> tr_SSL.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Transport </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Incoming_transports"><span class="tocnumber">1</span> <span class="toctext">Incoming transports</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Outgoing_transports"><span class="tocnumber">2</span> <span class="toctext">Outgoing transports</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Certificates_and_keys"><span class="tocnumber">3</span> <span class="toctext">Certificates and keys</span></a></li>
+</ul>
+</div>
+
+<p>The module SSL of the transport provides the support of transport based on secure sockets layer (SSL)  into the system. In the basis of the module there is the library <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a>. Incoming and outgoing transports of protocols SSLv3 and TLSv1 are supported.
+</p><p>It is possible to add new incoming and outgoing transports through the transport subsystem configuration in any configurator of OpenSCADA system.
+</p>
+<h2><span class="mw-headline" id="Incoming_transports"><span class="mw-headline-number">1</span> Incoming transports</span></h2>
+<p>The configured and running incoming transport opens server SSL-socket for the expectation of connection of the clients. SSL-socket is a multi-stream, i.e. when the client connects, the client SSL-connection and a new stream in which the client is served are created. Server SSL-socket in this moment switches to the waiting for the request from the new client. Thus the parallel service of the clients is achieved.
+</p><p>Each incoming transport is necessarily associated with one of the available transport protocols, to which incoming messages are transmitted. In conjunction with the transport protocol is supported by a mechanism of the combining of pieces of requests, disparate while transferring.
+</p><p>Configuration dialog of the incoming SSL-transport is depicted in Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in.png"><img class="thumbimage" height="717" src="../files/SSL_in.png" width="808" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the incoming SSL-transport.</div></div></div></div>
+<p>Using this dialog you can set:
+</p>
+<ul><li> State of transport, namely: "Status", "Running", name of the database (containing the configuration) and list with information about the active connections.</li>
+<li> Id, name and description of transport.</li>
+<li> Address of the transport in the format: "{address}:{port}[:{mode}]", where:
+<ul><li> address — Address, on which the SSL is opened. It must be one of the addresses of the host. If the "*" is indicated then SSL will be available in all the host's interfaces. There may be as the symbolic representation as well as IP one of the address.</li>
+<li> port — Network port, on which the SSL is opened. Indication of the character name of the port (according to /etc/services) is available.</li>
+<li> mode — SSL-mode and version (SSLv3, SSLv23, TLSv1). By default and in case of error the SSLv23 is used.</li></ul></li>
+<li> Choice of a transport protocol.</li>
+<li> State, in which the transport must be translated at boot: "To start". </li>
+<li> Certificates, private SSL key and password of private SSL key.</li>
+<li> Maximum number of clients to serve, maximum number of clients to serve per host and size of the input buffer.</li>
+<li> Keep alive requests. Close the connection after specified requests. Zero value for disable (not close ever).</li>
+<li> Keep alive timeout, seconds. Close the connection after no requests at specified timeout. Zero value for disable (not close ever).</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> We do not recommend disable the function by the TCP/IP network's properties does not guarantee notice the server about the connection disable, for example after power supply lost on the client. As result the opened client connections will left <span style="color: red">forever</span> and after its number achieve to the limit server will drop new connections!</dd></dl>
+<ul><li> Transport's tasks priority.</li></ul>
+<h2><span class="mw-headline" id="Outgoing_transports"><span class="mw-headline-number">2</span> Outgoing transports</span></h2>
+<p>Configured and running outgoing transport opens the SSL connection to the specified server. In the case of destroying of the connection, outgoing transport is disconnected. In order to resume the connection transport must be re-run.
+</p><p>Main tab of the configuration page of outgoing SSL-transport is shown in Fig.2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:714px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out.png"><img class="thumbimage" height="678" src="../files/SSL_out.png" width="712" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of the outgoing SSL-transport.</div></div></div></div>
+<p>Using this dialog you can set:
+</p>
+<ul><li> The state of transport, namely: "Status", "Running" and the name of the database, containing the configuration.</li>
+<li> Id, name and description of transport.</li>
+<li> Address of the transport in the format: "{address}:{port}[:{mode}]", where:
+<ul><li> address — Address with which the connection is made. There may be as the symbolic representation as well as IP one of the address.</li>
+<li> port — Network port with which the connection is made. Indication of the character name of the port (according to /etc/services) is available.</li>
+<li> mode — SSL-mode and version (SSLv3, SSLv23, TLSv1). By default and in case of error the SSLv23 is used.</li></ul></li>
+<li> The state, in which the transport must be translated at boot: «To start». </li>
+<li> Certificates, private SSL key and password of private SSL key.</li>
+<li> Default timeout for connection and respond wait, separated.</li></ul>
+<h2><span class="mw-headline" id="Certificates_and_keys"><span class="mw-headline-number">3</span> Certificates and keys</span></h2>
+<p>For a valid module work certificates and private keys are required. In the case of the incoming SSL-transport (the server) they are compulsory. In the case of outgoing SSL-transport they can not be even installed though their using is desirable.
+</p><p>The simplest configuration of the certificate is self-subscription certificate and private key. The following describes how to create them using the tool <b>openssl</b>:
+</p>
+<pre style="white-space: pre-wrap;">
+# Generation the secret key
+$ openssl genrsa -out ./key.pem -des3 -rand /var/log/messages 2048
+# Generation of self-subscription certificate
+$ openssl req -x509 -new -key ./key.pem -out ./selfcert.pem -days 365
+</pre>
+<p>Next, the contents of the files "key.pem" and "selfcert.pem" is copied into the text field of the certificate and key. Password of the private key is installed in the appropriate field.
+</p>
+
+
+
+
+
+</div></body>
+</html>

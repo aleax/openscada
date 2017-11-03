@@ -1325,7 +1325,7 @@ void VisRun::messUpd( )
     actProjManual->setStatusTip(QString(_("Press to get the using project '%1' manual.")).arg(srcProject().c_str()));
     //Module manual
     actManual->setText(QString(_("'%1' manual")).arg(mod->modId().c_str()));
-    actManual->setProperty("doc", "Modules/UI.Vision|Modules/Vision");
+    actManual->setProperty("doc", "Modules/Vision|Modules/Vision");
     actManual->setWhatsThis(QString(_("The button for getting the using '%1' manual")).arg(mod->modId().c_str()));
     actManual->setStatusTip(QString(_("Press to get the using '%1' manual.")).arg(mod->modId().c_str()));
     //OpenSCADA manual

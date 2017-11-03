@@ -9,9 +9,11 @@ Allow realisation of the main templates.','Автор: Роман Савочен
 Надає реалізацію базових шаблонів.','tmplib_base','Базовые шаблоны','Автор: Роман Савоченко <rom_as@oscada.org>
 Версия: 1.0.1
 Предоставляет реализацию базовых шаблонов.');
-INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 1.8.0','','tmplib_DevLib','Библиотека устройств','');
+INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
+Version: 1.9.0','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
+INSERT INTO "ParamTemplLibs" VALUES('LowDevLib','Low-level devices','','The templates library provides common templates and related functions for custom access to low-level devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
+Version: 1.0.0','','tmplib_LowDevLib','','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','The models of the technological process devices.
 Founded: october 2005
@@ -276,6 +278,43 @@ INSERT INTO "lib_servProc_io" VALUES('archPackFStests','per','Period, seconds',1
 INSERT INTO "lib_servProc_io" VALUES('archPackFStests','addr','Archive address',0,0,'test123',0,2,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('archPackFStests','step','Step (0-8), -1 for all',1,0,'-1',0,4,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('archPackFStests','archiver','Archiver address',0,0,'FSArch.1m',0,3,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('wacko2media','ndb','DB',0,0,'wiki',0,0,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('wacko2media','wpg','Wiki page',0,0,'HomePageUk/Doc/SQLite',0,1,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('wacko2media','rez','Result',0,6,'',0,2,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/roman/work/Проекти/OpenSCADA/doc/',0,2,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('docOffLine','pages','Pages list of "{wiki}:{langs}:{dest}"',0,4,'Documents:en,uk,ru:index.html
+About:en,uk,ru:About.html
+Documents/Terms:en,uk,ru:Terms.html
+Functions_and_demands:en,uk,ru:Functions_and_demands.html
+Documents/FAQ:en,uk,ru:FAQ.html
+Documents/DAQ:en,uk,ru:DAQ.html
+Documents/Program_manual:en,uk,ru:Program_manual.html
+Documents/User_API:en,uk,ru:User_API.html
+Modules/SQLite:en,uk,ru:Modules/SQLite.html
+Modules/MySQL:en,uk,ru:Modules/MySQL.html
+Modules/FireBird:en,uk,ru:Modules/FireBird.html
+Modules/DBF:en,uk,ru:Modules/DBF.html
+Modules/PostgreSQL:en,uk,ru:Modules/PostgreSQL.html
+Modules/Sockets:en,uk,ru:Modules/Sockets.html
+Modules/Serial:en,uk,ru:Modules/Serial.html
+Modules/SSL:en,uk,ru:Modules/SSL.html
+Modules/SelfSystem:en,uk,ru:Modules/SelfSystem.html
+Modules/UserProtocol:en,uk,ru:Modules/UserProtocol.html
+Modules/HTTP:en,uk,ru:Modules/HTTP.html
+Modules/JavaLikeCalc:en,uk,ru:Modules/JavaLikeCalc.html
+Modules/LogicLev:en,uk,ru:Modules/LogicLev.html
+Modules/BlockCalc:en,uk,ru:Modules/BlockCalc.html
+Modules/DAQGate:en,uk,ru:Modules/DAQGate.html
+Modules/System:en,uk,ru:Modules/System.html
+Modules/ModBus:en,uk,ru:Modules/ModBus.html
+Modules/DCON:en,uk,ru:Modules/DCON.html
+Modules/OPC_UA:en,uk,ru:Modules/OPC_UA.html
+Modules/FSArch:en,uk,ru:Modules/FSArch.html
+Modules/DBArch:en,uk,ru:Modules/DBArch.html
+Modules/FLibSYS:en,uk,ru:Modules/FLibSYS.html',0,3,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,4,'',0,4,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('docOffLine','res','Result',0,1,'',0,0,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('docOffLine','reqTr','Tries of requests',1,1,'3',0,1,'','','','');
 CREATE TABLE 'techApp' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '' ,"FORMULA" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "techApp" VALUES('lag','Lag','Lag model. You can use this for sensors'' variables lag imitation.',10,'out-=(out-in)/(t_lg*f_frq);','Затримка','Модель затримки. Може використовуватися для імітації запізнення значень давачів.','Запаздывание','Модель задержки. Может использоваться для имитации запаздывания
 значений датчиков.
@@ -855,7 +894,7 @@ INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','spTMSt','Set point: TMS temperat
 INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','spSpeedPrev','Set point: Speed (previous)',1,1,'',20,'Задание: Скорость (предыдущая)','','Завдання: Швидкість (попередня)','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','cnt','Counter',1,1,'',21,'Счётчик','','Лічильник','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SCU750','operModes','Operation modes',4,1,'',22,'Режимы работы','','Режими роботи','');
-INSERT INTO "tmplib_DevLib_io" VALUES('TMH','transport','Transport',0,64,'TMP',0,'Транспорт','ТМН','Транспорт','ТМН');
+INSERT INTO "tmplib_DevLib_io" VALUES('TMH','transport','Transport',0,64,'TMH',0,'Транспорт','','Транспорт','');
 INSERT INTO "tmplib_DevLib_io" VALUES('TMH','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','');
 INSERT INTO "tmplib_DevLib_io" VALUES('TMH','perGet','Period data getting (s)',2,64,'10',2,'Период получения данных (с)','','Період отримання даних (с)','');
 INSERT INTO "tmplib_DevLib_io" VALUES('TMH','modelID','Model ID',0,16,'',3,'ID модели','','ID моделі','');
@@ -901,7 +940,7 @@ INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','trAddr','Transport',0,64,'Transpor
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhH','Archiver: hours',0,64,'',2,'Архиватор: часы','','Архіватор: години','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhD','Archiver: days',0,64,'',3,'Архиватор: дни','','Архіватор: дні','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhRes','Archiver: results-month',0,64,'',4,'Архиватор: результаты-месяцы','','Архіватор: результати-місяці','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','maxDayDepth','Archiver: maximum read depth for no hours archiver, days',1,64,'366',5,'Архиватор: максимум читаемой глубины для нечасового архиватора, дней','','Архіватор: максимум глибини читання для негодинного архіватора, днів','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','maxDayDepth','Archiver: maximum depth of reading for not hours archivers, days',1,64,'366',5,'Архиватор: максимум читаемой глубины для нечасового архиватора, дней','','Архіватор: максимум глибини читання для негодинного архіватора, днів','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','lastResTm','Last result months read time (s)',1,33,'0',6,'Время последнего чтения результирующих месяцев (с)','','Час останього читання результуючих місяців (с)','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','leftResTm','Left result months for read from archive',1,17,'',7,'Осталось результ. месяцев для чтения из архива','','Залишилося результ. місяців для читання із архіву','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','lastDTm','Last days read time (s)',1,33,'0',8,'Время последнего чтения дней (с)','','Час останього читання днів (с)','');
@@ -961,14 +1000,14 @@ INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','BOC_2','ВОС (Tв2)',2,32,'',61,
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','G1_2','G1 (Tв2)',2,32,'',62,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','G2_2','G2 (Tв2)',2,32,'',63,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','this','This parameter object',4,0,'',64,'Объект параметра','','Об''єкт параметру','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','transport','Transport',0,64,'SMDP',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','transport','Transport',0,64,'SMDP',0,'Транспорт','','Транспорт','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','addr','Device address (16...254)',1,64,'16',1,'Адрес устройства (16...254)','','Адреса пристрою (16...254)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','perGet','Period data getting (s)',2,64,'10',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','perGet','Period of the data getting, s',2,64,'10',2,'Период сбора данных, с','','Період збору даних, с','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','version','Firmware version',0,16,'',3,'Версия прошивки','','Версія прошивки','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','CfgPrmSSID','Configuration parameter session ID',1,16,'',4,'Параметр конфигурации ID сеанса','','Параметр конфігурації ID сеансу','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Srlno','Measurement serial number',1,16,'',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Srlno','Measurement serial number',1,16,'',5,'Измерянный номер серии','','Виміряний номер серії','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','RawFreq','Channel freq.',2,16,'',6,'Частота канала.','','Частота каналу.','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','GoodFreq','Last used, good channel freq. (Hz)',2,16,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','GoodFreq','Last used, good channel freq., Hz',2,16,'',7,'Последне использ.: частота хорошего канала, Гц','','Останнє використ.: частота хорошого каналу, Гц','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','RawThick','Computed raw thickness, from frequency. (A)',2,16,'',8,'Вычисленная сырая толщина, с частоты. (А)','','Обчислена сира товщина, з частоти. (A)','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalThick','Computed material related thickness, can be zeroed. (A)',2,16,'',9,'Вычисленная относительная толщина материала, может быть нулевой. (A)','','Обчислена відносна товщина матеріалу, може бути нульовою. (A)','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalThick_F','Filtered computed material related thickness, can be zeroed. (A)',2,16,'',10,'Фильтрованная вычисленная относительная толщина материала, может быть нулевой. (A)','','Фільтрована обчислена відносна товщина матеріалу, може бути нульовою. (A)','');
@@ -990,20 +1029,20 @@ INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Tooling','1.000 is 100 % tooling (
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','RateReq','Requested rate (A/S).',2,32,'',26,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','QlvlTrip','Quality threshold, if non 0 and exceeded, xtal fail occurs.',1,32,'',27,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','SlvlTrip','Stability threshold, if non 0 and exceeded, xtal fail occurs.',1,32,'',28,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','transport','Transport',0,64,'IT3',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','transport','Transport',0,64,'IT3',0,'Транспорт','','Транспорт','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IT3','addr','Device address',1,64,'1',1,'Адрес устройства','','Адреса пристрою','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','T','Temperature',2,16,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','T','Temperature',2,16,'',3,'Температура','','Температура','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IT3','H','Upper border',3,16,'',4,'Верхняя граница','','Верхня границя','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IT3','L','Lower border',3,16,'',5,'Нижняя граница','','Нижня границя','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IT3','relSt','Relay state',3,16,'',6,'Состояние реле','','Стан реле','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','transport','Transport',0,64,'Sockets.out_IVE',0,'','','Transport','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','transport','Transport',0,64,'Sockets.out_IVE',0,'Транспорт','','Транспорт','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','addr','Device address',1,64,'255',1,'Адрес устройства','','Адреса пристрою','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COIA','Output current level set-point',1,33,'',2,'','','Output current level set-point','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COUA','Output voltage level set-point',1,33,'',3,'','','Output voltage level set-point','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COPA','Output power level set-point',1,33,'',4,'','','Output power level set-point','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DIA','Output current',1,16,'',5,'','','Output current','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DUA','Output voltage',1,16,'',6,'','','Output voltage','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DPA','Output power',1,16,'',7,'','','Output power','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COIA','Output current level set-point',1,33,'',2,'Задание уровня выходного тока','','Завдання рівня вихідного струму','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COUA','Output voltage level set-point',1,33,'',3,'Задание уровня выходного напряжения','','Завдання рівня вихідної напруги','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COPA','Output power level set-point',1,33,'',4,'Задание уровня выходного мощности','','Завдання рівня вихідної потужності','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DIA','Output current',1,16,'',5,'Выходной ток','','Вихідний струм','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DUA','Output voltage',1,16,'',6,'Выходное напряжение','','Вихідна напруга','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DPA','Output power',1,16,'',7,'Выходная мощность','','Вихідна потужність','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DFA','Electric arcs frequency',1,16,'',8,'Частота появления "микродуг"','','Частота виникнення "мікродуг"','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DAC','Electric arcs counter',1,16,'',9,'Счетчик возникновения дуги','','Лічильник виникнення дуги','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_DEW','Command: Blocking by SC and XX',3,32,'',10,'Команда: Блокировка отключения выхода по "КЗ" и "ХХ"','','Команда: Блокування відключеня виходу по "КЗ" та "ХХ"','');
@@ -1011,201 +1050,134 @@ INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_OUT','Command: Display
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_DEP','Command: Enable MK',3,32,'',12,'Команда: Включение "МК"','','Команда: Включення "МК"','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_DEL','Command: Blocks #1,2 to line',3,32,'',13,'Команда: Включение блока "по сети" - канал№1,2','','Команда: Включення блоку "по мережі" - канал№1,2','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_UF','Command: Display on UI frequency and current',3,32,'',14,'Команда: Отображение на «УИ» напряжения и тока/частоты и мощности блока','','Команда: Відображення на «УІ» напруги та струму/частоти та потужності блоку','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DKW','MUBR of the block overheated',3,16,'',15,'','','MUBR of the block overheated','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DKZ','Short circuits on the block out',3,16,'',16,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DK','MK of the block overheated',3,16,'',17,'','','MK of the block overheated','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DE','Power and voltage on out present',3,16,'',18,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','transport','Transport',0,64,'Serial.out_OPTRIS',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','addr','Device address',3,64,'1',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Tproc','T process',2,16,'',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Thead','T head',2,16,'',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Tbox','T box',2,16,'',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Tact','T act.',2,16,'',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','eps','IR epsilon',2,32,'',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','trans','IR transmission',2,32,'',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','spIll','Spot illumination',3,32,'',8,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('CTR','transport','Transport',0,64,'Serial.out_CTR',0,'','','Transport','Serial.out_CTR');
-INSERT INTO "tmplib_DevLib_io" VALUES('CTR','press','Pressure, Tor',2,17,'',1,'','','Pressure, Tor','');
-INSERT INTO "tmplib_DevLib_io" VALUES('CTR','zeroSet','Zero set',3,32,'',2,'','','Zero set','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','transport','Transport',0,64,'Sockets.out_IEC60870',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','addr','Address, {addr}.{OA}',0,64,'0.5',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','tmRetr','Retry connection time, s',2,64,'10',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','t1','Acknowledge lack timeout, s',2,64,'1.5',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','t2','Acknowledge timeout, s',2,64,'1',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','t3','Test timeout, s',2,64,'2',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','k','Maximum unconfirmed',1,64,'12',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','w','Maximum no ack',1,64,'8',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','itemsSet','Items set by: "ai|di|do:{IOA}[-{EndIOA}]:a[:{NameBase}]"',0,36,'',8,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','items','All items',4,33,'',9,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','this','Object',4,0,'',10,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','addr','Device address [0...119]',1,64,'72',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','vRef','Reference voltage, V',2,64,'3.2',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ai0','AI0',2,16,'',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ai1','AI1',2,16,'',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ai2','AI2',2,16,'',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ai3','AI3',2,16,'',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ao','AO',2,32,'',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','transport','Transport of the One Wire bus, Sockets',0,64,'SSCP',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','addr','Address [0...255]',1,64,'1',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','user','User',0,64,'admin',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','pass','Password',0,64,'rw',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','list','Selected to process variables',0,36,'',8,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','listsDir','List files'' folder',0,64,'SSCP',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','this','Object',4,0,'',9,'','','Object','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrm','Maximum data frame size',1,64,'2048',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','verPrt','Protocol version',1,16,'',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrmServ','Server''s maximum data frame size',1,16,'',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','tmResc','Rescan period, s',2,64,'60',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','power','Power, for temperature',3,16,'',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','this','Object',4,0,'',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','tmResc','Rescan period, s',2,64,'60',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','power','Power, for temperature',3,16,'',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','this','Object',4,0,'',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','isData','In data mode',3,0,'0',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','mdPass','Passive mode, writing by an input protocol''s part',3,64,'0',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','this','Object',4,0,'',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','addr','Device address [0...119]',1,64,'39',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di0','DI0',3,16,'',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di1','DI1',3,16,'',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di2','DI2',3,16,'',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di3','DI3',3,16,'',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di4','DI4',3,16,'',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di5','DI5',3,16,'',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di6','DI6',3,16,'',8,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di7','DI7',3,16,'',9,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do0','DO0',3,33,'',10,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do1','DO1',3,33,'',11,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do2','DO2',3,33,'',12,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do3','DO3',3,33,'',13,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do4','DO4',3,33,'',14,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do5','DO5',3,33,'',15,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do6','DO6',3,33,'',16,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do7','DO7',3,33,'',17,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('BMP180','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('BMP180','addr','Device address [0...119]',1,64,'119',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('BMP180','oss','Oversampling setting (0...3)',1,64,'0',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('BMP180','t','T, °С',2,16,'',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('BMP180','p','P, Pa',2,16,'',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DS3231','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DS3231','addr','Device address [0...119]',1,64,'104',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DS3231','tm','Date and time, YYYY-MM-DDTHH:mm:SS',0,32,'',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DS3231','agOff','Aging offset, [-128...127]',1,32,'',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DS3231','t','T, °С',2,16,'',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DS3231','p32k','Enable 32768Hz',3,32,'',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DS3231','pSQW','Enable SQUARE-WAVE OUTPUT',3,32,'',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DS3231','pSQWf','SQUARE-WAVE OUTPUT frequency: 0-1Hz, 1-1.024kHz, 2-4.096kHz, 3-8.192kHz',1,32,'',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DHT','addr','GPIO address with functions mode(), get() and put(), mostly it''s BCM2835',0,64,'DAQ.BCM2835.pi.pi',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DHT','pin','IO pin number of the GPIO',1,64,'17',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DHT','tries','Tries [1...5]',1,64,'2',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DHT','dev','Device (0-DHT11, 1-DHT22)',1,64,'1',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DHT','t','T, °С',2,16,'',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('DHT','h','H, %',2,16,'',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','addr','I2C device address [0...119]',1,64,'39',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','RS','GPIO Pin: Reset',1,64,'7',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','E','GPIO Pin: Enable',1,64,'8',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D4','GPIO Pin: Data4',1,64,'25',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D5','GPIO Pin: Data5',1,64,'24',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D6','GPIO Pin: Data6',1,64,'23',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D7','GPIO Pin: Data7',1,64,'18',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','ln1','Line 1',0,32,'',8,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','ln2','Line 2',0,32,'',9,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChL','Battery charge low',2,32,'20',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChLL','Battery charge critical',2,32,'5',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inVL','Input voltage low',2,32,'210',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inVH','Input voltage high',2,32,'250',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFLL','Input frequency too low',2,32,'40',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFL','Input frequency low',2,32,'45',8,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFH','Input frequency high',2,32,'55',9,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFHH','Input frequency too high',2,32,'60',10,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadH','Load high',2,32,'80',11,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadHH','Load too high',2,32,'100',12,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tH','Temperature high',2,32,'50',13,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tHH','Temperature too high',2,32,'70',14,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','alDelay','Alarms delay, s',2,32,'0',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','transport','Transport of the I2C, Serial (i2c) or
-GPIO address with function put(), mostly it''s BCM2835 (DAQ.BCM2835.pi.pi)',0,64,'i2c',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','s','Energy from reset, tariffs sum',0,16,'',0,'Энергия от сброса сумма Тарифов','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','t1','Energy from reset, tariff 1',2,16,'',1,'Энергия от сброса Тариф1','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','t2','Energy from reset, tariff 2',2,16,'',2,'Энергия от сброса Тариф2','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','t3','Energy from reset, tariff 3',2,16,'',3,'Энергия от сброса Тариф3','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','t4','Energy from reset, tariff 4',2,16,'',4,'Энергия от сброса Тариф4','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','U','Voltage U(V)',2,16,'',5,'Напряжение U(В)','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','I','Current I(A)',2,16,'',6,'Ток I(А)','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','P','Power P(W)',2,16,'',7,'Мощность P(Вт)','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','transport','Transport',0,64,'merc200',8,'Транспорт','merc200','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','netaddr','Network address',2,64,'1',9,'Сетевой адрес','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','naladchik','Coded address by the program Fixer+',3,64,'0',10,'Адрес закодирован программой Наладчик+','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','tarif','Read energy from reset',3,64,'1',11,'Считывать энергию от сброса','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','UIP','Read current values',3,64,'1',12,'Считывать мгновенные значения','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','first','First byte of the address',1,0,'',13,'Первый байт адреса','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m200','second','Last 3 bytes of the address',1,0,'',14,'Последние 3 байта адреса','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','answer','Answer to the password request',0,16,'',0,'Ответ на запрос пароля','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','TS','Read energy of tariffs sum',3,64,'0',1,'Считывать энергию суммы тарифов','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1','Read energy of tariff 1',3,64,'0',2,'Считывать энергию тарифа 1','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2','Read energy of tariff 2',3,64,'0',3,'Считывать энергию тарифа 2','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3','Read energy of tariff 3',3,64,'0',4,'Считывать энергию тарифа 3','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4','Read energy of tariff 4',3,64,'0',5,'Считывать энергию тарифа 4','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','P','Read power P',3,64,'0',6,'Считывать мощность P','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','Q','Read power Q',3,64,'0',7,'Считывать мощность Q','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','S','Read power S',3,64,'0',8,'Считывать мощность S','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','U','Read voltage U',3,64,'0',9,'Считывать напряжение U','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','I','Read current I',3,64,'0',10,'Считывать ток I','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','K','Read power coefficient',3,64,'0',11,'Считывать коэф. мощности','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','F','Read frequency F',3,64,'0',12,'Считывать частоту F','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','N','Read serial number',3,64,'0',13,'Считывать серийный номер','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','TSAp','Energy from resetting, tariffs sum A+',2,16,'',14,'Энергия от сброса сумма тарифов A+','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','TSAm','Energy from resetting, tariffs sum A-',2,16,'',15,'Энергия от сброса сумма тарифов A-','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','TSRp','Energy from resetting, tariffs sum R+',2,16,'',16,'Энергия от сброса сумма тарифов R+','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','TSRm','Energy from resetting, tariffs sum R-',2,16,'',17,'Энергия от сброса сумма тарифов R-','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1Ap','Energy from resetting, tariff 1 A+',2,16,'',18,'Энергия от сброса тариф 1 A+','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1Am','Energy from resetting, tariff 1 A-',2,16,'',19,'Энергия от сброса тариф 1 A-','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1Rp','Energy from resetting, tariff 1 R+',2,16,'',20,'Энергия от сброса тариф 1 R+','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1Rm','Energy from resetting, tariff 1 R-',2,16,'',21,'Энергия от сброса тариф 1 R-','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2Ap','Energy from resetting, tariff 2 A+',2,16,'',22,'Энергия от сброса тариф 2 A+','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2Am','Energy from resetting, tariff 2 A-',2,16,'',23,'Энергия от сброса тариф 2 A-','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2Rp','Energy from resetting, tariff 2 R+',2,16,'',24,'Энергия от сброса тариф 2 R+','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2Rm','Energy from resetting, tariff 2 R-',2,16,'',25,'Энергия от сброса тариф 2 R-','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3Ap','Energy from resetting, tariff 3 A+',2,16,'',26,'Энергия от сброса тариф 3 A+','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3Am','Energy from resetting, tariff 3 A-',2,16,'',27,'Энергия от сброса тариф 3 A-','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3Rp','Energy from resetting, tariff 3 R+',2,16,'',28,'Энергия от сброса тариф 3 R+','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3Rm','Energy from resetting, tariff 3 R-',2,16,'',29,'Энергия от сброса тариф 3 R-','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4Ap','Energy from resetting, tariff 4 A+',2,16,'',30,'Энергия от сброса тариф 4 A+','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4Am','Energy from resetting, tariff 4 A-',2,16,'',31,'Энергия от сброса тариф 4 A-','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4Rp','Energy from resetting, tariff 4 R+',2,16,'',32,'Энергия от сброса тариф 4 R+','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4Rm','Energy from resetting, tariff 4 R-',2,16,'',33,'Энергия от сброса тариф 4 R-','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','PS','Power P(W) by the phases sum',2,16,'',34,'Мощность P(Вт) по сумме фаз','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','P1','Power P(W) by the phase 1',2,16,'',35,'Мощность P(Вт) по фазе 1','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','P2','Power P(W) by the phase 2',2,16,'',36,'Мощность P(Вт) по фазе 2','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','P3','Power P(W) by the phase 3',2,16,'',37,'Мощность P(Вт) по фазе 3','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','QS','Power Q(var) by the phases sum',2,16,'',38,'Мощность Q(вар) по сумме фаз','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','Q1','Power Q(var) by the phase 1',2,16,'',39,'Мощность Q(вар) по фазе 1','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','Q2','Power Q(var) by the phase 2',2,16,'',40,'Мощность Q(вар) по фазе 2','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','Q3','Power Q(var) by the phase 3',2,16,'',41,'Мощность Q(вар) по фазе 3','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','SS','Power S(VA) by the phases sum',2,16,'',42,'Мощность S(ВА) по сумме фаз','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','S1','Power S(VA) by the phase 1',2,16,'',43,'Мощность S(ВА) по фазе 1','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','S2','Power S(VA) by the phase 2',2,16,'',44,'Мощность S(ВА) по фазе 2','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','S3','Power S(VA) by the phase 3',2,16,'',45,'Мощность S(ВА) по фазе 3','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','U1','Voltage U(V) by the phase 1',2,16,'',46,'Напряжение U(В) по фазе 1','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','U2','Voltage U(V) by the phase 2',2,16,'',47,'Напряжение U(В) по фазе 2','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','U3','Voltage U(V) by the phase 3',2,16,'',48,'Напряжение U(В) по фазе 3','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','I1','Current I(A) by the phase 1',2,16,'',49,'Ток I(А) по фазе 1','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','I2','Current I(A) by the phase 2',2,16,'',50,'Ток I(А) по фазе 2','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','I3','Current I(A) by the phase 3',2,16,'',51,'Ток I(А) по фазе 3','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','KS','Power coefficient by the phases sum',2,16,'',52,'Коэф.мощности по сумме фаз','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','K1','Power coefficient by the phase 1',2,16,'',53,'Коэф.мощности по фазе 1','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','K2','Power coefficient by the phase 2',2,16,'',54,'Коэф.мощности по фазе 2','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','K3','Power coefficient by the phase 3',2,16,'',55,'Коэф.мощности по фазе 2','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','F1','Frequency F(Hz)',2,16,'',56,'Частота F(Гц)','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','N1','Serial number',0,16,'',57,'Серийный номер','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','netaddr','Network address (0...240)',1,64,'1',58,'Сетевой адрес (0...240)','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','password','Password',0,64,'111111',59,'Пароль','111111','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('m230','transport','Transport',0,64,'merc230',60,'Транспорт','merc230','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DKW','MUBR of the block overheated',3,16,'',15,'Перегрев MUBR блока','','Перегрів MUBR блоку','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DKZ','Short circuits on the block out',3,16,'',16,'Короткое замыкание выходных цепей блока','','Коротке замикання вихідних ланцюгів блоку','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DK','MK of the block overheated',3,16,'',17,'Перегрев MK блока','','Перегрів MK блоку','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DE','Power and voltage on out present',3,16,'',18,'Мощность и напряжение есть на выходе','','Потужність та напруга є на виході','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','transport','Transport',0,64,'Serial.out_OPTRIS',0,'Транспорт','','Транспорт','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','addr','Device address',3,64,'1',1,'Адрес устройства','','Адреса пристрою','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Tproc','T process',2,16,'',2,'Т обработки','','Т обробки','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Thead','T head',2,16,'',3,'Т головы','','Т голови','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Tbox','T box',2,16,'',4,'Т корпуса','','Т корпусу','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Tact','T act.',2,16,'',5,'Т акт.','','Т акт.','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','eps','IR epsilon',2,32,'',6,'IR эпсилон','','IR епсилон','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','trans','IR transmission',2,32,'',7,'IR передачи','','IR передавання','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','spIll','Spot illumination',3,32,'',8,'Точечное освещение','','Точкове освітлення','');
+INSERT INTO "tmplib_DevLib_io" VALUES('CTR','transport','Transport',0,64,'Serial.out_CTR',0,'Транспорт','','Транспорт','');
+INSERT INTO "tmplib_DevLib_io" VALUES('CTR','press','Pressure, Tor',2,17,'',1,'Давление, Tor','','Тиск, Tor','');
+INSERT INTO "tmplib_DevLib_io" VALUES('CTR','zeroSet','Zero set',3,32,'',2,'Установка нуля','','Встановлення нуля','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','transport','Transport',0,64,'Sockets.out_IEC60870',0,'Транспорт','','Транспорт','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','addr','Address, {addr}.{OA}',0,64,'0.5',1,'Адрес, {addr}.{OA}','','Адреса, {addr}.{OA}','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','tmRetr','Retry connection time, s',2,64,'10',2,'Время восстановления подключения, с','','Час відновлення підключення, с','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','t1','Acknowledge lack timeout, s',2,64,'1.5',3,'Таймаут подтверждения отсутствия активности, с','','Таймаут підтвердження відсутності активності, с','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','t2','Acknowledge timeout, s',2,64,'1',4,'Таймаут подтверждения, с','','Таймаут підтвердження, с','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','t3','Test timeout, s',2,64,'2',5,'Таймаут проверки, с','','Таймаут перевірки, с','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','k','Maximum unconfirmed',1,64,'12',6,'Максимально неподтверждённых','','Максимально непідтверджених','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','w','Maximum no ack',1,64,'8',7,'Максимальное отсутсвие "ack"','','Максимальна відсутність "ack"','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','itemsSet','Items set by: "ai|di|do:{IOA}[-{EndIOA}]:a[:{NameBase}]"',0,36,'',8,'Небор элементов по: "ai|di|do:{IOA}[-{EndIOA}]:a[:{NameBase}]"','','Набір елементів за: "ai|di|do:{IOA}[-{EndIOA}]:a[:{NameBase}]"','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','items','All items',4,33,'',9,'Все елементы','','Всі елементи','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','this','Object',4,0,'',10,'Объект','','Об''єкт','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','transport','Transport of the Ethernet network, Sockets',0,64,'SSCP',0,'Транспорт сети Ethernet, Сокеты','','Транспорт мережі Ethernet, Сокети','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','addr','Address [0...255]',1,64,'1',1,'Адрес [0...255]','','Адреса [0...255]','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','user','User',0,64,'admin',2,'Пользователь','','Користувач','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','pass','Password',0,64,'rw',3,'Пароль','','Пароль','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','list','Selected to process variables',0,36,'',8,'Переменные, выбранные для обработки','','Змінні, обрані для обробки','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','listsDir','List files'' folder',0,64,'SSCP',5,'Директория файлов-списков','','Тека файлів-переліків','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','this','Object',4,0,'',9,'Объект','','Об''єкт','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrm','Maximum data frame size',1,64,'2048',4,'Максимальный размер фрейма данных','','Максимальний розмір фрейму даних','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','verPrt','Protocol version',1,16,'',6,'Версия протокола','','Версія протоколу','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrmServ','Server''s maximum data frame size',1,16,'',7,'Максимальный размер фрейма данных сервера','','Максимальний розмір фрейму даних серверу','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','mdPass','Passive mode, writing by an input protocol''s part',3,64,'0',2,'Пассивный режим, запись входной частью протокола','','Пасивний режим, запис вхідною частиною протоколу','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','this','Object',4,0,'',7,'Объект','','Об''єкт','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChL','Battery charge low',2,32,'20',3,'Заряд батареи низкий','','Заряд батареї низький','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChLL','Battery charge critical',2,32,'5',4,'Заряд батареи критический','','Заряд батареї критичний','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inVL','Input voltage low',2,32,'210',5,'Входное напряжение низкое','','Вхідна напруга низька','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inVH','Input voltage high',2,32,'250',6,'Входное напряжение высокое','','Вхідна напруга висока','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFLL','Input frequency too low',2,32,'40',7,'Входная частота очень низкая','','Вхідна частота дуже низька','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFL','Input frequency low',2,32,'45',8,'Входная частота низкая','','Вхідна частота низька','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFH','Input frequency high',2,32,'55',9,'Входная частота высокая','','Вхідна частота висока','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFHH','Input frequency too high',2,32,'60',10,'Входная частота очень высокая','','Вхідна частота дуже висока','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadH','Load high',2,32,'80',11,'Нагрузка высокая','','Навантаження високе','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadHH','Load too high',2,32,'100',12,'Нагрузка очень высокая','','Навантаження дуже високе','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tH','Temperature high',2,32,'50',13,'Температура высокая','','Температура висока','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tHH','Temperature too high',2,32,'70',14,'Температура очень высокая','','Температура дуже висока','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','alDelay','Alarms delay, s',2,32,'0',2,'Задержка сигнализации, с','','Затримка сигналізації, с','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','s','Energy from reset, tariffs sum',0,16,'',0,'Энергия от сброса сумма Тарифов','','Енергія від скидання сума Тарифів','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','t1','Energy from reset, tariff 1',2,16,'',1,'Энергия от сброса Тариф1','','Енергія від скидання Тариф1','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','t2','Energy from reset, tariff 2',2,16,'',2,'Энергия от сброса Тариф2','','Енергія від скидання Тариф2','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','t3','Energy from reset, tariff 3',2,16,'',3,'Энергия от сброса Тариф3','','Енергія від скидання Тариф3','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','t4','Energy from reset, tariff 4',2,16,'',4,'Энергия от сброса Тариф4','','Енергія від скидання Тариф4','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','U','Voltage U, V',2,16,'',5,'Напряжение U, В','','Напруга U, В','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','I','Current I, A',2,16,'',6,'Ток I, А','','Струм I, А','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','P','Power P, W',2,16,'',7,'Мощность P, Вт','','Потужність P, Вт','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','transport','Transport',0,64,'merc200',8,'Транспорт','','Транспорт','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','netaddr','Network address',2,64,'1',9,'Сетевой адрес','','Мережева адреса','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','naladchik','Coded address by the program Fixer+',3,64,'0',10,'Адрес закодирован программой Наладчик+','','Адреса закодована програмою Налаштувач+','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','tarif','Read energy from reset',3,64,'1',11,'Считывать энергию от сброса','','Вичитувати енергію від скидання','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','UIP','Read current values',3,64,'1',12,'Считывать мгновенные значения','','Вичитувати миттеві значення','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','first','First byte of the address',1,0,'',13,'Первый байт адреса','','Перший байт адреси','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m200','second','Last 3 bytes of the address',1,0,'',14,'Последние 3 байта адреса','','Останні 3 байти адреси','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','answer','Answer to the password request',0,16,'',0,'Ответ на запрос пароля','','Відповідь на запит пароля','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','TS','Read energy of tariffs sum',3,64,'0',1,'Считывать энергию суммы тарифов','','Вичитувати енергію суми тарифів','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1','Read energy of tariff 1',3,64,'0',2,'Считывать энергию тарифа 1','','Вичитувати енергію тарифу 1','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2','Read energy of tariff 2',3,64,'0',3,'Считывать энергию тарифа 2','','Вичитувати енергію тарифу 2','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3','Read energy of tariff 3',3,64,'0',4,'Считывать энергию тарифа 3','','Вичитувати енергію тарифу 3','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4','Read energy of tariff 4',3,64,'0',5,'Считывать энергию тарифа 4','','Вичитувати енергію тарифу 4','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','P','Read power P',3,64,'0',6,'Считывать мощность P','','Вичитувати потужність P','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','Q','Read power Q',3,64,'0',7,'Считывать мощность Q','','Вичитувати потужність Q','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','S','Read power S',3,64,'0',8,'Считывать мощность S','','Вичитувати потужність S','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','U','Read voltage U',3,64,'0',9,'Считывать напряжение U','','Вичитувати напругу U','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','I','Read current I',3,64,'0',10,'Считывать ток I','','Вичитувати струм I','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','K','Read power coefficient',3,64,'0',11,'Считывать коэф. мощности','','Вичитувати коеф. потужності','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','F','Read frequency F',3,64,'0',12,'Считывать частоту F','','Вичитувати частоту F','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','N','Read serial number',3,64,'0',13,'Считывать серийный номер','','Вичитувати серійний номер','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','TSAp','Energy from resetting, tariffs sum A+',2,16,'',14,'Энергия от сброса сумма тарифов A+','','Енергія від скидання сума тарифів A+','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','TSAm','Energy from resetting, tariffs sum A-',2,16,'',15,'Энергия от сброса сумма тарифов A-','','Енергія від скидання сума тарифів A-','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','TSRp','Energy from resetting, tariffs sum R+',2,16,'',16,'Энергия от сброса сумма тарифов R+','','Енергія від скидання сума тарифів R+','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','TSRm','Energy from resetting, tariffs sum R-',2,16,'',17,'Энергия от сброса сумма тарифов R-','','Енергія від скидання сума тарифів R-','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1Ap','Energy from resetting, tariff 1 A+',2,16,'',18,'Энергия от сброса тариф 1 A+','','Енергія від скидання тариф 1 A+','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1Am','Energy from resetting, tariff 1 A-',2,16,'',19,'Энергия от сброса тариф 1 A-','','Енергія від скидання тариф 1 A-','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1Rp','Energy from resetting, tariff 1 R+',2,16,'',20,'Энергия от сброса тариф 1 R+','','Енергія від скидання тариф 1 R+','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T1Rm','Energy from resetting, tariff 1 R-',2,16,'',21,'Энергия от сброса тариф 1 R-','','Енергія від скидання тариф 1 R-','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2Ap','Energy from resetting, tariff 2 A+',2,16,'',22,'Энергия от сброса тариф 2 A+','','Енергія від скидання тариф 2 A+','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2Am','Energy from resetting, tariff 2 A-',2,16,'',23,'Энергия от сброса тариф 2 A-','','Енергія від скидання тариф 2 A-','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2Rp','Energy from resetting, tariff 2 R+',2,16,'',24,'Энергия от сброса тариф 2 R+','','Енергія від скидання тариф 2 R+','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T2Rm','Energy from resetting, tariff 2 R-',2,16,'',25,'Энергия от сброса тариф 2 R-','','Енергія від скидання тариф 2 R-','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3Ap','Energy from resetting, tariff 3 A+',2,16,'',26,'Энергия от сброса тариф 3 A+','','Енергія від скидання тариф 3 A+','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3Am','Energy from resetting, tariff 3 A-',2,16,'',27,'Энергия от сброса тариф 3 A-','','Енергія від скидання тариф 3 A-','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3Rp','Energy from resetting, tariff 3 R+',2,16,'',28,'Энергия от сброса тариф 3 R+','','Енергія від скидання тариф 3 R+','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T3Rm','Energy from resetting, tariff 3 R-',2,16,'',29,'Энергия от сброса тариф 3 R-','','Енергія від скидання тариф 3 R-','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4Ap','Energy from resetting, tariff 4 A+',2,16,'',30,'Энергия от сброса тариф 4 A+','','Енергія від скидання тариф 4 A+','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4Am','Energy from resetting, tariff 4 A-',2,16,'',31,'Энергия от сброса тариф 4 A-','','Енергія від скидання тариф 4 A-','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4Rp','Energy from resetting, tariff 4 R+',2,16,'',32,'Энергия от сброса тариф 4 R+','','Енергія від скидання тариф 4 R+','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','T4Rm','Energy from resetting, tariff 4 R-',2,16,'',33,'Энергия от сброса тариф 4 R-','','Енергія від скидання тариф 4 R-','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','PS','Power P(W) by the phases sum',2,16,'',34,'Мощность P(Вт) по сумме фаз','','Потужніст P(Вт) по сумі фаз','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','P1','Power P(W) by the phase 1',2,16,'',35,'Мощность P(Вт) по фазе 1','','Потужніст P(Вт) по фазі 1','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','P2','Power P(W) by the phase 2',2,16,'',36,'Мощность P(Вт) по фазе 2','','Потужніст P(Вт) по фазі 2','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','P3','Power P(W) by the phase 3',2,16,'',37,'Мощность P(Вт) по фазе 3','','Потужніст P(Вт) по фазі 3','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','QS','Power Q(var) by the phases sum',2,16,'',38,'Мощность Q(вар) по сумме фаз','','Потужніст Q(вар) по сумі фаз','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','Q1','Power Q(var) by the phase 1',2,16,'',39,'Мощность Q(вар) по фазе 1','','Потужніст Q(вар) по фазі 1','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','Q2','Power Q(var) by the phase 2',2,16,'',40,'Мощность Q(вар) по фазе 2','','Потужніст Q(вар) по фазі 2','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','Q3','Power Q(var) by the phase 3',2,16,'',41,'Мощность Q(вар) по фазе 3','','Потужніст Q(вар) по фазі 3','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','SS','Power S(VA) by the phases sum',2,16,'',42,'Мощность S(ВА) по сумме фаз','','Потужніст S(ВА) по сумі фаз','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','S1','Power S(VA) by the phase 1',2,16,'',43,'Мощность S(ВА) по фазе 1','','Потужніст S(ВА) по фазі 1','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','S2','Power S(VA) by the phase 2',2,16,'',44,'Мощность S(ВА) по фазе 2','','Потужніст S(ВА) по фазі 2','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','S3','Power S(VA) by the phase 3',2,16,'',45,'Мощность S(ВА) по фазе 3','','Потужніст S(ВА) по фазі 3','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','U1','Voltage U(V) by the phase 1',2,16,'',46,'Напряжение U(В) по фазе 1','','Напруга U(В) по фазі 1','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','U2','Voltage U(V) by the phase 2',2,16,'',47,'Напряжение U(В) по фазе 2','','Напруга U(В) по фазі 2','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','U3','Voltage U(V) by the phase 3',2,16,'',48,'Напряжение U(В) по фазе 3','','Напруга U(В) по фазі 3','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','I1','Current I(A) by the phase 1',2,16,'',49,'Ток I(А) по фазе 1','','Струм I(А) по фазі 1','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','I2','Current I(A) by the phase 2',2,16,'',50,'Ток I(А) по фазе 2','','Струм I(А) по фазі 2','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','I3','Current I(A) by the phase 3',2,16,'',51,'Ток I(А) по фазе 3','','Струм I(А) по фазі 3','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','KS','Power coefficient by the phases sum',2,16,'',52,'Коэф.мощности по сумме фаз','','Коеф.потужності по сумі фаз','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','K1','Power coefficient by the phase 1',2,16,'',53,'Коэф.мощности по фазе 1','','Коеф.потужності по фазі 1','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','K2','Power coefficient by the phase 2',2,16,'',54,'Коэф.мощности по фазе 2','','Коеф.потужності по фазі 2','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','K3','Power coefficient by the phase 3',2,16,'',55,'Коэф.мощности по фазе 3','','Коеф.потужності по фазі 3','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','F1','Frequency F(Hz)',2,16,'',56,'Частота F(Гц)','','Частота F(Гц)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','N1','Serial number',0,16,'',57,'Серийный номер','','Серійний номер','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','netaddr','Network address (0...240)',1,64,'1',58,'Сетевой адрес (0...240)','','Мережева адреса (0...240)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','password','Password',0,64,'111111',59,'Пароль','','Пароль','');
+INSERT INTO "tmplib_DevLib_io" VALUES('m230','transport','Transport',0,64,'merc230',60,'Транспорт','','Транспорт','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2967,7 +2939,8 @@ INSERT INTO "Trs" VALUES('Empty','Порожньо','Пусто');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',10,0,'JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	version = "";
 	operModes = new Object();
@@ -3097,10 +3070,11 @@ else {
 	}
 }
 
-f_err = t_err;','','',1425737223);
+f_err = t_err;','','',1509274008);
 INSERT INTO "tmplib_DevLib" VALUES('TMH','Power supply for turbomolecular pumps','','','Power supply for turbomolecular pumps of firm SHIMADZU (http://www.shimadzu.com), model EI-R04M.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',10,0,'JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 req = SYS.XMLNode("mess").setAttr("ProtIt","TMH").setAttr("addr",addr);
 
@@ -3276,9 +3250,10 @@ else {
 	else MP_Z = req.text().slice(4).toInt();
 }
 
-f_err = t_err;','','',1425737240);
+f_err = t_err;','','',1509283338);
 INSERT INTO "tmplib_DevLib" VALUES('TM510x','Elemer TM510x','','','Multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
-Author: Roman Savochenko <rom_as@oscada.org>','','',10,0,'JavaLikeCalc.JavaScript
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) devTp = EVAL_INT;
 
 tr = SYS.Transport.Serial.nodeAt("out_"+transport);
@@ -3324,7 +3299,7 @@ else {
 	}
 }
 
-f_err = t_err;','','',1424633101);
+f_err = t_err;','','',1509274015);
 INSERT INTO "tmplib_DevLib" VALUES('UPS','','','','Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.2.0','','',10,0,'JavaLikeCalc.JavaScript
@@ -3437,9 +3412,10 @@ else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;
 conDelay_ = 0;','','',1481351833);
-INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and the count. The device complex enough by provide more parameters, more history to its and access by nonlinear Serial-based protocol at low speed. The template implement acquisition for all significant parameters, get history by hours, days and result months. Also you can simple enough append for process other left parameters.
+INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vladislav Chubuk','Фірма "Teplocom" (http://www.teplocom.spb.ru) комп''ютер "VKT-7", St.Peterburg.','Фирма "Teplocom" (http://www.teplocom.spb.ru) компьютер "VKT-7", St.Peterburg.',60,0,'JavaLikeCalc.JavaScript
+Sponsored: Vladislav Chubuk
+Version: 1.0.0','','',60,0,'JavaLikeCalc.JavaScript
 using Special.FLibSYS;
 
 if(f_start) {
@@ -3791,10 +3767,11 @@ if(t_err.length) {
 	f_err = t_err;
 	for(var cA in varsLs) arguments[cA] = EVAL_REAL;
 }
-else f_err = errAttrs.length ? "11:"+tr("Quality errors")+": "+errAttrs : "0";','','',1424878121);
+else f_err = errAttrs.length ? "11:"+tr("Quality errors")+": "+errAttrs : "0";','','',1509274088);
 INSERT INTO "tmplib_DevLib" VALUES('SMDP','Sycon Multi Drop Protocol','','','STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com).
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',10,0,'JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 if(f_stop) return;
 if(f_start) {
 	cnt = 0;
@@ -4037,7 +4014,7 @@ else {
 	XtalLife_C = (t_err=req.attr("err")).length ? EVAL_INT : req.text().slice(2).toInt(10);
 }
 
-f_err = t_err.length ? t_err : "0";','','',1425737232);
+f_err = t_err.length ? t_err : "0";','','',1509282151);
 INSERT INTO "tmplib_DevLib" VALUES('IT3','Temperature measurement IT-3','','','Temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
@@ -4085,7 +4062,8 @@ if(t_err.length) { SYS.messDebug("/IT3/TMPL",tr("Error response")+": "+t_err); f
 else f_err = "0";','','',1472721622);
 INSERT INTO "tmplib_DevLib" VALUES('IVE_452HS_02','IVE-452HS-02','','','Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',10,0,'JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
 	addr_ = addr;
@@ -4181,10 +4159,11 @@ if(t_err.length) {
 	SYS.messDebug("/IVE452HS02/TMPL",tr("Error response")+": "+t_err);
 	f_err = t_err;
 }
-else f_err = "0";','','',1440089815);
+else f_err = "0";','','',1509285275);
 INSERT INTO "tmplib_DevLib" VALUES('OPTRIS','OPTRIS CT/CTL','','','OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',10,0,'JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
 	transport_ = transport;
@@ -4274,12 +4253,11 @@ if(t_err.length) {
 	SYS.messDebug("/OPTRIS/TMPL",tr("Error response")+": "+t_err);
 	f_err = t_err;
 }
-else f_err = "0";','','',1444290943);
-INSERT INTO "tmplib_DevLib" VALUES('CTR','CTR 100, 101','CTR 100, 101','','The RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
+else f_err = "0";','','',1509286707);
+INSERT INTO "tmplib_DevLib" VALUES('CTR','CTR 100, 101','','','The RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','The RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
-Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','',10,0,'JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
 	transport_ = transport;
@@ -4382,11 +4360,11 @@ if(t_err.length) {
 	press = EVAL_REAL;
 	f_err = t_err + " " + u_err;
 }
-else f_err = "0: " + u_err;','','',1445606346);
+else f_err = "0: " + u_err;','','',1509287409);
 INSERT INTO "tmplib_DevLib" VALUES('IEC60870','IEC-60870','','','IEC 60870 part 5 is one of the IEC 60870 set of standards which define systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems. The template implements part 104 (Ethernet transport) for client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1, C_CI_NA_1, C_SC_NA_1, M_SP_NA_1, M_ME_NB_1, C_CS_NA_1. For acquired and control data primarily used an object into attribute "items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. To the data control by attributes at once you can its describe into "itemsSet". Into the template for the first time used the non request mode of an output transport and free attributes creation wile performing.
-Version: 1.0.2
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Ustijancev Michael.','','',10,0,'JavaLikeCalc.JavaScript
+Sponsored: Ustijancev Michael.
+Version: 1.0.2','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{
 	transport_ = transport;
 	tr = SYS.Transport.nodeAt(transport,".");
@@ -4676,48 +4654,11 @@ if(t_err.length) {
 	}
 	f_err = t_err;
 }
-else f_err = "0";','','',1477584171);
-INSERT INTO "tmplib_DevLib" VALUES('PCF8591','I2C: PCF8591','','','I2C 8-bit 4xA/D and D/A converter. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
-//Set transport
-if(f_start) {
-	f_err = "0";
-	transport_ = transport;
-	tr = SYS.Transport.Serial["out_"+transport];
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial["out_"+transport];
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
-else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
-else {
-	for(i = 0; i < 4 && !t_err.toInt(); i++) {
-		//Select next channel and the output
-		tr.messIO(SYS.strFromCharCode(addr,0x40|((i+1)&0x3),255*max(0,min(1,ao/vRef))), 0, 0);
-		SYS.sleep(1e-3);
-		rez = tr.messIO("", 0, 1);
-		if(rez.length)	arguments["ai"+i] = vRef*(rez.charCodeAt(0)/255);
-		else t_err = "3:"+tr("No read result.");
-	}
-}
-
-if(t_err.toInt() && !f_err.toInt())
-	for(i = 0; i < 4; i++)
-		arguments["ai"+i] = EVAL;
-
-f_err = t_err;','','',1478967014);
-INSERT INTO "tmplib_DevLib" VALUES('SSCP','Shark Slave Communication Protocol','Shark Slave Communication Protocol','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
+else f_err = "0";','','',1509288456);
+INSERT INTO "tmplib_DevLib" VALUES('SSCP','Shark Slave Communication Protocol','','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Costumer Faster CZ (http://faster.cz)
-Version: 0.6.2','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
-Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Costumer Faster CZ (http://faster.cz)','',30,0,'JavaLikeCalc.JavaScript
+Version: 0.6.2','','',30,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(tr, addr, func, data) {
 	req = SYS.strFromCharCode(addr, (func>>8)&0xFF, func&0xFF, (data.length>>8)&0xFF, data.length&0xFF) + data;
@@ -4756,7 +4697,7 @@ function req(tr, addr, func, data) {
 //Set transport and init
 if(f_start) {
 	transport_ = transport;
-	tr = SYS.Transport.Sockets["out_"+transport];
+	tr = SYS.Transport.Sockets.nodeAt("out_"+transport);
 	vlist = new Object();
 	prcVList = new Array();
 	isLogin = false;
@@ -4770,7 +4711,7 @@ t_err = "0";
 
 //Check for the transport change and connect
 if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Sockets["out_"+transport];
+	tr = SYS.Transport.Sockets.nodeAt("out_"+transport);
 	transport_ = transport;
 }
 if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
@@ -4901,1287 +4842,14 @@ else {
 	}
 }
 
-f_err = t_err;','','',1481104555);
-INSERT INTO "tmplib_DevLib" VALUES('1W_DS9097U','One Wire by DS9097U','One Wire by DS9097U','','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
-Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.2.0','','',30,0,'JavaLikeCalc.JavaScript
-//Functions
-function reset(tr) {
-	req = (isData?SYS.strFromCharCode(0xE3):"") +
-				SYS.strFromCharCode(0xC5);	//CMD_COMM(0x81) | FUNCTSEL_RESET(0x40) | SPEEDSEL_FLEX(0x04)
-	isData = false;
-	resp = tr.messIO(req);
-	return (resp.charCodeAt(0)&0x03) == 0x01;	//RB_PRESENCE
-}
-
-function io(tr, mess, bits) {
-	if(bits == EVAL) {
-		req = isData ? "" : SYS.strFromCharCode(0xE1);	//MODE_DATA
-		isData = true;
-		for(iB = 0; iB < mess.length; iB++) {
-			req += SYS.strFromCharCode(tVl=mess.charCodeAt(iB));
-			if(tVl == 0xE3) req += SYS.strFromCharCode(0xE3);	//duplication to the COMMAND mode
-		}
-		for(resp = tr.messIO(req); resp.length && resp.length < mess.length && (tresp=tr.messIO("")).length; resp += tresp) ;
-		return resp;
-	}
-	else {
-		req = (isData?SYS.strFromCharCode(0xE3):"") + SYS.strFromCharCode(0x3F);	//MODE_COMMAND, CMD_CONFIG(0x01) | PARMSEL_5VPULSE(0x30) | PARMSET_infinite(0x0E)
-		isData = false;
-		for(iB = 0; iB < ceil(bits/8); iB++) {
-			vB = mess.charCodeAt(iB);
-			bB = ((iB+1)*8 > bits) ? bits-floor(bits/8)*8 : 8;
-			for(iBi = 0; iBi < bB; iBi++)
-				//{BITPOL_ONE(0x10)|BITPOL_ZERO(0x00)}|CMD_COMM(0x81)|FUNCTSEL_BIT(0x00)|SPEEDSEL_FLEX(0x04)|{PRIME5V_TRUE(0x02)|PRIME5V_FALSE(0x00)}
-				req += SYS.strFromCharCode(((vB&(1<<iBi))?0x10:0x00)|0x85/*|((iB==(ceil(bits/8)-1)&&iBi==(bB-1))?0x02:0x00)*/);
-		}
-		for(resp = tr.messIO(req); resp.length && resp.length < (bits+1) && (tresp=tr.messIO("")).length; resp += tresp) ;
-		rez = "";
-		if(resp.length && !(resp.charCodeAt(0)&0x81))
-			for(iR = 1;  iR < resp.length; ) {
-				vB = 0;
-				for(ib = 0; ib < 8 && iR < resp.length; iR++, ib++)
-					if(resp.charCodeAt(iR)&1) vB = vB | (1<<ib);
-				rez += SYS.strFromCharCode(vB);
-			}
-	}
-	return rez;
-}
-
-function scan(tr, sn, lstDiscr) {
-	if(!reset(tr)) return "";
-	
-	//Set the bits in the added buffer
-	asn = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-	for(i = 0; lstDiscr >= 0 && i < 64; i++)
-		if((i < (lstDiscr-1) && sn[floor(i/8)]&(1<<(i%8))) || i == (lstDiscr-1))
-			asn[(i*2+1)/8] = asn[(i*2+1)/8] | (1<<((i*2+1)%8));
-
-	req = isData ? "" : SYS.strFromCharCode(0xE1);	//MODE_DATA
-	req += SYS.strFromCharCode(0xF0, 0xE3, 0xB5, 0xE1,
-				asn[0], asn[1], asn[2], asn[3], asn[4], asn[5], asn[6], asn[7],
-				asn[8], asn[9], asn[10], asn[11], asn[12], asn[13], asn[14], asn[15],
-				0xE3, 0xA5);
-	isData = false;
-	for(resp = tr.messIO(req); resp.length && resp.length < 17 && (tresp=tr.messIO("")).length; resp += tresp) ;
-
-	tmpLastDesc = -1;
-	for(i = 0; i < 64; i++) {
-		if(resp.charCodeAt(floor((i*2+1)/8)+1)&(1<<((i*2+1)%8)))	sn[floor(i/8)] = sn[floor(i/8)] | (1<<(i%8));
-		else sn[floor(i/8)] = sn[floor(i/8)] & (~(1<<(i%8)));
-		// Check LastDiscrepancy
-		if((resp.charCodeAt(floor((i*2)/8)+1)&(1<<((i*2)%8))) && !(resp.charCodeAt(floor((i*2+1)/8)+1)&(1<<((i*2+1)%8))))
-			tmpLastDesc = i + 1;
-	}
-
-	rez = "";
-	for(iB = 0; iB < 8; iB++) rez += SYS.strFromCharCode(sn[iB]);
-	if(sn[0] && lstDiscr != 63 && !Special.FLibSYS.CRC(rez,0x8C,8,0))	lstDiscr = tmpLastDesc;
-	else { rez = ""; lstDiscr = 0; }
-
-	return rez;
-}
-
-//Set transport and init
-if(f_start) {
-	tmResc_ = 0;
-	devLs = new Object();
-	transport_ = transport;
-	tr = SYS.Transport.Serial["out_"+transport];
-	DS2480 = isData = false;
-}
-if(f_stop) {
-	for(var devID in devLs) {
-		if((dO=devLs[devID]).isEVal()) continue;
-		aLs = dO.dP.nodeList("a_");
-		for(iA = 0; iA < aLs.length; iA++)
-			if(!dO.dP[aLs[iA]].isCfg()) dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
-	}
-	devLs = tr = false;
-	return;
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial["out_"+transport];
-	transport_ = transport;
-	DS2480 = false;
-}
-//Try DS2480
-if(tr && !DS2480)	{
-	tr.addr(tr.addr().parse(0,":")+":9600:8N1");	tr.timings("500:20");
-	if(tr.start(true)) {
-		tr.sendbreak(); SYS.sleep(2e-3);
-		tr.messIO(SYS.strFromCharCode(0xC1));	SYS.sleep(4e-3);	//Send timing byte
-		//PDSRC=1.37Vus; W1LT=10us; DSO/WORT=8us;
-		//read the baud rate (to test command block); do 1 bit operation (to test 1-Wire block)
-		req = SYS.strFromCharCode(0x17, 0x45, 0x5B, 0x0F, 0x91);
-		for(resp = tr.messIO(req); resp.length && resp.length < 5 && (tresp=tr.messIO("")).length; resp += tresp) ;
-		if(resp.length == 5 && (resp.charCodeAt(3)&0xF1) == 0x00 && (resp.charCodeAt(3)&0x0E) == 0x00/*9600*/ &&
-				(resp.charCodeAt(4)&0xF0) == 0x90 && (resp.charCodeAt(4)&0x0C) == 0x00/*9600*/)
-			DS2480 = true;
-	}
-	isData = false;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
-else if(!DS2480)	t_err = "2:"+tr("DS2480 is not detected.");
-else {
-	//Generic information update.
-	if(f_start || (tmResc && (tmResc_=tmResc_-1/f_frq) <= 0)) {
-		tmResc_ = tmResc;
-		tmSc = SYS.time();
-		// Check for power
-		if(!reset(tr) ||
-		 	io(tr,(req=SYS.strFromCharCode(0xCC))) != req ||
-			io(tr,(req=SYS.strFromCharCode(0xB4))) != req ||
-			!(resp=io(tr,SYS.strFromCharCode(1),1)).length) power = EVAL;
-		else power = resp.charCodeAt(0);
-		// Scan for allowed devices on the bus.
-		sn = new Array(0, 0, 0, 0, 0, 0, 0, 0);
-		for(devID = "start", lstDiscr = 0; devID.length && lstDiscr >= 0; ) {
-			if((devID=scan(tr,sn,lstDiscr)).length)	{
-				//SYS.messInfo("OneWire","lstDiscr="+lstDiscr+"; devID="+SYS.strDecode(devID,"Bin"," "));
-				if((dO=devLs[devID]).isEVal()) {
-					devLs[devID] = dO = new Object();
-					devFamily = devID.charCodeAt(0); devNm = tr("1W device"); dO.isT = false;
-					if(devFamily == 0x10)			{ devNm = "DS1820/DS18S20/DS1920"; dO.isT = true; }
-					else if(devFamily == 0x20)	devNm = "DS2450";		//4AI
-					else if(devFamily == 0x22)	{ devNm = "DS1822"; dO.isT = true; }
-					else if(devFamily == 0x26)	devNm = "DS2438";		//SmartBat
-					else if(devFamily == 0x28)	{ devNm = "DS18B20"; dO.isT = true; }
-					else if(devFamily == 0x29)	devNm = "DS2408";		//8DIO
-					else if(devFamily == 0x3A)	devNm = "DS2413";		//2DIO
-
-					// Create the device''s parameter object
-					decId = SYS.strDecode(devID,"Bin","");
-					SYS.cntrReq(SYS.XMLNode("add").setAttr("path",this.nodePath()+"/%2fbr%2fprm_").setAttr("id",decId).setText(devNm+": "+decId));
-					SYS.cntrReq(SYS.XMLNode("set").setAttr("path",this.nodePath()+"/prm_"+decId+"/%2fprm%2fst%2fen").setText("1"));
-					// Create the device''s proper attributes
-					dO.dP = dP = this["prm_"+decId];
-					if(dO.isT) {	//Temperature
-						dP.attrAdd("val", tr("Temperature, °С"), "real|ro");
-						dP.attrAdd("m", tr("User cell [0...65535]"), "integer");
-						dP.attrAdd("res", tr("Resolution")+" [9...12]", "integer");
-					}
-					else if(devFamily == 0x20)		//DS2450
-						for(iN = 0; iN < 4; iN++) {
-							dP.attrAdd("ai"+iN, tr("AI, V")+iN, "real|ro");
-							dP.attrAdd("res"+iN, tr("Resolution")+iN+" [1...16]", "integer");
-							dP.attrAdd("md"+iN, tr("Mode")+iN, "integer|sel", "0;1;2\n2.55V;5.10V;DO");
-							dP.attrAdd("do"+iN, tr("DO")+iN, "boolean");
-						}
-					else if(devFamily == 0x26) {	//DS2438
-						dP.attrAdd("t", tr("Temperature, °С"), "real|ro");
-						dP.attrAdd("v", tr("Voltage, V"), "real|ro");
-						dP.attrAdd("i", tr("Current, A"), "real|ro");
-						dP.attrAdd("ICA", tr("Current Accumulator"), "integer");
-						dP.attrAdd("thr", tr("Accumulation threshold"), "integer|sel", "0;1;2;3\nNone;±2LSB;±4LSB;±8LSB");
-						dP.attrAdd("ETM", tr("Elapsed time meter"), "integer");
-						dP.attrAdd("TM_DISC", tr("Disconnect time"), "integer");
-						dP.attrAdd("TM_END", tr("End of charge time"), "integer");
-						dP.attrAdd("OFF", tr("Current Offset"), "integer");
-						dP.attrAdd("IAD", tr("Enable Current A/D"), "boolean");
-						dP.attrAdd("CA", tr("Enable Current Accumulator"), "boolean");
-						dP.attrAdd("EE", tr("Enable Current Accumulator Shadow"), "boolean");
-						dP.attrAdd("AD", tr("Voltage A/D (0-VAD,1-VDD)"), "boolean");
-					}
-					else if(devFamily == 0x29)		//DS2408
-						for(iD = 0; iD < 8; iD++) {
-							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
-							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
-						}
-					else if(devFamily == 0x3A)		//DS2413
-						for(iD = 0; iD < 2; iD++) {
-							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
-							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
-						}
-				}
-				if(dO.tmSc == tmSc)	break;	//Somthing wrong into the scan but repeat, interruption
-				dO.tmSc = tmSc;
-				dO.try = tryEVAL;
-			}
-		}
-		//Check for removed devices
-		for(devID in devLs) {
-			if((dO=devLs[devID]).isEVal()) continue;
-			if(dO.tmSc != tmSc)	{
-				devLs[devID] = EVAL;
-				aLs = dO.dP.nodeList("a_");
-				for(iA = 0; iA < aLs.length; iA++)
-					if(!dO.dP[aLs[iA]].isCfg())	dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
-			}
-		}
-	}
-	else {
-		//Process devices for reading current value and set modifable
-		for(devID in devLs) {
-			if((dO=devLs[devID]).isEVal()) continue;
-			devFamily = devID.charCodeAt(0);
-			if(dO.isT) {	//Temperature
-				dP = dO.dP;
-				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
-				//Check for a modifications
-				isMdf = false;
-				m_ = dP.m.get(), res_ = max(9,min(12,dP.res.get()));
-				if(!dO.m.isEVal() && !dO.res.isEVal() && (m_ != dO.m || res_ != dO.res)) {
-					//Set scratchpad
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x4E,m_&0xFF,(m_>>8)&0xFF,((res_-9)<<5)|0x1F))) != req) continue;
-					//Copy scratchpad part to the EEPROM
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x48))) != req) continue;
-					isMdf = true;
-				}
-
-				//Read current
-				// Call the transmission
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
-				if(!power) SYS.sleep(0.094*pow(2,(dO.res.isEVal()?12:dO.res)-9));
-				// Get scratchpad
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				/*out*/io(tr, SYS.strFromCharCode(0xBE));
-				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				if(!Special.FLibSYS.CRC(resp,0x8C,8,0)) {
-					val = resp.charCodeAt(1)*256 + resp.charCodeAt(0);
-					if(val > 32767) val -= 65536;
-					dP.val.set(val/16, 0, 0, true);
-					if(dO.m.isEVal() || dO.res.isEVal() || isMdf) {
-						dO.m = resp.charCodeAt(3)*256 + resp.charCodeAt(2); dP.m.set(dO.m, 0, 0, true);
-						dO.res = ((resp.charCodeAt(4)>>5)&0x3)+9; dP.res.set(dO.res, 0, 0, true);
-					}
-					dO.try = 0;
-				}
-				else if((dO.try=dO.try+1) > tryEVAL) {
-					dP.val.set(EVAL, 0, 0, true); dP.m.set(EVAL, 0, 0, true); dP.res.set(EVAL, 0, 0, true);
-					dO.m = dO.res = EVAL;
-				}
-			}
-			else if(devFamily == 0x20) {	//DS2450
-				dP = dO.dP;
-				//Check for a modifications
-				for(iN = 0; iN < 4; iN++) {
-					if(dO["st1"+iN].isEVal())	continue;
-					if((tRes=max(0,min(16,dP["res"+iN].get()))) == 16)	tRes = 0;
-					tSt = (dO["st1"+iN]&(~0xCF)) + tRes + ((dP["md"+iN].get()==2)?0x80:0) + (dP["do"+iN].get()?0x40:0);
-					if(tSt != dO["st1"+iN]) {	//Same write and check the result
-						if(!reset(tr)) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2,0,tSt))) != req) continue;
-						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
-						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
-							dO["st1"+iN] = tSt;
-					}
-					tSt = (dO["st2"+iN]&(~0x01)) + (dP["md"+iN].get()?1:0);
-					if(tSt != dO["st2"+iN]) {	//Same write and check the result
-						if(!reset(tr)) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2+1,0,tSt))) != req) continue;
-						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
-						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
-							dO["st2"+iN] = tSt;
-					}
-				}
-
-				//Read control status data
-				if(dP["res0"].get().isEVal()) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x08,0x00))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
-					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x08,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
-					for(iN = 0; iN < 4; iN++) {
-						dP["res"+iN].set(CRC_OK?((tVl=resp.charCodeAt(iN*2)&0xF)?tVl:16):EVAL, 0, 0, true);
-						dP["md"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x80)?2:resp.charCodeAt(iN*2+1)&1):EVAL, 0, 0, true);
-						dP["do"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x40)?true:false):EVAL, 0, 0, true);
-						dO["st1"+iN] = resp.charCodeAt(iN*2); dO["st2"+iN] = resp.charCodeAt(iN*2+1);
-					}
-				} else CRC_OK = true;
-
-				//Read AI value
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x00,0x00))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")/*+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0x3C,0x08,0x00)/*+resp.slice(0,-2),0xA001,16,0).toString(16)*/);
-					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
-					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x00,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
-				}
-				for(iN = 0; iN < 4; iN++)
-					if(CRC_OK) {
-						tVl = (resp.charCodeAt(iN*2+1)<<8) + resp.charCodeAt(iN*2);
-						vlMax = dP["md"+iN].get() ? 5.1 : 2.55;
-						dP["ai"+iN].set(tVl*vlMax/65536, 0, 0, true);
-					} else dP["ai"+iN].set(EVAL, 0, 0, true);
-
-				//Start A/D conversion for prepare data for next iteration
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x3C,0x0F,0x00))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
-				}
-			}
-			else if(devFamily == 0x26) {	//DS2438
-				dP = dO.dP;
-				//Check for a modifications
-				//????
-
-				//Recall memory page 0
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xB8,0))) != req) continue;
-				//Read current state
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xBE,0))) != req) continue;
-				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-				CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
-				if(CRC_OK) {
-					if((tVl=(resp.charCodeAt(2)<<8)+resp.charCodeAt(1)) >= 32767) tVl -= 65536;
-					dP["t"].set(tVl/256, 0, 0, true);
-					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
-					dP["i"].set(tVl, 0, 0, true);
-				}
-				else {
-					dP["t"].set(EVAL, 0, 0, true);
-					dP["i"].set(EVAL, 0, 0, true);
-				}
-				dP["v"].set(CRC_OK?((resp.charCodeAt(4)<<8)+resp.charCodeAt(3))/100:EVAL, 0, 0, true);
-				dP["IAD"].set(CRC_OK?(resp.charCodeAt(0)&0x01):EVAL, 0, 0, true);
-				dP["CA"].set(CRC_OK?(resp.charCodeAt(0)&0x02):EVAL, 0, 0, true);
-				dP["EE"].set(CRC_OK?(resp.charCodeAt(0)&0x04):EVAL, 0, 0, true);
-				dP["AD"].set(CRC_OK?(resp.charCodeAt(0)&0x08):EVAL, 0, 0, true);
-				dP["thr"].set(CRC_OK?(resp.charCodeAt(7)>>6):EVAL, 0, 0, true);
-
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xBE,1))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
-					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				}
-				dP["ETM"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
-				dP["ICA"].set(CRC_OK?resp.charCodeAt(4):EVAL, 0, 0, true);
-				if(CRC_OK) {
-					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
-					dP["OFF"].set(tVl, 0, 0, true);
-				} else dP["OFF"].set(EVAL, 0, 0, true);
-
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xBE,2))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
-					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				}
-				dP["TM_DISC"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
-				dP["TM_END"].set(CRC_OK?((resp.charCodeAt(7)<<24)+(resp.charCodeAt(6)<<16)+(resp.charCodeAt(5)<<8)+resp.charCodeAt(4)):EVAL, 0, 0, true);
-
-				//Start T ant V conversion for prepare the data for next iteration
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xB4))) != req) continue;
-				}
-			}
-			else if(devFamily == 0x29) {	//DS2408
-				dP = dO.dP;
-				//Check for a modifications
-				isMdf = false; tVl = 0; do_ = new Array();
-				for(iD = 0; iD < 8; iD++) {
-					if(dO["do"+iD].isEVal())	{ isMdf = false; break; }
-					do_[iD] = dP["do"+iD].get();
-					if(do_[iD] != dO["do"+iD])	isMdf = true;
-					if(do_[iD])	tVl = tVl | (1<<iD);
-				}
-				if(isMdf) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,~tVl))) != req) continue;
-					// Verify the correct writing, pass by that can be wrong
-					//resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
-					//SYS.messInfo("OneWire","Write resp="+SYS.strDecode(resp,"Bin"," "));
-				}
-
-				//Read current state
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xF0,0x88,0x00))) != req) continue;
-				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));//+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0).toString(16));
-				CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
-				CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
-				for(iD = 0; iD < 8; iD++) {
-					dP["di"+iD].set(CRC_OK?resp.charCodeAt(0)&(1<<iD):EVAL, 0, 0, true);
-					if(dO["do"+iD].isEVal() || isMdf || !CRC_OK) {
-						dO["do"+iD] = CRC_OK ? ((resp.charCodeAt(1)&(1<<iD))?true:false) : EVAL;
-						dP["do"+iD].set(dO["do"+iD], 0, 0, true);
-					}
-				}
-			}
-			else if(devFamily == 0x3A) {	//DS2413
-				dP = dO.dP;
-				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
-				//Check for a modifications
-				isMdf = false;
-				do0_ = dP.do0.get(), do1_ = dP.do1.get();
-				if(!dO.do0.isEVal() && !dO.do1.isEVal() && (do0_ != dO.do0 || do1_ != dO.do1)) {
-					tVl = (do1_<<1) | do0_;
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,(~tVl)&0xFF))) != req) continue;
-					isMdf = true;
-				}
-
-				//Read current state
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xF5))) != req) continue;
-				resp = io(tr, SYS.strFromCharCode(0xFF));
-				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				if(((tVl=resp.charCodeAt(0))&0xF) == ((~(tVl>>4))&0xF)) {
-					dP.di0.set(tVl&0x01, 0, 0, true); dP.di1.set(tVl&0x04, 0, 0, true);
-					if(dO.do0.isEVal() || dO.do1.isEVal() || isMdf) {
-						dO.do0 = (tVl&0x02)?true:false; dP.do0.set(dO.do0, 0, 0, true);
-						dO.do1 = (tVl&0x08)?true:false; dP.do1.set(dO.do1, 0, 0, true);
-					}
-				}
-				else {
-					dP.di0.set(EVAL, 0, 0, true); dP.di1.set(EVAL, 0, 0, true);
-					dP.do0.set(EVAL, 0, 0, true); dP.do1.set(EVAL, 0, 0, true);
-					dO.do0 = dO.do1 = EVAL;
-				}
-			}
-		}
-	}
-}
-
-f_err = t_err;','','',1486839523);
-INSERT INTO "tmplib_DevLib" VALUES('1W_DS9097','One Wire by DS9097','','','One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
-Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.2.0','','',30,0,'JavaLikeCalc.JavaScript
-//Functions
-function reset(tr) {
-	tr.addr(tr.addr().parse(0,":")+":9600:8N1"); tr.start(true);
-	rez = tr.messIO(SYS.strFromCharCode(0xF0));
-	tr.addr(tr.addr().parse(0,":")+":115200:8N1"); tr.timings("100:2-0"); tr.start(true);
-	tr.messIO("");
-	return rez.length && rez.charCodeAt(0) != 0xF0;
-}
-
-function io(tr, mess, bits) {
-	if(bits == EVAL) bits = mess.length * 8;
-	req = "";
-	for(iB = 0; iB < ceil(bits/8); iB++) {
-		vB = mess.charCodeAt(iB);
-		bB = ((iB+1)*8 > bits) ? bits-floor(bits/8)*8 : 8;
-		for(iBi = 0; iBi < bB; iBi++) req += SYS.strFromCharCode((vB&(1<<iBi)) ? 0xFF : 0x00);
-	}
-	//SYS.messInfo("OneWire","bits="+bits+"; req="+SYS.strDecode(req,"Bin"," "));
-	for(resp = tr.messIO(req); resp.length < req.length && (tresp=tr.messIO("")).length; resp += tresp) ;
-	//SYS.messInfo("OneWire","bits="+bits+"; resp="+SYS.strDecode(resp,"Bin"," "));
-	rez = "";
-	for(iR = 0; iR < resp.length; ) {
-		vB = 0;
-		for(ib = 0; ib < 8 && iR < resp.length; iR++, ib++)
-			if(resp.charCodeAt(iR)&1) vB = vB | (1<<ib);
-		rez += SYS.strFromCharCode(vB);
-	}		
-	return rez;
-}
-
-function scan(tr, sn, lstDiscr) {
-	if(!reset(tr)) return "";
-	io(tr, SYS.strFromCharCode(0xF0));
-	for(nByte = 0, nBit = 1, tBit = 0, sDir = false, mskByte = 1, lstZero = 0; nByte < 8; ) {
-		tBit = io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0) << 1;
-		tBit = tBit | io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0);
-		//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; tBit="+tBit);
-		if(tBit == 3) break;
-		if(tBit > 0) sDir = !(tBit&0x01);
-		else {
-			//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; lstDiscr="+lstDiscr);
-			if(nBit < lstDiscr) sDir = sn[nByte]&mskByte;
-			else sDir = (nBit == lstDiscr);
-			if(!sDir) lstZero = nBit;
-			//if(lstZero < 9) lstDiscr = lstZero;
-			//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; sDir="+sDir+"; mskByte="+mskByte);
-		}
-		if(sDir) sn[nByte] = sn[nByte] | mskByte;
-		else sn[nByte] = sn[nByte] & (~mskByte);
-		tr.messIO(SYS.strFromCharCode(sDir?0xFF:0x00));
-		nBit++;
-     mskByte = (mskByte<<1)&0xFF;
-		if(!mskByte) { nByte++; mskByte = 1; }
-	}
-
-	rez = "";
-	if(nByte == 8) {
-		for(iB = 0; iB < nByte; iB++) rez += SYS.strFromCharCode(sn[iB]);
-		if(!Special.FLibSYS.CRC(rez,0x8C,8,0))	lstDiscr = lstZero;
-		else { rez = ""; lstDiscr = 0; }
-	}
-
-	return rez;
-}
-
-//Set transport and init
-if(f_start) {
-	tmResc_ = tmResc;
-	devLs = new Object();
-	transport_ = transport;
-	tr = SYS.Transport.Serial["out_"+transport];
-}
-if(f_stop) {
-	for(var devID in devLs) {
-		if((dO=devLs[devID]).isEVal()) continue;
-		aLs = dO.dP.nodeList("a_");
-		for(iA = 0; iA < aLs.length; iA++)
-			if(!dO.dP[aLs[iA]].isCfg()) dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
-	}
-	devLs = tr = false;
-	return;
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial["out_"+transport];
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
-else {
-	//Generic information update.
-	if(f_start || (tmResc && (tmResc_=tmResc_-1/f_frq) <= 0)) {
-		tmResc_ = tmResc;
-		tmSc = SYS.time();
-		// Check for power
-		if(!reset(tr) ||
-		 	io(tr,(req=SYS.strFromCharCode(0xCC))) != req ||
-			io(tr,(req=SYS.strFromCharCode(0xB4))) != req ||
-			!(resp=io(tr,SYS.strFromCharCode(1),1)).length) power = EVAL;
-		else power = resp.charCodeAt(0);
-		// Scan for allowed devices on the bus.
-		sn = new Array(0, 0, 0, 0, 0, 0, 0, 0);
-		for(devID = "start", lstDiscr = -1; devID.length && lstDiscr; ) {
-			if(lstDiscr < 0) lstDiscr = 0;
-			if((devID=scan(tr,sn,lstDiscr)).length)	{
-				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
-				if((dO=devLs[devID]).isEVal()) {
-					devLs[devID] = dO = new Object();
-					devFamily = devID.charCodeAt(0); devNm = tr("1W device"); dO.isT = false;
-					if(devFamily == 0x10)			{ devNm = "DS1820/DS18S20/DS1920"; dO.isT = true; }
-					else if(devFamily == 0x20)	devNm = "DS2450";		//4AI
-					else if(devFamily == 0x22)	{ devNm = "DS1822"; dO.isT = true; }
-					else if(devFamily == 0x26)	devNm = "DS2438";		//SmartBat
-					else if(devFamily == 0x28)	{ devNm = "DS18B20"; dO.isT = true; }
-					else if(devFamily == 0x29)	devNm = "DS2408";		//8DIO
-					else if(devFamily == 0x3A)	devNm = "DS2413";		//2DIO
-
-					// Create the device''s parameter object
-					decId = SYS.strDecode(devID,"Bin","");
-					SYS.cntrReq(SYS.XMLNode("add").setAttr("path",this.nodePath()+"/%2fbr%2fprm_").setAttr("id",decId).setText(devNm+": "+decId));
-					SYS.cntrReq(SYS.XMLNode("set").setAttr("path",this.nodePath()+"/prm_"+decId+"/%2fprm%2fst%2fen").setText("1"));
-					// Create the device''s proper attributes
-					dO.dP = dP = this["prm_"+decId];
-					if(dO.isT) {	//Temperature
-						dP.attrAdd("val", tr("Temperature, °С"), "real|ro");
-						dP.attrAdd("m", tr("User cell [0...65535]"), "integer");
-						dP.attrAdd("res", tr("Resolution")+" [9...12]", "integer");
-					}
-					else if(devFamily == 0x20)		//DS2450
-						for(iN = 0; iN < 4; iN++) {
-							dP.attrAdd("ai"+iN, tr("AI, V")+iN, "real|ro");
-							dP.attrAdd("res"+iN, tr("Resolution")+iN+" [1...16]", "integer");
-							dP.attrAdd("md"+iN, tr("Mode")+iN, "integer|sel", "0;1;2\n2.55V;5.10V;DO");
-							dP.attrAdd("do"+iN, tr("DO")+iN, "boolean");
-						}
-					else if(devFamily == 0x26) {	//DS2438
-						dP.attrAdd("t", tr("Temperature, °С"), "real|ro");
-						dP.attrAdd("v", tr("Voltage, V"), "real|ro");
-						dP.attrAdd("i", tr("Current, A"), "real|ro");
-						dP.attrAdd("ICA", tr("Current Accumulator"), "integer");
-						dP.attrAdd("thr", tr("Accumulation threshold"), "integer|sel", "0;1;2;3\nNone;±2LSB;±4LSB;±8LSB");
-						dP.attrAdd("ETM", tr("Elapsed time meter"), "integer");
-						dP.attrAdd("TM_DISC", tr("Disconnect time"), "integer");
-						dP.attrAdd("TM_END", tr("End of charge time"), "integer");
-						dP.attrAdd("OFF", tr("Current Offset"), "integer");
-						dP.attrAdd("IAD", tr("Enable Current A/D"), "boolean");
-						dP.attrAdd("CA", tr("Enable Current Accumulator"), "boolean");
-						dP.attrAdd("EE", tr("Enable Current Accumulator Shadow"), "boolean");
-						dP.attrAdd("AD", tr("Voltage A/D (0-VAD,1-VDD)"), "boolean");
-					}
-					else if(devFamily == 0x29)		//DS2408
-						for(iD = 0; iD < 8; iD++) {
-							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
-							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
-						}
-					else if(devFamily == 0x3A)		//DS2413
-						for(iD = 0; iD < 2; iD++) {
-							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
-							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
-						}
-				}
-				if(dO.tmSc == tmSc)	break;	//Somthing wrong into the scan but repeat, interruption
-				dO.tmSc = tmSc;
-				dO.try = tryEVAL;
-			}
-		}
-		//Check for removed devices
-		for(devID in devLs) {
-			if((dO=devLs[devID]).isEVal()) continue;
-			if(dO.tmSc != tmSc)	{
-				devLs[devID] = EVAL;
-				aLs = dO.dP.nodeList("a_");
-				for(iA = 0; iA < aLs.length; iA++)
-					if(!dO.dP[aLs[iA]].isCfg())	dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
-			}
-		}
-	}
-	else {
-		//Process devices for reading current value and set modifable
-		for(devID in devLs) {
-			if((dO=devLs[devID]).isEVal()) continue;
-			devFamily = devID.charCodeAt(0);
-			if(dO.isT) {	//Temperature
-				dP = dO.dP;
-				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
-				//Check for a modifications
-				isMdf = false;
-				m_ = dP.m.get(), res_ = max(9,min(12,dP.res.get()));
-				if(!dO.m.isEVal() && !dO.res.isEVal() && (m_ != dO.m || res_ != dO.res)) {
-					//Set scratchpad
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x4E,m_&0xFF,(m_>>8)&0xFF,((res_-9)<<5)|0x1F))) != req) continue;
-					//Copy scratchpad part to the EEPROM
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x48))) != req) continue;
-					isMdf = true;
-				}
-
-				//Read current
-				// Call the transmission
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
-				if(!power) SYS.sleep(0.094*pow(2,(dO.res.isEVal()?12:dO.res)-9));
-				// Get scratchpad
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				io(tr, SYS.strFromCharCode(0xBE));
-				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				if(!Special.FLibSYS.CRC(resp,0x8C,8,0)) {
-					val = resp.charCodeAt(1)*256 + resp.charCodeAt(0);
-					if(val > 32767) val -= 65536;
-					dP.val.set(val/16, 0, 0, true);
-					if(dO.m.isEVal() || dO.res.isEVal() || isMdf) {
-						dO.m = resp.charCodeAt(3)*256 + resp.charCodeAt(2); dP.m.set(dO.m, 0, 0, true);
-						dO.res = ((resp.charCodeAt(4)>>5)&0x3)+9; dP.res.set(dO.res, 0, 0, true);
-					}
-					dO.try = 0;
-				}
-				else if((dO.try=dO.try+1) > tryEVAL) {
-					dP.val.set(EVAL, 0, 0, true); dP.m.set(EVAL, 0, 0, true); dP.res.set(EVAL, 0, 0, true);
-					dO.m = dO.res = EVAL;
-				}
-			}
-			else if(devFamily == 0x20) {	//DS2450
-				dP = dO.dP;
-				//Check for a modifications
-				for(iN = 0; iN < 4; iN++) {
-					if(dO["st1"+iN].isEVal())	continue;
-					if((tRes=max(0,min(16,dP["res"+iN].get()))) == 16)	tRes = 0;
-					tSt = (dO["st1"+iN]&(~0xCF)) + tRes + ((dP["md"+iN].get()==2)?0x80:0) + (dP["do"+iN].get()?0x40:0);
-					if(tSt != dO["st1"+iN]) {	//Same write and check the result
-						if(!reset(tr)) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2,0,tSt))) != req) continue;
-						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
-						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
-							dO["st1"+iN] = tSt;
-					}
-					tSt = (dO["st2"+iN]&(~0x01)) + (dP["md"+iN].get()?1:0);
-					if(tSt != dO["st2"+iN]) {	//Same write and check the result
-						if(!reset(tr)) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2+1,0,tSt))) != req) continue;
-						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
-						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
-							dO["st2"+iN] = tSt;
-					}
-				}
-
-				//Read control status data
-				if(dP["res0"].get().isEVal()) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x08,0x00))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
-					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x08,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
-					for(iN = 0; iN < 4; iN++) {
-						dP["res"+iN].set(CRC_OK?((tVl=resp.charCodeAt(iN*2)&0xF)?tVl:16):EVAL, 0, 0, true);
-						dP["md"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x80)?2:resp.charCodeAt(iN*2+1)&1):EVAL, 0, 0, true);
-						dP["do"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x40)?true:false):EVAL, 0, 0, true);
-						dO["st1"+iN] = resp.charCodeAt(iN*2); dO["st2"+iN] = resp.charCodeAt(iN*2+1);
-					}
-				} else CRC_OK = true;
-
-				//Read AI value
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x00,0x00))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")/*+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0x3C,0x08,0x00)/*+resp.slice(0,-2),0xA001,16,0).toString(16)*/);
-					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
-					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x00,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
-				}
-				for(iN = 0; iN < 4; iN++)
-					if(CRC_OK) {
-						tVl = (resp.charCodeAt(iN*2+1)<<8) + resp.charCodeAt(iN*2);
-						vlMax = dP["md"+iN].get() ? 5.1 : 2.55;
-						dP["ai"+iN].set(tVl*vlMax/65536, 0, 0, true);
-					} else dP["ai"+iN].set(EVAL, 0, 0, true);
-
-				//Start A/D conversion for prepare data for next iteration
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x3C,0x0F,0x00))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
-				}
-			}
-			else if(devFamily == 0x26) {	//DS2438
-				dP = dO.dP;
-				//Check for a modifications
-				//????
-
-				//Recall memory page 0
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xB8,0))) != req) continue;
-				//Read current state
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xBE,0))) != req) continue;
-				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-				CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
-				if(CRC_OK) {
-					if((tVl=(resp.charCodeAt(2)<<8)+resp.charCodeAt(1)) >= 32767) tVl -= 65536;
-					dP["t"].set(tVl/256, 0, 0, true);
-					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
-					dP["i"].set(tVl, 0, 0, true);
-				}
-				else {
-					dP["t"].set(EVAL, 0, 0, true);
-					dP["i"].set(EVAL, 0, 0, true);
-				}
-				dP["v"].set(CRC_OK?((resp.charCodeAt(4)<<8)+resp.charCodeAt(3))/100:EVAL, 0, 0, true);
-				dP["IAD"].set(CRC_OK?(resp.charCodeAt(0)&0x01):EVAL, 0, 0, true);
-				dP["CA"].set(CRC_OK?(resp.charCodeAt(0)&0x02):EVAL, 0, 0, true);
-				dP["EE"].set(CRC_OK?(resp.charCodeAt(0)&0x04):EVAL, 0, 0, true);
-				dP["AD"].set(CRC_OK?(resp.charCodeAt(0)&0x08):EVAL, 0, 0, true);
-				dP["thr"].set(CRC_OK?(resp.charCodeAt(7)>>6):EVAL, 0, 0, true);
-
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xBE,1))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
-					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				}
-				dP["ETM"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
-				dP["ICA"].set(CRC_OK?resp.charCodeAt(4):EVAL, 0, 0, true);
-				if(CRC_OK) {
-					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
-					dP["OFF"].set(tVl, 0, 0, true);
-				} else dP["OFF"].set(EVAL, 0, 0, true);
-
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xBE,2))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
-					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				}
-				dP["TM_DISC"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
-				dP["TM_END"].set(CRC_OK?((resp.charCodeAt(7)<<24)+(resp.charCodeAt(6)<<16)+(resp.charCodeAt(5)<<8)+resp.charCodeAt(4)):EVAL, 0, 0, true);
-
-				//Start T ant V conversion for prepare the data for next iteration
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xB4))) != req) continue;
-				}
-			}
-			else if(devFamily == 0x29) {	//DS2408
-				dP = dO.dP;
-				//Check for a modifications
-				isMdf = false; tVl = 0; do_ = new Array();
-				for(iD = 0; iD < 8; iD++) {
-					if(dO["do"+iD].isEVal())	{ isMdf = false; break; }
-					do_[iD] = dP["do"+iD].get();
-					if(do_[iD] != dO["do"+iD])	isMdf = true;
-					if(do_[iD])	tVl = tVl | (1<<iD);
-				}
-				if(isMdf) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,~tVl))) != req) continue;
-					// Verify the correct writing, pass by that can be wrong
-					//resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
-					//SYS.messInfo("OneWire","Write resp="+SYS.strDecode(resp,"Bin"," "));
-				}
-
-				//Read current state
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xF0,0x88,0x00))) != req) continue;
-				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0).toString(16));
-				CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
-				CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
-				for(iD = 0; iD < 8; iD++) {
-					dP["di"+iD].set(CRC_OK?resp.charCodeAt(0)&(1<<iD):EVAL, 0, 0, true);
-					if(dO["do"+iD].isEVal() || isMdf || !CRC_OK) {
-						dO["do"+iD] = CRC_OK ? ((resp.charCodeAt(1)&(1<<iD))?true:false) : EVAL;
-						dP["do"+iD].set(dO["do"+iD], 0, 0, true);
-					}
-				}
-			}
-			else if(devFamily == 0x3A) {	//DS2413
-				dP = dO.dP;
-				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
-				//Check for a modifications
-				isMdf = false;
-				do0_ = dP.do0.get(), do1_ = dP.do1.get();
-				if(!dO.do0.isEVal() && !dO.do1.isEVal() && (do0_ != dO.do0 || do1_ != dO.do1)) {
-					tVl = (do1_<<1) | do0_;
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,(~tVl)&0xFF))) != req) continue;
-					isMdf = true;
-				}
-
-				//Read current state
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xF5))) != req) continue;
-				resp = io(tr, SYS.strFromCharCode(0xFF));
-				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				if(((tVl=resp.charCodeAt(0))&0xF) == ((~(tVl>>4))&0xF)) {
-					dP.di0.set(tVl&0x01, 0, 0, true); dP.di1.set(tVl&0x04, 0, 0, true);
-					if(dO.do0.isEVal() || dO.do1.isEVal() || isMdf) {
-						dO.do0 = (tVl&0x02)?true:false; dP.do0.set(dO.do0, 0, 0, true);
-						dO.do1 = (tVl&0x08)?true:false; dP.do1.set(dO.do1, 0, 0, true);
-					}
-				}
-				else {
-					dP.di0.set(EVAL, 0, 0, true); dP.di1.set(EVAL, 0, 0, true);
-					dP.do0.set(EVAL, 0, 0, true); dP.do1.set(EVAL, 0, 0, true);
-					dO.do0 = dO.do1 = EVAL;
-				}
-			}
-		}
-	}
-}
-
-f_err = t_err;','','',1486839515);
-INSERT INTO "tmplib_DevLib" VALUES('PCF8574','I2C: PCF8574','','','I2C 8-bit 8DIO. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
-//Set transport
-if(f_start) {
-	f_err = "0";
-	transport_ = transport;
-	tr = SYS.Transport.Serial["out_"+transport];
-	di0 = di1 = di2 = di3 = di4 = di5 = di6 = di7 = EVAL;
-	do0 = do1 = do2 = do3 = do4 = do5 = do6 = do7 = true;
-	do0_ = do1_ = do2_ = do3_ = do4_ = do5_ = do6_ = do7_ = true;
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial["out_"+transport];
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
-else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
-else {
-	if(do0 != do0_ || do1 != do1_ || do2 != do2_ || do3 != do3_ || do4 != do4_ || do5 != do5_ || do6 != do6_ || do7 != do7_) {
-		tr.messIO(SYS.strFromCharCode(addr,(do0?0x01:0)|(do1?0x02:0)|(do2?0x04:0)|(do3?0x08:0)|
-																(do4?0x10:0)|(do5?0x20:0)|(do6?0x40:0)|(do7?0x80:0)), 0, 0);
-		do0_ = do0; do1_ = do1; do2_ = do2; do3_ = do3; do4_ = do4; do5_ = do5; do6_ = do6; do7_ = do7;
-	}
-	rez = tr.messIO(SYS.strFromCharCode(addr), 0, 1);
-	if(rez.length) {
-		vl = rez.charCodeAt(0);
-		di0 = (vl&0x01); di1 = (vl&0x02); di2 = (vl&0x04); di3 = (vl&0x08);
-		di4 = (vl&0x10); di5 = (vl&0x20); di6 = (vl&0x40); di7 = (vl&0x80);
-	}
-	else t_err = "3:"+tr("No read result.");
-}
-
-if(t_err.toInt() && !f_err.toInt())
-	di0 = di1 = di2 = di3 = di4 = di5 = di6 = di7 = EVAL;
-
-f_err = t_err;','','',1478967014);
-INSERT INTO "tmplib_DevLib" VALUES('BMP180','I2C: BMP180','','','I2C Pressure and Temperature sensor. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
-//Set transport
-if(f_start) {
-	f_err = "0";
-	transport_ = transport;
-	tr = SYS.Transport.Serial["out_"+transport];
-	AC1 = 0;
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial["out_"+transport];
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
-else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
-else {
-	resp = Special.FLibSYS.IO("", "", "b");
-	//Calibration data, from register 0xAA and to 0xBF
-	if(!AC1) {
-		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xAA), 0, 22);
-		if(resp.string.length != 22) t_err = "3:"+tr("Wrong or empty respond to the calibration request.");
-		else {
-			AC1 = resp.read("int16",1);	AC2 = resp.read("int16",1);	AC3 = resp.read("int16",1);
-			AC4 = resp.read("uint16",1);	AC5 = resp.read("uint16",1);	AC6 = resp.read("uint16",1);
-			B1 = resp.read("int16",1);	B2 = resp.read("int16",1);
-			MB = resp.read("int16",1);	MC = resp.read("int16",1);	MD = resp.read("int16",1);
-			//SYS.messInfo("BMP180","AC1="+AC1+"; AC2="+AC2+"; AC3="+AC3+"; AC4="+AC4+"; AC5="+AC5+"; AC6="+AC6);
-		}
-	}
-
-	//Read and calculate temperature
-	if(AC1 && !t_err.toInt()) {
-		// Start conversion
-		tr.messIO(SYS.strFromCharCode(addr,0xF4,0x2E), 0, 0);	SYS.sleep(4.5e-3);
-		// Read value
-		resp.pos = 0; resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF6), 0, 2);
-		if(resp.string.length != 2) t_err = "3:"+tr("Wrong or empty respond to the temperature data.");
-		else {
-			UT = resp.read("int16",1);
-			X1 = (UT-AC6)*AC5/pow(2,15);	X2 = MC*pow(2,11)/(X1+MD);
-			B5 = X1 + X2;
-			t = 0.1*((B5+8)/pow(2,4));
-			//SYS.messInfo("BMP180","UT="+UT+"; X1="+X1+"; X2="+X2+"; B5="+B5+"; t="+t);
-		}
-	}
-	
-	//Read and calculate temperature
-	if(AC1 && !t_err.toInt()) {
-		oss = max(0,min(3,oss));
-		// Start conversion
-		tr.messIO(SYS.strFromCharCode(addr,0xF4,0x34+(oss<<6)), 0, 0);	SYS.sleep((1.5+3*pow(2,oss))*1e-3);
-		// Read value
-		resp.pos = 0; resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF6), 0, 4);
-		UP = resp.read("int32",1)>>(16-oss);
-		B6 = B5 - 4000;
-		X1 = (B2*(B6*floor(B6/pow(2,12))))/pow(2,11);
-		X2 = AC2*B6/pow(2,11);
-		X3 = X1 + X2;
-		B3 = (((AC1*4+X3)<<oss)+2)/4;
-		X1 = AC3*B6/pow(2,13);
-		X2 = (B1*(B6*B6/pow(2,12)))/pow(2,16);
-		X3 = ((X1+X2)+2)/pow(2,2);
-		B4 = AC4*(X3+32768)/pow(2,15);
-		B7 = (UP-B3)*(50000>>oss);
-		p = (B7 < 0x80000000) ? (B7*2)/B4 : (B7/B4)*2;
-		X1 = (p/pow(2,8))*(p/pow(2,8));
-		X1 = (X1*3038)/pow(2,16);
-		X2 = (-7357*p)/pow(2,16);
-		p = p + (X1+X2+3791)/pow(2,4);
-	}
-}
-
-if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
-f_err = t_err;','','',1478966946);
-INSERT INTO "tmplib_DevLib" VALUES('DS3231','I2C: DS3231','','','I2C RTC chip with Temperature sensor and calibration on it. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
-//Set transport
-if(f_start) {
-	f_err = "0";
-	transport_ = transport;
-	tr = SYS.Transport.Serial["out_"+transport];
-	tm_ = tm = "";
-	agOff_ = agOff = 0;
-	p32k_ = p32k = false;
-	pSQW_ = pSQW = false;
-	pSQWf_ = pSQWf = 0;
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial["out_"+transport];
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
-else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
-else {
-	//Check for modification
-	if(tm != tm_) {
-		off = 0; sdt = tm.parse(0,"T",off); stm = tm.parse(0,"T",off);
-		off = 0; year = sdt.parse(0,"-",off).toInt(16); month = sdt.parse(0,"-",off).toInt(16); day = sdt.parse(0,"-",off).toInt(16);
-		off = 0; hour = stm.parse(0,":",off).toInt(16); min = stm.parse(0,":",off).toInt(16); sec = stm.parse(0,":",off).toInt(16);
-		tr.messIO(SYS.strFromCharCode(addr,0,sec,min,hour,0,day,month+((year&0xF00)?0x80:0),year&0xFF), 0, 0);
-		tm_ = tm;
-	}
-	if(agOff != agOff_) {
-		tr.messIO(SYS.strFromCharCode(addr,16,agOff), 0, 0);
-		agOff_ = agOff;
-	}
-	if(p32k != p32k_) {
-		resp = tr.messIO(SYS.strFromCharCode(addr,15), 0, 1);
-		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty read respond.");
-		else {
-			cntrB = resp.charCodeAt(0);
-			cntrB = p32k ?	cntrB|0x08 : cntrB&(~0x08);
-			tr.messIO(SYS.strFromCharCode(addr,15,cntrB), 0, 0);
-		}
-		p32k_ = p32k;
-	}
-	if(pSQW != pSQW_) {
-		resp = tr.messIO(SYS.strFromCharCode(addr,14), 0, 1);
-		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty read respond.");
-		else {
-			cntrB = resp.charCodeAt(0);
-			cntrB = pSQW ? cntrB&(~0x04) : cntrB|0x04;
-			tr.messIO(SYS.strFromCharCode(addr,14,cntrB), 0, 0);
-		}
-		pSQW_ = pSQW;
-	}
-	if(pSQWf != pSQWf_) {
-		pSQWf = max(0,min(3,pSQWf));
-		resp = tr.messIO(SYS.strFromCharCode(addr,14), 0, 1);
-		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty read respond.");
-		else {
-			cntrB = (resp.charCodeAt(0)&(~0x18)) + (pSQWf<<3);
-			tr.messIO(SYS.strFromCharCode(addr,14,cntrB), 0, 0);
-		}
-		pSQWf_ = pSQWf;
-	}
-
-	//Get current
-	resp = tr.messIO(SYS.strFromCharCode(addr,0), 0, 19);
-	if(resp.length != 19) t_err = "3:"+tr("Wrong or empty read respond.");
-	else {
-		// Get current time
-		tm_ = tm = (20+(resp.charCodeAt(5)>>7)).toString(10,2)+resp.charCodeAt(6).toString(16,2)+"-" +
-				(resp.charCodeAt(5)&0x7F).toString(16,2)+"-" + 
-				resp.charCodeAt(4).toString(16,2)+"T" +
-				(resp.charCodeAt(2)&0x3F).toString(16,2)+":" +
-				resp.charCodeAt(1).toString(16,2)+":" + 
-				resp.charCodeAt(0).toString(16,2);
-		// Aging offset
-		if((agOff=resp.charCodeAt(16)) >= 128)	agOff = agOff-256;
-		agOff_ = agOff;
-
-		// Miscellaneous
-		p32k = p32k_ = resp.charCodeAt(15)&0x08;
-		pSQW = pSQW_ = !(resp.charCodeAt(14)&0x04);
-		pSQWf = pSQWf_ = (resp.charCodeAt(14)>>3)&0x3;
-
-		// Get temperature
-		t = (resp.charCodeAt(17)<<2)+(resp.charCodeAt(18)>>6);
-		if(t >= 128) t = t-256;
-		t = t/4;
-	}
-}
-
-if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
-f_err = t_err;','','',1479651485);
-INSERT INTO "tmplib_DevLib" VALUES('DHT','GPIO: DHT11,22 (AM23XX)','','','Digital Temperature and Humidity Sensor for models: DHT11, DHT12, AM2302, AM2320, ...
-The module designed for the sensors connect through GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
-Conditions: Exclusively realtime planing in the priority 199 (FIFO-99).
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//Set link to fast external functions
-if(f_start)	f_err = "0", addr_ = "";
-
-t_err = "0";
-
-//Check for the address change and link
-if(addr != addr_)	{
-	addr_ = addr;
-	function mode = addr+".fnc_mode";
-	function get = addr+".fnc_get";
-	function put = addr+".fnc_put";
-}
-
-//Read sensor''s data function declaration
-function read() {
-	vl = 0;						//Meassured value
-	cntHoldMax = 100;		//Maximum wait counter
-
-	//Call the device to a respond
-	mode(pin, 4); put(pin, true); tmSleep(500e-3);	//Set pin to output mode and next to true for 500ms
-	put(pin, false); tmSleep(20e-3);							//Set output to false for 20ms
-	mode(pin, 2);														//Set pin to input mode
-
-	//Read
-	// Wait for pull pin low.
-	for(cntHold = 0; get(pin); cntHold++)
-		if(cntHold > cntHoldMax) return 0;
-
-	//Meassure the typical pulse length
-	for(cntHold = 0; !get(pin); cntHold++)
-		if(cntHold > cntHoldMax) return 0;
-	for(cntHold = 0; get(pin); cntHold++)
-		if(cntHold > cntHoldMax) return 0;
-	cntPulse = cntHold;
-
-	//Read meassured value
-	for(iB = 0; iB < 40; iB++) {
-		//stg = iB;
-		for(cntHold = 0; !get(pin); cntHold++)
-			if(cntHold > cntHoldMax) return 0;
-		for(cntHold = 0; get(pin); cntHold++)
-			if(cntHold > cntHoldMax) return 0;
-		vl = vl << 1;
-		if(cntHold > cntPulse/2)	vl = vl | 1;
-	}
-
-	return vl;
-}
-
-//Main processing
-if(!mode)	t_err = "1:"+tr("No link to external functions on ''%1''.").replace("%1",addr);
-else if(!(dev == 0 || dev == 1))	t_err = "2:"+tr("Unknown device %1 [0-DHT11, 1-DHT22].").replace("%1",dev.toString());
-else if(tries < 1 || tries > 5)	t_err = "3:"+tr("Tries number %1 out of range [1...5].").replace("%1",tries.toString());
-else {
-	for(i = 0; i < tries; i++) {
-		if(i) tmSleep(2);	//Retry after two seconds
-		if((vl=read()) && (vl&0xFF) == ((((vl>>8)&0xFF)+((vl>>16)&0xFF)+((vl>>24)&0xFF)+((vl>>32)&0xFF))&0xFF)) {
-			//SYS.messInfo("/DHT","vl="+vl.toString(16));
-			if(dev == 1) {
-				h = 0.1*(((vl>>32)&0xFF)*256+((vl>>24)&0xFF));
-				t = 0.1*(((vl>>16)&0xFF)*256+((vl>>8)&0xFF));
-				break;
-			}
-			h = ((vl>>32)&0xFF) + 20; t = (vl>>16)&0xFF;
-		}
-	}
-	if(i >= tries)	t_err = "10:"+tr("Get data after %1 tries error.").replace("%1",tries.toString());
-}
-
-if(t_err.toInt() && !f_err.toInt()) t = h = EVAL;
-f_err = t_err;','','',1481127790);
-INSERT INTO "tmplib_DevLib" VALUES('1602A','GPIO|I2C: 1602A(HD44780)','','','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
-Conditions: Default planing policy but realtime one preferred.
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0','','',10,0,'JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//Set link to fast external functions
-if(f_start)	f_err = "0", transport_ = ln1_ = ln2_ = "";
-
-t_err = "0";
-
-//Check for the transport change and the link update
-if(transport != transport_)	{
-	transport_ = transport;
-	if(!(tr=SYS.Transport.Serial["out_"+transport]))
-		function put = transport+".fnc_put";
-}
-
-//Write a byte function declaration
-function byte(tr, vl, md, dl) {
-	if(md == EVAL_BOOL) md = false;
-	if(dl == EVAL_BOOL) dl = 50e-6;
-	if(tr) {
-		//RS(md) | RW(false) | E(false) | BackLight(true) | D4 | D5 | D6 | D7
-		com = (md?0x01:0) | 0x8 | (vl&0xF0);
-		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
-		tr.messIO(SYS.strFromCharCode(addr,com|0x04), 0, 0);	tmSleep(dl);	//E toggle
-		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
-		//RS(md) | RW(false) | E(false) | BackLight(true) | D0 | D1 | D2 | D3
-		com = (md?0x01:0) | 0x8 | ((vl<<4)&0xF0);
-		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
-		tr.messIO(SYS.strFromCharCode(addr,com|0x04), 0, 0);	tmSleep(dl);	//E toggle
-		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
-	}
-	else if(put) {
-		put(RS, md);
-		put(D4, vl&0x10); put(D5, vl&0x20); put(D6, vl&0x40); put(D7, vl&0x80);
-		tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
-		put(D4, vl&0x01); put(D5, vl&0x02); put(D6, vl&0x04); put(D7, vl&0x08);
-		tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
-	}
-}
-
-//Main processing
-if(!tr && !put)
-	t_err = "1:"+tr("Error for ''%1'' as an output transport of I2C or a link to external functions of GPIO.").replace("%1",transport);
-else if(ln1 != ln1_ || ln2 != ln2_) {
-	ln1_ = ln1; ln2_ = ln2;	
-
-	//Init
-	byte(tr, 0x33); byte(tr, 0x32); byte(tr, 0x28); byte(tr, 0x0C); byte(tr, 0x06); byte(tr, 0x01);
-	//Line 1
-	if(ln1.length) {
-		tmSleep(2e-3);
-		byte(tr, 0x80);
-		for(iC = 0; iC < min(16,ln1.length); iC++)
-			byte(tr, ln1.charCodeAt(iC), true);
-	}
-	//Line 2
-	if(ln2.length) {
-		tmSleep(2e-3);
-		byte(tr, 0xC0);
-		for(iC = 0; iC < min(16,ln2.length); iC++)
-			byte(tr, ln2.charCodeAt(iC), true);
-	}
-}
-
-f_err = t_err;','','',1488701943);
-INSERT INTO "tmplib_DevLib" VALUES('m200','Mercury 200','','Меркурий 200','One phase counter of electricity Mercury 200, 203.2Т, 206 from firm Incotex (http://www.incotexcom.ru).
+f_err = t_err;','','',1509375504);
+INSERT INTO "tmplib_DevLib" VALUES('m200','Mercury 200','Меркурій 200','Меркурий 200','One phase counter of electricity Mercury 200, 203.2Т, 206 from firm Incotex (http://www.incotexcom.ru).
 Author: Arsen Zakojan <godzilla919@gmail.com>
-Version: 1.0','','Однофазные счетчики электроэнергии Меркурий 200,  203.2Т,  206 компании Инкотекс (http://www.incotexcom.ru).
+Version: 1.0.0','Однофазні лічильники електроенергії Меркурій 200,  203.2Т,  206 компанії Інкотекс (http://www.incotexcom.ru).
 Автор: Арсен Закоян <godzilla919@gmail.com>
-Версия 1.0',600,0,'JavaLikeCalc.JavaScript
+Версія 1.0.0','Однофазные счетчики электроэнергии Меркурий 200,  203.2Т,  206 компании Инкотекс (http://www.incotexcom.ru).
+Автор: Арсен Закоян <godzilla919@gmail.com>
+Версия 1.0.0',600,0,'JavaLikeCalc.JavaScript
 if(naladchik)//если счетчик закондирован программой Наладчик+
 {first=250;
 second=3+(8*netaddr);}
@@ -6206,10 +4874,12 @@ if(req.text().length <14){U= EVAL_STR;I= EVAL_STR;P= EVAL_STR;}//если нет
 else//если ответ получен
 {U =Special.FLibSYS.str2real( req.text().slice(15,17)+req.text().slice(18,20))/10;
 I =Special.FLibSYS.str2real( req.text().slice(21,23)+req.text().slice(24,26))/100;
-P =Special.FLibSYS.str2real( req.text().slice(27,29)+req.text().slice(30,32)+req.text().slice(33,35));}','','',1496394791);
-INSERT INTO "tmplib_DevLib" VALUES('m230','Mercury 230','','Меркурий 230','Three phase counter of electricity Mercury 230, 231, 232, 233, 234, 236 from firm Incotex (http://www.incotexcom.ru).
+P =Special.FLibSYS.str2real( req.text().slice(27,29)+req.text().slice(30,32)+req.text().slice(33,35));}','','',1509290186);
+INSERT INTO "tmplib_DevLib" VALUES('m230','Mercury 230','Меркурій 230','Меркурий 230','Three phase counter of electricity Mercury 230, 231, 232, 233, 234, 236 from firm Incotex (http://www.incotexcom.ru).
 Author: Arsen Zakojan <godzilla919@gmail.com>
-Version: 1.0','','Трехфазные счетчики электроэнергии Меркурий 230, 231, 232, 233,  234,  236  компании Инкотекс (http://www.incotexcom.ru).
+Version: 1.0.0','Трифазні лічильники електроенергії Меркурій 230, 231, 232, 233,  234,  236  компанії Інкотекс (http://www.incotexcom.ru).
+Автор: Арсен Закоян <godzilla919@gmail.com>
+Версія 1.0','Трехфазные счетчики электроэнергии Меркурий 230, 231, 232, 233,  234,  236  компании Инкотекс (http://www.incotexcom.ru).
 Автор: Арсен Закоян <godzilla919@gmail.com>
 Версия 1.0',300,0,'JavaLikeCalc.JavaScript
 if(f_start)
@@ -6365,7 +5035,7 @@ req = SYS.XMLNode().setAttr("ProtIt","m230").setAttr("netaddr",netaddr).setAttr(
 SYS.Transport["Serial"]["out_"+transport].messIO(req,"UserProtocol");
 if(!req.text())N1= EVAL_STR;
 else N1 =req.text();}
-','','',1496394916);
+','','',1509290192);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -8180,6 +6850,241 @@ if(step < 0 || step == 8) {
 	buf = vArhBuf(1, 10, per*1000000, true, true);
 	buf.set(10000, tm+9*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
 }','','',1479062821);
+INSERT INTO "lib_servProc" VALUES('wacko2media','WackoWiki to MediaWiki','','','','','',1,10,0,'dbO = SYS.BD.MySQL[ndb];
+if(!dbO)	return "Error: DB ''"+ndb+"'' missed!";
+DBTbl = dbO.SQLReq("SELECT body FROM `wk_pages` WHERE `tag`=\""+wpg+"\";");
+if(DBTbl.err.length) return "Error: "+DBTbl.err;
+else if(DBTbl.length < 2 || !DBTbl[1].length)	return "Error: Page ''"+wpg+"'' is not found!"; 
+ibuf = DBTbl[1][0];
+//ibuf = "==== 1.1. Вызов консольных команд и утилит операционной системы (sysCall) ====\n"
+//	"//Описание:// Осуществляет вызовы консольных команд ОС. Функция открывает широкие возможности пользователю ~OpenSCADA путём вызова любых системных программ, утилит и скриптов, а также получения посредством них доступа к огромному объёму системных данных. Например команда \"ls -l\" вернёт детализированное содержимое рабочей директории.\n"
+//	"//Параметры://";
+obuf = "";
+tblIn = tblInRow = formIt = formBold = formAlert = formSup = false;
+for(pos = 0; pos < ibuf.length; ) {
+	//if(ln.search(new RegExp("script","i"))
+	stLine = (pos == 0 || ibuf[pos-1] == "\n");
+	pos1 = pos;
+	ln = ibuf.parseLine(0, pos1);
+	twos = ibuf.slice(pos, pos+2);
+	// Blocks: %% {Cnt} %%
+	if(twos == "%%" && (pos1=ibuf.indexOf("%%",pos+2)) >= 0) {
+		cntr = ibuf.slice(pos+2, pos1);
+		cntrProps = cntr.match("^\\s*\\([^)]*\\)\\s*\\n*","gm");
+		if(cntrProps.length && cntrProps[0].indexOf("wrapper_align=center",0) >= 0)
+			obuf += (cntrProps.length?cntr.slice(cntrProps[0].length):cntr);
+		else obuf += "<pre style=\"white-space: pre-wrap;\">\n" + (cntrProps.length?cntr.slice(cntrProps[0].length):cntr) + "</pre>";
+		pos = pos1+2;
+		continue;
+	}
+	//Templates
+	if((mr=ln.match("^{{(TableOfContents|toc)[^}]*}}\\s*$")).length)	{ obuf += "__TOC__"; pos += mr[0].length; continue; }
+	// Generic shild simbol ~
+	if(ibuf[pos] == "~")	{ obuf += ibuf[pos+1]; pos += 2; }
+	// Tables
+	if((mr=ln.match("^#\\|\\s*$","gm")).length)	{ tblIn = true; obuf += "{| class=\"wikitable\""; pos += mr[0].length; continue; }
+	if(tblIn && twos == "||") {
+		if(!tblInRow)	{ obuf += "|-\n|"; tblInRow = true; }
+		else tblInRow = false;
+		pos += 2; continue;
+	}
+	if(tblIn && tblInRow && ibuf[pos] == "|")	{ obuf += "||"; pos++; continue; }
+	if(tblIn && (mr=ln.match("^\\|#\\s*$","gm")).length)	{ tblIn = tblInRow = false; obuf += "|}"; pos += mr[0].length; continue; }
+	// Links processing
+	if((twos == "((" && (pos1=ln.indexOf("))",0)) > 0) || (twos == "[[" && (pos1=ln.indexOf("]]",0)) > 0)) {
+		pos2 = ln.slice(2,pos1).indexOf(" ", 0);
+		//obuf += "["+ln.slice(2,pos1).parse(0," ",pos2)+"|"+ln.slice(2,pos1).slice(pos2)+"]"; 
+		if(pos2 >= 0) obuf += "["+((ln[2]=="/")?"http://wiki.oscada.org":"")+ln.slice(2,pos1)+"]";
+		else obuf += ((ln[2]=="/")?"http://wiki.oscada.org":"[[") + ln.slice(2,pos1) + ((ln[2]=="/")?"":"|"+ln.slice(2,pos1)+"]]");
+		pos += pos1+2; continue;
+	}
+	if((mr=ln.match("^file:[^\\s\\n]+")).length) {
+		obuf += "[[File:"+mr[0].slice(5)+"]]";
+		pos += mr[0].length; continue;
+	}
+	// Generic format
+	if(twos == "//" && ibuf.slice(pos-5,pos+2) != "http://") {
+		if(!formIt && ln.match("//","g").length > 1) { obuf += "''''"; formIt = true; pos += 2; continue; }
+		if(formIt)	{ obuf += "''''"; formIt = false; pos += 2; continue; }
+	}
+	if(twos == "**") {
+		if(!formBold && ln.match("\\*\\*","g").length > 1) { obuf += "''''''"; formBold = true; pos += 2; continue; }
+		if(formBold)	{ obuf += "''''''"; formBold = false; pos += 2; continue; }
+	}
+	if(twos == "!!") {
+		if(!formAlert && ln.match("!!","g").length > 1) { obuf += "<span style=\"color: red\">"; formAlert = true; pos += 2; continue; }
+		if(formAlert)	{ obuf += "</span>"; formAlert = false; pos += 2; continue; }
+	}
+	if(twos == "^^") {
+		if(!formSup && ln.match("\\^\\^","g").length > 1) { obuf += "<sup>"; formSup = true; pos += 2; continue; }
+		if(formSup)	{ obuf += "</sup>"; formSup = false; pos += 2; continue; }
+	}
+	// Lists
+	if(stLine && (mr=ln.match("^ {2,}+\\*")).length) {
+		for(iS = 0; iS < (mr[0].length-1); iS += 2)	obuf += "*";
+		pos += mr[0].length; continue;
+	}
+	// Indents
+	if(stLine && (mr=ln.match("^ {2,}+")).length) {
+		for(iS = 0; iS < (mr[0].length); iS += 2)	obuf += ":";
+		pos += mr[0].length; continue;
+	}
+	if(ibuf.slice(pos-1,pos+3).match("^[^\n=%#]\n[^\n=|#{ %]").length)	obuf += "<br/>";
+	obuf += ibuf[pos]; pos++;
+}
+
+return obuf;','','',1509372937);
+INSERT INTO "lib_servProc" VALUES('docOffLine','Off-line documentation','','','','','',1,120,0,'trNm = "offLine";
+docHost = "oscada.org:80";
+docHost_ = "http://" + docHost.parse(0, ":");
+defLang = "en";
+
+//Check and connect to self transport
+tr = SYS.Transport.Sockets.nodeAt("out_"+trNm);
+if(!tr) {
+	//Create self transport if it is missed
+	SYS.cntrReq((req=SYS.XMLNode("add").setAttr("path","/sub_Transport/mod_Sockets/%2fbr%2fout_").setAttr("id",trNm)));
+	tr = SYS.Transport.Sockets.nodeAt("out_"+trNm);
+}
+if(!tr)	return;
+
+//Preparation
+pCnt = imgCnt = lnkCnt = lngCnt = 0;
+dirsO = new Object();
+imgsO = new Object();
+
+// Pages list moving to an object for rapid links checking
+pgsO = new Object();
+for(off = 0; (tVl=pages.parseLine(0,off)).length; ) {
+	off1 = 0; pWiki = tVl.parse(0, ":", off1); pLngs = tVl.parse(0, ":", off1); pOffLn = tVl.parse(0, ":", off1);
+	for(off1 = 0; (tVl2=pLngs.parse(0,",",off1)).length; ) {
+		if(dirsO[tVl2] != true) {
+			if(tVl2 != defLang)
+				SYS.system("if test ! -d "+resDir+tVl2+"; then install -d "+resDir+tVl2+"/files; cp "+resDir+"en/files/doc.css "+resDir+tVl2+"/files; fi", true);
+			dirsO[tVl2] = true; lngCnt++;
+		}
+		pgsO[pWiki+"/"+tVl2] = pOffLn;
+	}
+}
+
+if(pagesCur.length) {
+	pgsOprc = new Object();
+	for(off = 0; (tVl=pagesCur.parseLine(0,off)).length; ) {
+		off1 = 0; pWiki = tVl.parse(0, ":", off1); pLngs = tVl.parse(0, ":", off1); pOffLn = tVl.parse(0, ":", off1);
+		for(off1 = 0; (tVl2=pLngs.parse(0,",",off1)).length; ) {
+			if(dirsO[tVl2] != true) {
+				if(tVl2 != defLang)
+					SYS.system("if test ! -d "+resDir+tVl2+"; then install -d "+resDir+tVl2+"/files; cp "+resDir+"en/files/doc.css "+resDir+tVl2+"/files; fi", true);
+				dirsO[tVl2] = true; lngCnt++;
+			}
+			pgsOprc[pWiki+"/"+tVl2] = pOffLn;
+		}
+	}
+} else pgsOprc = pgsO;
+
+//Pages fetching and processing
+for(var ip in pgsOprc) {
+	pLang = ip.lastIndexOf("/"); pWiki = ip.slice(0, pLang); pLang = ip.slice(pLang+1);
+	pOffLn = pgsO[ip];
+
+	// Take folders configuration
+	dstDir = topDir = "";
+	for(off = 0; (tVl=pOffLn.parsePath(0,off)).length && off < pOffLn.length; ) {
+		dstDir += tVl+"/";
+		topDir += "../";
+	}
+	// Create intermediate folders
+	if(dstDir.length && dirsO[pLang+"/"+dstDir] != true) {
+		SYS.system("if test ! -d "+resDir+pLang+"/"+dstDir+"; then install -d "+resDir+pLang+"/"+dstDir+"; fi", true);
+		dirsO[pLang+"/"+dstDir] = true;
+	}
+
+	// Request the documentation page
+	req = SYS.XMLNode("GET").setAttr("Host",docHost).setAttr("URI","/wiki/index.php?title="+ip+"&printable=yes");
+	// Load the documentation page to a XML tree
+	for(iTr = 0; iTr < reqTr; iTr++)
+		if(!(rez=tr.messIO(req,"HTTP")).length && req.text().length) break;
+	//if(req.text().length < 10)
+	//	SYS.messInfo("OffLine", "TEST 00: rez="+rez+"; length="+req.text().length);
+	if(iTr == reqTr)	{ res = "1: Page "+ip+" load error in "+reqTr+" tries"; return; }
+
+	docTree = SYS.XMLNode();
+	rez1 = docTree.load(req.text(), false, 0x01);
+	if(rez1.toInt()) {
+		//SYS.messInfo("OffLine", "TEST 00a: page="+ip+"; rez="+rez+"; length="+req.text().length+"; rez1="+rez1);
+		res = "1: Page ''"+ip+"'' parsing for XML is an error: "+rez1+". The original one saved!";
+		SYS.fileWrite(resDir+pLang+"/"+pOffLn, req.text());
+		return;
+	}
+
+	// HTML header processing
+	head = docTree.childGet("head");
+	for(iEl = 0, passPrev = true; iEl < head.childSize(); iEl++) {
+		chO = head.childGet(iEl);
+		if(chO.name() == "<*>") {
+			if(!passPrev)	{ head.childDel(iEl); iEl--; }
+			continue;
+		}
+		passPrev = false;
+		if(chO.name() == "script" || chO.name() == "style" ||
+				(chO.name() == "meta" && chO.attr("name") != "generator") ||
+				(chO.name() == "link" && chO.attr("rel") != "copyright"))	{
+			head.childDel(iEl);
+			iEl--;
+		}
+		else passPrev = true;
+	}
+	head.childAdd("link").setAttr("rel","stylesheet").setAttr("href",topDir+"files/doc.css");
+
+	// BODY processing
+	body = docTree.childGet("body");
+	header = body.getElementBy("mw_header");
+	cnt = body.getElementBy("mw-content-text");
+	body.clear(true);
+	body.childAdd(header); body.childAdd(cnt);
+
+	// Images processing
+	imgs = body.getElementsBy("img");
+	for(iEl = 0; iEl < imgs.length; iEl++)
+		if((tVl=imgs[iEl].attr("src").match("^/.*/(.*)$")).length) {
+			if(imgsO[pLang+":"+tVl[1]] != true) {
+				req = SYS.XMLNode("GET").setAttr("Host",docHost).setAttr("URI",imgs[iEl].attr("src"));
+				for(iTr = 0; iTr < reqTr; iTr++)
+					if(!(rez=tr.messIO(req,"HTTP")).length && req.text().length) break;
+				//if(req.text().length < 10)
+				//	SYS.messInfo("OffLine", "TEST 01: rez="+rez+"; length="+req.text().length);
+				if(iTr == reqTr)	{ res = "1: Image ''"+req.attr("URI")+"'' load error in "+reqTr+" tries"; return; }
+				SYS.fileWrite(resDir+pLang+"/files/"+tVl[1], req.text());
+				imgsO[pLang+":"+tVl[1]] = true;
+				imgCnt++;
+			}
+			imgs[iEl].setAttr("src", topDir+"files/"+tVl[1]);
+		}
+
+	// Links processing
+	anchs = body.getElementsBy("a");
+	for(iEl = 0; iEl < anchs.length; iEl++) {
+		href = anchs[iEl].attr("href");
+		if(href[0] == "/") {
+			dynLngPg = (href.indexOf("/wiki/Special:MyLanguage/") == 0) ? href.slice(25) : "";
+			stLngPg = (!dynLngPg.length && href.indexOf("/wiki/") == 0) ? href.slice(6) : "";
+			if(dynLngPg.length &&
+				(!(tDst=pgsO[dynLngPg+"/"+pLang]).isEVal() || !(tDst=pgsO[stLngPg]).isEVal()))
+					anchs[iEl].setAttr("href", topDir+tDst);
+			else {
+				anchs[iEl].setAttr("href", docHost_+href);
+				if(!anchs[iEl].attr("class").length)	anchs[iEl].setAttr("class", "external");
+			}
+			lnkCnt++;
+		}
+	}
+
+	docTree.save(0x3C0, resDir+pLang+"/"+pOffLn);
+	pCnt++;
+	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
+}
+
+res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1509717430);
 CREATE TABLE 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library "FLibComplex1" (http://wiki.oscada.org/HomePageEn/Doc/FLibComplex1#h902-15) and the implementation of the PWM for the pulse part.','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" (http://wiki.oscada.org/Doc/FLibComplex1#h91-15) и реализация ШИМ для импульсной части.',1,10,0,'//Call standard analog PID
 outA = Special.FLibComplex1.pid(var,sp,max,min,manIn,auto,casc,Kp,Ti,Kd,Td,Tzd,Hup,Hdwn,Zi,followSp,K1,in1,K2,in2,K3,in3,K4,in4,f_frq,int,dif,lag);
@@ -8471,7 +7376,8 @@ if(io.name() == "send") {
 }','','',1478107736);
 INSERT INTO "UserProtocol_uPrt" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Protocol level of typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,0,'','','','JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.0.0','','',1,0,0,'','','','JavaLikeCalc.JavaScript
 //Request form:
 //<mess addr="1" err="1:Error">{req}</mess> - message tag
 //  req - request/respond data;
@@ -8534,10 +7440,11 @@ for(i_k = 1; i_k <= k; i_k++) {
 		io.setAttr("err","8:"+tr("Unknown block end."));
 		return;
 	}
-}','','',1425737159);
+}','','',1509283349);
 INSERT INTO "UserProtocol_uPrt" VALUES('TMH','Power supply for turbomolecular pumps','','','Protocol level of power supply for turbomolecular pumps of firm SHIMADZU (http://www.shimadzu.com), model EI-R04M.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,0,'','','','JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.0.0','','',1,0,0,'','','','JavaLikeCalc.JavaScript
 //Request form:
 //<mess addr="1" err="1:Error">{req}</mess> - message tag
 //  req - request/respond data;
@@ -8567,10 +7474,11 @@ if(resp.length < 6 || resp[resp.length-1] != "\r" || resp.slice(0,2) != "MJ" || 
 CRC = 0;
 for(i = 0; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
 if((CRC&0xFF) != resp.slice(resp.length-3,resp.length-1).toInt(16)) { io.setAttr("err","6:"+tr("CRC error.")); return; }
-io.setText(resp.slice(4,resp.length-3));','','',1425737190);
-INSERT INTO "UserProtocol_uPrt" VALUES('VKT7','VKT-7','','','Protocol level of firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and the count. The device complex enough by provide more parameters, more history to its and access by nonlinear Serial-based protocol at low speed.
+io.setText(resp.slice(4,resp.length-3));','','',1509283419);
+INSERT INTO "UserProtocol_uPrt" VALUES('VKT7','VKT-7','','','Protocol level of firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vladislav Chubuk','','',1,0,0,'','','','JavaLikeCalc.JavaScript
+Sponsored: Vladislav Chubuk
+Version: 1.0.0','','',1,0,0,'','','','JavaLikeCalc.JavaScript
 //Request form:
 //<mess addr="1" err="1:Error">{req}</mess> - message tag
 //  req - request/respond data;
@@ -8611,7 +7519,7 @@ if(KS != ((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)))
 { io.setAttr("err","6:"+tr("KS error")+" "+KS.toString(16,4)+"=="+((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)).toString(16,4)); return; }
 if(resp.charCodeAt(1)&0x80)
 { io.setAttr("err","7:"+resp.charCodeAt(2)+":"+tr("Request error.")); return; }
-io.setText(resp.slice(1,-2));','','',1424879706);
+io.setText(resp.slice(1,-2));','','',1509283495);
 INSERT INTO "UserProtocol_uPrt" VALUES('DCON','DCON','','','Mostly aimed for example implement user protocols into OpenSCADA and contains only main functions into the protocol part.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.1','','',1,0,0,'JavaLikeCalc.JavaScript
@@ -8679,7 +7587,8 @@ if(resp[0] != ">") { io.setAttr("err","12:"+resp[0]+":"+tr("DCON error.")); retu
 io.setAttr("err","");
 io.setText(resp.slice(1,resp.length-3));','','',1424879498);
 INSERT INTO "UserProtocol_uPrt" VALUES('TM510x','Elemer TM510x','','','Protocol level of multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
-Author: Roman Savochenko <rom_as@oscada.org>','','',1,0,0,'','','','JavaLikeCalc.JavaScript
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','','',1,0,0,'','','','JavaLikeCalc.JavaScript
 //Request form:
 //<mess addr="1" err="1:Error">{req}</mess> - message tag
 //  req - request/respond data;
@@ -8720,10 +7629,11 @@ for(i = 1; i < min(KSpos+1,resp.length); i++) {
 		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
 }
 if(KS != resp.slice(KSpos+1).toInt(10)) { io.setAttr("err","6:"+tr("KS error.")); return; }
-io.setText(resp.slice(resp.indexOf(";")+1,KSpos));','','',1424879686);
+io.setText(resp.slice(resp.indexOf(";")+1,KSpos));','','',1509283413);
 INSERT INTO "UserProtocol_uPrt" VALUES('SMDP','Sycon Multi Drop Protocol','','','Protocol level of STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com)
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,0,'','','','JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.0.0','','',1,0,0,'','','','JavaLikeCalc.JavaScript
 //Request form:
 //<mess addr="16" try="1" err="1:Error">{req}</mess> - message tag
 //req - request/respond data;
@@ -8770,7 +7680,7 @@ else if(errCd == 3) io.setAttr("err",""+(10+errCd)+":Err_syntax: "+tr("Syntax er
 else if(errCd == 4) io.setAttr("err",""+(10+errCd)+":Err_range: "+tr("Data range error."));
 else if(errCd == 5) io.setAttr("err",""+(10+errCd)+":Err_inhibited: "+tr("Inhibited."));
 else if(errCd == 6) io.setAttr("err",""+(10+errCd)+":Err_obso: "+tr("Obsolete command. No action taken, but not really an error."));
-else io.setAttr("err",""+(10+errCd)+":"+tr("Unknown error."));','','',1425737182);
+else io.setAttr("err",""+(10+errCd)+":"+tr("Unknown error."));','','',1509283368);
 INSERT INTO "UserProtocol_uPrt" VALUES('OWEN','OWEN','','','Protocol level of mostly models of OWEN devices by specific protocol.
 Author: Constantine (IrmIngeneer)
 Refactoring: Roman Savochenko <rom_as@oscada.org>','','',1,0,0,'','','','JavaLikeCalc.JavaScript
@@ -8932,9 +7842,10 @@ for(blkOff = 0, blkLen = 0; blkOff < resp.length; blkOff += 6+blkLen) {
 	{ io.setAttr("err","5:"+resp.charCodeAt(blkOff+7)+":"+tr("Request error")); return; }
 	io.setText(resp.slice(blkOff+6,blkOff+6+blkLen));
 }','','',1472721683);
-INSERT INTO "UserProtocol_uPrt" VALUES('IVE_452HS_02','ИВЭ-452HS-02','IVE-452HS-02','','Protocol level of power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
+INSERT INTO "UserProtocol_uPrt" VALUES('IVE_452HS_02','IVE-452HS-02','IVE-452HS-02','','Protocol level of power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,0,'','','','JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.0.0','','',1,0,0,'','','','JavaLikeCalc.JavaScript
 //Request form:
 //<mess addr="255" err="1:Error">{req}</mess> - message tag
 //  req - request/respond data;
@@ -8963,10 +7874,11 @@ if(resp.length <= 3 || resp.charCodeAt(0) != addr || resp.charCodeAt(1) != req.c
 for(KS = 0, i = 0; i < resp.length-1; i++)	KS += resp.charCodeAt(i);
 KS = 0x100-KS&0xFF;
 if(resp.charCodeAt(resp.length-1) != KS )	{ io.setAttr("err","3:"+tr("CRC error")); return; }
-io.setText(resp.slice(1,resp.length-1));','','',1439819778);
+io.setText(resp.slice(1,resp.length-1));','','',1509285266);
 INSERT INTO "UserProtocol_uPrt" VALUES('OPTRIS','OPTRIS CT/CTL','','','Protocol level of OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,0,'','','','JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.0.0','','',1,0,0,'','','','JavaLikeCalc.JavaScript
 //Request form:
 //<mess addr="1" cs="1" err="1:Error">{req}</mess> - message tag
 //  req - request/respond data;
@@ -8988,10 +7900,11 @@ resp = tr.messIO(request);
 while(resp.length && (tresp=tr.messIO("")).length) resp += tresp;
 SYS.messDebug("/OPTRIS/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
 if(resp.length <= 0) { io.setAttr("err","3:"+tr("No a respond")); return; }
-io.setText(resp);','','',1444290609);
+io.setText(resp);','','',1509286719);
 INSERT INTO "UserProtocol_uPrt" VALUES('CTR','CTR 100, 101','CTR 100, 101','','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.0.0','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','',1,0,0,'','','','JavaLikeCalc.JavaScript
 //Request form:
@@ -9013,7 +7926,7 @@ if(resp.length < 9)	{ io.setAttr("err","3:"+tr("Respond too short")); return; }
 if(resp.length > 9)	{ io.setAttr("err","4:"+tr("Respond too long, possible continuous mode")); return; }
 for(CS = 0, i = 1; i < resp.length-1; i++)	CS += resp.charCodeAt(i);
 if(resp.charCodeAt(resp.length-1) != (CS&0xFF))	{ io.setAttr("err","5:"+tr("CRC error")); return; }
-io.setText(resp.slice(1,resp.length-1));','','',1445606112);
+io.setText(resp.slice(1,resp.length-1));','','',1509287419);
 INSERT INTO "UserProtocol_uPrt" VALUES('SMTP','SMTP','SMTP','','Provides EMAIL sending by the protocol SMTP.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.0','Provides EMAIL sending by the protocol SMTP.
@@ -9148,7 +8061,7 @@ if(io.name() == "write") {
 }','','',1479654824);
 INSERT INTO "UserProtocol_uPrt" VALUES('m200','Mercury 200','','Меркурий 200','Protocol level of one phase counter of electricity Mercury 200, 203.2Т, 206 from firm Incotex (http://www.incotexcom.ru).
 Author: Arsen Zakojan <godzilla919@gmail.com>
-Version: 1.0','','Протокольный уровень однофазных счетчиков электроэнергии Меркурий 200,  203.2Т,  206 компании Инкотекс (http://www.incotexcom.ru).
+Version: 1.0.0','','Протокольный уровень однофазных счетчиков электроэнергии Меркурий 200,  203.2Т,  206 компании Инкотекс (http://www.incotexcom.ru).
 Автор: Арсен Закоян <godzilla919@gmail.com>
 Версия 1.0',1,1,0,'','','','JavaLikeCalc.JavaScript
 //resp="";
@@ -9222,10 +8135,10 @@ CRC1=SYS.strFromCharCode(out1&0xFF,(out1&0xFF00)>>8 );
 if((CRCans==CRC1)&&(request.charCodeAt(0)==answer.charCodeAt(0))&&(request.charCodeAt(1)==answer.charCodeAt(1))&&(request.charCodeAt(2)==answer.charCodeAt(2))&&(request.charCodeAt(3)==answer.charCodeAt(3)))//break;
 //k++;}
 io.setText(Special.FLibSYS.strDec4Bin(resp));
-',1496394858);
+',1509290174);
 INSERT INTO "UserProtocol_uPrt" VALUES('m230','Mercury 230','','Меркурий 230','Protocol level of three phase counter of electricity Mercury 230, 231, 232, 233, 234, 236 from firm Incotex (http://www.incotexcom.ru).
 Author: Arsen Zakojan <godzilla919@gmail.com>
-Version: 1.0','','Протокольный уровень трехфазных счетчиков электроэнергии Меркурий 230, 231, 232, 233,  234,  236  компании Инкотекс (http://www.incotexcom.ru).
+Version: 1.0.0','','Протокольный уровень трехфазных счетчиков электроэнергии Меркурий 230, 231, 232, 233,  234,  236  компании Инкотекс (http://www.incotexcom.ru).
 Автор: Арсен Закоян <godzilla919@gmail.com>
 Версия 1.0',1,1,0,'','','','JavaLikeCalc.JavaScript
 //преобрауем сетевой адрес,преобразуем из строки в целое
@@ -9389,7 +8302,7 @@ else if((request.charCodeAt(1)==0x08)&&(request.charCodeAt(2)==0x16)&&(request.c
 //чтение серийного номера
 else if((request.charCodeAt(1)==0x08)&&(request.charCodeAt(2)==0x00)&&(answer.length==8))
  io.setText(b1.toInt(16).toString(10,2,)+b2.toInt(16).toString(10,2,)+b3.toInt(16).toString(10,2,)+b4.toInt(16).toString(10,2,));
-;}',1496394962);
+;}',1509290179);
 CREATE TABLE 'flb_doc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_doc" VALUES('getVal','Getting value from archive','Запит значення архіву','Запрос знач. архива','Query the value for a specified time from the assigned archive and issuing the result with the specified number of decimal points.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -9470,4 +8383,1383 @@ if(prec < 0)	return val;
 if(val.isEVal())	return tr("Empty");
 if(typeof(val) == "real")	return val.toFixed(prec);
 return val;','','',1501228052);
+CREATE TABLE 'tmplib_LowDevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+INSERT INTO "tmplib_LowDevLib" VALUES('1602A','GPIO|I2C: 1602A(HD44780)','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
+Conditions: Default planing policy but realtime one preferred.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.1.0',10,0,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//Set link to fast external functions
+if(f_start)	f_err = "0", transport_ = ln1_ = ln2_ = "";
+
+t_err = "0";
+
+//Check for the transport change and the link update
+if(transport != transport_)	{
+	transport_ = transport;
+	if(!(tr=SYS.Transport.Serial["out_"+transport]))
+		function put = transport+".fnc_put";
+}
+
+//Write a byte function declaration
+function byte(tr, vl, md, dl) {
+	if(md == EVAL_BOOL) md = false;
+	if(dl == EVAL_BOOL) dl = 50e-6;
+	if(tr) {
+		//RS(md) | RW(false) | E(false) | BackLight(true) | D4 | D5 | D6 | D7
+		com = (md?0x01:0) | 0x8 | (vl&0xF0);
+		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
+		tr.messIO(SYS.strFromCharCode(addr,com|0x04), 0, 0);	tmSleep(dl);	//E toggle
+		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
+		//RS(md) | RW(false) | E(false) | BackLight(true) | D0 | D1 | D2 | D3
+		com = (md?0x01:0) | 0x8 | ((vl<<4)&0xF0);
+		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
+		tr.messIO(SYS.strFromCharCode(addr,com|0x04), 0, 0);	tmSleep(dl);	//E toggle
+		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
+	}
+	else if(put) {
+		put(RS, md);
+		put(D4, vl&0x10); put(D5, vl&0x20); put(D6, vl&0x40); put(D7, vl&0x80);
+		tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
+		put(D4, vl&0x01); put(D5, vl&0x02); put(D6, vl&0x04); put(D7, vl&0x08);
+		tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
+	}
+}
+
+//Main processing
+if(!tr && !put)
+	t_err = "1:"+tr("Error for ''%1'' as an output transport of I2C or a link to external functions of GPIO.").replace("%1",transport);
+else if(ln1 != ln1_ || ln2 != ln2_) {
+	ln1_ = ln1; ln2_ = ln2;	
+
+	//Init
+	byte(tr, 0x33); byte(tr, 0x32); byte(tr, 0x28); byte(tr, 0x0C); byte(tr, 0x06); byte(tr, 0x01);
+	//Line 1
+	if(ln1.length) {
+		tmSleep(2e-3);
+		byte(tr, 0x80);
+		for(iC = 0; iC < min(16,ln1.length); iC++)
+			byte(tr, ln1.charCodeAt(iC), true);
+	}
+	//Line 2
+	if(ln2.length) {
+		tmSleep(2e-3);
+		byte(tr, 0xC0);
+		for(iC = 0; iC < min(16,ln2.length); iC++)
+			byte(tr, ln2.charCodeAt(iC), true);
+	}
+}
+
+f_err = t_err;',1509373346);
+INSERT INTO "tmplib_LowDevLib" VALUES('1W_DS9097','One Wire by DS9097','One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
+Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.2.0',30,0,'JavaLikeCalc.JavaScript
+//Functions
+function reset(tr) {
+	tr.addr(tr.addr().parse(0,":")+":9600:8N1"); tr.start(true);
+	rez = tr.messIO(SYS.strFromCharCode(0xF0));
+	tr.addr(tr.addr().parse(0,":")+":115200:8N1"); tr.timings("100:2-0"); tr.start(true);
+	tr.messIO("");
+	return rez.length && rez.charCodeAt(0) != 0xF0;
+}
+
+function io(tr, mess, bits) {
+	if(bits == EVAL) bits = mess.length * 8;
+	req = "";
+	for(iB = 0; iB < ceil(bits/8); iB++) {
+		vB = mess.charCodeAt(iB);
+		bB = ((iB+1)*8 > bits) ? bits-floor(bits/8)*8 : 8;
+		for(iBi = 0; iBi < bB; iBi++) req += SYS.strFromCharCode((vB&(1<<iBi)) ? 0xFF : 0x00);
+	}
+	//SYS.messInfo("OneWire","bits="+bits+"; req="+SYS.strDecode(req,"Bin"," "));
+	for(resp = tr.messIO(req); resp.length < req.length && (tresp=tr.messIO("")).length; resp += tresp) ;
+	//SYS.messInfo("OneWire","bits="+bits+"; resp="+SYS.strDecode(resp,"Bin"," "));
+	rez = "";
+	for(iR = 0; iR < resp.length; ) {
+		vB = 0;
+		for(ib = 0; ib < 8 && iR < resp.length; iR++, ib++)
+			if(resp.charCodeAt(iR)&1) vB = vB | (1<<ib);
+		rez += SYS.strFromCharCode(vB);
+	}		
+	return rez;
+}
+
+function scan(tr, sn, lstDiscr) {
+	if(!reset(tr)) return "";
+	io(tr, SYS.strFromCharCode(0xF0));
+	for(nByte = 0, nBit = 1, tBit = 0, sDir = false, mskByte = 1, lstZero = 0; nByte < 8; ) {
+		tBit = io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0) << 1;
+		tBit = tBit | io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0);
+		//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; tBit="+tBit);
+		if(tBit == 3) break;
+		if(tBit > 0) sDir = !(tBit&0x01);
+		else {
+			//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; lstDiscr="+lstDiscr);
+			if(nBit < lstDiscr) sDir = sn[nByte]&mskByte;
+			else sDir = (nBit == lstDiscr);
+			if(!sDir) lstZero = nBit;
+			//if(lstZero < 9) lstDiscr = lstZero;
+			//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; sDir="+sDir+"; mskByte="+mskByte);
+		}
+		if(sDir) sn[nByte] = sn[nByte] | mskByte;
+		else sn[nByte] = sn[nByte] & (~mskByte);
+		tr.messIO(SYS.strFromCharCode(sDir?0xFF:0x00));
+		nBit++;
+     mskByte = (mskByte<<1)&0xFF;
+		if(!mskByte) { nByte++; mskByte = 1; }
+	}
+
+	rez = "";
+	if(nByte == 8) {
+		for(iB = 0; iB < nByte; iB++) rez += SYS.strFromCharCode(sn[iB]);
+		if(!Special.FLibSYS.CRC(rez,0x8C,8,0))	lstDiscr = lstZero;
+		else { rez = ""; lstDiscr = 0; }
+	}
+
+	return rez;
+}
+
+//Set transport and init
+if(f_start) {
+	tmResc_ = tmResc;
+	devLs = new Object();
+	transport_ = transport;
+	tr = SYS.Transport.Serial["out_"+transport];
+}
+if(f_stop) {
+	for(var devID in devLs) {
+		if((dO=devLs[devID]).isEVal()) continue;
+		aLs = dO.dP.nodeList("a_");
+		for(iA = 0; iA < aLs.length; iA++)
+			if(!dO.dP[aLs[iA]].isCfg()) dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
+	}
+	devLs = tr = false;
+	return;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial["out_"+transport];
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else {
+	//Generic information update.
+	if(f_start || (tmResc && (tmResc_=tmResc_-1/f_frq) <= 0)) {
+		tmResc_ = tmResc;
+		tmSc = SYS.time();
+		// Check for power
+		if(!reset(tr) ||
+		 	io(tr,(req=SYS.strFromCharCode(0xCC))) != req ||
+			io(tr,(req=SYS.strFromCharCode(0xB4))) != req ||
+			!(resp=io(tr,SYS.strFromCharCode(1),1)).length) power = EVAL;
+		else power = resp.charCodeAt(0);
+		// Scan for allowed devices on the bus.
+		sn = new Array(0, 0, 0, 0, 0, 0, 0, 0);
+		for(devID = "start", lstDiscr = -1; devID.length && lstDiscr; ) {
+			if(lstDiscr < 0) lstDiscr = 0;
+			if((devID=scan(tr,sn,lstDiscr)).length)	{
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				if((dO=devLs[devID]).isEVal()) {
+					devLs[devID] = dO = new Object();
+					devFamily = devID.charCodeAt(0); devNm = tr("1W device"); dO.isT = false;
+					if(devFamily == 0x10)			{ devNm = "DS1820/DS18S20/DS1920"; dO.isT = true; }
+					else if(devFamily == 0x20)	devNm = "DS2450";		//4AI
+					else if(devFamily == 0x22)	{ devNm = "DS1822"; dO.isT = true; }
+					else if(devFamily == 0x26)	devNm = "DS2438";		//SmartBat
+					else if(devFamily == 0x28)	{ devNm = "DS18B20"; dO.isT = true; }
+					else if(devFamily == 0x29)	devNm = "DS2408";		//8DIO
+					else if(devFamily == 0x3A)	devNm = "DS2413";		//2DIO
+
+					// Create the device''s parameter object
+					decId = SYS.strDecode(devID,"Bin","");
+					SYS.cntrReq(SYS.XMLNode("add").setAttr("path",this.nodePath()+"/%2fbr%2fprm_").setAttr("id",decId).setText(devNm+": "+decId));
+					SYS.cntrReq(SYS.XMLNode("set").setAttr("path",this.nodePath()+"/prm_"+decId+"/%2fprm%2fst%2fen").setText("1"));
+					// Create the device''s proper attributes
+					dO.dP = dP = this["prm_"+decId];
+					if(dO.isT) {	//Temperature
+						dP.attrAdd("val", tr("Temperature, °С"), "real|ro");
+						dP.attrAdd("m", tr("User cell [0...65535]"), "integer");
+						dP.attrAdd("res", tr("Resolution")+" [9...12]", "integer");
+					}
+					else if(devFamily == 0x20)		//DS2450
+						for(iN = 0; iN < 4; iN++) {
+							dP.attrAdd("ai"+iN, tr("AI, V")+iN, "real|ro");
+							dP.attrAdd("res"+iN, tr("Resolution")+iN+" [1...16]", "integer");
+							dP.attrAdd("md"+iN, tr("Mode")+iN, "integer|sel", "0;1;2\n2.55V;5.10V;DO");
+							dP.attrAdd("do"+iN, tr("DO")+iN, "boolean");
+						}
+					else if(devFamily == 0x26) {	//DS2438
+						dP.attrAdd("t", tr("Temperature, °С"), "real|ro");
+						dP.attrAdd("v", tr("Voltage, V"), "real|ro");
+						dP.attrAdd("i", tr("Current, A"), "real|ro");
+						dP.attrAdd("ICA", tr("Current Accumulator"), "integer");
+						dP.attrAdd("thr", tr("Accumulation threshold"), "integer|sel", "0;1;2;3\nNone;±2LSB;±4LSB;±8LSB");
+						dP.attrAdd("ETM", tr("Elapsed time meter"), "integer");
+						dP.attrAdd("TM_DISC", tr("Disconnect time"), "integer");
+						dP.attrAdd("TM_END", tr("End of charge time"), "integer");
+						dP.attrAdd("OFF", tr("Current Offset"), "integer");
+						dP.attrAdd("IAD", tr("Enable Current A/D"), "boolean");
+						dP.attrAdd("CA", tr("Enable Current Accumulator"), "boolean");
+						dP.attrAdd("EE", tr("Enable Current Accumulator Shadow"), "boolean");
+						dP.attrAdd("AD", tr("Voltage A/D (0-VAD,1-VDD)"), "boolean");
+					}
+					else if(devFamily == 0x29)		//DS2408
+						for(iD = 0; iD < 8; iD++) {
+							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
+							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
+						}
+					else if(devFamily == 0x3A)		//DS2413
+						for(iD = 0; iD < 2; iD++) {
+							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
+							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
+						}
+				}
+				if(dO.tmSc == tmSc)	break;	//Somthing wrong into the scan but repeat, interruption
+				dO.tmSc = tmSc;
+				dO.try = tryEVAL;
+			}
+		}
+		//Check for removed devices
+		for(devID in devLs) {
+			if((dO=devLs[devID]).isEVal()) continue;
+			if(dO.tmSc != tmSc)	{
+				devLs[devID] = EVAL;
+				aLs = dO.dP.nodeList("a_");
+				for(iA = 0; iA < aLs.length; iA++)
+					if(!dO.dP[aLs[iA]].isCfg())	dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
+			}
+		}
+	}
+	else {
+		//Process devices for reading current value and set modifable
+		for(devID in devLs) {
+			if((dO=devLs[devID]).isEVal()) continue;
+			devFamily = devID.charCodeAt(0);
+			if(dO.isT) {	//Temperature
+				dP = dO.dP;
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				//Check for a modifications
+				isMdf = false;
+				m_ = dP.m.get(), res_ = max(9,min(12,dP.res.get()));
+				if(!dO.m.isEVal() && !dO.res.isEVal() && (m_ != dO.m || res_ != dO.res)) {
+					//Set scratchpad
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x4E,m_&0xFF,(m_>>8)&0xFF,((res_-9)<<5)|0x1F))) != req) continue;
+					//Copy scratchpad part to the EEPROM
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x48))) != req) continue;
+					isMdf = true;
+				}
+
+				//Read current
+				// Call the transmission
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
+				if(!power) SYS.sleep(0.094*pow(2,(dO.res.isEVal()?12:dO.res)-9));
+				// Get scratchpad
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				io(tr, SYS.strFromCharCode(0xBE));
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				if(!Special.FLibSYS.CRC(resp,0x8C,8,0)) {
+					val = resp.charCodeAt(1)*256 + resp.charCodeAt(0);
+					if(val > 32767) val -= 65536;
+					dP.val.set(val/16, 0, 0, true);
+					if(dO.m.isEVal() || dO.res.isEVal() || isMdf) {
+						dO.m = resp.charCodeAt(3)*256 + resp.charCodeAt(2); dP.m.set(dO.m, 0, 0, true);
+						dO.res = ((resp.charCodeAt(4)>>5)&0x3)+9; dP.res.set(dO.res, 0, 0, true);
+					}
+					dO.try = 0;
+				}
+				else if((dO.try=dO.try+1) > tryEVAL) {
+					dP.val.set(EVAL, 0, 0, true); dP.m.set(EVAL, 0, 0, true); dP.res.set(EVAL, 0, 0, true);
+					dO.m = dO.res = EVAL;
+				}
+			}
+			else if(devFamily == 0x20) {	//DS2450
+				dP = dO.dP;
+				//Check for a modifications
+				for(iN = 0; iN < 4; iN++) {
+					if(dO["st1"+iN].isEVal())	continue;
+					if((tRes=max(0,min(16,dP["res"+iN].get()))) == 16)	tRes = 0;
+					tSt = (dO["st1"+iN]&(~0xCF)) + tRes + ((dP["md"+iN].get()==2)?0x80:0) + (dP["do"+iN].get()?0x40:0);
+					if(tSt != dO["st1"+iN]) {	//Same write and check the result
+						if(!reset(tr)) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2,0,tSt))) != req) continue;
+						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
+						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
+							dO["st1"+iN] = tSt;
+					}
+					tSt = (dO["st2"+iN]&(~0x01)) + (dP["md"+iN].get()?1:0);
+					if(tSt != dO["st2"+iN]) {	//Same write and check the result
+						if(!reset(tr)) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2+1,0,tSt))) != req) continue;
+						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
+						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
+							dO["st2"+iN] = tSt;
+					}
+				}
+
+				//Read control status data
+				if(dP["res0"].get().isEVal()) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x08,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x08,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+					for(iN = 0; iN < 4; iN++) {
+						dP["res"+iN].set(CRC_OK?((tVl=resp.charCodeAt(iN*2)&0xF)?tVl:16):EVAL, 0, 0, true);
+						dP["md"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x80)?2:resp.charCodeAt(iN*2+1)&1):EVAL, 0, 0, true);
+						dP["do"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x40)?true:false):EVAL, 0, 0, true);
+						dO["st1"+iN] = resp.charCodeAt(iN*2); dO["st2"+iN] = resp.charCodeAt(iN*2+1);
+					}
+				} else CRC_OK = true;
+
+				//Read AI value
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x00,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")/*+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0x3C,0x08,0x00)/*+resp.slice(0,-2),0xA001,16,0).toString(16)*/);
+					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x00,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+				}
+				for(iN = 0; iN < 4; iN++)
+					if(CRC_OK) {
+						tVl = (resp.charCodeAt(iN*2+1)<<8) + resp.charCodeAt(iN*2);
+						vlMax = dP["md"+iN].get() ? 5.1 : 2.55;
+						dP["ai"+iN].set(tVl*vlMax/65536, 0, 0, true);
+					} else dP["ai"+iN].set(EVAL, 0, 0, true);
+
+				//Start A/D conversion for prepare data for next iteration
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x3C,0x0F,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
+				}
+			}
+			else if(devFamily == 0x26) {	//DS2438
+				dP = dO.dP;
+				//Check for a modifications
+				//????
+
+				//Recall memory page 0
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xB8,0))) != req) continue;
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xBE,0))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+				if(CRC_OK) {
+					if((tVl=(resp.charCodeAt(2)<<8)+resp.charCodeAt(1)) >= 32767) tVl -= 65536;
+					dP["t"].set(tVl/256, 0, 0, true);
+					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
+					dP["i"].set(tVl, 0, 0, true);
+				}
+				else {
+					dP["t"].set(EVAL, 0, 0, true);
+					dP["i"].set(EVAL, 0, 0, true);
+				}
+				dP["v"].set(CRC_OK?((resp.charCodeAt(4)<<8)+resp.charCodeAt(3))/100:EVAL, 0, 0, true);
+				dP["IAD"].set(CRC_OK?(resp.charCodeAt(0)&0x01):EVAL, 0, 0, true);
+				dP["CA"].set(CRC_OK?(resp.charCodeAt(0)&0x02):EVAL, 0, 0, true);
+				dP["EE"].set(CRC_OK?(resp.charCodeAt(0)&0x04):EVAL, 0, 0, true);
+				dP["AD"].set(CRC_OK?(resp.charCodeAt(0)&0x08):EVAL, 0, 0, true);
+				dP["thr"].set(CRC_OK?(resp.charCodeAt(7)>>6):EVAL, 0, 0, true);
+
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xBE,1))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+				dP["ETM"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
+				dP["ICA"].set(CRC_OK?resp.charCodeAt(4):EVAL, 0, 0, true);
+				if(CRC_OK) {
+					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
+					dP["OFF"].set(tVl, 0, 0, true);
+				} else dP["OFF"].set(EVAL, 0, 0, true);
+
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xBE,2))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+				dP["TM_DISC"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
+				dP["TM_END"].set(CRC_OK?((resp.charCodeAt(7)<<24)+(resp.charCodeAt(6)<<16)+(resp.charCodeAt(5)<<8)+resp.charCodeAt(4)):EVAL, 0, 0, true);
+
+				//Start T ant V conversion for prepare the data for next iteration
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xB4))) != req) continue;
+				}
+			}
+			else if(devFamily == 0x29) {	//DS2408
+				dP = dO.dP;
+				//Check for a modifications
+				isMdf = false; tVl = 0; do_ = new Array();
+				for(iD = 0; iD < 8; iD++) {
+					if(dO["do"+iD].isEVal())	{ isMdf = false; break; }
+					do_[iD] = dP["do"+iD].get();
+					if(do_[iD] != dO["do"+iD])	isMdf = true;
+					if(do_[iD])	tVl = tVl | (1<<iD);
+				}
+				if(isMdf) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,~tVl))) != req) continue;
+					// Verify the correct writing, pass by that can be wrong
+					//resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
+					//SYS.messInfo("OneWire","Write resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xF0,0x88,0x00))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0).toString(16));
+				CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+				CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+				for(iD = 0; iD < 8; iD++) {
+					dP["di"+iD].set(CRC_OK?resp.charCodeAt(0)&(1<<iD):EVAL, 0, 0, true);
+					if(dO["do"+iD].isEVal() || isMdf || !CRC_OK) {
+						dO["do"+iD] = CRC_OK ? ((resp.charCodeAt(1)&(1<<iD))?true:false) : EVAL;
+						dP["do"+iD].set(dO["do"+iD], 0, 0, true);
+					}
+				}
+			}
+			else if(devFamily == 0x3A) {	//DS2413
+				dP = dO.dP;
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				//Check for a modifications
+				isMdf = false;
+				do0_ = dP.do0.get(), do1_ = dP.do1.get();
+				if(!dO.do0.isEVal() && !dO.do1.isEVal() && (do0_ != dO.do0 || do1_ != dO.do1)) {
+					tVl = (do1_<<1) | do0_;
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,(~tVl)&0xFF))) != req) continue;
+					isMdf = true;
+				}
+
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xF5))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				if(((tVl=resp.charCodeAt(0))&0xF) == ((~(tVl>>4))&0xF)) {
+					dP.di0.set(tVl&0x01, 0, 0, true); dP.di1.set(tVl&0x04, 0, 0, true);
+					if(dO.do0.isEVal() || dO.do1.isEVal() || isMdf) {
+						dO.do0 = (tVl&0x02)?true:false; dP.do0.set(dO.do0, 0, 0, true);
+						dO.do1 = (tVl&0x08)?true:false; dP.do1.set(dO.do1, 0, 0, true);
+					}
+				}
+				else {
+					dP.di0.set(EVAL, 0, 0, true); dP.di1.set(EVAL, 0, 0, true);
+					dP.do0.set(EVAL, 0, 0, true); dP.do1.set(EVAL, 0, 0, true);
+					dO.do0 = dO.do1 = EVAL;
+				}
+			}
+		}
+	}
+}
+
+f_err = t_err;',1509373346);
+INSERT INTO "tmplib_LowDevLib" VALUES('1W_DS9097U','One Wire by DS9097U','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
+Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.2.0',30,0,'JavaLikeCalc.JavaScript
+//Functions
+function reset(tr) {
+	req = (isData?SYS.strFromCharCode(0xE3):"") +
+				SYS.strFromCharCode(0xC5);	//CMD_COMM(0x81) | FUNCTSEL_RESET(0x40) | SPEEDSEL_FLEX(0x04)
+	isData = false;
+	resp = tr.messIO(req);
+	return (resp.charCodeAt(0)&0x03) == 0x01;	//RB_PRESENCE
+}
+
+function io(tr, mess, bits) {
+	if(bits == EVAL) {
+		req = isData ? "" : SYS.strFromCharCode(0xE1);	//MODE_DATA
+		isData = true;
+		for(iB = 0; iB < mess.length; iB++) {
+			req += SYS.strFromCharCode(tVl=mess.charCodeAt(iB));
+			if(tVl == 0xE3) req += SYS.strFromCharCode(0xE3);	//duplication to the COMMAND mode
+		}
+		for(resp = tr.messIO(req); resp.length && resp.length < mess.length && (tresp=tr.messIO("")).length; resp += tresp) ;
+		return resp;
+	}
+	else {
+		req = (isData?SYS.strFromCharCode(0xE3):"") + SYS.strFromCharCode(0x3F);	//MODE_COMMAND, CMD_CONFIG(0x01) | PARMSEL_5VPULSE(0x30) | PARMSET_infinite(0x0E)
+		isData = false;
+		for(iB = 0; iB < ceil(bits/8); iB++) {
+			vB = mess.charCodeAt(iB);
+			bB = ((iB+1)*8 > bits) ? bits-floor(bits/8)*8 : 8;
+			for(iBi = 0; iBi < bB; iBi++)
+				//{BITPOL_ONE(0x10)|BITPOL_ZERO(0x00)}|CMD_COMM(0x81)|FUNCTSEL_BIT(0x00)|SPEEDSEL_FLEX(0x04)|{PRIME5V_TRUE(0x02)|PRIME5V_FALSE(0x00)}
+				req += SYS.strFromCharCode(((vB&(1<<iBi))?0x10:0x00)|0x85/*|((iB==(ceil(bits/8)-1)&&iBi==(bB-1))?0x02:0x00)*/);
+		}
+		for(resp = tr.messIO(req); resp.length && resp.length < (bits+1) && (tresp=tr.messIO("")).length; resp += tresp) ;
+		rez = "";
+		if(resp.length && !(resp.charCodeAt(0)&0x81))
+			for(iR = 1;  iR < resp.length; ) {
+				vB = 0;
+				for(ib = 0; ib < 8 && iR < resp.length; iR++, ib++)
+					if(resp.charCodeAt(iR)&1) vB = vB | (1<<ib);
+				rez += SYS.strFromCharCode(vB);
+			}
+	}
+	return rez;
+}
+
+function scan(tr, sn, lstDiscr) {
+	if(!reset(tr)) return "";
+	
+	//Set the bits in the added buffer
+	asn = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	for(i = 0; lstDiscr >= 0 && i < 64; i++)
+		if((i < (lstDiscr-1) && sn[floor(i/8)]&(1<<(i%8))) || i == (lstDiscr-1))
+			asn[(i*2+1)/8] = asn[(i*2+1)/8] | (1<<((i*2+1)%8));
+
+	req = isData ? "" : SYS.strFromCharCode(0xE1);	//MODE_DATA
+	req += SYS.strFromCharCode(0xF0, 0xE3, 0xB5, 0xE1,
+				asn[0], asn[1], asn[2], asn[3], asn[4], asn[5], asn[6], asn[7],
+				asn[8], asn[9], asn[10], asn[11], asn[12], asn[13], asn[14], asn[15],
+				0xE3, 0xA5);
+	isData = false;
+	for(resp = tr.messIO(req); resp.length && resp.length < 17 && (tresp=tr.messIO("")).length; resp += tresp) ;
+
+	tmpLastDesc = -1;
+	for(i = 0; i < 64; i++) {
+		if(resp.charCodeAt(floor((i*2+1)/8)+1)&(1<<((i*2+1)%8)))	sn[floor(i/8)] = sn[floor(i/8)] | (1<<(i%8));
+		else sn[floor(i/8)] = sn[floor(i/8)] & (~(1<<(i%8)));
+		// Check LastDiscrepancy
+		if((resp.charCodeAt(floor((i*2)/8)+1)&(1<<((i*2)%8))) && !(resp.charCodeAt(floor((i*2+1)/8)+1)&(1<<((i*2+1)%8))))
+			tmpLastDesc = i + 1;
+	}
+
+	rez = "";
+	for(iB = 0; iB < 8; iB++) rez += SYS.strFromCharCode(sn[iB]);
+	if(sn[0] && lstDiscr != 63 && !Special.FLibSYS.CRC(rez,0x8C,8,0))	lstDiscr = tmpLastDesc;
+	else { rez = ""; lstDiscr = 0; }
+
+	return rez;
+}
+
+//Set transport and init
+if(f_start) {
+	tmResc_ = 0;
+	devLs = new Object();
+	transport_ = transport;
+	tr = SYS.Transport.Serial["out_"+transport];
+	DS2480 = isData = false;
+}
+if(f_stop) {
+	for(var devID in devLs) {
+		if((dO=devLs[devID]).isEVal()) continue;
+		aLs = dO.dP.nodeList("a_");
+		for(iA = 0; iA < aLs.length; iA++)
+			if(!dO.dP[aLs[iA]].isCfg()) dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
+	}
+	devLs = tr = false;
+	return;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial["out_"+transport];
+	transport_ = transport;
+	DS2480 = false;
+}
+//Try DS2480
+if(tr && !DS2480)	{
+	tr.addr(tr.addr().parse(0,":")+":9600:8N1");	tr.timings("500:20");
+	if(tr.start(true)) {
+		tr.sendbreak(); SYS.sleep(2e-3);
+		tr.messIO(SYS.strFromCharCode(0xC1));	SYS.sleep(4e-3);	//Send timing byte
+		//PDSRC=1.37Vus; W1LT=10us; DSO/WORT=8us;
+		//read the baud rate (to test command block); do 1 bit operation (to test 1-Wire block)
+		req = SYS.strFromCharCode(0x17, 0x45, 0x5B, 0x0F, 0x91);
+		for(resp = tr.messIO(req); resp.length && resp.length < 5 && (tresp=tr.messIO("")).length; resp += tresp) ;
+		if(resp.length == 5 && (resp.charCodeAt(3)&0xF1) == 0x00 && (resp.charCodeAt(3)&0x0E) == 0x00/*9600*/ &&
+				(resp.charCodeAt(4)&0xF0) == 0x90 && (resp.charCodeAt(4)&0x0C) == 0x00/*9600*/)
+			DS2480 = true;
+	}
+	isData = false;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(!DS2480)	t_err = "2:"+tr("DS2480 is not detected.");
+else {
+	//Generic information update.
+	if(f_start || (tmResc && (tmResc_=tmResc_-1/f_frq) <= 0)) {
+		tmResc_ = tmResc;
+		tmSc = SYS.time();
+		// Check for power
+		if(!reset(tr) ||
+		 	io(tr,(req=SYS.strFromCharCode(0xCC))) != req ||
+			io(tr,(req=SYS.strFromCharCode(0xB4))) != req ||
+			!(resp=io(tr,SYS.strFromCharCode(1),1)).length) power = EVAL;
+		else power = resp.charCodeAt(0);
+		// Scan for allowed devices on the bus.
+		sn = new Array(0, 0, 0, 0, 0, 0, 0, 0);
+		for(devID = "start", lstDiscr = 0; devID.length && lstDiscr >= 0; ) {
+			if((devID=scan(tr,sn,lstDiscr)).length)	{
+				//SYS.messInfo("OneWire","lstDiscr="+lstDiscr+"; devID="+SYS.strDecode(devID,"Bin"," "));
+				if((dO=devLs[devID]).isEVal()) {
+					devLs[devID] = dO = new Object();
+					devFamily = devID.charCodeAt(0); devNm = tr("1W device"); dO.isT = false;
+					if(devFamily == 0x10)			{ devNm = "DS1820/DS18S20/DS1920"; dO.isT = true; }
+					else if(devFamily == 0x20)	devNm = "DS2450";		//4AI
+					else if(devFamily == 0x22)	{ devNm = "DS1822"; dO.isT = true; }
+					else if(devFamily == 0x26)	devNm = "DS2438";		//SmartBat
+					else if(devFamily == 0x28)	{ devNm = "DS18B20"; dO.isT = true; }
+					else if(devFamily == 0x29)	devNm = "DS2408";		//8DIO
+					else if(devFamily == 0x3A)	devNm = "DS2413";		//2DIO
+
+					// Create the device''s parameter object
+					decId = SYS.strDecode(devID,"Bin","");
+					SYS.cntrReq(SYS.XMLNode("add").setAttr("path",this.nodePath()+"/%2fbr%2fprm_").setAttr("id",decId).setText(devNm+": "+decId));
+					SYS.cntrReq(SYS.XMLNode("set").setAttr("path",this.nodePath()+"/prm_"+decId+"/%2fprm%2fst%2fen").setText("1"));
+					// Create the device''s proper attributes
+					dO.dP = dP = this["prm_"+decId];
+					if(dO.isT) {	//Temperature
+						dP.attrAdd("val", tr("Temperature, °С"), "real|ro");
+						dP.attrAdd("m", tr("User cell [0...65535]"), "integer");
+						dP.attrAdd("res", tr("Resolution")+" [9...12]", "integer");
+					}
+					else if(devFamily == 0x20)		//DS2450
+						for(iN = 0; iN < 4; iN++) {
+							dP.attrAdd("ai"+iN, tr("AI, V")+iN, "real|ro");
+							dP.attrAdd("res"+iN, tr("Resolution")+iN+" [1...16]", "integer");
+							dP.attrAdd("md"+iN, tr("Mode")+iN, "integer|sel", "0;1;2\n2.55V;5.10V;DO");
+							dP.attrAdd("do"+iN, tr("DO")+iN, "boolean");
+						}
+					else if(devFamily == 0x26) {	//DS2438
+						dP.attrAdd("t", tr("Temperature, °С"), "real|ro");
+						dP.attrAdd("v", tr("Voltage, V"), "real|ro");
+						dP.attrAdd("i", tr("Current, A"), "real|ro");
+						dP.attrAdd("ICA", tr("Current Accumulator"), "integer");
+						dP.attrAdd("thr", tr("Accumulation threshold"), "integer|sel", "0;1;2;3\nNone;±2LSB;±4LSB;±8LSB");
+						dP.attrAdd("ETM", tr("Elapsed time meter"), "integer");
+						dP.attrAdd("TM_DISC", tr("Disconnect time"), "integer");
+						dP.attrAdd("TM_END", tr("End of charge time"), "integer");
+						dP.attrAdd("OFF", tr("Current Offset"), "integer");
+						dP.attrAdd("IAD", tr("Enable Current A/D"), "boolean");
+						dP.attrAdd("CA", tr("Enable Current Accumulator"), "boolean");
+						dP.attrAdd("EE", tr("Enable Current Accumulator Shadow"), "boolean");
+						dP.attrAdd("AD", tr("Voltage A/D (0-VAD,1-VDD)"), "boolean");
+					}
+					else if(devFamily == 0x29)		//DS2408
+						for(iD = 0; iD < 8; iD++) {
+							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
+							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
+						}
+					else if(devFamily == 0x3A)		//DS2413
+						for(iD = 0; iD < 2; iD++) {
+							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
+							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
+						}
+				}
+				if(dO.tmSc == tmSc)	break;	//Somthing wrong into the scan but repeat, interruption
+				dO.tmSc = tmSc;
+				dO.try = tryEVAL;
+			}
+		}
+		//Check for removed devices
+		for(devID in devLs) {
+			if((dO=devLs[devID]).isEVal()) continue;
+			if(dO.tmSc != tmSc)	{
+				devLs[devID] = EVAL;
+				aLs = dO.dP.nodeList("a_");
+				for(iA = 0; iA < aLs.length; iA++)
+					if(!dO.dP[aLs[iA]].isCfg())	dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
+			}
+		}
+	}
+	else {
+		//Process devices for reading current value and set modifable
+		for(devID in devLs) {
+			if((dO=devLs[devID]).isEVal()) continue;
+			devFamily = devID.charCodeAt(0);
+			if(dO.isT) {	//Temperature
+				dP = dO.dP;
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				//Check for a modifications
+				isMdf = false;
+				m_ = dP.m.get(), res_ = max(9,min(12,dP.res.get()));
+				if(!dO.m.isEVal() && !dO.res.isEVal() && (m_ != dO.m || res_ != dO.res)) {
+					//Set scratchpad
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x4E,m_&0xFF,(m_>>8)&0xFF,((res_-9)<<5)|0x1F))) != req) continue;
+					//Copy scratchpad part to the EEPROM
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x48))) != req) continue;
+					isMdf = true;
+				}
+
+				//Read current
+				// Call the transmission
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
+				if(!power) SYS.sleep(0.094*pow(2,(dO.res.isEVal()?12:dO.res)-9));
+				// Get scratchpad
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				/*out*/io(tr, SYS.strFromCharCode(0xBE));
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				if(!Special.FLibSYS.CRC(resp,0x8C,8,0)) {
+					val = resp.charCodeAt(1)*256 + resp.charCodeAt(0);
+					if(val > 32767) val -= 65536;
+					dP.val.set(val/16, 0, 0, true);
+					if(dO.m.isEVal() || dO.res.isEVal() || isMdf) {
+						dO.m = resp.charCodeAt(3)*256 + resp.charCodeAt(2); dP.m.set(dO.m, 0, 0, true);
+						dO.res = ((resp.charCodeAt(4)>>5)&0x3)+9; dP.res.set(dO.res, 0, 0, true);
+					}
+					dO.try = 0;
+				}
+				else if((dO.try=dO.try+1) > tryEVAL) {
+					dP.val.set(EVAL, 0, 0, true); dP.m.set(EVAL, 0, 0, true); dP.res.set(EVAL, 0, 0, true);
+					dO.m = dO.res = EVAL;
+				}
+			}
+			else if(devFamily == 0x20) {	//DS2450
+				dP = dO.dP;
+				//Check for a modifications
+				for(iN = 0; iN < 4; iN++) {
+					if(dO["st1"+iN].isEVal())	continue;
+					if((tRes=max(0,min(16,dP["res"+iN].get()))) == 16)	tRes = 0;
+					tSt = (dO["st1"+iN]&(~0xCF)) + tRes + ((dP["md"+iN].get()==2)?0x80:0) + (dP["do"+iN].get()?0x40:0);
+					if(tSt != dO["st1"+iN]) {	//Same write and check the result
+						if(!reset(tr)) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2,0,tSt))) != req) continue;
+						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
+						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
+							dO["st1"+iN] = tSt;
+					}
+					tSt = (dO["st2"+iN]&(~0x01)) + (dP["md"+iN].get()?1:0);
+					if(tSt != dO["st2"+iN]) {	//Same write and check the result
+						if(!reset(tr)) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2+1,0,tSt))) != req) continue;
+						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
+						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
+							dO["st2"+iN] = tSt;
+					}
+				}
+
+				//Read control status data
+				if(dP["res0"].get().isEVal()) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x08,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x08,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+					for(iN = 0; iN < 4; iN++) {
+						dP["res"+iN].set(CRC_OK?((tVl=resp.charCodeAt(iN*2)&0xF)?tVl:16):EVAL, 0, 0, true);
+						dP["md"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x80)?2:resp.charCodeAt(iN*2+1)&1):EVAL, 0, 0, true);
+						dP["do"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x40)?true:false):EVAL, 0, 0, true);
+						dO["st1"+iN] = resp.charCodeAt(iN*2); dO["st2"+iN] = resp.charCodeAt(iN*2+1);
+					}
+				} else CRC_OK = true;
+
+				//Read AI value
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x00,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")/*+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0x3C,0x08,0x00)/*+resp.slice(0,-2),0xA001,16,0).toString(16)*/);
+					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x00,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+				}
+				for(iN = 0; iN < 4; iN++)
+					if(CRC_OK) {
+						tVl = (resp.charCodeAt(iN*2+1)<<8) + resp.charCodeAt(iN*2);
+						vlMax = dP["md"+iN].get() ? 5.1 : 2.55;
+						dP["ai"+iN].set(tVl*vlMax/65536, 0, 0, true);
+					} else dP["ai"+iN].set(EVAL, 0, 0, true);
+
+				//Start A/D conversion for prepare data for next iteration
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x3C,0x0F,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
+				}
+			}
+			else if(devFamily == 0x26) {	//DS2438
+				dP = dO.dP;
+				//Check for a modifications
+				//????
+
+				//Recall memory page 0
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xB8,0))) != req) continue;
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xBE,0))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+				if(CRC_OK) {
+					if((tVl=(resp.charCodeAt(2)<<8)+resp.charCodeAt(1)) >= 32767) tVl -= 65536;
+					dP["t"].set(tVl/256, 0, 0, true);
+					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
+					dP["i"].set(tVl, 0, 0, true);
+				}
+				else {
+					dP["t"].set(EVAL, 0, 0, true);
+					dP["i"].set(EVAL, 0, 0, true);
+				}
+				dP["v"].set(CRC_OK?((resp.charCodeAt(4)<<8)+resp.charCodeAt(3))/100:EVAL, 0, 0, true);
+				dP["IAD"].set(CRC_OK?(resp.charCodeAt(0)&0x01):EVAL, 0, 0, true);
+				dP["CA"].set(CRC_OK?(resp.charCodeAt(0)&0x02):EVAL, 0, 0, true);
+				dP["EE"].set(CRC_OK?(resp.charCodeAt(0)&0x04):EVAL, 0, 0, true);
+				dP["AD"].set(CRC_OK?(resp.charCodeAt(0)&0x08):EVAL, 0, 0, true);
+				dP["thr"].set(CRC_OK?(resp.charCodeAt(7)>>6):EVAL, 0, 0, true);
+
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xBE,1))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+				dP["ETM"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
+				dP["ICA"].set(CRC_OK?resp.charCodeAt(4):EVAL, 0, 0, true);
+				if(CRC_OK) {
+					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
+					dP["OFF"].set(tVl, 0, 0, true);
+				} else dP["OFF"].set(EVAL, 0, 0, true);
+
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xBE,2))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+				dP["TM_DISC"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
+				dP["TM_END"].set(CRC_OK?((resp.charCodeAt(7)<<24)+(resp.charCodeAt(6)<<16)+(resp.charCodeAt(5)<<8)+resp.charCodeAt(4)):EVAL, 0, 0, true);
+
+				//Start T ant V conversion for prepare the data for next iteration
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xB4))) != req) continue;
+				}
+			}
+			else if(devFamily == 0x29) {	//DS2408
+				dP = dO.dP;
+				//Check for a modifications
+				isMdf = false; tVl = 0; do_ = new Array();
+				for(iD = 0; iD < 8; iD++) {
+					if(dO["do"+iD].isEVal())	{ isMdf = false; break; }
+					do_[iD] = dP["do"+iD].get();
+					if(do_[iD] != dO["do"+iD])	isMdf = true;
+					if(do_[iD])	tVl = tVl | (1<<iD);
+				}
+				if(isMdf) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,~tVl))) != req) continue;
+					// Verify the correct writing, pass by that can be wrong
+					//resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
+					//SYS.messInfo("OneWire","Write resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xF0,0x88,0x00))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));//+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0).toString(16));
+				CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+				CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+				for(iD = 0; iD < 8; iD++) {
+					dP["di"+iD].set(CRC_OK?resp.charCodeAt(0)&(1<<iD):EVAL, 0, 0, true);
+					if(dO["do"+iD].isEVal() || isMdf || !CRC_OK) {
+						dO["do"+iD] = CRC_OK ? ((resp.charCodeAt(1)&(1<<iD))?true:false) : EVAL;
+						dP["do"+iD].set(dO["do"+iD], 0, 0, true);
+					}
+				}
+			}
+			else if(devFamily == 0x3A) {	//DS2413
+				dP = dO.dP;
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				//Check for a modifications
+				isMdf = false;
+				do0_ = dP.do0.get(), do1_ = dP.do1.get();
+				if(!dO.do0.isEVal() && !dO.do1.isEVal() && (do0_ != dO.do0 || do1_ != dO.do1)) {
+					tVl = (do1_<<1) | do0_;
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,(~tVl)&0xFF))) != req) continue;
+					isMdf = true;
+				}
+
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xF5))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				if(((tVl=resp.charCodeAt(0))&0xF) == ((~(tVl>>4))&0xF)) {
+					dP.di0.set(tVl&0x01, 0, 0, true); dP.di1.set(tVl&0x04, 0, 0, true);
+					if(dO.do0.isEVal() || dO.do1.isEVal() || isMdf) {
+						dO.do0 = (tVl&0x02)?true:false; dP.do0.set(dO.do0, 0, 0, true);
+						dO.do1 = (tVl&0x08)?true:false; dP.do1.set(dO.do1, 0, 0, true);
+					}
+				}
+				else {
+					dP.di0.set(EVAL, 0, 0, true); dP.di1.set(EVAL, 0, 0, true);
+					dP.do0.set(EVAL, 0, 0, true); dP.do1.set(EVAL, 0, 0, true);
+					dO.do0 = dO.do1 = EVAL;
+				}
+			}
+		}
+	}
+}
+
+f_err = t_err;',1509373346);
+INSERT INTO "tmplib_LowDevLib" VALUES('BMP180','I2C: BMP180','I2C Pressure and Temperature sensor. Connect through a Serial output transport into the I2C mode.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial["out_"+transport];
+	AC1 = 0;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial["out_"+transport];
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	resp = Special.FLibSYS.IO("", "", "b");
+	//Calibration data, from register 0xAA and to 0xBF
+	if(!AC1) {
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xAA), 0, 22);
+		if(resp.string.length != 22) t_err = "3:"+tr("Wrong or empty respond to the calibration request.");
+		else {
+			AC1 = resp.read("int16",1);	AC2 = resp.read("int16",1);	AC3 = resp.read("int16",1);
+			AC4 = resp.read("uint16",1);	AC5 = resp.read("uint16",1);	AC6 = resp.read("uint16",1);
+			B1 = resp.read("int16",1);	B2 = resp.read("int16",1);
+			MB = resp.read("int16",1);	MC = resp.read("int16",1);	MD = resp.read("int16",1);
+			//SYS.messInfo("BMP180","AC1="+AC1+"; AC2="+AC2+"; AC3="+AC3+"; AC4="+AC4+"; AC5="+AC5+"; AC6="+AC6);
+		}
+	}
+
+	//Read and calculate temperature
+	if(AC1 && !t_err.toInt()) {
+		// Start conversion
+		tr.messIO(SYS.strFromCharCode(addr,0xF4,0x2E), 0, 0);	SYS.sleep(4.5e-3);
+		// Read value
+		resp.pos = 0; resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF6), 0, 2);
+		if(resp.string.length != 2) t_err = "3:"+tr("Wrong or empty respond to the temperature data.");
+		else {
+			UT = resp.read("int16",1);
+			X1 = (UT-AC6)*AC5/pow(2,15);	X2 = MC*pow(2,11)/(X1+MD);
+			B5 = X1 + X2;
+			t = 0.1*((B5+8)/pow(2,4));
+			//SYS.messInfo("BMP180","UT="+UT+"; X1="+X1+"; X2="+X2+"; B5="+B5+"; t="+t);
+		}
+	}
+	
+	//Read and calculate temperature
+	if(AC1 && !t_err.toInt()) {
+		oss = max(0,min(3,oss));
+		// Start conversion
+		tr.messIO(SYS.strFromCharCode(addr,0xF4,0x34+(oss<<6)), 0, 0);	SYS.sleep((1.5+3*pow(2,oss))*1e-3);
+		// Read value
+		resp.pos = 0; resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF6), 0, 4);
+		UP = resp.read("int32",1)>>(16-oss);
+		B6 = B5 - 4000;
+		X1 = (B2*(B6*floor(B6/pow(2,12))))/pow(2,11);
+		X2 = AC2*B6/pow(2,11);
+		X3 = X1 + X2;
+		B3 = (((AC1*4+X3)<<oss)+2)/4;
+		X1 = AC3*B6/pow(2,13);
+		X2 = (B1*(B6*B6/pow(2,12)))/pow(2,16);
+		X3 = ((X1+X2)+2)/pow(2,2);
+		B4 = AC4*(X3+32768)/pow(2,15);
+		B7 = (UP-B3)*(50000>>oss);
+		p = (B7 < 0x80000000) ? (B7*2)/B4 : (B7/B4)*2;
+		X1 = (p/pow(2,8))*(p/pow(2,8));
+		X1 = (X1*3038)/pow(2,16);
+		X2 = (-7357*p)/pow(2,16);
+		p = p + (X1+X2+3791)/pow(2,4);
+	}
+}
+
+if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
+f_err = t_err;',1509373346);
+INSERT INTO "tmplib_LowDevLib" VALUES('DHT','GPIO: DHT11,22 (AM23XX)','Digital Temperature and Humidity Sensor for models: DHT11, DHT12, AM2302, AM2320, ...
+The module designed for the sensors connect through GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
+Conditions: Exclusively realtime planing in the priority 199 (FIFO-99).
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//Set link to fast external functions
+if(f_start)	f_err = "0", addr_ = "";
+
+t_err = "0";
+
+//Check for the address change and link
+if(addr != addr_)	{
+	addr_ = addr;
+	function mode = addr+".fnc_mode";
+	function get = addr+".fnc_get";
+	function put = addr+".fnc_put";
+}
+
+//Read sensor''s data function declaration
+function read() {
+	vl = 0;						//Meassured value
+	cntHoldMax = 100;		//Maximum wait counter
+
+	//Call the device to a respond
+	mode(pin, 4); put(pin, true); tmSleep(500e-3);	//Set pin to output mode and next to true for 500ms
+	put(pin, false); tmSleep(20e-3);							//Set output to false for 20ms
+	mode(pin, 2);														//Set pin to input mode
+
+	//Read
+	// Wait for pull pin low.
+	for(cntHold = 0; get(pin); cntHold++)
+		if(cntHold > cntHoldMax) return 0;
+
+	//Meassure the typical pulse length
+	for(cntHold = 0; !get(pin); cntHold++)
+		if(cntHold > cntHoldMax) return 0;
+	for(cntHold = 0; get(pin); cntHold++)
+		if(cntHold > cntHoldMax) return 0;
+	cntPulse = cntHold;
+
+	//Read meassured value
+	for(iB = 0; iB < 40; iB++) {
+		//stg = iB;
+		for(cntHold = 0; !get(pin); cntHold++)
+			if(cntHold > cntHoldMax) return 0;
+		for(cntHold = 0; get(pin); cntHold++)
+			if(cntHold > cntHoldMax) return 0;
+		vl = vl << 1;
+		if(cntHold > cntPulse/2)	vl = vl | 1;
+	}
+
+	return vl;
+}
+
+//Main processing
+if(!mode)	t_err = "1:"+tr("No link to external functions on ''%1''.").replace("%1",addr);
+else if(!(dev == 0 || dev == 1))	t_err = "2:"+tr("Unknown device %1 [0-DHT11, 1-DHT22].").replace("%1",dev.toString());
+else if(tries < 1 || tries > 5)	t_err = "3:"+tr("Tries number %1 out of range [1...5].").replace("%1",tries.toString());
+else {
+	for(i = 0; i < tries; i++) {
+		if(i) tmSleep(2);	//Retry after two seconds
+		if((vl=read()) && (vl&0xFF) == ((((vl>>8)&0xFF)+((vl>>16)&0xFF)+((vl>>24)&0xFF)+((vl>>32)&0xFF))&0xFF)) {
+			//SYS.messInfo("/DHT","vl="+vl.toString(16));
+			if(dev == 1) {
+				h = 0.1*(((vl>>32)&0xFF)*256+((vl>>24)&0xFF));
+				t = 0.1*(((vl>>16)&0xFF)*256+((vl>>8)&0xFF));
+				break;
+			}
+			h = ((vl>>32)&0xFF) + 20; t = (vl>>16)&0xFF;
+		}
+	}
+	if(i >= tries)	t_err = "10:"+tr("Get data after %1 tries error.").replace("%1",tries.toString());
+}
+
+if(t_err.toInt() && !f_err.toInt()) t = h = EVAL;
+f_err = t_err;',1509373346);
+INSERT INTO "tmplib_LowDevLib" VALUES('DS3231','I2C: DS3231','I2C RTC chip with Temperature sensor and calibration on it. Connect through a Serial output transport into the I2C mode.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial["out_"+transport];
+	tm_ = tm = "";
+	agOff_ = agOff = 0;
+	p32k_ = p32k = false;
+	pSQW_ = pSQW = false;
+	pSQWf_ = pSQWf = 0;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial["out_"+transport];
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	//Check for modification
+	if(tm != tm_) {
+		off = 0; sdt = tm.parse(0,"T",off); stm = tm.parse(0,"T",off);
+		off = 0; year = sdt.parse(0,"-",off).toInt(16); month = sdt.parse(0,"-",off).toInt(16); day = sdt.parse(0,"-",off).toInt(16);
+		off = 0; hour = stm.parse(0,":",off).toInt(16); min = stm.parse(0,":",off).toInt(16); sec = stm.parse(0,":",off).toInt(16);
+		tr.messIO(SYS.strFromCharCode(addr,0,sec,min,hour,0,day,month+((year&0xF00)?0x80:0),year&0xFF), 0, 0);
+		tm_ = tm;
+	}
+	if(agOff != agOff_) {
+		tr.messIO(SYS.strFromCharCode(addr,16,agOff), 0, 0);
+		agOff_ = agOff;
+	}
+	if(p32k != p32k_) {
+		resp = tr.messIO(SYS.strFromCharCode(addr,15), 0, 1);
+		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty read respond.");
+		else {
+			cntrB = resp.charCodeAt(0);
+			cntrB = p32k ?	cntrB|0x08 : cntrB&(~0x08);
+			tr.messIO(SYS.strFromCharCode(addr,15,cntrB), 0, 0);
+		}
+		p32k_ = p32k;
+	}
+	if(pSQW != pSQW_) {
+		resp = tr.messIO(SYS.strFromCharCode(addr,14), 0, 1);
+		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty read respond.");
+		else {
+			cntrB = resp.charCodeAt(0);
+			cntrB = pSQW ? cntrB&(~0x04) : cntrB|0x04;
+			tr.messIO(SYS.strFromCharCode(addr,14,cntrB), 0, 0);
+		}
+		pSQW_ = pSQW;
+	}
+	if(pSQWf != pSQWf_) {
+		pSQWf = max(0,min(3,pSQWf));
+		resp = tr.messIO(SYS.strFromCharCode(addr,14), 0, 1);
+		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty read respond.");
+		else {
+			cntrB = (resp.charCodeAt(0)&(~0x18)) + (pSQWf<<3);
+			tr.messIO(SYS.strFromCharCode(addr,14,cntrB), 0, 0);
+		}
+		pSQWf_ = pSQWf;
+	}
+
+	//Get current
+	resp = tr.messIO(SYS.strFromCharCode(addr,0), 0, 19);
+	if(resp.length != 19) t_err = "3:"+tr("Wrong or empty read respond.");
+	else {
+		// Get current time
+		tm_ = tm = (20+(resp.charCodeAt(5)>>7)).toString(10,2)+resp.charCodeAt(6).toString(16,2)+"-" +
+				(resp.charCodeAt(5)&0x7F).toString(16,2)+"-" + 
+				resp.charCodeAt(4).toString(16,2)+"T" +
+				(resp.charCodeAt(2)&0x3F).toString(16,2)+":" +
+				resp.charCodeAt(1).toString(16,2)+":" + 
+				resp.charCodeAt(0).toString(16,2);
+		// Aging offset
+		if((agOff=resp.charCodeAt(16)) >= 128)	agOff = agOff-256;
+		agOff_ = agOff;
+
+		// Miscellaneous
+		p32k = p32k_ = resp.charCodeAt(15)&0x08;
+		pSQW = pSQW_ = !(resp.charCodeAt(14)&0x04);
+		pSQWf = pSQWf_ = (resp.charCodeAt(14)>>3)&0x3;
+
+		// Get temperature
+		t = (resp.charCodeAt(17)<<2)+(resp.charCodeAt(18)>>6);
+		if(t >= 128) t = t-256;
+		t = t/4;
+	}
+}
+
+if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
+f_err = t_err;',1509373346);
+INSERT INTO "tmplib_LowDevLib" VALUES('PCF8574','I2C: PCF8574','I2C 8-bit 8DIO. Connect through a Serial output transport into the I2C mode.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial["out_"+transport];
+	di0 = di1 = di2 = di3 = di4 = di5 = di6 = di7 = EVAL;
+	do0 = do1 = do2 = do3 = do4 = do5 = do6 = do7 = true;
+	do0_ = do1_ = do2_ = do3_ = do4_ = do5_ = do6_ = do7_ = true;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial["out_"+transport];
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	if(do0 != do0_ || do1 != do1_ || do2 != do2_ || do3 != do3_ || do4 != do4_ || do5 != do5_ || do6 != do6_ || do7 != do7_) {
+		tr.messIO(SYS.strFromCharCode(addr,(do0?0x01:0)|(do1?0x02:0)|(do2?0x04:0)|(do3?0x08:0)|
+																(do4?0x10:0)|(do5?0x20:0)|(do6?0x40:0)|(do7?0x80:0)), 0, 0);
+		do0_ = do0; do1_ = do1; do2_ = do2; do3_ = do3; do4_ = do4; do5_ = do5; do6_ = do6; do7_ = do7;
+	}
+	rez = tr.messIO(SYS.strFromCharCode(addr), 0, 1);
+	if(rez.length) {
+		vl = rez.charCodeAt(0);
+		di0 = (vl&0x01); di1 = (vl&0x02); di2 = (vl&0x04); di3 = (vl&0x08);
+		di4 = (vl&0x10); di5 = (vl&0x20); di6 = (vl&0x40); di7 = (vl&0x80);
+	}
+	else t_err = "3:"+tr("No read result.");
+}
+
+if(t_err.toInt() && !f_err.toInt())
+	di0 = di1 = di2 = di3 = di4 = di5 = di6 = di7 = EVAL;
+
+f_err = t_err;',1509373346);
+INSERT INTO "tmplib_LowDevLib" VALUES('PCF8591','I2C: PCF8591','I2C 8-bit 4xA/D and D/A converter. Connect through a Serial output transport into the I2C mode.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial["out_"+transport];
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial["out_"+transport];
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	for(i = 0; i < 4 && !t_err.toInt(); i++) {
+		//Select next channel and the output
+		tr.messIO(SYS.strFromCharCode(addr,0x40|((i+1)&0x3),255*max(0,min(1,ao/vRef))), 0, 0);
+		SYS.sleep(1e-3);
+		rez = tr.messIO("", 0, 1);
+		if(rez.length)	arguments["ai"+i] = vRef*(rez.charCodeAt(0)/255);
+		else t_err = "3:"+tr("No read result.");
+	}
+}
+
+if(t_err.toInt() && !f_err.toInt())
+	for(i = 0; i < 4; i++)
+		arguments["ai"+i] = EVAL;
+
+f_err = t_err;',1509373346);
+CREATE TABLE 'tmplib_LowDevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '0' ,"FLAGS" INTEGER DEFAULT '0' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '0' , PRIMARY KEY ("TMPL_ID","ID"));
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','transport','Transport of the I2C, Serial (i2c) or
+GPIO address with function put(), mostly it''s BCM2835 (DAQ.BCM2835.pi.pi)',0,64,'i2c',0);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','addr','I2C device address [0...119]',1,64,'39',1);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','RS','GPIO Pin: Reset',1,64,'7',2);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','E','GPIO Pin: Enable',1,64,'8',3);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','D4','GPIO Pin: Data4',1,64,'25',4);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','D5','GPIO Pin: Data5',1,64,'24',5);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','D6','GPIO Pin: Data6',1,64,'23',6);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','D7','GPIO Pin: Data7',1,64,'18',7);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','ln1','Line 1',0,32,'',8);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','ln2','Line 2',0,32,'',9);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097','tmResc','Rescan period, s',2,64,'60',1);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097','tryEVAL','Tries after which set value to EVAL',1,64,'3',2);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097','power','Power, for temperature',3,16,'',3);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097','this','Object',4,0,'',4);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097U','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097U','tmResc','Rescan period, s',2,64,'60',1);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097U','tryEVAL','Tries after which set value to EVAL',1,64,'3',2);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097U','power','Power, for temperature',3,16,'',3);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097U','isData','In data mode',3,0,'0',4);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('1W_DS9097U','this','Object',4,0,'',5);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('BMP180','transport','Transport of the I2C, Serial',0,64,'i2c',0);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('BMP180','addr','Device address [0...119]',1,64,'119',1);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('BMP180','oss','Oversampling setting (0...3)',1,64,'0',2);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('BMP180','t','T, °С',2,16,'',3);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('BMP180','p','P, Pa',2,16,'',4);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','addr','GPIO address with functions mode(), get() and put(), mostly it''s BCM2835',0,64,'DAQ.BCM2835.pi.pi',0);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','pin','IO pin number of the GPIO',1,64,'17',1);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','tries','Tries [1...5]',1,64,'2',2);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','dev','Device (0-DHT11, 1-DHT22)',1,64,'1',3);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','t','T, °С',2,16,'',4);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','h','H, %',2,16,'',5);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','transport','Transport of the I2C, Serial',0,64,'i2c',0);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','addr','Device address [0...119]',1,64,'104',1);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','tm','Date and time, YYYY-MM-DDTHH:mm:SS',0,32,'',2);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','agOff','Aging offset, [-128...127]',1,32,'',3);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','t','T, °С',2,16,'',4);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','p32k','Enable 32768Hz',3,32,'',5);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','pSQW','Enable SQUARE-WAVE OUTPUT',3,32,'',6);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','pSQWf','SQUARE-WAVE OUTPUT frequency: 0-1Hz, 1-1.024kHz, 2-4.096kHz, 3-8.192kHz',1,32,'',7);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','transport','Transport of the I2C, Serial',0,64,'i2c',0);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','addr','Device address [0...119]',1,64,'39',1);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di0','DI0',3,16,'',2);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di1','DI1',3,16,'',3);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di2','DI2',3,16,'',4);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di3','DI3',3,16,'',5);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di4','DI4',3,16,'',6);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di5','DI5',3,16,'',7);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di6','DI6',3,16,'',8);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di7','DI7',3,16,'',9);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do0','DO0',3,33,'',10);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do1','DO1',3,33,'',11);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do2','DO2',3,33,'',12);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do3','DO3',3,33,'',13);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do4','DO4',3,33,'',14);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do5','DO5',3,33,'',15);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do6','DO6',3,33,'',16);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','do7','DO7',3,33,'',17);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','transport','Transport of the I2C, Serial',0,64,'i2c',0);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','addr','Device address [0...119]',1,64,'72',1);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','vRef','Reference voltage, V',2,64,'3.2',2);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ai0','AI0',2,16,'',3);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ai1','AI1',2,16,'',4);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ai2','AI2',2,16,'',5);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ai3','AI3',2,16,'',6);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ao','AO',2,32,'',7);
 COMMIT;

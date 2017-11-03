@@ -1,0 +1,565 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/Обчислювач подібний до Java - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/Обчислювач подібний до Java</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FJavaLikeCalc&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/JavaLikeCalc" title="Modules/JavaLikeCalc">Modules/JavaLikeCalc</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/JavaLikeCalc" title="Modules/JavaLikeCalc (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/JavaLikeCalc/ru" title="Модули/Вычислитель похожий на Java (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
+<td> Обчислювач на мові подібній до Java </td>
+<td> 3.6 </td>
+<td> GPL2 </td>
+<td> daq_JavaLikeCalc.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Роман Савоченко </td>
+<td> Надає обчислювач та рушій бібліотек, оснований на мові подібній до Java. Користувач може створювати та модифікувати функції та їх бібліотеки.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9F.D0.BE.D0.B4.D1.96.D0.B1.D0.BD.D0.B0_.D0.B4.D0.BE_Java_.D0.BC.D0.BE.D0.B2.D0.B0"><span class="tocnumber">1</span> <span class="toctext">Подібна до Java мова</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#.D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B8_.D0.BC.D0.BE.D0.B2.D0.B8"><span class="tocnumber">1.1</span> <span class="toctext">Елементи мови</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BC.D0.BE.D0.B2.D0.B8"><span class="tocnumber">1.2</span> <span class="toctext">Операції мови</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.92.D0.B1.D1.83.D0.B4.D0.BE.D0.B2.D0.B0.D0.BD.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D0.BC.D0.BE.D0.B2.D0.B8"><span class="tocnumber">1.3</span> <span class="toctext">Вбудовані функції мови</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D0.B8_.D0.BC.D0.BE.D0.B2.D0.B8"><span class="tocnumber">1.4</span> <span class="toctext">Оператори мови</span></a>
+<ul>
+<li class="toclevel-3 tocsection-6"><a href="#.D0.A3.D0.BC.D0.BE.D0.B2.D0.BD.D1.96_.D0.BE.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D0.B8"><span class="tocnumber">1.4.1</span> <span class="toctext">Умовні оператори</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#.D0.A6.D0.B8.D0.BA.D0.BB.D0.B8"><span class="tocnumber">1.4.2</span> <span class="toctext">Цикли</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#.D0.92.D0.BD.D1.83.D1.82.D1.80.D1.96.D1.88.D0.BD.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97"><span class="tocnumber">1.4.3</span> <span class="toctext">Внутрішні функції</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#.D0.A1.D0.BF.D0.B5.D1.86.D1.96.D0.B0.D0.BB.D1.8C.D0.BD.D1.96_.D1.81.D0.B8.D0.BC.D0.B2.D0.BE.D0.BB.D0.B8_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.BE.D0.B2.D0.B8.D1.85_.D0.B7.D0.BC.D1.96.D0.BD.D0.BD.D0.B8.D1.85"><span class="tocnumber">1.4.4</span> <span class="toctext">Спеціальні символи строкових змінних</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-10"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82"><span class="tocnumber">1.5</span> <span class="toctext">Об'єкт</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#.D0.9F.D1.80.D0.B8.D0.BA.D0.BB.D0.B0.D0.B4.D0.B8_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.B8_.D0.BD.D0.B0_.D0.BC.D0.BE.D0.B2.D1.96"><span class="tocnumber">1.6</span> <span class="toctext">Приклади програми на мові</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#.D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D1.82.D0.B0_.D0.B9.D0.BE.D0.B3.D0.BE_.D0.BA.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="tocnumber">2</span> <span class="toctext">Контролер та його конфігурація</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D1.82.D0.B0_.D0.B9.D0.BE.D0.B3.D0.BE_.D0.BA.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="tocnumber">3</span> <span class="toctext">Параметр контролеру та його конфігурація</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#.D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B8_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D0.B9_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">4</span> <span class="toctext"><span>Бібліотеки функцій модуля</span></span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#.D0.9A.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">5</span> <span class="toctext">Користувацькі функції модуля</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">API користувацького програмування</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#.D0.9F.D1.80.D0.BE.D0.B4.D1.83.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.96.D1.81.D1.82.D1.8C"><span class="tocnumber">7</span> <span class="toctext">Продуктивність</span></a></li>
+</ul>
+</div>
+
+<p>Модуль контролеру <i>JavaLikeCalc</i> надає у системі OpenSCADA механізм створення функцій та їх бібліотек на мові подібній до Java. Опис функції на мові подібній до Java зводиться до обв'язки параметрів функції алгоритмом. Крім цього модуль наділено функціями безпосередніх обчислень шляхом створення обчислювальних контролерів.
+</p><p>Безпосередні обчислення забезпечуються створенням контролеру та зв'язуванням його із функцією цього-ж модуля. Для зв'язування функції створюється кадр значень, над яким і виконуються періодичні обчислення.
+</p><p>Модулем реалізуються функції горизонтального резервування, а саме — спільної роботи з віддаленою станцією цього-ж рівня. Окрім синхронізації значень та архівів атрибутів параметрів модулем здійснюється синхронізація значень обчислювальної функції, з метою безударного "підхоплення" алгоритмів.
+</p><p>Параметри функції можуть вільно створюватися, видалятися або модифікуватися. Поточна версія модуля підтримує до 65535 параметрів функції у підсумку із внутрішніми змінними. Вигляд редактору функцій показано на рисунку 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1066px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_funcedit_uk.png"><img class="thumbimage" height="622" src="../files/JavaLikeCalc_funcedit_uk.png" width="1064" /></a>  <div class="thumbcaption">Рис.1. Вигляд редактору функцій.</div></div></div></div>
+<p>Після будь-якої зміни програми або конфігурації параметрів здійснюється перекомпіляція програми із повідомленням пов'язаних з функцією об'єктів значень <i>TValCfg</i>. Компілятор мови побудовано із використанням відомого генератору граматики "Bison", який сумісний з не менш відомою утилітою "Yacc".
+</p><p>Мова використовує неявне визначення локальних змінних, яке полягає у визначені нової змінної у випадку привласнення їй значення. Причому тип локальної змінної встановлюється у відповідності з типом значення, що привласнюється. Наприклад, вираз <b>Qr=Q0*Pi+0.01;</b> визначить змінну <b>Qr</b> з типом змінної <b>Q0</b>.
+</p><p>У роботі з різними типами ця мова використовує механізм автоматичного приведення типів у місцях, де подібне приведення є доцільним.
+</p><p>Для коментування ділянок коду у мові передбачено символи "//" та "/* ... */". Все, що йде після "//" до кінця рядку та між "/* ... */", ігнорується компілятором.
+</p><p>У процесі генерації коду компілятор мови здійснює оптимізацію за константам та приведення типів констант до потрібного типу. Під оптимізацією констант мається на увазі виконання обчислень у процесі побудови байт-коду над двома константами та вставка результату у код. Наприклад, вираз <b>y=pi*10;</b> згорнеться у просте привласнення <b>y=31.4159;</b>. Під приведенням типів констант до потрібного типу мається на увазі формування у коді константи, яка виключає приведення типу в процесі виконання. Наприклад, вираз <b>y=x*10</b>, у випадку реального типу змінної <b>x</b>, перетвориться у <b>y=x*10.0</b>.
+</p><p>Вирази привласнення можуть записуватися через символ ',', наприклад:
+</p>
+<pre style="white-space: pre-wrap;">
+var1=1, var2=3, var4=var1+var2;
+for(var1=0, var2=0, var3=-1; var1 &lt; 10; var1++, var2++) var3++;
+</pre>
+<p>Мова підтримує виклики зовнішніх та внутрішніх функцій. Ім'я будь-якої функції взагалі сприймається як символ, перевірка на належність якого до тієї або іншої категорії здійснюється у наступній послідовності:
+</p>
+<ul><li> не починається з крапки:
+<ul><li> ключові слова (if, else, while, ...);</li>
+<li> параметри-атрибути цієї функції;</li>
+<li> іменовані-вбудовані постійні (EVAL, pi, e, ...) та постійні-об'єкти (SYS, arguments)</li>
+<li> вбудовані функції (sin, cos, ...);</li>
+<li> внутрішні, зовнішні функції, функції об'єкту та системних вузлів OpenSCADA (DOM);</li>
+<li> зареєстровані раніш автоматичні змінні;</li>
+<li> глобальні атрибути параметрів DAQ та властивості змінних;</li>
+<li> ключові слова (in, var);</li>
+<li> нова автоматична змінна.</li></ul></li>
+<li> починаються з точки:
+<ul><li> елементи шляху до властивості та функції об'єкту.</li></ul></li></ul>
+<p>Виклик зовнішньої функції, як і атрибуту системного параметра, записується як адреса до об'єкту динамічного дерева об'єктної моделі системи OpenSCADA у вигляді: "DAQ.JavaLikeCalc.lib_techApp.klapNotLin". Для статичних функцій Ви можете здійснювати динамічне підключення, наступним чином:
+</p>
+<pre style="white-space: pre-wrap;">
+function klapNotLin = "DAQ.JavaLikeCalc.lib_techApp.klapNotLin";
+rez = klapNotLin(prm1, prm2, ..., prmN);</pre>
+<p>Для надання можливості написання користувацьких процедур управління різними компонентами OpenSCADA цим модулем надається реалізація API прекомпіляції користувацьких процедур окремих компонентів OpenSCADA на реалізації подібної до Java мови. Такими компонентами, наприклад, є: Шаблони параметрів підсистеми "Збір даних" та Середовище візуалізації та управління (СВУ).
+</p>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.96.D0.B1.D0.BD.D0.B0_.D0.B4.D0.BE_Java_.D0.BC.D0.BE.D0.B2.D0.B0"><span class="mw-headline-number">1</span> Подібна до Java мова</span></h2>
+<h3><span class="mw-headline" id=".D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B8_.D0.BC.D0.BE.D0.B2.D0.B8"><span class="mw-headline-number">1.1</span> Елементи мови</span></h3>
+<p><i>Ключові слова:</i> if, else, while, for, break, continue, return, function, using, true, false.
+<i>Постійні:</i>
+</p>
+<ul><li> десяткові: цифри 0-9 (12, 111, 678);</li>
+<li> вісімкові: цифри 0-7 (012, 011, 076);</li>
+<li> шістнадцяткові: цифри 0-9, букви a-f або A-F (0x12, 0XAB);</li>
+<li> реальні: 345.23, 2.1e5, 3.4E-5, 3e6;</li>
+<li> логічні: true, false;</li>
+<li> строкові: "hello", без переходу на наступний рядок однак з підтримкою прямої конкатенації строкових констант.</li></ul>
+<p><i>Типи змінних:</i>
+</p>
+<ul><li> ціле: -2<sup>63</sup>...2<sup>63</sup>, EVAL_INT(-9223372036854775807);</li>
+<li> реальне: 3.4 * 10<sup>308</sup>, EVAL_REAL(-1.79E308);</li>
+<li> логічне: false, true, EVAL_BOOL(2);</li>
+<li> рядок: послідовність символів-байтів (0...255) будь якої довжини, обмеженої об'ємом пам'яті та сховищем у БД; EVAL_STR("&lt;EVAL&gt;").</li></ul>
+<p><i>Вбудовані константи:</i> pi = 3.14159265, e = 2.71828182, EVAL_BOOL(2), EVAL_INT(-9223372036854775807), EVAL_REAL,EVAL(-1.79E308), EVAL_STR("&lt;EVAL&gt;")
+<i>Атрибути параметрів системи OpenSCADA (починаючи з підсистеми DAQ, у вигляді "{Тип модуля DAQ}.{Контролер}.{Параметр}.{Атрибут}").</i>
+<i>Функції об'єктної моделі системи OpenSCADA.</i>
+</p>
+<h3><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D1.96.D1.97_.D0.BC.D0.BE.D0.B2.D0.B8"><span class="mw-headline-number">1.2</span> Операції мови</span></h3>
+<p>Операції, підтримувані мовою, представлено у таблиці нижче. Пріоритет операцій зменшується зверху донизу. Операції з однаковим пріоритетом входять до однієї групи кольору.
+</p>
+<table bgcolor="#FFFFF0" border="1" cellspacing="0">
+<tr align="center" bgcolor="#83D8FF"><td><b>Символ</b></td><td><b>Опис</b></td></tr>
+<tr bgcolor="#FFFFC0"><td>()</td><td>Виклик функції.</td></tr>
+<tr><td>{}</td><td>Програмні блоки.</td></tr>
+<tr><td>++</td><td>Інкремент (пост та пре).</td></tr>
+<tr><td>--</td><td>Декремент (пост та пре).</td></tr>
+<tr bgcolor="#FFFFC0"><td>-</td><td>Унарний мінус.</td></tr>
+<tr bgcolor="#FFFFC0"><td>!</td><td>Логічне заперечення.</td></tr>
+<tr bgcolor="#FFFFC0"><td /><td>Побітове заперечення.</td></tr>
+<tr><td>*</td><td>Множення.</td></tr>
+<tr><td>/</td><td>Ділення.</td></tr>
+<tr><td>%</td><td>Залишок від цілочисельного ділення.</td></tr>
+<tr bgcolor="#FFFFC0"><td>+</td><td>Складання</td></tr>
+<tr bgcolor="#FFFFC0"><td>-</td><td>Віднімання</td></tr>
+<tr><td>&lt;&lt;</td><td>Порозрядний зсув ліворуч</td></tr>
+<tr><td>&gt;&gt;</td><td>Порозрядний зсув праворуч</td></tr>
+<tr bgcolor="#FFFFC0"><td>&gt;</td><td>Більше</td></tr>
+<tr bgcolor="#FFFFC0"><td>&gt;=</td><td>Більше або дорівнює</td></tr>
+<tr bgcolor="#FFFFC0"><td>&lt;</td><td>Менше</td></tr>
+<tr bgcolor="#FFFFC0"><td>&lt;=</td><td>Менше або дорівнює</td></tr>
+<tr bgcolor="#FFFFC0"><td>==</td><td>Дорівнює</td></tr>
+<tr bgcolor="#FFFFC0"><td>!=</td><td>Не дорівнює</td></tr>
+<tr><td>|</td><td>Порозрядне "АБО"</td></tr>
+<tr><td>&amp;</td><td>Порозрядне "ТАК"</td></tr>
+<tr><td>^</td><td>Порозрядне "Виключне АБО"</td></tr>
+<tr bgcolor="#FFFFC0"><td>&amp;&amp;</td><td>Логічне "ТАК"</td></tr>
+<tr bgcolor="#FFFFC0"><td>||</td><td>Логічне "АБО"</td></tr>
+<tr><td>?:</td><td>Умовна операція "i=(i&lt;0)?0:i;"</td></tr>
+<tr bgcolor="#FFFFC0"><td>=</td><td>Привласнення.</td></tr>
+<tr bgcolor="#FFFFC0"><td>+=</td><td>Привласнення із складанням.</td></tr>
+<tr bgcolor="#FFFFC0"><td>-=</td><td>Привласнення із відніманням.</td></tr>
+<tr bgcolor="#FFFFC0"><td>*=</td><td>Привласнення із множенням.</td></tr>
+<tr bgcolor="#FFFFC0"><td>/=</td><td>Привласнення із діленням.</td></tr>
+</table>
+<h3><span class="mw-headline" id=".D0.92.D0.B1.D1.83.D0.B4.D0.BE.D0.B2.D0.B0.D0.BD.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D0.BC.D0.BE.D0.B2.D0.B8"><span class="mw-headline-number">1.3</span> Вбудовані функції мови</span></h3>
+<p>Віртуальною машиною мови передбачено наступний набір вбудованих функцій загального призначення:
+</p>
+<ul><li> double max(double x, double x1) — максимальне значення із <i>x</i> та <i>x1</i>;</li>
+<li> double min(double x, double x1) — мінімальне значення із <i>x</i> та <i>x1</i>;</li>
+<li> string typeof(ElTp vl) — тип значення <i>vl</i>;</li>
+<li> string tr(string base) — переклад базового <i>base</i> повідомлення.</li></ul>
+<p>Для забезпечення високої швидкості роботи у математичних обчислення модуль надає вбудовані математичні функції, які викликаються на рівні команд віртуальної машини:
+</p>
+<ul><li> double sin(double x) — синус <i>x</i>;</li>
+<li> double cos(double x) — косинус <i>x</i>;</li>
+<li> double tan(double x) — тангенс <i>x</i>;</li>
+<li> double sinh(double x) — синус гіперболічний від <i>x</i>;</li>
+<li> double cosh(double x) — косинус гіперболічний від <i>x</i>;</li>
+<li> double tanh(double x) — тангенс гіперболічний від <i>x</i>;</li>
+<li> double asin(double x) — арксинус від <i>x</i>;</li>
+<li> double acos(double x) — арккосинус від <i>x</i>;</li>
+<li> double atan(double x) — арктангенс від <i>x</i>;</li>
+<li> double rand(double x) — випадкове число від 0 до <i>x</i>;</li>
+<li> double lg(double x) — десятковий логарифм від <i>x</i>;</li>
+<li> double ln(double x) — натуральний логарифм від <i>x</i>;</li>
+<li> double exp(double x) — експонента від <i>x</i>;</li>
+<li> double pow(double x, double x1) — зведення <i>x</i> у степінь <i>x1</i>;</li>
+<li> double sqrt(double x) — корінь квадратний від <i>x</i>;</li>
+<li> double abs(double x) — абсолютне значення від <i>x</i>;</li>
+<li> double sign(double x) — знак числа <i>x</i>;</li>
+<li> double ceil(double x) — округлення числа <i>x</i> до більшого цілого;</li>
+<li> double floor(double x) — округлення числа <i>x</i> до меншого цілого.</li></ul>
+<h3><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D0.B8_.D0.BC.D0.BE.D0.B2.D0.B8"><span class="mw-headline-number">1.4</span> Оператори мови</span></h3>
+<p>Загальний перелік операторів мови:
+</p>
+<ul><li> <i>var</i> — оператор ініціалізації змінної; визначення змінної без привласнення значення резервує її зі значенням EVAL, що дозволяє здійснити одноразову ініціалізацію складних типів даних на кшталт об'єкту, через перевірку на "isEVal()";</li>
+<li> <i>if</i> — оператор умови "Якщо";</li>
+<li> <i>else</i> — оператор умови "Інакше";</li>
+<li> <i>while</i> — опис циклу "Поки";</li>
+<li> <i>for</i> — опис циклу "Для";</li>
+<li> <i>in</i> — роздільник циклу "Для" для перебору властивостей об'єкту;</li>
+<li> <i>break</i> — переривання виконання циклу;</li>
+<li> <i>continue</i> — продовжити виконання циклу з початку;</li>
+<li> <i>function</i> — визначення внутрішньої функції;</li>
+<li> <i>using</i> — дозволяє встановити простір видимості функцій часто використовної бібліотеки (<b>using Special.FLibSYS;</b>) для наступного звернення тільки за назвою функції, не має ефекту для об'єктного доступу;</li>
+<li> <i>return</i> — переривання функції та повернення результату, який копіюється до атрибуту із ознакою повернення (<b>return 123;</b>); в середині внутрішньої функції здійснюється її завершення з визначеним результатом;</li>
+<li> <i>new</i> — створення об'єкту, реалізовано: об'єкт "Object", масив "Array" та регулярні вирази "RegExp";</li>
+<li> <i>delete</i> — видалення/звільнення об'єкту або його властивостей, при цьому: внутрішні змінні встановлюються у EVAL_REAL, зовнішні замінюються порожнім об'єктом, а властивості об'єкту очищуються.</li></ul>
+<h4><span class="mw-headline" id=".D0.A3.D0.BC.D0.BE.D0.B2.D0.BD.D1.96_.D0.BE.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D0.B8"><span class="mw-headline-number">1.4.1</span> Умовні оператори</span></h4>
+<p>Мовою модуля підтримуються два типи умов. Перша — це операції умови для використання всередині виразу, друга — глобальна, основана на умовних операторах.
+</p><p>Умова всередині виразу будується на операціях '?' та ':'. У якості прикладу можна записати наступні практичні вирази <b>st_open=(pos&gt;=100)?true:false;</b>, що читається як "Якщо змінна <i>pos</i> більша або дорівнює <b>100</b>, тоді змінній <i>st_open</i> привласнюється значення <b>true</b>, інакше — <b>false</b>".
+</p><p>Глобальна умова будується на основі умовних операторів "if" та "else". У якості прикладу можна привести той-же вираз, але записаний у інший спосіб <b>if(pos&gt;100) st_open=true; else st_open=false;</b>. Як видно, вираз записано по іншому, але читається так само.
+</p>
+<h4><span class="mw-headline" id=".D0.A6.D0.B8.D0.BA.D0.BB.D0.B8"><span class="mw-headline-number">1.4.2</span> Цикли</span></h4>
+<p>Підтримується три типи циклів: <b>while</b>, <b>for</b> та <b>for-in</b>. Синтаксис циклів відповідає мовам програмування: C++, Java та JavaScript.
+</p><p>Цикл <b>while</b>, загалом, записується наступним чином: <b>while({умова}) {тіло циклу};</b><br />
+Цикл <b>for</b> записується наступним чином: <b>for({пре-ініціаліз};{умова};{пост-обчислення}) {тіло циклу};</b><br />
+Цикл <b>for-in</b> записується наступним чином: <b>for({змінна} in {об'єкт}) {тіло циклу};</b><br />
+Де:
+</p>
+<dl><dd><i>{умова}</i> — вираз, який визначає умову;</dd>
+<dd><i>{тіло циклу}</i> — тіло циклу множинного виконання;</dd>
+<dd><i>{пре-ініціаліз}</i> — вираз попередньої ініціалізації змінних циклу;</dd>
+<dd><i>{пост-обчислення}</i> — вираз модифікації параметрів циклу після чергової ітерації;</dd>
+<dd><i>{змінна}</i> — змінна, яка буде містити ім'я властивості об'єкта при переборі;</dd>
+<dd><i>{об'єкт}</i> — об'єкт для якого здійснюється перебір властивостей.</dd></dl>
+<h4><span class="mw-headline" id=".D0.92.D0.BD.D1.83.D1.82.D1.80.D1.96.D1.88.D0.BD.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97"><span class="mw-headline-number">1.4.3</span> Внутрішні функції</span></h4>
+<p>Ця мова підтримує визначення та виклик внутрішніх функцій. Для визначення внутрішньої функції використовується ключове слово "function" та в цілому визначення має синтаксис: <b>function {ім'яФ} ({зм1}, {зм2}, ... {змN}) { {тіло функції} }</b>. Визначення внутрішньої функції всередині іншої недозволене однак дозволено виклик раніш визначеної.
+</p><p>Виклик внутрішньої функції здійснюється у типовий спосіб, як процедура <b>{ім'яФ}({var1}, {var2}, ... {varN});</b> або як функція <b>{змРез} = {ім'яФ}({зм1}, {зм2}, ... {змN});</b>. Виклик внутрішніх функцій допустимий тільки після їх декларації вище!
+</p><p>Всі змінні, визначені у основному тілі, недоступні всередині внутрішніх функцій і можуть бути передані тільки через двобічні аргументи викликуваної внутрішньої функції. Всі змінні, визначені в середині внутрішньої функції, мають власний простір назв та недоступні із основного тіла або будь якої іншої внутрішньої функції та можуть бути передані тільки в основне тіло через двобічні аргументи або результат викликуваної внутрішньої функції.
+</p><p>Оператор "return" в середині внутрішньої функції здійснює контрольоване її завершення та розташування вказаної змінної або результату виразу як результату викликуваної внутрішньої функції.
+</p><p>Приклад типового визначення та використання внутрішньої функції наведено нижче:
+</p>
+<pre style="white-space: pre-wrap;">
+function sum (a, b, c, d) { return a + ((b==EVAL)?0:b) + ((c==EVAL)?0:c) + ((d==EVAL)?0:d); }
+rez = sum(1, 2);
+</pre>
+<h4><span class="mw-headline" id=".D0.A1.D0.BF.D0.B5.D1.86.D1.96.D0.B0.D0.BB.D1.8C.D0.BD.D1.96_.D1.81.D0.B8.D0.BC.D0.B2.D0.BE.D0.BB.D0.B8_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.BE.D0.B2.D0.B8.D1.85_.D0.B7.D0.BC.D1.96.D0.BD.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">1.4.4</span> Спеціальні символи строкових змінних</span></h4>
+<p>Мовою передбачено підтримку наступних спеціальних символів строкових змінних:
+</p>
+<dl><dd>"\n" — перевід рядка;</dd>
+<dd>"\t" — символ табуляції;</dd>
+<dd>"\b" — забій;</dd>
+<dd>"\f" — перевід сторінки;</dd>
+<dd>"\r" — повернення каретки;</dd>
+<dd>"\\" — сам символ '\';</dd>
+<dd>"\041" — символ '!' записаний вісімковим числом;</dd>
+<dd>"\x21" — символ '!' записаний шістнадцятковим числом.</dd></dl>
+<h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82"><span class="mw-headline-number">1.5</span> Об'єкт</span></h3>
+<p>JavaLikeCalc надає підтримку типу даних об'єкт "Object". Об'єкт представляє собою асоціативний контейнер властивостей та функцій. Властивості можуть містити як дані чотирьох базових типів, так і інші об'єкти. Доступ до властивостей об'єкту може здійснюватися за посередництвом запису імен властивостей через точку до об'єкту <i>obj.prop</i>, а також за посередництвом заключення імені властивості у квадратні дужки <i>obj["prop"]</i>. Очевидно, що перший механізм статичний, а другий дозволяє вказувати ім'я властивості через змінну. Видалити властивість об'єкту можна директивою "delete". Створення об'єкту здійснюється за посередництвом ключового слова <i>new</i>: <b>varO = new Object()</b>. Базове визначення об'єкту не містить функцій. Операції копіювання об'єкту насправді роблять посилання на вихідний об'єкт. При видаленні об'єкту здійснюється зменшення лічильника посилань, а при досягнення лічильника посилань нуля об'єкт видаляється фізично.
+</p><p>Різні компоненти можуть довизначати базовий об'єкт особливими властивостями та функціями. Стандартним розширенням об'єкту є масив "Array", який створюється командою <b>varO = new Array(prm1,prm2,prm3,...,prmN)</b>. Перелічені через кому параметри поміщаються до масиву у вихідній послідовності. Якщо параметр тільки один тоді масив ініціюється вказаною кількістю порожніх елементів. Особливістю масиву є те, що він працює із властивостями як з індексами та основним механізмом звернення є заключення індексу у квадратні дужки <i>arr[1]</i>. Масив зберігає властивості у власному контейнері одномірного масиву. Цифрові властивості масиву використовуються для доступу безпосередньо до масиву, а символьні працюють як властивості об'єкту. Детальніше про властивості та функції масиву можна прочитати за <a class="external" href="http://oscada.org/wiki/Documents/User_API/uk#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_Array" title="Documents/User API/uk">посиланням</a>.
+</p><p>Об'єкт регулярного виразу "RegExp" створюється командою <b>varO = new RegExp(pat,flg)</b>, де <i>pat</i> — шаблон регулярного виразу, а <i>flg</i> — ознаки пошуку. Об'єкт роботи із регулярними виразами оснований на бібліотеці "PCRE". При глобальному пошуку встановлюється атрибут об'єкту "lastIndex", що дозволяє продовжити пошук при наступному виклику функції. У випадку невдалого пошуку атрибут "lastIndex" скидається у нуль. Детальніше про властивості та функції об'єкту регулярного виразу можна прочитати за <a class="external" href="http://oscada.org/wiki/Documents/User_API/uk#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_RegExp" title="Documents/User API/uk">посиланням</a>.
+</p><p>Для довільного доступу до аргументів функції передбачено об'єкт аргументів, звернутися до якого можна за посередництвом символу "arguments". Цей об'єкт містить властивість "length" з кількістю аргументів у функції та дозволяє звернутися до значень аргументу за посередництвом його номеру або ідентифікатору. Розглянемо перебір аргументів по циклу:
+</p>
+<pre style="white-space: pre-wrap;">
+args = new Array();
+for(var i=0; i &lt; arguments.length; i++)
+  args[i] = arguments[i];
+</pre>
+<p>Часткові властивості об'єкту мають і базові типи. Властивості та функції базових типів приведено нижче:
+</p>
+<ul><li> Нульовий тип, функції:
+<ul><li> <i>bool isEVal();</i> — Повертає "true".</li></ul></li></ul>
+<ul><li> Логічний тип, функції:
+<ul><li> <i>bool isEVal();</i> — Перевірка значення на "EVAL".</li>
+<li> <i>string toString();</i> — Надання значення у вигляді рядка "true" або "false".</li></ul></li></ul>
+<ul><li> Ціле та реальне число:</li></ul>
+<dl><dd><dl><dt> <i>Властивості:</i></dt></dl>
+<ul><li> <i>MAX_VALUE</i> — максимальне значення;</li>
+<li> <i>MIN_VALUE</i> — мінімальне значення;</li>
+<li> <i>NaN</i> — недостовірне значення.</li></ul>
+<dl><dt> <i>Функції:</i></dt></dl>
+<ul><li> <i>bool isEVal();</i> — Перевірка значення на "EVAL".</li>
+<li> <i>string toExponential( int numbs = -1 );</i> — Повернення рядка, відформатованого числа у експоненціальній нотації та кількістю значущих цифр <i>numbs</i>. Якщо <i>numbs</i> відсутній то цифр буде стільки скільки потрібно.</li>
+<li> <i>string toFixed( int numbs = 0, int len = 0, bool sign = false );</i> — Повернення рядку відформатованого числа в нотації з фіксованою точкою та кількістю цифр після десяткової точки <i>numbs</i> з мінімальною довжиною <i>len</i> та обов'язковим знаком <i>sign</i>. Якщо <i>numbs</i> відсутній то кількість цифр після десяткової точки дорівнює нулю.</li>
+<li> <i>string toPrecision( int prec = -1 );</i> — Повернення рядка відформатованого числа з кількістю значущих цифр <i>prec</i>. </li>
+<li> <i>string toString( int base = 10, int len = -1, bool sign = false );</i> — Повернення рядку відформатованого числа цілого типу з базою представлення <i>base</i> (2-36) з мінімальною довжиною <i>len</i> та обов'язковим знаком <i>sign</i>.</li></ul></dd></dl>
+<ul><li> Рядок:</li></ul>
+<dl><dd><dl><dt> <i>Властивості:</i></dt></dl>
+<ul><li> <i>int length</i> — довжина рядка.</li></ul>
+<dl><dt> <i>Функції:</i></dt></dl>
+<ul><li> <i>bool isEVal();</i> — Перевірка значення на "EVAL".</li>
+<li> <i>string charAt( int symb );</i> — Вилучає із рядка символ номер <i>symb</i>, нумерація символів з нуля.</li>
+<li> <i>int charCodeAt( int symb );</i> — Вилучає із рядка код символу <i>symb</i>.</li>
+<li> <i>string concat( string val1, string val2, ... );</i> — Повертає новий рядок сформований шляхом приєднання значень <i>val1</i> і т.п. до початкового.</li>
+<li> <i>int indexOf( string substr, int start );</i> — Повертає позицію пошукового рядка <i>substr</i> у вихідному рядку починаючи з позиції <i>start</i>. Якщо вихідна позиція не вказана то пошук починається з початку. Якщо шуканого рядка не знайдено то повертається "-1".</li>
+<li> <i>int lastIndexOf( string substr, int start );</i> — Повертає позицію шуканого рядка <i>substr</i> у вихідному рядку починаючи з позиції <i>start</i>, при пошуку з кінця. Якщо вихідна позиція не вказана то пошук починається з кінця. Якщо шуканого рядку не знайдено то повертається "-1".</li>
+<li> <i>int search( string pat, string flg = "" );</i> — Пошук у рядку за шаблоном <i>pat</i> та ознаками шаблону <i>flg</i>. Повертає положення найденого рядку інакше "-1".</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30pt">
+var rez = "Java123Script".search("script","i");  // rez = 7</pre>
+<dl><dd><ul><li> <i>int search( RegExp pat );</i> — Пошук у рядку за шаблоном "RegExp" <i>pat</i>. Повертає положення найденого підрядку інакше "-1".</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30pt">
+var rez = "Java123Script".search(new RegExp("script","i"));  // rez = 7</pre>
+<dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — Пошук в рядку за шаблоном <i>pat</i> та ознаками шаблону <i>flg</i>. Повертає масив із знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок.</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30pt">
+var rez = "1 плюс 2 плюс 3".match("\\d+","g");  // rez = [1], [2], [3]</pre>
+<dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — Пошук у рядку за шаблоном "RegExp" <i>pat</i>. Повертає масив зі знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок.</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30pt">
+var rez = "1 плюс 2 плюс 3".match(new RegExp("\\d+","g"));  // rez = [1], [2], [3]</pre>
+<dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — Повернення підрядку вилученого з вихідного починаючи з позиції <i>beg</i> та до <i>end</i> (не включаючи), нумерація з нуля. Якщо значення початку або кінця негативне, то відлік ведеться з кінця рядку. Якщо кінець не вказано, то кінцем є кінець рядку. Наприклад, конструкція <b>substring(-2)</b> поверне останні два символи рядку.</li>
+<li> <i>Array split( string sep, int limit );</i> — Повернення масиву елементів рядку поділених <i>sep</i> з обмеженням кількості елементів <i>limit</i>.</li>
+<li> <i>Array split( RegExp pat, int limit );</i> — Повертає масив елементів рядку поділених шаблоном "RegExp" <i>pat</i> з обмеженням кількості елементів <i>limit</i>.</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30pt">
+rez = "1,2, 3 , 4 ,5".split(new RegExp("\\s*,\\s*"));  // rez = [1], [2], [3], [4], [5]</pre>
+<dl><dd><ul><li> <i>string insert( int pos, string substr );</i> — Вставка в позицію <i>pos</i> поточного рядку підрядку <i>substr</i>.</li>
+<li> <i>string replace( int pos, int n, string str );</i> — Заміна підрядку з позиції <i>pos</i> та довжиною <i>n</i> у поточному рядку на рядок <i>str</i>.</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30pt">
+rez = "Javascript".replace(4,3,"67");  // rez = "Java67ipt"</pre>
+<dl><dd><ul><li> <i>string replace( string substr, string str );</i> — Заміна всіх підрядків <i>substr</i> на рядок <i>str</i>. </li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30pt">
+rez = "123 321".replace("3","55");  // rez = "1255 5521"</pre>
+<dl><dd><ul><li> <i>string replace( RegExp pat, string str );</i> — Заміна підрядків за шаблоном <i>pat</i> на рядок <i>str</i>.</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30pt">
+rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // rez = "value = ``123''"</pre>
+<dl><dd><ul><li> <i>real toReal();</i> — Перетворення поточного рядку у реальне число.</li>
+<li> <i>int toInt( int base = 0 );</i> — Перетворення поточного рядки в ціле число, у відповідності із основою <i>base</i> (от 2 до 36). Якщо основа дорівнює 0 тоді буде враховуватися префіксний запис для визначення основи (123-десяткове; 0123-вісімкове; 0x123-шістнадцяткове).</li>
+<li> <i>string parse( int pos, string sep = ".", int off = 0 );</i> — Виокремлення із вихідного рядку елементу <i>pos</i> для поділювача елементів <i>sep</i> від зміщення <i>off</i>. Результуюче зміщення поміщається назад до <i>off</i>.</li>
+<li> <i>string parseLine( int pos, int off = 0 );</i> — Виокремлення рядку з номером <i>pos</i> від зміщення <i>off</i>. Результуюче зміщення поміщається назад до <i>off</i>.</li>
+<li> <i>string parsePath( int pos, int off = 0 );</i> — Виділення із початкового шляху елементу <i>pos</i> від зміщення <i>off</i>. Результуюче зміщення поміщається назад до <i>off</i>.</li>
+<li> <i>string path2sep( string sep = "." );</i> — Перетворення шляху у поточному рядку у рядок з розділювачем <i>sep</i>.</li>
+<li> <i>string trim( string cfg = " \n\t\r" );</i> — Обрізка рядка з початку та кінцю для символів <i>cfg</i>.</li></ul></dd></dl>
+<p><br />
+Для доступу до системних об'єктів(вузлам) OpenSCADA передбачено відповідний об'єкт, який створюється шляхом простого вказання точки входу "SYS" кореневого об'єкту OpenSCADA, а надалі, через точку вказуються вкладені об'єкти у відповідності з ієрархією. Наприклад, виклик функції запиту через вихідний транспорт здійснюється наступним чином: <b>SYS.Transport.Sockets.out_testModBus.messIO(Special.FLibSYS.strEnc2Bin("15 01 00 00 00 06 01 03 00 00 00 05"));</b>.
+</p>
+<h3><span class="mw-headline" id=".D0.9F.D1.80.D0.B8.D0.BA.D0.BB.D0.B0.D0.B4.D0.B8_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.B8_.D0.BD.D0.B0_.D0.BC.D0.BE.D0.B2.D1.96"><span class="mw-headline-number">1.6</span> Приклади програми на мові</span></h3>
+<p>Приведемо декілька прикладів програм на подібній до Java мові:
+</p>
+<pre style="white-space: pre-wrap;">
+//Модель ходу виконавчого механізму шарового крану
+if(!(st_close &amp;&amp;&nbsp;!com) &amp;&amp;&nbsp;!(st_open &amp;&amp; com))
+{
+  tmp_up = (pos&gt;0&amp;&amp;pos&lt;100)&nbsp;? 0&nbsp;: (tmp_up&gt;0&amp;&amp;lst_com==com)&nbsp;? tmp_up-1/frq&nbsp;: t_up;
+  pos += (tmp_up&gt;0)&nbsp;? 0&nbsp;: (100*(com?1:-1))/(t_full*frq);
+  pos = (pos&gt;100)&nbsp;? 100&nbsp;: (pos&lt;0)&nbsp;? 0&nbsp;: pos;
+  st_open = (pos&gt;=100)&nbsp;? true&nbsp;: false;
+  st_close = (pos&lt;=0)&nbsp;? true&nbsp;: false;
+  lst_com = com;
+}
+</pre>
+<pre style="white-space: pre-wrap;">
+//Модель клапану
+Qr = Q0 + Q0*Kpr*(Pi-1) + 0.01;
+Sr = (S_kl1*l_kl1+S_kl2*l_kl2)/100;
+Ftmp = (Pi&gt;2*Po)&nbsp;? Pi*pow(Q0*0.75/Ti,0.5)&nbsp;: (Po&gt;2*Pi)&nbsp;? Po*pow(Q0*0.75/To,0.5)&nbsp;: pow(abs(Q0*(pow(Pi,2)-pow(Po,2))/Ti),0.5);
+Fi -= (Fi-7260*Sr*sign(Pi-Po)*Ftmp)/(0.01*lo*frq);
+Po += 0.27*(Fi-Fo)/(So*lo*Q0*frq);
+Po = (Po&lt;0)&nbsp;? 0&nbsp;: (Po&gt;100)&nbsp;? 100&nbsp;: Po;
+To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*frq);
+</pre>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D1.82.D0.B0_.D0.B9.D0.BE.D0.B3.D0.BE_.D0.BA.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="mw-headline-number">2</span> Контролер та його конфігурація</span></h2>
+<p>Контролер цього модуля пов'язується з функціями із бібліотек, побудованими за його допомогою, для забезпечення безпосередніх обчислень. Для надання обчислювальних даних у систему OpenSCADA в контролері можуть створюватися параметри. Приклад вкладки конфігурації контролера даного типу зображено на рисунку 2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:809px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr_uk.png"><img class="thumbimage" height="646" src="../files/JavaLikeCalc_cntr_uk.png" width="807" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфігурації контролера.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> Стан контролеру, а саме: Статус, "Включений", "Запущений" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис контролеру.</li>
+<li> Стан, в який переводити контролер при завантажені: "Включений" та "Запущений".</li>
+<li> Ім'я таблиці для зберігання параметрів.</li>
+<li> Адреса обчислювальної функції.</li>
+<li> Політика планування обчислення, пріоритет та число ітерацій у одному циклі задачі обчислення.</li></ul>
+<p>Вкладка "Обчислення" контролеру (Рис. 3) містить параметри та текст програми, яка безпосередньо виконується контролером. Модулем передбачена обробка низки спеціальних параметрів, доступних в програмі контролеру:
+</p>
+<ul><li> <i>f_frq</i> — Частота обчислення програми контролера, тільки читання.</li>
+<li> <i>f_start</i> — Ознака першого виконання програми контролера, запуск, тільки читання.</li>
+<li> <i>f_stop</i> — Ознака останнього виконання програми контролера, зупинка, тільки читання.</li>
+<li> <i>this</i> — Об'єкт даного контролеру.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:994px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr_calc_uk.png"><img class="thumbimage" height="682" src="../files/JavaLikeCalc_cntr_calc_uk.png" width="992" /></a>  <div class="thumbcaption">Рис.3. Вкладка "Обчислення" контролеру.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D1.82.D0.B0_.D0.B9.D0.BE.D0.B3.D0.BE_.D0.BA.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="mw-headline-number">3</span> Параметр контролеру та його конфігурація</span></h2>
+<p>Параметр контролера даного модуля виконує функцію надання доступу до результатів обчислення контролера у систему OpenSCADA за посередництвом атрибутів параметрів. Із специфічних полів вкладка конфігурації параметра контролера містить тільки поле перелічення параметрів обчислювальної функції, які треба відобразити.
+</p>
+<h2><span class="mw-headline" id=".D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B8_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D0.B9_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="mw-headline-number">4</span> <span id="FuncsLibs" title="#FuncsLibs">Бібліотеки функцій модуля</span></span></h2>
+<p>Модуль надає механізм для створення бібліотек користувацьких функцій на подібній до Java мові. Приклад вкладки конфігурації бібліотеки зображено на рисунку 4. Вкладка містить базові поля: доступність, адреса таблиці БД бібліотеки, дата та час модифікації, ідентифікатор, ім'я та опис.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:740px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_lib_uk.png"><img class="thumbimage" height="497" src="../files/JavaLikeCalc_lib_uk.png" width="738" /></a>  <div class="thumbcaption">Рис.4. Вкладка конфігурації бібліотеки.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="mw-headline-number">5</span> Користувацькі функції модуля</span></h2>
+<p>Функція, також як і бібліотека, містить базову вкладку конфігурації, вкладку формування програми та параметрів функції (Рис.1), а також вкладку виконання створеної функції.
+</p>
+<h2><span class="mw-headline" id="API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">6</span> API користувацького програмування</span></h2>
+<p>Деякі об'єкти модуля надають функції користувацького програмування.
+</p><p><b>Об'єкт "Бібліотека функцій" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
+</p>
+<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — виклик функції "<i>funcID</i>" бібліотеки "<i>Lfunc</i>". Повертає результат викликаної функції. Префікс "lib_" перед ідентифікатором бібліотеки обов'язковий!</li></ul>
+<p><b>Об'єкт "Користувацька функція" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"]["func"])</b>
+</p>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — виклик функції "<i>func</i>" бібліотеки "<i>Lfunc</i>" з параметрами "<i>prm{N}</i>". Повертає результат викликаної функції. Префікс "lib_" перед ідентифікатором бібліотеки обов'язковий!</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B4.D1.83.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.96.D1.81.D1.82.D1.8C"><span class="mw-headline-number">7</span> Продуктивність</span></h2>
+<p>Вихідний текст процедур на мові цього модуля компілюється у байт-код віртуальної машини, який надалі обчислюється віртуальною машиною. Байт-код це не машинний код і досягнути продуктивності самої апаратної архітектури у віртуальній машині його виконуючої теоретично нереально, якщо звісно код цієї віртуальної машини не виконує сам процесор. Тобто продуктивність виконання байт-коду приблизно на порядок нижче апаратної продуктивності за рахунок накладених витрат команд віртуальної машини, розподілу багатопотокового доступу до даних, прозорого приведення типів та відсутності жорсткої типізації, а також динамічної природи мови та наявності складних типів "Рядок" та "Об'єкт".
+</p><p><b>28.01.2006:</b><br />
+<i>Description:</i> Initial estimation of productivity of the virtual machine of OpenSCADA in example of the expression <b>y=x1+x2</b>, where all the variables are global and in the float-point type.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Stage </th>
+<th> Action </th>
+<th> K7_1G-0, us
+</th></tr>
+<tr>
+<td> 1 </td>
+<td> The registers list initialization </td>
+<td> 2.3
+</td></tr>
+<tr>
+<td> 2 </td>
+<td> Entry to the function exec() </td>
+<td> 3
+</td></tr>
+<tr>
+<td> 3 </td>
+<td> The commands coming </td>
+<td> 4.4
+</td></tr>
+<tr>
+<td> 4 </td>
+<td> Reading </td>
+<td> 9
+</td></tr>
+<tr>
+<td> 5 </td>
+<td> Full time </td>
+<td> 10.2
+</td></tr></table>
+<p><b>17.07.2013:</b><br />
+<i>Description:</i> Justification of the current performance evaluation and optimization. The measurements were made by sampling the minimum time from five calls to 1000 executions of the formula <b>a -= b*(a-c)</b> and its abbreviations in each call. All the variables are global and in the float-point type.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Formula </th>
+<th> Time on AMDGeode-500 (the operation time), us </th>
+<th> Notes
+</th></tr>
+<tr>
+<td> a -= b*(a-c) </td>
+<td> 4.52 (0.74) </td>
+<td>
+</td></tr>
+<tr>
+<td> a -= b*c </td>
+<td> 3.78 (0.72) </td>
+<td>
+</td></tr>
+<tr>
+<td> a -= b </td>
+<td> 3.06 (0.56)
+<dl><dd>=&gt; full call: 3.06 (0.49): getValR() = 0.49/2 = 0.245</dd>
+<dd>=&gt; only write const = 2.57 (0.17)</dd>
+<dd>=&gt; pass.code = 2.4</dd></dl>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> a = b </td>
+<td> 2.5 (1.21)
+<dl><dd>!&gt; use unified TVariant function setVal() and getVal() = 7.6 (2.7 write only) =&gt; fix to 5.0 by prevent default set to string EVAL.</dd>
+<dd>=&gt; full call: 2.5 (0.33)</dd>
+<dd>=&gt; only write const: 2.17 (0.47)</dd>
+<dd>=&gt; only check for type: 1.7 (0.3)</dd>
+<dd>=&gt; pass code: 1.4 (0.11)</dd></dl>
+</td>
+<td> Write to function IO is longer then read from local register by other context call and additional checking for NAN and real modification.
+</td></tr>
+<tr>
+<td> Empty </td>
+<td> 1.29 </td>
+<td> Infrastructure and measurement method utilization time.
+</td></tr></table>
+<p><b>24.04.2016:</b><br />
+<i>Reason:</i> Estimate performance of access to low level IO lines on Raspberry Pi GPIO in different ways of JavaLikeCalc language of OpenSCADA.<br />
+<i>Conditions:</i> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Raspberry_Pi" title="Special:MyLanguage/Using/Raspberry Pi">Raspberry Pi 3</a>, GPIO40, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/BCM2835" title="Special:MyLanguage/Modules/BCM2835">DAQ.BCM2835</a> (based on the library <a class="external text" href="http://www.airspayce.com/mikem/bcm2835" rel="nofollow noreferrer noopener" target="_blank">bcm2835</a>)
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Operation </th>
+<th> Result, us
+</th></tr>
+<tr>
+<td colspan="2"> <i>Sleep. Lag on sleep in 1ms measured, which mostly limited by the realtime reaction about 100us.</i>
+</td></tr>
+<tr>
+<td> <b>SYS.sleep();</b> </td>
+<td> +110
+</td></tr>
+<tr>
+<td> <b>Special.FLibSYS.fnc_tmSleep();</b> </td>
+<td> +70
+</td></tr>
+<tr>
+<td colspan="2"> <i>Sleep. Lag on sleep in 100us measured, which performs in the measuring cycle.</i>
+</td></tr>
+<tr>
+<td> <b>SYS.sleep();</b> </td>
+<td> +17
+</td></tr>
+<tr>
+<td> <b>Special.FLibSYS.fnc_tmSleep();</b> </td>
+<td> +2
+</td></tr>
+<tr>
+<td colspan="2"> <i>Get GPIO pin's level</i>
+</td></tr>
+<tr>
+<td> From an attribute <b>res = BCM2835.pi2.pi2.gpio17;</b> </td>
+<td> 5.4
+</td></tr>
+<tr>
+<td> By the static accessing function <b>res = DAQ.BCM2835.pi2.pi2.fnc_get(17);</b> </td>
+<td> 1.6
+</td></tr>
+<tr>
+<td> By the static accessing function with prepare the link <b>function get = "DAQ.BCM2835.pi2.pi2.fnc_get"; for(i = 0; i &lt; 10000; i++) res = get(17);</b> </td>
+<td> 1.7
+</td></tr>
+<tr>
+<td> By the dynamic accessing function <b>res = SYS.DAQ.BCM2835.pi2.pi2.fnc_get.call(17);</b> </td>
+<td> 80
+</td></tr>
+<tr>
+<td> By the dynamic accessing function with prepare the end object <b>tO = SYS.DAQ.BCM2835.pi2.pi2.fnc_get; for(i = 0; i &lt; 1000; i++) res = tO.call(17);</b> </td>
+<td> 14.3
+</td></tr>
+<tr>
+<td colspan="2"> <i>Put GPIO pin's level</i>
+</td></tr>
+<tr>
+<td> To an attribute <b>BCM2835.pi2.pi2.gpio18 = true;</b> </td>
+<td> 2.1
+</td></tr>
+<tr>
+<td> By the static accessing function <b>DAQ.BCM2835.pi2.pi2.fnc_put(18, true);</b> </td>
+<td> 1.4
+</td></tr>
+<tr>
+<td> By the static accessing function with prepare the link <b>function put = "DAQ.BCM2835.pi2.pi2.fnc_put"; for(i = 0; i &lt; 10000; i++) put(17, false);</b> </td>
+<td> 1.5
+</td></tr>
+<tr>
+<td> By the dynamic accessing function <b>SYS.DAQ.BCM2835.pi2.pi2.fnc_put.call(18, true);</b> </td>
+<td> 79
+</td></tr>
+<tr>
+<td> By the dynamic accessing function with prepare the end object <b>tO = SYS.DAQ.BCM2835.pi2.pi2.fnc_put; for(i = 0; i &lt; 1000; i++) tO.call(18, true);</b> </td>
+<td> 14.3
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

@@ -1,0 +1,235 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/MySQL - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/MySQL</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FMySQL&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/MySQL" title="Modules/MySQL (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/MySQL/ru" title="Модули/MySQL (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/MySQL/uk" title="Модулі/MySQL (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a> </td>
+<td> DB MySQL </td>
+<td> 2.6 </td>
+<td> GPL2 </td>
+<td> bd_MySQL.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DB </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> DB module. It provides the support for DB MySQL.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Operations_over_the_database"><span class="tocnumber">1</span> <span class="toctext">Operations over the database</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Operations_over_the_table"><span class="tocnumber">2</span> <span class="toctext">Operations over the table</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Operations_over_the_contents_of_the_table"><span class="tocnumber">3</span> <span class="toctext">Operations over the contents of the table</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#DB_access"><span class="tocnumber">4</span> <span class="toctext">DB access</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Productivity_of_DB"><span class="tocnumber">5</span> <span class="toctext">Productivity of DB</span></a></li>
+</ul>
+</div>
+
+<p>Module "MySQL" gives to OpenSCADA support of DB MySQL. MySQL database is a powerful multi-platform database available for free license. Manufacturer of <a class="external text" href="http://www.mysql.com" rel="nofollow noreferrer noopener" target="_blank">DB MySQL</a> currently is <a class="external text" href="http://oracle.com" rel="nofollow noreferrer noopener" target="_blank">Oracle corporation</a>. Fully free implementing of MySQL is project <a class="external text" href="http://mariadb.org" rel="nofollow noreferrer noopener" target="_blank">MariaDB</a>. The module is based on the library with API of DB MySQL on the language "C". The module allows you to perform operations over databases, tables and contents of tables.
+</p>
+<h2><span class="mw-headline" id="Operations_over_the_database"><span class="mw-headline-number">1</span> Operations over the database</span></h2>
+<p>The operations of opening and closing of the database is supported, with the possibility of creating a new database when you open and delete existing at the close. In terms of the subsystem "DB" of system OpenSCADA opening of DB is its registration for further using of it in the system. It also supported the operation of requesting the list of tables in the database.
+</p><p>DB MySQL address by string of following type: "<b>{host};{user};{pass};{db};{port}[;{u_sock}[;{charset-collation-engine}[;{tms}]]]</b>". Where:
+</p>
+<ul><li> <i>host</i> — the name of the host on which the database server MySQL works; </li>
+<li> <i>user</i> — the name of the user of database; </li>
+<li> <i>pass</i> — user password to access the database; </li>
+<li> <i>bd</i> — the name of the database; </li>
+<li> <i>port</i> — port to listen to by the database server (default is 3306); </li>
+<li> <i>u_sock</i> — the name of UNIX-socket in the case of local access to the database (/var/lib/mysql/mysql.sock);</li>
+<li> <i>charset-collation-engine</i> — DB <a class="external text" href="https://dev.mysql.com/doc/refman/5.5/en/charset-charsets.html" rel="nofollow noreferrer noopener" target="_blank">charset, collation</a> and <a class="external text" href="https://dev.mysql.com/doc/refman/5.5/en/storage-engines.html" rel="nofollow noreferrer noopener" target="_blank">storage engine</a> for "CREATE DATABASE" and "SET";</li>
+<li> <i>tms</i> — MySQL timeouts in form "<b>{connect},{read},{write}</b>" and in seconds.</li></ul>
+<p>In the case of local access to the database in the same host, you must use the UNIX socket. For example: "<b>;roman; 123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8-utf8_general_ci-MyISAM;5,2,2</b>"
+</p><p>In the case of remote access to the database you must use the host name and port of the server of the database. For example: "<b>server.nm.org;roman;123456;OpenSCADA;3306</b>"
+</p>
+<h2><span class="mw-headline" id="Operations_over_the_table"><span class="mw-headline-number">2</span> Operations over the table</span></h2>
+<p>The operations of opening and closing of the table with the possibility of creating a new table when you open and deleting the existing one at the closing, and also the operation of the requesting of the table's structure are supported.
+</p>
+<h2><span class="mw-headline" id="Operations_over_the_contents_of_the_table"><span class="mw-headline-number">3</span> Operations over the contents of the table</span></h2>
+<ul><li> scanning of the records of the table;</li>
+<li> request the values of these records;</li>
+<li> setting the values of these records;</li>
+<li> removing the records.</li></ul>
+<p>API of subsystem “DB” suppose the access to the contents of the table on the value of key(s) fields. Thus, the operation of request of the record implies the preset of key columns of the object TConfig, which will fulfill the request. Creating a new record(string) is the installation of the values of record, which does not exist.
+</p><p>The module allows you to dynamically change the structure of the database tables MySQL. Thus, in the event of a discrepancy of the table and the structure determined by record, the structure of the table will be set to the required structure of record. In the case of the request of the value of the record, and mismatching of the structures of record and the table there will be available only to the values of common elements of the record and table. The module does not track the order of the elements in the record and in the structure of the table!
+</p><p>The module is implement support multilanguage text variables. For fields with multilanguage text variable create the column of separated language in format <b>{lang}#{FldID}</b> (en#NAME). In this time the base column contain value for base language. The columns of separated languages created by needs, in time saving to DB and execution OpenSCADA in correspond language. If for work language value no present then will used value for base language.
+</p><p>The types of the elements of DB MySQL correspond to types of elements of system OpenSCADA in the following way:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> The types of fields of the system OpenSCADA </th>
+<th> Types of fields of DB MySQL
+</th></tr>
+<tr>
+<td>TFld::String </td>
+<td> char (n), text, mediumtext
+</td></tr>
+<tr>
+<td>TFld::Integer </td>
+<td> int (n), DATETIME [for fields with a flag TFld::DateTimeDec]
+</td></tr>
+<tr>
+<td>TFld::Real </td>
+<td> double(n, m)
+</td></tr>
+<tr>
+<td>TFld::Boolean </td>
+<td> tinyint(1)
+</td></tr></table>
+<h2><span class="mw-headline" id="DB_access"><span class="mw-headline-number">4</span> DB access</span></h2>
+<p>MySQL database provides a powerful mechanism for the separation of access, which is to selectively identify the access for user of the database to specific SQL-commands. The following table lists the operation over the database and the required access to the commands of these operations.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Operation </th>
+<th> SQL-commands
+</th></tr>
+<tr>
+<td>Creation of the database and tables</td>
+<td>CREATE
+</td></tr>
+<tr>
+<td>Deleting of the database and tables</td>
+<td>DROP
+</td></tr>
+<tr>
+<td>Adding of records</td>
+<td>INSERT
+</td></tr>
+<tr>
+<td>Deleting the values of records</td>
+<td>DELETE
+</td></tr>
+<tr>
+<td>Getting the values of records</td>
+<td>SELECT
+</td></tr>
+<tr>
+<td>Setting the values of records</td>
+<td>UPDATE
+</td></tr>
+<tr>
+<td>Manipulation with the structure of the table</td>
+<td>ALTER
+</td></tr></table>
+<p>Briefly we will look at the initial configuration of the MySQL server to connect for it using by this module:
+</p>
+<ul>
+<li>Install MySQL DBMS server by the package or by build.</li>
+<li>Start the DB server, if no start:
+<pre style="white-space: pre-wrap;">
+$ service mysqld start</pre></li>
+<li>Setup need password for system user "root":
+<pre style="white-space: pre-wrap;">
+$ mysqladmin -u root password '123456'</pre></li>
+<li>Connect to the DB local by the module help, enter DB address: <b>"localhost;root;123456;test;;;utf8"</b></li>
+<li>External access permit:<ul>
+ <li><b>my.cnf</b>: Change value of "bind-address" to "0.0.0.0" for allow the access from every interfaces.</li>
+ <li>Connect to the DBMS local for the users management "$ mysql -u root -p":<ul>
+  <li>The users list getting: "SELECT Host,User,Password FROM mysql.user;"</li>
+  <li>The user adding: "CREATE USER 'newuser'@'%' IDENTIFIED BY 'password';"</li>
+  <li>The user removing: "DROP USER 'newuser'@'%’;"</li>
+  <li>The user password changing: "UPDATE mysql.user SET Password=PASSWORD('newpass') WHERE User='newuser';</li>
+  <li>The user privileges setting: "GRANT ALL PRIVILEGES ON *.* TO 'newuser'@'%';"</li>
+  <li>Apply the privileges: "FLUSH PRIVILEGES;"</li>
+ </ul></li>
+</ul></li></ul>
+<h2><span class="mw-headline" id="Productivity_of_DB"><span class="mw-headline-number">5</span> Productivity of DB</span></h2>
+<p>Measurement of productivity of DB were carried out by the test "DB" of the module of system tests "SystemTests", by performing operations over the records of the structure: "<b>name char (20), descr char (50), val double (10.2), id int (7), stat bool, reqKey string, reqVal string</b>".
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Operation </th>
+<th> Nokia N800, MySQL 5.0.89 MyISAM WLAN
+</th>
+<th>
+<p>AMD Turion L625 1.6, 2G, MySQL<br />
+[5.0.51 MyISAM 100Base-TX; WLAN];<br />
+[5.1.62 MyISAM local; 100Base-TX];<br />
+[5.5.41 MyISAM local; InnoDB; MyISAM 100Base-TX; InnoDB]
+</p>
+</th>
+<th>
+<p>Intel(R) Core(TM) i3 CPU 1.33GHz, 3G, HDD<br />
+[5.5.49 MyISAM 100Base-TX; InnoDB]
+</p>
+</th></tr>
+<tr>
+<td> <i>Creation of the 1000 records (sec.):</i>  </td>
+<td> 4.53 </td>
+<td> [1.1; 3.6]; [0.7; 1.00]; [0.57; 0.73; 2.1; 2.0] </td>
+<td> [1.68; 1.56]
+</td></tr>
+<tr>
+<td> <i>Updating of the 1000 records (sec.):</i> </td>
+<td> 4.2 </td>
+<td> [1.12; 3.8]; [0.7; 1.07]; [0.6; 0.66; 2.0; 2.0] </td>
+<td> [1.75; 1.87]
+</td></tr>
+<tr>
+<td> <i>Getting of the 1000 records (sec.):</i> </td>
+<td> 2.88 </td>
+<td> [0.8; 2.1]; [0.38; 0.69]; [0.38; 0.4; 1.3; 1.4] </td>
+<td> [1.056; 1.12]
+</td></tr>
+<tr>
+<td> <i>Seeking of the 1000 records (sec.):</i> </td>
+<td> - </td>
+<td> - </td>
+<td> [1.89; 2.23]
+</td></tr>
+<tr>
+<td> <i>Seeking in preload of the 1000 records (sec.):</i> </td>
+<td> - </td>
+<td> - </td>
+<td> [0.03; 0.03]
+</td></tr>
+<tr>
+<td> <i>Deleting of the 1000 record (sec.):</i> </td>
+<td> 1.47 </td>
+<td> [0.43; 1.7]; [0.27; 0.42]; [0.23; 0.2; 0.79; 0.6] </td>
+<td> [0.66; 0.67]
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

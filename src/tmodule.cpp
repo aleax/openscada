@@ -154,7 +154,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Module: ")+modId(),R_R_R_,"root","root",1,
-	    "doc",("Modules/"+owner().subId()+"."+modId()+"|Modules/"+modId()).c_str());
+	    "doc",("Modules/"+modId()+"|Modules/"+modId()).c_str());
 	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
 	if(TUIS::icoGet(owner().subId()+"."+modId(),NULL,true).size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("area",opt,-1,"/module",_("Module")))

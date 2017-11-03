@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/Sockets - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/Sockets</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSockets&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets">Modules/Sockets</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/ru" title="Модули/Sockets (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> </td>
+<td> Сокети </td>
+<td> 2.3 </td>
+<td> GPL2 </td>
+<td> tr_Sockets.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Транспорт </td>
+<td> Роман Савоченко, Максим Кочетков </td>
+<td> Надає транспорт заснований на сокетах. Підтримуються інтернет та UNIX сокети. Інтернет сокет використовує TCP, UDP та RAWCAN протоколи.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.92.D1.85.D1.96.D0.B4.D0.BD.D1.96_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8"><span class="tocnumber">1</span> <span class="toctext">Вхідні транспорти</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.92.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D1.96_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Вихідні транспорти</span></a></li>
+</ul>
+</div>
+
+<p>Модуль транспорту Sockets надає до системи підтримку транспортів, заснованих на сокетах. Підтримуються вхідні та вихідні транспорти, основані на інтернет сокетах: TCP, UDP та UNIX. Додати нові вхідні та вихідні сокети можна за посередництвом конфігурації транспортної підсистеми у будь якому конфігураторі системи OpenSCADA.
+</p>
+<h2><span class="mw-headline" id=".D0.92.D1.85.D1.96.D0.B4.D0.BD.D1.96_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8"><span class="mw-headline-number">1</span> Вхідні транспорти</span></h2>
+<p>Сконфігурований та запущений вхідний транспорт відкриває серверний сокет для очікування підключення клієнтів, крім ініціативного підключення. У випадку з UNIX сокетом створюється файл UNIX сокету. Сокети TCP та UNIX є багатопотоковими, тобто при підключені клієнту до сокетів цих типів створюється клієнтський сокет та новий потік, у якому відбувається обслуговування клієнту. Серверний сокет у цей момент переходить до очікування запитів від нового клієнту. Таким чином досягається паралельне обслуговування клієнтів. RAWCAN сокет здійснює прийом CAN кадрів з інтерфейсу згідно налаштованому фільтру.
+</p><p>Кожний вхідний сокет пов'язується з одним з доступних транспортних протоколів, якому передаються вхідні повідомлення. Разом з транспортним протоколом підтримується механізм об'єднання шматків розрізнених при передачі запитів.
+</p><p>Діалог конфігурації вхідного сокету зображено на рисунку 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1068px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in_uk.png"><img class="thumbimage" height="807" src="../files/Sockets_in_uk.png" width="1066" /></a>  <div class="thumbcaption">Рис.1. Діалог конфігурації вхідного сокету.</div></div></div></div>
+<p>За допомогою цього діалогу можна встановити:
+</p>
+<ul><li> Стан транспорту, а саме: "Статус", "Запущено", ім'я БД (яка містить конфігурацію) та перелік з інформацією про поточні підключення.</li>
+<li> Ідентифікатор, ім'я та опис транспорту.</li>
+<li> Адреса транспорту. Формат адреси описано у таблиці нижче.</li>
+<li> Обрання транспортного протоколу.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Порожнє значення обрання протоколу перемикає транспорт у режим створення асоційованого вихідного транспорту для кожного підключення на цей вхідний.</dd>
+<dd>Режим асоційованих вихідних транспортів для вхідного передбачає наявність деякої зовнішньої для транспорту процедури, яка виконує роль протоколу, та яка має "обходити" всі асоційовані вихідні транспорти, та виконувати запит на читання або запис-читання.</dd>
+<dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Відсутність такої процедури неминуче призведе до росту асоційованих вихідних транспортів у зв'язку відсутності сутності яка зупиняє транспорти із закритими підключеннями та можливістю наступного видалення зупинених вихідних транспортів цим вхідним транспортом.</dd></dl>
+<ul><li> Стан, у який переводити транспорт при завантажені: "Запускати".</li>
+<li> Довжина черги сокетів, максимальна кількість обслугованих клієнтів, максимальна кількість обслугованих клієнтів за хостами (для TCP) та розмір вхідного буферу.</li>
+<li> Пріоритет задач транспорту.</li>
+<li> Максимальний розмір сегмента (MSS), для обмеження розміру пакетів що відсилаються (сегментів TCP) на поганих каналах зв'язку. Встановити в 0 для зняття користувацького обмеження розміру.</li>
+<li> Keep alive запитів. Закриття підключення після визначеної кількості запитів. Нульове значення для вимкнення (не закривається ніколи).</li>
+<li> Keep alive час очікування (сек.). Закриття підключення після відсутності запитів протягом визначеного часу. Нульове значення для вимкнення (не закривається ніколи). </li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Вимикати цю функцію не рекомендується оскільки властивість мереж TCP/IP не гарантує повідомлення серверу про відключення з'єднання, скажемо у випадку зникнення живлення на клієнті. У результаті чого можуть <span style="color: red">назавжди</span> залишатися відкритими клієнтські підключення, а при досягненні ліміту сервер припинить приймати нові!</dd></dl>
+<p>Особливості формування адрес вхідних сокетів приведено у таблиці нижче:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Тип сокету </th>
+<th> Адреса
+</th></tr>
+<tr>
+<td> TCP </td>
+<td>
+<p><i>TCP:{адреса}:{порт}:{режим}</i><br />
+де:
+</p>
+<ul><li> адреса — Адреса, на якій відкривається сокет. Має бути одним з адрес хосту. Якщо нічого не вказано, то сокет буде доступний на всіх інтерфейсах хосту. Допускається як символьне, так й IP представлення адреси.</li>
+<li> порт — Мережевий порт, на якому відкривається сокет. Можливе вказання символьного імені порту (відповідно до /etc/services).</li>
+<li> режим — режим роботи вхідного сокету:
+<ul><li> '0' — Примусово розривати з'єднання після сеансу прийом-відповідь.</li>
+<li> '1' — Не розривати з'єднання, тільки з урахуванням параметрів KeepAlive.</li>
+<li> '2' — Ініціативне підключення. Включає режим ініціативи підключення цього вхідного транспорту до віддаленого хосту (адреса замість локального) та перехід у режим очікування запитів від цього хосту. Значення "Keep alive час очікування (сек.)" використовується як таймаут перепідключення даного транспорту за відсутності активності, з метою відновлення можливо втраченого підключення.</li></ul></li></ul>
+<p>Приклад: "<i>TCP::10001:1</i>" — TCP-сокет доступний на всіх інтерфейсах, відкритий на порту 10001 та з'єднання не розриває. 
+</p>
+</td></tr>
+<tr>
+<td> UDP </td>
+<td>
+<p><i>UDP:{адреса}:{порт}</i><br />
+де:
+</p>
+<ul><li> адреса — теж що у TCP;</li>
+<li> порт — теж що у TCP.</li></ul>
+<p>Приклад: "<i>UDP:localhost:10001</i>" — UDP-сокет доступний тільки на інтерфейсі "localhost" та відкритий на порту 10001. 
+</p>
+</td></tr>
+<tr>
+<td> RAWCAN </td>
+<td>
+<p><i>RAWCAN:{інтерфейс}:{маска}:{ідентифікатор}</i><br />
+де:
+</p>
+<ul><li> інтерфейс — ім'я CAN інтерфейсу;</li>
+<li> маска, ідентифікатор — маска та ідентифікатор для фільтрації CAN кадрів.</li></ul>
+<p>Приклад: "<i>RAWCAN:can0:0:0</i>" — приймати всі CAN кадри на інтерфейсі can0. 
+</p>
+</td></tr>
+<tr>
+<td> UNIX </td>
+<td>
+<p><i>UNIX:{ім'я}:{режим}</i><br />
+де:
+</p>
+<ul><li> ім'я — ім'я файлу UNIX сокету;</li>
+<li> режим — теж що у TCP.</li></ul>
+<p>Приклад: "<i>UNIX:/tmp/oscada:1</i>" — UNIX-сокет доступний через файл "/tmp/oscada" та з'єднання не розриває. 
+</p>
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.92.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D1.96_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8"><span class="mw-headline-number">2</span> Вихідні транспорти</span></h2>
+<p>Сконфігурований та запущений вихідний транспорт відкриває з'єднання з вказаним сервером. При розриві з'єднання вихідний транспорт вимикається. Для відновлення з'єднання транспорт треба знову запустити.
+</p><p>Головна вкладка сторінки конфігурації вихідного сокету зображено на рис.2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1062px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out_uk.png"><img class="thumbimage" height="576" src="../files/Sockets_out_uk.png" width="1060" /></a>  <div class="thumbcaption">Рис.2. Головна вкладка сторінки конфігурації вихідного сокету.</div></div></div></div>
+<p>За допомогою цього діалогу можна встановити:
+</p>
+<ul><li> Стан транспорту, а саме: "Статус", "Запущено" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис транспорту.</li>
+<li> Адреса транспорту. Формат адреси описано у таблиці нижче.</li>
+<li> Стан, у який переводити транспорт при завантажені: "Запускати".</li>
+<li> Максимальний розмір сегменту (MSS), для обмеження розміру пакетів що відправляються (сегментів TCP) на поганих каналах зв'язку. Встановити у 0 для зняття користувацького обмеження розміру.</li>
+<li> інтервали часу підключення у форматі: "<b>conn:next[:rep]</b>". Де:
+<ul><li> <i>conn</i> — максимальний час очікування відповіді підключення, у секундах;</li>
+<li> <i>next</i> — максимальний час очікування продовження відповіді, у секундах;</li>
+<li> <i>rep</i>  — мінімальний таймаут очікування повтору запиту, в секундах.</li></ul></li></ul>
+<p>Адреси вихідних сокетів різного типу формуються наступним чином:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Тип сокету </th>
+<th> Адреса
+</th></tr>
+<tr>
+<td> TCP/UDP </td>
+<td>
+<p><i>TCP:{адреса}:{порт}</i><br />
+<i>UDP:{адреса}:{порт}</i><br />
+де:
+</p>
+<ul><li> адреса — Адреса, з якою здійснюється підключення. Допускається як символьне так й IP представлення адреси.</li>
+<li> порт — Мережевий порт, з яким здійснюється підключення. Можливе вказання символьного імені порту (відповідно до /etc/services).</li></ul>
+<p>Приклад: "<i>TCP:127.0.0.1:7634</i>" — підключення з портом 7634 на хості 127.0.0.1.
+</p>
+</td></tr>
+<tr>
+<td> RAWCAN </td>
+<td>
+<p><i>RAWCAN:{інтерфейс}:{маска}:{ідентифікатор}</i><br />
+де:
+</p>
+<ul><li> інтерфейс — ім'я CAN інтерфейсу;</li>
+<li> маска, ідентифікатор — маска та ідентифікатор CAN кадрів.</li></ul>
+<p>Приклад: "<i>RAWCAN:can0:0:0</i>" — приймати всі CAN кадри на інтерфейсі can0. 
+</p>
+</td></tr>
+<tr>
+<td> UNIX </td>
+<td>
+<p><i>UNIX:{ім'я}</i><br />
+де:
+</p>
+<ul><li> ім'я — ім'я файлу UNIX сокета.</li></ul>
+<p>Приклад: "<i>UNIX:/tmp/oscada</i>" — з'єднатися з UNIX-сокетом через файл /tmp/oscada. 
+</p>
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

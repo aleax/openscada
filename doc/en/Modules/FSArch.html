@@ -1,0 +1,312 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/FSArch - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/FSArch</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FFSArch&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FSArch" title="Modules/FSArch (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FSArch/ru" title="Модули/Архивация на ФС (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FSArch/uk" title="Модулі/Архівація на ФС (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a> </td>
+<td> Arhivator on the file system </td>
+<td> 2.10 </td>
+<td> GPL2 </td>
+<td> arh_FSArch.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Archive </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> The archiver module. Provides functions for messages and values archiving to file system.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Message_Archiver"><span class="tocnumber">1</span> <span class="toctext">Message Archiver</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#File_format_of_archive_messages"><span class="tocnumber">1.1</span> <span class="toctext">File format of archive messages</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Example_of_the_archive_of_messages_file"><span class="tocnumber">1.2</span> <span class="toctext">Example of the archive of messages file</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Values_Archiver"><span class="tocnumber">2</span> <span class="toctext">Values Archiver</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#File_format_of_archive_values"><span class="tocnumber">2.1</span> <span class="toctext">File format of archive values</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Efficiency"><span class="tocnumber">3</span> <span class="toctext">Efficiency</span></a></li>
+</ul>
+</div>
+
+<p>The module is designed for archiving messages and values of OpenSCADA on the file system.
+</p><p>Any SCADA system provides the ability to archive the collected data, i.e. formation of history of the changes (dynamics) of processes. Archives conditionally can be divided into two types: archives of messages and archives of values.
+</p><p>A feature of the archives of messages is that so-called events are archived. The characteristic feature of the events is its time of occurrence. The archives of messages are usually used for archiving ,messages in the system, i.e. conducting of logs and reports. Depending on the source the messages can be classified according to different criteria. For example, this may be the reports of emergency situations, the reports of actions of the operators, reports of the glitches of connection and others.
+</p><p>A feature of the archives of values is their frequency, measured in the time lag between two adjacent values. Archives of values are used for archiving the history of continuous processes. As the process is continuous, it can only be archived by introducing the notion of quantization of time interviewing, because otherwise we get the archives of infinite dimensions in view of continuity of the nature of the process. In addition, practically, we can get value from the time limited by the data sources. For example, a fairly high-quality data sources in the industry, are rarely allowed to receive data at a frequency of more than 1kHz. And this is without taking into account of the sensors themselves, which have even less qualitative characteristics.
+</p><p>For conducting of archives in the system OpenSCADA the subsystem «Archives» is provided. This subsystem, according to the types of archives, consists of two parts: an archives of messages and archives of values. The subsystem, in general, is a module that allows you to create archives based on the different nature and methods of storing of data. This module provides a mechanism for the archiving on the file system for both: for the flow of messages, and for the flow of values.
+</p>
+<h2><span class="mw-headline" id="Message_Archiver"><span class="mw-headline-number">1</span> Message Archiver</span></h2>
+<p>Archives of messages are formed by archiver. There can be the set of archivers, with individual settings, allowing to share archiving of different classes of messages.
+</p><p>The archiver of messages of this module allows you to store data in XML files or in the flat-text format. Markup language XML is a standard format that is easily understood by a lot of exterior applications. However, opening and reviewing of the files in this format requires considerable resources. On the other hand, the flat-text format requires far fewer resources, although not uniform, but also requires knowledge of its structure to deal with.
+</p><p>In any case, both formats are supported and the user can select any of them in accordance with his requirements.
+</p><p>Files of the archive are named by archivers based on the date of the first messages in the archive. For example so: "2006-06-21 17:11:04. Msg".
+</p><p>Files of the archive can be limited in size and time. After exceeding the limit a new file is created. Maximum number of files in a directory of the archiver can also be restricted. After exceeding the limit on the number of files old files will be deleted!
+</p><p>In order to optimize the use of disk space archivers support package of old archives by gzip packer. Packaging is made after a long non-use of the archive.
+</p><p>When you are using the archives in the form of XML, appropriate files are loaded entirely! For a long time unused archives unloading timeout of access to the archive is used, after the exceeding of which  the archive is unloaded from memory and then is packaged.
+</p><p>Module provides additional settings for the archiving process (Fig. 1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:FSArch_mess_a_prm.png"><img class="thumbimage" height="768" src="../files/FSArch_mess_a_prm.png" width="808" /></a>  <div class="thumbcaption">Fig.1. Additional settings of an archiving process of messages.</div></div></div></div>
+<p>Those parameters include:
+</p>
+<ul><li> <i>Files of the archive in XML</i> — Enables archiving of messages by files in XML-format, rather than plain text. Use of archiving in XML-format requires more RAM because it needs for full downloading of the file, XML-parsing and storing the content into memory at the time of use.</li>
+<li> <i>Maximum size of archive's file, by kilobytes</i> — Sets limit on the size of one archive file. Disabling the restriction can be performed by setting the parameter to zero.</li>
+<li> <i>Maximum number of the files</i> — Limits the maximum number for files of the archive and additional with the size of single file it determines the size of archive on disk. Completely removing this restriction can be performed by setting the parameter to zero.</li>
+<li> <i>Time size of archive's file, by days</i> — Sets limit on the size of single archive file on time.</li>
+<li> <i>Timeout to pack files of the archive, by minutes</i> — Sets the time after which, in the absence of requests, the archive file will be packaged in a gzip archive. Set to zero for disabling the packing by gzip.</li>
+<li> <i>Period of the archives checking, by minutes</i> — Sets for checking frequency of the archives for the files emergence or deletion into the directory of the archive, as well as exceeding the limits and removing for old files.</li>
+<li> <i>Use an info file for the packed archives</i> — Specifies whether to create a file with information about the packed archive files by gzip-archiver. When copying files of archive to another station, this info file can speed up the target station process of first run by eliminating the need to decompress by gzip-archiver in order to obtain the information.</li>
+<li> <i>Prevent for duplicates</i> — Enables checking for duplicate messages at the time of putting a message into the archive. If there is a duplicate the message does not fit into the archive. This feature some increases the recording time to archive, but in cases of placing messages in the archive by past time from external sources it allows to eliminate the duplication.</li>
+<li> <i>Mean as duplicates and prevent its for equal time, category, level</i> — Enables checking for duplicate messages at the time of putting a message into the archive. As duplicates there mean messages which equal to time, category and level. If there is a duplicate then the new message will replace the old one into the archive. This feature mostly usable for text of messages changing in time, for alarm's state to example.</li>
+<li> <i>Check now for the directory of the archivator</i> — The command, which allows you to immediately start for checking the archives, for example, after some manual changes into the directory of the archiver.</li></ul>
+<p>For the archivator's files control you can see to tab "Files" (Fig. 2).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1005px;"><a class="image" href="http://oscada.org/wiki/File:FSArch_mess_files.png"><img class="thumbimage" height="717" src="../files/FSArch_mess_files.png" width="1003" /></a>  <div class="thumbcaption">Fig.2. Tab "Files" of the messages archivator object.</div></div></div></div>
+<h3><span class="mw-headline" id="File_format_of_archive_messages"><span class="mw-headline-number">1.1</span> File format of archive messages</span></h3>
+<p>The table below shows the syntax of the archive file based on the XML-language:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Tag </th>
+<th> Description </th>
+<th> Attributes </th>
+<th> Contains
+</th></tr>
+<tr>
+<td> FSArch </td>
+<td> The root element. Identifies the file as belonging to the module. </td>
+<td>
+<p><i>Version</i> — version of the archive file;<br />
+<i>Begin</i> — the start time for the archive (hex - UTC in seconds from 01/01/1970);<br />
+<i>End</i> — the end time for the archive (hex - UTC in seconds from 01/01/1970).
+</p>
+</td>
+<td> (m)
+</td></tr>
+<tr>
+<td> m </td>
+<td>Tag of the single message. </td>
+<td>
+<p><i>tm</i> — time of creation of the message (hex - UTC in seconds from 01/01/1970);<br />
+<i>tmu</i> — microseconds of message's time;<br />
+<i>lv</i> — message level<br />
+<i>cat</i> — category of message.
+</p>
+</td>
+<td> Text of message
+</td></tr></table>
+<p>Archive file on the basis of the flat text consists of:
+</p>
+<ul><li> header in the format: "<b>FSArch {vers} {charset} {beg_tm} {end_tm}</b>"; Where:
+<ul><li> <i>vers</i> — version of the archiving module;</li>
+<li> <i>charset</i> — code page of the file (usually UTF8);</li>
+<li> <i>beg_tm</i> — UTC start time for the archive from 01.01.1970, in hexadecimal form;</li>
+<li> <i>end_tm</i> — UTC end time for the archive  01.01.1970, in hexadecimal form.    </li></ul></li>
+<li> records of the messages in the format: "<b>{tm} {lev} {cat} {mess}</b>"; Where:
+<ul><li> <i>tm</i> — message time in format "<b>{utc_sec}:{usec}</b>", where:
+<ul><li> <i>utc_sec</i> — UTC time from 01.01.1970, in hexadecimal form;</li>
+<li> <i>usec</i> — microseconds of time, in decimal form.</li></ul></li>
+<li> <i>lev</i> — the level of importance of the message;</li>
+<li> <i>cat</i> — category of the message;</li>
+<li> <i>mess</i> — text of the message.</li></ul></li></ul>
+<p>Text of the message and its category are coded to exclude separator symbols (space character).
+</p>
+<h3><span class="mw-headline" id="Example_of_the_archive_of_messages_file"><span class="mw-headline-number">1.2</span> Example of the archive of messages file</span></h3>
+<p><b>Example of the contents of an archive file in format of the XML language:</b>
+</p>
+<pre style="white-space: pre-wrap;">
+&lt;?xml version='1.0' encoding='UTF-8'&nbsp;?&gt;
+&lt;FSArch Version="1.3.0" Begin="4a27dfbc" End="4a28c990"&gt;
+&lt;m tm="4a28cd01" tmu="942937" lv="4" cat="/DemoStation/sub_DAQ/mod_DiamondBoards/"&gt;dscInit error.&lt;/m&gt;
+&lt;m tm="4a28cd12" tmu="466631" lv="4" cat="/DemoStation/sub_Transport/mod_Sockets/out_HDDTemp/"&gt;Connect to Internet socket error: Operation now in progress!&lt;/m&gt;
+&lt;/FSArch&gt;
+</pre>
+<p><b>Example of the contents of the archive file in the format of flat text:</b>
+</p>
+<pre style="white-space: pre-wrap;">
+FSArch 1.3.0    UTF-8 4a27dfbb 4a28cd12
+4a28cd11:295857 1 /DemoStation/ Start!
+4a28cd11:296091 1 /DemoStation/sub_Transport/ Start%20subsystem.
+4a28cd11:304391 1 /DemoStation/sub_DAQ/mod_DAQGate/cntr_test/ Enable%20controller!
+4a28cd11:306362 1 /DemoStation/sub_DAQ/mod_ModBus/cntr_testTCP/ Enable%20controller!
+4a28cd11:310956 1 /DemoStation/sub_DAQ/mod_ModBus/cntr_testRTU/ Enable%20controller!
+4a28cd11:313845 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_Anast1to2node/ Enable%20controller!
+4a28cd11:531765 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM102cntr/ Enable%20controller!
+4a28cd11:557546 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_Anast1to2node_cntr/ Enable%20controller!
+4a28cd11:616320 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM101/ Enable%20controller!
+4a28cd11:770404 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM102/ Enable%20controller!
+4a28cd11:935745 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM201/ Enable%20controller!
+4a28cd12:64148 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_КМ202/ Enable%20controller!
+4a28cd12:212514 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM301/ Enable%20controller!
+4a28cd12:331423 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM302/ Enable%20controller!
+4a28cd12:462627 1 /DemoStation/sub_DAQ/mod_System/cntr_AutoDA/ Enable%20controller!
+4a28cd12:466631 4 /DemoStation/sub_Transport/mod_Sockets/out_HDDTemp/ Connect%20to%20Internet%20socket%20error:%20Operation%20now%20in%20progress!
+4a28cd12:499705 1 /DemoStation/sub_DAQ/mod_SoundCard/cntr_test/ Enable%20controller!
+4a28cd12:502482 1 /DemoStation/sub_DAQ/mod_LogicLev/cntr_experiment/ Enable%20controller!
+4a28cd12:620560 1 /DemoStation/sub_DAQ/mod_JavaLikeCalc/cntr_testCalc/ Enable%20controller!
+4a28cd12:624907 1 /DemoStation/sub_DAQ/mod_Siemens/cntr_test/ Enable%20controller!
+4a28cd12:644620 1 /DemoStation/sub_DAQ/mod_DAQGate/cntr_test/ Enable%20controller!
+4a28cd12:665980 1 /DemoStation/sub_Archive/ Start%20subsystem.
+4a28cd12:843813 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_Anast1to2node/ Start%20controller!
+4a28cd12:845059 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM102cntr/ Start%20controller!
+4a28cd12:845555 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_Anast1to2node_cntr/ Start%20controller!
+4a28cd12:845983 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM101/ Start%20controller!
+4a28cd12:846778 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM102/ Start%20controller!
+4a28cd12:847440 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM201/ Start%20controller!
+4a28cd12:849979 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_КМ202/ Start%20controller!
+4a28cd12:850851 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM301/ Start%20controller!
+4a28cd12:851417 1 /DemoStation/sub_DAQ/mod_BlockCalc/cntr_KM302/ Start%20controller!
+4a28cd12:852073 1 /DemoStation/sub_DAQ/mod_System/cntr_AutoDA/ Start%20controller!
+4a28cd12:854718 1 /DemoStation/sub_DAQ/mod_LogicLev/cntr_experiment/ Start%20controller!
+4a28cd12:889380 1 /DemoStation/sub_Archive/ Start%20subsystem.
+4a28cd12:909319 1 /DemoStation/sub_UI/mod_VCAEngine/ Start%20module.
+</pre>
+<h2><span class="mw-headline" id="Values_Archiver"><span class="mw-headline-number">2</span> Values Archiver</span></h2>
+<p>Archives of values are formed particularly by archivers of the values for each registered archive. There can be a lot of archivers with individual settings that allow to divide the archives by various parameters, such as the accuracy and depth.
+</p><p>Archive of values is an independent component, which includes buffer processed by archivers. The main parameter of archive of value is a source of data. As a source of data may make the attributes of the parameters of subsystem "Data acquisition", as well as other external data sources (passive mode). Other sources of data could be: network archivers of remote OpenSCADA systems, environment of programming of systems OpenSCADA etc. No less important parameters are the parameters of the archive buffer. From the parameters of the buffer the opportunity of working of archivers depends on. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Thus, the periodicity of values in the buffer should be no more than the periodicity of the fastest archiver, a buffer size not less than double the amount for the slowest archiver. Otherwise, the possible loss of data.
+</p><p>The overall scheme of archival of values vividly depicted in Fig. 3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:621px;"><a class="image" href="http://oscada.org/wiki/File:Arch_val_sh.png"><img class="thumbimage" height="391" src="../files/Arch_val_sh.png" width="619" /></a>  <div class="thumbcaption">Fig.3. Overall scheme of the process of archiving.</div></div></div></div>
+<p>Files of archives are named by archivers based on the date of the first value in the archive and archive identifier. For example in this way: "MemInfo_use 2006-06-17 17:32:56.val".
+</p><p>Files of archives can be limited in time. After exceeding the limit the new file is created. Maximum number of files in a directory of archiver also may be limited. After exceeding the limit on the number of files old files will be deleted!
+</p><p>In order to optimize the use of disk space archivers support package of old archives by gzip packer. Packaging is made after a long non-use of the archive. For fast archives connection allow to other systems you can enable info-files using for packed files, that prevent all files forward unpackaging at other system.
+</p><p>The module provides additional settings for the archiving process (Fig. 4).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:FSArch_val_a_prm.png"><img class="thumbimage" height="768" src="../files/FSArch_val_a_prm.png" width="808" /></a>  <div class="thumbcaption">Fig.4. Additional settings of an archiving process of values.</div></div></div></div>
+<p>Those parameters include:
+</p>
+<ul><li> <i>Time size of archive's file, by hours</i> — The parameter is set automatically when you change the values period by the archiver and generally proportional to values frequency of the archiver.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Large files of the archive will be processed long by there is long unpacking for gzip-files and the primary indexing, when accessing to parts of deep in the archives of history.</dd></dl>
+<ul><li> <i>Maximum number of the files to one archive</i> — Limits the maximum number for files of the archive and additional with the size of single file it determines the size of archive on disk. Completely removing this restriction can be performed by setting the parameter to zero.</li>
+<li> <i>Maximum capacity for all archives, by megabytes</i> — Sets limit to maximum amount of the disk space of all arhive's files of the archiver. The testing performs the periodically checking for the archives, which resulted in, on exceeding the limit, for the oldest files removing from all archives. To completely remove this restriction you can set it to value &lt; 1.</li>
+<li> <i>Rounding for numeric values (%)</i> — Sets the percentage of boundary for values' difference of parameters into integer and real types where they are considered as identical and will be archived as a single value through the sequential packaging. Allows for well-packaging of slightly changing parameters which are outside certainty. To disable this property you can it set to zero.</li>
+<li> <i>Timeout to pack files of the archive, by minutes</i> — Sets the time after which, in the absence of requests, the archive file will be packaged in a gzip archive. Set to zero for disabling the packing by gzip.</li>
+<li> <i>Period of the archives checking, by minutes</i> — Sets for checking frequency of the archives for the files emergence or deletion into the directory of the archive, as well as exceeding the limits and removing for old files.</li>
+<li> <i>Use an info file for the packed archives</i> — Specifies whether to create a file with information about the packed archive files by gzip-archiver. When copying files of archive to another station, this info file can speed up the target station process of first run by eliminating the need to decompress by gzip-archiver in order to obtain the information.</li>
+<li> <i>Check now for the directory of the archivator</i> — The command, which allows you to immediately start for checking the archives, for example, after some manual changes into the directory of the archiver.</li></ul>
+<p>For the archivator's files control you can see to tab "Files" (Fig. 5).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1090px;"><a class="image" href="http://oscada.org/wiki/File:FSArch_val_files.png"><img class="thumbimage" height="717" src="../files/FSArch_val_files.png" width="1088" /></a>  <div class="thumbcaption">Fig.5. Tab "Files" of a values archivator object.</div></div></div></div>
+<h3><span class="mw-headline" id="File_format_of_archive_values"><span class="mw-headline-number">2.1</span> File format of archive values</span></h3>
+<p>To implement the archiving to the file system the following requirements are to be done:
+</p>
+<ul><li> quick (easy) access to add to the archive and reading from the archive;</li>
+<li> the possibility of changing the values of the existing archive (to fill holes in duplicate systems);</li>
+<li> cycle (size restrictions);</li>
+<li> the possibility of the compression by the method of packaging the same values sequence that preserves the possibility of quick access (consistent packaging);</li>
+<li> the possibility of packaging obsolete data by standard archivers (gzip, bzip2 ...), with the possibility of extracting on access.</li></ul>
+<p>In accordance with the above requirements archiving is organized by method of plurality of files (for each source). Cyclical of archive sold at the file level, ie a new file is created, and the oldest one is removed. For fast compression the method of tightening to the last equal value is used. For this purpose, the bit archiving table is provided with the size of one to one with the number of stored data. Ie each bit corresponds to the single value in the archive. The presence of bit indicates the presence of value. For the thread of the same values bits reduced to zero. In the case of the string archive the table is not a bit but the byte one and contains the length of the appropriate value. In the case of reception of the thread  of equal values, the length will be zero and the first same value will be read. As the table is bite one, the archive will be able to keep strings with the length more than 255 characters. Thus, the methods of storage can be divided into a method of fixed and not fixed data size. The overall structure of the archive is shown in Fig. 6.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:202px;"><a class="image" href="http://oscada.org/wiki/File:FSArch_file_struct.png"><img class="thumbimage" height="339" src="../files/FSArch_file_struct.png" width="200" /></a>  <div class="thumbcaption">Fig.6. Overall structure of a value archive.</div></div></div></div>
+<p>When you create a new archive file there is formed: the title (the structure of the title is in the table 1), zero bit table of package of the archive and the first false value. Thus, the archive will be initialized with false values. In the future, the new values will be inserted in the area of values with adjustment of index table of packaging. It follows that the passive archives will dwindle in the files with the size of the title and the bit table.
+</p><p><b>Table 1.</b> The structure of the header of archive file
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Field </th>
+<th> Description </th>
+<th> Size in bite(bit)
+</th></tr>
+<tr>
+<td>f_tp</td>
+<td>System name of the archive ("OpenSCADA Val Arch.")</td>
+<td>20
+</td></tr>
+<tr>
+<td>archive</td>
+<td>Name of the archive to which the file belongs.</td>
+<td>20
+</td></tr>
+<tr>
+<td>beg</td>
+<td>Start time of the archive data (microseconds)</td>
+<td>8
+</td></tr>
+<tr>
+<td>end</td>
+<td>End time of the archive data (microseconds)</td>
+<td>8
+</td></tr>
+<tr>
+<td>period</td>
+<td>Periodicity of the archive (microseconds)</td>
+<td>8
+</td></tr>
+<tr>
+<td>vtp</td>
+<td>Type of value in the archive (Boolean, Integer, Real, String)</td>
+<td>(3)
+</td></tr>
+<tr>
+<td>hgrid</td>
+<td>Сriterion of using of hard grid in the buffer of the archive</td>
+<td>(1)
+</td></tr>
+<tr>
+<td>hres</td>
+<td>Сriterion of using of time of high resolution (mcs) in the buffer of the archive</td>
+<td>(1)
+</td></tr>
+<tr>
+<td>reserve</td>
+<td>Reserve</td>
+<td>14
+</td></tr>
+<tr>
+<td>term</td>
+<td>The symbol of the end of the header of file (0x55)</td>
+<td>1
+</td></tr></table>
+<p>Explaining of the mechanism of consistent packaging is given in Fig. 7. As can be seen from the figure a sign of the package contains a length (not fixed types) or a sign of the package (fixed types) of the separately taken value. This means that to obtain the desired value of displacement it is necessary to sum up the length of previous valid values. The implementation of this operation each time and for each value is highly invoice operation. Therefore, the mechanism of caching of displacement of the values is provided. The mechanism caches displacement of values through predefined their quantity, as well as cashes the last value for which the access is made (separately for reading and writing).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:602px;"><a class="image" href="http://oscada.org/wiki/File:FSArch_file_mpack.png"><img class="thumbimage" height="327" src="../files/FSArch_file_mpack.png" width="600" /></a>  <div class="thumbcaption">Fig. 7. Mechanism of the following packaging of values.</div></div></div></div>
+<p>Changes of the values in the existing archive is also provided. However, given the necessity to implement the shifting of the tail of the archive, it is recommended to perform this operation as sparingly as possible and with as far as possible large blocks.
+</p>
+<h2><span class="mw-headline" id="Efficiency"><span class="mw-headline-number">3</span> Efficiency</span></h2>
+<p>In the design and implementation of the module it was built mechanisms improving the process of archiving.
+</p><p>The first mechanism is a mechanism of block (frame-accurate or transactive) location of data in the files of the archives of values. Such an arrangement allows to achieve a maximum speed of archiving, and thus allows to archive more data streams at the same time. The experience of the practical using showed that the system of K8-3000 with a regular IDE hard drive is able to archive to 300000 data streams at a frequency of 1 second, or K5-400 system with the IDE drive (2.5") can archive to 100 parameters with 1 millisecond intervals.
+</p><p>The second mechanism is the package of current values, and outdated files of archives to optimize the use of disk space. There are two packaging mechanisms: the consistent package (archives of values), and a mechanism of finish packaging of archives by means of standard packer (gzip). This approach allowed to achieve high productivity in the process of archiving of current data with the effective mechanism of consistent compression. And finish packaging by means of standard packer of obsolete archives completes the overall picture of the compact storage of large volumes of data. Statistics of practical using, in real noise signal (the worst situation), showed that the extent of consistent packaging is 10%, and the extent of the full packaging was 71%.
+</p>
+
+
+
+
+
+</div></body>
+</html>

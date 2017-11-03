@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/LogicLev - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/LogicLev</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FLogicLev&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/LogicLev" title="Modules/LogicLev (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/LogicLev/ru" title="Модули/Логический уровень (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/LogicLev/uk" title="Модулі/Логічний рівень (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> </td>
+<td> Logical level </td>
+<td> 1.7 </td>
+<td> GPL2 </td>
+<td> daq_LogicLev.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Provides the logical level of parameters.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Data_controller"><span class="tocnumber">1</span> <span class="toctext">Data controller</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Parameters"><span class="tocnumber">2</span> <span class="toctext">Parameters</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Logical_type_parameter_.28std.29"><span class="tocnumber">2.1</span> <span class="toctext">Logical type parameter (std)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Parameter_reflection_.28pRef.29"><span class="tocnumber">2.2</span> <span class="toctext">Parameter reflection (pRef)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#User_programming_API"><span class="tocnumber">3</span> <span class="toctext">User programming API</span></a></li>
+</ul>
+</div>
+
+<p>This module is a pure logic-level implementation mechanism, based on the templates of parameters of the subsystem "Data acquisition — DAQ". This implementation of the module is based on the "<a class="external text" href="http://wiki.oscada.org/Doc/LogParmUrov" rel="nofollow noreferrer noopener" target="_blank">Logical level of the parameters of the system OpenSCADA</a>". Practically, this module is an implementation of the subsystem "Options" of the project without templates and putting it into the module.
+</p><p>The module provides a mechanism for the formation of the parameters of subsystem "DAQ", based on other sources of the subsystem at the level of the user. Actually, the module uses templates of subsystem "DAQ" and the specific format for the description of references to the attributes of the parameters of subsystem "DAQ".
+</p><p>Also, the module implements the functions of the horizontal reservation, namely, working in conjunction with the remote station of the same level. In addition to the synchronization of the archives of values and  archives of attributes of parameters the module implements synchronization of computational templates, in order to shockless catch of the algorithms.
+</p>
+<h2><span class="mw-headline" id="Data_controller"><span class="mw-headline-number">1</span> Data controller</span></h2>
+<p>For addition of the data source of parameters of the logical level the controller in the system OpenSCADA is created and configured. Example of the configuration tab of the controller of the type is depicted in Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:814px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_cntr.png"><img class="thumbimage" height="617" src="../files/LogicLev_cntr.png" width="812" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller.</div></div></div></div>
+<p>From this tab you can set:
+</p>
+<ul><li> The state of the controller, as follows: Status, "Enable", "Run" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the controller.</li>
+<li> The state, in which the controller must be translated at boot: "To enable" and "To start".</li>
+<li> Name of tables to store the settings based on templates and direct reflection external parameter of DAQ.</li>
+<li> The schedule policy and the priority of the task of the interrogation of data sources.</li></ul>
+<h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
+<p>LogicLev module provides two types of parameters: "Logical"(std) and "Reflection parameter"(pRefl). Additional configuration fields, the parameters of the module (Fig. 2) are:
+</p>
+<ul><li> <i>"Logical"(std)</i>:
+<ul><li> <b>Parameter template</b> — template of DAQ parameter address.</li></ul></li>
+<li> <i>"Reflection parameter"(pRefl)</i>:
+<ul><li> <b>Source parameter</b> — source reflected parameter address.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm.png"><img class="thumbimage" height="503" src="../files/LogicLev_prm.png" width="780" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a parameter.</div></div></div></div>
+<h3><span class="mw-headline" id="Logical_type_parameter_.28std.29"><span class="mw-headline-number">2.1</span> Logical type parameter (std)</span></h3>
+<p>When building a template, for logical parameter type of the controller, the peculiarity of the link format of the template must take into account. Reference should be written in the form: <b>{Parameter}|{identifier}</b>, where:
+</p>
+<ul><li> <i>{Parameter}</i> — line, characterizing the parameter;</li>
+<li> <i>{Identifier}</i> — identifier of an attribute of a parameter.</li></ul>
+<p>This record allows to group multiple attributes of a source parameter and assign them only by the choice of the parameter. I.e. in the configuration dialog of the template (Fig. 3) it will be shown only parameter. This does not preclude the possibility to assign the attributes of the parameter each separately, in addition, if you miss in the configuration of the template the description of the links in the specified format, it will be assigned an attribute of the parameter (Fig.4).
+</p><p>The module provides a special treatment of a number of attributes of the template:
+</p>
+<ul><li> <i>f_frq</i> — Frequency computation procedure template, or the time after the last calculation, the negative, in seconds, for scheduling of CRON, read-only.</li>
+<li> <i>f_start</i> — First calculate of template's procedure, start, read-only.</li>
+<li> <i>f_stop</i> — Last calculate of template's procedure, stop, read-only.</li>
+<li> <i>f_err</i> — The parameter error, full access. Value of the attribute is set to the parameter's error attribute "err". Write here <b>EVAL</b> for allow the attribute "err" and all other Read Only attributes set external.</li>
+<li> <i>SHIFR</i> — The parameter code, read-only.</li>
+<li> <i>NAME</i> — The parameter name, read-only.</li>
+<li> <i>DESCR</i> — The parameter description, read-only.</li>
+<li> <i>this</i> — The parameter object, allow access to attributes of the parameter, for example to their archives access.</li></ul>
+<p>Sign "(+)" at the end of the address signals about successful linking and presence of the target. For object's type attributes allowed hierarchical access to the object concrete property by set the path through symbol '#', for example: "LogicLev.experiment.Pi.var#pr1.pr2".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_tmpl.png"><img class="thumbimage" height="503" src="../files/LogicLev_prm_tmpl.png" width="780" /></a>  <div class="thumbcaption">Fig.3. Configuration tab of a template of a parameter.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_tmpl1.png"><img class="thumbimage" height="503" src="../files/LogicLev_prm_tmpl1.png" width="780" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of a template of a parameter. Show only attributes.</div></div></div></div>
+<p>In accordance with the template underlying the parameter, we get the set of attributes of the parameter Fig.5.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_attr.png"><img class="thumbimage" height="503" src="../files/LogicLev_prm_attr.png" width="780" /></a>  <div class="thumbcaption">Fig.5. Tab of attributes of a parameter.</div></div></div></div>
+<h3><span class="mw-headline" id="Parameter_reflection_.28pRef.29"><span class="mw-headline-number">2.2</span> Parameter reflection (pRef)</span></h3>
+<p>All attributes from specified to reflect parameter just become available in this parameter thereby realizing the function proxy, for example, for include the parameters from other sources into a single, export, object controller (PLC).
+</p>
+<h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">3</span> User programming API</span></h2>
+<p>In view of the module support logical type parameters make sense to provide a number of functions the user API to call from a template of logical parameter.
+</p><p><b>The object "Parameter" [this]</b>
+</p>
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">for enabled parameter of the standard type</span>] — attribute <i>id</i> and <i>name</i> for type <i>tp</i> add. If the attribute already present then will apply properties allowed to hot changing: name, selection mode and the selection mode parameters.
+<ul><li> <i>id, name</i> — new attribute id and name;</li>
+<li> <i>tp</i> — attribute type [boolean | integer | real | string | text | object] + selection mode [sel | seled] + read-only [ro];</li>
+<li> <i>selValsNms</i> — two lines with values in first and it's names in first (separated by ";").</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">for enabled parameter of the standard type</span>] — attribute <i>id</i> remove.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

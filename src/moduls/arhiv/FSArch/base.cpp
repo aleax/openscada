@@ -103,7 +103,7 @@ string ModArch::packArch( const string &anm, bool replace )
     //signal(SIGCHLD,prevs);
     if(sysres) {
 	remove(rez_nm.c_str());
-	throw err_sys(_("Compress error!"));
+	throw err_sys(_("Compressing for '%s' error %d!"), anm.c_str(), sysres);
     }
     if(replace) remove(anm.c_str());
 
@@ -119,7 +119,7 @@ string ModArch::unPackArch( const string &anm, bool replace )
     //signal(SIGCHLD,prevs);
     if(sysres) {
 	remove(rez_nm.c_str());
-	throw err_sys(_("Decompress error: '%s'!"), anm.c_str());
+	throw err_sys(_("Decompressing for '%s' error %d!"), anm.c_str(), sysres);
     }
     if(replace) remove(anm.c_str());
 

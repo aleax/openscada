@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/SSL - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/SSL</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSSL&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SSL" title="Modules/SSL">Modules/SSL</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SSL" title="Modules/SSL (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SSL/ru" title="Модули/SSL (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a> </td>
+<td> SSL </td>
+<td> 1.5 </td>
+<td> GPL2 </td>
+<td> tr_SSL.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Транспорт </td>
+<td> Роман Савоченко </td>
+<td> Надає транспорт базований на безпечному шарі сокетів. Використано OpenSSL та підтримуються SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.92.D1.85.D1.96.D0.B4.D0.BD.D1.96_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8"><span class="tocnumber">1</span> <span class="toctext">Вхідні транспорти</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.92.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D1.96_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Вихідні транспорти</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.A1.D0.B5.D1.80.D1.82.D0.B8.D1.84.D1.96.D0.BA.D0.B0.D1.82.D0.B8_.D1.82.D0.B0_.D0.BA.D0.BB.D1.8E.D1.87.D1.96"><span class="tocnumber">3</span> <span class="toctext">Сертифікати та ключі</span></a></li>
+</ul>
+</div>
+
+<p>Модуль транспорту SSL надає до системи підтримку транспортів заснованих на шарі безпечних сокетів (SSL). У основі модуля лежить бібліотека <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a>. Підтримуються вхідні та вихідні транспорти протоколів SSLv3 та TLSv1.
+</p><p>Додати нові вхідні та вихідні транспорти можна за посередництвом конфігурації транспортної підсистеми у будь якому конфігураторі системи OpenSCADA.
+</p>
+<h2><span class="mw-headline" id=".D0.92.D1.85.D1.96.D0.B4.D0.BD.D1.96_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8"><span class="mw-headline-number">1</span> Вхідні транспорти</span></h2>
+<p>Сконфігурований та запущений вхідний транспорт відкриває серверний SSL-сокет для очікування з'єднання клієнтів. SSL-сокет є багато-потоковим, тобто. при підключенні клієнту створюється клієнтське SSL-з'єднання та новий потік у якому здійснюється обслуговування клієнту. Серверний SSL-сокет на цей час переходить до очікування запитів від нового клієнту. Таким чином досягається паралельне обслуговування клієнтів.
+</p><p>Кожний вхідний транспорт обов'язково зв'язується з одним з доступних транспортних протоколів, якому передаються вхідні повідомлення. Спільно з транспортним протоколом підтримується механізм об'єднання шматків роздрібнених, при передачі, запитів.
+</p><p>Діалог конфігурації вхідного SSL-транспорту зображено на рисунок 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:970px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in_uk.png"><img class="thumbimage" height="746" src="../files/SSL_in_uk.png" width="968" /></a>  <div class="thumbcaption">Рис.1. Діалог конфігурації вхідного SSL-транспорту.</div></div></div></div>
+<p>За допомогою цього діалогу можна встановити:
+</p>
+<ul><li> Стан транспорту, а саме: "Статус", "Виконується", ім'я БД (яка містить конфігурацію) та перелік з інформацією про поточні підключення.</li>
+<li> Ідентифікатор, ім'я та опис транспорту.</li>
+<li> Адреса транспорту у форматі "{адреса}:{порт}[:{режим}]" де:
+<ul><li> адреса — Адреса, на якій відкривається SSL. Має бути однією з адрес хосту. Якщо вказано "*" то SSL буде доступний на всіх інтерфейсах хосту. Допускаються як символьне, так й IP представлення адреси.</li>
+<li> порт – Мережевий порт, на якому відкривається SSL. Можливе вказання символьного ім'я порту (відповідно до /etc/services).</li>
+<li> режим – SSL-режим та версія (SSLv3, SSLv23, TLSv1). По замовченню та при помилці використовується SSLv23.</li></ul></li>
+<li> Обрання транспортного протоколу.</li>
+<li> Стан, у який переводити транспорт при завантажені: "Запускати".</li>
+<li> Сертифікати, приватний ключ SSL та пароль приватного ключа SSL.</li>
+<li> Максимальна кількість обслугованих клієнтів, максимальна кількість обслугованих клієнтів за хостами та розмір вхідного буферу.</li>
+<li> Keep alive запитів. Закриття підключення після вказаної кількості запитів. Нульове значення для вимкнення (не закривається ніколи).</li>
+<li> Keep alive час очікування, секунд. Закриття підключення після відсутності запитів протягом вказаного часу. Нульове значення для вимкнення (не закривається ніколи).</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Вимикати цю функцію не рекомендується оскільки властивість мережі TCP/IP не гарантує повідомлення серверу про відключення з'єднання, скажемо у випадку пропадання живлення на клієнті. У результаті чого можуть <span style="color: red">назавжди</span> залишатися відкриті клієнтські підключення, а за досягненням ліміту сервер припинить приймати нові!</dd></dl>
+<ul><li> Пріоритет задач транспорту.</li></ul>
+<h2><span class="mw-headline" id=".D0.92.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D1.96_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8"><span class="mw-headline-number">2</span> Вихідні транспорти</span></h2>
+<p>Сконфігурований та запущений вихідний транспорт відкриває SSL підключення з вказаним сервером. При розриві з'єднання, вихідний транспорт вимикається. Для відновлення з'єднання транспорт треба знову запустити.
+</p><p>Головну вкладку сторінки конфігурації вихідного SSL-транспорту зображено на рис.2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:758px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out_uk.png"><img class="thumbimage" height="751" src="../files/SSL_out_uk.png" width="756" /></a>  <div class="thumbcaption">Рис.2. Головна вкладка сторінки конфігурації вихідного SSL-транспорту.</div></div></div></div>
+<p>За допомогою цього діалогу можна встановити:
+</p>
+<ul><li> Стан транспорту, а саме: "Статус", "Виконується" та ім'я БД яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис транспорту.</li>
+<li> Адреса транспорту у форматі "{адреса}:{порт}[:{режим}]", де:
+<ul><li> адреса — Адреса, з якою здійснюється з'єднання. Допускається як символьне так й IP представлення адреси.</li>
+<li> порт — Мережевий порт, з яким здійснюється підключення. Можливо вказання символьного ім'я порту (відповідно до /etc/services).</li>
+<li> режим — SSL-режим та версія (SSLv3, SSLv23, TLSv1). По замовченню та при помилці використовується SSLv23</li></ul></li>
+<li> Стан, у який переводити транспорт при завантаженні: "Запускати".</li>
+<li> Сертифікати, приватний ключ SSL та пароль приватного ключа SSL.</li>
+<li> Таймаут по замовченню для очікування з'єднання та відповіді, окремо.</li></ul>
+<h2><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D1.82.D0.B8.D1.84.D1.96.D0.BA.D0.B0.D1.82.D0.B8_.D1.82.D0.B0_.D0.BA.D0.BB.D1.8E.D1.87.D1.96"><span class="mw-headline-number">3</span> Сертифікати та ключі</span></h2>
+<p>Для повноцінної роботи модуля потрібні сертифікати та приватні ключі. У випадку з вхідним SSL-транспортом (сервером) вони обов'язкові. У випадку з вихідним SSL-транспортом вони можуть й не встановлюватися хоча їх використання бажане.
+</p><p>Простішою конфігурацією сертифікату є само-підписаний сертифікат та приватний ключ. Нижче описано процедуру їх створення з допомогою утиліти <b>openssl</b>:
+</p>
+<pre style="white-space: pre-wrap;">
+# Генерація секретного ключа
+$ openssl genrsa -out ./key.pem -des3 -rand /var/log/messages 2048
+# Генерація само-підписаного сертифікату
+$ openssl req -x509 -new -key ./key.pem -out ./selfcert.pem -days 365
+</pre>
+<p>Далі вміст файлів "selfcert.pem" та "key.pem" копіюються до текстового поля сертифікату та ключа. Пароль приватного ключа встановлюється у відповідному полі.
+</p>
+
+
+
+
+
+</div></body>
+</html>

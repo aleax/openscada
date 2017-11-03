@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/DAQGate - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/DAQGate</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FDAQGate&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DAQGate" title="Modules/DAQGate (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DAQGate/ru" title="Модули/Шлюз сбора данных (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DAQGate/uk" title="Модулі/Шлюз збору даних (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> </td>
+<td> Gateway of the data sources </td>
+<td> 1.7 </td>
+<td> GPL2 </td>
+<td> daq_DAQGate.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Controller_of_data"><span class="tocnumber">1</span> <span class="toctext">Controller of data</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Parameters"><span class="tocnumber">2</span> <span class="toctext">Parameters</span></a></li>
+</ul>
+</div>
+
+<p>The main function of this module is the reflection of the data of the "Data acquisition" subsystem of the remote OpenSCADA stations on the local ones. In its work, the module uses the self protocol of the OpenSCADA (SelfSystem) and service functions of the subsystem "Data acquisition".
+</p><p>The module realizes following functions:
+</p>
+<ul><li> The reflection of the structure of the parameters of the subsystem "Data acquisition" of the remote station. The structure can be periodically synchronized while working.</li>
+<li> Access to the configuration of the parameters. Configuration of the parameters of the controllers of remote stations is transparently reflected that lets you to change it remotely.</li>
+<li> Access to the current value of the attributes of the parameters and the possibility of their modification. The values of the attributes of the parameters are updated at a frequency of execution of the local controller. Requests for modification of the attributes are transmitted to the remote station.</li>
+<li> Reflection of the archives of values of individual attributes parameters. The reflection of the archives is realized in two ways. The first method includes creating of the local archive for the attribute and its synchronization with the remote, the restoration of the archive at the stop of the station is provided. The second method is the translation of the requests of the local archive file to the one of the remote station.</li>
+<li> Messages reflection from selected data sources of remote station to local messages archive with prefix "<b>{Station}:</b>", include also alarms (negative level messages). </li>
+<li> Provides the implementation of the mechanism of the vertical redundancy as an opportunity to reflect data from the multiple stations at the same level.</li>
+<li> Realization of the functions of horizontal redundancy, namely, working in the conjunction with the remote station of the same level.</li></ul>
+<p>Using of the available redundancy schemes is graphically represented in Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:515px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_red.png"><img class="thumbimage" height="351" src="../files/DAQ_red.png" width="513" /></a>  <div class="thumbcaption">Fig.1. Horizontal and vertical redundancy.</div></div></div></div>
+<h2><span class="mw-headline" id="Controller_of_data"><span class="mw-headline-number">1</span> Controller of data</span></h2>
+<p>For addition of the data source the controller's object is created and configured in OpenSCADA. Example of the configuration tab of the controller is depicted in Figure 2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:DAQGate_tr_cntr.png"><img class="thumbimage" height="720" src="../files/DAQGate_tr_cntr.png" width="808" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a controller.</div></div></div></div>
+<p>From this tab you can set:
+</p>
+<ul><li> The state of the controller, as follows: «Enable», «Run» and the name of the database containing the configuration.</li>
+<li> Id, name and description of the controller.</li>
+<li> The state, in which the controller must be translated at boot: «To enable» and «To start».</li>
+<li> The table for store of cache parameters, which next created also on data source miss.</li>
+<li> The acquisition schedule policy and the priority of the task of data acquisition. </li>
+<li> Recurrence interval of time of the attempting to restore a lost connection with the station in seconds.</li>
+<li> Maximum depth of data of the archive values and messages to restore when start, in the hours. Zero for disable archive access.</li>
+<li> Gather messages level from remote.</li>
+<li> The period of synchronization with a remote station in seconds. Zero for disable periodic synchronization.</li>
+<li> List of the reflected remote stations. Several stations in the list include a mechanism of vertical redundancy.</li>
+<li> The list of the reflected controllers and parameters. The list can be used as for controllers for the reflection of all their parameters, and for individual parameters too.</li>
+<li> The commands to go to the configuration of remote stations.</li>
+<li> Allow automatic remove parameters and attributes to fresh its current state. To the production mode you better disable the option!</li></ul>
+<h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
+<p>This module though provides the ability to create the parameters manually, but it does not make sense as a parameter in absence it on the server will be empty. All parameters are created automatically, taking into account the list of reflected controllers and parameters. The parameters can be stored into the cache for following its creation even on link to the server miss. Example of the reflected parameter is shown in Fig. 3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:714px;"><a class="image" href="http://oscada.org/wiki/File:DAQGate_tr_prm.png"><img class="thumbimage" height="513" src="../files/DAQGate_tr_prm.png" width="712" /></a>  <div class="thumbcaption">Fig.3. Configuration tab of a reflected parameter.</div></div></div></div>
+
+
+
+
+
+
+</div></body>
+</html>

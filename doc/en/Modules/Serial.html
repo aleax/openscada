@@ -1,0 +1,228 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/Serial - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/Serial</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSerial&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Serial" title="Modules/Serial (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Serial/ru" title="Модули/Serial (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Serial/uk" title="Модулі/Serial (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> </td>
+<td> Serial interfaces </td>
+<td> 1.6 </td>
+<td> GPL2 </td>
+<td> tr_Serial.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Transport </td>
+<td> Roman Savochenko, Maxim Kochetkov<br />Maxim Lysenko (2009-2010) — the page translation </td>
+<td> Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Incoming_transports"><span class="tocnumber">1</span> <span class="toctext">Incoming transports</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Outgoing_transports"><span class="tocnumber">2</span> <span class="toctext">Outgoing transports</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#User_programming_API"><span class="tocnumber">3</span> <span class="toctext">User programming API</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Notes"><span class="tocnumber">4</span> <span class="toctext">Notes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Virtual.2Flocal_serial_interfaces"><span class="tocnumber">4.1</span> <span class="toctext">Virtual/local serial interfaces</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Serial_interfaces_forwarding_through_Ethernet_network"><span class="tocnumber">4.2</span> <span class="toctext">Serial interfaces forwarding through Ethernet network</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<p>Module of transport Serial provides support of transports based on the type of serial interfaces RS232, RS485, GSM, and others to the system. Incoming and outgoing transports are supported. To add new incoming and outgoing interfaces is possible by means of configuration of the transport subsystem in the system configurator of OpenSCADA.
+</p><p>Into modem mode by the module support misc work mode. Misc mode mean an input transport allow, which wait ingoing connections, and also an output transport allow at idem device. That is the input transport will ignore all requests while the output transport's established connection allow, in idem time the output transport will not try make connection while the input transport have connection or other an output transport connected to other telephone, for example.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In normal mode, the serial interface is not allowed to reuse one and the same port incoming and outgoing traffic. Global blocking of the serial device is not carried out in mind the ambiguity of this process at the system level, and re-use can lead to unexpected problems. If necessary, Organization of a local serial line with a pair of connected ports is recommended to use the command "<b>$ socat -d -d pty,raw,echo=0,perm=0666 pty,raw,echo=0,perm=0666</b>".
+</p>
+<h2><span class="mw-headline" id="Incoming_transports"><span class="mw-headline-number">1</span> Incoming transports</span></h2>
+<p>The configured and running incoming transport opens port of serial interface for the expectation of the requests of the clients. Each incoming interface is necessarily associated with one of the available transport protocols, to which the incoming messages are transmitted.
+</p><p>Configuration dialog of the incoming serial interface is depicted in Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:647px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in.png"><img class="thumbimage" height="534" src="../files/Serial_in.png" width="645" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the incoming serial interface.</div></div></div></div>
+<p>Using this dialog you can set:
+</p>
+<ul><li> The state of transport, namely: "Status", "Running" and the name of the database, containing the configuration.</li>
+<li> Id, name and description of transport.</li>
+<li> Address of the transport in the format: <i>"dev:spd:format[:fc[:mdm]]"</i>. Where:
+<ul><li> <i>dev</i> — address of the serial device (/dev/ttyS0);</li>
+<li> <i>spd</i> — speed of the serial devices from a number of: 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000, 576000 or 921600;</li>
+<li> <i>format</i> — asynchronous data format "{size}{parity}{stop}" (8N1, 7E1, 5O2, ...);</li>
+<li> <i>fc</i> — flow control:
+<ul><li> "h" — hardware (CRTSCTS);</li>
+<li> "s" — software (IXON|IXOFF);</li>
+<li> "rts" — using of the RTS signal for transferring(false) and checking for echo, for raw RS-485;</li>
+<li> "rts1" — using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;</li>
+<li> "rtsne" — using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;</li>
+<li> "rts1ne" — using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;</li>
+<li> "RS485" — use RS-485 mode, by TIOCSRS485.</li></ul></li>
+<li> <i>mdm</i> — modem mode, listen for 'RING'.</li></ul></li>
+<li> The choice of transport protocol.</li>
+<li> The state, in which the transport must be translated at boot: "To start". </li>
+<li> Time intervals of the interface in the format of string: <i>"character:frm[::rtsDelay1:rtsDelay2]"</i>. Where:
+<ul><li> <i>character</i> — character time, in milliseconds. Used for control of the end of the frame;</li>
+<li> <i>frm</i> — the maximum time of the frame in milliseconds. Used to limit the maximum size of the package of the request (frame);</li>
+<li> <i>rtsDelay1</i> — the delay in milliseconds from the transmitter enabling by the RTS signal and to same the transferring;</li>
+<li> <i>rtsDelay2</i> — the delay in milliseconds from the transferring finish and the transmitter disabling by the RTS signal.</li></ul></li>
+<li> Input flow task priority.</li></ul>
+<p>Transport supports the ability to work as a modem. This mode is activated by the fifth parameter of the address and includes call waiting from the remote modem (request "RING"), answering the call (command "ATA") and the subsequent transfer the requests from the remote station to the transport's protocol. Turning off the communication session is made by the initiator of the connection and leads to the reconnect of the modem-receiver for the waiting for new calls.
+</p><p>To configure the modem of the incoming transport the special tab "Modem" is provided (Fig. 2).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:581px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in_mod.png"><img class="thumbimage" height="476" src="../files/Serial_in_mod.png" width="579" /></a>  <div class="thumbcaption">Fig.2. "Modem" tab of the modem's configuration of the incoming serial interface.</div></div></div></div>
+<p>With this dialog you can set the following properties of working with modem:
+</p>
+<ul><li> Requests timeout of the modem in seconds.</li>
+<li> The time delay before initializing the modem in seconds.</li>
+<li> The time delay after initializing the modem in seconds.</li>
+<li> The first initialization string typically contains the reset command of the modem "ATZ".</li>
+<li> The second initialization string.</li>
+<li> The result string of the modem's initialization, usually "OK", with which the modem answers for initializing and which must be expected.</li>
+<li> The call's request, usually is "RING", which is sent by the modem in the case of an outgoing call.</li>
+<li> The answer to the call, usually is "ATA", which is sent to the modem to answer the call.</li>
+<li> String result of the answer the call, usually is "CONNECT", with which the modem answers to the answer command, and that is to be expected.</li></ul>
+<h2><span class="mw-headline" id="Outgoing_transports"><span class="mw-headline-number">2</span> Outgoing transports</span></h2>
+<p>Configured and running outgoing transport opens port of the serial interface for the sending the requests through it.
+</p><p>Main tab of the configuration page of outgoing serial interface is shown in Fig.3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:655px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out.png"><img class="thumbimage" height="559" src="../files/Serial_out.png" width="653" /></a>  <div class="thumbcaption">Fig.3. Main tab of the configuration page of outgoing serial interface.</div></div></div></div>
+<p>Using this dialog you can set:
+</p>
+<ul><li> The state of transport, namely: "Status", "Running" and the name of the database, containing the configuration.</li>
+<li> Id, name and description of transport.</li>
+<li> Address of the transport in the format: <i>"dev:spd:format[:fc[:modTel]]"</i>. Where:
+<ul><li> <i>dev</i> — address of the serial device (/dev/ttyS0);</li>
+<li> <i>spd</i> — speed of the serial devices from a number of: 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000, 576000 or 921600;</li>
+<li> <i>format</i> — asynchronous data format "{size}{parity}{stop}" (8N1, 7E1, 5O2, ...);</li>
+<li> <i>fc</i> — flow control:
+<ul><li> "h" — hardware (CRTSCTS);</li>
+<li> "s" — software (IXON|IXOFF);</li>
+<li> "rts" — using of the RTS signal for transferring(false) and checking for echo, for raw RS-485;</li>
+<li> "rts1" — using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;</li>
+<li> "rtsne" — using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;</li>
+<li> "rts1ne" — using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;</li>
+<li> "RS485" — use RS-485 mode, by TIOCSRS485.</li></ul></li>
+<li> <i>modTel</i> — modem telephone, the field presence do switch transport to work with modem mode.</li></ul></li>
+<li> The state, in which the transport must be translated at boot: "To start". </li>
+<li> Time intervals of the interface in the format of string: <i>"conn:symbol[-NextReqMult][:KeepAliveTm[:rtsDelay1:rtsDelay2]]"</i>. Where:
+<ul><li> <i>conn</i> — waiting time of the connection i.e. response from the remote device;</li>
+<li> <i>symbol</i> — symbol time, in milliseconds. Used for control of the end of the frame and for timeout of the next request;</li>
+<li> <i>NextReqMult</i> — next request's multiplicator to the <i>symbol</i> time, 4 by default;</li>
+<li> <i>KeepAliveTm</i> — keep alive timeout in seconds for restart transport;</li>
+<li> <i>rtsDelay1</i> — the delay in milliseconds from the transmitter enabling by the RTS signal and to same the transferring;</li>
+<li> <i>rtsDelay2</i> — the delay in milliseconds from the transferring finish and the transmitter disabling by the RTS signal.</li></ul></li>
+<li> No stop on proceed. Sometime opened device closing can be breakage, on ICP-DAS LP PLC for example, then you alowed to prevent it by that option.</li></ul>
+<p>Transport supports the ability to work as a modem. This mode is activated by the fifth parameter of the address, and implies the phone call making at the number, specified in the fifth parameter, at the moment of transport's start. After installation the connection with the remote modem all requests are sent to the station behind the remote modem. Turning off the communication session at the transport's stop is made using the activity timeout.
+</p><p>Transport allowed for work with the hardware bus I2С if you select "/dev/i2c-{N}" and the bus permits to set a slave device address by command I2C_SLAVE, from <b>the first byte of request</b>. Speed and format don't play a role in that mode. From the timeouts here in fact works only the symbol time and generically for next request timeout calculate.
+</p><p>To configure the modem of the outgoing transport the special tab "Modem" is provided (Fig. 4).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:608px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out_mod.png"><img class="thumbimage" height="560" src="../files/Serial_out_mod.png" width="606" /></a>  <div class="thumbcaption">Fig.4. "Modem" tab of the configuration of modem of outgoing serial interface.</div></div></div></div>
+<p>With this dialog you can set the following properties of working with modem:
+</p>
+<ul><li> Requests timeout of the modem in seconds.</li>
+<li> Lifetime of the connection in seconds. If during this time there will be no data transmission over the transport the connection will be aborted.</li>
+<li> The time delay before initializing the modem in seconds.</li>
+<li> The time delay after initializing the modem in seconds.</li>
+<li> The first initialization string typically contains the reset command of the modem "ATZ".</li>
+<li> The second initialization string.</li>
+<li> The result string of the modem's initialization, usually "OK", with which the modem answers for initializing and which must be expected.</li>
+<li> Dialing string to the remote modem, usually is "ATDT". When you dial the phone number is appended to this prefix.</li>
+<li> The string result of the successful connection, typically is "CONNECT".</li>
+<li> The string result of the busy line, usually is "BUSY".</li>
+<li> The string result of the absence of the carrier in line, usually is "NO CARRIER".</li>
+<li> The string result of the lack of dial tone in the line, typically is "NO DIALTONE".</li>
+<li> The exit from data mode string, is usually "+++" and "the time delay before initializing" after it used.</li>
+<li> The command hang up, is usually "+++ATH". This command is called whenever there is need to break the connection.</li>
+<li> The string result of the hang up command, usually is "OK", with which the modem answers to the command and which must be expected.</li></ul>
+<h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">3</span> User programming API</span></h2>
+<p><b>Object "Outgoing transport" (SYS.Transport.Serial.out_{OutTransport})</b>
+</p>
+<ul><li> <i>bool TS( bool rts = EVAL )</i> — To Send control by set request <i>rts</i> and return Clear CTS state.</li>
+<li> <i>bool DR( bool dtr = EVAL )</i> — Device ready to communicate control by set Terminal Ready <i>dtr</i> and return Set Ready DSR state.</li>
+<li> <i>bool DCD()</i> — Data Carrier Detect return.</li>
+<li> <i>bool RI()</i> — Ring Indicator return.</li>
+<li> <i>int sendbreak( int duration = 0 )</i> — Send to the stream a break by zero in <i>duration</i> (0 — some default duration).</li></ul>
+<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">4</span> Notes</span></h2>
+<p>Communications via the serial interfaces have a number of features. The most important feature is the criterion for the end of the message and the waiting time of this criterion. In some protocols, such a criterion is a sign of the end or the specified message size. In other protocols, such a criterion is no data in the input stream for a specified time, the character time. In both cases, the waiting time of criterion or character is a crucial and strongly affects the overall exchange time. Consequently, the smaller this time, the better. Here the problem of hardware and its drivers latency happens.
+</p><p>To check the latency of communication channel and thus optimally to configure the waiting time, character time, you can use the interface tab "Request" of outgoing transport. To do this you need to specify a model request to the protocol, indicating "Wait timeout", send a request and check its integrity. To obtain the more representative result you should repeat the request a few times. If there is getting incomplete answers, the character time should be increased, else it can be reduced.
+</p><p>On embedded serial interfaces RS232/422/485 hardware you can achieve low latency, up to several milliseconds. However, the latency of the high-loaded systems with multiple tasks on a priority of real-time can be non-deterministic in connection with the execution of the events' service thread of the Linux kernel in the low priority. To solve this problem you should install a high priority to these threads that can be done with a script, placing it, for example, to "/etc/rc.local":
+</p>
+<pre style="white-space: pre-wrap;">
+#!/bin/sh
+
+# High priority set to kernel threads events for serial interfaces reaction rise
+events=`ps -Ao pid,comm | sed -n '/[ ]*\([^ ]\)[ ]*events\/[0-9]/s//\1/p'`
+for ie in $events; do
+  chrt -pr 21 $ie
+done
+</pre>
+<p>The script has not any sense for real-time Linux kernels, includes patch PREEMPT_RT, as well all threads for interrupts and events just already call into real-time priority.
+</p><p>On the external serial interfaces hardware, such as adapters USB-&gt;RS232/422/485, you may meet the problems of high latency associated with the feature of hardware implementation or its driver. To solve this problem you need study the configuration of the equipment or adjust the large waiting time, character time!
+</p><p>In the like way you can determine an optimal connection time, specifically: set the connection time to default value for the speed (sets at the speed into the address set), clear "Wait timeout", send the request. If a respond came then let take measured respond time of the device, doubling and set the result value as the connection time. Unreasonable the connection time excess cause to big waitings at the device miss and the safety timers triggers of the internal procedures!
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> On the market meets USB-&gt;Serial converters which ones work only for terminals then their can transfer and process only ASCII symbols and unallowed for switch to binary mode. Known ones are: PL2303TA (Y-105).
+</p>
+<h3><span class="mw-headline" id="Virtual.2Flocal_serial_interfaces"><span class="mw-headline-number">4.1</span> Virtual/local serial interfaces</span></h3>
+<p>Often for local checking, without physical hardware, you may need the ports pair connected each other. For the ports creation and more other operations on serial stream you can use utility <b>socat</b>. For example, to create two linked ports you need call command which will create and print its addresses:
+</p>
+<pre style="white-space: pre-wrap;">
+$ socat -d -d pty,raw,echo=0,perm=0666 pty,raw,echo=0,perm=0666
+2013/07/02 16:37:29 socat[10402] N PTY is /dev/pts/6
+2013/07/02 16:37:30 socat[10402] N PTY is /dev/pts/7
+2013/07/02 16:37:30 socat[10402] N starting data transfer loop with FDs [3,3] and [5,5]
+</pre>
+<h3><span class="mw-headline" id="Serial_interfaces_forwarding_through_Ethernet_network"><span class="mw-headline-number">4.2</span> Serial interfaces forwarding through Ethernet network</span></h3>
+<p>In some cases there can be useful forward the serial interface port from remote computer to local port, for example to poll devices connected to serial interface of the remote computer. Sure also possible install OpenSCADA to the remote computer into PLC configuration and perform processing this data, previous buffering/archiving and other, but sometime the hardware maybe complicated for OpenSCADA running, where help possibility for serial stream forwarding through network. For the task solve you can also use utility <b>socat</b> or <b>remserial</b>, <b>ser2net</b>, which you can build and start on the remote computer. Examples for serial port forwarding:
+</p>
+<pre style="white-space: pre-wrap;">
+# The socket on port 5555 creation on remote computer, for serial port /dev/ttyS0
+$ socat tcp-l:5555,reuseaddr,fork file:/dev/ttyS0,raw
+# Connection to the socket for the serial port of the remote computer forwarding and the local interface file forming
+$ socat -d -d pty,raw,echo=0,perm=0666 tcp:192.168.2.4:5555,mss=1400
+2013/07/04 10:09:09 socat[12947] N PTY is /dev/pts/4
+2013/07/04 10:09:09 socat[12947] N opening connection to AF=2 192.168.2.4:5555
+2013/07/04 10:09:09 socat[12947] N successfully connected from local address AF=2 192.168.2.61:33493
+2013/07/04 10:09:09 socat[12947] N starting data transfer loop with FDs [3,3] and [5,5]
+</pre>
+<p>In the case "socat", and also possible for other utilities, you can pass start the driver EthernetTCP-&gt;Serial on client side and connect from OpenSCADA straight to TCP-port of remote device.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In working through the driver EthernetTCP-&gt;Serial has one specialty with two connection timeouts, one into the driver and second into <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>. Important the timeout value into <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a> must be more for it into the driver else you will possible get to the request response for previous one.
+</p><p>More manufacturers of industrial communication hardware produce ready converters from Ethernet to RS-232/422/485, which you can use with OpenSCADA in similar way. Here comments and list of the converters for what OpenSCADA working tested:
+</p>
+<ul><li> <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>: <a class="external text" href="http://www.icpdas.com/products/Industrial/pds/tds-700.htm" rel="nofollow noreferrer noopener" target="_blank">tDS-7xx</a> — configures by WEB-interface and works straight on connection to TCP-port;</li>
+<li> <a class="external text" href="http://tibbo.com" rel="nofollow noreferrer noopener" target="_blank">Tibbo</a>: <a class="external text" href="http://tibbo.com/products/controllers/ds100.html" rel="nofollow noreferrer noopener" target="_blank">DS100</a> — <span style="color: red">configures only by the program for MS Windows®</span>, provides self driver for virtual serial interfaces preparing on Linux, works straight on connection to TCP-port.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

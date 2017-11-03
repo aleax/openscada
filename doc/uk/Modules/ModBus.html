@@ -1,0 +1,364 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/ModBus - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/ModBus</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FModBus&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ModBus" title="Modules/ModBus">Modules/ModBus</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/ModBus" title="Modules/ModBus (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/ModBus/ru" title="Модули/ModBus (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
+<td> ModBus </td>
+<td> 1.8 </td>
+<td> GPL2 </td>
+<td> daq_ModBus.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Збір Даних </td>
+<td> Роман Савоченко </td>
+<td> Надає реалізацію клієнтського ModBus сервісу. Підтримуються Modbus/TCP, Modbus/RTU та Modbus/ASCII протоколи.
+</td></tr>
+
+<tr>
+<td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
+<td> ModBus </td>
+<td> 1.0 </td>
+<td> GPL2 </td>
+<td> daq_ModBus.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Протокол </td>
+<td> Роман Савоченко </td>
+<td> Надає реалізацію ModBus протоколів. Підтримуються Modbus/TCP, Modbus/RTU та Modbus/ASCII протоколи.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.97.D0.B0.D0.B3.D0.B0.D0.BB.D1.8C.D0.BD.D0.B8.D0.B9_.D0.BE.D0.BF.D0.B8.D1.81_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_ModBus"><span class="tocnumber">1</span> <span class="toctext">Загальний опис протоколу ModBus</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#.D0.90.D0.B4.D1.80.D0.B5.D1.81.D0.B0.D1.86.D1.96.D1.8F"><span class="tocnumber">1.1</span> <span class="toctext">Адресація</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.96_.D0.BA.D0.BE.D0.B4.D0.B8_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D0.B9"><span class="tocnumber">1.2</span> <span class="toctext">Стандартні коди функцій</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D1.80.D0.B5.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.97_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83"><span class="tocnumber">2</span> <span class="toctext">Модуль реалізації протоколу</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#API_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2"><span class="tocnumber">2.1</span> <span class="toctext">API функції вихідних запитів</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#.D0.9E.D0.B1.D1.81.D0.BB.D1.83.D0.B3.D0.BE.D0.B2.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2_.D0.B7.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.BE.D0.BC_ModBus"><span class="tocnumber">2.2</span> <span class="toctext">Обслуговування запитів за протоколом ModBus</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="#.D0.A0.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_.22.D0.94.D0.B0.D0.BD.D1.96.22"><span class="tocnumber">2.2.1</span> <span class="toctext">Режим вузла протоколу "Дані"</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#.D0.A0.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_.22.D0.A8.D0.BB.D1.8E.D0.B7_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0.22"><span class="tocnumber">2.2.2</span> <span class="toctext">Режим вузла протоколу "Шлюз вузла"</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#.D0.A0.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_.22.D0.A8.D0.BB.D1.8E.D0.B7_.D0.BC.D0.B5.D1.80.D0.B5.D0.B6.D1.96.22"><span class="tocnumber">2.2.3</span> <span class="toctext">Режим вузла протоколу "Шлюз мережі"</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-10"><a href="#.D0.97.D0.B2.D1.96.D1.82_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2_ModBus"><span class="tocnumber">2.3</span> <span class="toctext">Звіт запитів ModBus</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.B7.D0.B1.D0.BE.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="tocnumber">3</span> <span class="toctext">Модуль збору даних</span></a>
+<ul>
+<li class="toclevel-2 tocsection-12"><a href="#.D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="tocnumber">3.1</span> <span class="toctext">Контролер даних</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="tocnumber">3.2</span> <span class="toctext">Параметри</span></a>
+<ul>
+<li class="toclevel-3 tocsection-14"><a href="#.D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D0.B9_.D1.82.D0.B8.D0.BF_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83.28std.29"><span class="tocnumber">3.2.1</span> <span class="toctext">Стандартний тип параметру(std)</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#.D0.9B.D0.BE.D0.B3.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.D1.82.D0.B8.D0.BF_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83.28logic.29"><span class="tocnumber">3.2.2</span> <span class="toctext">Логічний тип параметру(logic)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-16"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">3.3</span> <span class="toctext">API користувацького програмування</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<p>ModBus — комунікаційний протокол, заснований на клієнт-серверній архітектурі. Розроблений фірмою Modicon для використання у контролерах з програмованою логікою (ПЛК). Став стандартом де-факто у промисловості та широко застосовується для організації зв'язку промислового електронного обладнання. Використовується для передачі даних через послідовні лінії зв'язку RS-485, RS-422, RS-232, а також мережі TCP/IP. На цей час підтримується некомерційною організацією ModBus-IDA.
+</p><p>Існує три режими протоколу: ModBus/RTU, ModBus/ASCII та ModBus/TCP. Перші два використовують послідовні лінії зв'язку (переважно RS-485, рідше RS-422/RS-232), останній використовує для передачі даних мережі TCP/IP.
+</p><p>Модуль збору даних надає можливість збирати інформацію з різних джерел за протоколом ModBus у всіх режимах. Також модулем реалізуються функції горизонтального резервування, а саме спільної роботи з віддаленою станцією цього-ж рівня. В той же час модуль протоколу дозволяє сформувати та видати дані за протоколом ModBus у різних режимах та через інтерфейси, які підтримуються модулями підсистеми "Транспорти".
+</p>
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D0.B3.D0.B0.D0.BB.D1.8C.D0.BD.D0.B8.D0.B9_.D0.BE.D0.BF.D0.B8.D1.81_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_ModBus"><span class="mw-headline-number">1</span> Загальний опис протоколу ModBus</span></h2>
+<p>Протокол ModBus/RTU припускає один ведучий (запити) пристрій у лінії (master), який може передавати команди одному або декільком веденим пристроям (slave), звертаючись до них за унікальною у лінії адресою. Синтаксис команд протоколу дозволяє адресувати 247 пристроїв на одній лінії зв'язку стандарту RS-485 (рідше RS-422 або RS-232). У випадку з режимом TCP адресація виключена з протоколу, оскільки здійснюється на рівні TCP/IP стека.
+</p><p>Ініціатива здійснення обміну завжди виходить від ведучого пристрою. Ведені пристрої прослуховують лінію зв'язку. Майстер подає запит (посилка, послідовність байт) у лінію та переходить в стан прослуховування лінії зв'язку. Ведений пристрій відповідає на запит, який надійшов у його адресу. 
+</p><p>Закінчення посилки відповіді визначається залежно від режиму. У режимі RTU закінчення посилки визначається за інтервалом часу між закінченням прийому попереднього байту та початком прийому наступного, час символу. Якщо цей інтервал перевищив час, потрібний для прийому півтори байти на визначеній швидкості передачі то прийом фрейму відповіді вважається завершеним. У режимі ASCII критерієм закінчення посилки є символ '\r', а у режимі TCP — очікуваний розмір посилки, інформація про який присутня у заголовку пакету.
+</p>
+<h3><span class="mw-headline" id=".D0.90.D0.B4.D1.80.D0.B5.D1.81.D0.B0.D1.86.D1.96.D1.8F"><span class="mw-headline-number">1.1</span> Адресація</span></h3>
+<p>Всі операції з даними прив'язано до нуля, кожний вид даних (регістр, біт, регістр входу або біт входу) починається з адреси <b>0</b> та закінчується <b>65535</b>.
+</p>
+<h3><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.96_.D0.BA.D0.BE.D0.B4.D0.B8_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D0.B9"><span class="mw-headline-number">1.2</span> Стандартні коди функцій</span></h3>
+<p>У протоколі ModBus можна відокремити декілька множин команд (Таблиця 1).
+</p><p><b>Таблиця 1</b>: Підмножина команд протоколу ModBus
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Підмножина </th>
+<th> Діапазон кодів
+</th></tr>
+<tr>
+<td> Стандартні </td>
+<td> 1-21
+</td></tr>
+<tr>
+<td> Резерв для розширених функцій </td>
+<td> 22-64
+</td></tr>
+<tr>
+<td> Користувацькі </td>
+<td> 65-119
+</td></tr>
+<tr>
+<td> Резерв для внутрішніх потреб </td>
+<td> 120-255
+</td></tr></table>
+<p>Модулем збору даних використовуються команди 0x03 та 0x06(0x10) для читання та запису регістрів, 0x01 та 0x05(0x0F) для читання та запису бітів, 0x02 та 0x04 для читання біту та регістру входу відповідно. Для реалізації інших-нетипових команд модулем передбачено функцію <a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F">API користувацького програмування</a>, яку можна викликати з процедури шаблону, надсилаючи довільні PDU пакети та обробляючи отримані у відповідь.
+</p><p>Модуль протоколу обробляє запити командами 0x03 та 0x06(0x10) для читання та запису регістрів, 0x01 та 0x05(0x0F) для читання та запису бітів.
+</p>
+<h2><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D1.80.D0.B5.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.97_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83"><span class="mw-headline-number">2</span> Модуль реалізації протоколу</span></h2>
+<p>Модуль протоколу ModBus містить код реалізації протокольної частини ModBus, а саме особливості варіантів протоколів ModBus/TCP, ModBus/RTU та ModBus/ASCII. Модуль протоколу, спільно з обраним транспортом, активно використовується модулем збору даних для здійснення безпосередніх запитів. Оскільки модуль протоколу є автономним то, використовуючи його, можна створювати додаткові модулі збору даних за посередництвом нестандартних функцій розширення ModBus різного обладнання автоматизації.
+</p>
+<h3><span class="mw-headline" id="API_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2"><span class="mw-headline-number">2.1</span> API функції вихідних запитів</span></h3>
+<p>API функції вихідних запитів (<a class="external" href="http://oscada.org/wiki/Documents/User_API/uk#.D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8.22_.28SYS.Transport.29" title="Documents/User API/uk">messIO()</a>) оперують обміном блоками PDU, загорнутими у XML-пакети з відповідною структурою:
+</p>
+<ul><li> <b>&lt;prt id="sId" reqTm="reqTm" node="node" reqTry="reqTry"&gt;{pdu}&lt;/prt&gt;</b></li></ul>
+<dl><dd>Де:
+<ul><li> <i>prt</i> — ім'я тегу запиту з назвою використаного варіанту протоколу (TCP, RTU або ASCII).</li>
+<li> <i>sId</i> — ідентифікатор джерела запиту. Використовується для розташування до <a href="#.D0.97.D0.B2.D1.96.D1.82_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2_ModBus">звіту вихідного протоколу</a>.</li>
+<li> <i>reqTm</i> — час запиту, а саме час протягом якого очікувати відповіді, у мілісекундах.</li>
+<li> <i>node</i> — номер вузла призначення або ідентифікатор юніту ModBus/TCP.</li>
+<li> <i>reqTry</i> — кількість спроб повтору запиту з помилкою у відповіді. Тільки для варіантів ModBus/RTU та ModBus/ASCII.</li>
+<li> <i>pdu</i> — безпосередньо блок юніту даних протоколу (PDU) ModBus.</li></ul></dd></dl>
+<p>Результатний <i>pdu</i> замінює <i>pdu</i> запиту у XML-пакеті, а також встановлюється атрибут "err" з кодом та текстом помилки, якщо така мала місце.
+</p>
+<h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.81.D0.BB.D1.83.D0.B3.D0.BE.D0.B2.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2_.D0.B7.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.BE.D0.BC_ModBus"><span class="mw-headline-number">2.2</span> Обслуговування запитів за протоколом ModBus</span></h3>
+<p>Вхідна частина обслуговування запитів до модуля протоколу здійснює перевірку та обробку запитів за посередництвом об'єктів вузлів, передбачених модулем (рис.1). Фактично реалізується механізм, який дозволяє виконувати системою OpenSCADA роль серверу ModBus/TCP або підлеглого пристрою ModBus/RTU та ModBus/ASCII. Таким чином система OpenSCADA отримує можливість використовуватися у ролі будь якого учасника мереж ModBus.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:630px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_nodes_uk.png"><img class="thumbimage" height="507" src="../files/ModBus_prt_nodes_uk.png" width="628" /></a>  <div class="thumbcaption">Рис.1. Вкладка переліку вузлів обслуговування вхідних запитів протоколу.</div></div></div></div>
+<p>Вузол протоколу еквівалентний фізичному вузлу пристрою мережі ModBus. Вузол протоколу може працювати у трьох режимах:
+</p>
+<ul><li> "Дані" — режим відображення даних системи OpenSCADA на масиви регістрів та бітів ModBus з передачею їх за запитом клієнтського вузла або майстра.</li>
+<li> "Шлюз вузла" — режим переспрямування (шлюзування) запитів до вузла у іншій мережі ModBus через цей вузол.</li>
+<li> "Шлюз мережі" — режим переспрямування запитів до будь якого вузла у іншу мережі ModBus, фактично виконуючи інтеграцію декількох мереж ModBus у одну.</li></ul>
+<p>Оскільки вузлів протоколу може бути створено багато то виходить, що на одному інтерфейсі, тобто у одній мережі, одна станція на основі OpenSCADA може прозоро надавати декілька вузлів мережі ModBus з різними даними.
+</p><p>Розглянемо особливості конфігурації вузла протоколу у різних режимах.
+</p>
+<h4><span class="mw-headline" id=".D0.A0.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_.22.D0.94.D0.B0.D0.BD.D1.96.22"><span class="mw-headline-number">2.2.1</span> Режим вузла протоколу "Дані"</span></h4>
+<p>Режим використовується для відображення даних системи OpenSCADA на масиви регістрів та бітів ModBus. Загальна конфігурація вузла здійснюється у вкладці "Вузол" (рис.2) параметрами:
+</p>
+<ul><li> Стан вузла, а саме: статус, "Включено" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис вузла.</li>
+<li> Стан, у який переводити вузол при завантажені: "Включено".</li>
+<li> Адреса вузла мережі ModBus від 1 до 247.</li>
+<li> Вхідний транспорт, до мережі якого належить вузол. Обирається із переліку вхідних транспортів підсистеми "Транспорти" OpenSCADA. Вказання у якості транспорту символу "*" робить цей вузол учасником будь якої мережі ModBus з обробкою запитів від будь якого транспорту.</li>
+<li> Варіант протоколу ModBus, запити у якому має обробляти вузол із переліку: Всі, RTU, ASCII, TCP/IP.</li>
+<li> Вибір режиму, у даному випадку це режим "Дані".</li>
+<li> Період обчислення даних у секундах. Вказує періодичність обробки даних які формуються для запитів, а саме: таблиці даних ModBus, програми обчислення даних та обслуговування посилання на дані OpenSCADA.</li></ul>
+<p>Вузлом у цьому режимі обробляються наступні стандартні команди протоколу ModBus:
+</p>
+<ul><li> <i>0x01</i> — читання групи бітів;</li>
+<li> <i>0x02</i> — читання групи бітів входів;</li>
+<li> <i>0x03</i> — читання групи регістрів;</li>
+<li> <i>0x04</i> — читання групи регістрів входів;</li>
+<li> <i>0x05</i> — встановлення одного біту;</li>
+<li> <i>0x06</i> — встановлення одного регістру;</li>
+<li> <i>0x0F</i> — встановлення групи бітів;</li>
+<li> <i>0x10</i> — встановлення групи регістрів.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:748px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_node_uk.png"><img class="thumbimage" height="659" src="../files/ModBus_prt_node_node_uk.png" width="746" /></a>  <div class="thumbcaption">Рис.2. Вкладка "Вузол" сторінки конфігурації вузла протоколу у режимі "Дані".</div></div></div></div>
+<p>Для формування таблиці відбиття даних мережі ModBus, а саме регістрів та бітів передбачається вкладка "Дані" (рис.3). Вкладка "Дані" містить таблицю параметрів та програму обробки параметрів з визначеною мовою програмування, доступною у системі OpenSCADA. Таблиця містить параметри з властивостями:
+</p>
+<ul><li> <i>Id</i> — ідентифікатор параметра. є ключовим для формування таблиць регістрів та бітів ModBus. Регістри та біти ModBus визначаються наступним чином:</li></ul>
+<dl><dd><ul><li> <b>R{N}[w]</b>, <b>RI{N}[w]</b> — специфічна форма регістру (та входу), може бути розширено суфіксами: "i"—Int32, "f"—Float, "d"—Double, "s"—Рядок (розмір по замовченню 10 та до 100 регістрів);</li>
+<li> <b>R:{N}:[w]</b>, <b>RI:{N}:[w]</b> — класична форма регістру (та входу), може бути розширено суфіксами: "i4"—Int32, "i8"—Int64, "f"—Float, "d"—Double, "s"—Рядок;</li>
+<li> <b>C{N}[w]</b>, <b>CI{N}[w]</b>, <b>C:{N}:[w]</b>, <b>CI:{N}:[w]</b> — біт (та вхід).</li></ul></dd>
+<dd>Де:
+<ul><li> <b>{N}</b> — адреса даних ModBus пристрою (десяткова, шістнадцяткова, або вісімкова) [0...65535];</li>
+<li> <b>w</b> — необов'язковий символ для індикації можливості запису.</li></ul></dd>
+<dd>Приклади:
+<dl><dd>"R0x300" — доступ до регістру;</dd>
+<dd>"C100w" — доступ до біту, доступний для запису;</dd>
+<dd>"R_f200" — отримати реальне з регістрів 200 та 201;</dd>
+<dd>"R_i400,300" — отримати int32 з регістрів 400 та 300;</dd>
+<dd>"R_s15,20" — отримати рядок, блок регістрів, з регістру 15 та розміром 20;</dd>
+<dd>"R_i8:0x10:w" — отримати та встановити int64 у регістри [0x10-0x13];</dd>
+<dd>"R_d:0x20,0x30" — отримати реальне подвійної точності (8 байтів) з регістрів [0x20,0x30-0x32].</dd></dl></dd></dl>
+<dl><dt> Всі інші параметри, які не потрапили під вище-визначені правила, є внутрішніми, використовуються для різних проміжних обчислень, обробки, перетворень та значення їх можуть бути оперативно проконтрольовані та змінені з цієї таблиці у режимі виконання.</dt></dl>
+<ul><li> <i>Ім'я</i> — Ім'я параметру, використовується для іменування зв'язку.</li>
+<li> <i>Тип</i> — Тип параметру із переліку: "Реальний", "Цілий", "Логічний" та "Рядок". Для регістрів та бітів ModBus має сенс встановлювати "Цілий" та "Логічний" тип відповідно. Для регістрів розширених пріфіксами "f" та "s" треба вказати типи "Реальний" та "Рядок", відповідно.</li>
+<li> <i>Зв'язок</i> — Ознака того, що цей параметр має пов'язуватися з атрибутом параметру підсистеми "Збір даних". Вказані цією ознакою зв'язки встановлюються у вкладці "Зв'язки".</li>
+<li> <i>Значення</i> — Вихідне або поточне, якщо вузол включено, значення параметру.</li></ul>
+<p>В таблиці, по замовченню, визначаються декілька параметрів спеціального призначення:
+</p>
+<ul><li> <i>f_frq</i> — частота обчислення таблиці програмою;</li>
+<li> <i>f_start</i> — ознака першого виконання — запуску програми.</li>
+<li> <i>f_stop</i> — ознака останнього виконання — зупинки програми.</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Оскільки у вказівнику розширених типів регістрів може використовуватися недозволений символ ',' то доступ до нього із процедури можна здійснити тільки альтернативним способом, через об'єкт "arguments":
+</p>
+<pre style="white-space: pre-wrap;">
+arguments["R_s10,5w"] = "9876543210";</pre>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:748px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_data_uk.png"><img class="thumbimage" height="682" src="../files/ModBus_prt_node_data_uk.png" width="746" /></a>  <div class="thumbcaption">Рис.3. Вкладка "Дані", сторінки конфігурації вузла протоколу у режимі "Дані".</div></div></div></div>
+<p>Для вказаних у якості зв'язків параметрів можна встановити зв'язки тільки для вимкненого вузла протоколу у вкладці "Зв'язки" (рис.4).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:748px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_lnk_uk.png"><img class="thumbimage" height="507" src="../files/ModBus_prt_node_lnk_uk.png" width="746" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Зв'язки" сторінки конфігурації вузла протоколу у режимі "Дані".</div></div></div></div>
+<h4><span class="mw-headline" id=".D0.A0.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_.22.D0.A8.D0.BB.D1.8E.D0.B7_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0.22"><span class="mw-headline-number">2.2.2</span> Режим вузла протоколу "Шлюз вузла"</span></h4>
+<p>Режим використовується для прокидання запиту до окремого пристрою у іншій мережі ModBus із мережі ModBus, для якого сконфігуровано цей вузол. Загальна конфігурація вузла здійснюється у вкладці "Вузол" (рис.5) параметрами:
+</p>
+<ul><li> Стан вузла, а саме: стан "Включено" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис вузла.</li>
+<li> Стан, у який переводити вузол при завантажені: "Включений".</li>
+<li> Адрес вузла вихідної мережі ModBus від 1 до 247.</li>
+<li> Вхідний транспорт, до мережі якої має стосунок вузол. Обирається з переліку вхідних транспортів підсистеми "Транспорти" OpenSCADA. Вказання у якості транспорту символу "*" робить цей вузол учасником будь якої мережі ModBus з обробкою запитів від будь якого транспорту.</li>
+<li> Варіант протоколу ModBus запити у якому має оброблятися вузлом з переліку: Всі, RTU, ASCII, TCP/IP.</li>
+<li> Вибір режиму, в цьому випадку цей режим "Шлюз вузла".</li>
+<li> Транспорт, у який переспрямовують запит, з переліку вихідних транспортів підсистеми "Транспорти".</li>
+<li> Протокол у якому переспрямовувати запит.</li>
+<li> Адреса вузла мережі ModBus, від 1 до 247, у яку переспрямовується запит.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:729px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_nodeGwNode_uk.png"><img class="thumbimage" height="675" src="../files/ModBus_prt_node_nodeGwNode_uk.png" width="727" /></a>  <div class="thumbcaption">Рис.5. Вкладка "Вузол" сторінки конфігурації вузла протоколу у режимі "Шлюз вузла".</div></div></div></div>
+<h4><span class="mw-headline" id=".D0.A0.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_.22.D0.A8.D0.BB.D1.8E.D0.B7_.D0.BC.D0.B5.D1.80.D0.B5.D0.B6.D1.96.22"><span class="mw-headline-number">2.2.3</span> Режим вузла протоколу "Шлюз мережі"</span></h4>
+<p>Режим використовується для прокидання запитів мережі цілком у іншу мережу ModBus з мережі ModBus для якої сконфігуровано цей вузол протоколу. Тобто запит на пристрій з будь якою адресою буде спрямовуватися у іншу мережу, без переадресування. Загальна конфігурація вузла протоколу здійснюється у вкладці "Вузол" (рис.6) параметрами:
+</p>
+<ul><li> Стан вузла, а саме: статус, "Включено" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис вузла.</li>
+<li> Стан, у який переводити вузол при завантажені: "Включений".</li>
+<li> Вхідний транспорт мережі, з якого прокидаються запити. Обирається з переліку вхідних транспортів підсистеми "Транспорти" OpenSCADA.</li>
+<li> Варіант протоколу ModBus, запити у якому має обробляти вузол із переліку: Всі, RTU, ASCII, TCP/IP.</li>
+<li> Вибір режиму, у цьому випадку цей режим "Шлюз мережі".</li>
+<li> Транспорт мережі, у яку переспрямовувати запит, з переліку вихідних транспортів підсистеми "Транспорти".</li>
+<li> Протокол у якому переспрямовувати запит.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:729px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_nodeGwNet_uk.png"><img class="thumbimage" height="629" src="../files/ModBus_prt_node_nodeGwNet_uk.png" width="727" /></a>  <div class="thumbcaption">Рис.6. Вкладка "Вузол" сторінки конфігурації вузла протоколу у режимі "Шлюз мережі".</div></div></div></div>
+<h3><span class="mw-headline" id=".D0.97.D0.B2.D1.96.D1.82_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2_ModBus"><span class="mw-headline-number">2.3</span> Звіт запитів ModBus</span></h3>
+<p>Для можливості контролю та діагностики за коректністю здійснення запитів різними компонентами модулем надається можливість включення звіту запитів, що проходять через модуль протоколу. Звіт включається вказанням ненульової кількості записів у вкладці "Звіт" сторінки модуля протоколу (рис.7).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:742px;"><a class="image" href="http://oscada.org/wiki/File:Modbus_prt_rep_uk.png"><img class="thumbimage" height="629" src="../files/Modbus_prt_rep_uk.png" width="740" /></a>  <div class="thumbcaption">Рис.7. Вкладка "Звіт" сторінки модуля протоколу.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.B7.D0.B1.D0.BE.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">3</span> Модуль збору даних</span></h2>
+<p>Модуль збору даних надає можливість опитування та запису регістрів та бітів пристроїв за посередництвом режиму протоколів TCP, RTU, ASCII та команд запиту 0x01 — 0x06, 0x0F, 0x10.
+</p>
+<h3><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">3.1</span> Контролер даних</span></h3>
+<p>Для додання джерела даних ModBus створюється та конфігурується контролер у системі OpenSCADA. Приклад вкладки конфігурації контролеру даного типу зображено на рис.8.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:880px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr_uk.png"><img class="thumbimage" height="839" src="../files/ModBus_cntr_uk.png" width="878" /></a>  <div class="thumbcaption">Рис.8. Вкладка конфігурації контролеру.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> Стан контролеру, а саме: Статус, "Включено", Запущено" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис контролеру.</li>
+<li> Стан, у який переводити контролер при завантажені: "Включено" та "Запущено".</li>
+<li> Ім'я таблиць для зберігання конфігурації параметрів контролеру стандартного та логічного типу.</li>
+<li> Політика планування та пріоритет задачі збору даних.</li>
+<li> ModBus протокол, який використовується для опитування фізичного пристрою (TCP/IP, RTU або ASCII).</li>
+<li> Адреса <a class="external" href="http://oscada.org/wiki/Documents/Program_manual/uk#.D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8.22" title="Documents/Program manual/uk">вихідного транспорту</a> з переліку сконфігурованих вихідних транспортів у підсистемі "Транспорти" OpenSCADA.</li>
+<li> ModBus вузол призначення. У випадку з протоколами RTU та ASCII це індивідуальна адреса фізичного пристрою, а при TCP/IP — ідентифікатор одиниці.</li>
+<li> Об'єднання фрагментів регістрів. Стандартні функції 01-04 дозволяють запитати одразу декілька суміжних регістрів або бітів. Така стратегія часто дозволяє оптимізувати трафік та час. Однак потрібні регістри не завжди розташовані суміжно один до одного та така опція дозволяє збирати їх у блоки до 100 регістрів або 1600 бітів.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> До встановлення цього параметру треба підходити з обережністю, оскільки не всі пристрої підтримують доступ до регістрів між фрагментами.</dd></dl>
+<ul><li> Використовувати функції запису декількох елементів (0x0F,0x10). Замість функцій одно-елементного запису буде використано багато-елементні. </li>
+<li> Час очікування підключення у мілісекундах. Вказує проміжок час, на протязі якого очікувати відповіді. У випадку вказання нульового значення використовується час очікування по замовченню у транспорті. Дозволяє враховувати індивідуальні властивості контролеру у загальній мережі.</li>
+<li> Час відновлення підключення у секундах. Указує проміжок часу за вичерпанням якого здійснювати повторну спробу запиту до раніш недоступного пристрою.</li>
+<li> Спроб запиту для протоколів RTU та ASCII. Вказує на кількість спроб повтору запиту у випадку отримання неповної або пошкодженої відповіді.</li>
+<li> Максимальний розмір блоку запиту (байти). Встановлює максимальний розмір блоку групових запитів регістрів та бітів, у байтах. Корисний для контролерів зі схожим обмеженням.</li></ul>
+<h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">3.2</span> Параметри</span></h3>
+<p>Модуль збору даних надає два типи параметру: "Стандартний"(std) та "Логічний"(logic). Додатковими конфігураційними полями параметрів цього модуля є:
+</p>
+<ul><li> <i>"Стандартний"(std)</i>:
+<ul><li> <b>Перелік атрибутів</b> — містить структурований перелік конфігурації атрибутів ModBus.</li></ul></li>
+<li> <i>"Логічний"(logic)</i>:
+<ul><li> <b>Шаблон параметру</b> — адреса шаблону параметру DAQ.</li></ul></li></ul>
+<h4><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D0.B9_.D1.82.D0.B8.D0.BF_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83.28std.29"><span class="mw-headline-number">3.2.1</span> Стандартний тип параметру(std)</span></h4>
+<p>Головну сторінку конфігурації параметру стандартного типу представлено на рисунку 9.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:686px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_uk.png"><img class="thumbimage" height="656" src="../files/ModBus_prm_uk.png" width="684" /></a>  <div class="thumbcaption">Рис.9. Вкладка конфігурації параметру стандартного типу.</div></div></div></div>
+<p>Структура атрибуту, у параметрі переліку атрибутів, записується наступним чином: "<b>{dt}:{numb}:{rw}:{id}:{name}</b>".<br />
+Де:
+</p>
+<ul><li> <b>dt</b> — ModBus тип даних ("R"—регістр[3,6(16)], "C"—біт[1,5(15)], "RI"—регістр входу[4], "CI"—біт входу[2]);</li></ul>
+<dl><dd>"R" та "RI" можуть бути розширені суфіксами: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "s"—Рядок (розмір по умовчанню 10 та до 100 регістрів);</dd></dl>
+<ul><li> <b>numb</b> — адреса ModBus пристрою (десяткова, шістнадцяткова або вісімкова) [0...65535];</li>
+<li> <b>rw</b> — режим читання/запису ("r"—читання; "w"—запис, "rw"—запис та читання);</li>
+<li> <b>id</b> — ідентифікатор атрибуту що створюється;</li>
+<li> <b>name</b> — ім'я атрибуту що створюється.</li></ul>
+<p>Приклади:
+</p>
+<dl><dd>"R:0x300:rw:var:Variable" — доступ до регістру;</dd>
+<dd>"C:100:rw:var1:Variable 1" — доступ до біту;</dd>
+<dd>"R_f:200:r:float:Float" — отримати реальне з регістрів 200 та 201;</dd>
+<dd>"R_i4:400,300:r:int32:Int32" — отримати int32 з регістрів 400 та 300;</dd>
+<dd>"R_b10:25:r:rBit:Reg bit" — отримати біт 10 з регістру 25;</dd>
+<dd>"R_s:15,20:r:str:Reg blk" — отримати рядок, блок регістрів, з регістру 15 та розміром 20.</dd></dl>
+<p>Рядок, який починається з символу '#', вважається коментарем та не обробляється.
+</p><p>Відповідно до визначених переліком атрибутів здійснюється опитування та створення атрибутів параметру (рис.10).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:686px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_atr_uk.png"><img class="thumbimage" height="548" src="../files/ModBus_prm_atr_uk.png" width="684" /></a>  <div class="thumbcaption">Рис.10. Вкладка атрибутів параметру стандартного типа.</div></div></div></div>
+<h4><span class="mw-headline" id=".D0.9B.D0.BE.D0.B3.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.D1.82.D0.B8.D0.BF_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83.28logic.29"><span class="mw-headline-number">3.2.2</span> Логічний тип параметру(logic)</span></h4>
+<p>Головну сторінку конфігурації параметру логічного типу представлено на рисунку 11.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:764px;"><a class="image" href="http://oscada.org/wiki/File:ModBusLog_prm_uk.png"><img class="thumbimage" height="544" src="../files/ModBusLog_prm_uk.png" width="762" /></a>  <div class="thumbcaption">Рис.11. Вкладка конфігурації параметру логічного типа.</div></div></div></div>
+<p>При формуванні шаблону, для логічного типу параметру даного контролеру, не треба враховувати формат посилання шаблону, оскільки він не використовується та може бути опущений. Саме ж значення посилання, при конфігурації шаблону (рис.12), записується у форматі: "<b>{dt}:{numb}:{rw}</b>".<br />
+Де:
+</p>
+<ul><li> <b>dt</b> — ModBus тип даних ("R"—регістр[3,6(16)], "C"—біт[1,5(15)], "RI"—регістр входу[4], "CI"—біт входу[2]);</li></ul>
+<dl><dd>"R" та "RI" можуть бути розширені суфіксами: "i2"—Int16, "i4"—Int32, i8-Int64, u2-UInt16, u4-UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "s"—Рядок (розмір по умовчанню 10 та до 100 регістрів);</dd></dl>
+<ul><li> <b>numb</b> — адреса даних ModBus пристрою (десяткова, шістнадцяткова або вісімкова) [0...65535];</li>
+<li> <b>rw</b> — режим читання/запису ("r"—читання; "w"—запис, "rw"—запис та читання).</li></ul>
+<p>Приклади:
+</p>
+<dl><dd>"R:0x300:rw" — доступ до регістру;</dd>
+<dd>"C:100:rw" — доступ до біту;</dd>
+<dd>"R_f:200:r" — отримати реальне з регістрів 200 та 201;</dd>
+<dd>"R_i4:400,300:r" — отримати int32 з регістрів 400 та 300;</dd>
+<dd>"R_b10:25:r" — отримати біт 10 із регістру 25;</dd>
+<dd>"R_s:15,20:r" — отримати рядок, блок регістрів, з регістру 15 та розміром 20.</dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:764px;"><a class="image" href="http://oscada.org/wiki/File:ModbusLog_tmpl_uk.png"><img class="thumbimage" height="544" src="../files/ModbusLog_tmpl_uk.png" width="762" /></a>  <div class="thumbcaption">Рис.12. Вкладка "Конфігурація шаблону" параметра логічного типу.</div></div></div></div>
+<p>Модулем передбачена особлива обробка низки атрибутів шаблону:
+</p>
+<ul><li> <i>f_frq</i> — Частота обчислення процедури шаблону або час після останнього обчислення, негативне у секундах, для планування за CRON, тільки читання.</li>
+<li> <i>f_start</i> — Ознака першого виконання процедури шаблону, запуск, тільки читання.</li>
+<li> <i>f_stop</i> — Ознака останнього виконання процедури шаблону, зупинка, тільки читання.</li>
+<li> <i>f_err</i> — Помилка параметру, повний доступ. Значення цього атрибуту шаблону потрапляє до атрибуту помилки параметру "err".</li>
+<li> <i>SHIFR</i> — Значення шифру параметру, тільки читання.</li>
+<li> <i>NAME</i> — Значення ім'я параметру, тільки читання.</li>
+<li> <i>DESCR</i> — Значення опису параметру, тільки читання.</li>
+<li> <i>this</i> — Об'єкт даного параметру, дозволяє отримати доступ до атрибутів параметру, наприклад, для доступу до архівів.</li></ul>
+<p>Відповідно до шаблону, який лежить у основі параметру, ми отримаємо набір атрибутів параметру рис.13.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:764px;"><a class="image" href="http://oscada.org/wiki/File:ModbusLog_prm_atr_uk.png"><img class="thumbimage" height="544" src="../files/ModbusLog_prm_atr_uk.png" width="762" /></a>  <div class="thumbcaption">Рис.13. Вкладка атрибутів параметру логічного типу.</div></div></div></div>
+<h3><span class="mw-headline" id="API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">3.3</span> API користувацького програмування</span></h3>
+<p>У зв'язку із підтримкою модулем параметрів логічного типу має сенс надання низки функцій користувацького API для виклику із шаблону логічного параметру.
+</p><p><b>Об'єкт "Контролер" [this.cntr()]</b>
+</p>
+<ul><li> <i>string messIO(string pdu)</i> — відправка PDU <i>pdu</i> через транспорт об'єкту контролеру за посередництвом ModBus протоколу. PDU результату запиту розташовується замість запиту у <i>pdu</i>, а помилка повертається у результаті функції.</li></ul>
+<p><b>Об'єкт "Параметр" [this]</b>
+</p>
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">для включеного параметру логічного типу</span>] — додати атрибут <i>id</i> з іменем <i>name</i> та для типу <i>tp</i>. Якщо атрибут вже присутній, то будуть застосовані властивості, які можливо змінити "на ходу": ім'я, режим вибору та параметри вибору.
+<ul><li> <i>id, name</i> — ідентифікатор та ім'я нового атрибуту;</li>
+<li> <i>tp</i> — тип атрибута [boolean | integer | real | string | text | object] + режим вибору [sel | seled] + тільки для читання [ro];</li>
+<li> <i>selValsNms</i> — два рядки зі значеннями у першому та їх іменами у другому (поділені ";").</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">для включеного параметру логічного типу</span>] — видалити атрибут <i>id</i>.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

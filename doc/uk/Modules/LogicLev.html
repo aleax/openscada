@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/Логічний рівень - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/Логічний рівень</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FLogicLev&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/LogicLev" title="Modules/LogicLev">Modules/LogicLev</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/LogicLev" title="Modules/LogicLev (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/LogicLev/ru" title="Модули/Логический уровень (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> </td>
+<td> Логічний рівень </td>
+<td> 1.7 </td>
+<td> GPL2 </td>
+<td> daq_LogicLev.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Роман Савоченко </td>
+<td> Надає логічний рівень параметрів.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="tocnumber">1</span> <span class="toctext">Контролер даних</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Параметри</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.9B.D0.BE.D0.B3.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.D1.82.D0.B8.D0.BF_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.28std.29"><span class="tocnumber">2.1</span> <span class="toctext">Логічний тип параметру (std)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.92.D1.96.D0.B4.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.28pRef.29"><span class="tocnumber">2.2</span> <span class="toctext">Відображення параметру (pRef)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">3</span> <span class="toctext">API користувацького програмування</span></a></li>
+</ul>
+</div>
+
+<p>Модуль є чистою реалізацією механізму логічного рівня, заснованого на шаблонах параметрів підсистеми "Збір даних — DAQ". Реалізація модуля заснована на проекті "<a class="external text" href="http://wiki.oscada.org/Doc/LogParmUrov" rel="nofollow noreferrer noopener" target="_blank">Логічний рівень параметрів OpenSCADA</a>". Практично, цей модуль є реалізацією підсистеми "Параметри" вказаного проекту без шаблонів та винесена до модуля.
+</p><p>Модуль надає механізм формування параметрів підсистеми "DAQ" на основі інших джерел цієї підсистеми на рівні користувача. Фактично, модулем використовуються шаблони підсистеми "DAQ" та специфічний формат опису посилань на атрибути параметрів підсистеми "DAQ".
+</p><p>Також модулем реалізуються функції горизонтального резервування, а саме спільної роботи з віддаленою станцією цього-ж рівня. Крім синхронізації значень та архівів атрибутів параметрів модулем здійснюється синхронізація значень обчислювальних шаблонів, з метою безударного підхоплення алгоритмів.
+</p>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">1</span> Контролер даних</span></h2>
+<p>Для додання джерела даних параметрів логічного рівня створюється та конфігурується контролер у OpenSCADA. Приклад вкладки конфігурації контролеру даного типу зображено на рис.1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:976px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_cntr_uk.png"><img class="thumbimage" height="655" src="../files/LogicLev_cntr_uk.png" width="974" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфігурації контролеру.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> Стан контролеру, а саме: Статус, "Включений", "Запущений" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис контролеру.</li>
+<li> Стан, у який переводити контролер при завантажені: "Включений" та "Запущений".</li>
+<li> Ім'я таблиць для зберігання конфігурації параметрів контролеру на основі шаблонів та прямого відображення зовнішніх параметрів DAQ.</li>
+<li> Планування обчислень та пріоритет задачі опитування джерел даних.</li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">2</span> Параметри</span></h2>
+<p>Модуль <i>LogicLev</i> надає два типи параметру: "Логічний"(std) та "Відображення параметру"(pRefl). Додатковими конфігураційними полями параметрів цього модуля (рис.2) є:
+</p>
+<ul><li> <i>"Логічний"(std)</i>:
+<ul><li> <b>Шаблон параметру</b> — адреса шаблону параметру DAQ.</li></ul></li>
+<li> <i>"Відображення параметру"(pRefl)</i>:
+<ul><li> <b>Вихідний параметр</b> — адреса вихідного параметру відображення.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:875px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_uk.png"><img class="thumbimage" height="629" src="../files/LogicLev_prm_uk.png" width="873" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфігурації параметру.</div></div></div></div>
+<h3><span class="mw-headline" id=".D0.9B.D0.BE.D0.B3.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.D1.82.D0.B8.D0.BF_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.28std.29"><span class="mw-headline-number">2.1</span> Логічний тип параметру (std)</span></h3>
+<p>При формуванні шаблону, для логічного типу параметру даного контролеру, треба враховувати особливість формату посилання шаблону. Посилання має записуватися у вигляді: <b>{Параметр}|{Ідентифікатор}</b>, де:
+</p>
+<ul><li> <i>{Параметр}</i> — рядок, що характеризує параметр;</li>
+<li> <i>{Ідентифікатор}</i> — ідентифікатор атрибуту параметра.</li></ul>
+<p>Подібний запис дозволяє групувати декілька атрибутів одного вихідного параметру та призначати їх обранням тільки параметру. Тобто у діалозі конфігурації шаблону (рис.3) буде вказуватися лише параметр. Це не виключає можливості призначати атрибути параметрів окремо кожний, крім того, якщо опустити у конфігурації шаблону опис посилання у вказаному форматі то призначатися буде атрибут параметру (рис.4).
+</p><p>Модулем передбачено особливу обробка низки атрибутів шаблону:
+</p>
+<ul><li> <i>f_frq</i> — Частота обчислення процедури шаблону або час після останнього обчислення, негативне у секундах для планування за CRON, тільки читання.</li>
+<li> <i>f_start</i> — Ознака першого виконання процедури шаблону, запуск, тільки читання.</li>
+<li> <i>f_stop</i> — Ознака останнього виконання процедури шаблону, зупинка, тільки читання.</li>
+<li> <i>f_err</i> — Помилка параметру, повний доступ. Значення цього атрибуту шаблону потрапляє до атрибуту помилки параметру "err". Записати сюди <b>EVAL</b> для можливості встановлення ззовні атрибуту "err" та всіх інших у режимі Тільки для Читання.</li>
+<li> <i>SHIFR</i> — Значення шифру параметру, тільки читання.</li>
+<li> <i>NAME</i> — Значення імені параметру, тільки читання.</li>
+<li> <i>DESCR</i> — Значення опису параметра, тільки читання.</li>
+<li> <i>this</i> — Об'єкт даного параметру, дозволяє отримати доступ до атрибутів параметру, наприклад, для доступу до архівів.</li></ul>
+<p>Знак "(+)", в кінці адреси, сигналізує про вдале зв'язування та присутність цільового об'єкту. Для атрибутів об'єктного типу дозволений ієрархічний доступ до конкретної властивості об'єкта шляхом указання його шляху через символ '#', наприклад: "LogicLev.experiment.Pi.var#pr1.pr2".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:875px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_tmpl_uk.png"><img class="thumbimage" height="629" src="../files/LogicLev_prm_tmpl_uk.png" width="873" /></a>  <div class="thumbcaption">Рис.3. Вкладка конфігурації шаблону параметру.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:875px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_tmpl1_uk.png"><img class="thumbimage" height="629" src="../files/LogicLev_prm_tmpl1_uk.png" width="873" /></a>  <div class="thumbcaption">Рис.4. Вкладка конфігурації шаблону параметру. Показувати тільки атрибути.</div></div></div></div>
+<p>Відповідно до шаблону, що лежить у основі параметру, ми отримуємо набір атрибутів параметру рис.5.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:875px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_attr_uk.png"><img class="thumbimage" height="629" src="../files/LogicLev_prm_attr_uk.png" width="873" /></a>  <div class="thumbcaption">Рис.5. Вкладка атрибутів параметру.</div></div></div></div>
+<h3><span class="mw-headline" id=".D0.92.D1.96.D0.B4.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.28pRef.29"><span class="mw-headline-number">2.2</span> Відображення параметру (pRef)</span></h3>
+<p>Всі атрибути вказаного для відображення параметру просто становляться доступними у даному параметрі тим самим здійснюючи функцію проксування, наприклад, для зведення параметрів інших джерел у один, експортний, об'єкт контролеру (для ПЛК).
+</p>
+<h2><span class="mw-headline" id="API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">3</span> API користувацького програмування</span></h2>
+<p>У зв'язку із підтримкою модулем параметрів логічного типу має сенс надання низки функцій користувацького API для виклику із шаблону логічного параметру.
+</p><p><b>Об'єкт "Параметр" [this]</b>
+</p>
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">для увімкненого параметру стандартного типу</span>] — додати атрибут <i>id</i> з ім'ям <i>name</i> та для типу <i>tp</i>. Якщо атрибут вже присутній, то будуть застосовані властивості, які можливо змінити "на ходу": ім'я, режим обрання та параметри обрання.
+<ul><li> <i>id, name</i> — ідентифікатор та ім'я нового атрибуту;</li>
+<li> <i>tp</i> — тип атрибуту [boolean | integer | real | string | text | object] + режим обрання [sel | seled] + тільки для читання [ro];</li>
+<li> <i>selValsNms</i> — два рядки зі значеннями у першому та їх іменами у другому (поділені ";").</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">для увімкненого параметру стандартного типу</span>] — видалити атрибут <i>id</i>.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>
