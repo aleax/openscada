@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.15"
+#define MOD_VER		"0.7.16"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -102,12 +102,12 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost"));
-    fldAdd(new TFld("RETR",_("Retries"),TFld::Integer,TFld::NoFlag,"1","1","0;10"));
-    fldAdd(new TFld("TM",_("Timeout (sec)"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
+    fldAdd(new TFld("RETR",_("Number of retries"),TFld::Integer,TFld::NoFlag,"1","1","0;10"));
+    fldAdd(new TFld("TM",_("Responds timeout, seconds"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
     fldAdd(new TFld("VER",_("SNMP version"),TFld::String,TFld::Selected,"2","1","1;2c;2u;3","SNMPv1;SNMPv2c;SNMPv2u;SNMPv3"));
     fldAdd(new TFld("COMM",_("Server community/user"),TFld::String,TFld::NoFlag,"20","public"));
     fldAdd(new TFld("V3",_("V3 parameters"),TFld::String,TFld::NoFlag,"50","authNoPriv:MD5::DES:"));
-    fldAdd(new TFld("PATTR_LIM",_("Parameter's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
+    fldAdd(new TFld("PATTR_LIM",_("Limit of the attributes number"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
@@ -656,10 +656,10 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode2("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,"SnthHgl","1","rows","8",
 	    "help",_("SNMP OID list, include directories for get all subitems. OID can write in the methods:\n"
-		"  \".1.3.6.1.2.1.1\" - direct code addressing for object \"System\";\n"
-		"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbol to direct code addressing for object \"System\";\n"
-		"  \"system.sysDescr.0\" - simple, not full path, addressing from root alias (object \"System\");\n"
-		"  \"SNMPv2-MIB::sysDescr.0\" - addressing from MIB base by module name for \"system.sysDescr.0\"."),NULL);
+		"  \".1.3.6.1.2.1.1\" - direct code addressing for the object \"System\";\n"
+		"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbolic addressing to direct one for the object \"System\";\n"
+		"  \"system.sysDescr.0\" - simple, not full path, addressing from a root alias (the object \"System\");\n"
+		"  \"SNMPv2-MIB::sysDescr.0\" - addressing from the MIB base by the module name for \"system.sysDescr.0\"."),NULL);
 	if(get_tree_head())
 	    ctrMkNode2("fld",opt,-1,"/prm/cfg/MIB",_("MIB Tree"),enableStat()?0:RWRW__,"root",SDAQ_ID,"dest","select","select","/prm/cfg/MIB_lst",NULL);
 	return;

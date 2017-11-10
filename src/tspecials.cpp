@@ -35,7 +35,7 @@ TSpecialS::TSpecialS( ) : TSubSYS(SSPC_ID,_("Specials"),true)
 string TSpecialS::optDescr( )
 {
     return(_(
-	"======================= Subsystem \"Special\" options =====================\n\n"));
+	"======================= Subsystem \"Specials\" options =====================\n\n"));
 }
 
 void TSpecialS::load_( )

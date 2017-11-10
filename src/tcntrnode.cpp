@@ -218,10 +218,10 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    }
 	}
     } catch(TError &err) {
-	if(err.cat == "warning") opt->setAttr("rez","1");
-	else opt->setAttr("rez","2");
+	if(err.cat == "warning") opt->setAttr("rez", "1");
+	else opt->setAttr("rez", "2");
 	opt->childClear();
-	opt->setAttr("mcat",err.cat);
+	opt->setAttr("mcat", err.cat);
 	opt->setText(err.mess);
     }
     opt->setAttr("path",path);

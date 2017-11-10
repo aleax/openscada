@@ -10,7 +10,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Program manual</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual/ru" title="Документы/Руководство по программе (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="http://oscada.org/wiki/Documents/Program_manual/uk" title="Документи/Посібник по програмі (6% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual/ru" title="Документы/Руководство по программе (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="http://oscada.org/wiki/Documents/Program_manual/uk" title="Документи/Посібник по програмі (13% translated)">українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -21,14 +21,14 @@
 </div>
 <p><i>Author:</i> <a class="external text" href="http://wiki.oscada.org/RomanSavochenko" rel="nofollow noreferrer noopener" target="_blank">Roman Savochenko</a>
 </p>
-<dl><dd><dl><dd><a class="external text" href="http://wiki.oscada.org/MaximLysenko" rel="nofollow noreferrer noopener" target="_blank">Maxim Lysenko</a> (2012) — the page translation</dd></dl></dd></dl>
+<dl><dd><dl><dd><a class="external text" href="http://wiki.oscada.org/MaximLysenko" rel="nofollow noreferrer noopener" target="_blank">Maxim Lysenko</a> (2012) — the page initial translation</dd></dl></dd></dl>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Functions_of_the_program"><span class="tocnumber">1</span> <span class="toctext">Functions of the program</span></a>
 <ul>
 <li class="toclevel-2 tocsection-2"><a href="#Modularity"><span class="tocnumber">1.1</span> <span class="toctext">Modularity</span></a></li>
 <li class="toclevel-2 tocsection-3"><a href="#Subsystems"><span class="tocnumber">1.2</span> <span class="toctext">Subsystems</span></a></li>
-<li class="toclevel-2 tocsection-4"><a href="#PLC_and_other_sources_of_dynamic_data.2C_a_subsystem_.22Data_acquisition.22"><span class="tocnumber">1.3</span> <span class="toctext">PLC and other sources of dynamic data, a subsystem "Data acquisition"</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#PLC_and_other_sources_of_dynamic_data.2C_the_subsystem_.22Data_acquisition.22"><span class="tocnumber">1.3</span> <span class="toctext">PLC and other sources of dynamic data, the subsystem "Data acquisition"</span></a></li>
 <li class="toclevel-2 tocsection-5"><a href="#Databases.2C_a_subsystem_of_.22Databases.22"><span class="tocnumber">1.4</span> <span class="toctext">Databases, a subsystem of "Databases"</span></a></li>
 <li class="toclevel-2 tocsection-6"><a href="#Archives.2C_a_subsystem_.22Archives.22"><span class="tocnumber">1.5</span> <span class="toctext">Archives, a subsystem "Archives"</span></a></li>
 <li class="toclevel-2 tocsection-7"><a href="#Communications.2C_subsystems_.22Transports.22_and_.22Transport_protocols.22"><span class="tocnumber">1.6</span> <span class="toctext">Communications, subsystems "Transports" and "Transport protocols"</span></a></li>
@@ -69,73 +69,82 @@
 </ul>
 </div>
 
-<p>This document is a description of the "open source" project called "OpenSCADA". OpenSCADA is a SCADA system built on the principles of modularity, scalability and multiple OS/Hardware integration.
-</p><p>As a policy of the development of the program there uses "open source" principle. This choice was done for the creation of a reliable and publicly available SCADA system. This policy allows to bring together a significant number of developers, enthusiasts and other interested persons to develop, test, improve, distribute and use the program, thus minimizing and distribution of efforts and financial costs.
-</p><p>OpenSCADA is designed for the collection and archiving of system data plus the visualization and controlling of process operations typical of SCADA systems. Due to the level of scalability and modularization the program can be used in a variety of applications.
-</p><p>OpenSCADA can be used:
+<p>This document is a manual of the "open source" program called "OpenSCADA". OpenSCADA represents a SCADA system built on the principles of modularity, multiplatformity and scalability.
+</p><p>As a policy of the development of the program there uses "open source" principle. This choice was done at needs of creation of a free, reliable and publicly available SCADA system. This policy allows to bring together a significant number of developers, enthusiasts and other interested persons to develop, test, improve, distribute and use the program, thus minimizing and distribution of efforts and financial costs.
+</p><p>OpenSCADA is designed for acquisition, archiving, visualization of information, performing of control actions and for other related operations charactered for full-featured SCADA systems. Due to the high level of abstraction and modularization the program can be used in a variety of related industries.
+</p><p>OpenSCADA <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/About#Using" title="Special:MyLanguage/About">can be and used</a> now at:
 </p>
-<ul><li> at industrial facilities as a full featured SCADA system;</li>
-<li> in embedded devices, as an execution environment, including within a PLC (programmable logic controller);</li>
-<li> to build technological, chemical, physical or electrical processes models;</li>
-<li> at data centers or other server facilities to collect, process, present and archive data regarding the PCs, servers and clusters and their network and environment.</li></ul>
-<p>The host operating system selected for development was Linux has it optimized the solutions of the following issues:
+<ul><li> industrial facilities as a full featured SCADA system or telemechanics;</li>
+<li> dynamic models, imitators and training apparatus of technological processes into the real-time;</li>
+<li> machine tools and industrial robots;</li>
+<li> agricultural dispatching and control systems, poultry-yards;</li>
+<li> embedded and mobile systems — environments of execution Programming Logical Controllers (PLC), robots, ...;</li>
+<li> server equipment monitoring;</li>
+<li> smart houses and home automation.</li></ul>
+<p>In the role of the common operating system (program platform) for development and using there was selected Linux OS, which is an optimal solution of the following issues:
 </p>
-<ul><li> reliability — a large proportion of servers and clusters running on GNU/Linux OS;</li>
-<li> flexibility/scalability — due to its openness and modularity Linux allows the designer to create solutions to fix any requirements</li>
-<li> availability — due to being GPL the software is provided at no cost (novice users may require some kind of paid support package however skilled user would not require this level of support);</li>
-<li> popularity and support — Linux is in active development by many enthusiasts, businesses and government agencies throughout the world, and is gaining wide spread support on the personal and the corporate marketplace, plus it is being promoted in the state structures of various countries.</li></ul>
-<p>While the program currently operates only on the Linux OS the project is being developed so that it can be installed on different operating systems. This ability to port to other OS will be added in future revisions.
-</p><p>At the heart of the program is a modular core, and depending on what modules are installed the program can configured to operate on a variety of networked servers and clients and in this way allow for the implementation of a client-server architecture saving machine memory, disk space, and programming time. However it is possible to configure OpenSCADA on a single stand alone PC with the user choosing which modules to install, data acquisition, simple client, or both the client and server.
-</p><p>Differing server configuration can be designed for collecting data, processing data, issuing commands, archiving and logging information, and providing this information to clients (UI, GUI, TUI ...). The modular architecture allows for modification of a module’s functionality without the requirement of restarting the whole program.
-</p><p>Client configurations can be based on different graphics libraries (GUI/TUI ToolKits), using the core program and selecting various modules (by adding it to the UI-user interface module), or the program can be used in a standalone application connecting the core of OpenSCADA to its libraries.
-</p><p>Flexible program configuration allows the user to build solutions to meet specific requirements of reliability, functionality and complexity.
+<ul><li> reliability — a large part of servers and clusters running on GNU/Linux OS;</li>
+<li> flexibility/scalability — due to its openness and modularity Linux allows to build solutions to meet any requirements;</li>
+<li> availability — due to being under the license GPL the software is a fully free (libre) operational system and for high qualified users it can be also a non-cost one;</li>
+<li> popularity, advancement, support and prevalence — the system is in active development by many enthusiasts, firms and government agencies throughout the world, and is gaining wide support on the personal and the corporate marketplace.</li></ul>
+<p>While the project currently develops under the principles of multiplatformity then there is no most problem for porting the project to other operational systems (program platforms) and hardware platforms. That is planned to future and mostly already done for some platforms.
+</p><p>At the heart of the program is a modular core. And depending on what modules are installed the program can be configured to operate in role of variety servers, clients and both clients and servers in the same time and into the same program. It allows for implementation of the client-server architecture on the same components/modules, saving machine memory, disk space and expensive programming time.
+</p><p>Server configurations of the program were designed for issuing control actions and acquisition, processing, archiving, logging information from different sources and this information providing also to clients (UI, GUI, TUI ...). The modular architecture allows for expanding of server's functionality without it restarting.
+</p><p>Client configurations can be built on different graphics libraries (GUI/TUI ToolKits), as using the program core and its modules (by adding to it an user interface module), or as an independent application connected the OpenSCADA core as a library.
+</p><p>The flexible configuration of the program allows for user to build solutions to meet specific requirements of reliability, functionality and capacity-complexity.
 </p>
 <h2><span class="mw-headline" id="Functions_of_the_program"><span class="mw-headline-number">1</span> Functions of the program</span></h2>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:637px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_struct.png"><img class="thumbimage" height="336" src="files/Oscada_struct.png" width="635" /></a>  <div class="thumbcaption">Fig. 1. Block scheme of OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:703px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_struct.png"><img class="thumbimage" height="360" src="files/Oscada_struct.png" width="701" /></a>  <div class="thumbcaption">Fig. 1. Block scheme of OpenSCADA.</div></div></div></div>
 <h3><span class="mw-headline" id="Modularity"><span class="mw-headline-number">1.1</span> Modularity</span></h3>
-<p>In order to achieve flexibility and a high degree of scalability OpenSCADA is constructed in a modular fashion. The process of developing our own modules imposed a great risk; possible errors could introduce an element of instability into the program, however tight integration of the modules with core lessened this issue and the ability to create a distributed configuration was seen as a greater benefit. In the end a more flexible and stable program was created.
-</p><p>OpenSCADA modules are stored within dynamic libraries and each shared library can contain modules of various types. The specific functional modules that are contained in a library is determined by the specifics of the modules connections. These dynamic libraries are hot swappable, which allows for the updating of a specific module without affecting the program as a whole. This method of storing code modules in dynamic libraries is essential for OpenSCADA, because it is supported by virtually all modern operating systems (OS). However, this does not exclude the possibility of developing other methods of storing code modules.
-</p><p>OpenSCADA has the following functional parts or modules:
+<p>In order to achieve flexibility and a high degree of scalability OpenSCADA is constructed in a modular fashion. Tight integration the modules with the core improves the program stability in whole due to repeat of using the well-tuned code. But same process of developing of self code of the modules OpenSCADA imposes greater responsibility — possible errors introduce an element of instability into the program. The ability to create distributed configurations smooths this danger.
+</p><p>OpenSCADA modules are stored within dynamic libraries and each shared library can contain modules of various types. The filling of dynamic libraries by modules is determined by the functional connectivity of the modules itself. Dynamic libraries are hot swappable which allows to update certain parts of the program during the operation. This method of storing of modules' code in dynamic libraries is essential for OpenSCADA, because it is supported by practically all modern operating systems (OS). However, this does not exclude the possibility of developing other methods of storing of the modules' code.
+</p><p>OpenSCADA has the following functional parts implemented in modules:
 </p>
 <ul><li> databases;</li>
-<li> communication transports interfaces;</li>
-<li> communication protocols;</li>
+<li> communication interfaces, transports;</li>
+<li> protocols of the communication interfaces;</li>
 <li> data sources and data acquisition;</li>
-<li> archives (messages and values);</li>
-<li> user interfaces(GUI, TUI, WebGUI, speech, signal...);</li>
-<li> additional and special (for Special subsystem) modules.</li></ul>
-<p>Management of the modules is carried out by the "Modules Management" subsystem, whose functions include connection, switching off, updating, and other operations concerned with the management of the modules and their libraries.
+<li> archives-history (messages and values);</li>
+<li> user interfaces (GUI, TUI, WebGUI, speech, signal ...);</li>
+<li> additional modules, special.</li></ul>
+<p>Management of the modules is carried out by the "Module scheduler" subsystem. The subsystem functions are: connection, switching off, updating and other operations concerned with the modules and their libraries.
 </p>
 <h3><span class="mw-headline" id="Subsystems"><span class="mw-headline-number">1.2</span> Subsystems</span></h3>
-<p>Architecturally OpenSCADA is divided into subsystems or two types, regular and modular. Modular subsystem have the ability to expand through the addition of modules, with each modular subsystem containing sets of modular objects.  For example the modular Database subsystem contains modular objects of the database type, thus the modular object is the root of the module.
-</p><p>The basic configuration of OpenSCADA consists of nine subsystems with seven being modular. These nine subsystems are present at every configuration. Additional subsystems can be created by adding additional modules. The following lists the basic subsystems of OpenSCADA:
+<p>Architecturally OpenSCADA is divided into subsystems. Subsystems can be two types: regular and modular. Modular subsystem have the ability of expanding by modules. Each the modular subsystem can contain many of modular objects. For example, the modular subsystem "Databases" contains modular objects of types of databases. Modular object is the root of the module.
+</p><p>Summary OpenSCADA contains nine subsystems with seven being modular. These nine subsystems of OpenSCADA are base ones and their present at every configuration. To the list of these nine subsystems can be added new ones, through the modules themselves. OpenSCADA subsystems:
 </p>
-<ul><li> Security — non-modular.</li>
-<li> Modules Scheduler — non-modular.</li>
-<li> Data Bases — modular.</li>
-<li> Transports — modular.</li>
-<li> Transport Protocols — modular.</li>
-<li> Data Acquisition — modular.</li>
-<li> Archives (Histories) — modular.</li>
-<li> User Interfaces — modular.</li>
-<li> Specials (Speciality) — modular.</li></ul>
-<h3><span class="mw-headline" id="PLC_and_other_sources_of_dynamic_data.2C_a_subsystem_.22Data_acquisition.22"><span class="mw-headline-number">1.3</span> PLC and other sources of dynamic data, a subsystem "Data acquisition"</span></h3>
-<p>The Data Acquisition subsystem supports dynamic data sources whether PLC controllers, USO boards, virtual, or other sources. The functions of this subsystem are to provide data in a structured manner and the management of the data, i.e. data modification.
-</p><p>Since the Data Acquisition subsystem is modular it contains objects of the dynamic data source type. For example in October 2007 OpenSCADA supported the following data sources:
+<ul><li> Security.</li>
+<li> Modules Scheduler.</li>
+<li> Data Bases (modular).</li>
+<li> Transports (modular).</li>
+<li> Transport Protocols (modular).</li>
+<li> Data Acquisition (modular).</li>
+<li> Archives-Histories (modular).</li>
+<li> User Interfaces (modular).</li>
+<li> Specials (modular).</li></ul>
+<h3><span class="mw-headline" id="PLC_and_other_sources_of_dynamic_data.2C_the_subsystem_.22Data_acquisition.22"><span class="mw-headline-number">1.3</span> PLC and other sources of dynamic data, the subsystem "Data acquisition"</span></h3>
+<p>The subsystem "DAQ" (Data Acquisition) provides to support dynamic data sources whether: PLC, MOD, virtual sources and other. The function of this subsystem is to provide the received data in structured form and to provide management of these data, for example, these are data modification.
+</p><p>The subsystem "DAQ" is a modular one and it contains modular objects of types of sources of dynamic data. For example OpenSCADA provides now more than twenty <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">modules</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices/list" title="Special:MyLanguage/Libs/User protocol devices/list">libraries items</a> by <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices" title="Special:MyLanguage/Libs/User protocol devices">sources of the logical level</a>. Most significant and developed from them are:
 </p>
-<ul><li> "Diamond Systems" data acquisition cards.</li>
-<li> OS data acquisition.</li>
-<li> The Block calculator. </li>
-<li> Calculator in Java-like language.</li>
-<li> Data communicated from one OpenSCADA station to another.</li>
-<li> PLC data via the Modbus protocol. </li>
-<li> Network Device data via the SNMP protocol. </li>
-<li> OpenSCADA logic level data. </li>
-<li> CIF50PB Profibus communications card, connecting to logic controllers via the MPI protocol.</li></ul>
-<p>Each data source requires a separate module that can be connected or disconnected, with a module communicating to one or more devices(controllers).
-</p><p>Each controller contains parameters with the types, defined by the module. The parameter provides the list of attributes which contain the data. Parameter's attributes can be one of four basic types, string(text), integer, float and boolean. For example an analog parameter can contain data in either integer or float format.
-</p><p>The structures of a controllers, parameters and their types are contained in the Data Acquisition subsystem so that the module objects can specifically fill in these structures.
-</p><p>A source of dynamic data can be on a remote OpenSCADA station. In this case the data source would be the OpenSCADA data transport. The function of this type of data source is to mirror of the data sources on the local station.
+<ul><li> Java-like based calculator;</li>
+<li> Logical level;</li>
+<li> Block calculator;</li>
+<li> Gateway of the data sources;</li>
+<li> System DA;</li>
+<li> ModBus;</li>
+<li> DCON client;</li>
+<li> Client OPC-UA;</li>
+<li> MMS(IEC-9506);</li>
+<li> SNMP client;</li>
+<li> ICP DAS hardware;</li>
+<li> Siemens DAQ;</li>
+<li> Diamond DAQ boards.</li></ul>
+<p>Each non-logical source type is implemented into a separate module, which can contain many sources (controller objects), and each source is usually executed in a separate thread-task.
+</p><p>Separately taken object controller may contain parameters specified by module types. For example, the parameters of the analog type, the basic information of which is the value of the integer or the real type. Structurally, the parameter is a list of attributes that contain data. Attributes can have five basic types: logical, integer, real, character string (text) and object. Structures of controller objects, parameters and their types are contained in the subsystem "DAQ" so that the module objects carry out their filling in accordance with their own specifics.
+</p><p>Certain types of data sources themselves can generate data as they generate them entirely, as well as processing physical data, and even <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices" title="Special:MyLanguage/Libs/User protocol devices">fully implement the gathering of these data into OpenSCADA environment</a> and its internal language. Such data sources are called logical. Fully logical data sources are represented by modules:
+<a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> and <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a>. There are several modules that combine logical data as a result of direct physical ones processing: <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Siemens" title="Special:MyLanguage/Modules/Siemens">Siemens</a>.
+</p><p>Dynamic data sources can be remote, that is, they can be generated or received at the remote OpenSCADA station. To communicate with such data sources, the <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> gateway module is used. The function of this type of data sources is to display the data sources of the remote OpenSCADA station to the local one.
+</p><p>You can read in detail the key subsystem "DAQ" and its functions in a separate document "<a href="DAQ.html" title="Special:MyLanguage/Documents/DAQ">Data acquisition in OpenSCADA</a>".
 </p>
 <h3><span class="mw-headline" id="Databases.2C_a_subsystem_of_.22Databases.22"><span class="mw-headline-number">1.4</span> Databases, a subsystem of "Databases"</span></h3>
 <p>For a data storage of the program databases (DB) are everywhere used. With a view of systematization of access and management of databases in OpenSCADA the subsystem "Database" is provided. For support of various DB/DBMS the subsystem is modular.

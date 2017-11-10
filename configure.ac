@@ -285,7 +285,7 @@ AX_MOD_Transport_EN(Sockets, [disable or enable[=incl] compilation module Transp
 	AC_MSG_ERROR([Transport.Sockets: Some GLibC network headers aren't found. Install or check the GLibC development package!]))
 ])
 AX_MOD_Transport_EN(Serial, [disable or enable[=incl] compilation module Transport.Serial], disable, incl, [
-    AC_CHECK_HEADERS([linux/serial.h linux/i2c-dev.h], [], AC_MSG_NOTICE([Some Linux headers aren't found. Using disabled!]))
+    AC_CHECK_HEADERS([linux/serial.h linux/i2c-dev.h linux/spi/spidev.h], [], AC_MSG_NOTICE([Some Linux headers aren't found. Using disabled!]))
 ])
 AX_MOD_Transport_EN(SSL, [disable or enable[=incl] compilation module Transport.SSL], disable, incl, [
     AX_LIB_OpenSSL()

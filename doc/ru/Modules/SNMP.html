@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/SNMP - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/SNMP</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSNMP&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SNMP" title="Modules/SNMP">Modules/SNMP</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SNMP" title="Modules/SNMP (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SNMP/uk" title="Модулі/SNMP (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a> </td>
+<td> SNMP клиент </td>
+<td> 0.7 </td>
+<td> GPL2 </td>
+<td> daq_SNMP.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Роман Савоченко </td>
+<td> Предоставляет реализацию клиента SNMP-сервиса.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#SNMP"><span class="tocnumber">1</span> <span class="toctext">SNMP</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#MIB"><span class="tocnumber">1.1</span> <span class="toctext">MIB</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.90.D0.B4.D1.80.D0.B5.D1.81.D0.B0.D1.86.D0.B8.D1.8F"><span class="tocnumber">1.2</span> <span class="toctext">Адресация</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.92.D0.B7.D0.B0.D0.B8.D0.BC.D0.BE.D0.B4.D0.B5.D0.B9.D1.81.D1.82.D0.B2.D0.B8.D0.B5"><span class="tocnumber">1.3</span> <span class="toctext">Взаимодействие</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.D0.90.D0.B2.D1.82.D0.BE.D1.80.D0.B8.D0.B7.D0.B0.D1.86.D0.B8.D1.8F"><span class="tocnumber">1.4</span> <span class="toctext">Авторизация</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C"><span class="tocnumber">2</span> <span class="toctext">Модуль</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">2.1</span> <span class="toctext">Объект контроллера</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">2.2</span> <span class="toctext">Параметр объекта контроллера</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<p>Протокол SNMP был разработан с целью проверки функционирования сетевых маршрутизаторов и мостов в 1988 году. Впоследствии сфера действия протокола охватила и другие сетевые устройства, такие как хабы, шлюзы, терминальные сервера и даже устройства, имеющие отдалённое отношение к сети: принтеры, источники бесперебойного питания, PLC и т.д. Кроме того, протокол допускает возможность внесения изменений в функционирование указанных устройств. На данное время протокол SNMP стандартизирован как RFC-1157, -1215, -1187, -1089.
+</p><p>Данный модуль предоставляет возможность собирать информацию и вносить изменения у различных устройств по SNMP протоколу и с помощью библиотеки <a class="external text" href="http://net-snmp.sourceforge.net" rel="nofollow noreferrer noopener" target="_blank">NetSNMP</a>. Также модулем реализуются функция горизонтального резервирования, а именно совместная работа с удалённой станцией этого-же уровня.
+</p>
+<h2><span class="mw-headline" id="SNMP"><span class="mw-headline-number">1</span> SNMP</span></h2>
+<p>Основными взаимодействующими "лицами" протокола являются агенты и системы управления. Если рассматривать эти два понятия на языке "клиент-сервер", то роль сервера выполняют агенты, то есть те самые устройства для опроса состояния которых и был разработан протокол. Соответственно, роль клиентов отводится системам управления – сетевым приложениям, необходимым для сбора информации о функционировании агентов. Помимо этих двух субъектов в модели протокола можно выделить также еще два: управляющую информацию и сам протокол обмена данными.
+</p><p>Вся информация об объектах системы-агента содержится в так называемой MIB (management information base) – базе управляющей информации, другими словами MIB представляет собой совокупность объектов (MIB-переменные), доступных для операций записи-чтения.
+</p><p>На данный момент существует четыре типовых базы MIB:
+</p>
+<dl><dd>1. Internet MIB – база объектов для обеспечения диагностики ошибок и конфигураций. Включает в себя 171 объект (в том числе и объекты MIB I).</dd>
+<dd>2. LAN manager MIB – база из 90 объектов – пароли, сессии, пользователи, общие ресурсы.</dd>
+<dd>3. WINS MIB – база объектов, необходимых для функционирования WINS сервера.</dd>
+<dd>4. DHCP MIB – база объектов, необходимых для функционирования DHCP сервера, служащего для динамического выделения IP адресов в сети.</dd></dl>
+<p>Кроме вышеуказанных типовых баз MIB могут догружаться в виде модулей, в соответствии с библиотекой <a class="external text" href="http://net-snmp.sourceforge.net" rel="nofollow noreferrer noopener" target="_blank">NetSNMP</a>.
+</p>
+<h3><span class="mw-headline" id="MIB"><span class="mw-headline-number">1.1</span> MIB</span></h3>
+<p>Все имена MIB имеют иерархическую структуру. Существует десять корневых синонимов:
+</p>
+<dl><dd>1. System — данная группа MIB II содержит в себе семь объектов, каждый из которых служит для хранения информации о системе (версия ОС, время работы и т.д.).</dd>
+<dd>2. Interfaces — содержит 23 объекта, необходимых для ведения статистики сетевых интерфейсов агентов (количество интерфейсов, размер MTU, скорость передачи, физические адреса и т.д.).</dd>
+<dd>3. AT (3 объекта) — отвечают за трансляцию адресов. Более не используется. Была включена в MIB I. В SNMP v2 эта информация была перенесена в MIB для соответствующих протоколов.</dd>
+<dd>4. IP (42 объекта) — данные о проходящих IP пакетах (количество запросов, ответов, отброшенных пакетов).</dd>
+<dd>5. ICMP (26 объектов) — информация о контрольных сообщениях (входящие/исходящие сообщения, ошибки и т.д.).</dd>
+<dd>6. TCP (19) — все, что касается одноименного транспортного протокола (алгоритмы, константы, соединения, открытые порты и т.п.).</dd>
+<dd>7. UDP (6) — аналогично, только для UDP протокола (входящие/исходящие датаграммы, порты, ошибки).</dd>
+<dd>8. EGP (20) — данные о трафике Exterior Gateway Protocol (используется маршрутизаторами, объекты хранят информацию о принятых/отосланных/отброшенных кадрах).</dd>
+<dd>9. Transmission — зарезервирована для специфических MIB.</dd>
+<dd>10. SNMP (29) — статистика по SNMP – входящие/исходящие пакеты, ограничения пакетов по размеру, ошибки, данные об обработанных запросах и многое другое.</dd></dl>
+<h3><span class="mw-headline" id=".D0.90.D0.B4.D1.80.D0.B5.D1.81.D0.B0.D1.86.D0.B8.D1.8F"><span class="mw-headline-number">1.2</span> Адресация</span></h3>
+<p>Каждый из корневых псевдонимов представляется в виде дерева, растущего вниз. Например, к адресу администратора можно обратиться посредством пути: "system.sysContact.0", ко времени работы системы: "system.sysUpTime.0", к описанию системы (версия, ядро и другая информация об ОС): "system.sysDescr.0". С другой стороны, те же данные могут задаваться и в точечной нотации. Так "system.sysUpTime.0" соответствует значение "1.3.0", так как "system" имеет индекс "1" в группах MIB II, а "sysUpTime" – 3, в иерархии группы "system". Ноль в конце пути говорит о скалярном типе хранимых данных. В процессе работы символьные имена объектов не используются, то есть если менеджер запрашивает у агента содержимое параметра "system.sysDescr.0", то в строке запроса ссылка на объект будет преобразована в "1.1.0", а не передана "как есть".
+</p><p>В целом существует несколько способов записи адреса к MIB-переменной:
+</p>
+<dl><dd>1. ".1.3.6.1.2.1.1" — прямая кодовая адресация для объекта "System" (корневой псевдоним System). При такой адресации каждая MIB переменная кодируется идентификатором, а полный адрес записывается в виде последовательности идентификаторов, разделённых точкой слева на право. Данная запись адреса является основной и все другие способы записи приводятся к ней.</dd>
+<dd>2. ".iso.org.dod.internet.mgmt.mib-2.system" — полная символьная к прямой кодовой адресации для объекта "System".</dd>
+<dd>3. "system.sysDescr.0" — простая, не полным путём, адресация относительно корневого псевдонима (объект "System").</dd>
+<dd>4. "SNMPv2-MIB::sysDescr.0" — адресация из MIB базы от имени модуля, для "system.sysDescr.0".</dd></dl>
+<h3><span class="mw-headline" id=".D0.92.D0.B7.D0.B0.D0.B8.D0.BC.D0.BE.D0.B4.D0.B5.D0.B9.D1.81.D1.82.D0.B2.D0.B8.D0.B5"><span class="mw-headline-number">1.3</span> Взаимодействие</span></h3>
+<p>SNMP клиент взаимодействует с сервером по принципу запрос-ответ. Сам по себе агент способен инициировать только одно действие, называемое ловушкой прерыванием. Помимо этого, все действия агентов сводятся к ответам на запросы, посылаемые менеджерами.
+</p><p>Существует три основные версии протокола SNMP (v1 &amp; v2 &amp; v3), которые не являются совместимыми. В SNMP v3 включена поддержка шифрования трафика, для чего, в зависимости от реализации, используются алгоритмы DES, MD5. Это ведет к тому, что при передаче наиболее важные данные недоступны для прослушивания. В качестве транспортного протокола в SNMP обычно используется протокол UDP, Хотя на самом деле SNMP поддерживает множество других транспортных протоколов нижнего уровня.
+</p>
+<h3><span class="mw-headline" id=".D0.90.D0.B2.D1.82.D0.BE.D1.80.D0.B8.D0.B7.D0.B0.D1.86.D0.B8.D1.8F"><span class="mw-headline-number">1.4</span> Авторизация</span></h3>
+<p>Одним из ключевых понятий в SNMP является группа (group). Процедура авторизации менеджера представляет собой простую проверку на принадлежность его к определенной группе, из списка, находящегося у агента. Если агент не находит группы менеджера в своем списке то их дальнейшее взаимодействие невозможно. По умолчанию используются группы: public (для чтения) и private (для записи). В протоколе SNMP v3 для аутентификации используется понятие пользователя с паролем аутентификации и приватности, в зависимости от уровня секретности.
+</p>
+<h2><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C"><span class="mw-headline-number">2</span> Модуль</span></h2>
+<p>Данный модуль поддерживает работу со всеми версиями протокола SNMP (1, 2 и 3) в режимах чтения и записи MIB-параметров, благодаря использованию библиотеки <a class="external text" href="http://net-snmp.sourceforge.net" rel="nofollow noreferrer noopener" target="_blank">NetSNMP</a>.
+</p>
+<h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">2.1</span> Объект контроллера</span></h3>
+<p>Для добавления источников данных SNMP в OpenSCADA создаются и конфигурируются объекты контроллера. Пример вкладки конфигурации объекта контроллера данного типа изображен на рисунке 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:922px;"><a class="image" href="http://oscada.org/wiki/File:SNMP_cntr_ru.png"><img class="thumbimage" height="719" src="../files/SNMP_cntr_ru.png" width="920" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфигурации объектов контроллера.</div></div></div></div>
+<p>С помощью этой вкладки можно установить:
+</p>
+<ul><li> Состояние объекта контроллера, а именно: Статус, "Включен", "Исполняется" и имя БД, содержащей конфигурацию.</li>
+<li> Идентификатор, имя и описание объекта контроллера.</li>
+<li> Состояние в которое переводить объект контроллера при загрузке: "Включать" и "Запускать".</li>
+<li> Имя таблицы для хранения конфигурации параметров объекта контроллера.</li>
+<li> Политика планирования и приоритет задачи сбора данных.</li>
+<li> Адрес удалённого хоста агента. </li>
+<li> Количество попыток отправки запросов.</li>
+<li> Время ожидания ответов, в секундах.</li>
+<li> Используемую версию протокола SNMP.</li>
+<li> Сообщество или пользователя подключения.</li>
+<li> Ограничение на количество атрибутов в одном параметре.</li>
+<li> Уровень безопасности для v3 (Нет авториз./Нет приватн.; Авториз./Нет приватн.; Авториз./Приватн.).</li>
+<li> Метод кодирования (MD5, SHA) и пароль аутентификации для v3.</li>
+<li> Метод кодирования (DES, AES) и приватность аутентификации для v3.</li></ul>
+<h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">2.2</span> Параметр объекта контроллера</span></h3>
+<p>Модуль <i>SNMP</i> предоставляет только один тип параметров — "Стандарт". Дополнительным конфигурационным полем параметра данного модуля (рис.2) является список MIB-параметров, ветви или отдельные элементы (скаляры) которых подлежат считыванию.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:922px;"><a class="image" href="http://oscada.org/wiki/File:SNMP_prm_ru.png"><img class="thumbimage" height="719" src="../files/SNMP_prm_ru.png" width="920" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфигурации параметров.</div></div></div></div>
+<p>В соответствии с указанным списком MIB-параметров выполняется опрос их ветвей (или скаляров) и создание атрибутов параметров. В дальнейшем выполняется обновление значений параметров. Атрибуты именуются в соответствии с кодовой адресацией MIB-параметров, в качестве идентификатора, и адресации от базы MIB объектов, в имени атрибута (рис.3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:960px;"><a class="image" href="http://oscada.org/wiki/File:SNMP_prm_atr_ru.png"><img class="thumbimage" height="836" src="../files/SNMP_prm_atr_ru.png" width="958" /></a>  <div class="thumbcaption">Рис.3. Вкладка атрибутов параметров.</div></div></div></div>
+
+
+
+
+
+
+</div></body>
+</html>

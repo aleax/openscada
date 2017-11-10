@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.SNMP translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.SNMP package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:46+0300\n"
+"POT-Creation-Date: 2017-11-08 11:51+0200\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -36,11 +36,11 @@ msgstr "Уровень приоритета задачи сбора данных
 msgid "Remote host address"
 msgstr "Адрес удалённого хоста"
 
-msgid "Retries"
-msgstr "Попыток"
+msgid "Number of retries"
+msgstr "Количество попыток"
 
-msgid "Timeout (sec)"
-msgstr "Время ожидания (сек)"
+msgid "Responds timeout, seconds"
+msgstr "Таймаут ответов, секунд"
 
 msgid "SNMP version"
 msgstr "SNMP версия"
@@ -51,8 +51,8 @@ msgstr "Сообщество/пользователь сервера"
 msgid "V3 parameters"
 msgstr "V3 параметры"
 
-msgid "Parameter's attributes limit"
-msgstr "Ограничение на количество атрибутов"
+msgid "Limit of the attributes number"
+msgstr "Ограничение количества атрибутов"
 
 msgid "Standard"
 msgstr "Стандарт"
@@ -117,13 +117,13 @@ msgstr "10:Истекло время ожидания ответа от %s."
 msgid ""
 "SNMP OID list, include directories for get all subitems. OID can write in "
 "the methods:\n"
-"  \".1.3.6.1.2.1.1\" - direct code addressing for object \"System\";\n"
-"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbol to direct code "
-"addressing for object \"System\";\n"
-"  \"system.sysDescr.0\" - simple, not full path, addressing from root alias "
-"(object \"System\");\n"
-"  \"SNMPv2-MIB::sysDescr.0\" - addressing from MIB base by module name for "
-"\"system.sysDescr.0\"."
+"  \".1.3.6.1.2.1.1\" - direct code addressing for the object \"System\";\n"
+"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbolic addressing to "
+"direct one for the object \"System\";\n"
+"  \"system.sysDescr.0\" - simple, not full path, addressing from a root "
+"alias (the object \"System\");\n"
+"  \"SNMPv2-MIB::sysDescr.0\" - addressing from the MIB base by the module "
+"name for \"system.sysDescr.0\"."
 msgstr ""
 "Список SNMP OID, включая директории для получения подэлементов. OID может "
 "быть записан таким образом:\n"

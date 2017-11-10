@@ -80,3 +80,4 @@ table.wikitable,table.mw_metadata{margin:0}
 pre{background-color:transparent;margin-top:0;padding:0.5em}
 a.image{pointer-events:none;cursor:default;}
 #mw-content-text a.external { background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVElEQVR42n3PgQkAIAhEUXdqJ3dqJ3e6IoTPUSQcgj4EQ5IlUiLE0Jil3PECXhcHGBhZ8kg4hwxAu3MZeCGeyFnAXp4hqNQPnt7QL0nADpD6wHccLvnAKksq8iiaAAAAAElFTkSuQmCC) center right no-repeat; padding-right: 13px; }
+#toctitle h2 { margin-top: 0.5em; }

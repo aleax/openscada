@@ -1158,6 +1158,8 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
     if(!isContainer())  throw TError(nodePath().c_str(),_("Widget is not container!"));
     if(wdgPresent(wid)) return;
 
+    bool toRestoreInher = false;
+
     //Check for label <deleted>
     if(!force) {
 	string db = ownerProj()->DB();
@@ -1166,21 +1168,31 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
 	cEl.cfg("IDW").setS(path());
 	cEl.cfg("ID").setS(wid);
 	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,false,true) && cEl.cfg("PARENT").getS() == "<deleted>") {
-	    if(!parent().at().wdgPresent(wid))
+	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true, false, true);
+	    toRestoreInher = parent().at().wdgPresent(wid);
+	    /*if(!parent().at().wdgPresent(wid))
 		SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true, false, true);
 	    else throw TError(nodePath().c_str(),
-		_("You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"),wid.c_str());
+		_("You try to create widget with name '%s' of the widget that was early deleted as an inherited from the base container!"), wid.c_str());*/
 	}
     }
 
-    //Same widget add
-    chldAdd(inclWdg, new PageWdg(wid,ipath));
-    wdgAt(wid).at().setName(name);
+    //Same widget addition or restoring
+    if(toRestoreInher) {
+	inheritIncl(wid);
+	wdgAt(wid).at().setEnable(true);
+    }
+    else {
+	chldAdd(inclWdg, new PageWdg(wid,ipath));
+	wdgAt(wid).at().setName(name);
+    }
 
     //Call heritors include widgets update
     for(unsigned i_h = 0; i_h < mHerit.size(); i_h++)
 	if(mHerit[i_h].at().enable())
 	    mHerit[i_h].at().inheritIncl(wid);
+
+    if(toRestoreInher)	throw TError("warning", _("Restoring '%s' from the base container!"), wid.c_str());
 }
 
 AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off ) const

@@ -1153,7 +1153,8 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 	// Create widget
 	int err = cntrIfCmd(req);
 	if(err) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
-	else {
+	if(err == 1)	emit modifiedItem(new_wdg+req.attr("id"));					//Warning
+	else if(!err) {
 	    new_wdg += req.attr("id");
 	    //  Set some parameters
 	    req.clear()->setName("set");

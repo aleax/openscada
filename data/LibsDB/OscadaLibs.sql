@@ -13,7 +13,7 @@ INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices','Бібліотека п�
 Version: 1.9.0','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 INSERT INTO "ParamTemplLibs" VALUES('LowDevLib','Low-level devices','','The templates library provides common templates and related functions for custom access to low-level devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 1.0.0','','tmplib_LowDevLib','','');
+Version: 1.1.0','','tmplib_LowDevLib','','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','The models of the technological process devices.
 Founded: october 2005
@@ -309,6 +309,7 @@ Modules/System:en,uk,ru:Modules/System.html
 Modules/ModBus:en,uk,ru:Modules/ModBus.html
 Modules/DCON:en,uk,ru:Modules/DCON.html
 Modules/OPC_UA:en,uk,ru:Modules/OPC_UA.html
+Modules/SNMP:en,uk,ru:Modules/SNMP.html
 Modules/FSArch:en,uk,ru:Modules/FSArch.html
 Modules/DBArch:en,uk,ru:Modules/DBArch.html
 Modules/FLibSYS:en,uk,ru:Modules/FLibSYS.html',0,3,'','','','');
@@ -4169,7 +4170,7 @@ if(f_start) {
 	transport_ = transport;
 	Tproc = Thead = Tbox = Tact = eps = eps_ = trans = trans_ = EVAL_REAL;
 	spIll = spIll_ = EVAL_BOOL;
-	tr = SYS.Transport.nodeAt(transport,".");
+	tr = SYS.Transport.nodeAt(transport, ".");
 }
 
 //Check for the transport change and connect
@@ -4253,7 +4254,7 @@ if(t_err.length) {
 	SYS.messDebug("/OPTRIS/TMPL",tr("Error response")+": "+t_err);
 	f_err = t_err;
 }
-else f_err = "0";','','',1509286707);
+else f_err = "0";','','',1509908064);
 INSERT INTO "tmplib_DevLib" VALUES('CTR','CTR 100, 101','','','The RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
@@ -6934,7 +6935,7 @@ for(pos = 0; pos < ibuf.length; ) {
 }
 
 return obuf;','','',1509372937);
-INSERT INTO "lib_servProc" VALUES('docOffLine','Off-line documentation','','','','','',1,120,0,'trNm = "offLine";
+INSERT INTO "lib_servProc" VALUES('docOffLine','Off-line documentation','','','','','',1,180,0,'trNm = "offLine";
 docHost = "oscada.org:80";
 docHost_ = "http://" + docHost.parse(0, ":");
 defLang = "en";
@@ -8387,7 +8388,7 @@ CREATE TABLE 'tmplib_LowDevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"
 INSERT INTO "tmplib_LowDevLib" VALUES('1602A','GPIO|I2C: 1602A(HD44780)','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
 Conditions: Default planing policy but realtime one preferred.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0',10,0,'JavaLikeCalc.JavaScript
+Version: 1.1.1',10,0,'JavaLikeCalc.JavaScript
 using Special.FLibSYS;
 
 //Set link to fast external functions
@@ -8398,7 +8399,7 @@ t_err = "0";
 //Check for the transport change and the link update
 if(transport != transport_)	{
 	transport_ = transport;
-	if(!(tr=SYS.Transport.Serial["out_"+transport]))
+	if(!(tr=SYS.Transport.Serial.nodeAt("out_"+transport)))
 		function put = transport+".fnc_put";
 }
 
@@ -8451,11 +8452,11 @@ else if(ln1 != ln1_ || ln2 != ln2_) {
 	}
 }
 
-f_err = t_err;',1509373346);
+f_err = t_err;',1509990639);
 INSERT INTO "tmplib_LowDevLib" VALUES('1W_DS9097','One Wire by DS9097','One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.2.0',30,0,'JavaLikeCalc.JavaScript
+Version: 1.2.1',30,0,'JavaLikeCalc.JavaScript
 //Functions
 function reset(tr) {
 	tr.addr(tr.addr().parse(0,":")+":9600:8N1"); tr.start(true);
@@ -8526,7 +8527,7 @@ if(f_start) {
 	tmResc_ = tmResc;
 	devLs = new Object();
 	transport_ = transport;
-	tr = SYS.Transport.Serial["out_"+transport];
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 }
 if(f_stop) {
 	for(var devID in devLs) {
@@ -8543,7 +8544,7 @@ t_err = "0";
 
 //Check for the transport change and connect
 if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial["out_"+transport];
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 	transport_ = transport;
 }
 if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
@@ -8892,11 +8893,11 @@ else {
 	}
 }
 
-f_err = t_err;',1509373346);
+f_err = t_err;',1509990639);
 INSERT INTO "tmplib_LowDevLib" VALUES('1W_DS9097U','One Wire by DS9097U','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.2.0',30,0,'JavaLikeCalc.JavaScript
+Version: 1.2.1',30,0,'JavaLikeCalc.JavaScript
 //Functions
 function reset(tr) {
 	req = (isData?SYS.strFromCharCode(0xE3):"") +
@@ -8979,7 +8980,7 @@ if(f_start) {
 	tmResc_ = 0;
 	devLs = new Object();
 	transport_ = transport;
-	tr = SYS.Transport.Serial["out_"+transport];
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 	DS2480 = isData = false;
 }
 if(f_stop) {
@@ -8997,7 +8998,7 @@ t_err = "0";
 
 //Check for the transport change and connect
 if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial["out_"+transport];
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 	transport_ = transport;
 	DS2480 = false;
 }
@@ -9017,7 +9018,7 @@ if(tr && !DS2480)	{
 	}
 	isData = false;
 }
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
 else if(!DS2480)	t_err = "2:"+tr("DS2480 is not detected.");
 else {
 	//Generic information update.
@@ -9363,15 +9364,15 @@ else {
 	}
 }
 
-f_err = t_err;',1509373346);
+f_err = t_err;',1509990639);
 INSERT INTO "tmplib_LowDevLib" VALUES('BMP180','I2C: BMP180','I2C Pressure and Temperature sensor. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
-//Set transport
+Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
+//Initial set
 if(f_start) {
 	f_err = "0";
 	transport_ = transport;
-	tr = SYS.Transport.Serial["out_"+transport];
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 	AC1 = 0;
 }
 
@@ -9379,20 +9380,20 @@ t_err = "0";
 
 //Check for the transport change and connect
 if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial["out_"+transport];
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 	transport_ = transport;
 }
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
 else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
 else {
 	resp = Special.FLibSYS.IO("", "", "b");
 	//Calibration data, from register 0xAA and to 0xBF
 	if(!AC1) {
 		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xAA), 0, 22);
-		if(resp.string.length != 22) t_err = "3:"+tr("Wrong or empty respond to the calibration request.");
+		if(resp.length != 22) t_err = "3:"+tr("Wrong or empty respond to the calibration request.");
 		else {
 			AC1 = resp.read("int16",1);	AC2 = resp.read("int16",1);	AC3 = resp.read("int16",1);
-			AC4 = resp.read("uint16",1);	AC5 = resp.read("uint16",1);	AC6 = resp.read("uint16",1);
+			AC4 = resp.read("uint16",1); AC5 = resp.read("uint16",1);	AC6 = resp.read("uint16",1);
 			B1 = resp.read("int16",1);	B2 = resp.read("int16",1);
 			MB = resp.read("int16",1);	MC = resp.read("int16",1);	MD = resp.read("int16",1);
 			//SYS.messInfo("BMP180","AC1="+AC1+"; AC2="+AC2+"; AC3="+AC3+"; AC4="+AC4+"; AC5="+AC5+"; AC6="+AC6);
@@ -9402,10 +9403,11 @@ else {
 	//Read and calculate temperature
 	if(AC1 && !t_err.toInt()) {
 		// Start conversion
-		tr.messIO(SYS.strFromCharCode(addr,0xF4,0x2E), 0, 0);	SYS.sleep(4.5e-3);
+		tr.messIO(SYS.strFromCharCode(addr,0xF4,0x2E), 0, 0);
+		SYS.sleep(4.5e-3);
 		// Read value
 		resp.pos = 0; resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF6), 0, 2);
-		if(resp.string.length != 2) t_err = "3:"+tr("Wrong or empty respond to the temperature data.");
+		if(resp.length != 2) t_err = "3:"+tr("Wrong or empty respond to the temperature data.");
 		else {
 			UT = resp.read("int16",1);
 			X1 = (UT-AC6)*AC5/pow(2,15);	X2 = MC*pow(2,11)/(X1+MD);
@@ -9415,11 +9417,12 @@ else {
 		}
 	}
 	
-	//Read and calculate temperature
+	//Read and calculate pressure
 	if(AC1 && !t_err.toInt()) {
-		oss = max(0,min(3,oss));
+		oss = max(0, min(3,oss));
 		// Start conversion
-		tr.messIO(SYS.strFromCharCode(addr,0xF4,0x34+(oss<<6)), 0, 0);	SYS.sleep((1.5+3*pow(2,oss))*1e-3);
+		tr.messIO(SYS.strFromCharCode(addr,0xF4,0x34+(oss<<6)), 0, 0);
+		SYS.sleep((1.5+3*pow(2,oss))*1e-3);
 		// Read value
 		resp.pos = 0; resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF6), 0, 4);
 		UP = resp.read("int32",1)>>(16-oss);
@@ -9442,7 +9445,7 @@ else {
 }
 
 if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
-f_err = t_err;',1509373346);
+f_err = t_err;',1509990639);
 INSERT INTO "tmplib_LowDevLib" VALUES('DHT','GPIO: DHT11,22 (AM23XX)','Digital Temperature and Humidity Sensor for models: DHT11, DHT12, AM2302, AM2320, ...
 The module designed for the sensors connect through GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
 Conditions: Exclusively realtime planing in the priority 199 (FIFO-99).
@@ -9523,12 +9526,12 @@ if(t_err.toInt() && !f_err.toInt()) t = h = EVAL;
 f_err = t_err;',1509373346);
 INSERT INTO "tmplib_LowDevLib" VALUES('DS3231','I2C: DS3231','I2C RTC chip with Temperature sensor and calibration on it. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
 	f_err = "0";
 	transport_ = transport;
-	tr = SYS.Transport.Serial["out_"+transport];
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 	tm_ = tm = "";
 	agOff_ = agOff = 0;
 	p32k_ = p32k = false;
@@ -9540,10 +9543,10 @@ t_err = "0";
 
 //Check for the transport change and connect
 if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial["out_"+transport];
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 	transport_ = transport;
 }
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
 else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
 else {
 	//Check for modification
@@ -9617,15 +9620,15 @@ else {
 }
 
 if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
-f_err = t_err;',1509373346);
+f_err = t_err;',1509990639);
 INSERT INTO "tmplib_LowDevLib" VALUES('PCF8574','I2C: PCF8574','I2C 8-bit 8DIO. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
 	f_err = "0";
 	transport_ = transport;
-	tr = SYS.Transport.Serial["out_"+transport];
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 	di0 = di1 = di2 = di3 = di4 = di5 = di6 = di7 = EVAL;
 	do0 = do1 = do2 = do3 = do4 = do5 = do6 = do7 = true;
 	do0_ = do1_ = do2_ = do3_ = do4_ = do5_ = do6_ = do7_ = true;
@@ -9635,10 +9638,10 @@ t_err = "0";
 
 //Check for the transport change and connect
 if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial["out_"+transport];
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 	transport_ = transport;
 }
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
 else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
 else {
 	if(do0 != do0_ || do1 != do1_ || do2 != do2_ || do3 != do3_ || do4 != do4_ || do5 != do5_ || do6 != do6_ || do7 != do7_) {
@@ -9658,7 +9661,7 @@ else {
 if(t_err.toInt() && !f_err.toInt())
 	di0 = di1 = di2 = di3 = di4 = di5 = di6 = di7 = EVAL;
 
-f_err = t_err;',1509373346);
+f_err = t_err;',1509990639);
 INSERT INTO "tmplib_LowDevLib" VALUES('PCF8591','I2C: PCF8591','I2C 8-bit 4xA/D and D/A converter. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
@@ -9666,17 +9669,17 @@ Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
 	transport_ = transport;
-	tr = SYS.Transport.Serial["out_"+transport];
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 }
 
 t_err = "0";
 
 //Check for the transport change and connect
 if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial["out_"+transport];
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 	transport_ = transport;
 }
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
 else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
 else {
 	for(i = 0; i < 4 && !t_err.toInt(); i++) {
@@ -9693,7 +9696,130 @@ if(t_err.toInt() && !f_err.toInt())
 	for(i = 0; i < 4; i++)
 		arguments["ai"+i] = EVAL;
 
-f_err = t_err;',1509373346);
+f_err = t_err;',1509908745);
+INSERT INTO "tmplib_LowDevLib" VALUES('BME280','I2C: BME280','I2C Pressure, Temperature and Humidity sensor. Connect through a Serial output transport into the I2C mode.
+Author: Arcadiy Kisel, Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
+//Initial set
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	dig_T1 = 0;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.SerialnodeAt("out_"+transport);
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	resp = Special.FLibSYS.IO("", "", "l");
+	//Calibration data, from register 0x88 and count 24 
+	if(!dig_T1) {
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0x88), 0, 24); //start address 88, count = 24
+		if(resp.length != 24)	t_err = "3:"+tr("Wrong or empty respond to the calibration T1-3 or P1-9 request.");
+		else {
+			dig_T1 = resp.read("uint16", 1);	dig_T2 = resp.read("int16", 1);	dig_T3 = resp.read("int16", 1);
+			dig_P1 = resp.read("uint16", 1);	dig_P2 = resp.read("int16", 1);	dig_P3 = resp.read("int16", 1);
+			dig_P4 = resp.read("int16", 1);	dig_P5 = resp.read("int16", 1);	dig_P6 = resp.read("int16", 1);
+			dig_P7 = resp.read("int16", 1);	dig_P8 = resp.read("int16", 1);	dig_P9 = resp.read("int16", 1);
+		}
+		resp.pos = 0;
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xA1), 0, 1); //start address A1, count = 1
+		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty respond to the calibration H1 request.");
+		else dig_H1 = resp.read("uint8",1);
+		resp.pos = 0;
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xE1), 0, 7); //start address E1, count = 8
+		if(resp.length != 7) t_err = "3:"+tr("Wrong or empty respond to the calibration H2-H6 request.");
+		else {
+			dig_H2 = resp.read("int16", 1);
+			dig_H3 = resp.read("unt8", 1);
+
+			E4 = resp.read("int8", 1);
+			E5 = resp.read("int8", 1);
+			E6 = resp.read("int8", 1);
+			// dig_H4, dig_H5 is signed. may be bug here, when <0
+			dig_H4 = (E4 << 4) | (E5 & 0x0F);
+			dig_H5 = (E6 << 4) | ((E5 >> 4) & 0x0F);
+			dig_H6 = resp.read("int8", 1);
+		}
+	}
+
+	oss = max(0, min(7,oss));
+
+	//Pressure and Temperature
+	tr.messIO(SYS.strFromCharCode(addr,0xF4,(oss<<5)|(oss<<2)|0x3), 0, 0);
+	
+	//Humidity
+	tr.messIO(SYS.strFromCharCode(addr,0xF2,oss), 0, 0);	
+
+	SYS.sleep((1.25 + (2.3*oss) + 2*(2.3*oss + 0.575))*1e-3); 
+
+	//Read and calculate temperature
+	if(dig_T1 && !t_err.toInt()) {
+		// Read value
+		resp = Special.FLibSYS.IO("", "", "b");
+		resp.pos = 0;
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xFA), 0, 4);
+		if(resp.length != 4) t_err = "3:"+tr("Wrong or empty respond to the temperature data.");
+		else {
+			adc_T = resp.read("int32", 1) >> 12; //8 бит т.к. прочли четвертый "лишний" байт. 4 бит по даташиту
+			var1 = (adc_T/16384 - dig_T1/1024)*dig_T2;
+			var2 = ((adc_T/131072 - dig_T1/8192)*(adc_T/131072 - dig_T1/8192))*dig_T3;
+			t_fine = var1 + var2; //for pressure
+			t = (var1 + var2)/5120;
+		}
+	}
+
+	//Read and calculate pressure
+	if(dig_T1 && !t_err.toInt()) {
+		// Read value
+		resp.pos = 0; 
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF7), 0, 4);
+		if(resp.length != 4) t_err = "3:"+tr("Wrong or empty respond to the pressure data.");
+		else {
+			adc_P = resp.read("int32", 1) >> 12; //8 бит т.к. прочли четвертый "лишний" байт. 4 бит по даташиту
+			
+			var1 = t_fine/2 - 64000;
+			var2 = var1*var1*dig_P6/32768;
+			var2 = var2 + var1*dig_P5*2;
+			var2 = var2/4 + dig_P4*65536;
+			var1 = (dig_P3*var1*var1/524288 + dig_P2*var1)/524288;
+			var1 = (1 + var1/32768)*dig_P1;
+			if(var1 == 0)	p = EVAL_REAL; // avoid exception caused by division by zero
+			else {
+				p = 1048576 - adc_P;
+				p = (p - (var2/4096))*6250/var1;
+				var1 = dig_P9*p*p/2147483648;
+				var2 = p*dig_P8/32768;
+				p = p + (var1 + var2 + dig_P7)/16;
+			}
+		}
+	}
+	
+	//Read and calculate humidity
+	if(dig_T1 && !t_err.toInt()) {
+		resp.pos = 0;
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xFD), 0, 2);
+		if(resp.length != 2) t_err = "3:"+tr("Wrong or empty respond to the humidity data.");
+		else {
+			adc_H = resp.read("int16", 1);
+			
+			h = t_fine - 76800;
+			h = (adc_H - (dig_H4*64 + dig_H5/16384*h))*(dig_H2/65536*(1 + dig_H6/67108864*h*(1 + dig_H3/67108864*h)));
+			h = max(0, min(100, h*(1 - dig_H1*h/524288)));
+		}
+	}	
+}
+
+if(t_err.toInt() && !f_err.toInt()) t = p = h = EVAL;
+
+f_err = t_err;',1509989860);
 CREATE TABLE 'tmplib_LowDevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '0' ,"FLAGS" INTEGER DEFAULT '0' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '0' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_LowDevLib_io" VALUES('1602A','transport','Transport of the I2C, Serial (i2c) or
 GPIO address with function put(), mostly it''s BCM2835 (DAQ.BCM2835.pi.pi)',0,64,'i2c',0);
@@ -9762,4 +9888,10 @@ INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ai1','AI1',2,16,'',4);
 INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ai2','AI2',2,16,'',5);
 INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ai3','AI3',2,16,'',6);
 INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8591','ao','AO',2,32,'',7);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','transport','Transport of the I2C, Serial',0,64,'i2c',0);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','addr','Device address [0...119]',1,64,'118',1);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','oss','Oversampling setting (0...7)',1,64,'3',2);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','t','T, °С',2,16,'',3);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','p','P, Pa',2,16,'',4);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','h','H, %',2,16,'',5);
 COMMIT;

@@ -70,7 +70,7 @@ class TUser : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void load_( TConfig *cfg );
 	void save_( );
 

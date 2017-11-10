@@ -715,6 +715,8 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
     if(!isContainer())	throw TError(nodePath().c_str(),_("Widget is not container!"));
     if(wdgPresent(wid))	return;
 
+    bool toRestoreInher = false;
+
     //Check for label <deleted>
     if(!force) {
 	string db  = ownerLib().DB();
@@ -723,19 +725,30 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
 	cEl.cfg("IDW").setS(id());
 	cEl.cfg("ID").setS(wid);
 	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,false,true) && cEl.cfg("PARENT").getS() == "<deleted>") {
-	    if(!parent().at().wdgPresent(wid))	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true, false, true);
-	    else throw TError(nodePath().c_str(),_("You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"),wid.c_str());
+	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true, false, true);
+	    toRestoreInher = parent().at().wdgPresent(wid);
+	    /*if(!parent().at().wdgPresent(wid))	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true, false, true);
+	    else throw TError(nodePath().c_str(),
+		_("You try to create widget with name '%s' of the widget that was early deleted as an inherited from the base container!"), wid.c_str());*/
 	}
     }
 
-    //Same widget add
-    chldAdd(inclWdg,new CWidget(wid,path));
-    wdgAt(wid).at().setName(name);
+    //Same widget addition or restoring
+    if(toRestoreInher) {
+	inheritIncl(wid);
+	wdgAt(wid).at().setEnable(true);
+    }
+    else {
+	chldAdd(inclWdg, new CWidget(wid,path));
+	wdgAt(wid).at().setName(name);
+    }
 
     //Call heritors include widgets update
-    for(unsigned i_h = 0; i_h < mHerit.size(); i_h++)
-	if(mHerit[i_h].at().enable())
-	    mHerit[i_h].at().inheritIncl(wid);
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().inheritIncl(wid);
+
+    if(toRestoreInher)	throw TError("warning", _("Restoring '%s' from the base container!"), wid.c_str());
 }
 
 AutoHD<CWidget> LWidget::wdgAt( const string &wdg ) const	{ return Widget::wdgAt(wdg); }
@@ -873,9 +886,9 @@ void CWidget::setEnable( bool val, bool force )
 
     //Enable heritors widgets
     if(val)
-	for(unsigned i_h = 0; i_h < ownerLWdg().herit().size(); i_h++)
-	    if(!ownerLWdg().herit()[i_h].at().wdgAt(id()).at().enable() && ownerLWdg().herit()[i_h].at().wdgPresent(id()))
-		try { ownerLWdg().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
+	for(unsigned iH = 0; iH < ownerLWdg().herit().size(); iH++)
+	    if(!ownerLWdg().herit()[iH].at().wdgAt(id()).at().enable() && ownerLWdg().herit()[iH].at().wdgPresent(id()))
+		try { ownerLWdg().herit()[iH].at().wdgAt(id()).at().setEnable(true); }
 		catch(...) { mess_err(nodePath().c_str(),_("Inheriting widget '%s' enable error."),id().c_str()); }
 }
 

@@ -198,6 +198,7 @@ class TTrOut: public TTransportOut
 	unsigned mRTSlvl	:1;
 	unsigned mRTSEcho	:1;
 	unsigned mI2C		:1;
+	unsigned mSPI		:1;
 };
 
 //************************************************

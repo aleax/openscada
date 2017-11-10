@@ -45,13 +45,17 @@
 # include <linux/i2c-dev.h>
 #endif
 
+#ifdef HAVE_LINUX_SPI_SPIDEV_H
+# include <linux/spi/spidev.h>
+#endif
+
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Serial"
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.8.0"
+#define MOD_VER		"1.9.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -739,7 +743,7 @@ TTrOut::TTrOut(string name, const string &idb, TElem *el) :
     mMdmTm(30), mMdmLifeTime(30), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmDialStr("ATDT"), mMdmCnctResp("CONNECT"), mMdmBusyResp("BUSY"), mMdmNoCarResp("NO CARRIER"), mMdmNoDialToneResp("NO DIALTONE"),
     mMdmExit("+++"), mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"),
-    mMdmMode(false), mMdmDataMode(false), mRTSfc(false), mRTSlvl(false), mRTSEcho(false), mI2C(false)
+    mMdmMode(false), mMdmDataMode(false), mRTSfc(false), mRTSlvl(false), mRTSEcho(false), mI2C(false), mSPI(false)
 {
     setAddr("/dev/ttyS0:19200:8E2");
     setTimings("640:6");
@@ -845,7 +849,7 @@ void TTrOut::start( int tmCon )
     if(runSt) return;
 
     //Statuses clear
-    mMdmMode = mRTSfc = mRTSlvl = mRTSEcho = mI2C = false;
+    mMdmMode = mRTSfc = mRTSlvl = mRTSEcho = mI2C = mSPI = false;
     trIn = trOut = 0;
     bool isLock = false;
 
@@ -864,16 +868,28 @@ void TTrOut::start( int tmCon )
 
 	// Set serial port parameters
 	struct termios tio;
+	uint8_t spiMode = SPI_MODE_0,
+		spiBits = 8;
+	uint32_t spiSpeed = 500000;
+
 	if(tcgetattr(fd,&tio) < 0) {
 	    string tErr = TSYS::strMess(_("Serial port '%s' %s error: %s."), mDevPort.c_str(), "tcgetattr", strerror(errno));
 #ifdef I2C_SLAVE
-	    //  Try to I2C by set some slave device address
-	    if(ioctl(fd,I2C_SLAVE,0) >= 0) mI2C = true;
+	    //  Try for I2C by set some slave device address
+	    if(ioctl(fd,I2C_SLAVE,0) >= 0)	mI2C = true;
+	    else
+#endif
+#ifdef HAVE_LINUX_SPI_SPIDEV_H
+	    //  Try for SPI ...
+	    if(ioctl(fd,SPI_IOC_WR_MODE,&spiMode) >= 0 && ioctl(fd,SPI_IOC_RD_MODE,&spiMode) >= 0 &&
+		    ioctl(fd,SPI_IOC_WR_BITS_PER_WORD,&spiBits) >= 0 && ioctl(fd,SPI_IOC_RD_BITS_PER_WORD,&spiBits) >= 0 &&
+		    ioctl(fd,SPI_IOC_WR_MAX_SPEED_HZ,&spiSpeed) >= 0 && ioctl(fd,SPI_IOC_RD_MAX_SPEED_HZ,&spiSpeed) >= 0)
+		mSPI = true;
 	    else
 #endif
 		throw TError(nodePath().c_str(), "%s", tErr.c_str());
 	}
-	if(!mI2C) {
+	if(!mI2C && !mSPI) {
 	    tio.c_iflag = 0;
 	    tio.c_oflag = 0;
 	    tio.c_cflag |= (CREAD|CLOCAL);
@@ -1114,8 +1130,8 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 	// Wait for char based timeout
 	if((tmW-mLstReqTm) < (reqRetrMult*wCharTm)) TSYS::sysSleep(1e-6*((reqRetrMult*wCharTm)-(tmW-mLstReqTm)));
 
-	// Input buffer clear
-	if(!noReq && !mI2C) {
+	// Input buffer clean
+	if(!noReq && !mI2C && !mSPI) {
 	    tcflush(fd, TCIOFLUSH);
 	    char tbuf[30]; while(read(fd,tbuf,sizeof(tbuf)) > 0) ;
 	}

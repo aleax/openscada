@@ -1,3 +1,16 @@
+2017-11-10 Roman (stable)
+- !!:DB.LibsDB.OscadaLibs: servProc.docOffLine appended by the document Modules/SNMP for the offline documentaion list. The execution limit rose to 180 seconds.
+    All templates of the library "LowDevLib" fixed for connection to a transport using nodeAt().
+    The templates libary "LowDevLib" appended by a new template "BME280" of the chip BME280 support implementation from Arcadiy Kisel.
+- !:DOC: "Program Manual" started to revision ongoing of it translation to Ukrainian. Appended by Modules/SNMP.
+- SYS,DAQ.SNMP: Some original messages were fixed.
+- SYS.Function: Number of calculations of internal procedures set to 1 again, by default.
+- SYS.Security: In hashed passwords their allowed to store in plain, mostly for the storages which are primarily in edition.
+- !!:Transport.Serial: Expanded for initial support the bus "SPI".
+- UI.{VCAEngine,Vision}: Deleted widgets from inherited containers resoring was added at alike widget creation try, instead incomprehensible messages.
+    That is the first service used the warnings mechanism of the control interfase of OpenSCADA!
+
+
 2017-11-03 Roman (stable)
 - !!!!:DOC: OpenSCADA switched to a new scheme of the project off-line documentation forming directly from the project Wiki just by the OpenSCADA procedure "docOffLine" execution.
     Then folders doc/{en,uk,ru} of the source texts tree of the project were cleaned from previous old documentation in PDF and generated for a new one in HTML.

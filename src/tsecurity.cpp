@@ -391,6 +391,18 @@ TSecurity &TUser::owner( ) const	{ return *(TSecurity*)nodePrev(); }
 
 string TUser::tbl( )			{ return string(owner().subId())+"_user"; }
 
+bool TUser::cfgChange( TCfg &co, const TVariant &pc )
+{
+#if defined(HAVE_CRYPT_H)
+    //Check password at it loading and changing for plain one to generate its hash
+    if(co.name() == "PASS" && co.getS() != pc.getS() && co.getS().compare(0,4+name().size(),"$1$"+name()+"$") != 0)
+	setPass(co.getS());
+#endif
+
+    modif();
+    return true;
+}
+
 void TUser::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
