@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tconfig.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -229,7 +229,7 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const stri
 //*************************************************
 //* TCfg                                          *
 //*************************************************
-TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mExtVal(false), mOwner(owner)
+TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mExtVal(false), mInCfgCh(false), mOwner(owner)
 {
     //Chek for self field for dinamic elements
     if(fld.flg()&TFld::SelfFld) {
@@ -248,7 +248,7 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl
     if(fld.flg()&TCfg::Hide)	mView = false;
 }
 
-TCfg::TCfg( const TCfg &src ) : mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mExtVal(false), mOwner(src.mOwner)
+TCfg::TCfg( const TCfg &src ) : mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mExtVal(false), mInCfgCh(false), mOwner(src.mOwner)
 {
     //Chek for self field for dinamic elements
     if(src.mFld->flg()&TFld::SelfFld) {
@@ -380,13 +380,16 @@ void TCfg::setS( const string &ival )
 	    }
 	    else TVariant::setS(ival);
 	    mOwner.mRes.unlock();
+	    bool mInCfgCh_ = mInCfgCh;
 	    try {
-		if(!mOwner.cfgChange(*this,tVal)) {
+		if(!mInCfgCh && (mInCfgCh=true) && !mOwner.cfgChange(*this,tVal)) {
 		    mOwner.mRes.lock();
 		    TVariant::setS(tVal);
 		    mOwner.mRes.unlock();
 		}
+		if(!mInCfgCh_)	mInCfgCh = false;
 	    } catch(TError &err) {
+		if(!mInCfgCh_)	mInCfgCh = false;
 		mOwner.mRes.lock();
 		TVariant::setS(tVal);
 		mOwner.mRes.unlock();
@@ -409,8 +412,16 @@ void TCfg::setR( double ival )
 		ival = vmin(mFld->selValR()[1], vmax(mFld->selValR()[0],ival));
 	    double tVal = TVariant::getR();
 	    TVariant::setR(ival);
-	    try{ if(!mOwner.cfgChange(*this,tVal)) TVariant::setR(tVal); }
-	    catch(TError &err) { TVariant::setR(tVal); throw; }
+	    bool mInCfgCh_ = mInCfgCh;
+	    try {
+		if(!mInCfgCh && (mInCfgCh=true) && !mOwner.cfgChange(*this,tVal)) TVariant::setR(tVal);
+		if(!mInCfgCh_)	mInCfgCh = false;
+	    }
+	    catch(TError &err) {
+		if(!mInCfgCh_)	mInCfgCh = false;
+		TVariant::setR(tVal);
+		throw;
+	    }
 	    break;
 	}
 	default: break;
@@ -428,8 +439,16 @@ void TCfg::setI( int64_t ival )
 		ival = vmin(mFld->selValI()[1], vmax(mFld->selValI()[0],ival));
 	    int tVal = TVariant::getI();
 	    TVariant::setI(ival);
-	    try{ if(!mOwner.cfgChange(*this,tVal)) TVariant::setI(tVal); }
-	    catch(TError &err) { TVariant::setI(tVal); throw; }
+	    bool mInCfgCh_ = mInCfgCh;
+	    try {
+		if(!mInCfgCh && (mInCfgCh=true) && !mOwner.cfgChange(*this,tVal)) TVariant::setI(tVal);
+		if(!mInCfgCh_)	mInCfgCh = false;
+	    }
+	    catch(TError &err) {
+		if(!mInCfgCh_)	mInCfgCh = false;
+		TVariant::setI(tVal);
+		throw;
+	    }
 	    break;
 	}
 	default: break;
@@ -445,8 +464,16 @@ void TCfg::setB( char ival )
 	case TVariant::Boolean: {
 	    bool tVal = TVariant::getB();
 	    TVariant::setB(ival);
-	    try { if(!mOwner.cfgChange(*this,tVal)) TVariant::setB(tVal); }
-	    catch(TError &err) { TVariant::setB(tVal); throw; }
+	    bool mInCfgCh_ = mInCfgCh;
+	    try {
+		if(!mInCfgCh && (mInCfgCh=true) && !mOwner.cfgChange(*this,tVal)) TVariant::setB(tVal);
+		if(!mInCfgCh_)	mInCfgCh = false;
+	    }
+	    catch(TError &err) {
+		if(!mInCfgCh_)	mInCfgCh = false;
+		TVariant::setB(tVal);
+		throw;
+	    }
 	    break;
 	}
 	default: break;

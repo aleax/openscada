@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tconfig.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -121,6 +121,7 @@ class TCfg : public TVariant
 	uint8_t	mExtVal		: 1;	//Double value mode: For key and translation processing,
 					//where TVariant type force to String and value separated by one value (set for key)
 					//and two value (base for key) by 0 symbol
+	uint8_t	mInCfgCh	: 1;
 
 	TFld	*mFld;
 	TConfig	&mOwner;

@@ -9699,7 +9699,7 @@ if(t_err.toInt() && !f_err.toInt())
 f_err = t_err;',1509908745);
 INSERT INTO "tmplib_LowDevLib" VALUES('BME280','I2C: BME280','I2C Pressure, Temperature and Humidity sensor. Connect through a Serial output transport into the I2C mode.
 Author: Arcadiy Kisel, Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Initial set
 if(f_start) {
 	f_err = "0";
@@ -9712,7 +9712,7 @@ t_err = "0";
 
 //Check for the transport change and connect
 if(!tr || transport != transport_)	{
-	tr = SYS.Transport.SerialnodeAt("out_"+transport);
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 	transport_ = transport;
 }
 if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
