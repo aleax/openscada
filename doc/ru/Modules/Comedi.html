@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/Comedi - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/Comedi</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FComedi&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Comedi" title="Modules/Comedi">Modules/Comedi</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Comedi" title="Modules/Comedi (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Comedi/uk" title="Модулі/Comedi (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/Comedi.html" title="Special:MyLanguage/Modules/Comedi">Comedi</a> </td>
+<td> DAQ платы от Comedi </td>
+<td> 1.0 </td>
+<td> GPL2 </td>
+<td> daq_Comedi.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Роман Савоченко </td>
+<td> Коллекция ISA, PCI, PCMCIA, USB DAQ плат от Comedi (<a class="external free" href="http://www.comedi.org" rel="nofollow noreferrer noopener" target="_blank">http://www.comedi.org</a>).
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">1</span> <span class="toctext">Объект контроллера</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">2</span> <span class="toctext">Объект параметры контроллера</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">3</span> <span class="toctext">Замечания</span></a></li>
+</ul>
+</div>
+
+<p>Модуль предоставляет в OpenSCADA поддержку источников данных реального времени, основанных на платах сбора данных (DAQ) различных производителей, устанавливаемых на шины: ISA, PCI, PCMCIA и USB. Реализация драйверов всего поддерживаемого разнообразия плат на стороне ядра Linux, а также библиотека прикладного уровня, предоставляется проектом <a class="external text" href="http://comedi.org" rel="nofollow noreferrer noopener" target="_blank">Comedi</a>. Полный перечень поддерживаемых плат, модулей к ядру Linux, проектом <b>Comedi</b>, а значит и данным модулем можно получить по ссылке: <a class="external free" href="http://comedi.org/hardware.html" rel="nofollow noreferrer noopener" target="_blank">http://comedi.org/hardware.html</a>.
+</p><p>В рамках проекта <b>Comedi</b> осуществлена унификация интерфейса доступа к данным плат на уровне типа данных, что позволяет, реализовав работу с типичными данными плат такого рода, не заботиться в дальнейшем о поддержке нового оборудования, на стороне данного модуля. В текущей версии данного модуля реализована поддержка типов данных: AI (режим прямого опроса без FIFO), AO, DI, DO, DIO.
+</p><p>Модулем реализуются функции горизонтального резервирования, а именно совместной работы с удалённой станцией этого-же уровня.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">1</span> Объект контроллера</span></h2>
+<p>DAQ—платы посредством библиотеки <b>Comedi</b> в OpenSCADA конфигурируются путём создания объекта контроллера (рис.1), как контейнера объектов параметров — плат DAQ.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:663px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_cntr_ru.png"><img class="thumbimage" height="605" src="../files/Comedi_cntr_ru.png" width="661" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфигурации объекта контроллера.</div></div></div></div>
+<p>С помощью этой формы можно установить:
+</p>
+<ul><li> Состояние контроллера, а именно: Статус, "Включен", "Запущен" и имя БД, содержащей конфигурацию.</li>
+<li> Идентификатор, имя и описание контроллера.</li>
+<li> Состояние, в которое переводить контроллер при загрузке: "Включен" и "Запущен".</li>
+<li> Имя таблицы в БД для хранения конфигурации параметров данного контроллера.</li>
+<li> Политику планирования и приоритет задачи опроса. </li></ul>
+<p>Нужно отметить, что опрос данных в основном осуществляется в синхронном режиме, однако для некоторых плат аналоговых входов (AI-АЦП) может быть более оптимальным асинхронных режим, что связано с продолжительным временем установки значения после переключения канала мультиплексора. Так, на плате Advantech PCL-813B это время составляет 5мс.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">2</span> Объект параметры контроллера</span></h2>
+<p>Объект параметра является непосредственным представителем-отражением DAQ-платы, который содержит набор атрибутов с типами и количеством, зависимым от конкретно взятой платы. Вкладка конфигурации объекта параметра представлена на рис.2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_prm_ru.png"><img class="thumbimage" height="586" src="../files/Comedi_prm_ru.png" width="687" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфигурации параметра — DAQ платы.</div></div></div></div>
+<p>С помощью формы конфигурации объекта параметра можно установить:
+</p>
+<ul><li> Состояние параметра, а именно "Включен" и тип параметра.</li>
+<li> Идентификатор, имя и описание параметра.</li>
+<li> Состояние, в которое переводить параметр при загрузке: "Включен".</li>
+<li> Адрес устройства платы. Содержит путь к устройству платы. В случае наличия в системе корректно загруженных модулей ядра Linux для плат из коллекции <b>Comedi</b> их адреса устройств будут доступны для выбора.</li>
+<li> Асинхронное чтение. Включает режим чтение данных в цикле задачи контроллера, вместо чтения по требованию (Синхронный режим).</li></ul>
+<p>Вкладка "Атрибуты" для платы ACL-8113 приведена на рис.3. Для данных некоторых типов может быть доступна вкладка "Конфигурация". Например, для плат аналоговых входов эта вкладка (рис.4) содержит таймаут установки значения и выбор диапазона каждого канала.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_prmAttr_ru.png"><img class="thumbimage" height="586" src="../files/Comedi_prmAttr_ru.png" width="687" /></a>  <div class="thumbcaption">Рис.3. Вкладка "Атрибуты" параметра платы "ACL-8113".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_prmCfg_ru.png"><img class="thumbimage" height="586" src="../files/Comedi_prmCfg_ru.png" width="687" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Конфигурация" параметра платы "ACL-8113".</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">3</span> Замечания</span></h2>
+<p>Для сборки и работы данного модуля нужна только библиотека <i>comedilib</i>, которая присутствует в репозиториях большинства дистрибутивов. Однако модули драйверов плат нужно собирать отдельно, а архив можно загрузить здесь: <a class="external free" href="http://comedi.org/download.html" rel="nofollow noreferrer noopener" target="_blank">http://comedi.org/download.html</a>.
+</p><p>Работа данного модуля проверена на следующих платах:
+</p>
+<ul><li> Advantech PCL-725, PCL-726</li>
+<li> ADLink ACL-8113</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

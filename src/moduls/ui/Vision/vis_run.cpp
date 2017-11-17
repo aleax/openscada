@@ -1248,7 +1248,7 @@ string	VisRun::lang( )
 
 void VisRun::messUpd( )
 {
-    setWindowTitle(_("Vision runtime"));
+    //setWindowTitle(_("Vision runtime"));
 
     //Close
     actClose->setText(_("&Close"));
@@ -1814,7 +1814,7 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
     QImage ico_t;
     if(!ico.empty()) {
 	ico = owner()->masterPg()->resGet(ico);
-	ico_t.loadFromData((const uchar*)ico.data(),ico.size());
+	ico_t.loadFromData((const uchar*)ico.data(), ico.size());
     }
     if(ico_t.isNull() && !ico_t.load(TUIS::icoGet("alarmAlarm",NULL,true).c_str())) ico_t.load(":/images/alarmAlarm.png");
     if(name.empty()) name = TSYS::strMess(_("Notyfier %d"), tp);

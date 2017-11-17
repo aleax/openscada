@@ -30,7 +30,7 @@ License: GPL','techApp','Технологічні апарати','Моделі 
 Лицензия: GPL',0);
 INSERT INTO "UserFuncLibs" VALUES('servProc','Service procedures','Library of service procedures for different using.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0
+Version: 1.1.1
 License: GPL','lib_servProc','Сервісні процедури','Бібліотека різноманітних сервісних процедур.','Сервисные процедуры','Библиотека различных сервисных процедур.',1);
 INSERT INTO "UserFuncLibs" VALUES('doc','Report''s documents','Library of functions to facilitate the implementation of typical computations the primitive form of reporting documentation VCA "Document".
 Founded: January 2008
@@ -310,6 +310,10 @@ Modules/ModBus:en,uk,ru:Modules/ModBus.html
 Modules/DCON:en,uk,ru:Modules/DCON.html
 Modules/OPC_UA:en,uk,ru:Modules/OPC_UA.html
 Modules/SNMP:en,uk,ru:Modules/SNMP.html
+Modules/ICP_DAS:en,uk,ru:Modules/ICP_DAS.html
+Modules/Siemens:en,uk,ru:Modules/Siemens.html
+Modules/DiamondBoards:en,uk,ru:Modules/DiamondBoards.html
+Modules/Comedi:en,uk,ru:Modules/Comedi.html
 Modules/FSArch:en,uk,ru:Modules/FSArch.html
 Modules/DBArch:en,uk,ru:Modules/DBArch.html
 Modules/FLibSYS:en,uk,ru:Modules/FLibSYS.html',0,3,'','','','');
@@ -2937,6 +2941,11 @@ INSERT INTO "Trs" VALUES('Get data after %1 tries error.','','');
 INSERT INTO "Trs" VALUES('None of good battery present','','');
 INSERT INTO "Trs" VALUES('Error for ''%1'' as an output transport of I2C or a link to external functions of GPIO.','','');
 INSERT INTO "Trs" VALUES('Empty','Порожньо','Пусто');
+INSERT INTO "Trs" VALUES('Wrong or empty respond to the calibration T1-3 or P1-9 request.','','');
+INSERT INTO "Trs" VALUES('Wrong or empty respond to the calibration H1 request.','','');
+INSERT INTO "Trs" VALUES('Wrong or empty respond to the calibration H2-H6 request.','','');
+INSERT INTO "Trs" VALUES('Wrong or empty respond to the pressure data.','','');
+INSERT INTO "Trs" VALUES('Wrong or empty respond to the humidity data.','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -6861,7 +6870,7 @@ ibuf = DBTbl[1][0];
 //	"//Описание:// Осуществляет вызовы консольных команд ОС. Функция открывает широкие возможности пользователю ~OpenSCADA путём вызова любых системных программ, утилит и скриптов, а также получения посредством них доступа к огромному объёму системных данных. Например команда \"ls -l\" вернёт детализированное содержимое рабочей директории.\n"
 //	"//Параметры://";
 obuf = "";
-tblIn = tblInRow = formIt = formBold = formAlert = formSup = false;
+tblIn = tblInRow = formIt = formBold = formAlert = formSup = formUndrLn = false;
 for(pos = 0; pos < ibuf.length; ) {
 	//if(ln.search(new RegExp("script","i"))
 	stLine = (pos == 0 || ibuf[pos-1] == "\n");
@@ -6912,8 +6921,18 @@ for(pos = 0; pos < ibuf.length; ) {
 		if(!formBold && ln.match("\\*\\*","g").length > 1) { obuf += "''''''"; formBold = true; pos += 2; continue; }
 		if(formBold)	{ obuf += "''''''"; formBold = false; pos += 2; continue; }
 	}
+	if(twos == "__") {
+		if(!formUndrLn && ln.match("__","g").length > 1) { obuf += "<u>"; formUndrLn = true; pos += 2; continue; }
+		if(formUndrLn)	{ obuf += "</u>"; formUndrLn = false; pos += 2; continue; }
+	}
 	if(twos == "!!") {
-		if(!formAlert && ln.match("!!","g").length > 1) { obuf += "<span style=\"color: red\">"; formAlert = true; pos += 2; continue; }
+		if(!formAlert && ln.match("!!","g").length > 1) {
+			mr = ln.match("^!!\\s*\\(([^\\)]+)\\)");
+			obuf += "<span style=\"color: "+(mr.length?mr[1]:"red")+"\">";
+			formAlert = true;
+			pos += mr.length ? mr[0].length : 2;
+			continue;
+		}
 		if(formAlert)	{ obuf += "</span>"; formAlert = false; pos += 2; continue; }
 	}
 	if(twos == "^^") {
@@ -6921,7 +6940,7 @@ for(pos = 0; pos < ibuf.length; ) {
 		if(formSup)	{ obuf += "</sup>"; formSup = false; pos += 2; continue; }
 	}
 	// Lists
-	if(stLine && (mr=ln.match("^ {2,}+\\*")).length) {
+	if(stLine && (mr=ln.match("^ {2,}+[\\*-]")).length && ((mr[0].length-1)%2) == 0) {
 		for(iS = 0; iS < (mr[0].length-1); iS += 2)	obuf += "*";
 		pos += mr[0].length; continue;
 	}
@@ -6934,8 +6953,8 @@ for(pos = 0; pos < ibuf.length; ) {
 	obuf += ibuf[pos]; pos++;
 }
 
-return obuf;','','',1509372937);
-INSERT INTO "lib_servProc" VALUES('docOffLine','Off-line documentation','','','','','',1,180,0,'trNm = "offLine";
+return obuf;','','',1510947218);
+INSERT INTO "lib_servProc" VALUES('docOffLine','Off-line documentation','','','','','',1,240,0,'trNm = "offLine";
 docHost = "oscada.org:80";
 docHost_ = "http://" + docHost.parse(0, ":");
 defLang = "en";
@@ -7085,7 +7104,7 @@ for(var ip in pgsOprc) {
 	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
 }
 
-res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1509717430);
+res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1510949176);
 CREATE TABLE 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library "FLibComplex1" (http://wiki.oscada.org/HomePageEn/Doc/FLibComplex1#h902-15) and the implementation of the PWM for the pulse part.','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" (http://wiki.oscada.org/Doc/FLibComplex1#h91-15) и реализация ШИМ для импульсной части.',1,10,0,'//Call standard analog PID
 outA = Special.FLibComplex1.pid(var,sp,max,min,manIn,auto,casc,Kp,Ti,Kd,Td,Tzd,Hup,Hdwn,Zi,followSp,K1,in1,K2,in2,K3,in3,K4,in4,f_frq,int,dif,lag);
@@ -9738,7 +9757,7 @@ else {
 		if(resp.length != 7) t_err = "3:"+tr("Wrong or empty respond to the calibration H2-H6 request.");
 		else {
 			dig_H2 = resp.read("int16", 1);
-			dig_H3 = resp.read("unt8", 1);
+			dig_H3 = resp.read("uint8", 1);
 
 			E4 = resp.read("int8", 1);
 			E5 = resp.read("int8", 1);
@@ -9768,7 +9787,7 @@ else {
 		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xFA), 0, 4);
 		if(resp.length != 4) t_err = "3:"+tr("Wrong or empty respond to the temperature data.");
 		else {
-			adc_T = resp.read("int32", 1) >> 12; //8 бит т.к. прочли четвертый "лишний" байт. 4 бит по даташиту
+			adc_T = resp.read("uint32", 1) >> 12; //8 бит т.к. прочли четвертый "лишний" байт. 4 бит по даташиту
 			var1 = (adc_T/16384 - dig_T1/1024)*dig_T2;
 			var2 = ((adc_T/131072 - dig_T1/8192)*(adc_T/131072 - dig_T1/8192))*dig_T3;
 			t_fine = var1 + var2; //for pressure
@@ -9783,7 +9802,7 @@ else {
 		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF7), 0, 4);
 		if(resp.length != 4) t_err = "3:"+tr("Wrong or empty respond to the pressure data.");
 		else {
-			adc_P = resp.read("int32", 1) >> 12; //8 бит т.к. прочли четвертый "лишний" байт. 4 бит по даташиту
+			adc_P = resp.read("uint32", 1) >> 12; //8 бит т.к. прочли четвертый "лишний" байт. 4 бит по даташиту
 			
 			var1 = t_fine/2 - 64000;
 			var2 = var1*var1*dig_P6/32768;
@@ -9808,7 +9827,7 @@ else {
 		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xFD), 0, 2);
 		if(resp.length != 2) t_err = "3:"+tr("Wrong or empty respond to the humidity data.");
 		else {
-			adc_H = resp.read("int16", 1);
+			adc_H = resp.read("uint16", 1);
 			
 			h = t_fine - 76800;
 			h = (adc_H - (dig_H4*64 + dig_H5/16384*h))*(dig_H2/65536*(1 + dig_H6/67108864*h*(1 + dig_H3/67108864*h)));

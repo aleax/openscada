@@ -1,3 +1,18 @@
+2017-11-17 Roman (stable)
+- FIX:DB.LibsDB.OscadaLibs: LowDevLib.BME280 next some fixed by Arcadiy Kisel.
+    FIX: servProc.wacko2media appended for processing "__", "!!(color)!!" and fixed for unpaired paddings before list symbol "   *".
+    servProc.docOffLine appended by the documents Modules/{ICP_DAS,Siemens,DiamondBoards,Comedi} for the offline documentaion list. The execution limit next rose to 240 seconds.
+- DB.LibsDB.vcaBase: Main.cntrPaspExt expanded to parameter name into the tittle.
+- !:DOC: "Program Manual" continued to revision ongoing of it translation to Ukrainian. Appended by Modules/{ICP_DAS,Siemens,DiamondBoards,Comedi}.
+- SYS: --enable-QtMainThrd set conditional in it default value that is "yes" for Qt5 and "no" for Qt4.
+- FIX:Archive.FSArch: Translation to German some fixed by Alexey Bondarchuk.
+- !!:FIX:DAQ.{DCON,ModBus,Siemens}: Mutex objects "enRes" and "reqRes" set to recursive ones by Alexey Bondarchuk.
+- Special.SystemTests: The name and description some expanded.
+- !!:FIX:UI.Vision: Main window restored for correct title into the runtime mode.
+    !!:FIX:View "Text" of the primitive "FormEl" fixed for crashes at placing on external windows of the runtime mode.
+    Spare Mutex Objects removed from the object "UserStBar".
+
+
 2017-11-14 Roman (stable)
 - FIX:DB.LibsDB.OscadaLibs: LowDevLib.BME280 fixed from SYS.Transport.SerialnodeAt().
 - !!:SYS.TConfig: Prevented from recursive entry to cfgChange() by flag mInCfgCh.

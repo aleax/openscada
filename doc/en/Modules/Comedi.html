@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/Comedi - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/Comedi</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FComedi&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Comedi" title="Modules/Comedi (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Comedi/ru" title="Модули/Comedi (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Comedi/uk" title="Модулі/Comedi (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/Comedi.html" title="Special:MyLanguage/Modules/Comedi">Comedi</a> </td>
+<td> DAQ boards by Comedi </td>
+<td> 1.0 </td>
+<td> GPL2 </td>
+<td> daq_Comedi.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko </td>
+<td> ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi (<a class="external free" href="http://www.comedi.org" rel="nofollow noreferrer noopener" target="_blank">http://www.comedi.org</a>).
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Controller_object"><span class="tocnumber">1</span> <span class="toctext">Controller object</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#The_controller.27s_parameter_object"><span class="tocnumber">2</span> <span class="toctext">The controller's parameter object</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Notes"><span class="tocnumber">3</span> <span class="toctext">Notes</span></a></li>
+</ul>
+</div>
+
+<p>The module provides the OpenSCADA system with the support data sources of realtime, which based on data acquisition boards (DAQ) from different manufacturers, installed on the buses: ISA, PCI, PCMCIA and USB. Drivers implementation for all supported variety boards on Linux kernel side, and also application level library, provided by project <a class="external text" href="http://comedi.org" rel="nofollow noreferrer noopener" target="_blank">Comedi</a>. Full supported boards list, modules to Linux kernel, by project <b>Comedi</b>, also and the module you can get by link: <a class="external free" href="http://comedi.org/hardware.html" rel="nofollow noreferrer noopener" target="_blank">http://comedi.org/hardware.html</a>.
+</p><p>Into <b>Comedi</b> project the unified interface implemented for access to boards data on types data level, that allows, made doing with typical data the boards, not to care further about new hardware supporting on the module side. In current version of the module implemented support for data types: AI (simple poll mode without FIFO), AO, DI, DO, DIO.
+</p><p>The module implements the functions of the horizontal reservation, namely, working in conjunction with the remote station of the same level.
+</p>
+<h2><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">1</span> Controller object</span></h2>
+<p>DAQ—boards by library <b>Comedi</b> into OpenSCADA configured with new controller object creation (Fig.1), the container parameters' objects — DAQ boards.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:726px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_cntr.png"><img class="thumbimage" height="585" src="../files/Comedi_cntr.png" width="724" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller object.</div></div></div></div>
+<p>From this tab you can set:
+</p>
+<ul><li> The state of the controller, as follows: Status, "Enable", "Run" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the controller.</li>
+<li> The state, in which the controller must be translated at boot: "To enable" and "To start".</li>
+<li> Name of table to store the configuration of the parameters of the controller. </li>
+<li> The acquisition schedule policy and the priority of the task of data acquisition. </li></ul>
+<p>It should be noted that the acquisition data is mainly done in synchronous mode, but for some modules of analog inputs (AI-ADC) that would be optimal asynchronous mode, due to the length of time for value setting after switching a multiplexor channel. For board Advantech PCL-813B the time is 5ms.
+</p>
+<h2><span class="mw-headline" id="The_controller.27s_parameter_object"><span class="mw-headline-number">2</span> The controller's parameter object</span></h2>
+<p>The parameter object is a direct representative-reflection for DAQ-board, which contained attributes set with types and it quantity depending from specific board. Parameter's object configuration tab is shown in Figure 2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_prm_ru.png"><img class="thumbimage" height="586" src="../files/Comedi_prm_ru.png" width="687" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a parameter — a DAQ board.</div></div></div></div>
+<p>With the parameter's object configuration tab you can set:
+</p>
+<ul><li> The state of the parameter "Enable" and type.</li>
+<li> Id, name and description of the parameter.</li>
+<li> The state, in which the parameter must be translated at boot: "To enable".</li>
+<li> Address to board's device. Contains the path to the device board. For correct loaded modules to Linux kernel, from <b>Comedi</b> collection, this addresses will allow for select.</li>
+<li> Asynchronous reading. Enable data acquisition into the controller's task cycle, instead reading on demand (Synchronous mode).</li></ul>
+<p>Tab "Attributes" for board ACL-8113 is shown in Figure 3. For some types of data can be accessed "Configuration" tab. For example, this tab (Fig.4) for boards with analog inputs has the values set timeout and ranges selection for each channel.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_prmAttr_ru.png"><img class="thumbimage" height="586" src="../files/Comedi_prmAttr_ru.png" width="687" /></a>  <div class="thumbcaption">Fig.3. Tab "Attributes" of a parameter of the board "ACL-8113".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_prmCfg_ru.png"><img class="thumbimage" height="586" src="../files/Comedi_prmCfg_ru.png" width="687" /></a>  <div class="thumbcaption">Fig.4. Tab "Configuration" of a parameter of the board "ACL-8113".</div></div></div></div>
+<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">3</span> Notes</span></h2>
+<p>To build and work of the module only needs library <i>comedilib</i> which is present in most distributions repositories. However, the drivers modules need build separately, and its archive you can download here: <a class="external free" href="http://comedi.org/download.html" rel="nofollow noreferrer noopener" target="_blank">http://comedi.org/download.html</a>.
+</p><p>The module work is tested on the following boards:
+</p>
+<ul><li> Advantech PCL-725, PCL-726</li>
+<li> ADLink ACL-8113</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

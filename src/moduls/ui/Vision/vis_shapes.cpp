@@ -333,7 +333,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    }
 	    case F_TEXT_ED: {
 		TextEdit *wdg = (TextEdit*)shD->addrWdg;
-		if(!wdg || !qobject_cast<TextEdit*>(wdg) || (runW && wdg->lang != ((VisRun*)runW->window())->lang())) {
+		if(!wdg || !qobject_cast<TextEdit*>(wdg) || (runW && wdg->lang != ((VisRun*)runW->mainWin())->lang())) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new TextEdit(w, !shD->mode);
 		    if(runW) connect(wdg, SIGNAL(apply()), this, SLOT(textAccept()));

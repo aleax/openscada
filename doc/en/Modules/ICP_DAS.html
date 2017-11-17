@@ -1,0 +1,1081 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/ICP DAS - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/ICP DAS</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FICP+DAS&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/ICP_DAS" title="Modules/ICP DAS (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/ICP_DAS/ru" title="Модули/ICP-DAS (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/ICP_DAS/uk" title="Модулі/ICP-DAS (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a> </td>
+<td> ICP DAS hardware </td>
+<td> 1.8 </td>
+<td> GPL2 </td>
+<td> daq_ICP_DAS.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,ARM
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Provides implementation for "ICP DAS" hardware support. Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Data_controller"><span class="tocnumber">1</span> <span class="toctext">Data controller</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Parameters"><span class="tocnumber">2</span> <span class="toctext">Parameters</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#The_modules_I-8xxx_series"><span class="tocnumber">2.1</span> <span class="toctext">The modules I-8xxx series</span></a>
+<ul>
+<li class="toclevel-3 tocsection-4"><a href="#Controllers_LP-8xxx_series_configuration"><span class="tocnumber">2.1.1</span> <span class="toctext">Controllers LP-8xxx series configuration</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#Module_I-8014_and_I-8017"><span class="tocnumber">2.1.2</span> <span class="toctext">Module I-8014 and I-8017</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#Digital_input_and_output_values_inversion"><span class="tocnumber">2.1.3</span> <span class="toctext">Digital input and output values inversion</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-7"><a href="#Module_I-87xxx_series"><span class="tocnumber">2.2</span> <span class="toctext">Module I-87xxx series</span></a>
+<ul>
+<li class="toclevel-3 tocsection-8"><a href="#Abstract_module_I-87xxx_series"><span class="tocnumber">2.2.1</span> <span class="toctext">Abstract module I-87xxx series</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#Channel_type_select_for_AI"><span class="tocnumber">2.2.2</span> <span class="toctext">Channel type select for AI</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#Host_watchdog_and_default_values_for_power_on_and_by_watchdog_event"><span class="tocnumber">2.2.3</span> <span class="toctext">Host watchdog and default values for power on and by watchdog event</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-11"><a href="#Boards_on_bus_ISA"><span class="tocnumber">2.3</span> <span class="toctext">Boards on bus ISA</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Links"><span class="tocnumber">3</span> <span class="toctext">Links</span></a></li>
+</ul>
+</div>
+
+<p>The module provides the OpenSCADA system with the support of various equipment of "ICP DAS" company (<a class="external free" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">http://www.icpdas.com</a>) through the API library <i>libi8k.a</i> from the company, for modules <i>I-87xxx</i> and <i>I-8xxx</i>, and direct <i>ioctl</i> calls to Linux kernel modules for boards on bus <i>ISA</i>.
+</p><p>Most of the equipment of the "ICP DAS" company is working under the <i>DCON</i> protocol, but some new equipment such as <i>I-8xxx</i> Series operates on a parallel bus, while another part is set into the parallel bus slots (<i>I-87xxx</i>) which are available under the serial interface and <i>DCON</i> protocol, they are not addressed directly and require call of the specialized command of the slot selection. Access to equipment that uses direct requests under the <i>DCON</i> protocol, can be implemented by the module <a href="../Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>. Support for the rest of the equipment is not added to the module <a href="../Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>, but it was implemented in this module due to the availability of API library of the "ICP DAS" company only for the <i>x86_32</i> and <i>ARM(OABI, HardFloatFPA)</i> platform, which brings restrictions on access to the equipment of the ICP DAS company and other equipment under the <i>DCON</i> protocol on the other hardware platforms.
+</p><p>The reason for creating this module was the works with the controller <i>LP-8781</i> of "LinPAC" series of "ICP DAS" company with the purpose to implement runtime PLC based on the OpenSCADA system.
+</p><p>API library of the "ICP DAS" company for platform <i>x86_32 -&gt; libi8k.a</i> and <i>ARM(OABI, HardFloatFPA) -&gt; libi8k_arm.a</i> is available with source code of the module and does not require separate installation.
+</p>
+<h2><span class="mw-headline" id="Data_controller"><span class="mw-headline-number">1</span> Data controller</span></h2>
+<p>To add the "ICP DAS" data source the controller is created and configured in the <i>OpenSCADA</i> system. Example of the configuration tab of the controller of this type is shown in Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:660px;"><a class="image" href="http://oscada.org/wiki/File:ICP_cntr.png"><img class="thumbimage" height="642" src="../files/ICP_cntr.png" width="658" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller.</div></div></div></div>
+<p>From this tab you can set:
+</p>
+<ul><li> State of the controller, namely: the status, "Enable" and "Run" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the controller.</li>
+<li> The state, in which the controller must be translated at boot: "To enable" and "To start".</li>
+<li> Name of table to store the configuration of the parameters of the controller.</li>
+<li> The calls planing policy and the priority of the task of data acquisition.</li>
+<li> Bus, on which the modules/boards are placed. If you specify a serial interface (COM {X}), then access is made under the protocol <i>DCON</i>. If the main controller bus is <i>LP-8xxx</i> the access is made through the parallel bus API or mixed. Bus <i>ISA</i> set allow select boards for bus ISA, from configured boards list.</li>
+<li> Transport through which requests to the serial bus performed. It's allowed on field "Bus" set to "COM {X}". If set "&lt;ICP DAS&gt;" then used the serial requests API from "ICP DAS", by default.</li>
+<li> Data transfer rate for the serial interface. It is indicated for the not main bus and transport "&lt;ICP DAS&gt;".</li>
+<li> Serial request tries.</li></ul>
+<h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
+<p>The module provides only one type of parameters — "Standard" and three groups of modules/boards, accessable dependent from selected bus:
+</p>
+<ul><li> <i>ISA</i> — boards on <i>ISA</i>;</li>
+<li> <i>I-87xxx</i> — modules on serial bus and with protocol <i>DCON</i>, for example into <i>LinPAC</i>;</li>
+<li> <i>I-8xxx</i> — modules on parallel bus, for example into <i>LinPAC</i>.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:660px;"><a class="image" href="http://oscada.org/wiki/File:ICP_prm.png"><img class="thumbimage" height="510" src="../files/ICP_prm.png" width="658" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a parameter.</div></div></div></div>
+<p>The configuration tab of parameter (fig.2) generally equal for all modules/boards groups and contain:
+</p>
+<ul><li> The state of the parameter, namely the type and the status "Enable"</li>
+<li> Id, name and description of the parameter.</li>
+<li> The state, in which the parameter must be translated at boot: "To enable".</li>
+<li> Type of the module/board.</li>
+<li> Address of the module/board. In the case of work not on the main bus (in the decimal value from 0 to 255) or on bus ISA.</li>
+<li> Slot of the module in the case of work with a series of devices <i>I-8xxx</i> and <i>I-87xxx</i>, which set into PLC rack.</li>
+<li> More options of the module, dependent from bus or specific board/module.</li>
+<li> CRC control for the modules series <i>I-87xxx</i> on serial bus.</li></ul>
+<p>In accordance with the parameter settings the poll and the creation of attributes is made (Fig. 3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:660px;"><a class="image" href="http://oscada.org/wiki/File:ICP_prm_atr.png"><img class="thumbimage" height="568" src="../files/ICP_prm_atr.png" width="658" /></a>  <div class="thumbcaption">Fig.3. Tab of attributes of a parameter.</div></div></div></div>
+<h3><span class="mw-headline" id="The_modules_I-8xxx_series"><span class="mw-headline-number">2.1</span> The modules I-8xxx series</span></h3>
+<p>The modules <i>I-8xxx</i> series inserting on parallel bus slot of controller, for example <i>LinPAC</i> series. Into table 1 listed properties modules "ICP DAS" of <i>I-8xxx</i> series, which implemented into <i>OpenSCADA</i>.
+</p><p><b>Table 1</b> Properties of modules <i>I-8xxx</i> series
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> AI </th>
+<th> AO </th>
+<th> DI </th>
+<th> DO </th>
+<th> Notes
+</th></tr>
+<tr>
+<td> I-8014 </td>
+<td> i8014W_ReadAI() or i8014W_ReadFIFO() for mode FIFO(Magic) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-8017 </td>
+<td> I8017_GetCurAdChannel_Float_Cal() </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-8024 </td>
+<td> </td>
+<td> I8024_VoltageOut </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8037 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_16, DO_16_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8040 </td>
+<td> </td>
+<td> </td>
+<td> DI_32 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8041 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_32, DO_32_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8042 </td>
+<td> </td>
+<td> </td>
+<td> DI_16 </td>
+<td> DO_16, DO_16_RB </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-8046 </td>
+<td> </td>
+<td> </td>
+<td> DI_16 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8048 </td>
+<td> </td>
+<td> </td>
+<td> DI_8 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8050 </td>
+<td> </td>
+<td> </td>
+<td> DIO_DI_16 </td>
+<td> DIO_DO_16 </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8051 </td>
+<td> </td>
+<td> </td>
+<td> DI_16 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8052 </td>
+<td> </td>
+<td> </td>
+<td> DI_8 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8053 </td>
+<td> </td>
+<td> </td>
+<td> DI_16 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8054 </td>
+<td> </td>
+<td> </td>
+<td> DI_8 </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8055 </td>
+<td> </td>
+<td> </td>
+<td> DI_8 </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8056 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_16, DO_16_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8057 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_16, DO_16_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8058 </td>
+<td> </td>
+<td> </td>
+<td> DI_8 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8060 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_8 (6), DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8063 </td>
+<td> </td>
+<td> </td>
+<td> DI_8 (4) </td>
+<td> DO_8 (4), DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8064 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8065 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8066 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8068 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8069 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8077 </td>
+<td> </td>
+<td> </td>
+<td> DIO_DI_16 </td>
+<td> DIO_DO_16 </td>
+<td>
+</td></tr></table>
+<h4><span class="mw-headline" id="Controllers_LP-8xxx_series_configuration"><span class="mw-headline-number">2.1.1</span> Controllers LP-8xxx series configuration</span></h4>
+<p>For common properties the controllers series <i>LP-8xxx</i> configuration allowed accordingly "LinPAC" tab on controller's page (Fig.4), and also by parameter "LP-8xxx" (Fig.5). Into parameter "LP-8xxx" you can get information about controller's serial number, SDK version, DIP and Rotary switch value. Into tab "LinPAC" you can set value for controller's watchdog timer. The watchdog timer is disabled by set it to zero value. Watchdog timer's value updated into controller's task and with it period, then the acquisition task hang consequently follow controller's restart! The watchdog value must be greater to the system full loading time, up to OpenSCADA loading, wherein OpenSCADA must be loaded after time sync start.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:668px;"><a class="image" href="http://oscada.org/wiki/File:ICP_cfg_LP8xxx.png"><img class="thumbimage" height="480" src="../files/ICP_cfg_LP8xxx.png" width="666" /></a>  <div class="thumbcaption">Fig.4. Tab "LinPAC" for configuration of controllers the serie "LP-8xxx"</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:668px;"><a class="image" href="http://oscada.org/wiki/File:ICP_prm_LP8xxx.png"><img class="thumbimage" height="480" src="../files/ICP_prm_LP8xxx.png" width="666" /></a>  <div class="thumbcaption">Fig.5. Attributes of the parameter "LP-8xxx".</div></div></div></div>
+<h4><span class="mw-headline" id="Module_I-8014_and_I-8017"><span class="mw-headline-number">2.1.2</span> Module I-8014 and I-8017</span></h4>
+<p>Fast analog input modules that runs on a parallel bus.
+</p><p>The module I-8014 formal provides speed access to data on one channel at 250 kHz by FIFO, however, because of the pledged hardware-program limitations it does not allow to reach speed over 100 kHz per channel when scanning into real-time, by low reading speed from FIFO. In that time the data reading causes the main CPU high load, that is 9.5 microseconds per sample.
+</p><p>The module I-8017 formal provides speed access to data on one channel at 130 kHz, however, because of the pledged hardware-program limitations it does not allow to reach speed over 33 kHz per channel when scanning multiple channels into real-time (by switching). Data expectation is in the blind cycle, which leads to great losses of the CPU at high frequencies of the acquisition.
+</p><p>The modules provides sixteen analog input attributes <i>ai{x}</i> and eight signs of violation of the upper<i> ha{x}</i> and the <i>lower la{x}</i> boundaries, for I-8017. Also "Configuration" tab is available with advanced configuration (Fig.6):
+</p>
+<ul><li> <i>Number of processed parameters</i> — indicates how many inputs to process. It is characteristic for the mode of fast data acquisition and used to limit the number of processed channels, commensurate with used resources of the CPU.</li>
+<li> <i>Frequency of the fast data acquisition (seconds)</i> — indicates how often to carry out fast data acquisition for the number of channels listed above. Fast mode of data acquisition is turned off by indicating zero period.</li>
+<li> Modes of the gain for each input define a the following gains: +-1.25V, +-2.5V, +-5V, +-10V and +-20mA.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:668px;"><a class="image" href="http://oscada.org/wiki/File:ICP_mod_cfg_8017.png"><img class="thumbimage" height="516" src="../files/ICP_mod_cfg_8017.png" width="666" /></a>  <div class="thumbcaption">Fig.6. Tab "Configuration" of the modules I-8014 and I-8017.</div></div></div></div>
+<h4><span class="mw-headline" id="Digital_input_and_output_values_inversion"><span class="mw-headline-number">2.1.3</span> Digital input and output values inversion</span></h4>
+<p>For digital input and output modules, into tab "Configuration" (Fig.7), proposed selectable channel inversion function, that is too comfortably for next work with the channel.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:668px;"><a class="image" href="http://oscada.org/wiki/File:ICP_mod_cfg_DIO.png"><img class="thumbimage" height="532" src="../files/ICP_mod_cfg_DIO.png" width="666" /></a>  <div class="thumbcaption">Fig.7. Tab "Configuration" of digital input and output modules.</div></div></div></div>
+<h3><span class="mw-headline" id="Module_I-87xxx_series"><span class="mw-headline-number">2.2</span> Module I-87xxx series</span></h3>
+<p>The modules <i>I-87xxx</i> series inserting on serial bus slot of controller, for example <i>LinPAC</i> series. Into table 2 listed properties modules "ICP DAS" of <i>I-87xxx</i> series, which implemented into <i>OpenSCADA</i>.
+</p><p><b>Table 2</b> Properties of modules <i>I-87xxx</i> series
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> AI </th>
+<th> AO </th>
+<th> DI </th>
+<th> DO </th>
+<th> Counters </th>
+<th> Notes
+</th></tr>
+<tr>
+<td> I-87005 </td>
+<td> #AA (8); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> @AADODD (8), @AADI </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87013 </td>
+<td> #AA (4); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87015 </td>
+<td> #AA (7); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87016 </td>
+<td> #AA (2); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87017 </td>
+<td> #AA (8); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87017DW </td>
+<td> #AA (16); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87017ZW </td>
+<td> #AA (20); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-87018 </td>
+<td> $AA3; #AA (8); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87018ZW </td>
+<td> $AA3; #AA (10); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87019RW </td>
+<td> $AA3; #AA (8); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-87019ZW </td>
+<td> $AA3; #AA (10); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87022 </td>
+<td> </td>
+<td> #AAN(Data) (2), $AA8N; W: ~AA0-5 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87024 </td>
+<td> </td>
+<td> #AAN(Data) (4), $AA8N; W: ~AA0-5 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-87026 </td>
+<td> </td>
+<td> #AAN(Data) (2), $AA8N; W: ~AA0-5 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87026PW </td>
+<td> #AA (6); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> #AAN(Data) (2), $AA8N; W: ~AA0-5 </td>
+<td> @AADI (2) </td>
+<td> @AADODD (2), @AADI </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87028 </td>
+<td> </td>
+<td> #AAN(Data) (8), $AA8N; W: ~AA0-5 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87037 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (16), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87040 </td>
+<td> </td>
+<td> </td>
+<td> @AA (32) </td>
+<td> </td>
+<td> #AAN (32) </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-87041 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (32), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-87042 </td>
+<td> </td>
+<td> </td>
+<td> @AA (16) </td>
+<td> @AA(Data) (16), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87046 </td>
+<td> </td>
+<td> </td>
+<td> @AA (16) </td>
+<td> </td>
+<td> #AAN (16) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87051 </td>
+<td> </td>
+<td> </td>
+<td> @AA (16) </td>
+<td> </td>
+<td> #AAN (16) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87052 </td>
+<td> </td>
+<td> </td>
+<td> @AA (8) </td>
+<td> </td>
+<td> #AAN (8) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87053 </td>
+<td> </td>
+<td> </td>
+<td> @AA (16) </td>
+<td> </td>
+<td> #AAN (16) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87054 </td>
+<td> </td>
+<td> </td>
+<td> @AA (8) </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> #AAN (8) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87055 </td>
+<td> </td>
+<td> </td>
+<td> @AA (8) </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> #AAN (8) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87057 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (16), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87058 </td>
+<td> </td>
+<td> </td>
+<td> @AA (8) </td>
+<td> </td>
+<td> #AAN (8) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87059 </td>
+<td> </td>
+<td> </td>
+<td> @AA (8) </td>
+<td> </td>
+<td> #AAN (8) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87061 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (16), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87063 </td>
+<td> </td>
+<td> </td>
+<td> @AA (16) </td>
+<td> @AA(Data) (16), @AA; W: ~AA0-5 </td>
+<td> #AAN (16) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87064 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87065 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87066 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87068 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87069 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr></table>
+<h4><span class="mw-headline" id="Abstract_module_I-87xxx_series"><span class="mw-headline-number">2.2.1</span> Abstract module I-87xxx series</span></h4>
+<p>Besides support for modules into table 2 this modules group provide abstract module "I-87xxx" implementation, on select which to user will possible set quantity and types for generic connected module's signals: AI, AO, DI, DO and Counters. The function also selectable accessed for modules which containing signals AO and Counters and allows to limit processed channels quantity, for traffic decrease on the serial interface.
+</p><p>This abstract module "I-87xxx" you can use for modules "ICP DAS" <i>I-7xxx</i> series on "pure" serial bus.
+</p><p>Fields for signals quantity and types set provided into main tab of the parameter object configuration page (Fig.8).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:687px;"><a class="image" href="http://oscada.org/wiki/File:ICP_mod_prm_i87xxx.png"><img class="thumbimage" height="633" src="../files/ICP_mod_prm_i87xxx.png" width="685" /></a>  <div class="thumbcaption">Fig.8. Main tab of parameters of the abstract module "I-87xxx".</div></div></div></div>
+<h4><span class="mw-headline" id="Channel_type_select_for_AI"><span class="mw-headline-number">2.2.2</span> Channel type select for AI</span></h4>
+<p>For analog input modules possible to select mode/gain, which doing from list (Fig.9), if it specified for the module, or direct by mode's code set. The modes saved and stored into the module.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:691px;"><a class="image" href="http://oscada.org/wiki/File:ICP_mod_cfg_AI.png"><img class="thumbimage" height="507" src="../files/ICP_mod_cfg_AI.png" width="689" /></a>  <div class="thumbcaption">Fig.9. Tab "Configuration" of analog inputs modules.</div></div></div></div>
+<h4><span class="mw-headline" id="Host_watchdog_and_default_values_for_power_on_and_by_watchdog_event"><span class="mw-headline-number">2.2.3</span> Host watchdog and default values for power on and by watchdog event</span></h4>
+<p>Modules with analog or digital outputs typical provide host watchdog function. And its sets safe outputs values on host activity miss for specified time. Also the modules allow specify outputs values for power on.
+</p><p>On Figure 10 presented tab for module with analog outputs and functions:
+</p>
+<ul><li> set and control for state the watchdog timer of the module;</li>
+<li> set and control outputs values for power on of the module;</li>
+<li> set and control outputs values for watchdog event of the module;.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:691px;"><a class="image" href="http://oscada.org/wiki/File:ICP_mod_cfg_AO.png"><img class="thumbimage" height="541" src="../files/ICP_mod_cfg_AO.png" width="689" /></a>  <div class="thumbcaption">Fig.10. Tab "Configuration" of analog outputs modules.</div></div></div></div>
+<h3><span class="mw-headline" id="Boards_on_bus_ISA"><span class="mw-headline-number">2.3</span> Boards on bus ISA</span></h3>
+<p>The type boards installed on bus ISA of personal computer. For work with this boards you need build and start drivers-modules for Linux kernel. Into table 3 listed properties boards "ICP DAS" on bus ISA, which implemented into <i>OpenSCADA</i>.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Counters function is not currently implemented into OpenSCADA.
+</p><p><b>Table 3</b> Properties of boards on bus ISA
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> AI </th>
+<th> AO </th>
+<th> DI </th>
+<th> DO </th>
+<th> DIO </th>
+<th> Counters </th>
+<th> Notes
+</th></tr>
+<tr>
+<td> A-626 </td>
+<td> </td>
+<td> IXISA_AO{0...5} </td>
+<td> IXISA_DI_{A...B} </td>
+<td> IXISA_DO_{A...B} </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> A-628 </td>
+<td> </td>
+<td> IXISA_AO{0...7} </td>
+<td> IXISA_DIO_{A...B} </td>
+<td> IXISA_DIO_{A...B} </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> A-8111 </td>
+<td>
+<p>IXISA_AI (8,12)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADMCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> IXISA_AO{0...1} </td>
+<td> IXISA_DI{L,H} </td>
+<td> IXISA_DO{L,H} </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> A-812 </td>
+<td>
+<p>IXISA_AI (16,12)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADMCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> IXISA_AO{0...1} </td>
+<td> IXISA_DI{L,H} </td>
+<td> IXISA_DO{L,H} </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> A-821 </td>
+<td>
+<p>IXISA_AI (16,12)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADMCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> IXISA_AO </td>
+<td> IXISA_DI{L,H} </td>
+<td> IXISA_DO{L,H} </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> A-822 </td>
+<td>
+<p>IXISA_AI (16,12)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADMCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> IXISA_AO{0...1} </td>
+<td> IXISA_DI{L,H} </td>
+<td> IXISA_DO{L,H} </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> A-823 </td>
+<td>
+<p>IXISA_AI (16,12)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADMCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> IXISA_AO{0...1} </td>
+<td> IXISA_DI{L,H} </td>
+<td> IXISA_DO{L,H} </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> A-826 </td>
+<td>
+<p>IXISA_AI (16,16)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADMCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> IXISA_AO{0...1} </td>
+<td> IXISA_DI{L,H} </td>
+<td> IXISA_DO{L,H} </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> DIO-144 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+<p>IXISA_CN{0...5}P{A...C}<br />
+IXISA_CN{0...5}CR
+</p>
+</td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> DIO-24 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+<p>IXISA_P{A...C}<br />
+IXISA_CR
+</p>
+</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> DIO-48 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> IXISA_CN{1...2}P{A...C} </td>
+<td>
+<p>IXISA_CN{1...2}CR<br />
+IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> DIO-64 </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DIO_{A...D} </td>
+<td> IXISA_DIO_{A...D} </td>
+<td> </td>
+<td> IXISA_8254C{0...5}<br />
+<p>IXISA_8254CR<br />
+IXISA_8254CR1
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> DIO-96 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+<p>IXISA_CN{0...3}P{A...C}<br />
+IXISA_CN{0...3}CR
+</p>
+</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-730 </td>
+<td> </td>
+<td> </td>
+<td>
+<p>IXISA_IDIO_{A...B}<br />
+IXISA_DIO_{A...B}
+</p>
+</td>
+<td>
+<p>IXISA_IDIO_{A...B}<br />
+IXISA_DIO_{A...B}
+</p>
+</td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-813 </td>
+<td>
+<p>IXISA_AI (32)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-AD32 </td>
+<td> &lt;FIFO&gt; </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-C64 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DO_{A...H} </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-DA16 </td>
+<td>&nbsp;? </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-P32C32 </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DIO_{A...D} </td>
+<td> IXISA_DIO_{A...D} </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-P64 </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DI_{A...H} </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> P16R16DIO </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DI_{A...B} </td>
+<td> IXISA_DO_{A...B} </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> P8R8DIO </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DI (8) </td>
+<td> IXISA_DO (8) </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> TMC-10 </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DI_{A...B} </td>
+<td> IXISA_DO_A </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR<br />
+IXISA_8254CS
+</p>
+</td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">3</span> Links</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Lp8x81_2629rt_up.tgz" title="File:Lp8x81 2629rt up.tgz">Special modules for Linux kernel 2.6.29-rt-up for controllers LP-8x81</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Lp8x81_2629rt1_up.tgz" title="File:Lp8x81 2629rt1 up.tgz">Special modules for Linux kernel 2.6.29-rt1-up for controllers LP-8x81</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Rhinefet20070212111037.tgz" title="File:Rhinefet20070212111037.tgz">The driver from VIA for network of controllers LP-8x81</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Rhinefet_build_to_2.6.29.patch" title="File:Rhinefet build to 2.6.29.patch">The patch to build network driver "rhinefet" for Linux 2.6.29</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Rhinefet_build_to_2.6.29rt1.patch.gz" title="File:Rhinefet build to 2.6.29rt1.patch.gz">The patch to build network driver "rhinefet" for Linux 2.6.29-rt1</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Ixisa0.17.0.1.tgz" title="File:Ixisa0.17.0.1.tgz">Drivers set for Linux for ISA boards</a></li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

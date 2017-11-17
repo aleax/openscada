@@ -1486,6 +1486,7 @@ AC_DEFUN([AX_LIB_Qt],
 	    QtGui_LIBS="$Qt5Widgets_LIBS $Qt5PrintSupport_LIBS"
 	    QtGui=Qt5Widgets
 	    Qt5_use=true
+	    if test "x$enable_QtMainThrd" = "x"; then enable_QtMainThrd=yes; fi
 	fi
 	AC_SUBST(Qt_MOC)
 	AC_SUBST(Qt_RCC)
@@ -1496,8 +1497,8 @@ AC_DEFUN([AX_LIB_Qt],
 	Qt_use=true
     fi
 
-    AC_ARG_ENABLE(QtMainThrd, AC_HELP_STRING([--enable-QtMainThrd],[enable for using the main thread for Qt.]), [], [enable_QtMainThrd=no;])
-    if test $enable_QtMainThrd = yes; then
+    AC_ARG_ENABLE(QtMainThrd, AC_HELP_STRING([--enable-QtMainThrd],[enable for Qt4 and disable for Qt5 for using the main thread for Qt.]), [], [])
+    if test "x$enable_QtMainThrd" = "xyes"; then
 	AC_DEFINE([EN_QtMainThrd], [1], [Define if Qt uses the main thread.])
     fi
 ])

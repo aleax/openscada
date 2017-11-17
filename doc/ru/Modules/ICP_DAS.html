@@ -1,0 +1,1081 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/ICP-DAS - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/ICP-DAS</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FICP+DAS&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ICP_DAS" title="Modules/ICP DAS">Modules/ICP DAS</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/ICP_DAS" title="Modules/ICP DAS (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/ICP_DAS/uk" title="Модулі/ICP-DAS (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a> </td>
+<td> Оборудование ICP_DAS </td>
+<td> 1.8 </td>
+<td> GPL2 </td>
+<td> daq_ICP_DAS.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,ARM
+</td>
+<td> DAQ </td>
+<td> Роман Савоченко </td>
+<td> Предоставляет реализацию поддержки оборудования "ICP DAS". Включает поддержку основных I-87xxx DCON модулей, I-8xxx быстрых модулей и плат на шине ISA.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85"><span class="tocnumber">1</span> <span class="toctext">Контроллер данных</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="tocnumber">2</span> <span class="toctext">Параметры</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D0.B8_.D1.81.D0.B5.D1.80.D0.B8.D0.B8_I-8xxx"><span class="tocnumber">2.1</span> <span class="toctext">Модули серии I-8xxx</span></a>
+<ul>
+<li class="toclevel-3 tocsection-4"><a href="#.D0.9D.D0.B0.D1.81.D1.82.D1.80.D0.BE.D0.B9.D0.BA.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.BE.D0.B2_.D1.81.D0.B5.D1.80.D0.B8.D0.B8_LP-8xxx"><span class="tocnumber">2.1.1</span> <span class="toctext">Настройка контроллеров серии LP-8xxx</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_I-8014_.D0.B8_I-8017"><span class="tocnumber">2.1.2</span> <span class="toctext">Модуль I-8014 и I-8017</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#.D0.98.D0.BD.D0.B2.D0.B5.D1.80.D1.81.D0.B8.D1.8F_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.B4.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D1.8B.D1.85_.D0.B2.D1.85.D0.BE.D0.B4.D0.BE.D0.B2_.D0.B8_.D0.B2.D1.8B.D1.85.D0.BE.D0.B4.D0.BE.D0.B2"><span class="tocnumber">2.1.3</span> <span class="toctext">Инверсия значений дискретных входов и выходов</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-7"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D0.B8_.D1.81.D0.B5.D1.80.D0.B8.D0.B8_I-87xxx"><span class="tocnumber">2.2</span> <span class="toctext">Модули серии I-87xxx</span></a>
+<ul>
+<li class="toclevel-3 tocsection-8"><a href="#.D0.90.D0.B1.D1.81.D1.82.D1.80.D0.B0.D0.BA.D1.82.D0.BD.D1.8B.D0.B9_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D1.81.D0.B5.D1.80.D0.B8.D0.B8_I-87xxx"><span class="tocnumber">2.2.1</span> <span class="toctext">Абстрактный модуль серии I-87xxx</span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="#.D0.92.D1.8B.D0.B1.D0.BE.D1.80_.D1.82.D0.B8.D0.BF.D0.B0_.D0.BA.D0.B0.D0.BD.D0.B0.D0.BB.D0.B0_.D0.B4.D0.BB.D1.8F_AI"><span class="tocnumber">2.2.2</span> <span class="toctext">Выбор типа канала для AI</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#.D0.A5.D0.BE.D1.81.D1.82.D0.BE.D0.B2.D1.8B.D0.B9_.D1.81.D1.82.D0.BE.D1.80.D0.BE.D0.B6.D0.B5.D0.B2.D0.BE.D0.B9_.D1.82.D0.B0.D0.B9.D0.BC.D0.B5.D1.80_.D0.B8_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D1.8F_.D0.BF.D0.BE_.D1.83.D0.BC.D0.BE.D0.BB.D1.87.D0.B0.D0.BD.D0.B8.D1.8E_.D0.BF.D1.80.D0.B8_.D0.B2.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B8_.D0.B8_.D1.81.D1.80.D0.B0.D0.B1.D0.B0.D1.82.D1.8B.D0.B2.D0.B0.D0.BD.D0.B8.D1.8E_.D1.82.D0.B0.D0.B9.D0.BC.D0.B5.D1.80.D0.B0"><span class="tocnumber">2.2.3</span> <span class="toctext">Хостовый сторожевой таймер и значения по умолчанию при включении и срабатыванию таймера</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-11"><a href="#.D0.9F.D0.BB.D0.B0.D1.82.D1.8B_.D0.BD.D0.B0_.D1.88.D0.B8.D0.BD.D0.B5_ISA"><span class="tocnumber">2.3</span> <span class="toctext">Платы на шине ISA</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#.D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Ссылки</span></a></li>
+</ul>
+</div>
+
+<p>Модуль предоставляет в систему <i>OpenSCADA</i> поддержку различного оборудования фирмы "ICP DAS" (<a class="external free" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">http://www.icpdas.com</a>, <a class="external free" href="http://ipc2u.ru" rel="nofollow noreferrer noopener" target="_blank">http://ipc2u.ru</a>) посредством библиотеки API <i>libi8k.a</i> от фирмы, для модулей <i>I-87xxx</i> и <i>I-8xxx</i>, и прямых <i>ioctl</i> вызовов к модулям ядра, для плат на шине <i>ISA</i>.
+</p><p>Большинство оборудования фирмы "ICP DAS" работает посредством последовательных интерфейсов и протокола <i>DCON</i>, однако часть нового оборудования, например, серия <i>I-8xxx</i> работает на параллельной шине, а другая часть, устанавливается в слоты параллельной шины (<i>I-87xxx</i>), доступны по последовательному интерфейсу и протоколу <i>DCON</i>, однако не адресуются прямо, а требуют вызова специализированной команды выбора слота. Доступ к оборудованию, использующему прямые запросы по протоколу <i>DCON</i>, может быть осуществлён модулем <a href="../Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>. Поддержка остального оборудования не добавлялась в модуль <a href="../Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>, а реализовывалась в данном модуле по причине наличия библиотеки API фирмы "ICP DAS" только для платформ <i>x86_32</i> и <i>ARM(OABI, HardFloatFPA)</i>, что вносит ограничения на доступ к оборудованию фирмы "ICP DAS" и другому оборудованию по протоколу <i>DCON</i> на иных аппаратных платформах.
+</p><p>Причиной создания данного модуля стали работы с контроллером фирмы "ICP DAS" <i>LP-8781</i> серии "LinPAC" с целью реализации среды исполнения PLC на основе системы <i>OpenSCADA</i>.
+</p><p>Библиотека API фирмы "ICP DAS" для платформ <i>x86_32 -&gt; libi8k.a</i> и <i>ARM(OABI, HardFloatFPA) -&gt; libi8k_arm.a</i> размещена вместе с исходными текстами данного модуля и не требует отдельной инсталляции.
+</p>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85"><span class="mw-headline-number">1</span> Контроллер данных</span></h2>
+<p>Для добавления источника данных "ICP DAS" создаётся и конфигурируется контроллер в системе <i>OpenSCADA</i>. Пример вкладки конфигурации контроллера данного типа изображен на рис.1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:777px;"><a class="image" href="http://oscada.org/wiki/File:ICP_cntr_ru.png"><img class="thumbimage" height="641" src="../files/ICP_cntr_ru.png" width="775" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфигурации контроллера.</div></div></div></div>
+<p>С помощью этой вкладки можно установить:
+</p>
+<ul><li> Состояние контроллера, а именно: статус, состояния "Включен" и Запущен" и имя БД, содержащей конфигурацию.</li>
+<li> Идентификатор, имя и описание контроллера.</li>
+<li> Состояние, в которое переводить контроллер при загрузке: "Включен" и "Запущен".</li>
+<li> Имя таблицы для хранения конфигурации параметров контроллера.</li>
+<li> Политику планирования вызовов и приоритет задачи сбора данных.</li>
+<li> Шина на которой расположены модули/платы. Если указан последовательный интерфейс (COM {X}), то доступ производится по протоколу <i>DCON</i>. В случае указания мастер шины контроллера <i>LP-8xxx</i> доступ производится через API параллельной шины или смешано. Указание <i>ISA</i> шины позволяет выбирать платы для шины ISA, из перечня сконфигурированных плат.</li>
+<li> Транспорт, через который осуществляются запросы к последовательной шине. Доступен при установке поля "Шина" в "COM {X}". Если указано "&lt;ICP DAS&gt;" то используется API последовательных запросов от "ICP DAS", по умолчанию.</li>
+<li> Скорость передачи данных для последовательного интерфейса, указывается для неглавной последовательной шины и транспорта "&lt;ICP DAS&gt;".</li>
+<li> Количество попыток последовательных запросов.</li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="mw-headline-number">2</span> Параметры</span></h2>
+<p>Модуль предоставляет только один тип параметров — “Стандарт(std)” и три группы модулей/плат, доступные в зависимости от выбранной шины:
+</p>
+<ul><li> <i>ISA</i> — платы на шине <i>ISA</i>;</li>
+<li> <i>I-87xxx</i> — модули на последовательной шине и с протоколом <i>DCON</i>, например в <i>LinPAC</i>;</li>
+<li> <i>I-8xxx</i> — модули на параллельной шине, например в <i>LinPAC</i>.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:738px;"><a class="image" href="http://oscada.org/wiki/File:ICP_prm_ru.png"><img class="thumbimage" height="547" src="../files/ICP_prm_ru.png" width="736" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфигурации параметра.</div></div></div></div>
+<p>Вкладка конфигурации параметра (рис.2) в целом одинакова для всех групп модулей/плат и содержит:
+</p>
+<ul><li> Состояние параметра, а именно: тип и состояние "Включен".</li>
+<li> Идентификатор, имя и описание параметра.</li>
+<li> Состояние, в которое переводить параметр при загрузке: "Включен".</li>
+<li> Тип модуля/платы.</li>
+<li> Адрес модуля/платы, в случае работы на не главной последовательной шине (в десятичном виде от 0 до 255) или шине ISA.</li>
+<li> Слот модуля, в случае работы с устройствами серии <i>I-8xxx</i> и <i>I-87xxx</i>, установленных в корзину ПЛК.</li>
+<li> Контроль CRC для модулей серии <i>I-87xxx</i> на последовательной шине.</li>
+<li> Дополнительные параметры модуля, в зависимости от шины и конкретной платы/модуля.</li></ul>
+<p>В соответствии с настройками параметра осуществляется формирование и опрос атрибутов (рис.3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:740px;"><a class="image" href="http://oscada.org/wiki/File:ICP_prm_atr_ru.png"><img class="thumbimage" height="584" src="../files/ICP_prm_atr_ru.png" width="738" /></a>  <div class="thumbcaption">Рис.3. Вкладка атрибутов параметра.</div></div></div></div>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D0.B8_.D1.81.D0.B5.D1.80.D0.B8.D0.B8_I-8xxx"><span class="mw-headline-number">2.1</span> Модули серии I-8xxx</span></h3>
+<p>Модули серии <i>I-8xxx</i> устанавливаются в слот параллельной шины корзины контроллера, например, серии <i>LinPAC</i>. В таблице 1 приведены свойства модулей "ICP DAS" серии <i>I-8xxx</i>, реализуемых в <i>OpenSCADA</i>.
+</p><p><b>Таблица 1</b> Свойства модулей серии <i>I-8xxx</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> AI </th>
+<th> AO </th>
+<th> DI </th>
+<th> DO </th>
+<th> Замечания
+</th></tr>
+<tr>
+<td> I-8014 </td>
+<td> i8014W_ReadAI() or i8014W_ReadFIFO() for mode FIFO(Magic) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-8017 </td>
+<td> I8017_GetCurAdChannel_Float_Cal() </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-8024 </td>
+<td> </td>
+<td> I8024_VoltageOut </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8037 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_16, DO_16_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8040 </td>
+<td> </td>
+<td> </td>
+<td> DI_32 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8041 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_32, DO_32_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8042 </td>
+<td> </td>
+<td> </td>
+<td> DI_16 </td>
+<td> DO_16, DO_16_RB </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-8046 </td>
+<td> </td>
+<td> </td>
+<td> DI_16 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8048 </td>
+<td> </td>
+<td> </td>
+<td> DI_8 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8050 </td>
+<td> </td>
+<td> </td>
+<td> DIO_DI_16 </td>
+<td> DIO_DO_16 </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8051 </td>
+<td> </td>
+<td> </td>
+<td> DI_16 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8052 </td>
+<td> </td>
+<td> </td>
+<td> DI_8 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8053 </td>
+<td> </td>
+<td> </td>
+<td> DI_16 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8054 </td>
+<td> </td>
+<td> </td>
+<td> DI_8 </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8055 </td>
+<td> </td>
+<td> </td>
+<td> DI_8 </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8056 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_16, DO_16_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8057 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_16, DO_16_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8058 </td>
+<td> </td>
+<td> </td>
+<td> DI_8 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8060 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_8 (6), DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8063 </td>
+<td> </td>
+<td> </td>
+<td> DI_8 (4) </td>
+<td> DO_8 (4), DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8064 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8065 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8066 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8068 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8069 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> DO_8, DO_8_RB </td>
+<td>
+</td></tr>
+<tr>
+<td> I-8077 </td>
+<td> </td>
+<td> </td>
+<td> DIO_DI_16 </td>
+<td> DIO_DO_16 </td>
+<td>
+</td></tr></table>
+<h4><span class="mw-headline" id=".D0.9D.D0.B0.D1.81.D1.82.D1.80.D0.BE.D0.B9.D0.BA.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.BE.D0.B2_.D1.81.D0.B5.D1.80.D0.B8.D0.B8_LP-8xxx"><span class="mw-headline-number">2.1.1</span> Настройка контроллеров серии LP-8xxx</span></h4>
+<p>Для конфигурации свойств контроллеров серии <i>LP-8xxx</i> предусмотрена вкладка "LinPAC" на странице контроллера (рис.4), а также параметр "LP-8xxx" (рис.5). В параметре "LP-8xxx" можно получить информацию о серийном номере контроллера, версии SDK, значении DIP и поворотного переключателя. Во вкладке "LinPAC" можно установить значение сторожевого таймера контроллера. Сторожевой таймер контроллера выключается установкой нулевого значения. Обновление значения сторожевого таймера осуществляется в задаче контроллера и с её периодичностью, следовательно зависание задачи опроса приводит к перезапуска контроллера! Значение сторожевого таймера должно быть больше полного времени загрузки системы, до загрузки OpenSCADA, при этом OpenSCADA должна грузиться после запуска синхронизации времени.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:690px;"><a class="image" href="http://oscada.org/wiki/File:ICP_cfg_LP8xxx_ru.png"><img class="thumbimage" height="496" src="../files/ICP_cfg_LP8xxx_ru.png" width="688" /></a>  <div class="thumbcaption">Рис.4. Вкладка "LinPAC" конфигурации контроллеров серии "LP-8xxx".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:690px;"><a class="image" href="http://oscada.org/wiki/File:ICP_prm_LP8xxx_ru.png"><img class="thumbimage" height="496" src="../files/ICP_prm_LP8xxx_ru.png" width="688" /></a>  <div class="thumbcaption">Рис.5. Атрибуты параметра "LP-8xxx".</div></div></div></div>
+<h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_I-8014_.D0.B8_I-8017"><span class="mw-headline-number">2.1.2</span> Модуль I-8014 и I-8017</span></h4>
+<p>Быстрые модули аналогового ввода, работающие на параллельной шине.
+</p><p>Модуль I-8014 формально обеспечивает скорость доступа к данным по одному каналу в 250 КГц посредством FIFO, однако ввиду заложенного аппаратного-программного ограничения не позволяет достичь скорости более 100 КГц на канал при сканировании в реальном времени, за счёт низкой скорости чтения из FIFO. При этом чтение данных FIFO осуществляется c большими потерям ресурсов процессора на высоких частотах сбора, а именно это 9.5 микросекунд на измерение.
+</p><p>Модуль I-8017 формально обеспечивает скорость доступа к данным по одному каналу в 130 КГц, однако ввиду заложенного аппаратно-программного ограничения не позволяет достичь скорости более 33 КГц на канал при сканировании нескольких каналов в реальном времени (за счёт переключения). При этом ожидание данных осуществляется в глухом цикле, что приводит к большим потерям ресурсов процессора на высоких частотах сбора.
+</p><p>Модулями предоставляется шестнадцать атрибутов аналоговых входов <i>ai{x}</i> и по восемь признаков нарушения верхней <i>ha{x}</i> и нижней <i>la{x}</i> границ, для I-8017. Также модулями предоставляется вкладка "Конфигурация" с расширенной настройкой (рис.6):
+</p>
+<ul><li> <i>Количество обрабатываемых параметров</i> — указывает сколько входов обслуживать. Характерен в режиме быстрого сбора данных и используется для ограничения количества обрабатываемый каналов соразмерно используемым ресурсам процессора.</li>
+<li> <i>Периодичность быстрого сбора данных (сек)</i> — указывает с какой периодичностью осуществлять быстрый сбор данных для количества каналов, указанных ранее. Режим быстрого сбора данных отключается указанием нулевого периода.</li>
+<li> Режимы усилений входов, отдельно для каждого входа определяет усиление из ряда: +-1.25В, +-2.5В, +-5В, +-10В и +-20мА.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:735px;"><a class="image" href="http://oscada.org/wiki/File:ICP_mod_cfg_8017_ru.png"><img class="thumbimage" height="591" src="../files/ICP_mod_cfg_8017_ru.png" width="733" /></a>  <div class="thumbcaption">Рис.6. Вкладка "Конфигурация" модулей I-8014 и I-8017.</div></div></div></div>
+<h4><span class="mw-headline" id=".D0.98.D0.BD.D0.B2.D0.B5.D1.80.D1.81.D0.B8.D1.8F_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.B4.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D1.8B.D1.85_.D0.B2.D1.85.D0.BE.D0.B4.D0.BE.D0.B2_.D0.B8_.D0.B2.D1.8B.D1.85.D0.BE.D0.B4.D0.BE.D0.B2"><span class="mw-headline-number">2.1.3</span> Инверсия значений дискретных входов и выходов</span></h4>
+<p>Для модулей дискретного входа и выхода, во вкладке "Конфигурация" (рис.7), предоставляется функция выборочной инверсии канала, что очень удобно при последующей работе с каналом.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:722px;"><a class="image" href="http://oscada.org/wiki/File:ICP_mod_cfg_DIO_ru.png"><img class="thumbimage" height="563" src="../files/ICP_mod_cfg_DIO_ru.png" width="720" /></a>  <div class="thumbcaption">Рис.7. Вкладка "Конфигурация" модуля дискретного входа и выхода.</div></div></div></div>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D0.B8_.D1.81.D0.B5.D1.80.D0.B8.D0.B8_I-87xxx"><span class="mw-headline-number">2.2</span> Модули серии I-87xxx</span></h3>
+<p>Модули серии <i>I-87xxx</i> устанавливаются в слот последовательной шины корзины контроллера, например, серии <i>LinPAC</i>. В таблице 2 приведены свойства модулей "ICP DAS" серии <i>I-87xxx</i>, реализуемых в <i>OpenSCADA</i>.
+</p><p><b>Таблица 2</b> Свойства модулей серии <i>I-87xxx</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> AI </th>
+<th> AO </th>
+<th> DI </th>
+<th> DO </th>
+<th> Счётчики </th>
+<th> Замечания
+</th></tr>
+<tr>
+<td> I-87005 </td>
+<td> #AA (8); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> @AADODD (8), @AADI </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87013 </td>
+<td> #AA (4); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87015 </td>
+<td> #AA (7); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87016 </td>
+<td> #AA (2); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87017 </td>
+<td> #AA (8); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87017DW </td>
+<td> #AA (16); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87017ZW </td>
+<td> #AA (20); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-87018 </td>
+<td> $AA3; #AA (8); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87018ZW </td>
+<td> $AA3; #AA (10); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87019RW </td>
+<td> $AA3; #AA (8); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-87019ZW </td>
+<td> $AA3; #AA (10); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87022 </td>
+<td> </td>
+<td> #AAN(Data) (2), $AA8N; W: ~AA0-5 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87024 </td>
+<td> </td>
+<td> #AAN(Data) (4), $AA8N; W: ~AA0-5 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-87026 </td>
+<td> </td>
+<td> #AAN(Data) (2), $AA8N; W: ~AA0-5 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87026PW </td>
+<td> #AA (6); TP: $AA7CiRrr ($AA8Ci) </td>
+<td> #AAN(Data) (2), $AA8N; W: ~AA0-5 </td>
+<td> @AADI (2) </td>
+<td> @AADODD (2), @AADI </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87028 </td>
+<td> </td>
+<td> #AAN(Data) (8), $AA8N; W: ~AA0-5 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87037 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (16), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87040 </td>
+<td> </td>
+<td> </td>
+<td> @AA (32) </td>
+<td> </td>
+<td> #AAN (32) </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-87041 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (32), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> I-87042 </td>
+<td> </td>
+<td> </td>
+<td> @AA (16) </td>
+<td> @AA(Data) (16), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87046 </td>
+<td> </td>
+<td> </td>
+<td> @AA (16) </td>
+<td> </td>
+<td> #AAN (16) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87051 </td>
+<td> </td>
+<td> </td>
+<td> @AA (16) </td>
+<td> </td>
+<td> #AAN (16) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87052 </td>
+<td> </td>
+<td> </td>
+<td> @AA (8) </td>
+<td> </td>
+<td> #AAN (8) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87053 </td>
+<td> </td>
+<td> </td>
+<td> @AA (16) </td>
+<td> </td>
+<td> #AAN (16) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87054 </td>
+<td> </td>
+<td> </td>
+<td> @AA (8) </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> #AAN (8) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87055 </td>
+<td> </td>
+<td> </td>
+<td> @AA (8) </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> #AAN (8) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87057 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (16), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87058 </td>
+<td> </td>
+<td> </td>
+<td> @AA (8) </td>
+<td> </td>
+<td> #AAN (8) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87059 </td>
+<td> </td>
+<td> </td>
+<td> @AA (8) </td>
+<td> </td>
+<td> #AAN (8) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87061 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (16), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87063 </td>
+<td> </td>
+<td> </td>
+<td> @AA (16) </td>
+<td> @AA(Data) (16), @AA; W: ~AA0-5 </td>
+<td> #AAN (16) </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87064 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87065 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87066 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87068 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> I-87069 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> @AA(Data) (8), @AA; W: ~AA0-5 </td>
+<td> </td>
+<td>
+</td></tr></table>
+<h4><span class="mw-headline" id=".D0.90.D0.B1.D1.81.D1.82.D1.80.D0.B0.D0.BA.D1.82.D0.BD.D1.8B.D0.B9_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D1.81.D0.B5.D1.80.D0.B8.D0.B8_I-87xxx"><span class="mw-headline-number">2.2.1</span> Абстрактный модуль серии I-87xxx</span></h4>
+<p>Кроме поддержки модулей в таблице 2 данной группой модулей предоставляется реализация абстрактного модуля "I-87xxx" при выборе которого пользователю предоставляется возможность указать количество и типы основных сигналов подключенного модуля: AI, AO, DI, DO и Счётчики. Данная функция также избирательно доступна для модулей, содержащих сигналы AO и Счётчики и позволяет ограничить число обслуживаемых каналов, с целью уменьшения трафика на последовательном интерфейсе.
+</p><p>Абстрактный модуль "I-87xxx" можно использовать для модулей "ICP DAS" серии <i>I-7xxx</i> на "чистой" последовательной шине.
+</p><p>Поля указания количества сигналов и их типов предоставляются в основной вкладке страницы конфигурации объекта параметра (рис.8).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:761px;"><a class="image" href="http://oscada.org/wiki/File:ICP_mod_prm_i87xxx_ru.png"><img class="thumbimage" height="631" src="../files/ICP_mod_prm_i87xxx_ru.png" width="759" /></a>  <div class="thumbcaption">Рис.8. Основная вкладка параметра абстрактного модуля "I-87xxx".</div></div></div></div>
+<h4><span class="mw-headline" id=".D0.92.D1.8B.D0.B1.D0.BE.D1.80_.D1.82.D0.B8.D0.BF.D0.B0_.D0.BA.D0.B0.D0.BD.D0.B0.D0.BB.D0.B0_.D0.B4.D0.BB.D1.8F_AI"><span class="mw-headline-number">2.2.2</span> Выбор типа канала для AI</span></h4>
+<p>Для модулей аналогового ввода доступна возможность выбора режима/усиления, что осуществляется из списка (рис.9), если для модуля он указан, или прямым указанием кода режима. Установленные режимы сохраняются и хранятся в самом модуле.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:711px;"><a class="image" href="http://oscada.org/wiki/File:ICP_mod_cfg_AI_ru.png"><img class="thumbimage" height="530" src="../files/ICP_mod_cfg_AI_ru.png" width="709" /></a>  <div class="thumbcaption">Рис.9. Вкладка "Конфигурация" модуля аналоговых входов.</div></div></div></div>
+<h4><span class="mw-headline" id=".D0.A5.D0.BE.D1.81.D1.82.D0.BE.D0.B2.D1.8B.D0.B9_.D1.81.D1.82.D0.BE.D1.80.D0.BE.D0.B6.D0.B5.D0.B2.D0.BE.D0.B9_.D1.82.D0.B0.D0.B9.D0.BC.D0.B5.D1.80_.D0.B8_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D1.8F_.D0.BF.D0.BE_.D1.83.D0.BC.D0.BE.D0.BB.D1.87.D0.B0.D0.BD.D0.B8.D1.8E_.D0.BF.D1.80.D0.B8_.D0.B2.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B8_.D0.B8_.D1.81.D1.80.D0.B0.D0.B1.D0.B0.D1.82.D1.8B.D0.B2.D0.B0.D0.BD.D0.B8.D1.8E_.D1.82.D0.B0.D0.B9.D0.BC.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">2.2.3</span> Хостовый сторожевой таймер и значения по умолчанию при включении и срабатыванию таймера</span></h4>
+<p>Модулями с выходами, аналоговыми или дискретными, обычно предоставляется функция хостового сторожевого таймера. А именно установка значения выходов в безопасное состояние при отсутствии активности обмена с хоста в течении указанного интервала времени. Также модули позволяют установить значения выходов при включении.
+</p><p>На рисунке 10 представлена вкладка модуля аналоговых выходов с функциями:
+</p>
+<ul><li> установка и контроль состояния сторожевого таймера модуля;</li>
+<li> установка и контроль значения выходов модуля при включении;</li>
+<li> установка и контроль значения выходов модуля при срабатывании хостового сторожевого таймера.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:765px;"><a class="image" href="http://oscada.org/wiki/File:ICP_mod_cfg_AO_ru.png"><img class="thumbimage" height="530" src="../files/ICP_mod_cfg_AO_ru.png" width="763" /></a>  <div class="thumbcaption">Рис.10. Вкладка "Конфигурация" модуля аналоговых выходов.</div></div></div></div>
+<h3><span class="mw-headline" id=".D0.9F.D0.BB.D0.B0.D1.82.D1.8B_.D0.BD.D0.B0_.D1.88.D0.B8.D0.BD.D0.B5_ISA"><span class="mw-headline-number">2.3</span> Платы на шине ISA</span></h3>
+<p>Платы данного типа устанавливаются на шину ISA персонального компьютера. Для работы с этими платами необходима сборка и запуск драйверов-модулей ядра Linux. В таблице 3 приведены свойства плат "ICP DAS" на шине ISA, реализуемых в <i>OpenSCADA</i>.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Функция счётчиков на данный момент не реализована в OpenSCADA.
+</p><p><b>Таблица 3</b> Свойства плат на шине ISA
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> AI </th>
+<th> AO </th>
+<th> DI </th>
+<th> DO </th>
+<th> DIO </th>
+<th> Счётчики </th>
+<th> Замечания
+</th></tr>
+<tr>
+<td> A-626 </td>
+<td> </td>
+<td> IXISA_AO{0...5} </td>
+<td> IXISA_DI_{A...B} </td>
+<td> IXISA_DO_{A...B} </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> A-628 </td>
+<td> </td>
+<td> IXISA_AO{0...7} </td>
+<td> IXISA_DIO_{A...B} </td>
+<td> IXISA_DIO_{A...B} </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> A-8111 </td>
+<td>
+<p>IXISA_AI (8,12)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADMCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> IXISA_AO{0...1} </td>
+<td> IXISA_DI{L,H} </td>
+<td> IXISA_DO{L,H} </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> A-812 </td>
+<td>
+<p>IXISA_AI (16,12)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADMCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> IXISA_AO{0...1} </td>
+<td> IXISA_DI{L,H} </td>
+<td> IXISA_DO{L,H} </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> A-821 </td>
+<td>
+<p>IXISA_AI (16,12)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADMCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> IXISA_AO </td>
+<td> IXISA_DI{L,H} </td>
+<td> IXISA_DO{L,H} </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> A-822 </td>
+<td>
+<p>IXISA_AI (16,12)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADMCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> IXISA_AO{0...1} </td>
+<td> IXISA_DI{L,H} </td>
+<td> IXISA_DO{L,H} </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> A-823 </td>
+<td>
+<p>IXISA_AI (16,12)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADMCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> IXISA_AO{0...1} </td>
+<td> IXISA_DI{L,H} </td>
+<td> IXISA_DO{L,H} </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> A-826 </td>
+<td>
+<p>IXISA_AI (16,16)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADMCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> IXISA_AO{0...1} </td>
+<td> IXISA_DI{L,H} </td>
+<td> IXISA_DO{L,H} </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> DIO-144 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+<p>IXISA_CN{0...5}P{A...C}<br />
+IXISA_CN{0...5}CR
+</p>
+</td>
+<td> </td>
+<td> Tested!
+</td></tr>
+<tr>
+<td> DIO-24 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+<p>IXISA_P{A...C}<br />
+IXISA_CR
+</p>
+</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> DIO-48 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> IXISA_CN{1...2}P{A...C} </td>
+<td>
+<p>IXISA_CN{1...2}CR<br />
+IXISA_8254C{0...2}<br />
+IXISA_8254CR
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> DIO-64 </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DIO_{A...D} </td>
+<td> IXISA_DIO_{A...D} </td>
+<td> </td>
+<td> IXISA_8254C{0...5}<br />
+<p>IXISA_8254CR<br />
+IXISA_8254CR1
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> DIO-96 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+<p>IXISA_CN{0...3}P{A...C}<br />
+IXISA_CN{0...3}CR
+</p>
+</td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-730 </td>
+<td> </td>
+<td> </td>
+<td>
+<p>IXISA_IDIO_{A...B}<br />
+IXISA_DIO_{A...B}
+</p>
+</td>
+<td>
+<p>IXISA_IDIO_{A...B}<br />
+IXISA_DIO_{A...B}
+</p>
+</td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-813 </td>
+<td>
+<p>IXISA_AI (32)<br />
+IXISA_ADGCR<br />
+IXISA_ADMXCR<br />
+IXISA_ADSTCR
+</p>
+</td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-AD32 </td>
+<td> &lt;FIFO&gt; </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-C64 </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DO_{A...H} </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-DA16 </td>
+<td>&nbsp;? </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-P32C32 </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DIO_{A...D} </td>
+<td> IXISA_DIO_{A...D} </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> ISO-P64 </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DI_{A...H} </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> P16R16DIO </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DI_{A...B} </td>
+<td> IXISA_DO_{A...B} </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> P8R8DIO </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DI (8) </td>
+<td> IXISA_DO (8) </td>
+<td> </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> TMC-10 </td>
+<td> </td>
+<td> </td>
+<td> IXISA_DI_{A...B} </td>
+<td> IXISA_DO_A </td>
+<td> </td>
+<td>
+<p>IXISA_8254C{0...2}<br />
+IXISA_8254CR<br />
+IXISA_8254CS
+</p>
+</td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="mw-headline-number">3</span> Ссылки</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Lp8x81_2629rt_up.tgz" title="File:Lp8x81 2629rt up.tgz">Специальные модули ядра Linux 2.6.29-rt-up для контроллеров LP-8x81</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Lp8x81_2629rt1_up.tgz" title="File:Lp8x81 2629rt1 up.tgz">Специальные модули ядра Linux 2.6.29-rt1-up для контроллеров LP-8x81</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Rhinefet20070212111037.tgz" title="File:Rhinefet20070212111037.tgz">Драйвер производителя (VIA) для сети контроллеров LP-8x81</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Rhinefet_build_to_2.6.29.patch" title="File:Rhinefet build to 2.6.29.patch">Патч для сборки сетевого драйвера "rhinefet" на Linux 2.6.29-rt</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Rhinefet_build_to_2.6.29rt1.patch.gz" title="File:Rhinefet build to 2.6.29rt1.patch.gz">Патч для сборки сетевого драйвера "rhinefet" на Linux 2.6.29-rt1</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Ixisa0.17.0.1.tgz" title="File:Ixisa0.17.0.1.tgz">Набор драйверов Linux для ISA плат</a></li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

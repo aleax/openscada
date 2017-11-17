@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.8"
+#define MOD_VER		"1.2.9"
 #define AUTHORS		_("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	_("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -146,7 +146,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db ) {
 //* TMdContr                                           *
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
-    TController(name_c, daq_db, cfgelem),
+    TController(name_c, daq_db, cfgelem), enRes(true), reqRes(true),
     mAddr(cfg("ADDR")), mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), connTry(cfg("REQ_TRY").getId()),
     prcSt(false), callSt(false), endrunReq(false), mPer(1e9), tmGath(0)
 {

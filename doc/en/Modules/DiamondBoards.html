@@ -1,0 +1,337 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/DiamondBoards - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/DiamondBoards</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FDiamondBoards&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DiamondBoards" title="Modules/DiamondBoards (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DiamondBoards/ru" title="Модули/Платы Diamond Systems (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DiamondBoards/uk" title="Модулі/Плати Diamond Systems (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/DiamondBoards.html" title="Special:MyLanguage/Modules/DiamondBoards">DiamondBoards</a> </td>
+<td> Diamond DAQ boards </td>
+<td> 2.1 </td>
+<td> GPL2 </td>
+<td> daq_DiamondBoards.so </td>
+<td> en,uk,ru,de </td>
+<td> x86
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Provides an access to "Diamond Systems" DAQ boards. Includes main support for all generic boards.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Data_controller.27s_object"><span class="tocnumber">1</span> <span class="toctext">Data controller's object</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Parameter-board.27s_object"><span class="tocnumber">2</span> <span class="toctext">Parameter-board's object</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Notes"><span class="tocnumber">3</span> <span class="toctext">Notes</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Links"><span class="tocnumber">4</span> <span class="toctext">Links</span></a></li>
+</ul>
+</div>
+
+<p>The module provides for the system OpenSCADA support of dynamic data sources, based on cards for data acquisition from Diamond Systems company (<a class="external free" href="http://diamondsystems.com" rel="nofollow noreferrer noopener" target="_blank">http://diamondsystems.com</a>). The module based on an universal driver of the manufacturer of the boards. Universal driver is available for almost all known software platforms in the form of a library. Universal driver has been received at <a class="external free" href="http://www.diamondsystems.com/support/software" rel="nofollow noreferrer noopener" target="_blank">http://www.diamondsystems.com/support/software</a> and it was included in the distribution kit of OpenSCADA, therefore, for the building of the module external libraries are not required. You need only an assembling of the Linux kernel module "dscudkp.ko" for operating by interrupts and with FIFO.
+</p><p>The boards of data acquisition of Diamond Systems represent the modules of expansion of the PC/104 form-factor. Boards may include: analog IO (input/outputs), digital IO, and counters. Complete constitution of the cards can vary greatly. There can be contained only one type of IO or some theirs mix. In addition, the function of data acquisition can be given to system boards of this company. For example, the motherboard "<a class="external text" href="http://www.diamondsystems.com/products/athena" rel="nofollow noreferrer noopener" target="_blank">Athena</a>" contains: 16 AI, 4 AO, 24 DIO.
+</p><p>The module provides support for analog and digital IO into synchronous and asynchronous access modes. Analog inputs (AI) acquisition supports also into an interruption mode (by FIFO assistance). The acquisition method by interrupts allows to achieve maximum frequency of interrogation for a hardware supports that. In the case of "Athena" system board the frequency achieves 100 kHz. In the acquisition on interrupts process the data becomes by packages of the main acquisition period and places into an archives buffer.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In version 2.0 the module, in accordance <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/module_daqdiamondboards_update" rel="nofollow noreferrer noopener" target="_blank">the task</a>, was in fact rewrote for providing the support of all wide-range boards of data acquisition of firm <a class="external text" href="http://diamondsystems.com" rel="nofollow noreferrer noopener" target="_blank">Diamond Systems</a>. The result module is first which supports operating into all three modes of the data acquisition (synchronous, asynchronous, by packets), addition to that the module is first data acquisition module of OpenSCADA system.
+</p>
+<h2><span class="mw-headline" id="Data_controller.27s_object"><span class="mw-headline-number">1</span> Data controller's object</span></h2>
+<p>On the controller's object level creates generic task for all board-parameters processing. Example of the tab of configuration of the controller's object shown in Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:769px;"><a class="image" href="http://oscada.org/wiki/File:DiamondBoards_cntr.png"><img class="thumbimage" height="629" src="../files/DiamondBoards_cntr.png" width="767" /></a>  <div class="thumbcaption">Fig.1. Tab of configuration of a controller object.</div></div></div></div>
+<p>In assistance with the tab you can set:
+</p>
+<ul><li> The controller status, that is: state, states "Enabled" and "Started" and DB name, which stores the configuration.</li>
+<li> Identifier, name and description of the controller's object.</li>
+<li> Status, in which the controller must to be switched at the boot time: "Enabled" and "Started".</li>
+<li> Table name for storing here controller's parameters configuration.</li>
+<li> Data acquisition task's scheduling policy and execution priority.</li></ul>
+<h2><span class="mw-headline" id="Parameter-board.27s_object"><span class="mw-headline-number">2</span> Parameter-board's object</span></h2>
+<p>Parameter-board's object same has a configuration of concrete board and provides available on the board data by attributes. Example of the tab "Parameter", configuration of the parameter-board at all, shown on Figure 2, and the tab "Configuration", signals properties, shown on Figure 3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:769px;"><a class="image" href="http://oscada.org/wiki/File:DiamondBoards_prm.png"><img class="thumbimage" height="629" src="../files/DiamondBoards_prm.png" width="767" /></a>  <div class="thumbcaption">Fig.2. Configuration tab "Parameter" of a parameter-board at all.</div></div></div></div>
+<p>In assistance with the tab you can set:
+</p>
+<ul><li> The parameter status, that is: type and status "Enabled".</li>
+<li> Identifier, name and description of the parameter's object.</li>
+<li> Status, in which the parameter must to be switched at the boot time: "Enabled".</li>
+<li> Type, address and vector of interruption of the board. The interruption vector allowed only for boards with the analog inputs and FIFO.</li>
+<li> Samplerate for single channel on the analog inputs acquisition by interrupts. Allowed only for boards with analog inputs and FIFO. Nonzero and correct value into this and previous field will enable the AI acquisition mode by interrupts.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Value of the field may be dropped to the limit of the counter's frequency of service AI by interrupts, on it's recounting to single channel.</dd></dl>
+<ul><li> Asynchronous reading mode, on the controller's object period. Working also into the AI acquisition mode by interrupts for discrete signals.</li>
+<li> Analog input values display mode: "ADC code (integer)", "Percent of the signal range (real)" and "Voltage (real)". The mode "Voltage" may not be allowed for all boards!</li>
+<li> Limit number of the analog parameters in theirs processing. Useful for using lesser the channels number but frequently. Especially into the acquisition by interrupts mode and channel's mode SE(single-ended) and "Differential" control.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:769px;"><a class="image" href="http://oscada.org/wiki/File:DiamondBoards_prm_cfg.png"><img class="thumbimage" height="629" src="../files/DiamondBoards_prm_cfg.png" width="767" /></a>  <div class="thumbcaption">Fig.3. Tab "Configuration" of properties of signals.</div></div></div></div>
+<p>In assistance with the tab you can set:
+</p>
+<ul><li> Analog inputs scan interval, it defines time between samples into the AI acquisition by interrupts mode.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In case of the requested samplerate and the interval too big then the result frequency may be dropped to a value got from the scan interval.</dd></dl>
+<ul><li> AI range configuration. Into the AI acquisition mode by interrupts uses a range from the zero input why into the brackets we can see "(all inputs)".</li>
+<li> Groups of discrete inputs (channels) direction for DIO and an inversion mode of concrete discrete inputs.</li></ul>
+<p>On the Figure 4 shown an example of tab "Attributes" for board "DMM-32x-AT".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:797px;"><a class="image" href="http://oscada.org/wiki/File:DiamondBoards_prm_attr.png"><img class="thumbimage" height="680" src="../files/DiamondBoards_prm_attr.png" width="795" /></a>  <div class="thumbcaption">Fig.4. Tab "Attributes" of a parameter-board.</div></div></div></div>
+<p>Into table 1 shown a list of boards of firm "Diamond Systems", their support status and testing.
+</p><p><b>Table 1</b> Properties of firm "Diamond Systems" boards
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Board </th>
+<th> AI (16 bit) </th>
+<th> AO (12 bit) </th>
+<th> DIO (x8) </th>
+<th> DI (x8) </th>
+<th> DO (x8) </th>
+<th> Notes
+</th></tr>
+<tr>
+<td> DMM-16 </td>
+<td> 16 </td>
+<td> 4 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td>
+</td></tr>
+<tr>
+<td> Ruby-MM </td>
+<td> 0 </td>
+<td> 8 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Opal-MM </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td>
+</td></tr>
+<tr>
+<td> DMM </td>
+<td> 16 (12 bit) </td>
+<td> 2 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td>
+</td></tr>
+<tr>
+<td> Pearl-MM </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 2 </td>
+<td>
+</td></tr>
+<tr>
+<td> Onyx-MM </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 6 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Ruby-MM-416 </td>
+<td> 0 </td>
+<td> 4 (16 bit) </td>
+<td> 2 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> DMM-AT </td>
+<td> 16 (12 bit, 100 kHz, 512 FIFO) </td>
+<td> 2 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td>
+</td></tr>
+<tr>
+<td> DMM-16-AT </td>
+<td> 16 (100 kHz, 512 FIFO) </td>
+<td> 4 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td>
+</td></tr>
+<tr>
+<td> IR104 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 3 </td>
+<td> 3 </td>
+<td>
+</td></tr>
+<tr>
+<td> Prometheus </td>
+<td> 16 (100 kHz, 48 FIFO) </td>
+<td> 4 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Hercules EBX </td>
+<td> 32 (250 kHz, 2048 FIFO) </td>
+<td> 4 </td>
+<td> 5 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Onyx-MM-DIO </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 6 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Mercator </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Athena </td>
+<td> 16 (100 kHz, 48 FIFO) </td>
+<td> 4 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> <span style="color: green">Verified</span>
+</td></tr>
+<tr>
+<td> DMM-32x(-AT) </td>
+<td> 32 (250 kHz, 1024 FIFO) </td>
+<td> 4 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> GPIO-MM-11[12](DIO) </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 6 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> GPIO-MM-21 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 12 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Poseidon </td>
+<td> 32 (250 kHz, 1024 FIFO) </td>
+<td> 4 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Athena-II </td>
+<td> 16 (100 kHz, 2048 FIFO) </td>
+<td> 4 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> DMM-32dx(-AT) </td>
+<td> 32 (250 kHz, 1024 FIFO) </td>
+<td> 4 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> <span style="color: green">Verified</span>
+</td></tr>
+<tr>
+<td> Helios </td>
+<td> 16 (100 kHz, 2048 FIFO) </td>
+<td> 4 </td>
+<td> 5 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Neptune </td>
+<td> 32 (250 kHz, 1024 FIFO) </td>
+<td> 4 </td>
+<td> 4 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">3</span> Notes</span></h2>
+<p>Specific in an operation by the AI acquisition by interrupts is the channels switching sync; measuring by different, external, counter and using FIFO for intermediate measuring buffer. Sure, this measuring counter will different to some value from the real-time clock and the FIFO need to have time to it reading. Course it is needs to adjust-calibrate the data receipts with the real-time clock. At all here implemented next compensation mechanisms of the counters walk difference and other effects:
+</p>
+<ul><li> <b>FIFO overflow</b> — as result here lost one data frame of FIFO size and performed channels shifting into the data area, at unaligned FIFO size to the channels number, addition to the block size alignment.</li>
+<li> <b>Cycles lost</b> — the processing data blocks task calling can be happen through one or several cycles, as result of a low priority and other effects. As result of the effect it is overflow (wrapping) of the measuring data blocks and we need to be reset the data time to real-time.</li>
+<li> <b>Difference into the measurement counter walk and the real-time clock</b> — compensated by tune the real measurement samplerate to size of the time deviation more to one cycle of the processing. An error to the calling time and hitting to the buffer's part dropping border here presents (transfers threshold), with the value about the dropping buffer's part size it is a half from the measurement period.</li></ul>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">4</span> Links</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:DiamondBoards_dscud5.91linux.tar.gz" title="File:DiamondBoards dscud5.91linux.tar.gz">Used version of the Linux driver from Diamond systems</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:DiamondBoards_lastkernels.patch" title="File:DiamondBoards lastkernels.patch">Patch for building driver at kernel Linux 2.6.29, used for data gathering by interrupts</a></li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

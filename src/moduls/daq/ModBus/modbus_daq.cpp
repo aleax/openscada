@@ -102,7 +102,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 //* TMdContr                                           *
 //******************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
-	TController(name_c, daq_db, cfgelem),
+	TController(name_c, daq_db, cfgelem), enRes(true),
 	mPrior(cfg("PRIOR").getId()), mNode(cfg("NODE").getId()), blkMaxSz(cfg("MAX_BLKSZ").getId()),
 	mSched(cfg("SCHEDULE")), mPrt(cfg("PROT")), mAddr(cfg("ADDR")),
 	mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), mAsynchWr(cfg("WR_ASYNCH").getBd()),

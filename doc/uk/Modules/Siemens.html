@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/Siemens - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/Siemens</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSiemens&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Siemens" title="Modules/Siemens">Modules/Siemens</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Siemens" title="Modules/Siemens (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Siemens/ru" title="Модули/Siemens (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a> </td>
+<td> Збір даних Siemens </td>
+<td> 2.0 </td>
+<td> GPL2 </td>
+<td> daq_Siemens.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Роман Савоченко </td>
+<td> Надає джерело даних ПЛК Siemens за допомогою карт Hilscher CIF, з використанням протоколу MPI, та бібліотеки LibnoDave, або власної, для іншого.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BC.D1.83.D0.BD.D1.96.D0.BA.D0.B0.D1.86.D1.96.D0.B9.D0.BD.D1.96_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D0.B8_CIF"><span class="tocnumber">1</span> <span class="toctext">Комунікаційні контролери CIF</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D0.B4.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.B0_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="tocnumber">2</span> <span class="toctext">Об'єкт контролеру джерела даних</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.D0.B4.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.B0_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="tocnumber">3</span> <span class="toctext">Об'єкт параметру джерела даних</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.90.D1.81.D0.B8.D0.BD.D1.85.D1.80.D0.BE.D0.BD.D0.BD.D0.B8.D0.B9_.D1.80.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B7.D0.B0.D0.BF.D0.B8.D1.81.D1.83"><span class="tocnumber">4</span> <span class="toctext">Асинхронний режим запису</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">5</span> <span class="toctext">Зауваження</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Посилання</span></a></li>
+</ul>
+</div>
+
+<p>Першочерговою метою створення цього модуля становить забезпечення підтримки промислових контролерів фірми Siemens серії S7 (S7-200,300,400). Історично склалося, що доступ до контролерів вказаної фірми у мережі ProfiBus здійснюється тільки за посередництвом власних комунікаційних процесорів (CP5412, CP5613 та інше) та власного протоколу S7. Вказані комунікаційні процесори та API до протоколу S7 достатньо дорогі, крім того драйвери до комунікаційних процесорі та S7 API закриті, а також доступні тільки для платформи Intel + MS Windows (зустрічалась інформація про можливість придбати для Linux).
+</p><p>У якості альтернативи комунікаційним процесорам від фірми Siemens, які дозволяють повноцінно працювати із контролерами фірми Siemens, є спектр комунікаційних продуктів фірми Hilscher (<a class="external free" href="http://hilscher.com" rel="nofollow noreferrer noopener" target="_blank">http://hilscher.com</a>) у особі комунікаційних процесорів CIF серії PB(Profibus) та бібліотека LibnoDave (<a class="external free" href="http://libnodave.sourceforge.net" rel="nofollow noreferrer noopener" target="_blank">http://libnodave.sourceforge.net</a>).
+</p><p>Особливістю продуктів Hilscher є повністю відкрита специфікація протоколу обміну із комунікаційним процесором, уніфікований драйвер для всіх плат CIF, наявність драйверу для багатьох розповсюджених операційних систем(ОС) та відкритість драйверу для ОС Linux (GPL).
+</p><p>У основу даного модуля покладено драйвер версії 2.621 фірми Hilsher, люб'язно наданого фірмою Hilsher в особі <a class="external text" href="mailto:DTsaava@hilscher.com" rel="nofollow noreferrer noopener" target="_blank">Devid Tsaava</a> для ядер серії 2.6 ОС Linux. Всі потрібні для збірки файли включені у модуль та не потребують задоволення спеціальних залежностей. Драйвер версії 2.621 для плат CIF можна завантажити <a class="external" href="http://oscada.org/wiki/File:Siemens_cif2621.tgz" title="File:Siemens cif2621.tgz">cif2621.tgz</a>.
+</p><p>Спектр плат фірми Hilsher родини CIF та уніфікований драйвер підтримують широкий спектр обладнання. Закласти підтримку всіх цих можливостей у цьому модулі, не маючи всього цього обладнання на руках, не є можливим. Тому підтримка того або іншого обладнання буде додаватися у міру потреби та наявності обладнання. По стану на версію 2.0.0 модулем надається підтримка джерел даних на мережі ProfiBus або MPI за посередництвом протоколу MPI, на швидкостях мережі від 9600Бод до 12МБод. Зокрема підтримуються та виконано перевірку на контролерах фірми Siemens родини S7 (S7-200,300,400).
+</p><p>Бібліотека LibnoDave є реалізацією, шляхом реверсінженірингу, протоколів MPI, S7, ISO-TSAP та інших, які використовуються при взаємодії із контролерами фірми Siemens. Бібліотекою підтримуються багато MPI та USB адаптерів, а також ProfiNet. Комунікаційні процесори фірми Siemens, на платформах відмінних від MS Windows, бібліотекою не підтримуються. На цьому етапі модулем забезпечено підтримку протоколу ISO-TSAP(ProfiNet) за посередництвом бібліотеки LibnoDave. Бібліотеку LibnoDave повністю включено в цей модуль та не потребує вирішення залежностей як при збірці, так і при виконанні.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> У коді бібліотеки LibnoDave присутні складно-вловимі помилки, які переважно відтворюються пі великим навантаженням та в момент підключень, що призводить до псування пам'яті процесу та <a class="external" href="http://oscada.org/wiki/File:Siemens_crash_20160127_0911.crash.gz" title="File:Siemens crash 20160127 0911.crash.gz">падіння</a> у непередбачених місцях. У зв'язку з цим, з версії 2 цього модуля, розпочато процес переписування потрібних функцій та код зв'язку ISO-TCP вже готовий до використання.
+</p><p>Також модулем реалізуються функції горизонтального резервування, а саме спільної роботи із віддаленою станцією цього-ж рівня. Крім синхронізації значень та архівів атрибутів параметрів модулем здійснюється синхронізація значень обчислювальних шаблонів, з метою безударного підхоплення алгоритмів.
+</p>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BC.D1.83.D0.BD.D1.96.D0.BA.D0.B0.D1.86.D1.96.D0.B9.D0.BD.D1.96_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D0.B8_CIF"><span class="mw-headline-number">1</span> Комунікаційні контролери CIF</span></h2>
+<p>Драйвером плат сімейства CIF підтримується можливість встановлення до 4 CIF плат. З метою контролю за наявністю плат у системі та можливості їх конфігурації, модуль містить форму контролю та конфігурації CIF-плат (рис.1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:786px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cif_dev.png"><img class="thumbimage" height="567" src="../files/Siemens_cif_dev.png" width="784" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфігурації CIF-плат.</div></div></div></div>
+<p>За допомогою цієї форми можна проконтролювати наявність комунікаційних процесорів, їх конфігурацію, а також налаштувати параметри мережі ProfiBus у вигляді PB адреси комунікаційного процесору та швидкості шини ProfiBus. У другій вкладці модуля (рис.2) можна проконтролювати наявність різних станцій в мережі ProfiBus.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:634px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_pb.png"><img class="thumbimage" height="559" src="../files/Siemens_pb.png" width="632" /></a>  <div class="thumbcaption">Рис.2. Вкладка моніторингу мережі ProfiBus.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D0.B4.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.B0_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">2</span> Об'єкт контролеру джерела даних</span></h2>
+<p>Для додання джерела даних створюється та конфігурується об'єкт контролеру у OpenSCADA. Приклад вкладки конфігурації об'єкта контролера цього типу зображено на рисунку 3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:831px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cntr_uk.png"><img class="thumbimage" height="717" src="../files/Siemens_cntr_uk.png" width="829" /></a>  <div class="thumbcaption">Рис.3. Вкладка конфігурації контролеру.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> Стан контролеру, а сам: Статус, "Включено", Запущено" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис контролеру.</li>
+<li> Стан, в який переводити контролер при завантажені: "Включено" та "Запущено".</li>
+<li> Ім'я таблиці для збереження конфігурації параметрів контролеру.</li>
+<li> Політика планування та пріоритет задачі збору даних.</li>
+<li> Час відновлення підключення, у секундах, після втрати зв'язку.</li>
+<li> Режим асинхронного запису до віддаленого контролеру.</li>
+<li> Тип з'єднання. Підтримуються:
+<ul><li> <i>CIF_PB</i> — підключення до контролерів серії S7, фірми Siemens, за посередництвом комунікаційного процесору CIF-50PB або схожого;</li>
+<li> <i>ISO_TCP</i>, <i>ISO_TCP243</i> — підключення до контролерів серії S7, фірми Siemens, за посередництвом мережі Ethernet (TCP243 для CP243);</li>
+<li> <i>ADS</i> — TwinCAT ADS/AMS протокол для підключення до контролерів фірми Beckhoff.</li></ul></li>
+<li> Адреса віддаленого контролеру. у випадку типу з'єднання:
+<ul><li> <i>CIF_PB</i> — адреса контролеру у мережі "ProfiBus", цифра 0-255;</li>
+<li> <i>ISO_TCP</i>, <i>ISO_TCP243</i> — IP-адреса контролеру у мережі Ethernet;</li>
+<li> <i>ADS</i> — Мережевий ідентифікатор та порт цільового контролеру та вихідної станції, у вигляді <b>{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}</b> (наприклад: "192.168.0.1.1.1:801|82.207.88.73.1.1:801"), де:
+<ul><li> <i>AMSNetId</i> — мережевий ідентифікатор, записується у вигляді шести цифр 0-255, наприклад: "192.168.0.1.1.1";</li>
+<li> <i>AMSPort</i> — порт, записується у вигляді числа 0-65535.</li></ul></li></ul></li>
+<li> Слот ЦП у котрий встановлено центральний процесор контролеру.</li>
+<li> CIF плату, використану для доступу до промислового контролеру за посередництвом CIF комунікаційних процесорів.</li>
+<li> Вихідний транспорт OpenSCADA, використовуваний протоколом "ADS" (порт 48898, 801 для AMS) та "ISO_TCP" (порт 102) для передачі запитів.</li></ul>
+<h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.D0.B4.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.B0_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">3</span> Об'єкт параметру джерела даних</span></h2>
+<p>Враховуючи високу інтелектуальність джерел даних в особі промислових контролерів фірми Siemens S7-200,300,400, об'єкти параметру виконуються на основі <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/LogicLevParam" rel="nofollow noreferrer noopener" target="_blank">шаблонів</a>. Такий підхід дозволяє не обмежуватися жорстким переліком типів параметрів, що обмежує й можливості контролерів, а надати можливість користувачу формувати потрібні йому типи параметрів самостійно або використовувати бібліотеки вже розроблених раніш типів параметрів (шаблонів).
+</p><p>Виходячи із цього, модуль надає тільки один тип параметрів — "Логічний". Додатковими конфігураційними полями параметрів цього модуля (рис.4) є поле вибору шаблону параметра.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:755px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm_uk.png"><img class="thumbimage" height="501" src="../files/Siemens_prm_uk.png" width="753" /></a>  <div class="thumbcaption">Рис.4. Вкладка конфігурації параметру.</div></div></div></div>
+<p>Для конфігурації шаблону параметра надається відповідна вкладка. Вміст цієї вкладки визначається конфігурацією шаблона, тобто формуються відповідні поля посилань та встановлення постійних.
+</p><p>Типи посилань визначаються типом параметру у шаблоні (Логічний, Цілий, Реальний та Строковий) та визначенням значення посилання (для групових посилань). Визначення групового посилання у шаблоні записується у форматі: "{Ім'я посилання}|{Зсув у БД}|{Розмір значення}", де:
+</p>
+<dl><dd><i>Ім'я посилання</i> — ім'я групового посилання. Всі посилання із однаковим ім'ям групуються та вказуються як одне посилання на БД або БД з вказаним зсувом.</dd>
+<dd><i>Зсув у БД</i> — Ім'я зсуву у блоці даних (БД). При зазначені тільки БД, при конфігурації шаблону, цей зсув буде вказано для параметру, якщо ж при конфігурації шаблону буде вказано і зсув, то обидва зсуви будуть сумуватися разом. Такий підхід дозволяє звертатися до множини структур у одному БД. Номер БД та зсув можна вказувати у десятковій (3245) та шістнадцятковій формі (0xCAD).</dd>
+<dd><i>Розмір значення</i> — необов'язкове поле, яке визначає нестандартний розмір значення у контролері. Передбачено наступні розміри типів значень:
+<dl><dd><i>Ціле:</i> — 1 байт(знаковий), 2 байти(знаковий, типово) та 4 байти(знаковий).</dd>
+<dd><i>Реальний:</i> — 4 байти(float, типово), 8 байт(double).</dd>
+<dd><i>Логічний:</i> — завжди один байт (з вказівкою біту через крапку - DB1.10.1).</dd>
+<dd><i>Рядок:</i> — 10 байт(типово) та 1-200 можна вказувати.</dd></dl></dd></dl>
+<p>Наочний приклад загального процесу конфігурації параметру від шаблону й до значень приведено на рисунках від 5 до 8.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:886px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_tmpl_uk.png"><img class="thumbimage" height="638" src="../files/Siemens_tmpl_uk.png" width="884" /></a>  <div class="thumbcaption">Рис.5. Приклад шаблону із групуванням.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:756px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm_tmpl_uk.png"><img class="thumbimage" height="512" src="../files/Siemens_prm_tmpl_uk.png" width="754" /></a>  <div class="thumbcaption">Рис.6. Вкладка конфігурації шаблону параметру.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:756px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm_tmpl_off_uk.png"><img class="thumbimage" height="512" src="../files/Siemens_prm_tmpl_off_uk.png" width="754" /></a>  <div class="thumbcaption">Рис.7. Вкладка конфігурації шаблону параметра із визначенням параметрів окремо.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:756px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm_val_uk.png"><img class="thumbimage" height="547" src="../files/Siemens_prm_val_uk.png" width="754" /></a>  <div class="thumbcaption">Рис.8. Значення параметру.</div></div></div></div>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Модулем підтримується адресація тільки до блоків даних (БД) контролерів.
+</p><p>Модулем передбачено особливу обробку низки атрибутів шаблону:
+</p>
+<ul><li> <i>f_frq</i> — Частота обчислення процедури шаблону або час після останнього обчислення, негативне у секундах, для планування за CRON, тільки читання.</li>
+<li> <i>f_start</i> — Прапор першого виконання процедури шаблону, запуск, тільки читання.</li>
+<li> <i>f_stop</i> — Прапор останнього виконання процедури шаблону, зупинка, тільки читання.</li>
+<li> <i>f_err</i> — Помилка параметру, повний доступ. Значення цього атрибуту шаблону потрапляє до атрибуту помилки параметру "err".</li>
+<li> <i>SHIFR</i> — Значення шифру параметра, тільки читання.</li>
+<li> <i>NAME</i> — Значення імені параметру, тільки читання.</li>
+<li> <i>DESCR</i> — Значення опису параметру, тільки читання.</li>
+<li> <i>this</i> — Об'єкт даного параметру, дозволяє отримати доступ до атрибутів параметру, наприклад, для доступу до архівів.</li></ul>
+<h2><span class="mw-headline" id=".D0.90.D1.81.D0.B8.D0.BD.D1.85.D1.80.D0.BE.D0.BD.D0.BD.D0.B8.D0.B9_.D1.80.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B7.D0.B0.D0.BF.D0.B8.D1.81.D1.83"><span class="mw-headline-number">4</span> Асинхронний режим запису</span></h2>
+<p>Стандартним режимом запису для SCADA-систем, які взаємодіють із PLC, є синхронний оскільки дозволяє контролювати коректність завершення операції запису. Однак у випадку запису множини параметрів одразу такий підхід не виправданий у зв'язку із надсиланням безлічі мілких запитів у контролер, що перевантажує ПЛК та займає тривалий проміжок часу. Рішенням цієї проблеми є асинхронний запис суміжних значень одним блоком. Такий режим підтримується цим модулем та дозволяє записувати всі параметри одразу суміжними блоками по 240 байт. Читання та запис у такому режимі здійснюється суміжними блоками із періодичністю опитування контролеру.
+</p>
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">5</span> Зауваження</span></h2>
+<p>Після цілеспрямованого пошуку було виявлено декілька рішень проблеми комунікації із промисловими контролерами фірми Siemens за посередництвом різних комунікаційних інтерфейсів:
+</p>
+<ul><li> Виявлено достатньо багато рішень від фірми Siemens, які постачаються із рішеннями, які підтримують відкриту ОС "Linux" (<a class="external free" href="http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm" rel="nofollow noreferrer noopener" target="_blank">http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm</a>, ...).</li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">6</span> Посилання</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Siemens_cif2621.tgz" title="File:Siemens cif2621.tgz">Драйвер фірми Hilscher для плат сімейства CIF</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Siemens_lastkernels.patch" title="File:Siemens lastkernels.patch">Патч для збірки драйверу для ядра Linux 2.6.29</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Siemens_crash_20160127_0911.crash.gz" title="File:Siemens crash 20160127 0911.crash.gz">Звіт про падіння, LibnoDave специфічне</a></li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

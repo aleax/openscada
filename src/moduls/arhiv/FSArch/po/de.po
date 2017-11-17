@@ -410,7 +410,7 @@ msgid "Read parameters of the archive file '%s' error!"
 msgstr "Lese Parameter der Archivdatei '%s' Fehler!"
 
 msgid "Parameters of the archive file '%s' are error!"
-msgstr "Parameter der Archivdatei '%s' sind fehlerhaft!
+msgstr "Parameter der Archivdatei '%s' sind fehlerhaft!"
 
 msgid "Archive file '%s' is not opened!"
 msgstr "Archivdatei '%s' ist nicht geöffnet!"

@@ -1,0 +1,337 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/Плати Diamond Systems - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/Плати Diamond Systems</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FDiamondBoards&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/DiamondBoards" title="Modules/DiamondBoards">Modules/DiamondBoards</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DiamondBoards" title="Modules/DiamondBoards (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/DiamondBoards/ru" title="Модули/Платы Diamond Systems (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/DiamondBoards.html" title="Special:MyLanguage/Modules/DiamondBoards">DiamondBoards</a> </td>
+<td> Diamond плати збору даних </td>
+<td> 2.1 </td>
+<td> GPL2 </td>
+<td> daq_DiamondBoards.so </td>
+<td> en,uk,ru,de </td>
+<td> x86
+</td>
+<td> DAQ </td>
+<td> Роман Савоченко </td>
+<td> Надає доступ до "<a class="external text" href="http://diamondsystems.com" rel="nofollow noreferrer noopener" target="_blank">Diamond Systems</a>" DAQ плат. Включає основну підтримку базових плат.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="tocnumber">1</span> <span class="toctext">Об'єкт контролеру даних</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83-.D0.BF.D0.BB.D0.B0.D1.82.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Об'єкт параметру-плати</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">3</span> <span class="toctext">Зауваження</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">4</span> <span class="toctext">Посилання</span></a></li>
+</ul>
+</div>
+
+<p>Модуль надає до OpenSCADA підтримку джерел даних, основаних на платах збору даних фірми Diamond Systems (<a class="external free" href="http://diamondsystems.com" rel="nofollow noreferrer noopener" target="_blank">http://diamondsystems.com</a>). Модуль побудовано на основі універсального драйверу виробника плат. Універсальний драйвер доступний практично для всіх відомих програмних платформ, у вигляді бібліотеки. Універсальний драйвер було отримано за адресою <a class="external free" href="http://www.diamondsystems.com/support/software" rel="nofollow noreferrer noopener" target="_blank">http://www.diamondsystems.com/support/software</a> та включено до дистрибутиву OpenSCADA, тому для збірки цього модуля не потрібно зовнішніх бібліотек. Потрібно тільки збірку модуля ядра Linux "dscudkp.ko" для роботи за перериванням та з FIFO.
+</p><p>Плати збору даних фірми Diamond Systems представляють з себе модулі розширення формфактору PC/104. Плати можуть містити: аналогові IO(входи/виходи), дискретні IO та лічильники. Комплектація плат може значно варіюватися. Можуть міститися тільки IO одного типу або ж всього потроху. Крім того, функцією збору даних можуть наділятися і системні плати цієї фірми. Наприклад, системна плата "<a class="external text" href="http://www.diamondsystems.com/products/athena" rel="nofollow noreferrer noopener" target="_blank">Athena</a>" містить: 16 AI, 4 AO, 24 DIO.
+</p><p>Модуль надає підтримку аналогових та дискретних IO у режимах синхронного та асинхронного доступу. Збір аналогових входів (AI) підтримується також у режимі за перериванням (за допомогою FIFO). Метод збору за перериванням дозволяє досягнути максимальної частоти опитування, апаратурою яка це підтримує. У випадку із процесорною платою "Athena" ця частота досягає 100 кГц. У процесі збору за перериванням дані отримуються пакетами основного періоду опитування та розташовуються у буфер архівів значень.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> У версії 2.0 цей модуль, згідно із <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/module_daqdiamondboards_update" rel="nofollow noreferrer noopener" target="_blank">завданням</a>, було фактично повністю переписана за для забезпечення підтримки всього спектру плат збору даних фірми <a class="external text" href="http://diamondsystems.com" rel="nofollow noreferrer noopener" target="_blank">Diamond Systems</a>. Отриманий модуль став першим, який підтримує роботу в усіх трьох режимах збору даних (синхронний, асинхронний, пакетний), додатково до того, що він є першим модулем збору даних системи OpenSCADA.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">1</span> Об'єкт контролеру даних</span></h2>
+<p>На рівні об'єкта контролеру створюється загальне для всіх плат завдання обслуговування плат-параметрів. Приклад вкладки конфігурації об'єкту контролера наведено на рис.1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:717px;"><a class="image" href="http://oscada.org/wiki/File:DiamondBoards_cntr_uk.png"><img class="thumbimage" height="629" src="../files/DiamondBoards_cntr_uk.png" width="715" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфігурації об'єкта контролеру.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> Стан контролеру, а саме: статус, стани "Включено" та Запущено" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис об'єкту контролера.</li>
+<li> Стан, в який переводити контролер при завантажені: "Включено" та "Запущено".</li>
+<li> Ім'я таблиці для зберігання конфігурації параметрів контролеру.</li>
+<li> Політику планування викликів та пріоритет завдання збору даних.</li></ul>
+<h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83-.D0.BF.D0.BB.D0.B0.D1.82.D0.B8"><span class="mw-headline-number">2</span> Об'єкт параметру-плати</span></h2>
+<p>Об'єкт параметру-плати безпосередньо містить конфігурацію окремо взятої плати та надає всі доступні на платі дані у вигляді атрибутів. Приклад вкладки "Параметр", конфігурації параметру-плати цілком, представлено на рис.2, а вкладку "Конфігурація", властивостей сигналів, наведено на рис.3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:717px;"><a class="image" href="http://oscada.org/wiki/File:DiamondBoards_prm_uk.png"><img class="thumbimage" height="629" src="../files/DiamondBoards_prm_uk.png" width="715" /></a>  <div class="thumbcaption">Рис.2. Вкладка "Параметр", конфігурації параметру-плати цілком.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> Стан параметру, а саме: тип та стан "Включено".</li>
+<li> Ідентифікатор, ім'я та опис параметру.</li>
+<li> Стан, в який переводити параметр при завантажені: "Включено".</li>
+<li> Тип, адреса та вектор переривання плати. Вектор переривання доступний лише для плат з аналоговими входами та FIFO.</li>
+<li> Частота вимірювання на один канал, при опитуванні аналогових входів за перериванням. Доступна тільки для плат із аналоговими входами та FIFO. Ненульові та коректні значення цього та попереднього поля включають режим опитування AI за перериванням.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Реальні значення цього поля можуть бути скинуті до ліміту частоти лічильника обслуговування AI за перериванням, під час перерахунку на один канал.</dd></dl>
+<ul><li> Режим асинхронного читання, з періодом об'єкта контролера. Працює і у режимі опитування AI за перериваннями для дискретних сигналів.</li>
+<li> Режим відображення значення аналогових входів: "Код АЦП (ціле)", "Відсоток від шкали сигналу (реальне)" та "Напруга (реальне)". Режим "Напруга" може бути доступний не для всіх плат!</li>
+<li> Обмеження на кількість аналогових параметрів що обробляються. Корисно при використанні меншої кількості каналів, але частіше. Особливо у режимі опитування за перериванням та керування режимом каналу SE(single-ended) та "Differential".</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:DiamondBoards_prm_cfg_uk.png"><img class="thumbimage" height="629" src="../files/DiamondBoards_prm_cfg_uk.png" width="773" /></a>  <div class="thumbcaption">Рис.3. Вкладка "Конфігурація", властивостей сигналів.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> Інтервал сканування аналогових входів, визначає час між вибірками у режимі опитування AI за перериванням.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Якщо запитана частота вибірки велика та великий інтервал, то результуюча частота може скидатися до отриманої із інтервалу сканування.</dd></dl>
+<ul><li> Конфігурація діапазону AI. У режимі опитування AI по перериванню використовується діапазон нульового входу, чому у дужках вказано "(всі входи)".</li>
+<li> Конфігурація напрямку груп дискретних входів (каналів), для DIO, та режим інверсії окремих дискретних входів.</li></ul>
+<p>На рисунку 4 представлено приклад вкладки "Атрибути" для плати "DMM-32x-AT".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:774px;"><a class="image" href="http://oscada.org/wiki/File:DiamondBoards_prm_attr_uk.png"><img class="thumbimage" height="690" src="../files/DiamondBoards_prm_attr_uk.png" width="772" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Атрибути" параметру-плати.</div></div></div></div>
+<p>В таблиці 1 наведено перелік плат фірми "Diamond Systems", статус їх підтримки та тестування.
+</p><p><b>Таблиця 1</b> Властивості плат фірми "Diamond Systems"
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Плата </th>
+<th> AI (16 біт) </th>
+<th> AO (12 біт) </th>
+<th> DIO (x8) </th>
+<th> DI (x8) </th>
+<th> DO (x8) </th>
+<th> Зауваження
+</th></tr>
+<tr>
+<td> DMM-16 </td>
+<td> 16 </td>
+<td> 4 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td>
+</td></tr>
+<tr>
+<td> Ruby-MM </td>
+<td> 0 </td>
+<td> 8 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Opal-MM </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td>
+</td></tr>
+<tr>
+<td> DMM </td>
+<td> 16 (12 bit) </td>
+<td> 2 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td>
+</td></tr>
+<tr>
+<td> Pearl-MM </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 2 </td>
+<td>
+</td></tr>
+<tr>
+<td> Onyx-MM </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 6 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Ruby-MM-416 </td>
+<td> 0 </td>
+<td> 4 (16 bit) </td>
+<td> 2 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> DMM-AT </td>
+<td> 16 (12 bit, 100 kHz, 512 FIFO) </td>
+<td> 2 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td>
+</td></tr>
+<tr>
+<td> DMM-16-AT </td>
+<td> 16 (100 kHz, 512 FIFO) </td>
+<td> 4 </td>
+<td> 0 </td>
+<td> 1 </td>
+<td> 1 </td>
+<td>
+</td></tr>
+<tr>
+<td> IR104 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 3 </td>
+<td> 3 </td>
+<td>
+</td></tr>
+<tr>
+<td> Prometheus </td>
+<td> 16 (100 kHz, 48 FIFO) </td>
+<td> 4 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Hercules EBX </td>
+<td> 32 (250 kHz, 2048 FIFO) </td>
+<td> 4 </td>
+<td> 5 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Onyx-MM-DIO </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 6 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Mercator </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Athena </td>
+<td> 16 (100 kHz, 48 FIFO) </td>
+<td> 4 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> <span style="color: green">Verified</span>
+</td></tr>
+<tr>
+<td> DMM-32x(-AT) </td>
+<td> 32 (250 kHz, 1024 FIFO) </td>
+<td> 4 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> GPIO-MM-11[12](DIO) </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 6 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> GPIO-MM-21 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> 12 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Poseidon </td>
+<td> 32 (250 kHz, 1024 FIFO) </td>
+<td> 4 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Athena-II </td>
+<td> 16 (100 kHz, 2048 FIFO) </td>
+<td> 4 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> DMM-32dx(-AT) </td>
+<td> 32 (250 kHz, 1024 FIFO) </td>
+<td> 4 </td>
+<td> 3 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td> <span style="color: green">Verified</span>
+</td></tr>
+<tr>
+<td> Helios </td>
+<td> 16 (100 kHz, 2048 FIFO) </td>
+<td> 4 </td>
+<td> 5 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr>
+<tr>
+<td> Neptune </td>
+<td> 32 (250 kHz, 1024 FIFO) </td>
+<td> 4 </td>
+<td> 4 </td>
+<td> 0 </td>
+<td> 0 </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">3</span> Зауваження</span></h2>
+<p>Особливістю роботи збору AI за перериванням є синхронізація переключення каналів; вимірів за окремим, внутрішнім, лічильником та використання FIFO як проміжного буферу вимірювання. Звісно, що цей лічильник на деяке значення буде відрізнятися від лічильника реального часу, а FIFO потрібно встигати вичитувати. Природно що потрібне підлаштування-калібровка розходження надходження даних із годинником реального часу. В цілому реалізуються наступні механізми компенсації розходження лічильників та інших явищ:
+</p>
+<ul><li> <b>Переповнення FIFO</b> — у наслідку чого втрачається один кадр даних розміром у FIFO та відбувається зсув положення каналів у області даних, якщо розмір FIFO не вирівняно до кількості каналів, в додатку до розміру блоку вимірювань.</li>
+<li> <b>Втрата циклів</b> — виклик задачі обробки блоків даних може статися через один або декілька циклів, в наслідок низького пріоритету та інших факторів. Результатом цього явища є переповнення (завертання) даних блоку вимірів та потрібно повністю перевстановити час даних у реальний час.</li>
+<li> <b>Різниця у лічильнику вимірювання та годинника реального часу</b> — компенсується шляхом підлаштування реальної частоти вимірювань на розмір відхилення часу більш циклу обробки. Тут присутня похибка на час виклику задачі обробки та потрапляння на границю скидання частини буферу вимірювання (transfers threshold) на значення біля розмірності скидання буферу вимірювання, половина від періоду вимірювання.</li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">4</span> Посилання</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:DiamondBoards_dscud5.91linux.tar.gz" title="File:DiamondBoards dscud5.91linux.tar.gz">Використана версія Linux драйвера від Diamond systems</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:DiamondBoards_lastkernels.patch" title="File:DiamondBoards lastkernels.patch">Патч для збірки драйверу для ядра Linux 2.6.29, використаного при зборі даних за перериванням</a></li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

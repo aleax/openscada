@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -252,8 +252,7 @@ void DlgUser::showEvent( QShowEvent * event )
 //*********************************************
 //* Status bar user widget                    *
 //*********************************************
-UserStBar::UserStBar( const string &iuser, const string &ipass, const string &iVCAstat, QWidget *parent ) :
-    QLabel(parent), userTxt(resData), userPass(resData), VCAStat(resData)
+UserStBar::UserStBar( const string &iuser, const string &ipass, const string &iVCAstat, QWidget *parent ) : QLabel(parent)
 {
     setUser(iuser);
     setPass(ipass);

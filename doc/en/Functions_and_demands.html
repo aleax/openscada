@@ -29,6 +29,7 @@
 <li class="toclevel-2 tocsection-8"><a href="#Building"><span class="tocnumber">2.2</span> <span class="toctext"><span>Building</span></span></a></li>
 </ul>
 </li>
+<li class="toclevel-1 tocsection-9"><a href="#Links"><span class="tocnumber">3</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -45,16 +46,16 @@
 <li> Data acquisition (DAQ) from sources:
 <ul><li> Information about a platform (hardware-software) on which the server works. By means of the DAQ-module <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>. </li>
 <li> Data acquisition from sources which support protocol SNMP (Simple Network Management Protoсol). By means of the DAQ-module <a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>.</li>
-<li> Data acquisition from controllers of firm Siemens of S7 series. By means of the DAQ-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Siemens" title="Special:MyLanguage/Modules/Siemens">Siemens</a>.</li>
+<li> Data acquisition from controllers of firm Siemens of S7 series. By means of the DAQ-module <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a>.</li>
 <li> Data acquisition of industrial controllers under the protocol ModBus. By means of the DAQ-module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
 <li> Data acquisition of industrial controllers under the protocol DCON. By means of the DAQ-module <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>.</li>
 <li> Formation of derivative structures of parameters on the basis of templates of parameters and data from other sources. By means of the DAQ-module <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a>.</li>
 <li> Data acquisition from other servers and PLC, based on OpenSCADA, possibly for duplication. By means of the DAQ-module <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>.</li>
 <li> Data acquisition from sound controller's input channels. By means of the DAQ-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SoundCard" title="Special:MyLanguage/Modules/SoundCard">SoundCard</a>.</li>
-<li> Data acquisition from hardware of firm <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>. By means of the DAQ-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ICP_DAS" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>.</li>
+<li> Data acquisition from hardware of firm <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>. By means of the DAQ-module <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>.</li>
 <li> Data acquisition from sources which support protocol OPC-UA. By means of the DAQ-module <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a>.</li>
 <li> Data acquisition from automation of "Big Dutchman" company. By means of the DAQ-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/BFN" title="Special:MyLanguage/Modules/BFN">BFN</a>.</li>
-<li> Data acquisition from sources DAQ-boars on buses ISA, PCI, PCMCIA and USB by means library of the project <a class="external text" href="http://comedi.org" rel="nofollow noreferrer noopener" target="_blank">Comedi</a> and the DAQ-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Comedi" title="Special:MyLanguage/Modules/Comedi">Comedi</a>.</li>
+<li> Data acquisition from sources DAQ-boars on buses ISA, PCI, PCMCIA and USB by means library of the project <a class="external text" href="http://comedi.org" rel="nofollow noreferrer noopener" target="_blank">Comedi</a> and the DAQ-module <a href="Modules/Comedi.html" title="Special:MyLanguage/Modules/Comedi">Comedi</a>.</li>
 <li> Data acquisition from different sources, which have utilities for access to it data or it accessibly through simple special network protocols. Making by getting procedure writing on language of user programming by DAQ-module <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, and also the transport's protocol module <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">User Protocol</a>. Most known protocols implementing on <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">the Users Protocols</a>: SMS, SMTP, Elemer TM510x, EDWARDS TURBOMOLECULAR PUMPS (SCU750), Heat counter computer VKT7, Sycon Multi Drop Protocol, Power supply for turbomolecular pumps (TMP-xx03), Temperature measurement IT-3, OWEN, IVE-452HS-02, OPTRIS CT/CTL, CTR 100-101, IEC-60870-104, I2C Chips (PCF8591, PCF8574, DS3231, AT24CXX), 1Wire Chips by adapters DS9097 and DS9097U (DS1820, DS1820/DS18S20/DS1920, DS1822, DS2413, DS2408, DS2450, DS2438), Low level devices by GPIO (DHT, 1602A), etc.</li></ul></li>
 <li> Providing data to upper-level systems:
 <ul><li> By means of interfaces:
@@ -119,7 +120,7 @@
 <hr />
 <h3><span class="mw-headline" id="Environment_of_execution_of_the_controllers_.28PLC.29"><span class="mw-headline-number">1.3</span> Environment of execution of the controllers (PLC)</span></h3>
 <ul><li> Data acquisition (DAQ) from sources:
-<ul><li> Cards of data acquisition of firm <a class="external text" href="http://diamondsystems.com/" rel="nofollow noreferrer noopener" target="_blank">Diamond Systems</a>. By means of the DAQ-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/DiamondBoards" title="Special:MyLanguage/Modules/DiamondBoards">DiamondBoards</a>.</li>
+<ul><li> Cards of data acquisition of firm <a class="external text" href="http://diamondsystems.com/" rel="nofollow noreferrer noopener" target="_blank">Diamond Systems</a>. By means of the DAQ-module <a href="Modules/DiamondBoards.html" title="Special:MyLanguage/Modules/DiamondBoards">DiamondBoards</a>.</li>
 <li> Information about a platform (hardware-software) on which the server works. By means of the DAQ-module <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>. </li>
 <li> Data acquisition from sources which support protocol SNMP (Simple Network Management Protoсol). By means of the DAQ-module <a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>.</li>
 <li> Data acquisition of industrial controllers under the protocol ModBus. By means of the DAQ-module [[Special:MyLanguage/Modules/ModBus|ModBus].</li>
@@ -127,9 +128,9 @@
 <li> Formation of derivative structures of parameters on the basis of templates of parameters and data from other sources. By means of the DAQ-module <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a>.</li>
 <li> Data acquisition from other servers and PLC, based on OpenSCADA, possibly for duplication. By means of the DAQ-module <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>.</li>
 <li> Data acquisition from sound controller's input channels. By means of the DAQ-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SoundCard" title="Special:MyLanguage/Modules/SoundCard">SoundCard</a>.</li>
-<li> Data acquisition from hardware of firm <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>. By means of the DAQ-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ICP_DAS" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>.</li>
+<li> Data acquisition from hardware of firm <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>. By means of the DAQ-module <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>.</li>
 <li> Data acquisition from sources which support protocol OPC-UA. By means of the DAQ-module <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a>.</li>
-<li> Data acquisition from sources DAQ-boars on buses ISA, PCI, PCMCIA and USB by means library of the project <a class="external text" href="http://comedi.org" rel="nofollow noreferrer noopener" target="_blank">Comedi</a> and the DAQ-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Comedi" title="Special:MyLanguage/Modules/Comedi">Comedi</a>.</li>
+<li> Data acquisition from sources DAQ-boars on buses ISA, PCI, PCMCIA and USB by means library of the project <a class="external text" href="http://comedi.org" rel="nofollow noreferrer noopener" target="_blank">Comedi</a> and the DAQ-module <a href="Modules/Comedi.html" title="Special:MyLanguage/Modules/Comedi">Comedi</a>.</li>
 <li> Data acquisition from different sources, which have utilities for access to it data or it accessibly through simple special network protocols. Making by getting procedure writing on language of user programming by DAQ-module <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, and also the transport's protocol module <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">User Protocol</a>. Most known protocols implementing on <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">the Users Protocols</a>: SMS, SMTP, Elemer TM510x, EDWARDS TURBOMOLECULAR PUMPS (SCU750), Heat counter computer VKT7, Sycon Multi Drop Protocol, Power supply for turbomolecular pumps (TMP-xx03), Temperature measurement IT-3, OWEN, IVE-452HS-02, OPTRIS CT/CTL, CTR 100-101, IEC-60870-104, I2C Chips (PCF8591, PCF8574, DS3231, AT24CXX), 1Wire Chips by adapters DS9097 and DS9097U (DS1820, DS1820/DS18S20/DS1920, DS1822, DS2413, DS2408, DS2450, DS2438), Low level devices by GPIO (DHT, 1602A), etc.</li></ul></li>
 <li> Providing data to upper-level systems:
 <ul><li> By means of interfaces:
@@ -171,10 +172,10 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:556px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use_opcua.png"><img class="thumbimage" height="525" src="files/Oscada_use_opcua.png" width="554" /></a>  <div class="thumbcaption">Fig. 2. OpenSCADA system role as "OPC-UA Server".</div></div></div></div>
 <p>The data sources and protocols, which accessible by the unified OPC-UA server:
 </p>
-<ul><li> Industrial controllers of firm <a class="external text" href="http://s7automation.com" rel="nofollow noreferrer noopener" target="_blank">Siemens GMBH</a> series S7, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Siemens" title="Special:MyLanguage/Modules/Siemens">DAQ.Siemens</a>.</li>
-<li> Hardware of firm <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ICP_DAS" title="Special:MyLanguage/Modules/ICP DAS">DAQ.ICP_DAS</a>.</li>
-<li> Data acquisition boards of firm <a class="external text" href="http://diamondsystems.com/" rel="nofollow noreferrer noopener" target="_blank">Diamond Systems</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/DiamondBoards" title="Special:MyLanguage/Modules/DiamondBoards">DAQ.DiamondBoards</a>.</li>
-<li> Wide range of DAQ-boards Devices Object Interface (DOI) of different producers at buses ISA, PCI, PCMCIA and USB by a library of project <a class="external text" href="http://comedi.org" rel="nofollow noreferrer noopener" target="_blank">Comedi</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Comedi" title="Special:MyLanguage/Modules/Comedi">DAQ.Comedi</a>.</li>
+<ul><li> Industrial controllers of firm <a class="external text" href="http://s7automation.com" rel="nofollow noreferrer noopener" target="_blank">Siemens GMBH</a> series S7, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">DAQ.Siemens</a>.</li>
+<li> Hardware of firm <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>, <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">DAQ.ICP_DAS</a>.</li>
+<li> Data acquisition boards of firm <a class="external text" href="http://diamondsystems.com/" rel="nofollow noreferrer noopener" target="_blank">Diamond Systems</a>, <a href="Modules/DiamondBoards.html" title="Special:MyLanguage/Modules/DiamondBoards">DAQ.DiamondBoards</a>.</li>
+<li> Wide range of DAQ-boards Devices Object Interface (DOI) of different producers at buses ISA, PCI, PCMCIA and USB by a library of project <a class="external text" href="http://comedi.org" rel="nofollow noreferrer noopener" target="_blank">Comedi</a>, <a href="Modules/Comedi.html" title="Special:MyLanguage/Modules/Comedi">DAQ.Comedi</a>.</li>
 <li> Wide range of industrial controllers and other data sources by protocol ModBus, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a>.</li>
 <li> Wide range of industrial controllers and other data sources by protocol DCON, <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>.</li>
 <li> Wide range of data of the network hardware by protocol "Simple Network Management Protocol (SNMP)", <a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">DAQ.SNMP</a>.</li>
@@ -576,6 +577,10 @@
 </td></tr></table>
 <p>* "opt: auto" — provides for disable of using the library at build time on it absence.
 </p>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">3</span> Links</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use.odg" title="File:Oscada use.odg">Diagram: Roles of the OpenSCADA system.</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use_opcua.odg" title="File:Oscada use opcua.odg">Diagram: OpenSCADA system roles as "OPC-UA Server".</a></li></ul>
+
 
 
 

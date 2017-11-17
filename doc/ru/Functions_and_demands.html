@@ -29,6 +29,7 @@
 <li class="toclevel-2 tocsection-8"><a href="#.D0.A1.D0.B1.D0.BE.D1.80.D0.BA.D0.B0"><span class="tocnumber">2.2</span> <span class="toctext"><span>Сборка</span></span></a></li>
 </ul>
 </li>
+<li class="toclevel-1 tocsection-9"><a href="#.D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Ссылки</span></a></li>
 </ul>
 </div>
 
@@ -45,16 +46,16 @@
 <li> Сбор данных (DAQ) из источников:
 <ul><li> Информация про платформу (программно-аппаратную) на которой работает сервер. С помощью модуля <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>.</li>
 <li> Сбор данных из источников, которые поддерживают протокол SNMP (Простой Протокол Управления Сетью). С помощью DAQ-модуля <a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>.</li>
-<li> Сбор данных промышленных контроллеров фирмы Siemens серии S7. С помощью DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Siemens" title="Special:MyLanguage/Modules/Siemens">Siemens</a>.</li>
+<li> Сбор данных промышленных контроллеров фирмы Siemens серии S7. С помощью DAQ-модуля <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a>.</li>
 <li> Сбор данных промышленных контроллеров по протоколу ModBus. С помощью DAQ-модуля <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
 <li> Сбор данных промышленных контролеров по протоколу DCON. С помощью DAQ-модуля <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>.</li>
 <li> Формирование производных структур параметров основываясь на шаблонах параметров и данных других источников. С помощью DAQ-модуля <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a>.</li>
 <li> Сбор данных с других серверов и ПЛК, построенных на OpenSCADA, возможно для дублирования. С помощью DAQ-модуля <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>.</li>
 <li> Сбор данных через входные каналы звуковых контроллеров. Посредством DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SoundCard" title="Special:MyLanguage/Modules/SoundCard">SoundCard</a>.</li>
-<li> Сбор данных оборудования фирмы <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>. Посредством DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ICP_DAS" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>.</li>
+<li> Сбор данных оборудования фирмы <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>. Посредством DAQ-модуля <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>.</li>
 <li> Сбор данных с источников, которые поддерживают протокол OPC-UA. Посредством DAQ-модуля <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a>.</li>
 <li> Сбор данных с автоматики птицеводства фирмы "Big Dutchman". Посредством DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/BFN" title="Special:MyLanguage/Modules/BFN">BFN</a>.</li>
-<li> Сбор данных с источников DAQ-плат на шинах ISA, PCI, PCMCIA и USB посредством библиотеки проекта Comedi и DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Comedi" title="Special:MyLanguage/Modules/Comedi">Comedi</a>.</li>
+<li> Сбор данных с источников DAQ-плат на шинах ISA, PCI, PCMCIA и USB посредством библиотеки проекта Comedi и DAQ-модуля <a href="Modules/Comedi.html" title="Special:MyLanguage/Modules/Comedi">Comedi</a>.</li>
 <li> Сбор данных из источников различного типа, которые имеют утилиты для доступа к данным или доступны посредством простых специализированных сетевых протоколов. Осуществляется путём написания процедуры получения данных на языке пользовательского программирования DAQ-модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, а также модуля транспортного протокола "<a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">Пользовательский протокол</a>". Реализация наиболее известных протоколов как <a class="external text" href="http://wiki.oscada.org/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">Протокол пользователя</a>: SMS, SMTP, Elemer TM510x, EDWARDS TURBOMOLECULAR PUMPS (SCU750), Компьютер учёта тепла VKT7, Sycon Multi Drop Protocol, Блок питания турбо-молекулярных насосов (TMP-xx03), Измеритель температуры IT-3, OWEN, IVE-452HS-02, OPTRIS CT/CTL, CTR 100-101, IEC-60870-104, I2C чипы (PCF8591, PCF8574, DS3231, AT24CXX), 1Wire чипы через адаптеры DS9097 и DS9097U (DS1820, DS1820/DS18S20/DS1920, DS1822, DS2413, DS2408, DS2450, DS2438), Низкоуровневые устройства через GPIO (DHT, 1602A), другое.</li></ul></li>
 <li> Предоставление данных системам верхнего уровня:
 <ul><li> Посредством интерфейсов:
@@ -119,7 +120,7 @@
 <hr />
 <h3><span class="mw-headline" id=".D0.A1.D1.80.D0.B5.D0.B4.D0.B0_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.BE.D0.B2_.28.D0.9F.D0.9B.D0.9A.29"><span class="mw-headline-number">1.3</span> Среда исполнения контроллеров (ПЛК)</span></h3>
 <ul><li> Сбор данных (DAQ) из источников:
-<ul><li> Платы сбора данных <a class="external text" href="http://diamondsystems.com/" rel="nofollow noreferrer noopener" target="_blank">Diamond Systems</a>. Посредством DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/DiamondBoards" title="Special:MyLanguage/Modules/DiamondBoards">DiamondBoards</a>.</li>
+<ul><li> Платы сбора данных <a class="external text" href="http://diamondsystems.com/" rel="nofollow noreferrer noopener" target="_blank">Diamond Systems</a>. Посредством DAQ-модуля <a href="Modules/DiamondBoards.html" title="Special:MyLanguage/Modules/DiamondBoards">DiamondBoards</a>.</li>
 <li> Информация про платформу (программно-аппаратную) на которой работает сервер. С помощью модуля <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>.</li>
 <li> Сбор данных из источников, которые поддерживают протокол SNMP (Простой Протокол Управления Сетью). С помощью DAQ-модуля <a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>.</li>
 <li> Сбор данных промышленных контроллеров по протоколу ModBus. С помощью DAQ-модуля <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
@@ -127,9 +128,9 @@
 <li> Формирование производных структур параметров основываясь на шаблонах параметров и данных других источников. С помощью DAQ-модуля <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a>.</li>
 <li> Сбор данных с других серверов и ПЛК, построенных на OpenSCADA, возможно для дублирования. С помощью DAQ-модуля <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>.</li>
 <li> Сбор данных через входные каналы звуковых контроллеров. Посредством DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SoundCard" title="Special:MyLanguage/Modules/SoundCard">SoundCard</a>.</li>
-<li> Сбор данных оборудования фирмы <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>. Посредством DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ICP_DAS" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>.</li>
+<li> Сбор данных оборудования фирмы <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>. Посредством DAQ-модуля <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>.</li>
 <li> Сбор данных с источников, которые поддерживают протокол OPC-UA. Посредством DAQ-модуля <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a>.</li>
-<li> Сбор данных с источников DAQ-плат на шинах ISA, PCI, PCMCIA и USB посредством библиотеки проекта Comedi и DAQ-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Comedi" title="Special:MyLanguage/Modules/Comedi">Comedi</a>.</li>
+<li> Сбор данных с источников DAQ-плат на шинах ISA, PCI, PCMCIA и USB посредством библиотеки проекта Comedi и DAQ-модуля <a href="Modules/Comedi.html" title="Special:MyLanguage/Modules/Comedi">Comedi</a>.</li>
 <li> Сбор данных из источников различного типа, которые имеют утилиты для доступа к данным или доступны посредством простых специализированных сетевых протоколов. Осуществляется путём написания процедуры получения данных на языке пользовательского программирования DAQ-модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, а также модуля транспортного протокола "<a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">Пользовательский протокол</a>". Реализация наиболее известных протоколов как <a class="external text" href="http://wiki.oscada.org/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">Протокол пользователя</a>: SMS, SMTP, Elemer TM510x, EDWARDS TURBOMOLECULAR PUMPS (SCU750), Компьютер учёта тепла VKT7, Sycon Multi Drop Protocol, Блок питания турбо-молекулярных насосов (TMP-xx03), Измеритель температуры IT-3, OWEN, IVE-452HS-02, OPTRIS CT/CTL, CTR 100-101, IEC-60870-104, I2C чипы (PCF8591, PCF8574, DS3231, AT24CXX), 1Wire чипы через адаптеры DS9097 и DS9097U (DS1820, DS1820/DS18S20/DS1920, DS1822, DS2413, DS2408, DS2450, DS2438), Низкоуровневые устройства через GPIO (DHT, 1602A), другое.</li></ul></li>
 <li> Предоставление данных системам верхнего уровня:
 <ul><li> Посредством интерфейсов:
@@ -171,10 +172,10 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:556px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use_opcua_ru.png"><img class="thumbimage" height="529" src="files/Oscada_use_opcua_ru.png" width="554" /></a>  <div class="thumbcaption">Рис. 2. Роль системы OpenSCADA как "OPC-UA Сервер".</div></div></div></div>
 <p>Источники данных и протоколы, доступные посредством универсального OPC-UA сервера:
 </p>
-<ul><li> Промышленные контроллеры фирмы <a class="external text" href="http://s7automation.com" rel="nofollow noreferrer noopener" target="_blank">Siemens GMBH</a> серии S7, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Siemens" title="Special:MyLanguage/Modules/Siemens">DAQ.Siemens</a>.</li>
-<li> Оборудование фирмы <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ICP_DAS" title="Special:MyLanguage/Modules/ICP DAS">DAQ.ICP_DAS</a>.</li>
-<li> Платы сбора данных фирмы <a class="external text" href="http://diamondsystems.com/" rel="nofollow noreferrer noopener" target="_blank">Diamond Systems</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/DiamondBoards" title="Special:MyLanguage/Modules/DiamondBoards">DAQ.DiamondBoards</a>.</li>
-<li> Широкий спектр DAQ-плат УСО разных производителей на шинах ISA, PCI, PCMCIA и USB посредством библиотеки проекта <a class="external text" href="http://comedi.org" rel="nofollow noreferrer noopener" target="_blank">Comedi</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Comedi" title="Special:MyLanguage/Modules/Comedi">DAQ.Comedi</a>.</li>
+<ul><li> Промышленные контроллеры фирмы <a class="external text" href="http://s7automation.com" rel="nofollow noreferrer noopener" target="_blank">Siemens GMBH</a> серии S7, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">DAQ.Siemens</a>.</li>
+<li> Оборудование фирмы <a class="external text" href="http://www.icpdas.com" rel="nofollow noreferrer noopener" target="_blank">ICP DAS</a>, <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">DAQ.ICP_DAS</a>.</li>
+<li> Платы сбора данных фирмы <a class="external text" href="http://diamondsystems.com/" rel="nofollow noreferrer noopener" target="_blank">Diamond Systems</a>, <a href="Modules/DiamondBoards.html" title="Special:MyLanguage/Modules/DiamondBoards">DAQ.DiamondBoards</a>.</li>
+<li> Широкий спектр DAQ-плат УСО разных производителей на шинах ISA, PCI, PCMCIA и USB посредством библиотеки проекта <a class="external text" href="http://comedi.org" rel="nofollow noreferrer noopener" target="_blank">Comedi</a>, <a href="Modules/Comedi.html" title="Special:MyLanguage/Modules/Comedi">DAQ.Comedi</a>.</li>
 <li> Широкий спектр промышленных контроллеров и других источников данных по протоколу ModBus, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a>.</li>
 <li> Широкий спектр промышленных контроллеров и других источников данных по протоколу DCON, <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>.</li>
 <li> Широкий спектр данных сетевого оборудования по протоколу "Простой Протокол Управления Сетью (SNMP)", <a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">DAQ.SNMP</a>.</li>
@@ -576,6 +577,10 @@
 </td></tr></table>
 <p>* "опц: авт." — предусматривает отключение использования библиотеки в случае отсутствия её при сборке.
 </p>
+<h2><span class="mw-headline" id=".D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="mw-headline-number">3</span> Ссылки</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use_ru.odg" title="File:Oscada use ru.odg">Диаграмма: Роли системы OpenSCADA.</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use_opcua_ru.odg" title="File:Oscada use opcua ru.odg">Диаграмма: Роль системы OpenSCADA как "OPC-UA Сервер".</a></li></ul>
+
 
 
 

@@ -6982,7 +6982,7 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','dscr','Extended pasport of the s
 - Trends for standard and key attributes: var, sp, out, auto, com, st_open, ...
 - Table of the current data.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0',32,'','','','','','','','','');
+Version: 1.1.1',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','en','1',40,'','','go_rg','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsAct','owner','root:UI',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsAct','name','Alarms: active',32,'','','','Порушення: активні','','Нарушения: активные','','','');
@@ -9691,6 +9691,7 @@ INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','highLght','Highlight rules, {lev}
 1:yellow',8,'','','','Правила підсвітлення, {lev}:{color}:{font}:{fontColor}','','','Правила подсветки, {lev}:{color}:{font}:{fontColor}','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','vHdrVis','Show header: vertical',131072,'0',8,'','','','Показув. заголовок: вертикальний','','','Показыв. заголовок: вертикальный','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','hideAttrs','Attributes list of the pasport to hide',131077,'',10,'<page>|paspHideAttrs','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','name_','For save original name',131077,'',8,'','','','','','','','','','','');
 CREATE TABLE 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeDayA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;bTime;time;process;n;aCur;',2);
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeMonthA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;bTime;time;process;n;aCur;',2);
@@ -20260,11 +20261,13 @@ arSAaoRlWe12e3Tv63FBSmmapnAce3urVShV8n623+85jptM12q1F/YPXV/beNQOAIriWFAcdrr9
 using Special.FLibSYS;
 
 if(f_start) {
+	if(!name_.length)	name_ = this.attr("name");
 	viewSet_geomY_ = viewSet_geomY, viewSet_geomH_ = viewSet_geomH;
 	pAddr = pName.slice(0, pName.lastIndexOf("/"));
 	if(!(pObj=SYS.nodeAt(pAddr)))	return;
 	scLog = (pObj.nodeAt("a_log").get() == true);
 	aLst = pObj.nodeList("a_");
+	this.attrSet("name", name_+": "+SYS.nodeAt(pName).get());
 
 	selTab = "view";
 
@@ -20425,7 +20428,7 @@ if(selTab != prevTab) {
 		else if(wId.indexOf(prevTab) != -1) wObj.attrSet("en",false);
 	}
 	prevTab = selTab;
-}','','',1000,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1498028091);
+}','','',1000,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1510948332);
 INSERT INTO "wlb_Main" VALUES('objProps','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAABvUlEQVRoge3av0rDUBTH8V9ubpNqrVrS+BcKWtFFpYidXBycHbvqSwhd
 fAHHvoEv4CIOLnHQRQcFETpYEPG/VVNtaaw1iUNRHDrJ1YNwPtMlwzn3O2S72tLy0tnoGdR6AQ4B
