@@ -1,0 +1,498 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/Системные тесты - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/Системные тесты</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSystemTests&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SystemTests" title="Modules/SystemTests">Modules/SystemTests</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SystemTests" title="Modules/SystemTests (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SystemTests/uk" title="Модулі/Системні тести (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/SystemTests.html" title="Special:MyLanguage/Modules/SystemTests">SystemTests</a> </td>
+<td> Тесты OpenSCADA и её модулей </td>
+<td> 1.5 </td>
+<td> GPL2 </td>
+<td> spec_SystemTests.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Специальные </td>
+<td> Роман Савоченко </td>
+<td> Предоставляет группу тестов для OpenSCADA и её модулей.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80_.28Param.29"><span class="tocnumber">1</span> <span class="toctext">Параметр (Param)</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.A0.D0.B0.D0.B7.D0.B1.D0.BE.D1.80_XML_.28XML.29"><span class="tocnumber">2</span> <span class="toctext">Разбор XML (XML)</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.A1.D0.BE.D0.BE.D0.B1.D1.89.D0.B5.D0.BD.D0.B8.D1.8F_.28Mess.29"><span class="tocnumber">3</span> <span class="toctext">Сообщения (Mess)</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.9F.D0.BE.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_SO_.28SOAttach.29"><span class="tocnumber">4</span> <span class="toctext">Подключение SO (SOAttach)</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.90.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B0_.28Val.29"><span class="tocnumber">5</span> <span class="toctext">Атрибут параметра (Val)</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.A2.D0.B5.D1.81.D1.82_.D0.91.D0.94_.28DB.29"><span class="tocnumber">6</span> <span class="toctext">Тест БД (DB)</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82_.28TrOut.29"><span class="tocnumber">7</span> <span class="toctext">Транспорт (TrOut)</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#.D0.AF.D0.B7.D1.8B.D0.BA_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.BE.D0.B9_.28SysContrLang.29"><span class="tocnumber">8</span> <span class="toctext">Язык управления программой (SysContrLang)</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#.D0.91.D1.83.D1.84.D0.B5.D1.80_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.28ValBuf.29"><span class="tocnumber">9</span> <span class="toctext">Буфер значений (ValBuf)</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#.D0.90.D1.80.D1.85.D0.B8.D0.B2_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.28Archive.29"><span class="tocnumber">10</span> <span class="toctext">Архив значений (Archive)</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Base64_.D0.BA.D0.BE.D0.B4.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.28Base64Code.29"><span class="tocnumber">11</span> <span class="toctext">Base64 кодирование (Base64Code)</span></a></li>
+</ul>
+</div>
+
+<p>Специальный модуль "SystemTests" содержит набор тестов, предназначенных для тестирования различных подсистем и узлов OpenSCADA. Тесты выполнены в виде функций пользовательского API. Следовательно тесты можно запускать как единоразово, во вкладке "Исполнить" страницы объекта функции, так и из пользовательских процедур, передавая в них нужные аргументы.
+</p><p>Для адресации к тестам можно использовать статический адрес вызова "<b>Special.SystemTests.{Test}()</b>" или динамический "<b>SYS.Special.SystemTests["{Test}"].call()</b>", "<b>SYS.Special.SystemTests.{Test}()</b>". Где <i>{Test}</i> — идентификатор функции в библиотеке.
+</p><p>Кроме механизмов обычного исполнения функций пользовательского API предусмотрен автономный механизм. Этот механизм представлен отдельной задачей, исполняющейся с периодом в одну секунду, и в которой осуществляется вызов функций тестов в соответствии с настройками в конфигурационном файле.
+</p><p>Конфигурационные поля тестов помещаются в секцию модуля SystemTests подсистемы "Специальные". Формат конфигурационных полей: <b>&lt;prm id="Test Id" on="1" per="10" /&gt;</b><br />
+Где:
+</p>
+<ul><li> id - идентификатор теста;</li>
+<li> on - признак "Тест включен";</li>
+<li> per - период повторения теста (секунд).</li></ul>
+<p>Кроме основных атрибутов осуществляется отражение входных параметров функций тестов на одноимённые атрибуты тега "prm". Например, атрибут "name" функции "Param" можно указать в теге "prm".
+</p><p>Допускается указание множества тегов "prm" для одного или разных тестов с одинаковыми или различными параметрами, указывая тем самым на отдельный запуск теста с указанными параметрами. Приведём пример описания всех доступных тестов:
+</p>
+<pre style="white-space: pre-wrap;">
+&lt;?xml version="1.0" encoding="UTF-8"&nbsp;?&gt;
+&lt;OpenSCADA&gt;
+    &lt;station id="DemoStation"&gt;
+        &lt;node id="sub_Special"&gt;
+            &lt;node id="mod_SystemTests"&gt;
+                &lt;prm id="Param" on="0" per="5" name="LogicLev.experiment.F3"/&gt;
+                &lt;prm id="XML" on="0" per="10" file="/etc/oscada.xml"/&gt;
+                &lt;prm id="Mess" on="0" per="10" categ="" arhtor="DBArch.test3" depth="10"/&gt;
+                &lt;prm id="SOAttach" on="0" per="20" name="../../lib/openscada/daq_LogicLev.so" mode="0" full="1"/&gt;
+                &lt;prm id="Val" on="0" per="1" name="LogicLev.experiment.F3.var" arch_len="5" arch_per="1000000"/&gt;
+                &lt;prm id="Val" on="0" per="1" name="System.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000"/&gt;
+                &lt;prm id="DB" on="0" per="10" type="MySQL" addr="server.diya.org;roman;123456;oscadaTest" table="test" size="1000"/&gt;
+                &lt;prm id="DB" on="0" per="10" type="DBF" addr="./DATA/DBF" table="test.dbf" size="1000"/&gt;
+                &lt;prm id="DB" on="0" per="10" type="SQLite" addr="./DATA/test.db" table="test" size="1000"/&gt;
+                &lt;prm id="DB" on="0" per="10" type="FireBird" addr="server.diya.org:/var/tmp/test.fdb;roman;123456" table="test" size="1000"/&gt;
+                &lt;prm id="TrOut" on="0" per="1" addr="TCP:127.0.0.1:10001" type="Sockets" req="time"/&gt;
+                &lt;prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:10001" type="Sockets" req="time"/&gt;
+                &lt;prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time"/&gt;
+                &lt;prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time"/&gt;
+                &lt;prm id="SysContrLang" on="0" per="10" path="/Archive/FSArch/mess_StatErrors/%2fprm%2fst"/&gt;
+                &lt;prm id="ValBuf" on="0" per="5"/&gt;
+                &lt;prm id="Archive" on="0" per="30" arch="test1" period="1000000"/&gt;
+                &lt;prm id="Base64Code" on="0" per="10"/&gt;
+            &lt;/node&gt;
+        &lt;/node&gt;
+  &lt;/station&gt;
+&lt;/OpenSCADA&gt;
+</pre>
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80_.28Param.29"><span class="mw-headline-number">1</span> Параметр (Param)</span></h2>
+<p><i>Описание:</i> Тест DAQ параметров. Вычитывает атрибуты и конфигурационные поля параметра.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> name </td>
+<td> Адрес DAQ параметра </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> System.AutoDA.CPULoad
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.A0.D0.B0.D0.B7.D0.B1.D0.BE.D1.80_XML_.28XML.29"><span class="mw-headline-number">2</span> Разбор XML (XML)</span></h2>
+<p><i>Описание:</i> Тест разбора файла XML. Парсит и отображает структуру указанного файла.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> file </td>
+<td> XML файл </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.A1.D0.BE.D0.BE.D0.B1.D1.89.D0.B5.D0.BD.D0.B8.D1.8F_.28Mess.29"><span class="mw-headline-number">3</span> Сообщения (Mess)</span></h2>
+<p><i>Описание:</i> Тест архива сообщений. Периодически вычитывает новые сообщения из архива, для указанного архиватора.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> arhtor </td>
+<td> Архиватор </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> FSArch.StatErrors
+</td></tr>
+<tr>
+<td> categ </td>
+<td> Шаблон категории сообщения </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr>
+<tr>
+<td> depth </td>
+<td> Глубина сообщения, с </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 10
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_SO_.28SOAttach.29"><span class="mw-headline-number">4</span> Подключение SO (SOAttach)</span></h2>
+<p><i>Описание:</i> Тест подключения/отключения модулей.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> name </td>
+<td> Путь к модулю </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr>
+<tr>
+<td> mode </td>
+<td> Режим (1-подключ.;-1-отключ.;0-изменение) </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 0
+</td></tr>
+<tr>
+<td> full </td>
+<td> Полное подключение(при старте) </td>
+<td> Bool </td>
+<td> Вход </td>
+<td> 1
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.90.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B0_.28Val.29"><span class="mw-headline-number">5</span> Атрибут параметра (Val)</span></h2>
+<p><i>Описание:</i> Тест значений атрибута параметра. Выполняет периодический опрос последнего значения указанного атрибута, а также опрос архива на указанную глубину.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> name </td>
+<td> Путь к атрибуту параметра </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> System.AutoDA.CPULoad.load
+</td></tr>
+<tr>
+<td> arch_len </td>
+<td> Глубина запроса к архиву значений, с </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 10
+</td></tr>
+<tr>
+<td> arch_per </td>
+<td> Период запроса к архиву значений, мкс </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 1000000
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.A2.D0.B5.D1.81.D1.82_.D0.91.D0.94_.28DB.29"><span class="mw-headline-number">6</span> Тест БД (DB)</span></h2>
+<p><i>Описание:</i> Полный тест БД. Выполняет:
+</p>
+<ul><li> создание/открытие БД;</li>
+<li> создание/открытие таблицы;</li>
+<li> создание множества записей (строк) предопределённой структуры;</li>
+<li> модификация множества записей;</li>
+<li> получение и проверка значений множества записей;</li>
+<li> модификация структуры записи и таблицы;</li>
+<li> удаление записей;</li>
+<li> закрытие/удаление таблицы;</li>
+<li> закрытие/удаление БД.</li></ul>
+<p><i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> type </td>
+<td> Тип БД </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> SQLite
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Адрес БД </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> ./DATA/test.db
+</td></tr>
+<tr>
+<td> table </td>
+<td> Таблица БД </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> test
+</td></tr>
+<tr>
+<td> size </td>
+<td> Количество записей </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 1000
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82_.28TrOut.29"><span class="mw-headline-number">7</span> Транспорт (TrOut)</span></h2>
+<p><i>Описание:</i> Тест выходных и/или входных транспортов. Выполняет тестирование исходящего транспорта путём отправления запроса к указанному входящему транспорту.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Адрес </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> TCP:127.0.0.1:10001
+</td></tr>
+<tr>
+<td> type </td>
+<td> Модуль транспорта </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> Sockets
+</td></tr>
+<tr>
+<td> req </td>
+<td> Текст запроса </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.AF.D0.B7.D1.8B.D0.BA_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.BE.D0.B9_.28SysContrLang.29"><span class="mw-headline-number">8</span> Язык управления программой (SysContrLang)</span></h2>
+<p><i>Описание:</i> Тест языка управления программой. Производит запрос элементов языка посредством полного пути. Полный путь к элементу языка имеет вид  "/Archive/%2fbd%2fm_per". Полный путь состоит из двух вложенных путей. Первый "Archive" это путь к узлу дерева контроля. Второй "/bd/m_per" это путь к конкретному элементу узла.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> path </td>
+<td> Путь к элементу языка </td>
+<td> Строка </td>
+<td> Вход </td>
+<td> /Archive/BaseArh/mess_StatErrors/%2fprm%2fst
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.91.D1.83.D1.84.D0.B5.D1.80_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.28ValBuf.29"><span class="mw-headline-number">9</span> Буфер значений (ValBuf)</span></h2>
+<p><i>Описание:</i> Тесты буфера значений. Содержит 13 тестов всех аспектов буфера значений (подсистема "Архивы").<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.90.D1.80.D1.85.D0.B8.D0.B2_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.28Archive.29"><span class="mw-headline-number">10</span> Архив значений (Archive)</span></h2>
+<p><i>Описание:</i> Тесты размещения в архиве значений. Содержит 7(8) тестов архиватора значений на проверку корректности функционирования последовательного механизма упаковки.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr>
+<tr>
+<td> arch </td>
+<td> Архив значений </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr>
+<tr>
+<td> period </td>
+<td> Период значений, мкс </td>
+<td> Целый </td>
+<td> Вход </td>
+<td> 1000000
+</td></tr>
+<tr>
+<td> archtor </td>
+<td> Архиватор </td>
+<td> Строка </td>
+<td> Вход </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id="Base64_.D0.BA.D0.BE.D0.B4.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.28Base64Code.29"><span class="mw-headline-number">11</span> Base64 кодирование (Base64Code)</span></h2>
+<p><i>Описание:</i> Тесты кодирования Mime Base64 алгоритмом.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Строка </td>
+<td> Возврат </td>
+<td>
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

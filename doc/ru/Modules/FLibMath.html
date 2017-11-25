@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/FLibMath - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/FLibMath</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FFLibMath&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/FLibMath" title="Modules/FLibMath">Modules/FLibMath</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibMath" title="Modules/FLibMath (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibMath/uk" title="Модулі/FLibMath (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/FLibMath.html" title="Special:MyLanguage/Modules/FLibMath">FLibMath</a> </td>
+<td> Библиотека стандартных математических функций. </td>
+<td> 0.6 </td>
+<td> GPL2 </td>
+<td> spec_FLibMath.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Специальные </td>
+<td> Роман Савоченко </td>
+<td> Предоставляет библиотеку стандартных математических функций.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8"><span class="tocnumber">1</span> <span class="toctext">Функции</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">2</span> <span class="toctext">API пользовательского программирования</span></a></li>
+</ul>
+</div>
+
+<p>Специальный модуль FLibMath предоставляет в систему библиотеку стандартных математических функций.
+</p><p>Для адресации к функциям этой библиотеки можно использовать статический адрес вызова "<b>Special.FLibMath.{Func}()</b>" или динамический "<b>SYS.Special.FLibMath["{Func}"].call()</b>", "<b>SYS.Special.FLibMath.{Func}()</b>". Где <i>{Func}</i> — идентификатор функции в библиотеке.
+</p>
+<h2><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8"><span class="mw-headline-number">1</span> Функции</span></h2>
+<p>В таблице 1 приведено описание каждой функции библиотеки. Для каждой функции производилась оценка времени исполнения. Измерение производилось на системе со следующими параметрами: Athlon 64 3000+ (ALTLinux 3.0(32бит)), путём замера общего времени исполнения функции, при вызове её 1000 раз. Выборка производилась по наименьшему значению из пяти вычислений. 
+</p><p><b>Таблица 1:</b> Функции библиотеки стандартных математических функций
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Имя </th>
+<th> Описание </th>
+<th> Время (мкс)
+</th></tr>
+<tr>
+<td>abs</td>
+<td>Модуль</td>
+<td>Мат. функция — модуль от числа.</td>
+<td>81
+</td></tr>
+<tr>
+<td>acos</td>
+<td>Арккосинус</td>
+<td>Мат. функция — арккосинус.</td>
+<td>149
+</td></tr>
+<tr>
+<td>asin</td>
+<td>Арксинус</td>
+<td>Мат. функция — арксинус.</td>
+<td>140
+</td></tr>
+<tr>
+<td>atan</td>
+<td>Арктангенс</td>
+<td>Мат. функция — арктангенс.</td>
+<td>109
+</td></tr>
+<tr>
+<td>ceil</td>
+<td>Округл. до большего</td>
+<td>Мат. функция — округление до большего целого.</td>
+<td>96
+</td></tr>
+<tr>
+<td>cos</td>
+<td>Косинус</td>
+<td>Мат. функция — косинус.</td>
+<td>93
+</td></tr>
+<tr>
+<td>cosh</td>
+<td>Косинус гиперболический</td>
+<td>Мат. функция — косинус гиперболический.</td>
+<td>121
+</td></tr>
+<tr>
+<td>exp</td>
+<td>Экспонента</td>
+<td>Мат. функция — экспонента.</td>
+<td>145
+</td></tr>
+<tr>
+<td>floor</td>
+<td>Округл. до меньшего</td>
+<td>Мат. функция — округление до меньшего целого</td>
+<td>95
+</td></tr>
+<tr>
+<td>if</td>
+<td>Условие Если</td>
+<td>Функция условие — "Если".</td>
+<td>92
+</td></tr>
+<tr>
+<td>lg</td>
+<td>Десятичный логарифм</td>
+<td>Мат. функция — десятичный логарифм.</td>
+<td>168
+</td></tr>
+<tr>
+<td>ln</td>
+<td>Натуральный логарифм</td>
+<td>Мат. функция — натуральный логарифм.</td>
+<td>185
+</td></tr>
+<tr>
+<td>pow</td>
+<td>Степень</td>
+<td>Мат. функция — возведение в степень.</td>
+<td>157
+</td></tr>
+<tr>
+<td>rand</td>
+<td>Случ. число</td>
+<td>Мат. функция — генератор случайных чисел.</td>
+<td>147
+</td></tr>
+<tr>
+<td>sin</td>
+<td>Синус</td>
+<td>Мат. функция — синус.</td>
+<td>127
+</td></tr>
+<tr>
+<td>sinh</td>
+<td>Синус гиперболический</td>
+<td>Мат. функция — синус гиперболический.</td>
+<td>199
+</td></tr>
+<tr>
+<td>sqrt</td>
+<td>Корень квадратный</td>
+<td>Мат. функция — корень квадратный.</td>
+<td>94
+</td></tr>
+<tr>
+<td>tan</td>
+<td>Тангенс</td>
+<td>Мат. функция — тангенс.</td>
+<td>153
+</td></tr>
+<tr>
+<td>tanh</td>
+<td>Тангенс гиперболический</td>
+<td>Мат. функция — тангенс гиперболический.</td>
+<td>177
+</td></tr></table>
+<h2><span class="mw-headline" id="API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">2</span> API пользовательского программирования</span></h2>
+<p>Некоторые объекты модуля предоставляют функции пользовательского программирования.
+</p><p><b>Объект "Библиотека функций" (SYS.Special.FLibMath)</b>
+</p>
+<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — вызов функции библиотеки <i>{funcID}</i>. Возвращает результат вызываемой функции.</li></ul>
+<p><b>Объект "Пользовательская функция" (SYS.Special.FLibMath["funcID"])</b>
+</p>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — вызов данной функции с параметрами <i>&lt;prm{N}&gt;</i>. Возвращает результат вызываемой функции.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

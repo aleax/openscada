@@ -135,8 +135,7 @@ class TMdContr: public TController
 	//Attributes
 	ResMtx	enRes, reqRes;			//Resource for enable params and request values
 	TCfg	&mAddr;				//Transport device address
-	int64_t	&mPerOld,			//Acquisition task (seconds)
-		&mPrior,			//Process task priority
+	int64_t	&mPrior,			//Process task priority
 		&connTry;			//Connections try
 
 	bool	prcSt,				//Process task active

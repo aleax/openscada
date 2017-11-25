@@ -644,16 +644,22 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     waitCursorClear->setInterval(50);
     connect(waitCursorClear, SIGNAL(timeout()), SLOT(waitCursorSet()));
 
-    //resize( 1000, 800 );
-    setWindowState(Qt::WindowMaximized);
+    //resize(1000, 800);
+    //setWindowState(Qt::WindowMaximized);
     menuBar()->setVisible(true);
 
     wdgTree->updateTree("", true);	//Initial for allow the widgets loading on the server side mostly
     prjTree->updateTree("", NULL, true);//Initial for allow the projects loading on the server side mostly
 
     //Restore main window state
-    string st = TSYS::strDecode(mod->uiPropGet("devWinState",user()), TSYS::base64);
-    restoreState(QByteArray(st.data(),st.size()));
+    int off = 0;
+    string rst = mod->uiPropGet("devWinState", user());
+    string sRst = TSYS::strDecode(TSYS::strParse(rst,0,":",&off), TSYS::base64);
+    if(sRst.size()) restoreState(QByteArray(sRst.data(),sRst.size()));
+    int	wH = s2i(TSYS::strParse(rst,0,":",&off)),
+	wW = s2i(TSYS::strParse(rst,0,":",&off));
+    if(wH > 100 && wW > 100) resize(wH, wW);
+
     //Restore ToolBars icons size
     for(int i_ch = 0; i_ch < children().size(); i_ch++) {
 	if(!qobject_cast<QToolBar*>(children()[i_ch])) continue;
@@ -675,7 +681,7 @@ VisDevelop::~VisDevelop( )
 
     //Save main window state
     QByteArray st = saveState();
-    mod->uiPropSet("devWinState",TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,"\n"), user());
+    mod->uiPropSet("devWinState", TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,"")+":"+i2s(width())+":"+i2s(height()), user());
 
     //Timers stop
     endRunTimer->stop();

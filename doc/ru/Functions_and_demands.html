@@ -34,14 +34,14 @@
 </div>
 
 <h2><span class="mw-headline" id=".D0.A1.D1.84.D0.B5.D1.80.D0.B0_.D0.BF.D1.80.D0.B8.D0.BC.D0.B5.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F_OpenSCADA"><span class="mw-headline-number">1</span> Сфера применения OpenSCADA</span></h2>
-<p>Разбиение на сферы применения выполнено для упрощения восприятия функциональных возможностей системы в свете традиционной области для проекта OpenSCADA — автоматизация технологических процессов. Хотя возможна как смешанная, так и более специализированная конфигурация систем работы с данными в реального времени, например, в сферах: ERP, Билинг, Умный дом и др.
+<p>Разбиение на сферы применения выполнено для упрощения восприятия функциональных возможностей программы в свете традиционной области для проекта OpenSCADA — автоматизация технологических процессов. Хотя возможна как смешанная, так и более специализированная конфигурация систем работы с данными в реального времени, например, в сферах: ERP, Билинг, Умный дом и др.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:497px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use_ru.png"><img class="thumbimage" height="670" src="files/Oscada_use_ru.png" width="495" /></a>  <div class="thumbcaption">Рис. 1. Роли системы OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:537px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use_ru.png"><img class="thumbimage" height="655" src="files/Oscada_use_ru.png" width="535" /></a>  <div class="thumbcaption">Рис. 1. Роли OpenSCADA.</div></div></div></div>
 <hr />
 <h3><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80_SCADA_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B"><span class="mw-headline-number">1.1</span> Сервер SCADA системы</span></h3>
 <ul><li> Визуальный контроль и управление посредством интерфейсов:
-<ul><li> Удалённый сервер визуализации на основе движка визуализации и управления СВУ <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>. Локальный запуск модуля UI.Vision, подключенного к серверу визуализации.</li>
-<li> Удалённый WEB интерфейс. Посредством WEB-браузера, модуля визуализации <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> и модуля ядра среды визуализации и управления <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
+<ul><li> Удалённый сервер визуализации на основе движка визуализации и управления СВУ <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>. Локальный запуск модуля UI.Vision, подключенного к серверу визуализации.</li>
+<li> Удалённый WEB интерфейс. Посредством WEB-браузера, модуля визуализации <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> и модуля ядра среды визуализации и управления <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
 <li> Простые удалённые Web-интерфейсы пользователя. Посредством WEB-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebUser" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
 <li> Сбор данных (DAQ) из источников:
 <ul><li> Информация про платформу (программно-аппаратную) на которой работает сервер. С помощью модуля <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>.</li>
@@ -79,7 +79,7 @@
 <li> В таблицах архивных БД. Посредством модуля архивации <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li></ul></li>
 <li> Конфигурация и управление сервером через:
 <ul><li> WEB-интерфейс. Посредством Web-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> или <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
-<li> С удалённой конфигурационной станции. Посредством UI-модуля на конфигурационной станции <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/QTCfg" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> и интерфейса управления OpenSCADA, отражённого в протоколе <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
+<li> С удалённой конфигурационной станции. Посредством UI-модуля на конфигурационной станции <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> и интерфейса управления OpenSCADA, отражённого в протоколе <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
 <li> Сохранение данных сервера в БД типов:
 <ul><li> MySQL. Посредством модуля БД <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a>.</li>
 <li> SQLite. Посредством модуля БД <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a>.</li>
@@ -91,8 +91,8 @@
 <hr />
 <h3><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD.D1.86.D0.B8.D1.8F_.D0.BE.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D0.B0_.D1.82.D0.B5.D1.85.D0.BD.D0.BE.D0.BB.D0.BE.D0.B3.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D1.86.D0.B5.D1.81.D1.81.D0.B0.2C_.D0.BF.D1.83.D0.BB.D1.8C.D1.82_.D0.B4.D0.B8.D1.81.D0.BF.D0.B5.D1.82.D1.87.D0.B5.D1.80.D0.B0.2C_.D0.BF.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.BC.D0.BE.D0.BD.D0.B8.D1.82.D0.BE.D1.80.D0.B8.D0.BD.D0.B3.D0.B0_.D0.B8_.D0.B4.D1.80.D1.83.D0.B3.D0.BE.D0.B5"><span class="mw-headline-number">1.2</span> Станция оператора технологического процесса, пульт диспетчера, панель мониторинга и другое</span></h3>
 <ul><li> Визуальный контроль и управление посредством интерфейсов:
-<ul><li> Локальный (быстрый) интерфейс, который основан на библиотеке Qt. Посредством модуля визуализации <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision" title="Special:MyLanguage/Modules/Vision">Vision</a> и модуля ядра среды визуализации и управления <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> с возможностью визуализации с удалённого движка СВУ, сервера визуализации.</li>
-<li> Удалённый WEB интерфейс. Посредством WEB-браузера, модуля визуализации <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> и модуля ядра среды визуализации и управления <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
+<ul><li> Локальный (быстрый) интерфейс, который основан на библиотеке Qt. Посредством модуля визуализации <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision" title="Special:MyLanguage/Modules/Vision">Vision</a> и модуля ядра среды визуализации и управления <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> с возможностью визуализации с удалённого движка СВУ, сервера визуализации.</li>
+<li> Удалённый WEB интерфейс. Посредством WEB-браузера, модуля визуализации <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> и модуля ядра среды визуализации и управления <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
 <li> Простые удалённые Web-интерфейсы пользователя. Посредством WEB-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebUser" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
 <li> Сбор данных (DAQ) из источников:
 <ul><li> Сбор данных с других серверов и ПЛК, построенных на OpenSCADA, для пробрасывания данных серверов и дублирования. С помощью DAQ-модуля <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>.</li>
@@ -107,8 +107,8 @@
 <li> <span style="color: red">Запланировано.</span> На другой сервер, возможно удалённый сервер архивации, основанных на OpenSCADA.</li></ul></li>
 <li> Конфигурация и управление сервером через:
 <ul><li> WEB-интерфейс. Посредством Web-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> или <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
-<li> Qt-интерфейс. Посредством UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/QTCfg" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a>.</li>
-<li> С удалённой конфигурационной станции. Посредством UI-модуля на конфигурационной станции <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/QTCfg" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> и интерфейса управления OpenSCADA, отражённого в протоколе <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
+<li> Qt-интерфейс. Посредством UI-модуля <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a>.</li>
+<li> С удалённой конфигурационной станции. Посредством UI-модуля на конфигурационной станции <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> и интерфейса управления OpenSCADA, отражённого в протоколе <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
 <li> Сохранение данных сервера в БД типов:
 <ul><li> MySQL. Посредством модуля БД <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a>.</li>
 <li> SQLite. Посредством модуля БД <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a>.</li>
@@ -155,7 +155,7 @@
 <li> В таблицах архивных БД. Посредством модуля архивации <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li></ul></li>
 <li> Конфигурация и управление ПЛК через:
 <ul><li> WEB-интерфейс. Посредством Web-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> или <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
-<li> С удалённой конфигурационной станции. Посредством UI-модуля на конфигурационной станции <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/QTCfg" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> и интерфейса управления OpenSCADA, отражённого в протоколе <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
+<li> С удалённой конфигурационной станции. Посредством UI-модуля на конфигурационной станции <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> и интерфейса управления OpenSCADA, отражённого в протоколе <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
 <li> Сохранение данных ПЛК в БД типов:
 <ul><li> Все данные в конфигурационном файле.</li>
 <li> MySQL. Посредством модуля БД <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a>.</li>
@@ -169,7 +169,7 @@
 <p>Благодаря реализации протокола OPC-UA в режиме агента OpenSCADA может предоставлять распространённую функцию OPC-сервера на клиентские протоколы, поддерживаемые и прямо реализуемые в OpenSCADA. Данная функция широко используется на платформе MS Windows®, а многие SCADA-системы на ней работают исключительно с OPC—серверами, как источниками данных. Таким образом OpenSCADA может выступать универсальным OPC-сервером на платформе Linux (рис.2).
 </p><p><span style="color: red">В планах.</span> С адаптацией OpenSCADA для работы на платформе MS Windows® и реализацией работы с OPC-DA посредством системного DCOM, появится возможность применения OpenSCADA в роли шлюза OPC-DA -&gt; OPC-UA, а значит и доступной интеграции устаревших систем в новые или аккумулирующие системы.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:556px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use_opcua_ru.png"><img class="thumbimage" height="529" src="files/Oscada_use_opcua_ru.png" width="554" /></a>  <div class="thumbcaption">Рис. 2. Роль системы OpenSCADA как "OPC-UA Сервер".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:556px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use_opcua_ru.png"><img class="thumbimage" height="529" src="files/Oscada_use_opcua_ru.png" width="554" /></a>  <div class="thumbcaption">Рис. 2. Роль OpenSCADA как "OPC-UA Сервер".</div></div></div></div>
 <p>Источники данных и протоколы, доступные посредством универсального OPC-UA сервера:
 </p>
 <ul><li> Промышленные контроллеры фирмы <a class="external text" href="http://s7automation.com" rel="nofollow noreferrer noopener" target="_blank">Siemens GMBH</a> серии S7, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">DAQ.Siemens</a>.</li>
@@ -192,8 +192,8 @@
 <li> Источники данных различных типов, которые имеют консольные утилиты для доступа к этим данным или доступны посредством простых специализированных сетевых протоколов. Осуществляется путём написания процедуры получения данных на <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">языке пользовательского программирования (DAQ.JavaLikeCalc)</a>, а также <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модуля транспортного протокола (Protocol.UserProtocol)</a>, смотри <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">библиотеку</a>.</li></ul>
 <h2><span class="mw-headline" id=".D0.A2.D1.80.D0.B5.D0.B1.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_OpenSCADA"><span class="mw-headline-number">2</span> Требования OpenSCADA</span></h2>
 <h3><span class="mw-headline" id=".D0.98.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">2.1</span> Исполнение</span></h3>
-<p>Аппаратные требования системы OpenSCADA для её исполнения в различных ролях приведены в таблице 1. Программные требования для исполнения системы OpenSCADA и её модулей представлены в таблице 2.
-</p><p><b>Таблица 1.</b> Аппаратные требования системы OpenSCADA и её модулей.
+<p>Аппаратные требования OpenSCADA для её исполнения в различных ролях приведены в таблице 1. Программные требования для исполнения OpenSCADA и её модулей представлены в таблице 2.
+</p><p><b>Таблица 1.</b> Аппаратные требования OpenSCADA и её модулей.
 </p>
 <table class="wikitable">
 
@@ -225,7 +225,7 @@
 <b>HDD:</b> 32 МБ включая ОС и без архивов
 </p>
 </td></tr></table>
-<p><b>Таблица 2.</b> Программные требования системы OpenSCADA и её модулей.
+<p><b>Таблица 2.</b> Программные требования OpenSCADA и её модулей.
 </p>
 <table class="wikitable">
 
@@ -234,7 +234,7 @@
 <th> Описание
 </th></tr>
 <tr>
-<td colspan="2"> <i>Зависимости ядра системы OpenSCADA</i>
+<td colspan="2"> <i>Зависимости ядра OpenSCADA</i>
 </td></tr>
 <tr>
 <td> ОС Linux </td>
@@ -392,7 +392,7 @@
 <p>* "опц: авт." — предусматривает отключение использования библиотеки в случае отсутствия её при сборке.
 </p>
 <h3><span class="mw-headline" id=".D0.A1.D0.B1.D0.BE.D1.80.D0.BA.D0.B0"><span class="mw-headline-number">2.2</span> <span id="Building" title="#Building">Сборка</span></span></h3>
-<p>Программные требования системы OpenSCADA для сборки ядра OpenSCADA и её модулей приведены в таблице ниже.
+<p>Программные требования OpenSCADA для сборки её ядра и модулей приведены в таблице ниже.
 </p><p><b>Таблица 3.</b> Зависимости сборки OpenSCADA и её модулей.
 </p>
 <table class="wikitable">
@@ -578,8 +578,8 @@
 <p>* "опц: авт." — предусматривает отключение использования библиотеки в случае отсутствия её при сборке.
 </p>
 <h2><span class="mw-headline" id=".D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="mw-headline-number">3</span> Ссылки</span></h2>
-<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use_ru.odg" title="File:Oscada use ru.odg">Диаграмма: Роли системы OpenSCADA.</a></li>
-<li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use_opcua_ru.odg" title="File:Oscada use opcua ru.odg">Диаграмма: Роль системы OpenSCADA как "OPC-UA Сервер".</a></li></ul>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use_ru.odg" title="File:Oscada use ru.odg">Диаграмма: Роли OpenSCADA.</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use_opcua_ru.odg" title="File:Oscada use opcua ru.odg">Диаграмма: Роль OpenSCADA как "OPC-UA Сервер".</a></li></ul>
 
 
 

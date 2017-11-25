@@ -34,14 +34,14 @@
 </div>
 
 <h2><span class="mw-headline" id="The_employment_areas_of_OpenSCADA"><span class="mw-headline-number">1</span> The employment areas of OpenSCADA</span></h2>
-<p>Separating to the employment areas was made to simplify perception of the system functionality in light of traditional area for the project OpenSCADA — automation of technological processes. But also there possible mixed and specialized configuring systems for real-time data operation, for example into areas: ERP, Billing, Smart House and etc.
+<p>Separating to the employment areas was made to simplify perception of the program functionality in light of traditional area for the project OpenSCADA — automation of technological processes. But also there possible mixed and specialized configuring of the program for real-time data operation, for example into areas: ERP, Billing, Smart House and etc.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:497px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use.png"><img class="thumbimage" height="670" src="files/Oscada_use.png" width="495" /></a>  <div class="thumbcaption">Fig. 1. Roles of the OpenSCADA system.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:537px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use.png"><img class="thumbimage" height="655" src="files/Oscada_use.png" width="535" /></a>  <div class="thumbcaption">Fig. 1. Roles of OpenSCADA.</div></div></div></div>
 <hr />
 <h3><span class="mw-headline" id="System_server_of_SCADA"><span class="mw-headline-number">1.1</span> System server of SCADA</span></h3>
 <ul><li> Visual control and management by means of the interfaces:
-<ul><li> Remote visualization server grounded on visualization and control area (VCA) engine <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>. Module UI.Vision local starting and connecting to the visualization server.</li>
-<li> Remote WEB interface. By means of a Web-browser, a visualization module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> and a module of the core of visual control area <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
+<ul><li> Remote visualization server grounded on visualization and control area (VCA) engine <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>. Module UI.Vision local starting and connecting to the visualization server.</li>
+<li> Remote WEB interface. By means of a Web-browser, a visualization module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> and a module of the core of visual control area <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
 <li> Simple remote Web-interfaces of user. By means of a Web-browser and the UI-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebUser" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
 <li> Data acquisition (DAQ) from sources:
 <ul><li> Information about a platform (hardware-software) on which the server works. By means of the DAQ-module <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>. </li>
@@ -79,7 +79,7 @@
 <li> In tables of archival DB. By means of the archiving module <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li></ul></li>
 <li> Configuration and management of a server through:
 <ul><li> The WEB-interface. By means of a Web-browser and the UI-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
-<li> From remote configuration station. By means of the UI-module at configuration station <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/QTCfg" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> and the interface of management OpenSCADA reflected in the protocol <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
+<li> From remote configuration station. By means of the UI-module at configuration station <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> and the interface of management OpenSCADA reflected in the protocol <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
 <li> Data storage of a server in a DB of types:
 <ul><li> MySQL. By means of the DB-module <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a>.</li>
 <li> SQLite. By means of the DB-module <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a>.</li>
@@ -91,8 +91,8 @@
 <hr />
 <h3><span class="mw-headline" id="Station_of_the_operator_of_technological_process.2C_the_board_of_the_dispatcher.2C_the_panel_of_monitoring.2C_etc."><span class="mw-headline-number">1.2</span> Station of the operator of technological process, the board of the dispatcher, the panel of monitoring, etc.</span></h3>
 <ul><li> Visual control and management by means of the interfaces:
-<ul><li> Local (fast) interface based on Qt library. By means of the visualization module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision" title="Special:MyLanguage/Modules/Vision">Vision</a> and the module of a core of the visual control area <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> include ability of visualization from remote engine of VCA, visualization server.</li>
-<li> Remote WEB interface. By means of a Web-browser, the visualization module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> and the module of a core of visual control area <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
+<ul><li> Local (fast) interface based on Qt library. By means of the visualization module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision" title="Special:MyLanguage/Modules/Vision">Vision</a> and the module of a core of the visual control area <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> include ability of visualization from remote engine of VCA, visualization server.</li>
+<li> Remote WEB interface. By means of a Web-browser, the visualization module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> and the module of a core of visual control area <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
 <li> Simple remote Web-interfaces of user. By means of a Web-browser and the UI-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebUser" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
 <li> Data acquisition (DAQ) from sources:
 <ul><li> Data acquisition from other servers and PLC, based on OpenSCADA, for data transportation and for duplication. By means of the DAQ-module <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>.</li>
@@ -107,8 +107,8 @@
 <li> <span style="color: red">In plans.</span> On other server, it is possible to an allocated archiving server, based on OpenSCADA.</li></ul></li>
 <li> Configuration and management of a station through:
 <ul><li> WEB-interface. By means of a Web-browser and the UI-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> or <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
-<li> Qt-interface. By means of the UI-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/QTCfg" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a>.</li>
-<li> From remote configuration station. By means of the UI-module at configuration station <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/QTCfg" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> and the interface of management OpenSCADA reflected in the protocol <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
+<li> Qt-interface. By means of the UI-module <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a>.</li>
+<li> From remote configuration station. By means of the UI-module at configuration station <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> and the interface of management OpenSCADA reflected in the protocol <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
 <li> Data storage of a station in a DB of types:
 <ul><li> MySQL. By means of the DB-module <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a>.</li>
 <li> SQLite. By means of the DB-module <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a>.</li>
@@ -155,7 +155,7 @@
 <li> In tables of archival DB. By means of the archiving module <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li></ul></li>
 <li> Configuration and management PLC through:
 <ul><li> The WEB-interface. By means of a Web-browser and the UI-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> or <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
-<li> From the remote configuration station. By means of the UI-module at configuration station <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/QTCfg" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> and the interface of management OpenSCADA reflected in the protocol [Special:MyLanguage/Modules/SelfSystem|SelfSystem]].</li></ul></li>
+<li> From the remote configuration station. By means of the UI-module at configuration station <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> and the interface of management OpenSCADA reflected in the protocol [Special:MyLanguage/Modules/SelfSystem|SelfSystem]].</li></ul></li>
 <li> Data storage PLC in a DB of types:
 <ul><li> All data in a configuration file.</li>
 <li> MySQL. By means of the DB-module <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a>.</li>
@@ -169,7 +169,7 @@
 <p>Due implementation of the protocol OPC-UA into agent mode, OpenSCADA can provide a popular function of the OPC-server to client's protocols, which supports and direct implemented into OpenSCADA. The function common uses on platform MS Windows®, and many SCADA-systems on the platform work exclusively with OPC—servers, as the data sources. Thus OpenSCADA can act as an universal OPC-server on Linux platform (Fig.2).
 </p><p><span style="color: red">In plans.</span> With adapting OpenSCADA for work on MS Windows® platform and implementing work with OPC-DA by system DCOM, there will appear possibility for applying OpenSCADA into gate OPC-DA -&gt; OPC-UA role, which means free integration of old systems to the new or accumulation systems.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:556px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use_opcua.png"><img class="thumbimage" height="525" src="files/Oscada_use_opcua.png" width="554" /></a>  <div class="thumbcaption">Fig. 2. OpenSCADA system role as "OPC-UA Server".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:556px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_use_opcua.png"><img class="thumbimage" height="525" src="files/Oscada_use_opcua.png" width="554" /></a>  <div class="thumbcaption">Fig. 2. OpenSCADA role as "OPC-UA Server".</div></div></div></div>
 <p>The data sources and protocols, which accessible by the unified OPC-UA server:
 </p>
 <ul><li> Industrial controllers of firm <a class="external text" href="http://s7automation.com" rel="nofollow noreferrer noopener" target="_blank">Siemens GMBH</a> series S7, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">DAQ.Siemens</a>.</li>
@@ -192,8 +192,8 @@
 <li> Data sources of different types, which have console utilities for the data access or accessible by simple specialized network protocols. Performed by writing some procedure of getting the data at <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the language of user-level programming (DAQ.JavaLikeCalc)</a>, and also <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the module of transport protocols (Protocol.UserProtocol)</a>, see <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">the library</a>.</li></ul>
 <h2><span class="mw-headline" id="Requirements_for_OpenSCADA"><span class="mw-headline-number">2</span> Requirements for OpenSCADA</span></h2>
 <h3><span class="mw-headline" id="Execution"><span class="mw-headline-number">2.1</span> Execution</span></h3>
-<p>The demands to apparatus for OpenSCADA system execution at different roles viewed into table 1. The demands to programs for OpenSCADA system execution and it modules allow into table 2.
-</p><p><b>Table 1.</b> The demands to apparatus for OpenSCADA system and it modules.
+<p>The demands to apparatus for OpenSCADA execution at different roles viewed into table 1. The demands to programs for OpenSCADA execution and it modules allow into table 2.
+</p><p><b>Table 1.</b> The demands to apparatus for OpenSCADA and it modules.
 </p>
 <table class="wikitable">
 
@@ -225,7 +225,7 @@
 <b>HDD:</b> 32 MB include OS without any archive space
 </p>
 </td></tr></table>
-<p><b>Table 2.</b> Dependencies of execution of OpenSCADA system and its modules.
+<p><b>Table 2.</b> Dependencies of execution of OpenSCADA and its modules.
 </p>
 <table class="wikitable">
 
@@ -234,7 +234,7 @@
 <th> Description
 </th></tr>
 <tr>
-<td colspan="2"> <i>Dependencies of OpenSCADA system's core</i>
+<td colspan="2"> <i>Dependencies of OpenSCADA core</i>
 </td></tr>
 <tr>
 <td> OS Linux </td>
@@ -392,7 +392,7 @@
 <p>* "opt: auto" — provides for disable of using the library at building time on it absence.
 </p>
 <h3><span class="mw-headline" id="Building"><span class="mw-headline-number">2.2</span> <span id="Building" title="#Building">Building</span></span></h3>
-<p>Dependencies of the system OpenSCADA for OpenSCADA core and its modules building are tabulated bellow.
+<p>Dependencies of OpenSCADA for its core and modules building are tabulated bellow.
 </p><p><b>Table 3.</b> Dependencies to build OpenSCADA and its modules.
 </p>
 <table class="wikitable">
@@ -578,8 +578,8 @@
 <p>* "opt: auto" — provides for disable of using the library at build time on it absence.
 </p>
 <h2><span class="mw-headline" id="Links"><span class="mw-headline-number">3</span> Links</span></h2>
-<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use.odg" title="File:Oscada use.odg">Diagram: Roles of the OpenSCADA system.</a></li>
-<li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use_opcua.odg" title="File:Oscada use opcua.odg">Diagram: OpenSCADA system roles as "OPC-UA Server".</a></li></ul>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use.odg" title="File:Oscada use.odg">Diagram: Roles of OpenSCADA.</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use_opcua.odg" title="File:Oscada use opcua.odg">Diagram: OpenSCADA roles as a "OPC-UA Server".</a></li></ul>
 
 
 

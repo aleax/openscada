@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/Пускатель Qt GUI - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/Пускатель Qt GUI</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FQTStarter&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/QTStarter" title="Modules/QTStarter">Modules/QTStarter</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/QTStarter" title="Modules/QTStarter (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/QTStarter/uk" title="Модулі/Пускач Qt GUI (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a> </td>
+<td> Qt GUI пускатель </td>
+<td> 1.9 </td>
+<td> GPL2 </td>
+<td> ui_QTStarter.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Пользовательские интерфейсы </td>
+<td> Роман Савоченко </td>
+<td> Предоставляет Qt GUI пускатель. Qt-пускатель является единственным и обязательным компонентом для всех GUI модулей, основанных на библиотеке Qt.
+</td></tr></table>
+<p><br />
+</p><p>Модуль &lt;QTStarter&gt; предоставляет в систему OpenSCADA пускатель Qt GUI модулей. Отдельный модуль для запуска Qt GUI модулей понадобился по причине необходимости организации однопоточного исполнения всех компонентов и централизованной инициализации главного объекта Qt-библиотеки — QApplication.
+</p><p>Для запуска Qt GUI модулей используется расширенный интерфейс вызова функций модулей. Данный интерфейс подразумевает экспортирование функций внешними модулями. В нашем случае Qt GUI модули должны экспортировать следующие функции:
+</p>
+<ul><li> <i>QIcon icon();</i> — Передаёт объект иконки вызываемого модуля.</li>
+<li> <i>QMainWindow *openWindow();</i> — Создаёт объект главного окна данного Qt GUI модуля и передаёт его пускателю. Может возвращать NULL в случае невозможности создания нового окна.</li></ul>
+<p>Для идентификации Qt GUI модуль должен определять информационный элемент модуля "SubType" как "Qt". Исходя из этого признака, "Стартер" с ним работает.
+</p><p>После получения объекта главного окна "Стартер" добавляет свою панель управления и пункт меню в это окно и запускает его. Панель управления Стартера содержит иконки для вызова всех доступных Qt GUI модулей. Для исключения добавления панели управления или пункта меню модуль, содержащий окно, может указать свойства "QTStarterToolDis" или "QTStarterMenuDis" соответственно.
+</p><p>Для указания Qt GUI модулей, запускаемых при старте, модуль стартера содержит конфигурационное поле StartMod. В данном поле записываются идентификаторы запускаемых модулей через ';'. Конфигурационное поле StartMod можно описать в конфигурационном файле, а также в системной таблице БД через диалог конфигурации модуля (рис.1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:738px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_cfg_ru.png"><img class="thumbimage" height="516" src="../files/QTStarter_cfg_ru.png" width="736" /></a>  <div class="thumbcaption">Рис.1. Страница конфигурации модуля.</div></div></div></div>
+<p>В случае закрытия окон всех Qt GUI модулей "Стартер" создаёт своё диалоговое окно, которое предлагает выбрать доступные Qt GUI модули или завершить работу системы OpenSCADA. Вид диалогового окна приведен на рис.2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:347px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog_ru.png"><img class="thumbimage" height="313" src="../files/QTStarter_dialog_ru.png" width="345" /></a>  <div class="thumbcaption">Рис.2. Диалоговое окно "Стартера".</div></div></div></div>
+<p>Модулем осуществляется отключение функции запуска программы после её закрытия при выходе.
+</p>
+
+
+
+
+
+</div></body>
+</html>

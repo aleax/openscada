@@ -1,0 +1,463 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/FLibComplex1 - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/FLibComplex1</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FFLibComplex1&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibComplex1" title="Modules/FLibComplex1 (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibComplex1/ru" title="Модули/FLibComplex1 (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibComplex1/uk" title="Модулі/FLibComplex1 (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/FLibComplex1.html" title="Special:MyLanguage/Modules/FLibComplex1">FLibComplex1</a> </td>
+<td> Complex1 function's lib </td>
+<td> 1.1 </td>
+<td> GPL2 </td>
+<td> spec_FLibComplex1.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Special </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Provides the library of functions compatible with SCADA Complex1 of the firm "DIYA" Ltd.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Alarm_.28alarm.29_.3C111.3E"><span class="tocnumber">1</span> <span class="toctext">Alarm (alarm) &lt;111&gt;</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Condition_.27.3C.27_.28cond_lt.29_.3C239.3E"><span class="tocnumber">2</span> <span class="toctext">Condition '&lt;' (cond_lt) &lt;239&gt;</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Condition_.27.3E.27_.28cond_gt.29_.3C240.3E"><span class="tocnumber">3</span> <span class="toctext">Condition '&gt;' (cond_gt) &lt;240&gt;</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Full_condition_.28cond_full.29_.3C513.3E"><span class="tocnumber">4</span> <span class="toctext">Full condition (cond_full) &lt;513&gt;</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Digital_block_.28digitBlock.29_.3C252.3E"><span class="tocnumber">5</span> <span class="toctext">Digital block (digitBlock) &lt;252&gt;</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Division_.28div.29_.3C526.3E"><span class="tocnumber">6</span> <span class="toctext">Division (div) &lt;526&gt;</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Exponent_.28exp.29_.3C476.3E"><span class="tocnumber">7</span> <span class="toctext">Exponent (exp) &lt;476&gt;</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Flow_.28flow.29_.3C235.3E"><span class="tocnumber">8</span> <span class="toctext">Flow (flow) &lt;235&gt;</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Iterator_.28increment.29_.3C181.3E"><span class="tocnumber">9</span> <span class="toctext">Iterator (increment) &lt;181&gt;</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Lag_.28lag.29_.3C121.3E"><span class="tocnumber">10</span> <span class="toctext">Lag (lag) &lt;121&gt;</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Simple_multiplication.28mult.29_.3C259.3E"><span class="tocnumber">11</span> <span class="toctext">Simple multiplication(mult) &lt;259&gt;</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Multiplication_.2B_Division.28multDiv.29_.3C468.3E"><span class="tocnumber">12</span> <span class="toctext">Multiplication + Division(multDiv) &lt;468&gt;</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#PID_regulator_.28pid.29_.3C745.3E"><span class="tocnumber">13</span> <span class="toctext">PID regulator (pid) &lt;745&gt;</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Power_.28pow.29_.3C564.3E"><span class="tocnumber">14</span> <span class="toctext">Power (pow) &lt;564&gt;</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Selection_.28select.29_.3C156.3E"><span class="tocnumber">15</span> <span class="toctext">Selection (select) &lt;156&gt;</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#Simple_integrator_.28sum.29_.3C404.3E"><span class="tocnumber">16</span> <span class="toctext">Simple integrator (sum) &lt;404&gt;</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#Sum_with_the_division_.28sum_div.29_.3C518.3E"><span class="tocnumber">17</span> <span class="toctext">Sum with the division (sum_div) &lt;518&gt;</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#Sum_with_the_multiplication._.28sum_mult.29_.3C483.3E"><span class="tocnumber">18</span> <span class="toctext">Sum with the multiplication. (sum_mult) &lt;483&gt;</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#User_programming_API"><span class="tocnumber">19</span> <span class="toctext">User programming API</span></a></li>
+</ul>
+</div>
+
+<p>Special module FLibComplex1 provides the OpenSCADA system with the static library of functions compatible with SCADA Complex1 of firm SIC "DIYA". These functions are used in the SCADA system Complex1 in the form of algoblocks to create inner-computings on the virtual controller. Provision of the library of these functions lets to do the transfer of computational algorithms from the system Complex1.
+</p><p>To address the functions of the library you can use static call address "<b>Special.FLibComplex1.{Func}()</b>" or dynamic "<b>SYS.Special.FLibComplex1["{Func}"].call()</b>", "<b>SYS.Special.FLibComplex1.{Func}()</b>". Where <i>{Func}</i> — function identifier in the library.
+</p><p>Below is the description of each function of the library. For each function it was evaluated the execution time. Measurements were made on the system with the following parameters: Athlon 64 3000 + (ALTLinux 4.0 (32bit)) by measuring the total execution time of the function when you call it 1000 times. Sampling was carried out of the five calculations, rounded to integer. Time is in angle brackets and is measured in microseconds. 
+</p>
+<h2><span class="mw-headline" id="Alarm_.28alarm.29_.3C111.3E"><span class="mw-headline-number">1</span> Alarm (alarm) &lt;111&gt;</span></h2>
+<p><i>Description:</i> Set alarm sign in the case of going out of the variable for the specified boundary.<br />
+<i>Formula:</i> 
+</p>
+<pre style="white-space: pre-wrap;">
+out = if(val&gt;max || val&lt;min) true; else false;</pre>
+<h2><span class="mw-headline" id="Condition_.27.3C.27_.28cond_lt.29_.3C239.3E"><span class="mw-headline-number">2</span> Condition '&lt;' (cond_lt) &lt;239&gt;</span></h2>
+<p><i>Description:</i> Operation of branching in accordance with the condition "&lt;".<br />
+<i>Formula:</i> 
+</p>
+<pre style="white-space: pre-wrap;">
+out = if(in1&lt;(in2_1*in2_2*in2_3*in2_4)) in3_1*in3_2*in3_3*in3_4;
+      else in4_1*in4_2*in4_3*in4_4;</pre>
+<h2><span class="mw-headline" id="Condition_.27.3E.27_.28cond_gt.29_.3C240.3E"><span class="mw-headline-number">3</span> Condition '&gt;' (cond_gt) &lt;240&gt;</span></h2>
+<p><i>Description:</i> Operation of branching in accordance with the condition "&gt;".<br />
+<i>Formula:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = if(in1&gt;(in2_1*in2_2*in2_3*in2_4)) in3_1*in3_2*in3_3*in3_4;
+      else in4_1*in4_2*in4_3*in4_4;</pre>
+<h2><span class="mw-headline" id="Full_condition_.28cond_full.29_.3C513.3E"><span class="mw-headline-number">4</span> Full condition (cond_full) &lt;513&gt;</span></h2>
+<p><i>Description:</i> Full check of the conditions, including more, less and equal.<br />
+<i>Formula:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = if(in1&lt;(in2_1*in2_2*in2_3*in2_4)) in3_1*in3_2*in3_3*in3_4;
+      else if( in1&gt;(in4_1*in4_2*in4_3*in4_4) in5_1*in5_2*in5_3*in5_4;
+      else in6_1*in6_2*in6_3*in6_4;</pre>
+<h2><span class="mw-headline" id="Digital_block_.28digitBlock.29_.3C252.3E"><span class="mw-headline-number">5</span> Digital block (digitBlock) &lt;252&gt;</span></h2>
+<p><i>Description:</i> Function contains the control algorithm of digital signals acquisition for valves and pumps that contain: signs of "Open", "Close" and the command "Open", "Close", "Stop". Supports work with pulse commands, i.e. can read the signal through the specified period of time.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode
+</th></tr>
+<tr>
+<td>cmdOpen</td>
+<td>Command "Open"</td>
+<td>Bool</td>
+<td>Out
+</td></tr>
+<tr>
+<td>cmdClose</td>
+<td>Command "Close"</td>
+<td>Bool</td>
+<td>Out
+</td></tr>
+<tr>
+<td>cmdStop</td>
+<td>Command "Stop"</td>
+<td>Bool</td>
+<td>Out
+</td></tr>
+<tr>
+<td>stOpen</td>
+<td>Position "Opened"</td>
+<td>Bool</td>
+<td>In
+</td></tr>
+<tr>
+<td>stClose</td>
+<td>Position "Closed"</td>
+<td>Bool</td>
+<td>In
+</td></tr>
+<tr>
+<td>tCmd</td>
+<td>Command hold time (s)</td>
+<td>Integer</td>
+<td>In
+</td></tr>
+<tr>
+<td>frq</td>
+<td>Frequency of calculation (milliseconds)</td>
+<td>Integer</td>
+<td>In
+</td></tr></table>
+<h2><span class="mw-headline" id="Division_.28div.29_.3C526.3E"><span class="mw-headline-number">6</span> Division (div) &lt;526&gt;</span></h2>
+<p><i>Description:</i> Makes division of the set of variables.<br />
+<i>Formula:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = (in1_1*in1_2*in1_3*in1_4*in1_5 + in2_1*in2_2*in2_3*in2_4*in2_5 + in3) /
+      (in4_1*in4_2*in4_3*in4_4*in4_5 + in5_1*in5_2*in5_3*in5_4*in5_5 + in6);</pre>
+<h2><span class="mw-headline" id="Exponent_.28exp.29_.3C476.3E"><span class="mw-headline-number">7</span> Exponent (exp) &lt;476&gt;</span></h2>
+<p><i>Description:</i> Calculating the exponent under the group of variables.<br />
+<i>Formula:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = exp (in1_1*in1_2*in1_3*in1_4*in1_5 + (in2_1*in2_2*in2_3*in2_4*in2_5+in3) /
+          (in4_1*in4_2*in4_3*in4_4*in4_5+in5) )</pre>
+<h2><span class="mw-headline" id="Flow_.28flow.29_.3C235.3E"><span class="mw-headline-number">8</span> Flow (flow) &lt;235&gt;</span></h2>
+<p><i>Description:</i> Calculation of the gas flow.<br />
+<i>Formula:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+f = K1*((K3+K4*x)^K2);</pre>
+<h2><span class="mw-headline" id="Iterator_.28increment.29_.3C181.3E"><span class="mw-headline-number">9</span> Iterator (increment) &lt;181&gt;</span></h2>
+<p><i>Description:</i> Iterative calculation with the increment specifying. Gain ratio for different directions is different.<br />
+<i>Formula:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = if( in1 &gt; in2 ) in2 + in3*(in1-in2); 
+      else in2 - in4*(in2-in1);</pre>
+<h2><span class="mw-headline" id="Lag_.28lag.29_.3C121.3E"><span class="mw-headline-number">10</span> Lag (lag) &lt;121&gt;</span></h2>
+<p><i>Description:</i>Variation of the variable lag. Practice, this is the filter without reference to time.<br />
+<i>Formula:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+y = y - Klag*( y - x );</pre>
+<h2><span class="mw-headline" id="Simple_multiplication.28mult.29_.3C259.3E"><span class="mw-headline-number">11</span> Simple multiplication(mult) &lt;259&gt;</span></h2>
+<p><i>Description:</i> Simple multiplication with division.<br />
+<i>Formula:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = (in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/
+      (in2_1*in2_2*in2_3*in2_4);</pre>
+<h2><span class="mw-headline" id="Multiplication_.2B_Division.28multDiv.29_.3C468.3E"><span class="mw-headline-number">12</span> Multiplication + Division(multDiv) &lt;468&gt;</span></h2>
+<p><i>Description:</i> Branched multiplication + division.<br />
+<i>Formula:</i> 
+</p>
+<pre style="white-space: pre-wrap;">
+out = in1_1*in1_2*in1_3*in1_4*in1_5*
+      (in2_1*in2_2*in2_3*in2_4*in2_5+(in3_1*in3_2*in3_3*in3_4*in3_5)/
+      (in4_1*in4_2*in4_3*in4_4*in4_5));</pre>
+<h2><span class="mw-headline" id="PID_regulator_.28pid.29_.3C745.3E"><span class="mw-headline-number">13</span> PID regulator (pid) &lt;745&gt;</span></h2>
+<p><i>Description:</i> Proportional-integral-differential regulator.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td>var</td>
+<td>Variable</td>
+<td>Real</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>sp</td>
+<td>Set point</td>
+<td>Real</td>
+<td>Out</td>
+<td>0
+</td></tr>
+<tr>
+<td>max</td>
+<td>Maximum of scale</td>
+<td>Real</td>
+<td>In</td>
+<td>100
+</td></tr>
+<tr>
+<td>min</td>
+<td>Minimum of scale</td>
+<td>Real</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>manIn</td>
+<td>Manual input (%)</td>
+<td>Real</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>out</td>
+<td>Out (%)</td>
+<td>Real</td>
+<td>Return</td>
+<td>0
+</td></tr>
+<tr>
+<td>auto</td>
+<td>Auto</td>
+<td>Bool</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>casc</td>
+<td>Cascade</td>
+<td>Bool</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>Kp</td>
+<td>Kp</td>
+<td>Real</td>
+<td>In</td>
+<td>1
+</td></tr>
+<tr>
+<td>Ti</td>
+<td>Ti (ms)</td>
+<td>Integer</td>
+<td>In</td>
+<td>1000
+</td></tr>
+<tr>
+<td>Kd</td>
+<td>Kd</td>
+<td>Real</td>
+<td>In</td>
+<td>1
+</td></tr>
+<tr>
+<td>Td</td>
+<td>Td (ms)</td>
+<td>Integer</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>Tzd</td>
+<td>Td lag (ms)</td>
+<td>Integer</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>Hup</td>
+<td>Upper limit of the out (%)</td>
+<td>Real</td>
+<td>In</td>
+<td>100
+</td></tr>
+<tr>
+<td>Hdwn</td>
+<td>Lower limit of the out (%)</td>
+<td>Real</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>Zi</td>
+<td>Insensitivity (%)</td>
+<td>Real</td>
+<td>In</td>
+<td>1
+</td></tr>
+<tr>
+<td>followSp</td>
+<td>Follow sp from var on manual</td>
+<td>Bool</td>
+<td>In</td>
+<td>1
+</td></tr>
+<tr>
+<td>K1</td>
+<td>Koef. of the input 1</td>
+<td>Real</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>in1</td>
+<td>Input 1</td>
+<td>Real</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>K2</td>
+<td>Koef. of the input 2</td>
+<td>Real</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>in2</td>
+<td>Input 2</td>
+<td>Real</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>K3</td>
+<td>Koef. of the input 3</td>
+<td>Real</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>in3</td>
+<td>Input 3</td>
+<td>Real</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>K4</td>
+<td>Koef. of the input 4</td>
+<td>Real</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>in4</td>
+<td>Input 4</td>
+<td>Real</td>
+<td>In</td>
+<td>0
+</td></tr>
+<tr>
+<td>f_frq</td>
+<td>Frequency of calculation (Hz)</td>
+<td>Real</td>
+<td>In</td>
+<td>1
+</td></tr></table>
+<p><i>Structure:</i><br />
+<a class="image" href="http://oscada.org/wiki/File:FLibComplex1_PID.png"><img alt="FLibComplex1 PID.png" height="319" src="../files/FLibComplex1_PID.png" width="800" /></a>
+</p>
+<h2><span class="mw-headline" id="Power_.28pow.29_.3C564.3E"><span class="mw-headline-number">14</span> Power (pow) &lt;564&gt;</span></h2>
+<p><i>Description:</i> Raising to the power<br />
+<i>Formula:</i> 
+</p>
+<pre style="white-space: pre-wrap;">
+out = (in1_1*in1_2*in1_3*in1_4*in1_5)^
+      (in2_1*in2_2*in2_3*in2_4*in2_5 + (in3_1*in3_2*in3_3*in3_4*in3_5)/
+      (in4_1*in4_2*in4_3*in4_4*in4_5));</pre>
+<h2><span class="mw-headline" id="Selection_.28select.29_.3C156.3E"><span class="mw-headline-number">15</span> Selection (select) &lt;156&gt;</span></h2>
+<p><i>Description:</i> Selection of the one from four options.<br />
+<i>Formula:</i> 
+</p>
+<pre style="white-space: pre-wrap;">
+out = if(sel = 1) in1_1*in1_2*in1_3*in1_4;
+      if(sel = 2) in2_1*in2_2*in2_3*in2_4;
+      if(sel = 3) in3_1*in3_2*in3_3*in3_4;
+      if(sel = 4) in4_1*in4_2*in4_3*in4_4;</pre>
+<h2><span class="mw-headline" id="Simple_integrator_.28sum.29_.3C404.3E"><span class="mw-headline-number">16</span> Simple integrator (sum) &lt;404&gt;</span></h2>
+<p><i>Description:</i> A simple summation with the multiplication.<br />
+<i>Formula:</i> 
+</p>
+<pre style="white-space: pre-wrap;">
+out = in1_1*in1_2+in2_1*in2_2+in3_1*in3_2+in4_1*in4_2
+      + in5_1*in5_2+in6_1*in6_2+in7_1*in7_2+in8_1*in8_2;</pre>
+<h2><span class="mw-headline" id="Sum_with_the_division_.28sum_div.29_.3C518.3E"><span class="mw-headline-number">17</span> Sum with the division (sum_div) &lt;518&gt;</span></h2>
+<p><i>Description:</i> The summation the set of values with the division.<br />
+<i>Formula:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = in1_1*in1_2*(in1_3+in1_4/in1_5) + 
+      in2_1*in2_2*(in2_3+in2_4/in2_5) +
+      in3_1*in3_2*(in3_3+in3_4/in3_5) + 
+      in4_1*in4_2*(in4_3+in4_4/in4_5);</pre>
+<h2><span class="mw-headline" id="Sum_with_the_multiplication._.28sum_mult.29_.3C483.3E"><span class="mw-headline-number">18</span> Sum with the multiplication. (sum_mult) &lt;483&gt;</span></h2>
+<p><i>Description:</i> The summation the set of values with the multiplication.<br />
+<i>Formula:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = in1_1*in1_2*(in1_3*in1_4+in1_5) + 
+      in2_1*in2_2*(in2_3*in2_4+in2_5) +
+      in3_1*in3_2*(in3_3*in3_4+in3_5) + 
+      in4_1*in4_2*(in4_3*in4_4+in4_5);</pre>
+<h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">19</span> User programming API</span></h2>
+<p>Some objects of the module provides functions for user's programming.
+</p><p><b>The object "Functions library" (SYS.Special.FLibComplex1)</b>
+</p>
+<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — call the library function <i>{funcID}</i>. Return result of the called function.</li></ul>
+<p><b>The object "User function" (SYS.Special.FLibComplex1["funcID"])</b>
+</p>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — call the function with parameters <i>&lt;prm{N}&gt;</i>. Return result of the called function.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

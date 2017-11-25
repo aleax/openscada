@@ -65,7 +65,7 @@ using namespace VISION;
 //****************************************
 ModInspAttr::ModInspAttr( const string &iwdg, VisDevelop *mainWind ) : main_win(mainWind)
 {
-    rootItem = new Item("wgrp",Item::WdgGrp);
+    rootItem = new Item("wgrp", Item::WdgGrp);
     setWdg(iwdg);
 }
 

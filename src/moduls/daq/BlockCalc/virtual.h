@@ -130,8 +130,7 @@ class Contr: public TController
 	bool	prcSt,		//Calc status
 		callSt,		//Calc now stat
 		endrunReq;	//Endrun calc request
-	int64_t	&mPerOld,	//Clock period (ms)
-		&mPrior,	//Process data task priority
+	int64_t	&mPrior,	//Process data task priority
 		&mIter;		//Iteration into clock
 
 	int	mBl;

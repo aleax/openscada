@@ -1,0 +1,463 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/FLibComplex1 - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/FLibComplex1</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FFLibComplex1&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/FLibComplex1" title="Modules/FLibComplex1">Modules/FLibComplex1</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibComplex1" title="Modules/FLibComplex1 (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibComplex1/uk" title="Модулі/FLibComplex1 (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/FLibComplex1.html" title="Special:MyLanguage/Modules/FLibComplex1">FLibComplex1</a> </td>
+<td> Библиотека функций совместимости со SCADA Complex1 </td>
+<td> 1.1 </td>
+<td> GPL2 </td>
+<td> spec_FLibComplex1.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Специальные </td>
+<td> Роман Савоченко </td>
+<td> Предоставляет библиотеку функций совместимых с SCADA Complex1 фирмы ООО НИП "ДІЯ".
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28alarm.29_.3C111.3E"><span class="tocnumber">1</span> <span class="toctext">Сигнал (alarm) &lt;111&gt;</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.A3.D1.81.D0.BB.D0.BE.D0.B2.D0.B8.D0.B5_.27.3C.27_.28cond_lt.29_.3C239.3E"><span class="tocnumber">2</span> <span class="toctext">Условие '&lt;' (cond_lt) &lt;239&gt;</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.A3.D1.81.D0.BB.D0.BE.D0.B2.D0.B8.D0.B5_.27.3E.27_.28cond_gt.29_.3C240.3E"><span class="tocnumber">3</span> <span class="toctext">Условие '&gt;' (cond_gt) &lt;240&gt;</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.9F.D0.BE.D0.BB.D0.BD.D0.BE.D0.B5_.D1.83.D1.81.D0.BB.D0.BE.D0.B2.D0.B8.D0.B5_.28cond_full.29_.3C513.3E"><span class="tocnumber">4</span> <span class="toctext">Полное условие (cond_full) &lt;513&gt;</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.94.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D1.8B.D0.B9_.D0.B1.D0.BB.D0.BE.D0.BA_.28digitBlock.29_.3C252.3E"><span class="tocnumber">5</span> <span class="toctext">Дискретный блок (digitBlock) &lt;252&gt;</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.94.D0.B5.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.28div.29_.3C526.3E"><span class="tocnumber">6</span> <span class="toctext">Деление (div) &lt;526&gt;</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#.D0.AD.D0.BA.D1.81.D0.BF.D0.BE.D0.BD.D0.B5.D0.BD.D1.82.D0.B0_.28exp.29_.3C476.3E"><span class="tocnumber">7</span> <span class="toctext">Экспонента (exp) &lt;476&gt;</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#.D0.A0.D0.B0.D1.81.D1.85.D0.BE.D0.B4_.28flow.29_.3C235.3E"><span class="tocnumber">8</span> <span class="toctext">Расход (flow) &lt;235&gt;</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#.D0.98.D1.82.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80_.28increment.29_.3C181.3E"><span class="tocnumber">9</span> <span class="toctext">Итератор (increment) &lt;181&gt;</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#.D0.97.D0.B0.D0.B4.D0.B5.D1.80.D0.B6.D0.BA.D0.B0_.28lag.29_.3C121.3E"><span class="tocnumber">10</span> <span class="toctext">Задержка (lag) &lt;121&gt;</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#.D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B5_.D1.83.D0.BC.D0.BD.D0.BE.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5.28mult.29_.3C259.3E"><span class="tocnumber">11</span> <span class="toctext">Простое умножение(mult) &lt;259&gt;</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#.D0.A3.D0.BC.D0.BD.D0.BE.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5.2B.D0.B4.D0.B5.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5.28multDiv.29_.3C468.3E"><span class="tocnumber">12</span> <span class="toctext">Умножение+деление(multDiv) &lt;468&gt;</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#.D0.9F.D0.98.D0.94_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.82.D0.BE.D1.80_.28pid.29_.3C745.3E"><span class="tocnumber">13</span> <span class="toctext">ПИД регулятор (pid) &lt;745&gt;</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#.D0.A1.D1.82.D0.B5.D0.BF.D0.B5.D0.BD.D1.8C_.28pow.29_.3C564.3E"><span class="tocnumber">14</span> <span class="toctext">Степень (pow) &lt;564&gt;</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#.D0.92.D1.8B.D0.B1.D0.BE.D1.80_.28select.29_.3C156.3E"><span class="tocnumber">15</span> <span class="toctext">Выбор (select) &lt;156&gt;</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#.D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B9_.D1.81.D1.83.D0.BC.D0.BC.D0.B0.D1.82.D0.BE.D1.80_.28sum.29_.3C404.3E"><span class="tocnumber">16</span> <span class="toctext">Простой сумматор (sum) &lt;404&gt;</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#.D0.A1.D1.83.D0.BC.D0.BC.D0.B0_.D1.81_.D0.B4.D0.B5.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5.D0.BC_.28sum_div.29_.3C518.3E"><span class="tocnumber">17</span> <span class="toctext">Сумма с делением (sum_div) &lt;518&gt;</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#.D0.A1.D1.83.D0.BC.D0.BC.D0.B0_.D1.81_.D1.83.D0.BC.D0.BD.D0.BE.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5.D0.BC_.28sum_mult.29_.3C483.3E"><span class="tocnumber">18</span> <span class="toctext">Сумма с умножением (sum_mult) &lt;483&gt;</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">19</span> <span class="toctext">API пользовательского программирования</span></a></li>
+</ul>
+</div>
+
+<p>Специальный модуль FLibComplex1 предоставляет в систему OpenSCADA статическую библиотеку функций совместимости со SCADA Complex1 фирмы НИП "DIYA". Эти функции использовались в SCADA системе Complex1 в виде алгоблоков для создания внутрисистемных вычислений на основе виртуального контроллера. Предоставление библиотеки этих функций позволяет выполнять перенос вычислительных алгоритмов из системы Complex1.
+</p><p>Для адресации к функциям этой библиотеки можно использовать статический адрес вызова "<b>Special.FLibComplex1.{Func}()</b>" или динамический "<b>SYS.Special.FLibComplex1["{Func}"].call()</b>", "<b>SYS.Special.FLibComplex1.{Func}()</b>". Где <i>{Func}</i> — идентификатор функции в библиотеке.
+</p><p>Ниже приведено описание каждой функции библиотеки. Для каждой функции производилась оценка времени исполнения. Измерение производилось на системе со следующими параметрами: Athlon 64 3000+ (ALTLinux 3.0(32бит)) путём замера общего времени исполнения функции при вызове её 1000 раз. Выборка производилась по наименьшему значению из пяти вычислений. Время заключается в угловые скобки и измеряется в микросекундах. 
+</p>
+<h2><span class="mw-headline" id=".D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB_.28alarm.29_.3C111.3E"><span class="mw-headline-number">1</span> Сигнал (alarm) &lt;111&gt;</span></h2>
+<p><i>Описание:</i> Установка признака сигнализации в случае выхода значения переменной за указанную границу.<br />
+<i>Формула:</i> 
+</p>
+<pre style="white-space: pre-wrap;">
+out = if(val&gt;max || val&lt;min) true; else false;</pre>
+<h2><span class="mw-headline" id=".D0.A3.D1.81.D0.BB.D0.BE.D0.B2.D0.B8.D0.B5_.27.3C.27_.28cond_lt.29_.3C239.3E"><span class="mw-headline-number">2</span> Условие '&lt;' (cond_lt) &lt;239&gt;</span></h2>
+<p><i>Описание:</i> Операция ветвления в соответствии с условием "&lt;".<br />
+<i>Формула:</i> 
+</p>
+<pre style="white-space: pre-wrap;">
+out = if(in1&lt;(in2_1*in2_2*in2_3*in2_4)) in3_1*in3_2*in3_3*in3_4;
+      else in4_1*in4_2*in4_3*in4_4;</pre>
+<h2><span class="mw-headline" id=".D0.A3.D1.81.D0.BB.D0.BE.D0.B2.D0.B8.D0.B5_.27.3E.27_.28cond_gt.29_.3C240.3E"><span class="mw-headline-number">3</span> Условие '&gt;' (cond_gt) &lt;240&gt;</span></h2>
+<p><i>Описание:</i> Операция ветвления в соответствии с условием "&gt;".<br />
+<i>Формула:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = if(in1&gt;(in2_1*in2_2*in2_3*in2_4)) in3_1*in3_2*in3_3*in3_4;
+      else in4_1*in4_2*in4_3*in4_4;</pre>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.BB.D0.BD.D0.BE.D0.B5_.D1.83.D1.81.D0.BB.D0.BE.D0.B2.D0.B8.D0.B5_.28cond_full.29_.3C513.3E"><span class="mw-headline-number">4</span> Полное условие (cond_full) &lt;513&gt;</span></h2>
+<p><i>Описание:</i> Полная проверка условия, включая больше, меньше и равно.<br />
+<i>Формула:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = if(in1&lt;(in2_1*in2_2*in2_3*in2_4)) in3_1*in3_2*in3_3*in3_4;
+      else if( in1&gt;(in4_1*in4_2*in4_3*in4_4) in5_1*in5_2*in5_3*in5_4;
+      else in6_1*in6_2*in6_3*in6_4;</pre>
+<h2><span class="mw-headline" id=".D0.94.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D1.8B.D0.B9_.D0.B1.D0.BB.D0.BE.D0.BA_.28digitBlock.29_.3C252.3E"><span class="mw-headline-number">5</span> Дискретный блок (digitBlock) &lt;252&gt;</span></h2>
+<p><i>Описание:</i> Функция содержит алгоритм управления сборками дискретных сигналов для задвижек и насосов, содержащих: признаки "Open", "Close" и команды "Open", "Close", "Stop". Функция поддерживает работу с импульсными командами, т.е. может снимать сигнал через указанный промежуток времени.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим
+</th></tr>
+<tr>
+<td>cmdOpen</td>
+<td>Команда "Открыть"</td>
+<td>Bool</td>
+<td>Выход
+</td></tr>
+<tr>
+<td>cmdClose</td>
+<td>Команда "Закрыть"</td>
+<td>Bool</td>
+<td>Выход
+</td></tr>
+<tr>
+<td>cmdStop</td>
+<td>Команда "Стоп"</td>
+<td>Bool</td>
+<td>Выход
+</td></tr>
+<tr>
+<td>stOpen</td>
+<td>Сотояние "Открыт"</td>
+<td>Bool</td>
+<td>Вход
+</td></tr>
+<tr>
+<td>stClose</td>
+<td>Состояние "Закрыт"</td>
+<td>Bool</td>
+<td>Вход
+</td></tr>
+<tr>
+<td>tCmd</td>
+<td>Command hold time (s)</td>
+<td>Целый</td>
+<td>Вход
+</td></tr>
+<tr>
+<td>frq</td>
+<td>Период обсчёта (мс)</td>
+<td>Целый</td>
+<td>Вход
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.94.D0.B5.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.28div.29_.3C526.3E"><span class="mw-headline-number">6</span> Деление (div) &lt;526&gt;</span></h2>
+<p><i>Описание:</i> Производит деление сборок переменных.<br />
+<i>Формула:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = (in1_1*in1_2*in1_3*in1_4*in1_5 + in2_1*in2_2*in2_3*in2_4*in2_5 + in3) /
+      (in4_1*in4_2*in4_3*in4_4*in4_5 + in5_1*in5_2*in5_3*in5_4*in5_5 + in6);</pre>
+<h2><span class="mw-headline" id=".D0.AD.D0.BA.D1.81.D0.BF.D0.BE.D0.BD.D0.B5.D0.BD.D1.82.D0.B0_.28exp.29_.3C476.3E"><span class="mw-headline-number">7</span> Экспонента (exp) &lt;476&gt;</span></h2>
+<p><i>Описание:</i> Вычисление экспоненты над группой переменных.<br />
+<i>Формула:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = exp (in1_1*in1_2*in1_3*in1_4*in1_5 + (in2_1*in2_2*in2_3*in2_4*in2_5+in3) /
+          (in4_1*in4_2*in4_3*in4_4*in4_5+in5) )</pre>
+<h2><span class="mw-headline" id=".D0.A0.D0.B0.D1.81.D1.85.D0.BE.D0.B4_.28flow.29_.3C235.3E"><span class="mw-headline-number">8</span> Расход (flow) &lt;235&gt;</span></h2>
+<p><i>Описание:</i> Вычисление расхода газа.<br />
+<i>Формула:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+f = K1*((K3+K4*x)^K2);</pre>
+<h2><span class="mw-headline" id=".D0.98.D1.82.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80_.28increment.29_.3C181.3E"><span class="mw-headline-number">9</span> Итератор (increment) &lt;181&gt;</span></h2>
+<p><i>Описание:</i> Итерационное вычисление с указанием приращения. Коэффициент приращения для разных направлений различный.<br />
+<i>Формула:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = if( in1 &gt; in2 ) in2 + in3*(in1-in2); 
+      else in2 - in4*(in2-in1);</pre>
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D0.B4.D0.B5.D1.80.D0.B6.D0.BA.D0.B0_.28lag.29_.3C121.3E"><span class="mw-headline-number">10</span> Задержка (lag) &lt;121&gt;</span></h2>
+<p><i>Описание:</i> Задержка изменения переменной. Практически это фильтр без привязки ко времени.<br />
+<i>Формула:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+y = y - Klag*( y - x );</pre>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B5_.D1.83.D0.BC.D0.BD.D0.BE.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5.28mult.29_.3C259.3E"><span class="mw-headline-number">11</span> Простое умножение(mult) &lt;259&gt;</span></h2>
+<p><i>Описание:</i> Простое умножение с делением.<br />
+<i>Формула:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = (in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/
+      (in2_1*in2_2*in2_3*in2_4);</pre>
+<h2><span class="mw-headline" id=".D0.A3.D0.BC.D0.BD.D0.BE.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5.2B.D0.B4.D0.B5.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5.28multDiv.29_.3C468.3E"><span class="mw-headline-number">12</span> Умножение+деление(multDiv) &lt;468&gt;</span></h2>
+<p><i>Описание:</i> Разветвленное умножение+деление.<br />
+<i>Формула:</i> 
+</p>
+<pre style="white-space: pre-wrap;">
+out = in1_1*in1_2*in1_3*in1_4*in1_5*
+      (in2_1*in2_2*in2_3*in2_4*in2_5+(in3_1*in3_2*in3_3*in3_4*in3_5)/
+      (in4_1*in4_2*in4_3*in4_4*in4_5));</pre>
+<h2><span class="mw-headline" id=".D0.9F.D0.98.D0.94_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.82.D0.BE.D1.80_.28pid.29_.3C745.3E"><span class="mw-headline-number">13</span> ПИД регулятор (pid) &lt;745&gt;</span></h2>
+<p><i>Описание:</i> Пропорционально-интегрально-дифференциальный регулятор.<br />
+<i>Параметры:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По умолчанию
+</th></tr>
+<tr>
+<td>var</td>
+<td>Переменная</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>sp</td>
+<td>Задание</td>
+<td>Веществен.</td>
+<td>Выход</td>
+<td>0
+</td></tr>
+<tr>
+<td>max</td>
+<td>Макс. шкалы</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>100
+</td></tr>
+<tr>
+<td>min</td>
+<td>Мин. шкалы</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>manIn</td>
+<td>Ручной ввод (%)</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>out</td>
+<td>Выход (%)</td>
+<td>Веществен.</td>
+<td>Возврат</td>
+<td>0
+</td></tr>
+<tr>
+<td>auto</td>
+<td>Автомат</td>
+<td>Логический</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>casc</td>
+<td>Каскад</td>
+<td>Логический</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>Kp</td>
+<td>Kp</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>1
+</td></tr>
+<tr>
+<td>Ti</td>
+<td>Ти (мс)</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>1000
+</td></tr>
+<tr>
+<td>Kd</td>
+<td>Kd</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>1
+</td></tr>
+<tr>
+<td>Td</td>
+<td>Тд (мс)</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>Tzd</td>
+<td>Т задержки производной (мс)</td>
+<td>Целый</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>Hup</td>
+<td>Верхняя граница выхода (%)</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>100
+</td></tr>
+<tr>
+<td>Hdwn</td>
+<td>Нижняя граница выхода (%)</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>Zi</td>
+<td>Нечувствительность (%)</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>1
+</td></tr>
+<tr>
+<td>followSp</td>
+<td>Следить заданием за переменной в ручном.</td>
+<td>Логический</td>
+<td>Вход</td>
+<td>1
+</td></tr>
+<tr>
+<td>K1</td>
+<td>Коэф. входа 1</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>in1</td>
+<td>Вход 1</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>K2</td>
+<td>Коэф. входа 2</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>in2</td>
+<td>Вход 2</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>K3</td>
+<td>Коэф. входа 3</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>in3</td>
+<td>Вход 3</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>K4</td>
+<td>Коэф. входа 4</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>in4</td>
+<td>Вход 4</td>
+<td>Веществен.</td>
+<td>Вход</td>
+<td>0
+</td></tr>
+<tr>
+<td>f_frq</td>
+<td>Частота вычисления (Гц)</td>
+<td>Вещественный</td>
+<td>Вход</td>
+<td>1
+</td></tr></table>
+<p><i>Структура:</i><br />
+<a class="image" href="http://oscada.org/wiki/File:FLibComplex1_PID.png"><img alt="FLibComplex1 PID.png" height="319" src="../files/FLibComplex1_PID.png" width="800" /></a>
+</p>
+<h2><span class="mw-headline" id=".D0.A1.D1.82.D0.B5.D0.BF.D0.B5.D0.BD.D1.8C_.28pow.29_.3C564.3E"><span class="mw-headline-number">14</span> Степень (pow) &lt;564&gt;</span></h2>
+<p><i>Описание:</i> Возведение в степень.<br />
+<i>Формула:</i> 
+</p>
+<pre style="white-space: pre-wrap;">
+out = (in1_1*in1_2*in1_3*in1_4*in1_5)^
+      (in2_1*in2_2*in2_3*in2_4*in2_5 + (in3_1*in3_2*in3_3*in3_4*in3_5)/
+      (in4_1*in4_2*in4_3*in4_4*in4_5));</pre>
+<h2><span class="mw-headline" id=".D0.92.D1.8B.D0.B1.D0.BE.D1.80_.28select.29_.3C156.3E"><span class="mw-headline-number">15</span> Выбор (select) &lt;156&gt;</span></h2>
+<p><i>Описание:</i> Выбор одного из четырёх вариантов.<br />
+<i>Формула:</i> 
+</p>
+<pre style="white-space: pre-wrap;">
+out = if(sel = 1) in1_1*in1_2*in1_3*in1_4;
+      if(sel = 2) in2_1*in2_2*in2_3*in2_4;
+      if(sel = 3) in3_1*in3_2*in3_3*in3_4;
+      if(sel = 4) in4_1*in4_2*in4_3*in4_4;</pre>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B9_.D1.81.D1.83.D0.BC.D0.BC.D0.B0.D1.82.D0.BE.D1.80_.28sum.29_.3C404.3E"><span class="mw-headline-number">16</span> Простой сумматор (sum) &lt;404&gt;</span></h2>
+<p><i>Описание:</i> Простое суммирование с умножением.<br />
+<i>Формула:</i> 
+</p>
+<pre style="white-space: pre-wrap;">
+out = in1_1*in1_2+in2_1*in2_2+in3_1*in3_2+in4_1*in4_2
+      + in5_1*in5_2+in6_1*in6_2+in7_1*in7_2+in8_1*in8_2;</pre>
+<h2><span class="mw-headline" id=".D0.A1.D1.83.D0.BC.D0.BC.D0.B0_.D1.81_.D0.B4.D0.B5.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5.D0.BC_.28sum_div.29_.3C518.3E"><span class="mw-headline-number">17</span> Сумма с делением (sum_div) &lt;518&gt;</span></h2>
+<p><i>Описание:</i> Суммирование с делением группы значений.<br />
+<i>Формула:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = in1_1*in1_2*(in1_3+in1_4/in1_5) + 
+      in2_1*in2_2*(in2_3+in2_4/in2_5) +
+      in3_1*in3_2*(in3_3+in3_4/in3_5) + 
+      in4_1*in4_2*(in4_3+in4_4/in4_5);</pre>
+<h2><span class="mw-headline" id=".D0.A1.D1.83.D0.BC.D0.BC.D0.B0_.D1.81_.D1.83.D0.BC.D0.BD.D0.BE.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5.D0.BC_.28sum_mult.29_.3C483.3E"><span class="mw-headline-number">18</span> Сумма с умножением (sum_mult) &lt;483&gt;</span></h2>
+<p><i>Описание:</i> Суммирование с умножением группы значений.<br />
+<i>Формула:</i>
+</p>
+<pre style="white-space: pre-wrap;">
+out = in1_1*in1_2*(in1_3*in1_4+in1_5) + 
+      in2_1*in2_2*(in2_3*in2_4+in2_5) +
+      in3_1*in3_2*(in3_3*in3_4+in3_5) + 
+      in4_1*in4_2*(in4_3*in4_4+in4_5);</pre>
+<h2><span class="mw-headline" id="API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">19</span> API пользовательского программирования</span></h2>
+<p>Некоторые объекты модуля предоставляют функции пользовательского программирования.
+</p><p><b>Объект "Библиотека функций" (SYS.Special.FLibComplex1)</b>
+</p>
+<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — вызов функции библиотеки <i>{funcID}</i>. Возвращает результат вызываемой функции.</li></ul>
+<p><b>Объект "Пользовательская функция" (SYS.Special.FLibComplex1["funcID"])</b>
+</p>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — вызов данной функции с параметрами <i>&lt;prm{N}&gt;</i>. Возвращает результат вызываемой функции.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

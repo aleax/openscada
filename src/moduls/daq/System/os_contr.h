@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.System file: os_contr.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -135,8 +135,7 @@ class TMdContr: public TController
 
 	//Attributes
 	ResRW	enRes;		//Resource for enable params
-	int64_t	&mPerOld,	//ms
-		&mPrior;	//Process task priority
+	int64_t	&mPrior;	//Process task priority
 
 	bool	prcSt,		//Process task active
 		callSt,		//Calc now stat

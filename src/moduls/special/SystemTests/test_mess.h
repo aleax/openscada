@@ -37,7 +37,7 @@ class TestMess : public TFunction
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("arhtor",_("Archivator"),IO::String,IO::Default,"FSArch.StatErrors") );
 	    ioAdd( new IO("categ",_("Messages category pattern"),IO::String,IO::Default) );
-	    ioAdd( new IO("depth",_("Messages depth (s)"),IO::Integer,IO::Default,"10") );
+	    ioAdd( new IO("depth",_("Messages depth, s"),IO::Integer,IO::Default,"10") );
 	}
 
 	string name( )	{ return _("Messages"); }

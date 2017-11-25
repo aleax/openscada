@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.11"
+#define MOD_VER		"1.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -104,7 +104,6 @@ void TpContr::postEnable( int flag )
     //Controllers BD structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system"));
     fldAdd(new TFld("BLOCK_SH",_("Block's table"),TFld::String,TFld::NoFlag,"30","block"));
-    fldAdd(new TFld("PERIOD",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Calculate task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("ITER",_("Iteration number into calculate period"),TFld::Integer,TFld::NoFlag,"2","1","0;99"));
@@ -150,7 +149,7 @@ TController *TpContr::ContrAttach( const string &name, const string &daq_db )	{ 
 //************************************************
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     TController(name_c, daq_db, cfgelem), prcSt(false), callSt(false), endrunReq(false),
-    mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()),
+    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()),
     mPer(1e9), calcRes(true)
 {
     cfg("PRM_BD").setS("BlckCalcPrm_"+name_c);
@@ -229,9 +228,6 @@ void Contr::load_( )
     if(!SYS->chkSelDB(DB())) throw TError();
 
     //TController::load_( );
-
-    //Check for get old period method value
-    if(mPerOld)	{ cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0;  modif(true); }
 
     //Load block's configuration
     TConfig cEl(&mod->blockE());

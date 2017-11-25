@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.4.0"
+#define MOD_VER		"2.4.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -119,8 +119,11 @@ void MBD::enable( )
     MtxAlloc res(connRes, true);
     if(enableStat()) return;
 
-    cd_pg = codePage().size()?codePage():Mess->charset();
-    int rc = sqlite3_open(TSYS::strSepParse(addr(),0,';').c_str(), &m_db);
+    string fnm = TSYS::strSepParse(addr(), 0, ';');
+    remove((fnm+"-journal").c_str());
+
+    cd_pg = codePage().size() ? codePage() : Mess->charset();
+    int rc = sqlite3_open(fnm.c_str(), &m_db);
     if(rc) {
 	string err = sqlite3_errmsg(m_db);
 	sqlite3_close(m_db);

@@ -48,6 +48,7 @@ class QLineEdit;
 class QHBoxLayout;
 class QLabel;
 class QTabWidget;
+class QSplitter;
 
 using namespace OSCADA;
 
@@ -116,7 +117,8 @@ public:
 
 protected:
     //Methods
-    void closeEvent( QCloseEvent* );
+    void closeEvent( QCloseEvent* );		//Close window event
+    void resizeEvent( QResizeEvent * );		//Resize window event
 
 private slots:
     //Slots
@@ -206,6 +208,7 @@ private:
     QTimer	*endRunTimer, *autoUpdTimer, *reqPrgrsTimer;
 
     QTreeWidget	*CtrTree;
+    QSplitter	*splitter;
     QLabel	*titleIco,
 		*titleLab,
 		*mStModify;

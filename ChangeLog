@@ -1,3 +1,17 @@
+2017-11-25 Roman (stable)
+- FIX:DB.LibsDB.OscadaLibs: servProc.docOffLine appended by the documents Modules/{VCAEngine(without Ukrainian still),QTStarter,QTCfg,FLibSYS,SystemTests,FLibMath,FLibComplex1}
+    for the offline documentaion list.
+- !:DOC: "Program Manual" continued to revision ongoing of it translation to Ukrainian.
+    Appended by Modules/{VCAEngine(without Ukrainian still),QTStarter,QTCfg,FLibSYS,SystemTests,FLibMath,FLibComplex1}.
+- !:DB.SQLite: Journals removing before open any DB was added.
+- !!:DAQ.{BlockCalc,DAQGate,DCON,LogicLev,Siemens,System}: The deprecated attribute "Clock period (ms)" removed.
+- Special.SystemTests: Some original messages fixed.
+- UI.{QTCfg,Vision}: Main window (developing for Vision) size and splitter's properties storing and restoring were added.
+- UI.QTCfg: Pages refresh at vertical size changing was added.
+    Stop for cyclic refreshing at wait dialog termination was added before same termination.
+
+
+
 2017-11-17 Roman (stable)
 - FIX:DB.LibsDB.OscadaLibs: LowDevLib.BME280 next some fixed by Arcadiy Kisel.
     FIX: servProc.wacko2media appended for processing "__", "!!(color)!!" and fixed for unpaired paddings before list symbol "   *".

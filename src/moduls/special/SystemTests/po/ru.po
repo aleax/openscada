@@ -1,13 +1,13 @@
 # OpenSCADA.Special.SystemTests translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Special.SystemTests package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-17 22:39+0200\n"
+"POT-Creation-Date: 2017-11-25 21:56+0200\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -69,8 +69,8 @@ msgstr "Результат"
 msgid "Value archive"
 msgstr "Архив значений"
 
-msgid "Values period (us)"
-msgstr "Период значений (мкс)"
+msgid "Values period, us"
+msgstr "Период значений, мкс"
 
 msgid "Archivator"
 msgstr "Архиватор"
@@ -370,8 +370,8 @@ msgstr "Закрытие и удаление БД '%s'."
 msgid "Messages category pattern"
 msgstr "Шаблон категории сообщения"
 
-msgid "Messages depth (s)"
-msgstr "Глубина сообщения (с)"
+msgid "Messages depth, s"
+msgstr "Глубина сообщения, с"
 
 msgid "Messages"
 msgstr "Сообщения"
@@ -658,11 +658,11 @@ msgstr "Ошибка: %s: %s"
 msgid "Parameter attribute path"
 msgstr "Путь к атрибуту параметра"
 
-msgid "Archive value getting depth (s)"
-msgstr "Глубина запроса к архиву значений (с)"
+msgid "Archive value getting depth, s"
+msgstr "Глубина запроса к архиву значений, с"
 
-msgid "Archive value getting period (us)"
-msgstr "Период запроса к архиву значений (мкс)"
+msgid "Archive value getting period, us"
+msgstr "Период запроса к архиву значений, мкс"
 
 msgid "Parameter attribute"
 msgstr "Атрибут параметра"

@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/Конфігуратор на Qt - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/Конфігуратор на Qt</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FQTCfg&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/QTCfg" title="Modules/QTCfg">Modules/QTCfg</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/QTCfg" title="Modules/QTCfg (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/QTCfg/ru" title="Модули/Конфигуратор на Qt (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> </td>
+<td> Програмний конфігуратор (Qt) </td>
+<td> 3.3 </td>
+<td> GPL2 </td>
+<td> ui_QTCfg.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Користувацькі інтерфейси </td>
+<td> Роман Савоченко </td>
+<td> Надає оснований на Qt конфігуратор OpenSCADA.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Конфігурація</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.96_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Базові елементи</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Команди</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.9F.D0.B5.D1.80.D0.B5.D0.BB.D1.96.D0.BA.D0.B8"><span class="tocnumber">4</span> <span class="toctext">Переліки</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.96"><span class="tocnumber">5</span> <span class="toctext">Таблиці</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.97.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Зображення</span></a></li>
+</ul>
+</div>
+
+<p>Модуль "QTCfg" надає конфігуратор OpenSCADA. Конфігуратор реалізовано на основі багатоплатформеної бібліотеки графічного користувацького інтерфейсу (GUI) фірми TrollTech — Qt (<a class="external free" href="http://www.trolltech.com/qt/" rel="nofollow noreferrer noopener" target="_blank">http://www.trolltech.com/qt/</a>). 
+</p><p>У основі модуля лежить мова інтерфейсу управління OpenSCADA, що означає надання єдиного інтерфейсу конфігурації. Оновлення модуля може знадобитися тільки у випадку оновлення специфікації мови інтерфейсу управління. Для запиту контексту сторінки використовується груповий запит інтерфейсу управління, що дозволяє оптимізувати час віддаленого доступу за високо-латентними та повільними каналами зв'язку.
+</p><p>Розглянемо робоче вікно конфігуратору на рисунку 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:729px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_workplacestruct.png"><img class="thumbimage" height="588" src="../files/QTCfg_workplacestruct.png" width="727" /></a>  <div class="thumbcaption">Рис.1. Робоче вікно конфігуратору.</div></div></div></div>
+<p>Робоче вікно конфігуратору складається з наступних частин:
+</p>
+<dl><dd>1 <i>Меню</i> — містить меню конфігуратору, що випадає.</dd>
+<dd>2 <i>Панель інструментів</i> — містить кнопки швидкого управління.</dd>
+<dd>3 <i>Навігатор</i> — призначений для прямої навігації за деревом управління.
+<dl><dd>3.1 Поле вводу тексту для пошуку елементу у поточній гілці дерева.</dd></dl></dd>
+<dd>4 <i>Рядок статусу</i> — відображення стану конфігуратору.
+<dl><dd>4.1 <i>Індикатор/обрання користувача</i> — відображає поточного користувача. По подвійному кліку відкривається діалог вибору користувача. А також індикатор факту внесення змін до конфігурації.</dd></dl></dd>
+<dd>5 <i>Робоче поле</i> — поділено на частини:
+<dl><dd>5.1 <i>Ім'я вузла</i> — містить ім'я поточного вузла.</dd>
+<dd>5.2 <i>Табулятор робочих областей</i> — до табулятору розташовуються кореневі сторінки (області управління) вузла. Області управління наступних рівнів розташовуються на інформаційній панелі.</dd></dl></dd></dl>
+<p>Меню конфігуратору містить наступні пункти:
+</p>
+<ul><li> <i>Файл</i> — група загальних команд:
+<ul><li> <i>Завантажити з БД</i> — здійснює завантаження обраного об'єкту або гілки об'єктів з БД.</li>
+<li> <i>Зберегти у БД</i> — виконує збереження обраного об'єкту або гілки об'єктів у БД.</li>
+<li> <i>Закрити</i> — закрити вікно конфігуратору.</li>
+<li> <i>Вихід</i> — завершення роботи OpenSCADA.</li></ul></li>
+<li> <i>Редагування</i> — команди редагування:
+<ul><li> <i>Додати</i> — додати новий об'єкт до контейнеру.</li>
+<li> <i>Видалити</i> — видалити обраний об'єкт.</li>
+<li> <i>Копіювати елемент</i> — копіювання обраного об'єкту.</li>
+<li> <i>Вирізати елемент</i> — вирізання обраного об'єкту. Початковий об'єкт видаляється після вставки.</li>
+<li> <i>Вставити елемент</i> — вставка скопійованого або вирізаного елементу.</li></ul></li>
+<li> <i>Вид</i> — команди навігації та управління видом:
+<ul><li> <i>Вверх</i> — піднятися вверх по дереву.</li>
+<li> <i>Попередня</i> — відкрити попередню сторінку, що відкривалася.</li>
+<li> <i>Наступна</i> — відкрити наступну сторінку, що відкривалася.</li>
+<li> <i>Оновити</i> — оновити вміст поточної сторінки.</li>
+<li> <i>Запустити</i> — запустити періодичне оновлення вмісту поточної сторінки з інтервалом одна секунда.</li>
+<li> <i>Зупинити</i> — зупинити періодичне оновлення вмісту поточної сторінки з інтервалом одна секунда.</li></ul></li>
+<li> <i>Допомога</i> — команди виклику допомоги:
+<ul><li> <i>Про</i> — інформація про модуль та OpenSCADA.</li>
+<li> <i>Про Qt</i> — інформація про бібліотеку Qt.</li>
+<li> <i>Посібник QTCfg</i> — виклик локального або віддаленого посібника по модулю QTCfg.</li>
+<li> <i>Посібник OpenSCADA</i> — виклик локального або віддаленого індексу посилань на документацію та посібники по OpenSCADA.</li>
+<li> <i>Посібник цієї сторінки</i> — виклик локального або віддаленого посібника обраної сторінки.</li>
+<li> <i>Що це</i> — команда запиту інформації за елементами інтерфейсу та отримання їх повної контекстної допомоги.</li></ul></li></ul>
+<p>Панель інструментів містить наступні кнопки швидкого управління (зліва на право):
+</p>
+<ul><li> <i>Завантажити з БД</i> — виконує завантаження обраного об'єкту або гілки об'єктів з БД.</li>
+<li> <i>Зберегти у БД</i> — виконує збереження обраного об'єкту або гілки об'єктів у БД.  </li>
+<li> <i>Вверх</i> — піднятися нагору за деревом.</li>
+<li> <i>Попередня</i> — відкрити попередню сторінку, що відкривалася.</li>
+<li> <i>Наступна</i> — відкрити наступну сторінку, що відкривалася.</li>
+<li> <i>Додати</i> — додати новий об'єкт до контейнеру.</li>
+<li> <i>Видалити</i> — видалити обраний об'єкт.</li>
+<li> <i>Копіювати елемент</i> — копіювання обраного об'єкту.</li>
+<li> <i>Вирізати елемент</i> — вирізання обраного об'єкту. Початковий об'єкт видаляється після вставки.</li>
+<li> <i>Вставити елемент</i> — вставка скопійованого або вирізаного елементу.</li>
+<li> <i>Оновити</i> — оновити вміст поточної сторінки.</li>
+<li> <i>Запустити</i> — запустити періодичне оновлення вмісту поточної сторінки з інтервалом одна секунда.</li>
+<li> <i>Зупинити</i> — зупинити періодичне оновлення вмісту поточної сторінки з інтервалом одна секунда.</li>
+<li> <i>Посібник цієї сторінки</i> — виклик локального або віддаленого посібника обраної сторінки.</li>
+<li> Кнопки виклику модулів графічних інтерфейсів на бібліотеці Qt.</li></ul>
+<p>У дереві навігації підтримується контекстне меню наступного вмісту:
+</p>
+<ul><li> <i>Завантажити з БД</i> — виконує завантаження обраного об'єкту або гілки об'єктів з БД.</li>
+<li> <i>Зберегти у БД</i> — виконує збереження обраного об'єкту або гілки об'єктів у БД.</li>
+<li> <i>Додати</i> — додати новий об'єкт до контейнеру.</li>
+<li> <i>Видалити</i> — видалити обраний об'єкт.</li>
+<li> <i>Копіювати елемент</i> — копіювання обраного об'єкту.</li>
+<li> <i>Вирізати елемент</i> — вирізання обраного об'єкту. Початковий об'єкт видаляється після вставки.</li>
+<li> <i>Вставити елемент</i> — вставка скопійованого або вирізаного елементу.</li>
+<li> <i>Оновити елементи дерева</i> — виконує оновлення вмісту дерева навігації.</li></ul>
+<p>Елементи управління поділяються на базові, команди, переліки, таблиці та зображення. Всі елементи відображаються у послідовності, яка суворо відповідає їх розташуванню у описі мови інтерфейсу управління.
+</p>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="mw-headline-number">1</span> Конфігурація</span></h2>
+<p>Для налаштування власної поведінки у неочевидних ситуаціях модулем надається можливість налаштування окремих параметрів за посередництвом інтерфейсу управління OpenSCADA (рис. 2). Такими параметрами є:
+</p>
+<ul><li> Таймаути перевірки підключення, у секундах, '{немає}:{є}' — інколи (для тунелю SSH) корисно зменшити таймаут перевірки на наявність підключення до 30 секунд з метою утримання підключення.</li>
+<li> Початковий шлях конфігуратору — дозволяє визначити, яку локальну сторінку відкривати при запуску конфігуратору.</li>
+<li> Початковий користувач конфігуратору — вказує, від ім'я якого користувача відкривати конфігуратор без запиту пароля.</li>
+<li> Посилання на сторінку конфігурації переліку зовнішніх OpenSCADA станцій, яке використовується для надання можливості віддаленої конфігурації.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:928px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_uk.png"><img class="thumbimage" height="529" src="../files/QTCfg_uk.png" width="926" /></a>  <div class="thumbcaption">Рис.2. Сторінка конфігурації самого конфігуратору.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.96_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B8"><span class="mw-headline-number">2</span> Базові елементи</span></h2>
+<p>До числа базових елементів входять: інформаційні елементи, поля вводу значень, елементи обрання з переліку, прапорці-ознаки, текстові поля. У випадку відсутності ім'я елементу базовий елемент приєднується до попереднього базового елементу. Приклад групи базових елементів з приєднанням наведено на рисунку 3.
+</p><p>Для елементів вводу, які не передбачають миттєвих змін та можуть тривалий час редагуватися перед остаточним завершенням, передбачено механізм підтвердження. Цей механізм дозволяє виключити затримки при редагуванні, особливо у випадках конфігурації віддалених станцій, та вносити зміни за підтвердженням. До елементів вводу з підтвердженням відносяться: поля вводу рядків тексту або чисельних значень та текстові поля. Підтвердження здійснюється натиском кнопки, яка з'являється поряд з полем вводу після початку редагування.
+</p><p>Поле вводу та відображення тексту підтримує можливість зміни висоти шляхом хапання за нижній край віджета та перетягування його. Крім того текстові поля підтримують підсвічення синтаксису, правила чого передаються у вигляді регулярних виразів з інтерфейсу управління.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:839px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_genelem_uk.png"><img class="thumbimage" height="656" src="../files/QTCfg_genelem_uk.png" width="837" /></a>  <div class="thumbcaption">Рис.3. Приєднання базових елементів.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B8"><span class="mw-headline-number">3</span> Команди</span></h2>
+<p>Команди — це елементи для передачі визначених вказівок дії вузлу та організації посилань-переходів на інші сторінки. Команди можуть містити параметри. Параметри формуються з базових елементів. Приклад команди з параметрами приведено на рисунку 4.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:836px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_commandelem_uk.png"><img class="thumbimage" height="656" src="../files/QTCfg_commandelem_uk.png" width="834" /></a>  <div class="thumbcaption">Рис.4. Команда.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.9F.D0.B5.D1.80.D0.B5.D0.BB.D1.96.D0.BA.D0.B8"><span class="mw-headline-number">4</span> Переліки</span></h2>
+<p>Переліки містять групу базових елементів одного типу. Операції над елементами доступні через контекстне меню переліку. Через елементи переліку можуть виконуватися операції переходу на інші сторінки, зазвичай дочірні. Перехід здійснюється за посередництвом подвійного кліку мишею на елементі переліку. Переліки можуть бути індексованими. Приклад переліку наведено на рисунку 5.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:758px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_listelem_uk.png"><img class="thumbimage" height="417" src="../files/QTCfg_listelem_uk.png" width="756" /></a>  <div class="thumbcaption">Рис.5. Перелік.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.96"><span class="mw-headline-number">5</span> Таблиці</span></h2>
+<p>Таблиці містять значення базових елементів. Тип базового елементу є індивідуальним для кожного стовпчика. Приклад таблиці наведено на рисунку 6. Операції над структурою таблиці, для редагованих таблиць, доступні за посередництвом контекстного меню. Редагування елементів таблиці здійснюється шляхом подвійного кліку по потрібній клітинці.
+</p><p>Таблиці підтримують можливість зміни висоти шляхом хапання за нижній край віджету та перетаскування його.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:915px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_tableelem_uk.png"><img class="thumbimage" height="672" src="../files/QTCfg_tableelem_uk.png" width="913" /></a>  <div class="thumbcaption">Рис.6. Таблиця.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.97.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">6</span> Зображення</span></h2>
+<p>Зображення закликано передавати графічну інформацію до конфігураторів. Приклад зображення наведено на рисунку 7.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1022px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_imgelem_uk.png"><img class="thumbimage" height="615" src="../files/QTCfg_imgelem_uk.png" width="1020" /></a>  <div class="thumbcaption">Рис.7. Зображення.</div></div></div></div>
+
+
+
+
+
+
+</div></body>
+</html>

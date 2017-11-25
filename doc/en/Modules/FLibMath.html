@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/FLibMath - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/FLibMath</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FFLibMath&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibMath" title="Modules/FLibMath (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibMath/ru" title="Модули/FLibMath (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/FLibMath/uk" title="Модулі/FLibMath (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/FLibMath.html" title="Special:MyLanguage/Modules/FLibMath">FLibMath</a> </td>
+<td> Math function's lib </td>
+<td> 0.6 </td>
+<td> GPL2 </td>
+<td> spec_FLibMath.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Special </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009-2010) — the page translation </td>
+<td> Provides the library of standard mathematical functions.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Functions"><span class="tocnumber">1</span> <span class="toctext">Functions</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#User_programming_API"><span class="tocnumber">2</span> <span class="toctext">User programming API</span></a></li>
+</ul>
+</div>
+
+<p>Special FLibMath module provides the library of standard mathematical functions into the system.
+</p><p>To address the functions of the library you can use static call address "<b>Special.FLibMath.{Func}()</b>" or dynamic "<b>SYS.Special.FLibMath["{Func}"].call()</b>", "<b>SYS.Special.FLibMath.{Func}()</b>". Where <i>{Func}</i> — function identifier in the library.
+</p>
+<h2><span class="mw-headline" id="Functions"><span class="mw-headline-number">1</span> Functions</span></h2>
+<p>Table 1 provides a description of each function of the library. For each function the evaluation time of execution is measured. The measurement was made on a system with the following parameters: Athlon 64 3000 + (ALTLinux 3.0 (32bit)), by measuring the total time of execution of the function, while calling it 1000 times. 
+</p><p><b>Table 1:</b> The functions of the library of standard mathematical functions
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Description </th>
+<th> Time (micro-seconds)
+</th></tr>
+<tr>
+<td>abs</td>
+<td>Module</td>
+<td>Math. function — the number module.</td>
+<td>81
+</td></tr>
+<tr>
+<td>acos</td>
+<td>Anti-cosine</td>
+<td>Math. function — anti-cosine.</td>
+<td>149
+</td></tr>
+<tr>
+<td>asin</td>
+<td>Anti-sine</td>
+<td>Math. function — anti-sine.</td>
+<td>140
+</td></tr>
+<tr>
+<td>atan</td>
+<td>Anti-tangent</td>
+<td>Math. function — anti-tangent.</td>
+<td>109
+</td></tr>
+<tr>
+<td>ceil</td>
+<td>Rounding up to a larger</td>
+<td>Math. function — rounding up to a larger integer.</td>
+<td>96
+</td></tr>
+<tr>
+<td>cos</td>
+<td>Сosine</td>
+<td>Math. function — cosine.</td>
+<td>93
+</td></tr>
+<tr>
+<td>cosh</td>
+<td>Hyperbolic cosine</td>
+<td>Math. function — hyperbolic cosine.</td>
+<td>121
+</td></tr>
+<tr>
+<td>exp</td>
+<td>Exponent</td>
+<td>Math. function — exponent.</td>
+<td>145
+</td></tr>
+<tr>
+<td>floor</td>
+<td>Rounding to the lower</td>
+<td>Math. function — rounding to the lower integer</td>
+<td>95
+</td></tr>
+<tr>
+<td>if</td>
+<td>If Condition</td>
+<td>Condition function — "If".</td>
+<td>92
+</td></tr>
+<tr>
+<td>lg</td>
+<td>Common logarithm</td>
+<td>Math. function — common logarithm.</td>
+<td>168
+</td></tr>
+<tr>
+<td>ln</td>
+<td>Natural logarithm</td>
+<td>Math. function — natural logarithm.</td>
+<td>185
+</td></tr>
+<tr>
+<td>pow</td>
+<td>Power</td>
+<td>Math. function — involution.</td>
+<td>157
+</td></tr>
+<tr>
+<td>rand</td>
+<td>Random number</td>
+<td>Math. function — random number generator.</td>
+<td>147
+</td></tr>
+<tr>
+<td>sin</td>
+<td>Sine</td>
+<td>Math. function — sine.</td>
+<td>127
+</td></tr>
+<tr>
+<td>sinh</td>
+<td>Hyperbolic sine</td>
+<td>Math. function — hyperbolic sine.</td>
+<td>199
+</td></tr>
+<tr>
+<td>sqrt</td>
+<td>The square root</td>
+<td>Math. function — the square root.</td>
+<td>94
+</td></tr>
+<tr>
+<td>tan</td>
+<td>Tangent</td>
+<td>Math. function — tangent.</td>
+<td>153
+</td></tr>
+<tr>
+<td>tanh</td>
+<td>Hyperbolic tangent</td>
+<td>Math. function — hyperbolic tangent.</td>
+<td>177
+</td></tr></table>
+<h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">2</span> User programming API</span></h2>
+<p>Some objects of the module provides functions for user's programming.
+</p><p><b>The object "Functions library" (SYS.Special.FLibMath)</b>
+</p>
+<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — call the library function <i>{funcID}</i>. Return result of the called function.</li></ul>
+<p><b>The object "User function" (SYS.Special.FLibMath["funcID"])</b>
+</p>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — call the function with parameters <i>&lt;prm{N}&gt;</i>. Return result of the called function.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

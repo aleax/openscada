@@ -1,0 +1,3249 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/VCAEngine - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/VCAEngine</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVCAEngine&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine/ru" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="http://oscada.org/wiki/Modules/VCAEngine/uk" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (5% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
+<td> Visual control area engine </td>
+<td> 4.1 </td>
+<td> GPL2 </td>
+<td> ui_VCAEngine.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> UI </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2011-2012) — the page translation </td>
+<td> The main visual control area engine.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Purpose"><span class="tocnumber">1</span> <span class="toctext">Purpose</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#The_configuration_and_the_formation_of_interfaces_of_the_VCA"><span class="tocnumber">2</span> <span class="toctext">The configuration and the formation of interfaces of the VCA</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Architecture"><span class="tocnumber">3</span> <span class="toctext">Architecture</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Frames_and_elements_of_visualization_.28widgets.29"><span class="tocnumber">3.1</span> <span class="toctext">Frames and elements of visualization (widgets)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Project"><span class="tocnumber">3.2</span> <span class="toctext">Project</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Session_of_the_project_execution"><span class="tocnumber">3.3</span> <span class="toctext">Session of the project execution</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Styles"><span class="tocnumber">3.4</span> <span class="toctext">Styles</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Events.2C_their_processing_and_the_events.27_maps"><span class="tocnumber">3.5</span> <span class="toctext">Events, their processing and the events' maps</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Signaling_.28Alarms.29"><span class="tocnumber">3.6</span> <span class="toctext">Signaling (Alarms)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Rights_management"><span class="tocnumber">3.7</span> <span class="toctext">Rights management</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Linkage_with_the_dynamics"><span class="tocnumber">3.8</span> <span class="toctext">Linkage with the dynamics</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#The_primitives_of_the_widget"><span class="tocnumber">3.9</span> <span class="toctext">The primitives of the widget</span></a>
+<ul>
+<li class="toclevel-3"><a href="#Elementary_graphic_figures_.28ElFigure.29"><span class="tocnumber">3.9.1</span> <span class="toctext"><span>Elementary graphic figures (ElFigure)</span></span></a></li>
+<li class="toclevel-3"><a href="#Element_of_the_form_.28FormEl.29"><span class="tocnumber">3.9.2</span> <span class="toctext"><span>Element of the form (FormEl)</span></span></a></li>
+<li class="toclevel-3"><a href="#Text_element_.28Text.29"><span class="tocnumber">3.9.3</span> <span class="toctext"><span>Text element (Text)</span></span></a></li>
+<li class="toclevel-3"><a href="#Element_of_visualization_of_media_materials_.28Media.29"><span class="tocnumber">3.9.4</span> <span class="toctext"><span>Element of visualization of media materials (Media)</span></span></a></li>
+<li class="toclevel-3"><a href="#Element_of_constructing_diagrams.2Ftrends_.28Diagram.29"><span class="tocnumber">3.9.5</span> <span class="toctext"><span>Element of constructing diagrams/trends (Diagram)</span></span></a></li>
+<li class="toclevel-3"><a href="#Element_of_building_the_protocols_based_on_the_archives_of_messages_.28Protocol.29"><span class="tocnumber">3.9.6</span> <span class="toctext"><span>Element of building the protocols based on the archives of messages (Protocol)</span></span></a></li>
+<li class="toclevel-3"><a href="#Element_of_formation_of_documentation_.28Document.29"><span class="tocnumber">3.9.7</span> <span class="toctext"><span>Element of formation of documentation (Document)</span></span></a></li>
+<li class="toclevel-3"><a href="#Container_.28Box.29"><span class="tocnumber">3.9.8</span> <span class="toctext"><span>Container (Box)</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-13"><a href="#Database_using_to_store_libraries_of_widgets_and_projects"><span class="tocnumber">3.10</span> <span class="toctext">Database using to store libraries of widgets and projects</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#API_of_the_user_programming_and_service_interfaces_of_the_OpenSCADA"><span class="tocnumber">3.11</span> <span class="toctext">API of the user programming and service interfaces of the OpenSCADA</span></a>
+<ul>
+<li class="toclevel-3"><a href="#API_of_the_user_programming"><span class="tocnumber">3.11.1</span> <span class="toctext">API of the user programming</span></a></li>
+<li class="toclevel-3"><a href="#Service_interfaces_of_OpenSCADA"><span class="tocnumber">3.11.2</span> <span class="toctext">Service interfaces of OpenSCADA</span></a>
+<ul>
+<li class="toclevel-4"><a href="#Access_to_the_values_of_attributes_of_the_visualization_elements_.28widgets.29"><span class="tocnumber">3.11.2.1</span> <span class="toctext">Access to the values of attributes of the visualization elements (widgets)</span></a></li>
+<li class="toclevel-4"><a href="#Group_access_to_the_values_of_the_attributes_of_the_visualization_elements_.28widgets.29"><span class="tocnumber">3.11.2.2</span> <span class="toctext">Group access to the values of the attributes of the visualization elements (widgets)</span></a></li>
+<li class="toclevel-4"><a href="#Access_to_the_pages_of_the_session"><span class="tocnumber">3.11.2.3</span> <span class="toctext">Access to the pages of the session</span></a></li>
+<li class="toclevel-4"><a href="#Signaling_.28alarm.29_management"><span class="tocnumber">3.11.2.4</span> <span class="toctext">Signaling (alarm) management</span></a></li>
+<li class="toclevel-4"><a href="#Manipulation_with_the_sessions_of_the_projects"><span class="tocnumber">3.11.2.5</span> <span class="toctext">Manipulation with the sessions of the projects</span></a></li>
+<li class="toclevel-4"><a href="#Group_request_for_the_tree_of_widget_libraries"><span class="tocnumber">3.11.2.6</span> <span class="toctext">Group request for the tree of widget libraries</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="#Configuring_the_module_via_the_control_interface_of_OpenSCADA"><span class="tocnumber">4</span> <span class="toctext">Configuring the module via the control interface of OpenSCADA</span></a></li>
+</ul>
+</div>
+
+<p>The VCAEngine module provides visual control area engine (VCA) in OpenSCADA system. The module same does not implement the visualization of the VCA, and contains data in accordance with the ideology of "Model/data — Interface". Data visualization of that module is implemented by the visualization modules of VCA, such as <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision" title="Special:MyLanguage/Modules/Vision">Vision</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a>.
+</p><p>Visual control area (VCA) is an integral part of the SCADA system. It applies to the client stations with a view to providing accessible information about the object and to for the the issuance of the control actions to the object. In various practical situations and conditions the VCA based on different principles of visualization may by applied. For example, this may be the library of widgets Qt, GTK+, WxWidgets or hypertext mechanisms based technologies HTML, XHTML, XML, CSS, and JavaScript, or third-party applications of visualization, realized in various programming languages Java, Python, etc. Any of these principles has its advantages and disadvantages, the combination of which could become an insurmountable obstacle to the use of VCA in a practical case. For example, technologies like the Qt library can create highly-reactive VCA, which will undoubtedly important for the operator station for control of technological processes (TP). However, the need for installation of that client software in some cases may make using of it impossible. On the other hand, Web-technology does not require installation on client systems and is extremely multi-platform (it is enough to create a link to the Web-server at any Web-browser) that is most important for various engineering and administrative stations, but the responsiveness and reliability of such interfaces is lower that actually eliminates the using of them at the operator of the TP stations.
+</p><p>OpenSCADA system has extremely flexible architecture that allows you to create external interfaces, including user and in any manner and for any taste. For example, the system configuration OpenSCADA as now available as by means of the Qt library, and also the Web-based.
+</p><p>At the same time creation of an independent implementation of the VCA in different basis may cause the inability to use the configuration of one VCA into another one. That is inconvenient and limited from the user side, as well as costly in terms of implementation and follow-up support. In order to avoid these problems, as well as to create as soon as possible the full spectrum of different types of VCA <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA" title="Special:MyLanguage/Sub-projects/VCA">project of the creation of the conception of the VCA</a> is established. The result of this project — the engine module(data model) of the VCA, as well as direct visualization modules <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision" title="Special:MyLanguage/Modules/Vision">Vision</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a>.
+</p>
+<h2><span class="mw-headline" id="Purpose"><span class="mw-headline-number">1</span> Purpose</span></h2>
+<p>This module of the engine (data model) of the VCA is aimed to create the logical structure of the VCA and the execution of sessions of individual instances of the VCA projects. Also, the module provides all the necessary data to the final visualizers of the VCA, both through local mechanisms of interaction of OpenSCADA, and through the management Interface of OpenSCADA for remote access.
+</p><p>The final version of the VCA module will provide:
+</p>
+<ul><li> three levels of complexity in the formation of visualization interface which let organically to develop and apply the tools of the methodology from simple to complex:</li></ul>
+<dl><dd><ol><li> formation from the template frames through the appointment of the dynamics (without the graphical configuration);</li>
+<li> graphical formation of new frames through the use of already made visualization elements from the library (mimic panel);</li>
+<li> formation of new frames, template frames of the visualization elements in the libraries.</li></ol></dd></dl>
+<ul><li> building of the visualization interfaces of various complexity, ranging from simple flat interfaces of the monitoring and finishing with the full-fledged hierarchical interface used in SCADA systems;</li>
+<li> providing of the different ways of formation and configuration of the user interface, based on different graphical interfaces (Qt, Web, Java ...) and also through the standard management interface of OpenSCADA system;</li>
+<li> change of dynamics in the process of execution;</li>
+<li> building of the new template frames on the user level and the formation of the frames libraries, specialized for the area of application (eg. the inclusion of frames of parameters, graphs and other items linking them to each other) in accordance with the theory of secondary using and accumulation;</li>
+<li> building of the new user elements of the visualization and the formation of the libraries of frames, specialized for the area of application in accordance with the theory of secondary using and accumulation;</li>
+<li> description of the logic of new template frames and user visualization elements as with the simple links, and also with the laconic, a full-featured programming language;</li>
+<li> the possibility of the inclusion of the functions (or frames of computing of the functions) of the object model of OpenSCADA to the user elements of the visualization, actually linking the presentation of the algorithm of computing (for example, by visualizing the library of models of devices of TP for following visual modeling TP);</li>
+<li> separation of user interfaces and interfaces of visualization of data provides building the user interface in a single environment, and performance of it in many others (Qt, Web, Java ...);</li>
+<li> the possibility to connect to the performing interface for monitoring and corrective actions (for example, while operator training and control in real time for his actions);</li>
+<li> visual building of various schemes with the superposition of the logical links and the subsequent centralized execution in the background (visual construction and performance of mathematical models, logic circuits, relay circuits and other proceedings);</li>
+<li> providing of the functions of the object API to the OpenSCADA system, it can be used to control the properties of the visualization interface from the user procedures;</li>
+<li> building of the servers of frames, of elements of the visualization and of the project of the interfaces of the visualization with the possibility to serve the set number of the client connections;</li>
+<li> simple organization of client stations in different basis (Qt, Web, Java ...) with the connection to the central server;</li>
+<li> full mechanism of separation of privileges between the users which allows to create and execute projects with the various rights of access to its components;</li>
+<li> adaptive formation of alarms and notifications, with the support of arbitrary ways of notification;</li>
+<li> support of the user formation of the palettes and font preferences, into styles, for the visualization of the interfaces;</li>
+<li> support of the user formation of maps of the events under the various items of equipment management and user preferences;</li>
+<li> support for user profiles, allowing to define various properties of the visualization interface (colors, font characteristics - styles, the preferred maps of events);</li>
+<li> flexible storage and distribution of libraries of widgets, frames, and projects of the visualization interfaces in the databases, supported by OpenSCADA; actually users need only to register the database with data.</li></ul>
+<h2><span class="mw-headline" id="The_configuration_and_the_formation_of_interfaces_of_the_VCA"><span class="mw-headline-number">2</span> The configuration and the formation of interfaces of the VCA</span></h2>
+<p>Module itself does not contain mechanisms for visual creating interfaces of VCA, such tools can be given by the final visualization modules of the VCA, for example such a tool provides by the module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision" title="Special:MyLanguage/Modules/Vision">Vision</a>.
+</p><p>Although the mechanisms for the visual formation of the VCA the module doesn't provide the interface, implemented on the basis of the management interface of the OpenSCADA, to manage the logical structure is provided, and thus it is available for use in any system configurator of the OpenSCADA. Dialogues of this interface are considered further in the context of the architecture of the module and its data.
+</p>
+<h2><span class="mw-headline" id="Architecture"><span class="mw-headline-number">3</span> Architecture</span></h2>
+<p>Any VCA can operate in two modes — the development and running. In the development mode the VCA interface and its components are formed, the mechanisms of interaction are identified. While the running it is carried out the formation of VCA interface based on the developed VCA with the final user interaction is made.
+</p><p>VCA interface is formed of the frames, each of which, in its turn, formed from elements of the primitives, or user interface elements. In doing so, the user interface elements are also formed from the primitives or other user elements. That gives us a hierarchy and reuse of already developed components.
+</p><p>Frames and user elements are placed in the libraries of widgets. The projects of the interfaces of the final visualization of the VCA are formed from these libraries' elements. Based on these projects the visualization sessions are formed.
+</p><p>The structure of VCA is shown in the Figure.
+</p>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:VCA_struct.png"><img alt="VCA struct.png" height="938" src="../files/VCA_struct.png" width="854" /></a></div></div>
+<p>This architecture of the VCA allows the support of three levels of complexity of the developing process of the management interface:
+</p>
+<ul><li> Forming of the VC interface (visualization and control) using the library of template frames by placing the templates of the frames in the project and by the assignment of the dynamics.</li>
+<li> In addition to the first level the own creation of frames based on the library of derivatives and basic widgets is to be done. Perhaps as a direct appointment of the dynamics in the widget, and the subsequent appointment of it in the project.</li>
+<li> In addition to the second level is performed the independently forming of derivatives widgets, new template frames and also the frames with the use of mechanism of describing the logic of interaction and handling of events in one of the languages of a user programming of OpenSCADA system.</li></ul>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Frames_and_elements_of_visualization_.28widgets.29"><span class="mw-headline-number">3.1</span> Frames and elements of visualization (widgets)</span></h3>
+<p>Frame is the window which directly provides information to the user in a graphical or text form. The group of interconnected frames creates whole user interface of VC.
+</p><p>Contents of the frame is forming from the elements of visualization (widgets). Widgets may be the basic primitives (different elementary shapes, text, trend, etc.) and derivatives (formed from the basic or other derivatives of widgets). All the widgets are grouped into the libraries. In the process, you can build your own library of derivative widgets.
+</p><p>Actually the frame is also a widget that is used as a final element of visualization. This means that the widget libraries can store the blanks of frames and the templates of the resulting pages of the user interface.
+</p><p>Frames and widgets are passive elements that do not normally contain links to the dynamics and other frames, but only provide information about the properties of the widget and the nature of the dynamics (configuration), connected to the properties of the frame. Activated frames, ie containing links to the dynamics and active connections, form the user interface and are stored in the projects. In some cases, it is possible the direct appointment of the dynamics in the blanks of frames.
+</p><p>Derivative frames/widgets can contain other widgets (attached), which can be glued (associated) with the logic of one another by one of the languages of programming available in the OpenSCADA system.
+</p>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:VCA_widget.png"><img alt="VCA widget.png" height="585" src="../files/VCA_widget.png" width="800" /></a></div></div>
+<p>The widget is an element, by means of which it is provided:
+</p>
+<ul><li> visualization of operational and archive information about TP;</li>
+<li> alarm about a violation of conduction of TP;</li>
+<li> switching between the frames of TP;</li>
+<li> management of technological equipment and the parameters of conduction of TP.</li></ul>
+<p>Tuning and linkage of the widgets is done through their properties. Parent widget and the widgets it contains, can be complemented by user properties. Then the user and static attributes are associated with the properties of embedded widget by internal logic. To show the dynamics (ie, current and archived data), properties of widgets are dynamized, that is linked with the attributes of the parameters of OpenSCADA or properties of other widgets. Using to link of the nested widgets by means of the internal logic with the available programming language of the OpenSCADA system eliminates the question of the implementation of complex logic of visualization, thus providing high flexibility. Practically, you can create fully dynamized frames with complex interactions at the level of the user.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Project"><span class="mw-headline-number">3.2</span> Project</span></h3>
+<p>Direct configuration and properties of the final visualization interface are contained in the project of the visualization interface of the VCA, which may be created lot ones.
+</p><p>Each project includes pages from the libraries of the frames/widgets. In some modes the page allowed to include into nested pages as independent from the parent and in using the parent as template. The template's page-widget allows to extremely simplify the process of creating the same type of the frames by the ACS-TP engineer or by the user of OpenSCADA for easy monitoring. An example of such one-type frames may be: groups of contours, groups of graphs, reports and various tables. Mnemonic schemes of technological processes rarely come under this scheme and will be formed directly in the description of the frame.
+</p><p>Page like to a widget on which it is based provides a possibility for bind the dynamics to described into properties, which links at all can be set to dynamic or resolved as constants. Besides, links to the dynamics on the project's page level is preferable to the widget of libraries level.
+</p><p>Example of hierarchical representations of components of the project of the classical interface of VC of the technological process with the description of standard call expressions is given in Figure.
+</p>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:VCA_prog_tree.png"><img alt="VCA prog tree.png" height="681" src="../files/VCA_prog_tree.png" width="436" /></a></div></div>
+<p>Reserved next the special properties of pages:
+</p>
+<ul><li> <i>Container</i> — page is a container for the underlying pages.</li>
+<li> <i>Template</i> — page is a template for the underlying pages.</li>
+<li> <i>Empty</i> — empty and inactive page. This property is used in conjunction with the property <i>Container</i> for logical containers organization.</li></ul>
+<p>Based on these properties combinations the following types of pages are realized:
+</p>
+<ul><li> <i>Standard</i> — the standard page (none property is set), it is the full final page.</li>
+<li> <i>Container</i> — the full-featured page with the property of the container (<i>Container</i>).</li>
+<li> <i>Logical container</i> — the logical container is actually not a page (<i>Container</i>|<i>Empty</i>), but it performs property of the intermediate and bunching element in the tree of pages.</li>
+<li> <i>Template</i> — the template page (<i>Template</i>). Pure template page is used to describe the common properties and expand them definitions in privately order in nested pages.</li>
+<li> <i>Container and template</i> — the template and a container page (<i>Template</i>|<i>Container</i>), combines the functions of the template and the container.</li></ul>
+<p>On the side of the visualization (RunTime), on the following attributes of the basic element "Box", there is the logic regulating how to open the pages:
+</p>
+<ul><li> <i>pgOpen</i> — sign "The page is opened";</li>
+<li> <i>pgNoOpenProc</i> — sign "Execute the page, even if it is not opened";</li>
+<li> <i>pgOpenSrc</i> — contains the address of the widget or of the page which has opened the current; in the case of the nested container widget here it is contained the address of the included page; to open the pages from the script here it is enough to indicate the address of the widget-source of the opening;</li>
+<li> <i>pgGrp</i> — group of pages, used for conjunction of the containers of the pages with the pages in accordance with the general group.</li></ul>
+<p>The logic of the method of the opening the pages works in the following way:
+</p>
+<ul><li> if the page has the group "main" or coincides with a group of the page in the main window or there is no page on the main window, then open the page in the main window;</li>
+<li> if the page has a group which coincides with the group one of the containers of the current page, then open it in the container;</li>
+<li> if the source of the opening of the page coincides with the current page, then open it as an additional window over the current page;</li>
+<li> transmit a call for request for the opening to the additional windows with the processing in each of the first three paragraphs;</li>
+<li> if any one of the relative windows doesn't open a new page, then open it as a related window of the main window.</li></ul>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Session_of_the_project_execution"><span class="mw-headline-number">3.3</span> Session of the project execution</span></h3>
+<p>The project's session is expanded tree of the project for direct it execution, which includes an individual task of hierarchical the widget's procedures execution. For each project can be opened many sessions. The end-user visual interface forming performs by the visualizers from data of the project's session, after the session creation by the request.
+</p><p>Between widgets at the different levels of hierarchy complex inheritance relations are arranged, which are defined by the possibility of using some widgets by other ones, beginning with the library widget, and finishing with the widget to the session. To clarify these features of the interaction in Figure comprehensive map of "uses" inheritance is shown.
+</p>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:VCA_map_inher.png"><img alt="VCA map inher.png" height="1123" src="../files/VCA_map_inher.png" width="794" /></a></div></div>
+<p>At the session level widget contains a object of values of calculation procedure. This object is initiated and used in the case of presence of the calculation procedure. At the time of the initialization the list of parameters of the procedure is created and a compilation of procedure is performed with these parameters in the module, implementing the selected programming language and encoded with the full name of the widget. A compiled function is connected to the object of values of the calculation procedure. Further the calculation is performed with the frequency of the session.
+</p><p>Calculation and processing of the widget on the whole runs in the following sequence:
+</p>
+<ul><li> the events, which are available at the time of computation, are selected from the attribute "event" of the widget;</li>
+<li> events are loaded into the parameter "event" of the object of computation;</li>
+<li> values of the input connections are loaded into the object of calculation;</li>
+<li> values of special variables are loaded into the computation object (f_frq, f_start and f_stop);</li>
+<li> values of selected parameters of the widget are loaded into the object of computation;</li>
+<li> computation; </li>
+<li> uploading of the computation object's values to the selected parameters of the widget;</li>
+<li> uploading of the event from the parameter "event" of the computation object;</li>
+<li> processing the events and transfer the unprocessed events at the level above.</li></ul>
+<p>The objects of the session of the project inherit from an abstract object "Widget" and use the appropriate objects of the project. Thus, the session ("Session") uses the project ("Project") and forms expand tree on its basis. Project page "Page" is directly used by the session page "SessPage". The remaining objects ("SessWdg") are deployed in accordance with the hierarchy of page elements.
+</p><p>In addition to the standard properties of an abstract widget ("Widget") elements of the pages of session themselves get the following properties: storage of the object of values of computational procedure, calculation of the procedures and mechanism for processing of the events. Pages of the session, in addition, contain a container of the following by the hierarchy pages. The session generally is computed with the frequency and in the consistency:
+</p>
+<ul><li> "Page of the top level" -&gt; "Page of the lower level" </li>
+<li> "Widget of the lower level" -&gt; "Widget of the top level"</li></ul>
+<p>This policy allows you to circumvention the pages in accordance with the hierarchy, and to rise on the top during the one iteration for the widget events.
+</p><p>Sessions at the level of <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h919-1" rel="nofollow noreferrer noopener" target="_blank">the control interface of OpenSCADA</a> supports multi-language depended from values of the generic attributes "lang" and next "user" and which visualizer can set in proper way of self language. This function enabled for <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Styles"><span class="mw-headline-number">3.4</span> Styles</span></h3>
+<p>It knows that people can have individual characteristics in the perception of graphical information. If these features are not taken into account, it is possible to obtain the rejection and abruption of the user to the interface of VC. This rejection and abruption can lead to fatal errors in the management of TP, as well as traumatize the human by the continuous work with the interface. In SCADA systems the agreements are adopted, which regulate the requirements for creating a unified interface of VC normally perceived by most people. This is practically eliminates the features of people with some deviations.
+</p><p>In order to take this into account and allow centralized and easy to change the visual properties of the interface module is implementing a theme manager of the visualization interface.
+</p><p>User can create many themes, each of which will keep the color, font and other properties of the elements of the frame. Simple changing of the theme will allow you to change the interface of VC, and the possibility of appointing an individual theme in the user's profile allows to take into account his individual characteristics.
+</p><p>To realize this opportunity, when you create a frame, it is necessary for the properties of color, font and others set the "Config" (of the table in the "Process" tab) in the value of "From style". And in the parameter "Config template" to specify the identifier of the style field. Further, this field will automatically appear in the Style Manager and will be there to change. Style Manager is available on the project configuration page in the tab "Styles". On this tab you can create new styles, delete old ones, change the field of the style and delete unnecessary.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:707px;"><a class="image" href="http://oscada.org/wiki/File:VCA_prj_stl.png"><img class="thumbimage" height="535" src="../files/VCA_prj_stl.png" width="705" /></a>  <div class="thumbcaption">Figure. "Styles" tab of the configuration page of the project.</div></div></div></div>
+<p>In general the styles are available from the project level. At the level of libraries of widgets you can only define styles fields of widgets. At the project level, at the choice of style, it is started the work with styles, which includes access to the fields of styles instead of direct attribute values. In fact, this means that when reading or writing a widget attribute these operations will be carried out with the corresponding field of the chosen style.
+</p><p>When you run the project execution it will be used the set in the project style. Subsequently, the user can select a style from the list of available ones. The user's style will be saved and used next time you run the project.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Events.2C_their_processing_and_the_events.27_maps"><span class="mw-headline-number">3.5</span> Events, their processing and the events' maps</span></h3>
+<p>Given the range of tasks for which the OpenSCADA system may be used, it is necessary to provide a tool for management of  interactive user events. This is due to the fact that in dealing with individual tasks of embedded systems, input and control devices can greatly vary. But it is enough to look at the regular office keyboard and notebook one, that would remove any doubt about the necessity for the manager of events.
+</p><p>The events manager must work using the maps of events. Map of the events — is the list of named events, indicating their origin. The origin of the events can be a keyboard, mouse, paddle, joystick, etc. At an event emerge the events manager is looking for it in the active map and compares with the name of the event. A comparison name of the event is placed in the queue for processing. Widgets in this case must process the given queue of events.
+</p><p>The active map of events is specified in the profile of each user or it is set by default (<span style="color: red">in planes</span>).
+</p><p>In general, four types of events are provided:
+</p>
+<ul><li> events of the shapes-primitives of VCA (prefix: <b>ws_</b>), for example, pressing of the display button event — "ws_BtPress";</li>
+<li> keyboard events (prefix: <b>key_</b>) — all events from mouse and keyboard in the form of — "key_presAlt1";</li>
+<li> user events (prefix: <b>usr_</b>) are generated by the user in the procedures of the calculation of widgets;</li>
+<li> mapping of the event (prefix: <b>map_</b>) — events from the map of events, <span style="color: red">in planes</span>.</li></ul>
+<p>Event itself represents deficiently information, especially if its processing occurs at higher level. For the unequivocal identification of the event and its source in the whole the event is recorded as follows: "ws_BtPress:/curtime". Where:
+</p>
+<dl><dd><i>ws_BtPress</i> — same event;</dd>
+<dd><i> /curtime</i> — the path to the child element that has generated the event.</dd></dl>
+<p>Table 3.5 provides a list of standard events, the support of which should be provided in visualizers of VCA.
+</p><p><b>Table 3.5.</b> Standard events
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Description
+</th></tr>
+<tr>
+<td colspan="2"> <i>Keyboard events:</i> <b>key_[pres|rels][Ctrl|Alt|Shift]{Key}</b>
+</td></tr>
+<tr>
+<td> *SC#3b </td>
+<td> Scan-code of the key.
+</td></tr>
+<tr>
+<td> *#2cd5 </td>
+<td> Code of the unnamed key.
+</td></tr>
+<tr>
+<td> *Esc </td>
+<td> "Esc".
+</td></tr>
+<tr>
+<td> *BackSpace </td>
+<td> Removing of the previous character — "&lt;--".
+</td></tr>
+<tr>
+<td> *Return, *Enter </td>
+<td> Enter — "Enter".
+</td></tr>
+<tr>
+<td> *Insert </td>
+<td> Insertion — "Insert".
+</td></tr>
+<tr>
+<td> *Delete </td>
+<td> Deleting — "Delete".
+</td></tr>
+<tr>
+<td> *Pause </td>
+<td> Pause — "Pause".
+</td></tr>
+<tr>
+<td> *Print </td>
+<td> Print of the screen — "Print Screen".
+</td></tr>
+<tr>
+<td> *Home </td>
+<td> Home — "Home".
+</td></tr>
+<tr>
+<td> *End </td>
+<td> End — "End".
+</td></tr>
+<tr>
+<td> *Left </td>
+<td> Left — "&lt;-".
+</td></tr>
+<tr>
+<td> *Up </td>
+<td> Up — '^'.
+</td></tr>
+<tr>
+<td> *Right </td>
+<td> Right — "-&gt;".
+</td></tr>
+<tr>
+<td> *Down </td>
+<td> Down — '\/'.
+</td></tr>
+<tr>
+<td> *PageUp </td>
+<td> Page up — "PageUp".
+</td></tr>
+<tr>
+<td> *PageDown </td>
+<td> Page down — "PageDown".
+</td></tr>
+<tr>
+<td> *F1 ... *F35 </td>
+<td> Function key from "F1" to "F35".
+</td></tr>
+<tr>
+<td> *Space </td>
+<td> Space — ' '.
+</td></tr>
+<tr>
+<td> *Apostrophe </td>
+<td> Apostrophe — '`'.
+</td></tr>
+<tr>
+<td> *Asterisk </td>
+<td> Asterisk on an additional field of the keyboard — '*'.
+</td></tr>
+<tr>
+<td> *Plus </td>
+<td> Plus on an additional field of the keyboard — '+'.
+</td></tr>
+<tr>
+<td> *Comma </td>
+<td> Comma — ','.
+</td></tr>
+<tr>
+<td> *Minus </td>
+<td> Minus — '-'.
+</td></tr>
+<tr>
+<td> *Period </td>
+<td> Period — '.'.
+</td></tr>
+<tr>
+<td> *Slash </td>
+<td> Slash — '\'.
+</td></tr>
+<tr>
+<td> *0 ... *9 </td>
+<td> Number from '0' to '9'.
+</td></tr>
+<tr>
+<td> *Semicolon </td>
+<td> Semicolon — ';'.
+</td></tr>
+<tr>
+<td> *Equal </td>
+<td> Equal — '='.
+</td></tr>
+<tr>
+<td> *A ... *Z </td>
+<td> Keys of Latin alphabet from 'A' to 'Z'.
+</td></tr>
+<tr>
+<td> *BracketLeft </td>
+<td> Left square bracket - '['.
+</td></tr>
+<tr>
+<td> *BackSlash </td>
+<td> Backslash — '/'.
+</td></tr>
+<tr>
+<td> *BracketRight </td>
+<td> Right square bracket — ']'.
+</td></tr>
+<tr>
+<td> *QuoteLeft </td>
+<td> Left quote — <b>.</b>
+</td></tr>
+<tr>
+<td colspan="2"> <i>Keyboard focus events.</i>
+</td></tr>
+<tr>
+<td> ws_FocusIn </td>
+<td> Focus is obtained by a widget.
+</td></tr>
+<tr>
+<td> ws_FocusOut </td>
+<td> Focus is lost by a widget.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Mouse events:</i>
+</td></tr>
+<tr>
+<td> key_mouse[Pres|Rels][Left|Right|Midle] </td>
+<td> Pressed/released the mouse button.
+</td></tr>
+<tr>
+<td> key_mouseDblClick </td>
+<td> Double-click the left mouse button.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Events of quittance on the side of the visualizer.</i>
+</td></tr>
+<tr>
+<td> ws_alarmLev </td>
+<td> Quittance of all violations by all notices methods and types.
+</td></tr>
+<tr>
+<td> ws_alarmNtf{N} </td>
+<td> Quittance of all violations by the type {N} (0...7).
+</td></tr>
+<tr>
+<td colspan="2"> <i>Events of the primitive of elemental figure <b>ElFigure</b>:</i>
+</td></tr>
+<tr>
+<td> ws_Fig[Left|Right|Midle|DblClick] </td>
+<td> Activating of the figures (fills) by the mouse button.
+</td></tr>
+<tr>
+<td> ws_Fig{N}[Left|Right|Midle|DblClick] </td>
+<td> Activating of the figure (fill) <i>N</i> by the mouse button.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Events of the primitive of form elements <b>FormEl</b>:</i>
+</td></tr>
+<tr>
+<td> ws_LnAccept </td>
+<td> A new value in the input line is set.
+</td></tr>
+<tr>
+<td> ws_TxtAccept </td>
+<td> The value of the text editor is changed.
+</td></tr>
+<tr>
+<td> ws_ChkChange </td>
+<td> The state of the flag is changed.
+</td></tr>
+<tr>
+<td> ws_BtPress </td>
+<td> The button is pressed.
+</td></tr>
+<tr>
+<td> ws_BtRelease </td>
+<td> The button is released.
+</td></tr>
+<tr>
+<td> ws_BtToggleChange </td>
+<td> The button toggle is changed.
+</td></tr>
+<tr>
+<td> ws_BtMenu={Item} </td>
+<td> Selection of the menu <i>Item</i>.
+</td></tr>
+<tr>
+<td> ws_BtLoad </td>
+<td> The selected file loaded.
+</td></tr>
+<tr>
+<td> ws_CombChange </td>
+<td> The value of the combo box is changed.
+</td></tr>
+<tr>
+<td> ws_ListChange </td>
+<td> The current list item is changed.
+</td></tr>
+<tr>
+<td> ws_TreeChange </td>
+<td> The current tree item is changed.
+</td></tr>
+<tr>
+<td> ws_TableChangeSel </td>
+<td> The table's item selection changed.
+</td></tr>
+<tr>
+<td> ws_TableEdit_{colN}_{rowN} </td>
+<td> The table's cell ({colN}:{rowN}) edited.
+</td></tr>
+<tr>
+<td> ws_SliderChange </td>
+<td> The slider position changed.
+</td></tr>
+<tr>
+<td colspan="2"> <i>Events of the primitive of media content <b>Media</b>:</i>
+</td></tr>
+<tr>
+<td> ws_MapAct{N}[Left|Right|Midle] </td>
+<td> Media area with the number <i>N</i> is activated by the mouse button.
+</td></tr>
+<tr>
+<td> ws_MediaFinished </td>
+<td> Media-stream play is finished.
+</td></tr></table>
+<p>Events are the main mechanism of notification and is actively used for user interaction. For the event processing there are two mechanisms:
+</p>
+<ul><li> Primary — the script uses to control the opening of the pages.</li>
+<li> Secondary — the computational procedure of the widget.</li></ul>
+<p>The mechanism "Scripts for the control the opening of pages" based on the basic attribute of the widget "evProc", which can be used for switching, opening, substitution and navigation through the pages. The scenario of this attribute is stored as a list of commands with the syntax: "<b>{event}:{evSrc}:{com}:{prm}</b>". Where:
+</p>
+<ul><li> <i>event</i> — the expected event;</li>
+<li> <i>evSrc</i> — the path of the nested widget-source of the event;</li>
+<li> <i>com</i> — the session command;</li>
+<li> <i>prm</i> — the parameter of the command.</li></ul>
+<p>The following commands are implemented:
+</p>
+<ul><li> <i>open</i> — opening page; page to open is specified in the parameter <i>prm</i> both in direct way and as a template (example: /pg_so/1/*/*);</li>
+<li> <i>next</i> — opening of the next page; page to open is specified in the parameter <i>prm</i> as a template (example: /pg_so/*/*/$);</li>
+<li> <i>prev</i> — opening of the previous page; page to open is specified in the parameter <i>prm</i> as a template (example: /pg_so/*/*/$).</li></ul>
+<p>Special characters of the template are deciphered as follows:
+</p>
+<ul><li> <i>pg_so</i> — direct name of the desired-static page (with the prefix), requires the compulsory accordance and is used to identify the last open page;</li>
+<li> <i>1</i> — name of a new page in a general way (without a prefix);</li>
+<li> <i>*</i> — the page is taken from the name of a previous opened page or the first available page is substituted, if the previous opened page is missing;</li>
+<li> <i>$</i> — points the place of the opened page relative to which you are to go to the next or to the previous one.</li></ul>
+<p>To more and true the mechanism of the templates understanding lets cite some real examples:
+</p>
+<ul><li> <i>Changing the signal object:</i></li></ul>
+<dl><dd><dl><dd>Initially: /pg_so/pg_1/pg_mn/pg_1</dd>
+<dd>Command: open:/pg_so/2/*/*</dd>
+<dd>Result: /pg_so/pg_2/pg_mn/pg_1</dd></dl></dd></dl>
+<ul><li> <i>Switching of the type:</i></li></ul>
+<dl><dd><dl><dd>Initially: /pg_so/pg_1/pg_mn/pg_1</dd>
+<dd>Command: open:/pg_so/*/gkadr/*</dd>
+<dd>Result: /pg_so/pg_1/pg_gkadr/pg_1</dd></dl></dd></dl>
+<ul><li> <i>Next/previous page of the type:</i></li></ul>
+<dl><dd><dl><dd>Initially: /pg_so/pg_1/pg_mn/pg_1</dd>
+<dd>Command: next:/pg_so/*/*/$</dd>
+<dd>Result: /pg_so/pg_1/pg_mn/pg_2</dd></dl></dd></dl>
+<p>As an example lets cite the scenario of operation of the main page of the user interface:
+</p>
+<pre style="white-space: pre-wrap;">
+ws_BtPress:/prev:prev:/pg_so/*/*/$
+ws_BtPress:/next:next:/pg_so/*/*/$
+ws_BtPress:/go_mn:open:/pg_so/*/mn/*
+ws_BtPress:/go_graph:open:/pg_so/*/ggraph/*
+ws_BtPress:/go_cadr:open:/pg_so/*/gcadr/*
+ws_BtPress:/go_view:open:/pg_so/*/gview/*
+ws_BtPress:/go_doc:open:/pg_so/*/doc/*
+ws_BtPress:/go_resg:open:/pg_so/rg/rg/*
+ws_BtPress:/so1:open:/pg_so/1/*/*
+ws_BtPress:/so2:open:/pg_so/2/*/*
+ws_BtPress:/so3:open:/pg_so/3/*/*
+ws_BtPress:/so4:open:/pg_so/4/*/*
+ws_BtPress:/so5:open:/pg_so/5/*/*
+ws_BtPress:/so6:open:/pg_so/6/*/*
+ws_BtPress:/so7:open:/pg_so/7/*/*
+ws_BtPress:/so8:open:/pg_so/8/*/*
+ws_BtPress:/so9:open:/pg_so/9/*/*
+ws_BtPress:*:open:/pg_control/pg_terminator
+</pre>
+<p>The mechanism "Processing the events with the help of computational procedure of the widget" is based on the attribute "event" and the user procedure of calculating written with the help of the programming language of OpenSCADA. The events, in process of receipt, are accumulated in the attribute "event" till the moment of call of the computational procedure. The computational procedure is called with the specified frequency of calculating the widget and receives a value for the attribute "event" as the list of events. In the calculation procedure the user can: analyze, process and delete the processed events from the list, and add to the list new events. The remaining, after the procedure execution, and new events are analyzed for compliance with the conditions of the call by means of script of the primary mechanism, after which the remaining events are transmitted to the upper by the hierarchy widget to be processed by it, with the correction of the path of events in accordance with the hierarchy of the penetration of the event.
+</p><p>The content of the attribute "event" is a list of events in the format "<b>{event}:{evSrc}</b>", with the event on the separate line. Here is an example of processing events in the Java-like programming language of the OpenSCADA:
+</p>
+<pre style="white-space: pre-wrap;">
+for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
+  if(sval == "ws_BtPress:/cvt_light") alarmSt = 0x1000001;
+  else if(sval == "ws_BtPress:/cvt_alarm") alarmSt = 0x1000002;
+  else if(sval == "ws_BtPress:/cvt_sound") alarmSt = 0x1000004;
+  else ev_rez += sval+"\n";
+}
+event = ev_rez;
+</pre>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Signaling_.28Alarms.29"><span class="mw-headline-number">3.6</span> Signaling (Alarms)</span></h3>
+<p>An important element of any visualization interface is the user notification about the violation — alarming. To simplify the perception, but also in mind the close connectivity of visualization and notification (typically notification is amplified with the visualization) it is decided to integrate the interface of a notification in the visualization interface. To do this, all the widget provides two additional attributes (of the session level): "alarm" and "alarmSt". Attribute "alarm" is used to form the signal by the widget, according to his logic, and attribute "alarmSt" is used to control the signaling fact of the branch of the tree of the session of the project.
+</p><p>Attribute "alarm" is a line and has the following format: "<b>{lev}|{categ}|{message}|{type}|{tp_arg}</b>"<br />
+Where:
+</p>
+<ul><li> <i>lev</i> — signaling (alarm) level; number from 0 to 255;</li>
+<li> <i>categ</i> — alarm category; parameter of the acquisition subsystem, object, path, or their combination;</li>
+<li> <i>message</i> — signaling (alarm) message;</li>
+<li> <i>type</i> — type of notification, is formed as a the integer number (0...7), which contains the flags of notification methods; typical notification methods:
+<ul><li> <i>1</i> — visual;</li>
+<li> <i>2</i> — beep tone, is frequently made through the PC-speaker;</li>
+<li> <i>4</i> — sound signal from the sound file or the speech synthesis, and if in the <i>tp_arg</i> the name of the resource of the sound file is specified, then play it, or in other case the speech synthesis from the text specified in <i>message</i> is made.</li></ul></li>
+<li> <i>tp_arg</i> — argument of the type; it is used in the case of the audible signal to indicate the resource of the sound alarm (file of the sound format).</li></ul>
+<p>Attribute "alarmSt" is an integer number that represents the maximum alarm level and the fact of the quittance of the branch of the tree of the session of the project. Format of the number is as follows:
+</p>
+<ul><li> first bite (0...255) characterizes the level of the alarm of the branch;</li>
+<li> the second byte indicates the type of notification (as well as in the attribute "alarm");</li>
+<li> the third byte indicates the type of notification without quittance (as well as in the attribute "alarm");</li>
+<li> the four byte has special appointment, assigns different bites:
+<ul><li> bit 0 — indicates, by sets, to quittance fact of notification into first byte;</li>
+<li> bit 1 — indicates, by sets it and the bit 0, to the quittance return — enable back the quittance.</li></ul></li></ul>
+<p><b>Alarm formation and receipt of it by the visualizer.</b><br />
+The alarm formation is performed by the widget by setting its own attribute "alarm" in appropriate way and in accordance with it the attribute "alarmSt" of current and the parent widget is set. Visualizers receive notification of the alarm using a standard mechanism for notifications of the changes of attributes of widgets.
+</p><p>Taking into account that the processing of conditions of the signaling is made in the widgets, the pages containing the objects of signaling should be performed in the background, regardless of their openness to the moment. This is done by setting a flag of the background execution of the page.
+</p><p>Although the mechanism of signaling is built in the visualization area the possibility of formation of visual signaling elements remains, for example by creating the page that will never be opened.
+</p><p><b>Quittance</b><br />
+Quittance is process of accepting the violation(s) to mind, disabling the notification and action to remove the violation(s). In the display of user's interface the quittance assume only the notification disable.
+</p><p>Quittance performs by specifying the root of the branch of the widgets and the types of notification. This allows to make quittance on the side of visualizer both as by groups, for example by the signaling objects as well as individually by the objects. It is possible to independently quittance different types of alarms. Setting of the quittance is made by the simple modification of the attribute "alarmSt".
+</p><p>Example of the script to work with the signals gives below:
+</p>
+<pre style="white-space: pre-wrap;">
+//Secretion of the existence of alarms for different ways of notification
+cvt_light_en = alarmSt&amp;0x100; cvt_alarm_en = alarmSt&amp;0x200; cvt_sound_en = alarmSt&amp;0x400;
+//Secretion of the existence of alarms which not in quittance for different ways notification
+cvt_light_active = alarmSt&amp;0x10000; cvt_alarm_active = alarmSt&amp;0x20000; cvt_sound_active = alarmSt&amp;0x40000;
+//Processing of the button's events of quittance and the quittance for different ways of notification
+for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
+  if(sval == "ws_BtPress:/cvt_light") alarmSt = 0x1000001;
+  else if(sval == "ws_BtPress:/cvt_alarm") alarmSt = 0x1000002;
+  else if(sval == "ws_BtPress:/cvt_sound") alarmSt = 0x1000004;
+  else ev_rez += sval + "\n";
+}
+event = ev_rez;
+</pre>
+<p><b>External notification methods</b><br />
+A first and a typical method of notifications is display's light notification by alarm colors and its dynamic about proper visual elements, which always presents and does not require of specific configuration. But often we need for an external type notification, for example: external lamp, PC buzzer or "howler", arbitrary sound, synthesized speech and etc.
+</p><p>For the possibility of implements the external notification methods and the accorded notification types are free described for the visualization server and same visualizers. On the visualization server side describes for forming/getting the notification resource and same notification. On the visualizers side describes a notification by the resources from the visualization server.
+</p><p>Description of rules and scenarios of notifications performs with user attributes of text type for pages of the visualization project, which applies at the page open. That is potentially for each opening page there possible describe self rules of notifications but typically here enough to describe a generic rules of notification on the main project's page, which open once and doesn't close in work:
+</p>
+<ul><li> For the visualization server/engine by the attribute "notify{N}" into the format:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+//flags=notify[{DL}][|resource[|queue[|qMergeMess]]];
+if(doRes) { The command text to form the resource. }
+if(doNtf) { The command text to notify. }
+</pre>
+<ul><li> For a visualizer by the attribute "notifyVis[Vision|WebVision]{N}" into the format:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+//flags=notify[{DL}][|resource[|queue[|quittanceRet]]];
+//name={The notifier name}
+//ico={The icon name}
+{ The notification command text to any or concrete visualizer. }
+</pre>
+<p>Flags:
+</p>
+<ul><li> <i>notify[{DL}]</i> — enables notification with repeat by time <i>DL</i>, if the set; for <i>DL</i> = 0 the repeat made once.</li>
+<li> <i>resource</i> — request-form (force) the notification resource from the visualization server, can be an audio file, a text or other data for the notification produce.</li>
+<li> <i>queue</i> — the notification resources appoint not only by global alarming sign and the quittance but follow to the priority queue of sources of the notification-resources. The queue forms on the visualization server side and for the visualizers set need of working with it at the resources request.</li>
+<li> <i>qMergeMess</i> — merging the notifications into the queue by equality its messages.</li>
+<li> <i>quittanceRet</i> — possibility of a visualizer for a quittance recall-return ie in fact the notification enable back.</li></ul>
+<p>The exchanging variables:
+</p>
+<ul><li> <i>en</i>[0,1] — the notification enable (1) or disable (0);</li>
+<li> <i>doNtf</i>[0,1] — call the script for the notification;</li>
+<li> <i>doRes</i>[0,1] — call the script for the resource form;</li>
+<li> <i>res</i> — the content or the content's file name (for external scripts) of the resource;</li>
+<li> <i>mess</i> — the message-parameters for the resource and the notification form.</li>
+<li> <i>lang</i> — the language of current user or system.</li></ul>
+<p>The examples and comments to work of typical notification methods:
+</p>
+<ul><li> Beep (buzzer) on a visualizer or the visualization server side:</li></ul>
+<dl><dd><ul><li> alarm = "10|Prm||0x02"</li>
+<li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+//flags=notify
+if(en) SYS.system("beep -f 1000 -l 1000000 &amp;", true);
+else if((beepPID=SYS.system("pidof beep")).toInt()) SYS.system("kill "+beepPID); </pre>
+<dl><dd><ul><li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+#!/bin/sh
+#flags=notify
+if test $en = 1; then
+	beep -f 1000 -l 1000000 &amp;
+else
+	beepPID=$(pidof beep)
+	if test "x$beepPID"&nbsp;!= "x"; then kill $beepPID; fi
+fi </pre>
+<ul><li> Repeating play for ready audio file, one common, on a visualizer or the visualization server side:</li></ul>
+<dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
+<li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+//flags=notify2
+if(en) SYS.system("play -q alarm.ogg");</pre>
+<dl><dd><ul><li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+#!/bin/sh
+#flags=notify2
+if test $en = 1; then play -q alarm.ogg; fi</pre>
+<ul><li> Play an individual audio file for the source, on the visualization server side:</li></ul>
+<dl><dd><ul><li> alarm = "10|Prm||0x04|res:al_prm1"</li>
+<li> notify2 =</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+//flags=queue</pre>
+<dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+//flags=notify2|queue
+if(doNtf &amp;&amp; en &amp;&amp; res.length) {
+  SYS.fileWrite("tmpPlay", res);
+  SYS.system("play -q tmpPlay");
+  SYS.fileRemove("tmpPlay");
+}</pre>
+<dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+#!/bin/sh
+#flags=notify2|queue
+if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
+</pre>
+<ul><li> Speech synth for an individual message for the source, on a visualizer side:</li></ul>
+<dl><dd><ul><li> alarm = "10|Prm|Text message for the speech synth|0x04"</li>
+<li> notify2 =</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+//flags=queue</pre>
+<dl><dd><ul><li> notifyVisVision2 = </li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+//flags=notify2|queue
+if(doNtf &amp;&amp; en &amp;&amp; mess.length) {
+  SYS.fileWrite("tmpForSpeech", mess);
+  SYS.system("festival --tts tmpForSpeech");
+  SYS.fileRemove("tmpForSpeech");
+}
+</pre>
+<dl><dd><ul><li> notifyVisVision2 = </li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+#!/bin/sh
+#flags=notify2|queue
+if test $doNtf = 1 -a $en = 1 -a "x"&nbsp;!= "x$mess"; then
+  echo $mess &gt; tmpForSpeech
+  festival --tts tmpForSpeech
+  rm tmpForSpeech
+fi
+</pre>
+<ul><li> Once audio file prepare and playing that on a visualizer or the visualization server side:</li></ul>
+<dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
+<li> notify2 = </li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+//flags=notify2|resource
+if(doRes) res = SYS.fileRead("alarm.ogg");  //Insert here a different method of generation
+if(doNtf &amp;&amp; en &amp;&amp; res.length) {
+  SYS.fileWrite("tmpPlay", res);
+  SYS.system("play -q tmpPlay");
+  SYS.fileRemove("tmpPlay");
+}</pre>
+<dl><dd><ul><li> notify2 = </li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+#!/bin/sh
+#flags=notify2|resource
+if test $doRes = 1; then cp -f alarm.ogg $res; fi  #Insert here a different method of generation
+if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
+</pre>
+<dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+//flags=notify2|resource
+if(en &amp;&amp; res.length) {
+  SYS.fileWrite("tmpPlay", res);
+  SYS.system("play -q tmpPlay");
+  SYS.fileRemove("tmpPlay");
+}</pre>
+<dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+#!/bin/sh
+#flags=notify2|resource
+if test $en = 1 -a -s $res; then play -q $res; fi
+</pre>
+<ul><li> Prepare an individual audio file for the source of notification through the speech synth, on a visualizer or the visualization server side:</li></ul>
+<dl><dd><ul><li> alarm = "10|Prm|Text message for the speech synth|0x04"</li>
+<li> notify2 =</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+//flags=notify2|queue
+if(doRes &amp;&amp; mess.length) {
+ SYS.fileWrite("tmpText", mess);
+ SYS.system("text2wave tmpText -o tmpWAV");
+ res = SYS.fileRead("tmpWAV");
+ SYS.fileRemove("tmpText"); SYS.fileRemove("tmpWAV");
+}
+if(doNtf &amp;&amp; en &amp;&amp; res.length) {
+ SYS.fileWrite("tmpPlay", res);
+ SYS.system("play -q tmpPlay");
+ SYS.fileRemove("tmpPlay");
+}</pre>
+<dl><dd><ul><li> notify2 =</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+#!/bin/sh
+#flags=notify2|queue
+if test $doRes = 1 -a "x"&nbsp;!= "x$mess"; then
+ echo $mess &gt; tmpText
+ text2wave tmpText -o $res
+ rm tmpText
+fi
+if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
+</pre>
+<dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+//flags=notify2|queue
+if(en &amp;&amp; res.length) {
+ SYS.fileWrite("tmpPlay", res);
+ SYS.system("play -q tmpPlay");
+ SYS.fileRemove("tmpPlay");
+}</pre>
+<dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+#!/bin/sh
+#flags=notify2|queue
+if test $en = 1 -a -s $res; then play -q $res; fi
+</pre>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Rights_management"><span class="mw-headline-number">3.7</span> Rights management</span></h3>
+<p>For the separation of access to the interface of VC and its components every widget contains information about the owner, about its group and access rights. Access rights are recorded as is the convention in the OpenSCADA system, in the form of a triad: "<b>{user}{groups}{rest}</b>" where each element consists of three attributes of access. Groups list writes through symbol ','. For the elements of the VCA the following interpretation is taken:
+</p>
+<ul><li> <b>r</b> — the right to review the widget;</li>
+<li> <b>w</b> — the right to control over the widget.</li></ul>
+<p>In the development mode a simple scheme of access "root.UI:RWRWR_" is used, which means — all users can open and view the libraries, their components and projects, and all users of group "UI" user interfaces) can edit.
+</p><p>In the running mode the right described in the components of interface work, which provide possibility for inheritance the owner and the permissions from top to bottom. Wherein by default the inheritance enabled for each widget, then they get the owner and the permissions of the project. Into that time, the permissions direct setting will propagate they to all components of the widget.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Linkage_with_the_dynamics"><span class="mw-headline-number">3.8</span> Linkage with the dynamics</span></h3>
+<p>To provide relevant data in the visualization interface the data of subsystems "Data acquisition (DAQ)" must be used. The nature of these data as follows:
+</p>
+<ol><li> parameters that contain some number of attributes;</li>
+<li> attributes of the parameter can provide information of five types: Boolean, Integer, Real, String and Object;</li>
+<li> attributes of the parameter can have their history (archive);</li>
+<li> attributes of the parameter can be set to read, write, and with full access.</li></ol>
+<p>Considering the first list item it is necessary to allow the possibility of the group of destination links. To do this we use the conception of <a href="../DAQ.html" title="Special:MyLanguage/Documents/DAQ">of the logic level</a>.
+</p><p>In accordance with the list item 2, the links provide transparent conversion of connection types and do not require special configuration here.
+</p><p>To satisfy the opportunities for access to archives, in accordance with the list item 3, links make check of the type of the attribute, and in the case of connection to the "Address", the address of linkage is put into the value.
+</p><p>In terms of the VCA, the dynamic links and configuration of the dynamics are the one process, to describe a configuration of which the tab "Processing" of the widgets is provided. The tab contains a table of configuration of the properties of the attributes of the widget and the text of calculation procedure of the widget.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:943px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_proc.png"><img class="thumbimage" height="684" src="../files/VCA_wdg_proc.png" width="941" /></a>  <div class="thumbcaption">Figure. The tab "Processing" of the configuration page of the widget.</div></div></div></div>
+<p>In addition to configuration fields of the attributes the column "Processing" in the table provides, for selective using of the attributes of the widgets in the computational procedure of the widget, and the columns "Configuration", "Configuration template", to describe the configuration of links.
+</p><p>If the "Processing" column is true, then the variable <i>{widget ID}_{string ID}</i>, for example, <i>cw_value</i>, becomes available in the computational procedure.
+</p><p>The column "Configuration" allows you to specify the linkage type for the attribute of the widget:
+</p>
+<ul><li> <i>Constant</i> — in the tab of widget links the field for indication of a constant appears, for example of the special color or header for the template frames.</li>
+<li> <i>Input link</i> — linkage with the dynamics for a read-only.</li>
+<li> <i>Output link</i> — linkage with the dynamics just for a writing.</li>
+<li> <i>Full link</i> — complete linkage with dynamic (read/write).</li>
+<li> <i>From style</i> — take the value from the project's style.</li></ul>
+<p>The column "Configuration template" makes it possible to describe the groups of dynamic attributes. For example, it may be different types of parameters of subsystem "DAQ" and other widgets of the interface. Furthermore, in the case of correct formation of this field, the mechanism of automatically assign of the attributes with the only indication of the parameter of subsystem "DAQ" or the widget is working, which simplifies and accelerates the configuration process. The value of this column has the following format:
+</p>
+<ul><li> <i>For constant:</i> direct the attribute value.</li>
+<li> <i>For link:</i> "<b>{parameter}|{identifier}</b>", where:
+<ul><li> <i>parameter</i> — the group of the attribute;</li>
+<li> <i>identifier</i> — identifier of the attribute; same the value is compared with the attributes of the DAQ parameters with automatic linkage, after the group link indication.</li></ul></li>
+<li> <i>For style:</i> identifier-name of the style field.</li></ul>
+<p>Installation of the links may be of several types, which are determined by the prefix:
+</p>
+<ul><li> <i>val:</i> — Direct download of the value through the links mechanism. For example, link: "val:100" loads in the attribute of the widget the value of the 100. It is often used in the case of absence of end point of the link, in order to direct value indicating.</li>
+<li> <i>prm:</i> — Link to the attribute of the parameter or the parameter, in general, for a group of attributes, of subsystem "Data acquisition". For example, the link "prm:/LogicLev/experiment/Pi/var" implements the access of the attribute of the widget to the attribute of the parameter of subsystem "Data acquisition". Sign "(+)" at the end of the address indicate about successful linking and presence of the target. For object's type attributes allowed hierarchical access to the object concrete property by set the path through symbol '#', for example: "prm:/LogicLev/experiment/Pi/var#pr1/pr2".</li>
+<li> <i>wdg:</i> — Link to an attribute of another widget or the widget, in general, for a group of attributes. For example, the link "wdg:/ses_AGLKS/pg_so/pg_1/pg_ggraph/pg_1/a_bordColor" performs the access of the attribute of one widget to the attribute of another one. Supported absolute and relative link's path. Start point of absolute point is root object of module "VCAEngine", then the first item of absolute address is a session or a project identifier. On session side first item is passed then set into a project links there work. For relative links by start point used a widget with the link set. The item ".." of parent node is a special item of the relative links.</li>
+<li> <i>arh:</i> — A special type of link is only available for a particular attribute such as "Address", which allows you to connect directly to the archive values ("arh:CPU_load"). It may be useful to specify the archive as a source of data for primitive "Diagram".</li></ul>
+<p>Processing of the links occurs at a frequency of calculating the widget in the following order:
+</p>
+<ul><li> receiving of the data from input links;</li>
+<li> perform of calculating of the script;</li>
+<li> transmission of the values by the output links.</li></ul>
+<p>In the Figure the tab of links with the group assignment of the attributes by the only specifying the parameter is presented, and in next Figure — with the individual appointment of the attributes.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:759px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_lnk_grp.png"><img class="thumbimage" height="469" src="../files/VCA_wdg_lnk_grp.png" width="757" /></a>  <div class="thumbcaption">Figure. Tab "Links" of the page of configuration of the widget with the group assignment of the attributes by the only specifying of the parameter.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:759px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_lnk_attr.png"><img class="thumbimage" height="469" src="../files/VCA_wdg_lnk_attr.png" width="757" /></a>  <div class="thumbcaption">Figure. Tab "Links" of the page of configuration of the widget with the individual appointment of the attributes.</div></div></div></div>
+<p>When the widget that contains the configuration of links is placed to the container of widgets, all links of the source widget is added to the list of resulting links of the widgets' container, but only to a depth of one level of nesting.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:872px;"><a class="image" href="http://oscada.org/wiki/File:VCA_cntwdg_lnk.png"><img class="thumbimage" height="568" src="../files/VCA_cntwdg_lnk.png" width="870" /></a>  <div class="thumbcaption">Figure. Tab "Links" of the page of configuration of the container of widgets, including widgets with links.</div></div></div></div>
+<p>The above shows that the links are set by the user in the configuration interface. However, for the possibility of creation of the frames for general use, with the function of providing detailed data of various sources of the same type, a dynamic linkage mechanism is necessary. Such mechanism is provided through a reserved key identifier "<b>&lt;page&gt;</b>" of the group of attributes of links in the frames of general purpose and dynamic linkage with the identifier "<b>&lt;page&gt;</b>" in the process of opening of the frame of general purpose by means of the signal from another widget.
+</p><p>Lets examine the example when we have the frame of general-purpose "Control panel of graph" and a lot of "Graphs" in different tabs. "Control panel of graph" has links with the templates:
+</p>
+<ul><li> tSek -&gt; "&lt;page&gt;|tSek"</li>
+<li> tSize -&gt; "&lt;page&gt;|tSize"</li>
+<li> trcPer -&gt; "&lt;page&gt;|trcPer"</li>
+<li> valArch -&gt; "&lt;page&gt;|valArch"</li></ul>
+<p>At the same time, each widget "Graph" has the attributes tSek, tSize, trcPer and valArch. In the case of a calling of the opening signal of "Control panel of graph" from any widget "Graph" it is happening the linkage of the attributes of the "Control panel of graph" in accordance with the attribute specified in the template with the attribute of the widget "Graph". As a result, all changes in the "Control panel of graph" will be displayed on the graph by means of the link.
+</p><p>In the case of presence of external links to the parameters of subsystem "Data acquisition" in the widget "Graph", the links of "Control panel of graph" will be set on an external source. In addition, if in the "Control panel of graph" will be declared the links to the missing attributes directly in the widget "Graph", it will be made the search for the availability of such attributes from the external source, the first to which the link is directed, performing, thus, the addition of missing links.
+</p><p>To visualize this mechanism the table is cited.
+</p><p><b>Table.</b> The mechanism of the dynamic linkage.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Attributes of the "Control panel of graph" (the template of dynamic linkage) </th>
+<th> "Graph" attributes </th>
+<th> Attributes of an external "Parameter" </th>
+<th> The resulting link or an value of the linking attribute
+</th></tr>
+<tr>
+<td> tSek (&lt;page&gt;|tSek) </td>
+<td> tSek </td>
+<td> - </td>
+<td> "Graph".tSek
+</td></tr>
+<tr>
+<td> tSize (&lt;page&gt;|tSize) </td>
+<td> tSize </td>
+<td> - </td>
+<td> "Graph".tSize
+</td></tr>
+<tr>
+<td> trcPer (&lt;page&gt;|trcPer) </td>
+<td> trcPer </td>
+<td> - </td>
+<td> "Graph".trcPer
+</td></tr>
+<tr>
+<td> valArch (&lt;page&gt;|valArch) </td>
+<td> valArch </td>
+<td> - </td>
+<td> "Graph".valArch
+</td></tr>
+<tr>
+<td> var (&lt;page&gt;|var) </td>
+<td> var </td>
+<td> var </td>
+<td> "Parameter".var
+</td></tr>
+<tr>
+<td> ed (&lt;page&gt;|ed) </td>
+<td> - </td>
+<td> ed </td>
+<td> "Parameter".ed
+</td></tr>
+<tr>
+<td> max (&lt;page&gt;|max) </td>
+<td> - </td>
+<td> - </td>
+<td> EVAL
+</td></tr>
+<tr>
+<td> min (&lt;page&gt;|min) </td>
+<td> - </td>
+<td> - </td>
+<td> EVAL
+</td></tr></table>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="The_primitives_of_the_widget"><span class="mw-headline-number">3.9</span> The primitives of the widget</span></h3>
+<p>Any newly created widget is based on one of several primitives (end element of the visualization) by installing of the kinship as directly to the primitive, as well as through the several intermediate user widgets. Each of the primitives contains a mechanism (logic) of the data model. A copy of the widget keeps the values of the properties of configuration of the the primitive specially for itself.
+</p><p>The tasks of the visualization interface includes support and work with the data model of the primitives of widgets. Primitives of the widget must be carefully developed and unitized in order to cover as many opportunities in the as possible to a smaller number of weakly connected with each other by their purpose primitives.
+</p><p><b>Table.</b> The library of the primitives of widgets (basic elements of visualization).
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Function
+</th></tr>
+<tr>
+<td> ElFigure </td>
+<td> Elementary graphic figures </td>
+<td>
+<p>Primitive is the basis for drawing basic graphic shapes with their possible combinations in a single object. The support of the following basic figures is provided:
+</p>
+<ul><li> Line.</li>
+<li> Arc.</li>
+<li> Bézier curve.</li>
+<li> Fill of the enclosed space.<br /></li></ul>
+<p>For all the figures contained in the widget it is set the common properties of thickness, color, etc., but this does not exclude the possibility of indicating the above attributes for each figure separately. 
+</p>
+</td></tr>
+<tr>
+<td> FormEl </td>
+<td> Elements of the form </td>
+<td>
+<p>Includes support for standard form components:
+</p>
+<ul><li> Line edit.</li>
+<li> Text edit.</li>
+<li> Check box.</li>
+<li> Button.</li>
+<li> Combo box.</li>
+<li> List.</li>
+<li> Tree.</li>
+<li> Table.</li>
+<li> Slider.</li>
+<li> Scroll bar. </li></ul>
+</td></tr>
+<tr>
+<td> Text </td>
+<td> Text </td>
+<td> Text element (labels). Characterized by the type of font, color, orientation and alignment.
+</td></tr>
+<tr>
+<td> Media </td>
+<td> Media </td>
+<td> Element of visualization of raster and vector images of various formats, playback of animated images, audio segments and video fragments.
+</td></tr>
+<tr>
+<td> Diagram </td>
+<td> Diagram </td>
+<td> Element of the diagram with the support of the visualization of the flow of several trends, the spectrum, XY diagrams of real-time data, ... .
+</td></tr>
+<tr>
+<td> Protocol </td>
+<td> Protocol </td>
+<td> Element of the protocol, visualizer of the system messages, with support for multiple operating modes.
+</td></tr>
+<tr>
+<td> Document </td>
+<td> Document </td>
+<td> The element of generating the reports, journals and other documentation on the basis of available in the system data.
+</td></tr>
+<tr>
+<td> Box </td>
+<td> Container </td>
+<td> Contains the mechanism for other widgets placement-including with the purpose of creation of new, more complex, widgets and pages of end visualization.
+</td></tr>
+<tr>
+<td> Function, <span style="color: red">in plane</span> </td>
+<td> Function of API of the object model of OpenSCADA </td>
+<td> Not visual, on the side of execution, widget which allows to include a computing function of the object model of OpenSCADA in the VCA.
+</td></tr></table>
+<p><b>Table.</b> The common set of properties/attributes in the widget
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Number </th>
+<th> Value
+</th></tr>
+<tr>
+<td> id </td>
+<td> Id </td>
+<td> - </td>
+<td> Id of the element. The attribute is read-only, designed to provide information on the ID of the element.
+</td></tr>
+<tr>
+<td> path </td>
+<td> Path </td>
+<td> - </td>
+<td> The path to the widget. The attribute is read-only and designed to provide full information about the location of the element.
+</td></tr>
+<tr>
+<td> parent </td>
+<td> Parent </td>
+<td> - </td>
+<td> Path to the parent widget. The attribute is read-only and designed to provide information about the location of ancestor which the widget is inherited from.
+</td></tr>
+<tr>
+<td> owner </td>
+<td> Owner </td>
+<td> - </td>
+<td> The widget owner and group in form "<b>{owner}:{group}</b>", by default the "root:UI".
+</td></tr>
+<tr>
+<td> perm </td>
+<td> Permission </td>
+<td> - </td>
+<td>
+<p>Permission to the widget in form "<b>{user}{group}{other}</b>" plus inheritance flag, includes the inheritance owner and it's permissions from upper widget.<br />
+Where "<b>user</b>", "<b>group</b>" and "<b>other</b>" is:
+</p>
+<ul><li> "__" — no any access;</li>
+<li> "R_" — read-only;</li>
+<li> "RW" — read and write.<br /></li></ul>
+<p>By default the 01000(inheritance). 
+</p>
+</td></tr>
+<tr>
+<td> root </td>
+<td> Root </td>
+<td> 1 </td>
+<td> Id of the widget-primitive (basic element) which underlies the image of visualization of the widget.
+</td></tr>
+<tr>
+<td> name </td>
+<td> Name </td>
+<td> - </td>
+<td> Name of the element. Modifiable the element name.
+</td></tr>
+<tr>
+<td> dscr </td>
+<td> Description </td>
+<td> - </td>
+<td> Description of the element. Text field, serves for attachment to the widget of the brief description.
+</td></tr>
+<tr>
+<td> en </td>
+<td> Enabled </td>
+<td> 5 </td>
+<td> The state of the element — "Enabled". Disabled element is not shown in the execution mode.
+</td></tr>
+<tr>
+<td> active </td>
+<td> Active </td>
+<td> 6 </td>
+<td> The state of the element — "Active". Active element may receive focus in the execution mode, and thus receive keyboard and other events with their subsequent processing.
+</td></tr>
+<tr>
+<td> geomX </td>
+<td> Geometry:x </td>
+<td> 7 </td>
+<td> Geometry, coordinate 'x' of the element position.
+</td></tr>
+<tr>
+<td> geomY </td>
+<td> Geometry:y </td>
+<td> 8 </td>
+<td> Geometry, coordinate 'y' of the element position.
+</td></tr>
+<tr>
+<td> geomW </td>
+<td> Geometry:width </td>
+<td> 9 </td>
+<td> Geometry, the width of the element.
+</td></tr>
+<tr>
+<td> geomH </td>
+<td> Geometry:height </td>
+<td> 10 </td>
+<td> Geometry, the height of the element.
+</td></tr>
+<tr>
+<td> geomXsc </td>
+<td> Geometry:x scale </td>
+<td> 13 </td>
+<td> The horizontally scale of the element.
+</td></tr>
+<tr>
+<td> geomYsc </td>
+<td> Geometry:y scale </td>
+<td> 14 </td>
+<td> The vertical scale of the element.
+</td></tr>
+<tr>
+<td> geomZ </td>
+<td> Geometry:z </td>
+<td> 11 </td>
+<td> Geometry, coordinate 'z' (level) of element on the page. It also defines order to transfer the focus through active elements.
+</td></tr>
+<tr>
+<td> geomMargin </td>
+<td> Geometry:margin </td>
+<td> 12 </td>
+<td> Geometry, the margins of the element.
+</td></tr>
+<tr>
+<td> tipTool </td>
+<td> Tip:tool </td>
+<td> 15 </td>
+<td> The text of a brief help or tip on this element. Usually is realized as a tool tip, while keeping your mouse cursor over the element.
+</td></tr>
+<tr>
+<td> tipStatus </td>
+<td> Tip:status </td>
+<td> 16 </td>
+<td>
+<p>Text information on the status of the element or the guide to action over the element. Usually is implemented in the form of a message in the status bar while keeping your mouse cursor over the element.
+</p>
+<dl><dd> * Modification from session of the attribute of the root page will record the message in the status bar of the visualization window session. </dd></dl>
+</td></tr>
+<tr>
+<td> contextMenu </td>
+<td> Context menu </td>
+<td> 17 </td>
+<td>
+<p>Context menu in form strings list: "<b>{ItName}:{Signal}</b>".<br />
+Where:
+</p>
+<ul><li> "ItName" — the item name;</li>
+<li> "Signal" — the signal name, for it forming as "<b>usr_{Signal}</b>". </li></ul>
+</td></tr>
+<tr>
+<td> evProc </td>
+<td> Events process </td>
+<td> - </td>
+<td>
+<p>Attribute for storing of the script of the processing of event of direct control of user interface. Script is the list of commands to the visualization interface generated at the event receipt (attribute <b>event</b>). Direct events processing for pages manipulation in form: "<b>{event}:{evSrc}:{com}:{prm}</b>". Where:
+</p>
+<ul><li> "event" — the waiting event;</li>
+<li> "evSrc" — the event source;</li>
+<li> "com" — the command of a session (open, next, prev);</li>
+<li> "prm" — the command parameter, where used:
+<ul><li> <i>pg_so</i> — direct name of the desired page with the prefix;</li>
+<li> <i>1</i> — name of a new page in a general way, without a prefix;</li>
+<li> <i>*</i> — the page is taken from the name of a previous page;</li>
+<li> <i>$</i> — points the place of the opened page relative.<br /></li></ul></li></ul>
+<p>Examples:
+</p>
+<ul><li> ws_BtPress:/prev:prev:/pg_so/*/*/$</li>
+<li> ws_BtPress:/next:next:/pg_so/*/*/$</li>
+<li> ws_BtPress:/go_mn:open:/pg_so/*/mn/*</li>
+<li> ws_BtPress:/go_graph:open:/pg_so/*/ggraph </li></ul>
+</td></tr>
+<tr>
+<td colspan="4"> <i>Additional attributes for items placed into the project in the role of a page.</i>
+</td></tr>
+<tr>
+<td> pgOpen </td>
+<td> Page:open state </td>
+<td> - </td>
+<td>
+<p>Sign "The page is open".
+</p>
+<dl><dd> * Modification from session provides an immediate opening/closing the page. </dd></dl>
+</td></tr>
+<tr>
+<td> pgNoOpenProc </td>
+<td> Page:process not opened </td>
+<td> - </td>
+<td> Sign "Execute the page, even if it is closed".
+</td></tr>
+<tr>
+<td> pgOpenSrc </td>
+<td> Page:open source </td>
+<td> 3 </td>
+<td>
+<p>Full address of the page which has opened this one.
+</p>
+<dl><dd> * Write/clear address of the widget — (opening initiator) performs an immediate opening/closing page. In the case of write the address and on certain conditions carried the dynamic linking of the current widget to the initiator. </dd></dl>
+</td></tr>
+<tr>
+<td> pgGrp </td>
+<td> Page:group </td>
+<td> 4 </td>
+<td> The group of the page.
+</td></tr>
+<tr>
+<td colspan="4"> <i>Additional attributes of the execution mode — by the session.</i>
+</td></tr>
+<tr>
+<td> event </td>
+<td> Event </td>
+<td> - </td>
+<td> Special attributes for the collection of events of the widget in the list, which is divided by the new line. Access to the attribute is protected by the resource allocation in order to avoid loss of the events. The attribute is always available in the script of widget.
+</td></tr>
+<tr>
+<td> load </td>
+<td> Load </td>
+<td> -1 </td>
+<td> The virtual command of the group data download.
+</td></tr>
+<tr>
+<td> focus </td>
+<td> Focus </td>
+<td> -2 </td>
+<td> The special attribute of the indicating the fact of receiving the focus by an active widget. Attribute of the widget and of the the embedded widgets is available in the script of widget.
+</td></tr>
+<tr>
+<td> perm </td>
+<td> Permission </td>
+<td> -3 </td>
+<td> The virtual attribute of the rights verification of active user on the viewing and control over the widget.
+</td></tr></table>
+<dl><dd> * — The special function of the widget attribute which running in a session of the project at any user's modification.</dd></dl>
+<p>The visualization engine provides visualizer specific attributes activation. The process of activation does at a session of the project opening and minds for the project: creation of the specific attribute with pointed properties, at case it lack, and activation for modification tracing by the visualization engine, like to the attributes of forming primitive's shapes. For the specific attributes list of the visualizer you can see to proper documentation of the visualizer.
+</p>
+<h4><span class="mw-headline" id="Elementary_graphic_figures_.28ElFigure.29"><span class="mw-headline-number">3.9.1</span> <span id="ElFigure" title="#ElFigure">Elementary graphic figures (ElFigure)</span></span></h4>
+<p>Primitive is the basis for drawing basic graphic shapes with their possible combinations in a single object. Taking into account the wide range of various shapes, which must be maintained by the primitive, and at the same time the primitive must be simple enough for using and, if possible, for implementation, it was decided to limit the list of the basic figures used for the construction of the resulting graphics to these figures: line, arc, Bézier curve and fill of the enclosed spaces. Based at these basic figures, it is possible to construct derived figures by combining the basic. In the context of the primitive, there is possibility to set the transparency of the color in the range [0...255], where '0' — complete transparency.
+</p><p><b>Table.</b> A list of additional properties/attributes of the primitive "ElFigure"
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Number </th>
+<th> Value
+</th></tr>
+<tr>
+<td> lineWdth </td>
+<td> Line:width </td>
+<td> 20 </td>
+<td> Line width.
+</td></tr>
+<tr>
+<td> lineClr </td>
+<td> Line:color </td>
+<td> 21 </td>
+<td> Color name form "<b>{color}[-{alpha}]</b>", where:
+<ul><li> "color" — standard color name or digital view of three hexadecimal digit's number form "#RRGGBB";</li>
+<li> "alpha" — alpha channel level [0...255], where 0 — complete transparent.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "red" — solid red color;</li>
+<li> "#FF0000" — solid red color by digital code;</li>
+<li> "red-127" — half transparent red color. </li></ul>
+</td></tr>
+<tr>
+<td> lineStyle </td>
+<td> Line:style </td>
+<td> 22 </td>
+<td> Line style (solid, dashed, dotted).
+</td></tr>
+<tr>
+<td> bordWdth </td>
+<td> Border:width </td>
+<td> 23 </td>
+<td> Line border width. The zero width indicates the lack of border.
+</td></tr>
+<tr>
+<td> bordClr </td>
+<td> Border:color </td>
+<td> 24 </td>
+<td> Border color (detailed in attribute 21).
+</td></tr>
+<tr>
+<td> fillColor </td>
+<td> Fill:color </td>
+<td> 25 </td>
+<td> Fill color (detailed in attribute 21).
+</td></tr>
+<tr>
+<td> fillImg </td>
+<td> Fill:image </td>
+<td> 26 </td>
+<td> Image name in form "<b>[{src}:]{name}</b>", where:
+<ul><li> "src" — the image source:
+<ul><li> <i>file</i> — direct from local file by the path;</li>
+<li> <i>res</i> — from the DB mime resources table.</li></ul></li>
+<li> "name" — the file path or the resource mime Id.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "res:backLogo" — from the DB mime resources table for id "backLogo";</li>
+<li> "backLogo" — like previous;</li>
+<li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png". </li></ul>
+</td></tr>
+<tr>
+<td> orient </td>
+<td> Orientation angle </td>
+<td> 28 </td>
+<td> The rotation angle of the content of widget.
+</td></tr>
+<tr>
+<td> elLst </td>
+<td> Element's list </td>
+<td> 27 </td>
+<td> List of graphic primitives in the following format:
+<ul><li> Line. Record form in the list, for static and dynamic parameters (may mix):</li></ul>
+<dl><dd><dl><dd>"<b>line:({x}|{y}):({x}|{y})[:{width}[:{color}[:{bord_w}[:{bord_clr}[:{line_stl}]]]]]</b>"</dd>
+<dd>"<b>line:{p1}:{p2}[:w{n}[:c{n}[:w{n}[:c{n}[:s{n}]]]]]</b>"</dd></dl></dd></dl>
+<ul><li> Arc. Record form in the list, for static and dynamic parameters (may mix):</li></ul>
+<dl><dd><dl><dd>"<b>arc:({x}|{y}):({x}|{y}):({x}|{y}):({x}|{y}):({x}|{y})[:{width}[:{color}[:{bord_w}[:{bord_clr}[:{line_stl}]]]]]</b>"</dd>
+<dd>"<b>arc:{p1}:{p2}:{p3}:{p4}:{p5}[:w{n}[:c{n}[:w{n}[:c{n}[:s{n}]]]]]</b>"</dd></dl></dd>
+<dd> <a class="image" href="http://oscada.org/wiki/File:VCA_arc.png"><img alt="VCA arc.png" height="215" src="../files/VCA_arc.png" width="164" /></a>
+<dl><dd>p1, p2 — starting and ending points of an elliptic arc, respectively;</dd>
+<dd>p3 — the center of the arc;</dd>
+<dd>p4 — first radius;</dd>
+<dd>p5 — second radius.</dd></dl></dd></dl>
+<ul><li> Bézier curve. Record form in the list, for static and dynamic parameters (may mix):</li></ul>
+<dl><dd><dl><dd>"<b>bezier:({x}|{y}):({x}|{y}):({x}|{y}):({x}|{y})[:{width}[:{color}[:{bord_w}[:{bord_clr}[:{line_stl}]]]]]</b>"</dd>
+<dd>"<b>bezier:{p1}:{p2}:{p3}:{p4}[:w{n}[:c{n}[:w{n}[:c{n}[:s{n}]]]]]</b>"</dd></dl></dd></dl>
+<ul><li> Fill. Record form in the list:</li></ul>
+<dl><dd><dl><dd>"<b>fill:({x}|{y}):({x}|{y}):...:({x}|{y})[:{fill_clr}[:{fill_img}]]</b>"</dd>
+<dd>"<b>fill:{p1}:{p2}:...:{pN}[:c{n}[:i{n}]]</b>"<br /></dd></dl></dd></dl>
+<p>Where:
+</p>
+<dl><dd><i>x, y</i> — direct point (x,y), coordinate in float point pixels;</dd>
+<dd><i>p1 ... pN</i> — dynamic point 1...N;</dd>
+<dd><i>width, bord_w</i> — direct line and border width in float point pixels;</dd>
+<dd><i>w{n}</i> — dynamic width 'n';</dd>
+<dd><i>color, bord_clr, fill_clr</i> — direct line, border and fill color name or 32bit code with alpha: {name}[-{AAA}], #RRGGBB-AAA;</dd>
+<dd><i>c{n}</i> — dynamic color 'n';</dd>
+<dd><i>line_stl</i> — direct line style: 0-Solid, 1-Dashed, 2-Dotted;</dd>
+<dd><i>s{n}</i> — dynamic style 'n';</dd>
+<dd><i>fill_img</i> — direct fill image in form "[{src}%3A]{name}", where:
+<dl><dd>"src" — image source:
+<dl><dd><i>file</i> — direct from local file by the path;</dd>
+<dd><i>res</i> — from the DB mime resources table.</dd></dl></dd>
+<dd>"name" — the file path or the resource mime Id.</dd></dl></dd>
+<dd><i>i{n}</i> — dynamic fill image 'n'.<br /></dd></dl>
+<p>For example:
+</p>
+<ul><li> line:(50|25):(90.5|25):2:yellow:3:green:2</li>
+<li> arc:(25|50):(25|50):1:4:(25|50)::#000000-0</li>
+<li> fill:(25|50):(25|50):c2:i2</li>
+<li> fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31 </li></ul>
+</td></tr>
+<tr>
+<td colspan="4"> <i>The attributes for each point from the list of graphic figures <b>elLst</b></i>
+</td></tr>
+<tr>
+<td> p{n}x </td>
+<td> Point {n}:x </td>
+<td> 30+n*6 </td>
+<td> Coordinates 'x' of the point <i>n</i>.
+</td></tr>
+<tr>
+<td> p{n}y </td>
+<td> Point {n}:y </td>
+<td> 30+n*6+1 </td>
+<td> Coordinates 'y' of the point <i>n</i>.
+</td></tr>
+<tr>
+<td> w{n} </td>
+<td> Width {n} </td>
+<td> 30+n*6+2 </td>
+<td> Width <i>n</i>.
+</td></tr>
+<tr>
+<td> с{n} </td>
+<td> Color {n} </td>
+<td> 30+n*6+3 </td>
+<td> Color <i>n</i> (detailed in attribute 21).
+</td></tr>
+<tr>
+<td> i{n} </td>
+<td> Image {n} </td>
+<td> 30+n*6+4 </td>
+<td> Image <i>n</i> (detailed in attribute 26).
+</td></tr>
+<tr>
+<td> s{n} </td>
+<td> Style {n} </td>
+<td> 30+n*6+5 </td>
+<td> Style <i>n</i>.
+</td></tr></table>
+<h4><span class="mw-headline" id="Element_of_the_form_.28FormEl.29"><span class="mw-headline-number">3.9.2</span> <span id="FormEl" title="#FormEl">Element of the form (FormEl)</span></span></h4>
+<p>Primitive is intended to provide the standard form elements to the user. The general list of attributes depends on the type of element.
+</p><p><b>Table.</b> A set of additional properties/attributes of the primitive "FormEl"
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Number </th>
+<th> Value
+</th></tr>
+<tr>
+<td> elType </td>
+<td> Element's type </td>
+<td> 20 </td>
+<td> Type of the element: "Line edit", "Text edit", "Check box", "Button", "Combo box", "List", "Tree", "Table", "Slider", "Scroll bar". On its value it depends a list of additional attributes.
+</td></tr>
+<tr>
+<td colspan="4"> <i>Line edit:</i>
+</td></tr>
+<tr>
+<td> value </td>
+<td> Value </td>
+<td> 21 </td>
+<td> The contents of the line.
+</td></tr>
+<tr>
+<td> view </td>
+<td> View </td>
+<td> 22 </td>
+<td> Type of the editing line: "Text", "Combobox", "Integer", "Real", "Time", "Date", "Date and Time".
+</td></tr>
+<tr>
+<td> cfg </td>
+<td> Configuration </td>
+<td> 23 </td>
+<td> Configuration of the line. The format of the value of the field for different types of lines:
+<dl><dd><i>Text</i> — the formated input configuration with parameters:
+<dl><dd><dl><dd><b>A</b> — ASCII alphabetic character required. A-Z, a-z.</dd>
+<dd><b>a</b> — ASCII alphabetic character permitted but not required.</dd>
+<dd><b>N</b> — ASCII alphanumeric character required. A-Z, a-z, 0-9.</dd>
+<dd><b>n</b> — ASCII alphanumeric character permitted but not required.</dd>
+<dd><b>X</b> — Any character required.</dd>
+<dd><b>x</b> — Any character permitted but not required.</dd>
+<dd><b>9</b> — ASCII digit required. 0-9.</dd>
+<dd><b>0</b> — ASCII digit permitted but not required.</dd>
+<dd><b>D</b> — ASCII digit required. 1-9.</dd>
+<dd><b>d</b> — ASCII digit permitted but not required (1-9).</dd>
+<dd><b>#</b> — ASCII digit or plus/minus sign permitted but not required.</dd>
+<dd><b>H</b> — Hexadecimal character required. A-F, a-f, 0-9.</dd>
+<dd><b>h</b> — Hexadecimal character permitted but not required.</dd>
+<dd><b>B</b> — Binary character required. 0-1.</dd>
+<dd><b>b</b> — Binary character permitted but not required.</dd>
+<dd><b>&gt;</b> — All following alphabetic characters are uppercased.</dd>
+<dd><b>&lt;</b> — All following alphabetic characters are lowercased.</dd>
+<dd><b>!</b> — Switch off case conversion.</dd>
+<dd><b>\\</b> — Use to escape the special characters listed above to use them as separators.</dd></dl></dd></dl></dd>
+<dd><i>Combobox</i> — list of values the editable combobox by lines.</dd>
+<dd><i>Integer</i> — integer value configuration in form: "<b>{Min}:{Max}:{ChangeStep}:{Prefix}:{Suffix}</b>".</dd>
+<dd><i>Real</i> — real value configuration in form: "<b>{Min}:{Max}:{ChangeStep}:{Prefix}:{Suffix}:{SignsAfterDot}</b>".</dd>
+<dd><i>Time</i>, <i>Date</i>, <i>Date and time</i> — to form the date following the template with parameters:
+<dl><dd><dl><dd><b>d</b> — number of the day (1-31);</dd>
+<dd><b>dd</b> — number of the day (01-31);</dd>
+<dd><b>ddd</b> — acronym of the day ("Mon" ... "Sun");</dd>
+<dd><b>dddd</b> — the full name of the day ("Monday" ... "Sunday");</dd>
+<dd><b>M</b> — number of the month (1-12);</dd>
+<dd><b>MM</b> — number of the month (01-12);</dd>
+<dd><b>MMM</b> — acronym of the month ("Jan" ... "Dec");</dd>
+<dd><b>MMMM</b> — the full name of the month ("January" ... "December");</dd>
+<dd><b>yy</b> — last two digits of the year;</dd>
+<dd><b>yyyy</b> — full year;</dd>
+<dd><b>h</b> — hour (0-23);</dd>
+<dd><b>hh</b> — hour (00-23);</dd>
+<dd><b>m</b> — minutes (0-59);</dd>
+<dd><b>mm</b> — minutes (00-59);</dd>
+<dd><b>s</b> — seconds (0-59);</dd>
+<dd><b>ss</b> — seconds (00-59);</dd>
+<dd><b>AP,ap</b> — to display AM/PM or am/pm. </dd></dl></dd></dl></dd></dl>
+</td></tr>
+<tr>
+<td> confirm </td>
+<td> Confirm </td>
+<td> 24 </td>
+<td> Enable the confirm mode.
+</td></tr>
+<tr>
+<td> font </td>
+<td> Font </td>
+<td> 25 </td>
+<td> Font name form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>", where:
+<ul><li> "family" — font family, for spaces use symbol '_', like: "Arial", "Courier", "Times_New_Roman";</li>
+<li> "size" — font size in pixels;</li>
+<li> "bold" — font bold (0 or 1);</li>
+<li> "italic" — font italic (0 or 1);</li>
+<li> "underline" — font underlined (0 or 1);</li>
+<li> "strike" — font struck (0 or 1).<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "Arial 10 1 0 0 0" — Arial font size 10 pixels and bold. </li></ul>
+</td></tr>
+<tr>
+<td colspan="4"> <i>Text edit:</i>
+</td></tr>
+<tr>
+<td> value </td>
+<td> Value </td>
+<td> 21 </td>
+<td> The contents of the editor.
+</td></tr>
+<tr>
+<td> wordWrap </td>
+<td> Word wrap </td>
+<td> 22 </td>
+<td> Automatic division of text by the words.
+</td></tr>
+<tr>
+<td> confirm </td>
+<td> Confirm </td>
+<td> 24 </td>
+<td> Enable confirm mode.
+</td></tr>
+<tr>
+<td> font </td>
+<td> Font </td>
+<td> 25 </td>
+<td> Font name form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (details above).
+</td></tr>
+<tr>
+<td colspan="4"> <i>Check box:</i>
+</td></tr>
+<tr>
+<td> name </td>
+<td> Name </td>
+<td> 26 </td>
+<td> Name/label of the checkbox.
+</td></tr>
+<tr>
+<td> value </td>
+<td> Value </td>
+<td> 21 </td>
+<td> Value of the checkbox.
+</td></tr>
+<tr>
+<td> font </td>
+<td> Font </td>
+<td> 25 </td>
+<td> Font name form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (details above).
+</td></tr>
+<tr>
+<td colspan="4"> <i>Button:</i>
+</td></tr>
+<tr>
+<td> name </td>
+<td> Name </td>
+<td> 26 </td>
+<td> Name, the inscription on the button. Allowed symbols '\n' for multiple line names.
+</td></tr>
+<tr>
+<td> value </td>
+<td> Value </td>
+<td> 21 </td>
+<td> The value, different for modes:
+<ul><li> "Standard" — repeating parameters of events on holding "<b>{delay}-{interval}</b>", time in milliseconds;</li>
+<li> "Checkable" — toggle value;</li>
+<li> "Menu" — addresses of menu elements list like "<b>/grp1/grp2/item1</b>";</li>
+<li> "Load" — description line "{FilesTemplate}|{Header}|{FileByDefault}" and loaded file content. Files template like "Images (*.png *.xpm *.jpg);;CSV-file (*.csv)".</li>
+<li> "Save" — description line "{FilesTemplate}|{Header}|{FileByDefault}" and saved file content. Files template like before. </li></ul>
+</td></tr>
+<tr>
+<td> img </td>
+<td> Image </td>
+<td> 22 </td>
+<td> The image on the button. Image name in form "<b>[{src}:]{name}</b>", where:
+<ul><li> "src" — the image source:
+<ul><li> <i>file</i> — direct from local file by the path;</li>
+<li> <i>res</i> — from the DB mime resources table.</li></ul></li>
+<li> "name" — the file path or the resource mime Id.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "res:backLogo" — from the DB mime resources table for Id "backLogo";</li>
+<li> "backLogo" — like previous;</li>
+<li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png". </li></ul>
+</td></tr>
+<tr>
+<td> color </td>
+<td> Color </td>
+<td> 23 </td>
+<td> Color of the button. Color name form "<b>{color}[-{alpha}]</b>", where:
+<ul><li> "color" — the standard color name or digital view of three hexadecimal digit's number form "#RRGGBB";</li>
+<li> "alpha" — the alpha channel level [0...255].<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "red" — solid red color;</li>
+<li> "#FF0000" — solid red color by the digital code;</li>
+<li> "red-127" — half transparent red color. </li></ul>
+</td></tr>
+<tr>
+<td> colorText </td>
+<td> Color:text </td>
+<td> 27 </td>
+<td> The color of the text. (details above)
+</td></tr>
+<tr>
+<td> mode </td>
+<td> Mode </td>
+<td> 24 </td>
+<td> The button operation mode:
+<ul><li> "Standard" — normal button which allow events repeat on it hold (the parameters into "value");</li>
+<li> "Checkable" — fixed button (values into "value");</li>
+<li> "Menu" — open menu on press (items list into "value");</li>
+<li> "Load" — provides user-space small files loading through the visual interface; on the mode the button press will open selection file dialog for loading and the file content next saving to the attribute "value";</li>
+<li> "Save" — provides user-space small files saving through the visual interface; on the file content writing to "value" attribute for user will open selection/set file dialog and next saving the attribute "value" content to the file and next the attribute "value" will set clean. </li></ul>
+</td></tr>
+<tr>
+<td> font </td>
+<td> Font </td>
+<td> 25 </td>
+<td> Font name form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (details above).
+</td></tr>
+<tr>
+<td colspan="4"> <i>List:</i>
+</td></tr>
+<tr>
+<td> value </td>
+<td> Value </td>
+<td> 21 </td>
+<td> Current value of the list.
+</td></tr>
+<tr>
+<td> items </td>
+<td> Items </td>
+<td> 22 </td>
+<td> The entries of the list.
+</td></tr>
+<tr>
+<td> font </td>
+<td> Font </td>
+<td> 25 </td>
+<td> Font name form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (details above).
+</td></tr>
+<tr>
+<td> mult </td>
+<td> Multiple selection </td>
+<td> 23 </td>
+<td> Allow for multiple entries selection of the list.
+</td></tr>
+<tr>
+<td colspan="4"> <i>Combo box, Tree:</i>
+</td></tr>
+<tr>
+<td> value </td>
+<td> Value </td>
+<td> 21 </td>
+<td> Current value of the list.
+</td></tr>
+<tr>
+<td> items </td>
+<td> Items </td>
+<td> 22 </td>
+<td> The entries of the list or hierarchical items list of tree in path "<b>/{DIR}/{DIR}/{ITEM}</b>".
+</td></tr>
+<tr>
+<td> font </td>
+<td> Font </td>
+<td> 25 </td>
+<td> Font name form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (details above).
+</td></tr>
+<tr>
+<td colspan="4"> <i>Table:</i>
+</td></tr>
+<tr>
+<td> set </td>
+<td> Setting value </td>
+<td> 23 </td>
+<td> The value of edition of a cell of the table which address into the event "<b>ws_TableEdit_{colN}_{rowN}</b>".
+</td></tr>
+<tr>
+<td> value </td>
+<td> Value </td>
+<td> 21 </td>
+<td> Address of the selected item. It changing follows by the signal "<b>ws_TableChangeSel</b>". The address format depends from the table's selection mode:
+<ul><li> "Cell" — the cell address in format "<b>{row}:{col}</b>".</li>
+<li> "Row", "Column" — the row-column number or the row-column key's cell content, which sets by the attribute "keyID". </li></ul>
+</td></tr>
+<tr>
+<td> items </td>
+<td> Elements </td>
+<td> 22 </td>
+<td>
+<p>The table structure and content in XML view:
+</p>
+<pre style="white-space: pre-wrap;">
+&lt;tbl&gt;
+&lt;h&gt;&lt;s&gt;{Header1}&lt;/s&gt;&lt;s&gt;{Header2}&lt;/s&gt;&lt;/h&gt;
+&lt;r&gt;&lt;s&gt;{Row1Column1String}&lt;/s&gt;&lt;i&gt;{Row1Column1Integer}&lt;/i&gt;&lt;/r&gt;
+&lt;r&gt;&lt;b&gt;{Row2Column1Logical}&lt;/b&gt;&lt;r&gt;{Row2Column2Real}&lt;/r&gt;&lt;/r&gt;
+&lt;/tbl&gt;</pre>
+<p>The tags:
+</p>
+<dl><dd>"tbl" — Table, the properties at all:
+<ul><li> "sel" — the selection mode of the table items: "row" — by rows, "col" — by columns, "cell" — by cells (by default);</li>
+<li> "keyID" — the key's row-column number, for the selection value get;</li>
+<li> "colsWdthFit" — fit the columns (which size unfixed) size to fill for full the table width;</li>
+<li> "hHdrVis", "vHdrVis" — horizontal, vertical header visibility set;</li>
+<li> "sortEn" — direct sorting by columns enable.</li></ul></dd>
+<dd>"h" — The headers size, allowed attributes about cell-tag of the header, for the column as a whole:
+<ul><li> "width" — the column width, in pixels or percents (10%);</li>
+<li> "edit" — allowing to the cells of the row edition (0 or 1), by default — no (0);</li>
+<li> "color" — the column color as a whole into the color name or code;</li>
+<li> "colorText" — the column's text color as a whole into the color name or code;</li>
+<li> "font" — the column's text font in typical OpenSCADA's string;</li>
+<li> "sort" — sorting by the column [0 - Descending; 1 - Ascending].</li></ul></dd>
+<dd>"r" — the row of values, allowed attributes:
+<ul><li> "color" — the row color as a whole into the color name or code;</li>
+<li> "colorText" — the row's text color as a whole into the color name or code;</li>
+<li> "font" — the row's text font in typical OpenSCADA's string.</li></ul></dd>
+<dd>"s", "i", "r", "b" — the data type's cells "String", "Integer", "Real" and "Logical". Allowed attributes:
+<ul><li> "color" — the cell's background color;</li>
+<li> "colorText" — the cell's text color into the color name or code;</li>
+<li> "font" — the cell's text font in typical OpenSCADA's string;</li>
+<li> "img" — the cell's image into form "<b>[{src}:]{name}</b>", the details above;</li>
+<li> "edit" — allowing to the cell of the row edition (0 or 1), by default — no (0). </li></ul></dd></dl>
+</td></tr>
+<tr>
+<td> font </td>
+<td> Font </td>
+<td> 25 </td>
+<td> Font name form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (the details above).
+</td></tr>
+<tr>
+<td colspan="4"> <i>Slider and Scroll Bar:</i>
+</td></tr>
+<tr>
+<td> value </td>
+<td> Value </td>
+<td> 21 </td>
+<td> The slider position.
+</td></tr>
+<tr>
+<td> cfg </td>
+<td> Configuration </td>
+<td> 22 </td>
+<td> Configuration of the slider in the format: "<b>{VertOrient}:{Min}:{Max}:{SinglStep}:{PageStep}</b>".<br />
+<p>Where:
+</p>
+<ul><li> "VertOrient" — sign (0 or 1) of a vertical orientation, the default is the horizontal orientation;</li>
+<li> "Min" — minimum value;</li>
+<li> "Max" — maximum value;</li>
+<li> "SinglStep" — the size of a single step;</li>
+<li> "PageStep" — the size of a page step. </li></ul>
+</td></tr></table>
+<h4><span class="mw-headline" id="Text_element_.28Text.29"><span class="mw-headline-number">3.9.3</span> <span id="Text" title="#Text">Text element (Text)</span></span></h4>
+<p>This primitive is designed to display the plain text used as labels, and different signatures. With the reason of creating a simple frequent decorations the primitive must support the surrounding of the text by frame.
+</p><p><b>Table.</b> The list of additional properties/attributes of the primitive "Text"
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Number </th>
+<th> Value
+</th></tr>
+<tr>
+<td> backColor </td>
+<td> Background:color </td>
+<td> 20 </td>
+<td> Background color. Color name in form "<b>{color}[-{alpha}]</b>", where:
+<ul><li> "color" — standard color name or digital view of three hexadecimal digit's number form "#RRGGBB";</li>
+<li> "alpha" — alpha channel level [0...255], where 0 - is full transparent.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "red" — solid red color;</li>
+<li> "#FF0000" — solid red color by the digital code;</li>
+<li> "red-127" — half transparent red color. </li></ul>
+</td></tr>
+<tr>
+<td> backImg </td>
+<td> Background:image </td>
+<td> 21 </td>
+<td> Background image. The image name in form "<b>[{src}:]{name}</b>", where:
+<ul><li> "src" — the image source:
+<ul><li> <i>file</i> — direct from local file by the path;</li>
+<li> <i>res</i> — from the DB mime resources table.</li></ul></li>
+<li> "name" — the file path or the resource mime Id.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "res:backLogo" — from DB mime resources table for Id "backLogo";</li>
+<li> "backLogo" — like previous;</li>
+<li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png". </li></ul>
+</td></tr>
+<tr>
+<td> bordWidth </td>
+<td> Border:width </td>
+<td> 22 </td>
+<td> Border width.
+</td></tr>
+<tr>
+<td> bordColor </td>
+<td> Border:color </td>
+<td> 23 </td>
+<td> Border color (detailed in attribute 20).
+</td></tr>
+<tr>
+<td> bordStyle </td>
+<td> Border:style </td>
+<td> 24 </td>
+<td> Border style: "None", "Dotted", "Dashed", "Solid", "Double", "Groove", "Ridge", "Inset", "Outset".
+</td></tr>
+<tr>
+<td> font </td>
+<td> Font </td>
+<td> 25 </td>
+<td> Font name form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>", where:
+<ul><li> "family" — font family, for spaces use symbol '_', like: "Arial", "Courier", "Times_New_Roman";</li>
+<li> "size" — font size in pixels;</li>
+<li> "bold" — font bold (0 or 1);</li>
+<li> "italic" — font italic (0 or 1);</li>
+<li> "underline" — font underlined (0 or 1);</li>
+<li> "strike" — font struck (0 or 1).<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "Arial 10 1 0 0 0" — Arial font size 10 pixels and bold. </li></ul>
+</td></tr>
+<tr>
+<td> color </td>
+<td> Color </td>
+<td> 26 </td>
+<td> Text color (detailed in attribute 20).
+</td></tr>
+<tr>
+<td> orient </td>
+<td> Orientation angle </td>
+<td> 27 </td>
+<td> Orientation of text, rotation on angle.
+</td></tr>
+<tr>
+<td> wordWrap </td>
+<td> Word wrap </td>
+<td> 28 </td>
+<td> Automatic division of text by words.
+</td></tr>
+<tr>
+<td> alignment </td>
+<td> Alignment </td>
+<td> 29 </td>
+<td> Alignment of the text: "Top left", "Top right", "Top center", "Top justify", "Bottom left", "Bottom right", "Bottom justify", "V center left", "V center right", "Center", "V center justify".
+</td></tr>
+<tr>
+<td> text </td>
+<td> Text </td>
+<td> 30 </td>
+<td> Text value. Use "%{x}" for argument "x" (from 1) value insert to.
+</td></tr>
+<tr>
+<td> numbArg </td>
+<td> Arguments number </td>
+<td> 40 </td>
+<td> Arguments number.
+</td></tr>
+<tr>
+<td colspan="4"> <i>Attributes of the arguments</i>
+</td></tr>
+<tr>
+<td> arg{x}val </td>
+<td> Argument {x}:value </td>
+<td> 50+10*x </td>
+<td> Argument <i>x</i> value.
+</td></tr>
+<tr>
+<td> arg{x}tp </td>
+<td> Argument {x}:type </td>
+<td> 50+10*x+1 </td>
+<td> Argument <i>x</i> type: "Integer", "Real", "String".
+</td></tr>
+<tr>
+<td> arg{x}cfg </td>
+<td> Argument {x}:config </td>
+<td> 50+10*x+2 </td>
+<td> Argument <i>x</i> configuration:
+<ul><li> "String": <b>{len}</b> — string length;</li>
+<li> "Real": <b>{wdth};{form};{prec}</b> — value width, the form of ('g', 'e', 'f') and the precision;</li>
+<li> "Integer": <b>{len}</b> — value length. </li></ul>
+</td></tr></table>
+<h4><span class="mw-headline" id="Element_of_visualization_of_media_materials_.28Media.29"><span class="mw-headline-number">3.9.4</span> <span id="Media" title="#Media">Element of visualization of media materials (Media)</span></span></h4>
+<p>This primitive is designed to play different media materials, ranging from simple images to the full audio and video streams.
+</p><p><b>Table.</b> A set of additional properties/attributes of primitive "Media"
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Number </th>
+<th> Value
+</th></tr>
+<tr>
+<td> backColor </td>
+<td> Background:color </td>
+<td> 20 </td>
+<td> Background color. Color name in form "<b>{color}[-{alpha}]</b>", where:
+<ul><li> "color" — standard color name or digital view of three hexadecimal digit's number form "#RRGGBB";</li>
+<li> "alpha" — alpha channel level [0...255], where 0 - is full transparent.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "red" — solid red color;</li>
+<li> "#FF0000" — solid red color by the digital code;</li>
+<li> "red-127" — half transparent red color. </li></ul>
+</td></tr>
+<tr>
+<td> backImg </td>
+<td> Background:image </td>
+<td> 21 </td>
+<td> Background image. The image name in form "<b>[{src}:]{name}</b>", where:
+<ul><li> "src" — the image source:
+<ul><li> <i>file</i> — direct from local file by the path;</li>
+<li> <i>res</i> — from the DB mime resources table.</li></ul></li>
+<li> "name" — the file path or the resource mime Id.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "res:backLogo" — from DB mime resources table for Id "backLogo";</li>
+<li> "backLogo" — like previous;</li>
+<li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png". </li></ul>
+</td></tr>
+<tr>
+<td> bordWidth </td>
+<td> Border:width </td>
+<td> 22 </td>
+<td> Border width.
+</td></tr>
+<tr>
+<td> bordColor </td>
+<td> Border:color </td>
+<td> 23 </td>
+<td> Border color (detailed in attribute 20).
+</td></tr>
+<tr>
+<td> bordStyle </td>
+<td> Border:style </td>
+<td> 24 </td>
+<td> Border style: "None", "Dotted", "Dashed", "Solid", "Double", "Groove", "Ridge", "Inset", "Outset".
+</td></tr>
+<tr>
+<td> src </td>
+<td> Source </td>
+<td> 25 </td>
+<td> Media source name in form "<b>[{src}:]{name}</b>", where:
+<ul><li> "src" — source:
+<ul><li> <i>file</i> — direct from local (visualizer or engine) file by the path;</li>
+<li> <i>res</i> — from the DB mime resources table;</li>
+<li> stream — Stream URL for the video and the audio play.</li></ul></li>
+<li> "name" — the file path or the resource mime Id.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "res:workMedia" — from DB mime resources table for Id "workMedia";</li>
+<li> "workMedia" — like previous;</li>
+<li> "file:/var/tmp/workMedia.mng" — from local file by path "/var/tmp/workMedia.mng";</li>
+<li> "stream:http://localhost.localhost:5050" — video and audio stream play from URL. </li></ul>
+</td></tr>
+<tr>
+<td> type </td>
+<td> Type </td>
+<td> 27 </td>
+<td> Media type variant:
+<ul><li> "Image" — raster or vector(can not support) image, like: PNG, JPEG, GIF, SVG;</li>
+<li> "Animation" — simple animation image, like: GIF, MNG;</li>
+<li> "Full video" — full video, audio or stream, like: OGG, OGM, AVI, MKV, MPG, MP3, MP4. </li></ul>
+</td></tr>
+<tr>
+<td> areas </td>
+<td> Map areas </td>
+<td> 28 </td>
+<td> Number of active areas.
+</td></tr>
+<tr>
+<td colspan="4"> <i>The attributes of the image (Image)</i>
+</td></tr>
+<tr>
+<td> fit </td>
+<td> Fit to the widget size </td>
+<td> 26 </td>
+<td> Sign "Coordinate the contents with the size of the widget".
+</td></tr>
+<tr>
+<td colspan="4"> <i>The attributes of the video (Movie)</i>
+</td></tr>
+<tr>
+<td> fit </td>
+<td> Fit to the widget size </td>
+<td> 26 </td>
+<td> Sign "Coordinate the contents with the size of the widget".
+</td></tr>
+<tr>
+<td> speed </td>
+<td> Play speed </td>
+<td> 29 </td>
+<td> The speed of playback, as a percentage from the original speed. If the value is less than 1%, the playback stops.
+</td></tr>
+<tr>
+<td colspan="4"> <i>The attributes of the full video (Full video)</i>
+</td></tr>
+<tr>
+<td> play </td>
+<td> Play </td>
+<td> 29 </td>
+<td> Video/audio - "Play".
+</td></tr>
+<tr>
+<td> roll </td>
+<td> Roll play </td>
+<td> 30 </td>
+<td> Roll play on the finish.
+</td></tr>
+<tr>
+<td> pause </td>
+<td> Pause </td>
+<td> 31 </td>
+<td> Playing pause.
+</td></tr>
+<tr>
+<td> size </td>
+<td> Size </td>
+<td> 32 </td>
+<td> Total video size (in milliseconds).
+</td></tr>
+<tr>
+<td> seek </td>
+<td> Seek </td>
+<td> 33 </td>
+<td> Seek video playing (in milliseconds).
+</td></tr>
+<tr>
+<td> volume </td>
+<td> Volume </td>
+<td> 34 </td>
+<td> Sound volume [0...100].
+</td></tr>
+<tr>
+<td colspan="4"> <i>Active areas</i>
+</td></tr>
+<tr>
+<td> area{x}shp </td>
+<td> Area {x}:shape </td>
+<td> 40+3*x </td>
+<td> Type of the area <i>x</i>: "Rect", "Poly", "Circle".
+</td></tr>
+<tr>
+<td> area{x}coord </td>
+<td> Area {x}:coordinates </td>
+<td> 40+3*x+1 </td>
+<td> The coordinates of area <i>x</i>, are separated by commas: "x1,y1,x2,y2,xN,yN"
+</td></tr>
+<tr>
+<td> area{x}title </td>
+<td> Area {x}:title </td>
+<td> 40+3*x+2 </td>
+<td> Title of the area <i>x</i>.
+</td></tr></table>
+<h4><span class="mw-headline" id="Element_of_constructing_diagrams.2Ftrends_.28Diagram.29"><span class="mw-headline-number">3.9.5</span> <span id="Diagram" title="#Diagram">Element of constructing diagrams/trends (Diagram)</span></span></h4>
+<p>This primitive targeted to construct various diagrams, including graphs/trends showing ongoing process and the archive data. Following types of the diagrams are implemented:
+</p>
+<ul><li> "Graph" — builds a graph of the values of a parameter in time</li>
+<li> "Spectrum" — builds the frequency spectrum of values of a parameter. Window of the data of frequency spectrum is formed on the basis of the size of the widget horizontally, in pixels, and the available data of the parameters imposed on the horizontal grid size. In this regard, the minimum frequency is determined by the value of the attribute "tSize" — "<b>1/tSize</b>", and maximum frequency of allocated frequencies is determined by half-width of the graph in pixels multiplied by the minimum frequency "<b>width/(2*tSize)</b>".</li>
+<li> "XY" — builds the two-dimensional graph of values of a parameter, by pairs to one graphic, where paired by axis Y (0,2,4...) and unpaired by axis X (1,3,5...). Sets time of the data range uses for values of the parameter obtain by axis X and Y, with follow sorting by the axis X and the imaging.</li></ul>
+<p>For all the diagram types possible as the data source sets:
+</p>
+<ul><li> parameter of the subsystem "DAQ";</li>
+<li> values archive;</li>
+<li> direct data block from user.</li></ul>
+<p>Supported tracing of the current values and the values from the archive, and also the possibility of building the graphs of the parameters which have no archive of values, by the current values accumulation into the diagram buffer and only at the diagram active visibility moment.
+</p><p>The process of access to the archive data is optimized, by means of an intermediate buffer for the display, as well as the package of traffic data in the query, by way the data lead to quality enough for display.
+</p><p><b>Table.</b> A list of additional properties/attributes of the primitive "Diagram"
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Number </th>
+<th> Value
+</th></tr>
+<tr>
+<td> backColor </td>
+<td> Background:color </td>
+<td> 20 </td>
+<td> Background color. Color name in form "<b>{color}[-{alpha}]</b>", where:
+<ul><li> "color" — standard color name or digital view of three hexadecimal digit's number form "#RRGGBB";</li>
+<li> "alpha" — alpha channel level [0...255], where 0 - is full transparent.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "red" — solid red color;</li>
+<li> "#FF0000" — solid red color by the digital code;</li>
+<li> "red-127" — half transparent red color. </li></ul>
+</td></tr>
+<tr>
+<td> backImg </td>
+<td> Background:image </td>
+<td> 21 </td>
+<td> Background image. The image name in form "<b>[{src}:]{name}</b>", where:
+<ul><li> "src" — the image source:
+<ul><li> <i>file</i> — direct from local file by the path;</li>
+<li> <i>res</i> — from the DB mime resources table.</li></ul></li>
+<li> "name" — the file path or the resource mime Id.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "res:backLogo" — from DB mime resources table for Id "backLogo";</li>
+<li> "backLogo" — like previous;</li>
+<li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png". </li></ul>
+</td></tr>
+<tr>
+<td> bordWidth </td>
+<td> Border:width </td>
+<td> 22 </td>
+<td> Border width.
+</td></tr>
+<tr>
+<td> bordColor </td>
+<td> Border:color </td>
+<td> 23 </td>
+<td> Border color (detailed in attribute 20).
+</td></tr>
+<tr>
+<td> bordStyle </td>
+<td> Border:style </td>
+<td> 24 </td>
+<td> Border style: "None", "Dotted", "Dashed", "Solid", "Double", "Groove", "Ridge", "Inset", "Outset".
+</td></tr>
+<tr>
+<td> trcPer </td>
+<td> Tracing period (s) </td>
+<td> 25 </td>
+<td> Mode and frequency of the tracing.
+</td></tr>
+<tr>
+<td> type </td>
+<td> Type </td>
+<td> 26 </td>
+<td> Diagram type: "Trend", "Spectrum", "XY".
+</td></tr>
+<tr>
+<td colspan="4"> <i>General attributes for all the types</i>
+</td></tr>
+<tr>
+<td> tSek </td>
+<td> Time:seconds </td>
+<td> 27 </td>
+<td> Current time, seconds.
+</td></tr>
+<tr>
+<td> tUSek </td>
+<td> Time:microseconds </td>
+<td> 28 </td>
+<td> Current time, microseconds.
+</td></tr>
+<tr>
+<td> tSize </td>
+<td> Size, seconds </td>
+<td> 29 </td>
+<td> Size of the trend, seconds.
+</td></tr>
+<tr>
+<td> curSek </td>
+<td> Cursor:seconds </td>
+<td> 30 </td>
+<td> Cursor position, seconds.
+</td></tr>
+<tr>
+<td> curUSek </td>
+<td> Cursor:usek </td>
+<td> 31 </td>
+<td> Cursor position, microseconds.
+</td></tr>
+<tr>
+<td> curColor </td>
+<td> Cursor:color </td>
+<td> 32 </td>
+<td> Cursor color.
+</td></tr>
+<tr>
+<td> sclColor </td>
+<td> Scale:color </td>
+<td> 33 </td>
+<td> Color of the scale/grid (detailed in attribute 20).
+</td></tr>
+<tr>
+<td> sclHor </td>
+<td> Scale:horizontal </td>
+<td> 34 </td>
+<td> Horizontal mode of the scale/grid: "No draw", "Grid", "Markers", "Grid and markers", "Grid (log)", "Markers (log)", "Grid and markers (log)".
+</td></tr>
+<tr>
+<td> sclHorScl </td>
+<td> Scale:horizontal scale (%) </td>
+<td> 44 </td>
+<td> Graphics's horizontal scale in percents, excluding for type "XY".
+</td></tr>
+<tr>
+<td> sclHorSclOff </td>
+<td> Scale:horizontal scale offset (%) </td>
+<td> 45 </td>
+<td> Offset of graphics's horizontal scale in percents, excluding for type "XY".
+</td></tr>
+<tr>
+<td> sclVer </td>
+<td> Scale:vertical </td>
+<td> 35 </td>
+<td> Vertical mode of the scale/grid: "No draw", "Grid", "Markers", "Grid and markers", "Grid (log)", "Markers (log)", "Grid and markers (log)".
+</td></tr>
+<tr>
+<td> sclVerScl </td>
+<td> Scale:vertical scale (%) </td>
+<td> 40 </td>
+<td> Graphics's vertical scale in percents.
+</td></tr>
+<tr>
+<td> sclVerSclOff </td>
+<td> Scale:vertical scale offset (%) </td>
+<td> 41 </td>
+<td> Offset of graphics's vertical scale in percents.
+</td></tr>
+<tr>
+<td> sclMarkColor </td>
+<td> Scale:Markers:color </td>
+<td> 36 </td>
+<td> Color of the markers of the scale/grid (detailed in attribute 20).
+</td></tr>
+<tr>
+<td> sclMarkFont </td>
+<td> Scale:Markers:font </td>
+<td> 37 </td>
+<td> Font of the markers of scale/grid. Font name form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>", where:
+<ul><li> "family" — font family, for spaces use symbol '_', like: "Arial", "Courier", "Times_New_Roman";</li>
+<li> "size" — font size in pixels;</li>
+<li> "bold" — font bold (0 or 1);</li>
+<li> "italic" — font italic (0 or 1);</li>
+<li> "underline" — font underlined (0 or 1);</li>
+<li> "strike" — font struck (0 or 1).<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "Arial 10 1 0 0 0" — Arial font size 10 pixels and bold. </li></ul>
+</td></tr>
+<tr>
+<td> valArch </td>
+<td> Value archiver </td>
+<td> 38 </td>
+<td> Value archiver in form "<b>{ArchMod}.{ArchivatorId}</b>".
+</td></tr>
+<tr>
+<td> valsForPix </td>
+<td> Values for pixel </td>
+<td> 42 </td>
+<td> The number of values per pixel. Increase to enhance the accuracy of export at large time intervals.
+</td></tr>
+<tr>
+<td> parNum </td>
+<td> Parameters number </td>
+<td> 39 </td>
+<td> The number of parameters that can be displayed on the one trend.
+</td></tr>
+<tr>
+<td> <i>Attributes for type: "Graph"</i>
+</td></tr>
+<tr>
+<td> sclHorPer </td>
+<td> Scale:horizontal grid size, seconds </td>
+<td> 43 </td>
+<td> Fixed a grid period of horizontal scale, disable automatic calculation for the grid period. Activated if the periods number into overall size more for two and one period size more for 15 pixels.
+</td></tr>
+<tr>
+<td colspan="4"> <i><u>Individual attributes of the parameters of trend/graph/XY</u></i>
+</td></tr>
+<tr>
+<td> prm{X}addr </td>
+<td> Parameter {X}&nbsp;:address </td>
+<td> 50+10*{X} </td>
+<td> Full address to DAQ attribute of a parameter <i>X</i> or to an archive.<br />
+<p>Also supported direct data set by the prefixes:
+</p>
+<ul><li> "<i>data:{XMLNodeData}</i>" — drawing from the direct set data;</li>
+<li> "<i>line:{value}</i>" — drawing the horizontal line by the value, no sense have for type "XY".<br /></li></ul>
+<p>Example:
+</p>
+<ul><li> "/DAQ/System/AutoDA/MemInfo/use" — address to attribute "use" of parameter "MemInfo" of controller "AutoDA" of DAQ module "System";</li>
+<li> "/Archive/va_CPULoad_load" — address to archive "CPULoad_load". </li>
+<li> "data:&lt;d s="1" aprox="1" tm="1369465209" tm_grnd="1369465200" per="1"&gt;</li></ul>
+<dl><dd>0 3.14</dd>
+<dd>1 3.141</dd>
+<dd>5 3.1415&lt;/d&gt;" — data for 10 seconds and period 1 second from "25.05.2013 10:00:00"; at pass "tm" and "tm_grnd" it will sets values from the diagram range, and also by set attribute "s" it will allows the time set into seconds; "aprox" — approximate the throughout from one point to other instead the substitution previous value into all the periodical points (typically it is from packing);</dd></dl>
+<ul><li> "line:3.14159265" — horizontal line into value "3.14159265". </li></ul>
+</td></tr>
+<tr>
+<td> prm{X}bordL </td>
+<td> Parametr {X}:view border:lower </td>
+<td> 50+10*{X}+1 </td>
+<td> Lower limit of the parameter <i>X</i>.
+</td></tr>
+<tr>
+<td> prm{X}bordU </td>
+<td> Parametr {X}:view border:upper </td>
+<td> 50+10*{X}+2 </td>
+<td> Upper limit of the parameter <i>X</i>.
+</td></tr>
+<tr>
+<td> prm{X}color </td>
+<td> Parametr {X}:color </td>
+<td> 50+10*{X}+3 </td>
+<td> Color for display of the trend of the parameter <i>X</i> (detailed in attribute 20).
+</td></tr>
+<tr>
+<td> prm{X}width </td>
+<td> Parametr {X}:width </td>
+<td> 50+10*{X}+6 </td>
+<td> Line width for display of the trend of the parameter <i>X</i>, in pixels.
+</td></tr>
+<tr>
+<td> prm{X}scl </td>
+<td> Parametr {X}:scale </td>
+<td> 50+10*{X}+5 </td>
+<td> Separated vertical scale mode of the parameter <i>X</i>: "Global", "Markers", "Grid and markers", "Markers (log)", "Grid and markers (log)".
+</td></tr>
+<tr>
+<td> prm{X}val </td>
+<td> Parametr {X}:value </td>
+<td> 50+10*{X}+4 </td>
+<td> Value of the parameter <i>X</i> under the cursor.
+</td></tr>
+<tr>
+<td> prm{X}prop </td>
+<td> Parametr {X}:properties </td>
+<td> 50+10*{X}+7 </td>
+<td> Real archive properties in form "<b>{BegArh}:{EndArh}:{DataPeriod}</b>", where "BegArh", "EndArh", "DataPeriod" — begin, end and period of archive's data in seconds, real up to microseconds (1e-6).
+</td></tr></table>
+<h4><span class="mw-headline" id="Element_of_building_the_protocols_based_on_the_archives_of_messages_.28Protocol.29"><span class="mw-headline-number">3.9.6</span> <span id="Protocol" title="#Protocol">Element of building the protocols based on the archives of messages (Protocol)</span></span></h4>
+<p>This primitive is designed to visualize the data of the archive of messages through the formation of protocols with different ways of visualization, starting from a static scanning view and finishing with dynamic tracing of protocol of message.
+</p><p><b>Table.</b> A list of additional properties/attributes of the primitive "Protocol"
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Number </th>
+<th> Value
+</th></tr>
+<tr>
+<td> backColor </td>
+<td> Background:color </td>
+<td> 20 </td>
+<td> Background color. Color name in form "<b>{color}[-{alpha}]</b>", where:
+<ul><li> "color" — standard color name or digital view of three hexadecimal digit's number form "#RRGGBB";</li>
+<li> "alpha" — alpha channel level [0...255], where 0 - is full transparent.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "red" — solid red color;</li>
+<li> "#FF0000" — solid red color by the digital code;</li>
+<li> "red-127" — half transparent red color. </li></ul>
+</td></tr>
+<tr>
+<td> backImg </td>
+<td> Background:image </td>
+<td> 21 </td>
+<td> Background image. The image name in form "<b>[{src}:]{name}</b>", where:
+<ul><li> "src" — the image source:
+<ul><li> <i>file</i> — direct from local file by the path;</li>
+<li> <i>res</i> — from the DB mime resources table.</li></ul></li>
+<li> "name" — the file path or the resource mime Id.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "res:backLogo" — from DB mime resources table for Id "backLogo";</li>
+<li> "backLogo" — like previous;</li>
+<li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png". </li></ul>
+</td></tr>
+<tr>
+<td> font </td>
+<td> Font </td>
+<td> 22 </td>
+<td> Font of markers of scale/grid. Font name form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>", where:
+<ul><li> "family" — font family, for spaces use symbol '_', like: "Arial", "Courier", "Times_New_Roman";</li>
+<li> "size" — font size in pixels;</li>
+<li> "bold" — font bold (0 or 1);</li>
+<li> "italic" — font italic (0 or 1);</li>
+<li> "underline" — font underlined (0 or 1);</li>
+<li> "strike" — font struck (0 or 1).<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "Arial 10 1 0 0 0" — Arial font size 10 pixels and bold. </li></ul>
+</td></tr>
+<tr>
+<td> headVis </td>
+<td> Header visible </td>
+<td> 23 </td>
+<td> Show header for table or not.
+</td></tr>
+<tr>
+<td> time </td>
+<td> Time, seconds </td>
+<td> 24 </td>
+<td> Current time, seconds.
+</td></tr>
+<tr>
+<td> tSize </td>
+<td> Size, seconds </td>
+<td> 25 </td>
+<td> Query size, seconds. Set value to '0' for get all alarms, for "lev" &lt; 0.
+</td></tr>
+<tr>
+<td> trcPer </td>
+<td> Tracing period (s) </td>
+<td> 26 </td>
+<td> Mode and frequency of tracing.
+</td></tr>
+<tr>
+<td> arch </td>
+<td> Archivator </td>
+<td> 27 </td>
+<td> Messages archivator in form "<b>{ArchMod}.{ArchivatorId}</b>".
+</td></tr>
+<tr>
+<td> tmpl </td>
+<td> Template </td>
+<td> 28 </td>
+<td> Category template or regular expression "<b>/{re}/</b>". For template reserved special symbols:
+<ul><li> '*' — any multiply symbols group;</li>
+<li> '?' — any one symbol;</li>
+<li> '\\' — use for shield special symbols. </li></ul>
+</td></tr>
+<tr>
+<td> lev </td>
+<td> Level </td>
+<td> 29 </td>
+<td> The level of messages. Set value to &lt; 0 for get the current alarms.
+</td></tr>
+<tr>
+<td> viewOrd </td>
+<td> View order </td>
+<td> 30 </td>
+<td> View order: "By time", "By level", "By category", "By messages", "By time (reverse)", "By level (reverse)", "By category (reverse)", "By messages (reverse)".
+</td></tr>
+<tr>
+<td> col </td>
+<td> View columns </td>
+<td> 31 </td>
+<td> Visible and order columns list separated by symbol ';'. Supported columns:
+<ul><li> "pos" — row number;</li>
+<li> "tm" — date and time of the message;</li>
+<li> "utm" — microseconds part of the time of the message;</li>
+<li> "lev" — level of the message;</li>
+<li> "cat" — category of the message;</li>
+<li> "mess" — the message text. </li></ul>
+</td></tr>
+<tr>
+<td> itProp </td>
+<td> Item properties </td>
+<td> 32 </td>
+<td> Item's properties number.
+</td></tr>
+<tr>
+<td colspan="4"> <i><u>Individual attributes of the item's properties</u></i>
+</td></tr>
+<tr>
+<td> it{X}lev </td>
+<td> Item {X}:level </td>
+<td> 40+5*{X} </td>
+<td> Criterion: element's level <i>X</i>, more or equal for pointed.
+</td></tr>
+<tr>
+<td> it{X}tmpl </td>
+<td> Item {X}:template </td>
+<td> 40+5*{X}+1 </td>
+<td> Criterion: element's category template <i>X</i> (detailed in attribute 28).
+</td></tr>
+<tr>
+<td> it{X}fnt </td>
+<td> Item {X}:font </td>
+<td> 40+5*{X}+2 </td>
+<td> Element <i>X</i> font (detailed in attribute 22).
+</td></tr>
+<tr>
+<td> it{X}сolor </td>
+<td> Item {X}:color </td>
+<td> 40+5*{X}+3 </td>
+<td> Element <i>X</i> color (detailed in attribute 20).
+</td></tr></table>
+<h4><span class="mw-headline" id="Element_of_formation_of_documentation_.28Document.29"><span class="mw-headline-number">3.9.7</span> <span id="Document" title="#Document">Element of formation of documentation (Document)</span></span></h4>
+<p>The primitive is designed to creation report, operational and other documents based on templates of documents.
+</p><p><b>Table.</b> A list of additional properties/attributes of the primitive "Document".
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Number </th>
+<th> Value
+</th></tr>
+<tr>
+<td> style </td>
+<td> CSS </td>
+<td> 20 </td>
+<td> CSS rules in rows like "<b>body { background-color:#818181; }</b>".
+</td></tr>
+<tr>
+<td> tmpl </td>
+<td> Template </td>
+<td> 21 </td>
+<td> Document's template in XHTML, starts from tag "body" and include procedures parts:
+<pre style="white-space: pre-wrap;">
+&lt;body docProcLang="JavaLikeCalc.JavaScript"&gt;
+  &lt;h1&gt;Value&lt;?dp return wCod+1.314;?&gt;&lt;/h1&gt;
+&lt;/body&gt;</pre> 
+</td></tr>
+<tr>
+<td> doc </td>
+<td> Document </td>
+<td> 22 </td>
+<td> Final document in XHTML, starts from tag "body".
+</td></tr>
+<tr>
+<td> font </td>
+<td> Font </td>
+<td> 26 </td>
+<td> Basic font of the text. Font name form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>", where:
+<ul><li> "family" — font family, for spaces use symbol '_', like: "Arial", "Courier", "Times_New_Roman";</li>
+<li> "size" — font size in pixels;</li>
+<li> "bold" — font bold (0 or 1);</li>
+<li> "italic" — font italic (0 or 1);</li>
+<li> "underline" — font underlined (0 or 1);</li>
+<li> "strike" — font struck (0 or 1).<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "Arial 10 1 0 0 0" — Arial font size 10 pixels and bold. </li></ul>
+</td></tr>
+<tr>
+<td> bTime </td>
+<td> Time:begin </td>
+<td> 24 </td>
+<td> Start time of the document, seconds.
+</td></tr>
+<tr>
+<td> time </td>
+<td> Time:current </td>
+<td> 23 </td>
+<td> Time of the document generation, seconds. Write the time for the document generation from that point or zero for regeneration.
+</td></tr>
+<tr>
+<td> n </td>
+<td> Archive size </td>
+<td> 25 </td>
+<td> Number of documents or the depth of the archive.
+</td></tr>
+<tr>
+<td colspan="4"> <i>Attributes of the enabled archival mode</i>
+</td></tr>
+<tr>
+<td> aCur </td>
+<td> Archive:cursor:current </td>
+<td> - </td>
+<td> Position of the current document in the archive. Record of the value <i>&lt;0</i> produces the archiving of this document.
+</td></tr>
+<tr>
+<td> vCur </td>
+<td> Archive:cursor:view </td>
+<td> - </td>
+<td> Current visual document of the archive. Writing a value of <i>-1</i> — to select next document, <i>-2</i> — to select previous document.
+</td></tr>
+<tr>
+<td> aDoc </td>
+<td> Archive:current document </td>
+<td> - </td>
+<td> Current archive document in XHTML, starts from the tag "body".
+</td></tr>
+<tr>
+<td> aSize </td>
+<td> Archive:size </td>
+<td> - </td>
+<td> Real the archive document size.
+</td></tr></table>
+<p>Features of the primitive "Document":
+</p>
+<ul><li> Flexible formation of the structure of the document based on Hypertext Markup Language.</li>
+<li> Formation of the documents by a command or a plan into the archive with the subsequent viewing of the archive.</li>
+<li> Formation of the document in real-time mode, fully dynamic and based on the archives of the real-data for the specified time.</li>
+<li> Using the attributes of the widget to pass values and addresses to the archives of real-data in the document. Allows you to use the widget of document as the template for generating reports with other input data.</li></ul>
+<p>The basis of any document is XHTML-template. XHTML-template is the tag "body" of the WEB-page which contains the document's static in the standard XHTML 1.0 and elements of the executable instructions in one of the languages of the user programming of OpenSCADA in the form of  <b>&lt;?dp {procedure}&nbsp;?&gt;</b>. The resulting document is formed by the execution of procedures and insert of their result into the document.
+</p><p>The source for values of the executable instructions are the attributes of the widget of the primitive, as well as all the mechanisms of the user programming language. Attributes may be added by the user and they can be linked to the actual attributes or parameters or they can be autonomous, values of which will be formed in the script of the widget. In the case of linked attributes the values can be extracted from the history, archive.
+</p><p>Fig. 3.8.7.a shows a block diagram of the widget of the primitive "Document". According to this structure "Document" includes: XHTML-template, the resulting documents and the processing script. The data source for the script and for the resulting documents are the attributes of the widget.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:503px;"><a class="image" href="http://oscada.org/wiki/File:VCA_document.png"><img class="thumbimage" height="356" src="../files/VCA_document.png" width="501" /></a>  <div class="thumbcaption">Fig. 3.8.7.a The block diagram of the primitive "Document".</div></div></div></div>
+<p>It is provided the work of the widget in two modes: "Dynamic" and "Archive". The difference between archive mode is the availability of the archive of the specified depth and attributes which allow you to control the process of archiving and viewing of the document in the archive.
+</p><p>Generation of the document is always performed at the time of installation of the time attribute <i>time</i> relatively to the set start time of the document in the attribute <i>bTime</i>. With the archive turned off the resulting document is placed directly in the attribute <i>doc</i>. When the archive is turned on the resulting document is placed in the cell under the cursor, the attribute <i>aCur</i>, as well as in <i>doc</i> if the value of the archive cursor <i>aCur</i> and the cursor of visualized document <i>vCur</i> match. Attributes of the archival cursors provide several commands of values:
+</p>
+<ul><li> "aCur &lt; 0" — Moves the archiver cursor for the following position, thereby leaving the previous document in the archive and clearing the document under the cursor (at the circle archive short).</li>
+<li> "vCur == -1" — Select of the next document to be displayed, the selected document is copied to the attribute <i>doc</i>.</li>
+<li> "vCur==-2" — Select of the previous document to be displayed, the selected document is copied to the attribute <i>doc</i>.</li></ul>
+<p>As it was stated above dynamics of the document's template is defined by the inserts of executable instructions of the form "<b>&lt;?dp {procedure}&nbsp;?&gt;</b>". The procedures may use the same attributes of the widget and functions of the user programming interface of OpenSCADA. In addition to the attributes of the widget special attributes (Table 3.8.7.a) are reserved.
+</p><p><b>Table 3.8.7.a.</b> Special and reserved elements of the template.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Name </th>
+<th> Assignment
+</th></tr>
+<tr>
+<td colspan="2"> <i>Attributes</i>
+</td></tr>
+<tr>
+<td> rez </td>
+<td> Attribute of the results of the procedure execution, the contents of which is placed to the document tree.
+</td></tr>
+<tr>
+<td> lTime </td>
+<td> Last formation time. If the document is formed for the first time, <i>lTime</i> is equal to the <i>bTime</i>.
+</td></tr>
+<tr>
+<td> rTime </td>
+<td> Contains the time for the selected values in seconds, it is defined inside the tags with the attribute "docRept".
+</td></tr>
+<tr>
+<td> rTimeU </td>
+<td> Contains the time for the  selected values in microseconds, it is defined inside the tags with the attribute "docRept".
+</td></tr>
+<tr>
+<td> rPer </td>
+<td> Contains the periodicity of the selection of values (the attribute "docRept").
+</td></tr>
+<tr>
+<td> mTime, mTimeU, mLev, mCat, mVal </td>
+<td> It is defined inside the tags with an attribute "docAMess" when parsing messages of the messages' archive:
+<dl><dd><i>mTime</i> — message time;</dd>
+<dd><i>mTimeU</i> — message time, microseconds;</dd>
+<dd><i>mLev</i> — message level;</dd>
+<dd><i>mCat</i> — message category;</dd>
+<dd><i>mVal</i> — message value. </dd></dl>
+</td></tr>
+<tr>
+<td colspan="2"> <i>Special tags</i>
+</td></tr>
+<tr>
+<td colspan="2"> <i>Special attributes of the standard tags</i>
+</td></tr>
+<tr>
+<td> body.docProcLang </td>
+<td> Language of executable procedures of the document. By defaults it is "JavaLikeCalc.JavaScript".
+</td></tr>
+<tr>
+<td> *.docRept="1s" </td>
+<td> Tag with the specified attribute, while the formation it multiplies through the time offset in the attribute "rTime" to the value, specified in this attribute.
+</td></tr>
+<tr>
+<td> *.docAMess="1:PLC*" </td>
+<td> Indicates the necessity of the tag multiplication with an attribute of message from the archive of messages for the specified interval of time, in accordance with the level of "1" and template of request "PLC*" by the messages category. The template request may specify a regular expression in the form of "<b>/{re}/</b>". For this tag in the process of multiplication the following attributes: mTime, mTimeU, mLev, mCat and mVal are defined.
+</td></tr>
+<tr>
+<td> *.docAMessArchs="ArchMod0.Archivator0[;ArchModN.ArchivatorN]" </td>
+<td> The attribute "*.docAMess" appends by a list of archivators for messages reading.
+</td></tr>
+<tr>
+<td> *.docRevers="1" </td>
+<td> Points to invert of the order of multiplication, the last from the top.
+</td></tr>
+<tr>
+<td> *.docAppend="1" </td>
+<td> The sign of the necessity of addition of the procedure execution result in the tag of the procedure. Otherwise, the result of execution replaces the contents of the tag.
+</td></tr>
+<tr>
+<td> body.docTime </td>
+<td> Time of formation of the document. It is used to set the attribute <i>lTime</i> in the time of the next formation of the document. It is not set by the user!
+</td></tr>
+<tr>
+<td> table.export="1" </td>
+<td> Enable for selected table content allow for export to CSV-file and other table formats.
+</td></tr></table>
+<h4><span class="mw-headline" id="Container_.28Box.29"><span class="mw-headline-number">3.9.8</span> <span id="Box" title="#Box">Container (Box)</span></span></h4>
+<p>The primitive container is used to build composite widgets and/or the pages the user interface.
+</p><p><b>Table.</b> A list of additional properties/attributes of the primitive Box
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Number </th>
+<th> Value
+</th></tr>
+<tr>
+<td> pgOpenSrc </td>
+<td> Page:open source </td>
+<td> 3 </td>
+<td> Full address of the page, included inside of the container.
+</td></tr>
+<tr>
+<td> pgGrp </td>
+<td> Page:group </td>
+<td> 4 </td>
+<td> Group of the container of the pages.
+</td></tr>
+<tr>
+<td> backColor </td>
+<td> Background:color </td>
+<td> 20 </td>
+<td> Background color. Color name in form "<b>{color}[-{alpha}]</b>", where:
+<ul><li> "color" — standard color name or digital view of three hexadecimal digit's number form "#RRGGBB";</li>
+<li> "alpha" — alpha channel level [0...255], where 0 - is full transparent.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "red" — solid red color;</li>
+<li> "#FF0000" — solid red color by the digital code;</li>
+<li> "red-127" — half transparent red color. </li></ul>
+</td></tr>
+<tr>
+<td> backImg </td>
+<td> Background:image </td>
+<td> 21 </td>
+<td> Background image. The image name in form "<b>[{src}:]{name}</b>", where:
+<ul><li> "src" — the image source:
+<ul><li> <i>file</i> — direct from local file by the path;</li>
+<li> <i>res</i> — from the DB mime resources table.</li></ul></li>
+<li> "name" — the file path or the resource mime Id.<br /></li></ul>
+<p>Examples:
+</p>
+<ul><li> "res:backLogo" — from DB mime resources table for Id "backLogo";</li>
+<li> "backLogo" — like previous;</li>
+<li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png". </li></ul>
+</td></tr>
+<tr>
+<td> bordWidth </td>
+<td> Border:width </td>
+<td> 22 </td>
+<td> Border width.
+</td></tr>
+<tr>
+<td> bordColor </td>
+<td> Border:color </td>
+<td> 23 </td>
+<td> Border color (detailed in attribute 20).
+</td></tr>
+<tr>
+<td> bordStyle </td>
+<td> Border:style </td>
+<td> 24 </td>
+<td> Border style: "None", "Dotted", "Dashed", "Solid", "Double", "Groove", "Ridge", "Inset", "Outset".
+</td></tr></table>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Database_using_to_store_libraries_of_widgets_and_projects"><span class="mw-headline-number">3.10</span> Database using to store libraries of widgets and projects</span></h3>
+<p>Storage of widgets, widgets libraries and projects are implemented into the databases accessible in the OpenSCADA system. The DB is structured on the data belonging to the library-project. Ie a separate library-project stores in a separate group of tables of one or of the different databases. The list of libraries of widgets is stored in the index table of the libraries with the name "VCALibs", with the structure "Libs", and the list of projects in the index table "VCAPrjs", with the structure "Projs". A copy of this table is created in each database, which stores data of the module with the list of libraries which are hold in a given database. To the list of the tables belonging to the library of widgets and projects, are included:
+</p>
+<ul><li> "<b>{DB_TBL}</b>" — table of widgets belonging to the library (structure "LibWigets"), or pages belonging to the project (structure "ProjPages");</li>
+<li> "<b>{DB_TBL}_io</b>" — table with the working properties of the widget in this library and of the embedded widgets of the container ones (structure "LibWidgetIO"), or the properties of the pages (structure "ProjPageIO");</li>
+<li> "<b>{DB_TBL}_uio</b>" — table with the user properties of the widgets of this library and the embedded widgets of container ones (structure "LibWidgetUserIO"), or the user properties of the pages (structure "ProjPageUserIO");</li>
+<li> "<b>{DB_TBL}_incl</b>" — table of included widgets into the widgets-containers of the library (structure "LibWidgetIncl") or the project (structure "ProjPageWIncl");</li>
+<li> "<b>{DB_TBL}_mime</b>" — table with the resources of the library and it's widgets (structure "LibWidgetMime") or the project and it's pages (structure "ProjMime");</li>
+<li> "<b>{DB_TBL}_stl</b>" — table for store values of the stiled properties of a project (structure "PrjStlIO");</li>
+<li> "<b>{DB_TBL}_ses</b>" — table for store data of project's run mode, session (structure "PrjSesIO").</li></ul>
+<p>Projections (structures) of basic tables are as follows:
+</p>
+<ul><li> <b>Libs(<u>ID</u>, NAME, DSCR, DB_TBL, ICO)</b> — Libraries of widgets <i>ID</i>.</li></ul>
+<dl><dd><dl><dd><i>ID</i> — identifier;</dd>
+<dd><i>NAME</i> — name;</dd>
+<dd><i>DSCR</i> — description;</dd>
+<dd><i>DB_TBL</i> — root of the tables of DB with the widgets;</dd>
+<dd><i>ICO</i> — encoded (Base64) image of the icon of the library.</dd></dl></dd></dl>
+<ul><li> <b>LibWigets(<u>ID</u>, ICO, PARENT, PROC, PROC_PER, ATTRS, TIMESTAMP)</b> — Widgets <i>ID</i> of the library.</li></ul>
+<dl><dd><dl><dd><i>ID</i> — identifier;</dd>
+<dd><i>ICO</i> — encoded (Base64) image of the icon of the widget.</dd>
+<dd><i>PARENT</i> — address of the basic widget <i>/wlb_originals/wdg_Box</i>;</dd>
+<dd><i>PROC</i> — internal script and the script language of the widget;</dd>
+<dd><i>PROC_PER</i> — frequency of the computation of the script of the widget;</dd>
+<dd><i>ATTRS</i> — list of attributes of the widget, modified by the user.</dd>
+<dd><i>TIMESTAMP</i> — time-stamp of the last modification.</dd></dl></dd></dl>
+<ul><li> <b>LibWidgetIO(<u>IDW</u>, <u>ID</u>, <u>IDC</u>, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)</b> — Work attributes <i>ID</i> of the widget <i>IDW</i>.</li></ul>
+<dl><dd><dl><dd><i>IDW</i> — identifier of the widget;</dd>
+<dd><i>ID</i> — identifier of the IO;</dd>
+<dd><i>IDC</i> — child widget identifier;</dd>
+<dd><i>IO_VAL</i> — value of the attribute;</dd>
+<dd><i>SELF_FLG</i> — internal flags of the IO;</dd>
+<dd><i>CFG_TMPL</i> — template of the configuration element based on this attribute;</dd>
+<dd><i>CFG_VAL</i> — value of the configuration element (link, constant ...).</dd></dl></dd></dl>
+<ul><li> <b>LibWidgetUserIO(<u>IDW</u>, <u>ID</u>, <u>IDC</u>, NAME, IO_TP, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)</b> — User attributes <i>ID</i> of the widget <i>IDW</i>.</li></ul>
+<dl><dd><dl><dd><i>IDW</i> — identifier of the widget;</dd>
+<dd><i>ID</i> — identifier of the IO;</dd>
+<dd><i>IDC</i> — child widget identifier;</dd>
+<dd><i>NAME</i> — name of the IO;</dd>
+<dd><i>IO_TP</i> — type and main flags of the IO;</dd>
+<dd><i>IO_VAL</i> — value of the IO;</dd>
+<dd><i>SELF_FLG</i> — internal flags of the IO;</dd>
+<dd><i>CFG_TMPL</i> — template of the configuration element based on this attribute;</dd>
+<dd><i>CFG_VAL</i> — value of the configuration element (link, constant ...).</dd></dl></dd></dl>
+<ul><li> <b>LibWidgetIncl(<u>IDW</u>, <u>ID</u>, PARENT, ATTRS)</b> — Included into the container <i>IDW</i> widgets <i>ID</i>.</li></ul>
+<dl><dd><dl><dd><i>IDW</i> — identifier of the widget;</dd>
+<dd><i>ID</i> — identifier of the copy of the included widget;</dd>
+<dd><i>PARENT</i> — address of the basic widget <i>/wlb_originals/wdg_Box</i>;</dd>
+<dd><i>ATTRS</i> — list of attributes of the widget, modified by the user.</dd></dl></dd></dl>
+<ul><li> <b>LibWidgetMime(<u>ID</u>, MIME, DATA)</b> — Audio, video, media and other resources of widgets of the library.</li></ul>
+<dl><dd><dl><dd><i>ID</i> — identifier of the resource.</dd>
+<dd><i>MIME</i> — Mime data type of the resource (in the format — "<b>{mimeType};{Size}</b>").</dd>
+<dd><i>DATA</i> — Resource data encoded with Base64.</dd></dl></dd></dl>
+<ul><li> <b>Projs(<u>ID</u>, NAME, DSCR, DB_TBL, ICO, USER, GRP, PERMIT, PER, FLGS, STYLE)</b> — Projects of visualization interfaces <i>ID</i>.</li></ul>
+<dl><dd><dl><dd><i>ID</i> — identifier of the project;</dd>
+<dd><i>NAME</i> — name of the project;</dd>
+<dd><i>DSCR</i> — description of the project;</dd>
+<dd><i>DB_TBL</i> — root of the tables of DB with the pages;</dd>
+<dd><i>ICO</i> — encoded (Base64) image of the icon of the project;</dd>
+<dd><i>USER</i> — owner of the project;</dd>
+<dd><i>GRP</i> —  users group of the project;</dd>
+<dd><i>PERMIT</i> — rights of access to the project;</dd>
+<dd><i>PER</i> — frequency of the computation of the project;</dd>
+<dd><i>FLGS</i> — flags of the project;</dd>
+<dd><i>STYLE</i> — typical style of the project.</dd></dl></dd></dl>
+<ul><li> <b>ProjPages(<u>OWNER</u>, <u>ID</u>, ICO, PARENT, PROC, PROC_PER, FLGS, ATTRS, TIMESTAMP)</b> — The pages <i>ID</i> which are hold in the project/page <i>OWNER</i>.</li></ul>
+<dl><dd><dl><dd><i>OWNER</i> —  project/page — owner of the page (in the format — "/AGLKS/so/1/gcadr")</dd>
+<dd><i>ID</i> — identifier of the page;</dd>
+<dd><i>ICO</i> — encoded (Base64) image of the icon of the page;</dd>
+<dd><i>PARENT</i> — address of the basic widget of the page in the format: <i>/wlb_originals/wdg_Box</i>;</dd>
+<dd><i>PROC</i> —  internal script and the script language of the page;</dd>
+<dd><i>PROC_PER</i> — frequency of the computation of the script of the widget;</dd>
+<dd><i>FLGS</i> — flags of the page;</dd>
+<dd><i>ATTRS</i> — list of attributes of the widget, modified by the user;</dd>
+<dd><i>TIMESTAMP</i> — time-stamp of the last modification.</dd></dl></dd></dl>
+<ul><li> <b>ProjPageIO(<u>IDW</u>, <u>ID</u>, <u>IDC</u>, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)</b> — Working attributes of the pages. The structure actually corresponds to the table LibWidgetIO.</li>
+<li> <b>ProjPageUserIO(<u>IDW</u>, <u>ID</u>, <u>IDC</u>, NAME, IO_TP, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)</b> — User attributes of the pages. The structure actually corresponds to the table LibWidgetUserIO.</li>
+<li> <b>ProjPageWIncl(<u>IDW</u>, <u>ID</u>, PARENT, ATTRS)</b> — Included widgets on the page. The structure actually corresponds to the table LibWidgetIncl.</li>
+<li> <b>ProjMime(<u>ID</u>, MIME, DATA)</b> — Audio, video, media and other resources of the pages of the project. The structure actually corresponds to the table "LibWidgetMime".</li>
+<li> <b>PrjStl(<u>ID</u>, V_0, V_1, V_2, V_3, V_4, V_5, V_6, V_7, V_8, V_9)</b> — Value of the style's field <i>ID</i> of the project.</li></ul>
+<dl><dd><dl><dd><i>ID</i> — style's field identifier;</dd>
+<dd><i>V_{N}</i> — value of the style's field for the style <i>N</i>.</dd></dl></dd></dl>
+<ul><li> <b>ProjSess(<u>IDW</u>, <u>ID</u>, IO_VAL)</b> — Project table <i>IDW</i> for data storage of the sessions, performing project.</li></ul>
+<dl><dd><dl><dd><i>IDW</i> — the full path of the element of the project;</dd>
+<dd><i>ID</i> — attribute of the element;</dd>
+<dd><i>IO_VAL</i> — value of the element.</dd></dl></dd></dl>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="API_of_the_user_programming_and_service_interfaces_of_the_OpenSCADA"><span class="mw-headline-number">3.11</span> API of the user programming and service interfaces of the OpenSCADA</span></h3>
+<h4><span class="mw-headline" id="API_of_the_user_programming"><span class="mw-headline-number">3.11.1</span> API of the user programming</span></h4>
+<p>API of the user programming of API of the visualization engine are represented by the OpenSCADA objects directly, which build user interface, and same "Session" and "Widget/page". These objects provide the set of control functions for the user:
+<b>Object "Session" ( this.ownerSess() )</b>
+</p>
+<ul><li> <i>string user( )</i> — current session user.</li>
+<li> <i>int alrmQuittance( int quit_tmpl, string wpath = "", bool ret = false )</i> — violations quittance <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then make global quittance. Into the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. The <i>ret</i> sets will cause the quittance return.</li>
+<li> <i>int reqTm( )</i> — last request time.</li>
+<li> <i>string reqUser( )</i> — last request user.</li>
+<li> <i>string reqLang( )</i> — last request language.</li>
+<li> <i>int userActTm( )</i> — last user action time.</li></ul>
+<p><b>Object "Widget" (this)</b>
+</p>
+<ul><li> <i>TCntrNodeObj ownerSess( )</i> — the session's object is getting for current widget.</li>
+<li> <i>TCntrNodeObj ownerPage( )</i> — the parent object's page is getting for current widget.</li>
+<li> <i>TCntrNodeObj ownerWdg( bool base = false )</i> — the parent widget is getting for current widget. If set <i>base</i> then will return the parent pages' objects also.</li>
+<li> <i>TCntrNodeObj wdgAdd( string wid, string wname, string parent )</i> — add new widget <i>wid</i> with the name <i>wname</i> and based on the library widget <i>parent</i>.</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+//New widget adding, based at the text primitive
+nw = this.wdgAdd("nw", "New widget", "/wlb_originals/wdg_Text");
+nw.attrSet("geomX", 50).attrSet("geomY", 50);
+</pre>
+<ul><li> <i>bool wdgDel( string wid )</i> — delete the widget <i>wid</i>.</li>
+<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — attach to child or global, by <i>byPath</i>, widget. In the case of global connection, you can use absolute or relative path to the widget. For starting point of the absolute address acts the root object of the module "VCAEngine", which means the first element of the absolute address is session identifier, which is omitted. The relative address takes the countdown from the current widget. Special element of the relative address is an element of parent node "..".</li>
+<li> <i>bool attrPresent( string attr )</i> — the attribute <i>attr</i> of the widget checking to presence fact.</li>
+<li> <i>ElTp attr( string attr, bool fromSess = false )</i> — value of the attribute <i>attr</i> of the widget getting or from the session <i>fromSess</i>. For missing attributes will return empty string.</li>
+<li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — value of the attribute <i>attr</i> of the widget setting to <i>vl</i>, or to the session <i>toSess</i>. The object is returned for the function concatenation.</li>
+<li> <i>string link( string attr, bool prm = false )</i> — the link return for the widget's attribute <i>attr</i>. At set <i>prm</i> requests the link for the attributes block (parameter), represented by the attribute. </li>
+<li> <i>string linkSet( string attr, string vl, bool prm = false )</i> — the link set for the widget's attribute <i>attr</i>. At set <i>prm</i> makes the link set for the attributes block (parameter), represented by the attribute.</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+//Set link for eight trend to the parameter
+this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
+</pre>
+<ul><li> <i>string mime( string addr, string type = "" )</i> — the "mime" object by the address <i>addr</i> (the direct link to the resource or the widget's attribute contained the link) getting with the type to <i>type</i>, from the session table or the source. It is designed for the "mime" objects edition and that substitution to this session's context, for example, images SVG.</li>
+<li> <i>int mimeSet( string addr, string data, string type = "" )</i> — the "mime" object <i>data</i> with type <i>type</i> by address <i>addr</i> setting.</li>
+<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formation of the system message <i>mess</i> with the category as the widget path.</li></ul>
+<p><b>Object "Widget" of the primitive "Document" (this)</b>
+</p>
+<ul><li> <i>string getArhDoc( int nDoc)</i> — getting the archive document's text to "nDoc" (0-{aSize-1}) depth.</li></ul>
+<p>The deprecated API of the user programming of the visualization engine are represented by the group of functions directly in the engine module of the VCA. Calling of these functions from the scripts of widgets can be performed directly by the ID of the function, since their area of names is indicated for the context of the scripts of widgets.
+</p><p><b>Widget list (WdgList)</b><br />
+<i>Description:</i> Returns a list of widgets in the container of widgets or a list of child widgets. If <i>pg</i> is set it returns a list of pages for the projects and sessions.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By default
+</th></tr>
+<tr>
+<td> list </td>
+<td> List </td>
+<td> String </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Address </td>
+<td>String </td>
+<td> Input </td>
+<td>
+</td></tr>
+<tr>
+<td> pg </td>
+<td> Pages </td>
+<td> Bool </td>
+<td> Input </td>
+<td> 0
+</td></tr></table>
+<p><b>Presence of the node (NodePresent)</b><br />
+<i>Description:</i> Check for the presence of the node, including widgets, attributes and others.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By default
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> Bool </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Address </td>
+<td> String </td>
+<td> Input </td>
+<td>
+</td></tr></table>
+<p><b>Attributes list (AttrList)</b><br />
+<i>Description:</i> Returns list of attributes of the widget. If <i>noUser</i> is set then only not user attributes are returned.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By default
+</th></tr>
+<tr>
+<td> list </td>
+<td> List </td>
+<td> String </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Address </td>
+<td> String </td>
+<td> Input </td>
+<td>
+</td></tr>
+<tr>
+<td> noUser </td>
+<td> Without user </td>
+<td> Bool </td>
+<td> Input </td>
+<td> 1
+</td></tr></table>
+<p><b>Request of the attribute (AttrGet)</b><br />
+<i>Description:</i> Request of the value of the attribute of the widget. The request can be done as by indicating the full address of the attribute in <i>addr</i>, and by indicating separately the address of the widget in <i>addr</i>, and the ID of the attribute in the <i>attr</i>.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By default
+</th></tr>
+<tr>
+<td> val </td>
+<td> Value </td>
+<td> String </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Address </td>
+<td> String </td>
+<td> Input </td>
+<td>
+</td></tr>
+<tr>
+<td> attr </td>
+<td> Attribute </td>
+<td> Bool </td>
+<td> Input </td>
+<td>
+</td></tr></table>
+<p><b>Setting of the attribute (AttrSet)</b><br />
+<i>Description:</i> Setting of the value of the attribute of the widget. Setting can be done as by the indicating the full address of the attribute in <i>addr</i>, and by indicating separately the address of the widget in <i>addr</i>, and the ID of the attribute in <i>attr</i>.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By default
+</th></tr>
+<tr>
+<td> addr </td>
+<td> Address </td>
+<td> String </td>
+<td> Input </td>
+<td>
+</td></tr>
+<tr>
+<td> val </td>
+<td> Value </td>
+<td> String </td>
+<td> Input </td>
+<td>
+</td></tr>
+<tr>
+<td> attr </td>
+<td> Attribute </td>
+<td> Bool </td>
+<td> Input </td>
+<td>
+</td></tr></table>
+<p><b>Session user (SesUser)</b><br />
+<i>Description:</i> Return the session user by the session's widget path.<br />
+<i>Parameters:</i>
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By default
+</th></tr>
+<tr>
+<td> user </td>
+<td> User </td>
+<td> String </td>
+<td> Return</td>
+<td>
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Address </td>
+<td> String </td>
+<td> Input </td>
+<td>
+</td></tr></table>
+<h4><span class="mw-headline" id="Service_interfaces_of_OpenSCADA"><span class="mw-headline-number">3.11.2</span> Service interfaces of OpenSCADA</span></h4>
+<p>Service interfaces are interfaces of access to the OpenSCADA system by means of <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h154-1" rel="nofollow noreferrer noopener" target="_blank">OpenSCADA control interface</a> from external systems. This mechanism — is the basis of all the mechanisms for interaction within OpenSCADA, implemented through the weak ties, and standard exchange protocol of OpenSCADA.
+</p>
+<h5><span class="mw-headline" id="Access_to_the_values_of_attributes_of_the_visualization_elements_.28widgets.29"><span class="mw-headline-number">3.11.2.1</span> Access to the values of attributes of the visualization elements (widgets)</span></h5>
+<p>In order to provide unitized, grouping and relatively fast access to the values of attributes of the visual elements the service function of the visual element "/serv/attr" and get/set commands of the attributes' values are provided: <b>&lt;get path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b> and <b>&lt;set path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b>.
+</p><p><b>Table.</b> Attributes of commands for get/set of the attributes of the visual elements.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Value
+</th></tr>
+<tr>
+<td colspan="3"> <i>Requesting command of the visual attributes of the widget: <b>&lt;get path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b></i>
+</td></tr>
+<tr>
+<td> tm </td>
+<td> Time/counter of the changes </td>
+<td> Time/counter of the changes set up for the query of the only changed attributes.
+</td></tr>
+<tr>
+<td> &lt;el id="{attr}" p="{a_id}"&gt;{val}&lt;/el&gt; </td>
+<td> The formation of the child elements with the results of the attributes </td>
+<td> In the child element are specified: string ID <i>attr</i> of the attribute, index <i>a_id</i> of the attribute and its value <i>val</i>.
+</td></tr>
+<tr>
+<td colspan="3"> <i>Setting command of the visual attributes of the widget: <b>&lt;set path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b></i>
+</td></tr>
+<tr>
+<td> &lt;el id="{attr}"&gt;{val}&lt;/el&gt; </td>
+<td> Setting of the attributes </td>
+<td> In the child elements the ID of the attribute <i>attr</i> and its value <i>val</i> are specified.
+</td></tr>
+<tr>
+<td colspan="3"> <i>Activation-creation command of specific for the visualizer attribute: <b>&lt;activate path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr/{attrId}" aNm="{Name}" aTp="{Type} aFlg="{Flags}"/&gt;</b></i>
+</td></tr>
+<tr>
+<td> attrId </td>
+<td> Attribute identifier </td>
+<td>
+</td></tr>
+<tr>
+<td> aNm </td>
+<td> Attribute name </td>
+<td>
+</td></tr>
+<tr>
+<td> aTp </td>
+<td> Attribute type </td>
+<td>
+</td></tr>
+<tr>
+<td> aFlg </td>
+<td> Attribute flags </td>
+<td>
+</td></tr></table>
+<h5><span class="mw-headline" id="Group_access_to_the_values_of_the_attributes_of_the_visualization_elements_.28widgets.29"><span class="mw-headline-number">3.11.2.2</span> Group access to the values of the attributes of the visualization elements (widgets)</span></h5>
+<p>In order to optimize network traffic by eliminating the small queries, but use one, but a large the group query of the attributes' values of visual elements is made. Grouping of this query involves a request of attributes of the entire branch of the widget, including the embedded elements. For this request the service command "/serv/attrBr" provides. Request of this service command is equivalent to the service command "/serv/attr" and looks as follows: <b>&lt;get path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattrBr"/&gt;</b>
+</p>
+<dl><dd><i>tm</i> — Time/counter of the changes. Time/counter of the changes set up for the query of the only changed attributes.<br /></dd></dl>
+<p>Result:
+</p>
+<dl><dd><i>&lt;el id="{attr}" p="{a_id}"&gt;{val}&lt;/el&gt;</i> — elements with the results of the attributes. In the element are specified: string ID <i>attr</i> of the attribute, index <i>a_id</i> of the attribute and its value <i>val</i>.</dd>
+<dd><i>&lt;w id="{wid}" lnkPath="{lnk_path}"&gt;{childs+attrs}&lt;/w&gt;</i> — elements with the child widgets and their attributes. The identifier of the child widget <i>wid</i> and the path to the widget on which the current widget links to, if its is the link <i>lnk_path</i>, are specified in the element.</dd></dl>
+<h5><span class="mw-headline" id="Access_to_the_pages_of_the_session"><span class="mw-headline-number">3.11.2.3</span> Access to the pages of the session</span></h5>
+<p>In order to unify and optimize the access to the pages the service function of the session "/serv/pg" and commands of the query of the list of open pages <b>&lt;openlist path="/UI/VCAEngine/ses_{Session}/%2fserv%2fpg"/&gt;</b>; of opening the pages <b>&lt;open path="/UI/VCAEngine/ses_{Session}/%2fserv%2fpg"/&gt;</b>; and closing of the pages <b>&lt;close path="/UI/VCAEngine/ses_{Session}/%2fserv%2fpg"/&gt;</b> are provided.
+</p><p>The result of the query is child elements <b>&lt;el&gt;{OpPage}&lt;/el&gt;</b> which contain the full path of the open page. In addition to the list of open pages, the query returns the value of the current counter for calculating the session in the attribute <i>tm</i>. If this attribute is set during the query, then for each open page it returns the list of changed, since the moment of the specified value of the counter, widgets of the open page.
+</p>
+<h5><span class="mw-headline" id="Signaling_.28alarm.29_management"><span class="mw-headline-number">3.11.2.4</span> Signaling (alarm) management</span></h5>
+<p>To provide a mechanism for global control of the signaling of the session the service function of the session "/serv/alarm" and commands of the query of the signals status <b>&lt;get path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b>; and of the quittance <b>&lt;quittance path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b> are provided.
+</p><p>Request for the status of signals returns generalized condition of the signals, as well as additional a notification resource by attribute "mode" sets to "resource". The notification resource request result is typically a sound file, for playback, and at that time it performs monitoring of the sequence of signaling and quittance of individual the notification resources of the messages.
+</p><p>Request for the quittance performs quittance of the specified widget, attribute <i>wdg</i>, in accordance with the template, attribute <i>tmpl</i>.
+</p>
+<h5><span class="mw-headline" id="Manipulation_with_the_sessions_of_the_projects"><span class="mw-headline-number">3.11.2.5</span> Manipulation with the sessions of the projects</span></h5>
+<p>To provide a unitize mechanism for manipulation of the sessions by the visualizers of VCA in the module of the VCA engine (VCAEngine) are provided the service function "/serv/sess" and the query commands of the list of open sessions, connection/creation of the new session and disconnection/deleting of the session: <b>&lt;list path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b>, <b>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b> and <b>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b> accordingly.
+</p><p><b>Table.</b> Attributes of commands of the mechanism of manipulation with sessions
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Value
+</th></tr>
+<tr>
+<td colspan="3"> <i>Command of requesting of a list of open sessions for the project: <b>&lt;list path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b></i>
+</td></tr>
+<tr>
+<td> prj </td>
+<td> Indication of the project </td>
+<td> Specifies the project for which to return the list of open sessions.
+</td></tr>
+<tr>
+<td> &lt;el&gt;{Session}&lt;/el&gt; </td>
+<td> Control of the sessions' list </td>
+<td> In the child element the open for the requested project sessions are specified.
+</td></tr>
+<tr>
+<td colspan="3"> <i>The command of the connection/opening of the session: <b>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b></i>
+</td></tr>
+<tr>
+<td> sess </td>
+<td> Installation and control of the session name </td>
+<td> If the attribute is defined, then connecting to an existing session is to be made, else — creation of the new session is to be made. In the case of opening of the new session in this attribute its name is is placed.
+</td></tr>
+<tr>
+<td> prj </td>
+<td> Setting the name of the project </td>
+<td> It is used to open a new session for indicated project and when the attribute <i>sess</i> is not specified.
+</td></tr>
+<tr>
+<td colspan="3"> <i>The command of disconnection/closing of the session: <b>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b></i>
+</td></tr>
+<tr>
+<td> sess </td>
+<td> Setting the name of the session </td>
+<td> Specify the name of the session from that it is made the disconnection or closing. Sessions, not the background, and to which none of the visualizers is not connected, are automatically closed.
+</td></tr></table>
+<h5><span class="mw-headline" id="Group_request_for_the_tree_of_widget_libraries"><span class="mw-headline-number">3.11.2.6</span> Group request for the tree of widget libraries</span></h5>
+<p>In order to optimize the performance of local and especially network interaction the service function "/serv/wlbBr" and the command of the query of the tree of widget libraries: <b>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr"/&gt;</b> are provided. The result of the query is a tree with the elements of the libraries of widgets, tags <i>wlb</i>. Inside the tags of libraries of widgets are included: icon tag <i>ico</i> and the widgets library tags <i>w</i>. The widgets tags, in their turn, contain the icon tag and tags of the child widgets <i>cw</i>.
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Configuring_the_module_via_the_control_interface_of_OpenSCADA"><span class="mw-headline-number">4</span> Configuring the module via the control interface of OpenSCADA</span></h2>
+<p>Through the management interface of OpenSCADA, components that use it, can be configured from any system configurator OpenSCADA. This module provides an interface to access all the data object of the VCA. Main inset of the configuration page of the module provides access to widgets libraries and projects (Fig. 4.1). The tab "Sessions" provides access to opened sessions of projects (Fig. 4.2).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:695px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_main.png"><img class="thumbimage" height="577" src="../files/VCAeng_main.png" width="693" /></a>  <div class="thumbcaption">Fig.4.1 Main configuration page of the module.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:695px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_sess.png"><img class="thumbimage" height="577" src="../files/VCAeng_sess.png" width="693" /></a>  <div class="thumbcaption">Fig.4.2 Tab "Sessions" of the configuration page of the module.</div></div></div></div>
+<p>In addition to the list of open sessions the tab in Figure 4.2 contains a table with a list of sessions that must be created and run at boot time OpenSCADA. Creation of sessions through this tool can be useful for Web-based interface. In this case, when connecting Web-user data is ready and ensures the continuity of the formation of archival documents.
+</p><p>The configuration of container widgets in the face of libraries and widget projects is done through pages in Fig. 4.3 (a project) and Fig.4.5 (a library of widgets). Widgets library contains the widgets, and project — the pages. Both types contain a tab of configuration Mime-data used widgets (Fig.4.6). The project page also contains the tab "Diagnostics" (Fig.4.4) for debug and control all the page's executions by sessions.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:842px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg.png"><img class="thumbimage" height="608" src="../files/VCAeng_pg.png" width="840" /></a>  <div class="thumbcaption">Fig.4.3 Configuration page of the projects.</div></div></div></div>
+<p>From this page you can set:
+</p>
+<ul><li> State of the container, same: "Enabled", the name of the database containing the configuration, date and time for last modification.</li>
+<li> Id, name, description and icon of the container.</li>
+<li> Owner, group and access rights to the container.</li>
+<li> Period for computing of the sessions based on the given project.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1055px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag.png"><img class="thumbimage" height="561" src="../files/VCAeng_pg_diag.png" width="1053" /></a>  <div class="thumbcaption">Fig.4.4 Tab "Diagnostics" of the projects.</div></div></div></div>
+<p>From this tab you can select time, or refresh to current, and size for diagnostic messages obtain of the sessions of running the project.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:717px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb.png"><img class="thumbimage" height="520" src="../files/VCAeng_wlb.png" width="715" /></a>  <div class="thumbcaption">Fig.4.5 Configuration page of the widgets libraries.</div></div></div></div>
+<p>From this page you can set:
+</p>
+<ul><li> State of the container, same: "Enabled", the name of the database containing the configuration, date and time for last modification.</li>
+<li> Id, name, description and icon of the container.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:613px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_mime.png"><img class="thumbimage" height="547" src="../files/VCAeng_mime.png" width="611" /></a>  <div class="thumbcaption">Fig.4.6 Configuration tab of Mime-data of a container.</div></div></div></div>
+<p>Configuration of the project's session differs significantly from configuration of the project (Fig. 4.8), but also contains pages of the project.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1020px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_ses.png"><img class="thumbimage" height="657" src="../files/VCAeng_pg_ses.png" width="1018" /></a>  <div class="thumbcaption">Fig.4.7 Configuration page of the sessions of the projects.</div></div></div></div>
+<p>From this page you can set:
+</p>
+<ul><li> State of the session, same: "Enabled"; "Started"; user; owner; users group; access; source project; mode of execution in the background; execution time of the session; the counter of client connections; last request time, user and language; last user action and left time to its force closing.</li>
+<li> Period of calculation of the session.</li>
+<li> Current style of the session.</li>
+<li> List of opened pages.</li></ul>
+<p>The configuration pages of visual elements, placed in different containers, may be very different, but this difference is the presence or absence of individual tabs. The main tab of visual elements in fact is the same everywhere, differing in one configuration field and three into the session (Fig. 4.8). The pages contains the tabs of the child pages and embedded widgets. The container widgets contains the tab of the embedded widgets. All visual elements contain attributes tab (Fig. 4.9), except the logical containers of the projects. Elements, at the level of which it is possible to build the user procedure and to determine the links, contain the tabs "Process" (Fig. 4.10) and "Links" (Fig.4.11).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:801px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_main.png"><img class="thumbimage" height="717" src="../files/VCAeng_vit_main.png" width="799" /></a>  <div class="thumbcaption">Fig.4.8 Main tab of configuration of the visual elements.</div></div></div></div>
+<p>From this page you can set:
+</p>
+<ul><li> States of the element, same: "Enabled", counting of using, parent element and jump to it, date and time for last modification.</li>
+<li> States of the runtime session's mode: "Open", "Process" and spent time on execution of the subtree and item, into the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">debug mode</a>.</li>
+<li> Id, type, root, path, name, description and icon of the element.</li>
+<li> Command for the widget's changes clear.</li>
+<li> Command for the widget's changes put down to the parent.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:759px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_attr.png"><img class="thumbimage" height="672" src="../files/VCAeng_vit_attr.png" width="757" /></a>  <div class="thumbcaption">Fig.4.9 Tab of the attributes of the visual elements.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:891px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_proc.png"><img class="thumbimage" height="685" src="../files/VCAeng_vit_proc.png" width="889" /></a>  <div class="thumbcaption">Fig.4.10 Tab of processing of the visual elements.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:929px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_lnk.png"><img class="thumbimage" height="497" src="../files/VCAeng_vit_lnk.png" width="927" /></a>  <div class="thumbcaption">Fig.4.11 Tab of links of the visual elements.</div></div></div></div>
+
+
+
+
+
+
+</div></body>
+</html>

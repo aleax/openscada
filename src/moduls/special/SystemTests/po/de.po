@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.Special.SystemTests package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-17 22:39+0200\n"
+"POT-Creation-Date: 2017-11-25 21:56+0200\n"
 "PO-Revision-Date: 2010-10-19 20:56+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -73,8 +73,8 @@ msgstr "Resultat"
 msgid "Value archive"
 msgstr "Archiv der Werte"
 
-msgid "Values period (us)"
-msgstr "Periode der Werte (usek)"
+msgid "Values period, us"
+msgstr "Periode der Werte, usek"
 
 msgid "Archivator"
 msgstr "Archivator"
@@ -376,8 +376,8 @@ msgstr "DB '%s' schließen und löschen."
 msgid "Messages category pattern"
 msgstr "Muster der Kategorie der Nachricht"
 
-msgid "Messages depth (s)"
-msgstr "Tiefe der Nachricht (sek)"
+msgid "Messages depth, s"
+msgstr "Tiefe der Nachricht, s"
 
 msgid "Messages"
 msgstr "Nachrichten"
@@ -667,11 +667,11 @@ msgstr "Fehler: %s: %s"
 msgid "Parameter attribute path"
 msgstr "Weg zum Parameterattribut"
 
-msgid "Archive value getting depth (s)"
-msgstr "Tiefe der Anfrage ans Wertearchiv (sek)"
+msgid "Archive value getting depth, s"
+msgstr "Tiefe der Anfrage ans Wertearchiv, s"
 
-msgid "Archive value getting period (us)"
-msgstr "Periode der Anfrage ans Wertearchiv (usek)"
+msgid "Archive value getting period, us"
+msgstr "Periode der Anfrage ans Wertearchiv, usek"
 
 msgid "Parameter attribute"
 msgstr "Attribut des Parameters"
