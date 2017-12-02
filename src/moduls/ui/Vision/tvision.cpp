@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"4.7.1"
+#define MOD_VER		"4.8.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -356,11 +356,12 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	string rez;
 	MtxAlloc res(dataRes(), true);
 	for(unsigned iW = 0; iW < mnWinds.size(); iW++)
-	    if(dynamic_cast<VisDevelop*>(mnWinds[iW]))	opt->childAdd("el")->setText(TSYS::strMess(_("%d: Development"),iW));
+	    if(dynamic_cast<VisDevelop*>(mnWinds[iW]))	opt->childAdd("el")->setText(TSYS::strMess(_("%d: Development by \"%s\""),iW,((VisDevelop*)mnWinds[iW])->user().c_str()));
 	    else if(dynamic_cast<VisRun*>(mnWinds[iW]))	{
-		opt->childAdd("el")->setText(TSYS::strMess(_("%d: Running \"%s:%s\" - %s"),iW,
+		opt->childAdd("el")->setText(TSYS::strMess(_("%d: Running \"%s:%s\" from \"%s\" - %s"),iW,
 		    ((VisRun*)mnWinds[iW])->workSess().c_str(),
 		    ((VisRun*)mnWinds[iW])->srcProject().c_str(),
+		    ((VisRun*)mnWinds[iW])->user().c_str(),
 		    ((VisRun*)mnWinds[iW])->connOK()?_("Connected"):_("Disconnected")));
 	    }
     }
@@ -429,7 +430,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	vector<TTransportS::ExtHost> lst;
 	SYS->transport().at().extHostList("*", lst);
 	for(unsigned iLs = 0; iLs < lst.size(); iLs++)
-	    opt->childAdd("el")->setAttr("id",lst[iLs].id)->setText(lst[iLs].name);
+	    opt->childAdd("el")->setAttr("id", lst[iLs].id)->setText(lst[iLs].name);
     }
     else TUI::cntrCmdProc(opt);
 }

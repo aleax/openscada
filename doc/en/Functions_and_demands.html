@@ -41,8 +41,8 @@
 <h3><span class="mw-headline" id="System_server_of_SCADA"><span class="mw-headline-number">1.1</span> System server of SCADA</span></h3>
 <ul><li> Visual control and management by means of the interfaces:
 <ul><li> Remote visualization server grounded on visualization and control area (VCA) engine <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>. Module UI.Vision local starting and connecting to the visualization server.</li>
-<li> Remote WEB interface. By means of a Web-browser, a visualization module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> and a module of the core of visual control area <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
-<li> Simple remote Web-interfaces of user. By means of a Web-browser and the UI-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebUser" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
+<li> Remote WEB interface. By means of a Web-browser, a visualization module <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> and a module of the core of visual control area <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
+<li> Simple remote Web-interfaces of user. By means of a Web-browser and the UI-module <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
 <li> Data acquisition (DAQ) from sources:
 <ul><li> Information about a platform (hardware-software) on which the server works. By means of the DAQ-module <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>. </li>
 <li> Data acquisition from sources which support protocol SNMP (Simple Network Management Protoсol). By means of the DAQ-module <a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>.</li>
@@ -78,7 +78,7 @@
 <ul><li> Files with double packing: consecutive and standard archiver gzip. By means of the archiving module <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a>.</li>
 <li> In tables of archival DB. By means of the archiving module <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li></ul></li>
 <li> Configuration and management of a server through:
-<ul><li> The WEB-interface. By means of a Web-browser and the UI-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
+<ul><li> The WEB-interface. By means of a Web-browser and the UI-module <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> and <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
 <li> From remote configuration station. By means of the UI-module at configuration station <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> and the interface of management OpenSCADA reflected in the protocol <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
 <li> Data storage of a server in a DB of types:
 <ul><li> MySQL. By means of the DB-module <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a>.</li>
@@ -91,9 +91,9 @@
 <hr />
 <h3><span class="mw-headline" id="Station_of_the_operator_of_technological_process.2C_the_board_of_the_dispatcher.2C_the_panel_of_monitoring.2C_etc."><span class="mw-headline-number">1.2</span> Station of the operator of technological process, the board of the dispatcher, the panel of monitoring, etc.</span></h3>
 <ul><li> Visual control and management by means of the interfaces:
-<ul><li> Local (fast) interface based on Qt library. By means of the visualization module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision" title="Special:MyLanguage/Modules/Vision">Vision</a> and the module of a core of the visual control area <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> include ability of visualization from remote engine of VCA, visualization server.</li>
-<li> Remote WEB interface. By means of a Web-browser, the visualization module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> and the module of a core of visual control area <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
-<li> Simple remote Web-interfaces of user. By means of a Web-browser and the UI-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebUser" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
+<ul><li> Local (fast) interface based on Qt library. By means of the visualization module <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> and the module of a core of the visual control area <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> include ability of visualization from remote engine of VCA, visualization server.</li>
+<li> Remote WEB interface. By means of a Web-browser, the visualization module <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> and the module of a core of visual control area <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
+<li> Simple remote Web-interfaces of user. By means of a Web-browser and the UI-module <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
 <li> Data acquisition (DAQ) from sources:
 <ul><li> Data acquisition from other servers and PLC, based on OpenSCADA, for data transportation and for duplication. By means of the DAQ-module <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>.</li>
 <li> Data acquisition from sources which support protocol SNMP (Simple Network Management Protoсol). By means of the DAQ-module <a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>.</li>
@@ -106,7 +106,7 @@
 <li> In tables of archival DB. By means of the archiving module <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li>
 <li> <span style="color: red">In plans.</span> On other server, it is possible to an allocated archiving server, based on OpenSCADA.</li></ul></li>
 <li> Configuration and management of a station through:
-<ul><li> WEB-interface. By means of a Web-browser and the UI-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> or <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
+<ul><li> WEB-interface. By means of a Web-browser and the UI-module <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> or <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
 <li> Qt-interface. By means of the UI-module <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a>.</li>
 <li> From remote configuration station. By means of the UI-module at configuration station <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> and the interface of management OpenSCADA reflected in the protocol <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
 <li> Data storage of a station in a DB of types:
@@ -154,7 +154,7 @@
 <li> Files with double packing: consecutive and standard archiver gzip. By means of the archiving module <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a>.</li>
 <li> In tables of archival DB. By means of the archiving module <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li></ul></li>
 <li> Configuration and management PLC through:
-<ul><li> The WEB-interface. By means of a Web-browser and the UI-module <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> or <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
+<ul><li> The WEB-interface. By means of a Web-browser and the UI-module <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> or <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
 <li> From the remote configuration station. By means of the UI-module at configuration station <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> and the interface of management OpenSCADA reflected in the protocol [Special:MyLanguage/Modules/SelfSystem|SelfSystem]].</li></ul></li>
 <li> Data storage PLC in a DB of types:
 <ul><li> All data in a configuration file.</li>

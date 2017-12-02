@@ -34,6 +34,8 @@
 
 class QTimer;
 class QSplashScreen;
+class QListWidget;
+class QPushButton;
 
 using namespace OSCADA;
 
@@ -97,12 +99,20 @@ protected:
     //Methods
     void closeEvent( QCloseEvent* );
 
+private:
+    //Attributes
+    QListWidget	*prjsLs;
+    QPushButton	*prjsBt;
+
 private slots:
     //Methods
     void about( );
     void aboutQt( );
     void enterWhatsThis( );
     void enterManual( );
+
+    void projSelect( );
+    void projSwitch( );
 };
 
 //*************************************************
@@ -165,7 +175,7 @@ private:
 
     //Attributes
     bool	hideMode, mEndRun, mStartCom;
-    string	mStartMod;
+    MtxString	mStartMod;
 
     // Command line options binding to Qt
     int		qtArgC, qtArgEnd;		//Arguments counter and end position

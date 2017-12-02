@@ -136,7 +136,8 @@ class ModInspAttr: public QAbstractTableModel
 	Qt::ItemFlags flags( const QModelIndex &index ) const;
 	QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 	QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
-	QModelIndex parent(const QModelIndex &index) const;
+	QModelIndex sibling( int row, int column, const QModelIndex &idx ) const;
+	QModelIndex parent( const QModelIndex &index ) const;
 
 	int rowCount( const QModelIndex &parent = QModelIndex() ) const;
 	int columnCount( const QModelIndex &parent = QModelIndex() ) const;
@@ -185,12 +186,12 @@ class InspAttr: public QTreeView
 	{
 	    public:
 		//Public methods
-		ItemDelegate(QObject *parent = 0);
+		ItemDelegate( QObject *parent = 0 );
 
-		QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-		void setEditorData(QWidget *editor, const QModelIndex &index) const;
-		void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
-		QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+		QWidget *createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+		void setEditorData( QWidget *editor, const QModelIndex &index ) const;
+		void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
+		QSize sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 
 	    private:
 		//Private methods

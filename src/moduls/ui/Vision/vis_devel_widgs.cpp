@@ -366,6 +366,11 @@ QModelIndex ModInspAttr::index( int row, int column, const QModelIndex &parent )
     return idx;
 }
 
+QModelIndex ModInspAttr::sibling( int row, int column, const QModelIndex &idx ) const
+{
+    return QAbstractItemModel::sibling(row, column, idx);	//For prevent wrong here the QAbstractTableModel implementation on Qt > 5.3
+}
+
 QModelIndex ModInspAttr::parent( const QModelIndex &index ) const
 {
     QModelIndex idx;

@@ -1,13 +1,13 @@
 # OpenSCADA.UI.QTStarter translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTStarter package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-06 16:37+0300\n"
+"POT-Creation-Date: 2017-12-02 18:33+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -554,8 +554,14 @@ msgstr "Опции модуля"
 msgid "Start Qt modules (sep - ';')"
 msgstr "Запускаемые Qt-модули (разд. - ';')"
 
-msgid "OpenSCADA system Qt-starter"
-msgstr "Qt-пускатель системы OpenSCADA"
+msgid "Qt-starter of OpenSCADA"
+msgstr "Qt-пускатель OpenSCADA"
+
+msgid "Project: %1"
+msgstr "Проект: %1"
+
+msgid "OpenSCADA start"
+msgstr "Запуск OpenSCADA"
 
 msgid "&About"
 msgstr "Пр&о..."
@@ -563,11 +569,8 @@ msgstr "Пр&о..."
 msgid "Program and OpenSCADA information"
 msgstr "Информация о программе и OpenSCADA"
 
-msgid "The button for display program and OpenSCADA information"
-msgstr "Кнопка для показа информации о программе и OpenSCADA"
-
-msgid "Press to display program and OpenSCADA information"
-msgstr "Нажать для показа информации о программе и OpenSCADA"
+msgid "The button for display program and OpenSCADA information."
+msgstr "Кнопка для показа информации о программе и OpenSCADA."
 
 msgid "About &Qt"
 msgstr "Про &Qt"
@@ -575,20 +578,14 @@ msgstr "Про &Qt"
 msgid "Qt information"
 msgstr "Qt информация"
 
-msgid "The button for getting the using Qt information"
-msgstr "Кнопка для получения информации о Qt"
-
-msgid "Press to get the using Qt information."
-msgstr "Нажать для получения информации о Qt."
+msgid "The button for getting the using Qt information."
+msgstr "Кнопка для получения информации о Qt."
 
 msgid "%1 manual"
 msgstr "%1 руководство"
 
-msgid "The button for getting the using %1 manual"
-msgstr "Кнопка для получения руководства %1"
-
-msgid "Press to get the using %1 manual."
-msgstr "Нажать для получения руководства %1."
+msgid "The button for getting the using %1 manual."
+msgstr "Кнопка для получения руководства %1."
 
 msgid "What's &This"
 msgstr "Что &это"
@@ -596,16 +593,16 @@ msgstr "Что &это"
 msgid "Question about GUI elements"
 msgstr "Вопрос про GUI элементы"
 
-msgid "The button for requesting the information about user interface elements"
+msgid ""
+"The button for requesting the information about user interface elements."
 msgstr ""
-"Кнопка для запроса информации про элементы пользовательского интерфейса"
-
-msgid "Press for requesting about user interface elements"
-msgstr ""
-"Нажать для запроса информации про элементы пользовательского интерфейса"
+"Кнопка для запроса информации про элементы пользовательского интерфейса."
 
 msgid "&Help"
 msgstr "&Помощь"
+
+msgid "Qt modules of OpenSCADA"
+msgstr "Qt модули OpenSCADA"
 
 msgid "Call the Qt-based UI module '%1'"
 msgstr "Вызов основанного на Qt UI модуля '%1'"
@@ -627,11 +624,35 @@ msgstr ""
 "Описание: %6\n"
 "Лицензия: %7"
 
+msgid "Projects of OpenSCADA"
+msgstr "Проекти OpenSCADA"
+
+msgid "List of allowed to switch projects of OpenSCADA"
+msgstr "Перечень проектов OpenSCADA доступных для переключения"
+
+msgid "The list for select and switch to allowed projects of OpenSCADA."
+msgstr "Перечень проектов OpenSCADA доступных для выбора и переключения."
+
+msgid "<New project or project to update>"
+msgstr "<Новый проект или проект для обновления>"
+
+msgid "=== User directory copy projects ==="
+msgstr "=== Проекты копий пользов. директории ==="
+
+msgid "=== Pre-installed projects ==="
+msgstr "=== Предустановленные проекты ==="
+
+msgid "Switch to the selected project"
+msgstr "Переключиться на выбранный проект"
+
+msgid "The button for switch to the selected project."
+msgstr "Кнопка для переключения на выбранный проект."
+
 msgid "Exit from the program"
 msgstr "Выход из программы"
 
-msgid "The button for exit from the program"
-msgstr "Кнопка для выхода из программы"
+msgid "The button for exit from the program."
+msgstr "Кнопка для выхода из программы."
 
 #, c-format
 msgid ""
@@ -663,9 +684,40 @@ msgstr "Руководство"
 msgid "No the manual '%1' found offline or online!"
 msgstr "Не найдено руководства '%1' локально и в сети!"
 
+msgid "New project or project to update"
+msgstr "Новый проект или проект для обновления"
+
+msgid "Project name for new one creation or to update present one:"
+msgstr "Имя проекта для создания нового или обновления присутствующего:"
+
+msgid "Empty name of the project is unavailable!"
+msgstr "Пустое имя проекта недопустимо!"
+
+msgid "Switch project"
+msgstr "Переключить проект"
+
+msgid "Do you really want to change the current project \"%1\" to \"%2\"?"
+msgstr "Вы действительно желаете изменить текущий проект \"%1\" на \"%2\"?"
+
+msgid "Project \"%1\" seems wrong or broken!"
+msgstr "Проект \"%1\" похоже ошибочный или сломан!"
+
 #, c-format
 msgid "No translated Qt message: '%s'"
 msgstr "Непереведенное Qt сообщение: '%s'"
+
+#~ msgid "Press to display program and OpenSCADA information"
+#~ msgstr "Нажать для показа информации о программе и OpenSCADA"
+
+#~ msgid "Press to get the using Qt information."
+#~ msgstr "Нажать для получения информации о Qt."
+
+#~ msgid "Press to get the using %1 manual."
+#~ msgstr "Нажать для получения руководства %1."
+
+#~ msgid "Press for requesting about user interface elements"
+#~ msgstr ""
+#~ "Нажать для запроса информации про элементы пользовательского интерфейса"
 
 #~ msgid ""
 #~ "<p>This program uses Qt Open Source Edition version %1.</p><p>Qt Open "

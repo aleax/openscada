@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-23 18:34+0300\n"
+"POT-Creation-Date: 2017-12-02 20:01+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -32,6 +32,7 @@ msgstr ""
 "Робочий інтерфейс користувача, заснований на бібліотеці Qt - зовнішній "
 "інтерфейс до рущія візуалізації."
 
+#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
@@ -129,12 +130,12 @@ msgid "Exit on last run project close"
 msgstr "Вихід при закритті останього проекту що виконується"
 
 #, c-format
-msgid "%d: Development"
-msgstr "%d: Розробка"
+msgid "%d: Development by \"%s\""
+msgstr "%d: Розробка від \"%s\""
 
 #, c-format
-msgid "%d: Running \"%s:%s\" - %s"
-msgstr "%d: Виконання \"%s:%s\" - %s"
+msgid "%d: Running \"%s:%s\" from \"%s\" - %s"
+msgstr "%d: Виконання \"%s:%s\" від \"%s\" - %s"
 
 msgid "Connected"
 msgstr "Під'єднаний"
@@ -1525,9 +1526,6 @@ msgstr "<Створити новий сеанс>"
 msgid "Running project: %1"
 msgstr "Виконання проекту: %1"
 
-msgid "Vision runtime"
-msgstr "Vision-виконання"
-
 msgid "The button for closing Vision runtime window"
 msgstr "Кнопка для закриття вікна виконання Vision"
 
@@ -2198,9 +2196,3 @@ msgstr "Час ініціалізації '%s' %f мс."
 
 msgid "Vision dialog"
 msgstr "Vision діалог"
-
-#~ msgid "Auth wrong!!!"
-#~ msgstr "Помилка аутентифікації!!!"
-
-#~ msgid "Developers"
-#~ msgstr "Розробники"

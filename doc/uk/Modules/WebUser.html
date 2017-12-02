@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/Web користувача - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/Web користувача</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebUser&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/WebUser" title="Modules/WebUser">Modules/WebUser</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/WebUser" title="Modules/WebUser (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/WebUser/ru" title="Модули/Web пользователя (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Translation and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">WebUser</a> </td>
+<td> Web-інтерфейс від користувача </td>
+<td> 0.8 </td>
+<td> GPL2 </td>
+<td> ui_WebUser.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Користувацькі інтерфейси </td>
+<td> Роман Савоченко </td>
+<td> Дозволяє створювати користувачу власні web-інтерфейси на мові OpenSCADA.
+</td></tr></table>
+<p>Модуль WebUser надає користувачу механізм створення Web-сторінок, а також дозволяє обробляти інші Web-запити на одній із внутрішніх мов OpenSCADA, зазвичай JavaLikeCalc, не залучаючись до низькорівневого програмування OpenSCADA.
+</p><p>Крім приналежності модуля системі OpenSCADA він також належить та є модулем модуля транспортного протоколу <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a>. Власне, виклик WebUser здійснюється з Protocol.HTTP. Виклик здійснюється за посередництвом розширеного механізму комунікації через експортовані у цьому модулі функції: HTTP_GET(), HTTP_POST().
+</p><p>Адресація сторінок починається із другого елементу URI. Що пов'язано із тим, що перший елемент URI використовується для ідентифікації самого модуля користувацького Web-інтерфейсу. Наприклад URL: <i>http://localhost.localdomain:10002/WebUser/UserPage</i> можна розшифрувати як виклик користувацької сторінки "UserPage" цього модуля на хості "localhost.localdomain" через порт 10002. У випадку відсутності другого елементу URI та вказання відображати індекс користувацьких сторінок у конфігурації — формується індекс сторінок (рис.1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:348px;"><a class="image" href="http://oscada.org/wiki/File:WebUser_idx_uk.png"><img class="thumbimage" height="238" src="../files/WebUser_idx_uk.png" width="346" /></a>  <div class="thumbcaption">Рис.1. Індекс користувацьких сторінок.</div></div></div></div>
+<p>Головна вкладка конфігурації модуля (рис.2) містить стан модуля, надає можливість обрання сторінки по замовченню та дозволяє сформувати перелік користувацьких сторінок.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:768px;"><a class="image" href="http://oscada.org/wiki/File:WebUser_main_uk.png"><img class="thumbimage" height="518" src="../files/WebUser_main_uk.png" width="766" /></a>  <div class="thumbcaption">Рис.2. Основна вкладка конфігурації модуля.</div></div></div></div>
+<h2><span class="mw-headline" id="WEB_.E2.80.94_.D1.81.D1.82.D0.BE.D1.80.D1.96.D0.BD.D0.BA.D0.B8">WEB — сторінки</span></h2>
+<p>Модуль надає можливість створення реалізацій Web-сторінок у об'єкті "Користувацька сторінка" (рис.3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:768px;"><a class="image" href="http://oscada.org/wiki/File:WebUser_up_main_uk.png"><img class="thumbimage" height="518" src="../files/WebUser_up_main_uk.png" width="766" /></a>  <div class="thumbcaption">Рис.3. Головна вкладка конфігурації користувацької сторінки.</div></div></div></div>
+<p>Головна вкладка містить основні налаштування користувацького протоколу:
+</p>
+<ul><li> Розділ "Стан" — містить властивості, що характеризують стан користувацької сторінки: 
+<ul><li> <i>Стан</i> — поточний режим та статистика.</li>
+<li> <i>Включено</i> — стан сторінки "Включено". </li>
+<li> <i>БД</i> — БД, у якій зберігається конфігурація.</li>
+<li> <i>Дата модифікації</i> — дата та час останньої модифікації об'єкту.</li></ul></li>
+<li> Розділ "Конфігурація" — безпосередньо містить поля конфігурації: 
+<ul><li> <i>ID</i> — інформація про ідентифікатор сторінки. </li>
+<li> <i>Ім'я</i> — вказує на ім'я сторінки. </li>
+<li> <i>Опис</i> — короткий опис сторінки та її призначення. </li>
+<li> <i>Включати</i> — вказує на стан "Включено", у який переводити сторінку при завантажені.</li></ul></li></ul>
+<p>Всі запити до користувацьких сторінок спрямовуються до процедури обробки запитів користувацької сторінки, яка представлена на вкладці "Програма" об'єкту сторінки користувача (рис.4).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:768px;"><a class="image" href="http://oscada.org/wiki/File:WebUser_up_prog_uk.png"><img class="thumbimage" height="612" src="../files/WebUser_up_prog_uk.png" width="766" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Програма" об'єкту користувацької сторінки.</div></div></div></div>
+<p>Вкладка процедури обробки запитів до користувацької сторінки містить поле для обрання внутрішньої мови програмування OpenSCADA та поле вводу тексту процедури обробки.
+</p><p>Для процедури обробки предвизначено наступні змінні обміну:
+</p>
+<ul><li> <i>rez</i> — Результат оброки (по замовченню — "200 OK").</li>
+<li> <i>HTTPreq</i> — Метод HTTP запиту (GET, POST).</li>
+<li> <i>url</i> — URI запиту.</li>
+<li> <i>page</i> — Вміст сторінки Get/Post, як для запиту так і для відповіді.</li>
+<li> <i>sender</i> — Відправник запиту.</li>
+<li> <i>user</i> — Аутентифікований користувач.</li>
+<li> <i>HTTPvars</i> — HTTP змінні у Object. Змінені та додані змінні (окрім "Date", "Server", "Accept-Ranges" та "Content-Length") будуть розташовані у пакеті відповіді.</li>
+<li> <i>URLprms</i> — Параметри URL у Object.</li>
+<li> <i>cnts</i> — Елементи вмісту для POST у Array&lt;XMLNodeObj&gt;.</li>
+<li> <i>this</i> — Показник на об'єкт цієї сторінки.</li>
+<li> <i>prt</i> — Показник на об'єкт вхідної частини HTTP протоколу.</li></ul>
+<p>Загальний сценарій запиту користувацької сторінки:
+</p>
+<ul><li> Зовнішня мережева станція формує HTTP запит з URI виду "/WebUser/{UserPage}", який попадає на транспорт OpenSCADA із значенням поля конфігурації "Протокол", рівного "HTTP".</li>
+<li> Транспорт спрямовує запит на модуль транспортного протоколу Protocol.HTTP.</li>
+<li> Модуль транспортного протоколу, у відповідності до першого елементу URI, спрямовує запит цьому модулю.</li>
+<li> Цей модуль обирає об'єкт сторінки користувача, яка вказана у другому елементі URI.</li>
+<li> Здійснюється ініціалізація змінних HTTP-протоколу для процедури сторінки:
+<ul><li> <i>HTTPreq</i> — встановлюється у значення рядка "GET" або "POST" у залежності від типу запиту;</li>
+<li> <i>url</i> — адрес запитаного ресурсу (URI);</li>
+<li> <i>page</i> — вміст сторінки що передається, для методу "POST";</li>
+<li> <i>sender</i> — адреса відправника запиту;</li>
+<li> <i>user</i> — ідентифікатор аутентифікованого користувача, якщо аутентифікація мала місце;</li>
+<li> <i>HTTPvars</i> — розібраний перелік змінних протоколу HTTP у вигляді властивостей об'єкту;</li>
+<li> <i>URLprms</i> — розібраний перелік параметрів URL у вигляді властивостей об'єкту;</li>
+<li> <i>cnts</i> — розібрані елементи вмісту для POST у Array&lt;XMLNodeObj&gt; з вмістом елементів у тексті з властивостями у атрибутах XMLNodeObj.</li></ul></li>
+<li> Виклик процедури на виконання, яка, обробивши запит, формує вміст сторінки у "page" та результат запиту у "rez".</li>
+<li> На завершення формується відповідь з кодом повернення HTTP із "rez" та вмістом із "page", а також зміненими та доданими змінними протоколу HTTP із <i>HTTPvars</i>.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

@@ -59,8 +59,9 @@ pthread_key_t TSYS::sTaskKey;
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"),
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
-    mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mN_CPU(1),
-    mainPthr(0), mSysTm(0), mClockRT(false), mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrcTm(0), mRdPrimCmdTr(false)
+    mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
+    mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()),
+    mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrcTm(0), mRdPrimCmdTr(false)
 {
     Mess = new TMess();
 
@@ -102,6 +103,12 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     //sigaction(SIGSEGV, &sHdr, &sigActOrig);
     sigaction(SIGABRT, &sHdr, &sigActOrig);
     sigaction(SIGUSR1, &sHdr, &sigActOrig);
+
+    //Load commandline options
+    string argCom, argVl;
+    for(int argPos = 0; (argCom=getCmdOpt(argPos,&argVl)).size(); )
+	mCmdOpts[strEncode(argCom,ToLower)] = argVl;
+    mCmdOpts[""] = argv[0];
 }
 
 TSYS::~TSYS( )
@@ -110,15 +117,7 @@ TSYS::~TSYS( )
     finalKill = true;
 
     //Delete all nodes in order
-    del("ModSched");
-    del("UI");
-    del("Special");
-    del("Archive");
-    del("DAQ");
-    del("Protocol");
-    del("Transport");
-    del("Security");
-    del("BD");
+    unload();
 
     delete Mess;
     pthread_key_delete(sTaskKey);
@@ -153,7 +152,7 @@ string TSYS::host( )
 string TSYS::workDir( )
 {
     char buf[STR_BUF_LEN];
-    return getcwd(buf,sizeof(buf));
+    return getcwd(buf, sizeof(buf));
 }
 
 void TSYS::setWorkDir( const string &wdir, bool init )
@@ -504,7 +503,7 @@ string TSYS::getCmdOpt_( int &curPos, string *argVal, int argc, char **argv )
 	    string rez = string(argv[argI]+2);
 	    if((fPos=rez.find("=")) != string::npos) {
 		if(argVal) *argVal = rez.substr(fPos+1);
-		return rez.substr(0,fPos);
+		return rez.substr(0, fPos);
 	    }
 	    if(argVal) *argVal = ((argI+1) < argc && argv[argI+1][0] != '-') ? argv[argI+1] : "";
 	    return rez;
@@ -514,11 +513,24 @@ string TSYS::getCmdOpt_( int &curPos, string *argVal, int argc, char **argv )
 	    if((argIsh+1) >= argLen) continue;
 	    curPos = argI+((argIsh+1)<<8);
 	    if(argVal) *argVal = ((argIsh+2) == argLen && (argI+1) < argc && argv[argI+1][0] != '-') ? argv[argI+1] : "";
-	    return string(argv[argI]+argIsh+1,1);
+	    return string(argv[argI]+argIsh+1, 1);
 	}
     }
 
     return "";
+}
+
+string TSYS::cmdOpt( const string &opt, const string &setVl )
+{
+    MtxAlloc res(dataRes(), true);
+
+    //Set command option
+    if(setVl.size()) mCmdOpts[strEncode(opt,ToLower)] = setVl;
+
+    //Get value
+    map<string, string>::iterator iOpt = mCmdOpts.find(strEncode(opt,ToLower));
+    if(iOpt == mCmdOpts.end()) return "";
+    return iOpt->second.size() ? iOpt->second : "1";
 }
 
 bool TSYS::cfgFileLoad( )
@@ -526,16 +538,15 @@ bool TSYS::cfgFileLoad( )
     bool cmd_help = false;
 
     //================ Load parameters from commandline =========================
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=getCmdOpt(argPos,&argVl)).size(); )
-	if(strcasecmp(argCom.c_str(),"h") == 0 || strcasecmp(argCom.c_str(),"help") == 0) {
-	    fprintf(stdout,"%s",optDescr().c_str());
-	    Mess->setMessLevel(7);
-	    cmd_help = true;
-	}
-	else if(strcasecmp(argCom.c_str(),"config") == 0)	mConfFile = argVl;
-	else if(strcasecmp(argCom.c_str(),"station") == 0)	mId = argVl;
-	else if(strcasecmp(argCom.c_str(),"statname") == 0)	mName = argVl;
+    string tVl;
+    if(s2i(cmdOpt("h")) || s2i(cmdOpt("help"))) {
+	fprintf(stdout, "%s", optDescr().c_str());
+	Mess->setMessLevel(7);
+	cmd_help = true;
+    }
+    if((tVl=cmdOpt("config")).size())	mConfFile = tVl;
+    if((tVl=cmdOpt("station")).size())	mId = tVl;
+    if((tVl=cmdOpt("statname")).size())	mName = tVl;
 
     //Load config-file
     int hd = open(mConfFile.c_str(), O_RDONLY);
@@ -579,6 +590,8 @@ bool TSYS::cfgFileLoad( )
 
     return cmd_help;
 }
+
+
 
 void TSYS::cfgFileSave( )
 {
@@ -624,14 +637,36 @@ void TSYS::cfgPrmLoad( )
 
 void TSYS::load_( )
 {
-    static bool first_load = true;
+    //Check for a OpenSCADA project selection and switch at need
+    // Get current project name
+    setPrjNm(cmdOpt("StatName"));
+    if(!(prjNm().size() && TRegExp("/"+prjNm()+"$").test(workDir()) &&
+	    TRegExp("/("+prjNm()+"/oscada.xml|oscada_"+prjNm()+".xml)$").test(cmdOpt("config"))))
+	setPrjNm("");
+    // Get name for the command of project switch
+    if(!prjNm().size()) {
+	setPrjNm(cmdOpt("ProjName"));
+	if(!prjNm().size()) {
+	    TArrayObj *rez = TRegExp("openscada_(.+)$").match(cmdOpt(""));
+	    if(rez) {
+		if(rez->size() >= 2) setPrjNm(rez->arGet(1).getS());
+		delete(rez);
+	    }
+	}
+	if(!prjNm().size() && getenv("OSCADA_ProjName")) setPrjNm(getenv("OSCADA_ProjName"));
+	if(prjNm().size() && !prjSwitch(prjNm())) setPrjNm("");
+    }
+    // Check for the custom (not project) mode
+    setPrjCustMode(!prjNm().size() && cmdOpt("config").size());
+
+    mStopSignal = 0;
 
     bool cmd_help = cfgFileLoad();
     mess_sys(TMess::Info, _("Load!"));
     cfgPrmLoad();
     Mess->load();	//Messages load
 
-    if(first_load) {
+    if(!present("BD")) {
 	//Create subsystems
 	add(new TBDS());
 	add(new TSecurity());
@@ -659,7 +694,7 @@ void TSYS::load_( )
 	cfgPrmLoad();
     }
 
-    //Direct load subsystems and modules
+    //Direct loading of subsystems and modules
     vector<string> lst;
     list(lst);
     for(unsigned iA = 0; iA < lst.size(); iA++)
@@ -670,7 +705,6 @@ void TSYS::load_( )
 	}
 
     if(cmd_help) stop();
-    first_load = false;
 }
 
 void TSYS::save_( )
@@ -763,7 +797,21 @@ int TSYS::start( )
     return mStopSignal;
 }
 
-void TSYS::stop( )	{ mStopSignal = SIGUSR1; }
+void TSYS::stop( int sig )	{ if(!mStopSignal) mStopSignal = sig; }
+
+void TSYS::unload( )
+{
+    del("ModSched");
+    del("UI");
+    del("Special");
+    del("Archive");
+    del("DAQ");
+    del("Protocol");
+    del("Transport");
+    del("Security");
+    del("BD");
+    modif();
+}
 
 bool TSYS::chkSelDB( const string& wDB,  bool isStrong )
 {
@@ -1195,6 +1243,11 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 		    iSz++;
 		}
 		else sout += in[iSz];
+	    break;
+	case TSYS::ToLower:
+	    sout.reserve(in.size());
+	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+		sout += (char)tolower(in[iSz]);
 	    break;
     }
     return sout;
@@ -1687,6 +1740,50 @@ string TSYS::rdStRequest( XMLNode &req, const string &st, bool toScan )
     }
 
     return "";
+}
+
+bool TSYS::prjSwitch( const string &prj, bool toCreate )
+{
+    //Check for the project availability into folder of preistalled ones for writibility and next into the user folder
+    struct stat file_stat;
+
+    //Check for projects' folders availability
+    string  prjDir = oscd_datadir_full,
+	    prjCfg = "";
+    stat(prjDir.c_str(), &file_stat);
+    if((file_stat.st_mode&S_IFMT) != S_IFDIR || access(prjDir.c_str(), X_OK|W_OK) != 0) {
+	prjDir = "~/.openscada";
+	stat(prjDir.c_str(), &file_stat);
+	if((file_stat.st_mode&S_IFMT) != S_IFDIR || access(prjDir.c_str(), X_OK|W_OK) != 0) return false;
+    }
+
+    //Check for the project folder availability
+    prjDir += "/" + prj;
+    stat(prjDir.c_str(), &file_stat);
+    if((file_stat.st_mode&S_IFMT) == S_IFDIR && access(prjDir.c_str(), X_OK|W_OK) == 0) {
+	prjCfg = prjDir + "/oscada.xml";
+	stat(prjCfg.c_str(), &file_stat);
+	if((file_stat.st_mode&S_IFMT) != S_IFREG) {
+	    prjCfg = string(sysconfdir_full) + "/oscada_" + prj + ".xml";
+	    stat(prjCfg.c_str(), &file_stat);
+	    if((file_stat.st_mode&S_IFMT) != S_IFREG) return false;
+	}
+
+	// Switch to the found project
+	//  Set the project configuration file into "--config", name into "--StatName", change the work directory
+	cmdOpt("config", prjCfg);
+	cmdOpt("StatName", prj);
+	setWorkDir(prjDir);
+
+	//  Set an exit signal for restarting the system, clean prjNm and return true
+	stop(SIGUSR2);
+
+	return true;
+    }
+    // ???? Create new project's folder or copy its content from preinstalled RO one at <toCreate>
+    //  ???? ...
+
+    return false;
 }
 
 void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm, pthread_attr_t *pAttr, bool *startSt )
@@ -3091,9 +3188,14 @@ int main( int argc, char *argv[] )
     //Same load and start the core object TSYS
     SYS = new TSYS(argc, argv, NULL);
     try {
-	SYS->load();
-	if((rez=SYS->stopSignal()) > 0) throw TError(SYS->nodePath().c_str(), "Stop by signal %d on load.", rez);
-	rez = SYS->start();
+	while(true) {
+	    SYS->load();
+	    if((rez=SYS->stopSignal()) && rez != SIGUSR2)
+		throw TError(SYS->nodePath().c_str(), "Stop by signal %d on load.", rez);
+	    if(!rez) rez = SYS->start();
+	    if(rez != SIGUSR2)	break;
+	    SYS->unload();
+	}
     } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     //Free OpenSCADA system's root object

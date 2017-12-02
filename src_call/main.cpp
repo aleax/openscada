@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: main.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *                                                     *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -80,9 +80,14 @@ int main( int argc, char *argv[], char *envp[] )
     //Same load and start the core object TSYS
     SYS = new TSYS(argc, argv, envp);
     try {
-	SYS->load();
-	if((rez=SYS->stopSignal()) > 0) throw TError(SYS->nodePath().c_str(),"Stop by signal %d on load.",rez);
-	rez = SYS->start();
+	while(true) {
+	    SYS->load();
+	    if((rez=SYS->stopSignal()) && rez != SIGUSR2)
+		throw TError(SYS->nodePath().c_str(), "Stop by signal %d on load.", rez);
+	    if(!rez) rez = SYS->start();
+	    if(rez != SIGUSR2)	break;
+	    SYS->unload();
+	}
     } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     //Free OpenSCADA system's root object

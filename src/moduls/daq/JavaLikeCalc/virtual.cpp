@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.6.9"
+#define MOD_VER		"3.6.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -259,7 +259,7 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 	    func.free();
 	    lbAt("sys_compile").at().del(funcId.c_str());
 	}
-	throw TError(nodePath().c_str(),_("Compile error: %s"),err.mess.c_str());
+	throw TError((nodePath()+"sys_compile/"+funcId).c_str(), _("Compile error: %s"), err.mess.c_str());
     }
 
     return func.at().nodePath(0,true);

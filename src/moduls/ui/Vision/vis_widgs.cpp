@@ -261,6 +261,7 @@ UserStBar::UserStBar( const string &iuser, const string &ipass, const string &iV
 
 void UserStBar::setUser( const string &val )
 {
+    MtxAlloc res(mod->dataRes(), true);
     setText(QString("<font color='%1'>%2</font>").arg((val=="root")?"red":"green").arg(val.size()?val.c_str():"*"));
     userTxt = val;
 }

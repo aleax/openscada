@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модули/Конфигуратор на Web - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/Конфигуратор на Web</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebCfg&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/WebCfg" title="Modules/WebCfg">Modules/WebCfg</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/WebCfg" title="Modules/WebCfg (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/WebCfg/uk" title="Модулі/Конфігуратор на Web (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Translation and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a> </td>
+<td> Системный конфигуратор (Web) </td>
+<td> 1.7 </td>
+<td> GPL2 </td>
+<td> ui_WebCfg.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Пользовательские интерфейсы </td>
+<td> Роман Савоченко </td>
+<td> Предоставляет конфигуратор OpenSCADA, основанный на Web.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="tocnumber">1</span> <span class="toctext">Базовые элементы</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D1.8B"><span class="tocnumber">2</span> <span class="toctext">Команды</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.A1.D0.BF.D0.B8.D1.81.D0.BA.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Списки</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8B"><span class="tocnumber">4</span> <span class="toctext">Таблицы</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.98.D0.B7.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.B8.D1.8F"><span class="tocnumber">5</span> <span class="toctext">Изображения</span></a></li>
+</ul>
+</div>
+
+<p>Модуль "WebCfg" предоставляет конфигуратор OpenSCADA. Конфигуратор реализован на основе Web технологий. Для работы конфигуратора достаточно обычного WEB-браузера. Работоспособность модуля "WebCfg" тестировалась в связке с модулями "<a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>" и "<a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>" на следующих Web-браузерах:
+</p>
+<ul><li> Mozilla;</li>
+<li> Firefox;</li>
+<li> Konqueror;</li>
+<li> Opera;</li>
+<li> IE.</li></ul>
+<p>Модуль построен на основе языка управления OpenSCADA, а значит предоставляется единый интерфейс конфигурации. Обновление модуля может потребоваться только в случае обновления спецификации языка управления.
+</p><p>Кроме принадлежности модуля к OpenSCADA он также принадлежит и является модулем модуля транспортного протокола "HTTP". Собственно, вызов "WebCfg" производиться из "HTTP" и производится посредством расширенного механизма коммуникации, через экспортированные в модуле "WebCfg" функции: HttpGet() и HttpSet().
+</p><p>Интерфейс модуля реализован на языке XHTML 1.0 Transitional с вкраплениями JavaScript.
+</p><p>Использование модуля начинается с открытия сеанса пользователя, аутентификации пользователя модулем протокола HTTP (Protocol.HTTP) (рис.1). Для функционирования аутентификации и механизма сохранения сеанса браузер должен разрешать Cookies.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:558px;"><a class="image" href="http://oscada.org/wiki/File:WebCfg_login_ru.png"><img class="thumbimage" height="362" src="../files/WebCfg_login_ru.png" width="556" /></a>  <div class="thumbcaption">Рис.1. Аутентификация пользователя.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:748px;"><a class="image" href="http://oscada.org/wiki/File:WebCfg_displaystruct_ru.png"><img class="thumbimage" height="568" src="../files/WebCfg_displaystruct_ru.png" width="746" /></a>  <div class="thumbcaption">Рис.2. Структура рабочего окна пользователя.</div></div></div></div>
+<p>После аутентификации пользователь попадает в рабочее окно (рис.2), которое состоит из следующих частей:
+</p>
+<dl><dd>1. <i>Верхний колонтитул</i> — содержит наименование модуля.</dd>
+<dd>2. <i>Панель управления</i> — состоит из:
+<dl><dd>2.1. <i>Навигатор</i> — выполняет функции навигации по дереву страниц.</dd>
+<dd>2.2. <i>Наименование узла</i>.</dd>
+<dd>2.3. <i>Пользователь системы</i> — отображает пользователя текущего сеанса, его адрес и позволяет изменить пользователя.</dd></dl></dd>
+<dd>3. <i>Рабочее поле</i> — содержит конфигурационный контент языка интерфейса управления, начиная с корневых вкладок и заканчивая конечными элементами управления.</dd>
+<dd>4. <i>Нижний колонтитул</i> — содержит адрес текущей страницы.</dd></dl>
+<p>Адресация страниц начинается с элемента второго уровня URL. Это связанно с тем, что элемент первого уровня используется для идентификации модуля пользовательского Web-интерфейса. Например URL: "http://localhost.localdomain:10002/WebCfg/Functions" можно расшифровать как вызов страницы первого уровня "Functions" Web модуля "WebCfg" на хосте localhost.localdomain через порт 10002.
+</p><p>Элементы управления делятся на: базовые, команды, списки, таблицы и изображения. Все четыре типа отображаются отдельными блоками независимо от их расположения в описании.
+</p>
+<h2><span class="mw-headline" id=".D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="mw-headline-number">1</span> Базовые элементы</span></h2>
+<p>В число базовых элементов входят: информационные элементы, поля ввода значений, элементы выбора из списка, флаги. Для установки новых значений базовых элементов используется групповой метод, для этого на форме существует кнопка "Принять". В случае отсутствия имени элемента базовый элемент стыкуется к предыдущему базовому. Пример группы базовых элементов со стыковкой приведён на рисунке 3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:715px;"><a class="image" href="http://oscada.org/wiki/File:WebCfg_genericelem_ru.png"><img class="thumbimage" height="423" src="../files/WebCfg_genericelem_ru.png" width="713" /></a>  <div class="thumbcaption">Рис.3. Базовые элементы и их стыковка.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D1.8B"><span class="mw-headline-number">2</span> Команды</span></h2>
+<p>Команды — это элементы для передачи определённых действий узлу и организации ссылок на страницы. Команды могут содержать параметры. Параметры формируются из базовых элементов. Пример команды с параметрами приведен на рисунке 4.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:601px;"><a class="image" href="http://oscada.org/wiki/File:WebCfg_commandelem_ru.png"><img class="thumbimage" height="260" src="../files/WebCfg_commandelem_ru.png" width="599" /></a>  <div class="thumbcaption">Рис.4. Команда.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.A1.D0.BF.D0.B8.D1.81.D0.BA.D0.B8"><span class="mw-headline-number">3</span> Списки</span></h2>
+<p>Списки содержат группу базовых элементов одного типа. Для операций над элементами списка добавляются дополнительные кнопки. Кроме того, через элементы списка выполняются операции перехода на другие страницы. Для перехода добавляется кнопка "Перейти". Списки могут быть индексированными. Пример списка с переходом приведен на рисунке 5.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:834px;"><a class="image" href="http://oscada.org/wiki/File:WebCfg_listelem_ru.png"><img class="thumbimage" height="430" src="../files/WebCfg_listelem_ru.png" width="832" /></a>  <div class="thumbcaption">Рис.5. Список.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8B"><span class="mw-headline-number">4</span> Таблицы</span></h2>
+<p>Таблицы содержат значения базовых элементов. Тип базового элемента определяется отдельно для каждой колонки. Пример таблицы приведен на рисунке 6.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:970px;"><a class="image" href="http://oscada.org/wiki/File:WebCfg_tableelem_ru.png"><img class="thumbimage" height="514" src="../files/WebCfg_tableelem_ru.png" width="968" /></a>  <div class="thumbcaption">Рис.6. Таблица.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.98.D0.B7.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">5</span> Изображения</span></h2>
+<p>Изображения призваны передавать графическую информацию в конфигураторы. Пример изображения приведен на рисунке 7.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:765px;"><a class="image" href="http://oscada.org/wiki/File:WebCfg_imgelem_ru.png"><img class="thumbimage" height="630" src="../files/WebCfg_imgelem_ru.png" width="763" /></a>  <div class="thumbcaption">Рис.7. Изображение.</div></div></div></div>
+
+
+
+
+
+
+</div></body>
+</html>

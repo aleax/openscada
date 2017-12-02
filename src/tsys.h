@@ -83,7 +83,7 @@ class TSYS : public TCntrNode
 
     public:
 	//Data
-	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb };
+	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb, ToLower };
 	enum IntView	{ Dec, Oct, Hex };
 
 	// Task structure
@@ -133,8 +133,10 @@ class TSYS : public TCntrNode
 	TSYS( int argi, char **argb, char **env );
 	~TSYS( );
 
+	void	unload( );
+
 	int	start( );
-	void	stop( );
+	void	stop( int sig = SIGUSR1 );	// SIGUSR2 used for reloading from other project
 
 	int	stopSignal( )	{ return mStopSignal; }
 
@@ -213,6 +215,14 @@ class TSYS : public TCntrNode
 
 	time_t	sysTm( ) volatile	{ return mSysTm ? mSysTm : time(NULL); }	//System time fast access, from updated cell
 	static int64_t curTime( );	//Current system time (usec)
+
+	// Projects
+	bool prjCustMode( )			{ return mPrjCustMode; }
+	void setPrjCustMode( bool vl )		{ mPrjCustMode = vl; }
+	string prjNm( )				{ return mPrjNm; }
+	void setPrjNm( const string &vl )	{ mPrjNm = vl; }
+
+	bool prjSwitch( const string &prj, bool toCreate = false );
 
 	// Tasks control
 	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );
@@ -340,16 +350,15 @@ class TSYS : public TCntrNode
 	string getCmdOpt( int &curPos, string *argVal = NULL );
 	static string getCmdOpt_( int &curPos, string *argVal, int argc, char **argv );
 
+	string cmdOpt( const string &opt, const string &setVl = "" );
+
 	// System control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
 	ResRW &cfgRes( )	{ return mCfgRes; }
 
 	//Public attributes
-	static bool finalKill;	//Final object's kill flag. For dead requsted resources
-	const int argc;		//Comand line seting counter.
-	const char **argv;	//Comand line seting buffer.
-	const char **envp;	//System environment.
+	static bool finalKill;		//Final object's kill flag. For dead requsted resources
 
 	AutoHD<TModule>	mainThr;	//A module to call into the main thread
 
@@ -365,11 +374,11 @@ class TSYS : public TCntrNode
 	//Private methods
 	const char *nodeName( ) const		{ return mId.c_str(); }
 	const char *nodeNameSYSM( ) const	{ return mName.c_str(); }
-	bool cfgFileLoad( );
-	void cfgFileSave( );
-	void cfgPrmLoad( );
-	void cfgFileScan( bool first = false, bool up = false );
-	void cntrCmdProc( XMLNode *opt );	// Control interface command process
+	bool	cfgFileLoad( );
+	void	cfgFileSave( );
+	void	cfgPrmLoad( );
+	void	cfgFileScan( bool first = false, bool up = false );
+	void	cntrCmdProc( XMLNode *opt );	// Control interface command process
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
@@ -382,6 +391,10 @@ class TSYS : public TCntrNode
 	static void *RdTask( void * );
 
 	//Private attributes
+	const int argc;		// Comand line seting counter.
+	const char **argv;	// Comand line seting buffer.
+	const char **envp;	// System environment.
+
 	string	mUser,		// A owner user name!
 	 	mConfFile,	// Config-file name
 		mId,		// Station id
@@ -415,8 +428,12 @@ class TSYS : public TCntrNode
 	volatile time_t	mSysTm;
 	bool		mClockRT;	//Used clock REALTIME, else it is MONOTONIC
 
-	map<string, double>	mCntrs;	//Counters
-	map<string, SStat>	mSt;	//Remote stations
+	bool		mPrjCustMode;
+	MtxString	mPrjNm;
+
+	map<string, string>	mCmdOpts;	//Commandline options
+	map<string, double>	mCntrs;		//Counters
+	map<string, SStat>	mSt;		//Remote stations
 
 	unsigned char	mRdStLevel,	//Current station level
 			mRdRestConnTm;	//Redundant restore connection to reserve stations timeout in seconds

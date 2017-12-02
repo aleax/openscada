@@ -1,0 +1,870 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/Vision - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/Vision</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVision&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Vision" title="Modules/Vision (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Vision/ru" title="Модули/Vision (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="http://oscada.org/wiki/Modules/Vision/uk" title="Модулі/Vision (1% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Translation and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
+<td> Operation user interface (Qt) </td>
+<td> 4.6 </td>
+<td> GPL2 </td>
+<td> ui_Vision.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> UI </td>
+<td> Roman Savochenko, Maxim Lysenko (2007-2012), Ksenia Yashina (2007-2008) </td>
+<td> Visual operation user interface, based on Qt library - front-end to VCA engine.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Purpose"><span class="tocnumber">1</span> <span class="toctext">Purpose</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Tool_of_the_graphical_formation_of_the_VCA_interface"><span class="tocnumber">2</span> <span class="toctext">Tool of the graphical formation of the VCA interface</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Styles"><span class="tocnumber">2.1</span> <span class="toctext">Styles</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Linkage_with_the_dynamics"><span class="tocnumber">2.2</span> <span class="toctext">Linkage with the dynamics</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Execution_of_the_VCA_interfaces"><span class="tocnumber">3</span> <span class="toctext">Execution of the VCA interfaces</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Conception_of_basic_elements_.28primitives.29"><span class="tocnumber">4</span> <span class="toctext">Conception of basic elements (primitives)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Elementary_figure_primitive_.28ElFigure.29"><span class="tocnumber">4.1</span> <span class="toctext">Elementary figure primitive (ElFigure)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Text_primitive_.28Text.29"><span class="tocnumber">4.2</span> <span class="toctext">Text primitive (Text)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Primitive_of_the_form_element_.28FormEl.29"><span class="tocnumber">4.3</span> <span class="toctext">Primitive of the form element (FormEl)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Primitive_of_the_displaying_the_media_materials_.28Media.29"><span class="tocnumber">4.4</span> <span class="toctext">Primitive of the displaying the media materials (Media)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Primitive_of_the_construction_of_diagrams.2Fgraphs_.28Diagram.29"><span class="tocnumber">4.5</span> <span class="toctext">Primitive of the construction of diagrams/graphs (Diagram)</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Primitive_of_the_protocol_formation_.28Protocol.29"><span class="tocnumber">4.6</span> <span class="toctext">Primitive of the protocol formation (<i>Protocol</i>)</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Primitive_of_the_report_formation_.28Document.29"><span class="tocnumber">4.7</span> <span class="toctext">Primitive of the report formation (<i>Document</i>)</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Primitive_of_the_box_container_.28Box.29"><span class="tocnumber">4.8</span> <span class="toctext">Primitive of the box container (Box)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="#Vector_graphics_editor"><span class="tocnumber">5</span> <span class="toctext">Vector graphics editor</span></a>
+<ul>
+<li class="toclevel-2 tocsection-16"><a href="#Purpose_2"><span class="tocnumber">5.1</span> <span class="toctext">Purpose</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Principles_and_functions_of_the_graphic_editor"><span class="tocnumber">5.2</span> <span class="toctext">Principles and functions of the graphic editor</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#Basic_principles_of_operation_in_the_graphic_editor"><span class="tocnumber">5.3</span> <span class="toctext">Basic principles of operation in the graphic editor</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Popup_menu_of_the_graphic_editor"><span class="tocnumber">5.4</span> <span class="toctext">Popup menu of the graphic editor</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Properties_dialog_of_the_elementary_figure"><span class="tocnumber">5.5</span> <span class="toctext">Properties dialog of the elementary figure</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#The_overall_configuration_of_the_module"><span class="tocnumber">6</span> <span class="toctext">The overall configuration of the module</span></a></li>
+</ul>
+</div>
+
+<p>Vision module provides a mechanism of the final visualization control area (VCA) into the OpenSCADA. The module is based on the multi-platform library of graphical user interface (GUI) of firm TrollTech — Qt (<a class="external free" href="http://www.trolltech.com/qt" rel="nofollow noreferrer noopener" target="_blank">http://www.trolltech.com/qt</a>). In its work, the module uses the data of the VCA engine (module <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>).
+</p><p>Visual control area (VCA) is an integral part of the SCADA system. It applies to the client stations with a view to providing accessible information about the object and to for the the issuance of the control actions to the object. In various practical situations and conditions the VCA, based on different principles of visualization may by applied. For example, this may be the library of widgets Qt, GTK+,  wxWidgets or hypertext mechanisms based technologies HTML, XHTML, XML, CSS, and JavaScript, or third-party applications of visualization, realized in various programming languages Java, Python, etc. Any of these principles has its advantages and disadvantages, the combination of which could become an insurmountable obstacle to the use of VCA in a practical case. For example, technologies like the Qt library can create highly-reactive VCA, which will undoubtedly important for the operator station for control of technological processes (TP). However, the need for installation of that client software in some cases may make using of it impossible. On the other hand, Web-technology does not require installation on client systems and is extremely multi-platform (it is enough to create a link to the Web-server at any Web-browser) that is most important for various engineering and administrative stations, but the responsiveness and reliability of such interfaces is lower that actually eliminates the using of them at the operator of the TP stations.
+</p><p>OpenSCADA system has extremely flexible architecture that allows you to create external interfaces, including user and in any manner and for any taste. For example, the system configuration OpenSCADA as now available as by means of the Qt library, and also the Web-based.
+</p><p>At the same time creation of an independent implementation of the VCA in different basis may cause the inability to use the configuration of one VCA into another one. That is inconvenient and limited from the user side, as well as costly in terms of implementation and follow-up support. In order to avoid these problems, as well as to create as soon as possible the full spectrum of different types of VCA 
+<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA" title="Special:MyLanguage/Sub-projects/VCA">the project of conception of the Visual Control Area (VCA)</a> is established. The result of this project — the direct visualization module (based on the library Qt), direct visualization module <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> and VCA engine <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.
+</p>
+<h2><span class="mw-headline" id="Purpose"><span class="mw-headline-number">1</span> Purpose</span></h2>
+<p>This module of the direct visualization of the VCA is designed for the formation and execution of VCA interfaces among the graphic library Qt. The VCA module provide:
+</p>
+<ul><li> three levels of complexity in the formation of visualization interface which let organically to develop and apply the tools of the methodology from simple to complex:</li></ul>
+<dl><dd><ol><li> formation from the template frames through the appointment of the dynamics (without the graphical configuration);</li>
+<li> graphical formation of new frames through the use of already made visualization elements from the library (mimic panel);</li>
+<li> formation of new frames, template frames of the visualization elements in the libraries.</li></ol></dd></dl>
+<ul><li> building of the visualization interfaces of various complexity, ranging from simple flat interfaces of the monitoring and finishing with the full-fledged hierarchical interface used in SCADA systems;</li>
+<li> providing of the different ways of formation and configuration of the user interface, based on different graphical interfaces (Qt, Web, Java ...) and also through the standard management interface of OpenSCADA system;</li>
+<li> change of dynamics in the process of execution;</li>
+<li> building of the new template frames on the user level and the formation of the frames libraries, specialized for the area of application (eg the inclusion of frames of parameters, graphs and other items linking them to each other) in accordance with the theory of secondary using and accumulation;</li>
+<li> building of the new user elements of the visualization and the formation of the libraries of frames,specialized for the area of application in accordance with the theory of secondary using and accumulation;</li>
+<li> description of the logic of new template frames and user visualization elements as with the simple links, and also with the laconic, a full-fledged programming language;</li>
+<li> the possibility of the inclusion of the functions(or frames of computing of the functions) of the object model of OpenSCADA to the user elements of the visualization, actually linking the presentation of the algorithm of computing (for example, by visualizing the library of models of devices of TP for following visual modeling TP);</li>
+<li> separation of user interfaces and interfaces of visualization of data provides building the user interface in a single environment, and performance of it in many others (Qt, Web, Java ...);</li>
+<li>the possibility to connect to the performing interface for monitoring and corrective actions (for example, while operator training and control in real time for his actions);</li>
+<li> Visual building of various schemes with the superposition of the logical links and the subsequent centralized execution in the background (visual construction and performance of mathematical models, logic circuits, relay circuits and other proceedings);</li>
+<li> providing of the the functions of the object API to the OpenSCADA system, it can be used to control the properties of the visualization interface from the user procedures;</li>
+<li> building of the servers of frames, of elements of the visualization and of the project of the interfaces of the visualization with the possibility to serve the great number of the client connections;</li>
+<li> simple organization of client stations in different basis (Qt, Web, Java ...) with the connection to the central server;</li>
+<li> full mechanism of separation of privileges between the users which allows to create and execute projects with the various rights of access to its components;</li>
+<li> adaptive formation of alarms and notifications, with the support of different ways of notification;</li>
+<li> support of the user formation of the palettes and font preferences for the visualization of the interface;</li>
+<li> support of the user formation of maps of the events under the various items of equipment management and user preferences;</li>
+<li> support for user profiles, allowing to define various properties of the visualization interface (colors, font characteristics, the preferred maps of events);</li>
+<li> flexible storage and distribution of libraries of widgets, frames, and projects of the visualization interfaces in the databases, supported by OpenSCADA; actually users need only to register the database with data.</li></ul>
+<h2><span class="mw-headline" id="Tool_of_the_graphical_formation_of_the_VCA_interface"><span class="mw-headline-number">2</span> Tool of the graphical formation of the VCA interface</span></h2>
+<p>Development of the VCA interface is performed in a single window, realizing many documents interface (MDI) interface (Fig. 2.a). This approach allows you to simultaneously open multiple frames of various sizes. The following mechanisms for managing the development are used: toolbars, menus and context menus. Most actions are duplicated by different mechanisms, that allows you to quickly find the tool by the preferred method. Navigational interfaces are implemented by the attached windows. Configuration if the toolbars and attached windows is saved on exit and restored at startup that lets you to customize the interface for yourself.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:809px;"><a class="image" href="http://oscada.org/wiki/File:Vision_win.png"><img class="thumbimage" height="593" src="../files/Vision_win.png" width="807" /></a>  <div class="thumbcaption">Fig.2.a. Window of the VCA interface development.</div></div></div></div>
+<p>Access to major components of the VCA is made by attached windows, in the Figure 2.a these windows are shown on the left side. These windows contain:
+</p>
+<ul><li> Tree of the widget libraries. Using the navigator you can quickly find the needed widget or library and to do with them necessary operations. The following operations are implemented: add, delete, copy, settings of the widgets and libraries, as well as cleaning and visual editing of the widget. For adaptive management the context menu is supported with the following items:
+<ul><li> "New library" — creation of the new library.</li>
+<li> "Add visual item" — adding of the visual element to the library.</li>
+<li> "Delete visual item" — deleting of the visual element from the library.</li>
+<li> "Visual item changes clear" — cleaning of the visual element with inheritance of modified properties or setting them by default.</li>
+<li> "Visual item changes put down" — put down of the visual element changes to the parent, that will used by other inheritances.</li>
+<li> "Visual item properties" — configuration of the visual element.</li>
+<li> "Visual item edit" — visual editing of the element.</li>
+<li> "Visual item cut" — cut/move of the visual element at the time of paste.</li>
+<li> "Visual item copy" — copy of the visual element at the time of paste.</li>
+<li> "Visual item paste" — paste of the visual element.</li>
+<li> "Load from DB" — uploading the data of the visual element from the database.</li>
+<li> "Save to DB" — saving data of visual element to the database.</li>
+<li> "Refresh libraries" — performs rereading of the configuration and composition of the libraries of the data model.</li></ul></li>
+<li> The tree of pages of the project. Provides the mechanism for "Drag and drop" for creation of the user frames based on the elements of libraries. In order to provide the adaptive management the context menu is supported with the following items:
+<ul><li> "Run project execution" — starting of the execution of the chosen project.</li>
+<li> "New project" — creation of the new project.</li>
+<li> "Add visual item" — adding of the visual element to the project/page.</li>
+<li> "Delete visual item" — deleting of the visual element from the project/page.</li>
+<li> "Visual item changes clear" — cleaning of the visual element with inheritance of modified properties or setting them by default.</li>
+<li> "Visual item changes put down" — put down of the visual element changes to the parent, that will used by other inheritances.</li>
+<li> "Visual item properties" — configuration of the visual element.</li>
+<li> "Visual item edit" — visual editing of the element.</li>
+<li> "Visual item cut" — cut/move of the visual element at the time of paste.</li>
+<li> "Visual item copy" — copy of the visual element at the time of paste.</li>
+<li> "Visual item paste" — paste of the visual element.</li>
+<li> "Load from DB" — uploading the data of the visual element from the database.</li>
+<li> "Save to DB" — saving data of visual element to the database.</li>
+<li> "Refresh libraries" — performs rereading of the configuration and composition of the libraries of the data model.</li></ul></li>
+<li> attributes of widgets;</li>
+<li> external links of widgets.</li></ul>
+<p>In the main space of the working window the pages of projects, frames of the widgets' libraries, user elements and elements of primitives at the time of their visual editing are placed.
+</p><p>At the top of the working window there is the menu. All the tools needed for development the VCA interfaces are placed in the menu. Menu has the following structure:
+</p>
+<ul><li> "File" — General operations.
+<ul><li> "Load from DB" — uploading the data of the visual element from the database.</li>
+<li> "Save to DB" — saving data of visual element to the database.</li>
+<li> "Close" — close the editor's window</li>
+<li> "Quit" — quit from the OpenSCADA system.</li></ul></li>
+<li> "Edit" — Editing operations of the visual elements.
+<ul><li> "Make visual item changes UnDo" — make visual item last change undo.</li>
+<li> "Make visual item changes ReDo" — make repeat for visual item change.</li>
+<li> "Visual item cut" — cut/move of the visual element at the time of paste.</li>
+<li> "Visual item copy" — copy of the visual element at the time of paste.</li>
+<li> "Visual item paste" — paste of the visual element.</li></ul></li>
+<li> "Project" — Operations over the projects.
+<ul><li> "Run project execution" — starting of the execution of the chosen project.</li>
+<li> "New project" — creation of the new project.</li>
+<li> "Add visual item" — adding of the visual element to the project.</li>
+<li> "Delete visual item" — deleting of the visual element from the project.</li>
+<li> "Visual item changes clear" — cleaning of the visual element with inheritance of modified properties or setting them by default.</li>
+<li> "Visual item changes put down" — put down of the visual element changes to the parent, that will used by other inheritances.</li>
+<li> "Visual item properties" — configuration of the visual element.</li>
+<li> "Visual item edit" — visual editing of the element.</li></ul></li>
+<li> "Widget" — Operations over the widgets and the libraries of widgets.
+<ul><li> "New library" — creation of the new library.</li>
+<li> "Add visual item" — adding of the visual element to the library.</li>
+<li> "Delete visual item" — deleting of the visual element from the library.</li>
+<li> "Visual item changes clear" — cleaning of the visual element with inheritance of modified properties or setting them by default.</li>
+<li> "Visual item changes put down" — put down of the visual element changes to the parent, that will used by other inheritances.</li>
+<li> "Visual item properties" — configuration of the visual element.</li>
+<li> "Visual item edit" — visual editing of the element.</li>
+<li> "View" — Management of the arrangement of visual elements on the frame.
+<ul><li> "Rise widget" — rising the widget to the top.</li>
+<li> "Lower widget" — lowering the widget to the very bottom.</li>
+<li> "Up widget" — to rise the widget above.</li>
+<li> "Down widget" — to lower the widget below.</li>
+<li> "Align to left" — alignment of the widget to the left.</li>
+<li> "Align to vertical center" — alignment of the widget vertically to the center.</li>
+<li> "Align to right" — alignment of the widget to the right.</li>
+<li> "Align to top" — alignment of the widget to the top.</li>
+<li> "Align to horizontal center" — horizontal alignment of the widget in the center.</li>
+<li> "Align to bottom" — alignment of the widget to the bottom.</li></ul></li>
+<li> "Library: {Name of the library}" — menu items to access the frames/widgets in the library.</li></ul></li>
+<li> "Window" — Management of the windows of MDI-interface.
+<ul><li> "Close" — to close the active window.</li>
+<li> "Close all" — to close all the windows.</li>
+<li> "Tile" — to tile all the windows for visibility at the same time.</li>
+<li> "Cascade" — to cascade all the windows.</li>
+<li> "Next" — to activate the next window.</li>
+<li> "Previous" — to activate the previous window.</li>
+<li> "Widget: {Name of the widget}" — items of activation of the specific window.</li></ul></li>
+<li> "View" — Management of the visibility of the working window and the toolbars on it.
+<ul><li> "Visual items toolbar" — visual element toolbar.</li>
+<li> "Widgets view functions" — the toolbar for management of the visibility and arrangement of widgets on the panels.</li>
+<li> "Elementary figures tools" — Additional toolbar for the editing the primitive of elementary figures ("ElFigure").</li>
+<li> "Projects" — attached window of management of projects' tree.</li>
+<li> "Widgets" — attached window of management of widgets' libraries tree.</li>
+<li> "Attributes" — attached window of the attributes' manager.</li>
+<li> "Links" — attached window of the links' manager.</li>
+<li> "Library: {Name of the library}" — management of the visibility of widgets' libraries toolbars.</li></ul></li>
+<li> "Help" — Help for OpenSCADA and fro Vision module.
+<ul><li> "About" — information about this module.</li>
+<li> "About Qt" — Information about the Qt library, used by this module.</li>
+<li> "What's this" — query of the description of the elements of the window's interface.</li></ul></li></ul>
+<p>Above, under menu, or on the sides, there are the toolbars. Toolbars can be hidden or located, which is controlled in the menu item "View". The following toolbars are present:
+</p>
+<ul><li> "Visual items toolbar" — Management toolbar of the visual items:
+<ul><li> "Run project execution for selected item" — runs the project for execution and activates the selected page of the project.</li>
+<li> "Load item data from DB" — uploading the data of the chosen elements from the database.</li>
+<li> "Save item data to DB" — saving data of chosen elements to the database.</li>
+<li> "New project" — creation of the new project.</li>
+<li> "New library" — creation of the new library.</li>
+<li> "Add visual item" — adding of the visual element to the project.</li>
+<li> "Delete visual item" — deleting of the visual element from the project.</li>
+<li> "Visual item's properties" — configuration of the visual element.</li>
+<li> "Visual item edit" — visual editing of the element.</li>
+<li> "Make visual item changes UnDo" — make visual item last change undo.</li>
+<li> "Make visual item changes ReDo" — make repeat for visual item change.</li>
+<li> "Visual item cut" — cut/move of the visual element at the time of paste.</li>
+<li> "Visual item copy" — copy of the visual element at the time of paste.</li>
+<li> "Visual item paste" — paste of the visual element.</li></ul></li>
+<li> "Widgets view functions" — The toolbar of visibility and arrangement management of widgets on the panels:
+<ul><li> "Rise widget" — rising the widget to the top.</li>
+<li> "Lower widget" — lowering the widget to the very bottom.</li>
+<li> "Up widget" — to rise the widget above.</li>
+<li> "Down widget" — to lower the widget below.</li>
+<li> "Align to left" — alignment of the widget to the left.</li>
+<li> "Align to vertical center" — alignment of the widget vertically to the center.</li>
+<li> "Align to right" — alignment of the widget to the right.</li>
+<li> "Align to top" — alignment of the widget to the top.</li>
+<li> "Align to horizontal center" — horizontal alignment of the widget in the center.</li>
+<li> "Align to bottom" — alignment of the widget to the bottom.</li></ul></li>
+<li> "Elementary figure tools" — Additional toolbar of the editing of the elementary figures primitive ("ElFig").
+<ul><li> "Cursor" — return to the cursor for the action over the figures on the widget.</li>
+<li> "Add line" — adding the line to the elementary figure.</li>
+<li> "Add arc" — adding the arc to the elementary figure.</li>
+<li> "Add besier curve" — adding the Bézier curve to the elementary figure.</li>
+<li> "Connections" — the enabling of the of connections at the elementary figure.</li></ul></li>
+<li> "Library: {Name of the library}" — Management of the visibility of toolbars of the widget libraries. The contents of the panel depends on the contents of the library and includes call buttons of the library items.</li>
+<li> "QTStarter toolbar" — The toolbar, created by the module of the module of starting the Qt library modules. It contains buttons to start the UI modules of OpenSCADA, based on the Qt Library. With this toolbar you can open multiple copies of the windows of the module or other modules.</li></ul>
+<p>At the bottom of the development window of the VCA there is the status line. On the right side of the status line there are indicators of the visual scale of the edited frame, of the mode of changing of the size of the elements, of the mode of the current page of the of the VCA engine station and the user on whose behalf the development of the VCA interface is done. By double-clicking on the indicator of the user it can be changed the current user, enter the new username and password. In the main field of the status line it is displayed various information and assistance messages.
+</p><p>To edit the properties of the visual elements there are two dialogues. The first dialogue allows you to edit the properties of containers of visual elements (widget libraries and projects), figure 2.b. The second dialogue serves to edit the properties of the visual elements, Fig. 2.d. Changes, made in the dialogues, at once, get to the VCA engine. To save these changes to the database or restore from the database it is necessary to use the appropriate tools of the main development window.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:629px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg.png"><img class="thumbimage" height="504" src="../files/Vision_wlbpg.png" width="627" /></a>  <div class="thumbcaption">Fig.2.b. Dialogue of editing of properties of containers of the visual elements.</div></div></div></div>
+<p>With the help of the main tab of that dialog you can set:
+</p>
+<ul><li> The state of the elements' container, namely: "Enabled", the database container, date and time for last modification.</li>
+<li> Id, name and description of the container.</li>
+<li> For project:
+<ul><li> user, group of users and user access, users' group and all other;</li>
+<li> the period for calculating of the project in the execution.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_diag.png"><img class="thumbimage" height="450" src="../files/Vision_wlbpg_diag.png" width="773" /></a>  <div class="thumbcaption">Fig.2.c. Tab "Diagnostics" of the projects.</div></div></div></div>
+<p><br />
+From this tab you can select time, or refresh to current, and size for diagnostic messages obtain.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:563px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg.png"><img class="thumbimage" height="489" src="../files/Vision_wdg.png" width="561" /></a>  <div class="thumbcaption">Fig.2.d. Dialogue of editing of properties of the visual elements.</div></div></div></div>
+<p><br />
+With the help of the main tab of that dialog you can set:
+</p>
+<ul><li> The state of element, namely: "Enabled", the parent widget, date and time for last modification.</li>
+<li> Id, root, path, name and description of the element.</li></ul>
+<p>Dialogue of editing the properties of the containers of visual elements contains two tabs: configuration tab of the the main parameters (Fig.2.b) and the configuration tab of the mime-data of the container (Fig. 2.e).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:428px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_mime.png"><img class="thumbimage" height="449" src="../files/Vision_wlbpg_mime.png" width="426" /></a>  <div class="thumbcaption">Fig.2.e. Editing tab of mime-data of a container of the visual elements.</div></div></div></div>
+<p>Dialogue of the editing the properties of the visual elements contains four tabs: configuration tab of the main parameters (Fig.2.b), the tab of attributes of the element (Fig. 2.f), the tab of the processing of the element (Fig. 2.g) and the tab of links of the elements (Fig.2.h). At different levels of the hierarchy of visual elements any tabs can be available, but some are not.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:590px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg_attr.png"><img class="thumbimage" height="533" src="../files/Vision_wdg_attr.png" width="588" /></a>  <div class="thumbcaption">Fig.2.f. Attributes of the editing dialogue of the properties of the visual element tab.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:804px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg_prc.png"><img class="thumbimage" height="597" src="../files/Vision_wdg_prc.png" width="802" /></a>  <div class="thumbcaption">Fig.2.g. Processing tab of the dialogue of editing of the properties of the visual element.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:595px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg_lnk.png"><img class="thumbimage" height="513" src="../files/Vision_wdg_lnk.png" width="593" /></a>  <div class="thumbcaption">Fig.2.g. Tab of links of the editing dialog of the properties of the visual element.</div></div></div></div>
+<h3><span class="mw-headline" id="Styles"><span class="mw-headline-number">2.1</span> Styles</span></h3>
+<p>It is known that people can have individual characteristics in the perception of graphical information. If these features are not taken into account it is possible to get the rejection and exclusion of the user to the VC interface. Such rejection and exclusion can lead to fatal errors in the management of TP, as well as traumatize the human by the permanent working with the such interface. In SCADA systems it is accepted the agreement, which regulate the requirements for establishing a unified VC interface which is normally perceived by most of people. The people with some deviations are not taken into account.
+</p><p>To take this into account, and provide the ability to centrally and easily change the visual properties of the interface, the project provides the implementation of visualization interface styles manager.
+</p><p>User can create many styles, each of which will hold the color, font and other properties of the elements of the frame. A simple change of style will quickly transform the VC interface, and the possibility of appointing an individual style to the user will take into account his individual characteristics.
+</p><p>To realize this opportunity, when you create a frame, it is necessary for the properties of color, font and others set the "Config" ( of the table if the "process" tab) in the value of "From style". And in the parameter "Config template" to specify the identifier of the style field. Further, this field will automatically appear in the Style Manager and will be there to change. Style Manager is available on the project configuration page in the tab "Styles" (Figure next). On this tab you can create new styles, delete old ones, change the field of the style and delete unnecessary.
+</p>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_prj_stl.png"><img alt="Vision prj stl.png" height="370" src="../files/Vision_prj_stl.png" width="416" /></a></div></div>
+<p>In general the styles are available from the project level. At the level of libraries of widgets you can only define styles fields of widgets. At the project level, at the choice of style it is started the work with styles, which includes access to the fields of styles instead of direct attribute values. In fact, this means that when reading or writing a widget attribute these operations will be carried out with the corresponding field of the chosen style.
+</p><p>When you run the project execution it will be used the set in the project style. Subsequently, the user can select a style from the list of available ones. The user's style will be saved and used next time you run the project.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Linkage_with_the_dynamics"><span class="mw-headline-number">2.2</span> Linkage with the dynamics</span></h3>
+<p>To provide relevant data in the visualization interface the data of  subsystems "Data acquisition (DAQ)" must be used. The nature of these data as follows:
+</p>
+<ol><li> parameters that contain some number of attributes;</li>
+<li> attributes of the parameter can provide information of four types: Boolean, Integer, Real and String;</li>
+<li> attributes of the parameter can have their history (archive);</li>
+<li> attributes of the parameter can be set to read, write, and with full access.</li></ol>
+<p>Considering the first paragraph it is necessary to allow the possibility of the group of destination links. To do this we use the conception of <a href="../DAQ.html" title="Special:MyLanguage/Documents/DAQ">of the logic level</a>.
+</p><p>In accordance with paragraph 2, links provide transparent conversion of connection types and do not require special configuration.
+</p><p>To satisfy the opportunities for access to archives, in accordance with paragraph 3, links make check of the type of the attribute, and in the case of connection to the "Address", the address of linkage is put into the value.
+</p><p>In terms of the VCA, the dynamic links and configuration of the dynamics are the one process, to describe a configuration of which the tab "Processing" of the widgets is provided (Fig.2.f). The tab contains a table of configuration of the properties of the attributes of the widget and the text of calculation procedure of  the widget.
+</p><p>In addition to configuration fields of the attributes the column "Processing" in the table is provided, for selective using of the attributes of the widgets in the computational procedure of the widget, and the columns "Configuration" and "Configuration template", to describe the configuration of links.
+</p><p>The column "Configuration" allows you to specify the linkage type for the attribute of the widget:
+</p>
+<ul><li> <i>Constant</i> — in the tab of widget links the field for indication of a constant appears, for example of the special color or header for the template frames.</li>
+<li> <i>Input link</i> — linkage with the dynamics for a read-only.</li>
+<li> <i>Output link</i> — linkage with the dynamics just for a writing.</li>
+<li> <i>Full link</i> — complete linkage with dynamic (read/write).</li>
+<li> <i>From style</i> — take the value from the project's style.</li></ul>
+<p>The column "Configuration template" makes it possible to describe the groups of dynamic attributes. For example, it may be different types of parameters of subsystem "DAQ" and other widgets of the interface. Furthermore, in the case of correct formation of this field, the mechanism of automatically assign of the attributes with the only indication of the parameter of subsystem "DAQ" or the widget is working, which simplifies and accelerates the configuration process. The value of this column has the following format:
+</p>
+<ul><li> <i>For constant:</i> direct the attribute value.</li>
+<li> <i>For link:</i> "<b>{parameter}|{identifier}</b>", where:
+<ul><li> <i>parameter</i> — the group of the attribute;</li>
+<li> <i>identifier</i> — identifier of the attribute; same the value is compared with the attributes of the DAQ parameters with automatic linkage, after the group link indication.</li></ul></li>
+<li> <i>For style:</i> identifier-name of the style field.</li></ul>
+<p>Installation of the links may be of several types, which are determined by the prefix:
+</p>
+<ul><li> <i>val:</i> — Direct download of the value through the links mechanism. For example, link: "val:100" loads in the attribute of the widget the value of the 100. It is often used in the case of absence of end point of the link, in order to direct value indicating.</li>
+<li> <i>prm:</i> — Link to the attribute of the parameter or the parameter, in general, for a group of attributes, of subsystem "Data acquisition". For example, the link "prm:/LogicLev/experiment/Pi/var" implements the access of the attribute of the widget to the attribute of the parameter of subsystem "Data acquisition". Sign "(+)" at the end of the address indicate about successful linking and presence of the target. For object's type attributes allowed hierarchical access to the object concrete property by set the path through symbol '#', for example: "prm:/LogicLev/experiment/Pi/var#pr1/pr2".</li>
+<li> <i>wdg:</i> — Link to an attribute of another widget or the widget, in general, for a group of attributes. For example, the link "wdg:/ses_AGLKS/pg_so/pg_1/pg_ggraph/pg_1/a_bordColor" performs the access of the attribute of one widget to the attribute of another one. Supported absolute and relative link's path. Start point of absolute point is root object of module "VCAEngine", then the first item of absolute address is a session or a project identifier. On session side first item is passed then set into a project links there work. For relative links by start point used a widget with the link set. The item ".." of parent node is a special item of the relative links.</li>
+<li> <i>arh:</i> — A special type of link is only available for a particular attribute such as "Address", which allows you to connect directly to the archive values ("arh:CPU_load"). It may be useful to specify the archive as a source of data for primitive "Diagram".</li></ul>
+<p>Processing of the links occurs at a frequency of calculating the widget in the following order:
+</p>
+<ul><li> receiving of the data from input links;</li>
+<li> perform of calculating of the script;</li>
+<li> transmission of the values by the output links.</li></ul>
+<p>Figure 2.g presents the tab with the possibility of group and individual assignment of attributes.
+</p><p>When the widget that contains the configuration of links is placed to the container of widgets, all links of the source widget is added to the list of resulting links of the widgets' container.
+</p><p>The above shows that the links are set by the user in the configuration interface. However, for the possibility of creation of the frames for general use, with the function of providing detailed data of various sources of the same type, a dynamic linkage mechanism is necessary. Such mechanism is provided through a reserved key identifier "<b>&lt;page&gt;</b>" of the group of attributes of links in the frames of general purpose and dynamic linkage with the identifier "<b>&lt;page&gt;</b>" in the process of opening of the frame of general purpose by means of the signal from another widget.
+</p><p>Lets examine the example when we have the frame of general-purpose "Control panel of graph" and a lot of "Graphs" in different tabs. "Control panel of graph" has links with the templates:
+</p>
+<ul><li> tSek -&gt; "&lt;page&gt;|tSek"</li>
+<li> tSize -&gt; "&lt;page&gt;|tSize"</li>
+<li> trcPer -&gt; "&lt;page&gt;|trcPer"</li>
+<li> valArch -&gt; "&lt;page&gt;|valArch"</li></ul>
+<p>At the same time, each widget "Graph" has the attributes tSek, tSize, trcPer and valArch. In the case of a calling of the opening signal of "Control panel of graph" from any widget "Graph" it is happening the linkage of the attributes of the "Control panel of graph" in accordance with the attribute specified in the template with the attribute of the widget "Graph". As a result, all changes in the "Control panel of graph" will be displayed on the graph by means of the link.
+</p><p>In the case of presence of external links to the parameters of subsystem "Data acquisition" in the widget "Graph", the links of "Control panel of graph" will be set on an external source. In addition, if in the "Control panel of graph" will be declared the links to the missing attributes directly in the widget "Graph", it will be made the search for the availability of such attributes from the external source, the first to which the link is directed, performing, thus, the addition of missing links.
+</p><p>To visualize this mechanism the table is cited.
+</p><p><b>Table.</b> The mechanism of the dynamic linkage.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Attributes of the "Control panel of graph" (the template of dynamic linkage) </th>
+<th> "Graph" attributes </th>
+<th> Attributes of an external "Parameter" </th>
+<th> The resulting link or an value of the linking attribute
+</th></tr>
+<tr>
+<td> tSek (&lt;page&gt;|tSek) </td>
+<td> tSek </td>
+<td> - </td>
+<td> "Graph".tSek
+</td></tr>
+<tr>
+<td> tSize (&lt;page&gt;|tSize) </td>
+<td> tSize </td>
+<td> - </td>
+<td> "Graph".tSize
+</td></tr>
+<tr>
+<td> trcPer (&lt;page&gt;|trcPer) </td>
+<td> trcPer </td>
+<td> - </td>
+<td> "Graph".trcPer
+</td></tr>
+<tr>
+<td> valArch (&lt;page&gt;|valArch) </td>
+<td> valArch </td>
+<td> - </td>
+<td> "Graph".valArch
+</td></tr>
+<tr>
+<td> var (&lt;page&gt;|var) </td>
+<td> var </td>
+<td> var </td>
+<td> "Parameter".var
+</td></tr>
+<tr>
+<td> ed (&lt;page&gt;|ed) </td>
+<td> - </td>
+<td> ed </td>
+<td> "Parameter".ed
+</td></tr>
+<tr>
+<td> max (&lt;page&gt;|max) </td>
+<td> - </td>
+<td> - </td>
+<td> EVAL
+</td></tr>
+<tr>
+<td> min (&lt;page&gt;|min) </td>
+<td> - </td>
+<td> - </td>
+<td> EVAL
+</td></tr></table>
+<h2><span class="mw-headline" id="Execution_of_the_VCA_interfaces"><span class="mw-headline-number">3</span> Execution of the VCA interfaces</span></h2>
+<p>Execution of the VCA interface is to run a new project session or connect to the existing one on the level of VCA engine. Then the module of direct visualization represents and manages the data of the session. The main window mode of execution mode of this module has the form presented at Fig.3.
+</p><p>Update of the contents of the open pages of the visualization interface with the frequency of the project session execution. In the updating process it is performed:
+</p>
+<ul><li> request a list of opened pages, with a sign of page modification, at the model and consistency checking of the actually opened pages to that list;</li>
+<li> request of the branch of the modified pages;</li>
+<li> update of the contents of the modified pages and their widgets, in accordance with the received modified data.</li></ul>
+<p>At the closure of "Run-time" window closing of the session of the project is done in the VCA engine.
+</p><p>The mechanism of the request of the only modified data is based on an absolute counter of the session execution. If you want to make real changes in the attributes of widgets the memorizing of the value of this counter is done, which allows the identification of modified attributes. This approach can increase productivity and reduce the load on network sharing in the case of access to the VCA engine via network.
+</p><p>Hierarchically the module provides an opportunity to accommodate the project pages in the main execution window (Fig.3), as well as putting them inside of the container widgets, as well as by the opening of additional windows over the main.
+</p><p>When you expand the main execution window, or when moving to the full-screen mode the scaling of the page content of the VCA interface is done, filling the entire space of the window and allowing to execute the projects, developed on one screen resolution, at different resolutions.
+</p><p>The main window consists of menu (top) status line (bottom), and the executable contents of the session between them. Menu in the execution mode is positioned as the OpenSCADA administrator tool, containing the self-system functions and it is available only to privileged users, occupying the group "root". Menu has the following structure:
+</p>
+<ul><li> "File" — General operations.
+<ul><li> "Print" — Print:
+<ul><li> "Page" — page of the user interface;</li>
+<li> "Diagram" — diagram on the user interface;</li>
+<li> "Document" — document on the user interface.</li></ul></li>
+<li> "Export" — Export:
+<ul><li> "Page" — page of the user interface;</li>
+<li> "Diagram" — diagram on the user interface;</li>
+<li> "Document" — document on the user interface.</li></ul></li>
+<li> "Close" — Close the editor window.</li>
+<li> "Quit" — Quit from the OpenSCADA system.</li></ul></li>
+<li> "Alarm" — Alarm quittance:
+<ul><li> "Alarm level" — all alarms;</li>
+<li> "Light alarm" — lighting notification;</li>
+<li> "Speaker alarm" — notification with the whistle;</li>
+<li> "Sound/speech alarm" — sound/speech notivication.</li></ul></li>
+<li> "View" — Display options of the project session.
+<ul><li> "Full screen" — Switcher of the full screen execution mode.</li></ul></li>
+<li> "Help" — Help through the OpenSCADA and Vision module.
+<ul><li> "About" — Information about this module.</li>
+<li> "About Qt" — Information about the Qt library, used by the module.</li></ul></li>
+<li> "QTStarter toolbar" — The toolbar, created by the module of the module of starting the Qt library modules. It contains buttons to start the UI modules of OpenSCADA, based on the Qt Library. With this toolbar you can open multiple copies of the windows of the module or other modules.</li></ul>
+<p>On the right side of the status line the indicators of the time, the current VCA engine station and users on whose behalf the VCA interface is executed, as well as the panel with the alarm quittance buttons, print and export. By double-clicking on the indicator of the user it can be changed by the typing of the new username and password, and by clicking on the quittance button — to quit alarms completely or only the desired notification. In the main field of the status line various messages and assistance messages are displayed.
+</p><p>The Run-time mode mostly supports multi-language depended from user language from which the window executed or selected, that is if you change the user you will get the Run-time interface at other language of the user. This function enabled for <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1042px;"><a class="image" href="http://oscada.org/wiki/File:Vision_run.png"><img class="thumbimage" height="768" src="../files/Vision_run.png" width="1040" /></a>  <div class="thumbcaption">Fig.3. Main window in the execution mode.</div></div></div></div>
+<h2><span class="mw-headline" id="Conception_of_basic_elements_.28primitives.29"><span class="mw-headline-number">4</span> Conception of basic elements (primitives)</span></h2>
+<p>In this version of that module not all the primitives' images of this project are implemented. In general the project provides the following primitives:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Function
+</th></tr>
+<tr>
+<td> ElFigure </td>
+<td> Elementary graphic figures </td>
+<td>
+<p>Primitive is the basis for drawing basic graphic shapes with their possible combinations in a single object. The support of the following basic figures is provided:
+</p>
+<ul><li> Line.</li>
+<li> Arc.</li>
+<li> Bézier curve.</li>
+<li> Fill of the enclosed space.<br /></li></ul>
+<p>For all the figures contained in the widget it is set the common properties of thickness, color, etc., but this does not exclude the possibility of indicating the above attributes for each figure separately. 
+</p>
+</td></tr>
+<tr>
+<td> FormEl </td>
+<td> Elements of the form </td>
+<td>
+<p>Includes support for standard form components:
+</p>
+<ul><li> Line edit.</li>
+<li> Text edit.</li>
+<li> Check box.</li>
+<li> Button.</li>
+<li> Combo box.</li>
+<li> List.</li>
+<li> Tree.</li>
+<li> Table.</li>
+<li> Slider.</li>
+<li> Scroll bar. </li></ul>
+</td></tr>
+<tr>
+<td> Text </td>
+<td> Text </td>
+<td> Text element (labels). Characterized by the type of font, color, orientation and alignment.
+</td></tr>
+<tr>
+<td> Media </td>
+<td> Media </td>
+<td> Element of visualization of raster and vector images of various formats, playback of animated images, audio segments and video fragments.
+</td></tr>
+<tr>
+<td> Diagram </td>
+<td> Diagram </td>
+<td> Element of the diagram with the support of the visualization of the flow of several trends, the spectrum, XY diagrams of real-time data, ... .
+</td></tr>
+<tr>
+<td> Protocol </td>
+<td> Protocol </td>
+<td> Element of the protocol, visualizer of the system messages, with support for multiple operating modes.
+</td></tr>
+<tr>
+<td> Document </td>
+<td> Document </td>
+<td> The element of generating the reports, journals and other documentation on the basis of available in the system data.
+</td></tr>
+<tr>
+<td> Box </td>
+<td> Container </td>
+<td> Contains the mechanism for other widgets placement-including with the purpose of creation of new, more complex, widgets and pages of end visualization.
+</td></tr>
+<tr>
+<td> Function, <span style="color: red">in plane</span> </td>
+<td> Function of API of the object model of OpenSCADA </td>
+<td> Not visual, on the side of execution, widget which allows to include a computing function of the object model of OpenSCADA in the VCA.
+</td></tr></table>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> For all listed and implemented primitives except "FormEl" the module supports events conditional generating from transparency of the pointed pixel, more then zero (not full transparency).
+</p><p>The module of visualizer provides and uses set of specific attributes of the generic means, its information are into next table. Theses attributes create by the visualizer, on its lack, at a first start.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id (space) </th>
+<th> Name </th>
+<th> Appointment
+</th></tr>
+<tr>
+<td> statLine (main page) </td>
+<td> Status line items </td>
+<td>
+<p>Text field with description of the status line item in form "<b>{Id}:{Label}:{ToolTip}:{Color}:{Img}</b>", where:
+</p>
+<ul><li> "Id" — identifier, uses also for form events from the widget "stIt_{Id}".</li>
+<li> "Label" — visual label of the status element.</li>
+<li> "ToolTip" — context help about the element.</li>
+<li> "Color" — label color.</li>
+<li> "Img" — image of the status element, instead the label. </li></ul>
+</td></tr>
+<tr>
+<td> runWin (main page) </td>
+<td> Run window </td>
+<td>
+<p>Main window execution mode setting:
+</p>
+<ul><li> "Original size (0)".</li>
+<li> "Maximize (1)".</li>
+<li> "Full screen (2)". </li></ul>
+</td></tr>
+<tr>
+<td> keepAspectRatio (main page) </td>
+<td> Keep aspect ratio on scale </td>
+<td> Pages aspect ration save at the scaling.
+</td></tr>
+<tr>
+<td> stBarNoShow (main page) </td>
+<td> No show status bar </td>
+<td> Main window status line hide.
+</td></tr>
+<tr>
+<td> winPosCntrSave (main page) </td>
+<td> Windows position control and save </td>
+<td> Enabling of the windows position control and save.
+</td></tr>
+<tr>
+<td> userSetVis (main page, created manually of the type String) </td>
+<td> Set user </td>
+<td>
+<p>Change user or call dialog for it selection. Value variants:
+</p>
+<ul><li> "*" — call for the user selection dialog; </li>
+<li> "$" — change user to default one;</li>
+<li> "{user}" — direct change to <i>user</i> if it is allowed. </li></ul>
+</td></tr></table>
+<p>Lets examine the implementation of each primitive.
+</p>
+<h3><span class="mw-headline" id="Elementary_figure_primitive_.28ElFigure.29"><span class="mw-headline-number">4.1</span> Elementary figure primitive (ElFigure)</span></h3>
+<p>Support of the following elementary figures is provided: lines, elliptical arcs, Bézier curves and fill of the closed circuit with the color and/or image. For the elementary figures the following operations are provided:
+</p>
+<ul><li> creation/deleting of the figures;</li>
+<li> copying of the figure(s);</li>
+<li> moving and resizing of the figures by mouse and keyboard;</li>
+<li> possibility to connect the elementary figures to each other, getting more complex figures, for which all the properties of the source elementary figures are available;</li>
+<li> possibility of simultaneous movement of several figures;</li>
+<li> fill of the closed circuit with the color and/or image;</li>
+<li> generation of mouse key events at the time of the mouse-click on the filled spaces;</li>
+<li> scaling;</li>
+<li> rotation;</li>
+<li> mirroring, <span style="color: red">partial</span>.</li></ul>
+<p>Figure shows a part of the screen with a frame containing the elementary figures.
+</p>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_elfig_new.png"><img alt="Vision elfig new.png" height="298" src="../files/Vision_elfig_new.png" width="299" /></a></div></div>
+<p>The figures underlying this widget, containing the points (the start and end ones) that can be connected with the according points of other figures; and the points with the help of which the geometry of the figure can be changed.
+</p><p>It is possible to add the figure using the mouse:
+</p>
+<ol><li> Select the desired figure from the context menu.</li>
+<li> Set with the left mouse-button start and end points (for line with the SHIFT key hold its orthogonal drawing is made).</li></ol>
+<p>The deleting of the figure(s) it is possible by pressing "Del", having selected figure(s).
+</p><p>The copying of the figure(s) it is possible by pressing keys "Ctrl"+"C", having selected figure(s).
+</p><p>Moving/resizing of the figure it is possible by using the mouse or keyboard:
+</p>
+<ol><li> Select the figure, by clicking on it with the left mouse button.</li>
+<li> Drag (with the help of mouse or control keys) the figure or one of its control points in the desired location and release the mouse button (key).</li></ol>
+<p>It is possible to move several figures, selected by means of holding "Ctrl" and clicking on the desired figures (this option works when the button Connections (Connections) is disabled) or by mouse selection.
+</p><p>The connection of the figures with each other it is possible by the following way:
+</p>
+<ol><li> Press the Connections button.</li>
+<li> Select one of the figures and move its start or end point to the desired start or end point of the other figure so that it will get to the appeared circle, release the left mouse button. Connected figures are moving as well as the individual, the general point is moved for all connected figures, to which it refers(priority is given to the arc, two arcs can't be connected directly with each other ).</li></ol>
+<p>To fill the closed circuit from the figures it is possible with the following way:
+</p>
+<ol><li> Press the Connections button. </li>
+<li> Create the closed circuit. </li>
+<li> Make the double-click of the left mouse button inside of it.</li></ol>
+<p>To delete the fill of the closed circuit it is possible from the context menu of the widget; by braking the closed circuit or by double-click of the left mouse button on the already existing filled space.
+</p><p>Rotation of the figure is made around the center of the widget.
+</p><p><br />
+</p>
+<h3><span class="mw-headline" id="Text_primitive_.28Text.29"><span class="mw-headline-number">4.2</span> Text primitive (Text)</span></h3>
+<p>Support of the text element with the following properties is provided:
+</p>
+<ul><li> Font with the properties: type/class of the font, size, bold, italic, strikeout and underline.</li>
+<li> Text color.</li>
+<li> Text orientation. </li>
+<li> Automatic word wrap. </li>
+<li> Alignment of the text horizontally and vertically with all options..</li>
+<li> Displaying the background as the color and/or image.</li>
+<li> Display the border around the text, with the specified color, width and style.</li>
+<li> Formation of the text from the attributes of different types and properties.</li></ul>
+<p>Figure represents a part of the screen with the frame containing the text examples using various parameters.
+</p>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_run_txt.png"><img alt="Vision run txt.png" height="128" src="../files/Vision_run_txt.png" width="232" /></a></div></div>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Primitive_of_the_form_element_.28FormEl.29"><span class="mw-headline-number">4.3</span> Primitive of the form element (FormEl)</span></h3>
+<p>Support of the form elements on the VCA frames is provided. The following form elements are included:
+</p>
+<ul><li> <i>Line edit</i> — It is represented by the following types: "Text", "Combo", "Integer", "Real", "Time", "Date", "Date and time". All kinds of line editor support the confirmation of entry.</li>
+<li> <i>Text edit</i> — It is the flat-text editor with the confirmation or denial of entry.</li>
+<li> <i>Check box</i> — Provides a field of binary flag.</li>
+<li> <i>Button</i> — Provides the button with the support of: the color of the button, the image of the button, and mode of fixation.</li>
+<li> <i>Combo box</i> — Provides the selection field of the element from the list of the items.</li>
+<li> <i>List</i> — Provides the list box with the control of the current element.</li>
+<li> <i>Tree</i> — Provides the tree element with possibility of an item selection.</li>
+<li> <i>Таблица</i> — Provides the table element with possibility of a cell, a row or a column selection and a cell content edition.</li>
+<li> <i>Slider</i> — Slider element.</li>
+<li> <i>Scroll bar</i> — Strip of the scroll bar.</li></ul>
+<p>The following modes are realized: "Enable" and "Active", as well as transfer of changes and events to the data model of the VCA (engine).
+</p><p>Figure represents a part of the screen with the frame containing the above-listed elements of the form.
+</p>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_run_formel.png"><img alt="Vision run formel.png" height="345" src="../files/Vision_run_formel.png" width="464" /></a></div></div>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Primitive_of_the_displaying_the_media_materials_.28Media.29"><span class="mw-headline-number">4.4</span> Primitive of the displaying the media materials (Media)</span></h3>
+<p>Support of the element of the displaying of media materials with the following properties is provided:
+</p>
+<ul><li> The indication of the source of media data (images or video material).</li>
+<li> View of the images of most well-known formats with the possibility of inscribing of it in the size of the widget.</li>
+<li> Playback of the simple animated images and video formats with the possibility to control the playback speed.</li>
+<li> Full format video and audio playing by <a class="extiw" href="https://en.wikipedia.org/wiki/Phonon" title="wikipedia:Phonon">Phonon</a>.</li>
+<li> Displaying of the the background as a color and/or image.</li>
+<li> Display the border around the text, with the specified color, width and style.</li>
+<li> Formation of the active areas and generating the events when they are activated.</li></ul>
+<p>Figure represents a part of the screen with the frame containing examples of viewing/playback of media data.
+</p>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_run_media.png"><img alt="Vision run media.png" height="233" src="../files/Vision_run_media.png" width="290" /></a></div></div>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Primitive_of_the_construction_of_diagrams.2Fgraphs_.28Diagram.29"><span class="mw-headline-number">4.5</span> Primitive of the construction of diagrams/graphs (Diagram)</span></h3>
+<p>The diagrams construction element releases for types "Graph", "Spectrum" and "XY" with properties:
+</p>
+<ul><li> General properties of the diagram types "Graph", "Spectrum" and "XY":
+<ul><li> possibility for select an archivator, the archive's buffer or all the data at working with archiving data;</li>
+<li> adapting the parameter's graph to real the data values in way the scales tune, at case the direct values range missing set;</li>
+<li> controlling by axis ranges in way magnification/mitigation and shifting;</li>
+<li> wide range scaling and adapting the time axis with automatic fitting the requested data to quality pretty for imaging, or needed for export — by set limited number measurements into pixel;</li>
+<li> imaging dimensional grid and markers in horizontal and vertical with adapting to the imaging range;</li>
+<li> tracing mode for current time by periodical update and switching the diagram time to current (time of last data into the archive buffer);</li>
+<li> horizontal sliding by mouse;</li>
+<li> scaling of a window selected part, by the mouse.</li></ul></li>
+<li> Properties of the diagram type "Graph":
+<ul><li> constructing graphics up to 100 parameters into single diagram as percent scale with possibility to display self axis for selected parameters;</li>
+<li> constructing graph for: current, archiving and users data;</li>
+<li> forming intermediate displaying buffer for current only values;</li>
+<li> support active mode with cursor and getting the values under the cursor;</li>
+<li> possibility of construction graphics as into both linear, and logarithmic values scale.</li></ul></li>
+<li> Properties of the diagram type "Spectrum":
+<ul><li> constructing graphics for frequency spectrum of the parameters up to 100 into single diagram as percent scale with possibility to display self axis for selected parameters;</li>
+<li> constructing graph for: archiving and users data;</li>
+<li> support active mode with cursor and getting the values under the cursor.</li></ul></li>
+<li> Properties of the diagram type "XY":
+<ul><li> constructing XY graphics up to 50 parameters into single diagram as percent scale with possibility to display self axis for selected parameters;</li>
+<li> constructing graph for: current, archiving and users data;</li>
+<li> forming intermediate displaying buffer for current only values;</li>
+<li> the parameters distributed by pairs at one graph, where paired by axis Y (0,2,4...) and unpaired by axis X (1,3,5...);</li>
+<li> possibility of construction graphics as into both linear, and logarithmic values scale.</li></ul></li></ul>
+<p>The module of visualizer provides and uses set of specific attributes of the generic means, its information are into next table. Theses attributes create by the visualizer, on its lack, at a first start.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Id </th>
+<th> Name </th>
+<th> Appointment
+</th></tr>
+<tr>
+<td> sclWin </td>
+<td> Scaling of a window selected part, by the mouse. </td>
+<td> It is logical type attribute created by the user manually at needs. The "true" value enables the scaling of a window selected part, by the mouse.
+</td></tr></table>
+<p>Figure represents a part of the screen with the frame containing examples of the diagrams: "Graph", "Spectrum" and "XY".
+</p>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_run_diag.png"><img alt="Vision run diag.png" height="447" src="../files/Vision_run_diag.png" width="347" /></a></div></div>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Primitive_of_the_protocol_formation_.28Protocol.29"><span class="mw-headline-number">4.6</span> Primitive of the protocol formation (<i>Protocol</i>)</span></h3>
+<p>Support of the element of the formation of the protocol with the following properties is provided:
+</p>
+<ul><li> Formation of the protocol from the archive of messages for the specified time and depth.</li>
+<li> Request of the data from the messages archivers.</li>
+<li> Selection of data from the archives by the level of importance and the category of messages template.</li>
+<li> Support the tracking mode for the appearance of messages in the archive of messages.</li></ul>
+<p>Figure represents a part of the screen with the frame containing an example of the protocol.
+</p>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_prot.png"><img alt="Vision prot.png" height="242" src="../files/Vision_prot.png" width="740" /></a></div></div>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Primitive_of_the_report_formation_.28Document.29"><span class="mw-headline-number">4.7</span> Primitive of the report formation (<i>Document</i>)</span></h3>
+<p>Support element of the report formation with the following properties is provided:
+</p>
+<ul><li> Adaptive formation of a document structure based on Hypertext Markup Language. This provides support for the broad features of formatting of the documents.</li>
+<li> Formation of the documents on command or on schedule. It is necessary for creation of reports into the archive and then view the archive.</li>
+<li> Formation of a document in real time mode. It is necessary to form documents completely dynamically, and based on the archives for the specified time.</li>
+<li> Using of the the attributes of the widget for transmission of values and addresses to the archives in the report. It allows you to use the widget of the document as a template when generating reports with other input data.</li></ul>
+<p>The basis of any document is XHTML-template. XHTML-template is the tag "body" of the WEB-page which contains the document's static in the standard XHTML 1.0 and elements of the executable instructions in one of the languages of the user programming of OpenSCADA in the form of <b>&lt;?dp {procedure}&nbsp;?&gt;</b>. The resulting document is formed by the execution of procedures and insert of their result into the document.
+</p><p>The source for values of the executable instructions are the  attributes of the widget of the primitive, as well as all the mechanisms of the user programming language. Attributes may be added by the user and they can be linked to the actual attributes or parameters or they can be autonomous, values of which will be formed in the script of the widget. In the case of linked attributes the values can be extracted from the history, archive.
+</p><p>Figure shows the frame containing a sample of the document.
+</p>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_doc.png"><img alt="Vision doc.png" height="545" src="../files/Vision_doc.png" width="899" /></a></div></div>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Primitive_of_the_box_container_.28Box.29"><span class="mw-headline-number">4.8</span> Primitive of the box container (Box)</span></h3>
+<p>Support of the primitive of the container concurrently serves as the project pages is provided. This primitive is the only element-container, which may include links to frames from the library, thereby creating the user elements of desired configuration. Primitive implements the provided by the project properties. The properties of this primitive are:
+</p>
+<ul><li> <i>Container</i> — Allows you to form the desired objects by grouping in the limits of the primitive.</li>
+<li> <i>Page</i> — Elements constructed on the basis of the primitive may serve as a page of user interface.</li>
+<li> <i>Container of pages</i> — Property of substitution of its own contents by another page in the execution process. Used to create frames on the pages of user interface. For example, the main page of traditional SCADA system with alarm objects is constructed in this way.</li>
+<li> <i>Background</i> — Supports ability to specify the background as color or image.</li>
+<li> <i>Border</i> — Supports the displaying of the border, with the specified color, width and style.</li></ul>
+<p><br />
+Example of editing of the frame, based on the primitive, is shown in Figure 2.a, and Figure 3 shows a page containing the container of the pages, built on the basis of the primitive.
+</p>
+<h2><span class="mw-headline" id="Vector_graphics_editor"><span class="mw-headline-number">5</span> Vector graphics editor</span></h2>
+<h3><span class="mw-headline" id="Purpose_2"><span class="mw-headline-number">5.1</span> Purpose</span></h3>
+<p>The presence of own vector graphics editor is an integral part of self-respecting SCADA system. Experience shows that the most informative form of technological process presentation is a mnemonic schemes — a set of alarm devices, images of the equipment, and internal connections of the controlled object, running on a PC (operator's station). To create them, you can use any of the existing graphical editors. However, thus obtained the mnemonic schemes are static and do not reflect the dynamics of changes in the characteristics of the process and, consequently, they are inadequate and uncomfortable for perception. Thus, one of the tasks facing the developers of SCADA systems is the creation of a graphical editor for creation (painting) the objects, whose characteristics can be dynamically changed.
+</p>
+<h3><span class="mw-headline" id="Principles_and_functions_of_the_graphic_editor"><span class="mw-headline-number">5.2</span> Principles and functions of the graphic editor</span></h3>
+<p>The basis of the described editor are three graphic primitives: line, arc, Bézier curve. The dynamically changing the characteristics of these primitives are:
+</p>
+<ul><li> Coordinates of control points; they are used to define the shape of the line, arc or Bézier curve. The line has two control points, the arc — 5 control points, Bézier curve — 4 (Fig. 5.2.a).</li>
+<li> Line width.</li>
+<li> Border width.</li>
+<li> Border color.</li>
+<li> Line style.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:Vision_ElFigCntrPoints.png"><img class="thumbimage" height="150" src="../files/Vision_ElFigCntrPoints.png" width="400" /></a>  <div class="thumbcaption">Fig. 5.2.a. Control points of the line, arcs and Bézier curve.</div></div></div></div>
+<p>Examples of primitives of different colors, widths, styles with borders or without ones are shown in Figure 5.2.b.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:Vision_ElFigExamples.png"><img class="thumbimage" height="150" src="../files/Vision_ElFigExamples.png" width="400" /></a>  <div class="thumbcaption">Fig. 5.2.b. Examples of primitives: line, arc and Bézier curve from left to right.</div></div></div></div>
+<p>It is possible to connect the various graphic primitives for creation of complex graphic objects. If the connected primitives make the closed circuit, it can be filled with color and/or image (Fig. 5.2.c).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:252px;"><a class="image" href="http://oscada.org/wiki/File:Vision_ElFigFills.png"><img class="thumbimage" height="150" src="../files/Vision_ElFigFills.png" width="250" /></a>  <div class="thumbcaption">Fig. 5.2.c. Fills of the closed circuit with the colors and/or images.</div></div></div></div>
+<p>Graphics editor allows you to zoom and rotate the figures (primitives and complex graphic objects) (Fig. 5.2.d).
+</p><p>The features of the editor also include the selection, moving, copying and deleting the figures.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:302px;"><a class="image" href="http://oscada.org/wiki/File:Vision_ElFigScaleRotate.png"><img class="thumbimage" height="150" src="../files/Vision_ElFigScaleRotate.png" width="300" /></a>  <div class="thumbcaption">Fig. 5.2.d. Zoom and rotate the figures.</div></div></div></div>
+<h3><span class="mw-headline" id="Basic_principles_of_operation_in_the_graphic_editor"><span class="mw-headline-number">5.3</span> Basic principles of operation in the graphic editor</span></h3>
+<p>To get to work with a graphical editor after the OpenSCADA is started it is necessary to call "Operation user interface". The "Widgets" tab contains a list of existing graphic libraries and their elements.
+</p><p>Lets suppose that we need to add a graphic element to the one of the existing libraries. To do this, select the name of the library, and click the (<a class="image" href="http://oscada.org/wiki/File:Vision_ElFigCreate.png"><img alt="Vision ElFigCreate.png" height="36" src="../files/Vision_ElFigCreate.png" width="32" /></a>) on the toolbar. In the appeared window enter the ID and name of the new graphic element. After that lets select the created item and click (<a class="image" href="http://oscada.org/wiki/File:Vision_ElFigEdit.png"><img alt="Vision ElFigEdit.png" height="23" src="../files/Vision_ElFigEdit.png" width="25" /></a>) button. The drawing area will appear on the right. By double-clicking on that field or either using the context menu lets enter the editing mode — the mode of the graphical editor that allows you to perform all provided manipulations with the figures. At a time when we have the created graphic element in focus, the "Attributes" tab takes the form, shown in Fig. 5.3.a.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:365px;"><a class="image" href="http://oscada.org/wiki/File:Vision_ElFigAttrs.png"><img class="thumbimage" height="441" src="../files/Vision_ElFigAttrs.png" width="363" /></a>  <div class="thumbcaption">Fig. 5.3.a. Attributes of elementary figure.</div></div></div></div>
+<p>With the help of mouse or the "Geometry" field of the "Attributes" tab lets define the drawing area size and scale coefficients.
+</p><p>Using the "Line" field of the "Attributes" tab, lets define the width, color, lines' style of the figures which we'll draw. With the "Border" field lets define the width and color of the border. The "Fill" field allows you to specify color, and image for the fills. "Elements' list" contains a list of primitives used to create the graphic object. Elements of all fields of the "Attributes" tab can be dynamically changed in the scripts (programs) of the user.
+</p><p>Graphics primitives can be drawn with the mouse or by specifying the list of graphical primitives ("Elements' list"). In the first case, the coordinates of control points of the primitive are computed automatically, width, color, style of the line, width and color of the border are set by defaults from the "Attributes" tab. In the second case, the primitive must be described in the "Elements' list" as follows:
+</p>
+<dl><dd><i>line:(x1|y1):(x2|y2):width:color:border_width:border_color:style</i> <b>(1)</b></dd>
+<dd><i>arc:(x1|y1):(x2|y2):(x3|y3):(x4|y4):(x5|y5):width:color:border_width:border_color:style</i> <b>(2)</b></dd>
+<dd><i>bezier:(x1|y1):(x2|y2):(x3|y3):(x4|y4):width:color:border_width:border_color:style,</i> <b>(3)</b></dd></dl>
+<p>Where:
+</p>
+<dl><dd><i>(x1|y1)</i> — first control point's coordinates of the primitive;</dd>
+<dd><i>(x2|y2)</i> — second control point's coordinates of the primitive;</dd>
+<dd><i>(x3|y3)</i> — third control point's coordinates of the primitive;</dd>
+<dd><i>(x4|y4)</i> — fourth control point's coordinates of the primitive;</dd>
+<dd><i>(x5|y5)</i> — fifth control point's coordinates of the primitive;</dd>
+<dd><i>width</i> — line width, with which the primitive will be drawn;</dd>
+<dd><i>color</i> — line color, with which the primitive will be drawn;</dd>
+<dd><i>border_width</i> — border width;</dd>
+<dd><i>border_color</i> — border color;</dd>
+<dd><i>style</i> — line style ("0" — solid, "1" — dashed, "2" — dotted).</dd></dl>
+<p>The priority values are the width, color, style of the line, width and color of the border, specified in the "Elements' list". If you want to use any of the properties that are set in the fields "Line" or "Border" of the "Attributes" tab, then during the description of the primitive they should be skipped. For example, we want to create a line with a width of 3, red color, solid and without border. At the same time in the "Line" field the following properties are set: the line width — 3, black color of the line, solid line style, and in the "Border" field — the width of the border — 5, border's color — green. Then the description of the primitive in the "Elements' list " will be as follows:
+</p>
+<dl><dd><i>line:(x1|y1):(x2|y2)::red:0::</i> <b>(4)</b></dd></dl>
+<p>Expressions (1) - (4) define the static properties of the primitives that can not be changed by user's program. To specify the dynamic properties it is necessary to use the following expression:
+</p>
+<dl><dd><i>line:1:2:w1:c1:w2:c2:s1</i> <b>(5)</b></dd></dl>
+<p>Then the "Attributes" tab will be appended by the fields: Point 1 (<i>1</i>), Point 2 (<i>2</i>), Width 1(<i>w1</i>), Width 2(<i>w2</i>), Color 1(<i>c1</i>), Color 2(<i>c2</i>), Style 1 (<i>s1</i>) (Fig. 5.3.b), values of these fields can be changed programmatically, by using a programming language of the OpenSCADA project. It is obvious that if desired not all properties of the primitive can be declared dynamic, but one or several, besides one dynamic property can be used repeatedly.
+</p><p>Editing the coordinates of control points is made either with the mouse or through changes in the "Elements' list " for static points, or directly in the "Attributes" tab, having the dynamic ones ("Point 1"...). Editing the other properties is made by means of changing the contents of the fields "Line", "Border", "Fill" of the "Attributes" tab or the "Elements' list".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:366px;"><a class="image" href="http://oscada.org/wiki/File:Vision_ElFigDynAttrs.png"><img class="thumbimage" height="444" src="../files/Vision_ElFigDynAttrs.png" width="364" /></a>  <div class="thumbcaption">Fig. 5.3.b. Dynamic attributes of the elementary figure.</div></div></div></div>
+<p>There is the possibility of selection (left click on the figure) the primitive, the joint selection of primitives (left mouse button + "Ctrl" key pressed having disabled the "Connections" button), a joint selection by the frame, drawn by holding down the left mouse button; moving them (keyboard/mouse); copy and paste ("Ctrl" + "C", "Ctrl" + "V" or from the popup menu); delete ("Del").
+</p><p>To connect the primitives with each other it is necessary:
+</p>
+<ol><li> push the "Connections" button;</li>
+<li> select one of the figures and move its start or end point to the desired start or end point of the other figure so that it will get to the appeared circle. Connected figures are moving as well as the individual ones, the general point is moved for all connected figures, to which it refers(priority is given to the arc, two arcs can't be connected directly with each other ).</li>
+<li> release the left mouse button.</li></ol>
+<p>To fill the closed circuit it is necessary to make double click of the left mouse button inside it or you can specify a fill in the "Elements' list" as follows:
+</p>
+<dl><dd><i>fill:(x1:y1):(x2:y2):...:(xn:yn):color:image</i> — (statics);</dd>
+<dd><i>fill:1:2:3:...:c1:i1</i> — (dynamics).</dd></dl>
+<p>Where:
+</p>
+<dl><dd><i>(x1:y1):(x2:y2):...:(xn:yn)</i> — coordinates of the start/end points of the primitives that form a closed circuit;</dd>
+<dd><i>color</i> — fill color;</dd>
+<dd><i>image</i> — fill image.</dd></dl>
+<p>The priority values are the color and image of the fill, set in the "Elements' list. " If you want to use the properties set in the "Fill" field of the "Attributes" tab, then they should be skipped in the description of the primitive.
+</p><p>To scale the figures it is necessary in the "Geometry" field to set the scale the for the "X" and "Y" axes. In addition, there is the ability to visually zoom in/out the widget without changing the scale in the "Geometry" field. You must exit the editing mode by the right click on the widget field, select in the popup menu "Zoom in (+10%)"/"Zoom out (-10%)", or rotate the mouse wheel while holding the "Ctrl" key pressed. Exit the editing mode is made either by pressing the "Esc", or using the popup menu of the widget.
+</p><p>It is possible to rotate the contents of the widget. To rotate the created objects you should set the "Orientation angle" from -360 to 360 in the "Attributes" tab.
+</p><p>Graphical editor supports color transparency, defined as follows: color-t, where the color — the color itself, and t — transparency from 0 (fully transparent) to 255 (opaque).
+</p>
+<h3><span class="mw-headline" id="Popup_menu_of_the_graphic_editor"><span class="mw-headline-number">5.4</span> Popup menu of the graphic editor</span></h3>
+<p>The popup menu by the right-clicking in the editable widget is provided. Depending on what an object is under the mouse popup menu can take several different forms. Below, in Figure 5.4, there are examples of the popup menu.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:572px;"><a class="image" href="http://oscada.org/wiki/File:Vision_ElFigPopup.png"><img class="thumbimage" height="376" src="../files/Vision_ElFigPopup.png" width="570" /></a>  <div class="thumbcaption">Fig. 5.4. Popup menu for the lines (line, arc, Bézier curve) and for the fill from left to right.</div></div></div></div>
+<p>The popup menu includes the following sections (from top to bottom):
+</p>
+<ul><li> drawing section, allows you to select the figure to paint, the "bindings" mode by the "Connections" item and to return to selection mode — "Cursor";</li>
+<li> undo/redo section;</li>
+<li> copy/paste the selected figures section;</li>
+<li> rising/lowering the selected figures along "Z" section;</li>
+<li> control section (to make static or dynamic) different properties of primitives and also for the call the properties dialog of the elementary figure;</li>
+<li> exit the editing mode section.</li></ul>
+<h3><span class="mw-headline" id="Properties_dialog_of_the_elementary_figure"><span class="mw-headline-number">5.5</span> Properties dialog of the elementary figure</span></h3>
+<p>Dialog, versions of which are shown in Figures 5.5.a, 5.5.b, 5.5.c, is implemented for interactive and comfortable user control of the properties of the figure(s).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:698px;"><a class="image" href="http://oscada.org/wiki/File:Vision_ElFigDlgLine.png"><img class="thumbimage" height="326" src="../files/Vision_ElFigDlgLine.png" width="696" /></a>  <div class="thumbcaption">Fig. 5.5.a. Properties dialog of the elementary figure for single figure (line, arc or a Bézier curve).</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:837px;"><a class="image" href="http://oscada.org/wiki/File:Vision_ElFigDlgLines.png"><img class="thumbimage" height="326" src="../files/Vision_ElFigDlgLines.png" width="835" /></a>  <div class="thumbcaption">Fig. 5.5.b. Properties dialog of the elementary figure for the group of selected figures.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:381px;"><a class="image" href="http://oscada.org/wiki/File:Vision_ElFigDlgFill.png"><img class="thumbimage" height="188" src="../files/Vision_ElFigDlgFill.png" width="379" /></a>  <div class="thumbcaption">Fig. 5.5.c. Properties dialog of the elementary figure for the fill.</div></div></div></div>
+<p>As can be seen from the figures above, the dialog can be of three different forms, depending on the object for which it is called. In the title of the dialog there are the numbers of figures, for which it is called. These numbers correspond to the positions of figures in the "Elements' list", starting from the top.
+</p><p>If the dialog called for a single figure (line, arc or a Bézier curve), then it is possible to edit the points' coordinates of the figure (Fig. 5.5.a). If the point is connected to the point of another figure or figures, and "bindings" ("Connections") are enabled, then entered coordinates will be applied to all connected figures and fills, which involved the figure, will be redrawn accordingly.
+</p><p>If the dialog is called for the group of selected figures (Fig. 5.5.b), properties (attributes) listed in the dialog will be applied to all figures listed in the title of the dialog. When you call the dialog in the fields of the properties will be shown the data of the figure from the group of selected ones, for which it was called the popup menu. There is the possibility to include/exclude certain properties of the dialog. For this the (<a class="image" href="http://oscada.org/wiki/File:Vision_disableButton.png"><img alt="Vision disableButton.png" height="28" src="../files/Vision_disableButton.png" width="32" /></a>) button is provided. In the case of exclusion of individual properties, they will not be processed upon acceptation of the dialog ("Ok" button). After the acceptation of the dialog, all of the data of the included properties will be applied to the whole group of figures.
+</p><p>Dialog for the fill's properties (Fig. 5.5.c) allows you to manage the properties of the specific fill.
+</p><p>When selecting a check box to the right of a property, it (the property) after the acceptation of the dialog is set to the default value, which is listed in the "Attributes" tab. The "Dyn/Stat" buttons make the appropriate properties dynamic or static.
+</p>
+<h2><span class="mw-headline" id="The_overall_configuration_of_the_module"><span class="mw-headline-number">6</span> The overall configuration of the module</span></h2>
+<p>To adjust your own behavior in not obvious situations the module provides the ability to customize individual settings through the management interface of the OpenSCADA (Fig. 6). These settings are:
+</p>
+<ul><li> Module Status: running, the number of available screens in the library of Qt and active main widows list.</li>
+<li> The name of the remote OpenSCADA station with visualization engine VCA and the link to the configuration page of the external OpenSCADA stations.</li>
+<li> Initial user of the configurator — points on behalf of what user to open configurator without requiring the password, for local station. For remote station it is points to an user different from typical one, pointed into the host configuration.</li>
+<li> User password (remote station) — password of user different from typical one, pointed into the host configuration.</li>
+<li> Restore connection timeout, in seconds — points to time of the re-connection of a lost remote connection repeating.</li>
+<li> The lifetime of the pages in the cache. Visualizer provides acceleration of the user interface by placing a previously opened pages in the cache, to control the lifespan of pages in which the property and intended. Specifying a value of zero generally excludes cleaning the cache.</li>
+<li> The projects, by separate symbol ';', for their automatic execution with the launch of the module. To provide the possibility to indicate the opening of the window of the project execution on the desired display of many display systems the recording format of the project "PrjName-1" is provided, where 1 — the number of the target display. For connect to background or other opened session use "<b>ses_{SesID}</b>".</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The display selection function possible for non virtual and non repeating desktop, i.e. with using Xinerma or NVidia into proper modes. Technical the function Qt screen() must return different display's widgets to it's number.</dd></dl>
+<ul><li> Exit on last run project close — useful for solutions running at once on the interface of the project execution.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:759px;"><a class="image" href="http://oscada.org/wiki/File:Vision_cfg.png"><img class="thumbimage" height="621" src="../files/Vision_cfg.png" width="757" /></a>  <div class="thumbcaption">Fig.6. Configuration page of the module.</div></div></div></div>
+
+
+
+
+
+
+</div></body>
+</html>

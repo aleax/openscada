@@ -1,0 +1,228 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/WebCfgD - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/WebCfgD</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebCfgD&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/WebCfgD" title="Modules/WebCfgD (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/WebCfgD/ru" title="Модули/Динамический конфигуратор на Web (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/WebCfgD/uk" title="Модулі/Динамічний конфігуратор на Web (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Translation and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> </td>
+<td> Dynamic Web configurator </td>
+<td> 1.2 </td>
+<td> GPL2 </td>
+<td> ui_WebCfgD.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> UI </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Configuration"><span class="tocnumber">1</span> <span class="toctext">Configuration</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Basic_elements"><span class="tocnumber">2</span> <span class="toctext">Basic elements</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Commands"><span class="tocnumber">3</span> <span class="toctext">Commands</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Lists"><span class="tocnumber">4</span> <span class="toctext">Lists</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Tables"><span class="tocnumber">5</span> <span class="toctext">Tables</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Images"><span class="tocnumber">6</span> <span class="toctext">Images</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Design"><span class="tocnumber">7</span> <span class="toctext">Design</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Errors"><span class="tocnumber">8</span> <span class="toctext">Errors</span></a></li>
+</ul>
+</div>
+
+<p>The "WebCfgD" module provides the configurator of OpenSCADA system. Configurator is implemented on the basis of Web-technologies:
+</p>
+<ul><li> <i>HTTP</i> — hypertext transfer protocol;</li>
+<li> <i>XHTML</i> — extended language of markup of the hypertext documents;</li>
+<li> <i>CSS</i> — cascading style sheets of hypertext documents;</li>
+<li> <i>JavaScript</i> — built-in into the hypertext document the browser programming language;</li>
+<li> <i>DOM</i> — document object model of the internal structure of the browser;</li>
+<li> <i>AJAX</i> — arrangement of asynchronous and synchronous requests from the JavaScript to the server;</li>
+<li> <i>XML</i> — eXtensible Markup Language.</li></ul>
+<p>Interface of the configurator is formed in the WEB-browser by reference to the WEB-server and getting from it the XHTML-document over HTTP. In this case there is the OpenSCADA system in the role of the WEB-server, which supports standard communication mechanisms of TCP-networks (module <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>), hypertext transfer protocol (module <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>), as well as encryption of traffic between the browser and the server (<a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">Transport.SSL</a>). Based on this to gain access to the interface configuration of the OpenSCADA, provided by this module, you need to configure the transport in the OpenSCADA (Transport.Sockets or Transport.SSL) in conjunction with the protocol HTTP (Protocol.HTTP). In the delivery of the OpenSCADA system there are configuration files containing settings of Transport.Sockets for ports 10002 and 10004. Hence the interface of the module in the configuration of the OpenSCADA by default will be available at URL: http://localhost:10002 or http://localhost:10004.
+</p><p>After receiving the document XHTML the JavaScript program runs  to create dynamic interface configurator.
+</p><p>At the core of the module there is the language of the management interface of the OpenSCADA system, and thus provides the uniform interface of configuration. Update of module may be required only in the case of updating the specification of the language of management.
+</p><p>The module was implemented and tested on three WEB-browsers, representatives of the three types of WEB-engines, as follows:
+</p>
+<ul><li> Chromium 55</li>
+<li> Mozilla Firefox 3.0, 45.7</li>
+<li> Opera 9.6</li>
+<li> Konqueror 3.5, 4</li></ul>
+<p>Using the module starts with the opening of the session (the user authentication) by the module of the protocol HTTP (Protocol.HTTP). For the operation of the authentication and the mechanism of saving of the session the browser must allow Cookies.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:345px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_login.png"><img class="thumbimage" height="265" src="../files/WebCfgD_login.png" width="343" /></a>  <div class="thumbcaption">Fig.1. User authentication.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:781px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_workplacestruct.png"><img class="thumbimage" height="521" src="../files/WebCfgD_workplacestruct.png" width="779" /></a>  <div class="thumbcaption">Fig.2. Working window of the configurator.</div></div></div></div>
+<p>Lets examine the working window of the configurator in Figure 2.
+</p><p>Working window of the configurator consists of the following parts:
+</p>
+<dl><dd>1 <i>Toolbar</i> — contains the control buttons.</dd>
+<dd>2 <i>Address of the open node</i> — displays the current selected node.</dd>
+<dd>3 <i>Navigator</i> — intended for direct navigation through the control tree.</dd>
+<dd>4 <i>Working field</i> — divided into parts:
+<dl><dd>4.1 <i>The name of the node</i> — contains the name of the current node.</dd>
+<dd>4.2 <i>Tabulator of the working areas</i> — the root pages (control areas) of the node are placed into the tabulator. The control areas of the following levels are placed on the information panel.</dd></dl></dd>
+<dd>5 <i>Status line</i> — displaying the states of the configurator.</dd></dl>
+<p>The toolbar contains the following control buttons (from left to right):
+</p>
+<ul><li> <i>Load</i> — downloads the selected object or branch of object from the database.</li>
+<li> <i>Save</i> — save the selected object or branch of object to the database.</li>
+<li> <i>Up</i> — climb up the tree.</li>
+<li> <i>Previous</i> — open the previous page.</li>
+<li> <i>Next</i> — open the following page.</li>
+<li> <i>Add item</i> — add a new object to the container.</li>
+<li> <i>Delete item</i> — delete the selected object.</li>
+<li> <i>Copy item</i> —  copy the selected object.</li>
+<li> <i>Cut item</i> — cut of the selected object. The original object is removed after paste.</li>
+<li> <i>Paste item</i> — paste of the copied or cut item.</li>
+<li> <i>Refresh item and the tree</i> — refresh the current page.</li>
+<li> <i>Start periodic update</i> — run periodically update of the contents of the current page with an interval of 5 second.</li>
+<li> <i>Stop periodic update</i> — stop periodically update of the contents of the current page with an interval of one second.</li>
+<li> <i>Manual</i> — call for manual of the selected page.</li>
+<li> <i>About</i> — the information about the module.</li></ul>
+<p>The control tools are divided into basic, commands, lists, tables and images. All items are displayed in the sequence strictly appropriate to their location in the description of language of management interface.
+</p>
+<h2><span class="mw-headline" id="Configuration"><span class="mw-headline-number">1</span> Configuration</span></h2>
+<p>To adjust your own behavior in the not obvious situations module provides the ability to customize individual settings through the management interface of the OpenSCADA (Fig. 3). These parameters are:
+</p>
+<ul><li> The link to the configuration page of the external OpenSCADA stations used to enable remote configuration.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:755px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_webdcfg.png"><img class="thumbimage" height="413" src="../files/WebCfgD_webdcfg.png" width="753" /></a>  <div class="thumbcaption">Fig.3. Configuration page of the configurator.</div></div></div></div>
+<h2><span class="mw-headline" id="Basic_elements"><span class="mw-headline-number">2</span> Basic elements</span></h2>
+<p>Into the number of the basic elements are included: information elements, the field to input values, the elements of choice from the list, flags. In the case of absence of an element name, the basic element connects to the previous basic element. Example of the group of the basic elements with the connection is shown in Figure 4.
+</p><p>For input elements that do not mean instant change and may be edited for a long time before a final conclusion, a confirmation mechanism is foretold. This mechanism eliminates the delay when editing, especially in the case of the configuration of remote stations, and to make changes on the confirmation. To elements of input with confirmation include: input line fields of text or numeric values and text fields. Confirmation is made by pressing the button that appears next to the input field after the start of editing.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1005px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_genelem.png"><img class="thumbimage" height="586" src="../files/WebCfgD_genelem.png" width="1003" /></a>  <div class="thumbcaption">Fig.4. Connection of the basic elements.</div></div></div></div>
+<h2><span class="mw-headline" id="Commands"><span class="mw-headline-number">3</span> Commands</span></h2>
+<p>Commands are the elements for the transfer of the certain instructions of the action to the node and for the organization of the links on the page. Commands may contain parameters. The parameters are formed from the basic elements. Example of the commands with the parameters is shown in Figure 5.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:840px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_commandelem.png"><img class="thumbimage" height="527" src="../files/WebCfgD_commandelem.png" width="838" /></a>  <div class="thumbcaption">Fig.5. The command.</div></div></div></div>
+<h2><span class="mw-headline" id="Lists"><span class="mw-headline-number">4</span> Lists</span></h2>
+<p>Lists contain a group of basic elements of the same type. Operations under the elements are accessible via the context menu by the mouse click on the list. Through the elements of the list can be performed the moving operations to other pages. Lists can be indexed. An example of the list is shown in Figure 6.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:621px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_listelem.png"><img class="thumbimage" height="415" src="../files/WebCfgD_listelem.png" width="619" /></a>  <div class="thumbcaption">Fig.6. The list.</div></div></div></div>
+<h2><span class="mw-headline" id="Tables"><span class="mw-headline-number">5</span> Tables</span></h2>
+<p>The tables contain values of the basic elements. Type of the basic element is an individual for each column. Example of the table is given in Figure 7. Operations on the structure of the table for editable tables are accessible through the context menu by the mouse clicking on the service button with the line number. Editing of the table is done by double-clicking on the desired cell.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:811px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_tableelem.png"><img class="thumbimage" height="554" src="../files/WebCfgD_tableelem.png" width="809" /></a>  <div class="thumbcaption">Fig.7. The table.</div></div></div></div>
+<h2><span class="mw-headline" id="Images"><span class="mw-headline-number">6</span> Images</span></h2>
+<p>The images are designed to transmit graphic information into the configurators. Example of the image is shown in Figure 8.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:991px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_imgelem.png"><img class="thumbimage" height="532" src="../files/WebCfgD_imgelem.png" width="989" /></a>  <div class="thumbcaption">Fig.8. The image.</div></div></div></div>
+<h2><span class="mw-headline" id="Design"><span class="mw-headline-number">7</span> Design</span></h2>
+<p>Module supports the design changing by placing to the work/current directory two files WebCfgDVCA.html and WebCfgDVCA.js, where the first one is the configurator's page XHTML-template and the second one is XHTML-template's JavaScript program.
+</p><p>For now allowed next designs:
+</p>
+<ul><li> New standard (default) design: <a class="external" href="http://oscada.org/wiki/File:WebCfgDVCA_std.html.gz" title="File:WebCfgDVCA std.html.gz">WebCfgDVCA.html</a>, <a class="external" href="http://oscada.org/wiki/File:WebCfgDVCA_std.js.gz" title="File:WebCfgDVCA std.js.gz">WebCfgDVCA.js</a></li>
+<li> Old standard (default) design: <a class="external" href="http://oscada.org/wiki/File:WebCfgDVCA_std201701.html.gz" title="File:WebCfgDVCA std201701.html.gz">WebCfgDVCA.html</a>, <a class="external" href="http://oscada.org/wiki/File:WebCfgDVCA_std201701.js.gz" title="File:WebCfgDVCA std201701.js.gz">WebCfgDVCA.js</a></li></ul>
+<h2><span class="mw-headline" id="Errors"><span class="mw-headline-number">8</span> Errors</span></h2>
+<p>Performance of the configurator may differ for different types of browsers. This is due to the fact that the basis of this module is quite a lot of complex technologies, as well as differences between them on different types of WEB-engines.
+</p><p>In addition, each Web-browser has its own problems. Some errors were outflanked in the process of implementation, but part of them has stayed in sight of the significant difficulties in their outflanking and also of actual impossibility to do so.
+</p><p>This section contains a table listing the detected errors of the WEB-browsers, which are appeared in the configurator.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Error </th>
+<th> Description </th>
+<th> Correction
+</th></tr>
+<tr>
+<td colspan="3"> <i>Mozilla FireFox 3.0.4</i> (stable, few errors)
+</td></tr>
+<tr>
+<td> Offset of the popup window of the editable combobox at 5 pixels up and left. </td>
+<td>
+<p>The problem lies in the fact that the calculation of the absolute position of the element of the document doesn't grab exactly 5 pixels. Error of 5 pixels is visible in relation to the coordinates of the mouse pointer and the position of the newly-created entirely-positioned window. The algorithm for computing the position:<br />
+<i>for(&nbsp;; obj&nbsp;!= null; obj = obj.offsetParent ) posX += obj.offsetLeft;</i>
+</p>
+</td>
+<td> To correction of this error to the estimated value on this browser the 5 pixels are added.
+</td></tr>
+<tr>
+<td> In the element of the list (&lt;select size="10"/&gt;) the vertical scroller is always shows and never turned on the horizontal one. </td>
+<td> This element is actively used for building the context menu and drop-down list of the editable combo-box. </td>
+<td> <span style="color: blue">To outflank the browser's error I had to include the list in the block with scroll of the block itself.</span>
+</td></tr>
+<tr>
+<td> The image field is not updating. </td>
+<td> In order to eliminate the need for restructuring of the configurable page while updating the values of fields in the tree of the structure objects of the pages which was get from the XMLHttpRequest, the properties are created with the links to the object of the tags of the fields (addr_lab, addr_val_w). In objects with the name of the tag "img", these properties are not created by the browser. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr>
+<tr>
+<td colspan="3"> <i>Opera</i> (stable, few errors)
+</td></tr>
+<tr>
+<td> Scroller of the unit of the page does not turn on. For example when displaying large images of the trend. </td>
+<td> The block is fixed with the parameters{ overflow: auto; width: 600px; } however, in the case of the exceeding the size of the interior elements the scroller is not turned on. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr>
+<tr>
+<td colspan="3"> <i>Konqueror</i> (very unstable on the dynamic resources and contains many errors)
+</td></tr>
+<tr>
+<td> Stable browser crashing. </td>
+<td> Browser repeatedly and consistently crashes while the computation of JavaScript and when dealing with external windows. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr>
+<tr>
+<td> The scroll of the navigation tree doesn't returned. </td>
+<td> If the navigation tree to expand until the vertical scroll is appeared, then scroll down it, then fold a large branch, the vertical sсroll disappears, and a part of the tree remains invisible in the upper part of the block. Ie the contents of the block is not updated. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr>
+<tr>
+<td> The images do not update. </td>
+<td> In the fields of images, to update the image from the server, the property "src" is to be changed. Browser does not feel it, or even updates the size of the frame, and the image is not updated. Methods to prevent caching of the images are used, but do not help. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr>
+<tr>
+<td> Capture of the images of the buttons </td>
+<td> JavaScript modules use non asynchronous, but synchronous requests to a server to save the sequence of actions. In moments of such a request if it was caused by the event from the image (the image is a button), the image is captured as if to move, even for short mouse clicks. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr>
+<tr>
+<td> Impossible to insert a new element to the tree of objects obtained as a result of XMLHttpRequest </td>
+<td> To monitor the modification of the configuration page the current tree structure to a new one, just received from XMLHttpRequest, reduction was used. When inserting a new element to the tree of the structure through the insertBefore() an error occurs "DOM error 4". If the paste is made to the tree created from zero (not from XMLHttpRequest), this error does not occur. It seems the problem lies in the contrast of object "document" —  the owner of these trees. In such a tree it is not possible to add a node as document.createElement (). Only created as a mytree.ownerDocument.createElement() are inserted.</td>
+<td> The procedure for verifying the structure was simplified to reduced to the determining the fact of changes.
+</td></tr>
+<tr>
+<td> The mechanisms of the formation of the context menu in the Konqueror 4 doesn't work. </td>
+<td> Typically, to form a context menu handler oncontextmenu is used in Firefox and IE, or onmousedown in processing the right keys on the remaining browsers. In the Konqueror generally oncontextmenu  does not work, but onmousedown only works in Konqueror 3.5. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

@@ -32,11 +32,11 @@ if test "x$ProjName" = "x" -o "$ProjName" = "start"; then
     if test $TERM_REZ = 0 -a -n "$(which dialog)" || test -n "$DISPLAY" -a -n "$(which kdialog || which zenity || which Xdialog)"; then
 	prjList=("start" "<$(GETTEXT "Default")>" "<new>" "<$(GETTEXT "New project")>")
 	if test ! -w $WorkDir/$ProjName; then
-	    prjList=("${prjList[@]}" "<*>" "==== $(GETTEXT "User directory copy projects") ===")
+	    prjList=("${prjList[@]}" "<*>" "=== $(GETTEXT "User directory copy projects") ===")
 	    for fit in `ls ~/.openscada`; do
 		if test -d ~/.openscada/$fit && test -f ~/.openscada/$fit/oscada.xml; then prjList=("${prjList[@]}" "$fit" "$fit"); fi
 	    done
-	    prjList=("${prjList[@]}" "<*>" "==== $(GETTEXT "Pre-installed projects") ===")
+	    prjList=("${prjList[@]}" "<*>" "=== $(GETTEXT "Pre-installed projects") ===")
 	fi
 	# Projects list obtaine from preinstalled projects
 	for fit in `ls $StartWorkDir`; do

@@ -40,6 +40,7 @@ class QCheckBox;
 class QDialogButtonBox;
 class QTabWidget;
 class QTableWidget;
+class QSplitter;
 
 namespace VISION
 {
@@ -202,6 +203,7 @@ class VisItProp : public QDialog
 	QComboBox	*proc_lang;	//Widget's procedure name
 	QCheckBox	*proc_text_tr;	//Widget's procedure program text translation
 	TextEdit	*proc_text;	//Widget's procedure program text
+	QSplitter	*proc_split;	//Procedure splitter
 
 	QTreeWidget	*obj_attr_cfg;	//Attribute configuration widget
 	QPushButton	*buttAttrAdd,	//Add new attribute button

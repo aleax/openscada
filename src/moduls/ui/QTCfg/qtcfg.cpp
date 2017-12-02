@@ -1189,7 +1189,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 	    //lstbox->setMinimumHeight(0);	//Fit reset
 
-	    //  Fill list
+	    //  Fill the list
 	    lab->setText((t_s.attr("dscr")+":").c_str());
 	    string helpVl = t_s.attr("help");
 	    lstbox->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
@@ -2540,7 +2540,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 	string path = comb->objectName().toStdString();
 	if(path[0] == 'b') { block = true; path = path.substr(1); }
 
-	n_el = SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl) );
+	n_el = SYS->ctrId(root, TSYS::strDecode(path,TSYS::PathEl));
 
 	//Get list for index list check!
 	if(n_el->attr("dest") == "select") {

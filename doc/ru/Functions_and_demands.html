@@ -41,8 +41,8 @@
 <h3><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80_SCADA_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B"><span class="mw-headline-number">1.1</span> Сервер SCADA системы</span></h3>
 <ul><li> Визуальный контроль и управление посредством интерфейсов:
 <ul><li> Удалённый сервер визуализации на основе движка визуализации и управления СВУ <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>. Локальный запуск модуля UI.Vision, подключенного к серверу визуализации.</li>
-<li> Удалённый WEB интерфейс. Посредством WEB-браузера, модуля визуализации <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> и модуля ядра среды визуализации и управления <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
-<li> Простые удалённые Web-интерфейсы пользователя. Посредством WEB-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebUser" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
+<li> Удалённый WEB интерфейс. Посредством WEB-браузера, модуля визуализации <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> и модуля ядра среды визуализации и управления <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
+<li> Простые удалённые Web-интерфейсы пользователя. Посредством WEB-браузера и UI-модуля <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
 <li> Сбор данных (DAQ) из источников:
 <ul><li> Информация про платформу (программно-аппаратную) на которой работает сервер. С помощью модуля <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>.</li>
 <li> Сбор данных из источников, которые поддерживают протокол SNMP (Простой Протокол Управления Сетью). С помощью DAQ-модуля <a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>.</li>
@@ -78,7 +78,7 @@
 <ul><li> Файлы с двойной упаковкой: последовательной и стандартным архиватором gzip. Посредством модуля архивации <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a>.</li>
 <li> В таблицах архивных БД. Посредством модуля архивации <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li></ul></li>
 <li> Конфигурация и управление сервером через:
-<ul><li> WEB-интерфейс. Посредством Web-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> или <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
+<ul><li> WEB-интерфейс. Посредством Web-браузера и UI-модуля <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> или <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
 <li> С удалённой конфигурационной станции. Посредством UI-модуля на конфигурационной станции <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> и интерфейса управления OpenSCADA, отражённого в протоколе <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
 <li> Сохранение данных сервера в БД типов:
 <ul><li> MySQL. Посредством модуля БД <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a>.</li>
@@ -91,9 +91,9 @@
 <hr />
 <h3><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD.D1.86.D0.B8.D1.8F_.D0.BE.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D0.B0_.D1.82.D0.B5.D1.85.D0.BD.D0.BE.D0.BB.D0.BE.D0.B3.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D1.86.D0.B5.D1.81.D1.81.D0.B0.2C_.D0.BF.D1.83.D0.BB.D1.8C.D1.82_.D0.B4.D0.B8.D1.81.D0.BF.D0.B5.D1.82.D1.87.D0.B5.D1.80.D0.B0.2C_.D0.BF.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.BC.D0.BE.D0.BD.D0.B8.D1.82.D0.BE.D1.80.D0.B8.D0.BD.D0.B3.D0.B0_.D0.B8_.D0.B4.D1.80.D1.83.D0.B3.D0.BE.D0.B5"><span class="mw-headline-number">1.2</span> Станция оператора технологического процесса, пульт диспетчера, панель мониторинга и другое</span></h3>
 <ul><li> Визуальный контроль и управление посредством интерфейсов:
-<ul><li> Локальный (быстрый) интерфейс, который основан на библиотеке Qt. Посредством модуля визуализации <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision" title="Special:MyLanguage/Modules/Vision">Vision</a> и модуля ядра среды визуализации и управления <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> с возможностью визуализации с удалённого движка СВУ, сервера визуализации.</li>
-<li> Удалённый WEB интерфейс. Посредством WEB-браузера, модуля визуализации <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision" title="Special:MyLanguage/Modules/WebVision">WebVision</a> и модуля ядра среды визуализации и управления <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
-<li> Простые удалённые Web-интерфейсы пользователя. Посредством WEB-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebUser" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
+<ul><li> Локальный (быстрый) интерфейс, который основан на библиотеке Qt. Посредством модуля визуализации <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> и модуля ядра среды визуализации и управления <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> с возможностью визуализации с удалённого движка СВУ, сервера визуализации.</li>
+<li> Удалённый WEB интерфейс. Посредством WEB-браузера, модуля визуализации <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> и модуля ядра среды визуализации и управления <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.</li>
+<li> Простые удалённые Web-интерфейсы пользователя. Посредством WEB-браузера и UI-модуля <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">WebUser</a>.</li></ul></li>
 <li> Сбор данных (DAQ) из источников:
 <ul><li> Сбор данных с других серверов и ПЛК, построенных на OpenSCADA, для пробрасывания данных серверов и дублирования. С помощью DAQ-модуля <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>.</li>
 <li> Сбор данных из источников, которые поддерживают протокол SNMP (Простой Протокол Управления Сетью). С помощью DAQ-модуля <a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>.</li>
@@ -106,7 +106,7 @@
 <li> В таблицах архивных БД. С помощью модуля архивации <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li>
 <li> <span style="color: red">Запланировано.</span> На другой сервер, возможно удалённый сервер архивации, основанных на OpenSCADA.</li></ul></li>
 <li> Конфигурация и управление сервером через:
-<ul><li> WEB-интерфейс. Посредством Web-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> или <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
+<ul><li> WEB-интерфейс. Посредством Web-браузера и UI-модуля <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> или <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
 <li> Qt-интерфейс. Посредством UI-модуля <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a>.</li>
 <li> С удалённой конфигурационной станции. Посредством UI-модуля на конфигурационной станции <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> и интерфейса управления OpenSCADA, отражённого в протоколе <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
 <li> Сохранение данных сервера в БД типов:
@@ -154,7 +154,7 @@
 <li> Файлы с двойной упаковкой: последовательной и стандартным архиватором gzip. Посредством модуля архивации <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a>.</li>
 <li> В таблицах архивных БД. Посредством модуля архивации <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.</li></ul></li>
 <li> Конфигурация и управление ПЛК через:
-<ul><li> WEB-интерфейс. Посредством Web-браузера и UI-модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfgD" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> или <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebCfg" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
+<ul><li> WEB-интерфейс. Посредством Web-браузера и UI-модуля <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> или <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.</li>
 <li> С удалённой конфигурационной станции. Посредством UI-модуля на конфигурационной станции <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> и интерфейса управления OpenSCADA, отражённого в протоколе <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a>.</li></ul></li>
 <li> Сохранение данных ПЛК в БД типов:
 <ul><li> Все данные в конфигурационном файле.</li>

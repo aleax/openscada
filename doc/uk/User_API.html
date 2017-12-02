@@ -67,7 +67,7 @@
 <p>До початку програмування у OpenSCADA Ви маєте вивчити структуру об'єктів програми у <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">посібнику по програмі OpenSCADA</a>. З цього документу Ви побачите, що Ви можете як користувач програмувати наступні частини OpenSCADA:
 </p>
 <ul><li> <a class="external" href="http://oscada.org/wiki/Documents/DAQ/uk#.D0.92.D1.96.D1.80.D1.82.D1.83.D0.B0.D0.BB.D1.8C.D0.BD.D1.96_.D0.B4.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.B0_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85" title="Documents/DAQ/uk">Джерела логічного рівня підсистеми "Збір даних"</a>.</li>
-<li> Транспортні протоколи, доступні для користувацького програмування, такі як: <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">Користувацький протокол</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus вузли типу "Данні"</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebUser" title="Special:MyLanguage/Modules/WebUser">Web-інтерфейси від користувача</a>, ...</li>
+<li> Транспортні протоколи, доступні для користувацького програмування, такі як: <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">Користувацький протокол</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus вузли типу "Данні"</a>, <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">Web-інтерфейси від користувача</a>, ...</li>
 <li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">Середовище Візуалізації та Управління (СВУ)</a> у процедурах віджетів.</li></ul>
 <p>API користувацького програмування представляє собою дерево об'єктів OpenSCADA, кожний об'єкт якого може надавати власний перелік властивостей та функцій. Властивості та функції об'єктів можуть використовуватися користувачем у процедурах на мовах користувацького програмування OpenSCADA.
 </p><p>На цей час OpenSCADA надає тільки одну мову текстового програмування це <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, відповідно Ви також повинні її вивчити перед початком. Точкою входу для доступу до об'єктів OpenSCADA з мови користувацького програмування JavaLikeCalc є зарезервоване слово "SYS" кореневого об'єкту OpenSCADA. Наприклад, для доступу до функції вихідного транспорту треба записати: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
@@ -532,7 +532,43 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 </p>
 <h2><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9A.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D1.96_.D1.96.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B8.22_.28SYS.UI.29"><span class="mw-headline-number">10</span> Підсистема "Користувацькі інтерфейси" (SYS.UI)</span></h2>
 <h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_UI.VCAEngine"><span class="mw-headline-number">10.1</span> Модуль <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></span></h3>
-<p><a class="new" href="http://oscada.org/wiki/index.php?title=Template:Include_file%3D%22/Doc/KoncepcijaSredyVizualizacii/part4/part14%22_notoc%3D%221%22_first_anchor%3D%22API%22_last_anchor%3D%22endAPI%22&amp;action=edit&amp;redlink=1" title="Template:Include file=&quot;/Doc/KoncepcijaSredyVizualizacii/part4/part14&quot; notoc=&quot;1&quot; first anchor=&quot;API&quot; last anchor=&quot;endAPI&quot; (page does not exist)">Template:Include file="/Doc/KoncepcijaSredyVizualizacii/part4/part14" notoc="1" first anchor="API" last anchor="endAPI"</a>
+<p><b>Object "Session" ( this.ownerSess() )</b>
+</p>
+<ul><li> <i>string user( )</i> — current session user.</li>
+<li> <i>int alrmQuittance( int quit_tmpl, string wpath = "", bool ret = false )</i> — violations quittance <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then make global quittance. Into the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. The <i>ret</i> sets will cause the quittance return.</li>
+<li> <i>int reqTm( )</i> — last request time.</li>
+<li> <i>string reqUser( )</i> — last request user.</li>
+<li> <i>string reqLang( )</i> — last request language.</li>
+<li> <i>int userActTm( )</i> — last user action time.</li></ul>
+<p><b>Object "Widget" (this)</b>
+</p>
+<ul><li> <i>TCntrNodeObj ownerSess( )</i> — the session's object is getting for current widget.</li>
+<li> <i>TCntrNodeObj ownerPage( )</i> — the parent object's page is getting for current widget.</li>
+<li> <i>TCntrNodeObj ownerWdg( bool base = false )</i> — the parent widget is getting for current widget. If set <i>base</i> then will return the parent pages' objects also.</li>
+<li> <i>TCntrNodeObj wdgAdd( string wid, string wname, string parent )</i> — add new widget <i>wid</i> with the name <i>wname</i> and based on the library widget <i>parent</i>.</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+//New widget adding, based at the text primitive
+nw = this.wdgAdd("nw", "New widget", "/wlb_originals/wdg_Text");
+nw.attrSet("geomX", 50).attrSet("geomY", 50);
+</pre>
+<ul><li> <i>bool wdgDel( string wid )</i> — delete the widget <i>wid</i>.</li>
+<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — attach to child or global, by <i>byPath</i>, widget. In the case of global connection, you can use absolute or relative path to the widget. For starting point of the absolute address acts the root object of the module "VCAEngine", which means the first element of the absolute address is session identifier, which is omitted. The relative address takes the countdown from the current widget. Special element of the relative address is an element of parent node "..".</li>
+<li> <i>bool attrPresent( string attr )</i> — the attribute <i>attr</i> of the widget checking to presence fact.</li>
+<li> <i>ElTp attr( string attr, bool fromSess = false )</i> — value of the attribute <i>attr</i> of the widget getting or from the session <i>fromSess</i>. For missing attributes will return empty string.</li>
+<li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — value of the attribute <i>attr</i> of the widget setting to <i>vl</i>, or to the session <i>toSess</i>. The object is returned for the function concatenation.</li>
+<li> <i>string link( string attr, bool prm = false )</i> — the link return for the widget's attribute <i>attr</i>. At set <i>prm</i> requests the link for the attributes block (parameter), represented by the attribute. </li>
+<li> <i>string linkSet( string attr, string vl, bool prm = false )</i> — the link set for the widget's attribute <i>attr</i>. At set <i>prm</i> makes the link set for the attributes block (parameter), represented by the attribute.</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+//Set link for eight trend to the parameter
+this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
+</pre>
+<ul><li> <i>string mime( string addr, string type = "" )</i> — the "mime" object by the address <i>addr</i> (the direct link to the resource or the widget's attribute contained the link) getting with the type to <i>type</i>, from the session table or the source. It is designed for the "mime" objects edition and that substitution to this session's context, for example, images SVG.</li>
+<li> <i>int mimeSet( string addr, string data, string type = "" )</i> — the "mime" object <i>data</i> with type <i>type</i> by address <i>addr</i> setting.</li>
+<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formation of the system message <i>mess</i> with the category as the widget path.</li></ul>
+<p><b>Object "Widget" of the primitive "Document" (this)</b>
+</p>
+<ul><li> <i>string getArhDoc( int nDoc)</i> — getting the archive document's text to "nDoc" (0-{aSize-1}) depth.</li></ul>
+<p><br />
 </p>
 <h2><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A1.D0.BF.D0.B5.D1.86.D1.96.D0.B0.D0.BB.D1.8C.D0.BD.D1.96.22_.28SYS.Special.29"><span class="mw-headline-number">11</span> Підсистема "Спеціальні" (SYS.Special)</span></h2>
 <h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D0.BE.D0.B3.D0.BE_API_.D1.81.D0.B5.D1.80.D0.B5.D0.B4.D0.BE.D0.B2.D0.B8.D1.89.D0.B0_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.28Special.FLibSYS.29"><span class="mw-headline-number">11.1</span> Модуль <a href="Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Бібліотека системного API середовища користувацького програмування (Special.FLibSYS)</a></span></h3>
@@ -543,12 +579,21 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 </p>
 <ul><li> <i>ElTp call(ElTp prm1, ...)</i> — виклик цієї функції з параметрами <i>&lt;prm{N}&gt;</i>. Повертає результат викликаної функції.</li></ul>
 <h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D1.85_.D0.BC.D0.B0.D1.82.D0.B5.D0.BC.D0.B0.D1.82.D0.B8.D1.87.D0.BD.D0.B8.D1.85_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D0.B9_.28Special.FLibMath.29"><span class="mw-headline-number">11.2</span> Модуль <a href="Modules/FLibMath.html" title="Special:MyLanguage/Modules/FLibMath">Бібліотека стандартних математичних функцій (Special.FLibMath)</a></span></h3>
-<p><a class="new" href="http://oscada.org/wiki/index.php?title=Template:Include_file%3D%22/HomePageEn/Doc/FLibMath%22_notoc%3D%221%22_first_anchor%3D%22API%22_last_anchor%3D%22endAPI%22&amp;action=edit&amp;redlink=1" title="Template:Include file=&quot;/HomePageEn/Doc/FLibMath&quot; notoc=&quot;1&quot; first anchor=&quot;API&quot; last anchor=&quot;endAPI&quot; (page does not exist)">Template:Include file="/HomePageEn/Doc/FLibMath" notoc="1" first anchor="API" last anchor="endAPI"</a>
+<p><b>Об'єкт "Бібліотека функцій" (SYS.Special.FLibMath)</b>
 </p>
+<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — виклик функції бібліотеки <i>{funcID}</i>. Повертає результат функції що викликається.</li></ul>
+<p><b>Об'єкт "Користувацька функція" (SYS.Special.FLibMath["funcID"])</b>
+</p>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — виклик цієї функції з параметрами <i>&lt;prm{N}&gt;</i>. Повертає результат функції що викликається.</li></ul>
 <h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D0.B9_.D1.81.D1.83.D0.BC.D1.96.D1.81.D0.BD.D0.BE.D1.81.D1.82.D1.96_.D0.B7_SCADA_Complex1_.D1.84.D1.96.D1.80.D0.BC.D0.B8_.D0.A2.D0.9E.D0.92_.D0.9D.D0.86.D0.9F_.22DIYA.22_.28Special.FLibComplex1.29"><span class="mw-headline-number">11.3</span> Модуль <a href="Modules/FLibComplex1.html" title="Special:MyLanguage/Modules/FLibComplex1">Бібліотека функцій сумісності з SCADA Complex1 фірми ТОВ НІП "DIYA" (Special.FLibComplex1)</a></span></h3>
-<p><a class="new" href="http://oscada.org/wiki/index.php?title=Template:Include_file%3D%22/HomePageEn/Doc/FLibComplex1%22_notoc%3D%221%22_first_anchor%3D%22API%22_last_anchor%3D%22endAPI%22&amp;action=edit&amp;redlink=1" title="Template:Include file=&quot;/HomePageEn/Doc/FLibComplex1&quot; notoc=&quot;1&quot; first anchor=&quot;API&quot; last anchor=&quot;endAPI&quot; (page does not exist)">Template:Include file="/HomePageEn/Doc/FLibComplex1" notoc="1" first anchor="API" last anchor="endAPI"</a>
-</p><p><br />
-<a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Link to DB API libraries ...
+<p><b>Об'єкт "Бібліотека функцій" (SYS.Special.FLibComplex1)</b>
+</p>
+<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — виклик функції бібліотеки <i>{funcID}</i>. Повертає результат функції що викликається.</li></ul>
+<p><b>Об'єкт "Користувацька функція" (SYS.Special.FLibComplex1["funcID"])</b>
+</p>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — виклик даної функції з параметрами <i>&lt;prm{N}&gt;</i>. Повертає результат функції що викликається.</li></ul>
+<p><br /> 
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Link to DB API libraries ...
 </p>
 
 

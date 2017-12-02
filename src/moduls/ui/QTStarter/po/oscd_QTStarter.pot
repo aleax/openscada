@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-06 16:37+0300\n"
+"POT-Creation-Date: 2017-12-02 18:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -495,7 +495,13 @@ msgstr ""
 msgid "Start Qt modules (sep - ';')"
 msgstr ""
 
-msgid "OpenSCADA system Qt-starter"
+msgid "Qt-starter of OpenSCADA"
+msgstr ""
+
+msgid "Project: %1"
+msgstr ""
+
+msgid "OpenSCADA start"
 msgstr ""
 
 msgid "&About"
@@ -504,10 +510,7 @@ msgstr ""
 msgid "Program and OpenSCADA information"
 msgstr ""
 
-msgid "The button for display program and OpenSCADA information"
-msgstr ""
-
-msgid "Press to display program and OpenSCADA information"
+msgid "The button for display program and OpenSCADA information."
 msgstr ""
 
 msgid "About &Qt"
@@ -516,19 +519,13 @@ msgstr ""
 msgid "Qt information"
 msgstr ""
 
-msgid "The button for getting the using Qt information"
-msgstr ""
-
-msgid "Press to get the using Qt information."
+msgid "The button for getting the using Qt information."
 msgstr ""
 
 msgid "%1 manual"
 msgstr ""
 
-msgid "The button for getting the using %1 manual"
-msgstr ""
-
-msgid "Press to get the using %1 manual."
+msgid "The button for getting the using %1 manual."
 msgstr ""
 
 msgid "What's &This"
@@ -537,13 +534,13 @@ msgstr ""
 msgid "Question about GUI elements"
 msgstr ""
 
-msgid "The button for requesting the information about user interface elements"
-msgstr ""
-
-msgid "Press for requesting about user interface elements"
+msgid "The button for requesting the information about user interface elements."
 msgstr ""
 
 msgid "&Help"
+msgstr ""
+
+msgid "Qt modules of OpenSCADA"
 msgstr ""
 
 msgid "Call the Qt-based UI module '%1'"
@@ -559,10 +556,34 @@ msgid ""
 "License: %7"
 msgstr ""
 
+msgid "Projects of OpenSCADA"
+msgstr ""
+
+msgid "List of allowed to switch projects of OpenSCADA"
+msgstr ""
+
+msgid "The list for select and switch to allowed projects of OpenSCADA."
+msgstr ""
+
+msgid "<New project or project to update>"
+msgstr ""
+
+msgid "=== User directory copy projects ==="
+msgstr ""
+
+msgid "=== Pre-installed projects ==="
+msgstr ""
+
+msgid "Switch to the selected project"
+msgstr ""
+
+msgid "The button for switch to the selected project."
+msgstr ""
+
 msgid "Exit from the program"
 msgstr ""
 
-msgid "The button for exit from the program"
+msgid "The button for exit from the program."
 msgstr ""
 
 #, c-format
@@ -583,6 +604,24 @@ msgid "Manual"
 msgstr ""
 
 msgid "No the manual '%1' found offline or online!"
+msgstr ""
+
+msgid "New project or project to update"
+msgstr ""
+
+msgid "Project name for new one creation or to update present one:"
+msgstr ""
+
+msgid "Empty name of the project is unavailable!"
+msgstr ""
+
+msgid "Switch project"
+msgstr ""
+
+msgid "Do you really want to change the current project \"%1\" to \"%2\"?"
+msgstr ""
+
+msgid "Project \"%1\" seems wrong or broken!"
 msgstr ""
 
 #, c-format

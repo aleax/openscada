@@ -10,7 +10,7 @@ Allow realisation of the main templates.','Автор: Роман Савочен
 Версия: 1.0.1
 Предоставляет реализацию базовых шаблонов.');
 INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 1.9.0','','tmplib_DevLib','Библиотека устройств','');
+Version: 1.9.1','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 INSERT INTO "ParamTemplLibs" VALUES('LowDevLib','Low-level devices','','The templates library provides common templates and related functions for custom access to low-level devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
 Version: 1.1.0','','tmplib_LowDevLib','','');
@@ -319,6 +319,11 @@ Modules/DBArch:en,uk,ru:Modules/DBArch.html
 Modules/VCAEngine:en,ru:Modules/VCAEngine.html
 Modules/QTStarter:en,uk,ru:Modules/QTStarter.html
 Modules/QTCfg:en,uk,ru:Modules/QTCfg.html
+Modules/Vision:en,ru:Modules/Vision.html
+Modules/WebCfgD:en,uk,ru:Modules/WebCfgD.html
+Modules/WebCfg:en,uk,ru:Modules/WebCfg.html
+Modules/WebVision:en,uk,ru:Modules/WebVision.html
+Modules/WebUser:en,uk,ru:Modules/WebUser.html
 Modules/FLibSYS:en,uk,ru:Modules/FLibSYS.html
 Modules/SystemTests:en,uk,ru:Modules/SystemTests.html
 Modules/FLibMath:en,uk,ru:Modules/FLibMath.html
@@ -1189,6 +1194,59 @@ INSERT INTO "tmplib_DevLib_io" VALUES('m230','N1','Serial number',0,16,'',57,'С
 INSERT INTO "tmplib_DevLib_io" VALUES('m230','netaddr','Network address (0...240)',1,64,'1',58,'Сетевой адрес (0...240)','','Мережева адреса (0...240)','');
 INSERT INTO "tmplib_DevLib_io" VALUES('m230','password','Password',0,64,'111111',59,'Пароль','','Пароль','');
 INSERT INTO "tmplib_DevLib_io" VALUES('m230','transport','Transport',0,64,'merc230',60,'Транспорт','','Транспорт','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','transport','Transport',0,64,'Sockets.out_',0,'Транспорт','','Транспорт','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','serial','Factory number of the counter',0,64,'',1,'Заводской номер счётчика','','Заводський номер лічильника','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','passw','Password',0,64,'1111111111111111',2,'Пароль','','Пароль','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','kT','Coefficient of transformation',1,64,'1',3,'Коэффициент трансформации','','Коефіцієнт трансформації','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','T0','Current values',3,64,'0',4,'Текущие показатели','','Поточні показники','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','T1','Current values tariff T1',3,64,'0',5,'Текущие показатели тариф T1','','Поточні показники тариф T1','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','T2','Current values tariff T2',3,64,'0',6,'Текущие показатели тариф T2','','Поточні показники тариф T2','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','T3','Current values tariff T3',3,64,'0',7,'Текущие показатели тариф T3','','Поточні показники тариф T3','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','U','Instantaneous value "Voltage"',3,64,'0',8,'Мгновенные значения "Напряжение"','','Миттєві значення "Напруга"','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','I','Instantaneous value "Current"',3,64,'0',9,'Мгновенные значения "Ток"','','Миттєві значення "Струм"','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','P','Instantaneous value "Power"',3,64,'0',10,'Мгновенные значения "Мощность"','','Миттєві значення "Потужність"','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','kP','Instantaneous value "Power coefficient"',3,64,'0',11,'Мгновенные значения "коэффициент Мощности"','','Миттєві значення "коефіцієнт Потужності"','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Q','Instantaneous value "Power reactive"',3,64,'0',12,'Мгновенные значения "реактивная мощность"','','Миттєві значення "Реактивна потужність"','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','K','Instantaneous value "Vectors angle"',3,64,'0',13,'Мгновенные значения "Угол между векторами"','','Миттєві значення "Кут між векторами"','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae','А+(kW*h)',2,17,'',14,'А+(кВт*ч)','','А+(кВт*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae_','А-(kW*h)',2,17,'',15,'А-(кВт*ч)','','А-(кВт*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re','R+(1+2quadrant)(kVar*h)',2,17,'',16,'R+(1+2квадрант)(кВар*ч)','','R+(1+2квадрант)(кВар*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re_','R-(3+4quadrant)(kVar*h)',2,17,'',17,'R-(3+4квадрант)(кВар*ч)','','R-(3+4квадрант)(кВар*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae1','А1+(kW*h)',2,17,'',18,'А1+(кВт*ч)','','А1+(кВт*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae_1','А1-(kW*h)',2,17,'',19,'А1-(кВт*ч)','','А1-(кВт*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re1','R1+(1+2quadrant)(kVar*h)',2,17,'',20,'R1+(1+2квадрант)(кВар*ч)','','R1+(1+2квадрант)(кВар*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re_1','R1-(3+4quadrant)(kVar*h)',2,17,'',21,'R1-(3+4квадрант)(кВар*ч)','','R1-(3+4квадрант)(кВар*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae2','А2+(kW*h)',2,17,'',22,'А2+(кВт*ч)','','А2+(кВт*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae_2','А2-(kW*h)',2,17,'',23,'А2-(кВт*ч)','','А2-(кВт*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re2','R2+(1+2quadrant)(kVar*h)',2,17,'',24,'R2+(1+2квадрант)(кВар*ч)','','R2+(1+2квадрант)(кВар*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re_2','R2-(3+4quadrant)(kVar*h)',2,17,'',25,'R2-(3+4квадрант)(кВар*ч)','','R2-(3+4квадрант)(кВар*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae3','А3+(kW*h)',2,17,'',26,'А3+(кВт*ч)','','А3+(кВт*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Ae_3','А3-(kW*h)',2,17,'',27,'А3-(кВт*ч)','','А3-(кВт*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re3','R3+(1+2quadrant)(kVar*h)',2,17,'',28,'R3+(1+2квадрант)(кВар*ч)','','R3+(1+2квадрант)(кВар*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Re_3','R3-(3+4quadrant)(kVar*h)',2,17,'',29,'R3-(3+4квадрант)(кВар*ч)','','R3-(3+4квадрант)(кВар*ч)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','U1','Phase voltage 1(V)',2,17,'',30,'Напряжение фаза 1 (В)','','Напруга фаза 1 (В)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','U2','Phase voltage 2(V)',2,17,'',31,'Напряжение фаза 2 (В)','','Напруга фаза 2 (В)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','U3','Phase voltage 3(V)',2,17,'',32,'Напряжение фаза 3 (В)','','Напруга фаза 3 (В)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','I1','Phase current 1(A)',2,17,'',33,'Ток фаза 1 (А)','','Струм фаза 1 (А)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','I2','Phase current 2(A)',2,17,'',34,'Ток фаза 2 (А)','','Струм фаза 2 (А)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','I3','Phase current 3(A)',2,17,'',35,'Ток фаза 3 (А)','','Струм фаза 3 (А)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','kP1','Power coeff. cos φ phase 1',2,17,'',36,'Коеф. мощности. cos φ фаза 1','','Коеф. потужн. cos φ фаза 1','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','kP2','Power coeff. cos φ phase 2',2,17,'',37,'Коеф. мощности. cos φ фаза 2','','Коеф. потужн. cos φ фаза 2','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','kP3','Power coeff. cos φ phase 3',2,17,'',38,'Коеф. мощности. cos φ фаза 3','','Коеф. потужн. cos φ фаза 3','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Psum','Summary active power (kW)',2,17,'',39,'Мощность  акт. суммарная (кВт)','','Потужн.  акт. сумарна (кВт)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','P1','Active power phase 1 (kW)',2,17,'',40,'Мощность  акт. фаза 1 (кВт)','','Потужн.  акт. фаза 1 (кВт)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','P2','Active power phase 2 (kW)',2,17,'',41,'Мощность  акт. фаза 2 (кВт)','','Потужн.  акт. фаза 2 (кВт)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','P3','Active power phase 3 (kW)',2,17,'',42,'Мощность  акт. фаза 3 (кВт)','','Потужн.  акт. фаза 3 (кВт)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Qsum','Summary reactive power (kVar)',2,17,'',43,'Мощность реакт. сумарная (кВар)','','Потужн. реакт. сумарна (кВар)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Q1','Reactive power phase 1 (kVar)',2,17,'',44,'Мощность реакт. фаза 1 (кВар)','','Потужн. реакт. фаза 1 (кВар)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Q2','Reactive power phase 2 (kVar)',2,17,'',45,'Мощность реакт. фаза 2 (кВар)','','Потужн. реакт. фаза 2 (кВар)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','Q3','Reactive power phase 3 (kVar)',2,17,'',46,'Мощность реакт. фаза 3 (кВар)','','Потужн. реакт. фаза 3 (кВар)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','V12','Vector angle U1_U2(degr.)',1,17,'',47,'Угол вектора U1_U2 (град.)','','Кут вектора U1_U2 (град.)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','V13','Vector angle U1_U3(degr.)',1,17,'',48,'Угол вектора U1_U3 (град.)','','Кут вектора U1_U3 (град.)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','this','Object',4,0,'',49,'Объект','','Об''єкт','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','NAME','Name',0,16,'',50,'Имя','','Ім''я','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','SHIFR','Shifr',0,16,'',51,'Шифр','','Шифр','');
+INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','DESCR','Description',0,16,'',52,'Описание','','Опис','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2952,6 +3010,7 @@ INSERT INTO "Trs" VALUES('Wrong or empty respond to the calibration H1 request.'
 INSERT INTO "Trs" VALUES('Wrong or empty respond to the calibration H2-H6 request.','','');
 INSERT INTO "Trs" VALUES('Wrong or empty respond to the pressure data.','','');
 INSERT INTO "Trs" VALUES('Wrong or empty respond to the humidity data.','','');
+INSERT INTO "Trs" VALUES('FCS error.','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -3086,7 +3145,7 @@ else {
 	}
 }
 
-f_err = t_err;','','',1509274008);
+f_err = t_err;','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('TMH','Power supply for turbomolecular pumps','','','Power supply for turbomolecular pumps of firm SHIMADZU (http://www.shimadzu.com), model EI-R04M.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
@@ -3266,7 +3325,7 @@ else {
 	else MP_Z = req.text().slice(4).toInt();
 }
 
-f_err = t_err;','','',1509283338);
+f_err = t_err;','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('TM510x','Elemer TM510x','','','Multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
@@ -3315,7 +3374,7 @@ else {
 	}
 }
 
-f_err = t_err;','','',1509274015);
+f_err = t_err;','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('UPS','','','','Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.2.0','','',10,0,'JavaLikeCalc.JavaScript
@@ -3427,7 +3486,7 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;
-conDelay_ = 0;','','',1481351833);
+conDelay_ = 0;','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vladislav Chubuk
@@ -3783,7 +3842,7 @@ if(t_err.length) {
 	f_err = t_err;
 	for(var cA in varsLs) arguments[cA] = EVAL_REAL;
 }
-else f_err = errAttrs.length ? "11:"+tr("Quality errors")+": "+errAttrs : "0";','','',1509274088);
+else f_err = errAttrs.length ? "11:"+tr("Quality errors")+": "+errAttrs : "0";','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('SMDP','Sycon Multi Drop Protocol','','','STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com).
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
@@ -4030,7 +4089,7 @@ else {
 	XtalLife_C = (t_err=req.attr("err")).length ? EVAL_INT : req.text().slice(2).toInt(10);
 }
 
-f_err = t_err.length ? t_err : "0";','','',1509282151);
+f_err = t_err.length ? t_err : "0";','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('IT3','Temperature measurement IT-3','','','Temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
@@ -4075,7 +4134,7 @@ else {
 }
 
 if(t_err.length) { SYS.messDebug("/IT3/TMPL",tr("Error response")+": "+t_err); f_err = t_err; }
-else f_err = "0";','','',1472721622);
+else f_err = "0";','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('IVE_452HS_02','IVE-452HS-02','','','Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
@@ -4175,7 +4234,7 @@ if(t_err.length) {
 	SYS.messDebug("/IVE452HS02/TMPL",tr("Error response")+": "+t_err);
 	f_err = t_err;
 }
-else f_err = "0";','','',1509285275);
+else f_err = "0";','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('OPTRIS','OPTRIS CT/CTL','','','OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
@@ -4269,7 +4328,7 @@ if(t_err.length) {
 	SYS.messDebug("/OPTRIS/TMPL",tr("Error response")+": "+t_err);
 	f_err = t_err;
 }
-else f_err = "0";','','',1509908064);
+else f_err = "0";','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('CTR','CTR 100, 101','','','The RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
@@ -4376,7 +4435,7 @@ if(t_err.length) {
 	press = EVAL_REAL;
 	f_err = t_err + " " + u_err;
 }
-else f_err = "0: " + u_err;','','',1509287409);
+else f_err = "0: " + u_err;','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('IEC60870','IEC-60870','','','IEC 60870 part 5 is one of the IEC 60870 set of standards which define systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems. The template implements part 104 (Ethernet transport) for client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1, C_CI_NA_1, C_SC_NA_1, M_SP_NA_1, M_ME_NB_1, C_CS_NA_1. For acquired and control data primarily used an object into attribute "items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. To the data control by attributes at once you can its describe into "itemsSet". Into the template for the first time used the non request mode of an output transport and free attributes creation wile performing.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Ustijancev Michael.
@@ -4670,7 +4729,7 @@ if(t_err.length) {
 	}
 	f_err = t_err;
 }
-else f_err = "0";','','',1509288456);
+else f_err = "0";','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('SSCP','Shark Slave Communication Protocol','','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Costumer Faster CZ (http://faster.cz)
@@ -4858,7 +4917,7 @@ else {
 	}
 }
 
-f_err = t_err;','','',1509375504);
+f_err = t_err;','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('m200','Mercury 200','Меркурій 200','Меркурий 200','One phase counter of electricity Mercury 200, 203.2Т, 206 from firm Incotex (http://www.incotexcom.ru).
 Author: Arsen Zakojan <godzilla919@gmail.com>
 Version: 1.0.0','Однофазні лічильники електроенергії Меркурій 200,  203.2Т,  206 компанії Інкотекс (http://www.incotexcom.ru).
@@ -4890,7 +4949,7 @@ if(req.text().length <14){U= EVAL_STR;I= EVAL_STR;P= EVAL_STR;}//если нет
 else//если ответ получен
 {U =Special.FLibSYS.str2real( req.text().slice(15,17)+req.text().slice(18,20))/10;
 I =Special.FLibSYS.str2real( req.text().slice(21,23)+req.text().slice(24,26))/100;
-P =Special.FLibSYS.str2real( req.text().slice(27,29)+req.text().slice(30,32)+req.text().slice(33,35));}','','',1509290186);
+P =Special.FLibSYS.str2real( req.text().slice(27,29)+req.text().slice(30,32)+req.text().slice(33,35));}','','',1512240506);
 INSERT INTO "tmplib_DevLib" VALUES('m230','Mercury 230','Меркурій 230','Меркурий 230','Three phase counter of electricity Mercury 230, 231, 232, 233, 234, 236 from firm Incotex (http://www.incotexcom.ru).
 Author: Arsen Zakojan <godzilla919@gmail.com>
 Version: 1.0.0','Трифазні лічильники електроенергії Меркурій 230, 231, 232, 233,  234,  236  компанії Інкотекс (http://www.incotexcom.ru).
@@ -5051,7 +5110,279 @@ req = SYS.XMLNode().setAttr("ProtIt","m230").setAttr("netaddr",netaddr).setAttr(
 SYS.Transport["Serial"]["out_"+transport].messIO(req,"UserProtocol");
 if(!req.text())N1= EVAL_STR;
 else N1 =req.text();}
-','','',1509290192);
+','','',1512240506);
+INSERT INTO "tmplib_DevLib" VALUES('Nik2303I','Nik2303I','','','Three phase counter of electricity NIK 2303 from firm NIK LLC (http://www.nik.net.ua).
+Author: Ruslan Yarmoliuk <rylio74@gmail.com>
+Version: 1.0.0','','',120,0,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+if(f_start) {
+	transport_ = transport;
+	tr = SYS.Transport.nodeAt(transport,".");
+	LLC = SYS.strFromCharCode(0xe6, 0xe6, 0x00);
+	F_id = SYS.strFromCharCode(0xC0, 0x01, 0x81, 0x00, 0x03);
+	end = SYS.strFromCharCode(0x02, 0x00);
+	Ae=Ae_=Re=Re_=Ae1=Ae_1=Re1=Re_1=Ae2=Ae_2=Re2=Re_2=Ae3=Ae_3=Re3=Re_3=EVAL_REAL;
+	U1=U2=U3=I1=I2=I3=Psum=P1=P2=P3=Qsum=Q1=Q2=Q3=kP1=kP2=kP3=EVAL_REAL;
+	V12=V13=EVAL_INT;
+
+}
+if(f_stop) {
+	return;
+}
+ 
+tErr="0";
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.nodeAt(transport,".");
+	transport_ = transport;
+}
+tr.start(true, 0);
+/* timeout=SYS.time();
+	while(!tr.start()){
+		if(SYS.time()>timeout+5)break;
+	}	
+*/	
+if(!tr.start()){ tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+			Ae=Ae_=Re=Re_=Ae1=Ae_1=Re1=Re_1=U1=U2=U3=I1=I2=I3=Psum=P1=P2=P3=Qsum=Q1=Q2=Q3=kP1=kP2=kP3=EVAL_REAL;
+			V12=V13=EVAL_INT;
+}else{
+	req = SYS.XMLNode("mess").setAttr("ProtIt","NIK2303").setAttr("SN",serial.toInt(10));
+	//COMAND_SNRM
+	req.setAttr("cntr",0x93).setText("");
+	tr.messIO(req, "UserProtocol");
+	if (req.attr("err").toInt()){SYS.messDebug("/NIK2303I/TMPL",tr("Error response")+": "+req.attr("err"));
+		Ae=Ae_=Re=Re_=Ae1=Ae_1=Re1=Re_1=U1=U2=U3=I1=I2=I3=Psum=P1=P2=P3=Qsum=Q1=Q2=Q3=kP1=kP2=kP3=EVAL_REAL;
+		V12=V13=EVAL_INT;
+		return;}
+	//COMAND_AARQ (передача пароля)	
+	mess = SYS.strFromCharCode(0xa1, 0x09, 0x06, 0x07, 0x60,
+		0x85, 0x74, 0x05, 0x08, 0x01, 0x01, 0x8a, 0x02,
+		0x07, 0x80, 0x8b, 0x07, 0x60, 0x85, 0x74, 0x05,
+		0x08, 0x02, 0x01, 0xac, 0x12, 0x80, 0x11, 0x00)
+		+ passw + SYS.strFromCharCode(0xbe, 0x10, 0x04,	
+		0x0e, 0x01, 0x00, 0x00, 0x00, 0x06, 0x5f, 0x1f,
+		0x04, 0x00, 0x00, 0x08, 0xcb, 0x00, 0x80 );
+	req.setAttr("cntr",0x10).setText(LLC + SYS.strFromCharCode(0x60, mess.length) + mess);
+	tr.messIO(req, "UserProtocol");
+	if (req.attr("err").toInt()){SYS.messDebug("/NIK2303I/TMPL",tr("Error response")+": "+req.attr("err"));
+		Ae=Ae_=Re=Re_=Ae1=Ae_1=Re1=Re_1=Ua=Ub=Uc=Ia=Ib=Ic=Pa=Pb=Pc=Qa=Qb=Qc=kPa=kPb=kPc=EVAL_REAL;
+		Vab=Vac=EVAL_INT;
+		return;}
+//ЗАПИТИ ПОТОЧНИХ ПОКАЗНИКІВ ЛІЧИЛЬНИКА T0
+	if (T0)	{
+		//Запит показник Активна енергія	(1.8.0)
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 1, 8, 0, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Ae = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Ae = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	//Запит показник Активна енергія генерація	(2.8.0)
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 2, 8, 0, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Ae_ = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Ae_ = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	//Запит показник реактивна енергія	 (3.8.0)
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 3, 8, 0, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Re = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Re = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	//Запит показник реактивна енергія генерація (4.8.0)	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 4, 8, 0, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Re_ = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Re_ = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	}
+	//ЗАПИТИ ПОТОЧНИХ ПОКАЗНИКІВ ЛІЧИЛЬНИКА T1
+	if (T1)	{
+		//Запит показник Активна енергія	(1.8.1)
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 1, 8, 1, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Ae1 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Ae1 = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	//Запит показник Активна енергія генерація	(2.8.1)
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 2, 8, 1, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Ae_1 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Ae_1 = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	//Запит показник реактивна енергія	 (3.8.1)
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 3, 8, 1, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Re1 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Re1 = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	//Запит показник реактивна енергія генерація (4.8.1)	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 4, 8, 1, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Re_1 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Re_1 = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	}
+	//ЗАПИТИ ПОТОЧНИХ ПОКАЗНИКІВ ЛІЧИЛЬНИКА T2
+	if (T2)	{
+		//Запит показник Активна енергія	(1.8.2)
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 1, 8, 2, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Ae2 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Ae2 = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	//Запит показник Активна енергія генерація	(2.8.2)
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 2, 8, 2, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Ae_2 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Ae_2 = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	//Запит показник реактивна енергія	 (3.8.2)
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 3, 8, 2, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Re2 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Re2 = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	//Запит показник реактивна енергія генерація (4.8.2)	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 4, 8, 2, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Re_2 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Re_2 = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	}
+	//ЗАПИТИ ПОТОЧНИХ ПОКАЗНИКІВ ЛІЧИЛЬНИКА T3
+	if (T3)	{
+		//Запит показник Активна енергія	(1.8.3)
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 1, 8, 3, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Ae3 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Ae3 = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	//Запит показник Активна енергія генерація	(2.8.3)
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 2, 8, 3, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Ae_3 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Ae_3 = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	//Запит показник реактивна енергія	 (3.8.3)
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 3, 8, 3, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Re3 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Re3 = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	//Запит показник реактивна енергія генерація (4.8.3)	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 4, 8, 3, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Re_3 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Re_3 = kT*((req.text().charCodeAt(9)<<40)+(req.text().charCodeAt(10)<<32)+(req.text().charCodeAt(11)<<24)+(req.text().charCodeAt(12)<<16)+(req.text().charCodeAt(13)<<8)+req.text().charCodeAt(14).toInt())/100000;
+	}
+//ЗАПИТИ МИТТЄВИХ ЗНАЧЕНЬ	
+	if (U )	{ 		//Напруга
+	//Запит напруга фаза 1	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 32, 7, 0, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){U1 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	U1 = (req.text().slice(9, 17).replace(",",".").toReal());
+	//Запит напруга фаза  2	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 52, 7, 0, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){U2 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	U2 = (req.text().slice(9, 17).replace(",",".").toReal());
+	//Запит напруга фаза  3	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 72, 7, 0, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){U3 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	U3 = (req.text().slice(9, 17).replace(",",".").toReal());
+	}
+	if(I){ 		//СТРУМ	
+	//Запит струм фаза 1	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 31, 7, 0, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){I1 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	I1 = kT*(req.text().slice(9, 17).replace(",",".").toReal());
+	//Запит струм фаза 2	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 51, 7, 0, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){I2 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	I2 = kT*(req.text().slice(9, 17).replace(",",".").toReal());
+	//Запит струм фаза 3	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 71, 7, 0, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){I3 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	I3 = kT*(req.text().slice(9, 17).replace(",",".").toReal());
+		}
+	if(P){		//Потужність
+	//Запит потужність сумарна
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 1, 7, 0, 254)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Psum = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Psum = kT*(req.text().slice(9, 17).replace(",",".").toReal());
+	//Запит потужність фаза 1
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 128, 21, 7, 0, 0)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){P1 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	P1 = kT*(req.text().slice(9, 17).replace(",",".").toReal());
+	//Запит потужність фаза 2	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 128, 41, 7, 0, 0)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){P2 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	P2 = kT*(req.text().slice(9, 17).replace(",",".").toReal());
+	//Запит потужність фаза 3	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 128, 61, 7, 0, 0)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){P3 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	P3 = kT*(req.text().slice(9, 17).replace(",",".").toReal());
+	}
+	if(kP){		//Коефіцієнт потужності
+	//Запит коефіцієнт потужності фаза 1	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 33, 7, 0, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){kP1 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	kP1 = (req.text().slice(9, 17).replace(",",".").toReal());		
+	//Запит коефіцієнт потужності фаза 2	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 53, 7, 0, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){kP2 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	kP2 = (req.text().slice(9, 17).replace(",",".").toReal());		
+	//Запит коефіцієнт потужності фаза 3	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 73, 7, 0, 255)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){kP3 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	kP3 = (req.text().slice(9, 17).replace(",",".").toReal());
+	}
+	if(Q){	//Реактивна потужність
+	//Запит реактивна потужність сумарна	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 0, 3, 7, 0, 254)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Qsum = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Qsum = kT*(req.text().slice(9, 17).replace(",",".").toReal());
+	//Запит реактивна потужність фаза 1	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 128, 23, 7, 0, 0)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Q1 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Q1 = kT*(req.text().slice(9, 17).replace(",",".").toReal());
+	//Запит реактивна потужність фаза B	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 128, 43, 7, 0, 0)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Q2 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Q2 = kT*(req.text().slice(9, 17).replace(",",".").toReal());
+	//Запит реактивна потужність фаза 3	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 128, 63, 7, 0, 0)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){Q3 = EVAL_REAL; tErr = "2:"+req.attr("err");}
+		else	Q3 = kT*(req.text().slice(9, 17).replace(",",".").toReal());
+	}
+	if(K){
+	//Запит кута між векторами U1_U2	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 128, 33, 7, 0, 0)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){V12 = EVAL_INT; tErr = "2:"+req.attr("err");}
+		else	V12 = req.text().charCodeAt(8);
+	//Запит кута між векторами U1_U3	
+		req.setAttr("cntr",0x10).setText(LLC+F_id+SYS.strFromCharCode( 1, 128, 73, 7, 0, 0)+end);
+		tr.messIO(req, "UserProtocol");
+		if (req.attr("err").toInt()){V13 = EVAL_INT; tErr = "2:"+req.attr("err");}
+		else	V13 = req.text().charCodeAt(8);
+		tErr = req.attr("err");
+	}
+	//Закриття зєднання
+	//COMAND_SNRM 
+	req.setAttr("cntr",0x53).setText("");
+	tr.messIO(req, "UserProtocol");
+	tr.start(false, 0);
+	
+}
+//Error set
+if(tErr.length) {
+	SYS.messDebug("/NIK2303I/TMPL",tr("Error response")+": "+tErr);
+	f_err = tErr;
+}
+else f_err = "0";','','',1512241411);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -7110,7 +7441,7 @@ for(var ip in pgsOprc) {
 	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
 }
 
-res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1511637642);
+res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1512239196);
 CREATE TABLE 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library "FLibComplex1" (http://wiki.oscada.org/HomePageEn/Doc/FLibComplex1#h902-15) and the implementation of the PWM for the pulse part.','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" (http://wiki.oscada.org/Doc/FLibComplex1#h91-15) и реализация ШИМ для импульсной части.',1,10,0,'//Call standard analog PID
 outA = Special.FLibComplex1.pid(var,sp,max,min,manIn,auto,casc,Kp,Ti,Kd,Td,Tzd,Hup,Hdwn,Zi,followSp,K1,in1,K2,in2,K3,in3,K4,in4,f_frq,int,dif,lag);
@@ -8329,6 +8660,99 @@ else if((request.charCodeAt(1)==0x08)&&(request.charCodeAt(2)==0x16)&&(request.c
 else if((request.charCodeAt(1)==0x08)&&(request.charCodeAt(2)==0x00)&&(answer.length==8))
  io.setText(b1.toInt(16).toString(10,2,)+b2.toInt(16).toString(10,2,)+b3.toInt(16).toString(10,2,)+b4.toInt(16).toString(10,2,));
 ;}',1509290179);
+INSERT INTO "UserProtocol_uPrt" VALUES('NIK2303','NIK2303','','','Protocol level of three phase counter of electricity NIK 2303 from firm NIK LLC (http://www.nik.net.ua).
+Author: Ruslan Yarmoliuk <rylio74@gmail.com>
+Version: 1.0.0','','',1,1,0,'','','','JavaLikeCalc.JavaScript
+//Protocol NIK 2303
+io.setAttr("err", "0");
+
+SN = io.attr("SN").toInt();
+cli = 0x21;
+trm1 = (SN>>20)&0xFE;
+trm2 = (SN>>13)&0xFE;
+dnum1 = (SN>>6)&0xFE;;
+dnum2 = ((SN&0x3FFF)<<1)-(dnum1<<7)+1;
+//Message creation
+if(!io.text().length) request = SYS.strFromCharCode(0xA0, 10, trm1, trm2, dnum1, dnum2, cli, io.attr("cntr"));
+else {
+	title = SYS.strFromCharCode(0xA0, io.text().length +12, trm1, trm2, dnum1, dnum2, cli, io.attr("cntr"));
+	// Check for HCS
+	for(HCS = 0xFFFF, i = 0; i < title.length; i++) {
+		b = 0;
+		for (j = 0; j<8; j++){				//byte reversion
+			bit = (title.charCodeAt(i)&(1<<j))>>j;
+			b = b |( bit << (8 - j - 1));
+		} 
+		for(j = 0; j < 8; j++, b = b << 1)		//HCS calculation
+			HCS = ((b^(HCS>>8)&0x80)?(HCS<<1)^0x1021:HCS<<1) & 0xFFFF;
+	}
+	HCS = HCS ^ 0xFFFF; // HCS*HOR
+	rev = 0;					// HCS reversion
+	for (i = 0; i<16; i++){
+		bit = (HCS&(1<<i))>>i;
+		rev = rev |( bit << (16 - i - 1));
+	} 
+	HCS = rev;
+	request = title + SYS.strFromCharCode(HCS&0xFF, (HCS>>8)&0xFF)+ io.text();
+}
+// Check for FCS
+for(FCS = 0xFFFF, i = 0; i < request.length; i++) {
+	b = 0;
+	for (j = 0; j<8; j++){				//byte reversion
+		bit = (request.charCodeAt(i)&(1<<j))>>j;
+		b = b |( bit << (8 - j - 1));
+	} 
+	for(j = 0; j < 8; j++, b = b << 1)		//CRC calculation
+		FCS = ((b^(FCS>>8)&0x80)?(FCS<<1)^0x1021:FCS<<1) & 0xFFFF;
+}
+FCS = FCS ^ 0xFFFF; // FCS*HOR
+rev = 0;			// FCS reversion
+for (i = 0; i<16; i++){
+	bit = (FCS&(1<<i))>>i;
+	rev = rev |( bit << (16 - i - 1));
+} 
+FCS = rev;
+request = SYS.strFromCharCode(0x7E) + request + SYS.strFromCharCode(FCS&0xFF, (FCS>>8)&0xFF, 0x7E);
+//SYS.messDebug("/NIK2303I/PRT", "Request: "+SYS.strDecode(request, "Bin","|"));
+
+
+//message sending
+resp = tr.messIO(request);
+while(resp.length) {//io.setText(request);
+	if(!(tresp=tr.messIO("")).length) break;
+  	resp += tresp;
+}
+if(resp.length == 0) {io.setText(""); io.setAttr("err","1:"+tr("No a respond")); return; }
+//SYS.messDebug("/NIK2303I/PRT", "Respond: "+SYS.strDecode(resp, "Bin","|"));
+if(resp.length <= 3 || resp.charCodeAt(2) != resp.length-2)
+{ io.setAttr("err","3:"+tr("Respond too short or wrong")); return; }
+// Remove markers
+resp = resp.slice(1, resp.length-1);
+// Check for FCS
+for(FCS = 0xFFFF, i = 0; i < resp.length-2; i++) {
+	b = 0;
+	for (j = 0; j<8; j++){				//byte reversion
+		bit = (resp.charCodeAt(i)&(1<<j))>>j;
+		b = b |( bit << (8 - j - 1));
+	} 
+	for(j = 0; j < 8; j++, b = b << 1)		//FCS calculation
+		FCS = ((b^(FCS>>8)&0x80)?(FCS<<1)^0x1021:FCS<<1) & 0xFFFF;
+}
+
+FCS = FCS ^ 0xFFFF; // FCS*HOR
+rev = 0;			// FCS reversion
+for (i = 0; i<16; i++){
+	bit = (FCS&(1<<i))>>i;
+	rev = rev |( bit << (16 - i - 1));
+} 
+FCS = rev;
+if(FCS != ((resp.charCodeAt(resp.length-1)<<8)+ resp.charCodeAt(resp.length-2))) {
+	io.setAttr("err", "11:"+tr("FCS error."));
+	return;
+}
+io.setText(resp.slice(10,resp.length-2));
+io.setAttr("cntr", resp[7]);
+io.setAttr("err", "0");','','',1512240522);
 CREATE TABLE 'flb_doc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_doc" VALUES('getVal','Getting value from archive','Запит значення архіву','Запрос знач. архива','Query the value for a specified time from the assigned archive and issuing the result with the specified number of decimal points.
 Author: Roman Savochenko <rom_as@oscada.org>

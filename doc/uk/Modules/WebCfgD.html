@@ -1,0 +1,228 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/Динамічний конфігуратор на Web - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/Динамічний конфігуратор на Web</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebCfgD&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/WebCfgD" title="Modules/WebCfgD">Modules/WebCfgD</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/WebCfgD" title="Modules/WebCfgD (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/WebCfgD/ru" title="Модули/Динамический конфигуратор на Web (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Translation and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> </td>
+<td> Динамічний WEB конфігуратор </td>
+<td> 1.2 </td>
+<td> GPL2 </td>
+<td> ui_WebCfgD.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> Користувацькі інтерфейси </td>
+<td> Роман Савоченко </td>
+<td> Надає динамічний WEB базований конфігуратор. Використано XHTML, CSS та JavaScript технології.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Конфігурація</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.96_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Базові елементи</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Команди</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.A1.D0.BF.D0.B8.D1.81.D0.BA.D0.B8"><span class="tocnumber">4</span> <span class="toctext">Списки</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.96"><span class="tocnumber">5</span> <span class="toctext">Таблиці</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.97.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Зображення</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#.D0.94.D0.B8.D0.B7.D0.B0.D0.B9.D0.BD"><span class="tocnumber">7</span> <span class="toctext">Дизайн</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#.D0.9F.D0.BE.D0.BC.D0.B8.D0.BB.D0.BA.D0.B8"><span class="tocnumber">8</span> <span class="toctext">Помилки</span></a></li>
+</ul>
+</div>
+
+<p>Модуль "WebCfgD" надає конфігуратор системи OpenSCADA. Конфігуратор реалізовано на основі таких Web-технологій:
+</p>
+<ul><li> <i>HTTP</i> — протокол передачі гіпертексту;</li>
+<li> <i>XHTML</i> — розширена мова розмітки гіпертекстових документів;</li>
+<li> <i>CSS</i> — каскадні таблиці стилів гіпертекстових документів;</li>
+<li> <i>JavaScript</i> — вбудована у гіпертекстовий документ мова програмування браузеру;</li>
+<li> <i>DOM</i> — об'єктна модель документу внутрішньої структури браузеру;</li>
+<li> <i>AJAX</i> — механізм асинхронних та синхронних запитів із JavaScript до серверу;</li>
+<li> <i>XML</i> — розширена мова розмітки.</li></ul>
+<p>Інтерфейс конфігуратору формується у WEB-браузері шляхом звернення до WEB-серверу та отримання від нього XHTML-документу за протоколом HTTP. У цьому випадку у ролі WEB-серверу виступає система OpenSCADA, яка підтримує стандартні комунікаційні механізми TCP-мереж (модуль <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>), протокол передачі гіпертексту (модуль <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>), а також шифрування трафіку між браузером та сервером (<a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">Transport.SSL</a>). Виходячи з цього, для отримання доступу до інтерфейсу конфігурації OpenSCADA, який надається цим модулем, треба у OpenSCADA налаштувати транспорт (Transport.Sockets або Transport.SSL) у зв'язці із протоколом HTTP (Protocol.HTTP). У поставці з системою OpenSCADA йдуть конфігураційні файли, які містять налаштування Transport.Sockets для портів 10002 та 10004. Відповідно інтерфейс модуля у конфігурації OpenSCADA по замовченню буде доступний за URL: http://localhost:10002 або http://localhost:10004.
+</p><p>Після отримання XHTML-документу запускається програма на JavaScript для формування динамічного інтерфейсу конфігуратору.
+</p><p>В основі модуля лежить мова інтерфейсу управління системою OpenSCADA, а це означає що надається єдиний інтерфейс конфігурації. Оновлення модуля може знадобитися тільки у випадку оновлення специфікації мови інтерфейсу управління.
+</p><p>Модуль реалізовувався та тестувався на трьох WEB-браузерах, представниках трьох типів WEB-рушіїв, а саме:
+</p>
+<ul><li> Chromium 55</li>
+<li> Mozilla Firefox 3.0, 45.7</li>
+<li> Opera 9.6</li>
+<li> Konqueror 3.5, 4</li></ul>
+<p>Використання модуля починається з відкриття сеансу користувача (автентифікації) модулем протоколу HTTP (Protocol.HTTP). Для функціювання аутентифікації та механізму збереження сеансу браузер повинен дозволяти Cookies.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:347px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_login_uk.png"><img class="thumbimage" height="258" src="../files/WebCfgD_login_uk.png" width="345" /></a>  <div class="thumbcaption">Рис.1. Аутентифікація користувача.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:779px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_workplacestruct_uk.png"><img class="thumbimage" height="520" src="../files/WebCfgD_workplacestruct_uk.png" width="777" /></a>  <div class="thumbcaption">Рис.2. Робоче вікно конфигуратора.</div></div></div></div>
+<p>Розглянемо робоче вікно конфігуратору на рисунку 2.
+</p><p>Робоче вікно конфігуратору складається із наступних частин:
+</p>
+<dl><dd>1 <i>Панель інструментів</i> — містить кнопки управління.</dd>
+<dd>2 <i>Адреса відкритого вузла</i> — відображає поточний обраний вузол.</dd>
+<dd>3 <i>Навігатор</i> — призначено для прямої навігації за деревом управління.</dd>
+<dd>4 <i>Робоче поле</i> — поділено на частини:
+<dl><dd>4.1 <i>Ім'я вузла</i> — містить ім'я поточного вузла.</dd>
+<dd>4.2 <i>Табулятор робочих областей</i> — до табулятору поміщаються кореневі сторінки (області управління) вузла. Області управління наступних рівнів поміщаються на інформаційних панелях.</dd></dl></dd>
+<dd>5 <i>Рядок статусу</i> — відображає стан конфігуратора.</dd></dl>
+<p>Панель інструментів містить наступні кнопки управління (зліва на право):
+</p>
+<ul><li> <i>Завантажити</i> — здійснює завантаження обраного об'єкта або гілки об'єктів із БД.</li>
+<li> <i>Зберегти</i> — здійснює збереження обраного об'єкту або гілки об'єктів у БД.  </li>
+<li> <i>На рівень вище</i> — піднятися нагору за деревом.</li>
+<li> <i>Попередній</i> — відкрити попередню відкриту сторінку.</li>
+<li> <i>Наступний</i> — відкрити наступну відкриту сторінку.</li>
+<li> <i>Додати елемент</i> — додати новий об'єкт до контейнеру.</li>
+<li> <i>Видалити елемент</i> — видалити обраний об'єкт.</li>
+<li> <i>Копіювати елемент</i> — копіювання обраного об'єкту.</li>
+<li> <i>Вирізати елемент</i> — вирізання обраного об'єкту. Оригінальний об'єкт видаляється після вставки.</li>
+<li> <i>Вставити елемент</i> — вставка скопійованого або вирізаного елементу.</li>
+<li> <i>Перевантажити елемент</i> — оновити вміст поточної сторінки.</li>
+<li> <i>Запуск періодичного оновлення</i> — запустити періодичне оновлення вмісту поточної сторінки з інтервалом п'ять секунд.</li>
+<li> <i>Зупинка періодичного оновлення</i> — зупинити періодичне оновлення вмісту поточної сторінки з інтервалом п'ять секунда.</li>
+<li> <i>Підручник</i> — виклик підручника обраної сторінки.</li>
+<li> <i>Про...</i> — інформація про цей модуль.</li></ul>
+<p>Елементи управління поділяються на базові, команди, списки, таблиці та зображення. Всі елементи відображаються у послідовності, суворої відповідності до їх розташування у опису мови інтерфейсу управління.
+</p>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="mw-headline-number">1</span> Конфігурація</span></h2>
+<p>Для налаштування власної поведінки у неочевидних ситуаціях модулем надається можливість налаштування окремих параметрів за посередництвом інтерфейсу управління OpenSCADA (рис. 3). Такими параметрами є:
+</p>
+<ul><li> Посилання на сторінку конфігурації переліку зовнішніх OpenSCADA станцій, які використовуються для надання можливості віддаленої конфігурації.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:728px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_webdcfg_uk.png"><img class="thumbimage" height="430" src="../files/WebCfgD_webdcfg_uk.png" width="726" /></a>  <div class="thumbcaption">Рис.3. Сторінка конфігурації самого конфігуратора.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.96_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B8"><span class="mw-headline-number">2</span> Базові елементи</span></h2>
+<p>До числа базових елементів входять: інформаційні елементи, поля вводу значень, елементи вибору з переліку, ознаки. У випадку відсутності ім'я елементу, базовий елемент приєднується до попереднього базового елементу. Приклад групи базових елементів з приєднанням наведено на рисунку 4.
+</p><p>Для елементів вводу, які не передбачають миттєвих змін та можуть тривалий час редагуватися перед остаточним завершенням, передбачено механізм підтвердження. Цей механізм дозволяє виключати затримки при редагуванні, особливо у випадку конфігурації віддалених станцій, та вносить зміни за підтвердженням. До елементів вводу з підтвердженням мають відношення: поля вводу рядків тексту або чисельні значення та текстові поля. Підтвердження здійснюється натиском кнопки, яка з'являється поряд з полем вводу після початку редагування.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:964px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_genelem_uk.png"><img class="thumbimage" height="584" src="../files/WebCfgD_genelem_uk.png" width="962" /></a>  <div class="thumbcaption">Рис.4. Приєднання базових елементів.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B8"><span class="mw-headline-number">3</span> Команди</span></h2>
+<p>Команди — це елементи для передачі визначених дій вузлу та організації посилань на сторінки. Команди можуть містити параметри. Параметри формуються з базових елементів. Приклад команди з параметрами наведено на рисунку 5.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:897px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_commandelem_uk.png"><img class="thumbimage" height="511" src="../files/WebCfgD_commandelem_uk.png" width="895" /></a>  <div class="thumbcaption">Рис.5. Команда.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.A1.D0.BF.D0.B8.D1.81.D0.BA.D0.B8"><span class="mw-headline-number">4</span> Списки</span></h2>
+<p>Списки містять групу базових елементів одного типу. Операції над елементами доступні через контекстне меню за кліком мишею на переліку. Через елементи переліку можуть здійснюватися операції переходу на інші сторінки. Списки можуть бути індексованими. Приклад списку приведено на рисунку 6.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:651px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_listelem_uk.png"><img class="thumbimage" height="411" src="../files/WebCfgD_listelem_uk.png" width="649" /></a>  <div class="thumbcaption">Рис.6. Список.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.96"><span class="mw-headline-number">5</span> Таблиці</span></h2>
+<p>Таблиці містять значення базових елементів. Тип базового елементу є індивідуальним для кожного стовпчику. Приклад таблиці приведено на рисунку 7. Операції із структурою таблиці для редагованих таблиць доступні за посередництвом контекстного меню за кліком на службовому стовпчику із номерами рядків. Редагування елементів таблиці здійснюється шляхом подвійного кліку на потрібній клітинці.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:920px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_tableelem_uk.png"><img class="thumbimage" height="563" src="../files/WebCfgD_tableelem_uk.png" width="918" /></a>  <div class="thumbcaption">Рис.7. Таблиця.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.97.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">6</span> Зображення</span></h2>
+<p>Зображення закликані передавати графічну інформацію у конфігураторі. Приклад зображення наведено на рисунку 8.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:983px;"><a class="image" href="http://oscada.org/wiki/File:WebCfgD_imgelem_uk.png"><img class="thumbimage" height="532" src="../files/WebCfgD_imgelem_uk.png" width="981" /></a>  <div class="thumbcaption">Рис.8. Зображення.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.94.D0.B8.D0.B7.D0.B0.D0.B9.D0.BD"><span class="mw-headline-number">7</span> Дизайн</span></h2>
+<p>Модуль підтримує зміну дизайну шляхом розташування у робочій/поточній теці двох файлів WebCfgDVCA.html та WebCfgDVCA.js, де перший це XHTML-шаблон сторінки конфігуратору, а другий це JavaScript програма XHTML-шаблону.
+</p><p>На цей час наявні наступні дизайни:
+</p>
+<ul><li> Новий стандартний дизайн (по замовченню): <a class="external" href="http://oscada.org/wiki/File:WebCfgDVCA_std.html.gz" title="File:WebCfgDVCA std.html.gz">WebCfgDVCA.html</a>, <a class="external" href="http://oscada.org/wiki/File:WebCfgDVCA_std.js.gz" title="File:WebCfgDVCA std.js.gz">WebCfgDVCA.js</a></li>
+<li> Старий стандартний дизайн (по замовченню): <a class="external" href="http://oscada.org/wiki/File:WebCfgDVCA_std201701.html.gz" title="File:WebCfgDVCA std201701.html.gz">WebCfgDVCA.html</a>, <a class="external" href="http://oscada.org/wiki/File:WebCfgDVCA_std201701.js.gz" title="File:WebCfgDVCA std201701.js.gz">WebCfgDVCA.js</a></li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.BC.D0.B8.D0.BB.D0.BA.D0.B8"><span class="mw-headline-number">8</span> Помилки</span></h2>
+<p>Представлення конфігуратору може дещо відрізнятися на різних типах браузерів. Це пов'язано з тим, що у основі цього модуля лежить багато достатньо складних технологій, а також відмінностей їх реалізації на різних типах WEB-рушіїв.
+</p><p>Окрім того, кожний Web-браузер містить власні помилки. Частину помилок було обійдено у процесі реалізації, однак частина залишилася у зв'язку зі значними складностями у їх обході або-ж фактичної неможливості це зробити.
+</p><p>У цьому розділі міститься таблиця переліку виявлених помилок WEB-браузерів, які проявляються у конфігураторі.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Помилка </th>
+<th> Опис </th>
+<th> Виправлення
+</th></tr>
+<tr>
+<td colspan="3"> <i>Mozilla FireFox 3.0.4</i> (stable, few errors)
+</td></tr>
+<tr>
+<td> Offset of the popup window of the editable combobox at 5 pixels up and left. </td>
+<td>
+<p>The problem lies in the fact that the calculation of the absolute position of the element of the document doesn't grab exactly 5 pixels. Error of 5 pixels is visible in relation to the coordinates of the mouse pointer and the position of the newly-created entirely-positioned window. The algorithm for computing the position:<br />
+<i>for(&nbsp;; obj&nbsp;!= null; obj = obj.offsetParent ) posX += obj.offsetLeft;</i>
+</p>
+</td>
+<td> To correction of this error to the estimated value on this browser the 5 pixels are added.
+</td></tr>
+<tr>
+<td> In the element of the list (&lt;select size="10"/&gt;) the vertical scroller is always shows and never turned on the horizontal one. </td>
+<td> This element is actively used for building the context menu and drop-down list of the editable combo-box. </td>
+<td> <span style="color: blue">To outflank the browser's error I had to include the list in the block with scroll of the block itself.</span>
+</td></tr>
+<tr>
+<td> The image field is not updating. </td>
+<td> In order to eliminate the need for restructuring of the configurable page while updating the values of fields in the tree of the structure objects of the pages which was get from the XMLHttpRequest, the properties are created with the links to the object of the tags of the fields (addr_lab, addr_val_w). In objects with the name of the tag "img", these properties are not created by the browser. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr>
+<tr>
+<td colspan="3"> <i>Opera</i> (stable, few errors)
+</td></tr>
+<tr>
+<td> Scroller of the unit of the page does not turn on. For example when displaying large images of the trend. </td>
+<td> The block is fixed with the parameters{ overflow: auto; width: 600px; } however, in the case of the exceeding the size of the interior elements the scroller is not turned on. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr>
+<tr>
+<td colspan="3"> <i>Konqueror</i> (very unstable on the dynamic resources and contains many errors)
+</td></tr>
+<tr>
+<td> Stable browser crashing. </td>
+<td> Browser repeatedly and consistently crashes while the computation of JavaScript and when dealing with external windows. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr>
+<tr>
+<td> The scroll of the navigation tree doesn't returned. </td>
+<td> If the navigation tree to expand until the vertical scroll is appeared, then scroll down it, then fold a large branch, the vertical sсroll disappears, and a part of the tree remains invisible in the upper part of the block. Ie the contents of the block is not updated. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr>
+<tr>
+<td> The images do not update. </td>
+<td> In the fields of images, to update the image from the server, the property "src" is to be changed. Browser does not feel it, or even updates the size of the frame, and the image is not updated. Methods to prevent caching of the images are used, but do not help. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr>
+<tr>
+<td> Capture of the images of the buttons </td>
+<td> JavaScript modules use non asynchronous, but synchronous requests to a server to save the sequence of actions. In moments of such a request if it was caused by the event from the image (the image is a button), the image is captured as if to move, even for short mouse clicks. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr>
+<tr>
+<td> Impossible to insert a new element to the tree of objects obtained as a result of XMLHttpRequest </td>
+<td> To monitor the modification of the configuration page the current tree structure to a new one, just received from XMLHttpRequest, reduction was used. When inserting a new element to the tree of the structure through the insertBefore() an error occurs "DOM error 4". If the paste is made to the tree created from zero (not from XMLHttpRequest), this error does not occur. It seems the problem lies in the contrast of object "document" —  the owner of these trees. In such a tree it is not possible to add a node as document.createElement (). Only created as a mytree.ownerDocument.createElement() are inserted.</td>
+<td> The procedure for verifying the structure was simplified to reduced to the determining the fact of changes.
+</td></tr>
+<tr>
+<td> The mechanisms of the formation of the context menu in the Konqueror 4 doesn't work. </td>
+<td> Typically, to form a context menu handler oncontextmenu is used in Firefox and IE, or onmousedown in processing the right keys on the remaining browsers. In the Konqueror generally oncontextmenu  does not work, but onmousedown only works in Konqueror 3.5. </td>
+<td> <span style="color: red">The problem is not solved.</span>
+</td></tr></table>
+
+
+
+
+
+
+</div></body>
+</html>

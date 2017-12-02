@@ -1,3 +1,24 @@
+2017-12-02 Roman (stable)
+- FIX:DB.LibsDB.OscadaLibs: servProc.docOffLine appended by the documents Modules/{Vision(without Ukrainian still),WebCfgD,WebCfg,WebVision,WebUser}
+    for the offline documentaion list.
+- !!!!:DB.LibsDB.OscadaLibs: DevLib is appended by implementing of electricity counters Nik2303I from Ruslan Yarmoliuk <rylio74@gmail.com>.
+- !:DOC: Appended by Modules/{Vision(without Ukrainian still),WebCfgD,WebCfg,WebVision,WebUser}.
+- SYS: Default DB of the config file oscada.xml changed to the same config file, mostly to prevent empty DB files creation at initial configurations.
+- !!!!:SYS,UI.QTStarter: Initial support of projects OpenSCADA was added in way of which there appended:
+    - strEncode() expanded by mode "ToLower" for conversion to lower register;
+    - command-line options preloading and direct access-modification by a new function cmdOpt().
+    - subsystem's modules unloading by unload();
+    - stopping by user's signals into stop(), where SIGUSR2 reserved for projects switching;
+    - projects managing core functions: prjCustMode(), prjNm(), prjSwitch();
+    - UI.QTStarter: list of projects of OpenSCADA for controlled switching from initial (only a project selection) or other project;
+    - the actual project manager in a BASH script yet allowed and here left to implement:
+	RW projects copy, new projects creation at template, locking from multiple starting of single project.
+- DAQ.JavaLikeCalc: "Compile error ..." information expanded by the function ID.
+- !:FIX:UI.Vision: State of openned windows appended by their users.
+    Main dialogs of the developing mode size and splitter's properties storing and restoring were added.
+    Qt > 5.3 fix for wrong QAbstractTableModel::sibling() implementation by it reverting to QAbstractItemModel implementation.
+
+
 2017-11-25 Roman (stable)
 - FIX:DB.LibsDB.OscadaLibs: servProc.docOffLine appended by the documents Modules/{VCAEngine(without Ukrainian still),QTStarter,QTCfg,FLibSYS,SystemTests,FLibMath,FLibComplex1}
     for the offline documentaion list.
