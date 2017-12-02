@@ -1,4 +1,5 @@
 2017-12-02 Roman (stable)
+- FIX:UI.QTStarter: Fix build for Qt5 in the main thread.
 - FIX:DB.LibsDB.OscadaLibs: servProc.docOffLine appended by the documents Modules/{Vision(without Ukrainian still),WebCfgD,WebCfg,WebVision,WebUser}
     for the offline documentaion list.
 - !!!!:DB.LibsDB.OscadaLibs: DevLib is appended by implementing of electricity counters Nik2303I from Ruslan Yarmoliuk <rylio74@gmail.com>.

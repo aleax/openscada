@@ -236,7 +236,7 @@ void TUIMod::modStart( )
     //Start external modules
     WinControl *winCntr = new WinControl();
 
-    if(mod->custMode() || mod->prjNm().size()) {
+    if(SYS->prjCustMode() || SYS->prjNm().size()) {
 	int op_wnd = 0;
 	vector<string> list;
 	mod->owner().modList(list);
