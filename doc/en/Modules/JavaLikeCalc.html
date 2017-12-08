@@ -66,12 +66,12 @@
 <li class="toclevel-2 tocsection-11"><a href="#Examples_of_programs_on_the_language"><span class="tocnumber">1.6</span> <span class="toctext">Examples of programs on the language</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-12"><a href="#Controller_and_its_configuration"><span class="tocnumber">2</span> <span class="toctext">Controller and its configuration</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Controller_and_its_configuration"><span class="tocnumber">2</span> <span class="toctext"><span>Controller and its configuration</span></span></a></li>
 <li class="toclevel-1 tocsection-13"><a href="#The_parameter_of_the_controller_and_its_configuration"><span class="tocnumber">3</span> <span class="toctext">The parameter of the controller and its configuration</span></a></li>
 <li class="toclevel-1 tocsection-14"><a href="#Libraries_of_functions_of_the_module"><span class="tocnumber">4</span> <span class="toctext"><span>Libraries of functions of the module</span></span></a></li>
 <li class="toclevel-1 tocsection-15"><a href="#User_functions_of_the_module"><span class="tocnumber">5</span> <span class="toctext">User functions of the module</span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#User_programming_API"><span class="tocnumber">6</span> <span class="toctext">User programming API</span></a></li>
-<li class="toclevel-1 tocsection-17"><a href="#Productivity"><span class="tocnumber">7</span> <span class="toctext">Productivity</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#Productivity"><span class="tocnumber">7</span> <span class="toctext"><span>Productivity</span></span></a></li>
 </ul>
 </div>
 
@@ -356,7 +356,7 @@ Po += 0.27*(Fi-Fo)/(So*lo*Q0*frq);
 Po = (Po&lt;0)&nbsp;? 0&nbsp;: (Po&gt;100)&nbsp;? 100&nbsp;: Po;
 To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*frq);
 </pre>
-<h2><span class="mw-headline" id="Controller_and_its_configuration"><span class="mw-headline-number">2</span> Controller and its configuration</span></h2>
+<h2><span class="mw-headline" id="Controller_and_its_configuration"><span class="mw-headline-number">2</span> <span id="Controller" title="#Controller">Controller and its configuration</span></span></h2>
 <p>The controller of the module connects with the functions of libraries, built with his help, to provide immediate calculations. In order to provide calculated data in the system OpenSCADA parameters can be created in the controller. Example of the configuration tab of the controller of the given type depicted in Figure 2.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:709px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr.png"><img class="thumbimage" height="619" src="../files/JavaLikeCalc_cntr.png" width="707" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a controller.</div></div></div></div>
@@ -395,7 +395,7 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <ul><li> <i>ElTp call(ElTp prm1, ...)</i> — call the function "<i>func</i>" of library "<i>Lfunc</i>" with parameters "<i>prm{N}</i>". Return result of the called function. The prefix "lib_" before the library identifier is required!</li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id="Productivity"><span class="mw-headline-number">7</span> Productivity</span></h2>
+<h2><span class="mw-headline" id="Productivity"><span class="mw-headline-number">7</span> <span id="Productivity" title="#Productivity">Productivity</span></span></h2>
 <p>Source texts of procedures on the language compiled to byte-code of the virtual machine which next executed by the virtual machine. The byte-code is not native machine code and achieving to productivity of the hardware platform into the virtual machine that executing is theoretical unreal, sure if the virtual machine code is not executed direct by the CPU. That is, productivity of the byte-code execution approximately low by ten to the hardware productivity by overheads to the virtual machine commands, separating multi-threads access to data, clear cast and the lack of strict typing, and also dynamic nature of the language and present complex types "String" and "Object".
 </p><p><b>28.01.2006:</b><br />
 <i>Description:</i> Initial estimation of productivity of the virtual machine of OpenSCADA in example of the expression <b>y=x1+x2</b>, where all the variables are global and in the float-point type.

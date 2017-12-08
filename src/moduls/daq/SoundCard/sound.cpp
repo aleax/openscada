@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SoundCard file: sound.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	_("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.12"
+#define MOD_VER		"0.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
@@ -104,8 +104,10 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db ) {
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     TController(name_c,daq_db,cfgelem), pEl("w_attr"),
     mSmplRate(cfg("SMPL_RATE").getId()), mSmplType(cfg("SMPL_TYPE").getId()), mPrior(cfg("PRIOR").getId()),
-    prcSt(false), endrunReq(false), firstCall(false), numChan(0), smplSize(0), stream(NULL), cTm(0), acqSize(0)
+    prcSt(false), endrunReq(false), firstCall(false), numChan(0), smplSize(0), stream(NULL), acqSize(0), cntCor(0)
 {
+    for(int iC = 0; iC < sizeof(curTm)/sizeof(time_t); iC++) curTm[iC] = 0;
+
     cfg("PRM_BD").setS("SoundCard_"+name_c);
 
     pEl.fldAdd(new TFld("val",_("Value"),((mSmplType==paFloat32)?TFld::Real:TFld::Integer),TFld::NoWrite,"",
@@ -124,8 +126,8 @@ string TMdContr::getStatus( )
     string val = TController::getStatus();
     if(!startStat()) val += TSYS::strMess(_("Allowed %d input channels"),channelAllow());
     else if(!redntUse())
-	val += TSYS::strMess(_("Gathering from %d channels. Recieved %.2g MB. Adjusted samplerate %d. Lost frames %g"),
-	    numChan, acqSize, sRt, lostFrmsCntr);
+	val += TSYS::strMess(_("Gathering from %d channels, recieved %.2g MB, samplerate corrections %g and adjusted value %d."),
+	    numChan, acqSize, cntCor, sRt);
 
     return val;
 }
@@ -134,11 +136,11 @@ int TMdContr::channelAllow( )
 {
     int chann = 0;
     if(card() == "<default>" && Pa_GetDefaultInputDevice() >= 0)
-	chann = Pa_GetDeviceInfo(Pa_GetDefaultInputDevice())->maxInputChannels;
+	chann = fmin(sizeof(curTm)/sizeof(time_t), Pa_GetDeviceInfo(Pa_GetDefaultInputDevice())->maxInputChannels);
     else
 	for(int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++)
 	    if(card() == Pa_GetDeviceInfo(i_d)->name) {
-		chann = Pa_GetDeviceInfo(i_d)->maxInputChannels;
+		chann = fmin(sizeof(curTm)/sizeof(time_t), Pa_GetDeviceInfo(i_d)->maxInputChannels);
 		break;
 	    }
 
@@ -158,7 +160,7 @@ string TMdContr::sampleRates( )
 	    if(Pa_GetDeviceInfo(i_d)->maxInputChannels && card() == Pa_GetDeviceInfo(i_d)->name)
 	    { iParam.device = i_d; break; }
     if(iParam.device < 0) return rez;
-    iParam.channelCount = Pa_GetDeviceInfo(iParam.device)->maxInputChannels;
+    iParam.channelCount = fmin(sizeof(curTm)/sizeof(time_t), Pa_GetDeviceInfo(iParam.device)->maxInputChannels);
     iParam.sampleFormat = mSmplType;
     iParam.suggestedLatency = 0;
     iParam.hostApiSpecificStreamInfo = NULL;
@@ -178,22 +180,19 @@ void TMdContr::start_( )
 
     endrunReq = false;
     numChan = 0;
-    acqSize = 0;
-    lostFrmsCntr = 0;
-    framesPerBufferMax = 0;
+    acqSize = cntCor = 0;
 
     //Former proccess parameters list
     vector<string> list_p;
     list(list_p);
-    for(unsigned i_prm = 0; i_prm < list_p.size(); i_prm++)
-	if(at(list_p[i_prm]).at().enableStat()) {
-	    prmEn(list_p[i_prm], true);
-	    numChan = vmax(numChan,at(list_p[i_prm]).at().iCnl()+1);
+    for(unsigned iPrm = 0; iPrm < list_p.size(); iPrm++)
+	if(at(list_p[iPrm]).at().enableStat()) {
+	    prmEn(list_p[iPrm], true);
+	    numChan = vmax(numChan,at(list_p[iPrm]).at().iCnl()+1);
 	}
 
     wTm = TSYS::curTime( );
     sRt = mSmplRate;
-    inAdcTimePrev = inAdcTimeAdj = -1;
     switch(mSmplType) {
 	case paFloat32:	smplSize = sizeof(float);	break;
 	case paInt32:	smplSize = sizeof(int32_t);	break;
@@ -222,6 +221,7 @@ void TMdContr::start_( )
     PaError err = Pa_OpenStream(&stream, &iParam, NULL, mSmplRate, 0/*mSmplRate/2*/, paClipOff, recordCallback, this);
     if(err != paNoError) throw TError(nodePath().c_str(),"Pa_OpenStream: %s",Pa_GetErrorText(err));
 
+    corTm = SYS->sysTm();
     firstCall = true;
     err = Pa_StartStream(stream);
     if(err != paNoError) throw TError(nodePath().c_str(),"Pa_StartStream: %s",Pa_GetErrorText(err));
@@ -244,14 +244,14 @@ void TMdContr::stop_( )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    ResAlloc res(nodeRes(),true);
+    ResAlloc res(nodeRes(), true);
 
-    unsigned i_prm;
-    for(i_prm = 0; i_prm < pHd.size(); i_prm++)
-	if(pHd[i_prm].at().id() == id) break;
+    unsigned iPrm;
+    for(iPrm = 0; iPrm < pHd.size(); iPrm++)
+	if(pHd[iPrm].at().id() == id) break;
 
-    if(val && i_prm >= pHd.size()) pHd.push_back(at(id));
-    if(!val && i_prm < pHd.size()) pHd.erase(pHd.begin()+i_prm);
+    if(val && iPrm >= pHd.size()) pHd.push_back(at(id));
+    if(!val && iPrm < pHd.size()) pHd.erase(pHd.begin()+iPrm);
 }
 
 int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long framesPerBuffer,
@@ -279,73 +279,58 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
     }
 
     //Check for current time correction
-    int64_t t_sz = (1000000ll*framesPerBuffer)/cntr.sRt;
-    double err = ((timeInfo->inputBufferAdcTime-cntr.inAdcTimePrev)-1e-6*t_sz)/(1e-6*t_sz);
-
-    //Pass short framesPerBuffer by incorrect
-    cntr.framesPerBufferMax = vmax(cntr.framesPerBufferMax,framesPerBuffer);
-    if(framesPerBuffer < cntr.framesPerBufferMax) {
-	cntr.inAdcTimePrev = timeInfo->inputBufferAdcTime;
-	return paContinue;
-    }
-
-    // Lost frames process
-    if(cntr.inAdcTimePrev > 0 && err > 0.001) {
-	cntr.wTm += (int64_t)((double)t_sz*err);
-	mess_warning(cntr.nodePath().c_str(), _("CallBack: Lost frames correct: framesPerBuffer=%lu; sRt=%d; t_sz=%lld; err=%g; diff=%lld."),
-	    framesPerBuffer, cntr.sRt, t_sz, err, (TSYS::curTime()-cntr.wTm));
-	cntr.lostFrmsCntr++;
-    }
-    // Sound counter difference from time clock correction
-    else if(cntr.inAdcTimeAdj < 0 || (timeInfo->inputBufferAdcTime-cntr.inAdcTimeAdj) >= 60) {
-	int64_t dTm = TSYS::curTime()-cntr.wTm;
-	if(cntr.inAdcTimeAdj > 0) cntr.sRt -= (dTm-cntr.tmAdj)*cntr.sRt/60000000;
+    int64_t tSz = (1000000ll*framesPerBuffer)/cntr.sRt;
+     if(abs(SYS->sysTm()-cntr.wTm/1000000) >= 3) {
+	time_t corDt = SYS->sysTm()-cntr.wTm/1000000;
+	corDt -= (corDt>=0?2:-2);
 	if(cntr.messLev() == TMess::Debug)
-	    mess_debug_(cntr.nodePath().c_str(), _("CallBack: Sound counter difference fix: sRt=%d; dTm=%lld."), cntr.sRt, dTm);
-	cntr.tmAdj = dTm;
-	cntr.inAdcTimeAdj = timeInfo->inputBufferAdcTime;
+	    mess_debug_(cntr.nodePath().c_str(), _("CallBack: Sample rate correction from %g to %g for fix error %ds on time %ds."),
+		cntr.sRt, cntr.sRt/vmax(0.9,vmin(1.1,((float)corDt/(SYS->sysTm()-cntr.corTm)+1))), corDt, SYS->sysTm()-cntr.corTm);
+	cntr.sRt = cntr.sRt / vmax(0.9,vmin(1.1,((float)corDt/(SYS->sysTm()-cntr.corTm)+1)));
+	cntr.corTm = SYS->sysTm();
+	cntr.wTm = 1000000ll*cntr.corTm;
+	cntr.cntCor++;
     }
-    cntr.inAdcTimePrev = timeInfo->inputBufferAdcTime;
 
     //Input buffer process
-    ResAlloc res(cntr.nodeRes(),false);
-    for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++) {
-	int  chn = cntr.pHd[i_p].at().iCnl();
-	AutoHD<TVal> val = cntr.pHd[i_p].at().vlAt("val");
+    ResAlloc res(cntr.nodeRes(), false);
+    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
+	int  chn = cntr.pHd[iP].at().iCnl();
+	AutoHD<TVal> val = cntr.pHd[iP].at().vlAt("val");
 	AutoHD<TVArchive> arch = val.at().arch();
 	bool archAllow = (!arch.freeStat() && arch.at().srcMode() == TVArchive::PassiveAttr);
 	switch(cntr.mSmplType) {
 	    case paFloat32:
 		if(archAllow)
-		    for(int64_t i_t = 0; i_t < t_sz; i_t += arch.at().period())
-			arch.at().setR(*(float*)(bptr+cntr.smplSize*((i_t*framesPerBuffer/t_sz)*cntr.numChan+chn)), cntr.wTm+i_t);
-		if(SYS->sysTm() > cntr.cTm) {
-		    val.at().setR(*(float*)(bptr+cntr.smplSize*((framesPerBuffer-1)*cntr.numChan+chn)),cntr.wTm+(1000000ll*(framesPerBuffer-1))/cntr.sRt,true);
-		    cntr.cTm = SYS->sysTm();
+		    for(int64_t iT = 0; iT < tSz; iT += arch.at().period())
+			arch.at().setR(*(float*)(bptr+cntr.smplSize*((iT*framesPerBuffer/tSz)*cntr.numChan+chn)), cntr.wTm+iT);
+		if(SYS->sysTm() > cntr.curTm[chn]) {
+		    val.at().setR(*(float*)(bptr+cntr.smplSize*((framesPerBuffer-1)*cntr.numChan+chn)),cntr.wTm+(1000000ll*(framesPerBuffer-1))/cntr.sRt, true);
+		    cntr.curTm[chn] = SYS->sysTm();
 		}
 		break;
 	    case paInt32:
 		if(archAllow)
-		    for(int64_t i_t = 0; i_t < t_sz; i_t += arch.at().period())
-			arch.at().setI(*(int32_t*)(bptr+cntr.smplSize*((i_t*framesPerBuffer/t_sz)*cntr.numChan+chn)), cntr.wTm+i_t);
-		if(SYS->sysTm() > cntr.cTm) {
+		    for(int64_t iT = 0; iT < tSz; iT += arch.at().period())
+			arch.at().setI(*(int32_t*)(bptr+cntr.smplSize*((iT*framesPerBuffer/tSz)*cntr.numChan+chn)), cntr.wTm+iT);
+		if(SYS->sysTm() > cntr.curTm[chn]) {
 		    val.at().setI(*(int32_t*)(bptr+cntr.smplSize*((framesPerBuffer-1)*cntr.numChan+chn)),cntr.wTm+(1000000ll*(framesPerBuffer-1))/cntr.sRt,true);
-		    cntr.cTm = SYS->sysTm();
+		    cntr.curTm[chn] = SYS->sysTm();
 		}
 		break;
 	    case paInt16:
 		if(archAllow)
-		    for(int64_t i_t = 0; i_t < t_sz; i_t += arch.at().period())
-			arch.at().setI(*(int16_t*)(bptr+cntr.smplSize*((i_t*framesPerBuffer/t_sz)*cntr.numChan+chn)), cntr.wTm+i_t);
-		if(SYS->sysTm() > cntr.cTm) {
+		    for(int64_t iT = 0; iT < tSz; iT += arch.at().period())
+			arch.at().setI(*(int16_t*)(bptr+cntr.smplSize*((iT*framesPerBuffer/tSz)*cntr.numChan+chn)), cntr.wTm+iT);
+		if(SYS->sysTm() > cntr.curTm[chn]) {
 		    val.at().setI(*(int16_t*)(bptr+cntr.smplSize*((framesPerBuffer-1)*cntr.numChan+chn)),cntr.wTm+(1000000ll*(framesPerBuffer-1))/cntr.sRt,true);
-		    cntr.cTm = SYS->sysTm();
+		    cntr.curTm[chn] = SYS->sysTm();
 		}
 		break;
 	}
     }
 
-    cntr.wTm += t_sz;
+    cntr.wTm += tSz;
 
     cntr.acqSize += (float)(framesPerBuffer*cntr.smplSize*cntr.numChan)/1048576;
 

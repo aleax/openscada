@@ -31,8 +31,8 @@
 <li class="toclevel-2 tocsection-4"><a href="#XMLNodeObj_object"><span class="tocnumber">1.3</span> <span class="toctext">XMLNodeObj object</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-5"><a href="#System_.28SYS.29"><span class="tocnumber">2</span> <span class="toctext">System (SYS)</span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#Any_object_.28TCntrNode.29_of_OpenSCADA_objects_tree_.28SYS..2A.29"><span class="tocnumber">3</span> <span class="toctext">Any object (TCntrNode) of OpenSCADA objects tree (SYS.*)</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#System_.28SYS.29"><span class="tocnumber">2</span> <span class="toctext"><span>System (SYS)</span></span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Any_object_.28TCntrNode.29_of_OpenSCADA_objects_tree_.28SYS..2A.29"><span class="tocnumber">3</span> <span class="toctext"><span>Any object (TCntrNode) of OpenSCADA objects tree (SYS.*)</span></span></a></li>
 <li class="toclevel-1 tocsection-7"><a href="#Subsystem_.22Security.22_.28SYS.Security.29"><span class="tocnumber">4</span> <span class="toctext">Subsystem "Security" (SYS.Security)</span></a></li>
 <li class="toclevel-1 tocsection-8"><a href="#Subsystem_.22DB.22_.28SYS.BD.29"><span class="tocnumber">5</span> <span class="toctext"><span>Subsystem "DB" (SYS.BD)</span></span></a></li>
 <li class="toclevel-1 tocsection-9"><a href="#Subsystem_.22DAQ.22_.28SYS.DAQ.29"><span class="tocnumber">6</span> <span class="toctext"><span>Subsystem "DAQ" (SYS.DAQ)</span></span></a>
@@ -229,7 +229,7 @@ var OK = re.test("12/30/1969"); </pre></li>
 <dd>0x200 — miss for attribute's name encoding.</dd></dl></dd></dl>
 <ul><li> <i>XMLNodeObj getElementBy( string val, string attr = "id" )</i> — get element from the tree by attribute <i>attr</i> value <i>val</i>.</li>
 <li> <i>TArrayObj&lt;XMLNodeObj&gt; getElementsBy( string tag, string attrVal = "", string attr = "id" )</i> — get elements array from the tree by <i>tag</i> (empty for all) and attribute <i>attr</i> value <i>attrVal</i> (empty for pass).</li></ul>
-<h2><span class="mw-headline" id="System_.28SYS.29"><span class="mw-headline-number">2</span> System (SYS)</span></h2>
+<h2><span class="mw-headline" id="System_.28SYS.29"><span class="mw-headline-number">2</span> <span id="SYS" title="#SYS">System (SYS)</span></span></h2>
 <p>Object functions:
 </p>
 <ul>
@@ -296,7 +296,7 @@ SYS.cntrReq(req); </pre></li>
 <dd>"Base64" — same from Base 64;</dd>
 <dd>"Bin" — the binary string to ASCII bytes ("XX XX XX XX ..   A.b.c.."), <i>opt1</i> points to separator or "&lt;text&gt;" for enable the offset to the left and the text part to the right.</dd></dl>
 </li></ul>
-<h2><span class="mw-headline" id="Any_object_.28TCntrNode.29_of_OpenSCADA_objects_tree_.28SYS..2A.29"><span class="mw-headline-number">3</span> Any object (TCntrNode) of OpenSCADA objects tree (SYS.*)</span></h2>
+<h2><span class="mw-headline" id="Any_object_.28TCntrNode.29_of_OpenSCADA_objects_tree_.28SYS..2A.29"><span class="mw-headline-number">3</span> <span id="TCntrNode" title="#TCntrNode">Any object (TCntrNode) of OpenSCADA objects tree (SYS.*)</span></span></h2>
 <p>Object functions:
 </p>
 <ul><li> <i>TArrayObj nodeList( string grp = "", string path = "" );</i> — Get child nodes identifiers list for group <i>grp</i> and node from path <i>path</i>. If <i>grp</i> empty then return nodes for all groups.</li>

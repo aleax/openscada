@@ -1,13 +1,13 @@
 # OpenSCADA.UI.VCAEngine translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-25 16:36+0300\n"
+"POT-Creation-Date: 2017-12-08 22:22+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -43,7 +43,7 @@ msgstr "Бібліотека"
 msgid "State"
 msgstr "Стан"
 
-msgid "Enable"
+msgid "Enabled"
 msgstr "Включений"
 
 msgid "Library DB"
@@ -94,12 +94,8 @@ msgid "Widget is not container!"
 msgstr "Віджет не контейнер!"
 
 #, c-format
-msgid ""
-"You try to create widget with name '%s' of the widget that was the early "
-"inherited and deleted from base container!"
-msgstr ""
-"Ви намагаєтесь створити віджет з ім'ям '%s' віджета який було раніше "
-"успадковано та видалено з базового контейнера!"
+msgid "Restoring '%s' from the base container!"
+msgstr "Відновлення '%s' з базового контейнеру!"
 
 msgid "Library widget: "
 msgstr "Бібліотечний віджет: "
@@ -2065,6 +2061,3 @@ msgstr "Встановлення атрибуту"
 
 msgid "Setup widget's attribute to value."
 msgstr "Встановлення значення атрибуту віджета."
-
-#~ msgid "Last request"
-#~ msgstr "Останній запит"

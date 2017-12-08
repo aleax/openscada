@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 16:59+0300\n"
+"POT-Creation-Date: 2017-12-08 21:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,9 +27,6 @@ msgid "Allows you to perform the locking of the data sources of the remote OpenS
 msgstr ""
 
 msgid "Parameters cache table"
-msgstr ""
-
-msgid "Gather data period (s)"
 msgstr ""
 
 msgid "Acquisition schedule"
@@ -162,7 +159,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-msgid "Enable"
+msgid "Enabled"
 msgstr ""
 
 msgid "Id"

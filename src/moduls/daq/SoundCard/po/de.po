@@ -1,15 +1,15 @@
 # OpenSCADA.DAQ.SoundCard translate to German.
-# Copyright (C) Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.SoundCard package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
+# Roman Savochenko <rom_as@oscada.org>, 2017
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-18 09:09+0300\n"
+"POT-Creation-Date: 2017-12-05 20:22+0200\n"
 "PO-Revision-Date: 2011-07-19 20:48+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -61,11 +61,10 @@ msgid "Allowed %d input channels"
 msgstr "Verfügbar %d Eingangskanäle"
 
 msgid ""
-"Gathering from %d channels. Recieved %.2g MB. Adjusted samplerate %d. Lost "
-"frames %g"
+"Gathering from %d channels, recieved %.2g MB, samplerate corrections %g and "
+"adjusted value %d."
 msgstr ""
-"Erfassung von %d Kanälen. Empfangen %.2g MB. Customized Probenahme %d. "
-"Verlorenen Frames %g"
+"Sammeln von %d Kanälen, empfangene %.2g MB, Samplerate-Korrekturen %g und Angepasster Wert %d."
 
 #, c-format
 msgid "Selected device '%s' is error or default device no allow."
@@ -84,12 +83,5 @@ msgstr "Datenerfassung Toneingang ist nicht angehalten!"
 
 #, c-format
 msgid ""
-"CallBack: Lost frames correct: framesPerBuffer=%lu; sRt=%d; t_sz=%lld; err="
-"%g; diff=%lld."
-msgstr ""
-"Rückruffunktion: Korrektur Frame-Verlust: framesPerBuffer=%lu; sRt=%d; t_sz="
-"%lld; err=%g; diff=%lld."
-
-#, c-format
-msgid "CallBack: Sound counter difference fix: sRt=%d; dTm=%lld."
-msgstr "Rückruffunktion: Klingt Zähler Unterschied fix: sRt=%d; dTm=%lld."
+"CallBack: Sample rate correction from %g to %g for fix error %ds on time %ds."
+msgstr "CallBack: Abtastratenkorrektur von %g nach %g für Fixfehler %ds für die Zeit %ds."

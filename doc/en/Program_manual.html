@@ -29,7 +29,7 @@
 <li class="toclevel-2 tocsection-2"><a href="#Modularity"><span class="tocnumber">1.1</span> <span class="toctext">Modularity</span></a></li>
 <li class="toclevel-2 tocsection-3"><a href="#Subsystems"><span class="tocnumber">1.2</span> <span class="toctext">Subsystems</span></a></li>
 <li class="toclevel-2 tocsection-4"><a href="#PLC_and_other_sources_of_dynamic_data.2C_the_subsystem_.22Data_acquisition.22"><span class="tocnumber">1.3</span> <span class="toctext"><span>PLC and other sources of dynamic data, the subsystem "Data acquisition"</span></span></a></li>
-<li class="toclevel-2 tocsection-5"><a href="#Databases.2C_the_subsystem_of_.22Databases.22"><span class="tocnumber">1.4</span> <span class="toctext">Databases, the subsystem of "Databases"</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Databases.2C_the_subsystem_of_.22Databases.22"><span class="tocnumber">1.4</span> <span class="toctext"><span>Databases, the subsystem of "Databases"</span></span></a></li>
 <li class="toclevel-2 tocsection-6"><a href="#Archives_and_history.2C_the_subsystem_.22Archives-History.22"><span class="tocnumber">1.5</span> <span class="toctext">Archives and history, the subsystem "Archives-History"</span></a></li>
 <li class="toclevel-2 tocsection-7"><a href="#Communications.2C_the_subsystem_.22Transports.22_and_.22Transport_protocols.22"><span class="tocnumber">1.6</span> <span class="toctext">Communications, the subsystem "Transports" and "Transport protocols"</span></a></li>
 <li class="toclevel-2 tocsection-8"><a href="#User_interfaces.2C_the_subsystem_.22User_Interfaces.22"><span class="tocnumber">1.7</span> <span class="toctext">User interfaces, the subsystem "User Interfaces"</span></a></li>
@@ -54,12 +54,12 @@
 </li>
 <li class="toclevel-1 tocsection-23"><a href="#Configuration_and_adjustment_of_the_program"><span class="tocnumber">4</span> <span class="toctext"><span>Configuration and adjustment of the program</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-24"><a href="#Subsystem_.22DB.22"><span class="tocnumber">4.1</span> <span class="toctext">Subsystem "DB"</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#Subsystem_.22DB.22"><span class="tocnumber">4.1</span> <span class="toctext"><span>Subsystem "DB"</span></span></a></li>
 <li class="toclevel-2 tocsection-25"><a href="#Subsystem_.22Security.22"><span class="tocnumber">4.2</span> <span class="toctext">Subsystem "Security"</span></a></li>
 <li class="toclevel-2 tocsection-26"><a href="#Subsystem_.22Transports.22"><span class="tocnumber">4.3</span> <span class="toctext"><span>Subsystem "Transports"</span></span></a></li>
 <li class="toclevel-2 tocsection-27"><a href="#Subsystem_.22Transport_protocols.22"><span class="tocnumber">4.4</span> <span class="toctext">Subsystem "Transport protocols"</span></a></li>
-<li class="toclevel-2 tocsection-28"><a href="#Subsystem_.22Data_acquisition.22"><span class="tocnumber">4.5</span> <span class="toctext">Subsystem "Data acquisition"</span></a></li>
-<li class="toclevel-2 tocsection-29"><a href="#Subsystem_.22Archives.22"><span class="tocnumber">4.6</span> <span class="toctext">Subsystem "Archives"</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#Subsystem_.22Data_acquisition.22"><span class="tocnumber">4.5</span> <span class="toctext"><span>Subsystem "Data acquisition"</span></span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#Subsystem_.22Archives.22"><span class="tocnumber">4.6</span> <span class="toctext"><span>Subsystem "Archives"</span></span></a></li>
 <li class="toclevel-2 tocsection-30"><a href="#Subsystem_.22User_interfaces.22"><span class="tocnumber">4.7</span> <span class="toctext">Subsystem "User interfaces"</span></a></li>
 <li class="toclevel-2 tocsection-31"><a href="#Subsystem_.22Specials.22"><span class="tocnumber">4.8</span> <span class="toctext">Subsystem "Specials"</span></a></li>
 <li class="toclevel-2 tocsection-32"><a href="#Subsystem_.22Modules_scheduler.22"><span class="tocnumber">4.9</span> <span class="toctext">Subsystem "Modules scheduler"</span></a></li>
@@ -149,7 +149,7 @@
 </p><p>Dynamic data sources can be remote, that is, they can be generated or received at the remote OpenSCADA station. To communicate with such data sources, the <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> gateway module is used. The function of this type of data sources is to display the data sources of the remote OpenSCADA station to the local one.
 </p><p>You can read in detail the key subsystem "DAQ" and its functions in a separate document "<a href="DAQ.html" title="Special:MyLanguage/Documents/DAQ">Data acquisition in OpenSCADA</a>".
 </p>
-<h3><span class="mw-headline" id="Databases.2C_the_subsystem_of_.22Databases.22"><span class="mw-headline-number">1.4</span> Databases, the subsystem of "Databases"</span></h3>
+<h3><span class="mw-headline" id="Databases.2C_the_subsystem_of_.22Databases.22"><span class="mw-headline-number">1.4</span> <span id="DB" title="#DB">Databases, the subsystem of "Databases"</span></span></h3>
 <p>To store data of the program are constantly used databases (DB). In order to unify access and manage databases, OpenSCADA has a subsystem called "Databases" (Fig. 1.4). To support different DB/DBMS the subsystem implemented as a modular one.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:370px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_db_str.png"><img class="thumbimage" height="297" src="files/Oscada_subsys_db_str.png" width="368" /></a>  <div class="thumbcaption">Fig. 1.4. Hierarchical structure of the subsystem "DB".</div></div></div></div>
@@ -468,7 +468,7 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1133px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_transl.png"><img class="thumbimage" height="768" src="files/QTCfg_sys_transl.png" width="1131" /></a>  <div class="thumbcaption">Fig. 4f. The tab "Translations" of the main page of the configuration of station.</div></div></div></div>
 <p>While examining the configuration pages of modular subsystems there will be described the general for all modules properties. However, it should be noted that each module can provide both: the additional tabs, and separate fields for the configuration of their own functioning for the pages, objects of which are inherited by modules. Information on the features and additions of the modules can be found in separate documentation for each of them.
 </p>
-<h3><span class="mw-headline" id="Subsystem_.22DB.22"><span class="mw-headline-number">4.1</span> Subsystem "DB"</span></h3>
+<h3><span class="mw-headline" id="Subsystem_.22DB.22"><span class="mw-headline-number">4.1</span> <span id="CfgDB" title="#CfgDB">Subsystem "DB"</span></span></h3>
 <p>The subsystem is the modular one and contains a hierarchy of objects shown in Figure 1.4. To configure the subsystem the root page of the subsystem "DB" containing the tab "Modules". Tab "Modules" (Fig. 4.1a) contains the list of modules in subsystem "DB", available at the station.
 </p><p>To modify the page's fields of this subsystem it may be required the super user's rights or the inclusion of your user to the "DB" group.
 </p>
@@ -597,7 +597,7 @@
 <p>The subsystem is modular. To configure the subsystem the root page of the subsystem "Transport Protocols" is provided, it contains tab "Modules". The tab "Modules" (Fig. 4.1b) contains the list of modules in subsystem "Transport Protocols" and is identical for all modular subsystems.
 </p><p>Each module of subsystem "Transport Protocols" provides configuration page with the only one tab — "Module". On the tab "Module" there is the information on the module of subsystem "Transport Protocols" (Fig. 4.1d), which structure is identical for all modules.
 </p>
-<h3><span class="mw-headline" id="Subsystem_.22Data_acquisition.22"><span class="mw-headline-number">4.5</span> Subsystem "Data acquisition"</span></h3>
+<h3><span class="mw-headline" id="Subsystem_.22Data_acquisition.22"><span class="mw-headline-number">4.5</span> <span id="CfgDAQ" title="#CfgDAQ">Subsystem "Data acquisition"</span></span></h3>
 <p>The subsystem is modular one and contains the hierarchy of objects shown in Fig.1.3. To configure the subsystem the root page of subsystem "Data acquisition" is provided, which contains the tabs "Redundancy", "Template libraries" and "Modules".
 </p><p>To obtain access to modify the objects of this subsystem the user of the group "DAQ" or the rights of the privileged user are required.
 </p><p>As a redundancy object of the subsystem "Data Acquisition" there used the object of controller for which the redundancy process performs that functions:
@@ -711,7 +711,7 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:664px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_attr.png"><img class="thumbimage" height="472" src="files/QTCfg_subsys_daq_mod_cntr_prm_attr.png" width="662" /></a>  <div class="thumbcaption">Fig. 4.5l. Tab "Attributes" of a parameter of a controller of the subsystem "Data acquisition".</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_arch.png"><img class="thumbimage" height="472" src="files/QTCfg_subsys_daq_mod_cntr_prm_arch.png" width="711" /></a>  <div class="thumbcaption">Fig. 4.5m. Tab "Archiving" of a parameter of a controller of the subsystem "Data acquisition".</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_tmpl.png"><img class="thumbimage" height="472" src="files/QTCfg_subsys_daq_mod_cntr_prm_tmpl.png" width="711" /></a>  <div class="thumbcaption">Fig. 4.5n. Tab "Template config" of a parameter of a controller of the subsystem "Data acquisition".</div></div></div></div>
-<h3><span class="mw-headline" id="Subsystem_.22Archives.22"><span class="mw-headline-number">4.6</span> Subsystem "Archives"</span></h3>
+<h3><span class="mw-headline" id="Subsystem_.22Archives.22"><span class="mw-headline-number">4.6</span> <span id="CfgArch" title="#CfgArch">Subsystem "Archives"</span></span></h3>
 <p>The subsystem is modular and contains the hierarchy of objects shown in Fig.1.5. To configure the subsystem the root page of the subsystem "Archives" is provided, it contains tabs: "Redundancy", "Messages archive", "Value archives" and "Modules".
 </p><p>To gain the access to modify the objects of this subsystem the user of the group "Archive" or the privileged user rights are required.
 </p><p>As a redundancy object of the subsystem "Archives" there used the object of messages archivator for which the redundancy process performs that functions:

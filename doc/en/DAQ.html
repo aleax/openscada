@@ -35,7 +35,7 @@
 </ul>
 </li>
 <li class="toclevel-1 tocsection-6"><a href="#Virtual_data_sources"><span class="tocnumber">2</span> <span class="toctext">Virtual data sources</span></a></li>
-<li class="toclevel-1 tocsection-7"><a href="#Logic_level_of_data_processing"><span class="tocnumber">3</span> <span class="toctext">Logic level of data processing</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Logic_level_of_data_processing"><span class="tocnumber">3</span> <span class="toctext"><span>Logic level of data processing</span></span></a></li>
 <li class="toclevel-1 tocsection-8"><a href="#Redundancy_of_the_data_sources"><span class="tocnumber">4</span> <span class="toctext">Redundancy of the data sources</span></a></li>
 </ul>
 </div>
@@ -143,7 +143,7 @@
 <li> Library of standard mathematical functions: <a href="Modules/FLibMath.html" title="Special:MyLanguage/Modules/FLibMath">FLibMath</a>;</li>
 <li> Library of System API functions: <a href="Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">FLibSYS</a>.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:602px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_progCompon.png"><img class="thumbimage" height="662" src="files/DAQ_progCompon.png" width="600" /></a>  <div class="thumbcaption">Fig. 6. Overall structure of the components of the programming area.</div></div></div></div>
-<h2><span class="mw-headline" id="Logic_level_of_data_processing"><span class="mw-headline-number">3</span> Logic level of data processing</span></h2>
+<h2><span class="mw-headline" id="Logic_level_of_data_processing"><span class="mw-headline-number">3</span> <span id="LogicLev" title="#LogicLev">Logic level of data processing</span></span></h2>
 <p>Above we talked that type of data source can vary from a "raw" to the complex. The "raw" means the source that provides only the basic signal (Integer, Real, Boolean, String, ...) separately. Under the complex it's meant the source that groups the signals and in the parameter of subsystem "DAQ" it provides the attributes of an additional purpose, covering practically all diagnostic tasks, i.e. the parameter is the complete object, which do not need any additions.
 </p><p>Taking into account this variation, the situation may occur, when the information in the object of data source controller's parameter, is insufficient to describe the real TP object in general and the derived object of a higher level of abstraction is needed. The solution of this situation is the formation of complementary parameters, which isn't obvious and confusing. The better solution is to use layer, so-called "Logic Level", serving for the flexible formation of parameters, containers of signals with the necessary structure, and which has post-processing.
 </p><p>Functionally "Logic Level" is intended to provide OpenSCADA with mechanism of free formation of parameters' objects, containers of signals of the necessary structure.

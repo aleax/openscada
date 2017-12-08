@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-18 09:09+0300\n"
+"POT-Creation-Date: 2017-12-05 20:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,7 +58,7 @@ msgid "Allowed %d input channels"
 msgstr ""
 
 #, c-format
-msgid "Gathering from %d channels. Recieved %.2g MB. Adjusted samplerate %d. Lost frames %g"
+msgid "Gathering from %d channels, recieved %.2g MB, samplerate corrections %g and adjusted value %d."
 msgstr ""
 
 #, c-format
@@ -75,9 +75,5 @@ msgid "Sound input stream is not stopped!"
 msgstr ""
 
 #, c-format
-msgid "CallBack: Lost frames correct: framesPerBuffer=%lu; sRt=%d; t_sz=%lld; err=%g; diff=%lld."
-msgstr ""
-
-#, c-format
-msgid "CallBack: Sound counter difference fix: sRt=%d; dTm=%lld."
+msgid "CallBack: Sample rate correction from %g to %g for fix error %ds on time %ds."
 msgstr ""

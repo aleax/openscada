@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/BFN - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/BFN</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FBFN&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/BFN" title="Modules/BFN (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/BFN/ru" title="Модули/BFN (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="http://oscada.org/wiki/Modules/BFN/uk" title="Модулі/BFN (17% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/BFN.html" title="Special:MyLanguage/Modules/BFN">BFN</a> </td>
+<td> BFN module </td>
+<td> 0.6 </td>
+<td> GPL2 </td>
+<td> daq_BFN.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2011) — the page translation </td>
+<td> Big Farm Net (BFN) modules support for Viper CT/BAS and others from "Big Dutchman" (<a class="external free" href="http://www.bigdutchman.com" rel="nofollow noreferrer noopener" target="_blank">http://www.bigdutchman.com</a>).<br />Sponsored by: JSC "Jaroslavskiy Broiler"
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Data_controller"><span class="tocnumber">1</span> <span class="toctext">Data controller</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Parameters"><span class="tocnumber">2</span> <span class="toctext">Parameters</span></a></li>
+</ul>
+</div>
+
+<p>This module is written for the current data and alarms acquisition from the data concentration module BFN(BigFarmNet) of the poultry automation of "Big Dutchman" company (<a class="external free" href="http://www.bigdutchman.com" rel="nofollow noreferrer noopener" target="_blank">http://www.bigdutchman.com</a>). To the one module of data concentration (BFN) can be connected multiple controllers of the poultry house, for example, Viper CT/BAS — a computer to control the microclimate and production processes, designed in a modular principle; it is provided to maintain an optimal climate and production efficiency in the poultry-yard.
+</p><p>An inquiry of the BFN module is made by the SOAP/XML protocol, during which it can be obtained at once all available data of the one house computer. As a result of this and because of the connection of multiple house computers to one BFN module total query time of current data can reach 30 (thirty) seconds!
+</p><p>Data and alarms are transmitted as signals' codes and alarms, and, therefore, to convert them to text messages it is necessary to have correspondence tables. Formation of a signals' code table and alarms are provided by this module at the module's object level and in the "Symbols" tab (Fig. 1). For use in multilingual projects data tables can be configured separately for each language.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:BFN_symb.png"><img class="thumbimage" height="629" src="../files/BFN_symb.png" width="808" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of symbols of the signals and the alarms.</div></div></div></div>
+<h2><span class="mw-headline" id="Data_controller"><span class="mw-headline-number">1</span> Data controller</span></h2>
+<p>For addition of the data source the controller is created and configured in the OpenSCADA system. Example of the configuration tab of the controller is depicted in Figure 2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:781px;"><a class="image" href="http://oscada.org/wiki/File:BFN_tr_cntr.png"><img class="thumbimage" height="681" src="../files/BFN_tr_cntr.png" width="779" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a controller object.</div></div></div></div>
+<p>From this tab you can set:
+</p>
+<ul><li> The state of the controller, as follows: "Enable", "Run" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the controller.</li>
+<li> The state, in which the controller must be set at boot: "To enable" and "To start".</li>
+<li> The acquisition schedule policy and the priority of the task of data acquisition.</li>
+<li> Synchronization period of configuration.</li>
+<li> An address of the transport by which the access to the BFN module is made. Usually the TCP-sockets of the transports' module "<a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" are used.</li>
+<li> User and password to connect to the BFN module.</li></ul>
+<h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
+<p>The module doesn't provides the possibility of creating parameters manually, all parameters are automatically created taking into account the list of house controllers connected to the BFN module. In fact, one parameter — a single house controller and all its data is presented as the attributes of the parameter. One controller of the house computer contains approximately 250 parameters, and some up to 500. As a result, the total amount of information of one BFN can reach 2000 signals! An example of the "Attributes" tab of the poultry house computer's parameter is shown in Figure 3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:839px;"><a class="image" href="http://oscada.org/wiki/File:BFN_tr_prm_a.png"><img class="thumbimage" height="760" src="../files/BFN_tr_prm_a.png" width="837" /></a>  <div class="thumbcaption">Fig.3. Tab "Attributes" of a parameter of a poultry house computer.</div></div></div></div>
+<p>Obtained alarms of the poultry computer are placed in the alarms list and to the messages' archive with:
+</p>
+<ul><li> Category: <b>alBFN:{cntrId}:{house}:{nodeCode}:{alarmId}</b>, where:
+<ul><li> <i>cntrId</i> — controller's ID;</li>
+<li> <i>house</i> — house or the parameter's object ID;</li>
+<li> <i>nodeCode</i> — the code of the node-signal for which the alarm is formed;</li>
+<li> <i>alarmId</i> — alarm's ID.</li></ul></li>
+<li> Name: <b>{HouseName} &gt; {NodeName}&nbsp;: {AlarmMess}</b>, where:
+<ul><li> <i>HouseName</i> — house name;</li>
+<li> <i>NodeName</i> — house or the parameter's object name;</li>
+<li> <i>AlarmMess</i> — alarm message.</li></ul></li>
+<li> Alarm level: -4(Error) — error; 1(Info) — norm.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

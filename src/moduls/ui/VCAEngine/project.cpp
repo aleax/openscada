@@ -452,7 +452,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/obj",_("Project"))) {
 	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enable"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:prj_"+id()).c_str(),
 		    "help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));

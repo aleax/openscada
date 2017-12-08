@@ -314,6 +314,9 @@ Modules/ICP_DAS:en,uk,ru:Modules/ICP_DAS.html
 Modules/Siemens:en,uk,ru:Modules/Siemens.html
 Modules/DiamondBoards:en,uk,ru:Modules/DiamondBoards.html
 Modules/Comedi:en,uk,ru:Modules/Comedi.html
+Modules/SoundCard:en,uk,ru:Modules/SoundCard.html
+Modules/BFN:en,ru:Modules/BFN.html
+Modules/SMH2Gi:en,uk,ru:Modules/SMH2Gi.html
 Modules/FSArch:en,uk,ru:Modules/FSArch.html
 Modules/DBArch:en,uk,ru:Modules/DBArch.html
 Modules/VCAEngine:en,ru:Modules/VCAEngine.html
@@ -7441,7 +7444,7 @@ for(var ip in pgsOprc) {
 	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
 }
 
-res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1512239196);
+res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1512766945);
 CREATE TABLE 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library "FLibComplex1" (http://wiki.oscada.org/HomePageEn/Doc/FLibComplex1#h902-15) and the implementation of the PWM for the pulse part.','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" (http://wiki.oscada.org/Doc/FLibComplex1#h91-15) и реализация ШИМ для импульсной части.',1,10,0,'//Call standard analog PID
 outA = Special.FLibComplex1.pid(var,sp,max,min,manIn,auto,casc,Kp,Ti,Kd,Td,Tzd,Hup,Hdwn,Zi,followSp,K1,in1,K2,in2,K3,in3,K4,in4,f_frq,int,dif,lag);
@@ -8662,7 +8665,7 @@ else if((request.charCodeAt(1)==0x08)&&(request.charCodeAt(2)==0x00)&&(answer.le
 ;}',1509290179);
 INSERT INTO "UserProtocol_uPrt" VALUES('NIK2303','NIK2303','','','Protocol level of three phase counter of electricity NIK 2303 from firm NIK LLC (http://www.nik.net.ua).
 Author: Ruslan Yarmoliuk <rylio74@gmail.com>
-Version: 1.0.0','','',1,1,0,'','','','JavaLikeCalc.JavaScript
+Version: 1.0.1','','',1,1,0,'','','','JavaLikeCalc.JavaScript
 //Protocol NIK 2303
 io.setAttr("err", "0");
 
@@ -8718,10 +8721,9 @@ request = SYS.strFromCharCode(0x7E) + request + SYS.strFromCharCode(FCS&0xFF, (F
 
 //message sending
 resp = tr.messIO(request);
-while(resp.length) {//io.setText(request);
-	if(!(tresp=tr.messIO("")).length) break;
-  	resp += tresp;
-}
+while(resp.length && resp.charCodeAt(resp.length-1) != 0x7E)
+	if((tresp=tr.messIO("")).length) resp += tresp;
+	else break;
 if(resp.length == 0) {io.setText(""); io.setAttr("err","1:"+tr("No a respond")); return; }
 //SYS.messDebug("/NIK2303I/PRT", "Respond: "+SYS.strDecode(resp, "Bin","|"));
 if(resp.length <= 3 || resp.charCodeAt(2) != resp.length-2)

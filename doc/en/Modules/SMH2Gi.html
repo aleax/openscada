@@ -1,0 +1,281 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/SMH2Gi - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/SMH2Gi</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSMH2Gi&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SMH2Gi" title="Modules/SMH2Gi (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SMH2Gi/ru" title="Модули/SMH2Gi (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SMH2Gi/uk" title="Модулі/SMH2Gi (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/SMH2Gi.html" title="Special:MyLanguage/Modules/SMH2Gi">SMH2Gi</a> </td>
+<td> Segnetics SMH2Gi </td>
+<td> 1.0 </td>
+<td> GPL2 </td>
+<td> daq_SMH2Gi.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko </td>
+<td> Data acquisition and control by Segnetics SMH2Gi (<a class="external free" href="http://segnetics.com/smh_2gi" rel="nofollow noreferrer noopener" target="_blank">http://segnetics.com/smh_2gi</a>) hardware interfaces and modules.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#1._General_provisions"><span class="tocnumber">1</span> <span class="toctext">1. General provisions</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Controller.27s_object"><span class="tocnumber">2</span> <span class="toctext">Controller's object</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Parameter.27s_object_of_controller"><span class="tocnumber">3</span> <span class="toctext">Parameter's object of controller</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Shared_memory"><span class="tocnumber">3.1</span> <span class="toctext">Shared memory</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Modules_MC_and_MR"><span class="tocnumber">3.2</span> <span class="toctext">Modules MC and MR</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Links"><span class="tocnumber">4</span> <span class="toctext">Links</span></a></li>
+</ul>
+</div>
+
+<p>The module provides functions of integration of OpenSCADA system to environment of programming panel controller with OS Linux <a class="external text" href="http://segnetics.com/smh_2gi" rel="nofollow noreferrer noopener" target="_blank">SMH2Gi</a> (Fig.1) from firm <a class="external text" href="http://segnetics.com" rel="nofollow noreferrer noopener" target="_blank">Segnetics</a>. The module was developed for project "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Vacuum_processing_unit" title="Special:MyLanguage/Using/Vacuum processing unit">Automatic system of control of vacuum technological process</a>" and funded by "<a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">The Laboratory of vacuum technologies</a>". The module implementing task allowed on <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/new_module_daqsmh2gi_creation_for_deep_integration_to_segnetics_smh2gi" rel="nofollow noreferrer noopener" target="_blank">link</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:421px;"><a class="image" href="http://oscada.org/wiki/File:Segnetics_SMH2Gi.png"><img class="thumbimage" height="470" src="../files/Segnetics_SMH2Gi.png" width="419" /></a>  <div class="thumbcaption">Fig.1. SMH2Gi controller.</div></div></div></div>
+<p>"SMH 2Gi" — programming logical controller, aimed for automation of engineer systems of buildings and technological processes of industry.
+</p><p>Specifics of the controller "SMH 2Gi":
+</p>
+<dl><dd>1. High modularity level. You do not need pay for unused channels and interfaces. To base resources added next functions:
+<dl><dd>a. Enchantment of input-output channels by connection of an adjustment module "MC" and expansion modules "MR".</dd>
+<dd>b. Working into the networks Lonworks and Ethernet.</dd>
+<dd>c. Working with USB-modems, channels CSD, GPRS, EDGE, 3G</dd>
+<dd>d. Working into VPN, working through the internet and local networks</dd></dl></dd>
+<dd>2. At a new module addition you unneeded for the PLC dismantling and disassembling. It made significant simplify the work into process of a system expanding and configuring.</dd>
+<dd>3. Free programming by the instrument "SMLogix" assistance in addition with the configuring program "SMConstructor" which allow you to create control programs quickly and to adapt it for a concrete object.</dd>
+<dd>4. Full programming compatibility with the controllers "SMH2010", "Pixel" and "SMH 2G". You unneeded for a program re-creation.</dd>
+<dd>5. Possibility to work into networks, built on Modbus and Ethernet into the device's role as Slave or Master.</dd>
+<dd>6. Graphical display, which allow you show different objects of visualization, trends of processes and text of different sizes.</dd></dl>
+<p><b>Table 1:</b> SMH2Gi specification
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Naming </th>
+<th> Type (Value)
+</th></tr>
+<tr>
+<td colspan="2"> <i>Supplying</i>
+</td></tr>
+<tr>
+<td> Nominal supplying voltage </td>
+<td> 24 V of DC ± 5%
+</td></tr>
+<tr>
+<td> Allowed range of the supplying voltage </td>
+<td> 18…36 V DC
+</td></tr>
+<tr>
+<td> Power consumption </td>
+<td> No more to 5 W without "МС" module and more then 10 W with the "МС" connection
+</td></tr>
+<tr>
+<td colspan="2"> <i>Processor, memory</i>
+</td></tr>
+<tr>
+<td> Control processor, bus band width </td>
+<td> Freescale iMX27 with the core ARM926EJ-S, 32 bit
+</td></tr>
+<tr>
+<td> Working CPU frequency </td>
+<td> 400 MHz
+</td></tr>
+<tr>
+<td> Operational system </td>
+<td> Linux 2.6.29
+</td></tr>
+<tr>
+<td> The operational memory type and size </td>
+<td> 64 Mbyte (or 128 Mbyte) DDR dependent from the model
+</td></tr>
+<tr>
+<td> Content memory type and size </td>
+<td> 128 MByte NAND Flash
+</td></tr>
+<tr>
+<td colspan="2"> <i>Interfaces</i>
+</td></tr>
+<tr>
+<td> RS-232 </td>
+<td> Speed – from 2400 … to 115200 bit/s; without optical isolation; protocol – Modbus RTU; socket to connection – terminal block (needed additional coupler to DB-9)
+</td></tr>
+<tr>
+<td> RS-485 </td>
+<td> Speed – to 2400…115200 bit/s; with optical isolation; protocol – Modbus RTU; socket to connection – terminal block
+</td></tr>
+<tr>
+<td> USB Host </td>
+<td> Support standard USB 2.0; socket for connection – USB type A (big socket);
+</td></tr>
+<tr>
+<td> USB Device </td>
+<td> Socket for connection – USB type miniAB (small socket)
+</td></tr>
+<tr>
+<td> Ethernet </td>
+<td> Embedded, 10/100Mbit; supported protocols: FTP, HTTP and other. Socket for connection – type RJ-45
+</td></tr>
+<tr>
+<td> Additional network modules </td>
+<td> LONworks, modules for specific order
+</td></tr>
+<tr>
+<td colspan="2"> <i>User interface</i>
+</td></tr>
+<tr>
+<td> Keyboard </td>
+<td> 23 buttons
+</td></tr>
+<tr>
+<td> Graphical display </td>
+<td> Type – STN, monochrome 192 х 64 dots; diagonal - 4.1"
+</td></tr>
+<tr>
+<td> Sound alarming </td>
+<td> Missing
+</td></tr>
+<tr>
+<td colspan="2"> <i>Discrete inputs</i>
+</td></tr>
+<tr>
+<td> Inputs number </td>
+<td> 3…5 galvanic isolated inputs (the number configures in a program) with counter inputs support up to 10 kHz
+</td></tr>
+<tr>
+<td> Type of the galvanic isolation </td>
+<td> Grouped
+</td></tr>
+<tr>
+<td> Triggering voltage's levels </td>
+<td> Closed "dry" contact �1.1В. Opened "dry" contact �4.2В DC (lesser to 50В)
+</td></tr>
+<tr>
+<td colspan="2"> <i>Discrete outputs</i>
+</td></tr>
+<tr>
+<td> Number and type: </td>
+<td> 2 transistor outputs (without a galvanic isolation)
+</td></tr>
+<tr>
+<td> SMH 2Gi – 0XXX – XX – Х </td>
+<td> 1 optorele
+</td></tr>
+<tr>
+<td> SMH 2Gi – 1XXX – XX – Х </td>
+<td> 2 optorele
+</td></tr>
+<tr>
+<td> Working voltage range </td>
+<td> For outputs on transistors: 0…36 В DC. For outputs on optorele: 0…36 В DC; 0…25 В (rms) AC.
+</td></tr>
+<tr>
+<td> Switched current, lesser </td>
+<td> 0.4 А to each output
+</td></tr>
+<tr>
+<td> Switching time, lesser </td>
+<td> 1.5 ms
+</td></tr>
+<tr>
+<td> "Contacts" resource, switches, lesser </td>
+<td> No limited
+</td></tr></table>
+<p>OpenSCADA project assembling for an environment of processor ARM926EJ-S and OS Linux grounds on GCC-4.3.2, Glibc-2.8, Binutils-2.18 and Kernel-2.6.29 was done long enough and it described by <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Segnetics_SMH2Gi" title="Special:MyLanguage/Using/Segnetics SMH2Gi">the link</a>. But in an exploitation process was is a need of a direct data acquisition from modules "MC" and "MR", and interaction with the original environment "SMLogix".
+</p><p>At all we need to note that the original environment of SMH2Gi represent by two processes: "mbs" and "logix". Where "mbs" performs a function of acquisition of modules MC, MR and other interfaces and "logix" performs programs execution and visualization to the embedded screen. On the modules MС and MR configuring to frequent acquisition the process "mbs" can use more then 30% of the processor's resources into the system loading then it is leave few resources to all other tasks, and it mostly reloads the processor. Replacing the process "mbs" (disabled into the file "/projects/start") into OpenSCADA allow you to remove that kind system loading by using function <i>select()</i> of the operation system at work with the serial interfaces. And working with the process "logix" by the shared memory allow you to bypass a problem of a low priority of the network interface.
+</p><p>Into this version implemented the data acquisition and the values transmission to the process "logix" by the shared memory, also the values acquisition and transmission from/to modules MC and MR.
+</p><p>The module implements functions of horizontal redundancy that is accordance working with a remote station of the same level.
+</p>
+<h3><span class="mw-headline" id="1._General_provisions"><span class="mw-headline-number">1</span> 1. General provisions</span></h3>
+<p>To the modules MC and MR working needs a previous initial procedure which must send <b>tune</b>-request, specified to the module concrete model. Next to a data request/send you need an information about the module structure. This kind information is contained into <b>INI</b>-files, per file to the device. Folder with <b>INI</b>-files specified into tab "SMH2Gi" by the module page (Figure 1), and the typical *.INI files archive, adapted to OpenSCADA needs, allowed <a class="external" href="http://oscada.org/wiki/File:SMH2Gi_ini.tgz" title="File:SMH2Gi ini.tgz">here</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:673px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_mod.png"><img class="thumbimage" height="515" src="../files/SMH2Gi_mod.png" width="671" /></a>  <div class="thumbcaption">Fig.1. Tab "SMH2Gi" of the module page.</div></div></div></div>
+<h2><span class="mw-headline" id="Controller.27s_object"><span class="mw-headline-number">2</span> Controller's object</span></h2>
+<p>The controller's object describes a task of SMH2Gi data acquisition of the two types: "SHM" and "MRC" (Fig. 2).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:727px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_obj_cntr.png"><img class="thumbimage" height="631" src="../files/SMH2Gi_obj_cntr.png" width="725" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a controller object.</div></div></div></div>
+<p>In assistance with the tab you can set:
+</p>
+<ul><li> The controller status, that is: state, "Enabled" and "Started" and DB name, which stores the configuration.</li>
+<li> Identifier, name and description of the controller's object.</li>
+<li> Status, in which the controller must to be switched at the boot time: "Enabled" and "Started".</li>
+<li> Tables name for storing here controller's parameters configuration for types "SHM" and "MRC".</li>
+<li> Data acquisition task's scheduling policy and execution priority.</li>
+<li> Variables description file of the shared memory to interaction with the process "logix", which created by the process.</li>
+<li> Serial interfaces addresses for devices MC and MR.</li>
+<li> Tries number to requests by a serial interface.</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Due to the fact that the modules MC and MR needs to previous reset and next send the <b>tune</b>-request then an independent physical connection, disconnecting and also object single module enabling/disabling often impossible without the controller's object stopping and disabling at all.
+</p>
+<h2><span class="mw-headline" id="Parameter.27s_object_of_controller"><span class="mw-headline-number">3</span> Parameter's object of controller</span></h2>
+<p>The parameter's object is a direct agent of the data source, in our case this is shared memory and MC, MR modules. Each the type represented into different way.
+</p>
+<h3><span class="mw-headline" id="Shared_memory"><span class="mw-headline-number">3.1</span> Shared memory</span></h3>
+<p>The parameter's type "Shared memory (SHM)" uses for interaction with the process "logix" through exchanging by variables. The parameter's object configuration tab of this type shown on Figure 3. The process "logix" provides four variable's types with it reflection to OpenSCADA data source's attributes into next way:
+</p>
+<ul><li> <b>BOOL</b> — TFld::Boolean;</li>
+<li> <b>SHORT</b> (int16), <b>LONG</b> (int32) — TFld::Integer;</li>
+<li> <b>FLOAT</b> — TFld::Real.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:671px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_prm.png"><img class="thumbimage" height="556" src="../files/SMH2Gi_prm.png" width="669" /></a>  <div class="thumbcaption">Fig.3. Configuration tab of the parameter's type "Shared memory".</div></div></div></div>
+<p>In assistance with the tab of parameter's object configuration you can set:
+</p>
+<ul><li> The parameter status, that is: type and status "Enabled".</li>
+<li> Identifier, name and description of the parameter's object.</li>
+<li> Status, in which the parameter must to be switched at the boot time: "Enabled".</li>
+<li> Variables list of the shared memory for it creation/placing to an attribute of the parameter.</li></ul>
+<p>The tab "Attributes" example shown into Figure 4.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:671px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_prmAttr.png"><img class="thumbimage" height="556" src="../files/SMH2Gi_prmAttr.png" width="669" /></a>  <div class="thumbcaption">Fig.4. Tab "Attributes" of a parameter's object of the shared memory.</div></div></div></div>
+<h3><span class="mw-headline" id="Modules_MC_and_MR"><span class="mw-headline-number">3.2</span> Modules MC and MR</span></h3>
+<p>The parameter's type "Modules MC and MR (MRC)" uses for access to the modules MC and MR data. The parameter's object configuration tab of the type shown on Figure 5. The parameter's type is generic for the modules MC and MR by mostly like working with a difference only it's installation bus, that is taken in account by the module address sign.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:635px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_MRCobj_prm.png"><img class="thumbimage" height="518" src="../files/SMH2Gi_MRCobj_prm.png" width="633" /></a>  <div class="thumbcaption">Fig.5. Configuration tab of the parameter's type "Modules MC and MR".</div></div></div></div>
+<p>In assistance with the tab of parameter's object configuration you can set:
+</p>
+<ul><li> The parameter status, that is: type and status "Enabled".</li>
+<li> Identifier, name and description of the parameter's object.</li>
+<li> Status, in which the parameter must to be switched at the boot time: "Enabled".</li>
+<li> Module type and it's address on bus. The module type you must set strictly accordance to the physical module installation by the address, elsewhere you will take an error of the parameter's object! The MC module can be single and for one you need set address "-1".</li></ul>
+<p>The tab "Attributes" example shown into Figure 6. On Figure 7 shown tab "Configuration" which contains all configuration fields of the <b>tune</b>-request and the discrete signals inversion.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:654px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_MRCobj_prmAttr.png"><img class="thumbimage" height="631" src="../files/SMH2Gi_MRCobj_prmAttr.png" width="652" /></a>  <div class="thumbcaption">Fig.6. Tab "Attributes" of a parameter's object of a module MC.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:654px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_MRCobj_prmCfg.png"><img class="thumbimage" height="690" src="../files/SMH2Gi_MRCobj_prmCfg.png" width="652" /></a>  <div class="thumbcaption">Fig.7. Tab "Configuration" of a parameter of a module MC.</div></div></div></div>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">4</span> Links</span></h2>
+<p>INI-files archive with configuration of the modules MC and MR: <a class="external" href="http://oscada.org/wiki/File:SMH2Gi_ini.tgz" title="File:SMH2Gi ini.tgz">File:SMH2Gi_ini.tgz</a>
+</p>
+
+
+
+
+
+</div></body>
+</html>

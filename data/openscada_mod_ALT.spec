@@ -1251,6 +1251,7 @@ ln -s `relative %_defaultdocdir/%name-docUK-%version %_datadir/openscada/docs/uk
 %config %_initdir/oscadad
 %_bindir/openscada
 %_bindir/openscada_start
+%_bindir/openscada-proj
 %doc README README_ru README_uk COPYING ChangeLog INSTALL TODO TODO_ru TODO_uk
 %_mandir/man1/*
 %_mandir/*/man1/*

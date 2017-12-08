@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-02 18:33+0200\n"
+"POT-Creation-Date: 2017-12-08 21:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -559,25 +559,34 @@ msgstr ""
 msgid "Projects of OpenSCADA"
 msgstr ""
 
-msgid "List of allowed to switch projects of OpenSCADA"
+msgid "List of allowed to call/switch projects of OpenSCADA"
 msgstr ""
 
-msgid "The list for select and switch to allowed projects of OpenSCADA."
+msgid "The list for call and switch to allowed projects of OpenSCADA."
 msgstr ""
 
-msgid "<New project or project to update>"
+msgid "<Creation-updating>"
 msgstr ""
 
-msgid "=== User directory copy projects ==="
+msgid "New projects creation or updating of presented ones, like to desktop links"
 msgstr ""
 
-msgid "=== Pre-installed projects ==="
+msgid "=== User projects ==="
+msgstr ""
+
+msgid "=== Common projects ==="
 msgstr ""
 
 msgid "Switch to the selected project"
 msgstr ""
 
+msgid "Call the selected project"
+msgstr ""
+
 msgid "The button for switch to the selected project."
+msgstr ""
+
+msgid "The button for call the selected project."
 msgstr ""
 
 msgid "Exit from the program"
@@ -626,4 +635,19 @@ msgstr ""
 
 #, c-format
 msgid "No translated Qt message: '%s'"
+msgstr ""
+
+msgid "current"
+msgstr ""
+
+msgid "running"
+msgstr ""
+
+msgid "Call project"
+msgstr ""
+
+msgid "Project \"%1\" seems running now! You still want to switch the project?"
+msgstr ""
+
+msgid "Project \"%1\" seems running now! You still want to call the project?"
 msgstr ""

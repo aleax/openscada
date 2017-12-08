@@ -586,13 +586,13 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     w_scale->setToolTip(_("Field for display widgets' scaling mode."));
     w_scale->setStatusTip(_("Click to change widgets' scaling mode."));
     statusBar()->insertPermanentWidget(0,w_scale);
-    mStModify = new WMdfStBar( this );
+    mStModify = new WMdfStBar(this);
     connect(mStModify, SIGNAL(press()), this, SLOT(itDBSave()));
     mStModify->setWhatsThis(_("This label displays modifying."));
     mStModify->setToolTip(_("Field for display modifying."));
     mStModify->setStatusTip(_("Click to save all modifyings."));
     statusBar()->insertPermanentWidget(0,mStModify);
-    mWVisScale = new QLabel( "100%", this );
+    mWVisScale = new QLabel("100%", this);
     mWVisScale->setWhatsThis(_("This label displays current widget's scale."));
     mWVisScale->setToolTip(_("Field for display the scale of the current widget."));
     statusBar()->insertPermanentWidget(0,mWVisScale);

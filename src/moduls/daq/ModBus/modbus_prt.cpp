@@ -1301,7 +1301,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/nd",_("Node"))) {
 	    if(ctrMkNode("area",opt,-1,"/nd/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/nd/st/status",_("Status"),R_R_R_,"root",SPRT_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/nd/st/en_st",_("Enable"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/nd/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/nd/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }

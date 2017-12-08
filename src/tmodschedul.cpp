@@ -419,7 +419,7 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/ms/libs/path",_("Path"),R_R_R_,"root",SMSH_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/ms/libs/tm",_("Time"),R_R_R_,"root",SMSH_ID,1,"tp","time");
 		ctrMkNode("list",opt,-1,"/ms/libs/mods",_("Modules"),R_R_R_,"root",SMSH_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/ms/libs/en",_("Enable"),RWRWR_,"root",SMSH_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/ms/libs/en",_("Enabled"),RWRWR_,"root",SMSH_ID,1,"tp","bool");
 	    }
 	}
 	return;

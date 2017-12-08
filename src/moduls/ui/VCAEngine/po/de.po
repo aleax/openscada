@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2013.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-25 16:36+0300\n"
+"POT-Creation-Date: 2017-12-08 22:22+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -48,8 +48,8 @@ msgstr "Bibliothek"
 msgid "State"
 msgstr "Zustand"
 
-msgid "Enable"
-msgstr "Einschalten"
+msgid "Enabled"
+msgstr "Aktiviert"
 
 msgid "Library DB"
 msgstr "Datenbank der Bibliothek"
@@ -99,12 +99,8 @@ msgid "Widget is not container!"
 msgstr "Widget ist kein Container!"
 
 #, c-format
-msgid ""
-"You try to create widget with name '%s' of the widget that was the early "
-"inherited and deleted from base container!"
-msgstr ""
-"Sie versuchen, das Widget mit dem Namen '%s' des Widgets, das früher aus dem "
-"Basencontainer geerbt und gelöscht war, zu schaffen!"
+msgid "Restoring '%s' from the base container!"
+msgstr "Wiederherstellen von '%s' aus dem Basiscontainer!"
 
 msgid "Library widget: "
 msgstr "Bibliothekenwidget: "

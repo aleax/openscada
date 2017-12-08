@@ -58,16 +58,9 @@ int main( int argc, char *argv[], char *envp[] )
 	}
 
     //Check for other system's command line parameters
+    bool coreDump = true;
     for(int argPos = 0; (argCom=TSYS::getCmdOpt_(argPos,&argVl,argc,argv)).size(); )
-	if(strcasecmp(argCom.c_str(),"coredumpallow") == 0) {
-	    // Set the Dumpable state to be enabled
-	    prctl(PR_SET_DUMPABLE, 1, 0, 0, 0);
-	    // Set the core dump limitation to be unlimited
-	    struct rlimit rlim;
-	    rlim.rlim_cur = RLIM_INFINITY;
-	    rlim.rlim_max = RLIM_INFINITY;
-	    setrlimit(RLIMIT_CORE, &rlim);
-	}
+	if(strcasecmp(argCom.c_str(),"nocoredump") == 0) coreDump = false;
 	else if((strcasecmp(argCom.c_str(),"pidfile") == 0 || strcasecmp(argCom.c_str(),"pid-file") == 0) &&
 	    argVl.size() && (pid=open(argVl.c_str(),O_CREAT|O_TRUNC|O_WRONLY,0664)) >= 0)
 	{
@@ -76,6 +69,16 @@ int main( int argc, char *argv[], char *envp[] )
 	    write(pid, argVl.data(), argVl.size());
 	    close(pid);
 	}
+
+    //Set the Dumpable state to be enabled
+    if(coreDump) {
+	prctl(PR_SET_DUMPABLE, 1, 0, 0, 0);
+	// Set the core dump limitation to be unlimited
+	struct rlimit rlim;
+	rlim.rlim_cur = RLIM_INFINITY;
+	rlim.rlim_max = RLIM_INFINITY;
+	setrlimit(RLIMIT_CORE, &rlim);
+    }
 
     //Same load and start the core object TSYS
     SYS = new TSYS(argc, argv, envp);

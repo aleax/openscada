@@ -1,0 +1,125 @@
+#!/bin/sh
+
+if test $# -lt 1; then
+    echo "Projects management script of OpenSCADA mostly designed to call from OpenSCADA but also can be used independently.
+The script is mostly software platform specific and relates now for Linux.
+openscada-proj list
+openscada-proj proc|create|remove {ProjName}
+ Commands:
+  list   - allowed projects list;
+  proc   - proceed for copy RO projects to WR, create desktop links, process core dumps;
+  create - create new projects or copy RO projects to WR, create desktop links;
+  remove - remove projects.
+ Arguments:
+  ProjName - project name;
+ Environments:
+  dPrj     - directory of projects OpenSCADA, can be RO;
+  dPrjUser - directory of projects OpenSCADA of the user, WR;
+  dSysCfg  - directory of system configuration;
+  dData    - directory of system data;
+";
+    exit 0;
+fi
+
+if test "x$dPrj" = "x"; then dPrj=@oscd_datadir_full@; fi
+if test "x$dPrjUser" = "x"; then dPrjUser=~/.openscada; fi
+if test "x$dSysCfg" = "x"; then dSysCfg=@sysconfdir_full@; fi
+if test "x$dData" = "x"; then dData=@datadir_full@; fi
+
+case "$1" in
+  list)
+    if test ! -w $dPrj; then
+	echo "=== User projects ==="
+	for fit in `ls $dPrjUser`; do
+	    if test -d $dPrjUser/$fit && test -f $dPrjUser/$fit/oscada.xml; then echo "$fit"; fi
+	done
+	echo "=== Common projects ==="
+    fi
+    for fit in `ls $dPrj`; do
+	if test -d $dPrj/$fit && test -f $dSysCfg/oscada_$fit.xml -o -f $dPrj/$fit/oscada.xml; then echo "$fit"; fi
+    done
+    ;;
+  proc|create)
+    if test $# -lt 2; then echo "Not enough arguments!"; exit 1; fi
+    prjNm=$2
+    dPrjRez=$dPrj/$prjNm
+
+    #User projects directory processing
+    if test ! -w $dPrj -a -w $dPrjUser; then
+	dPrjRez=$dPrjUser/$prjNm
+	if test -d $dPrj/LibsDB -a ! -d $dPrjUser/LibsDB; then cp -R $dPrj/LibsDB $dPrjUser; fi
+	if test ! -d $dPrjRez -a -d $dPrj/$prjNm; then
+	    mkdir -p $dPrjRez
+	    cp -R $dPrj/$prjNm/* $dPrjRez;
+	    if test ! -e $dPrjRez/oscada.xml; then cp $dSysCfg/oscada_$prjNm.xml $dPrjRez/oscada.xml; fi
+	fi
+    fi
+
+    #Generic projects directory processing
+    if test ! -d $dPrjRez -a $1 = create; then mkdir -p $dPrjRez; fi
+    if test -d $dPrjRez; then
+	if test ! -e $dPrjRez/oscada.xml -a ! -w $dSysCfg/oscada_$prjNm.xml; then cp $dSysCfg/oscada_start.xml $dPrjRez/oscada.xml; fi
+	if test ! -d $dPrjRez/LibsDB -a ! -L $dPrjRez/LibsDB; then ln -s ../LibsDB $dPrjRez/LibsDB; fi
+	if test ! -d $dPrjRez/ARCHIVES/MESS; then mkdir -pm 700 $dPrjRez/ARCHIVES/MESS; fi
+	if test ! -d $dPrjRez/ARCHIVES/VAL; then mkdir -pm 700 $dPrjRez/ARCHIVES/VAL; fi
+	if test -n "$(which xdg-user-dir)" -a -n "$(xdg-user-dir DESKTOP)" -a $1 = create; then
+	    DESKTOP_DIR="$(xdg-user-dir DESKTOP)"
+	    if test -n "$DESKTOP_DIR"  -a ! -f "$DESKTOP_DIR/openscada_$prjNm.desktop"; then
+		cp $dData/applications/openscada.desktop "$DESKTOP_DIR/openscada_$prjNm.desktop"
+		sed -i "s/Exec=/Exec=env OSCADA_ProjName=$prjNm /" "$DESKTOP_DIR/openscada_$prjNm.desktop"
+		sed -i "s/\(^\(Generic\|\)Name\(=\|\\[.*\\]=\).*\)/\1: $prjNm/" "$DESKTOP_DIR/openscada_$prjNm.desktop"
+	    fi
+	fi
+
+	# Check for lost lock at it PID and openscada process in whole
+	if test -f $dPrjRez/lock; then
+	    pid=`cat $dPrjRez/lock | sed -r 's/^0*([0-9]+).*/\1/'`
+	    if ! ps -A -o "pid cmd" | grep "^ *$pid.*openscada" > /dev/null; then rm $dPrjRez/lock; fi
+	fi
+
+	# Core dump files "core[.*]" into work directory process
+	if test -n "$(which gdb 2> /dev/null)"; then
+	    cd $dPrjRez
+	    for fit in `ls core* 2> /dev/null`; do
+		echo "Core dump process for back trace purchase to file ${prjNm}_${fit}_$(date +%F_%H.%M).crash"
+		gdb @bindir_full@/openscada --core ${fit} --batch --quiet -ex "thread apply all bt full" -ex "quit" > ${prjNm}_${fit}_$(date +%F_%H.%M).crash
+		rm -f ${fit}
+	    done
+	fi
+    fi
+    ;;
+  remove)
+    if test $# -lt 2; then echo "Not enough arguments!"; exit 1; fi
+    prjNm=$2
+    prjDir=
+
+    if test ! -w $dPrj; then
+	for fit in `ls $dPrjUser`; do
+	    if test -d $dPrjUser/$fit && test -f $dPrjUser/$fit/oscada.xml && test $fit = $prjNm; then
+		prjDir=$dPrjUser/$fit
+		break
+	    fi
+	done
+    else
+	for fit in `ls $dPrj`; do
+	    if test -d $dPrj/$fit && test -f $dSysCfg/oscada_$fit.xml -o -f $dPrj/$fit/oscada.xml && test $fit = $prjNm; then
+		prjDir=$dPrj/$fit
+		break
+	    fi
+	done
+    fi
+
+    if test "x$prjDir" != "x"; then
+	rm -r $prjDir
+
+	# Remove the desktop link
+	DESKTOP_DIR="$(xdg-user-dir DESKTOP)"
+	if test -n "$DESKTOP_DIR"  -a -f "$DESKTOP_DIR/openscada_$prjNm.desktop"; then
+	    rm $DESKTOP_DIR/openscada_$prjNm.desktop
+	fi
+    else exit -1;
+    fi
+    ;;
+esac
+
+exit 0

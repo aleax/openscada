@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-25 16:36+0300\n"
+"POT-Creation-Date: 2017-12-08 22:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "State"
 msgstr ""
 
-msgid "Enable"
+msgid "Enabled"
 msgstr ""
 
 msgid "Library DB"
@@ -94,7 +94,7 @@ msgid "Widget is not container!"
 msgstr ""
 
 #, c-format
-msgid "You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"
+msgid "Restoring '%s' from the base container!"
 msgstr ""
 
 msgid "Library widget: "

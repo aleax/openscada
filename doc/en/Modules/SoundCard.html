@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/SoundCard - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/SoundCard</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSoundCard&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SoundCard" title="Modules/SoundCard (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SoundCard/ru" title="Модули/Звуковая карта (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SoundCard/uk" title="Модулі/Звукова карта (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/SoundCard.html" title="Special:MyLanguage/Modules/SoundCard">SoundCard</a> </td>
+<td> Sound card </td>
+<td> 0.8 </td>
+<td> GPL2 </td>
+<td> daq_SoundCard.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Provides an access to the sound card.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Controller_object_of_the_data"><span class="tocnumber">1</span> <span class="toctext">Controller object of the data</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Parameters"><span class="tocnumber">2</span> <span class="toctext">Parameters</span></a></li>
+</ul>
+</div>
+
+<p>This module is designed to provide data from the inputs of sound cards of the system. The module is based on the multi-platform library of work with sound PortAudio (<a class="external free" href="http://www.portaudio.com" rel="nofollow noreferrer noopener" target="_blank">http://www.portaudio.com</a>). The feature of this library is the unified API, which allows you to easily adapt this module to work on different platforms and even different audio subsystems on a single platform.
+</p><p>Structure of the module reflections of the object "Controller" of the subsystem "Data acquisition" on a separate audio input device available in the system. The object "Parameter" of the subsystem "Data acquisition" reflects a separate channel available from the sound input device to the attribute "val". The most functional is to use the attribute "val" in conjunction with the archive, or at least with its buffer. In the case of the archiving enabling the data of the channel of audio input are placed in the buffer of the archive by the packages with the frequency of the data acquisition of the input device that allows you to perform further operations on that data. In addition, the last package value is installed as the current value of the attribute. In the case of archive absence operation of the last package value placing as the current value of the attribute is performed only.
+</p><p>Also, the module implements the functions of the horizontal reservation, that is working in conjunction with the remote station of the same level.
+</p>
+<h2><span class="mw-headline" id="Controller_object_of_the_data"><span class="mw-headline-number">1</span> Controller object of the data</span></h2>
+<p>To add an audio input device a controller object is created and configured in OpenSCADA. Example of the configuration tab of the controller object is shown in Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:877px;"><a class="image" href="http://oscada.org/wiki/File:SoundCard_cntr.png"><img class="thumbimage" height="658" src="../files/SoundCard_cntr.png" width="875" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller object.</div></div></div></div>
+<p>From this tab you can set:
+</p>
+<ul><li> State of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the controller object.</li>
+<li> State, in which the controller object must be translated at boot: "To enable" and "To start".</li>
+<li> Name of table to store the configuration of the parameters of the controller object.</li>
+<li> Card device from the list of available ones.</li>
+<li> Frequency of values acquisition of cards in Hertz.</li>
+<li> Type of values of acquisition from the list: "Real 32", "Integer 32" and "Integer 16".</li></ul>
+<h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
+<p>To add a channel of input sound device a parameter of the controller object is created and configured in OpenSCADA. Example of the configuration tab of the parameter is shown in Figure 2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:756px;"><a class="image" href="http://oscada.org/wiki/File:SoundCard_prm.png"><img class="thumbimage" height="543" src="../files/SoundCard_prm.png" width="754" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a parameter.</div></div></div></div>
+<p>From this tab you can set:
+</p>
+<ul><li> Type of the parameter and indicate the status "Enabled".</li>
+<li> Id, name and description of the parameter.</li>
+<li> The state, in which the parameter must be translated at boot: "To enable".</li>
+<li> Channel of the audio input device from the list of available channels.</li></ul>
+<p>Tab of attributes of the parameter has the form presented in Figure 3, the tab of the values of the attribute's archive "val" is presented in Figure 4.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:774px;"><a class="image" href="http://oscada.org/wiki/File:SoundCard_prm_a.png"><img class="thumbimage" height="519" src="../files/SoundCard_prm_a.png" width="772" /></a>  <div class="thumbcaption">Fig.3. Tab of attributes of a parameter.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1009px;"><a class="image" href="http://oscada.org/wiki/File:SoundCard_arch_val.png"><img class="thumbimage" height="620" src="../files/SoundCard_arch_val.png" width="1007" /></a>  <div class="thumbcaption">Fig.4. Tab of values of an archive of the attribute "val".</div></div></div></div>
+
+
+
+
+
+
+</div></body>
+</html>

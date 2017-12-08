@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-02 18:33+0200\n"
+"POT-Creation-Date: 2017-12-08 21:59+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -627,26 +627,36 @@ msgstr ""
 msgid "Projects of OpenSCADA"
 msgstr "Проекти OpenSCADA"
 
-msgid "List of allowed to switch projects of OpenSCADA"
-msgstr "Перечень проектов OpenSCADA доступных для переключения"
+msgid "List of allowed to call/switch projects of OpenSCADA"
+msgstr "Перечень проектов OpenSCADA доступных для вызова/переключения"
 
-msgid "The list for select and switch to allowed projects of OpenSCADA."
-msgstr "Перечень проектов OpenSCADA доступных для выбора и переключения."
+msgid "The list for call and switch to allowed projects of OpenSCADA."
+msgstr "Перечень проектов OpenSCADA доступных для вызова и переключения."
 
-msgid "<New project or project to update>"
-msgstr "<Новый проект или проект для обновления>"
+msgid "<Creation-updating>"
+msgstr "<Создание-обновление>"
 
-msgid "=== User directory copy projects ==="
-msgstr "=== Проекты копий пользов. директории ==="
+msgid ""
+"New projects creation or updating of presented ones, like to desktop links"
+msgstr "Создание новых проектов или обновление присутствующих, вроде ссылок рабочего стола"
 
-msgid "=== Pre-installed projects ==="
-msgstr "=== Предустановленные проекты ==="
+msgid "=== User projects ==="
+msgstr "=== Пользовательские проекты ==="
+
+msgid "=== Common projects ==="
+msgstr "=== Основные проекты ==="
 
 msgid "Switch to the selected project"
 msgstr "Переключиться на выбранный проект"
 
+msgid "Call the selected project"
+msgstr "Вызвать выбранный проект"
+
 msgid "The button for switch to the selected project."
 msgstr "Кнопка для переключения на выбранный проект."
+
+msgid "The button for call the selected project."
+msgstr "Кнопка для вызова выбранного проекта."
 
 msgid "Exit from the program"
 msgstr "Выход из программы"
@@ -706,18 +716,20 @@ msgstr "Проект \"%1\" похоже ошибочный или сломан!
 msgid "No translated Qt message: '%s'"
 msgstr "Непереведенное Qt сообщение: '%s'"
 
-#~ msgid "Press to display program and OpenSCADA information"
-#~ msgstr "Нажать для показа информации о программе и OpenSCADA"
+msgid "current"
+msgstr "текущий"
 
-#~ msgid "Press to get the using Qt information."
-#~ msgstr "Нажать для получения информации о Qt."
+msgid "running"
+msgstr "исполняется"
 
-#~ msgid "Press to get the using %1 manual."
-#~ msgstr "Нажать для получения руководства %1."
+msgid "Call project"
+msgstr "Вызвать проект"
 
-#~ msgid "Press for requesting about user interface elements"
-#~ msgstr ""
-#~ "Нажать для запроса информации про элементы пользовательского интерфейса"
+msgid "Project \"%1\" seems running now! You still want to switch the project?"
+msgstr "Проект \"%1\" похоже исполняется! Вы всё ещё желаете переключить проект?"
+
+msgid "Project \"%1\" seems running now! You still want to call the project?"
+msgstr "Проект \"%1\" похоже исполняется! Вы всё ещё желаете вызвать проект?"
 
 #~ msgid ""
 #~ "<p>This program uses Qt Open Source Edition version %1.</p><p>Qt Open "

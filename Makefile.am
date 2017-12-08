@@ -17,7 +17,7 @@ clean-local:
 	rm -f data/ModelsDB/AGLKS/*.db ; \
 	rm -f data/ModelsDB/Boiler/*.db ;
 
-bin_SCRIPTS = data/openscada_start
+bin_SCRIPTS = data/openscada_start data/openscada-proj
 sysconf_DATA = data/oscada.xml data/oscada_start.xml data/ModelsDB/AGLKS/oscada_AGLKS.xml data/ModelsDB/Boiler/oscada_Boiler.xml
 
 sysicodir = $(datadir)/icons

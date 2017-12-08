@@ -414,7 +414,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Block: ")+id(),RWRWR_,"root",SDAQ_ID);
 	if(ctrMkNode("area",opt,-1,"/blck",_("Block"))) {
 	    if(owner().enableStat() && ctrMkNode("area",opt,-1,"/blck/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/blck/st/en",_("Enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/blck/st/en",_("Enabled"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		if(owner().startStat())
 		    ctrMkNode("fld",opt,-1,"/blck/st/prc",_("Process"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }

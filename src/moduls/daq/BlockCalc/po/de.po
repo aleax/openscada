@@ -4,13 +4,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-06 16:20+0300\n"
+"POT-Creation-Date: 2017-12-08 21:43+0200\n"
 "PO-Revision-Date: 2010-10-09 22:40+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -53,8 +53,8 @@ msgstr "Block"
 msgid "State"
 msgstr "Zustand"
 
-msgid "Enable"
-msgstr "Einschalten"
+msgid "Enabled"
+msgstr "Aktiviert"
 
 msgid "Process"
 msgstr "Bearbeitung"
@@ -128,9 +128,6 @@ msgstr "Tabelle der Parameter"
 
 msgid "Block's table"
 msgstr "Tabelle des Blocks"
-
-msgid "Calculate period (ms)"
-msgstr "Rechenzeit (ms)"
 
 msgid "Calculate schedule"
 msgstr "Berechnet Zeitplan"

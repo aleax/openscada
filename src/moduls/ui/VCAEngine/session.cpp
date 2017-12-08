@@ -642,7 +642,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),R_R_R_,"root",SUI_ID,1,"idm","1");
 	if(ctrMkNode("area",opt,-1,"/obj",_("Session"))) {
 	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enable"),permit(),owner().c_str(),grp().c_str(),1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),permit(),owner().c_str(),grp().c_str(),1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/start",_("Start"),permit(),owner().c_str(),grp().c_str(),1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/user",_("User"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/st/owner",_("Owner"),R_R_R_,"root",SUI_ID,1,"tp","str");

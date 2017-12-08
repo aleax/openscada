@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 16:59+0300\n"
+"POT-Creation-Date: 2017-12-08 21:45+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -30,9 +30,6 @@ msgstr ""
 
 msgid "Parameters cache table"
 msgstr "Таблиця кеша параметрів"
-
-msgid "Gather data period (s)"
-msgstr "Період збору даних (с)"
 
 msgid "Acquisition schedule"
 msgstr "Планування опитування"
@@ -180,7 +177,7 @@ msgstr "Стан"
 msgid "Type"
 msgstr "Тип"
 
-msgid "Enable"
+msgid "Enabled"
 msgstr "Ввімкнено"
 
 msgid "Id"

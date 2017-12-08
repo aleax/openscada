@@ -1,13 +1,13 @@
 # OpenSCADA.UI.QTStarter translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTStarter package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-02 18:33+0200\n"
+"POT-Creation-Date: 2017-12-08 21:59+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -627,26 +627,36 @@ msgstr ""
 msgid "Projects of OpenSCADA"
 msgstr "Проекти OpenSCADA"
 
-msgid "List of allowed to switch projects of OpenSCADA"
-msgstr "Перелік проектів OpenSCADA доступних для переключення"
+msgid "List of allowed to call/switch projects of OpenSCADA"
+msgstr "Перелік проектів OpenSCADA доступних для виклику/переключення"
 
-msgid "The list for select and switch to allowed projects of OpenSCADA."
-msgstr "Перелік проектів OpenSCADA доступних для обрання та переключення."
+msgid "The list for call and switch to allowed projects of OpenSCADA."
+msgstr "Перелік проектів OpenSCADA доступних для виклику та переключення."
 
-msgid "<New project or project to update>"
-msgstr "<Новий проект або проект для оновлення>"
+msgid "<Creation-updating>"
+msgstr "<Створення-оновлення>"
 
-msgid "=== User directory copy projects ==="
-msgstr "=== Проекти копій користувацької теки ==="
+msgid ""
+"New projects creation or updating of presented ones, like to desktop links"
+msgstr "Створення нових проектів або оновлення наявних, на кшталт посилань робочої стільниці"
 
-msgid "=== Pre-installed projects ==="
-msgstr "=== Предвстановлені проекти ==="
+msgid "=== User projects ==="
+msgstr "=== Користувацькі проекти ==="
+
+msgid "=== Common projects ==="
+msgstr "=== Загальні проекти ==="
 
 msgid "Switch to the selected project"
 msgstr "Переключитися на обраний проект"
 
+msgid "Call the selected project"
+msgstr "Викликати обраний проект"
+
 msgid "The button for switch to the selected project."
 msgstr "Кнопка для переключення на обраний проект."
+
+msgid "The button for call the selected project."
+msgstr "Кнопка для виклику обраного проекту."
 
 msgid "Exit from the program"
 msgstr "Вихід з програми"
@@ -706,17 +716,20 @@ msgstr "Проект \"%1\" схоже помилковий або зламан�
 msgid "No translated Qt message: '%s'"
 msgstr "Неперекладене Qt повідомлення: '%s'"
 
-#~ msgid "Press to display program and OpenSCADA information"
-#~ msgstr "Натиснути для відображення інформації про програму та OpenSCADA"
+msgid "current"
+msgstr "поточний"
 
-#~ msgid "Press to get the using Qt information."
-#~ msgstr "Натиснути для отримання інформації про використання Qt."
+msgid "running"
+msgstr "виконується"
 
-#~ msgid "Press to get the using %1 manual."
-#~ msgstr "Натиснути для отримання підручника %1."
+msgid "Call project"
+msgstr "Викликати проект"
 
-#~ msgid "Press for requesting about user interface elements"
-#~ msgstr "Натисніть для запиту інформації про елементи інтерфейсу користувача"
+msgid "Project \"%1\" seems running now! You still want to switch the project?"
+msgstr "Проект \"%1\" схоже виконується! Ви ще бажаєте переключити проект?"
+
+msgid "Project \"%1\" seems running now! You still want to call the project?"
+msgstr "Проект \"%1\" схоже виконується! Ви ще бажаєте викликати проект?"
 
 #~ msgid ""
 #~ "<p>This program uses Qt Open Source Edition version %1.</p><p>Qt Open "

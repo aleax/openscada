@@ -2,6 +2,7 @@ debian/tmp/etc/oscada.xml
 debian/tmp/etc/oscada_start.xml
 debian/tmp/usr/bin/openscada
 debian/tmp/usr/bin/openscada_start
+debian/tmp/usr/bin/openscada-proj
 debian/tmp/usr/lib/*.so.*
 debian/tmp/usr/lib/openscada/*.so
 debian/tmp/usr/share/locale/*

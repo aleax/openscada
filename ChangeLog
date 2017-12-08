@@ -1,3 +1,21 @@
+2017-12-08 Roman (stable)
+- DB.LibsDB.OscadaLibs: DevLib.Nik2303I improved for natural termination criterion checking by Ruslan Yarmoliuk <rylio74@gmail.com>.
+    servProc.docOffLine appended by the documents Modules/{BFN(without Ukrainian still),SoundCard,SMH2Gi} for the offline documentaion list.
+- DB.AGLKS.St: A preconfigured sound controler object of DAQ.SoundCard set to "default".
+- !:DOC: Appended by Modules/{BFN(without Ukrainian still),SoundCard,SMH2Gi}.
+- !!!!:SYS,UI.QTStarter: Built-in manager of projects of OpenSCADA implementation is finished for:
+    - implementing of the platform specific placed to the script openscada-proj which also can be used independently and supports commands: list, proc, create, remove;
+    - directory of user projects set configurable by a command-line argument --projUserDir;
+    - multiple start preventing implemented by functions prjLockUpdPer(), prjLock() and a command-line argument --projLock;
+    - icons and statuses added to prolect's items of the list of selection;
+    - the actual project manager in a BASH script yet allowed but it will be switched to the new built-in at next turn-commit
+	and currently you can see it simple call "openscada".
+- SYS: Command-line option --coreDumpAllow replaced by --noCoreDump to generate core dumps by default.
+- SYS,DAQ.{BlockCalc,DAQGate},Protocol.{ModBus,OPC_UA,UserProtocol},UI.VCAEngine: State lablel "Enable" renamed to "Enabled".
+- !!:FIX:DAQ.SoundCard: Significant revised and fixed for work with the real hardware and virtual ones like PulseAudio and tested on sample rates up to 192000.
+- FIX:UI.WebVision: Calendar dialog closing fixed and set at the clear timeout also and set it to 10 seconds.
+
+
 2017-12-02 Roman (stable)
 - FIX:UI.QTStarter: Fix build for Qt5 in the main thread.
 - FIX:DB.LibsDB.OscadaLibs: servProc.docOffLine appended by the documents Modules/{Vision(without Ukrainian still),WebCfgD,WebCfg,WebVision,WebUser}

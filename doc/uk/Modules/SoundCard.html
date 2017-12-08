@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/Звукова карта - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/Звукова карта</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSoundCard&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SoundCard" title="Modules/SoundCard">Modules/SoundCard</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SoundCard" title="Modules/SoundCard (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SoundCard/ru" title="Модули/Звуковая карта (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/SoundCard.html" title="Special:MyLanguage/Modules/SoundCard">SoundCard</a> </td>
+<td> Звукова карта </td>
+<td> 0.8 </td>
+<td> GPL2 </td>
+<td> daq_SoundCard.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Роман Савоченко </td>
+<td> Надає доступ до звукової карти.
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="tocnumber">1</span> <span class="toctext">Об'єкт контролеру даних</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Параметри</span></a></li>
+</ul>
+</div>
+
+<p>Цей модуль призначено для надання даних зі входів звукових карт системи. Модуль засновано на багатоплатформеній бібліотеці роботи зі звуком PortAudio (<a class="external free" href="http://www.portaudio.com" rel="nofollow noreferrer noopener" target="_blank">http://www.portaudio.com</a>). Особливістю цієї бібліотеки є уніфіковане API, яке дозволяє легко адаптувати цей модуль для роботи на різних платформах та навіть з різними підсистемами звуку на одній платформі.
+</p><p>Структура модуля полягає у відображені об'єкту "Контролер" підсистеми "Збір даних" на окремий пристрій вводу звуку, доступний у системі. А об'єкт "Параметр" підсистеми "Збір даних" відображає окремий канал, доступний у пристрою вводу звуку, на атрибут "val". Більш функціональним є використання атрибуту "val" спільно із архівом або хоча-б його буфером. У випадку включення архівування дані каналу звукового вводу поміщаються до буферу архіву пакетами з частотою вибірки даних пристрою вводу, що дозволяє виконувати подальші операції над цими даними. Крім того, останнє значення пакету встановлюється як поточне значення атрибуту. У випадку відсутності архіву здійснюється тільки операція розташування останнього значення пакету як поточне значення атрибуту.
+</p><p>Також модулем реалізуються функції горизонтального резервування, а саме спільної роботи з віддаленою станцією цього-ж рівня.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">1</span> Об'єкт контролеру даних</span></h2>
+<p>Для додання пристрою вводу звуку створюється та конфігурується об'єкт контролеру у OpenSCADA. Приклад вкладки конфігурації об'єкту контролеру цього типу зображено на рисунку 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:858px;"><a class="image" href="http://oscada.org/wiki/File:SoundCard_cntr_uk.png"><img class="thumbimage" height="662" src="../files/SoundCard_cntr_uk.png" width="856" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфігурації об'єкту контролеру.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> Стан об'єкту контролеру, а саме: Статус, "Включений", "Запущений" та ім'я БД, яка містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис контролеру.</li>
+<li> Стан, у який переводити об'єкт контролеру при завантажені: "Включати" та "Запускати".</li>
+<li> Ім'я таблиці БД, у якій зберігати параметри цього об'єкту контролеру.</li>
+<li> Пристрій карти з переліку доступних.</li>
+<li> Частота вибірки значень карти у Герцах.</li>
+<li> Тип значення вибірки з переліку: "Реальний 32", "Цілий 32" та "Цілий 16".</li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">2</span> Параметри</span></h2>
+<p>Для додання каналу пристрою вводу звуку створюється та конфігурується параметр об'єкту контролера у OpenSCADA. Приклад вкладки конфігурації параметру цього типу зображено на рисунку 2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:792px;"><a class="image" href="http://oscada.org/wiki/File:SoundCard_prm_uk.png"><img class="thumbimage" height="527" src="../files/SoundCard_prm_uk.png" width="790" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфігурації параметру.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> Тип параметру та вказати стан параметру "Включений".</li>
+<li> Ідентифікатор, ім'я та опис параметру.</li>
+<li> Стан, у який переводити параметр при завантажені: "Включати".</li>
+<li> Канал пристрою вводу звука з переліку доступних каналів.</li></ul>
+<p>Вкладка атрибутів параметру має вигляд, представлений на рисунку 3, а вкладка значень архіву атрибуту "val" представлено на рисунку 4.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:792px;"><a class="image" href="http://oscada.org/wiki/File:SoundCard_prm_a_uk.png"><img class="thumbimage" height="527" src="../files/SoundCard_prm_a_uk.png" width="790" /></a>  <div class="thumbcaption">Рис.3. Вкладка атрибутів параметру.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:993px;"><a class="image" href="http://oscada.org/wiki/File:SoundCard_arch_val_uk.png"><img class="thumbimage" height="629" src="../files/SoundCard_arch_val_uk.png" width="991" /></a>  <div class="thumbcaption">Рис.4. Вкладка значень архіву атрибуту "val".</div></div></div></div>
+
+
+
+
+
+
+</div></body>
+</html>

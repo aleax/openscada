@@ -445,13 +445,18 @@ string TSYS::optDescr( )
 	"==================== Generic options ======================================\n"
 	"===========================================================================\n"
 	"-h, --help		Info message about the program options.\n"
-	"    --lang=<LANG>	The station language, in view \"uk_UA.UTF-8\".\n"
-	"    --config=<file>	The station configuration file.\n"
-	"    --station=<id>	The station identifier.\n"
-	"    --statName=<name>	The station name.\n"
+	"    --projName=<name>	OpenSCADA project name to switch it.\n"
+	"    --projUserDir={dir} Directory of user projects (writeable) of OpenSCADA, \"~/.openscada\" by default.\n"
+	"			For this feature there also uses an environment variable \"OSCADA_ProjName\" and the program binary name \"openscada_{ProjName}\".\n"
+	"    --projLock={per}	Use projects locking by creation the \"lock\" file into the project folder and updating it in period <per>,\n"
+	"			by default it is enabled and the updating period <per> is 60 seconds. To disable set the updating period <per> to zero.\n"
+	"    --lang=<LANG>	Station language, in view \"uk_UA.UTF-8\".\n"
+	"    --config=<file>	Station configuration file.\n"
+	"    --station=<id>	Station identifier.\n"
+	"    --statName=<name>	Station name.\n"
 	"    --demon, --daemon	Start into the daemon mode.\n"
 	"    --pidFile=<file>	The file for the programm process ID place here.\n"
-	"    --coreDumpAllow	Set the limits for a core dump creation allow on the crash.\n"
+	"    --noCoreDump	Prevent from core dumps creation on crashes, don't set the limit to unlimited value.\n"
 	"    --messLev=<level>	Process messages <level> (0-7).\n"
 	"    --log=<direct>	Direct messages to, by bitfield:\n"
 	"			  0x1 - syslogd;\n"
@@ -546,7 +551,7 @@ bool TSYS::cfgFileLoad( )
     }
     if((tVl=cmdOpt("config")).size())	mConfFile = tVl;
     if((tVl=cmdOpt("station")).size())	mId = tVl;
-    if((tVl=cmdOpt("statname")).size())	mName = tVl;
+    if((tVl=cmdOpt("statName")).size())	mName = tVl;
 
     //Load config-file
     int hd = open(mConfFile.c_str(), O_RDONLY);
@@ -590,8 +595,6 @@ bool TSYS::cfgFileLoad( )
 
     return cmd_help;
 }
-
-
 
 void TSYS::cfgFileSave( )
 {
@@ -639,13 +642,13 @@ void TSYS::load_( )
 {
     //Check for a OpenSCADA project selection and switch at need
     // Get current project name
-    setPrjNm(cmdOpt("StatName"));
+    setPrjNm(cmdOpt("statName"));
     if(!(prjNm().size() && TRegExp("/"+prjNm()+"$").test(workDir()) &&
 	    TRegExp("/("+prjNm()+"/oscada.xml|oscada_"+prjNm()+".xml)$").test(cmdOpt("config"))))
 	setPrjNm("");
     // Get name for the command of project switch
     if(!prjNm().size()) {
-	setPrjNm(cmdOpt("ProjName"));
+	setPrjNm(cmdOpt("projName"));
 	if(!prjNm().size()) {
 	    TArrayObj *rez = TRegExp("openscada_(.+)$").match(cmdOpt(""));
 	    if(rez) {
@@ -656,10 +659,18 @@ void TSYS::load_( )
 	if(!prjNm().size() && getenv("OSCADA_ProjName")) setPrjNm(getenv("OSCADA_ProjName"));
 	if(prjNm().size() && !prjSwitch(prjNm())) setPrjNm("");
     }
-    // Check for the custom (not project) mode
-    setPrjCustMode(!prjNm().size() && cmdOpt("config").size());
 
     mStopSignal = 0;
+
+    //Check for the custom (not project) mode
+    setPrjCustMode(!prjNm().size() && cmdOpt("config").size());
+    //Check for the project lock
+    if(prjNm().size() && prjLockUpdPer() && !prjLock("hold")) {
+	mess_sys(TMess::Warning, _("Impossible to hold the project lock! Seems the project '%s' already running."), prjNm().c_str());
+	setPrjNm("");
+	stop();
+	return;
+    }
 
     bool cmd_help = cfgFileLoad();
     mess_sys(TMess::Info, _("Load!"));
@@ -801,6 +812,8 @@ void TSYS::stop( int sig )	{ if(!mStopSignal) mStopSignal = sig; }
 
 void TSYS::unload( )
 {
+    if(!present("BD"))	return;	//Seems the configuration already unloaded
+
     del("ModSched");
     del("UI");
     del("Special");
@@ -810,6 +823,9 @@ void TSYS::unload( )
     del("Transport");
     del("Security");
     del("BD");
+
+    if(prjNm().size() && prjLockUpdPer()) prjLock("free");
+
     modif();
 }
 
@@ -1742,6 +1758,16 @@ string TSYS::rdStRequest( XMLNode &req, const string &st, bool toScan )
     return "";
 }
 
+string TSYS::prjUserDir( )
+{
+    string userDir = cmdOpt("projUserDir");
+    if(userDir.empty())	userDir = "~/.openscada";
+    size_t posHome = userDir.find("~/");
+    if(posHome != string::npos && getenv("HOME")) userDir.replace(posHome, 2, string(getenv("HOME"))+"/");
+
+    return userDir;
+}
+
 bool TSYS::prjSwitch( const string &prj, bool toCreate )
 {
     //Check for the project availability into folder of preistalled ones for writibility and next into the user folder
@@ -1752,13 +1778,30 @@ bool TSYS::prjSwitch( const string &prj, bool toCreate )
 	    prjCfg = "";
     stat(prjDir.c_str(), &file_stat);
     if((file_stat.st_mode&S_IFMT) != S_IFDIR || access(prjDir.c_str(), X_OK|W_OK) != 0) {
-	prjDir = "~/.openscada";
+	prjDir = prjUserDir();
+	if(prjDir.empty()) return false;
+	if(access(prjDir.c_str(),F_OK) != 0 && mkdir(prjDir.c_str(),0700) != 0)	return false;
 	stat(prjDir.c_str(), &file_stat);
 	if((file_stat.st_mode&S_IFMT) != S_IFDIR || access(prjDir.c_str(), X_OK|W_OK) != 0) return false;
     }
 
-    //Check for the project folder availability
+    //Call the projects manager procedure
     prjDir += "/" + prj;
+    stat(prjDir.c_str(), &file_stat);
+    if(access(bindir_full "/openscada-proj",F_OK|X_OK) == 0) {
+	int rez = system((string("dPrj=") + oscd_datadir_full +
+		" dPrjUser=" + prjUserDir() +
+		" dSysCfg=" + sysconfdir_full +
+		" dData=" + datadir_full +
+		" " bindir_full "/openscada-proj" +
+		" " + (toCreate?"create":"proc") +
+		" " + prj).c_str());
+    }
+
+    //Check for the project folder presence and main items creation at miss or wrong the projects manager procedure
+    //????
+
+    //Check for the project folder availability and switch to the project
     stat(prjDir.c_str(), &file_stat);
     if((file_stat.st_mode&S_IFMT) == S_IFDIR && access(prjDir.c_str(), X_OK|W_OK) == 0) {
 	prjCfg = prjDir + "/oscada.xml";
@@ -1770,9 +1813,9 @@ bool TSYS::prjSwitch( const string &prj, bool toCreate )
 	}
 
 	// Switch to the found project
-	//  Set the project configuration file into "--config", name into "--StatName", change the work directory
+	//  Set the project configuration file into "--config", name into "--statName", change the work directory
 	cmdOpt("config", prjCfg);
-	cmdOpt("StatName", prj);
+	cmdOpt("statName", prj);
 	setWorkDir(prjDir);
 
 	//  Set an exit signal for restarting the system, clean prjNm and return true
@@ -1780,8 +1823,48 @@ bool TSYS::prjSwitch( const string &prj, bool toCreate )
 
 	return true;
     }
-    // ???? Create new project's folder or copy its content from preinstalled RO one at <toCreate>
-    //  ???? ...
+
+    return false;
+}
+
+int TSYS::prjLockUpdPer( )
+{
+    int rez = 60;
+    if(cmdOpt("projLock").size()) rez = s2i(cmdOpt("projLock"));
+
+    return vmax(0, rez);
+}
+
+bool TSYS::prjLock( const char *cmd )
+{
+    if(strcmp(cmd,"free") == 0 && prjLockFile.size())	return (remove(prjLockFile.c_str()) == 0);
+
+    int hd = -1;
+    if(strcmp(cmd,"hold") == 0) {
+	prjLockFile = workDir() + "/lock";
+	//Check for presented file
+	if((hd=open(prjLockFile.c_str(),O_RDONLY)) >= 0) {
+	    int bufLn = 35;
+	    char buf[bufLn+1]; buf[bufLn] = 0;
+	    bool toRemove = (read(hd,buf,bufLn) <= 0);
+	    close(hd);
+	    if(!toRemove) {
+		int pid = 0, tm = 0;
+		toRemove = ((sscanf(buf,"%d %d",&pid,&tm) < 2) || pid == getpid() || abs(sysTm()-tm) > 2*prjLockUpdPer());
+	    }
+	    if(toRemove) remove(prjLockFile.c_str());
+	}
+
+	//Hold the lock file
+	if((hd=open(prjLockFile.c_str(),O_CREAT|O_EXCL|O_WRONLY,0600)) < 0) return false;
+    }
+    else if(strcmp(cmd,"update") == 0 && (hd=open(prjLockFile.c_str(),O_WRONLY,0600)) < 0) return false;
+    if(hd >= 0) {
+	string lockInfo = TSYS::strMess("%010d %020d", (int)getpid(), (int)sysTm());
+	int rez = write(hd, lockInfo.data(), lockInfo.size());
+	close(hd);
+	return true;
+    }
 
     return false;
 }
@@ -2012,6 +2095,9 @@ void *TSYS::ServTask( void * )
     SYS->list(lst);
 
     for(unsigned int iCnt = 1; !TSYS::taskEndRun(); iCnt++) {
+	//Lock file update
+	if(SYS->prjNm().size() && SYS->prjLockUpdPer() && !(iCnt%SYS->prjLockUpdPer())) SYS->prjLock("update");
+
 	//CPU frequency calculation (per ten seconds)
 	if(!(iCnt%10))	SYS->clkCalc();
 
@@ -2213,8 +2299,8 @@ reload:
     vm = 200;
     for(int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); ) {
 	vbeg = vend = -1; vstep = 0;
-	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
-	if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=59; }
+	sscanf(tEl.c_str(), "%d-%d/%d", &vbeg, &vend, &vstep);
+	if(vbeg < 0) { sscanf(tEl.c_str(), "*/%d", &vstep); vbeg = 0; vend = 59; }
 	if(vend < 0) vm = vmin(vm, vbeg+((ttm.tm_min>=vbeg)?60:0));
 	else if((vbeg=vmax(0,vbeg)) < (vend=vmin(59,vend))) {
 	    if(ttm.tm_min < vbeg) vm = vmin(vm, vbeg);

@@ -1392,6 +1392,7 @@ ln -s openscada_start %buildroot/%_bindir/openscada_Boiler
 %_initrddir/openscadad
 %_bindir/openscada
 %_bindir/openscada_start
+%_bindir/openscada-proj
 %doc README README_ru README_uk COPYING ChangeLog INSTALL TODO TODO_ru TODO_uk
 %_libdir/*.so.*
 %_libdir/openscada/*.so

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tarchval.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1403,7 +1403,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 		}
 	}
 
-	getVals(buf, h_min, h_max, rarch, 600000);
+	getVals(buf, h_min, h_max, rarch, 1000000);	// ! More than 1000000 is notable slow
 	if(!buf.end() || !buf.begin()) {
 #if HAVE_GD_FORCE
 	    gdImageDestroy(im);
@@ -2125,13 +2125,13 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    }
     }
     else if(a_path == "/val/trend" && ctrChkNode(opt,"get",R_R_R_,"root",SARH_ID,SEC_RD)) {
-	int vPctW = vmin(1024,vmax(100,s2i(TBDS::genDBGet(owner().nodePath()+"vPctW","650",opt->attr("user")))));
-	int vPctH = vmin(800,vmax(50,s2i(TBDS::genDBGet(owner().nodePath()+"vPctH","230",opt->attr("user")))));
+	int vPctW = vmin(1024, vmax(100,s2i(TBDS::genDBGet(owner().nodePath()+"vPctW","650",opt->attr("user")))));
+	int vPctH = vmin(800, vmax(50,s2i(TBDS::genDBGet(owner().nodePath()+"vPctH","230",opt->attr("user")))));
 	double vMax = s2r(TBDS::genDBGet(owner().nodePath()+"vMax","0",opt->attr("user")));
 	double vMin = s2r(TBDS::genDBGet(owner().nodePath()+"vMin","0",opt->attr("user")));
 	int64_t end = (int64_t) s2i(TBDS::genDBGet(owner().nodePath()+"vaTm",i2s(time(NULL)),opt->attr("user")))*1000000+
 				s2i(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")));
-	if( !(end/1000000) )	end = (int64_t)time(NULL) * 1000000;
+	if(!(end/1000000))	end = (int64_t)time(NULL) * 1000000;
 	int64_t beg = end - (int64_t)(s2r(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")))*1e6);
 
 	string tp = "png";

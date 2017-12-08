@@ -785,7 +785,7 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/ep",_("End point"))) {
 	    if(ctrMkNode("area",opt,-1,"/ep/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/ep/st/status",_("Status"),R_R_R_,"root",SPRT_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/ep/st/en_st",_("Enable"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/ep/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/ep/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }

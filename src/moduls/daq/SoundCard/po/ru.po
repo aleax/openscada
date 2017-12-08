@@ -2,13 +2,13 @@
 # Copyright (C) 2008-2009 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.SoundCard package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2008-2009.
+# Roman Savochenko <rom_as@oscada.org>, 2008-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-18 09:09+0300\n"
+"POT-Creation-Date: 2017-12-05 20:22+0200\n"
 "PO-Revision-Date: 2008-03-27 18:49+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -57,11 +57,10 @@ msgid "Allowed %d input channels"
 msgstr "Доступно %d входных каналов"
 
 msgid ""
-"Gathering from %d channels. Recieved %.2g MB. Adjusted samplerate %d. Lost "
-"frames %g"
+"Gathering from %d channels, recieved %.2g MB, samplerate corrections %g and "
+"adjusted value %d."
 msgstr ""
-"Сбор с %d каналов. Получено %.2g МБ. Подстроенная частота выборки %d. "
-"Потеряно кадров %g"
+"Сбор с %d каналов, получено %.2g МБ, частота выборки скорректирована %g раз на значение %d."
 
 #, c-format
 msgid "Selected device '%s' is error or default device no allow."
@@ -78,12 +77,5 @@ msgstr "Звуковой входной поток не остановлено!"
 
 #, c-format
 msgid ""
-"CallBack: Lost frames correct: framesPerBuffer=%lu; sRt=%d; t_sz=%lld; err="
-"%g; diff=%lld."
-msgstr ""
-"Обратный вызов: Коррекция потери кадров: framesPerBuffer=%lu; sRt=%d; t_sz="
-"%lld; err=%g; diff=%lld."
-
-#, c-format
-msgid "CallBack: Sound counter difference fix: sRt=%d; dTm=%lld."
-msgstr "Обратный вызов: Исправление разницы счётчика звука: sRt=%d; dTm=%lld."
+"CallBack: Sample rate correction from %g to %g for fix error %ds on time %ds."
+msgstr "CallBack: Корректировка частоты выборки с %g на %g для исправления ошибки %ds на время %ds."

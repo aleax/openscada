@@ -131,7 +131,7 @@ void Widget::postEnable( int flag )
 	attrAdd(new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic,"","","","",i2s(A_ROOT).c_str()));
 	attrAdd(new TFld("name",_("Name"),TFld::String,TFld::TransltText|Attr::Generic));
 	attrAdd(new TFld("dscr",_("Description"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Generic));
-	attrAdd(new TFld("en",_("Enable"),TFld::Boolean,Attr::Generic,"","1","","",i2s(A_EN).c_str()));
+	attrAdd(new TFld("en",_("Enabled"),TFld::Boolean,Attr::Generic,"","1","","",i2s(A_EN).c_str()));
 	attrAdd(new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","",i2s(A_ACTIVE).c_str()));
 	attrAdd(new TFld("geomX",_("Geometry: x"),TFld::Real,Attr::Generic,"","0","-10000;10000","",i2s(A_GEOM_X).c_str()));
 	attrAdd(new TFld("geomY",_("Geometry: y"),TFld::Real,Attr::Generic,"","0","-10000;10000","",i2s(A_GEOM_Y).c_str()));
@@ -849,7 +849,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget: ")+id(),RWRWR_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget"))) {
 	    if(ctrMkNode("area",opt,-1,"/wdg/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/wdg/st/en",_("Enable"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/wdg/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/wdg/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),RWRWR_,"root",SUI_ID,3,"tp","str", "dest","sel_ed", "select","/wdg/w_lst");
 		if(!parent().freeStat())

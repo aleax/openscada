@@ -70,7 +70,7 @@ class TUIS : public TSubSYS
 
 	// All system UI functions
 	static string icoGet( const string &inm, string *tp = NULL, bool retPath = false );
-	//  Return the EXEC command by default to open the document
+	// Return the EXEC command by default to open the document
 	static string docGet( const string &inm, string *tp = NULL, unsigned opt = 0 );
 
 	static string mimeGet( const string &inm, const string &fDt, const string &orig = "" );

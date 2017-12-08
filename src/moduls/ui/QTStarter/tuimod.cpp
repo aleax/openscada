@@ -57,7 +57,7 @@
 #else
 #define SUB_TYPE	""
 #endif
-#define MOD_VER		"3.0.0"
+#define MOD_VER		"3.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -711,13 +711,58 @@ StartDialog::StartDialog( WinControl *wcntr ) : prjsLs(NULL), prjsBt(NULL)
 
     //Append the list of projects of OpenSCADA
     if(!SYS->prjCustMode()) {
-	// Projects list obtaine for the preinstalled projects
-	QStringList prjListPreInst, prjListUser;
-	bool oscd_datadir_wr = false;
+	bool oscd_datadir_wr = (access(oscd_datadir_full,X_OK|W_OK) == 0);
+
+	// Prepare the list widget for projects selection.
+	prjsLs = new QListWidget(this);
+	prjsLs->setToolTip(_("List of allowed to call/switch projects of OpenSCADA"));
+	prjsLs->setWhatsThis(_("The list for call and switch to allowed projects of OpenSCADA."));
+	prjsLs->addItem(_("<Creation-updating>"));
+	prjsLs->item(prjsLs->count()-1)->setToolTip(_("New projects creation or updating of presented ones, like to desktop links"));
+	string userDir = SYS->prjUserDir();
+	if(!oscd_datadir_wr) {
+	    prjsLs->addItem(_("=== User projects ==="));
+	    prjsLs->item(prjsLs->count()-1)->setFlags(Qt::NoItemFlags);
+
+	    DIR *IdDir = opendir(userDir.c_str());
+	    if(IdDir) {
+		struct stat file_stat;
+		dirent	*scan_rez = NULL,
+			*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+
+		while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
+		    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
+		    //  Presenting of the project's folder
+		    stat((userDir+"/"+scan_rez->d_name).c_str(), &file_stat);
+		    if((file_stat.st_mode&S_IFMT) != S_IFDIR)	continue;
+		    //  Presenting of the project's config file
+		    string itNm = userDir + "/" + scan_rez->d_name + "/oscada.xml";
+		    stat(itNm.c_str(), &file_stat);
+		    if((file_stat.st_mode&S_IFMT) != S_IFREG) continue;
+		    //  Item placing
+		    string opt;
+		    if(scan_rez->d_name == SYS->prjNm()) opt += string(opt.size()?", ":"") + _("current");
+		    if(access((userDir+"/"+scan_rez->d_name+"/lock").c_str(),F_OK) == 0)
+			opt += string(opt.size()?", ":"") + _("running");
+		    prjsLs->addItem((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str());
+		    QListWidgetItem *tit = prjsLs->item(prjsLs->count()-1);
+		    tit->setData(Qt::UserRole, scan_rez->d_name);
+		    QImage ico;
+		    if(ico.load((string(oscd_datadir_full "/icons/")+scan_rez->d_name+".png").c_str()) ||
+			    ico.load((userDir+"/"+scan_rez->d_name+"/icons/"+scan_rez->d_name+".png").c_str()))
+			tit->setIcon(QPixmap::fromImage(ico));
+		}
+
+		free(scan_dirent);
+		closedir(IdDir);
+	    }
+
+	    prjsLs->addItem(_("=== Common projects ==="));
+	    prjsLs->item(prjsLs->count()-1)->setFlags(Qt::NoItemFlags);
+	}
+
 	DIR *IdDir = opendir(oscd_datadir_full);
 	if(IdDir) {
-	    oscd_datadir_wr = (access(oscd_datadir_full, X_OK|W_OK) == 0);
-
 	    struct stat file_stat;
 	    dirent	*scan_rez = NULL,
 			*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
@@ -735,60 +780,27 @@ StartDialog::StartDialog( WinControl *wcntr ) : prjsLs(NULL), prjsBt(NULL)
 		    stat(itNm.c_str(), &file_stat);
 		    if((file_stat.st_mode&S_IFMT) != S_IFREG) continue;
 		}
-		prjListPreInst.append(scan_rez->d_name);
+		//  Item placing
+		string opt;
+		if(scan_rez->d_name == SYS->prjNm())	opt += string(opt.size()?", ":"") + _("current");
+		if(access((string(oscd_datadir_full "/")+scan_rez->d_name+"/lock").c_str(),F_OK) == 0)
+		    opt += string(opt.size()?", ":"") + _("running");
+		prjsLs->addItem((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str());
+		QListWidgetItem *tit = prjsLs->item(prjsLs->count()-1);
+		tit->setData(Qt::UserRole, scan_rez->d_name);
+		QImage ico;
+		if(ico.load((string(oscd_datadir_full "/icons/")+scan_rez->d_name+".png").c_str()) ||
+			ico.load((string(oscd_datadir_full "/")+scan_rez->d_name+"/icons/"+scan_rez->d_name+".png").c_str()))
+		    tit->setIcon(QPixmap::fromImage(ico));
 	    }
 
 	    free(scan_dirent);
 	    closedir(IdDir);
 	}
 
-	// Projects list obtaine for user projects if the default OpenSCADA data dir is not writible
-	if(!oscd_datadir_wr) {
-	    DIR *IdDir = opendir("~/.openscada");
-	    if(IdDir) {
-		struct stat file_stat;
-		dirent	*scan_rez = NULL,
-			*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
-
-		while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
-		    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
-		    //  Presenting of the project's folder
-		    stat((string(oscd_datadir_full)+"/"+scan_rez->d_name).c_str(), &file_stat);
-		    if((file_stat.st_mode&S_IFMT) != S_IFDIR)	continue;
-		    //  Presenting of the project's config file
-		    string itNm = string(oscd_datadir_full) + "/" + scan_rez->d_name + "/oscada.xml";
-		    stat(itNm.c_str(), &file_stat);
-		    if((file_stat.st_mode&S_IFMT) != S_IFREG) continue;
-		    prjListUser.append(scan_rez->d_name);
-		}
-
-		free(scan_dirent);
-		closedir(IdDir);
-	    }
-	}
-
-	// Prepare the list widget for projects selection.
-	prjsLs = new QListWidget(this);
-	prjsLs->setToolTip(_("List of allowed to switch projects of OpenSCADA"));
-	prjsLs->setWhatsThis(_("The list for select and switch to allowed projects of OpenSCADA."));
-	prjsLs->addItem(_("<New project or project to update>"));
-	if(prjListUser.size()) {
-	    if(prjListPreInst.size()) {
-		prjsLs->addItem(_("=== User directory copy projects ==="));
-		prjsLs->item(prjsLs->count()-1)->setFlags(Qt::NoItemFlags);
-	    }
-	    prjsLs->addItems(prjListUser);
-	}
-	if(prjListPreInst.size()) {
-	    if(prjListUser.size()) {
-		prjsLs->addItem(_("=== Pre-installed projects ==="));
-		prjsLs->item(prjsLs->count()-1)->setFlags(Qt::NoItemFlags);
-	    }
-	    prjsLs->addItems(prjListPreInst);
-	}
 	// Mark current project's items in the list
 	if(SYS->prjNm().size()) {
-	    QList<QListWidgetItem *> sIt = prjsLs->findItems(SYS->prjNm().c_str(), Qt::MatchExactly);
+	    QList<QListWidgetItem *> sIt = prjsLs->findItems(SYS->prjNm().c_str(), Qt::MatchStartsWith);
 	    for(unsigned iIt = 0; iIt < sIt.length(); iIt++) {
 		sIt[iIt]->setSelected(true);
 		prjsLs->scrollToItem(sIt[iIt]);
@@ -800,10 +812,10 @@ StartDialog::StartDialog( WinControl *wcntr ) : prjsLs(NULL), prjsBt(NULL)
 
 	wnd_lay->addWidget(prjsLs, 0, 0);
 
-	prjsBt = new QPushButton(QIcon(":/images/ok.png"), _("Switch to the selected project"), this);
+	prjsBt = new QPushButton(QIcon(":/images/ok.png"), SYS->prjNm().size()?_("Switch to the selected project"):_("Call the selected project"), this);
 	prjsBt->setEnabled(false);
-	prjsBt->setToolTip(_("Switch to the selected project"));
-	prjsBt->setWhatsThis(_("The button for switch to the selected project."));
+	prjsBt->setToolTip(SYS->prjNm().size()?_("Switch to the selected project"):_("Call the selected project"));
+	prjsBt->setWhatsThis(SYS->prjNm().size()?_("The button for switch to the selected project."):_("The button for call the selected project."));
 	QObject::connect(prjsBt, SIGNAL(clicked(bool)), this, SLOT(projSwitch()));
 	wnd_lay->addWidget(prjsBt, 0, 0);
     }
@@ -865,7 +877,7 @@ void StartDialog::projSelect( )
     if(!prjsLs || !prjsBt) return;
 
     QList<QListWidgetItem *> selPrj = prjsLs->selectedItems();
-    prjsBt->setEnabled(selPrj.length() && selPrj[0]->text().toStdString() != SYS->prjNm());
+    prjsBt->setEnabled(selPrj.length() && selPrj[0]->data(Qt::UserRole).toString().toStdString() != SYS->prjNm());
 }
 
 void StartDialog::projSwitch( )
@@ -875,7 +887,7 @@ void StartDialog::projSwitch( )
     QList<QListWidgetItem *> selPrj = prjsLs->selectedItems();
     if(!selPrj.length())	return;
 
-    QString prjNm = selPrj[0]->text();
+    QString prjNm = selPrj[0]->data(Qt::UserRole).toString();
     bool toCreate = false;
 
     //Enter project name for new one creation or present one updating
@@ -892,13 +904,18 @@ void StartDialog::projSwitch( )
     }
 
     //Switch to presented project and create new one before
-    if(prjNm.toStdString() != SYS->prjNm() && (!SYS->prjNm().size() ||
-		QMessageBox::warning(this,_("Switch project"),
+    if(prjNm.toStdString() == SYS->prjNm())	return;
+    if(SYS->prjNm().size() && QMessageBox::warning(this,_("Switch project"),
 		    QString(_("Do you really want to change the current project \"%1\" to \"%2\"?")).arg(SYS->prjNm().c_str()).arg(prjNm),
-			QMessageBox::Yes|QMessageBox::No,QMessageBox::No) == QMessageBox::Yes)) {
-	if(!SYS->prjSwitch(prjNm.toStdString(),toCreate))
-	    QMessageBox::warning(this, _("Switch project"), QString(_("Project \"%1\" seems wrong or broken!")).arg(prjNm));
-    }
+			QMessageBox::Yes|QMessageBox::No,QMessageBox::No) != QMessageBox::Yes)	return;
+    if((access(((oscd_datadir_full "/")+prjNm.toStdString()+"/lock").c_str(),F_OK) == 0 ||
+	    access((SYS->prjUserDir()+"/"+prjNm.toStdString()+"/lock").c_str(),F_OK) == 0) &&
+		QMessageBox::warning(this,SYS->prjNm().size()?_("Switch project"):_("Call project"),
+		    QString(SYS->prjNm().size()?_("Project \"%1\" seems running now! You still want to switch the project?"):
+						_("Project \"%1\" seems running now! You still want to call the project?")).arg(prjNm),
+			QMessageBox::Yes|QMessageBox::No,QMessageBox::No) != QMessageBox::Yes)	return;
+    if(!SYS->prjSwitch(prjNm.toStdString(),toCreate))
+	QMessageBox::warning(this, SYS->prjNm().size()?_("Switch project"):_("Call project"), QString(_("Project \"%1\" seems wrong or broken!")).arg(prjNm));
 }
 
 //*************************************************
