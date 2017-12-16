@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include <signal.h>
-#include <getopt.h>
 #include <string.h>
 
 #include <tsys.h>

@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Categories=Graphics;Development;
 Type=Application
-Exec=env TERM= @bindir_full@/openscada_start
+Exec=@bindir_full@/openscada
 Icon=openscada
 Name=OpenSCADA
 GenericName=Open SCADA system

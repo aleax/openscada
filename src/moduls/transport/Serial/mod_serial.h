@@ -94,7 +94,7 @@ class TTrIn: public TTransportIn
 	bool	endrun;				// Command for stop task
 
 	uint64_t trIn, trOut;			// Traffic in and out counter
-	float	tmMax;
+	float	tmMax, prcTm, prcTmMax;;
 
 	// Modem properties
 	int	mTaskPrior;			// Requests processing task prioritet

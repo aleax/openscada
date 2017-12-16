@@ -1,0 +1,692 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Documents/Quick start - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Documents/Quick start</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FQuick+start&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Quick_start" title="Documents/Quick start (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Quick_start/ru" title="Документы/Быстрый старт (100% translated)">российский</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Common revision and translation
+</td></tr></table>
+</div>
+<p><i>Author:</i> <a class="external text" href="http://wiki.oscada.org/RomanSavochenko" rel="nofollow noreferrer noopener" target="_blank">Roman Savochenko</a>, <a class="external text" href="http://wiki.oscada.org/MaximLysenko" rel="nofollow noreferrer noopener" target="_blank">Maxim Lysenko</a> (2010-2012)<br />
+<i>Video-addon:</i> <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/doc/ru/QuickStart.mkv" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/doc/ru/QuickStart.mkv</a> (RU)
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Terms.2C_definitions_and_abbreviations"><span class="tocnumber">1</span> <span class="toctext">Terms, definitions and abbreviations</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Installation"><span class="tocnumber">2</span> <span class="toctext">Installation</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#Installing_OpenSCADA_from_packages"><span class="tocnumber">2.1</span> <span class="toctext">Installing OpenSCADA from packages</span></a>
+<ul>
+<li class="toclevel-3 tocsection-4"><a href="#The_repository_packages_appending_and_installing_OpenSCADA_from_it"><span class="tocnumber">2.1.1</span> <span class="toctext">The repository packages appending and installing OpenSCADA from it</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#OpenSCADA_packages_manual_installing"><span class="tocnumber">2.1.2</span> <span class="toctext">OpenSCADA packages manual installing</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-6"><a href="#Installation_from_sources"><span class="tocnumber">2.2</span> <span class="toctext">Installation from sources</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#Initial_configuration_and_start"><span class="tocnumber">3</span> <span class="toctext">Initial configuration and start</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Creation_the_user.27s_project_from_scratch"><span class="tocnumber">3.1</span> <span class="toctext"><span>Creation the user's project from scratch</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Working_with_Data_Sources"><span class="tocnumber">4</span> <span class="toctext">Working with Data Sources</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Data_acquisition_from_the_TP_device"><span class="tocnumber">4.1</span> <span class="toctext">Data acquisition from the TP device</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#TP_data_processing"><span class="tocnumber">4.2</span> <span class="toctext"><span>TP data processing</span></span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Typified_Data_Sources_Parameters"><span class="tocnumber">4.3</span> <span class="toctext">Typified Data Sources Parameters</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Enabling_the_TP_data_archiving"><span class="tocnumber">4.4</span> <span class="toctext">Enabling the TP data archiving</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Formation_of_visual_presentation"><span class="tocnumber">5</span> <span class="toctext">Formation of visual presentation</span></a>
+<ul>
+<li class="toclevel-2 tocsection-15"><a href="#Adding_the_template_page_in_the_project_and_linkage_of_the_dynamics"><span class="tocnumber">5.1</span> <span class="toctext">Adding the template page in the project and linkage of the dynamics</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#The_creation_of_the_new_frame.2C_the_mnemonic_scheme"><span class="tocnumber">5.2</span> <span class="toctext">The creation of the new frame, the mnemonic scheme</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Creation_of_the_new_complex_element"><span class="tocnumber">5.3</span> <span class="toctext">Creation of the new complex element</span></a>
+<ul>
+<li class="toclevel-3 tocsection-18"><a href="#Creation_the_widget_.22Air_cooler.22_on_the_basis_of_the_primitive_.22Elementary_figures.22"><span class="tocnumber">5.3.1</span> <span class="toctext">Creation the widget "Air cooler" on the basis of the primitive "Elementary figures"</span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#Creation_the_final_complex_widget_.22Cooler.22_on_the_basis_of_the_primitive_.22Elements_box.22"><span class="tocnumber">5.3.2</span> <span class="toctext"><span>Creation the final complex widget "Cooler" on the basis of the primitive "Elements box"</span></span></a></li>
+<li class="toclevel-3 tocsection-20"><a href="#Adding_the_complex_element_to_the_mnemonic_scheme"><span class="tocnumber">5.3.3</span> <span class="toctext">Adding the complex element to the mnemonic scheme</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#Conclusion"><span class="tocnumber">6</span> <span class="toctext">Conclusion</span></a></li>
+</ul>
+</div>
+
+<p>The OpenSCADA is extremely modular, flexible and multi-functional SCADA-system. As a consequence of this the first contact with OpenSCADA can be quite complex because of the small chance of matching the previous experience of the user or complete lack of it with the methods of work in OpenSCADA. However, this is largely just a first impression, because the whole power of OpenSCADA is in the palm of the user, because of the abundance of which the user can get confused, and he may require considerable efforts to select the necessary functions to solve his tasks. 
+</p><p>For this reason, and to visualize the general concept of work in OpenSCADA this document is created. The document in the concise and understandable form shows the path from start of OpenSCADA to creation of the user interface elements on real examples. In addition, the document contains the chapter with recipes for the configuration, implementation, and typical problems of the user.
+</p><p>The document does not contain the detailed description of the concept and a deep dive into the details of OpenSCADA, and provides links to the appropriate OpenSCADA documents, containing such information.
+</p><p>Document description is synchronized with the implementation of the examples on the demonstration database (DB), <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">AGLKS model</a>. Consequently, the user must obtain the distribution kit of OpenSCADA with this database for illustrative study and testing the examples.
+</p>
+<h2><span class="mw-headline" id="Terms.2C_definitions_and_abbreviations"><span class="mw-headline-number">1</span> Terms, definitions and abbreviations</span></h2>
+<p><b>The automated workplace</b> — Usually consists of a system unit of the computer system, display, mouse, sometimes with the keyboard, and other peripheral equipment that is used for visual representation of technological process data and making the control actions on the TP.
+</p><p><b>Lock (term)</b> — notional boundary of technological parameter, in the case of its getting over the preset algorithm steps to prevent the accident are made. In some modes of TP (start) in accordance with the regulation it may be necessary to disable the lock (unlocking).
+</p><p><b>Unlocking (term)</b> — process of the lock disabling for the duration of the TP working in the modes for which the regulation provides this operation. Attention, unlocking the technological parameters is strict accountable operation and the must be made by operational staff in the proper order.
+</p><p><b>Quittance (term)</b> — the process of confirming the fact that operational staff drew attention to the failures of TP working. This process usually entails the adoption of measures by the operator to correct violations and pressing the appropriate button to stop the alarm.
+</p><p><b>PLC (abbreviation)</b> — Industrial PLC. Microprocessor-based electronic device to which via computer-process interface (CPI) the signal of processing parameters are going. PLC acts the role of the direct data acquisition, processing and making the control actions by means of algorithms of automatic control. In addition the PLC provides data for the visualization of TP, and receives data of the manual intervention from the "top level" system.
+</p><p><b>Alarm (term)</b> — process of notifying the operational staff of the violation of process or work of the automation equipment. Way of signaling may be of different types of impacts on human senses in order to attract attention. Often it is involved the following types of alarms:
+</p>
+<ul><li> <i>Light alarm</i> — usually is done by changing the color of the graphic object (blinking) to emerging events and by the setting of static accidents colors (red and yellow) for acknowledged events.</li>
+<li> <i>Sound</i> — is made by an audible signal at the time of occurrence of the event. Type of alarm can be monotonous and the synthesized voice message with information about the violation.</li></ul>
+<p><b>TP (abbreviation)</b> — Technological process. The whole complex of technological equipment of the production process.
+</p><p><b>CPI (abbreviation)</b> — Computer-Process Interface. A number of devices or modules of PLC, to which are directly connected the signals from the sensors of TP for subsequent conversion from analog to digital form and vice versa. The transformation is carried out with aim of further processing of values of technological parameters in the PLC.
+</p><p><b>Alarm setpoint (term)</b> — conventional boundary of the value of technological parameter, the overcoming of which is considered ad the emergency situation. Usually the following boundaries are provided:
+</p>
+<ul><li> <i>The upper and lower emergency boundaries</i> — boundaries of the emergency values of technological parameter.</li>
+<li> <i>The upper and lower warning boundaries</i> — boundaries of the prevention, regulation boundaries, of the violation of the technological parameter of the working range.</li>
+<li> <i>Failure</i> — sign of parameter getting over the hardware boundaries of technological equipment. Usually it characterizes the sensor failure, breakage of the communication channel with the sensor or PLC.</li></ul>
+<p><b>SCADA (abbreviation)</b> — Supervisory Control And Data Acquisition. The software that performs complex tasks of data acquisition of TP, their archiving and presentation, as well as the making the control actions by the operator in manual mode.
+</p>
+<h2><span class="mw-headline" id="Installation"><span class="mw-headline-number">2</span> Installation</span></h2>
+<p>The installation of OpenSCADA distribution kit can be done in two ways. The first and the easiest way is to get packages for your Linux distribution. The second — to build the OpenSCADA system from sources. In general, the installation procedure depends strongly on the used Linux distribution and it does not seem possible to exhaustively describe it in this guide! Therefore, you may need a deep familiarity with the mechanisms of software installation for the selected Linux distribution from its documentation.
+</p><p>If user does not have deep enough knowledge and skills in the chosen Linux distribution, it is strongly recommended to choose the Linux distribution by the criterion of existence for it the packages of OpenSCADA in the repositories of the distribution, which will ensure an easy and problem-free installation!
+</p><p>If the user can not only install the OpenSCADA, but also the Linux distribution, for the first time he can use the "live" distribution of Linux, with the installed and ready for work or study demonstration of OpenSCADA. Currently are available "live" builds on the basis of Debian and ALTLinux distribution in the form of the hybrid CD-images on the page: <a class="external free" href="http://oscada.org/en/main/download/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/en/main/download/</a>. For more details look "<a href="How_to.html" title="Special:MyLanguage/Documents/How to">the document Recipes (How to)</a>".
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The dynamic model of the compressor station, at 6 gas compressors, which lies at the basis of the demonstration database requires significant computing resources, and more specifically the processor with a frequency greater than 1 GHz. These resources are needed specifically for the dynamic model and are not a common resource intensity indicator of the program in its final tasks!
+</p>
+<h3><span class="mw-headline" id="Installing_OpenSCADA_from_packages"><span class="mw-headline-number">2.1</span> Installing OpenSCADA from packages</span></h3>
+<p>Installing OpenSCADA from packages, in its turn, can be made by two methods. The first — the simplest one, when packages of OpenSCADA are already present in the official, additional repositories of the used Linux distribution or self repositories of OpenSCADA. Installation of that packages — the question of running the typical program of packages' management followed by selection of the OpenSCADA packages. The second method is when the OpenSCADA packages are got and installed manually.
+</p><p>To check for OpenSCADA packages presence in the repositories of the used Linux distribution, as well as to download OpenSCADA packages for manual installation you can at download page of the official OpenSCADA site (<a class="external free" href="http://oscada.org/en/main/download/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/en/main/download/</a>).
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> You should download the packages directly for the used distributive version, otherwise you can get unresolved dependencies problems at the installation process.
+</p>
+<h4><span class="mw-headline" id="The_repository_packages_appending_and_installing_OpenSCADA_from_it"><span class="mw-headline-number">2.1.1</span> The repository packages appending and installing OpenSCADA from it</span></h4>
+<p>At the moment the OpenSCADA packages can be found in the repositories of such OS Linux distributions: <a class="external text" href="http://www.altlinux.ru" rel="nofollow noreferrer noopener" target="_blank">ALTLinux</a> and distributions based on the <a class="external text" href="http://fedoraproject.org" rel="nofollow noreferrer noopener" target="_blank">Fedora</a> package base. Besides the packages repositories are provided by the OpenSCADA project, which service information ordinarily placed beside to the packages and it updates automatic at the building i.e. these repositories are most fresh and preferable.
+</p><p>The repositories addresses you can get on same downloading OpenSCADA page (<a class="external free" href="http://oscada.org/en/main/download/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/en/main/download/</a>) or into examples bellow.
+</p><p>If you are installing from the repository you should only select the package "openscada-Model.AGLKS". Everything else, according to the dependencies, will be selected and installed automatically.
+</p><p>Setting from a repository simply but it is specific for each Linux distributive, window manager or concrete program of the repositories and the packages manage then for them we'll refer the reader to the documentation of the appropriate distribution or program. Her in brief let observe the repositories appending and OpenSCADA installing with typical command line tools aid:
+</p><p><b>The packages repositories based on manager APT (Debian, Ubuntu, ALTLinux)</b> — appending by edition file /etc/apt/sources.list and one line inserting:<br />
+<i>Debian:</i> "deb <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/Debian/8" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/Debian/8</a> ./"<br />
+<i>Debian (Work version):</i> "deb <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/Work/Debian/8" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/Work/Debian/8</a> ./"<br />
+<i>Debian (Work version, modules separated):</i> "deb <a class="external free" href="ftp://ftp.oscada.org/Debian/8/openscada" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/Debian/8/openscada</a> ./"<br />
+<i>Ubuntu:</i> "deb <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/Ubuntu/14.04" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/Ubuntu/14.04</a> ./"<br />
+<i>Ubuntu (Work version):</i> "deb <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/Work/Ubuntu/14.04" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/Work/Ubuntu/14.04</a> ./"<br />
+Installing:
+</p>
+<pre style="white-space: pre-wrap;">
+$ apt-get update
+$ apt-get install openscada-model-aglks
+</pre>
+<p><i>ALTLinux:</i> "rpm <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/ALTLinux/7</a> openscada main"<br />
+<i>ALTLinux (Work version):</i> "rpm <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/Work/ALTLinux/6" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/Work/ALTLinux/6</a> openscada main"<br />
+<i>ALTLinux (Work version, modules separated):</i> "rpm <a class="external free" href="ftp://ftp.oscada.org/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/ALTLinux/7</a> openscada main"<br />
+Installing:
+</p>
+<pre style="white-space: pre-wrap;">
+$ apt-get update
+$ apt-get install openscada-Model.AGLKS
+</pre>
+<p>Appending the key to check the sign (the authenticity) of the repository and the packages into it (not necessary and uses for not all the repositories):
+</p>
+<pre style="white-space: pre-wrap;">
+ $ wget -O - http://ftp.oscada.org/Misc/pkgSignKey | sudo apt-key add - </pre>
+<p><b>The packages repositories based on manager YUM (RedHat, Fedora, CentOs)</b> — appending by the file /etc/yum.repos.d/openscada.repo creation with content:
+</p>
+<pre style="white-space: pre-wrap;">
+[openscada]
+name=OpenSCADA
+#CentoOs
+baseurl=ftp://ftp.oscada.org/OpenSCADA/0.8.0/CentOs/7
+#CentoOs (Work version)
+#baseurl=ftp://ftp.oscada.org/OpenSCADA/Work/CentOs/6
+#Fedora (Work version)
+#baseurl=ftp://ftp.oscada.org/OpenSCADA/Work/Fedora/12
+enabled=1
+gpgcheck=0
+</pre>
+<p>Installing:
+</p>
+<pre style="white-space: pre-wrap;">
+$ yum install openscada-Model.AGLKS </pre>
+<p><b>The packages repositories SuSE YaST</b> — appending by the command:
+</p>
+<pre style="white-space: pre-wrap;">
+$ zypper ar -f ftp://ftp.oscada.org/OpenSCADA/0.8.0/SuSE/13 OpenSCADA</pre>
+<p>Installing:
+</p>
+<pre style="white-space: pre-wrap;">
+$ zypper in openscada-Model.AGLKS </pre>
+<h4><span class="mw-headline" id="OpenSCADA_packages_manual_installing"><span class="mw-headline-number">2.1.2</span> OpenSCADA packages manual installing</span></h4>
+<p>For the manually installation of OpenSCADA packages lets download them from the official website or from the other source. You can download packages of two sets.
+</p><p>The first set is represented by the nine packages:
+</p>
+<ul><li> <b>openscada</b> — package with all necessary files to start OpenSCADA, including all modules;</li>
+<li> <b>openscada-LibDB.Main</b> — main OpenSCADA libraries for DAQ and others in the SQLite DB;</li>
+<li> <b>openscada-LibDB.VCA</b> — visual components libraries in the SQLite DB;</li>
+<li> <b>openscada-Model.AGLKS</b> — model "AGLKS" data bases and config (Demo: EN,RU,UK);</li>
+<li> <b>openscada-Model.Boiler</b> — model "Boiler" data bases and config (EN,RU,UK);</li>
+<li> <b>openscada-docEN</b> — documentation on the OpenSCADA system - English;</li>
+<li> <b>openscada-docRU</b> — documentation on the OpenSCADA system - Russian;</li>
+<li> <b>openscada-docUK</b> — documentation on the OpenSCADA system - Ukrainian;</li>
+<li> <b>openscada-devel</b> — development packages for the creation of the separate modules for the OpenSCADA.</li></ul>
+<p>The second set is represented by about fifty packages with separation of OpenSCADA modules in different packages:
+</p>
+<ul><li> <b>openscada-core</b> — contains the OpenSCADA core, basic configuration and launching(starting) files;</li>
+<li> <b>openscada-DB.* </b> — "DB" subsystem's modules;</li>
+<li> <b>openscada-DAQ.* </b> — "Data acquisition" subsystem's modules;</li>
+<li> <b>openscada-Archive.* </b> — "Archives" subsystem's modules;</li>
+<li> <b>openscada-Transport.* </b> — "Transports" subsystem's modules;</li>
+<li> <b>openscada-Protocol.* </b> — "Transport protocols" subsystem's modules;</li>
+<li> <b>openscada-UI.* </b> — "User interfaces" subsystem's modules;</li>
+<li> <b>openscada-Special.* </b> — "Specials" subsystem's modules;</li>
+<li> <b>openscada-LibDB.Main</b> — main OpenSCADA libraries for DAQ and other into SQLite DB;</li>
+<li> <b>openscada-LibDB.VCA</b> — visual components libraries into SQLite DB;</li>
+<li> <b>openscada-Model.AGLKS</b> — model "AGLKS" data bases and config (Demo: EN,RU,UK);</li>
+<li> <b>openscada-Model.Boiler</b> — model "Boiler" data bases and config (EN,RU,UK);</li>
+<li> <b>openscada-docEN</b> — documentation on the OpenSCADA system - English;</li>
+<li> <b>openscada-docRU</b> — documentation on the OpenSCADA system - Russian;</li>
+<li> <b>openscada-docUK</b> — documentation on the OpenSCADA system - Ukrainian;</li>
+<li> <b>openscada-devel</b> — development packages for the creation of the separate modules to the OpenSCADA.</li>
+<li> <b>openscada</b> — virtual package containing dependencies for installing the typical configuration of the OpenSCADA;</li>
+<li> <b>openscada-plc</b> — virtual package containing dependencies for installing the typical configuration of the OpenSCADA as a PLC;</li>
+<li> <b>openscada-server</b> — virtual package containing dependencies for installing the typical configuration of OpenSCADA as a SCADA-server;</li>
+<li> <b>openscada-visStation</b> — virtual package containing dependencies for installing the typical configuration of OpenSCADA as a visual SCADA-station.</li></ul>
+<p>The first packages' set is most provided for easy, manual installation, because it contains only nine packages. The second set is designed to be placed in a repository of Linux distribution and for the following installation of them using the packages manager, which the auto-dependency resolution. The second type of the packages' set allows you to install only the required components of OpenSCADA, thereby optimizing the working environment, which is do not allowed by the packages of the first set.
+</p><p>Manual installation of RPM-packages of the first set can be made by the following command, after changing the working directory to the directory with the package:
+</p>
+<pre style="white-space: pre-wrap;">
+# rpm -i openscada-LibDB.Main-0.8.0-alt1.noarch.rpm openscada-LibDB.VCA-0.8.0-alt1.noarch.rpm openscada-Model.AGLKS-0.8.0-alt1.i586.rpm openscada-0.8.0-alt1.i586.rpm </pre>
+<p>Manual installation of DEB-packages of the first set is made by the following command, previously having changed the working directory to the directory with the package:
+</p>
+<pre style="white-space: pre-wrap;">
+# dpkg -i openscada-libdb.main_0.8.0-1_all.deb openscada-libdb.vca_0.8.0-1_all.deb openscada-model.aglks_0.8.0-1_all openscada_0.8.0-1_i386.deb </pre>
+<p>In the process of installation it may cause bugs related to missing dependencies, because of the unresolved dependences. The manual installation of the packages means that you'll solve them manually, like installing packages of OpenSCADA, or via the packages manager of Linux distribution. You can read the details of the RPM-package software installing process by the click on: <a class="external free" href="http://skif.bas-net.by/bsuir/admin/node51.html" rel="nofollow noreferrer noopener" target="_blank">http://skif.bas-net.by/bsuir/admin/node51.html</a>.
+</p><p>Into Linux systems which include APT-manager of packages you can simple update downloaded files direct from the folder, do not include its to the packages repository and with automatic dependents resolving:
+</p>
+<pre style="white-space: pre-wrap;">
+$ apt-get upgrade /var/tmp/OpenSCADA/* </pre>
+<h3><span class="mw-headline" id="Installation_from_sources"><span class="mw-headline-number">2.2</span> Installation from sources</span></h3>
+<p>If you can not get packages of OpenSCADA for the selected distribution, it remains the only option of OpenSCADA building from the sources. The building process of OpenSCADA is described in details in the guide on the following link <a class="external free" href="http://wiki.oscada.org/HomePageEn/Doc/BuildFromSource" rel="nofollow noreferrer noopener" target="_blank">http://wiki.oscada.org/HomePageEn/Doc/BuildFromSource</a>. However, it must be noted that if you managed to build OpenSCADA from sources, then this document is not for you, and you probably can easily master <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">the basic document of OpenSCADA</a>).
+</p><p>This chapter is given here for completeness and integrity of the consideration of the question, because the required qualification level of the user for this chapter is much higher than the level of the document at whole!
+</p>
+<h2><span class="mw-headline" id="Initial_configuration_and_start"><span class="mw-headline-number">3</span> Initial configuration and start</span></h2>
+<p>After successful installation of the OpenSCADA with the database of "AGLKS" model no pre-configuration is required. If you want to perform a particular configuration, which differs from the base, then use <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">the document of description the OpenSCADA program</a>.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The demonstration of OpenSCADA based on the "AGLKS" model database is not the same as that is usually provided by the commercial software vendors to demonstrate the possibilities, but to exclude or to complicate the normal operations by limiting the functions. Demonstration of OpenSCADA is fully-functional system that provides examples of implementation and configuration of various components. Based on the "AGLKS" model database and other OpenSCADA models one can easily create own projects, using the given resources.
+</p><p>You can execute the OpenSCADA with "AGLKS" model database from the menu of the desktop environment in the "Graphics" section, "Model 'AGLKS' on open SCADA system" with the characteristic icon (Fig. 3.1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:777px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_demenu_oscada.png"><img class="thumbimage" height="642" src="files/QuickStart_demenu_oscada.png" width="775" /></a>  <div class="thumbcaption">Fig. 3.1. Menu item of the desktop environment to start the demonstration of OpenSCADA.</div></div></div></div>
+<p>Start also can be done from the console by the command:
+</p>
+<pre style="white-space: pre-wrap;">
+$ openscada_AGLKS</pre>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> When you start OpenSCADA from the console with the command <b> "$ openscada" </b>, the system is launched without any configuration and the result is the request of the user name and password to login. By default, the system provides OpenSCADA super user "root" (password "openscada") and unprivileged "user" (password "user"), which have no relation to the users of the operating system. Starting the OpenSCADA in this way makes sense only if it is done from the OS administrator ("root") or in daemon mode.
+</p><p>After start we'll get the window of the OpenSCADA graphical configurator — QTCfg (Fig.3.2) with the opened root page. Demo database specifically configured so that the first window you'll see after start it is the configurator's window. You can then open the window for creating graphical user interfaces, as well as run the user interface project's execution.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_QTCfg_root.png"><img class="thumbimage" height="697" src="files/QuickStart_QTCfg_root.png" width="808" /></a>  <div class="thumbcaption">Fig. 3.2. OpenSCADA configurator — QTCfg, the root page.</div></div></div></div>
+<p>Configurator of OpenSCADA is the main and sufficient instrument for the configuration of any system's component. Like many other components of OpenSCADA, configurator is implemented as a module. Besides the QTCfg configurator there may be available other configurators that performs the same function, but implemented on the basis of other technologies. For example, these are the Web-configurators: <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> and <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.
+</p><p>All actions in the future, we will make only in the configuration tool QTCfg, although all of them can be done in other configurators.
+</p><p>The structure of the configurator's window interface can be considered in detail by <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">the reference</a>. It is more important now for us to examine all the available interfaces OpenSCADA, so click next to last icon in the top on the toolbar. After clicking on this icon the window of user interface development will be opened (Fig.3.3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:781px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Vision_dev.png"><img class="thumbimage" height="563" src="files/QuickStart_Vision_dev.png" width="779" /></a>  <div class="thumbcaption">Fig. 3.3. Window of the UI development.</div></div></div></div>
+<p>Then we can start the "AGLKS" project's execution. To do this, select it in the list of projects and run by clicking on the first left icon on the toolbar or in the the popup menu. The result will be the window of user interface (Fig.3.4).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1042px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Vision_run.png"><img class="thumbimage" height="768" src="files/QuickStart_Vision_run.png" width="1040" /></a>  <div class="thumbcaption">Fig. 3.4. Window of the user interface of the "AGLKS" project.</div></div></div></div>
+<p>Building and executing of the user interfaces is implemented by the <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> module of the "User interfaces" subsystem. In addition to this module it can be accessed the other modules of visualization. For example, OpenSCADA provides the <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> module, which allows to execute projects, previously developed in the "Vision" interface module, through the Web-based technologies and standard Web-browser. All actions in the future we will make only in the interface of the "Vision" module.
+</p><p>So we ran the demonstration of OpenSCADA and familiarized with the main set of tools. In the future we will use them for configuration of OpenSCADA, creating the tasks of data acquisition, binding the collected data with the purpose of their processing and making the impacts, as well as to create the visualization user interface of the received data and to make the control actions.
+</p><p>Lets close the window of the "AGLKS" project's execution and the window of the user interface development to prepare for the study of the following chapters.
+</p><p>The whole process of SCADA-system's configuration to perform the "top level" functions can be divided into two stages:
+</p>
+<ul><li> The configuration of data sources and creation the database (DB) of the parameters from these sources.</li>
+<li> Formation of a visual presentation of technological process (TP) data by creating the operator's interface in the form of: mnemonic schemes, groups of graphs (trends), groups of contours, documents, etc.</li></ul>
+<h3><span class="mw-headline" id="Creation_the_user.27s_project_from_scratch"><span class="mw-headline-number">3.1</span> <span id="UserPrjCrt" title="#UserPrjCrt">Creation the user's project from scratch</span></span></h3>
+<p>All the actions in the following sections are described in the "AGLKS" (demonstration) model database environment with the purpose of the widest and the most descriptive presentation of the configuration process, with the ability to connect to a real-live data source, realized on the basis of the gas compressor station TP model. However, it is necessary to describe the process of creation a user project from scratch, which is obviously your final goal. On the basis of a new user's project you can perform all the following steps with the "AGLKS" model database, but with an eye to your own data sources of a new project.
+</p><p>To start a clean user's project there is the item "OpenSCADA System" with the characteristic icon in the desktop environment menu, the "Graphics" section (Fig.3.1.1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:878px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_demenu_oscada_start.png"><img class="thumbimage" height="639" src="files/QuickStart_demenu_oscada_start.png" width="876" /></a>  <div class="thumbcaption">Fig. 3.1.1. Menu item of the desktop environment to start the clean user's project.</div></div></div></div>
+<p>The start can also be done with the following command:
+</p>
+<pre style="white-space: pre-wrap;">
+$ openscada_start</pre>
+<p>Starting from version 0.9 of OpenSCADA the command call cause creation the dialog for new project creation or using pre-installed and user's projects. For selection and new project name dialogs building supported the dialog programs, into the priority checking: dialog (for active terminal present), kdialog (Fig.3.1.2), "zenity" and "Xdialog". Let select the menu item "&lt;New project&gt;" and enter the project name "start" into next dialog.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:697px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_demenu_oscada_start_dialog.png"><img class="thumbimage" height="259" src="files/QuickStart_demenu_oscada_start_dialog.png" width="695" /></a>  <div class="thumbcaption">Fig. 3.1.2. Dialog of selection of new project creation or using pre-installed and user's projects.</div></div></div></div>
+<p>A clean user's project does not contain any project-specific configuration and is configured to work in the user's directory "<b>/.openscada</b>", with the main SQLite database in the file "<b>DATA/MainSt.db</b>". It is easier to create a complex SCADA-system's project using the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs" title="Special:MyLanguage/Libs">libraries of API functions of the OpenSCADA object model and libraries of graphic elements</a>, as well as with the help of other OpenSCADA libraries. To use the OpenSCADA libraries, stored in a database file, they need to be connected, added in the "SQLite" database module's object (Fig.3.1.3), as well as it is necessary to set the address and the database charset to "UTF-8" (Fig.3.1.4).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1222px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_SQLite_add.png"><img class="thumbimage" height="632" src="files/QuickStart_SQLite_add.png" width="1220" /></a>  <div class="thumbcaption">Fig. 3.1.3. Add the "SQLite" DB object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:667px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_SQLite_obj.png"><img class="thumbimage" height="720" src="files/QuickStart_SQLite_obj.png" width="665" /></a>  <div class="thumbcaption">Fig. 3.1.4. "SQLite" DB object of OpenSCADA library.</div></div></div></div>
+<p>OpenSCADA distributions supplied with a number of libraries in the form of "SQLite" database files (Table 3.1), which, when you run the clean user's project are placed to the "<b>LibsDB/</b>" directory. According to this list, lets add them in the "SQLite" database module's object, set the "Enabled" flag and save. Next, to load the library contents it is necessary to enable the database and click "Download this system from the database", but during the loading some of new objects are disabled so it's easier to complete a exit user's project and start over again.
+</p><p><b>Table 3.1.</b> OpenSCADA libraries included in the distribution.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Name </th>
+<th> Address </th>
+<th> Languages/charset
+</th></tr>
+<tr>
+<td> OscadaLibs </td>
+<td> Functions libraries </td>
+<td> ./LibsDB/OscadaLibs.db </td>
+<td> EN,RU,UK/UTF-8
+</td></tr>
+<tr>
+<td> vcaBase </td>
+<td> VCA: Main libraries </td>
+<td> ./LibsDB/vcaBase.db </td>
+<td> EN,RU,UK/UTF-8
+</td></tr>
+<tr>
+<td> vcaTest </td>
+<td> VCA: Tests </td>
+<td> ./LibsDB/vcaTest.db </td>
+<td> EN,RU,UK/UTF-8
+</td></tr>
+<tr>
+<td> vcaElectroEls </td>
+<td> VCA: Electrical elements library of the user interface </td>
+<td> ./LibsDB/vcaElectroEls.db </td>
+<td> EN,RU,UK/UTF-8
+</td></tr></table>
+<p>After the addition of OpenSCADA libraries you'll get an environment ready for addition of data sources and the formation of the new SCADA-system project's interface.
+</p>
+<h2><span class="mw-headline" id="Working_with_Data_Sources"><span class="mw-headline-number">4</span> Working with Data Sources</span></h2>
+<p>The main function of any SCADA-system is to work with data sources of realtime, namely the inquiry of programmable logic controllers (PLC) and simple modules of CPI. For more details see <a href="DAQ.html" title="Special:MyLanguage/Documents/DAQ">the document "Data acquisition in OpenSCADA"</a>.
+</p><p>Support of the one or another data source depends on the protocol or API, through which the source provides its data, and the availability for the protocol/API the module in the subsystem "Data acquisition" in OpenSCADA. The total list of modules of the subsystem "Data acquisition" and documentation on them can be found <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">here</a> in the appropriate table part.
+</p><p>Obtained from sources data subsequently are archived, processed and used for visual representation for the operator of TP.
+</p>
+<h3><span class="mw-headline" id="Data_acquisition_from_the_TP_device"><span class="mw-headline-number">4.1</span> Data acquisition from the TP device</span></h3>
+<p>As an example lets examine and create the inquiry for the air cooler device. Demo database contains the real-time model of the compressor station with six compressors. Data for two devices of air coolers "AT101_1" and "AT101_2" of the compressor station "KM101" are available via the ModBus/TCP protocol on the 10502 port.
+</p><p>We will create the inquiry controller's object via the ModBUS/TCP protocol and get these data, thereby practically made the task of inquiry of real data, because from the external device our configuration will be different only in address of the device, addresses of the ModBUS registers and maybe the interaction interface.
+</p><p>There is "ModBUS" module in the "Data acquisition" subsystem for the data acquisition via "ModBUS" protocol in OpenSCADA. To add a new controller we will open the page of the "ModBUS" module in the configurator ("Demo Station"-&gt;"Data acquisition"-&gt;"Module"-&gt;"ModBUS") and in the pop-up menu of the "ModBUS" item lets click "Add" (Fig. 4.1.1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBUS_add.png"><img class="thumbimage" height="628" src="files/QuickStart_ModBUS_add.png" width="808" /></a>  <div class="thumbcaption">Fig. 4.1.1. Adding the controller in the "ModBUS" module of the "Data acquisition" subsystem.</div></div></div></div>
+<p>At the result of our actions the dialog window will appear (Fig.4.1.2) to enter the ID and name of the new controller. IDs of any objects in OpenSCADA are limited by 20 characters and they should be entered using English alphabet characters and numerals. In addition, it is desirable to start the ID with the letter. This is due to the fact that the identifier can later be used in scripts. The OpenSCADA objects' names are limited by 50 characters and can contain any characters. The names are usually displayed. If the name field is blank, instead it the identifier will be displayed. Enter the ID "KM101" and the name "KM 101".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:410px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_enter_idnm.png"><img class="thumbimage" height="249" src="files/QuickStart_enter_idnm.png" width="408" /></a>  <div class="thumbcaption">Fig. 4.1.2. Dialog to specify the ID and name of the new object.</div></div></div></div>
+<p>After confirmation we have a new controller's object. Lets choose it in the configurator and get acquainted with its settings (Fig.4.1.3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:805px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBUS_cntr.png"><img class="thumbimage" height="688" src="files/QuickStart_ModBUS_cntr.png" width="803" /></a>  <div class="thumbcaption">Fig. 4.1.3. Main tab of the controller's object settings of the ModBUS module.</div></div></div></div>
+<p>Settings of the controller's object, as a rule, are specific for the different types of data sources and protocols. You can familiarize in details with the settings of the controller's object of the <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBUS</a> module using <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ModBus#DAQ" title="Special:MyLanguage/Modules/ModBus">the link</a>. We'll examine the general configuration of the controller's object and the key settings for the <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBUS</a> module.
+</p><p>Before the connection configuration with your controller you need from the controller's documentation to find the settings of network interfaces and protocols, and also, in the case of "ModBus" using, to get the association table for external and internal controller's signals with the numbers of "ModBus" registers.
+</p><p>With the help of the page of the controller's object in the section "Status" may be primarily assessed the current state of the controller's object and the real state of connection with the physical controller, as well as it can be quickly changed. For example, field "Status" contains the code of error and the textual description of the current state of connection with the controller, in this case the controller's object is disabled. We are able to enable it and start by setting the flags beside the appropriate fields. Enabled controller's object initializes the parameters objects, the running one runs the acquisition task and provides an opportunity to transmit data to the controller through the attributes of the parameters. The DB field indicates which database to store in the configuration of the object. We will store the data to main database, ie leave it by defaults. 
+</p><p>In the "Config" section the configuration of the controller's object is directly contained:
+</p>
+<ul><li> "ID" and "Name" are the fields, we've just entered at the object's creation. The Name can be changed right here, but the ID can not be changed so simply. If you want to change the ID you must Cut (Ctrl+X) and Paste (Ctrl+V) the object and enter the desired ID.</li>
+<li> "Description" may contain the detailed description and purpose of the controller's object. In our case, the value of this field is not principal.</li>
+<li> "Enable" and "Run" indicated the state, in which to transfer the controller's object at start of OpenSCADA. Lets set both fields.</li>
+<li> "Parameters table" — contains the name of the database's table in which to store the configuration of parameters of the controller. Leave it default.</li>
+<li> "Acquisition schedule" — contains the configuration of the scheduler to run the inquiry task. To get the description of the format of the configuration of the field you can from the tooltip. The single number indicates the periodicity of run in seconds. Let it be one second.</li>
+<li> "Gather task priority" — indicate the priority of the task (from -1 to 99). Priorities above zero are meaningful only when you start OpenSCADA from the privileged user. Leave this field unchanged.</li>
+<li> "ModBUS protocol" — indicates to variant of the ModBUS protocol. The protocol variants possible "TCP/IP", "RTU" and "ASCII". At the moment we are interested in the option "TCP/IP", so leave it as is. The protocol variants "RTU" and "ASCII" need for set at case communication with the controller by serial interfaces, typically "RS-485".</li>
+<li> "Transport address" — indicates the outgoing transport of the subsystem "Transports", which is used to connect to the controller. In the case of "TCP/IP" option we need the transport module <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>, and in case variants "RTU", "ASCII" and serial interfaces we need the transport module <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>. We'll examine the creating of the outgoing transport in "Sockets" and "Serial" in details below.</li>
+<li> "Destination node" — indicates the node of data source or conroller in ModBUS network. In our case, it should be "1".</li>
+<li> "Data fragments merge" — includes the merging not related fragments of registers in the single block of the request, up to 100 registers, instead generating individual requests. Allows you to reduce the total time of the inquiry. Lets set this option.</li>
+<li> "Using write functions for more items (0x0F,0x10)" — instead one-item write will used multi-items functions. Leave this field unchanged.</li>
+<li> "Connection timeout" — indicates how long to wait for the response from the controller and after which to report an error of connection. Zero indicates the use of time of transport. Unchanged.</li>
+<li> "Restore timeout" — specifies the time in seconds after which if there is no connection to retry to reconnect.</li>
+<li> "Maximum request block size (bytes)" — maximum size (bytes) of registers and coils blocks set. Usefull for some controllers with like limits. Unchanged.</li></ul>
+<p>Lets save our changes to the database by clicking the second left icon on the toolbar.
+</p><p>Now, in the same manner as the controller's object, let's create the outgoing transport in the module "Sockets" ("Demo Station" -&gt;"Transports"-&gt;"Sockets") through the context menu (Fig.4.1.4). And let's call the transport as well as the controller: "KM101" and the name "KM 101". Note that in the "Item type" of the dialog (fig.4.1.2) you should choose the "Output transport.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:616px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Sockets_add.png"><img class="thumbimage" height="584" src="files/QuickStart_Sockets_add.png" width="614" /></a>  <div class="thumbcaption">Fig. 4.1.4. Adding the outgoing transport in the module "Sockets" of the subsystem "Transports".</div></div></div></div>
+<p>The configuration page of outgoing transport is shown in Fig.4.1.5. This page also contains the section of the status and operational control. In the "Status" field the textual description of the current state of transport is contained. We can run it for execution by checking the box in front of the appropriate field. Running object of the transport initiates the connection to the external node. Field DB indicates the database to store the configuration of the object. We will store it in the main database.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:661px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Sockets_tr.png"><img class="thumbimage" height="519" src="files/QuickStart_Sockets_tr.png" width="659" /></a>  <div class="thumbcaption">Fig. 4.1.5. Configuration page of the outgoing transport of the "Sockets" module of the subsystem "Transports".</div></div></div></div>
+<p>In the "Config" section the configuration of the transport object is contained:
+</p>
+<ul><li> "ID" and "Name" contain the titles, which we entered when creating the object.</li>
+<li> "Description" — may contain the detailed description and purpose of the object.</li>
+<li> "Address" — specifies the type, address and mode of connection with the remote station. You can view the record format in the tooltip. Let's set this field to the value "TCP:localhost:10502".</li>
+<li> "To start" — indicates in what state to transfer an object at start of OpenSCADA. Let's set the field.</li>
+<li> "Timings" — indicate the duration of waiting for the response from the remote station. You can view the record format in the tooltip. Let us leave the value unchanged.</li></ul>
+<p>Other types transports created by like to "Sockets" method, but configuration typical different only at record format for address and timings. In case of transport module "Serial" into address field write the path to serial device, speed, and format. For converters <i>USB-&gt;Serial</i> that address you need learn into operation system, for example by console command "<b>$ dmesg</b>", just after the converter connection.
+</p><p>Let's save the transport and return to the configuration field "Transport address" of the controller's object and select the address "Sockets.KM101". Setting the controller's object is finished, enable it by set flag "Enabled". The next step is configuration and choose the data you need to query from the controller. This setting is done by creating an object "Parameter" of the controller. The "Parameter" object allows you to describe the list of data obtained from the comptroller and to transmit them to the environment of OpenSCADA.
+</p><p>To add a new object of the parameter we will open in the configurator the page of our controller's object and on the popup menu of item "KM101" we'll click "Add". The parameter's object we'll call "AT101_1" and the name "AT 101_1".
+</p><p>The configuration page of the obtained parameter is shown in the Fig.4.1.6. This page contains the section of status and operational control. In the "Type" field it is contained the ID of the type of the parameter, in this case it is only possible the "Standard" type (std). We can enable the parameter by checking the box of the appropriate field. The enabled parameter is involved in the process of exchange with the controller.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:773px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBUS_prm.png"><img class="thumbimage" height="620" src="files/QuickStart_ModBUS_prm.png" width="771" /></a>  <div class="thumbcaption">Fig. 4.1.6. Configuration page of the controller's parameter "ModBUS".</div></div></div></div>
+<p>In the "Config" section the configuration of tge parameter's object is contained:
+</p>
+<ul><li> "ID" and "Name" contain the titles, which we entered when creating the object.</li>
+<li> "Description" — may contain the detailed description and purpose of the object.</li>
+<li> "To enable" — indicates in what state to transfer an object at start of OpenSCADA. Let's set the field.</li>
+<li> "Attributes list" — contains the configuration of attributes of parameters in relation of them to the registers and bits of ModBUS. You can view the record format in the tooltip. Let's  set the contents of the text field as follows:</li></ul>
+<pre style="white-space: pre-wrap;">
+R:100:r:Ti:T input
+R:101:r:To:T output
+R:102:rw:Cw:Productivity.
+</pre>
+<p>Similarly, create the second option: "AT101_2" with the name "AT 101_2". The list of attributes fro it let's set in:
+</p>
+<pre style="white-space: pre-wrap;">
+R:103:r:Ti:T input
+R:104:r:To:T output
+R:105:rw:Cw:Productivity.
+</pre>
+<p>Let's save the both objects of the parameter. Now we can enable and run our controller to initiate the exchange. To do this, go back to the page of our controller's object and in the "Status" section let's set the flag "Run". If we do not miss something, the exchange is successfully started and in the "Status" field we'll get something like this, as it is shown in the Fig.4.1.7.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:770px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBUS_cntr_st.png"><img class="thumbimage" height="707" src="files/QuickStart_ModBUS_cntr_st.png" width="768" /></a>  <div class="thumbcaption">Fig. 4.1.7. Page of the controller's object if the exchange with the physical controller is successful.</div></div></div></div>
+<p>In the case of a successful exchange with the physical controller, we'll obtain the described data of the controller in the infrastructure of OpenSCADA. You can see these data on the tab "Attributes" of our parameters AT101_1 (Fig.4.1.8) and AT101_2. Because the inquiry is regularly and at intervals of a second, then we can observe their changes by clicking the button "Refresh current page" on the toolbar.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:673px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBUS_prm_attr.png"><img class="thumbimage" height="517" src="files/QuickStart_ModBUS_prm_attr.png" width="671" /></a>  <div class="thumbcaption">Fig. 4.1.8. Page of described attributes of the AT101_1 parameter.</div></div></div></div>
+<p>The configuration of data acquisition is complete.
+</p>
+<h3><span class="mw-headline" id="TP_data_processing"><span class="mw-headline-number">4.2</span> <span id="DataProc" title="#DataProc">TP data processing</span></span></h3>
+<p>Frequently the initial data obtained from the data source are the "raw", ie unprepared or uncomfortable for the visual presentation, so you need to perform this preparation. In our example, we received the data that comes in the code from the scale inside the controller. Our task is to perform the calculation of real values from the received data. Data processing in OpenSCADA can be done, either during the visualization, and in the subsystem "Data acquisition". However, the mixing of the visualization process and processing of initial data makes the configuration confusing and makes the obtained images of the visualization unsuitable for reuse. For this reason, let's make the preparation of data in the subsystem "Data acquisition".
+</p><p>Calculations in the subsystem "Data acquisition" are done via the module of logic level <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> and the templates of parameters of the subsystem "Data acquisition". To familiarize with the concept of "logical level" you can <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">here</a>.
+</p><p>To make calculations in the module of the logic level you must first create the template of the parameter of subsystem "Data acquisition". To do this, let's open the page of templates' library "Main templates" ("Demo Station"-&gt;"Data acquisition"-&gt;"Template library"-&gt;"Main templates") and through the context menu we will create the template object "airCooler" with the name "Air cooler". The configuration page of the resulting object is shows in the figure 4.2.1. This page contains the "State" section and the section of the operational control. We can make the template accessing by checking the box next to the corresponding field. Accessing templates can be connected to the data acquisition parameters, and the parameters will make calculations on this template. In the "Used" field the number of objects that use this template to calculate the image of the parameter is indicated. In the "Config" section only the familiar for us configuration fields are present.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:673px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Tmpl_gen.png"><img class="thumbimage" height="517" src="files/QuickStart_Tmpl_gen.png" width="671" /></a>  <div class="thumbcaption">Fig. 4.2.1. Configuration page of the template's object.</div></div></div></div>
+<p>The basic configuration and the formation of the template of parameter of data acquisition is made in the tab "IO" (Fig.4.2.2) of the template. The detailed description of the process of the template's formation can be found <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#CfgDAQ" title="Special:MyLanguage/Documents/Program manual">here</a>.
+</p><p>Let's create in the template two properties fro the inputs ("TiCod", "ToCod"), two for outputs ("Ti","To") and one clear property ("Cw"). For the "TiCod", "ToCod" and "Cw" let's set the "Configure" flag to the "Link", this will let to link to them the "raw" source. For the "Ti" and "To" let's set the "Attribute" flag to the "Read only", and for the "Cw" — "Full access", we make it to form the three attributes of the resulting parameter of the data acquisition: two — read only and one with the full access.
+</p><p>The program language let's set to "JavaLikeCalc.JavaScript", and the program:
+</p>
+<pre style="white-space: pre-wrap;">
+Ti = 150*TiCod/65536;
+To = 100*ToCod/65536;
+</pre>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:900px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Tmpl_io.png"><img class="thumbimage" height="625" src="files/QuickStart_Tmpl_io.png" width="898" /></a>  <div class="thumbcaption">Fig. 4.2.2. Tab "IO" of the configuration page of the template's object.</div></div></div></div>
+<p>Let's save the resulting template and set the accessibility flag.
+</p><p>Now we'll create the controller's parameters' objects in the "LogicLev" module of subsystem "Data acquisition". The controller and its parameters in the module "LogicLev" are identical to the previously created in the module "ModBUS" and they are created on the page: "Demo station"-&gt;"Data acquisition-&gt;"Module"-&gt;"Logic level". The object of the controller and the parameters will be called identical to the objects in the module "ModBUS".
+</p><p>The object of the controller of the module "LogicLev" (Fig.4.2.3) has no specific settings and the default ones may not be touched except the "Calculation planning" field, which will be set to one second. Before adding parameters, you must turn on the controller by checking the "Enabled" flag.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:723px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_cntr.png"><img class="thumbimage" height="640" src="files/QuickStart_LogicLev_cntr.png" width="721" /></a>  <div class="thumbcaption">Fig. 4.2.3. Main tab of the configuration of the object of controller of the LogicLev module.</div></div></div></div>
+<p>The object of the parameter of controller of the "LogicLev" module (Fig.4.2.4) has the specific setting "Type", where you need to set "Logical" (std) and into setting "Parameter template" select the address of the template, we have just created.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:663px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_prm.png"><img class="thumbimage" height="524" src="files/QuickStart_LogicLev_prm.png" width="661" /></a>  <div class="thumbcaption">Fig. 4.2.4. Configuration page of the "LogicLev" controller's parameter.</div></div></div></div>
+<p>In addition to the basic configuration of the parameter it is necessary to configure the attached template (Fig. 4.2.5). Configuration tab of the template appears in the parameter's mode "Enable". To enable the parameter it is possible by the previously enabling the controller. The flag "Only attributes are to be shown" allows you to set apart each link (Fig.4.2.6). Since we are made the following format of linkage in the template "Parameter|Ti", then all three links we can set simply by typing an address to the parameter in the "ModBus" controller. We shall specify the following addresses "ModBus.KM101.AT101_1" and "ModBus.KM101.AT101_2" in the appropriate parameters.
+</p><p>It should be noted that all the input fields addresses of objects in OpenSCADA provide a mechanism to set the address. This mechanism involves elemental choice, during which there is a movement in the interior. For example, typing the address "ModBus.KM101.AT101_1" first we will be able to choose the type of data source, including the "ModBus". By selecting "ModBus" in the list of available items for selection will be added to the module controllers "ModBus", among which will be "ModBus.KM101". Select the item "ModBus.KM101" add to the list of parameters of the controller, etc. to the final element in accordance with <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#DAQ" title="Special:MyLanguage/Documents/Program manual">the hierarchy of objects</a>. To be able to return to levels above the selection list of all the elements are inserted into the higher levels of the current value of the address.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:673px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_prm_tmpl.png"><img class="thumbimage" height="434" src="files/QuickStart_LogicLev_prm_tmpl.png" width="671" /></a>  <div class="thumbcaption">Fig. 4.2.5. Tab "Template config" of the "LogicLev" controller's parameter page.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:673px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_prm_tmpl_attr.png"><img class="thumbimage" height="434" src="files/QuickStart_LogicLev_prm_tmpl_attr.png" width="671" /></a>  <div class="thumbcaption">Fig. 4.2.6. Tab "Template config" of the "LogicLev" controller's parameter page with the links details.</div></div></div></div>
+<p>Let's save the created objects of the controller and parameters. After this, run the controller for execution by setting the controller's flag "Run" in the "State". If we do not miss something, the calculation is successfully started and in the "State" we'll get something like the one on Fig.4.2.7.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:674px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_cntr_st.png"><img class="thumbimage" height="636" src="files/QuickStart_LogicLev_cntr_st.png" width="672" /></a>  <div class="thumbcaption">Fig. 4.2.7. Page of the controller's object if the calculation of the controller in the "LogicLev" module is successful.</div></div></div></div>
+<p>In the case of successful processing of the template's code in the parameters we'll obtain the processed data in the infrastructure of OpenSCADA. You can see these data on the tab "Attributes" of our parameters AT101_1 (Fig.4.2.8) and AT101_2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_prm_attr.png"><img class="thumbimage" height="482" src="files/QuickStart_LogicLev_prm_attr.png" width="687" /></a>  <div class="thumbcaption">Fig. 4.2.8. Page of attributes of the parameter AT101_1 of the "LogicLev" module.</div></div></div></div>
+<p>The configuration of data processing is complete.
+</p>
+<h3><span class="mw-headline" id="Typified_Data_Sources_Parameters"><span class="mw-headline-number">4.3</span> Typified Data Sources Parameters</span></h3>
+<p>In the previous sections the data source connection mechanism has been described for the apparatus object ("Air Cooler"), which provides the unification of all signals in a single parameter's object of the data source. However, a more common approach is to create a parameter's object around a signal, such as "Temperature at the cooler's outlet AT101_1 (TE1314_1)".
+</p><p>Creating the parameter's object around the signal allows to formalize its description to the templates of analog and digital signals by including to them all necessary processing, alarming and other characteristic information. For a simple configuration of the typified analog and digital signals there are the parameters templates in the OpenSCADA libraries, and many of the visual presentation images are adapted to work and binding with these parameters directly, without going into details on the attributes.
+</p><p>Typically, for the formation of a parameter's object based on a template the logic level module <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> is used, as described in the previous section. However, a number of modules, including <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> provide the ability to immediately create logical parameters, based on the template. We'll add new parameter's objects by opening the early created page of our "ModBus" controller's object in the configurator, and in the context menu of the "KM101" item lets press "Add".
+</p><p>Lets name the analog parameter object "TE1314_1" — id and the name is "TE1314_1" (Fig.4.3.1). Parameter's type lets set to "Logical", the parameter's template — "base.anUnif", description — "The temperature at the outlet of AT101_1", lets set the "To enable" and "Enable" flags. Next, we need to configure the parameter's template in the tab "Template Configuration" tab (Fig.4.3.2): the "Input" field is set to ModBus-register's address of  this parameter "R:101", the "Maximum module scale" is set to 65535, which corresponds to 100 °C. Next, lets go to the "Attributes" tab (Fig.4.3.3) and set some fields, "Dimension" is set to "deg. C", "Scale minimum" to "0", "Scale maximum" to "100"; "Border up alarm" to "40", "Border up warning" to "30". Lets save the parameter's object.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:661px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBus_prmAn.png"><img class="thumbimage" height="508" src="files/QuickStart_ModBus_prmAn.png" width="659" /></a>  <div class="thumbcaption">Fig. 4.3.1. Page of the logical parameter "TE1314_1" of the "ModBus" module.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:662px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBus_prmAn_tmpl.png"><img class="thumbimage" height="506" src="files/QuickStart_ModBus_prmAn_tmpl.png" width="660" /></a>  <div class="thumbcaption">Fig. 4.3.2. Page of the "TE1314_1" parameter's template configuration of the "ModBus" module.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:695px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBus_prmAn_attr.png"><img class="thumbimage" height="666" src="files/QuickStart_ModBus_prmAn_attr.png" width="693" /></a>  <div class="thumbcaption">Fig. 4.3.3. Page of the "TE1314_1" parameter's attributes of the "ModBus" module.</div></div></div></div>
+<p>The discrete parameter's object lats name: "KSH102" — id and the name is "KSH102". Parameter's type lets set to "Logical", the parameter's template — "base.digitBlockUnif", lets set the "To enable" and "Enable" flags. Next, we need to configure the parameter's template in the tab "Template Configuration" tab (Fig.4.3.4): the "Command 'Open '" field is set to the value of the ModBus-bit address of the parameter "C:100:rw"; the "State 'Opened'" field is set to the value of the ModBus-bit address "C:101", the "State 'Closed'" field is set to the value of the ModBus-bit address "C:102", the "Hold command time (s)" field is set to 0, because the command if not the pulse one. Next, lets go to the "Attributes" tab (Fig.4.3.5) and make sure the availability of command and states. Save the parameter's object.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:687px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBus_prmDig_tmpl.png"><img class="thumbimage" height="516" src="files/QuickStart_ModBus_prmDig_tmpl.png" width="685" /></a>  <div class="thumbcaption">Fig. 4.3.4. Page of the "KSH102" parameter's template configuration of the "ModBus" module.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:687px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBus_prmDig_attr.png"><img class="thumbimage" height="516" src="files/QuickStart_ModBus_prmDig_attr.png" width="685" /></a>  <div class="thumbcaption">Fig. 4.3.5. Page of the "KSH102" parameter's attributes of the "ModBus" module.</div></div></div></div>
+<h3><span class="mw-headline" id="Enabling_the_TP_data_archiving"><span class="mw-headline-number">4.4</span> Enabling the TP data archiving</span></h3>
+<p>Many tasks require to keep the history of parameters of the TP. To activate the archiving of the attributes "Ti" and "To" of the AT101_1 and AT101_2 parameters in the previously created controller of the "LogicLev" module it is enough on the "Archiving" tab of the configuration page to choose which attributes are to be archived and by what archivers (Fig.4.4.1). We'll choose the archiving of "Ti" and "To" attributes in the "FSArch.1s" archiver. The same thing you can do for attribute "var" of analog parameter "ModBus.KM101.TE1314_1" and for "com" of digital parameter "ModBus.KM101.KSH102".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_prm_arh.png"><img class="thumbimage" height="482" src="files/QuickStart_LogicLev_prm_arh.png" width="687" /></a>  <div class="thumbcaption">Fig. 4.4.1. Tab "Archiving" of the AT101_1 parameter of the "LogicLev" module.</div></div></div></div>
+<p>As the result of this operation it will be automatically created the objects of archives for the selected attributes. For example, the archive's object for the attribute "Ti" of the AT101_1 parameter is presented at Fig.4.4.2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Arh_gen.png"><img class="thumbimage" height="650" src="files/QuickStart_Arh_gen.png" width="800" /></a>  <div class="thumbcaption">Fig. 4.4.2. Page of the archive's object of the "Ti" attribute of the AT101_1 parameter.</div></div></div></div>
+<p>Usually the settings of the archive do not need to be change, but if you need the special configuration, it can be done on the aforesaid page. Often you may need to obtain the information about the archive. For example, find the archive's size, both in time and in the bytes, as well as to look at the graph(diagram) of the parameter (Fig.4.4.3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:943px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Arh_tr.png"><img class="thumbimage" height="633" src="files/QuickStart_Arh_tr.png" width="941" /></a>  <div class="thumbcaption">Fig. 4.4.3. Tab "Values" of the page of the archive's object of the "To" attribute of the AT101_1 parameter.</div></div></div></div>
+<h2><span class="mw-headline" id="Formation_of_visual_presentation"><span class="mw-headline-number">5</span> Formation of visual presentation</span></h2>
+<p>The formation of visual presentation may be performed at three levels of complexity and the user can select any of them, depending on the level of his knowledge and availability of libraries with ready-made images and templates.
+</p><p>The first level requires a minimum qualification of the user, but implies the presence of template frames' libraries, which are needed to solve his task. Within the limits of the first level the user only has to know how to connect the dynamics to the template frames' pages and how to add new pages of the template frames.
+</p><p>The second level provides the additional ability to create new frames based on the finished complex elements, simply by their placement in the frame. To achieve this qualification level users will need libraries of complex elements needed to solve his tasks.
+</p><p>The third level requires that user is able to use of all the tools of the development environment of visual interfaces of OpenSCADA, including the creation of new complex elements and developing of the new user interfaces in the project.
+</p><p>All works on the visualization interface we will make in an environment of the "Vision" module of subsystem "User interfaces". To open the "Vision" interface window you should click the second icon on the right on the configurator toolbar. The result is the window previously shown in Figure 3.3.
+</p><p>The interfaces of user-operator realizing into OpenSCADA by the projects of visualization. Into library <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_elements" title="Special:MyLanguage/Libs/Main elements">main elements library of the user interface</a> the typical project template has presented, which based on signal objects model and display views concept. The user can start for self concept of visualization interface creation, by new project, or can use pointed template. For new visualization project creation you will need third level knowledge and hard work which placed over this document. By that will see to creation the visualization interface based on allowed template project.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1036px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_so.png"><img class="thumbimage" height="674" src="files/QuickStart_ui_so.png" width="1034" /></a>  <div class="thumbcaption">Fig. 5.1. Template project by the signal objects concept.</div></div></div></div>
+<p>The template contain two branches: "Control panels" and "Root page". The branch "Control panels" contain typical control panels and special frames set. Branch "Root page", with the root page basis, contain subbranches for signal objects "Group 1", "Group 2" and different branch of "Result graphics". The signal object's subbranches "Group {n}" have number identifier and can expanded by appending up to 16. The subbranch "Group {n}" presenting will display by activation corresponding to it signal object's button on root page, which will allow switch to it. Every subbranch "Group {n}" has containers or templates for display views, typical: "Mnemo", "Graphics groups", "Contours groups", "Groups of overview frames" and "Documents". Any pages present into containers will enable selection the display view, for corresponding signal object of root page. About root page structure you can detailed see by link <a class="external free" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements#h1039-45" rel="nofollow noreferrer noopener" target="_blank">http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements#h1039-45</a>.
+</p><p>For creation self visualization project user can copy the template project and call it for self. We will continue work direct with template project and place our pages into mnemo-containers and graphics groups.
+</p>
+<h3><span class="mw-headline" id="Adding_the_template_page_in_the_project_and_linkage_of_the_dynamics"><span class="mw-headline-number">5.1</span> Adding the template page in the project and linkage of the dynamics</span></h3>
+<p>Let's examine the first level of complexity task, when in the already designed interface it is necessary to link the dynamics to the template page. The concept of "Page's template" means the page on the basis of which with the help of inheritance it can be created a lot of final visualization pages with an individual list of the dynamics. The examples of these pages are: "<a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements#h1039-30" rel="nofollow noreferrer noopener" target="_blank">Graphics group</a>", "<a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements#h1039-14" rel="nofollow noreferrer noopener" target="_blank">Contours group</a>", "<a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements#h1039-22" rel="nofollow noreferrer noopener" target="_blank">Overview frames panel</a>" and "<a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements#h1039-37" rel="nofollow noreferrer noopener" target="_blank">Result graphics</a>". In the Fig.5.1.1 the template page "Graphics group" in the project tree "Signal groups (template)" is presented.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_grah_tmpl.png"><img class="thumbimage" height="717" src="files/QuickStart_ui_grah_tmpl.png" width="1024" /></a>  <div class="thumbcaption">Fig. 5.1.1. Template page "Graphics group".</div></div></div></div>
+<p>The "Graphics group" template page provides an opportunity to link up to eight signals for simultaneous display them on the diagram. Elements at the top will automatically hide for unspecified links.
+</p><p>Let's create the new group of graphs "Graphics 2" in the template container "Graphics group" of the first group of the root page of "Signal groups (template)". To do this, let's in the context menu of the "Graphics group" item select "Add visual item" (Fig.5.1.2). To enter the ID and name of the new visual item the dialog will appear (Fig.5.1.3). Enter the ID "2" and the name "Graphics 2".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:718px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_grah_add.png"><img class="thumbimage" height="616" src="files/QuickStart_ui_grah_add.png" width="716" /></a>  <div class="thumbcaption">Fig. 5.1.2. Adding of the "Graphics 2" group of graphs.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:410px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_enter_idname.png"><img class="thumbimage" height="229" src="files/QuickStart_ui_enter_idname.png" width="408" /></a>  <div class="thumbcaption">Fig. 5.1.3. Input dialog of the ID and name.</div></div></div></div>
+<p>After confirming the name input it will be created the new page. However, for its activation, we need to enable it. You can enable this page in the dialog of the properties editing  page (Fig.5.1.4). To open this page it is possible by selecting the menu item 'Visual item properties" in the context menu of the newly created page. New page, based at the template, you can create into the logical container by simple copy template to internal self.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:510px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_el_prop.png"><img class="thumbimage" height="525" src="files/QuickStart_ui_el_prop.png" width="508" /></a>  <div class="thumbcaption">Fig. 5.1.4. Dialogue of properties editing of the visual element.</div></div></div></div>
+<p>After enabling the page you are ready to set links to the created in the previous chapter parameters of controllers. To do this, without leaving the dialog to edit the properties of the newly created page (Fig.5.1.4), click on the "Links" tab (Fig.5.1.5). On this tab, we can see the tree with the elements "el1" ... "el8". Unwinding any of the elements we'll see the "Parameter" branch, in this branch  we need to specify or select the address of our attributes "Ti" and "To". Total we will fill the four elements. When filling out the elements the part of properties must be specified as constants. For example, it is necessarily needed to be specified:
+</p>
+<ul><li> <i>name</i> — "val:AT101_1 Ti".</li>
+<li> <i>ed</i> — "val:deg.C".</li>
+<li> <i>max</i> — "val:150" (for Ti) and "val:100" (for To).</li>
+<li> <i>min</i> — "val:0".</li></ul>
+<p>If you foresee the existence of the attributes specified in the controller parameter's template as constant, it will be possible to specify only parameter, and the attributes will be set automatically, that you can see to link created early typical analog parameter "ModBus.KM101.TE1314_1".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:712px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_el_prop_lnk.png"><img class="thumbimage" height="631" src="files/QuickStart_ui_el_prop_lnk.png" width="710" /></a>  <div class="thumbcaption">Fig. 5.1.5. Tab "Links" of the dialog of edition of the properties of the visual item.</div></div></div></div>
+<p>Having finished the links entering, we can see the result of our efforts. To do this we'll close the editing properties dialog and run the "Signal groups (template)" for execution, about the run button we remember from the previous chapters. Then let's choose the graphics and switch to the second page. With error-free configuration, we should see something similar to that shown in Fig.5.1.6. Note that for typical parameter, with violations borders set, variable gone to the borders will cause marking by violations color. For see that we can set performance cooler value to 100 (Fig.4.2.8).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_run_grph.png"><img class="thumbimage" height="670" src="files/QuickStart_ui_run_grph.png" width="1024" /></a>  <div class="thumbcaption">Fig. 5.1.6. Created group of graphs with four signals and one typical parameter linked.</div></div></div></div>
+<h3><span class="mw-headline" id="The_creation_of_the_new_frame.2C_the_mnemonic_scheme"><span class="mw-headline-number">5.2</span> The creation of the new frame, the mnemonic scheme</span></h3>
+<p>Let's raise the bar and create the new frame, on which we'll put the basic elements of our controllers' values displaying. Such frames are usually called the mnemonic schemes and in addition to the dynamics displaying, and even in the first place, contain the static image of the technological process in the mnemonic representation. We are not going to focus on the creation of statics and we'll add the dynamic elements and link them to the parameters of our controllers. We'll put the created frame to the tree of already known to us project.
+</p><p>New frames, destined later to be placed in the project, are to be created in the library of widgets. Let's create the new library of widgets "KM101" by the selecting of the vertical tab "Widgets" and in the context menu of the window of widgets' libraries click "New Library" (Fig.5.2.1). In the dialog of entering the name we'll indicate the identifier "KM101" and the name "KM 101" and then confirm.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:717px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_wlib_add.png"><img class="thumbimage" height="620" src="files/QuickStart_ui_wlib_add.png" width="715" /></a>  <div class="thumbcaption">Fig. 5.2.1. Adding of a new library of widgets.</div></div></div></div>
+<p>Next we'll add the new frame "AT101" by selecting "Library: originals" -&gt; "Elements box" in the context menu of the created library "KM101" (Fig.5.2.2). In the dialog of entering the name we'll indicate the identifier "AT101" and the name "AT 101" and then confirm. At the heart of any frame and the page must be based on an element of "Elements box (Box)", and therefore we have chosen it.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:734px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_w_add.png"><img class="thumbimage" height="658" src="files/QuickStart_ui_w_add.png" width="732" /></a>  <div class="thumbcaption">Fig. 5.2.2. Adding of a new frame.</div></div></div></div>
+<p>Immediately after the creation of the new frame element it is necessary to set its basic properties, characteristic to the mnemonic scheme frame. Properties or attributes of any visual element can be specified in the toolbar "Attributes", having pre-selected the visual element. Let's select the created frame "AT 101" and set the following properties:
+</p>
+<ul><li> <i>Geometry:width</i> — "900".</li>
+<li> <i>Geometry:height</i> — "600".</li>
+<li> <i>Page:group</i> — "so", for the frame including to mnemo container allow, at run.</li>
+<li> <i>Background:color</i> — "#5A5A5A".</li>
+<li> <i>Border:width</i> — "1".</li>
+<li> <i>Border:color</i> — "black".</li></ul>
+<p>The result will be an empty frame (Fig.5.2.3), ready to add items to it. To edit or view the the frame you should in the frame's context menu select the "Visual item edit".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:734px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_w_viewa.png"><img class="thumbimage" height="655" src="files/QuickStart_ui_w_viewa.png" width="732" /></a>  <div class="thumbcaption">Fig. 5.2.3. View of the new frame and set attributes for the mnemonic scheme.</div></div></div></div>
+<p>Now let's add on frame the elements for the value of the analog parameters displaying for our four signals and typical parameter "ModBus.KM101.TE1314_1". To place an element for displaying an analog signal to the mnemonic scheme it is necessary to select our mnemonic scheme, and then in the window's menu to select the "Widget" -&gt; "Library: Main" -&gt; "Analog show" after which the cursor with an image of this element will appear, which should be moving to the desired location on the mnemonic scheme and then the left mouse button should be pressed. At the time of adding the dialog asking the name of the new element will appear. We'll add this way the five elements which we'll call: "A1_Ti", "A1_To", "A2_Ti", "A2_To" and "TE1314_1".
+</p><p>let's add on the frame the element of typical digital parameter, for that will use library's widget "Widget"-&gt;"Library: mnEls"-&gt;"Ball crane" and next call it "KSH102".
+</p><p>For list of current violations display let's place on the frame the protocol element from the primitives library "Widget"-&gt;"Library: originals"-&gt;"Protocol" and next call it "Protocol". For the protocol element will set properties into the attributes inspector:
+</p>
+<ul><li> <i>Geometry:width</i> — "500".</li>
+<li> <i>Geometry:height</i> — "250".</li>
+<li> <i>View columns</i> — "tm;lev;mess".</li>
+<li> <i>Level</i> — "-1", for any level violations display.</li>
+<li> <i>Size, sek</i> — "0", for any depth violatons display.</li>
+<li> <i>Tracing period (s)</i> — "1".</li></ul>
+<p>The added elements can be subsequently positioned as needed by simply selecting and dragging them by the mouse. Also you can change its size. Simple size changing will only resize the container widget geometry, what often needlessly. For all widget's content geometry change it need to scale, what making by key "Ctrl" holding at the widget geometry change or by toggle state "Resize" into statusline to "Scale.
+</p><p>After such manipulations, we should get the mnemonic scheme with the view, similar to Figure 5.2.4.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1063px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_mn.png"><img class="thumbimage" height="610" src="files/QuickStart_ui_mn.png" width="1061" /></a>  <div class="thumbcaption">Fig. 5.2.4. View of the new frame and set attributes for the mnemonic scheme.</div></div></div></div>
+<p>This procedure of the creating the mnemonic scheme we'll consider to be finished. Save the new library of widgets "KM101" and proceed to the stage of the placing our mnemonic scheme in the project's tree of "Signal groups (template)".
+</p><p>Let's put our mnemonic scheme to the branch of the "Signal groups (template"-&gt;"Root page (SO)"-&gt;"Group 1"-&gt;"Mnemos" by selecting in the context menu for the "Mnemos" item the item "Library: KM101"-&gt;"AT 101". The identifier for the new mnemonic scheme let's set to "2" and the name field let's leave blank.
+</p><p>Next you need to make an already familiar to us the operation from the previous chapter, namely the setting of links to the created in the previous chapter the parameters of controllers. To do this let's open the dialogue of the properties editing of the mnemonic scheme on the "Links" tab (Fig.5.2.5). On this tab, we'll see the tree with the elements of "A1_Ti", "A1_To", "A2_Ti" and "A2_To". Unwinding any of the elements, we'll see the "Parameter" branch, in this branch we are to specify or select the address of our attributes "Ti" and "To", respectively. When filling out the elements the part of the properties must be specified as constants. For example, necessarily must be specified:
+</p>
+<ul><li> <i>pName</i> — "val:AT101_1 Ti".</li></ul>
+<p>As in case with graphics group in previous chapter for typical parameters "ModBus.KM101.TE1314_1" and "ModBus.KM101.KSH102" you can set only the parameter and attributes will assign automatic.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:457px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_mn_lnk.png"><img class="thumbimage" height="688" src="files/QuickStart_ui_mn_lnk.png" width="455" /></a>  <div class="thumbcaption">Fig. 5.2.5. Tab "Links" of dialog of editing of properties of the mnemonic scheme.</div></div></div></div>
+<p>Now we can save our mnemonic scheme and verify what we have. To do this, we'll close the properties dialog and run the "Signal groups (template)" for execution. Then switch to the second mnemonic scheme by the paging buttons. With error-free configuration, we should see something similar to that shown in Figure 5.2.6.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1044px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_run_mn.png"><img class="thumbimage" height="720" src="files/QuickStart_ui_run_mn.png" width="1042" /></a>  <div class="thumbcaption">Fig. 5.2.6. Created mnemonic scheme with four linked signals, typical parameters and the protocol.</div></div></div></div>
+<p>Note for you, the typical parameter variable going beyond violation borders set will mark by flashing through alarm color: the parameter, the signal object and the yellow circle bottom. On the violation also will cause boozer cheep and speech synthesis (if set and configured program "ru_tts" or other) from the parameter position text into link field "spName" (рис. 5.2.5). On the violation will set active the indication buttons on the right and right-bottom, and to press the button will accorded type notification make cvitation. On flashing yellow circle on the right-bottom press will cvitation for all. Any violation allowing fact will noted into the protocol, which we have appended. To see going beyond one violation border we can set the cooler productivity to 100 (Fig.4.2.8). About working with violations concept you can detailed read into chapter "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/How_to#Violation" title="Special:MyLanguage/Documents/How to">Recipes (How To)</a>".
+</p><p>Violations history you can see into document "Protocol of violations", which allowed on the display view "Document" select (Fig.5.2.7).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1044px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_run_docAlarms.png"><img class="thumbimage" height="720" src="files/QuickStart_ui_run_docAlarms.png" width="1042" /></a>  <div class="thumbcaption">Fig. 5.2.7. Alarms document.</div></div></div></div>
+<p>The digital typical parameter "ModBus.KM101.KSH102", displayed by ball crane, is active then you can select it and get control panel on the right (Fig.5.2.6), and also send commands (open or close). The commands you can doing to the control panel or context menu. All operator's control interruptions will noted into protocols and the document for its you can see on the display view "Document" select (Fig.5.2.8).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1044px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_run_docOperator.png"><img class="thumbimage" height="720" src="files/QuickStart_ui_run_docOperator.png" width="1042" /></a>  <div class="thumbcaption">Fig. 5.2.7. Operator interruptions protocol.</div></div></div></div>
+<h3><span class="mw-headline" id="Creation_of_the_new_complex_element"><span class="mw-headline-number">5.3</span> Creation of the new complex element</span></h3>
+<p>Let's proceed to the objectives of the third level of complexity, namely the creation of an complex element. Creating of the new complex element, which includes a combination of basic primitives, can be made in several stages. As an example, let's examine the task, consisting of two stages:
+</p>
+<ul><li> Creation the widget "Air cooler" on the basis of the primitive "Elementary figures".</li>
+<li> Creation the final grouped widget "Cooler" based on the primitive "Elements box".</li></ul>
+<h4><span class="mw-headline" id="Creation_the_widget_.22Air_cooler.22_on_the_basis_of_the_primitive_.22Elementary_figures.22"><span class="mw-headline-number">5.3.1</span> Creation the widget "Air cooler" on the basis of the primitive "Elementary figures"</span></h4>
+<p>The widget will be created in our previously made library "KM101". To do this we'll make right mouse button click on this library and select the item "Library: originals"-&gt;"Elementary figures", as it is shown in Figure 5.3.1.1. For a new element let's write the "air_cooler" identifier and the name "Air cooler".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:692px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_addElFig.png"><img class="thumbimage" height="628" src="files/QuickStart_addElFig.png" width="690" /></a>  <div class="thumbcaption">Fig. 5.3.1.1. Adding of a widget based on the primitive "Elementary figures" to the "KM101" library.</div></div></div></div>
+<p>After confirmation, we will have a new widget's object with the name "Air cooler". Select it in the widget library "KM101" and open for editing via the context menu of the new element (Fig. 5.3.1.2). Let is set properties into attributes inspector:
+</p>
+<ul><li> <i>Geometry:width</i> — "200".</li>
+<li> <i>Geometry:height</i> — "200".</li>
+<li> <i>Fill:color</i> — "lightgrey". Color may set, as with help <a class="external text" href="http://www.w3.org/TR/SVG/types.html#ColorKeywords" rel="nofollow noreferrer noopener" target="_blank">colors names</a>, and also in format #RRGGBB (#RRGGBB-AAA).</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:693px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ElFigWH.png"><img class="thumbimage" height="590" src="files/QuickStart_ElFigWH.png" width="691" /></a>  <div class="thumbcaption">Fig. 5.3.1.2. First widget configuration.</div></div></div></div>
+<p>Now let's draw the visual presentation of the widget. This procedure can be done in two ways described below:
+</p>
+<ul><li> To draw the desired image by the mouse, using the "Line", "Arc", "Bezier curve" and "Fill." The corresponding panel ("Elementary figure tools") appears after entering the edit mode (drawing). To enter this mode it is possible as shown it is shown in Fig. 5.3.1.3, or by double clicking the left mouse button on the body of the widget.</li>
+<li> Manually fill in the "Elements' list", by entering the list of required elements and coordinates of points.</li></ul>
+<p>More information about the editor you can get <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision#ElFigure" title="Special:MyLanguage/Modules/Vision">here</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:693px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_goElFigEdit.png"><img class="thumbimage" height="590" src="files/QuickStart_goElFigEdit.png" width="691" /></a>  <div class="thumbcaption">Fig. 5.3.1.3. Entrance to the mode of drawing the widget, based on the primitive "Elementary figures".</div></div></div></div>
+<p>In our example, we'll use the second method. To do this in the "Elements' list" of the attributes inspector let's enter the list below and press "Ctrl" + "Enter".
+</p>
+<pre style="white-space: pre-wrap;">
+line:(20|80):(100|20)
+line:(100|20):(180|80)
+line:(180|80):(100|140)
+line:(100|140):(20|80)
+line:(100|20):(100|140)
+line:(20|80):(180|80)
+line:(50|165):(100|140)
+line:(100|140):(150|165)
+line:(150|165):(50|165)
+fill:(20|80):(100|20):(180|80):(100|140)
+fill:(50|165):(100|140):(150|165)
+</pre>
+<p>All the points in our case are specified in the static form, since it is not provided the dynamics and change of coordinates in the mode of execution, and all the other parameters are left by default.
+</p><p>As a consequence, our widget will take the form shown in Figure 5.3.1.4.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:693px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ElFigFillCl.png"><img class="thumbimage" height="590" src="files/QuickStart_ElFigFillCl.png" width="691" /></a>  <div class="thumbcaption">Fig. 5.3.1.4. Image corresponding to the "Elements' list" of the widget.</div></div></div></div>
+<p>Let's create an icon for our widget, which will be visible in the widgets' tree of the library "KM101" (Figure 5.3.1.5).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:693px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ElFigPic.png"><img class="thumbimage" height="588" src="files/QuickStart_ElFigPic.png" width="691" /></a>  <div class="thumbcaption">Fig. 5.3.1.5. Creating an icon for the widget.</div></div></div></div>
+<p>The process of creating the first widget is completed. We'll now turn to the stage of layout and the creation of the resulting widget.
+</p>
+<h4><span class="mw-headline" id="Creation_the_final_complex_widget_.22Cooler.22_on_the_basis_of_the_primitive_.22Elements_box.22"><span class="mw-headline-number">5.3.2</span> <span id="ComplexWdg" title="#ComplexWdg">Creation the final complex widget "Cooler" on the basis of the primitive "Elements box"</span></span></h4>
+<p>The resulting widget we'll create in the "KM 101" library. To do this we must click the right mouse button on the library and select the primitive "Elements box", as it is shown in Figure 5.3.2.1. For a new element let's specify the identifier "elCooler" and the name of "Cooler".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:691px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_addBox.png"><img class="thumbimage" height="628" src="files/QuickStart_addBox.png" width="689" /></a>  <div class="thumbcaption">Fig. 5.3.2.1. Adding of a widget based on the primitive "Elements box" to the "KM 101" library.</div></div></div></div>
+<p>After confirmation, we'll have the new widget object with the name "Cooler". Select it in the widget library "KM 101" and open for editing. Let is set properties into attributes inspector:
+</p>
+<ul><li> <i>Geometry:width</i> — "250".</li>
+<li> <i>Geometry:height</i> — "200".</li></ul>
+<p>Let's take the previously created element "Air cooler" (air_cooler) and drag him (clicking on it by the left mouse button and moving the cursor of the mouse to the body of the widget, then let the button) to the newly created widget (see Figure 5.3.2.2). 
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:692px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_air_coolerDrag.png"><img class="thumbimage" height="630" src="files/QuickStart_air_coolerDrag.png" width="690" /></a>  <div class="thumbcaption">Fig. 5.3.2.2. Drag and Drop of the widget "air_cooler" to the widget-container "elCooler".</div></div></div></div>
+<p>The dialogue window will appear to enter the ID and name of the new widget. ID and the name can be set arbitrarily. We will input the "air_cooler" ID and the name we'll leave blank (it will be inherited from parent - the element "air_cooler"). Thus, the newly-created widget inside the container "elCooler" inherits the element - "Air cooler" ("air_cooler"). After confirming the entry of ID and name the widget "Air cooler" ("air_cooler") will be added to our widget container "elCooler" (Figure 5.3.2.3). Let is set properties into attributes inspector:
+</p>
+<ul><li> <i>Geometry:x</i> — "25".</li>
+<li> <i>Geometry:y</i> — "0".</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:693px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_air_coolerDrop.png"><img class="thumbimage" height="631" src="files/QuickStart_air_coolerDrop.png" width="691" /></a>  <div class="thumbcaption">Fig. 5.3.2.3. Adding of the inherited widget "air_cooler".</div></div></div></div>
+<p>Next, unwind the library "Mnemo elements", find there the "Cooler" element (cooler2) and drag it to the widget-container. This element will dynamically display the productivity of the air cooler. As the result it will appear the dialog window for entering the ID and name of the new widget. Enter the ID "cooler2" and the name again let's leave blank. Thus, the newly-created widget inside the container "elCooler" will inherit the element of the library "Mnemo elements" - "Cooler" ("cooler2"). After confirming the entry of the ID and name the widget "Cooler" ("cooler2") will be added to our widget-container "elCooler". Let is set properties into attributes inspector:
+</p>
+<ul><li> <i>Geometry:x</i> — "75".</li>
+<li> <i>Geometry:y</i> — "30".</li>
+<li> <i>Geometry:z</i> — "10". Raise the widget over all you can from panel "Widgets view functions".</li>
+<li> <i>Color1</i> — "#FFFF00-200", we have added the value of transparency 200 ("0" - fully transparent, while "255" - the fully opaque), as it is shown in Fig. 5.3.2.4.</li>
+<li> <i>Color2</i> — "#FF0000-200", we have added the value of transparency 200.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:693px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_cooler2AlphaChange.png"><img class="thumbimage" height="631" src="files/QuickStart_cooler2AlphaChange.png" width="691" /></a>  <div class="thumbcaption">Fig. 5.3.2.4. Change the fill colors transparency in the inherited widget "cooler2".</div></div></div></div>
+<p>Now let's add to the widget-container "elCooler" two text fields based on the primitive "Text", in order to display the input and output temperatures of the flow. To do this in the library "KM 101" we'll select the widget "Cooler" and then click on the visual items toolbar on the icon of the primitive "Text", as it is shown in Figure 5.3.2.5. The dialog of the ID and name of the newly created element entering will appear. Enter the ID "Ti" for the first text field, and the name field we'll leave blank. Let is set properties into attributes inspector:
+</p>
+<ul><li> <i>Geometry:x</i> — "5".</li>
+<li> <i>Geometry:y</i> — "20".</li>
+<li> <i>Geometry:ширина</i> — "70".</li>
+<li> <i>Geometry:высота</i> — "35".</li>
+<li> <i>Alignment</i> — "Center".</li>
+<li> <i>Font</i> — "Arial 14 1". Font selection you can do into the dialog which opened at press on the key into edit field (Fig. 5.3.2.7).</li>
+<li> <i>Text</i> — "%1{Enter}deg.C" (Fig. 5.3.2.8). {Enter} — move to next line.</li>
+<li> <i>Arguments number</i> — "1" (Fig. 5.3.2.9):
+<ul><li> <i>Argument 0:type</i> — "Real".</li>
+<li> <i>Argument 0:value</i> — "300.25", the number "300.25" is entered only the with the purpose of clarity, in the execution mode it will be changed by the real value of the input temperature.</li>
+<li> <i>Аргумент 0:config</i> — "3;f;2".</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:755px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_BoxAddText.png"><img class="thumbimage" height="600" src="files/QuickStart_BoxAddText.png" width="753" /></a>  <div class="thumbcaption">Fig. 5.3.2.5. Adding of a new element to the container, based on the primitive "Text".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:757px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_textGeom.png"><img class="thumbimage" height="603" src="files/QuickStart_textGeom.png" width="755" /></a>  <div class="thumbcaption">Fig. 5.3.2.6. Specifying of the geometry of the widget "Ti".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:694px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_tetxFontChange.png"><img class="thumbimage" height="538" src="files/QuickStart_tetxFontChange.png" width="692" /></a>  <div class="thumbcaption">Fig. 5.3.2.7. Changing of the font size for the widget "Ti".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:757px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_textArgAdd.png"><img class="thumbimage" height="603" src="files/QuickStart_textArgAdd.png" width="755" /></a>  <div class="thumbcaption">Fig. 5.3.2.8. Changing of the field "Text" and an indication of the argument's presence in it for the widget "Ti".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:757px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_textArgConf.png"><img class="thumbimage" height="603" src="files/QuickStart_textArgConf.png" width="755" /></a>  <div class="thumbcaption">Fig. 5.3.2.9. Configuration of the argument for the "Ti" widget.</div></div></div></div>
+<p>Now we'll copy the "Ti" widget in order to create an equivalent widget "To" (output temperature). Let's paste the widget, in the dialog of the ID and the name entering for the newly created widget in the field "ID" we'll write "To", and the name field we'll leave blank (Fig. 5.3.2.10). Let is set properties into attributes inspector:
+</p>
+<ul><li> <i>Geometry:x</i> — "175".</li>
+<li> <i>Geometry:y</i> — "20".</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:757px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ToGeom.png"><img class="thumbimage" height="659" src="files/QuickStart_ToGeom.png" width="755" /></a>  <div class="thumbcaption">Fig. 5.3.2.10. Widget "To".</div></div></div></div>
+<p>Now let's add the widget based on the primitive "Form's elements" (Fig. 5.3.2.11), which will be used as the ComboBox to select the productivity values of the cooler. The identifier will be "cw", and the "Name" field we'll leave blank (Fig. 5.3.2.12). Let is set properties into attributes inspector:
+</p>
+<ul><li> <i>Active</i> — "true".</li>
+<li> <i>Geometry:x</i> — "60".</li>
+<li> <i>Geometry:y</i> — "158".</li>
+<li> <i>Geometry:z</i> — "10". Raise the widget over all you can from panel "Widgets view functions".</li>
+<li> <i>Geometry:width</i> — "60".</li>
+<li> <i>Geometry:height</i> — "40".</li>
+<li> <i>Element type</i> — "Combo Box".</li>
+<li> <i>Font</i> — "Arial 14 1".</li>
+<li> <i>Value</i> — "200".</li>
+<li> <i>Configuration</i> — "0{Enter}50{Enter}100{Enter}150{Enter}200". {Enter} — move to next line.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:756px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_addFormEl.png"><img class="thumbimage" height="658" src="files/QuickStart_addFormEl.png" width="754" /></a>  <div class="thumbcaption">Fig. 5.3.2.11. Adding of a widget based on the primitive "Form's elements".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:757px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_comboParams.png"><img class="thumbimage" height="659" src="files/QuickStart_comboParams.png" width="755" /></a>  <div class="thumbcaption">Fig. 5.3.2.12. Filling of the parameters of the "cw" ComboBox.</div></div></div></div>
+<p>To display the cooler productivity dimensions we'll add the widget on the basis of the "Text" primitive. Let's make the same procedure as for the "Ti" widget. The identifier of the newly created widget will be "dimension" (Fig. 5.3.2.13). Let is set properties into attributes inspector:
+</p>
+<ul><li> <i>Geometry:x</i> — "125".</li>
+<li> <i>Geometry:y</i> — "168".</li>
+<li> <i>Geometry:width</i> — "60".</li>
+<li> <i>Geometry:height</i> — "20".</li>
+<li> <i>Alignment</i> — "Center".</li>
+<li> <i>Font</i> — "Arial 14 1".</li>
+<li> <i>Text</i> — "rpm".</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:757px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_addDimension.png"><img class="thumbimage" height="659" src="files/QuickStart_addDimension.png" width="755" /></a>  <div class="thumbcaption">Fig. 5.3.2.13. Adding of the "dimension" widget, based on the primitive "Text" and changing of its settings.</div></div></div></div>
+<p>To add the processing logics for the widget "Cooler" (elCooler) we'll open the dialog of the properties editing of the visual element and select the "Process" tab. On this tab we can see the tree of widget's attributes and the field for the program code for the attributes' processing. To solve our task, we must add three attributes: Ti, To, Cw (Fig. 5.3.2.14). To add an attribute you should unwind the root element ".", select any element inside the root one and click "Add attribute" button below.
+</p><p>Further we'll enable the processing of "value" attribute of combo box "cw", as it is shown in Figure 5.3.2.15. Similarly, enable the processing of the "arg0val" attribute for Ti and To, as well as the "speed" attribute of the "cooler2" element.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:809px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_elCoolerAtrrAdd.png"><img class="thumbimage" height="506" src="files/QuickStart_elCoolerAtrrAdd.png" width="807" /></a>  <div class="thumbcaption">Fig. 5.3.2.14. Adding of three attributes for the element "elCooler" of the library "KM 101".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:809px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_cwValueProc.png"><img class="thumbimage" height="506" src="files/QuickStart_cwValueProc.png" width="807" /></a>  <div class="thumbcaption">Fig. 5.3.2.15. Enabling of processing of the attribute "value" of the combo box "cw".</div></div></div></div>
+<p>At the end let's set the user programming language for the program to the "JavaLikeCalc.JavaScript" and write the program to process this widget:
+</p>
+<pre style="white-space: pre-wrap;">
+Ti_arg0val = Ti;
+To_arg0val = To;
+
+ev_wrk = ev_rez = "";
+for(off = 0; true; )
+{
+  ev_wrk = event.parse(0,"\n",off);
+  if(!ev_wrk.length) break;
+  if(ev_wrk == "ws_CombChange:/cw") Cw = cw_value;
+  else ev_rez += ev_wrk+"\n";
+}
+event = ev_rez;
+cw_value = Cw;
+cooler2_speed = Cw/5;
+</pre>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Place or edit the widget program does not make its compilation, and therefore no error messages in the program if they have a place to be. This is due to the fact that the immediate execution of the program and, hence, its compilation is carried out in the surroundings and the moment of launch to project execution visualization. In this case any errors during compilation are displayed in a message OpenSCADA, widgets with errors and not executed. View to messages archive OpenSCADA you can in <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#CfgArch" title="Special:MyLanguage/Documents/Program manual">the main tab of the subsystem "Archives"</a> or in a terminal run OpenSCADA, if the launch was from the terminal or emulator.
+</p><p>The resulting view of the Process tab of the "elCooler" widget of the "KM 101" library will have the form shown in Figure 5.3.2.16.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:611px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_UserProgElCooler.png"><img class="thumbimage" height="562" src="files/QuickStart_UserProgElCooler.png" width="609" /></a>  <div class="thumbcaption">Fig. 5.3.2.16. Resulting view of the "Process" tab of the "elCooler" widget of the "KM 101" library.</div></div></div></div>
+<p>Let's close the dialogue of the properties of visual element editing, create an icon on the basis of our element, close the inner editing window and save it all.
+</p><p>The development of the complex element is finished.
+</p>
+<h4><span class="mw-headline" id="Adding_the_complex_element_to_the_mnemonic_scheme"><span class="mw-headline-number">5.3.3</span> Adding the complex element to the mnemonic scheme</span></h4>
+<p>To test the operability and evaluate the results of our efforts let's add the created widget to the mnemonic scheme, developed in chapter 5.2. We'll repeat this operation for two coolers "AT101_1" and "AT101_2".
+</p><p>To do this we'll open the frame of mnemonic scheme "AT 101" for editing. Then grab by the "mouse" our complex element and drag to mnemonic scheme, where we drop it in the desired position. In the dialog we'll enter the identifiers "AT101_1" and "AT101_2" respectively. The field "Name" is blank. Added element we'll place the way we desire. After such manipulations, we should get the mnemonic scheme with the view, similar to Fig.5.3.3.1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1074px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_mn2.png"><img class="thumbimage" height="639" src="files/QuickStart_ui_mn2.png" width="1072" /></a>  <div class="thumbcaption">Figure 5.3.3.1. View of the mnemonic scheme with the complex elements.</div></div></div></div>
+<p>Let's save the new mnemonic scheme and close its window. Then move on to the project and open this mnemonic scheme in the project's tree "Signal groups (template)"-&gt;"Root page (SO)"-&gt;"Group 1"-&gt;"Mnemos"-&gt;"AT 101". As you can see, our new elements are appeared here automatically. And we only need to connect the links to the new elements. To do this we'll open the dialog of editing the properties of the mnemonic scheme on the "Links" tab (Fig.5.3.3.2). On this tab, we can see the tree with the elements of "AT101_1" and "AT101_2". Unwinding any of the elements, we'll see the "Parameter" branch just with the "Ti", "To" and "Cw" attributes, thus we can simply specify the address of the parameter "prm:/LogicLev/KM101/AT101_1" in the "Parameter" field and attributes will be placed automatically.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:445px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_mn2_lnk.png"><img class="thumbimage" height="483" src="files/QuickStart_ui_mn2_lnk.png" width="443" /></a>  <div class="thumbcaption">Fig. 5.3.3.2. Tab "Links" of the dialog of editing properties of the mnemonic scheme.</div></div></div></div>
+<p>Let's save our mnemonic scheme and verify what we have. To do this, close the dialog of the properties and run the "Signal groups (template)" for execution. Then switch to the second mnemonic scheme with the help of paging buttons. With error-free configuration, we should see something similar to that shown in Figure 5.3.3.3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1044px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_run_mn2.png"><img class="thumbimage" height="720" src="files/QuickStart_ui_run_mn2.png" width="1042" /></a>  <div class="thumbcaption">Fig. 5.3.3.3. Resulting mnemonic scheme.</div></div></div></div>
+<p>On this mnemonic scheme through our complex elements we can not only observe but also to control the productivity of coolers, simply by changing the value in the combo box. Changing the productivity, we can see the changes in temperature and alarms for analog typed parameter. History of changes we can see on the created in the chapter 5.1 the group of graphs.
+</p>
+<h2><span class="mw-headline" id="Conclusion"><span class="mw-headline-number">6</span> Conclusion</span></h2>
+<p>This document describes in detail the basic process of creating the user interface elements, with preparation and configuration of the data source. In general, you can quickly get an idea of the work with the OpenSCADA system, and purposefully look for solutions of associated problems.
+</p>
+
+
+
+
+
+</div></body>
+</html>

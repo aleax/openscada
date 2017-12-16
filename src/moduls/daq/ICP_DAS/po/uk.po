@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.ICP_DAS translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.ICP_DAS package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2009-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2009-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-18 06:26+0000\n"
+"POT-Creation-Date: 2017-12-16 16:02+0200\n"
 "PO-Revision-Date: 2009-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -92,8 +92,8 @@ msgstr "Тип входу %d"
 msgid "Error;"
 msgstr "Помилка;"
 
-msgid "Host watchdog timeout (s)"
-msgstr "Час хостового сторожового таймеру (с)"
+msgid "Host watchdog timeout, seconds"
+msgstr "Час хостового сторожового таймеру, секунд"
 
 msgid "Module"
 msgstr "Модуль"
@@ -191,13 +191,14 @@ msgstr "Вихід %d"
 
 #, c-format
 msgid "Version FPGA=%04X, Library=%04X, ISO=%04X; Build=%s; Jumper SE=%d"
-msgstr "Версія FPGA=%04X, Бібліотека=%04X, ISO=%04X; Збірка=%s; Перемикач SE=%d"
+msgstr ""
+"Версія FPGA=%04X, Бібліотека=%04X, ISO=%04X; Збірка=%s; Перемикач SE=%d"
 
 msgid "Process parameters"
 msgstr "Обробка параметрів"
 
-msgid "Fast data get period (s)"
-msgstr "Період швидкого збору даних (с)"
+msgid "Fast data get period, seconds"
+msgstr "Період швидкого збору даних, секунд"
 
 msgid "Use 0 for disable"
 msgstr "Використати 0 для вимкнення"
@@ -217,7 +218,8 @@ msgid ""
 "0:FIFO gather: %.2gMB. Sample rate: %g(%g cor.). Overfulls: %g. Retry time: "
 "%gs."
 msgstr ""
-"0:Опитування FIFO: %.2gМБ. Частота дискр.: %g(%g кор.). Переповнень: %g. Час повтору: %gс."
+"0:Опитування FIFO: %.2gМБ. Частота дискр.: %g(%g кор.). Переповнень: %g. Час "
+"повтору: %gс."
 
 msgid "ICP DAS hardware"
 msgstr "Обладнання ICP DAS"
@@ -329,8 +331,8 @@ msgstr "Помилка -> '%s': %s"
 msgid "13:Send_Receive_Cmd: error: %d."
 msgstr "13:Send_Receive_Cmd: помилка: %d."
 
-msgid "Watchdog timeout (s)"
-msgstr "Час сторожового таймеру (с)"
+msgid "Watchdog timeout, seconds"
+msgstr "Час сторожового таймеру, секунд"
 
 msgid "Set to zero for the watchdog disable."
 msgstr "Встановити у нуль для вимкнення сторожового таймеру."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-22 16:55+0300\n"
+"POT-Creation-Date: 2017-12-16 16:25+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -31,13 +31,16 @@ msgstr ""
 msgid "Addition parameters"
 msgstr "Дополнительные параметры"
 
-#, c-format
 msgid ""
 "Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed "
-"connections by limit %d."
+"connections by limit %d. "
 msgstr ""
 "Соединений %d, открыто %d, последний %s. Трафик входящий %s, исходящий %s. "
-"Закрыто соединений по лимиту %d."
+"Закрыто соединений по лимиту %d. "
+
+#, c-format
+msgid "Processing time %s[%s]. "
+msgstr "Время обработки %s[%s]. "
 
 #, c-format
 msgid "Create %s socket error: '%s (%d)'!"
@@ -149,6 +152,7 @@ msgstr "%d:Принято из '%s'\n"
 msgid "Wrote message %s to '%s'."
 msgstr "Записано сообщение %s на '%s'."
 
+#, c-format
 msgid "Transmitting error: %s"
 msgstr "Ошибка передачи: %s"
 
@@ -164,6 +168,7 @@ msgstr "Отключено '%s'!"
 msgid "Has been terminated by execution: %s"
 msgstr "Разорвано исключением: %s"
 
+#, c-format
 msgid "%d:Has been terminated by execution: %s"
 msgstr "%d:Разорвано исключением: %s"
 
@@ -275,8 +280,8 @@ msgstr ""
 "Закрытие подключения после указанного количества запросов.\n"
 "Нулевое значение для отключения (не закрывается никогда)."
 
-msgid "Keep alive timeout (s)"
-msgstr "Keep alive время ожидания (с)"
+msgid "Keep alive timeout, seconds"
+msgstr "Keep alive время ожидания, секунд"
 
 msgid ""
 "Close the connection after no requests at specified timeout.\n"
@@ -286,9 +291,12 @@ msgstr ""
 "времени.\n"
 "Нулевое значение для отключения (не закрывается никогда)."
 
+msgid "%s %d(%s): last %s; traffic in %s, out %s; client detachings %g; "
+msgstr "%s %d(%s): последний %s; трафик входящий %s, исходящий %s; отключений клиента %g; "
+
 #, c-format
-msgid "%s %d(%s): last %s; traffic in %s, out %s."
-msgstr "%s %d(%s): последний %s; трафик входящий %s, исходящий %s."
+msgid "processing time %s[%s]; "
+msgstr "время обработки %s[%s]; "
 
 #, c-format
 msgid "Traffic in %s, out %s."
@@ -371,6 +379,7 @@ msgstr "Время ожидания истекло!"
 msgid "Read (select) error: %s"
 msgstr "Ошибка чтения (select): %s"
 
+#, c-format
 msgid "Receiving (select) error: %s"
 msgstr "Ошибка получения (select): %s"
 
@@ -381,6 +390,7 @@ msgstr "Нет данных"
 msgid "Read error: %s"
 msgstr "Ошибка чтения: %s"
 
+#, c-format
 msgid "Receiving error: %s"
 msgstr "Ошибка получения: %s"
 

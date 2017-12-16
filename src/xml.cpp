@@ -304,7 +304,6 @@ void XMLNode::encode( const string &s, string &rez, bool text, unsigned flg ) co
     int32_t symb;
 
     //Append UTF8 codes checking Mess->isUTF8(), at first it is for &nbsp; = \xC2\xA0"
-    rez.reserve(s.size());
     for(unsigned iSz = 0; iSz < s.size(); iSz++) {
 	const char *replStr = NULL;
 	switch(s[iSz]) {

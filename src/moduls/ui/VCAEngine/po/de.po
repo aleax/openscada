@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-08 22:22+0200\n"
+"POT-Creation-Date: 2017-12-16 16:47+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -780,8 +780,8 @@ msgstr "Diagramm"
 msgid "Diagram widget of the finite visualization."
 msgstr "Widget für das Diagramm der Visualisierung."
 
-msgid "Tracing period (s)"
-msgstr "Trackingszeit (s)"
+msgid "Tracing period, seconds"
+msgstr "Trackingszeit, Sekunden"
 
 msgid "Trend;Spectrum;XY"
 msgstr "Plan;Spektrum;XY"
@@ -1112,20 +1112,20 @@ msgstr "Startzeit des Dokuments"
 msgid "Last time"
 msgstr "Das letzte Mal"
 
-msgid "Repeat time (s)"
-msgstr "Wiederholungszeit (Sek.)"
+msgid "Repeat time, seconds"
+msgstr "Wiederholungszeit, Sekunden"
 
-msgid "Repeat time (us)"
-msgstr "Wiederholungszeit (Mksek.)"
+msgid "Repeat time, microseconds"
+msgstr "Wiederholungszeit, Mikrosekunden"
 
 msgid "Repeat period"
 msgstr "Wiederholungsperiode"
 
-msgid "Message time"
-msgstr "Zeit der Nachricht"
+msgid "Message time, seconds"
+msgstr "Nachrichtenzeit, Sekunden"
 
-msgid "Message time (mcs)"
-msgstr "Zeit der Nachricht (Mks)"
+msgid "Message time, microseconds"
+msgstr "Nachrichtenzeit, Mikrosekunden"
 
 msgid "Message level"
 msgstr "Stufe der Nachricht"
@@ -1179,6 +1179,9 @@ msgstr "Datenbaustein %d: %0.2f%% beladen."
 #, c-format
 msgid "Messages block %d: %0.2f%% loaded."
 msgstr "Meldeblock %d: %0.2f%% beladen."
+
+msgid "Document generation terminated."
+msgstr "Dokumentenerstellung kündigen."
 
 msgid "Built-in function"
 msgstr "Installierte Funktion"
@@ -1260,9 +1263,6 @@ msgstr "Diagnostik"
 
 msgid "Time"
 msgstr "Zeit"
-
-msgid "Size (s)"
-msgstr "Größe (Sek)"
 
 msgid "Messages"
 msgstr "Nachrichten"
@@ -1421,8 +1421,8 @@ msgstr "Letzte Anfrage Zeit, Benutzer, Sprache"
 msgid "Last user action"
 msgstr "Letzte Benutzeraktion"
 
-msgid "Left to force close (s)"
-msgstr "Links nach Nähe zu zwingen (s)"
+msgid "Left to force close, seconds"
+msgstr "Links, um zu schließen, Sekunden"
 
 msgid "Period (ms)"
 msgstr "Periode (msek)"

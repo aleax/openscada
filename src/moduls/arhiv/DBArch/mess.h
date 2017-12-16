@@ -67,7 +67,7 @@ class ModMArch: public TMArchivator
 
     private:
 	//Attributes
-	double	tmProc;				//Archiving/processing time
+	float	tmProc, tmProcMax;		//Archiving-processing time
 	time_t	mBeg, mEnd;
 	double	mMaxSize;			//Maximum archive size (hours)
 	bool	mTmAsStr,			//Store time as pure integer

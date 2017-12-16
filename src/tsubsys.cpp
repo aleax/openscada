@@ -89,6 +89,18 @@ AutoHD<TModule> TSubSYS::modAt( const string &name ) const
     return chldAt(mMod,name);
 }
 
+void TSubSYS::unload( )
+{
+    //Delete all child nodes passes holded
+    vector<string> nLs;
+    for(int iCh = 0; iCh < grpSize(); iCh++) {
+	chldList(iCh, nLs);
+	for(unsigned iN = 0; iN < nLs.size(); iN++)
+	    try { chldDel(iCh, nLs[iN]); }
+	    catch(...) { }
+    }
+}
+
 void TSubSYS::subStart( )
 {
     mess_sys(TMess::Debug, _("Start subsystem."));

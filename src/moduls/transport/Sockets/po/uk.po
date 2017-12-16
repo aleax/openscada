@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-22 16:55+0300\n"
+"POT-Creation-Date: 2017-12-16 16:25+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -31,13 +31,16 @@ msgstr ""
 msgid "Addition parameters"
 msgstr "Додаткові параметри"
 
-#, c-format
 msgid ""
 "Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed "
-"connections by limit %d."
+"connections by limit %d. "
 msgstr ""
 "Підключень %d, відкрито %d, останне %s. Трафік вхідний %s, вихідний %s. "
-"Закрито підключень за лімітом %d."
+"Закрито підключень за лімітом %d. "
+
+#, c-format
+msgid "Processing time %s[%s]. "
+msgstr "Час обробки %s[%s]. "
 
 #, c-format
 msgid "Create %s socket error: '%s (%d)'!"
@@ -149,6 +152,7 @@ msgstr "%d:Отримано з '%s'\n"
 msgid "Wrote message %s to '%s'."
 msgstr "Записано повідомлення %s до '%s'."
 
+#, c-format
 msgid "Transmitting error: %s"
 msgstr "Помилка передавання: %s"
 
@@ -164,6 +168,7 @@ msgstr "Відєднано '%s'!"
 msgid "Has been terminated by execution: %s"
 msgstr "Перервано виключенням: %s"
 
+#, c-format
 msgid "%d:Has been terminated by execution: %s"
 msgstr "%d:Перервано виключенням: %s"
 
@@ -274,8 +279,8 @@ msgstr ""
 "Закриття підключення після визначеної кількості запитів.\n"
 "Нульове значення для відключення (не закривається ніколи)."
 
-msgid "Keep alive timeout (s)"
-msgstr "Keep alive час очікування (с)"
+msgid "Keep alive timeout, seconds"
+msgstr "Keep alive час очікування, секунд"
 
 msgid ""
 "Close the connection after no requests at specified timeout.\n"
@@ -284,9 +289,12 @@ msgstr ""
 "Закриття підключення після відсутності запитів протягом визначеного часу.\n"
 "Нульове значення для відключення (не закривається ніколи)."
 
+msgid "%s %d(%s): last %s; traffic in %s, out %s; client detachings %g; "
+msgstr "%s %d(%s): останній %s; трафік вхідний %s, вихідний %s; відключень клієнту %g; "
+
 #, c-format
-msgid "%s %d(%s): last %s; traffic in %s, out %s."
-msgstr "%s %d(%s): останній %s; трафік вхідний %s, вихідний %s."
+msgid "processing time %s[%s]; "
+msgstr "час обробки %s[%s]; "
 
 #, c-format
 msgid "Traffic in %s, out %s."
@@ -369,6 +377,7 @@ msgstr "Перевищено час очікування!"
 msgid "Read (select) error: %s"
 msgstr "Помилка читання (select): %s"
 
+#, c-format
 msgid "Receiving (select) error: %s"
 msgstr "Помилка отримання (select): %s"
 
@@ -379,6 +388,7 @@ msgstr "Немає даних"
 msgid "Read error: %s"
 msgstr "Помилка читання: %s"
 
+#, c-format
 msgid "Receiving error: %s"
 msgstr "Помилка отримання: %s"
 

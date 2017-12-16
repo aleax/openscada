@@ -73,9 +73,10 @@ class TModSchedul : public TSubSYS
 
     protected:
 	//Methods
-	void load_( );
-	void save_( );
 	void preDisable( int flag );
+	void load_( );
+	void unload( );
+	void save_( );
 
     private:
 	//Methods

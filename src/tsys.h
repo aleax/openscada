@@ -413,6 +413,8 @@ class TSYS : public TCntrNode
 	bool	mSaveAtExit;	// Save at exit
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
 
+	bool	isLoaded;
+
 	XMLNode rootN;		// Root of the config-file tree
 	string	rootCfgFl;	// Root node's config-file name
 	time_t	rootFlTm;	// Root node's config-file's modify time
@@ -442,8 +444,7 @@ class TSYS : public TCntrNode
 
 	unsigned char	mRdStLevel,	//Current station level
 			mRdRestConnTm;	//Redundant restore connection to reserve stations timeout in seconds
-	float		mRdTaskPer,	//Redundant task period in seconds
-			mRdPrcTm;	//Redundant process time
+	float		mRdTaskPer;	//Redundant task period in seconds
 	bool		mRdPrimCmdTr;	//Allow transfer local primary commands to redundant ones
 
 	struct sigaction	sigActOrig;

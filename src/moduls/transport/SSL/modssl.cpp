@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.7.0"
+#define MOD_VER		"1.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -178,9 +178,12 @@ string TSocketIn::getStatus( )
     string rez = TTransportIn::getStatus();
 
     if(!startStat() && !stErr.empty())	rez += _("Start error: ") + stErr;
-    else if(startStat())
-	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %s, out %s. Closed connections by limit %d."),
+    else if(startStat()) {
+	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %s, out %s. Closed connections by limit %d. "),
 	    connNumb, clId.size(), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str(), clsConnByLim);
+	if(mess_lev() == TMess::Debug)
+	    rez += TSYS::strMess(_("Processing time %s[%s]. "), tm2s(1e-6*prcTm).c_str(), tm2s(1e-6*prcTmMax).c_str());
+    }
 
     return rez;
 }
@@ -227,7 +230,7 @@ void TSocketIn::start( )
 
     //Status clear
     stErr = "";
-    trIn = trOut = 0;
+    trIn = trOut = prcTm = prcTmMax = 0;
     connNumb = clsConnByLim = 0;
 
     //Wait connection main task start
@@ -504,7 +507,17 @@ void *TSocketIn::ClTask( void *s_inf )
 	    s.s->trIn += rez; s.trIn += rez;
 	    s.s->dataRes().unlock();
 
+	    int64_t stTm = 0;
+	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
 	    s.s->messPut(s.sock, req, answ, s.sender, prot_in);
+	    if(mess_lev() == TMess::Debug) {
+		s.s->dataRes().lock();
+		s.prcTm = s.s->prcTm = SYS->curTime() - stTm;
+		s.prcTmMax = vmax(s.prcTmMax, s.prcTm);
+		s.s->prcTmMax = vmax(s.s->prcTmMax, s.s->prcTm);
+		s.s->dataRes().unlock();
+	    }
+
 	    if(answ.size()) {
 		if(mess_lev() == TMess::Debug)
 		    mess_debug(s.s->nodePath().c_str(), _("The message is replied with the size '%d'."), answ.size());
@@ -646,7 +659,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveReqs",_("Keep alive requests"),RWRWR_,"root",STR_ID,2,"tp","dec",
 	    "help",_("Close the connection after specified requests.\nZero value for disable (not close ever)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout (s)"),RWRWR_,"root",STR_ID,2,"tp","dec",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout, seconds"),RWRWR_,"root",STR_ID,2,"tp","dec",
 	    "help",_("Close the connection after no requests at specified timeout.\nZero value for disable (not close ever)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,2, "tp","dec", "help",TMess::labTaskPrior());
 	return;
@@ -655,11 +668,16 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/conns" && ctrChkNode(opt)) {
 	MtxAlloc res(sockRes, true);
-	for(vector<SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
-	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %d(%s): last %s; traffic in %s, out %s."),
+	for(vector<SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId) {
+	    string mess = TSYS::strMess(_("%s %d(%s): last %s; traffic in %s, out %s; "),
 		atm2s((*iId)->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),(*iId)->sock,(*iId)->sender.c_str(),
 		atm2s((*iId)->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
-		TSYS::cpct2str((*iId)->trIn).c_str(),TSYS::cpct2str((*iId)->trOut).c_str()));
+		TSYS::cpct2str((*iId)->trIn).c_str(),TSYS::cpct2str((*iId)->trOut).c_str());
+	    if(mess_lev() == TMess::Debug)
+		mess += TSYS::strMess(_("processing time %s[%s]; "),
+		tm2s(1e-6*(*iId)->prcTm).c_str(), tm2s(1e-6*(*iId)->prcTmMax).c_str());
+	    opt->childAdd("el")->setText(mess);
+	}
     }
     else if(a_path == "/prm/cfg/certKey") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(certKey());

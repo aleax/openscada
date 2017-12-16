@@ -1448,9 +1448,11 @@ ln -s openscada_start %buildroot/%_bindir/openscada_Boiler
 
 %files plc
 %defattr(-,root,root)
+%config(noreplace) %_sysconfdir/oscada_plc.xml
 
 %files server
 %defattr(-,root,root)
+%config(noreplace) %_sysconfdir/oscada_server.xml
 
 %files visStation
 %defattr(-,root,root)

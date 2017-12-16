@@ -30,7 +30,6 @@
 #include <QApplication>
 #include <QLocale>
 #include <QDesktopWidget>
-#include <QMenu>
 #include <QTimer>
 #include <QMenuBar>
 #include <QCloseEvent>
@@ -159,25 +158,20 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     actAlrmLev = new QAction(QPixmap::fromImage(ico_t), "", this);
     actAlrmLev->setObjectName("alarmLev");
 
-    //Create menu
-    menuFile = menuBar()->addMenu("");
-    menuFile->addAction(menuPrint->menuAction());
-    menuFile->addAction(menuExport->menuAction());
-    menuFile->addSeparator();
-    menuFile->addAction(actClose);
-    menuFile->addAction(actQuit);
-    menuAlarm = menuBar()->addMenu("");
-    menuAlarm->addAction(actAlrmLev);
-    menuView = menuBar()->addMenu("");
-    menuView->addAction(actFullScr);
-    menuHelp = menuBar()->addMenu("");
-    menuHelp->addAction(actAbout);
-    menuHelp->addAction(actQtAbout);
-    menuHelp->addAction(actProjManual);
-    menuHelp->addAction(actManual);
-    menuHelp->addAction(actManualSYS);
-    menuHelp->addSeparator();
-    menuHelp->addAction(actWhatIs);
+    menuFile.addAction(menuPrint->menuAction());
+    menuFile.addAction(menuExport->menuAction());
+    menuFile.addSeparator();
+    menuFile.addAction(actClose);
+    menuFile.addAction(actQuit);
+    menuAlarm.addAction(actAlrmLev);
+    menuView.addAction(actFullScr);
+    menuHelp.addAction(actAbout);
+    menuHelp.addAction(actQtAbout);
+    menuHelp.addAction(actProjManual);
+    menuHelp.addAction(actManual);
+    menuHelp.addAction(actManualSYS);
+    menuHelp.addSeparator();
+    menuHelp.addAction(actWhatIs);
 
     //Init tool bars
     // Generic tools bar
@@ -279,6 +273,22 @@ VisRun::~VisRun( )
     if(prDoc)	delete prDoc;
     if(fileDlg)	delete fileDlg;
 #endif
+}
+
+void VisRun::setWinMenu( bool act )
+{
+    //Create menu
+    if(act) {
+	menuBar()->clear();
+	menuBar()->addMenu(&menuFile);
+	menuBar()->addMenu(&menuAlarm);
+	menuBar()->addMenu(&menuView);
+	menuBar()->addMenu(&menuHelp);
+	menuBar()->addMenu((QMenu*)TSYS::str2addr(qApp->property("menuStarterAddr").toString().toStdString()));
+	menuBar()->setVisible(true);
+    }
+    //Clear menu
+    else { menuBar()->clear(); menuBar()->setVisible(false); }
 }
 
 string VisRun::user( )		{ return mWUser->user(); }
@@ -951,8 +961,8 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	return;
     }
-    if(req.attr("userIsRoot").size()) menuBar()->setVisible(s2i(req.attr("userIsRoot")));
-    else menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
+    if(req.attr("userIsRoot").size()) setWinMenu(s2i(req.attr("userIsRoot")));
+    else setWinMenu(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
     int oldConId = mConId;
     mConId = s2i(req.attr("conId"));
     req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess())->setAttr("conId", i2s(oldConId));
@@ -1145,8 +1155,8 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	}
 	return;
     }
-    if(req.attr("userIsRoot").size()) menuBar()->setVisible(s2i(req.attr("userIsRoot")));
-    else menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
+    if(req.attr("userIsRoot").size()) setWinMenu(s2i(req.attr("userIsRoot")));
+    else setWinMenu(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
 
     if(work_sess.empty()) work_sess = req.attr("sess");
     if(src_prj.empty()) src_prj = req.attr("prj");
@@ -1277,10 +1287,10 @@ void VisRun::messUpd( )
     actQtAbout->setStatusTip(_("Press to get the using QT information."));
 
     //Menus
-    menuFile->setTitle(_("&File"));
-    menuAlarm->setTitle(_("&Alarm"));
-    menuView->setTitle(_("&View"));
-    menuHelp->setTitle(_("&Help"));
+    menuFile.setTitle(_("&File"));
+    menuAlarm.setTitle(_("&Alarm"));
+    menuView.setTitle(_("&View"));
+    menuHelp.setTitle(_("&Help"));
 
     //Menu "Print"
     menuPrint->setTitle(_("&Print"));
@@ -1531,8 +1541,8 @@ void VisRun::alarmSet( unsigned alarm )
 
     //Set notify to the alarm
     for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); isMaster && iN != mNotify.end(); ++iN) iN->second->ntf(alarm);
-    for(int iAl = 0; iAl < menuAlarm->actions().size(); ++iAl) {
-	QAction *cO = menuAlarm->actions()[iAl];
+    for(int iAl = 0; iAl < menuAlarm.actions().size(); ++iAl) {
+	QAction *cO = menuAlarm.actions()[iAl];
 	if(!cO || cO->objectName().toStdString().compare(0,8,"alarmNtf") != 0)	continue;
 	unsigned nTp = s2i(cO->objectName().toStdString().substr(8));
 	bool newSt;
@@ -1831,7 +1841,7 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
     }
     actAlrm->setProperty("quittanceRet", (bool)f_quittanceRet);
     actAlrm->setCheckable(f_quittanceRet);
-    owner()->menuAlarm->addAction(actAlrm);
+    owner()->menuAlarm.addAction(actAlrm);
     owner()->toolBarStatus->addAction(actAlrm);
 
     //Apply to the current alarm status

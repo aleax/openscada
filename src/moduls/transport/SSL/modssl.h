@@ -58,6 +58,7 @@ class SSockIn
 	string	sender;
 	time_t	tmCreate, tmReq;
 	uint64_t trIn, trOut;	//Traffic in and out counters
+	float	prcTm, prcTmMax;
 
 	TSocketIn	*s;
 };
@@ -138,6 +139,7 @@ class TSocketIn: public TTransportIn
 	// Status atributes
 	string		stErr;			//Last error messages
 	uint64_t	trIn, trOut;		//Traffic in and out counter
+	float		prcTm, prcTmMax;
 	int		connNumb, clsConnByLim;	//Close connections by limit
 };
 

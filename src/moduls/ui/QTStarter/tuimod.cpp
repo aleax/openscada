@@ -57,7 +57,7 @@
 #else
 #define SUB_TYPE	""
 #endif
-#define MOD_VER		"3.1.0"
+#define MOD_VER		"3.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -190,6 +190,11 @@ void TUIMod::postEnable( int flag )
 	SYS->taskCreate(nodePath('.',true), 0, Task, this);
     }
 #endif
+}
+
+void TUIMod::preDisable( int flag )
+{
+    if(SYS->stopSignal() == SIGUSR2) throw err_sys(_("Hold at reloading in different project."));
 }
 
 void TUIMod::postDisable( int flag )
@@ -377,6 +382,7 @@ void *TUIMod::Task( void * )
     I18NTranslator translator;
     mod->QtApp->installTranslator(&translator);
 
+    ret:
     mod->splashSet(SPLSH_START);
     while(!mod->startCom() && !mod->endRun()) {
 	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
@@ -417,6 +423,8 @@ void *TUIMod::Task( void * )
 
     mod->QtApp->exec();
     delete winCntr;
+
+    if(SYS->stopSignal() == SIGUSR2) { mod->mStartCom = false; goto ret; }
 
     mod->splashSet(SPLSH_STOP);
     st_time = time(NULL);
@@ -471,7 +479,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* WinControl: Windows control                   *
 //*************************************************
-WinControl::WinControl( )
+WinControl::WinControl( ) : menuStarter(NULL)
 {
     tm = new QTimer(this);
     tm->setSingleShot(false);
@@ -481,6 +489,8 @@ WinControl::WinControl( )
 
 WinControl::~WinControl( )
 {
+    if(menuStarter) { delete menuStarter; menuStarter = NULL; }
+
     tm->stop();
 }
 
@@ -520,6 +530,12 @@ bool WinControl::callQtModule( const string &nm )
 {
     vector<string> list;
 
+    if(!menuStarter) {
+	menuStarter = new QMenu("QTStarter");
+	qApp->setProperty("menuStarterAddr", TSYS::addr2str(menuStarter).c_str());
+    }
+    else menuStarter->clear();
+
     AutoHD<TModule> QtMod = mod->owner().modAt(nm);
     QMainWindow *(TModule::*openWindow)( );
     QtMod.at().modFunc("QMainWindow *openWindow();",(void (TModule::**)()) &openWindow);
@@ -528,15 +544,14 @@ bool WinControl::callQtModule( const string &nm )
 
     //Make Qt starter toolbar
     QToolBar *toolBar = NULL;
-    QMenu *menu = NULL;
     if(!new_wnd->property("QTStarterToolDis").toBool()) {
-	toolBar = new QToolBar("QTStarter",new_wnd);
+	toolBar = new QToolBar("QTStarter", new_wnd);
 	toolBar->setObjectName("QTStarterTool");
-	new_wnd->addToolBar(Qt::TopToolBarArea,toolBar);
+	new_wnd->addToolBar(Qt::TopToolBarArea, toolBar);
 	toolBar->setMovable(true);
     }
     if(!new_wnd->property("QTStarterMenuDis").toBool() && !new_wnd->menuBar()->actions().empty())
-	menu = new_wnd->menuBar()->addMenu("QTStarter");
+	new_wnd->menuBar()->addMenu(menuStarter);
 
     mod->owner().modList(list);
     for(unsigned iL = 0; iL < list.size(); iL++)
@@ -560,7 +575,7 @@ bool WinControl::callQtModule( const string &nm )
 	QObject::connect(act_1, SIGNAL(triggered()), this, SLOT(callQtModule()));
 
 	if(toolBar) toolBar->addAction(act_1);
-	if(menu) menu->addAction(act_1);
+	menuStarter->addAction(act_1);
     }
 
     new_wnd->show();
@@ -710,6 +725,8 @@ StartDialog::StartDialog( WinControl *wcntr ) : prjsLs(NULL), prjsBt(NULL)
     }
 
     //Append the list of projects of OpenSCADA
+    prjsLs = NULL;
+    prjsBt = NULL;
     if(!SYS->prjCustMode()) {
 	bool oscd_datadir_wr = (access(oscd_datadir_full,X_OK|W_OK) == 0);
 
@@ -733,12 +750,11 @@ StartDialog::StartDialog( WinControl *wcntr ) : prjsLs(NULL), prjsBt(NULL)
 		while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
 		    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
 		    //  Presenting of the project's folder
-		    stat((userDir+"/"+scan_rez->d_name).c_str(), &file_stat);
-		    if((file_stat.st_mode&S_IFMT) != S_IFDIR)	continue;
+		    if(stat((userDir+"/"+scan_rez->d_name).c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR)
+			continue;
 		    //  Presenting of the project's config file
 		    string itNm = userDir + "/" + scan_rez->d_name + "/oscada.xml";
-		    stat(itNm.c_str(), &file_stat);
-		    if((file_stat.st_mode&S_IFMT) != S_IFREG) continue;
+		    if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) continue;
 		    //  Item placing
 		    string opt;
 		    if(scan_rez->d_name == SYS->prjNm()) opt += string(opt.size()?", ":"") + _("current");
@@ -770,15 +786,13 @@ StartDialog::StartDialog( WinControl *wcntr ) : prjsLs(NULL), prjsBt(NULL)
 	    while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
 		if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
 		//  Presenting of the project's folder
-		stat((string(oscd_datadir_full)+"/"+scan_rez->d_name).c_str(), &file_stat);
-		if((file_stat.st_mode&S_IFMT) != S_IFDIR)	continue;
+		if(stat((string(oscd_datadir_full)+"/"+scan_rez->d_name).c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR)
+		    continue;
 		//  Presenting of the project's config file
 		string itNm = string(sysconfdir_full) + "/oscada_" + scan_rez->d_name + ".xml";
-		stat(itNm.c_str(), &file_stat);
-		if((file_stat.st_mode&S_IFMT) != S_IFREG) {
+		if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
 		    itNm = string(oscd_datadir_full) + "/" + scan_rez->d_name + "/oscada.xml";
-		    stat(itNm.c_str(), &file_stat);
-		    if((file_stat.st_mode&S_IFMT) != S_IFREG) continue;
+		    if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) continue;
 		}
 		//  Item placing
 		string opt;
@@ -833,6 +847,13 @@ StartDialog::StartDialog( WinControl *wcntr ) : prjsLs(NULL), prjsBt(NULL)
     butt->setWhatsThis(_("The button for exit from the program."));
     QObject::connect(butt, SIGNAL(clicked(bool)), wcntr, SLOT(callQtModule()));
     wnd_lay->addWidget(butt, 0, 0);
+}
+
+void StartDialog::showEvent( QShowEvent* )
+{
+    //Hide the projects apply button for too busy lists
+    if(prjsLs && prjsBt)
+	prjsBt->setVisible(prjsLs->height() > 5*QFontMetrics(prjsLs->font()).height());
 }
 
 void StartDialog::closeEvent( QCloseEvent *ce )

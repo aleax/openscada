@@ -59,8 +59,8 @@ void TModSchedul::preDisable( int flag )
 	}
 
     //All shared libraries detach
-    for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
-	if(schHD[iSh].hd) { dlclose(schHD[iSh].hd); schHD[iSh].hd = NULL; }
+    for(int iSh = 0; iSh < schHD.size(); iSh++)
+	if(schHD[iSh].hd) { dlclose(schHD[iSh].hd); schHD.erase(schHD.begin()+(iSh--)); }
 }
 
 string TModSchedul::optDescr( )
@@ -82,21 +82,43 @@ string TModSchedul::optDescr( )
 
 void TModSchedul::setChkPer( int per )	{ mPer = vmax(0,per); modif(); }
 
-int TModSchedul::loadLibS( )	{ return libLoad(SYS->modDir(),false); }
+int TModSchedul::loadLibS( )	{ return libLoad(SYS->modDir(), false); }
 
 void TModSchedul::load_( )
 {
     //Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-	if(strcasecmp(argCom.c_str(),"h") == 0 || strcasecmp(argCom.c_str(),"help") == 0) fprintf(stdout,"%s",optDescr().c_str());
-	else if(strcasecmp(argCom.c_str(),"modpath") == 0)	SYS->setModDir(optarg, true);
+    string argVl;
+    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
+    if((argVl=SYS->cmdOpt("modPath")).size()) SYS->setModDir(argVl, true);
 
     //Load parameters from command line
     setChkPer(s2i(TBDS::genDBGet(nodePath()+"ChkPer",i2s(chkPer()))));
     SYS->setModDir(TBDS::genDBGet(nodePath()+"ModPath",SYS->modDir()), true);
     setAllowList(TBDS::genDBGet(nodePath()+"ModAllow",allowList(),"root",TBDS::OnlyCfg));
     setDenyList(TBDS::genDBGet(nodePath()+"ModDeny",denyList(),"root",TBDS::OnlyCfg));
+}
+
+void TModSchedul::unload( )
+{
+    //Unload all modules and pass for holded
+    MtxAlloc res(schM, true);
+    for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
+	while(schHD[iSh].hd && schHD[iSh].use.size())
+	    try {
+		owner().at(TSYS::strSepParse(schHD[iSh].use[0],0,'.')).at().modDel(TSYS::strSepParse(schHD[iSh].use[0],1,'.'));
+		schHD[iSh].use.erase(schHD[iSh].use.begin());
+	    } catch(...) { break; }
+
+    //All shared libraries detach
+    for(int iSh = 0; iSh < schHD.size(); iSh++)
+	if(!schHD[iSh].hd || !schHD[iSh].use.size()) {
+	    if(schHD[iSh].hd) dlclose(schHD[iSh].hd);
+	    schHD.erase(schHD.begin()+(iSh--));
+    }
+
+    TSubSYS::unload();
+
+    mAllow = "*"; mDeny = "";
 }
 
 void TModSchedul::save_( )
@@ -322,6 +344,7 @@ bool TModSchedul::chkAllowMod( const string &name )
 	    if(sTrm(sel) == name || sTrm(sel) == nmFile) break;
 	if(sel.empty()) return false;
     }
+
     for(int off = 0; (sel=TSYS::strSepParse(denyList(),0,';',&off)).size(); )
 	if(sTrm(sel) == name || sTrm(sel) == nmFile) return false;
 
@@ -370,28 +393,28 @@ int TModSchedul::libLoad( const string &iname, bool full )
     dirScan(iname, files);
 
     //Add and process allowed modules
-    for(unsigned i_f = 0; i_f < files.size(); i_f++) {
+    for(unsigned iF = 0; iF < files.size(); iF++) {
 	unsigned iSh;
-	bool st_auto = chkAllowMod(files[i_f]);
+	bool st_auto = chkAllowMod(files[iF]);
 	MtxAlloc res(schM, true);
 	for(iSh = 0; iSh < schHD.size(); iSh++)
-	    if(schHD[iSh].name == files[i_f]) break;
+	    if(schHD[iSh].name == files[iF]) break;
 	if(iSh < schHD.size()) {
 	    try {
 		res.unlock();
-		if(st_auto) libDet(files[i_f]);
+		if(st_auto) libDet(files[iF]);
 	    } catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Warning, _("Can't detach library '%s'."), files[i_f].c_str());
+		mess_sys(TMess::Warning, _("Can't detach library '%s'."), files[iF].c_str());
 		continue;
 	    }
 	}
 	res.unlock();
 
-	libReg(files[i_f]);
+	libReg(files[iF]);
 
 	if(st_auto) {
-	    try{ libAtt(files[i_f],full); ldCnt++; }
+	    try{ libAtt(files[iF],full); ldCnt++; }
 	    catch(TError &err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
 	}
     }

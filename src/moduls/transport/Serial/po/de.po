@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-22 17:17+0300\n"
+"POT-Creation-Date: 2017-12-16 16:21+0200\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -55,11 +55,14 @@ msgstr "Keine Antwort vom Modem %d."
 msgid "No any expected respond but receive from modem %d: '%s'."
 msgstr "Keine Antwort erwartet wurde, erhielt aber vom Modem %d: '%s'."
 
-#, c-format
-msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms."
+msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms. "
 msgstr ""
 "Datenverkehr eingehend %s, ausgehend %s. Maximale Wartezeit für ein Zeichen "
-"%.4g msek."
+"%.4g msek. "
+
+#, c-format
+msgid "Processing time %s[%s]. "
+msgstr "Bearbeitungszeit %s[%s]. "
 
 #, c-format
 msgid "Serial port '%s' %s error: %s."
@@ -263,6 +266,7 @@ msgstr "Keine Daten geschrieben"
 msgid "Write error: %s"
 msgstr "Fehler beim Schreiben: %s"
 
+#, c-format
 msgid "Transmitting error: %s"
 msgstr "Übertragungsfehler: %s"
 
@@ -286,6 +290,7 @@ msgstr "Empfangen zeitgesteuert"
 msgid "Read (select) error: %s"
 msgstr "Lesefehler (select): %s"
 
+#, c-format
 msgid "Receiving (select) error: %s"
 msgstr "Empfangen (select) Fehler: %s"
 
@@ -296,6 +301,7 @@ msgstr "Keine Daten"
 msgid "Read error: %s"
 msgstr "Lesefehler: %s"
 
+#, c-format
 msgid "Receiving error: %s"
 msgstr "Empfangsfehler: %s"
 

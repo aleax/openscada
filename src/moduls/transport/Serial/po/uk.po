@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-22 17:17+0300\n"
+"POT-Creation-Date: 2017-12-16 16:21+0200\n"
 "PO-Revision-Date: 2009-03-31 18:44+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -53,10 +53,13 @@ msgstr "Немає відповіді з модему %d."
 msgid "No any expected respond but receive from modem %d: '%s'."
 msgstr "Немає очікуваної відповіді, але отримано з модему %d: '%s'."
 
-#, c-format
-msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms."
+msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms. "
 msgstr ""
-"Трафік вхідний %s, вихідний %s. Максимальний час очікування символу %.4g мс."
+"Трафік вхідний %s, вихідний %s. Максимальний час очікування символу %.4g мс. "
+
+#, c-format
+msgid "Processing time %s[%s]. "
+msgstr "Час обробки %s[%s]. "
 
 #, c-format
 msgid "Serial port '%s' %s error: %s."
@@ -258,6 +261,7 @@ msgstr "Не записано даних"
 msgid "Write error: %s"
 msgstr "Помилка запису: %s"
 
+#, c-format
 msgid "Transmitting error: %s"
 msgstr "Помилка передавання: %s"
 
@@ -281,6 +285,7 @@ msgstr "Перевищено час очікування отримання!"
 msgid "Read (select) error: %s"
 msgstr "Помилка читання (select): %s"
 
+#, c-format
 msgid "Receiving (select) error: %s"
 msgstr "Помилка отримання (select): %s"
 
@@ -291,6 +296,7 @@ msgstr "Немає даних"
 msgid "Read error: %s"
 msgstr "Помилка читання: %s"
 
+#, c-format
 msgid "Receiving error: %s"
 msgstr "Помилка отримання: %s"
 

@@ -473,7 +473,7 @@ void *Session::Task( void *icontr )
     while(!ses.endrunReq) {
 	//Calc session pages and all other items at recursion
 	for(unsigned iL = 0; iL < pls.size(); iL++)
-	    try { ses.at(pls[iL]).at().calc(false, false); }
+	    try { ses.at(pls[iL]).at().calc(false, false, iL); }
 	    catch(TError &err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(ses.nodePath().c_str(),_("Session '%s' calculate error."),pls[iL].c_str());
@@ -663,7 +663,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("fld",opt,-1,"/obj/st/reqUser","",R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("fld",opt,-1,"/obj/st/reqLang","",R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("fld",opt,-1,"/obj/st/userActTime",_("Last user action"),R_R_R_,"root",SUI_ID,1,"tp","time");
-		    if(!backgrnd()) ctrMkNode("fld",opt,-1,"/obj/st/leftToClose",_("Left to force close (s)"),R_R_R_,"root",SUI_ID,1,"tp","dec");
+		    if(!backgrnd()) ctrMkNode("fld",opt,-1,"/obj/st/leftToClose",_("Left to force close, seconds"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 		}
 	    }
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Configuration"))) {
@@ -1180,10 +1180,10 @@ float SessPage::tmCalcMaxAll( )
     return vl;
 }
 
-void SessPage::calc( bool first, bool last )
+void SessPage::calc( bool first, bool last, int pos )
 {
     //Process self data
-    if(process()) SessWdg::calc(first, last);
+    if(process()) SessWdg::calc(first, last, pos);
 
     if(mClosePgCom) { mClosePgCom = false; setProcess(false); return; }
 
@@ -1192,7 +1192,7 @@ void SessPage::calc( bool first, bool last )
 	vector<string> ls;
 	pageList(ls);
 	for(unsigned iL = 0; iL < ls.size(); iL++)
-	    pageAt(ls[iL]).at().calc(first, last);
+	    pageAt(ls[iL]).at().calc(first, last, pos+iL);
     }
 }
 
@@ -1834,7 +1834,7 @@ bool SessWdg::modifChk( unsigned int tm, unsigned int iMdfClc )
     return (mCalcClk>=tm) ? (iMdfClc >= tm && iMdfClc <= mCalcClk) : (iMdfClc >= tm || iMdfClc <= mCalcClk);
 }
 
-void SessWdg::calc( bool first, bool last )
+void SessWdg::calc( bool first, bool last, int pos )
 {
     if(!process()) return;
 
@@ -1850,7 +1850,7 @@ void SessWdg::calc( bool first, bool last )
 	try {
 	    AutoHD<SessWdg> wdg = wdgAt(mWdgChldAct[iL]);
 	    resDt.unlock();
-	    wdg.at().calc(first, last);
+	    wdg.at().calc(first, last, pos+iL);
 	    resDt.lock();
 	} catch(TError &err) { }
     resDt.unlock();
@@ -1862,7 +1862,7 @@ void SessWdg::calc( bool first, bool last )
 	if(mess_lev() == TMess::Debug) tCnt = TSYS::curTime();
 
 	//Load events to process
-	if(!((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) || first || last) {
+	if(!((ownerSess()->calcClk()+pos)%(vmax(calcPer()/ownerSess()->period(),1))) || first || last) {
 	    string wevent = eventGet(true);
 	    //Process input links and constants
 	    AutoHD<Attr> attr;

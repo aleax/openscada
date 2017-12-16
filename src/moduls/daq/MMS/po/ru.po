@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.MMS translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.MMS package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2013-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2013-2014, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-13 18:45+0200\n"
+"POT-Creation-Date: 2017-12-16 16:04+0200\n"
 "PO-Revision-Date: 2013-10-20 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -33,11 +33,11 @@ msgstr "Планирование опроса"
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
 
-msgid "Restore timeout (s)"
-msgstr "Интервал восстановления (с)"
+msgid "Restore timeout, seconds"
+msgstr "Интервал восстановления, секунд"
 
-msgid "Sync inter remote station period (s)"
-msgstr "Период синхронизации с удалённой станцией (сек)"
+msgid "Sync inter remote station period, seconds"
+msgstr "Период синхронизации с удалённой станцией, секунд"
 
 msgid "Server address"
 msgstr "Адрес сервера"

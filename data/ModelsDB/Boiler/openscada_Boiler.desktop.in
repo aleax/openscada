@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Categories=Graphics;Development;
 Type=Application
-Exec=env OSCADA_ProjName=Boiler env TERM= @bindir_full@/openscada_start
+Exec=env OSCADA_ProjName=Boiler @bindir_full@/openscada
 Icon=openscada_Boiler
 Name=OpenSCADA: Model "Boiler"
 GenericName=Model "Boiler" on open SCADA system

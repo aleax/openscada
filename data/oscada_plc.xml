@@ -3,14 +3,13 @@
     <!--
     This is the OpenSCADA configuration file.
     -->
-    <station id="WorkStation">
+    <station id="PLCStation">
 	<!--
 	Describe internal parameters for station.
 	The station is OpenSCADA program.
 	-->
-	<prm id="StName">Work station</prm>
+	<prm id="StName">PLC station</prm>
 	<!--<prm id="WorkDB">SQLite.GenDB</prm>-->
-	<prm id="WorkDir">@oscd_datadir_full@</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="SaveAtExit">0</prm>
 	<prm id="SavePeriod">0</prm>
@@ -18,7 +17,7 @@
 	<node id="sub_BD">
 	    <prm id="SYSStPref">0</prm>
 	    <tbl id="DB">
-		<fld ID="GenDB" TYPE="SQLite" NAME="Main DB" ADDR="MainSt.db" CODEPAGE="UTF-8"/>
+		<fld ID="GenDB" TYPE="SQLite" NAME="Main DB" ADDR="St.db" CODEPAGE="UTF-8"/>
 	    </tbl>
 	</node>
 
@@ -71,9 +70,6 @@
 	</node>
 
 	<node id="sub_UI">
-	    <node id="mod_QTStarter">
-		<prm id="StartMod">QTCfg</prm>
-	    </node>
 	    <node id="mod_WebCfg">
 		<prm id="SessTimeLife">20</prm>
 	    </node>

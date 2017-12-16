@@ -14,7 +14,7 @@ DESC="OpenSCADA PLC"
 NAME=openscada
 PIDFILE=/var/run/${NAME}_PLC.pid
 DAEMON=/usr/bin/$NAME
-DAEMON_ARGS="--demon --pidFile=$PIDFILE"
+DAEMON_ARGS="--projName=plc --demon --pidFile=$PIDFILE"
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0

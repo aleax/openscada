@@ -1,13 +1,13 @@
 # OpenSCADA.Archive.DBArch translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Archive.DBArch module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2010, 2016.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2010, 2016-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.DBArch 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-18 18:22+0300\n"
+"POT-Creation-Date: 2017-12-16 15:18+0200\n"
 "PO-Revision-Date: 2007-10-21 22:40+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -34,11 +34,11 @@ msgstr "Помилка перевірки архіватору '%s'."
 msgid "In minutes"
 msgstr "У хвилинах"
 
-msgid "Time (s)"
-msgstr "Час (с)"
+msgid "Time, seconds"
+msgstr "Час, секунд"
 
-msgid "Time (us)"
-msgstr "Час (мкс)"
+msgid "Time, microseconds"
+msgstr "Час, мікросекунд"
 
 msgid "Category"
 msgstr "Категорія"

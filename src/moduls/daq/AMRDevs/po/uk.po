@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.AMRDevs translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.AMRDevs package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2010-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 16:54+0300\n"
+"POT-Creation-Date: 2017-12-16 15:44+0200\n"
 "PO-Revision-Date: 2010-02-16 16:54+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -119,8 +119,8 @@ msgstr "Конф. файл мережі контролерів"
 msgid "PLC serial number"
 msgstr "Серійний номер ПЛК"
 
-msgid "Set PLC clock on different for more (s)"
-msgstr "Вст. годинника ПЛК при відхилені більш (с)"
+msgid "Set PLC clock on different for more, seconds"
+msgstr "Вст. годинника ПЛК при відхилені більш, секунд"
 
 msgid "PLC clock's zone"
 msgstr "Зона годинника ПЛК"
@@ -159,10 +159,10 @@ msgid "Request (enc): '%s'"
 msgstr "Запит (код): '%s'"
 
 #, c-format
-msgid "13:Unapt MasterPLC ID: %xh != %xh"
+msgid "13:Inapt MasterPLC ID: %xh != %xh"
 msgstr "13:Непридатний ID МастерПЛК: %xh != %xh"
 
-msgid "12:PLC: The password encripted by master key."
+msgid "12:PLC: The password encrypted by master key."
 msgstr "12:ПЛК: Пароль кодовано мастер ключем."
 
 msgid "12:PLC: Error."
@@ -218,8 +218,8 @@ msgstr "Планування опитування"
 msgid "Gather task priority"
 msgstr "Рівень пріорітету задачі збору даних"
 
-msgid "Restore timeout (s)"
-msgstr "Час відновлення (с)"
+msgid "Restore timeout, seconds"
+msgstr "Час відновлення, секунд"
 
 msgid "Request tries"
 msgstr "Спроб запиту"

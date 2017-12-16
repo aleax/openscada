@@ -16,7 +16,7 @@ WITHOUT_RC_COMPAT=1
 PIDFILE=/var/run/openscada.pid
 LOCKFILE=/var/lock/subsys/openscada
 OPENSCADA=/usr/bin/openscada
-ARGS="--demon --pidFile=$PIDFILE"
+ARGS="--projName=server --demon --pidFile=$PIDFILE"
 RETVAL=0
 
 start()

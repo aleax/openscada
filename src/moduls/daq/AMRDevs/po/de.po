@@ -1,14 +1,14 @@
 # OpenSCADA.DAQ.AMRDevs translate to German.
-# Copyright (C) 2010 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.AMRDevs package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010, 2011.
+# Roman Savochenko <rom_as@oscada.org>, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 16:54+0300\n"
+"POT-Creation-Date: 2017-12-16 15:44+0200\n"
 "PO-Revision-Date: 2011-07-19 20:33+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -112,101 +112,99 @@ msgid "Kontar"
 msgstr ""
 
 msgid "Input transport"
-msgstr ""
+msgstr "Eingabetransport"
 
 msgid "Master password"
-msgstr ""
+msgstr "Master Passwort"
 
 msgid "Master PLC serial number"
-msgstr ""
+msgstr "Master-SPS-Seriennummer"
 
 msgid "Controllers network config-file"
-msgstr ""
+msgstr "Controller-Netzwerkkonfigurationsdatei"
 
-#, fuzzy
 msgid "PLC serial number"
-msgstr "Nummer des Fadens"
+msgstr "SPS-Seriennummer"
 
-msgid "Set PLC clock on different for more (s)"
-msgstr ""
+msgid "Set PLC clock on different for more, seconds"
+msgstr "Stellen Sie SPS-Uhr auf verschiedenen für mehr Sekunden"
 
 msgid "PLC clock's zone"
-msgstr ""
+msgstr "Zeitzone der SPS-Uhr"
 
 msgid "List"
-msgstr ""
+msgstr "Liste"
 
-#, fuzzy
 msgid "Parameter"
-msgstr "Parametertabelle"
+msgstr "Parameter"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Master PLC ID Request: '%s'"
-msgstr "Anfrageversuche"
+msgstr "Master-PLC-ID-Anfrage: '%s'"
 
 #, c-format
 msgid "Connection from PLC Kontar %xh."
-msgstr ""
+msgstr "Verbindung von SPS Kontar %xh."
 
 #, c-format
 msgid "Password sequence set: '%s'."
-msgstr ""
+msgstr "Passwortreihenfolge: '%s'."
 
 #, c-format
 msgid "Master PLC ID Response: '%s'"
-msgstr ""
+msgstr "Master-SPS-ID-Antwort: '%s'"
 
 msgid "No a propper connection from PLC."
-msgstr ""
-
-#, fuzzy, c-format
-msgid "Request: '%s'"
-msgstr "Anfrageversuche"
-
-#, fuzzy, c-format
-msgid "Request (enc): '%s'"
-msgstr "Anfrageversuche"
+msgstr "Keine ordnungsgemäße Verbindung von der SPS."
 
 #, c-format
-msgid "13:Unapt MasterPLC ID: %xh != %xh"
-msgstr ""
+msgid "Request: '%s'"
+msgstr "Anfordern: '%s'"
 
-msgid "12:PLC: The password encripted by master key."
-msgstr ""
+#, c-format
+msgid "Request (enc): '%s'"
+msgstr "Anfrage (enc): '%s'"
+
+#, c-format
+msgid "13:Inapt MasterPLC ID: %xh != %xh"
+msgstr "13:Eingebaute Master-SPS-ID: %xh != %Xh"
+
+msgid "12:PLC: The password encrypted by master key."
+msgstr "12:SPS: Das Passwort wird mit dem Hauptschlüssel verschlüsselt."
 
 msgid "12:PLC: Error."
-msgstr ""
+msgstr "12:SPS: Fehler."
 
 msgid "12:PLC: Unknown command."
-msgstr ""
+msgstr "12:SPS: Unbekannter Befehl."
 
 msgid "12:PLC: Wrong command format."
-msgstr ""
+msgstr "12:SPS: Falsches Befehlsformat."
 
 msgid "12:PLC: Error read from slave."
-msgstr ""
+msgstr "12:SPS: Fehler vom Slave gelesen."
 
 msgid "12:PLC: Network update in process."
-msgstr ""
+msgstr "12:SPS: Netzwerkaktualisierung läuft."
 
-#, fuzzy, c-format
+#, c-format
 msgid "Response (enc): '%s'"
-msgstr "Anfrageversuche"
+msgstr "Antwort (enc): '%s'"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Response: '%s'"
-msgstr "Anfrageversuche"
+msgstr "Antwort: '%s'"
 
 #, c-format
 msgid "Error: '%s': '%s'"
-msgstr ""
+msgstr "Fehler: '%s': '%s'"
 
-#, fuzzy, c-format
+#, c-format
 msgid "15:Response PDU size (%d from %d) error."
-msgstr "15:Fehler in der Grösse der PDU - Antwort."
+msgstr "15:Antwort PDU-Größe (%d von %d) Fehler."
 
 msgid "<No select>"
-msgstr ""
+msgstr "<Keine Auswahl>"
 
 msgid "AMR devices"
 msgstr "Die AMR-Devices"
@@ -227,8 +225,8 @@ msgstr "Planung der Befragung"
 msgid "Gather task priority"
 msgstr "Prioritätsniveau der Aufgabe des Datenempfangs"
 
-msgid "Restore timeout (s)"
-msgstr "Wiederaufbauzeit (s)"
+msgid "Restore timeout, seconds"
+msgstr "Wiederaufbauzeit, Sekunden"
 
 msgid "Request tries"
 msgstr "Anfrageversuche"
@@ -259,31 +257,3 @@ msgstr "Bearbeitung"
 
 msgid "11:Value not gathered."
 msgstr "11:Der Wert ist nicht empfangen."
-
-#~ msgid "Standard"
-#~ msgstr "Standard"
-
-#~ msgid "Device type"
-#~ msgstr "Anlagetyp"
-
-#~ msgid "Transport's address"
-#~ msgstr "Adresse des Transports"
-
-#~ msgid "Device address"
-#~ msgstr "Adresse der Anlage"
-
-#~ msgid "Device addon parameters"
-#~ msgstr "Zusätzliche Parameter der Anlage"
-
-#~ msgid "No one device selected."
-#~ msgstr "Die Anlage ist nicht gewählt."
-
-#~ msgid "Need re-enable for configuration apply! "
-#~ msgstr ""
-#~ "Es ist notwendig für die Konfigurationsaktivierung re-einzuschalten! "
-
-#~ msgid "FLowTEC UGT-AA55"
-#~ msgstr "FlowTEC UGT-AA55"
-
-#~ msgid "Ergomera"
-#~ msgstr "Ergomera"

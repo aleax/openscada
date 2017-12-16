@@ -1,13 +1,13 @@
 # OpenSCADA.DB.FireBird translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DB.FireBird package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.FireBird 0.9.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-07 17:08+0200\n"
+"POT-Creation-Date: 2017-12-16 15:26+0200\n"
 "PO-Revision-Date: 2007-10-23 12:52+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -87,17 +87,18 @@ msgid ""
 "  file - full path to DB file in form: \"[{host}:]{filePath}\";\n"
 "  user - DB user;\n"
 "  pass - password of DB user;\n"
-"  conTm- connection timeout (s)."
+"  conTm- connection timeout, seconds."
 msgstr ""
 "Адрес БД FireBird записывается как: \"{file};{user};{pass}[;{conTm}]\".\n"
 "Где:\n"
 "  файл   - полный путь к файлу БД в формате: \"[{host}:]{filePath}\";\n"
 "  пользователь - пользователь БД;\n"
 "  пароль - пароль пользователя БД;\n"
-"  conTm  - таймаут подключения (с)."
+"  conTm  - таймаут подключения, секунд."
 
 msgid "Table is empty."
 msgstr "Таблица пуста."
 
+#, c-format
 msgid "Row \"%s\" is not present. Are you saved the object?"
 msgstr "Запись \"%s\" отсутствует. Вы сохраняли этот объект?"

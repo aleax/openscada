@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-08 21:59+0200\n"
+"POT-Creation-Date: 2017-12-16 16:41+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -479,6 +479,9 @@ msgstr "Дополнительно"
 msgid "Mon"
 msgstr "Пон"
 
+msgid "Hold at reloading in different project."
+msgstr ""
+
 msgid "Load module."
 msgstr "Загрузка модуля."
 
@@ -638,10 +641,18 @@ msgstr "<Создание-обновление>"
 
 msgid ""
 "New projects creation or updating of presented ones, like to desktop links"
-msgstr "Создание новых проектов или обновление присутствующих, вроде ссылок рабочего стола"
+msgstr ""
+"Создание новых проектов или обновление присутствующих, вроде ссылок рабочего "
+"стола"
 
 msgid "=== User projects ==="
 msgstr "=== Пользовательские проекты ==="
+
+msgid "current"
+msgstr "текущий"
+
+msgid "running"
+msgstr "исполняется"
 
 msgid "=== Common projects ==="
 msgstr "=== Основные проекты ==="
@@ -709,27 +720,22 @@ msgstr "Переключить проект"
 msgid "Do you really want to change the current project \"%1\" to \"%2\"?"
 msgstr "Вы действительно желаете изменить текущий проект \"%1\" на \"%2\"?"
 
+msgid "Call project"
+msgstr "Вызвать проект"
+
+msgid "Project \"%1\" seems running now! You still want to switch the project?"
+msgstr ""
+"Проект \"%1\" похоже исполняется! Вы всё ещё желаете переключить проект?"
+
+msgid "Project \"%1\" seems running now! You still want to call the project?"
+msgstr "Проект \"%1\" похоже исполняется! Вы всё ещё желаете вызвать проект?"
+
 msgid "Project \"%1\" seems wrong or broken!"
 msgstr "Проект \"%1\" похоже ошибочный или сломан!"
 
 #, c-format
 msgid "No translated Qt message: '%s'"
 msgstr "Непереведенное Qt сообщение: '%s'"
-
-msgid "current"
-msgstr "текущий"
-
-msgid "running"
-msgstr "исполняется"
-
-msgid "Call project"
-msgstr "Вызвать проект"
-
-msgid "Project \"%1\" seems running now! You still want to switch the project?"
-msgstr "Проект \"%1\" похоже исполняется! Вы всё ещё желаете переключить проект?"
-
-msgid "Project \"%1\" seems running now! You still want to call the project?"
-msgstr "Проект \"%1\" похоже исполняется! Вы всё ещё желаете вызвать проект?"
 
 #~ msgid ""
 #~ "<p>This program uses Qt Open Source Edition version %1.</p><p>Qt Open "

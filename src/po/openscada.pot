@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-08 20:38+0200\n"
+"POT-Creation-Date: 2017-12-16 11:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -195,13 +195,13 @@ msgstr ""
 msgid "Messages buffer size"
 msgstr ""
 
-msgid "Archiving period (s)"
+msgid "Archiving period, seconds"
 msgstr ""
 
 msgid "View messages"
 msgstr ""
 
-msgid "Time, size (s) and level"
+msgid "Time, size (seconds) and level"
 msgstr ""
 
 msgid "Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning (3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;Emergency (7), ALARMS"
@@ -405,13 +405,13 @@ msgstr ""
 msgid "Process"
 msgstr ""
 
-msgid "Period (s)"
+msgid "Period, seconds"
 msgstr ""
 
 msgid "Microseconds"
 msgstr ""
 
-msgid "Size (s)"
+msgid "Size, seconds"
 msgstr ""
 
 msgid ""
@@ -1473,7 +1473,7 @@ msgid ""
 "-h, --help\t\tInfo message about the program options.\n"
 "    --projName=<name>\tOpenSCADA project name to switch it.\n"
 "    --projUserDir={dir} Directory of user projects (writeable) of OpenSCADA, \"~/.openscada\" by default.\n"
-"\t\t\tFor this feature there also uses an evironment \"OSCADA_ProjName\" and the program binary name \"openscada_{ProjName}\".\n"
+"\t\t\tFor this feature there also uses an environment variable \"OSCADA_ProjName\" and the program binary name \"openscada_{ProjName}\".\n"
 "    --projLock={per}\tUse projects locking by creation the \"lock\" file into the project folder and updating it in period <per>,\n"
 "\t\t\tby default it is enabled and the updating period <per> is 60 seconds. To disable set the updating period <per> to zero.\n"
 "    --lang=<LANG>\tStation language, in view \"uk_UA.UTF-8\".\n"
@@ -1755,10 +1755,10 @@ msgstr ""
 msgid "Station level"
 msgstr ""
 
-msgid "Redundant task period (s)"
+msgid "Redundant task period, seconds"
 msgstr ""
 
-msgid "Restore connection timeout (s)"
+msgid "Restore connection timeout, seconds"
 msgstr ""
 
 msgid "Local primary commands transfer"
@@ -1860,7 +1860,7 @@ msgid "Monotonic %s"
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s."
+msgid "Spent time: %s[%s]."
 msgstr ""
 
 msgid "<newStat>"

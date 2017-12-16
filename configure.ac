@@ -124,7 +124,7 @@ fi
 AC_CONFIG_FILES([Makefile openscada.pc src/Makefile src_call/Makefile])
 
 if test -d data; then
-    COND_CONFIG_FILES="data/openscada.desktop data/openscada_start data/openscada-proj data/oscada.xml data/ModelsDB/AGLKS/openscada_AGLKS.desktop data/ModelsDB/Boiler/openscada_Boiler.desktop"
+    COND_CONFIG_FILES="data/openscada.desktop data/openscada_start data/openscada-proj data/ModelsDB/AGLKS/openscada_AGLKS.desktop data/ModelsDB/Boiler/openscada_Boiler.desktop"
     AC_CONFIG_FILES([${COND_CONFIG_FILES}])
 fi
 

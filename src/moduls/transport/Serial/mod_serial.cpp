@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.9.1"
+#define MOD_VER		"1.10.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -201,7 +201,7 @@ string TTr::expect( int fd, const string& expLst, int tm )
 //* TTrIn					 *
 //************************************************
 TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), fd(-1), endrun(false), trIn(0), trOut(0), tmMax(0), mTaskPrior(0),
+    TTransportIn(name,idb,el), fd(-1), endrun(false), trIn(0), trOut(0), tmMax(0), prcTm(0), prcTmMax(0), mTaskPrior(0),
     mMdmTm(20), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmRingReq("RING"), mMdmRingAnswer("ATA"), mMdmRingAnswerResp("CONNECT"),
     mMdmMode(false), mMdmDataMode(false), mRTSfc(false), mRTSlvl(false), mRTSEcho(false)
@@ -269,9 +269,12 @@ string TTrIn::getStatus( )
 {
     string rez = TTransportIn::getStatus( );
 
-    if(startStat())
-	rez += TSYS::strMess(_("Traffic in %s, out %s. Maximum char timeout %.4g ms."),
+    if(startStat()) {
+	rez += TSYS::strMess(_("Traffic in %s, out %s. Maximum char timeout %.4g ms. "),
 	    TSYS::cpct2str(trIn).c_str(),TSYS::cpct2str(trOut).c_str(),tmMax);
+	if(mess_lev() == TMess::Debug)
+	    rez += TSYS::strMess(_("Processing time %s[%s]. "), tm2s(1e-6*prcTm).c_str(), tm2s(1e-6*prcTmMax).c_str());
+    }
 
     return rez;
 }
@@ -429,7 +432,7 @@ void TTrIn::start( )
     if(runSt) return;
 
     //Status clear
-    trIn = trOut = 0;
+    trIn = trOut = prcTm = prcTmMax = 0;
     tmMax = 0;
 
     connect();
@@ -550,7 +553,7 @@ void *TTrIn::Task( void *tr_in )
 		continue;
 	    }
 	}
-	//Send message to protocol
+	//Send message to the protocol
 	try {
 	    if(prot_in.freeStat()) {
 		AutoHD<TProtocol> proto = SYS->protocol().at().modAt(tr->protocol());
@@ -558,7 +561,14 @@ void *TTrIn::Task( void *tr_in )
 		if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, tr, "\n"+i2s(tr->fd));
 		prot_in = proto.at().at(n_pr);
 	    }
+
+	    int64_t stTm = 0;
+	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
 	    prot_in.at().mess(req, answ);
+	    if(mess_lev() == TMess::Debug) {
+		tr->prcTm = SYS->curTime() - stTm;
+		tr->prcTmMax = vmax(tr->prcTmMax, tr->prcTm);
+	    }
 	} catch(TError &err) {
 	    mess_err(tr->nodePath().c_str(),"%s",err.mess.c_str() );
 	    mess_err(tr->nodePath().c_str(),_("Error request to protocol."));

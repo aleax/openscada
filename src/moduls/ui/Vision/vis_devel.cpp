@@ -766,32 +766,32 @@ QMenu *VisDevelop::createPopupMenu( )
     if(qobject_cast<QToolBar*>(ucw) && !mn->children().isEmpty()) {
 	QAction *first = mn->actions().isEmpty() ? NULL : mn->actions()[0];
 	QMenu *iSz = new QMenu(_("Icons size"));
-	mn->insertMenu(first,iSz);
+	mn->insertMenu(first, iSz);
 	mn->insertSeparator(first);
 
-	QAction *act = new QAction(_("Small (16x16)"),iSz);
+	QAction *act = new QAction(_("Small (16x16)"), iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
-	act->setObjectName("16"); 
-	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
-	iSz->addAction( act );
+	act->setObjectName("16");
+	act->setProperty("toolAddr", TSYS::addr2str(ucw).c_str());
+	iSz->addAction(act);
 
-	act = new QAction(_("Medium (22x22)"),iSz);
+	act = new QAction(_("Medium (22x22)"), iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
 	act->setObjectName("22");
-	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
-	iSz->addAction( act );
+	act->setProperty("toolAddr", TSYS::addr2str(ucw).c_str());
+	iSz->addAction(act);
 
-	act = new QAction(_("Big (32x32)"),iSz);
+	act = new QAction(_("Big (32x32)"), iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
 	act->setObjectName("32");
-	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
-	iSz->addAction( act );
+	act->setProperty("toolAddr", TSYS::addr2str(ucw).c_str());
+	iSz->addAction(act);
 
-	act = new QAction(_("Huge (48x48)"),iSz);
+	act = new QAction(_("Huge (48x48)"), iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
 	act->setObjectName("32");
-	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
-	iSz->addAction( act );
+	act->setProperty("toolAddr", TSYS::addr2str(ucw).c_str());
+	iSz->addAction(act);
     }
 
     return mn;

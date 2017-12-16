@@ -39,7 +39,7 @@ Kontar::Kontar( ) : TTypeParam("kontar", _("Kontar"))
     fldAdd(new TFld("M_PLC",_("Master PLC serial number"),TFld::Integer,TFld::HexDec|TCfg::NoVal,"10","0"));
     fldAdd(new TFld("CNTR_NET_CFG",_("Controllers network config-file"),TFld::String,TCfg::NoVal,"100"));
     fldAdd(new TFld("PLC",_("PLC serial number"),TFld::Integer,TCfg::NoVal,"10","0"));
-    fldAdd(new TFld("SET_CLC",_("Set PLC clock on different for more (s)"),TFld::Integer,TCfg::NoVal,"3","0","0;999"));
+    fldAdd(new TFld("SET_CLC",_("Set PLC clock on different for more, seconds"),TFld::Integer,TCfg::NoVal,"3","0","0;999"));
     fldAdd(new TFld("ZONE_CLC",_("PLC clock's zone"),TFld::Integer,TCfg::NoVal,"2","2","-12;12"));
 }
 
@@ -248,7 +248,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 	else
 	{
 	    if(TSYS::i32_BE(*(uint32_t*)mbap.data()) != cntrMN)
-		err = TSYS::strMess(_("13:Unapt MasterPLC ID: %xh != %xh"),TSYS::i32_BE(*(uint32_t*)mbap.data()), cntrN);
+		err = TSYS::strMess(_("13:Inapt MasterPLC ID: %xh != %xh"),TSYS::i32_BE(*(uint32_t*)mbap.data()), cntrN);
 	    else switch((uint8_t)mbap.data()[4])
 	    {
 		case 0xA0:	break;	//OK
@@ -261,14 +261,14 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 			    mess_debug_(p->nodePath().c_str(), _("Password sequence set: '%s'."), TSYS::strDecode(ePrm->pass,TSYS::Bin," ").c_str());
 			return req(p, pdu, true);
 		    }
-		    else err = TSYS::strMess(_("12:PLC: The password encripted by master key."));
+		    else err = TSYS::strMess(_("12:PLC: The password encrypted by master key."));
 		    break;
 		case 0xE0:	err = TSYS::strMess(_("12:PLC: Error."));			break;
 		case 0xE1:	err = TSYS::strMess(_("12:PLC: Unknown command."));		break;
 		case 0xE2:	err = TSYS::strMess(_("12:PLC: Wrong command format."));	break;
 		case 0xE5:	err = TSYS::strMess(_("12:PLC: Error read from slave."));	break;
 		case 0xE6:	err = TSYS::strMess(_("12:PLC: Network update in process."));	break;
-		case 0xD0:	//The data encripted the access password
+		case 0xD0:	//The data encrypted the access password
 		    if(p->owner().messLev() == TMess::Debug)
 			mess_debug_(p->nodePath().c_str(), _("Response (enc): '%s'"), TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
 		    mbap.replace(5, string::npos, ePrm->RC5Decr(mbap.substr(5),ePrm->key));

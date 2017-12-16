@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-18 06:26+0000\n"
+"POT-Creation-Date: 2017-12-16 16:02+0200\n"
 "PO-Revision-Date: 2010-10-13 22:21+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -97,8 +97,8 @@ msgstr "Eingangstyp %d"
 msgid "Error;"
 msgstr "Fehler;"
 
-msgid "Host watchdog timeout (s)"
-msgstr "Zeit des Hostwatchdogs (s)"
+msgid "Host watchdog timeout, seconds"
+msgstr "Zeit des Hostwatchdogs, Sekunden"
 
 msgid "Module"
 msgstr "Modul"
@@ -202,8 +202,8 @@ msgstr "Version FPGA=%04X, Bibliothek=%04X, ISO=%04X; Bauen=%s; Jumper SE=%d"
 msgid "Process parameters"
 msgstr "Parameterbearbeitung"
 
-msgid "Fast data get period (s)"
-msgstr "Periode der schnellen Datenerfassun (s)"
+msgid "Fast data get period, seconds"
+msgstr "Periode der schnellen Datenerfassun, Sekunden"
 
 msgid "Use 0 for disable"
 msgstr "Mit 0 deaktivieren"
@@ -223,7 +223,8 @@ msgid ""
 "0:FIFO gather: %.2gMB. Sample rate: %g(%g cor.). Overfulls: %g. Retry time: "
 "%gs."
 msgstr ""
-"0:FIFO sammeln: %.2gMB. Sample-Rate: %g(%g cor.). Overfulls: %g. Wiederholungszeit: %gs."
+"0:FIFO sammeln: %.2gMB. Sample-Rate: %g(%g cor.). Overfulls: %g. "
+"Wiederholungszeit: %gs."
 
 msgid "ICP DAS hardware"
 msgstr "Ausstattung ICP DAS"
@@ -336,8 +337,8 @@ msgstr "Fehler -> '%s': %s"
 msgid "13:Send_Receive_Cmd: error: %d."
 msgstr "13:Send_Receive_Cmd: Fehler: %d."
 
-msgid "Watchdog timeout (s)"
-msgstr "Zeit des Watchdogs (s)"
+msgid "Watchdog timeout, seconds"
+msgstr "Zeit des Watchdogs, Sekunden"
 
 msgid "Set to zero for the watchdog disable."
 msgstr "Auf Null gesetzt für den Watchdog deaktivieren."

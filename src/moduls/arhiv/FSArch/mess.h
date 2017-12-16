@@ -169,7 +169,7 @@ class ModMArch: public TMArchivator
 		mPrevDblTmCatLev;// mean and prevent to duples by time, category and level
 
 	ResRW	mRes;		// resource to access;
-	double	tmCalc;		// Archiving time
+	float	tmProc, tmProcMax; // Archiving time
 	time_t	mLstCheck;	// Last check directory time
 
 	deque<MFileArch *>	files;

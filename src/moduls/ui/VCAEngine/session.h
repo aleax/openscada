@@ -259,7 +259,7 @@ class SessWdg : public Widget, public TValFunc
 	virtual void setProcess( bool val, bool lastFirstCalc = true );
 
 	virtual void prcElListUpdate( );
-	virtual void calc( bool first, bool last );
+	virtual void calc( bool first, bool last, int pos = 0 );
 	void getUpdtWdg( const string &path, unsigned int tm, vector<string> &els );
 
 	// Include widgets
@@ -346,7 +346,7 @@ class SessPage : public SessWdg
 	void setEnable( bool val, bool force = false );
 	void setProcess( bool val, bool lastFirstCalc = true );
 
-	void calc( bool first, bool last );
+	void calc( bool first, bool last, int pos = 0 );
 
 	AutoHD<Page> parent( ) const;
 

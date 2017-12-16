@@ -36,6 +36,7 @@ class QTimer;
 class QSplashScreen;
 class QListWidget;
 class QPushButton;
+class QMenu;
 
 using namespace OSCADA;
 
@@ -83,6 +84,7 @@ private slots:
 private:
     //Attributes
     QTimer	*tm;
+    QMenu	*menuStarter;
 };
 
 //*************************************************
@@ -97,6 +99,7 @@ public:
 
 protected:
     //Methods
+    void showEvent( QShowEvent* );
     void closeEvent( QCloseEvent* );
 
 private:
@@ -160,6 +163,7 @@ protected:
     void save_( );
     void cntrCmdProc( XMLNode *opt );		//Control interface command process
     void postEnable( int flag );
+    void preDisable( int flag );
     void postDisable( int flag );
 
 private:

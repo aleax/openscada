@@ -406,7 +406,7 @@ bool da_LP_8x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	//Individual I-8017 processing
 	if((p->modTp.getS() == "I-8014" || p->modTp.getS() == "I-8017") && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) {
 	    p->ctrMkNode("fld",opt,-1,"/cfg/prms",_("Process parameters"),RWRWR_,"root",SDAQ_ID,1, "tp","dec");
-	    p->ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period (s)"),RWRWR_,"root",SDAQ_ID,2, "tp","real", "help",_("Use 0 for disable"));
+	    p->ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period, seconds"),RWRWR_,"root",SDAQ_ID,2, "tp","real", "help",_("Use 0 for disable"));
 	    if(p->ctrMkNode("area",opt,-1,"/cfg/mode",_("Mode")))
 		for(int iV = 0; iV < 16; iV++)
 		    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/mode/in%d",iV).c_str(),TSYS::strMess(_("Input %d"),iV).c_str(),

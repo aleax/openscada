@@ -397,7 +397,7 @@ bool da_87x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	    }
 	//AO and watchdog processing
 	if(ePrm && ePrm->dev.AO && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) {
-	    p->ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout (s)"),RWRWR_,"root",SDAQ_ID,3,"tp","real","min","0","max","25.5");
+	    p->ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout, seconds"),RWRWR_,"root",SDAQ_ID,3,"tp","real","min","0","max","25.5");
 	    if(p->owner().startStat() && p->ctrMkNode("area",opt,-1,"/cfg/mod",_("Module"))) {
 		p->ctrMkNode("fld",opt,-1,"/cfg/mod/wSt",_("Host watchdog status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		p->ctrMkNode("fld",opt,-1,"/cfg/mod/vPon",_("Power on values"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
@@ -417,7 +417,7 @@ bool da_87x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	}
 	//DO watchdog processing
 	if(ePrm && ePrm->dev.DO && (ePrm->dev.DO>>8) == 0 && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) {
-	    p->ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout (s)"),RWRWR_,"root",SDAQ_ID,3,"tp","real","min","0","max","25.5");
+	    p->ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout, seconds"),RWRWR_,"root",SDAQ_ID,3,"tp","real","min","0","max","25.5");
 	    if(p->owner().startStat() && p->ctrMkNode("area",opt,-1,"/cfg/mod",_("Module"))) {
 		p->ctrMkNode("fld",opt,-1,"/cfg/mod/wSt",_("Host watchdog status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		p->ctrMkNode("fld",opt,-1,"/cfg/mod/vPon",_("Power on values"),R_R_R_,"root",SDAQ_ID,1,"tp","str");

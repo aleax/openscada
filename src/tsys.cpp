@@ -59,9 +59,9 @@ pthread_key_t TSYS::sTaskKey;
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"),
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
-    mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
+    mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), isLoaded(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
     mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()),
-    mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrcTm(0), mRdPrimCmdTr(false)
+    mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false)
 {
     Mess = new TMess();
 
@@ -117,7 +117,17 @@ TSYS::~TSYS( )
     finalKill = true;
 
     //Delete all nodes in order
-    unload();
+    del("ModSched");
+    del("UI");
+    del("Special");
+    del("Archive");
+    del("DAQ");
+    del("Protocol");
+    del("Transport");
+    del("Security");
+    del("BD");
+
+    if(prjNm().size() && prjLockUpdPer()) prjLock("free");
 
     delete Mess;
     pthread_key_delete(sTaskKey);
@@ -677,8 +687,8 @@ void TSYS::load_( )
     cfgPrmLoad();
     Mess->load();	//Messages load
 
+    //Create subsystems
     if(!present("BD")) {
-	//Create subsystems
 	add(new TBDS());
 	add(new TSecurity());
 	add(new TTransportS());
@@ -688,7 +698,9 @@ void TSYS::load_( )
 	add(new TSpecialS());
 	add(new TUIS());
 	add(new TModSchedul());
+    }
 
+    if(!isLoaded) {
 	//Load modules
 	modSchedul().at().load();
 	if(!modSchedul().at().loadLibS()) {
@@ -703,6 +715,8 @@ void TSYS::load_( )
 	//Second load for load from generic DB
 	Mess->load();
 	cfgPrmLoad();
+
+	isLoaded = true;
     }
 
     //Direct loading of subsystems and modules
@@ -812,21 +826,20 @@ void TSYS::stop( int sig )	{ if(!mStopSignal) mStopSignal = sig; }
 
 void TSYS::unload( )
 {
-    if(!present("BD"))	return;	//Seems the configuration already unloaded
-
-    del("ModSched");
-    del("UI");
-    del("Special");
-    del("Archive");
-    del("DAQ");
-    del("Protocol");
-    del("Transport");
-    del("Security");
-    del("BD");
+    at("ModSched").at().unload();
+    at("UI").at().unload();
+    at("Special").at().unload();
+    at("Archive").at().unload();
+    at("DAQ").at().unload();
+    at("Protocol").at().unload();
+    at("Transport").at().unload();
+    at("Security").at().unload();
+    at("BD").at().unload();
 
     if(prjNm().size() && prjLockUpdPer()) prjLock("free");
 
-    modif();
+    isLoaded = false;
+    modifG();
 }
 
 bool TSYS::chkSelDB( const string& wDB,  bool isStrong )
@@ -1776,40 +1789,34 @@ bool TSYS::prjSwitch( const string &prj, bool toCreate )
     //Check for projects' folders availability
     string  prjDir = oscd_datadir_full,
 	    prjCfg = "";
-    stat(prjDir.c_str(), &file_stat);
-    if((file_stat.st_mode&S_IFMT) != S_IFDIR || access(prjDir.c_str(), X_OK|W_OK) != 0) {
+    if(stat(prjDir.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR || access(prjDir.c_str(), X_OK|W_OK) != 0) {
 	prjDir = prjUserDir();
 	if(prjDir.empty()) return false;
 	if(access(prjDir.c_str(),F_OK) != 0 && mkdir(prjDir.c_str(),0700) != 0)	return false;
-	stat(prjDir.c_str(), &file_stat);
-	if((file_stat.st_mode&S_IFMT) != S_IFDIR || access(prjDir.c_str(), X_OK|W_OK) != 0) return false;
+	if(stat(prjDir.c_str(), &file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR || access(prjDir.c_str(), X_OK|W_OK) != 0)
+	    return false;
     }
 
     //Call the projects manager procedure
     prjDir += "/" + prj;
-    stat(prjDir.c_str(), &file_stat);
-    if(access(bindir_full "/openscada-proj",F_OK|X_OK) == 0) {
-	int rez = system((string("dPrj=") + oscd_datadir_full +
+    if(access(bindir_full "/openscada-proj",F_OK|X_OK) == 0)
+	system((string("dPrj=") + oscd_datadir_full +
 		" dPrjUser=" + prjUserDir() +
 		" dSysCfg=" + sysconfdir_full +
 		" dData=" + datadir_full +
 		" " bindir_full "/openscada-proj" +
 		" " + (toCreate?"create":"proc") +
 		" " + prj).c_str());
-    }
 
     //Check for the project folder presence and main items creation at miss or wrong the projects manager procedure
     //????
 
     //Check for the project folder availability and switch to the project
-    stat(prjDir.c_str(), &file_stat);
-    if((file_stat.st_mode&S_IFMT) == S_IFDIR && access(prjDir.c_str(), X_OK|W_OK) == 0) {
+    if(stat(prjDir.c_str(),&file_stat) == 0 && (file_stat.st_mode&S_IFMT) == S_IFDIR && access(prjDir.c_str(), X_OK|W_OK) == 0) {
 	prjCfg = prjDir + "/oscada.xml";
-	stat(prjCfg.c_str(), &file_stat);
-	if((file_stat.st_mode&S_IFMT) != S_IFREG) {
+	if(stat(prjCfg.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
 	    prjCfg = string(sysconfdir_full) + "/oscada_" + prj + ".xml";
-	    stat(prjCfg.c_str(), &file_stat);
-	    if((file_stat.st_mode&S_IFMT) != S_IFREG) return false;
+	    if(stat(prjCfg.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) return false;
 	}
 
 	// Switch to the found project
@@ -2190,8 +2197,6 @@ void *TSYS::RdTask( void * )
 	for(int iL = 0; iL < (int)subLs.size(); iL++)
 	    if(!SYS->at(subLs[iL]).at().rdProcess())
 		subLs.erase(subLs.begin()+(iL--));
-
-	SYS->mRdPrcTm = SYS->curTime()-wTm;
 
 	//Wait to next iteration
 	TSYS::taskSleep((int64_t)(SYS->rdTaskPer()*1e9));
@@ -2783,8 +2788,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/redund",_("Redundancy"))) {
 	    ctrMkNode("fld",opt,-1,"/redund/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/redund/statLev",_("Station level"),RWRWR_,"root","root",1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/redund/tskPer",_("Redundant task period (s)"),RWRWR_,"root","root",1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/redund/restConn",_("Restore connection timeout (s)"),RWRWR_,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/redund/tskPer",_("Redundant task period, seconds"),RWRWR_,"root","root",1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/redund/restConn",_("Restore connection timeout, seconds"),RWRWR_,"root","root",1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/redund/primCmdTr",_("Local primary commands transfer"),RWRWR_,"root","root",1,"tp","bool");
 	    if(ctrMkNode("table",opt,-1,"/redund/sts",_("Stations"),RWRWR_,"root","root",2,"key","st","s_com","add,del")) {
 		ctrMkNode("list",opt,-1,"/redund/sts/st",_("ID"),RWRWR_,"root","root",3,"tp","str","dest","select","select","/redund/lsSt");
@@ -2959,7 +2964,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setAttr("id",lst[iA])->setText(at(lst[iA]).at().subName());
     }
     else if(a_path == "/redund/status" && ctrChkNode(opt,"get",R_R_R_,"root","root"))
-	opt->setText(TSYS::strMess(_("Spent time: %s."),tm2s(1e-6*mRdPrcTm).c_str()));
+	opt->setText(TSYS::strMess(_("Spent time: %s[%s]."),
+	    tm2s(SYS->taskUtilizTm("SYS_Redundancy")).c_str(), tm2s(SYS->taskUtilizTm("SYS_Redundancy",true)).c_str()));
     else if(a_path == "/redund/statLev") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(rdStLevel()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setRdStLevel(s2i(opt->text()));

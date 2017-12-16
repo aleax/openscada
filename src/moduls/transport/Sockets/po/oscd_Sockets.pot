@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-22 16:55+0300\n"
+"POT-Creation-Date: 2017-12-16 16:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,11 @@ msgid "Addition parameters"
 msgstr ""
 
 #, c-format
-msgid "Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed connections by limit %d."
+msgid "Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed connections by limit %d. "
+msgstr ""
+
+#, c-format
+msgid "Processing time %s[%s]. "
 msgstr ""
 
 #, c-format
@@ -240,7 +244,7 @@ msgid ""
 "Zero value for disable (not close ever)."
 msgstr ""
 
-msgid "Keep alive timeout (s)"
+msgid "Keep alive timeout, seconds"
 msgstr ""
 
 msgid ""
@@ -249,7 +253,11 @@ msgid ""
 msgstr ""
 
 #, c-format
-msgid "%s %d(%s): last %s; traffic in %s, out %s."
+msgid "%s %d(%s): last %s; traffic in %s, out %s; client detachings %g; "
+msgstr ""
+
+#, c-format
+msgid "processing time %s[%s]; "
 msgstr ""
 
 #, c-format

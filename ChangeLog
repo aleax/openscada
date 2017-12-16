@@ -1,3 +1,42 @@
+2017-12-16 Roman (stable)
+- DB.LibsDB.OscadaLibs: servProc.docOffLine appended by the documents Modules/{Quick_start,How_to}(without Ukrainian still) for the offline documentaion list.
+- DB.AGLKS.vca: Table "prj_AGLKS_incl" clear from spare records with "ATTRS"='' from old versions of OpenSCADA.
+- DB.Boiler.St: Table "prj_kotel9_incl" clear from spare records with "ATTRS"='' from old versions of OpenSCADA.
+- !:DOC: "Program Manual" continued to revision ongoing of it translation to Ukrainian.
+    Appended by Modules/{Quick_start,How_to}(without Ukrainian still).
+- !!:FIX:SYS,UI.QTStarter: The new project manager adapted to lighter reloading at the projects switching in way of holding UI.QTStarter
+    that fix some Qt configurations exactly for Maemo and seems for Android. Then the reloading performs now on the subsystems level with holding some modules.
+    FIX: Checking filesystem items of projects for presence som fixed.
+- !!!!:SYS: Switch to the new projects manager:
+    - for desktop files: openscada.desktop, openscada_AGLKS.desktop, openscada_Boiler.desktop;
+    - initial scripts of the daemon mode: debian/openscada-server.init;
+    - new configuration files of the projects "server" and "plc" of the daemon mode and their appending to debian and RPM packages,
+	for: oscada_server.xml, oscada_plc.xml; old direct configurations of this mode must be in function;
+    - the default configuration file oscada.xml moving to the exclusively projects initial configuration
+	where only module ui_QTStarter.so allowed to a project fast selection;
+    - the projects managing external script openscada-proj adapted to create projects' folders at their configuration file only availability,
+	mostly for the daemon mode projects "server" and "plc";
+    -the old project manager script openscada_start left to the compatibility of the early created *.desktop links.
+- !!:FIX:SYS.*: Fully switch to cmdOpt() from getCmdOpt() and some command-line options ongoing processing fix
+    from early direct using of the system function: --messlev, --modPath.
+- !!!!:FIX:SYS: XMLNode fixed from spare srting size reserving in encoding of the serialization which caused to its performance significant degradation
+    especially on big trees. It must significant rise overall performance in network interaction by XML.
+- SYS.*: Unwrapping all the shortcuts "(s)" to ", seconds".
+- SYS: Redundancy appended by the maximum value of measuring of the processing.
+- Archives.*: Values and messages archivators appended by the maximum value of measuring of the processing.
+- DAQ.AMRDevs: Finish of translation to German.
+- !!:Transport.*: Appended by measurement of curent and maximum time of requesting to protocol, in "Debug (0)" mode.
+- !!:UI.QTStarter: Set holded at reloading by signal SIGUSR2 of projects reloading.
+    Self menu for other modules made single one and placed also into property "menuStarterAddr" of the application main object.
+    Made some optimal for busy screen devices like Nokia N900.
+- !!:FIX:UI.VCAEngine: Document processing tasks closing at executions prevented by these executions processing.
+    !!: Different big (from the main task of the session) perioded widgets processing adapted to execution into diferent phases
+	than to make the main task loading more plain and lesser at all.
+- !!FIX:UI.Vision: Runtime menu creation moved to whole mode that is full creation at needs and full clearing at not needs,
+    for prevent the menu show at its inactive mode into some environments like Maemo and Unity.
+    In that menu creation there used the property "menuStarterAddr" of the QTStarter menu from the main object of the application.
+
+
 2017-12-08 Roman (stable)
 - DB.LibsDB.OscadaLibs: DevLib.Nik2303I improved for natural termination criterion checking by Ruslan Yarmoliuk <rylio74@gmail.com>.
     servProc.docOffLine appended by the documents Modules/{BFN(without Ukrainian still),SoundCard,SMH2Gi} for the offline documentaion list.
@@ -146,7 +185,7 @@
 - DAQ.BlockCalc: Attributes description format some rewrote.
 - !!:Special.FLibSYS: VArch::set() expanded for single value writing to an archivator of an archive.
 - UI.{QTCfg,WebCfgD}: Set optimal for scalable items vertical fitting, but straight increasing per 5 pixels too slow on some graphical environments like virtual machines and VNC.
-- FIX:UI.{VCAEngine,Vision,WebVision}: Adapted to mark service commands, like promitive's "Diagram" tracing", to "noUser" and doesn't perform updating UserActTm on their.
+- FIX:UI.{VCAEngine,Vision,WebVision}: Adapted to mark service commands, like primitive's "Diagram" tracing", to "noUser" and doesn't perform updating UserActTm on their.
 
 
 2017-09-23 Roman (stable)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 16:54+0300\n"
+"POT-Creation-Date: 2017-12-16 15:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,7 +109,7 @@ msgstr ""
 msgid "PLC serial number"
 msgstr ""
 
-msgid "Set PLC clock on different for more (s)"
+msgid "Set PLC clock on different for more, seconds"
 msgstr ""
 
 msgid "PLC clock's zone"
@@ -149,10 +149,10 @@ msgid "Request (enc): '%s'"
 msgstr ""
 
 #, c-format
-msgid "13:Unapt MasterPLC ID: %xh != %xh"
+msgid "13:Inapt MasterPLC ID: %xh != %xh"
 msgstr ""
 
-msgid "12:PLC: The password encripted by master key."
+msgid "12:PLC: The password encrypted by master key."
 msgstr ""
 
 msgid "12:PLC: Error."
@@ -204,7 +204,7 @@ msgstr ""
 msgid "Gather task priority"
 msgstr ""
 
-msgid "Restore timeout (s)"
+msgid "Restore timeout, seconds"
 msgstr ""
 
 msgid "Request tries"

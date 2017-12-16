@@ -38,7 +38,7 @@ using namespace FSArch;
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
     TMArchivator(iid,idb,cf_el), infoTbl(dataRes()),
     mUseXml(false), mMaxSize(1024), mNumbFiles(30), mTimeSize(30), mChkTm(60), mPackTm(10),
-    mPackInfoFiles(false), mPrevDbl(false), mPrevDblTmCatLev(false), tmCalc(0), mLstCheck(0)
+    mPackInfoFiles(false), mPrevDbl(false), mPrevDblTmCatLev(false), tmProc(0), tmProcMax(0), mLstCheck(0)
 {
 
 }
@@ -196,7 +196,8 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 	    wrOK = files[iF]->put(mess[i_m]) && wrOK;
 	}
     }
-    tmCalc = TSYS::curTime()-t_cnt;
+
+    tmProc = TSYS::curTime() - t_cnt; tmProcMax = vmax(tmProcMax, tmProc);
 
     return wrOK;
 }
@@ -412,7 +413,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/dirList" && ctrChkNode(opt))		TSYS::ctrListFS(opt, addr());
     else if(a_path == "/prm/st/fsz" && ctrChkNode(opt))		opt->setText(TSYS::cpct2str(size()));
-    else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(tm2s(1e-6*tmCalc));
+    else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(tm2s(1e-6*tmProc) + "[" + tm2s(1e-6*tmProcMax) + "]");
     else if(a_path == "/prm/add/xml") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(useXML() ? "1" : "0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setUseXML(s2i(opt->text()));

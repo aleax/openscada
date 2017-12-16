@@ -250,6 +250,7 @@ ln -s %_defaultdocdir/%name-docUK-%version %buildroot/%_datadir/openscada/docs/u
 %defattr(-,root,root)
 %config(noreplace) %_sysconfdir/oscada.xml
 %config(noreplace) %_sysconfdir/oscada_start.xml
+%config(noreplace) %_sysconfdir/oscada_server.xml
 %config %_initdir/oscadad
 %_bindir/openscada
 %_bindir/openscada_start

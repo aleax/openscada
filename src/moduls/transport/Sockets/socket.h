@@ -54,13 +54,15 @@ class SSockIn
 {
     public:
 	SSockIn( TSocketIn *is, int isock, const string &isender ) :
-	    pid(0), sock(isock), sender(isender), tmCreate(time(NULL)), tmReq(time(NULL)), trIn(0), trOut(0), s(is)	{ }
+	    pid(0), sock(isock), sender(isender), tmCreate(time(NULL)), tmReq(time(NULL)),
+	    trIn(0), trOut(0), prcTm(0), prcTmMax(0), clntDetchCnt(0), s(is)	{ }
 
 	pthread_t pid;		//Client's thread id
 	int	sock;
 	string	sender;
 	time_t	tmCreate, tmReq;
 	uint64_t trIn, trOut;	//Traffic in and out counters
+	float	prcTm, prcTmMax, clntDetchCnt;
 
 	TSocketIn	*s;
 };
@@ -158,6 +160,7 @@ class TSocketIn: public TTransportIn
 
 	// Status atributes
 	uint64_t	trIn, trOut;		// Traffic in and out counter
+	float		prcTm, prcTmMax, clntDetchCnt;
 	int		connNumb, connTm, clsConnByLim;	// Connections number
 };
 

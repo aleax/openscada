@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-08 22:22+0200\n"
+"POT-Creation-Date: 2017-12-16 16:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -558,7 +558,7 @@ msgstr ""
 msgid "Diagram widget of the finite visualization."
 msgstr ""
 
-msgid "Tracing period (s)"
+msgid "Tracing period, seconds"
 msgstr ""
 
 msgid "Trend;Spectrum;XY"
@@ -820,19 +820,19 @@ msgstr ""
 msgid "Last time"
 msgstr ""
 
-msgid "Repeat time (s)"
+msgid "Repeat time, seconds"
 msgstr ""
 
-msgid "Repeat time (us)"
+msgid "Repeat time, microseconds"
 msgstr ""
 
 msgid "Repeat period"
 msgstr ""
 
-msgid "Message time"
+msgid "Message time, seconds"
 msgstr ""
 
-msgid "Message time (mcs)"
+msgid "Message time, microseconds"
 msgstr ""
 
 msgid "Message level"
@@ -873,6 +873,9 @@ msgstr ""
 
 #, c-format
 msgid "Messages block %d: %0.2f%% loaded."
+msgstr ""
+
+msgid "Document generation terminated."
 msgstr ""
 
 msgid "Built-in function"
@@ -954,9 +957,6 @@ msgid "Diagnostics"
 msgstr ""
 
 msgid "Time"
-msgstr ""
-
-msgid "Size (s)"
 msgstr ""
 
 msgid "Messages"
@@ -1116,7 +1116,7 @@ msgstr ""
 msgid "Last user action"
 msgstr ""
 
-msgid "Left to force close (s)"
+msgid "Left to force close, seconds"
 msgstr ""
 
 msgid "Period (ms)"

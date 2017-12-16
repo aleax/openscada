@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-08 21:59+0200\n"
+"POT-Creation-Date: 2017-12-16 16:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -454,6 +454,9 @@ msgstr ""
 msgid "Mon"
 msgstr ""
 
+msgid "Hold at reloading in different project."
+msgstr ""
+
 msgid "Load module."
 msgstr ""
 
@@ -574,6 +577,12 @@ msgstr ""
 msgid "=== User projects ==="
 msgstr ""
 
+msgid "current"
+msgstr ""
+
+msgid "running"
+msgstr ""
+
 msgid "=== Common projects ==="
 msgstr ""
 
@@ -630,19 +639,6 @@ msgstr ""
 msgid "Do you really want to change the current project \"%1\" to \"%2\"?"
 msgstr ""
 
-msgid "Project \"%1\" seems wrong or broken!"
-msgstr ""
-
-#, c-format
-msgid "No translated Qt message: '%s'"
-msgstr ""
-
-msgid "current"
-msgstr ""
-
-msgid "running"
-msgstr ""
-
 msgid "Call project"
 msgstr ""
 
@@ -650,4 +646,11 @@ msgid "Project \"%1\" seems running now! You still want to switch the project?"
 msgstr ""
 
 msgid "Project \"%1\" seems running now! You still want to call the project?"
+msgstr ""
+
+msgid "Project \"%1\" seems wrong or broken!"
+msgstr ""
+
+#, c-format
+msgid "No translated Qt message: '%s'"
 msgstr ""

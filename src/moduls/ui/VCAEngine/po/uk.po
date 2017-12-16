@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-08 22:22+0200\n"
+"POT-Creation-Date: 2017-12-16 16:47+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -784,8 +784,8 @@ msgstr "Діаграма"
 msgid "Diagram widget of the finite visualization."
 msgstr "Віджет діаграми кінцевої візуалізації."
 
-msgid "Tracing period (s)"
-msgstr "Період слідкування (с)"
+msgid "Tracing period, seconds"
+msgstr "Період слідкування, секунд"
 
 msgid "Trend;Spectrum;XY"
 msgstr "Графік;Спектр;XY"
@@ -1113,20 +1113,20 @@ msgstr "Час початку документа"
 msgid "Last time"
 msgstr "Останній час"
 
-msgid "Repeat time (s)"
-msgstr "Час повтору (сек.)"
+msgid "Repeat time, seconds"
+msgstr "Час повтору, секунд"
 
-msgid "Repeat time (us)"
-msgstr "Час повтору (мксек.)"
+msgid "Repeat time, microseconds"
+msgstr "Час повтору, мікросекунд"
 
 msgid "Repeat period"
 msgstr "Період повтору"
 
-msgid "Message time"
-msgstr "Час повідомлення"
+msgid "Message time, seconds"
+msgstr "Час сповіщення, секунд"
 
-msgid "Message time (mcs)"
-msgstr "Час сповіщення (мкс)"
+msgid "Message time, microseconds"
+msgstr "Час сповіщення, мікросекунд"
 
 msgid "Message level"
 msgstr "Рівень повідомлення"
@@ -1180,6 +1180,9 @@ msgstr "Блок даних %d: %0.2f%% завантажено."
 #, c-format
 msgid "Messages block %d: %0.2f%% loaded."
 msgstr "Блок повідомлень %d: %0.2f%% завантажено."
+
+msgid "Document generation terminated."
+msgstr "Перервано генерацію документа."
 
 msgid "Built-in function"
 msgstr "Вбудована функція"
@@ -1261,9 +1264,6 @@ msgstr "Діагностика"
 
 msgid "Time"
 msgstr "Час"
-
-msgid "Size (s)"
-msgstr "Розмір (сек)"
 
 msgid "Messages"
 msgstr "Повідомлення"
@@ -1422,8 +1422,8 @@ msgstr "Час, користувач, мова останього запиту"
 msgid "Last user action"
 msgstr "Остання дія користувача"
 
-msgid "Left to force close (s)"
-msgstr "Залишилось до примусового закриття (с)"
+msgid "Left to force close, seconds"
+msgstr "Залишилось до примусового закриття, секунд"
 
 msgid "Period (ms)"
 msgstr "Період (мс)"

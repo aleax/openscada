@@ -1,0 +1,692 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Документы/Быстрый старт - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Документы/Быстрый старт</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FQuick+start&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Quick_start" title="Documents/Quick start">Documents/Quick start</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Quick_start" title="Documents/Quick start (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Common revision and translation
+</td></tr></table>
+</div>
+<p><i>Автор:</i> <a class="external text" href="http://wiki.oscada.org/RomanSavochenko" rel="nofollow noreferrer noopener" target="_blank">Роман Савоченко</a>, <a class="external text" href="http://wiki.oscada.org/MaximLysenko" rel="nofollow noreferrer noopener" target="_blank">Максим Лысенко</a> (2010-2012)<br />
+<i>Видео-дополнение:</i> <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/doc/ru/QuickStart.mkv" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/doc/ru/QuickStart.mkv</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.A2.D0.B5.D1.80.D0.BC.D0.B8.D0.BD.D1.8B.2C_.D0.BE.D0.BF.D1.80.D0.B5.D0.B4.D0.B5.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F_.D0.B8_.D0.B0.D0.B1.D0.B1.D1.80.D0.B5.D0.B2.D0.B8.D0.B0.D1.82.D1.83.D1.80.D1.8B"><span class="tocnumber">1</span> <span class="toctext">Термины, определения и аббревиатуры</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.A3.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BA.D0.B0"><span class="tocnumber">2</span> <span class="toctext">Установка</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.A3.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BA.D0.B0_OpenSCADA_.D0.B8.D0.B7_.D0.B3.D0.BE.D1.82.D0.BE.D0.B2.D1.8B.D1.85_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.BE.D0.B2"><span class="tocnumber">2.1</span> <span class="toctext">Установка OpenSCADA из готовых пакетов</span></a>
+<ul>
+<li class="toclevel-3 tocsection-4"><a href="#.D0.94.D0.BE.D0.B1.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.D1.80.D0.B5.D0.BF.D0.BE.D0.B7.D0.B8.D1.82.D0.BE.D1.80.D0.B8.D1.8F_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.BE.D0.B2_.D0.B8_.D1.83.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BA.D0.B0_OpenSCADA_.D0.B8.D0.B7_.D0.BD.D0.B5.D0.B3.D0.BE"><span class="tocnumber">2.1.1</span> <span class="toctext">Добавление репозитория пакетов и установка OpenSCADA из него</span></a></li>
+<li class="toclevel-3 tocsection-5"><a href="#.D0.A0.D1.83.D1.87.D0.BD.D0.B0.D1.8F_.D1.83.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BA.D0.B0_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.BE.D0.B2_OpenSCADA"><span class="tocnumber">2.1.2</span> <span class="toctext">Ручная установка пакетов OpenSCADA</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-6"><a href="#.D0.A3.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BA.D0.B0_.D0.B8.D0.B7_.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D0.BD.D1.8B.D1.85_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D0.BE.D0.B2"><span class="tocnumber">2.2</span> <span class="toctext">Установка из исходных текстов</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="#.D0.9F.D0.B5.D1.80.D0.B2.D0.B8.D1.87.D0.BD.D0.B0.D1.8F_.D0.BA.D0.BE.D0.BD.D1.84.D0.B8.D0.B3.D1.83.D1.80.D0.B0.D1.86.D0.B8.D1.8F_.D0.B8_.D0.B7.D0.B0.D0.BF.D1.83.D1.81.D0.BA"><span class="tocnumber">3</span> <span class="toctext">Первичная конфигурация и запуск</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#.D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B5.D0.BA.D1.82.D0.B0_.D1.81_.D1.87.D0.B8.D1.81.D1.82.D0.BE.D0.B3.D0.BE_.D0.BB.D0.B8.D1.81.D1.82.D0.B0"><span class="tocnumber">3.1</span> <span class="toctext"><span>Создание пользовательского проекта с чистого листа</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#.D0.A0.D0.B0.D0.B1.D0.BE.D1.82.D0.B0_.D1.81_.D0.B8.D1.81.D1.82.D0.BE.D1.87.D0.BD.D0.B8.D0.BA.D0.B0.D0.BC.D0.B8_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85"><span class="tocnumber">4</span> <span class="toctext">Работа с источниками данных</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#.D0.9E.D0.BF.D1.80.D0.BE.D1.81_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.D0.B0.D0.BF.D0.BF.D0.B0.D1.80.D0.B0.D1.82.D0.B0_.D0.A2.D0.9F"><span class="tocnumber">4.1</span> <span class="toctext">Опрос данных аппарата ТП</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#.D0.9E.D0.B1.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D0.BA.D0.B0_.D0.BF.D0.BE.D0.BB.D1.83.D1.87.D0.B5.D0.BD.D0.BD.D1.8B.D1.85_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.D0.A2.D0.9F"><span class="tocnumber">4.2</span> <span class="toctext"><span>Обработка полученных данных ТП</span></span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#.D0.A2.D0.B8.D0.BF.D0.B8.D0.B7.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.BD.D1.8B.D0.B5_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B_.D0.B8.D1.81.D1.82.D0.BE.D1.87.D0.BD.D0.B8.D0.BA.D0.BE.D0.B2_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85"><span class="tocnumber">4.3</span> <span class="toctext">Типизированные параметры источников данных</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#.D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.D0.B0.D1.80.D1.85.D0.B8.D0.B2.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.D0.A2.D0.9F"><span class="tocnumber">4.4</span> <span class="toctext">Включение архивирования данных ТП</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#.D0.A4.D0.BE.D1.80.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D0.B2.D0.B8.D0.B7.D1.83.D0.B0.D0.BB.D1.8C.D0.BD.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.B5.D0.B4.D1.81.D1.82.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="tocnumber">5</span> <span class="toctext">Формирование визуального представления</span></a>
+<ul>
+<li class="toclevel-2 tocsection-15"><a href="#.D0.94.D0.BE.D0.B1.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.D1.88.D0.B0.D0.B1.D0.BB.D0.BE.D0.BD.D0.BD.D0.BE.D0.B9_.D1.81.D1.82.D1.80.D0.B0.D0.BD.D0.B8.D1.86.D1.8B_.D0.B2_.D0.BF.D1.80.D0.BE.D0.B5.D0.BA.D1.82_.D0.B8_.D0.BF.D0.BE.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.D0.B4.D0.B8.D0.BD.D0.B0.D0.BC.D0.B8.D0.BA.D0.B8"><span class="tocnumber">5.1</span> <span class="toctext">Добавление шаблонной страницы в проект и подключение динамики</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#.D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.BD.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_.D0.BA.D0.B0.D0.B4.D1.80.D0.B0.2C_.D0.BC.D0.BD.D0.B5.D0.BC.D0.BE.D1.81.D1.85.D0.B5.D0.BC.D1.8B"><span class="tocnumber">5.2</span> <span class="toctext">Создание нового кадра, мнемосхемы</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#.D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.BD.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_.D0.BA.D0.BE.D0.BC.D0.BF.D0.BB.D0.B5.D0.BA.D1.81.D0.BD.D0.BE.D0.B3.D0.BE_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B0"><span class="tocnumber">5.3</span> <span class="toctext">Создание нового комплексного элемента</span></a>
+<ul>
+<li class="toclevel-3 tocsection-18"><a href="#.D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.B2.D0.B8.D0.B4.D0.B6.D0.B5.D1.82.D0.B0_.22.D0.92.D0.BE.D0.B7.D0.B4.D1.83.D1.88.D0.BD.D1.8B.D0.B9_.D1.85.D0.BE.D0.BB.D0.BE.D0.B4.D0.B8.D0.BB.D1.8C.D0.BD.D0.B8.D0.BA.22_.D0.BD.D0.B0_.D0.BE.D1.81.D0.BD.D0.BE.D0.B2.D0.B5_.D0.BF.D1.80.D0.B8.D0.BC.D0.B8.D1.82.D0.B8.D0.B2.D0.B0_.22.D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B0.D1.80.D0.BD.D0.B0.D1.8F_.D1.84.D0.B8.D0.B3.D1.83.D1.80.D0.B0.22"><span class="tocnumber">5.3.1</span> <span class="toctext">Создание виджета "Воздушный холодильник" на основе примитива "Элементарная фигура"</span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#.D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D1.84.D0.B8.D0.BD.D0.B0.D0.BB.D1.8C.D0.BD.D0.BE.D0.B3.D0.BE_.D1.81.D0.BA.D0.BE.D0.BC.D0.BF.D0.BE.D0.BD.D0.BE.D0.B2.D0.B0.D0.BD.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D0.B8.D0.B4.D0.B6.D0.B5.D1.82.D0.B0_.22.D0.A5.D0.BE.D0.BB.D0.BE.D0.B4.D0.B8.D0.BB.D1.8C.D0.BD.D0.B8.D0.BA.22_.D0.BD.D0.B0_.D0.BE.D1.81.D0.BD.D0.BE.D0.B2.D0.B5_.D0.BF.D1.80.D0.B8.D0.BC.D0.B8.D1.82.D0.B8.D0.B2.D0.B0_.22.D0.93.D1.80.D1.83.D0.BF.D0.BF.D0.B0_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.BE.D0.B2.22"><span class="tocnumber">5.3.2</span> <span class="toctext">Создание финального скомпонованного виджета "Холодильник" на основе примитива "Группа элементов"</span></a></li>
+<li class="toclevel-3 tocsection-20"><a href="#.D0.94.D0.BE.D0.B1.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.D0.BA.D0.BE.D0.BC.D0.BF.D0.BB.D0.B5.D0.BA.D1.81.D0.BD.D0.BE.D0.B3.D0.BE_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B0_.D0.BD.D0.B0_.D0.BC.D0.BD.D0.B5.D0.BC.D0.BE.D1.81.D1.85.D0.B5.D0.BC.D1.83"><span class="tocnumber">5.3.3</span> <span class="toctext">Добавление комплексного элемента на мнемосхему</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#.D0.97.D0.B0.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B5"><span class="tocnumber">6</span> <span class="toctext">Заключение</span></a></li>
+</ul>
+</div>
+
+<p>Открытая система OpenSCADA является предельно модульной, гибкой и многофункциональной SCADA-системой. Как следствие этого первое знакомство с OpenSCADA может быть достаточно сложным по причине малых шансов совпадения предыдущего опыта пользователя или полного его отсутствия, с подходами работы в OpenSCADA. Однако, в значительной степени это только первое впечатление, поскольку вся мощь OpenSCADA оказывается на ладони у пользователя, от изобилия которой пользователь может растеряться, и ему могут понадобиться значительные усилия для отбора функций, нужных в решении его задачи. 
+</p><p>По этой причине и для наглядного представления общей концепции работы в OpenSCADA создан данный документ. Документ в достаточно краткой и наглядной форме представляет путь от запуска OpenSCADA до создания элементов пользовательского интерфейса на реальных примерах. Кроме того, документ содержит раздел с рецептами по конфигурации, реализации и решению типовых задач пользователя.
+</p><p>Документ не содержит детального описания концепции и глубокого погружения в детали OpenSCADA, а предоставляет ссылки на документы OpenSCADA, содержащие такую информацию.
+</p><p>Описание документа ведётся синхронно с реализацией примеров на демонстрационной базе данных (БД), <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">модели АГЛКС</a>. Следовательно, пользователь должен получить дистрибутив OpenSCADA с этой БД, для наглядного изучения и опробования примеров.
+</p>
+<h2><span class="mw-headline" id=".D0.A2.D0.B5.D1.80.D0.BC.D0.B8.D0.BD.D1.8B.2C_.D0.BE.D0.BF.D1.80.D0.B5.D0.B4.D0.B5.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F_.D0.B8_.D0.B0.D0.B1.D0.B1.D1.80.D0.B5.D0.B2.D0.B8.D0.B0.D1.82.D1.83.D1.80.D1.8B"><span class="mw-headline-number">1</span> Термины, определения и аббревиатуры</span></h2>
+<p><b>АРМ (аббревиатура)</b> — Автоматизированное Рабочее Место. Обычно представляет из себя системный блок вычислительной системы, дисплей, манипулятор "мышь" иногда с клавиатурой, и другое периферийное оборудование, которое служит для визуального представления данных технологического процесса, а также выдачи управляющих воздействий на ТП.
+</p><p><b>Блокировка (термин)</b> — условная граница технологического параметра, по преодолению которой выполняются предустановленные алгоритмом действия по предотвращению аварии. В некоторых режимах ТП (пуск) в соответствии с регламентом может быть необходимо отключение блокировки (деблокирование).
+</p><p><b>Деблокирование (термин)</b> — процесс отключения блокировки на время работы ТП в режимах, для которых в регламенте предусмотрена данная операция. Внимание, деблокирование технологических параметров является строго отчётной операцией и должно производится оперативным персоналом в соответствующем порядке.
+</p><p><b>Квитация (термин)</b> — процесс подтверждения факта того, что оперативный персонал обратил внимание на нарушение в работе ТП. Обычно этот процесс подразумевает принятие мер оператором для устранения нарушения и нажатие соответствующей кнопки для прекращения сигнализации.
+</p><p><b>ПЛК (аббревиатура)</b> — Промышленный Логический Контроллер. Микропроцессорное электронное устройство, на которое через устройство сопряжения с объектом (УСО)  собираются сигналы технологических параметров. ПЛК выполняет функцию непосредственного сбора данных, их обработку и выдачу управляющих воздействий посредством алгоритмов автоматического регулирования. Кроме того ПЛК предоставляет данные для визуализации ТП, а также получает данные ручного вмешательства оператора от системы верхнего уровня.
+</p><p><b>Сигнализация (термин)</b> — процесс уведомления оперативного персонала о нарушении технологического процесса или работы оборудования автоматизации. Способы сигнализации могут быть различных типов воздействия на органы чувств человека с целью привлечения внимания. Часто предусматриваются следующие типы сигнализации:
+</p>
+<ul><li> <i>Световая сигнализация</i> — обычно осуществляется посредством смены цвета графического объекта (миганием) для возникающих событий и установкой статичных аварийных цветов (красный и жёлтый) для сквитированных событий.</li>
+<li> <i>Звуковая</i> — осуществляется выдачей звукового сигнала в момент  возникновения события. Тип звукового сигнала может быть как монотонным, так и синтезированным речевым сообщением с информацией о нарушении.</li></ul>
+<p><b>ТП (аббревиатура)</b> — Технологический Процесс. Весь комплекс технологического оборудования производственного процесса.
+</p><p><b>УСО (аббревиатура)</b> — Устройство Сопряжения с Объектом. Ряд устройств или модулей ПЛК, к которым непосредственно подключаются сигналы с датчиков ТП для последующего преобразования из аналогового в цифровой вид и обратно. Преобразование осуществляется с целю последующей обработки значений технологических параметров в ПЛК.
+</p><p><b>Уставка сигнализации (термин)</b> — условная граница значения технологического параметра, преодоление которой считается нештатной ситуацией. Обычно предусматриваются следующие границы:
+</p>
+<ul><li> <i>Верхняя и нижняя аварийные границы</i> — границы аварийных значений технологического параметра.</li>
+<li> <i>Верхняя и нижняя предупредительные границы</i> — границы предупреждения, регламентные границы, о выходе технологического параметра за рабочий диапазон.</li>
+<li> <i>Отказ</i> — признак выхода значения параметра за аппаратные границы технологического оборудования. Обычно характеризует отказ датчика, обрыв канала связи с датчиком или ПЛК.</li></ul>
+<p><b>SCADA (аббревиатура-ан.)</b> — Supervisory Control And Data Acquisition (Диспетчерская система управления и сбора данных). Программное обеспечение, выполняющее комплекс задач по сбору данных ТП, их архивирование и представление, а также выдачу управляющих воздействий оператором в ручном режиме.
+</p>
+<h2><span class="mw-headline" id=".D0.A3.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BA.D0.B0"><span class="mw-headline-number">2</span> Установка</span></h2>
+<p>Установку дистрибутива OpenSCADA можно осуществить двумя способами. Первый и простой способ — это получить готовые пакеты для используемого дистрибутива ОС Linux. Второй — собрать систему OpenSCADA из исходных текстов. В целом процедура установки сильно зависит от используемого дистрибутива Linux и исчерпывающе её описать в данном руководстве не представляется возможным! Поэтому может понадобиться глубокое знакомство с механизмами установки ПО выбранного дистрибутива Linux из его документации.
+</p><p>В случае отсутствия у пользователя достаточно глубоких знаний и умений в выбранном дистрибутиве Linux, настоятельно рекомендуется выбирать дистрибутив Linux по критерию наличия для него пакетов системы OpenSCADA в репозиториях дистрибутива, что позволит и гарантирует простейшую и беспроблемную установку!
+</p><p>Если у пользователя вызывает затруднение установка не только OpenSCADA, но и дистрибутива Linux, то на первое время он может воспользоваться "живым" дистрибутивом Linux, с установленной и готовой для работы и изучения демонстрацией OpenSCADA. На данный момент доступны "живые" сборки на основе дистрибутива Debian и ALTLinux в виде гибридных CD-образов, на странице: <a class="external free" href="http://oscada.org/ru/glavnaja/zagruzit" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/ru/glavnaja/zagruzit</a>. Детальнее смотрите в <a href="How_to.html" title="Special:MyLanguage/Documents/How to">документе рецептов (Как сделать)</a>.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Динамическая модель компрессорной станции на 6 газовых компрессоров, которая лежит в основе демонстрационной БД, требует значительных вычислительных ресурсов, а именно процессора с частотой более 1 ГГц. Данные ресурсы требуются именно для динамической модели и не являются общим показателем ресурсоёмкости программы в конечных задачах!
+</p>
+<h3><span class="mw-headline" id=".D0.A3.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BA.D0.B0_OpenSCADA_.D0.B8.D0.B7_.D0.B3.D0.BE.D1.82.D0.BE.D0.B2.D1.8B.D1.85_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.BE.D0.B2"><span class="mw-headline-number">2.1</span> Установка OpenSCADA из готовых пакетов</span></h3>
+<p>Установка OpenSCADA из готовых пакетов, в свою очередь, может осуществляться двумя методами. Первый — простейший, когда пакеты OpenSCADA уже присутствуют в официальных, дополнительных репозиториях используемого дистрибутива ОС Linux или собственных репозиториях пакетов OpenSCADA. Установка таких пакетов — вопрос запуска типовой программы управления пакетами дистрибутива с последующим выбором пакетов OpenSCADA. Второй способ подразумевает получение пакетов OpenSCADA и установку их вручную.
+</p><p>Проверить на наличие пакетов OpenSCADA в репозиториях используемого дистрибутива Linux, а также загрузить пакеты OpenSCADA для ручной установки, можно на странице загрузки официального сайта OpenSCADA (<a class="external free" href="http://oscada.org/ru/glavnaja/zagruzit/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/ru/glavnaja/zagruzit/</a>).
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Загружать пакеты нужно непосредственно для версии используемого дистрибутива иначе при установке могут возникнут неразрешимые проблемы с зависимостями.
+</p>
+<h4><span class="mw-headline" id=".D0.94.D0.BE.D0.B1.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.D1.80.D0.B5.D0.BF.D0.BE.D0.B7.D0.B8.D1.82.D0.BE.D1.80.D0.B8.D1.8F_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.BE.D0.B2_.D0.B8_.D1.83.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BA.D0.B0_OpenSCADA_.D0.B8.D0.B7_.D0.BD.D0.B5.D0.B3.D0.BE"><span class="mw-headline-number">2.1.1</span> Добавление репозитория пакетов и установка OpenSCADA из него</span></h4>
+<p>На данный момент пакеты системы OpenSCADA можно встретить в репозиториях таких дистрибутивов ОС Linux: <a class="external text" href="http://www.altlinux.ru" rel="nofollow noreferrer noopener" target="_blank">ALTLinux</a> и дистрибутивах, основанных на пакетной базе <a class="external text" href="http://fedoraproject.org" rel="nofollow noreferrer noopener" target="_blank">Fedora</a>. Кроме того, репозитории с пакетами предоставляются самим проектом OpenSCADA, служебная информация которых обычно располагается рядом с самими пакетами и обновляется автоматически при сборке, т.е. эти репозитории являются наиболее свежими и предпочтительными.
+</p><p>Адреса репозиториев Вы можете получить на той-же странице загрузки OpenSCADA (<a class="external free" href="http://oscada.org/ru/glavnaja/zagruzit/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/ru/glavnaja/zagruzit/</a>) или в примерах ниже.
+</p><p>При установке из репозитория выбираем только пакет "openscada-Model.AGLKS". Всё остальное, в соответствии с зависимостями, будет выбрано и установлено автоматически.
+</p><p>Установка из репозитория хоть и проста, но является специфичной для каждого дистрибутива Linux, оконного менеджера или отдельной программы работы с репозиториями и пакетами поэтому для них отошлём читателя к соответствующей документации на дистрибутив или программу. Здесь-же вкратце рассмотрим добавление репозитория и установку OpenSCADA с помощью типовых инструментов командной строки:
+</p><p><b>Репозитории пакетов, основанные на менеджере APT (Debian, Ubuntu, ALTLinux)</b> — добавляются редактированием файла /etc/apt/sources.list путём вставки одной строки:<br />
+<i>Debian:</i> "deb <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/Debian/8" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/Debian/8</a> ./"<br />
+<i>Debian (рабочая версия):</i> "deb <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/Work/Debian/8" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/Work/Debian/8</a> ./"<br />
+<i>Debian (рабочая версия, модули отдельно):</i> "deb <a class="external free" href="ftp://ftp.oscada.org/Debian/8/openscada" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/Debian/8/openscada</a> ./"<br />
+<i>Ubuntu:</i> "deb <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/Ubuntu/14.04" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/Ubuntu/14.04</a> ./"<br />
+<i>Ubuntu (рабочая версия):</i> "deb <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/Work/Ubuntu/14.04" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/Work/Ubuntu/14.04</a> ./"<br />
+Установка:
+</p>
+<pre style="white-space: pre-wrap;">
+$ apt-get update
+$ apt-get install openscada-model-aglks
+</pre>
+<p><i>ALTLinux:</i> "rpm <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/ALTLinux/7</a> openscada main"<br />
+<i>ALTLinux (рабочая версия):</i> "rpm <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/Work/ALTLinux/6" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/Work/ALTLinux/6</a> openscada main"<br />
+<i>ALTLinux (рабочая версия, модули отдельно):</i> "rpm <a class="external free" href="ftp://ftp.oscada.org/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/ALTLinux/7</a> openscada main"<br />
+Установка:
+</p>
+<pre style="white-space: pre-wrap;">
+$ apt-get update
+$ apt-get install openscada-Model.AGLKS
+</pre>
+<p>Добавление ключа проверки подписи (подлинности) репозитория и пакетов в нём (необязательно и используется не во всех репозиториях):
+</p>
+<pre style="white-space: pre-wrap;">
+ $ wget -O - http://ftp.oscada.org/Misc/pkgSignKey | sudo apt-key add - </pre>
+<p><b>Репозитории пакетов, основанные на менеджере YUM (RedHat, Fedora, CentOs)</b> — добавляются созданием файла /etc/yum.repos.d/openscada.repo с содержимым:
+</p>
+<pre style="white-space: pre-wrap;">
+[openscada]
+name=OpenSCADA
+#CentoOs
+baseurl=ftp://ftp.oscada.org/OpenSCADA/0.8.0/CentOs/7
+#CentoOs (рабочая версия)
+#baseurl=ftp://ftp.oscada.org/OpenSCADA/Work/CentOs/6
+#Fedora (рабочая версия)
+#baseurl=ftp://ftp.oscada.org/OpenSCADA/Work/Fedora/12
+enabled=1
+gpgcheck=0
+</pre>
+<p>Установка:
+</p>
+<pre style="white-space: pre-wrap;">
+$ yum install openscada-Model.AGLKS </pre>
+<p><b>Репозитории пакетов SuSE YaST</b> — добавляются командой:
+</p>
+<pre style="white-space: pre-wrap;">
+$ zypper ar -f ftp://ftp.oscada.org/OpenSCADA/0.8.0/SuSE/13 OpenSCADA</pre>
+<p>Установка:
+</p>
+<pre style="white-space: pre-wrap;">
+$ zypper in openscada-Model.AGLKS </pre>
+<h4><span class="mw-headline" id=".D0.A0.D1.83.D1.87.D0.BD.D0.B0.D1.8F_.D1.83.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BA.D0.B0_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.BE.D0.B2_OpenSCADA"><span class="mw-headline-number">2.1.2</span> Ручная установка пакетов OpenSCADA</span></h4>
+<p>Для ручной установки пакетов OpenSCADA загрузим их из официального сайта или другого источника. Загрузить можно два набора пакетов.
+</p><p>Первый набор представлен девятью пакетами:
+</p>
+<ul><li> <b>openscada</b> — пакет со всеми файлами, нужными для запуска OpenSCADA в полном объёме, включая все модули;</li>
+<li> <b>openscada-LibDB.Main</b> — основные библиотеки OpenSCADA для сбора данных и другого в БД SQLite;</li>
+<li> <b>openscada-LibDB.VCA</b> — библиотеки визуальных компонетов в БД SQLite;</li>
+<li> <b>openscada-Model.AGLKS</b> — БД и конфигурация модели "АГЛКС" (Демо: EN,RU,UK);</li>
+<li> <b>openscada-Model.Boiler</b> — БД и конфигурация модели "Котёл" (EN,RU,UK);</li>
+<li> <b>openscada-docEN</b> — документация на систему OpenSCADA - Английский язык;</li>
+<li> <b>openscada-docRU</b> — документация на систему OpenSCADA - Русский язык;</li>
+<li> <b>openscada-docUK</b> — документация на систему OpenSCADA - Украинский язык;</li>
+<li> <b>openscada-devel</b> — пакеты разработки, для отдельного создания модулей к системе OpenSCADA.</li></ul>
+<p>Второй набор представлен порядка пятьюдесятью пакетами, с выделением модулей OpenSCADA в отдельные пакеты:
+</p>
+<ul><li> <b>openscada-core</b> — содержит ядро OpenSCADA, базовую конфигурацию и запускающие файлы;</li>
+<li> <b>openscada-DB.* </b> — модули подсистемы "БД";</li>
+<li> <b>openscada-DAQ.* </b> — модули подсистемы "Сбор данных";</li>
+<li> <b>openscada-Archive.* </b> — модули подсистемы "Архивы";</li>
+<li> <b>openscada-Transport.* </b> — модули подсистемы "Транспорты";</li>
+<li> <b>openscada-Protocol.* </b> — модули подсистемы "Транспортные протоколы";</li>
+<li> <b>openscada-UI.* </b> — модули подсистемы "Пользовательские интерфейсы";</li>
+<li> <b>openscada-Special.* </b> — модули подсистемы "Специальные";</li>
+<li> <b>openscada-LibDB.Main</b> — основные библиотеки OpenSCADA для сбора данных и другого в БД SQLite;</li>
+<li> <b>openscada-LibDB.VCA</b> — библиотеки визуальных компонентов в БД SQLite;</li>
+<li> <b>openscada-Model.AGLKS</b> — БД и конфигурация модели "АГЛКС" (Демо: EN,RU,UK);</li>
+<li> <b>openscada-Model.Boiler</b> — БД и конфигурация модели "Котёл" (EN,RU,UK);</li>
+<li> <b>openscada-docEN</b> — документация на систему OpenSCADA - Английский язык;</li>
+<li> <b>openscada-docRU</b> — документация на систему OpenSCADA - Русский язык;</li>
+<li> <b>openscada-docUK</b> — документация на систему OpenSCADA - Украинский язык;</li>
+<li> <b>openscada-devel</b> — пакеты разработки, для отдельного создания модулей к системе OpenSCADA;</li>
+<li> <b>openscada</b> — виртуальный пакет, содержащий зависимости, для установки типовой конфигурации OpenSCADA;</li>
+<li> <b>openscada-plc</b> — виртуальный пакет, содержащий зависимости, для установки типовой конфигурации OpenSCADA как ПЛК;</li>
+<li> <b>openscada-server</b> — виртуальный пакет, содержащий зависимости, для установки типовой конфигурации OpenSCADA как SCADA-сервер;</li>
+<li> <b>openscada-visStation</b> — виртуальный пакет, содержащий зависимости, для установки типовой конфигурации OpenSCADA как визуальная SCADA-станция.</li></ul>
+<p>Первый набор пакетов больше предназначен для простой-ручной установки, поскольку содержит только девять пакетов. Второй набор предназначен для помещения в репозиторий дистрибутива Linux и последующей установки их с помощью пакетного менеджера, осуществляющего автоматическое разрешение зависимостей. Второй набор пакетов позволяет установить только нужные компоненты OpenSCADA, тем самым оптимизируя рабочее окружение, чего не позволяет осуществить первый набор пакетов.
+</p><p>Ручную установку RPM-пакетов первого набора можно осуществить командой, предварительно сменив рабочую директорию на директорию с пакетами:
+</p>
+<pre style="white-space: pre-wrap;">
+$ rpm -i openscada-LibDB.Main-0.8.0-alt1.noarch.rpm openscada-LibDB.VCA-0.8.0-alt1.noarch.rpm openscada-Model.AGLKS-0.8.0-alt1.i586.rpm openscada-0.8.0-alt1.i586.rpm </pre>
+<p>Ручную установку DEB-пакетов первого набора можно осуществить командой, предварительно сменив рабочую директорию на директорию с пакетами:
+</p>
+<pre style="white-space: pre-wrap;">
+$ dpkg -i openscada-libdb.main_0.8.0-1_all.deb openscada-libdb.vca_0.8.0-1_all.deb openscada-model.aglks_0.8.0-1_all openscada_0.8.0-1_i386.deb </pre>
+<p>В процессе выполнения установки могут возникнуть ошибки, связанные с неудовлетворёнными зависимостями. При ручной установке из пакетов удовлетворять их нужно будет вручную, подобно установке пакетов OpenSCADA, или через менеджер пакетов дистрибутива Linux. Детальнее ознакомиться с процессом установки ПО в RPM-пакетах можно по ссылке: <a class="external free" href="http://skif.bas-net.by/bsuir/admin/node51.html" rel="nofollow noreferrer noopener" target="_blank">http://skif.bas-net.by/bsuir/admin/node51.html</a>.
+</p><p>В системах Linux с APT-менеджером пакетов можно загруженные файлы пакетов легко обновлять прямо из директории с этими пакетами, не помещая их в репозиторий пакетов, с автоматическим разрешением зависимостей:
+</p>
+<pre style="white-space: pre-wrap;">
+$ apt-get upgrade /var/tmp/OpenSCADA/* </pre>
+<h3><span class="mw-headline" id=".D0.A3.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BA.D0.B0_.D0.B8.D0.B7_.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D0.BD.D1.8B.D1.85_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D0.BE.D0.B2"><span class="mw-headline-number">2.2</span> Установка из исходных текстов</span></h3>
+<p>Если нет возможности получить готовые пакеты OpenSCADA для выбранного дистрибутива, то остаётся только вариант сборки OpenSCADA из исходных текстов. Процесс сборки OpenSCADA детально описан в руководстве по ссылке <a class="external free" href="http://wiki.oscada.org/Doc/SborkaIzIsxodnikov" rel="nofollow noreferrer noopener" target="_blank">http://wiki.oscada.org/Doc/SborkaIzIsxodnikov</a>. Однако нужно отметить, что если Вам удалось собрать OpenSCADA из исходных текстов, то это руководство не для Вас и Вы, скорее всего, можете легко освоить <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">базовую документацию OpenSCADA</a>.
+</p><p>Данный раздел приведён здесь только для полноты и целостности рассмотрения вопроса, поскольку требование квалификационного уровня пользователя для этого раздела значительно выше уровня документа в целом!
+</p>
+<h2><span class="mw-headline" id=".D0.9F.D0.B5.D1.80.D0.B2.D0.B8.D1.87.D0.BD.D0.B0.D1.8F_.D0.BA.D0.BE.D0.BD.D1.84.D0.B8.D0.B3.D1.83.D1.80.D0.B0.D1.86.D0.B8.D1.8F_.D0.B8_.D0.B7.D0.B0.D0.BF.D1.83.D1.81.D0.BA"><span class="mw-headline-number">3</span> Первичная конфигурация и запуск</span></h2>
+<p>После корректной установки OpenSCADA с БД модели "АГЛКС" никакой предварительной настройки не требуется. Если нужно выполнить особую настройку, которая отличается от базовой, то воспользуйтесь <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">документом описания программы OpenSCADA</a>.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Демонстрация OpenSCADA на основе БД модели "АГЛКС" это не то же что обычно предоставляют коммерческие производители ПО с целью продемонстрировать возможности, но исключить или усложнить нормальную работу путём ограничения функций. Демонстрация OpenSCADA это полно-функциональная система, предоставляющая примеры реализации и настройки различных компонентов. На основе БД модели "АГЛКС" и других моделей OpenSCADA можно легко создавать собственные проекты, используя предоставленные наработки.
+</p><p>Запустить на исполнение OpenSCADA с БД модели "АГЛКС" можно из меню окружения рабочего стола в разделе "Графика", пункт "Модель 'АГЛКС' на открытой системе визуального контроля и сбора данных" с характерной иконкой (рис.3.1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:876px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_demenu_oscada_ru.png"><img class="thumbimage" height="638" src="files/QuickStart_demenu_oscada_ru.png" width="874" /></a>  <div class="thumbcaption">Рис. 3.1. Пункт меню окружения рабочего стола для запуска демонстрации OpenSCADA.</div></div></div></div>
+<p>Запуск также можно осуществить из консоли командой:
+</p>
+<pre style="white-space: pre-wrap;">
+$ openscada_AGLKS </pre>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> При запуске OpenSCADA из консоли, с помощью команды "<b>$ openscada</b>", осуществляется запуск без конфигурации, в результате которого запрашивается пользователь и пароль для входа. По умолчанию в системе OpenSCADA предусмотрен привилегированный пользователь "root" (пароль "openscada") и непривилегированный "user" (пароль "user"), которые не имеют никакого отношения к пользователям операционной системы. Запуск OpenSCADA таким образом имеет смысл только от суперпользователя ОС ("root") или в режиме демона.
+</p><p>После запуска получим окно графического конфигуратора системы OpenSCADA — QTCfg (рис.3.2) с открытой корневой страницей. Демонстрационная БД специально настроена так, чтобы первым при запуске появлялось окно конфигуратора. В дальнейшем можно открыть окно разработки графических интерфейсов пользователя, а также запустить проект пользовательского интерфейса на исполнение.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:811px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_QTCfg_root_ru.png"><img class="thumbimage" height="768" src="files/QuickStart_QTCfg_root_ru.png" width="809" /></a>  <div class="thumbcaption">Рис. 3.2. OpenSCADA конфигуратор - QTCfg, корневая страница.</div></div></div></div>
+<p>Конфигуратор OpenSCADA является основным и достаточным средством для конфигурации любого компонента системы. Как и многие компоненты OpenSCADA, конфигуратор реализован в виде модуля. Кроме конфигуратора QTCfg могут быть доступны другие конфигураторы, выполняющие те же функции, но реализованные на основе других технологиях. Например, таковыми являются Web-конфигураторы: <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> и <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.
+</p><p>Все действия в дальнейшем мы будем рассматривать только в конфигураторе QTCfg, хотя их можно будет выполнить и в других конфигураторах.
+</p><p>Структуру интерфейса окна конфигуратора можно детально рассмотреть по <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">ссылке</a>. Для нас же сейчас более важно рассмотреть все доступные интерфейсы OpenSCADA, поэтому нажмём предпоследнюю сверху иконку на панели инструментов после чего откроется окно разработки пользовательского интерфейса (рис.3.3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:906px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Vision_dev_ru.png"><img class="thumbimage" height="672" src="files/QuickStart_Vision_dev_ru.png" width="904" /></a>  <div class="thumbcaption">Рис. 3.3. Окно разработки пользовательского интерфейса.</div></div></div></div>
+<p>Далее можем запустить проект "AGLKS" на исполнение. Для этого выбираем его в перечне проектов и запускаем путём нажатия на первую слева иконку на панели инструментов или в контекстном меню, в результате чего получим окно пользовательского интерфейса (рис.3.4).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1043px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Vision_run_ru.png"><img class="thumbimage" height="768" src="files/QuickStart_Vision_run_ru.png" width="1041" /></a>  <div class="thumbcaption">Рис. 3.4. Окно пользовательского интерфейса проекта "AGLKS".</div></div></div></div>
+<p>Построение и исполнение пользовательских интерфейсов осуществляется модулем <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> подсистемы "Пользовательские интерфейсы". Кроме этого модуля могут быть доступны иные модули визуализации. Например, OpenSCADA предоставляет модуль <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a>, который позволяет исполнять проекты, ранее разработанные в интерфейсе модуля Vision, посредством Web-технологий и стандартного Web-браузера. Все действия в дальнейшем мы будем рассматривать только в интерфейсе модуля Vision.
+</p><p>Таким образом мы запустили демонстрацию OpenSCADA и познакомились с основным набором инструментов. В дальнейшем будем их использовать для конфигурации OpenSCADA, создания задач сбора данных, обвязки собранных данных, с целью их обработки и выдачи воздействий, а также для создания пользовательского интерфейса визуализации полученных данных и выдачи управляющих воздействий.
+</p><p>Закроем окно исполнения проекта "AGLKS" и окно разработки пользовательского интерфейса для подготовки к изучению следующих разделов.
+</p><p>Весь процесс конфигурации SCADA-системы для выполнения функций верхнего уровня можно условно разделить на два этапа:
+</p>
+<ul><li> Конфигурация источников данных и создание базы данных (БД) параметров этих источников.</li>
+<li> Формирование визуального представления данных ТП путём создания интерфейса оператора в виде: мнемосхем, групп графиков, групп контуров, документов и т.д.</li></ul>
+<h3><span class="mw-headline" id=".D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B5.D0.BA.D1.82.D0.B0_.D1.81_.D1.87.D0.B8.D1.81.D1.82.D0.BE.D0.B3.D0.BE_.D0.BB.D0.B8.D1.81.D1.82.D0.B0"><span class="mw-headline-number">3.1</span> <span id="UserPrjCrt" title="#UserPrjCrt">Создание пользовательского проекта с чистого листа</span></span></h3>
+<p>Все действия в последующих разделах описаны в окружении БД модели "АГЛКС" (демонстрация) с целью как можно более полного и наглядного представления процесса конфигурации, с возможностью подключения к реальному-живому источнику данных, реализованному на основе модели технологического процесса (ТП) газо-компрессорной станции. Однако нужно несколько отвлечься и описать процесс создания пользовательского проекта с чистого листа, что очевидно является Вашей конечной целью. На основе нового пользовательского проекта можно выполнять все описанные ниже действия с БД модели "АГЛКС", но с оглядкой на источники данных собственного, нового, проекта.
+</p><p>Для запуска чистого пользовательского проекта в меню окружения рабочего стола, разделе "Графика", предусмотрен пункт "Открытая SCADA система" с характерной иконкой (рис.3.1.1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1017px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_demenu_oscada_start_ru.png"><img class="thumbimage" height="627" src="files/QuickStart_demenu_oscada_start_ru.png" width="1015" /></a>  <div class="thumbcaption">Рис. 3.1.1. Пункт меню окружения рабочего стола для запуска чистого пользовательского проекта.</div></div></div></div>
+<p>Запуск также можно осуществить из консоли командой:
+</p>
+<pre style="white-space: pre-wrap;">
+$ openscada_start</pre>
+<p>Начиная с версии 0.9 OpenSCADA вызов указанной команды создаст диалог для выбора создания нового проекта или исполнения пред-установленных и пользовательских проектов. Для формирования диалогов выбора и имени нового проекта используются диалоговые программы, в приведенном приоритете проверки: "dialog" (в случае наличия активного терминала), "kdialog" (рис.3.1.2), "zenity" та "Xdialog". Выбираем пункт меню "&lt;Новый проект&gt;" и вводим имя проекта "start" на следующем диалоге.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:792px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_demenu_oscada_start_dialog_ru.png"><img class="thumbimage" height="266" src="files/QuickStart_demenu_oscada_start_dialog_ru.png" width="790" /></a>  <div class="thumbcaption">Рис. 3.1.2. Диалог выбора создания нового проекта или исполнения пред-установленных и пользовательских проектов.</div></div></div></div>
+<p>Чистый пользовательский проект не содержит никакой специфической для конкретного проекта конфигурации и настроен на работу в директории пользователя "<b>/.openscada</b>", с основной SQLite БД в файле "<b>DATA/MainSt.db</b>". Создавать сложный проект SCADA-системы проще с использованием <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs" title="Special:MyLanguage/Libs">библиотек функций API объектной модели системы OpenSCADA и библиотек графических элементов</a>, а также других библиотек OpenSCADA. Для использования библиотек OpenSCADA, хранящихся в файле БД, их нужно подключить, добавить в объекте модуля БД "SQLite" (рис.3.1.3), установить адрес и кодировку БД в "UTF-8" (рис.3.1.4).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1072px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_SQLite_add_ru.png"><img class="thumbimage" height="531" src="files/QuickStart_SQLite_add_ru.png" width="1070" /></a>  <div class="thumbcaption">Рис. 3.1.3. Добавление объекта БД "SQLite".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:712px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_SQLite_obj_ru.png"><img class="thumbimage" height="720" src="files/QuickStart_SQLite_obj_ru.png" width="710" /></a>  <div class="thumbcaption">Рис. 3.1.4. Объект БД "SQLite" библиотеки OpenSCADA.</div></div></div></div>
+<p>Дистрибутивы OpenSCADA поставляются с рядом библиотек в виде файлов БД "SQLite" (таблица 3.1), которые, при запуске чистого пользовательского проекта, помещаются в директорию "<b>LibsDB/</b>". Согласно этому списку добавляем их в объекте модуля БД "SQLite", устанавливаем им флаг "Включать" и сохраняем. Далее, для загрузки содержимого библиотек можно включить БД и нажать кнопку "Загрузить систему из этой БД", однако при загрузке ряд новых объектов не включатся поэтому проще завершить чистый пользовательский проект и запустить по новой.
+</p><p><b>Таблица 3.1.</b> Библиотеки OpenSCADA в составе дистрибутива.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Имя </th>
+<th> Адрес </th>
+<th> Языки/кодировка
+</th></tr>
+<tr>
+<td> OscadaLibs </td>
+<td> Библиотеки функций </td>
+<td> ./LibsDB/OscadaLibs.db </td>
+<td> EN,RU,UK/UTF-8
+</td></tr>
+<tr>
+<td> vcaBase </td>
+<td> СВУ: Главные библиотеки </td>
+<td> ./LibsDB/vcaBase.db </td>
+<td> EN,RU,UK/UTF-8
+</td></tr>
+<tr>
+<td> vcaTest </td>
+<td> СВУ: Тесты </td>
+<td> ./LibsDB/vcaTest.db </td>
+<td> EN,RU,UK/UTF-8
+</td></tr>
+<tr>
+<td> vcaElectroEls </td>
+<td> СВУ: Библиотека электроэлементов мнемосхем пользовательского интерфейса </td>
+<td> ./LibsDB/vcaElectroEls.db </td>
+<td> EN,RU,UK/UTF-8
+</td></tr></table>
+<p>В результате добавления библиотек OpenSCADA Вы получите окружение, готовое для добавления источников данных и формирования интерфейса своего, нового проекта SCADA-системы.
+</p>
+<h2><span class="mw-headline" id=".D0.A0.D0.B0.D0.B1.D0.BE.D1.82.D0.B0_.D1.81_.D0.B8.D1.81.D1.82.D0.BE.D1.87.D0.BD.D0.B8.D0.BA.D0.B0.D0.BC.D0.B8_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85"><span class="mw-headline-number">4</span> Работа с источниками данных</span></h2>
+<p>Основной функцией любой SCADA-системы является работа с источниками данных реального времени, а именно опрос программируемых логических контроллеров (ПЛК) и простых модулей УСО. Детальнее ознакомиться с этим вопросом можно в <a href="DAQ.html" title="Special:MyLanguage/Documents/DAQ">документе "Сбор данных в OpenSCADA"</a>.
+</p><p>Поддержка того или иного источника данных зависит от протокола или API, по которому источник свои данные предоставляет, и наличия для протокола/API модуля подсистемы "Сбор данных" в OpenSCADA. Общий перечень модулей подсистемы "Сбор данных" и документацию по ним можно получить по <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">ссылке</a>, в соответствующей части таблицы.
+</p><p>Полученные из источников данные впоследствии архивируются, обрабатываются и используются для визуального представления оператору ТП.
+</p>
+<h3><span class="mw-headline" id=".D0.9E.D0.BF.D1.80.D0.BE.D1.81_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.D0.B0.D0.BF.D0.BF.D0.B0.D1.80.D0.B0.D1.82.D0.B0_.D0.A2.D0.9F"><span class="mw-headline-number">4.1</span> Опрос данных аппарата ТП</span></h3>
+<p>В качестве примера рассмотрим и создадим опрос данных для аппарата воздушного холодильника. Демонстрационная БД содержит модель реального времени ТП компрессорной станции из шести компрессоров. Данные для двух аппаратов воздушных холодильников "AT101_1" и "AT101_2" компрессорной станции "KM101" доступны по протоколу ModBus/TCP на порту 10502.
+</p><p>Мы создадим объект контроллера для опроса по протоколу ModBUS/TCP и получим эти данные, тем самым фактически реализовав задачу опроса реальных данных, поскольку от настоящего внешнего устройства наша конфигурация будет отличаться адресом этого устройства, адресами регистров ModBUS и возможно интерфейсом взаимодействия.
+</p><p>Для опроса данных по протоколу "ModBUS" в OpenSCADA присутствует модуль "ModBUS" подсистемы "Сбор данных". Для добавления нового контроллера откроем в конфигураторе страницу модуля "ModBUS" ("Демо станция"-&gt;"Сбор данных"-&gt;"Модуль"-&gt;"ModBUS") и в контекстном меню пункта "ModBUS" нажмём "Добавить" (рис.4.1.1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:642px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBUS_add_ru.png"><img class="thumbimage" height="580" src="files/QuickStart_ModBUS_add_ru.png" width="640" /></a>  <div class="thumbcaption">Рис. 4.1.1. Добавление контроллера в модуле "ModBUS" подсистемы "Сбор данных".</div></div></div></div>
+<p>В результате появится окно диалога (рис.4.1.2) с предложением ввести идентификатор и имя нового контроллера. Идентификаторы любых объектов в OpenSCADA ограничены размером в 20 символов и их рекомендуется вводить символами английского алфавита и цифрами. Кроме этого, начинать идентификатор желательно с буквы. Это связано с тем, что идентификатор впоследствии может использоваться в скриптах. Имена объектов OpenSCADA ограничены размером в 50 символов и могут вводиться любыми символами. Имена обычно используются для отображения. Если поле имени оставить пустым, то вместо него для отображения будет использоваться идентификатор. Введём идентификатор "KM101" и имя "KM 101".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:410px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_enter_idnm_ru.png"><img class="thumbimage" height="247" src="files/QuickStart_enter_idnm_ru.png" width="408" /></a>  <div class="thumbcaption">Рис. 4.1.2. Диалог для указания идентификатора и имени нового объекта.</div></div></div></div>
+<p>После подтверждения у нас появится объект нового контроллера. Выберем его в конфигураторе и познакомимся с настройками (рис.4.1.3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBUS_cntr_ru.png"><img class="thumbimage" height="674" src="files/QuickStart_ModBUS_cntr_ru.png" width="773" /></a>  <div class="thumbcaption">Рис. 4.1.3. Главная вкладка настройки объекта контроллера модуля ModBUS.</div></div></div></div>
+<p>Настройки объекта контроллера, как правило, специфичны для разных типов источников данных и протоколов. Детально ознакомиться с настройками объекта контроллера модуля <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBUS</a> можно по <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ModBus#DAQ" title="Special:MyLanguage/Modules/ModBus">ссылке</a>. Мы же рассмотрим общие и ключевые настройки для модуля <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBUS</a>.
+</p><p>Перед конфигурацией связи со своим контроллером предварительно необходимо, из документации на контроллер, выяснить настройки его сетевых интерфейсов и протоколов, а также, в случае использования "ModBus", получить таблицу назначения внешних и внутренних сигналов контроллера на номера регистров "ModBus".
+</p><p>С помощью страницы объекта контроллера в разделе "Состояние" можно в первую очередь оценить текущее состояние объекта контроллера и реальное состояние связи с физическим контроллером, а также оперативно его менять. Так, поле "Статус" содержит код ошибки и текстовое описание текущего состояния связи с контроллером, в нашем случае объект контроллера выключен. Мы его можем включить и запустить, установив флажки напротив соответствующих полей. Включенный объект контролера инициализирует объекты параметров, запущенный же запускает задачу опроса и предоставляет возможность передавать данные в контроллер через атрибуты параметров. Поле БД указывает на то, в какой БД хранится конфигурация данного объекта. Нас устроит хранение в главной БД, т.е. оставим по умолчанию. 
+</p><p>В разделе "Конфигурация" непосредственно содержится конфигурация объекта контроллера:
+</p>
+<ul><li> "Идентификатор" и "Имя" содержат названия, которые мы вводили при создании объекта. Имя мы можем поменять прямо здесь, а вот идентификатор невозможно изменять прямо, однако объект можно вырезать (Ctrl+X) и затем вставить (Ctrl+V), тем самым переименовав его.</li>
+<li> "Описание" может содержать развёрнутую характеристику и назначение объекта контроллера. В нашем случае значение этого поля непринципиально.</li>
+<li> "Включать" и "Запускать" указывают на то, в какое состояние переводить объект контроллера при запуске OpenSCADA. Установим оба поля.</li>
+<li> "Таблица параметров" — содержит имя таблицы БД, в которой будет храниться конфигурация параметров данного контроллера. Оставим по умолчанию.</li>
+<li> "Планирование опроса" — содержит конфигурацию планировщика для запуска задачи опроса. Получить описание формата конфигурации данного поля можно из всплывающей подсказки. Одиночная цифра указывает на периодичность запуска в секундах. Укажем одну секунду.</li>
+<li> "Уровень приоритета задачи сбора данных" — указывает насколько приоритетная данная задача (от -1 до 99). Приоритеты выше нуля имеют смысл только при запуске OpenSCADA от привилегированного пользователя. Оставим это поле без изменений.</li>
+<li> "ModBUS протокол" — указывает на вариант протокола ModBUS. Возможны варианты протокола "TCP/IP", "RTU" и "ASCII". На данный момент нас интересует вариант "TCP/IP", поэтому оставим как есть. Варианты протоколов "RTU" и "ASCII" нужно устанавливать в случае связи с контроллером посредством последовательных интерфейсов, часто "RS-485".</li>
+<li> "Адрес транспорта" — указывает на исходящий транспорт подсистемы "Транспорты", который используется для соединения с контроллером. В случае с вариантом "TCP/IP" нам нужен транспорт в модуле <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>, а в случае вариантов "RTU", "ASCII" и последовательного интерфейса нам нужен транспорт в модуле <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>. На создании исходящего транспорта в "Sockets" и "Serial" детальнее остановимся ниже.</li>
+<li> "Узел назначения" — указывает узел источника данных или контроллера в сети ModBUS. В нашем случае это должно быть "1".</li>
+<li> "Объединять фрагменты данных" — включает объединение несмежных фрагментов регистров в один блок запроса, до 100 регистров, вместо генерации отдельных запросов. Позволяет уменьшить общее время опроса. Установим эту опцию.</li>
+<li> "Использовать функции записи нескольких элементов (0x0F,0x10)" — вместо функций одно-элементной записи будут использованы много-элементные. Оставим неизменным.</li>
+<li> "Время ожидания соединения" — указывает в течение какого времени ожидать ответа от контроллера и по истечению которого сообщать об ошибке связи. Ноль указывает на использование времени транспорта. Оставим без изменений.</li>
+<li> "Время восстановления" — указывает на время в секундах, через которое, в случае отсутствия связи, повторять попытку восстановить соединение.</li>
+<li> "Максимальный размер блока запроса (байты)" — устанавливает максимальный размер блока групповых запросов регистров и битов, в байтах. Полезен для некоторых контроллеров с подобным ограничением. Оставим неизменным.</li></ul>
+<p>Сохраним наши изменения в БД, нажав вторую слева иконку на панели инструментов.
+</p><p>Теперь таким же образом, как и объект контроллера, создадим исходящий транспорт в модуле "Sockets" ("Демо станция"-&gt;"Транспорты"-&gt;"Сокеты") посредством контекстного меню (рис.4.1.4) и назовём транспорт так же, как контроллер: "KM101" и имя "KM 101". Обратите внимание, что в поле "Тип элемента" диалога ввода идентификатора и имени (рис.4.1.2) нужно выбрать "Выходной транспорт"!
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:615px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Sockets_add_ru.png"><img class="thumbimage" height="536" src="files/QuickStart_Sockets_add_ru.png" width="613" /></a>  <div class="thumbcaption">Рис. 4.1.4. Добавление исходящего транспорта в модуле "Sockets" подсистемы "Транспорты".</div></div></div></div>
+<p>Страница конфигурации полученного исходящего транспорта приведена на рис.4.1.5. Эта страница также содержит раздел состояния и оперативного управления. В поле "Статус" содержится текстовое описание текущего состояния транспорта. Мы его можем запустить на исполнение, установив флажок напротив соответствующего поля. Выполняющийся объект транспорта инициирует соединение с внешним узлом. Поле БД указывает на то, в какой БД хранится конфигурация данного объекта. Нас устроит хранение в главной БД.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Sockets_tr_ru.png"><img class="thumbimage" height="533" src="files/QuickStart_Sockets_tr_ru.png" width="687" /></a>  <div class="thumbcaption">Рис. 4.1.5. Страница конфигурации исходящего транспорта модуля "Sockets" подсистемы "Транспорты".</div></div></div></div>
+<p>В разделе "Конфигурация" непосредственно содержится конфигурация объекта транспорта:
+</p>
+<ul><li> "Идентификатор" и "Имя" содержат названия, которые мы вводили при создании объекта.</li>
+<li> "Описание" — может содержать развёрнутую характеристику и назначение объекта.</li>
+<li> "Адрес" — указывает тип, адрес и режим соединения с удалённой станцией. Ознакомиться с форматом записи можно из всплывающей подсказки. Установим это поле в значение "TCP:localhost:10502".</li>
+<li> "Запускать" — указывает на то, в какое состояние переводить объект при запуска OpenSCADA. Установим поля.</li>
+<li> "Временные интервалы" — указывают продолжительность ожидания ответа от удалённой станции. Ознакомиться с форматом записи можно из всплывающей подсказки. Оставим значение неизменным.</li></ul>
+<p>Транспорты других типов создаются подобным к рассмотренному для "Sockets" способу, а конфигурация их отличается обычно только форматом записи адреса и таймаутов. В случае с транспорта модуля "Serial" в адресе указывается путь к последовательному устройству, скорость, и формат. Для переходников <i>USB-&gt;Serial</i> этот адрес нужно узнать в операционной системе, например, консольной командой "<b>$ dmesg</b>", сразу после подключения переходника.
+</p><p>Сохраним объект транспорта и вернёмся к конфигурационному полю "Адрес транспорта" объекта контроллера, где выберем адрес "Sockets.KM101". На этом настройка объекта контроллера закончена, включим его установив флаг "Включен". Следующим этапом является конфигурация и выбор тех данных, которые нужно опрашивать из контроллера. Эта настройка производится путём создания объекта "Параметр" контроллера. Объект "Параметр" позволяет описать перечень данных, получаемых у контролера и передать их в окружение OpenSCADA.
+</p><p>Для добавления нового объекта параметра откроем в конфигураторе страницу нашего объекта контроллера и в контекстном меню пункта "KM101" нажмём "Добавить". Объект параметра назовём: "AT101_1" и имя "AT 101_1".
+</p><p>Страница конфигурации полученного параметра приведена на рис.4.1.6. Эта страница содержит раздел состояния и оперативного управления. В поле "Тип" содержится идентификатор типа параметра, в нашем случае тип "Стандартный" (std). Параметр мы можем включить, установив флажок напротив соответствующего поля. Включенный параметр участвует в процессе обмена с контроллером.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:685px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBUS_prm_ru.png"><img class="thumbimage" height="649" src="files/QuickStart_ModBUS_prm_ru.png" width="683" /></a>  <div class="thumbcaption">Рис. 4.1.6. Страница конфигурации параметра контроллера "ModBUS".</div></div></div></div>
+<p>В разделе "Конфигурация" непосредственно содержится конфигурация объекта параметра:
+</p>
+<ul><li> "Идентификатор" и "Имя" содержат названия, которые мы вводили при создании объекта.</li>
+<li> "Описание" — может содержать развёрнутую характеристику и назначение объекта.</li>
+<li> "Включать" — указывает на то, в какое состояние переводить объект при запуска OpenSCADA. Установим поле.</li>
+<li> "Перечень атрибутов" — содержит конфигурацию атрибутов параметров в соотношении их с регистрами и битами "ModBUS". Ознакомиться с форматом записи можно из всплывающей подсказки. Установим содержимое этого текстового поля в:</li></ul>
+<pre style="white-space: pre-wrap;">
+R:100:r:Ti:T вход
+R:101:r:To:T выход
+R:102:rw:Cw:Производ.
+</pre>
+<p>Таким же образом создадим второй параметр: "AT101_2" с именем "AT 101_2". Перечень атрибутов для него установим в:
+</p>
+<pre style="white-space: pre-wrap;">
+R:103:r:Ti:T вход
+R:104:r:To:T выход
+R:105:rw:Cw:Производ.
+</pre>
+<p>Сохраним оба объекта параметра. Теперь мы можем включить и запустить наш контроллер для инициации обмена. Для этого вернёмся на страницу нашего объекта контроллера и в разделе "Состояние" установим флажок "Запущен". Если мы ничего не пропустили, то обмен успешно запустится и в поле "Статус" мы получим подобное представленному на рис.4.1.7.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBUS_cntr_st_ru.png"><img class="thumbimage" height="686" src="files/QuickStart_ModBUS_cntr_st_ru.png" width="773" /></a>  <div class="thumbcaption">Рис. 4.1.7. Страница объекта контроллера при успешном обмене с физическим контроллером.</div></div></div></div>
+<p>В случае успешного обмена с физическим контроллером мы получим описанные данные контроллера в инфраструктуре OpenSCADA. Увидеть эти данные можно на вкладке "Атрибуты" наших параметров AT101_1 (рис.4.1.8) и AT101_2. Поскольку опрос производится регулярно и с периодичностью в секунду, то мы можем наблюдать их изменение, нажимая кнопку "Обновить текущую страницу" на панели инструментов.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:579px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBUS_prm_attr_ru.png"><img class="thumbimage" height="513" src="files/QuickStart_ModBUS_prm_attr_ru.png" width="577" /></a>  <div class="thumbcaption">Рис. 4.1.8. Страница описанных атрибутов параметра AT101_1.</div></div></div></div>
+<p>На этом конфигурация сбора данных считается законченной.
+</p>
+<h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D0.BA.D0.B0_.D0.BF.D0.BE.D0.BB.D1.83.D1.87.D0.B5.D0.BD.D0.BD.D1.8B.D1.85_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.D0.A2.D0.9F"><span class="mw-headline-number">4.2</span> <span id="DataProc" title="#DataProc">Обработка полученных данных ТП</span></span></h3>
+<p>Часто встречается ситуация, когда исходные данные, полученные из источника данных, являются "сырыми", т.е. неготовыми или неудобными для визуального представления, поэтому необходимо выполнить эту подготовку. В нашем примере мы получили данные, которые поступают в коде от шкалы внутри контроллера. Наша задача — выполнить вычисление реальных значений из полученных данных. Обработку данных в OpenSCADA можно делать, как непосредственно при визуализации, так и в подсистеме "Сбор данных". Однако, смешивание процесса визуализации и обработки исходных данных вносит путаницу в конфигурацию, а также делает полученные образы визуализации мало пригодными для повторного использования. По этой причине выполним подготовку данных в подсистеме "Сбор данных".
+</p><p>Вычисления в подсистеме "Сбор данных" выполняются посредством модуля логического уровня <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> и шаблонов параметров подсистемы "Сбор данных". Детальнее ознакомиться с концепцией "Логического уровня" можно по <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">ссылке</a>.
+</p><p>Для выполнения вычислений в модуле логического уровня нужно предварительно создать шаблон параметра подсистемы "Сбор данных". Для этого откроем страницу библиотеки шаблонов "Базовые шаблоны" ("Демо станция"-&gt;"Сбор данных"-&gt;"Библиотека шаблонов"-&gt;"Базовые шаблоны") и посредством контекстного меню создадим объект шаблона "airCooler" c именем "Воздушный холодильник". Страница конфигурации полученного объекта представлена на рисунке 4.2.1. Эта страница содержит раздел состояния и оперативного управления. Мы можем сделать шаблон доступным, установив флажок напротив соответствующего поля. Доступные шаблоны могут подключаться к параметрам сбора данных, а параметры будут выполнять вычисления по этому шаблону. В поле "Использовано" указывается число объектов, которые используют данный шаблон для вычисления образа параметра. В разделе "Конфигурация" содержаться только уже знакомые нам поля конфигурации.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:664px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Tmpl_gen_ru.png"><img class="thumbimage" height="525" src="files/QuickStart_Tmpl_gen_ru.png" width="662" /></a>  <div class="thumbcaption">Рис. 4.2.1. Страница конфигурации объекта шаблона.</div></div></div></div>
+<p>Основная конфигурация и формирование шаблона параметра сбора данных осуществляется во вкладке "IO" (рис.4.2.2) шаблона. Детальное описание процесса формирования шаблона можно получить по <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#CfgDAQ" title="Special:MyLanguage/Documents/Program manual">ссылке</a>.
+</p><p>Создадим в шаблоне два свойства для входов ("TiCod", "ToCod"), два для выходов ("Ti","To") и один прозрачный ("Cw"). Свойствам "TiCod", "ToCod" и "Cw" установим флаг "Конфигурация" в "Связь", что позволит к ним подвязывать "сырой" источник. Параметрам "Ti" и "To" установим флаг "Атрибут" в "Только чтение", "Cw" в "Полный доступ" для формирования трёх атрибутов: два только на чтение и один на полный доступ, у результирующего параметра сбора данных.
+</p><p>Язык программы установим в "JavaLikeCalc.JavaScript", а программу в:
+</p>
+<pre style="white-space: pre-wrap;">
+Ti = 150*TiCod/65536;
+To = 100*ToCod/65536;
+</pre>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1032px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Tmpl_io_ru.png"><img class="thumbimage" height="624" src="files/QuickStart_Tmpl_io_ru.png" width="1030" /></a>  <div class="thumbcaption">Рис. 4.2.2. Вкладка "IO" страницы конфигурации объекта шаблона.</div></div></div></div>
+<p>Полученный шаблон сохраним и установим флаг доступности.
+</p><p>Теперь создадим объекты контроллера и параметров в модуле "LogicLev" подсистемы "Сбор данных". Контроллер и его параметры в модуле "LogicLev" создаются идентично ранее созданным в модуле "ModBUS" на странице: "Демо станция"-&gt;"Сбор данных"-&gt;"Модуль"-&gt;"Логический уровень". Объекты назовём идентично объектам в модуле "ModBUS".
+</p><p>Объект контроллера модуля "LogicLev" (рис.4.2.3) не имеет специфических настроек и установленные по умолчанию можно не трогать, кроме поля "Планирование вычислений", которое установим в одну секунду. Перед добавлением параметров нужно включить контроллер, установив флаг "Включен".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:707px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_cntr_ru.png"><img class="thumbimage" height="641" src="files/QuickStart_LogicLev_cntr_ru.png" width="705" /></a>  <div class="thumbcaption">Рис. 4.2.3. Главная вкладка настройки объекта контроллера модуля LogicLev.</div></div></div></div>
+<p>Объект параметра контроллера модуля "LogicLev" (рис.4.2.4) из специфических настроек имеет "Тип", где нужно установить "Логический" (std), а в поле "Шаблон параметра" выбрать адрес созданного нами шаблона.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:684px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_prm_ru.png"><img class="thumbimage" height="554" src="files/QuickStart_LogicLev_prm_ru.png" width="682" /></a>  <div class="thumbcaption">Рис. 4.2.4. Страница конфигурации параметра контроллера "LogicLev".</div></div></div></div>
+<p>Кроме базовой конфигурации параметра нужно сконфигурировать подключенный шаблон (рис. 4.2.5). Вкладка конфигурации шаблона появляется в режиме параметра "Включен". Включить параметр можно, включив предварительно контроллер. Флаг "Показывать только атрибуты" позволяет устанавливать отдельно каждую связь (рис.4.2.6). Поскольку мы в шаблоне предусмотрительно описали формат связей в виде "Параметр|Ti", то все три связи мы можем установить просто указав адрес к параметру в контроллере "ModBus". Укажем адреса "ModBus.KM101.AT101_1" и "ModBus.KM101.AT101_2" в соответствующих параметрах.
+</p><p>Нужно отметить, что все поля ввода адресов объектов в OpenSCADA снабжены механизмом набора адреса. Данный механизм подразумевает поэлементный выбор, в процессе которого происходит движение в глубь. Например, при наборе адреса "ModBus.KM101.AT101_1" вначале мы будем иметь возможность выбора типа источника данных, в числе которых будет "ModBus". Выбрав пункт "ModBus" в перечень доступных элементов для выбора добавятся контроллеры модуля "ModBus", в числе которого будет "ModBus.KM101". Выбор элемента "ModBus.KM101" добавит в список параметры контроллера и т.д. до конечного элемента в соответствии с <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#DAQ" title="Special:MyLanguage/Documents/Program manual">иерархией объектов</a>. Для возможности возврата на уровни выше в список выбора вставляются элементы всех вышестоящих уровней от текущего значения адреса.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:707px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_prm_tmpl_ru.png"><img class="thumbimage" height="479" src="files/QuickStart_LogicLev_prm_tmpl_ru.png" width="705" /></a>  <div class="thumbcaption">Рис. 4.2.5. Вкладка "Конфигурация шаблона" страницы параметра контроллера "LogicLev".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:707px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_prm_tmpl_attr_ru.png"><img class="thumbimage" height="479" src="files/QuickStart_LogicLev_prm_tmpl_attr_ru.png" width="705" /></a>  <div class="thumbcaption">Рис. 4.2.6. Вкладка "Конфигурация шаблона" страницы параметра контроллера "LogicLev" с разворотом связей.</div></div></div></div>
+<p>Сохраним созданные объекты контроллера и параметров. После этого запустим контроллер на исполнение, установив флаг контроллера "Запущен" в разделе "Состояние". Если мы ничего не пропустили, то вычисление успешно запустится и в поле "Статус" мы получим подобное представленному на рис.4.2.7.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:750px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_cntr_st_ru.png"><img class="thumbimage" height="637" src="files/QuickStart_LogicLev_cntr_st_ru.png" width="748" /></a>  <div class="thumbcaption">Рис. 4.2.7. Страница объекта контроллера при успешном вычислении контроллера в модуле "LogicLev".</div></div></div></div>
+<p>В случае успешной обработки кода шаблона в параметрах мы получим обработанные данные в инфраструктуре OpenSCADA. Увидеть эти данные можно на вкладке "Атрибуты" наших параметров AT101_1 (рис.4.2.8) и AT101_2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:681px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_prm_attr_ru.png"><img class="thumbimage" height="572" src="files/QuickStart_LogicLev_prm_attr_ru.png" width="679" /></a>  <div class="thumbcaption">Рис. 4.2.8. Страница атрибутов параметра AT101_1 модуля "LogicLev".</div></div></div></div>
+<p>На этом конфигурация обработки данных считается законченной.
+</p>
+<h3><span class="mw-headline" id=".D0.A2.D0.B8.D0.BF.D0.B8.D0.B7.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.BD.D1.8B.D0.B5_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B_.D0.B8.D1.81.D1.82.D0.BE.D1.87.D0.BD.D0.B8.D0.BA.D0.BE.D0.B2_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85"><span class="mw-headline-number">4.3</span> Типизированные параметры источников данных</span></h3>
+<p>В предыдущих разделах был описан механизм подключения источника данных по объекту аппарата ("Воздушный холодильник"), который предусматривает объединение всех сигналов в одном объекте параметра источника данных. Однако более распространённым подходом является формирование объекта параметра вокруг сигнала, например, "Температура на выходе холодильника AT101_1 (TE1314_1)".
+</p><p>Создание объекта параметра вокруг сигнала позволяет формализовать его описание до шаблонов аналоговых и дискретных сигналов, включив в них всю необходимую обработку, сигнализацию и другую характерную информацию. Для простой конфигурации типизированных аналоговых и дискретных сигналов в библиотеках OpenSCADA предусмотрены шаблоны параметров, а многие образы визуального представление адаптированны к работе и связыванию с такими параметрами прямо, без детализации по атрибутам.
+</p><p>Обычно для формирования объекта параметра на основе шаблона используется модуля логического уровня <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a>, как это было описано в предыдущем разделе. Однако ряд модулей, в том числе и <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> предоставляют возможность сразу создавать логические параметры, на основе шаблона. Добавим новые объекты параметра, открыв в конфигураторе страницу нашего объекта контроллера "ModBus", ранее созданного, и в контекстном меню пункта "KM101" нажмём "Добавить".
+</p><p>Объект аналогового параметра назовём "TE1314_1" и имя "TE1314_1" (рис.4.3.1). Тип параметра установим в "Логический (logic)", шаблон параметра выберем "base.anUnif", описание установим в "Температура на выходе AT101_1", установим флажки "Включать" и "Включен". Далее нам нужно настроить шаблон параметра, в появившейся вкладке "Конфигурация шаблона" (рис.4.3.2): поле "Вход" устанавливаем в значение адреса ModBus-регистра этого параметра "R:101"; поле "Максимум шкалы модуля" устанавливаем в значение 65535, что соответствует 100 °C. Далее переходим во вкладку "Атрибуты" (рис.4.3.3) и устанавливаем некоторые поля: "Ед. изм" устанавливаем в "град. С"; "Шкала минимум" в "0"; "Шкала максимум" в "100"; "Граница верхняя ав." в "40"; "Граница верхняя пред." в "30". Сохраним объект параметра.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:717px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBus_prmAn_ru.png"><img class="thumbimage" height="531" src="files/QuickStart_ModBus_prmAn_ru.png" width="715" /></a>  <div class="thumbcaption">Рис. 4.3.1. Страница логического параметра "TE1314_1" модуля "ModBus".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:708px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBus_prmAn_tmpl_ru.png"><img class="thumbimage" height="513" src="files/QuickStart_ModBus_prmAn_tmpl_ru.png" width="706" /></a>  <div class="thumbcaption">Рис. 4.3.2. Страница конфигурации шаблона параметра "TE1314_1", модуля "ModBus".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:717px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBus_prmAn_attr_ru.png"><img class="thumbimage" height="661" src="files/QuickStart_ModBus_prmAn_attr_ru.png" width="715" /></a>  <div class="thumbcaption">Рис. 4.3.3. Страница атрибутов параметра "TE1314_1" модуля "ModBus".</div></div></div></div>
+<p>Объект дискретного параметра назовём: "KSH102" и имя "КШ102". Тип параметра установим в "Логический (logic)", шаблон параметра выберем "base.digitBlockUnif", установим флажки "Включать" и "Включен". Далее нам нужно настроить шаблон параметра, в появившейся вкладке "Конфигурация шаблона" (рис.4.3.4): поле "Команда 'Открыть'" устанавливаем в значение адреса ModBus-бита этого параметра "C:100:rw"; поле "Состояние 'Открыт'" устанавливаем в значение адреса ModBus-бита "C:101"; поле "Состояние 'Закрыть'" устанавливаем в значение адреса ModBus-бита "C:102"; поле "Время удерж. команды (с)" устанавливаем в 0, поскольку команда не импульсная. Далее переходим во вкладку "Атрибуты" (рис.4.3.5) и удостоверяемся в доступности команды и состояний. Сохраним объект параметра.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:650px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBus_prmDig_tmpl_ru.png"><img class="thumbimage" height="505" src="files/QuickStart_ModBus_prmDig_tmpl_ru.png" width="648" /></a>  <div class="thumbcaption">Рис. 4.3.4. Страница конфигурации шаблона параметра "KSH102" модуля "ModBus".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:650px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ModBus_prmDig_attr_ru.png"><img class="thumbimage" height="505" src="files/QuickStart_ModBus_prmDig_attr_ru.png" width="648" /></a>  <div class="thumbcaption">Рис. 4.3.5. Страница атрибутов параметра "KSH102" модуля "ModBus".</div></div></div></div>
+<h3><span class="mw-headline" id=".D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.D0.B0.D1.80.D1.85.D0.B8.D0.B2.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.D0.A2.D0.9F"><span class="mw-headline-number">4.4</span> Включение архивирования данных ТП</span></h3>
+<p>Во многих задачах требуется ведение истории параметров ТП. Для включения архивирования атрибутов "Ti" и "To" параметров AT101_1  и AT101_2 в ранее созданном контроллере модуля "LogicLev" достаточно на вкладке "Архивация" страницы параметров выбрать, какие атрибуты архивировать и на каких архиваторах (рис.4.4.1). Выберем архивацию атрибутов "Ti" и "To" в архиваторе "FSArch.1s". Тоже самое можно сделать для атрибута "var" аналогового параметра "ModBus.KM101.TE1314_1" и "com" дискретного параметра "ModBus.KM101.KSH102".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:710px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_LogicLev_prm_arh_ru.png"><img class="thumbimage" height="583" src="files/QuickStart_LogicLev_prm_arh_ru.png" width="708" /></a>  <div class="thumbcaption">Рис. 4.4.1. Вкладка "Архивация" параметра AT101_1 модуля "LogicLev".</div></div></div></div>
+<p>В результате этой операции будут автоматически созданы объекты архивов для выбранных атрибутов. Например, объект архива для атрибута "Ti" параметра AT101_1 представлен на рис.4.4.2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Arh_gen_ru.png"><img class="thumbimage" height="644" src="files/QuickStart_Arh_gen_ru.png" width="808" /></a>  <div class="thumbcaption">Рис. 4.4.2. Страница объекта архива атрибута "Ti" параметра AT101_1.</div></div></div></div>
+<p>Обычно настройки архива менять не нужно, однако, если потребуется особая конфигурация, то её можно сделать на указанной выше странице. Чаще может понадобиться получение информации об архиве. Например, узнать размер архива как по времени, так и на носителе, а также взглянуть на график параметра (рис.4.4.3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:914px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Arh_tr_ru.png"><img class="thumbimage" height="644" src="files/QuickStart_Arh_tr_ru.png" width="912" /></a>  <div class="thumbcaption">Рис. 4.4.3. Вкладка "Значения" страницы объекта архива атрибута "To" параметра AT101_1.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.A4.D0.BE.D1.80.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D0.B2.D0.B8.D0.B7.D1.83.D0.B0.D0.BB.D1.8C.D0.BD.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.B5.D0.B4.D1.81.D1.82.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">5</span> Формирование визуального представления</span></h2>
+<p>Формирование визуального представления может выполняться на трёх уровнях сложности и пользователь может выбрать любой из них, в зависимости от уровня своих знаний и наличия библиотек с готовыми образами и шаблонами.
+</p><p>Первый уровень требует минимальной квалификации пользователя, но подразумевает наличие библиотек шаблонных кадров, нужных для решения его задачи. В рамках первого уровня пользователю достаточно знать, как подключить динамику к страницам шаблонных кадров и как добавить новые страницы шаблонных кадров.
+</p><p>Второй уровень предусматривает дополнительную способность создавать новые кадры на основе готовых комплексных элементов, путём простого их размещения в области кадра. Для обеспечения этого квалификационного уровня пользователю понадобятся библиотеки комплексных элементов, нужных для решения его задач.
+</p><p>И третий уровень предусматривает владение всеми инструментами среды разработки визуальных интерфейсов OpenSCADA, включая создание новых комплексных элементов и разработки новых интерфейсов пользователя в проекте.
+</p><p>Все работы над интерфейсом визуализации будем выполнять в окружении модуля "Vision" подсистемы "Пользовательские интерфейсы". Для открытия окна интерфейса "Vision" нажмём вторую иконку справа на панели инструментов конфигуратора. В результате получим окно, ранее изображённое на рисунке 3.3.
+</p><p>Интерфейсы пользователя-оператора в OpenSCADA реализуются проектами визуализации. В библиотеке <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_elements" title="Special:MyLanguage/Libs/Main elements">основных элементов пользовательского интерфейса</a> присутствует шаблон типового проекта визуализации, основанного на концепции объектов сигнализации и видов отображения. Пользователь может начать создавать свою концепцию интерфейса визуализации, в виде нового проекта, а может использовать указанный шаблон. Для реализации нового проекта визуализации потребуются знания третьего уровня и значительные усилия, что находится за рамками этого документа. Поэтому будем рассматривать создание интерфейса визуализации на основе доступного шаблонного проекта.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1108px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_so_ru.png"><img class="thumbimage" height="655" src="files/QuickStart_ui_so_ru.png" width="1106" /></a>  <div class="thumbcaption">Рис. 5.1. Шаблонный проект по концепции объектов сигнализации.</div></div></div></div>
+<p>Данный шаблон содержит две ветви: "Панели управления" и "Корневая страница". Ветвь "Панели управления" содержит набор кадров типовых панелей управления и специализированных кадров. Ветвь "Корневая страница", с корневой страницей в основе, содержит подветви объектов сигнализации "Группа 1", "Группа 2" и отдельную ветвь сводных графиков "Сводные графики". Подветви объектов сигнализации "Группа {n}" имеют цифровой идентификатор и могут расширяться добавлением вплоть до 16. Присутствие подветви "Группа {n}" отражается на активации соответствующей кнопки объекта сигнализации корневой страницы, что позволяет на них переключаться. Каждая подветвь "Группа {n}" содержит контейнеры или шаблоны видов отображения, обычно: "Мнемосхемы", "Группы графиков", "Группы контуров", "Группы обзорных кадров" и "Документы". Наличие страниц в контейнерах отображений включает возможность выбора этого отображения, для соответствующего объекта сигнализации корневой страницы. Детальнее о структуре корневой страницы можно ознакомиться по ссылке <a class="external free" href="http://wiki.oscada.org/Using/GraphicElementsLibraries/MainElements#h1036-45" rel="nofollow noreferrer noopener" target="_blank">http://wiki.oscada.org/Using/GraphicElementsLibraries/MainElements#h1036-45</a>.
+</p><p>Для создания собственного проекта визуализации пользователь может скопировать шаблонный проект и назвать согласно своей тематике. Мы же продолжим непосредственно с шаблонным проектом, помещая наши страницы в контейнера мнемосхем и групп графиков.
+</p>
+<h3><span class="mw-headline" id=".D0.94.D0.BE.D0.B1.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.D1.88.D0.B0.D0.B1.D0.BB.D0.BE.D0.BD.D0.BD.D0.BE.D0.B9_.D1.81.D1.82.D1.80.D0.B0.D0.BD.D0.B8.D1.86.D1.8B_.D0.B2_.D0.BF.D1.80.D0.BE.D0.B5.D0.BA.D1.82_.D0.B8_.D0.BF.D0.BE.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.D0.B4.D0.B8.D0.BD.D0.B0.D0.BC.D0.B8.D0.BA.D0.B8"><span class="mw-headline-number">5.1</span> Добавление шаблонной страницы в проект и подключение динамики</span></h3>
+<p>Рассмотрим задачу первого уровня сложности, когда в уже разработанном интерфейсе нужно подключить динамику к шаблонной странице. Понятие "Шаблон страницы" подразумевает страницу на основе которой, путём наследования, может создаваться множество конечных страниц визуализации с индивидуальным перечнем динамики. Примером таких страниц являются: "<a class="external text" href="http://wiki.oscada.org/Using/GraphicElementsLibraries/MainElements#h1036-30" rel="nofollow noreferrer noopener" target="_blank">Группа графиков</a>", "<a class="external text" href="http://wiki.oscada.org/Using/GraphicElementsLibraries/MainElements#h1036-14" rel="nofollow noreferrer noopener" target="_blank">Группа контуров</a>", "<a class="external text" href="http://wiki.oscada.org/Using/GraphicElementsLibraries/MainElements#h1036-22" rel="nofollow noreferrer noopener" target="_blank">Группа обзорных кадров</a>" и "<a class="external text" href="http://wiki.oscada.org/Using/GraphicElementsLibraries/MainElements#h1036-37" rel="nofollow noreferrer noopener" target="_blank">Сводные графики</a>". На рис.5.1.1 представлена шаблонная страница "Группа графиков" в дереве проекта "Группы сигнализаций (шаблон)".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_grah_tmpl_ru.png"><img class="thumbimage" height="729" src="files/QuickStart_ui_grah_tmpl_ru.png" width="1024" /></a>  <div class="thumbcaption">Рис. 5.1.1. Шаблонная страница "Группа графиков".</div></div></div></div>
+<p>Шаблонная страница "Группа графиков" предоставляет возможность подключить до восьми сигналов для одновременного их отображения на графике. Элементы отображения значения сверху автоматически скрываются для неустановленных ссылок.
+</p><p>Создадим новую группу графиков "Графики 2" в шаблонном контейнере "Группа графиков" первой группы корневой страницы проекта "Группы сигнализаций (шаблон)". Для этого в контекстном меню пункта "Группа графиков" выберем "Добавить визуальный элемент" (рис.5.1.2). Для ввода идентификатора и имени нового визуального элемента появится диалог их ввода (рис.5.1.3). Введём идентификатор "2" и имя "Графики 2".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:792px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_grah_add_ru.png"><img class="thumbimage" height="604" src="files/QuickStart_ui_grah_add_ru.png" width="790" /></a>  <div class="thumbcaption">Рис. 5.1.2. Добавление группы графиков "Графики 2".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:410px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_enter_idname_ru.png"><img class="thumbimage" height="207" src="files/QuickStart_ui_enter_idname_ru.png" width="408" /></a>  <div class="thumbcaption">Рис. 5.1.3. Диалог ввода идентификатора и имени.</div></div></div></div>
+<p>После подтверждения ввода имени будет создана новая страница. Однако, для её активации нам понадобится её включить. Включить страницу можно в диалоге редактирования свойств страницы (рис.5.1.4). Открыть эту страницу можно посредством выбора пункта меню "Свойства визуального элемента" в контекстном меню вновь созданной страницы. Создать страницу в логическом контейнере, на основе шаблона, можно и простым копированием шаблона внутрь себя.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:615px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_el_prop_ru.png"><img class="thumbimage" height="504" src="files/QuickStart_ui_el_prop_ru.png" width="613" /></a>  <div class="thumbcaption">Рис. 5.1.4. Диалог редактирования свойств визуального элемента.</div></div></div></div>
+<p>После включения страницы можно приступать к установке связей на созданные в предыдущей главе параметры контроллеров. Для этого, не покидая диалога редактирования свойств вновь созданной страницы (рис.5.1.4), перейдём на вкладку "Связи" (рис.5.1.5). На этой вкладке мы увидим дерево с элементами "el1" ... "el8". Развернув любой из элементов мы увидим ветку "Parameter", вот в ней мы и должны указать или выбрать адрес наших атрибутов "Ti" и "To". Итого заполним четыре элемента. При заполнении элементов часть свойств нужно указывать как постоянные. Например, обязательно нужно указать:
+</p>
+<ul><li> <i>name</i> — "val:AT101_1 Ti".</li>
+<li> <i>ed</i> — "val:град.С".</li>
+<li> <i>max</i> — "val:150" (для Ti) и "val:100" (для To).</li>
+<li> <i>min</i> — "val:0".</li></ul>
+<p>Если заранее предусмотреть наличие атрибутов, указанных нами постоянными в шаблоне параметра контроллера, то можно будет указывать только параметр, а атрибуты расставятся автоматически, что мы можем увидеть, привязав созданный нами ранее типизированный аналоговый параметр "ModBus.KM101.TE1314_1".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_el_prop_lnk_ru.png"><img class="thumbimage" height="631" src="files/QuickStart_ui_el_prop_lnk_ru.png" width="808" /></a>  <div class="thumbcaption">Рис. 5.1.5. Вкладка "Связи" диалога редактирования свойств визуального элемента.</div></div></div></div>
+<p>Закончив ввод связей можем проверить что получилось в результате наших усилий. Для этого закроем окно диалога свойств и запустим проект "Группы сигнализаций (шаблон)" на исполнение, про кнопку запуска мы помним из первых глав. Затем выберем графики и переключимся на вторую страницу. При безошибочной конфигурации мы должны увидеть что-то подобное изображённому на рис.5.1.6. Заметьте, что для типизированного параметра, с установленными границами нарушений, выход значения за границы отмечается аварийным цветом. Для того что-бы увидеть выход за границу нарушения Вы можете установить значение производительности вентилятора в 100 (рис.4.2.8).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_run_grph_ru.png"><img class="thumbimage" height="670" src="files/QuickStart_ui_run_grph_ru.png" width="1024" /></a>  <div class="thumbcaption">Рис. 5.1.6. Созданная группа графиков с четырьмя подключенными сигналами и одним типизированным параметром.</div></div></div></div>
+<h3><span class="mw-headline" id=".D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.BD.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_.D0.BA.D0.B0.D0.B4.D1.80.D0.B0.2C_.D0.BC.D0.BD.D0.B5.D0.BC.D0.BE.D1.81.D1.85.D0.B5.D0.BC.D1.8B"><span class="mw-headline-number">5.2</span> Создание нового кадра, мнемосхемы</span></h3>
+<p>Поднимем планку и создадим новый кадр, куда поместим базовые элементы отображения значений параметров наших контроллеров. Такие кадры обычно называются мнемосхемами и кроме отображения динамики, и даже в первую очередь, содержат статическое изображение технологического процесса в мнемоническом представлении. Мы же не будем акцентировать внимание на создание статики, а добавим элементы динамики и подключим к ней параметры наших контроллеров. Ну и поместим созданный кадр в дерево уже известного нам проекта.
+</p><p>Новые кадры, предназначенные впоследствии для помещения в проект, принято создавать в библиотеке виджетов. Создадим новую библиотеку виджетов "KM101"; выбрав вертикальную вкладку "Виджет" и в контекстном меню окна библиотек виджетов выберем пункт "Новая библиотека" (рис.5.2.1). В диалоге ввода имени укажем идентификатор "KM101" и имя "KM 101", а затем подтвердим.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:692px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_wlib_add_ru.png"><img class="thumbimage" height="539" src="files/QuickStart_ui_wlib_add_ru.png" width="690" /></a>  <div class="thumbcaption">Рис. 5.2.1. Добавление новой библиотеки виджетов.</div></div></div></div>
+<p>Далее добавляем новый кадр "AT101", выбрав пункт "Библиотека: originals"-&gt;"Группа элементов" в контекстном меню созданной библиотеки "KM101" (рис.5.2.2). В диалоге ввода имени укажем идентификатор "AT101" и имя "AT 101", а затем подтвердим. В основе любого кадра и страницы должен лежать элемент "Группа элементов (Box)" поэтому мы его и выбрали.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:703px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_w_add_ru.png"><img class="thumbimage" height="621" src="files/QuickStart_ui_w_add_ru.png" width="701" /></a>  <div class="thumbcaption">Рис. 5.2.2. Добавление нового кадра.</div></div></div></div>
+<p>Сразу после создания элемента нового кадра нужно установить его базовые свойства, характерные для кадра мнемосхемы. Свойства или атрибуты любого визуального элемента можно указать в панели инструментов "Атрибуты", предварительно выбрав нужный визуальный элемент. Выберем созданный кадр "AT 101" и установим следующие свойства:
+</p>
+<ul><li> <i>Геометрия:ширина</i> — "900".</li>
+<li> <i>Геометрия:высота</i> — "600".</li>
+<li> <i>Страница:группа</i> — "so", для включения кадра в контейнер мнемосхем, при исполнении.</li>
+<li> <i>Фон:цвет</i> — "#5A5A5A".</li>
+<li> <i>Граница:ширина</i> — "1".</li>
+<li> <i>Граница:цвет</i> — "black".</li></ul>
+<p>В результате получим пустой кадр (рис.5.2.3), готовый для добавления элементов на него. Для редактирования или просмотра вида кадра необходимо в контекстном меню кадра выбрать пункт "Редактировать визуальный элемент".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:904px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_w_viewa_ru.png"><img class="thumbimage" height="666" src="files/QuickStart_ui_w_viewa_ru.png" width="902" /></a>  <div class="thumbcaption">Рис. 5.2.3. Вид нового кадра и установленных атрибутов для мнемосхемы.</div></div></div></div>
+<p>Теперь добавим на кадр элементы отображения значения аналогового параметра для наших четырёх сигналов и типизированного параметра "ModBus.KM101.TE1314_1". Для помещения на мнемосхему элемента отображения аналогового сигнала нужно выбрать нашу мнемосхему, а затем в меню окна выбрать пункт меню "Виджет"-&gt;"Библиотека: Main"-&gt;"Отобр аналог"; после чего появится курсор с образом этого элемента, который нужно подвести в желаемую область мнемосхемы и нажать левую кнопку мыши. В момент добавления появится диалог с запросом имени нового элемента. Добавлять подобным образом будем пять элементов, которые назовём: "A1_Ti", "A1_To", "A2_Ti", "A2_To" и "TE1314_1".
+</p><p>Добавим также элемент крана для типизированного дискретного параметра "ModBus.KM101.KSH102", для добавления которого используем библиотечный элемент "Виджет"-&gt;"Библиотека: mnEls"-&gt;"Кран шаровый" и назовём его "KSH102".
+</p><p>Для отображения списка текущих нарушений поместим на мнемосхему элемент протокола из библиотеки примитивов "Виджет"-&gt;"Библиотека: originals"-&gt;"Протокол" и назовём его "Protocol". В инспекторе атрибутов установим свойства для протокола:
+</p>
+<ul><li> <i>Геометрия:ширина</i> — "500".</li>
+<li> <i>Геометрия:высота</i> — "250".</li>
+<li> <i>Показать колонки</i> — "tm;lev;mess".</li>
+<li> <i>Уровень</i> — "-1", отображение текущих нарушений любого уровня.</li>
+<li> <i>Размер, сек</i> — "0", отображать нарушения на любую глубину.</li>
+<li> <i>Период слежения (с)</i> — "1".</li></ul>
+<p>Добавленные элементы можно впоследствии расположить как нужно, просто выделяя и перетаскивая мышью. Также можно изменить их размер. Простое изменение размера вызовет изменение только геометрии контейнера виджета, что часто не нужно. Для изменения размера всего содержимого виджета его нужно масштабировать, что осуществляется удержанием клавиши "Ctrl" при изменении размера или переключением состояния "Изм. размера" в строке статуса на "Масштаб".
+</p><p>После выполнения всех манипуляций у нас должна получиться мнемосхема с видом, похожим представленной на рисунке 5.2.4.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1067px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_mn_ru.png"><img class="thumbimage" height="575" src="files/QuickStart_ui_mn_ru.png" width="1065" /></a>  <div class="thumbcaption">Рис. 5.2.4. Вид нового кадра и установленных атрибутов для мнемосхемы.</div></div></div></div>
+<p>На этом процедуру создания мнемосхемы будем считать законченной. Сохраним новую библиотеку виджетов "KM101" и приступим к этапу размещения нашей мнемосхемы в дереве проекта "Группы сигнализаций (шаблон)".
+</p><p>Поместим нашу мнемосхему в ветвь "Группы сигнализаций (шаблон)"-&gt;"Корневая страница"-&gt;"Группа 1"-&gt;"Мнемосхемы" путём выбора в контекстном меню для пункта "Мнемосхемы" пункта "Библиотека: КМ101"-&gt;"AT 101". Идентификатор для новой мнемосхемы установим в "2", при этом поле имени оставим пустым.
+</p><p>Далее нужно произвести уже знакомую нам операцию по предыдущей главе, а именно установку связей на созданные в предыдущей главе параметры контроллеров. Для этого откроем диалог редактирования свойств мнемосхемы на вкладке "Связи" (рис.5.2.5). На этой вкладке мы увидим дерево с элементами "A1_Ti", "A1_To", "A2_Ti" и "A2_To". Развернув любой из элементов, мы увидим ветку "Parameter", в которой мы должны указать или выбрать адрес значений наших атрибутов "Ti" и "To" соответственно. При заполнении элементов часть свойств нужно указывать как постоянные. Например, обязательно нужно указать:
+</p>
+<ul><li> <i>pName</i> — "val:AT101_1 Ti".</li></ul>
+<p>Как и в случае с группой графиков, в предыдущем разделе, для типизированных параметров "ModBus.KM101.TE1314_1" и "ModBus.KM101.KSH102" можно указать только параметр, а атрибуты расставятся автоматически.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:471px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_mn_lnk_ru.png"><img class="thumbimage" height="682" src="files/QuickStart_ui_mn_lnk_ru.png" width="469" /></a>  <div class="thumbcaption">Рис. 5.2.5. Вкладка "Связи" диалога редактирования свойств мнемосхемы.</div></div></div></div>
+<p>Теперь можем сохранить нашу мнемосхему и проверить что получилось. Для этого закроем окно диалога свойств и запустим проект "Группы сигнализаций (шаблон)" на исполнение. Затем переключимся на нашу мнемосхему кнопками перелистывания. При безошибочной конфигурации мы должны увидеть что-то подобное изображённому на рисунке 5.2.6.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1044px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_run_mn_ru.png"><img class="thumbimage" height="720" src="files/QuickStart_ui_run_mn_ru.png" width="1042" /></a>  <div class="thumbcaption">Рис. 5.2.6. Созданная мнемосхема с четырьмя подключенными сигналами, типизированными параметрами и протоколом.</div></div></div></div>
+<p>Заметьте, что для типизированного параметра, с установленными границами нарушений, выход значения за границы отмечается миганием через аварийный цвет: параметра, объекта сигнализации и жёлтого кружочка снизу. При нарушении, кроме мигания, производится писк на бузер (если он доступен) и синтез речи с проговором позиции параметра (если установлена программа "ru_tts") указанной в поле связи "spName" (рис. 5.2.5). При активации нарушения справа и справа-внизу активируются кнопки с индикацией типа уведомления, а по нажатию на них осуществляется квитация соответствующего типа уведомления. По нажатию на мигающем жёлтым кружочке справа-внизу квитируются всё. Факт присутствия нарушения также отображается записью в протоколе, который мы добавили. Для того что-бы увидеть выход за границу нарушения Вы можете установить значение производительности вентилятора в 100 (рис.4.2.8). Детальнее про концепцию работы с нарушениями можно почитать в разделе "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/How_to#Violation" title="Special:MyLanguage/Documents/How to">Рецепты (Как сделать)</a>".
+</p><p>Историю нарушений можем посмотреть в документе "Протокол нарушений", который доступен при выборе вида "Документ" (рис.5.2.7).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1044px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_run_docAlarms_ru.png"><img class="thumbimage" height="720" src="files/QuickStart_ui_run_docAlarms_ru.png" width="1042" /></a>  <div class="thumbcaption">Рис. 5.2.7. Протокол нарушений.</div></div></div></div>
+<p>Дискретный типизированный параметр "ModBus.KM101.KSH102", представленный нами в виде шарового крана, является активным, т.е. его можно выбрать, получив панель управления справа, как на рис.5.2.6, а также передавать команды (открыть или закрыть). Команды можно передавать с панели управления или через контекстное меню. Все действия оператора по управляющим воздействиям протоколируются, а документ протокола можно посмотреть при выборе вида "Документ" (рис.5.2.8).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1044px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_run_docOperator_ru.png"><img class="thumbimage" height="720" src="files/QuickStart_ui_run_docOperator_ru.png" width="1042" /></a>  <div class="thumbcaption">Рис. 5.2.7. Протокол действий оператора.</div></div></div></div>
+<h3><span class="mw-headline" id=".D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.BD.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_.D0.BA.D0.BE.D0.BC.D0.BF.D0.BB.D0.B5.D0.BA.D1.81.D0.BD.D0.BE.D0.B3.D0.BE_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B0"><span class="mw-headline-number">5.3</span> Создание нового комплексного элемента</span></h3>
+<p>Приступим к рассмотрению задач третьего уровня сложности, а именно к созданию комплексного элемента. Создание нового комплексного элемента, включающего в себя комбинацию различных базовых примитивов, может осуществляться в несколько этапов. В качестве примера рассмотрим задачу, состоящую из двух этапов:
+</p>
+<ul><li> Создание виджета "Воздушный холодильник" на основе примитива "Элементарная фигура".</li>
+<li> Создание финального скомпонованного виджета "Холодильник" на основе примитива "Группа элементов".</li></ul>
+<h4><span class="mw-headline" id=".D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.B2.D0.B8.D0.B4.D0.B6.D0.B5.D1.82.D0.B0_.22.D0.92.D0.BE.D0.B7.D0.B4.D1.83.D1.88.D0.BD.D1.8B.D0.B9_.D1.85.D0.BE.D0.BB.D0.BE.D0.B4.D0.B8.D0.BB.D1.8C.D0.BD.D0.B8.D0.BA.22_.D0.BD.D0.B0_.D0.BE.D1.81.D0.BD.D0.BE.D0.B2.D0.B5_.D0.BF.D1.80.D0.B8.D0.BC.D0.B8.D1.82.D0.B8.D0.B2.D0.B0_.22.D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B0.D1.80.D0.BD.D0.B0.D1.8F_.D1.84.D0.B8.D0.B3.D1.83.D1.80.D0.B0.22"><span class="mw-headline-number">5.3.1</span> Создание виджета "Воздушный холодильник" на основе примитива "Элементарная фигура"</span></h4>
+<p>Виджет будем создавать в ранее нами созданной библиотеке "KM101". Для этого кликаем правой кнопкой манипулятора "мышь" по пункту этой библиотеке и выбираем пункт "Библиотека: originals"-&gt;"Элементарная фигура", как это показано на рисунке 5.3.1.1. Для нового элемента указываем идентификатор "air_cooler" и имя "Воздушный холодильник".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:690px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_addElFig_ru.png"><img class="thumbimage" height="566" src="files/QuickStart_addElFig_ru.png" width="688" /></a>  <div class="thumbcaption">Рис. 5.3.1.1. Добавление виджета на основе примитива "Элементарная фигура" в библиотеку "KM101".</div></div></div></div>
+<p>После подтверждения у нас появится объект нового виджета с именем "Воздушный холодильник". Выберем его в списке виджетов библиотеки "KM101" и откроем для редактирования посредством контекстного меню нового элемента (рис. 5.3.1.2). В инспекторе атрибутов установим свойства:
+</p>
+<ul><li> <i>Геометрия:ширина</i> — "200".</li>
+<li> <i>Геометрия:высота</i> — "200".</li>
+<li> <i>Заполнение:цвет</i> — "lightgrey". Цвет можно задавать, как с помощью  <a class="external text" href="http://www.w3.org/TR/SVG/types.html#ColorKeywords" rel="nofollow noreferrer noopener" target="_blank">названий цветов</a>, так и в формате #RRGGBB (#RRGGBB-AAA).</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:692px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ElFigWH_ru.png"><img class="thumbimage" height="566" src="files/QuickStart_ElFigWH_ru.png" width="690" /></a>  <div class="thumbcaption">Рис. 5.3.1.2. Первичная конфигурация виджета.</div></div></div></div>
+<p>Теперь нарисуем визуальное представление виджета. Эту процедуру можно проделать двумя нижеописанными способами:
+</p>
+<ul><li> Нарисовать желаемое изображение манипулятором "мышь", используя "Линию", "Дугу", "Кривую Безье" и "Заливку". Соответствующая панель ("Панель элементарных фигур") появится после входа в режим редактирования (рисования). Вход в этот режим осуществляется, как показано на рис. 5.3.1.3, либо двойным нажатием левой кнопки манипулятора "мышь" на теле виджета.</li>
+<li> Вручную заполнить поле "Список элементов", введя перечень необходимых элементов и координат точек.</li></ul>
+<p>Дополнительную информацию о редакторе можно прочитать <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision#ElFigure" title="Special:MyLanguage/Modules/Vision">здесь</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:692px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_goElFigEdit_ru.png"><img class="thumbimage" height="566" src="files/QuickStart_goElFigEdit_ru.png" width="690" /></a>  <div class="thumbcaption">Рис. 5.3.1.3. Вход в режим рисования виджета, основанного на примитиве "Элементарная фигура".</div></div></div></div>
+<p>В нашем примере мы воспользуемся вторым способом. Для этого в поле "Список элементов" инспектора атрибутов введем нижеприведенный перечень и нажмем "Ctrl"+"Enter".
+</p>
+<pre style="white-space: pre-wrap;">
+line:(20|80):(100|20)
+line:(100|20):(180|80)
+line:(180|80):(100|140)
+line:(100|140):(20|80)
+line:(100|20):(100|140)
+line:(20|80):(180|80)
+line:(50|165):(100|140)
+line:(100|140):(150|165)
+line:(150|165):(50|165)
+fill:(20|80):(100|20):(180|80):(100|140)
+fill:(50|165):(100|140):(150|165)
+</pre>
+<p>Все точки, в нашем случае, указаны в статическом виде, так как не предусматривается динамизация и смена координат в режиме исполнения, а все остальные параметры оставлены по умолчанию.
+</p><p>Вследствие этого наш виджет примет вид, изображенный на рисунке 5.3.1.4.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:787px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ElFigFillCl_ru.png"><img class="thumbimage" height="606" src="files/QuickStart_ElFigFillCl_ru.png" width="785" /></a>  <div class="thumbcaption">Рис. 5.3.1.4. Изображение, соответствующее "Списку элементов" виджета.</div></div></div></div>
+<p>Создадим иконку для нашего виджета, которая будет видна в дереве виджетов библиотеки "KM101" (рис. 5.3.1.5).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:787px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ElFigPic_ru.png"><img class="thumbimage" height="606" src="files/QuickStart_ElFigPic_ru.png" width="785" /></a>  <div class="thumbcaption">Рис. 5.3.1.5. Создание иконки для виджета.</div></div></div></div>
+<p>На этом процесс создания первого виджета можно считать завершенным. Перейдем теперь к этапу компоновки и созданию результирующего виджета.
+</p>
+<h4><span class="mw-headline" id=".D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D1.84.D0.B8.D0.BD.D0.B0.D0.BB.D1.8C.D0.BD.D0.BE.D0.B3.D0.BE_.D1.81.D0.BA.D0.BE.D0.BC.D0.BF.D0.BE.D0.BD.D0.BE.D0.B2.D0.B0.D0.BD.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D0.B8.D0.B4.D0.B6.D0.B5.D1.82.D0.B0_.22.D0.A5.D0.BE.D0.BB.D0.BE.D0.B4.D0.B8.D0.BB.D1.8C.D0.BD.D0.B8.D0.BA.22_.D0.BD.D0.B0_.D0.BE.D1.81.D0.BD.D0.BE.D0.B2.D0.B5_.D0.BF.D1.80.D0.B8.D0.BC.D0.B8.D1.82.D0.B8.D0.B2.D0.B0_.22.D0.93.D1.80.D1.83.D0.BF.D0.BF.D0.B0_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.BE.D0.B2.22"><span class="mw-headline-number">5.3.2</span> Создание финального скомпонованного виджета "Холодильник" на основе примитива "Группа элементов"</span></h4>
+<p>Результирующий виджет будем создавать в библиотеке "KM 101". Для этого кликаем правой кнопкой манипулятора "мышь" по этой библиотеке и выбираем примитив "Группа элементов", как это показано на рисунке 5.3.2.1. Для нового элемента указываем идентификатор "elCooler" и имя "Холодильник".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:690px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_addBox_ru.png"><img class="thumbimage" height="652" src="files/QuickStart_addBox_ru.png" width="688" /></a>  <div class="thumbcaption">Рис. 5.3.2.1. Добавление виджета на основе примитива "Группа элементов" в библиотеку "KM 101".</div></div></div></div>
+<p>После подтверждения у нас появится объект нового виджета с именем "Холодильник". Выберем его в списке виджетов библиотеки "KM 101" и откроем для редактирования. В инспекторе атрибутов установим свойства:
+</p>
+<ul><li> <i>Геометрия:ширина</i> — "250".</li>
+<li> <i>Геометрия:высота</i> — "200".</li></ul>
+<p>Возьмём ранее созданный элемент "Воздушный холодильник" (air_cooler) и перетащим его (нажав на нем левую кнопку манипулятора "мышь", и перемещая курсор "мыши" до области виджета; после этого нужно отпустить кнопку) на вновь созданный нами виджет (рис. 5.3.2.2). 
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:714px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_air_coolerDrag_ru.png"><img class="thumbimage" height="504" src="files/QuickStart_air_coolerDrag_ru.png" width="712" /></a>  <div class="thumbcaption">Рис. 5.3.2.2. Перетаскивание (Drag&amp;Drop) виджета "air_cooler" в виджет-контейнер "elCooler".</div></div></div></div>
+<p>В результате появится окно диалога с предложением ввести идентификатор и имя нового виджета. Идентификатор и имя могут быть заданы произвольно. Мы введём идентификатор "air_cooler", а имя оставим пустым (оно унаследуется от родителя - элемента "air_cooler"). Таким образом, вновь созданный виджет внутри контейнера "elCooler" унаследует элемент - "Воздушный холодильник" ("air_cooler"). После подтверждения ввода идентификатора и имени виджет "Воздушный холодильник" ("air_cooler") добавится в наш виджет-контейнер "elCooler" (рис. 5.3.2.3). В инспекторе атрибутов установим свойства:
+</p>
+<ul><li> <i>Геометрия:x</i> — "25".</li>
+<li> <i>Геометрия:y</i> — "0".</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_air_coolerDrop_ru.png"><img class="thumbimage" height="504" src="files/QuickStart_air_coolerDrop_ru.png" width="711" /></a>  <div class="thumbcaption">Рис. 5.3.2.3. Добавление унаследованного виджета "air_cooler".</div></div></div></div>
+<p>Далее развернем библиотеку "Элементы мнемосхемы", найдем там элемент "Вентилятор" (cooler2) и перетащим его на виджет-контейнер. Этот элемент будет динамически отображать интенсивность работы воздушного холодильника. В результате появится окно диалога для ввода идентификатора и имени нового виджета. Введём идентификатор "cooler2", а имя снова оставим пустым. Таким образом, вновь созданный виджет внутри контейнера "elCooler" унаследует элемент библиотеки "Элементы мнемосхемы" - "Вентилятор" (cooler2). После подтверждения ввода идентификатора и имени виджет "Вентилятор" (cooler2) добавится в наш виджет-контейнер "elCooler". В инспекторе атрибутов установим свойства:
+</p>
+<ul><li> <i>Геометрия:x</i> — "75".</li>
+<li> <i>Геометрия:y</i> — "30".</li>
+<li> <i>Геометрия:z</i> — "10". Поднять элемент над всеми, можно из панели "Функции видимости виджетов".</li>
+<li> <i>Цвет1</i> — "#FFFF00-200", добавили альфа канал, прозрачность 200 ("0" - полностью прозрачный, а "255" - полностью непрозрачный), рис. 5.3.2.4.</li>
+<li> <i>Цвет2</i> — "#FF0000-200", добавили альфа канал, прозрачность 200.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:752px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_cooler2AlphaChange_ru.png"><img class="thumbimage" height="644" src="files/QuickStart_cooler2AlphaChange_ru.png" width="750" /></a>  <div class="thumbcaption">Рис. 5.3.2.4. Изменение прозрачности цветов заполнений у унаследованного виджета "cooler2".</div></div></div></div>
+<p>Теперь добавим в виджет-контейнер "elCooler" два текстовых поля, основанных на примитиве "Текст", с целью отображения входной и выходной температур потока. Для этого в библиотеке "KM 101" выделим виджет "холодильник" и нажмем на панели визуальных элементов на иконку примитива "Текст", как это показано на рис 5.3.2.5. В результате появится диалог ввода идентификатора и имени вновь создаваемого элемента. Введем идентификатор "Ti" для первого текстового поля, а имя оставим пустым. В инспекторе атрибутов установим свойства:
+</p>
+<ul><li> <i>Геометрия:x</i> — "5".</li>
+<li> <i>Геометрия:y</i> — "20".</li>
+<li> <i>Геометрия:ширина</i> — "70".</li>
+<li> <i>Геометрия:высота</i> — "35".</li>
+<li> <i>Выравнивание</i> — "В центре".</li>
+<li> <i>Шрифт</i> — "Arial 14 1". Изменение шрифта можно осуществлять в диалоге, который открывается по нажатию на ключик в поле редактирования (рис. 5.3.2.7).</li>
+<li> <i>Текст</i> — "%1{Enter}град.C" (рис. 5.3.2.8). {Enter} — переход на другую строку.</li>
+<li> <i>Количество аргументов</i> — "1" (рис. 5.3.2.9):
+<ul><li> <i>Аргумент 0:тип</i> — "Вещественный".</li>
+<li> <i>Аргумент 0:значение</i> — "300.25", задано лишь только с целью наглядности, в режиме исполнения оно будет подменяться реальным значением входной температуры.</li>
+<li> <i>Аргумент 0:конфигурация</i> — "3;f;2".</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:849px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_BoxAddText_ru.png"><img class="thumbimage" height="592" src="files/QuickStart_BoxAddText_ru.png" width="847" /></a>  <div class="thumbcaption">Рис. 5.3.2.5. Добавление в контейнер нового элемента, основанного на примитиве "Текст".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:750px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_textGeom_ru.png"><img class="thumbimage" height="582" src="files/QuickStart_textGeom_ru.png" width="748" /></a>  <div class="thumbcaption">Рис. 5.3.2.6. Задание геометрии виджета "Ti".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:787px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_tetxFontChange_ru.png"><img class="thumbimage" height="605" src="files/QuickStart_tetxFontChange_ru.png" width="785" /></a>  <div class="thumbcaption">Рис. 5.3.2.7. Изменение размера шрифта для виджета "Ti".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:750px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_textArgAdd_ru.png"><img class="thumbimage" height="582" src="files/QuickStart_textArgAdd_ru.png" width="748" /></a>  <div class="thumbcaption">Рис. 5.3.2.8. Изменение поля "Текст" и указание в нем наличия атрибута для виджета "Ti".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:750px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_textArgConf_ru.png"><img class="thumbimage" height="582" src="files/QuickStart_textArgConf_ru.png" width="748" /></a>  <div class="thumbcaption">Рис. 5.3.2.9. Конфигурация аргумента для виджета "Ti".</div></div></div></div>
+<p>Теперь скопируем виджет "Ti" с целью создания аналогичного ему виджета "To" (выходная температура). Вставим скопированный виджет, в диалоге ввода идентификатора и имени для вновь созданного виджета в поле "ID" укажем "To", а имя оставим пустым (рис. 5.3.2.10). В инспекторе атрибутов установим свойства:
+</p>
+<ul><li> <i>Геометрия:x</i> — "175".</li>
+<li> <i>Геометрия:y</i> — "20".</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:692px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ToGeom_ru.png"><img class="thumbimage" height="675" src="files/QuickStart_ToGeom_ru.png" width="690" /></a>  <div class="thumbcaption">Рис. 5.3.2.10. Виджет "To".</div></div></div></div>
+<p>Теперь добавим виджет, основанный на примитиве "Элементы формы" (рис. 5.3.2.11), который будем использовать в качестве ComboBox для выбора заданий производительности холодильника. В качестве идентификатора укажем "cw", и поле "Имя" оставим пустым (рис. 5.3.2.12). В инспекторе атрибутов установим свойства:
+</p>
+<ul><li> <i>Активный</i> — "true".</li>
+<li> <i>Геометрия:x</i> — "60".</li>
+<li> <i>Геометрия:y</i> — "158".</li>
+<li> <i>Геометрия:z</i> — "10". Поднять элемент над всеми, можно из панели "Функции видимости виджетов".</li>
+<li> <i>Геометрия:ширина</i> — "60".</li>
+<li> <i>Геометрия:высота</i> — "40".</li>
+<li> <i>Тип элемента</i> — "Combo Box".</li>
+<li> <i>Шрифт</i> — "Arial 14 1".</li>
+<li> <i>Значение</i> — "200".</li>
+<li> <i>Конфигурация</i> — "0{Enter}50{Enter}100{Enter}150{Enter}200". {Enter} — переход на другую строку.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:690px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_addFormEl_ru.png"><img class="thumbimage" height="674" src="files/QuickStart_addFormEl_ru.png" width="688" /></a>  <div class="thumbcaption">Рис. 5.3.2.11. Добавление виджета, основанного на примитиве "Элементы формы".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:692px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_comboParams_ru.png"><img class="thumbimage" height="614" src="files/QuickStart_comboParams_ru.png" width="690" /></a>  <div class="thumbcaption">Рис. 5.3.2.12. Заполнение параметров ComboBox "cw".</div></div></div></div>
+<p>Для отображения единицы измерения производительности холодильника добавим виджет на основе примитива "Текст". Делаем ту же процедуру, что и для виджета "Ti". Идентификатором вновь созданного виджета сделаем "dimension" (рис. 5.3.2.13). В инспекторе атрибутов установим свойства:
+</p>
+<ul><li> <i>Геометрия:x</i> — "125".</li>
+<li> <i>Геометрия:y</i> — "168".</li>
+<li> <i>Геометрия:ширина</i> — "60".</li>
+<li> <i>Геометрия:высота</i> — "20".</li>
+<li> <i>Выравнивание</i> — "В центре".</li>
+<li> <i>Шрифт</i> — "Arial 14 1".</li>
+<li> <i>Текст</i> — "об./мин.".</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:692px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_addDimension_ru.png"><img class="thumbimage" height="614" src="files/QuickStart_addDimension_ru.png" width="690" /></a>  <div class="thumbcaption">Рис. 5.3.2.13. Добавление виджета "dimension", основанного на примитиве "Текст" и изменение его параметров.</div></div></div></div>
+<p>Для добавления логики обработки виджета "Холодильник"(elCooler) откроем диалог редактирования свойств этого визуального элемента и перейдём на вкладку "Обработка". На этой вкладке мы увидим дерево атрибутов виджета и поле текста программы, для обработки атрибутов. Для решения нашей задачи нужно добавить три атрибута: Ti, To, Cw (рис. 5.3.2.14). Для добавления атрибута нужно развернуть корневой элемент ".", выбрать любой элемент внутри корневого и нажать кнопку "Добавить атрибут" снизу.
+</p><p>Далее включим в обработку атрибут "value" комбобокса "cw", как это показано на рисунке 5.3.2.15. Аналогично включим в обработку атрибут "arg0val" для Ti и To, а также атрибут "speed" у элемента "cooler2".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:879px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_elCoolerAtrrAdd_ru.png"><img class="thumbimage" height="506" src="files/QuickStart_elCoolerAtrrAdd_ru.png" width="877" /></a>  <div class="thumbcaption">Рис. 5.3.2.14. Добавление трех атрибутов для элемента "elCooler" библиотеки "KM 101".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:879px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_cwValueProc_ru.png"><img class="thumbimage" height="506" src="files/QuickStart_cwValueProc_ru.png" width="877" /></a>  <div class="thumbcaption">Рис. 5.3.2.15. Включение в обработку атрибута "value" комбобокса "cw".</div></div></div></div>
+<p>В завершении установим язык пользовательского программирования для процедуры в "JavaLikeCalc.JavaScript" и напишем программу обработки этого виджета:
+</p>
+<pre style="white-space: pre-wrap;">
+Ti_arg0val = Ti;
+To_arg0val = To;
+
+ev_wrk = ev_rez = "";
+for(off = 0; true; )
+{
+  ev_wrk = event.parse(0,"\n",off);
+  if(!ev_wrk.length) break;
+  if(ev_wrk == "ws_CombChange:/cw") Cw = cw_value;
+  else ev_rez += ev_wrk+"\n";
+}
+event = ev_rez;
+cw_value = Cw;
+cooler2_speed = Cw/5;
+</pre>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Помещение или редактирование программы виджета не приводит к непосредственной её компиляции, а значит не будет сообщений об ошибках в программе, если они имеют место быть. Это связано с тем, что непосредственное исполнение программы, а значит и её компиляция, осуществляется в окружении и в момент запуска на исполнение проекта визуализации. При этом все ошибки, возникшие при компиляции, выводятся в виде сообщений OpenSCADA, а виджеты с ошибками не исполняются. Посмотреть архив сообщений OpenSCADA можно в <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#CfgArch" title="Special:MyLanguage/Documents/Program manual">главной вкладке подсистемы "Архивы"</a> или в терминале запуска OpenSCADA, если запуск был из терминала или его эмулятора.
+</p><p>Результирующий вид вкладки обработка виджета "elCooler" библиотеки "KM 101" будет иметь вид, показанный на рисунке 5.3.2.16.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:720px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_UserProgElCooler_ru.png"><img class="thumbimage" height="554" src="files/QuickStart_UserProgElCooler_ru.png" width="718" /></a>  <div class="thumbcaption">Рис. 5.3.2.16. Результирующий вид вкладки обработка виджета "elCooler" библиотеки "KM 101".</div></div></div></div>
+<p>Закроем диалог редактирования свойств визуального элемента, создадим иконку на основе нашего элемента, закроем внутреннее окно редактирования и сохраним это всё.
+</p><p>На этом разработку комплексного элемента можно считать законченной.
+</p>
+<h4><span class="mw-headline" id=".D0.94.D0.BE.D0.B1.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.D0.BA.D0.BE.D0.BC.D0.BF.D0.BB.D0.B5.D0.BA.D1.81.D0.BD.D0.BE.D0.B3.D0.BE_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B0_.D0.BD.D0.B0_.D0.BC.D0.BD.D0.B5.D0.BC.D0.BE.D1.81.D1.85.D0.B5.D0.BC.D1.83"><span class="mw-headline-number">5.3.3</span> Добавление комплексного элемента на мнемосхему</span></h4>
+<p>Для проверки работоспособности и оценки результатов наших усилий добавим созданный виджет на мнемосхему, разработанную в разделе 5.2. Выполним эту операцию для двух холодильников "AT101_1" и "AT101_2".
+</p><p>Для этого откроем кадр мнемосхемы "AT 101" на редактирование. После чего хватаем "мышью" наш комплексный элемент и тащим на мнемосхему, где отпускаем в нужной нам позиции. В диалоге запроса имени вводим идентификаторы "AT101_1" и "AT101_2" соответственно. Поле имени опускаем. Добавленные элементы располагаем как нам удобно. После выполнения подобных манипуляций у нас должна получиться мнемосхема с видом, похожим представленной на рисунке 5.3.3.1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1047px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_mn2_ru.png"><img class="thumbimage" height="640" src="files/QuickStart_ui_mn2_ru.png" width="1045" /></a>  <div class="thumbcaption">Рис. 5.3.3.1. Вид мнемосхемы с комплексными элементами.</div></div></div></div>
+<p>Сохраним новую мнемосхему и закроем её окно. Далее перейдём в проект и откроем эту мнемосхему в дереве проекта "Группы сигнализаций (шаблон)"-&gt;"Корневая страница"-&gt;"Группа 1"-&gt;"Мнемосхемы"-&gt;"AT 101". Как можно заметить, наши новые элементы появились здесь автоматически. И нам осталось только подключить связи к новым элементам. Для этого откроем диалог редактирования свойств мнемосхемы на вкладке "Связи" (рис.5.3.3.2). На этой вкладке мы увидим дерево с элементами "AT101_1" и "AT101_2". Развернув любой из элементов, мы увидим ветку "Параметр" как раз с атрибутами "Ti", "To" и "Cw", Таким образом, мы можем просто указать адрес параметра "prm:/LogicLev/KM101/AT101_1" в поле "Параметр", а атрибуты будут расставлены автоматически.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:456px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_mn2_lnk_ru.png"><img class="thumbimage" height="479" src="files/QuickStart_ui_mn2_lnk_ru.png" width="454" /></a>  <div class="thumbcaption">Рис. 5.3.3.2. Вкладка "Связи" диалога редактирования свойств мнемосхемы.</div></div></div></div>
+<p>Сохраним нашу мнемосхему и проверим, что получилось. Для этого закроем окно диалога свойств и запустим проект "Группы сигнализаций (шаблон)" на исполнение. Затем переключимся на вторую мнемосхему кнопками листания. При безошибочной конфигурации мы должны увидеть что-то подобное изображённому на рисунке 5.3.3.3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1044px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ui_run_mn2_ru.png"><img class="thumbimage" height="720" src="files/QuickStart_ui_run_mn2_ru.png" width="1042" /></a>  <div class="thumbcaption">Рис. 5.3.3.3. Результирующая мнемосхема.</div></div></div></div>
+<p>На этой мнемосхеме посредством наших комплексных элементов мы можем не только наблюдать, но и управлять производительностью холодильников, просто меняя значение в комбобоксе. Меняя производительность, мы можем заметить и изменение температуры и срабатывание сигнализации по типизированному аналоговому параметру. Историю изменения мы можем увидеть на созданной нами в разделе 5.1 группе графиков.
+</p>
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">6</span> Заключение</span></h2>
+<p>Данный документ детально описывает основной процесс создания элементов пользовательского интерфейса с предварительной подготовкой и конфигурацией источника данных. В целом это позволяет быстро получить представление о работе с системой OpenSCADA, а также целенаправленно искать решения сопутствующих проблем.
+</p>
+
+
+
+
+
+</div></body>
+</html>

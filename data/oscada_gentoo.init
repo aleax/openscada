@@ -14,7 +14,7 @@ DNAME="OpenSCADA"
 NAME=openscada
 PIDFILE=/var/run/$NAME.pid
 DAEMON=/usr/bin/$NAME
-DAEMON_ARGS="--demon --pidFile=$PIDFILE"
+DAEMON_ARGS="--projName=server --demon --pidFile=$PIDFILE"
 
 depend() {
     use logger net

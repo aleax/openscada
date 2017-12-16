@@ -31,6 +31,7 @@
 #include <QLabel>
 #include <QFileDialog>
 #include <QPrinter>
+#include <QMenu>
 
 #include "tvision.h"
 
@@ -135,6 +136,8 @@ class VisRun : public QMainWindow
 	bool	connOK( )	{ return !conErr; }
 	QAction *aFullScr( )	{ return actFullScr; }
 
+	void	setWinMenu( bool act );
+
 	bool userSel( const string &hint = "" );
 	void setXScale( float vl )	{ x_scale = vl; }
 	void setYScale( float vl )	{ y_scale = vl; }
@@ -228,10 +231,10 @@ class VisRun : public QMainWindow
 	};
 	//Private attributes
 	// Menu root items
-	QMenu	*menuFile,			//Menu "File"
-		*menuAlarm,			//Menu "Alarm"
-		*menuView,			//Menu "View"
-		*menuHelp,			//Menu "Help"
+	QMenu	menuFile,			//Menu "File"
+		menuAlarm,			//Menu "Alarm"
+		menuView,			//Menu "View"
+		menuHelp,			//Menu "Help"
 		*menuPrint,			//Menu "Print"
 		*menuExport;			//Menu "Export"
 

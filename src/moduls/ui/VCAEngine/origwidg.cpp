@@ -953,7 +953,7 @@ void OrigDiagram::postEnable( int flag )
 	attrAdd(new TFld("bordStyle",_("Border: style"),TFld::Integer,TFld::Selected,"","3",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",FBRD_NONE,FBRD_DOT,FBRD_DASH,FBRD_SOL,FBRD_DBL,FBRD_GROOVE,FBRD_RIDGE,FBRD_INSET,FBRD_OUTSET).c_str(),
 	    _("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),i2s(A_BordStyle).c_str()));
-	attrAdd(new TFld("trcPer",_("Tracing period (s)"),TFld::Real,TFld::NoFlag,"","0","0;360","",i2s(A_DiagramTrcPer).c_str()));
+	attrAdd(new TFld("trcPer",_("Tracing period, seconds"),TFld::Real,TFld::NoFlag,"","0","0;360","",i2s(A_DiagramTrcPer).c_str()));
 	attrAdd(new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0",
 	    TSYS::strMess("%d;%d;%d",FD_TRND,FD_SPECTR,FD_XY).c_str(),_("Trend;Spectrum;XY"),i2s(A_DiagramType).c_str()));
     }
@@ -1136,7 +1136,7 @@ void OrigProtocol::postEnable( int flag )
 	attrAdd(new TFld("headVis",_("Header visible"),TFld::Boolean,TFld::NoFlag,"","1","","",i2s(A_ProtHeadVis).c_str()));
 	attrAdd(new TFld("time",_("Time, seconds"),TFld::Integer,Attr::DateTime,"","","","",i2s(A_ProtTime).c_str()));
 	attrAdd(new TFld("tSize",_("Size, seconds"),TFld::Integer,TFld::NoFlag,"","60","0;50000000","",i2s(A_ProtTSize).c_str()));
-	attrAdd(new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","",i2s(A_ProtTrcPer).c_str()));
+	attrAdd(new TFld("trcPer",_("Tracing period, seconds"),TFld::Integer,TFld::NoFlag,"","0","0;360","",i2s(A_ProtTrcPer).c_str()));
 	attrAdd(new TFld("arch",_("Archivator"),TFld::String,0,"","","","",i2s(A_ProtArch).c_str()));
 	attrAdd(new TFld("tmpl",_("Template"),TFld::String,0,"","","","",i2s(A_ProtTmpl).c_str()));
 	attrAdd(new TFld("lev",_("Level"),TFld::Integer,TFld::NoFlag,"","0","-7;7","",i2s(A_ProtLev).c_str()));
@@ -1519,11 +1519,11 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     funcIO.ioIns(new IO("time",_("Document time"),IO::Integer,IO::Default), A_DocCalcPrmTime);
     funcIO.ioIns(new IO("bTime",_("Document begin time"),IO::Integer,IO::Default), A_DocCalcPrmBTime);
     funcIO.ioIns(new IO("lTime",_("Last time"),IO::Integer,IO::Default), A_DocCalcPrmLTime);
-    funcIO.ioIns(new IO("rTime",_("Repeat time (s)"),IO::Integer,IO::Default), A_DocCalcPrmRTime);
-    funcIO.ioIns(new IO("rTimeU",_("Repeat time (us)"),IO::Integer,IO::Default), A_DocCalcPrmRTimeU);
+    funcIO.ioIns(new IO("rTime",_("Repeat time, seconds"),IO::Integer,IO::Default), A_DocCalcPrmRTime);
+    funcIO.ioIns(new IO("rTimeU",_("Repeat time, microseconds"),IO::Integer,IO::Default), A_DocCalcPrmRTimeU);
     funcIO.ioIns(new IO("rPer",_("Repeat period"),IO::Real,IO::Default), A_DocCalcPrmRPer);
-    funcIO.ioIns(new IO("mTime",_("Message time"),IO::Integer,IO::Default), A_DocCalcPrmMTime);
-    funcIO.ioIns(new IO("mTimeU",_("Message time (mcs)"),IO::Integer,IO::Default), A_DocCalcPrmMTimeU);
+    funcIO.ioIns(new IO("mTime",_("Message time, seconds"),IO::Integer,IO::Default), A_DocCalcPrmMTime);
+    funcIO.ioIns(new IO("mTimeU",_("Message time, microseconds"),IO::Integer,IO::Default), A_DocCalcPrmMTimeU);
     funcIO.ioIns(new IO("mLev",_("Message level"),IO::Integer,IO::Default), A_DocCalcPrmMLev);
     funcIO.ioIns(new IO("mCat",_("Message category"),IO::String,IO::Default), A_DocCalcPrmMCat);
     funcIO.ioIns(new IO("mVal",_("Message value"),IO::String,IO::Default), A_DocCalcPrmMVal);
@@ -1756,22 +1756,28 @@ void *OrigDocument::DocTask( void *param )
 	    l = sw->ownerSess()->reqLang();
 
     // The document generation
-    string mkDk;
-    if(!sw->attrAt("n").at().getI()) {
-	mkDk = sw->attrAt("doc").at().getS();
-	if(mkDk.empty()) mkDk = trLU(sw->attrAt("tmpl").at().getS(), l, u);
-	mkDk = OrigDocument::makeDoc(mkDk,sw);
-	sw->attrAt("doc").at().setS(mkDk);
-    }
-    else {
-	int aCur = sw->attrAt("aCur").at().getI();
-	mkDk = sw->attrAt("aDoc").at().getS();
-	if(mkDk.empty()) mkDk = trLU(sw->attrAt("tmpl").at().getS(), l, u);
+    try {
+	string mkDk;
+	if(!sw->attrAt("n").at().getI()) {
+	    mkDk = sw->attrAt("doc").at().getS();
+	    if(mkDk.empty()) mkDk = trLU(sw->attrAt("tmpl").at().getS(), l, u);
+	    mkDk = OrigDocument::makeDoc(mkDk,sw);
+	    sw->attrAt("doc").at().setS(mkDk);
+	}
+	else {
+	    int aCur = sw->attrAt("aCur").at().getI();
+	    mkDk = sw->attrAt("aDoc").at().getS();
+	    if(mkDk.empty()) mkDk = trLU(sw->attrAt("tmpl").at().getS(), l, u);
 
-	mkDk = makeDoc(mkDk,sw);
-	sw->attrAt("aDoc").at().setS(mkDk);
-	if(aCur == sw->attrAt("vCur").at().getI()) sw->attrAt("doc").at().setS(mkDk);
+	    mkDk = makeDoc(mkDk,sw);
+	    sw->attrAt("aDoc").at().setS(mkDk);
+	    if(aCur == sw->attrAt("vCur").at().getI()) sw->attrAt("doc").at().setS(mkDk);
+	}
+    } catch(TError &err) {
+	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	mess_err(sw->nodePath().c_str(), _("Document generation terminated."));
     }
+
     sw->attrAt("process").at().setB(false);
 
     return NULL;

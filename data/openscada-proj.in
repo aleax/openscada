@@ -56,7 +56,7 @@ case "$1" in
     fi
 
     #Generic projects directory processing
-    if test ! -d $dPrjRez -a $1 = create; then mkdir -p $dPrjRez; fi
+    if test ! -d $dPrjRez && test $1 = create -o -w $dSysCfg/oscada_$prjNm.xml; then mkdir -p $dPrjRez; fi
     if test -d $dPrjRez; then
 	if test ! -e $dPrjRez/oscada.xml -a ! -w $dSysCfg/oscada_$prjNm.xml; then cp $dSysCfg/oscada_start.xml $dPrjRez/oscada.xml; fi
 	if test ! -d $dPrjRez/LibsDB -a ! -L $dPrjRez/LibsDB; then ln -s ../LibsDB $dPrjRez/LibsDB; fi

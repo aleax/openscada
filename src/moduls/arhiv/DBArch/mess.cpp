@@ -32,7 +32,7 @@ using namespace DBArch;
 //* DBArch::ModMArch - Messages archivator       *
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TMArchivator(iid, idb, cf_el), tmProc(0), mBeg(0), mEnd(0), mMaxSize(0), mTmAsStr(false), needMeta(true)
+    TMArchivator(iid, idb, cf_el), tmProc(0), tmProcMax(0), mBeg(0), mEnd(0), mMaxSize(0), mTmAsStr(false), needMeta(true)
 {
     setAddr("*.*");
 }
@@ -91,8 +91,8 @@ void ModMArch::start( )
     if(!runSt) {
 	reqEl.fldClear();
 	reqEl.fldAdd(new TFld("MIN",_("In minutes"),TFld::Integer,TCfg::Key,"15"));	//Mostly for fast reading next, by minutes
-	reqEl.fldAdd(new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
-	reqEl.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"6","0"));
+	reqEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
+	reqEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"6","0"));
 	reqEl.fldAdd(new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"100"));
 	reqEl.fldAdd(new TFld("MESS",_("Message"),TFld::String,TFld::NoFlag/*TCfg::Key*/,"100000"));
 	reqEl.fldAdd(new TFld("LEV",_("Level"),TFld::Integer,TFld::NoFlag,"2"));
@@ -164,7 +164,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
     cfg.cfg("END").setS(i2s(mEnd),true);
     bool rez = SYS->db().at().dataSet(addr()+"."+mod->mainTbl(),"",cfg,false,true);
 
-    tmProc = 1e-3*(TSYS::curTime()-t_cnt);
+    tmProc = TSYS::curTime() - t_cnt; tmProcMax = vmax(tmProcMax, tmProc);
 
     return rez;
 }
@@ -263,7 +263,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(r2s(tmProc,6));
+    if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(tm2s(1e-6*tmProc) + "[" + tm2s(1e-6*tmProcMax) + "]");
     else if(a_path == "/prm/add/sz") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(r2s(maxSize()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMaxSize(s2r(opt->text()));
