@@ -206,7 +206,7 @@ void *TMdContr::Task( void *icntr )
 
     bool isStart = true;
     bool isStop  = false;
-    int64_t tCnt1, tCnt2;
+    int64_t tCnt1 = 0, tCnt2 = 0;
 
     while(true) {
 	//Update controller's data

@@ -836,6 +836,13 @@ void TSYS::unload( )
     at("Security").at().unload();
     at("BD").at().unload();
 
+    //Clear counters
+    if(Mess->messLevel() == TMess::Debug) {
+	dataRes().lock();
+	mCntrs.clear();
+	dataRes().unlock();
+    }
+
     if(prjNm().size() && prjLockUpdPer()) prjLock("free");
 
     isLoaded = false;
@@ -1868,7 +1875,7 @@ bool TSYS::prjLock( const char *cmd )
     else if(strcmp(cmd,"update") == 0 && (hd=open(prjLockFile.c_str(),O_WRONLY,0600)) < 0) return false;
     if(hd >= 0) {
 	string lockInfo = TSYS::strMess("%010d %020d", (int)getpid(), (int)sysTm());
-	int rez = write(hd, lockInfo.data(), lockInfo.size());
+	write(hd, lockInfo.data(), lockInfo.size());
 	close(hd);
 	return true;
     }
@@ -2150,8 +2157,6 @@ void *TSYS::RdTask( void * )
 
     while(!TSYS::taskEndRun())
     try {
-	int64_t wTm = SYS->curTime();
-
 	//Update wait time for dead stations and process connections to stations
 	ResAlloc res(SYS->mRdRes, false);
 	for(map<string,TSYS::SStat>::iterator sit = SYS->mSt.begin(); sit != SYS->mSt.end(); sit++) {
@@ -2766,17 +2771,17 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/docdir",_("Documents directory"),R_R___,"root","root",4,"tp","str","dest","sel_ed","select","/gen/docDirList",
 		"help",_("Separate directory paths with documents by symbol ';'."));
 	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
-		"help",_("Work DB address in format [<DB module>.<DB name>].\nChange it field if you want save or reload all system from other DB."));
+		"help",_("Work DB address in format \"{DB module}.{DB name}\".\nChange this field if you want to save or to reload all the program from other DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save the program at exit"),RWRWR_,"root","root",2,"tp","bool",
-		"help",_("Select for automatic system saving to DB on exit."));
+		"help",_("Select for the program automatic saving to DB on exit."));
 	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save the program period"),RWRWR_,"root","root",2,"tp","dec",
-		"help",_("Use no zero period (seconds) for periodic saving of changed systems parts to DB."));
+		"help",_("Use not a zero period (seconds) to periodically save program changes to the DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",1,"tp","str");
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_)) {
 		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",6,"tp","dec","len","1","dest","select",
 		    "sel_id","0;1;2;3;4;5;6;7",
 		    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
-		    "help",_("Least messages level which process by the program."));
+		    "help",_("Least messages level which is procesed by the program."));
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_sysl",_("To syslog"),RWRWR_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_stdo",_("To stdout"),RWRWR_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_stde",_("To stderr"),RWRWR_,"root","root",1,"tp","bool");
@@ -2818,17 +2823,17 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
 	    ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,
 		"tp","str","len","2","dest","sel_ed","select","/tr/baseLangLs",
-		"help",_("Multilingual for variable texts support enabling by base language selection."));
+		"help",_("Enable multilingual support for text variables by selecting the base language."));
 	    if(Mess->lang2CodeBase().size()) {
-		ctrMkNode("fld",opt,-1,"/tr/dyn",_("Dynamic translation"),R_R_R_,"root","root",2,"tp","bool","help",_("Current dynamic translation state."));
-		ctrMkNode("fld",opt,-1,"/tr/dynPlan","",RWRW__,"root","root",2,"tp","bool","help",_("Plan for dynamic translation at next start."));
+		ctrMkNode("fld",opt,-1,"/tr/dyn",_("Dynamic translation"),R_R_R_,"root","root",2,"tp","bool","help",_("Current state of the dynamic translation."));
+		ctrMkNode("fld",opt,-1,"/tr/dynPlan","",RWRW__,"root","root",2,"tp","bool","help",_("Dynamic translation scheduling for next launch."));
 		if(!Mess->translDyn())
 		    ctrMkNode("fld",opt,-1,"/tr/enMan",_("Enable manager"),RWRWR_,"root","root",2,"tp","bool",
-			"help",_("Enable common translation manage which cause full reloading for all built messages obtain."));
+			"help",_("Enable generic translation manager which cause full reloading for all built messages obtain."));
 	    }
 	    if(Mess->translEnMan()) {
 		ctrMkNode("fld",opt,-1,"/tr/langs",_("Languages"),RWRW__,"root","root",2,"tp","str",
-		    "help",_("Processed languages list by two symbols code and separated symbol ';'."));
+		    "help",_("List of processed languages, in a two-character representation and separated by the character ';'."));
 		ctrMkNode("fld",opt,-1,"/tr/fltr",_("Source filter"),RWRW__,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/tr/chkUnMatch",_("Check for mismatch"),RWRW__,"root","root",1,"tp","bool");
 		if(ctrMkNode("table",opt,-1,"/tr/mess",_("Messages"),RWRW__,"root","root",1,"key","base")) {

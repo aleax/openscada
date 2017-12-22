@@ -206,7 +206,7 @@ Fuers Starten wird Kommando <openscada_Boiler> benutzt.
 %setup -T -D -a 1 -n %srcname
 
 %build
-%if %_vendor == "Mandriva"
+%if %_vendor == "redhat" || %_vendor == "Mandriva"
 autoreconf -ivf
 %endif
 
@@ -251,6 +251,7 @@ ln -s %_defaultdocdir/%name-docUK-%version %buildroot/%_datadir/openscada/docs/u
 %config(noreplace) %_sysconfdir/oscada.xml
 %config(noreplace) %_sysconfdir/oscada_start.xml
 %config(noreplace) %_sysconfdir/oscada_server.xml
+%config(noreplace) %_sysconfdir/oscada_plc.xml
 %config %_initdir/oscadad
 %_bindir/openscada
 %_bindir/openscada_start

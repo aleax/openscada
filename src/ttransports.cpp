@@ -426,7 +426,7 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
 
     //Check for reforward
     off = 0; TSYS::strParse(station, 0, ".", &off);
-    if(off && off < station.size()) { node.setAttr("reforwardHost", station.substr(off)); station.erase(off-1); }
+    if(off && off < (int)station.size()) { node.setAttr("reforwardHost", station.substr(off)); station.erase(off-1); }
 
     //Connect to the transport
     off = 0;
@@ -845,7 +845,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,-1,"/log",_("IO log"),R_R___,"root",STR_ID)) {
 	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length"),RWRW__,"root",STR_ID,4,"tp","dec","min","0","max","10000",
-		"help",_("Use zero for the log disabling"));
+		"help",_("Use zero for the log disabling."));
 	    if(logLen()) ctrMkNode("fld",opt,-1,"/log/log",_("Log"),R_R___,"root",STR_ID,3,"tp","str","rows","20","SnthHgl","1");
 	}
 	return;
@@ -891,7 +891,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
 		opt->setText(opt->text() + "[" + atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S")+"."+i2s(itTm%1000000)+"] " +
-		    itDscr + ((off<mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off),TSYS::Bin,"<text>"):"") + "\n\n");
+		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off),TSYS::Bin,"<text>"):"") + "\n\n");
 	    }
 	}
 	if(ctrChkNode(opt,"SnthHgl",R_R___,"root",STR_ID,SEC_RD)) {
@@ -1099,19 +1099,19 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/req/mode",_("Mode"),RWRW__,"root",STR_ID,4,"tp","dec","dest","select",
 		"sel_id","0;1;2;3","sel_list",_("Binary;Text(LF);Text(CR);Text(CR/LF)"));
 	    ctrMkNode("fld",opt,-1,"/req/toTmOut",_("Wait timeout"),RWRWR_,"root",STR_ID,2,"tp","bool","help",
-		_("Sign for expect by timeout when a response is received.\n"
-		  "Many systems in response to various protocols (HTTP) are send the response data in several pieces.\n"
-		  "Without this flag will be received and displayed only the first piece.\n"
-		  "When this flag will be set all the pieces awaiting an answer, until the lack of data during the timeout the transport elapsed ."));
+		_("A sign of waiting timeout when receiving an answer.\n"
+		  "Many systems, when responding to different protocols (such as HTTP), can send response data in several parts.\n"
+		  "Without this, only the first part will be received and displayed.\n"
+		  "When this flag is set, all parts of the response will be waiting up to missing data during the transport timeout."));
 	    ctrMkNode("fld",opt,-1,"/req/inBufSz",_("Input buffer size, bytes"),RWRW__,"root",STR_ID,4,"tp","dec","min","0","max",i2s(STR_BUF_LEN).c_str(),
-		"help",_("Direct set the input buffer size. Use 0 to disable waiting and reading to a data, only to write."));
+		"help",_("Direct set the input buffer size. Use 0 to disable waiting and reading for a data - only to write."));
 	    ctrMkNode("comm",opt,-1,"/req/send",_("Send"),RWRW__,"root",STR_ID);
 	    ctrMkNode("fld",opt,-1,"/req/req",_("Request"),RWRW__,"root",STR_ID,4,"tp","str","cols","90","rows","5","SnthHgl","1");
 	    ctrMkNode("fld",opt,-1,"/req/answ",_("Answer"),RWRW__,"root",STR_ID,4,"tp","str","cols","90","rows","5","SnthHgl","1");
 	}
 	if(ctrMkNode("area",opt,-1,"/log",_("IO log"),R_R___,"root",STR_ID)) {
 	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length"),RWRW__,"root",STR_ID,4,"tp","dec","min","0","max","10000",
-		"help",_("Use zero for the log disabling"));
+		"help",_("Use zero for the log disabling."));
 	    if(logLen()) ctrMkNode("fld",opt,-1,"/log/log",_("Log"),R_R___,"root",STR_ID,3,"tp","str","rows","20","SnthHgl","1");
 	}
 	return;
@@ -1229,7 +1229,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
 		opt->setText(opt->text() + "[" + atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S")+"."+i2s(itTm%1000000)+"] " +
-		    itDscr + ((off<mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off),TSYS::Bin,"<text>"):"") + "\n\n");
+		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off),TSYS::Bin,"<text>"):"") + "\n\n");
 	    }
 	}
 	if(ctrChkNode(opt,"SnthHgl",R_R___,"root",STR_ID,SEC_RD)) {

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:21+0200\n"
+"POT-Creation-Date: 2017-12-22 21:11+0200\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -55,6 +55,7 @@ msgstr "Keine Antwort vom Modem %d."
 msgid "No any expected respond but receive from modem %d: '%s'."
 msgstr "Keine Antwort erwartet wurde, erhielt aber vom Modem %d: '%s'."
 
+#, c-format
 msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms. "
 msgstr ""
 "Datenverkehr eingehend %s, ausgehend %s. Maximale Wartezeit für ein Zeichen "
@@ -196,14 +197,14 @@ msgstr "Priorität"
 msgid "Modem"
 msgstr "Modem"
 
-msgid "Timeout (sec)"
-msgstr "Wartezeit (sec)"
+msgid "Timeout, seconds"
+msgstr "Wartezeit, Sekunden"
 
-msgid "Pre-initial delay (sec)"
-msgstr "Pre-erste Ausdauer (sek)"
+msgid "Pre-initial delay, seconds"
+msgstr "Pre-erste Ausdauer, Sekunden"
 
-msgid "Post-initial delay (sec)"
-msgstr "Aufhalten der Post-erste (sek)"
+msgid "Post-initial delay, seconds"
+msgstr "Aufhalten der Post-erste, Sekunden"
 
 msgid "Initialization string 1"
 msgstr "Initialisierungszeile 1"
@@ -226,6 +227,10 @@ msgstr "Ring Antwort, Ergebnis"
 #, c-format
 msgid "Traffic in %s, out %s. "
 msgstr "Datenverkehr eingehend %s, ausgehend %s. "
+
+#, c-format
+msgid "Respond time %s[%s]. "
+msgstr "Reaktionszeit %s[%s]. "
 
 #, c-format
 msgid "Device '%s' is used now."
@@ -393,8 +398,8 @@ msgstr ""
 "Irgendwann geöffnet Gerät Schließung kann Bruch sein, auf ICP-DAS LP PLC zum "
 "Beispiel, dann können Sie es durch diese Option zu verhindern."
 
-msgid "Life time (sec)"
-msgstr "Lebenszeit (sek)"
+msgid "Life time, seconds"
+msgstr "Lebenszeit, Sekunden"
 
 msgid "Dial string"
 msgstr "Dialzeile"

@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.8.0"
+#define MOD_VER		"1.9.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -510,7 +510,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    int64_t stTm = 0;
 	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
 	    s.s->messPut(s.sock, req, answ, s.sender, prot_in);
-	    if(mess_lev() == TMess::Debug) {
+	    if(mess_lev() == TMess::Debug && stTm) {
 		s.s->dataRes().lock();
 		s.prcTm = s.s->prcTm = SYS->curTime() - stTm;
 		s.prcTmMax = vmax(s.prcTmMax, s.prcTm);
@@ -737,8 +737,11 @@ string TSocketOut::getStatus( )
 {
     string rez = TTransportOut::getStatus();
 
-    if(startStat())
+    if(startStat()) {
 	rez += TSYS::strMess(_("Traffic in %s, out %s."), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
+	if(mess_lev() == TMess::Debug && respTmMax)
+	    rez += TSYS::strMess(_("Respond time %s[%s]. "), tm2s(1e-6*respTm).c_str(), tm2s(1e-6*respTmMax).c_str());
+    }
 
     return rez;
 }
@@ -784,7 +787,7 @@ void TSocketOut::start( int tmCon )
     conn = NULL;
 
     //Status clear
-    trIn = trOut = 0;
+    trIn = trOut = respTm = respTmMax = 0;
 
     //SSL context init
     string ssl_host = TSYS::strParse(addr(), 0, ":");
@@ -993,6 +996,9 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
 
 repeate:
     if(reqTry++ >= 2)	throw TError(nodePath().c_str(), _("Request error: %s"), err.c_str());
+
+    int64_t stRespTm = 0;
+
     //Write request
     if(oBuf != NULL && oLen > 0) {
 	if(!time) time = mTmCon;
@@ -1015,6 +1021,8 @@ repeate:
 
 	trOut += ret;
 	writeReq = true;
+
+	if(mess_lev() == TMess::Debug) stRespTm = SYS->curTime();
     }
     else if(!noReq) time = mTmNext;
     if(!time) time = 5000;
@@ -1076,6 +1084,10 @@ repeate:
 	    }
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,ret)).c_str());
 	    if(ret > 0 && logLen()) pushLogMess(_("Received from\n") + string(iBuf,ret));
+	    if(ret > 0 && mess_lev() == TMess::Debug && stRespTm) {
+		respTm = SYS->curTime() - stRespTm;
+		respTmMax = vmax(respTmMax, respTm);
+	    }
 	}
     }
 

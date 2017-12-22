@@ -57,7 +57,7 @@
 #else
 #define SUB_TYPE	""
 #endif
-#define MOD_VER		"3.2.0"
+#define MOD_VER		"3.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -815,7 +815,7 @@ StartDialog::StartDialog( WinControl *wcntr ) : prjsLs(NULL), prjsBt(NULL)
 	// Mark current project's items in the list
 	if(SYS->prjNm().size()) {
 	    QList<QListWidgetItem *> sIt = prjsLs->findItems(SYS->prjNm().c_str(), Qt::MatchStartsWith);
-	    for(unsigned iIt = 0; iIt < sIt.length(); iIt++) {
+	    for(int iIt = 0; iIt < sIt.length(); iIt++) {
 		sIt[iIt]->setSelected(true);
 		prjsLs->scrollToItem(sIt[iIt]);
 	    }

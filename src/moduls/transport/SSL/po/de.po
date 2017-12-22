@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:16+0200\n"
+"POT-Creation-Date: 2017-12-22 21:09+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -36,6 +36,7 @@ msgstr "Weitere Optionen"
 msgid "Start error: "
 msgstr "Fehler beim Start: "
 
+#, c-format
 msgid ""
 "Connections %d, opened %d. Traffic in %s, out %s. Closed connections by "
 "limit %d. "
@@ -189,6 +190,7 @@ msgstr ""
 msgid "Priority"
 msgstr "Priorität"
 
+#, c-format
 msgid "%s %d(%s): last %s; traffic in %s, out %s; "
 msgstr "%s %d(%s): letzte %s; eingangstraffik %s, Ausgangs- %s; "
 
@@ -199,6 +201,10 @@ msgstr "Bearbeitungszeit %s[%s]; "
 #, c-format
 msgid "Traffic in %s, out %s."
 msgstr "Eingangstraffik %s, Ausgangs %s."
+
+#, c-format
+msgid "Respond time %s[%s]. "
+msgstr "Reaktionszeit %s[%s]. "
 
 #, c-format
 msgid "Host '%s' not found!"

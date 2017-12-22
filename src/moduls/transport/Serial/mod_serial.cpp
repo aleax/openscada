@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.10.0"
+#define MOD_VER		"1.11.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -565,7 +565,7 @@ void *TTrIn::Task( void *tr_in )
 	    int64_t stTm = 0;
 	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
 	    prot_in.at().mess(req, answ);
-	    if(mess_lev() == TMess::Debug) {
+	    if(mess_lev() == TMess::Debug && stTm) {
 		tr->prcTm = SYS->curTime() - stTm;
 		tr->prcTmMax = vmax(tr->prcTmMax, tr->prcTm);
 	    }
@@ -675,9 +675,9 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
 	    "tp","dec", "help",TMess::labTaskPrior());
 	if(s2i(TSYS::strParse(addr(),4,":")) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
-	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-initial delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-initial delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout, seconds"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-initial delay, seconds"),RWRWR_,"root",STR_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-initial delay, seconds"),RWRWR_,"root",STR_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/mod/initStr1",_("Initialization string 1"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/initStr2",_("Initialization string 2"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Initial response"),RWRWR_,"root",STR_ID,1,"tp","str");
@@ -818,8 +818,11 @@ string TTrOut::getStatus( )
 {
     string rez = TTransportOut::getStatus();
 
-    if(startStat())
+    if(startStat()) {
 	rez += TSYS::strMess(_("Traffic in %s, out %s. "),TSYS::cpct2str(trIn).c_str(),TSYS::cpct2str(trOut).c_str());
+	if(mess_lev() == TMess::Debug && respTmMax)
+	    rez += TSYS::strMess(_("Respond time %s[%s]. "), tm2s(1e-6*respTm).c_str(), tm2s(1e-6*respTmMax).c_str());
+    }
 
     return rez;
 }
@@ -860,7 +863,7 @@ void TTrOut::start( int tmCon )
 
     //Statuses clear
     mMdmMode = mRTSfc = mRTSlvl = mRTSEcho = mI2C = mSPI = false;
-    trIn = trOut = 0;
+    trIn = trOut = respTm = respTmMax = 0;
     bool isLock = false;
 
     try {
@@ -1135,6 +1138,8 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 
     if(mRTSfc)	ioctl(fd, TIOCMGET, &sec);
 
+    int64_t stRespTm = 0;
+
     //Write request
     if(oBuf && oLen > 0) {
 	// Wait for char based timeout
@@ -1177,6 +1182,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 	    else {
 		trOut += kz;
 		if(logLen()) pushLogMess(_("Transmitted to\n") + string(oBuf+wOff,kz));
+		if(mess_lev() == TMess::Debug) stRespTm = SYS->curTime();
 	    }
 
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
@@ -1242,6 +1248,10 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 	    }
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,blen)).c_str());
 	    if(blen > 0 && logLen()) pushLogMess(_("Received from\n") + string(iBuf,blen));
+	    if(blen > 0 && mess_lev() == TMess::Debug && stRespTm) {
+		respTm = SYS->curTime() - stRespTm;
+		respTmMax = vmax(respTmMax, respTm);
+	    }
 	    trIn += vmax(0, blen);
 	}
     }
@@ -1351,10 +1361,10 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/noStopOnProceed",_("No stop on proceed"),RWRWR_,"root",STR_ID,2,"tp","bool", "help",
 	    _("Sometime opened device closing can be breakage, on ICP-DAS LP PLC for example, then you alowed to prevent it by that option."));
 	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
-	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/mod/lifeTm",_("Life time (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-initial delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-initial delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout, seconds"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/mod/lifeTm",_("Life time, seconds"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-initial delay, seconds"),RWRWR_,"root",STR_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-initial delay, seconds"),RWRWR_,"root",STR_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/mod/initStr1",_("Initialization string 1"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/initStr2",_("Initialization string 2"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Initial response"),RWRWR_,"root",STR_ID,1,"tp","str");

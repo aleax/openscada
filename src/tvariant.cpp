@@ -975,7 +975,7 @@ XMLNodeObj::XMLNodeObj( const string &name ) : mName(name), parent(NULL)
 
 XMLNodeObj::~XMLNodeObj( )
 {
-    while(childSize()) childDel(0);
+    while(childSize()) childDel(childSize()-1);
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter(TVarObj::objName()+":"+objName(), -1);
 }

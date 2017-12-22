@@ -607,7 +607,7 @@ void TTypeBD::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),RWRWR_,"root",SDB_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),R_R_R_)) {
 	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Full DB delete"),RWRW__,"root",SDB_ID,2,
-		"tp","bool","help",_("Select for full deletion DB on DB close. Else DB will be simply closed."));
+		"tp","bool","help",_("Select for full DB deletion at this DB closing, else the DB will be simply closed."));
 	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),RWRWR_,"root",SDB_ID,5,
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","db_","idSz",OBJ_ID_SZ);
 	}
@@ -798,7 +798,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Enabled"),RWRWR_,"root",SDB_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Accessible tables"),RWRW__,"root",SDB_ID,4,
-		    "tp","br","br_pref","tbl_","s_com","del","help",_("Tables which are in the DB, tables which are not opened at that moment."));
+		    "tp","br","br_pref","tbl_","s_com","del","help",_("Tables in the database, but not open at this time."));
 		ctrMkNode("comm",opt,-1,"/prm/st/load",_("Load the program from this DB"),RWRW__,"root","root");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
@@ -807,13 +807,13 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID);
 		ctrMkNode2("fld",opt,-1,"/prm/cfg/CODEPAGE",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,
 		    "dest","sel_ed","sel_list",(Mess->charset()+";UTF-8;KOI8-R;KOI8-U;CP1251;CP866").c_str(),
-		    "help",_("Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."),NULL);
+		    "help",_("Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."),NULL);
 	    }
 	}
 	if(ctrMkNode("area",opt,1,"/tbls",_("Tables"),R_R___))
 	    ctrMkNode("list",opt,-1,"/tbls/otbl",_("Opened tables"),RWRW__,"root",SDB_ID,5,
 		"tp","br","idSz","255","s_com","add,del","br_pref","tbl_",
-		"help",_("Opened table list.\nAdding and deleting tables operations are really open and close tables operations."));
+		"help",_("Opened tables list.\nAdding and removing tables actually consists of opening and closing tables."));
 	if(enableStat() && ctrMkNode("area",opt,-1,"/sql",_("SQL"),R_R___,"root",SDB_ID)) {
 	    ctrMkNode("fld",opt,-1,"/sql/req",_("Request"),RWRW__,"root",SDB_ID,3,"tp","str","cols","100","rows","2");
 	    ctrMkNode("fld",opt,-1,"/sql/trans",_("Transaction"),RWRW__,"root",SDB_ID,4,"tp","dec","dest","select",
@@ -997,8 +997,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Table: ")+name(),RWRW__,"root",SDB_ID);
 	if(ctrMkNode("area",opt,0,"/prm",_("Table"))) {
-	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
-		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",_("Name"),R_R___,"root",SDB_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/nm",_("Name"),R_R___,"root",SDB_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/tblOff",_("Table offset, size"),RWRW__,"root",SDB_ID,2,"tp","dec","min","0");
 	    ctrMkNode("fld",opt,-1,"/prm/tblSz","",RWRW__,"root",SDB_ID,3,"tp","dec","min","10","max","10000");
 	    XMLNode *tbl;
@@ -1019,7 +1018,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/nm" && ctrChkNode(opt,"get",R_R___,"root",SDB_ID,SEC_RD)) opt->setText(name());
+    if(a_path == "/prm/nm" && ctrChkNode(opt,"get",R_R___,"root",SDB_ID,SEC_RD)) opt->setText(name());
     else if(a_path == "/prm/tblOff") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(i2s(tblOff));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	tblOff = s2i(opt->text());

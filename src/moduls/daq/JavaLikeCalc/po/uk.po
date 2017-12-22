@@ -2,13 +2,13 @@
 # Copyright (C) 2005-2011 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.JavaLikeCalc module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-03 18:32+0200\n"
+"POT-Creation-Date: 2017-12-22 20:52+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -17,8 +17,50 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 #, c-format
+msgid "Internal function inaccessible by offset %d > %d"
+msgstr "Внутрішня функція недосяжна через зміщення %d > %d"
+
+#, c-format
 msgid "Variable '%s' is used but undefined"
 msgstr "Змінна '%s' не визначена але використана"
+
+msgid "Error constant after constant"
+msgstr "Помилка константи після константи"
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr "%s, позиція: (%d,%d)-(%d,%d)."
+
+msgid "Unexpected end program, expect end string symbol '\"', "
+msgstr "Неочікуване завершення програми, очікувався символ кінця строки '\"', "
+
+msgid "The next line symbol failed into string, "
+msgstr "Символ переведення лінії не дозволено у рядку, "
+
+msgid "Using namespace is error or empty, "
+msgstr "Помилка площини найменувань або вона порожня, "
+
+msgid "Internal function declaration error, "
+msgstr "Помилка декларації внутрішньої функцій, "
+
+#, c-format
+msgid "Internal function '%s' defined early, "
+msgstr "Внутрішню функцію '%s' визначено раніш, "
+
+msgid "Do not include declaration of one internal function to other, "
+msgstr "Не включайте визначення однієї внутрішньої функції до іншої, "
+
+msgid "Build in function has too much parameters, "
+msgstr "Вбудована функція має дуже багато параметрів, "
+
+msgid "Function error, "
+msgstr "Помилка функції, "
+
+msgid "Symbol error, "
+msgstr "Помилка символу, "
+
+msgid "Object's properties too long, "
+msgstr "Властивості об'єкту дуже довгі, "
 
 msgid "Array have more 255 items."
 msgstr "Масив має більш 255 елементів."
@@ -81,8 +123,8 @@ msgstr "Опис"
 msgid "To start"
 msgstr "Запускати"
 
-msgid "Maximum calculate time (sec)"
-msgstr "Максимальний час обрахунку (сек)"
+msgid "Maximum calculate time, seconds"
+msgstr "Максимальний час обрахунку, секунд"
 
 msgid "Program"
 msgstr "Програма"
@@ -215,8 +257,8 @@ msgstr "Помилка компіляції: %s"
 msgid "Load function's libraries error."
 msgstr "Помилка завантаження бібліотеки функцій."
 
-msgid "Safe timeout (sec)"
-msgstr "Таймаут безпеки (сек)"
+msgid "Safe timeout, seconds"
+msgstr "Таймаут безпеки, секунд"
 
 msgid "Functions' Libraries"
 msgstr "Бібліотеки функцій"
@@ -315,45 +357,3 @@ msgstr ""
 "  anm - ім'я створюваного атрибута.\n"
 "Якщо 'aid' або 'anm' не встановлено тоді вони будуть згенеровані з обраного "
 "IO функції."
-
-#, c-format
-msgid "Internal function inaccessible by offset %d > %d"
-msgstr "Внутрішня функція недосяжна через зміщення %d > %d"
-
-msgid "Error constant after constant"
-msgstr "Помилка константи після константи"
-
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr "%s, позиція: (%d,%d)-(%d,%d)."
-
-msgid "Unexpected end program, expect end string symbol '\"', "
-msgstr "Неочікуване завершення програми, очікувався символ кінця строки '\"', "
-
-msgid "The next line symbol failed into string, "
-msgstr "Символ переведення лінії не дозволено у рядку, "
-
-msgid "Using namespace is error or empty, "
-msgstr "Помилка площини найменувань або вона порожня, "
-
-msgid "Internal function declaration error, "
-msgstr "Помилка декларації внутрішньої функцій, "
-
-#, c-format
-msgid "Internal function '%s' defined early, "
-msgstr "Внутрішню функцію '%s' визначено раніш, "
-
-msgid "Do not include declaration of one internal function to other, "
-msgstr "Не включайте визначення однієї внутрішньої функції до іншої, "
-
-msgid "Build in function has too much parameters, "
-msgstr "Вбудована функція має дуже багато параметрів, "
-
-msgid "Function error, "
-msgstr "Помилка функції, "
-
-msgid "Symbol error, "
-msgstr "Помилка символу, "
-
-msgid "Object's properties too long, "
-msgstr "Властивості об'єкту дуже довгі, "

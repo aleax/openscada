@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DB DBF")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.2.6"
+#define MOD_VER		"2.2.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the *.dbf files, version 3.0.")
 #define LICENSE		"GPL2"
@@ -192,7 +192,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //* BDDBF::MTable                                *
 //************************************************
 MTable::MTable( const string &inm, MBD *iown, const string &inTable, TBasaDBF *ibasa ) :
-    TTable(inm), mModify(0), nTable(inTable), basa(ibasa)
+    TTable(inm), nTable(inTable), basa(ibasa), mModify(0)
 {
     setNodePrev(iown);
     codepage = owner().codePage().size() ? owner().codePage() : Mess->charset();

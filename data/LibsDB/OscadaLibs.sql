@@ -8760,17 +8760,17 @@ io.setAttr("err", "0");','','',1512240522);
 CREATE TABLE 'flb_doc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_doc" VALUES('getVal','Getting value from archive','Запит значення архіву','Запрос знач. архива','Query the value for a specified time from the assigned archive and issuing the result with the specified number of decimal points.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0','Запит значення на визначений час з вказаного архіву та видача результату з вказаною кількістю знаків після точки.
+Version: 1.1.1','Запит значення на визначений час з вказаного архіву та видача результату з вказаною кількістю знаків після точки.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.1.0','Запрос значения на указанное время из установленного архива и выдача результата с указанным количеством знаков после точки.
+Версія: 1.1.1','Запрос значения на указанное время из установленного архива и выдача результата с указанным количеством знаков после точки.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.1.0',1,10,0,'srcTime = time*1e6 + uTime;
+Версия: 1.1.1',1,10,0,'srcTime = time*1e6 + uTime;
 aO = SYS.nodeAt(addr).arch();
 if(aO) {
 	if(!tryTo || tryTo == srcTime)	val = aO.getVal(srcTime, false, archtor);
 	else {
-		aPer = aO.period(archtor);
-		if(srcTime < tryTo)
+		if((aPer=aO.period(archtor)) == 0)	val = EVAL;
+		else if(srcTime < tryTo)
 			for(srcTime1 = srcTime; srcTime < tryTo && (val=aO.getVal(srcTime1,false,archtor)).isEVal(); )
 			{ srcTime += aPer; srcTime1 = srcTime; }
 		else

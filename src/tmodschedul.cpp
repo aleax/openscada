@@ -59,7 +59,7 @@ void TModSchedul::preDisable( int flag )
 	}
 
     //All shared libraries detach
-    for(int iSh = 0; iSh < schHD.size(); iSh++)
+    for(int iSh = 0; iSh < (int)schHD.size(); iSh++)
 	if(schHD[iSh].hd) { dlclose(schHD[iSh].hd); schHD.erase(schHD.begin()+(iSh--)); }
 }
 
@@ -110,7 +110,7 @@ void TModSchedul::unload( )
 	    } catch(...) { break; }
 
     //All shared libraries detach
-    for(int iSh = 0; iSh < schHD.size(); iSh++)
+    for(int iSh = 0; iSh < (int)schHD.size(); iSh++)
 	if(!schHD[iSh].hd || !schHD[iSh].use.size()) {
 	    if(schHD[iSh].hd) dlclose(schHD[iSh].hd);
 	    schHD.erase(schHD.begin()+(iSh--));
@@ -436,7 +436,7 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 		"help",_("List of shared libs(modules) allowed for auto connection.\n"
 		         "Elements separated by symbol ';'.\n"
 		         "Value '*' used for allow all modules."));
-	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Check modules period (sec)"),RWRWR_,"root",SMSH_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Check modules period, seconds"),RWRWR_,"root",SMSH_ID,1,"tp","dec");
 	    ctrMkNode("comm",opt,-1,"/ms/chk_now",_("Check modules now."),RWRW__,"root",SMSH_ID);
 	    if(ctrMkNode("table",opt,-1,"/ms/libs",_("Shared libs(modules)"),RWRWR_,"root",SMSH_ID,1,"key","path")) {
 		ctrMkNode("list",opt,-1,"/ms/libs/path",_("Path"),R_R_R_,"root",SMSH_ID,1,"tp","str");

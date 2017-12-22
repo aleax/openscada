@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.1"
+#define MOD_VER		"2.1.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
  and Libnodave library, or self, for the rest.")
@@ -442,11 +442,11 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //* TMdContr                                     *
 //************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
-	::TController(name_c, daq_db, cfgelem), enRes(true),
+	::TController(name_c, daq_db, cfgelem),
 	mPrior(cfg("PRIOR").getId()), mType(cfg("TYPE").getId()),
 	mSlot(cfg("SLOT").getId()), mDev(cfg("CIF_DEV").getId()), restTm(cfg("TM_REST").getId()), mAssincWR(cfg("ASINC_WR").getBd()),
 	prcSt(false), callSt(false), endrunReq(false), isReload(false), isInitiated(false), alSt(-1), conErr(dataRes()), mInvokeID(-1),
-	di(NULL), dc(NULL), mPer(1e9), numR(0), numW(0), numErr(0), tmDelay(0)
+	di(NULL), dc(NULL), enRes(true), mPer(1e9), numR(0), numW(0), numErr(0), tmDelay(0)
 {
     cfg("PRM_BD").setS("SiemensPrm_"+name_c);
 }

@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.6.0"
+#define MOD_VER		"2.8.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -591,7 +591,7 @@ void *TSocketIn::Task( void *sock_in )
 	    int64_t stTm = 0;
 	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
 	    sock->messPut(sock->sockFd, req, answ, inet_ntoa(name_cl.sin_addr), prot_in);
-	    if(mess_lev() == TMess::Debug) {
+	    if(mess_lev() == TMess::Debug && stTm) {
 		sock->prcTm = SYS->curTime() - stTm;
 		sock->prcTmMax = vmax(sock->prcTmMax, sock->prcTm);
 	    }
@@ -620,7 +620,7 @@ void *TSocketIn::Task( void *sock_in )
 	    int64_t stTm = 0;
 	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
 	    sock->messPut(sock->sockFd, req, answ, u2s(frame.can_id), prot_in);
-	    if(mess_lev() == TMess::Debug) {
+	    if(mess_lev() == TMess::Debug && stTm) {
 		sock->prcTm = SYS->curTime() - stTm;
 		sock->prcTmMax = vmax(sock->prcTmMax, sock->prcTm);
 	    }
@@ -698,7 +698,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    int64_t stTm = 0;
 	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
 	    s.s->messPut(s.sock, req, answ, s.sender, prot_in);
-	    if(mess_lev() == TMess::Debug) {
+	    if(mess_lev() == TMess::Debug && stTm) {
 		s.s->dataRes().lock();
 		s.prcTm = s.s->prcTm = SYS->curTime() - stTm;
 		s.prcTmMax = vmax(s.prcTmMax, s.prcTm);
@@ -964,8 +964,11 @@ string TSocketOut::getStatus( )
 {
     string rez = TTransportOut::getStatus();
 
-    if(startStat())
-	rez += TSYS::strMess(_("Traffic in %s, out %s."), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
+    if(startStat()) {
+	rez += TSYS::strMess(_("Traffic in %s, out %s. "), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
+	if(mess_lev() == TMess::Debug && respTmMax)
+	    rez += TSYS::strMess(_("Respond time %s[%s]. "), tm2s(1e-6*respTm).c_str(), tm2s(1e-6*respTmMax).c_str());
+    }
 
     return rez;
 }
@@ -1005,7 +1008,7 @@ void TSocketOut::start( int itmCon )
     mLstReqTm = TSYS::curTime();*/
 
     //Status clear
-    trIn = trOut = 0;
+    trIn = trOut = respTm = respTmMax = 0;
     if(!itmCon) itmCon = tmCon();
 
     //Connect to remote host
@@ -1193,6 +1196,8 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
 
 repeate:
 	if(reqTry++ >= 2) { mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(), _("Request error: %s"), err.c_str()); }
+	int64_t stRespTm = 0;
+
 	//Write request
 	writeReq = false;
 	if(oBuf != NULL && oLen > 0) {
@@ -1229,6 +1234,8 @@ repeate:
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
 
 	    writeReq = true;
+
+	    if(mess_lev() == TMess::Debug) stRespTm = SYS->curTime();
 	}
 	else if(!noReq) time = mTmNext;
 	if(!time) time = 5000;
@@ -1280,6 +1287,10 @@ repeate:
 		}
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,iB)).c_str());
 		if(iB > 0 && logLen()) pushLogMess(_("Received from\n") + string(iBuf,iB));
+		if(iB > 0 && mess_lev() == TMess::Debug && stRespTm) {
+		    respTm = SYS->curTime() - stRespTm;
+		    respTmMax = vmax(respTmMax, respTm);
+		}
 		trIn += vmax(0, iB);
 	    }
 	}

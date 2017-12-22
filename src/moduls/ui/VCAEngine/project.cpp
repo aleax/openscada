@@ -1170,10 +1170,6 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
 	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,false,true) && cEl.cfg("PARENT").getS() == "<deleted>") {
 	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true, false, true);
 	    toRestoreInher = parent().at().wdgPresent(wid);
-	    /*if(!parent().at().wdgPresent(wid))
-		SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true, false, true);
-	    else throw TError(nodePath().c_str(),
-		_("You try to create widget with name '%s' of the widget that was early deleted as an inherited from the base container!"), wid.c_str());*/
 	}
     }
 

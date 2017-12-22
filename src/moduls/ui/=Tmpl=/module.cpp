@@ -181,8 +181,8 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/col",_("Collums"),RWRWR_,"root",SUI_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/hsize",_("Horizontal trend size (pixel)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/vsize",_("Vertical trend size (pixel)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_tm",_("Trend start time (sec)"),RWRWR_,"root",SUI_ID,1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_len",_("Trend length (sec)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_tm",_("Trend start time, seconds"),RWRWR_,"root",SUI_ID,1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_len",_("Trend length, seconds"),RWRWR_,"root",SUI_ID,1,"tp","dec");
 	}
 	return;
     }

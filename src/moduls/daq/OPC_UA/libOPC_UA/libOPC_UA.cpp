@@ -2347,7 +2347,7 @@ nextReq:
 			if(rb[3] == 'C') {
 			    // Checking for limits
 			    scHd_.chCnt++;
-			    if((chunkMaxCnt() && scHd_.chCnt > chunkMaxCnt()) || (msgMaxSz() && scHd_.chB.size() > msgMaxSz()))
+			    if((chunkMaxCnt() && scHd_.chCnt > (int)chunkMaxCnt()) || (msgMaxSz() && scHd_.chB.size() > msgMaxSz()))
 				throw OPCError(OpcUa_BadRequestTooLarge, "Request too large");
 			    passMessPrc = true;
 			}
@@ -3394,7 +3394,7 @@ nextReq:
 	    }
 	    chnkBodySz -= 8;	//- {SeqSz}
 	    if((clientMsgMaxSz(inPrtId) && respBody.size() > clientMsgMaxSz(inPrtId)) ||
-		    clientChunkMaxCnt(inPrtId) && (respBody.size()/chnkBodySz + ((respBody.size()%chnkBodySz)?1:0)) > clientChunkMaxCnt(inPrtId))
+		    (clientChunkMaxCnt(inPrtId) && (respBody.size()/chnkBodySz + ((respBody.size()%chnkBodySz)?1:0)) > clientChunkMaxCnt(inPrtId)))
 		throw OPCError(OpcUa_BadResponseTooLarge, "Respond too large");
 	    // Same chunks prepare.
 	    while(respBody.size()) {

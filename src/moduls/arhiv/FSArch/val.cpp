@@ -1196,9 +1196,9 @@ void VFileArch::check( )
 {
     //Check for pack archive file
     ResAlloc res(mRes, false);
-    if(!err() && !isPack() && owner().archivator().packTm() && (time(NULL) > mAcces + owner().archivator().packTm()*60)) {
+    if(!err() && !mPack && owner().archivator().packTm() && (time(NULL) > mAcces + owner().archivator().packTm()*60)) {
 	res.request(true);
-	mName = mod->packArch(name());
+	if(!mPack) mName = mod->packArch(name());
 	mPack = true;
 
 	// Get file size
@@ -1235,7 +1235,7 @@ int64_t VFileArch::endData( )
     if(mErr) throw owner().archivator().err_sys(_("Archive file error!"));
     if(mPack) {
 	res.request(true);
-	try{ mName = mod->unPackArch(mName); } catch(TError&) { mErr = true; throw; }
+	try{ if(mPack) mName = mod->unPackArch(mName); } catch(TError&) { mErr = true; throw; }
 	mPack = false;
 	res.request(false);
     }
@@ -1281,7 +1281,7 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 
     if(mPack) {
 	res.request(true);
-	try{ mName = mod->unPackArch(mName); }
+	try{ if(mPack) mName = mod->unPackArch(mName); }
 	catch(TError&) {
 	    try {
 		owner().archivator().checkArchivator(false, true);	// Try to remove some files by limits
@@ -1416,7 +1416,7 @@ TVariant VFileArch::getVal( int vpos )
 
     if(mPack) {
 	res.request(true);
-	try { mName = mod->unPackArch(mName); }
+	try { if(mPack) mName = mod->unPackArch(mName); }
 	catch(TError&) {
 	    try {
 		owner().archivator().checkArchivator(false, true);	// Try to remove some files by limits
@@ -1492,7 +1492,7 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 
     if(mPack) {
 	res.request(true);
-	try { mName = mod->unPackArch(mName); }
+	try { if(mPack) mName = mod->unPackArch(mName); }
 	catch(TError&) {
 	    try {
 		owner().archivator().checkArchivator(false, true);	// Try to remove some files by limits

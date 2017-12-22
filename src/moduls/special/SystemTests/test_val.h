@@ -36,8 +36,8 @@ class TestVal : public TFunction
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("name",_("Parameter attribute path"),IO::String,IO::Default,"System.AutoDA.CPULoad.load") );
-	    ioAdd( new IO("arch_len",_("Archive value getting depth, s"),IO::Integer,IO::Default,"10") );
-	    ioAdd( new IO("arch_per",_("Archive value getting period, us"),IO::Integer,IO::Default,"1000000") );
+	    ioAdd( new IO("arch_len",_("Archive value getting depth, seconds"),IO::Integer,IO::Default,"10") );
+	    ioAdd( new IO("arch_per",_("Archive value getting period, microseconds"),IO::Integer,IO::Default,"1000000") );
 	}
 
 	string name( )	{ return _("Parameter attribute"); }

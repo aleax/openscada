@@ -863,20 +863,20 @@ void ConfApp::userSel( )
     catch(TError &err) { pageDisplay("/"+SYS->id()); }
 }
 
-void ConfApp::pageRefresh( bool tm )
+void ConfApp::pageRefresh( int tm )
 {
     if(tm) {
 	if(!actStartUpd->isEnabled())	return;
 
 	autoUpdTimer->setSingleShot(true);
-	autoUpdTimer->start(CH_REFR_TM);
+	autoUpdTimer->start(tm);
 
 	return;
     }
 
     try {
 	//Tree part update
-	if(CtrTree->currentItem())
+	if(CtrTree->currentItem() && !pgDisplay)
 	    viewChildRecArea(CtrTree->currentItem()->parent() ? CtrTree->currentItem()->parent() : CtrTree->currentItem(), true);
 
 	//Same page update
@@ -975,7 +975,7 @@ void ConfApp::closeEvent( QCloseEvent* ce )
 
 void ConfApp::resizeEvent( QResizeEvent *rszEv )
 {
-    if((rszEv->size()-rszEv->oldSize()).height() && actStartUpd->isEnabled()) pageRefresh(true);
+    if((rszEv->size()-rszEv->oldSize()).height() && actStartUpd->isEnabled()) pageRefresh(500);
 }
 
 void ConfApp::selectItem( )
@@ -1157,6 +1157,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    ListView *lstbox;
 
 	    if(widget) {
+		lab = new QLabel(widget);
 		lstbox = new ListView(widget);
 		lstbox->setStatusTip((selPath+"/"+br_path).c_str());
 		lstbox->setObjectName(br_path.c_str());
@@ -1171,7 +1172,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 		QVBoxLayout *vbox = new QVBoxLayout;
 		vbox->setAlignment(Qt::AlignLeft);
-		lab = new QLabel(widget);
 		vbox->addWidget(lab);
 		vbox->addWidget(lstbox);
 		widget->layout()->addItem(vbox);
@@ -1187,7 +1187,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		lstbox->clear();
 	    }
 
-	    //lstbox->setMinimumHeight(0);	//Fit reset
+	    lstbox->setMinimumHeight(0);	//Fit reset
 
 	    //  Fill the list
 	    lab->setText((t_s.attr("dscr")+":").c_str());
@@ -1210,6 +1210,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    CfgTable *tbl;
 
 	    if(widget) {
+		widget->layout()->addWidget(new QLabel((t_s.attr("dscr")+":").c_str(),widget));
 		tbl = new CfgTable(widget);
 		tbl->setItemDelegate(new TableDelegate);
 		tbl->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
@@ -1224,10 +1225,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		connect(tbl, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(tablePopup(const QPoint&)));
 		connect(tbl, SIGNAL(cellChanged(int,int)), this, SLOT(tableSet(int,int)));
 		connect(tbl->horizontalHeader(), SIGNAL(sectionClicked(int)/*sectionResized(int,int,int)*/), tbl, SLOT(resizeRowsToContentsLim()));
-
 		tbl->setMinimumHeight(150); //tbl->setMaximumHeight(500);
-
-		widget->layout()->addWidget(new QLabel((t_s.attr("dscr")+":").c_str(),widget));
 		widget->layout()->addWidget(tbl);
 
 		//t_s.attr("addr_lab",TSYS::addr2str(lab));
@@ -1368,7 +1366,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    ImgView *img;
 
 	    if(widget) {
-		img = new ImgView(widget,0,s2i(t_s.attr("h_sz")),s2i(t_s.attr("v_sz")));
+		lab = new QLabel(widget);
+		img = new ImgView(widget, 0, s2i(t_s.attr("h_sz")), s2i(t_s.attr("v_sz")));
 		img->setObjectName(br_path.c_str());
 		img->setStatusTip((selPath+"/"+br_path).c_str());
 		img->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
@@ -1378,7 +1377,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 		int vsz = s2i(t_s.attr("v_sz"));
 		QBoxLayout *box = new QBoxLayout((vsz&&vsz<70)?QBoxLayout::LeftToRight:QBoxLayout::TopToBottom);
-		lab = new QLabel(widget);
 		box->addWidget(lab);
 		box->addWidget(img);
 		if(box->direction() == QBoxLayout::LeftToRight) {
@@ -1672,6 +1670,8 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    connect(edit, SIGNAL(apply()), this, SLOT(applyButton()));
 		    connect(edit, SIGNAL(cancel()), this, SLOT(cancelButton()));
 		}
+
+		edit->setMinimumHeight(0);	//Fit reset
 
 		t_s.setAttr("addr_lab", TSYS::addr2str(lab));
 		t_s.setAttr("addr_edit", TSYS::addr2str(edit));
@@ -2342,7 +2342,7 @@ int ConfApp::cntrIfCmdHosts( XMLNode &node )
 	return s2i(node.attr("rez"));
     }
 
-    //???? Main-first request
+    //Main-first request
     inHostReq++;
     while(iHost->reqBusy()) {
 	reqPrgrsSet(0, QString(_("Wait for reply from host '%1'")).arg(hostId.c_str()), iHost->reqTmMax);
@@ -2494,7 +2494,7 @@ void ConfApp::checkBoxStChange( int stat )
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //Redraw
-    pageRefresh(true);
+    pageRefresh(CH_REFR_TM);
 }
 
 void ConfApp::buttonClicked( )
@@ -2526,7 +2526,7 @@ void ConfApp::buttonClicked( )
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //Redraw
-    pageRefresh(true);
+    pageRefresh(CH_REFR_TM);
 }
 
 void ConfApp::combBoxActivate( const QString& ival )
@@ -2584,7 +2584,7 @@ void ConfApp::combBoxActivate( const QString& ival )
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //Redraw
-    pageRefresh(true);
+    pageRefresh(CH_REFR_TM);
 }
 
 void ConfApp::listBoxPopup( )
@@ -2719,7 +2719,7 @@ void ConfApp::listBoxPopup( )
 		return;
 	    }
 
-	    pageRefresh(true);	//Redraw
+	    pageRefresh(CH_REFR_TM);	//Redraw
 
 	    if(n_el->attr("tp") == "br" && (rez == actAdd || rez == actIns || rez == actEd || rez == actDel))
 		treeUpdate();
@@ -2728,7 +2728,7 @@ void ConfApp::listBoxPopup( )
 	}
     } catch(TError &err) {
 	mod->postMess(err.cat,err.mess,TUIMod::Error,this);
-	pageRefresh(true);	//Redraw
+	pageRefresh(CH_REFR_TM);	//Redraw
     }
 }
 
@@ -2846,7 +2846,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 	}
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-    pageRefresh(true);	//Redraw
+    pageRefresh(CH_REFR_TM);	//Redraw
 }
 
 void ConfApp::imgPopup( const QPoint &pos )
@@ -2905,7 +2905,7 @@ void ConfApp::imgPopup( const QPoint &pos )
 	}
     } catch(TError &err) {
 	mod->postMess(err.cat,err.mess,TUIMod::Error,this);
-	pageRefresh(true);	//Redraw
+	pageRefresh(CH_REFR_TM);	//Redraw
     }
 }
 
@@ -2984,7 +2984,7 @@ void ConfApp::tableSet( int row, int col )
 	if(noReload) n_el->childGet(col)->childGet(row)->setText(value);
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-    if(!noReload) pageRefresh(true);
+    if(!noReload) pageRefresh(CH_REFR_TM);
 }
 
 void ConfApp::listBoxGo( QListWidgetItem* item )
@@ -3013,7 +3013,7 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
 	if(!sel_ok) throw TError(mod->nodePath().c_str(), _("Selective element '%s' is not present!"), item->text().toStdString().c_str());
 
 	selPath = path;
-	pageRefresh(true);
+	pageRefresh(CH_REFR_TM);
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
@@ -3047,7 +3047,7 @@ void ConfApp::applyButton( QWidget *src )
 		el->setAttr("tpCh", "oct");
 	    else el->setAttr("tpCh", "dec");
 
-	    long long vl = strtoll(sval.c_str(), NULL, 0), vlBrd;
+	    long long vl = strtoll(sval.c_str(), NULL, 0);
 	    if(el->attr("min").size()) vl = vmax(s2ll(el->attr("min")), vl);
 	    if(el->attr("max").size()) vl = vmin(s2ll(el->attr("max")), vl);
 	    sval = ll2s(vl);
@@ -3062,7 +3062,7 @@ void ConfApp::applyButton( QWidget *src )
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //Redraw only for changing into same this widget
-    if(!src) pageRefresh(true);
+    if(!src) pageRefresh(CH_REFR_TM);
 }
 
 void ConfApp::cancelButton( )
@@ -3072,7 +3072,7 @@ void ConfApp::cancelButton( )
     string path = bwidg->objectName().toStdString();
 
     //Redraw
-    pageRefresh(true);
+    pageRefresh(CH_REFR_TM);
 }
 
 //***********************************************

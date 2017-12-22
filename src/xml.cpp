@@ -92,9 +92,13 @@ void XMLNode::childDel( XMLNode *nd )
 
 void XMLNode::childClear( const string &name )
 {
-    for(unsigned iCh = 0; iCh < mChildren.size(); )
+    //From the end it will be faster here
+    for(int iCh = (int)mChildren.size()-1; iCh >= 0; iCh--)
 	if(name.empty() || mChildren[iCh]->name() == name) childDel(iCh);
-	else iCh++;
+
+    //for(unsigned iCh = 0; iCh < mChildren.size(); )
+	//if(name.empty() || mChildren[iCh]->name() == name) childDel(iCh);
+	//else iCh++;
 }
 
 int XMLNode::childIns( int id, XMLNode * n )

@@ -136,7 +136,7 @@ private slots:
     void itCut( );
     void itCopy( );
     void itPaste( );
-    void pageRefresh( bool tm = false );
+    void pageRefresh( int tm = 0 );
     void pageCyclRefrStart( );
     void pageCyclRefrStop( );
 

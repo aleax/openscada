@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:25+0200\n"
+"POT-Creation-Date: 2017-12-21 12:35+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -32,6 +32,7 @@ msgstr ""
 msgid "Addition parameters"
 msgstr "Weitere Optionen"
 
+#, c-format
 msgid ""
 "Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed "
 "connections by limit %d. "
@@ -293,16 +294,21 @@ msgstr ""
 "Schließen Sie die Verbindung nach keine Anfragen zu bestimmten Timeout.\n"
 "Null-Wert für disable (nicht immer schließen)."
 
+#, c-format
 msgid "%s %d(%s): last %s; traffic in %s, out %s; client detachings %g; "
-msgstr "%s %d(%s): letzte %s; eingangstraffik %s, Ausgangs- %s; Client-Ablösungen %g; "
+msgstr ""
+"%s %d(%s): letzte %s; eingangstraffik %s, Ausgangs- %s; Client-Ablösungen "
+"%g; "
 
 #, c-format
 msgid "processing time %s[%s]; "
 msgstr "Bearbeitungszeit %s[%s]; "
 
-#, c-format
-msgid "Traffic in %s, out %s."
-msgstr "Eingangstraffik %s, Ausgangs- %s."
+msgid "Traffic in %s, out %s. "
+msgstr "Eingangstraffik %s, Ausgangs- %s. "
+
+msgid "Respond time %s[%s]. "
+msgstr "Reaktionszeit %s[%s]. "
 
 #, c-format
 msgid "Type socket '%s' error!"

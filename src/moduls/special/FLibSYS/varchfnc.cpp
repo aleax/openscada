@@ -163,16 +163,6 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    }
 	    TValBuf buf(tp, 10, arch().at().period(), true, true); buf.set(prms[0], (int64_t)prms[1].getI()*1000000+prms[2].getI());
 	    arch().at().setVals(buf, buf.begin(), buf.end(), (prms.size()>=4)?prms[3].getS():"");
-	    /*switch(arch().at().valType()) {
-		case TFld::Boolean:	arch().at().setB(prms[0].getB(), (int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::Integer:	arch().at().setI(prms[0].getI(), (int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
-		case TFld::Real:
-		    printf("TEST 00: %g\n", prms[0].getR());
-		    arch().at().setR(prms[0].getR(), (int64_t)prms[1].getI()*1000000+prms[2].getI());
-		    break;
-		case TFld::String:	arch().at().setS(prms[0].getS(), (int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
-		default: break;
-	    }*/
 	}
 	else {
 	    if(!buf()) return false;

@@ -73,7 +73,7 @@ using namespace QTCFG;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), mTmConChk(dataRes()), mStartPath(dataRes()), mStartUser(dataRes()), mEndRun(false)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID), mTmConChk(dataRes()), mStartUser(dataRes()), mStartPath(dataRes()), mEndRun(false)
 {
     mod = this;
 

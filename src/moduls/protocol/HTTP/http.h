@@ -64,7 +64,7 @@ class TProtIn: public TProtocolIn
 	bool pgAccess( const string &URL );
 
 	//Attributes
-	bool	mNoFull;
+	bool	mNotFull;
 	string	mBuf,
 		prms, user, prmLang, brLang;
 };

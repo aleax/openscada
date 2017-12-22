@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.4.1"
+#define MOD_VER		"2.4.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -189,8 +189,8 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     if(rc != SQLITE_OK) {
 	string err = _("Unknown error");
 	if(zErrMsg) { err = zErrMsg; sqlite3_free(zErrMsg); }
-	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Request \"%s\" error: %s"), req.c_str(), err.c_str());
-	throw err_sys(100+rc, _("Request \"%s\" error: %s"), TSYS::strMess(50,"%s",req.c_str()).c_str(), err.c_str());
+	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Request \"%s\" error: %s(%d)"), req.c_str(), err.c_str(), rc);
+	throw err_sys(100+rc, _("Request \"%s\" error: %s(%d)"), TSYS::strMess(50,"%s",req.c_str()).c_str(), err.c_str(), rc);
     }
     if(tbl && ncol > 0) {
 	vector<string> row;
@@ -213,22 +213,20 @@ void MBD::transOpen( )
     //Check for limit into one trinsaction
     if(reqCnt > 1000) transCommit();
 
-    connRes.lock();
+    MtxAlloc res(connRes, true);
     bool begin = !reqCnt;
     if(begin) trOpenTm = SYS->sysTm();
     reqCnt++;
     reqCntTm = SYS->sysTm();
-    connRes.unlock();
 
     if(begin) sqlReq("BEGIN;");
 }
 
 void MBD::transCommit( )
 {
-    connRes.lock();
+    MtxAlloc res(connRes, true);
     bool commit = reqCnt;
     reqCnt = reqCntTm = 0;
-    connRes.unlock();
 
     if(commit) sqlReq("COMMIT;");
 }
@@ -370,7 +368,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     }
 
     row = full ? (row%SEEK_PRELOAD_LIM)+1 : 1;
-    if(tbl.size() < 2 || (full && row >= tbl.size())) return false;
+    if(tbl.size() < 2 || (full && row >= (int)tbl.size())) return false;
 
     //Processing of the query
     for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {

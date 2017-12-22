@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:25+0200\n"
+"POT-Creation-Date: 2017-12-21 12:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -261,7 +261,11 @@ msgid "processing time %s[%s]; "
 msgstr ""
 
 #, c-format
-msgid "Traffic in %s, out %s."
+msgid "Traffic in %s, out %s. "
+msgstr ""
+
+#, c-format
+msgid "Respond time %s[%s]. "
 msgstr ""
 
 #, c-format

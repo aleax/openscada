@@ -66,8 +66,8 @@ TArchiveS::TArchiveS( ) :
     elVal.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
     elVal.fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1","0"));
     elVal.fldAdd(new TFld("ADDR",_("Address"),TFld::String,0,"100"));
-    elVal.fldAdd(new TFld("V_PER",_("Value period (sec)"),TFld::Real,0,"12.6","1","0;100000"));
-    elVal.fldAdd(new TFld("A_PER",_("Period archiving (sec)"),TFld::Integer,0,"4","60","0;1000"));
+    elVal.fldAdd(new TFld("V_PER",_("Value period, seconds"),TFld::Real,0,"12.6","1","0;100000"));
+    elVal.fldAdd(new TFld("A_PER",_("Period archiving, seconds"),TFld::Integer,0,"4","60","0;1000"));
     elVal.fldAdd(new TFld("SEL_PR",_("Selection priority"),TFld::Integer,0,"4","10","0;1000"));
 
     //Value archive DB structure
@@ -85,7 +85,7 @@ TArchiveS::TArchiveS( ) :
     elAval.fldAdd(new TFld("VTYPE",_("Value type"),TFld::Integer,TFld::Selected,"1","0",
 	TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",TFld::Boolean,TFld::Integer,TFld::Real,TFld::String,TFld::Int16,TFld::Int32,TFld::Int64,TFld::Float,TFld::Double).c_str(),
 	_("Boolean;Integer;Real;String;Int16;Int32;Int64;Real(Float);Real(Double)")));
-    elAval.fldAdd(new TFld("BPER",_("Buffer period (sec)"),TFld::Real,0,"9.6","1","0;10000"));
+    elAval.fldAdd(new TFld("BPER",_("Buffer period, seconds"),TFld::Real,0,"9.6","1","0;10000"));
     elAval.fldAdd(new TFld("BSIZE",_("Buffer size (items)"),TFld::Integer,0,"8","100","10;10000000"));
     elAval.fldAdd(new TFld("BHGRD",_("Buffer in hard time grid"),TFld::Boolean,0,"1","1"));
     elAval.fldAdd(new TFld("BHRES",_("Buffer in high time resolution"),TFld::Boolean,0,"1","0"));
@@ -1511,7 +1511,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	string cat = TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user"));
 	char   lev = s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")));
 
-	int64_t stTm;
+	int64_t stTm = 0;
 	if(mess_lev() == TMess::Debug) stTm = TSYS::curTime();
 
 	get(beg, end, rec, cat, lev);

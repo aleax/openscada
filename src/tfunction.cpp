@@ -384,7 +384,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 //* IO                                            *
 //*************************************************
 IO::IO( const char *iid, const char *iname, IO::Type itype,  unsigned iflgs, const char *idef, bool ihide, const char *irez ) :
-    mId(iid), mName(iname), mType(itype), mFlg(iflgs), mHide(ihide), mDef(idef), mRez(irez), owner(NULL)
+    mId(iid), mName(iname), mType(itype), mFlg(iflgs), mDef(idef), mHide(ihide), mRez(irez), owner(NULL)
 {
 
 }

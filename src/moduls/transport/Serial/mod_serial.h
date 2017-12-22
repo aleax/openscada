@@ -185,6 +185,7 @@ class TTrOut: public TTransportOut
 	int64_t	mLstReqTm, mKeepAliveLstTm;
 
 	uint64_t trIn, trOut;			//Traffic in and out counter and maximum respond timeout
+	float	respTm, respTmMax;
 
 	// Modem properties
 	int	mMdmTm, mMdmLifeTime;

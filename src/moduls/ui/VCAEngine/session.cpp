@@ -1857,7 +1857,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 
     try {
 	int pgOpenPrc = -1;
-	int64_t tCnt;
+	int64_t tCnt = 0;
 
 	if(mess_lev() == TMess::Debug) tCnt = TSYS::curTime();
 

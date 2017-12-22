@@ -603,15 +603,15 @@ void TMess::save( )
 
 const char *TMess::labDB( )
 {
-    return _("DB address in format [<DB module>.<DB name>].\n"
-	     "For use main work DB set '*.*'.");
+    return _("DB address in format \"{DB module}.{DB name}\".\n"
+	     "For use the main work DB set '*.*'.");
 }
 
 const char *TMess::labSecCRON( )
 {
-    return _("Schedule is wrote in seconds periodic form or in standard CRON form.\n"
-	     "Seconds form is one real number (1.5, 1e-3).\n"
-	     "Cron it is standard form \"* * * * *\".\n"
+    return _("Schedule wrotes in seconds periodic form or in the standard CRON form.\n"
+	     "The seconds periodic form is one real number (1.5, 1e-3).\n"
+	     "Cron is the standard form \"* * * * *\".\n"
 	     "  Where items by order:\n"
 	     "    - minutes (0-59);\n"
 	     "    - hours (0-23);\n"
@@ -620,13 +620,13 @@ const char *TMess::labSecCRON( )
 	     "    - week day (0[Sunday]-6).\n"
 	     "  Where an item variants:\n"
 	     "    - \"*\" - any value;\n"
-	     "    - \"1,2,3\" - allowed values;\n"
+	     "    - \"1,2,3\" - allowed values list;\n"
 	     "    - \"1-5\" - raw range of allowed values;\n"
 	     "    - \"*/2\" - range divider for allowed values.\n"
 	     "Examples:\n"
-	     "  \"1e-3\" - periodic call by one millisecond;\n"
+	     "  \"1e-3\" - call with a period of one millisecond;\n"
 	     "  \"* * * * *\" - each minute;\n"
-	     "  \"10 23 * * *\" - only 23 hour and 10 minute for any day and month;\n"
+	     "  \"10 23 * * *\" - only at 23 hour and 10 minute for any day and month;\n"
 	     "  \"*/2 * * * *\" - for minutes: 0,2,4,...,56,58;\n"
 	     "  \"* 2-4 * * *\" - for any minutes in hours from 2 to 4(include).");
 }
@@ -644,7 +644,7 @@ const char *TMess::labTaskPrior( )
 
 int TMess::getUTF8( const string &str, int off, int32_t *symb )
 {
-    if(off < 0 || off >= str.size())	return 0;
+    if(off < 0 || off >= (int)str.size())	return 0;
     if(!isUTF8() || !(str[off]&0x80)) {
 	if(symb) *symb = (uint8_t)str[off];
 	return 1;
@@ -654,7 +654,7 @@ int TMess::getUTF8( const string &str, int off, int32_t *symb )
     if((str[off]&0xE0) == 0xC0)		{ len = 2; rez = str[off]&0x1F; }
     else if((str[off]&0xF0) == 0xE0)	{ len = 3; rez = str[off]&0x0F; }
     else if((str[off]&0xF8) == 0xF0)	{ len = 4; rez = str[off]&0x07; }
-    if((off+len) > str.size())	return 0;
+    if((off+len) > (int)str.size())	return 0;
     for(int iSmb = 1; iSmb < len; iSmb++)
 	if((str[off+iSmb]&0xC0) != 0x80) return 0;
 	else rez = (rez<<6) | (str[off+iSmb]&0x3F);
