@@ -382,7 +382,7 @@ void VisRun::closeEvent( QCloseEvent* ce )
 	    if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[i_w]) && QApplication::topLevelWidgets()[i_w]->isVisible())
 		winCnt++;
 
-	if(winCnt <= 1) SYS->stop();
+	if(winCnt <= 1 && !qApp->property("closeToTray").toBool()) SYS->stop();
     }
 
     endRunTimer->stop();
@@ -394,10 +394,10 @@ void VisRun::closeEvent( QCloseEvent* ce )
 
 void VisRun::resizeEvent( QResizeEvent *ev )
 {
-    if(ev && ev->oldSize().isValid() && masterPg()) {
+    if(ev && masterPg()) {
 	float x_scale_old = x_scale;
 	float y_scale_old = y_scale;
-	if(windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen) {
+	if(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen)) {
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)masterPg()->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)masterPg()->size().height();
 	    if(x_scale > 1 && x_scale < 1.02) x_scale = 1;
@@ -407,15 +407,14 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	if(x_scale_old != x_scale || y_scale_old != y_scale) {
 	    isResizeManual = true;
 	    fullUpdatePgs();
-
-	    // Fit to the master page size
-	    if(!(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen))) {
-		QRect ws = QApplication::desktop()->availableGeometry(this);
-		resize(fmin(ws.width()-10,masterPg()->size().width()+(centralWidget()->parentWidget()->width()-centralWidget()->width())+5),
-		       fmin(ws.height()-10,masterPg()->size().height()+(centralWidget()->parentWidget()->height()-centralWidget()->height())+5));
-	    }
-
 	    isResizeManual = false;
+	}
+
+	// Fit to the master page size
+	if((x_scale_old != x_scale || y_scale_old != y_scale || !ev->oldSize().isValid()) && !(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen))) {
+	    QRect ws = QApplication::desktop()->availableGeometry(this);
+	    resize(fmin(ws.width()-10,masterPg()->size().width()+(centralWidget()->parentWidget()->width()-centralWidget()->width())+5),
+		fmin(ws.height()-10,masterPg()->size().height()+(centralWidget()->parentWidget()->height()-centralWidget()->height())+5));
 	}
 
 	mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
@@ -1439,8 +1438,6 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	((QScrollArea *)centralWidget())->setWidget(master_pg);
 	if(!(windowState()&(Qt::WindowFullScreen|Qt::WindowMaximized))) {
 	    QRect ws = QApplication::desktop()->availableGeometry(this);
-	    //resize(fmin(ws.width()-10,masterPg()->size().width()+(centralWidget()->parentWidget()->width()-centralWidget()->width())+5),
-	    //	   fmin(ws.height()-10,masterPg()->size().height()+(centralWidget()->parentWidget()->height()-centralWidget()->height())+5));
 	    resize(vmin(master_pg->size().width()+10,ws.width()-10), vmin(master_pg->size().height()+55,ws.height()-10));
 	}
 	else x_scale = y_scale = 1.0;

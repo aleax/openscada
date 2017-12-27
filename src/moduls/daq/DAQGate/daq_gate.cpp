@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.9.2"
+#define MOD_VER		"1.9.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -756,10 +756,10 @@ void TMdPrm::disable( )
     TParamContr::disable();
 
     //Set EVAL to the parameter attributes
-    vector<string> ls;
+    /*vector<string> ls;
     elem().fldList(ls);
     for(unsigned i_el = 0; i_el < ls.size(); i_el++)
-	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
+	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);*/
 }
 
 void TMdPrm::setStats( const string &vl )
@@ -861,9 +861,12 @@ void TMdPrm::sync( )
 	} catch(TError &err) { continue; }
 }
 
-void TMdPrm::vlGet( TVal &val )
+void TMdPrm::vlGet( TVal &vl )
 {
-    if(val.name() == "err" && (!enableStat() || !owner().startStat())) TParamContr::vlGet(val);
+    if(!enableStat() || !owner().startStat()) {
+	if(vl.name() == "err") TParamContr::vlGet(vl);
+	else vl.setI(EVAL_INT, 0, true);
+    }
 }
 
 void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
@@ -992,8 +995,6 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else TParamContr::cntrCmdProc(opt);
 }
-
-
 
 //******************************************************
 //* TMdVl                                              *

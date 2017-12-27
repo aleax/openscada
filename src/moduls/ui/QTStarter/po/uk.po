@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:41+0200\n"
+"POT-Creation-Date: 2017-12-27 17:26+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -480,7 +480,7 @@ msgid "Mon"
 msgstr "Пон"
 
 msgid "Hold at reloading in different project."
-msgstr ""
+msgstr "Утримувати при перевантажені до іншого проекту."
 
 msgid "Load module."
 msgstr "Завантаження модуля."
@@ -557,6 +557,15 @@ msgstr "Опції модуля"
 
 msgid "Start Qt modules (sep - ';')"
 msgstr "Запускаємі Qt модулі (розд. - ';')"
+
+msgid "Close (all windows) or start to tray"
+msgstr "Закривати (всі вікна) або запускати у трей"
+
+msgid "OpenSCADA Project: %1"
+msgstr "OpenSCADA Проект: %1"
+
+msgid "Exit from the program"
+msgstr "Вихід з програми"
 
 msgid "Qt-starter of OpenSCADA"
 msgstr "Qt-пускач OpenSCADA"
@@ -668,9 +677,6 @@ msgstr "Кнопка для переключення на обраний про�
 
 msgid "The button for call the selected project."
 msgstr "Кнопка для виклику обраного проекту."
-
-msgid "Exit from the program"
-msgstr "Вихід з програми"
 
 msgid "The button for exit from the program."
 msgstr "Кнопка для виходу з програми."

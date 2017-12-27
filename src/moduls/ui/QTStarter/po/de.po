@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:41+0200\n"
+"POT-Creation-Date: 2017-12-27 17:26+0200\n"
 "PO-Revision-Date: 2011-07-19 20:56+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -484,7 +484,7 @@ msgid "Mon"
 msgstr "Mon"
 
 msgid "Hold at reloading in different project."
-msgstr ""
+msgstr "Beim Neuladen in verschiedenen Projekten halten."
 
 msgid "Load module."
 msgstr "Modul laden."
@@ -562,6 +562,15 @@ msgstr "Optionen des Moduls"
 
 msgid "Start Qt modules (sep - ';')"
 msgstr "Qt-Startmodule (trenn. - ';')"
+
+msgid "Close (all windows) or start to tray"
+msgstr "Schließe (alle Fenster) oder beginne mit dem Tray"
+
+msgid "OpenSCADA Project: %1"
+msgstr "OpenSCADA Projekt: %1"
+
+msgid "Exit from the program"
+msgstr "Ausfahrt aus dem Programm"
 
 msgid "Qt-starter of OpenSCADA"
 msgstr "Qt-Starter von OpenSCADA"
@@ -675,9 +684,6 @@ msgstr "Die Schaltfläche zum Wechseln zum ausgewählten Projekt."
 
 msgid "The button for call the selected project."
 msgstr "Die Schaltfläche zum Aufrufen des ausgewählten Projekts."
-
-msgid "Exit from the program"
-msgstr "Ausfahrt aus dem Programm"
 
 msgid "The button for exit from the program."
 msgstr "Die Taste zum Verlassen des Programms."

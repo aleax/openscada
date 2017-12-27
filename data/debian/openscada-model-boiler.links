@@ -1,2 +1,2 @@
-/usr/bin/openscada_start /usr/bin/openscada_Boiler
+/usr/bin/openscada /usr/bin/openscada_Boiler
 /usr/share/openscada/LibsDB /usr/share/openscada/Boiler/LibsDB

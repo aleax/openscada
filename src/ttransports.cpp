@@ -222,6 +222,15 @@ void TTransportS::save_( )
 	}
 }
 
+void TTransportS::unload( )
+{
+    TSubSYS::unload();
+
+    extHostRes.lock(true);
+    extHostLs.clear();
+    extHostRes.unlock();
+}
+
 void TTransportS::subStart( )
 {
     vector<string> t_lst, o_lst;

@@ -9713,7 +9713,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','tmpl','<body docProcLang="Java
 <h1>Table of average over hour values of "<b><?dp return pTitle;?></b>"</h1>
 
 <TABLE class="data" width="100%" export="1">
-	<TR align="left" valign="center"><TH colspan="7">The operation date over XXX Calculator # Pipeline #.<?dp return "The operation date over "+SYS.strftime(time,"%d %m %Y")+" Calculator # Pipeline #.";?>
+	<TR align="left" valign="center"><TH colspan="7">The operation date over XXX Calculator # Pipeline #.<?dp return "The operation date over "+SYS.strftime(time-1,"%d %m %Y")+" Calculator # Pipeline #.";?>
 	</TH></TR>
 	<TR><TH>Date</TH><TH>Time</TH><TH>Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH></TR>
 	<TR><TH>&nbsp;</TH><TH>begin&nbsp;&nbsp;end</TH><TH>m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH></TR>
@@ -9743,7 +9743,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','tmpl','<body docProcLang="Java
 
 <TABLE class="data" width="100%" export="1">
 	<TR align="left" valign="center"><TH colspan="7">Оперативні дані за XXX Обчислювач # Трубопровід #.
-<?dp return "Оперативні дані за "+SYS.strftime(time,"%d %m %Y")+" Обчислювач # Трубопровід #.";?>
+<?dp return "Оперативні дані за "+SYS.strftime(time-1,"%d %m %Y")+" Обчислювач # Трубопровід #.";?>
 	</TH></TR>
 	<TR><TH>Дата</TH><TH>Час</TH><TH>Об''єм</TH><TH>Сер. переп.</TH><TH>Ст. тиск</TH><TH>Сер. темп.</TH><TH>Щільність</TH></TR>
 	<TR><TH>&nbsp;</TH><TH>поч.&nbsp;&nbsp;кін.</TH><TH>м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
@@ -9773,7 +9773,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','tmpl','<body docProcLang="Java
 
 <TABLE class="data" width="100%" export="1">
 	<TR align="left" valign="center"><TH colspan="7">Оперативные данные за XXX Вычислитель # Трубопровод #.
-<?dp return "Оперативные данные за "+SYS.strftime(time,"%d %m %Y")+" Вычислитель # Трубопровод #.";?>
+<?dp return "Оперативные данные за "+SYS.strftime(time-1,"%d %m %Y")+" Вычислитель # Трубопровод #.";?>
 	</TH></TR>
 	<TR><TH>Дата</TH><TH>Время</TH><TH>Объём</TH><TH>Ср. переп.</TH><TH>Ст. давл.</TH><TH>Ср. темп.</TH><TH>Плотность</TH></TR>
 	<TR><TH>&nbsp;</TH><TH>нач.&nbsp;&nbsp;кон.</TH><TH>м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
@@ -9809,7 +9809,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','tmpl','<body docProcLang="Ja
 <h1>Table of average over day values of "<b><?dp return pTitle;?></b>"</h1>
 
 <TABLE class="data" width="100%" export="1">
-	<TR align="left" valign="center"><TH colspan="7">Days data over XXXXX Calculator # Pipeline #.<?dp return "Day data over "+SYS.strftime(time,"%m %Y")+" Calculator # Pipeline #.";?>
+	<TR align="left" valign="center"><TH colspan="7">Days data over XXXXX Calculator # Pipeline #.<?dp return "Day data over "+SYS.strftime(time-1,"%m %Y")+" Calculator # Pipeline #.";?>
   </TH></TR>
 	<TR><TH>Date</TH><TH colspan="2">Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH></TR>
   	<TR><TH>&nbsp;</TH><TH colspan="2">m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH></TR>
@@ -9838,7 +9838,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','tmpl','<body docProcLang="Ja
 
 <TABLE class="data" width="100%" export="1">
 	<TR align="left" valign="center"><TH colspan="7">Добові дані за XXXXX Обчислювач # Трубопровід #.
-<?dp return "Добові дані за "+SYS.strftime(time,"%m %Y")+" Обчислювач # Трубопровід #.";?>
+<?dp return "Добові дані за "+SYS.strftime(time-1,"%m %Y")+" Обчислювач # Трубопровід #.";?>
   </TH></TR>
 	<TR><TH>Дата</TH><TH colspan="2">Об''єм</TH><TH>Сер. переп.</TH><TH>Ст. тиск</TH><TH>Сер. темп.</TH><TH>Щільність</TH></TR>
 	<TR><TH>&nbsp;</TH><TH colspan="2">м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
@@ -9867,7 +9867,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','tmpl','<body docProcLang="Ja
 
 <TABLE class="data" width="100%" export="1">
 	<TR align="left" valign="center"><TH colspan="7">Суточные данные за XXXXX Вычислитель # Трубопровод #.
-<?dp return "Суточные данные за "+SYS.strftime(time,"%m %Y")+" Вычислитель # Трубопровод #.";?>
+<?dp return "Суточные данные за "+SYS.strftime(time-1,"%m %Y")+" Вычислитель # Трубопровод #.";?>
   </TH></TR>
 	<TR><TH>Дата</TH><TH colspan="2">Объём</TH><TH>Ср. переп.</TH><TH>Ст. давл.</TH><TH>Ср. темп.</TH><TH>Плотность</TH></TR>
 	<TR><TH>&nbsp;</TH><TH colspan="2">м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>

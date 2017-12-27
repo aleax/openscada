@@ -305,6 +305,16 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
     return TCntrNode::objFuncCall(iid, prms, user);
 }
 
+void TDAQS::unload( )
+{
+    TSubSYS::unload();
+
+    mRdRes.lock(true);
+    mRdRestDtTm = 1;
+    mRdCntr.clear();
+    mRdRes.unlock();
+}
+
 void TDAQS::subStart( )
 {
     vector<string> m_l, tmpl_lst;

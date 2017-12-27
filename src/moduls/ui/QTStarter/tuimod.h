@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QCloseEvent>
 #include <QSessionManager>
+#include <QSystemTrayIcon>
 
 #include <tuis.h>
 
@@ -62,32 +63,6 @@ public:
 };
 
 //*************************************************
-//* WinControl                                    *
-//*************************************************
-class WinControl: public QObject
-{
-    Q_OBJECT
-public:
-    //Methods
-    WinControl( );
-    ~WinControl( );
-
-    bool callQtModule( const string &nm );
-    void startDialog( );
-
-private slots:
-    //Methods
-    void checkForEnd( );
-    void callQtModule( );
-    void lastWinClose( );
-
-private:
-    //Attributes
-    QTimer	*tm;
-    QMenu	*menuStarter;
-};
-
-//*************************************************
 //* StartDialog                                   *
 //*************************************************
 class StartDialog: public QMainWindow
@@ -95,7 +70,7 @@ class StartDialog: public QMainWindow
     Q_OBJECT
 public:
     //Methods
-    StartDialog( WinControl *wcntr );
+    StartDialog( );
 
 protected:
     //Methods
@@ -125,10 +100,39 @@ class StApp : public QApplication
 {
     Q_OBJECT
 
-    public:
-	StApp( int &argv, char **args ) : QApplication(argv, args) { }
+public:
+    //Methods
+    StApp( int &argv, char **args );
+    ~StApp( );
 
-	void saveState( QSessionManager &manager )	{ manager.setRestartHint(QSessionManager::RestartNever); }
+    bool trayPresent( )	{ return tray; }
+
+    void createTray( );
+    bool callQtModule( const string &nm );
+
+    void saveState( QSessionManager &manager );
+
+    int stExec( );
+    void stClear( );
+
+protected:
+    //Methods
+    void timerEvent( QTimerEvent *event );
+
+private slots:
+    void check( );
+    void startDialog( );
+    void callQtModule( );
+    void lastWinClose( );
+    void trayAct( QSystemTrayIcon::ActivationReason reason );
+
+private:
+    //Attributes
+    bool inExec;
+    QMenu	*menuStarter, *trayMenu;
+    QSystemTrayIcon *tray;
+    StartDialog	*stDlg;
+    bool	initExec;
 };
 
 //*************************************************
@@ -150,12 +154,19 @@ public:
 
     bool endRun( )	{ return mEndRun; }
     bool startCom( )	{ return mStartCom; }
+    bool closeToTray( )	{ return mCloseToTray; }
     string startMod( )	{ return mStartMod; }
 
     void setStartMod( const string &vl )	{ mStartMod = vl; modif(); }
-
+    void setCloseToTray( bool vl )		{ mCloseToTray = vl; modif(); }
     void modStart( );
     void modStop( );
+
+    void	splashSet( SplashFlag flg = SPLSH_NULL );
+
+public:
+    //Attributes
+    StApp	*QtApp;
 
 protected:
     //Methods
@@ -175,10 +186,9 @@ private:
     //Methods
     string	optDescr( );
     void	toQtArg( const char *nm, const char *arg = NULL );
-    void	splashSet( SplashFlag flg = SPLSH_NULL );
 
     //Attributes
-    bool	hideMode, mEndRun, mStartCom;
+    bool	hideMode, mEndRun, mStartCom, mCloseToTray;
     MtxString	mStartMod;
 
     // Command line options binding to Qt
@@ -186,7 +196,6 @@ private:
     char	*qtArgV[10];			//Argument's values
     char	qtArgBuf[1000];			//Arguments' strings buffer
 
-    StApp	*QtApp;
     QSplashScreen *splash;
 };
 

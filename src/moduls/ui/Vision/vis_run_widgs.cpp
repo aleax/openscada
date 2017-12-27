@@ -213,14 +213,7 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 	    if(attr == "statLine")		mainWin()->usrStatus(val, dynamic_cast<RunPageView*>(this));
 	    else if(attr == "runWin" && !mainWin()->isResizeManual && (!mainWin()->masterPg() || this == mainWin()->masterPg())) {
 		switch(s2i(val)) {
-		    case 0: {
-			mainWin()->aFullScr()->setChecked(false); mainWin()->setWindowState(Qt::WindowNoState);
-			// Fit to the master page size
-			QRect ws = QApplication::desktop()->availableGeometry(mainWin());
-			mainWin()->resize(fmin(ws.width()-10,size().width()+(mainWin()->centralWidget()->parentWidget()->width()-mainWin()->centralWidget()->width())+5),
-				fmin(ws.height()-10,size().height()+(mainWin()->centralWidget()->parentWidget()->height()-mainWin()->centralWidget()->height())+5));
-			break;
-		    }
+		    case 0: mainWin()->aFullScr()->setChecked(false); mainWin()->setWindowState(Qt::WindowNoState);	break;
 		    case 1: mainWin()->aFullScr()->setChecked(false); mainWin()->setWindowState(Qt::WindowMaximized);	break;
 		    case 2: mainWin()->aFullScr()->setChecked(true);							break;
 		}

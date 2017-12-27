@@ -57,7 +57,7 @@ bool TSYS::finalKill = false;
 pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
-    mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"),
+    mUser("root"), mConfFile(sysconfdir_full "/oscada.xml"), mId("InitSt"),
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
     mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), isLoaded(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
     mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()),
@@ -590,7 +590,7 @@ bool TSYS::cfgFileLoad( )
 			if(stat_n->attr("id") == mId) break;
 		    }
 		if(stat_n && stat_n->attr("id") != mId) {
-		    if(mId != "EmptySt")
+		    if(mId != "InitSt")
 			mess_sys(TMess::Warning, _("Station '%s' is not present in the config-file. Using configuration for station '%s'!"),
 			    mId.c_str(), stat_n->attr("id").c_str());
 		    mId	= stat_n->attr("id");
@@ -845,7 +845,21 @@ void TSYS::unload( )
 
     if(prjNm().size() && prjLockUpdPer()) prjLock("free");
 
-    isLoaded = false;
+    Mess->unload();
+
+    mRdRes.lock(true);
+    mSt.clear();
+    mRdStLevel = 0, mRdRestConnTm = 10, mRdTaskPer = 1, mRdPrimCmdTr = false;
+    mRdRes.unlock();
+
+    mId = "InitSt", mName = _("Empty Station"), mUser = "root", mMainCPUs = "";
+    mConfFile = sysconfdir_full "/oscada.xml";
+    mModDir = oscd_moddir_full;
+    mIcoDir = "icons;" oscd_datadir_full "/icons";
+    mDocDir = "docs;" oscd_datadir_full "/docs";
+    mWorkDB = DB_CFG;
+    mSaveAtExit = false, mSavePeriod = 0, isLoaded = false, rootModifCnt = 0, sysModifFlgs = 0, mPrjCustMode = true;
+
     modifG();
 }
 

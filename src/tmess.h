@@ -103,6 +103,7 @@ class TMess
 	~TMess( );
 
 	void load( );
+	void unload( );
 	void save( );
 
 	string codeConv( const string &fromCH, const string &toCH, const string &mess );

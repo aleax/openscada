@@ -40,7 +40,7 @@ using namespace OSCADA;
 //* TArchiveS                                    *
 //************************************************
 TArchiveS::TArchiveS( ) :
-    TSubSYS(SARH_ID,_("Archives"),true), elMess(""), elVal(""), elAval(""), bufErr(0), mMessPer(10), prcStMess(false), mRes(true),
+    TSubSYS(SARH_ID,_("Archives"),true), elMess(""), elVal(""), elAval(""), mMessPer(10), prcStMess(false), mRes(true),
     headBuf(0), vRes(true), mValPer(1000), mValPrior(10), mValForceCurTm(false),
     prcStVal(false), endrunReqVal(false), toUpdate(false), mRdRestDtOverTm(0), mRdFirst(true)
 {
@@ -256,6 +256,23 @@ string TArchiveS::optDescr(  )
 	), nodePath().c_str());
 
     return buf;
+}
+
+void TArchiveS::unload( )
+{
+    TSubSYS::unload();
+
+    mRdRes.lock(true);
+    mRdArchM.clear();
+    mRdRestDtOverTm = 0, mRdFirst = true;
+    mRdRes.unlock();
+
+    mRes.lock();
+    mAlarms.clear();
+    mRes.unlock();
+    setMessBufLen(BUF_SIZE_DEF);
+
+    mMessPer = 10, mValPer = 1000, mValPrior = 10, mValForceCurTm = false;
 }
 
 void TArchiveS::subStart( )

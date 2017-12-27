@@ -1,2 +1,2 @@
-/usr/bin/openscada_start /usr/bin/openscada_AGLKS
+/usr/bin/openscada /usr/bin/openscada_AGLKS
 /usr/share/openscada/LibsDB /usr/share/openscada/AGLKS/LibsDB

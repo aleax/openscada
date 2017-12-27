@@ -304,6 +304,8 @@ class TTransportS : public TSubSYS
 	// Request to remote or local OpenSCADA control interface
 	int cntrIfCmd( XMLNode &node, const string &senderPref, const string &user = "" );
 
+	void unload( );
+
 	void subStart( );
 	void subStop( );
 

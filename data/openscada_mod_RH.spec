@@ -1374,8 +1374,8 @@ chrpath --delete %buildroot/%_bindir/openscada
 %__install -m 755 -pD data/oscada_RH.init %buildroot/%_initrddir/openscadad
 %__install -m 755 -d %buildroot/%_datadir/openscada/{DATA,icons,LibsDB,AGLKS,Boiler}
 
-ln -s openscada_start %buildroot/%_bindir/openscada_AGLKS
-ln -s openscada_start %buildroot/%_bindir/openscada_Boiler
+ln -s openscada %buildroot/%_bindir/openscada_AGLKS
+ln -s openscada %buildroot/%_bindir/openscada_Boiler
 
 %find_lang o.* %name.lang
 

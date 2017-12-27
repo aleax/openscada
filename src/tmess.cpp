@@ -590,6 +590,21 @@ void TMess::load( )
     setTranslEnMan(translDyn() || s2i(TBDS::genDBGet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg)), true);
 }
 
+void TMess::unload( )
+{
+    mRes.lock();
+    debugCats.clear();
+    selectDebugCats.clear();
+
+    mTranslLangs = "";
+    trMessIdx.clear();
+    trMessCache.clear();
+    mRes.unlock();
+
+    IOCharSet = "UTF-8", mMessLevel = Info, mLogDir = DIR_STDOUT|DIR_ARCHIVE;
+    mConvCode = mIsUTF8 = true, mTranslDyn = mTranslDynPlan = mTranslEnMan = mTranslSet = false;
+}
+
 void TMess::save( )
 {
     TBDS::genDBSet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg);

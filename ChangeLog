@@ -1,3 +1,17 @@
+2017-12-27 Roman (stable)
+- FIX:DB.LibsDB.vcaBase: doc.{docGasNodeDayA,docGasNodeMonthA} Fix the summary document generation data for the account hour 0.
+- SYS:*.spec,debian/*.links: Final switch straight links from "openscada_start" to "openscada".
+- SYS.{Mess,DAQ,Archives,Transports}: Expand for subsystem specific unloading by implement the function unload() for cleaner complex OpenSCADA projects switch.
+- SYS: "EmptySt" renamed to "InitSt" as the initial station by default.
+- FIX:DAQ.DAQGate: Fix for attributes in EVAL for the stopped and disabled modes.
+- !!!!:UI.QTStarter: Expanded for close and run into the system tray.
+    !!!!: Too refactored to the interface fully creation into the Qt events loop of exec() and WinControl functions moved to the StApp inherit of QApplication.
+    Menu of QTStarter with the Qt modules list was unified as the static storage of the actions for extending menus and toolbars of windows of
+	the Qt modules and the system tray icon.
+    Set icon of the QTStarter dialog to one of the actual project.
+- !!:FIX:UI.Vision: Maximizing, Fullscreen, return to the original size of the runtime windows of the visual projects made true and unified at last.
+
+
 2017-12-22 Roman (stable)
 - !!:FIX:DB.LibsDB.OscadaLibs: flb_doc.getVal fix for wrong archivators work out.
 - FIX:SYS:
@@ -15,7 +29,7 @@
 - Protocol.HTTP: mNoFull renamed to mNotFull.
 - !!:Transport.{Sockets,SSL,Serial}: Output transports were appended by the responsible measurement in the Debug mode.
 - !!:FIX:UI.QTCfg: Prevent error messages at resizing and make it after 0.5s.
-    !!:FIX:Fix vertical scalable widgets "Tables" and "Lists" by their placing at the end of the widgets stack.
+    !!:FIX: Fix vertical scalable widgets "Tables" and "Lists" by their placing at the end of the widgets stack.
 
 
 2017-12-16 Roman (stable)
@@ -50,7 +64,7 @@
     Self menu for other modules made single one and placed also into property "menuStarterAddr" of the application main object.
     Made some optimal for busy screen devices like Nokia N900.
 - !!:FIX:UI.VCAEngine: Document processing tasks closing at executions prevented by these executions processing.
-    !!: Different big (from the main task of the session) perioded widgets processing adapted to execution into diferent phases
+    !!: Different big (from the main task of the session) perioded widgets processing adapted to execution into different phases
 	then to make the main task loading more plain and lesser at all.
 - !!FIX:UI.Vision: Runtime menu creation moved to whole mode that is full creation at needs and full clearing at not needs,
     for prevent the menu show at its inactive mode into some environments like Maemo and Unity.
@@ -259,7 +273,7 @@
     !: Added control for user action by its last action time.
     Appended by user functions of the session space: reqTm(), reqUser(), reqLang(), userActTm().
     FIX: Restored for values and configurations translation of user's attributes.
-- !!: UI.Vision: Added control for user change by a visualizer specific attribute "userSetVis" of the main page
+- !!: UI.Vision: Added control for user actions by a visualizer specific attribute "userSetVis" of the main page
     and by expanding of the user's status widget and the selection dialog.
 
 
@@ -325,7 +339,7 @@
 - SYS.acinclude.m4: Macro AX_PTHREAD was updated to last version.
 - SYS:Changelog: Significant cleaned in process of releasing 0.8.18 LTS.
 - SYS,DAQ.OPC_UA.libOPC_UA: ieee754.h included to adapt for float point in IEEE754.
-- DAQ.{LogicLev,ModBus}: Values size of stored attributes of logical parameters expanded from 200 to 1000000.
+- DAQ.{LogicLev,ModBus}: Values size of the stored attributes of the logical parameters expanded from 200 to 1000000.
 - FIX:DAQ.LogicLev: Fixed for uninitiated access to "err(f_err)" attribute into the debug mode.
 - FIX:{DAQ,Protocol}.ModBus: The extended type "String" was fixed to ModBus register's natural order in "BigEndian", seen on Sycon Instruments STM-3.
     FIX:Syntax highlighting was fixed for four digits-registers for extended types "_u4", "_d".

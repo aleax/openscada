@@ -236,8 +236,8 @@ install -m 644 doc/openscada_start.uk.1 %buildroot/%_mandir/uk/man1/openscada_st
 install -m 644 doc/openscada.ru.1 %buildroot/%_mandir/ru/man1/openscada.1
 install -m 644 doc/openscada_start.ru.1 %buildroot/%_mandir/ru/man1/openscada_start.1
 
-ln -s openscada_start %buildroot/%_bindir/openscada_AGLKS
-ln -s openscada_start %buildroot/%_bindir/openscada_Boiler
+ln -s openscada %buildroot/%_bindir/openscada_AGLKS
+ln -s openscada %buildroot/%_bindir/openscada_Boiler
 
 ln -s %_defaultdocdir/%name-docEN-%version %buildroot/%_datadir/openscada/docs/en
 ln -s %_defaultdocdir/%name-docRU-%version %buildroot/%_datadir/openscada/docs/ru

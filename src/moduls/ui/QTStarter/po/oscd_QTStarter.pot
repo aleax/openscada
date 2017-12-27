@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:41+0200\n"
+"POT-Creation-Date: 2017-12-27 17:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -498,6 +498,15 @@ msgstr ""
 msgid "Start Qt modules (sep - ';')"
 msgstr ""
 
+msgid "Close (all windows) or start to tray"
+msgstr ""
+
+msgid "OpenSCADA Project: %1"
+msgstr ""
+
+msgid "Exit from the program"
+msgstr ""
+
 msgid "Qt-starter of OpenSCADA"
 msgstr ""
 
@@ -596,9 +605,6 @@ msgid "The button for switch to the selected project."
 msgstr ""
 
 msgid "The button for call the selected project."
-msgstr ""
-
-msgid "Exit from the program"
 msgstr ""
 
 msgid "The button for exit from the program."
