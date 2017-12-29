@@ -33,11 +33,13 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.3.2"
+#define MOD_VER		"2.4.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
 //******************************************************************************
+
+#define SEEK_PRELOAD_LIM	100
 
 BDSQLite::BDMod *BDSQLite::mod;
 
@@ -117,8 +119,11 @@ void MBD::enable( )
     MtxAlloc res(connRes, true);
     if(enableStat()) return;
 
-    cd_pg = codePage().size()?codePage():Mess->charset();
-    int rc = sqlite3_open(TSYS::strSepParse(addr(),0,';').c_str(), &m_db);
+    string fnm = TSYS::strSepParse(addr(), 0, ';');
+    remove((fnm+"-journal").c_str());
+
+    cd_pg = codePage().size() ? codePage() : Mess->charset();
+    int rc = sqlite3_open(fnm.c_str(), &m_db);
     if(rc) {
 	string err = sqlite3_errmsg(m_db);
 	sqlite3_close(m_db);
@@ -184,8 +189,8 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     if(rc != SQLITE_OK) {
 	string err = _("Unknown error");
 	if(zErrMsg) { err = zErrMsg; sqlite3_free(zErrMsg); }
-	//if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Request \"%s\" error: %s"), req.c_str(), err.c_str());
-	throw err_sys(100+rc, _("Request \"%s\" error: %s"), TSYS::strMess(50,"%s",req.c_str()).c_str(), err.c_str());
+	//if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Request \"%s\" error: %s(%d)"), req.c_str(), err.c_str(), rc);
+	throw err_sys(100+rc, _("Request \"%s\" error: %s(%d)"), TSYS::strMess(50,"%s",req.c_str()).c_str(), err.c_str(), rc);
     }
     if(tbl && ncol > 0) {
 	vector<string> row;
@@ -208,22 +213,20 @@ void MBD::transOpen( )
     //Check for limit into one trinsaction
     if(reqCnt > 1000) transCommit();
 
-    connRes.lock();
+    MtxAlloc res(connRes, true);
     bool begin = !reqCnt;
     if(begin) trOpenTm = time(NULL);
     reqCnt++;
     reqCntTm = time(NULL);
-    connRes.unlock();
 
     if(begin) sqlReq("BEGIN;");
 }
 
 void MBD::transCommit( )
 {
-    connRes.lock();
+    MtxAlloc res(connRes, true);
     bool commit = reqCnt;
     reqCnt = reqCntTm = 0;
-    connRes.unlock();
 
     if(commit) sqlReq("COMMIT;");
 }
@@ -337,7 +340,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 	TCfg *u_cfg = cfg.at(sid,true);
 	if(!u_cfg && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
 	    u_cfg = cfg.at(sid.substr(3),true);
-	    if( u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText) ) continue;
+	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;
 	    trPresent = true;
 	}
 	if( !u_cfg ) continue;
@@ -353,20 +356,21 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     }
 
     //Request
-    if(!full || !full->size() || row == 0) {
+    if(!full || !full->size() || (row%SEEK_PRELOAD_LIM) == 0) {
 	if(first_sel) return false;
 	req += " FROM '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "' " + ((next)?req_where:"");
 	if(!full) req += " LIMIT " +  i2s(row) + ",1";
+	else req += " LIMIT " + i2s((row/SEEK_PRELOAD_LIM)*SEEK_PRELOAD_LIM) + "," + i2s(SEEK_PRELOAD_LIM);
 	req += ";";
 
 	tbl.clear();
 	owner().sqlReq(req, &tbl/*, false*/);	// For seek to deletion into save context do not set to "false"
     }
 
-    if(tbl.size() < 2 || (full && (row+1) >= tbl.size())) return false;
+    row = full ? (row%SEEK_PRELOAD_LIM)+1 : 1;
+    if(tbl.size() < 2 || (full && row >= (int)tbl.size())) return false;
 
     //Processing of the query
-    row = full ? row+1 : 1;
     for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
 	sid = tbl[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);
@@ -396,7 +400,7 @@ void MTable::fieldGet( TConfig &cfg )
 	TCfg *u_cfg = cfg.at(sid,true);
 	if(!u_cfg && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
 	    u_cfg = cfg.at(sid.substr(3), true);
-	    if(u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText)) continue;
+	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;
 	    trPresent = true;
 	}
 	if(!u_cfg) continue;
@@ -487,7 +491,7 @@ void MTable::fieldSet( TConfig &cfg )
 		TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 		if(!u_cfg.isKey() && !u_cfg.view()) continue;
 
-		bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && trPresent && !u_cfg.noTransl());
+		bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && trPresent && !u_cfg.noTransl());
 		ins_name += (next?",\"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL,"\"") + "\" " +
 		    (isTransl ? (",\""+TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[i_el],TSYS::SQL,"\"")+"\" ") : "");
 		sval = getVal(u_cfg);
@@ -506,7 +510,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	    if(u_cfg.isKey() || !u_cfg.view()) continue;
 
-	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && trPresent && !u_cfg.noTransl());
+	    bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && trPresent && !u_cfg.noTransl());
 	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[i_el]) : cf_el[i_el];
 	    req += (next?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + getVal(u_cfg) + " ";
 	    next = true;
@@ -605,7 +609,7 @@ void MTable::fieldFix( TConfig &cfg )
 	if(iFld >= tblStrct.size()) toUpdate = true;
 
 	// Other languages for translation process
-	if(cf.fld().flg()&TCfg::TransltText) {
+	if(cf.fld().flg()&TFld::TransltText) {
 	    bool col_cur = false;
 	    for(unsigned iC = 1; iC < tblStrct.size(); iC++)
 		if(tblStrct[iC][1].size() > 3 && tblStrct[iC][1].substr(2) == ("#"+cf_el[iCf])) {
@@ -628,7 +632,7 @@ void MTable::fieldFix( TConfig &cfg )
     for(unsigned iFld = 1, iCf; iFld < tblStrct.size() && !toUpdate; iFld++) {
 	for(iCf = 0; iCf < cf_el.size(); iCf++)
 	    if(cf_el[iCf] == tblStrct[iFld][1] ||
-		    (cfg.cfg(cf_el[iCf]).fld().flg()&TCfg::TransltText && tblStrct[iFld][1].size() > 3 &&
+		    (cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText && tblStrct[iFld][1].size() > 3 &&
 		    tblStrct[iFld][1].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][1].compare(0,2,Mess->lang2Code()) != 0))
 		break;
 	if(iCf >= cf_el.size()) toUpdate = true;
@@ -683,8 +687,8 @@ void MTable::setVal( TCfg &cf, const string &ival, bool tr )
     string val = (ival==DB_NULL) ? EVAL_STR : ival;
     switch(cf.fld().type()) {
 	case TFld::String:
-		if(!tr || (cf.fld().flg()&TCfg::TransltText && !cf.noTransl())) cf.setS(val);
-		//if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
+		if(!tr || (cf.fld().flg()&TFld::TransltText && !cf.noTransl())) cf.setS(val);
+		//if(!tr && cf.fld().flg()&TFld::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
 	    break;
 	default: cf.setS(val); break;
     }

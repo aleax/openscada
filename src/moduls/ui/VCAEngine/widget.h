@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: widget.h
 /***************************************************************************
- *   Copyright (C) 2006-2008 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2006-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -91,9 +90,9 @@ class Attr
 	string cfgTempl( );
 	string cfgVal( );
 	static bool isTransl( TFld::Type tp, int flgGlb, int flgSelf = -1 ) {
-	    return (tp == TFld::String &&
-		!(flgGlb&(TFld::NoStrTransl|Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
-		(flgSelf == -1 || flgSelf&(Attr::CfgConst|Attr::CfgLnkIn)));
+	    return (tp == TFld::String && (flgGlb&(TFld::TransltText|Attr::IsUser)) &&
+		!(flgGlb&(Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		(flgSelf == -1 || (flgSelf&(Attr::CfgConst|Attr::CfgLnkIn))));
 	}
 	bool isTransl( bool cfg = false )	{ return Attr::isTransl(type(), flgGlob(), (cfg?flgSelf():-1)); }
 

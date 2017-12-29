@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tbds.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -89,7 +88,7 @@ class TTable : public TCntrNode
 	//Private attributes
 	const string	mName;
 	bool		notFullShow;
-	int		tblOff;
+	int		tblOff, tblSz;
 };
 
 //************************************************

@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.Sockets translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-17 10:21+0300\n"
+"POT-Creation-Date: 2017-12-28 12:59+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -34,10 +34,14 @@ msgstr "Додаткові параметри"
 #, c-format
 msgid ""
 "Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed "
-"connections by limit %d."
+"connections by limit %d. "
 msgstr ""
 "Підключень %d, відкрито %d, останне %s. Трафік вхідний %s, вихідний %s. "
-"Закрито підключень за лімітом %d."
+"Закрито підключень за лімітом %d. "
+
+#, c-format
+msgid "Processing time %s[%s]. "
+msgstr "Час обробки %s[%s]. "
 
 #, c-format
 msgid "Create %s socket error: '%s (%d)'!"
@@ -71,6 +75,12 @@ msgstr "Невідомий код помилки gethostbyname_r для '%s'!"
 msgid "Bind to %s socket error: '%s (%d)'!"
 msgstr "Помилка зв'язування із %s сокетом: '%s (%d)'!"
 
+msgid "Started"
+msgstr "Запущено"
+
+msgid "Stopped"
+msgstr "Зупинено"
+
 #, c-format
 msgid "Close input transport by error: '%s (%d)'"
 msgstr "Закриття вхідного транспорту за помилкою: '%s (%d)'"
@@ -102,6 +112,10 @@ msgid "Read message %s from '%s'."
 msgstr "Прочитано повідомлення %s від '%s'."
 
 #, c-format
+msgid "%d:Received from '%s'\n"
+msgstr "%d:Отримано з '%s'\n"
+
+#, c-format
 msgid "Wrote message %s to '%s'."
 msgstr "Записано повідомлення %s до '%s'."
 
@@ -113,6 +127,14 @@ msgid "Write: error '%s (%d)'!"
 msgstr "Запис: помилка '%s (%d)'!"
 
 #, c-format
+msgid "Transmitting error: %s"
+msgstr "Помилка передавання: %s"
+
+#, c-format
+msgid "%d:Transmitted to '%s'\n"
+msgstr "%d:Передано до '%s'\n"
+
+#, c-format
 msgid "Has been disconnected by '%s'!"
 msgstr "Відєднано '%s'!"
 
@@ -121,11 +143,23 @@ msgid "Has been terminated by execution: %s"
 msgstr "Перервано виключенням: %s"
 
 #, c-format
+msgid "%d:Has been terminated by execution: %s"
+msgstr "%d:Перервано виключенням: %s"
+
+#, c-format
 msgid "New input protocol's object '%s' created!"
 msgstr "Новий об'єкт вхідного протоколу '%s' створено!"
 
 msgid "Error request to protocol."
 msgstr "Помилка запиту до протоколу."
+
+#, c-format
+msgid "A new client %d from '%s' connected"
+msgstr "Підключено новий клієнт %d з %s"
+
+#, c-format
+msgid "Client %d from '%s' disconnected"
+msgstr "Відключено клієнт %d з %s"
 
 msgid "State"
 msgstr "Стан"
@@ -203,8 +237,8 @@ msgstr ""
 "Закриття підключення після визначеної кількості запитів.\n"
 "Нульове значення для відключення (не закривається ніколи)."
 
-msgid "Keep alive timeout (s)"
-msgstr "Keep alive час очікування (с)"
+msgid "Keep alive timeout, seconds"
+msgstr "Keep alive час очікування, секунд"
 
 msgid ""
 "Close the connection after no requests at specified timeout.\n"
@@ -214,12 +248,22 @@ msgstr ""
 "Нульове значення для відключення (не закривається ніколи)."
 
 #, c-format
-msgid "%s %d(%s): last %s; traffic in %s, out %s."
-msgstr "%s %d(%s): останній %s; трафік вхідний %s, вихідний %s."
+msgid "%s %d(%s): last %s; traffic in %s, out %s; client detachings %g; "
+msgstr ""
+"%s %d(%s): останній %s; трафік вхідний %s, вихідний %s; відключень клієнту "
+"%g; "
 
 #, c-format
-msgid "Traffic in %s, out %s."
-msgstr "Трафік вхідний %s, вихідний %s."
+msgid "processing time %s[%s]; "
+msgstr "час обробки %s[%s]; "
+
+#, c-format
+msgid "Traffic in %s, out %s. "
+msgstr "Трафік вхідний %s, вихідний %s. "
+
+#, c-format
+msgid "Respond time %s[%s]. "
+msgstr "Час відповіді %s[%s]. "
 
 #, c-format
 msgid "Type socket '%s' error!"
@@ -266,6 +310,9 @@ msgstr "Не записано даних"
 msgid "Write error: %s"
 msgstr "Помилка запису: %s"
 
+msgid "Transmitted to\n"
+msgstr "Передано\n"
+
 #, c-format
 msgid "Wrote %s."
 msgstr "Записано %s."
@@ -273,12 +320,19 @@ msgstr "Записано %s."
 msgid "Read timeouted."
 msgstr "Перевищено час очікування читання!"
 
+msgid "Receiving timeouted"
+msgstr "Перевищено час очікування отримання!"
+
 msgid "Timeouted!"
 msgstr "Перевищено час очікування!"
 
 #, c-format
 msgid "Read (select) error: %s"
 msgstr "Помилка читання (select): %s"
+
+#, c-format
+msgid "Receiving (select) error: %s"
+msgstr "Помилка отримання (select): %s"
 
 msgid "No data"
 msgstr "Немає даних"
@@ -288,8 +342,15 @@ msgid "Read error: %s"
 msgstr "Помилка читання: %s"
 
 #, c-format
+msgid "Receiving error: %s"
+msgstr "Помилка отримання: %s"
+
+#, c-format
 msgid "Read %s."
 msgstr "Прочитано %s."
+
+msgid "Received from\n"
+msgstr "Отримано\n"
 
 msgid ""
 "Socket's output transport has address format:\n"

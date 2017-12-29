@@ -565,13 +565,13 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     w_scale->setToolTip(_("Field for display widgets' scaling mode."));
     w_scale->setStatusTip(_("Click to change widgets' scaling mode."));
     statusBar()->insertPermanentWidget(0,w_scale);
-    mStModify = new WMdfStBar( this );
+    mStModify = new WMdfStBar(this);
     connect(mStModify, SIGNAL(press()), this, SLOT(itDBSave()));
     mStModify->setWhatsThis(_("This label displays modifying."));
     mStModify->setToolTip(_("Field for display modifying."));
     mStModify->setStatusTip(_("Click to save all modifyings."));
     statusBar()->insertPermanentWidget(0,mStModify);
-    mWVisScale = new QLabel( "100%", this );
+    mWVisScale = new QLabel("100%", this);
     mWVisScale->setWhatsThis(_("This label displays current widget's scale."));
     mWVisScale->setToolTip(_("Field for display the scale of the current widget."));
     statusBar()->insertPermanentWidget(0,mWVisScale);
@@ -623,16 +623,22 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     waitCursorClear->setInterval(50);
     connect(waitCursorClear, SIGNAL(timeout()), SLOT(waitCursorSet()));
 
-    //resize( 1000, 800 );
-    setWindowState(Qt::WindowMaximized);
+    //resize(1000, 800);
+    //setWindowState(Qt::WindowMaximized);
     menuBar()->setVisible(true);
 
     wdgTree->updateTree("", true);	//Initial for allow the widgets loading on the server side mostly
     prjTree->updateTree("", NULL, true);//Initial for allow the projects loading on the server side mostly
 
     //Restore main window state
-    string st = TSYS::strDecode(mod->uiPropGet("devWinState",user()), TSYS::base64);
-    restoreState(QByteArray(st.data(),st.size()));
+    int off = 0;
+    string rst = mod->uiPropGet("devWinState", user());
+    string sRst = TSYS::strDecode(TSYS::strParse(rst,0,":",&off), TSYS::base64);
+    if(sRst.size()) restoreState(QByteArray(sRst.data(),sRst.size()));
+    int	wH = s2i(TSYS::strParse(rst,0,":",&off)),
+	wW = s2i(TSYS::strParse(rst,0,":",&off));
+    if(wH > 100 && wW > 100) resize(wH, wW);
+
     //Restore ToolBars icons size
     for(int i_ch = 0; i_ch < children().size(); i_ch++) {
 	if(!qobject_cast<QToolBar*>(children()[i_ch])) continue;
@@ -654,7 +660,7 @@ VisDevelop::~VisDevelop( )
 
     //Save main window state
     QByteArray st = saveState();
-    mod->uiPropSet("devWinState",TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,"\n"), user());
+    mod->uiPropSet("devWinState", TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,"")+":"+i2s(width())+":"+i2s(height()), user());
 
     //Timers stop
     endRunTimer->stop();
@@ -733,32 +739,32 @@ QMenu *VisDevelop::createPopupMenu( )
     if(qobject_cast<QToolBar*>(ucw) && !mn->children().isEmpty()) {
 	QAction *first = mn->actions().isEmpty() ? NULL : mn->actions()[0];
 	QMenu *iSz = new QMenu(_("Icons size"));
-	mn->insertMenu(first,iSz);
+	mn->insertMenu(first, iSz);
 	mn->insertSeparator(first);
 
-	QAction *act = new QAction(_("Small (16x16)"),iSz);
+	QAction *act = new QAction(_("Small (16x16)"), iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
-	act->setObjectName("16"); 
-	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
-	iSz->addAction( act );
+	act->setObjectName("16");
+	act->setProperty("toolAddr", TSYS::addr2str(ucw).c_str());
+	iSz->addAction(act);
 
-	act = new QAction(_("Medium (22x22)"),iSz);
+	act = new QAction(_("Medium (22x22)"), iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
 	act->setObjectName("22");
-	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
-	iSz->addAction( act );
+	act->setProperty("toolAddr", TSYS::addr2str(ucw).c_str());
+	iSz->addAction(act);
 
-	act = new QAction(_("Big (32x32)"),iSz);
+	act = new QAction(_("Big (32x32)"), iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
 	act->setObjectName("32");
-	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
-	iSz->addAction( act );
+	act->setProperty("toolAddr", TSYS::addr2str(ucw).c_str());
+	iSz->addAction(act);
 
-	act = new QAction(_("Huge (48x48)"),iSz);
+	act = new QAction(_("Huge (48x48)"), iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
 	act->setObjectName("32");
-	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
-	iSz->addAction( act );
+	act->setProperty("toolAddr", TSYS::addr2str(ucw).c_str());
+	iSz->addAction(act);
     }
 
     return mn;
@@ -1119,7 +1125,8 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 	// Create widget
 	int err = cntrIfCmd(req);
 	if(err) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
-	else {
+	if(err == 1)	emit modifiedItem(new_wdg+req.attr("id"));					//Warning
+	else if(!err) {
 	    new_wdg += req.attr("id");
 	    //  Set some parameters
 	    req.clear()->setName("set");
@@ -1290,7 +1297,7 @@ void VisDevelop::visualItEdit( )
 
 	scrl->parentWidget()->show();
 
-	if(!(work_space->activeSubWindow() && work_space->activeSubWindow()->isMaximized()))
+	if(/*work_space->subWindowList().length() <= 1*/ !(work_space->activeSubWindow() && work_space->activeSubWindow()->isMaximized()))
 	    scrl->parentWidget()->resize(fmax(300,fmin(work_space->width(),vw->size().width()+(scrl->parentWidget()->width()-scrl->width())+5)),
 				     fmax(200,fmin(work_space->height(),vw->size().height()+(scrl->parentWidget()->height()-scrl->height())+5)));
     }
@@ -1473,6 +1480,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    dlg.edLay()->addWidget(wInher, 2, 1);
 	}
 	if(!wsrc.empty() || dlg.exec() == QDialog::Accepted) {
+	    dlg.setId(TSYS::strEncode(dlg.id().toStdString(),TSYS::oscdID).c_str());
 	    if(wdst.empty() && dlg.id().toStdString() != t1_el) {
 		unsigned i_w = 0;
 		for( ; i_w < req.childSize() && req.childGet(i_w)->attr("id") != dlg.id().toStdString(); i_w++) ;
@@ -1502,7 +1510,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		req.clear()->setName("set")->setAttr("path", "/%2fprm%2fcfg%2fcp%2fcp")->
 		    setAttr("src", s_elp+"/"+s_el)->setAttr("dst", d_elp+"/"+d_el);
 		if(cntrIfCmd(req))
-		    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+		    mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 		else {
 		    if(it_nm.size()) {
 			req.clear()->setName("set")->setText(it_nm);

@@ -29,12 +29,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"SelfSystem"
-#define MOD_NAME	_("Self system OpenSCADA protocol")
+#define MOD_NAME	_("Self protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.2.0"
+#define MOD_VER		"1.2.2"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and one's control interface.")
+#define DESCRIPTION	_("Provides self OpenSCADA protocol based at XML and one's control interface.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -172,7 +172,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     string req, resp, header;
     int rez, resp_len, off, head_end;
 
-    ResAlloc res(tro.nodeRes(), true);
+    MtxAlloc res(tro.reqRes(), true);
 
     bool isDir = s2i(io.attr("rqDir"));	io.attrDel("rqDir");
     bool authForce = s2i(io.attr("rqAuthForce")); io.attrDel("rqAuthForce");
@@ -190,12 +190,12 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 		//if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN request: %d"), req.size());
 
-		resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,conTm,true);
+		resp_len = tro.messIO(req.c_str(), req.size(), buf, sizeof(buf)-1, conTm);
 		resp.assign(buf, resp_len);
 
 		// Wait tail
 		while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A') {
-		    if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf),0,true))) throw TError(nodePath().c_str(),_("Not full respond."));
+		    if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf)))) throw TError(nodePath().c_str(),_("Not full respond."));
 		    resp.append(buf, resp_len);
 		}
 
@@ -222,12 +222,12 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    //if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ send: %d"), req.size());
 
-	    resp_len = tro.messIO(req.c_str(), req.size(), buf, sizeof(buf), conTm, true);
+	    resp_len = tro.messIO(req.c_str(), req.size(), buf, sizeof(buf), conTm);
 	    resp.assign(buf, resp_len);
 
 	    // Wait tail
 	    while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A') {
-		if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf),0,true))) throw TError(nodePath().c_str(),_("Not full respond."));
+		if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf)))) throw TError(nodePath().c_str(),_("Not full respond."));
 		resp.append(buf, resp_len);
 	    }
 
@@ -252,7 +252,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    // Wait tail
 	    while((int)resp.size() < abs(resp_size)+head_end)
 	    {
-		resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true);
+		resp_len = tro.messIO(NULL, 0, buf, sizeof(buf));
 		if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond."));
 		resp.append(buf,resp_len);
 	    }

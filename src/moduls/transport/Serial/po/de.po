@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-09 13:45+0200\n"
+"POT-Creation-Date: 2017-12-22 21:11+0200\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -56,10 +56,14 @@ msgid "No any expected respond but receive from modem %d: '%s'."
 msgstr "Keine Antwort erwartet wurde, erhielt aber vom Modem %d: '%s'."
 
 #, c-format
-msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms."
+msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms. "
 msgstr ""
 "Datenverkehr eingehend %s, ausgehend %s. Maximale Wartezeit für ein Zeichen "
-"%.4g msek."
+"%.4g msek. "
+
+#, c-format
+msgid "Processing time %s[%s]. "
+msgstr "Bearbeitungszeit %s[%s]. "
 
 #, c-format
 msgid "Serial port '%s' %s error: %s."
@@ -89,9 +93,18 @@ msgstr "Fehler in der Anzahl der Stopbits '%d'."
 msgid "No response to initial request '%s'."
 msgstr "Keine Antwort auf die Initialisierungsanfrage '%s'."
 
+msgid "Started"
+msgstr "Gestartet"
+
+msgid "Stopped"
+msgstr "Gestoppt"
+
 #, c-format
 msgid "Serial received message '%d'."
 msgstr "Die Serielle Schnittstelle hat eine Nachricht empfangen '%d'."
+
+msgid "Received from\n"
+msgstr "Empfangen von\n"
 
 msgid "Error request to protocol."
 msgstr "Fehler in der Protokollanfrage."
@@ -106,6 +119,9 @@ msgstr "Schreiben: Antwort für Null-Bytes."
 #, c-format
 msgid "Write: error '%s (%d)'."
 msgstr "Schreiben: Fehler '%s (%d)'."
+
+msgid "Transmitted to\n"
+msgstr "Übertragen an\n"
 
 msgid ""
 "Serial transport has address format: \"dev:speed:format[:fc[:mdm]]\". "
@@ -181,14 +197,14 @@ msgstr "Priorität"
 msgid "Modem"
 msgstr "Modem"
 
-msgid "Timeout (sec)"
-msgstr "Wartezeit (sec)"
+msgid "Timeout, seconds"
+msgstr "Wartezeit, Sekunden"
 
-msgid "Pre-initial delay (sec)"
-msgstr "Pre-erste Ausdauer (sek)"
+msgid "Pre-initial delay, seconds"
+msgstr "Pre-erste Ausdauer, Sekunden"
 
-msgid "Post-initial delay (sec)"
-msgstr "Aufhalten der Post-erste (sek)"
+msgid "Post-initial delay, seconds"
+msgstr "Aufhalten der Post-erste, Sekunden"
 
 msgid "Initialization string 1"
 msgstr "Initialisierungszeile 1"
@@ -211,6 +227,10 @@ msgstr "Ring Antwort, Ergebnis"
 #, c-format
 msgid "Traffic in %s, out %s. "
 msgstr "Datenverkehr eingehend %s, ausgehend %s. "
+
+#, c-format
+msgid "Respond time %s[%s]. "
+msgstr "Reaktionszeit %s[%s]. "
 
 #, c-format
 msgid "Device '%s' is used now."
@@ -252,6 +272,10 @@ msgid "Write error: %s"
 msgstr "Fehler beim Schreiben: %s"
 
 #, c-format
+msgid "Transmitting error: %s"
+msgstr "Übertragungsfehler: %s"
+
+#, c-format
 msgid "Wrote %s."
 msgstr "Schrieb %s."
 
@@ -264,9 +288,16 @@ msgstr "Fehler beim Lesen der Echo-Request."
 msgid "Read timeouted."
 msgstr "Lesen timeouted."
 
+msgid "Receiving timeouted"
+msgstr "Empfangen zeitgesteuert"
+
 #, c-format
 msgid "Read (select) error: %s"
 msgstr "Lesefehler (select): %s"
+
+#, c-format
+msgid "Receiving (select) error: %s"
+msgstr "Empfangen (select) Fehler: %s"
 
 msgid "No data"
 msgstr "Keine Daten"
@@ -274,6 +305,10 @@ msgstr "Keine Daten"
 #, c-format
 msgid "Read error: %s"
 msgstr "Lesefehler: %s"
+
+#, c-format
+msgid "Receiving error: %s"
+msgstr "Empfangsfehler: %s"
 
 #, c-format
 msgid "Read %s."
@@ -363,8 +398,8 @@ msgstr ""
 "Irgendwann geöffnet Gerät Schließung kann Bruch sein, auf ICP-DAS LP PLC zum "
 "Beispiel, dann können Sie es durch diese Option zu verhindern."
 
-msgid "Life time (sec)"
-msgstr "Lebenszeit (sek)"
+msgid "Life time, seconds"
+msgstr "Lebenszeit, Sekunden"
 
 msgid "Dial string"
 msgstr "Dialzeile"

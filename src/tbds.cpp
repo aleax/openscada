@@ -35,13 +35,13 @@ TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mSYSStPref(true)
     //Generic system DB
     fldAdd(new TFld("user","User",TFld::String,TCfg::Key,OBJ_ID_SZ));
     fldAdd(new TFld("id",_("Value ID"),TFld::String,TCfg::Key,"100"));
-    fldAdd(new TFld("val","Value"  ,TFld::String,TCfg::TransltText,"1000"));
+    fldAdd(new TFld("val","Value"  ,TFld::String,TFld::TransltText,"1000"));
 
     //Open data bases DB structure
     elDB.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     elDB.fldAdd(new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elDB.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    elDB.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"2000"));
+    elDB.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    elDB.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"2000"));
     elDB.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"1000"));
     elDB.fldAdd(new TFld("CODEPAGE",_("Code page"),TFld::String,TFld::NoFlag,"20"));
     elDB.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","1"));
@@ -168,8 +168,8 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 	vector<string> cf_el;
 
 	nd = SYS->cfgNode(path);
-	for(unsigned i_fld = 0, iEl; nd && i_fld < nd->childSize(); i_fld++) {
-	    el = nd->childGet(i_fld);
+	for(unsigned iFld = 0, iEl; nd && iFld < nd->childSize(); iFld++) {
+	    el = nd->childGet(iFld);
 	    if(el->name() == "fld") {
 		cfg.cfgList(cf_el);
 
@@ -184,7 +184,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 			// Check for field's tag, for store big values
 			if(vl.empty() && (fnd=el->childGet(cf_el[iEl],0,true))) vl = fnd->text(true);
 			// Check for translation
-			if(cf.fld().flg()&TCfg::TransltText && (Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase())) {
+			if(cf.fld().flg()&TFld::TransltText && !cf.noTransl() && (Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase())) {
 			    vl_tr = el->attr(cf_el[iEl]+"_"+Mess->lang2Code());
 			    // Check for field's tag, for store big values
 			    if(vl_tr.empty() && (fnd=el->childGet(cf_el[iEl]+"_"+Mess->lang2Code(),0,true))) vl_tr = fnd->text(true);
@@ -239,8 +239,8 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool f
     nd = SYS->cfgNode(path);
 
     // Scan fields and fill Configuration
-    for(unsigned i_fld = 0, iEl; nd && i_fld < nd->childSize(); i_fld++) {
-	el = nd->childGet(i_fld);
+    for(unsigned iFld = 0, iEl; nd && iFld < nd->childSize(); iFld++) {
+	el = nd->childGet(iFld);
 	if(el->name() == "fld") {
 	    cfg.cfgList(cf_el);
 
@@ -254,7 +254,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool f
 		    //  Check for field's tag, for store big values
 		    if(vl.empty() && (fnd=el->childGet(cf_el[iEl],0,true))) vl = fnd->text(true);
 		    //  Check for translation
-		    if(cf.fld().flg()&TCfg::TransltText && Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase()) {
+		    if(cf.fld().flg()&TFld::TransltText && !cf.noTransl() && Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase()) {
 			vl_tr = el->attr(cf_el[iEl]+"_"+Mess->lang2Code());
 			//  Check for field's tag, for store big values
 			if(vl_tr.empty() && (fnd=el->childGet(cf_el[iEl]+"_"+Mess->lang2Code(),0,true))) vl_tr = fnd->text(true);
@@ -308,8 +308,8 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	    if(nd->name() != "tbl")	nd->setName("tbl");
 
 	    // Search present field
-	    for(unsigned i_fld = 0, iEl; i_fld < nd->childSize(); i_fld++) {
-		XMLNode *el = nd->childGet(i_fld);
+	    for(unsigned iFld = 0, iEl; iFld < nd->childSize(); iFld++) {
+		XMLNode *el = nd->childGet(iFld);
 		if(el->name() != "fld")	continue;
 		//  Check keywords
 		for(iEl = 0; iEl < cf_el.size(); iEl++)
@@ -321,30 +321,30 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	    if(!wel) wel = nd->childAdd("fld");
 	    for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
 		vnm = cf_el[iEl];
-		TCfg &u_cfg = cfg.cfg(vnm);
-		bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && !u_cfg.noTransl() &&
+		TCfg &cf = cfg.cfg(vnm);
+		bool isTransl = (cf.fld().flg()&TFld::TransltText && !cf.noTransl() &&
 				Mess->lang2CodeBase().size() && Mess->lang2Code() != Mess->lang2CodeBase());
 		if(isCreate || !isTransl) {
-		    if(u_cfg.getS().size() < 100) {
-			wel->setAttr(vnm, u_cfg.getS());
+		    if(cf.getS().size() < 100) {
+			wel->setAttr(vnm, cf.getS());
 			if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
 		    }
 		    else {
 			if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
-			fnd->setText(u_cfg.getS(),true);
-			wel->setAttr(vnm,"");
+			fnd->setText(cf.getS(), true);
+			wel->setAttr(vnm, "");
 		    }
 		}
 		if(isTransl) {
 		    vnm = cf_el[iEl]+"_"+Mess->lang2Code();
-		    if(u_cfg.getS().size() < 100) {
-			wel->setAttr(vnm, u_cfg.getS());
+		    if(cf.getS().size() < 100) {
+			wel->setAttr(vnm, cf.getS());
 			if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
 		    }
 		    else {
 			if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
-			fnd->setText(u_cfg.getS(),true);
-			wel->setAttr(vnm,"");
+			fnd->setText(cf.getS(), true);
+			wel->setAttr(vnm, "");
 		    }
 		}
 	    }
@@ -401,8 +401,8 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
 	XMLNode *nd = SYS->cfgNode(path,true);
 	vector<string> cf_el;
 	// Search present field
-	for(unsigned i_fld = 0, iEl; nd && i_fld < nd->childSize(); i_fld++) {
-	    XMLNode *el = nd->childGet(i_fld);
+	for(unsigned iFld = 0, iEl; nd && iFld < nd->childSize(); iFld++) {
+	    XMLNode *el = nd->childGet(iFld);
 	    if(el->name() != "fld")	continue;
 	    //Check keywords
 	    cfg.cfgList(cf_el);
@@ -410,7 +410,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
 	        if(cfg.cfg(cf_el[iEl]).isKey() && cfg.cfg(cf_el[iEl]).getS() != el->attr(cf_el[iEl])) break;
 	    if(iEl == cf_el.size()) {
 		SYS->modifCfg(true);
-		nd->childDel(i_fld);
+		nd->childDel(iFld);
 		SYS->modifCfg();
 		return true;
 	    }
@@ -518,9 +518,7 @@ string TBDS::optDescr( )
 void TBDS::load_( )
 {
     //Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
     mSYSStPref = (bool)s2i(TBDS::genDBGet(nodePath()+"SYSStPref",(mSYSStPref?"1":"0"),"root",TBDS::OnlyCfg));
@@ -600,7 +598,7 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),RWRWR_,"root",SDB_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),R_R_R_)) {
 	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Full DB delete"),RWRW__,"root",SDB_ID,2,
-		"tp","bool","help",_("Select for full deletion DB on DB close. Else DB will be simply closed."));
+		"tp","bool","help",_("Select for full DB deletion at this DB closing, else the DB will be simply closed."));
 	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),RWRWR_,"root",SDB_ID,5,
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","db_","idSz",OBJ_ID_SZ);
 	}
@@ -784,10 +782,10 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("grp",opt,-1,"/br/tbl_",_("Opened table"),RWRW__,"root",SDB_ID,1,"idSz","255");
 	if(ctrMkNode("area",opt,0,"/prm",_("Data base"))) {
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Enable"),RWRWR_,"root",SDB_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Enabled"),RWRWR_,"root",SDB_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Accessible tables"),RWRW__,"root",SDB_ID,4,
-		    "tp","br","br_pref","tbl_","s_com","del","help",_("Tables which are in the DB, tables which are not opened at that moment."));
-		ctrMkNode("comm",opt,-1,"/prm/st/load",_("Load the system from this DB"),RWRW__,"root","root");
+		    "tp","br","br_pref","tbl_","s_com","del","help",_("Tables in the database, but not open at this time."));
+		ctrMkNode("comm",opt,-1,"/prm/st/load",_("Load the program from this DB"),RWRW__,"root","root");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SDB_ID,RWRWR_);
@@ -795,15 +793,15 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID);
 		ctrMkNode2("fld",opt,-1,"/prm/cfg/CODEPAGE",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,
 		    "dest","sel_ed","sel_list",(Mess->charset()+";UTF-8;KOI8-R;KOI8-U;CP1251;CP866").c_str(),
-		    "help",_("Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."),NULL);
+		    "help",_("Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."),NULL);
 	    }
 	}
 	if(ctrMkNode("area",opt,1,"/tbls",_("Tables"),R_R___))
 	    ctrMkNode("list",opt,-1,"/tbls/otbl",_("Opened tables"),RWRW__,"root",SDB_ID,5,
 		"tp","br","idSz","255","s_com","add,del","br_pref","tbl_",
-		"help",_("Opened table list.\nAdding and deleting tables operations are really open and close tables operations."));
+		"help",_("Opened tables list.\nAdding and removing tables actually consists of opening and closing tables."));
 	if(enableStat() && ctrMkNode("area",opt,-1,"/sql",_("SQL"),R_R___,"root",SDB_ID)) {
-	    ctrMkNode("fld",opt,-1,"/sql/req",_("Request"),RWRW__,"root",SDB_ID,3,"tp","str","cols","100","rows","5");
+	    ctrMkNode("fld",opt,-1,"/sql/req",_("Request"),RWRW__,"root",SDB_ID,3,"tp","str","cols","100","rows","2");
 	    ctrMkNode("fld",opt,-1,"/sql/trans",_("Transaction"),RWRW__,"root",SDB_ID,4,"tp","dec","dest","select",
 		"sel_id","0;1;2","sel_list",_("Out;Into;No matter"));
 	    ctrMkNode("comm",opt,-1,"/sql/send",_("Send"),RWRW__,"root",SDB_ID);
@@ -870,7 +868,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTable                                       *
 //************************************************
-TTable::TTable( const string &name ) : mName(name), notFullShow(false), tblOff(0)
+TTable::TTable( const string &name ) : mName(name), notFullShow(false), tblOff(0), tblSz(100)
 {
     modifClr();
     mLstUse = time(NULL);
@@ -986,9 +984,9 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Table: ")+name(),RWRW__,"root",SDB_ID);
 	if(ctrMkNode("area",opt,0,"/prm",_("Table"))) {
-	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
-		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",_("Name"),R_R___,"root",SDB_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/prm/tblOff",_("Table offset"),RWRW__,"root",SDB_ID,2,"tp","dec","min","0");
+	    ctrMkNode("fld",opt,-1,"/prm/nm",_("Name"),R_R___,"root",SDB_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/tblOff",_("Table offset, size"),RWRW__,"root",SDB_ID,2,"tp","dec","min","0");
+	    ctrMkNode("fld",opt,-1,"/prm/tblSz","",RWRW__,"root",SDB_ID,3,"tp","dec","min","10","max","10000");
 	    XMLNode *tbl;
 	    if((tbl=ctrMkNode("table",opt,-1,"/prm/tbl",_("Data"),RWRW__,"root",SDB_ID,1,"s_com","add,del"))) {
 		TConfig req;
@@ -1007,10 +1005,14 @@ void TTable::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/nm" && ctrChkNode(opt,"get",R_R___,"root",SDB_ID,SEC_RD)) opt->setText(name());
+    if(a_path == "/prm/nm" && ctrChkNode(opt,"get",R_R___,"root",SDB_ID,SEC_RD)) opt->setText(name());
     else if(a_path == "/prm/tblOff") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(i2s(tblOff));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	tblOff = s2i(opt->text());
+    }
+    else if(a_path == "/prm/tblSz") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(i2s(tblSz));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	tblSz = s2i(opt->text());
     }
     else if(a_path == "/prm/tbl") {
 	TConfig req;
@@ -1020,7 +1022,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	    time_t upTo = time(NULL)+STD_INTERF_TM;
 	    bool firstRow = true;
 	    vector< vector<string> > full;
-	    for(unsigned iR = vmax(0,tblOff); time(NULL) < upTo && fieldSeek(iR,req,&full); iR++, firstRow = false)
+	    for(unsigned iR = vmax(0,tblOff); (iR-tblOff) < tblSz && time(NULL) < upTo && fieldSeek(iR,req,&full); iR++, firstRow = false)
 		for(unsigned iF = 0; iF < req.elem().fldSize(); iF++) {
 		    eid = req.elem().fldAt(iF).name();
 		    if(firstRow) ctrMkNode("list",opt,-1,("/prm/tbl/"+eid).c_str(),"",RWRWR_);

@@ -83,7 +83,7 @@ class TSYS : public TCntrNode
 
     public:
 	//Data
-	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb };
+	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb, ToLower };
 	enum IntView	{ Dec, Oct, Hex };
 
 	// Task structure
@@ -233,7 +233,10 @@ class TSYS : public TCntrNode
 	static string time2str( double tm );
 	static string cpct2str( double cnt );
 
-	//> Adress convertors
+	// Convert value to string
+	static double str2real( const string &val );
+
+	// Adress convertors
 	static string addr2str( void *addr );
 	static void *str2addr( const string &str );
 
@@ -312,6 +315,8 @@ class TSYS : public TCntrNode
 	string getCmdOpt( int &curPos, string *argVal = NULL );
 	static string getCmdOpt_( int &curPos, string *argVal, int argc, char **argv );
 
+	string cmdOpt( const string &opt, const string &setVl = "" );
+
 	//>> System control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
@@ -319,9 +324,6 @@ class TSYS : public TCntrNode
 
 	//Public attributes
 	static bool finalKill;	//Final object's kill flag. For dead requsted resources
-	const int argc;		//Comand line seting counter.
-	const char **argv;	//Comand line seting buffer.
-	const char **envp;	//System environment.
 
     protected:
 	//Protected methods
@@ -329,17 +331,22 @@ class TSYS : public TCntrNode
 	void save_( );
 
     private:
+	//Private attributes
+	const int argc;		//Comand line seting counter.
+	const char **argv;	//Comand line seting buffer.
+	const char **envp;	//System environment.
+
 	//Data
 	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04, MDF_LANG = 0x08 };
 
 	//Private methods
 	const char *nodeName( ) const		{ return mId.c_str(); }
 	const char *nodeNameSYSM( ) const	{ return mName.c_str(); }
-	bool cfgFileLoad( );
-	void cfgFileSave( );
-	void cfgPrmLoad( );
-	void cfgFileScan( bool first = false, bool up = false );
-	void cntrCmdProc( XMLNode *opt );	// Control interface command process
+	bool	cfgFileLoad( );
+	void	cfgFileSave( );
+	void	cfgPrmLoad( );
+	void	cfgFileScan( bool first = false, bool up = false );
+	void	cntrCmdProc( XMLNode *opt );	// Control interface command process
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
@@ -379,6 +386,7 @@ class TSYS : public TCntrNode
 	uint64_t	mSysclc;
 	bool		mClockRT;	//Used clock REALTIME, else it is MONOTONIC
 
+	map<string, string>	mCmdOpts;
 	map<string, double>	mCntrs;	//Counters
 
 	struct sigaction	sigActOrig;
@@ -399,7 +407,7 @@ inline string tm2s( double tm )					{ return TSYS::time2str(tm); }
 
 inline int s2i( const string &val )		{ return atoi(val.c_str()); }
 inline long long s2ll( const string &val )	{ return atoll(val.c_str()); }
-inline double s2r( const string &val )		{ return atof(val.c_str()); }
+inline double s2r( const string &val )		{ return /*TSYS::str2real(val); }*/ atof(val.c_str()); }
 
 inline string sTrm( const string &val, const string &cfg = " \n\t\r") { return TSYS::strTrim(val, cfg); }
 

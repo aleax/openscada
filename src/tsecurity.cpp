@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsecurity.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <errno.h>
 #include <unistd.h>
 
 #include "tsys.h"
@@ -42,15 +43,15 @@ TSecurity::TSecurity( ) : TSubSYS(SSEC_ID,_("Security"), false)
 
     //User BD structure
     userEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    userEl.fldAdd(new TFld("DESCR",_("Full name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    userEl.fldAdd(new TFld("LONGDESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
+    userEl.fldAdd(new TFld("DESCR",_("Full name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    userEl.fldAdd(new TFld("LONGDESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
     userEl.fldAdd(new TFld("PASS",_("Password"),TFld::String,0,"100"));
     userEl.fldAdd(new TFld("PICTURE",_("User picture"),TFld::String,0,"100000"));
 
     //Group BD structure
     grpEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    grpEl.fldAdd(new TFld("DESCR",_("Full name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    grpEl.fldAdd(new TFld("LONGDESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
+    grpEl.fldAdd(new TFld("DESCR",_("Full name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    grpEl.fldAdd(new TFld("LONGDESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
     grpEl.fldAdd(new TFld("USERS",_("Users"),TFld::String,0,"200"));
 }
 
@@ -123,9 +124,7 @@ char TSecurity::access( const string &user, char mode, const string &owner, cons
 void TSecurity::load_( )
 {
     //Load commandline data
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters
 
@@ -298,6 +297,10 @@ TUser::TUser( const string &nm, const string &idb, TElem *el ) : TConfig(el), mN
     mDB(idb), mSysIt(false)
 {
     mName = nm;
+
+#if defined(HAVE_CRYPT_H)
+    setPass("");
+#endif
 }
 
 TUser::~TUser( )
@@ -318,17 +321,21 @@ TCntrNode &TUser::operator=( const TCntrNode &node )
 
 void TUser::setPass( const string &n_pass )
 {
+    char *tRez = NULL;
     string tPass = n_pass;
 #if defined(HAVE_CRYPT_H)
     string salt = "$1$"+name();		//Use MD5
-# if defined(__USE_GNU)
+# if defined(__USE_GNU) && !defined(__UCLIBC__)
     crypt_data data;
     data.initialized = 0;
-    tPass = crypt_r(n_pass.c_str(), salt.c_str(), &data);
+    tRez = crypt_r(n_pass.c_str(), salt.c_str(), &data);
+    if(!tRez)	throw TError(_("Error crypt_r(): %s (%d)"), strerror(errno), errno);
+    tPass = tRez;
 # else
-    dataRes().lock();
-    tPass = crypt(n_pass.c_str(), salt.c_str());
-    dataRes().unlock();
+    MtxAlloc res(dataRes(), true);
+    tRez = crypt(n_pass.c_str(), salt.c_str());
+    if(!tRez)	throw TError(_("Error crypt_r(): %s (%d)"), strerror(errno), errno);
+    tPass = tRez;
 # endif
 #endif
     cfg("PASS").setS(tPass);
@@ -336,20 +343,33 @@ void TUser::setPass( const string &n_pass )
 
 bool TUser::auth( const string &ipass, string *hash )
 {
+    char *tRez = NULL;
 #if defined(HAVE_CRYPT_H)
     string pass = cfg("PASS").getS();
     string salt = (pass.compare(0,3,"$1$") == 0) ? "$1$"+name() : name();	//Check for MD5 or the old method
     if(ipass.compare(0,TSecurity::pHashMagic.size(),TSecurity::pHashMagic) == 0)
 	return (ipass.compare(TSecurity::pHashMagic.size(),pass.size(),pass) == 0);
-# if defined(__USE_GNU)
+# if defined(__USE_GNU) && !defined(__UCLIBC__)
     crypt_data data;
     data.initialized = 0;
-    if(hash) *hash = crypt_r(ipass.c_str(),salt.c_str(),&data);
-    return (pass == crypt_r(ipass.c_str(),salt.c_str(),&data));
+    if(hash) {
+	tRez = crypt_r(ipass.c_str(), salt.c_str(), &data);
+	if(!tRez) { mess_sys(TMess::Error, _("Error crypt_r(): %s (%d)"), strerror(errno), errno); return false; }
+	*hash = tRez;
+    }
+    tRez = crypt_r(ipass.c_str(), salt.c_str(), &data);
+    if(!tRez) { mess_sys(TMess::Error, _("Error crypt_r(): %s (%d)"), strerror(errno), errno); return false; }
+    return (pass == tRez);
 # else
     MtxAlloc res(dataRes(), true);
-    if(hash) *hash = crypt(ipass.c_str(), salt.c_str());
-    return (pass == crypt(ipass.c_str(), salt.c_str()));
+    if(hash) {
+	tRez = crypt(ipass.c_str(), salt.c_str());
+	if(!tRez) { mess_sys(TMess::Error, _("Error crypt(): %s (%d)"), strerror(errno), errno); return false; }
+	*hash = tRez;
+    }
+    tRez = crypt(ipass.c_str(), salt.c_str());
+    if(!tRez) { mess_sys(TMess::Error, _("Error crypt(): %s (%d)"), strerror(errno), errno); return false; }
+    return (pass == tRez);
 # endif
 #else
     return (ipass == cfg("PASS").getS());
@@ -370,6 +390,19 @@ void TUser::postDisable( int flag )
 TSecurity &TUser::owner( ) const	{ return *(TSecurity*)nodePrev(); }
 
 string TUser::tbl( )			{ return string(owner().subId())+"_user"; }
+
+bool TUser::cfgChange( TCfg &co, const TVariant &pc )
+{
+#if defined(HAVE_CRYPT_H)
+    //Check password at it loading and changing for plain one to generate its hash
+    if(co.name() == "PASS" && co.getS() != pc.getS() &&
+	    co.getS().compare(0,3+vmin(8,name().size()),"$1$"+name().substr(0,vmin(8,name().size()))) != 0 && co.getS().size() != 13)
+	setPass(co.getS());
+#endif
+
+    modif();
+    return true;
+}
 
 void TUser::load_( TConfig *icfg )
 {
@@ -468,7 +501,8 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    modif();
 	}
     }
-    else if(a_path.compare(0,4,"/prm") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,1), name().c_str(), SSEC_ID, RWRWR_);
+    else if(a_path.compare(0,4,"/prm") == 0)
+	TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,1), name().c_str(), SSEC_ID, RWRWR_);
     else TCntrNode::cntrCmdProc(opt);
 }
 

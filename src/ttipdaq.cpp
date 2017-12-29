@@ -40,8 +40,8 @@ TTipDAQ::TTipDAQ( const string &id ) : TModule(id)
     mCntr = grpAdd("cntr_");
 
     fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
+    fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
     fldAdd(new TFld("ENABLE",_("To enable"),TFld::Boolean,0,"1","0"));
     fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1","0"));
 }
@@ -124,8 +124,8 @@ int TTipDAQ::tpParmAdd( const char *id, const char *n_db, const char *name )
     paramt.push_back(new TTipParam(id,name,n_db));
     //> Add structure fields
     paramt[i_t]->fldAdd(new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    paramt[i_t]->fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    paramt[i_t]->fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200"));
+    paramt[i_t]->fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    paramt[i_t]->fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
     paramt[i_t]->fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TCfg::NoVal,"1","0"));
 
     return i_t;

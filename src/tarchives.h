@@ -248,7 +248,6 @@ class TArchiveS : public TSubSYS
 		elAval;			//Value archives DB elements
 
 	//> Messages archiving
-	char	bufErr;			//Buffer error
 	int	mMessPer;		//Message archiving period
 	bool	prcStMess;		//Process messages flag
 	//  Messages buffer

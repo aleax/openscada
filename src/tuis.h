@@ -66,7 +66,7 @@ class TUIS : public TSubSYS
 
 	//- All system UI functions -
 	static bool icoPresent( const string &inm, string *tp = NULL );
-	static string icoGet( const string &inm, string *tp = NULL );
+	static string icoGet( const string &inm, string *tp = NULL, bool retPath = false );
 	static string icoPath( const string &ico, const string &tp = "png" );
 
 	static string mimeGet( const string &inm, const string &fDt, const string &orig = "" );

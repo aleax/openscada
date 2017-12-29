@@ -83,7 +83,7 @@ void TTpContr::postEnable( int flag )
 
     // Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
-    fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.01;100") );
+    fldAdd( new TFld("PERIOD",_("Gather data period, seconds"),TFld::Real,TFld::NoFlag,"6.2","1","0.01;100") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("BUS",_("Bus"),TFld::Integer,TFld::NoFlag,"2","1") );
     fldAdd( new TFld("BAUD",_("Baudrate"),TFld::Integer,TFld::NoFlag,"6","115200") );
@@ -256,7 +256,7 @@ void *TMdContr::Task( void *icntr )
     cntr.endRunReq = false;
 
     //> Init watchdog and get previous state
-    if( cntr.mBus == 0 ) wTm = atof(cntr.prmLP("wTm").c_str());
+    if( cntr.mBus == 0 ) wTm = s2r(cntr.prmLP("wTm"));
 
     try
     {
@@ -329,18 +329,18 @@ string TMdContr::serReq( string req, char mSlot )
 	req += "\r";
     } catch(...)	{ return ""; }*/
 
-    //ResAlloc resN( tr.nodeRes(), true );
+    //MtxAlloc resN( tr.reqRes(), true );
     for( int i_tr = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++ )
     {
 	/*try
 	{
-	    int resp_len = tr.at().messIO( req.data(), req.size(), szReceive, sizeof(szReceive), 0, true );
+	    int resp_len = tr.at().messIO( req.data(), req.size(), szReceive, sizeof(szReceive));
 	    string rez( szReceive, resp_len );
 
 	    //> Wait tail
 	    while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r'))
 	    {
-		try{ resp_len = tr.at().messIO( NULL, 0, szReceive, sizeof(szReceive), 0, true ); } catch(TError &er){ break; }
+		try{ resp_len = tr.at().messIO( NULL, 0, szReceive, sizeof(szReceive)); } catch(TError &er){ break; }
 		rez.append( szReceive, resp_len );
 	    }
 	    if( rez.size() < 2 || rez[rez.size()-1] != '\r' )	{ errResp = true; continue; }
@@ -367,7 +367,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	if(cfg("BAUD").view())
 	    ctrMkNode("fld",opt,-1,"/cntr/cfg/BAUD",cfg("BAUD").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","dest","sel_ed","select","/cntr/cfg/boudLst");
 	if(mBus == 0 && ctrMkNode("area",opt,-1,"/LPcfg","LinPAC"))
-	    ctrMkNode("fld",opt,-1,"/LPcfg/wTm",_("Watchdog timeout (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/LPcfg/wTm",_("Watchdog timeout, seconds"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
 	return;
     }
     //> Process command to page
@@ -523,7 +523,7 @@ void TMdPrm::loadExtPrms( )
     string  vl;
 
     //> Generic
-    vl = prmNd.attr("wTm"); if( !vl.empty() ) wTm = vmin(25.5,vmax(0,atof(vl.c_str())));
+    vl = prmNd.attr("wTm"); if( !vl.empty() ) wTm = vmin(25.5,vmax(0,s2r(vl)));
     vl = prmNd.attr("dInRev"); if( !vl.empty() ) dInRev = atoi(vl.c_str());
     vl = prmNd.attr("dOutRev"); if( !vl.empty() ) dOutRev = atoi(vl.c_str());
 
@@ -533,7 +533,7 @@ void TMdPrm::loadExtPrms( )
 	case 0x8017:
 	    if(!extPrms) extPrms = new PrmsI8017();
 	    vl = prmNd.attr("cnls"); if(!vl.empty()) ((PrmsI8017*)extPrms)->prmNum = vmin(8,vmax(0,atoi(vl.c_str())));
-	    vl = prmNd.attr("fastPer"); if(!vl.empty()) ((PrmsI8017*)extPrms)->fastPer = atof(vl.c_str());
+	    vl = prmNd.attr("fastPer"); if(!vl.empty()) ((PrmsI8017*)extPrms)->fastPer = s2r(vl);
 	    for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
 		if(prmNd.childGet(i_n)->name() == "cnl")
 		    ((PrmsI8017*)extPrms)->cnlMode[atoi(prmNd.childGet(i_n)->attr("id").c_str())] = atoi(prmNd.childGet(i_n)->text().c_str());
@@ -629,10 +629,10 @@ void TMdPrm::getVals( )
 	case 0x87019:
 	    rez = owner().serReq( TSYS::strMess("#%02X",(owner().mBus==0)?0:modAddr), modSlot );
 	    for( int i_v = 0; i_v < 8; i_v++ )
-		vlAt(TSYS::strMess("i%d",i_v)).at().setR( (rez.size() != 57 || rez[0] != '>') ? EVAL_REAL : atof(rez.data()+1+7*i_v), 0, true );
+		vlAt(TSYS::strMess("i%d",i_v)).at().setR( (rez.size() != 57 || rez[0] != '>') ? EVAL_REAL : s2r(rez.data()+1+7*i_v), 0, true );
 
 	    if( !rez.empty() )	rez = owner().serReq( TSYS::strMess("$%02X3",(owner().mBus==0)?0:modAddr), modSlot );
-	    vlAt("cvct").at().setR( (rez.size() != 8 || rez[0] != '>') ? EVAL_REAL : atof(rez.data()+1), 0, true );
+	    vlAt("cvct").at().setR( (rez.size() != 8 || rez[0] != '>') ? EVAL_REAL : s2r(rez.data()+1), 0, true );
 	    acq_err.setVal( rez.empty() ? _("10:Request to module error.") : ((rez[0]!='>')?_("11:Respond from module error."):""));
 
 	    break;
@@ -649,7 +649,7 @@ void TMdPrm::getVals( )
 	    for( int i_v = 0; i_v < 4; i_v++ )
 	    {
 		if( !rez.empty() ) rez = owner().serReq( TSYS::strMess("$%02X8%d",(owner().mBus==0)?0:modAddr,i_v), modSlot );
-		vlAt(TSYS::strMess("o%d",i_v)).at().setR( (rez.size() != 10 || rez[0]!='!') ? EVAL_REAL : atof(rez.data()+3), 0, true );
+		vlAt(TSYS::strMess("o%d",i_v)).at().setR( (rez.size() != 10 || rez[0]!='!') ? EVAL_REAL : s2r(rez.data()+3), 0, true );
 	    }
 	    acq_err.setVal( rez.empty()?_("10:Request to module error."):"" );
 
@@ -901,7 +901,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    case 0x8017:
 		if(!enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) break;
 		ctrMkNode("fld",opt,-1,"/cfg/prms",_("Process parameters"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
+		ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period, seconds"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
 		if(ctrMkNode("area",opt,-1,"/cfg/mode",_("Mode")))
 		    for(int i_v = 0; i_v < 8; i_v++)
 			ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/mode/in%d",i_v).c_str(),TSYS::strMess(_("Input %d"),i_v).c_str(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","dest","select","select","/cfg/tpLst");
@@ -920,7 +920,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		break;
 	    case 0x87024:
 		if(!enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) break;
-		ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout (s)"),RWRWR_,"root",SDAQ_ID,3,"tp","real","min","0","max","25.5");
+		ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout, seconds"),RWRWR_,"root",SDAQ_ID,3,"tp","real","min","0","max","25.5");
 		if(!owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg/mod",_("Module"))) break;
 		ctrMkNode("fld",opt,-1,"/cfg/mod/wSt",_("Host watchdog status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/cfg/mod/vPon",_("Power on values"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
@@ -932,7 +932,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		if(!enableStat() || !ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) break;
 		for(int i_o = 0; i_o < 16; i_o++)
 		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/revOut%d",i_o).c_str(),i_o?"":_("Out reverse"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout (s)"),RWRWR_,"root",SDAQ_ID,3,"tp","real","min","0","max","25.5");
+		ctrMkNode("fld",opt,-1,"/cfg/wTm",_("Host watchdog timeout, seconds"),RWRWR_,"root",SDAQ_ID,3,"tp","real","min","0","max","25.5");
 		if(!owner().startStat() || !ctrMkNode("area",opt,-1,"/cfg/mod",_("Module"))) break;
 		ctrMkNode("fld",opt,-1,"/cfg/mod/wSt",_("Host watchdog status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/cfg/mod/vPon",_("Power on values"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
@@ -967,7 +967,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::real2str(((PrmsI8017*)extPrms)->fastPer,5));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	{ ((PrmsI8017*)extPrms)->fastPer = atof(opt->text().c_str()); saveExtPrms(); }
+	{ ((PrmsI8017*)extPrms)->fastPer = s2r(opt->text()); saveExtPrms(); }
     }
     else if(modTp == 0x8017 && enableStat() && a_path.substr(0,12) == "/cfg/mode/in")
     {
@@ -1039,7 +1039,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     else if(enableStat() && a_path == "/cfg/wTm")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::real2str(wTm));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ wTm = atof(opt->text().c_str()); saveExtPrms(); }
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ wTm = s2r(opt->text()); saveExtPrms(); }
     }
     else if(enableStat() && owner().startStat() && a_path == "/cfg/mod/wSt" && ctrChkNode(opt))
     {

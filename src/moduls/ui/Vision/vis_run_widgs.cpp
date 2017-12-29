@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +25,7 @@
 #include <QPainter>
 #include <QComboBox>
 #include <QStatusBar>
+#include <QDesktopWidget>
 
 #include <tsys.h>
 
@@ -202,9 +202,16 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 	    setPermView(s2i(val)&SEC_RD);
 	    return true;
 	case A_NO_ID:
-	    //User's status line items
-	    if(attr == "statLine") { mainWin()->usrStatus(val, dynamic_cast<RunPageView*>(this)); return true; }
-	    break;
+	    // User's status line items
+	    if(attr == "statLine")		mainWin()->usrStatus(val, dynamic_cast<RunPageView*>(this));
+	    else if(attr == "userSetVis") {
+		if(val.size() && val != mainWin()->user() && val != property("userSetVis").toString().toStdString()) {
+		    setProperty("userSetVis", QString(val.c_str()));
+		    mainWin()->userSel(val);
+		} else setProperty("userSetVis", QString(val.c_str()));
+	    }
+	    else break;
+	    return true;
 	case A_PG_NAME:	setWindowTitle(val.c_str());	break;
 	case A_PG_OPEN_SRC: setProperty("pgOpenSrc", val.c_str());	return true;
 	case A_PG_GRP:	setProperty("pgGrp", val.c_str());		return true;

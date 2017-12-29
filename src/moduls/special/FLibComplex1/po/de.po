@@ -434,7 +434,3 @@ msgid ""
 msgstr ""
 "Verzögerung nach der Formel:\n"
 "y = y - Klag*( y - x );"
-
-#~ msgid "Allow static function library Complex1 (SCADA Complex1 functions)."
-#~ msgstr ""
-#~ "Zugriff auf die statische Bibliothek Complex1 (Funktionen SCADA Complex1)."

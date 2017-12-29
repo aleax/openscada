@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.h
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,6 +30,7 @@
 #include <QLabel>
 #include <QFileDialog>
 #include <QPrinter>
+#include <QMenu>
 
 #include "tvision.h"
 
@@ -69,6 +70,9 @@ class VisRun : public QMainWindow
 	int	style( );
 	bool	connOK( )	{ return !conErr; }
 
+	void	setWinMenu( bool act );
+
+	bool userSel( const string &hint = "" );
 	void setXScale( float vl )	{ x_scale = vl; }
 	void setYScale( float vl )	{ y_scale = vl; }
 	void setReqTm( unsigned rt )	{ reqtm = rt; }
@@ -152,10 +156,10 @@ class VisRun : public QMainWindow
 	};
 	//Private attributes
 	// Menu root items
-	QMenu	*mn_file,			//Menu "File"
-		*mn_alarm,			//Menu "Alarm"
-		*mn_view,			//Menu "View"
-		*mn_help;			//Menu "Help"
+	QMenu	menuFile,			//Menu "File"
+		menuAlarm,			//Menu "Alarm"
+		menuView,			//Menu "View"
+		menuHelp;			//Menu "Help"
 
 	// Tool bars
 	QToolBar	*toolBarStatus;		//Status toolbar
@@ -170,7 +174,9 @@ class VisRun : public QMainWindow
 
 	// Main components
 	QTimer		*endRunTimer, *updateTimer;
+#ifndef QT_NO_PRINTER
 	QPrinter	*prPg, *prDiag, *prDoc;
+#endif
 	QFileDialog	*fileDlg;
 	bool		winClose;		//Close window flag
 	UserStBar	*mWUser;		//User status widget

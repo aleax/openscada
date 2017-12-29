@@ -41,7 +41,7 @@ using namespace OSCADA;
 #define PRT_NAME	_("ModBUS")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.0.10"
+#define PRT_MVER	"1.0.16"
 #define PRT_AUTHORS	_("Roman Savochenko")
 #define PRT_DESCR	_("Allow realization of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define PRT_LICENSE	"GPL2"
@@ -228,8 +228,6 @@ class TProt: public TProtocol
 	TElem &nodeEl( )	{ return mNodeEl; }
 	TElem &nodeIOEl( )	{ return mNodeIOEl; }
 
-	ResRW &nodeRes( )	{ return nRes; }
-
     protected:
 	//Methods
 	void load_( );
@@ -254,8 +252,6 @@ class TProt: public TProtocol
 	int	mNode;
 
 	TElem	mNodeEl, mNodeIOEl;
-
-	ResRW	nRes;
 };
 
 extern TProt *modPrt;

@@ -24,6 +24,7 @@ var isIE = navigator.appName.indexOf('Microsoft') != -1;
 var isOpera = navigator.appName.indexOf('Opera') != -1;
 var isKonq = navigator.userAgent.indexOf('Konqueror') != -1;
 var mainTmId = 0;
+var gPrms = window.location.search || '';
 
 /***************************************************
  * pathLev - Path parsing function.                *
@@ -207,7 +208,7 @@ function evKeyGet( e )
 function servGet( adr, prm, callBack, callBackPrm )
 {
     var req = getXmlHttp();
-    req.open('GET', encodeURI('/'+MOD_ID+adr+'?'+prm), callBack ? true : false);
+    req.open('GET', encodeURI('/'+MOD_ID+adr+(gPrms.length?gPrms+'&':'?')+prm), callBack ? true : false);
     if(callBack) {
 	req.callBack = callBack;
 	req.callBackPrm = callBackPrm;
@@ -238,7 +239,7 @@ function servGet( adr, prm, callBack, callBackPrm )
 function servSet( adr, prm, body, waitRez )
 {
     var req = getXmlHttp();
-    req.open('POST', encodeURI('/'+MOD_ID+adr+'?'+prm), !waitRez);
+    req.open('POST', encodeURI('/'+MOD_ID+adr+(gPrms.length?gPrms+'&':'?')+prm), !waitRez);
     try {
 	req.send(body);
 	if(waitRez && req.status == 200 && req.responseXML.childNodes.length)
@@ -944,6 +945,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    dlgN.formObj.chApply();
 					    dlgN.style.visibility = 'hidden';
 					    dlgN.style.top = "-100px";
+					    dlgN.cldrDlg = null;
 					}
 					//Fill and activate the table
 					cldrDlg.tmSet = function(tm) {
@@ -994,10 +996,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 						    if(iWd == 5 || iWd == 6) tdEl.className += " end";
 						    iD++;
 						}
+					    this.formObj.setModify(true);
 					}
 					this.ownerDocument.body.appendChild(cldrDlg);
 				    }
-				    cldrDlg.onmouseleave = formObj.onclick;
+				    //cldrDlg.onmouseleave = formObj.onclick;
+				    formObj.cldrDlg = cldrDlg;
 				    cldrDlg.formObj = formObj;
 				    cldrDlg.tmSet(formObj.valGet());
 				    cldrDlg.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
@@ -1015,7 +1019,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.modify = function( )
 			{ return (this.parentNode.children[this.parentNode.children.length-1].style.visibility == 'visible'); }
 			formObj.setModify = function(on) {
-			    if(on && this.clearTm) this.clearTm = 5;
+			    if(on && this.clearTm) this.clearTm = clearTm;
 			    if(this.modify() == on) return;
 			    var posOkImg = this.parentNode.children.length-1;
 			    var okImg = this.parentNode.children[posOkImg];
@@ -1024,7 +1028,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				if(posOkImg == 2)
 				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)-16)+'px';
 				okImg.style.visibility = 'visible';
-				this.wdgLnk.perUpdtEn(true); this.clearTm = 5;
+				this.wdgLnk.perUpdtEn(true); this.clearTm = clearTm;
 			    }
 			    else {
 				this.style.width = (parseInt(this.style.width)+16)+'px';
@@ -1032,6 +1036,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)+16)+'px';
 				okImg.style.visibility = 'hidden';
 				this.wdgLnk.perUpdtEn(false); this.clearTm = 0;
+				if(this.cldrDlg) this.onclick();
 			    }
 			    this.parentNode.isModify = on;
 			}
@@ -1328,10 +1333,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(toInit || this.attrsMdf['font']) formObj.style.font = this.place.fontCfg;
 			var imgObj = formObj.childNodes.length ? formObj.childNodes[0] : this.place.ownerDocument.createElement('img');
 			var spanObj = formObj.childNodes.length ? formObj.childNodes[1] : this.place.ownerDocument.createElement('span');
-			spanObj.style.cssText = "display: table-cell; height: "+geomH+"px; line-height: 1; text-align: center; white-space: pre-line; width: "+geomW+"px; ";
+			spanObj.style.cssText = "display: table-cell; height: "+geomH+"px; line-height: 1; text-align: center; white-space: pre-line; word-break: break-word; width: "+geomW+"px; ";
 			if(toInit || this.attrsMdf['name']) {
 			    spanObj.disabled = !this.attrs['name'].length;
-			    spanObj.innerHTML = this.attrs['name'];
+			    spanObj.innerText = this.attrs['name'].replace('\\n','\n');
 			}
 			if(toInit || this.attrsMdf['img'] || this.attrsMdf['name']) {
 			    imgObj.hidden = !this.attrs['img'].length;
@@ -2435,7 +2440,7 @@ function makeUI( callBackRez )
     var sleepTm = Math.max(0, planePer-elTm);
     prcTm = elTm + sleepTm;
     //console.log("sleepTm: "+sleepTm+"s; prcTm: "+prcTm+"s; elTm: "+elTm+"s; planePer: "+planePer+"s.");
-    setTimeout(makeUI,sleepTm*1e3);
+    setTimeout(makeUI, sleepTm*1e3);
     //if(mainTmId) clearTimeout(mainTmId);
     //mainTmId = setTimeout(makeUI, 1000);
 
@@ -2458,7 +2463,7 @@ function setStatus( mess, tm )
     window.status = mess ? mess : '###Ready###';
     if(!mess) return;
     if(stTmID) clearTimeout(stTmID);
-    if(!tm || tm > 0) stTmID = setTimeout('setStatus(null)',tm?tm:1000);
+    if(!tm || tm > 0) stTmID = setTimeout('setStatus(null)', tm?tm:1000);
 }
 
 /**************************************************
@@ -2511,5 +2516,6 @@ var stTmID = null;			//Status line timer identifier
 var stTmMain = null;			//Main cycle start time
 var wx_scale = 1;			//Main window scale for fit, X axis
 var wy_scale = 1;			//Main window scale for fit, Y axis
+var clearTm = 10;			//Clear time of line edit fields, seconds
 
 mainTmId = setTimeout(makeUI, 100);	//First call init

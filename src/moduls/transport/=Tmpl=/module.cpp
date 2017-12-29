@@ -101,7 +101,7 @@ string TTr::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
-	"======================= The module <%s:%s> options =======================\n"
+	"======================= Module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section '%s' in config-file ----------\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
@@ -112,10 +112,8 @@ string TTr::optDescr( )
 void TTr::load_( )
 {
     //!!! Load self module command line parameters' values. Append your addition parameters process.
-    //> Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    // Load parameters from command line
+    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA system DB or from main config-file
 }
@@ -319,7 +317,7 @@ void TTrOut::stop()
 }
 
 //!!! The inherited (virtual) sending data and receiving interface function implementation. Append into for your need.
-int TTrOut::messIO( const char *oBuf, int iLen, char *iBuf, int iLen, int time, bool noRes )
+int TTrOut::messIO( const char *oBuf, int iLen, char *iBuf, int iLen, int time )
 {
     if(!runSt) throw TError(nodePath().c_str(),_("Transport is not started!"));
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-15 11:26+0200\n"
+"POT-Creation-Date: 2017-12-28 13:07+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -37,7 +37,7 @@ msgstr ""
 
 #, c-format
 msgid ""
-"======================= The module <%s:%s> options =======================\n"
+"======================= Module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
 "StartUser   <user>    No password requested start user.\n"
 "UserPass    <pass>    User password for no local start.\n"
@@ -163,13 +163,12 @@ msgstr ""
 msgid "Options help"
 msgstr "Optionen Hilfe"
 
-#, c-format
-msgid "%d: Development"
-msgstr "%d: Entwicklung"
+msgid "%d: Development by \"%s\""
+msgstr "%d: Entwicklung durch \"%s\""
 
 #, c-format
-msgid "%d: Running \"%s:%s\" - %s"
-msgstr "%d: Laufen \"%s:%s\" - %s"
+msgid "%d: Running \"%s:%s\" from \"%s\" - %s"
+msgstr "%d: Laufen \"%s:%s\" von \"%s\" - %s"
 
 msgid "Connected"
 msgstr "Verbunden"
@@ -1470,7 +1469,7 @@ msgid "Speaker alarm"
 msgstr "Lautsprecheralarm"
 
 msgid "PC speaker alarm"
-msgstr "PC Lautsprecheralarm"
+msgstr "PC Lautsprecheralar"
 
 msgid "The button for all PC speaker alarms quittance"
 msgstr "Schaltfläche für die Quittierung aller Lautsprecheralarme"

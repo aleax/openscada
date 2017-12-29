@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-09 13:45+0200\n"
+"POT-Creation-Date: 2017-12-22 21:11+0200\n"
 "PO-Revision-Date: 2009-03-31 18:44+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -54,9 +54,13 @@ msgid "No any expected respond but receive from modem %d: '%s'."
 msgstr "Немає очікуваної відповіді, але отримано з модему %d: '%s'."
 
 #, c-format
-msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms."
+msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms. "
 msgstr ""
-"Трафік вхідний %s, вихідний %s. Максимальний час очікування символу %.4g мс."
+"Трафік вхідний %s, вихідний %s. Максимальний час очікування символу %.4g мс. "
+
+#, c-format
+msgid "Processing time %s[%s]. "
+msgstr "Час обробки %s[%s]. "
 
 #, c-format
 msgid "Serial port '%s' %s error: %s."
@@ -86,9 +90,18 @@ msgstr "Помилка кількості стопових бітів '%d'."
 msgid "No response to initial request '%s'."
 msgstr "Немає відповіді на запит ініціалізації '%s'."
 
+msgid "Started"
+msgstr "Запущено"
+
+msgid "Stopped"
+msgstr "Зупинено"
+
 #, c-format
 msgid "Serial received message '%d'."
 msgstr "Serial отримав повідомлення '%d'."
+
+msgid "Received from\n"
+msgstr "Отримано\n"
 
 msgid "Error request to protocol."
 msgstr "Помилка запиту до протоколу."
@@ -103,6 +116,9 @@ msgstr "Запис: відповідь ноль байт."
 #, c-format
 msgid "Write: error '%s (%d)'."
 msgstr "Запис: помилка '%s (%d)'."
+
+msgid "Transmitted to\n"
+msgstr "Передано\n"
 
 msgid ""
 "Serial transport has address format: \"dev:speed:format[:fc[:mdm]]\". "
@@ -176,14 +192,14 @@ msgstr "Пріоритет"
 msgid "Modem"
 msgstr "Модем"
 
-msgid "Timeout (sec)"
-msgstr "Час очікування (с)"
+msgid "Timeout, seconds"
+msgstr "Час очікування, секунд"
 
-msgid "Pre-initial delay (sec)"
-msgstr "Витримка пре-ініціалізації (с)"
+msgid "Pre-initial delay, seconds"
+msgstr "Витримка пре-ініціалізації, секунд"
 
-msgid "Post-initial delay (sec)"
-msgstr "Витримка після-ініціалізації (с)"
+msgid "Post-initial delay, seconds"
+msgstr "Витримка після-ініціалізації, секунд"
 
 msgid "Initialization string 1"
 msgstr "Рядок ініціалізації 1"
@@ -206,6 +222,10 @@ msgstr "Відповідь на дзвінок, результат"
 #, c-format
 msgid "Traffic in %s, out %s. "
 msgstr "Трафік вхідний %s, вихідний %s. "
+
+#, c-format
+msgid "Respond time %s[%s]. "
+msgstr "Час відповіді %s[%s]. "
 
 #, c-format
 msgid "Device '%s' is used now."
@@ -247,6 +267,10 @@ msgid "Write error: %s"
 msgstr "Помилка запису: %s"
 
 #, c-format
+msgid "Transmitting error: %s"
+msgstr "Помилка передавання: %s"
+
+#, c-format
 msgid "Wrote %s."
 msgstr "Записано %s."
 
@@ -259,9 +283,16 @@ msgstr "Помилка читання эхо запиту."
 msgid "Read timeouted."
 msgstr "Перевищено час очікування читання!"
 
+msgid "Receiving timeouted"
+msgstr "Перевищено час очікування отримання!"
+
 #, c-format
 msgid "Read (select) error: %s"
 msgstr "Помилка читання (select): %s"
+
+#, c-format
+msgid "Receiving (select) error: %s"
+msgstr "Помилка отримання (select): %s"
 
 msgid "No data"
 msgstr "Немає даних"
@@ -269,6 +300,10 @@ msgstr "Немає даних"
 #, c-format
 msgid "Read error: %s"
 msgstr "Помилка читання: %s"
+
+#, c-format
+msgid "Receiving error: %s"
+msgstr "Помилка отримання: %s"
 
 #, c-format
 msgid "Read %s."
@@ -358,8 +393,8 @@ msgstr ""
 "Інколи закриття відкритого пристрою може бути руйнівним, наприклад, на ПЛК "
 "LP від ICP-DAS, та Ви можете запобігти цьому даною опцією."
 
-msgid "Life time (sec)"
-msgstr "Час життя (с)"
+msgid "Life time, seconds"
+msgstr "Час життя, секунд"
 
 msgid "Dial string"
 msgstr "Рядок для дзвінка"

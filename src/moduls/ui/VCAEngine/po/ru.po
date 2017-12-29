@@ -1,13 +1,13 @@
 # OpenSCADA.UI.VCAEngine translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-02 17:54+0300\n"
+"POT-Creation-Date: 2017-12-28 13:06+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -43,7 +43,7 @@ msgstr "Библиотека"
 msgid "State"
 msgstr "Состояние"
 
-msgid "Enable"
+msgid "Enabled"
 msgstr "Включен"
 
 msgid "Library DB"
@@ -91,12 +91,8 @@ msgid "Widget is not container!"
 msgstr "Виджет не контейнер!"
 
 #, c-format
-msgid ""
-"You try to create widget with name '%s' of the widget that was the early "
-"inherited and deleted from base container!"
-msgstr ""
-"Вы пытаетесь создать виджет с именем '%s', который был ранее унаследован и "
-"удалён из базового контейнера!"
+msgid "Restoring '%s' from the base container!"
+msgstr "Восстановление '%s' из базового контейнера!"
 
 msgid "Library widget: "
 msgstr "Библиотечный виджет: "
@@ -706,8 +702,8 @@ msgstr "Диаграмма"
 msgid "Diagram widget of the finite visualization."
 msgstr "Виджет диаграммы конечной визуализации."
 
-msgid "Tracing period (s)"
-msgstr "Период слежения (с)"
+msgid "Tracing period, seconds"
+msgstr "Период слежения, секунд"
 
 msgid "Trend;Spectrum;XY"
 msgstr "График;Спектр;XY"
@@ -1032,20 +1028,20 @@ msgstr "Время начала документа"
 msgid "Last time"
 msgstr "Последнее время"
 
-msgid "Repeat time (s)"
-msgstr "Время повтора (сек.)"
+msgid "Repeat time, seconds"
+msgstr "Время повтора, секунд"
 
-msgid "Repeat time (us)"
-msgstr "Время повтора (мксек.)"
+msgid "Repeat time, microseconds"
+msgstr "Время повтора, микросекунд"
 
 msgid "Repeat period"
 msgstr "Период повтора"
 
-msgid "Message time"
-msgstr "Время сообщения"
+msgid "Message time, seconds"
+msgstr "Время сообщения, секунд"
 
-msgid "Message time (mcs)"
-msgstr "Время сообщения (мкс)"
+msgid "Message time, microseconds"
+msgstr "Время сообщения, микросекунд"
 
 msgid "Message level"
 msgstr "Уровень сообщения"
@@ -1259,7 +1255,7 @@ msgstr "Ошибка вычисления сессии '%s'."
 
 #, c-format
 msgid "Unregistered connection %d on the session."
-msgstr ""
+msgstr "Незарегистрированное подключени %d на сеансе."
 
 msgid "Session: "
 msgstr "Сеанс: "
@@ -1288,11 +1284,14 @@ msgstr "Время вычисления сеанса"
 msgid "Connections counter"
 msgstr "Счётчик подключений"
 
-msgid "Last request"
-msgstr "Последнее обращение"
+msgid "Last request time, user, language"
+msgstr "Время, пользователь, язык последн. запроса"
 
-msgid "Left to force close (s)"
-msgstr "Осталось до принудительного закрытия (с)"
+msgid "Last user action"
+msgstr "Последнее действие пользователя"
+
+msgid "Left to force close, seconds"
+msgstr "Осталось до принудительного закрытия, секунд"
 
 msgid "Period (ms)"
 msgstr "Период (мс)"

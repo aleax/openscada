@@ -735,7 +735,11 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	    if(!((LineEdit*)shD->addrWdg)->isEdited()) ((LineEdit*)shD->addrWdg)->setValue(val.c_str());
 	    break;
 	case F_TEXT_ED: ((TextEdit*)shD->addrWdg)->setText(val.c_str());	break;
-	case F_CHECK_BOX: ((QCheckBox*)shD->addrWdg)->setChecked(s2i(val));	break;
+	case F_CHECK_BOX:
+	    shD->addrWdg->blockSignals(true);
+	    ((QCheckBox*)shD->addrWdg)->setChecked(s2i(val));
+	    shD->addrWdg->blockSignals(false);
+	    break;
 	case F_BUTTON: {
 	    QPushButton *wdg = (QPushButton*)shD->addrWdg;
 	    wdg->setCheckable(false);
@@ -1877,7 +1881,7 @@ void ShapeDiagram::loadData( WdgView *w, bool full )
     ShpDt *shD = (ShpDt*)w->shpData;
 
     XMLNode req("set");
-    req.setAttr("path",w->id()+"/%2fserv%2fattr");
+    req.setAttr("path", w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1");
     for(unsigned iP = 0; iP < shD->prms.size(); iP++) {
 	shD->prms[iP].loadData(full);
 	if(shD->prms[iP].arh_beg && shD->prms[iP].arh_end)
@@ -3414,7 +3418,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	shD->holdCur = (curTime==shD->tTime);
 
 	XMLNode req("set");
-	req.setAttr("path",w->id()+"/%2fserv%2fattr");
+	req.setAttr("path",w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1");
 	req.childAdd("el")->setAttr("id","curSek")->setText(i2s(curTime/1000000));
 	req.childAdd("el")->setAttr("id","curUSek")->setText(i2s(curTime%1000000));
 
@@ -3441,7 +3445,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	shD->curTime = 1e6/curFrq;
 
 	XMLNode req("set");
-	req.setAttr("path",w->id()+"/%2fserv%2fattr");
+	req.setAttr("path",w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1");
 	req.childAdd("el")->setAttr("id","curSek")->setText(i2s(shD->curTime/1000000));
 	req.childAdd("el")->setAttr("id","curUSek")->setText(i2s(shD->curTime%1000000));
 
@@ -4430,10 +4434,12 @@ void ShapeDocument::ShpDt::nodeProcess( XMLNode *xcur )
     }
 }
 
+#ifndef QT_NO_PRINTER
 void ShapeDocument::ShpDt::print( QPrinter * printer )
 {
     web->document()->print(printer);
 }
+#endif
 
 //************************************************
 //* User function shape widget                   *

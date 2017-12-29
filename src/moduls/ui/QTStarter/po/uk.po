@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-02 17:53+0300\n"
+"POT-Creation-Date: 2017-12-28 13:02+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -493,7 +493,7 @@ msgstr "Зупинка модуля..."
 
 #, c-format
 msgid ""
-"======================= The module <%s:%s> options =======================\n"
+"======================= Module <%s:%s> options =======================\n"
 "----------- Qt debug commandline options ----------\n"
 "    --noX11                Prevent Qt start, mostly for pure console.\n"
 "    --sync                 Switches to synchronous mode X11 for debugging.\n"
@@ -555,8 +555,17 @@ msgstr "Опції модуля"
 msgid "Start Qt modules (sep - ';')"
 msgstr "Запускаємі Qt модулі (розд. - ';')"
 
-msgid "OpenSCADA system Qt-starter"
-msgstr "Qt-стартер системи OpenSCADA"
+msgid "Close (all windows) or start to tray"
+msgstr "Закрывать (все окна) или запускать в трей"
+
+msgid "OpenSCADA %1"
+msgstr "OpenSCADA %1"
+
+msgid "Exit from the program"
+msgstr "Выход из программы"
+
+msgid "Qt-starter of OpenSCADA"
+msgstr "Qt-пускач OpenSCADA"
 
 msgid "&About"
 msgstr "&Про ..."
@@ -616,12 +625,6 @@ msgstr ""
 "Автор: %5\n"
 "Опис: %6\n"
 "Ліцензія: %7"
-
-msgid "Exit from the system"
-msgstr "Вийти з системи"
-
-msgid "Exit from the program"
-msgstr "Вихід з програми"
 
 msgid "The button for exit from the program"
 msgstr "Кнопка для виходу з програми"

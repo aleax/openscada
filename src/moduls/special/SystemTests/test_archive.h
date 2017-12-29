@@ -36,7 +36,7 @@ class TestArchive : public TFunction
 	{
 	    ioAdd(new IO("rez",_("Result"),IO::String,IO::Return));
 	    ioAdd(new IO("arch",_("Value archive"),IO::String,IO::Default));
-	    ioAdd(new IO("period",_("Values period (us)"),IO::Integer,IO::Default,"1000000"));
+	    ioAdd(new IO("period",_("Values period, us"),IO::Integer,IO::Default,"1000000"));
 	    ioAdd(new IO("archtor",_("Archivator"),IO::String,IO::Default));
 	}
 

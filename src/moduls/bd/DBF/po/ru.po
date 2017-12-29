@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.DBF 2.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-21 18:06+0300\n"
+"POT-Creation-Date: 2017-12-28 11:42+0200\n"
 "PO-Revision-Date: 2007-10-23 11:43+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -40,15 +40,15 @@ msgstr "Ошибка восстановления предыдущей дире�
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Ошибка открытия таблицы '%s'. БД отключена."
 
+msgid "Open table error!"
+msgstr "Ошибка открытия таблицы!"
+
 msgid ""
 "For DBF address DB is the directory which contains files of tables (*.dbf).\n"
 "For example: /opt/dbf ."
 msgstr ""
 "Для DBF адрес БД это директория, которая содержит файлы таблиц (*.dbf).\n"
 "Для примера: /opt/dbf ."
-
-msgid "Open table error!"
-msgstr "Ошибка открытия таблицы!"
 
 msgid "Cell error!"
 msgstr "Ошибка ячейки!"
