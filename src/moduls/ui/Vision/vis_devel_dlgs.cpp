@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -211,7 +211,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     mimeDataTable = new QTableWidget(0, 3, tab_w);
     mimeDataTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     connect(mimeDataTable, SIGNAL(cellChanged(int,int)), this, SLOT(mimeDataChange(int,int)));
-    mimeDataTable->setHorizontalHeaderLabels(QStringList() << _("Id") << _("Mime type") << _("Data size"));
+    mimeDataTable->setHorizontalHeaderLabels(QStringList() << _("Identifier") << _("Mime type") << _("Data size"));
     dlg_lay->addWidget(mimeDataTable, 0, 0, 1, 4);
 
     buttDataAdd = new QPushButton(_("Add record"),tab_w);
@@ -259,7 +259,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     stl_table->setObjectName("/style/props");
     stl_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     connect(stl_table, SIGNAL(cellChanged(int,int)), this, SLOT(stlTableChange(int,int)));
-    stl_table->setHorizontalHeaderLabels(QStringList() << _("Id") << _("Value"));
+    stl_table->setHorizontalHeaderLabels(QStringList() << _("Identifier") << _("Value"));
     dlg_lay->addWidget(stl_table, 4, 0, 1, 4);
 
     buttStlTableDel = new QPushButton(_("Delete record"),tab_w);
@@ -1070,7 +1070,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_attr_cfg->setSelectionBehavior(QAbstractItemView::SelectRows);
     obj_attr_cfg->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     connect(obj_attr_cfg, SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(changeAttr(QTreeWidgetItem*,int)));
-    obj_attr_cfg->setHeaderLabels(QStringList() << _("Id") << _("Name") << _("Data type") << _("Work area") << _("Proc.")
+    obj_attr_cfg->setHeaderLabels(QStringList() << _("Identifier") << _("Name") << _("Data type") << _("Work area") << _("Proc.")
 						<< _("Configuration") << _("Configuration template"));
     glay->addWidget(obj_attr_cfg,0,0,1,2);
 

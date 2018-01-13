@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.ModBus translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.ModBus package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:06+0200\n"
+"POT-Creation-Date: 2018-01-13 20:07+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -75,8 +75,8 @@ msgstr "Шаблон параметра"
 msgid "Parameter ID"
 msgstr "ID параметра"
 
-msgid "ID"
-msgstr ""
+msgid "Identifier"
+msgstr "Идентификатор"
 
 msgid "Value"
 msgstr "Значение"
@@ -519,9 +519,6 @@ msgstr ""
 "  \"R_i8:0x10:w\" - получить и установить int64 в регистры [0x10-0x13];\n"
 "  \"R_d:0x20,0x30\" - получить вещественное двойной точности (8 byte) из "
 "регистров [0x20,0x30-0x32]."
-
-msgid "Id"
-msgstr ""
 
 msgid "Type"
 msgstr "Тип"

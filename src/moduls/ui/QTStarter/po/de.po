@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2014-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2014-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-27 17:26+0200\n"
+"POT-Creation-Date: 2018-01-13 20:53+0200\n"
 "PO-Revision-Date: 2011-07-19 20:56+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -498,7 +498,6 @@ msgstr "Starten des Moduls ..."
 msgid "Stopping the module..."
 msgstr "Stoppen des Moduls ..."
 
-#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "----------- Qt debug commandline options ----------\n"
@@ -524,7 +523,7 @@ msgid ""
 "    --geometry=<geom>      Sets the client geometry of the first window that "
 "is shown.\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
-"StartMod  <moduls>    Start modules list (sep - ';').\n"
+"StartMod    <moduls>       Start modules list (sep - ';').\n"
 "\n"
 msgstr ""
 "======================== Optionen des Moduls <%s:%s> "
@@ -554,7 +553,7 @@ msgstr ""
 "    --geometry=<Geom>      Installieren Sie den Client Geometrie der ersten "
 "Display-Fenster.\n"
 "------- Parameter des Abschnitts '%s' in der Konfigurationsdatei ---------\n"
-"StartMod  <moduls>    Liste der Startmodulen (Trennzeichen - ';');\n"
+"StartMod    <moduls>       Liste der Startmodulen (Trennzeichen - ';');\n"
 "\n"
 
 msgid "Module options"
@@ -562,6 +561,12 @@ msgstr "Optionen des Moduls"
 
 msgid "Start Qt modules (sep - ';')"
 msgstr "Qt-Startmodule (trenn. - ';')"
+
+msgid "Style"
+msgstr "Stil"
+
+msgid "Style Sheets"
+msgstr "Stilvorlagen"
 
 msgid "Close (all windows) or start to tray"
 msgstr "Schließe (alle Fenster) oder beginne mit dem Tray"

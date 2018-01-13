@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:47+0200\n"
+"POT-Creation-Date: 2018-01-13 20:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,7 +62,7 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
-msgid "Id"
+msgid "Identifier"
 msgstr ""
 
 msgid "Name"
@@ -1184,9 +1184,6 @@ msgstr ""
 msgid "The main visual control area engine."
 msgstr ""
 
-msgid "ID"
-msgstr ""
-
 msgid "DB table"
 msgstr ""
 
@@ -1224,6 +1221,9 @@ msgid "Configuration template"
 msgstr ""
 
 msgid "Configuration value"
+msgstr ""
+
+msgid "Child identifier"
 msgstr ""
 
 msgid "Attribute generic flags and type"

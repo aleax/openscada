@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 20:52+0200\n"
+"POT-Creation-Date: 2018-01-13 20:01+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -16,51 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 #, c-format
-msgid "Internal function inaccessible by offset %d > %d"
-msgstr "Внутрення функция недоступна ввиду смещения %d > %d"
-
-#, c-format
 msgid "Variable '%s' is used but undefined"
 msgstr "Переменная '%s' не определена но использована"
-
-msgid "Error constant after constant"
-msgstr "Ошибка постоянной после постоянной"
-
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr "%s, позиция: (%d,%d)-(%d,%d)."
-
-msgid "Unexpected end program, expect end string symbol '\"', "
-msgstr ""
-"Неожиданное окончание программы, ожидается символ окончания строки '\"', "
-
-msgid "The next line symbol failed into string, "
-msgstr "Символ перевода линии недопустим в строке, "
-
-msgid "Using namespace is error or empty, "
-msgstr "Ошибка использования области имён или она пуста, "
-
-msgid "Internal function declaration error, "
-msgstr "Ошибка определения внутренней функции, "
-
-#, c-format
-msgid "Internal function '%s' defined early, "
-msgstr "Внутренняя функция '%s' ранее определена, "
-
-msgid "Do not include declaration of one internal function to other, "
-msgstr "Не включать определение одной внутренней функции в другую, "
-
-msgid "Build in function has too much parameters, "
-msgstr "Встроенная функция имеет слишком много параметров, "
-
-msgid "Function error, "
-msgstr "Ошибка функции, "
-
-msgid "Symbol error, "
-msgstr "Ошибка символа, "
-
-msgid "Object's properties too long, "
-msgstr "Свойства объекта очень длинные, "
 
 msgid "Array have more 255 items."
 msgstr "Массив имеет более 255 элементов."
@@ -132,8 +89,8 @@ msgstr "Программа"
 msgid "IO"
 msgstr ""
 
-msgid "Id"
-msgstr ""
+msgid "Identifier"
+msgstr "Идентификатор"
 
 msgid "Type"
 msgstr "Тип"
@@ -228,9 +185,6 @@ msgstr "Стандартный"
 
 msgid "Data fields"
 msgstr "Поля данных"
-
-msgid "ID"
-msgstr ""
 
 msgid "Data base"
 msgstr "База данных"
@@ -358,3 +312,46 @@ msgstr ""
 "  anm - имя создаваемого атрибута.\n"
 "Если 'aid' или 'anm' не установлены то они будут генерироваться из "
 "выбранного IO функции."
+
+#, c-format
+msgid "Internal function inaccessible by offset %d > %d"
+msgstr "Внутрення функция недоступна ввиду смещения %d > %d"
+
+msgid "Error constant after constant"
+msgstr "Ошибка постоянной после постоянной"
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr "%s, позиция: (%d,%d)-(%d,%d)."
+
+msgid "Unexpected end program, expect end string symbol '\"', "
+msgstr ""
+"Неожиданное окончание программы, ожидается символ окончания строки '\"', "
+
+msgid "The next line symbol failed into string, "
+msgstr "Символ перевода линии недопустим в строке, "
+
+msgid "Using namespace is error or empty, "
+msgstr "Ошибка использования области имён или она пуста, "
+
+msgid "Internal function declaration error, "
+msgstr "Ошибка определения внутренней функции, "
+
+#, c-format
+msgid "Internal function '%s' defined early, "
+msgstr "Внутренняя функция '%s' ранее определена, "
+
+msgid "Do not include declaration of one internal function to other, "
+msgstr "Не включать определение одной внутренней функции в другую, "
+
+msgid "Build in function has too much parameters, "
+msgstr "Встроенная функция имеет слишком много параметров, "
+
+msgid "Function error, "
+msgstr "Ошибка функции, "
+
+msgid "Symbol error, "
+msgstr "Ошибка символа, "
+
+msgid "Object's properties too long, "
+msgstr "Свойства объекта очень длинные, "

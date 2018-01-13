@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -619,7 +619,7 @@ void TMess::save( )
 const char *TMess::labDB( )
 {
     return _("DB address in format \"{DB module}.{DB name}\".\n"
-	     "For use the main work DB set '*.*'.");
+	     "Set '*.*' for use the main work DB.");
 }
 
 const char *TMess::labSecCRON( )

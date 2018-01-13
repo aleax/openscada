@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,8 +51,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     fileDlg(NULL), winClose(false), mWaitCursorSet(false), copy_buf("0"), prjLibPropDlg(NULL), visItPropDlg(NULL)
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
-
-    setProperty("QTStarterToolDis", true);
+    connect(this, SIGNAL(makeStarterMenu()), qApp, SLOT(makeStarterMenu()));
 
     setDockOptions(dockOptions() | QMainWindow::VerticalTabs);
     mod->regWin(this);
@@ -515,6 +514,8 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     mn_help->addAction(actManualSYS);
     mn_help->addSeparator();
     mn_help->addAction(actWhatIs);
+    // QTStarter
+    emit makeStarterMenu();
 
     //Init tool bars
     // Visual items tools bar
@@ -646,7 +647,8 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
 
     //resize(1000, 800);
     //setWindowState(Qt::WindowMaximized);
-    menuBar()->setVisible(true);
+
+    //menuBar()->setVisible(true);	//!!!! Spare for Qt5 and the native menu bar
 
     wdgTree->updateTree("", true);	//Initial for allow the widgets loading on the server side mostly
     prjTree->updateTree("", NULL, true);//Initial for allow the projects loading on the server side mostly

@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:06+0200\n"
+"POT-Creation-Date: 2018-01-13 20:07+0200\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -80,8 +80,8 @@ msgstr "Template-Parameter"
 msgid "Parameter ID"
 msgstr "ID der Parameter"
 
-msgid "ID"
-msgstr ""
+msgid "Identifier"
+msgstr "Identifikator"
 
 msgid "Value"
 msgstr "Wert"
@@ -528,9 +528,6 @@ msgstr ""
 "  \"R_i8:0x10:w\" - get-und set int64 in Register [0x10-0x13];\n"
 "  \"R_d:0x20,0x30\" - erhalten die doppelte Float (8 Byte) aus den Registern "
 "[0x20,0x30-0x32]."
-
-msgid "Id"
-msgstr ""
 
 msgid "Type"
 msgstr "Typ"

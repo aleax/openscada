@@ -10,7 +10,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Program manual</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual/ru" title="Документы/Руководство по программе (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--high" href="http://oscada.org/wiki/Documents/Program_manual/uk" title="Документи/Посібник по програмі (61% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual/ru" title="Документы/Руководство по программе (99% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--high" href="http://oscada.org/wiki/Documents/Program_manual/uk" title="Документи/Посібник по програмі (73% translated)">українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -64,10 +64,15 @@
 <li class="toclevel-2 tocsection-31"><a href="#Subsystem_.22Specials.22"><span class="tocnumber">4.8</span> <span class="toctext">Subsystem "Specials"</span></a></li>
 <li class="toclevel-2 tocsection-32"><a href="#Subsystem_.22Modules_scheduler.22"><span class="tocnumber">4.9</span> <span class="toctext">Subsystem "Modules scheduler"</span></a></li>
 <li class="toclevel-2 tocsection-33"><a href="#Configuration_file_of_OpenSCADA_and_parameters_of_command-line_OpenSCADA_execution"><span class="tocnumber">4.10</span> <span class="toctext"><span>Configuration file of OpenSCADA and parameters of command-line OpenSCADA execution</span></span></a></li>
-<li class="toclevel-2 tocsection-34"><a href="#OpenSCADA_projects"><span class="tocnumber">4.11</span> <span class="toctext"><span>OpenSCADA projects</span></span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#OpenSCADA_projects"><span class="tocnumber">4.11</span> <span class="toctext"><span>OpenSCADA projects</span></span></a>
+<ul>
+<li class="toclevel-3 tocsection-35"><a href="#GUI_application"><span class="tocnumber">4.11.1</span> <span class="toctext">GUI application</span></a></li>
+<li class="toclevel-3 tocsection-36"><a href="#Background_application_.E2.80.94_service"><span class="tocnumber">4.11.2</span> <span class="toctext">Background application — service</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-35"><a href="#Links"><span class="tocnumber">5</span> <span class="toctext">Links</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-37"><a href="#Links"><span class="tocnumber">5</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -125,7 +130,7 @@
 <li> User Interfaces (modular).</li>
 <li> Specials (modular).</li></ul>
 <h3><span class="mw-headline" id="PLC_and_other_sources_of_dynamic_data.2C_the_subsystem_.22Data_acquisition.22"><span class="mw-headline-number">1.3</span> <span id="DAQ" title="#DAQ">PLC and other sources of dynamic data, the subsystem "Data acquisition"</span></span></h3>
-<p>The subsystem "DAQ" (Data Acquisition) (Fig. 1.3) provides to support dynamic data sources whether: PLC, MOD, virtual sources and other. The function of this subsystem is to provide the received data in structured form and to provide management of these data, for example, these are data modification.
+<p>The subsystem "DAQ" (Data Acquisition) (Fig.1.3) provides to support dynamic data sources whether: PLC, MOD, virtual sources and other. The function of this subsystem is to provide the received data in structured form — <b>the data model</b> and to provide management of these data, for example, these are data modification.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:309px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_daq_str.png"><img class="thumbimage" height="335" src="files/Oscada_subsys_daq_str.png" width="307" /></a>  <div class="thumbcaption">Fig. 1.3. Hierarchical structure of the subsystem "DAQ".</div></div></div></div>
 <p>The subsystem "DAQ" is a modular one and it contains modular objects of types of sources of dynamic data. For example OpenSCADA provides now more than twenty <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">modules</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices/list" title="Special:MyLanguage/Libs/User protocol devices/list">libraries items</a> by <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices" title="Special:MyLanguage/Libs/User protocol devices">sources of the logical level</a>. Most significant and developed from them are:
@@ -151,7 +156,7 @@
 </p><p>You can read in detail the key subsystem "DAQ" and its functions in a separate document "<a href="DAQ.html" title="Special:MyLanguage/Documents/DAQ">Data acquisition in OpenSCADA</a>".
 </p>
 <h3><span class="mw-headline" id="Databases.2C_the_subsystem_of_.22Databases.22"><span class="mw-headline-number">1.4</span> <span id="DB" title="#DB">Databases, the subsystem of "Databases"</span></span></h3>
-<p>To store data of the program are constantly used databases (DB). In order to unify access and manage databases, OpenSCADA has a subsystem called "Databases" (Fig. 1.4). To support different DB/DBMS the subsystem implemented as a modular one.
+<p>To store data of the program are constantly used databases (DB). In order to unify access and manage databases, OpenSCADA has a subsystem called "Databases" (Fig.1.4). To support different DB/DBMS the subsystem implemented as a modular one.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:370px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_db_str.png"><img class="thumbimage" height="297" src="files/Oscada_subsys_db_str.png" width="368" /></a>  <div class="thumbcaption">Fig. 1.4. Hierarchical structure of the subsystem "DB".</div></div></div></div>
 <p>In the role of modular object contained in the subsystem, the type of DB/DBMS acts, that is, any module of the subsystem "Databases" practically contain the implementation of access to a specific type of database. OpenSCADA provides that most significant and developed modules: <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a>, <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a>, <a href="Modules/PostgreSQL.html" title="Special:MyLanguage/Modules/PostgreSQL">PostgreSQL</a>, <a href="Modules/FireBird.html" title="Special:MyLanguage/Modules/FireBird">FireBird</a>.
@@ -167,7 +172,7 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:221px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_arch_str.png"><img class="thumbimage" height="251" src="files/Oscada_subsys_arch_str.png" width="219" /></a>  <div class="thumbcaption">Fig. 1.5. Hierarchical structure of the subsystem "Archives-History".</div></div></div></div>
 <p>The peculiarity of message archives is the very archiving of so-called program messages, that is logging. A characteristic sign of a message is the time of its occurrence. Depending on the source the messages can be classified according to different criteria. For example, it can be emergency reports, operator logs, communication failure protocols, and more.
 </p><p>The peculiarity of the value archives is their periodicity, which is determined by the time interval between two adjacent values. Value archives are used to archive the history of continuous processes. Since the process is continuous, it can be archived only by introducing the concept of quantization of the acquired values, otherwise we will receive archives of infinite sizes, in accordance with the continuity of the nature of the process itself. Besides, we can practically get values with a period limited by the data sources themselves. For example, rather high-quality data sources in industry rarely allow data to be received at frequencies above 1 kHz, without taking into account the sensors themselves, which have less qualitative frequency characteristics.
-</p><p>To solve the problems of archiving data streams in OpenSCADA provides a subsystem "Archives-History" (Fig. 1.5), which is modular and allows you to maintain archives of messages and values. Modular object, which is contained in the subsystem "Archives-History", is the type of archiver. The type of archiver determines a way of data storing ie the storage — <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">file system</a>, <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBMS</a>. Each module of the "Archives-History" subsystem, respectively, can implement the archiving of messages and values, and the subsystem itself can contain many archives that are processed by different modules.
+</p><p>To solve the problems of archiving data streams in OpenSCADA provides a subsystem "Archives-History" (Fig.1.5), which is modular and allows you to maintain archives of messages and values. Modular object, which is contained in the subsystem "Archives-History", is the type of archiver. The type of archiver determines a way of data storing ie the storage — <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">file system</a>, <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBMS</a>. Each module of the "Archives-History" subsystem, respectively, can implement the archiving of messages and values, and the subsystem itself can contain many archives that are processed by different modules.
 </p><p>Messages in OpenSCADA are characterized by the date, level of importance, category, and directly the message text. Date of a message indicates the date and time of his creation. Level of importance points to importance of the message. Category defines address or identifier-key of the message source. Often, category contains full path to a source of the message in the program. Text of a message, respectively, has the main meaning of the message.
 </p><p>When archiving messages, they are passed through a filter that works according to importance level and category of messages. Messages level in a filter indicates that you must skip messages with specified or higher levels of importance. For filtering by category, templates or regular expressions are used to determine which messages to pass. Each archiver has its own filter settings, therefore, it is easy to create various specialized archivers for the archive of messages. For example, archivers of messages can be directed to:
 </p>
@@ -179,7 +184,7 @@
 </p><p>To organize remote archivers in distributed configurations, the transport type of archivers is used, which is currently not implemented in OpenSCADA. The function of the transport type of archivers is to display the remote central archiver of OpenSCADA in the local configuration. As a result, the transport-type archiver performs data transfer between the local configuration and the archiver of the remote configuration of the program, by hiding from the subsystems of the local configuration the real nature of the archiver.
 </p>
 <h3><span class="mw-headline" id="Communications.2C_the_subsystem_.22Transports.22_and_.22Transport_protocols.22"><span class="mw-headline-number">1.6</span> Communications, the subsystem "Transports" and "Transport protocols"</span></h3>
-<p>Since OpenSCADA is highly scalable, communication support should be sufficiently flexible, for which it is implemented in the "Transports" and "Transport protocols" subsystems (fig. 1.6), which are modular ones.
+<p>Since OpenSCADA is highly scalable, communication support should be sufficiently flexible, for which it is implemented in the "Transports" and "Transport protocols" subsystems (Fig.1.6), which are modular ones.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:293px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_tr_str.png"><img class="thumbimage" height="296" src="files/Oscada_subsys_tr_str.png" width="291" /></a>  <div class="thumbcaption">Fig. 1.6. Hierarchical structure of the subsystem "Transports" and "Protocols".</div></div></div></div>
 <p>The "Transport" subsystem is intended to provide for the exchange of unstructured data between OpenSCADA and external systems, in the role of which remote stations OpenSCADA may also serve. Under unstructured data means the stream of characters of a certain length. Modular object contained in the "Transport" subsystem is a type of transport that determines the mechanism for the transmission of unstructured data. For example, their may be and are:
@@ -289,7 +294,7 @@
 </p>
 <h2><span class="mw-headline" id="Ways_of_configuration_and_using_of_OpenSCADA"><span class="mw-headline-number">3</span> Ways of configuration and using of OpenSCADA</span></h2>
 <h3><span class="mw-headline" id="Simple_server_connection"><span class="mw-headline-number">3.1</span> Simple server connection</span></h3>
-<p>In the elementary case OpenSCADA can be configured in a server mode (fig. 3.1) for acquisition and archiving of data. The given configuration allows to carry out following functions:
+<p>In the elementary case OpenSCADA can be configured in a server mode (Fig.3.1) for acquisition and archiving of data. The given configuration allows to carry out following functions:
 </p>
 <ul><li> interrogation of data sources (controllers);</li>
 <li> archiving of values of parameters of data sources;</li>
@@ -300,7 +305,7 @@
 <li> simulating, correcting and appending calculations in objects of the computing controllers.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:397px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_simple_server.png"><img class="thumbimage" height="253" src="files/Oscada_simple_server.png" width="395" /></a>  <div class="thumbcaption">Fig. 3.1. Simple server connection.</div></div></div></div>
 <h3><span class="mw-headline" id="Duplicated_server_connection"><span class="mw-headline-number">3.2</span> Duplicated server connection</span></h3>
-<p>For increasing of reliability and productivity OpenSСADA supposes plural reservation (fig. 3.2) at which data sources (controllers) and archives-history of one copy are reflected in other. At use of a similar configuration there is possible distribution of loading of interrogation/calculation at various stations. The given configuration allows to carry out functions:
+<p>For increasing of reliability and productivity OpenSСADA supposes plural reservation (Fig.3.2) at which data sources (controllers) and archives-history of one copy are reflected in other. At use of a similar configuration there is possible distribution of loading of interrogation/calculation at various stations. The given configuration allows to carry out functions:
 </p>
 <ul><li> interrogation of data sources (controllers);</li>
 <li> archiving of values of parameters of data sources;</li>
@@ -313,11 +318,11 @@
 <li> simulating, correcting and appending calculations in objects of the computing controllers with an opportunity of distribution of loading on servers.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:793px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_duplicated_server.png"><img class="thumbimage" height="257" src="files/Oscada_duplicated_server.png" width="791" /></a>  <div class="thumbcaption">Fig. 3.2. Duplicated server connection.</div></div></div></div>
 <h3><span class="mw-headline" id="Duplicated_server_connection_on_one_server"><span class="mw-headline-number">3.3</span> Duplicated server connection on one server</span></h3>
-<p>Special case of the duplicated connection is the duplicated connection within one server (fig. 3.3), that is starting of several stations at one machine with their parameters crossing. The purpose of the given configuration is increase of reliability and fault tolerance of the configuration by reservation of software.
+<p>Special case of the duplicated connection is the duplicated connection within one server (Fig.3.3), that is starting of several stations at one machine with their parameters crossing. The purpose of the given configuration is increase of reliability and fault tolerance of the configuration by reservation of software.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:793px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_duplicated_one_server.png"><img class="thumbimage" height="272" src="files/Oscada_duplicated_one_server.png" width="791" /></a>  <div class="thumbcaption">Fig. 3.3. Duplicated server connection on one server.</div></div></div></div>
 <h3><span class="mw-headline" id="Client_access_by_means_of_the_Web-interface._A_place_of_the_manager"><span class="mw-headline-number">3.4</span> Client access by means of the Web-interface. A place of the manager</span></h3>
-<p>For visualization of data containing on a server, the good decision is to use the user WEB-interface (fig. 3.4). The given decision allows to use a standard WEB-browser at the client side and therefore is the most flexible as it is not related to one platform, i.e. is multiplatform. However this decision has essential imperfections — that is low productivity and reliability. In this connection it is recommended to use the given method for visualization of noncritical data or data having a reserve highly reliable way of visualization. For example, the good decision will be using of this method in the management of industrial plants where always exists an operator station with a reliable way of visualization. The given configuration allows to carry out following functions:
+<p>For visualization of data containing on a server, the good decision is to use the user WEB-interface (Fig.3.4). The given decision allows to use a standard WEB-browser at the client side and therefore is the most flexible as it is not related to one platform, i.e. is multiplatform. However this decision has essential imperfections — that is low productivity and reliability. In this connection it is recommended to use the given method for visualization of noncritical data or data having a reserve highly reliable way of visualization. For example, the good decision will be using of this method in the management of industrial plants where always exists an operator station with a reliable way of visualization. The given configuration allows to carry out following functions:
 </p>
 <ul><li> interrogation of the server for acquisition of visualization data and configurations;</li>
 <li> visualization of data in a kind accessible to understanding;</li>
@@ -325,7 +330,7 @@
 <li> manipulation with parameters supposing change.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:537px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_for_wwwclient.png"><img class="thumbimage" height="251" src="files/Oscada_for_wwwclient.png" width="535" /></a>  <div class="thumbcaption">Fig. 3.4. Client access by means of the Web-interface. A place of the manager.</div></div></div></div>
 <h3><span class="mw-headline" id="Automated_workplace_.28place_of_the_manager.2Foperator.29"><span class="mw-headline-number">3.5</span> Automated workplace (place of the manager/operator)</span></h3>
-<p>For visualization of critical data, and also in case of if high quality and productivity is required, it is possible to use visualization on the basis of OpenSCADA configured with a GUI module (fig. 3.5). The given configuration allows to carry out following functions:
+<p>For visualization of critical data, and also in case of if high quality and productivity is required, it is possible to use visualization on the basis of OpenSCADA configured with a GUI module (Fig.3.5). The given configuration allows to carry out following functions:
 </p>
 <ul><li> interrogation of the server for updating current values;</li>
 <li> visualization of the gathered data in a kind accessible to understanding;</li>
@@ -333,7 +338,7 @@
 <li> manipulation with parameters supposing changes.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:647px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_clientserver_AWP.png"><img class="thumbimage" height="273" src="files/Oscada_clientserver_AWP.png" width="645" /></a>  <div class="thumbcaption">Fig. 3.5. Automated workplace (a place of the manager/operator).</div></div></div></div>
 <h3><span class="mw-headline" id="AWP_with_a_server_of_acquisition_and_archiving_on_single_machine_.28place_of_the_operator.2C_simulator_....29"><span class="mw-headline-number">3.6</span> AWP with a server of acquisition and archiving on single machine (place of the operator, simulator ...)</span></h3>
-<p>The full-function client-server configuration on single machine (fig. 3.6) can be used for increasing of reliability of the configuration as a whole by start of a client and a server in different processes. The given configuration allows, without consequences for the server, to stop the client and to do with it various preventive works. It is recommended for use at stations of the operator by installation of two machines combining in itself a station of the operator and a redundant server. The given configuration allows to carry out following functions:
+<p>The full-function client-server configuration on single machine (Fig.3.6) can be used for increasing of reliability of the configuration as a whole by start of a client and a server in different processes. The given configuration allows, without consequences for the server, to stop the client and to do with it various preventive works. It is recommended for use at stations of the operator by installation of two machines combining in itself a station of the operator and a redundant server. The given configuration allows to carry out following functions:
 </p>
 <ul><li> interrogation of data sources (controllers);</li>
 <li> service of client requests;</li>
@@ -345,7 +350,7 @@
 <li> acquisition and visualization of the information about the personal computer, the server....</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:647px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_clientserver_AWP_one.png"><img class="thumbimage" height="299" src="files/Oscada_clientserver_AWP_one.png" width="645" /></a>  <div class="thumbcaption">Fig. 3.6. Automated workplace with a server of acquisition and archiving on the single machine (a place of the operator, simulator...).</div></div></div></div>
 <h3><span class="mw-headline" id="Elementary_mixed_connection_.28simulator.2C_demonstration.2C_configurator_....29"><span class="mw-headline-number">3.7</span> Elementary mixed connection (simulator, demonstration, configurator ...)</span></h3>
-<p>The mixed connection combines functions of a server and a client (fig. 3.7). It can be used for test, demonstration functions, and also for granting simulators of technological processes as a unit. In this mode following functions can be carried out:
+<p>The mixed connection combines functions of a server and a client (Fig.3.7). It can be used for test, demonstration functions, and also for granting simulators of technological processes as a unit. In this mode following functions can be carried out:
 </p>
 <ul><li> interrogation of controllers;</li>
 <li> service of client requests;</li>
@@ -358,7 +363,7 @@
 <li> configuration of databases, connections, etc.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:394px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_misc.png"><img class="thumbimage" height="303" src="files/Oscada_misc.png" width="392" /></a>  <div class="thumbcaption">Fig. 3.7. Elementary mixed connection (simulator, demonstration, configurator...).</div></div></div></div>
 <h3><span class="mw-headline" id="Robust_Distributed_Configuration"><span class="mw-headline-number">3.8</span> Robust Distributed Configuration</span></h3>
-<p>The given configuration is one of variants of robust/reliable connection (fig. 3.8). Stability is reached by distribution of functions on:
+<p>The given configuration is one of variants of robust/reliable connection (Fig.3.8). Stability is reached by distribution of functions on:
 </p>
 <ul><li> to servers of acquisition;</li>
 <li> to the central server of archiving and service of client requests;</li>
@@ -397,7 +402,7 @@
 </p><p>Let's start the observing with configuration of the OpenSCADA system parameters that are placed in the six tabs of the root page of the station:
 </p>
 <ul><li> Tab "Station" contains basic information and configuration fields of the station, Figure 4a. List the fields provided and comment on them:
-<ul><li> <i>ID</i> — contains information about the station's identifier. It is specified by the command line parameter "--station". When loading it is sought a section in the configuration file appropriate to the station identifier, and if not detected, it uses the first available one.</li>
+<ul><li> <i>Identifier</i> — contains information about the station's identifier. It is specified by the command line parameter "--station". When loading it is sought a section in the configuration file appropriate to the station identifier, and if not detected, it uses the first available one.</li>
 <li> <i>Station name</i> — indicates the localized station's name. It is specified by the command line parameter "--statName".</li>
 <li> <i>Program</i> — contains information on the program name. Usually it is OpenSCADA or name of a solution based on OpenSCADA.</li>
 <li> <i>Version</i> — contains information on the current version of the program.</li>
@@ -418,7 +423,7 @@
 <li> <i>Save the program period</i> — indicates the frequency in seconds with which to save the changed station's data.</li>
 <li> <i>Language</i> — indicates the language of messages and localisation of the program. Changing of this field is acceptable, but leads to a change of messages' language only for the interface and dynamic messages!</li>
 <li> <i>Messages</i> — section of the parameters' group that are processing by the work of messages of the stations:
-<ul><li> <i>Least level</i> — indicates the level of messages beginning from which they are to be processed. Messages below this level will be ignored. The level "Debug (0)" have special sense, it set will enable debug messages generation by different parts of the program. For the parts debug messages generation control you can use the tab "Debug" (fig.4d).</li>
+<ul><li> <i>Least level</i> — indicates the level of messages beginning from which they are to be processed. Messages below this level will be ignored. The level "Debug (0)" have special sense, it set will enable debug messages generation by different parts of the program. For the parts debug messages generation control you can use the tab "Debug" (Fig.4d).</li>
 <li> <i>To syslog</i> — indicates the need of sending the message to the system logger that is the mechanism of operation system for work with messages of the system and software. When this option is enabled the possibility appears to manage and control the OpenSCADA messages by the mechanisms of OS.</li>
 <li> <i>To stdout</i> — indicates the use of the standard output mechanism in the console as a message output. Disabling of this feature will eliminate the entire output in the console, unless you specify the following parameter.</li>
 <li> <i>To stderr</i> — indicates the use of the standard error-taking mechanism for outputting messages, is usually also sent to the console.</li>
@@ -431,7 +436,7 @@
 <li> <i>Restore connection timeout, seconds</i> — indicates over the which period of time to attempt to reconnect with a lost redundant station in seconds (0-255).</li>
 <li> <i>Local primary commands transfer</i> — enables of local primary commands transfer to redundant stations for the local changes automatic sync.</li>
 <li> <i>Stations</i> — contains a table with information about the redundant stations. The stations can be added and removed via contextual menu. Id of the added stations is to be chosen from <a href="#Transports">the list of available OpenSCADA stations</a>. Presence into the table at last one enables the redundancy in whole and opens access to pages of the redundancy configuration at level of the subsystems, if a subsystem supports the redundancy. The table provides the following information about the station:
-<ul><li> <i>ID</i> — ID of the OpenSCADA station, should be changed after the addition by choosing from the list of available ones;</li>
+<ul><li> <i>Identifier</i> — Identifier of the OpenSCADA station, should be changed after the addition by choosing from the list of available ones;</li>
 <li> <i>Name</i> — name of the OpenSCADA station;</li>
 <li> <i>Live</i> — sign of establishing of a connection with the redundant station;</li>
 <li> <i>Level</i> — level of the remote station in the redundancy scheme;</li>
@@ -450,7 +455,7 @@
 <p>To modify the fields of this page it may be required the super user's rights. Get these rights you can by means of including your user into the superuser's group "root", or by entering the station from the superuser "root".
 </p><p>We must mention another one important point: the fields of the identifiers of all OpenSCADA objects are unacceptable for direct editing, because they are keys for storage of objects' data inti the database. However, to change the object's identifier you can by the command of cutting and the further pasting of the object (Cut-&gt; Paste) in the configurator.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:958px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_st.png"><img class="thumbimage" height="750" src="files/QTCfg_sys_st.png" width="956" /></a>  <div class="thumbcaption">Fig. 4a. Tab "Station" of the main page of the station configuration.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:950px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_st.png"><img class="thumbimage" height="747" src="files/QTCfg_sys_st.png" width="948" /></a>  <div class="thumbcaption">Fig. 4a. Tab "Station" of the main page of the station configuration.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:773px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_sub.png"><img class="thumbimage" height="469" src="files/QTCfg_sys_sub.png" width="771" /></a>  <div class="thumbcaption">Fig 4b. Tab "Subsystems" of the main page of the station configuration.</div></div></div></div>
 <p>Service task of the redundancy mechanism is always running and executed at intervals which are prescribed in the appropriate configuration field. Real work on implementing the redundancy is carried out in presence of at least one redundant station in the list of stations, and implies:
 </p>
@@ -462,20 +467,20 @@
 </p><p>Next for the concrete station, with copy of the generic DB, we configure its specific parameters into the tab "Redundancy" of the main page (Fig.4c), which will be stored into the configuration file.
 </p><p>After that all next configurations of the redundancy perform into the tab "Redundancy" of proper subsystem — "Data acquisition" (Fig.4.5b) or "Archives" (Fig.4.6b). If you will set the parameter "Local primary commands transfer" (Fig.4c) then the configurations, like to any other generic ones, can be carried out at one of the stations, and the changes made will fall on all the redundant stations, of course, if they will be available.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:676px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_redundancy.png"><img class="thumbimage" height="589" src="files/QTCfg_sys_redundancy.png" width="674" /></a>  <div class="thumbcaption">Fig 4c. Tab "Redundancy" of the main page of the station configuration.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:679px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_redundancy.png"><img class="thumbimage" height="585" src="files/QTCfg_sys_redundancy.png" width="677" /></a>  <div class="thumbcaption">Fig 4c. Tab "Redundancy" of the main page of the station configuration.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1094px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_tasks.png"><img class="thumbimage" height="720" src="files/QTCfg_sys_tasks.png" width="1092" /></a>  <div class="thumbcaption">Fig 4d. Tab "Tasks" of the main page of the station configuration.</div></div></div></div>
-<p>For debug of specific of OpenSCADA different working you may be necessary to enable addition-debugging messages generation, which you can set by select minimal messages level, into the tab "Station", to "Debug (0)". As a result of this there will emerge the tab "Debug" (fig.4e) where available the objects counters for control to leaks, and also the table with categories list of incoming debug messages. Into the table you can select only needed sources of the debug messages and omit to overload the archiving messages subsystem and to decrease significantly for overall performance of the program. You can also to select higher categories, up to root subsystems categories, that will disable the detailed selection and enable all messages generation by the level or by the overall subsystem. For the debug messages observing you need to go subsystem "Archives" (fig. 4.6c), and for this there provided the button "See to messages". The selected debug mode and list of debug categories can be standard stored to the configuration file and on the next boot the debug mode will be activated, this important primarily for the objects counters.
+<p>For debug of specific of OpenSCADA different working you may be necessary to enable addition-debugging messages generation, which you can set by select minimal messages level, into the tab "Station", to "Debug (0)". As a result of this there will emerge the tab "Debug" (Fig.4e) where available the objects counters for control to leaks, and also the table with categories list of incoming debug messages. Into the table you can select only needed sources of the debug messages and omit to overload the archiving messages subsystem and to decrease significantly for overall performance of the program. You can also to select higher categories, up to root subsystems categories, that will disable the detailed selection and enable all messages generation by the level or by the overall subsystem. For the debug messages observing you need to go subsystem "Archives" (Fig.4.6c), and for this there provided the button "See to messages". The selected debug mode and list of debug categories can be standard stored to the configuration file and on the next boot the debug mode will be activated, this important primarily for the objects counters.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:807px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_debug.png"><img class="thumbimage" height="698" src="files/QTCfg_sys_debug.png" width="805" /></a>  <div class="thumbcaption">Fig. 4e. Tab "Debug" of the main page of the station configuration.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1134px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_transl.png"><img class="thumbimage" height="782" src="files/QTCfg_sys_transl.png" width="1132" /></a>  <div class="thumbcaption">Fig. 4f. Tab "Translations" of the main page of the station configuration.</div></div></div></div>
 <p>While examining configuration pages of the modular subsystems there will be described general properties of all the modules. However, it should be noted that each module can provide both additional tabs and separate fields for the configuration of its own operation features for pages whose objects are inherited by the modules. Information on the features and additions of the modules can be found in <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">separate documentation</a> for each of them.
 </p>
 <h3><span class="mw-headline" id="Subsystem_.22DB.22"><span class="mw-headline-number">4.1</span> <span id="CfgDB" title="#CfgDB">Subsystem "DB"</span></span></h3>
-<p>This subsystem is the modular one and contains a hierarchy of objects shown in Figure 1.4. To configure the subsystem the root page of the subsystem "DB" containing the tab "Modules". Tab "Modules" (Fig. 4.1a) contains the list of modules in the subsystem "DB", available at the station.
+<p>This subsystem is the modular one and contains a hierarchy of objects shown in Figure 1.4. To configure the subsystem the root page of the subsystem "DB" containing the tab "Modules". Tab "Modules" (Fig.4.1a) contains the list of modules in the subsystem "DB", available at the station.
 </p><p>To modify the page's fields of this subsystem it may be required the super user's rights or the inclusion of your user to the "DB" group.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:626px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod.png"><img class="thumbimage" height="406" src="files/QTCfg_subsys_db_mod.png" width="624" /></a>  <div class="thumbcaption">Fig. 4.1a. Tab "Modules" of the root page of the subsystem "DB".</div></div></div></div>
-<p>Each module of the subsystem "DB" provides a configuration page with tabs "DB" and "Module". The tab "DB" (Fig. 4.1b) contains a list of database objects registered in the module and a sign of complete removal of database in execution of the deletion command. In the context menu of the database list, the user is given the opportunity to add, remove and switch to the desired database. The tab "Module" contains information about the module of the subsystem "DB" (Fig.4.1c):
+<p>Each module of the subsystem "DB" provides a configuration page with tabs "DB" and "Module". The tab "DB" (Fig.4.1b) contains a list of database objects registered in the module and a sign of complete removal of database in execution of the deletion command. In the context menu of the database list, the user is given the opportunity to add, remove and switch to the desired database. The tab "Module" contains information about the module of the subsystem "DB" (Fig.4.1c):
 </p>
 <ul><li> <i>Module</i> — module identifier.</li>
 <li> <i>Name</i> — module name.</li>
@@ -495,7 +500,7 @@
 <li> <i>Accessible tables</i> — list of tables that are in the database. Context menu of the property gives the opportunity to physically remove the tables from the database.</li>
 <li> <i>Load the program from this DB</i> — command to make loading from this database. Can be used when transferring data in the database between stations. For example, you can to save a part of one station in an export database, to move physically the DB to another station and to connect it in this subsystem, and to call this command.</li></ul></li>
 <li> Section "Configuration" — contains the following configuration fields:
-<ul><li> <i>ID</i> — contains directly the information on identifier of the DB object.</li>
+<ul><li> <i>Identifier</i> — contains directly the information on identifier of the DB object.</li>
 <li> <i>Name</i> — specifies the DB object name.</li>
 <li> <i>Description</i> — short description and appointment of the DB object and the DB itself.</li>
 <li> <i>Address</i> — DB address in specific format of the database type (module). Description of the recording format of the DB address is usually available in tooltip for this field.</li>
@@ -504,20 +509,20 @@
 <p>Tab "Tables" (Fig.4.1e) contains a list of opened tables. In normal mode of the program operation this tab is empty, because after completion of working with tables the program closes them. Presence of opened tables tells that the program is now working with the tables or the tables are opened by the user to examine their contents. In context menu of the list of opened tables you can open a table for study (the command "Add"), close an opened table (the command "Delete") and proceed to examination of its contents.
 </p><p>Tab "SQL" (Fig.4.1f) allows only for data bases which support SQL-requests, and contains field to the request enter, button to the request send and table to result. Control of transaction mode of requests provided by a separate configuration field.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:694px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_db.png"><img class="thumbimage" height="608" src="files/QTCfg_subsys_db_mod_db_db.png" width="692" /></a>  <div class="thumbcaption">Fig. 4.1d. Tab "Data base" of the DB object of the module of the subsystem "DB".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:683px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_db.png"><img class="thumbimage" height="625" src="files/QTCfg_subsys_db_mod_db_db.png" width="681" /></a>  <div class="thumbcaption">Fig. 4.1d. Tab "Data base" of the DB object of the module of the subsystem "DB".</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:683px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_tbl.png"><img class="thumbimage" height="635" src="files/QTCfg_subsys_db_mod_db_tbl.png" width="681" /></a>  <div class="thumbcaption">Fig. 4.1e. Tab "Tables" of the DB object of the module of the subsystem "DB".</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1117px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_sql.png"><img class="thumbimage" height="814" src="files/QTCfg_subsys_db_mod_db_sql.png" width="1115" /></a>  <div class="thumbcaption">Fig. 4.1f. Tab "SQL" of the DB object of the module of the subsystem "DB".</div></div></div></div>
-<p>Page of examination of contents of tables contains only one tab "Table". The tab "Table" (Figure 4.1g) contains a field of the name of the table and a table with the contents. The Table of contents provides following functions:  
+<p>Page of examination of contents of tables contains only one tab "Table". The tab "Table" (Fig.4.1g) contains a field of the name of the table and a table with the contents. The Table of contents provides following functions:  
 </p>
 <ul><li> redaction of content of cells of the table;</li>
 <li> addition of line;</li>
 <li> deleting of line.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1203px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_tbl_tbl.png"><img class="thumbimage" height="814" src="files/QTCfg_subsys_db_mod_db_tbl_tbl.png" width="1201" /></a>  <div class="thumbcaption">Fig. 4.1g. Tab "Table" of a DB table of the module of the subsystem "DB".</div></div></div></div>
 <h3><span class="mw-headline" id="Subsystem_.22Security.22"><span class="mw-headline-number">4.2</span> Subsystem "Security"</span></h3>
-<p>This subsystem is not modular one. To configure the subsystem the root page of the subsystem "Security" is provided, which contains the tab "Users and Groups". This tab "Users and Groups" (Figure 4.2a) contains a list of users and users' groups. Users in the group "Security" or with the rights of the privileged user can add, delete the user or group of users. All other users can go to pages of users or groups of the users and change some personal parameters on the own user page.
+<p>This subsystem is not modular one. To configure the subsystem the root page of the subsystem "Security" is provided, which contains the tab "Users and Groups". This tab "Users and Groups" (Fig.4.2a) contains a list of users and users' groups. Users in the group "Security" or with the rights of the privileged user can add, delete the user or group of users. All other users can go to pages of users or groups of the users and change some personal parameters on the own user page.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:620px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_sec.png"><img class="thumbimage" height="542" src="files/QTCfg_subsys_sec.png" width="618" /></a>  <div class="thumbcaption">Fig. 4.2a. Tab "Users and Groups" of the root page of the subsystem "Security".</div></div></div></div>
-<p>For user configuration, a page that contains only the "User" tab (Fig. 2.4b) is provided. This tab contains configuration data of the user profile, which can be changed by the user, the user in the "Security" group or the privileged user:
+<p>For user configuration, a page that contains only the "User" tab (Fig.2.4b) is provided. This tab contains configuration data of the user profile, which can be changed by the user, the user in the "Security" group or the privileged user:
 </p>
 <ul><li> <i>Name</i> — information about the name (identifier) of the user.</li>
 <li> <i>Full name</i> — specifies the full name of the user.</li>
@@ -528,7 +533,7 @@
 <li> <i>Groups</i> — the table with a list of user groups and a sign of the user's belonging to the corresponding group.</li>
 <li> <i>User DB</i> — DB address for the user's data storage.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:684px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_sec_user.png"><img class="thumbimage" height="724" src="files/QTCfg_subsys_sec_user.png" width="682" /></a>  <div class="thumbcaption">Fig. 4.2b. Tab "User" of the user's page of the subsystem "Security".</div></div></div></div>
-<p>To configure a group of users, a page is provided that contains only the "Group" tab (Fig. 4.2c). This tab contains configuration data of the user group profile that can only be changed by the privileged user:
+<p>To configure a group of users, a page is provided that contains only the "Group" tab (Fig.4.2c). This tab contains configuration data of the user group profile that can only be changed by the privileged user:
 </p>
 <ul><li> <i>Name</i> — information about the name (identifier) of the user's group.</li>
 <li> <i>Full name</i> — specifies the full name of the user's group.</li>
@@ -538,9 +543,9 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:649px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_sec_grp.png"><img class="thumbimage" height="551" src="files/QTCfg_subsys_sec_grp.png" width="647" /></a>  <div class="thumbcaption">Fig. 4.2c. Tab "Group" of the user group page of the subsystem "Security".</div></div></div></div>
 <h3><span class="mw-headline" id="Subsystem_.22Transports.22"><span class="mw-headline-number">4.3</span> <span id="Transports" title="#Transports">Subsystem "Transports"</span></span></h3>
 <p>This subsystem is the modular one and contains the hierarchy of objects shown in Figure 1.6. To configure the subsystem it is provided the root page of the subsystem "Transports", containing the tabs "Subsystem" and "Modules".
-</p><p>Tab "Subsystem" (Fig. 4.3a) contains a configuration table for external, for this, OpenSCADA stations. External stations may be "System", "User" or both these are selected by the appropriate column. System's external stations are available only to the super user and are used in purpose of components of the system, for example, the horizontal redundancy mechanism and the module <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.DAQGate</a>. User's external stations are tied to the user who created them, and thus the list of user's external stations is individual for each user. User's external stations are used by components of the graphical interface, for example, <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">UI.QTCfg</a>, <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">UI.WebCfgD</a> and <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a>. In this table of external stations it is possible to add and delete records about the stations, as well as their modification. Each station contains the following fields:
+</p><p>Tab "Subsystem" (Fig.4.3a) contains a configuration table for external, for this, OpenSCADA stations. External stations may be "System", "User" or both these are selected by the appropriate column. System's external stations are available only to the super user and are used in purpose of components of the system, for example, the horizontal redundancy mechanism and the module <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.DAQGate</a>. User's external stations are tied to the user who created them, and thus the list of user's external stations is individual for each user. User's external stations are used by components of the graphical interface, for example, <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">UI.QTCfg</a>, <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">UI.WebCfgD</a> and <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a>. In this table of external stations it is possible to add and delete records about the stations, as well as their modification. Each station contains the following fields:
 </p>
-<ul><li> <i>Id</i> — identifier of the external station.</li>
+<ul><li> <i>Identifier</i> — identifier of the external station.</li>
 <li> <i>Name</i> — name of the external host.</li>
 <li> <i>Transport</i> — selection of a module of the "Transport" subsystem from the list to use it for access to an external station.</li>
 <li> <i>Address</i> — address of the external station in format, specific to the module of the subsystem "Transports" selected in the previous field.</li>
@@ -548,13 +553,13 @@
 <li> <i>Password</i> — password of the user of the external station.</li>
 <li> <i>Mode</i> — host mode: "User", "System", "User and System".</li>
 <li> <i>Uprising level</i> — uprising hosts level of the pointed host for possibility of requests re-transmission.</li></ul>
-<p>Tab "Moules" (fig. 4.1a) contains a list of modules in the subsystem "Transports" and it is identical for all modular subsystems.
+<p>Tab "Moules" (Fig.4.1a) contains a list of modules in the subsystem "Transports" and it is identical for all modular subsystems.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:933px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_sub.png"><img class="thumbimage" height="455" src="files/QTCfg_subsys_tr_sub.png" width="931" /></a>  <div class="thumbcaption">Fig. 4.3a. Tab "Subsystem" of the root page of the subsystem "Transports".</div></div></div></div>
-<p>Each module of the subsystem "Transports" provides a configuration page with the tabs "Transports" and "Module". This tab "Transports" (Fig.4.3b) contains a list of incoming and outgoing transports registered by the module. Context menu of the transports lists provides the user with the possibility to add, delete and move to the desired transport. On the "Module" tab it is provided the information about the module of subsystem "Transports" (Fig. 4.1c), whose structure is identical for all modules.
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:950px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_sub.png"><img class="thumbimage" height="448" src="files/QTCfg_subsys_tr_sub.png" width="948" /></a>  <div class="thumbcaption">Fig. 4.3a. Tab "Subsystem" of the root page of the subsystem "Transports".</div></div></div></div>
+<p>Each module of the subsystem "Transports" provides a configuration page with the tabs "Transports" and "Module". This tab "Transports" (Fig.4.3b) contains a list of incoming and outgoing transports registered by the module. Context menu of the transports lists provides the user with the possibility to add, delete and move to the desired transport. On the "Module" tab it is provided the information about the module of subsystem "Transports" (Fig.4.1c), whose structure is identical for all modules.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:628px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr.png"><img class="thumbimage" height="499" src="files/QTCfg_subsys_tr_mod_tr.png" width="626" /></a>  <div class="thumbcaption">Fig. 4.3b. Tab "Transports" of the module of the subsystem "Transports".</div></div></div></div>
-<p>Each transport contains its own configuration page with the tab "Transport". This tab contains basic transport settings. Ingoing transport (Fig. 4.3c) contains:
+<p>Each transport contains its own configuration page with the tab "Transport". This tab contains basic transport settings. Ingoing transport (Fig.4.3c) contains:
 </p>
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
 <ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debuging mode</a>.</li>
@@ -562,26 +567,26 @@
 <li> <i>Transport DB</i> — DB address to store the transport's data.</li>
 <li> <i>Active connections</i> — active and actual connections list of the input transport.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
-<ul><li> <i>ID</i> — information on the transport's identifier.</li>
+<ul><li> <i>Identifier</i> — information on the transport's identifier.</li>
 <li> <i>Name</i> — specifies the transport's name.</li>
 <li> <i>Description</i> — brief description of the transport and its appointment.</li>
 <li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li>
 <li> <i>Transport protocol</i> — indicates the transport protocol module (the subsystem "Transport protocols") that should work in conjunction with the input transport. That is, received unstructured data this module will sent to the structuring and processing to the specified module of the transport protocol.</li>
 <li> <i>To start</i> — indicates the state "Running", in which to transfer the transport at startup.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:934px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_itr.png"><img class="thumbimage" height="809" src="files/QTCfg_subsys_tr_mod_tr_itr.png" width="932" /></a>  <div class="thumbcaption">Fig. 4.3c. Tab "Transport" of the page of an incoming transport of the module of the subsystem "Transports".</div></div></div></div>
-<p>Outgoing transport (Fig. 4.3d) contains:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:949px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_itr.png"><img class="thumbimage" height="806" src="files/QTCfg_subsys_tr_mod_tr_itr.png" width="947" /></a>  <div class="thumbcaption">Fig. 4.3c. Tab "Transport" of the page of an incoming transport of the module of the subsystem "Transports".</div></div></div></div>
+<p>Outgoing transport (Fig.4.3d) contains:
 </p>
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
 <ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debuging mode</a>.</li>
 <li> <i>Running</i> — state of the transport "Running".</li>
 <li> <i>Transport DB</i> — DB address to store the transport's data.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
-<ul><li> <i>ID</i> — information on the transport's identifier.</li>
+<ul><li> <i>Identifier</i> — information on the transport's identifier.</li>
 <li> <i>Name</i> — specifies the transport's name.</li>
 <li> <i>Description</i> — brief description of the transport and its appointment.</li>
 <li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li>
 <li> <i>To start</i> — indicates the state "Running", in which to transfer the transport at startup.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:788px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_otr.png"><img class="thumbimage" height="605" src="files/QTCfg_subsys_tr_mod_tr_otr.png" width="786" /></a>  <div class="thumbcaption">Fig. 4.3d. Tab "Transport" of the page of an outgoing transport of the module of the subsystem "Transports".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:750px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_otr.png"><img class="thumbimage" height="610" src="files/QTCfg_subsys_tr_mod_tr_otr.png" width="748" /></a>  <div class="thumbcaption">Fig. 4.3d. Tab "Transport" of the page of an outgoing transport of the module of the subsystem "Transports".</div></div></div></div>
 <p>Outgoing transport, in addition, provides a tab of forming user requests via this transport (Fig.4.3e). The tab is provided for debugging of communications and communication protocols, and includes:
 </p>
 <ul><li> <i>Time</i> — information about the time spent on the request and the response.</li>
@@ -596,8 +601,8 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:866px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_log.png"><img class="thumbimage" height="771" src="files/QTCfg_subsys_tr_mod_tr_log.png" width="864" /></a>  <div class="thumbcaption">Fig. 4.3f. Tab "IO log" of the page of an incoming transport of the module of the subsystem "Transports".</div></div></div></div>
 <h3><span class="mw-headline" id="Subsystem_.22Transport_protocols.22"><span class="mw-headline-number">4.4</span> Subsystem "Transport protocols"</span></h3>
-<p>This subsystem is the modular one. To configure the subsystem the root page of the subsystem "Transport Protocols" is provided, it contains the tab "Modules". The tab "Modules" (Fig. 4.1a) contains a list of modules in the subsystem "Transport Protocols" and it is identical for all modular subsystems.
-</p><p>Each module of the subsystem "Transport Protocols" provides the configuration page with the tab "Module". On the tab "Module" there is information on the module of the subsystem "Transport Protocols" (Fig. 4.1c), which structure is identical for all modules.
+<p>This subsystem is the modular one. To configure the subsystem the root page of the subsystem "Transport Protocols" is provided, it contains the tab "Modules". The tab "Modules" (Fig.4.1a) contains a list of modules in the subsystem "Transport Protocols" and it is identical for all modular subsystems.
+</p><p>Each module of the subsystem "Transport Protocols" provides the configuration page with the tab "Module". On the tab "Module" there is information on the module of the subsystem "Transport Protocols" (Fig.4.1c), which structure is identical for all modules.
 </p>
 <h3><span class="mw-headline" id="Subsystem_.22Data_acquisition.22"><span class="mw-headline-number">4.5</span> <span id="CfgDAQ" title="#CfgDAQ">Subsystem "Data acquisition"</span></span></h3>
 <p>This subsystem is the modular one and contains the hierarchy of objects shown in Fig.1.3. To configure the subsystem the root page of the subsystem "Data acquisition" is provided, which contains the tabs: "Redundancy", "Template libraries" and "Modules".
@@ -609,6 +614,115 @@
 <li> <b>Load distribution of data acquisition between the nodes</b>. When creating complex distributed systems there can be an important question of predicting and optimizing of the overall SCADA system performance. Taking into account these problems the redundancy mechanism provides the execution of tasks of data acquisition of individual sources (OpenSCADA controllers) only at one station. The other stations' tasks would go to the data synchronization mode with the executive station. In the case of loss of the connection with the executive station the task of the local data acquisition is started. It's also provided the possibility of optimal the load distribution of the execution of data acquisition task's of group of the controller objects between the stations.</li>
 <li> <b>Optimization of the load on the external data sources</b> through the data request from an external source by the only one node. In practice, we often meet highly loaded data sources or interfaces of access to the data sources, for which even the data acquisition by one station can be a problem and would require reducing the acquisition periodicity, i.e. data quality. The mechanism of redundancy, besides the load distribution between the stations as described above, allows you to remove an additional load form the data source and its interfaces, thereby improving the data quality. Writing to attributes of the controller's object under redundancy causes to the modification request sending to the master one, that is the writing through the master one.</li>
 <li> <b>Prevention of some differences of data on different nodes</b> associated with the mismatch of moments of time at the independent acquisition of data by individual nodes by means of receiving the data from the station with an active controller. In systems of high accountability under the redundancy there should be excluded or minimized the differences in the data at different stations, that means the real acquisition of data by one station and synchronization with these data of other ones.</li></ul>
+<p>Tab "Redundancy" (Fig.4.5a) presented only if at last one station (Fig.4c) pointed into the redundancy and contains the configuration of redundancy of data sources of the subsystem "Data acquisition" with the following settings:
+</p>
+<ul><li> <i>Depth time of restoring data at the starting</i> — indicates the maximum depth of archival data to restore from the archive of the remote station when the starting in hours (0-12).</li>
+<li> <i>Controllers</i> — contains the table with the list of controller objects, available for redundancy, and their current status:
+<ul><li> <i>Controller</i> — full ID of the controller object;</li>
+<li> <i>Name</i> — name of the controller object;</li>
+<li> <i>Running</i> — sign of the controller object running on the local station;</li>
+<li> <i>Redundancy</i> — redundancy mode of the controller object, you can select it from the list:
+<ul><li> "Off" — absolutely independent work of the controller object.</li>
+<li> "Asymmetric" — full redundancy with the allowed controller object configuration of the remote station and without tries to generalize its.</li>
+<li> "Only alarms" — in fact it is work without redundancy but with oppressing of the alarms of the reserve controller object to exclude duple messages about the alarms.</li></ul></li>
+<li> <i>Preferable running</i> — configuration of the preferred running at the specified station; the reserved values:
+<ul><li> <b>&lt;High Level&gt;</b> — running at the station with the highest level.</li>
+<li> <b>&lt;Low Level&gt;</b> — running at the station with the lowest level.</li>
+<li> <b>&lt;Optimal&gt;</b> — choice for the running of the least loaded station this is the station which runs lowest number of the controller objects.</li></ul></li>
+<li> <i>Remote</i> — sign of indicating the running of the controller object on the remote station and work the local station in the mode of remote data synchronization.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_red.png"><img class="thumbimage" height="672" src="files/QTCfg_subsys_daq_red.png" width="900" /></a>  <div class="thumbcaption">Fig. 4.5a. Tab "Redundancy" of the subsystem "Data acquisition".</div></div></div></div>
+<p>Tab "Template libraries" (Fig.4.5b) contains a list of libraries of templates for the parameters of this subsystem. In the context menu of the list of template libraries the user can add, delete and move to the desired library. The tab "Modules" (Fig.4.1b) contains the list of modules in the subsystem "Transports" and it is identical for all modular subsystems.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:621px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl.png"><img class="thumbimage" height="397" src="files/QTCfg_subsys_daq_tmpl.png" width="619" /></a>  <div class="thumbcaption">Fig. 4.5b. Tab "Template libraries" of the subsystem "Data acquisition".</div></div></div></div>
+<p>Each template library of the subsystem "Data acquisition" provides a configuration page with the tabs "Library" and "Parameter templates". The tab "Library" (Fig.4.5d) contains the basic settings of the library:
+</p>
+<ul><li> Section "State" — contains properties that characterize the state of the library:
+<ul><li> <i>Accessing</i> — state of library "Accessing".</li>
+<li> <i>Library DB</i> — address of the database for the library and templates data storage.</li>
+<li> <i>Date of modification</i> — date and time for the object last modification.</li></ul></li>
+<li> Section "Config" — directly contains the configuration fields:
+<ul><li> <i>Identifier</i> — information on the Id of the library.</li>
+<li> <i>Name</i> — specifies the name of the library.</li>
+<li> <i>Description</i> — short description of the library and its purpose.</li></ul></li></ul>
+<p>Tab "Parameter templates" (Fig.4.5d) contains a list of templates in the library. In the context menu of the list the user can add, delete and go to the desired template.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:641px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_lib.png"><img class="thumbimage" height="499" src="files/QTCfg_subsys_daq_tmpl_lib.png" width="639" /></a>  <div class="thumbcaption">Fig. 4.5c. Main tab of the configuration of a template library of the subsystem "Data acquisition".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:641px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_ls.png"><img class="thumbimage" height="499" src="files/QTCfg_subsys_daq_tmpl_ls.png" width="639" /></a>  <div class="thumbcaption">Fig. 4.5d. Tab of the list of templates of a template library of the subsystem "Data acquisition".</div></div></div></div>
+<p>Each template of the template library provides the configuration page with the tabs "Template" and "IO". The tab "Template" (Fig.4.5e) contains the basic settings of the template:
+</p>
+<ul><li> Section "State" — contains properties that characterize the state of the template:
+<ul><li> <i>Accessing</i> — state "Accessing" of the template.</li>
+<li> <i>Used</i> — counter of the template's using. Allows you to determine whether the template is used and, consequently, the ability of structural changes of the template.</li>
+<li> <i>Date of modification</i> — date and time for the object last modification.</li></ul></li>
+<li> Section "Configuration" — directly contains the configuration fields:
+<ul><li> <i>Identifier</i> — information on the identifier of the template.</li>
+<li> <i>Name</i> — specifies the name of the template.</li>
+<li> <i>Description</i> — short description of the template and its purpose.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:854px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_tmpl_main.png"><img class="thumbimage" height="515" src="files/QTCfg_subsys_daq_tmpl_tmpl_main.png" width="852" /></a>  <div class="thumbcaption">Fig. 4.5e. Main configuration tab of a parameters template of the subsystem "Data acquisition".</div></div></div></div>
+<p>The tab "IO" (Fig.4.5f) contains the configuration of attributes (Input-Output) of templates and the program text of the template on a language of the user programming of OpenSCADA, for example, "JavaLikeCalc.JavaScript". In the table of attributes of template user can, through the context menu: add, insert, delete, move up or down the record of attribute, as well as edit the attribute fields:
+</p>
+<ul><li> <i>Identifier</i> — identifier of the attribute.</li>
+<li> <i>Name</i> — name of the attribute.</li>
+<li> <i>Type</i> — select the value's type of the attribute from the following: "Real", "Integer", "Boolean", "String", "Text", "Object".</li>
+<li> <i>Mode</i> — select the mode from list: "Input", "Output". Typically used to indicate the direction of data transmission through links. I.e., values for the "Input" data link will only be obtained, and for the "Output" will also be transferred, in the case of modification.</li>
+<li> <i>Attribute</i> — mode of the parameter's attribute, implemented based on a template from the list: "No attribute", "Read Only", "Full access". For the attributes of a template, in which this field is set, it will be created an appropriate attribute in the controller's parameter of this subsystem.</li>
+<li> <i>Configuration</i> — configuration mode of an attribute in the configuration tab of a template of the controller's parameter of this subsystem from the list: "Variable", "Constant", "Link". In the "Constant" and "Link" modes in the configuration tab of a template will be added these attributes to set the constant or specify an external link of the parameter.</li>
+<li> <i>Value</i> — attribute's default value or link's template to access by the link. Format of the link's template depends on the component that uses it. For the module <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a> the link's template is written in the following way: <b>{Parameter}|{attribute}</b>. Field <b>{Parameter}</b> — specifies the parameter's name as the attribute's container. Attributes with the equal value <b>{Parameter}</b> will be grouped and will be appointed only by the indication of the attributes' container, and the individual attributes will be associated with the attributes of the container in accordance with the field <b>{attribute}</b>.</li></ul>
+<p>The syntax of the language of the template program can be found in the documentation of the module which provides the interpreter of the selected language. For example, a typical user programming language of OpenSCADA is <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc.JavaScript</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1018px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_tmpl_io.png"><img class="thumbimage" height="700" src="files/QTCfg_subsys_daq_tmpl_tmpl_io.png" width="1016" /></a>  <div class="thumbcaption">Fig. 4.5f. Configuration tab of attributes and a template program of the subsystem "Data acquisition".</div></div></div></div>
+<p>Each module of the subsystem "Data acquisition" provides the configuration page with the tabs "Controllers" and "Module". The tab "Controllers" (Fig.4.5g) contains a list of controller objects, registered in the module. In the context menu of the list user can add, delete and move to the desired controller object. On the tab "Module" there is information on the module of the subsystem "Data acquisition" (Fig.4.1c), which structure is identical for all modules.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:715px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr.png"><img class="thumbimage" height="585" src="files/QTCfg_subsys_daq_mod_cntr.png" width="713" /></a>  <div class="thumbcaption">Fig. 4.5g. Tab "Controllers" of the module of the subsystem "Data acquisition".</div></div></div></div>
+<p>Each controller object contains its own configuration page with the tabs "Controller", "Parameters" and "Diagnostics".
+</p><p>Tab "Controller" (Fig.4.5h) contains the basic settings. Content of these settings may differ slightly from one module of this subsystem to another, as you can find in the own documentation of the modules. As an example, let's examine the settings of a controller object in the module of the logical level controller <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a>:
+</p>
+<ul><li> Section "State" — contains the properties, which characterize the state of the controller object and the controller itself:
+<ul><li> <i>Status</i> — specifies the controller object status. In our case, the controller is running and the current computation time is 460 microseconds and the maximum one is 1.6 milliseconds.</li>
+<li> <i>Enabled</i> — state of the controller object "Enabled". When enabled, the controller object provides the possibility of creating the parameters and their configuration.</li>
+<li> <i>Running</i> — State of the controller object "Running". The running controller object performs the physical data acquisition and/or includes mechanisms for access to these data.</li>
+<li> <i>Controller DB</i> — address of the database for data storage of the controller object and its parameters.</li></ul></li>
+<li> Section "Configuration" — directly contains the configuration fields:
+<ul><li> <i>Identifier</i> — information on the controller object identifier.</li>
+<li> <i>Name</i> — specifies the controller name.</li>
+<li> <i>Description</i> — brief description of the controller and its purpose.</li>
+<li> <i>To enable</i> — indicates the state of "Enabled", in which to transfer the controller object at the program startup.</li>
+<li> <i>To start</i> — indicates the state of "Running", in which to transfer the controller object at the program startup.</li>
+<li> <i>Parameters tables</i> — names of tables that store the parameters of different types (refers to parameter objects of the data acquisition).</li>
+<li> <i>Schedule of the calculation</i> — defines whether periodic or scheduled character of the calculations is. In our example the template calculation is periodic in one second.</li>
+<li> <i>Priority of the acquisition task</i> — sets priority of the data acquisition of this controller. It is used when scheduling the operating system tasks. In the case of proper access availability this field enables the planning of the controller's task in real time and with the specified priority otherwise it modifies the parameter "nice" of the task.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:817px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_main.png"><img class="thumbimage" height="628" src="files/QTCfg_subsys_daq_mod_cntr_main.png" width="815" /></a>  <div class="thumbcaption">Fig. 4.5h. Main configuration tab of a controller object of the subsystem "Data acquisition".</div></div></div></div>
+<p>Tab "Parameters" (Fig.4.5i) contains a list of parameters in the controller object, provides selection of the type of parameters that are created by default, as well as information on the total number and the number of enabled parameters. In the context menu user can add, delete and go to the desired parameter.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm.png"><img class="thumbimage" height="577" src="files/QTCfg_subsys_daq_mod_cntr_prm.png" width="687" /></a>  <div class="thumbcaption">Fig. 4.5i. Tab "Parameters" of the configuration page of a controller object of the subsystem "Data acquisition".</div></div></div></div>
+<p>Tab "Diagnostic" (Fig.4.5j) contains diagnostic messages form by the data source. More data sources are external devices with accessing to the data by a network connection or a system bus then there possible different emergency situations on access to the data. Display all their to the field "State" of the controller object impossible due it displays only current access data state. Due the diagnostic you can trace all the emergency situations at view of messages, which forming by the controller object for the specified range of time and by the selected messages level. Besides to certain diagnostic information some modules of the data sources can provide here debug exchange dumps, on the messages level "Debug (0)".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1196px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_diagn.png"><img class="thumbimage" height="681" src="files/QTCfg_subsys_daq_mod_cntr_diagn.png" width="1194" /></a>  <div class="thumbcaption">Fig. 4.5j. Tab "Diagnostic" of the configuration page of a controller object of the subsystem "Data acquisition".</div></div></div></div>
+<p>Parameters of the controller objects of the subsystem "Data acquisition" provide a configuration page with the tabs "Parameters", "Attributes", "Archiving", "Inclusion" and "Template configuration".
+</p><p>Tab "Parameter" (Fig.4.5k) contains the main settings:
+</p>
+<ul><li> Section "State" — contains the properties, which characterize the state of the parameter:
+<ul><li> <i>Type</i> — specifies the parameter type. Type of disabled parameter can be changed if there are multiple types.</li>
+<li> <i>Enabled</i> — state of the parameter "Enabled". Enabled parameter is used by the controller for the data acquisition.</li></ul></li>
+<li> Section "Configuration" — directly contains the configuration fields:
+<ul><li> <i>Identifier</i> — information on the parameter identifier.</li>
+<li> <i>Name</i> — specifies the parameter name.</li>
+<li> <i>Description</i> — brief description of the parameter and its purpose.</li>
+<li> <i>To enable</i> — indicates the state "Enabled" in which to transfer the parameter at the program startup.</li>
+<li> <i>Parameter template</i> — address of the previously discussed template.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:785px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_main.png"><img class="thumbimage" height="581" src="files/QTCfg_subsys_daq_mod_cntr_prm_main.png" width="783" /></a>  <div class="thumbcaption">Fig. 4.5k. Main configuration tab of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
+<p>Tab "Attributes" (Fig.4.5l) contains the parameter attributes and their values in accordance with the configuration of the used template and calculation of its program.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:785px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_attr.png"><img class="thumbimage" height="581" src="files/QTCfg_subsys_daq_mod_cntr_prm_attr.png" width="783" /></a>  <div class="thumbcaption">Fig. 4.5l. Tab "Attributes" of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
+<p>Tab "Archiving" (Fig.4.5m) contains a table with attributes of a parameter in the rows and the archivers in columns. The user can set the archiving for the desired attribute with the required archiver simply by changing the cell at the intersection.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:785px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_arch.png"><img class="thumbimage" height="581" src="files/QTCfg_subsys_daq_mod_cntr_prm_arch.png" width="783" /></a>  <div class="thumbcaption">Fig. 4.5m. Tab "Archiving" of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
+<p>Tab "Inclusion" (Fig.4.5n) contains a list of parameters included hierarchically to other parameter, provides information on the total number and the number of enabled parameters. In the context menu user can add, delete and go to the desired parameter. The parameters inclusion is supported by most the data sources and depth of the inclusion mostly limited 10 levels!
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:664px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_incl.png"><img class="thumbimage" height="501" src="files/QTCfg_subsys_daq_mod_cntr_prm_incl.png" width="662" /></a>  <div class="thumbcaption">Fig. 4.5n. Tab "Inclusion" of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
+<p>Tab "Template configuration" is't standard, but it is present only in the parameters of modules of the subsystem "Data acquisition", which implement the mechanisms of working under the template in the context of the data source, which they are served, for the logical type. In this review this tab is included for logical completeness of the review of parameter templates configuration of the subsystem "Data acquisition" and as the final stage of of their using. This tab (Fig.4.5o) contains the configuration fields in accordance with the template. In this example it is the group link on the external parameter. This link can be set simply by pointing the way to the parameter, if the flag "Only attributes are to be shown" is not set, or the attribute addresses separately in the case if the flag is set. Sign "(+)" at the end of the address signals about successful linking and presence of the target.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:785px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_tmpl.png"><img class="thumbimage" height="581" src="files/QTCfg_subsys_daq_mod_cntr_prm_tmpl.png" width="783" /></a>  <div class="thumbcaption">Fig. 4.5o. Tab "Template configuration" of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -617,110 +731,6 @@
 <td style="padding-left:5px;"> Common revision is doing now in this position...
 </td></tr></table>
 </div>
-<p>Tab "Redundancy" (Fig. 4.5a) presented only if at last one station pointed into the redundancy and contains the configuration of redundancy of data sources of subsystem "Data acquisition" with the following settings:
-</p>
-<ul><li> <i>Restore data depth time (hours)</i> — indicates the maximum depth of archival data to restore from the archive of the remote station when start up in hours (0-12).</li>
-<li> <i>Controllers</i> — contains the table with the list of controllers, available for redundancy, and their current status:
-<ul><li> <i>Controller</i> — full controller's ID;</li>
-<li> <i>Name</i> — controller's name;</li>
-<li> <i>Started</i> — the sign of the controller's execution on the local station;</li>
-<li> <i>Redundant</i> — redundancy mode of the controller, you can select it from the list:
-<ul><li> "Off" — absolutely independent working of the controller's object.</li>
-<li> "Asymmetric" — full redundancy with the allowed controller's object configuration of the remote station and without tries to generalize its.</li>
-<li> "Only alarms" — in fact it is working without a redundancy, but with alarms oppressing from the reserve controller's object to exclude a duple messages into the alarms.</li></ul></li>
-<li> <i>Preferable run</i> — configuration of the preferred execution at the specified station can be changed; reserved values:
-<ul><li> <b>&lt;High Level&gt;</b> — execution at the station with the highest level.</li>
-<li> <b>&lt;Low Level&gt;</b> — execution at the station with the lowest level.</li>
-<li> <b>&lt;Optimal&gt;</b> — the choice for the execution of the least loaded station.</li></ul></li>
-<li> <i>Remoted</i> — sign indicating the execution of the controller on the remote station and work the local station in mode with a remote data synchronization.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:856px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_red.png"><img class="thumbimage" height="567" src="files/QTCfg_subsys_daq_red.png" width="854" /></a>  <div class="thumbcaption">Fig. 4.5a. Tab "Redundancy" of the subsystem "Data acquisition".</div></div></div></div>
-<p>The tab "Template libraries" (Fig.4.5b) contains the list of libraries of templates for the parameters of this subsystem. In the context menu of the list of template libraries the user can add, delete and move to the desired library. The tab "Modules" (Fig. 4.1b) contains the list of modules in the subsystem "Transports" and is identical for all modular subsystems.
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:618px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl.png"><img class="thumbimage" height="394" src="files/QTCfg_subsys_daq_tmpl.png" width="616" /></a>  <div class="thumbcaption">Fig. 4.5b. Tab "Template libraries" of the subsystem "Data acquisition".</div></div></div></div>
-<p>Each template library of subsystem "Data acquisition" provides the configuration page with the tabs "Library" and "Parameter templates". Tab "Library" (fig. 4.5d) contains the basic settings of the library:
-</p>
-<ul><li> Section "State" — contains properties that characterize the state of the library:
-<ul><li> <i>Accessing</i> — state of library "Accessing".</li>
-<li> <i>Library DB</i> — address of the database for data storage of the library and templates.</li>
-<li> <i>Date of modification</i> — date and time for the object last modification.</li></ul></li>
-<li> Section "Config" — directly contains the configuration fields:
-<ul><li> <i>ID</i> — information on the ID of the library.</li>
-<li> <i>Name</i> — specifies the name of the library.</li>
-<li> <i>Description</i> — short description of the library and its purpose.</li></ul></li></ul>
-<p>Tab "Parameter templates" (Fig.4.5d) contains the list of templates in the library. In the context menu of the list the user can add, delete and move to the desired template.
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:578px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_lib.png"><img class="thumbimage" height="475" src="files/QTCfg_subsys_daq_tmpl_lib.png" width="576" /></a>  <div class="thumbcaption">Fig. 4.5c. Main tab of the configuration of a template library of the subsystem "Data acquisition".</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:578px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_ls.png"><img class="thumbimage" height="475" src="files/QTCfg_subsys_daq_tmpl_ls.png" width="576" /></a>  <div class="thumbcaption">Fig. 4.5d. Tab of the list of templates of a template library of the subsystem "Data acquisition".</div></div></div></div>
-<p>Each template of the template library provides the configuration page with the tabs "Template" and "IO". The tab "Template" (Figure 4.5e) contains the basic settings of the template:
-</p>
-<ul><li> Section "State" — contains properties that characterize the state of the template:
-<ul><li> <i>Accessing</i> — state of template "Accessing".</li>
-<li> <i>Used</i> — counter of the template's using. Allows you to determine whether the template is used and, consequently, the ability to edit the template.</li>
-<li> <i>Date of modification</i> — date and time for the object last modification.</li></ul></li>
-<li> Section "Config" — directly contains the configuration fields:
-<ul><li> <i>ID</i> — information on the ID of the template.</li>
-<li> <i>Name</i> — specifies the name of the template.</li>
-<li> <i>Description</i> — short description of the template and its purpose.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:755px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_tmpl_main.png"><img class="thumbimage" height="509" src="files/QTCfg_subsys_daq_tmpl_tmpl_main.png" width="753" /></a>  <div class="thumbcaption">Fig. 4.5e. Main configuration tab of a parameters template of the subsystem "Data acquisition".</div></div></div></div>
-<p>The tab "IO" (Fig.4.5f) contains the configuration of attributes (IO) of templates and the program of template on the one of languages of the user programming of OpenSCADA, for example, DAQ.JavaLikeCalc.JavaScript. To the table of attributes of template user can, through the context menu, add, insert, delete, move up or down the record of attribute, as well as edit the attribute's fields:
-</p>
-<ul><li> <i>Id</i> — ID of the attribute.</li>
-<li> <i>Name</i> — the name of the attribute.</li>
-<li> <i>Type</i> — select the value's type of the attribute from the following: "Real", "Integer", "Boolean", "String", "Text", "Object".</li>
-<li> <i>Mode</i> — select the mode from list: "Input", "Output". Typically used to indicate the direction of data transmission through link. Ie, values for "Input" data link will only be obtained, and for the "Output" will also be transferred, in the case of modification.</li>
-<li> <i>Attribute</i> — mode of the parameter's attribute, implemented based on a template from the list: "No attribute" ,"Read Only","Full access". For the attributes of a template, in which this field is set, it will be created an appropriate attribute in the controller's parameter of this subsystem.</li>
-<li> <i>Configure</i> — configuration mode of the attribute in the configuration tab of a template of the controller's parameter of this subsystem from the list: "Variable", "Constant", "Link". In "Constant" and "Link" modes tab in the configuration tab of the template will be added these attributes to set the constant or specify an external link of the parameter.</li>
-<li> <i>Value</i> — attribute's default value or template of the links to access by the link. The format of the link's template depends on the component that uses it. Usually for the module <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a> the link's template is written the following way: <b>{Parameter}|{attribute}</b>. Field <b>{Parameter}</b> — specifies the parameter's name as the attribute's container. Attributes with the equal value <b>{Parameter}</b> will be grouped and will be appointed only by the indication of attributes' container, and individual attributes will be associated with the attributes of the container in accordance with the field <b>{attribute}</b>.</li></ul>
-<p>The syntax of the language of the template's program you can see in the documentation of the module, providing an interpreter of the chosen language. For example, a typical user programming language of OpenSCADA — <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc.JavaScript</a>.
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:965px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_tmpl_io.png"><img class="thumbimage" height="679" src="files/QTCfg_subsys_daq_tmpl_tmpl_io.png" width="963" /></a>  <div class="thumbcaption">Fig. 4.5f. Configuration tab of attributes and a template's program of the subsystem "Data acquisition".</div></div></div></div>
-<p>Each module of the subsystem "Data acquisition" provides the configuration page with the tabs "Controllers" and "Module". The tab "Controllers" (Fig.4.5g) contains the list of controllers, registered in the module. In the context menu user can add, delete and move to the desired controller. The tab "Module" provides information about the module of the subsystem "Data acquisition" (Fig. 4.1d), which structure is identical for all modules.
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:633px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr.png"><img class="thumbimage" height="487" src="files/QTCfg_subsys_daq_mod_cntr.png" width="631" /></a>  <div class="thumbcaption">Fig. 4.5g. Tab "Controllers" of the module of the subsystem "Data acquisition".</div></div></div></div>
-<p>Each controller contains its own configuration page with the tabs "Controller" and "Parameters".
-</p><p>The tab "Controller" (Fig.4.5h) contains the basic settings. The structure of these settings may differ slightly from one module of this subsystem to another, as you can find in the own documentation of modules. As an example, let's examine the settings of the controller in the module of the controller of logic <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a>:
-</p>
-<ul><li> Section "State" — contains the properties, which characterize the state of the controller:
-<ul><li> <i>Status</i> — specifies the controller's status. In our case, the controller is running and the computation time is 425 microseconds.</li>
-<li> <i>Enable</i> — the state of the controller "Enable". When enabled, the controller provides the possibility of creating the parameters and their configuration.</li>
-<li> <i>Run</i> — the state of the controller "Run". The running controller performs the physical data acquisition and/or includes mechanisms for access to these data.</li>
-<li> <i>Controller DB</i> — the address of the database for data storage of the controller and its parameters.</li></ul></li>
-<li> Section "Config" — directly contains the configuration fields:
-<ul><li> <i>ID</i> — information on the controller's identifier.</li>
-<li> <i>Name</i> — specifies the controller's name.</li>
-<li> <i>Description</i> — brief description of the controller and its purpose.</li>
-<li> <i>To enable</i> — indicates the state of "Enable" in which to transfer the controller at startup.</li>
-<li> <i>To start</i> — indicates the state of "Run" in which to transfer the controller at startup.</li>
-<li> <i>Parameters tables</i> — names of tables that store the parameters of different types (refers to parameter objects of data acquisition).</li>
-<li> <i>Calc schedule</i> — defines a periodic or scheduled character of calculations. In our example this one second of calculation template.</li>
-<li> <i>Request task priority</i> — sets the priority of data acquisition of this controller. It is used when scheduling the operating system tasks. In the case of proper access availability this field includes the planning of the controller's task in real time and with the specified priority otherwise it modifies parameter "nice" of the task.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:724px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_main.png"><img class="thumbimage" height="576" src="files/QTCfg_subsys_daq_mod_cntr_main.png" width="722" /></a>  <div class="thumbcaption">Fig. 4.5h. Main configuration tab of a controller of the subsystem "Data acquisition".</div></div></div></div>
-<p>"Parameters" tab (Fig.4.5i) contains a list of parameters in the controller, select the type of parameters that are created by default, as well as information on the total number and the number of enabled parameters. In the context menu user can add, delete and move to the desired parameter.
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:664px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm.png"><img class="thumbimage" height="538" src="files/QTCfg_subsys_daq_mod_cntr_prm.png" width="662" /></a>  <div class="thumbcaption">Fig. 4.5i. Tab "Parameters" of the configuration page of a controller of the subsystem "Data acquisition".</div></div></div></div>
-<p>"Diagnostic" tab (Fig.4.5j) contains diagnostic messages form by the data source. More data sources is external devices with accessing to the data by a network connection or a system bus then there possible different emergency situation on access to the data. Print all its to field "State" of controller object impossible due it display only current access data state. Due the diagnostic you can trace all emergency situation at messages view, which forming by the controller object for specified period of time and by selected messages level. Besides to certain diagnostic information some modules of data sources can provide here debug exchange dumps, on messages level "Debug (0)".
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:939px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_diagn.png"><img class="thumbimage" height="629" src="files/QTCfg_subsys_daq_mod_cntr_diagn.png" width="937" /></a>  <div class="thumbcaption">Fig. 4.5j. Tab "Diagnostic" of the configuration page of a controller of the subsystem "Data acquisition".</div></div></div></div>
-<p>Parameters of the controllers of subsystem "Data acquisition" provides the configuration page with the tabs "Parameters", "Attributes", "Archiving" and "Template config". The tab "Template config" is not standard, but it is present only in the parameters of modules of subsystem "Data acquisition", which implement the mechanisms of working under the template in the context of the data source, which they are served, for logical type. In this review this tab is included for logical completeness of the review of the configuration of templates of parameters of subsystem "Data acquisition" and as the final stage — using.
-</p><p>The tab "Parameter" (Fig.4.5k) contains the main settings:
-</p>
-<ul><li> Section "State" — contains the properties, which characterize the state of the parameter:
-<ul><li> <i>Type</i> — specifies the type parameter. Type of disabled parameter can be changed if there are multiple types.</li>
-<li> <i>Enable</i> — the state of the parameter "Enable". Enabled parameter is used by the controller fro data acquisition.</li></ul></li>
-<li> Section "Config" — directly contains the configuration fields:
-<ul><li> <i>ID</i> — information on the parameter's identifier.</li>
-<li> <i>Name</i> — specifies the parameter's name.</li>
-<li> <i>Description</i> — brief description of the parameter and its purpose.</li>
-<li> <i>To enable</i> — indicates the state of "Run" in which to transfer the parameter at startup.</li>
-<li> <i>Parameter template</i> — the address of the previously discussed template.</li></ul></li></ul>
-<p>The tab "Attributes" (Fig.4.5l) contains the parametr's attributes and their values in accordance with the configuration of the used template and calculation of its program.
-</p><p>The "Archiving" tab (Fig.4.5m) contains the table with the attributes of a parameter in the columns and the archivers in rows. The user can set the archiving for the desired attribute with the required archiver simply by changing the cell at the intersection.
-</p><p>The "Template config" tab (Figure 4.5n) contains the configuration fields in accordance with the template. In this example it is the group link on the external parameter. This link can be set simply by pointing the way to the parameter if the flag "Only attributes are to be shown" is not set, or to set the addresses of the attributes separately in the case if the flag is set. Sign "(+)", at the end of the address signals about successful linking and presence of the target.
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:664px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_main.png"><img class="thumbimage" height="472" src="files/QTCfg_subsys_daq_mod_cntr_prm_main.png" width="662" /></a>  <div class="thumbcaption">Fig. 4.5k. Main configuration tab of a parameter of a controller of the subsystem "Data acquisition".</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:664px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_attr.png"><img class="thumbimage" height="472" src="files/QTCfg_subsys_daq_mod_cntr_prm_attr.png" width="662" /></a>  <div class="thumbcaption">Fig. 4.5l. Tab "Attributes" of a parameter of a controller of the subsystem "Data acquisition".</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_arch.png"><img class="thumbimage" height="472" src="files/QTCfg_subsys_daq_mod_cntr_prm_arch.png" width="711" /></a>  <div class="thumbcaption">Fig. 4.5m. Tab "Archiving" of a parameter of a controller of the subsystem "Data acquisition".</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_tmpl.png"><img class="thumbimage" height="472" src="files/QTCfg_subsys_daq_mod_cntr_prm_tmpl.png" width="711" /></a>  <div class="thumbcaption">Fig. 4.5n. Tab "Template config" of a parameter of a controller of the subsystem "Data acquisition".</div></div></div></div>
 <h3><span class="mw-headline" id="Subsystem_.22Archives.22"><span class="mw-headline-number">4.6</span> <span id="CfgArch" title="#CfgArch">Subsystem "Archives"</span></span></h3>
 <p>The subsystem is modular and contains the hierarchy of objects shown in Fig.1.5. To configure the subsystem the root page of the subsystem "Archives" is provided, it contains tabs: "Redundancy", "Messages archive", "Value archives" and "Modules".
 </p><p>To gain the access to modify the objects of this subsystem the user of the group "Archive" or the privileged user rights are required.
@@ -734,7 +744,7 @@
 <li> <b>Load distribution of data acquisition between the nodes</b>. When creating complex allocated systems there can be an important question of predicting and optimizing of the overall system performance. Taking into account these problems the redundancy mechanism provides the execution of tasks of archivation of individual archivators only at one station. The other stations' tasks would go to data synchronization mode with the executive station. In the case of loss of the connection with the executive station the task of the local archivation is started. It's also provided the possibility of optimal the load distribution of the execution of archivation task's of the archivators' group between the stations.</li>
 <li> <b>Restoring of the alarms primacy</b>. For alarming messages, negative level, at its writing performs an additional processing for the active alarms, that is only old — original ones allow for rewriting.</li></ul>
 <p>Redundancy of the value archivators doesn't provided directly but that process does through data sources and the subsystem of "Data acquisition".
-</p><p>Tab "Redundancy" (Fig. 4.6a) presented only if at last one station pointed into the redundancy and contains the configuration of redundancy of messages archvators with the following settings:
+</p><p>Tab "Redundancy" (Fig.4.6a) presented only if at last one station pointed into the redundancy and contains the configuration of redundancy of messages archvators with the following settings:
 </p>
 <ul><li> <i>Overtime of the reserve history reload at start, hours</i> — points to the messages requesting depth from time of the last message into the local archive. Sometime that can be usable for reloading last messages if its can be potential changed-updated at the station down.</li>
 <li> <i>Message archivators</i> — contains the table with the list of message archivators, available for redundancy, and their current status:
@@ -770,7 +780,7 @@
 <ul><li> <i>Get data period (ms)</i> — indicates the periodicity of the active archiving task. In fact, the highest level of detail or the minimum period of active archives is determined by this value.</li>
 <li> <i>Get data task priority level</i> — sets the priority of task of active archiving. It is used when scheduling the operating system tasks. In the case of proper access availability this field includes the planning of the archiving task in real time and with the specified priority otherwise it modifies parameter "nice" of the task.</li>
 <li> <i>Variable timestamp force to current time</i> — time-stamp of values, received on the active archivation, forces to current time, replaces the data source time.</li></ul>
-<p>The "Modules" tab (Fig. 4.1b) contains a list of modules in subsystem "Archives" and it is identical for all modular subsystems.
+<p>The "Modules" tab (Fig.4.1b) contains a list of modules in subsystem "Archives" and it is identical for all modular subsystems.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:668px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_val.png"><img class="thumbimage" height="570" src="files/QTCfg_subsys_arch_val.png" width="666" /></a>  <div class="thumbcaption">Fig. 4.6c. Tab "Values" of the subsystem "Archives".</div></div></div></div>
 <p>Archive of values of subsystem "Archives" provides the configuration page with the tabs "Archive", "Archivators" and "Values".
@@ -781,7 +791,7 @@
 <li> <i>Buffer start and end</i> — Time of values begin and end into the buffer.</li>
 <li> <i>Archive DB</i> — Database address for storing the archive's data.</li></ul></li>
 <li> Section "Config" — Directly contains the configuration fields:
-<ul><li> <i>ID</i> — Information on the archive's identifier.</li>
+<ul><li> <i>Identifier</i> — Information on the archive's identifier.</li>
 <li> <i>Name</i> — Specifies the archive's name.</li>
 <li> <i>Description</i> — Brief description of the archive and its purpose.</li>
 <li> <i>To start</i> — Indicates the state "Running" in which to transfer the archive at startup.</li>
@@ -812,7 +822,7 @@
 <ul><li> <i>Picture size</i> — indicates the width and height of the generated image in pixels.</li>
 <li> <i>Value scale</i> — indicates the lower and upper limit of the scale of value. If both values are set to 0 or equal, then the scale will be determined automatically depending on the values.</li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:927px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_vals.png"><img class="thumbimage" height="599" src="files/QTCfg_subsys_arch_va_vals.png" width="925" /></a>  <div class="thumbcaption">Fig. 4.6f. Tab "Values" of a values archive of the subsystem "Archives".</div></div></div></div>
-<p>Each module of the "Archives" subsystem provides configuration page with the tabs "Archivators" and "Module". The "Archivators" tab (Fig.4.6g) contains a list of messages and values archivers registered in the module. The context menu of the list provides user with possibility to add, delete and move to the desired controller. The "Module" tab  contains information about the module of subsystem "Archives" (Fig. 4.1d), whose structure is identical for all modules.
+<p>Each module of the "Archives" subsystem provides configuration page with the tabs "Archivators" and "Module". The "Archivators" tab (Fig.4.6g) contains a list of messages and values archivers registered in the module. The context menu of the list provides user with possibility to add, delete and move to the desired controller. The "Module" tab  contains information about the module of subsystem "Archives" (Fig.4.1d), whose structure is identical for all modules.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:630px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_arcs.png"><img class="thumbimage" height="487" src="files/QTCfg_subsys_arch_mod_arcs.png" width="628" /></a>  <div class="thumbcaption">Fig. 4.6g. Tab "Archivators" of the module of the subsystem "Archives".</div></div></div></div>
 <p>Messages archivators contains their own configuration page with tabs "Archivator" and "Messages".
@@ -826,7 +836,7 @@
 <li> <i>Archivator files size (kB)</i> — information about the total size of the archiver's files with the data.</li>
 <li> <i>Archiving time (ms)</i> — time spent on the archiving of messages archive data.</li></ul></li>
 <li> Section "Config" — directly contains the configuration fields:
-<ul><li> <i>ID</i> — information on the archiver's identifier.</li>
+<ul><li> <i>Identifier</i> — information on the archiver's identifier.</li>
 <li> <i>Name</i> — indicates the archiver's name.</li>
 <li> <i>Description</i> — brief description of the archiver and its purpose.</li>
 <li> <i>To start</i> — indicates the state "Running", in which to transfer archiver at startup.</li>
@@ -854,7 +864,7 @@
 <li> <i>Archiving time (ms)</i> — information about the time spent on archiving data of the archives buffers. Periodicity of archiving is set in the field "Period archiving" in the section "Config" of the tab.</li>
 <li> <i>Archivator DB</i> — database address for storing the archiver's data.</li></ul></li>
 <li> Section "Config" — directly contains the configuration fields:
-<ul><li> <i>ID</i> — information on the archiver's identifier.</li>
+<ul><li> <i>Identifier</i> — information on the archiver's identifier.</li>
 <li> <i>Name</i> — indicates the archiver's name.</li>
 <li> <i>Description</i> — brief description of the archiver and its purpose.</li>
 <li> <i>To start</i> — indicates the state "Running", in which to transfer archiver at startup.</li>
@@ -874,13 +884,13 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:740px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_va_archs.png"><img class="thumbimage" height="617" src="files/QTCfg_subsys_arch_mod_va_archs.png" width="738" /></a>  <div class="thumbcaption">Fig. 4.6k. Tab "Archives" of a values archiver of the subsystem "Archives".</div></div></div></div>
 <h3><span class="mw-headline" id="Subsystem_.22User_interfaces.22"><span class="mw-headline-number">4.7</span> Subsystem "User interfaces"</span></h3>
-<p>The subsystem is modular. To configure the subsystem the root page of the subsystem "User Interfaces" is provided, it contains the tab "Modules". The "Modules" tab (Fig. 4.1b) contains a list of modules of subsystem and it is identical for all modular subsystems.
-</p><p>Each module of the subsystem "User Interfaces" provides configuration page with the tabs "User Interface" and "Module". The "User Interface" tab (Fig.4.7a) provides the parameter for monitoring the "Running" status of the module, as well as the configuration sections specialized  for the modules of this subsystem. On the "Module" tab there is an information about the module of the subsystem "User Interfaces" (Fig. 4.1d), which structure is identical for all modules.
+<p>The subsystem is modular. To configure the subsystem the root page of the subsystem "User Interfaces" is provided, it contains the tab "Modules". The "Modules" tab (Fig.4.1b) contains a list of modules of subsystem and it is identical for all modular subsystems.
+</p><p>Each module of the subsystem "User Interfaces" provides configuration page with the tabs "User Interface" and "Module". The "User Interface" tab (Fig.4.7a) provides the parameter for monitoring the "Running" status of the module, as well as the configuration sections specialized  for the modules of this subsystem. On the "Module" tab there is an information about the module of the subsystem "User Interfaces" (Fig.4.1d), which structure is identical for all modules.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:618px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_ui_mod.png"><img class="thumbimage" height="522" src="files/QTCfg_subsys_ui_mod.png" width="616" /></a>  <div class="thumbcaption">Fig. 4.7a. Tab "User Interface" of the module of the subsystem "User Interfaces".</div></div></div></div>
 <h3><span class="mw-headline" id="Subsystem_.22Specials.22"><span class="mw-headline-number">4.8</span> Subsystem "Specials"</span></h3>
-<p>The subsystem is modular. To configure the subsystem the root page of the subsystem "User Interfaces" is provided, it contains the tab "Modules". The "Modules" tab (Fig. 4.1b) contains a list of modules of subsystem and it is identical for all modular subsystems.
-</p><p>Each module of the subsystem "Specials" provides configuration page with the tabs "Special" and "Module". The "Special" tab (Fig.4.8a) provides the parameter for monitoring the "Running" status of the module, as well as the configuration sections specialized  for the modules of this subsystem. On the "Module" tab there is an information about the module of the subsystem "Specials" (Fig. 4.1d), which structure is identical for all modules.
+<p>The subsystem is modular. To configure the subsystem the root page of the subsystem "User Interfaces" is provided, it contains the tab "Modules". The "Modules" tab (Fig.4.1b) contains a list of modules of subsystem and it is identical for all modular subsystems.
+</p><p>Each module of the subsystem "Specials" provides configuration page with the tabs "Special" and "Module". The "Special" tab (Fig.4.8a) provides the parameter for monitoring the "Running" status of the module, as well as the configuration sections specialized  for the modules of this subsystem. On the "Module" tab there is an information about the module of the subsystem "Specials" (Fig.4.1d), which structure is identical for all modules.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:618px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_spec_mod.png"><img class="thumbimage" height="522" src="files/QTCfg_subsys_spec_mod.png" width="616" /></a>  <div class="thumbcaption">Fig. 4.8a. Tab "Special" of the module of the subsystems "Specials".</div></div></div></div>
 <h3><span class="mw-headline" id="Subsystem_.22Modules_scheduler.22"><span class="mw-headline-number">4.9</span> Subsystem "Modules scheduler"</span></h3>
@@ -1559,6 +1569,12 @@ RestoreTime &lt;seconds&gt; Restore connection time.
 SessTimeLife &lt;time&gt;      Time of the session life, minutes (default 10).
 </pre>
 <h3><span class="mw-headline" id="OpenSCADA_projects"><span class="mw-headline-number">4.11</span> <span id="Projects" title="#Projects">OpenSCADA projects</span></span></h3>
+<p>...
+</p>
+<h4><span class="mw-headline" id="GUI_application"><span class="mw-headline-number">4.11.1</span> GUI application</span></h4>
+<p>...
+</p>
+<h4><span class="mw-headline" id="Background_application_.E2.80.94_service"><span class="mw-headline-number">4.11.2</span> Background application — service</span></h4>
 <p>...
 </p>
 <h2><span class="mw-headline" id="Links"><span class="mw-headline-number">5</span> Links</span></h2>

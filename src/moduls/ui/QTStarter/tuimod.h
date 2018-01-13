@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTStarter file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -123,13 +123,14 @@ private slots:
     void check( );
     void startDialog( );
     void callQtModule( );
+    void makeStarterMenu( QWidget *mn = NULL );
     void lastWinClose( );
     void trayAct( QSystemTrayIcon::ActivationReason reason );
 
 private:
     //Attributes
-    bool inExec;
-    QMenu	*menuStarter, *trayMenu;
+    bool	inExec;
+    QMenu	*trayMenu;
     QSystemTrayIcon *tray;
     StartDialog	*stDlg;
     bool	initExec;
@@ -154,10 +155,14 @@ public:
 
     bool endRun( )	{ return mEndRun; }
     bool startCom( )	{ return mStartCom; }
-    bool closeToTray( )	{ return mCloseToTray; }
     string startMod( )	{ return mStartMod; }
+    string style( );
+    string styleSheets( );
+    bool closeToTray( )	{ return mCloseToTray; }
 
     void setStartMod( const string &vl )	{ mStartMod = vl; modif(); }
+    void setStyle( const string &vl )		{ mStyle = vl; modif(); }
+    void setStyleSheets( const string &vl )	{ mStyleSheets = vl; modif(); }
     void setCloseToTray( bool vl )		{ mCloseToTray = vl; modif(); }
     void modStart( );
     void modStop( );
@@ -189,7 +194,7 @@ private:
 
     //Attributes
     bool	hideMode, mEndRun, mStartCom, mCloseToTray;
-    MtxString	mStartMod;
+    MtxString	mStartMod, mStyle, mStyleSheets;
 
     // Command line options binding to Qt
     int		qtArgC, qtArgEnd;		//Arguments counter and end position

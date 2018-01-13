@@ -1,13 +1,13 @@
 # OpenSCADA.Protocol.UserProtocol translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Protocol.UserProtocol package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.UserProtocol 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-08 21:56+0200\n"
+"POT-Creation-Date: 2018-01-13 20:15+0200\n"
 "PO-Revision-Date: 2010-03-04 21:26+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -27,8 +27,8 @@ msgstr ""
 "Позволяет создавать собственные пользовательские протоколы на любом "
 "OpenSCADA языке."
 
-msgid "ID"
-msgstr ""
+msgid "Identifier"
+msgstr "Идентификатор"
 
 msgid "Name"
 msgstr "Имя"

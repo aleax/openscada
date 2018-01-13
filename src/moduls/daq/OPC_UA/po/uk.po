@@ -1,12 +1,12 @@
 # OpenSCADA.DAQ.OPC_UA translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.OPC_UA module.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:08+0200\n"
+"POT-Creation-Date: 2018-01-13 20:10+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -267,8 +267,8 @@ msgstr "2:Збір зупинено."
 msgid "0x%x: Attribute's errors %s"
 msgstr "0x%x: Помилки атрибутів %s"
 
-msgid "ID"
-msgstr ""
+msgid "Identifier"
+msgstr "Ідентифікатор"
 
 msgid "Name"
 msgstr "Ім'я"

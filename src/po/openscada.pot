@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 18:56+0200\n"
+"POT-Creation-Date: 2018-01-13 19:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Archives"
 msgstr ""
 
-msgid "ID"
+msgid "Identifier"
 msgstr ""
 
 msgid "Module(plugin) name"
@@ -785,8 +785,8 @@ msgid "Diagnostics"
 msgstr ""
 
 msgid ""
-"Get messages for level more and equal it.\n"
-"Also affect to specific-diagnostic messages generation by data source."
+"Display messages for larger or even levels.\n"
+"Also affects to specific-diagnostic messages generation by the data sources."
 msgstr ""
 
 msgid "Data Acquisition"
@@ -804,7 +804,7 @@ msgstr ""
 msgid "Date of modification"
 msgstr ""
 
-msgid "Template ID"
+msgid "Template identifier"
 msgstr ""
 
 msgid "Flags"
@@ -865,7 +865,7 @@ msgstr ""
 msgid "Template library"
 msgstr ""
 
-msgid "Depth time of restoring data at start, hours"
+msgid "Depth time of restoring data at the starting, hours"
 msgstr ""
 
 msgid "Controllers"
@@ -949,9 +949,6 @@ msgstr ""
 msgid "Used"
 msgstr ""
 
-msgid "Id"
-msgstr ""
-
 msgid "IO"
 msgstr ""
 
@@ -1025,7 +1022,7 @@ msgstr ""
 
 msgid ""
 "DB address in format \"{DB module}.{DB name}\".\n"
-"For use the main work DB set '*.*'."
+"Set '*.*' for use the main work DB."
 msgstr ""
 
 msgid ""
@@ -1181,7 +1178,7 @@ msgstr ""
 msgid "Parameter: "
 msgstr ""
 
-msgid "Change type lead to data lost for specific configurations."
+msgid "The type changing leads to lose some data of the specific configurations."
 msgstr ""
 
 msgid "Inclusion"
@@ -1258,8 +1255,8 @@ msgid "Library DB"
 msgstr ""
 
 msgid ""
-"DB address in format [<DB module>.<DB name>.<Table name>].\n"
-"For use main work DB set '*.*'."
+"DB address in format \"{DB module}.{DB name}.{Table name}\".\n"
+"Set '*.*.{Table name}' for use the main work DB."
 msgstr ""
 
 msgid "Parameter templates"

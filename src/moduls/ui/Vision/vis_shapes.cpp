@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_shapes.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -424,6 +424,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		}
 		wdg->setSelectionMode(shD->opt1?QAbstractItemView::ExtendedSelection:QAbstractItemView::SingleSelection);
 		//Items
+		//???? Make light updating for true work on mobile devices like to Maemo, MeeGo
 		wdg->clear();
 		wdg->addItems(QString(shD->items.c_str()).split("\n"));
 

@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 21:11+0200\n"
+"POT-Creation-Date: 2018-01-13 20:28+0200\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -228,9 +228,8 @@ msgstr "Ring Antwort, Ergebnis"
 msgid "Traffic in %s, out %s. "
 msgstr "Datenverkehr eingehend %s, ausgehend %s. "
 
-#, c-format
-msgid "Respond time %s[%s]. "
-msgstr "Reaktionszeit %s[%s]. "
+msgid "Respond time %s[%s:%s/1.5]. "
+msgstr "Reaktionszeit %s[%s:%s/1.5]. "
 
 #, c-format
 msgid "Device '%s' is used now."

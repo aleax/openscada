@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -129,9 +129,6 @@ TSYS::~TSYS( )
 
     if(prjNm().size() && prjLockUpdPer()) prjLock("free");
 
-    delete Mess;
-    pthread_key_delete(sTaskKey);
-
     if(mLev == TMess::Debug) {
 	string cntrsStr;
 	dataRes().lock();
@@ -140,6 +137,9 @@ TSYS::~TSYS( )
 	dataRes().unlock();
 	printf(_("System counters on exit: %s"), cntrsStr.c_str());
     }
+
+    delete Mess;
+    pthread_key_delete(sTaskKey);
 
     //Signal handlers restore
     sigaction(SIGINT, &sigActOrig, NULL);
@@ -2764,7 +2764,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),R_R_R_,"root","root",1,"idm","1");
 	if(TUIS::icoGet(id(),NULL,true).size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("area",opt,-1,"/gen",_("Station"),R_R_R_)) {
-	    ctrMkNode("fld",opt,-1,"/gen/id",_("ID"),R_R_R_,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/id",_("Identifier"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/stat",_("Station name"),RWRWR_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/prog",_("Program"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/ver",_("Version"),R_R_R_,"root","root",1,"tp","str");
@@ -2811,7 +2811,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/redund/restConn",_("Restore connection timeout, seconds"),RWRWR_,"root","root",1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/redund/primCmdTr",_("Local primary commands transfer"),RWRWR_,"root","root",1,"tp","bool");
 	    if(ctrMkNode("table",opt,-1,"/redund/sts",_("Stations"),RWRWR_,"root","root",2,"key","st","s_com","add,del")) {
-		ctrMkNode("list",opt,-1,"/redund/sts/st",_("ID"),RWRWR_,"root","root",3,"tp","str","dest","select","select","/redund/lsSt");
+		ctrMkNode("list",opt,-1,"/redund/sts/st",_("Identifier"),RWRWR_,"root","root",3,"tp","str","dest","select","select","/redund/lsSt");
 		ctrMkNode("list",opt,-1,"/redund/sts/name",_("Name"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/sts/live",_("Live"),R_R_R_,"root","root",1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/redund/sts/lev",_("Lev."),R_R_R_,"root","root",1,"tp","dec");

@@ -1,13 +1,13 @@
 # OpenSCADA.UI.WebUser translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.WebUser package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-08 22:28+0200\n"
+"POT-Creation-Date: 2018-01-13 21:18+0200\n"
 "PO-Revision-Date: 2010-03-16 16:43+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -27,8 +27,8 @@ msgid ""
 msgstr ""
 "Дозволяє створювати користувачу власні web-інтерфейси на мові OpenSCADA."
 
-msgid "ID"
-msgstr ""
+msgid "Identifier"
+msgstr "Ідентифікатор"
 
 msgid "Name"
 msgstr "Ім'я"

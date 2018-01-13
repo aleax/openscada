@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -73,12 +73,11 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 {
     QImage ico_t;
 
+    connect(this, SIGNAL(makeStarterMenu()), qApp, SLOT(makeStarterMenu()));
     setAttribute(Qt::WA_DeleteOnClose, true);
     mod->regWin(this);
 
     setWindowIcon(mod->icon());
-
-    setProperty("QTStarterToolDis", true);
 
     //Create actions
     // Generic actions
@@ -275,20 +274,20 @@ VisRun::~VisRun( )
 #endif
 }
 
+bool VisRun::winMenu( )	{ return menuBar()->actions().length(); }
+
 void VisRun::setWinMenu( bool act )
 {
+    menuBar()->clear();
+
     //Create menu
     if(act) {
-	menuBar()->clear();
 	menuBar()->addMenu(&menuFile);
 	menuBar()->addMenu(&menuAlarm);
 	menuBar()->addMenu(&menuView);
 	menuBar()->addMenu(&menuHelp);
-	menuBar()->addMenu((QMenu*)TSYS::str2addr(qApp->property("menuStarterAddr").toString().toStdString()));
-	menuBar()->setVisible(true);
+	emit makeStarterMenu();
     }
-    //Clear menu
-    else { menuBar()->clear(); menuBar()->setVisible(false); }
 }
 
 string VisRun::user( )		{ return mWUser->user(); }
@@ -360,7 +359,7 @@ QString VisRun::getFileName( const QString &caption, const QString &dir, const Q
     fileDlg->setNameFilter(filter);
     if(dir.size()) { QString dirF = dir; fileDlg->selectFile(dirF.replace("\"","")); }
 #if QT_VERSION >= 0x040500
-    fileDlg->setReadOnly(!menuBar()->isVisible());
+    fileDlg->setReadOnly(!winMenu());
 #endif
     if(fileDlg->exec() && !fileDlg->selectedFiles().empty()) return fileDlg->selectedFiles()[0];
 
@@ -394,7 +393,7 @@ void VisRun::closeEvent( QCloseEvent* ce )
 
 void VisRun::resizeEvent( QResizeEvent *ev )
 {
-    if(ev && masterPg()) {
+    if(masterPg()) {
 	float x_scale_old = x_scale;
 	float y_scale_old = y_scale;
 	if(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen)) {
@@ -411,7 +410,7 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	}
 
 	// Fit to the master page size
-	if((x_scale_old != x_scale || y_scale_old != y_scale || !ev->oldSize().isValid()) && !(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen))) {
+	if((x_scale_old != x_scale || y_scale_old != y_scale || !ev || !ev->oldSize().isValid()) && !(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen))) {
 	    QRect ws = QApplication::desktop()->availableGeometry(this);
 	    resize(fmin(ws.width()-10,masterPg()->size().width()+(centralWidget()->parentWidget()->width()-centralWidget()->width())+5),
 		fmin(ws.height()-10,masterPg()->size().height()+(centralWidget()->parentWidget()->height()-centralWidget()->height())+5));
@@ -969,10 +968,10 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 
     //Update pages after an user change
     pgCacheClear();
-    bool oldMenuVis = menuBar()->isVisible();
+    bool oldMenuVis = winMenu();
     QApplication::processEvents();
     if(masterPg()) {
-	if(oldMenuVis != menuBar()->isVisible() && (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen)) {
+	if(oldMenuVis != winMenu() && (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen)) {
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
 	    if(x_scale > 1 && x_scale < 1.05) x_scale = 1;
@@ -982,6 +981,9 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 	}
 	fullUpdatePgs();
 	messUpd();
+
+	//Resize
+	resizeEvent(NULL);
     }
 }
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -77,6 +77,8 @@ using namespace QTCFG;
 ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false), pgDisplay(false)
 {
+    connect(this, SIGNAL(makeStarterMenu(QWidget*)), qApp, SLOT(makeStarterMenu(QWidget*)));
+
     //Main window settings
     setAttribute(Qt::WA_DeleteOnClose, true);
     QImage ico_t;
@@ -368,12 +370,14 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     help->addAction(actManualPage);
     help->addSeparator();
     help->addAction(actWhatIs);
+    // QTStarter
+    emit makeStarterMenu(NULL);
 
     //Create tool bars
     // Main tool bar
-    QToolBar *toolBar = new QToolBar(_("OpenSCADA toolbar"),this);
+    QToolBar *toolBar = new QToolBar(_("OpenSCADA toolbar"), this);
     toolBar->setAllowedAreas(Qt::AllToolBarAreas);
-    addToolBar(Qt::TopToolBarArea,toolBar);
+    addToolBar(Qt::TopToolBarArea, toolBar);
     toolBar->setMovable(true);
     toolBar->addAction(actDBLoad);
     toolBar->addAction(actDBSave);
@@ -394,6 +398,12 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     toolBar->addAction(actStopUpd);
     toolBar->addSeparator();
     toolBar->addAction(actManualPage);
+    // QTStarter
+    QToolBar *tB = new QToolBar("QTStarter", this);
+    tB->setObjectName("QTStarterTool");
+    addToolBar(Qt::TopToolBarArea, tB);
+    tB->setMovable(true);
+    emit makeStarterMenu(tB);
 
     //Init status bar
     connect(statusBar(), SIGNAL(messageChanged(const QString&)), this, SLOT(stMessChanged(const QString&)));
@@ -444,7 +454,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     reqPrgrsTimer->setInterval(500);
     connect(reqPrgrsTimer, SIGNAL(timeout()), SLOT(reqPrgrsSet()));
 
-    menuBar()->setVisible(true);
+    //menuBar()->setVisible(true);	//!!!! Spare for Qt5 and the native menu bar
 
     // Display root page and init external pages
     initHosts();

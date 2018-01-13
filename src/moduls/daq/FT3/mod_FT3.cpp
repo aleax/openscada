@@ -542,7 +542,7 @@ void TTpContr::postEnable(int flag)
     tpPrmAt(t_prm).fldAdd(new TFld("WITH_PARAMS", _("With parameters"), TFld::Boolean, TCfg::NoVal, "1", "0"));
 
     elPrmIO.fldAdd(new TFld("PRM_ID", _("Parameter ID"), TFld::String, TCfg::Key, i2s(atoi(OBJ_ID_SZ) * 6).c_str()));
-    elPrmIO.fldAdd(new TFld("ID", _("ID"), TFld::String, TCfg::Key, OBJ_ID_SZ));
+    elPrmIO.fldAdd(new TFld("ID", _("Identifier"), TFld::String, TCfg::Key, OBJ_ID_SZ));
     elPrmIO.fldAdd(new TFld("VALUE", _("Value"), TFld::String, TFld::NoFlag, "200"));
     elPrmIO.fldAdd(new TFld("ATTR_VALUE", _("Attribute value"), TFld::String, TFld::NoFlag, "200"));
 }

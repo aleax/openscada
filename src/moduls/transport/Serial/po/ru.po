@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.Serial translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Serial package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2009-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2009-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 21:11+0200\n"
+"POT-Creation-Date: 2018-01-13 20:28+0200\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -225,9 +225,8 @@ msgstr "Ответ на звонок, результат"
 msgid "Traffic in %s, out %s. "
 msgstr "Трафик входящий %s, исходящий %s. "
 
-#, c-format
-msgid "Respond time %s[%s]. "
-msgstr "Время ответа %s[%s]. "
+msgid "Respond time %s[%s:%s/1.5]. "
+msgstr "Время ответа %s[%s:%s/1.5]. "
 
 #, c-format
 msgid "Device '%s' is used now."

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -257,14 +257,14 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/func/st/use",_("Used"),R_R_R_,"root",grp,1,"tp","dec");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/func/cfg",_("Configuration"))) {
-		ctrMkNode("fld",opt,-1,"/func/cfg/id",_("Id"),R_R_R_,"root",grp,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/func/cfg/id",_("Identifier"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),R_R_R_,"root",grp,3,"tp","str","cols","90","rows","5");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/io",_("IO")))
 	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),R_R_R_,"root",grp)) {
-		ctrMkNode("list",opt,-1,"/io/io/0",_("Id"),R_R_R_,"root",grp,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/0",_("Identifier"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),R_R_R_,"root",grp,1,"tp","str");

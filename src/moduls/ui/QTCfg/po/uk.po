@@ -1,13 +1,13 @@
 # OpenSCADA.UI.QTCfg translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTCfg package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2004-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2004-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-23 18:32+0300\n"
+"POT-Creation-Date: 2018-01-13 20:37+0200\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -674,6 +674,7 @@ msgstr "Роман Савоченко"
 msgid "Provides the Qt-based configurator of the OpenSCADA system."
 msgstr "Надає базований на Qt конфігуратор системи OpenSCADA."
 
+#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"

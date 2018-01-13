@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Serial file: mod_serial.h
 /***************************************************************************
- *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -185,7 +185,7 @@ class TTrOut: public TTransportOut
 	int64_t	mLstReqTm, mKeepAliveLstTm;
 
 	uint64_t trIn, trOut;			//Traffic in and out counter and maximum respond timeout
-	float	respTm, respTmMax;
+	float	respTm, respTmMax, respSymbTmMax;
 
 	// Modem properties
 	int	mMdmTm, mMdmLifeTime;

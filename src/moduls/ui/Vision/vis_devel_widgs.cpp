@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1223,7 +1223,7 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
     treeW->setContextMenuPolicy(Qt::CustomContextMenu);
     // Set collumn headers
     QStringList headerLabels;
-    headerLabels << _("Name") << _("Type") << _("Id");
+    headerLabels << _("Name") << _("Type") << _("Identifier");
     treeW->setHeaderLabels(headerLabels);
     treeW->header()->setStretchLastSection(false);
     treeW->setColumnWidth(0,180);
@@ -1615,7 +1615,7 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
 
     //Set collumn headers
     QStringList headerLabels;
-    headerLabels << _("Name") << _("Type") << _("Id");
+    headerLabels << _("Name") << _("Type") << _("Identifier");
     treeW->setHeaderLabels(headerLabels);
     treeW->header()->setStretchLastSection(false);
     treeW->setColumnWidth(0,180);

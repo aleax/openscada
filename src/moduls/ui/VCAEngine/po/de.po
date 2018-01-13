@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2013.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:47+0200\n"
+"POT-Creation-Date: 2018-01-13 20:58+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -67,8 +67,8 @@ msgstr "Änderungsdatum"
 msgid "Configuration"
 msgstr "Konfig"
 
-msgid "Id"
-msgstr "Id"
+msgid "Identifier"
+msgstr "Identifikator"
 
 msgid "Name"
 msgstr "Name"
@@ -1490,9 +1490,6 @@ msgstr "Roman Savotschenko"
 msgid "The main visual control area engine."
 msgstr "Allgemeine Visualisierungssteuerung."
 
-msgid "ID"
-msgstr "ID"
-
 msgid "DB table"
 msgstr "DB-Tabelle"
 
@@ -1531,6 +1528,9 @@ msgstr "Konfigurationsvorlage"
 
 msgid "Configuration value"
 msgstr "Konfigurationswert"
+
+msgid "Child identifier"
+msgstr "Kind-ID"
 
 msgid "Attribute generic flags and type"
 msgstr "Basisschalter und Typ des Attributs"

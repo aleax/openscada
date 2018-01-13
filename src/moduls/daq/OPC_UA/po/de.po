@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.OPC_UA translate to German.
 # This file is distributed under the same license as the OpenSCADA.DAQ.OPC_UA package module.
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:08+0200\n"
+"POT-Creation-Date: 2018-01-13 20:10+0200\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -269,8 +269,8 @@ msgstr "2:Befragung ist gestoppt."
 msgid "0x%x: Attribute's errors %s"
 msgstr "0x%x: Fehler der Attribute %s"
 
-msgid "ID"
-msgstr "ID"
+msgid "Identifier"
+msgstr "Identifikator"
 
 msgid "Name"
 msgstr "Name"
@@ -374,6 +374,9 @@ msgstr "Server OPC-UA"
 
 msgid "Provides OPC-UA server service implementation."
 msgstr "Bietet OPC-UA Server-Service-Implementierung."
+
+#~ msgid "ID"
+#~ msgstr "ID"
 
 #~ msgid "Transport address"
 #~ msgstr "Adresse des Transports"

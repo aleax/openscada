@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-23 18:32+0300\n"
+"POT-Creation-Date: 2018-01-13 20:37+0200\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -684,6 +684,7 @@ msgstr "Roman Savotschenko"
 msgid "Provides the Qt-based configurator of the OpenSCADA system."
 msgstr "Ermöglicht die Qt-basierte Systemeinstellung von OpenSCADA."
 
+#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"

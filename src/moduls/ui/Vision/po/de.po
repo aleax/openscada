@@ -4,13 +4,13 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-02 20:01+0200\n"
+"POT-Creation-Date: 2018-01-13 21:13+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -992,8 +992,8 @@ msgstr "Rechenzeit (ms):"
 msgid "Mime data"
 msgstr "Mime Angaben"
 
-msgid "Id"
-msgstr ""
+msgid "Identifier"
+msgstr "Identifikator"
 
 msgid "Mime type"
 msgstr "Mime Typ"

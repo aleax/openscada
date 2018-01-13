@@ -1,13 +1,13 @@
 # OpenSCADA.UI.VCAEngine translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:47+0200\n"
+"POT-Creation-Date: 2018-01-13 20:58+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -62,8 +62,8 @@ msgstr "Дата модифікації"
 msgid "Configuration"
 msgstr "Конфігурація"
 
-msgid "Id"
-msgstr ""
+msgid "Identifier"
+msgstr "Ідентифікатор"
 
 msgid "Name"
 msgstr "Ім'я"
@@ -1490,9 +1490,6 @@ msgstr "Роман Савоченко"
 msgid "The main visual control area engine."
 msgstr "Загальний рушій середовища візуалізації та керування."
 
-msgid "ID"
-msgstr ""
-
 msgid "DB table"
 msgstr "Таблиця БД"
 
@@ -1531,6 +1528,9 @@ msgstr "Конфігураційний шаблон"
 
 msgid "Configuration value"
 msgstr "Значення конфігурації"
+
+msgid "Child identifier"
+msgstr "Дочковий ідентифікатор"
 
 msgid "Attribute generic flags and type"
 msgstr "Основні прапорці та тип атрибуту"

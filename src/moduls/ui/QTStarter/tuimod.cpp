@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,6 +41,7 @@
 #include <QListWidget>
 #include <QTreeWidgetItem>
 #include <QInputDialog>
+#include <QStyleFactory>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -57,7 +58,7 @@
 #else
 #define SUB_TYPE	""
 #endif
-#define MOD_VER		"4.0.0"
+#define MOD_VER		"4.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -94,7 +95,7 @@ using namespace QTStarter;
 //* TUIMod                                        *
 //*************************************************
 TUIMod::TUIMod( string name ) : TUI(MOD_ID), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
-    mStartMod(dataRes()), qtArgC(0), qtArgEnd(0), QtApp(NULL), splash(NULL)
+    mStartMod(dataRes()), mStyle(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), QtApp(NULL), splash(NULL)
 {
     mod = this;
 
@@ -147,6 +148,10 @@ void TUIMod::modInfo( vector<string> &list )
     TModule::modInfo(list);
     list.push_back("SubType");
 }
+
+string TUIMod::style( )	{ return mStyle.getVal().size() ? mStyle.getVal() : SYS->cmdOpt("style"); }
+
+string TUIMod::styleSheets( )	{ return mStyleSheets.getVal().size() ? mStyleSheets.getVal() : SYS->cmdOpt("stylesheet"); }
 
 void TUIMod::postEnable( int flag )
 {
@@ -220,7 +225,9 @@ void TUIMod::load_( )
 	fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
-    mStartMod = TBDS::genDBGet(nodePath()+"StartMod", mStartMod);
+    setStartMod(TBDS::genDBGet(nodePath()+"StartMod",startMod()));
+    setStyle(TBDS::genDBGet(nodePath()+"Style",style()));
+    setStyleSheets(TBDS::genDBGet(nodePath()+"StyleSheets",styleSheets()));
     setCloseToTray(s2i(TBDS::genDBGet(nodePath()+"CloseToTray",i2s(closeToTray()))));
 }
 
@@ -228,7 +235,9 @@ void TUIMod::save_( )
 {
     mess_debug(nodePath().c_str(),_("Save module."));
 
-    TBDS::genDBSet(nodePath()+"StartMod", mStartMod);
+    TBDS::genDBSet(nodePath()+"StartMod", startMod());
+    TBDS::genDBSet(nodePath()+"Style", style());
+    TBDS::genDBSet(nodePath()+"StyleSheets", styleSheets());
     TBDS::genDBSet(nodePath()+"CloseToTray", i2s(closeToTray()));
 }
 
@@ -309,7 +318,7 @@ string TUIMod::optDescr( )
 	"    --display=<nm>         Sets the X display name (default it is $DISPLAY).\n"
 	"    --geometry=<geom>      Sets the client geometry of the first window that is shown.\n"
 	"---------- Parameters of the module section '%s' in config-file ----------\n"
-	"StartMod  <moduls>    Start modules list (sep - ';').\n\n"),
+	"StartMod    <moduls>       Start modules list (sep - ';').\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -318,7 +327,7 @@ string TUIMod::optDescr( )
 void TUIMod::toQtArg( const char *nm, const char *arg )
 {
     string plStr = nm;
-    if(qtArgC) plStr.insert(0,"-");
+    if(qtArgC) plStr.insert(0, "-");
 
     //Name process
     if(qtArgC >= (int)(sizeof(qtArgV)/sizeof(char*)) || (qtArgEnd+plStr.size()+1) > sizeof(qtArgBuf)) return;
@@ -346,6 +355,7 @@ void *TUIMod::Task( void * )
 
     //Init locale setLocale
     QLocale::setDefault(QLocale(Mess->lang().c_str()));
+
 
     //Qt application object init
     mod->QtApp = new StApp(mod->qtArgC, (char**)&mod->qtArgV);
@@ -404,6 +414,8 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start Qt modules (sep - ';')"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQtMod");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/stl",_("Style"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsStl");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/stlSheets",_("Style Sheets"),RWRWR_,"root",SUI_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/closeToTray",_("Close (all windows) or start to tray"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	}
 	return;
@@ -411,11 +423,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/closeToTray") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(closeToTray()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCloseToTray(s2i(opt->text()));
-    }
-    else if(a_path == "/prm/cfg/st_mod") {
+    if(a_path == "/prm/cfg/st_mod") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startMod());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartMod(opt->text());
     }
@@ -427,6 +435,23 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 		    mod->owner().modAt(list[iL]).at().modFuncPresent("QMainWindow *openWindow();"))
 		opt->childAdd("el")->setText(list[iL]);
     }
+    else if(a_path == "/prm/cfg/stl") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(style());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStyle(opt->text());
+    }
+    else if(a_path == "/prm/cfg/stlSheets") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(styleSheets());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStyleSheets(opt->text());
+    }
+    else if(a_path == "/prm/cfg/lsStl" && ctrChkNode(opt)) {
+	QStringList sls = QStyleFactory::keys();
+	for(unsigned iL = 0; iL < sls.size(); iL++)
+	    opt->childAdd("el")->setText(sls[iL].toStdString());
+    }
+    else if(a_path == "/prm/cfg/closeToTray") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(closeToTray()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCloseToTray(s2i(opt->text()));
+    }
     else TUI::cntrCmdProc(opt);
 }
 
@@ -434,7 +459,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 //* StApp                                         *
 //*************************************************
 StApp::StApp( int &argv, char **args ) : QApplication(argv, args),
-    inExec(false), menuStarter(NULL), trayMenu(NULL), tray(NULL), stDlg(NULL), initExec(false)
+    inExec(false), trayMenu(NULL), tray(NULL), stDlg(NULL), initExec(false)
 {
     startTimer(STD_WAIT_DELAY);
 }
@@ -467,7 +492,6 @@ void StApp::stClear( )
 
     if(tray)		{ delete tray; tray = NULL; }
     if(trayMenu)	{ delete trayMenu; trayMenu = NULL; }
-    if(menuStarter)	{ delete menuStarter; menuStarter = NULL; }
     if(stDlg)		{ delete stDlg; stDlg = NULL; }
 
     initExec = false;
@@ -477,32 +501,15 @@ void StApp::timerEvent( QTimerEvent *event )
 {
     if(!inExec)	return;
     if(!initExec) {
-	menuStarter = new QMenu("QTStarter");
-	setProperty("menuStarterAddr", TSYS::addr2str(menuStarter).c_str());
+	QStyle *appStl = QStyleFactory::create(mod->style().c_str());
+	if(appStl)	QApplication::setStyle(appStl);
+	if(mod->styleSheets().size()) setStyleSheet(mod->styleSheets().c_str());
 
-	//Prepare Qt modules list of the starter menu
+	//!!!! Disable the native menu bar, mostly for Unity, Maemo (possible) where a problem in build QTStarter menu is
+	//QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
+
 	vector<string> list;
 	mod->owner().modList(list);
-	for(unsigned iL = 0; iL < list.size(); iL++)
-	    if(mod->owner().modAt(list[iL]).at().modInfo("SubType") == "Qt" &&
-		mod->owner().modAt(list[iL]).at().modFuncPresent("QMainWindow *openWindow();"))
-		{
-		    AutoHD<TModule> QtMod = mod->owner().modAt(list[iL]);
-
-		    QIcon icon;
-		    if(mod->owner().modAt(list[iL]).at().modFuncPresent("QIcon icon();")) {
-			QIcon(TModule::*iconGet)();
-			mod->owner().modAt(list[iL]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
-			icon = ((&mod->owner().modAt(list[iL]).at())->*iconGet)( );
-		    } else icon = QIcon(":/images/oscada_qt.png");
-		    QAction *act_1 = new QAction(icon, QtMod.at().modName().c_str(), menuStarter);
-		    act_1->setObjectName(list[iL].c_str());
-		    //act_1->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_1);
-		    act_1->setToolTip(QtMod.at().modName().c_str());
-		    act_1->setWhatsThis(QtMod.at().modInfo("Description").c_str());
-		    QObject::connect(act_1, SIGNAL(triggered()), this, SLOT(callQtModule()));
-		    menuStarter->addAction(act_1);
-		}
 
 	//Start external modules
 	int op_wnd = 0;
@@ -548,19 +555,19 @@ void StApp::timerEvent( QTimerEvent *event )
 void StApp::createTray( )
 {
     QImage ico_t;
-    if(!(SYS->prjNm().size() && ico_t.load(TUIS::icoGet(SYS->prjNm(),NULL,true).c_str()))) ico_t.load(":/images/oscada_qt.png");
+    if(SYS->prjNm().size())	ico_t.load(TUIS::icoGet(SYS->prjNm(),NULL,true).c_str());
+    if(ico_t.isNull() && SYS->prjCustMode())	ico_t.load(TUIS::icoGet(SYS->id(),NULL,true).c_str());
+    if(ico_t.isNull())		ico_t.load(":/images/oscada_qt.png");
     if(!tray)	tray = new QSystemTrayIcon(QPixmap::fromImage(ico_t));
     QObject::connect(tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(trayAct(QSystemTrayIcon::ActivationReason)));
-    tray->setToolTip(QString(_("OpenSCADA Project: %1")).arg(SYS->prjNm().c_str()));
+    tray->setToolTip(QString(_("OpenSCADA Project: %1")).arg((SYS->prjCustMode()?SYS->name():SYS->prjNm()).c_str()));
     if(!trayMenu) trayMenu = new QMenu();
     else trayMenu->clear();
     QAction *tAct = trayMenu->addAction(QIcon(":/images/oscada_qt.png"), "QTStarter");
     trayMenu->addSeparator();
     QObject::connect(tAct, SIGNAL(triggered()), this, SLOT(startDialog()));
-    if(menuStarter) {
-	trayMenu->addActions(menuStarter->actions());
-	trayMenu->addSeparator();
-    }
+    makeStarterMenu(trayMenu);
+    trayMenu->addSeparator();
     tAct = trayMenu->addAction(QIcon(":/images/exit.png"), _("Exit from the program"));
     tAct->setObjectName("*exit*");
     QObject::connect(tAct, SIGNAL(triggered()), this, SLOT(callQtModule()));
@@ -576,6 +583,39 @@ void StApp::callQtModule( )
 	try{ callQtModule(obj->objectName().toStdString()); }
 	catch(TError &err) {  }
     }
+}
+
+void StApp::makeStarterMenu( QWidget *mn )
+{
+    if(!mn) {
+	QMainWindow *w = dynamic_cast<QMainWindow*>(sender());
+	if(!w) return;
+	mn = new QMenu("QTStarter");
+	w->menuBar()->addMenu((QMenu*)mn);
+    }
+
+    vector<string> list;
+    mod->owner().modList(list);
+    for(unsigned iL = 0; iL < list.size(); iL++)
+	if(mod->owner().modAt(list[iL]).at().modInfo("SubType") == "Qt" &&
+	    mod->owner().modAt(list[iL]).at().modFuncPresent("QMainWindow *openWindow();"))
+	{
+	    AutoHD<TModule> QtMod = mod->owner().modAt(list[iL]);
+
+	    QIcon icon;
+	    if(mod->owner().modAt(list[iL]).at().modFuncPresent("QIcon icon();")) {
+		QIcon(TModule::*iconGet)();
+		mod->owner().modAt(list[iL]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
+		icon = ((&mod->owner().modAt(list[iL]).at())->*iconGet)( );
+	    } else icon = QIcon(":/images/oscada_qt.png");
+	    QAction *act = new QAction(icon, QtMod.at().modName().c_str(), mn);
+	    act->setObjectName(list[iL].c_str());
+	    //act_1->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_1);
+	    act->setToolTip(QtMod.at().modName().c_str());
+	    act->setWhatsThis(QtMod.at().modInfo("Description").c_str());
+	    QObject::connect(act, SIGNAL(triggered()), this, SLOT(callQtModule()));
+	    mn->addAction(act);
+	}
 }
 
 void StApp::lastWinClose( )
@@ -607,20 +647,6 @@ bool StApp::callQtModule( const string &nm )
     QMainWindow *new_wnd = ((&QtMod.at())->*openWindow)( );
     if(!new_wnd) return false;
 
-    //Append the window menu by the one from Qt starter
-    if(!new_wnd->property("QTStarterMenuDis").toBool() && !new_wnd->menuBar()->actions().empty())
-	new_wnd->menuBar()->addMenu(menuStarter);
-
-    //Make Qt starter toolbar
-    QToolBar *toolBar = NULL;
-    if(!new_wnd->property("QTStarterToolDis").toBool()) {
-	toolBar = new QToolBar("QTStarter", new_wnd);
-	toolBar->setObjectName("QTStarterTool");
-	new_wnd->addToolBar(Qt::TopToolBarArea, toolBar);
-	toolBar->setMovable(true);
-	toolBar->addActions(menuStarter->actions());
-    }
-
     new_wnd->show();
 
     return true;
@@ -642,9 +668,10 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
     else setWindowTitle(_("OpenSCADA start"));
 
     QImage ico_t;
-    if(!(SYS->prjNm().size() && ico_t.load(TUIS::icoGet(SYS->prjNm(),NULL,true).c_str()))) ico_t.load(":/images/oscada_qt.png");
+    if(SYS->prjNm().size())	ico_t.load(TUIS::icoGet(SYS->prjNm(),NULL,true).c_str());
+    if(ico_t.isNull() && SYS->prjCustMode())	ico_t.load(TUIS::icoGet(SYS->id(),NULL,true).c_str());
+    if(ico_t.isNull())		ico_t.load(":/images/oscada_qt.png");
     setWindowIcon(QPixmap::fromImage(ico_t));
-    //setWindowIcon(QIcon(":/images/oscada_qt.png"));
 
     //Menu prepare
     // About "System info"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:47+0200\n"
+"POT-Creation-Date: 2018-01-13 20:58+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -62,8 +62,8 @@ msgstr "Дата модификации"
 msgid "Configuration"
 msgstr "Конфигурация"
 
-msgid "Id"
-msgstr ""
+msgid "Identifier"
+msgstr "Идентификатор"
 
 msgid "Name"
 msgstr "Имя"
@@ -1490,9 +1490,6 @@ msgstr "Роман Савоченко"
 msgid "The main visual control area engine."
 msgstr "Общий движок среды визуализации и управления."
 
-msgid "ID"
-msgstr ""
-
 msgid "DB table"
 msgstr "Таблица БД"
 
@@ -1531,6 +1528,9 @@ msgstr "Конфигурационный шаблон"
 
 msgid "Configuration value"
 msgstr "Значение конфигурации"
+
+msgid "Child identifier"
+msgstr "Дочерний идентификатор"
 
 msgid "Attribute generic flags and type"
 msgstr "Основные флаги и тип атрибута"

@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.Siemens translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.Siemens package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0Report-Msgid-Bugs-To: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:10+0200\n"
+"POT-Creation-Date: 2018-01-13 20:12+0200\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -68,8 +68,8 @@ msgstr "Шаблон параметра"
 msgid "Parameter ID"
 msgstr "Идентификатор параметра"
 
-msgid "ID"
-msgstr ""
+msgid "Identifier"
+msgstr "Идентификатор"
 
 msgid "Value"
 msgstr "Значение"
@@ -461,6 +461,3 @@ msgstr "Показывать только смещения"
 
 msgid "Parameters"
 msgstr "Параметры"
-
-#~ msgid "Request data period (ms)"
-#~ msgstr "Период получения данных (мс)"

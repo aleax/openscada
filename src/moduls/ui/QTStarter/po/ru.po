@@ -1,13 +1,13 @@
 # OpenSCADA.UI.QTStarter translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTStarter package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-27 17:26+0200\n"
+"POT-Creation-Date: 2018-01-13 20:53+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -494,7 +494,6 @@ msgstr "Старт модуля..."
 msgid "Stopping the module..."
 msgstr "Останов модуля..."
 
-#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "----------- Qt debug commandline options ----------\n"
@@ -520,7 +519,7 @@ msgid ""
 "    --geometry=<geom>      Sets the client geometry of the first window that "
 "is shown.\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
-"StartMod  <moduls>    Start modules list (sep - ';').\n"
+"StartMod    <moduls>       Start modules list (sep - ';').\n"
 "\n"
 msgstr ""
 "======================== Опции модуля <%s:%s> ============================\n"
@@ -548,7 +547,7 @@ msgstr ""
 "    --geometry=<геом>      Установить клиентскую геометрию первого "
 "отображаемого окна.\n"
 "------- Параметры модульной секции '%s' в конфигурационном файле ---------\n"
-"StartMod  <модули>    Список запускаемых модулей (разделитель - ';');\n"
+"StartMod    <модули>       Список запускаемых модулей (разделитель - ';');\n"
 "\n"
 
 msgid "Module options"
@@ -556,6 +555,12 @@ msgstr "Опции модуля"
 
 msgid "Start Qt modules (sep - ';')"
 msgstr "Запускаемые Qt-модули (разд. - ';')"
+
+msgid "Style"
+msgstr "Стиль"
+
+msgid "Style Sheets"
+msgstr "Таблицы Стилей"
 
 msgid "Close (all windows) or start to tray"
 msgstr "Закрывать (все окна) или запускать в трей"

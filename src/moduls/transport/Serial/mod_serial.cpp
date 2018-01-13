@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Serial file: mod_serial.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.11.0"
+#define MOD_VER		"1.12.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -258,8 +258,11 @@ bool TTrIn::cfgChange( TCfg &co, const TVariant &pc )
     if(co.name() == "ADDR") {
 	//Times adjust
 	int speed = s2i(TSYS::strParse(co.getS(),1,":"));
-	if(speed) setTimings(r2s(11e4/(float)speed,2,'f')+":"+i2s((512*11*1000)/speed)+
-				"::"+TSYS::strParse(timings(),3,":")+":"+TSYS::strParse(timings(),4,":"));
+	if(speed) {
+	    float symbMlt = TRegExp("^.+\\/ttyS\\d+$").test(TSYS::strParse(co.getS(),0,":")) ? 1 : 3;
+	    setTimings(r2s(symbMlt*11e4/(float)speed,2,'f')+":"+i2s((512*11*1000)/speed)+
+		"::"+TSYS::strParse(timings(),3,":")+":"+TSYS::strParse(timings(),4,":"));
+	}
     }
 
     return TTransportIn::cfgChange(co, pc);
@@ -820,8 +823,8 @@ string TTrOut::getStatus( )
 
     if(startStat()) {
 	rez += TSYS::strMess(_("Traffic in %s, out %s. "),TSYS::cpct2str(trIn).c_str(),TSYS::cpct2str(trOut).c_str());
-	if(mess_lev() == TMess::Debug && respTmMax)
-	    rez += TSYS::strMess(_("Respond time %s[%s]. "), tm2s(1e-6*respTm).c_str(), tm2s(1e-6*respTmMax).c_str());
+	if(mess_lev() == TMess::Debug && (respTmMax || respSymbTmMax))
+	    rez += TSYS::strMess(_("Respond time %s[%s:%s/1.5]. "), tm2s(1e-6*respTm).c_str(), tm2s(1e-6*respTmMax).c_str(), tm2s(1e-6*respSymbTmMax).c_str());
     }
 
     return rez;
@@ -833,9 +836,11 @@ bool TTrOut::cfgChange( TCfg &co, const TVariant &pc )
 	//Times adjust
 	int speed = s2i(TSYS::strParse(co.getS(),1,":"));
 	if(TSYS::strParse(addr(),4,":").size()) setTimings("5000:1000");
-	else if(speed)
-	    setTimings(i2s((1024*11*1000)/speed)+":"+r2s(11e4/(float)speed,2,'f')+
+	else if(speed) {
+	    float symbMlt = TRegExp("^.+\\/ttyS\\d+$").test(TSYS::strParse(co.getS(),0,":")) ? 1 : 3;
+	    setTimings(i2s((1024*11*1000)/speed)+":"+r2s(symbMlt*11e4/(float)speed,2,'f')+
 			":"+TSYS::strParse(timings(),2,":")+":"+TSYS::strParse(timings(),3,":")+":"+TSYS::strParse(timings(),4,":"));
+	}
     }
 
     return TTransportOut::cfgChange(co, pc);
@@ -853,6 +858,8 @@ void TTrOut::setTimings( const string &vl )
     if(wKeepAliveTm || wRtsDelay1 || wRtsDelay2) mTimings += TSYS::strMess(":%g", wKeepAliveTm);
     if(wRtsDelay1 || wRtsDelay2) mTimings += TSYS::strMess(":%g:%g", wRtsDelay1, wRtsDelay2);
 
+    respSymbTmMax = 0;
+
     modif();
 }
 
@@ -863,7 +870,7 @@ void TTrOut::start( int tmCon )
 
     //Statuses clear
     mMdmMode = mRTSfc = mRTSlvl = mRTSEcho = mI2C = mSPI = false;
-    trIn = trOut = respTm = respTmMax = 0;
+    trIn = trOut = respTm = respTmMax = respSymbTmMax = 0;
     bool isLock = false;
 
     try {
@@ -1106,7 +1113,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
     int off = 0, kz, sec;
     fd_set rw_fd;
     struct timeval tv;
-    bool noReq = (time < 0);
+    bool notReq = (time < 0);
     time = abs(time);
 
     MtxAlloc res(reqRes(), true);
@@ -1146,7 +1153,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 	if((tmW-mLstReqTm) < (reqRetrMult*wCharTm)) TSYS::sysSleep(1e-6*((reqRetrMult*wCharTm)-(tmW-mLstReqTm)));
 
 	// Input buffer clean
-	if(!noReq && !mI2C && !mSPI) {
+	if(!notReq && !mI2C && !mSPI) {
 	    tcflush(fd, TCIOFLUSH);
 	    char tbuf[30]; while(read(fd,tbuf,sizeof(tbuf)) > 0) ;
 	}
@@ -1234,11 +1241,11 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 	    //!! Reading in that way but some time read() return 0 after the select() pass.
 	    // * Force wait any data in the request mode or EAGAIN
 	    // * No wait any data in the not request mode but it can get the data later
-	    for(int iRtr = 0; (((blen=read(fd,iBuf,iLen)) == 0 && !noReq) || (blen < 0 && errno == EAGAIN)) && iRtr < time; ++iRtr)
+	    for(int iRtr = 0; (((blen=read(fd,iBuf,iLen)) == 0 && !notReq) || (blen < 0 && errno == EAGAIN)) && iRtr < time; ++iRtr)
 		TSYS::sysSleep(1e-3);
 	    // * Force errors
 	    // * Retry if any data was wrote but no a reply there into the request mode
-	    if(blen < 0 || (blen == 0 && oBuf && oLen > 0 && !noReq)) {
+	    if(blen < 0 || (blen == 0 && oBuf && oLen > 0 && !notReq)) {
 		err = (blen < 0) ? TSYS::strMess("%s (%d)", strerror(errno), errno) : _("No data");
 		mLstReqTm = TSYS::curTime();
 		if(!noStopOnProceed()) stop();
@@ -1248,9 +1255,17 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 	    }
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,blen)).c_str());
 	    if(blen > 0 && logLen()) pushLogMess(_("Received from\n") + string(iBuf,blen));
-	    if(blen > 0 && mess_lev() == TMess::Debug && stRespTm) {
-		respTm = SYS->curTime() - stRespTm;
-		respTmMax = vmax(respTmMax, respTm);
+	    if(blen > 0 && !notReq && mess_lev() == TMess::Debug) {
+		if(!(oBuf && oLen > 0))
+		    respSymbTmMax = fmax(respSymbTmMax, SYS->curTime()-tmW);
+		    /*{
+		    if((stRespTm=SYS->curTime()-mLstReqTm)/1.5e3 < wCharTm)
+			respSymbTmMax = fmax(respSymbTmMax, stRespTm);
+		}*/
+		else if(stRespTm) {
+		    respTm = SYS->curTime() - stRespTm;
+		    respTmMax = vmax(respTmMax, respTm);
+		}
 	    }
 	    trIn += vmax(0, blen);
 	}

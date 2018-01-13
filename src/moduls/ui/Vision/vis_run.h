@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.h
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -136,6 +136,7 @@ class VisRun : public QMainWindow
 	bool	connOK( )	{ return !conErr; }
 	QAction *aFullScr( )	{ return actFullScr; }
 
+	bool	winMenu( );
 	void	setWinMenu( bool act );
 
 	bool userSel( const string &hint = "" );
@@ -184,6 +185,9 @@ class VisRun : public QMainWindow
 
 	//Public attributes
 	bool isResizeManual;				//Manual resizing flag
+
+    signals:
+	void makeStarterMenu( );
 
     protected:
 	//Protected methods
