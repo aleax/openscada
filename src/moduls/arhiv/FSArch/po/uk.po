@@ -1,13 +1,13 @@
 # OpenSCADA.Archive.FSArch translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Archive.FSArch module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 15:23+0200\n"
+"POT-Creation-Date: 2018-01-19 12:21+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -67,7 +67,7 @@ msgstr "Помилка створення нового архівного фай
 msgid "Can not create directory '%s'."
 msgstr "Не можу створити директорію '%s'."
 
-msgid "Overall size of archivator's files"
+msgid "Overall size of the archiver files"
 msgstr "Загальний розмір файлів архіватору"
 
 msgid "Archiving time"
@@ -118,8 +118,8 @@ msgstr ""
 "файлу визначає розмір архіву на диску.\n"
 "Повністю зняти це обмеження можна встановивши параметр у нуль."
 
-msgid "Time size of archive's file (days)"
-msgstr "Розмір файлу за часом (днів)"
+msgid "Time size of the archive files, days"
+msgstr "Розмір файлів за часом, днів"
 
 msgid "Sets limit on the size of single archive file on time."
 msgstr "Встановлює обмеження на розмір одного файлу архіву за часом."
@@ -279,10 +279,9 @@ msgstr "Помилка запису до файлу '%s'!"
 msgid "%s: Val: %s: information"
 msgstr "%s: Знач.: %s: інформація"
 
-#, c-format
 msgid ""
-"Local info DB for the values archivator '%s'. Created automatically then "
-"don't modify, save and remove it!"
+"Local info DB for the value archiver '%s'. Created automatically then don't "
+"modify, save and remove it!"
 msgstr ""
 "Локальна інформаційна БД для архіватору значень '%s'. Створена автоматично, "
 "відтак не змінюйте, не зберігайте та не видаляйте її!"
@@ -291,11 +290,11 @@ msgstr ""
 msgid "Unpack '%s' for information get."
 msgstr "Розпакування '%s' для отримання інформації"
 
-msgid "Path to a directory for files of values of the archivator."
+msgid "Path to a directory for files of values of the archiver."
 msgstr "Шлях до теки для файлів архіватору значень."
 
-msgid "Time size of archive's file (hours)"
-msgstr "Розмір файлу архіву за часом (годин)"
+msgid "Time size of the archive files, hours"
+msgstr "Розмір файлів архіву за часом, годин"
 
 msgid ""
 "The parameter is set automatically when you change the values period by the "
@@ -347,6 +346,9 @@ msgstr ""
 "одне значення, за посередництвом послідовного упакування.\n"
 "Дозволяє добре упаковувати слабозмінні, за межами дійсності, параметри.\n"
 "Виключити цю властивість можна встановивши параметр у нуль."
+
+msgid "Check now for the directory of the archiver"
+msgstr "Перевірити директорію архіватору зараз"
 
 msgid "Files size"
 msgstr "Розмір файлів"
@@ -441,7 +443,7 @@ msgid "Last value for actual archive file '%s' is not EVAL. Will try fix that!"
 msgstr ""
 "Останнє значення актуального файлу архіву '%s' не EVAL. Спробую виправити це!"
 
-msgid "Arhivator on the file system"
+msgid "Archiver on the file system"
 msgstr "Архіватор на файлову систему"
 
 msgid "Roman Savochenko"
@@ -449,7 +451,7 @@ msgstr "Роман Савоченко"
 
 msgid ""
 "The archiver module. Provides functions for messages and values archiving to "
-"file system."
+"the file system."
 msgstr ""
 "Модуль архіватору. Надає функції архівації повідомлень та значень на файлову "
 "систему."

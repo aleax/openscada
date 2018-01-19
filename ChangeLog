@@ -1,5 +1,16 @@
+2017-01-19 Roman (stable)
+- DB.AGLKS.St.db: ModBus tests expanded for reading a big PDU by the register 100 reading.
+- SYS:data/{debian,debian_mod}/rules: The configuration appended by the argument "--disable-static" to disable the static library of the OpenSCADA core build.
+- !:DOC: "Program Manual" continued to revision ongoing of it translation to Ukrainian.
+- !!:SYS,Archive.{DBArch,FSArch}: Most original messages and help ones of the subsystem "Archives-History" and some others were fixed and improved.
+- FIX:UI.QTStarter: Prevent from a multiple entry from processEvents() manual call, observed on QTCfg.
+- !!:UI.VCAEngine: Implemented for hot update of the widget procedures of the runtime mode.
+- !:FIX:UI.Vision: Prevent from the runtime window manual resize drop at the user change.
+    !:The view "List" of the primitive "FormEl" rewrote to implement the light updating, gor mobile devices like to Maemo, MeeGo.
+
+
 2017-01-13 Roman (stable)
-- DB.ModelsDB.St.db: Appended by the documented Logical Level parameter experiment.CB7.
+- DB.AGLKS.St.db: Appended by the documented Logical Level parameter experiment.CB7.
 - !:DOC: "Program Manual" continued to revision ongoing of it translation to Ukrainian.
 - SYS:Changelog: Some messages are fixed.
 - SYS,DAQ.{BFN,BlockCalc,DAQGate,FT3,JavaLikeCalc,LogicLev,ModBus,OPC_UA,Siemens},Protocol.UserProtocol,UI.{VCAEngine,Vision,WebUser}: "ID" renamed to "Identifier".

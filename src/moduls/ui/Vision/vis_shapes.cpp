@@ -424,9 +424,17 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		}
 		wdg->setSelectionMode(shD->opt1?QAbstractItemView::ExtendedSelection:QAbstractItemView::SingleSelection);
 		//Items
-		//???? Make light updating for true work on mobile devices like to Maemo, MeeGo
-		wdg->clear();
-		wdg->addItems(QString(shD->items.c_str()).split("\n"));
+		// Light updating for true work on mobile devices like to Maemo, MeeGo
+		int itN = 0;
+		string itVl;
+		for(int off = 0; (itVl=TSYS::strLine(shD->items,0,&off)).size() || off < shD->items.size(); itN++) {
+		    if(itN >= wdg->count()) wdg->addItem(itVl.c_str());
+		    else if(wdg->item(itN)->text() != itVl.c_str()) wdg->item(itN)->setText(itVl.c_str());
+		}
+		while(itN < wdg->count()) delete wdg->takeItem(wdg->count()-1);
+
+		//wdg->clear();
+		//wdg->addItems(QString(shD->items.c_str()).split("\n"));
 
 		wdg->setFont(elFnt);		//Font
 		setValue(w, shD->value, true);	//Value
@@ -810,7 +818,31 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	case F_LIST: {
 	    QListWidget *wdg = (QListWidget*)shD->addrWdg;
 
-	    while(wdg->selectedItems().size()) wdg->selectedItems()[0]->setSelected(false);
+	    //Light updating for true work on mobile devices like to Maemo, MeeGo
+	    string vl;
+	    bool scrollTo = false;
+	    for(int off = 0, cnt = 0; (vl=TSYS::strLine(val,0,&off)).size(); cnt++) {
+		QList<QListWidgetItem *> its = wdg->findItems(vl.c_str(), Qt::MatchExactly);
+		if(!its.size()) { wdg->addItem(vl.c_str()); its = wdg->findItems(vl.c_str(), Qt::MatchExactly); }
+		if(its.size()) {
+		    if(!its[0]->isSelected()) {
+			wdg->setCurrentItem(its[0], QItemSelectionModel::Select);
+			if(!scrollTo) wdg->scrollToItem(its[0]);
+			scrollTo = true;
+		    }
+		    its[0]->setData(Qt::UserRole, true);
+		}
+	    }
+
+	    //Clean from the last selections
+	    QList<QListWidgetItem *> its = wdg->selectedItems();
+	    for(int iT = 0; iT < its.size(); iT++) {
+		if(its[iT]->isSelected() && !its[iT]->data(Qt::UserRole).toBool())
+		    its[iT]->setSelected(false);
+		its[iT]->setData(Qt::UserRole, false);
+	    }
+
+	    /*while(wdg->selectedItems().size()) wdg->selectedItems()[0]->setSelected(false);
 
 	    string vl;
 	    for(int off = 0, cnt = 0; (vl=TSYS::strLine(val,0,&off)).size(); cnt++) {
@@ -820,7 +852,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		    wdg->setCurrentItem(its[0], QItemSelectionModel::Select);
 		    if(cnt == 0) wdg->scrollToItem(its[0]);
 		}
-	    }
+	    }*/
 
 	    break;
 	}

@@ -774,16 +774,27 @@ string LWidget::resourceGet( const string &id, string *mime )
     return mimeData;
 }
 
+void LWidget::procChange( bool src )
+{
+    if(!src && proc().size()) return;
+
+    //Update heritors procedures
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().procChange(false);
+}
+
 void LWidget::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
-    Widget::inheritAttr( attr );
-    if(!mdf)	modifClr( );
+    Widget::inheritAttr(attr);
+    if(!mdf)	modifClr();
 }
 
 bool LWidget::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "PR_TR") cfg("PROC").setNoTransl(!calcProgTr());
+    else if(co.name() == "PROC" && co.getS() != pc.getS()) procChange();
     modif();
     return true;
 }
@@ -806,6 +817,8 @@ void LWidget::cntrCmdProc( XMLNode *opt )
     else if(opt->attr("path") == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
     else TCntrNode::cntrCmdProc(opt);
 }
+
+
 
 //************************************************
 //* CWidget: Container stored widget             *

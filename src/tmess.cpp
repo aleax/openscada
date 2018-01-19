@@ -657,6 +657,13 @@ const char *TMess::labTaskPrior( )
 	     "  100...199 - realtime priority level (FIFO), often allowed only for \"root\".");
 }
 
+const char *TMess::labMessCat( )
+{
+    return _("Specifies the category of the requested messages.\n"
+	     "Use template's symbols for group selection:\n  '*' - any substring;\n  '?' - any character.\n"
+	     "Regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/).");
+}
+
 int TMess::getUTF8( const string &str, int off, int32_t *symb )
 {
     if(off < 0 || off >= (int)str.size())	return 0;

@@ -597,7 +597,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redund."),RWRWR_,"root",SDAQ_ID,4, "tp","int", "dest","select",
 		    "sel_id",(i2s(TController::Off)+";"+i2s(TController::Asymmetric)+";"+i2s(TController::OnlyAlarms)).c_str(),
 		    "sel_list",_("Off;Asymmetric;Only alarms"));
-		ctrMkNode("list",opt,-1,"/redund/cntr/prefRun",_("Pref. run"),RWRWR_,"root",SDAQ_ID,4,"tp","str",
+		ctrMkNode("list",opt,-1,"/redund/cntr/prefRun",_("Pref. to run"),RWRWR_,"root",SDAQ_ID,4,"tp","str",
 		    "idm","1","dest","select","select","/redund/lsMode");
 		ctrMkNode("list",opt,-1,"/redund/cntr/remoted",_("Remote"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
 	    }

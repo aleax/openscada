@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: libwidg.h
 /***************************************************************************
- *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -148,6 +148,8 @@ class LWidget : public Widget, public TConfig
 	// Data access
 	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
+
+	void procChange( bool src = true );
 
 	void inheritAttr( const string &attr = "" );
 

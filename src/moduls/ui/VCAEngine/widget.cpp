@@ -265,15 +265,15 @@ void Widget::setEnable( bool val, bool force )
 	    if(!(attrAt(ls[iL]).at().flgGlob()&Attr::Generic)) attrDel(ls[iL], true);
 
 	//Disable heritors widgets
-	for(unsigned i_h = 0; i_h < herit().size(); )
-	    if(herit()[i_h].at().enable())
-		try { herit()[i_h].at().setEnable(false); }
+	for(unsigned iH = 0; iH < herit().size(); )
+	    if(herit()[iH].at().enable())
+		try { herit()[iH].at().setEnable(false); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Inheriting widget '%s' disable error."),herit()[i_h].at().id().c_str());
-		    i_h++;
+		    mess_err(nodePath().c_str(),_("Inheriting widget '%s' disable error."),herit()[iH].at().id().c_str());
+		    iH++;
 		}
-	    else i_h++;
+	    else iH++;
 
 	if(!mParent.freeStat()) {
 	    //Unregister heritater
@@ -310,17 +310,17 @@ AutoHD<Widget> Widget::parentNoLink( )	{ return parent().at().isLink() ? parent(
 void Widget::heritReg( Widget *wdg )
 {
     //Search already herited widget
-    for(unsigned i_h = 0; i_h < mHerit.size(); i_h++)
-	if(&mHerit[i_h].at() == wdg)	return;
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(&mHerit[iH].at() == wdg)	return;
     mHerit.push_back(AutoHD<Widget>(wdg));
 }
 
 void Widget::heritUnreg( Widget *wdg )
 {
     //Search herited widget
-    for(unsigned i_h = 0; i_h < mHerit.size(); i_h++)
-	if(&mHerit[i_h].at() == wdg) {
-	    mHerit.erase(mHerit.begin()+i_h);
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(&mHerit[iH].at() == wdg) {
+	    mHerit.erase(mHerit.begin()+iH);
 	    return;
 	}
 }
@@ -572,9 +572,9 @@ void Widget::attrDel( const string &attr, bool allInher  )
 
     //Delete from inheritant wigets
     if(!(attrAt(attr).at().flgGlob()&Attr::Mutable) || allInher)
-	for(unsigned i_h = 0; i_h < mHerit.size(); i_h++)
-	    if(mHerit[i_h].at().enable())
-		mHerit[i_h].at().attrDel(attr);
+	for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	    if(mHerit[iH].at().enable())
+		mHerit[iH].at().attrDel(attr);
 
     //Self delete
     try {
@@ -652,9 +652,9 @@ bool Widget::attrChange( Attr &cfg, TVariant prev )
     if(cfg.owner() != this) return false;
 
     //Update heritors attributes
-    for(unsigned i_h = 0; i_h < mHerit.size(); i_h++)
-	if(mHerit[i_h].at().enable())
-	    mHerit[i_h].at().inheritAttr(cfg.id());
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().inheritAttr(cfg.id());
 
     return true;
 }
@@ -676,9 +676,9 @@ void Widget::wdgAdd( const string &wid, const string &name, const string &path, 
     wdgAt(wid).at().setName(name);
 
     //Call heritors include widgets update
-    for(unsigned i_h = 0; i_h < mHerit.size(); i_h++)
-	if(mHerit[i_h].at().enable())
-	    mHerit[i_h].at().inheritIncl(wid);
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().inheritIncl(wid);
 }
 
 AutoHD<Widget> Widget::wdgAt( const string &wdg, int lev, int off ) const

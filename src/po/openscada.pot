@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 19:23+0200\n"
+"POT-Creation-Date: 2018-01-19 19:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "Resource is timeouted!"
 msgstr ""
 
-msgid "Archives"
+msgid "Archives-History"
 msgstr ""
 
 msgid "Identifier"
@@ -62,10 +62,10 @@ msgstr ""
 msgid "Preferable run"
 msgstr ""
 
-msgid "Value period, seconds"
+msgid "Period of the values, seconds"
 msgstr ""
 
-msgid "Period archiving, seconds"
+msgid "Period of the archiving, seconds"
 msgstr ""
 
 msgid "Selection priority"
@@ -92,25 +92,25 @@ msgstr ""
 msgid "Buffer period, seconds"
 msgstr ""
 
-msgid "Buffer size (items)"
+msgid "Buffer size, items"
 msgstr ""
 
-msgid "Buffer in hard time grid"
+msgid "Buffer in the hard time grid"
 msgstr ""
 
-msgid "Buffer in high time resolution"
+msgid "Buffer in the high time resolution"
 msgstr ""
 
-msgid "Fill pass points to a last value"
+msgid "Filling the passage points with the last value"
 msgstr ""
 
-msgid "Process into archivators"
+msgid "Process into archivers"
 msgstr ""
 
-msgid "Message archivators load error."
+msgid "Message archivers load error."
 msgstr ""
 
-msgid "Value archivators load error."
+msgid "Value archivers load error."
 msgstr ""
 
 msgid "Value archives load error."
@@ -118,7 +118,7 @@ msgstr ""
 
 #, c-format
 msgid ""
-"======================== Subsystem \"Archives\" options ===================\n"
+"======================== Subsystem \"Archives-History\" options ===================\n"
 "------------ Parameters of section '%s' in config-file -----------\n"
 "MessBufSize   <items>       Messages buffer size.\n"
 "MessPeriod    <sec>         Message archiving period.\n"
@@ -132,11 +132,11 @@ msgid "Start/update subsystem."
 msgstr ""
 
 #, c-format
-msgid "Message archivator '%s' start error."
+msgid "Message archiver '%s' start error."
 msgstr ""
 
 #, c-format
-msgid "Value archivator '%s' start error."
+msgid "Value archiver '%s' start error."
 msgstr ""
 
 #, c-format
@@ -144,11 +144,11 @@ msgid "Value archive '%s' start error."
 msgstr ""
 
 #, c-format
-msgid "Value archivator '%s' stop error."
+msgid "Value archiver '%s' stop error."
 msgstr ""
 
 #, c-format
-msgid "Message archivator '%s' stop error."
+msgid "Message archiver '%s' stop error."
 msgstr ""
 
 #, c-format
@@ -171,10 +171,10 @@ msgstr ""
 msgid "Overtime of the reserve history reload at start, days"
 msgstr ""
 
-msgid "Message archivators"
+msgid "Message archivers"
 msgstr ""
 
-msgid "Archivator"
+msgid "Archiver"
 msgstr ""
 
 msgid "Run."
@@ -183,7 +183,7 @@ msgstr ""
 msgid "Redund."
 msgstr ""
 
-msgid "Pref. run"
+msgid "Pref. to run"
 msgstr ""
 
 msgid "Remote"
@@ -192,13 +192,13 @@ msgstr ""
 msgid "Messages"
 msgstr ""
 
-msgid "Messages buffer size"
+msgid "Buffer size"
 msgstr ""
 
 msgid "Archiving period, seconds"
 msgstr ""
 
-msgid "View messages"
+msgid "View"
 msgstr ""
 
 msgid "Time, size (seconds) and level"
@@ -207,27 +207,19 @@ msgstr ""
 msgid "Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning (3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;Emergency (7), ALARMS"
 msgstr ""
 
-msgid "Get messages for level more and equal it."
+msgid "Receiving messages with a level greater or equal to the specified."
 msgstr ""
 
 msgid "Category pattern"
 msgstr ""
 
-msgid ""
-"Messages category template or regular expression.\n"
-"Use template's symbols for group selection:\n"
-"  '*' - any substring;\n"
-"  '?' - any symbol.\n"
-"Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."
-msgstr ""
-
-msgid "Archivators"
+msgid "Archivers"
 msgstr ""
 
 msgid ""
-"Message archivators.\n"
-"No set archivator for process by buffer and all archivators.\n"
-"Set '<buffer>' for process by buffer."
+"Message archivers.\n"
+"Do not set the field for processing the request by the buffer and all archivers.\n"
+"Set '<buffer>' for processing by the buffer."
 msgstr ""
 
 msgid "Time"
@@ -239,7 +231,7 @@ msgstr ""
 msgid "Category"
 msgstr ""
 
-msgid "Lev."
+msgid "Level"
 msgstr ""
 
 msgid "Message"
@@ -248,13 +240,13 @@ msgstr ""
 msgid "Values"
 msgstr ""
 
-msgid "Get data period (ms)"
+msgid "Period of the data receiving, milliseconds"
 msgstr ""
 
-msgid "Get data task priority level"
+msgid "Level of priority of the data receiving task"
 msgstr ""
 
-msgid "Variable timestamp force to current time"
+msgid "Forced to set timestampes in the current time"
 msgstr ""
 
 msgid "Number"
@@ -276,16 +268,16 @@ msgstr ""
 msgid "<Optimal>"
 msgstr ""
 
-msgid "Message archivator"
+msgid "Message archiver"
 msgstr ""
 
-msgid "Value archivator"
+msgid "Value archiver"
 msgstr ""
 
-msgid "Value archivators"
+msgid "Value archivers"
 msgstr ""
 
-msgid "Message archivator: "
+msgid "Message archiver: "
 msgstr ""
 
 msgid "State"
@@ -294,7 +286,7 @@ msgstr ""
 msgid "Running"
 msgstr ""
 
-msgid "Archivator DB"
+msgid "Archiver DB"
 msgstr ""
 
 msgid "End"
@@ -304,17 +296,6 @@ msgid "Begin"
 msgstr ""
 
 msgid "Configuration"
-msgstr ""
-
-msgid ""
-"Messages category template or regular expression to processing by archivator, separated by symbol ';'.\n"
-"Use template's symbols for group selection:\n"
-"  '*' - any substring;\n"
-"  '?' - any symbol.\n"
-"Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."
-msgstr ""
-
-msgid "Level"
 msgstr ""
 
 #, c-format
@@ -384,25 +365,20 @@ msgid "Archive DB"
 msgstr ""
 
 msgid ""
-"The values buffer size have to much enough for archivators periodicity.\n"
-"Typical the value automatic adjusts to the archive period and archivators periodicity in 60 seconds."
+"The size of the buffer of values should be large enough for the periodicity of the archivers.\n"
+"By default, this value is automatically configured for periodicity of the values of this archive and periodicity of archivers in 60 seconds."
 msgstr ""
 
-msgid "Typical for fastest processing of values archivation."
+msgid "Default for fast processing of archiving values."
 msgstr ""
 
-msgid "Set for the values periodicity lesser to seconds."
+msgid "Set in case of periodicity of values in less than a second."
 msgstr ""
 
-msgid ""
-"Mostly the pass values fill by EVAL but sometime\n"
-"the source's data periodicity greater to the archive's one and it is normal."
+msgid "The passage values mostly fill by EVAL but sometime data periodicity of the source greater to the archive's one and it is normal."
 msgstr ""
 
-msgid "Start"
-msgstr ""
-
-msgid "Process"
+msgid "Processing"
 msgstr ""
 
 msgid "Period, seconds"
@@ -415,54 +391,54 @@ msgid "Size, seconds"
 msgstr ""
 
 msgid ""
-"Values archivator.\n"
-"No set archivator for process by buffer and all archivators.\n"
-"Set '<buffer>' for process by buffer."
+"Values archiver.\n"
+"If the value is empty, the request will be processed for the buffer and for all archivers.\n"
+"If \"<buffer>\" is specified then the request will be processed only for the archive buffer."
 msgstr ""
 
 msgid "Show trend"
 msgstr ""
 
-msgid "Values table"
+msgid "Table of the values"
 msgstr ""
 
 msgid "Value"
 msgstr ""
 
-msgid "Picture size"
+msgid "Image size"
 msgstr ""
 
-msgid "Picture width in pixels."
+msgid "Image width in pixels."
 msgstr ""
 
-msgid "Picture height in pixels."
+msgid "Image height in pixels."
 msgstr ""
 
-msgid "Value scale"
+msgid "Scale of the values"
 msgstr ""
 
-msgid "Picture minimum value."
+msgid "Image minimum value."
 msgstr ""
 
-msgid "Picture maximum value."
+msgid "Image maximum value."
 msgstr ""
 
-msgid "Values trend"
+msgid "Trend of the values"
 msgstr ""
 
-msgid "Value archivator: "
+msgid "Value archiver: "
 msgstr ""
 
 msgid "Archiving time"
 msgstr ""
 
-msgid "Set zero period for disable using the archiver for buffer processing, only for direct write."
+msgid "Set a zero period to disable the use of the archiver in processing the buffer - just a direct recording."
 msgstr ""
 
-msgid "Selection the archiver priority for \"All\" sources using mode. Set to zero for full the selection disable."
+msgid "Selection of a priority of the archiver for using in the source mode \"All\". Set to zero for full the selection disabling."
 msgstr ""
 
-msgid "Buffer size"
+msgid "Archives"
 msgstr ""
 
 msgid "Last read buffer"
@@ -1054,6 +1030,14 @@ msgid ""
 "  0         - standard userspace priority;\n"
 "  1...99    - realtime priority level (round-robin), often allowed only for \"root\";\n"
 "  100...199 - realtime priority level (FIFO), often allowed only for \"root\"."
+msgstr ""
+
+msgid ""
+"Specifies the category of the requested messages.\n"
+"Use template's symbols for group selection:\n"
+"  '*' - any substring;\n"
+"  '?' - any character.\n"
+"Regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/)."
 msgstr ""
 
 msgid "Modules Scheduler"
@@ -1767,7 +1751,7 @@ msgstr ""
 msgid "Live"
 msgstr ""
 
-msgid "Cntr."
+msgid "Counter"
 msgstr ""
 
 msgid "Go to remote stations list configuration"
@@ -1839,6 +1823,9 @@ msgid "Counters"
 msgstr ""
 
 msgid "Debug categories"
+msgstr ""
+
+msgid "Process"
 msgstr ""
 
 msgid "See to messages"

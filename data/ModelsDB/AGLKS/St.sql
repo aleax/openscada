@@ -1215,17 +1215,20 @@ R:1:r:reg1:Register 1
 R:3:rw:reg3:Register 3
 R:4:r:reg4:Register 4
 C:3:rw:coil3:Bit
-C:8:rw:coil8:Bit','R:0:r:reg0:Регистр 0
+C:8:rw:coil8:Bit
+R:100:r:AT101_1_Ti:AT101_1 Ti','R:0:r:reg0:Регистр 0
 R:1:r:reg1:Регистр 1
 R:3:rw:reg3:Регистр 3
 R:4:r:reg4:Регистр 4
 C:3:rw:coil3:Бит
-C:8:rw:coil8:Бит','R:0:r:reg0:Регістр 0
+C:8:rw:coil8:Бит
+R:100:r:AT101_1_Ti:AT101_1 Ti','R:0:r:reg0:Регістр 0
 R:1:r:reg1:Регістр 1
 R:3:rw:reg3:Регістр 3
 R:4:r:reg4:Регістр 4
 C:3:rw:coil3:Біт
-C:8:rw:coil8:Біт');
+C:8:rw:coil8:Біт
+R:100:r:AT101_1_Ti:AT101_1 Ti');
 INSERT INTO "ModBusPrm_testTCP" VALUES('test1','test','','','','','','',1,'R_i4:6:rw:i6:Integer32 [6,7]
 R_u4:6:r:u6:Integer32 (unsigned) [6,7]
 R_i8:10:r:i10:Integer64 [10-13]
@@ -1316,7 +1319,8 @@ C:3:r:coil3:Bit
 R_f:0,3:rw:float:Float
 R_i4:0,3:rw:int:Int
 R_b1:0:rw:rebBit:rebBit
-R_i2:0:rw:int16:Int16','R:0:r:reg0:Регістр 0
+R_i2:0:rw:int16:Int16
+R:100:r:AT101_1_Ti:AT101_1 Ti','R:0:r:reg0:Регістр 0
 R:1:r:reg1:Регістр 1
 R:3:rw:reg3:Регістр 3
 R:4:r:reg4:Регістр 4
@@ -1324,7 +1328,8 @@ C:3:r:coil3:Біт
 R_f:0,3:rw:float:Float
 R_i4:0,3:rw:int:Int
 R_b1:0:rw:rebBit:rebBit
-R_i2:0:rw:int16:Int16','R:0:r:reg0:Регистр 0
+R_i2:0:rw:int16:Int16
+R:100:r:AT101_1_Ti:AT101_1 Ti','R:0:r:reg0:Регистр 0
 R:1:r:reg1:Регистр 1
 R:3:rw:reg3:Регистр 3
 R:4:r:reg4:Регистр 4
@@ -1332,7 +1337,8 @@ C:3:r:coil3:Бит
 R_f:0,3:rw:float:Float
 R_i4:0,3:rw:int:Int
 R_b1:0:rw:rebBit:rebBit
-R_i2:0:rw:int16:Int16');
+R_i2:0:rw:int16:Int16
+R:100:r:AT101_1_Ti:AT101_1 Ti');
 CREATE TABLE 'DAQ_ModBus' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_L" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"PROT" TEXT DEFAULT 'TCP' ,"ADDR" TEXT DEFAULT '' ,"NODE" INTEGER DEFAULT '1' ,"FRAG_MERGE" INTEGER DEFAULT '0' ,"WR_MULTI" INTEGER DEFAULT '0' ,"WR_ASYNCH" INTEGER DEFAULT '0' ,"TM_REQ" INTEGER DEFAULT '0' ,"TM_REST" INTEGER DEFAULT '30' ,"REQ_TRY" INTEGER DEFAULT '1' ,"MAX_BLKSZ" INTEGER DEFAULT '200' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_ModBus" VALUES('testRTU','','','','','','',1,0,3,0,'<high>','ModBusPrm_testRTU','ModBusPrmL_testRTU','1',0,'RTU','Serial.testModBus',1,1,0,0,0,30,1,200);
 INSERT INTO "DAQ_ModBus" VALUES('testTCP','','','','','','',1,1,3,0,'<high>','ModBusPrm_testTCP','ModBusPrmL_testTCP','1',0,'TCP','Sockets.testModBus',1,1,0,0,0,30,3,200);

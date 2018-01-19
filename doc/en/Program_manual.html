@@ -10,7 +10,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Program manual</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual/ru" title="Документы/Руководство по программе (99% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--high" href="http://oscada.org/wiki/Documents/Program_manual/uk" title="Документи/Посібник по програмі (73% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual/ru" title="Документы/Руководство по программе (99% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual/uk" title="Документи/Посібник по програмі (86% translated)">українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -59,7 +59,7 @@
 <li class="toclevel-2 tocsection-26"><a href="#Subsystem_.22Transports.22"><span class="tocnumber">4.3</span> <span class="toctext"><span>Subsystem "Transports"</span></span></a></li>
 <li class="toclevel-2 tocsection-27"><a href="#Subsystem_.22Transport_protocols.22"><span class="tocnumber">4.4</span> <span class="toctext">Subsystem "Transport protocols"</span></a></li>
 <li class="toclevel-2 tocsection-28"><a href="#Subsystem_.22Data_acquisition.22"><span class="tocnumber">4.5</span> <span class="toctext"><span>Subsystem "Data acquisition"</span></span></a></li>
-<li class="toclevel-2 tocsection-29"><a href="#Subsystem_.22Archives.22"><span class="tocnumber">4.6</span> <span class="toctext"><span>Subsystem "Archives"</span></span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#Subsystem_.22Archives-History.22"><span class="tocnumber">4.6</span> <span class="toctext"><span>Subsystem "Archives-History"</span></span></a></li>
 <li class="toclevel-2 tocsection-30"><a href="#Subsystem_.22User_interfaces.22"><span class="tocnumber">4.7</span> <span class="toctext">Subsystem "User interfaces"</span></a></li>
 <li class="toclevel-2 tocsection-31"><a href="#Subsystem_.22Specials.22"><span class="tocnumber">4.8</span> <span class="toctext">Subsystem "Specials"</span></a></li>
 <li class="toclevel-2 tocsection-32"><a href="#Subsystem_.22Modules_scheduler.22"><span class="tocnumber">4.9</span> <span class="toctext">Subsystem "Modules scheduler"</span></a></li>
@@ -625,7 +625,7 @@
 <ul><li> "Off" — absolutely independent work of the controller object.</li>
 <li> "Asymmetric" — full redundancy with the allowed controller object configuration of the remote station and without tries to generalize its.</li>
 <li> "Only alarms" — in fact it is work without redundancy but with oppressing of the alarms of the reserve controller object to exclude duple messages about the alarms.</li></ul></li>
-<li> <i>Preferable running</i> — configuration of the preferred running at the specified station; the reserved values:
+<li> <i>Preferable to run</i> — configuration of the preferring execution at the specified station; the reserved values:
 <ul><li> <b>&lt;High Level&gt;</b> — running at the station with the highest level.</li>
 <li> <b>&lt;Low Level&gt;</b> — running at the station with the lowest level.</li>
 <li> <b>&lt;Optimal&gt;</b> — choice for the running of the least loaded station this is the station which runs lowest number of the controller objects.</li></ul></li>
@@ -690,7 +690,7 @@
 <li> <i>To start</i> — indicates the state of "Running", in which to transfer the controller object at the program startup.</li>
 <li> <i>Parameters tables</i> — names of tables that store the parameters of different types (refers to parameter objects of the data acquisition).</li>
 <li> <i>Schedule of the calculation</i> — defines whether periodic or scheduled character of the calculations is. In our example the template calculation is periodic in one second.</li>
-<li> <i>Priority of the acquisition task</i> — sets priority of the data acquisition of this controller. It is used when scheduling the operating system tasks. In the case of proper access availability this field enables the planning of the controller's task in real time and with the specified priority otherwise it modifies the parameter "nice" of the task.</li></ul></li></ul>
+<li> <i>Priority of the acquisition task</i> — sets priority of the data acquisition of this controller. It is used when scheduling the operating system tasks. In the case of proper access availability this field enables the planning of the controller task in real time and with the specified priority otherwise it modifies the parameter "nice" of the task.</li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:817px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_main.png"><img class="thumbimage" height="628" src="files/QTCfg_subsys_daq_mod_cntr_main.png" width="815" /></a>  <div class="thumbcaption">Fig. 4.5h. Main configuration tab of a controller object of the subsystem "Data acquisition".</div></div></div></div>
 <p>Tab "Parameters" (Fig.4.5i) contains a list of parameters in the controller object, provides selection of the type of parameters that are created by default, as well as information on the total number and the number of enabled parameters. In the context menu user can add, delete and go to the desired parameter.
 </p>
@@ -723,6 +723,158 @@
 <p>Tab "Template configuration" is't standard, but it is present only in the parameters of modules of the subsystem "Data acquisition", which implement the mechanisms of working under the template in the context of the data source, which they are served, for the logical type. In this review this tab is included for logical completeness of the review of parameter templates configuration of the subsystem "Data acquisition" and as the final stage of of their using. This tab (Fig.4.5o) contains the configuration fields in accordance with the template. In this example it is the group link on the external parameter. This link can be set simply by pointing the way to the parameter, if the flag "Only attributes are to be shown" is not set, or the attribute addresses separately in the case if the flag is set. Sign "(+)" at the end of the address signals about successful linking and presence of the target.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:785px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_tmpl.png"><img class="thumbimage" height="581" src="files/QTCfg_subsys_daq_mod_cntr_prm_tmpl.png" width="783" /></a>  <div class="thumbcaption">Fig. 4.5o. Tab "Template configuration" of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
+<h3><span class="mw-headline" id="Subsystem_.22Archives-History.22"><span class="mw-headline-number">4.6</span> <span id="CfgArch" title="#CfgArch">Subsystem "Archives-History"</span></span></h3>
+<p>This subsystem is the modular one and contains the hierarchy of objects shown in Figure 1.5. To configure the subsystem the root page of the subsystem "Archives-History" is provided, which contains the tabs:  "Redundancy", "Messages", "Values" and "Modules".
+</p><p>To gain the access to modify the objects of this subsystem the user of the group "Archive" or the privileged user rights are required.
+</p><p>As a redundancy object of the subsystem "Archives-History" there used the object of messages archiver for which the redundancy process performs followed functions:
+</p>
+<ul><li> <b>Redundancy of the archiving mechanism</b> — means of the messages combination from the redundant stations by the three mechanisms:
+<ul><li> in the main cycle of the redundancy there performs a request for new messages of the archiver on the master station from the last message time of the redundant object;</li>
+<li> writing messages to the redundant archiver causes to redirection of the writing request to to the master station both for new and rewriting messages (also the messages write locally);</li>
+<li> rewriting messages to the master archiver causes to the messages sending for all redundant stations.</li></ul></li>
+<li> <b>Compensation of the data loss on the time of the node stop</b> with the redundant node archive. There provides only initial synchronization by loading/reloading of parts of the archive from the redundant station, at the station starting in general. The archive's part requested from the moment of the last record into the local archive minus value of the parameter of the depth of the forced reloading and till the current time. Changed messages to more depth from the pointed will be lost on the started station!</li>
+<li> <b>Load distribution of the archiving between the nodes</b>. When creating complex distributed systems there can be an important question of predicting and optimizing of the overall system performance, taking this into the account  the redundancy mechanism provides the execution of tasks of archiving of individual archivers only at one station. The other stations' tasks would go to the data synchronization mode with the executive station. In the case of loss of the connection with the executive station the task of the local archiving is started. It's also provided the possibility of optimal the load distribution of the execution of archiving tasks of the archivers group between the stations.</li>
+<li> <b>Restoring of the alarms primacy</b>. For the alarming messages, negative level, at their writing are performed an additional processing for the active alarms, that is only old-original ones are allowed for rewriting.</li></ul>
+<p>Redundancy of the values archiving doesn't provided directly but that process does through the data sources and the subsystem of "Data acquisition".
+</p><p>Tab "Redundancy" (Fig.4.6a) presented only if at last one station (Fig.4c) pointed into the redundancy and contains the configuration of redundancy of the messages archiving with the following settings:
+</p>
+<ul><li> <i>Overtime of the reserve history reload at start</i> — points to the messages requesting depth, in days, at the redundant station from time of the last message into the local archive. Sometime that can be usable for reloading last messages if their can be potentially changed-updated on the redundant station at the time of the local one stopping.</li>
+<li> <i>Message archivers</i> — contains the table with the list of message archivers, available for redundancy, and their current status:
+<ul><li> <i>Archiver</i> — full identifier of the archiver;</li>
+<li> <i>Name</i> — name of the archiver;</li>
+<li> <i>Running</i> — sign of the archiver execution on the local station;</li>
+<li> <i>Redundancy</i> — redundancy mode of the archiver — enabling;</li>
+<li> <i>Preferable to run</i> — configuration of the preferring execution at the specified station; reserved values:
+<ul><li> <b>&lt;High Level&gt;</b> — running at the station with the highest level.</li>
+<li> <b>&lt;Low Level&gt;</b> — running at the station with the lowest level.</li>
+<li> <b>&lt;Optimal&gt;</b> — choice for the running of the least loaded station this is the station which runs lowest number of the archiver objects.</li></ul></li>
+<li> <i>Remote</i> — sign indicating the running of the archiver on the remote station and work the local station in the mode of the remote data synchronization.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:787px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_red.png"><img class="thumbimage" height="472" src="files/QTCfg_subsys_arch_red.png" width="785" /></a>  <div class="thumbcaption">Fig. 4.6a. Tab "Redundancy" of the subsystem "Archives-History".</div></div></div></div>
+<p>Tab "Messages" (Fig.4.6b) contains the configuration of the messages archive and the request form of messages from it.
+</p><p>Configuration of the messages archive is represented by the fields:
+</p>
+<ul><li> <i>Buffer size</i> — indicates the size of the memory area reserved for the interim buffer of messages. Messages from the buffer are requested for viewing and archived with the messages archivers.</li>
+<li> <i>Archiving period</i> — the periodicity in seconds with which the archivers get messages from the buffer for their archiving.</li></ul>
+<p>The messages request form contains the configuration fields of the request and the table of results. Configuration fields of the request are:
+</p>
+<ul><li> <i>Time, size (seconds) and level</i> — specifies the request time, size or depth (in seconds) and minimum level of messages (more than or equal).</li>
+<li> <i>Category pattern</i> — specifies the category of the requested messages. In the category you can specify the elements of selection by template, that is the characters '*' — for any string and '?' — for any character, as well as a regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/).</li>
+<li> <i>Archivers</i> — indicates the messages archivers (separated by symbol ';'), for which the request is to be processed. If the value is missing, the request will be processed for the buffer and all archivers. If "&lt;buffer&gt;" is specified then the request will be processed for the messages buffer.</li></ul>
+<p>The result table contains rows of messages with the following columns:
+</p>
+<ul><li> <i>Time</i>, <i>mcsec</i> — full date and time of the message and the microsecond part separately.</li>
+<li> <i>Category</i> — category o the message.</li>
+<li> <i>Level</i> — level of the message.</li>
+<li> <i>Message</i> — text of the message.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1043px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mess.png"><img class="thumbimage" height="621" src="files/QTCfg_subsys_arch_mess.png" width="1041" /></a>  <div class="thumbcaption">Fig. 4.6b. Tab "Messages" of the subsystem "Archives-History".</div></div></div></div>
+<p>Tab "Values" (Fig.4.6c) contains the general configuration of the values archiving and the list of archives of values. In the context menu of the list of values the user has the opportunity to add, delete and go to the desired archive. The general configuration of the archiving is represented by the fields:
+</p>
+<ul><li> <i>Period of the data receiving</i> — indicates the periodicity of the task of the active archiving, in milliseconds. Highest level of detail or minimum period of the active archives is in fact determined by this value.</li>
+<li> <i>Level of priority of the data receiving task</i> — sets priority of the task of the active archiving. It is used when scheduling the operating system tasks. In the case of proper access availability this field enables the planning of the archiving task in real time and with the specified priority otherwise it modifies the parameter "nice" of the task.</li>
+<li> <i>Forced to set timestampes in the current time</i> — timestamp of received values, on the active archiving, forces to the current time, replaces the data source time.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:638px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_val.png"><img class="thumbimage" height="529" src="files/QTCfg_subsys_arch_val.png" width="636" /></a>  <div class="thumbcaption">Fig. 4.6c. Tab "Values" of the subsystem "Archives-History".</div></div></div></div>
+<p>Tab "Modules" (Fig.4.1a) contains the list of modules in the subsystem "Archives-History", available at the station.
+</p><p>The value archive of the subsystem "Archives-History" provides the configuration page with the tabs "Archive", "Archivers" and "Values".
+</p><p>Tab "Archive" (Fig.4.6d) contains the basic settings of the archive:
+</p>
+<ul><li> Section "State" — contains the properties, which characterize the state of the archive:
+<ul><li> <i>Running</i> — state of the parameter "Running". Running archive collects data in the buffer and is served by the archivers.</li>
+<li> <i>Begin and end of the buffer</i> — date and time of values begin and end into the buffer.</li>
+<li> <i>Archive DB</i> — DB address for storing the archive data.</li></ul></li>
+<li> Section "Configuration" — directly contains the configuration fields:
+<ul><li> <i>Identifier</i> — information on the archive identifier.</li>
+<li> <i>Name</i> — specifies the archive name.</li>
+<li> <i>Description</i> — brief description of the archive and its purpose.</li>
+<li> <i>To start</i> — indicates the state "Running" in which to transfer the archive at the program startup.</li>
+<li> <i>Source</i> — indicates the type and address of the source. Type of source is indicated from the list: "Passive", "Passive param. attribute" or "Active param. attribute". Passive archive does not have an associated source of values, the data to the such archive the source transfers by itself, for example from calculating procedures of users on internal programming language. Types with the attribute of the parameter in the address field indicate the parameter of the subsystem "Data acquisition" as the source. Passive attribute of the parameter sends data to the archive by itself with its own period of the data acquisition. Active attribute of the parameter is acquired by the archiving task of this subsystem. In fact, all real data sources work in passive archiving mode, since the received data is immediately placed in the parameter attribute, sometimes by the source timestamp. But calculators (<a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a>, <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a>, <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a>, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">DAQ.Siemens</a>) can only operate in the active archiving mode because the data in the attribute parameter is updated only with their direct request, and are taken from the execution context. In the case of real data sources, the difference between active and passive mode of archiving by the fact that in the passive mode the source can put data into the archive by timestamp, and in the active mode the timestamp is always set to the current system time.</li>
+<li> <i>Data combining mode</i> — sets the combining mode for data writing from the high-resolution buffer (for example, 1 second) to low-resolution archiver (for example, 1 minute), when into single point of the archiver placed several values (for example, 60) from the buffer. The modes implemented: "Moving average", "Single", "Minimum" and "Maximum".</li>
+<li> <i>Value type</i> — indicates the type of values which are stored in the archive from the list: "Boolean", "Integer", "Real", "String", "Int16", "Int32", "Int64", "Real(Float)" and "Real(Double)".</li>
+<li> <i>Buffer period</i> — indicates the periodicity of values in the archive buffer, in seconds.</li>
+<li> <i>Buffer size</i> — indicates the dimension or depth of the archive buffer. The dimension is automatically sets at a rate of 60 sec of the periodicity of the archiving task, with the remainder.</li>
+<li> <i>Buffer in the hard time grid</i> — indicates the mode of the buffer. The hard time grid mode involves the memory reservation for each value, but without the timestamp. This mode eliminates the possibility of packaging the adjacently-identical values but also saves on storage of the timestamp. Otherwise, the buffer operates in the mode of storage the value and timestamp and supports the packaging of adjacently-identical values.</li>
+<li> <i>Buffer in the high time resolution</i> — indicates the possibility of storing values at intervals and dimensions up to 1 microsecond, differently the values can be stored at intervals and dimensions up to 1 second.</li>
+<li> <i>Filling the passage points with the last value</i> — the passage values mostly fill by EVAL but sometime data periodicity of the source greater to the archive's one and it is normal.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:867px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_arch.png"><img class="thumbimage" height="700" src="files/QTCfg_subsys_arch_va_arch.png" width="865" /></a>  <div class="thumbcaption">Fig. 4.6d. Main configuration tab of a values archive of the subsystem "Archives-History".</div></div></div></div>
+<p>Tab Archivers' (Fig.4.6e) contains the table with the configuration of the processing of the archive by the available archivers. Lines are available archivers, and the columns are the following parameters:
+</p>
+<ul><li> <i>Archiver</i> — information on the archiver address.</li>
+<li> <i>Running</i> — information on the archiver state "Running".</li>
+<li> <i>Processing</i> — sign of the processing this archive be the archiver. The field is available for modification by the user.</li>
+<li> <i>Period</i> — information on the periodicity of the archiver, in seconds.</li>
+<li> <i>Begin</i> — date and time of beginning of the archive data in the archiver.</li>
+<li> <i>End</i> — date and time of ending of the archive data in the archiver.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:894px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_arcs.png"><img class="thumbimage" height="549" src="files/QTCfg_subsys_arch_va_arcs.png" width="892" /></a>  <div class="thumbcaption">Fig. 4.6e. Tab "Archivers" of a value archive of the subsystem "Archives-History".</div></div></div></div>
+<p>Tab "Values" (Fig.4.6f) contains the values request in the archive and the result as a table of values or image of the trend. Values request contains the fields:
+</p>
+<ul><li> <i>Time</i> — indicates the time of the request. It contains two fields: the field of date+time and microseconds.</li>
+<li> <i>Size</i> — specifies the size or depth of the request in seconds.</li>
+<li> <i>Archiver</i> — indicates values archiver for which the request is to be processed. If the value is empty, the request will be processed for the buffer and for all archivers. If "&lt;buffer&gt;" is specified then the request will be processed only for the archive buffer.</li>
+<li> <i>Show trend</i> — indicates the necessity for presentation of the archive data in the form of a graph (trend) otherwise the result is presented in a table that contains only time and value. In the case of toggle of  this field the graph image is formed and displayed, additional configuration fields of the image settings are appeared:
+<ul><li> <i>Image size</i> — indicates the width and height of the generated image in pixels.</li>
+<li> <i>Scale of the values</i> — indicates the lower and upper border of the scale of the values. If both values are set to 0 or equal, then the scale will be determined automatically depending on the values.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1018px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_vals.png"><img class="thumbimage" height="626" src="files/QTCfg_subsys_arch_va_vals.png" width="1016" /></a>  <div class="thumbcaption">Fig. 4.6f. Tab "Values" of a values archive of the subsystem "Archives-History".</div></div></div></div>
+<p>Each module of the subsystem "Archives-History" provides configuration page with the tabs "Archivers" and "Module". The tab "Archivers" (Fig.4.6g) contains a list of archivers of messages and values registered in the module. The context menu of the list provides the user with possibility to add, delete and go to the desired archiver. On the tab "Module" there is information on the module of the subsystem "Archives-History" (Fig.4.1c), which structure is identical for all modules.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:726px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_arcs.png"><img class="thumbimage" height="456" src="files/QTCfg_subsys_arch_mod_arcs.png" width="724" /></a>  <div class="thumbcaption">Fig. 4.6g. Tab "Archivers" of the module of the subsystem "Archives-History".</div></div></div></div>
+<p>Message archivers contains their own configuration page with the tabs "Archiver" and "Messages".
+</p><p>The "Archiver" tab (Fig.4.6h) contains the basic settings. The structure of these settings may differ slightly from one module to another one of this subsystem as you can find in the own documentation of the modules. As an example we shall examine the settings of the message archiver from the module of the archiving on the file system <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">Arch.FSArch</a> Settings:
+</p>
+<ul><li> Section "State" — contains the properties, which characterize the archiver state:
+<ul><li> <i>Running</i> — archiver state "Running". The running archiver processes the buffer of the message archive and puts his data in its repository, but also it processes requests for access to data in the repository.</li>
+<li> <i>Archiver DB</i> — database address for storing the archiver data.</li>
+<li> <i>End and Begin of the archiver</i> — date and time of the end and start of data in the archiver repository.</li>
+<li> <i>Overall size of the archiver files</i> — information about the total size of the archiver files with the data.</li>
+<li> <i>Archiving time</i> — current and maximum time spent on the archiving of data of the message archive.</li></ul></li>
+<li> Section "Configuration" — directly contains the configuration fields:
+<ul><li> <i>Identifier</i> — information on the archiver identifier.</li>
+<li> <i>Name</i> — indicates the archiver name.</li>
+<li> <i>Description</i> — brief description of the archiver and its purpose.</li>
+<li> <i>To start</i> — indicates the state "Running" in which to transfer the archiver at the program startup.</li>
+<li> <i>Message categories</i> — list of categories of messages, separated by ';'. Messages matched with the templates or regular expressions of categories will be processed by the archiver. In the category you can specify the elements of selection by template, that is the characters '*' — for any string and '?' — for any character, as well as a regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/).</li>
+<li> <i>Messages level</i> — indicates the level of the archiver messages. Messages with the level greater than or equal to the specified one are processed by the archiver — taken from the buffer.</li>
+<li> <i>Address</i> — address of the storage in the specific for the type of archiver (module) format. The format description usually available in the tooltip for this field. In the example it is the relative path to the storage directory.</li></ul></li>
+<li> Section "Additional options" — a specialized section for the module, the contents of which can be found in the documentation for the module.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:799px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main.png"><img class="thumbimage" height="660" src="files/QTCfg_subsys_arch_mod_ma_main.png" width="797" /></a>  <div class="thumbcaption">Fig. 4.6h. Main tab of the configuration of a messages archiver of the subsystem "Archives-History".</div></div></div></div>
+<p>The "Messages" tab (Fig.4.6i) contains the form of the messages request from the archive of the archiver:
+</p>
+<ul><li> <i>Time, size (seconds) and level</i> — specifies the request date and time, size or depth and minimum level of messages (more or equal to the specified).</li>
+<li> <i>Category pattern</i> — indicates the category of the requested messages. In the category you can specify the elements of selection by template, that is the characters '*' — for any string and '?' — for any character, as well as a regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/).</li></ul>
+<p>The result table contains rows of messages with the following columns:
+</p>
+<ul><li> <i>Time</i>, <i>mcsec</i> — full date and time of the message and the microsecond part separately.</li>
+<li> <i>Category</i> — category o the message.</li>
+<li> <i>Level</i> — level of the message.</li>
+<li> <i>Message</i> — text of the message.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1037px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_mess.png"><img class="thumbimage" height="631" src="files/QTCfg_subsys_arch_mod_ma_mess.png" width="1035" /></a>  <div class="thumbcaption">Fig. 4.6i. Tab "Messages" of a messages requesting of a messages archiver of the subsystem "Archives-History".</div></div></div></div>
+<p>Value archivers contains their own configuration page with the tabs "Archiver" and "Archives".
+</p><p>The "Archivator" tab (Fig.4.6j) contains the basic settings. The structure of these settings may differ slightly from one module to another one of this subsystem as you can find in the own documentation of the modules. As an example we shall examine the settings of the value archiver from the module of the archiving on the file system <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">Arch.FSArch</a> Settings:
+</p>
+<ul><li> Section "State" — contains the properties, which characterize the archiver state:
+<ul><li> <i>Running</i> — archiver state "Running". The running archiver processes the buffers of the value archives and puts their data in its repository, but also it processes requests for access to data in the repository.</li>
+<li> <i>Archiving time</i> — current and maximum time spent on the archiving of data of the buffers of the archives. Periodicity of archiving is set in the field "Period of the archiving" in the section "Configuration" of the tab.</li>
+<li> <i>Archiver DB</i> — database address for storing the archiver data.</li>
+<li> <i>Overall size of the archiver files</i> — information about the total size of the archiver files with the data.</li></ul></li>
+<li> Section "Configuration" — directly contains the configuration fields:
+<ul><li> <i>Identifier</i> — information on the archiver identifier.</li>
+<li> <i>Name</i> — indicates the archiver name.</li>
+<li> <i>Description</i> — brief description of the archiver and its purpose.</li>
+<li> <i>To start</i> — indicates the state "Running" in which to transfer the archiver at the program startup.</li>
+<li> <i>Address</i> — address of the storage in the specific for the type of archiver (module) format. The format description usually available in the tooltip for this field. In the example it is the relative path to the storage directory.</li>
+<li> <i>Period of the values</i> — indicates the periodicity of the values those are contained in the archiver repository, in seconds.</li>
+<li> <i>Period of the archiving</i> — indicates the periodicity of an archiving task of data of the buffers of the archives, in seconds. The size of the buffers of the archives in the time expression must not be less, and preferably somewhat greater, then the periodicity of the of archiving task. Set a zero period to disable the use of the archiver in processing the buffer — just a direct recording.</li>
+<li> <i>Selection priority</i> — selection of a priority of the archiver for using in the source mode "All". Set to zero for full the selection disabling.</li></ul></li>
+<li> Section "Additional options" — a specialized section for the module, the contents of which can be found in the documentation for the module.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:776px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_va_main.png"><img class="thumbimage" height="652" src="files/QTCfg_subsys_arch_mod_va_main.png" width="774" /></a>  <div class="thumbcaption">Fig. 4.6j. Main tab of the configuration of a values archiver of the subsystem "Archives-History".</div></div></div></div>
+<p>The "Archives" tab (Fig.4.6k) contains a table with information about the archives being processed by the archiver. The table in the rows contains the archives, and in the columns — the following information:
+</p>
+<ul><li> <i>Archive</i> — archive name.</li>
+<li> <i>Period, seconds</i> — archive periodicity.</li>
+<li> <i>Buffer size</i> — buffer size, in units.</li>
+<li> <i>Last read buffer</i> — date and time of last reading of the buffer.</li>
+<li> <i>Files size</i> — specific to the module <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">Arch.FSArch</a> field with information about the total size of the files of the archiver storage for the archive.</li></ul>
+<p>In the case of the module <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">Arch.FSArch</a> in this tab you can find the form of exporting the archiver data.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:881px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_va_archs.png"><img class="thumbimage" height="533" src="files/QTCfg_subsys_arch_mod_va_archs.png" width="879" /></a>  <div class="thumbcaption">Fig. 4.6k. Tab "Archives" of a values archiver of the subsystem "Archives-History".</div></div></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -731,158 +883,6 @@
 <td style="padding-left:5px;"> Common revision is doing now in this position...
 </td></tr></table>
 </div>
-<h3><span class="mw-headline" id="Subsystem_.22Archives.22"><span class="mw-headline-number">4.6</span> <span id="CfgArch" title="#CfgArch">Subsystem "Archives"</span></span></h3>
-<p>The subsystem is modular and contains the hierarchy of objects shown in Fig.1.5. To configure the subsystem the root page of the subsystem "Archives" is provided, it contains tabs: "Redundancy", "Messages archive", "Value archives" and "Modules".
-</p><p>To gain the access to modify the objects of this subsystem the user of the group "Archive" or the privileged user rights are required.
-</p><p>As a redundancy object of the subsystem "Archives" there used the object of messages archivator for which the redundancy process performs that functions:
-</p>
-<ul><li> <b>Redundancy of the data acquisition mechanism</b>. It's means of messages combination from the redundant stations by the three mechanisms:
-<ul><li> in the main cycle of redundancy there performs a request for new messages of the archivator on the master station from a last message time of the redundant object;</li>
-<li> writing messages to the redundant archivator causes to redirection of the writing request to to the master station both for new and rewriting messages (also the messages write locally);</li>
-<li> rewriting messages to the master archivator causes to the messages sending for all redundant stations.</li></ul></li>
-<li> <b>Compensation of the data loss on the time of the node stop</b> with the redundant node archive. There provides only an initial synchronization by loading/reloading of parts of the archive from the redundant station, at the station starting in general. The archive's part requested from the moment of the last record into the local archive minus value of the parameter of the depth of the forced reloading and till the current time. Changed messages to more depth from the pointed should be lost on the started station!</li>
-<li> <b>Load distribution of data acquisition between the nodes</b>. When creating complex allocated systems there can be an important question of predicting and optimizing of the overall system performance. Taking into account these problems the redundancy mechanism provides the execution of tasks of archivation of individual archivators only at one station. The other stations' tasks would go to data synchronization mode with the executive station. In the case of loss of the connection with the executive station the task of the local archivation is started. It's also provided the possibility of optimal the load distribution of the execution of archivation task's of the archivators' group between the stations.</li>
-<li> <b>Restoring of the alarms primacy</b>. For alarming messages, negative level, at its writing performs an additional processing for the active alarms, that is only old — original ones allow for rewriting.</li></ul>
-<p>Redundancy of the value archivators doesn't provided directly but that process does through data sources and the subsystem of "Data acquisition".
-</p><p>Tab "Redundancy" (Fig.4.6a) presented only if at last one station pointed into the redundancy and contains the configuration of redundancy of messages archvators with the following settings:
-</p>
-<ul><li> <i>Overtime of the reserve history reload at start, hours</i> — points to the messages requesting depth from time of the last message into the local archive. Sometime that can be usable for reloading last messages if its can be potential changed-updated at the station down.</li>
-<li> <i>Message archivators</i> — contains the table with the list of message archivators, available for redundancy, and their current status:
-<ul><li> <i>Archivator</i> — full archivator's ID;</li>
-<li> <i>Name</i> — archivator's name;</li>
-<li> <i>Started</i> — the sign of the archivator's execution on the local station;</li>
-<li> <i>Redundant</i> — redundancy mode of the archivator, enabling;</li>
-<li> <i>Preferable run</i> — configuration of the preferred execution at the specified station can be changed; reserved values:
-<ul><li> <b>&lt;High Level&gt;</b> — execution at the station with the highest level.</li>
-<li> <b>&lt;Low Level&gt;</b> — execution at the station with the lowest level.</li>
-<li> <b>&lt;Optimal&gt;</b> — the choice for the execution of the least loaded station.</li></ul></li>
-<li> <i>Remoted</i> — sign indicating the execution of the archivator on the remote station and work the local station in mode with a remote data synchronization.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:785px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_red.png"><img class="thumbimage" height="427" src="files/QTCfg_subsys_arch_red.png" width="783" /></a>  <div class="thumbcaption">Fig. 4.6a. Tab "Redundancy" of the subsystem "Archives".</div></div></div></div>
-<p>The "Messages" tab (Fig.4.6b) contains the configuration of messages archive and the request form of  messages from the archive.
-</p><p>Configuration of the messages archive is represented by the fields:
-</p>
-<ul><li> <i>Messages buffer size</i> — indicates the dimension of the area of memory reserved for the interim buffer of messages. Messages from the buffer are requested for viewing and archived with the messages archivers.</li>
-<li> <i>Archiving period (s)</i> — the periodicity with which the archivers select messages from the buffer for their archiving.</li></ul>
-<p>The messages request form contains the configuration fields of the request and the table of results. Configuration fields of the request are:
-</p>
-<ul><li> <i>Time, size (s) and level</i> — specifies the request time, the size or the depth (in seconds) and the minimum level of messages (more than or equal).</li>
-<li> <i>Category pattern</i> — specifies the category of the requested messages. In the category you can specify the elements of a sample of the template, namely, the characters '*' — for any string and '?' — for any character, as well as a regular expression enclosed between '/' (/mod_(System|LogicLev)/).</li>
-<li> <i>Archivators</i> — indicates the messages archivators (separated by symbol ';'), for which the request is to be processed. If the value is missing, the request will be processed for the buffer and all archivers. If "&lt;buffer&gt;" is specified, then the request will be processed for the messages buffer.</li></ul>
-<p>The result table contains rows of messages with the following columns:
-</p>
-<ul><li> <i>Time</i> — message's time.</li>
-<li> <i>Category</i> — message's category.</li>
-<li> <i>Level</i> — message's level.</li>
-<li> <i>Message</i> — message's text.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1006px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mess.png"><img class="thumbimage" height="612" src="files/QTCfg_subsys_arch_mess.png" width="1004" /></a>  <div class="thumbcaption">Fig. 4.6b. Tab "Messages" of the subsystem "Archives".</div></div></div></div>
-<p>Tab "Value" (Fig.4.6c) contains the general configuration of value's archiving and the list of archives of values. In the context menu of the list of values the user has the opportunity to add, delete and move to the desired archive. The general configuration of archiving is represented by the fields:
-</p>
-<ul><li> <i>Get data period (ms)</i> — indicates the periodicity of the active archiving task. In fact, the highest level of detail or the minimum period of active archives is determined by this value.</li>
-<li> <i>Get data task priority level</i> — sets the priority of task of active archiving. It is used when scheduling the operating system tasks. In the case of proper access availability this field includes the planning of the archiving task in real time and with the specified priority otherwise it modifies parameter "nice" of the task.</li>
-<li> <i>Variable timestamp force to current time</i> — time-stamp of values, received on the active archivation, forces to current time, replaces the data source time.</li></ul>
-<p>The "Modules" tab (Fig.4.1b) contains a list of modules in subsystem "Archives" and it is identical for all modular subsystems.
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:668px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_val.png"><img class="thumbimage" height="570" src="files/QTCfg_subsys_arch_val.png" width="666" /></a>  <div class="thumbcaption">Fig. 4.6c. Tab "Values" of the subsystem "Archives".</div></div></div></div>
-<p>Archive of values of subsystem "Archives" provides the configuration page with the tabs "Archive", "Archivators" and "Values".
-</p><p>Tab "Archive" (Fig.4.6d) contains the basic settings of the archive:
-</p>
-<ul><li> Section "State" — Contains the properties, which characterize the state of the archive:
-<ul><li> <i>Running</i> — The state of the parameter "Running". Running archive collects data in the buffer and is served by the archivators.</li>
-<li> <i>Buffer start and end</i> — Time of values begin and end into the buffer.</li>
-<li> <i>Archive DB</i> — Database address for storing the archive's data.</li></ul></li>
-<li> Section "Config" — Directly contains the configuration fields:
-<ul><li> <i>Identifier</i> — Information on the archive's identifier.</li>
-<li> <i>Name</i> — Specifies the archive's name.</li>
-<li> <i>Description</i> — Brief description of the archive and its purpose.</li>
-<li> <i>To start</i> — Indicates the state "Running" in which to transfer the archive at startup.</li>
-<li> <i>Source</i> — Indicates the type and address of the source. Type of source is indicated from the list: "Passive", "Passive param. attribute" or "Active param. attribute". Passive archive does not have an associated source of values, the data to the such archive the source transfers by itself, for example from users' calculate procedures on internal programming language. Types with the attribute of the parameter in the address field indicate the parameter of the subsystem "Data acquisition" as the source. Passive attribute of the parameter sends data to the archive by itself with its own period of data acquisition. Active attribute of the parameter is queried by the archiving task of this subsystem. Virtually all sources of real data process into passive mode of archiving as the data at once placed in the attribute parameter, sometimes by time stamp. But calculators (<a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a>, <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a>, <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a>) can only operate in active mode, archiving, because the data in the attribute parameter is updated only with their direct request, and are taken from the execution context. In the case of real data sources, the difference between active and passive mode of archiving by the fact that in the passive mode the source can put data into the archive by timestamp, and in active mode, the timestamp is always set to the current system time.</li>
-<li> <i>Data combining mode</i> — Sets combining mode for data writing from highresolution buffer (for example, 1s) to lowresolution archivator (for example, 1min.), when into single point of the archivator placed several values from buffer (for example, 60). The modes implemented: "Moving average", "Single", "Minimum" and "Maximum".</li>
-<li> <i>Value type</i> — Indicates the type of values which are stored in the archive from the list: "Boolean", "Integer", "Real", "String", "Int16", "Int32", "Int64", "Real(Float)" and "Real(Double)".</li>
-<li> <i>Buffer period (s)</i> — Indicates the periodicity of values in the archive's buffer.</li>
-<li> <i>Buffer size (items)</i> — Indicates the dimension and depth of the archive's buffer. The dimension is usually set in terms of 60 sec of the periodicity of the archiving task with the reserve.</li>
-<li> <i>Buffer hard time grid</i> — Indicates the mode of the buffer. The hard grid mode involves the memory reservation for each value, but without the timestamp. This mode eliminates the possibility of packaging the adjacently-identical values, but also saves on storage of the timestamp. Otherwise, the buffer operates in the mode of storage the value and timestamp and supports the packaging of adjacently-identical values.</li>
-<li> <i>Buffer high time resolution</i> — indicates the possibility of storing values at intervals up to 1 microsecond, differently the values can be stored at intervals up to 1 second.</li>
-<li> <i>Fill pass points to a last value</i> — mostly the pass values fill by EVAL but sometime the source's data periodicity greater to the archive's one and it is normal.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:877px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_arch.png"><img class="thumbimage" height="687" src="files/QTCfg_subsys_arch_va_arch.png" width="875" /></a>  <div class="thumbcaption">Fig. 4.6d. Main configuration tab of a values archive of the subsystem "Archives".</div></div></div></div>
-<p>Tab Archivators' (Fig.4.6e) contains the table with the configuration of the processing of the archive by the available archivers. Lines are available archivers, and the columns are the following parameters:
-</p>
-<ul><li> <i>Archivator</i> — information on the archiver's address.</li>
-<li> <i>Start</i> — information on the archiver's state "Started".</li>
-<li> <i>Process</i> — sign of the processing this archive be the archiver. The field is available for modification by the user.</li>
-<li> <i>Period (s)</i> — information on the periodicity of the archiver.</li>
-<li> <i>Begin</i> — date and time of the archive beginning in the archiver.</li>
-<li> <i>End</i> — date and time of the archive ending in the archiver.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_arcs.png"><img class="thumbimage" height="515" src="files/QTCfg_subsys_arch_va_arcs.png" width="808" /></a>  <div class="thumbcaption">Fig. 4.6e. Tab "Archivators" of a values archive of the subsystem "Archives".</div></div></div></div>
-<p>Tab "Values" (Fig.4.6f) contains the values request in the archive and the result as a table of values or image of the trend. Values request contains the fields:
-</p>
-<ul><li> <i>Time</i> — indicates the time of request. It contains two fields: the field of date + time and microseconds.</li>
-<li> <i>Size (s)</i> — specifies the size or depth of the request in seconds.</li>
-<li> <i>Archivator</i> — indicates values archiver for which the request is to be processed. If the value is missing, the request will be processed for the buffer and for all archivers. If the &lt;buffer&gt; is specified, then the request will be processed only for the archive's buffer.</li>
-<li> <i>Show trend</i> — indicates the necessity for presentation of the archive's data in the form of a graph (trend), otherwise the result is presented in a table that contains only time and value. In the case of installation of this field the schedule is formed and displayed, in addition additional configuration fields of the image settings are appeared:
-<ul><li> <i>Picture size</i> — indicates the width and height of the generated image in pixels.</li>
-<li> <i>Value scale</i> — indicates the lower and upper limit of the scale of value. If both values are set to 0 or equal, then the scale will be determined automatically depending on the values.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:927px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_vals.png"><img class="thumbimage" height="599" src="files/QTCfg_subsys_arch_va_vals.png" width="925" /></a>  <div class="thumbcaption">Fig. 4.6f. Tab "Values" of a values archive of the subsystem "Archives".</div></div></div></div>
-<p>Each module of the "Archives" subsystem provides configuration page with the tabs "Archivators" and "Module". The "Archivators" tab (Fig.4.6g) contains a list of messages and values archivers registered in the module. The context menu of the list provides user with possibility to add, delete and move to the desired controller. The "Module" tab  contains information about the module of subsystem "Archives" (Fig.4.1d), whose structure is identical for all modules.
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:630px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_arcs.png"><img class="thumbimage" height="487" src="files/QTCfg_subsys_arch_mod_arcs.png" width="628" /></a>  <div class="thumbcaption">Fig. 4.6g. Tab "Archivators" of the module of the subsystem "Archives".</div></div></div></div>
-<p>Messages archivators contains their own configuration page with tabs "Archivator" and "Messages".
-</p><p>The "Archivator" tab (Fig.4.6h) contains the basic settings. The structure of these settings may differ slightly from one module of this subsystem to another as you can find in the own documentation of modules. As an example we shall examine the settings of the messages archiver from the module of the archive on the file system <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">Arch.FSArch</a> Settings:
-</p>
-<ul><li> Section "State" — contains the properties, hich characterize the archivers' state:
-<ul><li> <i>Running</i> — archivers' state "Running". The running archiver processes the messages archive buffer and puts his data in its repository, but also it processes requests for access to data in the repository.</li>
-<li> <i>Archivator DB</i> — database address for storing the archiver's data.</li>
-<li> <i>End</i> — date + time of the last data in the archiver's repository.</li>
-<li> <i>Begin</i> — date + time of the first data in the archiver's repository.</li>
-<li> <i>Archivator files size (kB)</i> — information about the total size of the archiver's files with the data.</li>
-<li> <i>Archiving time (ms)</i> — time spent on the archiving of messages archive data.</li></ul></li>
-<li> Section "Config" — directly contains the configuration fields:
-<ul><li> <i>Identifier</i> — information on the archiver's identifier.</li>
-<li> <i>Name</i> — indicates the archiver's name.</li>
-<li> <i>Description</i> — brief description of the archiver and its purpose.</li>
-<li> <i>To start</i> — indicates the state "Running", in which to transfer archiver at startup.</li>
-<li> <i>Message categories</i> — list of categories of messages, separated by ';'. Messages matched with the templates or regular expressions of categories will be processed by the archiver. In the category you can specify the elements of a sample of the template, namely, the characters '*' — for any string and '?' — for any character, as well as a regular expression enclosed between '/' (/mod_ (System|LogicLev)/).</li>
-<li> <i>Message level</i> — indicates the level of archiver's messages. Messages with a level greater than or equal to the specified one are processed by the archiver.</li>
-<li> <i>Address</i> — address of the storage in the specific for the type of archiver (module) format. Format description usually available in the tooltip for this field. In the example it is the relative path to the storage directory.</li></ul></li>
-<li> Section "Additional options" — specialized section for module about the contents of which you can read in the documentation on the module.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:711px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main.png"><img class="thumbimage" height="631" src="files/QTCfg_subsys_arch_mod_ma_main.png" width="709" /></a>  <div class="thumbcaption">Fig. 4.6h. Main tab of the configuration of a messages archiver of the subsystem "Archives".</div></div></div></div>
-<p>The "Messages" tab (Fig.4.6i) contains the form of the messages request from the archive of the archiver:
-</p>
-<ul><li> <i>Time, size (s) and level</i> — specifies the request time, the size or the depth (in seconds) and the minimum level of messages (more than or equal).</li>
-<li> <i>Category pattern</i> — indicates the category of the requested messages. In the category you can specify the elements of a sample of the template, namely, the characters '*' — for any string and '?' — for any character, as well as a regular expression enclosed between '/' (/mod_ (System|LogicLev)/).</li></ul>
-<p>The result table contains messages rows with the following columns:
-</p>
-<ul><li> <i>Time</i> — message time.</li>
-<li> <i>Category</i> — message category.</li>
-<li> <i>Level</i> — message level.</li>
-<li> <i>Message</i> — message text.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1036px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_mess.png"><img class="thumbimage" height="629" src="files/QTCfg_subsys_arch_mod_ma_mess.png" width="1034" /></a>  <div class="thumbcaption">Fig. 4.6i. Tab "Messages" of a messages requesting of a messages archiver of the subsystem "Archives".</div></div></div></div>
-<p>Values archivers contains their own configuration page with tabs "Archivator" and "Archives".
-</p><p>The "Archivator" tab (Fig.4.6j) contains the basic settings. The structure of these settings may differ slightly from one module of this subsystem to another as you can find in the own documentation of modules. As an example we shall examine the settings of the messages archiver from the module of the archive on the file system <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">Arch.FSArch</a> Settings:
-</p>
-<ul><li> Section "State" — contains the properties, hich characterize the archivers' state:
-<ul><li> <i>Running</i> — archivers' state "Running". The running archiver processes the messages archive buffer and puts his data in its repository, but also it processes requests for access to data in the repository.</li>
-<li> <i>Archiving time (ms)</i> — information about the time spent on archiving data of the archives buffers. Periodicity of archiving is set in the field "Period archiving" in the section "Config" of the tab.</li>
-<li> <i>Archivator DB</i> — database address for storing the archiver's data.</li></ul></li>
-<li> Section "Config" — directly contains the configuration fields:
-<ul><li> <i>Identifier</i> — information on the archiver's identifier.</li>
-<li> <i>Name</i> — indicates the archiver's name.</li>
-<li> <i>Description</i> — brief description of the archiver and its purpose.</li>
-<li> <i>To start</i> — indicates the state "Running", in which to transfer archiver at startup.</li>
-<li> <i>Address</i> — address of the storage in the specific for the type of archiver (module) format. Format description usually available in the tooltip for this field. In the example it is the relative path to the storage directory.</li>
-<li> <i>Value period (s)</i> — indicates the periodicity of values that are contained in the archiver's repository.</li>
-<li> <i>Period archiving (s)</i> — indicates the periodicity of the archives buffers data archiving task. The dimension of the archives buffers in the time expression must not be less, and preferably somewhat greater then the periodicity of the of archiving task. Set zero period for disable using the archiver for buffer processing, only for direct write.</li>
-<li> <i>Selection priority</i> — selection the archiver priority for "All" sources using mode. Set to zero for full the selection disable.</li></ul></li>
-<li> Section "Additional options" — specialized section for module about the contents of which you can read in the documentation on the module.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:735px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_va_main.png"><img class="thumbimage" height="768" src="files/QTCfg_subsys_arch_mod_va_main.png" width="733" /></a>  <div class="thumbcaption">Fig. 4.6j. Main tab of the configuration of a values archiver of the subsystem "Archives".</div></div></div></div>
-<p>The "Archives" tab (Fig.4.6k) contains a table with information about the archives being processed by the archiver. In the rows the table contains archives, and in the columns — the following information:
-</p>
-<ul><li> <i>Archive</i> — archive's name.</li>
-<li> <i>Period (s)</i> — archive's periodicity in seconds.</li>
-<li> <i>Buffer size</i> — buffer's dimension in units.</li>
-<li> <i>Files size (Mb)</i> — specific to the module Arch.FSArch field with information about the total size of the files of the archiver's storage for the archive.</li></ul>
-<p>In the case of the module Arch.FSArch in this tab you can find the form of export the archiver's data.
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:740px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_va_archs.png"><img class="thumbimage" height="617" src="files/QTCfg_subsys_arch_mod_va_archs.png" width="738" /></a>  <div class="thumbcaption">Fig. 4.6k. Tab "Archives" of a values archiver of the subsystem "Archives".</div></div></div></div>
 <h3><span class="mw-headline" id="Subsystem_.22User_interfaces.22"><span class="mw-headline-number">4.7</span> Subsystem "User interfaces"</span></h3>
 <p>The subsystem is modular. To configure the subsystem the root page of the subsystem "User Interfaces" is provided, it contains the tab "Modules". The "Modules" tab (Fig.4.1b) contains a list of modules of subsystem and it is identical for all modular subsystems.
 </p><p>Each module of the subsystem "User Interfaces" provides configuration page with the tabs "User Interface" and "Module". The "User Interface" tab (Fig.4.7a) provides the parameter for monitoring the "Running" status of the module, as well as the configuration sections specialized  for the modules of this subsystem. On the "Module" tab there is an information about the module of the subsystem "User Interfaces" (Fig.4.1d), which structure is identical for all modules.

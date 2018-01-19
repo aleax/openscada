@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -211,6 +211,8 @@ class Page : public Widget, public TConfig
 	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
+	void procChange( bool src = true );
+
 	void inheritAttr( const string &attr = "" );
 
 	Page	*ownerPage( ) const;
@@ -283,6 +285,7 @@ class PageWdg : public Widget, public TConfig
 	string resourceGet( const string &id, string *mime = NULL );
 
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
+
 
 	void inheritAttr( const string &attr = "" );
 

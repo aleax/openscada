@@ -1251,7 +1251,7 @@ msgid "Styles"
 msgstr "Стилі"
 
 msgid "Style"
-msgstr "Стиль "
+msgstr "Стиль"
 
 msgid "Properties"
 msgstr "Властивості"

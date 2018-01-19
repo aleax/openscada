@@ -1,13 +1,13 @@
 # OpenSCADA core translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 19:23+0200\n"
+"POT-Creation-Date: 2018-01-19 19:01+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -24,8 +24,8 @@ msgstr "Ресурс намагається намертво заблокува�
 msgid "Resource is timeouted!"
 msgstr "Час очікування ресурсу вичерпано!"
 
-msgid "Archives"
-msgstr "Архіви"
+msgid "Archives-History"
+msgstr "Архіви-Історія"
 
 msgid "Identifier"
 msgstr "Ідентифікатор"
@@ -64,10 +64,10 @@ msgstr "Резервування"
 msgid "Preferable run"
 msgstr "Уподобання виконання"
 
-msgid "Value period, seconds"
+msgid "Period of the values, seconds"
 msgstr "Період значень, секунд"
 
-msgid "Period archiving, seconds"
+msgid "Period of the archiving, seconds"
 msgstr "Період архівування, секунд"
 
 msgid "Selection priority"
@@ -96,25 +96,25 @@ msgstr ""
 msgid "Buffer period, seconds"
 msgstr "Період буфера, секунд"
 
-msgid "Buffer size (items)"
-msgstr "Розмір буферу (одиниць)"
+msgid "Buffer size, items"
+msgstr "Розмір буферу, одиниць"
 
-msgid "Buffer in hard time grid"
+msgid "Buffer in the hard time grid"
 msgstr "Жорстка сітка часу буфера"
 
-msgid "Buffer in high time resolution"
+msgid "Buffer in the high time resolution"
 msgstr "Висока роздільна здатність часу буфера"
 
-msgid "Fill pass points to a last value"
+msgid "Filling the passage points with the last value"
 msgstr "Заповнення прохідних точок останнім значенням"
 
-msgid "Process into archivators"
-msgstr "Обслуговувати у архіваторах"
+msgid "Process into archivers"
+msgstr "Обслуговування архіваторами"
 
-msgid "Message archivators load error."
+msgid "Message archivers load error."
 msgstr "Помилка завантаження архіваторів повідомлень."
 
-msgid "Value archivators load error."
+msgid "Value archivers load error."
 msgstr "Помилка завантаження архіваторів значень."
 
 msgid "Value archives load error."
@@ -122,7 +122,8 @@ msgstr "Помилка завантаження архівів значень."
 
 #, c-format
 msgid ""
-"======================== Subsystem \"Archives\" options ===================\n"
+"======================== Subsystem \"Archives-History\" options "
+"===================\n"
 "------------ Parameters of section '%s' in config-file -----------\n"
 "MessBufSize   <items>       Messages buffer size.\n"
 "MessPeriod    <sec>         Message archiving period.\n"
@@ -132,11 +133,12 @@ msgid ""
 "in hours.\n"
 "\n"
 msgstr ""
-"====================== Опції підсистеми \"Архіви\" ========================\n"
+"====================== Опції підсистеми \"Архіви-Історія\" "
+"========================\n"
 "------------ Параметри секції '%s' у конфігураційному файлі -----------\n"
 "MessBufSize   <од.>        Розмір буферу повідомлень.\n"
-"MessPeriod    <сек>        Період архівації повідомлень.\n"
-"ValPeriod     <мсек>       Період архівації значень.\n"
+"MessPeriod    <сек>        Період архівування повідомлень.\n"
+"ValPeriod     <мсек>       Період архівування значень.\n"
 "ValPriority   <рівень>     Рівень пріоритету задачі значень.\n"
 "RdRestDtOverTm <годин>     Глибина примусового перевантаження історії "
 "резерву при запуску, у годинах.\n"
@@ -146,11 +148,11 @@ msgid "Start/update subsystem."
 msgstr "Запуск/оновлення підсистеми."
 
 #, c-format
-msgid "Message archivator '%s' start error."
+msgid "Message archiver '%s' start error."
 msgstr "Помилка запуску архіватору повідомлень '%s'."
 
 #, c-format
-msgid "Value archivator '%s' start error."
+msgid "Value archiver '%s' start error."
 msgstr "Помилка запуску архіватору значень '%s'."
 
 #, c-format
@@ -158,11 +160,11 @@ msgid "Value archive '%s' start error."
 msgstr "Помилка запуску архіву значень '%s'."
 
 #, c-format
-msgid "Value archivator '%s' stop error."
+msgid "Value archiver '%s' stop error."
 msgstr "Помилка зупинки архіватору значень '%s'."
 
 #, c-format
-msgid "Message archivator '%s' stop error."
+msgid "Message archiver '%s' stop error."
 msgstr "Помилка зупинки архіватору повідомлень '%s'."
 
 #, c-format
@@ -186,19 +188,19 @@ msgid "Overtime of the reserve history reload at start, days"
 msgstr ""
 "Глибина примусового перевантаження історії резерву при запуску, в добах."
 
-msgid "Message archivators"
+msgid "Message archivers"
 msgstr "Архіватори повідомлень"
 
-msgid "Archivator"
+msgid "Archiver"
 msgstr "Архіватор"
 
 msgid "Run."
-msgstr "Вик."
+msgstr "Викон."
 
 msgid "Redund."
 msgstr "Резерв."
 
-msgid "Pref. run"
+msgid "Pref. to run"
 msgstr "Уподоб. вик."
 
 msgid "Remote"
@@ -207,14 +209,14 @@ msgstr "Віддалений"
 msgid "Messages"
 msgstr "Повідомлення"
 
-msgid "Messages buffer size"
-msgstr "Розмір буферу повідомлень"
+msgid "Buffer size"
+msgstr "Розмір буферу"
 
 msgid "Archiving period, seconds"
-msgstr "Період архівації, секунд"
+msgstr "Період архівування, секунд"
 
-msgid "View messages"
-msgstr "Перегляд повідомлень"
+msgid "View"
+msgstr "Перегляд"
 
 msgid "Time, size (seconds) and level"
 msgstr "Час, розмір (секунд) та рівень"
@@ -230,32 +232,20 @@ msgstr ""
 "(2), ПОРУШЕННЯ;Попередження (3), ПОРУШЕННЯ;Помилка (4), ПОРУШЕННЯ;Критично "
 "(5), ПОРУШЕННЯ;Тривога (6), ПОРУШЕННЯ;Аварія (7), ПОРУШЕННЯ"
 
-msgid "Get messages for level more and equal it."
+msgid "Receiving messages with a level greater or equal to the specified."
 msgstr "Отримання повідомлень з рівнем більш або дорівнює вказаному."
 
 msgid "Category pattern"
 msgstr "Шаблон категорії"
 
-msgid ""
-"Messages category template or regular expression.\n"
-"Use template's symbols for group selection:\n"
-"  '*' - any substring;\n"
-"  '?' - any symbol.\n"
-"Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."
-msgstr ""
-"Шаблон або регулярний вираз категорії повідомлень.\n"
-"Використовуйте символи шаблону для групового вибору:\n"
-"  '*' - будь який підрядок;\n"
-"  '?' - будь який символ.\n"
-"Регулярний вираз розташовується між символами '/' (/mod_(System|LogicLev)/)."
-
-msgid "Archivators"
+msgid "Archivers"
 msgstr "Архіватори"
 
 msgid ""
-"Message archivators.\n"
-"No set archivator for process by buffer and all archivators.\n"
-"Set '<buffer>' for process by buffer."
+"Message archivers.\n"
+"Do not set the field for processing the request by the buffer and all "
+"archivers.\n"
+"Set '<buffer>' for processing by the buffer."
 msgstr ""
 "Архіватори повідомлень.\n"
 "Не встановлюйте поле для обробки запиту буфером та всіма архіваторами.\n"
@@ -270,8 +260,8 @@ msgstr "мкс"
 msgid "Category"
 msgstr "Категорія"
 
-msgid "Lev."
-msgstr "Рів."
+msgid "Level"
+msgstr "Рівень"
 
 msgid "Message"
 msgstr "Повідомлення"
@@ -279,13 +269,13 @@ msgstr "Повідомлення"
 msgid "Values"
 msgstr "Значення"
 
-msgid "Get data period (ms)"
-msgstr "Період отримання даних (мс)"
+msgid "Period of the data receiving, milliseconds"
+msgstr "Період отримання даних, мілісекунд"
 
-msgid "Get data task priority level"
+msgid "Level of priority of the data receiving task"
 msgstr "Рівень пріоритету задачі отримання даних"
 
-msgid "Variable timestamp force to current time"
+msgid "Forced to set timestampes in the current time"
 msgstr "Примусово встановлювати мітку часу у поточний час"
 
 msgid "Number"
@@ -307,16 +297,16 @@ msgstr "<Низький рівень>"
 msgid "<Optimal>"
 msgstr "<Оптимально>"
 
-msgid "Message archivator"
+msgid "Message archiver"
 msgstr "Архіватор повідомлень"
 
-msgid "Value archivator"
+msgid "Value archiver"
 msgstr "Архіватор значень"
 
-msgid "Value archivators"
+msgid "Value archivers"
 msgstr "Архіватори значень"
 
-msgid "Message archivator: "
+msgid "Message archiver: "
 msgstr "Архіватор повідомлень: "
 
 msgid "State"
@@ -325,7 +315,7 @@ msgstr "Стан"
 msgid "Running"
 msgstr "Виконується"
 
-msgid "Archivator DB"
+msgid "Archiver DB"
 msgstr "БД архіватору"
 
 msgid "End"
@@ -336,24 +326,6 @@ msgstr "Початок"
 
 msgid "Configuration"
 msgstr "Конфігурація"
-
-msgid ""
-"Messages category template or regular expression to processing by "
-"archivator, separated by symbol ';'.\n"
-"Use template's symbols for group selection:\n"
-"  '*' - any substring;\n"
-"  '?' - any symbol.\n"
-"Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."
-msgstr ""
-"Шаблон або регулярний вираз категорії повідомлень для обробки архіватором, "
-"поділені символом ';'.\n"
-"Використовуйте символи шаблону для групової вибірки:\n"
-"  '*' - будь який підрядок;\n"
-"  '?' - будь який символ.\n"
-"Регулярний вираз розташовується між символами '/' (/mod_(System|LogicLev)/)."
-
-msgid "Level"
-msgstr "Рівень"
 
 #, c-format
 msgid "Requested %d records for time %s."
@@ -425,33 +397,31 @@ msgid "Archive DB"
 msgstr "БД архіву"
 
 msgid ""
-"The values buffer size have to much enough for archivators periodicity.\n"
-"Typical the value automatic adjusts to the archive period and archivators "
-"periodicity in 60 seconds."
+"The size of the buffer of values should be large enough for the periodicity "
+"of the archivers.\n"
+"By default, this value is automatically configured for periodicity of the "
+"values of this archive and periodicity of archivers in 60 seconds."
 msgstr ""
 "Розмір буферу значень має бути достатньо великим для періодичності "
 "архіваторів.\n"
-"Типово це значення автоматично налаштовується на періодичність цього архіву "
-"та періодичність архіваторів у 60 секунд."
+"Типово це значення автоматично налаштовується на періодичність значень цього "
+"архіву та періодичність архіваторів у 60 секунд."
 
-msgid "Typical for fastest processing of values archivation."
+msgid "Default for fast processing of archiving values."
 msgstr "Типово для швидкої обробки архівації значень."
 
-msgid "Set for the values periodicity lesser to seconds."
-msgstr "Встановити у випадку періодичності значень менш за секунди."
+msgid "Set in case of periodicity of values in less than a second."
+msgstr "Встановити у випадку періодичності значень менше за секунду."
 
 msgid ""
-"Mostly the pass values fill by EVAL but sometime\n"
-"the source's data periodicity greater to the archive's one and it is normal."
+"The passage values mostly fill by EVAL but sometime data periodicity of the "
+"source greater to the archive's one and it is normal."
 msgstr ""
 "Переважно прохідні значення заповнюються EVAL однак інколи\n"
 "періодичність значень джерела більша за періодичність цього архіву та це "
 "нормально."
 
-msgid "Start"
-msgstr "Запущено"
-
-msgid "Process"
+msgid "Processing"
 msgstr "Обробка"
 
 msgid "Period, seconds"
@@ -464,66 +434,69 @@ msgid "Size, seconds"
 msgstr "Розмір, секунд"
 
 msgid ""
-"Values archivator.\n"
-"No set archivator for process by buffer and all archivators.\n"
-"Set '<buffer>' for process by buffer."
+"Values archiver.\n"
+"If the value is empty, the request will be processed for the buffer and for "
+"all archivers.\n"
+"If \"<buffer>\" is specified then the request will be processed only for the "
+"archive buffer."
 msgstr ""
 "Архіватор значень.\n"
-"Не встановлюйте поле для обробки запиту буфером та всіма архіваторами.\n"
-"Встановіть '<buffer>' для обробки запиту буфером."
+"Якщо значення відсутнє то запит буде оброблено для буферу та всіх "
+"архіваторів.\n"
+"Якщо вказано \"<buffer>\", то запит буде оброблено тільки для буферу архіву."
 
 msgid "Show trend"
 msgstr "Показати графік"
 
-msgid "Values table"
+msgid "Table of the values"
 msgstr "Таблиця значень"
 
 msgid "Value"
 msgstr "Значення"
 
-msgid "Picture size"
+msgid "Image size"
 msgstr "Розмір зображення"
 
-msgid "Picture width in pixels."
+msgid "Image width in pixels."
 msgstr "Ширина зображення у пікселях."
 
-msgid "Picture height in pixels."
+msgid "Image height in pixels."
 msgstr "Висота зображення у пікселях."
 
-msgid "Value scale"
-msgstr "Шкала значення"
+msgid "Scale of the values"
+msgstr "Шкала значень"
 
-msgid "Picture minimum value."
+msgid "Image minimum value."
 msgstr "Мінімальне значення зображення."
 
-msgid "Picture maximum value."
+msgid "Image maximum value."
 msgstr "Максимальне значення зображення."
 
-msgid "Values trend"
+msgid "Trend of the values"
 msgstr "Графік значень"
 
-msgid "Value archivator: "
+msgid "Value archiver: "
 msgstr "Архіватор значень: "
 
 msgid "Archiving time"
-msgstr "Час архівації"
+msgstr "Час архівування"
 
 msgid ""
-"Set zero period for disable using the archiver for buffer processing, only "
-"for direct write."
+"Set a zero period to disable the use of the archiver in processing the "
+"buffer - just a direct recording."
 msgstr ""
 "Встановити нульовий період для відключення використання архіватору у обробці "
-"буферу, тільки прямий запис."
+"буферу - тільки прямий запис."
 
 msgid ""
-"Selection the archiver priority for \"All\" sources using mode. Set to zero "
-"for full the selection disable."
+"Selection of a priority of the archiver for using in the source mode \"All"
+"\". Set to zero for full the selection disabling."
 msgstr ""
 "Пріоритет обрання архіватору для режиму використання джерела \"Всі\". "
 "Встановити у нуль для повного виключення із обрання."
 
-msgid "Buffer size"
-msgstr "Розмір буферу"
+msgid "Archives"
+msgstr "Архіви"
 
 msgid "Last read buffer"
 msgstr "Останнє читання буферу"
@@ -1180,6 +1153,20 @@ msgstr ""
 "тілько для \"root\";\n"
 "  100...199 - рівень пріоритету реального часу (FIFO), часто доступно тілько "
 "для \"root\"."
+
+msgid ""
+"Specifies the category of the requested messages.\n"
+"Use template's symbols for group selection:\n"
+"  '*' - any substring;\n"
+"  '?' - any character.\n"
+"Regular expression enclosed between the symbols '/' (/mod_(System|"
+"LogicLev)/)."
+msgstr ""
+"Вказує категорію запитуваних повідомлень.\n"
+"Використовуйте символи шаблону для групового вибору:\n"
+"  '*' - будь який підрядок;\n"
+"  '?' - будь який символ.\n"
+"Регулярний вираз заключається між символами '/' (/mod_(System|LogicLev)/)."
 
 msgid "Modules Scheduler"
 msgstr "Керування Модулями"
@@ -2025,8 +2012,8 @@ msgstr "Станції"
 msgid "Live"
 msgstr "Жива"
 
-msgid "Cntr."
-msgstr "Ліч."
+msgid "Counter"
+msgstr "Лічильник"
 
 msgid "Go to remote stations list configuration"
 msgstr "Перехід до конфігурації переліку віддалених станцій"
@@ -2113,6 +2100,9 @@ msgstr "Лічильники"
 
 msgid "Debug categories"
 msgstr "Категорії налагодження"
+
+msgid "Process"
+msgstr "Обробка"
 
 msgid "See to messages"
 msgstr "Перегляд повідомлень"
@@ -2560,3 +2550,16 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+
+#~ msgid "Picture height in pixels."
+#~ msgstr "Висота зображення у пікселях."
+
+#~ msgid ""
+#~ "The values buffer size have to much enough for archivers periodicity.\n"
+#~ "Typical the value automatic adjusts to the archive period and archivers "
+#~ "periodicity in 60 seconds."
+#~ msgstr ""
+#~ "Розмір буферу значень має бути достатньо великим для періодичності "
+#~ "архіваторів.\n"
+#~ "Типово це значення автоматично налаштовується на періодичність цього "
+#~ "архіву та періодичність архіваторів у 60 секунд."

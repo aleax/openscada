@@ -979,7 +979,9 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 	    if(keepAspectRatio()) x_scale = y_scale = vmin(x_scale, y_scale);
 	    mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
 	}
+	isResizeManual = true;
 	fullUpdatePgs();
+	isResizeManual = false;
 	messUpd();
 
 	//Resize

@@ -2814,8 +2814,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/redund/sts/st",_("Identifier"),RWRWR_,"root","root",3,"tp","str","dest","select","select","/redund/lsSt");
 		ctrMkNode("list",opt,-1,"/redund/sts/name",_("Name"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/sts/live",_("Live"),R_R_R_,"root","root",1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/redund/sts/lev",_("Lev."),R_R_R_,"root","root",1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/redund/sts/cnt",_("Cntr."),R_R_R_,"root","root",1,"tp","real");
+		ctrMkNode("list",opt,-1,"/redund/sts/lev",_("Level"),R_R_R_,"root","root",1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/redund/sts/cnt",_("Counter"),R_R_R_,"root","root",1,"tp","real");
 	    }
 	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to remote stations list configuration"),0660,"root","Transport",1,"tp","lnk");
 	}

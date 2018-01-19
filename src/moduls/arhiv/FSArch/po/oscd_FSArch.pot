@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 15:23+0200\n"
+"POT-Creation-Date: 2018-01-19 12:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,7 +59,7 @@ msgstr ""
 msgid "Can not create directory '%s'."
 msgstr ""
 
-msgid "Overall size of archivator's files"
+msgid "Overall size of the archiver files"
 msgstr ""
 
 msgid "Archiving time"
@@ -95,7 +95,7 @@ msgid ""
 "Completely removing this restriction can be performed by setting the parameter to zero."
 msgstr ""
 
-msgid "Time size of archive's file (days)"
+msgid "Time size of the archive files, days"
 msgstr ""
 
 msgid "Sets limit on the size of single archive file on time."
@@ -217,17 +217,17 @@ msgid "%s: Val: %s: information"
 msgstr ""
 
 #, c-format
-msgid "Local info DB for the values archivator '%s'. Created automatically then don't modify, save and remove it!"
+msgid "Local info DB for the value archiver '%s'. Created automatically then don't modify, save and remove it!"
 msgstr ""
 
 #, c-format
 msgid "Unpack '%s' for information get."
 msgstr ""
 
-msgid "Path to a directory for files of values of the archivator."
+msgid "Path to a directory for files of values of the archiver."
 msgstr ""
 
-msgid "Time size of archive's file (hours)"
+msgid "Time size of the archive files, hours"
 msgstr ""
 
 msgid ""
@@ -254,6 +254,9 @@ msgid ""
 "Sets the percentage of boundary for values' difference of parameters into integer and real types where they are considered as identical and will be archived as a single value through the sequential packaging.\n"
 "Allows for well-packaging of slightly changing parameters which are outside certainty.\n"
 "To disable this property you can it set to zero."
+msgstr ""
+
+msgid "Check now for the directory of the archiver"
 msgstr ""
 
 msgid "Files size"
@@ -345,11 +348,11 @@ msgstr ""
 msgid "Last value for actual archive file '%s' is not EVAL. Will try fix that!"
 msgstr ""
 
-msgid "Arhivator on the file system"
+msgid "Archiver on the file system"
 msgstr ""
 
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "The archiver module. Provides functions for messages and values archiving to file system."
+msgid "The archiver module. Provides functions for messages and values archiving to the file system."
 msgstr ""

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: session.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1643,6 +1643,15 @@ void SessWdg::wdgAdd( const string &iid, const string &name, const string &ipare
     chldAdd(inclWdg, new SessWdg(iid,iparent,ownerSess()));
 }
 
+void SessWdg::procChange( bool src )
+{
+    MtxAlloc res(mCalcRes, true);
+    if(!enable() || !process())	return;
+
+    setProcess(false);
+    setProcess(true);
+}
+
 void SessWdg::inheritAttr( const string &aid )
 {
     MtxAlloc res(mCalcRes, true);
@@ -1821,6 +1830,7 @@ void SessWdg::getUpdtWdg( const string &ipath, unsigned int tm, vector<string> &
 	    resDt.lock();
 	} catch(TError &err) { }
 }
+
 
 unsigned int SessWdg::modifVal( Attr &cfg )
 {

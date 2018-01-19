@@ -504,7 +504,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/mess/mess/0",_("Time"),R_R___,"root",SUI_ID,1,"tp","time");
 		ctrMkNode("list",opt,-1,"/mess/mess/0a",_("mcsec"),R_R___,"root",SUI_ID,1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/mess/mess/1",_("Category"),R_R___,"root",SUI_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/mess/mess/2",_("Lev."),R_R___,"root",SUI_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/mess/mess/2",_("Level"),R_R___,"root",SUI_ID,1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/mess/mess/3",_("Message"),R_R___,"root",SUI_ID,1,"tp","str");
 	    }
 	}
@@ -885,6 +885,7 @@ void Page::postDisable( int flag )
 bool Page::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "PR_TR") cfg("PROC").setNoTransl(!calcProgTr());
+    else if(co.name() == "PROC" && co.getS() != pc.getS()) procChange();
     modif();
     return true;
 }
@@ -1251,6 +1252,16 @@ string Page::resourceGet( const string &id, string *mime )
     if(mime) *mime = mimeType;
 
     return mimeData;
+}
+
+void Page::procChange( bool src )
+{
+    if(!src && proc().size()) return;
+
+    //Update heritors procedures
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().procChange(false);
 }
 
 void Page::inheritAttr( const string &attr )
@@ -1666,6 +1677,7 @@ void PageWdg::wClear( )
     cfg("ATTRS").setS("");
 }
 
+
 void PageWdg::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
@@ -1704,3 +1716,4 @@ void PageWdg::cntrCmdProc( XMLNode *opt )
     if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)))
 	TCntrNode::cntrCmdProc(opt);
 }
+

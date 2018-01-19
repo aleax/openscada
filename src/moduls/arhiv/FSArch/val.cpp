@@ -37,7 +37,7 @@
 using namespace FSArch;
 
 //*************************************************
-//* FSArch::ModVArch - Value archivator           *
+//* FSArch::ModVArch - Value archiver             *
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
     TVArchivator(iid,idb,cf_el), chkANow(false), infoTbl(dataRes()),
@@ -104,13 +104,13 @@ bool ModVArch::cfgChange( TCfg &co, const TVariant &pc )
 
 void ModVArch::start( )
 {
-    //Create and/or update the SQLite info file, special for the archivator and placed with main files of the archivator
+    //Create and/or update the SQLite info file, special for the archiver and placed with main files of the archiver
     if(!startStat() && packInfoFiles()) {
 	try {
 	    if(!SYS->db().at().at("SQLite").at().openStat(infoDBnm())) SYS->db().at().at("SQLite").at().open(infoDBnm());
 	    AutoHD<TBD> tSQLite = SYS->db().at().at("SQLite").at().at(infoDBnm());
 	    tSQLite.at().setName(TSYS::strMess(_("%s: Val: %s: information"),MOD_ID,id().c_str()));
-	    tSQLite.at().setDscr(TSYS::strMess(_("Local info DB for the values archivator '%s'. "
+	    tSQLite.at().setDscr(TSYS::strMess(_("Local info DB for the value archiver '%s'. "
 		"Created automatically then don't modify, save and remove it!"),id().c_str()));
 	    tSQLite.at().setAddr(addr()+"/info.db");
 	    tSQLite.at().enable();
@@ -466,12 +466,12 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TVArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Overall size of archivator's files"),R_R_R_,"root",SARH_ID,1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Overall size of the archiver files"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
-	    "dest","sel_ed","select","/prm/cfg/dirList","help",_("Path to a directory for files of values of the archivator."));
+	    "dest","sel_ed","select","/prm/cfg/dirList","help",_("Path to a directory for files of values of the archiver."));
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
-	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Time size of archive's file (hours)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
+	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Time size of the archive files, hours"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
 		_("The parameter is set automatically when you change the values period by the archiver "
 		  "and generally proportional to values frequency of the archiver.\n"
 		  "Attention! Large files of the archive will be processed long by there is long unpacking for gzip-files "
@@ -498,7 +498,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 		_("Specifies whether to create a file with information about the packed archive files by gzip-archiver.\n"
 		  "When copying files of archive to another station, this info file can speed up the target station "
 		  "process of first run by eliminating the need to decompress by gzip-archiver in order to obtain the information."));
-	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check now for the directory of the archivator"),RWRW__,"root",SARH_ID,1,"help",
+	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check now for the directory of the archiver"),RWRW__,"root",SARH_ID,1,"help",
 		_("The command, which allows you to immediately start for checking the archives, "
 		  "for example, after some manual changes into the directory of the archiver."));
 	}

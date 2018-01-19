@@ -302,7 +302,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     messTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     messTable->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     messTable->setMinimumHeight(150);
-    messTable->setHorizontalHeaderLabels(QStringList() << _("Time") << _("mcsec") << _("Category") << _("Lev.") << _("Message"));
+    messTable->setHorizontalHeaderLabels(QStringList() << _("Time") << _("mcsec") << _("Category") << _("Level") << _("Message"));
     dlg_lay->addWidget(messTable, 2, 0, 1, 3);
 
     //Add button box

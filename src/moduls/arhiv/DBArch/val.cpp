@@ -32,7 +32,7 @@
 using namespace DBArch;
 
 //*************************************************
-//* DBArch::ModVArch - Value archivator           *
+//* DBArch::ModVArch - Value archiver             *
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
     TVArchivator(iid,idb,cf_el), needMeta(true), needRePushGrps(false), reqRes(true), mMaxSize(0), mTmAsStr(false), mGroupPrms(0)

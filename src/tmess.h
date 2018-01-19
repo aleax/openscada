@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmess.h
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -162,6 +162,7 @@ class TMess
 	static const char *labSecCRON( );
 	static const char *labSecCRONsel( );
 	static const char *labTaskPrior( );
+	static const char *labMessCat( );
 
 	int getUTF8( const string &str, int off = 0, int32_t *symb = NULL );
 

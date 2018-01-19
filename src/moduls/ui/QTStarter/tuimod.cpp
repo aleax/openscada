@@ -58,7 +58,7 @@
 #else
 #define SUB_TYPE	""
 #endif
-#define MOD_VER		"4.1.0"
+#define MOD_VER		"4.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -501,6 +501,8 @@ void StApp::timerEvent( QTimerEvent *event )
 {
     if(!inExec)	return;
     if(!initExec) {
+	initExec = true;	//!!: Set to the begin but here can be a multiple entry from processEvents() manual call, observed on QTCfg.
+
 	QStyle *appStl = QStyleFactory::create(mod->style().c_str());
 	if(appStl)	QApplication::setStyle(appStl);
 	if(mod->styleSheets().size()) setStyleSheet(mod->styleSheets().c_str());
@@ -535,8 +537,6 @@ void StApp::timerEvent( QTimerEvent *event )
 	    if(mod->closeToTray() && (SYS->prjNm().size() || SYS->prjCustMode())) createTray();
 	    else startDialog();
 	}
-
-	initExec = true;
 	return;
     }
 

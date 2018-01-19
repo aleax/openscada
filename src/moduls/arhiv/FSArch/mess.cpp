@@ -352,7 +352,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TMArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Overall size of archivator's files"),R_R_R_,"root",SARH_ID,1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Overall size of the archiver files"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
 	    "dest","sel_ed","select","/prm/cfg/dirList","help",_("Path to a directory for files of messages of the archivator."));
@@ -369,7 +369,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 		_("Limits the maximum number for files of the archive and additional with the size of single file "
 		  "it determines the size of archive on disk.\n"
 		  "Completely removing this restriction can be performed by setting the parameter to zero."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/len",_("Time size of archive's file (days)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+	    ctrMkNode("fld",opt,-1,"/prm/add/len",_("Time size of the archive files, days"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
 		_("Sets limit on the size of single archive file on time."));
 	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Timeout to pack files of the archive (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
 		_("Sets the time after which, in the absence of requests, the archive file will be packaged in a gzip archive.\n"
