@@ -28,6 +28,7 @@
 #include <QSessionManager>
 #include <QSystemTrayIcon>
 
+#include "tbds.h"
 #include <tuis.h>
 
 #undef _
@@ -115,12 +116,14 @@ public:
     int stExec( );
     void stClear( );
 
+    //Attribute
+    MtxString	origStl;
+
 protected:
     //Methods
     void timerEvent( QTimerEvent *event );
 
 private slots:
-    void check( );
     void startDialog( );
     void callQtModule( );
     void makeStarterMenu( QWidget *mn = NULL );
@@ -156,12 +159,14 @@ public:
     bool endRun( )	{ return mEndRun; }
     bool startCom( )	{ return mStartCom; }
     string startMod( )	{ return mStartMod; }
-    string style( );
-    string styleSheets( );
+    string style( bool mant = false );
+    string palette( )	{ return mPalette; }
+    string styleSheets( ) { return mStyleSheets; }
     bool closeToTray( )	{ return mCloseToTray; }
 
     void setStartMod( const string &vl )	{ mStartMod = vl; modif(); }
     void setStyle( const string &vl )		{ mStyle = vl; modif(); }
+    void setPalette( const string &vl )		{ mPalette = vl; modif(); }
     void setStyleSheets( const string &vl )	{ mStyleSheets = vl; modif(); }
     void setCloseToTray( bool vl )		{ mCloseToTray = vl; modif(); }
     void modStart( );
@@ -194,7 +199,9 @@ private:
 
     //Attributes
     bool	hideMode, mEndRun, mStartCom, mCloseToTray;
-    MtxString	mStartMod, mStyle, mStyleSheets;
+    MtxString	mStartMod, mStyle, mPalette, mStyleSheets;
+
+    TElem	elLF;
 
     // Command line options binding to Qt
     int		qtArgC, qtArgEnd;		//Arguments counter and end position

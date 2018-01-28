@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_xml.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,7 +27,7 @@ namespace KernelTest
 {
 
 //*************************************************
-//* TestValBuf: Value buffer tests.               *
+//* TestValBuf: The tests of the values buffer.   *
 //*************************************************
 class TestValBuf : public TFunction
 {
@@ -38,7 +38,7 @@ class TestValBuf : public TFunction
 	}
 
 	string name( )	{ return _("Value buffer"); }
-	string descr( )	{ return _("Value buffer tests.\nContain 13 tests for all aspects of value buffer (subsystem \"Archives\")."); }
+	string descr( )	{ return _("The tests of the values buffer.\nContains 13 tests of all aspects of the value buffer (the subsystem \"Archives\")."); }
 
 	void calc( TValFunc *val )
 	{

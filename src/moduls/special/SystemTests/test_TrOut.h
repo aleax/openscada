@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_TrOut.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,9 +26,9 @@
 namespace KernelTest
 {
 
-//*************************************************
-//* TestTrOut: Output and/or input transports test.*
-//*************************************************
+//********************************************************
+//* TestTrOut: Test of outgoing and/or ingoing transport.*
+//********************************************************
 class TestTrOut : public TFunction
 {
     public:
@@ -37,12 +37,12 @@ class TestTrOut : public TFunction
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("addr",_("Address"),IO::String,IO::Default,"TCP:127.0.0.1:10001") );
 	    ioAdd( new IO("type",_("Transport module"),IO::String,IO::Default,"Sockets") );
-	    ioAdd( new IO("req",_("Request text"),IO::String,IO::Default|IO::FullText) );
+	    ioAdd( new IO("req",_("Text of the request"),IO::String,IO::Default|IO::FullText) );
 	}
 
 	string name( )	{ return _("Transport"); }
-	string descr( )	{ return _("Output and/or input transports test.\n"
-				   "Make test for output transport by send the request to selected input transport."); }
+	string descr( )	{ return _("Test of outgoing and/or ingoing transport.\n"
+				   "Performs testing of the original transport by sending a request to the specified ingoing transport."); }
 
 	void calc( TValFunc *val )
 	{

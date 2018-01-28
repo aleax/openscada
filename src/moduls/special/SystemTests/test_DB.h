@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_DB.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,10 +44,10 @@ class TestDB : public TFunction
 	string descr( )	{ return _("Full database test. Make:\n"
 				   "  - make/open DB;\n"
 				   "  - make/open table;\n"
-				   "  - make multiply records for determined structure;\n"
+				   "  - make multiply records for the determined structure;\n"
 				   "  - modify multiply records;\n"
 				   "  - get and check values for multiply records;\n"
-				   "  - modify record and table structure;\n"
+				   "  - modify a record and the table structure;\n"
 				   "  - remove multiply records;\n"
 				   "  - close/remove table;\n"
 				   "  - close/remove DB."); }

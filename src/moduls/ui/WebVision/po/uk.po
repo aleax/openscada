@@ -1,13 +1,13 @@
 # OpenSCADA.UI.WebVision translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.WebVision package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-23 18:35+0300\n"
+"POT-Creation-Date: 2018-01-28 10:07+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -160,15 +160,16 @@ msgstr "Листопад"
 msgid "December"
 msgstr "Грудень"
 
+#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
-"---------- Parameters of the module section '%s' in config-file ----------\n"
-"SessTimeLife <time>      Time of the session life, minutes (default 10).\n"
+"---- Parameters of the module section '%s' of the configuration file ----\n"
+"SessTimeLife <min>      Time of session life, in minutes (by default, 10).\n"
 "\n"
 msgstr ""
 "======================== Опції модуля <%s:%s> ============================\n"
-"------- Параметри модульної секції '%s' у конфігураційному файлі ---------\n"
-"SessTimeLife <час>       Час життя сесії, хвилин (по замовченню 10).\n"
+"------ Параметри модульної секції '%s' конфігураційного файлу ------\n"
+"SessTimeLife <хвил>     Час життя сесії, у хвилинах (по замовченню 10).\n"
 "\n"
 
 msgid "Connect to opened session"

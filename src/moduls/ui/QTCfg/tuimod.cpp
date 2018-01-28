@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,11 +33,11 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"QTCfg"
-#define MOD_NAME	_("System configurator (Qt)")
+#define MOD_NAME	_("Program configurator (Qt)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"3.4.1"
+#define MOD_VER		"3.4.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -110,9 +110,9 @@ string TUIMod::optDescr( )
 {
     return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section '%s' in config-file ----------\n"
-	"StartPath  <path>    Configurator start path.\n"
-	"StartUser  <user>    No password requested start user.\n\n"),
+	"---- Parameters of the module section '%s' of the configuration file ----\n"
+	"StartPath  <path>       Initial page path of the configurator.\n"
+	"StartUser  <user>       Starting user without password.\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 }
 

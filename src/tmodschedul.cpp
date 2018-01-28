@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodschedul.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +38,7 @@ using namespace OSCADA;
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
-TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules Scheduler"),false), mAllow("*"), mPer(10), schM(true)
+TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules scheduler"),false), mAllow("*"), mPer(10), schM(true)
 {
 
 }
@@ -67,15 +67,16 @@ string TModSchedul::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
-	"=================== Subsystem \"Module scheduler\" options =================\n"
-	"    --modPath=<path>   Modules <path> (/var/os/modules/).\n"
-	"------------ Parameters of section '%s' in config-file -----------\n"
-	"ModPath  <path>        Path to shared libraries(modules).\n"
-	"ModAllow <list>        List of shared libraries allowed for automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
-	"                       Use '*' value to allow all modules.\n"
-	"ModDeny  <list>        List of shared libraries deny for automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
-	"ChkPer   <sec>         Period of checking at new shared libraries(modules).\n\n"
-	),nodePath().c_str());
+	"=================== Subsystem \"Modules scheduler\" options =================\n"
+	"    --modPath=<path>    Directories with the modules, separated by ';', they can include a files' template at the end.\n"
+	"------ Parameters of the section '%s' of the configuration file ------\n"
+	"ModPath    <path>       Directories with the modules, separated by ';', they can include a files' template at the end.\n"
+	"                        This is a synonym of the system wide parameter \"ModDir\"\n"
+	"ModAllow   <list>       List of the shared libraries allowed for the automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
+	"                        Uses '*' value to allow all the modules.\n"
+	"ModDeny    <list>       List of the shared libraries denied for the automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
+	"ChkPer     <sec>        Period of the checking for new shared libraries(modules), in seconds. Set zero to disable.\n\n"
+	), nodePath().c_str());
 
     return buf;
 }
@@ -428,17 +429,17 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/ms",_("Subsystem"),R_R_R_,"root",SMSH_ID)) {
-	    ctrMkNode("fld",opt,-1,"/ms/mod_path",_("Path to shared libs(modules)"),R_R_R_,"root",SMSH_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/ms/mod_path",_("Path to the shared libraries(modules)"),R_R_R_,"root",SMSH_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/ms/mod_deny",_("Denied modules"),RWRWR_,"root",SMSH_ID,2,"tp","str",
-		"help",_("List of shared libs(modules) deny for auto connection.\n"
-		         "Elements separated by symbol ';'."));
+		"help",_("The list of shared libraries (modules) denied for automatic connection.\n"
+		         "Elements are separated by the symbol ';'."));
 	    ctrMkNode("fld",opt,-1,"/ms/mod_allow",_("Allowed modules"),RWRWR_,"root",SMSH_ID,2,"tp","str",
-		"help",_("List of shared libs(modules) allowed for auto connection.\n"
-		         "Elements separated by symbol ';'.\n"
-		         "Value '*' used for allow all modules."));
-	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Check modules period, seconds"),RWRWR_,"root",SMSH_ID,1,"tp","dec");
-	    ctrMkNode("comm",opt,-1,"/ms/chk_now",_("Check modules now."),RWRW__,"root",SMSH_ID);
-	    if(ctrMkNode("table",opt,-1,"/ms/libs",_("Shared libs(modules)"),RWRWR_,"root",SMSH_ID,1,"key","path")) {
+		"help",_("The list of shared libraries (modules) allowed for automatic connection.\n"
+		         "Elements are separated by the symbol ';'.\n"
+		         "The value '*' is used to allow all modules."));
+	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Period of checking of the modules, seconds"),RWRWR_,"root",SMSH_ID,1,"tp","dec");
+	    ctrMkNode("comm",opt,-1,"/ms/chk_now",_("Check the modules now."),RWRW__,"root",SMSH_ID);
+	    if(ctrMkNode("table",opt,-1,"/ms/libs",_("Shared libraries(modules)"),RWRWR_,"root",SMSH_ID,1,"key","path")) {
 		ctrMkNode("list",opt,-1,"/ms/libs/path",_("Path"),R_R_R_,"root",SMSH_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/ms/libs/tm",_("Time"),R_R_R_,"root",SMSH_ID,1,"tp","time");
 		ctrMkNode("list",opt,-1,"/ms/libs/mods",_("Modules"),R_R_R_,"root",SMSH_ID,1,"tp","str");

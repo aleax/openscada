@@ -1278,7 +1278,7 @@ bool WdgTree::eventFilter( QObject *target, QEvent *event )
 
 		// Prepare mime data
 		QMimeData *mimeData = new QMimeData;
-		mimeData->setData("application/OpenSCADA-libwdg",itemData);
+		mimeData->setData("application/OpenSCADA-libwdg", itemData);
 
 		// Create drag object
 		QDrag *drag = new QDrag(this);

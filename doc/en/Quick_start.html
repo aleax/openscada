@@ -107,20 +107,20 @@
 </p><p>If you are installing from the repository you should only select the package "openscada-Model.AGLKS". Everything else, according to the dependencies, will be selected and installed automatically.
 </p><p>Setting from a repository simply but it is specific for each Linux distributive, window manager or concrete program of the repositories and the packages manage then for them we'll refer the reader to the documentation of the appropriate distribution or program. Her in brief let observe the repositories appending and OpenSCADA installing with typical command line tools aid:
 </p><p><b>The packages repositories based on manager APT (Debian, Ubuntu, ALTLinux)</b> — appending by edition file /etc/apt/sources.list and one line inserting:<br />
-<i>Debian:</i> "deb <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/Debian/8" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/Debian/8</a> ./"<br />
-<i>Debian (Work version):</i> "deb <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/Work/Debian/8" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/Work/Debian/8</a> ./"<br />
-<i>Debian (Work version, modules separated):</i> "deb <a class="external free" href="ftp://ftp.oscada.org/Debian/8/openscada" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/Debian/8/openscada</a> ./"<br />
-<i>Ubuntu:</i> "deb <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/Ubuntu/14.04" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/Ubuntu/14.04</a> ./"<br />
-<i>Ubuntu (Work version):</i> "deb <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/Work/Ubuntu/14.04" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/Work/Ubuntu/14.04</a> ./"<br />
+<i>Debian:</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.8.0/Debian/8" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.8.0/Debian/8</a> ./"<br />
+<i>Debian (Work version):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Debian/8" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Debian/8</a> ./"<br />
+<i>Debian (Work version, modules separated):</i> "deb <a class="external free" href="http://ftp.oscada.org/Debian/8/openscada" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/Debian/8/openscada</a> ./"<br />
+<i>Ubuntu:</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.8.0/Ubuntu/14.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.8.0/Ubuntu/14.04</a> ./"<br />
+<i>Ubuntu (Work version):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/14.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/14.04</a> ./"<br />
 Installing:
 </p>
 <pre style="white-space: pre-wrap;">
 $ apt-get update
 $ apt-get install openscada-model-aglks
 </pre>
-<p><i>ALTLinux:</i> "rpm <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/ALTLinux/7</a> openscada main"<br />
-<i>ALTLinux (Work version):</i> "rpm <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/Work/ALTLinux/6" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/Work/ALTLinux/6</a> openscada main"<br />
-<i>ALTLinux (Work version, modules separated):</i> "rpm <a class="external free" href="ftp://ftp.oscada.org/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/ALTLinux/7</a> openscada main"<br />
+<p><i>ALTLinux:</i> "rpm <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.8.0/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.8.0/ALTLinux/7</a> openscada main"<br />
+<i>ALTLinux (Work version):</i> "rpm <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/ALTLinux/6" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/ALTLinux/6</a> openscada main"<br />
+<i>ALTLinux (Work version, modules separated):</i> "rpm <a class="external free" href="http://ftp.oscada.org/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/ALTLinux/7</a> openscada main"<br />
 Installing:
 </p>
 <pre style="white-space: pre-wrap;">
@@ -137,11 +137,11 @@ $ apt-get install openscada-Model.AGLKS
 [openscada]
 name=OpenSCADA
 #CentoOs
-baseurl=ftp://ftp.oscada.org/OpenSCADA/0.8.0/CentOs/7
+baseurl=http://ftp.oscada.org/OpenSCADA/0.8.0/CentOs/7
 #CentoOs (Work version)
-#baseurl=ftp://ftp.oscada.org/OpenSCADA/Work/CentOs/6
+#baseurl=http://ftp.oscada.org/OpenSCADA/Work/CentOs/6
 #Fedora (Work version)
-#baseurl=ftp://ftp.oscada.org/OpenSCADA/Work/Fedora/12
+#baseurl=http://ftp.oscada.org/OpenSCADA/Work/Fedora/12
 enabled=1
 gpgcheck=0
 </pre>
@@ -152,7 +152,7 @@ $ yum install openscada-Model.AGLKS </pre>
 <p><b>The packages repositories SuSE YaST</b> — appending by the command:
 </p>
 <pre style="white-space: pre-wrap;">
-$ zypper ar -f ftp://ftp.oscada.org/OpenSCADA/0.8.0/SuSE/13 OpenSCADA</pre>
+$ zypper ar -f http://ftp.oscada.org/OpenSCADA/0.8.0/SuSE/13 OpenSCADA</pre>
 <p>Installing:
 </p>
 <pre style="white-space: pre-wrap;">

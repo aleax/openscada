@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_xml.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,7 +27,8 @@ namespace KernelTest
 {
 
 //*************************************************
-//* TestSysContrLang: System control language test.*
+//* TestSysContrLang: The test of the control     *
+//*   language of the program.                    *
 //*************************************************
 class TestSysContrLang : public TFunction
 {
@@ -35,16 +36,16 @@ class TestSysContrLang : public TFunction
 	TestSysContrLang( ) : TFunction("SysContrLang",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
-	    ioAdd( new IO("path",_("Path to language element"),IO::String,IO::Default,"/Archive/BaseArh/mess_StatErrors/%2fprm%2fst") );
+	    ioAdd( new IO("path",_("Path to the language element"),IO::String,IO::Default,"/Archive/BaseArh/mess_StatErrors/%2fprm%2fst") );
 	}
 
-	string name( )	{ return _("System control language"); }
-	string descr( )	{ return _("System control language test.\n"
-				   "Make request to language elements by full path set.\n"
-				   "Full path to language element have view </Archive/%2fbd%2fm_per>.\n"
-				   "Full path contained two included path.\n"
-				   "First </d_Archive/> is path to the node of the control tree.\n"
-				   "Second </bd/m_per> is path to concrete node's element."); }
+	string name( )	{ return _("The control language of the program"); }
+	string descr( )	{ return _("The test of the control language of the program.\n"
+				   "Performs query of language elements through a complete path.\n"
+				   "The full path to the language element looks like </Archive/%2fbd%2fm_per>.\n"
+				   "The complete path consists of two nested paths.\n"
+				   "The first </Archive/> is the path to the node of the control tree.\n"
+				   "The second </bd/m_per> is the path to the specific node element."); }
 
 	void calc( TValFunc *val )
 	{

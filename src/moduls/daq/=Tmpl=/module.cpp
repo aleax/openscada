@@ -104,7 +104,7 @@ string TTpContr::optDescr( )
 
     snprintf(buf,sizeof(buf),_(
 	"======================= Module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section '%s' in config-file ----------\n\n"),
+	"---- Parameters of the module section '%s' of the configuration file ----\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;

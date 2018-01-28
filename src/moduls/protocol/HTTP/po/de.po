@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-23 18:22+0300\n"
+"POT-Creation-Date: 2018-01-28 09:49+0200\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -29,17 +29,19 @@ msgstr "Roman Savotschenko"
 msgid "Provides support for the HTTP protocol for WWW-based user interfaces."
 msgstr "HTTP-Unterstützung für eine WWW basierte Benutzerschnittstelle."
 
+#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
-"---------- Parameters of the module section '%s' in config-file ----------\n"
-"AuthTime <min>      Life time of the authentication, minutes (default 10).\n"
+"---- Parameters of the module section '%s' of the configuration file ----\n"
+"AuthTime   <min>        Life time of the authentication session, in minutes "
+"(default 10).\n"
 "\n"
 msgstr ""
 "======================= Optionen des Moduls <%s:%s> "
 "=============================\n"
-"------- Parameter des Abschnitts '%s' in der Konfigurationsdatei---------\n"
-"AuthTime <min>     Lebensdauer der Authentifizierung, Minuten (Standard "
-"10).\n"
+"------ Parameter des Modulabschnitts '%s' der Konfigurationsdatei ------\n"
+"AuthTime   <min>        Lebensdauer der Authentifizierungssitzung in Minuten "
+"(Standard 10).\n"
 "\n"
 
 #, c-format

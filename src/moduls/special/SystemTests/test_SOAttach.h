@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_mess.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,13 +35,13 @@ class TestSOAttach : public TFunction
 	TestSOAttach( ) : TFunction("SOAttach",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
-	    ioAdd( new IO("name",_("Path to module"),IO::String,IO::Default) );
+	    ioAdd( new IO("name",_("Path to the module"),IO::String,IO::Default) );
 	    ioAdd( new IO("mode",_("Mode (1-attach;-1-detach;0-change)"),IO::Integer,IO::Default,"0") );
-	    ioAdd( new IO("full",_("Full attach(to start)"),IO::Boolean,IO::Default,"1") );
+	    ioAdd( new IO("full",_("Complete attach(startup)"),IO::Boolean,IO::Default,"1") );
 	}
 
 	string name( )	{ return _("Attach SO"); }
-	string descr( )	{ return _("Attach/detach module test."); }
+	string descr( )	{ return _("Test attach/detach module."); }
 
 	void calc( TValFunc *val )
 	{

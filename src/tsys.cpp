@@ -65,7 +65,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
 {
     Mess = new TMess();
 
-    mName = _("Empty Station");
+    mName = _("Initial Station");
 
     finalKill = false;
     SYS = this;		//Init global access value
@@ -454,51 +454,51 @@ string TSYS::optDescr( )
 	"===========================================================================\n"
 	"==================== Generic options ======================================\n"
 	"===========================================================================\n"
-	"-h, --help		Info message about the program options.\n"
+	"-h, --help		This help text about the program command-line options and configuration file parameters.\n"
 	"    --projName=<name>	OpenSCADA project name to switch it.\n"
-	"    --projUserDir={dir} Directory of user projects (writeable) of OpenSCADA, \"~/.openscada\" by default.\n"
 	"			For this feature there also uses an environment variable \"OSCADA_ProjName\" and the program binary name \"openscada_{ProjName}\".\n"
-	"    --projLock={per}	Use projects locking by creation the \"lock\" file into the project folder and updating it in period <per>,\n"
+	"    --projUserDir={dir} Directory of user projects (writeable) of OpenSCADA, \"~/.openscada\" by default.\n"
+	"    --projLock={per}	Uses the projects locking by creation the \"lock\" file into the project folder and update it in the period <per>,\n"
 	"			by default it is enabled and the updating period <per> is 60 seconds. To disable set the updating period <per> to zero.\n"
-	"    --lang=<LANG>	Station language, in view \"uk_UA.UTF-8\".\n"
+	"    --lang=<LANG>	Station language, in the view \"en_US.UTF-8\".\n"
 	"    --config=<file>	Station configuration file.\n"
 	"    --station=<id>	Station identifier.\n"
 	"    --statName=<name>	Station name.\n"
-	"    --demon, --daemon	Start into the daemon mode.\n"
-	"    --pidFile=<file>	The file for the programm process ID place here.\n"
-	"    --noCoreDump	Prevent from core dumps creation on crashes, don't set the limit to unlimited value.\n"
-	"    --messLev=<level>	Process messages <level> (0-7).\n"
-	"    --log=<direct>	Direct messages to, by bitfield:\n"
+	"    --demon, --daemon	Run in the daemon mode.\n"
+	"    --pidFile=<file>	File for the program process ID placing here.\n"
+	"    --noCoreDump	Prevents from the core dump creation at crashes - don't set the limit to the unlimited value.\n"
+	"    --messLev=<level>	Level of the processing messages (0-7).\n"
+	"    --log=<direct>	Direct messages to, by the bitfield:\n"
 	"			  0x1 - syslogd;\n"
 	"			  0x2 - stdout;\n"
 	"			  0x4 - stderr;\n"
 	"			  0x8 - the messages archive.\n"
-	"----------- The config-file station '%s' parameters -----------\n"
+	"----------- Station '%s(%s)' settings in the configuration file -----------\n"
 	"StName     <nm>	Station name.\n"
-	"WorkDB     <Type.Name> Work DB (type and name).\n"
-	"WorkDir    <path>	Work directory.\n"
-	"ModDir     <path>	Directories with modules, separated by ';', they can include a files' template into the end.\n"
+	"WorkDB     <Type.Name> Working DB (<type> and <name>).\n"
+	"WorkDir    <path>	Working directory.\n"
+	"ModDir     <path>	Directories with the modules, separated by ';', they can include a files' template at the end.\n"
 	"IcoDir     <path>	Icons directory.\n"
 	"DocDir     <path>	Documents directory.\n"
-	"MessLev    <level>	Messages <level> (0-7).\n"
-	"SelDebCats <list>	Debug categories list (separated by ';').\n"
-	"LogTarget  <direction> Direct messages to, by bitfield:\n"
+	"MessLev    <level>	Level of the processing messages (0-7).\n"
+	"SelDebCats <list>	Debug categories list, separated by ';'.\n"
+	"LogTarget  <direction> Direct messages to, by the bitfield:\n"
 	"			  0x1 - syslogd;\n"
 	"			  0x2 - stdout;\n"
 	"			  0x4 - stderr;\n"
 	"			  0x8 - the messages archive.\n"
-	"Lang       <lang>	Work-internal language, like \"en_US.UTF-8\".\n"
-	"Lang2CodeBase <lang>	Base language for variable texts translation, two symbols code.\n"
-	"MainCPUs   <list>	Main used CPUs list (separated by ':').\n"
-	"ClockRT    <0|1>	Set for use REALTIME (else MONOTONIC) clock, some problematic with the system clock modification.\n"
+	"Lang       <lang>	Station language, in the view \"uk_UA.UTF-8\".\n"
+	"Lang2CodeBase <lang>	Base language for variable texts translation, in the two symbols code.\n"
+	"MainCPUs   <list>	Main list of the using CPUs, separated by ':'.\n"
+	"ClockRT    <0|1>	Sets the clock source to use to REALTIME (otherwise MONOTONIC), which is problematic one at the system clock modification.\n"
 	"SaveAtExit <0|1>	Save the program at exit.\n"
-	"SavePeriod <sec>	Save the program period.\n"
-	"RdStLevel  <lev>	Level of redundancy current station.\n"
-	"RdTaskPer  <s>		Call period of the redundant task.\n"
-	"RdRestConnTm <s>	Restore connection timeout of try to the \"dead\" reserve stations.\n"
+	"SavePeriod <sec>	Period of the program saving, in seconds. Set zero to disable.\n"
+	"RdStLevel  <lev>	Level of the redundancy of the current station.\n"
+	"RdTaskPer  <sec>	Call period of the redundancy task, in seconds.\n"
+	"RdRestConnTm <sec>	Time to restore connection to \"dead\" reserve station, in seconds.\n"
 	"RdStList   <list>	Redundant stations list, separated symbol ';' (st1;st2).\n"
-	"RdPrimCmdTr <0|1>	Enable the primary commands transfering to the redundant stations.\n\n"),
-	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
+	"RdPrimCmdTr <0|1>	Enables the transmission of primary commands to the reserve stations.\n\n"),
+	PACKAGE_NAME, VERSION, buf.sysname, buf.release, name().c_str(), id().c_str());
 }
 
 string TSYS::getCmdOpt( int &curPos, string *argVal )	{ return getCmdOpt_(curPos, argVal, argc, (char **)argv); }
@@ -555,7 +555,7 @@ bool TSYS::cfgFileLoad( )
     //================ Load parameters from commandline =========================
     string tVl;
     if(s2i(cmdOpt("h")) || s2i(cmdOpt("help"))) {
-	fprintf(stdout, "%s", optDescr().c_str());
+	//fprintf(stdout, "%s", optDescr().c_str());
 	Mess->setMessLevel(7);
 	cmd_help = true;
     }
@@ -602,6 +602,8 @@ bool TSYS::cfgFileLoad( )
 	    rootModifCnt = 0;
 	} catch(TError &err) { mess_sys(TMess::Error, _("Load config-file error: %s"), err.mess.c_str()); }
     }
+
+    if(cmd_help) fprintf(stdout, "%s", optDescr().c_str());
 
     return cmd_help;
 }
@@ -852,7 +854,7 @@ void TSYS::unload( )
     mRdStLevel = 0, mRdRestConnTm = 10, mRdTaskPer = 1, mRdPrimCmdTr = false;
     mRdRes.unlock();
 
-    mId = "InitSt", mName = _("Empty Station"), mUser = "root", mMainCPUs = "";
+    mId = "InitSt", mName = _("Initial Station"), mUser = "root", mMainCPUs = "";
     mConfFile = sysconfdir_full "/oscada.xml";
     mModDir = oscd_moddir_full;
     mIcoDir = "icons;" oscd_datadir_full "/icons";
@@ -2762,7 +2764,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",buf,R_R_R_)->setAttr("doc","Program_manual|Documents/Program_manual");
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),R_R_R_,"root","root",1,"idm","1");
-	if(TUIS::icoGet(id(),NULL,true).size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
+	if(TUIS::icoGet(name(),NULL,true).size() || TUIS::icoGet(id(),NULL,true).size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("area",opt,-1,"/gen",_("Station"),R_R_R_)) {
 	    ctrMkNode("fld",opt,-1,"/gen/id",_("Identifier"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/stat",_("Station name"),RWRWR_,"root","root",1,"tp","str");
@@ -2877,8 +2879,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     //Process command to page
     if(a_path == "/ico" && ctrChkNode(opt)) {
 	string itp;
-	opt->setText(TSYS::strEncode(TUIS::icoGet(id(),&itp),TSYS::base64));
-	opt->setAttr("tp",itp);
+	opt->setText(TSYS::strEncode(TUIS::icoGet(name(),&itp),TSYS::base64));
+	if(!itp.size())
+	    opt->setText(TSYS::strEncode(TUIS::icoGet(id(),&itp),TSYS::base64));
+	opt->setAttr("tp", itp);
     }
     else if(a_path == "/gen/host" && ctrChkNode(opt))	opt->setText(host());
     else if(a_path == "/gen/sys" && ctrChkNode(opt)) {

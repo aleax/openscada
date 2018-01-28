@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 21:00+0200\n"
+"POT-Creation-Date: 2018-01-28 09:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,12 +29,12 @@ msgstr ""
 #, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
-"---------- Parameters of the module section '%s' in config-file ----------\n"
-"All tests main options:\n"
-"  id           test's id;\n"
-"  on           on test's flag;\n"
-"  per          repeat period (sek).\n"
-"       *** Test's options ***\n"
+"---- Parameters of the module section '%s' of the configuration file ----\n"
+"       *** Main options of all the tests ***\n"
+"  id                    test id;\n"
+"  on                    flag enabling test;\n"
+"  per                   period of repeating, seconds.\n"
+"       *** Test options ***\n"
 msgstr ""
 
 #, c-format
@@ -64,15 +64,15 @@ msgstr ""
 msgid "Value archive"
 msgstr ""
 
-msgid "Values period, us"
+msgid "Period of the values, microseconds"
 msgstr ""
 
-msgid "Archivator"
+msgid "Archiver"
 msgstr ""
 
 msgid ""
-"Value archive allocation tests.\n"
-"Contain 7(8) tests for value archivator for check to correct working the consecutive pack mechanism."
+"The tests of location in the value archives.\n"
+"Contains 7(8) tests of the value archiver to verify the correct functioning of the sequential packing mechanism."
 msgstr ""
 
 msgid "Test: Start"
@@ -158,7 +158,7 @@ msgstr ""
 msgid "Base64 encoding"
 msgstr ""
 
-msgid "Mime Base64 encoding algorithm tests."
+msgid "Mime Base64 algorithm encoding tests."
 msgstr ""
 
 msgid "Test1: Encoding."
@@ -201,10 +201,10 @@ msgid ""
 "Full database test. Make:\n"
 "  - make/open DB;\n"
 "  - make/open table;\n"
-"  - make multiply records for determined structure;\n"
+"  - make multiply records for the determined structure;\n"
 "  - modify multiply records;\n"
 "  - get and check values for multiply records;\n"
-"  - modify record and table structure;\n"
+"  - modify a record and the table structure;\n"
 "  - remove multiply records;\n"
 "  - close/remove table;\n"
 "  - close/remove DB."
@@ -348,7 +348,7 @@ msgstr ""
 msgid "Close and delete DB '%s'."
 msgstr ""
 
-msgid "Messages category pattern"
+msgid "Message category template"
 msgstr ""
 
 msgid "Messages depth, seconds"
@@ -357,7 +357,7 @@ msgstr ""
 msgid "Messages"
 msgstr ""
 
-msgid "Messages archive test. Periodic read new messages from archive, for selected archivator."
+msgid "Test the archive of messages. Periodically reads new messages from the archive for the specified archiver."
 msgstr ""
 
 #, c-format
@@ -370,7 +370,7 @@ msgstr ""
 msgid "Parameter"
 msgstr ""
 
-msgid "DAQ parameters test. Make read a parameter's attributes and configuration fields."
+msgid "DAQ test parameters. Reads the attributes and configuration fields of the parameter."
 msgstr ""
 
 #, c-format
@@ -401,35 +401,35 @@ msgstr ""
 msgid "Configuration fields: %d"
 msgstr ""
 
-msgid "Path to module"
+msgid "Path to the module"
 msgstr ""
 
 msgid "Mode (1-attach;-1-detach;0-change)"
 msgstr ""
 
-msgid "Full attach(to start)"
+msgid "Complete attach(startup)"
 msgstr ""
 
 msgid "Attach SO"
 msgstr ""
 
-msgid "Attach/detach module test."
+msgid "Test attach/detach module."
 msgstr ""
 
-msgid "Path to language element"
+msgid "Path to the language element"
 msgstr ""
 
-msgid "System control language"
+msgid "The control language of the program"
 msgstr ""
 
 #, c-format
 msgid ""
-"System control language test.\n"
-"Make request to language elements by full path set.\n"
-"Full path to language element have view </Archive/%2fbd%2fm_per>.\n"
-"Full path contained two included path.\n"
-"First </d_Archive/> is path to the node of the control tree.\n"
-"Second </bd/m_per> is path to concrete node's element."
+"The test of the control language of the program.\n"
+"Performs query of language elements through a complete path.\n"
+"The full path to the language element looks like </Archive/%2fbd%2fm_per>.\n"
+"The complete path consists of two nested paths.\n"
+"The first </Archive/> is the path to the node of the control tree.\n"
+"The second </bd/m_per> is the path to the specific node element."
 msgstr ""
 
 #, c-format
@@ -442,15 +442,15 @@ msgstr ""
 msgid "Transport module"
 msgstr ""
 
-msgid "Request text"
+msgid "Text of the request"
 msgstr ""
 
 msgid "Transport"
 msgstr ""
 
 msgid ""
-"Output and/or input transports test.\n"
-"Make test for output transport by send the request to selected input transport."
+"Test of outgoing and/or ingoing transport.\n"
+"Performs testing of the original transport by sending a request to the specified ingoing transport."
 msgstr ""
 
 #, c-format
@@ -465,8 +465,8 @@ msgid "Value buffer"
 msgstr ""
 
 msgid ""
-"Value buffer tests.\n"
-"Contain 13 tests for all aspects of value buffer (subsystem \"Archives\")."
+"The tests of the values buffer.\n"
+"Contains 13 tests of all aspects of the value buffer (the subsystem \"Archives\")."
 msgstr ""
 
 #, c-format
@@ -596,21 +596,21 @@ msgstr ""
 msgid "Failed: %s: %s"
 msgstr ""
 
-msgid "Parameter attribute path"
+msgid "Path to the parameter attribute"
 msgstr ""
 
-msgid "Archive value getting depth, seconds"
+msgid "Depth of getting of archive values, seconds"
 msgstr ""
 
-msgid "Archive value getting period, microseconds"
+msgid "Depth of getting of archive values, microseconds"
 msgstr ""
 
 msgid "Parameter attribute"
 msgstr ""
 
 msgid ""
-"Parameter attribute's value test.\n"
-"Periodic make gathering for last value of selected attribute, and also gathering from archive for selected depth."
+"Test the attribute value of the parameter.\n"
+"Performs a periodic acquisition of the last value of the specified attribute, as well as the archive questioning to the required depth."
 msgstr ""
 
 #, c-format
@@ -631,7 +631,7 @@ msgstr ""
 msgid "XML parsing"
 msgstr ""
 
-msgid "XML file parsing test. Parse and show selected file structure."
+msgid "XML parsing file test. Disassembles and displays the structure of the specified file."
 msgstr ""
 
 #, c-format

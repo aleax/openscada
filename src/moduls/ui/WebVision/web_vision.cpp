@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: web_vision.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.2.4"
+#define MOD_VER		"2.2.5"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -262,8 +262,8 @@ string TWEB::optDescr( )
 
     snprintf(buf,sizeof(buf),_(
 	"======================= Module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section '%s' in config-file ----------\n"
-	"SessTimeLife <time>      Time of the session life, minutes (default 10).\n\n"),
+	"---- Parameters of the module section '%s' of the configuration file ----\n"
+	"SessTimeLife <min>      Time of session life, in minutes (by default, 10).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;

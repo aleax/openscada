@@ -1,4 +1,21 @@
-2017-01-19 Roman (stable)
+2018-01-28 Roman (stable)
+- !:DOC: "Program Manual" continued to revision ongoing of it translation to Ukrainian.
+- SYS: The meaning of the OpenSCADA station ID set more clear and associated to the station role that is: WorkStation, ServerStation, PLCStation, SimulatorStation.
+    For the main roles WorkStation, ServerStation, PLCStation there were added some representative icons and the station icon set check to its name before.
+- !!!!:SYS, UI.QTStarter: UI.QTStarter expanded by the Look and Feel control itself and its profiles support from the configuration file table "LookFeel" of the module.
+    Currently to the table "LookFeel" added three pallete profiles of the configuration files oscada_start.xml, oscada_AGLKS.xml, oscada_Boiler.xml.
+    Most of the standard configuration files of OpenSCADA revised for their properties translation and the original messages.
+- !!!!:SYS: All command line help messages of the core library and modules of OpenSCADA fully revised for
+    the original texts and their translation to Ukrainian, Russian and German.
+- !!:SYS,Archive.{DBArch,FSArch}: Most original messages and help ones of the subsystem "Modules scheduler", "User interfaces", "Special" and
+    some others were fixed and improved.
+- SYS: The station name "Empty Station" renamed to "Initial Station".
+- !:Special.SystemTests: Especially significant revised for all command line help messages.
+- UI.VCAEngine: The syntax highlight rules of CSS expanded for comments by /* */ of the primitive "Document".
+- UI.WebCfgD: Renamed from "Dynamic WEB configurator" to "Program configurator (Dynamic WEB)".
+
+
+2018-01-19 Roman (stable)
 - DB.AGLKS.St.db: ModBus tests expanded for reading a big PDU by the register 100 reading.
 - SYS:data/{debian,debian_mod}/rules: The configuration appended by the argument "--disable-static" to disable the static library of the OpenSCADA core build.
 - !:DOC: "Program Manual" continued to revision ongoing of it translation to Ukrainian.
@@ -9,7 +26,7 @@
     !:The view "List" of the primitive "FormEl" rewrote to implement the light updating, gor mobile devices like to Maemo, MeeGo.
 
 
-2017-01-13 Roman (stable)
+2018-01-13 Roman (stable)
 - DB.AGLKS.St.db: Appended by the documented Logical Level parameter experiment.CB7.
 - !:DOC: "Program Manual" continued to revision ongoing of it translation to Ukrainian.
 - SYS:Changelog: Some messages are fixed.

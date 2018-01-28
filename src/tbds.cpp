@@ -519,8 +519,8 @@ string TBDS::optDescr( )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
 	"========================= Subsystem \"DB\" options ========================\n"
-	"----------- The config-file station '%s' parameters -----------\n"
-	"SYSStPref    <1>   The station id prefix using into the generic (SYS) table.\n\n"
+	"------ Parameters of the section '%s' of the configuration file ------\n"
+	"SYSStPref  <0|1>        Use the station ID in the common table (SYS).\n\n"
 	),nodePath().c_str());
 
     return(buf);

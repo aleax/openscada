@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_archive.h
 /***************************************************************************
- *   Copyright (C) 2005-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,9 +26,9 @@
 namespace KernelTest
 {
 
-//*************************************************
-//* TestArchive: Value archive allocation tests.  *
-//*************************************************
+//*************************************************************
+//* TestArchive: The tests of location in the value archives. *
+//*************************************************************
 class TestArchive : public TFunction
 {
     public:
@@ -36,13 +36,13 @@ class TestArchive : public TFunction
 	{
 	    ioAdd(new IO("rez",_("Result"),IO::String,IO::Return));
 	    ioAdd(new IO("arch",_("Value archive"),IO::String,IO::Default));
-	    ioAdd(new IO("period",_("Values period, us"),IO::Integer,IO::Default,"1000000"));
-	    ioAdd(new IO("archtor",_("Archivator"),IO::String,IO::Default));
+	    ioAdd(new IO("period",_("Period of the values, microseconds"),IO::Integer,IO::Default,"1000000"));
+	    ioAdd(new IO("archtor",_("Archiver"),IO::String,IO::Default));
 	}
 
 	string name( )	{ return _("Value archive"); }
-	string descr( )	{ return _("Value archive allocation tests.\n"
-				   "Contain 7(8) tests for value archivator for check to correct working the consecutive pack mechanism."); }
+	string descr( )	{ return _("The tests of location in the value archives.\n"
+				   "Contains 7(8) tests of the value archiver to verify the correct functioning of the sequential packing mechanism."); }
 
 	void calc( TValFunc *val )
 	{

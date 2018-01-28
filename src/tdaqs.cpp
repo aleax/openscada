@@ -556,8 +556,8 @@ string TDAQS::optDescr( )
 {
     return TSYS::strMess(_(
 	"=================== Subsystem \"Data acquisition\" options ================\n"
-	"------------ Parameters of section '%s' in config-file -----------\n"
-	"RdRestDtTm   <hour> Restore data archive depth from a reserve station after deadline.\n\n"
+	"------ Parameters of the section '%s' of the configuration file ------\n"
+	"RdRestDtTm <hour>       Depth of recovery time of archive data from the reserve station, when startup, in hours.\n\n"
 	),nodePath().c_str());
 }
 

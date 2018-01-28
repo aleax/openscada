@@ -58,7 +58,7 @@
 #else
 #define SUB_TYPE	""
 #endif
-#define MOD_VER		"4.1.1"
+#define MOD_VER		"4.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -95,7 +95,7 @@ using namespace QTStarter;
 //* TUIMod                                        *
 //*************************************************
 TUIMod::TUIMod( string name ) : TUI(MOD_ID), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
-    mStartMod(dataRes()), mStyle(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), QtApp(NULL), splash(NULL)
+    mStartMod(dataRes()), mStyle(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), QtApp(NULL), splash(NULL)
 {
     mod = this;
 
@@ -127,6 +127,12 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), hideMode(false), mEndRun(false), mS
 	_("Mon"),
     };
 #endif
+
+    //Look and Feel DB structure
+    elLF.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key,OBJ_NM_SZ));
+    elLF.fldAdd(new TFld("STYLE",_("Style"),TFld::String,0,"20"));
+    elLF.fldAdd(new TFld("PALETTE",_("Palette"),TFld::String,0,"1000"));
+    elLF.fldAdd(new TFld("STL_SHTS",_("Style Sheets"),TFld::String,0,"100000"));
 }
 
 TUIMod::~TUIMod( )
@@ -149,9 +155,7 @@ void TUIMod::modInfo( vector<string> &list )
     list.push_back("SubType");
 }
 
-string TUIMod::style( )	{ return mStyle.getVal().size() ? mStyle.getVal() : SYS->cmdOpt("style"); }
-
-string TUIMod::styleSheets( )	{ return mStyleSheets.getVal().size() ? mStyleSheets.getVal() : SYS->cmdOpt("stylesheet"); }
+string TUIMod::style( bool mant )	{ return mant ? mStyle.getVal() : (mStyle.getVal().size() ? mStyle.getVal() : SYS->cmdOpt("style")); }
 
 void TUIMod::postEnable( int flag )
 {
@@ -226,9 +230,10 @@ void TUIMod::load_( )
 
     //Load parameters from config-file
     setStartMod(TBDS::genDBGet(nodePath()+"StartMod",startMod()));
-    setStyle(TBDS::genDBGet(nodePath()+"Style",style()));
-    setStyleSheets(TBDS::genDBGet(nodePath()+"StyleSheets",styleSheets()));
     setCloseToTray(s2i(TBDS::genDBGet(nodePath()+"CloseToTray",i2s(closeToTray()))));
+    setStyle(TBDS::genDBGet(nodePath()+"Style",style()));
+    setPalette(TBDS::genDBGet(nodePath()+"Palette",palette()));
+    setStyleSheets(TBDS::genDBGet(nodePath()+"StyleSheets",styleSheets()));
 }
 
 void TUIMod::save_( )
@@ -236,9 +241,10 @@ void TUIMod::save_( )
     mess_debug(nodePath().c_str(),_("Save module."));
 
     TBDS::genDBSet(nodePath()+"StartMod", startMod());
-    TBDS::genDBSet(nodePath()+"Style", style());
-    TBDS::genDBSet(nodePath()+"StyleSheets", styleSheets());
     TBDS::genDBSet(nodePath()+"CloseToTray", i2s(closeToTray()));
+    TBDS::genDBSet(nodePath()+"Style", style());
+    TBDS::genDBSet(nodePath()+"Palette", palette());
+    TBDS::genDBSet(nodePath()+"StyleSheets", styleSheets());
 }
 
 void TUIMod::modStart( )
@@ -300,26 +306,29 @@ string TUIMod::optDescr( )
 {
     char buf[STR_BUF_LEN];
 
-    snprintf(buf,sizeof(buf),_(
+    snprintf(buf, sizeof(buf), _(
 	"======================= Module <%s:%s> options =======================\n"
 	"----------- Qt debug commandline options ----------\n"
-	"    --noX11                Prevent Qt start, mostly for pure console.\n"
-	"    --sync                 Switches to synchronous mode X11 for debugging.\n"
-	"    --widgetcount          Prints debug message at the end about number of widgets\n"
-	"                           left undestroyed and maximum number of widgets existed at\n"
-	"                           the same time.\n"
+	"    --noX11             Prevent the launch of Qt, preferably for a clean console.\n"
+	"    --sync              Switch to Sync X11 for debugging.\n"
+	"    --widgetcount       Print debug messages at output, the number of widgets\n"
+	"                        left unselected and their maximum number.\n"
 	"----------- Qt commandline options ----------------\n"
-	"    --qws                  With Qt for Embedded Linux makes this application the server.\n"
-	"    --style=<nm>           Sets GUI style to <nm> (windows, platinum, plastique, ...).\n"
-	"    --stylesheet=<path>    Sets styleSheet by <path> to file that contains.\n"
-	"    --session=<nm>         Restores from an earlier session <nm>.\n"
-	"    --reverse              Sets layout direction to Qt::RightToLeft.\n"
-	"    --graphicssystem=<nm>  Sets the backend to be used for on-screen widgets and QPixmaps (raster, opengl).\n"
-	"    --display=<nm>         Sets the X display name (default it is $DISPLAY).\n"
-	"    --geometry=<geom>      Sets the client geometry of the first window that is shown.\n"
-	"---------- Parameters of the module section '%s' in config-file ----------\n"
-	"StartMod    <moduls>       Start modules list (sep - ';').\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
+	"    --qws               Do this with Qt server software for embedded Linux.\n"
+	"    --style=<name>      Sets the GUI style to <name> (windows, platinum, plastique, ...).\n"
+	"    --stylesheet=<path> Set the style sheet from the file by <path>.\n"
+	"    --session=<name>    Restore from the previous session with the specified <name>.\n"
+	"    --reverse           Set the layout in Qt::RightToLeft.\n"
+	"    --graphicssystem=<nm> Install rendering mechanism for screen widgets and QPixmaps (raster, opengl).\n"
+	"    --display=<nm>      Set the X display (typically $DISPLAY).\n"
+	"    --geometry=<geom>   Set the client geometry of the first display window.\n"
+	"---- Parameters of the module section '%s' of the configuration file ----\n"
+	"StartMod   <moduls>     List of the modules that are started, separated ';'.\n"
+	"CloseToTray <0|1>       Closing all windows or starting without Qt modules to the system tray.\n"
+	"Style      <name>       The GUI style of Qt.\n"
+	"Palette    <colors>     Twenty colors of the palette separated by symbol ',' in three lines for active, disabled and inactive groups.\n"
+	"StyleSheets <CSS>       Rules of the Cascade Style Sheets.\n\n"),
+	MOD_TYPE, MOD_ID, nodePath().c_str());
 
     return buf;
 }
@@ -412,11 +421,15 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
+	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Module options"))) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start Qt modules (sep - ';')"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQtMod");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/stl",_("Style"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsStl");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/stlSheets",_("Style Sheets"),RWRWR_,"root",SUI_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/closeToTray",_("Close (all windows) or start to tray"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+	    if(ctrMkNode("area",opt,-1,"/prm/LF",_("Look and feel"))) {
+		ctrMkNode("fld",opt,-1,"/prm/LF/prfl",_("Known profiles"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/LF/prflLs");
+		ctrMkNode("fld",opt,-1,"/prm/LF/stl",_("Style"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/LF/stlLs");
+		ctrMkNode("fld",opt,-1,"/prm/LF/plt",_("Palette"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","4","SnthHgl","1");
+		ctrMkNode("fld",opt,-1,"/prm/LF/stlSheets",_("Style Sheets"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","5","SnthHgl","1");
+	    }
 	}
 	return;
     }
@@ -435,22 +448,90 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 		    mod->owner().modAt(list[iL]).at().modFuncPresent("QMainWindow *openWindow();"))
 		opt->childAdd("el")->setText(list[iL]);
     }
-    else if(a_path == "/prm/cfg/stl") {
+    else if(a_path == "/prm/cfg/closeToTray") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(closeToTray()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCloseToTray(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/LF/prfl") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(_("<Select a profile to combine>"));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
+	    if(opt->text() == _("<Clean>")) { setStyle(""); setPalette(""); setStyleSheets(""); }
+	    else if(opt->text() == _("<Read back>")) {
+		if(QtApp) {
+		    if(!style(true).size())	setStyle(QtApp->origStl);
+		    if(!styleSheets().size())	setStyleSheets(QtApp->styleSheet().toStdString());
+		    if(!palette().size()) {
+			QPalette tPlt = QtApp->palette();
+			string tRez;
+			for(int iG = 0; iG < 3; iG++) {
+			    for(int iC = 0; iC < 20; iC++)
+				tRez += tPlt.color((QPalette::ColorGroup)iG,(QPalette::ColorRole)iC).name().toStdString() + ((iC<19)?", ":"");
+			    tRez += (iG < 3) ? "\n" : "";
+			}
+			setPalette(tRez);
+		    }
+		}
+	    }
+	    else {
+		TConfig cEl(&elLF);
+		cEl.cfg("NAME").setS(opt->text());
+		if(SYS->db().at().dataGet("",nodePath()+"LookFeel",cEl,true,true)) {
+		    string tVl;
+		    if((tVl=cEl.cfg("STYLE").getS()).size())
+			if(style(true).empty()) setStyle(tVl);
+		    if((tVl=cEl.cfg("PALETTE").getS()).size()) {
+			string tPlt = palette(), tRez, tVl1;
+			for(int iG = 0; iG < 3; iG++) {
+			    for(int iC = 0; iC < 20; iC++)
+				tRez += ((tVl1=sTrm(TSYS::strParse(TSYS::strLine(tPlt,iG),iC,","))).size() ? tVl1 :
+						sTrm(TSYS::strParse(TSYS::strLine(tVl,iG),iC,","))) + ((iC<19)?", ":"");
+			    tRez += (iG < 3) ? "\n" : "";
+			}
+			setPalette(tRez);
+		    }
+		    if((tVl=cEl.cfg("STL_SHTS").getS()).size()) {
+			if(!styleSheets().size())	setStyleSheets(tVl);
+			else if(styleSheets().find(tVl) == string::npos)
+			    setStyleSheets(styleSheets()+"\n"+tVl);
+		    }
+		}
+	    }
+	}
+    }
+    else if(a_path == "/prm/LF/prflLs" && ctrChkNode(opt)) {
+	opt->childAdd("el")->setText(_("<Clean>"));
+	opt->childAdd("el")->setText(_("<Read back>"));
+	TConfig cEl(&elLF);
+	for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"LookFeel",fld_cnt++,cEl,true); )
+	    opt->childAdd("el")->setText(cEl.cfg("NAME").getS());
+    }
+    else if(a_path == "/prm/LF/stl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(style());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStyle(opt->text());
     }
-    else if(a_path == "/prm/cfg/stlSheets") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(styleSheets());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStyleSheets(opt->text());
-    }
-    else if(a_path == "/prm/cfg/lsStl" && ctrChkNode(opt)) {
+    else if(a_path == "/prm/LF/stlLs" && ctrChkNode(opt)) {
 	QStringList sls = QStyleFactory::keys();
 	for(unsigned iL = 0; iL < sls.size(); iL++)
 	    opt->childAdd("el")->setText(sls[iL].toStdString());
     }
-    else if(a_path == "/prm/cfg/closeToTray") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(closeToTray()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCloseToTray(s2i(opt->text()));
+    else if(a_path == "/prm/LF/plt") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(palette());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPalette(opt->text());
+	if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD)) {
+	    opt->setAttr("font", "Courier");
+	    opt->childAdd("rule")->setAttr("expr", "#[0-9a-fA-F]{6}")->setAttr("color", "blue");
+	}
+    }
+    else if(a_path == "/prm/LF/stlSheets") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(styleSheets());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStyleSheets(opt->text());
+	if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD)) {
+	    opt->setAttr("font", "Courier");
+	    opt->childAdd("blk")->setAttr("beg", "/\\*")->setAttr("end", "\\*/")->setAttr("color", "gray")->setAttr("font_italic", "1");
+	    opt->childAdd("blk")->setAttr("beg", "\\{")->setAttr("end", "\\}")->setAttr("color", "#666666")->
+		childAdd("rule")->setAttr("expr", ":[^;]+")->setAttr("color", "blue");
+	    opt->childAdd("rule")->setAttr("expr", "(\\.|#)\\w+\\s")->setAttr("color", "darkorange");
+	}
     }
     else TUI::cntrCmdProc(opt);
 }
@@ -458,7 +539,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* StApp                                         *
 //*************************************************
-StApp::StApp( int &argv, char **args ) : QApplication(argv, args),
+StApp::StApp( int &argv, char **args ) : QApplication(argv, args), origStl(mod->dataRes()),
     inExec(false), trayMenu(NULL), tray(NULL), stDlg(NULL), initExec(false)
 {
     startTimer(STD_WAIT_DELAY);
@@ -505,6 +586,18 @@ void StApp::timerEvent( QTimerEvent *event )
 
 	QStyle *appStl = QStyleFactory::create(mod->style().c_str());
 	if(appStl)	QApplication::setStyle(appStl);
+	origStl = style()->objectName().toStdString();
+	if(mod->palette().size()) {
+	    QPalette plt = palette();
+	    string cGrp, cRl, tVl;
+	    for(int off = 0, iGrp = 0; ((cGrp=TSYS::strLine(mod->palette(),0,&off)).size() || off < mod->palette().size()) && iGrp < 4; iGrp++)
+		for(int off1 = 0, iRl = 0; ((cRl=TSYS::strParse(cGrp,0,",",&off1)).size() || off1 < cGrp.size()) && iRl < 20; iRl++) {
+		    if(!(tVl=sTrm(cRl)).size())	continue;
+		    plt.setColor((QPalette::ColorGroup)iGrp, (QPalette::ColorRole)iRl, tVl.c_str());
+		}
+	    setPalette(plt);
+	}
+
 	if(mod->styleSheets().size()) setStyleSheet(mod->styleSheets().c_str());
 
 	//!!!! Disable the native menu bar, mostly for Unity, Maemo (possible) where a problem in build QTStarter menu is

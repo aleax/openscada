@@ -247,12 +247,12 @@ string TArchiveS::optDescr(  )
     char buf[STR_BUF_LEN];
     snprintf(buf, sizeof(buf), _(
 	"======================== Subsystem \"Archives-History\" options ===================\n"
-	"------------ Parameters of section '%s' in config-file -----------\n"
-	"MessBufSize   <items>       Messages buffer size.\n"
-	"MessPeriod    <sec>         Message archiving period.\n"
-	"ValPeriod     <msec>        Values active archiving period.\n"
-	"ValPriority   <level>	     Values task priority level of active archiving.\n"
-	"RdRestDtOverTm <hours>      Overtime of the reserve history reload at start in hours.\n\n"
+	"------ Parameters of the section '%s' of the configuration file ------\n"
+	"MessBufSize <items>     Size of the messages buffer.\n"
+	"MessPeriod <sec>        Period of the messages archiving.\n"
+	"ValPeriod  <msec>       Period of active archiving of values.\n"
+	"ValPriority <level>     Level of priority of the task of active archiving of values.\n"
+	"RdRestDtOverTm <hours>  Depth of the forced overloading of the reserve history at startup, in hours.\n\n"
 	), nodePath().c_str());
 
     return buf;

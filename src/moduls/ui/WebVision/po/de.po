@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-23 18:35+0300\n"
+"POT-Creation-Date: 2018-01-28 10:07+0200\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -166,16 +166,17 @@ msgstr "November"
 msgid "December"
 msgstr "Dezember"
 
+#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
-"---------- Parameters of the module section '%s' in config-file ----------\n"
-"SessTimeLife <time>      Time of the session life, minutes (default 10).\n"
+"---- Parameters of the module section '%s' of the configuration file ----\n"
+"SessTimeLife <min>      Time of session life, in minutes (by default, 10).\n"
 "\n"
 msgstr ""
 "======================== Optionen des Moduls <%s:%s> "
 "============================\n"
-"------- Parameter des Abschnitts '%s' in der Konfigurationsdatei ---------\n"
-"SessTimeLife <time>     Lebensdauer der Sitzung, Minuten (default 10).\n"
+"------ Parameter des Modulabschnitts '%s' der Konfigurationsdatei ------\n"
+"SessTimeLife <Min>      Sitzungszeit in Minuten (standardmäßig 10).\n"
 "\n"
 
 msgid "Connect to opened session"

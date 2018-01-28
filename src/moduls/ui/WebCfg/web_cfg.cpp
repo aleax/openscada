@@ -31,11 +31,11 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"WebCfg"
-#define MOD_NAME	_("System configurator (WEB)")
+#define MOD_NAME	_("Program configurator (WEB)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.6"
+#define MOD_VER		"1.7.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"

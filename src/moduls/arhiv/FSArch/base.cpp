@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: base.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -130,7 +130,8 @@ string ModArch::optDescr( )
 {
     return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
-	"    --noArchLimit        Disable archives limit to the file number. Use for see archives mode, not work.\n"
+	"    --noArchLimit       Disable the limit on number of files.\n"
+	"                        Use for archive the viewing mode, not for work.\n"
 	"\n"), MOD_TYPE,MOD_ID);
 }
 

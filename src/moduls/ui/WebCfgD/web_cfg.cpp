@@ -36,11 +36,11 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"WebCfgD"
-#define MOD_NAME	_("Dynamic WEB configurator")
+#define MOD_NAME	_("Program configurator (Dynamic WEB)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.2.6"
+#define MOD_VER		"1.2.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology.")
 #define LICENSE		"GPL2"

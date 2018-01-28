@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"4.9.4"
+#define MOD_VER		"4.10.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -108,14 +108,14 @@ string TVision::optDescr( )
 
     snprintf(buf,sizeof(buf),_(
 	"======================= Module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section '%s' in config-file ----------\n"
-	"StartUser   <user>    No password requested start user.\n"
-	"UserPass    <pass>    User password for no local start.\n"
-	"RunPrjs     <list>    Run projects list on the module start.\n"
-	"ExitLstRunPrjCls {0;1}Exit on last run project close (default = 1).\n"
-	"CachePgLife <hours>   Cached pages lifetime.\n"
-	"VCAstation  <id>      VCA station id ('.' - local).\n"
-	"RestoreTime <seconds> Restore connection time.\n\n"),
+	"---- Parameters of the module section '%s' of the configuration file ----\n"
+	"StartUser  <user>       Start-up, no-password, user.\n"
+	"UserPass   <pass>       User password for non-local start.\n"
+	"RunPrjs    <list>       List of projects to be launched at the start of the module.\n"
+	"ExitLstRunPrjCls <0|1>  Exit closing the last completed project (default = 1).\n"
+	"CachePgLife <hours>     The lifetime of pages in the cache.\n"
+	"VCAstation <id>         The station with the VCA engine ('.' Is local).\n"
+	"RestoreTime <seconds>   Connection recovery time.\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -326,23 +326,23 @@ void TVision::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/st/disp_n",_("Display number"),R_R_R_,"root",SUI_ID,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/st/disp_n",_("Number of individual displays"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	ctrMkNode("list",opt,-1,"/prm/st/mnWinds",_("Main windows"),R_R_R_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/u_lst");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("Station of the VCA engine"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to the remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Starting user"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/u_lst");
 	    if(VCAStation() != ".") {
-		ctrMkNode("fld",opt,-1,"/prm/cfg/u_pass",_("User password"),RWRWR_,"root",SUI_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/restTm",_("Restore connection timeout, s"),RWRWR_,"root",SUI_ID,3,"tp","dec","min","1","max","1000");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/u_pass",_("Password of the user"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/restTm",_("Connection recovery time, seconds"),RWRWR_,"root",SUI_ID,3,"tp","dec","min","1","max","1000");
 	    }
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Cached pages lifetime"),RWRWR_,"root",SUI_ID,2,"tp","real",
-		"help",_("The time in hours for close pages from cache by inactive.\nFor zero time pages will not closed."));
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/prm/cfg/r_lst",
-		"help",_("Automatic started projects separated by symbol ';'.\n"
-			 "For opening a project's window to need display (1) use the project name format: 'PrjName-1'.\n"
-			 "For connect to background or other opened session use \"ses_{SesID}\"."));
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/exit_on_lst_run_prj_cls",_("Exit on last run project close"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Lifetime of the cached pages"),RWRWR_,"root",SUI_ID,2,"tp","real",
+		"help",_("The time is specified in hours, which defines the inactivity interval for closing pages in the cache.\nA zero value of time excludes the closing of pages in the cache."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("List of the projects for launch"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/prm/cfg/r_lst",
+		"help",_("Automatically executed projects, divided by the symbol ';'.\n"
+			 "To open the project window on the desired display (1), use the project name format: 'PrjName-1'.\n"
+			 "To connect to the background or another open session use \"ses_{SesID}\"."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/exit_on_lst_run_prj_cls",_("Exit when closing the last running project"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	}
 	return;
     }

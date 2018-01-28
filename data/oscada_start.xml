@@ -5,8 +5,8 @@
     -->
     <station id="WorkStation">
 	<!--
-	Describe internal parameters for station.
-	The station is OpenSCADA program.
+	Description of the internal parameters of the station.
+	The station is the OpenSCADA program.
 	-->
 	<!--<prm id="StName">Work station</prm>-->
 	<prm id="WorkDB">SQLite.GenDB</prm>
@@ -32,30 +32,21 @@
 
 	<node id="sub_Transport">
 	    <tbl id="Transport_in">
-		<fld
-		    ID="WEB_1"
-		    MODULE="Sockets"
-		    NAME="Main WWW-interface"
-		    DESCRIPT=""
-		    ADDR="TCP::10002:0"
-		    PROT="HTTP"
-		    START="1"/>
-		<fld
-		    ID="WEB_2"
-		    MODULE="Sockets"
-		    NAME="Reserve WWW-interface"
-		    DESCRIPT=""
-		    ADDR="TCP::10004:0"
-		    PROT="HTTP"
-		    START="1"/>
-		<fld
-		    ID="CNTR"
-		    MODULE="Sockets"
-		    NAME="OpenSCADA control interface"
-		    DESCRIPT=""
-		    ADDR="TCP::10005:1"
-		    PROT="SelfSystem"
-		    START="1"/>
+		<fld ID="WEB_1" MODULE="Sockets" NAME="Main WWW-interface" DESCRIPT="Main transport of the WEB interfaces."
+			DESCRIPT_uk="Основний транспорт WEB інтерфейсів." DESCRIPT_ru="Основной транспорт WEB интерфейсов."
+			ADDR="TCP::10002:0" PROT="HTTP" START="1">
+		    <A_PRMS>&lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="5" /&gt;</A_PRMS>
+		</fld>
+		<fld ID="WEB_2" MODULE="Sockets" NAME="Reserve WWW-interface" DESCRIPT="Reserve transport of the WEB interfaces."
+			DESCRIPT_uk="Резервний транспорт WEB інтерфейсів." DESCRIPT_ru="Резервный транспорт WEB интерфейсов."
+			ADDR="TCP::10004:0" PROT="HTTP" START="1">
+		    <A_PRMS>&lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="5" /&gt;</A_PRMS>
+		</fld>
+		<fld ID="CNTR" MODULE="Sockets" NAME="OpenSCADA control interface" DESCRIPT="Main control interface of OpenSCADA"
+			DESCRIPT_uk="Основний інтерфейс контролю OpenSCADA" DESCRIPT_ru="Основной интерфейс контроля OpenSCADA"
+			ADDR="TCP::10005:1" PROT="SelfSystem" START="1">
+		    <A_PRMS>&lt;prms MaxQueue="10" MaxClients="20" MaxClientsPerHost="5" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" /&gt;</A_PRMS>
+		</fld>
 	    </tbl>
 	</node>
 
@@ -72,6 +63,27 @@
 	<node id="sub_UI">
 	    <node id="mod_QTStarter">
 		<prm id="StartMod">QTCfg</prm>
+		<prm id="CloseToTray">0</prm>
+		<prm id="Style"></prm>
+		<prm id="Palette"></prm>
+		<prm id="StyleSheets"></prm>
+		<tbl id="LookFeel">
+		    <fld NAME="Typical TDE" STYLE="" STL_SHTS="">
+			<PALETTE>#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b
+#808080, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #c7c7c7, #ffffff, #808080, #ffffff, #efefef, #000000, #567594, #ffffff, #0000ee, #52188b
+#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b</PALETTE>
+		    </fld>
+		    <fld NAME="Blue Slate" STYLE="" STL_SHTS="">
+			<PALETTE>#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
+#808080, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #808080, #bfe2f4, #808080, #c3c3c3, #9db9c8, #000000, #558097, #808080, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
+#000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000</PALETTE>
+		    </fld>
+		    <fld NAME="Blue Darkness" STYLE="" STL_SHTS="">
+			<PALETTE>#ffffff, #426794, #5788c3, #4871a2, #162231, #37567b, #dcdcdc, #5788c3, #ffffff, #002a4e, #426794, #000000, #5cb3ff, #000000, #00ffff, #c0c0ff
+#555555, #426794, #5788c3, #4871a2, #162231, #37567b, #37567b, #5788c3, #555555, #002a4e, #426794, #000000, #4c95d4, #ffffff, #00ffff, #c0c0ff
+#ffffff, #426794, #5788c3, #4871a2, #162231, #37567b, #dcdcdc, #5788c3, #ffffff, #002a4e, #426794, #000000, #5cb3ff, #000000, #00ffff, #c0c0ff</PALETTE>
+		    </fld>
+		</tbl>
 	    </node>
 	    <node id="mod_QTCfg">
 		<prm id="StartUser">root</prm>

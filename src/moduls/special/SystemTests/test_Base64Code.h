@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_Base64Code.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +38,7 @@ class TestBase64Code : public TFunction
 	}
 
 	string name( )	{ return _("Base64 encoding"); }
-	string descr( )	{ return _("Mime Base64 encoding algorithm tests."); }
+	string descr( )	{ return _("Mime Base64 algorithm encoding tests."); }
 
 	void calc( TValFunc *val )
 	{

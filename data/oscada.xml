@@ -5,7 +5,7 @@
     -->
     <station id="ProjInit">
 	<!--
-	Describe internal parameters for station.
+	Description of the internal parameters of the station.
 	The station is OpenSCADA program.
 	-->
 	<prm id="StName">Project initial</prm>
@@ -17,6 +17,14 @@
 	    <prm id="ModAllow">ui_QTStarter.so</prm>
 	    <prm id="ModDeny"></prm>
 	    <prm id="ChkPer">0</prm>
+	</node>
+
+	<node id="sub_UI">
+	    <node id="mod_QTStarter">
+		<prm id="Style"></prm>
+		<prm id="Palette"></prm>
+		<prm id="StyleSheets"></prm>
+	    </node>
 	</node>
     </station>
 </OpenSCADA>

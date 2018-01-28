@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_kernel.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,7 +49,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
-#define MOD_VER		"1.5.13"
+#define MOD_VER		"1.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the group of tests to OpenSCADA and its modules.")
 #define LICENSE		"GPL2"
@@ -152,23 +152,21 @@ string TTest::optDescr( )
 
     rez = TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section '%s' in config-file ----------\n"
-	"All tests main options:\n"
-	"  id           test's id;\n"
-	"  on           on test's flag;\n"
-	"  per          repeat period (sek).\n"
-	"       *** Test's options ***\n"),MOD_TYPE,MOD_ID,nodePath().c_str());
+	"---- Parameters of the module section '%s' of the configuration file ----\n"
+	"       *** Main options of all the tests ***\n"
+	"  id                    test id;\n"
+	"  on                    flag enabling test;\n"
+	"  per                   period of repeating, seconds.\n"
+	"       *** Test options ***\n"), MOD_TYPE, MOD_ID, nodePath().c_str());
 
     vector<string> ls;
     testList(ls);
-    for(unsigned i_t = 0; i_t < ls.size(); i_t++)
-    {
-	AutoHD<TFunction> fnc = testAt(ls[i_t]);
-	rez += TSYS::strMess("%d) %s\t%s\n",i_t+1,fnc.at().id().c_str(),fnc.at().descr().c_str());
-	for(int i_prm = 0; i_prm < fnc.at().ioSize( ); i_prm++)
-	{
+    for(unsigned iT = 0; iT < ls.size(); iT++) {
+	AutoHD<TFunction> fnc = testAt(ls[iT]);
+	rez += TSYS::strMess("  %d) %s\t%s\n",iT+1,fnc.at().id().c_str(),fnc.at().descr().c_str());
+	for(int i_prm = 0; i_prm < fnc.at().ioSize( ); i_prm++) {
 	    if(fnc.at().io(i_prm)->flg() & (IO::Output|IO::Return))	continue;
-	    rez += TSYS::strMess("  %d:%s\t%s\n",i_prm,fnc.at().io(i_prm)->id().c_str(),fnc.at().io(i_prm)->name().c_str());
+	    rez += TSYS::strMess("    %d:%s\t%s\n",i_prm,fnc.at().io(i_prm)->id().c_str(),fnc.at().io(i_prm)->name().c_str());
 	}
     }
     rez += "\n";
@@ -279,16 +277,16 @@ void TTest::cntrCmdProc( XMLNode *opt )
     {
 	vector<string> lst;
 	testList(lst);
-	for(unsigned i_t=0; i_t < lst.size(); i_t++)
-	    opt->childAdd("el")->setAttr("id",lst[i_t])->setText(testAt(lst[i_t]).at().name());
+	for(unsigned iT = 0; iT < lst.size(); iT++)
+	    opt->childAdd("el")->setAttr("id",lst[iT])->setText(testAt(lst[iT]).at().name());
     }
     else if(a_path == "/tests/nmb" && ctrChkNode(opt))
     {
 	vector<string> lst;
 	testList(lst);
 	int enCnt = 0;
-	for(unsigned i_t = 0; i_t < lst.size(); i_t++)
-	    if(testAt(lst[i_t]).at().startStat()) enCnt++;
+	for(unsigned iT = 0; iT < lst.size(); iT++)
+	    if(testAt(lst[iT]).at().startStat()) enCnt++;
 	opt->setText(TSYS::strMess(_("All: %d; Accessing: %d"),lst.size(),enCnt));
     }
     else TSpecial::cntrCmdProc(opt);

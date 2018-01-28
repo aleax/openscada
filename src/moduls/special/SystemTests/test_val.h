@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_val.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,23 +26,24 @@
 namespace KernelTest
 {
 
-//*************************************************
-//* TestVal: Parameter attribute's value test.    *
-//*************************************************
+//*******************************************************
+//* TestVal: Test the attribute value of the parameter. *
+//*******************************************************
 class TestVal : public TFunction
 {
     public:
 	TestVal( ) : TFunction("Val",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
-	    ioAdd( new IO("name",_("Parameter attribute path"),IO::String,IO::Default,"System.AutoDA.CPULoad.load") );
-	    ioAdd( new IO("arch_len",_("Archive value getting depth, seconds"),IO::Integer,IO::Default,"10") );
-	    ioAdd( new IO("arch_per",_("Archive value getting period, microseconds"),IO::Integer,IO::Default,"1000000") );
+	    ioAdd( new IO("name",_("Path to the parameter attribute"),IO::String,IO::Default,"System.AutoDA.CPULoad.load") );
+	    ioAdd( new IO("arch_len",_("Depth of getting of archive values, seconds"),IO::Integer,IO::Default,"10") );
+	    ioAdd( new IO("arch_per",_("Depth of getting of archive values, microseconds"),IO::Integer,IO::Default,"1000000") );
 	}
 
 	string name( )	{ return _("Parameter attribute"); }
-	string descr( )	{ return _("Parameter attribute's value test.\nPeriodic make gathering for last value of selected attribute,"
-				    " and also gathering from archive for selected depth."); }
+	string descr( )	{ return _("Test the attribute value of the parameter.\n"
+				   "Performs a periodic acquisition of the last value of the specified attribute, "
+				   "as well as the archive questioning to the required depth."); }
 
 	void calc( TValFunc *val )
 	{
