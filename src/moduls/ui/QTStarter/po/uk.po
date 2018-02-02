@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-27 22:51+0200\n"
+"POT-Creation-Date: 2018-01-30 20:08+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -25,8 +25,8 @@ msgid ""
 "Provides the Qt GUI starter. Qt-starter is the only and compulsory component "
 "for all GUI modules based on the Qt library."
 msgstr ""
-"Надає Qt GUI пускач. Qt-starter єдиний та обов'язковий компонент для всіх "
-"GUI модулів заснованих на Qt."
+"Надає Qt GUI пускач. Qt-пускач є єдиним та обов'язковим компонентом для всіх "
+"GUI модулів, основаних на бібліотеці Qt."
 
 msgid "Could not read image data"
 msgstr "Не вдалося прочитати дані зображення"
@@ -506,6 +506,7 @@ msgstr "Запуск модуля..."
 msgid "Stopping the module..."
 msgstr "Зупинка модуля..."
 
+#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "----------- Qt debug commandline options ----------\n"
@@ -575,22 +576,25 @@ msgstr ""
 msgid "Module options"
 msgstr "Опції модуля"
 
-msgid "Start Qt modules (sep - ';')"
-msgstr "Запускаємі Qt модулі (розд. - ';')"
+msgid "Qt modules for startup, separated by ';'"
+msgstr "Модулі Qt для запуску, поділені символом ';'"
 
-msgid "Close (all windows) or start to tray"
-msgstr "Закривати (всі вікна) або запускати у трей"
+msgid "Collapse or startup to the system tray"
+msgstr "Згортати або запускати у системний лоток"
 
-msgid "Look and feel"
+msgid "Look and feels"
 msgstr "Вигляд та відчуття"
 
 msgid "Known profiles"
 msgstr "Відомі профилі"
 
+msgid "Widgets style"
+msgstr "Стиль Віджетів"
+
 msgid "<Select a profile to combine>"
 msgstr "<Обрати профіль до поєднання>"
 
-msgid "<Clean>"
+msgid "<Clear>"
 msgstr "<Очистити>"
 
 msgid "<Read back>"
@@ -599,7 +603,7 @@ msgstr "<Прочитати назад>"
 msgid "OpenSCADA Project: %1"
 msgstr "OpenSCADA Проект: %1"
 
-msgid "Exit from the program"
+msgid "Exit the program"
 msgstr "Вихід з програми"
 
 msgid "Qt-starter of OpenSCADA"
@@ -713,7 +717,7 @@ msgstr "Кнопка для переключення на обраний про�
 msgid "The button for call the selected project."
 msgstr "Кнопка для виклику обраного проекту."
 
-msgid "The button for exit from the program."
+msgid "The button for exit the program."
 msgstr "Кнопка для виходу з програми."
 
 #, c-format

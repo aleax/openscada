@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 20:49+0200\n"
+"POT-Creation-Date: 2018-02-02 19:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,4 +61,7 @@ msgstr ""
 
 #, c-format
 msgid "Row \"%s\" is not present. Are you saved the object?"
+msgstr ""
+
+msgid "The DB is into the Read only mode!"
 msgstr ""

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.SQLite 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 20:49+0200\n"
+"POT-Creation-Date: 2018-02-02 19:44+0200\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -44,6 +44,7 @@ msgstr "Fehler beim Öffnen der Tabelle '%s'. Datenbank ist abgeschaltet."
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"
 
+#, c-format
 msgid "Request \"%s\" error: %s(%d)"
 msgstr "Request \"%s\" Fehler: %s(%d)"
 
@@ -73,3 +74,6 @@ msgstr "Tabelle ist leer."
 #, c-format
 msgid "Row \"%s\" is not present. Are you saved the object?"
 msgstr "Datensatz \"%s\" ist nicht vorhanden. Sind Sie das Objekt gespeichert?"
+
+msgid "The DB is into the Read only mode!"
+msgstr "Die DB befindet sich im Read-Only-Modus!"

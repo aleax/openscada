@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.SSL translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2008-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2008-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 21:09+0200\n"
+"POT-Creation-Date: 2018-02-02 19:52+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -229,8 +229,11 @@ msgid "Error creation TCP socket: %s!"
 msgstr "Ошибка создания TCP сокета: %s!"
 
 #, c-format
-msgid "Connect to Internet socket error: %s!"
-msgstr "Ошибка подключения к Internet сокету: %s!"
+msgid ""
+"Error connection to the internet socket '%s:%s' during the timeout, it seems "
+"in down or inaccessible: '%s (%d)'!"
+msgstr ""
+"Ошибка подключения к интернет сокету '%s:%s' в течении таймаута, он похоже отключенный или недоступный: '%s (%d)'!"
 
 #, c-format
 msgid "SSL_CTX_use_certificate_chain_file: %s"

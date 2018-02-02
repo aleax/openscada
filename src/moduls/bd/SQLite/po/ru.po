@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.SQLite 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 20:49+0200\n"
+"POT-Creation-Date: 2018-02-02 19:44+0200\n"
 "PO-Revision-Date: 2007-10-23 12:39+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -39,6 +39,7 @@ msgstr "Ошибка открытия таблицы '%s'. БД отключен
 msgid "Unknown error"
 msgstr "Неизвестная ошибка"
 
+#, c-format
 msgid "Request \"%s\" error: %s(%d)"
 msgstr "Ошибка запроса \"%s\": %s(%d)"
 
@@ -68,3 +69,6 @@ msgstr "Таблица пуста."
 #, c-format
 msgid "Row \"%s\" is not present. Are you saved the object?"
 msgstr "Запись \"%s\" отсутствует. Вы сохраняли этот объект?"
+
+msgid "The DB is into the Read only mode!"
+msgstr "БД в режиме Только для Чтения!"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-27 22:51+0200\n"
+"POT-Creation-Date: 2018-01-30 20:08+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -25,8 +25,8 @@ msgid ""
 "Provides the Qt GUI starter. Qt-starter is the only and compulsory component "
 "for all GUI modules based on the Qt library."
 msgstr ""
-"Предоставляет Qt GUI пускатель. Qt-starter единственный и обязательный "
-"компонент для всех GUI модулей основанных на Qt."
+"Предоставляет Qt GUI пускатель. Qt-пускатель является единственным и "
+"обязательным компонентом для всех GUI модулей, основанных на библиотеке Qt."
 
 msgid "Could not read image data"
 msgstr "Не удалось прочитать данные изображения"
@@ -506,6 +506,7 @@ msgstr "Старт модуля..."
 msgid "Stopping the module..."
 msgstr "Останов модуля..."
 
+#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "----------- Qt debug commandline options ----------\n"
@@ -566,7 +567,7 @@ msgstr ""
 "------ Параметры модульной секции '%s' конфигурационного файла ------\n"
 "StartMod   <модули>     Список запускаемых модулей, разделённых ';'.\n"
 "CloseToTray <0|1>       Закрывать все окна или запускать без Qt модулей в "
-"системный трей.\n"
+"системный лоток.\n"
 "Style      <имя>        GUI стиль Qt.\n"
 "Palette    <цвета>      Двадцать цветов палитры разделённые символом ',' в "
 "трёх строках для активной, отключенной и неактивной групп.\n"
@@ -576,22 +577,25 @@ msgstr ""
 msgid "Module options"
 msgstr "Опции модуля"
 
-msgid "Start Qt modules (sep - ';')"
-msgstr "Запускаемые Qt-модули (разд. - ';')"
+msgid "Qt modules for startup, separated by ';'"
+msgstr "Модули Qt для запуска, разделённые символом ';'"
 
-msgid "Close (all windows) or start to tray"
-msgstr "Закрывать (все окна) или запускать в трей"
+msgid "Collapse or startup to the system tray"
+msgstr "Сворачивать или запускать в системный лоток"
 
-msgid "Look and feel"
+msgid "Look and feels"
 msgstr "Вид и ощущения"
 
 msgid "Known profiles"
 msgstr "Известные профиля"
 
+msgid "Widgets style"
+msgstr "Стиль Виджетов"
+
 msgid "<Select a profile to combine>"
 msgstr "<Выбрать профиль для объединения>"
 
-msgid "<Clean>"
+msgid "<Clear>"
 msgstr "<Очистить>"
 
 msgid "<Read back>"
@@ -600,7 +604,7 @@ msgstr "<Прочитать назад>"
 msgid "OpenSCADA Project: %1"
 msgstr "OpenSCADA Проект: %1"
 
-msgid "Exit from the program"
+msgid "Exit the program"
 msgstr "Выход из программы"
 
 msgid "Qt-starter of OpenSCADA"
@@ -715,7 +719,7 @@ msgstr "Кнопка для переключения на выбранный п�
 msgid "The button for call the selected project."
 msgstr "Кнопка для вызова выбранного проекта."
 
-msgid "The button for exit from the program."
+msgid "The button for exit the program."
 msgstr "Кнопка для выхода из программы."
 
 #, c-format

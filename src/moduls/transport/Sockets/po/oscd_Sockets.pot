@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-21 12:35+0200\n"
+"POT-Creation-Date: 2018-02-02 19:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -285,11 +285,11 @@ msgid "Error creation UDP socket: '%s (%d)'!"
 msgstr ""
 
 #, c-format
-msgid "Connect by timeout %s error: '%s (%d)'"
+msgid "Error connecting during the time %s: '%s (%d)'"
 msgstr ""
 
 #, c-format
-msgid "Connect to Internet socket error: '%s (%d)'!"
+msgid "Error connection to the internet socket '%s:%s' during the timeout, it seems in down or inaccessible: '%s (%d)'!"
 msgstr ""
 
 #, c-format

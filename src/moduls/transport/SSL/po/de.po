@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 21:09+0200\n"
+"POT-Creation-Date: 2018-02-02 19:52+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -234,8 +234,11 @@ msgid "Error creation TCP socket: %s!"
 msgstr "Fehler Schaffung TCP-Socket: %s!"
 
 #, c-format
-msgid "Connect to Internet socket error: %s!"
-msgstr "Verbindung zum Internet-Socket-Fehler: %s!"
+msgid ""
+"Error connection to the internet socket '%s:%s' during the timeout, it seems "
+"in down or inaccessible: '%s (%d)'!"
+msgstr ""
+"Fehler beim Verbinden mit dem Internet-Socket '%s:%s' während des Timeouts, es scheint nicht aktiv oder erreichbar zu sein: '%s (%d)'!"
 
 #, c-format
 msgid "SSL_CTX_use_certificate_chain_file: %s"

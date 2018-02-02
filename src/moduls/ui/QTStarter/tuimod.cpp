@@ -58,7 +58,7 @@
 #else
 #define SUB_TYPE	""
 #endif
-#define MOD_VER		"4.2.0"
+#define MOD_VER		"4.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -128,7 +128,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), hideMode(false), mEndRun(false), mS
     };
 #endif
 
-    //Look and Feel DB structure
+    //Look and Feels DB structure
     elLF.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key,OBJ_NM_SZ));
     elLF.fldAdd(new TFld("STYLE",_("Style"),TFld::String,0,"20"));
     elLF.fldAdd(new TFld("PALETTE",_("Palette"),TFld::String,0,"1000"));
@@ -422,11 +422,11 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Module options"))) {
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start Qt modules (sep - ';')"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQtMod");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/closeToTray",_("Close (all windows) or start to tray"),RWRWR_,"root",SUI_ID,1,"tp","bool");
-	    if(ctrMkNode("area",opt,-1,"/prm/LF",_("Look and feel"))) {
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Qt modules for startup, separated by ';'"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQtMod");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/closeToTray",_("Collapse or startup to the system tray"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+	    if(ctrMkNode("area",opt,-1,"/prm/LF",_("Look and feels"))) {
 		ctrMkNode("fld",opt,-1,"/prm/LF/prfl",_("Known profiles"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/LF/prflLs");
-		ctrMkNode("fld",opt,-1,"/prm/LF/stl",_("Style"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/LF/stlLs");
+		ctrMkNode("fld",opt,-1,"/prm/LF/stl",_("Widgets style"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/LF/stlLs");
 		ctrMkNode("fld",opt,-1,"/prm/LF/plt",_("Palette"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","4","SnthHgl","1");
 		ctrMkNode("fld",opt,-1,"/prm/LF/stlSheets",_("Style Sheets"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","5","SnthHgl","1");
 	    }
@@ -455,7 +455,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/LF/prfl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(_("<Select a profile to combine>"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    if(opt->text() == _("<Clean>")) { setStyle(""); setPalette(""); setStyleSheets(""); }
+	    if(opt->text() == _("<Clear>")) { setStyle(""); setPalette(""); setStyleSheets(""); }
 	    else if(opt->text() == _("<Read back>")) {
 		if(QtApp) {
 		    if(!style(true).size())	setStyle(QtApp->origStl);
@@ -499,7 +499,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/prm/LF/prflLs" && ctrChkNode(opt)) {
-	opt->childAdd("el")->setText(_("<Clean>"));
+	opt->childAdd("el")->setText(_("<Clear>"));
 	opt->childAdd("el")->setText(_("<Read back>"));
 	TConfig cEl(&elLF);
 	for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"LookFeel",fld_cnt++,cEl,true); )
@@ -661,7 +661,7 @@ void StApp::createTray( )
     QObject::connect(tAct, SIGNAL(triggered()), this, SLOT(startDialog()));
     makeStarterMenu(trayMenu);
     trayMenu->addSeparator();
-    tAct = trayMenu->addAction(QIcon(":/images/exit.png"), _("Exit from the program"));
+    tAct = trayMenu->addAction(QIcon(":/images/exit.png"), _("Exit the program"));
     tAct->setObjectName("*exit*");
     QObject::connect(tAct, SIGNAL(triggered()), this, SLOT(callQtModule()));
     tray->setContextMenu(trayMenu);
@@ -1003,10 +1003,10 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
     gFrame->setFrameShadow(QFrame::Sunken);
     wnd_lay->addWidget(gFrame, 0, 0);
 
-    QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit from the program"), this);
+    QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit the program"), this);
     butt->setObjectName("*exit*");
-    butt->setToolTip(_("Exit from the program"));
-    butt->setWhatsThis(_("The button for exit from the program."));
+    butt->setToolTip(_("Exit the program"));
+    butt->setWhatsThis(_("The button for exit the program."));
     QObject::connect(butt, SIGNAL(clicked(bool)), mod->QtApp, SLOT(callQtModule()));
     wnd_lay->addWidget(butt, 0, 0);
 }

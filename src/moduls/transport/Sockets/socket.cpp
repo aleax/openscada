@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.8.0"
+#define MOD_VER		"2.8.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -1081,7 +1081,7 @@ void TSocketOut::start( int itmCon )
 	    if((sockFd=socket(PF_INET,SOCK_DGRAM,0)) == -1)
 		throw TError(nodePath().c_str(), _("Error creation UDP socket: '%s (%d)'!"), strerror(errno), errno);
 	}
-	//Connect to socket
+	//Connect to the socket
 	int flags = fcntl(sockFd, F_GETFL, 0);
 	fcntl(sockFd, F_SETFL, flags|O_NONBLOCK);
 	int rez = connect(sockFd, (sockaddr*)&nameIn, sizeof(nameIn));
@@ -1098,8 +1098,9 @@ void TSocketOut::start( int itmCon )
 	    close(sockFd);
 	    sockFd = -1;
 	    if(mess_lev() == TMess::Debug)
-		mess_debug(nodePath().c_str(), _("Connect by timeout %s error: '%s (%d)'"), tm2s(1e-3*itmCon).c_str(), strerror(errno), errno);
-	    throw TError(nodePath().c_str(), _("Connect to Internet socket error: '%s (%d)'!"), strerror(errno), errno);
+		mess_debug(nodePath().c_str(), _("Error connecting during the time %s: '%s (%d)'"), tm2s(1e-3*itmCon).c_str(), strerror(errno), errno);
+	    throw TError(nodePath().c_str(), _("Error connection to the internet socket '%s:%s' during the timeout, it seems in down or inaccessible: '%s (%d)'!"),
+		host.c_str(), port.c_str(), strerror(errno), errno);
 	}
     }
     else if(type == SOCK_UNIX) {

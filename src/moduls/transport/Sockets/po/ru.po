@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.Sockets translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-21 12:35+0200\n"
+"POT-Creation-Date: 2018-02-02 19:58+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -302,9 +302,11 @@ msgstr ""
 msgid "processing time %s[%s]; "
 msgstr "время обработки %s[%s]; "
 
+#, c-format
 msgid "Traffic in %s, out %s. "
 msgstr "Трафик входящий %s, исходящий %s. "
 
+#, c-format
 msgid "Respond time %s[%s]. "
 msgstr "Время ответа %s[%s]. "
 
@@ -324,13 +326,15 @@ msgstr "Ошибка создания TCP сокета: '%s (%d)'!"
 msgid "Error creation UDP socket: '%s (%d)'!"
 msgstr "Ошибка создания UDP сокета: '%s (%d)'!"
 
-#, c-format
-msgid "Connect by timeout %s error: '%s (%d)'"
-msgstr "Ошибка подключения по таймауту %s: '%s (%d)'"
+msgid "Error connecting during the time %s: '%s (%d)'"
+msgstr "Ошибка подключения в течении времени %s: '%s (%d)'"
 
 #, c-format
-msgid "Connect to Internet socket error: '%s (%d)'!"
-msgstr "Ошибка подключения к Internet сокету: '%s (%d)'!"
+msgid ""
+"Error connection to the internet socket '%s:%s' during the timeout, it seems "
+"in down or inaccessible: '%s (%d)'!"
+msgstr ""
+"Ошибка подключения к интернет сокету '%s:%s' в течении таймаута, он похоже отключенный или недоступный: '%s (%d)'!"
 
 #, c-format
 msgid "Error creation UNIX socket: '%s (%d)'!"

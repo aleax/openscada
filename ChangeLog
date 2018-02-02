@@ -1,3 +1,10 @@
+2018-02-02 Roman (stable)
+- !:DOC: "Program Manual" revision and it translation to Ukrainian finished at last. "UI.QTStarter" significant revised and actualised.
+- DB.SQLite: Expanded for an error message mark as "Read Only".
+- Transport.{Sockets,SSL}: The connection error of the outgoing transport was expanded by details.
+- FIX:UI.QTStarter: Some original messages were fixed.
+
+
 2018-01-28 Roman (stable)
 - !:DOC: "Program Manual" continued to revision ongoing of it translation to Ukrainian.
 - SYS: The meaning of the OpenSCADA station ID set more clear and associated to the station role that is: WorkStation, ServerStation, PLCStation, SimulatorStation.

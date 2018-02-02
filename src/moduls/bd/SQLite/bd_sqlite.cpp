@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.SQLite file: bd_sqlite.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.4.2"
+#define MOD_VER		"2.4.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -531,7 +531,10 @@ void MTable::fieldSet( TConfig &cfg )
     //Query
     try { owner().sqlReq(req, NULL, true); }
     catch(TError &err) {
-	if((err.cod-100) == SQLITE_READONLY) throw;
+	if((err.cod-100) == SQLITE_READONLY) {
+	    err.mess = err.mess + " " + _("The DB is into the Read only mode!");
+	    throw;
+	}
 	fieldFix(cfg);
 	owner().sqlReq(req, NULL, true);
     }
