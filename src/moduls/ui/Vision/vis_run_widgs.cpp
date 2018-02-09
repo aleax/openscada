@@ -213,9 +213,19 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 	    if(attr == "statLine")		mainWin()->usrStatus(val, dynamic_cast<RunPageView*>(this));
 	    else if(attr == "runWin" && !mainWin()->isResizeManual && (!mainWin()->masterPg() || this == mainWin()->masterPg())) {
 		switch(s2i(val)) {
-		    case 0: mainWin()->aFullScr()->setChecked(false); mainWin()->setWindowState(Qt::WindowNoState);	break;
-		    case 1: mainWin()->aFullScr()->setChecked(false); mainWin()->setWindowState(Qt::WindowMaximized);	break;
-		    case 2: mainWin()->aFullScr()->setChecked(true);							break;
+		    case 0:
+			if(s2i(SYS->cmdOpt("showWin")))	break;
+			mainWin()->aFullScr()->setChecked(false);
+			mainWin()->setWindowState(Qt::WindowNoState);
+			break;
+		    case 1:
+			if(s2i(SYS->cmdOpt("showWin")) > 1) break;
+			mainWin()->aFullScr()->setChecked(false);
+			mainWin()->setWindowState(Qt::WindowMaximized);
+			break;
+		    case 2:
+			mainWin()->aFullScr()->setChecked(true);
+			break;
 		}
 	    }
 	    else if(attr == "keepAspectRatio")	mainWin()->setKeepAspectRatio(s2i(val));

@@ -94,6 +94,7 @@
 <li class="toclevel-2 tocsection-16"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">3.3</span> <span class="toctext">API користувацького програмування</span></a></li>
 </ul>
 </li>
+<li class="toclevel-1 tocsection-17"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">4</span> <span class="toctext">Посилання</span></a></li>
 </ul>
 </div>
 
@@ -344,7 +345,9 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:764px;"><a class="image" href="http://oscada.org/wiki/File:ModbusLog_prm_atr_uk.png"><img class="thumbimage" height="544" src="../files/ModbusLog_prm_atr_uk.png" width="762" /></a>  <div class="thumbcaption">Рис.13. Вкладка атрибутів параметру логічного типу.</div></div></div></div>
 <h3><span class="mw-headline" id="API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">3.3</span> API користувацького програмування</span></h3>
 <p>У зв'язку із підтримкою модулем параметрів логічного типу має сенс надання низки функцій користувацького API для виклику із шаблону логічного параметру.
-</p><p><b>Об'єкт "Контролер" [this.cntr()]</b>
+</p>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_ModBus_uk.png" title="Об&#039;єктна модель користувача модуля ModBus."><img alt="Об&#039;єктна модель користувача модуля ModBus." height="215" src="../files/Oscada_UserOM_ModBus_uk.png" width="323" /></a></div>
+<p><b>Об'єкт "Контролер" [this.cntr()]</b>
 </p>
 <ul><li> <i>string messIO(string pdu)</i> — відправка PDU <i>pdu</i> через транспорт об'єкту контролеру за посередництвом ModBus протоколу. PDU результату запиту розташовується замість запиту у <i>pdu</i>, а помилка повертається у результаті функції.</li></ul>
 <p><b>Об'єкт "Параметр" [this]</b>
@@ -354,6 +357,10 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> <i>tp</i> — тип атрибута [boolean | integer | real | string | text | object] + режим вибору [sel | seled] + тільки для читання [ro];</li>
 <li> <i>selValsNms</i> — два рядки зі значеннями у першому та їх іменами у другому (поділені ";").</li></ul></li>
 <li> <i>bool attrDel( string id )</i> [<span style="color: red">для включеного параметру логічного типу</span>] — видалити атрибут <i>id</i>.</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">4</span> Посилання</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_UserOM_ModBus_uk.odg" title="File:Oscada UserOM ModBus uk.odg">Діаграма: Об'єктна модель користувача модуля ModBus.</a></li></ul>
 
 
 

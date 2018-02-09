@@ -1,3 +1,13 @@
+2018-02-09 Roman (stable)
+- !:DOC: "User API" revision finished.
+- SYS: data/{debian,debian_mod}/control,data/openscada.ebuild,data/*.spec: somewhat updated for some packages description.
+- SYS: TODO was updated for re-link to the online document. README was updated.
+- PrmTmpl,DAQ.JavaLikeCalc,UI.VCAEngine: The document "User API" call from some pages of the configurators of OpenSCADA was added.
+- !:UI.{QTStarter,QTCfg,Vision}: Qt Windows show mode support was added by the commandline parameter --showWin, for initial and allowed to change from.
+- !:UI.Vision.ElFigure: Some properties of the common part of the developing mode were moved to the private widget part -
+    for allowance of the feature of the parallel edition at widgets of the primitive execution.
+
+
 2018-02-02 Roman (stable)
 - !:DOC: "Program Manual" revision and it translation to Ukrainian finished at last. "UI.QTStarter" significant revised and actualised.
 - DB.SQLite: Expanded for an error message mark as "Read Only".

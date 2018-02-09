@@ -72,6 +72,7 @@
 <li class="toclevel-1 tocsection-15"><a href="#.D0.9A.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">5</span> <span class="toctext">Користувацькі функції модуля</span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">API користувацького програмування</span></a></li>
 <li class="toclevel-1 tocsection-17"><a href="#.D0.9F.D1.80.D0.BE.D0.B4.D1.83.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.96.D1.81.D1.82.D1.8C"><span class="tocnumber">7</span> <span class="toctext"><span>Продуктивність</span></span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">8</span> <span class="toctext">Посилання</span></a></li>
 </ul>
 </div>
 
@@ -387,7 +388,9 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 </p>
 <h2><span class="mw-headline" id="API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">6</span> API користувацького програмування</span></h2>
 <p>Деякі об'єкти модуля надають функції користувацького програмування.
-</p><p><b>Об'єкт "Бібліотека функцій" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
+</p>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc_uk.png" title="Об&#039;єктна модель користувача модуля JavaLikeCalc."><img alt="Об&#039;єктна модель користувача модуля JavaLikeCalc." height="214" src="../files/Oscada_UserOM_JavaLikeCalc_uk.png" width="223" /></a></div>
+<p><b>Об'єкт "Бібліотека функцій" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
 </p>
 <ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — виклик функції "<i>funcID</i>" бібліотеки "<i>Lfunc</i>". Повертає результат викликаної функції. Префікс "lib_" перед ідентифікатором бібліотеки обов'язковий!</li></ul>
 <p><b>Об'єкт "Користувацька функція" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"]["func"])</b>
@@ -555,6 +558,8 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <td> By the dynamic accessing function with prepare the end object <b>tO = SYS.DAQ.BCM2835.pi2.pi2.fnc_put; for(i = 0; i &lt; 1000; i++) tO.call(18, true);</b> </td>
 <td> 14.3
 </td></tr></table>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">8</span> Посилання</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc_uk.odg" title="File:Oscada UserOM JavaLikeCalc uk.odg">Діаграма: Об'єктна модель користувача модуля JavaLikeCalc.</a></li></ul>
 
 
 

@@ -244,7 +244,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter template: ")+name(),RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter template: ")+name(),RWRWR_,"root",SDAQ_ID,1,"doc","Documents/User_API|Documents/User_API");
 	if(ctrMkNode("area",opt,-1,"/tmpl",_("Template"))) {
 	    if(ctrMkNode("area",opt,-1,"/tmpl/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/tmpl/st/st",_("Accessing"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");

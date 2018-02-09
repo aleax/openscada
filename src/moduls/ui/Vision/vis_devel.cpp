@@ -504,8 +504,10 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     wMapper = new QSignalMapper(this);
     connect(wMapper, SIGNAL(mapped(QWidget *)), this, SLOT(setActiveSubWindow(QWidget *)));
     mn_view = menuBar()->addMenu(_("&View"));
-    mn_view->addAction(actFullScr);
-    mn_view->addSeparator();
+    if(s2i(SYS->cmdOpt("showWin")) != 2) {
+	mn_view->addAction(actFullScr);
+	mn_view->addSeparator();
+    }
     mn_help = menuBar()->addMenu(_("&Help"));
     mn_help->addAction(actAbout);
     mn_help->addAction(actQtAbout);
@@ -645,7 +647,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     waitCursorClear->setInterval(50);
     connect(waitCursorClear, SIGNAL(timeout()), SLOT(waitCursorSet()));
 
-    //resize(1000, 800);
+    //if(!s2i(SYS->cmdOpt("showWin")))	resize(1000, 800);
     //setWindowState(Qt::WindowMaximized);
 
     //menuBar()->setVisible(true);	//!!!! Spare for Qt5 and the native menu bar
@@ -660,7 +662,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     if(sRst.size()) restoreState(QByteArray(sRst.data(),sRst.size()));
     int	wH = s2i(TSYS::strParse(rst,0,":",&off)),
 	wW = s2i(TSYS::strParse(rst,0,":",&off));
-    if(wH > 100 && wW > 100) resize(wH, wW);
+    if(!s2i(SYS->cmdOpt("showWin")) && wH > 100 && wW > 100) resize(wH, wW);
 
     //Restore ToolBars icons size
     for(int i_ch = 0; i_ch < children().size(); i_ch++) {
@@ -813,7 +815,12 @@ void VisDevelop::setToolIconSize( )
 
 void VisDevelop::setActiveSubWindow( QWidget *w )	{ work_space->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w)); }
 
-void VisDevelop::fullScreen( bool vl )	{ setWindowState(vl?Qt::WindowFullScreen:Qt::WindowNoState); }
+void VisDevelop::fullScreen( bool vl )
+{
+    setWindowState(vl?Qt::WindowFullScreen:Qt::WindowNoState);
+    //!!!! But switching to the WindowMaximized performs only through the WindowNoState
+    if(!vl && s2i(SYS->cmdOpt("showWin"))) setWindowState(Qt::WindowMaximized);
+}
 
 bool VisDevelop::exitModifChk( )
 {
@@ -1054,8 +1061,14 @@ void VisDevelop::prjRun( )
     string own_wdg = TSYS::strSepParse(work_wdg, 0, ';');
 
     VisRun *sess = new VisRun(own_wdg, user(), password(), VCAStation());
-    sess->show();
-    sess->raise();
+    switch(s2i(SYS->cmdOpt("showWin"))) {
+	case 1:	sess->showMaximized();	break;
+	case 2:	sess->showFullScreen();	break;
+	default: {
+	    sess->show();
+	    sess->raise();
+	}
+    }
     sess->activateWindow();
 }
 

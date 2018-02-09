@@ -54,7 +54,7 @@
 <li class="toclevel-1 tocsection-3"><a href="#Architecture"><span class="tocnumber">3</span> <span class="toctext">Architecture</span></a>
 <ul>
 <li class="toclevel-2 tocsection-4"><a href="#Frames_and_elements_of_visualization_.28widgets.29"><span class="tocnumber">3.1</span> <span class="toctext">Frames and elements of visualization (widgets)</span></a></li>
-<li class="toclevel-2 tocsection-5"><a href="#Project"><span class="tocnumber">3.2</span> <span class="toctext">Project</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Project"><span class="tocnumber">3.2</span> <span class="toctext"><span>Project</span></span></a></li>
 <li class="toclevel-2 tocsection-6"><a href="#Session_of_the_project_execution"><span class="tocnumber">3.3</span> <span class="toctext">Session of the project execution</span></a></li>
 <li class="toclevel-2 tocsection-7"><a href="#Styles"><span class="tocnumber">3.4</span> <span class="toctext">Styles</span></a></li>
 <li class="toclevel-2 tocsection-8"><a href="#Events.2C_their_processing_and_the_events.27_maps"><span class="tocnumber">3.5</span> <span class="toctext">Events, their processing and the events' maps</span></a></li>
@@ -92,6 +92,7 @@
 </ul>
 </li>
 <li class="toclevel-1 tocsection-15"><a href="#Configuring_the_module_via_the_control_interface_of_OpenSCADA"><span class="tocnumber">4</span> <span class="toctext">Configuring the module via the control interface of OpenSCADA</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#Links"><span class="tocnumber">5</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -162,7 +163,7 @@
 <p>Tuning and linkage of the widgets is done through their properties. Parent widget and the widgets it contains, can be complemented by user properties. Then the user and static attributes are associated with the properties of embedded widget by internal logic. To show the dynamics (ie, current and archived data), properties of widgets are dynamized, that is linked with the attributes of the parameters of OpenSCADA or properties of other widgets. Using to link of the nested widgets by means of the internal logic with the available programming language of the OpenSCADA system eliminates the question of the implementation of complex logic of visualization, thus providing high flexibility. Practically, you can create fully dynamized frames with complex interactions at the level of the user.
 </p><p><br />
 </p>
-<h3><span class="mw-headline" id="Project"><span class="mw-headline-number">3.2</span> Project</span></h3>
+<h3><span class="mw-headline" id="Project"><span class="mw-headline-number">3.2</span> <span id="Project" title="#Project">Project</span></span></h3>
 <p>Direct configuration and properties of the final visualization interface are contained in the project of the visualization interface of the VCA, which may be created lot ones.
 </p><p>Each project includes pages from the libraries of the frames/widgets. In some modes the page allowed to include into nested pages as independent from the parent and in using the parent as template. The template's page-widget allows to extremely simplify the process of creating the same type of the frames by the ACS-TP engineer or by the user of OpenSCADA for easy monitoring. An example of such one-type frames may be: groups of contours, groups of graphs, reports and various tables. Mnemonic schemes of technological processes rarely come under this scheme and will be formed directly in the description of the frame.
 </p><p>Page like to a widget on which it is based provides a possibility for bind the dynamics to described into properties, which links at all can be set to dynamic or resolved as constants. Besides, links to the dynamics on the project's page level is preferable to the widget of libraries level.
@@ -2842,7 +2843,9 @@ Where:
 <h3><span class="mw-headline" id="API_of_the_user_programming_and_service_interfaces_of_the_OpenSCADA"><span class="mw-headline-number">3.11</span> <span id="UserAPI" title="#UserAPI">API of the user programming and service interfaces of the OpenSCADA</span></span></h3>
 <h4><span class="mw-headline" id="API_of_the_user_programming"><span class="mw-headline-number">3.11.1</span> API of the user programming</span></h4>
 <p>API of the user programming of API of the visualization engine are represented by the OpenSCADA objects directly, which build user interface, and same "Session" and "Widget/page". These objects provide the set of control functions for the user:
-</p><p><b>Object "Session" ( this.ownerSess() )</b>
+</p>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine.png" title="User object model of the module VCAEngine."><img alt="User object model of the module VCAEngine." height="238" src="../files/Oscada_UserOM_VCAEngine.png" width="352" /></a></div>
+<p><b>Object "Session" ( this.ownerSess() )</b>
 </p>
 <ul><li> <i>string user( )</i> — current session user.</li>
 <li> <i>int alrmQuittance( int quit_tmpl, string wpath = "", bool ret = false )</i> — violations quittance <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then make global quittance. Into the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. The <i>ret</i> sets will cause the quittance return.</li>
@@ -3209,7 +3212,7 @@ The deprecated API of the user programming of the visualization engine are repre
 <li> Id, name, description and icon of the container.</li>
 <li> Owner, group and access rights to the container.</li>
 <li> Period for computing of the sessions based on the given project.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:182px;"><a class="new" href="http://oscada.org/wiki/index.php?title=Special:Upload&amp;wpDestFile=VCAeng_pg_diag.png" title="File:VCAeng pg diag.png">File:VCAeng pg diag.png</a>  <div class="thumbcaption">Fig.4.4 Tab "Diagnostics" of the projects.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1055px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag.png"><img class="thumbimage" height="561" src="../files/VCAeng_pg_diag.png" width="1053" /></a>  <div class="thumbcaption">Fig.4.4 Tab "Diagnostics" of the projects.</div></div></div></div>
 <p>From this tab you can select time, or refresh to current, and size for diagnostic messages obtain of the sessions of running the project.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:717px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb.png"><img class="thumbimage" height="520" src="../files/VCAeng_wlb.png" width="715" /></a>  <div class="thumbcaption">Fig.4.5 Configuration page of the widgets libraries.</div></div></div></div>
@@ -3240,6 +3243,8 @@ The deprecated API of the user programming of the visualization engine are repre
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:759px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_attr.png"><img class="thumbimage" height="672" src="../files/VCAeng_vit_attr.png" width="757" /></a>  <div class="thumbcaption">Fig.4.9 Tab of the attributes of the visual elements.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:891px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_proc.png"><img class="thumbimage" height="685" src="../files/VCAeng_vit_proc.png" width="889" /></a>  <div class="thumbcaption">Fig.4.10 Tab of processing of the visual elements.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:929px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_lnk.png"><img class="thumbimage" height="497" src="../files/VCAeng_vit_lnk.png" width="927" /></a>  <div class="thumbcaption">Fig.4.11 Tab of links of the visual elements.</div></div></div></div>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">5</span> Links</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine.odg" title="File:Oscada UserOM VCAEngine.odg">Diagram: User object model of the module VCAEngine.</a></li></ul>
 
 
 

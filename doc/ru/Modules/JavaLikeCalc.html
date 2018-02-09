@@ -72,6 +72,7 @@
 <li class="toclevel-1 tocsection-15"><a href="#.D0.9F.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">5</span> <span class="toctext">Пользовательские функции модуля</span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">6</span> <span class="toctext">API пользовательского программирования</span></a></li>
 <li class="toclevel-1 tocsection-17"><a href="#.D0.9F.D1.80.D0.BE.D0.B8.D0.B7.D0.B2.D0.BE.D0.B4.D0.B8.D1.82.D0.B5.D0.BB.D1.8C.D0.BD.D0.BE.D1.81.D1.82.D1.8C"><span class="tocnumber">7</span> <span class="toctext"><span>Производительность</span></span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#.D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="tocnumber">8</span> <span class="toctext">Ссылки</span></a></li>
 </ul>
 </div>
 
@@ -387,7 +388,9 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 </p>
 <h2><span class="mw-headline" id="API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">6</span> API пользовательского программирования</span></h2>
 <p>Некоторые объекты модуля предоставляют функции пользовательского программирования.
-</p><p><b>Объект "Библиотека функций" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
+</p>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc_ru.png" title="Объектная модель пользователя модуля JavaLikeCalc."><img alt="Объектная модель пользователя модуля JavaLikeCalc." height="214" src="../files/Oscada_UserOM_JavaLikeCalc_ru.png" width="223" /></a></div>
+<p><b>Объект "Библиотека функций" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
 </p>
 <ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — вызов функции "<i>funcID</i>" библиотеки "<i>Lfunc</i>". Возвращает результат вызываемой функции. Префикс "lib_" перед идентификатором библиотеки обязателен!</li></ul>
 <p><b>Объект "Пользовательская функция" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"]["func"])</b>
@@ -555,6 +558,8 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <td> By the dynamic accessing function with prepare the end object <b>tO = SYS.DAQ.BCM2835.pi2.pi2.fnc_put; for(i = 0; i &lt; 1000; i++) tO.call(18, true);</b> </td>
 <td> 14.3
 </td></tr></table>
+<h2><span class="mw-headline" id=".D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="mw-headline-number">8</span> Ссылки</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc_ru.odg" title="File:Oscada UserOM JavaLikeCalc ru.odg">Диаграмма: Объектная модель пользователя модуля JavaLikeCalc.</a></li></ul>
 
 
 

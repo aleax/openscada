@@ -120,7 +120,8 @@ class ElFigDt : public QObject
     Q_OBJECT
     public:
 	//Methods
-	ElFigDt( WdgView *wi ) : en(true), active(true), geomMargin(0), mirror(false), orient(0), w(wi)  { }
+	ElFigDt( WdgView *wi ) : en(true), active(true), geomMargin(0), mirror(false), orient(0), w(wi),
+	    itInMotion(NULL), cntShp(0), cntHolds(0), rectN(-1), fCtrl(false), fA(false), fCopy(false)	{ }
 
 	int appendPoint( const QPointF &pos, bool flag_down );		//Append the new point to the points' map
 	void dropPoint( int num, int num_shape );			//Drop the point from the points' map
@@ -146,6 +147,24 @@ class ElFigDt : public QObject
 	WdgView *w;
 	QPixmap pictObj;
 	//QImage pictObj;
+
+	// Taken from ShapeElFigure but their are also used into RunTime and pevent the developing.
+	ShapeItem *itInMotion;				//Selected (moving) figure
+	QVector<int> idxArr;				//Array of the selected figures
+
+	int cntShp, cntMoveItemTo, cntHolds /*-*/, index, rectN;
+
+	unsigned fCtrl		:1;
+	unsigned fCtrlMove	:1;
+	unsigned fA		:1;
+	unsigned fCopy		:1;
+
+	double tStart, tEnd;			//Start and end values of the arc, global modified from moveItemTo()
+
+	QPointF	offset, mPos,
+	    mPosPrev, mPosPrevAll;		//Previous position for drag point by figure moving
+
+	QVector<RectItem> rectItems;		//RectItem's container
 
     private slots:
 	void dynamic();
@@ -216,7 +235,7 @@ class ShapeElFigure : public WdgShape
 	// Items-figures
 	void initShapeItems( const QPointF &pos, QVector<int> &items_array, WdgView *w );
 	int itemAt( const QPointF &pos, WdgView *w );		//Check for figure type under cursor
-	void moveItemTo( const QPointF &pos, WdgView *w );	//Move figure procedure
+	void moveItemTo( const QPointF &pos, WdgView *w );	//!!!! Move figure procedure and it is a generic function of the figures building
 	bool holds( WdgView *w );				//Compute the number of connected figures with the given one
 	void moveUpDown( WdgView *w );				//Moving the figure(s) with the help of keyboard
 	int  realRectNum( int rect_num_old, WdgView *w );	//Compute the real rect number of the figure when several figures are selected
@@ -239,27 +258,20 @@ class ShapeElFigure : public WdgShape
 	int  buildMatrix( WdgView *w );						//The function for the calculation of the minimum path to be filled
 
 	//Attributes
-	QPointF StartLine, EndLine,				//Start and end points for paint created figure
-		previousPosition, previousPosition_all;		//Previous position for drag point by figure moving
-	ShapeItem *itemInMotion;				//Selected (moving) figure
+	QPointF StartLine, EndLine;				//Start and end points for paint created figure
 
-	QVector<int> index_array;				//Array of the selected figures
 	QVector<int> rect_array;
 	QVector<int> copy_index, index_array_copy, index_array_copy_flag_A;
 
-	int count_Shapes, count_moveItemTo, index, fill_index, index_temp, index_del, rect_num, dyn_num;
+	int fill_index, index_temp, index_del, rect_num, dyn_num;
 
 	unsigned status_hold		:1;
 	unsigned flag_up		:1;
 	unsigned flag_down		:1;
 	unsigned flag_left		:1;
 	unsigned flag_right		:1;
-	unsigned flag_ctrl		:1;
-	unsigned flag_ctrl_move		:1;
 	unsigned flag_m			:1;
 	unsigned flag_hold_arc		:1;
-	unsigned flag_A			:1;
-	unsigned flag_copy		:1;
 	unsigned flag_check_pnt_inund	:1;
 	unsigned flag_check_point	:1;
 	unsigned flag_rect		:1;
@@ -280,9 +292,9 @@ class ShapeElFigure : public WdgShape
 	unsigned status			:1;	//Check fo any primitive paint key pressed
 	//unsigned fMoveHoldMove		:1;	//Moving processing flag hysteresis
 
-	int count_holds, count_rects, rect_num_arc, arc_rect;
-	double t_start, t_end;			//Start and end values of the arc, global modified from moveItemTo()
-	QPointF Mouse_pos, offset, pop_pos;
+	int count_rects, rect_num_arc, arc_rect;
+
+	QPointF pop_pos;
 	QPoint stPointDashedRect, mousePress_pos;
 	int current_ss, current_se, current_ee, current_es;
 	QVector<int> arc_rect_array, fig_rect_array, vect;
@@ -299,7 +311,6 @@ class ShapeElFigure : public WdgShape
 	int rect_dyn;
 	QPixmap rect_img;
 
-	QVector<RectItem> rectItems;		//RectItem's container
 	QPainterPath	newPath,		//Null path
 			ellipse_startPath,
 			ellipse_endPath,

@@ -11,26 +11,18 @@
 </div>
 			<h1 id="firstHeading" lang="uk">Документація/API користувача</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FUser+API&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API">Documents/User API</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/ru" title="Документация/API пользователя (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> The translation checking and actualizing
-</td></tr></table>
-</div>
 <p><i>Автор:</i> <a class="external text" href="http://wiki.oscada.org/RomanSavochenko" rel="nofollow noreferrer noopener" target="_blank">Роман Савоченко</a>
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.97.D0.B0.D0.B3.D0.B0.D0.BB.D1.8C.D0.BD.D0.BE.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D1.96_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D1.96_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D0.B8"><span class="tocnumber">1</span> <span class="toctext">Загальносистемні користувацькі об'єкти</span></a>
 <ul>
-<li class="toclevel-2 tocsection-2"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_Array"><span class="tocnumber">1.1</span> <span class="toctext">Об'єкт Array</span></a></li>
-<li class="toclevel-2 tocsection-3"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_RegExp"><span class="tocnumber">1.2</span> <span class="toctext">Об'єкт RegExp</span></a></li>
-<li class="toclevel-2 tocsection-4"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_XMLNodeObj"><span class="tocnumber">1.3</span> <span class="toctext">Об'єкт XMLNodeObj</span></a></li>
+<li class="toclevel-2 tocsection-2"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BC.D0.B0.D1.81.D0.B8.D0.B2.D1.83_.28Array.29"><span class="tocnumber">1.1</span> <span class="toctext">Об'єкт масиву (Array)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.80.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D0.B8.D1.80.D0.B0.D0.B7.D1.83_.28RegExp.29"><span class="tocnumber">1.2</span> <span class="toctext">Об'єкт регулярного виразу (RegExp)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0-.D1.82.D0.B5.D0.B3.D1.83_XML_.28XMLNodeObj.29"><span class="tocnumber">1.3</span> <span class="toctext">Об'єкт вузла-тегу XML (XMLNodeObj)</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-5"><a href="#.D0.A1.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.28SYS.29"><span class="tocnumber">2</span> <span class="toctext"><span>Система (SYS)</span></span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.9F.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.B0-.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.28SYS.29"><span class="tocnumber">2</span> <span class="toctext"><span>Програма-система (SYS)</span></span></a></li>
 <li class="toclevel-1 tocsection-6"><a href="#.D0.91.D1.83.D0.B4.D1.8C_.D1.8F.D0.BA.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.28TCntrNode.29_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B0_OpenSCADA_.28SYS..2A.29"><span class="tocnumber">3</span> <span class="toctext"><span>Будь який об'єкт (TCntrNode) дерева OpenSCADA (SYS.*)</span></span></a></li>
 <li class="toclevel-1 tocsection-7"><a href="#.D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.B5.D0.B7.D0.BF.D0.B5.D0.BA.D0.B0.22_.28SYS.Security.29"><span class="tocnumber">4</span> <span class="toctext">Підсистема "Безпека" (SYS.Security)</span></a></li>
 <li class="toclevel-1 tocsection-8"><a href="#.D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.94.22_.28SYS.BD.29"><span class="tocnumber">5</span> <span class="toctext"><span>Підсистема "БД" (SYS.BD)</span></span></a></li>
@@ -42,7 +34,7 @@
 <li class="toclevel-2 tocsection-13"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.ModBus"><span class="tocnumber">6.4</span> <span class="toctext">Модуль DAQ.ModBus</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-14"><a href="#.D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D1.96.D0.B2.D0.B8.22_.28SYS.Archive.29"><span class="tocnumber">7</span> <span class="toctext">Підсистема "Архіви" (SYS.Archive)</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#.D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D1.96.D0.B2.D0.B8-.D0.86.D1.81.D1.82.D0.BE.D1.80.D1.96.D1.8F.22_.28SYS.Archive.29"><span class="tocnumber">7</span> <span class="toctext">Підсистема "Архіви-Історія" (SYS.Archive)</span></a></li>
 <li class="toclevel-1 tocsection-15"><a href="#.D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8.22_.28SYS.Transport.29"><span class="tocnumber">8</span> <span class="toctext"><span>Підсистема "Транспорти" (SYS.Transport)</span></span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#.D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B8.22_.28SYS.Protocols.29"><span class="tocnumber">9</span> <span class="toctext">Підсистема "Протоколи" (SYS.Protocols)</span></a>
 <ul>
@@ -61,17 +53,22 @@
 <li class="toclevel-2 tocsection-23"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D0.B9_.D1.81.D1.83.D0.BC.D1.96.D1.81.D0.BD.D0.BE.D1.81.D1.82.D1.96_.D0.B7_SCADA_Complex1_.D1.84.D1.96.D1.80.D0.BC.D0.B8_.D0.A2.D0.9E.D0.92_.D0.9D.D0.86.D0.9F_.22DIYA.22_.28Special.FLibComplex1.29"><span class="tocnumber">11.3</span> <span class="toctext">Модуль Бібліотека функцій сумісності з SCADA Complex1 фірми ТОВ НІП "DIYA" (Special.FLibComplex1)</span></a></li>
 </ul>
 </li>
+<li class="toclevel-1 tocsection-24"><a href="#.D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B8_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D0.B9_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.87.D0.B0"><span class="tocnumber">12</span> <span class="toctext">Бібліотеки функцій користувача</span></a></li>
+<li class="toclevel-1 tocsection-25"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">13</span> <span class="toctext">Посилання</span></a></li>
 </ul>
 </div>
 
-<p>До початку програмування у OpenSCADA Ви маєте вивчити структуру об'єктів програми у <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">посібнику по програмі OpenSCADA</a>. З цього документу Ви побачите, що Ви можете як користувач програмувати наступні частини OpenSCADA:
+<p>До початку програмування у OpenSCADA Ви маєте вивчити структуру об'єктів програми (Об'єктна модель) у <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">посібнику по програмі OpenSCADA</a> та на рисунку 1.
 </p>
-<ul><li> <a class="external" href="http://oscada.org/wiki/Documents/DAQ/uk#.D0.92.D1.96.D1.80.D1.82.D1.83.D0.B0.D0.BB.D1.8C.D0.BD.D1.96_.D0.B4.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.B0_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85" title="Documents/DAQ/uk">Джерела логічного рівня підсистеми "Збір даних"</a>.</li>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_uk.png"><img class="thumbimage" height="361" src="files/800px-Oscada_UserOM_uk.png" srcset="/wiki/images/3/39/Oscada_UserOM_uk.png 1.5x, /wiki/images/3/39/Oscada_UserOM_uk.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM_uk.png" title="Enlarge" /></div>Рис. 1. Користувацька об'єктна модель ядра OpenSCADA.</div></div></div></div>
+<p>З цього документу Ви побачите, що Ви можете, як користувач, програмувати наступні частини OpenSCADA:
+</p>
+<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#Virtual" title="Special:MyLanguage/Documents/DAQ">Джерела логічного рівня підсистеми "Збір даних"</a>.</li>
 <li> Транспортні протоколи, доступні для користувацького програмування, такі як: <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">Користувацький протокол</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus вузли типу "Данні"</a>, <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">Web-інтерфейси від користувача</a>, ...</li>
-<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">Середовище Візуалізації та Управління (СВУ)</a> у процедурах віджетів.</li></ul>
-<p>API користувацького програмування представляє собою дерево об'єктів OpenSCADA, кожний об'єкт якого може надавати власний перелік властивостей та функцій. Властивості та функції об'єктів можуть використовуватися користувачем у процедурах на мовах користувацького програмування OpenSCADA.
-</p><p>На цей час OpenSCADA надає тільки одну мову текстового програмування це <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, відповідно Ви також повинні її вивчити перед початком. Точкою входу для доступу до об'єктів OpenSCADA з мови користувацького програмування JavaLikeCalc є зарезервоване слово "SYS" кореневого об'єкту OpenSCADA. Наприклад, для доступу до функції вихідного транспорту треба записати: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
-</p><p>API об'єктів, які надаються модулями, описуються у власній документації модулів.
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">Середовище Візуалізації та Управління (СВУ)</a>, у процедурах віджетів.</li></ul>
+<p>API користувацького програмування представляє собою дерево об'єктів OpenSCADA (Рис.1), кожний об'єкт якого може надавати власний перелік властивостей та функцій. Властивості та функції об'єктів можуть використовуватися користувачем у процедурах на мовах користувацького програмування OpenSCADA.
+</p><p>На цей час OpenSCADA надає тільки одну мову текстового програмування — <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, відповідно Ви також повинні її вивчити перед початком. Точкою входу для доступу до об'єктів OpenSCADA (Рис.1) з мови користувацького програмування JavaLikeCalc є зарезервоване слово "SYS", кореневого об'єкту OpenSCADA. Наприклад, для доступу до функції вихідного транспорту треба записати: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
+</p><p>API об'єктів, які надаються модулями, описуються у власній документації модулів та тут до неї надаються посилання.
 </p>
 <h2><span class="mw-headline" id=".D0.97.D0.B0.D0.B3.D0.B0.D0.BB.D1.8C.D0.BD.D0.BE.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D1.96_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D1.96_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D0.B8"><span class="mw-headline-number">1</span> Загальносистемні користувацькі об'єкти</span></h2>
 <p>JavaLikeCalc надає підтримку типу даних об'єкт "Object". Об'єкт представляє собою асоціативний контейнер властивостей та функцій. Властивості можуть містити як дані чотирьох базових типів, так і інші об'єкти. Доступ до властивостей об'єкту може здійснюватися за посередництвом запису імен властивостей через точку до об'єкту <i>obj.prop</i>, а також за посередництвом заключення імені властивості у квадратні дужки <i>obj["prop"]</i>. Очевидно, що перший механізм статичний, а другий дозволяє вказувати ім'я властивості через змінну. Видалити властивість об'єкту можна директивою "delete". Читання невизначеної властивості поверне <b>EVAL</b>. Створення об'єкту здійснюється за посередництвом ключового слова <i>new</i>: <b>varO = new Object()</b>. Базове визначення об'єкту не містить функцій. Операції копіювання об'єкту насправді роблять посилання на вихідний об'єкт. При видаленні об'єкту здійснюється зменшення лічильника посилань, а при досягнення лічильника посилань нуля об'єкт видаляється фізично.
@@ -148,98 +145,98 @@ rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // r
 <li> <i>string trim( string cfg = " \n\t\r" );</i> — Обрізка рядка з початку та кінцю для символів <i>cfg</i>.</li></ul></dd></dl>
 <p><br />
 </p>
-<h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_Array"><span class="mw-headline-number">1.1</span> Об'єкт Array</span></h3>
-<p>Особливістю масиву є те, що він працює з властивостями як з індексами та повне їх найменування не має сенсу, відтак доступний механізм звернення тільки заключенням індексу у квадратні дужки "<b>arr[1]</b>". Масив зберігає властивості у власному контейнері одномірного масиву. Цифрові властивості масиву використовуються для доступу безпосередньо до масиву, а символьні працюють як властивості об'єкту.
-</p><p>Масив надає спеціальну властивість "length" для отримання розміру масиву "<b>var = arr.length;</b>". Також масив надає наступні функції:
+<h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BC.D0.B0.D1.81.D0.B8.D0.B2.D1.83_.28Array.29"><span class="mw-headline-number">1.1</span> Об'єкт масиву (Array)</span></h3>
+<p>Особливістю масиву є те, що він працює з властивостями як з індексами та повне їх найменування не має сенсу, відтак доступний тільки механізм звернення охопленням індексу квадратними дужками "<b>arr[1]</b>". Масив зберігає властивості у власному контейнері одномірного масиву. Цифрові властивості масиву використовуються для доступу безпосередньо до масиву, а символьні працюють як властивості об'єкту.
+</p><p>Масив надає спеціальну властивість "length", для отримання розміру масиву "<b>var = arr.length;</b>". Також масив надає наступні функції:
 </p>
-<ul><li> <i>string join( string sep = "," )</i>, <i>string toString( string sep = "," )</i>, <i>string valueOf( string sep = "," )</i> — Повертає рядок з елементами масиву поділеними <i>sep</i> або символом ','.</li>
-<li> <i>Array concat( Array arr );</i> — Додає до первинного масиву елементи масиву <i>arr</i>. Повертає первинний масив зі змінами.</li>
-<li> <i>int push( ElTp var, ... );</i> — Поміщає елемент(и) <i>var</i> у кінець масиву, як до стеку. Повертає новий розмір масиву.</li>
-<li> <i>ElTp pop( );</i> — Видалення останнього елементу масиву та повернення його значення, як із стеку.</li>
-<li> <i>Array reverse( );</i> — Зміна порядку розташування елементів масиву. Повертається первинний масив зі змінами.</li>
-<li> <i>ElTp shift( );</i> — Зсув масиву догори. При цьому перший елемент масиву видаляється, а його значення повертається.</li>
-<li> <i>int unshift( ElTp var, ... );</i> — Засуває елемент(и) <i>var</i> до масиву. Перший елемент у 0, другий у 1 та так само далі.</li>
-<li> <i>Array slice( int beg, int end );</i> — Повертає фрагмент масиву від <i>beg</i> до <i>end</i> (виключаючи). якщо значення початку або кінця негативне, то відлік ведеться з кінця масиву. Якщо кінець не вказано, то кінцем є кінець масиву.</li>
-<li> <i>Array splice( int beg, int remN, ElTp val1, ElTp val2, ... );</i> — Вставляє, видаляє або замінює елементи масиву. Повертає масив видалених елементів. У першу чергу здійснюється видалення елементів з позиції <i>beg</i> та кількістю <i>remN</i>, а потім вставляються значення <i>val1</i> та інші, починаючи з позиції <i>beg</i>.</li>
-<li> <i>Array sort( );</i> — Сортування елементів масиву у лексикографічній послідовності.</li></ul>
-<h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_RegExp"><span class="mw-headline-number">1.2</span> Об'єкт RegExp</span></h3>
+<ul><li> <i>string join( string sep = "," )</i>, <i>string toString( string sep = "," )</i>, <i>string valueOf( string sep = "," )</i> — повертає рядок з елементами масиву, поділеними <i>sep</i> або символом ','.</li>
+<li> <i>Array concat( Array arr );</i> — додає до первинного масиву елементи масиву <i>arr</i>. Повертає первинний масив зі змінами.</li>
+<li> <i>int push( ElTp var, ... );</i> — поміщає елемент(и) <i>var</i> у кінець масиву, як до стеку. Повертає новий розмір масиву.</li>
+<li> <i>ElTp pop( );</i> — видаляє останній елемент масиву та повертає його значення, як із стеку.</li>
+<li> <i>Array reverse( );</i> — змінює порядок розташування елементів масиву. Повертає первинний масив зі змінами.</li>
+<li> <i>ElTp shift( );</i> — зсуває масив догори, при цьому перший елемент масиву видаляється, а його значення повертається.</li>
+<li> <i>int unshift( ElTp var, ... );</i> — засуває елемент(и) <i>var</i> до масиву. Перший елемент у 0, другий у 1 та так само далі.</li>
+<li> <i>Array slice( int beg, int end );</i> — повертає фрагмент масиву від <i>beg</i> до <i>end</i> (виключаючи). Якщо значення початку або кінця негативне то відлік ведеться з кінця масиву. Якщо кінець не вказано то кінцем є кінець масиву.</li>
+<li> <i>Array splice( int beg, int remN, ElTp val1, ElTp val2, ... );</i> — вставляє, видаляє або замінює елементи масиву. Повертає масив видалених елементів. У першу чергу здійснюється видалення елементів з позиції <i>beg</i> та кількістю <i>remN</i>, а потім вставляються значення <i>val1</i> та інші, починаючи з позиції <i>beg</i>.</li>
+<li> <i>Array sort( );</i> — сортує елементи масиву у лексикографічній послідовності.</li></ul>
+<h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.80.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D0.B8.D1.80.D0.B0.D0.B7.D1.83_.28RegExp.29"><span class="mw-headline-number">1.2</span> Об'єкт регулярного виразу (RegExp)</span></h3>
 <p>Об'єкт роботи з регулярними виразами, засновано на бібліотеці PCRE. При глобальному пошуку встановлюється атрибут об'єкта "lastIndex", що дозволяє продовжити пошук при наступному виклику функції. У випадку невдалого пошуку атрибут "lastIndex" скидається у нуль.
 </p><p>У якості аргументів створення об'єкту передається рядок з текстом регулярного виразу та прапорці у вигляді рядка символів:
 </p>
 <ul><li> 'g' — режим глобального пошуку;</li>
 <li> 'i' — режим регістронезалежного пошуку;</li>
 <li> 'm' — режим багаторядкового пошуку;</li>
-<li> 'u' — примусовий дозвіл символів UTF-8 для інших локалей;</li>
-<li> 'p' — тестування виразу за звичайним шаблоном з ключовими символами: '?', '*' та '\'.</li></ul>
+<li> 'u' — примусовий дозвіл символів UTF-8, для інших локалей;</li>
+<li> 'p' — тестування виразу за правилами звичайного шаблону з ключовими символами: '?', '*' та '\'.</li></ul>
 <p>Властивості об'єкту:
 </p>
-<ul><li> <i>source</i> — Початковий шаблон регулярного виразу, тільки читання.</li>
-<li> <i>global</i> — Ознака глобального пошуку, тільки читання.</li>
-<li> <i>ignoreCase</i> — Ознака ігнорувати регістр символів при пошуку, тільки читання.</li>
-<li> <i>multiline</i> — Ознака багаторядкового пошуку, тільки читання.</li>
-<li> <i>UTF8</i> — UTF-8 символи дозволено.</li>
-<li> <i>lastIndex</i> — Індекс символу за підрядком останнього пошуку. Використовується у глобальному режимі для продовження сканування, при наступному виклику.</li></ul>
+<ul><li> <i>source</i> — початковий шаблон регулярного виразу, тільки читання.</li>
+<li> <i>global</i> — ознака глобального пошуку, тільки читання.</li>
+<li> <i>ignoreCase</i> — ознака ігнорування регістру символів при пошуку, тільки читання.</li>
+<li> <i>multiline</i> — ознака багаторядкового пошуку, тільки читання.</li>
+<li> <i>UTF8</i> — ознака дозволу UTF-8 символів, тільки читання.</li>
+<li> <i>lastIndex</i> — індекс символу за підрядком останнього пошуку, використовується у глобальному режимі для продовження сканування, при наступному виклику.</li></ul>
 <p>Функції об'єкту:
 </p>
 <ul>
-<li><i>Array exec(string val);</i> — Виклик пошуку за рядком <i>val</i>. Повертає знайдений підрядок (0) та підвирази (&gt;0) у масиві. Встановлює атрибут масиву "index" у позицію знайденого підрядка. Встановлює атрибут масиву "input" у значення початкового рядку.
+<li><i>Array exec(string val);</i> — викликає пошук за рядком <i>val</i>. Повертає знайдений підрядок (0) та підвирази (&gt;0) у масиві. Встановлює атрибут масиву "index" у позицію знайденого підрядка. Встановлює атрибут масиву "input" у значення початкового рядку.
 <pre style="white-space: pre-wrap;">
 var re = new RegExp("(\\d\\d)[-/](\\d\\d)[-/](\\d\\d(?:\\d\\d)?)","");
 var rez = re.exec("12/30/1969");
 var month = rez[1];
 var day = rez[2];
 var year = rez[3]; </pre></li>
-<li><i>bool test(string val);</i> — Повертає "true" якщо підрядок знайдено у <i>val</i>.
+<li><i>bool test(string val);</i> — повертає "true" якщо підрядок знайдено у <i>val</i>.
 <pre style="white-space: pre-wrap;">
 var re = new RegExp("(\\d\\d)[-/](\\d\\d)[-/](\\d\\d(?:\\d\\d)?)","");
 var OK = re.test("12/30/1969"); </pre></li>
 </ul>
-<h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_XMLNodeObj"><span class="mw-headline-number">1.3</span> Об'єкт XMLNodeObj</span></h3>
+<h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0-.D1.82.D0.B5.D0.B3.D1.83_XML_.28XMLNodeObj.29"><span class="mw-headline-number">1.3</span> Об'єкт вузла-тегу XML (XMLNodeObj)</span></h3>
 <p>Функції:
 </p>
-<ul><li> <i>string name( )</i> — Ім'я вузла, XML-тегу.</li>
-<li> <i>string text( bool full = false )</i> — Текст вузла, вміст XML-тегу. Встановити <i>full</i> для отримання комбінованого тексту зі всіма включеними вузлами.</li>
-<li> <i>string attr( string id )</i> — Значення атрибуту вузла <i>id</i>.</li>
-<li> <i>XMLNodeObj setName( string vl )</i> — Установка ім'я вузла у <i>vl</i>. Повертає поточний вузол.</li>
-<li> <i>XMLNodeObj setText( string vl )</i> — Установка тексту вузла у <i>vl</i>. Повертає поточний вузол.</li>
-<li> <i>XMLNodeObj setAttr( string id, string vl )</i> — Установка атрибута <i>id</i> у значення <i>vl</i>. Повертає поточний вузол.</li>
-<li> <i>XMLNodeObj clear( bool full = false )</i> — Очищення вузла видаленням дочірніх вузлів, очищення тексту та атрибутів, для <i>full</i>.</li>
-<li> <i>int childSize( )</i> — Кількість вкладених вузлів.</li>
-<li> <i>XMLNodeObj childAdd( ElTp no = XMLNodeObj ); XMLNodeObj childAdd(string no)</i> — Додання об'єкту <i>no</i> як вкладеного. <i>no</i> може бути як безпосередньо об'єктом-результатом функції "SYS.XMLNode()", так і рядком з ім'ям нового тегу. Повертається вкладений вузол.</li>
-<li> <i>XMLNodeObj childIns( int id, ElTp no = XMLNodeObj ); XMLNodeObj childIns(int id, string no)</i> — Вставка об'єкту <i>no</i> як вкладеного у позицію <i>id</i>. <i>no</i> може бути як безпосередньо об'єктом-результатом функції "SYS.XMLNode()", так і рядком з ім'ям нового тегу. Повертається вкладений вузол.</li>
-<li> <i>XMLNodeObj childDel( int id )</i> — Видалення вкладеного вузла у позиції <i>id</i>. Повертає поточний вузол.</li>
-<li> <i>XMLNodeObj childGet( int id )</i> — Отримання вкладеного вузла у позиції <i>id</i>.</li>
-<li> <i>XMLNodeObj childGet( string name, int num = 0 )</i> — Отримання вкладеного вузла з ім'ям тегу <i>name</i> та порядковим номером <i>num</i>.</li>
-<li> <i>XMLNodeObj parent()</i> — Отримання батьківського вузла.</li>
-<li> <i>string load( string str, bool file = false, int flg = 0, string cp = "UTF-8" )</i> — Завантаження XML з рядка <i>str</i> або з файлу з шляхом у <i>str</i> якщо <i>file</i> "true", з кодуванням <i>cp</i>. <i>flg</i> — прапорці завантаження:</li></ul>
+<ul><li> <i>string name( )</i> — ім'я вузла, XML-тегу.</li>
+<li> <i>string text( bool full = false )</i> — текст вузла, вміст XML-тегу. Встановити <i>full</i> для отримання комбінованого тексту зі всіма включеними вузлами.</li>
+<li> <i>string attr( string id )</i> — значення атрибуту вузла <i>id</i>.</li>
+<li> <i>XMLNodeObj setName( string vl )</i> — встановлює ім'я вузла у <i>vl</i>. Повертає поточний вузол.</li>
+<li> <i>XMLNodeObj setText( string vl )</i> — встановлює текст вузла у <i>vl</i>. Повертає поточний вузол.</li>
+<li> <i>XMLNodeObj setAttr( string id, string vl )</i> — встановлює атрибут <i>id</i> у значення <i>vl</i>. Повертає поточний вузол.</li>
+<li> <i>XMLNodeObj clear( bool full = false )</i> — очищує вузол, видаленням дочірніх вузлів, очищує текст та атрибути, для <i>full</i>.</li>
+<li> <i>int childSize( )</i> — кількість вкладених вузлів.</li>
+<li> <i>XMLNodeObj childAdd( ElTp no = XMLNodeObj ); XMLNodeObj childAdd(string no)</i> — додає об'єкт <i>no</i> як вкладений. <i>no</i> може бути як безпосередньо об'єктом-результатом функції "SYS.XMLNode()", так і рядком з ім'ям нового тегу. Повертається вкладений вузол.</li>
+<li> <i>XMLNodeObj childIns( int id, ElTp no = XMLNodeObj ); XMLNodeObj childIns(int id, string no)</i> — вставляє об'єкт <i>no</i> як вкладений, у позицію <i>id</i>. <i>no</i> може бути як безпосередньо об'єктом-результатом функції "SYS.XMLNode()", так і рядком з ім'ям нового тегу. Повертається вкладений вузол.</li>
+<li> <i>XMLNodeObj childDel( int id )</i> — видаляє вкладений вузол у позиції <i>id</i>. Повертає поточний вузол.</li>
+<li> <i>XMLNodeObj childGet( int id )</i> — отримує вкладений вузол у позиції <i>id</i>.</li>
+<li> <i>XMLNodeObj childGet( string name, int num = 0 )</i> — отримує вкладений вузол з ім'ям тегу <i>name</i> та порядковим номером <i>num</i>.</li>
+<li> <i>XMLNodeObj parent()</i> — отримує батьківський вузол.</li>
+<li> <i>string load( string str, bool file = false, int flg = 0, string cp = "UTF-8" )</i> — завантажує XML з рядка <i>str</i> або з файлу з шляхом у <i>str</i> якщо <i>file</i> дорівнює "true", з кодуванням <i>cp</i>. Де <i>flg</i> — прапорці завантаження:</li></ul>
 <dl><dd><dl><dd>0x01 — повне завантаження, з блоками тексту та коментарями у спеціальних вузлах;</dd>
 <dd>0x02 — не видаляти пробіли на початку та кінці тексту тегу.</dd></dl></dd></dl>
-<ul><li> <i>string save( int flg = 0, string path = "", string cp = "UTF-8" )</i> — Збереження дерева XML у рядок або у файл <i>path</i> з параметрами форматування <i>flg</i> та кодуванням <i>cp</i>. Повертає текст XML або код помилки. Передбачено наступні прапорці форматування <i>flg</i>:</li></ul>
-<dl><dd><dl><dd>0x01 — переривати рядок перед відкриваючим тегом;</dd>
-<dd>0x02 — переривати рядок після відкриваючого тегу;</dd>
-<dd>0x04 — переривати рядок після закриваючого тегу;</dd>
+<ul><li> <i>string save( int flg = 0, string path = "", string cp = "UTF-8" )</i> — зберігає дерево XML у рядок або у файлі <i>path</i>, з параметрами форматування <i>flg</i> та кодуванням <i>cp</i>. Повертає текст XML або код помилки. Передбачено наступні прапорці форматування <i>flg</i>:</li></ul>
+<dl><dd><dl><dd>0x01 — переривати рядок перед відкривальним тегом;</dd>
+<dd>0x02 — переривати рядок після відкривального тегу;</dd>
+<dd>0x04 — переривати рядок після закривального тегу;</dd>
 <dd>0x08 — переривати рядок після тексту;</dd>
 <dd>0x10 — переривати рядок після інструкції;</dd>
 <dd>0x1E — переривати рядок після всіх;</dd>
 <dd>0x20 — вставляти стандартний XML-заголовок;</dd>
 <dd>0x40 — вставляти стандартний XHTML-заголовок;</dd>
 <dd>0x80 — очищати сервісні теги: &lt;??&gt;, &lt;!-- --&gt;;</dd>
-<dd>0x100 — опускати кодування назв тегів;</dd>
-<dd>0x200 — опускати кодування назв атрибутів.</dd></dl></dd></dl>
-<ul><li> <i>XMLNodeObj getElementBy( string val, string attr = "id" )</i> — отримати елемент з дерева за атрибутом <i>attr</i> зі значенням <i>val</i>.</li>
-<li> <i>TArrayObj&lt;XMLNodeObj&gt; getElementsBy( string tag, string attrVal = "", string attr = "id" )</i> — отримання масиву елементів з дерева за тегом <i>tag</i> (порожній для всіх) та атрибутом <i>attr</i> зі значенням <i>attrVal</i> (порожні для пропуску).</li></ul>
-<h2><span class="mw-headline" id=".D0.A1.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.28SYS.29"><span class="mw-headline-number">2</span> <span id="SYS" title="#SYS">Система (SYS)</span></span></h2>
+<dd>0x100 — не кодувати назви тегів;</dd>
+<dd>0x200 — не кодувати назви атрибутів.</dd></dl></dd></dl>
+<ul><li> <i>XMLNodeObj getElementBy( string val, string attr = "id" )</i> — отримує елемент з дерева за атрибутом <i>attr</i> зі значенням <i>val</i>.</li>
+<li> <i>TArrayObj&lt;XMLNodeObj&gt; getElementsBy( string tag, string attrVal = "", string attr = "id" )</i> — отримує масив елементів з дерева за тегом <i>tag</i> (порожній для всіх) та атрибутом <i>attr</i> зі значенням <i>attrVal</i> (порожні для пропуску).</li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.B0-.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.28SYS.29"><span class="mw-headline-number">2</span> <span id="SYS" title="#SYS">Програма-система (SYS)</span></span></h2>
 <p>Функції об'єкту:
 </p>
 <ul>
-<li><i>{string|int} system( string cmd, bool noPipe = false);</i> — здійснює виклик консольних команд <i>cmd</i> ОС з поверненням результату по каналу. Якщо <i>noPipe</i> встановлено то повертається код повернення виклику та можливий запуск програм у фоні ("sleep 5 &amp;"). Функція відкриває широкі можливості користувачу OpenSCADA, викликом будь яких системних програм, утиліт та скриптів, а також отримання за посередництвом них доступу до величезного об'єму системних даних. Наприклад, команда "ls -l" поверне деталізований вміст робочої теки.</li>
-<li><i>string fileRead( string file );</i> — Повертає вміст файлу <i>file</i> у рядку.</li>
-<li><i>int fileWrite( string file, string str, bool append = false );</i> — Записує рядок <i>str</i> до файлу <i>file</i>, видаляючи присутній файл або додаючи до нього <i>append</i>. Повертає кількість записаних байт.</li>
-<li><i>int fileRemove( string file );</i> — Видалити файл <i>file</i>. Повертає результат видалення.</li>
-<li><i>int message( string cat, int level, string mess );</i> — формування системного повідомлення <i>mess</i> з категорією <i>cat</i>, рівнем <i>level</i> (-7...7). Негативне значення рівня формує порушення (Alarm).</li>
-<li><i>int messDebug( string cat, string mess ); int messInfo( string cat, string mess ); int messNote( string cat, string mess ); int messWarning( string cat, string mess ); int messErr( string cat, string mess ); int messCrit( string cat, string mess ); int messAlert( string cat, string mess ); int messEmerg( string cat, string mess );</i> — формування системного повідомлення <i>mess</i> з категорією <i>cat</i> та відповідним рівнем.</li>
-<li><i>XMLNodeObj XMLNode( string name = "" );</i> — створення об'єкту вузла XML з ім'ям <i>name</i>.</li>
-<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — запит <a class="external text" href="http://wiki.oscada.org/Doc/API#h154-1" rel="nofollow noreferrer noopener" target="_blank">інтерфейсу управління</a> до системи за посередництвом XML. Зазвичай запит записується у вигляді "<b>&lt;get path="/OPath/%2felem"/&gt;</b>". При вказані станції <i>stat</i> здійснюється запит до вказаної зовнішньої станції. Адресу, атрибут "path", можна дізнатися у конфігураторі OpenSCADA, а саме у рядку статусу де ця адреса висвітлюється при наведені курсору миші на конфігураційне або інформаційне поле. Приклади розповсюджених запитів:<ul>
+<li><i>{string|int} system( string cmd, bool noPipe = false);</i> — викликає консольні команди <i>cmd</i> ОС з поверненням результату по каналу. Якщо встановлено <i>noPipe</i> то повертається код повернення виклику та можливий запуск програм у фоні ("sleep 5 &amp;"). Функція надає користувачу OpenSCADA широкі можливості через виклик будь яких системних програм, утиліт та скриптів, а також отримання за посередництвом них доступу до величезного об'єму системних даних. Наприклад, команда "ls -l" поверне деталізований вміст робочої теки.</li>
+<li><i>string fileRead( string file );</i> — повертає у рядку вміст файлу <i>file</i>.</li>
+<li><i>int fileWrite( string file, string str, bool append = false );</i> — записує рядок <i>str</i> до файлу <i>file</i>, видаляючи присутній файл або додаючи до нього, <i>append</i>. Повертає кількість записаних байт.</li>
+<li><i>int fileRemove( string file );</i> — видаляє файл <i>file</i>. Повертає результат видалення.</li>
+<li><i>int message( string cat, int level, string mess );</i> — формує системне повідомлення <i>mess</i> з категорією <i>cat</i>, рівнем <i>level</i> (-7...7). Негативне значення рівня формує порушення — "Alarm".</li>
+<li><i>int messDebug( string cat, string mess ); int messInfo( string cat, string mess ); int messNote( string cat, string mess ); int messWarning( string cat, string mess ); int messErr( string cat, string mess ); int messCrit( string cat, string mess ); int messAlert( string cat, string mess ); int messEmerg( string cat, string mess );</i> — формує системне повідомлення <i>mess</i> з категорією <i>cat</i> та відповідним до назви рівнем.</li>
+<li><i>XMLNodeObj XMLNode( string name = "" );</i> — створює об'єкт вузла XML з ім'ям <i>name</i>.</li>
+<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — надсилає запит <a class="external text" href="http://wiki.oscada.org/Doc/API#h154-1" rel="nofollow noreferrer noopener" target="_blank">інтерфейсу управління</a> до програми-системи за посередництвом XML. Зазвичай запит записується у вигляді <b>&lt;get path="/OPath/%2felem"/&gt;</b>. При вказані станції у <i>stat</i> здійснюється запит до вказаної зовнішньої станції. Адресу, атрибут "path", можна дізнатися у конфігураторі OpenSCADA, а саме у рядку статусу, де ця адреса виникає при наведені курсору миші на конфігураційне або інформаційне поле. Приклади розповсюджених запитів:<ul>
  <li>Читання значення елементу (ім'я користувача "test"):
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_test/%2fprm%2fDESCR");
@@ -266,69 +263,69 @@ SYS.cntrReq(req); </pre></li>
 req = SYS.XMLNode("load").setAttr("path","/sub_Security/usr_test/%2fobj");
 SYS.cntrReq(req); </pre></li>
 </ul></li>
-<li><i>int sleep(real tm, int ntm = 0);</i> — заспати потік виконання на <i>tm</i> секунд (з точністю до наносекунд) та <i>ntm</i> наносекунд. Час сну можна встановити не більш STD_INTERF_TM (5 секунд).</li>
+<li><i>int sleep(real tm, int ntm = 0);</i> — засипає потік виконання на <i>tm</i> секунд (з точністю до наносекунд) та <i>ntm</i> наносекунд. Час сну можна встановити не більш STD_INTERF_TM (5 секунд).</li>
 <li><i>int time( int usec );</i> — повертає абсолютний час у секундах від епохи 1.1.1970 та мікросекунди у <i>usec</i>, якщо вказано.</li>
 <li><i>int utime( ); int mtime( );</i> — повертає абсолютний час у мікросекундах та мілісекундах від епохи 1.1.1970.</li>
-<li><i>int {localtime|gmtime}( int fullsec, int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst );</i> — повертає повну дату у секундах (sec), хвилинах (min), годинах (hour), днях місяця (mday), місяцях (month), роках (year), днях тижня (wday), днях у році (yday) та ознака літнього часу (isdst), виходячи з абсолютного часу у секундах <i>fullsec</i> від епохи 1.1.1970. <i>gmtime</i> повертає час у GMT(UTC).</li>
-<li><i>int {mktime|timegm}(int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst);</i> — формує час з епохи 1.1.1970 з окремо вказаних секунд, хвилин, годин, днів, місяців та інше. Значення окремих одиниць часу можуть вказуватися за їх звичним діапазоном, що дозволяє використовувати цю функцію при переборі, у результаті чого одиниці часу буде відкориговано та повернуто у звичайному діапазоні. <i>timegm</i> працює з часом у GMT(UTC). </li>
-<li><i>string {strftime|strftimegm}( int sec, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — Перетворює абсолютний час <i>sec</i> у рядок потрібного формату <i>form</i>. Запис формату відповідає POSIX-функції strftime. <i>strftimegm</i> повертає час у GMT(UTC).</li>
-<li><i>int {strptime|strptimegm}( string str, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — Повертає час у секундах від епохи 1.1.1970, виходячи з строкового запису часу <i>str</i>, відповідно до вказаного шаблону <i>form</i>. Наприклад, шаблону "%Y-%m-%d&nbsp;%H:%M:%S" відповідає час "2006-08-08 11:21:55". Опис формату шаблону можна отримати з документації на POSIX-функцію "strptime". <i>strptimegm</i> працює з часом у GMT(UTC).</li>
-<li><i>int cron( string cronreq, int base = 0 );</i> — Повертає час, спланований у форматі стандарту Cron <i>cronreq</i>, починаючи від базового часу <i>base</i> або від поточного, якщо базовий не вказано.</li>
-<li><i>string strFromCharCode( int char1, int char2, int char3, ... );</i> — Створення рядку з кодів символів <i>char1</i>, <i>char2</i> ... <i>charN</i>.</li>
-<li><i>string strCodeConv( string src, string fromCP, string toCP );</i> — Кодування тексту <i>src</i> з кодування <i>fromCP</i> у <i>toCP</i>. Якщо кодування опущено (порожній рядок), то використовується внутрішнє.</li>
-<li><i>string strEncode( string src, string tp = "Bin", string opt1 = "" );</i> — Кодування рядка <i>src</i> за правилом <i>tp</i> та опцією <i>opt1</i>. Доступні правила:
-<dl><dd>"PathEl" — символи '/' та '%' у "%2f" та "%25", відповідно;</dd>
-<dd>"HttpURL" — символи ' ', '\t', '%' та "&gt; 0x80" у "%20", "%09", "%25" та інше;</dd>
-<dd>"HTML" — символи HTML-сутностей '&gt;', '&lt;', '"', '&amp;', '\<i> у "&gt;", "&lt;", """ та інше;</i></dd>
+<li><i>int {localtime|gmtime}( int fullsec, int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst );</i> — повертає повну дату та час у секундах (sec), хвилинах (min), годинах (hour), днях місяця (mday), місяцях (month), роках (year), днях тижня (wday), днях у році (yday) та ознаку літнього часу (isdst), виходячи з абсолютного часу у секундах <i>fullsec</i> від епохи 1.1.1970. <i>gmtime</i> повертає час у GMT(UTC).</li>
+<li><i>int {mktime|timegm}(int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst);</i> — формує час з епохи 1.1.1970 з окремо вказаних секунд, хвилин, годин, днів, місяців та інше. Значення окремих одиниць часу можуть вказуватися за межами їх звичного діапазону, що дозволяє використовувати цю функцію при переборі та у результаті чого одиниці часу буде виправлено та повернуто у звичайному діапазоні. <i>timegm</i> працює з часом у GMT(UTC). </li>
+<li><i>string {strftime|strftimegm}( int sec, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — перетворює абсолютний час <i>sec</i> у рядок потрібного формату <i>form</i>. Запис формату відповідає POSIX-функції <i>strftime</i>. <i>strftimegm</i> повертає час у GMT(UTC).</li>
+<li><i>int {strptime|strptimegm}( string str, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — повертає час у секундах від епохи 1.1.1970, виходячи з строкового запису часу <i>str</i>, відповідно до вказаного шаблону <i>form</i>. Наприклад, шаблону "%Y-%m-%d&nbsp;%H:%M:%S" відповідає час "2006-08-08 11:21:55". Опис формату шаблону можна отримати з документації на POSIX-функцію <i>strptime</i>. <i>strptimegm</i> працює з часом у GMT(UTC).</li>
+<li><i>int cron( string cronreq, int base = 0 );</i> — повертає час, спланований у форматі стандарту Cron, <i>cronreq</i>, починаючи від базового часу <i>base</i> або від поточного, якщо базовий не вказано.</li>
+<li><i>string strFromCharCode( int char1, int char2, int char3, ... );</i> — створює рядок з кодів символів <i>char1</i>, <i>char2</i> ... <i>charN</i>.</li>
+<li><i>string strCodeConv( string src, string fromCP, string toCP );</i> — перекодовує текст <i>src</i> з кодування <i>fromCP</i> у <i>toCP</i>. Якщо кодування опущено (порожній рядок), то використовується внутрішнє.</li>
+<li><i>string strEncode( string src, string tp = "Bin", string opt1 = "" );</i> — кодує рядок <i>src</i> за правилом <i>tp</i> та опції <i>opt1</i>. Доступні правила:
+<dl><dd>"PathEl" — символи <b>[/%]</b> у "%2f" та "%25", відповідно;</dd>
+<dd>"HttpURL" — символи <b>[ \t%]</b> та "&gt; 0x80" у "%20", "%09", "%25" та інше;</dd>
+<dd>"HTML" — символи HTML-сутностей <b>[&gt;&lt;"&amp;']</b> у "&amp;gt;", "&amp;lt;", "&amp;quot;" та інше;</dd>
 <dd>"JavaScript" — символ '\n' екрануванням "\\n";</dd>
-<dd>"SQL" — екрановані символи '\<i>, '\"', '`', '\\' або дублювання перелічених символів у </i>opt1<i>;</i></dd>
-<dd>"Custom" — вказаних символів у <i>opt1</i> у "%NN";</dd>
-<dd>"Base64" — бінарне кодування у Base 64, у <i>opt1</i> встановлюються символ(и) переривання рядку після 57 символів;</dd>
+<dd>"SQL" — екранування-захист символів <b>['"`\]</b>, доданням символу '\' або дублювання перелічених у <i>opt1</i> символів;</dd>
+<dd>"Custom" — символів вказаних у <i>opt1</i> у вигляд "%NN";</dd>
+<dd>"Base64" — бінарне кодування у Base 64, де у <i>opt1</i> встановлюються символ(и) переривання рядку після 57 символів;</dd>
 <dd>"FormatPrint" — символ '%' в "%%";</dd>
-<dd>"OscdID" — майже всі символи на кшталт ' ', '/', '\\', '&amp;', '(' у '_';</dd>
+<dd>"OscdID" — майже всі символи на кшталт <b>[ /\&amp;(]</b> у '_';</dd>
 <dd>"Bin" — перелік ASCII байтів ("XX XX XX XX ...") у бінарне представлення;</dd>
 <dd>"Reverse" — інверсія послідовності;</dd>
 <dd>"ShieldSimb" — захищені символи типу '\a', '\b', ..., '\0NNN', '\xNN' у бінарне представлення.</dd></dl>
 </li>
-<li><i>string strDecode( string src, string tp = "Bin", string opt1 = "" );</i> — Декодування рядку <i>src</i> за правилом <i>tp</i> та опцією <i>opt1</i>. Доступні правила:
-<dl><dd>"PathEl", "HttpURL", "Custom" — декодування символів типу "%NN" у бінарне представлення;</dd>
+<li><i>string strDecode( string src, string tp = "Bin", string opt1 = "" );</i> — декодує рядок <i>src</i> за правилом <i>tp</i> та опції <i>opt1</i>. Доступні правила:
+<dl><dd>"PathEl", "HttpURL", "Custom" — символи вигляду "%NN" у бінарне представлення;</dd>
 <dd>"Base64" — відповідно з Base 64;</dd>
-<dd>"Bin" — бінарного рядку у ASCII байти ("XX XX XX XX ..   A.b.c.."), <i>opt1</i> вказує на роздільник або "&lt;text&gt;" для включення зміщення ліворуч та текстової частини праворуч.</dd></dl>
+<dd>"Bin" — бінарний рядок у ASCII байти ("XX XX XX XX ..   A.b.c.."), <i>opt1</i> вказує на роздільник або "&lt;text&gt;", для включення зміщення ліворуч та текстової частини праворуч.</dd></dl>
 </li></ul>
 <h2><span class="mw-headline" id=".D0.91.D1.83.D0.B4.D1.8C_.D1.8F.D0.BA.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.28TCntrNode.29_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B0_OpenSCADA_.28SYS..2A.29"><span class="mw-headline-number">3</span> <span id="TCntrNode" title="#TCntrNode">Будь який об'єкт (TCntrNode) дерева OpenSCADA (SYS.*)</span></span></h2>
 <p>Функції об'єкту:
 </p>
-<ul><li> <i>TArrayObj nodeList(string grp = "", string path = "");</i> — Отримання переліку ідентифікаторів дочірніх вузлів для групи <i>grp</i> та вузла за шляхом <i>path</i>. Якщо <i>grp</i> порожній то повертаються вузли всіх груп.</li>
-<li> <i>TCntrNodeObj nodeAt(string path, string sep="");</i> — Підключення до вузла <i>path</i> у дереві об'єктів OpenSCADA. Якщо вказується роздільник у <i>sep</i> то шлях обробляється як рядок з роздільником. Для відсутніх та некоректних вузлів ця функція повертатиме "false" тоді як коректний вузол, при перетворені у BOOLEAN, повертатиме "true.</li>
-<li> <i>TCntrNodeObj nodePrev();</i> — Отримати попередній, батьківський, вузол.</li>
-<li> <i>string nodePath(string sep = "", bool from_root = true);</i> — Отримання шляху до поточного вузла, у дереві об'єктів OpenSCADA. Один символ роздільника вказується у <i>sep</i> для отримання шляху через роздільник, наприклад, "DAQ.ModBus.PLC1.P1.var", інакше "/DAQ/ModBus/PLC1/P1/var". <i>from_root</i> вказує на необхідність формувати шлях від кореня та без указання ідентифікатору станції.</li>
-<li> <i>int messSys( int level, string mess )</i> — Формування системного повідомлення <i>mess</i> з рівнем <i>level</i>, зі шляхом вузла у якості категорії та з читабельним шляхом перед повідомленням.</li></ul>
+<ul><li> <i>TArrayObj nodeList( string grp = "", string path = "" );</i> — повертає перелік ідентифікаторів дочірніх вузлів для групи <i>grp</i> та вузла за шляхом <i>path</i>. Якщо <i>grp</i> порожнє то повертаються вузли всіх груп.</li>
+<li> <i>TCntrNodeObj nodeAt( string path, string sep = "" );</i> — під'єднує до вузла <i>path</i> у дереві об'єктів OpenSCADA (рис.1). Якщо вказується роздільник у <i>sep</i> то шлях обробляється як рядок з роздільником. Для відсутніх та некоректних вузлів ця функція повертатиме "false", тоді як коректний вузол, при перетворені у BOOLEAN, повертатиме "true".</li>
+<li> <i>TCntrNodeObj nodePrev( );</i> — повертає попередній-батьківський вузол.</li>
+<li> <i>string nodePath( string sep = "", bool from_root = true );</i> — повертає шлях до поточного вузла у дереві об'єктів OpenSCADA (рис.1). Символ роздільника вказується у <i>sep</i>, для отримання шляху через роздільник, наприклад — "DAQ.ModBus.PLC1.P1.var", інакше — "/DAQ/ModBus/PLC1/P1/var". <i>from_root</i> вказує на необхідність формувати шлях від кореня та без вказання ідентифікатору станції.</li>
+<li> <i>int messSys( int level, string mess )</i> — формує системне повідомлення <i>mess</i> з рівнем <i>level</i>, зі шляхом вузла у якості категорії та з читабельним шляхом перед повідомленням.</li></ul>
 <h2><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.B5.D0.B7.D0.BF.D0.B5.D0.BA.D0.B0.22_.28SYS.Security.29"><span class="mw-headline-number">4</span> Підсистема "Безпека" (SYS.Security)</span></h2>
 <p>Функції об'єкту підсистеми (SYS.Security):
 </p>
-<ul><li> <i>int access(string user, int mode, string owner, string group, int access)</i> — Перевірка для користувача <i>user</i> доступу до ресурсу який належить <i>owner</i> та <i>group</i> з доступом <i>access</i> для режиму <i>mode</i>:</li></ul>
-<dl><dd><dl><dd><i>user</i> — користувач для перевірки доступу;</dd>
+<ul><li> <i>int access( string user, int mode, string owner, string group, int access )</i> — перевіряє доступ користувача <i>user</i> до ресурсу, який належить <i>owner</i> та <i>group</i> з доступом <i>access</i> та для режиму <i>mode</i>:</li></ul>
+<dl><dd><dl><dd><i>user</i> — користувач перевірки доступу;</dd>
 <dd><i>mode</i> — режим доступу (4-R, 2-W, 1-X);</dd>
 <dd><i>owner</i> — власник ресурсу;</dd>
 <dd><i>group</i> — група ресурсу;</dd>
 <dd><i>access</i> — режим доступу до ресурсу (RWXRWXRWX — 0777).</dd></dl></dd></dl>
-<p>Функції об'єкту користувача (SYS.Security["usr_User"]):
+<p>Функції об'єкту "Користувач" (SYS.Security["usr_{User}"]):
 </p>
-<ul><li> <i>ElTp cfg(string nm)</i> — отримання значення конфігураційного поля <i>nm</i> об'єкту.</li>
-<li> <i>bool cfgSet(string nm, ElTp val)</i> — встановлення конфігураційного поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
-<li> <i>Array groups( )</i> — перелік груп користувача.</li></ul>
-<p>Функції об'єкту групи (SYS.Security["grp_Group"]):
+<ul><li> <i>ElTp cfg( string nm )</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — встановлює конфігураційне поле <i>nm</i> об'єкту у значення <i>val</i>.</li>
+<li> <i>Array groups( )</i> — повертає перелік груп користувача.</li></ul>
+<p>Функції об'єкту "Група користувачів" (SYS.Security["grp_{Group}"]):
 </p>
-<ul><li> <i>ElTp cfg(string nm)</i> — отримання значення конфігураційного поля <i>nm</i> об'єкту.</li>
-<li> <i>bool cfgSet(string nm, ElTp val)</i> — встановлення конфігураційного поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
-<li> <i>bool user( string nm )</i> — перевірка на присутність користувача <i>nm</i> у даній групі.</li></ul>
+<ul><li> <i>ElTp cfg( string nm )</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — встановлює конфігураційне поле <i>nm</i> об'єкту у значення <i>val</i>.</li>
+<li> <i>bool user( string nm )</i> — перевіряє присутність користувача <i>nm</i> у даній групі.</li></ul>
 <h2><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.94.22_.28SYS.BD.29"><span class="mw-headline-number">5</span> <span id="SYS.BD" title="#SYS.BD">Підсистема "БД" (SYS.BD)</span></span></h2>
-<p>Функції об'єкту БД (SYS.BD["TypeDB"]["DB"]):
+<p>Функції об'єкту бази даних (SYS.BD["TypeDB"]["DB"]):
 </p>
 <ul>
-<li><i>ElTp cfg(string nm)</i> — отримання значення конфігураційного поля <i>nm</i> об'єкту.</li>
-<li><i>bool cfgSet(string nm, ElTp val)</i> — встановлення конфігураційного поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
-<li><i>Array SQLReq( string req, bool tr = EVAL );</i> — формування SQL-запиту до БД, всередині (<i>tr</i>=true), назовні (<i>tr</i>=false) або байдуже (<i>tr</i>=EVAL) до транзакції. У випадку помилки її значення розташовується у властивості "err" результату.
+<li><i>ElTp cfg( string nm )</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
+<li><i>bool cfgSet( string nm, ElTp val )</i> — встановлює конфігураційне поле <i>nm</i> об'єкту у значення <i>val</i>.</li>
+<li><i>Array SQLReq( string req, bool tr = EVAL );</i> — формує SQL-запит до БД, всередині (<i>tr</i>=true), назовні (<i>tr</i>=false) або байдуже (<i>tr</i>=EVAL) до транзакції. У випадку помилки її значення розташовується у властивості "err" результату.
 <pre style="white-space: pre-wrap;">
 DBTbl = SYS.BD.MySQL.GenDB.SQLReq("SELECT * from DB;");
 if(DBTbl.err.length) SYS.messInfo("TEST DB","Error: "+DBTbl.err);
@@ -340,10 +337,10 @@ else for(var iRw = 0; iRw &lt; DBTbl.length; iRw++) {
   if(iRw) SYS.messInfo("TEST DB", "Row "+iRw+": 'NAME'"+DBTbl[iRw]["NAME"]);
 } </pre></li>
 </ul>
-<p>Функції об'єкту Таблиця (SYS.BD["TypeDB"]["DB"]["Table"]):
+<p>Функції об'єкту таблиці (SYS.BD["TypeDB"]["DB"]["Table"]):
 </p>
 <ul>
-<li><i>XMLNodeObj fieldStruct();</i> — Отримання структури таблиці у вигляді XML вузла "field" з дочірніми вузлами-стовпчиками <b>&lt;RowId type="real" len="10.2" key="1" def="Default value"&gt;{Value}&lt;/RowId&gt;</b>, де:<ul>
+<li><i>XMLNodeObj fieldStruct( );</i> — отримує структуру таблиці у вигляді XML вузла "field" з дочірніми вузлами-стовпчиками <b>&lt;RowId type="real" len="10.2" key="1" def="Default value"&gt;{Value}&lt;/RowId&gt;</b>, де:<ul>
  <li>{RowId} — ідентифікатор стовпчика;</li>
  <li>{Value} — значення стовпчика;</li>
  <li>type — тип значення стовпчика: <i>str</i> — рядок, <i>int</i> — ціле, <i>real</i> — реальне та <i>bool</i> — логічне;</li>
@@ -351,8 +348,8 @@ else for(var iRw = 0; iRw &lt; DBTbl.length; iRw++) {
  <li>key — ознака того, що стовпчик є ключем, та пошук здійснюється за його значенням;</li>
  <li>def — значення стовпчика по замовченню.</li>
 </ul></li>
-<li><i>string fieldSeek(int row, XMLNodeObj fld);</i> — Запит поля <i>row</i> таблиці. Якщо поле отримано то повертається "1" інакше "0". У випадку помилки повертається "0:Error".</li>
-<li><i>string fieldGet(XMLNodeObj fld);</i> — Запит значення поля. У випадку помилки повертається "0:Error".
+<li><i>string fieldSeek( int row, XMLNodeObj fld );</i> — запитує поле <i>row</i> таблиці. Якщо поле отримано то повертається "1" інакше "0". У випадку помилки повертається "0:Error".</li>
+<li><i>string fieldGet( XMLNodeObj fld );</i> — запитує значення поля. У випадку помилки повертається "0:Error".
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("field");
 req.childAdd("user").setAttr("type","str").setAttr("key","1").setText("root");
@@ -360,14 +357,14 @@ req.childAdd("id").setAttr("type","str").setAttr("key","1").setText("/Lang2CodeB
 req.childAdd("val").setAttr("type","str");
 SYS.BD.MySQL.GenDB.SYS.fieldGet(req);
 SYS.messDebug("TEST DB","Value: "+req.childGet(2).text()); </pre></li>
-<li><i>string fieldSet(XMLNodeObj fld);</i> — Встановлення поля. У випадку помилки повертається "0:Error".</li>
-<li><i>string fieldDel(XMLNodeObj fld);</i> — Видалення поля. У випадку помилки повертається "0:Error".</li>
+<li><i>string fieldSet( XMLNodeObj fld );</i> — встановлює поле. У випадку помилки повертається "0:Error".</li>
+<li><i>string fieldDel( XMLNodeObj fld );</i> — видаляє поле. У випадку помилки повертається "0:Error".</li>
 </ul>
 <h2><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.97.D0.B1.D1.96.D1.80_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85.22_.28SYS.DAQ.29"><span class="mw-headline-number">6</span> <span id="SYS.DAQ" title="#SYS.DAQ">Підсистема "Збір даних" (SYS.DAQ)</span></span></h2>
 <p>Функції об'єкту підсистеми (SYS.DAQ):
 </p>
 <ul>
-<li><i>bool funcCall(string progLang, TVarObj args, string prog, string fixId = "");</i> — виклик тексту функції <i>prog</i> з аргументами у об'єкті <i>args</i> для мови програмування <i>progLang</i> та з ідентифікатором фіксації <i>fixId</i> (автоматично якщо порожній). Повертає "true" при коректному виклику. Фіксована функція відрізняється від автоматичної тим, що вона не видаляється після виконання, а використовується повторно за адресою у <i>fixId</i>, яка замінює оригінальний ідентифікатор при першому виклику. Для переформування функції треба змінити програму або очистити <i>fixId</i> у її оригінальний ідентифікатор.
+<li><i>bool funcCall( string progLang, TVarObj args, string prog, string fixId = "" );</i> — виконує тексту функції <i>prog</i> з аргументами у об'єкті <i>args</i> на мові програмування <i>progLang</i> та з ідентифікатором фіксації <i>fixId</i> (автоматично якщо порожній). Повертає "true" при коректному виконанні. Фіксована функція відрізняється від автоматичної тим, що вона не видаляється після виконання, а використовується повторно за адресою у <i>fixId</i>, яка замінює оригінальний ідентифікатор при першому виклику. Для переформування функції треба змінити програму або очистити <i>fixId</i> у її оригінальний ідентифікатор.
 <pre style="white-space: pre-wrap;">
 var args = new Object();
 args.y = 0;
@@ -377,31 +374,31 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 </ul>
 <p>Функції об'єкту контролеру (SYS.DAQ["Modul"]["Controller"]):
 </p>
-<ul><li> <i>ElTp cfg(string nm)</i> — отримання значення конфігураційного поля <i>nm</i> об'єкту.</li>
-<li> <i>bool cfgSet(string nm, ElTp val)</i> — встановлення конфігураційного поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
-<li> <i>string name()</i> — ім'я контролеру.</li>
-<li> <i>string descr()</i> — опис контролеру.</li>
-<li> <i>string status()</i> — статус контролеру.</li>
-<li> <i>bool alarmSet(string mess, int lev = -5, string prm = "")</i> — встановлення/зняття порушення <i>mess</i> з рівнем <i>lev</i> (негативне для встановлення інакше зняття), для параметру <i>prm</i>. Функція формує порушення з категорією: <b>al{ModId}:{CntrId}[.{PrmId}]</b>, де:
+<ul><li> <i>ElTp cfg( string nm )</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — встановлює конфігураційне поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
+<li> <i>string name( )</i> — ім'я об'єкту контролера.</li>
+<li> <i>string descr( )</i> — опис об'єкту та контролеру.</li>
+<li> <i>string status( )</i> — статус контролеру.</li>
+<li> <i>bool alarmSet( string mess, int lev = -5, string prm = "" )</i> — встановлює/знімає порушення <i>mess</i> з рівнем <i>lev</i> (негативне для встановлення інакше зняття), для параметру <i>prm</i>. Функція формує порушення з категорією: <b>al{ModId}:{CntrId}[.{PrmId}]</b>, де:
 <ul><li> <i>ModId</i> — ідентифікатор модуля;</li>
-<li> <i>CntrId</i> — ідентифікатор контролеру;</li>
+<li> <i>CntrId</i> — ідентифікатор об'єкту контролера;</li>
 <li> <i>PrmId</i> — ідентифікатор параметру, з аргументу <i>prm</i>.</li></ul></li>
-<li> <i>bool enable(bool newSt = EVAL)</i> — отримання стану "Включений" або зміна його призначенням атрибуту <i>newSt</i>.</li>
-<li> <i>bool start(bool newSt = EVAL)</i> — отримання стану "Запущений" або зміна його призначенням атрибуту <i>newSt</i>.</li></ul>
-<p>Функції об'єкту параметру контролеру (SYS.DAQ["Modul"]["Controller"]["Parameter"]):
+<li> <i>bool enable( bool newSt = EVAL )</i> — отримує стан "Включений" або змінює його призначенням атрибуту <i>newSt</i>.</li>
+<li> <i>bool start( bool newSt = EVAL)</i> — отримує стан "Виконується" або змінює його призначенням атрибуту <i>newSt</i>.</li></ul>
+<p>Функції об'єкту параметру контролера (SYS.DAQ["Modul"]["Controller"]["Parameter"]):
 </p>
-<ul><li> <i>ElTp cfg(string nm)</i> — отримання значення конфігураційного поля <i>nm</i> об'єкту.</li>
-<li> <i>bool cfgSet(string nm, ElTp val)</i> — встановлення конфігураційного поля <i>nm</i> об'єкта у значення <i>val</i>.</li>
-<li> <i>TCntrNodeObj cntr()</i> — повертає об'єкт контролеру цього параметру, незалежно від вкладеності.</li></ul>
+<ul><li> <i>ElTp cfg( string nm )</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — встановлює конфігураційне поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
+<li> <i>TCntrNodeObj cntr( )</i> — повертає об'єкт контролеру цього параметру, незалежно від вкладеності.</li></ul>
 <p>Функції об'єкту атрибута параметра контролера (SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"]):
 </p>
-<ul><li> <i>ElTp get( int tm = 0, int utm = 0, bool sys = false )</i> — запит значення атрибуту на час <i>tm.utm</i> та ознакою системного доступу <i>sys</i>. Атрибути часу <i>tm.utm</i> є також виходами, відтак реальний час отриманого значення розміщується у них, якщо це змінні.</li>
-<li> <i>bool set( ElTp val, int tm = 0, int utm = 0, bool sys = false )</i> — запис значення <i>val</i> до атрибуту з міткою часу <i>tm:utm</i> та ознакою системного доступу <i>sys</i>.</li>
-<li> <i>TCntrNodeObj arch( )</i> — отримання об'єкту архіву, пов'язаного з цим атрибутом. У випадку відсутності пов'язаного архіву повертається "false".</li>
+<ul><li> <i>ElTp get( int tm = 0, int utm = 0, bool sys = false )</i> — запитує значення атрибуту на час <i>tm.utm</i> та ознакою системного доступу <i>sys</i>. Атрибути часу <i>tm.utm</i> є також виходами, відтак реальний час отриманого значення розміщується у них, якщо це змінні.</li>
+<li> <i>bool set( ElTp val, int tm = 0, int utm = 0, bool sys = false )</i> — записує значення <i>val</i> до атрибуту з міткою часу <i>tm:utm</i> та ознакою системного доступу <i>sys</i>.</li>
+<li> <i>TCntrNodeObj arch( )</i> — отримує об'єкт архіву, пов'язаний з цим атрибутом. У випадку відсутності пов'язаного архіву повертається "false".</li>
 <li> <i>string descr( )</i> — опис атрибуту.</li>
 <li> <i>int time( int utm )</i> — час останнього значення у секундах та мікросекундах у <i>utm</i>, якщо вказано та є змінною.</li>
-<li> <i>int len( )</i> — довжина поля.</li>
-<li> <i>int dec( )</i> — роздільна здатність для реального.</li>
+<li> <i>int len( )</i> — довжина поля у БД.</li>
+<li> <i>int dec( )</i> — роздільна здатність реального числа поля у БД.</li>
 <li> <i>int flg( )</i> — прапорці поля.</li>
 <li> <i>string def( )</i> — значення по замовченню.</li>
 <li> <i>string values( )</i> — перелік допустимих значень або діапазон.</li>
@@ -409,9 +406,10 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>string reserve( )</i> — резервна властивість значення.</li></ul>
 <p>Функції об'єкта бібліотеки шаблона (SYS.DAQ[tmplb_Lib"]) та шаблону (SYS.DAQ[tmplb_Lib"]["Tmpl"]) параметра контролеру:
 </p>
-<ul><li> <i>ElTp cfg(string nm)</i> — отримання значення конфігураційного поля <i>nm</i> об'єкту.</li>
-<li> <i>bool cfgSet(string nm, ElTp val)</i> — встановлення конфігураційного поля <i>nm</i> об'єкту у значення <i>val</i>.</li></ul>
+<ul><li> <i>ElTp cfg( string nm )</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — встановлює конфігураційне поля <i>nm</i> об'єкту у значення <i>val</i>.</li></ul>
 <h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.JavaLikeCalc"><span class="mw-headline-number">6.1</span> Модуль <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a></span></h4>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc_uk.png" title="Об&#039;єктна модель користувача модуля JavaLikeCalc."><img alt="Об&#039;єктна модель користувача модуля JavaLikeCalc." height="214" src="files/Oscada_UserOM_JavaLikeCalc_uk.png" width="223" /></a></div>
 <p><b>Об'єкт "Бібліотека функцій" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
 </p>
 <ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — виклик функції "<i>funcID</i>" бібліотеки "<i>Lfunc</i>". Повертає результат викликаної функції. Префікс "lib_" перед ідентифікатором бібліотеки обов'язковий!</li></ul>
@@ -427,12 +425,14 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>selValsNms</i> — два рядки зі значеннями у першому та їх іменами у другому (поділені ";").</li></ul></li>
 <li> <i>bool attrDel( string id )</i> [<span style="color: red">для увімкненого параметру стандартного типу</span>] — видалити атрибут <i>id</i>.</li></ul>
 <h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.BlockCalc"><span class="mw-headline-number">6.3</span> Модуль <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a></span></h4>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_BlockCalc_uk.png" title="Об&#039;єктна модель користувача модуля BlockCalc."><img alt="Об&#039;єктна модель користувача модуля BlockCalc." height="214" src="files/Oscada_UserOM_BlockCalc_uk.png" width="218" /></a></div>
 <p><b>Об'єкт "Блок" (SYS.DAQ.BlockCalc["cntr"]["blk_block"])</b>
 </p>
 <ul><li> <i>ElTp cfg(string nm)</i> — отримання значення конфігураційного поля <i>nm</i> об'єкта.</li>
 <li> <i>bool cfgSet(string nm, ElTp val)</i> — установка конфігураційного поля <i>nm</i> об'єкта у значення <i>val</i>.</li>
 <li> <i>TCntrNodeObj cntr()</i> — повертає об'єкт контролеру цього параметру, незалежно від вкладеності.</li></ul>
 <h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.ModBus"><span class="mw-headline-number">6.4</span> Модуль <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a></span></h4>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_ModBus_uk.png" title="Об&#039;єктна модель користувача модуля ModBus."><img alt="Об&#039;єктна модель користувача модуля ModBus." height="215" src="files/Oscada_UserOM_ModBus_uk.png" width="323" /></a></div>
 <p><b>Об'єкт "Контролер" [this.cntr()]</b>
 </p>
 <ul><li> <i>string messIO(string pdu)</i> — відправка PDU <i>pdu</i> через транспорт об'єкту контролеру за посередництвом ModBus протоколу. PDU результату запиту розташовується замість запиту у <i>pdu</i>, а помилка повертається у результаті функції.</li></ul>
@@ -445,70 +445,70 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>bool attrDel( string id )</i> [<span style="color: red">для включеного параметру логічного типу</span>] — видалити атрибут <i>id</i>.</li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D1.96.D0.B2.D0.B8.22_.28SYS.Archive.29"><span class="mw-headline-number">7</span> Підсистема "Архіви" (SYS.Archive)</span></h2>
+<h2><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D1.96.D0.B2.D0.B8-.D0.86.D1.81.D1.82.D0.BE.D1.80.D1.96.D1.8F.22_.28SYS.Archive.29"><span class="mw-headline-number">7</span> Підсистема "Архіви-Історія" (SYS.Archive)</span></h2>
 <p>Функції об'єкту підсистеми:
 </p>
-<ul><li> <i>Array messGet( int btm, int etm, string cat = "", int lev = 0, string arch = "", int upTm = 0 );</i> — запит системних повідомлень або порушень (lev &lt; 0) на час від <i>btm</i> по <i>etm</i> для категорії <i>cat</i>, рівня <i>lev</i> (-7...7) та архіваторів <i>arch</i> (поділені символом ';'; "" — буфер та архіватори; "&lt;buffer&gt;" — буфер; "{ArhMod}.{Arh}" — конкретний архіватор модуля). <i>upTm</i> встановлює обмеження тривалості операції у визначений час; негативне значення використовується як відносний час; менше ніж STD_INTERF_TM (5). Повертається час зупинки читання (атрибут "tm" масиву) та масив об'єктів повідомлень/порушень з властивостями:
+<ul><li> <i>Array messGet( int btm, int etm, string cat = "", int lev = 0, string arch = "", int upTm = 0 );</i> — запитує повідомлення програми або порушеня (lev &lt; 0) на час від <i>btm</i> по <i>etm</i> для категорії <i>cat</i>, рівня <i>lev</i> (-7...7) та архіваторів <i>arch</i> (поділені символом ';'; "" — буфер та архіватори; "&lt;buffer&gt;" — буфер; "{ArhMod}.{Arh}" — конкретний архіватор модуля). <i>upTm</i> встановлює обмеження тривалості операції у визначений час; негативне значення використовується як відносний час; менше ніж STD_INTERF_TM (5). Повертається час зупинки читання (атрибут "tm" масиву) та масив об'єктів повідомлень/порушень з властивостями:
 <ul><li> <i>tm</i> — час повідомлення, секунди;</li>
 <li> <i>utm</i> — час повідомлення, мікросекунди;</li>
 <li> <i>categ</i> — категорія повідомлення;</li>
 <li> <i>level</i> — рівень повідомлення;</li>
 <li> <i>mess</i> — текст повідомлення.</li></ul></li>
-<li> <i>bool messPut(int tm, int utm, string cat, int lev, string mess, string arch = "");</i> — запис повідомлення <i>mess</i> з категорією <i>cat</i>, рівнем <i>lev</i> (-7...7) та часом <i>tm.utm</i> до архіваторів <i>arch</i> (поділені символом ';') та/або перелік порушень.</li></ul>
+<li> <i>bool messPut( int tm, int utm, string cat, int lev, string mess, string arch = "" );</i> — записує повідомлення <i>mess</i> з категорією <i>cat</i>, рівнем <i>lev</i> (-7...7) та часом <i>tm.utm</i> до архіваторів <i>arch</i> (поділені символом ';') та/або перелік порушень.</li></ul>
 <p>Функції об'єкту архіватору повідомлень (SYS.Archive["mod_Modul"]["mess_Archivator"]):
 </p>
-<ul><li> <i>ElTp cfg(string nm)</i> — отримання значення конфігураційного поля <i>nm</i> об'єкту.</li>
-<li> <i>bool cfgSet(string nm, ElTp val)</i> — встановлення конфігураційного поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
-<li> <i>bool status()</i> — отримання статусу виконання архіватору.</li>
-<li> <i>int end()</i> — отримання часу закінчення даних архіватору.</li>
-<li> <i>int begin()</i> — отримання часу початку даних архіватору.</li></ul>
+<ul><li> <i>ElTp cfg( string nm )</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — встановлює конфігураційне поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
+<li> <i>bool status( )</i> — статус архіватору "Виконання".</li>
+<li> <i>int end( )</i> — час закінчення даних архіватору.</li>
+<li> <i>int begin( )</i> — час початку даних архіватору.</li></ul>
 <p>Функції об'єкту архіватору значень (SYS.Archive["val_Modul"]["val_Archivator"]):
 </p>
-<ul><li> <i>ElTp cfg(string nm)</i> — отримання значення конфігураційного поля <i>nm</i> об'єкту.</li>
-<li> <i>bool cfgSet(string nm, ElTp val)</i> — встановлення конфігураційного поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
-<li> <i>bool status()</i> — отримання статусу виконання архіватору.</li></ul>
+<ul><li> <i>ElTp cfg( string nm )</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — встановлює конфігураційне поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
+<li> <i>bool status( )</i> — статус архіватору "Виконання".</li></ul>
 <p><span id="SYS.Archive" title="#SYS.Archive">Функції об'єкту архіву (SYS.Archive["va_Archive"]):</span>
 </p>
-<ul><li> <i>ElTp cfg( string nm )</i> — отримання значення конфігураційного поля <i>nm</i> об'єкту.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — встановлення конфігураційного поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
-<li> <i>bool status( )</i> — отримання статусу виконання архіву.</li>
-<li> <i>int end( string arch = "" )</i> — отримання часу закінчення даних архіву для архіватору <i>arch</i>, у мікросекундах.</li>
-<li> <i>int begin( string arch = "" )</i> — отримання часу початку даних архіву для архіватору <i>arch</i>, у мікросекундах.</li>
-<li> <i>int period( string arch = "" )</i> — отримання періодичності даних архіву для архіватору <i>arch</i>, у мікросекундах.</li>
-<li> <i>TArrayObj archivatorList( )</i> — отримання переліку архіваторів, які використовують цей архів як джерело.</li>
-<li> <i>VarType getVal( int tm, bool up_ord = false, string arch = "" )</i> — отримання значення з архіву на час <i>tm</i>, підтягненням догори <i>up_ord</i> та архіватору <i>arch</i>:
+<ul><li> <i>ElTp cfg( string nm )</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — встановлює конфігураційне поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
+<li> <i>bool status( )</i> — статус архіву "Виконання".</li>
+<li> <i>int end( string arch = "" )</i> — час закінчення даних архіву для архіватору <i>arch</i>, у мікросекундах.</li>
+<li> <i>int begin( string arch = "" )</i> — час початку даних архіву для архіватору <i>arch</i>, у мікросекундах.</li>
+<li> <i>int period( string arch = "" )</i> — період даних архіву для архіватору <i>arch</i>, у мікросекундах.</li>
+<li> <i>TArrayObj archivatorList( )</i> — перелік архіваторів, які використовують цей архів як джерело.</li>
+<li> <i>VarType getVal( int tm, bool up_ord = false, string arch = "" )</i> — отримує значення з архіву на час <i>tm</i>, підтягненням догори <i>up_ord</i> та архіватору <i>arch</i>:
 <ul><li> <i>tm</i> — час запитаного значення, у мікросекундах, встановити у 0 для "end()"; цей атрибут є також виходом, відтак реальний час отриманого значення поміщається сюди, якщо це змінна;</li>
-<li> <i>up_ord</i> — підтягувати час запитаного значення догори мережі;</li>
+<li> <i>up_ord</i> — підтягувати час запитаного значення догори ґратки;</li>
 <li> <i>arch</i> — архіватор запиту, встановити у порожній рядок для перевірки всіх архіваторів, встановити у "&lt;buffer&gt;" для обробки тільки буферу.</li></ul></li>
-<li> <i>bool setVal( int tm, VarType vl, string arch = "" )</i> — встановити одне значення <i>vl</i> у архів на час <i>tm</i> та архіватор <i>arch</i>:
+<li> <i>bool setVal( int tm, VarType vl, string arch = "" )</i> — встановлює значення <i>vl</i> у архів на час <i>tm</i> та архіватор <i>arch</i>:
 <ul><li> <i>tm</i> — час встановленого значення, у мікросекундах;</li>
 <li> <i>vl</i> — значення;</li>
-<li> <i>arch</i> — архіватор встановлення. Встановити у порожній рядок для всіх архіваторів. Встановити у "&lt;buffer&gt;" для обробки тільки буферу.</li></ul></li></ul>
+<li> <i>arch</i> — архіватор встановлення, встановити у порожній рядок для всіх архіваторів, встановити у "&lt;buffer&gt;" для обробки тільки буферу.</li></ul></li></ul>
 <h2><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8.22_.28SYS.Transport.29"><span class="mw-headline-number">8</span> <span id="SYSTransport" title="#SYSTransport">Підсистема "Транспорти" (SYS.Transport)</span></span></h2>
 <p>Функції об'єкту вхідного транспорту (SYS.Transport["Modul"]["in_Transp"]):
 </p>
-<ul><li> <i>ElTp cfg(string nm)</i> — отримання значення конфігураційного поля <i>nm</i> об'єкту.</li>
-<li> <i>bool cfgSet(string nm, ElTp val)</i> — встановлення конфігураційного поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
-<li> <i>string status()</i> — статус транспорту.</li>
-<li> <i>string addr( string vl = "" )</i> — повертає адресу транспорту, встановлює у непорожне значення <i>vl</i>.</li>
-<li> <i>string writeTo(string sender, string mess)</i> — Відправлення повідомлення <i>mess</i> відправнику <i>sender</i>.</li>
-<li> <i>TArrayObj assTrsList()</i> — перелік пов'язаних вихідних транспортів з цим вхідним.</li></ul>
+<ul><li> <i>ElTp cfg( string nm )</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — встановлює конфігураційне поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
+<li> <i>string status()</i> — рядок статусу транспорту.</li>
+<li> <i>string addr( string vl = "" )</i> — адреса транспорту, встановлює у непорожнє значення <i>vl</i>.</li>
+<li> <i>string writeTo( string sender, string mess )</i> — відправляє повідомлення <i>mess</i> відправнику <i>sender</i>, як відповідь.</li>
+<li> <i>TArrayObj assTrsList( )</i> — перелік пов'язаних вихідних транспортів з цим вхідним.</li></ul>
 <p>Функції об'єкту вихідного транспорту (SYS.Transport["Modul"]["out_Transp"]):
 </p>
 <ul>
-<li><i>ElTp cfg(string nm)</i> — отримання значення конфігураційного поля <i>nm</i> об'єкту.</li>
-<li><i>bool cfgSet(string nm, ElTp val)</i> — встановлення конфігураційного поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
-<li><i>string status()</i> — статус транспорту.</li>
-<li><i>bool start( bool vl = &lt;EVAL&gt;, int tm = 0 )</i> — повертає статус виконання, запускає/зупиняє за <i>vl</i> (якщо не &lt;EVAL&gt;). Для запуску можна вказувати особливий таймаут <i>tm</i>.</li>
-<li><i>string addr( string vl = "" )</i> — повертає адресу транспорту, встановлює у непорожнє значення <i>vl</i>.</li>
-<li><i>string timings( string vl = "" )</i> — повертає таймінги транспорту, встановлює у непорожнє значення <i>vl</i>.</li>
-<li><i>string messIO( string mess, real timeOut = 0, int inBufLen = -1 );</i> — відправка повідомлення <i>mess</i> через транспорт з таймаутом очікування відповіді <i>timeOut</i> (у секундах) та читання відповіді (буферу) розміром <i>inBufLen</i> байт. У випадку нульового таймауту цей час береться з налаштувань вихідного транспорту. Негативний час <i>timeOut</i> (&lt; -1e-3) вимикає роботу транспорту у режимі запит/відповідь та дозволяє незалежно читати/писати у буфер ВВ, з таймаутом читання <i>timeOut</i>, у абсолютному значенні. Для негативного <i>inBufLen</i> розмір буферу встановлюється у STR_BUF_LEN(10000), а "0" вимикає читання взагалі.<br />
-<a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Якщо Ваш транспорт у відповідь на запит передбачає отримання даних частинами тоді використовуйте цю функцію у одному потоці для декількох пристроїв на одній шині-транспорті оскільки тут не існує способу блокування транспорту з користувацького API. Один потік це об'єкт контролеру підсистеми "Збір даних", а <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модуль "Протокол користувача"</a> блокує транспорт всередині перед виконанням своїх користувацьких процедур.
+<li><i>ElTp cfg(string nm)</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
+<li><i>bool cfgSet(string nm, ElTp val)</i> — встановлює конфігураційне поле <i>nm</i> об'єкту у значення <i>val</i>.</li>
+<li><i>string status()</i> — рядок статусу транспорту.</li>
+<li><i>bool start( bool vl = &lt;EVAL&gt;, int tm = 0 )</i> — повертає статус "Виконання", запускає/зупиняє за <i>vl</i> (якщо не &lt;EVAL&gt;). Для запуску можна вказувати особливий таймаут <i>tm</i>.</li>
+<li><i>string addr( string vl = "" )</i> — адреса транспорту, встановлює у непорожнє значення <i>vl</i>.</li>
+<li><i>string timings( string vl = "" )</i> — таймінги транспорту, встановлює у непорожнє значення <i>vl</i>.</li>
+<li><i>string messIO( string mess, real timeOut = 0, int inBufLen = -1 );</i> — відправляє повідомлення <i>mess</i> через транспорт з таймаутом очікування відповіді <i>timeOut</i> (у секундах) та читає відповідь (буфер) розміром <i>inBufLen</i> байт. У випадку нульового таймауту цей час береться з налаштувань вихідного транспорту. Негативний час <i>timeOut</i> (&lt; -1e-3) вимикає роботу транспорту у режимі запит/відповідь та дозволяє незалежно читати/писати у буфер ВВ, з таймаутом читання <i>timeOut</i>, у абсолютному значенні. Для негативного <i>inBufLen</i> розмір буферу встановлюється у STR_BUF_LEN(10000), а "0" вимикає читання взагалі.<br />
+<a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Якщо Ваш транспорт у відповідь на запит передбачає отримання даних частинами тоді використовуйте цю функцію у одному потоці для декількох пристроїв на одній шині-транспорті оскільки тут не існує способу блокування транспорту з користувацького API. Один потік це об'єкт контролеру підсистеми "Збір даних", а <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модуль "Протокол користувача"</a> блокує транспорт всередині, перед виконанням своїх користувацьких процедур.
 <pre style="white-space: pre-wrap;">
 rez = SYS.Transport.Serial.out_ttyUSB0.messIO(SYS.strFromCharCode(0x4B,0x00,0x37,0x40),0.2);
 //Wait for all the message tail by timeout and empty result
 while((trez=SYS.Transport.Serial.out_ttyUSB0.messIO("")).length) rez += trez; </pre></li>
-<li><i>string messIO( XMLNodeObj req, string prt );</i> — відправка запиту <i>req</i> до протоколу <i>prt</i> для здійснення сеансу зв'язку через транспорт за посередництвом протоколу.
+<li><i>string messIO( XMLNodeObj req, string prt );</i> — відправляє запити <i>req</i> до протоколу <i>prt</i> для здійснення сеансу зв'язку через транспорт за посередництвом протоколу.
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("TCP");
 req.setAttr("id","test").setAttr("reqTm",500).setAttr("node",1).setAttr("reqTry",2).setText(SYS.strFromCharCode(0x03,0x00,0x00,0x00,0x05));
@@ -532,6 +532,7 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 </p>
 <h2><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9A.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D1.96_.D1.96.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B8.22_.28SYS.UI.29"><span class="mw-headline-number">10</span> Підсистема "Користувацькі інтерфейси" (SYS.UI)</span></h2>
 <h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_UI.VCAEngine"><span class="mw-headline-number">10.1</span> Модуль <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></span></h3>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine.png" title="User object model of the module VCAEngine."><img alt="User object model of the module VCAEngine." height="238" src="files/Oscada_UserOM_VCAEngine.png" width="352" /></a></div>
 <p><b>Object "Session" ( this.ownerSess() )</b>
 </p>
 <ul><li> <i>string user( )</i> — current session user.</li>
@@ -592,9 +593,100 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <p><b>Об'єкт "Користувацька функція" (SYS.Special.FLibComplex1["funcID"])</b>
 </p>
 <ul><li> <i>ElTp call(ElTp prm1, ...)</i> — виклик даної функції з параметрами <i>&lt;prm{N}&gt;</i>. Повертає результат функції що викликається.</li></ul>
-<p><br /> 
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Link to DB API libraries ...
+<p><br />
 </p>
+<h2><span class="mw-headline" id=".D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B8_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D0.B9_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.87.D0.B0"><span class="mw-headline-number">12</span> Бібліотеки функцій користувача</span></h2>
+<p>На цей час OpenSCADA має бібліотеки функцій користувача, написані з використанням цього API користувача. Деякі з них розроблено для виключного використання з цього API. Всі бібліотеки користувача представлено у наступній таблиці:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Назва </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови
+</th></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices" title="Special:MyLanguage/Libs/User protocol devices">Main user protocol based library</a> </td>
+<td> 1.8 </td>
+<td> Free (GPL2 by default) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en, uk, ru
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Controllers" title="Special:MyLanguage/Libs/Controllers">Controllers library</a> </td>
+<td> 1.1 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Service_procedures" title="Special:MyLanguage/Libs/Service procedures">Service procedures library</a> </td>
+<td> 1.0 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Regulation_elements" title="Special:MyLanguage/Libs/Regulation elements">Regulation elements library</a> </td>
+<td> 1.0 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Documents" title="Special:MyLanguage/Libs/Documents">Library of preparation and data acquisition for reporting</a> </td>
+<td> 1.0 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Technological_apparatuses" title="Special:MyLanguage/Libs/Technological apparatuses">Library of models of technological apparatuses</a> </td>
+<td> 1.0 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en
+</td></tr>
+<tr>
+<td colspan="5"> <i>Бібліотеки графічних елементів OpenSCADA модуля <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></i>
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Electrical_elements" title="Special:MyLanguage/Libs/Electrical elements">Library of the electrical elements of the user's interface mnemonic schemes</a> </td>
+<td> 0.2 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">File:VcaElectroEls.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en, uk, ru
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_elements" title="Special:MyLanguage/Libs/Main elements">Main elements library of the user interface</a> </td>
+<td> 1.1 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">File:VcaBase.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en, uk, ru
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Mnemo_elements" title="Special:MyLanguage/Libs/Mnemo elements">Mnemonic elements library of the user interface</a> </td>
+<td> 0.5 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">File:VcaBase.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en, uk, ru
+</td></tr></table>
+<p><br />
+</p>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">13</span> Посилання</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_UserOM_uk.odg" title="File:Oscada UserOM uk.odg">Діаграма: Користувацька об'єктна модель ядра OpenSCADA.</a></li></ul>
+
 
 
 

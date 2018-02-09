@@ -231,10 +231,10 @@ Das Paket %{name}-LibDB.VCA enthaelt Visuelle Komponente in einer Bibliothek Dat
 So verwenden, verbinden Sie die Datei Datenbank SQLite LibsDB/vcaBase.db und LibsDB/vcaTest.db.
 
 %package Model.AGLKS
-Summary: Model "AGLKS" data bases and config (Demo: EN,RU,UK)
-Summary(ru_RU.UTF8): БД и конфигурация модели "АГЛКС" (Демо: EN,RU,UK)
-Summary(uk_UA.UTF8): БД та конфігурація моделі "АГЛКС" (Демо: EN,RU,UK)
-Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "AGLKS" (Demo: EN,RU,UK)
+Summary: Model "AGLKS" data bases and config (Demo: EN,UK,RU)
+Summary(ru_RU.UTF8): БД и конфигурация модели "АГЛКС" (Демо: EN,UK,RU)
+Summary(uk_UA.UTF8): БД та конфігурація моделі "АГЛКС" (Демо: EN,UK,RU)
+Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "AGLKS" (Demo: EN,UK,RU)
 Group: Graphics
 %if %_vendor == "alt"
 AutoReq: noshell
@@ -247,26 +247,26 @@ Requires: %name-UI.QTStarter %name-UI.QTCfg %name-UI.Vision %name-UI.WebCfgD %na
 Requires: %name-Special.FLibMath
 %description Model.AGLKS
 The %{name}-Model.AGLKS package includes model "AGLKS" data bases and config.
-The Model is used for OpenSCADA demo and allowed for English, Russian and Ukrainian languages.
+The Model is used for OpenSCADA demo and allowed for English, Ukrainian and Russian languages.
 For start use command <openscada_AGLKS>.
 %description Model.AGLKS -l ru_RU.UTF8
 Пакет %{name}-Model.AGLKS включает БД и конфигурацию модели "АГЛКС".
-Модель используется для демонстрации OpenSCADA и доступна на Английском, Русском и Украинском языках.
+Модель используется для демонстрации OpenSCADA и доступна на Английском, Украинском и Российском языках.
 Для старта используйте команду <openscada_AGLKS>.
 %description Model.AGLKS -l uk_UA.UTF8
 Пакет %{name}-Model.AGLKS включає БД та конфігурацію моделі "АГЛКС".
-Модель використано для демонстрації OpenSCADA та доступно на Англійській, Російській та Українській мовах.
+Модель використано для демонстрації OpenSCADA та доступно на Англійській, Українській та Російській мовах.
 Для старту використовуйте команду <openscada_AGLKS>.
 %description Model.AGLKS -l de_DE.UTF8
 Das Paket %{name}-Model.AGLKS enthaelt Datenbanken und Konfigurationsdateien Modell "AGLKS".
-Das Modell wird verwendet, um OpenSCADA demonstrieren und ist verfügbar in Englisch, Russisch und Ukrainisch.
+Das Modell wird verwendet, um OpenSCADA demonstrieren und ist verfügbar in Englisch, Ukrainisch und Russisch.
 Fuers Starten wird Kommando <openscada_AGLKS> benutzt.
 
 %package Model.Boiler
-Summary: Model "Boiler" data bases and config (EN,RU,UK)
-Summary(ru_RU.UTF8): БД и конфигурация модели "Котёл" (EN,RU,UK)
-Summary(uk_UA.UTF8): БД та конфігурація моделі "Котел" (EN,RU,UK)
-Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "Kessel" (EN,RU,UK)
+Summary: Model "Boiler" data bases and config (EN,UK,RU)
+Summary(ru_RU.UTF8): БД и конфигурация модели "Котёл" (EN,UK,RU)
+Summary(uk_UA.UTF8): БД та конфігурація моделі "Котел" (EN,UK,RU)
+Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "Kessel" (EN,UK,RU)
 Group: Graphics
 %if %_vendor == "alt"
 AutoReq: noshell
@@ -278,19 +278,19 @@ Requires: %name-UI.QTCfg %name-UI.QTStarter %name-UI.Vision %name-UI.WebCfgD %na
 Requires: %name-Special.FLibMath
 %description Model.Boiler
 The %{name}-Model.Boiler package model "Boiler" data bases and config.
-The Model is allowed for English, Russian and Ukrainian languages.
+The Model is allowed for English, Ukrainian and Russian languages.
 For start use command <openscada_Boiler>.
 %description Model.Boiler -l ru_RU.UTF8
 Пакет %{name}-Model.Boiler включает БД и конфигурацию модели "Котёл".
-Модель доступна доступна на Английском, Русском и Украинском языках.
+Модель доступна доступна на Английском, Украинском и Российском языках.
 Для старта используйте команду <openscada_Boiler>.
 %description Model.Boiler -l uk_UA.UTF8
 Пакет %{name}-Model.Boiler включає БД та конфігурацію моделі "Котел".
-Модель доступно на Англійській, Російській та Українській мовах.
+Модель доступно на Англійській, Українській та Російській мовах.
 Для старту використовуйте команду <openscada_Boiler>.
 %description Model.Boiler -l de_DE.UTF8
 Das Paket %{name}-Model.Boiler enthaelt Datenbanken und Konfigurationsdateien Modell "Kessel".
-Das Modell ist verfügbar in Englisch, Russisch und Ukrainisch.
+Das Modell ist verfügbar in Englisch, Ukrainisch und Russisch.
 Fuers Starten wird Kommando <openscada_Boiler> benutzt.
 
 %package plc

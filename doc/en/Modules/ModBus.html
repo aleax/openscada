@@ -94,6 +94,7 @@
 <li class="toclevel-2 tocsection-16"><a href="#User_programming_API"><span class="tocnumber">3.3</span> <span class="toctext">User programming API</span></a></li>
 </ul>
 </li>
+<li class="toclevel-1 tocsection-17"><a href="#Links"><span class="tocnumber">4</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -344,7 +345,9 @@ Where:
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:665px;"><a class="image" href="http://oscada.org/wiki/File:ModbusLog_prm_atr.png"><img class="thumbimage" height="462" src="../files/ModbusLog_prm_atr.png" width="663" /></a>  <div class="thumbcaption">Fig.13. Tab of the attributes of the logical parameter type.</div></div></div></div>
 <h3><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">3.3</span> User programming API</span></h3>
 <p>In view of the module support logical type parameters make sense to provide a number of functions the user API to call from a template of logical parameter.
-</p><p><b>The object "Controller" [this.cntr()]</b>
+</p>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_ModBus.png" title="User object model of the module ModBus."><img alt="User object model of the module ModBus." height="215" src="../files/Oscada_UserOM_ModBus.png" width="323" /></a></div>
+<p><b>The object "Controller" [this.cntr()]</b>
 </p>
 <ul><li> <i>string messIO(string pdu)</i> — sending <i>pdu</i> through the transport of controller object by means of ModBus protocol. PDU query result is placed instead of the query <i>pdu</i>, and the error returned by the function.</li></ul>
 <p><b>The object "Parameter" [this]</b>
@@ -354,6 +357,10 @@ Where:
 <li> <i>tp</i> — attribute type [boolean | integer | real | string | text | object] + selection mode [sel | seled] + read-only [ro];</li>
 <li> <i>selValsNms</i> — two lines with values in first and it's names in first (separated by ";").</li></ul></li>
 <li> <i>bool attrDel( string id )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — attribute <i>id</i> remove.</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">4</span> Links</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_UserOM_ModBus.odg" title="File:Oscada UserOM ModBus.odg">Diagram: User object model of the module ModBus.</a></li></ul>
 
 
 

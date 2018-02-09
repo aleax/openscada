@@ -72,6 +72,7 @@
 <li class="toclevel-1 tocsection-15"><a href="#User_functions_of_the_module"><span class="tocnumber">5</span> <span class="toctext">User functions of the module</span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#User_programming_API"><span class="tocnumber">6</span> <span class="toctext">User programming API</span></a></li>
 <li class="toclevel-1 tocsection-17"><a href="#Productivity"><span class="tocnumber">7</span> <span class="toctext"><span>Productivity</span></span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#Links"><span class="tocnumber">8</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -387,7 +388,9 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 </p>
 <h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">6</span> User programming API</span></h2>
 <p>Some objects of the module provides functions for user's programming.
-</p><p><b>The object "Functions library" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
+</p>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc.png" title="User object model of the module JavaLikeCalc."><img alt="User object model of the module JavaLikeCalc." height="214" src="../files/Oscada_UserOM_JavaLikeCalc.png" width="223" /></a></div>
+<p><b>The object "Functions library" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
 </p>
 <ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — call the library function "<i>funcID</i>" of library "<i>Lfunc</i>". Return result of the called function. The prefix "lib_" before the library identifier is required!</li></ul>
 <p><b>The object "User function" ( SYS.DAQ.JavaLikeCalc["lib_Lfunc"]["func"] )</b>
@@ -555,6 +558,8 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <td> By the dynamic accessing function with prepare the end object <b>tO = SYS.DAQ.BCM2835.pi2.pi2.fnc_put; for(i = 0; i &lt; 1000; i++) tO.call(18, true);</b> </td>
 <td> 14.3
 </td></tr></table>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">8</span> Links</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc.odg" title="File:Oscada UserOM JavaLikeCalc.odg">Diagram: User object model of the module JavaLikeCalc.</a></li></ul>
 
 
 

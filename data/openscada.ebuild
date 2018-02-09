@@ -141,7 +141,7 @@ src_install() {
     if use demo && use webvision && ! use vision ; then
 	insinto /etc
 	doins data/ModelsDB/AGLKS/oscada_AGLKS.xml
-	dobin data/ModelsDB/AGLKS/openscada_demo
+	dobin data/ModelsDB/AGLKS/openscada_AGLKS
 	insinto /var/spool/openscada/AGLKS
 	doins data/ModelsDB/AGLKS/*.db
 
@@ -158,7 +158,7 @@ src_install() {
     if use demo && use vision ; then
 	insinto /etc
 	doins data/ModelsDB/AGLKS/oscada_AGLKS.xml
-	dobin data/ModelsDB/AGLKS/openscada_demo
+	dobin data/ModelsDB/AGLKS/openscada_AGLKS
 	insinto /var/spool/openscada/AGLKS
 	doins data/ModelsDB/AGLKS/*.db
 

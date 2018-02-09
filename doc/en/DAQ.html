@@ -34,7 +34,7 @@
 <li class="toclevel-2 tocsection-5"><a href="#Passive_acquisition_mechanism"><span class="tocnumber">1.4</span> <span class="toctext">Passive acquisition mechanism</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-6"><a href="#Virtual_data_sources"><span class="tocnumber">2</span> <span class="toctext">Virtual data sources</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Virtual_data_sources"><span class="tocnumber">2</span> <span class="toctext"><span>Virtual data sources</span></span></a></li>
 <li class="toclevel-1 tocsection-7"><a href="#Logic_level_of_data_processing"><span class="tocnumber">3</span> <span class="toctext"><span>Logic level of data processing</span></span></a></li>
 <li class="toclevel-1 tocsection-8"><a href="#Redundancy_of_the_data_sources"><span class="tocnumber">4</span> <span class="toctext">Redundancy of the data sources</span></a></li>
 </ul>
@@ -128,7 +128,7 @@
 <li> object of the SCADA-system sends the request to the last value of the object of parameter's attribute <b>DAQParamAttribute::getVal()</b> and gets the locally stored value of the previous connection session of the data source.</li></ul>
 <p>In OpenSCADA this mechanism has not been yet used, but in principle there is the possibility of its realization in the system, for example, through a writing by the standard protocols "ModBus", "OPC-UA".
 </p>
-<h2><span class="mw-headline" id="Virtual_data_sources"><span class="mw-headline-number">2</span> Virtual data sources</span></h2>
+<h2><span class="mw-headline" id="Virtual_data_sources"><span class="mw-headline-number">2</span> <span id="Virtual" title="#Virtual">Virtual data sources</span></span></h2>
 <p>In addition to the physical data acquisition the function of the virtual data acquisition is also important. Virtual data are the data obtained inside the system both independently and on the basis of physical data. Practically the formation mechanisms of virtual data are implemented in conjunction with the mechanism of user computing. Among the industrial controllers and SCADA-systems the different programming languages are used. In the case of controllers such languages can be for example low-level languages (assemblers), but in recent years the high-level languages (C, Pascal and others) are increasingly used, as well as the formal languages of IEC 61131-3 (sequential function chart SFC, function block diagrams FBD, LD relay circuits and text ST, IL). In the case of SCADA-systems computings are often provided with the help of high-level programming languages and formal languages.
 </p><p>In OpenSCADA the programming interfaces and virtual data sources on the basis of different languages in separate modules of a subsystem "Data acquisition" can be implemented. At the current time the available modules of virtual calculators are:
 </p>

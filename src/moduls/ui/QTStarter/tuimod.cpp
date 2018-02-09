@@ -58,7 +58,7 @@
 #else
 #define SUB_TYPE	""
 #endif
-#define MOD_VER		"4.2.1"
+#define MOD_VER		"4.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -175,6 +175,12 @@ void TUIMod::postEnable( int flag )
     string argCom, argVl;
     for(int off = 0; (argCom=TSYS::strParse("sync:widgetcount:qws:style:stylesheet:session:reverse:graphicssystem:display:geometry",0,":",&off)).size(); )
 	if((argVl=SYS->cmdOpt(argCom)).size())	toQtArg(argCom.c_str(), argVl.c_str());
+
+    if(SYS->cmdOpt("showWin").empty()) {
+#if defined(Q_WS_MAEMO) || defined(__ANDROID__)
+	SYS->cmdOpt("showWin", "1");	//To maximize
+#endif
+    }
 
 #ifdef EN_QtMainThrd
     if(hideMode) return;
@@ -308,6 +314,7 @@ string TUIMod::optDescr( )
 
     snprintf(buf, sizeof(buf), _(
 	"======================= Module <%s:%s> options =======================\n"
+	"    --showWin=<0,1,2>   Windows show mode, initial and allowed to change from: 0-typical window, 1-maximized window, 2-fullscreen.\n"
 	"----------- Qt debug commandline options ----------\n"
 	"    --noX11             Prevent the launch of Qt, preferably for a clean console.\n"
 	"    --sync              Switch to Sync X11 for debugging.\n"
@@ -740,7 +747,11 @@ bool StApp::callQtModule( const string &nm )
     QMainWindow *new_wnd = ((&QtMod.at())->*openWindow)( );
     if(!new_wnd) return false;
 
-    new_wnd->show();
+    switch(s2i(SYS->cmdOpt("showWin"))) {
+	case 1:	new_wnd->showMaximized();	break;
+	case 2:	new_wnd->showFullScreen();	break;
+	default: new_wnd->show();
+    }
 
     return true;
 }
@@ -748,7 +759,12 @@ bool StApp::callQtModule( const string &nm )
 void StApp::startDialog( )
 {
     if(!stDlg) stDlg = new StartDialog();
-    stDlg->show();
+
+    switch(s2i(SYS->cmdOpt("showWin"))) {
+	case 1:	stDlg->showMaximized();	break;
+	case 2:	stDlg->showFullScreen();break;
+	default: stDlg->show();
+    }
 }
 
 //*************************************************

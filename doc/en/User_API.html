@@ -11,14 +11,6 @@
 </div>
 			<h1 id="firstHeading" lang="en">Documents/User API</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FUser+API&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/ru" title="Документация/API пользователя (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/uk" title="Документація/API користувача (100% translated)">українська</a></div></div>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> The translation checking and actualizing
-</td></tr></table>
-</div>
 <p><i>Author:</i> <a class="external text" href="http://wiki.oscada.org/RomanSavochenko" rel="nofollow noreferrer noopener" target="_blank">Roman Savochenko</a>
 </p>
 <dl><dd><dl><dd><a class="external text" href="http://wiki.oscada.org/MaximLysenko" rel="nofollow noreferrer noopener" target="_blank">Maxim Lysenko</a> (2012) — the page translation</dd></dl></dd></dl>
@@ -28,10 +20,10 @@
 <ul>
 <li class="toclevel-2 tocsection-2"><a href="#Array_object"><span class="tocnumber">1.1</span> <span class="toctext">Array object</span></a></li>
 <li class="toclevel-2 tocsection-3"><a href="#RegExp_object"><span class="tocnumber">1.2</span> <span class="toctext">RegExp object</span></a></li>
-<li class="toclevel-2 tocsection-4"><a href="#XMLNodeObj_object"><span class="tocnumber">1.3</span> <span class="toctext">XMLNodeObj object</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#XML_node-tag_object_.28XMLNodeObj.29"><span class="tocnumber">1.3</span> <span class="toctext">XML node-tag object (XMLNodeObj)</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-5"><a href="#System_.28SYS.29"><span class="tocnumber">2</span> <span class="toctext"><span>System (SYS)</span></span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Program-system_.28SYS.29"><span class="tocnumber">2</span> <span class="toctext"><span>Program-system (SYS)</span></span></a></li>
 <li class="toclevel-1 tocsection-6"><a href="#Any_object_.28TCntrNode.29_of_OpenSCADA_objects_tree_.28SYS..2A.29"><span class="tocnumber">3</span> <span class="toctext"><span>Any object (TCntrNode) of OpenSCADA objects tree (SYS.*)</span></span></a></li>
 <li class="toclevel-1 tocsection-7"><a href="#Subsystem_.22Security.22_.28SYS.Security.29"><span class="tocnumber">4</span> <span class="toctext">Subsystem "Security" (SYS.Security)</span></a></li>
 <li class="toclevel-1 tocsection-8"><a href="#Subsystem_.22DB.22_.28SYS.BD.29"><span class="tocnumber">5</span> <span class="toctext"><span>Subsystem "DB" (SYS.BD)</span></span></a></li>
@@ -43,7 +35,7 @@
 <li class="toclevel-2 tocsection-13"><a href="#Module_DAQ.ModBus"><span class="tocnumber">6.4</span> <span class="toctext">Module DAQ.ModBus</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-14"><a href="#Subsystem_.22Archives.22_.28SYS.Archive.29"><span class="tocnumber">7</span> <span class="toctext">Subsystem "Archives" (SYS.Archive)</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Subsystem_.22Archives-History.22_.28SYS.Archive.29"><span class="tocnumber">7</span> <span class="toctext">Subsystem "Archives-History" (SYS.Archive)</span></a></li>
 <li class="toclevel-1 tocsection-15"><a href="#Subsystem_.22Transports.22_.28SYS.Transport.29"><span class="tocnumber">8</span> <span class="toctext"><span>Subsystem "Transports" (SYS.Transport)</span></span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#Subsystem_.22Protocols.22_.28SYS.Protocols.29"><span class="tocnumber">9</span> <span class="toctext">Subsystem "Protocols" (SYS.Protocols)</span></a>
 <ul>
@@ -62,17 +54,22 @@
 <li class="toclevel-2 tocsection-23"><a href="#Module_Library_of_functions_of_compatibility_with_SCADA_Complex1_of_the_firm_DIYA_Ltd_.28Special.FLibComplex1.29"><span class="tocnumber">11.3</span> <span class="toctext">Module Library of functions of compatibility with SCADA Complex1 of the firm DIYA Ltd (Special.FLibComplex1)</span></a></li>
 </ul>
 </li>
+<li class="toclevel-1 tocsection-24"><a href="#Libraries_of_the_user_functions"><span class="tocnumber">12</span> <span class="toctext">Libraries of the user functions</span></a></li>
+<li class="toclevel-1 tocsection-25"><a href="#Links"><span class="tocnumber">13</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
-<p>Before starting of programming into OpenSCADA you must learn a structure of objects of the program from <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">the program manual of OpenSCADA</a>. From the document you also will see that you can program next parts of OpenSCADA as the user:
+<p>Before programming in OpenSCADA, you must examine the object structure of the program (Object Model) in <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">OpenSCADA Program Manual</a> and in Figure 1.
 </p>
-<ul><li> <a class="external" href="http://oscada.org/wiki/Documents/DAQ#Virtual_data_sources" title="Documents/DAQ">Logical level sources of the subsystem "DAQ"</a>.</li>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 1. User object model of the core OpenSCADA.</div></div></div></div>
+<p>From the document you will see that you can program next parts of OpenSCADA as the user:
+</p>
+<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#Virtual" title="Special:MyLanguage/Documents/DAQ">Logical level sources of the subsystem "DAQ"</a>.</li>
 <li> Transport protocols allowed for user programming that is: <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">User protocol</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus nodes of the type "Data"</a>, <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">Web-interfaces from the user</a>, ...</li>
 <li> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">Visual Control Area (VCA)</a> in procedures of the widgets.</li></ul>
-<p>User programming API is the tree of OpenSCADA objects, every object of which can provide own list of properties and functions. Properties and functions of the objects can be used by the user in procedures on the languages of user programming of OpenSCADA.
-</p><p>Currently OpenSCADA provides only one language of text programming that is <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> then you must learn it also before the starting! The entry point for access to the objects of OpenSCADA from user programming language JavaLikeCalc is the reserved word "SYS" of the root OpenSCADA object. For example, to access the function of outgoing transport you should write: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
-</p><p>API of the objects provided by the modules is described in the own documentation of the modules.
+<p>User programming API is the tree of the OpenSCADA objects (Fig.1), every object of which can provide own list of properties and functions. Properties and functions of the objects can be used by the user in procedures on the languages of the user programming of OpenSCADA.
+</p><p>Currently OpenSCADA provides only one language of the text programming — <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> then you must learn it also before the starting! The entry point for access to the objects of OpenSCADA (Fig.1) from the user programming language JavaLikeCalc is the reserved word "SYS" of the root OpenSCADA object. For example, to access the function of outgoing transport you should write: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
+</p><p>API of the objects provided by the modules is described in the own documentation of the modules and here links to their are provided.
 </p>
 <h2><span class="mw-headline" id="System-wide_user_objects"><span class="mw-headline-number">1</span> System-wide user objects</span></h2>
 <p>JavaLikeCalc provides the data type "Object" support. The data type "Object" is an associated container of properties and functions. The properties can support data of fourth basic types and other objects. The access to properties is doing through the dot to object <i>obj.prop</i> and also by property placement into the rectangle brackets <i>obj["prop"]</i>. It is obvious that the first mechanism is static, while the second lets you to specify the name of the property through a variable. Object's properties removing you can perform by the operator "delete". Reading of an undefined property will return <b>EVAL</b>. Creating an object is carried by the keyword <i>new</i>: <b>varO = new Object()</b>. The basic definition of the object does not contain functions. Copying of an object is actually makes the reference to the original object. When you delete an object is carried out the reducing of the reference count, and when a reference count is set to zero then object is removed physically.
@@ -150,151 +147,151 @@ rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // r
 <p><br />
 </p>
 <h3><span class="mw-headline" id="Array_object"><span class="mw-headline-number">1.1</span> Array object</span></h3>
-<p>Peculiarity of the array is that it works with the properties like with the indexes, and complete their naming if senseless, and hence the mechanism of addressing is available only by the conclusion of the index in square brackets "<b>arr[1]</b>". Array stores the properties in its own container of one-dimensional array. Digital properties of the array are used to access directly to the array, and the characters work as object properties.
+<p>Peculiarity of the array is that it works with the properties like with the indexes, and complete their naming if senseless, and hence the mechanism of addressing is available only by the conclusion of the index in square brackets "<b>arr[1]</b>". Array stores the properties in its own container of one-dimensional array. Digital properties of the array are used to access directly to the array, and the character ones work as the object properties.
 </p><p>Array provides the special property "length" to get the array size "<b>var = arr.length;</b>". Also array provides the following functions:
 </p>
-<ul><li> <i>string join( string sep = "," )</i>, <i>string toString( string sep = "," )</i>, <i>string valueOf( string sep = "," )</i> — Returns the string with the array elements separated by <i>sep</i> or the character ','.</li>
-<li> <i>Array concat( Array arr );</i> — Adds to the initial array the elements of the <i>arr</i> array. Returns the initial array with changes.</li>
-<li> <i>int push( ElTp var, ... );</i> — Places the element(s) <i>var</i> to the end of the array, as to the stack. Returns the new array size.</li>
-<li> <i>ElTp pop( );</i> — Deleting of the last element of the array and return of its value, as from the stack.</li>
-<li> <i>Array reverse( );</i> — Changing the order of the elements of the array. Returns the initial array with changes.</li>
-<li> <i>ElTp shift( );</i> — The shift of the array to the top. The first element is removed and its value is returned.</li>
-<li> <i>int unshift( ElTp var, ... );</i> — Shift element(s) <i>var</i> to the array. The first element to the 0, second to the 1 and so on.</li>
-<li> <i>Array slice( int beg, int end );</i> — Returns an array fragment from <i>beg</i> to <i>end</i> (exclude). If the value of beginning or end is negative, then the count is made from the end of the array. If the end is not specified, then the end is the end of the array.</li>
-<li> <i>Array splice( int beg, int remN, ElTp val1, ElTp val2, ... );</i> — Inserts, deletes or replaces the elements of the array. Returns the removed elements array. Firstly it is made the removing of elements from the position <i>beg</i> and in the quantity of <i>remN</i>, and then the values <i>val1</i> are inserted and so on, beginning from the position <i>beg</i>.</li>
-<li> <i>Array sort( );</i> — Sort array elements in lexicographical order.</li></ul>
+<ul><li> <i>string join( string sep = "," )</i>, <i>string toString( string sep = "," )</i>, <i>string valueOf( string sep = "," )</i> — returns the string with the array elements separated by <i>sep</i> or the character ','.</li>
+<li> <i>Array concat( Array arr );</i> — adds to the initial array the elements of the <i>arr</i> array. Returns the initial array with changes.</li>
+<li> <i>int push( ElTp var, ... );</i> — places the element(s) <i>var</i> to the end of the array, as to the stack. Returns the new array size.</li>
+<li> <i>ElTp pop( );</i> — deletes of the last element of the array and returns of its value, as from the stack.</li>
+<li> <i>Array reverse( );</i> — changes the order of the elements of the array. Returns the initial array with the changes.</li>
+<li> <i>ElTp shift( );</i> — shifts of the array to the top. The first element is removed and its value is returned.</li>
+<li> <i>int unshift( ElTp var, ... );</i> — shifts element(s) <i>var</i> to the array. The first element to the 0, second to the 1 and so on.</li>
+<li> <i>Array slice( int beg, int end );</i> — returns an array fragment from <i>beg</i> to <i>end</i> (exclude). If the value of beginning or end is negative, then the count is made from the end of the array. If the end is not specified, then the end is the end of the array.</li>
+<li> <i>Array splice( int beg, int remN, ElTp val1, ElTp val2, ... );</i> — inserts, deletes or replaces the elements of the array. Returns the removed elements array. Firstly it is made the removing of elements from the position <i>beg</i> and in the quantity of <i>remN</i>, and then the values <i>val1</i> are inserted and so on, beginning from the position <i>beg</i>.</li>
+<li> <i>Array sort( );</i> — sorts array elements in the lexicographical order.</li></ul>
 <h3><span class="mw-headline" id="RegExp_object"><span class="mw-headline-number">1.2</span> RegExp object</span></h3>
-<p>Object for work with regular expressions, based on the library PCRE. In the global search set object attribute "lastIndex", which allows you to continue searching for the next function call. In the case of an unsuccessful search for the attribute "lastIndex" reset to zero.
-</p><p>As arguments passed to create the object put string with the text of regular expression and flags as a string of characters:
+<p>Object of work with the regular expressions, based on the library PCRE. In the global search sets object attribute "lastIndex", which allows you to continue the searching at the next function call. In the case of an unsuccessful search the attribute "lastIndex" resets to zero.
+</p><p>As arguments for creating the object, a string with regular expression text and a flags box in the form of a character string is passed:
 </p>
 <ul><li> 'g' — global match mode;</li>
 <li> 'i' — case insensitive match mode;</li>
 <li> 'm' — multi-line match mode;</li>
-<li> 'u' — UTF-8 symbols force for other locales;</li>
-<li> 'p' — expressions test by typical template with key symbols: '?', '*' and '\'.</li></ul>
-<p>Object's properties:
+<li> 'u' — compulsion for UTF-8 characters resolution, for other locales;</li>
+<li> 'p' — testing the expression by the usual template rule with the key characters: '?', '*' and '\'.</li></ul>
+<p>Object properties:
 </p>
-<ul><li> <i>source</i> — Original regular expression pattern, read-only.</li>
-<li> <i>global</i> — Global match flag, read-only.</li>
-<li> <i>ignoreCase</i> — Ignore case flag, read-only.</li>
-<li> <i>multiline</i> — Multiline search, read-only.</li>
-<li> <i>UTF8</i> — UTF-8 symbols allowed.</li>
-<li> <i>lastIndex</i> — Index of a character of the substring from the last search. Used in global mode for match continue, at next call.</li></ul>
-<p>Object's functions:
+<ul><li> <i>source</i> — original pattern of the regular expression, read-only.</li>
+<li> <i>global</i> — flag of the global matching, read-only.</li>
+<li> <i>ignoreCase</i> — flag of disabling of the case sensitivity, read-only.</li>
+<li> <i>multiline</i> — flag of the multiline searching, read-only.</li>
+<li> <i>UTF8</i> — flag of using UTF-8 characters, read-only.</li>
+<li> <i>lastIndex</i> — index of a character of the substring from the last search. Used in the global mode to continue the match, at next call.</li></ul>
+<p>Object functions:
 </p>
 <ul>
-<li><i>Array exec( string val );</i> — Call match for string <i>val</i>. Return found substring (0) and subexpressions (&gt;0) in array. Set attribute "index" of the array to matched substring position. Set attribute "input" of array to source string.
+<li><i>Array exec( string val );</i> — calls match for string <i>val</i>. Returns found sub-string (0) and sub-expressions (&gt;0) in the array. Sets attribute "index" of the array to the matched substring position. Sets the attribute "input" of the array to the source string.
 <pre style="white-space: pre-wrap;">
 var re = new RegExp("(\\d\\d)[-/](\\d\\d)[-/](\\d\\d(?:\\d\\d)?)","");
 var rez = re.exec("12/30/1969");
 var month = rez[1];
 var day = rez[2];
 var year = rez[3]; </pre></li>
-<li><i>bool test( string val );</i> — Return "true" for match substring in <i>val</i>.
+<li><i>bool test( string val );</i> — returns "true" for the match sub-string in <i>val</i>.
 <pre style="white-space: pre-wrap;">
 var re = new RegExp("(\\d\\d)[-/](\\d\\d)[-/](\\d\\d(?:\\d\\d)?)","");
 var OK = re.test("12/30/1969"); </pre></li>
 </ul>
-<h3><span class="mw-headline" id="XMLNodeObj_object"><span class="mw-headline-number">1.3</span> XMLNodeObj object</span></h3>
+<h3><span class="mw-headline" id="XML_node-tag_object_.28XMLNodeObj.29"><span class="mw-headline-number">1.3</span> XML node-tag object (XMLNodeObj)</span></h3>
 <p>Functions:
 </p>
-<ul><li> <i>string name( )</i> — The name of the node, XML-tag.</li>
-<li> <i>string text( bool full = false )</i> — The text of the node, contents of the XML-tag. Set <i>full</i> for get combined text all included nodes.</li>
-<li> <i>string attr( string id )</i> — The value of the node's attribute <i>id</i>.</li>
-<li> <i>XMLNodeObj setName( string vl )</i> — Setting of the node's name to <i>vl</i>. Returns the current node.</li>
-<li> <i>XMLNodeObj setText( string vl )</i> — Setting of the node's text to <i>vl</i>. Returns the current node.</li>
-<li> <i>XMLNodeObj setAttr( string id, string vl )</i> — Setting the attribute <i>id</i> to the value <i>vl</i>. Returns the current node.</li>
-<li> <i>XMLNodeObj clear( bool full = false )</i> — Clear the node for the childs remove, text and attributes for <i>full</i>.</li>
-<li> <i>int childSize( )</i> — Quantity of the embedded nodes.</li>
-<li> <i>XMLNodeObj childAdd( ElTp no = XMLNodeObj ); XMLNodeObj childAdd( string no )</i> — Addition of the object <i>no</i> as the embedded one. <i>no</i> may be the direct object-result of the function "SYS.XMLNode()", and the string with the name of the new tag. Returns the embedded node.</li>
-<li> <i>XMLNodeObj childIns( int id, ElTp no = XMLNodeObj ); XMLNodeObj childIns( int id, string no )</i> — Insert of the object <i>no</i> as the embedded one to the position <i>id</i>. <i>no</i> may be the direct object-result of the function "SYS.XMLNode()", and the string with the name of the new tag. Returns the embedded node.</li>
-<li> <i>XMLNodeObj childDel( int id )</i> — Deleting the included node from the position <i>id</i>. Returns the current node.</li>
-<li> <i>XMLNodeObj childGet( int id )</i> — Getting the included node in the position <i>id</i>.</li>
-<li> <i>XMLNodeObj childGet( string name, int num = 0 )</i> — Getting the included node with tag <i>name</i> and position number <i>num</i>.</li>
-<li> <i>XMLNodeObj parent( )</i> — Get parent node.</li>
-<li> <i>string load( string str, bool file = false, int flg = 0, string cp = "UTF-8" )</i> — Loading the XML from the string <i>str</i> or from the file with the path in <i>str</i> if the <i>file</i> "true", with source encoding <i>cp</i>. <i>flg</i> — loading flags:</li></ul>
+<ul><li> <i>string name( )</i> — the name of the node, XML-tag.</li>
+<li> <i>string text( bool full = false )</i> — the text of the node, contents of the XML-tag. Set <i>full</i> for get the combined text of all included nodes.</li>
+<li> <i>string attr( string id )</i> — the value of the node attribute <i>id</i>.</li>
+<li> <i>XMLNodeObj setName( string vl )</i> — sets of the node name to <i>vl</i>. Returns the current node.</li>
+<li> <i>XMLNodeObj setText( string vl )</i> — sets of the node text to <i>vl</i>. Returns the current node.</li>
+<li> <i>XMLNodeObj setAttr( string id, string vl )</i> — sets the attribute <i>id</i> to the value <i>vl</i>. Returns the current node.</li>
+<li> <i>XMLNodeObj clear( bool full = false )</i> — clears the node for the childs, removes the text and attributes for <i>full</i>.</li>
+<li> <i>int childSize( )</i> — quantity of the included nodes.</li>
+<li> <i>XMLNodeObj childAdd( ElTp no = XMLNodeObj ); XMLNodeObj childAdd( string no )</i> — addition of the object <i>no</i> as the included one. <i>no</i> may be the direct object-result of the function "SYS.XMLNode()", and the string with the name of a new tag. Returns the included node.</li>
+<li> <i>XMLNodeObj childIns( int id, ElTp no = XMLNodeObj ); XMLNodeObj childIns( int id, string no )</i> — insert of the object <i>no</i> as the included one to the position <i>id</i>. <i>no</i> may be the direct object-result of the function "SYS.XMLNode()", and the string with the name of a new tag. Returns the embedded node.</li>
+<li> <i>XMLNodeObj childDel( int id )</i> — deletes the included node from the position <i>id</i>. Returns the current node.</li>
+<li> <i>XMLNodeObj childGet( int id )</i> — gets the included node in the position <i>id</i>.</li>
+<li> <i>XMLNodeObj childGet( string name, int num = 0 )</i> — gets the included node with the tag <i>name</i> and the position number <i>num</i>.</li>
+<li> <i>XMLNodeObj parent( )</i> — gets the parent node.</li>
+<li> <i>string load( string str, bool file = false, int flg = 0, string cp = "UTF-8" )</i> — loads the XML from the string <i>str</i> or from the file with the path in <i>str</i> if the <i>file</i> equal "true", with the source encoding <i>cp</i>. Where <i>flg</i> — loading flags:</li></ul>
 <dl><dd><dl><dd>0x01 — full loading, with texts and comments blocks into special nodes;</dd>
-<dd>0x02 — no remove spaces for begin and end tag's text.</dd></dl></dd></dl>
-<ul><li> <i>string save( int flg = 0, string path = "", string cp = "UTF-8" )</i> — Saving the XML tree to the string or to the file <i>path</i> with the formatting flags <i>flg</i> and target encoding <i>cp</i>. Returns the XML text or the error code. The following formatting options <i>flg</i> are provided:</li></ul>
-<dl><dd><dl><dd>0x01 — interrupt the string before the opening tag;</dd>
-<dd>0x02 — interrupt the string after the opening tag;</dd>
-<dd>0x04 — interrupt the string after a closing tag;</dd>
-<dd>0x08 — interrupt the string after the text;</dd>
-<dd>0x10 — interrupt the string after the instruction;</dd>
-<dd>0x1E — interrupt the string after all;</dd>
-<dd>0x20 — insert standard XML-header;</dd>
-<dd>0x40 — insert standard XHTML-header;</dd>
-<dd>0x80 — clean service tags: &lt;??&gt;, &lt;!-- --&gt;;</dd>
-<dd>0x100 — miss for tag's name encoding;</dd>
-<dd>0x200 — miss for attribute's name encoding.</dd></dl></dd></dl>
-<ul><li> <i>XMLNodeObj getElementBy( string val, string attr = "id" )</i> — get element from the tree by attribute <i>attr</i> value <i>val</i>.</li>
-<li> <i>TArrayObj&lt;XMLNodeObj&gt; getElementsBy( string tag, string attrVal = "", string attr = "id" )</i> — get elements array from the tree by <i>tag</i> (empty for all) and attribute <i>attr</i> value <i>attrVal</i> (empty for pass).</li></ul>
-<h2><span class="mw-headline" id="System_.28SYS.29"><span class="mw-headline-number">2</span> <span id="SYS" title="#SYS">System (SYS)</span></span></h2>
+<dd>0x02 — does not remove spaces from the begin and end of the tag text.</dd></dl></dd></dl>
+<ul><li> <i>string save( int flg = 0, string path = "", string cp = "UTF-8" )</i> — saves the XML tree to the string or to the file <i>path</i> with the formatting flags <i>flg</i> and target encoding <i>cp</i>. Returns the XML text or the error code. The following formatting options <i>flg</i> are provided:</li></ul>
+<dl><dd><dl><dd>0x01 — end line before the opening tag;</dd>
+<dd>0x02 — end line after the opening tag;</dd>
+<dd>0x04 — end line after the closing tag;</dd>
+<dd>0x08 — end line after the text;</dd>
+<dd>0x10 — end line after the instruction;</dd>
+<dd>0x1E — end line after all ones;</dd>
+<dd>0x20 — inserts the standard XML-header;</dd>
+<dd>0x40 — inserts the standard XHTML-header;</dd>
+<dd>0x80 — cleans the service tags: &lt;??&gt;, &lt;!-- --&gt;;</dd>
+<dd>0x100 — does not encode the tag name;</dd>
+<dd>0x200 — does not encode the attribute.</dd></dl></dd></dl>
+<ul><li> <i>XMLNodeObj getElementBy( string val, string attr = "id" )</i> — gets an element from the tree by the attribute <i>attr</i> in value <i>val</i>.</li>
+<li> <i>TArrayObj&lt;XMLNodeObj&gt; getElementsBy( string tag, string attrVal = "", string attr = "id" )</i> — gets an elements array from the tree by the <i>tag</i> (empty for all) and attribute <i>attr</i> in value <i>attrVal</i> (empty for pass).</li></ul>
+<h2><span class="mw-headline" id="Program-system_.28SYS.29"><span class="mw-headline-number">2</span> <span id="SYS" title="#SYS">Program-system (SYS)</span></span></h2>
 <p>Object functions:
 </p>
 <ul>
-<li><i>{string|int} system( string cmd, bool noPipe = false );</i> — calls the console commands <i>cmd</i> of OS returning the result by the channel. If <i>noPipe</i> is set the return code is returned the the execution of the programs in the background ("sleep 5 &amp;") is possible. The function offers great opportunities to the OpenSCADA user by calling any system software, utilities and scripts, as well as by way of access to the huge volume of system data. For example the command "ls-l" returns the detailed contents of the working directory.</li>
-<li><i>string fileRead( string file );</i> — Return <i>file</i> content by string.</li>
-<li><i>int fileWrite( string file, string str, bool append = false );</i> — Write <i>str</i> to <i>file</i>, remove presented or <i>append</i>. Return wrote bytes count.</li>
-<li><i>int fileRemove( string file );</i> — Remove <i>file</i>. Return the removing result.</li>
-<li><i>int message( string cat, int level, string mess );</i> — formation of the system message <i>mess</i> with the category <i>cat</i>, level <i>level</i> (-7...7). The negative value of the level forms the alarms (Alarm).</li>
-<li><i>int messDebug( string cat, string mess ); int messInfo( string cat, string mess ); int messNote( string cat, string mess ); int messWarning( string cat, string mess ); int messErr( string cat, string mess ); int messCrit( string cat, string mess ); int messAlert( string cat, string mess ); int messEmerg( string cat, string mess );</i> — formation of the system message <i>mess</i> with the category <i>cat</i> and the appropriate level.</li>
-<li><i>XMLNodeObj XMLNode( string name = "" );</i> — creation of the XML node object with the name <i>name</i>.</li>
-<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — request of <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h919-1" rel="nofollow noreferrer noopener" target="_blank">the control interface</a> to the system via XML. The usual request is written as "<b>&lt;get path="/OPath/%2felem"/&gt;</b>". If the station <i>stat</i> is indicated to the request then to the external station will send one. The address into attribute "path" you can obtain into OpenSCADA configurator, namely into status line where the address appear at the mouse cursor point to configuring or information field. Examples for wide requests:<ul>
- <li>Reading value from the element (user "test" name):
+<li><i>{string|int} system( string cmd, bool noPipe = false );</i> — calls the console commands <i>cmd</i> of the OS returning the result by the channel. If <i>noPipe</i> is set then the callback code is returned and program can be started in the background ("sleep 5 &amp;"). The function provides OpenSCADA with a wide range of capabilities by calling any system programs, utilities, and scripts, as well as by providing them with access to a huge amount of system data. For example the command "ls-l" returns the detailed content of the working directory.</li>
+<li><i>string fileRead( string file );</i> — returns a string of the <i>file</i> content.</li>
+<li><i>int fileWrite( string file, string str, bool append = false );</i> — writes the string <i>str</i> to the <i>file</i>, removes presented one, at <i>append</i>. Returns the wrote bytes count.</li>
+<li><i>int fileRemove( string file );</i> — removes the <i>file</i>. Returns the removing result.</li>
+<li><i>int message( string cat, int level, string mess );</i> — forms of the system message <i>mess</i> with the category <i>cat</i>, level <i>level</i> (-7...7). The negative value of the level forms the alarms.</li>
+<li><i>int messDebug( string cat, string mess ); int messInfo( string cat, string mess ); int messNote( string cat, string mess ); int messWarning( string cat, string mess ); int messErr( string cat, string mess ); int messCrit( string cat, string mess ); int messAlert( string cat, string mess ); int messEmerg( string cat, string mess );</i> — forms of the system message <i>mess</i> with the category <i>cat</i> and the appropriate level by the name.</li>
+<li><i>XMLNodeObj XMLNode( string name = "" );</i> — creates of the XML node object with the <i>name</i>.</li>
+<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — sends of <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h919-1" rel="nofollow noreferrer noopener" target="_blank">the control interface</a> request to the program-system via XML. The usual request is written as <b>&lt;get path="/OPath/%2felem"/&gt;</b>. If the station <i>stat</i> is indicated into the request then the request will be send to this external station. The address into the attribute "path" you can obtain into an OpenSCADA configurator, that is into the status line where the address appear at the mouse cursor point to a field of configuration or information. Examples of common queries:<ul>
+ <li>Reading a value of the element (the user name "test"):
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_test/%2fprm%2fDESCR");
 SYS.cntrReq(req);
 idSt = req.text(); </pre></li>
- <li>Writing value to the element (user "test" name):
+ <li>Writing a value to the element (the user name "test"):
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("set").setAttr("path","/sub_Security/usr_test/%2fprm%2fDESCR").setText("New test user name");
 SYS.cntrReq(req); </pre></li>
- <li>Adding new node (user "test"):
+ <li>Adding a new node (the user "test"):
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("add").setAttr("path","/sub_Security/%2fbr%2fusr_").setText("test");
 SYS.cntrReq(req); </pre></li>
- <li>Deleting node (user "test"):
+ <li>Deleting a node (the user "test"):
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("del").setAttr("path","/sub_Security/%2fbr%2fusr_").setText("test");
 SYS.cntrReq(req); </pre></li>
- <li>Saving the node changes to DB (user "test"):
+ <li>Saving the node changes to DB (the user "test"):
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("save").setAttr("path","/sub_Security/usr_test/%2fobj");
 SYS.cntrReq(req); </pre></li>
- <li>Loading the node from DB (user "test"):
+ <li>Loading the node from DB (the user "test"):
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("load").setAttr("path","/sub_Security/usr_test/%2fobj");
 SYS.cntrReq(req); </pre></li>
 </ul></li>
-<li><i>int sleep( real tm, int ntm = 0 );</i> — put to sleep the execution thread on the <i>tm</i> seconds (precised up to nanoseconds) and <i>ntm</i> ns. The sleeping time you can set up to STD_INTERF_TM (5 seconds).</li>
+<li><i>int sleep( real tm, int ntm = 0 );</i> — puts the execution thread to sleep on the <i>tm</i> seconds (precised up to nanoseconds) and <i>ntm</i> nanoseconds. The sleeping time you can set up to STD_INTERF_TM (5 seconds).</li>
 <li><i>int time( int usec );</i> — returns the absolute time in seconds from the epoch of 1/1/1970 and the microseconds part into <i>usec</i> if specified.</li>
-<li><i>int utime( ); int mtime( );</i> — return absolute time in microseconds and milliseconds from the epoch of 1/1/1970.</li>
-<li><i>int {localtime|gmtime}( int fullsec, int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst );</i> — returns the full date in seconds (sec), minutes (min), hours (hour), days of the month (mday), month (month), year (year), days in the week (wday), days in the year (yday) and sign of summer time (isdst), based on the absolute time in seconds <i>fullsec</i> from the epoch 1.1.1970. <i>gmtime</i> return time into GMT(UTC).</li>
-<li><i>int {mktime|timegm}( int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst );</i> — the time forming since Epoch 1.1.1970 from separated seconds, minutes, hours, days, month etc. The values for separated time items can be set out from this typical range, that allow the function using for seek will correct and return the items values into typical range. <i>timegm</i> work into GMT(UTC) time.</li>
-<li><i>string {strftime|strftimegm}( int sec, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — Converts an absolute time <i>sec</i> to the string of the desired format <i>form</i>. Record of the format corresponds to the POSIX-function strftime. <i>strftimegm</i> return time into GMT(UTC).</li>
-<li><i>int {strptime|strptimegm}( string str, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — Returns the time in seconds from the epoch of 1/1/1970, based on the string record of time <i>str</i>, in accordance with the specified template <i>form</i>. For example the template "%Y-%m-%d&nbsp;%H:%M:%S" corresponds with the time "2006-08-08 11:21:55". Description of the template's format can be obtained from the documentation on POSIX-function "strptime". <i>strptimegm</i> work into GMT(UTC) time.</li>
-<li><i>int cron( string cronreq, int base = 0 );</i> — returns the time, planned in the format of the standard Cron <i>cronreq</i>, beginning from basic time <i>base</i> or from the current, if the basic is not specified.</li>
-<li><i>string strFromCharCode( int char1, int char2, int char3, ... );</i> — String creation from symbol's codes <i>char1</i>, <i>char2</i> ... <i>charN</i>.</li>
-<li><i>string strCodeConv( string src, string fromCP, string toCP );</i> — Encoding the text <i>src</i> from the encoding <i>fromCP</i> to <i>toCP</i>. If encoding is omitted (empty string), it is used inside.</li>
-<li><i>string strEncode( string src, string tp = "Bin", string opt1 = "" );</i> — String <i>src</i> encoding by the rule <i>tp</i> and the option <i>opt1</i>. Allowed rules:
-<dl><dd>"PathEl" — symbols '/' and '%' to "%2f" and "%25", respectively;</dd>
-<dd>"HttpURL" — symbols ' ', '\t', '%' and "&gt; 0x80" to "%20", "%09", "%25" and etc.;</dd>
-<dd>"HTML" — symbols of the HTML-entities '&gt;', '&lt;', '"', '&amp;', '\<i> to "&gt;", "&lt;", """ and etc.;</i></dd>
-<dd>"JavaScript" — symbol '\n' shielding "\\n";</dd>
-<dd>"SQL" — symbols shielding '\<i>, '\"', '`', '\\' or doubling of the listed symbols into </i>opt1<i>;</i></dd>
-<dd>"Custom" — set symbols into <i>opt1</i> to "%NN";</dd>
-<dd>"Base64" — same Base 64 binary encoding, into <i>opt1</i> sets line termination symbol(s) after 57 symbols;</dd>
+<li><i>int utime( ); int mtime( );</i> — returns the absolute time in microseconds and milliseconds from the epoch of 1/1/1970.</li>
+<li><i>int {localtime|gmtime}( int fullsec, int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst );</i> — returns the full date in seconds (sec), minutes (min), hours (hour), days of the month (mday), months (month), years (year), days in the week (wday), days in the year (yday) and sign of the summer time (isdst), based on the absolute time in seconds <i>fullsec</i> from the epoch 1/1/1970. <i>gmtime</i> returns time in GMT(UTC).</li>
+<li><i>int {mktime|timegm}( int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst );</i> — forms the time since Epoch 1/1/1970 from separated seconds, minutes, hours, days, month etc. The values for separated time items can be set out from this typical range, which allows you to use this function during checking, and as a result, units of time will be fixed and rotated in the normal range. <i>timegm</i> runs in time at GMT(UTC).</li>
+<li><i>string {strftime|strftimegm}( int sec, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — converts an absolute time <i>sec</i> to the string of the desired format <i>form</i>. Record of the format corresponds to the POSIX-function <i>strftime</i>. <i>strftimegm</i> returns time into GMT(UTC).</li>
+<li><i>int {strptime|strptimegm}( string str, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — returns the time in seconds from the epoch of 1/1/1970, based on the string record of time <i>str</i>, in accordance with the specified template <i>form</i>. For example the template "%Y-%m-%d&nbsp;%H:%M:%S" corresponds with the time "2006-08-08 11:21:55". Description of the template format can be obtained from the documentation on POSIX-function <i>strptime</i>. <i>strptimegm</i> works into GMT(UTC) time.</li>
+<li><i>int cron( string cronreq, int base = 0 );</i> — returns the time, planned in the format of the standard Cron, <i>cronreq</i>, beginning from the basic time <i>base</i> or current, if the basic is not specified.</li>
+<li><i>string strFromCharCode( int char1, int char2, int char3, ... );</i> — creates a string from symbol codes <i>char1</i>, <i>char2</i> ... <i>charN</i>.</li>
+<li><i>string strCodeConv( string src, string fromCP, string toCP );</i> — transcodes the text <i>src</i> from the encoding <i>fromCP</i> to <i>toCP</i>. If the encoding is omitted (empty string), it is used the internal one.</li>
+<li><i>string strEncode( string src, string tp = "Bin", string opt1 = "" );</i> — encodes the string <i>src</i> by the rule <i>tp</i> and option <i>opt1</i>. Allowed rules:
+<dl><dd>"PathEl" — symbols <b>[/%]</b> to "%2f" and "%25", respectively;</dd>
+<dd>"HttpURL" — symbols <b>[ \t%]</b> and "&gt; 0x80" to "%20", "%09", "%25" and etc.;</dd>
+<dd>"HTML" — symbols of the HTML-entities <b>[&gt;&lt;"&amp;']</b> to "&amp;gt;", "&amp;lt;", "&amp;quot;" and etc.;</dd>
+<dd>"JavaScript" — symbol '\n' shielding to "\\n";</dd>
+<dd>"SQL" — shielding of the symbols <b>['"`\]</b> by appending '\' or doubling of the listed symbols into <i>opt1</i>;</dd>
+<dd>"Custom" — symbols into <i>opt1</i> to the view "%NN";</dd>
+<dd>"Base64" — same Base 64 binary encoding, into <i>opt1</i> sets a line termination symbol(s) after 57 symbols;</dd>
 <dd>"FormatPrint" — symbol '%' to "%%";</dd>
-<dd>"OscdID" — almost all symbols like ' ', '/', '\\', '&amp;', '(' to '_';</dd>
-<dd>"Bin" — ASCII bytes list ("XX XX XX XX ...") to binary represent;</dd>
+<dd>"OscdID" — almost all symbols like <b>[ /\&amp;(]</b> to '_';</dd>
+<dd>"Bin" — ASCII bytes list ("XX XX XX XX ...") to the binary represent;</dd>
 <dd>"Reverse" — reversion the sequence;</dd>
-<dd>"ShieldSimb" — shielding symbols like '\a', '\b', ..., '\0NNN', '\xNN' to binary represent.</dd></dl>
+<dd>"ShieldSimb" — shielded symbols like '\a', '\b', ..., '\0NNN', '\xNN' to the binary represent.</dd></dl>
 </li>
-<li><i>string strDecode( string src, string tp = "Bin", string opt1 = "" );</i> — String <i>src</i> decoding by the rule <i>tp</i> and the option <i>opt1</i>. Allowed rules:
-<dl><dd>"PathEl", "HttpURL", "Custom" — decoding symbols like "%NN" to binary represent;</dd>
+<li><i>string strDecode( string src, string tp = "Bin", string opt1 = "" );</i> — decodes the string <i>src</i> by the rule <i>tp</i> and the option <i>opt1</i>. Allowed rules:
+<dl><dd>"PathEl", "HttpURL", "Custom" — symbols like "%NN" to the binary represent;</dd>
 <dd>"Base64" — same from Base 64;</dd>
-<dd>"Bin" — the binary string to ASCII bytes ("XX XX XX XX ..   A.b.c.."), <i>opt1</i> points to separator or "&lt;text&gt;" for enable the offset to the left and the text part to the right.</dd></dl>
+<dd>"Bin" — the binary string to ASCII bytes ("XX XX XX XX ..   A.b.c.."), <i>opt1</i> points to the separator or "&lt;text&gt;" for enable the offset to the left and the text part to the right.</dd></dl>
 </li></ul>
 <h2><span class="mw-headline" id="Any_object_.28TCntrNode.29_of_OpenSCADA_objects_tree_.28SYS..2A.29"><span class="mw-headline-number">3</span> <span id="TCntrNode" title="#TCntrNode">Any object (TCntrNode) of OpenSCADA objects tree (SYS.*)</span></span></h2>
 <p>Object functions:
@@ -305,31 +302,31 @@ SYS.cntrReq(req); </pre></li>
 <li> <i>string nodePath( string sep = "", bool from_root = true );</i> — Getting the path of the current node in the object tree OpenSCADA. One separator character is specified in <i>sep</i> to get the path through the separator, for example, "DAQ.ModBus.PLC1.P1.var", otherwise "/DAQ/ModBus/PLC1/P1/var". <i>from_root</i> indicates a need to form a path from the root, and without the Station ID.</li>
 <li> <i>int messSys( int level, string mess )</i> — Formation of the system message <i>mess</i> with the <i>level</i> with the node path as a category and with the human readable path before the message.</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Security.22_.28SYS.Security.29"><span class="mw-headline-number">4</span> Subsystem "Security" (SYS.Security)</span></h2>
-<p>The subsystem object's functions (SYS.Security):
+<p>Functions of the subsystem object (SYS.Security):
 </p>
-<ul><li> <i>int access( string user, int mode, string owner, string group, int access )</i> — Check for <i>user</i> access to resource what owned by <i>owner</i> and <i>group</i> and <i>access</i> for <i>mode</i>:</li></ul>
-<dl><dd><dl><dd><i>user</i> — user for access check;</dd>
+<ul><li> <i>int access( string user, int mode, string owner, string group, int access )</i> — checks for access of the <i>user</i> to resource which owned by the <i>owner</i> and <i>group</i> and for the <i>access</i> and <i>mode</i>:</li></ul>
+<dl><dd><dl><dd><i>user</i> — user of the access checking;</dd>
 <dd><i>mode</i> — access mode (4-R, 2-W, 1-X);</dd>
-<dd><i>owner</i> — resource owner;</dd>
-<dd><i>group</i> — resource group;</dd>
-<dd><i>access</i> — resource access mode (RWXRWXRWX — 0777).</dd></dl></dd></dl>
-<p>The user (SYS.Security["usr_User"]) object's functions:
+<dd><i>owner</i> — owner of the resource;</dd>
+<dd><i>group</i> — group of the resource;</dd>
+<dd><i>access</i> — access mode of the resource (RWXRWXRWX — 0777).</dd></dl></dd></dl>
+<p>Functions of the object "User" (SYS.Security["usr_{User}"]):
 </p>
-<ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
-<li> <i>Array groups( )</i> — groups list of the user</li></ul>
-<p>The group (SYS.Security["grp_Group"]) object's functions:
+<ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>Array groups( )</i> — returns the groups list of the user</li></ul>
+<p>Functions of the object "Users group" (SYS.Security["grp_{Group}"]):
 </p>
-<ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
-<li> <i>bool user( string nm )</i> — checking for user <i>nm</i> presence into the group.</li></ul>
+<ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool user( string nm )</i> — checks for the user <i>nm</i> presence into the group.</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22DB.22_.28SYS.BD.29"><span class="mw-headline-number">5</span> <span id="SYS.BD" title="#SYS.BD">Subsystem "DB" (SYS.BD)</span></span></h2>
-<p>DB object functions (SYS.BD["TypeDB"]["DB"]):
+<p>Functions of the database object (SYS.BD["TypeDB"]["DB"]):
 </p>
 <ul>
-<li><i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li><i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
-<li><i>Array SQLReq( string req, bool tr = EVAL );</i> — formation of the SQL-request to the DB, inside (<i>tr</i>=true), outside (<i>tr</i>=false) or no matter (<i>tr</i>=EVAL) to transaction. At an error the result's property "err" sets to the error value.
+<li><i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
+<li><i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li><i>Array SQLReq( string req, bool tr = EVAL );</i> — forms of the SQL-request to the DB, inside (<i>tr</i>=true), outside (<i>tr</i>=false) or no matter (<i>tr</i>=EVAL) to the transaction. At an error the result property "err" sets to the error value.
 <pre style="white-space: pre-wrap;">
 DBTbl = SYS.BD.MySQL.GenDB.SQLReq("SELECT * from DB;");
 if(DBTbl.err.length) SYS.messInfo("TEST DB","Error: "+DBTbl.err);
@@ -341,19 +338,19 @@ else for(var iRw = 0; iRw &lt; DBTbl.length; iRw++) {
   if(iRw) SYS.messInfo("TEST DB", "Row "+iRw+": 'NAME'"+DBTbl[iRw]["NAME"]);
 } </pre></li>
 </ul>
-<p>Table object functions (SYS.BD["TypeDB"]["DB"]["Table"]):
+<p>Functions of the table object (SYS.BD["TypeDB"]["DB"]["Table"]):
 </p>
 <ul>
-<li><i>XMLNodeObj fieldStruct( );</i> — The table structure get in XML-node "field" with child node-columns "<b>&lt;RowId type="real" len="10.2" key="1" def="Default value"&gt;{Value}&lt;/RowId&gt;</b>", where:<ul>
+<li><i>XMLNodeObj fieldStruct( );</i> — gets the table structure in XML-node "field" with the child node-columns "<b>&lt;RowId type="real" len="10.2" key="1" def="Default value"&gt;{Value}&lt;/RowId&gt;</b>", where:<ul>
 <li>{RowId} — column identifier;</li>
 <li>{Value} — column value;</li>
-<li>type — value's type for column: <i>str</i> — string, <i>int</i> — integer, <i>real</i> — real and <i>bool</i> — boolean;</li>
-<li>len — value's length for column, in chars;</li>
-<li>key — the flag for key-column, and used for search by it value;</li>
-<li>def — default value for column.</li>
+<li>type — value type of the column: <i>str</i> — string, <i>int</i> — integer, <i>real</i> — real and <i>bool</i> — boolean;</li>
+<li>len — value length of the column, in chars;</li>
+<li>key — a sign that the column is the key, and the search is carried out according to its meaning;</li>
+<li>def — default value of the column.</li>
 </ul></li>
-<li><i>string fieldSeek( int row, XMLNodeObj fld );</i> — Seek field <i>row</i> of table. For success returned "1" else "0". On error case returned "0:Error".</li>
-<li><i>string fieldGet( XMLNodeObj fld );</i> — Field value request. On error case returned "0:Error".
+<li><i>string fieldSeek( int row, XMLNodeObj fld );</i> — seeks the field <i>row</i> of the table. For success returned "1" else "0". In case of error, returns "0: Error".</li>
+<li><i>string fieldGet( XMLNodeObj fld );</i> — requests the field value. In case of error, returns "0: Error".
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("field");
 req.childAdd("user").setAttr("type","str").setAttr("key","1").setText("root");
@@ -361,14 +358,14 @@ req.childAdd("id").setAttr("type","str").setAttr("key","1").setText("/Lang2CodeB
 req.childAdd("val").setAttr("type","str");
 SYS.BD.MySQL.GenDB.SYS.fieldGet(req);
 SYS.messDebug("TEST DB","Value: "+req.childGet(2).text());</pre></li>
-<li><i>string fieldSet( XMLNodeObj fld );</i> — Field set. On error case returned "0:Error".</li>
-<li><i>string fieldDel( XMLNodeObj fld );</i> — Field remove. On error case returned "0:Error".</li>
+<li><i>string fieldSet( XMLNodeObj fld );</i> — sets the field. In case of error, returns "0: Error".</li>
+<li><i>string fieldDel( XMLNodeObj fld );</i> — removes the field. In case of error, returns "0: Error".</li>
 </ul>
 <h2><span class="mw-headline" id="Subsystem_.22DAQ.22_.28SYS.DAQ.29"><span class="mw-headline-number">6</span> <span id="SYS.DAQ" title="#SYS.DAQ">Subsystem "DAQ" (SYS.DAQ)</span></span></h2>
-<p>Functions of subsystem's object (SYS.DAQ):
+<p>Functions of the subsystem object (SYS.DAQ):
 </p>
 <ul>
-<li><i>bool funcCall(string progLang, TVarObj args, string prog, string fixId = "");</i> — call function text <i>prog</i> with arguments <i>args</i> for program language <i>progLang</i> and with the function fixing identifier <i>fixId</i> (automatic if it is empty). Return "true" on well call. The fixed function differ from the automatic by it does not remove after execution and uses repeatedly by an address into <i>fixId</i>, which replaces that original identifier in first call. For the fixed function recreate you need change the program or clean up <i>fixId</i> by the function original id.
+<li><i>bool funcCall( string progLang, TVarObj args, string prog, string fixId = "" );</i> — executes the function text <i>prog</i> with the arguments <i>args</i> on the program language <i>progLang</i> and with the function fixing identifier <i>fixId</i> (automatic if it is empty). Returns "true" when it is executed correctly. The fixed function differ from the automatic one by it does not remove after execution and uses repeatedly by an address into <i>fixId</i>, which replaces that original identifier in first call. To recreate the function, you must change the program or clear the <i>fixId</i> in its original id.
 <pre style="white-space: pre-wrap;">
 var args = new Object();
 args.y = 0;
@@ -376,43 +373,44 @@ args.x = 123;
 SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",args,"y=2*x;");
 SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 </ul>
-<p>Functions of object of controller (SYS.DAQ["Modul"]["Controller"]):
+<p>Functions of the controller object (SYS.DAQ["Modul"]["Controller"]):
 </p>
-<ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
-<li> <i>string name( )</i> — controller name.</li>
-<li> <i>string descr( )</i> — controller description.</li>
-<li> <i>string status( )</i> — controller status.</li>
-<li> <i>bool alarmSet( string mess, int lev = -5, string prm = "" )</i> — set/remove of violations <i>mess</i> with the level <i>lev</i> (negative for remove otherwise for set), for the parameter <i>prm</i>. The function forming alarm with category: <b>al{ModId}:{CntrId}[.{PrmId}]</b>, where:
-<ul><li> <i>ModId</i> — the module identifier;</li>
-<li> <i>CntrId</i> — the controller identifier;</li>
-<li> <i>PrmId</i> — parameter identifier, from argument <i>prm</i>.</li></ul></li>
-<li> <i>bool enable( bool newSt = EVAL )</i> — get enable status or change it by argument <i>newSt</i> assign.</li>
-<li> <i>bool start( bool newSt = EVAL )</i> — get start status or change it by argument <i>newSt</i> assign.</li></ul>
-<p>Functions of object of controller's parameter (SYS.DAQ["Modul"]["Controller"]["Parameter"]):
+<ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>string name( )</i> — name of the controller object.</li>
+<li> <i>string descr( )</i> — description of the controller object and controller.</li>
+<li> <i>string status( )</i> — status of the controller.</li>
+<li> <i>bool alarmSet( string mess, int lev = -5, string prm = "" )</i> — sets/removes of the violations <i>mess</i> with the level <i>lev</i> (negative to remove otherwise to set), for the parameter <i>prm</i>. The function forms an alarm with the category: <b>al{ModId}:{CntrId}[.{PrmId}]</b>, where:
+<ul><li> <i>ModId</i> — identifier of the module;</li>
+<li> <i>CntrId</i> — identifier of the controller object;</li>
+<li> <i>PrmId</i> — parameter identifier, from the argument <i>prm</i>.</li></ul></li>
+<li> <i>bool enable( bool newSt = EVAL )</i> — gets the status "Enabled" or changes it by the argument <i>newSt</i> assign.</li>
+<li> <i>bool start( bool newSt = EVAL )</i> — gets the status "Running" or changes it by the argument <i>newSt</i> assign.</li></ul>
+<p>Functions of the parameter object of the controller (SYS.DAQ["Modul"]["Controller"]["Parameter"]):
 </p>
-<ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
-<li> <i>TCntrNodeObj cntr()</i> — return the object of controller for the parameter nesting independent.</li></ul>
-<p>Functions of object of atribute of controller's parameter (SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"]):
+<ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>TCntrNodeObj cntr( )</i> — returns the controller object regardless of the nesting parameters.</li></ul>
+<p>Functions of the attribute object of the parameter of the controller (SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"]):
 </p>
-<ul><li> <i>ElTp get( int tm = 0, int utm = 0, bool sys = false );</i> — get attribute value at time <i>tm.utm</i> and system access flag <i>sys</i>. The time attributes <i>tm.utm</i> is outputs also then real time of the gotten value also places here if their are variables.</li>
-<li> <i>bool set( ElTp val, int tm = 0, int utm = 0, bool sys = false );</i> — write value <i>val</i> to attribute with time label <i>tm.utm</i> and system access flag <i>sys</i>.</li>
-<li> <i>TCntrNodeObj arch( );</i> — gets the archive associated with this attribute. In case of absence the associated archive returns "false".</li>
-<li> <i>string descr( );</i> — get attribute description.</li>
-<li> <i>int time( int utm );</i> — time of the last value of the attribute in seconds and microseconds into <i>utm</i>, if it pointed and a variable.</li>
-<li> <i>int len( );</i> — field length.</li>
-<li> <i>int dec( );</i> — float resolution.</li>
-<li> <i>int flg( );</i> — field's flags.</li>
+<ul><li> <i>ElTp get( int tm = 0, int utm = 0, bool sys = false );</i> — gets the attribute value at the time <i>tm.utm</i> and system access flag <i>sys</i>. The time attributes <i>tm.utm</i> is outputs also then real time of the gotten value also places here if their are variables.</li>
+<li> <i>bool set( ElTp val, int tm = 0, int utm = 0, bool sys = false );</i> — writes the value <i>val</i> to the attribute with the time label <i>tm.utm</i> and system access flag <i>sys</i>.</li>
+<li> <i>TCntrNodeObj arch( );</i> — gets the archive associated with this attribute. Returns "false" in the case of absence the associated archive.</li>
+<li> <i>string descr( );</i> — description of the attribute.</li>
+<li> <i>int time( int utm );</i> — time of the last value of the attribute in seconds and microseconds into <i>utm</i>, if it is pointed and is a variable.</li>
+<li> <i>int len( );</i> — length of the field in DB.</li>
+<li> <i>int dec( );</i> — float resolution of the field in DB.</li>
+<li> <i>int flg( );</i> — flags of the field.</li>
 <li> <i>string def( );</i> — default value.</li>
 <li> <i>string values( );</i> — allowed values list or range.</li>
-<li> <i>string selNames( );</i> — names of allowed values list.</li>
-<li> <i>string reserve( );</i> — reserve string property value.</li></ul>
+<li> <i>string selNames( );</i> — names list of the allowed values.</li>
+<li> <i>string reserve( );</i> — reserve string property of the value.</li></ul>
 <p>Functions of object of templates library (SYS.DAQ[tmplb_Lib"]) and template (SYS.DAQ[tmplb_Lib"]["Tmpl"]) of controller's parameter:
 </p>
-<ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li></ul>
+<ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li></ul>
 <h3><span class="mw-headline" id="Module_DAQ.JavaLikeCalc"><span class="mw-headline-number">6.1</span> Module <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a></span></h3>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc.png" title="User object model of the module JavaLikeCalc."><img alt="User object model of the module JavaLikeCalc." height="214" src="files/Oscada_UserOM_JavaLikeCalc.png" width="223" /></a></div>
 <p><b>The object "Functions library" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
 </p>
 <ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — call the library function "<i>funcID</i>" of library "<i>Lfunc</i>". Return result of the called function. The prefix "lib_" before the library identifier is required!</li></ul>
@@ -428,12 +426,14 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>selValsNms</i> — two lines with values in first and it's names in first (separated by ";").</li></ul></li>
 <li> <i>bool attrDel( string id )</i> [<span style="color: red">for enabled parameter of the standard type</span>] — attribute <i>id</i> remove.</li></ul>
 <h3><span class="mw-headline" id="Module_DAQ.BlockCalc"><span class="mw-headline-number">6.3</span> Module <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a></span></h3>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_BlockCalc.png" title="User object model of the module BlockCalc."><img alt="User object model of the module BlockCalc." height="214" src="files/Oscada_UserOM_BlockCalc.png" width="218" /></a></div>
 <p><b>The object "Block" (SYS.DAQ.BlockCalc["cntr"]["blk_block"])</b>
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
 <li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
 <li> <i>TCntrNodeObj cntr( )</i> — return the object of controller for the parameter nesting independent.</li></ul>
 <h3><span class="mw-headline" id="Module_DAQ.ModBus"><span class="mw-headline-number">6.4</span> Module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a></span></h3>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_ModBus.png" title="User object model of the module ModBus."><img alt="User object model of the module ModBus." height="215" src="files/Oscada_UserOM_ModBus.png" width="323" /></a></div>
 <p><b>The object "Controller" [this.cntr()]</b>
 </p>
 <ul><li> <i>string messIO(string pdu)</i> — sending <i>pdu</i> through the transport of controller object by means of ModBus protocol. PDU query result is placed instead of the query <i>pdu</i>, and the error returned by the function.</li></ul>
@@ -446,70 +446,70 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>bool attrDel( string id )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — attribute <i>id</i> remove.</li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id="Subsystem_.22Archives.22_.28SYS.Archive.29"><span class="mw-headline-number">7</span> Subsystem "Archives" (SYS.Archive)</span></h2>
-<p>Functions of the subsystem's object:
+<h2><span class="mw-headline" id="Subsystem_.22Archives-History.22_.28SYS.Archive.29"><span class="mw-headline-number">7</span> Subsystem "Archives-History" (SYS.Archive)</span></h2>
+<p>Functions of the subsystem object:
 </p>
-<ul><li> <i>Array messGet( int btm, int etm, string cat = "", int lev = 0, string arch = "", int upTm = 0 );</i> — request of the system messages or alarms for the time from <i>btm</i> to <i>etm</i> for the category <i>cat</i>, level <i>lev</i> (-7...7) and archivators <i>arch</i> (separated by symbol ';'; "" — buffer and archivators; "&lt;buffer&gt;" — buffer; "{ArhMod}.{Arh}" — concrete archivator of the module). <i>upTm</i> sets the operation continuance limit to time; a negative value used as relative time; less to STD_INTERF_TM (5). Return time of stopping of the reading (attribute "tm" of the array) and array of the message's objects with preset attributes:
+<ul><li> <i>Array messGet( int btm, int etm, string cat = "", int lev = 0, string arch = "", int upTm = 0 );</i> — requests of the program messages or alarms for the time from <i>btm</i> to <i>etm</i> for the category <i>cat</i>, level <i>lev</i> (-7...7) and archivers <i>arch</i> (separated by the symbol ';'; "" — buffer and archivers; "&lt;buffer&gt;" — buffer; "{ArhMod}.{Arh}" — concrete archiver of the module). <i>upTm</i> sets the operation continuance limit to time; a negative value used as relative time; less to STD_INTERF_TM (5). Returns time of stopping of the reading (attribute "tm" of the array) and an array of the message objects with the preset attributes:
 <ul><li> <i>tm</i> — time of the message, seconds;</li>
 <li> <i>utm</i> — time of the message, microseconds;</li>
 <li> <i>categ</i> — category of the message;</li>
 <li> <i>level</i> — level of the message;</li>
 <li> <i>mess</i> — text of the message.</li></ul></li>
-<li> <i>bool messPut( int tm, int utm, string cat, int lev, string mess, string arch = "" );</i> — write message <i>mess</i> with category <i>cat</i>, level <i>lev</i> (-7...7) and time <i>tm.utm</i> to archivators <i>arch</i> (separated by symbol ';') or/and alarms list.</li></ul>
+<li> <i>bool messPut( int tm, int utm, string cat, int lev, string mess, string arch = "" );</i> — writes the message <i>mess</i> with the category <i>cat</i>, level <i>lev</i> (-7...7) and time <i>tm.utm</i> to the archivers <i>arch</i> (separated by the symbol ';') or/and the alarms list.</li></ul>
 <p>Functions of object's archiver of messages (SYS.Archive["mod_Modul"]["mess_Archivator"]):
 </p>
-<ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
-<li> <i>bool status( )</i> — get the archiver start status.</li>
-<li> <i>int end( )</i> — get the archiver data end time.</li>
-<li> <i>int begin( )</i> — get the archiver data begin time.</li></ul>
+<ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool status( )</i> — status "Running" of the archiver.</li>
+<li> <i>int end( )</i> — end time of data of the archiver.</li>
+<li> <i>int begin( )</i> — begin time of data of the archiver.</li></ul>
 <p>Functions of object's archiver of values (SYS.Archive["val_Modul"]["val_Archivator"]):
 </p>
-<ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
-<li> <i>bool status( )</i> — get the archiver start status.</li></ul>
+<ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool status( )</i> — status "Running" of the archiver.</li></ul>
 <p><span id="SYS.Archive" title="#SYS.Archive">Functions of object's archive (SYS.Archive["va_Archive"]):</span>
 </p>
-<ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
-<li> <i>bool status( )</i> — get the archive start status.</li>
-<li> <i>int end( string arch = "" )</i> — get the archive data end time for the archiver <i>arch</i>, in microseconds.</li>
-<li> <i>int begin( string arch = "" )</i> — get the archive data begin time for the archiver <i>arch</i>, in microseconds.</li>
-<li> <i>int period( string arch = "" )</i> — get the archive data period for the archiver <i>arch</i>, in microseconds.</li>
-<li> <i>TArrayObj archivatorList( )</i> — get the archivers list which using the archive as source.</li>
-<li> <i>VarType getVal( int tm, bool up_ord = false, string arch = "" )</i> — get one value from the archive for the time <i>tm</i>, up order <i>up_ord</i> and the archiver <i>arch</i>:
-<ul><li> <i>tm</i> — the time for requested value, in microseconds, set to 0 for end(), the attribute is an output also then real time of the gotten value also places here if it is a variable;</li>
-<li> <i>up_ord</i> — fit the requested value time to up for the grid;</li>
-<li> <i>arch</i> — the archiver for the request, set to empty for buffer and all archivers try, set to "&lt;buffer&gt;" for the buffer only process.</li></ul></li>
-<li> <i>bool setVal( int tm, VarType vl, string arch = "" )</i> — set one value <i>vl</i> to the archive for the time <i>tm</i> and the archiver <i>arch</i>:
-<ul><li> <i>tm</i> — the time for set value, in microseconds;</li>
-<li> <i>vl</i> — the value;</li>
-<li> <i>arch</i> — the archiver for the query. Set to empty for buffer and all archivers. Set to "&lt;buffer&gt;" for the buffer only process.</li></ul></li></ul>
+<ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool status( )</i> — status "Running" of the archive.</li>
+<li> <i>int end( string arch = "" )</i> — end time of data of the archive for the archiver <i>arch</i>, in microseconds.</li>
+<li> <i>int begin( string arch = "" )</i> — begin time of data of the archive for the archiver <i>arch</i>, in microseconds.</li>
+<li> <i>int period( string arch = "" )</i> — period of data of the archive for the archiver <i>arch</i>, in microseconds.</li>
+<li> <i>TArrayObj archivatorList( )</i> — list of archivers that use this archive as a source.</li>
+<li> <i>VarType getVal( int tm, bool up_ord = false, string arch = "" )</i> — gets a value from the archive for the time <i>tm</i>, tightening up <i>up_ord</i> and archiver <i>arch</i>:
+<ul><li> <i>tm</i> — time of the requested value, in microseconds, set to 0 for "end()"; this attribute is also an output, so the real time of the received value is placed here if it is a variable;</li>
+<li> <i>up_ord</i> — tighten the time of the requested value to the top of the grid;</li>
+<li> <i>arch</i> — request archiver, set in an empty line to check all archivers, set to "&lt;buffer&gt;" to handle only the buffer.</li></ul></li>
+<li> <i>bool setVal( int tm, VarType vl, string arch = "" )</i> — sets the value <i>vl</i> to the archive for the time <i>tm</i> and the archiver <i>arch</i>:
+<ul><li> <i>tm</i> — time of the set value, in microseconds;</li>
+<li> <i>vl</i> — value;</li>
+<li> <i>arch</i> — archiver of the set request, set in an empty line for all archivers, set to "&lt;buffer&gt;" to handle only the buffer.</li></ul></li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Transports.22_.28SYS.Transport.29"><span class="mw-headline-number">8</span> <span id="SYSTransport" title="#SYSTransport">Subsystem "Transports" (SYS.Transport)</span></span></h2>
 <p>Functions of the ingoing transport object (SYS.Transport["Modul"]["in_Transp"]):
 </p>
-<ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
-<li> <i>string status()</i> — the transport status.</li>
-<li> <i>string addr( string vl = "" )</i> — the transport address return, set the to no empty <i>vl</i>.</li>
-<li> <i>string writeTo(string sender, string mess)</i> — Send the message <i>mess</i> to sender <i>sender</i>.</li>
-<li> <i>TArrayObj assTrsList()</i> — assigned output transports list to the input.</li></ul>
+<ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>string status()</i> — string status of the transport.</li>
+<li> <i>string addr( string vl = "" )</i> — address of the transport, sets the non-empty value <i>vl</i>.</li>
+<li> <i>string writeTo(string sender, string mess)</i> — sends the message <i>mess</i> to the sender <i>sender</i>, as a reply.</li>
+<li> <i>TArrayObj assTrsList()</i> — assigned output transports list to the input one.</li></ul>
 <p>Functions of the outgoing transport object (SYS.Transport["Modul"]["out_Transp"]):
 </p>
 <ul>
-<li><i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li><i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
-<li><i>string status()</i> — the transport status.</li>
-<li><i>bool start( bool vl = &lt;EVAL&gt;, int tm = 0 )</i> — the transport start status return, start/stop it by <i>vl</i> (if it is not &lt;EVAL&gt;). For starting you can set the specific timeout <i>tm</i>.</li>
-<li><i>string addr( string vl = "" )</i> — the transport address return, set the to no empty <i>vl</i>.</li>
-<li><i>string timings( string vl = "" )</i> — the transport timings return, set the to no empty <i>vl</i>.</li>
-<li><i>string messIO( string mess, real timeOut = 0, int inBufLen = -1 );</i> — sending the message <i>mess</i> through the transport with the timeout <i>timeOut</i> (in seconds) of waiting reply and the reply reading (buffer) size <i>inBufLen</i> bytes. In the case of a zero timeout is the time taken from the settings of outgoing transport. The <i>timeOut</i> in negative (&lt; -1e-3) disables the transport's request/respond mode and allows for independent reading/writing to a buffer IO, with the reading timeout <i>timeOut</i> in absolute. For negative <i>inBufLen</i> the buffer size sets to STR_BUF_LEN(10000) and "0" disables the reading at all.<br />
-<a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> If your transport means getting data in parts for a request then for several devices on single bus-transport use the function into single thread but there is not a way to lock the transport into the user API. Single thread that is any object of controller of DAQ and <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the module "User protocol"</a> locks the transport internally before self user procedures execution.
+<li><i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
+<li><i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li><i>string status()</i> — string status of the transport.</li>
+<li><i>bool start( bool vl = &lt;EVAL&gt;, int tm = 0 )</i> — returns the transport status "Running", starts/stops it by <i>vl</i> (if it is not &lt;EVAL&gt;). For starting you can set the specific timeout <i>tm</i>.</li>
+<li><i>string addr( string vl = "" )</i> — address of the transport, sets the non-empty value <i>vl</i>.</li>
+<li><i>string timings( string vl = "" )</i> — timings of the transport, sets the non-empty value <i>vl</i>.</li>
+<li><i>string messIO( string mess, real timeOut = 0, int inBufLen = -1 );</i> — sends the message <i>mess</i> via the transport with the waiting time of the response <i>timeOut</i> (in seconds) and reads an response (Buffer) in <i>inBufLen</i> byte. In the case of a zero timeout, this time is taken from the settings of the output transport. The <i>timeOut</i> in negative (&lt; -1e-3) disables the transport request/respond mode and allows for independent reading/writing to a buffer IO, with the reading timeout <i>timeOut</i> in absolute. For negative <i>inBufLen</i> the buffer size sets to STR_BUF_LEN(10000) and "0" disables the reading at all.<br />
+<a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> If your transport means getting data in parts for a request then for several devices on single bus-transport, use the function into single thread but there is not a way to lock the transport into the user API. Single thread that is any object of controller of DAQ and <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the module "User protocol"</a> locks the transport internally before self user procedures execution.
 <pre style="white-space: pre-wrap;">
 rez = SYS.Transport.Serial.out_ttyUSB0.messIO(SYS.strFromCharCode(0x4B,0x00,0x37,0x40),0.2);
 //Wait for all the message tail by timeout and empty result
 while((trez=SYS.Transport.Serial.out_ttyUSB0.messIO("")).length) rez += trez; </pre></li>
-<li><i>string messIO( XMLNodeObj req, string prt );</i> — sending the request <i>req</i> to the protocol <i>prt</i> for the implementation of a connection session through the transport by means of protocol.
+<li><i>string messIO( XMLNodeObj req, string prt );</i> — sends the requests <i>req</i> to the protocol <i>prt</i> to perform a communication session through the transport and in assistance of the protocol.
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("TCP");
 req.setAttr("id","test").setAttr("reqTm",500).setAttr("node",1).setAttr("reqTry",2).setText(SYS.strFromCharCode(0x03,0x00,0x00,0x00,0x05));
@@ -533,6 +533,7 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 </p>
 <h2><span class="mw-headline" id="Subsystem_.22User_interfaces.22_.28SYS.UI.29"><span class="mw-headline-number">10</span> Subsystem "User interfaces" (SYS.UI)</span></h2>
 <h3><span class="mw-headline" id="Module_UI.VCAEngine"><span class="mw-headline-number">10.1</span> Module <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></span></h3>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine.png" title="User object model of the module VCAEngine."><img alt="User object model of the module VCAEngine." height="238" src="files/Oscada_UserOM_VCAEngine.png" width="352" /></a></div>
 <p><b>Object "Session" ( this.ownerSess() )</b>
 </p>
 <ul><li> <i>string user( )</i> — current session user.</li>
@@ -593,9 +594,100 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <p><b>The object "User function" (SYS.Special.FLibComplex1["funcID"])</b>
 </p>
 <ul><li> <i>ElTp call(ElTp prm1, ...)</i> — call the function with parameters <i>&lt;prm{N}&gt;</i>. Return result of the called function.</li></ul>
-<p><br /> 
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Link to DB API libraries ...
+<p><br />
 </p>
+<h2><span class="mw-headline" id="Libraries_of_the_user_functions"><span class="mw-headline-number">12</span> Libraries of the user functions</span></h2>
+<p>Currently, OpenSCADA has libraries of the user functions written using this API user. Some of them are designed for exclusive use with this API. All user libraries are presented in the following table: 
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages
+</th></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices" title="Special:MyLanguage/Libs/User protocol devices">Main user protocol based library</a> </td>
+<td> 1.8 </td>
+<td> Free (GPL2 by default) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en, uk, ru
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Controllers" title="Special:MyLanguage/Libs/Controllers">Controllers library</a> </td>
+<td> 1.1 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Service_procedures" title="Special:MyLanguage/Libs/Service procedures">Service procedures library</a> </td>
+<td> 1.0 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Regulation_elements" title="Special:MyLanguage/Libs/Regulation elements">Regulation elements library</a> </td>
+<td> 1.0 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Documents" title="Special:MyLanguage/Libs/Documents">Library of preparation and data acquisition for reporting</a> </td>
+<td> 1.0 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Technological_apparatuses" title="Special:MyLanguage/Libs/Technological apparatuses">Library of models of technological apparatuses</a> </td>
+<td> 1.0 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">File:OscadaLibs.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en
+</td></tr>
+<tr>
+<td colspan="5"> <i>Graphic elements' libraries of OpenSCADA module <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></i>
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Electrical_elements" title="Special:MyLanguage/Libs/Electrical elements">Library of the electrical elements of the user's interface mnemonic schemes</a> </td>
+<td> 0.2 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">File:VcaElectroEls.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en, uk, ru
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_elements" title="Special:MyLanguage/Libs/Main elements">Main elements library of the user interface</a> </td>
+<td> 1.1 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">File:VcaBase.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en, uk, ru
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Mnemo_elements" title="Special:MyLanguage/Libs/Mnemo elements">Mnemonic elements library of the user interface</a> </td>
+<td> 0.5 </td>
+<td> Free (GPL) </td>
+<td> DB SQLite: <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">File:VcaBase.db.gz</a>, <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">Most actual SQL</a> </td>
+<td> en, uk, ru
+</td></tr></table>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">13</span> Links</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_UserOM.odg" title="File:Oscada UserOM.odg">Diagram: User object model of the core OpenSCADA.</a></li></ul>
+
 
 
 

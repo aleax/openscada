@@ -810,15 +810,13 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 	cntrCmdAttributes(opt);
 	cntrCmdLinks(opt);
 	cntrCmdProcess(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Library widget: ")+id());
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Library widget: ")+id(),RWRWR_,"root",SUI_ID,1,"doc", "Documents/User_API|Documents/User_API");
 	return;
     }
     if(cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt)) ;
     else if(opt->attr("path") == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
     else TCntrNode::cntrCmdProc(opt);
 }
-
-
 
 //************************************************
 //* CWidget: Container stored widget             *

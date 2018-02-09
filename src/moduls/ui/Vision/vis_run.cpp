@@ -220,7 +220,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 
     //actProjManual->setEnabled(TUIS::docGet(actProjManual->property("doc").toString().toStdString(),NULL,TUIS::GetFilePath).size());
 
-    resize(600, 400);
+    if(!s2i(SYS->cmdOpt("showWin"))) resize(600, 400);
 
     //Init session
     initSess(prjSes_it, crSessForce);
@@ -230,8 +230,8 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     //mWStat->setText(host.st_nm.c_str());
     statusBar()->showMessage(_("Ready"), 2000);
 
-    //Restore main window position
-    if(winPosCntrSave() && masterPg()) {
+    //Restore the main window position
+    if(!s2i(SYS->cmdOpt("showWin")) && winPosCntrSave() && masterPg()) {
 	string xPos, yPos;
 	if((xPos=wAttrGet(masterPg()->id(),i2s(screen())+"geomX",true)).size() &&
 		(yPos=wAttrGet(masterPg()->id(),i2s(screen())+"geomY",true)).size())
@@ -284,7 +284,7 @@ void VisRun::setWinMenu( bool act )
     if(act) {
 	menuBar()->addMenu(&menuFile);
 	menuBar()->addMenu(&menuAlarm);
-	menuBar()->addMenu(&menuView);
+	if(s2i(SYS->cmdOpt("showWin")) != 2) menuBar()->addMenu(&menuView);
 	menuBar()->addMenu(&menuHelp);
 	emit makeStarterMenu();
     }
@@ -1003,7 +1003,15 @@ void VisRun::styleChanged( )
 
 void VisRun::aboutQt( )		{ QMessageBox::aboutQt(this, mod->modInfo("Name").c_str()); }
 
-void VisRun::fullScreen( bool vl )	{ setWindowState(vl?Qt::WindowFullScreen:Qt::WindowNoState); }
+void VisRun::fullScreen( bool vl )
+{
+    setWindowState(vl?Qt::WindowFullScreen:Qt::WindowNoState);
+    //!!!! But switching to the WindowMaximized performs only through the WindowNoState
+    if(!vl && s2i(SYS->cmdOpt("showWin"))) {
+	QCoreApplication::processEvents();
+	setWindowState(Qt::WindowMaximized);
+    }
+}
 
 void VisRun::enterWhatsThis( )	{ QWhatsThis::enterWhatsThisMode(); }
 

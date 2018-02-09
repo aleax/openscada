@@ -1052,7 +1052,7 @@ LibsDB/vcaBase.db und LibsDB/vcaTest.db.
 
 # ############################### Modeles ############################################
 %package Model-AGLKS
-Summary: Model "AGLKS" data bases and config (Demo: EN,RU,UK)
+Summary: Model "AGLKS" data bases and config (Demo: EN,UK,RU)
 Group: Applications/Engineering
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-LibDB-Main = %{version}-%{release}
@@ -1090,25 +1090,25 @@ Requires: %{name}-UI-WebVision = %{version}-%{release}
 %description Model-AGLKS
 The %{name}-Model-AGLKS package includes model "AGLKS" data
 bases and config.
-The Model is used for OpenSCADA demo and allowed for English, Russian
-and Ukrainian languages.
-For start use command <openscada_demo> or <openscada_AGLKS>.
+The Model is used for OpenSCADA demo and allowed for English, Ukrainian
+and Russian languages.
+For start use command <openscada_AGLKS>.
 %description Model-AGLKS -l ru_RU.UTF8
 Пакет %{name}-Model-AGLKS включает БД и конфигурацию модели "АГЛКС".
 Модель используется для демонстрации OpenSCADA и доступна на Английском,
-Русском и Украинском языках.
-Для старта используйте команду <openscada_demo> мли <openscada_AGLKS>.
+Украинском и Российском языках.
+Для старта используйте команду <openscada_AGLKS>.
 %description Model-AGLKS -l uk_UA.UTF8
 Пакет %{name}-Model-AGLKS включає БД та конфігурацію моделі "АГЛКС".
 Модель використано для демонстрації OpenSCADA та доступно на Англійській,
-Російській та Українській мовах.
-Для старту використовуйте команду <openscada_demo> та <openscada_AGLKS>.
+Українській та Російській мовах.
+Для старту використовуйте команду <openscada_AGLKS>.
 %description Model-AGLKS -l de_DE.UTF8
 Das Paket %{name}-Model-AGLKS enthaelt Datenbanken und
 Konfigurationsdateien Modell "AGLKS".
 Das Modell wird verwendet, um OpenSCADA demonstrieren und ist verfügbar
-in Englisch, Russisch und Ukrainisch.
-Fuers Starten wird Kommando <openscada_demo> oder <openscada_AGLKS> benutzt.
+in Englisch, Ukrainisch und Russisch.
+Fuers Starten wird Kommando <openscada_AGLKS> benutzt.
 
 %package Model-Boiler
 Summary: Model "Boiler" data bases and config (only Russian)
@@ -1735,7 +1735,6 @@ ln -s openscada %buildroot/%_bindir/openscada_Boiler
 %defattr(-,root,root)
 %{_libdir}/openscada/ui_QTStarter.so
 #%_desktopdir/openscada.desktop
-#%_desktopdir/openscada_demo.desktop
 #%_iconsdir/openscada.png
 %lang(de) %{langmess}/de/LC_MESSAGES/oscd_QTStarter.mo
 %lang(ru) %{langmess}/ru/LC_MESSAGES/oscd_QTStarter.mo

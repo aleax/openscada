@@ -161,7 +161,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     splitter->setSizes(splSz);
     QTCfgLayout->addWidget(splitter, 0, 0);
 
-    resize(800, 600);
+    if(!s2i(SYS->cmdOpt("showWin"))) resize(800, 600);
 
     //Create actions
     // Close
@@ -436,7 +436,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
 	wH = s2i(TSYS::strParse(rst,0,":",&off)),
 	wW = s2i(TSYS::strParse(rst,0,":",&off));
     string sRst = TSYS::strDecode(TSYS::strParse(rst,0,":",&off), TSYS::base64);
-    if(wH > 100 && wW > 100) resize(wH, wW);
+    if(!s2i(SYS->cmdOpt("showWin")) && wH > 100 && wW > 100) resize(wH, wW);
     if(sRst.size()) splitter->restoreState(QByteArray(sRst.data(),sRst.size()));
 
     //Other resources init

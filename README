@@ -1,32 +1,33 @@
 
-	     Welcome to open SCADA system OpenSCADA.
+	     Welcome to OpenSCADA, an open SCADA system.
 
-Documentation about this program you may find together this document. Usually OpenSCASA system is accompanied by next
-documentation:
- - AboutOpenSCADA.pdf: Contain the generic information about system.
- - DAQ.pdf: Data acquisition conception OpenSCADA.
- - APIOpenSCADA.pdf: Contain OpenSCADA system API for developers.
- - FAQ.pdf: Frequently ask questions about system.
- - Modules/*: Module's documentation directory.
- - release_*.pdf: The release preview document for last version.
- - openscada.pdf: Generic program description document.
+You can find the documentation for the program in the Project Knowledge Base online at http://oscada.org/wiki and install offline
+with the package "openscada-doc-{lng}", which usually contains:
+  Release_*.pdf - announce of the program version.
+  Terms.html - terms, definitions and abbreviations.
+  FAQ.html - frequently asked questions about the program.
+  About.html - information about the program as a whole.
+  Functions_and_demands.html - functions and demands of OpenSCADA.
+  Program_manual.html - program manual.
+  User_API.html - user API of OpenSCADA
+  DAQ.html - concept of the data acquisition of OpenSCADA.
+  Quick_start.html - quick start of OpenSCADA.
+  Modules/* - directory with the modules documentation.
 
-For OpenSCADA starting you should write shell command <# openscada>. The system will be started in default configuration.
-This mode not have one DB configuration, but data into the configuration file enough for:
+To launch OpenSCADA, simply type the command <openscada> and start the program with the OpenSCADA project selection dialog.
+Configuration of the standard and the new project is sufficient for:
  - working into the graphical configurator UI.QTCfg;
- - working into WEB-configurators (adress: http://localhost:10002 or http://localhost:10004)
+ - working into the WEB-configurators (adress: http://localhost:10002 or http://localhost:10004)
 
-Default configuration you can use for demon mode run. For starting the system into demon(server) mode you should write shell command
-<# service oscadad start>.
+To start in the daemon mode (server), there is a project "server" in the openscada-server package that can be started by
+the <service openscada-server start> command.
 
-For first experience getting you can use OpenSCADA demo package (ModelsDB.AGLKS). This package contain DB with the system and subsystems
-configuration examples. For starting into demo configurations you should write shell command <# openscada_demo>.
+To facilitate the first experience with the program, a demonstration package (openscada-model-aglks) was created.
+This package contains a database with examples of configuration of the program and all its subsystems.
+To run the demo configuration, simply type the command <openscada_AGLKS>.
 
-To create your own independent configuration SCADA-system user has a run OpenSCADAs putting data in user's home directory (~/.openscada).
-For starting user's configurations you should write shell command <# openscada_start>.
-
-For using the system you can need passwords. Default configuration have next users:
+In the process, you may need passwords to log in to the program. Standard and new projects contain the following users:
  - root: system administrator, have password: "openscada";
  - user: unprivileged user, have password: "user".
 
-If you have some questions then apply to WWW project's site http://oscada.org for more information.
+If you have any questions, please contact the site http://oscada.org for more information.
