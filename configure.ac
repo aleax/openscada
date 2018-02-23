@@ -300,6 +300,18 @@ AX_MOD_TrProt_EN(HTTP, [disable or enable[=incl] compilation module Protocol.HTT
 AX_MOD_UI_EN(VCAEngine, [disable or enable[=incl] compilation module UI.VCAEngine], disable, incl)
 AX_MOD_UI_EN(QTStarter, [disable or enable[=incl] compilation module UI.QTStarter], disable, incl, [
     AX_LIB_Qt()
+
+    AS_IF([test "x${Qt5_use}" = "x"], [
+	PKG_CHECK_MODULES(QtSensors, [QtSensors > 1.2.0],
+	    AC_DEFINE(HAVE_QTSENSORS, 1, [QtSensors for mobility devices is allowed]),
+	    AC_MSG_NOTICE([QtSensors has not found. Using disabled!]))
+    ], [
+	PKG_CHECK_MODULES(Qt5Sensors, [Qt5Sensors > 1.2.0], [
+	    AC_DEFINE(HAVE_QTSENSORS, 1, [QtSensors for mobility devices is allowed])
+	    QtSensors_CFLAGS=$Qt5Sensors_CFLAGS
+	    QtSensors_LIBS=$Qt5Sensors_LIBS
+	], AC_MSG_NOTICE([QtSensors has not found. Using disabled!]))
+    ])
 ])
 AX_MOD_UI_EN(QTCfg, [disable or enable[=incl] compilation module UI.QTCfg], disable, incl, [
     AX_LIB_Qt()
@@ -371,7 +383,7 @@ AC_OUTPUT
 AC_MSG_RESULT([============ Final configuration results ==============])
 AC_MSG_RESULT([* Status:])
 AC_MSG_RESULT([  - To enable (yes), to include/builtin (incl), for a distributive (dist), to disable (no) all modules = $enable_AllModuls])
-AC_MSG_RESULT([  - Crosscompile compilation                                    = $enable_CrossCompile])
+AC_MSG_RESULT([  - Cross compilation                                           = $enable_CrossCompile])
 AC_MSG_RESULT([  - The core library compilation only in static                 = $enable_CoreLibStatic])
 AC_MSG_RESULT([* Generic features:])
 AC_MSG_RESULT([  - Strings charset encode support (by iconv)                   = $ac_cv_header_iconv_h])

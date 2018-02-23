@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-01 20:14+0300\n"
+"POT-Creation-Date: 2018-02-23 20:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -132,13 +132,13 @@ msgstr ""
 msgid "Memory info"
 msgstr ""
 
-msgid "Receive (B)"
+msgid "Received (B)"
 msgstr ""
 
 msgid "Receive speed (B/s)"
 msgstr ""
 
-msgid "Transmit (B)"
+msgid "Transmitted (B)"
 msgstr ""
 
 msgid "Transmit speed (B/s)"
@@ -148,6 +148,16 @@ msgid "Interface"
 msgstr ""
 
 msgid "Interface statistic: "
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+#, c-format
+msgid "Connected=%d; Active=%d; Busy=%d; Error=%d"
+msgstr ""
+
+msgid "Property "
 msgstr ""
 
 msgid "Data sensors"
@@ -221,9 +231,6 @@ msgstr ""
 msgid "System parameters table"
 msgstr ""
 
-msgid "Request data period (ms)"
-msgstr ""
-
 msgid "Acquisition schedule"
 msgstr ""
 
@@ -280,6 +287,9 @@ msgid "Memory"
 msgstr ""
 
 msgid "Net statistic"
+msgstr ""
+
+msgid "Qt sensors"
 msgstr ""
 
 msgid "Sensors"

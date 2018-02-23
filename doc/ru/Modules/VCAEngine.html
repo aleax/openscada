@@ -58,7 +58,7 @@
 <li class="toclevel-2 tocsection-6"><a href="#.D0.A1.D0.B5.D0.B0.D0.BD.D1.81_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F_.D0.BF.D1.80.D0.BE.D0.B5.D0.BA.D1.82.D0.B0"><span class="tocnumber">3.3</span> <span class="toctext">Сеанс исполнения проекта</span></a></li>
 <li class="toclevel-2 tocsection-7"><a href="#.D0.A1.D1.82.D0.B8.D0.BB.D0.B8"><span class="tocnumber">3.4</span> <span class="toctext">Стили</span></a></li>
 <li class="toclevel-2 tocsection-8"><a href="#.D0.A1.D0.BE.D0.B1.D1.8B.D1.82.D0.B8.D1.8F.2C_.D0.B8.D1.85_.D0.BE.D0.B1.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D0.BA.D0.B0_.D0.B8_.D0.BA.D0.B0.D1.80.D1.82.D1.8B_.D1.81.D0.BE.D0.B1.D1.8B.D1.82.D0.B8.D0.B9"><span class="tocnumber">3.5</span> <span class="toctext">События, их обработка и карты событий</span></a></li>
-<li class="toclevel-2 tocsection-9"><a href="#.D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D0.B8.D0.B7.D0.B0.D1.86.D0.B8.D1.8F"><span class="tocnumber">3.6</span> <span class="toctext">Сигнализация</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#.D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D0.B8.D0.B7.D0.B0.D1.86.D0.B8.D1.8F"><span class="tocnumber">3.6</span> <span class="toctext"><span>Сигнализация</span></span></a></li>
 <li class="toclevel-2 tocsection-10"><a href="#.D0.A3.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.D0.BF.D1.80.D0.B0.D0.B2.D0.B0.D0.BC.D0.B8"><span class="tocnumber">3.7</span> <span class="toctext">Управление правами</span></a></li>
 <li class="toclevel-2 tocsection-11"><a href="#.D0.A1.D0.B2.D1.8F.D0.B7.D1.8B.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.81_.D0.B4.D0.B8.D0.BD.D0.B0.D0.BC.D0.B8.D0.BA.D0.BE.D0.B9"><span class="tocnumber">3.8</span> <span class="toctext">Связывание с динамикой</span></a></li>
 <li class="toclevel-2 tocsection-12"><a href="#.D0.9F.D1.80.D0.B8.D0.BC.D0.B8.D1.82.D0.B8.D0.B2.D1.8B_.D0.B2.D0.B8.D0.B4.D0.B6.D0.B5.D1.82.D0.BE.D0.B2"><span class="tocnumber">3.9</span> <span class="toctext">Примитивы виджетов</span></a>
@@ -581,7 +581,7 @@ event = ev_rez;
 </pre>
 <p><br />
 </p>
-<h3><span class="mw-headline" id=".D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D0.B8.D0.B7.D0.B0.D1.86.D0.B8.D1.8F"><span class="mw-headline-number">3.6</span> Сигнализация</span></h3>
+<h3><span class="mw-headline" id=".D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D0.B8.D0.B7.D0.B0.D1.86.D0.B8.D1.8F"><span class="mw-headline-number">3.6</span> <span id="Alarms" title="#Alarms">Сигнализация</span></span></h3>
 <p>Важным элементом любого интерфейса визуализации является уведомление пользователя про нарушения — сигнализация. Для упрощения восприятия, а также в виду тесной связности визуализации и уведомления (как правило уведомление дополняет визуализацию) решено интегрировать интерфейс уведомления в интерфейс визуализации. Для этого во всех виджетах предусматриваются два дополнительных атрибута (уровня сеанса): "alarm" и "alarmSt". Атрибут "alarm" используется для формирования сигнала виджетом в соответствии с его логикой, а атрибут "alarmSt" используется для контроля за фактом сигнализации ветви дерева сеанса проекта.
 </p><p>Атрибут "alarm" является строкой и имеет следующий формат: "<b>{lev}|{categ}|{message}|{type}|{tp_arg}</b>"<br />
 Где:

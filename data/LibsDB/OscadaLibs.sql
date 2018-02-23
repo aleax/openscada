@@ -286,10 +286,14 @@ INSERT INTO "lib_servProc_io" VALUES('docOffLine','pages','Pages list of "{wiki}
 About:en,uk,ru:About.html
 Documents/Terms:en,uk,ru:Terms.html
 Functions_and_demands:en,uk,ru:Functions_and_demands.html
+Works/To_do:en:To_do.html
 Documents/FAQ:en,uk,ru:FAQ.html
 Documents/Quick_start:en,ru:Quick_start.html
 Documents/Program_manual:en,uk,ru:Program_manual.html
-Documents/How_to:en,ru:How_to.html
+Documents/How_to:en,ru,uk:How_to.html
+Documents/How_to/Install:en,ru,uk:How_to_Install.html
+Documents/How_to/Live_disk:en,ru,uk:How_to_Live_disk.html
+Documents/How_to/Violations,_alarms_and_notifications:en,ru,uk:How_to_Violations.html
 Documents/DAQ:en,uk,ru:DAQ.html
 Documents/User_API:en,uk,ru:User_API.html
 Modules/SQLite:en,uk,ru:Modules/SQLite.html
@@ -7430,9 +7434,10 @@ for(var ip in pgsOprc) {
 		if(href[0] == "/") {
 			dynLngPg = (href.indexOf("/wiki/Special:MyLanguage/") == 0) ? href.slice(25) : "";
 			stLngPg = (!dynLngPg.length && href.indexOf("/wiki/") == 0) ? href.slice(6) : "";
-			if(dynLngPg.length &&
-				(!(tDst=pgsO[dynLngPg+"/"+pLang]).isEVal() || !(tDst=pgsO[stLngPg]).isEVal()))
+			if(dynLngPg.length && (!(tDst=pgsO[dynLngPg+"/"+pLang]).isEVal() || !(tDst=pgsO[stLngPg]).isEVal()))
 					anchs[iEl].setAttr("href", topDir+tDst);
+			else if(dynLngPg.length && !(tDst=pgsO[dynLngPg+"/"+defLang]).isEVal())
+					anchs[iEl].setAttr("href", "../"+defLang+"/"+topDir+tDst);
 			else {
 				anchs[iEl].setAttr("href", docHost_+href);
 				if(!anchs[iEl].attr("class").length)	anchs[iEl].setAttr("class", "external");
@@ -7446,7 +7451,7 @@ for(var ip in pgsOprc) {
 	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
 }
 
-res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1513450007);
+res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1519414901);
 CREATE TABLE 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library "FLibComplex1" (http://wiki.oscada.org/HomePageEn/Doc/FLibComplex1#h902-15) and the implementation of the PWM for the pulse part.','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" (http://wiki.oscada.org/Doc/FLibComplex1#h91-15) и реализация ШИМ для импульсной части.',1,10,0,'//Call standard analog PID
 outA = Special.FLibComplex1.pid(var,sp,max,min,manIn,auto,casc,Kp,Ti,Kd,Td,Tzd,Hup,Hdwn,Zi,followSp,K1,in1,K2,in2,K3,in3,K4,in4,f_frq,int,dif,lag);

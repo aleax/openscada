@@ -1,3 +1,19 @@
+2018-02-23 Roman (stable)
+- !:DOC: Appended by Works/To_do,Documents/How_to/{Install,Live_disk,Violations,_alarms_and_notifications}.
+- DB.LibsDB.OscadaLibs: servProc.docOffLine appended by the documents Works/To_do,Documents/How_to/{Install,Live_disk,Violations,_alarms_and_notifications}
+	for the offline documentaion list.
+    servProc.docOffLine switched to the default language "en" and the missed pages link to there.
+- SYS:*.spec,debian/control: Translation packages set for dependent from English one.
+- !!!!:SYS,UI.QTStarter,DAQ.System: QtSensors support was added for the sensors reading into UI.QTStarter and a shared object preparing for DAQ.System and the user API.
+- !!:SYS: The folder "data/Android" of configuration of the OpenSCADA building for Android was added.
+    data/openscada-proj.in was adapted and its permition checking and setting to the executable was added for call from Android.
+    The command-line argument --modDir was added as a copy of the confuguration file parameter "ModDir".
+- SYS: The function cmdOptPresent() was added for the user projects directory role next expanding.
+- SYS: ARM CPU-frequency reading expanded in reading "scaling_cur_freq" which available for the ordinal users.
+- !:FIX:Archive.DBArch: Fixed for single-value request of the value archive.
+- FIX:UI.QTStarter: Visibility of the button of the OpenSCADA projects call some fixed for Android.
+
+
 2018-02-09 Roman (stable)
 - !:DOC: "User API" revision finished.
 - SYS: data/{debian,debian_mod}/control,data/openscada.ebuild,data/*.spec: somewhat updated for some packages description.

@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-01 20:14+0300\n"
+"POT-Creation-Date: 2018-02-23 20:22+0200\n"
 "PO-Revision-Date: 2009-08-18 09:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -135,13 +135,13 @@ msgstr "Swap benutzt (KiB)"
 msgid "Memory info"
 msgstr "Speicherinformation"
 
-msgid "Receive (B)"
+msgid "Received (B)"
 msgstr "Empfangen (B)"
 
 msgid "Receive speed (B/s)"
 msgstr "Speed Empfangen (B/s)"
 
-msgid "Transmit (B)"
+msgid "Transmitted (B)"
 msgstr "Uebermitteln (B)"
 
 msgid "Transmit speed (B/s)"
@@ -152,6 +152,16 @@ msgstr "Schnittstelle"
 
 msgid "Interface statistic: "
 msgstr "Schnittstellenstatistik: "
+
+msgid "State"
+msgstr "Zustand"
+
+#, c-format
+msgid "Connected=%d; Active=%d; Busy=%d; Error=%d"
+msgstr "Verbunden=%d; Aktiv=%d; Beschäftigt=%d; Fehler=%d"
+
+msgid "Property "
+msgstr "Eigentum "
 
 msgid "Data sensors"
 msgstr "Datesensoren"
@@ -228,9 +238,6 @@ msgstr "Manuell;Schnelle Quellen;Langsame Quellen;Alle Quellen"
 msgid "System parameters table"
 msgstr "Tabelle der Systemparameter"
 
-msgid "Request data period (ms)"
-msgstr "Datenanfrageperiode (msek)"
-
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
 
@@ -288,6 +295,9 @@ msgstr "Speicher"
 
 msgid "Net statistic"
 msgstr "Netzstatistik"
+
+msgid "Qt sensors"
+msgstr "Qt-Sensoren"
 
 msgid "Sensors"
 msgstr "Sensoren"

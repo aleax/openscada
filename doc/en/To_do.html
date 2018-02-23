@@ -1,0 +1,252 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Works/To do - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Works/To do</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Works%2FTo+do&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Works/To_do" title="Works/To do (100% translated)">English</a></div></div>
+<p>On this page you can get the "To Do" list and pool tasks of the project. "To Do" list is not connected to the time ranks, but it is structured by subsystems. "To Do" list and pool are provided to represent the general development picture, and to post notes for the developers' examination. The developers can append, apply and note tasks for themselves.
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Documentation"><span class="tocnumber">1</span> <span class="toctext">Documentation</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Site_of_the_project"><span class="tocnumber">2</span> <span class="toctext">Site of the project</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Testing.2Foptimization_and_fixing"><span class="tocnumber">3</span> <span class="toctext">Testing/optimization and fixing</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#System_generic"><span class="tocnumber">4</span> <span class="toctext">System generic</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Subsystem_DB"><span class="tocnumber">5</span> <span class="toctext">Subsystem DB</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Subsystem_.22Transports.22"><span class="tocnumber">6</span> <span class="toctext">Subsystem "Transports"</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Subsystem_.22Protocols_of_the_transports.22"><span class="tocnumber">7</span> <span class="toctext">Subsystem "Protocols of the transports"</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Subsystem_.22Data_acquisition.22_.28DAQ.29"><span class="tocnumber">8</span> <span class="toctext">Subsystem "Data acquisition" (DAQ)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#ICP_DAS"><span class="tocnumber">8.1</span> <span class="toctext">ICP DAS</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Comedi"><span class="tocnumber">8.2</span> <span class="toctext">Comedi</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Siemens"><span class="tocnumber">8.3</span> <span class="toctext">Siemens</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#OPC-UA"><span class="tocnumber">8.4</span> <span class="toctext">OPC-UA</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#System"><span class="tocnumber">8.5</span> <span class="toctext">System</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Subsystem_.22Archives.22"><span class="tocnumber">9</span> <span class="toctext">Subsystem "Archives"</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Subsystem_.22Special.22"><span class="tocnumber">10</span> <span class="toctext">Subsystem "Special"</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#Subsystem_.22User_interfaces.22"><span class="tocnumber">11</span> <span class="toctext">Subsystem "User interfaces"</span></a>
+<ul>
+<li class="toclevel-2 tocsection-17"><a href="#QTStarter"><span class="tocnumber">11.1</span> <span class="toctext">QTStarter</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#WebVision"><span class="tocnumber">11.2</span> <span class="toctext">WebVision</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#VCAEngine"><span class="tocnumber">11.3</span> <span class="toctext">VCAEngine</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#VCAEngine.2C_Vision"><span class="tocnumber">11.4</span> <span class="toctext">VCAEngine, Vision</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#VCAEngine.2C_Vision.2C_WebVision"><span class="tocnumber">11.5</span> <span class="toctext">VCAEngine, Vision, WebVision</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#WebCfgD"><span class="tocnumber">11.6</span> <span class="toctext">WebCfgD</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#QtCfg"><span class="tocnumber">11.7</span> <span class="toctext">QtCfg</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<table class="wikitable">
+
+<tr>
+<td>
+<h3><span class="mw-headline" id="Documentation"><span class="mw-headline-number">1</span> Documentation</span></h3>
+<ul><li> New documents:
+<ul><li> (9) Describe libraries of the standard DAQ templates into <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs" title="Special:MyLanguage/Libs">libraries of OpenSCADA</a>.</li>
+<li> (9) Document page of the new module "MMS".</li></ul></li>
+<li> Wiki-pages need to update:
+<ul><li> Expand <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/How_to/Create_module#DAQ" title="Special:MyLanguage/Documents/How to/Create module">the manual for creation of modules for OpenSCADA</a> in part 2.4 for DAQ modules variants, data gathering methods and links to its examples.</li>
+<li> (9) <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Values_archivation" title="Special:MyLanguage/Sub-projects/Values archivation">Values archivation</a></li></ul></li>
+<li> Creations/updatings for translation of the Wiki-pages/media:
+<ul><li> (9) <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Kamjanske_Bagley_Boiler1" title="Special:MyLanguage/Using/Kamjanske Bagley Boiler1">Kamjanske Bagley Boiler1</a></li>
+<li> (9) <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Logical_level" title="Special:MyLanguage/Sub-projects/Logical level">Logical level</a></li>
+<li> (9) <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/AMRDevs" title="Special:MyLanguage/Modules/AMRDevs">AMRDevs</a></li>
+<li> (9) <a class="external free" href="http://wiki.oscada.org/Doc/OperatorManual" rel="nofollow noreferrer noopener" target="_blank">http://wiki.oscada.org/Doc/OperatorManual</a></li>
+<li> Translate <a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">the video-addition for the sound track of QuickStart</a></li></ul></li></ul>
+</td></tr>
+<tr>
+<td>
+<h3><span class="mw-headline" id="Site_of_the_project"><span class="mw-headline-number">2</span> Site of the project</span></h3>
+<ul><li> (9) Redraw the project logotype.</li>
+<li> Prepare a funding button on the main page for link to: <a class="external free" href="http://oscada.org/en/development/tasks/topics/tasks_forming_formirovanie_zadach/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/en/development/tasks/topics/tasks_forming_formirovanie_zadach/</a></li>
+<li> (*) Prepare a donate button, mostly from PayPal but it isn't available for Ukraine yet. Now there was prepared a <a class="external text" href="http://oscada.org/ru/uslugi/denezhnyi-perevod/" rel="nofollow noreferrer noopener" target="_blank">donate button from WebMoney</a>, but only Russian.</li>
+<li> (9) Update and refresh the project gallery.</li>
+<li> Use OpenSCADA Web-functions for complex and management pages at the main site: fund and tasks control, works and solutions pool for implement by the participants.</li></ul>
+</td></tr>
+<tr>
+<td>
+<h3><span class="mw-headline" id="Testing.2Foptimization_and_fixing"><span class="mw-headline-number">3</span> Testing/optimization and fixing</span></h3>
+<ul><li> <i>UI.{Vision,WebVision}</i>: The primitive "ElFigure" full revision. There needs checking for align of the coordinates. Performance optimization. Revise events processing. Fix known bugs:</li></ul>
+<dl><dd>- (9) The edit mode is broken at any project execution in runtime.</dd>
+<dd>- Mirroring lack and it appending in the full features is difficult but the code's original style is bad.</dd>
+<dd>- The copy buffer clearing after selected items copy, impossible for the copy repeat.</dd>
+<dd>- Fix for selecting upper figure's point instead lower one selection on the point moving try.</dd>
+<dd>- Flaws between adjacent inundations, often for not orthogonal angles.</dd></dl>
+</td></tr>
+<tr>
+<td>
+<h3><span class="mw-headline" id="System_generic"><span class="mw-headline-number">4</span> System generic</span></h3>
+<ul><li> Work out for developing, using, integration to solutions, concept of the support of the OpenSCADA project. Expand the community targeting for implementation control of:
+<ul><li> tasks: tasks pool, fund and fundraising; developers register, ranks for participate into the tasks.</li>
+<li> solutions: register a task of the solution implementation (by consumer), set demands to the task and performer, set the price limit; each performer propose self price; consumer select a performer. Commission from the order price to the project is 10%.</li></ul></li>
+<li> Prepare and form achievements into the firmwares and builds for "ICP DAS" LinPac (LP) to a product.</li>
+<li> Adapt OpenSCADA parts directly to IPv6.</li>
+<li> Adapt to the software platform Android: </li></ul>
+<dl><dd>(+) purchase a modern internet tablet with Android;</dd>
+<dd>(+) read a book about Android NDK, using of Android NDK and Crystalx-NDK;</dd>
+<dd>(+) compiling for tests, education and execution;</dd>
+<dd>(+) initially (minimum) build and execute OpenSCADA for console (without GUI): PCRE, OpenSCADA Core, builtin modules: Transport.Sockets, Protocol.SelfSystem, DAQ.JavaLikeCalc, Special.FLibMath;</dd>
+<dd>(+) make the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Embedding_and_PLC#PerfSystems" title="Special:MyLanguage/Sub-projects/Embedding and PLC">performance tests</a> for Soft and Hard float;</dd>
+<dd>(+) compile for all OpenSCADA key modules to include/builtin them into the core;</dd>
+<dd>(+) compile for needed external libraries: OpenSSL, SQLite, GD [expat,libpng,jpeg,fontconfig,freetype], intl, iconv;</dd>
+<dd>(+) rebuild all already built parts into the original Ndk (outward the standalone one);</dd>
+<dd>(+) build Qt5: in the default configuration, with the early built libraries;</dd>
+<dd>(+) initial build OpenSCADA with Qt5;</dd>
+<dd>(+) build and observe an example of Qt5 as a Java package (APK);</dd>
+<dd>(+) adapt OpenSCADA to Qt5 on Android and build as a Java package (APK); get the program's locale from Java environment and set it to environment LANG;</dd>
+<dd>(+) the Java package (APK) resolve for different data files placing and fill in by: OpenSCADA icon and main images, configuration files, files of translation of the interface, files of DB and other of the libraries and models;</dd>
+<dd>(+) OpenSCADA main functions related to Qt restore and fix: Qt5 builds with soft-float but hard-float causes the mostly problems; two branches were created, based on CrystaX NDK r10 (from ABI 19) and Original Ndk r13 (from ABI 21); default interface style was set to "fusion";</dd>
+<dd>(!) Some Android specific expandings of the project OpenSCADA:
+<ul><li> (+) make the generic APK package including all DB (LibsDB, AGLKS, Boiler) and the function of OpenSCADA projects creation from the user;</li>
+<li> (+) perform some redesign for the main page of UI.QTStarter but the tittle image is too small for big resolutions of screens;</li>
+<li> (+) expand the module UI.QTStarter for the OpenSCADA projects management function;</li>
+<li> (+) expand for the module <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">DAQ.System</a> by the Android sensors;</li></ul>
+<dl><dd> &gt; was made through QtSensors.</dd></dl>
+<ul><li> expand the projects manager of OpenSCADA to forcibly use the user project directory on the external storage;</li>
+<li> adapt for QWebView using on fresh Qt5 (on Debian 9 with Qt5.7 it is present already) instead of the missing QtWebKit;</li>
+<li> Asus Nexus 7 2013:</li></ul>
+<dl><dd><ul><li> update to Android 5 or 6 and try the OpenSCADA built for the original NDKr13 and ABI 21;</li>
+<li> update to Android 7 and try the OpenSCADA built for the original NDKr13 and ABI 21.</li></ul></dd></dl>
+<ul><li> try and fit some styles and properties of Qt5 for Android.</li></ul></dd>
+<dd> Build the final signed package.</dd>
+<dd> Create a policy of distribution and support of the Android builds.</dd></dl>
+<ul><li> Adapt to the software platform MS Windows®:</li></ul>
+<dl><dd>+ adapt to modules linking directly with OpenSCADA core library, for DLL restrictions;</dd>
+<dd>- build OpenSCADA initially for the MS Windows environment.</dd></dl>
+<ul><li> Dynamic text values translation and the static one unification:</li></ul>
+<dl><dd>+ create the conception;</dd>
+<dd>+ create the translations manager;</dd>
+<dd>+ implement the dynamic messages translation;</dd>
+<dd>+ make the procedures translation controlled by an option;</dd>
+<dd>+ make dynamic of the static text messages from gettext;</dd>
+<dd>- allow the table "Tr" appending by the function tr() calls for not multi-language mode also;</dd>
+<dd>- check for changing of original of the translation and write empty values to its translations;</dd>
+<dd>- copy translations at the object copy.</dd></dl>
+<ul><li> Develop a mechanism for object's data removing from previous DB after the data copy to some other DB.</li>
+<li> (+) XMLNode: append for symbols validation checking, for UTF-8 mostly, but there are possible problems into text fields of UI.WebCfgD and other ones for near to binary bytes of the stream.</li></ul>
+</td></tr>
+<tr>
+<td>
+<h3><span class="mw-headline" id="Subsystem_DB"><span class="mw-headline-number">5</span> Subsystem DB</span></h3>
+<ul><li> (9) Expand the description page for access to DB by the native user API, primarily for extValue().</li>
+<li> (9) Create a DB module for ODBC:</li></ul>
+<dl><dd>+ Main functions implementation for generic SQL requests, testing for: SQLite, MySQL, PostgreSQL, FireBird.</dd>
+<dd>- Specific DBMS properties: quotes for names and values (there are generic and standard ones), ...</dd>
+<dd>- OpenSCADA internal DB's layer function fieldStruct() implementation for generic SQL dialects and DBMS specific.</dd>
+<dd>- OpenSCADA internal DB's layer functions fieldSeek(), fieldGet(), fieldDel() implementation for generic SQL dialects and DBMS specific.</dd>
+<dd>- OpenSCADA internal DB's layer functions fieldDel() implementation for generic SQL dialects and DBMS specific.</dd>
+<dd>- Generic tests passing for: SQLite(there are some problems into allowed connectors), MySQL, PostgreSQL, FireBird.</dd>
+<dd>- A ODBC connector of DBMS Oracle testing.</dd></dl>
+<ul><li> Create a gate module to other OpenSCADA station's DBs.</li></ul>
+</td></tr>
+<tr>
+<td>
+<h3><span class="mw-headline" id="Subsystem_.22Transports.22"><span class="mw-headline-number">6</span> Subsystem "Transports"</span></h3>
+<ul><li> Implement for an agent of the SNMP protocol. Examples are into: <a class="external text" href="http://www.networkupstools.org" rel="nofollow noreferrer noopener" target="_blank">NUT</a>.</li>
+<li> Create a transport for <a class="external text" href="https://en.wikipedia.org/wiki/ØMQ" rel="nofollow noreferrer noopener" target="_blank">ØMQ</a>.</li>
+<li> Create a gate module to other transports of the OpenSCADA stations.</li></ul>
+</td></tr>
+<tr>
+<td>
+<h3><span class="mw-headline" id="Subsystem_.22Protocols_of_the_transports.22"><span class="mw-headline-number">7</span> Subsystem "Protocols of the transports"</span></h3>
+</td></tr>
+<tr>
+<td>
+<h3><span class="mw-headline" id="Subsystem_.22Data_acquisition.22_.28DAQ.29"><span class="mw-headline-number">8</span> Subsystem "Data acquisition" (DAQ)</span></h3>
+<ul><li> (9) <a class="external" href="http://oscada.org/wiki/Fund/Electronic_parts" title="Fund/Electronic parts">Low level electonic parts adaption</a>. </li>
+<li> Create DAQ and transport's protocol for MMS and IEC 60850.</li></ul>
+<dl><dd>+ Test for the library libiec60850.</dd>
+<dd>+ Write self MMS implementation, mostly for a mode without sessions on ABB-800, replace libiec60850 fully.</dd>
+<dd>- Add for sessions support optionally.</dd>
+<dd>- Implement same IEC-60850 and test with "libiec60850".</dd></dl>
+<ul><li> Make for using attribute's <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#SYS.DAQ" title="Special:MyLanguage/Documents/User API">"values"</a> to scale for maximum and minimum into sources by FIFO mostly, and providing the values to archive by the engineer measure units.</li></ul>
+<h4><span class="mw-headline" id="ICP_DAS"><span class="mw-headline-number">8.1</span> <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP DAS</a></span></h4>
+<ul><li> Make support for asynchronous and group writing, mostly for I87x.</li></ul>
+<h4><span class="mw-headline" id="Comedi"><span class="mw-headline-number">8.2</span> <a href="Modules/Comedi.html" title="Special:MyLanguage/Modules/Comedi">Comedi</a></span></h4>
+<ul><li> Append for working with FIFO, by board Diamond Systems DMM-32X-AT.</li></ul>
+<h4><span class="mw-headline" id="Siemens"><span class="mw-headline-number">8.3</span> <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a></span></h4>
+<ul><li> Review for protocols MPI and SPI into single master, check for possibility of their direct using through pure RS-232/485.</li></ul>
+<h4><span class="mw-headline" id="OPC-UA"><span class="mw-headline-number">8.4</span> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a></span></h4>
+<ul><li> Separate the "EndPoint object of the input part to types "Discovery" and "Data".</li>
+<li> Append an input transport automatic creation and its pre-configuration from properties of the EndPoint object.</li>
+<li> Reread the OPC-UA specification and set implementing to it.</li>
+<li> (9) Append the authentication support to the input protocol part.</li>
+<li> (+) Implement chunks for big requests.</li>
+<li> Implement and process of the "Publish" request-service into the client part.</li>
+<li> Append support for the history services for the server part, see and test against UAExpert negotiation.</li>
+<li> Append support for the history services for the client part.</li>
+<li> Add the transport HTTP/SOAP.</li></ul>
+<h4><span class="mw-headline" id="System"><span class="mw-headline-number">8.5</span> <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a></span></h4>
+<ul><li> Append for system memory consumption per process.</li>
+<li> (9) Append for Android sensors.</li></ul>
+</td></tr>
+<tr>
+<td>
+<h3><span class="mw-headline" id="Subsystem_.22Archives.22"><span class="mw-headline-number">9</span> Subsystem "Archives"</span></h3>
+<ul><li> Move for the critical section locking from the object TValBuf to its heir to allow the global lock into group operations.</li>
+<li> Create a gate module to archives of other OpenSCADA stations.</li></ul>
+</td></tr>
+<tr>
+<td>
+<h3><span class="mw-headline" id="Subsystem_.22Special.22"><span class="mw-headline-number">10</span> Subsystem "Special"</span></h3>
+</td></tr>
+<tr>
+<td>
+<h3><span class="mw-headline" id="Subsystem_.22User_interfaces.22"><span class="mw-headline-number">11</span> Subsystem "User interfaces"</span></h3>
+<h4><span class="mw-headline" id="QTStarter"><span class="mw-headline-number">11.1</span> <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a></span></h4>
+<ul><li> (9) Expand to implement the project management functions, mostly to omit a "dialog" program lack and for Android.</li>
+<li> (9) Create for projects list into the system (pre-installed) and the user's folder for the projects selection by work folder changing to the one of the project. Then a project for pure starting/managing can provide only the module UI.QTStarter.</li>
+<li> (9) Implement for managing operations of the project: add, remove, rename.</li>
+<li> (9) Implement for language selection of the selected project.</li>
+<li> (9) Implement for a manager of sub-projects to their starting into different processes but with the ones storing and managing into the single configuration file of the project, for high reliable configurations.</li>
+<li> (9) Implement for a manager of the background, daemon processes.</li></ul>
+<h4><span class="mw-headline" id="WebVision"><span class="mw-headline-number">11.2</span> <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a></span></h4>
+<ul><li> Expand the view "Button" of the primitive "FormEl" for the extended modes.</li>
+<li> Expand the view "Table" of the primitive "FormEl" for user sorting by the selected column.</li>
+<li> Append an user-accessed general panel with functions: The project documents call, Export, Print, Alarm statuses, User control-change, Style control-change.</li>
+<li> <i>ElFigure,Diagram</i>: enable or make the anti aliasing, for the library GD.</li>
+<li> Implement the primitives "Diagram", "ElFigure" into the tag "canvas" and/or "SVG".</li>
+<li> Append checking for the connection and its lost detection with a dialog to this issue indication and some doings.</li></ul>
+<h4><span class="mw-headline" id="VCAEngine"><span class="mw-headline-number">11.3</span> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a></span></h4>
+<ul><li> Append for image files edition user API for raster (PNG, JPEG, GIF), by LibGD2, and vector (SVG).</li></ul>
+<dl><dd>+ Append images loading and saving their changes into the session table from user procedure, allow to edit for SVG (XML).</dd>
+<dd>- Implement for main functions of the GD object (into <a href="Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>).</dd></dl>
+<h4><span class="mw-headline" id="VCAEngine.2C_Vision"><span class="mw-headline-number">11.4</span> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>, <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a></span></h4>
+<ul><li> Move requests to the VCA Engine for asynchronous for RunTime and Development modes. For RunTime use a dialog with "Retry now" and for Development one use a way like to UI.QtCfg.</li>
+<li> Implement for the view "Table" of the primitive "FormEl".</li></ul>
+<dl><dd>+ Implement for the generic display mode.</dd>
+<dd>+ Implement for the edition mode of the contents of the cells.</dd>
+<dd>- Implement for run-time management for rows and columns.</dd></dl>
+<ul><li> Make for pages list into the project tab to ordered for hand-fix — to allow for switch in controlled order.</li>
+<li> Implement for background execution of the edited pages into the development mode — further for visual diagram forming jointly <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> and DAQ-sources at all.</li></ul>
+<h4><span class="mw-headline" id="VCAEngine.2C_Vision.2C_WebVision"><span class="mw-headline-number">11.5</span> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>, <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a>, <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a></span></h4>
+<ul><li> Append for the user-space global menu by the project-specific properties.</li>
+<li> Implement of primitive "Diagram" and some other forming into the primitive "Document" as an image on file system and allow their embedding to the document. For now you can manually use the SVG graphics to build this sort images.</li>
+<li> Develop the "Function" primitive.</li>
+<li> Develop the "Link" primitive.</li>
+<li> Implement for dynamic frames developing by placing the shapes of the <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> blocks and the DAQ-sources at all and the related objects creation into OpenSCADA objects model.</li></ul>
+<h4><span class="mw-headline" id="WebCfgD"><span class="mw-headline-number">11.6</span> <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a></span></h4>
+<ul><li> Set context of the table fields limited for too big data.</li></ul>
+<h4><span class="mw-headline" id="QtCfg"><span class="mw-headline-number">11.7</span> <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QtCfg</a></span></h4>
+<ul><li> Append to the tree part for the tabs and the tab "Chosen" for procedures, like import, or other fast access.</li></ul>
+</td></tr></table>
+<dl><dd> (9) — will be useful and can be implemented into the forthcoming release 0.9LTS</dd></dl>
+
+
+
+
+
+
+</div></body>
+</html>

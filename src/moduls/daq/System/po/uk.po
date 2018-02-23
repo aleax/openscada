@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.System translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-01 20:14+0300\n"
+"POT-Creation-Date: 2018-02-23 20:22+0200\n"
 "PO-Revision-Date: 2007-10-29 11:52+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -130,13 +130,13 @@ msgstr "Своп використано (КиБ)"
 msgid "Memory info"
 msgstr "Інформація про пам'ять"
 
-msgid "Receive (B)"
+msgid "Received (B)"
 msgstr "Прийнято (Б)"
 
 msgid "Receive speed (B/s)"
 msgstr "Швидкість прийому (Б/с)"
 
-msgid "Transmit (B)"
+msgid "Transmitted (B)"
 msgstr "Передано (Б)"
 
 msgid "Transmit speed (B/s)"
@@ -147,6 +147,16 @@ msgstr "Інтерфейс"
 
 msgid "Interface statistic: "
 msgstr "Статистика інтерфейсу: "
+
+msgid "State"
+msgstr "Стан"
+
+#, c-format
+msgid "Connected=%d; Active=%d; Busy=%d; Error=%d"
+msgstr "Підключений=%d; Активний=%d; Зайнятий=%d; Помилка=%d"
+
+msgid "Property "
+msgstr "Властивість "
 
 msgid "Data sensors"
 msgstr "Дані сенсорів"
@@ -223,9 +233,6 @@ msgstr "Ручний;Швидкі джерела;Повільні джерела
 msgid "System parameters table"
 msgstr "Таблиця системних параметрів"
 
-msgid "Request data period (ms)"
-msgstr "Період опитування даних (мс)"
-
 msgid "Acquisition schedule"
 msgstr "Планування опитування"
 
@@ -283,6 +290,9 @@ msgstr "Пам'ять"
 
 msgid "Net statistic"
 msgstr "Статистика мережі"
+
+msgid "Qt sensors"
+msgstr "Сенсори Qt"
 
 msgid "Sensors"
 msgstr "Сенсори"

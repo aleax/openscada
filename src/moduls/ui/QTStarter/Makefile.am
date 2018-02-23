@@ -12,8 +12,8 @@ ui_QTStarter_la_LIBTOOLFLAGS = --tag=disable-static
 ui_QTStarter_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
 endif
 
-ui_QTStarter_la_CXXFLAGS += $(QtGui_CFLAGS)
-ui_QTStarter_la_LDFLAGS += $(QtGui_LIBS)
+ui_QTStarter_la_CXXFLAGS += $(QtGui_CFLAGS) $(QtSensors_CFLAGS)
+ui_QTStarter_la_LDFLAGS += $(QtGui_LIBS) $(QtSensors_LIBS)
 ui_QTStarter_la_SOURCES = tuimod.cpp moc_tuimod.cpp qrc_qtstarter.cpp
 ui_QTStarter_la_DIST = tuimod.cpp qtstarter.qrc
 

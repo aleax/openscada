@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Documents/How to/Violations, alarms and notifications - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Documents/How to/Violations, alarms and notifications</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FViolations%2C+alarms+and+notifications&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Violations,_alarms_and_notifications" title="Documents/How to/Violations, alarms and notifications (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Violations,_alarms_and_notifications/ru" title="Документы/Как сделать/Нарушения, сигнализация и уведомления (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Violations,_alarms_and_notifications/uk" title="Документи/Як зробити/Порушення, сигналізація та повідомлення (100% translated)">українська</a></div></div>
+<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</p><p>Violations and work with them in OpenSCADA are implemented in two ways, which is related to the structure of OpenSCADA, ways of its use, as well as the very nature of violations.
+</p><p>The first aspect of the violations with which OpenSCADA works from the start and which is most demanded is the notification in various ways. Since the notification is part of the user interface, it is implemented in the visualization engine <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a> and the visualizers <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a>, <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>. Currently, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision#Alarms" title="Special:MyLanguage/Modules/WebVision">the notification mechanism about the violates</a> implements following functions, that have not yet been partially implemented in <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>:
+</p>
+<ul><li> Notification:
+<ul><li> <i>Visual</i> — blinking in an alarm color for the object, the signaling group and the general status.</li>
+<li> <i>Beep</i> — issuing a continuous signal, usually on the system "buzzer", and regardless of the violation.</li>
+<li> <i>Sound</i> — playing a sound file or the speech synthesis from a text, associated with the violation.</li>
+<li> By expanded special ways and through special notification mechanisms.</li></ul></li>
+<li> Quittance of the violation notification:
+<ul><li> <i>Fully</i> — by clicking on the colored flashing circle status of violations (the event "ws_alarmLev"), to the right bottom.</li>
+<li> <i>By the notification way</i> — separately visual (the event "ws_alarmNtf0"), beep (the event "ws_alarmNtf1"), audio (the event "ws_alarmNtf2") and expanded (the event "ws_alarmNtf{N}"); by pressing the button with the corresponding image to the right of the bottom or under the view types buttons.</li>
+<li> <i>By the violation object</i> — the visual presentation shape can be appended for the quittance command of the notification, directly by itself;</li>
+<li> <i>In turn, with listening</i> — is characterized for the sound notifications, because each object of the violation can provide its own sound message or synthesis of speech.</li></ul></li></ul>
+<p>In the visualization environment, in the implementation of notifications, there is no established rule for obtaining and forming a violation flag, since there is no unambiguousness in different situations. For now, in <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">the side of the typed data source templates</a>, a method is used to create the error attribute "err" with the codes and the text of the violation, and their processing and notification generation is already in the visual shape data object.
+</p><p>Subsequently, there was a need for logging, as well as the accounting of current violations. If for logging it is enough to form messages of the program with the specified category and message format, but for accounting of the current violations some buffer is needed. Such buffer has been added as an add-in over the subsystem of messages, and the addressing to it is carried out by the inversion of the message level. So, writing a message with the level "-2" and the category "TEST" will put the message in the violation buffer and duplicate it in the message archive. When requesting messages with a negative level, messages will be taken from the buffer of violations. Deletion-removal of the violation is made by writing a message with the same category "TEST" and non-negative level.
+</p><p>Such concept of accounting the actual violations allows you to use the standard mechanisms of the messages processing:
+</p>
+<ul><li> Alarm-violation registration: <i>SYS.message("alCategory", -3, "Parameter: alarm");</i></li>
+<li> The alarm-violation removing: <i>SYS.message("alCategory", 1, "Parameter: normal");</i></li>
+<li> Creating a list of the actual (active) alarms by means of the primitives "Protocol" or "Document", with the negative level for all — "-1".</li></ul>
+<p>The registration of violations is best done on the side of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">the typed data source templates</a>, through the special function <b>SYS.DAQ["Module"]["Controller"].alarmSet(string mess, int lev = -5, string prm = "")</b>, which unifies the category. To call this function from the context of the template you need to add the IO "this" of the type "Object", and then the setting of the violation will have a look <b>this.cntr().alarmSet("Parameter: Violation", -5, "prm");</b>. The specified function is currently used in many data source modules to account for global violations of the controller objects.
+</p><p>The function generates a violation with the category: <b>al{ModId}:{CntrId}[.{PrmId}]</b>, where:
+</p>
+<ul><li> <i>ModId</i> — identifier of the module;</li>
+<li> <i>CntrId</i> — identifier of the controller object;</li>
+<li> <i>PrmId</i> — identifier of the parameter from the <i>prm</i> argument.</li></ul>
+<p>The format of the text is not regulated by this function, but there is a practice of forming the text of the violation, defined by the cadres of the formation of accounting documents such as "Protocol of violations", where the format is: <b>{PrmId}: {PrmName}: {Alarm}</b> and where additionally defined:
+</p>
+<ul><li> <i>PrmName</i> — name of the parameter;</li>
+<li> <i>Alarm</i> — text of the violation or "NORM" for the violation withdrawing.</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> In general, it should be noted that violations notification and accounting are different mechanisms that can be used separately — for simple projects, or together — for large-complex projects.
+</p>
+
+
+
+
+
+</div></body>
+</html>

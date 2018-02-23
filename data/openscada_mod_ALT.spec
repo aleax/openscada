@@ -147,6 +147,7 @@ Summary(uk_UA.UTF8): Документація відкритої SCADA (RU)
 Summary(de_DE.UTF8): Open SCADA Dokumente (RU)
 Group: Documentation
 BuildArch: noarch
+Requires: %name-docEN
 %description docRU
 The %name-docRU package include documents files (Russian).
 %description docRU -l ru_RU.UTF8
@@ -163,6 +164,7 @@ Summary(uk_UA.UTF8): Документація відкритої SCADA (UK)
 Summary(de_DE.UTF8): Open SCADA Dokumente (UK)
 Group: Documentation
 BuildArch: noarch
+Requires: %name-docEN
 %description docUK
 The %name-docUK package include documents files (Ukraine).
 %description docUK -l ru_RU.UTF8

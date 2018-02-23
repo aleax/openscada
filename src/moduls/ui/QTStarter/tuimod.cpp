@@ -42,6 +42,7 @@
 #include <QTreeWidgetItem>
 #include <QInputDialog>
 #include <QStyleFactory>
+#include <QScrollBar>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -58,7 +59,7 @@
 #else
 #define SUB_TYPE	""
 #endif
-#define MOD_VER		"4.2.2"
+#define MOD_VER		"4.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -372,7 +373,6 @@ void *TUIMod::Task( void * )
     //Init locale setLocale
     QLocale::setDefault(QLocale(Mess->lang().c_str()));
 
-
     //Qt application object init
     mod->QtApp = new StApp(mod->qtArgC, (char**)&mod->qtArgV);
     mod->QtApp->setApplicationName(PACKAGE_STRING);
@@ -543,6 +543,21 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     else TUI::cntrCmdProc(opt);
 }
 
+TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    // Array sensors()
+    //  Get all available sensors of the Qt mobility.
+    if(iid == "sensors") {
+#ifdef HAVE_QTSENSORS
+	if(!QtApp) return false;
+	return QtApp->sensCnt;
+#endif
+	return false;
+    }
+
+    return TCntrNode::objFuncCall(iid, prms, user);
+}
+
 //*************************************************
 //* StApp                                         *
 //*************************************************
@@ -581,6 +596,11 @@ void StApp::stClear( )
     if(tray)		{ delete tray; tray = NULL; }
     if(trayMenu)	{ delete trayMenu; trayMenu = NULL; }
     if(stDlg)		{ delete stDlg; stDlg = NULL; }
+
+#ifdef HAVE_QTSENSORS
+    for(int iS = 0; iS < sensors.size(); iS++) { sensors[iS]->stop(); delete sensors[iS]; }
+    sensors.clear();
+#endif
 
     initExec = false;
 }
@@ -637,8 +657,56 @@ void StApp::timerEvent( QTimerEvent *event )
 	    if(mod->closeToTray() && (SYS->prjNm().size() || SYS->prjCustMode())) createTray();
 	    else startDialog();
 	}
+
+#ifdef HAVE_QTSENSORS
+	for(int iS = 0; iS < QSensor::sensorTypes().size(); iS++) {
+	    sensors.push_back(new QSensor(QSensor::sensorTypes()[iS],this));
+	    sensors.back()->start();
+	}
+#endif
+
 	return;
     }
+
+#ifdef HAVE_QTSENSORS
+    if(sensCnt.type() != TVariant::Object) sensCnt = new TArrayObj();
+    for(int iS = 0; iS < sensors.size(); iS++) {
+	QSensorReading *rd = sensors[iS]->reading();
+	if(!rd)	continue;
+	TVariant oS = sensCnt.getO().at().propGet(i2s(iS));
+	if(oS.type() != TVariant::Object) {
+	    sensCnt.getO().at().propSet(i2s(iS), new TArrayObj());
+	    oS = sensCnt.getO().at().propGet(i2s(iS));
+	}
+	oS.getO().at().propSet("type", sensors[iS]->type().data());
+	oS.getO().at().propSet("identifier", sensors[iS]->identifier().data());
+	oS.getO().at().propSet("description", sensors[iS]->description().toStdString());
+	oS.getO().at().propSet("active", sensors[iS]->isActive());
+	oS.getO().at().propSet("connected", sensors[iS]->isConnectedToBackend());
+	oS.getO().at().propSet("busy", sensors[iS]->isBusy());
+	oS.getO().at().propSet("error", sensors[iS]->error());
+	for(int iV = 0; iV < rd->valueCount(); iV++) {
+	    QVariant tvl = rd->value(iV);
+	    switch(tvl.type()) {
+		case QVariant::Bool:
+		    oS.getO().at().propSet(i2s(iV), tvl.toBool());
+		    break;
+		case QVariant::Int:
+		case QVariant::UInt:
+		case QVariant::LongLong:
+		case QVariant::ULongLong:
+		    oS.getO().at().propSet(i2s(iV), (int64_t)tvl.toLongLong());
+		    break;
+		case QVariant::Double:
+		    oS.getO().at().propSet(i2s(iV), tvl.toDouble());
+		    break;
+		default:
+		    oS.getO().at().propSet(i2s(iV), tvl.toString().toStdString());
+	    }
+	}
+    }
+#endif
+
 
 #ifdef EN_QtMainThrd
     if(!SYS->stopSignal()) return;
@@ -1031,7 +1099,7 @@ void StartDialog::showEvent( QShowEvent* )
 {
     //Hide the projects apply button for too busy lists
     if(prjsLs && prjsBt)
-	prjsBt->setVisible(prjsLs->height() > 9*QFontMetrics(prjsLs->font()).height());
+	prjsBt->setVisible(!prjsLs->verticalScrollBar() || !prjsLs->verticalScrollBar()->isVisible() || prjsLs->height() > 9*QFontMetrics(prjsLs->font()).height());
 }
 
 void StartDialog::closeEvent( QCloseEvent *ce )

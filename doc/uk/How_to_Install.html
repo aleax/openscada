@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Документи/Як зробити/Встановити - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Документи/Як зробити/Встановити</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FInstall&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Install" title="Documents/How to/Install">Documents/How to/Install</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Install" title="Documents/How to/Install (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Install/ru" title="Документы/Как сделать/Установить (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.92.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_OpenSCADA_.D0.B7_.D0.B3.D0.BE.D1.82.D0.BE.D0.B2.D0.B8.D1.85_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D1.96.D0.B2"><span class="tocnumber">1</span> <span class="toctext">Встановлення OpenSCADA з готових пакетів</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#.D0.94.D0.BE.D0.B4.D0.B0.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.80.D0.B5.D0.BF.D0.BE.D0.B7.D0.B8.D1.82.D0.BE.D1.80.D1.96.D1.8E_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D1.96.D0.B2_.D1.82.D0.B0_.D0.B2.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_OpenSCADA_.D0.B7_.D0.BD.D1.8C.D0.BE.D0.B3.D0.BE"><span class="tocnumber">1.1</span> <span class="toctext">Додавання репозиторію пакетів та встановлення OpenSCADA з нього</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.A0.D1.83.D1.87.D0.BD.D0.B5_.D0.B2.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D1.96.D0.B2_OpenSCADA"><span class="tocnumber">1.2</span> <span class="toctext">Ручне встановлення пакетів OpenSCADA</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.92.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F-.D0.B7.D0.B1.D1.96.D1.80.D0.BA.D0.B0_.D0.B7_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D1.96.D0.B2"><span class="tocnumber">2</span> <span class="toctext">Встановлення-збірка з вихідних текстів</span></a></li>
+</ul>
+</div>
+
+<p>Встановлення OpenSCADA, загалом, можна здійснити двома способами. Перший та простий спосіб — це отримати готові пакети для використаного дистрибутиву ОС Linux. Другий — зібрати OpenSCADA з вихідних текстів.
+</p><p>Процедура встановлення сильно залежить від використаного дистрибутиву Linux та вичерпно її описати у даному посібнику не є можливим. Тому може знадобитися глибоке знайомство з механізмами встановлення ПЗ обраного дистрибутиву Linux з його документації. У випадку відсутності у користувача таких знань, умінь та переваг до якогось дистрибутиву Linux, наполегливо рекомендується обирати його за критерієм наявності до нього пакетів OpenSCADA, що забезпечить найпростіше та безпроблемне встановлення.
+</p><p>Якщо у користувача викликає труднощі встановлення не тільки OpenSCADA, але й дистрибутиву Linux, то на перший час він може скористатися "живим" дистрибутивом Linux з встановленою та готовою до роботи та вивчення демонстрацією та повноцінною OpenSCADA. Якщо його влаштує таке оточення швидкої доступності то він може зупинити свій вибір на ньому та установити. На цей час доступні "живі" збірки на основі дистрибутиву Debian та ALTLinux (застаріле) у вигляді гібридних CD/DVD/USB-штампів, на сторінці: <a class="external free" href="http://oscada.org/ua/golovna/zavantazhiti/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/ua/golovna/zavantazhiti/</a>. Детальніше дивіться у документі рецепту (How to ...) <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">"Живий диск (Live CD/DVD/USB)"</a>.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Динамічна модель компресорної станції на 6 газових компресорів, яка лежить у основі демонстраційної БД, потребує значних обчислювальних ресурсів, а саме процесору з частотою більш 1 ГГц (x86). Дані ресурси потрібні безпосередньо для динамічної моделі та не є загальним показником ресурсоємності програми у кінцевих задачах!
+</p>
+<h3><span class="mw-headline" id=".D0.92.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_OpenSCADA_.D0.B7_.D0.B3.D0.BE.D1.82.D0.BE.D0.B2.D0.B8.D1.85_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D1.96.D0.B2"><span class="mw-headline-number">1</span> Встановлення OpenSCADA з готових пакетів</span></h3>
+<p>Встановлення з готових пакетів, своєю чергою, може здійснюватися двома методами. Перший — простіший, коли пакети OpenSCADA вже присутні у власних репозиторіях пакетів OpenSCADA або офіційних, додаткових репозиторіях використаного дистрибутиву ОС Linux. Встановлення таких пакетів це питання запуску типової програми управління пакетами дистрибутива з подальшим вибором пакетів OpenSCADA. Окрім простого встановлення, репозитрій пакетів загалом дозволяє просто утримувати операційну систему оновленою, безпечною та актуальною! Другий спосіб передбачає отримання пакетів OpenSCADA та встановлення їх вручну.
+</p><p>Перевірити наявність пакетів OpenSCADA у репозиторіях дистрибутивів Linux або OpenSCADA, а також завантажити пакети OpenSCADA для ручного встановлення, можна на сторінці завантаження офіційного сайту OpenSCADA (<a class="external free" href="http://oscada.org/ua/golovna/zavantazhiti/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/ua/golovna/zavantazhiti/</a>). Тут Ви також можете отримати конфігурацію для підключення репозиторіїв пакетів OpenSCADA до пакетного менеджеру вашого дистрибутиву Linux.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Завантажувати пакети та підключати репозиторії пакетів треба безпосередньо для версії використаного дистрибутиву інакше при встановлені можуть виникнути нерозв'язні проблеми з залежностями.
+</p>
+<h4><span class="mw-headline" id=".D0.94.D0.BE.D0.B4.D0.B0.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.80.D0.B5.D0.BF.D0.BE.D0.B7.D0.B8.D1.82.D0.BE.D1.80.D1.96.D1.8E_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D1.96.D0.B2_.D1.82.D0.B0_.D0.B2.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_OpenSCADA_.D0.B7_.D0.BD.D1.8C.D0.BE.D0.B3.D0.BE"><span class="mw-headline-number">1.1</span> Додавання репозиторію пакетів та встановлення OpenSCADA з нього</span></h4>
+<p>Репозиторії з пакетами надаються самим проектом OpenSCADA, службова інформація яких зазвичай розташовується поряд з самими пакетами та оновлюється автоматично при збірці, тобто ці репозиторії є найбільш свіжими та найліпшим. Хоча пакети OpenSCADA все ще можна зустріти у репозиторіях таких дистрибутивів ОС Linux: <a class="external text" href="http://www.altlinux.ru" rel="nofollow noreferrer noopener" target="_blank">ALTLinux</a> та дистрибутивах, заснованих на пакетній базі <a class="external text" href="http://fedoraproject.org" rel="nofollow noreferrer noopener" target="_blank">Fedora</a>, але вони там, скоріш за все, будуть старі, оскільки збірка до репозиторіїв дистрибутивів розробниками наразі не практикується!
+</p><p>Адреси репозиторіїв та конфігурацію менеджеру репозиторіїв Ви можете отримати на тій самій сторінці завантаження OpenSCADA (<a class="external free" href="http://oscada.org/ua/golovna/zavantazhiti/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/ua/golovna/zavantazhiti/</a>) або в прикладах нижче.
+</p><p>При встановлені з репозиторію обираємо тільки пакет з конфігурацією проекту OpenSCADA або моделлю. Все інше, згідно до залежностей, буде обрано та встановлено автоматично. Зазвичай передбачаються наступні пакети такого роду:
+</p>
+<ul><li> <b>openscada-model-aglks</b>, <b>openscada-model-boiler</b> — проекти динамічних моделей технологічних процесів, які за сумісництвом виконують функцію демонстрації OpenSCADA;</li>
+<li> <b>openscada-vis-station</b> — шаблонний проект SCADA станції, зазвичай — запуск у графічному інтерфейсі та без Web;</li>
+<li> <b>openscada-server</b> — шаблонний проект серверу SCADA, що запускається у фоновому режимі — режим демону;</li>
+<li> <b>openscada-plc</b> — шаблонний проект ПЛК, що запускається у фоновому режимі — режим демону;</li>
+<li> <b>openscada</b> — типове-повне встановлення OpenSCADA.</li></ul>
+<p>Встановлення-оновлення з репозиторію є простим, але специфічним для дистрибутиву Linux, віконного менеджеру або окремої програми роботи з репозиторіями та пакетами, тому відішлемо читача до відповідної документації на дистрибутив або програму, які він використовує. Тут-же коротко розглянемо додання репозиторію та встановлення OpenSCADA за допомогою типових інструментів командного рядку:
+</p><p><b>Репозиторії пакетів, основані на менеджері APT (Debian, Ubuntu, ALTLinux)</b> — додаються розташуванням завантаженого файлу "openscada.list" до теки "/etc/apt/sources.list.d" або редагуванням файлу /etc/apt/sources.list, вставкою одного рядка:<br />
+<i>Debian:</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.9.0/Debian/9" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.9.0/Debian/9</a> ./"<br />
+<i>Debian (робоча версія):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Debian/9" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Debian/9</a> ./"<br />
+<i>Debian (робоча версія, модулі окремо):</i> "deb <a class="external free" href="http://ftp.oscada.org/Debian/9/openscada" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/Debian/9/openscada</a> ./"<br />
+<i>Ubuntu:</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.9.0/Ubuntu/16.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.9.0/Ubuntu/16.04</a> ./"<br />
+<i>Ubuntu (робоча версія):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/16.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/16.04</a> ./"<br />
+Встановлення:
+</p>
+<pre style="white-space: pre-wrap;">
+$ apt-get update
+$ apt-get install openscada-model-aglks
+</pre>
+<p><i>ALTLinux:</i> "rpm <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.9.0/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.9.0/ALTLinux/7</a> openscada main"<br />
+<i>ALTLinux (робоча версія):</i> "rpm <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/ALTLinux/6" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/ALTLinux/6</a> openscada main"<br />
+<i>ALTLinux (робоча версія, модулі окремо):</i> "rpm <a class="external free" href="http://ftp.oscada.org/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/ALTLinux/7</a> openscada main"<br />
+Встановлення:
+</p>
+<pre style="white-space: pre-wrap;">
+$ apt-get update
+$ apt-get install openscada-Model.AGLKS
+</pre>
+<p>Додання ключа перевірки підпису (дійсності) репозиторію та пакетів у ньому (необов'язково та використовується не у всіх репозиторіях):
+</p>
+<pre style="white-space: pre-wrap;">
+ $ wget -O - http://ftp.oscada.org/Misc/pkgSignKey | sudo apt-key add - </pre>
+<p><b>Репозиторії пакетів, що засновано на менеджері пакетів YUM (RedHat, Fedora, CentOs)</b> — додаються завантаженням або створенням файлу /etc/yum.repos.d/openscada.repo з вмістом:
+</p>
+<pre style="white-space: pre-wrap;">
+[openscada]
+name=OpenSCADA
+#CentoOs
+baseurl=http://ftp.oscada.org/OpenSCADA/0.9.0/CentOs/7
+#CentoOs (рабочая версия)
+#baseurl=http://ftp.oscada.org/OpenSCADA/Work/CentOs/6
+#Fedora (рабочая версия)
+#baseurl=http://ftp.oscada.org/OpenSCADA/Work/Fedora/12
+enabled=1
+gpgcheck=0
+</pre>
+<p>Встановлення:
+</p>
+<pre style="white-space: pre-wrap;">
+$ yum install openscada-Model.AGLKS </pre>
+<p><b>Репозиторії пакетів SuSE YaST</b> — додаються командою:
+</p>
+<pre style="white-space: pre-wrap;">
+$ zypper ar -f http://ftp.oscada.org/OpenSCADA/0.9.0/SuSE/13 OpenSCADA</pre>
+<p>Встановлення:
+</p>
+<pre style="white-space: pre-wrap;">
+$ zypper in openscada-Model.AGLKS </pre>
+<h4><span class="mw-headline" id=".D0.A0.D1.83.D1.87.D0.BD.D0.B5_.D0.B2.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D1.96.D0.B2_OpenSCADA"><span class="mw-headline-number">1.2</span> Ручне встановлення пакетів OpenSCADA</span></h4>
+<p>Для ручного встановлення пакетів OpenSCADA їх треба завантажити з офіційного сайту або іншого джерела. Завантажити зазвичай можна два набори пакетів.
+</p><p>Перший набір представлено одиннадцатью пакетами:
+</p>
+<ul><li> <b>openscada</b> — пакет зі всіма файлами, потрібними для запуску OpenSCADA у повному об'ємі, включаючи всі модулі;</li>
+<li> <b>openscada-server</b> — містить залежності, файл сценарію та конфігурацію проекту сервера для запуску OpenSCADA у режимі сервісу-демону;</li>
+<li> <b>openscada-libdb-main</b> — основні бібліотеки OpenSCADA для збору даних та іншого, у БД SQLite;</li>
+<li> <b>openscada-libdb-vca</b> — бібліотеки візуальних компонентів, у БД SQLite;</li>
+<li> <b>openscada-model-aglks</b> — БД та конфігурація динамічної моделі реального часу "АГЛКС" (Демо: EN,UK,RU);</li>
+<li> <b>openscada-model-boiler</b> — БД та конфігурація динамічної моделі реального часу "Котел" (EN,UK,RU);</li>
+<li> <b>openscada-doc-en</b> — offline документація OpenSCADA, англійська мова;</li>
+<li> <b>openscada-doc-uk</b> — offline документація OpenSCADA, українська мова;</li>
+<li> <b>openscada-doc-ru</b> — offline документація OpenSCADA, російська мова;</li>
+<li> <b>openscada-dev</b> — пакет розробки, для окремого створення модулів OpenSCADA;</li>
+<li> <b>openscada-dbg</b> — пакет налагодження, містить налагоджувальну інформацію бінарних файлів для <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/How_to/Crash_report" title="Special:MyLanguage/Documents/How to/Crash report">звіту</a> та пошуку помилок у програмі.</li></ul>
+<p>Другий набір представлено біля п'ятдесятьма пакетами, з відокремленням модулів OpenSCADA у окремі пакети:
+</p>
+<ul><li> <b>openscada-core</b> — містить ядро OpenSCADA, базову конфігурацію та запускальні файли;</li>
+<li> <b>openscada-db-*</b> — модулі підсистеми "БД";</li>
+<li> <b>openscada-daq-*</b> — модулі підсистеми "Збір даних";</li>
+<li> <b>openscada-arh-*</b> — модулі підсистеми "Архіви-Історія";</li>
+<li> <b>openscada-tr-* </b> — модулі підсистеми "Транспорти";</li>
+<li> <b>openscada-prot-* </b> — модулі підсистеми "Транспортні протоколи";</li>
+<li> <b>openscada-ui-* </b> — модулі підсистеми "Користувацькі інтерфейси";</li>
+<li> <b>openscada-spec-* </b> — модулі підсистеми "Спеціальні";</li>
+<li> <b>openscada</b> — віртуальний пакет, що містить залежності для встановлення типової конфігурації OpenSCADA;</li>
+<li> <b>openscada-plc</b> — містить залежності, файл сценарію, конфігурацію проекту ПЛК для запуску OpenSCADA у режимі сервісу-демона;</li>
+<li> <b>openscada-server</b> — містить залежності, файл сценарію та конфігурацію проекту сервера для запуску OpenSCADA у режимі сервісу-демону;</li>
+<li> <b>openscada-vis-station</b> — віртуальний пакет, що містить залежності для встановлення типової конфігурації OpenSCADA, як візуальна SCADA-станція.</li>
+<li> <b>openscada-libdb-main</b> — основні бібліотеки OpenSCADA для збору даних та іншого, у БД SQLite;</li>
+<li> <b>openscada-libdb-vca</b> — бібліотеки візуальних компонентів, у БД SQLite;</li>
+<li> <b>openscada-model-aglks</b> — БД та конфігурація динамічної моделі реального часу "АГЛКС" (Демо: EN,UK,RU);</li>
+<li> <b>openscada-model-boiler</b> — БД та конфігурація динамічної моделі реального часу "Котел" (EN,UK,RU);</li>
+<li> <b>openscada-doc-en</b> — offline документація OpenSCADA, англійська мова;</li>
+<li> <b>openscada-doc-uk</b> — offline документація OpenSCADA, українська мова;</li>
+<li> <b>openscada-doc-ru</b> — offline документація OpenSCADA, російська мова;</li>
+<li> <b>openscada-dev</b> — пакет розробки, для окремого створення модулів OpenSCADA;</li>
+<li> <b>openscada-dbg</b> — пакет налагодження, містить налагоджувальну інформацію бінарних файлів для <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/How_to/Crash_report" title="Special:MyLanguage/Documents/How to/Crash report">звіту</a> та пошуку помилок у програмі.</li></ul>
+<p>Перший набір пакетів більш призначено для простого-ручного встановлення, оскільки містить тільки одинадцять пакетів. Другий набір призначено для розташування у репозиторії дистрибутиву Linux та подальшого встановлення їх за допомогою пакетного менеджеру, який здійснює автоматичне розв'язання залежностей, а також дозволяє встановити тільки потрібні компоненти OpenSCADA, тим самим оптимізуючи робоче оточення.
+</p><p>Ручне встановлення DEB-пакетів першого набору можна здійснити командою, попередньо змінивши робочу директорію на директорію з пакетами:
+</p>
+<pre style="white-space: pre-wrap;">
+$ dpkg -i openscada-libdb.main_0.9.0-1_all.deb openscada-libdb.vca_0.9.0-1_all.deb openscada-model.aglks_0.9.0-1_all openscada_0.9.0-1_i386.deb </pre>
+<p>Ручне встановлення RPM-пакетів першого набору можна здійснити командою, попередньо змінивши робочу директорію на директорію з пакетами:
+</p>
+<pre style="white-space: pre-wrap;">
+$ rpm -i openscada-LibDB.Main-0.9.0-alt1.noarch.rpm openscada-LibDB.VCA-0.9.0-alt1.noarch.rpm openscada-Model.AGLKS-0.9.0-alt1.i586.rpm openscada-0.9.0-alt1.i586.rpm </pre>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> У процесі виконання встановлення можуть виникнути помилки, пов'язані з незадоволеними залежностями. При ручному встановлені із пакетів задовольняти їх треба буде вручну, подібно до встановлення пакетів OpenSCADA, або через менеджер пакетів дистрибутиву Linux. Випадки наявності проблем залежності можуть бути навіть при встановлені через пакетний менеджер, якщо використовується репозиторій OpenSCADA, який не відповідає дистрибутиву Linux або його версії, або-ж не підключено основні репозиторії пакетів самого дистрибутиву. У пакетному менеджері APT, для автоматичного розв'язання проблем зовнішніх залежностей, які виникли при ручному встановлені OpenSCADA, можна використовувати команду:
+</p>
+<pre style="white-space: pre-wrap;">
+$ apt-get install -f</pre>
+<h3><span class="mw-headline" id=".D0.92.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F-.D0.B7.D0.B1.D1.96.D1.80.D0.BA.D0.B0_.D0.B7_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D1.96.D0.B2"><span class="mw-headline-number">2</span> Встановлення-збірка з вихідних текстів</span></h3>
+<p>Якщо немає можливості отримати готові пакети OpenSCADA для обраного дистрибутиву, то залишається тільки варіант збірки OpenSCADA з вихідних текстів. Цей процес детально описано у <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/How_to/Build_from_source" title="Special:MyLanguage/Documents/How to/Build from source">посібнику по збірці OpenSCADA з вихідних текстів</a>.
+</p>
+
+
+
+
+
+</div></body>
+</html>

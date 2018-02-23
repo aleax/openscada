@@ -464,6 +464,7 @@ string TSYS::optDescr( )
 	"    --config=<file>	Station configuration file.\n"
 	"    --station=<id>	Station identifier.\n"
 	"    --statName=<name>	Station name.\n"
+	"    --modDir=<path>	Directories with the modules, separated by ';', they can include a files' template at the end.\n"
 	"    --demon, --daemon	Run in the daemon mode.\n"
 	"    --pidFile=<file>	File for the program process ID placing here.\n"
 	"    --noCoreDump	Prevents from the core dump creation at crashes - don't set the limit to the unlimited value.\n"
@@ -535,6 +536,12 @@ string TSYS::getCmdOpt_( int &curPos, string *argVal, int argc, char **argv )
     return "";
 }
 
+bool TSYS::cmdOptPresent( const string &opt )
+{
+    MtxAlloc res(dataRes(), true);
+    return mCmdOpts.find(strEncode(opt,ToLower)) != mCmdOpts.end();
+}
+
 string TSYS::cmdOpt( const string &opt, const string &setVl )
 {
     MtxAlloc res(dataRes(), true);
@@ -562,6 +569,7 @@ bool TSYS::cfgFileLoad( )
     if((tVl=cmdOpt("config")).size())	mConfFile = tVl;
     if((tVl=cmdOpt("station")).size())	mId = tVl;
     if((tVl=cmdOpt("statName")).size())	mName = tVl;
+    if((tVl=cmdOpt("modDir")).size())	setModDir(tVl, true);
 
     //Load config-file
     int hd = open(mConfFile.c_str(), O_RDONLY);
@@ -942,7 +950,8 @@ void TSYS::clkCalc( )
 	char buf[255];
 	FILE *fp = NULL;
 	//Try read file cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq for current CPU frequency get
-	if(!mSysclc && (fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq", "r"))) {
+	if(!mSysclc && ((fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq","r")) ||
+			(fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq","r")))) {
 	    size_t rez = fread(buf, 1, sizeof(buf)-1, fp); buf[rez] = 0;
 	    mSysclc = uint64_t(s2r(buf)*1e3);
 	    fclose(fp);
@@ -1822,6 +1831,10 @@ bool TSYS::prjSwitch( const string &prj, bool toCreate )
 
     //Call the projects manager procedure
     prjDir += "/" + prj;
+#if defined(__ANDROID__)
+    if(access(bindir_full "/openscada-proj",F_OK) == 0 && access(bindir_full "/openscada-proj",X_OK) != 0)
+	chmod(bindir_full "/openscada-proj", 0700);	//Set openscada-proj to the execution mode
+#endif
     if(access(bindir_full "/openscada-proj",F_OK|X_OK) == 0)
 	system((string("dPrj=") + oscd_datadir_full +
 		" dPrjUser=" + prjUserDir() +

@@ -58,7 +58,7 @@
 <li class="toclevel-2 tocsection-6"><a href="#Session_of_the_project_execution"><span class="tocnumber">3.3</span> <span class="toctext">Session of the project execution</span></a></li>
 <li class="toclevel-2 tocsection-7"><a href="#Styles"><span class="tocnumber">3.4</span> <span class="toctext">Styles</span></a></li>
 <li class="toclevel-2 tocsection-8"><a href="#Events.2C_their_processing_and_the_events.27_maps"><span class="tocnumber">3.5</span> <span class="toctext">Events, their processing and the events' maps</span></a></li>
-<li class="toclevel-2 tocsection-9"><a href="#Signaling_.28Alarms.29"><span class="tocnumber">3.6</span> <span class="toctext">Signaling (Alarms)</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Signaling_.28Alarms.29"><span class="tocnumber">3.6</span> <span class="toctext"><span>Signaling (Alarms)</span></span></a></li>
 <li class="toclevel-2 tocsection-10"><a href="#Rights_management"><span class="tocnumber">3.7</span> <span class="toctext">Rights management</span></a></li>
 <li class="toclevel-2 tocsection-11"><a href="#Linkage_with_the_dynamics"><span class="tocnumber">3.8</span> <span class="toctext">Linkage with the dynamics</span></a></li>
 <li class="toclevel-2 tocsection-12"><a href="#The_primitives_of_the_widget"><span class="tocnumber">3.9</span> <span class="toctext">The primitives of the widget</span></a>
@@ -581,7 +581,7 @@ event = ev_rez;
 </pre>
 <p><br />
 </p>
-<h3><span class="mw-headline" id="Signaling_.28Alarms.29"><span class="mw-headline-number">3.6</span> Signaling (Alarms)</span></h3>
+<h3><span class="mw-headline" id="Signaling_.28Alarms.29"><span class="mw-headline-number">3.6</span> <span id="Alarms" title="#Alarms">Signaling (Alarms)</span></span></h3>
 <p>An important element of any visualization interface is the user notification about the violation — alarming. To simplify the perception, but also in mind the close connectivity of visualization and notification (typically notification is amplified with the visualization) it is decided to integrate the interface of a notification in the visualization interface. To do this, all the widget provides two additional attributes (of the session level): "alarm" and "alarmSt". Attribute "alarm" is used to form the signal by the widget, according to his logic, and attribute "alarmSt" is used to control the signaling fact of the branch of the tree of the session of the project.
 </p><p>Attribute "alarm" is a line and has the following format: "<b>{lev}|{categ}|{message}|{type}|{tp_arg}</b>"<br />
 Where:

@@ -11,14 +11,14 @@
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Program manual</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual/ru" title="Документы/Руководство по программе (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Program_manual/uk" title="Документи/Посібник по програмі (100% translated)">українська</a></div></div>
-<p><i>Author:</i> <a class="external text" href="http://wiki.oscada.org/RomanSavochenko" rel="nofollow noreferrer noopener" target="_blank">Roman Savochenko</a>
+<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </p>
 <dl><dd><dl><dd><a class="external text" href="http://wiki.oscada.org/MaximLysenko" rel="nofollow noreferrer noopener" target="_blank">Maxim Lysenko</a> (2012) — the page initial translation</dd></dl></dd></dl>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Functions"><span class="tocnumber">1</span> <span class="toctext">Functions</span></a>
 <ul>
-<li class="toclevel-2 tocsection-2"><a href="#Modularity"><span class="tocnumber">1.1</span> <span class="toctext">Modularity</span></a></li>
+<li class="toclevel-2 tocsection-2"><a href="#Modularity"><span class="tocnumber">1.1</span> <span class="toctext"><span>Modularity</span></span></a></li>
 <li class="toclevel-2 tocsection-3"><a href="#Subsystems"><span class="tocnumber">1.2</span> <span class="toctext">Subsystems</span></a></li>
 <li class="toclevel-2 tocsection-4"><a href="#PLC_and_other_sources_of_dynamic_data.2C_the_subsystem_.22Data_acquisition.22"><span class="tocnumber">1.3</span> <span class="toctext"><span>PLC and other sources of dynamic data, the subsystem "Data acquisition"</span></span></a></li>
 <li class="toclevel-2 tocsection-5"><a href="#Databases.2C_the_subsystem_of_.22Databases.22"><span class="tocnumber">1.4</span> <span class="toctext"><span>Databases, the subsystem of "Databases"</span></span></a></li>
@@ -54,7 +54,7 @@
 <li class="toclevel-2 tocsection-29"><a href="#Subsystem_.22Archives-History.22"><span class="tocnumber">4.6</span> <span class="toctext"><span>Subsystem "Archives-History"</span></span></a></li>
 <li class="toclevel-2 tocsection-30"><a href="#Subsystem_.22User_interfaces.22"><span class="tocnumber">4.7</span> <span class="toctext">Subsystem "User interfaces"</span></a></li>
 <li class="toclevel-2 tocsection-31"><a href="#Subsystem_.22Specials.22"><span class="tocnumber">4.8</span> <span class="toctext">Subsystem "Specials"</span></a></li>
-<li class="toclevel-2 tocsection-32"><a href="#Subsystem_.22Modules_scheduler.22"><span class="tocnumber">4.9</span> <span class="toctext">Subsystem "Modules scheduler"</span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#Subsystem_.22Modules_scheduler.22"><span class="tocnumber">4.9</span> <span class="toctext"><span>Subsystem "Modules scheduler"</span></span></a></li>
 <li class="toclevel-2 tocsection-33"><a href="#Configuration_file_and_command_line_parameters"><span class="tocnumber">4.10</span> <span class="toctext"><span>Configuration file and command line parameters</span></span></a></li>
 </ul>
 </li>
@@ -95,7 +95,7 @@
 <p>About actual functions and demands of OpenSCADA you can read on the page "<a href="Functions_and_demands.html" title="Special:MyLanguage/Functions and demands">Functions and demands</a>" but in this document we will learn the common functions and properties of the program.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:703px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_struct.png"><img class="thumbimage" height="360" src="files/Oscada_struct.png" width="701" /></a>  <div class="thumbcaption">Fig. 1. Block scheme of OpenSCADA.</div></div></div></div>
-<h3><span class="mw-headline" id="Modularity"><span class="mw-headline-number">1.1</span> Modularity</span></h3>
+<h3><span class="mw-headline" id="Modularity"><span class="mw-headline-number">1.1</span> <span id="Modularity" title="#Modularity">Modularity</span></span></h3>
 <p>In order to achieve flexibility and a high degree of scalability OpenSCADA is constructed in a modular fashion. Tight integration the modules with the core improves the program stability in whole due to repeat of using the well-tuned code. But same process of developing of self code of the modules OpenSCADA imposes greater responsibility — possible errors introduce an element of instability into the program. The ability to create distributed configurations smooths this danger.
 </p><p>OpenSCADA modules are stored within dynamic libraries and each shared library can contain modules of various types. The filling of dynamic libraries by modules is determined by the functional connectivity of the modules itself. Dynamic libraries are hot swappable which allows to update certain parts of the program during the operation. This method of storing of modules' code in dynamic libraries is essential for OpenSCADA, because it is supported by practically all modern operating systems (OS). However, this does not exclude the possibility of developing other methods of storing of the modules' code.
 </p><p>OpenSCADA has the following functional parts implemented in modules:
@@ -880,7 +880,7 @@
 </p><p>Each module of the subsystem "Specials" provides configuration page with the tabs "Special" and "Module". The "Special" tab (Fig.4.8) provides the parameter for monitoring the "Running" status of the module, as well as the configuration sections specialized for the modules of this subsystem. On the "Module" tab it is provided the information about the module of subsystem "Specials" (Fig.4.1c), whose structure is identical for all modules.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:630px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_spec_mod.png"><img class="thumbimage" height="548" src="files/QTCfg_subsys_spec_mod.png" width="628" /></a>  <div class="thumbcaption">Fig. 4.8. Tab "Special" of the module of the subsystems "Specials".</div></div></div></div>
-<h3><span class="mw-headline" id="Subsystem_.22Modules_scheduler.22"><span class="mw-headline-number">4.9</span> Subsystem "Modules scheduler"</span></h3>
+<h3><span class="mw-headline" id="Subsystem_.22Modules_scheduler.22"><span class="mw-headline-number">4.9</span> <span id="CfgModSched" title="#CfgModSched">Subsystem "Modules scheduler"</span></span></h3>
 <p>The subsystem is not modular one. To configure the subsystem "Modules scheduler" the subsystem page is provided, it contains the tab "Subsystem". The "Subsystem" tab (Fig.4.9) contains the basic settings of the subsystem in the contains:
 </p>
 <ul><li> <i>Path to the shared libraries(modules)</i> — information about the location of the directory with the modules of OpenSCADA. It is set by the parameter <i>ModDir</i> of the configuration file of the station.</li>
@@ -1392,6 +1392,7 @@
     --config=&lt;file&gt;     Station configuration file.
     --station=&lt;id&gt;      Station identifier.
     --statName=&lt;name&gt;   Station name.
+    --modDir=&lt;path&gt;	Directories with the modules, separated by ';', they can include a files' template at the end.
     --demon, --daemon   Run in the daemon mode.
     --pidFile=&lt;file&gt;    File for the program process ID placing here.
     --noCoreDump        Prevents from the core dump creation at crashes - don't set the limit to the unlimited value.

@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <array name="qt_sources">
+        <item>https://download.qt.io/ministro/android/qt5/qt-5.8</item>
+    </array>
+
+    <array name="bundled_libs">
+        
+    </array>
+
+     <array name="qt_libs">
+	<item>crystax</item>
+	<item>gnustl_shared</item>
+	<item>Qt5Core</item>
+	<item>Qt5Gui</item>
+	<item>Qt5Widgets</item>
+	<item>Qt5PrintSupport</item>
+	<item>Qt5Sensors</item>
+     </array>
+
+    <array name="bundled_in_lib">
+	<item>libplugins_platforms_android_libqtforandroid.so:plugins/platforms/android/libqtforandroid.so</item>
+	<item>libplugins_sensors_libqtsensors_generic.so:plugins/sensors/libqtsensors_generic.so</item>
+	<item>libplugins_sensors_libqtsensors_android.so:plugins/sensors/libqtsensors_android.so</item>
+	<item>libplugins_imageformats_libqgif.so:plugins/imageformats/libqgif.so</item>
+	<item>libplugins_imageformats_libqicns.so:plugins/imageformats/libqicns.so</item>
+	<item>libplugins_imageformats_libqico.so:plugins/imageformats/libqico.so</item>
+	<item>libplugins_imageformats_libqjpeg.so:plugins/imageformats/libqjpeg.so</item>
+	<item>libplugins_imageformats_libqsvg.so:plugins/imageformats/libqsvg.so</item>
+	<item>libplugins_imageformats_libqtga.so:plugins/imageformats/libqtga.so</item>
+	<item>libplugins_imageformats_libqtiff.so:plugins/imageformats/libqtiff.so</item>
+	<item>libplugins_imageformats_libqwbmp.so:plugins/imageformats/libqwbmp.so</item>
+	<item>libplugins_imageformats_libqwebp.so:plugins/imageformats/libqwebp.so</item>
+    </array>
+
+    <array name="bundled_in_assets">
+	<item>openscada-proj:../bin/openscada-proj</item>
+	<item>oscada.xml:../oscada.xml</item>
+	<item>oscada_start.xml:../oscada_start.xml</item>
+	<item>oscada_AGLKS.xml:../oscada_AGLKS.xml</item>
+	<item>oscada_Boiler.xml:../oscada_Boiler.xml</item>
+	<item>LibsDB/OscadaLibs.db:../openscada/LibsDB/OscadaLibs.db</item>
+	<item>LibsDB/vcaBase.db:../openscada/LibsDB/vcaBase.db</item>
+	<item>LibsDB/vcaTest.db:../openscada/LibsDB/vcaTest.db</item>
+	<item>AGLKS/St.db:../openscada/AGLKS/St.db</item>
+	<item>AGLKS/vca.db:../openscada/AGLKS/vca.db</item>
+	<item>AGLKS/Model.db:../openscada/AGLKS/Model.db</item>
+	<item>Boiler/St.db:../openscada/Boiler/St.db</item>
+	<item>Boiler/Model.db:../openscada/Boiler/Model.db</item>

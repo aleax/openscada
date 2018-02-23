@@ -29,7 +29,15 @@
 #include <QSystemTrayIcon>
 
 #include "tbds.h"
+#include <tsys.h>
 #include <tuis.h>
+
+#ifdef HAVE_QTSENSORS
+# include <QSensor>
+# if QT_VERSION < 0x050000
+using namespace QtMobility;
+# endif
+#endif
 
 #undef _
 #define _(mess) mod->I18N(mess)
@@ -119,6 +127,11 @@ public:
     //Attribute
     MtxString	origStl;
 
+#ifdef HAVE_QTSENSORS
+    TVariant		sensCnt;
+    vector<QSensor *>	sensors;
+#endif
+
 protected:
     //Methods
     void timerEvent( QTimerEvent *event );
@@ -183,6 +196,7 @@ protected:
     void load_( );
     void save_( );
     void cntrCmdProc( XMLNode *opt );		//Control interface command process
+    TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
     void postEnable( int flag );
     void preDisable( int flag );
     void postDisable( int flag );

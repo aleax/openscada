@@ -11,7 +11,7 @@
 </div>
 			<h1 id="firstHeading" lang="ru">Документация/API пользователя</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FUser+API&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API">Documents/User API</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/uk" title="Документація/API користувача (100% translated)">українська</a></div></div>
-<p><i>Автор:</i> <a class="external text" href="http://wiki.oscada.org/RomanSavochenko" rel="nofollow noreferrer noopener" target="_blank">Роман Савоченко</a>
+<p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -43,18 +43,19 @@
 </li>
 <li class="toclevel-1 tocsection-18"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9F.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B.22_.28SYS.UI.29"><span class="tocnumber">10</span> <span class="toctext">Подсистема "Пользовательские интерфейсы" (SYS.UI)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-19"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_UI.VCAEngine"><span class="tocnumber">10.1</span> <span class="toctext">Модуль UI.VCAEngine</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_QTStarter"><span class="tocnumber">10.1</span> <span class="toctext">Модуль QTStarter</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_UI.VCAEngine"><span class="tocnumber">10.2</span> <span class="toctext">Модуль UI.VCAEngine</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-20"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A1.D0.BF.D0.B5.D1.86.D0.B8.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5.22_.28SYS.Special.29"><span class="tocnumber">11</span> <span class="toctext">Подсистема "Специальные" (SYS.Special)</span></a>
+<li class="toclevel-1 tocsection-21"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A1.D0.BF.D0.B5.D1.86.D0.B8.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5.22_.28SYS.Special.29"><span class="tocnumber">11</span> <span class="toctext">Подсистема "Специальные" (SYS.Special)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-21"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D0.BE.D0.B3.D0.BE_API_.D1.81.D1.80.D0.B5.D0.B4.D1.8B_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.28Special.FLibSYS.29"><span class="tocnumber">11.1</span> <span class="toctext">Модуль Библиотека системного API среды пользовательского программирования (Special.FLibSYS)</span></a></li>
-<li class="toclevel-2 tocsection-22"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.8B.D1.85_.D0.BC.D0.B0.D1.82.D0.B5.D0.BC.D0.B0.D1.82.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D1.85_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.28Special.FLibMath.29"><span class="tocnumber">11.2</span> <span class="toctext">Модуль Библиотека стандартных математических функций (Special.FLibMath)</span></a></li>
-<li class="toclevel-2 tocsection-23"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.D1.81.D0.BE.D0.B2.D0.BC.D0.B5.D1.81.D1.82.D0.B8.D0.BC.D0.BE.D1.81.D1.82.D0.B8_.D1.81.D0.BE_SCADA_Complex1_.D1.84.D0.B8.D1.80.D0.BC.D1.8B_.D0.9E.D0.9E.D0.9E_.D0.9D.D0.98.D0.9F_.22DIYA.22_.28Special.FLibComplex1.29"><span class="tocnumber">11.3</span> <span class="toctext">Модуль Библиотека функций совместимости со SCADA Complex1 фирмы ООО НИП "DIYA" (Special.FLibComplex1)</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D0.BE.D0.B3.D0.BE_API_.D1.81.D1.80.D0.B5.D0.B4.D1.8B_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.28Special.FLibSYS.29"><span class="tocnumber">11.1</span> <span class="toctext">Модуль Библиотека системного API среды пользовательского программирования (Special.FLibSYS)</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.8B.D1.85_.D0.BC.D0.B0.D1.82.D0.B5.D0.BC.D0.B0.D1.82.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D1.85_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.28Special.FLibMath.29"><span class="tocnumber">11.2</span> <span class="toctext">Модуль Библиотека стандартных математических функций (Special.FLibMath)</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.D1.81.D0.BE.D0.B2.D0.BC.D0.B5.D1.81.D1.82.D0.B8.D0.BC.D0.BE.D1.81.D1.82.D0.B8_.D1.81.D0.BE_SCADA_Complex1_.D1.84.D0.B8.D1.80.D0.BC.D1.8B_.D0.9E.D0.9E.D0.9E_.D0.9D.D0.98.D0.9F_.22DIYA.22_.28Special.FLibComplex1.29"><span class="tocnumber">11.3</span> <span class="toctext">Модуль Библиотека функций совместимости со SCADA Complex1 фирмы ООО НИП "DIYA" (Special.FLibComplex1)</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-24"><a href="#.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B8_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F"><span class="tocnumber">12</span> <span class="toctext">Библиотеки функций пользователя</span></a></li>
-<li class="toclevel-1 tocsection-25"><a href="#.D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="tocnumber">13</span> <span class="toctext">Ссылки</span></a></li>
+<li class="toclevel-1 tocsection-25"><a href="#.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B8_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F"><span class="tocnumber">12</span> <span class="toctext">Библиотеки функций пользователя</span></a></li>
+<li class="toclevel-1 tocsection-26"><a href="#.D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="tocnumber">13</span> <span class="toctext">Ссылки</span></a></li>
 </ul>
 </div>
 
@@ -517,7 +518,7 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 </ul>
 <h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.8B.22_.28SYS.Protocols.29"><span class="mw-headline-number">9</span> Подсистема "Протоколы" (SYS.Protocols)</span></h2>
 <h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_Protocol.HTTP"><span class="mw-headline-number">9.1</span> Модуль <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a></span></h3>
-<p><b>Именно этот объект модуля "Protocol.HTTP" [SYS.Protocol.HTTP.pgCreator()]</b>
+<p><b>Объект модуля (SYS.Protocol.HTTP)</b>
 </p>
 <ul><li> <i>bool pgAccess(string URL)</i> — проверка доступности страницы определённой в <i>URL</i>.
 <ul><li> <i>URL</i> — URL страницы которая проверяется.</li></ul></li>
@@ -531,7 +532,11 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <p><br />
 </p>
 <h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9F.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B.22_.28SYS.UI.29"><span class="mw-headline-number">10</span> Подсистема "Пользовательские интерфейсы" (SYS.UI)</span></h2>
-<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_UI.VCAEngine"><span class="mw-headline-number">10.1</span> Модуль <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></span></h3>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_QTStarter"><span class="mw-headline-number">10.1</span> Модуль <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a></span></h3>
+<p><b>Объект модуля (SYS.UI.QTStarter)</b>
+</p>
+<ul><li> <i>Array sensors()</i> — получить все доступные сенсоры от Qt mobility.</li></ul>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_UI.VCAEngine"><span class="mw-headline-number">10.2</span> Модуль <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></span></h3>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine_ru.png" title="Объектная модель пользователя модуля VCAEngine."><img alt="Объектная модель пользователя модуля VCAEngine." height="238" src="files/Oscada_UserOM_VCAEngine_ru.png" width="364" /></a></div>
 <p><b>Объект "Сеанс" ( this.ownerSess() )</b>
 </p>

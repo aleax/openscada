@@ -957,6 +957,7 @@ Group: Documentation
 %if 0%{?flag_el}
 BuildArch: noarch
 %endif
+Requires: %{name}-docEN
 %description docRU
 The %name-docRU package include documents files (Russian).
 %description docRU -l ru_RU.UTF8
@@ -972,6 +973,7 @@ Group: Documentation
 %if 0%{?flag_el}
 BuildArch: noarch
 %endif
+Requires: %{name}-docEN
 %description docUK
 The %name-docUK package include documents files (Ukraine).
 %description docUK -l ru_RU.UTF8

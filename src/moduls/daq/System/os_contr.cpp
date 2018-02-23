@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.System file: os_contr.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,6 +41,7 @@
 #include "da_netstat.h"
 #include "da_ups.h"
 #include "da_fs.h"
+#include "da_qsensor.h"
 #include "os_contr.h"
 
 //*************************************************
@@ -49,7 +50,7 @@
 #define MOD_NAME	_("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.2.0"
+#define MOD_VER		"2.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
 #define LICENSE		"GPL2"
@@ -120,6 +121,7 @@ void TTpContr::postEnable( int flag )
     daReg(new NetStat());
     daReg(new UPS());
     daReg(new FS());
+    daReg(new QSensor());
 
     //Controler's bd structure
     fldAdd(new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3",_("Manual;Fast sources;Slow sources;All sources")));

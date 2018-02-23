@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Документи/Як зробити/Порушення, сигналізація та повідомлення - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Документи/Як зробити/Порушення, сигналізація та повідомлення</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FViolations%2C+alarms+and+notifications&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Violations,_alarms_and_notifications" title="Documents/How to/Violations, alarms and notifications">Documents/How to/Violations, alarms and notifications</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Violations,_alarms_and_notifications" title="Documents/How to/Violations, alarms and notifications (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Violations,_alarms_and_notifications/ru" title="Документы/Как сделать/Нарушения, сигнализация и уведомления (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</p><p>Порушення та робота з ними у OpenSCADA реалізуються двояко, що пов'язано зі структурою OpenSCADA, способами її використання, а також самою природою порушень.
+</p><p>Першою стороною порушень, з якою OpenSCADA працює від початку та яка найбільш затребувана, є повідомлення різними способами. Оскільки повідомлення це частина інтерфейсу користувача то й реалізовано їх у рушії візуалізації <a href="../en/Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a> та візуалізаторах <a href="../en/Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a>, <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>. На цей час, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/WebVision#Alarms" title="Special:MyLanguage/Modules/WebVision">механізм повідомлення про порушення</a> реалізує функції, частина з яких ще не реалізована у <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>:
+</p>
+<ul><li> Повідомлення:
+<ul><li> <i>Візуально</i> — миготіння кольором порушення для об'єкту, групи сигналізації та загального статусу.</li>
+<li> <i>Гудком</i> — видача неперервного сигналу, зазвичай на системний "бузер" та незалежно від порушення.</li>
+<li> <i>Звуком</i> — програвання звукового файлу або синтез мови з тексту, пов'язаного з порушенням.</li>
+<li> Розширеними особливими способами та через спеціальні механізми повідомлення.</li></ul></li>
+<li> Квітування повідомлення про порушення:
+<ul><li> <i>Повністю</i> — по натисканню на кольорове миготливе коло статусу порушень (повідомлення "ws_alarmLev"), праворуч знизу.</li>
+<li> <i>За способом повідомлення</i> — окремо візуальну (повідомлення "ws_alarmNtf0"), гудок (повідомлення "ws_alarmNtf1"), звукову (повідомлення "ws_alarmNtf2") та розширене (повідомлення "ws_alarmNtf{N}"); по натиску кнопки з відповідним зображенням праворуч знизу або під кнопками видів відображення.</li>
+<li> <i>За об'єктом порушення</i> — до образу візуального представлення може додаватися команда квітування повідомлення безпосередньо за ним.</li>
+<li> <i>Почергово, з вислуховуванням</i> — характерно для повідомлень звуком, оскільки кожний об'єкт порушення може надавати власне звукове повідомлення або синтез мови.</li></ul></li></ul>
+<p>У середовищі візуалізації, при реалізації повідомлень, немає встановленого правила отримання та формування ознаки порушення, оскільки немає однозначності у різних ситуаціях. На цей момент, на <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">стороні типізованих шаблонів джерела даних</a>, практикується спосіб формування атрибуту помилки "err" з кодами та текстом порушення, а їх обробка і формування повідомлення здійснюється вже у самому візуальному образі об'єкту даних. Інколи обробка границь уставок також здійснюється прямо, у візуальному образі об'єкту даних.
+</p><p>Згодом виникла потреба протоколювання, а також обліку актуальних на поточний час порушень. Якщо для протоколювання достатньо формування повідомлень програми з обумовленою категорією та форматом повідомлення, то для контролю за поточними порушеннями потрібен деякий буфер. Такий буфер було додано, у вигляді надбудови над підсистемою повідомлень, а адресація до нього здійснюється інверсією рівня повідомлення. Так, запис повідомлення з рівнем "-2" та категорією "TEST" помістить повідомлення до буферу порушень та продублює його у архіві повідомлень. При запиті повідомлень з негативним рівнем, повідомлення будуть братися з буферу порушень. Видалення-зняття порушення здійснюється записом повідомлення з тією-ж категорією "TEST" та не-негативним рівнем.
+</p><p>Така концепція обліку активних порушень дозволяє використовувати стандартні механізми роботи з повідомленнями:
+</p>
+<ul><li> Реєстрація порушення: <i>SYS.message("alCategory", -3, "Параметр: порушення");</i></li>
+<li> Зняття порушення: <i>SYS.message("alCategory", 1, "Параметр: норма");</i></li>
+<li> Формування переліку активних порушень: за посередництвом примітиву "Протокол" або "Документ", з негативним рівнем, для всіх — "-1".</li></ul>
+<p>Реєстрацію порушень краще за все здійснювати на боці <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">типізованих шаблонів джерела даних</a>, за посередництвом спеціальної функції <b>SYS.DAQ["Modul"]["Controller"].alarmSet(string mess, int lev = -5, string prm = "")</b>, яка уніфікує категорію. Для виклику цієї функції з контексту шаблону треба додати IO "this" типу "Об'єкт", після чого встановлення порушення матиме вигляд <b>this.cntr().alarmSet("Параметр: порушення", -5, "prm");</b>. Вказана функція наразі використовується у багатьох модулях джерел даних, для обліку глобальних порушень об'єктів контролерів.
+</p><p>Функція формує порушення з категорією: <b>al{ModId}:{CntrId}[.{PrmId}]</b>, де:
+</p>
+<ul><li> <i>ModId</i> — ідентифікатор модуля;</li>
+<li> <i>CntrId</i> — ідентифікатор об'єкту контролера;</li>
+<li> <i>PrmId</i> — ідентифікатор параметру, з аргументу <i>prm</i>.</li></ul>
+<p>Формат тексту цією функцією не регламентуються, але є практика формування тексту порушення, визначена кадрами формування звітних документів на кшталт "Протокол порушень", де застосовується формат: <b>{PrmId}: {PrmName}: {Alarm}</b> та де додатково визначено:
+</p>
+<ul><li> <i>PrmName</i> — ім'я параметру;</li>
+<li> <i>Alarm</i> — текст порушення або "НОРМА" для зняття порушення.</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Загалом треба відзначити, що повідомлення та облік порушень це різні механізми, які можуть використовуватися окремо — для простих проектів або разом — для великих-комплексних проектів.
+</p>
+
+
+
+
+
+</div></body>
+</html>

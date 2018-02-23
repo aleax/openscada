@@ -1,0 +1,43 @@
+--- data/oscada.xml~	2018-02-22 15:46:11.714759616 +0200
++++ data/oscada.xml	2018-02-22 15:46:32.354735844 +0200
+@@ -14,7 +14,7 @@
+ 	<prm id="SavePeriod">0</prm>
+ 
+ 	<node id="sub_ModSched">
+-	    <prm id="ModAllow">ui_QTStarter.so</prm>
++	    <prm id="ModAllow">liboscada_ui_QTStarter.so</prm>
+ 	    <prm id="ModDeny"></prm>
+ 	    <prm id="ChkPer">0</prm>
+ 	</node>
+--- data/ModelsDB/AGLKS/oscada_AGLKS.xml~	2018-02-22 15:52:06.722415645 +0200
++++ data/ModelsDB/AGLKS/oscada_AGLKS.xml	2018-02-22 15:52:44.546380046 +0200
+@@ -24,10 +24,10 @@
+ 
+ 	<node id="sub_Security">
+ 	    <tbl id="Security_user">
+-		<fld NAME="roman" DESCR="Roman Savochenko" PASS="$1$roman$wleNCf/uyA84cGpBn5QuG." />
+-		<fld NAME="root" DESCR="Administrator (superuser)!!!" DESCR_uk="Супер користувач" DESCR_ru="Супер пользователь" PASS="$1$root$lCn57dP9yzkCIAyrwJ24r1" />
+-		<fld NAME="test" DESCR="Test user" PASS="$1$test$pi/xDtU5WFVRqYS6BMU8X/" />
+-		<fld NAME="user" DESCR="Simple user" DESCR_uk="Звичайний користувач" DESCR_ru="Простой пользователь" PASS="$1$user$k8sntSoh7jhsc6lwspjsU." />
++		<fld NAME="roman" DESCR="Roman Savochenko" PASS="roman" />
++		<fld NAME="root" DESCR="Administrator (superuser)!!!" DESCR_uk="Супер користувач" DESCR_ru="Супер пользователь" PASS="openscada" />
++		<fld NAME="test" DESCR="Test user" PASS="test" />
++		<fld NAME="user" DESCR="Simple user" DESCR_uk="Звичайний користувач" DESCR_ru="Простой пользователь" PASS="user" />
+ 	    </tbl>
+ 	    <tbl id="Security_grp">
+ 		<fld NAME="Archive" DESCR="Archives-History" DESCR_uk="Архіви-Історія" DESCR_ru="Архивы-История" />
+--- data/ModelsDB/Boiler/oscada_Boiler.xml~	2018-02-22 15:54:40.734271231 +0200
++++ data/ModelsDB/Boiler/oscada_Boiler.xml	2018-02-22 15:55:07.862245939 +0200
+@@ -24,9 +24,9 @@
+ 
+ 	<node id="sub_Security">
+ 	    <tbl id="Security_user">
+-		<fld NAME="roman" DESCR="Roman Savochenko" PASS="$1$roman$wleNCf/uyA84cGpBn5QuG." />
+-		<fld NAME="root" DESCR="Administrator (superuser)!!!" DESCR_uk="Супер користувач" DESCR_ru="Супер пользователь" PASS="$1$root$lCn57dP9yzkCIAyrwJ24r1" />
+-		<fld NAME="user" DESCR="Simple user" DESCR_uk="Звичайний користувач" DESCR_ru="Простой пользователь" PASS="$1$user$k8sntSoh7jhsc6lwspjsU." />
++		<fld NAME="roman" DESCR="Roman Savochenko" PASS="roman" />
++		<fld NAME="root" DESCR="Administrator (superuser)!!!" DESCR_uk="Супер користувач" DESCR_ru="Супер пользователь" PASS="root" />
++		<fld NAME="user" DESCR="Simple user" DESCR_uk="Звичайний користувач" DESCR_ru="Простой пользователь" PASS="user" />
+ 	    </tbl>
+ 	    <tbl id="Security_grp">
+ 		<fld NAME="Archive" DESCR="Archives-History" DESCR_uk="Архіви-Історія" DESCR_ru="Архивы-История" />

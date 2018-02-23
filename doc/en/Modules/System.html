@@ -11,14 +11,6 @@
 </div>
 			<h1 id="firstHeading" lang="en">Modules/System</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSystem&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/System" title="Modules/System (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/System/ru" title="Модули/Система (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/System/uk" title="Модулі/Система (100% translated)">українська</a></div></div>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> The translation checking and actualizing
-</td></tr></table>
-</div>
 <table class="wikitable">
 
 <tr>
@@ -37,7 +29,7 @@
 <tr>
 <td> <a href="../Modules/System.html" title="Special:MyLanguage/Modules/System">System</a> </td>
 <td> System DA </td>
-<td> 2.1 </td>
+<td> 2.3 </td>
 <td> GPL2 </td>
 <td> daq_System.so </td>
 <td> en,uk,ru,de </td>
@@ -49,23 +41,23 @@
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#The_controller_of_data"><span class="tocnumber">1</span> <span class="toctext">The controller of data</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#The_controller_object_of_the_data"><span class="tocnumber">1</span> <span class="toctext">The controller object of the data</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Parameters"><span class="tocnumber">2</span> <span class="toctext">Parameters</span></a></li>
 </ul>
 </div>
 
-<p>The module is a sort of gateway between the system OpenSCADA and OS (operating system). The module receives data from various data sources of the OS and allows to manage components of the OS.
+<p>The module is a kind of gateway between OpenSCADA and OS (operating system). The module receives data from various data sources of the OS and allows to manage components of the OS.
 </p><p>The module provides the ability to automatically search for the supported and active data sources with the establishment of parameters for access to them as well as the implementation of the function of the horizontal reservation, that is working in conjunction with the remote station of the same level.
 </p>
-<h2><span class="mw-headline" id="The_controller_of_data"><span class="mw-headline-number">1</span> The controller of data</span></h2>
-<p>To add a data source of operating system there is created and configured the controller in the system OpenSCADA. Example of the configuration tab of the controller of the given type shown in Fig. 1.
+<h2><span class="mw-headline" id="The_controller_object_of_the_data"><span class="mw-headline-number">1</span> The controller object of the data</span></h2>
+<p>To add a data source of the operating system there is created and configured the controller object in OpenSCADA. Example of the configuration tab of the controller object of the given type shown in Fig. 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:706px;"><a class="image" href="http://oscada.org/wiki/File:System_cntr.png"><img class="thumbimage" height="629" src="../files/System_cntr.png" width="704" /></a>  <div class="thumbcaption">Fig.1. Tab of configuration of a controller.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:706px;"><a class="image" href="http://oscada.org/wiki/File:System_cntr.png"><img class="thumbimage" height="629" src="../files/System_cntr.png" width="704" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of the controller object.</div></div></div></div>
 <p>From this tab you can set:
 </p>
-<ul><li> The state of the controller, as follows: Status, "Enable","Run" and the name of the database containing the configuration.</li>
-<li> Id, name and description of the controller. </li>
-<li> The state in which the parameter to be switched at boot time: "To enable", "To start".</li>
+<ul><li> The state of the controller object, as follows: Status, "Enabled","Running" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the controller.</li>
+<li> The state in which the parameter object to be switched at boot time: "Enabled", "Running".</li>
 <li> Automatic search of active data sources and the creation of parameters for them for modes: "Manual", "Fast sources", "Slow sources", "All sources".</li>
 <li> Name of the table to store the configuration of the controller parameters.</li>
 <li> The acquisition schedule policy and the priority of the task of data acquisition.</li></ul>
@@ -74,9 +66,8 @@
 </p>
 <ul><li> part of the system; </li>
 <li> optional (depending on the data source).</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:799px;"><a class="image" href="http://oscada.org/wiki/File:System_prm.png"><img class="thumbimage" height="588" src="../files/System_prm.png" width="797" /></a>  <div class="thumbcaption">Fig.2. Tab of configuration of a parameter.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:799px;"><a class="image" href="http://oscada.org/wiki/File:System_prm.png"><img class="thumbimage" height="588" src="../files/System_prm.png" width="797" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of the parameter.</div></div></div></div>
 <p>The table below there is a list of supported data sources of the operating system, the value of the additional configuration field and attributes of the parameters.
-</p><p><br />
 </p>
 <table class="wikitable">
 
@@ -101,14 +92,14 @@
 <td> Memory (MEM) </td>
 <td> Not used </td>
 <td>
-<ul><li> [dec] free: Free (кБ);</li>
-<li> [dec] total: Total (кБ);</li>
-<li> [dec] use: Used (кБ);</li>
-<li> [dec] buff: Buffers (кБ);</li>
-<li> [dec] cache: Cache (кБ);</li>
-<li> [dec] sw_free: Swap, free (кБ);</li>
-<li> [dec] sw_total: Swap, total (кБ);</li>
-<li> [dec] sw_use: Swap, used (кБ).</li></ul>
+<ul><li> [dec] free: Free (kB);</li>
+<li> [dec] total: Total (kB);</li>
+<li> [dec] use: Used (kB);</li>
+<li> [dec] buff: Buffers (kB);</li>
+<li> [dec] cache: Cache (kB);</li>
+<li> [dec] sw_free: Swap, free (kB);</li>
+<li> [dec] sw_total: Swap, total (kB);</li>
+<li> [dec] sw_use: Swap, used (kB).</li></ul>
 </td>
 <td>
 </td></tr>
@@ -138,7 +129,7 @@
 <ul><li> [dec] full: Seconds full;</li>
 <li> [dec] sec: Seconds;</li>
 <li> [dec] min: Minutes;</li>
-<li> [dec] hour: Houres;</li>
+<li> [dec] hour: Hours;</li>
 <li> [dec] day: Days.</li></ul>
 </td>
 <td>
@@ -164,9 +155,9 @@
 <td> Net statistics (netstat) </td>
 <td> Network interface. Network interfaces, available in the system. </td>
 <td>
-<ul><li> [real] rcv: Recieved (B), reset on value 4.3<sup>9</sup>;</li>
+<ul><li> [real] rcv: Received (B), reset on value 4.3<sup>9</sup>;</li>
 <li> [real] rcvSp: Receive speed (B/s);</li>
-<li> [real] trns: Transfered (B), reset on value 4.3<sup>9</sup>;</li>
+<li> [real] trns: Transmitted (B), reset on value 4.3<sup>9</sup>;</li>
 <li> [real] trnsSp: Transmit speed (B/s).</li></ul>
 </td>
 <td>
@@ -187,6 +178,15 @@
 <li> [dec] totalN: Total file nodes;</li>
 <li> [dec] usedN: Used file nodes;</li>
 <li> [dec] freeN: Free file nodes.</li></ul>
+</td>
+<td>
+</td></tr>
+<tr>
+<td> Qt sensors (QSensor) </td>
+<td> The type of sensor in the list, which is determined by the source and which may be: QAccelerometer, QAmbientLightSensor, QCompass, QIRProximitySensor, QLightSensor, QMagnetometer, QOrientationSensor, QProximitySensor, QRotationSensor, QTapSensor. </td>
+<td>
+<ul><li> [string] st: State;</li>
+<li> [bool|dec|real|string] pr{N}: Property {N}.</li></ul>
 </td>
 <td>
 </td></tr></table>

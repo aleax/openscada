@@ -354,6 +354,7 @@ class TSYS : public TCntrNode
 	string getCmdOpt( int &curPos, string *argVal = NULL );
 	static string getCmdOpt_( int &curPos, string *argVal, int argc, char **argv );
 
+	bool   cmdOptPresent( const string &opt );
 	string cmdOpt( const string &opt, const string &setVl = "" );
 
 	// System control interface functions

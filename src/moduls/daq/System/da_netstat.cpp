@@ -36,9 +36,9 @@ using namespace SystemCntr;
 //*************************************************
 NetStat::NetStat( )
 {
-    fldAdd(new TFld("rcv",_("Receive (B)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("rcv",_("Received (B)"),TFld::Real,TFld::NoWrite));
     fldAdd(new TFld("rcvSp",_("Receive speed (B/s)"),TFld::Real,TFld::NoWrite));
-    fldAdd(new TFld("trns",_("Transmit (B)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("trns",_("Transmitted (B)"),TFld::Real,TFld::NoWrite));
     fldAdd(new TFld("trnsSp",_("Transmit speed (B/s)"),TFld::Real,TFld::NoWrite));
 }
 

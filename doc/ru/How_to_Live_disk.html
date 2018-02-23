@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Документы/Как сделать/Живой диск - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Документы/Как сделать/Живой диск</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FLive+disk&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Live_disk" title="Documents/How to/Live disk">Documents/How to/Live disk</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Live_disk" title="Documents/How to/Live disk (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Live_disk/uk" title="Документи/Як зробити/Живий диск (100% translated)">українська</a></div></div>
+<p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BC.D0.B1.D0.B8.D0.BD.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.BD.D1.8B.D0.B9-.D0.B3.D0.B8.D0.B1.D1.80.D0.B8.D0.B4.D0.BD.D1.8B.D0.B9_ISO-.D0.BE.D0.B1.D1.80.D0.B0.D0.B7_.D0.B6.D0.B8.D0.B2.D0.BE.D0.B3.D0.BE_.D0.B4.D0.B8.D1.81.D0.BA.D0.B0"><span class="tocnumber">1</span> <span class="toctext">Комбинированный-гибридный ISO-образ живого диска</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.96.D0.B8.D0.B2.D0.BE.D0.B9_USB-Flash_.D0.B4.D0.B8.D1.81.D0.BA_.D1.81_.D1.84.D0.B0.D0.B9.D0.BB.D0.BE.D0.B2.D0.BE.D0.B9_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BE.D0.B9_FAT_.D0.B8.D0.BB.D0.B8_EXT"><span class="tocnumber">2</span> <span class="toctext">Живой USB-Flash диск с файловой системой FAT или EXT</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.A1.D0.BE.D1.85.D1.80.D0.B0.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_.D1.80.D0.B0.D0.B1.D0.BE.D1.87.D0.B8.D1.85_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.D0.B6.D0.B8.D0.B2.D0.BE.D0.B3.D0.BE_.D0.B4.D0.B8.D1.81.D0.BA.D0.B0_.D0.BD.D0.B0_.D1.80.D0.B0.D0.B7.D0.B4.D0.B5.D0.BB.D0.B5_USB-Flash"><span class="tocnumber">3</span> <span class="toctext">Сохранение рабочих данных живого диска на разделе USB-Flash</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.97.D0.B0.D0.B3.D1.80.D1.83.D0.B7.D0.BA.D0.B0"><span class="tocnumber">4</span> <span class="toctext">Загрузка</span></a></li>
+</ul>
+</div>
+
+<p>Для максимального упрощения развёртывания OpenSCADA можно использовать живые сборки загрузочных дисков CD, DVD и USB от <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux дистрибутива автоматизации проекта OpenSCADA</a>. Живой диск предусматривает возможность загрузки, прямо из него, и быстрое получение желаемого рабочего окружения. При загрузке и работе живой диск не использует штатных носителей, а значит Вы можете не беспокоиться за целостность и сохранность данных на них. В целом живой диск является удобным средством с широким набором нужных программных инструментов под рукой и независимым от стационарного программного окружения, способным осуществить:
+</p>
+<ul><li> демонстрацию и ознакомление с возможностями OpenSCADA;</li>
+<li> установку готового, исчерпывающего и проверенного окружения автоматизированного рабочего места (АРМ);</li>
+<li> диагностику программного и аппаратного окружения, а также их восстановление, в некоторых случаях;</li>
+<li> формирования в специальных редакциях, содержащих все, что касается целевого решения: техническую и программную документацию, конфигурации ПЛК и АРМ, ...</li></ul>
+<p>Живой диск представляет собой упакованный образ операционной системы и прикладных программ размером около 700МБ, записанный на CD/DVD диск или USB-Flash носитель. При своей работе операционная система "на лету" распаковывает нужные файлы для запуска программ и открытия документов, т.е — не использует оперативной памяти больше, чем при её стационарной установке.
+</p><p>Живые диски от <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux дистрибутива автоматизации проекта OpenSCADA</a> собираются в нескольких вариантах на основе дистрибутивов ОС Linux <a class="external text" href="http://debian.org" rel="nofollow noreferrer noopener" target="_blank">Debian</a>, <a class="external text" href="http://www.altlinux.ru" rel="nofollow noreferrer noopener" target="_blank">ALTLinux</a> (старые версии) и доступны для загрузки, в последней версии OpenSCADA, здесь: <a class="external free" href="http://oscada.org/ru/glavnaja/zagruzit" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/ru/glavnaja/zagruzit</a>. Настоящие живые сборки с OpenSCADA обладают значительно большими функциями чем предусматривалось изначально:
+</p>
+<ul><li> Возможность прозрачного сохранения рабочих изменений в случае записи на USB-Flash. Функция обеспечивается созданием раздела диска, с возможностью записи, на свободном месте USB-Flash. Этот раздел отражается на корень файловой системы, или её часть, и все изменения записываются на него. Кроме сохранения рабочих данных в этот раздел можно доустанавливать недостающие пакеты программ из репозитория пакетов Debian, OpenSCADA или ALTLinux.</li>
+<li> Возможность совмещения обычного Flash-диска данных с живым Flash-диском. Предусматривает запись данных живого диска прямо на файловую систему USB-Flash — FAT16 или FAT32, что сохраняет функции обычного носителя данных и добавляет функцию живого диска.</li>
+<li> Возможность установки окружения живого диска на стационарный носитель. Позволяет не заниматься глубоким изучением и погружением в операционную систему Linux при её установке, настройке, а также развёртывания OpenSCADA. Достаточно загрузиться с живого диска, убедиться, что основное оборудование определилось нормально, нужные программы работают, а затем, посредством простой процедуры с иконки на рабочем столе или отдельного меню загрузки, установить на стационарный носитель. Полученная установка будет идентична окружению живого диска.</li></ul>
+<h3><span class="mw-headline" id=".D0.9A.D0.BE.D0.BC.D0.B1.D0.B8.D0.BD.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.BD.D1.8B.D0.B9-.D0.B3.D0.B8.D0.B1.D1.80.D0.B8.D0.B4.D0.BD.D1.8B.D0.B9_ISO-.D0.BE.D0.B1.D1.80.D0.B0.D0.B7_.D0.B6.D0.B8.D0.B2.D0.BE.D0.B3.D0.BE_.D0.B4.D0.B8.D1.81.D0.BA.D0.B0"><span class="mw-headline-number">1</span> Комбинированный-гибридный ISO-образ живого диска</span></h3>
+<p>На данный момент, в основном осуществляются сборки гибридных ISO образов "живых дисков" (*LiveCD_USB.iso), которые можно записать прямо на CD/DVD, USB-Flash, а также извлечь содержимое для записи на USB-Flash с файловыми системами FAT или EXT.
+</p><p>Основным вариантом формирования "живого диска" является запись на CD/DVD, для чего можно использовать стандартный инструментарий исходной операционной системы. Дополнительным, хотя по факту уже основным, вариантом является запись на USB-Flash, которая может быть осуществлена из окружения ОС Linux, например, из окружения этого-же "живого диска", записанного и загруженного ранее с CD/DVD диска; или-же из ОС MS Windows посредством "Win32DiskImager".
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Запись образа "живого диска" на USB-Flash уничтожит все данные и сделает его непригодным для использования в качестве носителя данных, если не учитывать возможность записи на раздел сохранения изменений окружения ОС живого диска, который будет создан при первой загрузке с живого диска, в случае ALTLinux, или пользователем, в случае "Debian".
+</p><p>Адрес диска для записи ISO-образа имеет вид "/dev/sd{x}" и узнать его можно вызовом консольной команды <b>$ dmesg</b> сразу после подключения целевого диска USB-Flash. Из окружения Linux ISO-образ можно записать таким образом:
+</p>
+<pre style="white-space: pre-wrap;">
+# Запись файла ISO-образа на USB-Flash:
+$ dd if=Debian_9-OpenSCADA_0.9.0-TDE_R14-amd64-LiveCD_USB.iso of=/dev/sd{x} bs=4096
+# Запись ISO-образа прямо с загруженного CD/DVD живого диска:
+$ dd if=/dev/sr0 of=/dev/sd{x} bs=4096
+</pre>
+<h3><span class="mw-headline" id=".D0.96.D0.B8.D0.B2.D0.BE.D0.B9_USB-Flash_.D0.B4.D0.B8.D1.81.D0.BA_.D1.81_.D1.84.D0.B0.D0.B9.D0.BB.D0.BE.D0.B2.D0.BE.D0.B9_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BE.D0.B9_FAT_.D0.B8.D0.BB.D0.B8_EXT"><span class="mw-headline-number">2</span> Живой USB-Flash диск с файловой системой FAT или EXT</span></h3>
+<p>Ранее осуществлялись отдельные сборки образов для записи их на файловую систему FAT. На данный момент специально такие образы собираются только для "прошивок" (FirmWare) ряда ПЛК (*flash.tar). Для создания живых USB-Flash дисков общего назначения можно использовать гибридный ISO-образ, про который написано в разделе выше.
+</p><p>Преимуществом "живого диска" на USB-Flash, как ранее упоминалось, является совмещение функции USB-Flash диска, как носителя данных и как живого диска. Кроме того, таким образом можно создавать компактные, надёжные и функциональные решения встраиваемых систем с OpenSCADA, взяв "живой диск" за основу, например: программируемые логические контроллеры (ПЛК), панельные контроллеры (с сенсорным дисплеем), а также просто SCADA-сервера и SCADA-станции оператора "быстрого приготовления"; путём записи живого диска на стационарный носитель (HDD, SSD или Flash). Надёжность данного решения определяется размещением основного ПО в немодифицируемом упакованном файле, а рабочих данных на журналируемой файловой системе.
+</p><p>Записать данные "живого диска" на файловую систему можно из любой ОС (для FAT), но установить загрузчик только в ОС Linux, для чего можно воспользоваться "живым" CD/DVD диском из прошлого раздела.
+</p><p>Процедура создания живого диска следующая, для данных гибридного ISO-диска (Debian и ALTLinux):
+</p>
+<ul><li> Для простоты, операцию извлечения и копирования данных ISO выполняем в двух-панельном файловом менеджере <b>mc</b>. Чтобы <b>mc</b> смог прочитать ISO образ необходимо установить утилиту <b>isoinfo</b>, обычно находится в пакете "genisoimage".</li>
+<li> Берём исходный файл ISO-образа, открываем его в <b>mc</b> и копируем из него на целевую FAT или EXT файловую систему:
+<ul><li> <i>Debian</i>: директории "isolinux" и "live"; директорию "isolinux", на целевой файловой системе, переименовываем в "syslinux".</li>
+<li> <i>ALTLinux</i>: директорию "syslinux" и файл "live".</li></ul></li>
+<li> Переименовываем файл "syslinux/isolinux.cfg" на "syslinux/syslinux.cfg", для FAT, или "syslinux/extlinux.cfg", для EXT.</li>
+<li> <i>ALTLinux</i>: добавляем, в секции "label live" файла "syslinux/syslinux.cfg", подстроку "automatic=method:disk,label:MY_LAB" или "automatic=method:disk,uuid:MY-UUID", где MY_LAB и MY-UUID можно узнать, для раздела "живого диска", с помощью команды <b>$ blkid</b>.</li>
+<li> <i>ALTLinux</i>: Заменяем файл "syslinux/gfxboot.c32" аналогичным файлом из текущей системы (обычно находится в директории "/usr/lib/syslinux/").</li>
+<li> Устанавливаем загрузчик из командной строки, всё от суперпользователя: <b>$ su -</b>
+<ul><li> Отключаем диск: <b>$ umount /dev/sd{x}1</b></li>
+<li> Инициируем MBR диска в корректное значение: <b>$ ms-sys -s /dev/sd{x}</b></li>
+<li> Инициируем загрузчик: <b>$ syslinux /dev/sd{x}1</b></li></ul></li></ul>
+<p>Для образа "живого диска" на FAT (ALTLinux), всё от суперпользователя: <b>$ su -</b>
+</p>
+<ul><li> Подключаем целевой диск и определяем его адрес: <b>$ dmesg</b></li>
+<li> Монтируем: <b>$ mkdir /mnt/tmp; mount /dev/sd{x}1 /mnt/tmp</b></li>
+<li> Распаковываем содержимое архива прошивки на смонтированный диск: <b>$ cd /mnt/tmp; tar xvf /var/tmp/LP8x81-ALTLinux6-OpenSCADA_0.9+r2302-i586-plc-rt1-up.flash.tar</b></li>
+<li> Определяем UUID для файловой системы целевого диска: <b>$ blkid | grep /dev/sd{x}1</b></li>
+<li> Модифицируем файл "/mnt/tmp/syslinux/syslinux.cfg" в конце строки "append initrd=alt0/full.cz live ... disk,uuid:4EB3-0478", где указываем ранее полученный UUID.</li>
+<li> Добавляем или модифицируем файл "/mnt/tmp/syslinux/lang" на предмет указания локали-языка интерфейса по умолчанию, для российского — "ru_RU", иначе будет Английский.</li>
+<li> Отключаем диск: <b>$ umount /dev/sd{x}1</b></li>
+<li> Инициируем MBR диска в корректное значение: <b>$ ms-sys -s /dev/sd{x}</b></li>
+<li> Инициируем загрузчик: <b>$ syslinux /dev/sd{x}1</b></li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Данный способ развёртывания живого диска требует знаний ОС Linux и интерфейса командной строки (консоли), а также основ разбиения дисковых носителей поскольку, при некорректном начальном разбиении носителя, загрузка может не пройти.
+</p>
+<h3><span class="mw-headline" id=".D0.A1.D0.BE.D1.85.D1.80.D0.B0.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_.D1.80.D0.B0.D0.B1.D0.BE.D1.87.D0.B8.D1.85_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.D0.B6.D0.B8.D0.B2.D0.BE.D0.B3.D0.BE_.D0.B4.D0.B8.D1.81.D0.BA.D0.B0_.D0.BD.D0.B0_.D1.80.D0.B0.D0.B7.D0.B4.D0.B5.D0.BB.D0.B5_USB-Flash"><span class="mw-headline-number">3</span> Сохранение рабочих данных живого диска на разделе USB-Flash</span></h3>
+<p>Живой диск, как ранее указывалось, допускает полноценную работу с возможностью сохранения рабочих данных, а также обновления ПО (за исключением системного ПО и ядра ОС Linux). Обычно данная возможность имеет смысл только для USB, HDD, SSD носителей.
+</p><p>В случае дистрибутивов Debian, отдельный раздел для хранения рабочих данных, с меткой "persistence", нужно всегда создавать специально, а в файле "persistence.conf" на нём также указывать файловую систему, или её часть, для отражения на запись (например, "/home"). Для отражения всей корневой файловой системы в файле нужно записать "/ union". В качестве файловой системы этого раздела лучше использовать "EXT3". Для создания раздела Вы можете использовать программу менеджера разделов, например — <b>gparted</b>.
+</p><p>В случае дистрибутива ALTLinux (6), и прямой записи гибридного ISO-образа, такой раздел будет создан при первом запуске. При формировании "живого диска" на FAT и EXT необходимо создать отдельный раздел с меткой "alt-live-storage" и файловой системой "EXT3", что можно сделать в программе менеджера разделов, например — <b>gparted</b>.
+</p>
+<h3><span class="mw-headline" id=".D0.97.D0.B0.D0.B3.D1.80.D1.83.D0.B7.D0.BA.D0.B0"><span class="mw-headline-number">4</span> Загрузка</span></h3>
+<p>Для загрузки с полученного "живого диска" нужно перегрузить компьютер и в самом начале загрузки в стационарную ОС нажать клавишу входа в меню загрузки BIOS и выбрать там наш носитель (рис.1). На разных компьютерах клавиша входа в меню загрузки может отличаться и быть одной из: "F8", "F9", "F10", "F11" или "F12". На некоторых компьютерах изменить порядок загрузки можно только в самом BIOS.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:602px;"><a class="image" href="http://oscada.org/wiki/File:HowTo_bios_boot.png"><img class="thumbimage" height="502" src="files/HowTo_bios_boot.png" width="600" /></a>  <div class="thumbcaption">Рис. 1. Вариант меню выбора устройства загрузки в BIOS.</div></div></div></div>
+<p>После выбора устройства должно появиться меню загрузки живого диска (рис.2), где предварительно можно выбрать вариант загрузки с указанным языком, для Debian, или Ваш язык, клавишей F2 для ALTLinux.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1042px;"><a class="image" href="http://oscada.org/wiki/File:HowTo_livebootlang.png"><img class="thumbimage" height="400" src="files/HowTo_livebootlang.png" width="1040" /></a>  <div class="thumbcaption">Рис. 2. Меню выбора языка живого диска Debian, ALTLinux.</div></div></div></div>
+<p>В результате загрузки живого диска Вы получите рабочий стол TDE (рис.3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:HowTo_livedesktop_ru.png"><img class="thumbimage" height="768" src="files/HowTo_livedesktop_ru.png" width="1024" /></a>  <div class="thumbcaption">Рис. 3. Рабочий стол живого диска.</div></div></div></div>
+
+
+
+
+
+
+</div></body>
+</html>

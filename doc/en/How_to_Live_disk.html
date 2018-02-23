@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Documents/How to/Live disk - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Documents/How to/Live disk</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FLive+disk&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Live_disk" title="Documents/How to/Live disk (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Live_disk/ru" title="Документы/Как сделать/Живой диск (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Live_disk/uk" title="Документи/Як зробити/Живий диск (100% translated)">українська</a></div></div>
+<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Combined-hybrid_ISO-images_of_the_live_disk"><span class="tocnumber">1</span> <span class="toctext">Combined-hybrid ISO-images of the live disk</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Live_USB-Flash_disk_with_the_file-system_FAT_or_EXT"><span class="tocnumber">2</span> <span class="toctext">Live USB-Flash disk with the file-system FAT or EXT</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Saving_the_working_data_of_the_live_disk_to_the_USB-Flash_partition"><span class="tocnumber">3</span> <span class="toctext">Saving the working data of the live disk to the USB-Flash partition</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Booting"><span class="tocnumber">4</span> <span class="toctext">Booting</span></a></li>
+</ul>
+</div>
+
+<p>To maximize ease of deployment of OpenSCADA you can use live builds of CD, DVD and USB boot disks from <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a>. A live disk provides the ability to download directly from it, and quickly get the desired working environment. When downloaded and running, the live disk does not use regular media, that is, you can not worry about the integrity and consistency of data on them. In general, a live disk is a convenient tool with a wide range of necessary software tools at hand and independent from the stationary software environment capable of implementing:
+</p>
+<ul><li> demonstration and familiarization with the possibilities of OpenSCADA;</li>
+<li> installation of the complete, exhaustive and verified environment of an automated workplace (AWP);</li>
+<li> diagnostics of the software and hardware environments, as well as their recovery, in some cases;</li>
+<li> formation in special editions containing everything related to the target solution: technical and program documentation, PLC and ARM configurations, ...</li></ul>
+<p>The live disk is a packed operating system image and applications size of about 700 MB, written to a CD/DVD disk or USB flash storage. In its work, the operating system "on the fly" unpacks the necessary files to run programs and open documents, ie — does not use more RAM than with its stationary installing.
+</p><p>Live disks from <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a> are built in several versions based on Linux distributions <a class="external text" href="http://debian.org" rel="nofollow noreferrer noopener" target="_blank">Debian</a>, <a class="external text" href="http://www.altlinux.ru" rel="nofollow noreferrer noopener" target="_blank">ALTLinux</a> (old versions) and available for download, in the latest version of OpenSCADA, here: <a class="external free" href="http://oscada.org/en/main/download/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/en/main/download/</a>. Existing live builds from OpenSCADA have much more features than expected from the beginning:
+</p>
+<ul><li> The ability to transparently save work changes when written to USB Flash. The function is provided by creating a disk partition, with the ability to record, on a free space of the USB-Flash. This partition is reflected on the root of the file system, or its parts, and all changes are written to it. In addition to storing work data in this section, you can install missing software packages from the Debian package repository, OpenSCADA or ALTLinux.</li>
+<li> Ability to combine an ordinary Flash data disk with a live Flash disk. Means recording live disk data directly to the USB-Flash file system — FAT16 or FAT32, which stores the functions of the usual data storage and adds the function of the live disk.</li>
+<li> Ability to install the environment of the live disk on a stationary storage. Allows you not to engage to the Linux operating system in-depth study and immersion  when its installing, its configuring and OpenSCADA deployment. Enough boot from the live disk, make sure that the main hardware is determined normally, the required programs work and next, through a simple procedure from the desktop icon or a separate boot menu, install it on a stationary storage. The resulting installation will be identical to the environment of the live disk.</li></ul>
+<h3><span class="mw-headline" id="Combined-hybrid_ISO-images_of_the_live_disk"><span class="mw-headline-number">1</span> Combined-hybrid ISO-images of the live disk</span></h3>
+<p>Currently, hybrid ISO images of "the live disks" (*LiveCD_USB.iso) are built mostly, which can be written directly to CD/DVD, USB-Flash, and also extract the contents for recording on USB-Flash with the FAT or EXT file systems.
+</p><p>The main option for creating a "live disk" is the recording on a CD/DVD, which allows you to use the standard tools of the original operating system. Additional, though in fact, already the main one, is the write to USB-Flash, which can be carried out from the environment of the Linux operating system, for example, from the environment of the same "live disk", recorded and downloaded earlier from a CD/DVD; or from the MS Windows operating system via Win32DiskImager.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Writing a "live diske" image on USB-Flash will erase all data and make it unusable for use as a data storage unless you take into account the ability to write to a partition of the changes saving of the environment of the OS live disk that will be created when first downloaded from the live disk, in case ALTLinux, or user in the case of Debian.
+</p><p>The address of the disk to write the ISO-image is "/dev/sd{x}" and you can found it by calling the <b>$ dmesg</b> console command immediately after connecting the target USB-Flash disk. From the Linux environment, an ISO-image can be written as follows:
+</p>
+<pre style="white-space: pre-wrap;">
+# Recording an ISO-image to USB-Flash:
+$ dd if=Debian_9-OpenSCADA_0.9.0-TDE_R14-amd64-LiveCD_USB.iso of=/dev/sd{x} bs=4096
+# Recording an ISO-image directly from the loaded CD/DVD live disk:
+$ dd if=/dev/sr0 of=/dev/sd{x} bs=4096
+</pre>
+<h3><span class="mw-headline" id="Live_USB-Flash_disk_with_the_file-system_FAT_or_EXT"><span class="mw-headline-number">2</span> Live USB-Flash disk with the file-system FAT or EXT</span></h3>
+<p>Earlier, separate builds of images were made for recording them on the FAT file system. Currently, these images are specially built only for FirmWare of a number of PLCs (*flash.tar). You can use the hybrid ISO-images described in the section above to create live USB flash disks of general purpose.
+</p><p>The advantage of the live disk on USB-Flash, as it was previously mentioned, is a combination of USB-Flash drive features as a data storage and as a live disc at the same time. Also on the basis you can create compact, reliable and functional solutions of the embedded systems based on OpenSCADA, such as Programmable Logic Controllers (PLC), the panel controllers (with a touch screen), as well as simple SCADA-servers and operator "quickly made" SCADA-stations, by recording a live disk to the stationary data storage (HDD, SSD or Flash). The reliability of this solution is achieved by placing the main non-modifiable software in the packed file, and operational data on the journaled file system.
+</p><p>You can write "live disk" data to a file system from any OS (for FAT), but install the boot loader only on the Linux operating system, for which you can use a live CD/DVD disk from the previous section.
+</p><p>The procedure for creating a live disk is the following, for the data of the hybrid ISO (Debian and ALTLinux):
+</p>
+<ul><li> To simplify the operation of extracting and copying of the ISO-data let perform it into the twin-panels file manager <b>mc</b>. For <b>mc</b> allowing to view the ISO-image you need install the utility <b>isoinfo</b>, which ordinary places into the package "genisoimage".</li>
+<li> Take original file of the ISO-image, open it into <b>mc</b> and copy from it to the target FAT or EXT file system:
+<ul><li> <i>Debian</i>: the directories "isolinux" and "live"; rename the directory "isolinux" to "syslinux", on the target file system.</li>
+<li> <i>ALTLinux</i>: the directory "syslinux" and file "live".</li></ul></li>
+<li> Rename the file "syslinux/isolinux.cfg" to "syslinux/syslinux.cfg", for FAT, or "syslinux/extlinux.cfg", for EXT.</li>
+<li> <i>ALTLinux</i>: Append to the argument "append", of the section "label live" of the file "syslinux/syslinux.cfg", the sub-string "automatic=method:disk,label:MY_LAB" or "automatic=method:disk,uuid:MY-UUID", where MY_LAB and MY-UUID you can obtain, for partition of "the live disk", by the command aid <b>$ blkid</b>.</li>
+<li> <i>ALTLinux</i>: Replace the file "syslinux/gfxboot.c32" to analogous one file from current file system (ordinary it is placed into the directory "/usr/lib/syslinux/").</li>
+<li> Install boot-loader from the command line, all from the superuser: <b>$ su -</b>
+<ul><li> Unmount the disk: <b>$ umount /dev/sd{x}1</b></li>
+<li> Initialize the MBR of the disk to the correct value: <b>$ ms-sys -s /dev/sd{x}</b></li>
+<li> Initialize the boot loader: <b>$ syslinux /dev/sd{x}1</b></li></ul></li></ul>
+<p>For a "live disk" image on FAT (ALTLinux), everything from superuser: <b>$ su -</b>
+</p>
+<ul><li> Connect the target disk and obtain its address: <b>$ dmesg</b></li>
+<li> Mount: <b>$ mkdir /mnt/tmp; mount /dev/sd{x}1 /mnt/tmp</b></li>
+<li> Unpack the contents of the firmware archive onto the mounted disk: <b>$ cd /mnt/tmp; tar xvf /var/tmp/LP8x81-ALTLinux6-OpenSCADA_0.9+r2302-i586-plc-rt1-up.flash.tar</b></li>
+<li> Find out the UUID for the filesystem of the target disk: <b>$ blkid | grep /dev/sd{x}1</b></li>
+<li> Modify the file "/mnt/tmp/syslinux/syslinux.cfg" at the end of the line "append initrd=alt0/full.cz live ... disk,uuid:4EB3-0478", where it is necessary to set the previously obtained UUID.</li>
+<li> Add or modify the file "/mnt/tmp/syslinux/lang" for specify the locale-language of the interface by default, for Ukrainian — "uk_UA", for Russian — "ru_RU", otherwise it will be English.</li>
+<li> Unmount the disk: <b>$ umount /dev/sd{x}1</b></li>
+<li> Initialize the MBR of the disk to the correct value: <b>$ ms-sys -s /dev/sd{x}</b></li>
+<li> Initialize the boot loader: <b>$ syslinux /dev/sd{x}1</b></li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This method of the live disk deploying requires knowledge of Linux and the command line interface (console), as well as the basics of the disks partitioning because with an wrong initial partitioning of media the booting may not be passed.
+</p>
+<h3><span class="mw-headline" id="Saving_the_working_data_of_the_live_disk_to_the_USB-Flash_partition"><span class="mw-headline-number">3</span> Saving the working data of the live disk to the USB-Flash partition</span></h3>
+<p>The Live disk, as mentioned early, allow you full-featured work with saving the working data, and also updating the programs (excluding the system programs and the OS Linux kernel). Typically that possibility has sense only for USB, HDD, SSD storage.
+</p><p>In the case of Debian distributions, a separate section for storing work data, with the label "persistence", should always be created specially, and in the file "persistence.conf" on it also specify the file system or part of it to be reflected on the record (for example, "/home"). To reflect the entire root file system, you must write "/ union" in the file. As the file system of this partition, it is better to use "EXT3". To create a partition you can use the program partition manager, for example — <b>gparted</b>.
+</p><p>In the case of the ALTLinux (6) distribution, and the direct recording of the hybrid ISO image, such a section will be created at first startup. When creating a live disk on FAT and EXT, you need to create a separate partition labeled "alt-live-storage" and the file system "EXT3" that can be done in the partition manager program, for example — <b>gparted</b>.
+</p>
+<h3><span class="mw-headline" id="Booting"><span class="mw-headline-number">4</span> Booting</span></h3>
+<p>To boot from the resulting "live disk" you need to reboot the computer and at the very start of loading to the stationary OS press the key to enter the BIOS boot menu and select our media (fig. 1). On different computers, the enter key to the boot menu may differ and be one of the following: "F8", "F9", "F10", "F11" or "F12". On some computers you can only change the boot order in the BIOS itself.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:602px;"><a class="image" href="http://oscada.org/wiki/File:HowTo_bios_boot.png"><img class="thumbimage" height="502" src="files/HowTo_bios_boot.png" width="600" /></a>  <div class="thumbcaption">Fig. 1. The menu option for choosing a boot device in the BIOS.</div></div></div></div>
+<p>After selecting the device, you should see the boot menu for the live disk (Fig. 2) where you can pre-select the boot option in a specific language, for Debian, or your language, with the F2 key for ALTLinux.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1042px;"><a class="image" href="http://oscada.org/wiki/File:HowTo_livebootlang.png"><img class="thumbimage" height="400" src="files/HowTo_livebootlang.png" width="1040" /></a>  <div class="thumbcaption">Fig. 2. The select language menu for the live disk Debian, ALTLinux.</div></div></div></div>
+<p>As a result of booting a live disk, you will get the TDE desktop (Fig. 3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:HowTo_livedesktop.png"><img class="thumbimage" height="768" src="files/HowTo_livedesktop.png" width="1024" /></a>  <div class="thumbcaption">Fig. 3. Desktop of the live disk.</div></div></div></div>
+
+
+
+
+
+
+</div></body>
+</html>

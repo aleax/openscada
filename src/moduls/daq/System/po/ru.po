@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.System translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-01 20:14+0300\n"
+"POT-Creation-Date: 2018-02-23 20:22+0200\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -130,13 +130,13 @@ msgstr "Своп использовано (КиБ)"
 msgid "Memory info"
 msgstr "Информация про память"
 
-msgid "Receive (B)"
+msgid "Received (B)"
 msgstr "Принято (Б)"
 
 msgid "Receive speed (B/s)"
 msgstr "Скорость приёма (Б/с)"
 
-msgid "Transmit (B)"
+msgid "Transmitted (B)"
 msgstr "Передано (Б)"
 
 msgid "Transmit speed (B/s)"
@@ -147,6 +147,16 @@ msgstr "Интерфейс"
 
 msgid "Interface statistic: "
 msgstr "Статистика интерфейсов: "
+
+msgid "State"
+msgstr "Состояние"
+
+#, c-format
+msgid "Connected=%d; Active=%d; Busy=%d; Error=%d"
+msgstr "Подключен=%d; Активный=%d; Занятый=%d; Ошибка=%d"
+
+msgid "Property "
+msgstr "Свойство "
 
 msgid "Data sensors"
 msgstr "Данные сенсоров"
@@ -223,9 +233,6 @@ msgstr "Ручной;Быстрые источники;Медленные ист
 msgid "System parameters table"
 msgstr "Таблица системных параметров"
 
-msgid "Request data period (ms)"
-msgstr "Период опроса данных (мс)"
-
 msgid "Acquisition schedule"
 msgstr "Планирование опроса"
 
@@ -283,6 +290,9 @@ msgstr "Память"
 
 msgid "Net statistic"
 msgstr "Статистика сети"
+
+msgid "Qt sensors"
+msgstr "Сенсоры Qt"
 
 msgid "Sensors"
 msgstr "Сенсоры"

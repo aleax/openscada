@@ -11,7 +11,7 @@
 </div>
 			<h1 id="firstHeading" lang="en">Documents/User API</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en"><a class="external" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FUser+API&amp;language=en&amp;action=page&amp;filter=" title="Special:Translate">Translate this page</a></div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/ru" title="Документация/API пользователя (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/uk" title="Документація/API користувача (100% translated)">українська</a></div></div>
-<p><i>Author:</i> <a class="external text" href="http://wiki.oscada.org/RomanSavochenko" rel="nofollow noreferrer noopener" target="_blank">Roman Savochenko</a>
+<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </p>
 <dl><dd><dl><dd><a class="external text" href="http://wiki.oscada.org/MaximLysenko" rel="nofollow noreferrer noopener" target="_blank">Maxim Lysenko</a> (2012) — the page translation</dd></dl></dd></dl>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -44,18 +44,19 @@
 </li>
 <li class="toclevel-1 tocsection-18"><a href="#Subsystem_.22User_interfaces.22_.28SYS.UI.29"><span class="tocnumber">10</span> <span class="toctext">Subsystem "User interfaces" (SYS.UI)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-19"><a href="#Module_UI.VCAEngine"><span class="tocnumber">10.1</span> <span class="toctext">Module UI.VCAEngine</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Module_QTStarter"><span class="tocnumber">10.1</span> <span class="toctext">Module QTStarter</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Module_UI.VCAEngine"><span class="tocnumber">10.2</span> <span class="toctext">Module UI.VCAEngine</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-20"><a href="#.22Special.22_subsystem_.28SYS.Special.29"><span class="tocnumber">11</span> <span class="toctext">"Special" subsystem (SYS.Special)</span></a>
+<li class="toclevel-1 tocsection-21"><a href="#.22Special.22_subsystem_.28SYS.Special.29"><span class="tocnumber">11</span> <span class="toctext">"Special" subsystem (SYS.Special)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-21"><a href="#Module_Library_of_the_system_API_of_the_user_programming_area_.28Special.FLibSYS.29"><span class="tocnumber">11.1</span> <span class="toctext">Module Library of the system API of the user programming area (Special.FLibSYS)</span></a></li>
-<li class="toclevel-2 tocsection-22"><a href="#Module_Library_of_standard_mathematical_functions_.28Special.FLibMath.29"><span class="tocnumber">11.2</span> <span class="toctext">Module Library of standard mathematical functions (Special.FLibMath)</span></a></li>
-<li class="toclevel-2 tocsection-23"><a href="#Module_Library_of_functions_of_compatibility_with_SCADA_Complex1_of_the_firm_DIYA_Ltd_.28Special.FLibComplex1.29"><span class="tocnumber">11.3</span> <span class="toctext">Module Library of functions of compatibility with SCADA Complex1 of the firm DIYA Ltd (Special.FLibComplex1)</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#Module_Library_of_the_system_API_of_the_user_programming_area_.28Special.FLibSYS.29"><span class="tocnumber">11.1</span> <span class="toctext">Module Library of the system API of the user programming area (Special.FLibSYS)</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#Module_Library_of_standard_mathematical_functions_.28Special.FLibMath.29"><span class="tocnumber">11.2</span> <span class="toctext">Module Library of standard mathematical functions (Special.FLibMath)</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#Module_Library_of_functions_of_compatibility_with_SCADA_Complex1_of_the_firm_DIYA_Ltd_.28Special.FLibComplex1.29"><span class="tocnumber">11.3</span> <span class="toctext">Module Library of functions of compatibility with SCADA Complex1 of the firm DIYA Ltd (Special.FLibComplex1)</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-24"><a href="#Libraries_of_the_user_functions"><span class="tocnumber">12</span> <span class="toctext">Libraries of the user functions</span></a></li>
-<li class="toclevel-1 tocsection-25"><a href="#Links"><span class="tocnumber">13</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-25"><a href="#Libraries_of_the_user_functions"><span class="tocnumber">12</span> <span class="toctext">Libraries of the user functions</span></a></li>
+<li class="toclevel-1 tocsection-26"><a href="#Links"><span class="tocnumber">13</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -518,7 +519,7 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 </ul>
 <h2><span class="mw-headline" id="Subsystem_.22Protocols.22_.28SYS.Protocols.29"><span class="mw-headline-number">9</span> Subsystem "Protocols" (SYS.Protocols)</span></h2>
 <h3><span class="mw-headline" id="Module_Protocol.HTTP"><span class="mw-headline-number">9.1</span> Module <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a></span></h3>
-<p><b>The same module's object "Protocol.HTTP" [SYS.Protocol.HTTP.pgCreator()]</b>
+<p><b>The module object (SYS.Protocol.HTTP)</b>
 </p>
 <ul><li> <i>bool pgAccess(string URL)</i> — checking for page access pointed by the <i>URL</i>.
 <ul><li> <i>URL</i> — URL of the checking page.</li></ul></li>
@@ -532,7 +533,11 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <p><br />
 </p>
 <h2><span class="mw-headline" id="Subsystem_.22User_interfaces.22_.28SYS.UI.29"><span class="mw-headline-number">10</span> Subsystem "User interfaces" (SYS.UI)</span></h2>
-<h3><span class="mw-headline" id="Module_UI.VCAEngine"><span class="mw-headline-number">10.1</span> Module <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></span></h3>
+<h3><span class="mw-headline" id="Module_QTStarter"><span class="mw-headline-number">10.1</span> Module <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a></span></h3>
+<p><b>The module object (SYS.UI.QTStarter)</b>
+</p>
+<ul><li> <i>Array sensors()</i> — get all available sensors of the Qt mobility.</li></ul>
+<h3><span class="mw-headline" id="Module_UI.VCAEngine"><span class="mw-headline-number">10.2</span> Module <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></span></h3>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine.png" title="User object model of the module VCAEngine."><img alt="User object model of the module VCAEngine." height="238" src="files/Oscada_UserOM_VCAEngine.png" width="352" /></a></div>
 <p><b>Object "Session" ( this.ownerSess() )</b>
 </p>

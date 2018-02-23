@@ -53,11 +53,13 @@ Description: OpenSCADA documents (EN)
 
 Package: openscada-doc-ru
 Architecture: all
+Depends: openscada-doc-en
 Description: OpenSCADA documents (RU)
  The openscada-doc-ru package include documents files (Russian).
 
 Package: openscada-doc-uk
 Architecture: all
+Depends: openscada-doc-en
 Description: OpenSCADA documents (UK)
  The openscada-doc-uk package include documents files (Ukraine).
 
