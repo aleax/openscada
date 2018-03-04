@@ -1714,7 +1714,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		    string sdata = w->resGet(shD->mediaSrc);
 		    if(sdata.size()) {
 			string tfile = TSYS::path2sepstr(w->id(),'_');
-			int tfid = open(tfile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
+			int tfid = open(tfile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles());
 			if(tfid >= 0) {
 			    if(write(tfid, sdata.data(), sdata.size()) != (ssize_t)sdata.size())
 				mod->postMess(mod->nodePath().c_str(), QString(_("Write file '%1' is fail.")).arg(tfile.c_str()), TVision::Error);

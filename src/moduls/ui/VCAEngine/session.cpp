@@ -772,7 +772,7 @@ Session::Notify::Notify( uint8_t itp, const string &ipgProps, Session *iown ) : 
 	// Prepare the external script
 	comProc = "ses_"+owner()->id()+"_ntf"+i2s(tp);
 	bool fOK = false;
-	int hd = open(comProc.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0775);
+	int hd = open(comProc.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles(true));
 	if(hd >= 0) {
 	    fOK = write(hd, props().data(), props().size()) == (ssize_t)props().size();
 	    close(hd);
@@ -964,7 +964,7 @@ void Session::Notify::commCall( bool doNtf, bool doRes, string &res, const strin
 
     if(comIsExtScript) {
 	string resFile = "ses_"+owner()->id()+"_res"+i2s(tp);
-	int hdRes = res.size() ? open(resFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664) : -1;
+	int hdRes = res.size() ? open(resFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles()) : -1;
 	if(hdRes >= 0) { write(hdRes, res.data(), res.size()); close(hdRes); }
 	// Prepare environment and execute the external script
 	system(("en="+i2s(alEn)+" doNtf="+i2s(doNtf)+" doRes="+i2s(doRes)+" res="+resFile+
@@ -1517,7 +1517,7 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	fio.setStor(calcProgStors());
 
 	//  Add generic io
-	fio.ioIns(new IO("f_frq","Function calculate frequency (Hz)",IO::Real,IO::Default,"1000",false), SpIO_Frq);
+	fio.ioIns(new IO("f_frq","Frequency of calculation of the function (Hz)",IO::Real,IO::Default,"1000",false), SpIO_Frq);
 	fio.ioIns(new IO("f_start","Function start flag",IO::Boolean,IO::Default,"0",false), SpIO_Start);
 	fio.ioIns(new IO("f_stop","Function stop flag",IO::Boolean,IO::Default,"0",false), SpIO_Stop);
 	fio.ioIns(new IO("this","This widget's object for access to user's API",IO::Object,IO::Default), SpIO_This);

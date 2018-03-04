@@ -2,13 +2,13 @@
 # Copyright (C) 2005-2013 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.DiamondBoards module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 2.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:48+0200\n"
+"POT-Creation-Date: 2018-03-04 09:49+0200\n"
 "PO-Revision-Date: 2007-10-28 09:43+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -23,9 +23,11 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards."
+"Provides an access to \"Diamond Systems\" DAQ boards. Includes main support "
+"for all generic boards."
 msgstr ""
-"Надає доступ до \"Diamond Systems\" DAQ плат. Включає основну підтримку базових плат."
+"Надає доступ до \"Diamond Systems\" DAQ плат. Включає основну підтримку "
+"базових плат."
 
 msgid ""
 "[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;"
@@ -35,11 +37,11 @@ msgstr ""
 "[-1.25, +1.25]В;[0, 10]В;[0, 5]В;[0, 2.5]В"
 
 msgid ""
-"[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1, +1]V;[-0.5, +0.5]V;+-Custom;[0, 10]"
-"V;[0, 5]V;[0, 2]V;[0, 1]V;+Custom"
+"[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1, +1]V;[-0.5, +0.5]V;+-Custom;[0, "
+"10]V;[0, 5]V;[0, 2]V;[0, 1]V;+Custom"
 msgstr ""
-"[-10, +10]В;[-5, +5]В;[-2.5, +2.5]В;[-1, +1]В;[-0.5, +0.5]В;+-Корист.;[0, 10]"
-"В;[0, 5]В;[0, 2]В;[0, 1]В;+Корист."
+"[-10, +10]В;[-5, +5]В;[-2.5, +2.5]В;[-1, +1]В;[-0.5, +0.5]В;+-Корист.;[0, "
+"10]В;[0, 5]В;[0, 2]В;[0, 1]В;+Корист."
 
 msgid ""
 "[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-0.625, +0.625]V;[-10, +10]V;[-5, "
@@ -63,11 +65,11 @@ msgstr ""
 "[-2.5, +2.5]В;[-1.25, +1.25]В;[0, 8.3]В;[0, 5]В;[0, 2.5]В"
 
 msgid ""
-"[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]"
-"V;[0, 1.25]V"
+"[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, "
+"2.5]V;[0, 1.25]V"
 msgstr ""
-"[-10, +10]В;[-5, +5]В;[-2.5, +2.5]В;[-1.25, +1.25]В;[0, 10]В;[0, 5]В;[0, 2.5]"
-"В;[0, 1.25]В"
+"[-10, +10]В;[-5, +5]В;[-2.5, +2.5]В;[-1.25, +1.25]В;[0, 10]В;[0, 5]В;[0, "
+"2.5]В;[0, 1.25]В"
 
 msgid "[0, 5]V;[0, 10]V;[-2.5, +2.5]V;[-5, +5]V;[-10, +10]V"
 msgstr "[0, 5]В;[0, 10]В;[-2.5, +2.5]В;[-5, +5]В;[-10, +10]В"
@@ -111,26 +113,24 @@ msgstr "Код;%;Напруга"
 msgid "Addition parameters"
 msgstr "Додаткові параметри"
 
-msgid "Call now. "
-msgstr "Виклик зараз. "
+msgid "Acquisition. "
+msgstr "Збір. "
 
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Виклик за періодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Збір з періодом: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Наступний виклик за cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Наступний збір за cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s[%s]. "
 msgstr "Витрачено часу: %s[%s]. "
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр вимкнено."
 
-msgid "2:Acquisition is stopped."
-msgstr "2:Опитування зупинено."
+msgid "2:Acquisition stopped."
+msgstr "2:Збір зупинено."
 
 #, c-format
 msgid ""

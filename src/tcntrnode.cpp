@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -172,7 +172,7 @@ XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
     }
 
     if(noex) return NULL;
-    throw TError("XML", _("Field id = %s(%s) no present!"), name_id.c_str(), s_el.c_str());
+    throw TError("XML", _("Field id = %s(%s) is missing!"), name_id.c_str(), s_el.c_str());
 }
 
 void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
@@ -207,7 +207,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    opt->setAttr("path", s_br);
 	    cntrCmdProc(opt);
 	    if(opt->attr("rez") != "0")
-		throw TError("ContrItfc", _("%s:%s:> Control element '%s' error!"), opt->name().c_str(), (nodePath()+path).c_str(), s_br.c_str());
+		throw TError("ContrItfc", _("%s:%s:> Error in the control item '%s'!"), opt->name().c_str(), (nodePath()+path).c_str(), s_br.c_str());
 
 	    // Check and put the command to the redundant stations
 	    if(SYS->rdPrimCmdTr() && SYS->rdEnable() && SYS->rdActive() && s2i(opt->attr("primaryCmd"))) {
@@ -231,8 +231,8 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 //* Resource section                              *
 void TCntrNode::nodeEn( int flag )
 {
-    if(nodeMode() == Enabled)	return;		//throw err_sys(_("Node already enabled!"));
-    if(nodeMode() != Disabled)	throw err_sys(_("Node already in process!"));
+    if(nodeMode() == Enabled)	return;
+    if(nodeMode() != Disabled)	throw err_sys(_("The node is already being processed!"));
 
     setNodeMode(DoEnable);
 
@@ -262,8 +262,8 @@ void TCntrNode::nodeEn( int flag )
 
 void TCntrNode::nodeDis( long tm, int flag )
 {
-    if(nodeMode() == Disabled)	return;		//throw err_sys(_("Node already disabled!"));
-    if(nodeMode() != Enabled)	throw err_sys(_("Node already in process!"));
+    if(nodeMode() == Disabled)	return;
+    if(nodeMode() != Enabled)	throw err_sys(_("The node is already being processed!"));
 
     preDisable(flag);
 
@@ -290,12 +290,12 @@ void TCntrNode::nodeDis( long tm, int flag )
 	time_t t_cur = time(NULL);
 	MtxAlloc res1(dataRes(), true);		//!! Added to prevent a possible attach and it next disable and free the node, by mUse control
 	while(mUse > 1) {
-	    mess_sys(TMess::Debug, _("Waiting for freeing by %d users!"), mUse-1);
+	    mess_sys(TMess::Debug, _("Expecting release %d users!"), mUse-1);
 	    // Check timeout
 	    if(tm && time(NULL) > (t_cur+tm)) {
 		if(!TSYS::finalKill)
-		    throw err_sys(_("Timeouted of wait. Object is used by %d users. Free object first!"), mUse-1);
-		mess_sys(TMess::Error, _("Blocking node error. Inform developers please!"));
+		    throw err_sys(_("Waiting time exceeded. The object is used by %d users. Release the object first!"), mUse-1);
+		mess_sys(TMess::Error, _("Error blocking node."));
 		break;
 	    }
 	    res1.unlock();
@@ -310,7 +310,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 	postDisable(flag);
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_sys(TMess::Error, _("Node disable error. Restore node enabling."));
+	mess_sys(TMess::Error, _("Error turning off node. Turning on back the node."));
 	setNodeMode(Disabled);
 	nodeEn(NodeRestore|flag);
 	throw;
@@ -351,7 +351,7 @@ AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int 
 	if(chN.freeStat() && chGrp) chN = chldAt(0, s_br);	//Go to default group
 	res.unlock();
 	if(!chN.freeStat()) return chN.at().nodeAt(path, 0, sep, off, noex);
-	throw err_sys(_("Node '%s' no present!"), s_br.c_str());
+	throw err_sys(_("The node '%s' is missing!"), s_br.c_str());
     } catch(TError &err) { if(!noex) throw; }
 
     return NULL;
@@ -378,7 +378,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
     int nDel = 0;
     for(int off = 0; !(tEl=TSYS::pathLev(dst,0,true,&off)).empty(); nDel++)
     { if(nDel) dElp += ("/"+dEl); dEl = tEl; }
-    if(!nDel) throw srcN.at().err_sys(_("Copy from '%s' to '%s' impossible."), src.c_str(), dst.c_str());
+    if(!nDel) throw srcN.at().err_sys(_("Copy from '%s' to '%s' is not possible."), src.c_str(), dst.c_str());
 
     //Connect to destination containers node
     AutoHD<TCntrNode> dstN = SYS->nodeAt(dElp);
@@ -388,7 +388,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
     brReq.setAttr("user",user)->setAttr("path","/%2fbr");
     dstN.at().cntrCmd(&brReq);
     if(s2i(brReq.attr("rez")) || !brReq.childGet(0,true))
-	throw srcN.at().err_sys(_("Destination node doesn't have branches."));
+	throw srcN.at().err_sys(_("Target node has no branches."));
     XMLNode *branch = brReq.childGet(0);
     int iB;
     for(iB = 0; iB < (int)branch->childSize(); iB++)
@@ -396,12 +396,12 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
 		s2i(branch->childGet(iB)->attr("acs"))&SEC_WR)
 	    break;
     if(iB >= (int)branch->childSize())
-	throw srcN.at().err_sys(_("Destination node doesn't have necessary branche."));
+	throw srcN.at().err_sys(_("Target node does not have the required branch."));
     bool idm = s2i(branch->childGet(iB)->attr("idm"));
     string nGrp = branch->childGet(iB)->attr("id");
     dEl = dEl.substr(nGrp.size());
     iB = dstN.at().grpId(nGrp);
-    if(iB < 0) throw srcN.at().err_sys(_("Destination node doesn't have necessary branche."));
+    if(iB < 0) throw srcN.at().err_sys(_("Target node does not have the required branch."));
 
     //Connect or create new destination node
     if(!dstN.at().chldPresent(iB,dEl)) {
@@ -463,7 +463,7 @@ int8_t TCntrNode::grpId( const string &sid )
 
 TCntrNode::GrpEl &TCntrNode::grpAt( int8_t iid )
 {
-    if(iid < 0 || iid >= grpSize())	throw err_sys(_("Branch group '%d' error."), iid);
+    if(iid < 0 || iid >= grpSize())	throw err_sys(_("Error group of branches '%d'."), iid);
     return (*chGrp)[iid];
 }
 
@@ -476,7 +476,7 @@ void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex, bool only
     MtxAlloc res(const_cast<ResMtx&>(mChM), true);
     if(!chGrp || igr < 0 || igr >= (int)chGrp->size()) {
 	if(noex) return;
-	else throw err_sys(_("Group of childs %d error!"), igr);
+	else throw err_sys(_("Error group of childs %d!"), igr);
     }
     list.reserve((*chGrp)[igr].elem.size());
     if(!(*chGrp)[igr].ordered)
@@ -499,7 +499,7 @@ void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex, bool only
 bool TCntrNode::chldPresent( int8_t igr, const string &name ) const
 {
     MtxAlloc res(const_cast<ResMtx&>(mChM), true);
-    if(!chGrp || igr >= (int)chGrp->size()) throw err_sys(_("Group of childs %d error!"), igr);
+    if(!chGrp || igr >= (int)chGrp->size()) throw err_sys(_("Error group of childs %d!"), igr);
     if(nodeMode() == Disabled)	throw err_sys(_("Node is disabled!"));
 
     TMap::iterator p = (*chGrp)[igr].elem.find(name.c_str());
@@ -511,10 +511,10 @@ bool TCntrNode::chldPresent( int8_t igr, const string &name ) const
 void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 {
     if(nodeMode() != Enabled)		{ delete node; throw err_sys(_("Node is not enabled!")); }
-    if(sTrm(node->nodeName()).empty())	{ delete node; throw err_sys(_("Add child id is empty!")); }
+    if(sTrm(node->nodeName()).empty())	{ delete node; throw err_sys(_("Id the child that is added is empty!")); }
 
     MtxAlloc res(mChM, true);
-    if(!chGrp || igr >= (int)chGrp->size())	{ delete node; throw err_sys(_("Group of childs %d error!"), igr); }
+    if(!chGrp || igr >= (int)chGrp->size())	{ delete node; throw err_sys(_("Error group of childs %d!"), igr); }
 
     TMap::iterator p;
     if((p=(*chGrp)[igr].elem.find(node->nodeName())) != (*chGrp)[igr].elem.end()) {
@@ -522,7 +522,7 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 	res.unlock();
 	delete node;
 	if(chN.at().nodeMode() == Disabled) chN.at().nodeEn(TCntrNode::NodeRestore);
-	if(!noExp) throw err_sys(_("Node '%s' is already present."), p->first);
+	if(!noExp) throw err_sys(_("The node '%s' is already present."), p->first);
 	return;
     }
 
@@ -542,7 +542,7 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 
 void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )
 {
-    if(!(nodeMode() == Enabled || nodeMode() == Disabled)) throw err_sys(_("Node is begin processed now!"));
+    if(!(nodeMode() == Enabled || nodeMode() == Disabled)) throw err_sys(_("Node is being processed now!"));
 
     if(tm < 0)	tm = DEF_TIMEOUT;
 
@@ -551,7 +551,7 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )
     chN.free();
 
     MtxAlloc res(mChM, true);
-    if(!chGrp || igr >= (int)chGrp->size()) throw err_sys(_("Group of childs %d error!"), igr);
+    if(!chGrp || igr >= (int)chGrp->size()) throw err_sys(_("Error group of childs %d!"), igr);
     TMap::iterator p = (*chGrp)[igr].elem.find(name.c_str());
     if(p == (*chGrp)[igr].elem.end()) return;
     if((*chGrp)[igr].ordered) {
@@ -608,7 +608,7 @@ TCntrNode *TCntrNode::nodePrev( bool noex ) const
 {
     if(prev.node) return prev.node;
     if(noex)	return NULL;
-    throw err_sys(_("Node is the root or is not connected!"));
+    throw err_sys(_("Node root or not connected!"));
 }
 
 AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const string &user ) const
@@ -616,9 +616,9 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
     if(nodeMode() == Disabled)	throw err_sys("Node is disabled!");
 
     MtxAlloc res(const_cast<ResMtx&>(mChM), true);
-    if(!chGrp || igr >= (int)chGrp->size()) throw err_sys(_("Group of childs %d error!"), igr);
+    if(!chGrp || igr >= (int)chGrp->size()) throw err_sys(_("Error group of childs %d!"), igr);
     TMap::iterator p = (*chGrp)[igr].elem.find(name.c_str());
-    if(p == (*chGrp)[igr].elem.end()) throw err_sys(_("Element '%s' is not present!"), name.c_str());
+    if(p == (*chGrp)[igr].elem.end()) throw err_sys(_("Element '%s' is missing!"), name.c_str());
     AutoHD<TCntrNode> chN(p->second, user);
     if(chN.at().nodeMode() == Disabled) throw err_sys(_("Element '%s' is disabled!"), name.c_str());
 
@@ -701,7 +701,7 @@ void TCntrNode::load( TConfig *cfg, string *errs )
 	} catch(TError &err) {
 	    if(errs && err.cat.size()) (*errs) += nodePath('.')+": "+err.mess+"\n";
 	    /*mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Load node error: %s"), err.mess.c_str());*/
+	    mess_sys(TMess::Error, _("Error node loading: %s"), err.mess.c_str());*/
 	}
 
     //Childs load process
@@ -742,7 +742,7 @@ void TCntrNode::save( unsigned lev, string *errs )
     } catch(TError &err) {
 	if(errs && err.cat.size()) (*errs) += nodePath('.')+": "+err.mess+"\n";
 	/*mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_sys(TMess::Error, _("Save node error: %s"), err.mess.c_str());*/
+	mess_sys(TMess::Error, _("Error node saving: %s"), err.mess.c_str());*/
 	isError = true;
     }
 
@@ -771,7 +771,7 @@ void TCntrNode::AHDConnect( )
     dataRes().lock();
     mUse++;
     dataRes().unlock();
-    if(mUse > 65000) mess_sys(TMess::Error, _("Too more users for node!!!"));
+    if(mUse > 65000) mess_sys(TMess::Error, _("Very many users at the node!!!"));
 }
 
 bool TCntrNode::AHDDisConnect( )
@@ -827,7 +827,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  mess - message text.
     if(iid == "messSys" && prms.size() >= 2) { mess_sys(prms[0].getI(), "%s", prms[1].getS().c_str()); return 0; }
 
-    throw err_sys(_("Function '%s' error or not enough parameters."), iid.c_str());
+    throw err_sys(_("Error function '%s' or missing parameters for it."), iid.c_str());
 }
 
 XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
@@ -867,7 +867,7 @@ XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const ch
 	if(obj1) { obj = obj1; continue; }
 	//int wofft = woff;
 	if(TSYS::pathLev(path,0,true,&woff).size())
-	    throw TError("ContrItfc", _("Entry %d of the path '%s' is missed!"), itN, path);
+	    throw TError("ContrItfc", _("Item %d of the path '%s' is missing!"), itN, path);
 	if(pos == -1)	obj = obj->childAdd();
 	else obj = obj->childIns((pos<0)?pos+1:pos);
     }
@@ -946,9 +946,9 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
 {
     if(nd->name() != cmd) return false;
     if(((char)perm&mode) != mode && SYS->security().at().access(nd->attr("user"),mode,user,grp,perm) != mode)
-	throw TError("ContrItfc", _("Error access to element '%s'!"), nd->attr("path").c_str());
+	throw TError("ContrItfc", _("Error accessing item '%s'!"), nd->attr("path").c_str());
     if(warn && !s2i(nd->attr("force")))
-	throw TError("warning", _("Element '%s' warning! %s"), nd->attr("path").c_str(),warn);
+	throw TError("warning", _("Warning element '%s'! %s"), nd->attr("path").c_str(),warn);
     nd->setAttr("rez","0");
 
     return true;
@@ -970,7 +970,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 
 	    string errs;
 	    load(NULL, &errs);
-	    if(errs.size()) throw err_sys(_("Load error:\n%s"), errs.c_str());
+	    if(errs.size()) throw err_sys(_("Error loading:\n%s"), errs.c_str());
 	}
 	// Do save node
 	else if(ctrChkNode(opt,"save",RWRWRW,"root","root",SEC_WR)) {
@@ -978,7 +978,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 
 	    string errs;
 	    save(0, &errs);
-	    if(errs.size()) throw err_sys(_("Save error:\n%s"), errs.c_str());
+	    if(errs.size()) throw err_sys(_("Error saving:\n%s"), errs.c_str());
 	}
 	// Do copy node
 	else if(ctrChkNode(opt,"copy",RWRWRW,"root","root",SEC_WR))

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tvariant.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -298,7 +298,7 @@ void TVariant::setS( const string &ivl )
 	    //!!!! Direct memory allocation mostly used now for constant strings like to key TCfg for prevent its "const char *" pointer changing.
 	    //     Maybe further there has a sense to use STL string also but check it to equal for the assign and then the pointer changing omit.
 	    else if(mStdStringOmit) {		//For middle blocks up to STR_BUF_LEN
-		if(ivl.size() > 30000000)	throw TError("TVariant", _("Too big string forced to the not STL string (> 30 MB)!"));
+		if(ivl.size() > 30000000)	throw TError("TVariant", _("Very large string for non STL string (> 30 MB)!"));
 		if(mStdString) { delete val.s; mStdString = false; }
 		if(mSize < sizeof(val.sMini))	val.sPtr = (char*)malloc(ivl.size()+1);
 		else if(ivl.size() != mSize)	{
@@ -309,7 +309,7 @@ void TVariant::setS( const string &ivl )
 		if(!val.sPtr) {
 		    mSize = 0;
 		    val.sMini[mSize] = 0;
-		    throw TError("TVariant", _("Memory alloc for big string length (%d) error!"), ivl.size());
+		    throw TError("TVariant", _("Error allocating memory for large string (%d)!"), ivl.size());
 		}
 		memcpy(val.sPtr, ivl.data(), ivl.size());
 		val.sPtr[ivl.size()] = 0;
@@ -372,7 +372,7 @@ bool TVarObj::AHDDisConnect( )
     bool toFree = (mUseCnt == 0 && !dblDscNct);
     dataM.unlock();
 
-    if(dblDscNct) mess_err("TVarObj", _("Double disconnection try!"));
+    if(dblDscNct) mess_err("TVarObj", _("Attempt to double disconnect!"));
 
     return toFree;
 }
@@ -496,7 +496,7 @@ TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
     // bool isEVal() - return "false" for EVAL detect
     if(id == "isEVal")	return false;
 
-    throw TError(TSYS::strMess("Obj%s",objName().c_str()).c_str(), _("Function '%s' error or not enough parameters."), id.c_str());
+    throw TError(TSYS::strMess("Obj%s",objName().c_str()).c_str(), _("Error function '%s' or missing parameters for it."), id.c_str());
 }
 
 //*****************************************************************
@@ -643,7 +643,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     // ElTp pop( ) - pop variable from array
     if(id == "pop") {
-	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj", _("Array is empty."));
+	if(mEls.empty()) return TVariant();
 	dataM.lock();
 	TVariant val = mEls.back();
 	mEls.pop_back();
@@ -659,7 +659,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     // ElTp shift( ) - shift array's items upward
     if(id == "shift") {
-	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj", _("Array is empty."));
+	if(mEls.empty()) return TVariant();
 	dataM.lock();
 	TVariant val = mEls.front();
 	mEls.erase(mEls.begin());
@@ -751,7 +751,6 @@ TVariant TArrayObj::arGet( int vid )
 
 void TArrayObj::arSet( int vid, TVariant val )
 {
-    //if(vid < 0) return;//throw TError("ArrayObj", _("Negative id is not allow for array."));
     dataM.lock();
     if(vid < 0) vid = mEls.size();
     while(vid >= (int)mEls.size()) mEls.push_back(TVariant());
@@ -1034,7 +1033,7 @@ void XMLNodeObj::childIns( unsigned id, AutoHD<XMLNodeObj> nd )
 
 void XMLNodeObj::childDel( unsigned id )
 {
-    if(/*id < 0 || */id >= mChilds.size()) throw TError("XMLNodeObj", _("Deletion child '%d' error."), id);
+    if(/*id < 0 || */id >= mChilds.size()) throw TError("XMLNodeObj", _("Error deleting the child '%d'."), id);
     dataM.lock();
     if(mChilds[id].at().parent == this) mChilds[id].at().parent = NULL;
     mChilds.erase(mChilds.begin()+id);
@@ -1043,7 +1042,7 @@ void XMLNodeObj::childDel( unsigned id )
 
 AutoHD<XMLNodeObj> XMLNodeObj::childGet( unsigned id )
 {
-    if(/*id < 0 || */id >= mChilds.size()) throw TError("XMLNodeObj", _("Child '%d' is not allow."), id);
+    if(/*id < 0 || */id >= mChilds.size()) throw TError("XMLNodeObj", _("Child '%d' is not allowed."), id);
     dataM.lock();
     AutoHD<XMLNodeObj> rez = mChilds[id];
     dataM.unlock();
@@ -1180,7 +1179,7 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 	if(prms.size() >= 2 && prms[1].getB()) {
 	    string s_buf;
 	    int hd = open(prms[0].getS().c_str(), O_RDONLY);
-	    if(hd < 0) return TSYS::strMess(_("2:Open file '%s' error: %s"), prms[0].getS().c_str(), strerror(errno));
+	    if(hd < 0) return TSYS::strMess(_("2:Error opening the file '%s': %s"), prms[0].getS().c_str(), strerror(errno));
 	    bool fOK = true;
 	    int cf_sz = lseek(hd, 0, SEEK_END);
 	    if(cf_sz > 0) {
@@ -1190,7 +1189,7 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 		fOK = s_buf.size();
 	    }
 	    close(hd);
-	    if(!fOK) return TSYS::strMess(_("3:Load file '%s' error."), prms[0].getS().c_str());
+	    if(!fOK) return TSYS::strMess(_("3:Error loading the file '%s'."), prms[0].getS().c_str());
 
 	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getI():0), ((prms.size()>=4)?prms[3].getS():Mess->charset())); }
 	    catch(TError &err) { return "1:"+err.mess; }
@@ -1218,7 +1217,7 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 	string s_buf = nd.save(((prms.size()>=1)?prms[0].getI():0), (prms.size()>=3)?prms[2].getS():Mess->charset());
 	//  Save to file
 	if(prms.size() >= 2) {
-	    int hd = open(prms[1].getS().c_str(), O_RDWR|O_CREAT|O_TRUNC, 0664);
+	    int hd = open(prms[1].getS().c_str(), O_RDWR|O_CREAT|O_TRUNC, SYS->permCrtFiles());
 	    if(hd < 0)	return "";
 	    bool fOK = (write(hd,s_buf.data(),s_buf.size()) == (int)s_buf.size());
 	    close(hd);
@@ -1346,7 +1345,7 @@ string TCntrNodeObj::getStrXML( const string &oid )	{ return "<TCntrNodeObj path
 
 TVariant TCntrNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {
-    if(cnd.freeStat()) throw TError("TCntrNodeObj", _("The object don't attached to node of OpenSCADA tree."));
+    if(cnd.freeStat()) throw TError("TCntrNodeObj", _("Object is not connected to a node of the OpenSCADA tree."));
     try{ return cnd.at().objFuncCall(id, prms, user()); } catch(TError&){ }
     return TVarObj::funcCall(id, prms);
 }

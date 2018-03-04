@@ -148,7 +148,7 @@ void TBDS::close( const string &bdn, bool del )
 	    obd.at().close(bdTbl, del);
     } catch(TError &err) {
 	mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_sys(TMess::Warning, _("Close DB '%s' error!"), bdn.c_str());
+	mess_sys(TMess::Warning, _("Error closing database '%s'!"), bdn.c_str());
     }
 }
 
@@ -288,8 +288,8 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool f
     }
 
     if(!db_true && !noEx) {
-	if(dbErr.cat.empty()) throw err_sys("%s", dbErr.mess.empty() ? _("Requested row no present.") : dbErr.mess.c_str());
-	throw TError(dbErr.cat.c_str(), "%s", dbErr.mess.empty() ? _("Requested row no present.") : dbErr.mess.c_str());
+	if(dbErr.cat.empty()) throw err_sys("%s", dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess.c_str());
+	throw TError(dbErr.cat.c_str(), "%s", dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess.c_str());
     }
 
     return db_true;
@@ -373,7 +373,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	}
     }
 
-    if(!noEx) throw err_sys(_("Write row to DB or config file error."));
+    if(!noEx) throw err_sys(_("Error writing to DB or configuration file."));
 
     return false;
 }
@@ -561,7 +561,7 @@ void TBDS::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_sys(TMess::Error, _("Search and open new DB error."));
+	mess_sys(TMess::Error, _("Error finding and opening a new database."));
     }
 }
 
@@ -606,8 +606,8 @@ void TTypeBD::cntrCmdProc( XMLNode *opt )
 	TModule::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),RWRWR_,"root",SDB_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),R_R_R_)) {
-	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Full DB delete"),RWRW__,"root",SDB_ID,2,
-		"tp","bool","help",_("Select for full DB deletion at this DB closing, else the DB will be simply closed."));
+	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Complete DB removal"),RWRW__,"root",SDB_ID,2,
+		"tp","bool","help",_("Select to completely remove the database when closing, otherwise the DB will simply be closed."));
 	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),RWRWR_,"root",SDB_ID,5,
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","db_","idSz",OBJ_ID_SZ);
 	}
@@ -814,7 +814,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/tbls/otbl",_("Opened tables"),RWRW__,"root",SDB_ID,5,
 		"tp","br","idSz","255","s_com","add,del","br_pref","tbl_",
 		"help",_("Opened tables list.\nAdding and removing tables actually consists of opening and closing tables."));
-	if(enableStat() && ctrMkNode("area",opt,-1,"/sql",_("SQL"),R_R___,"root",SDB_ID)) {
+	if(enableStat() && ctrMkNode("area",opt,-1,"/sql","SQL",R_R___,"root",SDB_ID)) {
 	    ctrMkNode("fld",opt,-1,"/sql/req",_("Request"),RWRW__,"root",SDB_ID,3,"tp","str","cols","100","rows","2");
 	    ctrMkNode("fld",opt,-1,"/sql/trans",_("Transaction"),RWRW__,"root",SDB_ID,4,"tp","dec","dest","select",
 		"sel_id","0;1;2","sel_list",_("Out;Into;No matter"));

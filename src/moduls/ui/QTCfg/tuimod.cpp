@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"3.4.3"
+#define MOD_VER		"3.4.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -118,7 +118,7 @@ string TUIMod::optDescr( )
 
 void TUIMod::load_( )
 {
-    mess_debug(nodePath().c_str(), _("Load module."));
+    mess_debug(nodePath().c_str(), _("Loading the module."));
 
     //Load parameters from command line
     if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
@@ -131,7 +131,7 @@ void TUIMod::load_( )
 
 void TUIMod::save_( )
 {
-    mess_debug(nodePath().c_str(),_("Save module."));
+    mess_debug(nodePath().c_str(),_("Saving the module."));
 
     //Save parameters to DB
     TBDS::genDBSet(nodePath()+"TmConChk", tmConChk());

@@ -543,7 +543,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	    break;
 	case Reg::String: {
 	    string sval = *rez->val().s;
-	    //if(sval.size() > 255) throw TError(nodePath().c_str(),_("String constant size is more 255 symbols."));
+	    //if(sval.size() > 255) throw TError(nodePath().c_str(),_("String-constant size is more for 255 symbols."));
 	    prg += (uint8_t)Reg::MviS;
 	    prg.append((char*)&addr, sizeof(uint16_t));
 	    prg += (uint8_t)vmin(255, sval.size());
@@ -589,7 +589,7 @@ Reg *Func::cdMviObject( )
 
 Reg *Func::cdMviArray( int p_cnt )
 {
-    if(p_cnt > 255) throw TError(nodePath().c_str(),_("Array have more 255 items."));
+    if(p_cnt > 255) throw TError(nodePath().c_str(),_("Array has more than 255 elements."));
     deque<int> p_pos;
 
     //Mvi all parameters
@@ -618,7 +618,7 @@ Reg *Func::cdMviArray( int p_cnt )
 
 Reg *Func::cdMviRegExp( int p_cnt )
 {
-    if(p_cnt < 1 || p_cnt > 2) throw TError(nodePath().c_str(),_("RegExp require one or two parameters."));
+    if(p_cnt < 1 || p_cnt > 2) throw TError(nodePath().c_str(),_("RegExp requires one or two parameters."));
 
     Reg *rg_expr = NULL;
     Reg *rg_arg  = NULL;
@@ -838,7 +838,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2, Reg *rez )
 	case Reg::LT: case Reg::GT:
 	case Reg::LEQ: case Reg::GEQ: case Reg::EQU: case Reg::NEQ:
 	    prg += (uint8_t)cod; rez->setType(Reg::Bool);	break;
-	default: throw TError(nodePath().c_str(),_("Don't support operation code %d."),cod);
+	default: throw TError(nodePath().c_str(),_("Operation code %d is not supported."),cod);
     }
 
     uint16_t addr;
@@ -936,7 +936,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 	case Reg::Not:		prg += (uint8_t)Reg::Not;	break;
 	case Reg::BitNot:	prg += (uint8_t)Reg::BitNot;	break;
 	case Reg::Neg:		prg += (uint8_t)Reg::Neg;	break;
-	default: throw TError(nodePath().c_str(),_("Don't support operation code %d."),cod);
+	default: throw TError(nodePath().c_str(),_("Operation code %d is not supported."),cod);
     }
     uint16_t addr;
     addr = rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
@@ -1058,7 +1058,7 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
 
     //if( (prm1 && !prm1->objEl() && prm1->vType(this) == Reg::String) ||
     //	(prm2 && !prm2->objEl() && prm2->vType(this) == Reg::String) )
-    //	throw TError(nodePath().c_str(),_("Buildin functions don't support string type"));
+    //	throw TError(nodePath().c_str(),_("Built-in functions don't support the string type"));
 
     //Free parameter's registers
     if(prm1)	{ prm1 = cdMvi(prm1); p1_pos = prm1->pos(); }
@@ -1090,7 +1090,7 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc, Reg *f_r )
 
     if(!f_r) {
 	if(f_id >= EXT_F_LIM)
-	    throw TError(nodePath().c_str(), _("External functions number exceeded limits to %d on function '%s'"), f_id, mFncs[f_id].at().id().c_str());
+	    throw TError(nodePath().c_str(), _("Number of external functions reached the limit of %d on the function '%s'"), f_id, mFncs[f_id].at().id().c_str());
 
 	//Check for return IO position
 	bool ret_ok = false;
@@ -1100,12 +1100,12 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc, Reg *f_r )
 
 	//Check IO and parameters count
 	if(p_cnt > mFncs[f_id].at().ioSize()-ret_ok)
-	    throw TError(nodePath().c_str(), _("More than %d(%d) parameters are specified for function '%s'"),
+	    throw TError(nodePath().c_str(), _("More than %d(%d) parameters are specified for the function '%s'"),
 		(mFncs[f_id].at().ioSize()-ret_ok), p_cnt, mFncs[f_id].at().id().c_str());
 
 	//Check the present return for fuction
 	if(!proc && !ret_ok)
-	    throw TError(nodePath().c_str(), _("Function is requested '%s', but it doesn't have return of IO"), mFncs[f_id].at().id().c_str());
+	    throw TError(nodePath().c_str(), _("Function '%s' is called, but it does not have the IO-return"), mFncs[f_id].at().id().c_str());
     }
 
     //Mvi all parameters
@@ -1177,8 +1177,8 @@ Reg *Func::cdIntFnc( int fOff, int pCnt, bool proc )
 
 Reg *Func::cdObjFnc( Reg *obj, const string &fNm, int p_cnt )
 {
-    if(fNm.size() > 254)throw TError(nodePath().c_str(), _("Function's name longer to 254."));
-    if(p_cnt > 255)	throw TError(nodePath().c_str(), _("Object's function have more 255 parameters."));
+    if(fNm.size() > 254)throw TError(nodePath().c_str(), _("Function name is longer than 254."));
+    if(p_cnt > 255)	throw TError(nodePath().c_str(), _("Object function contains more than 255 parameters."));
 
     Reg *rez = NULL;
     deque<int> p_pos;
@@ -1277,7 +1277,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		// string toString( ) - performs the value as the string “true” or “false”
 		if(prop == "toString")	return string(vl.getB() ? "true" : "false");
 		return false;
-		//throw TError(nodePath().c_str(),_("Boolean type have not function '%s' or not enough parameters for it."),prop.c_str());
+		//throw TError(nodePath().c_str(),_("Boolean type has not the property '%s' or there are not enough parameters for it."),prop.c_str());
 	    case TVariant::Integer:
 		// bool isEVal( ) - check value to "EVAL"
 		if(prop == "isEVal")	return (vl.getI() == EVAL_INT);
@@ -1335,7 +1335,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    return TSYS::strEncode(rez, TSYS::Reverse);
 		}
 		return false;
-		//throw TError(nodePath().c_str(),_("Integer or real type have not function '%s' or not enough parameters for it."),prop.c_str());
+		//throw TError(nodePath().c_str(),_("Integer or real type has not the property '%s' or there are not enough parameters for it."),prop.c_str());
 	    case TVariant::String:
 		// bool isEVal( ) - check value to "EVAL"
 		if(prop == "isEVal")	return (vl.getS() == EVAL_STR);
@@ -1523,11 +1523,11 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if(prop == "trim") return sTrm(vl.getS(), prms.size() ? prms[0].getS() : " \n\t\r");
 
 		return false;
-		//throw TError(nodePath().c_str(),_("String type have not properties '%s' or not enough parameters for it."),prop.c_str());
+		//throw TError(nodePath().c_str(),_("String type has not the property '%s' or there are not enough parameters for it."),prop.c_str());
 	    default:	break;
 	}
 	return false;
-	//throw TError(nodePath().c_str(),_("Unknown type '%d' for property '%s'."),vl.type(),prop.c_str());
+	//throw TError(nodePath().c_str(),_("Unknown type '%d' for the property '%s'."),vl.type(),prop.c_str());
     } catch(TError &err) {
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "%s", err.mess.c_str());
     }
@@ -1662,7 +1662,7 @@ AutoHD<TVarObj> Func::getValO( TValFunc *io, RegW &rg )
 		if(io->ioType(rg.val().io) == IO::Object) return io->getO(rg.val().io);
 	    default:	break;
 	}
-	throw TError(nodePath().c_str(),_("Get object from no object's register"));
+	throw TError(nodePath().c_str(),_("Obtaining an object from a non-object register"));
     }
     else return getVal(io,rg).getO();
 }
@@ -1775,18 +1775,9 @@ void Func::calc( TValFunc *val )
     try {
 	ExecData dt = { SYS->sysTm(), 0 };
 	exec(val, (const uint8_t*)prg.c_str(), dt);
-	if(dt.flg&0x08) throw TError(nodePath().c_str(),_("Function execution terminated by error"));
+	if(dt.flg&0x08) throw TError(nodePath().c_str(),_("Function is interrupted by an error"));
     } catch(...) { fRes().resRelease(); throw; }
     fRes().resRelease();
-
-    /*ResAlloc res(fRes(), false);
-    if(!startStat()) return;
-
-    //Exec calc
-    ExecData dt = { SYS->sysTm(), 0 };
-    exec(val, (const uint8_t*)prg.c_str(), dt);
-    if(dt.flg&0x08) throw TError(nodePath().c_str(),_("Function execution terminated by error"));*/
-
 }
 
 void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
@@ -1796,7 +1787,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
     while(!(dt.flg&0x01)) {
 	//Calc time control mechanism
 	if(SYS->sysTm() > (dt.startTm+mMaxCalcTm)) {
-	    mess_err(nodePath().c_str(), _("Timeouted function calculation %d > %d+%d"), SYS->sysTm(), dt.startTm, mMaxCalcTm);
+	    mess_err(nodePath().c_str(), _("Calculation time has been exceeded %d > %d+%d"), SYS->sysTm(), dt.startTm, mMaxCalcTm);
 	    dt.flg |= 0x09;
 	    return;
 	}
@@ -2010,7 +2001,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 				reg[ptr->rez].val().s->append(getValS(val,reg[ptr->a2]));
 			    else reg[ptr->rez] = getValS(val,reg[ptr->a1]) + getValS(val,reg[ptr->a2]);	break;
 			default:
-			    throw TError(nodePath().c_str(), _("Not supported type %d for operation 'Add'."), reg[ptr->a1].vType(this));
+			    throw TError(nodePath().c_str(), _("Type %d, which is not supported by the 'Add' operation."), reg[ptr->a1].vType(this));
 		    }
 		else {
 		    TVariant op1 = getVal(val,reg[ptr->a1]);
@@ -2020,7 +2011,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			case TVariant::String:
 			    reg[ptr->rez] = op1.getS() + getValS(val,reg[ptr->a2]);	break;
 			default:
-			    throw TError(nodePath().c_str(), _("Not supported type %d for operation 'Add'."), op1.type());
+			    throw TError(nodePath().c_str(), _("Type %d, which is not supported by the 'Add' operation."), op1.type());
 		    }
 		}
 		cprg += sizeof(SCode); continue;
@@ -2042,7 +2033,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			    else setValS(val, reg[ptr->rez], getValS(val,reg[ptr->a1]) + getValS(val,reg[ptr->a2]));
 			    break;
 			default:
-			    throw TError(nodePath().c_str(), _("Not supported type %d for operation 'Add'."), reg[ptr->a1].vType(this));
+			    throw TError(nodePath().c_str(), _("Type %d, which is not supported by the 'Add' operation."), reg[ptr->a1].vType(this));
 		    }
 		else {
 		    TVariant op1 = getVal(val,reg[ptr->a1]);
@@ -2052,7 +2043,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			case TVariant::String:
 			    setValS(val, reg[ptr->rez], op1.getS() + getValS(val,reg[ptr->a2])); break;
 			default:
-			    throw TError(nodePath().c_str(), _("Not supported type %d for operation 'Add'."), op1.type());
+			    throw TError(nodePath().c_str(), _("Type %d, which is not supported by the 'Add' operation."), op1.type());
 		    }
 		}
 		cprg += sizeof(SCode); continue;
@@ -2733,7 +2724,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 	    }
 	    default:
 		setStart(false);
-		throw TError(nodePath().c_str(),_("Operation %c(%xh) error. Function '%s' is stopped."),*cprg,*cprg,id().c_str());
+		throw TError(nodePath().c_str(),_("Error operation %c(%xh). Function '%s' stopped."),*cprg,*cprg,id().c_str());
 	}
     }
 }
@@ -2751,7 +2742,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
 	    "tp","str","cols","100","rows","5");
 	ctrMkNode("fld",opt,-1,"/func/cfg/toStart",_("To start"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calculate time, seconds"),RWRWR_,"root",SDAQ_ID,3,
+	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calculation time, seconds"),RWRWR_,"root",SDAQ_ID,3,
 	    "tp","dec","min","0","max","3600");
 	if(ctrMkNode("area",opt,-1,"/io",_("Program"))) {
 	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,1,"s_com","add,del,ins,move")) {
@@ -2763,7 +2754,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,IO::Output,IO::Return).c_str(),
 		    "sel_list",_("Input;Output;Return"));
-		ctrMkNode("list",opt,-1,"/io/io/4",_("Hide"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/io/io/4",_("Hidden"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    if(!owner().DB().empty())
@@ -2820,7 +2811,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    int row = s2i(opt->attr("row"));
 	    int col = s2i(opt->attr("col"));
 	    if((col == 0 || col == 1) && !opt->text().size())
-		throw TError(nodePath().c_str(),_("Empty value is not valid."));
+		throw TError(nodePath().c_str(),_("Empty value is not allowed."));
 	    switch(col) {
 		case 0:	io(row)->setId(opt->text());	break;
 		case 1:	io(row)->setName(opt->text());	break;

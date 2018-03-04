@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2017
+# Roman Savochenko <rom_as@oscada.org>, 2017-2018
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-05 20:22+0200\n"
+"POT-Creation-Date: 2018-03-04 13:47+0200\n"
 "PO-Revision-Date: 2011-07-19 20:48+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -29,7 +29,7 @@ msgstr "Roman Savotschenko"
 msgid "Provides an access to the sound card."
 msgstr "Zugriff auf Soundkartendata."
 
-msgid "Parameters' table"
+msgid "Table of parameters"
 msgstr "Tabelle der Parameter"
 
 msgid "Card device"
@@ -44,8 +44,8 @@ msgstr "Typ Abtasten der Karte"
 msgid "Float 32;Int 32;Int 16"
 msgstr "Fliesskomma 32;Ganzzahl 32;Ganzzahl 16"
 
-msgid "Gather task priority"
-msgstr "Priorität der Datenerfassung"
+msgid "Priority of the acquisition task"
+msgstr "Priorität der Erfassungsaufgabe"
 
 msgid "Standard"
 msgstr "Standart"
@@ -56,32 +56,33 @@ msgstr "Kanal"
 msgid "Value"
 msgstr "Variable"
 
-#, c-format
-msgid "Allowed %d input channels"
+msgid "%d input channels available"
 msgstr "Verfügbar %d Eingangskanäle"
 
 msgid ""
-"Gathering from %d channels, recieved %.2g MB, samplerate corrections %g and "
-"adjusted value %d."
+"Acquisition from %d channels, recieved %.2g MB, samplerate corrections %g "
+"and the adjusted value %d."
 msgstr ""
-"Sammeln von %d Kanälen, empfangene %.2g MB, Samplerate-Korrekturen %g und Angepasster Wert %d."
+"Sammeln von %d Kanälen, empfangene %.2g MB, Samplerate-Korrekturen %g und "
+"Angepasster Wert %d."
 
-#, c-format
-msgid "Selected device '%s' is error or default device no allow."
+msgid "Error of the selected device '%s' or default device is not available."
 msgstr ""
 "Fehler beim ausgewählten Gerät '%s' oder das Standardgerät ist nicht "
 "zulässig."
 
-msgid "No one channel is configured for acquisition."
+msgid "No channel is set up for acquisition."
 msgstr "Empfangsskanal ist nicht konfiguriert."
 
-msgid "Sample type set is error."
-msgstr "Fehler Bein Einstellen der Abtastung."
+msgid "Error setting sample type."
+msgstr "Fehler beim Festlegen des Probentyps."
 
-msgid "Sound input stream is not stopped!"
-msgstr "Datenerfassung Toneingang ist nicht angehalten!"
+msgid "Sound stream is not stopped!"
+msgstr "Soundstream wird nicht gestoppt!"
 
 #, c-format
 msgid ""
 "CallBack: Sample rate correction from %g to %g for fix error %ds on time %ds."
-msgstr "CallBack: Abtastratenkorrektur von %g nach %g für Fixfehler %ds für die Zeit %ds."
+msgstr ""
+"CallBack: Abtastratenkorrektur von %g nach %g für Fixfehler %ds für die Zeit "
+"%ds."

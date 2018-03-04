@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsubsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -52,21 +52,21 @@ string TSubSYS::subName( )	{ return mName.size()?_(mName.c_str()):mId; }
 
 void TSubSYS::modList( vector<string> &list )
 {
-    if(!subModule()) throw err_sys(_("The subsystem is not modular!"));
+    if(!subModule()) throw err_sys(_("Subsystem is not modular!"));
     chldList(mMod,list);
 }
 
 bool TSubSYS::modPresent( const string &name )
 {
-    if(!subModule()) throw err_sys(_("The subsystem is not modular!"));
+    if(!subModule()) throw err_sys(_("Subsystem is not modular!"));
     return chldPresent(mMod,name);
 }
 
 void TSubSYS::modAdd( TModule *modul )
 {
-    if(!subModule()) throw err_sys(_("The subsystem is not modular!"));
+    if(!subModule()) throw err_sys(_("Subsystem is not modular!"));
     if(chldPresent(mMod,modul->modId())) return;
-    mess_sys(TMess::Info, _("Connect module '%s'!"), modul->modId().c_str());
+    mess_sys(TMess::Info, _("Module '%s' connection."), modul->modId().c_str());
     chldAdd(mMod, modul, s2i(modul->modInfo("HighPriority"))?0:-1);
     if(mess_lev() == TMess::Debug) {
 	vector<string> list;
@@ -78,14 +78,14 @@ void TSubSYS::modAdd( TModule *modul )
 
 void TSubSYS::modDel( const string &name )
 {
-    if(!subModule()) throw err_sys(_("The subsystem is not modular!"));
+    if(!subModule()) throw err_sys(_("Subsystem is not modular!"));
     chldDel(mMod, name);
-    mess_sys(TMess::Info, _("Disconnect module '%s'!"), name.c_str());
+    mess_sys(TMess::Info, _("Module '%s' disconnection."), name.c_str());
 }
 
 AutoHD<TModule> TSubSYS::modAt( const string &name ) const
 {
-    if(!subModule()) throw err_sys(_("The subsystem is not modular!"));
+    if(!subModule()) throw err_sys(_("Subsystem is not modular!"));
     return chldAt(mMod,name);
 }
 
@@ -103,7 +103,7 @@ void TSubSYS::unload( )
 
 void TSubSYS::subStart( )
 {
-    mess_sys(TMess::Debug, _("Start subsystem."));
+    mess_sys(TMess::Debug, _("Subsystem starting."));
 
     if(!SYS->security().at().grpPresent(subId())) {
 	SYS->security().at().grpAdd(subId());
@@ -124,7 +124,7 @@ void TSubSYS::subStart( )
 	}
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Start module '%s' error."), list[iM].c_str());
+	    mess_sys(TMess::Error, _("Error starting the module '%s'."), list[iM].c_str());
 	}
 
     mStart = true;
@@ -132,7 +132,7 @@ void TSubSYS::subStart( )
 
 void TSubSYS::subStop( )
 {
-    mess_sys(TMess::Debug, _("Stop subsystem."));
+    mess_sys(TMess::Debug, _("Subsystem stopping."));
 
     if(!subModule())	return;
     vector<string> list;
@@ -145,7 +145,7 @@ void TSubSYS::subStop( )
 	}
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Stop module '%s' error."), list[iM].c_str());
+	    mess_sys(TMess::Error, _("Error stopping the module '%s'."), list[iM].c_str());
 	}
 
     mStart = false;

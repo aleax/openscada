@@ -47,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.16"
+#define MOD_VER		"0.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -98,9 +98,9 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD",_("Table of parameters"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost"));
     fldAdd(new TFld("RETR",_("Number of retries"),TFld::Integer,TFld::NoFlag,"1","1","0;10"));
     fldAdd(new TFld("TM",_("Responds timeout, seconds"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
@@ -138,9 +138,9 @@ string TMdContr::getStatus( )
     if(startStat() && !redntUse()) {
 	if(!acqErr.getVal().empty())	rez = acqErr.getVal();
 	else {
-	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
-	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	    if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
+	    if(period())rez += TSYS::strMess(_("Acquisition with the period: %s. "),tm2s(1e-9*period()).c_str());
+	    else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	    rez += TSYS::strMess(_("Spent time: %s."),tm2s(1e-6*tmGath).c_str());
 	}
     }
@@ -292,7 +292,7 @@ void *TMdContr::Task( void *icntr )
 
     //Start SNMP-net session
     void *ss =  snmp_sess_open(cntr.getSess());
-    if(!ss) { mess_err(mod->nodePath().c_str(), "%s", _("Error SNMP session open.")); return NULL; }
+    if(!ss) { mess_err(mod->nodePath().c_str(), "%s", _("Error opening SNMP session.")); return NULL; }
 
     cntr.endrunReq = false;
     cntr.prcSt = true;
@@ -594,7 +594,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 				if(var->val.doubleVal) attr.at().setR(*var->val.doubleVal,0,true);
 				break;
 			    default:
-				mess_warning(owner().nodePath().c_str(),_("ASN type '%d' do not handled."),var->type);
+				mess_warning(owner().nodePath().c_str(), _("ASN type '%d' is not supported."), var->type);
 				//print_objid(var->name,var->name_length);
 				//print_value(var->name,var->name_length,var);
 				break;
@@ -607,7 +607,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 		    }
 		}
 	    else if(status == STAT_TIMEOUT)
-		throw TError(owner().nodePath().c_str(),TSYS::strMess(_("10:Timeout: No Response from %s."),owner().session.peername).c_str());
+		throw TError(owner().nodePath().c_str(),TSYS::strMess(_("10:Timeout: No response from %s."),owner().session.peername).c_str());
 	    else running = 0;
 	    if(response) snmp_free_pdu(response);
 	}
@@ -655,10 +655,10 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode2("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,"SnthHgl","1","rows","8",
-	    "help",_("SNMP OID list, include directories for get all subitems. OID can write in the methods:\n"
+	    "help",_("The list of SNMP OIDs, including directories to get all of the subelements. The OID can be written as follows:\n"
 		"  \".1.3.6.1.2.1.1\" - direct code addressing for the object \"System\";\n"
 		"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbolic addressing to direct one for the object \"System\";\n"
-		"  \"system.sysDescr.0\" - simple, not full path, addressing from a root alias (the object \"System\");\n"
+		"  \"system.sysDescr.0\" - simple, not full path, addressing from the root alias (the object \"System\");\n"
 		"  \"SNMPv2-MIB::sysDescr.0\" - addressing from the MIB base by the module name for \"system.sysDescr.0\"."),NULL);
 	if(get_tree_head())
 	    ctrMkNode2("fld",opt,-1,"/prm/cfg/MIB",_("MIB Tree"),enableStat()?0:RWRW__,"root",SDAQ_ID,"dest","select","select","/prm/cfg/MIB_lst",NULL);
@@ -754,9 +754,9 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	snmp_add_var(pdu, oidn, oidn_len, vtp, vl.getS().c_str());
 	int status = snmp_sess_synch_response(ss, pdu, &response);
 	if(status == STAT_TIMEOUT)
-	    owner().acqErr.setVal(TSYS::strMess(_("10:Timeout: No Response from %s."),owner().session.peername).c_str());
+	    owner().acqErr.setVal(TSYS::strMess(_("10:Timeout: No response from %s."),owner().session.peername).c_str());
 	else if(response && response->errstat == SNMP_ERR_NOSUCHNAME)
-	    owner().acqErr.setVal(TSYS::strMess(_("11:No authorized name.")));
+	    owner().acqErr.setVal(TSYS::strMess(_("11:Unauthorized name.")));
 	if(response) snmp_free_pdu(response);
 	snmp_sess_close(ss);
     }

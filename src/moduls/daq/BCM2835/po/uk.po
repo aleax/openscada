@@ -38,7 +38,7 @@ msgstr ""
 "Помилка ініціалізації бібліотеки bcm2835 чи-то через відсутність bcm2835 чи-"
 "то доступу до нього."
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр вимкнено."
 
 msgid "2:Acquisition/access is stopped."

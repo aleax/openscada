@@ -5,7 +5,7 @@
 <title>Модули/Движок Среды Визуализации и Управлений (СВУ) - OpenSCADAWiki</title>
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
-<link href="../files/doc.css" rel="stylesheet" /></head>
+<link href="../../en/files/doc.css" rel="stylesheet" /></head>
 <body><div id="mw_header">
 			<div class="mw-indicators">
 </div>
@@ -14,7 +14,7 @@
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../../en/files/Constr.png" width="32" /></a>
 </td>
 <td style="padding-left:5px;"> The translation checking and actualizing
 </td></tr></table>
@@ -220,7 +220,7 @@
 <ul><li> "Страница верхнего уровня" -&gt; "Страница нижнего уровня"</li>
 <li> "Виджет нижнего уровня" -&gt; "Виджет верхнего уровня"</li></ul>
 <p>Такая политика позволяет обходить страницы в соответствии с их иерархией, а событиям в виджетах "всплывать" на верх за одну итерацию.
-</p><p>Сеансы, на уровне <a class="external text" href="http://wiki.oscada.org/Doc/API#h154-1" rel="nofollow noreferrer noopener" target="_blank">интерфейса управления OpenSCADA</a>, поддерживают многоязычность, которая зависит от значения общих атрибутов "lang" и далее "user", и которые визуализатор может устанавливать в соответствии со своим языком. Эта функция включается <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">динамическим переводом сообщений OpenSCADA</a>.
+</p><p>Сеансы, на уровне <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/API#CntrNode" title="Special:MyLanguage/Documents/API">интерфейса управления OpenSCADA</a>, поддерживают многоязычность, которая зависит от значения общих атрибутов "lang" и далее "user", и которые визуализатор может устанавливать в соответствии со своим языком. Эта функция включается <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">динамическим переводом сообщений OpenSCADA</a>.
 </p><p><br />
 </p>
 <h3><span class="mw-headline" id=".D0.A1.D1.82.D0.B8.D0.BB.D0.B8"><span class="mw-headline-number">3.4</span> Стили</span></h3>
@@ -1339,7 +1339,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <ul><li> Дуга, форма записи в списке, для статических и динамических параметров (могут смешиваться):</li></ul>
 <dl><dd><dl><dd>"<b>arc:({x}|{y}):({x}|{y}):({x}|{y}):({x}|{y}):({x}|{y})[:{width}[:{color}[:{bord_w}[:{bord_clr}[:{line_stl}]]]]]</b>"</dd>
 <dd>"<b>arc:{p1}:{p2}:{p3}:{p4}:{p5}[:w{n}[:c{n}[:w{n}[:c{n}[:s{n}]]]]]</b>"</dd></dl></dd>
-<dd><a class="image" href="http://oscada.org/wiki/File:VCA_arc.png"><img alt="VCA arc.png" height="215" src="../files/VCA_arc.png" width="164" /></a>
+<dd><a class="image" href="http://oscada.org/wiki/File:VCA_arc.png"><img alt="VCA arc.png" height="215" src="../../en/files/VCA_arc.png" width="164" /></a>
 <dl><dd>p1, p2 — начальная и конечная точки эллиптической дуги соответственно;</dd>
 <dd>p3 — центр дуги;</dd>
 <dd>p4 — первый радиус;</dd>
@@ -3138,7 +3138,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <td>
 </td></tr></table>
 <h4><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B2.D0.B8.D1.81.D0.BD.D1.8B.D0.B5_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B_OpenSCADA"><span class="mw-headline-number">3.11.2</span> Сервисные интерфейсы OpenSCADA</span></h4>
-<p>Сервисные интерфейсы это интерфейсы доступа к системе OpenSCADA посредством <a class="external text" href="http://wiki.oscada.org/Doc/API#h154-1" rel="nofollow noreferrer noopener" target="_blank">интерфейса управления OpenSCADA</a> из внешних систем. Данный механизм положен в основу всех механизмов обмена внутри OpenSCADA, реализованных посредством слабых связей и стандартного протокола обмена OpenSCADA.
+<p>Сервисные интерфейсы это интерфейсы доступа к системе OpenSCADA посредством <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/API#CntrNode" title="Special:MyLanguage/Documents/API">интерфейса управления OpenSCADA</a> из внешних систем. Данный механизм положен в основу всех механизмов обмена внутри OpenSCADA, реализованных посредством слабых связей и стандартного протокола обмена OpenSCADA.
 </p>
 <h5><span class="mw-headline" id=".D0.94.D0.BE.D1.81.D1.82.D1.83.D0.BF_.D0.BA_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.B8.D1.8F.D0.BC_.D0.B0.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D0.BE.D0.B2_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.BE.D0.B2_.D0.B2.D0.B8.D0.B7.D1.83.D0.B0.D0.BB.D0.B8.D0.B7.D0.B0.D1.86.D0.B8.D0.B8_.28.D0.B2.D0.B8.D0.B4.D0.B6.D0.B5.D1.82.D1.8B.29"><span class="mw-headline-number">3.11.2.1</span> Доступ к значениям атрибутов элементов визуализации (виджеты)</span></h5>
 <p>С целью предоставления унифицированного, группового и сравнительно быстрого доступа к значениям атрибутов визуальных элементов предусмотрена сервисная функция визуального элемента "/serv/attr" и команды получения/установки значений атрибутов: <b>&lt;get path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b> и <b>&lt;set path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b>.
@@ -3277,7 +3277,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <li> Идентификатор, имя, описание и иконку контейнера.</li>
 <li> Владелец, группа пользователей и права доступа к элементу.</li>
 <li> Период вычисления сеансов основанных на данном проекте.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1105px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag_ru.png"><img class="thumbimage" height="590" src="../files/VCAeng_pg_diag_ru.png" width="1103" /></a>  <div class="thumbcaption">Рис.4.4 Вкладка "Диагностика" проекта.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:996px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag_ru.png"><img class="thumbimage" height="563" src="../files/VCAeng_pg_diag_ru.png" width="994" /></a>  <div class="thumbcaption">Рис.4.4 Вкладка "Диагностика" проекта.</div></div></div></div>
 <p>В этой вкладке Вы можете выбрать время, или освежить к текущему, и размер для получения диагностических сообщений сеансов исполнения данного проекта.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:676px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb_ru.png"><img class="thumbimage" height="519" src="../files/VCAeng_wlb_ru.png" width="674" /></a>  <div class="thumbcaption">Рис.4.5 Страница конфигурации библиотек виджетов.</div></div></div></div>

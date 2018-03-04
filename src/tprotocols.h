@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tprotocols.h
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -101,12 +101,12 @@ class TProtocol: public TModule
 
 	// Output protocol
 	virtual void outMess( XMLNode &io, TTransportOut &tro )
-	{ throw TError(nodePath().c_str(),"Function '%s' no support!","outMess"); }
+	{ throw TError(nodePath().c_str(), _("Function '%s' is not supported!"), "outMess"); }
 
     private:
 	//Methods
 	virtual TProtocolIn *in_open( const string &name )
-	{ throw TError(nodePath().c_str(),"Function '%s' no support!","in_open"); }
+	{ throw TError(nodePath().c_str(), _("Function '%s' is not supported!"), "in_open"); }
 
 	//Attributes
 	int	m_pr;

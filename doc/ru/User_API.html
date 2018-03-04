@@ -5,7 +5,7 @@
 <title>Документация/API пользователя - OpenSCADAWiki</title>
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
-<link href="files/doc.css" rel="stylesheet" /></head>
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
 <body><div id="mw_header">
 			<div class="mw-indicators">
 </div>
@@ -15,47 +15,62 @@
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.B1.D1.89.D0.B5.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D1.8B.D0.B5_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82.D1.8B"><span class="tocnumber">1</span> <span class="toctext">Общесистемные пользовательские объекты</span></a>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9F.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B9_.D1.8F.D0.B7.D1.8B.D0.BA_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_JavaLikeCalc"><span class="tocnumber">1</span> <span class="toctext"><span>Пользовательский язык программирования JavaLikeCalc</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-2"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BC.D0.B0.D1.81.D1.81.D0.B8.D0.B2.D0.B0_.28Array.29"><span class="tocnumber">1.1</span> <span class="toctext">Объект массива (Array)</span></a></li>
-<li class="toclevel-2 tocsection-3"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.80.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D1.8B.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.B8.D1.8F_.28RegExp.29"><span class="tocnumber">1.2</span> <span class="toctext">Объект регулярного выражения (RegExp)</span></a></li>
-<li class="toclevel-2 tocsection-4"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D1.83.D0.B7.D0.BB.D0.B0-.D1.82.D0.B5.D0.B3.D0.B0_XML_.28XMLNodeObj.29"><span class="tocnumber">1.3</span> <span class="toctext">Объект узла-тега XML (XMLNodeObj)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B_.D1.8F.D0.B7.D1.8B.D0.BA.D0.B0"><span class="tocnumber">1.1</span> <span class="toctext">Элементы языка</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D1.8F.D0.B7.D1.8B.D0.BA.D0.B0"><span class="tocnumber">1.2</span> <span class="toctext">Операции языка</span></a></li>
+<li class="toclevel-2"><a href="#.D0.92.D1.81.D1.82.D1.80.D0.BE.D0.B5.D0.BD.D0.BD.D1.8B.D0.B5_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D1.8F.D0.B7.D1.8B.D0.BA.D0.B0"><span class="tocnumber">1.3</span> <span class="toctext">Встроенные функции языка</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D1.8B_.D1.8F.D0.B7.D1.8B.D0.BA.D0.B0"><span class="tocnumber">1.4</span> <span class="toctext">Операторы языка</span></a>
+<ul>
+<li class="toclevel-3"><a href="#.D0.A3.D1.81.D0.BB.D0.BE.D0.B2.D0.BD.D1.8B.D0.B5_.D0.BE.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D1.8B"><span class="tocnumber">1.4.1</span> <span class="toctext">Условные операторы</span></a></li>
+<li class="toclevel-3"><a href="#.D0.A6.D0.B8.D0.BA.D0.BB.D1.8B"><span class="tocnumber">1.4.2</span> <span class="toctext">Циклы</span></a></li>
+<li class="toclevel-3"><a href="#.D0.92.D0.BD.D1.83.D1.82.D1.80.D0.B5.D0.BD.D0.BD.D0.B8.D0.B5_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8"><span class="tocnumber">1.4.3</span> <span class="toctext">Внутренние функции</span></a></li>
+<li class="toclevel-3"><a href="#.D0.A1.D0.BF.D0.B5.D1.86.D0.B8.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5_.D1.81.D0.B8.D0.BC.D0.B2.D0.BE.D0.BB.D1.8B_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.BE.D0.B2.D1.8B.D1.85_.D0.BF.D0.B5.D1.80.D0.B5.D0.BC.D0.B5.D0.BD.D0.BD.D1.8B.D1.85"><span class="tocnumber">1.4.4</span> <span class="toctext">Специальные символы строковых переменных</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-5"><a href="#.D0.9F.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B0-.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.28SYS.29"><span class="tocnumber">2</span> <span class="toctext"><span>Программа-система (SYS)</span></span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#.D0.9B.D1.8E.D0.B1.D0.BE.D0.B9_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.28TCntrNode.29_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B0_OpenSCADA_.28SYS..2A.29"><span class="tocnumber">3</span> <span class="toctext"><span>Любой объект (TCntrNode) дерева OpenSCADA (SYS.*)</span></span></a></li>
-<li class="toclevel-1 tocsection-7"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.B5.D0.B7.D0.BE.D0.BF.D0.B0.D1.81.D0.BD.D0.BE.D1.81.D1.82.D1.8C.22_.28SYS.Security.29"><span class="tocnumber">4</span> <span class="toctext">Подсистема "Безопасность" (SYS.Security)</span></a></li>
-<li class="toclevel-1 tocsection-8"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.94.22_.28SYS.BD.29"><span class="tocnumber">5</span> <span class="toctext"><span>Подсистема "БД" (SYS.BD)</span></span></a></li>
-<li class="toclevel-1 tocsection-9"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A1.D0.B1.D0.BE.D1.80_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85.22_.28SYS.DAQ.29"><span class="tocnumber">6</span> <span class="toctext"><span>Подсистема "Сбор данных" (SYS.DAQ)</span></span></a>
-<ul>
-<li class="toclevel-2 tocsection-10"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.JavaLikeCalc"><span class="tocnumber">6.1</span> <span class="toctext">Модуль DAQ.JavaLikeCalc</span></a></li>
-<li class="toclevel-2 tocsection-11"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.LogicLev"><span class="tocnumber">6.2</span> <span class="toctext">Модуль DAQ.LogicLev</span></a></li>
-<li class="toclevel-2 tocsection-12"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.BlockCalc"><span class="tocnumber">6.3</span> <span class="toctext">Модуль DAQ.BlockCalc</span></a></li>
-<li class="toclevel-2 tocsection-13"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.ModBus"><span class="tocnumber">6.4</span> <span class="toctext">Модуль DAQ.ModBus</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-14"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D0.B8.D0.B2.D1.8B-.D0.98.D1.81.D1.82.D0.BE.D1.80.D0.B8.D1.8F.22_.28SYS.Archive.29"><span class="tocnumber">7</span> <span class="toctext">Подсистема "Архивы-История" (SYS.Archive)</span></a></li>
-<li class="toclevel-1 tocsection-15"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.8B.22_.28SYS.Transport.29"><span class="tocnumber">8</span> <span class="toctext"><span>Подсистема "Транспорты" (SYS.Transport)</span></span></a></li>
-<li class="toclevel-1 tocsection-16"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.8B.22_.28SYS.Protocols.29"><span class="tocnumber">9</span> <span class="toctext">Подсистема "Протоколы" (SYS.Protocols)</span></a>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.B1.D1.89.D0.B5.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D1.8B.D0.B5_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82.D1.8B"><span class="tocnumber">2</span> <span class="toctext">Общесистемные пользовательские объекты</span></a>
 <ul>
-<li class="toclevel-2 tocsection-17"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_Protocol.HTTP"><span class="tocnumber">9.1</span> <span class="toctext">Модуль Protocol.HTTP</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BC.D0.B0.D1.81.D1.81.D0.B8.D0.B2.D0.B0_.28Array.29"><span class="tocnumber">2.1</span> <span class="toctext"><span>Объект массива (Array)</span></span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.80.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D1.8B.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.B8.D1.8F_.28RegExp.29"><span class="tocnumber">2.2</span> <span class="toctext">Объект регулярного выражения (RegExp)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D1.83.D0.B7.D0.BB.D0.B0-.D1.82.D0.B5.D0.B3.D0.B0_XML_.28XMLNodeObj.29"><span class="tocnumber">2.3</span> <span class="toctext">Объект узла-тега XML (XMLNodeObj)</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-18"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9F.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B.22_.28SYS.UI.29"><span class="tocnumber">10</span> <span class="toctext">Подсистема "Пользовательские интерфейсы" (SYS.UI)</span></a>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.9F.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B0-.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.28SYS.29"><span class="tocnumber">3</span> <span class="toctext"><span>Программа-система (SYS)</span></span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#.D0.9B.D1.8E.D0.B1.D0.BE.D0.B9_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.28TCntrNode.29_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B0_OpenSCADA_.28SYS..2A.29"><span class="tocnumber">4</span> <span class="toctext"><span>Любой объект (TCntrNode) дерева OpenSCADA (SYS.*)</span></span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.B5.D0.B7.D0.BE.D0.BF.D0.B0.D1.81.D0.BD.D0.BE.D1.81.D1.82.D1.8C.22_.28SYS.Security.29"><span class="tocnumber">5</span> <span class="toctext">Подсистема "Безопасность" (SYS.Security)</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.94.22_.28SYS.BD.29"><span class="tocnumber">6</span> <span class="toctext"><span>Подсистема "БД" (SYS.BD)</span></span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A1.D0.B1.D0.BE.D1.80_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85.22_.28SYS.DAQ.29"><span class="tocnumber">7</span> <span class="toctext"><span>Подсистема "Сбор данных" (SYS.DAQ)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-19"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_QTStarter"><span class="tocnumber">10.1</span> <span class="toctext">Модуль QTStarter</span></a></li>
-<li class="toclevel-2 tocsection-20"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_UI.VCAEngine"><span class="tocnumber">10.2</span> <span class="toctext">Модуль UI.VCAEngine</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.JavaLikeCalc"><span class="tocnumber">7.1</span> <span class="toctext">Модуль DAQ.JavaLikeCalc</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.LogicLev"><span class="tocnumber">7.2</span> <span class="toctext">Модуль DAQ.LogicLev</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.BlockCalc"><span class="tocnumber">7.3</span> <span class="toctext">Модуль DAQ.BlockCalc</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.ModBus"><span class="tocnumber">7.4</span> <span class="toctext">Модуль DAQ.ModBus</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-21"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A1.D0.BF.D0.B5.D1.86.D0.B8.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5.22_.28SYS.Special.29"><span class="tocnumber">11</span> <span class="toctext">Подсистема "Специальные" (SYS.Special)</span></a>
+<li class="toclevel-1 tocsection-15"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D0.B8.D0.B2.D1.8B-.D0.98.D1.81.D1.82.D0.BE.D1.80.D0.B8.D1.8F.22_.28SYS.Archive.29"><span class="tocnumber">8</span> <span class="toctext">Подсистема "Архивы-История" (SYS.Archive)</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.8B.22_.28SYS.Transport.29"><span class="tocnumber">9</span> <span class="toctext"><span>Подсистема "Транспорты" (SYS.Transport)</span></span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.8B.22_.28SYS.Protocols.29"><span class="tocnumber">10</span> <span class="toctext">Подсистема "Протоколы" (SYS.Protocols)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-22"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D0.BE.D0.B3.D0.BE_API_.D1.81.D1.80.D0.B5.D0.B4.D1.8B_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.28Special.FLibSYS.29"><span class="tocnumber">11.1</span> <span class="toctext">Модуль Библиотека системного API среды пользовательского программирования (Special.FLibSYS)</span></a></li>
-<li class="toclevel-2 tocsection-23"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.8B.D1.85_.D0.BC.D0.B0.D1.82.D0.B5.D0.BC.D0.B0.D1.82.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D1.85_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.28Special.FLibMath.29"><span class="tocnumber">11.2</span> <span class="toctext">Модуль Библиотека стандартных математических функций (Special.FLibMath)</span></a></li>
-<li class="toclevel-2 tocsection-24"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.D1.81.D0.BE.D0.B2.D0.BC.D0.B5.D1.81.D1.82.D0.B8.D0.BC.D0.BE.D1.81.D1.82.D0.B8_.D1.81.D0.BE_SCADA_Complex1_.D1.84.D0.B8.D1.80.D0.BC.D1.8B_.D0.9E.D0.9E.D0.9E_.D0.9D.D0.98.D0.9F_.22DIYA.22_.28Special.FLibComplex1.29"><span class="tocnumber">11.3</span> <span class="toctext">Модуль Библиотека функций совместимости со SCADA Complex1 фирмы ООО НИП "DIYA" (Special.FLibComplex1)</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_Protocol.HTTP"><span class="tocnumber">10.1</span> <span class="toctext">Модуль Protocol.HTTP</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-25"><a href="#.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B8_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F"><span class="tocnumber">12</span> <span class="toctext">Библиотеки функций пользователя</span></a></li>
-<li class="toclevel-1 tocsection-26"><a href="#.D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="tocnumber">13</span> <span class="toctext">Ссылки</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9F.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B.22_.28SYS.UI.29"><span class="tocnumber">11</span> <span class="toctext">Подсистема "Пользовательские интерфейсы" (SYS.UI)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-20"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_QTStarter"><span class="tocnumber">11.1</span> <span class="toctext">Модуль QTStarter</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_UI.VCAEngine"><span class="tocnumber">11.2</span> <span class="toctext">Модуль UI.VCAEngine</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-22"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A1.D0.BF.D0.B5.D1.86.D0.B8.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5.22_.28SYS.Special.29"><span class="tocnumber">12</span> <span class="toctext">Подсистема "Специальные" (SYS.Special)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-23"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D0.BE.D0.B3.D0.BE_API_.D1.81.D1.80.D0.B5.D0.B4.D1.8B_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.28Special.FLibSYS.29"><span class="tocnumber">12.1</span> <span class="toctext">Модуль Библиотека системного API среды пользовательского программирования (Special.FLibSYS)</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.8B.D1.85_.D0.BC.D0.B0.D1.82.D0.B5.D0.BC.D0.B0.D1.82.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D1.85_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.28Special.FLibMath.29"><span class="tocnumber">12.2</span> <span class="toctext">Модуль Библиотека стандартных математических функций (Special.FLibMath)</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.D1.81.D0.BE.D0.B2.D0.BC.D0.B5.D1.81.D1.82.D0.B8.D0.BC.D0.BE.D1.81.D1.82.D0.B8_.D1.81.D0.BE_SCADA_Complex1_.D1.84.D0.B8.D1.80.D0.BC.D1.8B_.D0.9E.D0.9E.D0.9E_.D0.9D.D0.98.D0.9F_.22DIYA.22_.28Special.FLibComplex1.29"><span class="tocnumber">12.3</span> <span class="toctext">Модуль Библиотека функций совместимости со SCADA Complex1 фирмы ООО НИП "DIYA" (Special.FLibComplex1)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-26"><a href="#.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B8_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F"><span class="tocnumber">13</span> <span class="toctext">Библиотеки функций пользователя</span></a></li>
+<li class="toclevel-1 tocsection-27"><a href="#.D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="tocnumber">14</span> <span class="toctext">Ссылки</span></a></li>
 </ul>
 </div>
 
@@ -68,13 +83,169 @@
 <li> Транспортные протоколы, доступные для пользовательского программирования, такие как: <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">Пользовательский протокол</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus узлы типа "Данные"</a>, <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">Web-интерфейсы от пользователя</a>, ...</li>
 <li> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">Среда Визуализации и Управления (СВУ)</a> в процедурах виджетов.</li></ul>
 <p>API пользовательского программирования представляет собой дерево объектов OpenSCADA (Рис.1), каждый объект которого может представлять собственный перечень свойств и функций. Свойства и функции объектов могут использоваться пользователем в процедурах на языках пользовательского программирования OpenSCADA.
-</p><p>На данный момент OpenSCADA предоставляет только один язык текстового программирования — <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, следовательно Вы также должны его изучить перед началом. Точкой входа для доступа к объектам OpenSCADA (Рис.1) из языка пользовательского программирования JavaLikeCalc является зарезервированное слово "SYS", корневого объекта OpenSCADA. Например, для доступа к функции исходящего транспорта нужно записать: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
+</p><p>На данный момент OpenSCADA предоставляет только один язык текстового программирования — <a href="#JavaLikeCalc">JavaLikeCalc</a>, следовательно Вы также должны его изучить перед началом. Точкой входа для доступа к объектам OpenSCADA (Рис.1) из языка пользовательского программирования JavaLikeCalc является зарезервированное слово "SYS", корневого объекта OpenSCADA. Например, для доступа к функции исходящего транспорта нужно записать: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
 </p><p>API объектов, предоставляемых модулями, описывается в собственной документации модулей и тут предоставляются ссылки на неё.
 </p>
-<h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.89.D0.B5.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D1.8B.D0.B5_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82.D1.8B"><span class="mw-headline-number">1</span> Общесистемные пользовательские объекты</span></h2>
-<p>JavaLikeCalc предоставляет поддержку типа данных объект "Object". Объект представляет собой ассоциативный контейнер свойств и функций. Свойства могут содержать как данные четырёх базовых типов, так и другие объекты. Доступ к свойствам объекта может осуществляться посредством записи имён свойств через точку к объекту <i>obj.prop</i>, а также посредством заключения имени свойства в квадратные скобки <i>obj["prop"]</i>. Очевидно, что первый механизм статичен, а второй позволяет указывать имя свойства через переменную. Удалить свойство объекта можно директивой "delete". Чтение неопределённого свойства вернёт <b>EVAL</b>. Создание объекта осуществляется посредством ключевого слова <i>new</i>: <b>varO = new Object()</b>. Базовое определение объекта не содержит функций. Операции копирования объекта на самом деле делают ссылку на исходный объект. При удалении объекта осуществляется уменьшение счётчика ссылок, а при достижении счётчика ссылок нуля объект удаляется физически.
-</p><p>Разные компоненты могут доопределять базовый объект особыми свойствами и функциями. Стандартным расширением объекта является массив "Array", который создаётся командой <b>varO = new Array(prm1,prm2,prm3,...,prmN)</b>. Перечисленные через запятую параметры помещаются в массив в исходном порядке. Если параметр только один то массив инициируется указанным количеством пустых элементов. Особенностью массива является то, что он работает со свойствами как с индексами и основным механизмом обращения является заключение индекса в квадратные скобки <i>arr[1]</i>. Массив хранит свойства в собственном контейнере одномерного массива. Цифровые свойства массива используются для доступа непосредственно к массиву, а символьные работают как свойства объекта. Детальнее про свойства и функции массива можно прочитать по <a class="external" href="http://oscada.org/wiki/Documents/User_API/ru#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_Array" title="Documents/User API/ru">ссылке</a>.
-</p><p>Объект регулярного выражения "RegExp" создаётся командой <b>varO = new RegExp(pat,flg)</b>, где <i>pat</i> — шаблон регулярного выражения, а <i>flg</i> — флаги поиска. Объект работы с регулярными выражениями основан на библиотеке "PCRE". При глобальном поиске устанавливается атрибут объекта "lastIndex", что позволяет продолжить поиск при следующем вызове функции. В случае неудачного поиска атрибут "lastIndex" сбрасывается в ноль. Детальнее про свойства и функции объекта регулярного выражения можно прочитать по <a class="external" href="http://oscada.org/wiki/Documents/User_API/ru#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_RegExp" title="Documents/User API/ru">ссылке</a>.
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B9_.D1.8F.D0.B7.D1.8B.D0.BA_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_JavaLikeCalc"><span class="mw-headline-number">1</span> <span id="JavaLikeCalc" title="#JavaLikeCalc"><a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">Пользовательский язык программирования JavaLikeCalc</a></span></span></h2>
+<h3><span class="mw-headline" id=".D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B_.D1.8F.D0.B7.D1.8B.D0.BA.D0.B0"><span class="mw-headline-number">1.1</span> Элементы языка</span></h3>
+<p><i>Ключевые слова:</i> if, else, while, for, break, continue, return, function, using, true, false.<br />
+<i>Постоянные:</i>
+</p>
+<ul><li> десятичные: цифры 0-9 (12, 111, 678);</li>
+<li> восьмеричные: цифры 0-7 (012, 011, 076);</li>
+<li> шестнадцатеричные: цифры 0-9, буквы a-f или A-F (0x12, 0XAB);</li>
+<li> вещественные: 345.23, 2.1e5, 3.4E-5, 3e6;</li>
+<li> логические: true, false;</li>
+<li> строковые: "hello", без перехода на другую строку однако с поддержкой прямой конкатенации строковых констант.</li></ul>
+<p><i>Типы переменных:</i>
+</p>
+<ul><li> целое: -2<sup>63</sup>...2<sup>63</sup>, EVAL_INT(-9223372036854775807);</li>
+<li> вещественное: 3.4 * 10<sup>308</sup>, EVAL_REAL(-1.79E308);</li>
+<li> логическое: false, true, EVAL_BOOL(2);</li>
+<li> строка: последовательность символов-байтов (0...255) любой длины, ограниченной объёмом памяти и хранилищем в БД; EVAL_STR("&lt;EVAL&gt;").</li></ul>
+<p><i>Встроенные константы:</i> pi = 3.14159265..., e = 2.71828182..., EVAL_BOOL(2), EVAL_INT(-9223372036854775807), EVAL_REAL,EVAL(-1.79E308), EVAL_STR("&lt;EVAL&gt;")<br />
+<i>Глобальные атрибуты параметров DAQ (начиная с подсистемы "DAQ" и в виде <b>{Тип модуля DAQ}.{Объект контроллера}.{Параметр}.{Атрибут}</b>).</i><br />
+<i>Функции и параметры <a href="User_API.html" title="Special:MyLanguage/Documents/User API">объектной модели OpenSCADA</a>.</i>
+</p>
+<h3><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D1.8F.D0.B7.D1.8B.D0.BA.D0.B0"><span class="mw-headline-number">1.2</span> Операции языка</span></h3>
+<p>Операции, поддерживаемые языком, представлены в таблице ниже. Приоритет операций уменьшается сверху вниз. Операции с одинаковым приоритетом входят в одну цветовую группу.
+</p>
+<table bgcolor="#FFFFF0" border="1" cellspacing="0">
+<tr align="center" bgcolor="#83D8FF"><td><b>Символ</b></td><td><b>Описание</b></td></tr>
+<tr bgcolor="#FFFFC0"><td>()</td><td>Вызов функции.</td></tr>
+<tr><td>{}</td><td>Программные блоки.</td></tr>
+<tr><td>++</td><td>Инкремент (пост и пре).</td></tr>
+<tr><td>--</td><td>Декремент (пост и пре).</td></tr>
+<tr bgcolor="#FFFFC0"><td>-</td><td>Унарный минус.</td></tr>
+<tr bgcolor="#FFFFC0"><td>!</td><td>Логическое отрицание.</td></tr>
+<tr bgcolor="#FFFFC0"><td>~</td><td>Побитовое отрицание.</td></tr>
+<tr><td>*</td><td>Умножение.</td></tr>
+<tr><td>/</td><td>Деление.</td></tr>
+<tr><td>%</td><td>Остаток от целочисленного деления.</td></tr>
+<tr bgcolor="#FFFFC0"><td>+</td><td>Сложение</td></tr>
+<tr bgcolor="#FFFFC0"><td>-</td><td>Вычитание</td></tr>
+<tr><td>&lt;&lt;</td><td>Поразрядный сдвиг влево</td></tr>
+<tr><td>&gt;&gt;</td><td>Поразрядный сдвиг вправо</td></tr>
+<tr bgcolor="#FFFFC0"><td>&gt;</td><td>Больше</td></tr>
+<tr bgcolor="#FFFFC0"><td>&gt;=</td><td>Больше или равно</td></tr>
+<tr bgcolor="#FFFFC0"><td>&lt;</td><td>Меньше</td></tr>
+<tr bgcolor="#FFFFC0"><td>&lt;=</td><td>Меньше или равно</td></tr>
+<tr bgcolor="#FFFFC0"><td>==</td><td>Равно</td></tr>
+<tr bgcolor="#FFFFC0"><td>!=</td><td>Не равно</td></tr>
+<tr><td>|</td><td>Поразрядное "ИЛИ"</td></tr>
+<tr><td>&amp;</td><td>Поразрядное "И"</td></tr>
+<tr><td>^</td><td>Поразрядное "Исключающее ИЛИ"</td></tr>
+<tr bgcolor="#FFFFC0"><td>&amp;&amp;</td><td>Логический "И"</td></tr>
+<tr bgcolor="#FFFFC0"><td>||</td><td>Логический "ИЛИ"</td></tr>
+<tr><td>?:</td><td>Условная операция "i=(i&lt;0)?0:i;"</td></tr>
+<tr bgcolor="#FFFFC0"><td>=</td><td>Присваивание.</td></tr>
+<tr bgcolor="#FFFFC0"><td>+=</td><td>Присваивание со сложением.</td></tr>
+<tr bgcolor="#FFFFC0"><td>-=</td><td>Присваивание с вычитанием.</td></tr>
+<tr bgcolor="#FFFFC0"><td>*=</td><td>Присваивание с умножением.</td></tr>
+<tr bgcolor="#FFFFC0"><td>/=</td><td>Присваивание с делением.</td></tr>
+</table>
+<h3><span class="mw-headline" id=".D0.92.D1.81.D1.82.D1.80.D0.BE.D0.B5.D0.BD.D0.BD.D1.8B.D0.B5_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D1.8F.D0.B7.D1.8B.D0.BA.D0.B0"><span class="mw-headline-number">1.3</span> Встроенные функции языка</span></h3>
+<p>Виртуальной машиной языка предусматривается следующий набор встроенных функций общего назначения:
+</p>
+<ul><li> <i>double max(double x, double x1)</i> — максимальное значение из <i>x</i> и <i>x1</i>;</li>
+<li> <i>double min(double x, double x1)</i> — минимальное значение из <i>x</i> и <i>x1</i>;</li>
+<li> <i>string typeof(ElTp vl)</i> — тип значения <i>vl</i>;</li>
+<li> <i>string tr(string base)</i> — перевод базового <i>base</i> сообщения.</li></ul>
+<p>Для обеспечения высокой скорости работы в математических вычислениях модуль предоставляет встроенные математические функции, которые вызываются на уровне команд виртуальной машины:
+</p>
+<ul><li> <i>double sin(double x)</i> — синус <i>x</i>;</li>
+<li> <i>double cos(double x)</i> — косинус <i>x</i>;</li>
+<li> <i>double tan(double x)</i> — тангенс <i>x</i>;</li>
+<li> <i>double sinh(double x)</i> — синус гиперболический от <i>x</i>;</li>
+<li> <i>double cosh(double x)</i> — косинус гиперболический от <i>x</i>;</li>
+<li> <i>double tanh(double x)</i> — тангенс гиперболический от <i>x</i>;</li>
+<li> <i>double asin(double x)</i> — арксинус от <i>x</i>;</li>
+<li> <i>double acos(double x)</i> — арккосинус от <i>x</i>;</li>
+<li> <i>double atan(double x)</i> — арктангенс от <i>x</i>;</li>
+<li> <i>double rand(double x)</i> — случайное число от 0 до <i>x</i>;</li>
+<li> <i>double lg(double x)</i> — десятичный логарифм от <i>x</i>;</li>
+<li> <i>double ln(double x)</i> — натуральный логарифм от <i>x</i>;</li>
+<li> <i>double exp(double x)</i> — экспонента от <i>x</i>;</li>
+<li> <i>double pow(double x, double x1)</i> — возведение <i>x</i> в степень <i>x1</i>;</li>
+<li> <i>double sqrt(double x)</i> — корень квадратный от <i>x</i>;</li>
+<li> <i>double abs(double x)</i> — абсолютное значение от <i>x</i>;</li>
+<li> <i>double sign(double x)</i> — знак числа <i>x</i>;</li>
+<li> <i>double ceil(double x)</i> — округление числа <i>x</i> до большего целого;</li>
+<li> <i>double floor(double x)</i> — округление числа <i>x</i> до меньшего целого.</li></ul>
+<h3><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D1.8B_.D1.8F.D0.B7.D1.8B.D0.BA.D0.B0"><span class="mw-headline-number">1.4</span> Операторы языка</span></h3>
+<p>Общий перечень операторов языка:
+</p>
+<ul><li> <i>var</i> — оператор инициализации переменной; указание переменной без присваивания значения резервирует её со значением EVAL, что позволяет осуществлять одноразовую инициализацию сложных типов данных вроде объекта, через проверку на "isEVal()";</li>
+<li> <i>if</i> — оператор условия "ЕСЛИ";</li>
+<li> <i>else</i> — оператор условия "ИНАЧЕ";</li>
+<li> <i>while</i> — определение цикла "ПОКА";</li>
+<li> <i>for</i> — определение цикла "ДЛЯ";</li>
+<li> <i>in</i> — разделитель цикла "ДЛЯ" для перебора свойств объекта;</li>
+<li> <i>break</i> — прерывание выполнения цикла;</li>
+<li> <i>continue</i> — продолжить выполнение цикла с начала;</li>
+<li> <i>function</i> — определение внутренней функции;</li>
+<li> <i>using</i> — позволяет установить область видимости внешних функций часто используемой библиотеки (<b>using Special.FLibSYS;</b>) для последующего обращения только по имени функции, не имеет эффекта для объектного доступа;</li>
+<li> <i>return</i> — прерывание функции и возврат результата, который копируется в атрибут с флагом возврата (<b>return 123;</b>); в середине внутренней функции осуществляется её завершение с указанным результатом;</li>
+<li> <i>new</i> — создание объекта, реализовано для: общий объект "Object", массив "Array" и регулярные выражения "RegExp";</li>
+<li> <i>delete</i> — удаление/освобождение объекта или его свойств, при этом: внутренние переменные устанавливаются в EVAL, внешние заменяются пустым объектом, а свойства объекта очищаются.</li></ul>
+<h4><span class="mw-headline" id=".D0.A3.D1.81.D0.BB.D0.BE.D0.B2.D0.BD.D1.8B.D0.B5_.D0.BE.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D1.8B"><span class="mw-headline-number">1.4.1</span> Условные операторы</span></h4>
+<p>Языком поддерживаются два типа условий. Первый — это операции условия для использования внутри выражения, второй — глобальный, основанный на условных операторах.
+</p><p>Условие внутри выражения строится на операциях '?' и ':'. В качестве примера можно записать следующее практическое выражение <b>st_open =</b>
+</p>
+<pre>(pos&gt;=100)&nbsp;? true&nbsp;: false;<b>, что читается как: "Если переменная <i>pos</i> больше или равна </b>100<b>, то переменной <i>st_open</i> присваивается значение </b>true<b>, иначе — </b>false<b>".</b>
+</pre>
+<p>Глобальное условие строится на основе условных операторов "if" и "else". В качестве примера можно привести тоже выражение, но записанное другим способом <b>if(pos&gt;100) st_open = true; else st_open = false;</b>.
+</p>
+<h4><span class="mw-headline" id=".D0.A6.D0.B8.D0.BA.D0.BB.D1.8B"><span class="mw-headline-number">1.4.2</span> Циклы</span></h4>
+<p>Поддерживаются три типа циклов: <b>while</b>, <b>for</b> и <b>for-in</b>. Синтаксис циклов соответствует языкам программирования: C++, Java и JavaScript.
+</p><p>Цикл <b>while</b>, в общем, записывается следующим образом: <b>while({условие}) {тело цикла};</b><br />
+Цикл <b>for</b> записывается следующим образом: <b>for({пре-инициализ};{условие};{пост-вычисление}) {тело цикла};</b><br />
+Цикл <b>for-in</b> записывается следующим образом: <b>for({переменная} in {объект}) {тело цикла};</b><br />
+Где:
+</p>
+<dl><dd><i>{условие}</i> — выражение, определяющее условие;</dd>
+<dd><i>{тело цикла}</i> — тело цикла множественного исполнения;</dd>
+<dd><i>{пре-инициализ}</i> — выражение предварительной инициализации переменных цикла;</dd>
+<dd><i>{пост-вычисление}</i> — выражение модификации параметров цикла после очередной итерации;</dd>
+<dd><i>{переменная}</i> — переменная, которая будет содержать имя свойства объекта при переборе;</dd>
+<dd><i>{объект}</i> — объект для которого осуществляется перебор свойств.</dd></dl>
+<h4><span class="mw-headline" id=".D0.92.D0.BD.D1.83.D1.82.D1.80.D0.B5.D0.BD.D0.BD.D0.B8.D0.B5_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8"><span class="mw-headline-number">1.4.3</span> Внутренние функции</span></h4>
+<p>Язык поддерживает определение и вызов внутренних функций. Для определения внутренней функции используется ключевое слово "function" и в целом определение имеет синтаксис: <b>function {имяФ} ({пер1}, {пер2}, ... {перN}) { {тело функции} }</b>. Определение внутренней функции внутри другой недопустимо однако допустим вызов ранее определённой.
+</p><p>Вызов внутренней функции осуществляется в типовой способ, как процедура <b>{имяФ}({var1}, {var2}, ... {varN});</b> или как функция <b>{перРез} = {имяФ}({пер1}, {пер2}, ... {перN});</b>. Вызов внутренних функций допустим только после их декларации выше!
+</p><p>Все переменные, определённые в основном теле, недоступны в середине внутренних функций и могут быть переданы только через двухсторонние аргументы вызываемой внутренней функции. Все переменные, определённые в середине внутренней функции, имеют собственную область имён и недоступны из основного тела или любой другой внутренней функции и могут быть переданы только в основное тело через двухсторонние аргументы или результат вызываемой внутренней функции. Поскольку, определение переменных-регистров в этом языке является статичным и происходит при компиляции, то они фактически являются одинаковыми для каждого вызова функции, и соответственно их рекурсивный вызов тут не имеет смысла!
+</p><p>Оператор "return", в середине внутренней функции, осуществляет контролируемое её завершение и помещение указанной переменной, или результата выражения, как результат вызываемой внутренней функции.
+</p><p>Пример типового определения и использования внутренней функции представлен ниже:
+</p>
+<pre style="white-space: pre-wrap;">
+function sum(a, b, c, d) { return a + ((b==EVAL)?0:b) + ((c==EVAL)?0:c) + ((d==EVAL)?0:d); }
+rez = sum(1, 2);
+</pre>
+<h4><span class="mw-headline" id=".D0.A1.D0.BF.D0.B5.D1.86.D0.B8.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5_.D1.81.D0.B8.D0.BC.D0.B2.D0.BE.D0.BB.D1.8B_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.BE.D0.B2.D1.8B.D1.85_.D0.BF.D0.B5.D1.80.D0.B5.D0.BC.D0.B5.D0.BD.D0.BD.D1.8B.D1.85"><span class="mw-headline-number">1.4.4</span> Специальные символы строковых переменных</span></h4>
+<p>Языком предусмотрена поддержка следующих специальных символов строковых переменных:
+</p>
+<dl><dd>"\n" — перевод строки;</dd>
+<dd>"\t" — символ табуляции;</dd>
+<dd>"\b" — забой;</dd>
+<dd>"\f" — перевод страницы;</dd>
+<dd>"\r" — возврат каретки;</dd>
+<dd>"\\" — сам символ '\';</dd>
+<dd>"\041" — символ '!', записанный восьмеричным числом;</dd>
+<dd>"\x21" — символ '!', записанный шестнадцатеричным числом.</dd></dl>
+<p><br />
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.89.D0.B5.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D1.8B.D0.B5_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82.D1.8B"><span class="mw-headline-number">2</span> Общесистемные пользовательские объекты</span></h2>
+<p>JavaLikeCalc предоставляет поддержку типа данных объект "Object". Объект представляет собой ассоциативный контейнер свойств и функций. Свойства могут содержать как данные четырёх базовых типов, так и другие объекты. Доступ к свойствам объекта может осуществляться посредством записи имён свойств к объекту <i>obj.prop</i>, через точку, а также посредством заключения имени свойства в квадратные скобки <i>obj["prop"]</i>. Очевидно, что первый механизм статичен, а второй позволяет указывать имя свойства через переменную. Удалить свойство объекта можно директивой "delete". Чтение неопределённого свойства вернёт <b>EVAL</b>. Создание объекта осуществляется посредством ключевого слова <i>new</i>: <b>varO = new Object()</b>. Базовое определение объекта не содержит функций. Операции копирования объекта, на самом деле, делают ссылку на исходный объект. При удалении объекта осуществляется уменьшение счётчика ссылок, а при достижении счётчика нуля, объект удаляется физически.
+</p><p>Разные компоненты OpenSCADA могут доопределять базовый объект особыми свойствами и функциями. Стандартным расширением объекта является массив "Array", который создаётся командой <b>varO = new Array(prm1,prm2,prm3,...,prmN)</b>. Перечисленные через запятую параметры помещаются в массив в исходном порядке. Если параметр только один то массив инициируется указанным количеством пустых элементов. Особенностью массива является то, что он работает со свойствами, как с индексами и основным механизмом обращения является заключение индекса в квадратные скобки <i>arr[1]</i>. Массив хранит свойства в собственном контейнере одномерного массива. Цифровые свойства массива используются для доступа непосредственно к массиву, а символьные работают как свойства объекта. Детальнее про свойства и функции массива можно прочитать по <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#Array" title="Special:MyLanguage/Documents/User API">ссылке</a>.
+</p>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../en/files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing are going here
+</td></tr></table>
+</div>
+<p>Объект регулярного выражения "RegExp" создаётся командой <b>varO = new RegExp(pat,flg)</b>, где <i>pat</i> — шаблон регулярного выражения, а <i>flg</i> — флаги поиска. Объект работы с регулярными выражениями основан на библиотеке "PCRE". При глобальном поиске устанавливается атрибут объекта "lastIndex", что позволяет продолжить поиск при следующем вызове функции. В случае неудачного поиска атрибут "lastIndex" сбрасывается в ноль. Детальнее про свойства и функции объекта регулярного выражения можно прочитать по <a class="external" href="http://oscada.org/wiki/Documents/User_API/ru#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_RegExp" title="Documents/User API/ru">ссылке</a>.
 </p><p>Для произвольного доступа к аргументам функции предусмотрен объект аргументов, обратиться к которому можно посредством символа "arguments". Этот объект содержит свойство "length" с количеством аргументов у функции и позволяет обратиться к значению аргумента посредством его номера или идентификатора. Рассмотрим перебор аргументов по циклу:
 </p>
 <pre style="white-space: pre-wrap;">
@@ -146,7 +317,7 @@ rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // r
 <li> <i>string trim( string cfg = " \n\t\r" );</i> — Обрезка строки с начала и конца для символов <i>cfg</i>.</li></ul></dd></dl>
 <p><br />
 </p>
-<h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BC.D0.B0.D1.81.D1.81.D0.B8.D0.B2.D0.B0_.28Array.29"><span class="mw-headline-number">1.1</span> Объект массива (Array)</span></h3>
+<h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BC.D0.B0.D1.81.D1.81.D0.B8.D0.B2.D0.B0_.28Array.29"><span class="mw-headline-number">2.1</span> <span id="Array" title="#Array">Объект массива (Array)</span></span></h3>
 <p>Особенностью массива является то, что он работает со свойствами, как с индексами, и полное их именование бессмысленно, а значит доступен только механизм обращения заключением индекса в квадратные скобки "<b>arr[1]</b>". Массив хранит свойства в собственном контейнере одномерного массива. Цифровые свойства массива используются для доступа непосредственно к массиву, а символьные работают как свойства объекта.
 </p><p>Массив предоставляет специальное свойство "length", для получения размера массива "<b>var = arr.length;</b>". Также массив предоставляет следующие функции:
 </p>
@@ -160,7 +331,7 @@ rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // r
 <li> <i>Array slice( int beg, int end );</i> — возвращает фрагмент массива от <i>beg</i> к <i>end</i> (исключая). Если значение начала или конца отрицательно, то отсчёт ведётся с конца массива. Если конец не указан, то концом является конец массива.</li>
 <li> <i>Array splice( int beg, int remN, ElTp val1, ElTp val2, ... );</i> — вставляет, удаляет или заменяет элементы массива. Возвращает массив удалённых элементов. В первую очередь осуществляется удаление элементов с позиции <i>beg</i> и количеством <i>remN</i>, а затем вставляются значения <i>val1</i> и т.д., начиная с позиции <i>beg</i>.</li>
 <li> <i>Array sort( );</i> — сортирует элементы массива в лексикографическом порядке.</li></ul>
-<h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.80.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D1.8B.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.B8.D1.8F_.28RegExp.29"><span class="mw-headline-number">1.2</span> Объект регулярного выражения (RegExp)</span></h3>
+<h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.80.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D1.8B.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.B8.D1.8F_.28RegExp.29"><span class="mw-headline-number">2.2</span> Объект регулярного выражения (RegExp)</span></h3>
 <p>Объект работы с регулярными выражениями, основан на библиотеке PCRE. При глобальном поиске устанавливается атрибут объекта "lastIndex", что позволяет продолжить поиск при следующем вызове функции. В случае неудачного поиска атрибут "lastIndex" сбрасывается в ноль.
 </p><p>В качестве аргументов создания объекта передаётся строка с текстом регулярного выражения и флаги в виде строки символов:
 </p>
@@ -192,7 +363,7 @@ var year = rez[3]; </pre></li>
 var re = new RegExp("(\\d\\d)[-/](\\d\\d)[-/](\\d\\d(?:\\d\\d)?)","");
 var OK = re.test("12/30/1969"); </pre></li>
 </ul>
-<h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D1.83.D0.B7.D0.BB.D0.B0-.D1.82.D0.B5.D0.B3.D0.B0_XML_.28XMLNodeObj.29"><span class="mw-headline-number">1.3</span> Объект узла-тега XML (XMLNodeObj)</span></h3>
+<h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D1.83.D0.B7.D0.BB.D0.B0-.D1.82.D0.B5.D0.B3.D0.B0_XML_.28XMLNodeObj.29"><span class="mw-headline-number">2.3</span> Объект узла-тега XML (XMLNodeObj)</span></h3>
 <p>Функции:
 </p>
 <ul><li> <i>string name( )</i> — имя узла, XML-тега.</li>
@@ -226,7 +397,7 @@ var OK = re.test("12/30/1969"); </pre></li>
 <dd>0x200 — не кодировать наименований атрибутов.</dd></dl></dd></dl>
 <ul><li> <i>XMLNodeObj getElementBy( string val, string attr = "id" )</i> — получает элемент из дерева по атрибуту <i>attr</i> со значением <i>val</i>.</li>
 <li> <i>TArrayObj&lt;XMLNodeObj&gt; getElementsBy( string tag, string attrVal = "", string attr = "id" )</i> — получает массив элементов из дерева по тегу <i>tag</i> (пустой для всех) и атрибуту <i>attr</i> со значением <i>attrVal</i> (пустые для пропуска).</li></ul>
-<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B0-.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.28SYS.29"><span class="mw-headline-number">2</span> <span id="SYS" title="#SYS">Программа-система (SYS)</span></span></h2>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B0-.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.28SYS.29"><span class="mw-headline-number">3</span> <span id="SYS" title="#SYS">Программа-система (SYS)</span></span></h2>
 <p>Функции объекта:
 </p>
 <ul>
@@ -293,7 +464,7 @@ SYS.cntrReq(req); </pre></li>
 <dd>"Base64" — соответственно из Base 64;</dd>
 <dd>"Bin" — бинарную строку в ASCII байты ("XX XX XX XX ..   A.b.c.."), <i>opt1</i> указывает на разделитель или "&lt;text&gt;", для включения смещения слева и текстовой части справа.</dd></dl>
 </li></ul>
-<h2><span class="mw-headline" id=".D0.9B.D1.8E.D0.B1.D0.BE.D0.B9_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.28TCntrNode.29_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B0_OpenSCADA_.28SYS..2A.29"><span class="mw-headline-number">3</span> <span id="TCntrNode" title="#TCntrNode">Любой объект (TCntrNode) дерева OpenSCADA (SYS.*)</span></span></h2>
+<h2><span class="mw-headline" id=".D0.9B.D1.8E.D0.B1.D0.BE.D0.B9_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.28TCntrNode.29_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B0_OpenSCADA_.28SYS..2A.29"><span class="mw-headline-number">4</span> <span id="TCntrNode" title="#TCntrNode">Любой объект (TCntrNode) дерева OpenSCADA (SYS.*)</span></span></h2>
 <p>Функции объекта:
 </p>
 <ul><li> <i>TArrayObj nodeList( string grp = "", string path = "" );</i> — возвращает список идентификаторов дочерних узлов для группы <i>grp</i> и узла по пути <i>path</i>. Если <i>grp</i> пусто то возвращаются узлы всех групп.</li>
@@ -301,7 +472,7 @@ SYS.cntrReq(req); </pre></li>
 <li> <i>TCntrNodeObj nodePrev( );</i> — возвращает предыдущий-родительский узел.</li>
 <li> <i>string nodePath( string sep = "", bool from_root = true );</i> — возвращает путь к текущему узлу в дереве объектов OpenSCADA (рис.1). Символ разделителя указывается в <i>sep</i> для получения пути через разделитель, например — "DAQ.ModBus.PLC1.P1.var", иначе — "/DAQ/ModBus/PLC1/P1/var". <i>from_root</i> указывает на необходимость формировать путь от корня и без указания идентификатора станции.</li>
 <li> <i>int messSys( int level, string mess )</i> — формирует системное сообщение <i>mess</i> с уровнем <i>level</i>, с путём узла в качестве категории и с читабельным путём перед сообщением.</li></ul>
-<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.B5.D0.B7.D0.BE.D0.BF.D0.B0.D1.81.D0.BD.D0.BE.D1.81.D1.82.D1.8C.22_.28SYS.Security.29"><span class="mw-headline-number">4</span> Подсистема "Безопасность" (SYS.Security)</span></h2>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.B5.D0.B7.D0.BE.D0.BF.D0.B0.D1.81.D0.BD.D0.BE.D1.81.D1.82.D1.8C.22_.28SYS.Security.29"><span class="mw-headline-number">5</span> Подсистема "Безопасность" (SYS.Security)</span></h2>
 <p>Функции объекта подсистемы (SYS.Security):
 </p>
 <ul><li> <i>int access( string user, int mode, string owner, string group, int access )</i> — проверяет доступ пользователя <i>user</i> к ресурсу, который принадлежит <i>owner</i> и <i>group</i> с доступом <i>access</i> и для режима <i>mode</i>:</li></ul>
@@ -320,7 +491,7 @@ SYS.cntrReq(req); </pre></li>
 <ul><li> <i>ElTp cfg( string nm )</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
 <li> <i>bool cfgSet( string nm, ElTp val )</i> — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
 <li> <i>bool user( string nm )</i> — проверяет присутствие пользователя <i>nm</i> в данной группе.</li></ul>
-<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.94.22_.28SYS.BD.29"><span class="mw-headline-number">5</span> <span id="SYS.BD" title="#SYS.BD">Подсистема "БД" (SYS.BD)</span></span></h2>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.94.22_.28SYS.BD.29"><span class="mw-headline-number">6</span> <span id="SYS.BD" title="#SYS.BD">Подсистема "БД" (SYS.BD)</span></span></h2>
 <p>Функции объекта "БД" (SYS.BD["TypeDB"]["DB"]):
 </p>
 <ul>
@@ -361,7 +532,7 @@ SYS.messDebug("TEST DB","Value: "+req.childGet(2).text()); </pre></li>
 <li><i>string fieldSet( XMLNodeObj fld );</i> — устанавливает поле. В случае ошибки возвращается "0:Error".</li>
 <li><i>string fieldDel(XMLNodeObj fld);</i> — удаляет поле. В случае ошибки возвращается "0:Error".</li>
 </ul>
-<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A1.D0.B1.D0.BE.D1.80_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85.22_.28SYS.DAQ.29"><span class="mw-headline-number">6</span> <span id="SYS.DAQ" title="#SYS.DAQ">Подсистема "Сбор данных" (SYS.DAQ)</span></span></h2>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A1.D0.B1.D0.BE.D1.80_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85.22_.28SYS.DAQ.29"><span class="mw-headline-number">7</span> <span id="SYS.DAQ" title="#SYS.DAQ">Подсистема "Сбор данных" (SYS.DAQ)</span></span></h2>
 <p>Функции объекта подсистемы (SYS.DAQ):
 </p>
 <ul>
@@ -409,7 +580,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
 <li> <i>bool cfgSet( string nm, ElTp val )</i> — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li></ul>
-<h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.JavaLikeCalc"><span class="mw-headline-number">6.1</span> Модуль <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a></span></h4>
+<h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.JavaLikeCalc"><span class="mw-headline-number">7.1</span> Модуль <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a></span></h4>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc_ru.png" title="Объектная модель пользователя модуля JavaLikeCalc."><img alt="Объектная модель пользователя модуля JavaLikeCalc." height="214" src="files/Oscada_UserOM_JavaLikeCalc_ru.png" width="223" /></a></div>
 <p><b>Объект "Библиотека функций" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
 </p>
@@ -417,7 +588,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p><b>Объект "Пользовательская функция" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"]["func"])</b>
 </p>
 <ul><li> <i>ElTp call(ElTp prm1, ...)</i> — вызов функции "<i>func</i>" библиотеки "<i>Lfunc</i>" с параметрами "<i>prm{N}</i>". Возвращает результат вызываемой функции. Префикс "lib_" перед идентификатором библиотеки обязателен!</li></ul>
-<h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.LogicLev"><span class="mw-headline-number">6.2</span> Модуль <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a></span></h4>
+<h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.LogicLev"><span class="mw-headline-number">7.2</span> Модуль <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a></span></h4>
 <p><b>Объект "Параметр" [this]</b>
 </p>
 <ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">для включенного параметра стандартного типа</span>] — добавить атрибут <i>id</i> с именем <i>name</i> и для типа <i>tp</i>. Если атрибут уже присутствует, то будут применены свойства, которые возможно изменить "на ходу": имя, режим выбора и параметры выбора.
@@ -425,14 +596,14 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>tp</i> — тип атрибута [boolean | integer | real | string | text | object] + режим выбора [sel | seled] + только для чтения [ro];</li>
 <li> <i>selValsNms</i> — две строки со значениями в первой и их именами во второй (разделённые ";").</li></ul></li>
 <li> <i>bool attrDel( string id )</i> [<span style="color: red">для включенного параметра стандартного типа</span>] — удалить атрибут <i>id</i>.</li></ul>
-<h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.BlockCalc"><span class="mw-headline-number">6.3</span> Модуль <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a></span></h4>
+<h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.BlockCalc"><span class="mw-headline-number">7.3</span> Модуль <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a></span></h4>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_BlockCalc_ru.png" title="Объектная модель пользователя модуля BlockCalc."><img alt="Объектная модель пользователя модуля BlockCalc." height="214" src="files/Oscada_UserOM_BlockCalc_ru.png" width="218" /></a></div>
 <p><b>Объект "Блок" (SYS.DAQ.BlockCalc["cntr"]["blk_block"])</b>
 </p>
 <ul><li> <i>ElTp cfg(string nm)</i> — получение значения конфигурационного поля <i>nm</i> объекта.</li>
 <li> <i>bool cfgSet(string nm, ElTp val)</i> — установка конфигурационного поля <i>nm</i> объекта в значение <i>val</i>.</li>
 <li> <i>TCntrNodeObj cntr()</i> — возвращает объект контроллера этого параметра, независимо от вложенности.</li></ul>
-<h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.ModBus"><span class="mw-headline-number">6.4</span> Модуль <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a></span></h4>
+<h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.ModBus"><span class="mw-headline-number">7.4</span> Модуль <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a></span></h4>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_ModBus_ru.png" title="Объектная модель пользователя модуля ModBus."><img alt="Объектная модель пользователя модуля ModBus." height="213" src="files/Oscada_UserOM_ModBus_ru.png" width="323" /></a></div>
 <p><b>Объект "Контроллер" [this.cntr()]</b>
 </p>
@@ -446,7 +617,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>bool attrDel( string id )</i> [<span style="color: red">для включенного параметра логического типа</span>] — удалить атрибут <i>id</i>.</li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D0.B8.D0.B2.D1.8B-.D0.98.D1.81.D1.82.D0.BE.D1.80.D0.B8.D1.8F.22_.28SYS.Archive.29"><span class="mw-headline-number">7</span> Подсистема "Архивы-История" (SYS.Archive)</span></h2>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D0.B8.D0.B2.D1.8B-.D0.98.D1.81.D1.82.D0.BE.D1.80.D0.B8.D1.8F.22_.28SYS.Archive.29"><span class="mw-headline-number">8</span> Подсистема "Архивы-История" (SYS.Archive)</span></h2>
 <p>Функции объекта подсистемы:
 </p>
 <ul><li> <i>Array messGet( int btm, int etm, string cat = "", int lev = 0, string arch = "", int upTm = 0 );</i> — запрашивает сообщения программы или нарушения (lev &lt; 0) за время от <i>btm</i> до <i>etm</i> для категории <i>cat</i>, уровня <i>lev</i> (-7...7) и архиваторов <i>arch</i> (разделены символом ';'; "" — буфер и архиваторы; "&lt;buffer&gt;" — буфер; "{ArhMod}.{Arh}" — конкретный архиватор модуля). <i>upTm</i> устанавливает ограничение продолжительности операции в указанное время; отрицательное значение используется как относительное время; менее чем STD_INTERF_TM (5). Возвращается время останова чтения (атрибут "tm" массива) и массив объектов сообщений/нарушений со свойствами:
@@ -485,7 +656,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <ul><li> <i>tm</i> — время устанавливаемого значения, в микросекундах;</li>
 <li> <i>vl</i> — значение;</li>
 <li> <i>arch</i> — архиватор установки, установить в пустую строку для всех архиваторов, установить в "&lt;buffer&gt;" для обработки только буфера.</li></ul></li></ul>
-<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.8B.22_.28SYS.Transport.29"><span class="mw-headline-number">8</span> <span id="SYSTransport" title="#SYSTransport">Подсистема "Транспорты" (SYS.Transport)</span></span></h2>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.8B.22_.28SYS.Transport.29"><span class="mw-headline-number">9</span> <span id="SYSTransport" title="#SYSTransport">Подсистема "Транспорты" (SYS.Transport)</span></span></h2>
 <p>Функции объекта входящего транспорта (SYS.Transport["Modul"]["in_Transp"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
@@ -504,7 +675,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li><i>string addr( string vl = "" )</i> — адрес транспорта, устанавливает в непустое значение <i>vl</i>.</li>
 <li><i>string timings( string vl = "" )</i> — тайминги транспорта, устанавливает в непустое значение <i>vl</i>.</li>
 <li><i>string messIO( string mess, real timeOut = 0, int inBufLen = -1 );</i> — отправляет сообщения <i>mess</i> через транспорт с таймаутом ожидания ответа <i>timeOut</i> (в секундах) и читает ответ (буфер) размером <i>inBufLen</i> байт. В случае нулевого таймаута это время берётся из настроек исходящего транспорта. Отрицательное время <i>timeOut</i> (&lt; -1e-3) отключает работу транспорта в режиме запрос/ответ и позволяет независимо читать/писать в буфер ВВ, с таймаутом чтения <i>timeOut</i>, в абсолютном значении. Для отрицательного <i>inBufLen</i> размер буфера устанавливается в STR_BUF_LEN(10000), а "0" выключает чтение вообще.<br />
-<a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Если Ваш транспорт в ответ на запрос подразумевает получение данных частями тогда используйте эту функцию в одном потоке для нескольких устройств на одной шине-транспорте поскольку здесь не существует способа блокирования транспорта из пользовательского API. Один поток это объект контроллера подсистемы "Сбор данных", а <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модуль "Протокол пользователя"</a> блокирует транспорт внутри перед выполнением своих пользовательских процедур.
+<a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Если Ваш транспорт в ответ на запрос подразумевает получение данных частями тогда используйте эту функцию в одном потоке для нескольких устройств на одной шине-транспорте поскольку здесь не существует способа блокирования транспорта из пользовательского API. Один поток это объект контроллера подсистемы "Сбор данных", а <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модуль "Протокол пользователя"</a> блокирует транспорт внутри перед выполнением своих пользовательских процедур.
 <pre style="white-space: pre-wrap;">
 rez = SYS.Transport.Serial.out_ttyUSB0.messIO(SYS.strFromCharCode(0x4B,0x00,0x37,0x40),0.2);
 //Wait for all the message tail by timeout and empty result
@@ -516,8 +687,8 @@ req.setAttr("id","test").setAttr("reqTm",500).setAttr("node",1).setAttr("reqTry"
 SYS.Transport.Sockets.out_testModBus.messIO(req,"ModBus");
 test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 </ul>
-<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.8B.22_.28SYS.Protocols.29"><span class="mw-headline-number">9</span> Подсистема "Протоколы" (SYS.Protocols)</span></h2>
-<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_Protocol.HTTP"><span class="mw-headline-number">9.1</span> Модуль <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a></span></h3>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.8B.22_.28SYS.Protocols.29"><span class="mw-headline-number">10</span> Подсистема "Протоколы" (SYS.Protocols)</span></h2>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_Protocol.HTTP"><span class="mw-headline-number">10.1</span> Модуль <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a></span></h3>
 <p><b>Объект модуля (SYS.Protocol.HTTP)</b>
 </p>
 <ul><li> <i>bool pgAccess(string URL)</i> — проверка доступности страницы определённой в <i>URL</i>.
@@ -531,12 +702,12 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <li> <i>lang</i> — язык интерфейса, который формируется.</li></ul></li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9F.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B.22_.28SYS.UI.29"><span class="mw-headline-number">10</span> Подсистема "Пользовательские интерфейсы" (SYS.UI)</span></h2>
-<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_QTStarter"><span class="mw-headline-number">10.1</span> Модуль <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a></span></h3>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9F.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B.22_.28SYS.UI.29"><span class="mw-headline-number">11</span> Подсистема "Пользовательские интерфейсы" (SYS.UI)</span></h2>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_QTStarter"><span class="mw-headline-number">11.1</span> Модуль <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a></span></h3>
 <p><b>Объект модуля (SYS.UI.QTStarter)</b>
 </p>
-<ul><li> <i>Array sensors()</i> — получить все доступные сенсоры от Qt mobility.</li></ul>
-<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_UI.VCAEngine"><span class="mw-headline-number">10.2</span> Модуль <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></span></h3>
+<ul><li> <i>Array sensors()</i> — получить все доступные сенсоры от Qt mobility, возвращает "false" если не доступно ни одного сенсора.</li></ul>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_UI.VCAEngine"><span class="mw-headline-number">11.2</span> Модуль <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></span></h3>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine_ru.png" title="Объектная модель пользователя модуля VCAEngine."><img alt="Объектная модель пользователя модуля VCAEngine." height="238" src="files/Oscada_UserOM_VCAEngine_ru.png" width="364" /></a></div>
 <p><b>Объект "Сеанс" ( this.ownerSess() )</b>
 </p>
@@ -576,22 +747,22 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <ul><li> <i>string getArhDoc( int nDoc)</i> — получить текст документа архива на глубине <i>nDoc</i> (0-{aSize-1}).</li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A1.D0.BF.D0.B5.D1.86.D0.B8.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5.22_.28SYS.Special.29"><span class="mw-headline-number">11</span> Подсистема "Специальные" (SYS.Special)</span></h2>
-<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D0.BE.D0.B3.D0.BE_API_.D1.81.D1.80.D0.B5.D0.B4.D1.8B_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.28Special.FLibSYS.29"><span class="mw-headline-number">11.1</span> Модуль <a href="Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Библиотека системного API среды пользовательского программирования (Special.FLibSYS)</a></span></h3>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A1.D0.BF.D0.B5.D1.86.D0.B8.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5.22_.28SYS.Special.29"><span class="mw-headline-number">12</span> Подсистема "Специальные" (SYS.Special)</span></h2>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D0.BE.D0.B3.D0.BE_API_.D1.81.D1.80.D0.B5.D0.B4.D1.8B_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.28Special.FLibSYS.29"><span class="mw-headline-number">12.1</span> Модуль <a href="Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Библиотека системного API среды пользовательского программирования (Special.FLibSYS)</a></span></h3>
 <p><b>Объект "Библиотека функций" (SYS.Special.FLibSYS)</b>
 </p>
 <ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — вызов функции библиотеки <i>{funcID}</i>. Возвращает результат вызываемой функции.</li></ul>
 <p><b>Объект "Пользовательская функция" (SYS.Special.FLibSYS["funcID"])</b>
 </p>
 <ul><li> <i>ElTp call(ElTp prm1, ...)</i> — вызов данной функции с параметрами <i>&lt;prm{N}&gt;</i>. Возвращает результат вызываемой функции.</li></ul>
-<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.8B.D1.85_.D0.BC.D0.B0.D1.82.D0.B5.D0.BC.D0.B0.D1.82.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D1.85_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.28Special.FLibMath.29"><span class="mw-headline-number">11.2</span> Модуль <a href="Modules/FLibMath.html" title="Special:MyLanguage/Modules/FLibMath">Библиотека стандартных математических функций (Special.FLibMath)</a></span></h3>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.81.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.8B.D1.85_.D0.BC.D0.B0.D1.82.D0.B5.D0.BC.D0.B0.D1.82.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D1.85_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.28Special.FLibMath.29"><span class="mw-headline-number">12.2</span> Модуль <a href="Modules/FLibMath.html" title="Special:MyLanguage/Modules/FLibMath">Библиотека стандартных математических функций (Special.FLibMath)</a></span></h3>
 <p><b>Объект "Библиотека функций" (SYS.Special.FLibMath)</b>
 </p>
 <ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — вызов функции библиотеки <i>{funcID}</i>. Возвращает результат вызываемой функции.</li></ul>
 <p><b>Объект "Пользовательская функция" (SYS.Special.FLibMath["funcID"])</b>
 </p>
 <ul><li> <i>ElTp call(ElTp prm1, ...)</i> — вызов данной функции с параметрами <i>&lt;prm{N}&gt;</i>. Возвращает результат вызываемой функции.</li></ul>
-<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.D1.81.D0.BE.D0.B2.D0.BC.D0.B5.D1.81.D1.82.D0.B8.D0.BC.D0.BE.D1.81.D1.82.D0.B8_.D1.81.D0.BE_SCADA_Complex1_.D1.84.D0.B8.D1.80.D0.BC.D1.8B_.D0.9E.D0.9E.D0.9E_.D0.9D.D0.98.D0.9F_.22DIYA.22_.28Special.FLibComplex1.29"><span class="mw-headline-number">11.3</span> Модуль <a href="Modules/FLibComplex1.html" title="Special:MyLanguage/Modules/FLibComplex1">Библиотека функций совместимости со SCADA Complex1 фирмы ООО НИП "DIYA" (Special.FLibComplex1)</a></span></h3>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.D1.81.D0.BE.D0.B2.D0.BC.D0.B5.D1.81.D1.82.D0.B8.D0.BC.D0.BE.D1.81.D1.82.D0.B8_.D1.81.D0.BE_SCADA_Complex1_.D1.84.D0.B8.D1.80.D0.BC.D1.8B_.D0.9E.D0.9E.D0.9E_.D0.9D.D0.98.D0.9F_.22DIYA.22_.28Special.FLibComplex1.29"><span class="mw-headline-number">12.3</span> Модуль <a href="Modules/FLibComplex1.html" title="Special:MyLanguage/Modules/FLibComplex1">Библиотека функций совместимости со SCADA Complex1 фирмы ООО НИП "DIYA" (Special.FLibComplex1)</a></span></h3>
 <p><b>Объект "Библиотека функций" (SYS.Special.FLibComplex1)</b>
 </p>
 <ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — вызов функции библиотеки <i>{funcID}</i>. Возвращает результат вызываемой функции.</li></ul>
@@ -600,7 +771,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <ul><li> <i>ElTp call(ElTp prm1, ...)</i> — вызов данной функции с параметрами <i>&lt;prm{N}&gt;</i>. Возвращает результат вызываемой функции.</li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id=".D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B8_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F"><span class="mw-headline-number">12</span> Библиотеки функций пользователя</span></h2>
+<h2><span class="mw-headline" id=".D0.91.D0.B8.D0.B1.D0.BB.D0.B8.D0.BE.D1.82.D0.B5.D0.BA.D0.B8_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B9_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F"><span class="mw-headline-number">13</span> Библиотеки функций пользователя</span></h2>
 <p>На данное время OpenSCADA имеет библиотеки функций пользователя, написанные с использованием этого API пользователя. Некоторые из них разработаны для использования исключительно из этого API. Все библиотеки пользователя представлены в следующей таблице:
 </p>
 <table class="wikitable">
@@ -689,7 +860,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </td></tr></table>
 <p><br />
 </p>
-<h2><span class="mw-headline" id=".D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="mw-headline-number">13</span> Ссылки</span></h2>
+<h2><span class="mw-headline" id=".D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="mw-headline-number">14</span> Ссылки</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_UserOM_uk.odg" title="File:Oscada UserOM uk.odg">Диаграмма: Пользовательская объектная модель ядра OpenSCADA.</a></li></ul>
 
 

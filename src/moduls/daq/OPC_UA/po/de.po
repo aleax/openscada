@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:10+0200\n"
+"POT-Creation-Date: 2018-03-04 10:59+0200\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -75,16 +75,14 @@ msgstr "Wurzeldirektorie (%d)"
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Anschaltungsfehler. Wiederherstellung in %.6g s."
 
-msgid "Call now. "
-msgstr "Rufen Sie jetzt an. "
+msgid "Acquisition. "
+msgstr "Erwerb. "
 
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Aufruf mit einer Periode: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Erwerb mit dem Zeitraum: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Call nächsten durch cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Erwerb nächsten durch cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. Requests %.6g."
@@ -259,11 +257,11 @@ msgstr ""
 msgid "Node append"
 msgstr "Node Append"
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Parameter abgeschaltet."
 
-msgid "2:Acquisition is stopped."
-msgstr "2:Befragung ist gestoppt."
+msgid "2:Acquisition stopped."
+msgstr "2:Erwerb ist gestoppt."
 
 #, c-format
 msgid "0x%x: Attribute's errors %s"
@@ -374,117 +372,3 @@ msgstr "Server OPC-UA"
 
 msgid "Provides OPC-UA server service implementation."
 msgstr "Bietet OPC-UA Server-Service-Implementierung."
-
-#~ msgid "ID"
-#~ msgstr "ID"
-
-#~ msgid "Transport address"
-#~ msgstr "Adresse des Transports"
-
-#~ msgid "No secure policy found"
-#~ msgstr "Politik der Sicherheit ist nicht gefunden"
-
-#~ msgid "%s: request: %s"
-#~ msgstr "%s: Anforderung: %s"
-
-#~ msgid "%s: response: %s"
-#~ msgstr "%s: Antwort: %s"
-
-#~ msgid "Respond size is not coincidence."
-#~ msgstr "Nicht übereinstimmender Umfang der Antwort."
-
-#~ msgid "Respond don't acknowledge."
-#~ msgstr "Nichtübereinstimmung der Antwort."
-
-#~ msgid "%s: request, decoded: %s"
-#~ msgstr "%s: Anforderung, decodiert: %s"
-
-#~ msgid "Not full respond."
-#~ msgstr "Teilantwort"
-
-#~ msgid "Client certificate thumbprint error."
-#~ msgstr "Fehler des Stempels des Zertifikats des Kunden."
-
-#~ msgid "Respond NodeId don't acknowledge"
-#~ msgstr "Nichtübereinstimmumg NodeId der Antwort"
-
-#~ msgid "Signature error"
-#~ msgstr "Fehler der Signatur"
-
-#~ msgid "Request '%s' isn't supported."
-#~ msgstr "Anfrage '%s' wird nicht unterstüzt."
-
-#~ msgid "Application signature error"
-#~ msgstr "Fehler der Signatur der Beilage"
-
-#~ msgid "Service fault"
-#~ msgstr "Abfall des Servers"
-
-#~ msgid "OPC_UA protocol '%s' isn't supported."
-#~ msgstr "OPC_UA Protokoll '%s' wird nicht unterstüzt."
-
-#~ msgid "Buffer size is less for requested value."
-#~ msgstr "Buffersumfang ist kleiner als der des bezeichneten Wertes."
-
-#~ msgid "Number size '%d' error."
-#~ msgstr "Fehler im Umfang '%d' de Zahl."
-
-#~ msgid "Real number size '%d' error."
-#~ msgstr "Fehler im Umfang '%d' der reellen Zahl."
-
-#~ msgid "Buffer size is less for requested string."
-#~ msgstr "Buffersumfang ist kleiner als die gefragte Zeile."
-
-#~ msgid "Buffer size is less for requested NodeId."
-#~ msgstr "Buffersumfang ist kleiner als der gefragte NodeId."
-
-#~ msgid "NodeId type %d error or don't support."
-#~ msgstr "Fehler oder der NodeId %d Typ wird nicht unterstützt."
-
-#~ msgid "Data type '%d' isn't supported."
-#~ msgstr "Datentyp '%d' wird nicht unterstützt."
-
-#~ msgid "ArrayDimensions field don't supported now."
-#~ msgstr "Feld DimensionMassiv nicht unterstützt jetzt."
-
-#~ msgid "randBytes error: %s"
-#~ msgstr "randBytes Fehler: %s"
-
-#~ msgid "certPEM2DER error: %s"
-#~ msgstr "certPEM2DER Fehler: %s"
-
-#~ msgid "certDER2PEM error: %s"
-#~ msgstr "certDER2PEM Fehler: %s"
-
-#~ msgid "Server certificate thumbprint error."
-#~ msgstr "Fehler des Zertifikatstempels des Knotens."
-
-#~ msgid "Requested OpenSecureChannel NodeId don't acknowledge"
-#~ msgstr "Gefragter Bezeichner des Kanals ist nicht entdeckt"
-
-#~ msgid "Secure channel unknown"
-#~ msgstr "Sicherheitskanal ist unbekannt"
-
-#~ msgid "Secure channel closed"
-#~ msgstr "Sicherheitskanal ist geschlossen"
-
-#~ msgid "No supported userIdentityToken '%d'."
-#~ msgstr "userIdentityToken '%d' wird nicht unterstützt."
-
-#~ msgid "No supported request id '%d'."
-#~ msgstr "Anfrage '%d' wird nicht unterstützt."
-
-#~ msgid "Security setting %d error."
-#~ msgstr "Fehler in den Einstellungen der Sicherheit %d."
-
-#~ msgid "Parent node '%s' no present for node '%s'."
-#~ msgstr "Elternknoten '%s' fehlt für den Knoten '%s'."
-
-#~ msgid "No session %d present."
-#~ msgstr "Session %d fehlt."
-
-#~ msgid "Allow realization of OPC UA client service."
-#~ msgstr "Gewährt die Realisierung des Kundenservices OPC UA."
-
-#~ msgid "Allow realization of OPC UA protocol."
-#~ msgstr "Gewährt die Realisierung OPC UA des Protokolls."

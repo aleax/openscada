@@ -98,8 +98,9 @@ private slots:
     void enterWhatsThis( );
     void enterManual( );
 
+    void projCreateUpdt( );
     void projSelect( );
-    void projSwitch( );
+    void projSwitch( const QString &prj = "" );
 };
 
 //*************************************************
@@ -119,6 +120,9 @@ public:
     void createTray( );
     bool callQtModule( const string &nm );
 
+    bool updLookFeel( );
+
+    //bool notify( QObject *receiver, QEvent *event )	???? Try for mouse right click emulation on mobile only touch-screened devices
     void saveState( QSessionManager &manager );
 
     int stExec( );
@@ -178,9 +182,9 @@ public:
     bool closeToTray( )	{ return mCloseToTray; }
 
     void setStartMod( const string &vl )	{ mStartMod = vl; modif(); }
-    void setStyle( const string &vl )		{ mStyle = vl; modif(); }
-    void setPalette( const string &vl )		{ mPalette = vl; modif(); }
-    void setStyleSheets( const string &vl )	{ mStyleSheets = vl; modif(); }
+    void setStyle( const string &vl )		{ mStyle = vl; modif(); mQtLookMdf = true; }
+    void setPalette( const string &vl )		{ mPalette = vl; modif(); mQtLookMdf = true; }
+    void setStyleSheets( const string &vl )	{ mStyleSheets = vl; modif(); mQtLookMdf = true; }
     void setCloseToTray( bool vl )		{ mCloseToTray = vl; modif(); }
     void modStart( );
     void modStop( );
@@ -189,6 +193,7 @@ public:
 
 public:
     //Attributes
+    bool	mQtLookMdf;
     StApp	*QtApp;
 
 protected:

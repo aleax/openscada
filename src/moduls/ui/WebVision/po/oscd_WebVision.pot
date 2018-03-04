@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-28 10:07+0200\n"
+"POT-Creation-Date: 2018-03-04 15:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -176,7 +176,7 @@ msgid "Sorry, opened sessions number reach limit!"
 msgstr ""
 
 #, c-format
-msgid "Go to session '%s' for project '%s' ..."
+msgid "Going to the session '%s' for the project '%s' ..."
 msgstr ""
 
 #, c-format

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:12+0200\n"
+"POT-Creation-Date: 2018-03-04 13:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -212,15 +212,15 @@ msgstr ""
 msgid "Restoring in %.6g s. "
 msgstr ""
 
-msgid "Call now. "
+msgid "Acquisition. "
 msgstr ""
 
 #, c-format
-msgid "Call by period: %s. "
+msgid "Acquisition with the period: %s. "
 msgstr ""
 
 #, c-format
-msgid "Call next by cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
 msgstr ""
 
 #, c-format
@@ -385,7 +385,7 @@ msgstr ""
 msgid "Value type error."
 msgstr ""
 
-msgid "Connecting..."
+msgid "Connecting."
 msgstr ""
 
 msgid "OK"
@@ -409,13 +409,13 @@ msgid ""
 "    AMSPort - port, write into view digit 0-65535."
 msgstr ""
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr ""
 
-msgid "2:Controller is stopped."
+msgid "2:Acquisition stopped."
 msgstr ""
 
-msgid "Parameter is disabled."
+msgid "Parameter disabled."
 msgstr ""
 
 msgid "Parameter is disabled or id error."

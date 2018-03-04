@@ -476,7 +476,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
 {
     int64_t tm = (itm)?(*itm):TSYS::curTime();
 
-    if((up_ord && tm > end) || (!up_ord && tm < beg))	throw TError("ValBuf", _("Value is not present."));
+    if((up_ord && tm > end) || (!up_ord && tm < beg))	throw TError("ValBuf", _("No value."));
 
     tm = up_ord ? vmax(tm, beg) : vmin(tm, end);
     //Process hard grid buffer
@@ -802,7 +802,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
     else {
 	if(hgResTm) {
 	    SHg b_el = { tm, value };
-	    if(tm < beg && size && (int)buf.tmHigh->size() >= size) throw TError("ValBuf", _("Set too old value to buffer."));
+	    if(tm < beg && size && (int)buf.tmHigh->size() >= size) throw TError("ValBuf", _("Insert a very old value to the buffer."));
 	    int c_pos = 0;
 
 	    // Half divider
@@ -835,7 +835,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	}
 	else {
 	    SLw b_el = { (time_t)(tm/1000000ll), value };
-	    if(tm < beg && size && (int)buf.tmLow->size() >= size) throw TError("ValBuf", _("Set too old value to buffer."));
+	    if(tm < beg && size && (int)buf.tmLow->size() >= size) throw TError("ValBuf", _("Insert a very old value to the buffer."));
 	    int c_pos = 0;
 	    // Half divider
 	    int d_win = buf.tmLow->size()/2;
@@ -1078,13 +1078,13 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
     //Set all links
     if(runSt && vl == ActiveAttr) {
 	pattrSrc = srcPAttr(true,src);
-	if(pattrSrc.freeStat()) { if(!noex) throw err_sys(_("Connect to source '%s' error."),src.c_str()); }
+	if(pattrSrc.freeStat()) { if(!noex) throw err_sys(_("Error connecting to source '%s'."),src.c_str()); }
 	else {
 	    //Double link prevent
 	    if(!pattrSrc.at().arch().freeStat() && &pattrSrc.at().arch().at() != this) {
 		if(!noex) {
 		    pattrSrc.free();
-		    throw err_sys( _("The archive '%s' was already connected to target parameter '%s'."),
+		    throw err_sys(_("Archive '%s' is already connected to the target parameter '%s'."),
 			srcPAttr(true,src).at().arch().at().id().c_str(), src.c_str());
 		}
 	    }
@@ -1097,13 +1097,13 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 
     if(runSt && vl == PassiveAttr) {
 	pattrSrc = srcPAttr(true, src);
-	if(pattrSrc.freeStat()) { if(!noex) throw err_sys(_("Connect to source '%s' error."),src.c_str()); }
+	if(pattrSrc.freeStat()) { if(!noex) throw err_sys(_("Error connecting to source '%s'."),src.c_str()); }
 	else {
 	    //Double link prevent
 	    if(!pattrSrc.at().arch().freeStat() && &pattrSrc.at().arch().at() != this) {
 		if(!noex) {
 		    pattrSrc.free();
-		    throw err_sys( _("The archive '%s' was already connected to target parameter '%s'."),
+		    throw err_sys(_("Archive '%s' is already connected to the target parameter '%s'."),
 			srcPAttr(true,src).at().arch().at().id().c_str(), src.c_str());
 		}
 	    }
@@ -1246,7 +1246,7 @@ void TVArchive::archivatorAttach( const string &arch )
 
     AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().valAt(TSYS::strSepParse(arch,1,'.'));
 
-    if(!archivat.at().startStat()) return;	//throw err_sys(_("Archiver '%s' error or it is not started."), arch.c_str());
+    if(!archivat.at().startStat()) return;
 
     if(startStat()) {	//Attach allow only to started archive
 	int iL, i_ins = -1;
@@ -1337,7 +1337,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 #if HAVE_GD_FORCE
     int brect[8];
     char *gdR = gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000");
-    if(gdR) mess_sys(TMess::Error, _("gdImageStringFT for font '%s' error: %s."), sclMarkFont.c_str(), gdR);
+    if(gdR) mess_sys(TMess::Error, _("gdImageStringFT error for font '%s': %s."), sclMarkFont.c_str(), gdR);
     else mrkHeight = brect[3]-brect[7];
     //if( mrkHeight <= 0 ) return rez;
     int hmax_ln = vsz / (mrkHeight?(brect[2]-brect[6]):15);
@@ -1784,7 +1784,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    int64_t ibeg = buf.begin(), iend = buf.end();
 	    period = vmax(period,buf.period());
 	    int mode = s2i(opt->attr("mode"));
-	    if(mode < 0 || mode > 2) throw err_sys(_("No support data mode '%d'"),mode);
+	    if(mode < 0 || mode > 2) throw err_sys(_("Data mode '%d' is not supported"), mode);
 	    switch(buf.valType()) {
 		case TFld::Boolean: {
 		    char tval_pr = EVAL_BOOL, tval_pr1 = EVAL_BOOL;
@@ -1892,7 +1892,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 					text += i2s(vpos_end)+" "+TSYS::strEncode(tval_pr,TSYS::Custom,"\n")+"\n";
 				    tval_pr1 = tval_pr;
 				    break;
-				case 2: throw err_sys(_("Binary mode no support for string data"));
+				case 2: throw err_sys(_("Binary mode is not supported for strings data"));
 			    }
 			tval_pr = tval;
 			vpos_end = vpos_cur;

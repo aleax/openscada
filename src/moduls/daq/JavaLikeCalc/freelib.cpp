@@ -164,7 +164,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id(),RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Library of the functions: ")+id(),RWRWR_,"root",SDAQ_ID);
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library"))) {
@@ -173,7 +173,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
 		if(DB().size()) {
 		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
 			"tp","str","dest","sel_ed","select",("/db/tblList:flb_"+id()).c_str(),
-			"help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
+			"help",_("DB address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the main working DB, set '*.*'."));
 		    ctrMkNode("fld",opt,-1,"/lib/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 		}
 	    }

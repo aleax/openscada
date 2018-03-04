@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:02+0200\n"
+"POT-Creation-Date: 2018-03-04 09:55+0200\n"
 "PO-Revision-Date: 2010-10-13 22:21+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -286,16 +286,14 @@ msgstr "Slot des Moduls"
 msgid "Module addition parameters"
 msgstr "Zusätzliche Parameter des Moduls"
 
-msgid "Call now. "
-msgstr "Rufen Sie jetzt an. "
+msgid "Acquisition. "
+msgstr "Erwerb. "
 
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Aufruf mit einer Periode: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Erwerb mit dem Zeitraum: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Call nächsten durch cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Erwerb nächsten durch cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. Serial requests %g, errors %g. "
@@ -346,11 +344,11 @@ msgstr "Auf Null gesetzt für den Watchdog deaktivieren."
 msgid "No a device selected."
 msgstr "Nr. ein Gerät ausgewählt."
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Parameter ist abgeschaltet."
 
-msgid "2:Acquisition is stopped."
-msgstr "2:Erfassung ist angehalten."
+msgid "2:Acquisition stopped."
+msgstr "2:Erwerb ist angehalten."
 
 #, c-format
 msgid "Write value to attribute '%s' error: %s"

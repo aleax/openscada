@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Документы/Как сделать/Отладка - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Документы/Как сделать/Отладка</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FDebug&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Debug" title="Documents/How to/Debug">Documents/How to/Debug</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Debug" title="Documents/How to/Debug (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Debug/uk" title="Документи/Як зробити/Налагодження (100% translated)">українська</a></div></div>
+<p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D1.82.D0.BB.D0.B0.D0.B4.D0.BA.D0.B0_.D1.82.D0.B5.D0.BA.D1.83.D1.89.D0.B5.D0.B3.D0.BE_.D0.BA.D0.BE.D0.BD.D1.82.D0.B5.D0.BA.D1.81.D1.82.D0.B0_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Отладка текущего контекста исполнения</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D1.82.D0.BB.D0.B0.D0.B4.D0.BA.D0.B0_.D0.BF.D0.BE.D1.81.D0.BB.D0.B5.D0.B4.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D0.BD.D0.BE.D1.81.D1.82.D0.B8_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F"><span class="tocnumber">2</span> <span class="toctext">Отладка последовательности исполнения</span></a></li>
+</ul>
+</div>
+
+<p>Если Вы строго следуете <a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">руководству по быстрому старту</a> то Вы не встретите никаких проблем, однако если Вы делаете что-то своё тогда Вам может понадобиться некоторая отладка. OpenSCADA предоставляет широкие возможности отладки и обнаружения проблем программирования в общем пользовательском пространстве OpenSCADA и проблем самой OpenSCADA и её частей.
+</p><p>Основные подходы пользовательской отладки предусматривают:
+</p>
+<ul><li> Создание внешних атрибутов для обзора за промежуточными значениями и наблюдения за текущим контекстом исполнения.</li>
+<li> Создание отладочных сообщений, также для обзора за промежуточными значениями и наблюдения за последовательностью исполнения.</li></ul>
+<p>Основные механизмы отладки расширены в последних версиях OpenSCADA на предмет:
+</p>
+<ul><li> Пользовательского контроля за отладкой, посредством категории отладочного сообщения для частей OpenSCADA и сообщений пространства пользователя.</li>
+<li> Специфическая отладка и окружение диагностики некоторых частей OpenSCADA, таких как: источники данных (объекты контроллеров) и интерфейсы СВУ (проекты СВУ).</li></ul>
+<h3><span class="mw-headline" id=".D0.9E.D1.82.D0.BB.D0.B0.D0.B4.D0.BA.D0.B0_.D1.82.D0.B5.D0.BA.D1.83.D1.89.D0.B5.D0.B3.D0.BE_.D0.BA.D0.BE.D0.BD.D1.82.D0.B5.D0.BA.D1.81.D1.82.D0.B0_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">1</span> Отладка текущего контекста исполнения</span></h3>
+<p>Данный метод отладки предусматривает наблюдение за контекстом исполнения по значениям переменных, включая добавление промежуточных значений, для детализации.
+</p><p>Текущий контекст исполнения процедур Сбора Данных Вы можете наблюдать на соответствующей странице объекта исполняющегося контекста вроде: вкладка "Атрибуты" логического уровня параметров (Рис. 1), вкладка "Вычисления" вычислителя основанного на Java (Рис. 2) и подобное. Для добавления некоторых промежуточных значений Вы можете временно <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Quick_start#DataProc" title="Special:MyLanguage/Documents/Quick start">добавить (или установить режим атрибута "Только для чтения") и подключить некоторые атрибуты к шаблону</a> или <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/JavaLikeCalc#Controller" title="Special:MyLanguage/Modules/JavaLikeCalc">добавить и привязать некоторые ВВ к функции</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:881px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_attr_ru.png"><img class="thumbimage" height="567" src="files/LogicLev_prm_attr_ru.png" width="879" /></a>  <div class="thumbcaption">Рис. 1. Вкладка "Атрибуты" параметра Логического уровня.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:961px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr_calc_ru.png"><img class="thumbimage" height="649" src="files/JavaLikeCalc_cntr_calc_ru.png" width="959" /></a>  <div class="thumbcaption">Рис. 2. Вкладка "Вычисление" вычислителя основанного на Java.</div></div></div></div>
+<p>Текущий контекст исполнения СВУ процедур (процедуры виджетов) Вы можете наблюдать на вкладке "Атрибуты" соответствующей страницы или виджета сеанса выполняемого проекта (Рис. 3). Для добавления некоторых промежуточных значений Вы можете временно <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Quick_start#ComplexWdg" title="Special:MyLanguage/Documents/Quick start">добавить и подключить ряд атрибутов к виджету/странице</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:822px;"><a class="image" href="http://oscada.org/wiki/File:HowTo_vca_ses_wp_ctx_ru.png"><img class="thumbimage" height="637" src="files/HowTo_vca_ses_wp_ctx_ru.png" width="820" /></a>  <div class="thumbcaption">Рис. 3. Вкладка "Атрибуты" страницы или виджета сеанса выполняемого проекта.</div></div></div></div>
+<h3><span class="mw-headline" id=".D0.9E.D1.82.D0.BB.D0.B0.D0.B4.D0.BA.D0.B0_.D0.BF.D0.BE.D1.81.D0.BB.D0.B5.D0.B4.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D0.BD.D0.BE.D1.81.D1.82.D0.B8_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">2</span> Отладка последовательности исполнения</span></h3>
+<p>Данный метод отладки предусматривает размещение и/или включение отладочных сообщений и последующее наблюдение за ними в общем интерфейсе архивации и наблюдения сообщений (Рис. 4) или в соответствующем интерфейсе части OpenSCADA:
+</p>
+<ul><li> Вкладка "Диагностика" объекта контроллера источника данных (Рис. 5).</li>
+<li> Вкладка "Диагностика" объекта проекта СВУ в конфигураторе (Рис. 6) или свойствах проекта режима разработки UI.Vision (Рис. 7).</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1170px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mess_ru.png"><img class="thumbimage" height="632" src="files/QTCfg_subsys_arch_mess_ru.png" width="1168" /></a>  <div class="thumbcaption">Рис. 4. Общий интерфейс архивации и наблюдения сообщений.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1217px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_diagn_ru.png"><img class="thumbimage" height="605" src="files/QTCfg_subsys_daq_mod_cntr_diagn_ru.png" width="1215" /></a>  <div class="thumbcaption">Рис. 5. Вкладка "Диагностика" объекта контроллера источника данных.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:996px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag_ru.png"><img class="thumbimage" height="563" src="files/VCAeng_pg_diag_ru.png" width="994" /></a>  <div class="thumbcaption">Рис. 6. Вкладка "Диагностика" объекта проекта СВУ в конфигураторе.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:883px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_diag_ru.png"><img class="thumbimage" height="405" src="files/Vision_wlbpg_diag_ru.png" width="881" /></a>  <div class="thumbcaption">Рис. 7. Вкладка "Диагностика" свойств проекта режима разработки UI.Vision.</div></div></div></div>
+<p>Для добавления сообщений уровня отладки, или других уровней, к своей процедуре Вы можете использовать следующие функции:
+</p>
+<ul><li> Общее: <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#SYS" title="Special:MyLanguage/Documents/User API">SYS.message(), SYS.mess{Debug,Info,Note,Warning,Err,Crit,Alert,Emerg}()</a></i> — для формирования общих сообщений с произвольной категорией, которые в основном доступны для наблюдения из общего интерфейса архивации и наблюдения сообщений (Рис. 4).</li>
+<li> Общее: <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#TCntrNode" title="Special:MyLanguage/Documents/User API">SYS.*.messSys()</a></i> — для формирования системных сообщений программы с путём узла в качестве категории и с читабельным путём перед сообщением. Сообщения будут доступны для наблюдения в соответствующем интерфейсе диагностики части OpenSCADA (Рис. 5, 6, 7).</li>
+<li> СВУ: <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine#UserAPI" title="Special:MyLanguage/Modules/VCAEngine">this.mess{Debug,Info,Note,Warning,Err,Crit,Alert,Emerg}()</a></i> — для формирования системных сообщений программы с категорией, как путь виджета. Сообщения будут доступны для наблюдения из интерфейса диагностики СВУ (Рис. 6, 7).</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Отладочные сообщения (суффикс "Debug" или уровень 0), на последних версиях OpenSCADA, будут доступны для наблюдения только после включения отладки: установки поля "Наименьший уровень" в "Отладка (0)" (Рис. 8) и выбора категории сообщений (Рис. 9), детальнее читайте <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">тут</a>! Включение и выключение отладочных сообщений позволяет вставлять отладочные сообщения в процедуры на постоянной основе, с соответствующей категорией расположения. Все остальные, неотладочные, сообщения будут отображаться всегда, для уровней выше или равным указанным глобально (Рис. 8).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:865px;"><a class="image" href="http://oscada.org/wiki/File:HowTo_dbg_gen_ru.png"><img class="thumbimage" height="516" src="files/HowTo_dbg_gen_ru.png" width="863" /></a>  <div class="thumbcaption">Fig. 8. Установка поля "Наименьший уровень" в "Отладка (0)".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:862px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_debug_ru.png"><img class="thumbimage" height="692" src="files/QTCfg_sys_debug_ru.png" width="860" /></a>  <div class="thumbcaption">Fig. 9. Выбор категорий узлов для отладки и отладочных сообщений.</div></div></div></div>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Внутренние или системные части объекта контроллера источника данных включаются для диагностики независимо, установкой свойства "Уровень" в "Отладка (0)" на собственном интерфейсе диагностики (Рис. 5).
+</p>
+
+
+
+
+
+</div></body>
+</html>

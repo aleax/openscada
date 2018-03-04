@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,6 +44,7 @@ ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
     time_size(800), mNumbFiles(100), mMaxCapacity(0), round_proc(0.01), mChkTm(60), mPackTm(10), mPackInfoFiles(false), mLstCheck(0)
 {
     setSelPrior(1000);
+    if(SYS->prjNm().size()) setAddr("ARCHIVES/VAL/"+iid);
 }
 
 ModVArch::~ModVArch( )
@@ -220,7 +221,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	    cEl.cfg("PRM3").setS(i2s(head.vtp|(head.vtpExt<<4)));
 	    SYS->db().at().dataSet((infoTbl.size()?infoTbl:mod->filesDB()), mod->nodePath()+"Pack/", cEl, false, true);
 	}
-	else if((hd=open((anm+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,0666)) > 0) {
+	else if((hd=open((anm+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,SYS->permCrtFiles())) > 0) {
 	    // Write info to info file
 	    string si = TSYS::strMess("%llx %llx %s %llx %d", head.beg, head.end, buf, head.period, head.vtp|(head.vtpExt<<4));
 	    bool fOK = (write(hd,si.data(),si.size()) == (int)si.size());
@@ -375,7 +376,7 @@ void ModVArch::expArch( const string &arch_nm, time_t beg, time_t end, const str
 	wv_form.nBlockAlign = 4;
 	wv_form.wBitsPerSample = 32;
 
-	int hd = open((file_nm+"."+file_tp).c_str(), O_RDWR|O_CREAT|O_TRUNC, 0666);
+	int hd = open((file_nm+"."+file_tp).c_str(), O_RDWR|O_CREAT|O_TRUNC, SYS->permCrtFiles());
 	if(hd == -1) return;
 	bool fOK = true;
 
@@ -433,7 +434,7 @@ void ModVArch::expArch( const string &arch_nm, time_t beg, time_t end, const str
     }
     else {
 	char c_val[40];
-	int hd = open((file_nm+"."+file_tp).c_str(), O_RDWR|O_CREAT|O_TRUNC, 0666);
+	int hd = open((file_nm+"."+file_tp).c_str(), O_RDWR|O_CREAT|O_TRUNC, SYS->permCrtFiles());
 	if(hd == -1) return;
 	bool fOK = true;
 
@@ -859,7 +860,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool to
 		time_t tm = n_beg/1000000;
 		struct tm tm_tm;
 		localtime_r(&tm, &tm_tm);
-		strftime(c_buf, sizeof(c_buf)," %F %T.val",&tm_tm);
+		strftime(c_buf, sizeof(c_buf), " %F %H.%M.%S.val", &tm_tm);
 		string AName = archivator().addr()+"/"+archive().id()+c_buf;
 
 		files.insert(files.begin()+iA, new VFileArch(AName,n_beg,n_end,v_per,archive().valType(true),this));
@@ -890,7 +891,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool to
 	time_t tm = beg/1000000;
 	struct tm tm_tm;
 	localtime_r(&tm, &tm_tm);
-	strftime(c_buf, sizeof(c_buf), " %F %T.val", &tm_tm);
+	strftime(c_buf, sizeof(c_buf), " %F %H.%M.%S.val", &tm_tm);
 	string AName = archivator().addr() + "/" + archive().id() + c_buf;
 
 	int64_t n_end = beg + f_sz;
@@ -938,7 +939,7 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
     mEnd = (mEnd/mPer)*mPer + mPer;
 
     //Open/create new archive file
-    int hd = open(name().c_str(), O_RDWR|O_CREAT|O_TRUNC, 0666);
+    int hd = open(name().c_str(), O_RDWR|O_CREAT|O_TRUNC, SYS->permCrtFiles());
     if(hd <= 0) {
 	owner().archivator().mess_sys(TMess::Error, _("File '%s' creation error: %s(%d)."), name().c_str(), strerror(errno), errno);
 	mErr = true;
@@ -1217,7 +1218,7 @@ void VFileArch::check( )
 	    SYS->db().at().dataSet((owner().archivator().infoTbl.size()?owner().archivator().infoTbl:mod->filesDB()),
 		mod->nodePath()+"Pack/",cEl, false, true);
 	}
-	else if((hd=open((name()+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,0666)) > 0) {
+	else if((hd=open((name()+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,SYS->permCrtFiles())) > 0) {
 	    // Write info to info file
 	    string si = TSYS::strMess("%llx %llx %s %llx %d",begin(),end(),owner().archive().id().c_str(),period(),type());
 	    if(write(hd,si.data(),si.size()) != (int)si.size())
@@ -1948,7 +1949,7 @@ void VFileArch::repairFile( int hd )
 	if((dStat.st_mode&S_IFMT) == S_IFDIR && access(errsDir.c_str(),F_OK|W_OK|X_OK) == 0) {
 	    //  Copy the error file for observing next
 	    char cpBuf[4096];
-	    int ehd = open((errsDir+name().substr(name().rfind("/"))).c_str(), O_WRONLY|O_CREAT|O_TRUNC, 0666);
+	    int ehd = open((errsDir+name().substr(name().rfind("/"))).c_str(), O_WRONLY|O_CREAT|O_TRUNC, SYS->permCrtFiles());
 	    if(ehd < 0) owner().archivator().mess_sys(TMess::Error, _("Error open/create archive file for copy here: %s"), strerror(errno));
 	    else {
 		lseek(hd, 0, SEEK_SET);

@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Documents/How to/Crash report - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Documents/How to/Crash report</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Crash_report/ru" title="Документы/Как сделать/Отчёт о падении (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Crash_report/uk" title="Документи/Як зробити/Звіт про падіння (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Generic revision and updating
+</td></tr></table>
+</div>
+<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Requirements_for_the_report_of_an_error"><span class="tocnumber">1</span> <span class="toctext">Requirements for the report of an error</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Variants_of_the_report"><span class="tocnumber">2</span> <span class="toctext">Variants of the report</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Getting_the_pre-mortem_dump_file_and_its_processing"><span class="tocnumber">3</span> <span class="toctext">Getting the pre-mortem dump file and its processing</span></a></li>
+</ul>
+</div>
+
+<p>For debugging and testing of OpenSCADA it is given considerable time of developers, but in view of limited resources and even a practical impossibility to cover all the configuration options and performance of OpenSCADA system,  errors can occur either as a failure of some functions, incorrectness of their implementation and even crash of the program. Understanding of this from the user side is very important, and with his hand it is required goodwill to cost some time to prepare a report on the problem with a view of its subsequent removal by developers.
+</p><p>Before preparing the report of the problem it is recommend to review the list of errors and comments in the corresponding part <a class="external text" href="http://wiki.oscada.org/HomePageEn/Errors" rel="nofollow noreferrer noopener" target="_blank">Errors and comments to OpenSCADA</a>.
+</p>
+<h2><span class="mw-headline" id="Requirements_for_the_report_of_an_error"><span class="mw-headline-number">1</span> Requirements for the report of an error</span></h2>
+<p>To avoid unnecessary suggestive questions and to accelerate the localization of the problem it is recommended to follow the requirements for report.
+</p>
+<ul><li> To specify the execution environment of OpenSCADA, that is the distribution and version of operating system.</li>
+<li> To specify the version of OpenSCADA system, include SVN-revision for Work versions.</li>
+<li> To specify the particular features of the configuration and execution. It is desirable to achieve the demonstration of the problem in standard configurations and on the <a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">demonstration database</a>. If this can not be achieved, it is necessary to describe the particular configuration and to attach to the report the database, in which the problem takes place.</li>
+<li> Describe the actions causing the error.</li>
+<li> To attach the report of OpenSCADA messages for the session with the error.</li>
+<li> In the case of crash it is necessary to form a file of pre-mortem dump of the program and get out from him the back trach of the stack of execution at the time of the crash. At problems, which caused by hung one or more OpenSCADA tasks, manual termination by signal "SIGSEGV" for localisation can be useful, that cause forming pre-morten dump with information about hung place.</li>
+<li> To increase significant usability of the back trace you need append debug information by option "-g" set in compile or install ready debug packages.</li></ul>
+<h2><span class="mw-headline" id="Variants_of_the_report"><span class="mw-headline-number">2</span> Variants of the report</span></h2>
+<p>To report about an error in the OpenSCADA system it is possible in several ways:
+</p>
+<ul><li> in the appropriate forum section of the official site: <a class="external free" href="http://oscada.org/en/forum/topics/bug_tracker/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/en/forum/topics/bug_tracker/</a>;</li>
+<li> by the e-mail address <a class="external text" href="mailto:oscada@oscada.org" rel="nofollow noreferrer noopener" target="_blank">oscada at oscada.org</a> or <a class="external text" href="http://wiki.oscada.org/HomePageEn/Developers" rel="nofollow noreferrer noopener" target="_blank">developers addresses</a>;</li>
+<li> in the part <a class="external text" href="http://wiki.oscada.org/HomePageEn/Errors" rel="nofollow noreferrer noopener" target="_blank">Errors and comments to the OpenSCADA</a> in the knowledge base of the project.</li></ul>
+<h2><span class="mw-headline" id="Getting_the_pre-mortem_dump_file_and_its_processing"><span class="mw-headline-number">3</span> Getting the pre-mortem dump file and its processing</span></h2>
+<p>In the Linux operating system while crashing of programs the OS kernel can generate the pre-mortem memory dump of the program. With this dump it is often possible to identify a place in the program that caused the emergency stop. To enable the generation of pre-mortem memory dump of the program by the kernel it is necessary to execute the following commands:
+</p>
+<pre style="white-space: pre-wrap;">
+# Check the possibility of generation of memory dumps
+# Specifies the "core" if it is enabled
+$ cat /proc/sys/kernel/core_pattern
+# Enabling the generation of memory dumps
+$ echo "core" &gt; /proc/sys/kernel/core_pattern
+</pre>
+<p>After this you should remove the restriction on the size of the generated dump file, which can run from OpenSCADA argument <b>--CoreDumpAllow</b> or run a special command before calling OpenSCADA "<b>$ ulimit-c unlimited</b>".
+</p><p>Next you can just make sure that the user which running OpenSCADA, is entitled to write in the working directory OpenSCADA, parameter "Workdir" in the configuration file of the program.
+</p><p>Then the OpenSCADA system is running and the crashe is reproduced, the result of which the file is created in a working directory of the OpenSCADA <b>core</b>.
+</p><p>Typical startup scripts OpenSCADA, which come in packages OpenSCADA distributions from version 0.8.0 include the generation of memory dump file and automatically generate a report of the backtrace as files "AGLKS_core_2016-03-20_18.17.crash" (for 0.9 Work) or "crash_2012-01-05_11:05.txt" (for 0.8 LTS) in the working directory of the project.
+</p><p>If created the file memory dump <b>core</b>, and a report of backtrace is not automatically generated, you probably do not have a debugger "<b>gdb</b>". In this case, you need to install it and manually invoke the command from work directory for the global configuration:
+</p>
+<dl><dd>$ gdb openscada --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" &gt; crash_$(date +%F_%H:%M).txt</dd></dl>
+<p>Or do the same procedure in an interactive mode to global configuration:
+</p>
+<pre style="white-space: pre-wrap;">
+# Transfer to the working directory of OpenSCADA
+(gdb) cd /var/spool/openscada
+# Specifying an executable file, not scripts!
+(gdb) file /usr/bin/openscada
+# Specifying the dump file of the program
+(gdb) core-file /var/spool/openscada/core.26658
+# Getting the reversal of the stack execution
+(gdb) thread apply all bt full
+#0  0xb7d104c0 in pthread_cancel () from /lib/librt.so.1
+#1  0xb7d1edaa in start_thread () from /lib/libpthread.so.0
+#2  0xb7dfcf5e in clone () from /lib/libc.so.6
+</pre>
+
+
+
+
+
+
+</div></body>
+</html>

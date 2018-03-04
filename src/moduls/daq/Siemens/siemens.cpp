@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.3"
+#define MOD_VER		"2.1.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
  and Libnodave library, or self, for the rest.")
@@ -480,9 +480,9 @@ string TMdContr::getStatus( )
 	    rez.replace(0, 1, i2s(ConnErrCode));
 	}
 	else {
-	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	    if(period())rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
-	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	    if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
+	    if(period())rez += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
+	    else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	    rez += TSYS::strMess(_("Spent time: %s[%s]. Read %s. Wrote %s. Connection errors %g. "),
 			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(),
 			TSYS::cpct2str(numR).c_str(), TSYS::cpct2str(numW).c_str(), numErr);
@@ -1548,7 +1548,7 @@ void *TMdContr::Task( void *icntr )
 		isStart = false;
 		continue;
 	    }
-	    else if(cntr.tmDelay == 0) cntr.conErr = _("Connecting...");
+	    else if(cntr.tmDelay == 0) cntr.conErr = _("Connecting.");
 
 	    cntr.callSt = true;
 	    if(!cntr.period()) t_cnt = TSYS::curTime();
@@ -1907,8 +1907,8 @@ void TMdPrm::vlGet( TVal &val )
 {
     if(!enableStat() || !owner().startStat()) {
 	if(val.name() == "err") {
-	    if(!enableStat())			val.setS(_("1:Parameter is disabled."), 0, true);
-	    else if(!owner().startStat())	val.setS(_("2:Controller is stopped."), 0, true);
+	    if(!enableStat())			val.setS(_("1:Parameter disabled."), 0, true);
+	    else if(!owner().startStat())	val.setS(_("2:Acquisition stopped."), 0, true);
 	} else val.setS(EVAL_STR, 0, true);
 	return;
     }
@@ -1976,13 +1976,13 @@ void TMdPrm::vlArchMake( TVal &val )
 
 int TMdPrm::lnkSize( )
 {
-    if(!enableStat()) throw TError(nodePath().c_str(), _("Parameter is disabled."));
+    if(!enableStat()) throw TError(nodePath().c_str(), _("Parameter disabled."));
     return plnk.size();
 }
 
 int TMdPrm::lnkId( int id )
 {
-    if(!enableStat()) throw TError(nodePath().c_str(), _("Parameter is disabled."));
+    if(!enableStat()) throw TError(nodePath().c_str(), _("Parameter disabled."));
     for(unsigned i_l = 0; i_l < plnk.size(); i_l++)
 	if(lnk(i_l).ioId == id)
 	    return i_l;
@@ -1991,7 +1991,7 @@ int TMdPrm::lnkId( int id )
 
 int TMdPrm::lnkId( const string &id )
 {
-    if(!enableStat()) throw TError(nodePath().c_str(), _("Parameter is disabled."));
+    if(!enableStat()) throw TError(nodePath().c_str(), _("Parameter disabled."));
     for(unsigned i_l = 0; i_l < plnk.size(); i_l++)
 	if(func()->io(lnk(i_l).ioId)->id() == id)
 	    return i_l;

@@ -5,7 +5,7 @@
 <title>Модулі/Siemens - OpenSCADAWiki</title>
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
-<link href="../files/doc.css" rel="stylesheet" /></head>
+<link href="../../en/files/doc.css" rel="stylesheet" /></head>
 <body><div id="mw_header">
 			<div class="mw-indicators">
 </div>
@@ -14,7 +14,7 @@
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../../en/files/Constr.png" width="32" /></a>
 </td>
 <td style="padding-left:5px;"> The translation checking and actualizing
 </td></tr></table>
@@ -64,16 +64,16 @@
 </p><p>У основу даного модуля покладено драйвер версії 2.621 фірми Hilsher, люб'язно наданого фірмою Hilsher в особі <a class="external text" href="mailto:DTsaava@hilscher.com" rel="nofollow noreferrer noopener" target="_blank">Devid Tsaava</a> для ядер серії 2.6 ОС Linux. Всі потрібні для збірки файли включені у модуль та не потребують задоволення спеціальних залежностей. Драйвер версії 2.621 для плат CIF можна завантажити <a class="external" href="http://oscada.org/wiki/File:Siemens_cif2621.tgz" title="File:Siemens cif2621.tgz">cif2621.tgz</a>.
 </p><p>Спектр плат фірми Hilsher родини CIF та уніфікований драйвер підтримують широкий спектр обладнання. Закласти підтримку всіх цих можливостей у цьому модулі, не маючи всього цього обладнання на руках, не є можливим. Тому підтримка того або іншого обладнання буде додаватися у міру потреби та наявності обладнання. По стану на версію 2.0.0 модулем надається підтримка джерел даних на мережі ProfiBus або MPI за посередництвом протоколу MPI, на швидкостях мережі від 9600Бод до 12МБод. Зокрема підтримуються та виконано перевірку на контролерах фірми Siemens родини S7 (S7-200,300,400).
 </p><p>Бібліотека LibnoDave є реалізацією, шляхом реверсінженірингу, протоколів MPI, S7, ISO-TSAP та інших, які використовуються при взаємодії із контролерами фірми Siemens. Бібліотекою підтримуються багато MPI та USB адаптерів, а також ProfiNet. Комунікаційні процесори фірми Siemens, на платформах відмінних від MS Windows, бібліотекою не підтримуються. На цьому етапі модулем забезпечено підтримку протоколу ISO-TSAP(ProfiNet) за посередництвом бібліотеки LibnoDave. Бібліотеку LibnoDave повністю включено в цей модуль та не потребує вирішення залежностей як при збірці, так і при виконанні.
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> У коді бібліотеки LibnoDave присутні складно-вловимі помилки, які переважно відтворюються пі великим навантаженням та в момент підключень, що призводить до псування пам'яті процесу та <a class="external" href="http://oscada.org/wiki/File:Siemens_crash_20160127_0911.crash.gz" title="File:Siemens crash 20160127 0911.crash.gz">падіння</a> у непередбачених місцях. У зв'язку з цим, з версії 2 цього модуля, розпочато процес переписування потрібних функцій та код зв'язку ISO-TCP вже готовий до використання.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> У коді бібліотеки LibnoDave присутні складно-вловимі помилки, які переважно відтворюються пі великим навантаженням та в момент підключень, що призводить до псування пам'яті процесу та <a class="external" href="http://oscada.org/wiki/File:Siemens_crash_20160127_0911.crash.gz" title="File:Siemens crash 20160127 0911.crash.gz">падіння</a> у непередбачених місцях. У зв'язку з цим, з версії 2 цього модуля, розпочато процес переписування потрібних функцій та код зв'язку ISO-TCP вже готовий до використання.
 </p><p>Також модулем реалізуються функції горизонтального резервування, а саме спільної роботи із віддаленою станцією цього-ж рівня. Крім синхронізації значень та архівів атрибутів параметрів модулем здійснюється синхронізація значень обчислювальних шаблонів, з метою безударного підхоплення алгоритмів.
 </p>
 <h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BC.D1.83.D0.BD.D1.96.D0.BA.D0.B0.D1.86.D1.96.D0.B9.D0.BD.D1.96_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D0.B8_CIF"><span class="mw-headline-number">1</span> Комунікаційні контролери CIF</span></h2>
 <p>Драйвером плат сімейства CIF підтримується можливість встановлення до 4 CIF плат. З метою контролю за наявністю плат у системі та можливості їх конфігурації, модуль містить форму контролю та конфігурації CIF-плат (рис.1).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:786px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cif_dev.png"><img class="thumbimage" height="567" src="../files/Siemens_cif_dev.png" width="784" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфігурації CIF-плат.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:786px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cif_dev.png"><img class="thumbimage" height="567" src="../../en/files/Siemens_cif_dev.png" width="784" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфігурації CIF-плат.</div></div></div></div>
 <p>За допомогою цієї форми можна проконтролювати наявність комунікаційних процесорів, їх конфігурацію, а також налаштувати параметри мережі ProfiBus у вигляді PB адреси комунікаційного процесору та швидкості шини ProfiBus. У другій вкладці модуля (рис.2) можна проконтролювати наявність різних станцій в мережі ProfiBus.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:634px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_pb.png"><img class="thumbimage" height="559" src="../files/Siemens_pb.png" width="632" /></a>  <div class="thumbcaption">Рис.2. Вкладка моніторингу мережі ProfiBus.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:634px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_pb.png"><img class="thumbimage" height="559" src="../../en/files/Siemens_pb.png" width="632" /></a>  <div class="thumbcaption">Рис.2. Вкладка моніторингу мережі ProfiBus.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D0.B4.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.B0_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">2</span> Об'єкт контролеру джерела даних</span></h2>
 <p>Для додання джерела даних створюється та конфігурується об'єкт контролеру у OpenSCADA. Приклад вкладки конфігурації об'єкта контролера цього типу зображено на рисунку 3.
 </p>
@@ -121,7 +121,7 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:756px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm_tmpl_uk.png"><img class="thumbimage" height="512" src="../files/Siemens_prm_tmpl_uk.png" width="754" /></a>  <div class="thumbcaption">Рис.6. Вкладка конфігурації шаблону параметру.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:756px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm_tmpl_off_uk.png"><img class="thumbimage" height="512" src="../files/Siemens_prm_tmpl_off_uk.png" width="754" /></a>  <div class="thumbcaption">Рис.7. Вкладка конфігурації шаблону параметра із визначенням параметрів окремо.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:756px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm_val_uk.png"><img class="thumbimage" height="547" src="../files/Siemens_prm_val_uk.png" width="754" /></a>  <div class="thumbcaption">Рис.8. Значення параметру.</div></div></div></div>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Модулем підтримується адресація тільки до блоків даних (БД) контролерів.
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Модулем підтримується адресація тільки до блоків даних (БД) контролерів.
 </p><p>Модулем передбачено особливу обробку низки атрибутів шаблону:
 </p>
 <ul><li> <i>f_frq</i> — Частота обчислення процедури шаблону або час після останнього обчислення, негативне у секундах, для планування за CRON, тільки читання.</li>

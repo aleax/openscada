@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-02 19:52+0200\n"
+"POT-Creation-Date: 2018-03-04 14:06+0200\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -67,8 +67,8 @@ msgstr "Закрито вхідний транспорт за помилкою: 
 msgid "Error creation of the thread!"
 msgstr "Помилка створення потоку!"
 
-msgid " client tasks is stopping...."
-msgstr " зупинка клієнтських задач...."
+msgid " stopping client tasks ..."
+msgstr " зупинка клієнтських задач ..."
 
 #, c-format
 msgid "Socket has been connected by '%s'!"
@@ -233,7 +233,8 @@ msgid ""
 "Error connection to the internet socket '%s:%s' during the timeout, it seems "
 "in down or inaccessible: '%s (%d)'!"
 msgstr ""
-"Помилка підключення до інтернет сокету '%s:%s' протягом таймауту, він схоже відключений або недоступний: '%s (%d)'!"
+"Помилка підключення до інтернет сокету '%s:%s' протягом таймауту, він схоже "
+"відключений або недоступний: '%s (%d)'!"
 
 #, c-format
 msgid "SSL_CTX_use_certificate_chain_file: %s"

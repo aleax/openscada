@@ -516,7 +516,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	return rez;
     }
 
-    throw TError("IOObj",_("Function '%s' error or not enough parameters."),id.c_str());
+    throw TError("IOObj",_("Error function '%s' or missing parameters for it."),id.c_str());
 }
 
 IOObj::TpDescr &IOObj::getTp( const string &dtT )

@@ -5,7 +5,7 @@
 <title>Модулі/OPC UA - OpenSCADAWiki</title>
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
-<link href="../files/doc.css" rel="stylesheet" /></head>
+<link href="../../en/files/doc.css" rel="stylesheet" /></head>
 <body><div id="mw_header">
 			<div class="mw-indicators">
 </div>
@@ -14,7 +14,7 @@
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../../en/files/Constr.png" width="32" /></a>
 </td>
 <td style="padding-left:5px;"> The translation checking and actualizing
 </td></tr></table>
@@ -193,7 +193,7 @@
 <li> Політика планування та пріоритет задачі збору даних.</li>
 <li> Період синхронізації конфігурації атрибутів параметрів з віддаленою станцією, а також час повтору спроб відновлення підключення.</li>
 <li> URL кінцевого вузла віддаленої станції — сервера OPC-UA. На початку цю адресу можна вказати у вигляді "opc.tcp://{IP|name}:{port}", після чого, у випадку включення об'єкту контролера та наявності вказаного OPC-UA вузла, з'явиться можливість обрати уточнену адресу.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Часто зустрічається ситуація, коли уточнена адреса є символьною, який у цій мережі не резолвиться, через некоректне налаштування серверу. У таких випадках потрібно залишити початкову IP-адресу або ім'я яке резолвиться у IP правильно.</dd></dl>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Часто зустрічається ситуація, коли уточнена адреса є символьною, який у цій мережі не резолвиться, через некоректне налаштування серверу. У таких випадках потрібно залишити початкову IP-адресу або ім'я яке резолвиться у IP правильно.</dd></dl>
 <ul><li> Політика безпеки та режим безпеки повідомлення.</li>
 <li> Сертифікат клієнту та приватний ключ у форматі PEM.</li>
 <li> Користувач та пароль для аутентифікації на сервері. Порожнє значення включає анонімний доступ.</li>
@@ -213,7 +213,7 @@
 <dd><b>4:"61626364"</b> — вузол у просторі імен 4 та у вигляді рядка байт;</dd>
 <dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}</b> — вузол у просторі імен 4 і у вигляді GUID.</dd></dl></dd></dl>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:695px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_uk.png"><img class="thumbimage" height="675" src="../files/OPC-UA_prm_uk.png" width="693" /></a>  <div class="thumbcaption">Рис.5. Вкладка конфігурації об'єкту параметра.</div></div></div></div>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Вузли типу "Змінна" зі значенням у вигляді структури прочитати цілком зазвичай не можна тому потрібно її елементи вставляти до переліку вузлів читання окремо.
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Вузли типу "Змінна" зі значенням у вигляді структури прочитати цілком зазвичай не можна тому потрібно її елементи вставляти до переліку вузлів читання окремо.
 </p><p>У відповідності із вказаним переліком вузлів виконується опитування та створення атрибутів параметру (рис.6).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:695px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr_uk.png"><img class="thumbimage" height="574" src="../files/OPC-UA_prm_atr_uk.png" width="693" /></a>  <div class="thumbcaption">Рис.6. Вкладка атрибутів параметру.</div></div></div></div>
@@ -221,7 +221,7 @@
 <p>Ґрунтуючись на напрацюваннях цього модуля протокольний код OPC-UA було винесено до окремої бібліотеки та опубліковано під ліцензією LGPLv3. Такі дії виконано з метою надати можливість простого додання підтримки протоколу OPC-UA стороннім проектам. Бібліотека представлена двома файлами libOPC_UA.h, libOPC_UA.cpp; підтримується та міститься у складі цього модуля, тобто останню версію Ви можете завантажити тут: <a class="external free" href="http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA</a>.
 </p><p>Бібліотеку, як і цей модуль, написано на мові програмування C++. Статичну діаграму класів, яка відображає архітектуру бібліотеки, приведена на рисунку 7. Згідно діаграмі класів бібліотеку виконано у просторі імен "OPC", а архітектурно її можна поділити на клієнтську "Client" та серверну "Server" частини, які успадковані від загального класу протоколу "UA". Крім безпосередньо класів протоколу "OPC-UA" бібліотека включає в себе набір функцій та класів для обробки або збереження даних протоколу, окремо з яких треба відзначити клас вузла мови XML "XML_N", використаний для уніфікації звернень до API бібліотеки.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:399px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="249" src="../files/OPC-UA_libOPCUA_class.png" width="397" /></a>  <div class="thumbcaption">Рис.7. Статична діаграма класів бібліотеки libOPC_UA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:399px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="249" src="../../en/files/OPC-UA_libOPCUA_class.png" width="397" /></a>  <div class="thumbcaption">Рис.7. Статична діаграма класів бібліотеки libOPC_UA.</div></div></div></div>
 <p>Використання бібліотеки, в цілому, полягає у спадкуванні класу "Client" та/або "Server", згідно із функціями кінцевої програми, та наступної реалізації віртуальних функцій властивостей клієнта/сервера, у контексті протоколу OPC-UA, а також транспортної частини комунікації, тобто підключення/відкриття до TCP-сокету та передачу/читання неструктурованого потоку даних. Наступні запити та обробка запитів даних (для серверу) здійснюється через виклик функції <i>reqService()</i>, запит до сервісу, та/або обробки віртуальної функції <i>reqData()</i> запиту до даних, тобто фактично інтеграція у модель даних додатку.
 </p>
 <h3><span class="mw-headline" id=".D0.A1.D0.BB.D1.83.D0.B6.D0.B1.D0.BE.D0.B2.D1.96_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D0.B8.2C_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D1.82.D0.B0_.D0.BA.D0.BB.D0.B0.D1.81_UA"><span class="mw-headline-number">4.1</span> Службові об'єкти, функції та клас UA</span></h3>

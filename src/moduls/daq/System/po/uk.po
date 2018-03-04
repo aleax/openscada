@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-23 20:22+0200\n"
+"POT-Creation-Date: 2018-03-04 13:53+0200\n"
 "PO-Revision-Date: 2007-10-29 11:52+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -224,13 +224,13 @@ msgstr ""
 "Надає збір даних операційної системи. Підтримуються джерела даних ОС Linux: "
 "HDDTemp, Sensors, Uptime, Memory, CPU, ДБЖ та інше."
 
-msgid "Auto create active DA"
-msgstr "Авт. створювати акт. джерела даних"
+msgid "Auto create active data sources"
+msgstr "Авт. створювати активні джерела даних"
 
 msgid "Manual;Fast sources;Slow sources;All sources"
 msgstr "Ручний;Швидкі джерела;Повільні джерела;Всі джерела"
 
-msgid "System parameters table"
+msgid "Table of system parameters"
 msgstr "Таблиця системних параметрів"
 
 msgid "Acquisition schedule"
@@ -248,16 +248,15 @@ msgstr "Частина системи"
 msgid "Additional parameters"
 msgstr "Додаткові параметри"
 
-msgid "Call now. "
-msgstr "Виклик зараз. "
+msgid "Acquisition. "
+msgstr "Збір. "
 
 #, c-format
-msgid "Call by period: %s. "
-msgstr "Виклик за періодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Збір з періодом: %s."
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Наступний виклик за cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Наступний збір за cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s[%s]. "
@@ -269,8 +268,7 @@ msgstr "2:Контролер зупинено!"
 msgid "1:Parameter disabled"
 msgstr "1:Параметр вимкнено"
 
-#, c-format
-msgid "Write value to attribute '%s' error: %s"
+msgid "Error writing value to attribute '%s': %s"
 msgstr "Помилка запису значення до атрибуту '%s': %s"
 
 msgid "CPU"
@@ -288,7 +286,7 @@ msgstr "Температура HDD"
 msgid "Memory"
 msgstr "Пам'ять"
 
-msgid "Net statistic"
+msgid "Network statistic"
 msgstr "Статистика мережі"
 
 msgid "Qt sensors"

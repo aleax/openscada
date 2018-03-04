@@ -70,7 +70,7 @@ msgid "Value archive"
 msgstr "Архів значень"
 
 msgid "Period of the values, microseconds"
-msgstr "Період значень, микросекунды"
+msgstr "Період значень, мікросекунди"
 
 msgid "Archiver"
 msgstr "Архіватор"
@@ -662,7 +662,7 @@ msgid "Depth of getting of archive values, seconds"
 msgstr "Глибина отримання архівних значень, секунд"
 
 msgid "Depth of getting of archive values, microseconds"
-msgstr "Глибина отримання архівних значень, микросекунды"
+msgstr "Глибина отримання архівних значень, мікросекунди"
 
 msgid "Parameter attribute"
 msgstr "Атрибут параметру"

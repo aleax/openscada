@@ -1,0 +1,350 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Documents/How to/Create module - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Documents/How to/Create module</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Create_module/ru" title="Документация/Как сделать/Создать модуль (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Create_module/uk" title="Документація/Як зробити/Створити модуль (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Generic revision and updating
+</td></tr></table>
+</div>
+<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Creating_a_New_Module"><span class="tocnumber">1</span> <span class="toctext">Creating a New Module</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Creation_of_the_module_in_the_sources_tree_of_the_OpenSCADA_project"><span class="tocnumber">1.1</span> <span class="toctext">Creation of the module in the sources tree of the OpenSCADA project</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Creation_of_an_external_module_for_OpenSCADA"><span class="tocnumber">1.2</span> <span class="toctext">Creation of an external module for OpenSCADA</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Module.27s_API"><span class="tocnumber">2</span> <span class="toctext">Module's API</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#.22Data_Bases_.28DB.29.22_subsystem.27s_module"><span class="tocnumber">2.1</span> <span class="toctext">"Data Bases (DB)" subsystem's module</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#.22Transports.22_subsystem.27s_module"><span class="tocnumber">2.2</span> <span class="toctext">"Transports" subsystem's module</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#.22Transport_protocols.22_subsystem.27s_module"><span class="tocnumber">2.3</span> <span class="toctext">"Transport protocols" subsystem's module</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#.22Data_acquisition.22_.28DAQ.29_subsystem.27s_module"><span class="tocnumber">2.4</span> <span class="toctext"><span>"Data acquisition" (DAQ) subsystem's module</span></span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#.22Archives.22_subsystem.27s_module"><span class="tocnumber">2.5</span> <span class="toctext">"Archives" subsystem's module</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#.22User_interfaces.22_.28UI.29_subsystem.27s_module"><span class="tocnumber">2.6</span> <span class="toctext">"User interfaces" (UI) subsystem's module</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#.22Specials.22_subsystem.27s_module"><span class="tocnumber">2.7</span> <span class="toctext">"Specials" subsystem's module</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<p>This manual is made to help in building the modules for OpenSCADA. The module creation may be required if you wish to add the support for new data source or other extension to the OpenSCADA. Since OpenSCADA is extremely modular system, all interfaces of interaction with the external environment are implemented by expanding it with specialized modules of following types:
+</p>
+<ul><li> "Data Bases"</li>
+<li> "Communication Interfaces, Transports"</li>
+<li> "Protocols of the communication interfaces"</li>
+<li> "Data Sources and Data Acquisition"</li>
+<li> "Archives(Histories) (of messages and values)"</li>
+<li> "User Interfaces (GUI, TUI, WebGUI, speach, signal ...)"</li>
+<li> "Additional modules"</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> To create the OpenSCADA modules you need to have an experience in C/C++ programming language, build system <a class="external text" href="http://en.wikipedia.org/wiki/GNU_build_system" rel="nofollow noreferrer noopener" target="_blank">AutoTools</a>, as well as basic knowledge of Linux and the distribution you are using.
+</p><p>For placing developed module to main repository of OpenSCADA tree of source texts you need to do next and to follow to shown demands:
+</p>
+<ul><li> be the copyright holder or the author of the module code and distribute it's under any free license, GPL preferred;</li>
+<li> prepare and store the module code as a separated archive of folder of the module for any module's subsystem of OpenSCADA, follow to demands to the contain:
+<ul><li> the module's source texts must include a correct copyright information into each file's top, be wrote and formed in some system way preferring to the must used one of main OpenSCADA modules' styles;</li>
+<li> the module's localisation files must be also correct, actual and proper formed.</li></ul></li>
+<li> write a short information page of the module for placing it to <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">the OpenSCADA Wiki</a>, in way like to the other ones there;</li>
+<li> to placing the module write the direct request to the forum topic "<a class="external text" href="http://oscada.org/en/forum/topics/openscada_development/" rel="nofollow noreferrer noopener" target="_blank">OpenSCADA development</a>" includes a proving of it's ability to work from any OpenSCADA developer or a short demonstration video.</li></ul>
+<h2><span class="mw-headline" id="Creating_a_New_Module"><span class="mw-headline-number">1</span> Creating a New Module</span></h2>
+<p>Modules in OpenSCADA are the shared libraries, which are dynamically connected to the OpenSCADA core at the time of the program execution. Many of the modules can be disabled, connected and updated during the execution from <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#CfgModSched" title="Special:MyLanguage/Documents/Program manual">modules scheduler</a>. Modules can also be included into the OpenSCADA core during building, by an argument <b>-enable-{ModName}=incl</b> to the "configure" configuration script, what can you learn from <a href="Build_from_source.html" title="Special:MyLanguage/Documents/How to/Build from source">building manual</a>. OpenSCADA modules can be of seven types according to the present <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Modularity" title="Special:MyLanguage/Documents/Program manual">modular subsystems</a>. For now the modules for the OpenSCADA are written in the "<b>C++</b>" programming language, although in the future the bindings to other languages may appear.
+</p><p>In order to facilitate the creation of new modules in the sources tree, the branches of each subsystem provide the "<b>=Tmpl=</b>" directory with the module's template for the appropriate subsystem. The developer of the new module can copy this directory with the name of the new module. You can create modules in the OpenSCADA sources tree or as an independent project of the external module for the OpenSCADA.
+</p>
+<h3><span class="mw-headline" id="Creation_of_the_module_in_the_sources_tree_of_the_OpenSCADA_project"><span class="mw-headline-number">1.1</span> Creation of the module in the sources tree of the OpenSCADA project</span></h3>
+<p>It makes sense to create new modules in the sources tree of OpenSCADA project in case of further plans for the transfer of a new module to the OpenSCADA. Since the module should not be contrary to the spirit of open source project and to the license, on the basis of which <a class="external text" href="http://oscada.org/en/main/about-the-project/licenses/" rel="nofollow noreferrer noopener" target="_blank">the OpenSCADA is developed and distributed</a>; the license of the new module obviously should be one of the free licenses.
+</p><p>The procedure of a new module creation based on the template with its inclusion to the sources tree is easier than such procedure for the external module and includes the following steps:
+</p>
+<dl><dd>1. Getting the sources tree of the OpenSCADA project.
+<dl><dd><i>For a working branch:</i>
+<dl><dd>$ svn co svn://oscada.org/trunk/OpenSCADA</dd></dl></dd>
+<dd><i>For a stable release branch (not desirable because only corrections are accepted for the stable LTS releases and the instruction demand 0.9 version and more):</i>
+<dl><dd>$ svn co svn://oscada.org/tags/openscada_0.8.0</dd></dl></dd></dl></dd>
+<dd>2. Copy the template directory with the "NewMod" name of the new module (for example, for the "DB" subsystem):
+<dl><dd>$ cd OpenSCADA/src/moduls/bd</dd>
+<dd>$ cp -r =Tmpl= NewMod; cd NewMod</dd>
+<dd>$ rm -f configure.ac</dd></dl></dd>
+<dd>3. Editing the "module.cpp" file.
+<dl><dd><i>Change the names of the functions of a module's including with the name of the new module</i>:
+<dl><dd>"<b>TModule::SAt bd_Tmpl_module( int n_mod )</b>" — bd_NewMod_module</dd>
+<dd>"<b>TModule *bd_Tmpl_attach( const TModule::SAt &amp;AtMod, const string &amp;source )</b>" — bd_NewMod_attach</dd></dl></dd>
+<dd><i>Information about the module in the "module.cpp" file, namely the area:</i></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+//************************************************
+//* Modul info!                                  *
+#define MOD_ID          "NewMod"
+#define MOD_NAME        _("DB NewMod")
+#define MOD_TYPE        SDB_ID
+#define VER_TYPE        SDB_VER
+#define MOD_VER         "0.0.1"
+#define AUTHORS         _("MyName MyFamily")
+#define DESCRIPTION     _("BD NewMod description.")
+#define MOD_LICENSE     "GPL2"
+</pre>
+<dl><dd>4. Edit the module's building configuration in the "Makefile.am" file:</dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+EXTRA_DIST = *.h po/*
+
+if NewModIncl
+noinst_LTLIBRARIES = db_NewMod.la
+db_NewMod_la_CXXFLAGS = -DMOD_INCL -fpic
+db_NewMod_la_LIBTOOLFLAGS = --tag=disable-shared
+db_NewMod_la_LDFLAGS = -module
+else
+oscd_modul_LTLIBRARIES = db_NewMod.la
+db_NewMod_la_CXXFLAGS =
+db_NewMod_la_LIBTOOLFLAGS = --tag=disable-static
+db_NewMod_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+endif
+
+db_NewMod_la_CXXFLAGS += $(NewMod_CFLAGS)
+db_NewMod_la_LDFLAGS += $(NewMod_LDLAGS)
+db_NewMod_la_SOURCES = module.cpp
+
+I18N_mod = $(oscd_modulpref)NewMod
+include ../../../../I18N.mk
+</pre>
+<dl><dd>5. Adding an entry of the new module to the end  of the subsystem's section (for us it is "&gt; DB modules") of the OpenSCADA building system configuration file (OpenSCADA/configure.ac):</dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+AX_MOD_DB_EN(NewMod,[disable or enable[=incl] build module DB.NewMod],disable,incl,
+[
+    # The code for external libraries of the module check
+])
+</pre>
+<dl><dd>6. Now, the new module can be built in the OpenSCADA after the reorganization of the building system:
+<dl><dd>$ autoreconf -if</dd>
+<dd>$ ./configure --enable-NewMod</dd>
+<dd>$ make</dd></dl></dd>
+<dd>7. Publication. The formation of the patch with your module and send it to the OpenSCADA developers:
+<dl><dd>$ cd OpenSCADA; make distclean; rm -f src/moduls/bd/NewMod/Makefile.in</dd>
+<dd>$ svn add src/moduls/bd/NewMod</dd>
+<dd>$ svn diff &gt; NewMod.patch</dd></dl></dd></dl>
+<h3><span class="mw-headline" id="Creation_of_an_external_module_for_OpenSCADA"><span class="mw-headline-number">1.2</span> Creation of an external module for OpenSCADA</span></h3>
+<p>Creation of an external module for OpenSCADA may make sense in the case of the development the integration interface with business (commercial) systems that require proprietary interaction code, as well as in the case of other commercial interfaces implementations, in which the module for the OpenSCADA acquire the status of the separate project, that is distributed and maintained independently, often in the form of binary buildings for a specific platform and version of OpenSCADA. The license of such modules, respectively, can be arbitrary.
+</p><p>The procedure for creation of a new external module based on the template is largely similar to the previous procedure and includes the following steps:
+</p>
+<dl><dd>1. Getting the sources of the OpenSCADA project. For an external module as a source of template you can use any OpenSCADA source files of version more than 0.9 because it is necessary to copy only the "=Tmpl=" directory and several files for build.</dd>
+<dd>2.  Copy the template directory with the "NewMod" name of the new module (for example, for the "DB" subsystem). Creating and copying the necessary files for an external module. Further the information files of the project "COPYING", "NEWS", "README", "AUTHORS" and "ChangeLog" must be filled according to the nature of the new module.
+<dl><dd>$ cp -r OpenSCADA/src/moduls/bd/=Tmpl= NewMod</dd>
+<dd>$ touch NewMod/{NEWS,README,AUTHORS,ChangeLog}</dd>
+<dd>$ cp OpenSCADA/I18N.mk NewMod/</dd></dl></dd>
+<dd>3. Editing the "module.cpp" file, similar to the appropriate item in the previous section.</dd>
+<dd>4. Edit the module's building configuration in the "Makefile.am" file, similar to the appropriate item in the previous section, excepts:</dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+# Instead "db_NewMod_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la"
+db_NewMod_la_LDFLAGS = -module -avoid-version
+# Instead "include ../../../../I18N.mk"
+include I18N.mk </pre>
+<dl><dd>5. Editing the "configure.ac" configuration file of the build system:
+<dl><dd>"<b>AC_INIT([DB.Tmpl],[0.0.1],[my@email.org])</b>" — information about the module: name, version and e-mail of the project.</dd>
+<dd>"<b>AM_CONDITIONAL([TmplIncl],[test])</b>" — <b>AM_CONDITIONAL([NewModIncl],[test])</b></dd></dl></dd>
+<dd>6. Installing the OpenSCADA development package. Because the module is an external one and the OpenSCADA source files are needed only at the first stage of the module's creation, you must install the OpenSCADA development package (openscada-devel), which contains the header files and libraries.</dd>
+<dd>7. Now you can build the new module, after formation of the building system
+<dl><dd>$ autoreconf -if</dd>
+<dd>$ ./configure</dd>
+<dd>$ make</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Module.27s_API"><span class="mw-headline-number">2</span> Module's API</span></h2>
+<p>OpenSCADA API for the developer of OpenSCADA and modules for it is exhaustively, in a formal form, described in the paper <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">OpenSCADA API</a>, which should always be on hand for the development of OpenSCADA. This document focuses on the detailed explanation of the main points of the modular API.
+</p><p>The inheritance of root object-class of the module from the <i>TModule</i> class via a class of modular subsystem is common for all modules, which means that there is a common part of the module's interface, it'll be discussed below. In general, to present the architecture of modules in the context of the overall OpenSCADA architecture, it is strongly recommended to have before eyes <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API/part1/files?get=oscd_uml_classdep.png" rel="nofollow noreferrer noopener" target="_blank">the overall OpenSCADA class diagram</a>!
+</p><p>The entry point of any module are the following functions:
+</p>
+<ul><li> <i>TModule::SAt module( int n_mod )</i>, <i>TModule::SAt bd_DBF_module( int n_mod )</i> — used to scan the list and information about all modules in the library. The first function is used to implement the modules in the external shared library, and the second when linking them to the OpenSCADA core.</li>
+<li> <i>TModule *attach( const TModule::SAt &amp;AtMod, const string &amp;source )</i>, <i>TModule *bd_Tmpl_attach( const TModule::SAt &amp;AtMod, const string &amp;source )</i> — used for direct connection-opening the selected module by creating the root object of the module, inherited from the <i>TModule</i>. The first function is used to implement the modules in the external shared library, and the second when linking them to the OpenSCADA core.</li></ul>
+<p>For the convenience of a direct addressing to the root object of the module from any module's object below in the hierarchy it is recommended to determine the global variable "mod" in the namespace of the module with its initialization in the module's root object constructor. Also, for the transparent translation of the module's text messages it is recommended to define the template of the function for call messages' translation of the module "<b>_({Message})</b>":
+</p>
+<pre style="white-space: pre-wrap;">
+#undef _
+#define _(mess) mod-&gt;I18N(mess)</pre>
+<p>In the constructor of the root module's object, inherited from the <i>TModule</i>, it is necessary to set the main information of the module by call the function <i>void modInfoMainSet({Name}, {Type}, {Version}, {Authors}, {Description}, {License}, {Source})</i>, after init the fast link "mod" to root object of the module.
+</p><p>As well as to initiate the environment of the module with the following functions:
+</p>
+<ul><li> <i>void modFuncReg( ExpFunc *func );</i> — Registration of the module's exporting function. This function is the part of the intermodule interaction mechanism, which registers an internal function of the module for an external call by the function's name and its pointer relative to the module's object.</li></ul>
+<p>Followed getting for the translations template file "po/NewMod.pot" of the text messages "<b>_({Message})</b>", and also updating-actualizing already presented translations "po/{en|ru|uk|de|...}.po" performed by the command into the module directory "<b>$ make messages</b>".
+</p><p>For the purpose of general module's management the <i>TModule</i> class provides a number of virtual functions that can be defined in the root object of the module with the implementation of the necessary response to the OpenSCADA core commands to the module:
+</p>
+<ul><li> <i>void load_( );</i> — Loading the module. It is called on the stage of loading the module's configuration from the configuration file or database.</li>
+<li> <i>void save_( );</i> — Saving the module. It is called on the stage of the module's configuration saving to the configuration file or database, usually initiated by the user.</li>
+<li> <i>void modStart( );</i> — Starting the module. It is called on the execution stage of background module's functions tasks, if any are provided by the module.</li>
+<li> <i>void modStop( );</i> — Stop the module. It is called on the stopping the execution stage of background module's functions tasks, if any are provided by the module.</li>
+<li> <i>void modInfo( vector&lt;string&gt; &amp;list );</i> — Request the list of the information properties of the module. This function of the <i>TModule</i> class provides the standard set of properties of the module ("Module", "Name", "Type", "Source", "Version", "Author", "Description", "License"), which can be extended by additional properties of this module.</li>
+<li> <i>string modInfo( const string &amp;name );</i> — Request for the specified information item. The processing of requests for additional properties of this module is made.</li>
+<li> <i>void postEnable( int flag );</i> — Connecting the module to the dynamic tree of object. It is called after the starting module.</li>
+<li> <i>void perSYSCall( unsigned int cnt );</i> — Call from the system thread at regular intervals for 10 seconds and the seconds counter <i>cnt</i>. It can be used to execute periodic, rare, service procedures.</li></ul>
+<p>All interface modules' objects inherit the <i>TCntrNode</i> node class, which provides the <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h919-1" rel="nofollow noreferrer noopener" target="_blank">control interface</a> mechanism, one of whose functions is to provide the configuration interface of the object in any OpenSCADA configurator. To solve the new module's tasks it may be necessary to expand the parameters of the configuration; it is made in the <i>void cntrCmdProc(XMLNode *opt);</i> virtual function. The contents of this function that adds a property in the simplest case has the following form:
+</p>
+<pre style="white-space: pre-wrap;">
+void MBD::cntrCmdProc( XMLNode *opt )
+{
+    //&gt; Get page info
+    if(opt-&gt;name() == "info")
+    {
+        TBD::cntrCmdProc(opt);
+        ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close opened transaction"),RWRWRW,"root",SDB_ID);
+        return;
+    }
+    //&gt; Process command to page
+    string a_path = opt-&gt;attr("path");
+    if(a_path == "/prm/st/end_tr" &amp;&amp; ctrChkNode(opt,"set",RWRWRW,"root",SDB_ID,SEC_WR)) transCommit();
+    else TBD::cntrCmdProc(opt);
+}
+</pre>
+<p>The first half of this function serves the "info" information requests with the list and properties of the configuration fields. The second half serves all the other commands on the getting, setting the value, and others. The <i>TBD::cntrCmdProc(opt);</i> call is used to obtain the inherited interface. More details on the appointment of the used functions are in the <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h919-1" rel="nofollow noreferrer noopener" target="_blank">control interface</a>, as well as in the source code of existing modules.
+</p><p>In addition to the control interface functions <i>TCntrNode</i> object provides standardized control mechanisms for the modification of the object's configuration, for the loading and saving the configuration to the storage. To complete the setting of the modification flag of object's data you can use the <i>modif()</i> and <i>modifG()</i> functions, and module specific actions for the loading and saving can be placed in the virtual functions:
+</p>
+<ul><li> <i>void load_( );</i> — Loading an object from the repository.</li>
+<li> <i>void save_( );</i> — Saving object in the repository.</li></ul>
+<p>Typically the work with configuration is made through the <i><a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h917-2" rel="nofollow noreferrer noopener" target="_blank">TConfig</a></i> object, which contains a set of specified properties. For a direct reflection of the module's object properties it is inherited from <i>TConfig</i>, and new properties are added by the following command:
+</p>
+<pre style="white-space: pre-wrap;">
+fldAdd(new TFld("PRM_BD",_("Parameters cache table"),TFld::String,TFld::NoFlag,"30",""));</pre>
+<p>Loading and saving of the properties specified in the <i>TConfig</i> object,  to/from the storage is made with the following command:
+</p>
+<pre style="white-space: pre-wrap;">
+SYS-&gt;db().at().dataGet(fullDB(),owner().nodePath()+"DAQ",*this);
+SYS-&gt;db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);</pre>
+<p>Where:
+</p>
+<ul><li> <i>fullDB()</i> — the full name of the database-storage in the form: "<b>{DBMod}.{DBName}.{Table}</b>";</li>
+<li> <i>owner().nodePath()+"DAQ"</i>  — total path to the node of the object-representative of the table in the configuration file</li>
+<li> <i>*this</i> — this object, inherited from the <i>TConfig</i>.</li></ul>
+<p>To place debug messages, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">into common debugging concept</a>, need to use the function <i>mess_debug()</i> with call it conditional by the program source part:
+</p>
+<ul><li> <i>rarely invoked part:</i> direct call to the function <i>mess_debug(...)</i>;</li>
+<li> <i>offten invoked part:</i> conditional call: <i>if(mess_lev() == TMess::Debug) mess_debug(...);</i></li>
+<li> <i>critical to performance code parts:</i> wrapped to definition OSC_DEBUG:</li></ul>
+<pre style="white-space: pre-wrap;">
+#ifdef OSC_DEBUG
+  mess_debug(...);
+#endif
+</pre>
+<h3><span class="mw-headline" id=".22Data_Bases_.28DB.29.22_subsystem.27s_module"><span class="mw-headline-number">2.1</span> "Data Bases (DB)" subsystem's module</span></h3>
+<p>This module is designed for the OpenSCADA integration with the DBMS, implemented by the module.
+</p><p>OpenSCADA interface to process the requests to the DB is presented by the objects and virtual functions of the calls from the OpenSCADA core:
+</p>
+<ul><li> <i>TTypeBD-&gt;TModule</i> — The root module's object of the "DB" subsystem:
+<ul><li> <i>TBD *openBD( const string &amp;id );</i> — It is called when you open or create by this module a new database object with <i>id</i> identifier.</li></ul></li>
+<li> <i>TBD</i> — The database object:
+<ul><li> <i>void enable( );</i> — Enabling of the database.</li>
+<li> <i>void disable( );</i> — Disabling of the database.</li>
+<li> <i>void load_( );</i> — Loading a database from a shared configuration storage.</li>
+<li> <i>void save_( );</i> — Saving the database in a shared configuration storage.</li>
+<li> <i>void allowList( vector&lt;string&gt; &amp;list );</i> — Request the tables' list <i>list</i> in the database.</li>
+<li> <i>void sqlReq( const string &amp;req, vector&lt; vector&lt;string&gt; &gt; *tbl = NULL, char intoTrans = EVAL_BOOL );</i> — Handling of the <i>req</i> SQL-query to the database and receiving the results in the <i>tbl</i> table, if the selection request and the pointer are nonzero. When you set <i>intoTrans</i> to "true" a transaction must be opened for the request; to "false" - must be closed. This function should be implemented for a databases that support SQL-queries.</li>
+<li> <i>void transCloseCheck( );</i> — The periodically called function to check the transactions and closing the old or contain many requests ones.</li>
+<li> <i>TTable *openTable( const string &amp;table, bool create );</i> — It is called when you open or create a new table's object.</li></ul></li>
+<li> <i>TTable</i> — Table's object in the database:
+<ul><li> <i>void fieldStruct( TConfig &amp;cfg );</i> — Getting the current structure of the table in the <i>TConfig</i> object.</li>
+<li> <i>bool fieldSeek( int row, TConfig &amp;cfg, vector&lt; vector&lt;string&gt; &gt; *full = NULL );</i> — Sequential scan of the table entries using the <i>row</i> exhaustive search and "false" return at the end with the addressing by the active, <i><a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h917-2" rel="nofollow noreferrer noopener" target="_blank">keyUse()</a></i>, key fields. <i>full</i> defines before the request for preloading full reply with extracting next entries from here.</li>
+<li> <i>void fieldGet( TConfig &amp;cfg );</i> — Request of the specified in the <i>TConfig</i> object record with the addressing by key fields.</li>
+<li> <i>void fieldSet( TConfig &amp;cfg );</i> — Transfer of the specified in the <i>TConfig</i> object record with the addressing by key fields.</li>
+<li> <i>void fieldDel( TConfig &amp;cfg );</i> — Deleting of the specified in the <i>TConfig</i> object record with the addressing by key fields.</li></ul></li></ul>
+<h3><span class="mw-headline" id=".22Transports.22_subsystem.27s_module"><span class="mw-headline-number">2.2</span> "Transports" subsystem's module</span></h3>
+<p>The module of this type should provide OpenSCADA communications through the interface, often it is the network one, implemented by the module.
+</p><p>Software OpenSCADA interface to service incoming and outgoing requests through a network interface is presented by the objects and virtual functions of the calls from the OpenSCADA core:
+</p>
+<ul><li> <i>TTypeTransport-&gt;TModule</i> — The root module's object of the "Transports" subsystem:
+<ul><li> <i>TTransportIn *In( const string &amp;name, const string &amp;db );</i> — It is called when you open or create by this module a new incoming transport object <i>name</i> with the <i>db</i> storage.</li>
+<li> <i>TTransportOut *Out( const string &amp;name, const string &amp;db );</i> —  It is called when you open or create by this module a new outgoing transport object <i>name</i> with the <i>db</i> storage.</li></ul></li>
+<li> <i>TTransportIn</i> — The transport's object of the processing the incoming requests, the function of the server. Incoming requests received by the module through the implementation of a network interface must be sent to the specified in the configuration incoming protocol <i>protocol()</i> via the <i><a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h911-4" rel="nofollow noreferrer noopener" target="_blank">mess()</a></i> function:
+<ul><li> <i>string getStatus( );</i> — Call to get the specific status of the interface.</li>
+<li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport. Can be overridden for the processing and verification of module-specific address format of the transport.</li>
+<li> <i>void start();</i> — Start of the transport. When you start the incoming transport the task, that waits for requests from the outside, is typically created.</li>
+<li> <i>void stop();</i> — Stop of the transport.</li></ul></li>
+<li> <i>TTransportOut</i> — The transport's object of the processing the outgoing requests, the function of the client:
+<ul><li> <i>string getStatus( );</i> — Call to get the specific status of the interface.</li>
+<li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport. Can be overridden for the processing and verification of module-specific address format of the transport.</li>
+<li> <i>void start( );</i> — Start of the transport. When you start the outgoing transport the actual connection to the remote station is established for the interfaces that works by the connection. At this time, the errors can occur if the connection is impossible, and the transport should return to the stopped state.</li>
+<li> <i>void stop( );</i> — Stop of the transport.</li>
+<li> <i>int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false );</i> — Processing the requests from the OpenSCADA core to send data over the transport. The <i>time</i> waiting time of connection is specified in milliseconds, having a nonzero value it must replace the same transport's timeout in its general configuration. <i>noRes</i> is used by the protocols for the exclusive blocking the transport for the time of being working with it and for its own blocking exclusion by the function. The package to be sent is specified in the <i>obuf</i> buffer with the <i>len_ob</i> length, and the buffer and its size for the response are specified in the <i>ibuf</i> and <i>len_ib</i>. The outgoing buffer <i>obuf</i> may be empty (NULL) if you want to check for further response or responses, received without a request, the mode of broadcasting. If the response buffer is not specified (NULL), the response waiting will not be realized.</li></ul></li></ul>
+<h3><span class="mw-headline" id=".22Transport_protocols.22_subsystem.27s_module"><span class="mw-headline-number">2.3</span> "Transport protocols" subsystem's module</span></h3>
+<p>The module of this type should provide OpenSCADA with the protocol layer communications, implemented by the module, for data access of the external systems and for OpenSCADA data from external systems.
+</p><p>Software OpenSCADA interface to implement the protocol layer  is presented by the objects and virtual functions of the calls from the OpenSCADA core:
+</p>
+<ul><li> <i>TProtocol-&gt;TModule</i> — The root module's object of the "Protocols" subsystem:
+<ul><li> <i>void itemListIn( vector&lt;string&gt; &amp;ls, const string &amp;curIt = "" );</i> — The list of sub-elements of the incoming protocol, if the protocol provides them. It is used when selecting an object in the configuration of incoming transport.</li>
+<li> <i>void outMess( XMLNode &amp;io, TTransportOut &amp;tro );</i> — The transfer of data by the objects of the OpenSCADA core in the <i>in</i> XML tree to the remote system via the <i>tro</i> transport and the current outgoing protocol. Presentation of data in the <i>in</i> XML tree is non-standardized and specific to the logical structure of the protocol. This data are serialized (converted into a sequence of bytes according to the protocol) and are sent via the specified <i>tro</i> outgoing transport by the <i><a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h910-5" rel="nofollow noreferrer noopener" target="_blank">messIO()</a></i> function above.</li>
+<li> <i>TProtocolIn *in_open( const string &amp;name )</i> — It is called when you open or create by this module the new <i>name</i> incoming transport protocol object.</li></ul></li>
+<li> <i>TProtocolIn</i> — Protocol's object of the incoming requests processing from the incoming transport object <i><a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h910-4" rel="nofollow noreferrer noopener" target="_blank">TTransportIn</a></i> above. For each session of the incoming request the object of the associated incoming protocol is created, which remains alive until the completion of a full "request-&gt;answer" session. Address of the transport, which opened an instance of the protocol, is specified in the <i>srcTr()</i>:
+<ul><li> <i>bool mess( const string &amp;request, string &amp;answer, const string &amp;sender );</i> — Transfer of the <i>request</i> data sequence to the protocol's object for their parsing according to the protocol's implementation, with the specification of the requesting object's address in the <i>sender</i>. This protocol's function should process the request, generate the response in <i>answer</i> and return "false" in the case of the completeness of the request. If the request is not complete, it is necessary to return "true" to indicate the "expectation of the completion" for the transport, the first part of the request should be saved in the context of the protocol's object.</li></ul></li></ul>
+<h3><span class="mw-headline" id=".22Data_acquisition.22_.28DAQ.29_subsystem.27s_module"><span class="mw-headline-number">2.4</span> <span id="DAQ" title="#DAQ">"Data acquisition" (DAQ) subsystem's module</span></span></h3>
+<p>The module of this type should provide the real-time data acquisition from the external systems or their formation in the calculators, implemented by the module.
+</p><p>The software OpenSCADA interface to implement access to real-time data is presented by the objects and virtual functions of the calls from the OpenSCADA core:
+</p>
+<ul><li> <i>TTypeDAQ-&gt;TModule</i> —  The root module's object of the "Data acquisition" subsystem:
+<ul><li> <i>void compileFuncLangs( vector&lt;string&gt; &amp;ls );</i> — Request in the <i>ls</i> the list of user programming languages supported by the module.</li>
+<li> <i>void compileFuncSynthHighl( const string &amp;lang, XMLNode &amp;shgl );</i> — Request the syntax rules <i>shgl</i> of the specified user programming language <i>lang</i>.</li>
+<li> <i>string compileFunc( const string &amp;lang, TFunction &amp;fnc_cfg, const string &amp;prog_text );</i> — Calling the compilation of user's procedure <i>prog_text</i> and creation an object of the function's execution based on the <i>fnc_cfg</i> for the specified user programming language <i>lang</i> of this module. Returns address of the compiled function's object, ready for execution.</li>
+<li> <i>bool redntAllow( );</i> — A flag of support the redundancy mechanisms by module. Should be overridden and return "true" if supported, otherwise "false".</li>
+<li> <i>TController *ContrAttach( const string &amp;name, const string &amp;daq_db );</i> — It is called when you open or create a new controller's object <i>name</i> by this module in the <i>db</i> storage.</li></ul></li>
+<li> <i>TController</i> — Data source controller's object. In the context of the object is usually runs the task of the periodic or scheduled polling of real-time data of one physical controller or a dedicated physical data block. In the case of data getting by the packages, they are placed directly into the archive associated with the parameter's attribute <i><a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h903-8" rel="nofollow noreferrer noopener" target="_blank">TVAl::arch()</a></i>, and the current value is set by the <i><a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h903-8" rel="nofollow noreferrer noopener" target="_blank">TVAl::set()</a></i> function with the attribute "sys"=true:
+<ul><li> <i>string getStatus( );</i> — Call to get the specific status of the controller.</li>
+<li> <i>void enable_( );</i> — The enabling of the controller. Usually at this stage the initialization of the parameters' objects and their interfaces in the form of attributes is made, the attributes can sometimes be requested from the associated remote source.</li>
+<li> <i>void disable_( );</i> — Disabling the controller.</li>
+<li> <i>void start_( );</i> — Start of the controller. Usually at this stage  the task of periodic or scheduled polling is created and started.</li>
+<li> <i>void stop_( );</i> — Stop of the controller.</li>
+<li> <i>void redntDataUpdate( bool firstArchiveSync = false );</i> — The operation of obtaining data from the backup station. It is called automatically by the redundancy scheme's service task and  before the start to synchronize archives with the parameter <i>firstArchiveSync</i>.</li>
+<li> <i>TParamContr *ParamAttach( const string &amp;name, int type );</i> — It is called when you open or create a new parameter's object <i>name</i> with the <i>type</i>.</li></ul></li>
+<li> <i>TParamContr-&gt;TValue</i> — The object of the data source controller's parameter. It contains the attributes with real data in a set, defined by the physically accessible data. The values and attributes are taken from the task of the controller's polling in the asynchronous mode, or requested at the time of query in the synchronous mode with the help of methods of this object's inherited type <i><a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API#h903-7" rel="nofollow noreferrer noopener" target="_blank">TValue</a></i>:
+<ul><li> <i>void enable( );</i> — To enable the parameter. The formation of the attributes set and filling them with the value of unreliability is made.</li>
+<li> <i>void disable( );</i> — To disable the parameter.</li>
+<li> <i>void setType( const string &amp;tpId );</i> — It is called to change the <i>tpId</i> type of the parameter and can be processed in the module's object to change its own data.</li>
+<li> <i>TVal* vlNew( );</i> — It is called at the stage of a new attribute creation. It can be overridden to implement a particular behavior within its own, inherited from the <i>TVal</i>, class during the access of the attribute.</li>
+<li> <i>void vlSet( TVal &amp;val, const TVariant &amp;pvl );</i> — Called for an attribute with a direct recording mode <i>TVal::DirWrite</i> (synchronous or write to an internal buffer of the object) when set to record the values in the immediate physical controller or buffer object.</li>
+<li> <i>void vlGet( TVal &amp;val );</i> — It is called for an attribute with a direct reading mode <i>TVal::DirRead</i> (synchronous mode, or reading from an internal buffer of the object) when reading the value in order to directly read the value from the physical controller or object's buffer.</li>
+<li> <i>void vlArchMake( TVal &amp;val );</i> — It is called at the stage of creation the values archive with the <i>val</i> attribute as the source in order to initialize the qualitative characteristics of the archive's buffer according to the characteristics of the data source and polling.</li></ul></li></ul>
+<p>For specialized diagnostics you can place debug messages for condition <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_diagn.png" title="File:QTCfg subsys daq mod cntr diagn.png">to select diagnostic level "Debug (0)</a>: <i>if(messLev() == TMess::Debug) mess_debug_(...);</i>.
+</p>
+<h3><span class="mw-headline" id=".22Archives.22_subsystem.27s_module"><span class="mw-headline-number">2.5</span> "Archives" subsystem's module</span></h3>
+<p>This type of the module is used for archiving and maintaining the history of OpenSCADA messages and real-time data obtained in the "Data acquisition" subsystem with the help of the module.
+</p><p>The OpenSCADA software interface to implement an access to the archived data is presented by the objects and virtual functions of the calls from the OpenSCADA core:
+</p>
+<ul><li> <i>TTypeArchivator-&gt;TModule</i> — The root module's object of the "Archives" subsystem:
+<ul><li> <i>TMArchivator *AMess(const string &amp;id, const string &amp;db );</i> — It is called when you open or create a new message archiver <i>id</i> by this module in the <i>db</i> storage.</li>
+<li> <i>TVArchivator *AVal(const string &amp;id, const string &amp;db );</i> — It is called when you open or create a new values archiver <i>id</i> by this module in the <i>db</i> storage.</li></ul></li>
+<li> <i>TMArchivator</i> — The messages archiver object with its own archiving method and storage location:
+<ul><li> <i>void start( );</i> — Start of the archiver. The archiver starts to receive messages and place them into storage.</li>
+<li> <i>void stop( );</i> — Stop of the archiver.</li>
+<li> <i>time_t begin( );</i> — Data beginning in the archiver accordingly with the current state of the storage.</li>
+<li> <i>time_t end( );</i> — Data end in the archiver in accordance with the current state of the storage.</li>
+<li> <i>void put( vector&lt;TMess::SRec&gt; &amp;mess );</i> — Call to place the <i>mess</i> messages in the storage.</li>
+<li> <i>void get( time_t b_tm, time_t e_tm, vector&lt;TMess::SRec&gt; &amp;mess, const string &amp;category = "", char level = 0, time_t upTo = 0 );</i> — Request of the  <i>mess</i> messages in the archive for the <i>b_tm</i>...<i>e_tm</i> interval according to the category template <i>category</i> and the level, with the restriction on the request time to <i>upTo</i>.</li></ul></li>
+<li> <i>TVArchivator</i> — The values archiver object with its own archiving method and storage location:
+<ul><li> <i>void setValPeriod( double per );</i> — It is called when the archivers values frequency is changed.</li>
+<li> <i>void setArchPeriod( int per );</i> — It is called when the archiving frequency is changed.</li>
+<li> <i>void start( );</i> — Start of the archiver. The archiver starts to receive messages and place them into storage.</li>
+<li> <i>void stop( bool full_del = false );</i> — Stop of the archiver with the ability to completely remove its data from the storage, if the <i>full_del</i> is set.</li>
+<li> <i>TVArchEl *getArchEl( TVArchive &amp;arch );</i> — Request the object-representative of the <i>arch</i> archive, served by the archiver.</li></ul></li>
+<li> <i>TVArchEl</i> — The representative object of the values in the archiver's storage:
+<ul><li> <i>void fullErase( );</i> — It is called to complete remove a part of the archive in the archiver.</li>
+<li> <i>int64_t end( );</i> — End time of the archive in the archiver.</li>
+<li> <i>int64_t begin( );</i> — Start time of the archive in the archiver.</li>
+<li> <i>TVariant getValProc( int64_t *tm, bool up_ord );</i> — The request for the processing of one value from the archive for the time <i>tm</i> and fine-tuning to the upper value in the sampling grid <i>up_ord</i>.</li>
+<li> <i>void getValsProc( TValBuf &amp;buf, int64_t beg, int64_t end );</i> — The request for the getting values group processing <i>buf</i> for the specified period of time.</li>
+<li> <i>void setValsProc( TValBuf &amp;buf, int64_t beg, int64_t end );</i> — The request for the setting values group processing <i>buf</i> for the specified period of time.</li></ul></li></ul>
+<h3><span class="mw-headline" id=".22User_interfaces.22_.28UI.29_subsystem.27s_module"><span class="mw-headline-number">2.6</span> "User interfaces" (UI) subsystem's module</span></h3>
+<p>The module of this type should provide a user interface by its own method. The root object of the module is <i>TUI-&gt;TModule</i>, which does not contain specific interfaces, and the user interface is formed in accordance with the implemented concept and mechanisms, for example, of the graphic primitives library.
+</p>
+<h3><span class="mw-headline" id=".22Specials.22_subsystem.27s_module"><span class="mw-headline-number">2.7</span> "Specials" subsystem's module</span></h3>
+<p>The module of this type should implement specific functions that are not included in any of the above subsystems. The root object of this module is <i>TSpecial-&gt;TModule</i>, which does not contain specific interfaces and specific functions are formed according to their needs, using all the features of OpenSCADA API.
+</p>
+
+
+
+
+
+</div></body>
+</html>

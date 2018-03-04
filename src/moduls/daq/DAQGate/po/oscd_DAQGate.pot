@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 15:59+0200\n"
+"POT-Creation-Date: 2018-03-04 09:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,15 +71,15 @@ msgstr ""
 msgid "Presenting for stations"
 msgstr ""
 
-msgid "Call now. "
+msgid "Acquisition. "
 msgstr ""
 
 #, c-format
-msgid "Call by period: %s. "
+msgid "Acquisition with the period: %s. "
 msgstr ""
 
 #, c-format
-msgid "Call next by cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
 msgstr ""
 
 #, c-format
@@ -162,7 +162,7 @@ msgstr ""
 msgid "Enabled"
 msgstr ""
 
-msgid "Id"
+msgid "Identifier"
 msgstr ""
 
 msgid "Name"

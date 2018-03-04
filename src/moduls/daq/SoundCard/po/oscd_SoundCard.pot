@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-05 20:22+0200\n"
+"POT-Creation-Date: 2018-03-04 13:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "Provides an access to the sound card."
 msgstr ""
 
-msgid "Parameters' table"
+msgid "Table of parameters"
 msgstr ""
 
 msgid "Card device"
@@ -41,7 +41,7 @@ msgstr ""
 msgid "Float 32;Int 32;Int 16"
 msgstr ""
 
-msgid "Gather task priority"
+msgid "Priority of the acquisition task"
 msgstr ""
 
 msgid "Standard"
@@ -54,24 +54,24 @@ msgid "Value"
 msgstr ""
 
 #, c-format
-msgid "Allowed %d input channels"
+msgid "%d input channels available"
 msgstr ""
 
 #, c-format
-msgid "Gathering from %d channels, recieved %.2g MB, samplerate corrections %g and adjusted value %d."
+msgid "Acquisition from %d channels, recieved %.2g MB, samplerate corrections %g and the adjusted value %d."
 msgstr ""
 
 #, c-format
-msgid "Selected device '%s' is error or default device no allow."
+msgid "Error of the selected device '%s' or default device is not available."
 msgstr ""
 
-msgid "No one channel is configured for acquisition."
+msgid "No channel is set up for acquisition."
 msgstr ""
 
-msgid "Sample type set is error."
+msgid "Error setting sample type."
 msgstr ""
 
-msgid "Sound input stream is not stopped!"
+msgid "Sound stream is not stopped!"
 msgstr ""
 
 #, c-format

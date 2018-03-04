@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:07+0200\n"
+"POT-Creation-Date: 2018-03-04 10:52+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -88,16 +88,14 @@ msgstr "Завдання перервано!"
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Помилка з'єднання. Відновлення через %.6g c."
 
-msgid "Call now. "
-msgstr "Виклик зараз. "
+msgid "Acquisition. "
+msgstr "Збір. "
 
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Виклик за періодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Збір з періодом: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Наступний виклик за cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Наступний збір за cron '%s'. "
 
 #, c-format
 msgid ""
@@ -149,10 +147,10 @@ msgstr "11:Значення не отримано."
 msgid "Error calculate template."
 msgstr "Помилка обчислення шаблону."
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр вимкнено."
 
-msgid "2:Acquisition is stopped."
+msgid "2:Acquisition stopped."
 msgstr "2:Збір зупинено."
 
 msgid ""
@@ -278,7 +276,7 @@ msgstr "Дані;Шлюз вузла;Шлюз мережі"
 msgid "Calculate data period, seconds"
 msgstr "Період обчислення даних, секунд"
 
-msgid "Allow program translation"
+msgid "Translate program"
 msgstr "Перекладати програму"
 
 msgid "Program"
@@ -389,7 +387,7 @@ msgstr "Довжина звіту"
 msgid "Use zero for the report disabling"
 msgstr "Використовувати нуль для вимкнення звіту"
 
-msgid "Function calculate frequency (Hz)"
+msgid "Frequency of calculation of the function (Hz)"
 msgstr "Частота обчислення функції (Гц)"
 
 msgid "Function start flag"
@@ -470,7 +468,7 @@ msgid "Data"
 msgstr "Дані"
 
 msgid "IO"
-msgstr ""
+msgstr "ВВ"
 
 msgid ""
 "For \"Id\" field provide specific ModBus data form:\n"

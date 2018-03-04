@@ -5,7 +5,7 @@
 <title>Модули/ModBus - OpenSCADAWiki</title>
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
-<link href="../files/doc.css" rel="stylesheet" /></head>
+<link href="../../en/files/doc.css" rel="stylesheet" /></head>
 <body><div id="mw_header">
 			<div class="mw-indicators">
 </div>
@@ -14,7 +14,7 @@
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../../en/files/Constr.png" width="32" /></a>
 </td>
 <td style="padding-left:5px;"> The translation checking and actualizing
 </td></tr></table>
@@ -216,7 +216,7 @@
 <ul><li> <i>f_frq</i> — частота вычисления таблицы программой;</li>
 <li> <i>f_start</i> — признак первого исполнения — запуска программы.</li>
 <li> <i>f_stop</i> — признак последнего исполнения — останова программы.</li></ul>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Поскольку в указателе расширенных типов регистров может использоваться недопустимый символ ',' то доступ к нему из процедуры можно осуществить только альтернативным способом, через объект "arguments":
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Поскольку в указателе расширенных типов регистров может использоваться недопустимый символ ',' то доступ к нему из процедуры можно осуществить только альтернативным способом, через объект "arguments":
 </p>
 <pre style="white-space: pre-wrap;">
 arguments["R_s10,5w"] = "9876543210";</pre>
@@ -272,7 +272,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Адрес <a class="external" href="http://oscada.org/wiki/Documents/Program_manual/ru#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.8B.22" title="Documents/Program manual/ru">исходящего транспорта</a> из списка сконфигурированных исходящих транспортов в подсистеме "Транспорты" OpenSCADA.</li>
 <li> ModBus узел назначения. В случае с протоколами RTU и ASCII это индивидуальный адрес физического устройства, а при TCP/IP — идентификатор единицы.</li>
 <li> Объединение фрагментов регистров. Стандартные функции 01-04 позволяют запросить сразу несколько смежных регистров или битов. Такая стратегия часто позволяет оптимизировать трафик и время. Однако нужные регистры не всегда расположены смежно друг к другу и данная опция позволяет собирать их в блоки до 100 регистров или 1600 битов.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> К установке данного параметра нужно подходить с осторожностью, поскольку не все устройства поддерживают доступ к регистрам между фрагментами.</dd></dl>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> К установке данного параметра нужно подходить с осторожностью, поскольку не все устройства поддерживают доступ к регистрам между фрагментами.</dd></dl>
 <ul><li> Использовать функции записи нескольких элементов (0x0F,0x10). Вместо функций одно-элементной записи будут использованы много-элементные. </li>
 <li> Время ожидания соединения в миллисекундах. Указывает промежуток времени, в течение которого ожидать ответа. В случае указания нулевого значения используется время ожидания по умолчанию в транспорте. Позволяет учитывать индивидуальные свойства контроллера в общей сети.</li>
 <li> Время восстановления соединения в секундах. Указывает промежуток времени по истечению которого осуществлять повторную попытку запроса к ранее недоступному устройству.</li>

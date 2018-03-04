@@ -47,7 +47,7 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data Acquisition"),true), mElErr("Error"), 
     mElTmpl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     mElTmpl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
     mElTmpl.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
-    mElTmpl.fldAdd(new TFld("PR_TR",_("Allow program translation"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    mElTmpl.fldAdd(new TFld("PR_TR",_("Translate program"),TFld::Boolean,TFld::NoFlag,"1","0"));
     mElTmpl.fldAdd(new TFld("PROGRAM",_("Program"),TFld::String,TFld::TransltText,"1000000"));
     mElTmpl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
@@ -161,7 +161,7 @@ void TDAQS::load_( )
         }
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_sys(TMess::Error, _("Load template's libraries error."));
+	mess_sys(TMess::Error, _("Error loading template libraries."));
     }
 
     //Load parameters
@@ -188,7 +188,7 @@ void TDAQS::load_( )
 			itReg[mId] = true;
 		    } catch(TError &err) {
 			mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-			mess_sys(TMess::Error, _("Add controller '%s' error."), mId.c_str());
+			mess_sys(TMess::Error, _("Error adding controller '%s'."), mId.c_str());
 		    }
 		}
 
@@ -330,7 +330,7 @@ void TDAQS::subStart( )
 	    catch(TError &err) {
 		if(try_cnt) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Start template library '%s' error."), tmpl_lst[i_lb].c_str());
+		    mess_sys(TMess::Error, _("Error starting the template library '%s'."), tmpl_lst[i_lb].c_str());
 		}
 		reply = true;
 	    }
@@ -347,7 +347,7 @@ void TDAQS::subStart( )
 		    catch(TError &err) {
 			if(try_cnt) {
 			    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-			    mess_sys(TMess::Error, _("Enable controller '%s' error."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+			    mess_sys(TMess::Error, _("Error enabling the template library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
 			}
 			reply = true;
 		    }
@@ -378,7 +378,7 @@ void TDAQS::subStop( )
 		try{ cntr.at().stop(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Stop controller '%s' error."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_sys(TMess::Error, _("Error stopping the template library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
 		}
 	}
     }
@@ -392,7 +392,7 @@ void TDAQS::subStop( )
 		try{ cntr.at().disable(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Disable controller '%s' error."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_sys(TMess::Error, _("Error disabling the template library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
 		}
 	}
     }
@@ -418,7 +418,7 @@ AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool wa
 	AutoHD<TCntrNode> tNd = DAQnd.at().nodeAt(c_grp+cEl, 0, sep, 0, true);
 	if(tNd.freeStat() && !(strcmp(c_grp,"a_") != 0 && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+cEl,0,sep,0,true)).freeStat())) {
 	    if(noex) return AutoHD<TValue>();
-	    else throw err_sys(_("No DAQ node present '%s'."), path.c_str());
+	    else throw err_sys(_("Missing the DAQ node '%s'."), path.c_str());
 	}
 	c_grp = (c_lv == 0) ? "cntr_" : "prm_";
 	DAQnd = tNd;
@@ -432,7 +432,7 @@ AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex ) const
     AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex);
     if(DAQnd.freeStat() || !dynamic_cast<TValue*>(&DAQnd.at())) {
 	if(noex) return AutoHD<TValue>();
-	else throw err_sys(_("Pointed node is not parameter '%s'."), path.c_str());
+	else throw err_sys(_("The specified node is not the parameter '%s'."), path.c_str());
     }
 
     return DAQnd;
@@ -443,7 +443,7 @@ AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex ) const
     AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex, true);
     if(DAQnd.freeStat() || !dynamic_cast<TVal*>(&DAQnd.at())) {
 	if(noex) return AutoHD<TVal>();
-	else throw err_sys(_("Pointed node is not attribute '%s'."), path.c_str());
+	else throw err_sys(_("The specified node is not the attribute '%s'."), path.c_str());
     }
 
     return DAQnd;

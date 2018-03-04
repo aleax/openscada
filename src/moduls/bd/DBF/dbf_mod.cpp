@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.DBF file: dbf_mod.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DB DBF")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.2.7"
+#define MOD_VER		"2.2.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the *.dbf files, version 3.0.")
 #define LICENSE		"GPL2"
@@ -478,7 +478,7 @@ void MTable::fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec )
 void MTable::save( )
 {
     ResAlloc res(mRes, true);
-    basa->SaveFile((char *)nTable.c_str());
+    basa->SaveFile((char *)nTable.c_str(), SYS->permCrtFiles());
     mModify = 0;
 }
 

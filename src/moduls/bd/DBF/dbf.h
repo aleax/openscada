@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.DBF file: dbf.h
 /***************************************************************************
- *   Copyright (C) 2001-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2001-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -79,7 +79,7 @@ class TBasaDBF
 	int GetFieldIt( int posItems, int posField, string & str );
 	int GetFieldIt( int posItems, char *NameField, string & str );
 	int GetCountItems(  );
-	int SaveFile( char *Name );
+	int SaveFile( char *Name, int perm );
 	int LoadFile( char *Name );
 
     protected:

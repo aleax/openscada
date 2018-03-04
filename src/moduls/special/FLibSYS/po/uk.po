@@ -1,13 +1,13 @@
 # OpenSCADA.Special.FLibSYS translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Special.FLibSYS package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-20 16:44+0200\n"
+"POT-Creation-Date: 2018-03-04 14:03+0200\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -18,8 +18,7 @@ msgstr ""
 msgid "Properties no supported by the object."
 msgstr "Властивості не підтримуються об'єктом."
 
-#, c-format
-msgid "Function '%s' error or not enough parameters."
+msgid "Error function '%s' or missing parameters for it."
 msgstr "Помилка функції '%s' або недостатньо параметрів."
 
 msgid "System API functions"
@@ -79,7 +78,7 @@ msgid "String encoding in file"
 msgstr "Кодування рядку у файлі"
 
 msgid "IO"
-msgstr ""
+msgstr "ВВ"
 
 msgid "Input/Output to: file, string stream."
 msgstr "Ввід/Вивід до: файлу, поток у рядку."

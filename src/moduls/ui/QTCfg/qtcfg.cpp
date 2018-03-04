@@ -1096,13 +1096,22 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 		// Elements of scalable by vertical get and their grow up to the scroll appear into the container
 		if(!s2i(genReqs.attr("fillMode"))) {
-		    qApp->processEvents();
 		    QScrollArea *scrl = (QScrollArea*)tabs->widget(i_area);
 		    QWidget *lastW = qobject_cast<QWidget*>(scrl->widget()->children().last());
-		    int sclFitSz = lastW ? (scrl->maximumViewportSize().height() - (lastW->y()+lastW->height()) - 10): 0;
 		    QList<TextEdit*> texts = scrl->findChildren<TextEdit*>();
 		    QList<QTableWidget*> tbls = scrl->findChildren<QTableWidget*>();
 		    QList<ListView*> lsts = scrl->findChildren<ListView*>();
+
+		    //Fit reset
+		    for(int iL = 0; iL < texts.size(); iL++)	texts[iL]->setMinimumHeight(0);
+		    for(int iL = 0; iL < tbls.size(); iL++)	tbls[iL]->setMinimumHeight(0);
+		    for(int iL = 0; iL < lsts.size(); iL++)	lsts[iL]->setMinimumHeight(0);
+
+		    for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();	//Call all cascade events
+
+		    int sclFitSz = lastW ? (scrl->maximumViewportSize().height() - (lastW->y()+lastW->height()) - 10): 0;
+
+		    //Same fitting
 		    for(int fitStp = vmax(5, sclFitSz/(10*vmax(1,texts.length()+tbls.length()+lsts.length()))), iScN = 0; sclFitSz > fitStp; ) {
 			QAbstractScrollArea *sclIt = NULL, *tEl = NULL;
 			bool sclFromBeg = (iScN == 0);
@@ -1197,8 +1206,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		lstbox->clear();
 	    }
 
-	    lstbox->setMinimumHeight(0);	//Fit reset
-
 	    //  Fill the list
 	    lab->setText((t_s.attr("dscr")+":").c_str());
 	    string helpVl = t_s.attr("help");
@@ -1245,8 +1252,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		//lab = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
 		tbl = (CfgTable *)TSYS::str2addr(t_s.attr("addr_tbl"));
 	    }
-
-	    tbl->setMinimumHeight(0);	//Fit reset
 
 	    //  Fill the table
 	    string helpVl = t_s.attr("help");
@@ -1681,8 +1686,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    connect(edit, SIGNAL(cancel()), this, SLOT(cancelButton()));
 		}
 
-		edit->setMinimumHeight(0);	//Fit reset
-
 		t_s.setAttr("addr_lab", TSYS::addr2str(lab));
 		t_s.setAttr("addr_edit", TSYS::addr2str(edit));
 	    }
@@ -1690,8 +1693,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		lab  = (QLabel*)TSYS::str2addr(t_s.attr("addr_lab"));
 		edit = (TextEdit*)TSYS::str2addr(t_s.attr("addr_edit"));
 	    }
-
-	    edit->setMinimumHeight(0);	//Fit reset
 
 	    // Fill Edit
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());

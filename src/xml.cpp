@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: xml.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -141,7 +141,7 @@ XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) c
 	if(childGet(i_f)->attr(attr) == val) return childGet(i_f);
 
     if(noex) return NULL;
-    throw TError("XMLNode", _("Child with attribut %s=%s is not present."), attr.c_str(), val.c_str());
+    throw TError("XMLNode", _("Child with the attribute %s=%s is not present."), attr.c_str(), val.c_str());
 }
 
 XMLNode* XMLNode::getElementBy( const string &iattr, const string &val )
@@ -360,7 +360,7 @@ nextTag:
 	    //Comment block
 	    if(ctx.vl.compare(pos,4,"<!--") == 0) {
 		size_t comBlkEnd = ctx.vl.find("-->",cpos+4);
-		if(comBlkEnd == string::npos) throw TError("XMLNode", _("No comment block end. Pos: %d"), pos);
+		if(comBlkEnd == string::npos) throw TError("XMLNode", _("No comment block completion. Pos: %d"), pos);
 		if(ctx.flg&LD_Full) {
 		    if(mText.size()) { childAdd("<*>")->mText = Mess->codeConvIn(ctx.enc,mText); mText.clear(); }
 		    childAdd("<!>")->mText = Mess->codeConvIn(ctx.enc,ctx.vl.substr(cpos+4,comBlkEnd-(cpos+4)));
@@ -388,7 +388,7 @@ nextTag:
 		if(ctx.vl[cpos] != '>')	throw TError("XMLNode", _("Unexpected or error end tag. Pos: %d"), cpos);
 		pos = cpos+1;
 	    }
-	    else throw TError("XMLNode", _("Unfinished start comment or unknown block. Pos: %d"), pos);
+	    else throw TError("XMLNode", _("Unfinished start of comment or unknown block. Pos: %d"), pos);
 	    goto nextTag;
 	case '?':	//Program block
 	    for(bpos = cpos+2, tpos = bpos; ctx.vl.compare(tpos,2,"?>") != 0; tpos++)
@@ -510,14 +510,14 @@ void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
 	    rpos += 3;
 	    unsigned nBeg = rpos;
 	    while(isxdigit(ctx.vl[rpos])) rpos++;
-	    if(ctx.vl[rpos] != ';') throw TError("XMLNode", _("Entity error. Pos: %d"), nBeg-3);
+	    if(ctx.vl[rpos] != ';') throw TError("XMLNode", _("Error entity. Pos: %d"), nBeg-3);
 	    eVal = strtoul(ctx.vl.data()+nBeg, NULL, 16);
 	}
 	else {
 	    rpos += 2;
 	    unsigned nBeg = rpos;
 	    while(isdigit(ctx.vl[rpos])) rpos++;
-	    if(ctx.vl[rpos] != ';') throw TError("XMLNode", _("Entity error. Pos: %d"), nBeg-2);
+	    if(ctx.vl[rpos] != ';') throw TError("XMLNode", _("Error entity. Pos: %d"), nBeg-2);
 	    eVal = strtoul(ctx.vl.data()+nBeg, NULL, 10);
 	}
 	//Value process		!!!! Rewrote
@@ -534,7 +534,7 @@ void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
 	rpos += 1;
 	unsigned nBeg = rpos;
 	for( ; ctx.vl[rpos] != ';'; rpos++)
-	    if(rpos >= ctx.vl.size()) throw TError("XMLNode", _("Entity error. Pos: %d"), nBeg-1);
+	    if(rpos >= ctx.vl.size()) throw TError("XMLNode", _("Error entity. Pos: %d"), nBeg-1);
 	map<string,string>::iterator ient = ctx.ent.size() ? ctx.ent.find(ctx.vl.substr(nBeg,rpos-nBeg)) : ctx.ent.end();
 	if(ient != ctx.ent.end()) rez += ient->second;
 	else {

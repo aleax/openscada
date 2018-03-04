@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.Comedi translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.Comedi package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2012.
+# Roman Savochenko <rom_as@oscada.org>, 2012б 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Comedi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-13 18:37+0200\n"
+"POT-Creation-Date: 2018-03-04 09:33+0200\n"
 "PO-Revision-Date: 2012-07-27 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -47,26 +47,24 @@ msgstr "Асинхронное чтение"
 msgid "Addition parameters"
 msgstr "Дополнительные параметры"
 
-msgid "Call now. "
-msgstr "Вызов сейчас. "
+msgid "Acquisition. "
+msgstr "Сбор. "
 
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Вызовы с периодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Сбор с периодом: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Следующий вызов по cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Следующий сбор по cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. "
 msgstr "Затрачено времени: %s. "
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр отключен."
 
-msgid "2:Acquisition is stopped."
-msgstr "2:Опрос остановлен."
+msgid "2:Acquisition stopped."
+msgstr "2:Сбор остановлен."
 
 #, c-format
 msgid "Comedi device file open: %s"

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.DBF file: dbf.cpp
 /***************************************************************************
- *   Copyright (C) 2001-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2001-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -105,11 +105,11 @@ int TBasaDBF::LoadFile( char *Name )
     return db_head_ptr->numb_rec;
 }
 
-int TBasaDBF::SaveFile( char *Name )
+int TBasaDBF::SaveFile( char *Name, int perm )
 {
     int hd;
 
-    if((hd=open(Name,O_RDWR|O_CREAT|O_TRUNC,0666)) <= 0) return -1;
+    if((hd=open(Name,O_RDWR|O_CREAT|O_TRUNC,perm)) <= 0) return -1;
     bool wrOK = write(hd,db_head_ptr,sizeof(db_head)) > 0 &&
 		write(hd,db_field_ptr,db_head_ptr->len_head-sizeof(db_head)-2) > 0 &&
 		write(hd,"\x0D\x00",2) > 0;

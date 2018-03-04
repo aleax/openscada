@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-02 19:58+0200\n"
+"POT-Creation-Date: 2018-03-04 14:11+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -134,8 +134,8 @@ msgstr ""
 "Empfangenen CAN-Rahmen id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X"
 "%02X!"
 
-msgid " client task is stopping...."
-msgstr " Kundenaufgabe wird gestoppt...."
+msgid " stopping client tasks ..."
+msgstr " Client-Aufgaben stoppen ..."
 
 #, c-format
 msgid "Has been connected by '%s'!"
@@ -328,6 +328,7 @@ msgstr "Fehler der Schaffung des TCP Sockets: '%s (%d)'!"
 msgid "Error creation UDP socket: '%s (%d)'!"
 msgstr "Fehler der Schaffung des UDP Sockets: '%s (%d)'!"
 
+#, c-format
 msgid "Error connecting during the time %s: '%s (%d)'"
 msgstr "Fehler beim Verbinden während der Zeit %s: '%s (%d)'"
 
@@ -336,7 +337,8 @@ msgid ""
 "Error connection to the internet socket '%s:%s' during the timeout, it seems "
 "in down or inaccessible: '%s (%d)'!"
 msgstr ""
-"Fehler beim Verbinden mit dem Internet-Socket '%s:%s' während des Timeouts, es scheint nicht aktiv oder erreichbar zu sein: '%s (%d)'!"
+"Fehler beim Verbinden mit dem Internet-Socket '%s:%s' während des Timeouts, "
+"es scheint nicht aktiv oder erreichbar zu sein: '%s (%d)'!"
 
 #, c-format
 msgid "Error creation UNIX socket: '%s (%d)'!"

@@ -50,7 +50,7 @@
 #define MOD_NAME	_("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.3.0"
+#define MOD_VER		"2.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
 #define LICENSE		"GPL2"
@@ -124,8 +124,8 @@ void TTpContr::postEnable( int flag )
     daReg(new QSensor());
 
     //Controler's bd structure
-    fldAdd(new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3",_("Manual;Fast sources;Slow sources;All sources")));
-    fldAdd(new TFld("PRM_BD",_("System parameters table"),TFld::String,TFld::NoFlag,"30","system"));
+    fldAdd(new TFld("AUTO_FILL",_("Auto create active data sources"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3",_("Manual;Fast sources;Slow sources;All sources")));
+    fldAdd(new TFld("PRM_BD",_("Table of system parameters"),TFld::String,TFld::NoFlag,"30","system"));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
@@ -192,9 +192,9 @@ string TMdContr::getStatus( )
 {
     string rez = TController::getStatus();
     if(startStat() && !redntUse()) {
-	if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
+	if(period())	rez += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s[%s]. "),
 		tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }
@@ -385,7 +385,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     //Direct write
     try { if(mDA) mDA->vlSet(this, vo, vl, pvl); }
     catch(TError &err) {
-	mess_err(nodePath().c_str(),_("Write value to attribute '%s' error: %s"),vo.name().c_str(),err.mess.c_str());
+	mess_err(nodePath().c_str(),_("Error writing value to attribute '%s': %s"),vo.name().c_str(),err.mess.c_str());
 	vo.setS(pvl.getS(), 0, true);
     }
 }

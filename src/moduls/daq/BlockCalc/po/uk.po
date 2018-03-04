@@ -2,13 +2,13 @@
 # Copyright (C) 2005-2011 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.BlockCalc module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-12 11:18+0200\n"
+"POT-Creation-Date: 2018-03-04 10:38+0200\n"
 "PO-Revision-Date: 2007-10-28 08:54+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -68,7 +68,7 @@ msgid "Go to function"
 msgstr "Перейти до функції"
 
 msgid "IO"
-msgstr ""
+msgstr "ВВ"
 
 msgid "Show"
 msgstr "Показати"
@@ -167,7 +167,7 @@ msgid "Block's ID"
 msgstr "ID блоку"
 
 msgid "IO ID"
-msgstr ""
+msgstr "ВВ ID"
 
 msgid "Link's type"
 msgstr "Тип зв'язку"
@@ -178,16 +178,15 @@ msgstr "Зв'язок"
 msgid "Link's value"
 msgstr "Значення зв'язку"
 
-msgid "Call now. "
-msgstr "Виклик зараз. "
+msgid "Calculation. "
+msgstr "Обчислення. "
+
+msgid "Calculation with the period: %s. "
+msgstr "Обчислення за періодом: %s. "
 
 #, c-format
-msgid "Call by period: %s. "
-msgstr "Виклик за періодом: %s. "
-
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Наступний виклик за cron '%s'. "
+msgid "Next calculation by the cron '%s'. "
+msgstr "Наступне обчислення за cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s[%s]. "
@@ -236,11 +235,11 @@ msgstr "Блоки"
 msgid "All: %u; Enabled: %u; Process: %u"
 msgstr "Всього: %u; Включено: %u; Обробляється: %u"
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр вимкнено."
 
-msgid "2:Controller is stopped."
-msgstr "2:Контролер зупинено."
+msgid "2:Calculation stopped."
+msgstr "2:Обчислення зупинено."
 
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "

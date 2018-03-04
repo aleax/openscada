@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Документи/Як зробити/Звіт про падіння - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Документи/Як зробити/Звіт про падіння</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FCrash+report&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Crash_report" title="Documents/How to/Crash report">Documents/How to/Crash report</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Crash_report" title="Documents/How to/Crash report (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Crash_report/ru" title="Документы/Как сделать/Отчёт о падении (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../en/files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Generic revision and updating
+</td></tr></table>
+</div>
+<p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.92.D0.B8.D0.BC.D0.BE.D0.B3.D0.B8_.D0.B4.D0.BE_.D0.BF.D0.BE.D0.B2.D1.96.D0.B4.D0.BE.D0.BC.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BF.D1.80.D0.BE_.D0.BF.D0.BE.D0.BC.D0.B8.D0.BB.D0.BA.D1.83"><span class="tocnumber">1</span> <span class="toctext">Вимоги до повідомлення про помилку</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.A1.D0.BF.D0.BE.D1.81.D0.BE.D0.B1.D0.B8_.D0.BF.D0.BE.D0.B2.D1.96.D0.B4.D0.BE.D0.BC.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">2</span> <span class="toctext">Способи повідомлення</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9E.D1.82.D1.80.D0.B8.D0.BC.D0.B0.D0.BD.D0.BD.D1.8F_.D1.84.D0.B0.D0.B9.D0.BB.D1.83_.D0.BF.D0.B5.D1.80.D0.B5.D0.B4.D1.81.D0.BC.D0.B5.D1.80.D1.82.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B4.D0.B0.D0.BC.D0.BF.D1.83_.D1.82.D0.B0_.D0.B9.D0.BE.D0.B3.D0.BE_.D0.BE.D0.B1.D1.80.D0.BE.D0.B1.D0.BA.D0.B0"><span class="tocnumber">3</span> <span class="toctext">Отримання файлу передсмертного дампу та його обробка</span></a></li>
+</ul>
+</div>
+
+<p>Налагодженню та тестуванню системи OpenSCADA приділяється значний час розробників, однак у зв'язку із обмеженістю ресурсів та й практичною неможливістю охопити всі варіанти конфігурації та виконання системи OpenSCADA помилки можуть проявлятися як у вигляді невиконання окремих функцій, некоректності їх виконання та навіть аварійного завершення програми у користувачів. Розуміння цього з боку користувача дуже важливе, та з його боку потребується добра воля для приділення деякого часу на приготування звіту про проблему з метою її наступного усунення розробниками.
+</p><p>Перед приготуванням повідомлення про проблему рекомендується ознайомитися з переліком помилок та зауважень у відповідному розділі <a class="external text" href="http://wiki.oscada.org/HomePageEn/Errors" rel="nofollow noreferrer noopener" target="_blank">Помилки та зауваження до OpenSCADA</a>.
+</p>
+<h2><span class="mw-headline" id=".D0.92.D0.B8.D0.BC.D0.BE.D0.B3.D0.B8_.D0.B4.D0.BE_.D0.BF.D0.BE.D0.B2.D1.96.D0.B4.D0.BE.D0.BC.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BF.D1.80.D0.BE_.D0.BF.D0.BE.D0.BC.D0.B8.D0.BB.D0.BA.D1.83"><span class="mw-headline-number">1</span> Вимоги до повідомлення про помилку</span></h2>
+<p>Для виключення зайвих навідних питань та для прискорення процесу локалізації проблеми рекомендується слідувати наступним вимогам до повідомлення.
+</p>
+<ul><li> Вказати оточення виконання OpenSCADA, а саме дистрибутив та версію операційної систем.</li>
+<li> Вказати версію системи OpenSCADA, включаючи SVN-ревізію для робочих версій.</li>
+<li> Вказати особливості конфігурації та виконання. Бажано добиватися відтворення проблеми у стандартних конфігураціях та на <a href="../en/Quick_start.html" title="Special:MyLanguage/Documents/Quick start">демонстраційній БД</a>. Якщо цього не вдається досягнути, тоді потрібно описати особливості конфігурації та прикласти до повідомлення БД, на якій проблема відтворюється.</li>
+<li> Описати дії які викликають помилку.</li>
+<li> Прикласти протокол повідомлень OpenSCADA для сеансу з відтворенням помилки.</li>
+<li> У випадку аварійного завершення потрібно сформувати файл передсмертного дампу пам'яті програми та отримати з нього розворот стеку виконання на момент аварії, про що нижче. При проблемах, пов'язаних з зависанням однієї або декількох задач OpenSCADA, для локалізації може бути корисне ручне переривання програми сигналом "SIGSEGV", що викличе формування передсмертного дампу з інформацією про місце зависання.</li>
+<li> Для значного збільшення користі розвороту стеку ви маєте додати налагоджувальну інформацію, встановленням опції "-g" під час компіляції або встановлення готових налагоджувальних пакетів.</li></ul>
+<h2><span class="mw-headline" id=".D0.A1.D0.BF.D0.BE.D1.81.D0.BE.D0.B1.D0.B8_.D0.BF.D0.BE.D0.B2.D1.96.D0.B4.D0.BE.D0.BC.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">2</span> Способи повідомлення</span></h2>
+<p>Повідомити про помилку у системі OpenSCADA можна декількома способами:
+</p>
+<ul><li> у відповідному розділі форуму офіційного сайту: <a class="external free" href="http://oscada.org/ua/forum/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/ua/forum/</a>;</li>
+<li> по електронній пошті на адресу <a class="external text" href="mailto:oscada@oscada.org" rel="nofollow noreferrer noopener" target="_blank">oscada at oscada.org</a> або <a class="external text" href="http://wiki.oscada.org/HomePageUk/Developers" rel="nofollow noreferrer noopener" target="_blank">адреса розробників</a>;</li>
+<li> у розділі <a class="external text" href="http://wiki.oscada.org/HomePageEn/Errors" rel="nofollow noreferrer noopener" target="_blank">Помилки та зауваження до системи OpenSCADA</a> у базі знань проекту.</li></ul>
+<h2><span class="mw-headline" id=".D0.9E.D1.82.D1.80.D0.B8.D0.BC.D0.B0.D0.BD.D0.BD.D1.8F_.D1.84.D0.B0.D0.B9.D0.BB.D1.83_.D0.BF.D0.B5.D1.80.D0.B5.D0.B4.D1.81.D0.BC.D0.B5.D1.80.D1.82.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B4.D0.B0.D0.BC.D0.BF.D1.83_.D1.82.D0.B0_.D0.B9.D0.BE.D0.B3.D0.BE_.D0.BE.D0.B1.D1.80.D0.BE.D0.B1.D0.BA.D0.B0"><span class="mw-headline-number">3</span> Отримання файлу передсмертного дампу та його обробка</span></h2>
+<p>У ОС Linux, під час збою програм, ядро ОС може формувати передсмертний дамп пам'яті програми. За допомогою цього дампу часто можна виявити місце у програмі, яке викликало аварійну зупинку. Для включення можливості генерації передсмертного дампу пам'яті програми ядром потрібно виконати команди:
+</p>
+<pre style="white-space: pre-wrap;">
+# Перевірка можливості генерації дампів пам'яті
+# Повертає "core", якщо включена
+$ cat /proc/sys/kernel/core_pattern
+# Включення генерації дампів пам'яті
+$ echo "core" &gt; /proc/sys/kernel/core_pattern
+</pre>
+<p>Після цього потрібно зняти обмеження на розмір генерованого файлу дампу, для чого OpenSCADA можна запустити з аргументом <b>--CoreDumpAllow</b> або виконати спеціальну команду перед викликом OpenSCADA "<b>$ ulimit -c unlimited</b>".
+</p><p>Потім достатньо переконатися у тому, що користувач, який запускає OpenSCADA, має право запису до робочої директорії OpenSCADA, параметр "<b>Workdir</b>" у конфігураційному файлі програми.
+</p><p>Далі запускається система OpenSCADA та відтворюється аварійне завершення, у результаті якого у робочій директорії OpenSCADA створюється файл <b>core</b>.
+</p><p>Типові скрипти запуску OpenSCADA, які постачаються у пакетах дистрибутивів OpenSCADA з версії 0.8.0, включають генерацію дампу пам'яті та автоматично формують з нього звіт зворотніх викликів (backtrace) у вигляді файлів "AGLKS_core_2016-03-20_18.17.crash" (для 0.9 Work) або "crash_2012-01-05_11:05.txt" (для 0.8 LTS) у робочій директорії проекту.
+</p><p>Якщо сформувався файл дампу пам'яті <b>core</b>, а звіт зворотніх викликів автоматично не сформувався, то ймовірно не встановлено налаштовувача "gdb". У такому випадку Ви маєте його встановити та викликати вручну команду, із робочої директорії для глобальної конфігурації:
+</p>
+<dl><dd>$ gdb openscada --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" &gt; crash_$(date +%F_%H:%M).txt</dd></dl>
+<p>Або-ж виконати процедуру у інтерактивному режимі, для глобальної конфігурації:
+</p>
+<pre style="white-space: pre-wrap;">
+# Перехід до робочої директорії OpenSCADA
+(gdb) cd /var/spool/openscada
+# Вказання виконувального файлу, не скрипти!
+(gdb) file /usr/bin/openscada
+# Вказання файлу дампу пам'яті програми
+(gdb) core-file /var/spool/openscada/core.26658
+# Отримання розвороту стеку виконання
+(gdb) thread apply all bt full
+#0  0xb7d104c0 in pthread_cancel () from /lib/librt.so.1
+#1  0xb7d1edaa in start_thread () from /lib/libpthread.so.0
+#2  0xb7dfcf5e in clone () from /lib/libc.so.6
+</pre>
+
+
+
+
+
+
+</div></body>
+</html>

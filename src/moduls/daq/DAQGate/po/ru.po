@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.DAQGate translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 15:59+0200\n"
+"POT-Creation-Date: 2018-03-04 09:38+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -77,16 +77,15 @@ msgstr "Кеш конфигурации атрибутов"
 msgid "Presenting for stations"
 msgstr "Присутствие по станциям"
 
-msgid "Call now. "
-msgstr "Вызов сейчас. "
+msgid "Acquisition. "
+msgstr "Сбор. "
 
 #, c-format
-msgid "Call by period: %s. "
-msgstr "Вызовы с периодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Сбор с периодом: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Следующий вызов по cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Следующий сбор по cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s[%s]. "
@@ -179,8 +178,8 @@ msgstr "Тип"
 msgid "Enabled"
 msgstr "Включен"
 
-msgid "Id"
-msgstr ""
+msgid "Identifier"
+msgstr "Идентификатор"
 
 msgid "Name"
 msgstr "Имя"

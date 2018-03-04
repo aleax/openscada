@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-09 21:43+0200\n"
+"POT-Creation-Date: 2018-03-04 15:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -466,25 +466,25 @@ msgstr ""
 msgid "Style Sheets"
 msgstr ""
 
-msgid "Hold at reloading in different project."
+msgid "Hold when overloaded to another project."
 msgstr ""
 
-msgid "Load module."
+msgid "Loading the module."
 msgstr ""
 
-msgid "Save module."
+msgid "Saving the module."
 msgstr ""
 
-msgid "Starting the module..."
+msgid "Starting the module."
 msgstr ""
 
-msgid "Stopping the module..."
+msgid "Stopping the module."
 msgstr ""
 
 #, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
-"    --showWin=<0,1,2>   Windows show mode, initial and allowed to change from: 0-typical window, 1-maximized window, 2-fullscreen.\n"
+"    --showWin=<0,1,2>   Window display mode, initial and which is allowed to change from: 0-typical window, 1-maximized window, 2-full screen.\n"
 "----------- Qt debug commandline options ----------\n"
 "    --noX11             Prevent the launch of Qt, preferably for a clean console.\n"
 "    --sync              Switch to Sync X11 for debugging.\n"
@@ -553,10 +553,10 @@ msgstr ""
 msgid "&About"
 msgstr ""
 
-msgid "Program and OpenSCADA information"
+msgid "Program information"
 msgstr ""
 
-msgid "The button for display program and OpenSCADA information."
+msgid "The button for display the program information."
 msgstr ""
 
 msgid "About &Qt"
@@ -565,13 +565,13 @@ msgstr ""
 msgid "Qt information"
 msgstr ""
 
-msgid "The button for getting the using Qt information."
+msgid "The button for getting the Qt information."
 msgstr ""
 
 msgid "%1 manual"
 msgstr ""
 
-msgid "The button for getting the using %1 manual."
+msgid "The button for the manual %1."
 msgstr ""
 
 msgid "What's &This"
@@ -611,22 +611,10 @@ msgstr ""
 msgid "The list for call and switch to allowed projects of OpenSCADA."
 msgstr ""
 
-msgid "<Creation-updating>"
-msgstr ""
-
-msgid "New projects creation or updating of presented ones, like to desktop links"
-msgstr ""
-
-msgid "=== User projects ==="
-msgstr ""
-
 msgid "current"
 msgstr ""
 
 msgid "running"
-msgstr ""
-
-msgid "=== Common projects ==="
 msgstr ""
 
 msgid "Switch to the selected project"
@@ -639,6 +627,15 @@ msgid "The button for switch to the selected project."
 msgstr ""
 
 msgid "The button for call the selected project."
+msgstr ""
+
+msgid "Create-update a project"
+msgstr ""
+
+msgid "New projects creating or updating of presented ones, like to desktop links"
+msgstr ""
+
+msgid "The button for new projects creating or updating of presented ones, like to desktop links."
 msgstr ""
 
 msgid "The button for exit the program."
@@ -661,13 +658,13 @@ msgstr ""
 msgid "Manual"
 msgstr ""
 
-msgid "No the manual '%1' found offline or online!"
+msgid "No manual '%1' found offline or online!"
 msgstr ""
 
 msgid "New project or project to update"
 msgstr ""
 
-msgid "Project name for new one creation or to update present one:"
+msgid "Project name for new one creating or to update present one:"
 msgstr ""
 
 msgid "Empty name of the project is unavailable!"
@@ -692,5 +689,5 @@ msgid "Project \"%1\" seems wrong or broken!"
 msgstr ""
 
 #, c-format
-msgid "No translated Qt message: '%s'"
+msgid "Untranslated Qt message: '%s'"
 msgstr ""

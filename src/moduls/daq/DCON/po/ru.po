@@ -2,14 +2,14 @@
 # Copyright (C) 2008-2009 Almaz Karimov
 # This file is distributed under the same license as the OpenSCADA.DAQ.DCON package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2008-2011.
+# Roman Savochenko <rom_as@oscada.org>, 2008-2018.
 # Almaz Karimov, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:12+0300\n"
+"POT-Creation-Date: 2018-03-04 09:43+0200\n"
 "PO-Revision-Date: 2011-02-28 16:29+0300\n"
 "Last-Translator: Almaz Karimov\n"
 "Language-Team:  <ru@li.org>\n"
@@ -34,9 +34,6 @@ msgstr ""
 
 msgid "Parameters table"
 msgstr "Таблица параметров"
-
-msgid "Gather data period (s)"
-msgstr "Период сбора данных (с)"
 
 msgid "Acquisition schedule"
 msgstr "Планирование опроса"
@@ -116,14 +113,14 @@ msgstr "DO метод"
 msgid ""
 "No DO;2DO (@AA,0300);3DO (@AA,7);4DO (@AA,F);5DO (@AA,1F);7DO (@AA,7F);8DO "
 "(@AA,FF);12DO (@AA,0FFF);13DO (@AA,1FFF);16DO (@AA,FFFF);2DO (^AADOVVV);3DO "
-"(^AADOVVV);2DO (@AADO);4DO (@AADO);6DO (@AADODD);2DO (@AADO0D);4DO (@(^)"
-"AADO0D);4DO (@AA,0F00);8DO (@AA,FF00);4DO (#AA000F);8DO (#AA00FF);12DO "
+"(^AADOVVV);2DO (@AADO);4DO (@AADO);6DO (@AADODD);2DO (@AADO0D);4DO "
+"(@(^)AADO0D);4DO (@AA,0F00);8DO (@AA,FF00);4DO (#AA000F);8DO (#AA00FF);12DO "
 "(#AA000FFF)"
 msgstr ""
 "Нет DO;2DO (@AA,0300);3DO (@AA,7);4DO (@AA,F);5DO (@AA,1F);7DO (@AA,7F);8DO "
 "(@AA,FF);12DO (@AA,0FFF);13DO (@AA,1FFF);16DO (@AA,FFFF);2DO (^AADOVVV);3DO "
-"(^AADOVVV);2DO (@AADO);4DO (@AADO);6DO (@AADODD);2DO (@AADO0D);4DO (@(^)"
-"AADO0D);4DO (@AA,0F00);8DO (@AA,FF00);4DO (#AA000F);8DO (#AA00FF);12DO "
+"(^AADOVVV);2DO (@AADO);4DO (@AADO);6DO (@AADODD);2DO (@AADO0D);4DO "
+"(@(^)AADO0D);4DO (@AA,0F00);8DO (@AA,FF00);4DO (#AA000F);8DO (#AA00FF);12DO "
 "(#AA000FFF)"
 
 msgid "CI method"
@@ -132,16 +129,14 @@ msgstr "CI метод"
 msgid "No CI;2CI (#AA);3CI (#AA)"
 msgstr "Нет CI;2CI (#AA);3CI (#AA)"
 
-msgid "Call now. "
-msgstr "Вызов сейчас. "
+msgid "Acquisition. "
+msgstr "Сбор. "
 
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Вызовы с периодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Сбор с периодом: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Следующий вызов по cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Следующий сбор по cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. "
@@ -183,8 +178,8 @@ msgstr "24:Выход за пределы диапазона в модуле"
 msgid "25:Command ignored (host watchdog)."
 msgstr "25:Команда проигнорирована (сторожевой таймер)."
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр отключен"
 
-msgid "2:Acquisition is stopped."
-msgstr "2:Опрос остановлен."
+msgid "2:Acquisition stopped."
+msgstr "2:Сбор остановлен."

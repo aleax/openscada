@@ -32,14 +32,14 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"JavaLikeCalc"
-#define MOD_NAME	_("Java-like based calculator")
+#define MOD_NAME	_("Calculator on the Java-like language")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.6.13"
+#define MOD_VER		"3.7.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
- The user can create and modify functions and libraries.")
+#define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
+ The user can create and modify functions and their libraries.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -108,10 +108,10 @@ void TpContr::postEnable( int flag )
 
     //Controller db structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system"));
-    fldAdd(new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"40"));
+    fldAdd(new TFld("FUNC",_("Controller function"),TFld::String,TFld::NoFlag,"40"));
     fldAdd(new TFld("SCHEDULE",_("Calculation schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Calculation task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("ITER",_("Iteration number in single calculation"),TFld::Integer,TFld::NoFlag,"2","1","1;99"));
+    fldAdd(new TFld("PRIOR",_("Priority of the calculation task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("ITER",_("Number of iterations in single calculation"),TFld::Integer,TFld::NoFlag,"2","1","1;99"));
 
     //Controller value db structure
     val_el.fldAdd(new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
@@ -125,7 +125,7 @@ void TpContr::postEnable( int flag )
     lb_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     lb_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     lb_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::TransltText,"300"));
-    lb_el.fldAdd(new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30"));
+    lb_el.fldAdd(new TFld("DB",_("Database"),TFld::String,TFld::NoFlag,"30"));
 
     //Function's structure
     fnc_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
@@ -133,7 +133,7 @@ void TpContr::postEnable( int flag )
     fnc_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::TransltText,"300"));
     fnc_el.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1","1"));
     fnc_el.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
-    fnc_el.fldAdd(new TFld("PR_TR",_("Allow program translation"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fnc_el.fldAdd(new TFld("PR_TR",_("Translate program"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fnc_el.fldAdd(new TFld("FORMULA",_("Program"),TFld::String,TFld::TransltText,"1000000"));
     fnc_el.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
@@ -149,8 +149,8 @@ void TpContr::postEnable( int flag )
 
     //Init named constant table
     double rvl;
-    rvl = M_PI /*3.14159265358l*/; mConst.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
-    rvl = M_E /*2.71828182845l*/; mConst.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
+    rvl = M_PI; mConst.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
+    rvl = M_E;  mConst.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
     rvl = EVAL_REAL;
     mConst.push_back(NConst(TFld::Real,"EVAL_REAL",string((char*)&rvl,sizeof(rvl))));
     mConst.push_back(NConst(TFld::Real,"EVAL",string((char*)&rvl,sizeof(rvl))));
@@ -306,7 +306,7 @@ void TpContr::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Load function's libraries error.")); 
+	mess_err(nodePath().c_str(),_("Load function libraries error.")); 
     }
 }
 
@@ -349,8 +349,8 @@ void TpContr::cntrCmdProc( XMLNode *opt )
 	TTypeDAQ::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/prm",MOD_ID))
-	    ctrMkNode("fld",opt,-1,"/prm/safeTm",_("Safe timeout, seconds"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
-	if(ctrMkNode("area",opt,1,"/libs",_("Functions' Libraries")))
+	    ctrMkNode("fld",opt,-1,"/prm/safeTm",_("Safety timeout, seconds"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
+	if(ctrMkNode("area",opt,1,"/libs",_("Functions libraries")))
 	    ctrMkNode("list",opt,-1,"/libs/lb",_("Libraries"),RWRWR_,"root",SDAQ_ID,5,
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","lib_","idSz",OBJ_ID_SZ);
 	return;
@@ -423,9 +423,9 @@ string Contr::getStatus( )
     string val = TController::getStatus();
 
     if(startStat() && !redntUse()) {
-	if(call_st)	val += TSYS::strMess(_("Call now. "));
-	if(period())	val += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
-	else val += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	if(call_st)	val += TSYS::strMess(_("Calculation. "));
+	if(period())	val += TSYS::strMess(_("Calculation with the period: %s. "),tm2s(1e-9*period()).c_str());
+	else val += TSYS::strMess(_("Next calculation by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s[%s]."), tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(),
 						       tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }
@@ -437,16 +437,16 @@ void Contr::enable_( )
 {
     string wfnc = fnc();
     if(!mod->lbPresent(TSYS::strSepParse(wfnc,0,'.')))
-	throw TError(nodePath().c_str(),_("Functions library '%s' is not present. Please, create functions library!"),TSYS::strSepParse(wfnc,0,'.').c_str());
+	throw TError(nodePath().c_str(),_("Library of the functions '%s' is not present. Please, create the one!"),TSYS::strSepParse(wfnc,0,'.').c_str());
     if(!mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().present(TSYS::strSepParse(wfnc,1,'.'))) {
-	mess_info(nodePath().c_str(),_("Create new function '%s'."),wfnc.c_str());
+	mess_info(nodePath().c_str(),_("Creating a new function '%s'."),wfnc.c_str());
 	mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().add(TSYS::strSepParse(wfnc,1,'.').c_str());
     }
     setFunc(&mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().at(TSYS::strSepParse(wfnc,1,'.')).at());
     try{ loadFunc(); }
     catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_warning(nodePath().c_str(),_("Load function and its IO error."));
+	mess_warning(nodePath().c_str(),_("Error loading function and its IO."));
     }
 }
 
@@ -468,10 +468,10 @@ void Contr::loadFunc( bool onlyVl )
 	if(!onlyVl) ((Func*)func())->load();
 
 	//Creating special IO
-	if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,0,"1000",false),0);
+	if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Frequency of calculation of the function (Hz)"),IO::Real,0,"1000",false),0);
 	if(func()->ioId("f_start") < 0)	func()->ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,0,"0",false),1);
 	if(func()->ioId("f_stop") < 0)	func()->ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,0,"0",false),2);
-	if(func()->ioId("this") < 0)	func()->ioIns(new IO("this",_("This controller object link"),IO::Object,0,"0",false),3);
+	if(func()->ioId("this") < 0)	func()->ioIns(new IO("this",_("Link to the object of this controller"),IO::Object,0,"0",false),3);
 
 	//Load values
 	TConfig cfg(&mod->elVal());
@@ -572,7 +572,7 @@ void *Contr::Task( void *icntr )
 		try { cntr.calc(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str() );
-		    mess_err(cntr.nodePath().c_str(),_("Calculation controller's function error."));
+		    mess_err(cntr.nodePath().c_str(),_("Error calculating controller function."));
 		}
 	    t_prev = t_cnt;
 	    cntr.call_st = false;
@@ -614,7 +614,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path.substr(0,6) == "/serv/") {
 	if(a_path == "/serv/fncAttr") {
-	    if(!startStat() || !func()) throw TError(nodePath().c_str(),_("No started or no present function."));
+	    if(!startStat() || !func()) throw TError(nodePath().c_str(),_("Function is missing or not started."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 		for(int i_a = 0; i_a < ioSize(); i_a++)
 		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));
@@ -707,7 +707,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int row = s2i(opt->attr("row"));
 	    if(func()->io(row)->flg()&Func::SysAttr)
-		throw TError(nodePath().c_str(),_("Deleting lock attribute in not allow."));
+		throw TError(nodePath().c_str(),_("Deleting a locked attribute is not allowed."));
 	    ((Func *)func())->ioDel(row);
 	    modif();
 	}
@@ -717,9 +717,9 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    int row = s2i(opt->attr("row"));
 	    int col = s2i(opt->attr("col"));
 	    if((col == 0 || col == 1) && !opt->text().size())
-		throw TError(nodePath().c_str(),_("Empty value is not valid."));
+		throw TError(nodePath().c_str(),_("Empty value is not allowed."));
 	    if(func()->io(row)->flg()&Func::SysAttr)
-		throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
+		throw TError(nodePath().c_str(),_("Changing the locked attribute is not allowed."));
 	    switch(col) {
 		case 0:	func()->io(row)->setId(opt->text());	break;
 		case 1:	func()->io(row)->setName(opt->text());	break;
@@ -861,7 +861,7 @@ void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 void Prm::vlGet( TVal &val )
 {
     if(val.name() == "err") {
-	if(!owner().startStat())val.setS(_("2:Controller is stopped"),0,true);
+	if(!owner().startStat())val.setS(_("2:Calculation is stopped"),0,true);
 	else if(!enableStat())	val.setS(_("1:Parameter is disabled"),0,true);
 	else val.setS("0",0,true);
 	return;
@@ -891,12 +891,12 @@ void Prm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/FLD",cfg("FLD").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"SnthHgl","1",
-	    "help",_("Attributes configuration list. List must be written by lines in format: [<io>:<aid>:<anm>]\n"
+	    "help",_("List of configuration of the attributes. List must be written by lines in format: \"{io}[:{aid}[:{anm}]]\"\n"
 	    "Where:\n"
-	    "  io - calculation function's IO;\n"
-	    "  aid - created attribute identifier;\n"
-	    "  anm - created attribute name.\n"
-	    "If 'aid' or 'anm' are not set they will be generated from selected function's IO."));
+	    "  io - IO of the computable function;\n"
+	    "  aid - identifier of the created attribute;\n"
+	    "  anm - name of the created attribute.\n"
+	    "If 'aid' or 'anm' is not set then they will be generated from the selected IO of the function."));
 	return;
     }
     //Process command to page

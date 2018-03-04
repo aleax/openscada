@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Documents/How to/Debug - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Documents/How to/Debug</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Debug/ru" title="Документы/Как сделать/Отладка (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Debug/uk" title="Документи/Як зробити/Налагодження (100% translated)">українська</a></div></div>
+<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Debugging_the_current_execution_context"><span class="tocnumber">1</span> <span class="toctext">Debugging the current execution context</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Debugging_the_execution_sequence"><span class="tocnumber">2</span> <span class="toctext">Debugging the execution sequence</span></a></li>
+</ul>
+</div>
+
+<p>If you strictly follow the <a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">Quick Start manual</a> then you will not encounter any problems, but if you do something yourself then you may need some debugging. OpenSCADA provides extensive opportunities for debugging and identifying programming problems in the overall OpenSCADA user space and the problems of OpenSCADA itself and its parts.
+</p><p>Basic approaches to custom debugging include:
+</p>
+<ul><li> Creating external attributes to look at intermediate values and monitor the current execution context.</li>
+<li> Creating debugging messages, also for review of intermediate values and follow-up monitoring.</li></ul>
+<p>Basic debugging mechanisms have been expanded in the latest versions of OpenSCADA for the subject:
+</p>
+<ul><li> Custom control over debugging, through the debugging message category for OpenSCADA parts and user space messages.</li>
+<li> Specific debugging and diagnostic environments for some parts of OpenSCADA, such as: data sources (controller objects) and interfaces of VCA (VCA projects).</li></ul>
+<h3><span class="mw-headline" id="Debugging_the_current_execution_context"><span class="mw-headline-number">1</span> Debugging the current execution context</span></h3>
+<p>This method of debugging involves monitoring values of the variables of the execution context, including the addition of intermediate values, for detail.
+</p><p>Current execution context of DAQ procedures you can observe into a proper page of the object of the execution context, like: the tab "Attributes" of the Logic Level parameter (Fig. 1), the tab "Calculation" of the Java-like based calculator (Fig. 2) and so on. To append some interim values you can temporary <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Quick_start#DataProc" title="Special:MyLanguage/Documents/Quick start">append (or set as an read-only attribute) and link some attributes to the template</a> or <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/JavaLikeCalc#Controller" title="Special:MyLanguage/Modules/JavaLikeCalc">append and link some IO to the function</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:836px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_attr.png"><img class="thumbimage" height="570" src="files/LogicLev_prm_attr.png" width="834" /></a>  <div class="thumbcaption">Fig. 1. Tab "Attributes" of the Logic Level parameter.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:822px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr_calc.png"><img class="thumbimage" height="643" src="files/JavaLikeCalc_cntr_calc.png" width="820" /></a>  <div class="thumbcaption">Fig. 2. Tab "Calculation" of the Java-like based calculator.</div></div></div></div>
+<p>Current execution context of the VCA procedures (procedures of the widgets) you can observe on the tab "Attributes" of the proper page or widget of the session of the executed now project (Fig. 3). To append some interim values you can temporary <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Quick_start#ComplexWdg" title="Special:MyLanguage/Documents/Quick start">append and link several attributes to the widget/page</a>.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:HowTo_vca_ses_wp_ctx.png"><img class="thumbimage" height="629" src="files/HowTo_vca_ses_wp_ctx.png" width="773" /></a>  <div class="thumbcaption">Fig. 3. Tab "Attributes" of a page or widget of the session of the executed now project.</div></div></div></div>
+<h3><span class="mw-headline" id="Debugging_the_execution_sequence"><span class="mw-headline-number">2</span> Debugging the execution sequence</span></h3>
+<p>That debugging method means placing and/or enabling debugging messages and next their observing into the generic interface of the messages archiving and observing  (Fig. 4) or into the interface proper to the OpenSCADA part:
+</p>
+<ul><li> Tab "Diagnostics" of the controller object of the data source (Fig. 5).</li>
+<li> Tab "Diagnostics" of the project object of VCA into the configurator (Fig. 6) or of the project properties of the development mode of UI.Vision (Fig. 7).</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1043px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mess.png"><img class="thumbimage" height="621" src="files/QTCfg_subsys_arch_mess.png" width="1041" /></a>  <div class="thumbcaption">Fig. 4. Generic messages archiving and observing interface.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1196px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_diagn.png"><img class="thumbimage" height="681" src="files/QTCfg_subsys_daq_mod_cntr_diagn.png" width="1194" /></a>  <div class="thumbcaption">Fig. 5. Tab "Diagnostics" of a controller object of a data source.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1052px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag.png"><img class="thumbimage" height="513" src="files/VCAeng_pg_diag.png" width="1050" /></a>  <div class="thumbcaption">Fig. 6. Tab "Diagnostics" of a project object of VCA into the configurator.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:883px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_diag.png"><img class="thumbimage" height="379" src="files/Vision_wlbpg_diag.png" width="881" /></a>  <div class="thumbcaption">Fig. 7. Tab "Diagnostics" of project properties of the development mode of UI.Vision.</div></div></div></div>
+<p>To append messages in debug or other levels to your procedures you can use next functions:
+</p>
+<ul><li> Generic: <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#SYS" title="Special:MyLanguage/Documents/User API">SYS.message(), SYS.mess{Debug,Info,Note,Warning,Err,Crit,Alert,Emerg}()</a></i> — to form generic messages with a custom category, then them mostly allowed to observe from the generic messages archiving and observing interface (Fig. 4).</li>
+<li> Generic: <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#TCntrNode" title="Special:MyLanguage/Documents/User API">SYS.*.messSys()</a></i> — to form the system messages of the program with the node path as a category and with the human readable path before the message. The messages will be allowed to observe into the diagnostics interface proper to the OpenSCADA part (Fig. 5, 6, 7).</li>
+<li> VCA: <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine#UserAPI" title="Special:MyLanguage/Modules/VCAEngine">this.mess{Debug,Info,Note,Warning,Err,Crit,Alert,Emerg}()</a></i> — to form the system message of the program with the category as the widget path. The messages will be allowed to observe into the VCA diagnostics interface (Fig. 6, 7).</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The debugging messages (the suffix is "Debug" or the level is 0), on the last versions of OpenSCADA, will be allowed to observe only after the debugging enabled: the field "Least level" set to "Debug (0)" (Fig. 8) and check category(es) of the messages (Fig. 9), for the details read <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">here</a>! The debugging messages enabling and disabling allows you to include the debug messages permanently into the procedures with the proper category of the place. All other, not debug, messages will show anytime, for levels more or equal to the globally set (Fig. 8).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:789px;"><a class="image" href="http://oscada.org/wiki/File:HowTo_dbg_gen.png"><img class="thumbimage" height="491" src="files/HowTo_dbg_gen.png" width="787" /></a>  <div class="thumbcaption">Fig. 8. Field "Least level" set to "Debug (0)".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:807px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_debug.png"><img class="thumbimage" height="698" src="files/QTCfg_sys_debug.png" width="805" /></a>  <div class="thumbcaption">Fig. 9. Select categories of nodes for debugging and debugging messages.</div></div></div></div>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The internal or system parts of the controller object of the data source are enabled independently for diagnostics by setting the "Level" property to "Debug (0)" on the appropriate diagnostic interface (Fig. 5).
+</p>
+
+
+
+
+
+</div></body>
+</html>

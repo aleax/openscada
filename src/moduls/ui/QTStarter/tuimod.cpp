@@ -59,7 +59,7 @@
 #else
 #define SUB_TYPE	""
 #endif
-#define MOD_VER		"4.3.0"
+#define MOD_VER		"4.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -95,7 +95,7 @@ using namespace QTStarter;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
+TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
     mStartMod(dataRes()), mStyle(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), QtApp(NULL), splash(NULL)
 {
     mod = this;
@@ -210,7 +210,7 @@ void TUIMod::postEnable( int flag )
 
 void TUIMod::preDisable( int flag )
 {
-    if(SYS->stopSignal() == SIGUSR2) throw err_sys(_("Hold at reloading in different project."));
+    if(SYS->stopSignal() == SIGUSR2) throw err_sys(_("Hold when overloaded to another project."));
 }
 
 void TUIMod::postDisable( int flag )
@@ -229,7 +229,7 @@ void TUIMod::postDisable( int flag )
 
 void TUIMod::load_( )
 {
-    mess_debug(nodePath().c_str(),_("Load module."));
+    mess_debug(nodePath().c_str(),_("Loading the module."));
 
     //Load parameters from command line
     if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help")))
@@ -245,7 +245,7 @@ void TUIMod::load_( )
 
 void TUIMod::save_( )
 {
-    mess_debug(nodePath().c_str(),_("Save module."));
+    mess_debug(nodePath().c_str(),_("Saving the module."));
 
     TBDS::genDBSet(nodePath()+"StartMod", startMod());
     TBDS::genDBSet(nodePath()+"CloseToTray", i2s(closeToTray()));
@@ -258,7 +258,7 @@ void TUIMod::modStart( )
 {
 #ifdef EN_QtMainThrd
     if(runSt || hideMode)	return;
-    mess_debug(nodePath().c_str(), _("Starting the module..."));
+    mess_debug(nodePath().c_str(), _("Starting the module."));
 
     runSt = true;
 
@@ -269,17 +269,16 @@ void TUIMod::modStart( )
 
     runSt = false;
 #else
-    mess_debug(nodePath().c_str(), _("Starting the module..."));
+    mess_debug(nodePath().c_str(), _("Starting the module."));
 
     mStartCom = true;
 #endif
-
 }
 
 void TUIMod::modStop( )
 {
 #ifndef EN_QtMainThrd
-    mess_debug(nodePath().c_str(), _("Stopping the module..."));
+    mess_debug(nodePath().c_str(), _("Stopping the module."));
 
     mStartCom = false;
 #endif
@@ -315,7 +314,7 @@ string TUIMod::optDescr( )
 
     snprintf(buf, sizeof(buf), _(
 	"======================= Module <%s:%s> options =======================\n"
-	"    --showWin=<0,1,2>   Windows show mode, initial and allowed to change from: 0-typical window, 1-maximized window, 2-fullscreen.\n"
+	"    --showWin=<0,1,2>   Window display mode, initial and which is allowed to change from: 0-typical window, 1-maximized window, 2-full screen.\n"
 	"----------- Qt debug commandline options ----------\n"
 	"    --noX11             Prevent the launch of Qt, preferably for a clean console.\n"
 	"    --sync              Switch to Sync X11 for debugging.\n"
@@ -477,6 +476,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 			}
 			setPalette(tRez);
 		    }
+		    mQtLookMdf = false;
 		}
 	    }
 	    else {
@@ -611,24 +611,13 @@ void StApp::timerEvent( QTimerEvent *event )
     if(!initExec) {
 	initExec = true;	//!!: Set to the begin but here can be a multiple entry from processEvents() manual call, observed on QTCfg.
 
-	QStyle *appStl = QStyleFactory::create(mod->style().c_str());
-	if(appStl)	QApplication::setStyle(appStl);
 	origStl = style()->objectName().toStdString();
-	if(mod->palette().size()) {
-	    QPalette plt = palette();
-	    string cGrp, cRl, tVl;
-	    for(int off = 0, iGrp = 0; ((cGrp=TSYS::strLine(mod->palette(),0,&off)).size() || off < mod->palette().size()) && iGrp < 4; iGrp++)
-		for(int off1 = 0, iRl = 0; ((cRl=TSYS::strParse(cGrp,0,",",&off1)).size() || off1 < cGrp.size()) && iRl < 20; iRl++) {
-		    if(!(tVl=sTrm(cRl)).size())	continue;
-		    plt.setColor((QPalette::ColorGroup)iGrp, (QPalette::ColorRole)iRl, tVl.c_str());
-		}
-	    setPalette(plt);
-	}
-
-	if(mod->styleSheets().size()) setStyleSheet(mod->styleSheets().c_str());
+	updLookFeel();
 
 	//!!!! Disable the native menu bar, mostly for Unity, Maemo (possible) where a problem in build QTStarter menu is
 	//QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
+
+	//setAutoSipEnabled(true);
 
 	vector<string> list;
 	mod->owner().modList(list);
@@ -668,6 +657,8 @@ void StApp::timerEvent( QTimerEvent *event )
 	return;
     }
 
+    if(mod->mQtLookMdf)	updLookFeel();
+
 #ifdef HAVE_QTSENSORS
     if(sensCnt.type() != TVariant::Object) sensCnt = new TArrayObj();
     for(int iS = 0; iS < sensors.size(); iS++) {
@@ -706,7 +697,6 @@ void StApp::timerEvent( QTimerEvent *event )
 	}
     }
 #endif
-
 
 #ifdef EN_QtMainThrd
     if(!SYS->stopSignal()) return;
@@ -751,6 +741,26 @@ void StApp::callQtModule( )
 	try{ callQtModule(obj->objectName().toStdString()); }
 	catch(TError &err) {  }
     }
+}
+
+bool StApp::updLookFeel( )
+{
+    QStyle *appStl = QStyleFactory::create(mod->style().c_str());
+    if(appStl)	QApplication::setStyle(appStl);
+    if(mod->palette().size()) {
+	QPalette plt = palette();
+	string cGrp, cRl, tVl;
+	for(int off = 0, iGrp = 0; ((cGrp=TSYS::strLine(mod->palette(),0,&off)).size() || off < mod->palette().size()) && iGrp < 4; iGrp++)
+	    for(int off1 = 0, iRl = 0; ((cRl=TSYS::strParse(cGrp,0,",",&off1)).size() || off1 < cGrp.size()) && iRl < 20; iRl++) {
+		if(!(tVl=sTrm(cRl)).size())	continue;
+		plt.setColor((QPalette::ColorGroup)iGrp, (QPalette::ColorRole)iRl, tVl.c_str());
+	    }
+	setPalette(plt);
+    }
+
+    if(mod->styleSheets().size() || mod->mQtLookMdf) setStyleSheet(mod->styleSheets().c_str());
+
+    mod->mQtLookMdf = false;
 }
 
 void StApp::makeStarterMenu( QWidget *mn )
@@ -854,29 +864,29 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
     // About "System info"
     if(!ico_t.load(TUIS::icoGet("help",NULL,true).c_str())) ico_t.load(":/images/help.png");
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
-    actAbout->setToolTip(_("Program and OpenSCADA information"));
-    actAbout->setWhatsThis(_("The button for display program and OpenSCADA information."));
-    //actAbout->setStatusTip(_("Press to display program and OpenSCADA information."));
+    actAbout->setToolTip(_("Program information"));
+    actAbout->setWhatsThis(_("The button for display the program information."));
+    //actAbout->setStatusTip(_("Press to display the program information."));
     connect(actAbout, SIGNAL(triggered()), this, SLOT(about()));
     // About Qt
     QAction *actQtAbout = new QAction(_("About &Qt"),this);
     actQtAbout->setToolTip(_("Qt information"));
-    actQtAbout->setWhatsThis(_("The button for getting the using Qt information."));
-    //actQtAbout->setStatusTip(_("Press to get the using Qt information."));
+    actQtAbout->setWhatsThis(_("The button for getting the Qt information."));
+    //actQtAbout->setStatusTip(_("Press to get the Qt information."));
     connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
     // QTStarter manual
     if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
     QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(mod->modId().c_str()),this);
     actManual->setProperty("doc", "Modules/QTStarter|Modules/QTStarter");
     actManual->setShortcut(Qt::Key_F1);
-    actManual->setWhatsThis(QString(_("The button for getting the using %1 manual.")).arg(mod->modId().c_str()));
-    //actManual->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(mod->modId().c_str()));
+    actManual->setWhatsThis(QString(_("The button for the manual %1.")).arg(mod->modId().c_str()));
+    //actManual->setStatusTip(QString(_("Press for the manual %1.")).arg(mod->modId().c_str()));
     connect(actManual, SIGNAL(triggered()), this, SLOT(enterManual()));
     // OpenSCADA manual index
     QAction *actManualSYS = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(PACKAGE_STRING),this);
     actManualSYS->setProperty("doc", "index|Documents");
-    actManualSYS->setWhatsThis(QString(_("The button for getting the using %1 manual.")).arg(PACKAGE_STRING));
-    //actManualSYS->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(PACKAGE_STRING));
+    actManualSYS->setWhatsThis(QString(_("The button for the manual %1.")).arg(PACKAGE_STRING));
+    //actManualSYS->setStatusTip(QString(_("Press for the manual %1.")).arg(PACKAGE_STRING));
     connect(actManualSYS, SIGNAL(triggered()), this, SLOT(enterManual()));
     // What is
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
@@ -960,6 +970,7 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
 	//Append the horizontal line and the title of projects of OpenSCADA
 	if(!SYS->prjCustMode()) {
 	    QFrame *gFrame = new QFrame(this);
+	    gFrame->setLineWidth(4);
 	    gFrame->setFrameShape(QFrame::HLine);
 	    gFrame->setFrameShadow(QFrame::Sunken);
 	    wnd_lay->addWidget(gFrame, 0, 0);
@@ -978,52 +989,43 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
 
 	// Prepare the list widget for projects selection.
 	prjsLs = new QListWidget(this);
+	prjsLs->setSortingEnabled(true);
 	prjsLs->setToolTip(_("List of allowed to call/switch projects of OpenSCADA"));
 	prjsLs->setWhatsThis(_("The list for call and switch to allowed projects of OpenSCADA."));
-	prjsLs->addItem(_("<Creation-updating>"));
-	prjsLs->item(prjsLs->count()-1)->setToolTip(_("New projects creation or updating of presented ones, like to desktop links"));
 	string userDir = SYS->prjUserDir();
-	if(!oscd_datadir_wr) {
-	    prjsLs->addItem(_("=== User projects ==="));
-	    prjsLs->item(prjsLs->count()-1)->setFlags(Qt::NoItemFlags);
-
-	    DIR *IdDir = opendir(userDir.c_str());
-	    if(IdDir) {
-		struct stat file_stat;
-		dirent	*scan_rez = NULL,
+	DIR *IdDir = userDir.size() ? opendir(userDir.c_str()) : NULL;
+	if(IdDir) {
+	    struct stat file_stat;
+	    dirent	*scan_rez = NULL,
 			*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
 
-		while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
-		    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
-		    //  Presenting of the project's folder
-		    if(stat((userDir+"/"+scan_rez->d_name).c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR)
-			continue;
-		    //  Presenting of the project's config file
-		    string itNm = userDir + "/" + scan_rez->d_name + "/oscada.xml";
-		    if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) continue;
-		    //  Item placing
-		    string opt;
-		    if(scan_rez->d_name == SYS->prjNm()) opt += string(opt.size()?", ":"") + _("current");
-		    if(access((userDir+"/"+scan_rez->d_name+"/lock").c_str(),F_OK) == 0)
-			opt += string(opt.size()?", ":"") + _("running");
-		    prjsLs->addItem((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str());
-		    QListWidgetItem *tit = prjsLs->item(prjsLs->count()-1);
-		    tit->setData(Qt::UserRole, scan_rez->d_name);
-		    QImage ico;
-		    if(ico.load((string(oscd_datadir_full "/icons/")+scan_rez->d_name+".png").c_str()) ||
-			    ico.load((userDir+"/"+scan_rez->d_name+"/icons/"+scan_rez->d_name+".png").c_str()))
-			tit->setIcon(QPixmap::fromImage(ico));
-		}
-
-		free(scan_dirent);
-		closedir(IdDir);
+	    while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
+		if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
+		//  Presenting of the project's folder
+		if(stat((userDir+"/"+scan_rez->d_name).c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR)
+		    continue;
+		//  Presenting of the project's config file
+		string itNm = userDir + "/" + scan_rez->d_name + "/oscada.xml";
+		if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) continue;
+		//  Item placing
+		string opt;
+		if(scan_rez->d_name == SYS->prjNm()) opt += string(opt.size()?", ":"") + _("current");
+		if(access((userDir+"/"+scan_rez->d_name+"/lock").c_str(),F_OK) == 0)
+		    opt += string(opt.size()?", ":"") + _("running");
+		QListWidgetItem *tit = new QListWidgetItem((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str(), prjsLs);
+		prjsLs->addItem(tit);
+		tit->setData(Qt::UserRole, scan_rez->d_name);
+		QImage ico;
+		if(ico.load((string(oscd_datadir_full "/icons/")+scan_rez->d_name+".png").c_str()) ||
+			ico.load((userDir+"/"+scan_rez->d_name+"/icons/"+scan_rez->d_name+".png").c_str()))
+		    tit->setIcon(QPixmap::fromImage(ico));
 	    }
 
-	    prjsLs->addItem(_("=== Common projects ==="));
-	    prjsLs->item(prjsLs->count()-1)->setFlags(Qt::NoItemFlags);
+	    free(scan_dirent);
+	    closedir(IdDir);
 	}
 
-	DIR *IdDir = opendir(oscd_datadir_full);
+	IdDir = opendir(oscd_datadir_full);
 	if(IdDir) {
 	    struct stat file_stat;
 	    dirent	*scan_rez = NULL,
@@ -1040,13 +1042,19 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
 		    itNm = string(oscd_datadir_full) + "/" + scan_rez->d_name + "/oscada.xml";
 		    if(stat(itNm.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) continue;
 		}
+		//  Check for presenting already
+		QList<QListWidgetItem *> pLs = prjsLs->findItems(scan_rez->d_name, Qt::MatchStartsWith);
+		int iP = 0;
+		for( ; iP < pLs.size() && pLs[iP]->data(Qt::UserRole).toString() != scan_rez->d_name; iP++) ;
+		if(pLs.size() && iP < pLs.size()) continue;
+
 		//  Item placing
 		string opt;
 		if(scan_rez->d_name == SYS->prjNm())	opt += string(opt.size()?", ":"") + _("current");
 		if(access((string(oscd_datadir_full "/")+scan_rez->d_name+"/lock").c_str(),F_OK) == 0)
 		    opt += string(opt.size()?", ":"") + _("running");
-		prjsLs->addItem((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str());
-		QListWidgetItem *tit = prjsLs->item(prjsLs->count()-1);
+		QListWidgetItem *tit = new QListWidgetItem((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str(), prjsLs);
+		prjsLs->addItem(tit);
 		tit->setData(Qt::UserRole, scan_rez->d_name);
 		QImage ico;
 		if(ico.load((string(oscd_datadir_full "/icons/")+scan_rez->d_name+".png").c_str()) ||
@@ -1078,11 +1086,23 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
 	prjsBt->setWhatsThis(SYS->prjNm().size()?_("The button for switch to the selected project."):_("The button for call the selected project."));
 	QObject::connect(prjsBt, SIGNAL(clicked(bool)), this, SLOT(projSwitch()));
 	wnd_lay->addWidget(prjsBt, 0, 0);
+
+	QFrame *gFrame = new QFrame(this);
+	gFrame->setFrameShape(QFrame::HLine);
+	gFrame->setFrameShadow(QFrame::Plain);
+	wnd_lay->addWidget(gFrame, 0, 0);
+
+	QPushButton *prjAddUpdt = new QPushButton(/*QIcon(":/images/ok.png"),*/ _("Create-update a project"), this);
+	prjAddUpdt->setToolTip(_("New projects creating or updating of presented ones, like to desktop links"));
+	prjAddUpdt->setWhatsThis(_("The button for new projects creating or updating of presented ones, like to desktop links."));
+	QObject::connect(prjAddUpdt, SIGNAL(clicked(bool)), this, SLOT(projCreateUpdt()));
+	wnd_lay->addWidget(prjAddUpdt, 0, 0);
     }
 
-    wnd_lay->addItem(new QSpacerItem(20,10,QSizePolicy::Minimum,QSizePolicy::Expanding));
+    wnd_lay->addItem(new QSpacerItem(20,20,QSizePolicy::Minimum,QSizePolicy::Expanding));
 
     QFrame *gFrame = new QFrame(this);
+    gFrame->setLineWidth(4);
     gFrame->setFrameShape(QFrame::HLine);
     gFrame->setFrameShadow(QFrame::Sunken);
     wnd_lay->addWidget(gFrame, 0, 0);
@@ -1099,7 +1119,7 @@ void StartDialog::showEvent( QShowEvent* )
 {
     //Hide the projects apply button for too busy lists
     if(prjsLs && prjsBt)
-	prjsBt->setVisible(!prjsLs->verticalScrollBar() || !prjsLs->verticalScrollBar()->isVisible() || prjsLs->height() > 9*QFontMetrics(prjsLs->font()).height());
+	prjsBt->setVisible(!prjsLs->verticalScrollBar() || !prjsLs->verticalScrollBar()->isVisible() || prjsLs->height() > 3*QFontMetrics(prjsLs->font()).height());
 }
 
 void StartDialog::closeEvent( QCloseEvent *ce )
@@ -1137,7 +1157,21 @@ void StartDialog::enterManual( )
     string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString());
     if(findDoc.size())	system(findDoc.c_str());
     else QMessageBox::information(this, _("Manual"),
-	QString(_("No the manual '%1' found offline or online!")).arg(sender()->property("doc").toString()));
+	QString(_("No manual '%1' found offline or online!")).arg(sender()->property("doc").toString()));
+}
+
+void StartDialog::projCreateUpdt( )
+{
+    bool ok = false;
+    QString prjNm = QInputDialog::getText(this, _("New project or project to update"),
+	    _("Project name for new one creating or to update present one:"), QLineEdit::Normal, "NewProject", &ok);
+    if(!ok)	return;
+    if(!prjNm.length()) {
+	QMessageBox::warning(this, _("New project or project to update"), _("Empty name of the project is unavailable!"));
+	return;
+    }
+
+    projSwitch(prjNm);
 }
 
 void StartDialog::projSelect( )
@@ -1148,27 +1182,18 @@ void StartDialog::projSelect( )
     prjsBt->setEnabled(selPrj.length() && (prjsLs->row(selPrj[0]) == 0 || selPrj[0]->data(Qt::UserRole).toString().toStdString() != SYS->prjNm()));
 }
 
-void StartDialog::projSwitch( )
+void StartDialog::projSwitch( const QString& iprj )
 {
-    if(!prjsLs || !prjsBt)	return;
+    if((!prjsLs || !prjsBt) && !iprj.length())	return;
 
-    QList<QListWidgetItem *> selPrj = prjsLs->selectedItems();
-    if(!selPrj.length())	return;
+    QString prjNm = iprj;
+    bool toCreate = true;
 
-    QString prjNm = selPrj[0]->data(Qt::UserRole).toString();
-    bool toCreate = false;
-
-    //Enter project name for new one creation or present one updating
-    if(prjsLs->row(selPrj[0]) == 0) {
-	bool ok = false;
-	prjNm = QInputDialog::getText(this, _("New project or project to update"),
-		_("Project name for new one creation or to update present one:"), QLineEdit::Normal, "NewProject", &ok);
-	if(!ok)	return;
-	if(!prjNm.length()) {
-	    QMessageBox::warning(this, _("New project or project to update"), _("Empty name of the project is unavailable!"));
-	    return;
-	}
-	toCreate = true;
+    if(!prjNm.length()) {
+	QList<QListWidgetItem *> selPrj = prjsLs->selectedItems();
+	if(!selPrj.length())	return;
+	prjNm = selPrj[0]->data(Qt::UserRole).toString();
+	toCreate = false;
     }
 
     //Switch to presented project and create new one before
@@ -1206,7 +1231,7 @@ QString I18NTranslator::translate( const char *context, const char *sourceText, 
     QString trRes = _(sourceText);
 
     if(mess_lev() == TMess::Debug && trRes == sourceText)
-	mess_debug(mod->nodePath().c_str(),_("No translated Qt message: '%s'"),sourceText);
+	mess_debug(mod->nodePath().c_str(),_("Untranslated Qt message: '%s'"),sourceText);
 
     return trRes;
 }

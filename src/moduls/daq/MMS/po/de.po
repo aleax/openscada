@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.MMS translate to German.
 # This file is distributed under the same license as the OpenSCADA.DAQ.MMS package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2013-2014, 2017.
+# Roman Savochenko <rom_as@oscada.org>, 2013-2014, 2017-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:04+0200\n"
+"POT-Creation-Date: 2018-03-04 10:44+0200\n"
 "PO-Revision-Date: 2013-10-20 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -62,16 +62,14 @@ msgstr "Keine Aktivitätsdaten."
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Anschaltungsfehler. Wiederherstellung in %.6g s."
 
-msgid "Call now. "
-msgstr "Rufen Sie jetzt an. "
+msgid "Acquisition. "
+msgstr "Erwerb. "
 
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Aufruf mit einer Periode: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Erwerb mit dem Zeitraum: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Call nächsten durch cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Erwerb nächsten durch cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. Requests %.6g."
@@ -150,11 +148,11 @@ msgstr ""
 msgid "Variable append"
 msgstr "Variable anhängen"
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Parameter ist abgeschaltet."
 
-msgid "2:Acquisition is stopped."
-msgstr "2:Anfrage ist angehalten."
+msgid "2:Acquisition stopped."
+msgstr "2:Erwerb ist angehalten."
 
 #, c-format
 msgid "Write to '%s' error: %s."

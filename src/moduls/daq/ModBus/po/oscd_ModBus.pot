@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:07+0200\n"
+"POT-Creation-Date: 2018-03-04 10:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,15 +90,15 @@ msgstr ""
 msgid "Connection error. Restoring in %.6g s."
 msgstr ""
 
-msgid "Call now. "
+msgid "Acquisition. "
 msgstr ""
 
 #, c-format
-msgid "Call by period: %s. "
+msgid "Acquisition with the period: %s. "
 msgstr ""
 
 #, c-format
-msgid "Call next by cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
 msgstr ""
 
 #, c-format
@@ -140,10 +140,10 @@ msgstr ""
 msgid "Error calculate template."
 msgstr ""
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr ""
 
-msgid "2:Acquisition is stopped."
+msgid "2:Acquisition stopped."
 msgstr ""
 
 msgid ""
@@ -222,7 +222,7 @@ msgstr ""
 msgid "Calculate data period, seconds"
 msgstr ""
 
-msgid "Allow program translation"
+msgid "Translate program"
 msgstr ""
 
 msgid "Program"
@@ -333,7 +333,7 @@ msgstr ""
 msgid "Use zero for the report disabling"
 msgstr ""
 
-msgid "Function calculate frequency (Hz)"
+msgid "Frequency of calculation of the function (Hz)"
 msgstr ""
 
 msgid "Function start flag"

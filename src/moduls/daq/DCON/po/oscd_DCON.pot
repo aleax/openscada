@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:12+0300\n"
+"POT-Creation-Date: 2018-03-04 09:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,9 +27,6 @@ msgid "Provides an implementation of DCON-client protocol. Supports I-7000 DCON 
 msgstr ""
 
 msgid "Parameters table"
-msgstr ""
-
-msgid "Gather data period (s)"
 msgstr ""
 
 msgid "Acquisition schedule"
@@ -95,15 +92,15 @@ msgstr ""
 msgid "No CI;2CI (#AA);3CI (#AA)"
 msgstr ""
 
-msgid "Call now. "
+msgid "Acquisition. "
 msgstr ""
 
 #, c-format
-msgid "Call by period: %s. "
+msgid "Acquisition with the period: %s. "
 msgstr ""
 
 #, c-format
-msgid "Call next by cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
 msgstr ""
 
 #, c-format
@@ -146,8 +143,8 @@ msgstr ""
 msgid "25:Command ignored (host watchdog)."
 msgstr ""
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr ""
 
-msgid "2:Acquisition is stopped."
+msgid "2:Acquisition stopped."
 msgstr ""

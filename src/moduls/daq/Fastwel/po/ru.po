@@ -2,12 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.Fastwel package module.
 #
 # Maxim Kochetkov <fido_max@inbox.ru> 2015.
+# Roman Savochenko <rom_as@oscada.org>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Fastwel 0.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 10:28+0300\n"
+"POT-Creation-Date: 2018-03-04 09:53+0200\n"
 "PO-Revision-Date: 2015-11-12 10:28+0300\n"
 "Last-Translator: Maxim Kochetkov <fido_max@inbox.ru>\n"
 "Language-Team: \n"
@@ -174,16 +175,14 @@ msgstr "НЕТ;1.4мс;2.8мс;4.2мс;9.8мс;20мс;50мс;100мс;200мс;300
 msgid "Debounce off %d"
 msgstr "Фильтр дребезга выкл %d"
 
-msgid "Call now. "
-msgstr "Вызов сейчас. "
+msgid "Acquisition. "
+msgstr "Сбор. "
 
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Вызовы с периодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Сбор с периодом: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Следующий вызов по cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Следующий cбор по cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s."
@@ -193,11 +192,11 @@ msgstr "Spent time: %s."
 msgid "Break %d"
 msgstr "Обрыв %d"
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр отключен."
 
-msgid "2:Acquisition is stopped."
-msgstr "2:Опрос остановлен."
+msgid "2:Acquisition stopped."
+msgstr "2:Сбор остановлен."
 
 msgid "0: Normal"
 msgstr "0: Норма"

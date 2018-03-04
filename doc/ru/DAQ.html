@@ -5,7 +5,7 @@
 <title>Документы/Сбор данных - OpenSCADAWiki</title>
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
-<link href="files/doc.css" rel="stylesheet" /></head>
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
 <body><div id="mw_header">
 			<div class="mw-indicators">
 </div>
@@ -14,7 +14,7 @@
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../en/files/Constr.png" width="32" /></a>
 </td>
 <td style="padding-left:5px;"> The translation checking and actualizing
 </td></tr></table>
@@ -64,7 +64,7 @@
 <h3><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B9_.D1.81.D0.B8.D0.BD.D1.85.D1.80.D0.BE.D0.BD.D0.BD.D1.8B.D0.B9_.D0.BC.D0.B5.D1.85.D0.B0.D0.BD.D0.B8.D0.B7.D0.BC_.D1.81.D0.B1.D0.BE.D1.80.D0.B0"><span class="mw-headline-number">1.1</span> Простой синхронный механизм сбора</span></h3>
 <p>Механизм характеризуется запросами к источнику данных синхронно с запросом к атрибуту параметра (рис.2). Данный механизм обычно применяется при работе с локальными источниками данных, характеризующимися низкой латентностью, т.е. задержкой в ответе на запрос. С помощью этого метода можно получить актуальные данные непосредственно с запросом, однако время запроса объекта будет включать время транспортировки и обработки запроса источником данных.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:686px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_simpleSync.png"><img class="thumbimage" height="179" src="files/DAQ_simpleSync.png" width="684" /></a>  <div class="thumbcaption">Рис. 2. Диаграмма последовательности взаимодействия при синхронных запросах.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:686px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_simpleSync.png"><img class="thumbimage" height="179" src="../en/files/DAQ_simpleSync.png" width="684" /></a>  <div class="thumbcaption">Рис. 2. Диаграмма последовательности взаимодействия при синхронных запросах.</div></div></div></div>
 <p>В соответствии с диаграммой выше мы получаем следующую последовательность запросов получения данных и их передачи:
 </p>
 <ul><li> объект SCADA-системы шлёт запрос значения к объекту атрибута параметра <b>DAQParamAttribute::getVal()</b>;</li>
@@ -86,7 +86,7 @@
 </p><p>Недостатком асинхронного механизма является то, что запрос значения атрибута параметра возвращает неактуальное на момент запроса значение, а значение последнего сеанса опроса контроллера. Впрочем, если учесть, что источник данных может обновляться с периодичностью аппаратных ограничений АЦП, да и сами датчики могут иметь определённые ограничения в скорости реакции, то применение асинхронного механизма сбора может иметь серьёзные основания.
 </p><p>Применение асинхронного механизма для записи значений в ПЛК является достаточно редким явлением, поскольку запись значений обычно подразумевает воздействие оператора на ТП. Оператор, по факту, достаточно редко вносит коррективы в процесс, следовательно запись можно выполнять синхронно. Однако существуют ситуации, например, управление ТП регуляторами на SCADA-системе, выполняющей функции среды исполнения ПЛК.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:710px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_simpleAsync.png"><img class="thumbimage" height="279" src="files/DAQ_simpleAsync.png" width="708" /></a>  <div class="thumbcaption">Рис. 3. Диаграмма последовательности взаимодействия при асинхронных запросах.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:710px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_simpleAsync.png"><img class="thumbimage" height="279" src="../en/files/DAQ_simpleAsync.png" width="708" /></a>  <div class="thumbcaption">Рис. 3. Диаграмма последовательности взаимодействия при асинхронных запросах.</div></div></div></div>
 <p>В соответствии с диаграммой выше мы получаем следующую картину:
 </p>
 <ul><li> объект атрибута параметра (или вышестоящий объект контроллера) выполняет периодические запросы <b>HardwarePLC::valueRequest()</b> для получения значения сигнала или группы сигналов;</li>
@@ -104,7 +104,7 @@
 </p><p>В случае работы с синхронным механизмом выполняется фактический проброс архива источника данных для оперативной работы в системе (рис. 2). Как и простой синхронный механизм, его желательно применять только на низколатентных источниках данных или с источниками, работа которых является сеансовой, например, в сфере коммерческого учёта для чтения значений счётчиков.
 </p><p>При работе совместно с асинхронным механизмом история полученных сигналов обычно прямо помещается в архивы (рис. 4), а текущее значение атрибута параметра устанавливается в последнее значение пакета. Данная комбинация эффективна при сборе быстрых данных или при синхронизации архивов после потери связи с удалённым источником данных.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:555px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_packAsync.png"><img class="thumbimage" height="267" src="files/DAQ_packAsync.png" width="553" /></a>  <div class="thumbcaption">Рис. 4. Диаграмма последовательности взаимодействия при асинхронных запросах пакетного механизма.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:555px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_packAsync.png"><img class="thumbimage" height="267" src="../en/files/DAQ_packAsync.png" width="553" /></a>  <div class="thumbcaption">Рис. 4. Диаграмма последовательности взаимодействия при асинхронных запросах пакетного механизма.</div></div></div></div>
 <p>В соответствии с диаграммой выше мы получаем следующее поведение пакетного механизма при асинхронных запросах:
 </p>
 <ul><li> объект атрибута параметра или вышестоящий объект контроллера выполняет периодические запросы <b>HardwarePLC::valuesRequest()</b> для получения пакетов значений сигнала или группы сигналов;</li>
@@ -119,7 +119,7 @@
 <p>Пассивный механизм сбора данных характерен инициативой предоставления данных в SCADA-систему со стороны источника данных. Этот механизм является достаточно редким явлением, однако может иметь место в случае определённых условий или ограничений в возможности использования прямых механизмов сбора данных, рис. 5. Примером такой ситуации могут служить географически рассредоточенные системы сбора данных посредством мобильных сетей GPRS/EDGE. В таких сетях наделение клиентских узлов отдельными/реальными IP-адресами или формирование корпоративной мобильной сети может оказаться дорогим удовольствием, поэтому доступнее оказывается инициатива сеанса передачи данных с клиентских динамических IP-адресов на один реальный IP-адрес сервера SCADA-системы. Хотя возможна работа и через сетевую СУБД-посредника. Воздействия на модификацию передаются источнику данных в момент сеанса передачи данных источником.
 </p><p>Промежуточным вариантом является инициатива установки TCP-подключения от источника данных и типовые запросы далее от сервера по этому подключению, что входной транспорт OpenSCADA <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a> на данный момент поддерживает.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:729px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_passive.png"><img class="thumbimage" height="190" src="files/DAQ_passive.png" width="727" /></a>  <div class="thumbcaption">Рис. 5. Диаграмма последовательности взаимодействия при пассивном механизме работы.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:729px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_passive.png"><img class="thumbimage" height="190" src="../en/files/DAQ_passive.png" width="727" /></a>  <div class="thumbcaption">Рис. 5. Диаграмма последовательности взаимодействия при пассивном механизме работы.</div></div></div></div>
 <p>В соответствии с диаграммой выше мы получаем следующее поведение пассивного механизма:
 </p>
 <ul><li> объект источника данных осуществляет периодические сеансы связи с объектом атрибута параметра <b>DAQParamAttributeArch::setVal()</b> для передачи своих данных и получения команд воздействия;</li>

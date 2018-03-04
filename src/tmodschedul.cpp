@@ -170,14 +170,6 @@ bool TModSchedul::fileCheck( const string &iname )
     if(access(iname.c_str(),F_OK|R_OK) != 0)  return false;
     modNm = iname;
 
-    /*void *h_lib = dlopen(iname.c_str(),RTLD_LAZY|RTLD_LOCAL);
-    if( h_lib == NULL )
-    {
-	//mess_sys(TMess::Warning, _("Module '%s' error: %s !"), iname.c_str(), dlerror());
-	return false;
-    }
-    else dlclose(h_lib);*/
-
     MtxAlloc res(schM, true);
     for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
 	if(schHD[iSh].name == iname) {
@@ -214,7 +206,7 @@ void TModSchedul::libUnreg( const string &iname )
 	    schHD.erase(schHD.begin()+iSh);
 	    return;
 	}
-    throw err_sys(_("SO '%s' is not present!"), iname.c_str());
+    throw err_sys(_("SO '%s' is missing!"), iname.c_str());
 }
 
 void TModSchedul::libAtt( const string &iname, bool full )
@@ -223,7 +215,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
     MtxAlloc res(schM, true);
     for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
 	if(schHD[iSh].name == iname) {
-	    if(schHD[iSh].hd) throw err_sys(_("SO '%s' is already attached!"), iname.c_str());
+	    if(schHD[iSh].hd) throw err_sys(_("SO '%s' is already connected!"), iname.c_str());
 
 	    if(iname[0] != '*')	dlNm = iname.c_str();
 #ifdef CoreLibNmToDlOpen
@@ -234,7 +226,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    void *h_lib = dlopen(dlNm, RTLD_LAZY|RTLD_LOCAL);
 	    if(!h_lib) {
 		schHD[iSh].err = dlerror();
-		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[iSh].err.c_str());
+		throw err_sys(_("Error SO '%s': %s"), iname.c_str(), schHD[iSh].err.c_str());
 	    }
 
 	    //Connect to module function
@@ -243,7 +235,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    if((dlErr=dlerror()) != NULL) {
 		schHD[iSh].err = dlErr;
 		dlclose(h_lib);
-		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[iSh].err.c_str());
+		throw err_sys(_("Error SO '%s': %s"), iname.c_str(), schHD[iSh].err.c_str());
 	    }
 
 	    //Connect to attach function
@@ -252,7 +244,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    if((dlErr=dlerror()) != NULL) {
 		schHD[iSh].err = dlErr;
 		dlclose(h_lib);
-		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[iSh].err.c_str());
+		throw err_sys(_("Error SO '%s': %s"), iname.c_str(), schHD[iSh].err.c_str());
 	    }
 
 	    //Get allow modules from library and start it
@@ -265,18 +257,18 @@ void TModSchedul::libAtt( const string &iname, bool full )
 		    if(owner().at(list[i_sub]).at().subModule() && AtMod.type == owner().at(list[i_sub]).at().subId()) {
 			// Check type module version
 			if(AtMod.tVer != owner().at(list[i_sub]).at().subVer()) {
-			    mess_sys(TMess::Warning, _("%s for type '%s' doesn't support module version: %d!"),
+			    mess_sys(TMess::Warning, _("%s for type '%s' does not support the version %d of the module!"),
 				AtMod.id.c_str(), AtMod.type.c_str(), AtMod.tVer);
 			    break;
 			}
 			// Check module present
 			if(owner().at(list[i_sub]).at().modPresent(AtMod.id))
-			    mess_sys(TMess::Warning, _("Module '%s' is already present!"), AtMod.id.c_str());
+			    mess_sys(TMess::Warning, _("Module '%s' already exists!"), AtMod.id.c_str());
 			else {
 			    // Attach new module
 			    TModule *LdMod = (attach)(AtMod, iname);
 			    if(LdMod == NULL) {
-				mess_sys(TMess::Warning, _("Attach module '%s' error!"), AtMod.id.c_str());
+				mess_sys(TMess::Warning, _("Error connecting module '%s'!"), AtMod.id.c_str());
 				break;
 			    }
 			    // Add atached module
@@ -297,7 +289,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    else schHD[iSh].hd = h_lib;
 	    return;
 	}
-    throw err_sys(_("SO '%s' is not present!"), iname.c_str());
+    throw err_sys(_("SO '%s' is missing!"), iname.c_str());
 }
 
 void TModSchedul::libDet( const string &iname )
@@ -329,7 +321,7 @@ void TModSchedul::libDet( const string &iname )
 	    schHD[iSh].hd = NULL;
 	    return;
 	}
-    throw err_sys(_("SO '%s' is not present!"), iname.c_str());
+    throw err_sys(_("SO '%s' is missing!"), iname.c_str());
 }
 
 bool TModSchedul::chkAllowMod( const string &name )
@@ -367,7 +359,7 @@ TModSchedul::SHD TModSchedul::lib( const string &iname )
     for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
 	if(schHD[iSh].name == iname)
 	    return schHD[iSh];
-    throw err_sys(_("SO '%s' is not present!"), iname.c_str());
+    throw err_sys(_("SO '%s' is missing!"), iname.c_str());
 }
 
 int TModSchedul::libLoad( const string &iname, bool full )
@@ -406,7 +398,7 @@ int TModSchedul::libLoad( const string &iname, bool full )
 		if(st_auto) libDet(files[iF]);
 	    } catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Warning, _("Can't detach library '%s'."), files[iF].c_str());
+		mess_sys(TMess::Warning, _("Can not detach the library '%s'."), files[iF].c_str());
 		continue;
 	    }
 	}

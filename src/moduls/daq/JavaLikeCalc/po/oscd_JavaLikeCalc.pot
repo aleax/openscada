@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:01+0200\n"
+"POT-Creation-Date: 2018-03-04 10:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,288 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #, c-format
-msgid "Variable '%s' is used but undefined"
-msgstr ""
-
-msgid "Array have more 255 items."
-msgstr ""
-
-msgid "RegExp require one or two parameters."
-msgstr ""
-
-#, c-format
-msgid "Don't support operation code %d."
-msgstr ""
-
-#, c-format
-msgid "External functions number exceeded limits to %d on function '%s'"
-msgstr ""
-
-#, c-format
-msgid "More than %d(%d) parameters are specified for function '%s'"
-msgstr ""
-
-#, c-format
-msgid "Function is requested '%s', but it doesn't have return of IO"
-msgstr ""
-
-msgid "Function's name longer to 254."
-msgstr ""
-
-msgid "Object's function have more 255 parameters."
-msgstr ""
-
-msgid "Get object from no object's register"
-msgstr ""
-
-msgid "Function execution terminated by error"
-msgstr ""
-
-#, c-format
-msgid "Timeouted function calculation %d > %d+%d"
-msgstr ""
-
-#, c-format
-msgid "Not supported type %d for operation 'Add'."
-msgstr ""
-
-#, c-format
-msgid "Operation %c(%xh) error. Function '%s' is stopped."
-msgstr ""
-
-msgid "Function: "
-msgstr ""
-
-msgid "Date of modification"
-msgstr ""
-
-msgid "Name"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "To start"
-msgstr ""
-
-msgid "Maximum calculate time, seconds"
-msgstr ""
-
-msgid "Program"
-msgstr ""
-
-msgid "IO"
-msgstr ""
-
-msgid "Identifier"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Real;Integer;Boolean;String;Text;Object"
-msgstr ""
-
-msgid "Mode"
-msgstr ""
-
-msgid "Input;Output;Return"
-msgstr ""
-
-msgid "Hide"
-msgstr ""
-
-msgid "Default"
-msgstr ""
-
-msgid "New IO"
-msgstr ""
-
-msgid "Empty value is not valid."
-msgstr ""
-
-msgid "Function's library: "
-msgstr ""
-
-msgid "Function"
-msgstr ""
-
-msgid "Library"
-msgstr ""
-
-msgid "State"
-msgstr ""
-
-msgid "Accessing"
-msgstr ""
-
-msgid "Library DB"
-msgstr ""
-
-msgid ""
-"DB address in format [<DB module>.<DB name>.<Table name>].\n"
-"For use main work DB set '*.*'."
-msgstr ""
-
-msgid "Configuration"
-msgstr ""
-
-msgid "Functions"
-msgstr ""
-
-msgid "Java-like based calculator"
-msgstr ""
-
-msgid "Roman Savochenko"
-msgstr ""
-
-msgid "Provides based on java like language calculator and engine of libraries.  The user can create and modify functions and libraries."
-msgstr ""
-
-msgid "Parameters table"
-msgstr ""
-
-msgid "Controller's function"
-msgstr ""
-
-msgid "Calculation schedule"
-msgstr ""
-
-msgid "Calculation task priority"
-msgstr ""
-
-msgid "Iteration number in single calculation"
-msgstr ""
-
-msgid "IO ID"
-msgstr ""
-
-msgid "IO value"
-msgstr ""
-
-msgid "Standard"
-msgstr ""
-
-msgid "Data fields"
-msgstr ""
-
-msgid "Data base"
-msgstr ""
-
-msgid "Allow program translation"
-msgstr ""
-
-msgid "Function ID"
-msgstr ""
-
-msgid "Default value"
-msgstr ""
-
-msgid "Position"
-msgstr ""
-
-#, c-format
-msgid "Compilation with the help of the program language %s is not supported."
-msgstr ""
-
-#, c-format
-msgid "Compile error: %s"
-msgstr ""
-
-msgid "Load function's libraries error."
-msgstr ""
-
-msgid "Safe timeout, seconds"
-msgstr ""
-
-msgid "Functions' Libraries"
-msgstr ""
-
-msgid "Libraries"
-msgstr ""
-
-msgid "Call now. "
-msgstr ""
-
-#, c-format
-msgid "Call by period: %s. "
-msgstr ""
-
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr ""
-
-#, c-format
-msgid "Spent time: %s[%s]."
-msgstr ""
-
-#, c-format
-msgid "Functions library '%s' is not present. Please, create functions library!"
-msgstr ""
-
-#, c-format
-msgid "Create new function '%s'."
-msgstr ""
-
-msgid "Load function and its IO error."
-msgstr ""
-
-msgid "Function calculate frequency (Hz)"
-msgstr ""
-
-msgid "Function start flag"
-msgstr ""
-
-msgid "Function stop flag"
-msgstr ""
-
-msgid "This controller object link"
-msgstr ""
-
-msgid "Calculation controller's function error."
-msgstr ""
-
-msgid "No started or no present function."
-msgstr ""
-
-msgid "Calculation"
-msgstr ""
-
-msgid "Data"
-msgstr ""
-
-msgid "Attribute mode"
-msgstr ""
-
-msgid "Read only;Read and Write;Read and Write"
-msgstr ""
-
-msgid "Value"
-msgstr ""
-
-msgid "Deleting lock attribute in not allow."
-msgstr ""
-
-msgid "Changing locked attribute is not allowed."
-msgstr ""
-
-msgid "2:Controller is stopped"
-msgstr ""
-
-msgid "1:Parameter is disabled"
-msgstr ""
-
-msgid ""
-"Attributes configuration list. List must be written by lines in format: [<io>:<aid>:<anm>]\n"
-"Where:\n"
-"  io - calculation function's IO;\n"
-"  aid - created attribute identifier;\n"
-"  anm - created attribute name.\n"
-"If 'aid' or 'anm' are not set they will be generated from selected function's IO."
-msgstr ""
-
-#, c-format
 msgid "Internal function inaccessible by offset %d > %d"
+msgstr ""
+
+#, c-format
+msgid "Variable '%s' is used but undefined"
 msgstr ""
 
 msgid "Error constant after constant"
@@ -338,4 +61,287 @@ msgid "Symbol error, "
 msgstr ""
 
 msgid "Object's properties too long, "
+msgstr ""
+
+msgid "Array has more than 255 elements."
+msgstr ""
+
+msgid "RegExp requires one or two parameters."
+msgstr ""
+
+#, c-format
+msgid "Operation code %d is not supported."
+msgstr ""
+
+#, c-format
+msgid "Number of external functions reached the limit of %d on the function '%s'"
+msgstr ""
+
+#, c-format
+msgid "More than %d(%d) parameters are specified for the function '%s'"
+msgstr ""
+
+#, c-format
+msgid "Function '%s' is called, but it does not have the IO-return"
+msgstr ""
+
+msgid "Function name is longer than 254."
+msgstr ""
+
+msgid "Object function contains more than 255 parameters."
+msgstr ""
+
+msgid "Obtaining an object from a non-object register"
+msgstr ""
+
+msgid "Function is interrupted by an error"
+msgstr ""
+
+#, c-format
+msgid "Calculation time has been exceeded %d > %d+%d"
+msgstr ""
+
+#, c-format
+msgid "Type %d, which is not supported by the 'Add' operation."
+msgstr ""
+
+#, c-format
+msgid "Error operation %c(%xh). Function '%s' stopped."
+msgstr ""
+
+msgid "Function: "
+msgstr ""
+
+msgid "Date of modification"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "To start"
+msgstr ""
+
+msgid "Maximum calculation time, seconds"
+msgstr ""
+
+msgid "Program"
+msgstr ""
+
+msgid "IO"
+msgstr ""
+
+msgid "Identifier"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Real;Integer;Boolean;String;Text;Object"
+msgstr ""
+
+msgid "Mode"
+msgstr ""
+
+msgid "Input;Output;Return"
+msgstr ""
+
+msgid "Hidden"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "New IO"
+msgstr ""
+
+msgid "Empty value is not allowed."
+msgstr ""
+
+msgid "Library of the functions: "
+msgstr ""
+
+msgid "Function"
+msgstr ""
+
+msgid "Library"
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "Accessing"
+msgstr ""
+
+msgid "Library DB"
+msgstr ""
+
+msgid ""
+"DB address in the format \"{DB module}.{DB name}.{Table name}\".\n"
+"To use the main working DB, set '*.*'."
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+msgid "Functions"
+msgstr ""
+
+msgid "Calculator on the Java-like language"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Provides a calculator and libraries engine on the Java-like language. The user can create and modify functions and their libraries."
+msgstr ""
+
+msgid "Parameters table"
+msgstr ""
+
+msgid "Controller function"
+msgstr ""
+
+msgid "Calculation schedule"
+msgstr ""
+
+msgid "Priority of the calculation task"
+msgstr ""
+
+msgid "Number of iterations in single calculation"
+msgstr ""
+
+msgid "IO ID"
+msgstr ""
+
+msgid "IO value"
+msgstr ""
+
+msgid "Standard"
+msgstr ""
+
+msgid "Data fields"
+msgstr ""
+
+msgid "Database"
+msgstr ""
+
+msgid "Maximum calculate time, seconds"
+msgstr ""
+
+msgid "Translate program"
+msgstr ""
+
+msgid "Function ID"
+msgstr ""
+
+msgid "Default value"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+#, c-format
+msgid "Compilation with the help of the program language %s is not supported."
+msgstr ""
+
+#, c-format
+msgid "Compile error: %s"
+msgstr ""
+
+msgid "Load function libraries error."
+msgstr ""
+
+msgid "Safety timeout, seconds"
+msgstr ""
+
+msgid "Functions libraries"
+msgstr ""
+
+msgid "Libraries"
+msgstr ""
+
+msgid "Calculation. "
+msgstr ""
+
+#, c-format
+msgid "Calculation with the period: %s. "
+msgstr ""
+
+#, c-format
+msgid "Next calculation by the cron '%s'. "
+msgstr ""
+
+#, c-format
+msgid "Spent time: %s[%s]."
+msgstr ""
+
+#, c-format
+msgid "Library of the functions '%s' is not present. Please, create the one!"
+msgstr ""
+
+#, c-format
+msgid "Creating a new function '%s'."
+msgstr ""
+
+msgid "Error loading function and its IO."
+msgstr ""
+
+msgid "Frequency of calculation of the function (Hz)"
+msgstr ""
+
+msgid "Function start flag"
+msgstr ""
+
+msgid "Function stop flag"
+msgstr ""
+
+msgid "Link to the object of this controller"
+msgstr ""
+
+msgid "Error calculating controller function."
+msgstr ""
+
+msgid "Function is missing or not started."
+msgstr ""
+
+msgid "Calculation"
+msgstr ""
+
+msgid "Data"
+msgstr ""
+
+msgid "Attribute mode"
+msgstr ""
+
+msgid "Read only;Read and Write;Read and Write"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Deleting a locked attribute is not allowed."
+msgstr ""
+
+msgid "Changing the locked attribute is not allowed."
+msgstr ""
+
+msgid "2:Calculation is stopped"
+msgstr ""
+
+msgid "1:Parameter is disabled"
+msgstr ""
+
+msgid ""
+"List of configuration of the attributes. List must be written by lines in format: \"{io}[:{aid}[:{anm}]]\"\n"
+"Where:\n"
+"  io - IO of the computable function;\n"
+"  aid - identifier of the created attribute;\n"
+"  anm - name of the created attribute.\n"
+"If 'aid' or 'anm' is not set then they will be generated from the selected IO of the function."
 msgstr ""

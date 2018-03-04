@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:10+0200\n"
+"POT-Creation-Date: 2018-03-04 10:59+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -74,16 +74,14 @@ msgstr "Корневая директория (%d)"
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Ошибка подключения. Восстановление через %.6g с."
 
-msgid "Call now. "
-msgstr "Вызов сейчас. "
+msgid "Acquisition. "
+msgstr "Сбор. "
 
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Вызовы с периодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Сбор с периодом: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Следующий вызов по cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Следующий cбор по cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. Requests %.6g."
@@ -258,11 +256,11 @@ msgstr ""
 msgid "Node append"
 msgstr "Добавить узел"
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр отключен."
 
-msgid "2:Acquisition is stopped."
-msgstr "2:Опрос остановлен."
+msgid "2:Acquisition stopped."
+msgstr "2:Сбор остановлен."
 
 #, c-format
 msgid "0x%x: Attribute's errors %s"
@@ -373,117 +371,3 @@ msgstr "Сервер OPC-UA"
 
 msgid "Provides OPC-UA server service implementation."
 msgstr "Предоставляет реализацию OPC-UA сервиса сервера."
-
-#~ msgid "Transport address"
-#~ msgstr "Адрес транспорта"
-
-#~ msgid "No secure policy found"
-#~ msgstr "Не найдено политики безопасности"
-
-#~ msgid "%s: request: %s"
-#~ msgstr "%s: запрос: %s"
-
-#~ msgid "%s: response: %s"
-#~ msgstr "%s: ответ: %s"
-
-#~ msgid "Respond size is not coincidence."
-#~ msgstr "Несоответствующий размер ответа."
-
-#~ msgid "Respond don't acknowledge."
-#~ msgstr "Несоответствие ответа."
-
-#~ msgid "%s: request, decoded: %s"
-#~ msgstr "%s: запрос, декодирован: %s"
-
-#~ msgid "Not full respond."
-#~ msgstr "Неполный ответ"
-
-#~ msgid "Client certificate thumbprint error."
-#~ msgstr "Ошибка отпечатка сертификата клиента."
-
-#~ msgid "Respond NodeId don't acknowledge"
-#~ msgstr "Несоответствие NodeId ответа"
-
-#~ msgid "Signature error"
-#~ msgstr "Ошибка подписи"
-
-#~ msgid "Request '%s' isn't supported."
-#~ msgstr "Запрос '%s' не поддерживается."
-
-#~ msgid "Application signature error"
-#~ msgstr "Ошибка подписи приложения"
-
-#~ msgid "Service fault"
-#~ msgstr "Сбой сервиса"
-
-#~ msgid "OPC_UA protocol '%s' isn't supported."
-#~ msgstr "OPC_UA протокол '%s' не поддерживается."
-
-#~ msgid "Buffer size is less for requested value."
-#~ msgstr "Размер буфера меньше указанного значения."
-
-#~ msgid "Number size '%d' error."
-#~ msgstr "Ошибка в размере '%d' числа."
-
-#~ msgid "Real number size '%d' error."
-#~ msgstr "Ошибка в размере '%d' вещественного числа."
-
-#~ msgid "Buffer size is less for requested string."
-#~ msgstr "Размер буфера меньше запрошенной строки."
-
-#~ msgid "Buffer size is less for requested NodeId."
-#~ msgstr "Размер буфера меньше запрошенного NodeId."
-
-#~ msgid "NodeId type %d error or don't support."
-#~ msgstr "Ошибка или не поддерживается тип NodeId %d."
-
-#~ msgid "Data type '%d' isn't supported."
-#~ msgstr "Тип данных '%d' не поддерживается."
-
-#~ msgid "ArrayDimensions field don't supported now."
-#~ msgstr "Поле РазмерностьМассива не поддерживается сейчас."
-
-#~ msgid "randBytes error: %s"
-#~ msgstr "randBytes ошибка: %s"
-
-#~ msgid "certPEM2DER error: %s"
-#~ msgstr "certPEM2DER ошибка: %s"
-
-#~ msgid "certDER2PEM error: %s"
-#~ msgstr "certDER2PEM ошибка: %s"
-
-#~ msgid "Server certificate thumbprint error."
-#~ msgstr "Ошибка отпечатка сертификата сервера."
-
-#~ msgid "Requested OpenSecureChannel NodeId don't acknowledge"
-#~ msgstr "Запрошенный идентификатор канала не обнаружен"
-
-#~ msgid "Secure channel unknown"
-#~ msgstr "Канал безопасности неизвестен"
-
-#~ msgid "Secure channel closed"
-#~ msgstr "Канал безопасности закрыт"
-
-#~ msgid "No supported userIdentityToken '%d'."
-#~ msgstr "userIdentityToken '%d' не поддерживается."
-
-#~ msgid "No supported request id '%d'."
-#~ msgstr "Запрос '%d' не поддерживается."
-
-#~ msgid "Security setting %d error."
-#~ msgstr "Ошибка в настройках безопасности %d."
-
-#~ msgid "Parent node '%s' no present for node '%s'."
-#~ msgstr "Родительский узел '%s' отсутствует для узла '%s'."
-
-#~ msgid "No session %d present."
-#~ msgstr "Отсутствует сеанс %d."
-
-#~ msgid "Allow realization of OPC UA client service."
-#~ msgstr "Предоставляет реализацию клиентского сервиса OPC UA."
-
-#~ msgid "Allow realization of OPC UA protocol."
-#~ msgstr "Предоставляет реализацию OPC UA протокола."
-
-#~ msgid "%s response: %s"
-#~ msgstr "%s ответ: %s"

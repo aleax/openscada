@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.Comedi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2016 by Roman Savochenko                           *
+ *   Copyright (C) 2012-2018 by Roman Savochenko                           *
  *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,7 +37,7 @@
 #define MOD_NAME	_("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.9"
+#define MOD_VER		"1.0.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -116,9 +116,9 @@ string TMdContr::getStatus( )
     string val = TController::getStatus();
 
     if(startStat() && !redntUse()) {
-	if(call_st)	val += TSYS::strMess(_("Call now. "));
-	if(period())	val += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
-	else val += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	if(call_st)	val += TSYS::strMess(_("Acquisition. "));
+	if(period())	val += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
+	else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s. "), tm2s(1e-6*tm_gath).c_str());
     }
 
@@ -225,8 +225,8 @@ void TMdPrm::vlGet( TVal &val )
 {
     if(!enableStat() || !owner().startStat()) {
 	if(val.name() == "err") {
-	    if(!enableStat()) val.setS(_("1:Parameter is disabled."),0,true);
-	    else if(!owner().startStat()) val.setS(_("2:Acquisition is stopped."),0,true);
+	    if(!enableStat()) val.setS(_("1:Parameter disabled."),0,true);
+	    else if(!owner().startStat()) val.setS(_("2:Acquisition stopped."),0,true);
 	}
 	else val.setS(EVAL_STR,0,true);
 	return;

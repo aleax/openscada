@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tbds.h
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,15 +61,15 @@ class TTable : public TCntrNode
 	time_t	lstUse( )	{ return mLstUse; }
 
 	virtual void fieldStruct( TConfig &cfg )
-	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"fieldStruct"); }
+	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldStruct"); }
 	virtual bool fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full = NULL )
-	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"fieldSeek"); }
+	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldSeek"); }
 	virtual void fieldGet( TConfig &cfg )
-	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"fieldGet"); }
+	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldGet"); }
 	virtual void fieldSet( TConfig &cfg )
-	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"fieldSet"); }
+	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldSet"); }
 	virtual void fieldDel( TConfig &cfg )
-	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"fieldDel"); }
+	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldDel"); }
 
 	TBD &owner( ) const;
 
@@ -126,7 +126,7 @@ class TBD : public TCntrNode, public TConfig
 
 	// Opened DB tables
 	virtual void allowList( vector<string> &list ) const
-	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"allowList"); }
+	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"allowList"); }
 	void list( vector<string> &list ) const		{ chldList(mTbl, list); }
 	bool openStat( const string &table ) const	{ return chldPresent(mTbl, table); }
 	void open( const string &table, bool create );
@@ -135,7 +135,7 @@ class TBD : public TCntrNode, public TConfig
 
 	// SQL request interface
 	virtual void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL )
-	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"sqlReq"); }
+	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"sqlReq"); }
 
 	virtual void transCloseCheck( )		{ }
 
@@ -147,7 +147,7 @@ class TBD : public TCntrNode, public TConfig
     protected:
 	//Protected methods
 	virtual TTable *openTable( const string &table, bool create )
-	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"openTable"); }
+	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"openTable"); }
 
 	void preDisable( int flag );
 	void postDisable( int flag );
@@ -208,7 +208,7 @@ class TTypeBD : public TModule
 	//Private methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	virtual TBD *openBD( const string &id )	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"openBD"); }
+	virtual TBD *openBD( const string &id )	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"openBD"); }
 
 	//Private attributes
 	bool	fullDBDel;

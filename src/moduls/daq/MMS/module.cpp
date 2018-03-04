@@ -37,7 +37,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.14"
+#define MOD_VER		"1.3.15"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -158,9 +158,9 @@ string TMdContr::getStatus( )
 	    rez.replace(0, 1, "10");
 	}
 	else {
-	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	    if(period()) rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
-	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	    if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
+	    if(period()) rez += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
+	    else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."), tm2s(1e-6*tmGath).c_str(),-tmDelay);
 	}
     }
@@ -747,8 +747,8 @@ void TMdPrm::vlGet( TVal &val )
     if(val.name() != "err")	return;
 
     if(!enableStat() || !owner().startStat()) {
-	if(!enableStat())		val.setS(_("1:Parameter is disabled."),0,true);
-	else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."),0,true);
+	if(!enableStat())		val.setS(_("1:Parameter disabled."),0,true);
+	else if(!owner().startStat())	val.setS(_("2:Acquisition stopped."),0,true);
 	return;
     }
     if(owner().redntUse()) return;

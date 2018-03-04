@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:12+0200\n"
+"POT-Creation-Date: 2018-03-04 13:16+0200\n"
 "PO-Revision-Date: 2009-08-18 09:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -219,16 +219,15 @@ msgstr "Verbinden Fehler."
 msgid "Restoring in %.6g s. "
 msgstr "Wiederherstellung in %.6g sek. "
 
-msgid "Call now. "
-msgstr "Rufen Sie jetzt. "
+msgid "Acquisition. "
+msgstr "Erwerb. "
 
 #, c-format
-msgid "Call by period: %s. "
-msgstr "Aufruf mit einer Periode: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Erwerb mit dem Zeitraum: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Call nächsten durch cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Erwerb nächsten durch cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s[%s]. Read %s. Wrote %s. Connection errors %g. "
@@ -392,8 +391,8 @@ msgstr "%d:Wert wurde nicht erfasst."
 msgid "Value type error."
 msgstr "Fehler im Wertetyp."
 
-msgid "Connecting..."
-msgstr "Connecting..."
+msgid "Connecting."
+msgstr "Connecting."
 
 msgid "OK"
 msgstr "OK"
@@ -438,13 +437,13 @@ msgstr ""
 "Ziffern 0-255, zum Beispiel: \"192.168.0.1.1.1\";\n"
 "    AMSPort - Hafen, schreiben Sie in die Ansicht stelligen 0-65535."
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Parameter ist abgeschaltet."
 
-msgid "2:Controller is stopped."
-msgstr "2:Controller ist angehalten."
+msgid "2:Acquisition stopped."
+msgstr "2:Erwerb wurde gestoppt."
 
-msgid "Parameter is disabled."
+msgid "Parameter disabled."
 msgstr "Parameter ist abgeschaltet."
 
 msgid "Parameter is disabled or id error."

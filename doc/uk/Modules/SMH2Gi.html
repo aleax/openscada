@@ -5,7 +5,7 @@
 <title>Модулі/SMH2Gi - OpenSCADAWiki</title>
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
-<link href="../files/doc.css" rel="stylesheet" /></head>
+<link href="../../en/files/doc.css" rel="stylesheet" /></head>
 <body><div id="mw_header">
 			<div class="mw-indicators">
 </div>
@@ -14,7 +14,7 @@
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../../en/files/Constr.png" width="32" /></a>
 </td>
 <td style="padding-left:5px;"> The translation checking and actualizing
 </td></tr></table>
@@ -63,7 +63,7 @@
 
 <p>Модуль надає функцію інтеграції системи OpenSCADA в оточення програмованого панельного контролеру з ОС Linux <a class="external text" href="http://segnetics.com/smh_2gi" rel="nofollow noreferrer noopener" target="_blank">SMH2Gi</a> (рис.1) від фірми <a class="external text" href="http://segnetics.com" rel="nofollow noreferrer noopener" target="_blank">Segnetics</a>. Модуль розроблено для проекту "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Vacuum_processing_unit" title="Special:MyLanguage/Using/Vacuum processing unit">Автоматизованої системи управління вакуумної технологічної установки</a>" та фінансовано "<a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лабораторією вакуумних технологій</a>". Задачу реалізації даного модуля доступно за  <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/new_module_daqsmh2gi_creation_for_deep_integration_to_segnetics_smh2gi" rel="nofollow noreferrer noopener" target="_blank">посиланням</a>.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:421px;"><a class="image" href="http://oscada.org/wiki/File:Segnetics_SMH2Gi.png"><img class="thumbimage" height="470" src="../files/Segnetics_SMH2Gi.png" width="419" /></a>  <div class="thumbcaption">Рис.1. Контролер SMH2Gi.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:421px;"><a class="image" href="http://oscada.org/wiki/File:Segnetics_SMH2Gi.png"><img class="thumbimage" height="470" src="../../en/files/Segnetics_SMH2Gi.png" width="419" /></a>  <div class="thumbcaption">Рис.1. Контролер SMH2Gi.</div></div></div></div>
 <p>"SMH 2Gi" — програмований логічний контролер, призначено для автоматизації інженерних систем будівель та технологічних процесів у промисловості.
 </p><p>Особливості контролеру "SMH 2Gi":
 </p>
@@ -219,11 +219,11 @@
 <h2><span class="mw-headline" id=".D0.97.D0.B0.D0.B3.D0.B0.D0.BB.D1.8C.D0.BD.D1.96_.D0.BF.D0.BE.D0.BB.D0.BE.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">1</span> Загальні положення</span></h2>
 <p>Для роботи модулів MC та MR потрібна попередня процедура ініціалізації, яка полягає у відправлені <b>tune</b>-запиту, специфічного для окремо взятої моделі модуля. Далі, для запиту/відправлення даних, потрібна інформація про структуру модуля. Такого характеру інформація міститься у <b>INI</b>-файлах, по файлу на пристрій. Тека із <b>INI</b>-файлами визначається у вкладці "SMH2Gi" сторінки модуля (рис.1), а архів типових *.INI файлів, адаптований під потреби OpenSCADA, доступний <a class="external" href="http://oscada.org/wiki/File:SMH2Gi_ini.tgz" title="File:SMH2Gi ini.tgz">тут</a>.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:673px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_mod.png"><img class="thumbimage" height="515" src="../files/SMH2Gi_mod.png" width="671" /></a>  <div class="thumbcaption">Рис.1. Вкладка "SMH2Gi" сторінки модуля.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:673px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_mod.png"><img class="thumbimage" height="515" src="../../en/files/SMH2Gi_mod.png" width="671" /></a>  <div class="thumbcaption">Рис.1. Вкладка "SMH2Gi" сторінки модуля.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="mw-headline-number">2</span> Об'єкт контролеру</span></h2>
 <p>Об'єкт контролеру описує задачу опитування джерел даних SMH2Gi двох типів: "SHM" та "MRC" (рис.2).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:727px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_obj_cntr.png"><img class="thumbimage" height="631" src="../files/SMH2Gi_obj_cntr.png" width="725" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфігурації об'єкту контролера.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:727px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_obj_cntr.png"><img class="thumbimage" height="631" src="../../en/files/SMH2Gi_obj_cntr.png" width="725" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфігурації об'єкту контролера.</div></div></div></div>
 <p>За допомогою цієї вкладки можна встановити:
 </p>
 <ul><li> Стан контролеру, а саме: Статус, "Включений", "Запущений" та ім'я БД, яка містить конфігурацію.</li>
@@ -234,7 +234,7 @@
 <li> Файл опису змінних поділюваної пам'яті для взаємодії із процесом "logix" та створюваний їм.</li>
 <li> Адреса послідовних інтерфейсів MC та MR пристроїв.</li>
 <li> Кількість спроб запиту за послідовним інтерфейсом.</li></ul>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> У зв'язку з тим, що модулі MC та MR потребують попереднього скидання, а потім відправлення <b>tune</b>-запиту то незалежне фізичне підключення, відключення та навіть включення/виключення об'єкту окремого модуля часто неможливе без зупинки та вимкнення об'єкту контролера ціликом.
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> У зв'язку з тим, що модулі MC та MR потребують попереднього скидання, а потім відправлення <b>tune</b>-запиту то незалежне фізичне підключення, відключення та навіть включення/виключення об'єкту окремого модуля часто неможливе без зупинки та вимкнення об'єкту контролера ціликом.
 </p>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">3</span> Об'єкт параметру контролера</span></h2>
 <p>Об'єкт параметру є безпосереднім представником джерела даних, у нашому випадку поділюваної пам'яті та модулів MC, MR. Кожен із цих типів представлено окремо.
@@ -245,7 +245,7 @@
 <ul><li> <b>BOOL</b> — TFld::Boolean;</li>
 <li> <b>SHORT</b> (int16), <b>LONG</b> (int32) — TFld::Integer;</li>
 <li> <b>FLOAT</b> — TFld::Real.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:671px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_prm.png"><img class="thumbimage" height="556" src="../files/SMH2Gi_prm.png" width="669" /></a>  <div class="thumbcaption">Рис.3. Вкладка конфігурації об'єкту параметра типу "Поділювана пам'ять".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:671px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_prm.png"><img class="thumbimage" height="556" src="../../en/files/SMH2Gi_prm.png" width="669" /></a>  <div class="thumbcaption">Рис.3. Вкладка конфігурації об'єкту параметра типу "Поділювана пам'ять".</div></div></div></div>
 <p>За допомогою форми конфігурації об'єкту параметра можна встановити:
 </p>
 <ul><li> Стан параметру, а саме "Включений" та тип параметру.</li>
@@ -254,11 +254,11 @@
 <li> Перелік змінних поділюваної пам'яті для виносу у атрибут цього параметру.</li></ul>
 <p>Приклад вкладки "Атрибути" приведено на рисунку 4.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:671px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_prmAttr.png"><img class="thumbimage" height="556" src="../files/SMH2Gi_prmAttr.png" width="669" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Атрибути" об'єкту параметра поділюваної пам'яті.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:671px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_prmAttr.png"><img class="thumbimage" height="556" src="../../en/files/SMH2Gi_prmAttr.png" width="669" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Атрибути" об'єкту параметра поділюваної пам'яті.</div></div></div></div>
 <h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.96_MC_.D1.82.D0.B0_MR"><span class="mw-headline-number">3.2</span> Модулі MC та MR</span></h3>
 <p>Тип параметру "Модулі MC та MR (MRC)" використовується для доступу до даних модулів MC та MR. Вкладку конфігурація об'єкту параметра цього типу представлено на рисунку 5. Тип параметру для модулів MC та MR передбачено загальний оскільки робота з цими модулями схожа та відрізняється тільки шиною на якій вони встановлені, що враховується знаком адреси модуля.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:635px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_MRCobj_prm.png"><img class="thumbimage" height="518" src="../files/SMH2Gi_MRCobj_prm.png" width="633" /></a>  <div class="thumbcaption">Рис.5. Вкладка конфігурації об'єкту параметра типу "Модулі MC та MR".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:635px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_MRCobj_prm.png"><img class="thumbimage" height="518" src="../../en/files/SMH2Gi_MRCobj_prm.png" width="633" /></a>  <div class="thumbcaption">Рис.5. Вкладка конфігурації об'єкту параметра типу "Модулі MC та MR".</div></div></div></div>
 <p>За допомогою форми конфігурації об'єкту параметра можна встановити:
 </p>
 <ul><li> Стан параметру, а саме "Включений" та тип параметру.</li>
@@ -267,8 +267,8 @@
 <li> Тип модуля та адреса його на шині. Тип модуля мусить вказуватися суворо у відповідності із встановленому за адресою модулем інакше при ввімкнені об'єкту параметра виникне помилка! Модуль MC може бути один та для нього потрібно вказувати адресу "-1".</li></ul>
 <p>Приклад вкладки "Атрибути" приведено на рисунку 6. На рисунку 7 представлено вкладку "Конфігурація", яка містить всі конфігураційні поля <b>tune</b>-запиту, а також конфігурацію інверсії дискретних сигналів.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:654px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_MRCobj_prmAttr.png"><img class="thumbimage" height="631" src="../files/SMH2Gi_MRCobj_prmAttr.png" width="652" /></a>  <div class="thumbcaption">Рис.6. Вкладка "Атрибути", об'єкту параметра модуля MC.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:654px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_MRCobj_prmCfg.png"><img class="thumbimage" height="690" src="../files/SMH2Gi_MRCobj_prmCfg.png" width="652" /></a>  <div class="thumbcaption">Рис.7. Вкладка "Конфігурація", об'єкта параметра модуля MC.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:654px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_MRCobj_prmAttr.png"><img class="thumbimage" height="631" src="../../en/files/SMH2Gi_MRCobj_prmAttr.png" width="652" /></a>  <div class="thumbcaption">Рис.6. Вкладка "Атрибути", об'єкту параметра модуля MC.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:654px;"><a class="image" href="http://oscada.org/wiki/File:SMH2Gi_MRCobj_prmCfg.png"><img class="thumbimage" height="690" src="../../en/files/SMH2Gi_MRCobj_prmCfg.png" width="652" /></a>  <div class="thumbcaption">Рис.7. Вкладка "Конфігурація", об'єкта параметра модуля MC.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">4</span> Посилання</span></h2>
 <p>Архів INI-файлів із конфігурацією модулів MC та MR: <a class="external" href="http://oscada.org/wiki/File:SMH2Gi_ini.tgz" title="File:SMH2Gi ini.tgz">File:SMH2Gi_ini.tgz</a>
 </p>

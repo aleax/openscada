@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SoundCard file: sound.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	_("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.0"
+#define MOD_VER		"0.8.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
@@ -84,12 +84,12 @@ void TTpContr::postEnable( int flag )
     if(err != paNoError) mess_err(nodePath().c_str(),"Pa_Initialize: %s",Pa_GetErrorText(err));
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameters' table"),TFld::String,0,"30"));
+    fldAdd(new TFld("PRM_BD",_("Table of parameters"),TFld::String,0,"30"));
     fldAdd(new TFld("CARD",_("Card device"),TFld::String,0,"100","<default>"));
     fldAdd(new TFld("SMPL_RATE",_("Card sample rate (Hz)"),TFld::Integer,0,"5","8000","1;200000"));
     fldAdd(new TFld("SMPL_TYPE",_("Card sample type"),TFld::Integer,TFld::Selected,"5",i2s(paFloat32).c_str(),
 	TSYS::strMess("%d;%d;%d",paFloat32,paInt32,paInt16).c_str(),_("Float 32;Int 32;Int 16")));
-    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -124,9 +124,9 @@ TTpContr &TMdContr::owner( ) const	{ return (TTpContr&)TController::owner(); }
 string TMdContr::getStatus( )
 {
     string val = TController::getStatus();
-    if(!startStat()) val += TSYS::strMess(_("Allowed %d input channels"),channelAllow());
+    if(!startStat()) val += TSYS::strMess(_("%d input channels available"),channelAllow());
     else if(!redntUse())
-	val += TSYS::strMess(_("Gathering from %d channels, recieved %.2g MB, samplerate corrections %g and adjusted value %d."),
+	val += TSYS::strMess(_("Acquisition from %d channels, recieved %.2g MB, samplerate corrections %g and the adjusted value %d."),
 	    numChan, acqSize, cntCor, sRt);
 
     return val;
@@ -209,9 +209,9 @@ void TMdContr::start_( )
 	for(int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++)
 	    if(Pa_GetDeviceInfo(i_d)->maxInputChannels && card() == Pa_GetDeviceInfo(i_d)->name)
 	    { iParam.device = i_d; break; }
-    if(iParam.device < 0) throw TError(nodePath().c_str(),_("Selected device '%s' is error or default device no allow."),card().c_str());
-    if(!numChan) throw TError(nodePath().c_str(),_("No one channel is configured for acquisition."));
-    if(!smplSize) throw TError(nodePath().c_str(),_("Sample type set is error."));
+    if(iParam.device < 0) throw TError(nodePath().c_str(),_("Error of the selected device '%s' or default device is not available."),card().c_str());
+    if(!numChan) throw TError(nodePath().c_str(),_("No channel is set up for acquisition."));
+    if(!smplSize) throw TError(nodePath().c_str(),_("Error setting sample type."));
 
     iParam.channelCount = numChan;
     iParam.sampleFormat = mSmplType;
@@ -234,7 +234,7 @@ void TMdContr::stop_( )
     //Close and stop stream
     endrunReq = true;
     if(TSYS::eventWait(prcSt,false,nodePath()+"stream_stop",5))
-	throw TError(nodePath().c_str(),_("Sound input stream is not stopped!"));
+	throw TError(nodePath().c_str(),_("Sound stream is not stopped!"));
     PaError err = Pa_CloseStream(stream);
     if(err != paNoError) throw TError(nodePath().c_str(),"Pa_CloseStream: %s",Pa_GetErrorText(err));
 

@@ -2,13 +2,13 @@
 # Copyright (C) 2008-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.SoundCard package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2008-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2008-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-05 20:22+0200\n"
+"POT-Creation-Date: 2018-03-04 13:47+0200\n"
 "PO-Revision-Date: 2008-03-27 18:49+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -25,7 +25,7 @@ msgstr "Роман Савоченко"
 msgid "Provides an access to the sound card."
 msgstr "Надає доступ до даних звукової карти."
 
-msgid "Parameters' table"
+msgid "Table of parameters"
 msgstr "Таблиця параметрів"
 
 msgid "Card device"
@@ -40,7 +40,7 @@ msgstr "Тип вибірки карти"
 msgid "Float 32;Int 32;Int 16"
 msgstr "Реальне 32;Ціле 32;Ціле 16"
 
-msgid "Gather task priority"
+msgid "Priority of the acquisition task"
 msgstr "Пріоритет задачі збору"
 
 msgid "Standard"
@@ -53,28 +53,34 @@ msgid "Value"
 msgstr "Значення"
 
 #, c-format
-msgid "Allowed %d input channels"
+msgid "%d input channels available"
 msgstr "Наявно %d вхідних каналів"
 
+#, c-format
 msgid ""
-"Gathering from %d channels, recieved %.2g MB, samplerate corrections %g and "
-"adjusted value %d."
-msgstr "Збір з %d каналів, отримано %.2g МБ, частота вибірки скоригована %g разів до значення %d."
+"Acquisition from %d channels, recieved %.2g MB, samplerate corrections %g "
+"and the adjusted value %d."
+msgstr ""
+"Збір з %d каналів, отримано %.2g МБ, частота вибірки скоригована %g разів до "
+"значення %d."
 
 #, c-format
-msgid "Selected device '%s' is error or default device no allow."
-msgstr "Помилка вибраного пристрою '%s' або пристрій по замовченню не наявний."
+msgid "Error of the selected device '%s' or default device is not available."
+msgstr ""
+"Помилка вибраного пристрою '%s' або пристрій по замовчуванню не наявний."
 
-msgid "No one channel is configured for acquisition."
+msgid "No channel is set up for acquisition."
 msgstr "Жодного каналу не налаштовано для збору."
 
-msgid "Sample type set is error."
+msgid "Error setting sample type."
 msgstr "Помилка встановлення типу вибірки."
 
-msgid "Sound input stream is not stopped!"
+msgid "Sound stream is not stopped!"
 msgstr "Звуковий потік не зупинено!"
 
 #, c-format
 msgid ""
 "CallBack: Sample rate correction from %g to %g for fix error %ds on time %ds."
-msgstr "CallBack: Коригування частоти вибірки з %g на %g для виправлення помилки %ds на час %ds."
+msgstr ""
+"CallBack: Коригування частоти вибірки з %g на %g для виправлення помилки %ds "
+"на час %ds."

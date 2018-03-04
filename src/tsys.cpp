@@ -135,7 +135,7 @@ TSYS::~TSYS( )
 	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
 	    cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
 	dataRes().unlock();
-	printf(_("System counters on exit: %s"), cntrsStr.c_str());
+	printf(_("Program counters at the exit time: %s"), cntrsStr.c_str());
     }
 
     delete Mess;
@@ -169,7 +169,7 @@ void TSYS::setWorkDir( const string &wdir, bool init )
 {
     if(wdir.empty() || workDir() == wdir) return;
     if(chdir(wdir.c_str()) != 0)
-	mess_sys(TMess::Warning, _("Changing work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."),
+	mess_sys(TMess::Warning, _("Error changing working directory in '%s': %s. Perhaps the current directory is already correctly set to %s'."),
 	    wdir.c_str(), strerror(errno),workDir().c_str());
     else if(init) sysModifFlgs &= ~MDF_WorkDir;
     else { sysModifFlgs |= MDF_WorkDir; modif(); }
@@ -235,7 +235,7 @@ void TSYS::modifCfg( bool chkPossibleWR )
     if(chkPossibleWR) {
 	//Check config file for readonly
 	if(access(mConfFile.c_str(),F_OK|W_OK) != 0)
-	    throw err_sys(_("Read only access to file '%s'."), mConfFile.c_str());
+	    throw err_sys(_("Read-only access to file '%s'."), mConfFile.c_str());
     }
     else rootModifCnt++;
 }
@@ -465,15 +465,16 @@ string TSYS::optDescr( )
 	"    --station=<id>	Station identifier.\n"
 	"    --statName=<name>	Station name.\n"
 	"    --modDir=<path>	Directories with the modules, separated by ';', they can include a files' template at the end.\n"
-	"    --demon, --daemon	Run in the daemon mode.\n"
-	"    --pidFile=<file>	File for the program process ID placing here.\n"
-	"    --noCoreDump	Prevents from the core dump creation at crashes - don't set the limit to the unlimited value.\n"
 	"    --messLev=<level>	Level of the processing messages (0-7).\n"
 	"    --log=<direct>	Direct messages to, by the bitfield:\n"
 	"			  0x1 - syslogd;\n"
 	"			  0x2 - stdout;\n"
 	"			  0x4 - stderr;\n"
 	"			  0x8 - the messages archive.\n"
+	"    --demon, --daemon	Run in the daemon mode.\n"
+	"    --pidFile=<file>	File for the program process ID placing here.\n"
+	"    --noCoreDump	Prevents from the core dump creation at crashes - don't set the limit to the unlimited value.\n"
+	"    --permCrtFiles={perm} Permissions of the created OpenSCADA files, by default it is 0755 (RWXRW_RW_).\n"
 	"----------- Station '%s(%s)' settings in the configuration file -----------\n"
 	"StName     <nm>	Station name.\n"
 	"WorkDB     <Type.Name> Working DB (<type> and <name>).\n"
@@ -555,6 +556,16 @@ string TSYS::cmdOpt( const string &opt, const string &setVl )
     return iOpt->second.size() ? iOpt->second : "1";
 }
 
+int TSYS::permCrtFiles( bool exec )
+{
+    int rez = 0755;
+
+    if(cmdOptPresent("permCrtFiles"))
+	rez = strtol(cmdOpt("permCrtFiles").c_str(),NULL,0);
+
+    return rez & (exec?0777:0666);
+}
+
 bool TSYS::cfgFileLoad( )
 {
     bool cmd_help = false;
@@ -573,7 +584,7 @@ bool TSYS::cfgFileLoad( )
 
     //Load config-file
     int hd = open(mConfFile.c_str(), O_RDONLY);
-    if(hd < 0) mess_sys(TMess::Error, _("Config-file '%s' error: %s"), mConfFile.c_str(), strerror(errno));
+    if(hd < 0) mess_sys(TMess::Error, _("Error the configuration file '%s': %s"), mConfFile.c_str(), strerror(errno));
     else {
 	bool fOK = true;
 	string s_buf;
@@ -585,7 +596,7 @@ bool TSYS::cfgFileLoad( )
 	    fOK = s_buf.size();
 	}
 	close(hd);
-	if(!fOK) mess_sys(TMess::Error, _("Config-file '%s' load error."), mConfFile.c_str());
+	if(!fOK) mess_sys(TMess::Error, _("Error loading the configuration file '%s'."), mConfFile.c_str());
 
 	try {
 	    ResAlloc res(cfgRes(), true);
@@ -599,16 +610,16 @@ bool TSYS::cfgFileLoad( )
 		    }
 		if(stat_n && stat_n->attr("id") != mId) {
 		    if(mId != "InitSt")
-			mess_sys(TMess::Warning, _("Station '%s' is not present in the config-file. Using configuration for station '%s'!"),
+			mess_sys(TMess::Warning, _("Station '%s' is not in the configuration file. The configuration of the station '%s' has been used!"),
 			    mId.c_str(), stat_n->attr("id").c_str());
 		    mId	= stat_n->attr("id");
 		}
 		if(!stat_n)	rootN.clear();
 	    }
 	    else rootN.clear();
-	    if(!rootN.childSize()) mess_sys(TMess::Error, _("Configuration '%s' error!"), mConfFile.c_str());
+	    if(!rootN.childSize()) mess_sys(TMess::Error, _("Error configuration '%s'!"), mConfFile.c_str());
 	    rootModifCnt = 0;
-	} catch(TError &err) { mess_sys(TMess::Error, _("Load config-file error: %s"), err.mess.c_str()); }
+	} catch(TError &err) { mess_sys(TMess::Error, _("Error loading the configuration file '%s'."), err.mess.c_str()); }
     }
 
     if(cmd_help) fprintf(stdout, "%s", optDescr().c_str());
@@ -620,12 +631,12 @@ void TSYS::cfgFileSave( )
 {
     ResAlloc res(cfgRes(), true);
     if(!rootModifCnt) return;
-    int hd = open(mConfFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
-    if(hd < 0) mess_sys(TMess::Error, _("Config-file '%s' error: %s"), mConfFile.c_str(), strerror(errno));
+    int hd = open(mConfFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, permCrtFiles());
+    if(hd < 0) mess_sys(TMess::Error, _("Error the configuration file '%s': %s"), mConfFile.c_str(), strerror(errno));
     else {
 	string rezFile = rootN.save(XMLNode::XMLHeader);
 	int rez = write(hd, rezFile.data(), rezFile.size());
-	if(rez != (int)rezFile.size()) mess_sys(TMess::Error,_("Configuration '%s' write error. %s"), mConfFile.c_str(), ((rez<0)?strerror(errno):""));
+	if(rez != (int)rezFile.size()) mess_sys(TMess::Error,_("Error writing the configuration file '%s': %s"), mConfFile.c_str(), ((rez<0)?strerror(errno):""));
 	rootModifCnt = 0;
 	rootFlTm = time(NULL);
 	close(hd);
@@ -693,7 +704,7 @@ void TSYS::load_( )
     }
 
     bool cmd_help = cfgFileLoad();
-    mess_sys(TMess::Info, _("Load!"));
+    mess_sys(TMess::Info, _("Loading."));
     cfgPrmLoad();
     Mess->load();	//Messages load
 
@@ -714,7 +725,7 @@ void TSYS::load_( )
 	//Load modules
 	modSchedul().at().load();
 	if(!modSchedul().at().loadLibS()) {
-	    mess_sys(TMess::Error, _("No one module is loaded. Your configuration is broken!"));
+	    mess_sys(TMess::Error, _("No module has been loaded, your configuration is likely to be broken!"));
 	    stop();
 	}
 
@@ -736,7 +747,7 @@ void TSYS::load_( )
 	try { at(lst[iA]).at().load(); }
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Error load subsystem '%s'."), lst[iA].c_str());
+	    mess_sys(TMess::Error, _("Error loading the subsystem '%s'."), lst[iA].c_str());
 	}
 
     if(cmd_help) stop();
@@ -744,7 +755,7 @@ void TSYS::load_( )
 
 void TSYS::save_( )
 {
-    mess_sys(TMess::Info, _("Save!"));
+    mess_sys(TMess::Info, _("Saving."));
 
     //System parameters
     TBDS::genDBSet(nodePath()+"StName", mName, "root", TBDS::UseTranslate);
@@ -783,14 +794,14 @@ int TSYS::start( )
     vector<string> lst;
     list(lst);
 
-    mess_sys(TMess::Info, _("Starting ..."));
+    mess_sys(TMess::Info, _("Starting."));
 
     mainThr.free();
     for(unsigned iA = 0; iA < lst.size(); iA++)
 	try { at(lst[iA]).at().subStart(); }
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Error start subsystem '%s'."), lst[iA].c_str());
+	    mess_sys(TMess::Error, _("Error starting the subsystem '%s'."), lst[iA].c_str());
 	}
 
     cfgFileScan(true);
@@ -803,13 +814,13 @@ int TSYS::start( )
     //Start for ordinal service task
     taskCreate("SYS_Service", 0, TSYS::ServTask, NULL, 10);
 
-    mess_sys(TMess::Info, _("Final of the starting!"));
+    mess_sys(TMess::Info, _("Running is complete!"));
 
     //Call in monopoly for main thread module or wait for a signal.
     if(!mainThr.freeStat()) { mainThr.at().modStart(); mainThr.free(); }
     while(!mStopSignal) sysSleep(STD_WAIT_DELAY*1e-3);
 
-    mess_sys(TMess::Info, _("Stopping ..."));
+    mess_sys(TMess::Info, _("Stopping."));
 
     //Stop for ordinal service task
     taskDestroy("SYS_Service");
@@ -822,7 +833,7 @@ int TSYS::start( )
 	try { at(lst[iA]).at().subStop(); }
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Error for subsystem '%s' stopping."), lst[iA].c_str());
+	    mess_sys(TMess::Error, _("Error stopping the subsystem '%s'."), lst[iA].c_str());
 	}
 
     //Stop for high priority service and redundancy tasks
@@ -912,7 +923,7 @@ void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 	    SYS->mStopSignal = signal;
 	    break;
 	case SIGTERM:
-	    SYS->mess_sys(TMess::Warning, _("Termination signal is received. Stop the station!"));
+	    SYS->mess_sys(TMess::Warning, _("Termination signal is received. Stopping the program!"));
 	    SYS->mStopSignal = signal;
 	    break;
 	case SIGFPE:
@@ -922,7 +933,7 @@ void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 	case SIGCHLD: {
 	    int status;
 	    pid_t pid = wait(&status);
-	    if(!WIFEXITED(status) && pid > 0) SYS->mess_sys(TMess::Info, _("Free child process %d!"), pid);
+	    if(!WIFEXITED(status) && pid > 0) SYS->mess_sys(TMess::Info, _("Close the process %d of the child!"), pid);
 	    break;
 	}
 	case SIGPIPE:
@@ -1010,7 +1021,7 @@ bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_
 	//Make messages
 	if(c_tm > t_tm+1) {	//1sec
 	    t_tm = c_tm;
-	    SYS->mess_sys(TMess::Crit, _("Wait event..."));
+	    SYS->mess_sys(TMess::Crit, _("Waiting for event ..."));
 	}
 	sysSleep(STD_WAIT_DELAY*1e-3);
     }
@@ -1806,7 +1817,7 @@ string TSYS::rdStRequest( XMLNode &req, const string &st, bool toScan )
 string TSYS::prjUserDir( )
 {
     string userDir = cmdOpt("projUserDir");
-    if(userDir.empty())	userDir = "~/.openscada";
+    if(userDir.empty() && !cmdOptPresent("projUserDir"))	userDir = "~/.openscada";
     size_t posHome = userDir.find("~/");
     if(posHome != string::npos && getenv("HOME")) userDir.replace(posHome, 2, string(getenv("HOME"))+"/");
 
@@ -1818,19 +1829,7 @@ bool TSYS::prjSwitch( const string &prj, bool toCreate )
     //Check for the project availability into folder of preistalled ones for writibility and next into the user folder
     struct stat file_stat;
 
-    //Check for projects' folders availability
-    string  prjDir = oscd_datadir_full,
-	    prjCfg = "";
-    if(stat(prjDir.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR || access(prjDir.c_str(), X_OK|W_OK) != 0) {
-	prjDir = prjUserDir();
-	if(prjDir.empty()) return false;
-	if(access(prjDir.c_str(),F_OK) != 0 && mkdir(prjDir.c_str(),0700) != 0)	return false;
-	if(stat(prjDir.c_str(), &file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFDIR || access(prjDir.c_str(), X_OK|W_OK) != 0)
-	    return false;
-    }
-
     //Call the projects manager procedure
-    prjDir += "/" + prj;
 #if defined(__ANDROID__)
     if(access(bindir_full "/openscada-proj",F_OK) == 0 && access(bindir_full "/openscada-proj",X_OK) != 0)
 	chmod(bindir_full "/openscada-proj", 0700);	//Set openscada-proj to the execution mode
@@ -1848,26 +1847,32 @@ bool TSYS::prjSwitch( const string &prj, bool toCreate )
     //????
 
     //Check for the project folder availability and switch to the project
-    if(stat(prjDir.c_str(),&file_stat) == 0 && (file_stat.st_mode&S_IFMT) == S_IFDIR && access(prjDir.c_str(), X_OK|W_OK) == 0) {
+    string  prjDir = prjUserDir() + "/" + prj,
+	    prjCfg = prjDir + "/oscada.xml";
+    if(!(prjUserDir().size() && stat(prjDir.c_str(),&file_stat) == 0 && (file_stat.st_mode&S_IFMT) == S_IFDIR && access(prjDir.c_str(), X_OK|W_OK) == 0 &&
+	stat(prjCfg.c_str(),&file_stat) == 0 && (file_stat.st_mode&S_IFMT) == S_IFREG))
+    {
+	prjDir = string(oscd_datadir_full) + "/" + prj;
+	if(!(stat(prjDir.c_str(),&file_stat) == 0 && (file_stat.st_mode&S_IFMT) == S_IFDIR && access(prjDir.c_str(), X_OK|W_OK) == 0))
+	    return false;
 	prjCfg = prjDir + "/oscada.xml";
-	if(stat(prjCfg.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
+	if(!(stat(prjCfg.c_str(),&file_stat) == 0 && (file_stat.st_mode&S_IFMT) == S_IFREG)) {
 	    prjCfg = string(sysconfdir_full) + "/oscada_" + prj + ".xml";
-	    if(stat(prjCfg.c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) return false;
+	    if(!(stat(prjCfg.c_str(),&file_stat) == 0 && (file_stat.st_mode&S_IFMT) == S_IFREG))
+		return false;
 	}
-
-	// Switch to the found project
-	//  Set the project configuration file into "--config", name into "--statName", change the work directory
-	cmdOpt("config", prjCfg);
-	cmdOpt("statName", prj);
-	setWorkDir(prjDir);
-
-	//  Set an exit signal for restarting the system, clean prjNm and return true
-	stop(SIGUSR2);
-
-	return true;
     }
 
-    return false;
+    // Switch to the found project
+    //  Set the project configuration file into "--config", name into "--statName", change the work directory
+    cmdOpt("config", prjCfg);
+    cmdOpt("statName", prj);
+    setWorkDir(prjDir);
+
+    //  Set an exit signal for restarting the system, clean prjNm and return true
+    stop(SIGUSR2);
+
+    return true;
 }
 
 int TSYS::prjLockUpdPer( )
@@ -1899,9 +1904,9 @@ bool TSYS::prjLock( const char *cmd )
 	}
 
 	//Hold the lock file
-	if((hd=open(prjLockFile.c_str(),O_CREAT|O_EXCL|O_WRONLY,0600)) < 0) return false;
+	if((hd=open(prjLockFile.c_str(),O_CREAT|O_EXCL|O_WRONLY,permCrtFiles())) < 0) return false;
     }
-    else if(strcmp(cmd,"update") == 0 && (hd=open(prjLockFile.c_str(),O_WRONLY,0600)) < 0) return false;
+    else if(strcmp(cmd,"update") == 0 && (hd=open(prjLockFile.c_str(),O_WRONLY)) < 0) return false;
     if(hd >= 0) {
 	string lockInfo = TSYS::strMess("%010d %020d", (int)getpid(), (int)sysTm());
 	write(hd, lockInfo.data(), lockInfo.size());
@@ -1929,7 +1934,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	}
 	res.release();
 	//Error by this active task present
-	if(time(NULL) >= (c_tm+wtm)) throw err_sys(_("Task '%s' already present!"), path.c_str());
+	if(time(NULL) >= (c_tm+wtm)) throw err_sys(_("Task '%s' is already present!"), path.c_str());
 	sysSleep(0.01);
 	res.request(true);
     }
@@ -1968,7 +1973,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	if(detachStat == PTHREAD_CREATE_DETACHED) htsk.flgs |= STask::Detached;
 	int rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
 	if(rez == EPERM) {
-	    mess_sys(TMess::Warning, _("No permission for create a real-time policy for '%s'. Default thread is created!"), path.c_str());
+	    mess_sys(TMess::Warning, _("There is no access to create a real-time task for '%s'. An ordinal task is created!"), path.c_str());
 	    policy = SCHED_OTHER;
 	    pthread_attr_setschedpolicy(pthr_attr, policy);
 	    prior.sched_priority = 0;
@@ -1977,13 +1982,13 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	}
 	if(!pAttr) pthread_attr_destroy(pthr_attr);
 
-	if(rez) throw err_sys(1, _("Task creation error %d."), rez);
+	if(rez) throw err_sys(1, _("Error %d creation a task."), rez);
 
 	//Wait for thread structure initialization finish for not detachable tasks
 	while(!(htsk.flgs&STask::Detached) && !htsk.thr) TSYS::sysSleep(1e-3); //sched_yield(); !!! don't use for hard realtime systems with high priority
 	//Wait for start status
 	for(time_t c_tm = time(NULL); !(htsk.flgs&STask::Detached) && startSt && !(*startSt); ) {
-	    if(time(NULL) >= (c_tm+wtm)) throw err_sys(_("Task '%s' start timeouted!"), path.c_str());
+	    if(time(NULL) >= (c_tm+wtm)) throw err_sys(_("Timeout of starting the task '%s'!"), path.c_str());
 	    sysSleep(STD_WAIT_DELAY*1e-3);
 	}
     } catch(TError &err) {
@@ -2019,13 +2024,13 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
 	time_t c_tm = time(NULL);
 	//Check timeout
 	if(wtm && (c_tm > (s_tm+wtm))) {
-	    mess_sys(TMess::Crit, _("Task '%s' timeouted !!!"), path.c_str());
+	    mess_sys(TMess::Crit, _("Timeout of the task '%s' !!!"), path.c_str());
 	    throw err_sys(_("Task '%s' is not stopped!"), path.c_str());
 	}
 	//Make messages
 	if(c_tm > t_tm+1) {	//1sec
 	    t_tm = c_tm;
-	    mess_sys(TMess::Info, _("Wait event of task '%s' ..."), path.c_str());
+	    mess_sys(TMess::Info, _("Waiting for an event of the task '%s' ..."), path.c_str());
 	}
 	sysSleep(STD_WAIT_DELAY*1e-3);
 	first = false;
@@ -2118,10 +2123,10 @@ void *TSYS::taskWrap( void *stas )
     try { rez = wTask(wTaskArg); }
     catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	SYS->mess_sys(TMess::Error, _("Task %u unexpected terminated by exception."), tsk->thr);
+	SYS->mess_sys(TMess::Error, _("Task %u unexpected terminated by an exception."), tsk->thr);
     }
     //???? The code cause: FATAL: exception not rethrown
-    //catch(...)	{ mess_sys(TMess::Error, _("Task %u unexpected terminated by unknown exception."), tsk->thr); }
+    //catch(...)	{ mess_sys(TMess::Error, _("Task %u unexpected terminated by an unknown exception."), tsk->thr); }
 
     //Mark for task finish
     tsk->flgs |= STask::FinishTask;
@@ -2493,7 +2498,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	int wcnt = 0, wflags = O_WRONLY|O_CREAT|O_TRUNC;
 	string val = prms[1].getS();
 	if(prms.size() >= 3 && prms[2].getB()) wflags = O_WRONLY|O_CREAT|O_APPEND;
-	int hd = open(prms[0].getS().c_str(), wflags, 0664);
+	int hd = open(prms[0].getS().c_str(), wflags, permCrtFiles());
 	if(hd >= 0) {
 	    wcnt = write(hd,val.data(),val.size());
 	    close(hd);
@@ -2512,7 +2517,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "cntrReq" && prms.size() >= 1) {
 	XMLNode req;
 	AutoHD<XMLNodeObj> xnd = prms[0].getO();
-	if(xnd.freeStat()) return string(_("1:Request is not object!"));
+	if(xnd.freeStat()) return string(_("1:Request is not an object!"));
 	xnd.at().toXMLNode(req);
 	string path = req.attr("path");
 	if(prms.size() < 2 || prms[1].getS().empty()) {
@@ -2789,10 +2794,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/CPU",_("CPU"),R_R_R_,"root","root",1,"tp","str");
 	    if(nCPU() > 1)
 		ctrMkNode("fld",opt,-1,"/gen/mainCPUs",_("Main CPUs set"),RWRWR_,"root","root",2,"tp","str",
-		    "help",_("For using CPU set write processors numbers string separated by symbol ':'.\nCPU numbers started from 0."));
+		    "help",_("To set up the processors you use, write a row of numbers separated by a ':' character.\nProcessor numbers start at 0."));
 	    ctrMkNode("fld",opt,-1,"/gen/clk",_("Tasks planning clock"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),R_R___,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config-file"),R_R___,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/config",_("Configuration file"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),R_R___,"root","root",3,"tp","str","dest","sel_ed","select","/gen/workDirList");
 	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),R_R___,"root","root",3,"tp","str","dest","sel_ed","select","/gen/modDirList");
 	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),R_R___,"root","root",4,"tp","str","dest","sel_ed","select","/gen/icoDirList",
@@ -2832,12 +2837,12 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/redund/sts/lev",_("Level"),R_R_R_,"root","root",1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/redund/sts/cnt",_("Counter"),R_R_R_,"root","root",1,"tp","real");
 	    }
-	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to remote stations list configuration"),0660,"root","Transport",1,"tp","lnk");
+	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to the configuration of the list of remote stations"),0660,"root","Transport",1,"tp","lnk");
 	}
 	if(ctrMkNode("area",opt,-1,"/tasks",_("Tasks"),R_R___))
 	    if(ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),RWRW__,"root","root",2,"key","path",
-		"help",(nCPU()<=1)?"":_("For an using CPU set write processors numbers string separated by symbol ':'.\n"
-				       "CPU numbers started from 0.")))
+		"help",(nCPU()<=1)?"":_("To set up the processors you use, write a row of numbers separated by a ':' character.\n"
+				       "Processor numbers start at 0.")))
 	    {
 		ctrMkNode("list",opt,-1,"/tasks/tasks/path",_("Path"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/thrd",_("Thread"),R_R___,"root","root",1,"tp","str");
@@ -2850,15 +2855,15 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 #endif
 	    }
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
-	    ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,
+	    ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Base language of the text variables"),RWRWR_,"root","root",5,
 		"tp","str","len","2","dest","sel_ed","select","/tr/baseLangLs",
-		"help",_("Enable multilingual support for text variables by selecting the base language."));
+		"help",_("Enables the multilingual support for text variables by selecting the base language."));
 	    if(Mess->lang2CodeBase().size()) {
 		ctrMkNode("fld",opt,-1,"/tr/dyn",_("Dynamic translation"),R_R_R_,"root","root",2,"tp","bool","help",_("Current state of the dynamic translation."));
-		ctrMkNode("fld",opt,-1,"/tr/dynPlan","",RWRW__,"root","root",2,"tp","bool","help",_("Dynamic translation scheduling for next launch."));
+		ctrMkNode("fld",opt,-1,"/tr/dynPlan","",RWRW__,"root","root",2,"tp","bool","help",_("Dynamic translation scheduling for next startup."));
 		if(!Mess->translDyn())
-		    ctrMkNode("fld",opt,-1,"/tr/enMan",_("Enable manager"),RWRWR_,"root","root",2,"tp","bool",
-			"help",_("Enable generic translation manager which cause full reloading for all built messages obtain."));
+		    ctrMkNode("fld",opt,-1,"/tr/enMan",_("Enable the manager"),RWRWR_,"root","root",2,"tp","bool",
+			"help",_("Enables the generic translation manager which cause full reloading for all built messages obtain."));
 	    }
 	    if(Mess->translEnMan()) {
 		ctrMkNode("fld",opt,-1,"/tr/langs",_("Languages"),RWRW__,"root","root",2,"tp","str",
@@ -2884,7 +2889,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/debug/dbgCats/cat",_("Category"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/debug/dbgCats/prc",_("Process"),RWRWR_,"root","root",1,"tp","bool");
 	    }
-	    ctrMkNode("comm",opt,-1,"/debug/mess",_("See to messages"),R_R_R_,"root","root",1,"tp","lnk");
+	    ctrMkNode("comm",opt,-1,"/debug/mess",_("See to the messages"),R_R_R_,"root","root",1,"tp","lnk");
 	}
 	return;
     }
@@ -3078,7 +3083,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    XMLNode *cn = n_stat->childAdd("el");
 		    if(it->second.flgs&STask::FinishTask) cn->setText(_("Finished. "));
 		    if(tm_beg && tm_beg < tm_per)
-			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Consume: %3.1f[%3.1f]%% (%s from %s). Lag: %s[%s]. Cycles lost: %g."),
+			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Consumed: %3.1f[%3.1f]%% (%s from %s). Lag: %s[%s]. Lost cycles: %g."),
 			    atm2s((time_t)(1e-9*tm_per),SYS->clockRT()?"%d-%m-%Y %H:%M:%S":"%d-%m %H:%M:%S").c_str(),
 			    100*(double)(tm_end-tm_beg)/(double)(tm_per-tm_beg),
 			    100*(double)consMax/(double)(tm_per-tm_beg), tm2s(1e-9*(tm_end-tm_beg)).c_str(), tm2s(1e-9*(tm_per-tm_beg)).c_str(),
@@ -3113,7 +3118,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(nCPU() > 1 && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && opt->attr("col") == "cpuSet") {
 	    ResAlloc res(taskRes, true);
 	    map<string,STask>::iterator it = mTasks.find(opt->attr("key_path"));
-	    if(it == mTasks.end()) throw err_sys(_("No present task '%s'."));
+	    if(it == mTasks.end()) throw err_sys(_("The task '%s' is missing."));
 	    if(it->second.flgs & STask::Detached) return;
 
 	    it->second.cpuSet = TSYS::strParse(opt->text(),0,"(");
@@ -3134,8 +3139,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    int rez = pthread_setaffinity_np(it->second.thr, sizeof(cpu_set_t), &cpuset);
 	    res.release();
 	    TBDS::genDBSet(nodePath()+"CpuSet:"+it->first, it->second.cpuSet);
-	    if(rez == EINVAL) throw err_sys(_("Set not allowed processors try."));
-	    if(rez) throw err_sys(_("CPUs set for the thread error."));
+	    if(rez == EINVAL) throw err_sys(_("Attempt to set missing processor."));
+	    if(rez) throw err_sys(_("Error installing processors for the thread."));
 	}
 #endif
     }

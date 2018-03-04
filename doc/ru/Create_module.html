@@ -1,0 +1,350 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Документация/Как сделать/Создать модуль - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Документация/Как сделать/Создать модуль</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FCreate+module&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Create_module" title="Documents/How to/Create module">Documents/How to/Create module</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Create_module" title="Documents/How to/Create module (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Create_module/uk" title="Документація/Як зробити/Створити модуль (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../en/files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Generic revision and updating
+</td></tr></table>
+</div>
+<p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.BD.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Создание нового модуля</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#.D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.B2_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B5_.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D0.BD.D1.8B.D1.85_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D0.BE.D0.B2_.D0.BF.D1.80.D0.BE.D0.B5.D0.BA.D1.82.D0.B0_OpenSCADA"><span class="tocnumber">1.1</span> <span class="toctext">Создание в дереве исходных текстов проекта OpenSCADA</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.B2.D0.BD.D0.B5.D1.88.D0.BD.D0.B5.D0.B3.D0.BE_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F_.D0.BA_OpenSCADA"><span class="tocnumber">1.2</span> <span class="toctext">Создание внешнего модуля к OpenSCADA</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#API_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">2</span> <span class="toctext">API модуля</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.91.D0.B0.D0.B7.D1.8B_.D0.94.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.28.D0.91.D0.94.29.22"><span class="tocnumber">2.1</span> <span class="toctext">Модуль подсистемы "Базы Данных (БД)"</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.8B.22"><span class="tocnumber">2.2</span> <span class="toctext">Модуль подсистемы "Транспорты"</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.BD.D1.8B.D0.B5_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.8B.22"><span class="tocnumber">2.3</span> <span class="toctext">Модуль подсистемы "Транспортные протоколы"</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.A1.D0.B1.D0.BE.D1.80_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.28DAQ.29.22"><span class="tocnumber">2.4</span> <span class="toctext"><span>Модуль подсистемы "Сбор данных (DAQ)"</span></span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.90.D1.80.D1.85.D0.B8.D0.B2.D1.8B.22"><span class="tocnumber">2.5</span> <span class="toctext">Модуль подсистемы "Архивы"</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.9F.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B_.28UI.29.22"><span class="tocnumber">2.6</span> <span class="toctext">Модуль подсистемы "Пользовательские интерфейсы (UI)"</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.A1.D0.BF.D0.B5.D1.86.D0.B8.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5.22"><span class="tocnumber">2.7</span> <span class="toctext">Модуль подсистемы "Специальные"</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<p>Данное руководство призвано помочь в создании модулей для системы OpenSCADA. Создание модуля может потребоваться в случае желания добавить поддержку нового источника данных или другого расширения к системе OpenSCADA. Поскольку OpenSCADA является предельно модулей, то все интерфейсы взаимодействия с внешней средой осуществляются посредством расширения специализированными модулями типов:
+</p>
+<ul><li> "Базы данных"</li>
+<li> "Коммуникационные интерфейсы, транспорты"</li>
+<li> "Протоколы коммуникационных интерфейсов"</li>
+<li> "Источники данных и сбор данных"</li>
+<li> "Архивы (сообщений и значений)"</li>
+<li> "Интерфейсы пользователя (GUI, TUI, WebGUI, speach, signal ...)"</li>
+<li> "Дополнительные модули, специальные"</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Для создания модулей OpenSCADA нужны знания в программировании на языке C/C++, сборочной системы <a class="external text" href="http://ru.wikipedia.org/wiki/Autotools" rel="nofollow noreferrer noopener" target="_blank">AutoTools</a>, а также базовые знания ОС Linux и используемого дистрибутива Linux.
+</p><p>Для размещения разработанного модуля в основном репозитории дерева исходных текстов OpenSCADA Вы должны выполнить следующее и следовать приведенным требованиям:
+</p>
+<ul><li> являться правообладателем или автором кода этого модуля и распространять его под свободной лицензией, отдавая предпочтение GPL;</li>
+<li> приготовить и сохранить код модуля как архив отдельной папки модуля какой нибудь из подсистем OpenSCADA, следовать требованиям к содержимому:
+<ul><li> исходные тексты модуля должны включать корректную информацию прав копирования, в начале каждого файла, быть написанными и отформатированными согласно какой нибудь системе где предпочтение нужно отдавать стилю форматирования основных модулей OpenSCADA;</li>
+<li> файлы локализации модулей также должны быть корректными, актуальными и соответственно отформатированными.</li></ul></li>
+<li> написать краткую информационную страницу модуля для размещения её на <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">OpenSCADA Wiki</a>, таким-же образом как и для других модулей рядом;</li>
+<li> для размещения этого модуля написать прямой запрос в теме форума "<a class="external text" href="http://oscada.org/ru/forum/topics/razrabotka_openscada/" rel="nofollow noreferrer noopener" target="_blank">Разработка OpenSCADA</a>", включая доказательство работоспособности от разработчика OpenSCADA или короткое демонстрационное видео.</li></ul>
+<h2><span class="mw-headline" id=".D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.BD.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="mw-headline-number">1</span> Создание нового модуля</span></h2>
+<p>Модули в OpenSCADA представляют из себя разделяемые библиотеки, которые подключаются к ядру OpenSCADA динамически, в момент работы программы. Многие модули в процессе работы могут быть отключены, подключены и обновлены из <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#CfgModSched" title="Special:MyLanguage/Documents/Program manual">менеджера модулей</a>. Модули также могут быть включены в ядро OpenSCADA при сборке, посредством аргумента <b>--enable-{ModName}=incl</b> к скрипту конфигурации "configure", о чём можно узнать из <a href="Build_from_source.html" title="Special:MyLanguage/Documents/How to/Build from source">руководства по сборке</a>. Модули OpenSCADA могут быть семи типов, согласно присутствующим <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Modularity" title="Special:MyLanguage/Documents/Program manual">модульным подсистемам</a>. Сейчас модули к системе OpenSCADA пишутся на языке программирования "<b>C++</b>", хотя в дальнейшем возможно появление биндингов на другие языки.
+</p><p>Для облегчения создания новых модулей в дереве исходных текстов, в ветви каждой подсистемы, предусмотрена директория "<b>=Tmpl=</b>" с шаблоном модуля соответствующей подсистемы. Разработчик нового модуля может взять эту директорию и скопировать её с именем своего нового модуля. Предусмотрена возможность создания модулей в дереве исходных текстов проекта OpenSCADA или как независимого проекта внешнего модуля к OpenSCADA.
+</p>
+<h3><span class="mw-headline" id=".D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.B2_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B5_.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D0.BD.D1.8B.D1.85_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D0.BE.D0.B2_.D0.BF.D1.80.D0.BE.D0.B5.D0.BA.D1.82.D0.B0_OpenSCADA"><span class="mw-headline-number">1.1</span> Создание в дереве исходных текстов проекта OpenSCADA</span></h3>
+<p>Создавать новые модули в дереве исходных текстов проекта OpenSCADA имеет смысл в случае дальнейших планов передачи нового модуля проекту OpenSCADA. Поскольку модуль не должен противоречить духу открытого проекта и лицензии на основе которой <a class="external text" href="http://oscada.org/ru/glavnaja/o-proekte/licenzii/" rel="nofollow noreferrer noopener" target="_blank">разрабатывается и распространяется OpenSCADA</a> то лицензией нового модуля очевидно должна быть одна из свободных лицензий.
+</p><p>В целом процедура создания нового модуля с включением в дерево исходных текстов на основе шаблона является проще процедуры для внешнего модуля и включает в себя шаги:
+</p>
+<dl><dd>1. Получение дерева исходных текстов проекта OpenSCADA.
+<dl><dd><i>Для рабочей ветки:</i>
+<dl><dd>$ svn co svn://oscada.org/trunk/OpenSCADA</dd></dl></dd>
+<dd><i>Для ветки стабильного релиза (нежелательно поскольку к стабильным LTS релизам принимаются только исправления и эта инструкция требует версии 0.9 и более):</i>
+<dl><dd>$ svn co svn://oscada.org/tags/openscada_0.8.0</dd></dl></dd></dl></dd>
+<dd>2. Копирование директории шаблона с именем нового модуля "NewMod" (например, для подсистемы "БД"):
+<dl><dd>$ cd OpenSCADA/src/moduls/bd</dd>
+<dd>$ cp -r =Tmpl= NewMod; cd NewMod</dd>
+<dd>$ rm -f configure.ac</dd></dl></dd>
+<dd>3. Редактирование файла "module.cpp".
+<dl><dd><i>Изменить имена функций включения модуля согласно имени нового модуля</i>:
+<dl><dd>"<b>TModule::SAt bd_Tmpl_module( int n_mod )</b>" — bd_NewMod_module</dd>
+<dd>"<b>TModule *bd_Tmpl_attach( const TModule::SAt &amp;AtMod, const string &amp;source )</b>" — bd_NewMod_attach</dd></dl></dd>
+<dd><i>Информация о модуле в файле "module.cpp", а именно участок:</i></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+//************************************************
+//* Modul info!                                  *
+#define MOD_ID          "NewMod"
+#define MOD_NAME        _("DB NewMod")
+#define MOD_TYPE        SDB_ID
+#define VER_TYPE        SDB_VER
+#define MOD_VER         "0.0.1"
+#define AUTHORS         _("MyName MyFamily")
+#define DESCRIPTION     _("BD NewMod description.")
+#define MOD_LICENSE     "GPL2"
+</pre>
+<dl><dd>4. Редактирование конфигурации сборки модуля в файле "Makefile.am" к такому виду:</dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+EXTRA_DIST = *.h po/*
+
+if NewModIncl
+noinst_LTLIBRARIES = db_NewMod.la
+db_NewMod_la_CXXFLAGS = -DMOD_INCL -fpic
+db_NewMod_la_LIBTOOLFLAGS = --tag=disable-shared
+db_NewMod_la_LDFLAGS = -module
+else
+oscd_modul_LTLIBRARIES = db_NewMod.la
+db_NewMod_la_CXXFLAGS =
+db_NewMod_la_LIBTOOLFLAGS = --tag=disable-static
+db_NewMod_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+endif
+
+db_NewMod_la_CXXFLAGS += $(NewMod_CFLAGS)
+db_NewMod_la_LDFLAGS += $(NewMod_LDLAGS)
+db_NewMod_la_SOURCES = module.cpp
+
+I18N_mod = $(oscd_modulpref)NewMod
+include ../../../../I18N.mk
+</pre>
+<dl><dd>5. Добавление записи нового модуля в конец секции подсистемы (у нас "&gt; DB modules"), конфигурационного файла (OpenSCADA/configure.ac) сборочной системы OpenSCADA:</dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+AX_MOD_DB_EN(NewMod,[disable or enable[=incl] build module DB.NewMod],disable,incl,
+[
+    # Код проверки внешних библиотек модуля
+])
+</pre>
+<dl><dd>6. Теперь новый модуль можно собрать в составе OpenSCADA после переформирования сборочной системы:
+<dl><dd>$ autoreconf -if</dd>
+<dd>$ ./configure --enable-NewMod</dd>
+<dd>$ make</dd></dl></dd>
+<dd>7. Публикация. Формирование патча с вашим модулем и отправка его разработчикам OpenSCADA:
+<dl><dd>$ cd OpenSCADA; make distclean; rm -f src/moduls/bd/NewMod/Makefile.in</dd>
+<dd>$ svn add src/moduls/bd/NewMod</dd>
+<dd>$ svn diff &gt; NewMod.patch</dd></dl></dd></dl>
+<h3><span class="mw-headline" id=".D0.A1.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D0.B5_.D0.B2.D0.BD.D0.B5.D1.88.D0.BD.D0.B5.D0.B3.D0.BE_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F_.D0.BA_OpenSCADA"><span class="mw-headline-number">1.2</span> Создание внешнего модуля к OpenSCADA</span></h3>
+<p>Создание внешнего модуля к OpenSCADA может иметь смысл в случае разработки интерфейса интеграции с коммерческими системами, требующими закрытия кода взаимодействия, а также в случае других реализаций коммерческих интерфейсов, при которых модуль к OpenSCADA приобретает статус отдельного проекта, распространяется и поддерживается независимо, часто в виде бинарных сборок под конкретную платформу и версию OpenSCADA. Лицензия таких модулей соответственно может быть любой.
+</p><p>Процедура создания нового внешнего модуля на основе шаблона во многом похожа на предыдущую процедуру и включает в себя шаги:
+</p>
+<dl><dd>1. Получение исходных текстов проекта OpenSCADA. Для внешнего модуля в качестве источника шаблона можно использовать любые исходные файлы OpenSCADA версии более 0.9 поскольку из них нужно скопировать только директорию "=Tmpl=" и несколько файлов для сборки.</dd>
+<dd>2. Копирование директории шаблона с именем нового модуля "NewMod" (например, для подсистемы "БД"). Создание и копирование нужных файлов для внешнего модуля. В дальнейшем информационные файлы проекта "COPYING", "NEWS", "README", "AUTHORS" и "ChangeLog" нужно заполнить согласно сути нового модуля.
+<dl><dd>$ cp -r OpenSCADA/src/moduls/bd/=Tmpl= NewMod</dd>
+<dd>$ touch NewMod/{NEWS,README,AUTHORS,ChangeLog}</dd>
+<dd>$ cp OpenSCADA/I18N.mk NewMod/</dd></dl></dd>
+<dd>3. Редактирование информации о модуле в файле "module.cpp", аналогично этому пункту предыдущего раздела.</dd>
+<dd>4. Редактирование конфигурации сборки модуля в файле "Makefile.am", аналогично этому пункту предыдущего раздела, кроме:</dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+# вместо "db_NewMod_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la"
+db_NewMod_la_LDFLAGS = -module -avoid-version
+# Вместо "include ../../../../I18N.mk"
+include I18N.mk</pre>
+<dl><dd>5. Редактирование файла конфигурации сборочной системы "configure.ac":
+<dl><dd>"<b>AC_INIT([DB.Tmpl],[0.0.1],[my@email.org])</b>" — информация о модуле: имя, версия и email проекта.</dd>
+<dd>"<b>AM_CONDITIONAL([TmplIncl],[test])</b>" — <b>AM_CONDITIONAL([NewModIncl],[test])</b></dd></dl></dd>
+<dd>6. Установка пакета разработки OpenSCADA. Ввиду того, что модуль внешний и исходные файлы OpenSCADA нужны только на первом этапе создания модуля, необходимо установить пакет разработки OpenSCADA (openscada-devel), который содержит заголовочные файлы и библиотеки.</dd>
+<dd>7. Теперь новый модуль можно собрать, после формирования сборочной системы:
+<dl><dd>$ autoreconf -if</dd>
+<dd>$ ./configure</dd>
+<dd>$ make</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="API_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="mw-headline-number">2</span> API модуля</span></h2>
+<p>API системы OpenSCADA для разработчика OpenSCADA и модулей к ней исчерпывающе, в формальной форме, описано в соответствующем документе <a class="external text" href="http://wiki.oscada.org/Doc/API" rel="nofollow noreferrer noopener" target="_blank">API системы OpenSCADA</a>, который должен быть всегда под рукой при разработке для OpenSCADA. В данном же документе уклон сделан на детальное разъяснение основных моментов модульного API.
+</p><p>Общим для всех модулей является наследование корневого объекта-класса модуля от класса <i>TModule</i> посредством класса модульной подсистемы, а значит есть общая часть интерфейса модуля, которую рассмотрим ниже. В целом, для представления себе архитектуры модулей в контексте общей архитектуры OpenSCADA, настоятельно рекомендуется иметь перед глазами <a class="external text" href="http://wiki.oscada.org/Doc/API/part1/files?get=oscd_uml_classdep.png" rel="nofollow noreferrer noopener" target="_blank">общую диаграмму классов OpenSCADA</a>!
+</p><p>Точкой входа любого модуля являются функции:
+</p>
+<ul><li> <i>TModule::SAt module( int n_mod )</i>, <i>TModule::SAt bd_DBF_module( int n_mod )</i> — используется для сканирования перечня и информации о всех модулях в библиотеке. Первая функция используется при реализации модулей во внешней разделяемой библиотеке, а вторая при линковке их в ядро OpenSCADA.</li>
+<li> <i>TModule *attach( const TModule::SAt &amp;AtMod, const string &amp;source )</i>, <i>TModule *bd_Tmpl_attach( const TModule::SAt &amp;AtMod, const string &amp;source )</i> — используется для непосредственного подключения-открытия выбранного модуля путём создания корневого объекта модуля, наследованного от <i>TModule</i>. Первая функция используется при реализации модулей во внешней разделяемой библиотеке, а вторая при линковке их в ядро OpenSCADA.</li></ul>
+<p>Для удобства прямой адресации к корневому объекту модуля из любого объекта модуля ниже по иерархии рекомендуется определять глобальную переменную "mod" в области имён модуля с инициализацией её в конструкторе корневого объекта модуля. Также, для прозрачного перевода текстовых сообщений модуля рекомендуется определять шаблон функции вызова перевода сообщений модуля "<b>_({Сообщение})</b>", как:
+</p>
+<pre style="white-space: pre-wrap;">
+#undef _
+#define _(mess) mod-&gt;I18N(mess)</pre>
+<p>В конструкторе корневого объекта модуля, наследованного от <i>TModule</i>, необходимо установить основную информацию модуля вызовом функции <i>void modInfoMainSet({Имя}, {Тип}, {Версия}, {Авторы}, {Описание}, {Лицензия}, {Источник})</i>, после инициализации быстрой ссылки "mod" на корневой объект этого модуля.
+</p><p>А также инициировать окружение модуля с помощью функций:
+</p>
+<ul><li> <i>void modFuncReg( ExpFunc *func );</i> — Регистрация экспортируемой функции модуля. Эта функция часть механизма вызова межмодульного взаимодействия, которая регистрирует внутреннюю функцию модуля для внешнего вызова по имени функции и её указателю относительно объекта модуля.</li></ul>
+<p>Последующее получение файла шаблона переводов "po/NewMod.pot" текстовых сообщений "<b>_({Сообщение})</b>", а также обновление-актуализация файлов уже существующих переводов "po/{en|ru|uk|de|...}.po" осуществляется командой в директории модуля "<b>$ make messages</b>".
+</p><p>С целью общего управления модулем в классе <i>TModule</i> предусмотрен ряд виртуальных функций, которые могут быть определены в корневом объекте модуля с реализацией нужной реакции на команды ядра OpenSCADA к модулю:
+</p>
+<ul><li> <i>void load_( );</i> — Загрузка модуля. Вызывается на стадии загрузки конфигурации модуля из конфигурационного файла или БД.</li>
+<li> <i>void save_( );</i> — Сохранение модуля. Вызывается на стадии сохранения конфигурации модуля в конфигурационном файле или БД обычно по инициативе пользователя.</li>
+<li> <i>void modStart( );</i> — Запуск модуля. Вызывается на стадии запуска задач исполнения фоновых функций модуля, если таковые модулем предоставляются.</li>
+<li> <i>void modStop( );</i> — Останов модуля. Вызывается на стадии останова задач исполнения фоновых функций модуля, если таковые модулем предоставляются.</li>
+<li> <i>void modInfo( vector&lt;string&gt; &amp;list );</i> — Запрос списка информационных свойств модуля. Этой функцией класса <i>TModule</i> предоставляется стандартный набор свойств модуля ("Module", "Name", "Type", "Source", "Version", "Author", "Description", "License"), который может быть расширен дополнительными свойствами данного модуля.</li>
+<li> <i>string modInfo( const string &amp;name );</i> — Запрос указанного элемента информации. Осуществляется обработка запросов к дополнительным свойствам данного модуля.</li>
+<li> <i>void postEnable( int flag );</i> — Подключение модуля к динамическому дереву объектов. Вызывается фактически после включения модуля.</li>
+<li> <i>void perSYSCall( unsigned int cnt );</i> — Вызов из системного потока с периодичностью 10 секунд и секундным счётчиком <i>cnt</i>. Может использоваться для выполнения периодических, редких, сервисных процедур.</li></ul>
+<p>Все интерфейсные объекты модулей наследуют класс узла <i>TCntrNode</i>, который предоставляет механизм <a class="external text" href="http://wiki.oscada.org/Doc/API#h154-1" rel="nofollow noreferrer noopener" target="_blank">интерфейса управления</a>, одной из задач которого является предоставление интерфейса конфигурации объекта в любом конфигураторе OpenSCADA. Для решения задач нового модуля может понадобиться расширение параметров конфигурации, что делается в виртуальной функции <i>void cntrCmdProc( XMLNode *opt );</i>. Содержимое этой функции, добавляющее свойство, в простейшем случае имеет вид:
+</p>
+<pre style="white-space: pre-wrap;">
+void MBD::cntrCmdProc( XMLNode *opt )
+{
+    //&gt; Get page info
+    if(opt-&gt;name() == "info")
+    {
+        TBD::cntrCmdProc(opt);
+        ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close opened transaction"),RWRWRW,"root",SDB_ID);
+        return;
+    }
+    //&gt; Process command to page
+    string a_path = opt-&gt;attr("path");
+    if(a_path == "/prm/st/end_tr" &amp;&amp; ctrChkNode(opt,"set",RWRWRW,"root",SDB_ID,SEC_WR)) transCommit();
+    else TBD::cntrCmdProc(opt);
+}
+</pre>
+<p>Первая половина этой функции обслуживает информационные запросы "info" с перечнем и свойствами полей конфигурации. Вторая половина обслуживает все остальные команды на получение, установку значения и другое. Вызов <i>TBD::cntrCmdProc(opt);</i> используется для получения наследованного интерфейса. Детальнее о назначении использованных функций смотрите в <a class="external text" href="http://wiki.oscada.org/Doc/API#h154-1" rel="nofollow noreferrer noopener" target="_blank">интерфейса управления</a>, а также в исходных текстах существующих модулей.
+</p><p>Кроме функции интерфейса управления объект <i>TCntrNode</i> предоставляет унифицированные механизмы контроля за модификацией конфигурации объекта, загрузки и сохранения конфигурации в хранилище. Для выполнения установки флага модификации данных объекта можно использовать функции <i>modif()</i> и <i>modifG()</i>, а специфические для модуля действия по загрузке и сохранению можно помещать в виртуальные функции:
+</p>
+<ul><li> <i>void load_( );</i> — Загрузка объекта из хранилища.</li>
+<li> <i>void save_( );</i> — Сохранение объекта в хранилище.</li></ul>
+<p>Типично, работа с конфигурацией осуществляется посредством объекта <i><a class="external text" href="http://wiki.oscada.org/Doc/API#h153-2" rel="nofollow noreferrer noopener" target="_blank">TConfig</a></i>, который содержит набор указанных свойств. Для прямого отражения свойств объекта модуля он наследуется от <i>TConfig</i>, а новые свойства добавляются командой:
+</p>
+<pre style="white-space: pre-wrap;">
+fldAdd(new TFld("PRM_BD",_("Parameters cache table"),TFld::String,TFld::NoFlag,"30",""));</pre>
+<p>Загрузка и сохранение свойств, указанных в объекте <i>TConfig</i>, из/в хранилище осуществляется командами:
+</p>
+<pre style="white-space: pre-wrap;">
+SYS-&gt;db().at().dataGet(fullDB(),owner().nodePath()+"DAQ",*this);
+SYS-&gt;db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);</pre>
+<p>Где:
+</p>
+<ul><li> <i>fullDB()</i> — полное имя БД-хранилища в виде "<b>{DBMod}.{DBName}.{Table}</b>";</li>
+<li> <i>owner().nodePath()+"DAQ"</i> — суммарный путь к узлу объекта — представителя таблицы в конфигурационном файла;</li>
+<li> <i>*this</i> — данный объект, наследованный от <i>TConfig</i>.</li></ul>
+<p>Для помещения отладочных сообщений, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">в контексте общей концепции отладки</a>, нужно использовать функцию <i>mess_debug()</i> с условием вызова по участку исходного текста программы:
+</p>
+<ul><li> <i>редко вызываемый участок:</i> прямой вызов функции <i>mess_debug(...)</i>;</li>
+<li> <i>часто вызываемый участок:</i> условный вызов: <i>if(mess_lev() == TMess::Debug) mess_debug(...);</i></li>
+<li> <i>критические к производительности участки кода:</i> оборачивание в определение OSC_DEBUG:</li></ul>
+<pre style="white-space: pre-wrap;">
+#ifdef OSC_DEBUG
+  mess_debug(...);
+#endif
+</pre>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.91.D0.B0.D0.B7.D1.8B_.D0.94.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.28.D0.91.D0.94.29.22"><span class="mw-headline-number">2.1</span> Модуль подсистемы "Базы Данных (БД)"</span></h3>
+<p>Модуль данного типа предназначен для интеграции OpenSCADA с СУБД, реализуемой модулем.
+</p><p>Интерфейс OpenSCADA для обслуживания запросов к БД представлен объектами и виртуальными функциями вызовов из ядра OpenSCADA:
+</p>
+<ul><li> <i>TTypeBD-&gt;TModule</i> — Корневой объект модуля подсистемы "БД":
+<ul><li> <i>TBD *openBD( const string &amp;id );</i> — Вызывается при открытии или создании нового объекта БД с идентификатором <i>id</i> данным модулем.</li></ul></li>
+<li> <i>TBD</i> — Объект базы данных:
+<ul><li> <i>void enable( );</i> — Включение БД.</li>
+<li> <i>void disable( );</i> — Отключение БД.</li>
+<li> <i>void load_( );</i> — Загрузка БД из общего хранилища конфигурации.</li>
+<li> <i>void save_( );</i> — Сохранение БД в общем хранилище конфигурации.</li>
+<li> <i>void allowList( vector&lt;string&gt; &amp;list );</i> — Запрос перечня <i>list</i> таблиц в БД.</li>
+<li> <i>void sqlReq( const string &amp;req, vector&lt; vector&lt;string&gt; &gt; *tbl = NULL, char intoTrans = EVAL_BOOL );</i> — Обработка SQL-запроса <i>req</i> к БД и получение результата в виде таблицы <i>tbl</i>, если запрос выборки и указатель ненулевой. При установке <i>intoTrans</i> в "true" для запроса должна быть открыта транзакция, в "false" закрыта. Данная функция должна реализоваться для СУБД, поддерживающих SQL-запросы.</li>
+<li> <i>void transCloseCheck( );</i> — Периодически вызываемая функция для проверки транзакций и закрытия старых или содержащих много запросов.</li>
+<li> <i>TTable *openTable( const string &amp;table, bool create );</i> — Вызывается при открытии или создании нового объекта таблицы.</li></ul></li>
+<li> <i>TTable</i> — Объект таблицы в базе данных:
+<ul><li> <i>void fieldStruct( TConfig &amp;cfg );</i> — Получение текущей структуры таблицы в объекте <i>TConfig</i>.</li>
+<li> <i>bool fieldSeek( int row, TConfig &amp;cfg, vector&lt; vector&lt;string&gt; &gt; *full = NULL );</i> — Последовательное сканирование записей таблицы перебором <i>row</i> и возврат "false" по окончанию с адресацией по активным, <i><a class="external text" href="http://wiki.oscada.org/Doc/API#h153-2" rel="nofollow noreferrer noopener" target="_blank">keyUse()</a></i>, ключевым полям. <i>full</i> определяется перед запросом, для предзагрузки полного ответа, с извлечением последующих записей отсюда.</li>
+<li> <i>void fieldGet( TConfig &amp;cfg );</i> — Запрос указанной в объекте <i>TConfig</i> записи с адресацией по ключевым полям.</li>
+<li> <i>void fieldSet( TConfig &amp;cfg );</i> — Передача указанной в объекте <i>TConfig</i> записи с адресацией по ключевым полям.</li>
+<li> <i>void fieldDel( TConfig &amp;cfg );</i> — Удаление указанной записи по ключевым полям объекта <i>TConfig</i>.</li></ul></li></ul>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.8B.22"><span class="mw-headline-number">2.2</span> Модуль подсистемы "Транспорты"</span></h3>
+<p>Модуль данного типа предназначен для обеспечения коммуникации OpenSCADA посредством интерфейса, часто сетевого, реализуемого модулем.
+</p><p>Программный интерфейс OpenSCADA для обслуживания входящих и исходящих запросов через сетевой интерфейс представлен объектами и виртуальными функциями вызовов из ядра OpenSCADA:
+</p>
+<ul><li> <i>TTypeTransport-&gt;TModule</i> — Корневой объект модуля подсистемы "Транспорты":
+<ul><li> <i>TTransportIn *In( const string &amp;name, const string &amp;db );</i> — Вызывается при открытии или создании нового объекта входящего транспорта <i>name</i> данным модулем с хранилищем в <i>db</i>.</li>
+<li> <i>TTransportOut *Out( const string &amp;name, const string &amp;db );</i> — Вызывается при открытии или создании нового объекта исходящего транспорта <i>name</i> данным модулем с хранилищем в <i>db</i>.</li></ul></li>
+<li> <i>TTransportIn</i> — Объект транспорта обработки входящих запросов, функция сервера. Входящие запросы, полученные модулем через реализацию сетевого интерфейса, должны направляться к указанному в конфигурации входящему протоколу <i>protocol()</i> посредством функции <i><a class="external text" href="http://wiki.oscada.org/Doc/API#h146-4" rel="nofollow noreferrer noopener" target="_blank">mess()</a></i>:
+<ul><li> <i>string getStatus( );</i> — Вызов для получения специфического статуса интерфейса.</li>
+<li> <i>void setAddr( const string &amp;addr );</i> — Установка адреса транспорта. Может переопределяться для обработки и проверки специфического для модуля формата адреса транспорта.</li>
+<li> <i>void start();</i> — Запуск транспорта. При запуске входящего транспорта обычно создаётся задача, которая ожидает запросов извне.</li>
+<li> <i>void stop();</i> — Останов транспорта.</li></ul></li>
+<li> <i>TTransportOut</i> — Объект транспорта обработки исходящих запросов, функция клиента:
+<ul><li> <i>string getStatus( );</i> — Вызов для получения специфического статуса интерфейса.</li>
+<li> <i>void setAddr( const string &amp;addr );</i> — Установка адреса транспорта. Может переопределяться для обработки и проверки специфического для модуля формата адреса транспорта.</li>
+<li> <i>void start( );</i> — Запуск транспорта. При запуске исходящего транспорта осуществляется фактическое подключение к удалённой станции для интерфейсов работающих по подключению. В этот момент возможны ошибки, если подключение невозможно, и транспорт должен вернуться в остановленное состояние.</li>
+<li> <i>void stop( );</i> — Останов транспорта.</li>
+<li> <i>int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false );</i> — Обслуживание запросов из ядра OpenSCADA на отправку данных через транспорт. Время ожидания <i>time</i> соединения указывается в милисекундах, при ненулевом значении должно замещать одноимённый таймаут транспорта в его общих настройках. <i>noRes</i> используется протоколами для монопольного блокирования транспорта на время работы с ним и исключения собственной блокировки функцией. Пакет для отправки указывается в буфере <i>obuf</i> длиной <i>len_ob</i>, а в <i>ibuf</i> и <i>len_ib</i> указывается буфер и его размер для ответа. Исходящий буфер <i>obuf</i> может быть пуст (NULL) если нужно проверить наличие продолжения ответа или ответов, поступающих без запроса, режим вещания. Если не указан буфер для ответа (NULL) то ожидание ответа не будет осуществляться.</li></ul></li></ul>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.BD.D1.8B.D0.B5_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.8B.22"><span class="mw-headline-number">2.3</span> Модуль подсистемы "Транспортные протоколы"</span></h3>
+<p>Модуль данного типа предназначен для обеспечения протокольного слоя коммуникаций OpenSCADA, реализуемого модулем, как для доступа к данным внешних систем, так и к данным OpenSCADA из внешних систем.
+</p><p>Программный интерфейс OpenSCADA для реализации протокольного слоя представлен объектами и виртуальными функциями вызовов из ядра OpenSCADA:
+</p>
+<ul><li> <i>TProtocol-&gt;TModule</i> — Корневой объект модуля подсистемы "Протоколы":
+<ul><li> <i>void itemListIn( vector&lt;string&gt; &amp;ls, const string &amp;curIt = "" );</i> — Перечень подэлементов у входящего протокола, если протокол их предусматривает. Используется при выборе в конфигурации объекта входящего транспорта.</li>
+<li> <i>void outMess( XMLNode &amp;io, TTransportOut &amp;tro );</i> — Реализуемая передача данных объектами ядра OpenSCADA в дереве XML <i>in</i> удалённой системе посредством транспорта <i>tro</i> и текущего исходящего протокола. Представление данных в дереве XML <i>in</i> неунифицировано и специфично логической структуре протокола. Эти данные сериализуются (переводятся в последовательность байтов согласно протоколу) и отправляются через указанный исходящий транспорт <i>tro</i> функцией <i><a class="external text" href="http://wiki.oscada.org/Doc/API#h145-5" rel="nofollow noreferrer noopener" target="_blank">messIO()</a></i> выше.</li>
+<li> <i>TProtocolIn *in_open( const string &amp;name )</i> — Вызывается при открытии или создании нового объекта входящего транспортного протокола <i>name</i> данным модулем.</li></ul></li>
+<li> <i>TProtocolIn</i> — Объект протокола обработки входящих запросов из объекта входящего транспорта <i><a class="external text" href="http://wiki.oscada.org/Doc/API#h145-4" rel="nofollow noreferrer noopener" target="_blank">TTransportIn</a></i> выше. На каждый сеанс входящего запроса создаётся объект связанного входящего протокола, который остаётся жив до момента завершения полного сеанса "Запрос-&gt;Ответ". Адрес транспорта, открывшего экземпляр протокола, указан в <i>srcTr()</i>:
+<ul><li> <i>bool mess( const string &amp;request, string &amp;answer, const string &amp;sender );</i> — Передача последовательности данных <i>request</i> объекту протокола для их разбора согласно реализации протокола с указанием адреса запросившего объекта в <i>sender</i>. Данная функция протокола должна обработать запрос, сформировать ответ в <i>answer</i> и вернуть "false" в случае полноты запроса. В случае если запрос поступил не весь, нужно возвращать "true" для индикации транспорту "ожидать завершения", при этом первую часть запроса нужно сохранять в контексте объекта протокола.</li></ul></li></ul>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.A1.D0.B1.D0.BE.D1.80_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.28DAQ.29.22"><span class="mw-headline-number">2.4</span> <span id="DAQ" title="#DAQ">Модуль подсистемы "Сбор данных (DAQ)"</span></span></h3>
+<p>Модуль этого типа предназначен для получения данных реального времени внешних систем или их формирования в вычислителях, реализуемых модулем.
+</p><p>Программный интерфейс OpenSCADA для реализации доступа к данным реального времени представлен объектами и виртуальными функциями вызовов из ядра OpenSCADA:
+</p>
+<ul><li> <i>TTypeDAQ-&gt;TModule</i> — Корневой объект модуля подсистемы "Сбор данных":
+<ul><li> <i>void compileFuncLangs( vector&lt;string&gt; &amp;ls );</i> — Запрос перечня языков пользовательского программирования, поддерживаемых модулем в <i>ls</i>.</li>
+<li> <i>void compileFuncSynthHighl( const string &amp;lang, XMLNode &amp;shgl );</i> — Запрос правил подсветки синтаксиса <i>shgl</i> указанного языка пользовательского программирования <i>lang</i>.</li>
+<li> <i>string compileFunc( const string &amp;lang, TFunction &amp;fnc_cfg, const string &amp;prog_text );</i> — Вызов компиляции пользовательской процедуры в <i>prog_text</i> и создания объекта исполнения функции на основе <i>fnc_cfg</i> для указанного языка пользовательского программирования <i>lang</i> этого модуля. Возвращается адрес к скомпилированному объекту функции, готовому для исполнения.</li>
+<li> <i>bool redntAllow( );</i> — Признак поддержки механизмов резервирования модулем. Должен переопределяться и возвращать "true" в случае поддержки, иначе "false".</li>
+<li> <i>TController *ContrAttach( const string &amp;name, const string &amp;daq_db );</i> — Вызывается при открытии или создании нового объекта контроллера <i>name</i> данным модулем с хранилищем в <i>db</i>.</li></ul></li>
+<li> <i>TController</i> — Объект контроллера источника данных. В контексте данного объекта обычно запускается задача периодического или по расписанию опроса данных реального времени одного физического контроллера или физически выделенного блока данных. В случае получения данных пакетами они помещаются непосредственно в архив, связанный с атрибутом параметра <i><a class="external text" href="http://wiki.oscada.org/Doc/API#h143-8" rel="nofollow noreferrer noopener" target="_blank">TVAl::arch()</a></i>, а текущее значение устанавливается функцией <i><a class="external text" href="http://wiki.oscada.org/Doc/API#h143-8" rel="nofollow noreferrer noopener" target="_blank">TVAl::set()</a></i> с атрибутом "sys"=true:
+<ul><li> <i>string getStatus( );</i> — Вызов для получения специфического статуса контроллера.</li>
+<li> <i>void enable_( );</i> — Включение контроллера. Обычно здесь осуществляется инициализация объектов параметров и их интерфейса в виде атрибутов, которые иногда могут запрашиваться у ассоциированного удалённого источника.</li>
+<li> <i>void disable_( );</i> — Отключение контроллера.</li>
+<li> <i>void start_( );</i> — Запуск контроллера. Обычно здесь создаётся и запускается задача периодического или по расписанию опроса.</li>
+<li> <i>void stop_( );</i> — Останов контроллера.</li>
+<li> <i>void redntDataUpdate( bool firstArchiveSync = false );</i> — Выполнение операции получения данных из резервной станции. Вызывается автоматически задачей обслуживания схемы резервирования и перед запуском для синхронизации архивов с установленным параметром <i>firstArchiveSync</i>.</li>
+<li> <i>TParamContr *ParamAttach( const string &amp;name, int type );</i> — Вызывается при открытии или создании нового объекта параметра <i>name</i> с типом <i>type</i>.</li></ul></li>
+<li> <i>TParamContr-&gt;TValue</i> — Объект параметра контроллера источника данных. Содержит атрибуты с реальными данными в наборе, определённом физически доступными данными. Значения в атрибуты попадают из задачи опроса контроллера при асинхронном режиме или запрашиваются в момент обращения при синхронном режиме посредством методов наследованного типа <i><a class="external text" href="http://wiki.oscada.org/Doc/API#h143-7" rel="nofollow noreferrer noopener" target="_blank">TValue</a></i> данного объекта:
+<ul><li> <i>void enable( );</i> — Включить параметр. Осуществляется формирование набора атрибутов и заполнение их значением недостоверности.</li>
+<li> <i>void disable( );</i> — Отключить параметр.</li>
+<li> <i>void setType( const string &amp;tpId );</i> — Вызывается для смены типа параметра <i>tpId</i> и может быть обработан в объекте модуля для смены собственных данных.</li>
+<li> <i>TVal* vlNew( );</i> — Вызывается при создании нового атрибута. Может быть переопределён для реализации особого поведения в рамках своего, наследованного от <i>TVal</i>, класса при доступе к атрибуту.</li>
+<li> <i>void vlSet( TVal &amp;val, const TVariant &amp;pvl );</i> — Вызывается для атрибута с прямым режимом записи <i>TVal::DirWrite</i> (синхронный режим или запись во внутренний буфер объекта) при установке значения с целью непосредственной записи значения в физический контроллер или буфер объекта.</li>
+<li> <i>void vlGet( TVal &amp;val );</i> — Вызывается для атрибута с прямым режимом чтения <i>TVal::DirRead</i> (синхронный режим или чтение из внутреннего буфера объекта) при чтении значения с целью непосредственного чтения значения из физического контроллера или буфера объекта.</li>
+<li> <i>void vlArchMake( TVal &amp;val );</i> — Вызывается при создании архива значений с атрибутом <i>val</i> в качестве источника с целью инициализации качественных характеристик буфера архива согласно особенностям источника данных и их опроса.</li></ul></li></ul>
+<p>Для специализированной диагностики можно помещать отладочные сообщения для условия <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_diagn_ru.png" title="File:QTCfg subsys daq mod cntr diagn ru.png">выбора уровня диагностики "Отладка (0)"</a>: <i>if(messLev() == TMess::Debug) mess_debug_(...);</i>.
+</p>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.90.D1.80.D1.85.D0.B8.D0.B2.D1.8B.22"><span class="mw-headline-number">2.5</span> Модуль подсистемы "Архивы"</span></h3>
+<p>Модуль этого типа предназначен для архивирования и ведения истории сообщений OpenSCADA и данных реального времени, полученных в подсистеме "Сбор данных" реализуемым модулем способом.
+</p><p>Программный интерфейс OpenSCADA для реализации доступа к архивным данным представлен объектами и виртуальными функциями вызовов из ядра OpenSCADA:
+</p>
+<ul><li> <i>TTypeArchivator-&gt;TModule</i> — Корневой объект модуля подсистемы "Архивы":
+<ul><li> <i>TMArchivator *AMess(const string &amp;id, const string &amp;db );</i> — Вызывается при открытии или создании нового объекта архиватора сообщений <i>id</i> данным модулем с хранилищем в <i>db</i>.</li>
+<li> <i>TVArchivator *AVal(const string &amp;id, const string &amp;db );</i> — Вызывается при открытии или создании нового объекта архиватора значений <i>id</i> данным модулем с хранилищем в <i>db</i>.</li></ul></li>
+<li> <i>TMArchivator</i> — Объект архиватора сообщений с реализуемым способом архивирования и расположением хранилища:
+<ul><li> <i>void start( );</i> — Запуск архиватора. Архиватор начинает принимать сообщения и размещать их в хранилище.</li>
+<li> <i>void stop( );</i> — Останов архиватора.</li>
+<li> <i>time_t begin( );</i> — Начало данных в архиваторе согласно текущему состоянию хранилища.</li>
+<li> <i>time_t end( );</i> — Конец данных в архиваторе согласно текущему состоянию хранилища.</li>
+<li> <i>void put( vector&lt;TMess::SRec&gt; &amp;mess );</i> — Вызов на размещение сообщений <i>mess</i> в хранилище.</li>
+<li> <i>void get( time_t b_tm, time_t e_tm, vector&lt;TMess::SRec&gt; &amp;mess, const string &amp;category = "", char level = 0, time_t upTo = 0 );</i> — Запрос сообщений <i>mess</i> в архиве за промежуток времени <i>b_tm</i> ... <i>e_tm</i> согласно шаблону категории <i>category</i> и уровню с ограничением на время запроса до <i>upTo</i>.</li></ul></li>
+<li> <i>TVArchivator</i> — Объект архиватора значений с реализуемым способом архивирования и расположением хранилища:
+<ul><li> <i>void setValPeriod( double per );</i> — Вызывается при смене периодичности значений архиватора.</li>
+<li> <i>void setArchPeriod( int per );</i> — Вызывается при смене периодичности архивирования.</li>
+<li> <i>void start( );</i> — Запуск архиватора. Архиватор начинает принимать сообщения и размещать их в хранилище.</li>
+<li> <i>void stop( bool full_del = false );</i> — Останов архиватора с возможностью полного удаления его данных в хранилище, если установлен <i>full_del</i>.</li>
+<li> <i>TVArchEl *getArchEl( TVArchive &amp;arch );</i> — Запрос объекта-представителя архива <i>arch</i>, обслуживаемого архиватором.</li></ul></li>
+<li> <i>TVArchEl</i> — Объект представителя архива значений в хранилище архиватора:
+<ul><li> <i>void fullErase( );</i> — Вызывается для полного удаления части архива в архиваторе.</li>
+<li> <i>int64_t end( );</i> — Время окончания архива в архиваторе.</li>
+<li> <i>int64_t begin( );</i> — Время начала архива в архиваторе.</li>
+<li> <i>TVariant getValProc( int64_t *tm, bool up_ord );</i> — Запрос на обработку получения одного значения из архива за время <i>tm</i> и доводкой к верхнему значению в сетке дискретизации <i>up_ord</i>.</li>
+<li> <i>void getValsProc( TValBuf &amp;buf, int64_t beg, int64_t end );</i> — Запрос на обработку модулем получения данных группы значений <i>buf</i> за указанный промежуток времени.</li>
+<li> <i>void setValsProc( TValBuf &amp;buf, int64_t beg, int64_t end );</i> — Запрос на обработку модулем размещения данных группы значений <i>buf</i> за указанный промежуток времени.</li></ul></li></ul>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.9F.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B_.28UI.29.22"><span class="mw-headline-number">2.6</span> Модуль подсистемы "Пользовательские интерфейсы (UI)"</span></h3>
+<p>Модуль этого типа предназначен для предоставления пользовательского интерфейса реализуемым модулем способом. Корневым объектом модуля данной подсистемы является <i>TUI-&gt;TModule</i>, который не содержит специфических интерфейсов, а пользовательский интерфейс формируется согласно с реализуемой концепцией и механизмами, например, библиотеки графических примитивов.
+</p>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.22.D0.A1.D0.BF.D0.B5.D1.86.D0.B8.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5.22"><span class="mw-headline-number">2.7</span> Модуль подсистемы "Специальные"</span></h3>
+<p>Модуль этого типа предназначен для реализации специфических функций, не вошедших ни в одну из вышеперечисленных подсистем, реализуемым модулем способом. Корневым объектом модуля данной подсистемы является <i>TSpecial-&gt;TModule</i>, который не содержит специфических интерфейсов, а специфические функции формируется согласно их требованиям с использованием всех возможностей API OpenSCADA.
+</p>
+
+
+
+
+
+</div></body>
+</html>

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodule.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -73,23 +73,23 @@ void TModule::postEnable( int flag )
 {
     if(flag&TCntrNode::NodeRestore)	return;
 
-    mess_sys(TMess::Debug, _("Enable module."));
+    mess_sys(TMess::Debug, _("Module enabling."));
 }
 
 void TModule::postDisable( int flag )
 {
-    mess_sys(TMess::Debug, _("Disable module."));
+    mess_sys(TMess::Debug, _("Module disabling."));
 }
 
 TSubSYS &TModule::owner( ) const	{ return *(TSubSYS*)nodePrev(); }
 
 void TModule::modStart( )
 {
-    mess_sys(TMess::Debug, _("Start module."));
+    mess_sys(TMess::Debug, _("Module starting."));
 }
 void TModule::modStop( )
 {
-    mess_sys(TMess::Debug, _("Stop module."));
+    mess_sys(TMess::Debug, _("Module stopping."));
 }
 
 void TModule::modFuncList( vector<string> &list )
@@ -112,7 +112,7 @@ TModule::ExpFunc &TModule::modFunc( const string &prot )
 {
     for(unsigned i = 0; i < mEfunc.size(); i++)
 	if(mEfunc[i]->prot == prot) return *mEfunc[i];
-    throw err_sys(_("Function '%s' is not present in the module!"), prot.c_str());
+    throw err_sys(_("Function '%s' is not in the module!"), prot.c_str());
 }
 
 bool TModule::modFunc( const string &prot, void (TModule::**offptr)(), bool noex )

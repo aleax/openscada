@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,7 +40,7 @@ ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
     mUseXml(false), mMaxSize(1024), mNumbFiles(30), mTimeSize(30), mChkTm(60), mPackTm(10),
     mPackInfoFiles(false), mPrevDbl(false), mPrevDblTmCatLev(false), tmProc(0), tmProcMax(0), mLstCheck(0)
 {
-
+    if(SYS->prjNm().size()) setAddr("ARCHIVES/MESS/"+iid);
 }
 
 ModMArch::~ModMArch( )
@@ -174,7 +174,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 	    if(iF && files[iF-1]->begin() > f_beg && (files[iF-1]->begin()-f_beg) < (mTimeSize*24*60*60*2/3))
 		f_beg = files[iF-1]->begin()-mTimeSize*24*60*60;
 	    // Create new Archive
-	    string f_name = atm2s(f_beg, "/%F %T.msg");
+	    string f_name = atm2s(f_beg, "/%F %H.%M.%S.msg");
 	    try {
 		MFileArch *f_obj = new MFileArch(addr()+f_name, f_beg, this, Mess->charset(), useXML());
 		//Remove new error created file mostly by store space lack
@@ -494,7 +494,7 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
     mName = iname;
     cach_pr.tm = cach_pr.off = 0;
 
-    int hd = open(name().c_str(), O_RDWR|O_CREAT|O_TRUNC, 0666);
+    int hd = open(name().c_str(), O_RDWR|O_CREAT|O_TRUNC, SYS->permCrtFiles());
     if(hd <= 0) {
 	owner().mess_sys(TMess::Error, _("File '%s' creation error: %s(%d)."), name().c_str(), strerror(errno), errno);
 	mErr = true;
@@ -598,7 +598,7 @@ void MFileArch::attach( const string &iname, bool full )
 	    mPack = false;
 	}
 
-	f = fopen(name().c_str(),"r");
+	f = fopen(name().c_str(), "r");
 	if(f == NULL) { mErr = true; return; }
 
 	char s_char[100];
@@ -982,7 +982,7 @@ void MFileArch::check( bool free )
     ResAlloc res(mRes, true);
     if(!mErr && mLoad && xmlM()) {
 	if(mWrite) {
-	    int hd = open(name().c_str(), O_RDWR|O_TRUNC);
+	    int hd = open(name().c_str(), O_RDWR|O_TRUNC, 0600);
 	    if(hd > 0) {
 		string x_cf = mNode->save(XMLNode::XMLHeader|XMLNode::BrOpenPrev);
 		mSize = x_cf.size();
@@ -1015,7 +1015,7 @@ void MFileArch::check( bool free )
 	    cEl.cfg("PRM2").setS(i2s(xmlM()));
 	    SYS->db().at().dataSet((owner().infoTbl.size()?owner().infoTbl:mod->filesDB()), mod->nodePath()+"Pack/", cEl, false, true);
 	}
-	else if((hd=open((name()+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,0666)) > 0) {
+	else if((hd=open((name()+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,SYS->permCrtFiles())) > 0) {
 	    // Write info to info file
 	    string si = TSYS::strMess("%lx %lx %s %d",begin(),end(),charset().c_str(),xmlM());
 	    if(write(hd,si.data(),si.size()) != (int)si.size())

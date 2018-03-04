@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.JavaLikeCalc translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.JavaLikeCalc package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:01+0200\n"
+"POT-Creation-Date: 2018-03-04 10:39+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -16,306 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 #, c-format
-msgid "Variable '%s' is used but undefined"
-msgstr "Переменная '%s' не определена но использована"
-
-msgid "Array have more 255 items."
-msgstr "Массив имеет более 255 элементов."
-
-msgid "RegExp require one or two parameters."
-msgstr "RegExp требует одного или двух параметров."
-
-#, c-format
-msgid "Don't support operation code %d."
-msgstr "Не поддерживаемый код операции %d."
-
-#, c-format
-msgid "External functions number exceeded limits to %d on function '%s'"
-msgstr "Число внешних функций достигло лимита в %d на функции '%s'"
-
-#, c-format
-msgid "More than %d(%d) parameters are specified for function '%s'"
-msgstr "Указанно более %d(%d) параметров для функции '%s'"
-
-#, c-format
-msgid "Function is requested '%s', but it doesn't have return of IO"
-msgstr "Вызвана функция '%s', но она не имеет IO возврата"
-
-msgid "Function's name longer to 254."
-msgstr "Имя функции длиннее 254."
-
-msgid "Object's function have more 255 parameters."
-msgstr "Функция объекта имеет более 255 параметров."
-
-msgid "Get object from no object's register"
-msgstr "Получение объекта из не объектного регистра"
-
-msgid "Function execution terminated by error"
-msgstr "Выполнение функции прервано ошибкой"
-
-#, c-format
-msgid "Timeouted function calculation %d > %d+%d"
-msgstr "Исчерпано время вычисления функции %d > %d+%d"
-
-#, c-format
-msgid "Not supported type %d for operation 'Add'."
-msgstr "Не поддерживаемый тип %d для операции 'Add'."
-
-#, c-format
-msgid "Operation %c(%xh) error. Function '%s' is stopped."
-msgstr "Ошибка операции %c(%xh). Функция '%s' остановлена."
-
-msgid "Function: "
-msgstr "Функция: "
-
-msgid "Date of modification"
-msgstr "Дата модификации"
-
-msgid "Name"
-msgstr "Имя"
-
-msgid "Description"
-msgstr "Описание"
-
-msgid "To start"
-msgstr "Запускать"
-
-msgid "Maximum calculate time, seconds"
-msgstr "Максимальное время вычисления, секунд"
-
-msgid "Program"
-msgstr "Программа"
-
-msgid "IO"
-msgstr ""
-
-msgid "Identifier"
-msgstr "Идентификатор"
-
-msgid "Type"
-msgstr "Тип"
-
-msgid "Real;Integer;Boolean;String;Text;Object"
-msgstr "Веществ.;Целый;Логич.;Строка;Текст;Объект"
-
-msgid "Mode"
-msgstr "Режим"
-
-msgid "Input;Output;Return"
-msgstr "Вход;Выход;Возврат"
-
-msgid "Hide"
-msgstr "Скрытый"
-
-msgid "Default"
-msgstr "Умолч."
-
-msgid "New IO"
-msgstr "Новый IO"
-
-msgid "Empty value is not valid."
-msgstr "Пустое значение не допустимо."
-
-msgid "Function's library: "
-msgstr "Библиотека функций: "
-
-msgid "Function"
-msgstr "Функция"
-
-msgid "Library"
-msgstr "Библиотека"
-
-msgid "State"
-msgstr "Состояние"
-
-msgid "Accessing"
-msgstr "Доступен"
-
-msgid "Library DB"
-msgstr "БД библиотеки"
-
-msgid ""
-"DB address in format [<DB module>.<DB name>.<Table name>].\n"
-"For use main work DB set '*.*'."
-msgstr ""
-
-msgid "Configuration"
-msgstr "Конфигурация"
-
-msgid "Functions"
-msgstr "Функции"
-
-msgid "Java-like based calculator"
-msgstr "Вычислитель на java подобном языке"
-
-msgid "Roman Savochenko"
-msgstr "Роман Савоченко"
-
-msgid ""
-"Provides based on java like language calculator and engine of libraries.  "
-"The user can create and modify functions and libraries."
-msgstr ""
-"Предоставляет основанные на java подобном языке вычислитель и движок "
-"библиотек. Пользователь может создавать и модифицировать функции и "
-"библиотеки."
-
-msgid "Parameters table"
-msgstr "Таблица параметров"
-
-msgid "Controller's function"
-msgstr "Функция контроллера"
-
-msgid "Calculation schedule"
-msgstr "Планирование вычисления"
-
-msgid "Calculation task priority"
-msgstr "Приоритет задачи вычисления"
-
-msgid "Iteration number in single calculation"
-msgstr "Количество итераций в одном вычислении"
-
-msgid "IO ID"
-msgstr ""
-
-msgid "IO value"
-msgstr "Значение IO"
-
-msgid "Standard"
-msgstr "Стандартный"
-
-msgid "Data fields"
-msgstr "Поля данных"
-
-msgid "Data base"
-msgstr "База данных"
-
-msgid "Allow program translation"
-msgstr "Переводить программу"
-
-msgid "Function ID"
-msgstr "ID функции"
-
-msgid "Default value"
-msgstr "Знач. по умолч."
-
-msgid "Position"
-msgstr "Позиция"
-
-#, c-format
-msgid "Compilation with the help of the program language %s is not supported."
-msgstr "Компиляция на языке программирования %s не поддерживается."
-
-#, c-format
-msgid "Compile error: %s"
-msgstr "Ошибка компиляции: %s"
-
-msgid "Load function's libraries error."
-msgstr "Ошибка загрузки библиотеки функций."
-
-msgid "Safe timeout, seconds"
-msgstr "Таймаут безопасности, секунд"
-
-msgid "Functions' Libraries"
-msgstr "Библиотеки функций"
-
-msgid "Libraries"
-msgstr "Библиотеки"
-
-msgid "Call now. "
-msgstr "Вызов сейчас. "
-
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Вызовы с периодом: %s. "
-
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Следующий вызов по cron '%s'. "
-
-#, c-format
-msgid "Spent time: %s[%s]."
-msgstr "Затрачено времени: %s[%s]."
-
-#, c-format
-msgid ""
-"Functions library '%s' is not present. Please, create functions library!"
-msgstr ""
-"Библиотека функций '%s' отсутствует. Пожалуйста, создайте библиотеку функций!"
-
-#, c-format
-msgid "Create new function '%s'."
-msgstr "Создание новой функции '%s'."
-
-msgid "Load function and its IO error."
-msgstr "Ошибка загрузки функции и её IO."
-
-msgid "Function calculate frequency (Hz)"
-msgstr "Частота вычисления функции (Гц)"
-
-msgid "Function start flag"
-msgstr "Флаг запуска функции"
-
-msgid "Function stop flag"
-msgstr "Флаг останова функции"
-
-msgid "This controller object link"
-msgstr "Связь на объект этого контроллера"
-
-msgid "Calculation controller's function error."
-msgstr "Ошибка вычисления функции контроллера"
-
-msgid "No started or no present function."
-msgstr "Функция отсутствует или не запущена."
-
-msgid "Calculation"
-msgstr "Вычисления"
-
-msgid "Data"
-msgstr "Данные"
-
-msgid "Attribute mode"
-msgstr "Режим атрибута"
-
-msgid "Read only;Read and Write;Read and Write"
-msgstr "Только чтение;Чтение и запись;Чтение и запись"
-
-msgid "Value"
-msgstr "Значение"
-
-msgid "Deleting lock attribute in not allow."
-msgstr "Недопустимо удаление заблокированного атрибута."
-
-msgid "Changing locked attribute is not allowed."
-msgstr "Недопустимо изменение заблокированного атрибута."
-
-msgid "2:Controller is stopped"
-msgstr "2:Контроллер остановлен!"
-
-msgid "1:Parameter is disabled"
-msgstr "1:Параметр отключен"
-
-msgid ""
-"Attributes configuration list. List must be written by lines in format: "
-"[<io>:<aid>:<anm>]\n"
-"Where:\n"
-"  io - calculation function's IO;\n"
-"  aid - created attribute identifier;\n"
-"  anm - created attribute name.\n"
-"If 'aid' or 'anm' are not set they will be generated from selected "
-"function's IO."
-msgstr ""
-"Список конфигурации атрибутов. Список должен быть записан строками в "
-"формате: [<io>:<aid>:<anm>]\n"
-"Где:\n"
-"  io - IO вычисляемой функции;\n"
-"  aid - идентификатор создаваемого атрибута;\n"
-"  anm - имя создаваемого атрибута.\n"
-"Если 'aid' или 'anm' не установлены то они будут генерироваться из "
-"выбранного IO функции."
-
-#, c-format
 msgid "Internal function inaccessible by offset %d > %d"
 msgstr "Внутрення функция недоступна ввиду смещения %d > %d"
+
+#, c-format
+msgid "Variable '%s' is used but undefined"
+msgstr "Переменная '%s' не определена но использована"
 
 msgid "Error constant after constant"
 msgstr "Ошибка постоянной после постоянной"
@@ -355,3 +61,301 @@ msgstr "Ошибка символа, "
 
 msgid "Object's properties too long, "
 msgstr "Свойства объекта очень длинные, "
+
+msgid "Array has more than 255 elements."
+msgstr "Массив имеет более 255 элементов."
+
+msgid "RegExp requires one or two parameters."
+msgstr "RegExp требует одного или двух параметров."
+
+#, c-format
+msgid "Operation code %d is not supported."
+msgstr "Не поддерживаемый код операции %d."
+
+#, c-format
+msgid ""
+"Number of external functions reached the limit of %d on the function '%s'"
+msgstr "Число внешних функций достигло лимита в %d на функции '%s'"
+
+#, c-format
+msgid "More than %d(%d) parameters are specified for the function '%s'"
+msgstr "Указанно более %d(%d) параметров для функции '%s'"
+
+#, c-format
+msgid "Function '%s' is called, but it does not have the IO-return"
+msgstr "Вызвана функция '%s', но она не имеет ВВ возврата"
+
+msgid "Function name is longer than 254."
+msgstr "Имя функции длиннее 254."
+
+msgid "Object function contains more than 255 parameters."
+msgstr "Функция объекта имеет более 255 параметров."
+
+msgid "Obtaining an object from a non-object register"
+msgstr "Получение объекта из не объектного регистра"
+
+msgid "Function is interrupted by an error"
+msgstr "Выполнение функции прервано ошибкой"
+
+#, c-format
+msgid "Calculation time has been exceeded %d > %d+%d"
+msgstr "Исчерпано время вычисления функции %d > %d+%d"
+
+#, c-format
+msgid "Type %d, which is not supported by the 'Add' operation."
+msgstr "Не поддерживаемый тип %d для операции 'Add'."
+
+#, c-format
+msgid "Error operation %c(%xh). Function '%s' stopped."
+msgstr "Ошибка операции %c(%xh). Функция '%s' остановлена."
+
+msgid "Function: "
+msgstr "Функция: "
+
+msgid "Date of modification"
+msgstr "Дата модификации"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "To start"
+msgstr "Запускать"
+
+msgid "Maximum calculation time, seconds"
+msgstr "Максимальное время вычисления, секунд"
+
+msgid "Program"
+msgstr "Программа"
+
+msgid "IO"
+msgstr "ВВ"
+
+msgid "Identifier"
+msgstr "Идентификатор"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Real;Integer;Boolean;String;Text;Object"
+msgstr "Веществ.;Целый;Логич.;Строка;Текст;Объект"
+
+msgid "Mode"
+msgstr "Режим"
+
+msgid "Input;Output;Return"
+msgstr "Вход;Выход;Возврат"
+
+msgid "Hidden"
+msgstr "Скрытый"
+
+msgid "Default"
+msgstr "Умолчание"
+
+msgid "New IO"
+msgstr "Новый IO"
+
+msgid "Empty value is not allowed."
+msgstr "Пустое значение не допустимо."
+
+msgid "Library of the functions: "
+msgstr "Библиотека функций: "
+
+msgid "Function"
+msgstr "Функция"
+
+msgid "Library"
+msgstr "Библиотека"
+
+msgid "State"
+msgstr "Состояние"
+
+msgid "Accessing"
+msgstr "Доступен"
+
+msgid "Library DB"
+msgstr "БД библиотеки"
+
+msgid ""
+"DB address in the format \"{DB module}.{DB name}.{Table name}\".\n"
+"To use the main working DB, set '*.*'."
+msgstr ""
+
+msgid "Configuration"
+msgstr "Конфигурация"
+
+msgid "Functions"
+msgstr "Функции"
+
+msgid "Calculator on the Java-like language"
+msgstr "Вычислитель на Java-подобном языке"
+
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+msgid ""
+"Provides a calculator and libraries engine on the Java-like language. The "
+"user can create and modify functions and their libraries."
+msgstr ""
+"Предоставляет вычислитель и движок библиотек на Java-подобном языке. "
+"Пользователь может создавать и модифицировать функции и их библиотеки."
+
+msgid "Parameters table"
+msgstr "Таблица параметров"
+
+msgid "Controller function"
+msgstr "Функция контроллера"
+
+msgid "Calculation schedule"
+msgstr "Планирование вычисления"
+
+msgid "Priority of the calculation task"
+msgstr "Приоритет задачи вычисления"
+
+msgid "Number of iterations in single calculation"
+msgstr "Количество итераций одного вычисления"
+
+msgid "IO ID"
+msgstr "ВВ ID"
+
+msgid "IO value"
+msgstr "Значение IO"
+
+msgid "Standard"
+msgstr "Стандартный"
+
+msgid "Data fields"
+msgstr "Поля данных"
+
+msgid "Database"
+msgstr "База данных"
+
+msgid "Maximum calculate time, seconds"
+msgstr "Максимальное время вычисления, секунд"
+
+msgid "Translate program"
+msgstr "Переводить программу"
+
+msgid "Function ID"
+msgstr "ID функции"
+
+msgid "Default value"
+msgstr "Знач. по умолч."
+
+msgid "Hide"
+msgstr "Скрытый"
+
+msgid "Position"
+msgstr "Позиция"
+
+#, c-format
+msgid "Compilation with the help of the program language %s is not supported."
+msgstr "Компиляция на языке программирования %s не поддерживается."
+
+#, c-format
+msgid "Compile error: %s"
+msgstr "Ошибка компиляции: %s"
+
+msgid "Load function libraries error."
+msgstr "Ошибка загрузки библиотеки функций."
+
+msgid "Safety timeout, seconds"
+msgstr "Таймаут безопасности, секунд"
+
+msgid "Functions libraries"
+msgstr "Библиотеки функций"
+
+msgid "Libraries"
+msgstr "Библиотеки"
+
+msgid "Calculation. "
+msgstr "Вычисление. "
+
+msgid "Calculation with the period: %s. "
+msgstr "Вычисление с периодом: %s. "
+
+#, c-format
+msgid "Next calculation by the cron '%s'. "
+msgstr "Следующее вычисление по cron '%s'. "
+
+#, c-format
+msgid "Spent time: %s[%s]."
+msgstr "Затрачено времени: %s[%s]."
+
+#, c-format
+msgid "Library of the functions '%s' is not present. Please, create the one!"
+msgstr ""
+"Библиотека функций '%s' отсутствует. Пожалуйста, создайте библиотеку функций!"
+
+#, c-format
+msgid "Creating a new function '%s'."
+msgstr "Создание новой функции '%s'."
+
+msgid "Error loading function and its IO."
+msgstr "Ошибка загрузки функции и её ВВ."
+
+msgid "Frequency of calculation of the function (Hz)"
+msgstr "Частота вычисления функции (Гц)"
+
+msgid "Function start flag"
+msgstr "Флаг запуска функции"
+
+msgid "Function stop flag"
+msgstr "Флаг останова функции"
+
+msgid "Link to the object of this controller"
+msgstr "Связь на объект этого контроллера"
+
+msgid "Error calculating controller function."
+msgstr "Ошибка вычисления функции контроллера"
+
+msgid "Function is missing or not started."
+msgstr "Функция отсутствует или не запущена."
+
+msgid "Calculation"
+msgstr "Вычисления"
+
+msgid "Data"
+msgstr "Данные"
+
+msgid "Attribute mode"
+msgstr "Режим атрибута"
+
+msgid "Read only;Read and Write;Read and Write"
+msgstr "Только чтение;Чтение и запись;Чтение и запись"
+
+msgid "Value"
+msgstr "Значение"
+
+msgid "Deleting a locked attribute is not allowed."
+msgstr "Недопустимо удаление заблокированного атрибута."
+
+msgid "Changing the locked attribute is not allowed."
+msgstr "Недопустимо изменение заблокированного атрибута."
+
+msgid "2:Calculation is stopped"
+msgstr "2:Вычисление остановлено"
+
+msgid "1:Parameter is disabled"
+msgstr "1:Параметр отключен"
+
+msgid ""
+"List of configuration of the attributes. List must be written by lines in "
+"format: \"{io}[:{aid}[:{anm}]]\"\n"
+"Where:\n"
+"  io - IO of the computable function;\n"
+"  aid - identifier of the created attribute;\n"
+"  anm - name of the created attribute.\n"
+"If 'aid' or 'anm' is not set then they will be generated from the selected "
+"IO of the function."
+msgstr ""
+"Список конфигурации атрибутов. Список должен быть записан строками в "
+"формате: \"{io}[:{aid}[:{anm}]]\"\n"
+"Где:\n"
+"  io - IO вычисляемой функции;\n"
+"  aid - идентификатор создаваемого атрибута;\n"
+"  anm - имя создаваемого атрибута.\n"
+"Если 'aid' или 'anm' не установлены то они будут генерироваться из "
+"выбранного IO функции."

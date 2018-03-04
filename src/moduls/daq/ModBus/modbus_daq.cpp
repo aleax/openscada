@@ -144,9 +144,9 @@ string TMdContr::getStatus( )
 	    val.replace(0, 1, "10");
 	}
 	else {
-	    if(callSt)	val += TSYS::strMess(_("Call now. "));
-	    if(period())val += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
-	    else val += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	    if(callSt)	val += TSYS::strMess(_("Acquisition. "));
+	    if(period())val += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
+	    else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	    val += TSYS::strMess(_("Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, %g coils. Errors of connection %g, of respond %g."),
 			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(),
 			numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
@@ -996,6 +996,8 @@ TCntrNode &TMdPrm::operator=( const TCntrNode &node )
 	    lCtx->lnk(lCtx->lnkId(iIO)).addr = src_n->lCtx->lnk(src_n->lCtx->lnkId(iIO)).addr;
     else lCtx->setS(iIO, src_n->lCtx->getS(iIO));
 
+    if(isLogic()) initLnks();
+
     return *this;
 }
 
@@ -1393,8 +1395,8 @@ void TMdPrm::vlGet( TVal &val )
 {
     if(!enableStat() || !owner().startStat()) {
 	if(val.name() == "err") {
-	    if(!enableStat())			val.setS(_("1:Parameter is disabled."),0,true);
-	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."),0,true);
+	    if(!enableStat())			val.setS(_("1:Parameter disabled."),0,true);
+	    else if(!owner().startStat())	val.setS(_("2:Acquisition stopped."),0,true);
 	}
 	else val.setS(EVAL_STR, 0, true);
 	return;

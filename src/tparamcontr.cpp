@@ -188,12 +188,12 @@ void TParamContr::LoadParmCfg( )
 		    itReg[shfr] = true;
 		} catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Add parameter '%s' error."), cEl.cfg("SHIFR").getS().c_str());
+		    mess_sys(TMess::Error, _("Error adding parameter '%s'."), cEl.cfg("SHIFR").getS().c_str());
 		}
 	    }
 	} catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Search and create new parameters error."));
+	    mess_sys(TMess::Error, _("Error finding and creating new parameters."));
 	}
     }
 
@@ -294,13 +294,13 @@ void TParamContr::enable( )
 	    try{ at(prm_list[i_prm]).at().enable(); }
 	    catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Warning, _("Enable parameter '%s' error."), prm_list[i_prm].c_str());
+		mess_sys(TMess::Warning, _("Error turning on the parameter '%s'."), prm_list[i_prm].c_str());
 		enErr = true;
 	    }
 
     mEn = true;
 
-    if(enErr) throw err_sys(_("Some parameters enable error."));
+    if(enErr) throw err_sys(_("Error turning on some parameters."));
 }
 
 void TParamContr::disable( )
@@ -313,7 +313,7 @@ void TParamContr::disable( )
 	    try{ at(prm_list[i_prm]).at().disable(); }
 	    catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Warning, _("Disable parameter '%s' error."), prm_list[i_prm].c_str());
+		mess_sys(TMess::Warning, _("Error turning off the parameter '%s'."), prm_list[i_prm].c_str());
 	    }
 
     type().disable(this);
@@ -323,8 +323,8 @@ void TParamContr::disable( )
 void TParamContr::vlGet( TVal &val )
 {
     if(val.name() == "err") {
-	if(!enableStat()) val.setS(_("1:Parameter is disabled."), 0, true);
-	else if(!owner().startStat()) val.setS(_("2:Controller is stopped."), 0, true);
+	if(!enableStat()) val.setS(_("1:Parameter disabled."), 0, true);
+	else if(!owner().startStat()) val.setS(_("2:Acquisition stopped."), 0, true);
 	else val.setS("0", 0, true);
     }
 
@@ -445,7 +445,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    if(!owner().enableStat())	throw err_sys(_("Controller is not started!"));
+	    if(!owner().enableStat())	throw err_sys(_("Controller is not running!"));
 	    else s2i(opt->text()) ? enable() : disable();
 	}
     }

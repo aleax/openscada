@@ -123,9 +123,9 @@ string TController::getStatus( )
 {
     string rez, mess;
     if(startStat()) {
-	rez = string("0:")+_("Started. ");
+	rez = string("0:")+_("Running. ");
 	if(owner().redntAllow() && redntUse()) {
-	    mess = _("Getting data from remote station: ");
+	    mess = _("Acquisition data from a remote station: ");
 	    string rSt = mRdSt.getVal();
 	    if(!rSt.empty()) {
 		if(rSt.find(mess) == string::npos) {
@@ -133,7 +133,7 @@ string TController::getStatus( )
 		    rez.replace(0,1,TSYS::strSepParse(rSt,0,':',&rOff));
 		    mess.append(rSt.substr(rOff));
 		}
-		else mess = _("Your redundancy configuration wrong and controller often enable-disable redundancy!");
+		else mess = _("Your redundancy settings are incorrect and the controller often enables-disables the redundancy!");
 	    }
 	    rez += mess;
 	}
@@ -147,7 +147,7 @@ string TController::getStatus( )
 void TController::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
-    mess_sys(TMess::Info, _("Load controller's configurations!"));
+    mess_sys(TMess::Info, _("Controller configuration loading."));
 
     bool enSt_prev = enSt, runSt_prev = runSt;
 
@@ -167,7 +167,7 @@ void TController::load_( TConfig *icfg )
 
 void TController::save_( )
 {
-    mess_sys(TMess::Info, _("Save controller's configurations!"));
+    mess_sys(TMess::Info, _("Controller configuration saving."));
 
     //Update type controller bd record
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);
@@ -179,7 +179,7 @@ void TController::start( )
     if(runSt)	return;
     if(!enSt)	enable();
 
-    mess_sys(TMess::Info, _("Start controller!"));
+    mess_sys(TMess::Info, _("Controller starting."));
 
     //First archives synchronization
     if(owner().redntAllow() && redntMode()) redntDataUpdate();
@@ -194,7 +194,7 @@ void TController::stop( )
 {
     if(!runSt)	return;
 
-    mess_sys(TMess::Info, _("Stop controller!"));
+    mess_sys(TMess::Info, _("Controller stopping."));
 
     //Stop for children
     stop_();
@@ -205,7 +205,7 @@ void TController::stop( )
 void TController::enable( )
 {
     if(!enSt) {
-	mess_sys(TMess::Info, _("Enable controller!"));
+	mess_sys(TMess::Info, _("Controller enabling."));
 
 	//Enable for children
 	enable_();
@@ -220,14 +220,14 @@ void TController::enable( )
 	    try{ at(prm_list[i_prm]).at().enable(); }
 	    catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Warning, _("Enable parameter '%s' error."), prm_list[i_prm].c_str());
+		mess_sys(TMess::Warning, _("Error turning on the parameter '%s'."), prm_list[i_prm].c_str());
 		enErr = true;
 	    }
 
     //Set enable stat flag
     enSt = true;
 
-    if(enErr) throw err_sys(_("Some parameters enable error."));
+    if(enErr) throw err_sys(_("Error turning on some parameters."));
 }
 
 void TController::disable( )
@@ -237,7 +237,7 @@ void TController::disable( )
     //Stop if runed
     if(runSt) stop();
 
-    mess_sys(TMess::Info, _("Disable controller!"));
+    mess_sys(TMess::Info, _("Controller disabling."));
 
     //Disable parameters
     vector<string> prm_list;
@@ -247,7 +247,7 @@ void TController::disable( )
 	    try{ at(prm_list[i_prm]).at().disable(); }
 	    catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Warning, _("Disable parameter '%s' error."), prm_list[i_prm].c_str());
+		mess_sys(TMess::Warning, _("Error turning off the parameter '%s'."), prm_list[i_prm].c_str());
 	    }
 
     //Disable for children
@@ -281,12 +281,12 @@ void TController::LoadParmCfg( )
 		    itReg[shfr] = true;
 		} catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Warning, _("Add parameter '%s' error."), cEl.cfg("SHIFR").getS().c_str());
+		    mess_sys(TMess::Warning, _("Error adding the parameter '%s'."), cEl.cfg("SHIFR").getS().c_str());
 		}
 	    }
 	} catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_sys(TMess::Error, _("Search and create new parameters error."));
+	    mess_sys(TMess::Error, _("Error finding and creating new parameters."));
 	}
     }
 
@@ -490,7 +490,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	    if(ctrMkNode("area",opt,-1,"/prm",_("Parameters"))) {
 		if(owner().tpPrmSize() > 1)
-		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("To add parameters"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/t_lst");
+		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("Add parameters to the type"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/t_lst");
 		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","prm_","idSz",OBJ_ID_SZ);
 	    }

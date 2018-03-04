@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:48+0200\n"
+"POT-Creation-Date: 2018-03-04 09:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Allow access to 'Diamond Systems' DAQ boards. Include main support for generic boards."
+msgid "Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards."
 msgstr ""
 
 msgid "[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V"
@@ -86,25 +86,25 @@ msgstr ""
 msgid "Addition parameters"
 msgstr ""
 
-msgid "Call now. "
+msgid "Acquisition. "
 msgstr ""
 
 #, c-format
-msgid "Call by period: %s. "
+msgid "Acquisition with the period: %s. "
 msgstr ""
 
 #, c-format
-msgid "Call next by cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s. "
+msgid "Spent time: %s[%s]. "
 msgstr ""
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr ""
 
-msgid "2:Acquisition is stopped."
+msgid "2:Acquisition stopped."
 msgstr ""
 
 #, c-format

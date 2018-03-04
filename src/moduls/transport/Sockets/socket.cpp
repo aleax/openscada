@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.8.1"
+#define MOD_VER		"2.8.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -643,7 +643,7 @@ void *TSocketIn::Task( void *sock_in )
     for(map<int, SSockIn*>::iterator iId = sock->clId.begin(); iId != sock->clId.end(); ++iId)
 	pthread_kill(iId->second->pid, SIGALRM);
     res.unlock();
-    TSYS::eventWait(sock->clFree, true, string(MOD_ID)+": "+sock->id()+_(" client task is stopping...."));
+    TSYS::eventWait(sock->clFree, true, string(MOD_ID)+": "+sock->id()+_(" stopping client tasks ..."));
 
     sock->runSt = false;
 

@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Documents/How to/Build from source - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Documents/How to/Build from source</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Build_from_source/ru" title="Документы/Как сделать/Собрать из исходных текстов (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Build_from_source/uk" title="Документи/Як зробити/Скласти з вихідних текстів (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Generic revision and translation
+</td></tr></table>
+</div>
+<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, <a class="external text" href="http://oscada.org/en/forum/user/IrmIngeneer/" rel="nofollow noreferrer noopener" target="_blank">Constantine</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#OpenSCADA_configuration_for_building"><span class="tocnumber">1</span> <span class="toctext">OpenSCADA configuration for building</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#System_OpenSCADA_direct_building"><span class="tocnumber">2</span> <span class="toctext">System OpenSCADA direct building</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Building_packages_of_the_OpenSCADA_system_for_the_Linux_distribution"><span class="tocnumber">3</span> <span class="toctext">Building packages of the OpenSCADA system for the Linux distribution</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Redhat-based_distributions_-_RPM_package"><span class="tocnumber">3.1</span> <span class="toctext">Redhat-based distributions - RPM package</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Debian-based_distributions_-_Deb_package"><span class="tocnumber">3.2</span> <span class="toctext">Debian-based distributions - Deb package</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Gentoo_-_metadistribution"><span class="tocnumber">3.3</span> <span class="toctext">Gentoo - metadistribution</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<p>This manual made for help on OpenSCADA building from the source texts. In process of accumulation of experience of building for different OS Linux distributions and others platforms generally, this document will be complement for tips and details of building for different environments.
+</p><p>The document also contain information about preset configuration of built system of OpenSCADA, for complete start with using of present, included to sources, demo DB (model "AGLKS").
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> For build OpenSCADA from sources you need experience in opensource program build, and also generic knowledges in OS Linux and used Linux distributive, that allow correct resolve dependencies and solve possible build problems.
+</p>
+<h2><span class="mw-headline" id="OpenSCADA_configuration_for_building"><span class="mw-headline-number">1</span> OpenSCADA configuration for building</span></h2>
+<p>By OpenSCADA project, as a build system, using a set of utilities <a class="external text" href="http://en.wikipedia.org/wiki/GNU_build_system" rel="nofollow noreferrer noopener" target="_blank">AutoTools</a>. For any project building under control "AutoTools" precedes the stage configuration, and sometimes the formation of the build system under environment of the OS. The stage configuration, as well as directly build, made always and not depend from is a direct build or build the package.
+</p><p>To form the build system must be installed utility "AutoTools": "autoconf", "automake" and "libtool". Common forming you can made by command "<b>$ autoreconf -if</b>". Earlier, formed build the system may sometimes be necessary to update, for example, in the case of significant differences in operating environments where the build system was formed and the current. Reconfiguring the build system is carried by previously specified formation command.
+</p><p>The build system configuration carried by command "<b>$ configure</b>". By specifying the arguments to this command, you can enable/disable a function or module OpenSCADA for build. Fro get all allowed configure parameters and OpenSCADA modules you can specify argument <b>--help</b>.
+</p><p>Enabling and disabling modules OpenSCADA made by passing arguments <b>--enable-{ModName}</b> and <b>--disable-{ModName}</b>. To modules select you can specify a policy of "Enable all modules" <b> --enable-AllModuls</b> or "Disable all modules" <b>--disable-AllModuls</b>, and then enable/disable individual modules, depending on it would be easier. Most modules OpenSCADA can be linked (embedded) directly into the OpenSCADA, core library and not build separate library, for which you need to specify the argument <b>--enable-{ModName}=incl</b>.
+</p><p>At finish, the configuration will be formed summary result of the sets, which can be used to verify the desired configuration.
+</p>
+<h2><span class="mw-headline" id="System_OpenSCADA_direct_building"><span class="mw-headline-number">2</span> System OpenSCADA direct building</span></h2>
+<p>Build system must be executed from normal system user name. Thus described variants of installing and execution how global and local, to user directory. Get what user login is - "user".
+</p><p>Before building enter as common user and change user login to your, get sources (from ftp/http-server or SVN-repository), select install method (global or local) and follow instruction:
+</p><p>Steps of preparation of the source tree to build:
+</p>
+<dl><dd>1. Make directory for project building:
+<dl><dd>$ mkdir ~/projects; cd ~/projects</dd></dl></dd>
+<dd>2. Download sources package. It may be made from two ways:
+<ul><li> download tar archive from ftp-server <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/</a> and unpacked it, for example:</li></ul>
+<dl><dd>$ wget <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/openscada-0.8.0.tar.lzma" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/openscada-0.8.0.tar.lzma</a></dd>
+<dd>$ wget <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/openscada-res-0.8.0.tar.lzma" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/openscada-res-0.8.0.tar.lzma</a></dd>
+<dd>$ tar --lzma -xvf openscada-0.8.0.tar.lzma</dd>
+<dd>$ cd openscada-0.8.0</dd>
+<dd>$ tar --lzma -xvf ../openscada-res-0.8.0.tar.lzma</dd></dl>
+<ul><li> get project's source tree from SVN-repository:</li></ul>
+<dl><dd>$ svn co svn://oscada.org/trunk/OpenSCADA</dd>
+<dd>$ cd OpenSCADA</dd></dl></dd>
+<dd>3. Resolve OpenSCADA dependents for build, on according <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">demands</a>.</dd>
+<dd>4. Generate of build system, when download from the SVN-repository:
+<dl><dd>$ autoreconf -ivf</dd></dl></dd></dl>
+<p>Steps of global building:
+</p>
+<dl><dd>1. Configuring building system of OpenSCADA:
+<dl><dd>$ ./configure</dd></dl></dd>
+<dd>2. Make OpenSCADA project:
+<dl><dd>$ make</dd></dl></dd>
+<dd>3. Install OpenSCADA:
+<dl><dd>$ su; make install</dd></dl></dd>
+<dd>4. Some configuration and data files install. Skip for OpenSCADA versions &gt;= 0.8.1!
+<ul><li> Copy start script and configuration file of demonstration:</li></ul>
+<dl><dd>$ cp data/ModelsDB/AGLKS/openscada_demo /usr/bin</dd>
+<dd>$ cp data/ModelsDB/AGLKS/oscada_AGLKS.xml /etc</dd></dl>
+<ul><li> Make data directory and fill it:</li></ul>
+<dl><dd>$ mkdir /var/spool/openscada</dd>
+<dd>$ mkdir /var/spool/openscada/{DATA,icons,LibsDB,AGLKS}</dd>
+<dd>$ cp data/LibsDB/*.db /var/spool/openscada/LibsDB</dd>
+<dd>$ cp data/ModelsDB/AGLKS/*.db /var/spool/openscada/AGLKS</dd>
+<dd>$ cp data/icons/* /var/spool/openscada/icons</dd>
+<dd>$ install -m 777 -d /var/spool/openscada/ARCHIVES/{MESS,VAL}</dd></dl></dd>
+<dd>5. System ready to start:
+<dl><dd>$ exit; openscada_demo</dd></dl></dd></dl>
+<p>Steps of local building:
+</p>
+<dl><dd>1. Configuring building system of OpenSCADA:
+<dl><dd>$ mkdir ~/OScadaW; ./configure --prefix=/home/user/OScadaW</dd></dl></dd>
+<dd>2. Make OpenSCADA project:
+<dl><dd>$ make</dd></dl></dd>
+<dd>3. Install OpenSCADA:
+<dl><dd>$ make install</dd></dl></dd>
+<dd>4. Some configuration and data files install. Skip for OpenSCADA versions &gt;= 0.8.1!
+<ul><li> Copy start script and configuration file of demonstration:</li></ul>
+<dl><dd>$ cp data/ModelsDB/AGLKS/openscada_demo_local ~/OScadaW/bin/openscada_demo</dd>
+<dd>$ mkdir ~/OScadaW/etc</dd>
+<dd>$ cp data/ModelsDB/AGLKS/oscada_demo_local.xml ~/OScadaW/etc/oscada_demo.xml</dd></dl>
+<ul><li> Make data directory and fill it:</li></ul>
+<dl><dd>$ mkdir ~/OScadaW/share/openscada</dd>
+<dd>$ mkdir ~/OScadaW/share/openscada/{DATA,icons,LibsDB,AGLKS}</dd>
+<dd>$ cp data/LibsDB/*.db ~/OScadaW/share/openscada/LibsDB</dd>
+<dd>$ cp data/ModelsDB/AGLKS/*.db ~/OScadaW/share/openscada/AGLKS</dd>
+<dd>$ cp data/icons/* ~/OScadaW/share/openscada/icons</dd>
+<dd>$ install -m 777 -d ~/OScadaW/share/openscada/ARCHIVES/{MESS,VAL}</dd></dl></dd>
+<dd>5. System ready to start:
+<dl><dd>$ cd ~/OScadaW/bin; ./openscada_demo</dd></dl></dd></dl>
+<h2><span class="mw-headline" id="Building_packages_of_the_OpenSCADA_system_for_the_Linux_distribution"><span class="mw-headline-number">3</span> Building packages of the OpenSCADA system for the Linux distribution</span></h2>
+<h3><span class="mw-headline" id="Redhat-based_distributions_-_RPM_package"><span class="mw-headline-number">3.1</span> Redhat-based distributions - RPM package</span></h3>
+<p>To build the RPM-package you'll need OpenSCADA sources, resources tarballs and RPM package specification file (openscada.spec, openscada_mod.spec) or SRPM-package of all these source materials (openscada-0.8.0-1.src.rpm), which can be downloaded from <a class="external text" href="ftp://ftp.oscada.org" rel="nofollow noreferrer noopener" target="_blank">ftp</a> or <a class="external text" href="http://ftp.oscada.org" rel="nofollow noreferrer noopener" target="_blank">http</a>-server of the project.
+</p><p>Specification file of the RPM-packages and SRPM-package may be different for distributions of Linux, in view of their features, so you should try to load them in accordance with the distribution. If the specific SRPM package is missing you can try to build from the unified specification file in the main SRPM package.
+</p><p>RPM-package building is made in the directory with a special structure, which is normally created when you install the appropriate distribution package (for example: rpm-build). This directory, depending on the distribution, is located in the user's home directory or in the directory <b>/usr/src</b>. The known facts of location the build directory of RPM-packages for different distributions:
+</p>
+<ul><li> <b>/usr/src/packages</b>&nbsp;: <a class="external text" href="http://www.opensuse.org" rel="nofollow noreferrer noopener" target="_blank">Open-SUSE</a></li>
+<li> <b>~/RPM</b>&nbsp;: <a class="external text" href="http://www.altlinux.com/" rel="nofollow noreferrer noopener" target="_blank">ALTLinux</a></li>
+<li> <b>~/rpmbuild</b>&nbsp;: <a class="external text" href="http://www.mandriva.com" rel="nofollow noreferrer noopener" target="_blank">Mandriva</a>, <a class="external text" href="http://fedoraproject.org/" rel="nofollow noreferrer noopener" target="_blank">Fedora and branches</a></li></ul>
+<p>If, after the installation of a specialized package, the directory of RPM packages creation is missed, you need to create it with the following command:
+</p>
+<dl><dd>$ install -m 755 -d <u>Distribution directory</u>/{SPECS,SOURCES}</dd></dl>
+<p>Build steps in the RPM specification file:
+</p>
+<dl><dd>1. Placement of OpenSCADA archives and the specification file in the RPM build directory (the source files pre-placed in the current directory):
+<dl><dd>$ cp openscada-0.8.0.tar.lzma openscada-res-0.8.0.tar.lzma <u>Distribution directory</u>/SOURCES</dd>
+<dd>$ cp openscada.spec <u>Distribution directory</u>/SPECS</dd></dl></dd>
+<dd>2. Resolving of the OpenSCADA project's dependencies for building in accordance with <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">the requirements</a>. Arguments for command "configure" you can specify into file "openscada.spec".</dd>
+<dd>3. Building of packages
+<ul><li> build from the beginning:</li></ul>
+<dl><dd>$ rpmbuild -bb <u>Distribution directory</u>/SPECS/openscada.spec</dd></dl>
+<ul><li> only the installation and packaging from the etersoft rpm-utilities package (useful when configuring openscada.spec file):</li></ul>
+<dl><dd>$ rpmbb -i <u>Distribution directory</u>/SPECS/openscada.spec</dd></dl></dd>
+<dd>4. Packages are ready and available in the directory: <b><u>Distribution directory</u>/RPMS</b>  for the appropriate architecture.</dd></dl>
+<p>Build steps from the SRPMS package:
+</p>
+<dl><dd>1. Resolving of the OpenSCADA project's dependencies for building in accordance with <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">the requirements</a>.</dd>
+<dd>2. Building of the packages (the source files pre-placed in the current directory):
+<dl><dd>$ rpmbuild --rebuild openscada-0.8.0-1.src.rpm</dd></dl></dd>
+<dd>3. Packages are ready and available in the directory <b><u>Distribution directory</u>/RPMS</b> for the appropriate architecture.</dd></dl>
+<h3><span class="mw-headline" id="Debian-based_distributions_-_Deb_package"><span class="mw-headline-number">3.2</span> Debian-based distributions - Deb package</span></h3>
+<p>To build the RPM-package you'll need OpenSCADA sources, resources tarballs, which can be downloaded from <a class="external text" href="ftp://ftp.oscada.org" rel="nofollow noreferrer noopener" target="_blank">ftp</a> or <a class="external text" href="http://ftp.oscada.org" rel="nofollow noreferrer noopener" target="_blank">http</a>-server of the project.
+</p><p>Deb-package building is made in the "debian" directory with the building scripts, which is contained in the archives of the OpenSCADA sources.
+</p><p>Building steps:
+</p>
+<dl><dd>1. Creation the directory to build the project:
+<dl><dd>$ mkdir ~/build; cd ~/build</dd></dl></dd>
+<dd>2. Download the source package. Download the sources and resources tarball from ftp-server of project <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/</a> and unpacking, like this:
+<dl><dd>$ wget <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/openscada-0.8.0.tar.lzma" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/openscada-0.8.0.tar.lzma</a></dd>
+<dd>$ wget <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/openscada-res-0.8.0.tar.lzma" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/openscada-res-0.8.0.tar.lzma</a></dd>
+<dd>$ tar --lzma -xvf openscada-0.8.0.tar.lzma</dd>
+<dd>$ cd openscada-0.8.0</dd>
+<dd>$ tar --lzma -xvf ../openscada-res-0.8.0.tar.lzma</dd></dl></dd>
+<dd>3. The building type selection:
+<ul><li> binary files into single package:</li></ul>
+<dl><dd>$ ln -s openscada-0.8.0/data/debian openscada-0.8.0/debian</dd></dl>
+<ul><li> binary files of the modules into separated packages:</li></ul>
+<dl><dd>$ ln -s openscada-0.8.0/data/debian_mod openscada-0.8.0/debian</dd></dl></dd>
+<dd>4. Resolving of the OpenSCADA project's dependencies for building in accordance with <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">the requirements</a>. Arguments for command "configure" you can specify into file openscada-0.8.0/debian/rules.</dd>
+<dd>5. The transition to the OpenSCADA directory and start the building:
+<dl><dd>$ cd openscada-0.8.0</dd></dl>
+<ul><li> build from the beginning:</li></ul>
+<dl><dd>$ dpkg-buildpackage -rfakeroot</dd></dl>
+<ul><li> skip the building and repack it is convenient for debugging <b>openscada-0.8.0/debian/rules</b>:</li></ul>
+<dl><dd>$ fakeroot debian/rules binary</dd>
+<dd>$ fakeroot debian/rules build</dd></dl></dd>
+<dd>6. Packages are ready and available in the level above directory.</dd></dl>
+<h3><span class="mw-headline" id="Gentoo_-_metadistribution"><span class="mw-headline-number">3.3</span> Gentoo - metadistribution</span></h3>
+<p>OpenSCADA is not included to official portage Gentoo tree, so the building is made from the overlay. Details about the work with the overlay can be found in the Gentoo documentation, for example: <a class="external free" href="http://en.gentoo-wiki.com/wiki/Portage_Overlay" rel="nofollow noreferrer noopener" target="_blank">http://en.gentoo-wiki.com/wiki/Portage_Overlay</a>. Before the building of the OpenSCADA package itself, portage will satisfy dependencies, ie build the missing packages (if necessary).
+</p>
+<dl><dd>1. Creation of the portage overlay reduces to the describing the path to the overlay tree, ie in <b>/etc/make.conf</b> it is necessary to add the line:
+<dl><dd><i>PORTDIR_OVERLAY="/usr/local/portage"</i></dd></dl></dd>
+<dd>2. Create the directory <b>/usr/local/portage/dev-util/openscada/</b>, then download the ebuild archive file from the official site and unpack it in the created folder.
+<dl><dd>$ cd /usr/local/portage/dev-util/openscada</dd>
+<dd>$ wget <a class="external free" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/Gentoo/openscada-0.8.0.ebuild.tar.gz" rel="nofollow noreferrer noopener" target="_blank">ftp://ftp.oscada.org/OpenSCADA/0.8.0/Gentoo/openscada-0.8.0.ebuild.tar.gz</a></dd>
+<dd>$ tar -xzf openscada-0.8.0.ebuild.tar.gz</dd></dl></dd>
+<dd>3. You must specify the portage, that OpenSCADA is allowed to build on your platform. To do this, put the following line to the file <b>/etc/portage/package.keywords</b>:
+<dl><dd><i>dev-util/openscada</i></dd></dl></dd>
+<dd>4. Check:</dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+$ emerge -vp openscada
+These are the packages that would be merged, in order:
+Calculating dependencies... done!
+[ebuild   R   ~] dev-util/openscada-0.8.0  USE="mysql ssl -bfn -blockcalc -daqgate -dbarch -dbase -dcon -demo -diamondboards -doc (-firebird) -flibcomplex1 -flibmath -flibsys -fsarch -http -icp_das -javalikecalc -logiclev -modbus -portaudio -qtcfg -qtstarter -selfsystem -serial -simens -snmp -sockets -sqlite -system -systemtest -vcaengine -vision -webcfg -webcfgd -webvision" 79,647 kB [1]
+
+Total: 1 package (1 reinstall), Size of downloads: 79,647 kB
+Portage tree and overlays:
+ [0] /usr/portage
+ [1] /usr/local/portage</pre>
+<dl><dd>5. If you don't have connection to the Internet, you have to download the sources and resources tarball from ftp-server of the project, and place them in advance in the sources directory of the portage (<b>/usr/portage/distfiles</b>). If you have an Internet connection, then everything that is necessary for building will be taken from the project's server automatically.</dd>
+<dd>6. It is necessary to put the required USE-flags, with which the OpenSCADA will be built. This can be done in the file <b>/etc/portage/package.use</b>, for example:
+<dl><dd><i>dev-util/openscada dcon demo http javalikecalc mysql qtcfg qtstarter ssl vision webcfg webcfgd webvision blockcalc dbarch dbase doc flibcomplex1 flibmath flibsys fsarch logiclev modbus serial sockets sqlite vcaengine</i></dd></dl></dd>
+<dd>7. Directly building:
+<dl><dd>$ emerge -q openscada</dd></dl></dd>
+<dd>8. Database files and resources of OpenSCADA are ready and placed in the directory <b>/var/spool/openscada/</b>, executable files - <b>/usr/bin/</b>, documentation - <b>/usr/share/doc/openscada-0.8.0/</b>.</dd></dl>
+
+
+
+
+
+
+</div></body>
+</html>

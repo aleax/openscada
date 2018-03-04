@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-20 16:44+0200\n"
+"POT-Creation-Date: 2018-03-04 14:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgid "Properties no supported by the object."
 msgstr ""
 
 #, c-format
-msgid "Function '%s' error or not enough parameters."
+msgid "Error function '%s' or missing parameters for it."
 msgstr ""
 
 msgid "System API functions"

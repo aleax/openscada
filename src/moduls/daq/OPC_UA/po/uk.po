@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:10+0200\n"
+"POT-Creation-Date: 2018-03-04 10:59+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -73,16 +73,14 @@ msgstr "Коренева тека (%d)"
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Помилка з'єднання. Відновлення за %.6g с."
 
-msgid "Call now. "
-msgstr "Виклик зараз. "
+msgid "Acquisition. "
+msgstr "Збір. "
 
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Виклик за періодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Збір з періодом: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Наступний виклик за cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Наступний збір за cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. Requests %.6g."
@@ -257,10 +255,10 @@ msgstr ""
 msgid "Node append"
 msgstr "Додати вузол"
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр вимкнено."
 
-msgid "2:Acquisition is stopped."
+msgid "2:Acquisition stopped."
 msgstr "2:Збір зупинено."
 
 #, c-format
@@ -372,114 +370,3 @@ msgstr "Сервер OPC-UA"
 
 msgid "Provides OPC-UA server service implementation."
 msgstr "Надає реалізацію OPC-UA сервісу серверу."
-
-#~ msgid "Transport address"
-#~ msgstr "Адреса транспорту"
-
-#~ msgid "No secure policy found"
-#~ msgstr "Не знайдено політики безпеки"
-
-#~ msgid "%s: request: %s"
-#~ msgstr "%s: запит: %s"
-
-#~ msgid "%s: response: %s"
-#~ msgstr "%s: відповідь: %s"
-
-#~ msgid "Respond size is not coincidence."
-#~ msgstr "Невідповідний розмір відповіді."
-
-#~ msgid "Respond don't acknowledge."
-#~ msgstr "Невідповідність відповіді."
-
-#~ msgid "%s: request, decoded: %s"
-#~ msgstr "%s: запит, декодований: %s"
-
-#~ msgid "Not full respond."
-#~ msgstr "Неповна відповідь"
-
-#~ msgid "Client certificate thumbprint error."
-#~ msgstr "Помилка відбитку сертифікату клієнта."
-
-#~ msgid "Respond NodeId don't acknowledge"
-#~ msgstr "Невідповідність NodeId відповіді"
-
-#~ msgid "Signature error"
-#~ msgstr "Помилка підпису"
-
-#~ msgid "Request '%s' isn't supported."
-#~ msgstr "Запит '%s' не підтримується."
-
-#~ msgid "Application signature error"
-#~ msgstr "Помилка підпису застосування"
-
-#~ msgid "Service fault"
-#~ msgstr "Збій сервісу"
-
-#~ msgid "OPC_UA protocol '%s' isn't supported."
-#~ msgstr "OPC_UA протокол '%s' не підтримується."
-
-#~ msgid "Buffer size is less for requested value."
-#~ msgstr "Розмір буферу менше вказаного значення."
-
-#~ msgid "Number size '%d' error."
-#~ msgstr "Помилка у розмірі '%d' числа."
-
-#~ msgid "Real number size '%d' error."
-#~ msgstr "Помилка у розмірі '%d' реального числа."
-
-#~ msgid "Buffer size is less for requested string."
-#~ msgstr "Розмір буферу менше запитаної строки."
-
-#~ msgid "Buffer size is less for requested NodeId."
-#~ msgstr "Розмір буферу менше запитаного NodeId."
-
-#~ msgid "NodeId type %d error or don't support."
-#~ msgstr "Помилка або не підтримується тип %d NodeId."
-
-#~ msgid "Data type '%d' isn't supported."
-#~ msgstr "Тип даних '%d' не підтримується."
-
-#~ msgid "ArrayDimensions field don't supported now."
-#~ msgstr "Поле ВимірМасиву не підтримується."
-
-#~ msgid "randBytes error: %s"
-#~ msgstr "randBytes помилка: %s"
-
-#~ msgid "certPEM2DER error: %s"
-#~ msgstr "certPEM2DER помилка: %s"
-
-#~ msgid "certDER2PEM error: %s"
-#~ msgstr "certDER2PEM помилка: %s"
-
-#~ msgid "Server certificate thumbprint error."
-#~ msgstr "Помилка відбитку сертифікату сервера."
-
-#~ msgid "Requested OpenSecureChannel NodeId don't acknowledge"
-#~ msgstr "Запитано невідповідний NodeId каналу безпеки"
-
-#~ msgid "Secure channel unknown"
-#~ msgstr "Канал безпеки невідомий"
-
-#~ msgid "Secure channel closed"
-#~ msgstr "Канал безпеки закрито"
-
-#~ msgid "No supported userIdentityToken '%d'."
-#~ msgstr "userIdentityToken '%d' не підтримується."
-
-#~ msgid "No supported request id '%d'."
-#~ msgstr "Запит id '%d' не підтримується."
-
-#~ msgid "Security setting %d error."
-#~ msgstr "Помилка налаштувань безпеки %d."
-
-#~ msgid "Parent node '%s' no present for node '%s'."
-#~ msgstr "Батьківський вузол '%s' відсутній для вузла '%s'."
-
-#~ msgid "No session %d present."
-#~ msgstr "Сеанс %d відсутній."
-
-#~ msgid "Allow realization of OPC UA client service."
-#~ msgstr "Надає реалізацію клієнтського сервісу OPC UA."
-
-#~ msgid "Allow realization of OPC UA protocol."
-#~ msgstr "Надає реалізацію OPC UA протоколу."

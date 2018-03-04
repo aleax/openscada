@@ -754,7 +754,7 @@ void VisRun::exportDiag( const string &idg )
 	// Export to CSV
 	if(fileName.indexOf(QRegExp("\\.csv$")) != -1) {
 	    //  Open destination file
-	    int fd = open(fileName.toStdString().c_str(), O_WRONLY|O_CREAT|O_TRUNC, 0644);
+	    int fd = open(fileName.toStdString().c_str(), O_WRONLY|O_CREAT|O_TRUNC, SYS->permCrtFiles());
 	    if(fd < 0) {
 		mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
 		return;
@@ -866,7 +866,7 @@ void VisRun::exportDoc( const string &idoc )
     QString fileName = getFileName(_("Save document"), QString(_("Document %1.html")).arg(expDocCnt++),
 	_("XHTML (*.html);;CSV file (*.csv)"), QFileDialog::AcceptSave);
     if(!fileName.isEmpty()) {
-	int fd = open(fileName.toStdString().c_str(), O_WRONLY|O_CREAT|O_TRUNC, 0644);
+	int fd = open(fileName.toStdString().c_str(), O_WRONLY|O_CREAT|O_TRUNC, SYS->permCrtFiles());
 	if(fd < 0) {
 	    mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
 	    return;
@@ -1794,7 +1794,7 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 	// Prepare the external script
 	comProc = "sesRun_"+owner()->workSess()+"_ntf"+i2s(tp);
 	bool fOK = false;
-	int hd = open(comProc.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0775);
+	int hd = open(comProc.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles(true));
 	if(hd >= 0) {
 	    fOK = write(hd, props().data(), props().size()) == (ssize_t)props().size();
 	    ::close(hd);
@@ -1945,7 +1945,7 @@ void VisRun::Notify::commCall( string &res, const string &mess, const string &la
 
     if(comIsExtScript) {
 	string resFile = "sesRun_"+owner()->workSess()+"_res"+i2s(tp);
-	int hdRes = res.size() ? open(resFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664) : -1;
+	int hdRes = res.size() ? open(resFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles()) : -1;
 	if(hdRes >= 0) { write(hdRes, res.data(), res.size()); ::close(hdRes); }
 	// Prepare environment and execute the external script
 	system(("en="+i2s(alEn)+" doNtf=1 doRes=0 res="+resFile+

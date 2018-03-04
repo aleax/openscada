@@ -498,7 +498,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
     if(hd == (iconv_t)(-1)) {
-	mess_crit("IConv", _("Error 'iconv' open: %s"), strerror(errno));
+	mess_crit("IConv", _("Error opening 'iconv': %s"), strerror(errno));
 	return mess;
     }
 
@@ -510,7 +510,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 	olen = sizeof(outbuf)-1;
 	size_t rez = iconv(hd, &ibuf, &ilen, &obuf, &olen);
 	if(rez == (size_t)(-1) && (errno == EINVAL || errno == EBADF)) {
-	    mess_crit("IConv", _("Error input sequence convert: %s"), strerror(errno));
+	    mess_crit("IConv", _("Error converting input sequence: %s"), strerror(errno));
 	    buf = mess;
 	    break;
 	}
@@ -520,7 +520,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     iconv_close(hd);
 
     //> Deadlock possible on the error message print
-    //if(chwrcnt)	mess_err("IConv", _("Error converting %d symbols from '%s' to '%s' for message part: '%s'(%d)"),
+    //if(chwrcnt)	mess_err("IConv", _("Error converting %d symbols from '%s' to '%s' for the message part: '%s'(%d)"),
     //		    chwrcnt, fromCH.c_str(), toCH.c_str(), mess.substr(0,20).c_str(), mess.size());
 
     return buf;

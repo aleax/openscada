@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tfunction.h
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -184,20 +184,20 @@ class TValFunc
 	int  ioId( const string &id );
 	int  ioSize( );
 	IO::Type ioType( unsigned id ) {
-	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Id or IO %d error!"),"ioType()", id);
+	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Error with ID or IO %d!"), "ioType()", id);
 	    return mFunc->io(id)->type();
 	}
 	unsigned ioFlg( unsigned id ) {
 	    if(!mFunc) throw TError("ValFunc", _("%s: No function set!"),"ioFlg()", id);
-	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Id or IO %d error for function '%s'!"), "ioFlg()", id, mFunc->nodePath().c_str());
+	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Error with ID or IO %d for the function '%s'!"), "ioFlg()", id, mFunc->nodePath().c_str());
 	    return mFunc->io(id)->flg();
 	}
 	bool ioHide( unsigned id ) {
-	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Id or IO %d error!"), "ioHide()", id);
+	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Error with ID or IO %d!"), "ioHide()", id);
 	    return mFunc->io(id)->hide();
 	}
 	bool ioMdf( unsigned id ) {
-	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Id or IO %d error!"), "ioMdf()", id);
+	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Error with ID or IO %d!"), "ioMdf()", id);
 	    return mVal[id].mdf;
 	}
 

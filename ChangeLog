@@ -1,3 +1,26 @@
+2018-03-04 Roman (stable)
+- !!:DOC: Appended by Documents/How_to/{Cyclic_programming,Debug,Transferring_project_configuration,Build_from_source,Crash_report,Create_module},Documents/API.
+- DB.LibsDB.OscadaLibs: servProc.docOffLine appended by the documents
+	Documents/How_to/{Cyclic_programming,Debug,Transferring_project_configuration,Build_from_source,Crash_report,Create_module},Documents/API(EN)
+	for the offline documentaion list.
+    servProc.docOffLine switched more to the default language "en" for common images and generic documents - only in English.
+- !!!!:SYS,UI.QTStarter: The manager of the OpenSCADA projects expanded for:
+    data/Android/AndroidManifest.xml:
+    data/openscada-proj.in: The user directory of OpenSCADA projects allowed for disabling, setting to priority before the system one and placing to FAT.
+    The user directory of OpenSCADA projects set to "/storage/sdcard0/.openscada".
+    data/debian[_mod]/*.init: Set for disable the user directory of OpenSCADA projects.
+- !!!!:SYS,DAQ.{*,JavaLikeCalc,SNMP},UI.QTStarter: Most original messages at last improved and corrected.
+- !!:SYS,DB.DBF,Archive.FSArch,UI.Vision: Generic control for permition of created files by OpenSCADA,
+    added by the command-line parameter "--noCoreDump" and the function TSYS::permCrtFiles().
+- !!:Archive.FSArch: New objects of archivers sets to the default path of storage "ARCHIVES/MESS/" for the projects of OpenSCADA.
+    Archive files renamed from the format "%F %T" to "%F %H.%M.%S" to allow their creation on FAT.
+- FIX:DAQ.ModBus: Fix for copy parameters of the logical type at the links initiate after.
+- FIX:UI.QTCfg: Vertically scalable elements fixed for guaranty the fit reset before the same fitting.
+- UI.QTStarter: The look and feel are made for renewing on the go.
+    The manager of the OpenSCADA projects merged the user and system directories of the projects and was set for the projects sorting.
+    The function "Create-update a project" was moved as an independent button, after the projects list.
+
+
 2018-02-23 Roman (stable)
 - !:DOC: Appended by Works/To_do,Documents/How_to/{Install,Live_disk,Violations,_alarms_and_notifications}.
 - DB.LibsDB.OscadaLibs: servProc.docOffLine appended by the documents Works/To_do,Documents/How_to/{Install,Live_disk,Violations,_alarms_and_notifications}

@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Документація/Як зробити/Перенос документації проекту - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Документація/Як зробити/Перенос документації проекту</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FTransferring+project+configuration&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Transferring_project_configuration" title="Documents/How to/Transferring project configuration">Documents/How to/Transferring project configuration</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Transferring_project_configuration" title="Documents/How to/Transferring project configuration (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Transferring_project_configuration/ru" title="Документация/Как сделать/Перенос документации проекта (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.B8.D0.B9_.D0.BF.D0.B5.D1.80.D0.B5.D0.BD.D0.BE.D1.81_.D0.91.D0.94_.D0.B7_.D0.B1.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B0.D0.BC.D0.B8_.D1.82.D0.B0_.D0.BA.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.94.D1.8E"><span class="tocnumber">1</span> <span class="toctext">Простий перенос БД з бібліотеками та конфігурацією</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.92.D0.B8.D0.BE.D0.BA.D1.80.D0.B5.D0.BC.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BF.D0.BE.D1.82.D1.80.D1.96.D0.B1.D0.BD.D0.BE.D1.97_.D0.BA.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.97"><span class="tocnumber">2</span> <span class="toctext">Виокремлення потрібної конфігурації</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9D.D0.B8.D0.B7.D1.8C.D0.BA.D0.BE.D1.80.D1.96.D0.B2.D0.BD.D0.B5.D0.B2.D0.B5_.D0.BA.D0.BE.D0.BF.D1.96.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B2.D0.BC.D1.96.D1.81.D1.82.D1.83_.D0.91.D0.94"><span class="tocnumber">3</span> <span class="toctext">Низькорівневе копіювання вмісту БД</span></a></li>
+</ul>
+</div>
+
+<p>Часто затребуваною буває задача переносу конфігурації з одного проекту OpenSCADA до іншого. Причому, частіш за все, треба здійснити частковий перенос, наприклад, перенос окремих напрацювань, які можуть знадобитися у новому проекті.
+</p><p>Треба відзначити, що будь які напрацювання з найменшим натяком та перспективою вторинного використання треба намагатися уніфікувати та зберігати у окремі-власні бібліотеки та БД. Дуже не рекомендується безпосередньо міняти стандартні конфігурації та елементи стандартних бібліотек, а також зберігати власні-нові бібліотеки та елементи у базах даних стандартних бібліотек. Це дозволить Вам надалі безперешкодно оновлювати стандартні бібліотеки, а також просто використовувати напрацювання ваших попередніх проектів.
+</p>
+<h3><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.B8.D0.B9_.D0.BF.D0.B5.D1.80.D0.B5.D0.BD.D0.BE.D1.81_.D0.91.D0.94_.D0.B7_.D0.B1.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B0.D0.BC.D0.B8_.D1.82.D0.B0_.D0.BA.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.94.D1.8E"><span class="mw-headline-number">1</span> Простий перенос БД з бібліотеками та конфігурацією</span></h3>
+<p>Якщо Ви врахували вищенаведені рекомендації та всі Ваші уніфіковані напрацювання містяться у окремій БД, то весь процес переносу буде полягати у копіюванні та підключені БД у новому проекті або у простому підключені цієї БД, для мережевих СУБД.
+</p><p>Процедура копіювання БД відрізняється для різних типів БД та з нею треба буде ознайомитися з документації на цю БД. Для супутнього розповсюдження, з дистрибутивами OpenSCADA, зазвичай використовується БД SQLite, у вигляді окремих файлів *.db. Копіювання БД SQLite відповідно полягає у простому копіюванні потрібного файлу БД з директорії баз даних старого проекту у директорію баз даних нового.
+</p><p>Підключення здійснюється шляхом створення нового об'єкту БД, у модулі потрібного типу БД підсистеми БД, та подальшої його конфігурації,
+більше читайте у (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#CfgDB" title="Special:MyLanguage/Documents/Program manual">деталях</a>). Після створення, конфігурації та включення БД; дані у БД можна одразу завантажити; натиснувши, на формі об'єкту БД, кнопку "Завантажити програму з цієї БД". Однак це передбачає тільки саме завантаження, без включення-запуску завантажених об'єктів, тому тут може бути простіше перезапустити OpenSCADA.
+</p>
+<h3><span class="mw-headline" id=".D0.92.D0.B8.D0.BE.D0.BA.D1.80.D0.B5.D0.BC.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BF.D0.BE.D1.82.D1.80.D1.96.D0.B1.D0.BD.D0.BE.D1.97_.D0.BA.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.97"><span class="mw-headline-number">2</span> Виокремлення потрібної конфігурації</span></h3>
+<p>У випадку якщо потрібна конфігурація міститься у загальній БД або БД стандартних бібліотек то попередньо треба здійснити виокремлення її у окрему БД. Виокремити конфігурацію можна або у окрему БД з Вашими бібліотеками або у експортну БД. Експортна БД, на різницю від бібліотечної, слугує тільки для переносу конфігурації та буде надалі видалена. У будь якому випаду, треба створити нову БД для потрібного типу БД, подібно до процедури підключення вище. Для переносу треба використати тип БД, який планується використати у новому проекті. Типово, для переносу краще використовувати тип БД SQLite, через просту процедуру копіювання. Однак, якщо використовувати мережеву СУБД, ця процедура може перетворитися у просте підключення бібліотечної або експортної БД у новому проекті.
+</p><p>Далі конфігурацію треба виокремити у уніфікуючі або експортні бібліотеки, якщо вона не може бути прямо збережена у БД. Окремі шаблони параметрів або параметри контролерів збору даних, візуальні елементи бібліотек віджетів та інше можна виокремити шляхом створення бібліотеки експорту або уніфікації відповідного елементу. Для наново створеної бібліотеки, у якості БД, треба вказати раніш створену уніфікуючу або експортну БД. Далі здійснюється копіювання потрібних елементів з початкової бібліотеки до уніфікуючої-експортної, за посередництвом стандартної функції копіювання. Після копіювання уніфікуючу-експортну бібліотеку треба зберегти.
+</p><p>За потреби переносу об'єкту, з окремою властивістю БД або цілих бібліотек, операцію створення проміжної бібліотеки та подальше копіювання можна опустити. Достатньо у полі БД вказати раніш створену уніфікуючу або експортну БД та зберегти елемент.
+</p><p>Подальші дії, а саме просте перенесення БД, здійснюється відповідно до попереднього розділу.
+</p><p>При переносі конфігурації шляхом експортування, треба здійснити зворотній процес копіювання з експортних бібліотек у локальні бібліотеки нового проекту та видалення експортної БД.
+</p>
+<h3><span class="mw-headline" id=".D0.9D.D0.B8.D0.B7.D1.8C.D0.BA.D0.BE.D1.80.D1.96.D0.B2.D0.BD.D0.B5.D0.B2.D0.B5_.D0.BA.D0.BE.D0.BF.D1.96.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B2.D0.BC.D1.96.D1.81.D1.82.D1.83_.D0.91.D0.94"><span class="mw-headline-number">3</span> Низькорівневе копіювання вмісту БД</span></h3>
+<p>Для переносу можна використати вибіркове копіювання таблиць БД з конфігурацією, шляхом: обрання об'єктів таблиць у об'єкті БД, виклику команди копіювання, обрання об'єкту нової БД та виклику команди вставки, про що читайте (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#CfgDB" title="Special:MyLanguage/Documents/Program manual">детальніше</a>). Однак, для цього треба знати структуру БД, про яку викладено за <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#DB" title="Special:MyLanguage/Documents/Program manual">цим посиланням</a>.
+</p>
+
+
+
+
+
+</div></body>
+</html>

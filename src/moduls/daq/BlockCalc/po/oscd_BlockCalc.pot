@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 19:58+0200\n"
+"POT-Creation-Date: 2018-03-04 10:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,15 +175,15 @@ msgstr ""
 msgid "Link's value"
 msgstr ""
 
-msgid "Call now. "
+msgid "Calculation. "
 msgstr ""
 
 #, c-format
-msgid "Call by period: %s. "
+msgid "Calculation with the period: %s. "
 msgstr ""
 
 #, c-format
-msgid "Call next by cron '%s'. "
+msgid "Next calculation by the cron '%s'. "
 msgstr ""
 
 #, c-format
@@ -233,10 +233,10 @@ msgstr ""
 msgid "All: %u; Enabled: %u; Process: %u"
 msgstr ""
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr ""
 
-msgid "2:Controller is stopped."
+msgid "2:Calculation stopped."
 msgstr ""
 
 msgid ""

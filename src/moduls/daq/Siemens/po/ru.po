@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0Report-Msgid-Bugs-To: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:12+0200\n"
+"POT-Creation-Date: 2018-03-04 13:16+0200\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -215,16 +215,15 @@ msgstr "Ошибка подключения."
 msgid "Restoring in %.6g s. "
 msgstr "Восстановления через %.6g с."
 
-msgid "Call now. "
-msgstr "Вызов сейчас. "
+msgid "Acquisition. "
+msgstr "Сбор. "
 
 #, c-format
-msgid "Call by period: %s. "
-msgstr "Вызовы с периодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Сбор с периодом: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Следующий вызов по cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Следующий сбор по cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s[%s]. Read %s. Wrote %s. Connection errors %g. "
@@ -389,8 +388,8 @@ msgstr "%d:Значение не получено."
 msgid "Value type error."
 msgstr "Ошибка типа значения."
 
-msgid "Connecting..."
-msgstr "Соединение..."
+msgid "Connecting."
+msgstr "Соединение."
 
 msgid "OK"
 msgstr ""
@@ -435,13 +434,13 @@ msgstr ""
 "например: \"192.168.0.1.1.1\";\n"
 "    AMSPort - порт, записывается в виде числа 0-65535."
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр отключен."
 
-msgid "2:Controller is stopped."
-msgstr "2:Контроллер остановлен."
+msgid "2:Acquisition stopped."
+msgstr "2:Сбор остановлен."
 
-msgid "Parameter is disabled."
+msgid "Parameter disabled."
 msgstr "Параметр отключен."
 
 msgid "Parameter is disabled or id error."

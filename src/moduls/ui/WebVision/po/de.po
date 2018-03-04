@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-28 10:07+0200\n"
+"POT-Creation-Date: 2018-03-04 15:18+0200\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -192,8 +192,7 @@ msgstr ""
 msgid "Sorry, opened sessions number reach limit!"
 msgstr "Leider erreichen öffnen Sitzungen Anzahl unbegrenzt!"
 
-#, c-format
-msgid "Go to session '%s' for project '%s' ..."
+msgid "Going to the session '%s' for the project '%s' ..."
 msgstr "Gehen Sie zu Session '%s' für Projekt '%s' ..."
 
 #, c-format

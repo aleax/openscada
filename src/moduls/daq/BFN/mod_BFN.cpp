@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.10"
+#define MOD_VER		"0.6.11"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Big Farm Net (BFN) modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -300,10 +300,10 @@ string TMdContr::getStatus( )
 	    rez.replace(0,1,"10");
 	}
 	//Display processing
-	if(acq_st) rez += TSYS::strMess(_("Call now. "));
+	if(acq_st) rez += TSYS::strMess(_("Acquisition. "));
 	//Display schedule
-	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	if(period()) rez += TSYS::strMess(_("Acquisition with the period: %s. "),tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	//Display spent time
 	if(acq_err.getVal().empty()) rez += TSYS::strMess(_("Spent time: %s."),tm2s(1e-6*tm_gath).c_str());
     }
@@ -719,8 +719,8 @@ void TMdPrm::vlGet( TVal &val )
     if(val.name() != "err")	return;
 
     if(!enableStat() || !owner().startStat()) {
-	if(!enableStat())		val.setS(_("1:Parameter is disabled."),0,true);
-	else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."),0,true);
+	if(!enableStat())		val.setS(_("1:Parameter disabled."),0,true);
+	else if(!owner().startStat())	val.setS(_("2:Acquisition stopped."),0,true);
 	return;
     }
     if(owner().redntUse())	return;

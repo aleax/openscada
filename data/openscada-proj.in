@@ -45,7 +45,8 @@ case "$1" in
     dPrjRez=$dPrj/$prjNm
 
     #User projects directory processing
-    if test ! -w $dPrj -a -w $dPrjUser; then
+    if test -n "$dPrjUser" -a ! -d $dPrjUser; then mkdir $dPrjUser; fi
+    if test ! -d $dPrjRez -o ! -w $dPrjRez && test -n "$dPrjUser" -a -w $dPrjUser; then
 	dPrjRez=$dPrjUser/$prjNm
 	if test -d $dPrj/LibsDB -a ! -d $dPrjUser/LibsDB; then cp -R $dPrj/LibsDB $dPrjUser; fi
 	if test ! -d $dPrjRez -a -d $dPrj/$prjNm; then
@@ -60,6 +61,7 @@ case "$1" in
     if test -d $dPrjRez; then
 	if test ! -e $dPrjRez/oscada.xml -a ! -w $dSysCfg/oscada_$prjNm.xml; then cp $dSysCfg/oscada_start.xml $dPrjRez/oscada.xml; fi
 	if test ! -d $dPrjRez/LibsDB -a ! -L $dPrjRez/LibsDB; then ln -s ../LibsDB $dPrjRez/LibsDB; fi
+	if test ! -d $dPrjRez/LibsDB -a ! -L $dPrjRez/LibsDB; then cp -R $dPrjRez/../LibsDB $dPrjRez/LibsDB; fi
 	if test ! -d $dPrjRez/ARCHIVES/MESS; then mkdir -p $dPrjRez/ARCHIVES/MESS; fi
 	if test ! -d $dPrjRez/ARCHIVES/VAL; then mkdir -p $dPrjRez/ARCHIVES/VAL; fi
 	if test -n "$(which xdg-user-dir)" && test -n "$(xdg-user-dir DESKTOP)" -a $1 = create; then
@@ -93,7 +95,7 @@ case "$1" in
     prjNm=$2
     prjDir=
 
-    if test ! -w $dPrj; then
+    if test -n "$dPrjUser" -a -d $dPrjUser; then
 	for fit in `ls $dPrjUser`; do
 	    if test -d $dPrjUser/$fit && test -f $dPrjUser/$fit/oscada.xml && test $fit = $prjNm; then
 		prjDir=$dPrjUser/$fit

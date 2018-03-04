@@ -38,7 +38,7 @@ msgstr ""
 "Init bcm2835 Bibliothek Fehler, ob das nicht bcm2835 oder es gibt keinen "
 "Zugriff."
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Parameter ist abgeschaltet."
 
 msgid "2:Acquisition/access is stopped."

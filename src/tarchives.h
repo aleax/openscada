@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tarchives.h
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -173,9 +173,9 @@ class TTypeArchivator: public TModule
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
 	virtual TMArchivator *AMess( const string &id, const string &db )
-	{ throw TError(nodePath().c_str(),_("Message archive no support!")); }
+	{ throw TError(nodePath().c_str(),_("Message archiver not supported!")); }
 	virtual TVArchivator *AVal( const string &id, const string &db )
-	{ throw TError(nodePath().c_str(),_("Value archive no support!")); }
+	{ throw TError(nodePath().c_str(),_("Value archiver not supported!")); }
 
     private:
 	//Private attributes

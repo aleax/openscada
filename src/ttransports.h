@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -244,9 +244,9 @@ class TTypeTransport: public TModule
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	virtual TTransportIn  *In( const string &name, const string &db )
-	{ throw TError(nodePath().c_str(),_("Input transport no support!")); }
+	{ throw TError(nodePath().c_str(),_("Input transport is not supported!")); }
 	virtual TTransportOut *Out( const string &name, const string &db )
-	{ throw TError(nodePath().c_str(),_("Output transport no support!")); }
+	{ throw TError(nodePath().c_str(),_("Output transport is not supported!")); }
 
     private:
 	//Attributes

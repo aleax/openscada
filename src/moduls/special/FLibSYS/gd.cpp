@@ -60,5 +60,5 @@ void GDObj::propSet( const string &id, TVariant val )
 TVariant GDObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     //????
-    throw TError("GDObj",_("Function '%s' error or not enough parameters."),id.c_str());
+    throw TError("GDObj",_("Error function '%s' or missing parameters for it."),id.c_str());
 }

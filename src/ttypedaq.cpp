@@ -74,7 +74,7 @@ void TTypeDAQ::postEnable( int flag )
 	fldAdd(new TFld("REDNT",_("Redundant"),TFld::Integer,TFld::Selected,"1","0",
 	    (i2s(TController::Off)+";"+i2s(TController::Asymmetric)/*+";"+i2s(TController::Symmetric)*/).c_str(),
 	    _("Off;Asymmetric"/*;Symmetric"*/)));
-	fldAdd(new TFld("REDNT_RUN",_("Preferable run"),TFld::String,0,"20","<high>"));
+	fldAdd(new TFld("REDNT_RUN",_("Preference for running"),TFld::String,0,"20","<high>"));
     }
 }
 
@@ -88,7 +88,7 @@ void TTypeDAQ::modStart( )
 	    try{ at(lst[i_l]).at().start(); }
 	    catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Start controller '%s' error."), (modId()+"."+lst[i_l]).c_str());
+		mess_sys(TMess::Error, _("Error starting the controller '%s'."), (modId()+"."+lst[i_l]).c_str());
 	    }
 }
 
@@ -105,7 +105,7 @@ void TTypeDAQ::add( const string &name, const string &daq_db )	{ chldAdd(mCntr, 
 
 TTypeParam &TTypeDAQ::tpPrmAt( unsigned id )
 {
-    if(id >= paramt.size()/* || id < 0*/) throw err_sys(_("Id of parameter type error!"));
+    if(id >= paramt.size()/* || id < 0*/) throw err_sys(_("Error ID of the parameter type!"));
     return *paramt[id];
 }
 
@@ -138,12 +138,12 @@ int TTypeDAQ::tpPrmToId( const string &name_t )
 
 TController *TTypeDAQ::ContrAttach( const string &name, const string &daq_db )
 {
-    throw err_sys(_("Error attach new controller %s."), name.c_str());
+    throw err_sys(_("Error attaching the new controller '%s'."), name.c_str());
 }
 
 string TTypeDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings, int maxCalcTm )
 {
-    throw err_sys(_("Module doesn't support the function for compilation programming languages."));
+    throw err_sys(_("Module does not support compilation of the programming language."));
 }
 
 void TTypeDAQ::cntrCmdProc( XMLNode *opt )

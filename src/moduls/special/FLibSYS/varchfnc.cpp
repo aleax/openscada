@@ -275,5 +275,5 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	return ao;
     }
 #endif
-    throw TError("VArchObj",_("Function '%s' error or not enough parameters."),id.c_str());
+    throw TError("VArchObj",_("Error function '%s' or missing parameters for it."),id.c_str());
 }

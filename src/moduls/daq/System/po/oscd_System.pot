@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-23 20:22+0200\n"
+"POT-Creation-Date: 2018-03-04 13:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -222,13 +222,13 @@ msgstr ""
 msgid "Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc."
 msgstr ""
 
-msgid "Auto create active DA"
+msgid "Auto create active data sources"
 msgstr ""
 
 msgid "Manual;Fast sources;Slow sources;All sources"
 msgstr ""
 
-msgid "System parameters table"
+msgid "Table of system parameters"
 msgstr ""
 
 msgid "Acquisition schedule"
@@ -246,15 +246,15 @@ msgstr ""
 msgid "Additional parameters"
 msgstr ""
 
-msgid "Call now. "
+msgid "Acquisition. "
 msgstr ""
 
 #, c-format
-msgid "Call by period: %s. "
+msgid "Acquisition with the period: %s. "
 msgstr ""
 
 #, c-format
-msgid "Call next by cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
 msgstr ""
 
 #, c-format
@@ -268,7 +268,7 @@ msgid "1:Parameter disabled"
 msgstr ""
 
 #, c-format
-msgid "Write value to attribute '%s' error: %s"
+msgid "Error writing value to attribute '%s': %s"
 msgstr ""
 
 msgid "CPU"
@@ -286,7 +286,7 @@ msgstr ""
 msgid "Memory"
 msgstr ""
 
-msgid "Net statistic"
+msgid "Network statistic"
 msgstr ""
 
 msgid "Qt sensors"

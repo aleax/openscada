@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.SNMP translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.SNMP package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-08 11:51+0200\n"
+"POT-Creation-Date: 2018-03-04 11:09+0200\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -24,14 +24,14 @@ msgstr "Роман Савоченко"
 msgid "Provides an implementation of the client of SNMP-service."
 msgstr "Предоставляет реализацию клиентского сервиса протокола SNMP."
 
-msgid "Parameters table"
+msgid "Table of parameters"
 msgstr "Таблица параметров"
 
 msgid "Acquisition schedule"
-msgstr "Планирование опроса"
+msgstr "Планирование сбора"
 
-msgid "Gather task priority"
-msgstr "Уровень приоритета задачи сбора данных"
+msgid "Priority of the acquisition task"
+msgstr "Приоритет задачи сбора данных"
 
 msgid "Remote host address"
 msgstr "Адрес удалённого хоста"
@@ -60,16 +60,15 @@ msgstr "Стандарт"
 msgid "OID list (next line separated)"
 msgstr "Список OID (разделение след. строкой)"
 
-msgid "Call now. "
-msgstr "Вызов сейчас. "
+msgid "Acquisition. "
+msgstr "Сбор. "
 
 #, c-format
-msgid "Call by period: %s. "
-msgstr "Вызовы с периодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Сбор с периодом: %s."
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Следующий вызов по cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Следующий сбор по cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s."
@@ -81,7 +80,7 @@ msgstr "Ошибка генерации Ku из пароля аутентифи�
 msgid "Error generating Ku from privacy pass phrase."
 msgstr "Ошибка генерации Ku из пароля приватности."
 
-msgid "Error SNMP session open."
+msgid "Error opening SNMP session."
 msgstr "Ошибка открытия SNMP сессии."
 
 msgid ""
@@ -106,21 +105,19 @@ msgstr "Авторизация"
 msgid "Privacy"
 msgstr "Приватность"
 
-#, c-format
-msgid "ASN type '%d' do not handled."
+msgid "ASN type '%d' is not supported."
 msgstr "ASN тип '%d' не поддерживается."
 
-#, c-format
-msgid "10:Timeout: No Response from %s."
+msgid "10:Timeout: No response from %s."
 msgstr "10:Истекло время ожидания ответа от %s."
 
 msgid ""
-"SNMP OID list, include directories for get all subitems. OID can write in "
-"the methods:\n"
+"The list of SNMP OIDs, including directories to get all of the subelements. "
+"The OID can be written as follows:\n"
 "  \".1.3.6.1.2.1.1\" - direct code addressing for the object \"System\";\n"
 "  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbolic addressing to "
 "direct one for the object \"System\";\n"
-"  \"system.sysDescr.0\" - simple, not full path, addressing from a root "
+"  \"system.sysDescr.0\" - simple, not full path, addressing from the root "
 "alias (the object \"System\");\n"
 "  \"SNMPv2-MIB::sysDescr.0\" - addressing from the MIB base by the module "
 "name for \"system.sysDescr.0\"."
@@ -141,5 +138,5 @@ msgstr "MIB Дерево"
 msgid "<<Append current>>"
 msgstr "<<Добавить текущий>>"
 
-msgid "11:No authorized name."
+msgid "11:Unauthorized name."
 msgstr "11:Неавторизированное имя."

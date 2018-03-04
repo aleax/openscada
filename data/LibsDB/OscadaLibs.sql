@@ -294,8 +294,15 @@ Documents/How_to:en,ru,uk:How_to.html
 Documents/How_to/Install:en,ru,uk:How_to_Install.html
 Documents/How_to/Live_disk:en,ru,uk:How_to_Live_disk.html
 Documents/How_to/Violations,_alarms_and_notifications:en,ru,uk:How_to_Violations.html
+Documents/How_to/Cyclic_programming:en,ru,uk:Cyclic_programming.html
+Documents/How_to/Debug:en,ru,uk:Debug.html
+Documents/How_to/Transferring_project_configuration:en,ru,uk:Transferring_project_configuration.html
+Documents/How_to/Build_from_source:en,ru,uk:Build_from_source.html
+Documents/How_to/Crash_report:en,ru,uk:Crash_report.html
+Documents/How_to/Create_module:en,ru,uk:Create_module.html
 Documents/DAQ:en,uk,ru:DAQ.html
 Documents/User_API:en,uk,ru:User_API.html
+Documents/API:en:API.html
 Modules/SQLite:en,uk,ru:Modules/SQLite.html
 Modules/MySQL:en,uk,ru:Modules/MySQL.html
 Modules/FireBird:en,uk,ru:Modules/FireBird.html
@@ -7300,7 +7307,7 @@ for(pos = 0; pos < ibuf.length; ) {
 }
 
 return obuf;','','',1510947218);
-INSERT INTO "lib_servProc" VALUES('docOffLine','Off-line documentation','','','','','',1,240,0,'trNm = "offLine";
+INSERT INTO "lib_servProc" VALUES('docOffLine','Off-line documentation','','','','','',1,300,0,'trNm = "offLine";
 docHost = "oscada.org:80";
 docHost_ = "http://" + docHost.parse(0, ":");
 defLang = "en";
@@ -7326,7 +7333,8 @@ for(off = 0; (tVl=pages.parseLine(0,off)).length; ) {
 	for(off1 = 0; (tVl2=pLngs.parse(0,",",off1)).length; ) {
 		if(dirsO[tVl2] != true) {
 			if(tVl2 != defLang)
-				SYS.system("if test ! -d "+resDir+tVl2+"; then install -d "+resDir+tVl2+"/files; cp "+resDir+"en/files/doc.css "+resDir+tVl2+"/files; fi", true);
+				SYS.system("if test ! -d "+resDir+tVl2+"; then install -d "+resDir+tVl2+"/files; fi", true);
+				//SYS.system("if test ! -d "+resDir+tVl2+"; then install -d "+resDir+tVl2+"/files; cp "+resDir+"en/files/doc.css "+resDir+tVl2+"/files; fi", true);
 			dirsO[tVl2] = true; lngCnt++;
 		}
 		pgsO[pWiki+"/"+tVl2] = pOffLn;
@@ -7340,7 +7348,8 @@ if(pagesCur.length) {
 		for(off1 = 0; (tVl2=pLngs.parse(0,",",off1)).length; ) {
 			if(dirsO[tVl2] != true) {
 				if(tVl2 != defLang)
-					SYS.system("if test ! -d "+resDir+tVl2+"; then install -d "+resDir+tVl2+"/files; cp "+resDir+"en/files/doc.css "+resDir+tVl2+"/files; fi", true);
+					SYS.system("if test ! -d "+resDir+tVl2+"; then install -d "+resDir+tVl2+"/files; fi", true);
+					//SYS.system("if test ! -d "+resDir+tVl2+"; then install -d "+resDir+tVl2+"/files; cp "+resDir+"en/files/doc.css "+resDir+tVl2+"/files; fi", true);
 				dirsO[tVl2] = true; lngCnt++;
 			}
 			pgsOprc[pWiki+"/"+tVl2] = pOffLn;
@@ -7366,7 +7375,7 @@ for(var ip in pgsOprc) {
 	}
 
 	// Request the documentation page
-	req = SYS.XMLNode("GET").setAttr("Host",docHost).setAttr("URI","/wiki/index.php?title="+ip+"&printable=yes");
+	req = SYS.XMLNode("GET").setAttr("Host",docHost).setAttr("URI","/wiki/index.php?title="+ip.replace("/"+defLang,"")+"&printable=yes");
 	// Load the documentation page to a XML tree
 	for(iTr = 0; iTr < reqTr; iTr++)
 		if(!(rez=tr.messIO(req,"HTTP")).length && req.text().length) break;
@@ -7400,7 +7409,7 @@ for(var ip in pgsOprc) {
 		}
 		else passPrev = true;
 	}
-	head.childAdd("link").setAttr("rel","stylesheet").setAttr("href",topDir+"files/doc.css");
+	head.childAdd("link").setAttr("rel","stylesheet").setAttr("href",topDir+((pLang!=defLang)?"../"+defLang+"/":"")+"files/doc.css");
 
 	// BODY processing
 	body = docTree.childGet("body");
@@ -7413,7 +7422,8 @@ for(var ip in pgsOprc) {
 	imgs = body.getElementsBy("img");
 	for(iEl = 0; iEl < imgs.length; iEl++)
 		if((tVl=imgs[iEl].attr("src").match("^/.*/(.*)$")).length) {
-			if(imgsO[pLang+":"+tVl[1]] != true) {
+			isDef = false;
+			if(imgsO[pLang+":"+tVl[1]] != true && (pLang == defLang || (isDef=imgsO[defLang+":"+tVl[1]]) != true)) {
 				req = SYS.XMLNode("GET").setAttr("Host",docHost).setAttr("URI",imgs[iEl].attr("src"));
 				for(iTr = 0; iTr < reqTr; iTr++)
 					if(!(rez=tr.messIO(req,"HTTP")).length && req.text().length) break;
@@ -7424,7 +7434,8 @@ for(var ip in pgsOprc) {
 				imgsO[pLang+":"+tVl[1]] = true;
 				imgCnt++;
 			}
-			imgs[iEl].setAttr("src", topDir+"files/"+tVl[1]);
+			//SYS.messInfo("DOC", "pLang="+pLang+"; file="+tVl[1]+"; isP="+isP);
+			imgs[iEl].setAttr("src", topDir+((isDef==true)?"../"+defLang+"/":"")+"files/"+tVl[1]);
 		}
 
 	// Links processing
@@ -7437,7 +7448,7 @@ for(var ip in pgsOprc) {
 			if(dynLngPg.length && (!(tDst=pgsO[dynLngPg+"/"+pLang]).isEVal() || !(tDst=pgsO[stLngPg]).isEVal()))
 					anchs[iEl].setAttr("href", topDir+tDst);
 			else if(dynLngPg.length && !(tDst=pgsO[dynLngPg+"/"+defLang]).isEVal())
-					anchs[iEl].setAttr("href", "../"+defLang+"/"+topDir+tDst);
+					anchs[iEl].setAttr("href", topDir+"../"+defLang+"/"+tDst);
 			else {
 				anchs[iEl].setAttr("href", docHost_+href);
 				if(!anchs[iEl].attr("class").length)	anchs[iEl].setAttr("class", "external");
@@ -7451,7 +7462,7 @@ for(var ip in pgsOprc) {
 	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
 }
 
-res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1519414901);
+res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1520179222);
 CREATE TABLE 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library "FLibComplex1" (http://wiki.oscada.org/HomePageEn/Doc/FLibComplex1#h902-15) and the implementation of the PWM for the pulse part.','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" (http://wiki.oscada.org/Doc/FLibComplex1#h91-15) и реализация ШИМ для импульсной части.',1,10,0,'//Call standard analog PID
 outA = Special.FLibComplex1.pid(var,sp,max,min,manIn,auto,casc,Kp,Ti,Kd,Td,Tzd,Hup,Hdwn,Zi,followSp,K1,in1,K2,in2,K3,in3,K4,in4,f_frq,int,dif,lag);

@@ -1,13 +1,13 @@
 # OpenSCADA.UI.VCAEngine translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:58+0200\n"
+"POT-Creation-Date: 2018-03-04 15:11+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -50,10 +50,10 @@ msgid "Library DB"
 msgstr "БД библиотеки"
 
 msgid ""
-"DB address in format [<DB module>.<DB name>.<Table name>].\n"
-"For use main work DB set '*.*'."
+"DB address in the format \"{DB module}.{DB name}.{Table name}\".\n"
+"To use the main working DB, set '*.*'."
 msgstr ""
-"Адрес БД в формате [<Модуль БД>.<Имя БД>.<Имя таблицы>].\n"
+"Адрес БД в формате \"{Модуль БД}.{Имя БД}.{Имя таблицы}\".\n"
 "Для использования основной рабочей БД установить '*.*'."
 
 msgid "Date of modification"
@@ -1273,9 +1273,6 @@ msgstr "мксек"
 
 msgid "Category"
 msgstr "Категория"
-
-msgid "Lev."
-msgstr "Ур."
 
 msgid "Message"
 msgstr "Сообщение"

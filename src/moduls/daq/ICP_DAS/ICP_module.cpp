@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: ICP_module.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.8.6"
+#define MOD_VER		"1.8.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides implementation for 'ICP DAS' hardware support.\
  Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
@@ -174,9 +174,9 @@ string TMdContr::getStatus( )
     string val = TController::getStatus();
 
     if(startStat() && !redntUse()) {
-	if(callSt)	val += TSYS::strMess(_("Call now. "));
-	if(period())	val += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
-	else val += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	if(callSt)	val += TSYS::strMess(_("Acquisition. "));
+	if(period())	val += TSYS::strMess(_("Acquisition with the period: %s. "),tm2s(1e-9*period()).c_str());
+	else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s. Serial requests %g, errors %g. "), tm2s(1e-6*tmGath).c_str(), numReq, numErr);
     }
 
@@ -584,8 +584,8 @@ void TMdPrm::vlGet( TVal &val )
 {
     if(!enableStat() || !owner().startStat()) {
 	if(val.name() == "err") {
-	    if(!enableStat())			val.setS(_("1:Parameter is disabled."), 0, true);
-	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."), 0, true);
+	    if(!enableStat())			val.setS(_("1:Parameter disabled."), 0, true);
+	    else if(!owner().startStat())	val.setS(_("2:Acquisition stopped."), 0, true);
 	}
 	else val.setS(EVAL_STR, 0, true);
 	return;

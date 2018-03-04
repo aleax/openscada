@@ -56,7 +56,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
 	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET).c_str(),_("Data;Gateway node;Gateway net")));
     // For "Data" mode
     mNodeEl.fldAdd(new TFld("DT_PER",_("Calculate data period, seconds"),TFld::Real,0,"5.3","1","0.001;99"));
-    mNodeEl.fldAdd(new TFld("DT_PR_TR",_("Allow program translation"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    mNodeEl.fldAdd(new TFld("DT_PR_TR",_("Translate program"),TFld::Boolean,TFld::NoFlag,"1","0"));
     mNodeEl.fldAdd(new TFld("DT_PROG",_("Program"),TFld::String,TFld::TransltText,"1000000"));
     // For "Gateway" mode
     mNodeEl.fldAdd(new TFld("TO_TR",_("To transport"),TFld::String,0,OBJ_ID_SZ));
@@ -608,7 +608,7 @@ void Node::postEnable( int flag )
 {
     //Create default IOs
     if(flag&TCntrNode::NodeConnect) {
-	ioIns(new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Node::LockAttr,"1000",false), 0);
+	ioIns(new IO("f_frq",_("Frequency of calculation of the function (Hz)"),IO::Real,Node::LockAttr,"1000",false), 0);
 	ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,Node::LockAttr,"0",false), 1);
 	ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,Node::LockAttr,"0",false), 2);
     }

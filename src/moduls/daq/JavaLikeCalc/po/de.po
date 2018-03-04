@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:01+0200\n"
+"POT-Creation-Date: 2018-03-04 10:39+0200\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -21,308 +21,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, c-format
-msgid "Variable '%s' is used but undefined"
-msgstr "Die Variable '%s' wird verwendet, ist aber nicht definiert"
-
-msgid "Array have more 255 items."
-msgstr "Array haben mehr 255 Artikel."
-
-msgid "RegExp require one or two parameters."
-msgstr "RegExp benötigen einen oder zwei Parameter."
-
-#, c-format
-msgid "Don't support operation code %d."
-msgstr "Operation %d wird nicht unterstützt."
-
-#, c-format
-msgid "External functions number exceeded limits to %d on function '%s'"
-msgstr ""
-"Externe Funktionen Anzahl überschrittene Grenzen bis %d bei Funktion '%s'"
-
-#, c-format
-msgid "More than %d(%d) parameters are specified for function '%s'"
-msgstr "Mehr als %d(%d) Parameter sind für die Funktion '%s' angegeben"
-
-#, c-format
-msgid "Function is requested '%s', but it doesn't have return of IO"
-msgstr "Funktion ist aufgerufen '%s', sie hat aber keine Rückgabe"
-
-msgid "Function's name longer to 254."
-msgstr "Name der Funktion länger bis 254."
-
-msgid "Object's function have more 255 parameters."
-msgstr "Object-Funktion haben mehr 255 Parameter."
-
-msgid "Get object from no object's register"
-msgstr "Lade Objekt nicht vom Objektregister"
-
-msgid "Function execution terminated by error"
-msgstr "Funktion Ausführung abgebrochen durch Fehler"
-
-#, c-format
-msgid "Timeouted function calculation %d > %d+%d"
-msgstr "Zeitüberschreitung Berechnung der Funktion %d > %d+%d"
-
-#, c-format
-msgid "Not supported type %d for operation 'Add'."
-msgstr "Nicht unterstützt Typ %d für den Betrieb auf 'Hinzufügen'."
-
-#, c-format
-msgid "Operation %c(%xh) error. Function '%s' is stopped."
-msgstr "Fehler bei der Operation %c(%xh). Funktion '%s' ist angehalten."
-
-msgid "Function: "
-msgstr "Funktion: "
-
-msgid "Date of modification"
-msgstr "Änderungsdatum"
-
-msgid "Name"
-msgstr "Name"
-
-msgid "Description"
-msgstr "Beschreibung"
-
-msgid "To start"
-msgstr "Starten"
-
-msgid "Maximum calculate time, seconds"
-msgstr "Maximale Zeit der Berechnung, Sekunden"
-
-msgid "Program"
-msgstr "Programm"
-
-msgid "IO"
-msgstr ""
-
-msgid "Identifier"
-msgstr "Identifikator"
-
-msgid "Type"
-msgstr "Typ"
-
-msgid "Real;Integer;Boolean;String;Text;Object"
-msgstr "Reellezahl;Ganzzahl;Logisch;Saite;Text;Objekt"
-
-msgid "Mode"
-msgstr "Mode"
-
-msgid "Input;Output;Return"
-msgstr "Eingang;Ausgang;Rückgabe"
-
-msgid "Hide"
-msgstr "Unsichtbar"
-
-msgid "Default"
-msgstr "Standard"
-
-msgid "New IO"
-msgstr "Neu IO"
-
-msgid "Empty value is not valid."
-msgstr "Leerer Wert ist nicht zulässig."
-
-msgid "Function's library: "
-msgstr "Funktionsbibliothek: "
-
-msgid "Function"
-msgstr "Funktion"
-
-msgid "Library"
-msgstr "Bibliothek"
-
-msgid "State"
-msgstr "Zustand"
-
-msgid "Accessing"
-msgstr "Zugriff"
-
-msgid "Library DB"
-msgstr "Datenbank der Bibliothek"
-
-msgid ""
-"DB address in format [<DB module>.<DB name>.<Table name>].\n"
-"For use main work DB set '*.*'."
-msgstr ""
-
-msgid "Configuration"
-msgstr "Konfiguration"
-
-msgid "Functions"
-msgstr "Funktionen"
-
-msgid "Java-like based calculator"
-msgstr "Rechner in Java-ähnlicher Sprache"
-
-msgid "Roman Savochenko"
-msgstr "Roman Savotschenko"
-
-msgid ""
-"Provides based on java like language calculator and engine of libraries.  "
-"The user can create and modify functions and libraries."
-msgstr ""
-"Bietet auf Basis von Java ähnlichen Sprache Rechner und Motor der "
-"Bibliotheken. Der Anwender kann erstellen und Funktionen und Bibliotheken zu "
-"modifizieren."
-
-msgid "Parameters table"
-msgstr "Tabelle der Parameter"
-
-msgid "Controller's function"
-msgstr "Funktion des Controllers"
-
-msgid "Calculation schedule"
-msgstr "Berechnung Zeitplan"
-
-msgid "Calculation task priority"
-msgstr "Priorität der Berechnung"
-
-msgid "Iteration number in single calculation"
-msgstr "Anzahl der Iterationen"
-
-msgid "IO ID"
-msgstr ""
-
-msgid "IO value"
-msgstr "Wert IO"
-
-msgid "Standard"
-msgstr "Standard"
-
-msgid "Data fields"
-msgstr "Datenfelder"
-
-msgid "Data base"
-msgstr "Datenbank"
-
-msgid "Allow program translation"
-msgstr "Programmübersetzung zulassen"
-
-msgid "Function ID"
-msgstr "ID Funktionen"
-
-msgid "Default value"
-msgstr "Standardwert"
-
-msgid "Position"
-msgstr "Position"
-
-#, c-format
-msgid "Compilation with the help of the program language %s is not supported."
-msgstr "Kompilieren mit der Programmierungssprache %s wird nicht unterstützt."
-
-#, c-format
-msgid "Compile error: %s"
-msgstr "Fehler bei der Kompilation: %s"
-
-msgid "Load function's libraries error."
-msgstr "Fehler beim Laden der Funktionsbibliothek."
-
-msgid "Safe timeout, seconds"
-msgstr "Sicher Timeout, Sekunden"
-
-msgid "Functions' Libraries"
-msgstr "Funktionsbibliothek"
-
-msgid "Libraries"
-msgstr "Bibliotheken"
-
-msgid "Call now. "
-msgstr "Rufen Sie jetzt an. "
-
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Aufruf mit einer Periode: %s. "
-
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Call nächsten durch cron '%s'. "
-
-#, c-format
-msgid "Spent time: %s[%s]."
-msgstr "Verbrauchte Zeit: %s[%s]."
-
-#, c-format
-msgid ""
-"Functions library '%s' is not present. Please, create functions library!"
-msgstr ""
-"Funktionsbibliothek '%s' ist nicht vorhanden. Bitte, erstellen Sie eine "
-"Funktionsbibliothek!"
-
-#, c-format
-msgid "Create new function '%s'."
-msgstr "Erstellen einer neuen Funktion '%s'."
-
-msgid "Load function and its IO error."
-msgstr "Fehler beim Laden der Funktion und ihrer IO."
-
-msgid "Function calculate frequency (Hz)"
-msgstr "Frequenz der Funktionsberechnung (Hz)"
-
-msgid "Function start flag"
-msgstr "Schalter für das Starten der Funktion"
-
-msgid "Function stop flag"
-msgstr "Schalter für das Anhalten der Funktion"
-
-msgid "This controller object link"
-msgstr "Das Controller-Objekt zu verknüpfen"
-
-msgid "Calculation controller's function error."
-msgstr "Controller Berechnungsfehler in der Funktion."
-
-msgid "No started or no present function."
-msgstr "Nicht gestartet oder Funktion ist nicht vorhanden."
-
-msgid "Calculation"
-msgstr "Berechnungen"
-
-msgid "Data"
-msgstr "Daten"
-
-msgid "Attribute mode"
-msgstr "Modusattribut"
-
-msgid "Read only;Read and Write;Read and Write"
-msgstr "Read-only;Lesen und Schreiben;Lesen und Schreiben"
-
-msgid "Value"
-msgstr "Wert"
-
-msgid "Deleting lock attribute in not allow."
-msgstr "Löschen Verriegelungsattribut ist nicht erlaubt."
-
-msgid "Changing locked attribute is not allowed."
-msgstr "Änderung des verriegelten Attributs ist nicht erlaubt"
-
-msgid "2:Controller is stopped"
-msgstr "2:Controller ist angehalten!"
-
-msgid "1:Parameter is disabled"
-msgstr "1:Parameter ist abgeschaltet"
-
-msgid ""
-"Attributes configuration list. List must be written by lines in format: "
-"[<io>:<aid>:<anm>]\n"
-"Where:\n"
-"  io - calculation function's IO;\n"
-"  aid - created attribute identifier;\n"
-"  anm - created attribute name.\n"
-"If 'aid' or 'anm' are not set they will be generated from selected "
-"function's IO."
-msgstr ""
-"Liste der Konfiguration der Attribute. Die Liste soll eingeschrieben sein "
-"zeilenweise im Format: [<io>:<aid>:<anm>]\n"
-"Wo:\n"
-"  io - IO der berechneten Funktion;\n"
-"  aid - Bezeichner des gebildeten Attributs;\n"
-"  anm - Name des gebildeten Attributs.\n"
-"  Falls 'aid' oder 'anm' nicht bestimmt sind werden sie aus dem gewählten IO "
-"der Funktion generiert."
-
-#, c-format
 msgid "Internal function inaccessible by offset %d > %d"
 msgstr "Interne Funktion unzugänglich durch Offset %d > %d"
+
+#, c-format
+msgid "Variable '%s' is used but undefined"
+msgstr "Die Variable '%s' wird verwendet, ist aber nicht definiert"
 
 msgid "Error constant after constant"
 msgstr "Fehler konstant nach konstanter"
@@ -361,3 +65,305 @@ msgstr "Symbolfehler, "
 
 msgid "Object's properties too long, "
 msgstr "Eigenschaften des Objekts zu lang,"
+
+msgid "Array has more than 255 elements."
+msgstr "Array haben mehr 255 Artikel."
+
+msgid "RegExp requires one or two parameters."
+msgstr "RegExp benötigen einen oder zwei Parameter."
+
+#, c-format
+msgid "Operation code %d is not supported."
+msgstr "Operationscode %d wird nicht unterstützt."
+
+#, c-format
+msgid ""
+"Number of external functions reached the limit of %d on the function '%s'"
+msgstr ""
+"Externe Funktionen Anzahl überschrittene Grenzen bis %d bei Funktion '%s'"
+
+#, c-format
+msgid "More than %d(%d) parameters are specified for the function '%s'"
+msgstr "Mehr als %d(%d) Parameter sind für die Funktion '%s' angegeben"
+
+#, c-format
+msgid "Function '%s' is called, but it does not have the IO-return"
+msgstr "Funktion ist aufgerufen '%s', sie hat aber keine Rückgabe"
+
+msgid "Function name is longer than 254."
+msgstr "Name der Funktion länger bis 254."
+
+msgid "Object function contains more than 255 parameters."
+msgstr "Object-Funktion haben mehr 255 Parameter."
+
+msgid "Obtaining an object from a non-object register"
+msgstr "Lade Objekt nicht vom Objektregister"
+
+msgid "Function is interrupted by an error"
+msgstr "Funktion Ausführung abgebrochen durch Fehler"
+
+#, c-format
+msgid "Calculation time has been exceeded %d > %d+%d"
+msgstr "Berechnungszeit wurde überschritten %d > %d+%d"
+
+#, c-format
+msgid "Type %d, which is not supported by the 'Add' operation."
+msgstr ""
+"Geben Sie %d ein, das von der Operation 'Hinzufügen' nicht unterstützt wird."
+
+#, c-format
+msgid "Error operation %c(%xh). Function '%s' stopped."
+msgstr "Fehler bei der Operation %c(%xh). Funktion '%s' ist angehalten."
+
+msgid "Function: "
+msgstr "Funktion: "
+
+msgid "Date of modification"
+msgstr "Änderungsdatum"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "To start"
+msgstr "Starten"
+
+msgid "Maximum calculation time, seconds"
+msgstr "Maximale Zeit der Berechnung, Sekunden"
+
+msgid "Program"
+msgstr "Programm"
+
+msgid "IO"
+msgstr ""
+
+msgid "Identifier"
+msgstr "Identifikator"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Real;Integer;Boolean;String;Text;Object"
+msgstr "Reellezahl;Ganzzahl;Logisch;Saite;Text;Objekt"
+
+msgid "Mode"
+msgstr "Mode"
+
+msgid "Input;Output;Return"
+msgstr "Eingang;Ausgang;Rückgabe"
+
+msgid "Hidden"
+msgstr "Versteckt"
+
+msgid "Default"
+msgstr "Standard"
+
+msgid "New IO"
+msgstr "Neu IO"
+
+msgid "Empty value is not allowed."
+msgstr "Leerer Wert ist nicht zulässig."
+
+msgid "Library of the functions: "
+msgstr "Bibliothek der Funktionen: "
+
+msgid "Function"
+msgstr "Funktion"
+
+msgid "Library"
+msgstr "Bibliothek"
+
+msgid "State"
+msgstr "Zustand"
+
+msgid "Accessing"
+msgstr "Zugriff"
+
+msgid "Library DB"
+msgstr "Datenbank der Bibliothek"
+
+msgid ""
+"DB address in the format \"{DB module}.{DB name}.{Table name}\".\n"
+"To use the main working DB, set '*.*'."
+msgstr ""
+
+msgid "Configuration"
+msgstr "Konfiguration"
+
+msgid "Functions"
+msgstr "Funktionen"
+
+msgid "Calculator on the Java-like language"
+msgstr "Rechner auf der Java-ähnlichen Sprache"
+
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+msgid ""
+"Provides a calculator and libraries engine on the Java-like language. The "
+"user can create and modify functions and their libraries."
+msgstr ""
+"Bietet einen Rechner und ein Engine-Laufwerk für Bibliotheken in einer Java-"
+"ähnlichen Sprache. Der Benutzer kann Features und ihre Bibliotheken "
+"erstellen und ändern."
+
+msgid "Parameters table"
+msgstr "Tabelle der Parameter"
+
+msgid "Controller function"
+msgstr "Funktion des Controllers"
+
+msgid "Calculation schedule"
+msgstr "Berechnung Zeitplan"
+
+msgid "Priority of the calculation task"
+msgstr "Priorität der Berechnungsaufgabe"
+
+msgid "Number of iterations in single calculation"
+msgstr "Anzahl der Iterationen in einer einzelnen Berechnung"
+
+msgid "IO ID"
+msgstr ""
+
+msgid "IO value"
+msgstr "Wert IO"
+
+msgid "Standard"
+msgstr "Standard"
+
+msgid "Data fields"
+msgstr "Datenfelder"
+
+msgid "Database"
+msgstr "Datenbank"
+
+msgid "Maximum calculate time, seconds"
+msgstr "Maximale Zeit der Berechnung, Sekunden"
+
+msgid "Translate program"
+msgstr "Programm übersetzen"
+
+msgid "Function ID"
+msgstr "ID Funktionen"
+
+msgid "Default value"
+msgstr "Standardwert"
+
+msgid "Hide"
+msgstr "Unsichtbar"
+
+msgid "Position"
+msgstr "Position"
+
+#, c-format
+msgid "Compilation with the help of the program language %s is not supported."
+msgstr "Kompilieren mit der Programmierungssprache %s wird nicht unterstützt."
+
+#, c-format
+msgid "Compile error: %s"
+msgstr "Fehler bei der Kompilation: %s"
+
+msgid "Load function libraries error."
+msgstr "Fehler beim Laden der Funktionsbibliothek."
+
+msgid "Safety timeout, seconds"
+msgstr "Sicher Timeout, Sekunden"
+
+msgid "Functions libraries"
+msgstr "Funktionsbibliothek"
+
+msgid "Libraries"
+msgstr "Bibliotheken"
+
+msgid "Calculation. "
+msgstr "Berechnung. "
+
+msgid "Calculation with the period: %s. "
+msgstr "Berechnung mit einer Periode: %s. "
+
+#, c-format
+msgid "Next calculation by the cron '%s'. "
+msgstr "Berechnung nächsten durch cron '%s'. "
+
+#, c-format
+msgid "Spent time: %s[%s]."
+msgstr "Verbrauchte Zeit: %s[%s]."
+
+#, c-format
+msgid "Library of the functions '%s' is not present. Please, create the one!"
+msgstr ""
+"Funktionsbibliothek '%s' ist nicht vorhanden. Bitte, erstellen Sie eine "
+"Funktionsbibliothek!"
+
+#, c-format
+msgid "Creating a new function '%s'."
+msgstr "Erstellen einer neuen Funktion '%s'."
+
+msgid "Error loading function and its IO."
+msgstr "Fehler beim Laden der Funktion und ihrer IO."
+
+msgid "Frequency of calculation of the function (Hz)"
+msgstr "Frequenz der Funktionsberechnung (Hz)"
+
+msgid "Function start flag"
+msgstr "Schalter für das Starten der Funktion"
+
+msgid "Function stop flag"
+msgstr "Schalter für das Anhalten der Funktion"
+
+msgid "Link to the object of this controller"
+msgstr "Verknüpfen Sie mit dem Objekt dieses Controllers"
+
+msgid "Error calculating controller function."
+msgstr "Controller Berechnungsfehler in der Funktion."
+
+msgid "Function is missing or not started."
+msgstr "Funktion fehlt oder wurde nicht gestartet."
+
+msgid "Calculation"
+msgstr "Berechnungen"
+
+msgid "Data"
+msgstr "Daten"
+
+msgid "Attribute mode"
+msgstr "Modusattribut"
+
+msgid "Read only;Read and Write;Read and Write"
+msgstr "Read-only;Lesen und Schreiben;Lesen und Schreiben"
+
+msgid "Value"
+msgstr "Wert"
+
+msgid "Deleting a locked attribute is not allowed."
+msgstr "Löschen eines gesperrten Attributs ist nicht erlaubt."
+
+msgid "Changing the locked attribute is not allowed."
+msgstr "Gesperrte Attribut zu ändern ist nicht erlaubt."
+
+msgid "2:Calculation is stopped"
+msgstr "2:Berechnung wird gestoppt"
+
+msgid "1:Parameter is disabled"
+msgstr "1:Parameter ist abgeschaltet"
+
+msgid ""
+"List of configuration of the attributes. List must be written by lines in "
+"format: \"{io}[:{aid}[:{anm}]]\"\n"
+"Where:\n"
+"  io - IO of the computable function;\n"
+"  aid - identifier of the created attribute;\n"
+"  anm - name of the created attribute.\n"
+"If 'aid' or 'anm' is not set then they will be generated from the selected "
+"IO of the function."
+msgstr ""
+"Liste der Konfiguration der Attribute. Die Liste soll eingeschrieben sein "
+"zeilenweise im Format: \"{io}[:{aid}[:{anm}]]\"\n"
+"Wo:\n"
+"  io - IO der berechneten Funktion;\n"
+"  aid - Bezeichner des gebildeten Attributs;\n"
+"  anm - Name des gebildeten Attributs.\n"
+"  Falls 'aid' oder 'anm' nicht bestimmt sind werden sie aus dem gewählten IO "
+"der Funktion generiert."

@@ -38,7 +38,7 @@
 #define MOD_NAME	"BCM 2835"
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.2"
+#define MOD_VER		"1.2.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Broadcom BCM 2835 GPIO. Mostly for and used in Raspberry Pi.")
 #define LICENSE		"GPL2"
@@ -302,7 +302,7 @@ void TMdPrm::vlGet( TVal &vo )
 {
     if(!enableStat() || !owner().startStat()) {
 	if(vo.name() == "err") {
-	    if(!enableStat())			vo.setS(_("1:Parameter is disabled."),0,true);
+	    if(!enableStat())			vo.setS(_("1:Parameter disabled."),0,true);
 	    else if(!owner().startStat())	vo.setS(_("2:Acquisition/access is stopped."),0,true);
 	}
 	else vo.setR(EVAL_REAL, 0, true);

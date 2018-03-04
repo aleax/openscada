@@ -2,13 +2,13 @@
 # Copyright (C) 2012 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.SMH2Gi package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2012-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2012-2013, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:50+0200\n"
+"POT-Creation-Date: 2018-03-04 11:04+0200\n"
 "PO-Revision-Date: 2012-10-31 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -59,16 +59,14 @@ msgstr "Переподключение по флагу \"Reinit\" модуля M
 msgid "MR/MC devices *.ini files directry"
 msgstr "Директория с *.ini файлами устройств MR/MC"
 
-msgid "Call now. "
-msgstr "Вызов сейчас. "
+msgid "Acquisition. "
+msgstr "Сбор. "
 
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Вызовы с периодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Сбор с периодом: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Следующий вызов по cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Следующий сбор по cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s."
@@ -78,7 +76,7 @@ msgid "Error GPIO PC30 open for MC reset."
 msgstr "Ошибка открытия GPIO PC30 для сброса MC."
 
 msgid "Write to gpio94 error!"
-msgstr ""
+msgstr "Ошибка записи в gpio94!"
 
 #, c-format
 msgid "Segnetics SMH2Gi automatic created transport for '%s' bus"
@@ -102,11 +100,11 @@ msgstr "ModBUS Ответ -> '%s': %s"
 msgid "ModBUS ERR -> %s: %s"
 msgstr "ModBUS Ошибка -> %s: %s"
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр отключен."
 
-msgid "2:Acquisition is stopped."
-msgstr "2:Опрос остановлен."
+msgid "2:Acquisition stopped."
+msgstr "2:Сбор остановлен."
 
 msgid "Variables list"
 msgstr "Перечень переменных"

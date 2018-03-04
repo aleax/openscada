@@ -168,9 +168,9 @@ string TMdContr::getStatus( )
     string rez = TController::getStatus();
     if(startStat() && !redntUse()) {
 	if(!prcSt)	val += TSYS::strMess(_("Task terminated! "));
-	if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
+	if(period())	rez += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s."), tm2s(1e-6*tmGath).c_str());
     }
     return rez;

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: resalloc.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@ ResRW::ResRW( )
 #if !__GLIBC_PREREQ(2,4)
     wThr = 0;
 #endif
-    if(pthread_rwlock_init(&rwc,NULL)) throw TError("ResRW", _("Error open semaphore!"));
+    if(pthread_rwlock_init(&rwc,NULL)) throw TError("ResRW", _("Error opening the semaphore!"));
 }
 
 ResRW::~ResRW( )
@@ -59,7 +59,7 @@ void ResRW::resRequestW( unsigned short tm )
 	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedwrlock(&rwc, &wtm);
     }
-    if(rez == EDEADLK) throw TError(10, "ResRW", _("Resource is try deadlock a thread!"));
+    if(rez == EDEADLK) throw TError(10, "ResRW", _("The resource tries to tightly block the thread!"));
     else if(tm && rez == ETIMEDOUT) throw TError("ResRW", _("Resource is timeouted!"));
 #if !__GLIBC_PREREQ(2,4)
     wThr = pthread_self();
@@ -70,7 +70,7 @@ bool ResRW::resTryW( )
 {
     int rez = pthread_rwlock_trywrlock(&rwc);
     if(rez == EBUSY) return false;
-    else if(rez == EDEADLK) throw TError(10, "ResRW", _("Resource is try deadlock a thread!"));
+    else if(rez == EDEADLK) throw TError(10, "ResRW", _("The resource tries to tightly block the thread!"));
     return true;
 }
 
@@ -91,7 +91,7 @@ void ResRW::resRequestR( unsigned short tm )
 	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedrdlock(&rwc,&wtm);
     }
-    if(rez == EDEADLK) throw TError(10,"ResRW",_("Resource is try deadlock a thread!"));
+    if(rez == EDEADLK) throw TError(10,"ResRW",_("The resource tries to tightly block the thread!"));
     else if(tm && rez == ETIMEDOUT) throw TError("ResRW",_("Resource is timeouted!"));
 }
 
@@ -99,7 +99,7 @@ bool ResRW::resTryR( )
 {
     int rez = pthread_rwlock_tryrdlock(&rwc);
     if(rez == EBUSY) return false;
-    else if(rez == EDEADLK) throw TError(10,"ResRW",_("Resource is try deadlock a thread!"));
+    else if(rez == EDEADLK) throw TError(10,"ResRW",_("The resource tries to tightly block the thread!"));
     return true;
 }
 

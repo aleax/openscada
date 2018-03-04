@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Документы/Как сделать/Циклическое программирование - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Документы/Как сделать/Циклическое программирование</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FCyclic+programming&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Cyclic_programming" title="Documents/How to/Cyclic programming">Documents/How to/Cyclic programming</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Cyclic_programming" title="Documents/How to/Cyclic programming (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Cyclic_programming/uk" title="Документи/Як зробити/Циклічне програмування (100% translated)">українська</a></div></div>
+<p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</p><p>У начинающих пользователей часто возникает вопрос обеспечения выдержки временных интервалов при программировании вычислительных процедур в окружении OpenSCADA. Этот вопрос обычно связан с наличием предыдущего опыта программирования линейных вычислений и отсутствием опыта программирования циклических систем реального времени.
+</p><p>В системах реального времени используется так называемый такт или цикл периодических вычислений — ритм "жизни". В каждом такте выполняется некоторая процедура, которая не должна занимать времени больше такта — периода цикла. Как следствие, если процедура такта останавливается в ожидании, то останавливается и жизнь системы реального времени. Следовательно, недопустимо использование в этих процедурах традиционных функций усыпления задачи на большие интервалы времени!
+</p><p>Решение задачи выдержки большого интервала времени, более периодичности цикла, в системах реального времени осуществляется в два способа.
+</p><p>Первый способ заключается в декременте счётчика, установленного в значение временного интервала, в каждом цикле и на значение периодичности такта до значения &lt;=0, например, в OpenSCADA это реализуется таким образом:
+</p>
+<pre style="white-space: pre-wrap;">
+if((tm_cnt-=1/f_frq) &lt;= 0)  //Декремент
+{
+    tm_cnt = 10; //Установка счётчика в значение 10 секунд
+    //Выполнение других действий с периодичностью 10 секунд
+}</pre>
+<p>Второй способ основан на абсолютном времени, т.е. в цикле осуществляется сравнение с текущим временем, например, в OpenSCADA это реализуется таким образом:
+</p>
+<pre style="white-space: pre-wrap;">
+if(SYS.time() &gt; tm_to)
+{
+    tm_to = SYS.time()+10; //Установка порога ожидания на 10 секунд более текущего времени
+    //Выполнение других действий с периодичностью 10 секунд
+}</pre>
+<p>Второй способ является более надёжным поскольку в нём исключается проблема запаздывания срабатывания по причине возможного выполнения процедуры цикла более времени такта — потеря тактов-циклов. Хотя в правильно настроенных конфигурациях и задачах данный эффект не должен иметь место, а также, последние версии OpenSCADA в основном учитывают такие потери циклов в расчёте значения <i>f_frq</i>.
+</p>
+
+
+
+
+
+</div></body>
+</html>

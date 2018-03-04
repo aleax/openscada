@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Documents/How to/Cyclic programming - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Documents/How to/Cyclic programming</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Cyclic_programming/ru" title="Документы/Как сделать/Циклическое программирование (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Cyclic_programming/uk" title="Документи/Як зробити/Циклічне програмування (100% translated)">українська</a></div></div>
+<p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</p><p>Novice users often have a question about providing time intervals while programming calculation procedures in the OpenSCADA environment. This question is usually associated with the presence of previous programming experience in linear calculations and lack of the experience in programming of the cyclic real-time systems.
+</p><p>In real-time systems, the so-called tact or cycle of periodic calculations is used — the rhythm of "life". At each tact, some procedure is performed, which should not take more time of the tact — cycle period. As a result, if the tact procedure stops at the waiting, then the life of the real-time system stops. Accordingly, it is inappropriate to use traditional functions of sleeping the task in these procedures in large intervals!
+</p><p>Solving the problem of holding a large time interval, more than the periodicity of the cycle, in the systems of real time is carried out in two ways.
+</p><p>The first method consists in decrement of the counter, set in the time interval value, in each cycle, and at the periodicity of the cycle to the value of &lt;= 0, for example, in OpenSCADA this is implemented as follows:
+</p>
+<pre style="white-space: pre-wrap;">
+if((tm_cnt-=1/f_frq) &lt;= 0)  //Decrement
+{
+    tm_cnt = 10; //Setting the counter to 10 seconds
+    //Perform other actions with the 10 seconds period
+}</pre>
+<p>The second method is based on absolute time, that is the comparison with the current time is made in the cycle, for example, in OpenSCADA it is implemented as follows:
+</p>
+<pre style="white-space: pre-wrap;">
+if(SYS.time() &gt; tm_to)
+{ 
+    tm_to = SYS.time()+10; //Setting the waiting threshold for 10 seconds more than the current time
+    //Other actions with the periodicity of 10 seconds
+}</pre>
+<p>The second method is more reliable because it excludes the operation delay problem due to the possibility of calculating the cycle procedure over the cycle time — loss of loops-cycles. Although this effect should not occur in properly configured configurations and tasks, and also the latest versions of OpenSCADA mainly take into account such loop losses in the calculation of the value <i>f_frq</i>.
+</p>
+
+
+
+
+
+</div></body>
+</html>

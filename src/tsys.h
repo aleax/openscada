@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -243,7 +243,7 @@ class TSYS : public TCntrNode
 	// Wait event with timeout support
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 
-	// System counters
+	// Program counters
 	bool	cntrEmpty( );
 	double	cntrGet( const string &id );
 	void	cntrSet( const string &id, double vl );
@@ -357,7 +357,9 @@ class TSYS : public TCntrNode
 	bool   cmdOptPresent( const string &opt );
 	string cmdOpt( const string &opt, const string &setVl = "" );
 
-	// System control interface functions
+	int permCrtFiles( bool exec = false );
+
+	// Control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
 	ResRW &cfgRes( )	{ return mCfgRes; }

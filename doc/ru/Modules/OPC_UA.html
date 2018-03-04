@@ -5,7 +5,7 @@
 <title>Модули/OPC UA - OpenSCADAWiki</title>
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
-<link href="../files/doc.css" rel="stylesheet" /></head>
+<link href="../../en/files/doc.css" rel="stylesheet" /></head>
 <body><div id="mw_header">
 			<div class="mw-indicators">
 </div>
@@ -14,7 +14,7 @@
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../../en/files/Constr.png" width="32" /></a>
 </td>
 <td style="padding-left:5px;"> The translation checking and actualizing
 </td></tr></table>
@@ -193,7 +193,7 @@
 <li> Политика планирования и приоритет задачи сбора данных.</li>
 <li> Период синхронизации конфигурации атрибутов параметров с удалённой станцией, а также время повтора попыток восстановления подключения.</li>
 <li> URL конечного узла удалённой станции — сервера OPC-UA. Вначале этот адрес можно указать в виде "opc.tcp://{IP|name}:{port}", после чего, в случае включения объекта контроллера и наличия указанного OPC-UA узла, появится возможность выбрать уточнённый адрес.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Часто встречается ситуация, когда уточнённый адрес является символьным, который в этой сети не резолвится, из-за некорректной настройки сервера. В таких случаях нужно оставить исходный IP-адрес или имя которое резолвится в IP правильно.</dd></dl>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Часто встречается ситуация, когда уточнённый адрес является символьным, который в этой сети не резолвится, из-за некорректной настройки сервера. В таких случаях нужно оставить исходный IP-адрес или имя которое резолвится в IP правильно.</dd></dl>
 <ul><li> Политика безопасности и режим безопасности сообщения.</li>
 <li> Сертификат клиента и приватный ключ в формате PEM.</li>
 <li> Пользователь и пароль для аутентификации на сервере. Пустое значение включает анонимный доступ.</li>
@@ -213,7 +213,7 @@
 <dd><b>4:"61626364"</b> — узел в области имён 4 и в виде строки байт;</dd>
 <dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}</b> — узел в области имён 4 и в виде GUID.</dd></dl></dd></dl>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:720px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_ru.png"><img class="thumbimage" height="676" src="../files/OPC-UA_prm_ru.png" width="718" /></a>  <div class="thumbcaption">Рис.5. Вкладка конфигурации объекта параметра.</div></div></div></div>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Узлы типа "Переменная" со значением в виде структуры прочитать целиком обычно нельзя поэтому необходимо её элементы вставлять в перечень узлов чтения отдельно.
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Узлы типа "Переменная" со значением в виде структуры прочитать целиком обычно нельзя поэтому необходимо её элементы вставлять в перечень узлов чтения отдельно.
 </p><p>В соответствии с указанным списком узлов выполняется опрос и создание атрибутов параметра (рис.6).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:676px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr_ru.png"><img class="thumbimage" height="587" src="../files/OPC-UA_prm_atr_ru.png" width="674" /></a>  <div class="thumbcaption">Рис.6. Вкладка атрибутов параметра.</div></div></div></div>
@@ -221,7 +221,7 @@
 <p>Основываясь на наработках данного модуля протокольный код OPC-UA был вынесен в отдельную библиотеку и опубликован под лицензией LGPLv3. Данные действия выполнены с целью предоставить возможность простого добавления поддержки протокола OPC-UA сторонними проектами. Библиотека представлена двумя файлами libOPC_UA.h, libOPC_UA.cpp; поддерживается и содержится в составе данного модуля, т.е. последнюю версию Вы можете загрузить здесь: <a class="external free" href="http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA</a>.
 </p><p>Библиотека, как и данный модуль, написан на языке программирования C++. Статическая диаграмма классов, отражающая архитектуру библиотеки, приведена на рисунке 7. Согласно диаграмме классов библиотека выполнена в области имён "OPC", а архитектурно её можно разделить на клиентскую "Client" и серверную "Server" части, которые унаследованы от общего класса протокола "UA". Кроме непосредственно классов протокола "OPC-UA" библиотека включает в себя набор функций и классов для обработки или хранения данных протокола, отдельно из которых нужно отметить класс узла языка XML "XML_N", используемый для унификации обращений к API библиотеки.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:399px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="249" src="../files/OPC-UA_libOPCUA_class.png" width="397" /></a>  <div class="thumbcaption">Рис.7. Статическая диаграмма классов библиотеки libOPC_UA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:399px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="249" src="../../en/files/OPC-UA_libOPCUA_class.png" width="397" /></a>  <div class="thumbcaption">Рис.7. Статическая диаграмма классов библиотеки libOPC_UA.</div></div></div></div>
 <p>Использование библиотеки, в целом, заключается в наследовании от класса "Client" и/или "Server", согласно с функциями конечной программы, и последующей реализации виртуальных функций свойств клиента/сервера, в контексте протокола OPC-UA, а также транспортной части коммуникации, т.е. подключение/открытие к TCP-сокету и передачу/чтение неструктурированного потока данных. Последующие запросы и обработка запросов данных (для сервера) осуществляются через вызов функции <i>reqService()</i>, запрос к сервису, и/или обработкой виртуальной функции <i>reqData()</i> запроса к данным, т.е. по сути интеграция в модель данных приложения.
 </p>
 <h3><span class="mw-headline" id=".D0.A1.D0.BB.D1.83.D0.B6.D0.B5.D0.B1.D0.BD.D1.8B.D0.B5_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82.D1.8B.2C_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D0.B8_.D0.BA.D0.BB.D0.B0.D1.81.D1.81_UA"><span class="mw-headline-number">4.1</span> Служебные объекты, функции и класс UA</span></h3>

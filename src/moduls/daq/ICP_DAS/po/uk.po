@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.ICP_DAS translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.ICP_DAS package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2009-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2009-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 16:02+0200\n"
+"POT-Creation-Date: 2018-03-04 09:55+0200\n"
 "PO-Revision-Date: 2009-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -280,16 +280,14 @@ msgstr "Слот модуля"
 msgid "Module addition parameters"
 msgstr "Додаткові параметри модуля"
 
-msgid "Call now. "
-msgstr "Виклик зараз. "
+msgid "Acquisition. "
+msgstr "Збір. "
 
-#, c-format
-msgid "Call by period: %s. "
-msgstr "Виклик за періодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Збір з періодом: %s. "
 
-#, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Наступний виклик за cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Наступний збір за cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. Serial requests %g, errors %g. "
@@ -340,10 +338,10 @@ msgstr "Встановити у нуль для вимкнення сторож�
 msgid "No a device selected."
 msgstr "Жодного пристрою не обрано."
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр вимкнено."
 
-msgid "2:Acquisition is stopped."
+msgid "2:Acquisition stopped."
 msgstr "2:Збір зупинено."
 
 #, c-format

@@ -5,7 +5,7 @@
 <title>Модулі/Comedi - OpenSCADAWiki</title>
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
-<link href="../files/doc.css" rel="stylesheet" /></head>
+<link href="../../en/files/doc.css" rel="stylesheet" /></head>
 <body><div id="mw_header">
 			<div class="mw-indicators">
 </div>
@@ -14,7 +14,7 @@
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../../en/files/Constr.png" width="32" /></a>
 </td>
 <td style="padding-left:5px;"> The translation checking and actualizing
 </td></tr></table>
@@ -75,7 +75,7 @@
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">2</span> Об'єкт параметру контролера</span></h2>
 <p>Об'єкт параметру є безпосереднім представником-оточення DAQ-плати, який містить набір атрибутів з типами та кількістю, залежною від конкретно взятої плати. Вкладку конфігурації об'єкту параметра представлено на рис.2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_prm_ru.png"><img class="thumbimage" height="586" src="../files/Comedi_prm_ru.png" width="687" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфігурації параметру — DAQ плати.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_prm_ru.png"><img class="thumbimage" height="586" src="../../en/files/Comedi_prm_ru.png" width="687" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфігурації параметру — DAQ плати.</div></div></div></div>
 <p>За допомогою форми конфігурації об'єкту параметра можна встановити:
 </p>
 <ul><li> Стан параметру, а саме "Включено" та тип параметру.</li>
@@ -85,8 +85,8 @@
 <li> Асинхронне читання. Включає режим читання даних у циклі задачі контролера, замість читання за вимогою (Синхронний режим).</li></ul>
 <p>Вкладка "Атрибути" для плати ACL-8113 приведено на рис.3. Для даних деяких типів може бути доступна вкладка "Конфігурація". Наприклад, для плат аналогових входів ця вкладка (рис.4) містить таймаут встановлення значення та вибір діапазону кожного каналу.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_prmAttr_ru.png"><img class="thumbimage" height="586" src="../files/Comedi_prmAttr_ru.png" width="687" /></a>  <div class="thumbcaption">Рис.3. Вкладка "Атрибути" параметра плати "ACL-8113".</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_prmCfg_ru.png"><img class="thumbimage" height="586" src="../files/Comedi_prmCfg_ru.png" width="687" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Конфігурація" параметра плати "ACL-8113".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_prmAttr_ru.png"><img class="thumbimage" height="586" src="../../en/files/Comedi_prmAttr_ru.png" width="687" /></a>  <div class="thumbcaption">Рис.3. Вкладка "Атрибути" параметра плати "ACL-8113".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_prmCfg_ru.png"><img class="thumbimage" height="586" src="../../en/files/Comedi_prmCfg_ru.png" width="687" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Конфігурація" параметра плати "ACL-8113".</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">3</span> Зауваження</span></h2>
 <p>Для збірки та роботи цього модуля потрібна тільки бібліотека <i>comedilib</i>, яка присутня у репозиторіях більшості дистрибутивів. Однак модулі драйверів плат треба збирати окремо, а архів можна завантажити тут: <a class="external free" href="http://comedi.org/download.html" rel="nofollow noreferrer noopener" target="_blank">http://comedi.org/download.html</a>.
 </p><p>Роботу цього модуля перевірено на наступних платах:
