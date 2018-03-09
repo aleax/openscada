@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Документи/Як зробити/Скласти з вихідних текстів - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Документи/Як зробити/Скласти з вихідних текстів</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FBuild+from+source&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Build_from_source" title="Documents/How to/Build from source">Documents/How to/Build from source</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Build_from_source" title="Documents/How to/Build from source (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Build_from_source/ru" title="Документы/Как сделать/Собрать из исходных текстов (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>, <a class="external text" href="http://oscada.org/en/forum/user/IrmIngeneer/" rel="nofollow noreferrer noopener" target="_blank">Константин</a>
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F_OpenSCADA_.D0.B4.D0.BB.D1.8F_.D0.B7.D0.B1.D1.96.D1.80.D0.BA.D0.B8"><span class="tocnumber">1</span> <span class="toctext">Конфігурація OpenSCADA для збірки</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9F.D1.80.D1.8F.D0.BC.D0.B0_.D0.B7.D0.B1.D1.96.D1.80.D0.BA.D0.B0_OpenSCADA"><span class="tocnumber">2</span> <span class="toctext">Пряма збірка OpenSCADA</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.97.D0.B1.D1.96.D1.80.D0.BA.D0.B0_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D1.96.D0.B2_OpenSCADA_.D0.B4.D0.BB.D1.8F_.D0.B4.D0.B8.D1.81.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D0.B8.D0.B2.D1.83_Linux"><span class="tocnumber">3</span> <span class="toctext">Збірка пакетів OpenSCADA для дистрибутиву Linux</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.94.D0.B8.D1.81.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D0.B8.D0.B2.D0.B8_.D0.B7.D0.B0.D1.81.D0.BD.D0.BE.D0.B2.D0.B0.D0.BD.D1.96_.D0.BD.D0.B0_RedHat_.E2.80.94_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.B8_RPM"><span class="tocnumber">3.1</span> <span class="toctext">Дистрибутиви засновані на RedHat — пакети RPM</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.D0.94.D0.B8.D1.81.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D0.B8.D0.B2.D0.B8_.D0.B7.D0.B0.D1.81.D0.BD.D0.BE.D0.B2.D0.B0.D0.BD.D1.96_.D0.BD.D0.B0_Debian_.E2.80.94_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.B8_DEB"><span class="tocnumber">3.2</span> <span class="toctext">Дистрибутиви засновані на Debian — пакети DEB</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Gentoo_.E2.80.94_.D0.BC.D0.B5.D1.82.D0.B0.D0.B4.D1.96.D1.81.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D0.B8.D0.B2"><span class="tocnumber">3.3</span> <span class="toctext">Gentoo — метадістрибутив</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#.D0.9B.D0.B5.D0.B3.D0.BA.D0.BE.D0.B2.D0.B0.D0.B3.D0.BE.D0.B2.D0.B0_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.D0.BA.D0.B5.D1.80.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D1.96.D0.B2_.E2.80.94_IPKG_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.B8"><span class="tocnumber">3.4</span> <span class="toctext">Легковагова система керування пакетів — IPKG пакети</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#.D0.97.D0.B1.D1.96.D1.80.D0.BA.D0.B0_.D0.B4.D0.BB.D1.8F_Android_.E2.80.94_APK_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.B8"><span class="tocnumber">4</span> <span class="toctext">Збірка для Android — APK пакети</span></a></li>
+</ul>
+</div>
+
+<p>Цей посібник покликано допомогти у збірці OpenSCADA з вихідних текстів. Протягом накопичення досвіду збірки OpenSCADA на різних дистрибутивах ОС Linux та на інших платформах взагалі, документ буде доповнюватися особливостями та деталями збірки у різноманітних оточеннях.
+</p><p>На останніх версіях OpenSCADA, попереднього налаштування зібраної програми не потребується, у разі використання при збірці пакету з ресурсами "openscada-res" або дерева вихідних текстів з репозиторію SVN, навіть після прямої збірки. Тому одразу після збірки та встановлення програма готова до використання!
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Для збірки OpenSCADA із вихідних текстів потрібен досвід збірки вільного ПЗ, а також базові знання у ОС Linux та використаного дистрибутиву Linux, що дозволить коректно задовольняти залежності та вирішувати можливі проблеми збірки.
+</p>
+<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F_OpenSCADA_.D0.B4.D0.BB.D1.8F_.D0.B7.D0.B1.D1.96.D1.80.D0.BA.D0.B8"><span class="mw-headline-number">1</span> Конфігурація OpenSCADA для збірки</span></h2>
+<p>Проектом OpenSCADA, у якості складальної системи, використовується набір утиліт <a class="external text" href="http://en.wikipedia.org/wiki/GNU_build_system" rel="nofollow noreferrer noopener" target="_blank">AutoTools</a>. Будь якій збірці проекту під керуванням "AutoTools" передує стадія конфігурації, а інколи і формування складальної системи, під оточення ОС. Стадія конфігурації, як і безпосередньо збірка, здійснюється завжди та не залежить від того чи відбувається це пряма збірка або збірка пакету.
+</p><p>Для формування складальної системи мають бути встановлені утиліти "AutoTools": "autoconf", "automake" та "libtool". Загальне формування можна здійснити командою <b>$ autoreconf -if</b>. Раніш сформована складальна система інколи може потребувати переформатування, наприклад, у випадку значної різниці оточення ОС, на якому складальна система формувалася, та поточного! Переформування складальної системи також здійснюється раніш визначеною командою формування.
+</p><p>Конфігурація складальної системи здійснюється викликом команди <b>$ configure</b>. За посередництвом визначення аргументів до цієї команди можна включити-виключити функцію або модуль OpenSCADA. Отримати весь перелік доступних параметрів конфігурації та модулів OpenSCADA можна вказавши аргумент <b>--help</b>.
+</p><p>Включення та виключення модулів OpenSCADA здійснюється передаванням аргументів <b>--enable-{ModName}</b> та <b>--disable-{ModName}</b>. При виборі модулів можна вказати політику "Включити всі модулі" <b>--enable-AllModuls</b> або "Виключить всі модулі" <b>--disable-AllModuls</b>, та надалі включати-виключати окремі модулі, залежно від того що буде простіше. Більшість модулів OpenSCADA можна влінковувати (вбудовувати) безпосередньо у бібліотеку ядра OpenSCADA, а не збирати окремою бібліотекою, для чого потрібно вказати аргумент <b>--enable-{ModName}=incl</b>.
+</p><p>По завершенню конфігурації буде сформовано зведений результат налаштувань, за допомогою якого можна перевірити бажану конфігурацію.
+</p><p>Перед складанням треба визначитися з джерелом вихідних текстів, <a class="external text" href="http://oscada.org/ua/golovna/zavantazhiti/" rel="nofollow noreferrer noopener" target="_blank">ftp/http-сервер або SVN-репозиторій</a>, та гілкою OpenSCADA, яку Ви будете збирати. Оскільки LTS гілка автоматично збирається для багатьох дистрибутивів Linux, рідко оновлюється та її версія міняється з випуском нової LTS, то у цьому посібнику розглянемо збірку робочої гілки (Work) яка, своєю чергою, автоматично збирається для обмеженого кола Linux дистрибутивів, часто міняється та її адреса завжди однакова. Збірка LTS гілки, як правило, здійснюється так само і у інструкції треба "Work" замінити на версію LTS та змінити назву пакету вихідних текстів. Загалом, до назв пакетів та тек треба ставитися уважно бо вони, версія від версії, можуть відрізнятися!
+</p>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D1.8F.D0.BC.D0.B0_.D0.B7.D0.B1.D1.96.D1.80.D0.BA.D0.B0_OpenSCADA"><span class="mw-headline-number">2</span> Пряма збірка OpenSCADA</span></h2>
+<p>Збірка має виконуватися від ім'я звичайного користувача, хоча для ізольованих оточень може і від суперкористувача. При цьому будуть розглянуті варіанти встановлення та виконання як глобально — у систему, так і локально — у теку користувача. Приймаємо логін (обліковий запис) користувача — "user".
+</p><p>Входимо як звичайний користувач та підмінюємо обліковий запис "user" на Ваш, визначаймося зі способом встановлення (глобальний або локальний) та дотримуємося інструкції:
+</p><p>Етапи приготування дерева вихідних текстів до складання:
+</p>
+<dl><dd>1. Створення директорії для складання проекту:
+<dl><dd>$ mkdir ~/projects; cd ~/projects</dd></dl></dd>
+<dd>2. Завантаження пакету з вихідними текстами. Може бути виконано у два способи:
+<ul><li> завантаження тарболу з ftp/http-сервера проекту <a class="external free" href="http://ftp.oscada.org/OpenSCADA" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA</a> та розпакування, наприклад так:</li></ul>
+<dl><dd>$ wget <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/openscada-0.9+r2537.tar.xz" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/openscada-0.9+r2537.tar.xz</a></dd>
+<dd>$ wget <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/openscada-res-0.9+r2537.tar.xz" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/openscada-res-0.9+r2537.tar.xz</a></dd>
+<dd>$ tar -xvf openscada-0.9+r2537.tar.xz</dd>
+<dd>$ cd openscada-0.9+r2537</dd>
+<dd>$ tar -xvf ../openscada-res-0.9+r2537.tar.xz</dd></dl>
+<ul><li> отримання дерева вихідних текстів із SVN-репозиторія проекту:</li></ul>
+<dl><dd>$ svn co <a class="external free" href="http://oscada.org/svn/trunk/OpenSCADA/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/svn/trunk/OpenSCADA/</a></dd>
+<dd>$ cd OpenSCADA</dd></dl></dd>
+<dd>3. Задоволення залежностей проекту OpenSCADA для складання, відповідно до <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">вимог</a>.</dd>
+<dd>4. Генерація складальної системи, при завантажені із SVN-репозиторія:
+<dl><dd>$ autoreconf -ivf</dd></dl></dd></dl>
+<p>Етапи глобальної збірки:
+</p>
+<dl><dd>1. Конфігурація складальної системи OpenSCADA:
+<dl><dd>$ ./configure</dd></dl></dd>
+<dd>2. Збірка OpenSCADA:
+<dl><dd>$ make</dd></dl></dd>
+<dd>3. Встановлення OpenSCADA:
+<dl><dd>$ su; make install</dd></dl></dd>
+<dd>4. Програма готова до запуску:
+<dl><dd>$ exit; openscada</dd></dl></dd></dl>
+<p>Етапи локальної збірки:
+</p>
+<dl><dd>1. Конфігурація складальної системи OpenSCADA:
+<dl><dd>$ mkdir ~/OScadaW; ./configure --prefix=/home/user/OScadaW</dd></dl></dd>
+<dd>2. Збірка OpenSCADA:
+<dl><dd>$ make</dd></dl></dd>
+<dd>3. Встановлення OpenSCADA:
+<dl><dd>$ make install</dd></dl></dd>
+<dd>4. Програма готова до запуску:
+<dl><dd>$ cd ~/OScadaW/bin; ./openscada</dd></dl></dd></dl>
+<h2><span class="mw-headline" id=".D0.97.D0.B1.D1.96.D1.80.D0.BA.D0.B0_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D1.96.D0.B2_OpenSCADA_.D0.B4.D0.BB.D1.8F_.D0.B4.D0.B8.D1.81.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D0.B8.D0.B2.D1.83_Linux"><span class="mw-headline-number">3</span> Збірка пакетів OpenSCADA для дистрибутиву Linux</span></h2>
+<h3><span class="mw-headline" id=".D0.94.D0.B8.D1.81.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D0.B8.D0.B2.D0.B8_.D0.B7.D0.B0.D1.81.D0.BD.D0.BE.D0.B2.D0.B0.D0.BD.D1.96_.D0.BD.D0.B0_RedHat_.E2.80.94_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.B8_RPM"><span class="mw-headline-number">3.1</span> Дистрибутиви засновані на RedHat — пакети RPM</span></h3>
+<p>Для збірки RPM-пакетів OpenSCADA Вам знадобляться архіви вихідних текстів, ресурсів та файл специфікації RPM пакету (openscada.spec, openscada_mod_ALT.spec, openscada_mod_RH.spec) або ж SRPM-пакет всіх цих вихідних матеріалів.
+</p><p>Файл специфікації RPM-пакетів та SRPM-пакет можуть відрізнятися для різних дистрибутивів Linux, враховуючи їх особливості, тому потрібно намагатися завантажувати їх відповідно до дистрибутиву. Якщо спеціальний SRPM пакет відсутній тоді можна спробувати зібрати з уніфікованого файлу специфікації (openscada.spec) у основному SRPM пакеті або пакеті ресурсів.
+</p><p>Збірка RPM-пакетів відбувається у директорії зі спеціальною структурою, яка за звичай створюється під час встановлення відповідного пакету дистрибутива (наприклад: rpm-build). Ця директорія, залежно від дистрибутиву, розташовується у домашній теці користувача або у теці <b>/usr/src</b>. Відомі факти розташування директорії збірки RPM-пакетів різних дистрибутивів:
+</p>
+<ul><li> <b>~/rpmbuild</b>: <a class="external text" href="https://www.redhat.com" rel="nofollow noreferrer noopener" target="_blank">RedHat</a>, <a class="external text" href="https://www.centos.org/" rel="nofollow noreferrer noopener" target="_blank">CentOS</a>, Mandriva,</li></ul>
+<pre><a class="external text" href="http://fedoraproject.org" rel="nofollow noreferrer noopener" target="_blank">Fedora</a>
+</pre>
+<ul><li> <b>/usr/src/packages</b>: <a class="external text" href="https://www.opensuse.org/" rel="nofollow noreferrer noopener" target="_blank">Open-SUSE</a></li>
+<li> <b>~/RPM</b>: <a class="external text" href="http://altlinux.com" rel="nofollow noreferrer noopener" target="_blank">ALTLinux</a></li></ul>
+<p>Якщо після встановлення спеціалізованого пакету теки створення RPM пакетів немає тоді її потрібно створити командою:
+</p>
+<dl><dd>$ install -m 755 -d <u>Тека дистрибутиву</u>/{SPECS,SOURCES}</dd></dl>
+<p>Етапи збірки за файлом специфікації RPM:
+</p>
+<dl><dd>1. Розташування архівів OpenSCADA та файлу специфікації у теці збірки RPM (вихідні файли попередньо розташовано у поточній теці):
+<dl><dd>$ cp openscada-0.9+r2537.tar.xz openscada-res-0.9+r2537.tar.xz <u>Тека дистрибутиву</u>/SOURCES</dd>
+<dd>$ cp openscada.spec <u>Тека дистрибутиву</u>/SPECS</dd></dl></dd>
+<dd>2. Задоволення залежностей проекту OpenSCADA для збірки у відповідності із <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">вимогами</a>. Аргументи команди "configure" можна вказати у файлі "openscada.spec".</dd>
+<dd>3. Збірка пакетів
+<ul><li> збірка з початку:</li></ul>
+<dl><dd>$ rpmbuild -bb <u>Тека дистрибутиву</u>/SPECS/openscada.spec</dd></dl>
+<ul><li> тільки встановлення та пакування, із пакету rpm-утиліт etersoft (зручно під час налагодження openscada.spec файлу):</li></ul>
+<dl><dd>$ rpmbb -i <u>Тека дистрибутиву</u>/SPECS/openscada.spec</dd></dl></dd>
+<dd>4. Пакети готові та доступні у теці <b><u>Тека дистрибутиву</u>/RPMS</b>, для відповідної архітектури</dd></dl>
+<p>Етапи збірки із SRPMS пакету:
+</p>
+<dl><dd>1. Задоволення залежностей проекту OpenSCADA для збірки у відповідності із <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">вимогами</a>.</dd>
+<dd>2. Збірка пакетів (вихідні файли попередньо розташовано у поточній теці):
+<dl><dd>$ rpmbuild --rebuild openscada-0.9+r2537.src.rpm</dd></dl></dd>
+<dd>3. Пакети готові та доступні у теці <b><u>Тека дистрибутиву</u>/RPMS</b>, для відповідної архітектури</dd></dl>
+<h3><span class="mw-headline" id=".D0.94.D0.B8.D1.81.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D0.B8.D0.B2.D0.B8_.D0.B7.D0.B0.D1.81.D0.BD.D0.BE.D0.B2.D0.B0.D0.BD.D1.96_.D0.BD.D0.B0_Debian_.E2.80.94_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.B8_DEB"><span class="mw-headline-number">3.2</span> Дистрибутиви засновані на Debian — пакети DEB</span></h3>
+<p>Для збірки DEB-пакетів OpenSCADA Вам знадобляться архіви вихідних текстів та ресурсів.
+</p><p>Збірка DEB-пакетів відбувається у теці "debian" зі скриптами збірки, яка міститься у архівах вихідних текстів OpenSCADA.
+</p><p>Етапи збірки:
+</p>
+<dl><dd>1. Створення теки для збірки програми:
+<dl><dd>$ mkdir ~/build; cd ~/build</dd></dl></dd>
+<dd>2. Завантаження пакету з вихідними текстами. Може бути виконано у два способи:
+<ul><li> завантаження тарболу з ftp/http-сервера проекту <a class="external free" href="http://ftp.oscada.org/OpenSCADA" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA</a> та розпакування, наприклад так:</li></ul>
+<dl><dd>$ wget <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/openscada-0.9+r2537.tar.xz" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/openscada-0.9+r2537.tar.xz</a></dd>
+<dd>$ wget <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/openscada-res-0.9+r2537.tar.xz" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/openscada-res-0.9+r2537.tar.xz</a></dd>
+<dd>$ tar -xvf openscada-0.9+r2537.tar.xz</dd>
+<dd>$ cd openscada-0.9+r2537</dd>
+<dd>$ tar -xvf ../openscada-res-0.9+r2537.tar.xz</dd></dl>
+<ul><li> отримання дерева вихідних текстів із SVN-репозиторія проекту:</li></ul>
+<dl><dd>$ svn co <a class="external free" href="http://oscada.org/svn/trunk/OpenSCADA/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/svn/trunk/OpenSCADA/</a></dd>
+<dd>$ cd OpenSCADA</dd></dl></dd>
+<dd>3. Обрання типу збірки:
+<ul><li> бінарні файли в одному пакеті:</li></ul>
+<dl><dd>$ ln -s data/debian debian</dd></dl>
+<ul><li> бінарні файли модулів в окремих пакетах:</li></ul>
+<dl><dd>$ ln -s data/debian_mod debian</dd></dl></dd>
+<dd>4. Задоволення залежностей проекту OpenSCADA для складання, відповідно до <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Functions_and_demands#Building" title="Special:MyLanguage/Functions and demands">вимог</a>. Аргументи команди "configure" можна вказати у файлі "debian/rules".</dd>
+<dd>5. Збірка:
+<ul><li> збірка з початку:</li></ul>
+<dl><dd>$ dpkg-buildpackage -rfakeroot</dd></dl>
+<ul><li> пропустити збірку та переупакувати, зручно під час налаштування "debian/rules":</li></ul>
+<dl><dd>$ fakeroot debian/rules binary</dd>
+<dd>$ fakeroot debian/rules build</dd></dl></dd>
+<dd>6. Пакети готові та доступні у теці рівнем вище.</dd></dl>
+<h3><span class="mw-headline" id="Gentoo_.E2.80.94_.D0.BC.D0.B5.D1.82.D0.B0.D0.B4.D1.96.D1.81.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D0.B8.D0.B2"><span class="mw-headline-number">3.3</span> Gentoo — метадістрибутив</span></h3>
+<p>OpenSCADA не входить у офіційне дерево portage Gentoo, тому збірка відбувається з оверлею. Перед збіркою самого пакета OpenSCADA, portage задовольнить залежності, тобто, збере потрібні пакети (якщо необхідно).
+</p>
+<dl><dd>1. Створення оверлею "portage" зводиться до опису шляху для оверлейного дерева, тобто, у "/etc/make.conf" потрібно прописати рядок:
+<dl><dd><i>PORTDIR_OVERLAY="/usr/local/portage"</i></dd></dl></dd>
+<dd>2. Створити теку "/usr/local/portage/dev-util/openscada/", потім завантажити файл архіву ebuild з офіційного сайту та розпакувати його у створеній теці.
+<dl><dd>$ cd /usr/local/portage/dev-util/openscada</dd>
+<dd>$ wget <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Gentoo/openscada.0.9-ebuild.tar.gz" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Gentoo/openscada.0.9-ebuild.tar.gz</a></dd>
+<dd>$ tar -xzf openscada.0.9-ebuild.tar.gz</dd></dl></dd>
+<dd>3. Потрібно вказати portage, що OpenSCADA дозволена для збірки на Вашій платформі. Для цього потрібно внести наступний рядок до файлу "/etc/portage/package.keywords":
+<dl><dd><i>dev-util/openscada</i></dd></dl></dd>
+<dd>4. Перевірка:</dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px">
+$ emerge -vp openscada
+These are the packages that would be merged, in order:
+Calculating dependencies... done!
+[ebuild   R   ~] dev-util/openscada-0.9  USE="mysql ssl -bfn -blockcalc -daqgate -dbarch -dbase -dcon -demo -diamondboards -doc (-firebird) -flibcomplex1 -flibmath -flibsys -fsarch -http -icp_das -javalikecalc -logiclev -modbus -portaudio -qtcfg -qtstarter -selfsystem -serial -simens -snmp -sockets -sqlite -system -systemtest -vcaengine -vision -webcfg -webcfgd -webvision" 79,647 kB [1]
+
+Total: 1 package (1 reinstall), Size of downloads: 79,647 kB
+Portage tree and overlays:
+ [0] /usr/portage
+ [1] /usr/local/portage</pre>
+<dl><dd>5. Якщо у Вас немає підключення до інтернету, тоді потрібно завантажити тарболи вихідних текстів та ресурсів з ftp/http-серверу проекту та розташувати їх заздалегідь у теці вихідних текстів portage "/usr/portage/distfiles". Якщо ж у Вас є підключення до інтернету, тоді все потрібне для збірки буде отримано із сервера проекту автоматично.</dd>
+<dd>6. Потрібно виставити необхідні Вам USE-прапорці, з якими буде зібрано OpenSCADA. Це можна зробити у файлі "/etc/portage/package.use", наприклад:
+<dl><dd><i>dev-util/openscada dcon demo http javalikecalc mysql qtcfg qtstarter ssl vision webcfg webcfgd webvision blockcalc dbarch dbase doc flibcomplex1 flibmath flibsys fsarch logiclev modbus serial sockets sqlite vcaengine</i></dd></dl></dd>
+<dd>7. Безпосередньо збірка:
+<dl><dd>$ emerge -q openscada</dd></dl></dd>
+<dd>8. Файли БД та ресурсів OpenSCADA готові та будуть розташовані у теці "/var/spool/openscada/", виконувані файли — "/usr/bin/", документація — "/usr/share/doc/openscada-0.9/".</dd></dl>
+<h3><span class="mw-headline" id=".D0.9B.D0.B5.D0.B3.D0.BA.D0.BE.D0.B2.D0.B0.D0.B3.D0.BE.D0.B2.D0.B0_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.D0.BA.D0.B5.D1.80.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D1.96.D0.B2_.E2.80.94_IPKG_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.B8"><span class="mw-headline-number">3.4</span> Легковагова система керування пакетів — IPKG пакети</span></h3>
+<p>Областю застосування менеджеру пакетів та пакетів IPKG переважно є вбудовані оточення Linux з обмеженим об'ємом пам'яті на кшталт роутерів бездротових мереж. Відповідно і збірка пакетів IPKG є частиною складальних систем таких оточень, та опис цієї процедури не можна розглядати окремо від самої складальної системи, тому щодо створенням IPKG пакетів OpenSCADA читайте у розділі "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Embedding_and_PLC#OpenWrt" title="Special:MyLanguage/Sub-projects/Embedding and PLC">Дистрибутив OpenWRT</a>" підпроекту "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Embedding_and_PLC" title="Special:MyLanguage/Sub-projects/Embedding and PLC">Загальне вбудовування OpenSCADA та програмовані логічні контролери (ПЛК)</a>".
+</p>
+<h2><span class="mw-headline" id=".D0.97.D0.B1.D1.96.D1.80.D0.BA.D0.B0_.D0.B4.D0.BB.D1.8F_Android_.E2.80.94_APK_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D0.B8"><span class="mw-headline-number">4</span> Збірка для Android — APK пакети</span></h2>
+<p>Операційна система <a class="external text" href="https://en.wikipedia.org/wiki/Android_(operating_system)" rel="nofollow noreferrer noopener" target="_blank">Android</a> є програмним оточенням на основі ядра Linux, яке переважно призначене та використовується на мобільних телефонах, смартфонах, планшетах та іншому обладнані з сенсорним екраном. Стороннє програмне забезпечення для Android розповсюджується у вигляді APK-пакетів, збірку якого неможливо розглянути у відриві від складального оточення Android SDK, NDK та збірки всіх залежностей OpenSCADA, тому на предмет збірки OpenSCADA та створення її APK-пакетів читайте у під-проекті "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Adaption_to_Android" title="Special:MyLanguage/Sub-projects/Adaption to Android">Адаптація OpenSCADA до платформи Android</a>".
+</p>
+
+
+
+
+
+</div></body>
+</html>

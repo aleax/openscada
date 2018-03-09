@@ -1,3 +1,25 @@
+2018-03-09 Roman (stable)
+- SYS,UI.QTStarter: Android look adapted to a default custom theme and CSS.
+- !!:DOC: Off-line documents Documents/How_to/{Cyclic_programming,Debug,Transferring_project_configuration,Build_from_source,Crash_report,Create_module}
+	are appended by the prefix "How_to_".
+    DAQ templates base.{manInUnif,anUnif,anUnifSt} are appended by checking their execution controller state for oppressing their violations about
+    wrong connections to the source.
+- FIX:DB.LibsDB.vcaBase: Wrong "tittle" renamed to "title".
+- DATA.icons,UI.{QTCfg,QTStarter,Vision}: Some low-resolution images of GUI toolbars expanded up to 64x64 dimension in way of the Android look improving.
+- Archives: Clean up of the current violations table was added by a new button.
+- DAQ.JavaLikeCalc: The function String.toInt() of the user API set to the base "10" by default.
+    The user API expanded by functions {Boolean,Integer,Real}.{toReal,toInt}().
+- !!!:UI.{QTStarter,QTCfg,Vision}: Size of icons and sub-fonts made adaptive from the main-system font real size, for:
+    the title font, toolbars' icons, the navigation tree's icons; by the new function icoSize() and in way of the adaption to Android.
+    !!:Force switching to the style QPlastiqueStyle() (Qt4) or QCommonStyle() (Qt5) was removed by presence of OpenSCADA control of the look and feels.
+    Moving dialogs to the centre of the screen was added for Android.
+- !:UI.QTCfg: The images "ok.png" and "identity.png" removed and replaced. The fitting mechanism of the scalable items was made faster.
+- UI.QTStarter: An icon "it_add.png" was added for the button "Create-update a project".
+    Using of the native menu-bar of Android disabled by the attribute Qt::AA_DontUseNativeMenuBar.
+- !!!!:UI.{VCAEngine,Vision,WebVision}: The primitive "Text" was appended by an attribute "inHtml" and the support of display HTML.
+- UI.VCAEngine: The images "it_*.png" renamed to "v_it_*.png". The images "ok.png" removed and replaced.
+
+
 2018-03-04 Roman (stable)
 - !!:DOC: Appended by Documents/How_to/{Cyclic_programming,Debug,Transferring_project_configuration,Build_from_source,Crash_report,Create_module},Documents/API.
 - DB.LibsDB.OscadaLibs: servProc.docOffLine appended by the documents
@@ -231,7 +253,7 @@
 - FIX:DB.LibsDB.OscadaLibs: LowDevLib.BME280 next some fixed by Arcadiy Kisel.
     FIX: servProc.wacko2media appended for processing "__", "!!(color)!!" and fixed for unpaired paddings before list symbol "   *".
     servProc.docOffLine appended by the documents Modules/{ICP_DAS,Siemens,DiamondBoards,Comedi} for the offline documentaion list. The execution limit next rose to 240 seconds.
-- DB.LibsDB.vcaBase: Main.cntrPaspExt expanded to parameter name into the tittle.
+- DB.LibsDB.vcaBase: Main.cntrPaspExt expanded to parameter name into the title.
 - !:DOC: "Program Manual" continued to revision ongoing of it translation to Ukrainian. Appended by Modules/{ICP_DAS,Siemens,DiamondBoards,Comedi}.
 - SYS: --enable-QtMainThrd set conditional in it default value that is "yes" for Qt5 and "no" for Qt4.
 - FIX:Archive.FSArch: Translation to German some fixed by Oleksiy Bondarchuk.

@@ -33,7 +33,7 @@
 <li class="toclevel-1 tocsection-2"><a href="#.D0.97.D0.B0.D0.B3.D0.B0.D0.BB.D1.8C.D0.BD.D0.BE.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D1.96_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D1.96_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Загальносистемні користувацькі об'єкти</span></a>
 <ul>
 <li class="toclevel-2 tocsection-3"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BC.D0.B0.D1.81.D0.B8.D0.B2.D1.83_.28Array.29"><span class="tocnumber">2.1</span> <span class="toctext"><span>Об'єкт масиву (Array)</span></span></a></li>
-<li class="toclevel-2 tocsection-4"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.80.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D0.B8.D1.80.D0.B0.D0.B7.D1.83_.28RegExp.29"><span class="tocnumber">2.2</span> <span class="toctext">Об'єкт регулярного виразу (RegExp)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.80.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D0.B8.D1.80.D0.B0.D0.B7.D1.83_.28RegExp.29"><span class="tocnumber">2.2</span> <span class="toctext"><span>Об'єкт регулярного виразу (RegExp)</span></span></a></li>
 <li class="toclevel-2 tocsection-5"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0-.D1.82.D0.B5.D0.B3.D1.83_XML_.28XMLNodeObj.29"><span class="tocnumber">2.3</span> <span class="toctext">Об'єкт вузла-тегу XML (XMLNodeObj)</span></a></li>
 </ul>
 </li>
@@ -76,7 +76,7 @@
 
 <p>До початку програмування у OpenSCADA Ви маєте вивчити структуру об'єктів програми (Об'єктна модель) у <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">посібнику по програмі OpenSCADA</a> та на рисунку 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_uk.png"><img class="thumbimage" height="361" src="files/800px-Oscada_UserOM_uk.png" srcset="/wiki/images/3/39/Oscada_UserOM_uk.png 1.5x, /wiki/images/3/39/Oscada_UserOM_uk.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM_uk.png" title="Enlarge" /></div>Рис. 1. Користувацька об'єктна модель ядра OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1202px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_uk.png"><img class="thumbimage" height="542" src="files/Oscada_UserOM_uk.png" width="1200" /></a>  <div class="thumbcaption">Рис. 1. Користувацька об'єктна модель ядра OpenSCADA.</div></div></div></div>
 <p>З цього документу Ви побачите, що Ви можете, як користувач, програмувати наступні частини OpenSCADA:
 </p>
 <ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#Virtual" title="Special:MyLanguage/Documents/DAQ">Джерела логічного рівня підсистеми "Збір даних"</a>.</li>
@@ -234,85 +234,80 @@ rez = sum(1, 2);
 <h2><span class="mw-headline" id=".D0.97.D0.B0.D0.B3.D0.B0.D0.BB.D1.8C.D0.BD.D0.BE.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D1.96_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D1.96_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D0.B8"><span class="mw-headline-number">2</span> Загальносистемні користувацькі об'єкти</span></h2>
 <p>JavaLikeCalc надає підтримку типу даних об'єкт "Object". Об'єкт представляє собою асоціативний контейнер властивостей та функцій. Властивості можуть містити як дані чотирьох базових типів, так і інші об'єкти. Доступ до властивостей об'єкту може здійснюватися за посередництвом запису імен властивостей до об'єкту <i>obj.prop</i>, через крапку, а також за посередництвом включення імені властивості у квадратні дужки <i>obj["prop"]</i>. Очевидно, що перший механізм статичний, а другий дозволяє вказувати ім'я властивості через змінну. Видалити властивість об'єкту можна директивою "delete". Читання невизначеної властивості поверне <b>EVAL</b>. Створення об'єкту здійснюється за посередництвом ключового слова <i>new</i>: <b>varO = new Object()</b>. Базове визначення об'єкту не містить функцій. Операції копіювання об'єкту, насправді, роблять посилання на початковий об'єкт. При видаленні об'єкту здійснюється зменшення лічильника посилань, а за досягненням лічильника нуля, об'єкт видаляється фізично.
 </p><p>Різні компоненти OpenSCADA можуть довизначати базовий об'єкт особливими властивостями та функціями. Стандартним розширенням об'єкту є масив "Array", який створюється командою <b>varO = new Array(prm1,prm2,prm3,...,prmN)</b>. Перелічені через кому параметри поміщаються до масиву у вихідній послідовності. Якщо параметр тільки один тоді масив ініціюється вказаною кількістю порожніх елементів. Особливістю масиву є те, що він працює із властивостями, як з індексами та основним механізмом звернення є включення індексу у квадратні дужки <i>arr[1]</i>. Масив зберігає властивості у власному контейнері одномірного масиву. Цифрові властивості масиву використовуються для доступу безпосередньо до масиву, а символьні працюють як властивості об'єкту. Детальніше про властивості та функції масиву можна прочитати за <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#Array" title="Special:MyLanguage/Documents/User API">посиланням</a>.
-</p>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../en/files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> The translation checking and actualizing are going here
-</td></tr></table>
-</div>
-<p>Об'єкт регулярного виразу "RegExp" створюється командою <b>varO = new RegExp(pat,flg)</b>, де <i>pat</i> — шаблон регулярного виразу, а <i>flg</i> — ознаки пошуку. Об'єкт роботи із регулярними виразами оснований на бібліотеці "PCRE". При глобальному пошуку встановлюється атрибут об'єкту "lastIndex", що дозволяє продовжити пошук при наступному виклику функції. У випадку невдалого пошуку атрибут "lastIndex" скидається у нуль. Детальніше про властивості та функції об'єкту регулярного виразу можна прочитати за <a class="external" href="http://oscada.org/wiki/Documents/User_API/uk#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_RegExp" title="Documents/User API/uk">посиланням</a>.
+</p><p>Об'єкт регулярного виразу "RegExp" створюється командою <b>varO = new RegExp(pat, flg)</b>, де <i>pat</i> — шаблон регулярного виразу, а <i>flg</i> — ознаки пошуку. Об'єкт роботи із регулярними виразами оснований на бібліотеці "PCRE". При глобальному пошуку встановлюється атрибут об'єкту "lastIndex", що дозволяє продовжити пошук у наступному виклику функції. У випадку невдалого пошуку атрибут "lastIndex" скидається у нуль. Детальніше про властивості та функції об'єкту регулярного виразу можна прочитати за <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#RegExp" title="Special:MyLanguage/Documents/User API">посиланням</a>.
 </p><p>Для довільного доступу до аргументів функції передбачено об'єкт аргументів, звернутися до якого можна за посередництвом символу "arguments". Цей об'єкт містить властивість "length" з кількістю аргументів у функції та дозволяє звернутися до значень аргументу за посередництвом його номеру або ідентифікатору. Розглянемо перебір аргументів по циклу:
 </p>
 <pre style="white-space: pre-wrap;">
 args = new Array();
-for(var i=0; i &lt; arguments.length; i++)
+for(var i = 0; i &lt; arguments.length; i++)
   args[i] = arguments[i];
 </pre>
 <p>Часткові властивості об'єкту мають і базові типи. Властивості та функції базових типів приведено нижче:
 </p>
 <ul><li> Нульовий тип, функції:
-<ul><li> <i>bool isEVal();</i> — Повертає "true".</li></ul></li></ul>
+<ul><li> <i>bool isEVal();</i> — повертає "true".</li></ul></li></ul>
 <ul><li> Логічний тип, функції:
-<ul><li> <i>bool isEVal();</i> — Перевірка значення на "EVAL".</li>
-<li> <i>string toString();</i> — Надання значення у вигляді рядка "true" або "false".</li></ul></li></ul>
+<ul><li> <i>bool isEVal();</i> — перевіряє значення на "EVAL".</li>
+<li> <i>string toString();</i> — надає значення у вигляді рядка "true" або "false".</li></ul></li></ul>
+<dl><dd><ul><li> <i>real toReal();</i> — читає логічне значення як реальне число.</li>
+<li> <i>int toInt();</i> — читає логічне значення як ціле число.</li></ul></dd></dl>
 <ul><li> Ціле та реальне число:</li></ul>
 <dl><dd><dl><dt> <i>Властивості:</i></dt></dl>
 <ul><li> <i>MAX_VALUE</i> — максимальне значення;</li>
 <li> <i>MIN_VALUE</i> — мінімальне значення;</li>
 <li> <i>NaN</i> — недостовірне значення.</li></ul>
 <dl><dt> <i>Функції:</i></dt></dl>
-<ul><li> <i>bool isEVal();</i> — Перевірка значення на "EVAL".</li>
-<li> <i>string toExponential( int numbs = -1 );</i> — Повернення рядка, відформатованого числа у експоненціальній нотації та кількістю значущих цифр <i>numbs</i>. Якщо <i>numbs</i> відсутній то цифр буде стільки скільки потрібно.</li>
-<li> <i>string toFixed( int numbs = 0, int len = 0, bool sign = false );</i> — Повернення рядку відформатованого числа в нотації з фіксованою точкою та кількістю цифр після десяткової точки <i>numbs</i> з мінімальною довжиною <i>len</i> та обов'язковим знаком <i>sign</i>. Якщо <i>numbs</i> відсутній то кількість цифр після десяткової точки дорівнює нулю.</li>
-<li> <i>string toPrecision( int prec = -1 );</i> — Повернення рядка відформатованого числа з кількістю значущих цифр <i>prec</i>. </li>
-<li> <i>string toString( int base = 10, int len = -1, bool sign = false );</i> — Повернення рядку відформатованого числа цілого типу з базою представлення <i>base</i> (2-36) з мінімальною довжиною <i>len</i> та обов'язковим знаком <i>sign</i>.</li></ul></dd></dl>
+<ul><li> <i>bool isEVal();</i> — перевіряє значення на "EVAL".</li>
+<li> <i>string toExponential( int numbs = -1 );</i> — повертає рядок відформатованого числа, у експоненціальній нотації та кількістю значущих цифр <i>numbs</i>. Якщо <i>numbs</i> відсутній то цифр буде стільки скільки потрібно.</li>
+<li> <i>string toFixed( int numbs = 0, int len = 0, bool sign = false );</i> — повертає рядок відформатованого числа в нотації з фіксованою точкою та кількістю цифр після десяткової точки <i>numbs</i>, з мінімальною довжиною <i>len</i> та обов'язковим знаком <i>sign</i>. Якщо <i>numbs</i> відсутній то кількість цифр після десяткової точки дорівнює нулю.</li>
+<li> <i>string toPrecision( int prec = -1 );</i> — повертає рядок відформатованого числа з кількістю значущих цифр <i>prec</i>. </li>
+<li> <i>string toString( int base = 10, int len = -1, bool sign = false );</i> — повертає рядок відформатованого числа цілого типу з базою представлення <i>base</i> (2-36), з мінімальною довжиною <i>len</i> та обов'язковим знаком <i>sign</i>.</li>
+<li> <i>real toReal();</i> — читає ціле-реальне значення як реальне число.</li>
+<li> <i>int toInt();</i> — читає ціле-реальне значення як ціле число.</li></ul></dd></dl>
 <ul><li> Рядок:</li></ul>
 <dl><dd><dl><dt> <i>Властивості:</i></dt></dl>
 <ul><li> <i>int length</i> — довжина рядка.</li></ul>
 <dl><dt> <i>Функції:</i></dt></dl>
-<ul><li> <i>bool isEVal();</i> — Перевірка значення на "EVAL".</li>
-<li> <i>string charAt( int symb );</i> — Вилучає із рядка символ номер <i>symb</i>, нумерація символів з нуля.</li>
-<li> <i>int charCodeAt( int symb );</i> — Вилучає із рядка код символу <i>symb</i>.</li>
-<li> <i>string concat( string val1, string val2, ... );</i> — Повертає новий рядок сформований шляхом приєднання значень <i>val1</i> і т.п. до початкового.</li>
-<li> <i>int indexOf( string substr, int start );</i> — Повертає позицію пошукового рядка <i>substr</i> у вихідному рядку починаючи з позиції <i>start</i>. Якщо вихідна позиція не вказана то пошук починається з початку. Якщо шуканого рядка не знайдено то повертається "-1".</li>
-<li> <i>int lastIndexOf( string substr, int start );</i> — Повертає позицію шуканого рядка <i>substr</i> у вихідному рядку починаючи з позиції <i>start</i>, при пошуку з кінця. Якщо вихідна позиція не вказана то пошук починається з кінця. Якщо шуканого рядку не знайдено то повертається "-1".</li>
-<li> <i>int search( string pat, string flg = "" );</i> — Пошук у рядку за шаблоном <i>pat</i> та ознаками шаблону <i>flg</i>. Повертає положення найденого рядку інакше "-1".</li></ul></dd></dl>
+<ul><li> <i>bool isEVal();</i> — перевіряє значення на "EVAL".</li>
+<li> <i>string charAt( int symb );</i> — вилучає із рядка символ номер <i>symb</i>, нумерація символів з нуля.</li>
+<li> <i>int charCodeAt( int symb );</i> — вилучає із рядка код символу <i>symb</i>.</li>
+<li> <i>string concat( string val1, string val2, ... );</i> — повертає новий рядок, сформований шляхом приєднання значень <i>val1</i> та інші до початкового.</li>
+<li> <i>int indexOf( string substr, int start );</i> — повертає позицію пошукового рядка <i>substr</i> у вихідному рядку, починаючи з позиції <i>start</i>. Якщо вихідна позиція не вказана то пошук починається з початку. Якщо шуканого рядка не знайдено то повертається "-1".</li>
+<li> <i>int lastIndexOf( string substr, int start );</i> — повертає позицію шуканого рядка <i>substr</i> у вихідному рядку починаючи з позиції <i>start</i>, при пошуку з кінця. Якщо вихідна позиція не вказана то пошук починається з кінця. Якщо шуканого рядку не знайдено то повертається "-1".</li>
+<li> <i>int search( string pat, string flg = "" );</i> — шукає у рядку за шаблоном <i>pat</i> та ознаками шаблону <i>flg</i>. Повертає положення знайденого рядку інакше "-1".</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "Java123Script".search("script","i");  // rez = 7</pre>
-<dl><dd><ul><li> <i>int search( RegExp pat );</i> — Пошук у рядку за шаблоном "RegExp" <i>pat</i>. Повертає положення найденого підрядку інакше "-1".</li></ul></dd></dl>
+<dl><dd><ul><li> <i>int search( RegExp pat );</i> — шукає у рядку за шаблоном "RegExp" <i>pat</i>. Повертає положення найденого підрядку інакше "-1".</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "Java123Script".search(new RegExp("script","i"));  // rez = 7</pre>
-<dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — Пошук в рядку за шаблоном <i>pat</i> та ознаками шаблону <i>flg</i>. Повертає масив із знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — шукає у рядку за шаблоном <i>pat</i> та ознаками шаблону <i>flg</i>. Повертає масив із знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "1 плюс 2 плюс 3".match("\\d+","g");  // rez = [1], [2], [3]</pre>
-<dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — Пошук у рядку за шаблоном "RegExp" <i>pat</i>. Повертає масив зі знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — шукає у рядку за шаблоном "RegExp" <i>pat</i>. Повертає масив зі знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "1 плюс 2 плюс 3".match(new RegExp("\\d+","g"));  // rez = [1], [2], [3]</pre>
-<dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — Повернення підрядку вилученого з вихідного починаючи з позиції <i>beg</i> та до <i>end</i> (не включаючи), нумерація з нуля. Якщо значення початку або кінця негативне, то відлік ведеться з кінця рядку. Якщо кінець не вказано, то кінцем є кінець рядку. Наприклад, конструкція <b>substring(-2)</b> поверне останні два символи рядку.</li>
-<li> <i>Array split( string sep, int limit );</i> — Повернення масиву елементів рядку поділених <i>sep</i> з обмеженням кількості елементів <i>limit</i>.</li>
-<li> <i>Array split( RegExp pat, int limit );</i> — Повертає масив елементів рядку поділених шаблоном "RegExp" <i>pat</i> з обмеженням кількості елементів <i>limit</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — повертає підрядок вилучений з початкового, починаючи з позиції <i>beg</i> та до <i>end</i> (не включаючи), нумерація з нуля. Якщо значення початку або кінця негативне, то відлік ведеться з кінця рядку. Якщо кінець не вказано, то кінцем є кінець рядку. Наприклад, конструкція <b>substring(-2)</b> поверне останні два символи рядку.</li>
+<li> <i>Array split( string sep, int limit );</i> — повертає масив елементів рядку, поділених <i>sep</i> та з обмеженням кількості елементів <i>limit</i>.</li>
+<li> <i>Array split( RegExp pat, int limit );</i> — повертає масив елементів рядку, поділених шаблоном "RegExp" <i>pat</i> та з обмеженням кількості елементів <i>limit</i>.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 rez = "1,2, 3 , 4 ,5".split(new RegExp("\\s*,\\s*"));  // rez = [1], [2], [3], [4], [5]</pre>
-<dl><dd><ul><li> <i>string insert( int pos, string substr );</i> — Вставка в позицію <i>pos</i> поточного рядку підрядку <i>substr</i>.</li>
-<li> <i>string replace( int pos, int n, string str );</i> — Заміна підрядку з позиції <i>pos</i> та довжиною <i>n</i> у поточному рядку на рядок <i>str</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>string insert( int pos, string substr );</i> — вставляє підрядок <i>substr</i> у позицію <i>pos</i> поточного рядку.</li>
+<li> <i>string replace( int pos, int n, string str );</i> — замінює підрядок з позиції <i>pos</i> та довжиною <i>n</i> у поточному рядку, на рядок <i>str</i>.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 rez = "Javascript".replace(4,3,"67");  // rez = "Java67ipt"</pre>
-<dl><dd><ul><li> <i>string replace( string substr, string str );</i> — Заміна всіх підрядків <i>substr</i> на рядок <i>str</i>. </li></ul></dd></dl>
+<dl><dd><ul><li> <i>string replace( string substr, string str );</i> — замінює всі підрядки <i>substr</i> на рядок <i>str</i>. </li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 rez = "123 321".replace("3","55");  // rez = "1255 5521"</pre>
-<dl><dd><ul><li> <i>string replace( RegExp pat, string str );</i> — Заміна підрядків за шаблоном <i>pat</i> на рядок <i>str</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>string replace( RegExp pat, string str );</i> — замінює підрядок за шаблоном <i>pat</i> на рядок <i>str</i>.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // rez = "value = ``123''"</pre>
-<dl><dd><ul><li> <i>real toReal();</i> — Перетворення поточного рядку у реальне число.</li>
-<li> <i>int toInt( int base = 0 );</i> — Перетворення поточного рядки в ціле число, у відповідності із основою <i>base</i> (от 2 до 36). Якщо основа дорівнює 0 тоді буде враховуватися префіксний запис для визначення основи (123-десяткове; 0123-вісімкове; 0x123-шістнадцяткове).</li>
-<li> <i>string parse( int pos, string sep = ".", int off = 0 );</i> — Виокремлення із вихідного рядку елементу <i>pos</i> для поділювача елементів <i>sep</i> від зміщення <i>off</i>. Результуюче зміщення поміщається назад до <i>off</i>.</li>
-<li> <i>string parseLine( int pos, int off = 0 );</i> — Виокремлення рядку з номером <i>pos</i> від зміщення <i>off</i>. Результуюче зміщення поміщається назад до <i>off</i>.</li>
-<li> <i>string parsePath( int pos, int off = 0 );</i> — Виділення із початкового шляху елементу <i>pos</i> від зміщення <i>off</i>. Результуюче зміщення поміщається назад до <i>off</i>.</li>
-<li> <i>string path2sep( string sep = "." );</i> — Перетворення шляху у поточному рядку у рядок з розділювачем <i>sep</i>.</li>
-<li> <i>string trim( string cfg = " \n\t\r" );</i> — Обрізка рядка з початку та кінцю для символів <i>cfg</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>real toReal();</i> — перетворює поточной рядок у реальне число.</li>
+<li> <i>int toInt( int base = 10 );</i> — перетворює поточний рядок у ціле число, відповідно до основи <i>base</i> (від 2 до 36). Якщо основа дорівнює 0 тоді буде враховуватися префіксний запис для визначення основи (123-десяткове; 0123-вісімкове; 0x123-шістнадцяткове).</li>
+<li> <i>string parse( int pos, string sep = ".", int off = 0 );</i> — виокремлює із вихідного рядку елемент <i>pos</i> для роздільника елементів <i>sep</i> та від зміщення <i>off</i>. Результуюче зміщення поміщається назад до <i>off</i>.</li>
+<li> <i>string parseLine( int pos, int off = 0 );</i> — виокремлює рядок з номером <i>pos</i> від зміщення <i>off</i>. Результуюче зміщення поміщається назад до <i>off</i>.</li>
+<li> <i>string parsePath( int pos, int off = 0 );</i> — виділяє з початкового шляху елемент <i>pos</i> від зміщення <i>off</i>. Результуюче зміщення поміщається назад до <i>off</i>.</li>
+<li> <i>string path2sep( string sep = "." );</i> — перетворює шлях у поточному рядку у рядок з розділювачем <i>sep</i>.</li>
+<li> <i>string trim( string cfg = " \n\t\r" );</i> — обрізає рядок з початку та кінцю, для символів <i>cfg</i>.</li></ul></dd></dl>
 <p><br />
 </p>
 <h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BC.D0.B0.D1.81.D0.B8.D0.B2.D1.83_.28Array.29"><span class="mw-headline-number">2.1</span> <span id="Array" title="#Array">Об'єкт масиву (Array)</span></span></h3>
@@ -329,7 +324,7 @@ rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // r
 <li> <i>Array slice( int beg, int end );</i> — повертає фрагмент масиву від <i>beg</i> до <i>end</i> (виключаючи). Якщо значення початку або кінця негативне то відлік ведеться з кінця масиву. Якщо кінець не вказано то кінцем є кінець масиву.</li>
 <li> <i>Array splice( int beg, int remN, ElTp val1, ElTp val2, ... );</i> — вставляє, видаляє або замінює елементи масиву. Повертає масив видалених елементів. У першу чергу здійснюється видалення елементів з позиції <i>beg</i> та кількістю <i>remN</i>, а потім вставляються значення <i>val1</i> та інші, починаючи з позиції <i>beg</i>.</li>
 <li> <i>Array sort( );</i> — сортує елементи масиву у лексикографічній послідовності.</li></ul>
-<h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.80.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D0.B8.D1.80.D0.B0.D0.B7.D1.83_.28RegExp.29"><span class="mw-headline-number">2.2</span> Об'єкт регулярного виразу (RegExp)</span></h3>
+<h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D1.80.D0.B5.D0.B3.D1.83.D0.BB.D1.8F.D1.80.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B2.D0.B8.D1.80.D0.B0.D0.B7.D1.83_.28RegExp.29"><span class="mw-headline-number">2.2</span> <span id="RegExp" title="#RegExp">Об'єкт регулярного виразу (RegExp)</span></span></h3>
 <p>Об'єкт роботи з регулярними виразами, засновано на бібліотеці PCRE. При глобальному пошуку встановлюється атрибут об'єкта "lastIndex", що дозволяє продовжити пошук при наступному виклику функції. У випадку невдалого пошуку атрибут "lastIndex" скидається у нуль.
 </p><p>У якості аргументів створення об'єкту передається рядок з текстом регулярного виразу та прапорці у вигляді рядка символів:
 </p>
@@ -582,10 +577,10 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc_uk.png" title="Об&#039;єктна модель користувача модуля JavaLikeCalc."><img alt="Об&#039;єктна модель користувача модуля JavaLikeCalc." height="214" src="files/Oscada_UserOM_JavaLikeCalc_uk.png" width="223" /></a></div>
 <p><b>Об'єкт "Бібліотека функцій" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
 </p>
-<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — виклик функції "<i>funcID</i>" бібліотеки "<i>Lfunc</i>". Повертає результат викликаної функції. Префікс "lib_" перед ідентифікатором бібліотеки обов'язковий!</li></ul>
+<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — викликає функцію "funcID" бібліотеки "Lfunc" з параметрами <i>prm{N}</i>. Повертає результат викликаної функції. Префікс "lib_" перед ідентифікатором бібліотеки обов'язковий!</li></ul>
 <p><b>Об'єкт "Користувацька функція" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"]["func"])</b>
 </p>
-<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — виклик функції "<i>func</i>" бібліотеки "<i>Lfunc</i>" з параметрами "<i>prm{N}</i>". Повертає результат викликаної функції. Префікс "lib_" перед ідентифікатором бібліотеки обов'язковий!</li></ul>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — викликає функцію "func" бібліотеки "Lfunc" з параметрами <i>prm{N}</i>. Повертає результат викликаної функції. Префікс "lib_" перед ідентифікатором бібліотеки обов'язковий!</li></ul>
 <h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.LogicLev"><span class="mw-headline-number">7.2</span> Модуль <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a></span></h4>
 <p><b>Об'єкт "Параметр" [this]</b>
 </p>

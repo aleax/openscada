@@ -176,7 +176,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     // Generic tools bar
     toolBarStatus = new QToolBar(this);
     connect(toolBarStatus, SIGNAL(actionTriggered(QAction*)), this, SLOT(alarmAct(QAction*)));
-    toolBarStatus->setIconSize(QSize(16,16));
+    toolBarStatus->setIconSize(QSize(icoSize(),icoSize()));
     toolBarStatus->addAction(actProjManual);
     toolBarStatus->addSeparator();
     toolBarStatus->addAction(menuPrint->menuAction());

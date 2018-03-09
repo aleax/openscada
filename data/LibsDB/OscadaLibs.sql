@@ -294,12 +294,12 @@ Documents/How_to:en,ru,uk:How_to.html
 Documents/How_to/Install:en,ru,uk:How_to_Install.html
 Documents/How_to/Live_disk:en,ru,uk:How_to_Live_disk.html
 Documents/How_to/Violations,_alarms_and_notifications:en,ru,uk:How_to_Violations.html
-Documents/How_to/Cyclic_programming:en,ru,uk:Cyclic_programming.html
-Documents/How_to/Debug:en,ru,uk:Debug.html
-Documents/How_to/Transferring_project_configuration:en,ru,uk:Transferring_project_configuration.html
-Documents/How_to/Build_from_source:en,ru,uk:Build_from_source.html
-Documents/How_to/Crash_report:en,ru,uk:Crash_report.html
-Documents/How_to/Create_module:en,ru,uk:Create_module.html
+Documents/How_to/Cyclic_programming:en,ru,uk:How_to_Cyclic_programming.html
+Documents/How_to/Debug:en,ru,uk:How_to_Debug.html
+Documents/How_to/Transferring_project_configuration:en,ru,uk:How_to_Transferring_project_configuration.html
+Documents/How_to/Build_from_source:en,ru,uk:How_to_Build_from_source.html
+Documents/How_to/Crash_report:en,ru,uk:How_to_Crash_report.html
+Documents/How_to/Create_module:en,ru,uk:How_to_Create_module.html
 Documents/DAQ:en,uk,ru:DAQ.html
 Documents/User_API:en,uk,ru:User_API.html
 Documents/API:en:API.html
@@ -5565,8 +5565,10 @@ if(!tErr) {
 //Alarms forming
 if(alSup)	f_err = "0";
 else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt()) {
+		if(!this.cntr().status().toInt())
+			this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
+	}
 	else if(f_err.toInt() && !tErr.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
@@ -5660,8 +5662,10 @@ else {
 	if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 	if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt()) {
+		if(!this.cntr().status().toInt())
+			this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
+	}
 	else if(f_err.toInt() && !tErr.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	toSave = (alSup == 2 && f_err != tErr);
@@ -5821,8 +5825,10 @@ else {
 	if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 	if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt()) {
+		if(!this.cntr().status().toInt())
+			this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
+	}
 	else if(f_err.toInt() && !tErr.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	toSave = (alSup == 2 && f_err != tErr);

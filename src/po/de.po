@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 08:46+0200\n"
+"POT-Creation-Date: 2018-03-09 16:17+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -273,6 +273,9 @@ msgstr "Stufe"
 
 msgid "Message"
 msgstr "Nachricht"
+
+msgid "Clear the current alarms table"
+msgstr "Löschen Sie die aktuelle Alarmtabelle"
 
 msgid "Values"
 msgstr "Werte"
@@ -2358,6 +2361,7 @@ msgstr "Fehler-ID des Parametertyps!"
 msgid "Parameter type '%s' is not present."
 msgstr "Parametertyp '%s' ist nicht vorhanden."
 
+#, c-format
 msgid "Error attaching the new controller '%s'."
 msgstr "Fehler beim Anhängen des neuen Controllers '%s'."
 
@@ -2397,6 +2401,7 @@ msgstr "Logisch"
 msgid "-select"
 msgstr "-Wahl"
 
+#, c-format
 msgid ""
 "Parameter attribute\n"
 "  ID: '%s'\n"
@@ -2430,6 +2435,7 @@ msgstr "Archivierung"
 msgid "Not selective type!"
 msgstr "Nicht selektiver Typ!"
 
+#, c-format
 msgid "Error writing a value to the archive: %s"
 msgstr "Fehler beim Schreiben eines Werts in das Archiv: %s"
 
@@ -2446,9 +2452,11 @@ msgstr "Fehler beim Zuweisen von Speicher für große Zeichenfolge (% d)!"
 msgid "Attempt to double disconnect!"
 msgstr "Versuch, die Verbindung zu trennen!"
 
+#, c-format
 msgid "Error deleting the child '%d'."
 msgstr "Fehler beim Löschen des untergeordneten '%d'."
 
+#, c-format
 msgid "Child '%d' is not allowed."
 msgstr "Kind '%d' ist nicht erlaubt."
 
@@ -2456,19 +2464,23 @@ msgstr "Kind '%d' ist nicht erlaubt."
 msgid "Child %s:%d is not found!"
 msgstr "Kind %s:%d wurde nicht gefunden!"
 
+#, c-format
 msgid "2:Error opening the file '%s': %s"
 msgstr "2:Fehler beim Öffnen der Datei '%s': %s"
 
+#, c-format
 msgid "3:Error loading the file '%s'."
 msgstr "3:Fehler beim Laden der Datei '%s'."
 
 msgid "Object is not connected to a node of the OpenSCADA tree."
-msgstr "Objekt ist nicht mit einem Knoten der OpenSCADA-Baumstruktur verbunden."
+msgstr ""
+"Objekt ist nicht mit einem Knoten der OpenSCADA-Baumstruktur verbunden."
 
 #, c-format
 msgid "Child %d is not present."
 msgstr "Kind %d ist nicht vorhanden."
 
+#, c-format
 msgid "Child with the attribute %s=%s is not present."
 msgstr "Kind mit dem Attribut %s=%s ist nicht vorhanden."
 
@@ -2476,6 +2488,7 @@ msgstr "Kind mit dem Attribut %s=%s ist nicht vorhanden."
 msgid "Unexpected end. Pos: %d"
 msgstr "Unerwartetes Ende. Pos: %d"
 
+#, c-format
 msgid "No comment block completion. Pos: %d"
 msgstr "Kein Kommentar Blockende. Pos: %d"
 
@@ -2491,6 +2504,7 @@ msgstr "Unvollendete '! DOCTYPE []' Container. Pos: %d"
 msgid "Unexpected or error end tag. Pos: %d"
 msgstr "Unerwarteter oder Fehler End-Tag. Pos: %d"
 
+#, c-format
 msgid "Unfinished start of comment or unknown block. Pos: %d"
 msgstr "Unfertig starten Kommentar oder unbekannte blockieren. Pos: %d"
 
@@ -2502,6 +2516,7 @@ msgstr "Start-Tag-Fehler. Pos: %d"
 msgid "Unfinished attribute. Pos: %d"
 msgstr "Unfertig Attribut. Pos: %d"
 
+#, c-format
 msgid "Error entity. Pos: %d"
 msgstr "Entity Fehler. Pos: %d"
 
@@ -2515,6 +2530,7 @@ msgstr "Nachrichtarchiv wird nicht unterstützt!"
 msgid "Value archiver not supported!"
 msgstr "Wertearchiv wird nicht unterstützt!"
 
+#, c-format
 msgid "Function '%s' is not supported!"
 msgstr "Funktion '%s' wird nicht unterstützt!"
 
@@ -2522,6 +2538,7 @@ msgstr "Funktion '%s' wird nicht unterstützt!"
 msgid "%s: No function set!"
 msgstr "%s: Keine Funktion gesetzt!"
 
+#, c-format
 msgid "%s: Error with ID or IO %d for the function '%s'!"
 msgstr "%s: Fehler des Bezeichners oder IO %d für die Funktion %s'!"
 

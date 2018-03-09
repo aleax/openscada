@@ -1276,6 +1276,10 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if(prop == "isEVal")	return (vl.getB() == EVAL_BOOL);
 		// string toString( ) - performs the value as the string “true” or “false”
 		if(prop == "toString")	return string(vl.getB() ? "true" : "false");
+		// real toReal() - read this Boolean as a real number
+		if(prop == "toReal")	return vl.getR();
+		// int toInt() - read this Boolean as an integer number
+		if(prop == "toInt")	return (int64_t)vl.getI();
 		return false;
 		//throw TError(nodePath().c_str(),_("Boolean type has not the property '%s' or there are not enough parameters for it."),prop.c_str());
 	    case TVariant::Integer:
@@ -1334,6 +1338,10 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 			rez += dsymb[c_vl%n];
 		    return TSYS::strEncode(rez, TSYS::Reverse);
 		}
+		// real toReal() - read this integer-real as a real number
+		if(prop == "toReal") return vl.getR();
+		// int toInt() - read this integer-real as an integer number
+		if(prop == "toInt") return (int64_t)vl.getI();
 		return false;
 		//throw TError(nodePath().c_str(),_("Integer or real type has not the property '%s' or there are not enough parameters for it."),prop.c_str());
 	    case TVariant::String:
@@ -1482,7 +1490,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if(prop == "toReal") return s2r(vl.getS());
 		// int toInt(int base = 0) - convert this string to integer number
 		//  base - radix of subject sequence
-		if(prop == "toInt") return (int64_t)strtoll(vl.getS().c_str(),NULL,(prms.size()>=1?prms[0].getI():0));
+		if(prop == "toInt") return (int64_t)strtoll(vl.getS().c_str(), NULL, (prms.size()>=1?prms[0].getI():10));
 		// string parse(int pos, string sep = ".", int off = 0) - get token with number <pos> from the string when separated by <sep>
 		//       and from offset <off>
 		//  pos - item position

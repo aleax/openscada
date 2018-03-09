@@ -365,7 +365,7 @@ msgid "Node '%1' is already present. Continue?"
 msgstr "Вузол '%1' вже присутній. Продовжити?"
 
 msgid "Status bar messages list:"
-msgstr "Перелік повідомлень строки статусу:"
+msgstr "Перелік повідомлень рядка статусу:"
 
 msgid "Status messages"
 msgstr "Повідомлення статусу"

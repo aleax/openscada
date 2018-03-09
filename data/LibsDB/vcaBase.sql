@@ -1760,7 +1760,7 @@ INSERT INTO "wlb_Main_incl" VALUES('cntrPaspExt','view','/wlb_originals/wdg_Form
 INSERT INTO "wlb_Main_incl" VALUES('objProps','labSet','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;font;alignment;text;','');
 INSERT INTO "wlb_Main_incl" VALUES('objProps','props','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('objProps','set','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO "wlb_Main_incl" VALUES('objProps','tittle','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;tipTool;backColor;bordWidth;bordColor;bordStyle;font;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('objProps','title','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;tipTool;backColor;bordWidth;bordColor;bordStyle;font;alignment;text;','');
 INSERT INTO "wlb_Main_incl" VALUES('cntrPaspExt','viewLabSet','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
 INSERT INTO "wlb_Main_incl" VALUES('cntrPaspExt','viewSet','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;view;cfg;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('cntrPaspExt','sel_data','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;color;font;','');
@@ -2932,7 +2932,7 @@ INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomW','60',32,'','','p1','','
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomY','18',32,'','','p1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomX','1',32,'','','p1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','name','Parameter 1',32,'','','p1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','text','Tittle',40,'','','title','Заголовок','','Заголовок','','','');
+INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','text','Title',40,'','','title','Заголовок','','Заголовок','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','alignment','8',32,'','','title','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','font','Arial 15',32,'','','title','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomMargin','1',32,'','','title','','','','','','');
@@ -5768,21 +5768,21 @@ INSERT INTO "wlb_Main_io" VALUES('objProps','value','',8,'','','set','','','',''
 INSERT INTO "wlb_Main_io" VALUES('objProps','view','1',32,'','','set','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('objProps','cfg','',40,'','','set','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('objProps','font','Arial 14',32,'','','set','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','name','',32,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','geomX','2',32,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','geomY','1',32,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','geomW','255',32,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','geomH','16',32,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','geomZ','1',32,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','geomMargin','0',32,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','tipTool','',40,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','backColor','lime',40,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','bordWidth','2',32,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','bordColor','gray',32,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','bordStyle','6',32,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','font','Arial 15 0 1',32,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','alignment','10',32,'','','tittle','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('objProps','text','Text',40,'','','tittle','Текст','','Текст','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','name','',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','geomX','2',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','geomY','1',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','geomW','255',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','geomH','16',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','geomZ','1',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','geomMargin','0',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','tipTool','',40,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','backColor','lime',40,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','bordWidth','2',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','bordColor','gray',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','bordStyle','6',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','font','Arial 15 0 1',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','alignment','10',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('objProps','text','Text',40,'','','title','Текст','','Текст','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','value','',8,'','','view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','name','',32,'','','viewLabSet','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','1',32,'','','viewLabSet','','','','','','');
@@ -9414,7 +9414,7 @@ INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_addr','Parameter5: address
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_name','Parameter5: name',131077,'<EVAL>||',10,'Parameter 5|NAME','','','Параметр5: ім''я','','','Параметр5: имя','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_max','Parameter5: maximum',131076,'<EVAL>||',10,'Parameter 5|max','','','Параметр5: максимум','','','Параметр5: максимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_min','Parameter5: minimum',131076,'<EVAL>||',10,'Parameter 5|min','','','Параметр5: мінімум','','','Параметр5: минимум','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','title','Tittle',131077,'<EVAL>||',9,'','','','Заголовок','','','Заголовок','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','title','Title',131077,'<EVAL>||',9,'','','','Заголовок','','','Заголовок','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p1_clr','Parameter1: color',147461,'#b000b0||',9,'Parameter 1','','','Параметр1: колір','','','Параметр1: цвет','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p2_clr','Parameter2: color',147461,'#c75300||',9,'Parameter 2','','','Параметр2: колір','','','Параметр2: цвет','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p3_clr','Parameter3: color',147461,'blue||',9,'Parameter 3','','','Параметр3: колір','','','Параметр3: цвет','','','','');
@@ -20446,15 +20446,15 @@ if(f_start) {
 	props_geomH = geomH-props_geomY;
 }
 
-tittle_text = objName.isEVal() ? tr("Unknown") : objName;
-tittle_tipTool = objDescr.isEVal() ? "" : objDescr;
+title_text = objName.isEVal() ? tr("Unknown") : objName;
+title_tipTool = objDescr.isEVal() ? "" : objDescr;
 if(!objErr.isEVal()) {
-	if(objErr.toInt() == 0)			tittle_backColor = "lime";
-	else if(objErr.toInt() == 1)	tittle_backColor = "yellow";
-	else if(objErr.toInt() == 2)	tittle_backColor = "red";
-	else tittle_backColor = "gray";
+	if(objErr.toInt() == 0)			title_backColor = "lime";
+	else if(objErr.toInt() == 1)	title_backColor = "yellow";
+	else if(objErr.toInt() == 2)	title_backColor = "red";
+	else title_backColor = "gray";
 }
-else tittle_backColor = "gray";
+else title_backColor = "gray";
 
 if(!objItems.isEVal()) {
 	//Load table with variables

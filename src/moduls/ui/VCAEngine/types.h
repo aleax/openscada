@@ -93,6 +93,7 @@ namespace VCA
 	A_TextWordWrap	= 28,
 	A_TextAlignment	= 29,
 	A_TextText	= 30,
+	A_TextHTML	= 31,
 	A_TextNumbArg	= 40,
 	A_TextArs	= 50,
 	A_TextArsSz	= 10,

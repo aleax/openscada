@@ -174,7 +174,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actLibNew->setStatusTip(_("Press to create the new widgets library."));
     connect(actLibNew, SIGNAL(triggered()), this, SLOT(libNew()));
     //  Visual item add (widget or page)
-    if(!ico_t.load(TUIS::icoGet("vision_it_add",NULL,true).c_str())) ico_t.load(":/images/it_add.png");
+    if(!ico_t.load(TUIS::icoGet("vision_it_add",NULL,true).c_str())) ico_t.load(":/images/v_it_add.png");
     actVisItAdd = new QAction(QPixmap::fromImage(ico_t),_("Add visual item"),this);
     actVisItAdd->setToolTip(_("Add visual item into library, container widget, project or page"));
     actVisItAdd->setWhatsThis(_("The button for addition of the visual item into library, container widget, project or page"));
@@ -183,7 +183,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItAdd->setEnabled(false);
     actVisItAdd->setCheckable(true);
     //  Visual item delete
-    if(!ico_t.load(TUIS::icoGet("vision_it_del",NULL,true).c_str())) ico_t.load(":/images/it_del.png");
+    if(!ico_t.load(TUIS::icoGet("vision_it_del",NULL,true).c_str())) ico_t.load(":/images/v_it_del.png");
     actVisItDel = new QAction(QPixmap::fromImage(ico_t),_("Delete visual item"),this);
     actVisItDel->setToolTip(_("Delete visual item from library, container widget, project or page"));
     actVisItDel->setWhatsThis(_("The button for deleting visual item from library, container widget, project or page"));
@@ -192,7 +192,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItDel->setEnabled(false);
     connect(actVisItDel, SIGNAL(triggered()), this, SLOT(visualItDel()));
     //  Visual item properties
-    if(!ico_t.load(TUIS::icoGet("vision_it_prop",NULL,true).c_str())) ico_t.load(":/images/it_prop.png");
+    if(!ico_t.load(TUIS::icoGet("vision_it_prop",NULL,true).c_str())) ico_t.load(":/images/v_it_prop.png");
     actVisItProp = new QAction(QPixmap::fromImage(ico_t),_("Visual item properties"),this);
     actVisItProp->setToolTip(_("Get visual item properties"));
     actVisItProp->setWhatsThis(_("The button for getting the visual item properties"));
@@ -201,7 +201,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItProp->setEnabled(false);
     connect(actVisItProp, SIGNAL(triggered()), this, SLOT(visualItProp()));
     //  Visual item graphical edit
-    if(!ico_t.load(TUIS::icoGet("vision_it_edit",NULL,true).c_str())) ico_t.load(":/images/it_edit.png");
+    if(!ico_t.load(TUIS::icoGet("vision_it_edit",NULL,true).c_str())) ico_t.load(":/images/v_it_edit.png");
     actVisItEdit = new QAction(QPixmap::fromImage(ico_t),_("Visual item edit"),this);
     actVisItEdit->setToolTip(_("Goes visual item edit"));
     actVisItEdit->setWhatsThis(_("The button for going to visual item edition"));
@@ -210,7 +210,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItEdit->setEnabled(false);
     connect(actVisItEdit, SIGNAL(triggered()), this, SLOT(visualItEdit()));
     //  Visual item changes clear
-    if(!ico_t.load(TUIS::icoGet("vision_it_clear",NULL,true).c_str())) ico_t.load(":/images/it_clear.png");
+    if(!ico_t.load(TUIS::icoGet("vision_it_clear",NULL,true).c_str())) ico_t.load(":/images/v_it_clear.png");
     actVisItClear = new QAction(QPixmap::fromImage(ico_t),_("Visual item changes clear"),this);
     actVisItClear->setToolTip(_("Goes visual item changes clear"));
     actVisItClear->setWhatsThis(_("The button for going to visual item changes clear"));
@@ -218,7 +218,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItClear->setEnabled(false);
     connect(actVisItClear, SIGNAL(triggered()), this, SLOT(visualItClear()));
     //  Visual item changes put down
-    if(!ico_t.load(TUIS::icoGet("vision_it_ChDown",NULL,true).c_str())) ico_t.load(":/images/it_ChDown.png");
+    if(!ico_t.load(TUIS::icoGet("vision_it_ChDown",NULL,true).c_str())) ico_t.load(":/images/v_it_ChDown.png");
     actVisItChDown = new QAction(QPixmap::fromImage(ico_t),_("Visual item changes put down"),this);
     actVisItChDown->setToolTip(_("Goes visual item changes put down to the parent"));
     actVisItChDown->setWhatsThis(_("The button for going to visual item changes put down to the parent"));
@@ -463,8 +463,8 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     mn_edit->addAction(actVisItUnDo);
     mn_edit->addAction(actVisItReDo);
     mn_edit->addSeparator();
-    mn_edit->addAction(actVisItCut);
     mn_edit->addAction(actVisItCopy);
+    mn_edit->addAction(actVisItCut);
     mn_edit->addAction(actVisItPaste);
     mn_proj = menuBar()->addMenu(_("&Project"));
     mn_proj->addAction(actPrjRun);
@@ -523,6 +523,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     // Visual items tools bar
     visItToolBar = new QToolBar(_("Visual items toolbar"),this);
     visItToolBar->setObjectName("visItToolBar");
+    visItToolBar->setIconSize(QSize(icoSize(1.6),icoSize(1.6)));
     addToolBar(visItToolBar);
     visItToolBar->setMovable(true);
     visItToolBar->addAction(actPrjRun);
@@ -540,14 +541,15 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     visItToolBar->addAction(actVisItUnDo);
     visItToolBar->addAction(actVisItReDo);
     visItToolBar->addSeparator();
-    visItToolBar->addAction(actVisItCut);
     visItToolBar->addAction(actVisItCopy);
+    visItToolBar->addAction(actVisItCut);
     visItToolBar->addAction(actVisItPaste);
     mn_view->addAction(visItToolBar->toggleViewAction());
     mn_view->addSeparator();
     // Widget view functions toolbar
     wdgToolView = new QToolBar(_("Widgets view functions"),this);
     wdgToolView->setObjectName("wdgToolView");
+    wdgToolView->setIconSize(QSize(icoSize(1.6),icoSize(1.6)));
     addToolBar(wdgToolView);
     wdgToolView->setMovable(true);
     wdgToolView->addAction(actLevRise);
@@ -565,6 +567,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     // Elementar figure base widget tools
     elFigTool = new QToolBar(_("Elementars figure tools"),this);
     elFigTool->setObjectName("elFigTool");
+    elFigTool->setIconSize(QSize(icoSize(1.6),icoSize(1.6)));
     addToolBar(elFigTool);
     elFigTool->setMovable(true);
     elFigTool->addAction(actElFigCursorAct);
@@ -665,10 +668,10 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     if(!s2i(SYS->cmdOpt("showWin")) && wH > 100 && wW > 100) resize(wH, wW);
 
     //Restore ToolBars icons size
-    for(int i_ch = 0; i_ch < children().size(); i_ch++) {
-	if(!qobject_cast<QToolBar*>(children()[i_ch])) continue;
-	int icSz = s2i(mod->uiPropGet((children()[i_ch]->objectName()+"_icSz").toStdString(),user()));
-	if(icSz) ((QToolBar*)children()[i_ch])->setIconSize(QSize(icSz,icSz));
+    for(int iCh = 0; iCh < children().size(); iCh++) {
+	if(!qobject_cast<QToolBar*>(children()[iCh])) continue;
+	int icSz = s2i(mod->uiPropGet((children()[iCh]->objectName()+"_icSz").toStdString(),user()));
+	if(icSz) ((QToolBar*)children()[iCh])->setIconSize(QSize(icSz,icSz));
     }
 
     //Hide specific tools

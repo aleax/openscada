@@ -996,6 +996,8 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/2",_("Level"),R_R___,"root",SARH_ID,1,"tp","dec");
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/3",_("Message"),R_R___,"root",SARH_ID,1,"tp","str");
 		}
+		if(s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))) < 0)
+		    ctrMkNode("comm",opt,-1,"/m_arch/view/alClear",_("Clear the current alarms table"),RWRW__,"root",SARH_ID);
 	    }
 	}
 	if(ctrMkNode("area",opt,2,"/v_arch",_("Values"),R_R_R_,"root",SARH_ID)) {
@@ -1081,6 +1083,11 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    if(n_lvl)	n_lvl->childAdd("el")->setText(i2s(rec[i_rec].level));
 	    if(n_mess)	n_mess->childAdd("el")->setText(rec[i_rec].mess);
 	}
+    }
+    else if(a_path == "/m_arch/view/alClear" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR)) {
+	mRes.lock();
+	mAlarms.clear();
+	mRes.unlock();
     }
     else if(a_path == "/v_arch/per") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(valPeriod()));

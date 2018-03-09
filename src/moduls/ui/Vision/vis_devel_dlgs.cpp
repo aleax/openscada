@@ -34,6 +34,8 @@
 #include <QSplitter>
 #include <QScrollArea>
 #include <QMessageBox>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #include <tsys.h>
 
@@ -87,7 +89,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     obj_ico->setObjectName("/obj/cfg/ico");
     obj_ico->setToolTip(_("Item's icon. Click for download other."));
     obj_ico->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
-    obj_ico->setIconSize(QSize(60,60));
+    obj_ico->setIconSize(QSize(icoSize(5),icoSize(5)));
     obj_ico->setAutoDefault(false);
     connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
     glay->addWidget(obj_ico, 0, 0, 3, 1);
@@ -771,6 +773,10 @@ void LibProjProp::showEvent( QShowEvent * event )
     QSize src = size();
     adjustSize();
     resize(size().expandedTo(src));
+
+#if defined(__ANDROID__)
+    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
+#endif
 }
 
 void LibProjProp::addMimeData( )
@@ -943,7 +949,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_ico->setObjectName("/wdg/cfg/ico");
     obj_ico->setToolTip(_("Item's icon. Click for download other."));
     obj_ico->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    obj_ico->setIconSize(QSize(60,60));
+    obj_ico->setIconSize(QSize(icoSize(5),icoSize(5)));
     obj_ico->setAutoDefault(false);
     connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
     glay->addWidget(obj_ico,0,0,5,1);
@@ -1572,6 +1578,10 @@ void VisItProp::showEvent( QShowEvent * event )
     QSize src = size();
     adjustSize();
     resize(size().expandedTo(src));
+
+#if defined(__ANDROID__)
+    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
+#endif
 }
 
 void VisItProp::addAttr( )
@@ -1690,8 +1700,8 @@ void VisItProp::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 	if(index.column() == 4) {
 	    drawBackground(painter, option, index);
 	    if(index.data(Qt::DisplayRole).toBool()) {
-		QImage img(":/images/ok.png");
-		painter->drawImage(option.rect.center().x()-img.width()/2,option.rect.center().y()-img.height()/2,img);
+		QImage img = QImage(":/images/button_ok.png").scaled(icoSize(), icoSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		painter->drawImage(option.rect.center().x()-img.width()/2, option.rect.center().y()-img.height()/2, img);
 	    }
 	    drawFocus(painter, option, option.rect);
 	    return;

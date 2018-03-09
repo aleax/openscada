@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: selfwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,6 +43,7 @@
 #endif
 #include <QScrollBar>
 #include <QCompleter>
+#include <QDesktopWidget>
 
 #include <tsys.h>
 
@@ -50,6 +51,8 @@
 #include "selfwidg.h"
 
 using namespace QTCFG;
+
+int QTCFG::icoSize( float mult )	{ return (int)(mult * QFontMetrics(qApp->font()).height()); }
 
 //************************************************
 //* ListView: List view widget                   *
@@ -128,8 +131,8 @@ void LineEdit::viewApplyBt( bool view )
 
     if(view && !btFld) {
 	btFld = new QPushButton(this);
-	btFld->setIcon(QIcon(":/images/ok.png"));
-	btFld->setIconSize(QSize(12,12));
+	btFld->setIcon(QIcon(":/images/button_ok.png"));
+	btFld->setIconSize(QSize(icoSize(),icoSize()));
 	btFld->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
 	//btFld->setMaximumWidth(15);
 	connect(btFld, SIGNAL(clicked()), this, SLOT(applySlot()));
@@ -462,11 +465,11 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     setObjectName(name);
 
     edFld = new QTextEdit(this);
-#if QT_VERSION < 0x050000
+/*#if QT_VERSION < 0x050000
     edFld->setStyle(new QPlastiqueStyle());	//Force style set for resize allow everywhere
 #else
     edFld->setStyle(new QCommonStyle());	//Force style set for resize allow everywhere
-#endif
+#endif*/
     edFld->setContextMenuPolicy(Qt::CustomContextMenu);
     edFld->setTabStopWidth(20);
     edFld->setAcceptRichText(false);
@@ -672,11 +675,11 @@ void TextEdit::find( )
 //************************************************
 CfgTable::CfgTable( QWidget *parent ) : QTableWidget(parent)
 {
-#if QT_VERSION < 0x050000
+/*#if QT_VERSION < 0x050000
     setStyle(new QPlastiqueStyle());	//Force style set for resize allow everywhere
 #else
     setStyle(new QCommonStyle());	//Force style set for resize allow everywhere
-#endif
+#endif*/
 }
 
 void CfgTable::resizeRowsToContentsLim( )
@@ -796,6 +799,10 @@ void InputDlg::showEvent( QShowEvent * event )
     QSize src = size();
     adjustSize();
     resize(size().expandedTo(src));
+
+#if defined(__ANDROID__)
+    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
+#endif
 }
 
 //*****************************************************
@@ -921,6 +928,10 @@ void DlgUser::showEvent( QShowEvent * event )
     QSize src = size();
     adjustSize();
     resize(size().expandedTo(src));
+
+#if defined(__ANDROID__)
+    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
+#endif
 }
 
 //*********************************************
@@ -984,8 +995,8 @@ void TableDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option
 	case QVariant::Bool:
 	    //painter->save();
 	    if(value.toBool()) {
-		QImage img(":/images/ok.png");
-		painter->drawImage(option.rect.center().x()-img.width()/2,option.rect.center().y()-img.height()/2,img);
+		QImage img = QImage(":/images/button_ok.png").scaled(icoSize(), icoSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		painter->drawImage(option.rect.center().x()-img.width()/2, option.rect.center().y()-img.height()/2, img);
 	    }
 	    //painter->restore();
 	    break;

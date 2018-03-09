@@ -41,3 +41,75 @@
  	    </tbl>
  	    <tbl id="Security_grp">
  		<fld NAME="Archive" DESCR="Archives-History" DESCR_uk="Архіви-Історія" DESCR_ru="Архивы-История" />
+--- data/oscada.xml~	2018-03-06 20:39:42.019544934 +0200
++++ data/oscada.xml	2018-03-06 20:43:59.858864026 +0200
+@@ -22,8 +22,13 @@
+ 	<node id="sub_UI">
+ 	    <node id="mod_QTStarter">
+ 		<prm id="Style"></prm>
+-		<prm id="Palette"></prm>
+-		<prm id="StyleSheets"></prm>
++		<prm id="Palette">#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
++#808080, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #808080, #bfe2f4, #808080, #c3c3c3, #9db9c8, #000000, #558097, #808080, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
++#000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000</prm>
++		<prm id="StyleSheets">* { font: 16pt; }
++QDialog { border: 2px solid green; border-radius: 4px; padding: 2px; }
++QScrollBar:horizontal { height: 30px; } QScrollBar:vertical { width: 30px; }
++QSplitter::handle:horizontal { width: 30px; } QSplitter::handle:vertical { height: 30px; }</prm>
+ 	    </node>
+ 	</node>
+     </station>
+--- data/oscada_start.xml~	2018-03-06 20:36:22.360072422 +0200
++++ data/oscada_start.xml	2018-03-06 20:44:28.650788012 +0200
+@@ -65,8 +65,13 @@
+ 		<prm id="StartMod">QTCfg</prm>
+ 		<prm id="CloseToTray">0</prm>
+ 		<prm id="Style"></prm>
+-		<prm id="Palette"></prm>
+-		<prm id="StyleSheets"></prm>
++		<prm id="Palette">#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
++#808080, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #808080, #bfe2f4, #808080, #c3c3c3, #9db9c8, #000000, #558097, #808080, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
++#000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000</prm>
++		<prm id="StyleSheets">* { font: 16pt; }
++QDialog { border: 2px solid green; border-radius: 4px; padding: 2px; }
++QScrollBar:horizontal { height: 30px; } QScrollBar:vertical { width: 30px; }
++QSplitter::handle:horizontal { width: 30px; } QSplitter::handle:vertical { height: 30px; }</prm>
+ 		<tbl id="LookFeel">
+ 		    <fld NAME="Typical TDE" STYLE="" STL_SHTS="">
+ 			<PALETTE>#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b
+--- data/ModelsDB/AGLKS/oscada_AGLKS.xml~	2018-03-06 20:46:55.638480236 +0200
++++ data/ModelsDB/AGLKS/oscada_AGLKS.xml	2018-03-06 20:47:12.034462189 +0200
+@@ -387,8 +387,13 @@
+ 		<prm id="StartMod">QTCfg</prm>
+ 		<prm id="CloseToTray">0</prm>
+ 		<prm id="Style"></prm>
+-		<prm id="Palette"></prm>
+-		<prm id="StyleSheets"></prm>
++		<prm id="Palette">#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
++#808080, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #808080, #bfe2f4, #808080, #c3c3c3, #9db9c8, #000000, #558097, #808080, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
++#000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000</prm>
++		<prm id="StyleSheets">* { font: 16pt; }
++QDialog { border: 2px solid green; border-radius: 4px; padding: 2px; }
++QScrollBar:horizontal { height: 30px; } QScrollBar:vertical { width: 30px; }
++QSplitter::handle:horizontal { width: 30px; } QSplitter::handle:vertical { height: 30px; }</prm>
+ 		<tbl id="LookFeel">
+ 		    <fld NAME="Typical TDE" STYLE="" STL_SHTS="">
+ 			<PALETTE>#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b
+--- data/ModelsDB/Boiler/oscada_Boiler.xml~	2018-03-06 20:48:09.070398905 +0200
++++ data/ModelsDB/Boiler/oscada_Boiler.xml	2018-03-06 20:48:31.742373533 +0200
+@@ -380,8 +380,13 @@
+ 		<prm id="StartMod">Vision</prm>
+ 		<prm id="CloseToTray">0</prm>
+ 		<prm id="Style"></prm>
+-		<prm id="Palette"></prm>
+-		<prm id="StyleSheets"></prm>
++		<prm id="Palette">#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
++#808080, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #808080, #bfe2f4, #808080, #c3c3c3, #9db9c8, #000000, #558097, #808080, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
++#000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000</prm>
++		<prm id="StyleSheets">* { font: 16pt; }
++QDialog { border: 2px solid green; border-radius: 4px; padding: 2px; }
++QScrollBar:horizontal { height: 30px; } QScrollBar:vertical { width: 30px; }
++QSplitter::handle:horizontal { width: 30px; } QSplitter::handle:vertical { height: 30px; }</prm>
+ 		<tbl id="LookFeel">
+ 		    <fld NAME="Typical TDE" STYLE="" STL_SHTS="">
+ 			<PALETTE>#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b

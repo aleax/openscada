@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 08:46+0200\n"
+"POT-Creation-Date: 2018-03-09 16:17+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -267,6 +267,9 @@ msgstr "Рівень"
 
 msgid "Message"
 msgstr "Повідомлення"
+
+msgid "Clear the current alarms table"
+msgstr "Очистити таблицю поточних порушень."
 
 msgid "Values"
 msgstr "Значення"
@@ -2512,6 +2515,7 @@ msgstr "Архів повідомлень не підтримується!"
 msgid "Value archiver not supported!"
 msgstr "Архів значень не підтримується!"
 
+#, c-format
 msgid "Function '%s' is not supported!"
 msgstr "Функція '%s' не підтримується!"
 
@@ -2519,6 +2523,7 @@ msgstr "Функція '%s' не підтримується!"
 msgid "%s: No function set!"
 msgstr "%s: Функцію не встановлено!"
 
+#, c-format
 msgid "%s: Error with ID or IO %d for the function '%s'!"
 msgstr "%s: Помилка ідентифікатору або IO %d для функції '%s'!"
 

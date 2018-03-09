@@ -56,6 +56,8 @@ typedef vector<pair<string,string> > AttrValS;
 
 namespace VISION
 {
+    extern int icoSize( float mult = 1 );
+
     //*********************************************
     //* Id and name input dialog                  *
     //*********************************************

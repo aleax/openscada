@@ -63,7 +63,7 @@ INSERT INTO "wlb_test_incl" VALUES('FormElTests','bt1','/wlb_originals/wdg_FormE
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','bt2','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;mode;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','bt3','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;elType;color;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','bt4','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;img;',2);
-INSERT INTO "wlb_test_incl" VALUES('TextEltests','text1','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;alignment;text;',2);
+INSERT INTO "wlb_test_incl" VALUES('TextEltests','text1','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;alignment;inHtml;text;',2);
 INSERT INTO "wlb_test_incl" VALUES('TextEltests','text2','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
 INSERT INTO "wlb_test_incl" VALUES('TextEltests','text3','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
 INSERT INTO "wlb_test_incl" VALUES('TextEltests','text5','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;font;color;orient;alignment;text;',2);
@@ -370,7 +370,7 @@ INSERT INTO "wlb_test_io" VALUES('TextEltests','geomW','50',32,'','','text2','',
 INSERT INTO "wlb_test_io" VALUES('TextEltests','font','Arial 11 1',32,'','','text2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('TextEltests','geomX','53',32,'','','text2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('TextEltests','alignment','8',32,'','','text1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('TextEltests','text','Simple text',32,'','','text1','Простий текст','','Простой текст','','','');
+INSERT INTO "wlb_test_io" VALUES('TextEltests','text','Simple <b style="color: blue"><font size="+1">HTML</font></b> <i>text</i>',32,'','','text1','Простий <b style="color: blue"><font size="+1">HTML</font></b> <i>текст</i>','','Простой <b style="color: blue"><font size="+1">HTML</font></b> <i>текст</i>','','','');
 INSERT INTO "wlb_test_io" VALUES('TextEltests','geomX','3',32,'','','text1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('TextEltests','geomY','3',32,'','','text1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('TextEltests','geomW','50',32,'','','text1','','','','','','');
@@ -687,6 +687,7 @@ INSERT INTO "wlb_test_io" VALUES('FormElTests','items','<tbl colsWdthFit="1">
 </tbl>','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','tbl','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','105',32,'','','tree','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('TextEltests','inHtml','1',32,'','','text1','','','','','','');
 CREATE TABLE 'wlb_test_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_test_mime" VALUES('bake','image/png;9.79492','iVBORw0KGgoAAAANSUhEUgAAAKAAAADICAYAAABvaOoaAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
 WXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH1wcEDiUDhclhJwAAAB10RVh0Q29tbWVudABDcmVhdGVk
@@ -1777,7 +1778,7 @@ ay55ZNro441Bt3FVe4dt470PnLPPiKJVbh8vl3Iz4uQc+yOdq9kDgIjPKrl+F9Vqx33LhIceDikU
 uNF14zQI6BgQInREylJ5VpWEowFIlKaiXJMgkqMtsro+FrzOkqz4pD6UZiYMjXyrSsrd9DuExur1
 YQjYe4ABoFTe7L8sAEilkMvujD0D9NTsDnVJmUxld821dw0BH3yN8PvGPvko2N4IZxPHZCj6Lkyc
 2qlTpzZufPS6Prdsko64qYUPhKb+eg2m9Vrl/x05OSpKJhPT0qa82z8RtLTQ/wchCi3G/U9zOQAA
-AABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;geomW;geomH;backColor;bordWidth;bordColor;',1374518075);
+AABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;geomW;geomH;backColor;bordWidth;bordColor;',1520617537);
 INSERT INTO "wlb_test" VALUES('MediaTests','iVBORw0KGgoAAAANSUhEUgAAAEAAAAA4CAIAAADCemklAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAPn0lEQVRogdVaaWxc13W+9+3vzZs3O7chh0NS3ESK2mjJlC1ZkmE5cVMX
 TWGndtq0TZMWCBq0TlsYRfPHaIq2aV3kj+vaaBIgLdK6ieV4SbwFtRztkkVtpEhxX4fiDIec/e33

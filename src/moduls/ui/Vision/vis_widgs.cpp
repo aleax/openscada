@@ -42,6 +42,7 @@
 #include <QStatusBar>
 #include <QToolTip>
 #include <QCompleter>
+#include <QDesktopWidget>
 
 #include <tsys.h>
 
@@ -54,6 +55,8 @@ using namespace VISION;
 
 #undef _
 #define _(mess) mod->I18N(mess, lang.c_str())
+
+int VISION::icoSize( float mult )	{ return (int)(mult * QFontMetrics(qApp->font()).height()); }
 
 //*************************************************
 //* Id and name input dialog                      *
@@ -120,7 +123,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
     if(!ico_t.load(TUIS::icoGet("button_cancel",NULL,true).c_str())) ico_t.load(":/images/button_cancel.png");
     but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
-    dlg_lay->addWidget( but_box );
+    dlg_lay->addWidget(but_box);
 
     resize(400, 120+(40*with_nm)+(40*with_id));
 }
@@ -153,6 +156,10 @@ void InputDlg::showEvent( QShowEvent * event )
     QSize src = size();
     adjustSize();
     resize(size().expandedTo(src));
+
+#if defined(__ANDROID__)
+    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
+#endif
 }
 
 //*************************************************
@@ -247,6 +254,10 @@ void DlgUser::showEvent( QShowEvent * event )
     QSize src = size();
     adjustSize();
     resize(size().expandedTo(src));
+
+#if defined(__ANDROID__)
+    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
+#endif
 }
 
 //*********************************************
@@ -364,7 +375,7 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
     if(!ico_t.load(TUIS::icoGet("button_cancel",NULL,true).c_str())) ico_t.load(":/images/button_cancel.png");
     but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
-    dlg_lay->addWidget( but_box, 5, 0, 1, 2 );
+    dlg_lay->addWidget(but_box, 5, 0, 1, 2);
 
     setFont(ifnt);
 }
@@ -409,6 +420,10 @@ void FontDlg::showEvent( QShowEvent * event )
     QSize src = size();
     adjustSize();
     resize(size().expandedTo(src));
+
+#if defined(__ANDROID__)
+    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
+#endif
 }
 
 //*********************************************************************************************
@@ -435,10 +450,10 @@ void LineEdit::viewApplyBt( bool view )
 
     if(view && !bt_fld) {
 	bt_fld = new QPushButton(this);
-	bt_fld->setIcon(QIcon(":/images/ok.png"));
-	bt_fld->setIconSize(QSize(12,12));
+	bt_fld->setIcon(QIcon(":/images/button_ok.png"));
+	bt_fld->setIconSize(QSize(icoSize(),icoSize()));
 	bt_fld->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-	bt_fld->setMaximumWidth(15);
+	bt_fld->setMaximumWidth(icoSize(1.2));
 	connect(bt_fld, SIGNAL(clicked()), this, SLOT(applySlot()));
 	layout()->addWidget(bt_fld);
     }
@@ -830,12 +845,12 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
 	but_box->button(QDialogButtonBox::Apply)->setText("");
 	if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
 	but_box->button(QDialogButtonBox::Apply)->setIcon(QPixmap::fromImage(ico_t));
-	but_box->button(QDialogButtonBox::Apply)->setIconSize(QSize(12,12));
+	but_box->button(QDialogButtonBox::Apply)->setIconSize(QSize(icoSize(),icoSize()));
 	connect(but_box->button(QDialogButtonBox::Apply), SIGNAL(pressed()), this, SLOT(applySlot()));
 	but_box->button(QDialogButtonBox::Cancel)->setText("");
 	if(!ico_t.load(TUIS::icoGet("button_cancel",NULL,true).c_str())) ico_t.load(":/images/button_cancel.png");
 	but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
-	but_box->button(QDialogButtonBox::Cancel)->setIconSize(QSize(12,12));
+	but_box->button(QDialogButtonBox::Cancel)->setIconSize(QSize(icoSize(),icoSize()));
 	connect(but_box->button(QDialogButtonBox::Cancel), SIGNAL(pressed()), this, SLOT(cancelSlot()));
 	but_box->setVisible(false);
 	but_box->setEnabled(false);

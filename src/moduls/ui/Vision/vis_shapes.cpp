@@ -362,11 +362,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		if(!wdg || !qobject_cast<QPushButton*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QPushButton("test", w);
-#if QT_VERSION < 0x050000
+/*#if QT_VERSION < 0x050000
 		    wdg->setStyle(new QPlastiqueStyle());
 #else
 		    wdg->setStyle(new QCommonStyle());
-#endif
+#endif*/
 		    wdg->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 		    if(runW) {
 			connect(wdg, SIGNAL(pressed()), this, SLOT(buttonPressed()));
@@ -1306,27 +1306,35 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 	case A_TextColor: shD->color = getColor(val);			break;
 	case A_TextOrient: shD->orient = s2i(val);			break;
 	case A_TextWordWrap:
-	    if(s2i(val)) shD->text_flg |= Qt::TextWordWrap; else shD->text_flg &= (~Qt::TextWordWrap);
+	    shD->options.setWrapMode(s2i(val)?QTextOption::WordWrap:QTextOption::NoWrap);
 	    break;
-	case A_TextAlignment:
-	    shD->text_flg &= ~(Qt::AlignLeft|Qt::AlignRight|Qt::AlignHCenter|Qt::AlignJustify|Qt::AlignTop|Qt::AlignBottom|Qt::AlignVCenter);
+	case A_TextAlignment: {
+	    short int text_flg = 0;
 	    switch(s2i(val)&0x3) {
-		case 0: shD->text_flg |= Qt::AlignLeft;		break;
-		case 1: shD->text_flg |= Qt::AlignRight;	break;
-		case 2: shD->text_flg |= Qt::AlignHCenter;	break;
-		case 3: shD->text_flg |= Qt::AlignJustify;	break;
+		case 0: text_flg |= Qt::AlignLeft;	break;
+		case 1: text_flg |= Qt::AlignRight;	break;
+		case 2: text_flg |= Qt::AlignHCenter;	break;
+		case 3: text_flg |= Qt::AlignJustify;	break;
 	    }
 	    switch(s2i(val)>>2) {
-		case 0: shD->text_flg |= Qt::AlignTop;		break;
-		case 1: shD->text_flg |= Qt::AlignBottom;	break;
-		case 2: shD->text_flg |= Qt::AlignVCenter;	break;
+		case 0: text_flg |= Qt::AlignTop;	break;
+		case 1: text_flg |= Qt::AlignBottom;	break;
+		case 2: text_flg |= Qt::AlignVCenter;	break;
 	    }
+	    shD->options.setAlignment((Qt::Alignment)text_flg);
 	    break;
+	}
 	case A_TextText:
 	    if(shD->text_tmpl == val.c_str())	break;
 	    shD->text_tmpl = val;
 	    reform = true;
 	    break;
+	case A_TextHTML: {
+	    if((bool)shD->inHtml == (bool)s2i(val))	break;
+	    shD->inHtml = (bool)s2i(val);
+	    reform = true;
+	    break;
+	}
 	case A_TextNumbArg: {
 	    int numbArg = s2i(val);
 	    while((int)shD->args.size() < numbArg) shD->args.push_back(ArgObj());
@@ -1418,9 +1426,30 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	    dA = QRect(QPoint(-wdth/2,-heigt/2), QSize(wdth,heigt));
 
 	    //Draw text
-	    pnt.setPen(shD->color);
-	    pnt.setFont(getFont(shD->font,vmin(w->xScale(true),w->yScale(true))));
-	    pnt.drawText(dA, shD->text_flg, shD->text.c_str());
+	    if(shD->inHtml) {
+		QTextDocument td;
+		td.setPageSize(QSize(wdth,heigt));
+		QString htmlStl;
+		//htmlStl += QString("margin: 0; padding: 0; ");
+		if(shD->color.isValid())		htmlStl += QString("color: %1; ").arg(shD->color.name());
+		htmlStl += QString("white-space: %1; ").arg(shD->options.wrapMode()?"pre-wrap":"pre");
+		td.setDefaultStyleSheet(QString("body { %1 }").arg(htmlStl));
+		td.setDefaultFont(getFont(shD->font,vmin(w->xScale(true),w->yScale(true))));
+		td.setDefaultTextOption(shD->options);
+		td.setHtml(QString("<body>%1</body>").arg(shD->text.c_str()));
+
+		if(shD->options.alignment()&Qt::AlignVCenter)	heigt = td.size().height();
+		else if(shD->options.alignment()&Qt::AlignBottom) heigt -= 2*(heigt - td.size().height());
+
+		pnt.translate(-wdth/2, -heigt/2);
+		dA = QRect(QPoint(0,0), QSize(wdth,td.size().height()));
+		td.drawContents(&pnt, dA);
+	    }
+	    else {
+		pnt.setPen(shD->color);
+		pnt.setFont(getFont(shD->font,vmin(w->xScale(true),w->yScale(true))));
+		pnt.drawText(dA, shD->text.c_str(), shD->options);
+	    }
 
 	    event->accept( );
 	    return true;

@@ -733,7 +733,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
 		    txtVal = txtVal.replace('%'+(i+1),argVal);
 		}
-		this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal+"</span>";
+		var spEl = this.place.children.length ? this.place.children[0] : this.place.ownerDocument.createElement('span');
+		this.place.appendChild(spEl);
+		if(parseInt(this.attrs['inHtml'])) spEl.innerHTML = txtVal;
+		else spEl.innerText = txtVal;
+		spEl.setAttribute('style', spanStyle);
+		//this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal+"</span>";
 	    //}
 	    //else this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+
 	    //				"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(3)+"&ySc="+ySc.toFixed(3)+"'/>";

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 08:46+0200\n"
+"POT-Creation-Date: 2018-03-09 16:17+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -268,6 +268,9 @@ msgstr "Уровень"
 
 msgid "Message"
 msgstr "Сообщение"
+
+msgid "Clear the current alarms table"
+msgstr "Очистить таблицу текущих нарушений"
 
 msgid "Values"
 msgstr "Значения"
@@ -2349,6 +2352,7 @@ msgstr "Ошибка идентификатора типа параметра!"
 msgid "Parameter type '%s' is not present."
 msgstr "Тип параметра '%s' отсутствует."
 
+#, c-format
 msgid "Error attaching the new controller '%s'."
 msgstr "Ошибка подключения нового контроллера '%s'."
 
@@ -2387,6 +2391,7 @@ msgstr "Логический"
 msgid "-select"
 msgstr "-выбор"
 
+#, c-format
 msgid ""
 "Parameter attribute\n"
 "  ID: '%s'\n"
@@ -2420,6 +2425,7 @@ msgstr "Архивация"
 msgid "Not selective type!"
 msgstr "Не выборочный тип!"
 
+#, c-format
 msgid "Error writing a value to the archive: %s"
 msgstr "Ошибка записи значения в архив: %s"
 
@@ -2436,9 +2442,11 @@ msgstr "Ошибка выделения памяти для строки бол�
 msgid "Attempt to double disconnect!"
 msgstr "Попытка двойного отключения!"
 
+#, c-format
 msgid "Error deleting the child '%d'."
 msgstr "Ошибка удаления потомка '%d'."
 
+#, c-format
 msgid "Child '%d' is not allowed."
 msgstr "Потомок '%d' не доступен."
 
@@ -2446,9 +2454,11 @@ msgstr "Потомок '%d' не доступен."
 msgid "Child %s:%d is not found!"
 msgstr "Потомок %s:%d не обнаружен!"
 
+#, c-format
 msgid "2:Error opening the file '%s': %s"
 msgstr "2:Ошибка открытия файла '%s': %s"
 
+#, c-format
 msgid "3:Error loading the file '%s'."
 msgstr "3:Ошибка загрузки файла '%s'."
 
@@ -2459,6 +2469,7 @@ msgstr "Объект не подключен к узлу дерева OpenSCADA.
 msgid "Child %d is not present."
 msgstr "Потомок %d отсутствует."
 
+#, c-format
 msgid "Child with the attribute %s=%s is not present."
 msgstr "Потомок с атрибутом %s=%s отсутствует."
 
@@ -2466,6 +2477,7 @@ msgstr "Потомок с атрибутом %s=%s отсутствует."
 msgid "Unexpected end. Pos: %d"
 msgstr "Неожиданный конец. Поз: %d"
 
+#, c-format
 msgid "No comment block completion. Pos: %d"
 msgstr "Нет окончания блока комментария. Поз: %d"
 
@@ -2481,6 +2493,7 @@ msgstr "Незавершённый контейнер '!DOCTYPE [ ]'. Поз: %d
 msgid "Unexpected or error end tag. Pos: %d"
 msgstr "Неожиданный или ошибочный тег завершения. Поз: %d"
 
+#, c-format
 msgid "Unfinished start of comment or unknown block. Pos: %d"
 msgstr "Незавершённое начало комментария или неизвестный блок. Поз: %d"
 
@@ -2492,6 +2505,7 @@ msgstr "Ошибка начала тега. Поз: %d"
 msgid "Unfinished attribute. Pos: %d"
 msgstr "Незавершённый атрибут. Поз: %d"
 
+#, c-format
 msgid "Error entity. Pos: %d"
 msgstr "Ошибка сущности. Поз: %d"
 
@@ -2505,6 +2519,7 @@ msgstr "Архив сообщений не поддерживается!"
 msgid "Value archiver not supported!"
 msgstr "Архив значений не поддерживается!"
 
+#, c-format
 msgid "Function '%s' is not supported!"
 msgstr "Функция '%s' не поддерживается!"
 
@@ -2512,6 +2527,7 @@ msgstr "Функция '%s' не поддерживается!"
 msgid "%s: No function set!"
 msgstr "%s: Функция не установлена!"
 
+#, c-format
 msgid "%s: Error with ID or IO %d for the function '%s'!"
 msgstr "%s: Ошибка идентификатора или IO %d для функции '%s'!"
 

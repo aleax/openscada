@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 15:11+0200\n"
+"POT-Creation-Date: 2018-03-09 16:58+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -626,6 +626,9 @@ msgstr ""
 "ліворуч;Знизу праворуч;Знизу у центрі;Знизу по ширині;У центрі ліворуч;У "
 "центрі праворуч;У центрі;У центрі по ширині"
 
+msgid "In HTML"
+msgstr "У HTML"
+
 msgid "Text"
 msgstr "Текст"
 
@@ -646,6 +649,12 @@ msgstr ": значення"
 
 msgid ": config"
 msgstr ": конфігурація"
+
+msgid ""
+"Text value in HTML. Use \"%{x}\" for argument \"x\" (from 1) value insert."
+msgstr ""
+"Значення тексту у HTML. Використовуйте \"%{x}\" для розташування значення аргументу "
+"\"n\" (від 1)."
 
 msgid "Text value. Use \"%{x}\" for argument \"x\" (from 1) value insert."
 msgstr ""

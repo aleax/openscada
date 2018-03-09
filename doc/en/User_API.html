@@ -13,7 +13,7 @@
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/ru" title="Документация/API пользователя (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/uk" title="Документація/API користувача (100% translated)">українська</a></div></div>
 <p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </p>
-<dl><dd><dl><dd><a class="external text" href="http://wiki.oscada.org/MaximLysenko" rel="nofollow noreferrer noopener" target="_blank">Maxim Lysenko</a> (2012) — the page translation</dd></dl></dd></dl>
+<dl><dd><dl><dd>Maxim Lysenko (2012) — the page translation</dd></dl></dd></dl>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#The_user_programming_language_JavaLikeCalc"><span class="tocnumber">1</span> <span class="toctext"><span>The user programming language JavaLikeCalc</span></span></a>
@@ -34,7 +34,7 @@
 <li class="toclevel-1 tocsection-2"><a href="#System-wide_user_objects"><span class="tocnumber">2</span> <span class="toctext">System-wide user objects</span></a>
 <ul>
 <li class="toclevel-2 tocsection-3"><a href="#Array_object"><span class="tocnumber">2.1</span> <span class="toctext"><span>Array object</span></span></a></li>
-<li class="toclevel-2 tocsection-4"><a href="#RegExp_object"><span class="tocnumber">2.2</span> <span class="toctext">RegExp object</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#RegExp_object"><span class="tocnumber">2.2</span> <span class="toctext"><span>RegExp object</span></span></a></li>
 <li class="toclevel-2 tocsection-5"><a href="#XML_node-tag_object_.28XMLNodeObj.29"><span class="tocnumber">2.3</span> <span class="toctext">XML node-tag object (XMLNodeObj)</span></a></li>
 </ul>
 </li>
@@ -77,7 +77,7 @@
 
 <p>Before programming in OpenSCADA, you must examine the object structure of the program (Object Model) in <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">OpenSCADA Program Manual</a> and in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 1. User object model of the core OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1202px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="540" src="files/Oscada_UserOM.png" width="1200" /></a>  <div class="thumbcaption">Fig. 1. User object model of the core OpenSCADA.</div></div></div></div>
 <p>From the document you will see that you can program next parts of OpenSCADA as the user:
 </p>
 <ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#Virtual" title="Special:MyLanguage/Documents/DAQ">Logical level sources of the subsystem "DAQ"</a>.</li>
@@ -237,87 +237,80 @@ rez = sum(1, 2);
 <h2><span class="mw-headline" id="System-wide_user_objects"><span class="mw-headline-number">2</span> System-wide user objects</span></h2>
 <p>JavaLikeCalc provides support of the data type "Object" . The data type "Object" is an associated container of properties and functions. The properties can support data of fourth basic types and other objects. Access to object properties can be done through the record of property names to the object <i>obj.prop</i>, through a dot, and also through the inclusion of the property name in square brackets <i>obj["prop"]</i>. It is obvious that the first mechanism is static, while the second lets you to specify the name of the property through a variable. Object's properties removing you can perform by the operator "delete". Reading of an undefined property will return <b>EVAL</b>. Creating an object is carried by the keyword <i>new</i>: <b>varO = new Object()</b>. The basic definition of the object does not contain functions. Copying of an object is actually makes the reference to the original object. When you delete an object is carried out the reducing of the reference count, and when the count is set to zero then the object is removed physically.
 </p><p>Different components of OpenSCADA can define the basic object with special properties and functions. The standard extension of the object is an array "Array", which is created by the command <b>varO = new Array(prm1,prm2,prm3,...,prmN)</b>. Comma-separated parameters are placed in the array in the original order. If the parameter is the only one the array is initiated by the specified number of empty elements. Peculiarity of the array is that it works with the properties as the indexes and the main mechanism of addressing is placing the index into square brackets <i>arr[1]</i> is accessible. Array stores the properties in its own container of the one-dimensional array. Digital properties of the array are used to access directly to the array, and the characters work as the object properties. For more details about the properties and functions of the array can be read <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#Array" title="Special:MyLanguage/Documents/User API">here</a>.
-</p><p>&lt;/translate&gt;
-</p>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> The translation checking and actualizing are going here
-</td></tr></table>
-</div>
-<p>&lt;translate&gt;
-</p><p>The object of regular expression "RegExp" is created by command <b>varO = new RegExp(pat,flg)</b>, where <i>pat</i> — pattern of regular expression, and <i>flg</i> — match flags. The object for work with regular expressions, based on the library "PCRE". In the global search set object attribute "lastIndex", which allows you to continue searching for the next function call. In the case of an unsuccessful search for the attribute "lastIndex" reset to zero. For more details about the properties and functions of the regular expression object can be read <a class="external" href="http://oscada.org/wiki/Documents/User_API#RegExp_object" title="Documents/User API">here</a>.
-</p><p>For random access to the arguments of the functions provided the arguments object, which you can refer to by the symbol "arguments". This object contains the property "length" with a number of arguments in functions and allows you to access to a value of the argument by its number or ID. Consider the enumeration of the arguments on the cycle:
+</p><p>The object of regular expression "RegExp" is created by command <b>varO = new RegExp(pat, flg)</b>, where <i>pat</i> — pattern of the regular expression, and <i>flg</i> — match flags. The object for work with regular expressions, based on the library "PCRE". In the global search set object attribute "lastIndex", which allows you to continue searching for the next function call. In the case of an unsuccessful search for the attribute "lastIndex" reset to zero. For more details about the properties and functions of the regular expression object can be read <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#RegExp" title="Special:MyLanguage/Documents/User API">here</a>.
+</p><p>For random access to the arguments of functions provided the arguments object, which you can refer to by the symbol "arguments". This object contains the property "length" with a number of arguments in the function and allows you to access to a value of the argument by its number or ID. Consider the enumeration of the arguments on the cycle:
 </p>
 <pre style="white-space: pre-wrap;">
 args = new Array();
-for(var i=0; i &lt; arguments.length; i++)
+for(var i = 0; i &lt; arguments.length; i++)
   args[i] = arguments[i];
 </pre>
 <p>The basic types have the partial properties of the object. Properties and functions of the basic types are listed below: 
 </p>
 <ul><li> NULL type, functions:
-<ul><li> <i>bool isEVal();</i> — Return "true".</li></ul></li></ul>
+<ul><li> <i>bool isEVal();</i> — returns "true".</li></ul></li></ul>
 <ul><li> Logical type, functions:
-<ul><li> <i>bool isEVal();</i> — Check value to "EVAL".</li>
-<li> <i>string toString();</i> — Performs the value as the string "true" or "false".</li></ul></li></ul>
+<ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
+<li> <i>string toString();</i> — performs the value as the string "true" or "false".</li></ul></li></ul>
+<dl><dd><ul><li> <i>real toReal();</i> — reads this Boolean as a real number.</li>
+<li> <i>int toInt();</i> — reads this Boolean as an integer number.</li></ul></dd></dl>
 <ul><li> Integer and real number:</li></ul>
 <dl><dd><dl><dt> <i>Properties:</i></dt></dl>
 <ul><li> <i>MAX_VALUE</i> — maximum value; </li>
 <li> <i>MIN_VALUE</i> — minimum value;</li>
 <li> <i>NaN</i> —  error value.</li></ul>
 <dl><dt> <i>Functions:</i></dt></dl>
-<ul><li> <i>bool isEVal();</i> — Check value to "EVAL".</li>
-<li> <i>string toExponential( int numbs = -1 );</i> — Return the string of the number, formatted in exponential notation, and with the number of significant digits <i>numbs</i>. If <i>numbs</i> is missing the number of digits will have as much as needed.</li>
-<li> <i>string toFixed( int numbs = 0, int len = 0, bool sign = false );</i> — Return the string of the number, formatted in the notation of fixed-point, and with the number of significant digits after the decimal point <i>numbs</i> for minimum length <i>len</i> and strong sign present <i>sign</i>. If <i>numbs</i> is missing the number of digits after the decimal point is equal to zero.</li>
-<li> <i>string toPrecision( int prec = -1 );</i> — Return the string of the formatted number with the number of significant digits <i>prec</i>.</li>
-<li> <i>string toString( int base = 10, int len = -1, bool sign = false );</i> — Return the string of the formatted number of integer type with the following representation base (2-36) for minimum length <i>len</i> and strong sign present <i>sign</i>.</li></ul></dd></dl>
+<ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
+<li> <i>string toExponential( int numbs = -1 );</i> — returns the string of the number, formatted in the exponential notation, and with the number of significant digits <i>numbs</i>. If <i>numbs</i> is missing the number of digits will have as much as needed.</li>
+<li> <i>string toFixed( int numbs = 0, int len = 0, bool sign = false );</i> — returns the string of the number, formatted in the notation of fixed-point, and with the number of significant digits after the decimal point <i>numbs</i>, for minimum length <i>len</i> and compulsion to the presence of a <i>sign</i>. If <i>numbs</i> is missing, the number of digits after the decimal point is equal to zero.</li>
+<li> <i>string toPrecision( int prec = -1 );</i> — returns the string of the number, formatted with the number of significant digits <i>prec</i>.</li>
+<li> <i>string toString( int base = 10, int len = -1, bool sign = false );</i> — returns the string of the number of the integer type, formatted with the following representation <i>base</i> (2-36), for minimum length <i>len</i> and compulsion to the presence of a <i>sign</i>.</li>
+<li> <i>real toReal();</i> — reads this integer-real as a real number.</li>
+<li> <i>int toInt();</i> — reads this integer-real as an integer number.</li></ul></dd></dl>
 <ul><li> String: </li></ul>
 <dl><dd><dl><dt> <i>Properties:</i></dt></dl>
 <ul><li> <i>int length</i> — string length. </li></ul>
 <dl><dt> <i>Functions:</i></dt></dl>
-<ul><li> <i>bool isEVal();</i> — Check value to "EVAL".</li>
-<li> <i>string charAt( int symb );</i> — Extracts from the string the symbol <i>symb</i>, numbering from zero.</li>
-<li> <i>int charCodeAt( int symb );</i> — Extracts from the string the symbol code <i>symb</i>.</li>
-<li> <i>string concat( string val1, string val2, ... );</i> — Returns a new string formed by joining the values <i>val1</i> etc. to the original one.</li>
-<li> <i>int indexOf( string substr, int start );</i> — Returns the position of the required string <i>substr</i> in the original row from the position <i>start</i>. If the initial position is not specified then the search starts from the beginning. If the search string is not found then "-1" is returned.</li>
-<li> <i>int lastIndexOf( string substr, int start );</i> — Returns the position of the search string <i>substr</i> in the original one beginning from the position of <i>start</i> when searching from the end. If the initial position is not specified then the search begins from the end. If the search string is not found then "-1" is returned.</li>
-<li> <i>int search( string pat, string flg = "" );</i> — Search into the string by pattern <i>pat</i> and pattern's flags <i>flg</i>. Return found substring position or "-1" for else.</li></ul></dd></dl>
+<ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
+<li> <i>string charAt( int symb );</i> — extracts from the string the symbol <i>symb</i>, numbering from zero.</li>
+<li> <i>int charCodeAt( int symb );</i> — extracts from the string the symbol code <i>symb</i>.</li>
+<li> <i>string concat( string val1, string val2, ... );</i> — returns a new string formed by joining the values <i>val1</i> etc. to the original one.</li>
+<li> <i>int indexOf( string substr, int start );</i> — returns the position of the required string <i>substr</i> in the original row from the position <i>start</i>. If the initial position is not specified then the search starts from the beginning. If the search string is not found then "-1" is returned.</li>
+<li> <i>int lastIndexOf( string substr, int start );</i> — returns the position of the search string <i>substr</i> in the original one beginning from the position of <i>start</i> when searching from the end. If the initial position is not specified then the search begins from the end. If the search string is not found then "-1" is returned.</li>
+<li> <i>int search( string pat, string flg = "" );</i> — searches into the string by the pattern <i>pat</i> and pattern's flags <i>flg</i>. Returns found substring position or "-1" for else.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "Java123Script".search("script","i");  // rez = 7</pre>
-<dl><dd><ul><li> <i>int search( RegExp pat );</i> — Search into the string by "RegExp" pattern <i>pat</i>. Return found substring position or "-1" for else.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>int search( RegExp pat );</i> — searches into the string by the "RegExp" pattern <i>pat</i>. Returns found substring position or "-1" for else.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "Java123Script".search(new RegExp("script","i"));  // rez = 7</pre>
-<dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — Call match for the string by pattern <i>pat</i> and flags <i>flg</i>. Return matched substring (0) and subexpressions (&gt;0) array. Set "index" attribute of the array to substring position. Set "input" attribute to source string.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — calls match for the string by the pattern <i>pat</i> and flags <i>flg</i>. Returns matched substring (0) and subexpressions (&gt;0) array. Sets "index" attribute of the array to the substring position. Sets the "input" attribute to the source string.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "1 plus 2 plus 3".match("\\d+","g");  // rez = [1], [2], [3]</pre>
-<dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — Call match for the string and "RegExp" pattern <i>pat</i>. Return matched substring (0) and subexpressions (&gt;0) array. Set "index" attribute of the array to substring position. Set "input" attribute to source string.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — calls match for the string and "RegExp" pattern <i>pat</i>. Returns matched substring (0) and subexpressions (&gt;0) array. Sets the "index" attribute of the array to substring position. Sets the "input" attribute to the source string.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "1 plus 2 plus 3".match(new RegExp("\\d+","g"));  // rez = [1], [2], [3]</pre>
-<dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — Return the string extracted from the original one starting from the <i>beg</i> position and ending before the <i>end</i> (not included), numbering from zero. If the beginning or end is negative, then the count is conducted from the end of the line. If the end is not specified, then the end is the end of the line. For example, the construction <b>substring(-2)</b> return two last symbols of the string.</li>
-<li> <i>Array split( string sep, int limit );</i> — Return the array of strings separated by <i>sep</i> with the limit of the number of elements <i>limit</i>.</li>
-<li> <i>Array split( RegExp pat, int limit );</i> — Return the array of strings separated by RegExp pattern <i>pat</i> with the limit of the number of elements <i>limit</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — returns the string extracted from the original one starting from the <i>beg</i> position and ending before the <i>end</i> (not included), numbering from zero. If the begin or end is negative, then the count is conducted from the end of the line. If the end is not specified, then the end is the end of the line. For example, the construction <b>substring(-2)</b> return two last symbols of the string.</li>
+<li> <i>Array split( string sep, int limit );</i> — returns the array of strings separated by <i>sep</i> with the <i>limit</i> of the number of elements.</li>
+<li> <i>Array split( RegExp pat, int limit );</i> — returns the array of strings separated by the RegExp pattern <i>pat</i> with the <i>limit</i> of the number of elements.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 rez = "1,2, 3 , 4 ,5".split(new RegExp("\\s*,\\s*"));  // rez = [1], [2], [3], [4], [5]</pre>
-<dl><dd><ul><li> <i>string insert( int pos, string substr );</i> — Insert substring <i>substr</i> into this string's position <i>pos</i>.</li>
-<li> <i>string replace( int pos, int n, string str );</i> — Replace substring into position <i>pos</i> and length <i>n</i> to string <i>str</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>string insert( int pos, string substr );</i> — inserts the substring <i>substr</i> into this string's position <i>pos</i>.</li>
+<li> <i>string replace( int pos, int n, string str );</i> — replaces substring into the position <i>pos</i> and length <i>n</i> to the string <i>str</i>.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 rez = "Javascript".replace(4,3,"67");  // rez = "Java67ipt"</pre>
-<dl><dd><ul><li> <i>string replace( string substr, string str );</i> — Replace all substrings <i>"substr"</i> to string <i>"str"</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>string replace( string substr, string str );</i> — replaces all the substrings <i>substr</i> to the string <i>str</i>.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 rez = "123 321".replace("3","55");  // rez = "1255 5521"</pre>
-<dl><dd><ul><li> <i>string replace( RegExp pat, string str );</i> — Replace substrings by pattern <i>pat</i> to string <i>str</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>string replace( RegExp pat, string str );</i> — replaces substrings by the pattern <i>pat</i> to the string <i>str</i>.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // rez = "value = ``123''"</pre>
-<dl><dd><ul><li> <i>real toReal();</i> — Convert this string to real number.</li>
-<li> <i>int toInt( int base = 0 );</i> — Convert this string to integer number in accordance with the base <i>base</i> (from 2 to 36). If base is 0, then the prefix will be considered a record for determining the base (123-decimal; 0123-octal; 0x123-hex).</li>
-<li> <i>string parse( int pos, string sep = ".", int off = 0 );</i> — Get token with number <i>pos</i> from the string when separated by <i>sep</i> and from offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
-<li> <i>string parseLine( int pos, int off = 0 );</i> — Get line number <i>pos</i> from the string and from offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
-<li> <i>string parsePath( int pos, int off = 0 );</i> — Get path token with number <i>pos</i> from the string and from offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
-<li> <i>string path2sep( string sep = "." );</i> — Convert path into this string to separated by <i>sep</i> string.</li>
-<li> <i>string trim( string cfg = " \n\t\r" );</i> — String trimming at begin and end for symbols <i>cfg</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>real toReal();</i> — converts this string to a real number.</li>
+<li> <i>int toInt( int base = 0 );</i> — converts this string to an integer number in accordance with <i>base</i> (from 2 to 36). If the base is 0, then the prefix will be considered a prefix for determining the base (123-decimal; 0123-octal; 0x123-hex).</li>
+<li> <i>string parse( int pos, string sep = ".", int off = 0 );</i> — gets a token with the number <i>pos</i> from the string when separated by <i>sep</i> and from the offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
+<li> <i>string parseLine( int pos, int off = 0 );</i> — gets a line with the number <i>pos</i> from the string and from the offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
+<li> <i>string parsePath( int pos, int off = 0 );</i> — gets a path token with the number <i>pos</i> from the string and from the offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
+<li> <i>string path2sep( string sep = "." );</i> — converts path into this string to separated by <i>sep</i> string.</li>
+<li> <i>string trim( string cfg = " \n\t\r" );</i> — trims the string at the begin and the end for the symbols <i>cfg</i>.</li></ul></dd></dl>
 <p><br />
 </p>
 <h3><span class="mw-headline" id="Array_object"><span class="mw-headline-number">2.1</span> <span id="Array" title="#Array">Array object</span></span></h3>
@@ -334,7 +327,7 @@ rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // r
 <li> <i>Array slice( int beg, int end );</i> — returns an array fragment from <i>beg</i> to <i>end</i> (exclude). If the value of beginning or end is negative, then the count is made from the end of the array. If the end is not specified, then the end is the end of the array.</li>
 <li> <i>Array splice( int beg, int remN, ElTp val1, ElTp val2, ... );</i> — inserts, deletes or replaces the elements of the array. Returns the removed elements array. Firstly it is made the removing of elements from the position <i>beg</i> and in the quantity of <i>remN</i>, and then the values <i>val1</i> are inserted and so on, beginning from the position <i>beg</i>.</li>
 <li> <i>Array sort( );</i> — sorts array elements in the lexicographical order.</li></ul>
-<h3><span class="mw-headline" id="RegExp_object"><span class="mw-headline-number">2.2</span> RegExp object</span></h3>
+<h3><span class="mw-headline" id="RegExp_object"><span class="mw-headline-number">2.2</span> <span id="RegExp" title="#RegExp">RegExp object</span></span></h3>
 <p>Object of work with the regular expressions, based on the library PCRE. In the global search sets object attribute "lastIndex", which allows you to continue the searching at the next function call. In the case of an unsuccessful search the attribute "lastIndex" resets to zero.
 </p><p>As arguments for creating the object, a string with regular expression text and a flags box in the form of a character string is passed:
 </p>
@@ -587,10 +580,10 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc.png" title="User object model of the module JavaLikeCalc."><img alt="User object model of the module JavaLikeCalc." height="214" src="files/Oscada_UserOM_JavaLikeCalc.png" width="223" /></a></div>
 <p><b>The object "Functions library" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
 </p>
-<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — call the library function "<i>funcID</i>" of library "<i>Lfunc</i>". Return result of the called function. The prefix "lib_" before the library identifier is required!</li></ul>
+<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — calls the function "funcID" of the library "Lfunc" with the parameters <i>prm{N}</i>. Returns result of the called function. The prefix "lib_" before the library identifier is required!</li></ul>
 <p><b>The object "User function" ( SYS.DAQ.JavaLikeCalc["lib_Lfunc"]["func"] )</b>
 </p>
-<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — call the function "<i>func</i>" of library "<i>Lfunc</i>" with parameters "<i>prm{N}</i>". Return result of the called function. The prefix "lib_" before the library identifier is required!</li></ul>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — calls the function "func" of the library "Lfunc" with the parameters <i>prm{N}</i>. Returns result of the called function. The prefix "lib_" before the library identifier is required!</li></ul>
 <h3><span class="mw-headline" id="Module_DAQ.LogicLev"><span class="mw-headline-number">7.2</span> Module <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a></span></h3>
 <p><b>The object "Parameter" [this]</b>
 </p>

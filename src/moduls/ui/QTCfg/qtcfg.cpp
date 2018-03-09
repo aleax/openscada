@@ -22,7 +22,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include <QApplication>
 #include <QToolTip>
 #include <QTreeWidget>
 #include <QHeaderView>
@@ -143,9 +142,11 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
 
     titleLab = new QLabel(gFrame);
     //titleLab->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred) );
-    QFont titleLab_font(titleLab->font());
-    titleLab_font.setPointSize(14);
-    titleLab->setFont(titleLab_font);
+    QFont tFnt(titleLab->font());
+    if(tFnt.pointSizeF() > 0)	tFnt.setPointSizeF(tFnt.pointSizeF()*1.4);
+    else if(tFnt.pixelSize() > 0) tFnt.setPixelSize(tFnt.pixelSize()*1.4);
+    //tFnt.setPointSize(14);
+    titleLab->setFont(tFnt);
     titleLab->setWordWrap(true);
     gFrameLayout->addWidget(titleLab, 0, 1);
 
@@ -376,6 +377,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     //Create tool bars
     // Main tool bar
     QToolBar *toolBar = new QToolBar(_("OpenSCADA toolbar"), this);
+    toolBar->setIconSize(QSize(icoSize(1.7),icoSize(1.7)));
     toolBar->setAllowedAreas(Qt::AllToolBarAreas);
     addToolBar(Qt::TopToolBarArea, toolBar);
     toolBar->setMovable(true);
@@ -400,6 +402,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     toolBar->addAction(actManualPage);
     // QTStarter
     QToolBar *tB = new QToolBar("QTStarter", this);
+    tB->setIconSize(QSize(icoSize(1.7),icoSize(1.7)));
     tB->setObjectName("QTStarterTool");
     addToolBar(Qt::TopToolBarArea, tB);
     tB->setMovable(true);
@@ -522,7 +525,7 @@ void ConfApp::hostStSet( const QString &hid, int lnkOK, const QImage &img, const
     for(unsigned iTop = 0; iTop < (unsigned)CtrTree->topLevelItemCount(); ++iTop) {
 	QTreeWidgetItem *nit = CtrTree->topLevelItem(iTop);
 	if(hid.toStdString() != TSYS::pathLev(nit->text(2).toStdString(),0)) continue;
-	nit->setIcon(0, img.isNull() ? QPixmap() : QPixmap::fromImage(img).scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+	nit->setIcon(0, img.isNull() ? QPixmap() : QPixmap::fromImage(img).scaled(icoSize(),icoSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation));
 	if(lnkOK > 0 && !nit->data(0,Qt::UserRole).toBool()) {
 	    //? Used for rechange status for fix indicator hide after all childs remove on bad connection
 	    nit->setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
@@ -1034,7 +1037,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		string simg = TSYS::strDecode(req.text(), TSYS::base64);
 		QImage img;
 		if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
-		    titleIco->setPixmap(QPixmap::fromImage(img.scaled(32,32,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+		    titleIco->setPixmap(QPixmap::fromImage(img.scaled(icoSize(2),icoSize(2),Qt::KeepAspectRatio,Qt::SmoothTransformation)));
 		else titleIco->clear();
 	    }
 	} else titleIco->clear();
@@ -1112,7 +1115,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    int sclFitSz = lastW ? (scrl->maximumViewportSize().height() - (lastW->y()+lastW->height()) - 10): 0;
 
 		    //Same fitting
-		    for(int fitStp = vmax(5, sclFitSz/(10*vmax(1,texts.length()+tbls.length()+lsts.length()))), iScN = 0; sclFitSz > fitStp; ) {
+		    for(int fitStp = vmax(5, sclFitSz/(4*vmax(1,texts.length()+tbls.length()+lsts.length()))), iScN = 0; sclFitSz > fitStp; ) {
 			QAbstractScrollArea *sclIt = NULL, *tEl = NULL;
 			bool sclFromBeg = (iScN == 0);
 			for( ; iScN < (texts.length()+tbls.length()+lsts.length()) && !sclIt; iScN++) {
@@ -2237,7 +2240,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 		string simg = TSYS::strDecode(chIco->text(),TSYS::base64);
 		QImage img;
 		if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
-		    it->setIcon(0,QPixmap::fromImage(img).scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+		    it->setIcon(0, QPixmap::fromImage(img).scaled(icoSize(),icoSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation));
 	    }
 	    // Set groups
 	    QStringList it_grp;

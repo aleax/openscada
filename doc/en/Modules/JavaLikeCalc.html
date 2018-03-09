@@ -11,14 +11,6 @@
 </div>
 			<h1 id="firstHeading" lang="en">Modules/JavaLikeCalc</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/JavaLikeCalc/ru" title="Модули/Вычислитель похожий на Java (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/JavaLikeCalc/uk" title="Модулі/Обчислювач подібний до Java (100% translated)">українська</a></div></div>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> The translation checking and actualizing
-</td></tr></table>
-</div>
 <table class="wikitable">
 
 <tr>
@@ -37,7 +29,7 @@
 <tr>
 <td> <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
 <td> Calculator on the Java-like language </td>
-<td> 3.7 </td>
+<td> 3.8 </td>
 <td> GPL2 </td>
 <td> daq_JavaLikeCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -63,11 +55,11 @@
 </ul>
 </li>
 <li class="toclevel-2 tocsection-10"><a href="#Object"><span class="tocnumber">1.5</span> <span class="toctext">Object</span></a></li>
-<li class="toclevel-2 tocsection-11"><a href="#Examples_of_programs_on_the_language"><span class="tocnumber">1.6</span> <span class="toctext">Examples of programs on the language</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Examples_of_programs_on_this_language"><span class="tocnumber">1.6</span> <span class="toctext">Examples of programs on this language</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-12"><a href="#Controller_and_its_configuration"><span class="tocnumber">2</span> <span class="toctext"><span>Controller and its configuration</span></span></a></li>
-<li class="toclevel-1 tocsection-13"><a href="#The_parameter_of_the_controller_and_its_configuration"><span class="tocnumber">3</span> <span class="toctext">The parameter of the controller and its configuration</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Controller_object_and_its_configuration"><span class="tocnumber">2</span> <span class="toctext"><span>Controller object and its configuration</span></span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Parameter_of_the_controller_object_and_its_configuration"><span class="tocnumber">3</span> <span class="toctext">Parameter of the controller object and its configuration</span></a></li>
 <li class="toclevel-1 tocsection-14"><a href="#Libraries_of_functions_of_the_module"><span class="tocnumber">4</span> <span class="toctext"><span>Libraries of functions of the module</span></span></a></li>
 <li class="toclevel-1 tocsection-15"><a href="#User_functions_of_the_module"><span class="tocnumber">5</span> <span class="toctext">User functions of the module</span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#User_programming_API"><span class="tocnumber">6</span> <span class="toctext">User programming API</span></a></li>
@@ -81,7 +73,7 @@
 </p><p>The module implements the functions of the horizontal redundancy, that is working in conjunction with the remote station of the same level. In addition to the synchronization of the archives of values and archives of attributes of parameters, the module implements synchronization of computational function, in order to shockless holding of the algorithms.
 </p><p>Parameters of functions can be freely created, deleted or modified. The current version of the module supports up to 65535 parameters of the function, in the sum with the internal variables. The view of editing functions in the OpenSCADA configurator is shown in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1081px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_funcedit.png"><img class="thumbimage" height="631" src="../files/JavaLikeCalc_funcedit.png" width="1079" /></a>  <div class="thumbcaption">Fig.1. View of editing functions in the OpenSCADA configurator.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1198px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_funcedit.png"><img class="thumbimage" height="661" src="../files/JavaLikeCalc_funcedit.png" width="1196" /></a>  <div class="thumbcaption">Fig.1. View of editing functions in the OpenSCADA configurator.</div></div></div></div>
 <p>After any change in the program text or parameter configuration, the program is recompiled by notifying the values objects <i>TValCfg</i> associated with the function. The language compiler is built using the well-known grammar generator "Bison", which is compatible with the no less well-known "Yacc" utility.
 </p><p>The language uses the implicit definition of local variables, which is to define a new variable in the case of assigning a value to it. This type of local variable is set according to the type of the assigning value. For example, the expression <b>Qr=Q0*Pi+0.01;</b> will define <b>Qr</b> variable with the type of variable <b>Q0</b>.
 </p><p>In working with various types of data the language uses the mechanism of casting the types in the places where such casting is appropriate.
@@ -264,90 +256,85 @@ rez = sum(1, 2);
 <h3><span class="mw-headline" id="Object"><span class="mw-headline-number">1.5</span> Object</span></h3>
 <p>JavaLikeCalc provides support of the data type "Object" . The data type "Object" is an associated container of properties and functions. The properties can support data of fourth basic types and other objects. Access to object properties can be done through the record of property names to the object <i>obj.prop</i>, through a dot, and also through the inclusion of the property name in square brackets <i>obj["prop"]</i>. It is obvious that the first mechanism is static, while the second lets you to specify the name of the property through a variable. Object's properties removing you can perform by the operator "delete". Reading of an undefined property will return <b>EVAL</b>. Creating an object is carried by the keyword <i>new</i>: <b>varO = new Object()</b>. The basic definition of the object does not contain functions. Copying of an object is actually makes the reference to the original object. When you delete an object is carried out the reducing of the reference count, and when the count is set to zero then the object is removed physically.
 </p><p>Different components of OpenSCADA can define the basic object with special properties and functions. The standard extension of the object is an array "Array", which is created by the command <b>varO = new Array(prm1,prm2,prm3,...,prmN)</b>. Comma-separated parameters are placed in the array in the original order. If the parameter is the only one the array is initiated by the specified number of empty elements. Peculiarity of the array is that it works with the properties as the indexes and the main mechanism of addressing is placing the index into square brackets <i>arr[1]</i> is accessible. Array stores the properties in its own container of the one-dimensional array. Digital properties of the array are used to access directly to the array, and the characters work as the object properties. For more details about the properties and functions of the array can be read <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#Array" title="Special:MyLanguage/Documents/User API">here</a>.
-</p>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> The translation checking and actualizing are going here
-</td></tr></table>
-</div>
-<p>The object of regular expression "RegExp" is created by command <b>varO = new RegExp(pat,flg)</b>, where <i>pat</i> — pattern of regular expression, and <i>flg</i> — match flags. The object for work with regular expressions, based on the library "PCRE". In the global search set object attribute "lastIndex", which allows you to continue searching for the next function call. In the case of an unsuccessful search for the attribute "lastIndex" reset to zero. For more details about the properties and functions of the regular expression object can be read <a class="external" href="http://oscada.org/wiki/Documents/User_API#RegExp_object" title="Documents/User API">here</a>.
-</p><p>For random access to the arguments of the functions provided the arguments object, which you can refer to by the symbol "arguments". This object contains the property "length" with a number of arguments in functions and allows you to access to a value of the argument by its number or ID. Consider the enumeration of the arguments on the cycle:
+</p><p>The object of regular expression "RegExp" is created by command <b>varO = new RegExp(pat, flg)</b>, where <i>pat</i> — pattern of the regular expression, and <i>flg</i> — match flags. The object for work with regular expressions, based on the library "PCRE". In the global search set object attribute "lastIndex", which allows you to continue searching for the next function call. In the case of an unsuccessful search for the attribute "lastIndex" reset to zero. For more details about the properties and functions of the regular expression object can be read <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/User_API#RegExp" title="Special:MyLanguage/Documents/User API">here</a>.
+</p><p>For random access to the arguments of functions provided the arguments object, which you can refer to by the symbol "arguments". This object contains the property "length" with a number of arguments in the function and allows you to access to a value of the argument by its number or ID. Consider the enumeration of the arguments on the cycle:
 </p>
 <pre style="white-space: pre-wrap;">
 args = new Array();
-for(var i=0; i &lt; arguments.length; i++)
+for(var i = 0; i &lt; arguments.length; i++)
   args[i] = arguments[i];
 </pre>
 <p>The basic types have the partial properties of the object. Properties and functions of the basic types are listed below: 
 </p>
 <ul><li> NULL type, functions:
-<ul><li> <i>bool isEVal();</i> — Return "true".</li></ul></li></ul>
+<ul><li> <i>bool isEVal();</i> — returns "true".</li></ul></li></ul>
 <ul><li> Logical type, functions:
-<ul><li> <i>bool isEVal();</i> — Check value to "EVAL".</li>
-<li> <i>string toString();</i> — Performs the value as the string "true" or "false".</li></ul></li></ul>
+<ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
+<li> <i>string toString();</i> — performs the value as the string "true" or "false".</li></ul></li></ul>
+<dl><dd><ul><li> <i>real toReal();</i> — reads this Boolean as a real number.</li>
+<li> <i>int toInt();</i> — reads this Boolean as an integer number.</li></ul></dd></dl>
 <ul><li> Integer and real number:</li></ul>
 <dl><dd><dl><dt> <i>Properties:</i></dt></dl>
 <ul><li> <i>MAX_VALUE</i> — maximum value; </li>
 <li> <i>MIN_VALUE</i> — minimum value;</li>
 <li> <i>NaN</i> —  error value.</li></ul>
 <dl><dt> <i>Functions:</i></dt></dl>
-<ul><li> <i>bool isEVal();</i> — Check value to "EVAL".</li>
-<li> <i>string toExponential( int numbs = -1 );</i> — Return the string of the number, formatted in exponential notation, and with the number of significant digits <i>numbs</i>. If <i>numbs</i> is missing the number of digits will have as much as needed.</li>
-<li> <i>string toFixed( int numbs = 0, int len = 0, bool sign = false );</i> — Return the string of the number, formatted in the notation of fixed-point, and with the number of significant digits after the decimal point <i>numbs</i> for minimum length <i>len</i> and strong sign present <i>sign</i>. If <i>numbs</i> is missing the number of digits after the decimal point is equal to zero.</li>
-<li> <i>string toPrecision( int prec = -1 );</i> — Return the string of the formatted number with the number of significant digits <i>prec</i>.</li>
-<li> <i>string toString( int base = 10, int len = -1, bool sign = false );</i> — Return the string of the formatted number of integer type with the following representation base (2-36) for minimum length <i>len</i> and strong sign present <i>sign</i>.</li></ul></dd></dl>
+<ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
+<li> <i>string toExponential( int numbs = -1 );</i> — returns the string of the number, formatted in the exponential notation, and with the number of significant digits <i>numbs</i>. If <i>numbs</i> is missing the number of digits will have as much as needed.</li>
+<li> <i>string toFixed( int numbs = 0, int len = 0, bool sign = false );</i> — returns the string of the number, formatted in the notation of fixed-point, and with the number of significant digits after the decimal point <i>numbs</i>, for minimum length <i>len</i> and compulsion to the presence of a <i>sign</i>. If <i>numbs</i> is missing, the number of digits after the decimal point is equal to zero.</li>
+<li> <i>string toPrecision( int prec = -1 );</i> — returns the string of the number, formatted with the number of significant digits <i>prec</i>.</li>
+<li> <i>string toString( int base = 10, int len = -1, bool sign = false );</i> — returns the string of the number of the integer type, formatted with the following representation <i>base</i> (2-36), for minimum length <i>len</i> and compulsion to the presence of a <i>sign</i>.</li>
+<li> <i>real toReal();</i> — reads this integer-real as a real number.</li>
+<li> <i>int toInt();</i> — reads this integer-real as an integer number.</li></ul></dd></dl>
 <ul><li> String: </li></ul>
 <dl><dd><dl><dt> <i>Properties:</i></dt></dl>
 <ul><li> <i>int length</i> — string length. </li></ul>
 <dl><dt> <i>Functions:</i></dt></dl>
-<ul><li> <i>bool isEVal();</i> — Check value to "EVAL".</li>
-<li> <i>string charAt( int symb );</i> — Extracts from the string the symbol <i>symb</i>, numbering from zero.</li>
-<li> <i>int charCodeAt( int symb );</i> — Extracts from the string the symbol code <i>symb</i>.</li>
-<li> <i>string concat( string val1, string val2, ... );</i> — Returns a new string formed by joining the values <i>val1</i> etc. to the original one.</li>
-<li> <i>int indexOf( string substr, int start );</i> — Returns the position of the required string <i>substr</i> in the original row from the position <i>start</i>. If the initial position is not specified then the search starts from the beginning. If the search string is not found then "-1" is returned.</li>
-<li> <i>int lastIndexOf( string substr, int start );</i> — Returns the position of the search string <i>substr</i> in the original one beginning from the position of <i>start</i> when searching from the end. If the initial position is not specified then the search begins from the end. If the search string is not found then "-1" is returned.</li>
-<li> <i>int search( string pat, string flg = "" );</i> — Search into the string by pattern <i>pat</i> and pattern's flags <i>flg</i>. Return found substring position or "-1" for else.</li></ul></dd></dl>
+<ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
+<li> <i>string charAt( int symb );</i> — extracts from the string the symbol <i>symb</i>, numbering from zero.</li>
+<li> <i>int charCodeAt( int symb );</i> — extracts from the string the symbol code <i>symb</i>.</li>
+<li> <i>string concat( string val1, string val2, ... );</i> — returns a new string formed by joining the values <i>val1</i> etc. to the original one.</li>
+<li> <i>int indexOf( string substr, int start );</i> — returns the position of the required string <i>substr</i> in the original row from the position <i>start</i>. If the initial position is not specified then the search starts from the beginning. If the search string is not found then "-1" is returned.</li>
+<li> <i>int lastIndexOf( string substr, int start );</i> — returns the position of the search string <i>substr</i> in the original one beginning from the position of <i>start</i> when searching from the end. If the initial position is not specified then the search begins from the end. If the search string is not found then "-1" is returned.</li>
+<li> <i>int search( string pat, string flg = "" );</i> — searches into the string by the pattern <i>pat</i> and pattern's flags <i>flg</i>. Returns found substring position or "-1" for else.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "Java123Script".search("script","i");  // rez = 7</pre>
-<dl><dd><ul><li> <i>int search( RegExp pat );</i> — Search into the string by "RegExp" pattern <i>pat</i>. Return found substring position or "-1" for else.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>int search( RegExp pat );</i> — searches into the string by the "RegExp" pattern <i>pat</i>. Returns found substring position or "-1" for else.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "Java123Script".search(new RegExp("script","i"));  // rez = 7</pre>
-<dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — Call match for the string by pattern <i>pat</i> and flags <i>flg</i>. Return matched substring (0) and subexpressions (&gt;0) array. Set "index" attribute of the array to substring position. Set "input" attribute to source string.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — calls match for the string by the pattern <i>pat</i> and flags <i>flg</i>. Returns matched substring (0) and subexpressions (&gt;0) array. Sets "index" attribute of the array to the substring position. Sets the "input" attribute to the source string.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "1 plus 2 plus 3".match("\\d+","g");  // rez = [1], [2], [3]</pre>
-<dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — Call match for the string and "RegExp" pattern <i>pat</i>. Return matched substring (0) and subexpressions (&gt;0) array. Set "index" attribute of the array to substring position. Set "input" attribute to source string.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — calls match for the string and "RegExp" pattern <i>pat</i>. Returns matched substring (0) and subexpressions (&gt;0) array. Sets the "index" attribute of the array to substring position. Sets the "input" attribute to the source string.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "1 plus 2 plus 3".match(new RegExp("\\d+","g"));  // rez = [1], [2], [3]</pre>
-<dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — Return the string extracted from the original one starting from the <i>beg</i> position and ending before the <i>end</i> (not included), numbering from zero. If the beginning or end is negative, then the count is conducted from the end of the line. If the end is not specified, then the end is the end of the line. For example, the construction <b>substring(-2)</b> return two last symbols of the string.</li>
-<li> <i>Array split( string sep, int limit );</i> — Return the array of strings separated by <i>sep</i> with the limit of the number of elements <i>limit</i>.</li>
-<li> <i>Array split( RegExp pat, int limit );</i> — Return the array of strings separated by RegExp pattern <i>pat</i> with the limit of the number of elements <i>limit</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — returns the string extracted from the original one starting from the <i>beg</i> position and ending before the <i>end</i> (not included), numbering from zero. If the begin or end is negative, then the count is conducted from the end of the line. If the end is not specified, then the end is the end of the line. For example, the construction <b>substring(-2)</b> return two last symbols of the string.</li>
+<li> <i>Array split( string sep, int limit );</i> — returns the array of strings separated by <i>sep</i> with the <i>limit</i> of the number of elements.</li>
+<li> <i>Array split( RegExp pat, int limit );</i> — returns the array of strings separated by the RegExp pattern <i>pat</i> with the <i>limit</i> of the number of elements.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 rez = "1,2, 3 , 4 ,5".split(new RegExp("\\s*,\\s*"));  // rez = [1], [2], [3], [4], [5]</pre>
-<dl><dd><ul><li> <i>string insert( int pos, string substr );</i> — Insert substring <i>substr</i> into this string's position <i>pos</i>.</li>
-<li> <i>string replace( int pos, int n, string str );</i> — Replace substring into position <i>pos</i> and length <i>n</i> to string <i>str</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>string insert( int pos, string substr );</i> — inserts the substring <i>substr</i> into this string's position <i>pos</i>.</li>
+<li> <i>string replace( int pos, int n, string str );</i> — replaces substring into the position <i>pos</i> and length <i>n</i> to the string <i>str</i>.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 rez = "Javascript".replace(4,3,"67");  // rez = "Java67ipt"</pre>
-<dl><dd><ul><li> <i>string replace( string substr, string str );</i> — Replace all substrings <i>"substr"</i> to string <i>"str"</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>string replace( string substr, string str );</i> — replaces all the substrings <i>substr</i> to the string <i>str</i>.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 rez = "123 321".replace("3","55");  // rez = "1255 5521"</pre>
-<dl><dd><ul><li> <i>string replace( RegExp pat, string str );</i> — Replace substrings by pattern <i>pat</i> to string <i>str</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>string replace( RegExp pat, string str );</i> — replaces substrings by the pattern <i>pat</i> to the string <i>str</i>.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // rez = "value = ``123''"</pre>
-<dl><dd><ul><li> <i>real toReal();</i> — Convert this string to real number.</li>
-<li> <i>int toInt( int base = 0 );</i> — Convert this string to integer number in accordance with the base <i>base</i> (from 2 to 36). If base is 0, then the prefix will be considered a record for determining the base (123-decimal; 0123-octal; 0x123-hex).</li>
-<li> <i>string parse( int pos, string sep = ".", int off = 0 );</i> — Get token with number <i>pos</i> from the string when separated by <i>sep</i> and from offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
-<li> <i>string parseLine( int pos, int off = 0 );</i> — Get line number <i>pos</i> from the string and from offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
-<li> <i>string parsePath( int pos, int off = 0 );</i> — Get path token with number <i>pos</i> from the string and from offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
-<li> <i>string path2sep( string sep = "." );</i> — Convert path into this string to separated by <i>sep</i> string.</li>
-<li> <i>string trim( string cfg = " \n\t\r" );</i> — String trimming at begin and end for symbols <i>cfg</i>.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>real toReal();</i> — converts this string to a real number.</li>
+<li> <i>int toInt( int base = 0 );</i> — converts this string to an integer number in accordance with <i>base</i> (from 2 to 36). If the base is 0, then the prefix will be considered a prefix for determining the base (123-decimal; 0123-octal; 0x123-hex).</li>
+<li> <i>string parse( int pos, string sep = ".", int off = 0 );</i> — gets a token with the number <i>pos</i> from the string when separated by <i>sep</i> and from the offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
+<li> <i>string parseLine( int pos, int off = 0 );</i> — gets a line with the number <i>pos</i> from the string and from the offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
+<li> <i>string parsePath( int pos, int off = 0 );</i> — gets a path token with the number <i>pos</i> from the string and from the offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
+<li> <i>string path2sep( string sep = "." );</i> — converts path into this string to separated by <i>sep</i> string.</li>
+<li> <i>string trim( string cfg = " \n\t\r" );</i> — trims the string at the begin and the end for the symbols <i>cfg</i>.</li></ul></dd></dl>
 <p><br />
-For access to system objects (nodes) of the OpenSCADA the corresponding object is provided which is created simply by specifying the enter point "SYS" of the root object OpenSCADA, and then with the point separator the sub-objects in accordance with the hierarchy are specified. For example, the call of the request function over the outgoing transport is carried out as follows: <b>SYS.Transport.Sockets.out_testModBus.messIO(Special.FLibSYS.strEnc2Bin("15 01 00 00 00 06 01 03 00 00 00 05"));</b>.
+For access to <a href="../User_API.html" title="Special:MyLanguage/Documents/User API">the system objects(nodes) of OpenSCADA</a> the corresponding object is provided which is created simply by specifying the enter point "SYS" of the root object OpenSCADA, and then with the point separator the sub-objects in accordance with the hierarchy are specified. For example, the call of the request function over the outgoing transport is carried out as follows: <b>SYS.Transport.Sockets.out_testModBus.messIO(Special.FLibSYS.strEnc2Bin("15 01 00 00 00 06 01 03 00 00 00 05"));</b>.
 </p>
-<h3><span class="mw-headline" id="Examples_of_programs_on_the_language"><span class="mw-headline-number">1.6</span> Examples of programs on the language</span></h3>
-<p>Here are some examples of programs on Java-like language:
+<h3><span class="mw-headline" id="Examples_of_programs_on_this_language"><span class="mw-headline-number">1.6</span> Examples of programs on this language</span></h3>
+<p>Here are some examples of programs on the Java-like language:
 </p>
 <pre style="white-space: pre-wrap;">
 //Model of the course of the executive machinery of ball valve
@@ -371,34 +358,34 @@ Po += 0.27*(Fi-Fo)/(So*lo*Q0*frq);
 Po = (Po&lt;0)&nbsp;? 0&nbsp;: (Po&gt;100)&nbsp;? 100&nbsp;: Po;
 To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*frq);
 </pre>
-<h2><span class="mw-headline" id="Controller_and_its_configuration"><span class="mw-headline-number">2</span> <span id="Controller" title="#Controller">Controller and its configuration</span></span></h2>
-<p>The controller of the module connects with the functions of libraries, built with his help, to provide immediate calculations. In order to provide calculated data in the system OpenSCADA parameters can be created in the controller. Example of the configuration tab of the controller of the given type depicted in Figure 2.
+<h2><span class="mw-headline" id="Controller_object_and_its_configuration"><span class="mw-headline-number">2</span> <span id="Controller" title="#Controller">Controller object and its configuration</span></span></h2>
+<p>The controller object of the module connects with the functions of libraries, built with his help, to provide immediate calculations. In order to provide calculated data in OpenSCADA, parameters can be created in the controller. Example of the configuration tab of the controller object of the given type shown in Figure 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:709px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr.png"><img class="thumbimage" height="619" src="../files/JavaLikeCalc_cntr.png" width="707" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a controller.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:750px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr.png"><img class="thumbimage" height="661" src="../files/JavaLikeCalc_cntr.png" width="748" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of the controller object.</div></div></div></div>
 <p>From this tab you can set:
 </p>
-<ul><li> The state of the controller, as follows: Status, "Enable", "Run" and the name of the database containing the configuration.</li>
+<ul><li> The state of the controller object, as follows: Status, "Enable", "Running" and the name of the database containing the configuration.</li>
 <li> Id, name and description of the controller.</li>
-<li> The state, in which the controller must be translated at boot: "To enable" and "To start".</li>
-<li> Name of table to store the settings.</li>
+<li> The state, in which the controller object must be translated at the program startup: "Enabled" and "Running".</li>
+<li> Name of a table to store the settings.</li>
 <li> Address of the computational function.</li>
-<li> The calculation schedule policy, priority and number of iterations in one cycle of calculating task.</li></ul>
-<p>Tab "Calculations" of the controller (Fig. 3) contains the parameters and the text of the program, directly performed by the controller. Also for monitoring of execution the time of calculating of the program is shown. Module provide processing a number of special options available in the controller program:
+<li> The calculation schedule policy, priority and number of iterations in one cycle of calculation task.</li></ul>
+<p>Tab "Calculation" of the controller object (Fig. 3) contains parameters and a text of the program, are directly performed by the controller. Also, for monitoring of the execution, the time of calculating of the program is shown. The module provides processing a number of special options available in the controller program:
 </p>
-<ul><li> <i>f_frq</i> — The controller program calculate frequency, read-only.</li>
-<li> <i>f_start</i> — First calculate of the controller program, start, read-only.</li>
-<li> <i>f_stop</i> — Last calculate of the controller program, stop, read-only.</li>
-<li> <i>this</i> — The controller object.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:822px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr_calc.png"><img class="thumbimage" height="643" src="../files/JavaLikeCalc_cntr_calc.png" width="820" /></a>  <div class="thumbcaption">Fig.3. Tab "Calculations" of a controller.</div></div></div></div>
-<h2><span class="mw-headline" id="The_parameter_of_the_controller_and_its_configuration"><span class="mw-headline-number">3</span> The parameter of the controller and its configuration</span></h2>
-<p>Parameter of the controller of the module executes the function of providing the access to the results of computation of the controller to the system OpenSCADA by attributes if the parameters. Configuration tab contains only one specific field of the , set the controller only contains a field of listing the parameters of calculated function, which should be reflected.
+<ul><li> <i>f_frq</i> — calculation frequency of the controller program, read-only.</li>
+<li> <i>f_start</i> — first calculation of the controller program — starting, read-only.</li>
+<li> <i>f_stop</i> — last calculation of the controller program — stopping, read-only.</li>
+<li> <i>this</i> — the controller object.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:838px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr_calc.png"><img class="thumbimage" height="661" src="../files/JavaLikeCalc_cntr_calc.png" width="836" /></a>  <div class="thumbcaption">Fig.3. Tab "Calculation" of the controller object.</div></div></div></div>
+<h2><span class="mw-headline" id="Parameter_of_the_controller_object_and_its_configuration"><span class="mw-headline-number">3</span> Parameter of the controller object and its configuration</span></h2>
+<p>Parameter of the controller object of the module performs the function of providing the access to the results of computation of the controller to OpenSCADA by attributes if the parameters. From the specific fields, the configuration tab of the parameter of the controller object contains only the field for listing the parameters of the computational function that must be reflected.
 </p>
 <h2><span class="mw-headline" id="Libraries_of_functions_of_the_module"><span class="mw-headline-number">4</span> <span id="FuncsLibs" title="#FuncsLibs">Libraries of functions of the module</span></span></h2>
-<p>The module provides a mechanism to create libraries of user's functions on Java-like language. Example of the configuration tab of the library is depicted in Figure 4. The tab contains the basic fields: accessing, address of the DB table, date and time of modification, identifier, name and description.
+<p>The module provides a mechanism to create libraries of user's functions on the Java-like language. Example of the configuration tab of the library is shown in Figure 4. The tab contains the basic fields: accessing, address of the DB table, date and time of modification, identifier, name and description.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:669px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_lib.png"><img class="thumbimage" height="500" src="../files/JavaLikeCalc_lib.png" width="667" /></a>  <div class="thumbcaption">Fig.4. Tab of the configuration of a library.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:701px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_lib.png"><img class="thumbimage" height="507" src="../files/JavaLikeCalc_lib.png" width="699" /></a>  <div class="thumbcaption">Fig.4. Tab of the configuration of the library.</div></div></div></div>
 <h2><span class="mw-headline" id="User_functions_of_the_module"><span class="mw-headline-number">5</span> User functions of the module</span></h2>
-<p>Function, as well as the library, contains the basic configuration tab, tab of the formation of the program and the parameters of function (Fig. 1), as well as the performance tab of the created function.
+<p>Function, as well as the library, contains the basic configuration tab, the tab of the formation of the program and the parameters of the function (Fig. 1), as well as the performance tab of the created function.
 </p>
 <h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">6</span> User programming API</span></h2>
 <p>Some objects of the module provides functions for user's programming.
@@ -406,16 +393,16 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc.png" title="User object model of the module JavaLikeCalc."><img alt="User object model of the module JavaLikeCalc." height="214" src="../files/Oscada_UserOM_JavaLikeCalc.png" width="223" /></a></div>
 <p><b>The object "Functions library" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
 </p>
-<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — call the library function "<i>funcID</i>" of library "<i>Lfunc</i>". Return result of the called function. The prefix "lib_" before the library identifier is required!</li></ul>
+<ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — calls the function "funcID" of the library "Lfunc" with the parameters <i>prm{N}</i>. Returns result of the called function. The prefix "lib_" before the library identifier is required!</li></ul>
 <p><b>The object "User function" ( SYS.DAQ.JavaLikeCalc["lib_Lfunc"]["func"] )</b>
 </p>
-<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — call the function "<i>func</i>" of library "<i>Lfunc</i>" with parameters "<i>prm{N}</i>". Return result of the called function. The prefix "lib_" before the library identifier is required!</li></ul>
+<ul><li> <i>ElTp call(ElTp prm1, ...)</i> — calls the function "func" of the library "Lfunc" with the parameters <i>prm{N}</i>. Returns result of the called function. The prefix "lib_" before the library identifier is required!</li></ul>
 <p><br />
 </p>
 <h2><span class="mw-headline" id="Productivity"><span class="mw-headline-number">7</span> <span id="Productivity" title="#Productivity">Productivity</span></span></h2>
-<p>Source texts of procedures on the language compiled to byte-code of the virtual machine which next executed by the virtual machine. The byte-code is not native machine code and achieving to productivity of the hardware platform into the virtual machine that executing is theoretical unreal, sure if the virtual machine code is not executed direct by the CPU. That is, productivity of the byte-code execution approximately low by ten to the hardware productivity by overheads to the virtual machine commands, separating multi-threads access to data, clear cast and the lack of strict typing, and also dynamic nature of the language and present complex types "String" and "Object".
+<p>Source text of the procedures on the language is compiled into a bytecode, which is then computed by the virtual machine. The bytecode is not native machine code and achieving to productivity of the hardware platform into the virtual machine that executing is theoretical unreal, sure if the virtual machine code is not executed directly by the CPU. That is, the productivity of the bytecode execution approximately low by ten to the hardware productivity due to the overhead of the virtual machine commands, the distribution of multithreaded data access, the transparent casting of types and the lack of strict typing, as well as the dynamic nature of the language and the presence of complex types "String" and "Object ".
 </p><p><b>28.01.2006:</b><br />
-<i>Description:</i> Initial estimation of productivity of the virtual machine of OpenSCADA in example of the expression <b>y=x1+x2</b>, where all the variables are global and in the float-point type.
+<i>Description:</i> Initial estimation of the productivity of the OpenSCADA virtual machine in example of the expression <b>y=x1+x2</b>, where all the variables are global and in the float-point type.
 </p>
 <table class="wikitable">
 
@@ -481,21 +468,21 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <tr>
 <td> a = b </td>
 <td> 2.5 (1.21)
-<dl><dd>!&gt; use unified TVariant function setVal() and getVal() = 7.6 (2.7 write only) =&gt; fix to 5.0 by prevent default set to string EVAL.</dd>
+<dl><dd>!&gt; using the unified TVariant function setVal() and getVal() = 7.6 (2.7 write only) =&gt; fix to 5.0 for prevent default setting to the string EVAL.</dd>
 <dd>=&gt; full call: 2.5 (0.33)</dd>
 <dd>=&gt; only write const: 2.17 (0.47)</dd>
 <dd>=&gt; only check for type: 1.7 (0.3)</dd>
 <dd>=&gt; pass code: 1.4 (0.11)</dd></dl>
 </td>
-<td> Write to function IO is longer then read from local register by other context call and additional checking for NAN and real modification.
+<td> Writing to the function IO is longer then reading from the local register for other context call and additional checking for NAN and real modification.
 </td></tr>
 <tr>
 <td> Empty </td>
 <td> 1.29 </td>
-<td> Infrastructure and measurement method utilization time.
+<td> the infrastructure and measurement method utilization time.
 </td></tr></table>
 <p><b>24.04.2016:</b><br />
-<i>Reason:</i> Estimate performance of access to low level IO lines on Raspberry Pi GPIO in different ways of JavaLikeCalc language of OpenSCADA.<br />
+<i>Reason:</i> Estimate performance of accessing to the low level IO lines on Raspberry Pi GPIO in different ways of the JavaLikeCalc language of OpenSCADA.<br />
 <i>Conditions:</i> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Raspberry_Pi" title="Special:MyLanguage/Using/Raspberry Pi">Raspberry Pi 3</a>, GPIO40, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/BCM2835" title="Special:MyLanguage/Modules/BCM2835">DAQ.BCM2835</a> (based on the library <a class="external text" href="http://www.airspayce.com/mikem/bcm2835" rel="nofollow noreferrer noopener" target="_blank">bcm2835</a>)
 </p>
 <table class="wikitable">
@@ -505,7 +492,7 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <th> Result, us
 </th></tr>
 <tr>
-<td colspan="2"> <i>Sleep. Lag on sleep in 1ms measured, which mostly limited by the realtime reaction about 100us.</i>
+<td colspan="2"> <i>Sleep. Lag on sleep in 1ms measuring, which mostly limited by the realtime reaction about 100us.</i>
 </td></tr>
 <tr>
 <td> <b>SYS.sleep();</b> </td>
@@ -516,7 +503,7 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <td> +70
 </td></tr>
 <tr>
-<td colspan="2"> <i>Sleep. Lag on sleep in 100us measured, which performs in the measuring cycle.</i>
+<td colspan="2"> <i>Sleep. Lag on sleep in 100us measuring, which performs in the measuring cycle.</i>
 </td></tr>
 <tr>
 <td> <b>SYS.sleep();</b> </td>
@@ -527,7 +514,7 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <td> +2
 </td></tr>
 <tr>
-<td colspan="2"> <i>Get GPIO pin's level</i>
+<td colspan="2"> <i>Get a level of the GPIO pin</i>
 </td></tr>
 <tr>
 <td> From an attribute <b>res = BCM2835.pi2.pi2.gpio17;</b> </td>
@@ -538,7 +525,7 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <td> 1.6
 </td></tr>
 <tr>
-<td> By the static accessing function with prepare the link <b>function get = "DAQ.BCM2835.pi2.pi2.fnc_get"; for(i = 0; i &lt; 10000; i++) res = get(17);</b> </td>
+<td> By the static accessing function with the link preparation <b>function get = "DAQ.BCM2835.pi2.pi2.fnc_get"; for(i = 0; i &lt; 10000; i++) res = get(17);</b> </td>
 <td> 1.7
 </td></tr>
 <tr>
@@ -546,11 +533,11 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <td> 80
 </td></tr>
 <tr>
-<td> By the dynamic accessing function with prepare the end object <b>tO = SYS.DAQ.BCM2835.pi2.pi2.fnc_get; for(i = 0; i &lt; 1000; i++) res = tO.call(17);</b> </td>
+<td> By the dynamic accessing function with the end object preparation <b>tO = SYS.DAQ.BCM2835.pi2.pi2.fnc_get; for(i = 0; i &lt; 1000; i++) res = tO.call(17);</b> </td>
 <td> 14.3
 </td></tr>
 <tr>
-<td colspan="2"> <i>Put GPIO pin's level</i>
+<td colspan="2"> <i>Put a level to the GPIO pin</i>
 </td></tr>
 <tr>
 <td> To an attribute <b>BCM2835.pi2.pi2.gpio18 = true;</b> </td>
@@ -561,7 +548,7 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <td> 1.4
 </td></tr>
 <tr>
-<td> By the static accessing function with prepare the link <b>function put = "DAQ.BCM2835.pi2.pi2.fnc_put"; for(i = 0; i &lt; 10000; i++) put(17, false);</b> </td>
+<td> By the static accessing function with the link preparation <b>function put = "DAQ.BCM2835.pi2.pi2.fnc_put"; for(i = 0; i &lt; 10000; i++) put(17, false);</b> </td>
 <td> 1.5
 </td></tr>
 <tr>
@@ -569,7 +556,7 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <td> 79
 </td></tr>
 <tr>
-<td> By the dynamic accessing function with prepare the end object <b>tO = SYS.DAQ.BCM2835.pi2.pi2.fnc_put; for(i = 0; i &lt; 1000; i++) tO.call(18, true);</b> </td>
+<td> By the dynamic accessing function with the end object preparation <b>tO = SYS.DAQ.BCM2835.pi2.pi2.fnc_put; for(i = 0; i &lt; 1000; i++) tO.call(18, true);</b> </td>
 <td> 14.3
 </td></tr></table>
 <h2><span class="mw-headline" id="Links"><span class="mw-headline-number">8</span> Links</span></h2>

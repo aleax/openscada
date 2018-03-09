@@ -691,7 +691,8 @@ void OrigText::postEnable( int flag )
 			    _("Top left;Top right;Top center;Top justify;"
 			    "Bottom left;Bottom right;Bottom center;Bottom justify;"
 			    "V center left;V center right;Center;V center justify"),i2s(A_TextAlignment).c_str()));
-	attrAdd(new TFld("text",_("Text"),TFld::String,TFld::TransltText|TFld::FullText,"0","Text","","",i2s(A_TextText).c_str()));
+	attrAdd(new TFld("inHtml",_("In HTML"),TFld::Boolean,Attr::Active,"1","0","","",i2s(A_TextHTML).c_str()));
+	attrAdd(new TFld("text",_("Text"),TFld::String,TFld::TransltText|TFld::FullText,"","Text","","",i2s(A_TextText).c_str()));
 	attrAdd(new TFld("numbArg",_("Arguments number"),TFld::Integer,Attr::Active,"","0","0;20","",i2s(A_TextNumbArg).c_str()));
     }
 }
@@ -759,7 +760,12 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_BackColor: case A_BordColor: case A_TextColor: el->setAttr("help",Widget::helpColor());	break;
 		    case A_TextFont: el->setAttr("help",Widget::helpFont());	break;
 		    case A_BackImg:  el->setAttr("help",Widget::helpImg());	break;
-		    case A_TextText: el->setAttr("help",_("Text value. Use \"%{x}\" for argument \"x\" (from 1) value insert.")); break;
+		    case A_TextText: {
+			bool inHTML = src->attrAt("inHtml").at().getB();
+			if(inHTML) el->setAttr("SnthHgl","1")->setAttr("help",_("Text value in HTML. Use \"%{x}\" for argument \"x\" (from 1) value insert."));
+			else el->setAttr("SnthHgl","1")->setAttr("help",_("Text value. Use \"%{x}\" for argument \"x\" (from 1) value insert."));
+			break;
+		    }
 		}
 	    }
 	    for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++) {
@@ -776,7 +782,24 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
     }
 
     //Process command to page
-    return Widget::cntrCmdAttributes(opt, src);
+    string a_path = opt->attr("path");
+    if(a_path == "/attr/text" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD)) {
+	opt->childAdd("rule")->setAttr("expr","%[0-9]")->setAttr("color","darkcyan");
+	if(src->attrAt("inHtml").at().getB()) {
+	    opt->childAdd("blk")->setAttr("beg","<!--")->setAttr("end","-->")->setAttr("color","gray")->setAttr("font_italic","1");
+	    XMLNode *tag = opt->childAdd("blk")->setAttr("beg","<\\?")->setAttr("end","\\?>")->setAttr("color","#666666");
+	    tag = opt->childAdd("blk")->setAttr("beg","<\\w+")->setAttr("end","\\/?>")->setAttr("font_weight","1");
+		tag->childAdd("rule")->setAttr("expr","\\b\\w+[ ]*(?==)")->setAttr("color","blue");
+		tag->childAdd("rule")->setAttr("expr","[ ]?\"[^\"]+\"")->setAttr("color","darkgreen");
+		tag->childAdd("rule")->setAttr("expr","[ ]?'[^']+'")->setAttr("color","darkgreen");
+	    opt->childAdd("rule")->setAttr("expr","\\%\\d*);")->setAttr("color","cyan");
+	    opt->childAdd("rule")->setAttr("expr","<\\/[\\w]+>")->setAttr("font_weight","1");
+	    opt->childAdd("rule")->setAttr("expr","&([a-zA-Z]*|#\\d*);")->setAttr("color","#AF7E00");
+	}
+    }
+    else return Widget::cntrCmdAttributes(opt, src);
+
+    return true;
 }
 
 //************************************************
