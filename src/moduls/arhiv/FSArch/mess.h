@@ -53,7 +53,7 @@ class MFileArch
 	//  free - surely free used memory
 	void check( bool free = false );
 
-	string	&name( )	{ return mName; }
+	string	name( )		{ return mName; }
 	bool	xmlM( )		{ return mXML; }
 	int	size( )		{ return mSize; }
 	time_t	begin( )	{ return mBeg; }
@@ -74,7 +74,9 @@ class MFileArch
 	void	cacheUpdate( int64_t tm, long v_add );
 
 	// Base parameters
-	string	mName;		// name Archive file;
+	ResMtx	dtRes;
+
+	MtxString mName;	// name Archive file;
 	bool	mXML;		// XML mode file
 	int	mSize;		// Archive size
 	string	mChars;		// Archive charset;
@@ -167,7 +169,7 @@ class ModMArch: public TMArchivator
 		mPrevDblTmCatLev;// mean and prevent to duples by time, category and level
 
 	ResRW	mRes;		// resource to access;
-	double	tmCalc;		// Archiving time
+	float	tmProc, tmProcMax; // Archiving time
 	time_t	mLstCheck;	// Last check directory time
 
 	deque<MFileArch *>	files;

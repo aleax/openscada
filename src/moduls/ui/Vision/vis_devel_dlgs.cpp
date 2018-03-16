@@ -268,14 +268,21 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
 
     tab_lay->addWidget(butbox);
 
-    //End resize
-    //------------
-    resize(800,600);
+    //resize(800, 600);
+
+    //Restore the window state
+    int off = 0;
+    string rst = mod->uiPropGet("dlgPropLibProjState", owner()->user());
+    int	wH = s2i(TSYS::strParse(rst,0,":",&off)),
+	wW = s2i(TSYS::strParse(rst,0,":",&off));
+    if(wH > 100 && wW > 100) resize(wH, wW);
+    else resize(800, 600);
 }
 
 LibProjProp::~LibProjProp( )
 {
-
+    //Save the window state
+    mod->uiPropSet("dlgPropLibProjState", i2s(width())+":"+i2s(height()), owner()->user());
 }
 
 VisDevelop *LibProjProp::owner( ) const	{ return (VISION::VisDevelop*)parentWidget(); }
@@ -494,11 +501,11 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	if(gnd) {
 	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(stl_table->objectName().toStdString(),TSYS::PathEl));
 	    owner()->cntrIfCmd(req);
-	    for(unsigned i_c = 0; i_c < req.childSize() && i_c < 2; i_c++) {
-		stl_table->setRowCount(req.childGet(i_c)->childSize());
-		for(unsigned i_r = 0; i_r < req.childGet(i_c)->childSize(); i_r++) {
-		    stl_table->setItem(i_r, i_c, new QTableWidgetItem(req.childGet(i_c)->childGet(i_r)->text().c_str()));
-		    stl_table->item(i_r, i_c)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|((i_c==1)?Qt::ItemIsEditable:(Qt::ItemFlags)0));
+	    for(unsigned iC = 0; iC < req.childSize() && iC < 2; iC++) {
+		stl_table->setRowCount(req.childGet(iC)->childSize());
+		for(unsigned i_r = 0; i_r < req.childGet(iC)->childSize(); i_r++) {
+		    stl_table->setItem(i_r, iC, new QTableWidgetItem(req.childGet(iC)->childGet(i_r)->text().c_str()));
+		    stl_table->item(i_r, iC)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|((iC==1)?Qt::ItemIsEditable:(Qt::ItemFlags)0));
 		}
 	    }
 	    stl_table->resizeColumnsToContents();
@@ -615,10 +622,10 @@ void LibProjProp::isModify( QObject *snd )
     else if(oname == buttStlDel->objectName()) update = true;
     else return;
 
-    req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toStdString(),TSYS::PathEl));
+    req.setAttr("path", ed_it+"/"+TSYS::strEncode(oname.toStdString(),TSYS::PathEl));
     if(owner()->cntrIfCmd(req)) {
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	showDlg(ed_it,true);
+	showDlg(ed_it, true);
     }
     else if(update)	showDlg(ed_it,true);
 
@@ -923,14 +930,14 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     dlg_lay->addWidget(obj_attr,0,0);
 
     //Add tab 'Attribute cofiguration'
-    QSplitter *split = new QSplitter();
-    split->setOrientation( Qt::Vertical );
-    wdg_tabs->addTab(split,_("Widget process"));
+    proc_split = new QSplitter();
+    proc_split->setOrientation(Qt::Vertical);
+    wdg_tabs->addTab(proc_split, _("Widget process"));
 
-    QFrame *attr_cf_fr = new QFrame(split);
+    QFrame *attr_cf_fr = new QFrame(proc_split);
     attr_cf_fr->setFrameShape(QFrame::StyledPanel);
     attr_cf_fr->setFrameShadow(QFrame::Raised);
-    split->addWidget(attr_cf_fr);
+    proc_split->addWidget(attr_cf_fr);
 
     glay = new QGridLayout(attr_cf_fr);
     glay->setMargin(9);
@@ -955,10 +962,10 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(buttAttrDel, SIGNAL(clicked()), this, SLOT(delAttr()));
     glay->addWidget(buttAttrDel,1,1);
 
-    QFrame *wdg_proc_fr = new QFrame(split);
+    QFrame *wdg_proc_fr = new QFrame(proc_split);
     wdg_proc_fr->setFrameShape(QFrame::StyledPanel);
     wdg_proc_fr->setFrameShadow(QFrame::Raised);
-    split->addWidget(wdg_proc_fr);
+    proc_split->addWidget(wdg_proc_fr);
 
     glay = new QGridLayout(wdg_proc_fr);
     glay->setMargin(9);
@@ -1004,12 +1011,24 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     tab_lay->addWidget(butbox);
 
     //End resize
-    resize(800,600);
+    //resize(800,600);
+
+    //Restore the window state
+    int off = 0;
+    string rst = mod->uiPropGet("dlgPropVisItState", owner()->user());
+    int	wH = s2i(TSYS::strParse(rst,0,":",&off)),
+	wW = s2i(TSYS::strParse(rst,0,":",&off));
+    if(wH > 100 && wW > 100) resize(wH, wW);
+    else resize(800, 600);
+    string sRst = TSYS::strDecode(TSYS::strParse(rst,0,":",&off), TSYS::base64);
+    if(sRst.size()) proc_split->restoreState(QByteArray(sRst.data(),sRst.size()));
 }
 
 VisItProp::~VisItProp( )
 {
-
+    //Save the window state
+    QByteArray st = proc_split->saveState();
+    mod->uiPropSet("dlgPropVisItState", i2s(width())+":"+i2s(height())+":"+TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,""), owner()->user());
 }
 
 VisDevelop *VisItProp::owner( ) const	{ return (VISION::VisDevelop*)parentWidget(); }

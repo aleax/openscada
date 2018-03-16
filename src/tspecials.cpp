@@ -36,15 +36,13 @@ TSpecialS::TSpecialS( ) : TSubSYS(SSPC_ID,_("Specials"),true)
 string TSpecialS::optDescr( )
 {
     return(_(
-	"======================= Subsystem \"Special\" options =====================\n\n"));
+	"======================= Subsystem \"Specials\" options =====================\n\n"));
 }
 
 void TSpecialS::load_( )
 {
     //Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
 }

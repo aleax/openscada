@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.8.3"
+#define MOD_VER		"0.9.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -87,10 +87,10 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
 
     //User page DB structure
     mUPgEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    mUPgEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    mUPgEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
+    mUPgEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    mUPgEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mUPgEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mUPgEl.fldAdd(new TFld("PROG",_("Program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
+    mUPgEl.fldAdd(new TFld("PROG",_("Program"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
 }
 
 TWEB::~TWEB( )
@@ -542,7 +542,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/up",_("User page"))) {
 	    if(ctrMkNode("area",opt,-1,"/up/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/up/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enable"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
@@ -635,15 +635,19 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	url = iurl.substr(0,prmSep);
 	string prms = iurl.substr(prmSep+1);
 	string sprm;
-	for(int iprm = 0; (sprm=TSYS::strSepParse(prms,0,'&',&iprm)).size(); )
+	for(int iprm = 0; (sprm=TSYS::strSepParse(prms,0,'&',&iprm)).size(); ) {
 	    if((prmSep=sprm.find("=")) == string::npos) prm[sprm] = "true";
 	    else prm[sprm.substr(0,prmSep)] = sprm.substr(prmSep+1);
+	}
     }
 
     //Variables parse
     for(size_t iV = 0, spos = 0; iV < ivars.size(); iV++)
-	if((spos=ivars[iV].find(":")) != string::npos)
-	    vars[sTrm(ivars[iV].substr(0,spos))] = sTrm(ivars[iV].substr(spos+1));
+	if((spos=ivars[iV].find(":")) != string::npos) {
+	    string  var = sTrm(ivars[iV].substr(0,spos)),
+		    val = sTrm(ivars[iV].substr(spos+1));
+	    vars[var] = val;
+	}
 
     //Content parse
     size_t pos = 0, spos = 0;

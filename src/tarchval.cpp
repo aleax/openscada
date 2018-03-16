@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tarchval.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1424,7 +1424,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 		}
 	}
 
-	getVals(buf, h_min, h_max, rarch, 600000);
+	getVals(buf, h_min, h_max, rarch, 1000000);	// ! More than 1000000 is notable slow
 	if(!buf.end() || !buf.begin())
 	{
 #if HAVE_GD_FORCE
@@ -2012,7 +2012,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/arch/arch/arch",_("Archivator"),R_R_R_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/arch/arch/start",_("Start"),R_R_R_,"root",SARH_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/arch/arch/proc",_("Process"),RWRWR_,"root",SARH_ID,1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/arch/arch/per",_("Period (s)"),R_R_R_,"root",SARH_ID,1,"tp","real");
+		ctrMkNode("list",opt,-1,"/arch/arch/per",_("Period, seconds"),R_R_R_,"root",SARH_ID,1,"tp","real");
 		ctrMkNode("list",opt,-1,"/arch/arch/beg",_("Begin"),R_R_R_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/arch/arch/end",_("End"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	    }
@@ -2021,7 +2021,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	{
 	    ctrMkNode("fld",opt,-1,"/val/tm",_("Time"),RWRW__,"root",SARH_ID,1,"tp","time");
 	    ctrMkNode("fld",opt,-1,"/val/utm","",RWRW__,"root",SARH_ID,5,"tp","dec","len","6","min","0","max","999999","help",_("Microseconds"));
-	    ctrMkNode("fld",opt,-1,"/val/size",_("Size (s)"),RWRW__,"root",SARH_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/val/size",_("Size, seconds"),RWRW__,"root",SARH_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/val/arch",_("Archivator"),RWRW__,"root",SARH_ID,4,"tp","str","dest","select","select","/val/lstAVal",
 		"help",_("Values archivator.\nNo set archivator for process by buffer and all archivators.\nSet '<buffer>' for process by buffer."));
 	    ctrMkNode("fld",opt,-1,"/val/sw_trend",_("Show trend"),RWRW__,"root",SARH_ID,1,"tp","bool");
@@ -2215,13 +2215,13 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/val/trend" && ctrChkNode(opt,"get",R_R_R_,"root",SARH_ID,SEC_RD))
     {
-	int vPctW = vmin(1024,vmax(100,s2i(TBDS::genDBGet(owner().nodePath()+"vPctW","650",opt->attr("user")))));
-	int vPctH = vmin(800,vmax(50,s2i(TBDS::genDBGet(owner().nodePath()+"vPctH","230",opt->attr("user")))));
+	int vPctW = vmin(1024, vmax(100,s2i(TBDS::genDBGet(owner().nodePath()+"vPctW","650",opt->attr("user")))));
+	int vPctH = vmin(800, vmax(50,s2i(TBDS::genDBGet(owner().nodePath()+"vPctH","230",opt->attr("user")))));
 	double vMax = s2r(TBDS::genDBGet(owner().nodePath()+"vMax","0",opt->attr("user")));
 	double vMin = s2r(TBDS::genDBGet(owner().nodePath()+"vMin","0",opt->attr("user")));
 	int64_t end = (int64_t) s2i(TBDS::genDBGet(owner().nodePath()+"vaTm",i2s(time(NULL)),opt->attr("user")))*1000000+
 				s2i(TBDS::genDBGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")));
-	if( !(end/1000000) )	end = (int64_t)time(NULL) * 1000000;
+	if(!(end/1000000))	end = (int64_t)time(NULL) * 1000000;
 	int64_t beg = end - (int64_t)(s2r(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")))*1e6);
 
 	string tp = "png";
@@ -2235,7 +2235,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 //* TVArchivator                                  *
 //*************************************************
 TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el ) : TConfig(cf_el), runSt(false), endrunReq(false),
-    mId(cfg("ID")), mVPer(cfg("V_PER")), mAPer(cfg("A_PER")), mStart(cfg("START").getBd()), mSelPrior(cfg("SEL_PR").getId()), mDB(idb), tm_calc(0)
+    mId(cfg("ID")), mVPer(cfg("V_PER")), mAPer(cfg("A_PER")), mStart(cfg("START").getBd()), mSelPrior(cfg("SEL_PR").getId()), mDB(idb)
 {
     mId = iid;
 }
@@ -2391,18 +2391,13 @@ void *TVArchivator::Task( void *param )
     arch.runSt = true;
     bool isLast = false;
 
-    //time_t stTm = time(NULL);
-    //while(!arch.endrunReq && (time(NULL)-stTm) < arch.archPeriod()) TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
     TSYS::sysSleep(arch.archPeriod());
 
     //> Archiving
     while(true)
 	try
 	{
-	    //stTm = time(NULL);
 	    if(arch.endrunReq) isLast = true;
-
-	    int64_t t_cnt = TSYS::curTime();
 
 	    ResAlloc res(arch.archRes,false);
 	    int64_t beg, end;
@@ -2420,11 +2415,8 @@ void *TVArchivator::Task( void *param )
 	    //Call for accumulated values archiving
 	    arch.pushAccumVals();
 
-	    arch.tm_calc = TSYS::curTime()-t_cnt;
-
 	    if(isLast) break;
 
-	    //while(!arch.endrunReq && (time(NULL)-stTm) < arch.archPeriod()) TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 	    TSYS::taskSleep((int64_t)(1e9*arch.archPeriod()));
 	} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str() ); }
 
@@ -2475,7 +2467,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archives"),R_R_R_,"root",SARH_ID))
 	    {
 		ctrMkNode("list",opt,-1,"/arch/arch/0",_("Archive"),R_R_R_,"root",SARH_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/arch/arch/1",_("Period (s)"),R_R_R_,"root",SARH_ID,1,"tp","real");
+		ctrMkNode("list",opt,-1,"/arch/arch/1",_("Period, seconds"),R_R_R_,"root",SARH_ID,1,"tp","real");
 		ctrMkNode("list",opt,-1,"/arch/arch/2",_("Buffer size"),R_R_R_,"root",SARH_ID,1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/arch/arch/3",_("Last read buffer"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	    }
@@ -2489,7 +2481,8 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(startStat() ? "1" : "0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	s2i(opt->text()) ? start() : stop();
     }
-    else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(tm2s(1e-6*tm_calc));
+    else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))
+	opt->setText(tm2s(SYS->taskUtilizTm(nodePath('.',true))) + "[" + tm2s(SYS->taskUtilizTm(nodePath('.',true),true)) + "]");
     else if(a_path == "/prm/st/db")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(DB());

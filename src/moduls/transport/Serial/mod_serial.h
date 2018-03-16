@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Serial file: mod_serial.h
 /***************************************************************************
- *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -94,7 +94,7 @@ class TTrIn: public TTransportIn
 	bool	endrun;				// Command for stop task
 
 	uint64_t trIn, trOut;			// Traffic in and out counter
-	float	tmMax;
+	float	tmMax, prcTm, prcTmMax;;
 
 	// Modem properties
 	int	mTaskPrior;			// Requests processing task prioritet
@@ -164,7 +164,7 @@ class TTrOut: public TTransportOut
 
 	void check( );
 
-	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0, bool noRes = false );
+	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 );
 
     protected:
 	//Methods
@@ -185,6 +185,7 @@ class TTrOut: public TTransportOut
 	int64_t	mLstReqTm, mKeepAliveLstTm;
 
 	uint64_t trIn, trOut;			//Traffic in and out counter and maximum respond timeout
+	float	respTm, respTmMax;
 
 	// Modem properties
 	int	mMdmTm, mMdmLifeTime;

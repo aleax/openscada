@@ -34,7 +34,7 @@
 #define MOD_NAME	_("Arhivator on the DB")
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define MOD_VER		"2.4.2"
+#define MOD_VER		"2.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to DB.")
 #define LICENSE		"GPL2"
@@ -116,7 +116,7 @@ void ModArch::perSYSCall( unsigned int cnt )
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 		    mess_sys(TMess::Error, _("Check value archivator '%s' error."), aLs[iA].c_str());
-	    }
+		}
     } catch(TError &err) { mess_sys(TMess::Error, "%s", err.mess.c_str()); }
 }
 

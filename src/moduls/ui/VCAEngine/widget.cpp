@@ -122,7 +122,7 @@ void Widget::postEnable( int flag )
 	attrAdd(new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
 	attrAdd(new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
 	attrAdd(new TFld("parent",_("Parent"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
-	attrAdd(new TFld("owner",_("Owner"),TFld::String,TFld::NoStrTransl|Attr::Generic|Attr::PreRead,"","root:UI"));
+	attrAdd(new TFld("owner",_("Owner"),TFld::String,Attr::Generic|Attr::PreRead,"","root:UI"));
 	attrAdd(new TFld("perm",_("Access"),TFld::Integer,TFld::OctDec|TFld::Selected|Attr::Generic|Attr::PreRead,"","01000",
 	    "0;0400;0440;0444;0600;0640;0644;0660;0664;0666;"
 	    "01000;01400;01440;01444;01600;01640;01644;01660;01664;01666",
@@ -130,22 +130,22 @@ void Widget::postEnable( int flag )
 	      "Inheritance;Inherit.(R_____);Inherit.(R_R___);Inherit.(R_R_R_);Inherit.(RW____);"
 	      "Inherit.(RWR___);Inherit.(RWR_R_);Inherit.(RWRW__);Inherit.(RWRWR_);Inherit.(RWRWRW)")));
 	attrAdd(new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic,"","","","",i2s(A_ROOT).c_str()));
-	attrAdd(new TFld("name",_("Name"),TFld::String,Attr::Generic));
-	attrAdd(new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic));
-	attrAdd(new TFld("en",_("Enable"),TFld::Boolean,Attr::Generic,"","1","","",i2s(A_EN).c_str()));
+	attrAdd(new TFld("name",_("Name"),TFld::String,TFld::TransltText|Attr::Generic));
+	attrAdd(new TFld("dscr",_("Description"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Generic));
+	attrAdd(new TFld("en",_("Enabled"),TFld::Boolean,Attr::Generic,"","1","","",i2s(A_EN).c_str()));
 	attrAdd(new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","",i2s(A_ACTIVE).c_str()));
 	attrAdd(new TFld("geomX",_("Geometry: x"),TFld::Real,Attr::Generic,"","0","-10000;10000","",i2s(A_GEOM_X).c_str()));
 	attrAdd(new TFld("geomY",_("Geometry: y"),TFld::Real,Attr::Generic,"","0","-10000;10000","",i2s(A_GEOM_Y).c_str()));
 	attrAdd(new TFld("geomW",_("Geometry: width"),TFld::Real,Attr::Generic,"","100","0;10000","",i2s(A_GEOM_W).c_str()));
 	attrAdd(new TFld("geomH",_("Geometry: height"),TFld::Real,Attr::Generic,"","100","0;10000","",i2s(A_GEOM_H).c_str()));
-	attrAdd(new TFld("geomXsc",_("Geometry: x scale"),TFld::Real,Attr::Generic,"","1","0.1;100","",i2s(A_GEOM_X_SC).c_str()));
-	attrAdd(new TFld("geomYsc",_("Geometry: y scale"),TFld::Real,Attr::Generic,"","1","0.1;100","",i2s(A_GEOM_Y_SC).c_str()));
+	attrAdd(new TFld("geomXsc",_("Geometry: x scale"),TFld::Real,Attr::Generic,"","1","0.01;100","",i2s(A_GEOM_X_SC).c_str()));
+	attrAdd(new TFld("geomYsc",_("Geometry: y scale"),TFld::Real,Attr::Generic,"","1","0.01;100","",i2s(A_GEOM_Y_SC).c_str()));
 	attrAdd(new TFld("geomZ",_("Geometry: z"),TFld::Integer,Attr::Generic,"","0","-1000000;1000000","",i2s(A_GEOM_Z).c_str()));
 	attrAdd(new TFld("geomMargin",_("Geometry: margin"),TFld::Integer,Attr::Generic,"","0","0;1000","",i2s(A_GEOM_MARGIN).c_str()));
-	attrAdd(new TFld("tipTool",_("Tip: tool"),TFld::String,Attr::Generic,"","","","",i2s(A_TIP_TOOL).c_str()));
-	attrAdd(new TFld("tipStatus",_("Tip: status"),TFld::String,Attr::Generic,"","","","",i2s(A_TIP_STATUS).c_str()));
-	attrAdd(new TFld("contextMenu",_("Context menu"),TFld::String,TFld::FullText|Attr::Generic,"","","","",i2s(A_CTX_MENU).c_str()));
-	attrAdd(new TFld("evProc",_("Events process"),TFld::String,TFld::FullText|TFld::NoStrTransl,"200"));
+	attrAdd(new TFld("tipTool",_("Tip: tool"),TFld::String,TFld::TransltText|Attr::Generic,"","","","",i2s(A_TIP_TOOL).c_str()));
+	attrAdd(new TFld("tipStatus",_("Tip: status"),TFld::String,TFld::TransltText|Attr::Generic,"","","","",i2s(A_TIP_STATUS).c_str()));
+	attrAdd(new TFld("contextMenu",_("Context menu"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Generic,"","","","",i2s(A_CTX_MENU).c_str()));
+	attrAdd(new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200"));
     }
 }
 
@@ -851,7 +851,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget: ")+id(),RWRWR_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget"))) {
 	    if(ctrMkNode("area",opt,-1,"/wdg/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/wdg/st/en",_("Enable"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/wdg/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/wdg/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),RWRWR_,"root",SUI_ID,3,"tp","str", "dest","sel_ed", "select","/wdg/w_lst");
 		if(!parent().freeStat())

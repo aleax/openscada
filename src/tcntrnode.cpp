@@ -134,10 +134,10 @@ void TCntrNode::nodeDelAll( )
 
     TMap::iterator p;
     MtxAlloc res(mChM, true);
-    for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	while((p=(*chGrp)[i_g].elem.begin()) != (*chGrp)[i_g].elem.end()) {
+    for(unsigned iG = 0; chGrp && iG < chGrp->size(); iG++)
+	while((p=(*chGrp)[iG].elem.begin()) != (*chGrp)[iG].elem.end()) {
 	    delete p->second;
-	    (*chGrp)[i_g].elem.erase(p);
+	    (*chGrp)[iG].elem.erase(p);
 	}
 }
 
@@ -180,9 +180,9 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	if(!s_br.empty() && s_br[0] != '/') {
 	    AutoHD<TCntrNode> chNd;
 	    MtxAlloc res(mChM, true);
-	    for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-		if(s_br.compare(0,(*chGrp)[i_g].id.size(),(*chGrp)[i_g].id) == 0) {
-		    chNd = chldAt(i_g, s_br.substr((*chGrp)[i_g].id.size()));
+	    for(unsigned iG = 0; chGrp && iG < chGrp->size(); iG++)
+		if(s_br.compare(0,(*chGrp)[iG].id.size(),(*chGrp)[iG].id) == 0) {
+		    chNd = chldAt(iG, s_br.substr((*chGrp)[iG].id.size()));
 		    break;
 		}
 	    //Go to default thread
@@ -206,10 +206,10 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 		throw TError("ContrItfc", _("%s:%s:> Control element '%s' error!"), opt->name().c_str(), (nodePath()+path).c_str(), s_br.c_str());
 	}
     } catch(TError &err) {
-	if(err.cat == "warning") opt->setAttr("rez","1");
-	else opt->setAttr("rez","2");
+	if(err.cat == "warning") opt->setAttr("rez", "1");
+	else opt->setAttr("rez", "2");
 	opt->childClear();
-	opt->setAttr("mcat",err.cat);
+	opt->setAttr("mcat", err.cat);
 	opt->setText(err.mess);
     }
     opt->setAttr("path",path);
@@ -310,11 +310,11 @@ void TCntrNode::nodeList( vector<string> &list, const string &gid )
     vector<string> tls;
     list.clear();
     MtxAlloc res(mChM, true);
-    for(unsigned i_gr = 0; chGrp && i_gr < chGrp->size(); i_gr++)
-	if(gid.empty() || gid == (*chGrp)[i_gr].id) {
-	    chldList(i_gr, tls);
-	    for(unsigned i_l = 0; i_l < tls.size(); i_l++)
-		list.push_back((*chGrp)[i_gr].id+tls[i_l]);
+    for(unsigned iGr = 0; chGrp && iGr < chGrp->size(); iGr++)
+	if(gid.empty() || gid == (*chGrp)[iGr].id) {
+	    chldList(iGr, tls);
+	    for(unsigned iL = 0; iL < tls.size(); iL++)
+		list.push_back((*chGrp)[iGr].id+tls[iL]);
 	    if(!gid.empty())	break;
 	}
 }
@@ -331,9 +331,9 @@ AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int 
 
 	AutoHD<TCntrNode> chN;
 	MtxAlloc res(mChM, true);
-	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	    if(s_br.compare(0,(*chGrp)[i_g].id.size(),(*chGrp)[i_g].id) == 0) {
-		chN = chldAt(i_g, s_br.substr((*chGrp)[i_g].id.size()));
+	for(unsigned iG = 0; chGrp && iG < chGrp->size(); iG++)
+	    if(s_br.compare(0,(*chGrp)[iG].id.size(),(*chGrp)[iG].id) == 0) {
+		chN = chldAt(iG, s_br.substr((*chGrp)[iG].id.size()));
 		break;
 	    }
 	if(chN.freeStat() && chGrp) chN = chldAt(0, s_br);	//Go to default group
@@ -567,8 +567,8 @@ unsigned TCntrNode::nodeUse( bool selfOnly )
 
     TMap::iterator p;
     MtxAlloc res2(mChM, true);
-    for(unsigned i_g = 0; !selfOnly && chGrp && i_g < chGrp->size(); i_g++)
-	for(p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
+    for(unsigned iG = 0; !selfOnly && chGrp && iG < chGrp->size(); iG++)
+	for(p = (*chGrp)[iG].elem.begin(); p != (*chGrp)[iG].elem.end(); ++p)
 	    if(p->second->nodeMode() != Disabled)
 		i_use += p->second->nodeUse();
     res2.unlock();
@@ -661,8 +661,8 @@ void TCntrNode::modifG( )
     modif();
 
     MtxAlloc res(mChM, true);
-    for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
+    for(unsigned iG = 0; chGrp && iG < chGrp->size(); iG++)
+	for(TMap::iterator p = (*chGrp)[iG].elem.begin(); p != (*chGrp)[iG].elem.end(); ++p)
 	    p->second->modifG();
 }
 
@@ -671,8 +671,8 @@ void TCntrNode::modifGClr( )
     modifClr();
 
     MtxAlloc res(mChM, true);
-    for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
+    for(unsigned iG = 0; chGrp && iG < chGrp->size(); iG++)
+	for(TMap::iterator p = (*chGrp)[iG].elem.begin(); p != (*chGrp)[iG].elem.end(); ++p)
 	    p->second->modifGClr();
 }
 
@@ -809,7 +809,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  from_root - path forming from root tree and do not include station ID.
     if(iid == "nodePath")
 	return nodePath(((prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : 0), ((prms.size() >= 2) ? prms[1].getB() : true));
-    // int messSys(int level, string mess) - formation of the system message <mess> with the <level>
+    // int messSys(int level, string mess) - formation of the program message <mess> with the <level>
     //		with the node path as a category and with the human readable path before the message.
     //  level - message level;
     //  mess - message text.

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SoundCard file: sound.h
 /***************************************************************************
- *   Copyright (C) 2008-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -122,12 +122,10 @@ class TMdContr: public TController
 	vector< AutoHD<TMdPrm> > pHd;			//Parameter's process list
 
 	PaStream *stream;
-	time_t	cTm;
-	int64_t	wTm, tmAdj;
+	time_t	curTm[10], corTm;
+	int64_t	wTm;
 	int	sRt;
-	float	acqSize;
-	double	inAdcTimePrev, inAdcTimeAdj, lostFrmsCntr;
-	unsigned long framesPerBufferMax;
+	float	acqSize, cntCor;
 
 	ResRW	nRes;
 };

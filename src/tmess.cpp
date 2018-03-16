@@ -23,7 +23,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <langinfo.h>
 #include <stdlib.h>
 #include <locale.h>
 #include <string.h>
@@ -33,6 +32,9 @@
 #include "resalloc.h"
 #include "tmess.h"
 
+#ifdef HAVE_LANGINFO_H
+# include <langinfo.h>
+#endif
 #ifdef HAVE_ICONV_H
 #include <iconv.h>
 #endif
@@ -45,25 +47,29 @@ using namespace OSCADA;
 //*************************************************
 //* TMess                                         *
 //*************************************************
-TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_ARCHIVE), mConvCode(true), mIsUTF8(true)
+TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_ARCHIVE),
+    mConvCode(true), mIsUTF8(true), mRes(true), mLang2CodeBase(mRes), mLang2Code(mRes)
 {
     openlog(PACKAGE, 0, LOG_USER);
 
     setenv("LC_NUMERIC", "C", 1);
     setlocale(LC_ALL, "");
+#ifdef HAVE_LANGINFO_H
     IOCharSet = nl_langinfo(CODESET);
+#endif
 
 #ifdef HAVE_LIBINTL_H
     bindtextdomain(PACKAGE,LOCALEDIR);
     textdomain(PACKAGE);
 #endif
 
-    mLang2Code = lang();
-    if(mLang2Code.size() < 2 || mLang2Code == "POSIX" || mLang2Code == "C") mLang2Code = "en";
-    else mLang2Code = mLang2Code.substr(0,2);
+    string tLng = lang();
+    mLang2Code = tLng;
+    if(mLang2Code.size() < 2 || mLang2Code.getVal() == "POSIX" || mLang2Code.getVal() == "C") mLang2Code = "en";
+    else mLang2Code = mLang2Code.getVal().substr(0,2);
     mIsUTF8 = (IOCharSet == "UTF-8" || IOCharSet == "UTF8" || IOCharSet == "utf8");
 
-    if(mLang2Code == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "US-ASCII"))
+    if(tLng == "C" || (mLang2Code.getVal() == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "ASCII" || IOCharSet == "US-ASCII")))
 	mConvCode = false;
 }
 
@@ -145,12 +151,17 @@ void TMess::setLang( const string &lng, bool init )
     else setenv("LANG", lng.c_str(), 1);	//!!!! May be use further for the miss environment force set
     setlocale(LC_ALL, "");
 
+#ifdef HAVE_LANGINFO_H
     IOCharSet = nl_langinfo(CODESET);
+#endif
 
-    mLang2Code = lang();
-    if(mLang2Code.size() < 2 || mLang2Code == "POSIX" || mLang2Code == "C") mLang2Code = "en";
-    else mLang2Code = mLang2Code.substr(0, 2);
+    string tLng = lang();
+    mLang2Code = tLng;
+    if(mLang2Code.size() < 2 || mLang2Code.getVal() == "POSIX" || mLang2Code.getVal() == "C") mLang2Code = "en";
+    else mLang2Code = mLang2Code.getVal().substr(0, 2);
     mIsUTF8 = (IOCharSet == "UTF-8" || IOCharSet == "UTF8" || IOCharSet == "utf8");
+
+    mConvCode = !(tLng == "C" || (mLang2Code.getVal() == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "ASCII" || IOCharSet == "US-ASCII")));
 
     if(init) SYS->sysModifFlgs &= ~TSYS::MDF_LANG;
     else { SYS->sysModifFlgs |= TSYS::MDF_LANG; SYS->modif(); }
@@ -164,7 +175,12 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     //Make convert to blocks 1000 bytes
     string buf;
     buf.reserve(mess.size());
-    char   *ibuf, outbuf[1000], *obuf;
+# if defined(__UCLIBC__)
+    const char	*ibuf;
+# else
+    char	*ibuf;
+# endif
+    char	outbuf[1000], *obuf;
     size_t ilen, olen, chwrcnt = 0;
     iconv_t hd;
 
@@ -213,9 +229,9 @@ const char *TMess::I18N( const char *mess, const char *d_name )
 void TMess::setLang2CodeBase( const string &vl )
 {
     mLang2CodeBase = vl;
-    if((!mLang2CodeBase.empty() && mLang2CodeBase.size() < 2) || mLang2CodeBase == "POSIX" || mLang2CodeBase == "C")
+    if((!mLang2CodeBase.empty() && mLang2CodeBase.size() < 2) || mLang2CodeBase.getVal() == "POSIX" || mLang2CodeBase.getVal() == "C")
 	mLang2CodeBase = "en";
-    else mLang2CodeBase = mLang2CodeBase.substr(0,2);
+    else mLang2CodeBase = mLang2CodeBase.getVal().substr(0,2);
 
     SYS->modif();
 }
@@ -223,15 +239,14 @@ void TMess::setLang2CodeBase( const string &vl )
 void TMess::load( )
 {
     //Load params from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-	if(strcasecmp(argCom.c_str(),"h") == 0 || strcasecmp(argCom.c_str(),"help") == 0) return;
-	else if(strcasecmp(argCom.c_str(),"lang") == 0) setLang(argVl, true);
-	else if(strcasecmp(argCom.c_str(),"messlev") == 0) {
-	    int i = atoi(optarg);
-	    if(i >= Debug && i <= Emerg) setMessLevel(i);
-	}
-	else if(strcasecmp(argCom.c_str(),"log") == 0) setLogDirect(s2i(argVl));
+    string argVl;
+    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) return;
+    if((argVl=SYS->cmdOpt("lang")).size()) setLang(argVl, true);
+    if((argVl=SYS->cmdOpt("messLev")).size()) {
+	int i = s2i(argVl);
+	if(i >= Debug && i <= Emerg) setMessLevel(i);
+    }
+    if((argVl=SYS->cmdOpt("log")).size()) setLogDirect(s2i(argVl));
 
     //Load params config-file
     setMessLevel(s2i(TBDS::genDBGet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg)));
@@ -250,15 +265,15 @@ void TMess::save( )
 
 const char *TMess::labDB( )
 {
-    return _("DB address in format [<DB module>.<DB name>].\n"
-	     "For use main work DB set '*.*'.");
+    return _("DB address in format \"{DB module}.{DB name}\".\n"
+	     "For use the main work DB set '*.*'.");
 }
 
 const char *TMess::labSecCRON( )
 {
-    return _("Schedule is wrote in seconds periodic form or in standard CRON form.\n"
-	     "Seconds form is one real number (1.5, 1e-3).\n"
-	     "Cron it is standard form \"* * * * *\".\n"
+    return _("Schedule wrotes in seconds periodic form or in the standard CRON form.\n"
+	     "The seconds periodic form is one real number (1.5, 1e-3).\n"
+	     "Cron is the standard form \"* * * * *\".\n"
 	     "  Where items by order:\n"
 	     "    - minutes (0-59);\n"
 	     "    - hours (0-23);\n"
@@ -267,13 +282,13 @@ const char *TMess::labSecCRON( )
 	     "    - week day (0[Sunday]-6).\n"
 	     "  Where an item variants:\n"
 	     "    - \"*\" - any value;\n"
-	     "    - \"1,2,3\" - allowed values;\n"
+	     "    - \"1,2,3\" - allowed values list;\n"
 	     "    - \"1-5\" - raw range of allowed values;\n"
 	     "    - \"*/2\" - range divider for allowed values.\n"
 	     "Examples:\n"
-	     "  \"1e-3\" - periodic call by one millisecond;\n"
+	     "  \"1e-3\" - call with a period of one millisecond;\n"
 	     "  \"* * * * *\" - each minute;\n"
-	     "  \"10 23 * * *\" - only 23 hour and 10 minute for any day and month;\n"
+	     "  \"10 23 * * *\" - only at 23 hour and 10 minute for any day and month;\n"
 	     "  \"*/2 * * * *\" - for minutes: 0,2,4,...,56,58;\n"
 	     "  \"* 2-4 * * *\" - for any minutes in hours from 2 to 4(include).");
 }
@@ -291,7 +306,7 @@ const char *TMess::labTaskPrior( )
 
 int TMess::getUTF8( const string &str, int off, int32_t *symb )
 {
-    if(off < 0 || off >= str.size())	return 0;
+    if(off < 0 || off >= (int)str.size())	return 0;
     if(!isUTF8() || !(str[off]&0x80)) {
 	if(symb) *symb = (uint8_t)str[off];
 	return 1;
@@ -301,7 +316,7 @@ int TMess::getUTF8( const string &str, int off, int32_t *symb )
     if((str[off]&0xE0) == 0xC0)		{ len = 2; rez = str[off]&0x1F; }
     else if((str[off]&0xF0) == 0xE0)	{ len = 3; rez = str[off]&0x0F; }
     else if((str[off]&0xF8) == 0xF0)	{ len = 4; rez = str[off]&0x07; }
-    if((off+len) > str.size())	return 0;
+    if((off+len) > (int)str.size())	return 0;
     for(int iSmb = 1; iSmb < len; iSmb++)
 	if((str[off+iSmb]&0xC0) != 0x80) return 0;
 	else rez = (rez<<6) | (str[off+iSmb]&0x3F);

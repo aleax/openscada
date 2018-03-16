@@ -23,23 +23,27 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 #include <string>
 #include <vector>
 #include <exception>
 
+#include "resalloc.h"
+
 #define _(mess) Mess->I18N(mess)
 #define FTM(rec) ((int64_t)rec.time*1000000 + rec.utime)
 #define FTM2(tm, utm) ((int64_t)tm*1000000 + utm)
-#define message(cat,lev,fmt,args...) Mess->put(cat,lev,fmt,##args)
-#define mess_debug(cat,fmt,args...) Mess->put(cat,TMess::Debug,fmt,##args)
-#define mess_info(cat,fmt,args...) Mess->put(cat,TMess::Info,fmt,##args)
-#define mess_note(cat,fmt,args...) Mess->put(cat,TMess::Notice,fmt,##args)
-#define mess_warning(cat,fmt,args...) Mess->put(cat,TMess::Warning,fmt,##args)
-#define mess_err(cat,fmt,args...) Mess->put(cat,TMess::Error,fmt,##args)
-#define mess_crit(cat,fmt,args...) Mess->put(cat,TMess::Crit,fmt,##args)
-#define mess_alert(cat,fmt,args...) Mess->put(cat,TMess::Alert,fmt,##args)
-#define mess_emerg(cat,fmt,args...) Mess->put(cat,TMess::Emerg,fmt,##args)
+#define mess_lev( )			Mess->messLevel()
+#define message(cat,lev,fmt,args...)	Mess->put(cat,lev,fmt,##args)
+#define mess_debug(cat,fmt,args...)	Mess->put(cat,TMess::Debug,fmt,##args)
+#define mess_info(cat,fmt,args...)	Mess->put(cat,TMess::Info,fmt,##args)
+#define mess_note(cat,fmt,args...)	Mess->put(cat,TMess::Notice,fmt,##args)
+#define mess_warning(cat,fmt,args...)	Mess->put(cat,TMess::Warning,fmt,##args)
+#define mess_err(cat,fmt,args...)	Mess->put(cat,TMess::Error,fmt,##args)
+#define mess_crit(cat,fmt,args...)	Mess->put(cat,TMess::Crit,fmt,##args)
+#define mess_alert(cat,fmt,args...)	Mess->put(cat,TMess::Alert,fmt,##args)
+#define mess_emerg(cat,fmt,args...)	Mess->put(cat,TMess::Emerg,fmt,##args)
 
 using std::string;
 using std::vector;
@@ -122,7 +126,9 @@ class TMess
 	unsigned mConvCode	:1;	//Enable text code conversion
 	unsigned mIsUTF8	:1;
 
-	string	mLang2CodeBase, mLang2Code;
+	ResMtx	mRes;
+
+	MtxString	mLang2CodeBase, mLang2Code;
 };
 
 extern TMess *Mess;

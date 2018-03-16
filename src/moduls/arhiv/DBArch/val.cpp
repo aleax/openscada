@@ -174,10 +174,11 @@ void ModVArch::checkArchivator( unsigned int cnt )
 		    varch = owner().owner().valAt(aNm);
 		    varch.at().setToStart(true);
 		    varch.at().setValType((TFld::Type)aTp);
-		    varch.at().start();
+		    //varch.at().start();
 		}
 		// Check for archive's start state and it starts early for propper redundancy sync
-		if(!varch.at().startStat() && varch.at().toStart()) varch.at().start();
+		if(!varch.at().startStat() && varch.at().toStart())
+		    try { varch.at().start(); } catch(TError&) { continue; }	//!!!! Pass wrong archives
 
 		// Check for attached
 		if(!varch.at().archivatorPresent(workId())) varch.at().archivatorAttach(workId());
@@ -221,12 +222,12 @@ TValBuf &ModVArch::accmGetReg( const string &aNm, SGrp **grp, TFld::Type tp, int
 
     //Find or create a propper group or pointed by <prefGrpPos>
     for(unsigned iG = 0; prefGrpPos < 0 && iG < accm.size(); iG++)
-	if(accm[iG].els.size() < groupPrms()) prefGrpPos = iG;
+	if((int)accm[iG].els.size() < groupPrms()) prefGrpPos = iG;
     if(prefGrpPos < 0) prefGrpPos = accm.size();
-    while(accm.size() <= prefGrpPos) {
+    while((int)accm.size() <= prefGrpPos) {
 	accm.push_back(SGrp(accm.size()));
 	accm.back().tblEl.fldAdd(new TFld("MARK",_("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
-	accm.back().tblEl.fldAdd(new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
+	accm.back().tblEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
 	//accm.back().tblEl.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10"));
     }
 
@@ -316,6 +317,7 @@ void ModVArch::pushAccumVals( )
     MtxAlloc res(reqRes, true);
 
     needRePushGrps = false;
+
     for(unsigned iG = 0; iG < accm.size(); iG++) {
 	SGrp &oG = accm[iG];
 	if(!oG.accmBeg || !oG.accmEnd) continue;
@@ -442,7 +444,7 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
 
     if(!archivator().groupPrms()) {
 	reqEl.fldAdd(new TFld("MARK",_("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
-	reqEl.fldAdd(new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|(archivator().tmAsStr()?TFld::DateTimeDec:0),"20"));
+	reqEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(archivator().tmAsStr()?TFld::DateTimeDec:0),"20"));
 	//reqEl.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10"));
 	switch(archive().valType()) {
 	    case TFld::Boolean: reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));	break;

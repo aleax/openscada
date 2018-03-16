@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:46+0300\n"
+"POT-Creation-Date: 2017-11-08 11:51+0200\n"
 "PO-Revision-Date: 2009-08-18 09:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -41,11 +41,11 @@ msgstr "Priorität der Datenerfassung"
 msgid "Remote host address"
 msgstr "Adresse des entfernten Hosts"
 
-msgid "Retries"
-msgstr "Versuche"
+msgid "Number of retries"
+msgstr "Anzahl der Wiederholungen"
 
-msgid "Timeout (sec)"
-msgstr "Zeitsperre (sec)"
+msgid "Responds timeout, seconds"
+msgstr "Reagiert Timeout, Sekunden"
 
 msgid "SNMP version"
 msgstr "SNMP Version"
@@ -56,8 +56,8 @@ msgstr "Server-Community/User"
 msgid "V3 parameters"
 msgstr "V3 Parameter"
 
-msgid "Parameter's attributes limit"
-msgstr "Grenze Parameter Attribute"
+msgid "Limit of the attributes number"
+msgstr "Limit der Attributnummer"
 
 msgid "Standard"
 msgstr "Standard"
@@ -122,13 +122,13 @@ msgstr "10:Timeout: Keine Antwort von %s."
 msgid ""
 "SNMP OID list, include directories for get all subitems. OID can write in "
 "the methods:\n"
-"  \".1.3.6.1.2.1.1\" - direct code addressing for object \"System\";\n"
-"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbol to direct code "
-"addressing for object \"System\";\n"
-"  \"system.sysDescr.0\" - simple, not full path, addressing from root alias "
-"(object \"System\");\n"
-"  \"SNMPv2-MIB::sysDescr.0\" - addressing from MIB base by module name for "
-"\"system.sysDescr.0\"."
+"  \".1.3.6.1.2.1.1\" - direct code addressing for the object \"System\";\n"
+"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbolic addressing to "
+"direct one for the object \"System\";\n"
+"  \"system.sysDescr.0\" - simple, not full path, addressing from a root "
+"alias (the object \"System\");\n"
+"  \"SNMPv2-MIB::sysDescr.0\" - addressing from the MIB base by the module "
+"name for \"system.sysDescr.0\"."
 msgstr ""
 "SNMP OID-Liste enthalten Verzeichnisse für alle Unterpunkte erhalten. OID "
 "kann in den Methoden zu schreiben:\n"

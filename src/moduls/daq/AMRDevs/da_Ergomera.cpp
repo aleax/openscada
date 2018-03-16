@@ -149,17 +149,17 @@ string Ergomera::modBusReq( string &pdu )
 	mbap += (crc>>8);
 	mbap += crc;
 
-	ResAlloc resN( tr.at().nodeRes(), true );
+	MtxAlloc resN(tr.at().reqRes(), true);
 
 	//> Send request
 	for( int i_tr = 0; i_tr < vmax(1,vmin(10,mPrm->owner().connTry())); i_tr++ )
 	{
-	    int resp_len = tr.at().messIO(mbap.data(), mbap.size(), buf, sizeof(buf), 0, true);
+	    int resp_len = tr.at().messIO(mbap.data(), mbap.size(), buf, sizeof(buf));
 	    rez.assign( buf, resp_len );
 	    //> Wait tail
 	    while(resp_len)
 	    {
-		try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &err){ break; }
+		try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf)); } catch(TError &err){ break; }
 		rez.append(buf, resp_len);
 	    }
 

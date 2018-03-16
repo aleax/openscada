@@ -58,6 +58,7 @@ class SSockIn
 	string	sender;
 	time_t	tmCreate, tmReq;
 	uint64_t trIn, trOut;	//Traffic in and out counters
+	float	prcTm, prcTmMax;
 
 	TSocketIn	*s;
 };
@@ -138,6 +139,7 @@ class TSocketIn: public TTransportIn
 	// Status atributes
 	string		stErr;			//Last error messages
 	uint64_t	trIn, trOut;		//Traffic in and out counter
+	float		prcTm, prcTmMax;
 	int		connNumb, clsConnByLim;	//Close connections by limit
 };
 
@@ -163,7 +165,7 @@ class TSocketOut: public TTransportOut
 	void start( int time = 0 );
 	void stop( );
 
-	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0, bool noRes = false );
+	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 );
 
     protected:
 	//Methods
@@ -187,7 +189,7 @@ class TSocketOut: public TTransportOut
 
 	// Status atributes
 	uint64_t	trIn, trOut;		// Traffic in and out counter
-	ResRW		wres;
+	float		respTm, respTmMax;
 };
 
 //************************************************

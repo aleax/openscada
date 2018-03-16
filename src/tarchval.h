@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tarchval.h
 /***************************************************************************
- *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -370,8 +370,6 @@ class TVArchivator : public TCntrNode, public TConfig
 	char	&mStart;	//Var arch starting flag
 	int	&mSelPrior;	//Selection priority
 	string	mDB;
-	// Archivate process
-	double	tm_calc;	//Archiving time
 };
 
 //*************************************************

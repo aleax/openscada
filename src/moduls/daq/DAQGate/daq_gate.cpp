@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.8.1"
+#define MOD_VER		"1.9.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -91,11 +91,11 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"6","0","0;100"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"4","10","1;1000"));
+    fldAdd(new TFld("TM_REST",_("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;1000"));
     fldAdd(new TFld("TM_REST_DT",_("Restore data depth time (hour)"),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
     //fldAdd(new TFld("GATH_MESS_LEV",_("Gather messages level"),TFld::Integer,TFld::Selected,"1","1",
     //	"-1;0;1;2;3;4;5;6;7",_("==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)")));
-    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Integer,TFld::NoFlag,"4","0","0;1000"));
+    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period, seconds"),TFld::Integer,TFld::NoFlag,"4","0","0;1000"));
     fldAdd(new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100"));
     fldAdd(new TFld("CNTRPRM",_("Remote cotrollers and parameters list"),TFld::String,TFld::FullText,"200"));
     fldAdd(new TFld("ALLOW_DEL_PA",_("Allow automatic remove parameters and attributes"),TFld::Boolean,TFld::NoFlag,"1","0"));
@@ -757,10 +757,10 @@ void TMdPrm::disable( )
     TParamContr::disable();
 
     //Set EVAL to the parameter attributes
-    vector<string> ls;
+    /*vector<string> ls;
     elem().fldList(ls);
     for(unsigned i_el = 0; i_el < ls.size(); i_el++)
-	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
+	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);*/
 }
 
 void TMdPrm::setStats( const string &vl )
@@ -862,9 +862,12 @@ void TMdPrm::sync( )
 	} catch(TError &err) { continue; }
 }
 
-void TMdPrm::vlGet( TVal &val )
+void TMdPrm::vlGet( TVal &vl )
 {
-    if(val.name() == "err" && (!enableStat() || !owner().startStat())) TParamContr::vlGet(val);
+    if(!enableStat() || !owner().startStat()) {
+	if(vl.name() == "err") TParamContr::vlGet(vl);
+	else vl.setI(EVAL_INT, 0, true);
+    }
 }
 
 void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
@@ -947,7 +950,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		if(owner().enableStat())
-		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enabled"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    }

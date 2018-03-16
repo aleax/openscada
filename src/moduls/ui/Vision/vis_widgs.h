@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_widgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -95,13 +94,16 @@ namespace VISION
 
 	public:
 	    //Data
-	    enum Results { SelCancel, SelOK, SelErr };
+	    enum Results { SelCancel, SelOK, SelErr, NoAuto };
 
 	    //Methods
-	    DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent = 0 );
+	    DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent = 0,
+		const string &hint = "" );
 
-	    QString user();
-	    QString password();
+	    QString user( );
+	    QString password( );
+
+	    Results autoRes( )	{ return mAutoRes; }
 
 	protected:
 	    void showEvent( QShowEvent * event );
@@ -113,6 +115,7 @@ namespace VISION
 	    QComboBox	*users;
 	    QLineEdit	*passwd;
 	    QString	VCAstat;
+	    Results	mAutoRes;
     };
 
     //*********************************************
@@ -163,7 +166,7 @@ namespace VISION
 	    void setPass( const string &val )		{ userPass = val; }
 	    void setVCAStation( const string &val )	{ VCAStat = val.empty() ? "." : val; }
 
-	    bool userSel( );
+	    bool userSel( const string &hint = "" );
 
 	signals:
 	    void userChanged( const QString &oldUser, const QString &oldPass );
@@ -172,8 +175,7 @@ namespace VISION
 	    bool event( QEvent *event );
 
 	private:
-	    ResMtx	resData;
-	    MtxString	userTxt, userPass, VCAStat;
+	    string	userTxt, userPass, VCAStat;
     };
 
     //*********************************************************************************************

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-27 17:25+0200\n"
+"POT-Creation-Date: 2017-12-28 13:01+0200\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -653,7 +653,7 @@ msgstr "Предоставляет основанный на Qt конфигур
 
 #, c-format
 msgid ""
-"======================= The module <%s:%s> options =======================\n"
+"======================= Module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
 "StartPath  <path>    Configurator start path.\n"
 "StartUser  <user>    No password requested start user.\n"

@@ -393,8 +393,8 @@ class ShapeDiagram : public WdgShape
 	    public:
 		//Methods
 		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false),
-		    sclWin(false), fMoveHold(false), fMoveTmCh(false),
-		    valsForPix(1), tTime(0), tPict(0), curTime(0), sclHorPer(0), trcPer(0), tSize(1),
+		    valsForPix(1), sclWin(false), fMoveHold(false), fMoveTmCh(false),
+		    tTime(0), tPict(0), curTime(0), sclHorPer(0), trcPer(0), tSize(1),
 		    sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0)	{ }
 
 		int64_t	arhEnd( int64_t def = 0 );
@@ -538,7 +538,9 @@ class ShapeDocument : public WdgShape
 
 		string	toHtml( );
 		void	nodeProcess( XMLNode *xcur );
+#ifndef QT_NO_PRINTER
 		void	print( QPrinter * printer );
+#endif
 
 		//Attributes
 		short	en	:1;

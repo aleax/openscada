@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.BlockCalc translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.BlockCalc package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-09 09:44+0200\n"
+"POT-Creation-Date: 2017-12-28 12:33+0200\n"
 "PO-Revision-Date: 2007-10-28 08:44+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -47,7 +47,7 @@ msgstr "Блок"
 msgid "State"
 msgstr "Состояние"
 
-msgid "Enable"
+msgid "Enabled"
 msgstr "Включен"
 
 msgid "Process"
@@ -232,7 +232,7 @@ msgstr "2:Контроллер остановлен."
 
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "
-"[<blk>.<blk_io>:<aid>:<anm>]\n"
+"\"{blk}.{blk_io}[:{aid}:{anm}]\"\n"
 "Where:\n"
 "  blk - block identifier from block's scheme; for constant value set to:\n"
 "    '*s' - String type;\n"
@@ -246,8 +246,8 @@ msgid ""
 "If 'aid' or 'anm' are not set they will be generated from selected block's "
 "parameter."
 msgstr ""
-"Список конфигурации атрибутов. Список формируется строками в формате: [<blk>."
-"<blk_io>:<aid>:<anm>]\n"
+"Список конфигурации атрибутов. Список формируется строками в формате: "
+"\"{blk}.{blk_io}[:{aid}:{anm}]\"\n"
 "Где:\n"
 "  blk - идентификатор блока, блочной схемы; для постоянной значение "
 "устанавливается:\n"

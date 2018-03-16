@@ -48,6 +48,7 @@ class QLineEdit;
 class QHBoxLayout;
 class QLabel;
 class QTabWidget;
+class QSplitter;
 
 using namespace OSCADA;
 
@@ -116,7 +117,8 @@ public:
 
 protected:
     //Methods
-    void closeEvent( QCloseEvent* );
+    void closeEvent( QCloseEvent* );		//Close window event
+    void resizeEvent( QResizeEvent * );		//Resize window event
 
 private slots:
     //Slots
@@ -134,7 +136,7 @@ private slots:
     void itCut( );
     void itCopy( );
     void itPaste( );
-    void pageRefresh( bool tm = false );
+    void pageRefresh( int tm = 0 );
     void pageCyclRefrStart( );
     void pageCyclRefrStop( );
 
@@ -205,6 +207,7 @@ private:
     QTimer	*endRunTimer, *autoUpdTimer, *reqPrgrsTimer;
 
     QTreeWidget	*CtrTree;
+    QSplitter	*splitter;
     QLabel	*titleIco,
 		*titleLab,
 		*mStModify;
@@ -232,7 +235,7 @@ private:
     int		inHostReq;
     map<string, SCADAHost*> hosts;
 
-    bool	tblInit;
+    bool	tblInit, pgDisplay;
 };
 
 }

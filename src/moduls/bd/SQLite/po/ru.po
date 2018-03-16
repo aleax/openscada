@@ -2,13 +2,13 @@
 # Copyright (C) 2003-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DB.SQLite package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2003-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.SQLite 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-08 18:40+0200\n"
+"POT-Creation-Date: 2017-12-28 11:45+0200\n"
 "PO-Revision-Date: 2007-10-23 12:39+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -41,8 +41,8 @@ msgid "Unknown error"
 msgstr "Неизвестная ошибка"
 
 #, c-format
-msgid "Request \"%s\" error: %s"
-msgstr "Ошибка запроса \"%s\": %s"
+msgid "Request \"%s\" error: %s(%d)"
+msgstr "Ошибка запроса \"%s\": %s(%d)"
 
 msgid ""
 "SQLite DB address must be written as: [<FileDBPath>].\n"

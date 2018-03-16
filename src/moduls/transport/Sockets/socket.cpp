@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,7 +45,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.3.3"
+#define MOD_VER		"2.8.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, and UDP protocols.")
 #define LICENSE		"GPL2"
@@ -129,10 +129,13 @@ string TSocketIn::getStatus( )
 {
     string rez = TTransportIn::getStatus();
 
-    if(startStat())
-	rez += TSYS::strMess(_("Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed connections by limit %d."),
+    if(startStat()) {
+	rez += TSYS::strMess(_("Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed connections by limit %d. "),
 				connNumb, clId.size(), atm2s(lastConn()).c_str(),
 				TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str(), clsConnByLim);
+	if(mess_lev() == TMess::Debug)
+	    rez += TSYS::strMess(_("Processing time %s[%s]. "), tm2s(1e-6*prcTm).c_str(), tm2s(1e-6*prcTmMax).c_str());
+    }
 
     return rez;
 }
@@ -177,7 +180,7 @@ void TSocketIn::start( )
     if(runSt) return;
 
     //Status clear
-    trIn = trOut = 0;
+    trIn = trOut = prcTm = prcTmMax = clntDetchCnt = 0;
     connNumb = clsConnByLim = 0;
 
     //Socket init
@@ -282,6 +285,8 @@ void TSocketIn::start( )
     runSt = true;
 
     TTransportIn::start();
+
+    if(logLen()) pushLogMess(_("Started"));
 }
 
 void TSocketIn::stop( )
@@ -300,6 +305,8 @@ void TSocketIn::stop( )
     if(type == SOCK_UNIX) remove(path.c_str());
 
     TTransportIn::stop();
+
+    if(logLen()) pushLogMess(_("Stopped"));
 }
 
 unsigned TSocketIn::forksPerHost( const string &sender )
@@ -393,7 +400,13 @@ void *TSocketIn::Task( void *sock_in )
 	    mess_debug(sock->nodePath().c_str(), _("Read datagram %s from '%s'!"), TSYS::cpct2str(r_len).c_str(), inet_ntoa(name_cl.sin_addr));
 #endif
 
+	    int64_t stTm = 0;
+	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
 	    sock->messPut(sock->sockFd, req, answ, inet_ntoa(name_cl.sin_addr), prot_in);
+	    if(mess_lev() == TMess::Debug && stTm) {
+		sock->prcTm = SYS->curTime() - stTm;
+		sock->prcTmMax = vmax(sock->prcTmMax, sock->prcTm);
+	    }
 	    if(!prot_in.freeStat()) continue;
 
 #if OSC_DEBUG >= 5
@@ -469,7 +482,18 @@ void *TSocketIn::ClTask( void *s_inf )
 	    mess_debug(s.s->nodePath().c_str(), _("Read message %s from '%s'."), TSYS::cpct2str(r_len).c_str(), s.sender.c_str());
 #endif
 	    req.assign(buf, r_len);
+	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Received from '%s'\n"),s.sock,s.sender.c_str()) + req);
+
+	    int64_t stTm = 0;
+	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
 	    s.s->messPut(s.sock, req, answ, s.sender, prot_in);
+	    if(mess_lev() == TMess::Debug && stTm) {
+		s.s->dataRes().lock();
+		s.prcTm = s.s->prcTm = SYS->curTime() - stTm;
+		s.prcTmMax = vmax(s.prcTmMax, s.prcTm);
+		s.s->prcTmMax = vmax(s.s->prcTmMax, s.s->prcTm);
+		s.s->dataRes().unlock();
+	    }
 
 	    if(answ.size()) {
 #if OSC_DEBUG >= 5
@@ -487,12 +511,18 @@ void *TSocketIn::ClTask( void *s_inf )
 			    if(kz > 0 && FD_ISSET(s.sock,&rw_fd)) { wL = 0; continue; }
 			    //???? May be some flush ????
 			}
-			mess_err(s.s->nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
+			string err = TSYS::strMess(_("Write: error '%s (%d)'!"), strerror(errno), errno);
+			if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("Transmitting error: %s"),err.c_str()));
+			mess_err(s.s->nodePath().c_str(), "%s", err.c_str());
+			s.s->dataRes().lock();
+			s.s->clntDetchCnt++;
+			s.s->dataRes().unlock();
 			break;
 		    }
 		    s.s->dataRes().lock();
 		    s.s->trOut += vmax(0, wL); s.trOut += vmax(0, wL);
 		    s.s->dataRes().unlock();
+		    if(wL > 0 && s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Transmitted to '%s'\n"),s.sock,s.sender.c_str()) + string(answ.data()+wOff,wL));
 		}
 		answ = "";
 	    }
@@ -509,6 +539,7 @@ void *TSocketIn::ClTask( void *s_inf )
 #if OSC_DEBUG >= 5
 	mess_debug(s.s->nodePath().c_str(), _("Has been terminated by execution: %s"), err.mess.c_str());
 #endif
+	if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Has been terminated by execution: %s"),s.sock,err.mess.c_str()));
     }
 
     //Close protocol on broken connection
@@ -579,6 +610,8 @@ void TSocketIn::clientReg( SSockIn *so )
     clId[so->sock] = so;
     clS[so->sender]++;
     clFree = false;
+
+    if(logLen()) pushLogMess(TSYS::strMess(_("A new client %d from '%s' connected"),so->sock,so->sender.c_str()));
 }
 
 void TSocketIn::clientUnreg( SSockIn *so )
@@ -586,6 +619,8 @@ void TSocketIn::clientUnreg( SSockIn *so )
     MtxAlloc res(sockRes, true);
     for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
 	if(iId->second == so) {
+	    if(logLen()) pushLogMess(TSYS::strMess(_("Client %d from '%s' disconnected"),so->sock,so->sender.c_str()));
+
 	    shutdown(iId->first, SHUT_RDWR);
 	    close(iId->first);
 	    clS[iId->second->sender]--;
@@ -633,7 +668,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 		    "help",_("Set to zero for disable that limit."));
 	    ctrMkNode("fld", opt, -1, "/prm/cfg/keepAliveReqs", _("Keep alive requests"), RWRWR_, "root", STR_ID, 2, "tp","dec",
 		"help",_("Close the connection after specified requests.\nZero value for disable (not close ever)."));
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/keepAliveTm", _("Keep alive timeout (s)"), RWRWR_, "root", STR_ID, 2, "tp","dec",
+	    ctrMkNode("fld", opt, -1, "/prm/cfg/keepAliveTm", _("Keep alive timeout, seconds"), RWRWR_, "root", STR_ID, 2, "tp","dec",
 		"help",_("Close the connection after no requests at specified timeout.\nZero value for disable (not close ever)."));
 	}
 	return;
@@ -642,11 +677,17 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/conns" && ctrChkNode(opt)) {
 	MtxAlloc res(sockRes, true);
-	for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
-	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %d(%s): last %s; traffic in %s, out %s."),
+	for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId) {
+	    string mess = TSYS::strMess(_("%s %d(%s): last %s; traffic in %s, out %s; client detachings %g; "),
 		atm2s(iId->second->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),iId->first,iId->second->sender.c_str(),
 		atm2s(iId->second->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
-		TSYS::cpct2str(iId->second->trIn).c_str(),TSYS::cpct2str(iId->second->trOut).c_str()));
+		TSYS::cpct2str(iId->second->trIn).c_str(),TSYS::cpct2str(iId->second->trOut).c_str(),
+		iId->second->clntDetchCnt);
+	    if(mess_lev() == TMess::Debug)
+		mess += TSYS::strMess(_("processing time %s[%s]; "),
+		    tm2s(1e-6*iId->second->prcTm).c_str(), tm2s(1e-6*iId->second->prcTmMax).c_str());
+	    opt->childAdd("el")->setText(mess);
+	}
     }
     else if(a_path == "/prm/cfg/MSS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(MSS()));
@@ -686,8 +727,8 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TSocketOut                                   *
 //************************************************
-TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), mMSS(0), sockFd(-1), wres(true), mLstReqTm(0)
+TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) :
+    TTransportOut(name, idb, el), mMSS(0), sockFd(-1), mLstReqTm(0)
 {
     setAddr("TCP:localhost:10002");
     setTimings("5:1");
@@ -709,8 +750,11 @@ string TSocketOut::getStatus( )
 {
     string rez = TTransportOut::getStatus();
 
-    if(startStat())
-	rez += TSYS::strMess(_("Traffic in %s, out %s."), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
+    if(startStat()) {
+	rez += TSYS::strMess(_("Traffic in %s, out %s. "), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
+	if(mess_lev() == TMess::Debug && respTmMax)
+	    rez += TSYS::strMess(_("Respond time %s[%s]. "), tm2s(1e-6*respTm).c_str(), tm2s(1e-6*respTmMax).c_str());
+    }
 
     return rez;
 }
@@ -741,7 +785,7 @@ void TSocketOut::save_( )
 
 void TSocketOut::start( int itmCon )
 {
-    MtxAlloc res(wres, true);
+    MtxAlloc res(reqRes(), true);
 
     if(runSt) return;
 
@@ -751,7 +795,7 @@ void TSocketOut::start( int itmCon )
     mLstReqTm = TSYS::curTime();*/
 
     //Status clear
-    trIn = trOut = 0;
+    trIn = trOut = respTm = respTmMax = 0;
     if(!itmCon) itmCon = tmCon();
 
     //Connect to remote host
@@ -853,11 +897,13 @@ void TSocketOut::start( int itmCon )
     runSt = true;
 
     TTransportOut::start();
+
+    if(logLen()) pushLogMess(_("Started"));
 }
 
 void TSocketOut::stop( )
 {
-    MtxAlloc res(wres, true);
+    MtxAlloc res(reqRes(), true);
 
     if(!runSt) return;
 
@@ -872,9 +918,11 @@ void TSocketOut::stop( )
     runSt = false;
 
     TTransportOut::stop();
+
+    if(logLen()) pushLogMess(_("Stopped"));
 }
 
-int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, bool noRes )
+int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 {
     string err = _("Unknown error");
     ssize_t kz = 0;
@@ -886,9 +934,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
 	 writeReq = false;
     time = abs(time);
 
-    ResAlloc resN(nodeRes());
-    if(!noRes) resN.lock(true);
-    MtxAlloc res(wres, true);
+    MtxAlloc res(reqRes(), true);
 
     int prevTmOut = 0;
     if(time) { prevTmOut = tmCon(); setTmCon(time); }
@@ -898,6 +944,8 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
 
 repeate:
 	if(reqTry++ >= 2) { mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(), _("Request error: %s"), err.c_str()); }
+	int64_t stRespTm = 0;
+
 	//Write request
 	writeReq = false;
 	if(oBuf != NULL && oLen > 0) {
@@ -919,22 +967,27 @@ repeate:
 			if(kz > 0 && FD_ISSET(sockFd,&rw_fd)) { kz = 0; continue; }
 		    }
 		    err = (kz < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data wrote");
-		    res.unlock();
 		    stop();
 #if OSC_DEBUG >= 5
 		    mess_debug(nodePath().c_str(), _("Write error: %s"), err.c_str());
 #endif
+		    if(logLen()) pushLogMess(TSYS::strMess(_("Transmitting error: %s"), err.c_str()));
 		    if(noReq) throw TError(nodePath().c_str(),_("Write error: %s"), err.c_str());
 		    start();
-		    res.lock();
 		    goto repeate;
-		} else trOut += kz;
+		}
+		else {
+		    trOut += kz;
+		    if(logLen()) pushLogMess(_("Transmitted to\n") + string(oBuf+wOff,kz));
+		}
 
 #if OSC_DEBUG >= 5
 	    mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
 #endif
 
 	    writeReq = true;
+
+	    if(mess_lev() == TMess::Debug) stRespTm = SYS->curTime();
 	}
 	else if(!noReq) time = mTmNext;
 	if(!time) time = 5000;
@@ -945,22 +998,22 @@ repeate:
 	    FD_ZERO(&rw_fd); FD_SET(sockFd, &rw_fd);
 	    kz = select(sockFd+1, &rw_fd, NULL, NULL, &tv);
 	    if(kz == 0) {
-		res.unlock();
 		if(writeReq && !noReq) stop();
 		mLstReqTm = TSYS::curTime();
 #if OSC_DEBUG >= 5
 		mess_debug(nodePath().c_str(), _("Read timeouted."));
 #endif
+		if(logLen()) pushLogMess(_("Receiving timeouted"));
 		throw TError(nodePath().c_str(),_("Timeouted!"));
 	    }
 	    else if(kz < 0) {
 		err = TSYS::strMess("%s (%d)", strerror(errno), errno);
-		res.unlock();
 		stop();
 		mLstReqTm = TSYS::curTime();
 #if OSC_DEBUG >= 5
 		mess_debug(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
 #endif
+		if(logLen()) pushLogMess(TSYS::strMess(_("Receiving (select) error: %s"), err.c_str()));
 		throw TError(nodePath().c_str(),_("Read (select) error: %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sockFd,&rw_fd)) {
@@ -979,21 +1032,25 @@ repeate:
 		// * Retry if any data was wrote but no a reply there into the request mode
 		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode
 		if(iB < 0 || (iB == 0 && writeReq && !noReq)) {
-		    err = (iB < 0) ? TSYS::strMess("%s (%d)", strerror(errno), errno): _("No data");
-		    res.unlock();
+		    err = (iB < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data");
 		    stop();
 #if OSC_DEBUG >= 5
 		    mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
 #endif
+		    if(logLen()) pushLogMess(TSYS::strMess(_("Receiving error: %s"), err.c_str()));
 		    // * Pass to retry into the request mode and on the successful writing
 		    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
 		    start();
-		    res.lock();
 		    goto repeate;
 		}
 #if OSC_DEBUG >= 5
 		mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,i_b)).c_str());
 #endif
+		if(iB > 0 && logLen()) pushLogMess(_("Received from\n") + string(iBuf,iB));
+		if(iB > 0 && mess_lev() == TMess::Debug && stRespTm) {
+		    respTm = SYS->curTime() - stRespTm;
+		    respTmMax = vmax(respTmMax, respTm);
+		}
 		trIn += vmax(0, iB);
 	    }
 	}

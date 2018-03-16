@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.VISION file: tvision.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Evgen Zaichuk
- *                 2006-2015 by Roman Savochenko (rom_as@oscada.org)
+ *                 2006-2017 by Roman Savochenko (rom_as@oscada.org)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"4.3.1"
+#define MOD_VER		"4.9.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -120,7 +120,7 @@ string TVision::optDescr( )
     char buf[STR_BUF_LEN];
 
     snprintf(buf,sizeof(buf),_(
-	"======================= The module <%s:%s> options =======================\n"
+	"======================= Module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section '%s' in config-file ----------\n"
 	"StartUser   <user>    No password requested start user.\n"
 	"UserPass    <pass>    User password for no local start.\n"
@@ -144,9 +144,7 @@ void TVision::load_( )
 #endif
 
     //Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file and DB
     setUserStart(TBDS::genDBGet(nodePath()+"StartUser",""));
@@ -391,11 +389,12 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	string rez;
 	MtxAlloc res(dataRes(), true);
 	for(unsigned iW = 0; iW < mnWinds.size(); iW++)
-	    if(dynamic_cast<VisDevelop*>(mnWinds[iW]))	opt->childAdd("el")->setText(TSYS::strMess(_("%d: Development"),iW));
+	    if(dynamic_cast<VisDevelop*>(mnWinds[iW]))	opt->childAdd("el")->setText(TSYS::strMess(_("%d: Development by \"%s\""),iW,((VisDevelop*)mnWinds[iW])->user().c_str()));
 	    else if(dynamic_cast<VisRun*>(mnWinds[iW]))	{
-		opt->childAdd("el")->setText(TSYS::strMess(_("%d: Running \"%s:%s\" - %s"),iW,
+		opt->childAdd("el")->setText(TSYS::strMess(_("%d: Running \"%s:%s\" from \"%s\" - %s"),iW,
 		    ((VisRun*)mnWinds[iW])->workSess().c_str(),
 		    ((VisRun*)mnWinds[iW])->srcProject().c_str(),
+		    ((VisRun*)mnWinds[iW])->user().c_str(),
 		    ((VisRun*)mnWinds[iW])->connOK()?_("Connected"):_("Disconnected")));
 	    }
     }
@@ -473,7 +472,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	vector<TTransportS::ExtHost> lst;
 	SYS->transport().at().extHostList("*", lst);
 	for(unsigned iLs = 0; iLs < lst.size(); iLs++)
-	    opt->childAdd("el")->setAttr("id",lst[iLs].id)->setText(lst[iLs].name);
+	    opt->childAdd("el")->setAttr("id", lst[iLs].id)->setText(lst[iLs].name);
     }
     else if(a_path == "/alarm/plComm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(playCom());

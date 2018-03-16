@@ -103,7 +103,7 @@ string ModArch::packArch( const string &anm, bool replace )
     //signal(SIGCHLD,prevs);
     if(sysres) {
 	remove(rez_nm.c_str());
-	throw err_sys(_("Compress error!"));
+	throw err_sys(_("Compressing for '%s' error %d!"), anm.c_str(), sysres);
     }
     if(replace) remove(anm.c_str());
 
@@ -119,7 +119,7 @@ string ModArch::unPackArch( const string &anm, bool replace )
     //signal(SIGCHLD,prevs);
     if(sysres) {
 	remove(rez_nm.c_str());
-	throw err_sys(_("Decompress error: '%s'!"), anm.c_str());
+	throw err_sys(_("Decompressing for '%s' error %d!"), anm.c_str(), sysres);
     }
     if(replace) remove(anm.c_str());
 
@@ -129,7 +129,7 @@ string ModArch::unPackArch( const string &anm, bool replace )
 string ModArch::optDescr( )
 {
     return TSYS::strMess(_(
-	"======================= The module <%s:%s> options =======================\n"
+	"======================= Module <%s:%s> options =======================\n"
 	"    --noArchLimit        Disable archives limit to the file number. Use for see archives mode, not work.\n"
 	"\n"), MOD_TYPE,MOD_ID);
 }
@@ -137,10 +137,8 @@ string ModArch::optDescr( )
 void ModArch::load_( )
 {
     //Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout, "%s", optDescr().c_str());
-	else if(argCom == "noArchLimit")	noArchLimit = true;
+    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
+    if(s2i(SYS->cmdOpt("noArchLimit"))) noArchLimit = true;
 }
 
 void ModArch::perSYSCall( unsigned int cnt )

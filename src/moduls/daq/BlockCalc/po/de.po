@@ -4,13 +4,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-09 09:44+0200\n"
+"POT-Creation-Date: 2017-12-28 12:33+0200\n"
 "PO-Revision-Date: 2010-10-09 22:40+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -53,8 +53,8 @@ msgstr "Block"
 msgid "State"
 msgstr "Zustand"
 
-msgid "Enable"
-msgstr "Einschalten"
+msgid "Enabled"
+msgstr "Aktiviert"
 
 msgid "Process"
 msgstr "Bearbeitung"
@@ -238,7 +238,7 @@ msgstr "2:Controller ist angehalten."
 
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "
-"[<blk>.<blk_io>:<aid>:<anm>]\n"
+"\"{blk}.{blk_io}[:{aid}:{anm}]\"\n"
 "Where:\n"
 "  blk - block identifier from block's scheme; for constant value set to:\n"
 "    '*s' - String type;\n"
@@ -253,7 +253,7 @@ msgid ""
 "parameter."
 msgstr ""
 "Liste der Konfiguration der Attribute. Die Liste wird gemacht zeilenweise im "
-"Format: [<blk>.<blk_io>:<aid>:<anm>]\n"
+"Format: \"{blk}.{blk_io}[:{aid}:{anm}]\"\n"
 "Wo:\n"
 "  blk - Blockbezeichner, des Blockschemas; für die Konstante wird die "
 "Bedeutung  bestimmt:\n"

@@ -2,7 +2,7 @@
 //OpenSCADA system module DAQ.DCON file: DCON_client.cpp
 /***************************************************************************
  *   Copyright (C) 2008-2011 by Almaz Karimov                              *
- *		   2008-2016 by Roman Savochenko, rom_as@oscada.org        *
+ *		   2008-2017 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.6"
+#define MOD_VER		"1.2.9"
 #define AUTHORS		_("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	_("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -146,7 +146,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db ) {
 //* TMdContr                                           *
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
-    TController(name_c, daq_db, cfgelem),
+    TController(name_c, daq_db, cfgelem), enRes(true), reqRes(true),
     mAddr(cfg("ADDR")), mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), connTry(cfg("REQ_TRY").getId()),
     prcSt(false), callSt(false), endrunReq(false), mPer(1e9), tmGath(0)
 {
@@ -252,16 +252,16 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 	if(CRC) pdu += DCONCRC(pdu);
 	pdu += "\r";
 
-	ResAlloc resN(tr.at().nodeRes(), true);
+	MtxAlloc resN(tr.at().reqRes(), true);
 
 	for(int i_tr = 0, resp_len = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++) {
 	    try {
-		resp_len = tr.at().messIO(pdu.data(), pdu.size(), buf, sizeof(buf), 0, true);
+		resp_len = tr.at().messIO(pdu.data(), pdu.size(), buf, sizeof(buf));
 		rez.assign(buf,resp_len);
 
 		//Wait tail
 		while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r')) {
-		    try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &er) { break; }
+		    try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf)); } catch(TError &er) { break; }
 		    rez.append(buf, resp_len);
 		}
 	    } catch(TError &er) {	//By possible the send request breakdown and no response

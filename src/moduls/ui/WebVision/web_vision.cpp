@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.1.1"
+#define MOD_VER		"2.2.4"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -275,7 +275,7 @@ string TWEB::optDescr( )
     char buf[STR_BUF_LEN];
 
     snprintf(buf,sizeof(buf),_(
-	"======================= The module <%s:%s> options =======================\n"
+	"======================= Module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section '%s' in config-file ----------\n"
 	"SessTimeLife <time>      Time of the session life, minutes (default 10).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
@@ -286,9 +286,7 @@ string TWEB::optDescr( )
 void TWEB::load_( )
 {
     //Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
     setSessTime(s2i(TBDS::genDBGet(nodePath()+"SessTimeLife",i2s(sessTime()))));
@@ -322,7 +320,7 @@ void TWEB::perSYSCall( unsigned int cnt )
 }
 
 string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode, const string &httpattrs,
-    const string &htmlHeadEls, const string &forceTmplFile )
+    const string &htmlHeadEls, const string &forceTmplFile, const string &lang )
 {
     if(httpattrs.size() && httpattrs.find("Content-Type: text/html") == string::npos)
 	return "HTTP/1.0 " + rcode + "\x0D\x0A"
@@ -333,7 +331,7 @@ string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcod
 	    httpattrs + "\x0D\x0A\x0D\x0A" + cnt;
 
     vector<TVariant> prms;
-    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
+    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile); prms.push_back(lang);
 
     return iprt->owner().objFuncCall("pgCreator", prms, "root").getS();
 }
@@ -359,7 +357,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    if(prmEl != ses.prm.end()) {
 		XMLNode req("get");
 		req.setAttr("path", prmEl->second+"/%2fico");
-		mod->cntrIfCmd(req, ses.user);
+		mod->cntrIfCmd(req, ses);
 		page = TSYS::strDecode(req.text(), TSYS::base64);
 	    }
 	    else page = TUIS::icoGet(zero_lev=="ico"?"UI." MOD_ID:zero_lev.substr(4), &itp);
@@ -386,7 +384,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		string self_prjSess, prjSesEls = "";
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
-		cntrIfCmd(req, ses.user);
+		cntrIfCmd(req, ses);
 		ResAlloc sesRes(mSesRes, false);
 		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
 		    if(!pgAccess(iprt,sender+"/" MOD_ID "/ses_"+req.childGet(iCh)->text()+"/"))	continue;
@@ -395,7 +393,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			    (vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)))
 			continue;
 		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/ses_" + req.childGet(iCh)->text() + "' height='32' width='32'/> "
-			"<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "/'>" + req.childGet(iCh)->text()+"</a>";
+			"<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "/"+ses.gPrms+"'>" + req.childGet(iCh)->text()+"</a>";
 		    if(req.childGet(iCh)->attr("user") != user) prjSesEls += " - "+req.childGet(iCh)->attr("user");
 		    if(vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)
 			prjSesEls += " - "+vcaSesAt(req.childGet(iCh)->text()).at().sender();
@@ -414,13 +412,13 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		// Get present projects list
 		prjSesEls = "";
 		req.clear()->setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("chkUserPerm","1");
-		cntrIfCmd(req,ses.user);
+		cntrIfCmd(req, ses);
 		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
 		    if(!pgAccess(iprt,sender+"/" MOD_ID "/prj_"+req.childGet(iCh)->attr("id")+"/"))	continue;
 		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) && self_prjSess.find(req.childGet(iCh)->attr("id")+";") != string::npos)
 			continue;
 		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/prj_" + req.childGet(iCh)->attr("id") + "' height='32' width='32'/> "
-			"<a href='/" MOD_ID "/prj_" + req.childGet(iCh)->attr("id") + "/'>" + req.childGet(iCh)->text() + "</a></td></tr>";
+			"<a href='/" MOD_ID "/prj_" + req.childGet(iCh)->attr("id") + "/"+ses.gPrms+"'>" + req.childGet(iCh)->text() + "</a></td></tr>";
 		}
 		if(!prjSesEls.empty()) {
 		    page = page +
@@ -434,7 +432,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		page += "</table>";
 
 		if(!sesPrjOk) page = messPost(nodePath(), _("No one sessions and projects of VCA engine are present for user!"), TWEB::Warning);
-		page = pgCreator(iprt, page, "200 OK");
+		page = pgCreator(iprt, page, "200 OK", "", "", "", ses.lang);
 	    }
 	    //New session create
 	    else if(zero_lev.compare(0,4,"prj_") == 0) {
@@ -442,7 +440,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		// Find for early created session for the user and the sender
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
-		cntrIfCmd(req, ses.user);
+		cntrIfCmd(req, ses);
 		ResAlloc sesRes(mSesRes, false);
 		if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_))
 		    for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
@@ -457,7 +455,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		    else {
 			sesRes.request(true);
 			req.setName("connect")->setAttr("path","/%2fserv%2fsess")->setAttr("prj",zero_lev.substr(4));
-			if(cntrIfCmd(req,ses.user))
+			if(cntrIfCmd(req,ses))
 			    page = messPost(req.attr("mcat").c_str(), req.text().c_str(), TWEB::Error);
 			else {
 			    sName = req.attr("sess");
@@ -468,8 +466,8 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		}
 		if(!sName.empty())
 		    page = pgCreator(iprt, TSYS::strMess(_("Go to session '%s' for project '%s' ..."),sName.c_str(),zero_lev.substr(4).c_str()),
-			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "/ses_" + sName + "/'/>");
-		else page = pgCreator(iprt, page, "200 OK");
+			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "/ses_"+sName+"/"+ses.gPrms+"'/>", "", ses.lang);
+		else page = pgCreator(iprt, page, "200 OK", "", "", "", ses.lang);
 	    }
 	    //Main session page data prepare
 	    else if(zero_lev.compare(0,4,"ses_") == 0) {
@@ -478,7 +476,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		// Check for session present
 		if(!ses.prm.size()) {
 		    XMLNode req("get"); req.setAttr("path",ses.url+"/%2fobj%2fst%2fen");
-		    if(cntrIfCmd(req,ses.user) || !s2i(req.text()))	{ HTTP_GET("", page, vars, user, iprt); return; }
+		    if(cntrIfCmd(req,ses) || !s2i(req.text()))	{ HTTP_GET("", page, vars, user, iprt); return; }
 		}
 		// Call to session
 		ResAlloc sesRes(mSesRes, false);
@@ -495,12 +493,12 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    }
 	    else {
 		page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Pointed project/session '%s' is wrong!"),zero_lev.c_str())+"</div>\n",
-				       "404 Not Found");
+				       "404 Not Found", "", "", "", ses.lang);
 	    }
 	}
     } catch(TError &err) {
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),ses.url.c_str(),err.mess.c_str())+"</div>\n",
-			       "404 Not Found");
+			       "404 Not Found", "", "", "", ses.lang);
     }
 }
 
@@ -514,7 +512,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	//To control interface request
 	if((cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "com") {
 	    XMLNode req(""); req.load(ses.content); req.setAttr("path", ses.url);
-	    cntrIfCmd(req, ses.user, false);
+	    cntrIfCmd(req, ses, false);
 	    page = pgCreator(iprt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	    return;
 	}
@@ -530,7 +528,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	}
     } catch(TError &err) {
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),url.c_str(),err.mess.c_str())+"</div>\n",
-	    "404 Not Found");
+	    "404 Not Found", "", "", "", ses.lang);
     }
 }
 
@@ -552,9 +550,9 @@ string TWEB::messPost( const string &cat, const string &mess, MessLev type )
     return page;
 }
 
-int TWEB::cntrIfCmd( XMLNode &node, const string &user, bool VCA )
+int TWEB::cntrIfCmd( XMLNode &node, const SSess &ses, bool VCA )
 {
-    node.setAttr("user", user);
+    node.setAttr("user", ses.user);
     if(VCA)	node.setAttr("path","/UI/VCAEngine"+node.attr("path"));
     SYS->cntrCmd(&node);
     return s2i(node.attr("rez"));
@@ -688,21 +686,21 @@ string TWEB::trMessReplace( const string &tsrc )
 {
     string trez; trez.reserve(tsrc.size());
 
-    unsigned txtBeg = 0, i_s, i_r;
-    for(i_s = 0; i_s < tsrc.size(); i_s++)
-	if(tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#') {
-	    for(i_r = i_s+3; i_r < tsrc.size(); i_r++)
-	    if((tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) || tsrc[i_r] == '\n')
+    unsigned txtBeg = 0, iS, iR;
+    for(iS = 0; iS < tsrc.size(); iS++)
+	if(tsrc[iS] == '#' && tsrc.substr(iS,3) == "###" && (iS+3)<tsrc.size() && tsrc[iS+3] != '#') {
+	    for(iR = iS+3; iR < tsrc.size(); iR++)
+	    if((tsrc[iR] == '#' && tsrc.substr(iR,3) == "###" && ((iR+3)>=tsrc.size() || tsrc[iR+3] != '#')) || tsrc[iR] == '\n')
 		break;
-	    if(i_r < tsrc.size() && tsrc[i_r] != '\n') {
-		trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
-		trez.append(_(tsrc.substr(i_s+3,i_r-i_s-3).c_str()));
-		i_s = i_r+2;
-		txtBeg = i_r+3;
+	    if(iR < tsrc.size() && tsrc[iR] != '\n') {
+		trez.append(tsrc.substr(txtBeg,iS-txtBeg));
+		trez.append(_(tsrc.substr(iS+3,iR-iS-3).c_str()));
+		iS = iR+2;
+		txtBeg = iR+3;
 		continue;
 	    }
 	}
-    if(txtBeg < i_s) trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
+    if(txtBeg < iS) trez.append(tsrc.substr(txtBeg,iS-txtBeg));
 
     return trez;
 }
@@ -712,18 +710,29 @@ string TWEB::trMessReplace( const string &tsrc )
 //*************************************************
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars,
 	const string &icontent, TProtocolIn *iprt ) :
-    url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars), prt(iprt)
+    prt(iprt), url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars)
 {
     //URL parameters parse
     size_t prmSep = iurl.find("?");
     if(prmSep != string::npos) {
 	url = iurl.substr(0,prmSep);
-	string prms = iurl.substr(prmSep+1);
+	string prms = iurl.substr(prmSep);
 	string sprm;
-	for(int iprm = 0; (sprm=TSYS::strSepParse(prms,0,'&',&iprm)).size(); )
+	for(int iprm = 1; (sprm=TSYS::strSepParse(prms,0,'&',&iprm)).size(); )
 	    if((prmSep=sprm.find("=")) == string::npos) prm[sprm] = "true";
-	    else prm[sprm.substr(0,prmSep)] = sprm.substr(prmSep+1);
+	    else {
+		prm[sprm.substr(0,prmSep)] = sprm.substr(prmSep+1);
+		if(sprm.substr(0,prmSep) == "lang")	gPrms += (gPrms.size()?"&":"") + sprm;
+	    }
     }
+    if(gPrms.size()) gPrms = "?" + gPrms;
+
+    //Get language
+    for(size_t iVr = 0; iVr < vars.size(); iVr++)
+	if(TSYS::strParse(vars[iVr],0,":") == "oscd_lang") {
+	    lang = sTrm(TSYS::strParse(vars[iVr],1,":"));
+	    break;
+	}
 
     //Content parse
     string boundary;
@@ -733,10 +742,10 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     const char *c_fd = "Content-Disposition";
     const char *c_name = "name=\"";
 
-    for(size_t i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
-	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos) {
+    for(size_t iVr = 0, pos = 0; iVr < vars.size() && boundary.empty(); iVr++)
+	if(vars[iVr].compare(0,vars[iVr].find(":",0),"Content-Type") == 0 && (pos=vars[iVr].find(c_bound,0)) != string::npos) {
 	    pos += strlen(c_bound);
-	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
+	    boundary = vars[iVr].substr(pos,vars[iVr].size()-pos);
 	}
     if(boundary.empty()) return;
 

@@ -39,7 +39,7 @@
 #define MOD_NAME	_("AMR devices")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.0.3"
+#define MOD_VER		"0.0.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow access to automatic meter reading devices. Supported devices: ")
 #define LICENSE		"GPL2"
@@ -195,7 +195,7 @@ void TMdContr::start_( )
     if( prc_st ) return;
 
     //> Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
     //> Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);

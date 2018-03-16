@@ -87,18 +87,18 @@ void FlowTEC::getVals( )
 
     //> Send request
     bool errPresent = true;
-    ResAlloc resN( tr.at().nodeRes(), true );
+    MtxAlloc resN(tr.at().reqRes(), true);
     for( int i_tr = 0; i_tr < vmax(1,vmin(10,mPrm->owner().connTry())); i_tr++ )
     {
 	try
 	{
-	    int resp_len = tr.at().messIO( req.data(), req.size(), szReceive, sizeof(szReceive), 0, true );
+	    int resp_len = tr.at().messIO( req.data(), req.size(), szReceive, sizeof(szReceive));
 	    rez.assign( szReceive, resp_len );
 
 	    //> Wait tail
 	    while(resp_len && (rez.size() < 4 || rez.size() < (uint8_t)rez[2]))
 	    {
-		try{ resp_len = tr.at().messIO( NULL, 0, szReceive, sizeof(szReceive), 0, true ); } catch(TError &er){ break; }
+		try{ resp_len = tr.at().messIO(NULL, 0, szReceive, sizeof(szReceive)); } catch(TError &er){ break; }
 		rez.append(szReceive, resp_len);
 	    }
 	    if( rez.size() < 4 || rez.size() < (uint8_t)rez[2] ) continue;

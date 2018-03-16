@@ -450,7 +450,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/obj",_("Project"))) {
 	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enable"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:prj_"+id()).c_str(),
 		    "help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
@@ -1091,6 +1091,8 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
     if(!isContainer())  throw TError(nodePath().c_str(),_("Widget is not container!"));
     if(wdgPresent(wid)) return;
 
+    bool toRestoreInher = false;
+
     //Check for label <deleted>
     if(!force) {
 	string db = ownerProj()->DB();
@@ -1099,21 +1101,27 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
 	cEl.cfg("IDW").setS(path());
 	cEl.cfg("ID").setS(wid);
 	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,false,true) && cEl.cfg("PARENT").getS() == "<deleted>") {
-	    if(!parent().at().wdgPresent(wid))
-		SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true, false, true);
-	    else throw TError(nodePath().c_str(),
-		_("You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"),wid.c_str());
+	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true, false, true);
+	    toRestoreInher = parent().at().wdgPresent(wid);
 	}
     }
 
-    //Same widget add
-    chldAdd(inclWdg, new PageWdg(wid,ipath));
-    wdgAt(wid).at().setName(name);
+    //Same widget addition or restoring
+    if(toRestoreInher) {
+	inheritIncl(wid);
+	wdgAt(wid).at().setEnable(true);
+    }
+    else {
+	chldAdd(inclWdg, new PageWdg(wid,ipath));
+	wdgAt(wid).at().setName(name);
+    }
 
     //Call heritors include widgets update
     for(unsigned i_h = 0; i_h < mHerit.size(); i_h++)
 	if(mHerit[i_h].at().enable())
 	    mHerit[i_h].at().inheritIncl(wid);
+
+    if(toRestoreInher)	throw TError("warning", _("Restoring '%s' from the base container!"), wid.c_str());
 }
 
 AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off ) const

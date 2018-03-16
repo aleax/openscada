@@ -50,12 +50,10 @@ string TUIS::optDescr( )
 
 void TUIS::load_( )
 {
-    //> Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-	if(strcasecmp(argCom.c_str(),"h") == 0 || strcasecmp(argCom.c_str(),"help") == 0) fprintf(stdout,"%s",optDescr().c_str());
+    //Load parameters from command line
+    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
-    //> Load parameters from config-file
+    //Load parameters from config-file
 }
 
 bool TUIS::icoPresent(const string &inm, string *tp)
@@ -69,7 +67,7 @@ bool TUIS::icoPresent(const string &inm, string *tp)
     return false;
 }
 
-string TUIS::icoGet(const string &inm, string *tp )
+string TUIS::icoGet(const string &inm, string *tp, bool retPath )
 {
     int len, hd = -1;
     unsigned i_t;
@@ -77,15 +75,14 @@ string TUIS::icoGet(const string &inm, string *tp )
     string rez;
     char types[][5] = {"png","gif","jpg","jpeg"};
 
-    for(i_t = 0; i_t < sizeof(types)/5; i_t++)
-    {
+    for(i_t = 0; i_t < sizeof(types)/5; i_t++) {
 	hd = open(icoPath(inm,types[i_t]).c_str(),O_RDONLY);
 	if(hd != -1) break;
     }
-    if(hd != -1)
-    {
+    if(hd != -1) {
 	if(tp) *tp = types[i_t];
-	while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
+	if(retPath) rez = icoPath(inm, types[i_t]);
+	else while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
 	close(hd);
     }
 

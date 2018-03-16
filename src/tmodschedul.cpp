@@ -59,8 +59,8 @@ void TModSchedul::preDisable( int flag )
 	}
 
     //All shared libraries detach
-    for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
-	if(schHD[iSh].hd) { dlclose(schHD[iSh].hd); schHD[iSh].hd = NULL; }
+    for(int iSh = 0; iSh < (int)schHD.size(); iSh++)
+	if(schHD[iSh].hd) { dlclose(schHD[iSh].hd); schHD.erase(schHD.begin()+(iSh--)); }
 }
 
 string TModSchedul::optDescr( )
@@ -82,15 +82,14 @@ string TModSchedul::optDescr( )
 
 void TModSchedul::setChkPer( int per )	{ mPer = vmax(0,per); modif(); }
 
-int TModSchedul::loadLibS( )	{ return libLoad(SYS->modDir(),false); }
+int TModSchedul::loadLibS( )	{ return libLoad(SYS->modDir(), false); }
 
 void TModSchedul::load_( )
 {
     //Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-	if(strcasecmp(argCom.c_str(),"h") == 0 || strcasecmp(argCom.c_str(),"help") == 0) fprintf(stdout,"%s",optDescr().c_str());
-	else if(strcasecmp(argCom.c_str(),"modpath") == 0)	SYS->setModDir(optarg, true);
+    string argVl;
+    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
+    if((argVl=SYS->cmdOpt("modPath")).size()) SYS->setModDir(argVl, true);
 
     //Load parameters from command line
     setChkPer(s2i(TBDS::genDBGet(nodePath()+"ChkPer",i2s(chkPer()))));
@@ -318,6 +317,7 @@ bool TModSchedul::chkAllowMod( const string &name )
 	    if(sTrm(sel) == name || sTrm(sel) == nmFile) break;
 	if(sel.empty()) return false;
     }
+
     for(int off = 0; (sel=TSYS::strSepParse(denyList(),0,';',&off)).size(); )
 	if(sTrm(sel) == name || sTrm(sel) == nmFile) return false;
 
@@ -366,28 +366,28 @@ int TModSchedul::libLoad( const string &iname, bool full )
     dirScan(iname, files);
 
     //Add and process allowed modules
-    for(unsigned i_f = 0; i_f < files.size(); i_f++) {
+    for(unsigned iF = 0; iF < files.size(); iF++) {
 	unsigned iSh;
-	bool st_auto = chkAllowMod(files[i_f]);
+	bool st_auto = chkAllowMod(files[iF]);
 	MtxAlloc res(schM, true);
 	for(iSh = 0; iSh < schHD.size(); iSh++)
-	    if(schHD[iSh].name == files[i_f]) break;
+	    if(schHD[iSh].name == files[iF]) break;
 	if(iSh < schHD.size()) {
 	    try {
 		res.unlock();
-		if(st_auto) libDet(files[i_f]);
+		if(st_auto) libDet(files[iF]);
 	    } catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Warning, _("Can't detach library '%s'."), files[i_f].c_str());
+		mess_sys(TMess::Warning, _("Can't detach library '%s'."), files[iF].c_str());
 		continue;
 	    }
 	}
 	res.unlock();
 
-	libReg(files[i_f]);
+	libReg(files[iF]);
 
 	if(st_auto) {
-	    try{ libAtt(files[i_f],full); ldCnt++; }
+	    try{ libAtt(files[iF],full); ldCnt++; }
 	    catch(TError &err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
 	}
     }
@@ -409,13 +409,13 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 		"help",_("List of shared libs(modules) allowed for auto connection.\n"
 		         "Elements separated by symbol ';'.\n"
 		         "Value '*' used for allow all modules."));
-	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Check modules period (sec)"),RWRWR_,"root",SMSH_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Check modules period, seconds"),RWRWR_,"root",SMSH_ID,1,"tp","dec");
 	    ctrMkNode("comm",opt,-1,"/ms/chk_now",_("Check modules now."),RWRW__,"root",SMSH_ID);
 	    if(ctrMkNode("table",opt,-1,"/ms/libs",_("Shared libs(modules)"),RWRWR_,"root",SMSH_ID,1,"key","path")) {
 		ctrMkNode("list",opt,-1,"/ms/libs/path",_("Path"),R_R_R_,"root",SMSH_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/ms/libs/tm",_("Time"),R_R_R_,"root",SMSH_ID,1,"tp","time");
 		ctrMkNode("list",opt,-1,"/ms/libs/mods",_("Modules"),R_R_R_,"root",SMSH_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/ms/libs/en",_("Enable"),RWRWR_,"root",SMSH_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/ms/libs/en",_("Enabled"),RWRWR_,"root",SMSH_ID,1,"tp","bool");
 	    }
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SMSH_ID,3,"tp","str","cols","90","rows","10");

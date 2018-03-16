@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,7 +29,6 @@
 #include <QApplication>
 #include <QLocale>
 #include <QDesktopWidget>
-#include <QMenu>
 #include <QTimer>
 #include <QMenuBar>
 #include <QCloseEvent>
@@ -59,7 +58,11 @@ using namespace VISION;
 
 VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string &user_pass, const string &VCAstat,
 		bool icrSessForce, unsigned iScr ) :
-    QMainWindow(QDesktopWidget().screen(iScr)), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL),
+    QMainWindow(QDesktopWidget().screen(iScr)),
+#ifndef QT_NO_PRINTER
+    prPg(NULL), prDiag(NULL), prDoc(NULL),
+#endif
+    fileDlg(NULL),
     winClose(false), conErr(NULL), crSessForce(icrSessForce), keepAspectRatio(false), prjSes_it(iprjSes_it),
     master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1),
     mAlrmSt(0xFFFFFF)
@@ -210,25 +213,24 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     actAlrmSound->setStatusTip(_("Press for all sound or speech alarms quittance."));
     actAlrmSound->setVisible(false);
 
-    //Create menu
-    mn_file = menuBar()->addMenu(_("&File"));
-    mn_file->addAction(menuPrint->menuAction());
-    mn_file->addAction(menuExport->menuAction());
-    mn_file->addSeparator();
-    mn_file->addAction(actClose);
-    mn_file->addAction(actQuit);
-    mn_alarm = menuBar()->addMenu(_("&Alarm"));
-    mn_alarm->addAction(actAlrmLev);
-    mn_alarm->addAction(actAlrmLight);
-    mn_alarm->addAction(actAlrmAlarm);
-    mn_alarm->addAction(actAlrmSound);
-    mn_view = menuBar()->addMenu(_("&View"));
-    mn_view->addAction(actFullScr);
-    mn_help = menuBar()->addMenu(_("&Help"));
-    mn_help->addAction(actAbout);
-    mn_help->addAction(actQtAbout);
-    mn_help->addSeparator();
-    //mn_help->addAction(actWhatIs);
+    menuFile.setTitle(_("&File"));
+    menuFile.addAction(menuPrint->menuAction());
+    menuFile.addAction(menuExport->menuAction());
+    menuFile.addSeparator();
+    menuFile.addAction(actClose);
+    menuFile.addAction(actQuit);
+    menuAlarm.setTitle(_("&Alarm"));
+    menuAlarm.addAction(actAlrmLev);
+    menuAlarm.addAction(actAlrmLight);
+    menuAlarm.addAction(actAlrmAlarm);
+    menuAlarm.addAction(actAlrmSound);
+    menuView.setTitle(_("&View"));
+    menuView.addAction(actFullScr);
+    menuHelp.setTitle(_("&Help"));
+    menuHelp.addAction(actAbout);
+    menuHelp.addAction(actQtAbout);
+    menuHelp.addSeparator();
+    //menuHelp.addAction(actWhatIs);
 
     //Init tool bars
     // Generic tools bar
@@ -289,7 +291,6 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 
     alrmPlay = new SndPlay(this);
 
-
     resize(600, 400);
 
     //Init session
@@ -332,14 +333,34 @@ VisRun::~VisRun( )
     //Clear cache
     pgCacheClear();
 
+#ifndef QT_NO_PRINTER
     //Print objects free
     if(prPg)	delete prPg;
     if(prDiag)	delete prDiag;
     if(prDoc)	delete prDoc;
     if(fileDlg)	delete fileDlg;
+#endif
+}
+
+void VisRun::setWinMenu( bool act )
+{
+    //Create menu
+    if(act) {
+	menuBar()->clear();
+	menuBar()->addMenu(&menuFile);
+	menuBar()->addMenu(&menuAlarm);
+	menuBar()->addMenu(&menuView);
+	menuBar()->addMenu(&menuHelp);
+	menuBar()->addMenu((QMenu*)TSYS::str2addr(qApp->property("menuStarterAddr").toString().toStdString()));
+	menuBar()->setVisible(true);
+    }
+    //Clear menu
+    else { menuBar()->clear(); menuBar()->setVisible(false); }
 }
 
 string VisRun::user( )		{ return mWUser->user(); }
+
+bool VisRun::userSel( const string &hint )	{ return mWUser->userSel(hint); }
 
 string VisRun::password( )	{ return mWUser->pass(); }
 
@@ -347,7 +368,7 @@ string VisRun::VCAStation( )	{ return mWUser->VCAStation(); }
 
 int VisRun::style( )		{ return mStlBar->style(); }
 
-void VisRun::setStyle( int istl )	{ mStlBar->setStyle(istl); }
+void VisRun::setStyle( int istl )		{ mStlBar->setStyle(istl); }
 
 int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 {
@@ -428,7 +449,7 @@ void VisRun::closeEvent( QCloseEvent* ce )
 	    if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[i_w]) && QApplication::topLevelWidgets()[i_w]->isVisible())
 		winCnt++;
 
-	if(winCnt <= 1) SYS->stop();
+	if(winCnt <= 1 && !qApp->property("closeToTray").toBool()) SYS->stop();
     }
 
     endRunTimer->stop();
@@ -440,17 +461,25 @@ void VisRun::closeEvent( QCloseEvent* ce )
 
 void VisRun::resizeEvent( QResizeEvent *ev )
 {
-    if(ev && ev->oldSize().isValid() && masterPg()) {
+    if(ev && masterPg()) {
 	float x_scale_old = x_scale;
 	float y_scale_old = y_scale;
-	if(windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen) {
+	if(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen)) {
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)masterPg()->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)masterPg()->size().height();
 	    if(x_scale > 1 && x_scale < 1.02) x_scale = 1;
 	    if(y_scale > 1 && y_scale < 1.02) y_scale = 1;
 	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale, y_scale);
 	} else x_scale = y_scale = 1;
-	if(x_scale_old != x_scale || y_scale_old != y_scale)	fullUpdatePgs();
+	if(x_scale_old != x_scale || y_scale_old != y_scale) fullUpdatePgs();
+
+	// Fit to the master page size
+	if((x_scale_old != x_scale || y_scale_old != y_scale || !ev->oldSize().isValid()) && !(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen))) {
+	    QRect ws = QApplication::desktop()->availableGeometry(this);
+	    resize(fmin(ws.width()-10,masterPg()->size().width()+(centralWidget()->parentWidget()->width()-centralWidget()->width())+5),
+		fmin(ws.height()-10,masterPg()->size().height()+(centralWidget()->parentWidget()->height()-centralWidget()->height())+5));
+	}
+
 	mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
     }
     mWTime->setVisible(windowState()==Qt::WindowFullScreen);
@@ -486,6 +515,7 @@ void VisRun::print( )
 
 void VisRun::printPg( const string &ipg )
 {
+#ifndef QT_NO_PRINTER
     RunPageView *rpg;
     string pg = ipg;
 
@@ -527,11 +557,11 @@ void VisRun::printPg( const string &ipg )
 	painter.setViewport(prPg->paperRect());
 
 	//Draw image
-#if QT_VERSION >= 0x050000
+# if QT_VERSION >= 0x050000
 	QImage im = rpg->grab().toImage();
-#else
+# else
 	QImage im = QPixmap::grabWidget(rpg).toImage();
-#endif
+# endif
 	im = im.scaled(QSize(vmin(im.width()*4,pagl.width()),vmin(im.height()*4,pagl.height()-2*fntSize)),Qt::KeepAspectRatio/*,Qt::SmoothTransformation*/);
 	painter.drawImage((pagl.width()-im.width())/2,fntSize,im);
 
@@ -549,10 +579,12 @@ void VisRun::printPg( const string &ipg )
 
 	painter.end();
     }
+#endif
 }
 
 void VisRun::printDiag( const string &idg )
 {
+#ifndef QT_NO_PRINTER
     RunWdgView *rwdg;
     string dg = idg;
 
@@ -602,11 +634,11 @@ void VisRun::printDiag( const string &idg )
 	painter.setViewport(prDiag->paperRect());
 
 	//Draw image
-#if QT_VERSION >= 0x050000
+# if QT_VERSION >= 0x050000
 	QImage im = rwdg->grab().toImage();
-#else
+# else
 	QImage im = QPixmap::grabWidget(rwdg).toImage();
-#endif
+# endif
 	im = im.scaled(QSize(vmin(im.width()*4,pagl.width()),vmin(im.height()*4,pagl.height()-(2+elLine)*fntSize)),Qt::KeepAspectRatio/*,Qt::SmoothTransformation*/);
 	painter.drawImage((pagl.width()-im.width())/2,fntSize*2,im);
 
@@ -637,10 +669,12 @@ void VisRun::printDiag( const string &idg )
 
 	painter.end();
     }
+#endif
 }
 
 void VisRun::printDoc( const string &idoc )
 {
+#ifndef QT_NO_PRINTER
     RunWdgView *rwdg;
     string doc = idoc;
 
@@ -677,6 +711,7 @@ void VisRun::printDoc( const string &idoc )
     QPrintDialog dlg(prDoc, this);
     dlg.setWindowTitle(QString(_("Print document: \"%1\" (%2)")).arg(docnm.c_str()).arg(doc.c_str()));
     if(dlg.exec() == QDialog::Accepted) ((ShapeDocument::ShpDt*)rwdg->shpData)->print(prDoc);
+#endif
 }
 
 void VisRun::exportDef( )
@@ -988,8 +1023,8 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	return;
     }
-    if(req.attr("userIsRoot").size()) menuBar()->setVisible(s2i(req.attr("userIsRoot")));
-    else menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
+    if(req.attr("userIsRoot").size()) setWinMenu(s2i(req.attr("userIsRoot")));
+    else setWinMenu(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
     int oldConId = mConId;
     mConId = s2i(req.attr("conId"));
     req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess())->setAttr("conId", i2s(oldConId));
@@ -999,7 +1034,7 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     pgCacheClear();
     bool oldMenuVis = menuBar()->isVisible();
     QApplication::processEvents();
-    if(master_pg) {
+    if(masterPg()) {
 	if(oldMenuVis != menuBar()->isVisible() && (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen)) {
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
@@ -1175,8 +1210,8 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	}
 	return;
     }
-    if(req.attr("userIsRoot").size()) menuBar()->setVisible(s2i(req.attr("userIsRoot")));
-    else menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
+    if(req.attr("userIsRoot").size()) setWinMenu(s2i(req.attr("userIsRoot")));
+    else setWinMenu(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
 
     if(work_sess.empty()) work_sess = req.attr("sess");
     if(src_prj.empty()) src_prj = req.attr("prj");
@@ -1304,6 +1339,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	XMLNode reqSpc("CntrReqs"); reqSpc.setAttr("path", pg_it);
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fstatLine")->
 				     setAttr("aNm", _("Status line items"))->setAttr("aTp", i2s(TFld::String))->setAttr("aFlg", i2s(TFld::FullText));
+	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fuserSetVis");
 	cntrIfCmd(reqSpc);
 
 	// Create widget view

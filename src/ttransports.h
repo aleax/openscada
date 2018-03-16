@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		9		//TransportS type modules version
+#define STR_VER		10		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>
@@ -74,6 +74,11 @@ class TTransportIn : public TCntrNode, public TConfig
 	virtual void start( )	{ }
 	virtual void stop( )	{ }
 
+	// IO log
+	int logLen( )	{ return mLogLen; }
+	void setLogLen( int vl );
+	void pushLogMess( const string &vl );
+
 	TTipTransport &owner( ) const;
 
     protected:
@@ -100,6 +105,10 @@ class TTransportIn : public TCntrNode, public TConfig
 	TCfg	&mId;
 	char	&mStart;
 	string	mDB;
+
+	// IO log
+	int		mLogLen;
+	deque<string>	mLog;
 };
 
 //************************************************
@@ -144,14 +153,19 @@ class TTransportOut : public TCntrNode, public TConfig
 	virtual void start( int time = 0 );
 	virtual void stop( )			{ };
 
-	virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0, bool noRes = false )
+	virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 )
 	{ return 0; }
 
 	void messProtIO( XMLNode &io, const string &prot );
 
+	// IO log
+	int logLen( )	{ return mLogLen; }
+	void setLogLen( int vl );
+	void pushLogMess( const string &vl );
+
 	TTipTransport &owner( ) const;
 
-	ResRW &nodeRes( )			{ return nRes; }
+	ResMtx &reqRes( )			{ return mReqRes; }
 
     protected:
 	//Methods
@@ -181,7 +195,11 @@ class TTransportOut : public TCntrNode, public TConfig
 	// Reserve parameters
 	time_t	mStartTm;
 	int	mPrm1, mPrm2;
-	ResRW	nRes;
+	ResMtx	mReqRes;
+
+	// IO log
+	int		mLogLen;
+	deque<string>	mLog;
 };
 
 //************************************************

@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.OPC_UA translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.OPC_UA package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2010-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-09 11:25+0200\n"
+"POT-Creation-Date: 2017-12-16 16:08+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -24,11 +24,11 @@ msgstr "Планирование опроса"
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
 
-msgid "Restore timeout (s)"
-msgstr "Интервал восстановления (с)"
+msgid "Restore timeout, seconds"
+msgstr "Интервал восстановления, секунд"
 
-msgid "Sync inter remote station period (s)"
-msgstr "Период синхронизации с удалённой станцией (сек)"
+msgid "Sync inter remote station period, seconds"
+msgstr "Период синхронизации с удалённой станцией, секунд"
 
 msgid "End point"
 msgstr "Конечный узел"
@@ -323,7 +323,7 @@ msgstr "Состояние"
 msgid "Status"
 msgstr "Статус"
 
-msgid "Enable"
+msgid "Enabled"
 msgstr "Включен"
 
 msgid "DB"

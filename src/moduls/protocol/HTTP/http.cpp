@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"2.1.0"
+#define MOD_VER		"3.1.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -71,7 +71,9 @@ using namespace PrHTTP;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : TProtocol(MOD_ID), mDeny(dataRes()), mAllow(dataRes()), mTmpl(dataRes()), mTmplMainPage(dataRes()), lstSesChk(0), mTAuth(10)
+TProt::TProt( string name ) : TProtocol(MOD_ID),
+    mDeny(dataRes()), mAllow(dataRes()), mTmpl(dataRes()), mTmplMainPage(dataRes()), mAllowUsersAuth(dataRes()),
+    mTAuth(10), lstSesChk(0)
 {
     mod = this;
 
@@ -89,7 +91,7 @@ string TProt::optDescr( )
 {
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
-	"======================= The module <%s:%s> options =======================\n"
+	"======================= Module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section '%s' in config-file ----------\n"
 	"AuthTime <min>      Life time of the authentication, minutes (default 10).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
@@ -100,15 +102,14 @@ string TProt::optDescr( )
 void TProt::load_( )
 {
     //Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
     setDeny(TBDS::genDBGet(nodePath()+"Deny",deny()));
     setAllow(TBDS::genDBGet(nodePath()+"Allow",allow()));
     setTmpl(TBDS::genDBGet(nodePath()+"Tmpl",tmpl()));
     setTmplMainPage(TBDS::genDBGet(nodePath()+"TmplMainPage",tmplMainPage()));
+    setAllowUsersAuth(TBDS::genDBGet(nodePath()+"AllowUsersAuth",allowUsersAuth()));
     setAuthTime(s2i(TBDS::genDBGet(nodePath()+"AuthTime",i2s(authTime()))));
     // Load auto-login config
     MtxAlloc res(dataRes(), true);
@@ -129,8 +130,8 @@ void TProt::save_( )
     TBDS::genDBSet(nodePath()+"Allow", allow());
     TBDS::genDBSet(nodePath()+"Tmpl", tmpl());
     TBDS::genDBSet(nodePath()+"TmplMainPage", tmplMainPage());
+    TBDS::genDBSet(nodePath()+"AllowUsersAuth",allowUsersAuth());
     TBDS::genDBSet(nodePath()+"AuthTime", i2s(authTime()));
-
 
     //Save auto-login config
     MtxAlloc res(dataRes(), true);
@@ -165,7 +166,7 @@ TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 	}
 	return false;
     }
-    //string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}",
+    //string pgCreator( string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}",
     //                 string htmlHeadEls = "", string forceTmplFile = "" ) -
     //    Forming page or resource from content <cnt>, wrapped to HTTP result <rcode>, with HTTP additional attributes <httpattrs>,
     //    HTML additional head's element <htmlHeadEls> and forced template file <forceTmplFile>.
@@ -174,9 +175,22 @@ TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const st
     //  httpattrs - additional HTTP-attributes, mostly this is "Content-Type" which by default sets to "text/html;charset={SYS}";
     //              only for "Content-Type: text/html" will do wrapping to internal/service or force <forceTmplFile> HTML-template;
     //  htmlHeadEls   - an additional HTML-header's tag, it's mostly META with "Refresh" to pointed URL;
-    //  forceTmplFile - force template file for override the internal/service template by the main-page template or other.
+    //  forceTmplFile - force template file for override the internal/service template by the main-page template or other;
+    //  lang - language.
     if(iid == "pgCreator" && prms.size()) {
-	bool isForceTmpl = (prms.size() >= 5 && prms[4].getS().size());
+	size_t extPos;
+
+	string forceTmpl = (prms.size() >= 5) ? prms[4].getS() : "";
+	string forceTmplExt;
+	if((extPos=forceTmpl.rfind(".")) != string::npos) { forceTmplExt = forceTmpl.substr(extPos); forceTmpl = forceTmpl.substr(0, extPos); }
+	//bool isForceTmpl = forceTmpl.getS().size();
+
+	string cTmpl = mod->tmpl();
+	string cTmplExt;
+	if((extPos=cTmpl.rfind(".")) != string::npos)	{ cTmplExt = cTmpl.substr(extPos); cTmpl = cTmpl.substr(0, extPos); }
+
+	string lang = (prms.size() >= 6) ? prms[5].getS() : "";
+	if(lang.size() > 2)	lang = lang.substr(0, 2);
 
 	string httpattrs = (prms.size() >= 3) ? prms[2].getS() : "";
 	if(httpattrs.find("Content-Type") == string::npos)
@@ -186,13 +200,15 @@ TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 
 	if(httpattrs.find("Content-Type: text/html") != string::npos) {
 	    int hd = -1;
-	    if(isForceTmpl)			hd = ::open(prms[4].getS().c_str(), O_RDONLY);
-	    if(hd < 0 && mod->tmpl().size()) hd = ::open(tmpl().c_str(), O_RDONLY);
+	    if(forceTmpl.size() && lang.size())		hd = ::open((forceTmpl+"_"+lang+forceTmplExt).c_str(), O_RDONLY);
+	    if(hd < 0 && forceTmpl.size())		hd = ::open((forceTmpl+forceTmplExt).c_str(), O_RDONLY);
+	    if(hd < 0 && cTmpl.size() && lang.size())	hd = ::open((cTmpl+"_"+lang+cTmplExt).c_str(), O_RDONLY);
+	    if(hd < 0 && cTmpl.size())			hd = ::open((cTmpl+cTmplExt).c_str(), O_RDONLY);
 	    if(hd >= 0) {
 		char buf[STR_BUF_LEN];
 		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) answer.append(buf, len);
 		::close(hd);
-		if(answer.find("#####CONTEXT#####") == string::npos && !isForceTmpl) answer.clear();
+		if(answer.find("#####CONTEXT#####") == string::npos && !forceTmpl.size()) answer.clear();
 		else {
 		    try {
 			XMLNode tree("");
@@ -206,8 +222,8 @@ TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 			    } else answer.clear();
 			}
 		    } catch(TError &err) {
-			mess_err(nodePath().c_str(), _("HTML template '%s' load error: %s"),
-				(isForceTmpl?prms[4].getS():mod->tmpl()).c_str(), err.mess.c_str());
+			mess_err(nodePath().c_str(), _("HTML template '%s' for language '%s' load error: %s"),
+				(forceTmpl.size()?(forceTmpl+forceTmplExt):(cTmpl+cTmplExt)).c_str(), lang.c_str(), err.mess.c_str());
 			answer.clear();
 		    }
 		}
@@ -335,7 +351,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     if(uri.empty()) uri = "/";
     XMLNode *nd;
 
-    ResAlloc resN(tro.nodeRes(), true);
+    MtxAlloc resN(tro.reqRes(), true);
 
     try {
 	//Get host address from transport
@@ -392,7 +408,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	if(!tro.startStat()) tro.start();
 
 	//Put request
-	int resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),0,true);
+	int resp_len = tro.messIO(req.c_str(), req.size(), buf, sizeof(buf));
 	resp.assign(buf,resp_len);
 
 	//Process response
@@ -400,9 +416,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	// Parse first record
 	int pos = 0;
 	tw = TSYS::strLine(resp,0,&pos);
-	string protocol	= TSYS::strParse(tw,0," ");
-	string rcod	= TSYS::strParse(tw,1," ");
-	string rstr	= TSYS::strParse(tw,2," ");
+	string protocol	= TSYS::strParse(tw, 0, " ");
+	string rcod	= TSYS::strParse(tw, 1, " ");
+	string rstr	= TSYS::strParse(tw, 2, " ");
 	if((protocol != "HTTP/1.0" && protocol != "HTTP/1.1") || rcod.empty() || rstr.empty())
 	    throw TError(nodePath().c_str(),_("HTTP respond error"));
 	io.setAttr("Protocol",protocol)->setAttr("RezCod",rcod)->setAttr("RezStr",rstr);
@@ -433,9 +449,9 @@ next_ch:
 	while(ch_ln > 0 && ((int)(resp.size()-pos) < ch_ln ||
 	    (c_lng == -2 && ((int)(resp.size()-pos) < (ch_ln+5) || resp.find("\x0D\x0A",pos+ch_ln+2) == string::npos))))
 	{
-	    resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
-	    if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond."));
-	    resp.append(buf,resp_len);
+	    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf));
+	    if(!resp_len) throw TError(nodePath().c_str(), _("Not full respond."));
+	    resp.append(buf, resp_len);
 	}
 
 	// Put body
@@ -464,6 +480,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/tmplMainPage",_("HTML main page template"),RWRWR_,"root",SPRT_ID,3,
 		    "tp","str", "dest","sel_ed", "select","/prm/cfg/tmplMainPageList");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of the authentication (min)"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/aUsers",_("List of users allowed for auth, separated by ';'"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		if(ctrMkNode("table",opt,-1,"/prm/cfg/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins",
 		    "help",_("For address field you can use address templates list, for example \"192.168.1.*;192.168.2.*\".")))
 		{
@@ -506,6 +523,10 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(authTime()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAuthTime(s2i(opt->text()));
     }
+    else if(a_path == "/prm/cfg/aUsers") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(allowUsersAuth());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAllowUsersAuth(opt->text());
+    }
     else if(a_path == "/prm/cfg/alog") {
 	int idrow = s2i(opt->attr("row"));
 	string idcol = opt->attr("col");
@@ -545,7 +566,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TProtIn                                       *
 //*************************************************
-TProtIn::TProtIn( string name ) : TProtocolIn(name), mNoFull(false)
+TProtIn::TProtIn( string name ) : TProtocolIn(name), mNotFull(false)
 {
 
 }
@@ -558,7 +579,7 @@ TProtIn::~TProtIn( )
 string TProtIn::pgCreator( const string &cnt, const string &rcode, const string &httpattrs, const string &htmlHeadEls, const string &forceTmplFile )
 {
     vector<TVariant> prms;
-    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
+    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile); prms.push_back(lang());
 
     return owner().objFuncCall("pgCreator", prms, "root").getS();
 }
@@ -578,9 +599,9 @@ bool TProtIn::mess( const string &reqst, string &answer )
     string sender = TSYS::strLine(srcAddr(), 0);
 
     //Continue for full reqst
-    if(mNoFull) {
+    if(mNotFull) {
 	mBuf.append(reqst);
-	mNoFull = false;
+	mNotFull = false;
     } else mBuf = reqst;	//Save request to buffer
 
     string request = mBuf;
@@ -594,23 +615,25 @@ bool TProtIn::mess( const string &reqst, string &answer )
 
 	//Parse first record
 	req = TSYS::strLine(request,0,&pos);
-	if(req == request) { mNoFull = true; return mNoFull; }	//HTTP header is not full
+	if(req == request) { mNotFull = true; return mNotFull; }	//HTTP header is not full
 	string method   = TSYS::strSepParse(req, 0, ' ');
 	string uris     = TSYS::strSepParse(req, 1, ' ');
 	string protocol = TSYS::strSepParse(req, 2, ' ');
-	string user, uri;
+	string uri;
 
 	if(!pgAccess(sender+uris)) {
 	    answer = pgCreator(TSYS::strMess("<div class='error'>Access for the URL '%s' is forbidden.</div>\n",(sender+uris).c_str()), "403 Forbidden");
-	    return mNoFull || KeepAlive;
+	    return mNotFull || KeepAlive;
 	}
+
+	prms = user = brLang = prmLang = "";
 
 	//Parse parameters
 	int c_lng = -1;
 	while(true) {
 	    req = TSYS::strLine(request, 0, &pos);
 	    if(req.empty()) break;
-	    size_t sepPos = req.find(":",0);
+	    size_t sepPos = req.find(":", 0);
 	    if(sepPos == 0 || sepPos == string::npos) break;
 	    string var = req.substr(0, sepPos);
 	    string val = req.substr(sepPos+1);
@@ -624,23 +647,38 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		    { KeepAlive = true; break; }
 	    }
 	    else if(strcasecmp(var.c_str(),"cookie") == 0) {
-		size_t vpos = val.find("oscd_u_id=",0);
+		size_t vpos = val.find("oscd_u_id=", 0);
 		if(vpos != string::npos) user = mod->sesCheck((sesId=s2i(val.substr(vpos+10))));
 	    }
+	    else if(strcasecmp(var.c_str(),"accept-language") == 0)
+		brLang = TSYS::strTrim(TSYS::strParse(val,0,","));
+	    else if(strcasecmp(var.c_str(),"oscd_lang") == 0)	vars.pop_back();
 	}
 
 	//Check content length
-	if((c_lng >= 0 && c_lng > (int)(request.size()-pos)) || (c_lng < 0 && method == "POST")) mNoFull = true;
-	if(mNoFull) return mNoFull;
+	if((c_lng >= 0 && c_lng > (int)(request.size()-pos)) || (c_lng < 0 && method == "POST")) mNotFull = true;
+	if(mNotFull) return mNotFull;
 
 	//Check protocol version
 	if(protocol != "HTTP/1.0" && protocol != "HTTP/1.1") {
 	    answer = pgCreator("<div class='error'>Bad Request<br/>This server doesn't undersand your request.</div>\n", "400 Bad Request");
-	    return mNoFull || KeepAlive;
+	    return mNotFull || KeepAlive;
+	}
+
+	//URL parameters parse
+	size_t prmSep = uris.find("?");
+	if(prmSep != string::npos) {
+	    prms = uris.substr(prmSep);
+	    uris = uris.substr(0, prmSep);
+	    string sprm;
+	    for(int iprm = 1; (sprm=TSYS::strParse(prms,0,"&",&iprm)).size(); ) {
+		prmSep = sprm.find("=");
+		if(prmSep != string::npos && sprm.substr(0,prmSep) == "lang")	prmLang = sprm.substr(prmSep+1);
+	    }
 	}
 
 	int uri_pos = 0;
-	string name_mod = TSYS::pathLev(uris,0,false,&uri_pos);
+	string name_mod = TSYS::pathLev(uris, 0, false, &uri_pos);
 	while(uri_pos < (int)uris.size() && uris[uri_pos] == '/') uri_pos++;
 	uri = "/" + uris.substr(uri_pos);
 
@@ -650,33 +688,34 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	    if(method == "GET") {
 		if(sesId) mod->sesClose(sesId);
 		answer = getAuth(uri);
-		return mNoFull || KeepAlive;
+		return mNotFull || KeepAlive;
 	    }
 	    else if(method == "POST") {
 		map<string,string>	cnt;
 		map<string,string>::iterator cntEl;
-		getCnt(vars,request.substr(pos),cnt);
+		getCnt(vars, request.substr(pos), cnt);
 		if(cnt.find("auth_enter") != cnt.end()) {
 		    string pass;
 		    if((cntEl=cnt.find("user")) != cnt.end())	user = cntEl->second;
 		    if((cntEl=cnt.find("pass")) != cnt.end())	pass = cntEl->second;
 
 		    if(mod->autoLogGet(sender) == user ||
-			(SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass)))
+			((!mod->allowUsersAuth().size() || TRegExp("(^|;)"+user+"(;|$)").test(mod->allowUsersAuth())) &&
+			    SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass)))
 		    {
 			mess_info(owner().nodePath().c_str(), _("Auth OK from user '%s'. Host: %s. User agent: %s."),
 			    user.c_str(), sender.c_str(), userAgent.c_str());
-			answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),uri.c_str())+"</h2>\n", "200 OK",
+			answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),(uri+prms).c_str())+"</h2>\n", "200 OK",
 				"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;",
-				"<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+uri+"'/>");
-			return mNoFull || KeepAlive;
+				"<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+uri+prms+"'/>");
+			return mNotFull || KeepAlive;
 		    }
 		}
 
-		mess_warning(owner().nodePath().c_str(),_("Auth wrong from user '%s'. Host: %s. User agent: %s."),
+		mess_warning(owner().nodePath().c_str(), _("Auth wrong from user '%s'. Host: %s. User agent: %s."),
 		    user.c_str(), sender.c_str(), userAgent.c_str());
 		answer = getAuth(uri, _("<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"));
-		return mNoFull || KeepAlive;
+		return mNotFull || KeepAlive;
 	    }
 	}
 	// Logut
@@ -684,12 +723,12 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	    if(sesId) mod->sesClose(sesId);
 	    answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),"/")+"</h2>\n", "200 OK",
 		"Set-Cookie: oscd_u_id=0; path=/;", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/'/>");
-	    return mNoFull || KeepAlive;
+	    return mNotFull || KeepAlive;
 	}
 	// robots.txt
 	else if(name_mod == "robots.txt" && method == "GET") {
 	    answer = pgCreator("User-Agent: *\nDisallow: /", "200 OK", "Content-Type: text/plain;charset=us-ascii");
-	    return mNoFull || KeepAlive;
+	    return mNotFull || KeepAlive;
 	}
 
 	//Send request to the module
@@ -702,14 +741,16 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		if(!user.empty()) {
 		    mess_info(owner().nodePath().c_str(), _("Auto auth from user '%s'. Host: %s. User agent: %s."),
 			user.c_str(), sender.c_str(), userAgent.c_str());
-		    answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),uri.c_str())+"</h2>\n", "200 OK",
+		    answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),(uri+prms).c_str())+"</h2>\n", "200 OK",
 			"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;",
-			"<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+uris+"'/>");
+			"<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+uris+prms+"'/>");
 		}
-		else answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),("/login/"+name_mod+uri).c_str())+"</h2>\n",
-			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/login/"+(name_mod+uri)+"'/>");
-		return mNoFull || KeepAlive;
+		else answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),("/login/"+name_mod+uri+prms).c_str())+"</h2>\n",
+			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/login/"+(name_mod+uri+prms)+"'/>");
+		return mNotFull || KeepAlive;
 	    }
+
+	    vars.push_back("oscd_lang: "+lang());
 
 	    // Check metods
 	    if(method == "GET") {
@@ -718,10 +759,10 @@ bool TProtIn::mess( const string &reqst, string &answer )
 
 		if(wwwmod.at().modFunc("void HTTP_GET(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
 			(void (TModule::**)()) &HTTP_GET,true))
-		    ((&wwwmod.at())->*HTTP_GET)(uri, answer, vars, user, this);
+		    ((&wwwmod.at())->*HTTP_GET)(uri+prms, answer, vars, user, this);
 		else if(wwwmod.at().modFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
 			(void (TModule::**)()) &HttpGet,true))
-		    ((&wwwmod.at())->*HttpGet)(uri, answer, sender, vars, user);
+		    ((&wwwmod.at())->*HttpGet)(uri+prms, answer, sender, vars, user);
 		else throw TError(nodePath().c_str(), _("No a HTTP GET function present for module '%s'!"), name_mod.c_str());
 #if OSC_DEBUG >= 4
 		mess_debug(nodePath().c_str(),"Get Content:\n%s",request.c_str());
@@ -734,10 +775,10 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		answer = request.substr(pos);
 		if(wwwmod.at().modFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
 			(void (TModule::**)()) &HTTP_POST,true))
-		    ((&wwwmod.at())->*HTTP_POST)(uri, answer, vars, user, this);
+		    ((&wwwmod.at())->*HTTP_POST)(uri+prms, answer, vars, user, this);
 		else if(wwwmod.at().modFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
 			(void (TModule::**)()) &HttpPost,true))
-		    ((&wwwmod.at())->*HttpPost)(uri, answer, sender, vars, user);
+		    ((&wwwmod.at())->*HttpPost)(uri+prms, answer, sender, vars, user);
 		else throw TError(nodePath().c_str(), _("No a HTTP POST function present for module '%s'!"), name_mod.c_str());
 #if OSC_DEBUG >= 4
 		mess_debug(nodePath().c_str(),"Post Content:\n%s",request.c_str());
@@ -768,7 +809,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 			answer = pgCreator(answer, "200 OK", "Content-Type: text/javascript;");
 		    else answer = pgCreator("<div class='error'>Bad Request!<br/>This server doesn't undersand your request.</div>\n",
 					    "400 Bad Request");
-		    return mNoFull || KeepAlive;
+		    return mNotFull || KeepAlive;
 		}
 	    }
 	    //Check for module's icon and other images into folder "icons/"
@@ -776,15 +817,26 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		string icoTp, ico = TUIS::icoGet(name_mod.substr(0,name_mod.rfind(".")), &icoTp);
 		if(ico.size()) {
 		    answer = pgCreator(ico, "200 OK", "Content-Type: "+TUIS::mimeGet(name_mod,ico,"image/"+icoTp)+";");
-		    return mNoFull || KeepAlive;
+		    return mNotFull || KeepAlive;
 		}
 	    }
 
-	    answer = getIndex(user,sender);
+	    answer = getIndex(user, sender);
 	}
     }
 
-    return mNoFull || KeepAlive;
+    return mNotFull || KeepAlive;
+}
+
+string TProtIn::lang( )
+{
+    string rez = prmLang;
+    /*if(rez.empty() && user.size())
+	try { rez = SYS->security().at().usrAt(user).at().lang(); }
+	catch(...) { }*/
+    if(rez.empty())	rez = brLang;
+
+    return rez;
 }
 
 string TProtIn::getIndex( const string &user, const string &sender )
@@ -796,11 +848,11 @@ string TProtIn::getIndex( const string &user, const string &sender )
     if(!user.empty())
 	answer = answer +
 	    "<p style='color: green;'>"+TSYS::strMess(_("You are logged in as \"<b>%s</b>\"."),user.c_str())+"</p>"
-	    "<p>"+_("Select the necessary Web-module from the list below, <a href='/logout'>logout</a> or <a href='/login'>login as an another user</a>.")+"</p>";
+	    "<p>"+TSYS::strMess(_("Select the necessary Web-module from the list below, <a href='%s'>logout</a> or <a href='%s'>login as an another user</a>."),("/logout"+prms).c_str(),("/login"+prms).c_str())+"</p>";
     else {
 	answer = answer +
 	    "<p style='color: #CF8122;'>"+_("You are not logged in the system!")+"</p>"
-	    "<p>"+_("To use some modules you must be logged in. <a href='/login'>Login now</a>.")+"</p>";
+	    "<p>"+TSYS::strMess(_("To use some modules you must be logged in. <a href='%s'>Login now</a>."),("/login"+prms).c_str())+"</p>";
 	string a_log = mod->autoLogGet(sender);
 	if(!a_log.empty())
 	    answer += "<p>"+TSYS::strMess(_("You can auto-login from user \"<b>%s</b>\" by simple selecting the module."),a_log.c_str())+"</p>";
@@ -816,9 +868,9 @@ string TProtIn::getIndex( const string &user, const string &sender )
 	AutoHD<TModule> mod = owner().owner().owner().ui().at().modAt(list[iL]);
 	if(mod.at().modInfo("SubType") == "WWW" && pgAccess(sender+"/"+list[iL]+"/")) {
 	    string mIcoTp;
-	    TUIS::icoGet("UI."+list[iL], &mIcoTp);
+	    TUIS::icoGet("UI."+list[iL], &mIcoTp, true);
 	    answer = answer+"<li>"+(mIcoTp.size()?"<img src='/UI."+list[iL]+"."+mIcoTp+"' height='32' width='32'/> ":"")+
-		"<a href='/"+list[iL]+"/'><span title='"+mod.at().modInfo("Description")+"'>"+mod.at().modInfo("Name")+"</span></a></li>\n";
+		"<a href='/"+list[iL]+"/"+prms+"'><span title='"+mod.at().modInfo("Description")+"'>"+mod.at().modInfo("Name")+"</span></a></li>\n";
 	}
     }
 
@@ -830,7 +882,7 @@ string TProtIn::getAuth( const string& uri, const string &mess )
     return pgCreator(string("<table class='work'>") +
 	"<tr><th>" + _("Login to system") + "</th></tr>\n"
 	"<tr><td>\n"
-	"<form method='post' action='/login" + uri + "' enctype='multipart/form-data'>\n"
+	"<form method='post' action='/login" + uri + prms + "' enctype='multipart/form-data'>\n"
 	"<table cellpadding='3px'>\n"
 	"<tr><td><b>" + _("User name") + "</b></td><td><input type='text' name='user' size='20'/></td></tr>\n"
 	"<tr><td><b>" + _("Password") + "</b></td><td><input type='password' name='pass' size='20'/></td></tr>\n"
