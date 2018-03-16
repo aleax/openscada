@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 15:08+0200\n"
+"POT-Creation-Date: 2018-03-11 08:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -460,6 +460,9 @@ msgstr ""
 msgid "Style"
 msgstr ""
 
+msgid "Font"
+msgstr ""
+
 msgid "Palette"
 msgstr ""
 
@@ -524,6 +527,9 @@ msgid "Known profiles"
 msgstr ""
 
 msgid "Widgets style"
+msgstr ""
+
+msgid "Common font"
 msgstr ""
 
 msgid "<Select a profile to combine>"

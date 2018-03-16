@@ -1226,9 +1226,9 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
     headerLabels << _("Name") << _("Type") << _("Identifier");
     treeW->setHeaderLabels(headerLabels);
     treeW->header()->setStretchLastSection(false);
-    treeW->setColumnWidth(0,180);
-    treeW->setColumnWidth(1,60);
-    treeW->setColumnWidth(2,0);
+    treeW->setColumnWidth(0, icoSize(14));
+    treeW->setColumnWidth(1, icoSize(4));
+    treeW->setColumnWidth(2, 0);
     //treeW->header()->resizeSection(0,120);
 
     // Connect to signals
@@ -1619,9 +1619,9 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
     headerLabels << _("Name") << _("Type") << _("Identifier");
     treeW->setHeaderLabels(headerLabels);
     treeW->header()->setStretchLastSection(false);
-    treeW->setColumnWidth(0,180);
-    treeW->setColumnWidth(1,60);
-    treeW->setColumnWidth(2,0);
+    treeW->setColumnWidth(0, icoSize(14));
+    treeW->setColumnWidth(1, icoSize(4));
+    treeW->setColumnWidth(2, 0);
 
     //Connect to signals
     connect(treeW, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ctrTreePopup()));

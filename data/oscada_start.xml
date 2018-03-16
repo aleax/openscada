@@ -65,20 +65,21 @@
 		<prm id="StartMod">QTCfg</prm>
 		<prm id="CloseToTray">0</prm>
 		<prm id="Style"></prm>
+		<prm id="Font"></prm>
 		<prm id="Palette"></prm>
 		<prm id="StyleSheets"></prm>
 		<tbl id="LookFeel">
-		    <fld NAME="Typical TDE" STYLE="" STL_SHTS="">
+		    <fld NAME="Typical TDE" STYLE="" FONT="" STL_SHTS="">
 			<PALETTE>#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b
 #808080, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #c7c7c7, #ffffff, #808080, #ffffff, #efefef, #000000, #567594, #ffffff, #0000ee, #52188b
 #000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b</PALETTE>
 		    </fld>
-		    <fld NAME="Blue Slate" STYLE="" STL_SHTS="">
+		    <fld NAME="Blue Slate" STYLE="" FONT="" STL_SHTS="">
 			<PALETTE>#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
 #808080, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #808080, #bfe2f4, #808080, #c3c3c3, #9db9c8, #000000, #558097, #808080, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
 #000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000</PALETTE>
 		    </fld>
-		    <fld NAME="Blue Darkness" STYLE="" STL_SHTS="">
+		    <fld NAME="Blue Darkness" STYLE="" FONT="" STL_SHTS="">
 			<PALETTE>#ffffff, #426794, #5788c3, #4871a2, #162231, #37567b, #dcdcdc, #5788c3, #ffffff, #002a4e, #426794, #000000, #5cb3ff, #000000, #00ffff, #c0c0ff
 #555555, #426794, #5788c3, #4871a2, #162231, #37567b, #37567b, #5788c3, #555555, #002a4e, #426794, #000000, #4c95d4, #ffffff, #00ffff, #c0c0ff
 #ffffff, #426794, #5788c3, #4871a2, #162231, #37567b, #dcdcdc, #5788c3, #ffffff, #002a4e, #426794, #000000, #5cb3ff, #000000, #00ffff, #c0c0ff</PALETTE>

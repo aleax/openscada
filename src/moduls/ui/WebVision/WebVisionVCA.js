@@ -43,7 +43,7 @@ function pathLev( path, level, scan )
 	if(t_lev == level)	{ pathLev.off = t_dir; return path.substr(an_dir,t_dir-an_dir); }
 	an_dir = t_dir;
 	t_lev++;
-	while(an_dir<path.length && path.charAt(an_dir)=='/') an_dir++;
+	while(an_dir < path.length && path.charAt(an_dir) == '/') an_dir++;
     }
 }
 
@@ -228,7 +228,7 @@ function servGet( adr, prm, callBack, callBackPrm )
 	req.send(null);
 	if(req.status == 200 && req.responseXML.childNodes.length)
 	    return req.responseXML.childNodes[0];
-    } catch(e) { window.location = '/'+MOD_ID; }
+    } catch(e) { window.location.reload(); /*window.location = '/'+MOD_ID;*/ }
 
     return null;
 }
@@ -247,7 +247,7 @@ function servSet( adr, prm, body, waitRez )
 	//if(mainTmId) clearTimeout(mainTmId);
 	//mainTmId = setTimeout(makeUI, 1000);
 	//console.log("TEST 01: SET="+body);
-    } catch(e) { window.location = '/'+MOD_ID; }
+    } catch(e) { window.location.reload(); /*window.location = '/'+MOD_ID;*/ }
 
     return null;
 }
@@ -729,7 +729,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    var argSize = Math.max(-1000,Math.min(1000,parseInt(argCfg[0])));
 		    var argPad = '';
-		    for(var j = argVal.length; j < Math.abs(argSize); j++) argPad += '&nbsp;';
+		    for(var j = argVal.length; j < Math.abs(argSize); j++) argPad += ' ';//&nbsp;';
 		    if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
 		    txtVal = txtVal.replace('%'+(i+1),argVal);
 		}
@@ -2508,6 +2508,11 @@ document.body.onmouseup = function(e)
     //return false;	//!!!! It's buggy on <input type=range> for Chrome
 }
 
+window.onresize = function( ) {
+    if(stTmReload) clearTimeout(stTmReload);
+    stTmReload = setTimeout('window.location.reload()', 1000);
+}
+
 var modelPer = 0;			//Model proc period
 var prcCnt = 0;				//Process counter
 var prcTm = 0;				//Process time
@@ -2519,6 +2524,7 @@ var perUpdtWdgs = new Object();		//Periodic updated widgets register
 var masterPage = new pwDescr('', true);	//Master page create
 var stTmID = null;			//Status line timer identifier
 var stTmMain = null;			//Main cycle start time
+var stTmReload = null;			//Main reload timeout at the main window resize
 var wx_scale = 1;			//Main window scale for fit, X axis
 var wy_scale = 1;			//Main window scale for fit, Y axis
 var clearTm = 10;			//Clear time of line edit fields, seconds

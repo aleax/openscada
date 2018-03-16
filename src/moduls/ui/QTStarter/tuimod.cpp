@@ -59,7 +59,7 @@
 #else
 #define SUB_TYPE	""
 #endif
-#define MOD_VER		"4.4.1"
+#define MOD_VER		"4.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -96,7 +96,7 @@ using namespace QTStarter;
 //* TUIMod                                        *
 //*************************************************
 TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
-    mStartMod(dataRes()), mStyle(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), QtApp(NULL), splash(NULL)
+    mStartMod(dataRes()), mFont(dataRes()), mStyle(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), QtApp(NULL), splash(NULL)
 {
     mod = this;
 
@@ -132,6 +132,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), hideMode(false),
     //Look and Feels DB structure
     elLF.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key,OBJ_NM_SZ));
     elLF.fldAdd(new TFld("STYLE",_("Style"),TFld::String,0,"20"));
+    elLF.fldAdd(new TFld("FONT",_("Font"),TFld::String,0,"30"));
     elLF.fldAdd(new TFld("PALETTE",_("Palette"),TFld::String,0,"1000"));
     elLF.fldAdd(new TFld("STL_SHTS",_("Style Sheets"),TFld::String,0,"100000"));
 }
@@ -239,6 +240,7 @@ void TUIMod::load_( )
     setStartMod(TBDS::genDBGet(nodePath()+"StartMod",startMod()));
     setCloseToTray(s2i(TBDS::genDBGet(nodePath()+"CloseToTray",i2s(closeToTray()))));
     setStyle(TBDS::genDBGet(nodePath()+"Style",style()));
+    setFont(TBDS::genDBGet(nodePath()+"Font",font()));
     setPalette(TBDS::genDBGet(nodePath()+"Palette",palette()));
     setStyleSheets(TBDS::genDBGet(nodePath()+"StyleSheets",styleSheets()));
 }
@@ -250,6 +252,7 @@ void TUIMod::save_( )
     TBDS::genDBSet(nodePath()+"StartMod", startMod());
     TBDS::genDBSet(nodePath()+"CloseToTray", i2s(closeToTray()));
     TBDS::genDBSet(nodePath()+"Style", style());
+    TBDS::genDBSet(nodePath()+"Font", font());
     TBDS::genDBSet(nodePath()+"Palette", palette());
     TBDS::genDBSet(nodePath()+"StyleSheets", styleSheets());
 }
@@ -433,6 +436,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/LF",_("Look and feels"))) {
 		ctrMkNode("fld",opt,-1,"/prm/LF/prfl",_("Known profiles"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/LF/prflLs");
 		ctrMkNode("fld",opt,-1,"/prm/LF/stl",_("Widgets style"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/LF/stlLs");
+		ctrMkNode("fld",opt,-1,"/prm/LF/font",_("Common font"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/LF/plt",_("Palette"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","4","SnthHgl","1");
 		ctrMkNode("fld",opt,-1,"/prm/LF/stlSheets",_("Style Sheets"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","5","SnthHgl","1");
 	    }
@@ -461,10 +465,11 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/LF/prfl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(_("<Select a profile to combine>"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    if(opt->text() == _("<Clear>")) { setStyle(""); setPalette(""); setStyleSheets(""); }
+	    if(opt->text() == _("<Clear>")) { setStyle(""); setFont(""); setPalette(""); setStyleSheets(""); }
 	    else if(opt->text() == _("<Read back>")) {
 		if(QtApp) {
 		    if(!style(true).size())	setStyle(QtApp->origStl);
+		    if(!font().size())		setFont(QtApp->font().toString().toStdString());
 		    if(!styleSheets().size())	setStyleSheets(QtApp->styleSheet().toStdString());
 		    if(!palette().size()) {
 			QPalette tPlt = QtApp->palette();
@@ -486,6 +491,8 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 		    string tVl;
 		    if((tVl=cEl.cfg("STYLE").getS()).size())
 			if(style(true).empty()) setStyle(tVl);
+		    if((tVl=cEl.cfg("FONT").getS()).size())
+			if(font().empty()) setFont(tVl);
 		    if((tVl=cEl.cfg("PALETTE").getS()).size()) {
 			string tPlt = palette(), tRez, tVl1;
 			for(int iG = 0; iG < 3; iG++) {
@@ -515,6 +522,10 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/LF/stl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(style());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStyle(opt->text());
+    }
+    else if(a_path == "/prm/LF/font") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(font());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setFont(opt->text());
     }
     else if(a_path == "/prm/LF/stlLs" && ctrChkNode(opt)) {
 	QStringList sls = QStyleFactory::keys();
@@ -572,6 +583,16 @@ StApp::~StApp( )
     stClear();
 }
 
+int StApp::topLevelWindows( )
+{
+    int winCnt = 0;
+    for(int iW = 0; iW < topLevelWidgets().size(); iW++)
+	if(qobject_cast<QMainWindow*>(topLevelWidgets()[iW]) && topLevelWidgets()[iW]->isVisible())
+	    winCnt++;
+
+    return winCnt;
+}
+
 void StApp::saveState( QSessionManager &manager )
 {
     manager.setRestartHint(QSessionManager::RestartNever);
@@ -624,6 +645,8 @@ void StApp::timerEvent( QTimerEvent *event )
 	vector<string> list;
 	mod->owner().modList(list);
 
+	blockSignals(true);
+
 	//Start external modules
 	int op_wnd = 0;
 	if(SYS->prjCustMode() || SYS->prjNm().size())
@@ -642,6 +665,8 @@ void StApp::timerEvent( QTimerEvent *event )
 
 	//delete splash;
 	mod->splashSet(TUIMod::SPLSH_NULL);
+
+	blockSignals(false);
 
 	//Start the call dialog or to system tray
 	if(!op_wnd) {
@@ -749,6 +774,11 @@ bool StApp::updLookFeel( )
 {
     QStyle *appStl = QStyleFactory::create(mod->style().c_str());
     if(appStl)	QApplication::setStyle(appStl);
+    if(mod->font().size()) {
+	QFont tf = font();
+	tf.fromString(mod->font().c_str());
+	setFont(tf);
+    }
     if(mod->palette().size()) {
 	QPalette plt = palette();
 	string cGrp, cRl, tVl;
@@ -800,12 +830,14 @@ void StApp::makeStarterMenu( QWidget *mn )
 
 void StApp::lastWinClose( )
 {
+    if(topLevelWindows())	return;
+
 #ifdef EN_QtMainThrd
     if(SYS->stopSignal())	quit();
 #else
     if(!mod->startCom() || mod->endRun() || SYS->stopSignal())	quit();
 #endif
-    else if(mod->closeToTray()) createTray();
+    else if(mod->closeToTray())	createTray();
     else startDialog();
 }
 
@@ -1126,13 +1158,7 @@ void StartDialog::showEvent( QShowEvent* )
 
 void StartDialog::closeEvent( QCloseEvent *ce )
 {
-    if(!mod->QtApp->trayPresent()) {
-	unsigned winCnt = 0;
-	for(int iW = 0; iW < QApplication::topLevelWidgets().size(); iW++)
-	    if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[iW]) && QApplication::topLevelWidgets()[iW]->isVisible())
-		winCnt++;
-	if(winCnt <= 1) SYS->stop();
-    }
+    if(!mod->QtApp->trayPresent() && mod->QtApp->topLevelWindows() <= 1) SYS->stop();
     ce->accept();
 }
 

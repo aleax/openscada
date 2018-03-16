@@ -1345,22 +1345,30 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     //Load document's from project's DB
     else if(cfg.id() == "n" && cfg.getI() != prev.getI()) {
 	string tVl;
-	// Archive position load
-	if((tVl=sw->sessAttr("aCur")).size()) cfg.owner()->attrAt("aCur").at().setS(tVl, false, true);
-	// Current archive documents load
-	if((tVl=sw->sessAttr("doc"+cfg.owner()->attrAt("aCur").at().getS())).size())
-	    cfg.owner()->attrAt("aDoc").at().setS(tVl, false, true);
-	// Set current document
-	cfg.owner()->attrAt("vCur").at().setI(cfg.owner()->attrAt("aCur").at().getI(),false,true);
-	cfg.owner()->attrAt("doc").at().setS(cfg.owner()->attrAt("aDoc").at().getS(),false,true);
-	// Parse current document and restore last document's time
-	string cdoc = cfg.owner()->attrAt("doc").at().getS();
-	if(!cdoc.empty()) {
-	    XMLNode xdoc;
-	    try { xdoc.load(XHTML_entity+cdoc, false, Mess->charset()); } catch(TError &err) { }
-	    cfg.owner()->attrAt("time").at().setS(xdoc.attr("docTime"),false,true);
+	AutoHD<Attr> aCur, aDoc, vCur;
+	try {
+	    aCur = cfg.owner()->attrAt("aCur");
+	    aDoc = cfg.owner()->attrAt("aDoc");
+	    vCur = cfg.owner()->attrAt("vCur");
+	} catch(TError &err) { }
+
+	if(!(aCur.freeStat() || aDoc.freeStat() || vCur.freeStat())) {
+	    // Archive position load
+	    if((tVl=sw->sessAttr("aCur")).size()) aCur.at().setS(tVl, false, true);
+	    // Current archive documents load
+	    if((tVl=sw->sessAttr("doc"+aCur.at().getS())).size()) aDoc.at().setS(tVl, false, true);
+	    // Set current document
+	    vCur.at().setI(aCur.at().getI(), false, true);
+	    cfg.owner()->attrAt("doc").at().setS(aDoc.at().getS(),false,true);
+	    // Parse current document and restore last document's time
+	    string cdoc = cfg.owner()->attrAt("doc").at().getS();
+	    if(!cdoc.empty()) {
+		XMLNode xdoc;
+		try { xdoc.load(XHTML_entity+cdoc, false, Mess->charset()); } catch(TError &err) { }
+		cfg.owner()->attrAt("time").at().setS(xdoc.attr("docTime"),false,true);
+	    }
+	    sizeUpdate(sw);
 	}
-	sizeUpdate(sw);
     }
     //Move the archive cursor
     else if(cfg.id() == "aCur" && cfg.getI() != prev.getI()) {
@@ -1789,13 +1797,22 @@ void *OrigDocument::DocTask( void *param )
 	    sw->attrAt("doc").at().setS(mkDk);
 	}
 	else {
-	    int aCur = sw->attrAt("aCur").at().getI();
-	    mkDk = sw->attrAt("aDoc").at().getS();
-	    if(mkDk.empty()) mkDk = trLU(sw->attrAt("tmpl").at().getS(), l, u);
+	    AutoHD<Attr> aCur, aDoc, vCur;
+	    try {
+		aCur = sw->attrAt("aCur");
+		aDoc = sw->attrAt("aDoc");
+		vCur = sw->attrAt("vCur");
+	    } catch(TError &err) { }
 
-	    mkDk = makeDoc(mkDk,sw);
-	    sw->attrAt("aDoc").at().setS(mkDk);
-	    if(aCur == sw->attrAt("vCur").at().getI()) sw->attrAt("doc").at().setS(mkDk);
+	    if(!(aCur.freeStat() || aDoc.freeStat() || vCur.freeStat())) {
+		//int aCur = aCur.at().getI();
+		mkDk = aDoc.at().getS();
+		if(mkDk.empty()) mkDk = trLU(sw->attrAt("tmpl").at().getS(), l, u);
+
+		mkDk = makeDoc(mkDk, sw);
+		aDoc.at().setS(mkDk);
+		if(aCur.at().getI() == vCur.at().getI()) sw->attrAt("doc").at().setS(mkDk);
+	    }
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());

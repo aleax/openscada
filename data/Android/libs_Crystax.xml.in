@@ -9,6 +9,7 @@
     </array>
 
      <array name="qt_libs">
+	<item>crystax</item>
 	<item>gnustl_shared</item>
 	<item>Qt5Core</item>
 	<item>Qt5Gui</item>

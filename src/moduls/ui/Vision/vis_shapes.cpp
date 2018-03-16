@@ -50,9 +50,9 @@
 #include <QScrollBar>
 #include <QHeaderView>
 #if QT_VERSION < 0x050000
-#include <QPlastiqueStyle>
+// #include <QPlastiqueStyle>
 #else
-#include <QCommonStyle>
+// #include <QCommonStyle>
 #include <qdrawutil.h>
 #endif
 
@@ -390,7 +390,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		//Color
 		QPalette plt;
 		QColor clr = getColor(shD->color);
-		if(clr.isValid())	plt.setColor(QPalette::Button, clr);
+		if(clr.isValid()) {
+		    plt.setColor(QPalette::Button, clr);
+		    wdg->setStyleSheet(QString("background: %1").arg(shD->color.c_str()));
+		}
 		clr = getColor(shD->colorText);
 		if(clr.isValid())	plt.setColor(QPalette::ButtonText, clr);
 		wdg->setPalette(plt);

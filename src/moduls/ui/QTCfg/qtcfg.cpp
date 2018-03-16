@@ -107,12 +107,12 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     //splitter->setSizeConstraint(QSplitter::KeepSize);
     CtrTree->setHeaderLabels(QStringList() << _("Name") << _("Type") << _("Path"));
     CtrTree->header()->setStretchLastSection(false);
-    CtrTree->header()->resizeSection(0, 200);
+    CtrTree->header()->resizeSection(0, icoSize(14));
     //CtrTree->header()->setSectionHidden(1,true);
     //CtrTree->header()->setSectionHidden(2,true);
     //CtrTree->header()->hide();
     //CtrTree->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding, 2, 0, CtrTree->sizePolicy().hasHeightForWidth() ) );
-    CtrTree->setMinimumSize(QSize(150,0));
+    CtrTree->setMinimumSize(QSize(icoSize(10),0));
     CtrTree->setWhatsThis(_("The main navigation tree of the configurator."));
     connect(CtrTree, SIGNAL(itemSelectionChanged()), this, SLOT(selectItem()));
     connect(CtrTree, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(viewChild(QTreeWidgetItem*)));
@@ -157,12 +157,12 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     gFrameLayout->addWidget(tabs, 1, 0, 1, 2);
 
     QList<int> splSz;
-    splSz.push_back(200);
-    splSz.push_back(600);
+    splSz.push_back(icoSize(14));
+    splSz.push_back(icoSize(40));
     splitter->setSizes(splSz);
     QTCfgLayout->addWidget(splitter, 0, 0);
 
-    if(!s2i(SYS->cmdOpt("showWin"))) resize(800, 600);
+    if(!s2i(SYS->cmdOpt("showWin"))) resize(icoSize(50), icoSize(40));
 
     //Create actions
     // Close
@@ -450,7 +450,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     endRunTimer  = new QTimer(this);
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
-    endRunTimer->start(STD_WAIT_DELAY);
+    endRunTimer->start(1000/*STD_WAIT_DELAY*/);
     // Create Request progress closing timer
     reqPrgrsTimer = new QTimer(this);
     reqPrgrsTimer->setSingleShot(true);

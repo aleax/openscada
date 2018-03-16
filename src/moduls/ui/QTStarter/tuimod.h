@@ -115,6 +115,8 @@ public:
     StApp( int &argv, char **args );
     ~StApp( );
 
+    int topLevelWindows( );
+
     bool trayPresent( )	{ return tray; }
 
     void createTray( );
@@ -176,6 +178,7 @@ public:
     bool endRun( )	{ return mEndRun; }
     bool startCom( )	{ return mStartCom; }
     string startMod( )	{ return mStartMod; }
+    string font( )	{ return mFont; }
     string style( bool mant = false );
     string palette( )	{ return mPalette; }
     string styleSheets( ) { return mStyleSheets; }
@@ -183,6 +186,7 @@ public:
 
     void setStartMod( const string &vl )	{ mStartMod = vl; modif(); }
     void setStyle( const string &vl )		{ mStyle = vl; modif(); mQtLookMdf = true; }
+    void setFont( const string &vl )		{ mFont = vl; modif(); mQtLookMdf = true; }
     void setPalette( const string &vl )		{ mPalette = vl; modif(); mQtLookMdf = true; }
     void setStyleSheets( const string &vl )	{ mStyleSheets = vl; modif(); mQtLookMdf = true; }
     void setCloseToTray( bool vl )		{ mCloseToTray = vl; modif(); }
@@ -218,7 +222,7 @@ private:
 
     //Attributes
     bool	hideMode, mEndRun, mStartCom, mCloseToTray;
-    MtxString	mStartMod, mStyle, mPalette, mStyleSheets;
+    MtxString	mStartMod, mStyle, mFont, mPalette, mStyleSheets;
 
     TElem	elLF;
 

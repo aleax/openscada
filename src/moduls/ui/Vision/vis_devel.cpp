@@ -612,9 +612,9 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     connect(this,SIGNAL(modifiedItem(const string&)),wdgTree,SLOT(updateTree(const string&)));
     connect(wdgTree,SIGNAL(selectItem(const string&,bool)),this,SLOT(selectItem(const string&,bool)));
     wdgTree->setWhatsThis(_("Dock window for widgets and their libraries management."));
-    addDockWidget(Qt::LeftDockWidgetArea,prjTree);
-    addDockWidget(Qt::LeftDockWidgetArea,wdgTree);
-    tabifyDockWidget(prjTree,wdgTree);
+    addDockWidget(Qt::LeftDockWidgetArea, prjTree);
+    addDockWidget(Qt::LeftDockWidgetArea, wdgTree);
+    tabifyDockWidget(prjTree, wdgTree);
     mn_view->addAction(prjTree->toggleViewAction());
     mn_view->addAction(wdgTree->toggleViewAction());
     //mn_view->addSeparator();
@@ -626,7 +626,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     lnkInsp->setWhatsThis(_("Dock window for widget's links inspection."));
     addDockWidget(Qt::LeftDockWidgetArea, attrInsp);
     addDockWidget(Qt::LeftDockWidgetArea, lnkInsp);
-    tabifyDockWidget(attrInsp,lnkInsp);
+    tabifyDockWidget(attrInsp, lnkInsp);
     mn_view->addAction(attrInsp->toggleViewAction());
     mn_view->addAction(lnkInsp->toggleViewAction());
     mn_view->addSeparator();

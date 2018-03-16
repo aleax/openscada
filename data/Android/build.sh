@@ -1,9 +1,17 @@
 #!/bin/sh
 
 NDK_PATH=/home/roman/Android/Ndk
+
+CristaxNDK=0
+if test -f $NDK_PATH/RELEASE.TXT; then
+    if cat $NDK_PATH/RELEASE.TXT | grep crystax-ndk &> /dev/null; then
+	CristaxNDK=1
+    fi
+fi
+
 HOST=linux-x86_64
 TARGET=arm-linux-androideabi
-PLATFORM=android-19
+PLATFORM=android-21
 PLATFORM_LIB_VAR=armeabi-v7a
 TARGET_V=4.9
 PREFIX=$NDK_PATH/toolchains/$TARGET-$TARGET_V/prebuilt/$HOST
@@ -21,8 +29,21 @@ export LDFLAGS="-llog -landroid -Wl,--fix-cortex-a8"
 #export LDFLAGS="-llog -landroid -Wl,--no-warn-mismatch -lm_hard -Wl,--fix-cortex-a8"
 # -Wl,--no-undefined"
 
-export CFLAGS="$CFLAGS --sysroot=$NDK_PATH/platforms/$PLATFORM/arch-arm/ -I$NDK_PATH/sources/crystax/include\
- -I$NDK_PATH/sources/pcre/include\
+if test $CristaxNDK = 1; then
+    PLATFORM=android-19;
+
+    export CFLAGS="$CFLAGS --sysroot=$NDK_PATH/platforms/$PLATFORM/arch-arm/ -I$NDK_PATH/sources/crystax/include"
+    export LDFLAGS="$LDFLAGS -L$NDK_PATH/sources/crystax/libs/$PLATFORM_LIB_VAR"
+
+    echo "Build for $PLATFORM and by the Cristax NDK"
+else
+    export CFLAGS="$CFLAGS --sysroot=$NDK_PATH/platforms/$PLATFORM/arch-arm/"
+    export LDFLAGS="$LDFLAGS -lm"
+
+    echo "Build for $PLATFORM and by the Original NDK"
+fi
+
+export CFLAGS="$CFLAGS -I$NDK_PATH/sources/pcre/include\
  -I$NDK_PATH/sources/openssl/include\
  -I$NDK_PATH/sources/expat/include\
  -I$NDK_PATH/sources/libpng/include\
@@ -34,8 +55,7 @@ export CFLAGS="$CFLAGS --sysroot=$NDK_PATH/platforms/$PLATFORM/arch-arm/ -I$NDK_
  -I$NDK_PATH/sources/libiconv/include\
  -I$NDK_PATH/sources/gettext/include\
  -I$NDK_PATH/sources/sqlite/include"
-export LDFLAGS="$LDFLAGS -L$NDK_PATH/sources/crystax/libs/$PLATFORM_LIB_VAR\
- -L$NDK_PATH/sources/pcre/libs/$PLATFORM_LIB_VAR\
+export LDFLAGS="$LDFLAGS -L$NDK_PATH/sources/pcre/libs/$PLATFORM_LIB_VAR\
  -L$NDK_PATH/sources/openssl/libs/$PLATFORM_LIB_VAR\
  -L$NDK_PATH/sources/expat/libs/$PLATFORM_LIB_VAR\
  -L$NDK_PATH/sources/libpng/libs/$PLATFORM_LIB_VAR\
@@ -50,7 +70,6 @@ export LDFLAGS="$LDFLAGS -L$NDK_PATH/sources/crystax/libs/$PLATFORM_LIB_VAR\
 export CXXFLAGS="$CFLAGS -std=c++11 -I$NDK_PATH/sources/cxx-stl/gnu-libstdc++/$TARGET_V/include\
  -I$NDK_PATH/sources/cxx-stl/gnu-libstdc++/$TARGET_V/libs/$PLATFORM_LIB_VAR/include\
  -L$NDK_PATH/sources/cxx-stl/gnu-libstdc++/$TARGET_V/libs/$PLATFORM_LIB_VAR -lgnustl_shared"
-#-lgnustl_static -fexceptions -frtti"
 
 # export PKG_CONFIG="pkg-config --static"
 export PKG_CONFIG_PATH=$NDK_PATH/sources/pkgconfig
@@ -91,6 +110,8 @@ DESTDIR=$BuildDir make -j4 install
 #Update the Android files
 dirSrc=$BuildDir/data/data/org.oscada
 
+echo "target=$PLATFORM" > $AndroidPrjDir/project.properties
+
 # Strip all libraries
 arm-linux-androideabi-strip $dirSrc/lib/liboscada.so
 arm-linux-androideabi-strip $dirSrc/lib/openscada/*.so
@@ -103,7 +124,11 @@ done
 
 # Prepare assets
 install -m 755 -d $AndroidPrjDir/assets/icons
-cp $AndroidPrjDir/libs.xml.in $AndroidPrjDir/res/values/libs.xml
+if test $CristaxNDK = 1; then
+    cp $AndroidPrjDir/libs_Crystax.xml.in $AndroidPrjDir/res/values/libs.xml
+else
+    cp $AndroidPrjDir/libs.xml.in $AndroidPrjDir/res/values/libs.xml
+fi
 
 install -m 755 $dirSrc/bin/openscada-proj $AndroidPrjDir/assets/
 
@@ -138,4 +163,9 @@ echo "    </array>\\n</resources>" >> $AndroidPrjDir/res/values/libs.xml
 #Make the APK package
 cd $AndroidPrjDir
 ant clean
-ant debug
+#ant debug
+ant release
+#cp bin/OpenSCADA-release-unsigned.apk bin/OpenSCADA-release.apk
+#jarsigner -keystore ~/.android/roman.jks bin/OpenSCADA-release.apk RomanSavochenkoKey
+
+#adb install -r bin/OpenSCADA-release.apk

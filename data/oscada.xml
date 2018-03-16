@@ -22,6 +22,7 @@
 	<node id="sub_UI">
 	    <node id="mod_QTStarter">
 		<prm id="Style"></prm>
+		<prm id="Font"></prm>
 		<prm id="Palette"></prm>
 		<prm id="StyleSheets"></prm>
 	    </node>

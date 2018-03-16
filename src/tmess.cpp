@@ -462,6 +462,9 @@ void TMess::setLang( const string &lng, bool init )
     //else setenv("LC_MESSAGES", lng.c_str(), 1);
     else setenv("LANG", lng.c_str(), 1);	//!!!! May be use further for the miss environment force set
     setlocale(LC_ALL, "");
+#if defined(__ANDROID__)
+    setlocale(LC_CTYPE, "C.UTF-8");	//For original NDK r13 and Android >= 5
+#endif
 
 #ifdef HAVE_LANGINFO_H
     IOCharSet = nl_langinfo(CODESET);

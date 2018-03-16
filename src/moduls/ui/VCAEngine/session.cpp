@@ -1879,7 +1879,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 	    AutoHD<TVal> vl;
 	    inLnkGet = true;
 	    for(unsigned iA = 0; iA < mAttrLnkLs.size(); iA++) {
-		attr = attrAt(mAttrLnkLs[iA]);
+		try { attr = attrAt(mAttrLnkLs[iA]); } catch(TError &err) { continue; }
 		if(attr.at().flgSelf()&Attr::CfgConst && !attr.at().cfgVal().empty())	attr.at().setS(trLU(attr.at().cfgVal(),ownerSess()->reqLang(),ownerSess()->reqUser()));
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty()) {
 		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':') + ":";

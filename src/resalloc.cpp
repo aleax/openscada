@@ -191,7 +191,11 @@ int CondVar::wait( ResMtx &mtx, unsigned short tm )
 {
     if(tm) {
 	timespec wtm;
+#if __GLIBC_PREREQ(2,4) && (__ANDROID_API__ == 0 || __ANDROID_API__ > 19)
 	clock_gettime(SYS->clockRT()?CLOCK_REALTIME:CLOCK_MONOTONIC, &wtm);
+#else
+	clock_gettime(CLOCK_REALTIME, &wtm);
+#endif
 	wtm.tv_nsec += 1000000*(tm%1000);
 	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	return pthread_cond_timedwait(&cnd, &mtx.mtx(), &wtm);

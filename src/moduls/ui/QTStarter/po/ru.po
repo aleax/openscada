@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 15:08+0200\n"
+"POT-Creation-Date: 2018-03-11 08:39+0200\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -485,6 +485,9 @@ msgstr "Имя"
 msgid "Style"
 msgstr "Стиль"
 
+msgid "Font"
+msgstr "Шрифт"
+
 msgid "Palette"
 msgstr "Палитра"
 
@@ -596,6 +599,9 @@ msgstr "Известные профиля"
 
 msgid "Widgets style"
 msgstr "Стиль Виджетов"
+
+msgid "Common font"
+msgstr "Общий шрифт"
 
 msgid "<Select a profile to combine>"
 msgstr "<Выбрать профиль для объединения>"

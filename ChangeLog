@@ -1,3 +1,22 @@
+2018-03-16 Roman (stable)
+- !!:DB.LibsDB.vcaBase: doc.{docGasNodeDayA,docGasNodeMonthA} significant expanded for work in the dynamic mode also.
+- !!!:FIX:SYS.Android:
+    Expanded for: deep attenuation of the look, building with the official NDK r13, building and signing the release target,
+	setting the package version to 0.9.
+    FIX: For condition variables where CLOCK_MONOTONIC was selected but CLOCK_REALTIME used.
+    Setting for locale added as setlocale(LC_CTYPE, "C.UTF-8"); for Android >= 5.
+- !:SYS,UI.QTStarter: Generic font was added to the list of look control fields, initially for Android.
+- UI.QTCfg: Set adjustable to the generic font real size for: the control tree and the splitter width, the main window initial size.
+    Loading of the "endRunTimer" decrease.
+- FIX:UI.QTStarter: Prevented from open the QTStarter main window after successful log in into the QTCfg module.
+- UI.VCAEngine: Prevented from the missing attributes warnings at switching the primitive "Document" to the dynamic mode.
+- UI.Vision: Set adjustable to the generic font real size for: the tree view.
+    The view "Button" of the primitive "FormEl" forced to its background color changing by using CSS also,
+	which is needed for the Qt Widgets style "GTK+".
+- FIX:UI.WebVision: The primitive "Text" disabled from padding arguments by "&nbsp;" and " " used instead.
+    Tracing added for the Web-browser main window resize and the OpenSCADA main page reloading.
+
+
 2018-03-09 Roman (stable)
 - SYS,UI.QTStarter: Android look adapted to a default custom theme and CSS.
 - !!:DOC: Off-line documents Documents/How_to/{Cyclic_programming,Debug,Transferring_project_configuration,Build_from_source,Crash_report,Create_module}

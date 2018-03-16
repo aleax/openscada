@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 15:08+0200\n"
+"POT-Creation-Date: 2018-03-11 08:39+0200\n"
 "PO-Revision-Date: 2011-07-19 20:56+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -489,6 +489,9 @@ msgstr "Name"
 msgid "Style"
 msgstr "Stil"
 
+msgid "Font"
+msgstr "Schriftart"
+
 msgid "Palette"
 msgstr "Palette"
 
@@ -602,6 +605,9 @@ msgstr "Bekannte Profile"
 
 msgid "Widgets style"
 msgstr "Widgets Stil"
+
+msgid "Common font"
+msgstr "Gemeinsame Schriftart"
 
 msgid "<Select a profile to combine>"
 msgstr "<Wählen Sie ein zu kombinierendes Profil>"
@@ -797,5 +803,6 @@ msgstr ""
 msgid "Project \"%1\" seems wrong or broken!"
 msgstr "Project \"%1\" scheint falsch oder defekt!"
 
+#, c-format
 msgid "Untranslated Qt message: '%s'"
 msgstr "Keine übersetzt Qt Nachricht: '%s'"

@@ -11,45 +11,47 @@
 </div>
 			<h1 id="firstHeading" lang="ru">Документы/Как сделать/Отчёт о падении</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FCrash+report&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Crash_report" title="Documents/How to/Crash report">Documents/How to/Crash report</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Crash_report" title="Documents/How to/Crash report (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/How_to/Crash_report/uk" title="Документи/Як зробити/Звіт про падіння (100% translated)">українська</a></div></div>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../en/files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> Generic revision and updating
-</td></tr></table>
-</div>
 <p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#.D0.A2.D1.80.D0.B5.D0.B1.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.D0.BA_.D1.83.D0.B2.D0.B5.D0.B4.D0.BE.D0.BC.D0.BB.D0.B5.D0.BD.D0.B8.D1.8E_.D0.BE.D0.B1_.D0.BE.D1.88.D0.B8.D0.B1.D0.BA.D0.B5"><span class="tocnumber">1</span> <span class="toctext">Требования к уведомлению об ошибке</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#.D0.A1.D0.BF.D0.BE.D1.81.D0.BE.D0.B1.D1.8B_.D1.83.D0.B2.D0.B5.D0.B4.D0.BE.D0.BC.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="tocnumber">2</span> <span class="toctext">Способы уведомления</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.A3.D1.81.D0.BB.D0.BE.D0.B2.D0.B8.D1.8F_.D0.B8_.D0.B2.D0.B0.D1.80.D0.B8.D0.B0.D0.BD.D1.82.D1.8B_.D0.BE.D1.82.D1.87.D1.91.D1.82.D0.BD.D0.BE.D1.81.D1.82.D0.B8"><span class="tocnumber">1</span> <span class="toctext">Условия и варианты отчётности</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.A2.D1.80.D0.B5.D0.B1.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.D0.BA_.D0.BE.D1.82.D1.87.D1.91.D1.82.D1.83_.D0.BF.D1.80.D0.BE_.D0.BE.D1.88.D0.B8.D0.B1.D0.BA.D1.83"><span class="tocnumber">2</span> <span class="toctext">Требования к отчёту про ошибку</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D0.BE.D0.BB.D1.83.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.D1.84.D0.B0.D0.B9.D0.BB.D0.B0_.D0.BF.D1.80.D0.B5.D0.B4.D1.81.D0.BC.D0.B5.D1.80.D1.82.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B4.D0.B0.D0.BC.D0.BF.D0.B0_.D0.B8_.D0.B5.D0.B3.D0.BE_.D0.BE.D0.B1.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D0.BA.D0.B0"><span class="tocnumber">3</span> <span class="toctext">Получение файла предсмертного дампа и его обработка</span></a></li>
 </ul>
 </div>
 
-<p>Отладке и тестированию системы OpenSCADA уделяется значительное время разработчиков, однако в виду ограниченности ресурсов да и практической невозможности охватить все варианты конфигурации и исполнения системы OpenSCADA ошибки могут проявляться как в виде невыполнения отдельных функций, некорректности их выполнения и даже аварийного завершения программы у пользователей. Понимание этого со стороны пользователя очень важно, и с его стороны требуется добрая воля для затраты некоторого времени на подготовку отчёта о проблеме с целью её последующего устранения разработчиками.
-</p><p>Перед подготовкой уведомления о проблеме рекомендуется ознакомится с перечнем ошибок и замечаний в соответствующем разделе <a class="external text" href="http://wiki.oscada.org/Errors" rel="nofollow noreferrer noopener" target="_blank">Ошибки и замечания к OpenSCADA</a>.
+<p>Отладке и тестированию OpenSCADA уделяется значительное время разработчиков, однако в виду ограниченности ресурсов и практической невозможности охватить все варианты конфигурации и исполнения OpenSCADA, ошибки могут проявляться как в виде невыполнения отдельных функций, некорректности их выполнения и даже аварийного завершения программы у пользователей. Понимание этого со стороны пользователя очень важно и от него требуется добрая воля и некоторое время на подготовку отчёта о проблеме, с целью её последующего устранения разработчиками.
 </p>
-<h2><span class="mw-headline" id=".D0.A2.D1.80.D0.B5.D0.B1.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.D0.BA_.D1.83.D0.B2.D0.B5.D0.B4.D0.BE.D0.BC.D0.BB.D0.B5.D0.BD.D0.B8.D1.8E_.D0.BE.D0.B1_.D0.BE.D1.88.D0.B8.D0.B1.D0.BA.D0.B5"><span class="mw-headline-number">1</span> Требования к уведомлению об ошибке</span></h2>
-<p>Для исключения лишних наводящих вопросов и для ускорения процесса локализации проблемы рекомендуется следовать следующим требованиям к уведомлению.
+<h2><span class="mw-headline" id=".D0.A3.D1.81.D0.BB.D0.BE.D0.B2.D0.B8.D1.8F_.D0.B8_.D0.B2.D0.B0.D1.80.D0.B8.D0.B0.D0.BD.D1.82.D1.8B_.D0.BE.D1.82.D1.87.D1.91.D1.82.D0.BD.D0.BE.D1.81.D1.82.D0.B8"><span class="mw-headline-number">1</span> Условия и варианты отчётности</span></h2>
+<p>Сообщить про ошибку в программе может каждый, для её рассмотрения разработчиками на общих основаниях свободной технической поддержки, за рамками договора коммерческой технической поддержки или выполнения работ этого пользователя. Но будут рассмотрены разработчиками только ошибки, которые являются ошибками непосредственно OpenSCADA, не являются проблемами окружения и внешних библиотек и воспроизводятся у разработчика на демонстрационных конфигурациях последних версий OpenSCADA и присутствующем оборудовании проекта OpenSCADA!
+</p><p>Основным и единственным официальным местом сообщения про ошибки на общих основаниях свободной технической поддержки является раздел форума "<a class="external text" href="http://oscada.org/ru/forum/topics/otslezhivanie_oshibok/" rel="nofollow noreferrer noopener" target="_blank">Отслеживание ошибок</a>", где <a class="external text" href="http://oscada.org/ru/razrabotka/razrabotchiki/" rel="nofollow noreferrer noopener" target="_blank">разработчики</a> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Works" title="Special:MyLanguage/Works">гарантировано дадут на них ответ</a>. Если Вы не уверены, что эта ошибка непосредственно OpenSCADA, тогда лучше напишите сообщение про неё в другом разделе форума OpenSCADA, где никаких гарантий ответа не предоставляется. Иначе, после трёх подряд некорректных сообщений про ошибку, Вас будет отключено от форума за злостное получение технической поддержки и консультаций, бесплодно расходуя таким образом время разработчиков! Правила уведомления про ошибки детально изложены <a class="external text" href="http://oscada.org/ru/forum/posts/otslezhivanie_oshibok/pravila/" rel="nofollow noreferrer noopener" target="_blank">здесь</a>.
+</p><p>Перед формированием отчёта про ошибку на общих основаниях свободной технической поддержки, нужно на <a class="external text" href="http://oscada.org/ru/forum/metki/" rel="nofollow noreferrer noopener" target="_blank">странице меток форума</a> ознакомиться с перечнем известных ошибок:
 </p>
-<ul><li> Указывать окружение исполнения OpenSCADA, а именно дистрибутив и версию операционной системы.</li>
-<li> Указывать версию системы OpenSCADA, включая SVN-ревизию для рабочих версий.</li>
-<li> Указывать особенности конфигурации и исполнения. Желательно добиваться проявления проблемы в стандартных конфигурациях и на <a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">демонстрационной БД</a>. Если этого не удаётся достичь, то необходимо описать особенности конфигурации и приложить к уведомлению БД, на которой проблема проявляется.</li>
-<li> Описать действия вызывающие ошибку.</li>
-<li> Приложить протокол сообщений OpenSCADA для сеанса с проявлением ошибки.</li>
-<li> В случае аварийного завершения необходимо сформировать файл предсмертного дампа памяти программы и получить из него разворот стека исполнения на момент аварии, о чём ниже. При проблемах, связанных с зависанием одной или нескольких задач OpenSCADA, для локализации может быть полезно ручное прерывание программы сигналом "SIGSEGV", что вызовет формирование предсмертного дампа с информацией о месте зависания.</li>
-<li> Для значительного увеличения пользы разворота стека вы должны добавить отладочную информацию, установкой опции "-g" во время компиляции или установкой готовых отладочных пакетов.</li></ul>
-<h2><span class="mw-headline" id=".D0.A1.D0.BF.D0.BE.D1.81.D0.BE.D0.B1.D1.8B_.D1.83.D0.B2.D0.B5.D0.B4.D0.BE.D0.BC.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">2</span> Способы уведомления</span></h2>
-<p>Уведомить об ошибке в системе OpenSCADA можно несколькими способами:
+<ul><li> подтверждённых-открытых и решаемых на данный момент — "BugConfirmed";</li>
+<li> которые на данный момент требуют обратной связи от автора — "BugNeedFeedBack";</li>
+<li> окружения исполнения и специфические к пользователю — "BugEnvironment";</li>
+<li> некорректных уведомлений — "BugWrong".</li></ul>
+<p>Сообщения про ошибки в программе, на основании <a class="external text" href="http://oscada.org/ru/uslugi/tekh-podderzhka/" rel="nofollow noreferrer noopener" target="_blank">коммерческой технической поддержки</a> или выполнения работ пользователя, можно осуществить в такие способы, согласно приоритету разработчика:
 </p>
-<ul><li> в соответствующем разделе форума официального сайта: <a class="external free" href="http://oscada.org/ru/forum" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/ru/forum</a>;</li>
-<li> по электронной почте на адрес <a class="external text" href="mailto:oscada@oscada.org" rel="nofollow noreferrer noopener" target="_blank">oscada at oscada.org</a> или <a class="external text" href="http://wiki.oscada.org/Developers" rel="nofollow noreferrer noopener" target="_blank">адреса разработчиков</a>;</li>
-<li> в разделе <a class="external text" href="http://wiki.oscada.org/Errors" rel="nofollow noreferrer noopener" target="_blank">Ошибки и замечания к системе OpenSCADA</a> в базе знаний проекта.</li></ul>
+<ul><li> в разделе форума "<a class="external text" href="http://oscada.org/ua/forum/topics/tekhnichna_pidtrimka/" rel="nofollow noreferrer noopener" target="_blank">Техническая поддержка</a>", который появляется и доступен для зарегистрированных пользователей, которые имеют активный <a class="external text" href="http://oscada.org/ua/forum/topics/tekhnichna_pidtrimka/" rel="nofollow noreferrer noopener" target="_blank">пакет технической поддержки</a>;</li>
+<li> электронной почтой на адрес <a class="external text" href="mailto:service@oscada.org" rel="nofollow noreferrer noopener" target="_blank">service at oscada.org</a>;</li>
+<li> непосредственно электронной почтой, сервисом мгновенных сообщений и звонков, или телефоном <a class="external text" href="http://oscada.org/ru/razrabotka/razrabotchiki/" rel="nofollow noreferrer noopener" target="_blank">разработчика</a>, а также <a class="external text" href="http://oscada.org/ru/forum/lichnye-soobshchenija/" rel="nofollow noreferrer noopener" target="_blank">приватным сообщением форума</a> (для зарегистрированных пользователей).</li></ul>
+<h2><span class="mw-headline" id=".D0.A2.D1.80.D0.B5.D0.B1.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_.D0.BA_.D0.BE.D1.82.D1.87.D1.91.D1.82.D1.83_.D0.BF.D1.80.D0.BE_.D0.BE.D1.88.D0.B8.D0.B1.D0.BA.D1.83"><span class="mw-headline-number">2</span> Требования к отчёту про ошибку</span></h2>
+<p>Для исключения лишних наводящих вопросов, или даже преждевременного закрытия ошибки статусом "Не ошибка", и для ускорения процесса локализации проблемы рекомендуется следовать следующим требованиям к отчёту:
+</p>
+<ul><li> Указать окружение исполнения OpenSCADA, а именно: дистрибутив и версию операционной системы.</li>
+<li> Указать версию OpenSCADA, включая SVN-ревизию рабочей ветви.</li>
+<li> Указать особенности конфигурации и исполнения.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> В случае свободной поддержки обязательным является воспроизведение проблемы в стандартных конфигурациях и на <a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">демонстрационной БД</a>, особенно если это аварийное завершение программы и невозможно сформировать отчёт про падение или он оказывается непоказательным.</dd></dl>
+<ul><li> Описать действия, которые вызывают ошибку.</li>
+<li> Вложить протокол сообщений OpenSCADA для сеансу с воспроизведением ошибки.</li>
+<li> Сформировать отчёт про аварийное завершение программы — разворот стека исполнения на момент аварийного завершения.
+<ul><li> отчёт обычно формируется автоматически, путём генерации его из предсмертного дампа памяти программы; на предмет включения генерации дампа памяти и ручной генерации отчёта из него читайте в следующем разделе;</li>
+<li> при проблемах, связанных с зависанием-блокированием одной или нескольких задач-потоков OpenSCADA, для их локализации может быть полезным ручное прерывание программы сигналом "SIGSEGV", что вызовет формирование предсмертного дампу и отчёт про падение с информацией про место зависания;</li>
+<li> для значительного увеличения пользы разворота стека Вы должны добавить отладочную информацию, установкой опции "-g" во время компиляции, или установить готовый отладочный пакет <b>openscada-dbg</b>.</li></ul></li></ul>
 <h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.BB.D1.83.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.D1.84.D0.B0.D0.B9.D0.BB.D0.B0_.D0.BF.D1.80.D0.B5.D0.B4.D1.81.D0.BC.D0.B5.D1.80.D1.82.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B4.D0.B0.D0.BC.D0.BF.D0.B0_.D0.B8_.D0.B5.D0.B3.D0.BE_.D0.BE.D0.B1.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D0.BA.D0.B0"><span class="mw-headline-number">3</span> Получение файла предсмертного дампа и его обработка</span></h2>
-<p>В ОС Linux, при сбое программ, ядро ОС может формировать предсмертный дамп памяти программы. С помощью этого дампа часто можно выявить место в программе, вызвавшее аварийную остановку. Для включения возможности генерации предсмертного дампа памяти программы ядром необходимо выполнить команды:
+<p>Во время аварийного завершения программы ядро ОС Linux может формировать предсмертный дамп памяти программы. С помощью этого дампа часто можно выявить место в программе, которое вызвало аварийную остановку. Для включения возможности генерации ядром Linux предсмертного дампа памяти программы нужно выполнить команды:
 </p>
 <pre style="white-space: pre-wrap;">
 # Проверка возможности генерации дампов памяти
@@ -58,23 +60,26 @@ $ cat /proc/sys/kernel/core_pattern
 # Включение генерации дампов памяти
 $ echo "core" &gt; /proc/sys/kernel/core_pattern
 </pre>
-<p>После этого необходимо снять ограничение на размер генерируемого файла дампа, для чего OpenSCADA можно запустить с аргументом <b>--CoreDumpAllow</b> или выполнить специальную команду перед вызовом OpenSCADA "<b>$ ulimit -c unlimited</b>".
-</p><p>Затем достаточно убедиться в том, что пользователь, запускающий OpenSCADA, имеет право записи в рабочую директорию OpenSCADA, параметр "<b>Workdir</b>" в конфигурационном файле программы.
-</p><p>Далее запускается система OpenSCADA и воспроизводится аварийное завершение, в результате которого в рабочей директории OpenSCADA создаётся файл <b>core</b>.
-</p><p>Типовые скрипты запуска OpenSCADA, которые поставляются в пакетах дистрибутивов OpenSCADA с версии 0.8.0, включают генерацию дампа памяти и автоматически формируют из него отчёт обратных вызовов (backtrace) в виде файлов "AGLKS_core_2016-03-20_18.17.crash" (для 0.9 Work) или "crash_2012-01-05_11:05.txt" (для 0.8 LTS) в рабочей директории проекта.
-</p><p>Если сформировался файл дампа памяти <b>core</b>, а отчёт обратных вызовов автоматически не сформировался, то вероятно не установлен отладчик "gdb". В таком случае Вы должны его установить и вызвать вручную команду, из рабочей директории для глобальной конфигурации:
+<p>После этого нужно снять ограничение на размер генерируемого файла дампа. Это ограничение, по умолчанию, в OpenSCADA снято и устанавливается оно аргументом командной строки <b>--noCoreDump</b>. Снять это ограничение, на уровне операционной системы, можно исполнив, перед вызовом OpenSCADA, специальную команду — <b>$ ulimit -c unlimited</b>.
+</p><p>Затем нужно убедиться в том, что пользователь, который запускает OpenSCADA, имеет право записи в рабочую директорию OpenSCADA, что в последних версиях OpenSCADA является обязательным и обеспечивается <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Projects" title="Special:MyLanguage/Documents/Program manual">менеджером проектов OpenSCADA</a>.
+</p><p>Далее запускается OpenSCADA и воспроизводится аварийное завершение, в результате которого, в рабочей директории OpenSCADA, создаётся файл "core".
+</p><p>Последние версии OpenSCADA обеспечивают автоматическую генерацию отчёта про аварийное завершения, при наличии файла предсмертного дампу "core" и отладчика <b>gdb</b>, и это осуществляется в начале запуска OpenSCADA. Файлы отчётов про аварийное завершение получают название вида "AGLKS_core_2018-02-16_22.06.crash" и накапливаются в рабочей директории соответствующего проекта OpenSCADA.
+</p><p>Если файл дампа памяти "core" сформировался, а отчёт про аварийное завершение автоматически не генерируется, то вероятно не установлен отладчик <b>gdb</b>. В таком случае Вы должны его установить и вызвать:
 </p>
-<dl><dd>$ gdb openscada --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" &gt; crash_$(date +%F_%H:%M).txt</dd></dl>
-<p>Или-же выполнить процедуру в интерактивном режиме, для глобальной конфигурации:
-</p>
-<pre style="white-space: pre-wrap;">
-# Переход к рабочей директории OpenSCADA
-(gdb) cd /var/spool/openscada
-# Указание исполняемого файла, не скрипты!
+<ul><li> сервисную процедуру менеджера проектов OpenSCADA:</li></ul>
+<dl><dd>$ openscada-proj proc {ProjName}</dd></dl>
+<ul><li> или команду прямого вызова отладчика, из рабочей папки проекта:</li></ul>
+<dl><dd>$ gdb openscada --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" &gt; {ProjName}_core_$(date +%F_%H:%M).crash</dd></dl>
+<ul><li> или прямую процедуру отладчика в интерактивном режиме, через вызов <b>gdb</b> без аргументов:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 15px">
+# Переход в рабочий каталог проекта OpenSCADA
+(gdb) cd /var/spool/openscada/{ProjName}
+(gdb) cd ~/.openscada/{ProjName}
+# Указание исполняемого файла
 (gdb) file /usr/bin/openscada
 # Указание файла дампа памяти программы
-(gdb) core-file /var/spool/openscada/core.26658
-# Получение разворота стека исполнения
+(gdb) core-file ./core.26658
+# Получение разворота стека исполнения — отчёта об аварийном завершении
 (gdb) thread apply all bt full
 #0  0xb7d104c0 in pthread_cancel () from /lib/librt.so.1
 #1  0xb7d1edaa in start_thread () from /lib/libpthread.so.0
