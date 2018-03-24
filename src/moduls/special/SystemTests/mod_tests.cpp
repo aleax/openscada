@@ -49,7 +49,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
-#define MOD_VER		"1.6.1"
+#define MOD_VER		"1.6.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the group of tests to OpenSCADA and its modules.")
 #define LICENSE		"GPL2"
@@ -177,7 +177,7 @@ string TTest::optDescr( )
 void TTest::load_( )
 {
     // Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
+    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     // Load parameters from config-file
 }

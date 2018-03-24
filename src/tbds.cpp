@@ -529,7 +529,7 @@ string TBDS::optDescr( )
 void TBDS::load_( )
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
+    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
     mSYSStPref = (bool)s2i(TBDS::genDBGet(nodePath()+"SYSStPref",(mSYSStPref?"1":"0"),"root",TBDS::OnlyCfg));

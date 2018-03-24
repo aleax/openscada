@@ -394,6 +394,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		    plt.setColor(QPalette::Button, clr);
 		    wdg->setStyleSheet(QString("background: %1").arg(shD->color.c_str()));
 		}
+		else wdg->setStyleSheet(QString("background: %1").arg(plt.color(QPalette::Button).name()));
 		clr = getColor(shD->colorText);
 		if(clr.isValid())	plt.setColor(QPalette::ButtonText, clr);
 		wdg->setPalette(plt);
@@ -4170,7 +4171,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	return;
     }
 
-    //Correct request to present data
+    //Correct request to the present data
     if(shD->time > shD->tmPrev) { if(valEnd) tTimeGrnd = valEnd; toUp = true; }
     else if((shD->time-shD->tSize) < shD->tmGrndPrev) { if(valBeg) tTime = valBeg-1; }
     else return;
@@ -4192,7 +4193,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	for(unsigned iReq = 0; iReq < req.childSize(); iReq++) {
 	    XMLNode *rcd = req.childGet(iReq);
 	    TMess::SRec mess(strtoul(rcd->attr("time").c_str(),0,10), s2i(rcd->attr("utime")),
-		rcd->attr("cat"), (TMess::Type)abs(s2i(rcd->attr("lev"))), rcd->text());
+		rcd->attr("cat"),  (TMess::Type)abs(s2i(rcd->attr("lev"))), rcd->text());
 
 	    // Check for dublicates
 	    isDbl = false;
@@ -4203,7 +4204,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    }
 	    if(isDbl) continue;
 
-	    // Insert new row
+	    // Insert a new row
 	    shD->messList.push_front(mess);
 	    isDtChang = true;
 	}
@@ -4233,40 +4234,40 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     vector< pair<string,int> > sortIts;
     switch(shD->viewOrd&0x3) {
 	case FP_ON_TM:
-	    for(unsigned i_m = 0; i_m < shD->messList.size(); i_m++)
-		sortIts.push_back(pair<string,int>(u2s(shD->messList[i_m].time)+" "+u2s(shD->messList[i_m].utime),i_m));
+	    for(unsigned iM = 0; iM < shD->messList.size(); iM++)
+		sortIts.push_back(pair<string,int>(u2s(shD->messList[iM].time)+" "+u2s(shD->messList[iM].utime),iM));
 	    break;
 	case FP_ON_LEV:
-	    for(unsigned i_m = 0; i_m < shD->messList.size(); i_m++)
-		sortIts.push_back(pair<string,int>(i2s(shD->messList[i_m].level),i_m));
+	    for(unsigned iM = 0; iM < shD->messList.size(); iM++)
+		sortIts.push_back(pair<string,int>(i2s(shD->messList[iM].level),iM));
 	    break;
 	case FP_ON_CAT:
-	    for(unsigned i_m = 0; i_m < shD->messList.size(); i_m++)
-		sortIts.push_back(pair<string,int>(shD->messList[i_m].categ,i_m));
+	    for(unsigned iM = 0; iM < shD->messList.size(); iM++)
+		sortIts.push_back(pair<string,int>(shD->messList[iM].categ,iM));
 	    break;
 	case FP_ON_MESS:
-	    for(unsigned i_m = 0; i_m < shD->messList.size(); i_m++)
-		sortIts.push_back(pair<string,int>(shD->messList[i_m].mess,i_m));
+	    for(unsigned iM = 0; iM < shD->messList.size(); iM++)
+		sortIts.push_back(pair<string,int>(shD->messList[iM].mess,iM));
 	    break;
     }
     sort(sortIts.begin(), sortIts.end());
     if(shD->viewOrd&0x4) reverse(sortIts.begin(),sortIts.end());
 
-    //Write to table
+    //Write to the table
     shD->addrWdg->setRowCount(sortIts.size());
     QTableWidgetItem *tit;
-    for(unsigned i_m = 0; i_m < sortIts.size(); i_m++) {
+    for(unsigned iM = 0; iM < sortIts.size(); iM++) {
 	QFont fnt;
 	QColor clr, fclr;
-	// Check properties
-	for(int i_it = 0, lst_lev = -1; i_it < (int)shD->itProps.size(); i_it++)
-	    if(shD->messList[sortIts[i_m].second].level >= shD->itProps[i_it].lev && shD->itProps[i_it].lev > lst_lev &&
-		TRegExp(shD->itProps[i_it].tmpl, "p").test(shD->messList[sortIts[i_m].second].categ))
+	// Check the properties
+	for(int iIt = 0, lst_lev = -1; iIt < (int)shD->itProps.size(); iIt++)
+	    if(shD->messList[sortIts[iM].second].level >= shD->itProps[iIt].lev && shD->itProps[iIt].lev > lst_lev &&
+		TRegExp(shD->itProps[iIt].tmpl, "p").test(shD->messList[sortIts[iM].second].categ))
 	    {
-		fnt = shD->itProps[i_it].font;
-		clr = shD->itProps[i_it].clr;
-		if(shD->messList[sortIts[i_m].second].level == shD->itProps[i_it].lev) break;
-		lst_lev = shD->itProps[i_it].lev;
+		fnt = shD->itProps[iIt].font;
+		clr = shD->itProps[iIt].clr;
+		if(shD->messList[sortIts[iM].second].level == shD->itProps[iIt].lev) break;
+		lst_lev = shD->itProps[iIt].lev;
 	    }
 	if(clr.isValid())
 	    fclr = ((0.3*clr.red()+0.59*clr.green()+0.11*clr.blue()) > 128) ? Qt::black : Qt::white;
@@ -4275,17 +4276,17 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    tit = NULL;
 	    if(iCl == c_tm) {
 		QDateTime	dtm;
-		dtm.setTime_t(shD->messList[sortIts[i_m].second].time);
-		shD->addrWdg->setItem(i_m, c_tm, tit=new QTableWidgetItem(dtm.toString("dd.MM.yyyy hh:mm:ss")));
+		dtm.setTime_t(shD->messList[sortIts[iM].second].time);
+		shD->addrWdg->setItem(iM, c_tm, tit=new QTableWidgetItem(dtm.toString("dd.MM.yyyy hh:mm:ss")));
 	    }
 	    else if(iCl == c_tmu)
-		shD->addrWdg->setItem(i_m, c_tmu, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[i_m].second].utime)));
+		shD->addrWdg->setItem(iM, c_tmu, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[iM].second].utime)));
 	    else if(iCl == c_lev)
-		shD->addrWdg->setItem(i_m, c_lev, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[i_m].second].level)));
+		shD->addrWdg->setItem(iM, c_lev, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[iM].second].level)));
 	    else if(iCl == c_cat)
-		shD->addrWdg->setItem(i_m, c_cat, tit=new QTableWidgetItem(shD->messList[sortIts[i_m].second].categ.c_str()));
+		shD->addrWdg->setItem(iM, c_cat, tit=new QTableWidgetItem(shD->messList[sortIts[iM].second].categ.c_str()));
 	    else if(iCl == c_mess)
-		shD->addrWdg->setItem(i_m, c_mess, tit=new QTableWidgetItem(shD->messList[sortIts[i_m].second].mess.c_str()));
+		shD->addrWdg->setItem(iM, c_mess, tit=new QTableWidgetItem(shD->messList[sortIts[iM].second].mess.c_str()));
 	    else continue;
 	    tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 	    tit->setData(Qt::FontRole, fnt);

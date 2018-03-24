@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.HTTP file: http.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.1.3"
+#define MOD_VER		"3.1.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -102,7 +102,7 @@ string TProt::optDescr( )
 void TProt::load_( )
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
+    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
     setDeny(TBDS::genDBGet(nodePath()+"Deny",deny()));

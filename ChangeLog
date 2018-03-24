@@ -1,3 +1,26 @@
+2018-03-24 Roman (stable)
+- !:DOC: "Quick Start" continued to revision ongoing of it translation to Ukrainian, in the part 3.
+- !!!:SYS: The option --enable-QtMainThrd of the configure time of the building was replaced by
+    the execution command-line option --QtInNotMainThread of the module UI.QTStarter.
+    And Qt working into the main thread is the default mode.
+- DB.LibsDB.OscadaLibs: DAQ templates base.{manInUnif,anUnif,anUnifSt} expanded for NORM messages oppressing also at wrong connections to the source.
+- FIX:DB.LibsDB.vcaBase: doc.{docGasNodeDayA,docGasNodeMonthA} fixed for the archival mode and improved for the dynamic mode.
+- SYS: *.desktop.in fixed for the original name and description.
+    data/{openscada.spec,openscada_mod_ALT.spec,openscada_mod_RH.spec}:
+	The daemon mode init script "oscadad" and "openscadad" renamed to "openscada-server" and separated to "openscada-plc" for the generalization.
+    data/oscada_start.xml: the input transports were commented due to clarify the default configuration file of the desktop mode.
+    data/openscada_start.in: expanded to check for "lock" file of the new project manager.
+- FIX:SYS.*: The function cmdOpt() set to return empty strings at the empty command-line parameter.
+    The function cmdOptPresent() is used only for the parameter presence checking.
+- FIX:UI.VCAEngine: Restored and fixed for hot tracing into sessions of changes into widget's links.
+    The session project forbidden to edition into the enabled mode.
+- !:FIX:UI.Vision: The copy command final rised before the cut one.
+    The InputDlg widget expanded for controlled save and restore the window size, for very expanded ones on the example of the fullsized text edition.
+    FIX: The view "Button" of the primitive "FormEl" forcing to its background color fixed for set the default color.
+- !!:UI.WebVision: The view "Button" of the primitive "FormEl" some improved and expanded for the extended mode "Save" support.
+    Tracing for the main window resizing set only for the height and with 10% margin in decreasing.
+
+
 2018-03-16 Roman (stable)
 - !!:DB.LibsDB.vcaBase: doc.{docGasNodeDayA,docGasNodeMonthA} significant expanded for work in the dynamic mode also.
 - !!!:FIX:SYS.Android:
@@ -21,8 +44,8 @@
 - SYS,UI.QTStarter: Android look adapted to a default custom theme and CSS.
 - !!:DOC: Off-line documents Documents/How_to/{Cyclic_programming,Debug,Transferring_project_configuration,Build_from_source,Crash_report,Create_module}
 	are appended by the prefix "How_to_".
-    DAQ templates base.{manInUnif,anUnif,anUnifSt} are appended by checking their execution controller state for oppressing their violations about
-    wrong connections to the source.
+- DB.LibsDB.OscadaLibs: DAQ templates base.{manInUnif,anUnif,anUnifSt} are appended by checking their execution controller state
+    for oppressing their violations about wrong connections to the source.
 - FIX:DB.LibsDB.vcaBase: Wrong "tittle" renamed to "title".
 - DATA.icons,UI.{QTCfg,QTStarter,Vision}: Some low-resolution images of GUI toolbars expanded up to 64x64 dimension in way of the Android look improving.
 - Archives: Clean up of the current violations table was added by a new button.
@@ -9106,7 +9129,7 @@
 
 2009-01-12 Roman OpenSCADA 0.6.3
 - !!!!:/DemoDB: Translation to English is added. DB files separated to English and Russian.
-- !!:/SYS: Add release 0.6.3 anounce documents.
+- !!:/SYS: Add release 0.6.3 announce documents.
 - !!:/SYS: Updated FAQ, TODO and README documents.
 - !!:/SYS: RPM build spec file is updated for new demo DB files configuration support.
 - FIX:/DB: DB system table cache limit process is fixed.
@@ -9604,7 +9627,7 @@
 - !!:/UI/Vision: Documentation and translation is updated and version 0.7.0 is relised.
 - !!:/UI/WebVision: Documentation and translation is updated and version 0.4.0 is relised.
 - !!:/UI/WebCfg: Documentation and translation is updated and version 1.5.1 is relised.
-- !!:/SYS: Add release 0.6.2 anounce documents.
+- !!:/SYS: Add release 0.6.2 announce documents.
 - !!:/SYS: Updated API and TODO documents.
 
 

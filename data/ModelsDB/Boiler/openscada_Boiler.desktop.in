@@ -4,9 +4,9 @@ Categories=Graphics;Development;
 Type=Application
 Exec=env OSCADA_ProjName=Boiler @bindir_full@/openscada
 Icon=openscada_Boiler
-Name=OpenSCADA: Model "Boiler"
-GenericName=Model "Boiler" on open SCADA system
-Comment=Model "Boiler" on open supervisory control and data acquisition system
+Name=OpenSCADA: Simulator "Boiler"
+GenericName=Simulator "Boiler" on the open SCADA system
+Comment=Simulator "Boiler" on the open supervisory control and data acquisition system
 GenericName[ru]=Модель "Котёл" на открытой SCADA системе
 Comment[ru]=Модель "Котёл" на открытой системе визуального контроля и сбора данных
 GenericName[uk]=Модель "Котел" на відкритій SCADA системі

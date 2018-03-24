@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +38,7 @@ function pathLev( path, level, scan )
     while(an_dir < path.length && path.charAt(an_dir) == '/') an_dir++;
     if(an_dir >= path.length) return '';
     while(true) {
-	t_dir = path.indexOf('/',an_dir);
+	t_dir = path.indexOf('/', an_dir);
 	if(t_dir < 0)		{ pathLev.off = path.length; return (t_lev==level)?path.substr(an_dir):''; }
 	if(t_lev == level)	{ pathLev.off = t_dir; return path.substr(an_dir,t_dir-an_dir); }
 	an_dir = t_dir;
@@ -1301,25 +1301,30 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var formObj = tblCell.childNodes.length ? tblCell.childNodes[0] : this.place.ownerDocument.createElement('input');
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['value']) formObj.checked = parseInt(this.attrs['value']);
-		    if(!toInit) break;
-		    formObj.type = 'checkbox';
-		    formObj.disabled = !elWr;
-		    formObj.wdgLnk = this;
-		    formObj.onclick = function( ) {
-			//console.log(this.addr+": TEST 00: ChkChange="+this.checked);
-			var attrs = new Object();
-			attrs.value = this.checked ? '1' : '0';	attrs.event = 'ws_ChkChange';
-			setWAttrs(this.wdgLnk.addr,attrs);
-			return true;
+		    if(toInit) {
+			formObj.type = 'checkbox';
+			formObj.disabled = !elWr;
+			formObj.wdgLnk = this;
+			formObj.onclick = function( ) {
+			    //console.log(this.addr+": TEST 00: ChkChange="+this.checked);
+			    var attrs = new Object();
+			    attrs.value = this.checked ? '1' : '0';	attrs.event = 'ws_ChkChange';
+			    setWAttrs(this.wdgLnk.addr,attrs);
+			    return true;
+			}
+			tblCell.appendChild(formObj);
+			tblCell.appendChild(this.place.ownerDocument.createTextNode(this.attrs['name']));
+			this.place.appendChild(tblCell);
 		    }
-		    tblCell.appendChild(formObj);
-		    tblCell.appendChild(this.place.ownerDocument.createTextNode(this.attrs['name']));
-		    this.place.appendChild(tblCell);
+		    if(this.attrsMdf['name'])	tblCell.childNodes[1].textContent = this.attrs['name'];
 		    break;
 		case 3:	//Button
 		    var formObj;
 		    var iconImg = this.attrs['img'];
 		    this.place.checkable = (parseInt(this.attrs['mode']) == 1);
+		    this.place.isMenu = (parseInt(this.attrs['mode']) == 2);
+		    this.place.isLoad = (parseInt(this.attrs['mode']) == 3);
+		    this.place.isSave = (parseInt(this.attrs['mode']) == 4);
 		    var custBut = (iconImg || this.place.checkable);
 		    if(custBut != this.place.custBut)
 			while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
@@ -1338,6 +1343,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(toInit || this.attrsMdf['font']) formObj.style.font = this.place.fontCfg;
 			var imgObj = formObj.childNodes.length ? formObj.childNodes[0] : this.place.ownerDocument.createElement('img');
 			var spanObj = formObj.childNodes.length ? formObj.childNodes[1] : this.place.ownerDocument.createElement('span');
+
 			spanObj.style.cssText = "display: table-cell; height: "+geomH+"px; line-height: 1; text-align: center; white-space: pre-line; word-break: break-word; width: "+geomW+"px; ";
 			if(toInit || this.attrsMdf['name']) {
 			    spanObj.disabled = !this.attrs['name'].length;
@@ -1367,55 +1373,65 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    };
 			}
 
-			if(!toInit) break;
-			formObj.className = 'vertalign';
-			//Disable drag mostly for FireFox
-			imgObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
-			if(elWr) {
-			    this.place.onmouseout = function( ) {
-				if(this.checkable || this.style.borderStyle == 'outset') return false;
-				this.style.borderStyle = 'outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease');
-				return false;
-			    };
-			    this.place.onclick = function( ) {
-				if(!this.checkable) return false;
-				var attrs = new Object();
-				if(this.style.borderLeftStyle == 'outset')
-				{ attrs.value = '1'; this.style.borderStyle = 'inset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); }
-				else { attrs.value = '0'; this.style.borderStyle = 'outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease'); }
-				setWAttrs(this.wdgLnk.addr,'event','ws_BtToggleChange');
-				setWAttrs(this.wdgLnk.addr,'value',attrs.value);
-				return false;
-			    };
-			    this.place.wdgLnk = this;
-			}
-			formObj.appendChild(imgObj);
-			formObj.appendChild(spanObj);
+			if(toInit) {
+			    formObj.className = 'vertalign';
+			    //Disable drag mostly for FireFox
+			    imgObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
+			    if(elWr) {
+				this.place.onmouseout = function( ) {
+				    if(this.checkable || this.style.borderStyle == 'outset') return false;
+				    this.style.borderStyle = 'outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease');
+				    return false;
+				};
+				this.place.onclick = function( ) {
+				    if(!this.checkable) return false;
+				    var attrs = new Object();
+				    if(this.style.borderLeftStyle == 'outset')
+				    { attrs.value = '1'; this.style.borderStyle = 'inset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); }
+				    else { attrs.value = '0'; this.style.borderStyle = 'outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease'); }
+				    setWAttrs(this.wdgLnk.addr,'event','ws_BtToggleChange');
+				    setWAttrs(this.wdgLnk.addr,'value',attrs.value);
+				    return false;
+				};
+				this.place.wdgLnk = this;
+			    }
+			    formObj.appendChild(imgObj);
+			    formObj.appendChild(spanObj);
 
-			formObj.style.position = "absolute";
-			formObj.style.top = "-2px"; formObj.style.left = "-2px";
-			formObj.style.width = (geomW+4)+'px'; formObj.style.height = (geomH+4)+'px';
-			formObj.style.overflow = "hidden";
-			this.place.appendChild(formObj);
+			    formObj.style.position = "absolute";
+			    formObj.style.top = "-2px"; formObj.style.left = "-2px";
+			    formObj.style.width = (geomW+4)+'px'; formObj.style.height = (geomH+4)+'px';
+			    formObj.style.overflow = "hidden";
+			    this.place.appendChild(formObj);
+			}
 		    }
 		    else {
 			formObj = toInit ? this.place.ownerDocument.createElement('button') : this.place.childNodes[0];
 			if(toInit || this.attrsMdf['geomZ'])	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 			if(toInit || this.attrsMdf['font'])	formObj.style.font = this.place.fontCfg;
-			if(toInit || this.attrsMdf['name'])	formObj.value = this.attrs['name'].replace('\\n','\n');
+			if(toInit || this.attrsMdf['name']) {
+			    //formObj.value = this.attrs['name'].replace('\\n','\n');
+			    formObj.innerText = this.attrs['name'].replace('\\n','\n');	//Need for Opera after place to DOM
+			}
 			if(toInit || this.attrsMdf['color'])	formObj.style.backgroundColor = getColor(this.attrs['color']);
 			if(toInit || this.attrsMdf['colorText'])formObj.style.color = getColor(this.attrs['colorText']);
 			this.mouseup[this.mouseup.length] = function(e,el)	{ setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease'); };
 			this.mousedown[this.mousedown.length] = function(e,el)	{ setWAttrs(el.wdgLnk.addr,'event','ws_BtPress'); };
-			if(!toInit) break;
-			formObj.style.cursor = elWr ? 'pointer' : '';
-			formObj.disabled = !elWr;
-			//formObj.type = 'button';
-			formObj.wdgLnk = this;
-			formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
-			formObj.style.padding = "0";
-			this.place.appendChild(formObj);
-			formObj.innerText = this.attrs['name'].replace('\\n','\n');	//Need for Opera after place to DOM
+			if(toInit) {
+			    formObj.style.cursor = elWr ? 'pointer' : '';
+			    formObj.disabled = !elWr;
+			    //formObj.type = 'button';
+			    formObj.wdgLnk = this;
+			    formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
+			    formObj.style.padding = "0";
+			    this.place.appendChild(formObj);
+			}
+		    }
+
+		    if(this.place.isSave) {
+			if(this.attrs['value'].length && this.attrs['value'] != this.valuePrev)
+			    window.open('/'+MOD_ID+this.addr+"/"+this.attrs['value'].split("\n",1)[0].split("|")[2]+'?com=obj');
+			this.valuePrev = this.attrs['value'];
 		    }
 		    break;
 		case 4: case 5:	//Combo box, List
@@ -2510,7 +2526,9 @@ document.body.onmouseup = function(e)
 
 window.onresize = function( ) {
     if(stTmReload) clearTimeout(stTmReload);
-    stTmReload = setTimeout('window.location.reload()', 1000);
+    if(window.innerHeight > document.body.clientHeight ||
+	((document.body.clientHeight-window.innerHeight)/document.body.clientHeight > 0.1 && wy_scale > 1))
+	    stTmReload = setTimeout('window.location.reload()', 1000);
 }
 
 var modelPer = 0;			//Model proc period

@@ -138,8 +138,8 @@ string ModArch::optDescr( )
 void ModArch::load_( )
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
-    if(s2i(SYS->cmdOpt("noArchLimit"))) noArchLimit = true;
+    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
+    if(SYS->cmdOptPresent("noArchLimit")) noArchLimit = true;
 }
 
 void ModArch::perSYSCall( unsigned int cnt )

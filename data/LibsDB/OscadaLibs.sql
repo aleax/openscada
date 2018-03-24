@@ -5565,10 +5565,9 @@ if(!tErr) {
 //Alarms forming
 if(alSup)	f_err = "0";
 else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt()) {
-		if(!this.cntr().status().toInt())
-			this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	}
+	if(this.cntr().status().toInt())	return;
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
 	else if(f_err.toInt() && !tErr.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
@@ -5659,13 +5658,12 @@ if(!tErr) {
 //Alarms forming
 if(alSup == 1)	f_err = "0";
 else {
+	if(this.cntr().status().toInt())	return;
 	if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 	if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt()) {
-		if(!this.cntr().status().toInt())
-			this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	}
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
 	else if(f_err.toInt() && !tErr.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	toSave = (alSup == 2 && f_err != tErr);
@@ -5822,13 +5820,12 @@ else {
 //Alarms forming
 if(alSup == 1)	f_err = "0";
 else {
+	if(this.cntr().status().toInt())	return;
 	if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 	if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt()) {
-		if(!this.cntr().status().toInt())
-			this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	}
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
 	else if(f_err.toInt() && !tErr.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	toSave = (alSup == 2 && f_err != tErr);

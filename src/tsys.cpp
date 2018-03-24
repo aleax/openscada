@@ -553,7 +553,7 @@ string TSYS::cmdOpt( const string &opt, const string &setVl )
     //Get value
     map<string, string>::iterator iOpt = mCmdOpts.find(strEncode(opt,ToLower));
     if(iOpt == mCmdOpts.end()) return "";
-    return iOpt->second.size() ? iOpt->second : "1";
+    return iOpt->second.size() ? iOpt->second : "";	// "1";
 }
 
 int TSYS::permCrtFiles( bool exec )
@@ -572,7 +572,7 @@ bool TSYS::cfgFileLoad( )
 
     //================ Load parameters from commandline =========================
     string tVl;
-    if(s2i(cmdOpt("h")) || s2i(cmdOpt("help"))) {
+    if(cmdOptPresent("h") || cmdOptPresent("help")) {
 	//fprintf(stdout, "%s", optDescr().c_str());
 	Mess->setMessLevel(7);
 	cmd_help = true;

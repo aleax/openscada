@@ -135,7 +135,7 @@ void TWEB::load_( )
 {
     //!!! Load self module command line parameters' values. Append your addition parameters process.
     // Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
+    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA system DB or from main config-file.
     //> Load parameters from config-file

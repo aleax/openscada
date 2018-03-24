@@ -89,7 +89,7 @@ void TModSchedul::load_( )
 {
     //Load parameters from command line
     string argVl;
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
+    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
     if((argVl=SYS->cmdOpt("modPath")).size()) SYS->setModDir(argVl, true);
 
     //Load parameters from command line

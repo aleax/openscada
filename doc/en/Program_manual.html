@@ -760,6 +760,8 @@
 <li> <i>Category</i> — category o the message.</li>
 <li> <i>Level</i> — level of the message.</li>
 <li> <i>Message</i> — text of the message.</li></ul>
+<p>For alarm messages after the table appears a button for clean up this table of the active alarms, that is useful for service functions.
+</p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1043px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mess.png"><img class="thumbimage" height="621" src="files/QTCfg_subsys_arch_mess.png" width="1041" /></a>  <div class="thumbcaption">Fig. 4.6b. Tab "Messages" of the subsystem "Archives-History".</div></div></div></div>
 <p>Tab "Values" (Fig.4.6c) contains the general configuration of the values archiving and the list of archives of values. In the context menu of the list of values the user has the opportunity to add, delete and go to the desired archive. The general configuration of the archiving is represented by the fields:
 </p>
@@ -1543,6 +1545,8 @@ VCAstation &lt;id&gt;         The station with the VCA engine ('.' Is local).
 RestoreTime &lt;seconds&gt;   Connection recovery time.
 
 ======================= Module &lt;UI:QTStarter&gt; options =======================
+    --QtInNotMainThread Starts Qt into a different from the main thread.
+    --showWin=&lt;0,1,2&gt;   Window display mode, initial and which is allowed to change from: 0-typical window, 1-maximized window, 2-full screen.
 ----------- Qt debug commandline options ----------
     --noX11             Prevent the launch of Qt, preferably for a clean console.
     --sync              Switch to Sync X11 for debugging.
@@ -1561,6 +1565,7 @@ RestoreTime &lt;seconds&gt;   Connection recovery time.
 StartMod   &lt;moduls&gt;     List of the modules that are started, separated ';'.
 CloseToTray &lt;0|1&gt;       Closing all windows or starting without Qt modules to the system tray.
 Style      &lt;name&gt;       The GUI style of Qt.
+Font       &lt;font&gt;       Common Qt font.
 Palette    &lt;colors&gt;     Twenty colors of the palette separated by symbol ',' in three lines for active, disabled and inactive groups.
 StyleSheets &lt;CSS&gt;       Rules of the Cascade Style Sheets.
 

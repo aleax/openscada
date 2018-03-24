@@ -79,16 +79,17 @@ void Session::setEnable( bool val )
 	try {
 	    if(mess_lev() == TMess::Debug) d_tm = TSYS::curTime();
 
-	    //Connect to project
-	    mParent = mod->prjAt(mPrjnm);
+	    //Connecting and registering to the project
+	    mParent	= mod->prjAt(mPrjnm);
+	    //????
 
-	    //Get data from project
+	    //Getting data from the project
 	    mOwner	= parent().at().owner();
 	    mGrp	= parent().at().grp();
 	    mPermit	= parent().at().permit();
 	    setPeriod(parent().at().period());
 
-	    //Load previous style
+	    //Loading a previous style
 	    string stVl = sessAttr("<Style>", user());
 	    if(stVl.empty()) stVl = i2s(parent().at().stlCurent());
 	    stlCurentSet(s2i(stVl));
@@ -98,7 +99,7 @@ void Session::setEnable( bool val )
 		d_tm = TSYS::curTime();
 	    }
 
-	    //Create root pages
+	    //Creation the root pages
 	    parent().at().list(pg_ls);
 	    for(unsigned i_p = 0; i_p < pg_ls.size(); i_p++)
 		if(!present(pg_ls[i_p]))
@@ -109,7 +110,7 @@ void Session::setEnable( bool val )
 		d_tm = TSYS::curTime();
 	    }
 
-	    //Pages enable
+	    //Enabling the pages
 	    list(pg_ls);
 	    for(unsigned iLs = 0; iLs < pg_ls.size(); iLs++)
 		try{ at(pg_ls[iLs]).at().setEnable(true); }
@@ -118,7 +119,10 @@ void Session::setEnable( bool val )
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Enable root pages time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
 
 	    modifGClr();
-	} catch(...) { mParent.free(); }
+	} catch(...) {
+	    //????
+	    mParent.free();
+	}
     }
     else {
 	if(start()) setStart(false);
@@ -134,7 +138,8 @@ void Session::setEnable( bool val )
 	for(unsigned iLs = 0; iLs < pg_ls.size(); iLs++)
 	    del(pg_ls[iLs]);
 
-	//Disconnect from project
+	//Unregistering and disconnecting for the project
+	//????
 	mParent.free();
     }
 
@@ -341,7 +346,7 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 		}
 	    } else opPg = curPtEl;
 
-	    // Go to next page
+	    // Go to the next page
 	    cpg = cpg.freeStat() ? at(opPg) : cpg.at().pageAt(opPg);
 	}
 
@@ -653,7 +658,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
 		ctrMkNode("fld",opt,-1,"/obj/st/o_a","",R_R_R_,"root",SUI_ID,4,"tp","dec","dest","select",
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
-		ctrMkNode("fld",opt,-1,"/obj/st/prj",_("Project"),permit(),owner().c_str(),grp().c_str(),4,
+		ctrMkNode("fld",opt,-1,"/obj/st/prj",_("Project"),enable()?R_R_R_:permit(),owner().c_str(),grp().c_str(),4,
 		    "tp","str","idm","1","dest","select","select","/obj/prj_ls");
 		ctrMkNode("fld",opt,-1,"/obj/st/backgrnd",_("Background execution mode"),R_R_R_,"root",SUI_ID,1,"tp","bool");
 		if(start()) {
@@ -691,15 +696,14 @@ void Session::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/obj/st/user" && ctrChkNode(opt))	opt->setText(user());
     else if(a_path == "/obj/st/owner" && ctrChkNode(opt))	opt->setText(owner());
     else if(a_path == "/obj/st/grp" && ctrChkNode(opt))		opt->setText(grp());
-    else if((a_path == "/obj/st/u_a" || a_path == "/obj/st/g_a" || a_path == "/obj/st/o_a") && ctrChkNode(opt))
-    {
+    else if((a_path == "/obj/st/u_a" || a_path == "/obj/st/g_a" || a_path == "/obj/st/o_a") && ctrChkNode(opt)) {
 	if(a_path == "/obj/st/u_a")	opt->setText(i2s((permit()>>6)&0x7));
 	if(a_path == "/obj/st/g_a")	opt->setText(i2s((permit()>>3)&0x7));
 	if(a_path == "/obj/st/o_a")	opt->setText(i2s(permit()&0x7));
     }
     else if(a_path == "/obj/st/prj") {
-	if(ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD))	opt->setText(projNm());
-	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	setProjNm(opt->text());
+	if(ctrChkNode(opt,"get",enable()?R_R_R_:permit(),owner().c_str(),grp().c_str(),SEC_RD))	opt->setText(projNm());
+	if(ctrChkNode(opt,"set",enable()?R_R_R_:permit(),owner().c_str(),grp().c_str(),SEC_WR))	setProjNm(opt->text());
     }
     else if(a_path == "/obj/st/backgrnd" && ctrChkNode(opt))	opt->setText(i2s(backgrnd()));
     else if(a_path == "/obj/st/calc_tm" && ctrChkNode(opt))
@@ -1069,7 +1073,7 @@ void SessPage::setEnable( bool val, bool force )
 	    SessWdg::setEnable(true);
 	    if(pgOpen) ownerSess()->openReg(path());
 	}
-	// Child pages process
+	// Processing of the child pages
 	if(!force) {
 	    //Create included pages
 	    parent().at().pageList(pg_ls);
@@ -1077,7 +1081,7 @@ void SessPage::setEnable( bool val, bool force )
 		if(!pagePresent(pg_ls[i_p]))
 		    pageAdd(pg_ls[i_p], parent().at().pageAt(pg_ls[i_p]).at().path());
 
-	    //Enable included pages
+	    //Enabling of the included pages
 	    pageList(pg_ls);
 	    for(unsigned iL = 0; iL < pg_ls.size(); iL++)
 		try{ pageAt(pg_ls[iL]).at().setEnable(true); }
@@ -1637,7 +1641,7 @@ void SessWdg::resourceSet( const string &id, const string &data, const string &m
 
 void SessWdg::wdgAdd( const string &iid, const string &name, const string &iparent, bool force )
 {
-    if(!isContainer())	throw TError(nodePath().c_str(),_("Widget is not container!"));
+    if(!isContainer())	throw TError(nodePath().c_str(), _("Widget is not a container!"));
     if(wdgPresent(iid))	return;
 
     chldAdd(inclWdg, new SessWdg(iid,iparent,ownerSess()));
@@ -1852,7 +1856,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 
     string sw_attr, s_attr, obj_tp;
 
-//    if( !(ownerSess()->calcClk()%vmax(1,10000/ownerSess()->period())) ) prcElListUpdate( );
+    if(!((ownerSess()->calcClk()+pos)%vmax(1,10000/ownerSess()->period()))) prcElListUpdate( );
 
     //Calculate include widgets
     MtxAlloc resDt(ownerSess()->dataRes(), true);

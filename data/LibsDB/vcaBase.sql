@@ -9421,7 +9421,7 @@ INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p3_clr','Parameter3: color',1
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p4_clr','Parameter4: сolor',147461,'#00ff00||',9,'Parameter 4','','','Параметр4: колір','','','Параметр4: цвет','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_clr','Parameter5: color',147461,'#06fbff||',9,'Parameter 5','','','Параметр5: колір','','','Параметр5: цвет','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','bTime','Document begin',139265,'0|',14,'<page>|bTime','','','Початок документа','','','Начало документа','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('doc_panel','doc','Document',131077,'<EVAL>',14,'<page>|doc','','','Документ','','','Документ','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('doc_panel','doc','Document',131077,NULL,14,'<page>|doc','','','Документ','','','Документ','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','n','Archive size',131073,'<EVAL>|',10,'<page>|n','','','Розмір архіву','','','Размер архива','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','time','Document time',139265,'0|',14,'<page>|time','','','Час документа','','','Время документа','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','vCur','View cursor',131073,'<EVAL>|',14,'<page>|vCur','','','Курсор відображення','','','Курсор отображения','','','','');
@@ -9707,7 +9707,7 @@ INSERT INTO "wlb_doc_incl" VALUES('docMessRep','fltr','/wlb_originals/wdg_FormEl
 INSERT INTO "wlb_doc_incl" VALUES('docMessRep','fltrCol','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
 INSERT INTO "wlb_doc_incl" VALUES('docMessRep','lab_fltr','/wlb_originals/wdg_Text','owner;name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;','');
 CREATE TABLE 'wlb_doc_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','name','Hour-averaged values of flow-control point',32,'','','','Середні за годину значення витратовимірювального вузла','','Среднечасовые значения расходомерного узла','','','');
+INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','name','Hour-averaged values of the flow-control point',32,'','','','Середні за годину значення витратовимірювального вузла','','Среднечасовые значения расходомерного узла','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','geomZ','1',32,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Table of average over hour values of "<b><?dp return pTitle;?></b>"</h1>
@@ -9719,6 +9719,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','tmpl','<body docProcLang="Java
 	<TR><TH>&nbsp;</TH><TH>begin&nbsp;&nbsp;end</TH><TH>m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH></TR>
 	<TR docRept="3600">
 <?dp using DAQ.JavaLikeCalc.lib_doc;
+	if((rTime-rPer) > SYS.time())	return;
 	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
 	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
 	return "<TD>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
@@ -9749,6 +9750,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','tmpl','<body docProcLang="Java
 	<TR><TH>&nbsp;</TH><TH>поч.&nbsp;&nbsp;кін.</TH><TH>м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
 	<TR docRept="3600">
 <?dp using DAQ.JavaLikeCalc.lib_doc;
+	if((rTime-rPer) > SYS.time())	return;
 	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
 	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
 	return "<TD>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
@@ -9779,6 +9781,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','tmpl','<body docProcLang="Java
 	<TR><TH>&nbsp;</TH><TH>нач.&nbsp;&nbsp;кон.</TH><TH>м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
 	<TR docRept="3600">
 <?dp using DAQ.JavaLikeCalc.lib_doc;
+	if((rTime-rPer) > SYS.time())	return;
 	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
 	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
 	return "<TD>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
@@ -9802,8 +9805,8 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','tmpl','<body docProcLang="Java
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','bTime','0',40,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','time','0',40,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','n','10',34,'','wdg:../a_n','doc','','','','','','');
-INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','aCur','0',34,'','wdg:../a_aCur','doc','','','','','','');
-INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','name','Values average over day of flowcontrol point',32,'','','','Середньодобові значення витратовимірювального вузла','','Cреднесуточные значения расходомерного узла','','','');
+INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','aCur','0',32,'','wdg:../a_aCur','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','name','Day-averaged values of the flow-control point',32,'','','','Середньодобові значення витратовимірювального вузла','','Cреднесуточные значения расходомерного узла','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','geomZ','1',32,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Table of average over day values of "<b><?dp return pTitle;?></b>"</h1>
@@ -9815,6 +9818,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','tmpl','<body docProcLang="Ja
   	<TR><TH>&nbsp;</TH><TH colspan="2">m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH></TR>
 	<TR docRept="86400">
 <?dp using DAQ.JavaLikeCalc.lib_doc;
+	if((rTime-rPer) > SYS.time())	return;
 	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
 	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
 	return "<TD>"+SYS.strftime(rTime-rPer,"%d %m %Y")+"</TD>"+
@@ -9844,6 +9848,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','tmpl','<body docProcLang="Ja
 	<TR><TH>&nbsp;</TH><TH colspan="2">м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
 	<TR docRept="86400">
 <?dp using DAQ.JavaLikeCalc.lib_doc;
+	if((rTime-rPer) > SYS.time())	return;
 	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
 	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
 	return "<TD>"+SYS.strftime(rTime-rPer,"%d %m %Y")+"</TD>"+
@@ -9873,6 +9878,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','tmpl','<body docProcLang="Ja
 	<TR><TH>&nbsp;</TH><TH colspan="2">м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
 	<TR docRept="86400">
 <?dp using DAQ.JavaLikeCalc.lib_doc;
+	if((rTime-rPer) > SYS.time())	return;
 	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
 	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
 	return "<TD>"+SYS.strftime(rTime-rPer,"%d %m %Y")+"</TD>"+
@@ -9895,7 +9901,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','tmpl','<body docProcLang="Ja
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','bTime','0',40,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','time','0',40,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','n','10',34,'','wdg:../a_n','doc','','','','','','');
-INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','aCur','0',34,'','wdg:../a_aCur','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','aCur','0',32,'','wdg:../a_aCur','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docUsersSet','name','Log of interruptions',32,'','','','Журнал дій','','Журнал вмешательств','','','');
 INSERT INTO "wlb_doc_io" VALUES('docUsersSet','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Log of interruptions</h1>
@@ -11336,15 +11342,27 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','dscr','Table of hour-averaged 
 The custom configuration fields in the tab "Links":
 "n" - the mode of the document, set to 0 for the dynamic mode and some archive size for the archival mode.
 "repHour" - the report hour, which is 9 by default.
-"doc.arch" - the used archiver, for build the document, which is "FSArch.1m" by default.
+"doc.arch" - the used archiver for build the document, which is "FSArch.1m" by default.
 "doc.pTitle" - the document (a parameter of the flow-control point) title.
 "doc.Point" - the parameter of the flow-control point with group of attributes.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 2.0.0',32,'','','','Таблиця середніх за годину значень вузла контролю витрат. Заснований на архівному документі.
+Version: 2.1.0',32,'','','','Таблиця середніх за годину значень вузла контролю витрат. Заснований на архівному документі, але підтримує обидва режими - динамічний та архівний.
+Користувацькі конфігураційні поля у вкладці "Зв''язки":
+"n" - режим документу, встановіть у 0 для динамічного режиму та деякий розмір архіву для архівного режиму.
+"repHour" - час звіту, який по замовченю 9.
+"doc.arch" - архіватор користувача для формування документу, який по замовченю "FSArch.1m".
+"doc.pTitle" - заголовок документу (параметр вузла обліку витрат).
+"doc.Point" - параметр вузла обліку витрат з групою атрибутів.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.0.0','','Таблица средних за час значений узла контроля расхода. Основан на архивном документе.
+Версія: 2.1.0','','Таблица средних за час значений узла контроля расхода. Основан на архивном документе, но поддерживает оба режима - динамический и архивный.
+Пользовательские конфигурационные поля во вкладке "Связи":
+"n" - режим документа, установить в 0 для динамического режима и некоторый размер архива для архивного режима.
+"repHour" - отчётный час, который по умолчанию 9.
+"doc.arch" - архиватор пользователя для формирования документа, который по умолчанию "FSArch.1m".
+"doc.pTitle" - заголовок документа (параметр узла учёта расхода).
+"doc.Point" - параметр узла учёта расхода с группой атрибутов.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.0.0','','','');
+Версия: 2.1.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMgn','dscr','Instantaneous values table of the gas control node. Based on the dynamic document.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.0',32,'','','','Таблиця миттєвих значень вузла контролю газу. Засновано на динамічному документі.
@@ -11360,11 +11378,23 @@ The custom configuration fields in the tab "Links":
 "doc.pTitle" - the document (a parameter of the flow-control point) title.
 "doc.Point" - the parameter of the flow-control point with group of attributes.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 2.0.0',32,'','','','Таблиця середніх за добу значень вузла контролю витрат. Заснований на архівному документі.
+Version: 2.1.0',32,'','','','Таблиця середніх за добу значень вузла контролю витрат. Заснований на архівному документі, але підтримує обидва режими - динамічний та архівний.
+Користувацькі конфігураційні поля у вкладці "Зв''язки":
+"n" - режим документу, встановіть у 0 для динамічного режиму та деякий розмір архіву для архівного режиму.
+"repHour" - час звіту, який по замовченю 9.
+"doc.arch" - архіватор користувача для формування документу, який по замовченю "FSArch.1m".
+"doc.pTitle" - заголовок документу (параметр вузла обліку витрат).
+"doc.Point" - параметр вузла обліку витрат з групою атрибутів.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.0.0','','Таблица средних за сутки значений узла контроля расхода. Основан на архивном документе.
+Версія: 2.1.0','','Таблица средних за сутки значений узла контроля расхода. Основан на архивном документе, но поддерживает оба режима - динамический и архивный.
+Пользовательские конфигурационные поля во вкладке "Связи":
+"n" - режим документа, установить в 0 для динамического режима и некоторый размер архива для архивного режима.
+"repHour" - отчётный час, который по умолчанию 9.
+"doc.arch" - архиватор пользователя для формирования документа, который по умолчанию "FSArch.1m".
+"doc.pTitle" - заголовок документа (параметр узла учёта расхода).
+"doc.Point" - параметр узла учёта расхода с группой атрибутов.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.0.0','','','');
+Версия: 2.1.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docMessRep','dscr','Generic messages report allowed for filtering both in static and dynamic. Based on the dynamic document.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.0',32,'','','','Загальний звіт повідомлень, допускає фільтрацію як статично так і динамічно. Заснований на динамічному документі.
@@ -11386,13 +11416,13 @@ Version: 1.0.0',32,'','','','Протокол дій користувача. З�
 Версія: 1.0.0','','Протокол действий пользователя. Основан на динамическом документе.
 Автор: Роман Савоченко <rom_as@oscada.org>
 Версия: 1.0.0','','','');
-INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','aSize','0',34,'','wdg:../a_aSize','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','doc','',40,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','doc','',40,'','','doc','','','','','','');
-INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','vCur','0',38,'','wdg:../a_vCur','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','vCur','0',32,'','wdg:../a_vCur','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','evProc','ws_FocusIn::open:/pg_control/pg_doc_panel',32,'','','','','','','','','');
-INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','vCur','0',38,'','wdg:../a_vCur','doc','','','','','','');
-INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','aSize','0',34,'','wdg:../a_aSize','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','vCur','0',32,'','wdg:../a_vCur','doc','','','','','','');
+INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','');
 CREATE TABLE 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','');
@@ -11517,17 +11547,17 @@ INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayOrder','pTitle','Point: title',13
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayOrder','arch','Archiver',131077,'FSArch.1m',1,'','','doc','Архіватор','','','Архиватор','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayOrder','repHour','Report hour',131073,'9|',9,'','','','Звітний час','','','Отчётный час','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','time','Time: current',139265,'0|',8,'','','','','','','','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','vCur','Archive: cursor: view',131073,'0|',0,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','vCur','Archive: cursor: view',131073,'0|',6,'','wdg:wdg_doc/a_vCur','','','','','','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','n','Archive length, 0 for the dynamic mode',131073,'100|',9,'','','','','','','','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','bTime','Time: begin',139265,'0|',8,'','','','','','','','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','aSize','Archive: size',131073,'0|',0,'','','','','','','','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','aCur','Archive: cursor: current',131073,'0|',0,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','aSize','Archive: size',131073,'0|',2,'','wdg:wdg_doc/a_aSize','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','aCur','Archive: cursor: current',131073,'0|',2,'','wdg:wdg_doc/a_aCur','','','','','','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','n','Archive length, 0 for the dynamic mode',131073,'100|',9,'','','','','','','','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','vCur','Archive: cursor: view',131073,'0|',0,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','vCur','Archive: cursor: view',131073,'0|',6,'','wdg:wdg_doc/a_vCur','','','','','','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','time','Time: current',139265,'0|',8,'','','','','','','','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','bTime','Time: begin',139265,'0|',8,'','','','','','','','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','aSize','Archive: size',131073,'0|',0,'','','','','','','','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','aCur','Archive: cursor: current',131073,'0|',0,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','aSize','Archive: size',131073,'0|',2,'','wdg:wdg_doc/a_aSize','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','aCur','Archive: cursor: current',131073,'0|',2,'','wdg:wdg_doc/a_aCur','','','','','','','','','');
 CREATE TABLE 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "wlb_mnEls_incl" VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO "wlb_mnEls_incl" VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -19177,8 +19207,8 @@ szVal = time - bTime;
 
 //Archive size
 if(n) {
-	cPos = aCur - vCur;
-	if(cPos < 0) cPos += aSize;
+	if(vCur >= 0)	cPos = aCur - vCur;
+	if(cPos < 0)		cPos += aSize;
 	Text3_text = Text3_text.parse(0,"\n") + "\n" + (cPos+1) + "(" + aSize + ")";
 }
 else Text3_text = Text3_text.parse(0,"\n");
@@ -19223,7 +19253,7 @@ if(n == 0 && prevTime != time) { bTime = time - szVal; doc=""; }
 if(szVal < 60)						{ tmTp_value = tr("s"); size_value = szVal; }
 else if(szVal < 60*60)			{ tmTp_value = tr("m"); size_value = szVal/60; }
 else if(szVal < 24*60*60)	{ tmTp_value = tr("h"); size_value = szVal/(60*60); }
-else										{ tmTp_value = tr("d"); size_value = szVal/(24*60*60); }','','',200,'name;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1443604128);
+else										{ tmTp_value = tr("d"); size_value = szVal/(24*60*60); }','','',200,'name;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1521281223);
 INSERT INTO "wlb_Main" VALUES('terminator','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAAx1AAAMdQEteJR1AAAA
 2UlEQVRYhe3QsWrFMAwFUDlVsGWDDa/ZAvn5138K+QEPITVkiSEJ8hvcoUPpUG9Fd5NAh4vU8/mR
 UoKGOOcwpZTSZ4sCAF3jvSiiiCLKb0rOOcbIzH9WEAC2bTPGzPPMzESUc3bOXdfVdd00TcuyWGvv
@@ -22407,7 +22437,7 @@ if(!n) {
 	SYS.localtime(time, 0, curMin, curHour, curDay, curMonth, curYear);
 	doc_bTime = SYS.mktime(0, 0, repHour, curDay, curMonth, curYear);
 	doc_time = SYS.mktime(0, 0, repHour, curDay+1, curMonth, curYear);
-	if(curHour <= repHour) { doc_bTime -= 24*60*60; doc_time -= 24*60*60; }
+	if(curHour < repHour || (curHour == repHour && !curMin)) { doc_bTime -= 24*60*60; doc_time -= 24*60*60; }
 
 	bTime = doc_bTime;
 	time = lastTime = doc_time;
@@ -22446,7 +22476,7 @@ else if(curMin != lastMin && !(curMin%5)) {
 	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
 	doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
 	if(curHour < repHour) doc_bTime -= 24*60*60;
-}','','',1000,'name;dscr;evProc;',1521201592);
+}','','',1000,'name;dscr;evProc;',1521275982);
 INSERT INTO "wlb_doc" VALUES('docGasNodeMonthA','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	if(!n) { time = SYS.time(); lastTime = 0; }
@@ -22469,7 +22499,7 @@ if(!n) {
 	time = min(time, SYS.time());
 
 	SYS.localtime(time, 0, curMin, curHour, curDay, curMonth, curYear);
-	if(curDay == 1 && curHour <= repHour) {
+	if(curDay == 1 && (curHour < repHour || (curHour == repHour && !curMin))) {
 		doc_bTime = SYS.mktime(0, 0, repHour, 1, curMonth ? curMonth-1 : 11, curMonth?curYear:curYear-1);
 		doc_time = SYS.mktime(0, 0, repHour, 1, curMonth, curYear);
 	}
@@ -22524,7 +22554,7 @@ else if(curMin != lastMin && !(curMin%5))	{
 	if(curDay == 1 && curHour < repHour)
 		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
 	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-}','','',1000,'name;dscr;evProc;',1521201592);
+}','','',1000,'name;dscr;evProc;',1521281100);
 INSERT INTO "wlb_doc" VALUES('docUsersSet','','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
 if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','','',-1,'name;dscr;',1503659478);
 INSERT INTO "wlb_doc" VALUES('doc','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF

@@ -1210,7 +1210,9 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
 %makeinstall
 rm -f %buildroot/%_libdir/openscada/*.la
 install -m 755 -d %buildroot/%_datadir/openscada/{DATA,icons,docs,LibsDB,AGLKS,Boiler}
-install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
+install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/openscada-server
+install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/openscada-plc
+sed -i "s/--projName=server/--projName=plc/" %buildroot/%_initdir/openscada-plc
 
 install -m 755 -d %buildroot/%_mandir/man1
 install -m 755 -d %buildroot/%_mandir/{uk,ru}/man1
@@ -1232,25 +1234,12 @@ ln -s `relative %_defaultdocdir/%name-docUK-%version %_datadir/openscada/docs/uk
 %clean
 #rm -rf %buildroot %buildroot/%name-%version
 
-%post core
-%if %_vendor == "alt"
-%post_service oscadad
-%else
-/sbin/chkconfig --add oscadad
-%endif
-
-%preun core
-%if %_vendor == "alt"
-%preun_service oscadad
-%else
-/sbin/chkconfig --del oscadad
-%endif
 
 %files core
 %defattr(-,root,root)
 %config(noreplace) %_sysconfdir/oscada.xml
 %config(noreplace) %_sysconfdir/oscada_start.xml
-%config %_initdir/oscadad
+
 %_bindir/openscada
 %_bindir/openscada_start
 %_bindir/openscada-proj
@@ -1317,13 +1306,43 @@ ln -s `relative %_defaultdocdir/%name-docUK-%version %_datadir/openscada/docs/uk
 %_datadir/openscada/icons/Boiler.png
 %_datadir/openscada/Boiler/*.db 
 
+%post plc
+%if %_vendor == "alt"
+%post_service openscada-plc
+%else
+/sbin/chkconfig --add openscada-plc
+%endif
+
+%preun plc
+%if %_vendor == "alt"
+%preun_service openscada-plc
+%else
+/sbin/chkconfig --del openscada-plc
+%endif
+
 %files plc
 %defattr(-,root,root)
 %config(noreplace) %_sysconfdir/oscada_plc.xml
+%config %_initdir/openscada-plc
+
+%post server
+%if %_vendor == "alt"
+%post_service openscada-server
+%else
+/sbin/chkconfig --add openscada-server
+%endif
+
+%preun server
+%if %_vendor == "alt"
+%preun_service openscada-server
+%else
+/sbin/chkconfig --del openscada-server
+%endif
 
 %files server
 %defattr(-,root,root)
 %config(noreplace) %_sysconfdir/oscada_start.xml
+%config %_initdir/openscada-server
 
 %files visStation
 
@@ -1591,6 +1610,9 @@ ln -s `relative %_defaultdocdir/%name-docUK-%version %_datadir/openscada/docs/uk
 
 
 %changelog
+* Sat Mar 24 2018 Roman Savochenko <rom_as@oscada.org>
+- The daemon mode init script "oscadad" renamed to "openscada-server", separated to "openscada-plc" and moved to the coresponding package.
+
 * Fri May 22 2015 Roman Savochenko <rom_as@oscada.org>
 - Move to new Work version scheme naming 0.9+rNNNN, sets by the AutoBuilder or manual.
 - Next LTS version will 0.8.N.

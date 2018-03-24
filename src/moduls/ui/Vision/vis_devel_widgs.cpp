@@ -715,8 +715,8 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	QAction *rez = popup.exec(QCursor::pos());
 	if(actCopy && rez == actCopy) QApplication::clipboard()->setText(it->data().toString());
 	else if(actEdit && rez == actEdit) {
-	    InputDlg dlg(this, actEdit->icon(),_("Full text of the attribute edit."),
-		QString(_("Attribute '%1' edit for widget '%2'.")).arg(it->name().c_str()).arg(nwdg.c_str()),false,false);
+	    InputDlg dlg(window()/*this*/, actEdit->icon(), _("Full text of the attribute edit."),
+		QString(_("Attribute '%1' edit for widget '%2'.")).arg(it->name().c_str()).arg(nwdg.c_str()), false, false, "", "TextEd");
 
 	    if(it->help().size()) {
 		QTextEdit *helpView = new QTextEdit(&dlg);
@@ -730,7 +730,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 		dlg.edLay()->addWidget(helpView, 0, 0, 1, 2);
 	    }
 
-	    TextEdit *tEd = new TextEdit(&dlg,true);
+	    TextEdit *tEd = new TextEdit(&dlg, true);
 	    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	    sp.setVerticalStretch(3);
 	    tEd->setSizePolicy(sp);
@@ -741,7 +741,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 		tEd->setSnthHgl(rules);
 	    }
 	    dlg.edLay()->addWidget(tEd, 1, 0, 1, 2);
-	    dlg.resize(700,400);
+	    //dlg.resize(700,400);
 	    if(dlg.exec() == QDialog::Accepted && it->data().toString() != tEd->text())
 		model()->setData(selectedIndexes()[0], tEd->text(), Qt::EditRole);
 	}
@@ -1584,8 +1584,8 @@ void WdgTree::ctrTreePopup( )
 	if(owner()->lb_menu.size() <= 10 || owner()->lb_menu[i_lm]->property("rootLib").toBool())
 	    popup.addMenu(owner()->lb_menu[i_lm]);
     popup.addSeparator();
-    popup.addAction(owner()->actVisItCut);
     popup.addAction(owner()->actVisItCopy);
+    popup.addAction(owner()->actVisItCut);
     popup.addAction(owner()->actVisItPaste);
     popup.addSeparator();
     popup.addAction(owner()->actDBLoad);
@@ -1820,8 +1820,8 @@ void ProjTree::ctrTreePopup( )
 	if(owner()->lb_menu.size() <= 10 || owner()->lb_menu[i_lm]->property("rootLib").toBool())
 	    popup.addMenu(owner()->lb_menu[i_lm]);
     popup.addSeparator();
-    popup.addAction(owner()->actVisItCut);
     popup.addAction(owner()->actVisItCopy);
+    popup.addAction(owner()->actVisItCut);
     popup.addAction(owner()->actVisItPaste);
     popup.addSeparator();
     popup.addAction(owner()->actDBLoad);
@@ -2363,8 +2363,8 @@ void DevelWdgView::wdgPopup( )
 	popup.addAction(mainWin()->actVisItUnDo);
 	popup.addAction(mainWin()->actVisItReDo);
 	popup.addSeparator();
-	popup.addAction(mainWin()->actVisItCut);
 	popup.addAction(mainWin()->actVisItCopy);
+	popup.addAction(mainWin()->actVisItCut);
 	popup.addAction(mainWin()->actVisItPaste);
 	popup.addSeparator();
 	popup.addAction(mainWin()->actDBLoad);

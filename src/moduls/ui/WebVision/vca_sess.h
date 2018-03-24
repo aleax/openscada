@@ -90,6 +90,25 @@ class VCAObj : public TCntrNode
 	const string	mId;
 };
 
+//*************************************************
+//* VCAFormEl					  *
+//*************************************************
+class VCAFormEl : public VCAObj
+{
+    public:
+	//Methods
+	VCAFormEl( const string &iid );
+	~VCAFormEl( )			{ }
+
+	void getReq( SSess &ses );
+	void postReq( SSess &ses )	{ }
+	void setAttrs( XMLNode &node, const SSess &ses );
+
+    private:
+	//Attributes
+	unsigned char	type, btMode;
+	string		fCtx;
+};
 
 //*************************************************
 //* ElFigure					  *

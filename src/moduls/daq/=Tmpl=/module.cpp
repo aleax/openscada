@@ -114,7 +114,7 @@ string TTpContr::optDescr( )
 void TTpContr::load_( )
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
+    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 }
 
 //!!! Processing virtual function for save Root module to DB

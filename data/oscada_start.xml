@@ -31,7 +31,7 @@
 	</node>
 
 	<node id="sub_Transport">
-	    <tbl id="Transport_in">
+	    <!--<tbl id="Transport_in">
 		<fld ID="WEB_1" MODULE="Sockets" NAME="Main WWW-interface" DESCRIPT="Main transport of the WEB interfaces."
 			DESCRIPT_uk="Основний транспорт WEB інтерфейсів." DESCRIPT_ru="Основной транспорт WEB интерфейсов."
 			ADDR="TCP::10002:0" PROT="HTTP" START="1">
@@ -47,7 +47,7 @@
 			ADDR="TCP::10005:1" PROT="SelfSystem" START="1">
 		    <A_PRMS>&lt;prms MaxQueue="10" MaxClients="20" MaxClientsPerHost="5" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" /&gt;</A_PRMS>
 		</fld>
-	    </tbl>
+	    </tbl>-->
 	</node>
 
 	<node id="sub_DAQ">

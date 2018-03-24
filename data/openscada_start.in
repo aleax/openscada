@@ -107,8 +107,12 @@ pCmd="@bindir_full@/openscada --CoreDumpAllow --Config=$CfgFile --StatName=$Proj
 
 # Possible need using "flock" for race condition prevent
 # Check for already started programm present
-if ps -C $TEXTDOMAIN -o command | grep "^${pCmd}" > /dev/null; then
-#if [ -f $pLock ] && ps -Ao pid,command | grep "$(cat ${pLock})[ ]*${pCmd}" > /dev/null; then
+if ps -C $TEXTDOMAIN -o command | grep "^${pCmd}" > /dev/null; then started=1; fi
+if test -f lock; then
+    pid=`cat lock | sed -r 's/^0*([0-9]+).*/\1/'`
+    if ps -A -o "pid cmd" | grep "^ *$pid.*openscada" > /dev/null; then started=1; fi
+fi
+if test $started = 1; then
     echo "OpenSCADA station \"$ProjName\" already started!";
     if test $TERM_REZ = 0 -a -n "$(which dialog)"; then dialog --msgbox "\"$ProjName\" $(GETTEXT "already started.")" 10 30;
     elif test -n "$(which kdialog)"; then kdialog --title "$(GETTEXT "OpenSCADA start")" --msgbox "\"$ProjName\" $(GETTEXT "already started.")";

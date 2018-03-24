@@ -243,16 +243,6 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItReDo->setStatusTip(_("Press to make visual item changes ReDo."));
     actVisItReDo->setShortcut(QKeySequence("Ctrl+Y"));
     actVisItReDo->setEnabled(false);
-    //  Cut visual item
-    if(!ico_t.load(TUIS::icoGet("editcut",NULL,true).c_str())) ico_t.load(":/images/editcut.png");
-    actVisItCut = new QAction(QPixmap::fromImage(ico_t),_("Visual item cut"),this);
-    actVisItCut->setObjectName("editcut");
-    actVisItCut->setToolTip(_("Make visual item cut"));
-    actVisItCut->setWhatsThis(_("The button for making visual item cut"));
-    actVisItCut->setStatusTip(_("Press to make visual item cut."));
-    actVisItCut->setShortcut(QKeySequence("Ctrl+X"));
-    actVisItCut->setEnabled(false);
-    connect(actVisItCut, SIGNAL(triggered()), this, SLOT(visualItCut()));
     //  Copy visual item
     if(!ico_t.load(TUIS::icoGet("editcopy",NULL,true).c_str())) ico_t.load(":/images/editcopy.png");
     actVisItCopy = new QAction(QPixmap::fromImage(ico_t),_("Visual item copy"),this);
@@ -263,6 +253,16 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItCopy->setShortcut(QKeySequence("Ctrl+C"));
     actVisItCopy->setEnabled(false);
     connect(actVisItCopy, SIGNAL(triggered()), this, SLOT(visualItCopy()));
+    //  Cut visual item
+    if(!ico_t.load(TUIS::icoGet("editcut",NULL,true).c_str())) ico_t.load(":/images/editcut.png");
+    actVisItCut = new QAction(QPixmap::fromImage(ico_t),_("Visual item cut"),this);
+    actVisItCut->setObjectName("editcut");
+    actVisItCut->setToolTip(_("Make visual item cut"));
+    actVisItCut->setWhatsThis(_("The button for making visual item cut"));
+    actVisItCut->setStatusTip(_("Press to make visual item cut."));
+    actVisItCut->setShortcut(QKeySequence("Ctrl+X"));
+    actVisItCut->setEnabled(false);
+    connect(actVisItCut, SIGNAL(triggered()), this, SLOT(visualItCut()));
     //  Paste visual item
     if(!ico_t.load(TUIS::icoGet("editpaste",NULL,true).c_str())) ico_t.load(":/images/editpaste.png");
     actVisItPaste = new QAction(QPixmap::fromImage(ico_t),_("Visual item paste"),this);

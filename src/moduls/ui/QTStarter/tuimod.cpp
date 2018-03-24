@@ -54,12 +54,8 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#ifdef EN_QtMainThrd
 #define SUB_TYPE	"MainThr"
-#else
-#define SUB_TYPE	""
-#endif
-#define MOD_VER		"4.5.0"
+#define MOD_VER		"4.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -129,7 +125,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), hideMode(false),
     };
 #endif
 
-    //Look and Feels DB structure
+    //Look and feel DB structure
     elLF.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key,OBJ_NM_SZ));
     elLF.fldAdd(new TFld("STYLE",_("Style"),TFld::String,0,"20"));
     elLF.fldAdd(new TFld("FONT",_("Font"),TFld::String,0,"30"));
@@ -146,7 +142,7 @@ string TUIMod::modInfo( const string &iname )
 {
     string name = TSYS::strParse(iname, 0, ":");
 
-    if(name == "SubType") return SUB_TYPE;
+    if(name == "SubType" && !SYS->cmdOptPresent("QtInNotMainThread")) return SUB_TYPE;
 
     return TModule::modInfo(name);
 }
@@ -173,7 +169,7 @@ void TUIMod::postEnable( int flag )
 #endif
 
     //Check command line for options no help and no daemon
-    hideMode = s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help")) || s2i(SYS->cmdOpt("demon")) || s2i(SYS->cmdOpt("daemon")) || s2i(SYS->cmdOpt("nox11"));
+    hideMode = SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help") || SYS->cmdOptPresent("demon") || SYS->cmdOptPresent("daemon") || SYS->cmdOptPresent("nox11");
     string argCom, argVl;
     for(int off = 0; (argCom=TSYS::strParse("sync:widgetcount:qws:style:stylesheet:session:reverse:graphicssystem:display:geometry",0,":",&off)).size(); )
 	if((argVl=SYS->cmdOpt(argCom)).size())	toQtArg(argCom.c_str(), argVl.c_str());
@@ -184,29 +180,28 @@ void TUIMod::postEnable( int flag )
 #endif
     }
 
-#ifdef EN_QtMainThrd
-    if(hideMode) return;
+    if(!SYS->cmdOptPresent("QtInNotMainThread")) {
+	if(hideMode) return;
 
-    //Init locale setLocale
-    QLocale::setDefault(QLocale(Mess->lang().c_str()));
+	//Init locale setLocale
+	QLocale::setDefault(QLocale(Mess->lang().c_str()));
 
-    //Qt application object init
-    QtApp = new StApp(mod->qtArgC, (char**)&mod->qtArgV);
-    QtApp->setApplicationName(PACKAGE_STRING);
-    QtApp->setQuitOnLastWindowClosed(false);
+	//Qt application object init
+	QtApp = new StApp(mod->qtArgC, (char**)&mod->qtArgV);
+	QtApp->setApplicationName(PACKAGE_STRING);
+	QtApp->setQuitOnLastWindowClosed(false);
 
-    //Create I18N translator
-    I18NTranslator translator;
-    QtApp->installTranslator(&translator);
+	//Create I18N translator
+	I18NTranslator translator;
+	QtApp->installTranslator(&translator);
 
-    splashSet(SPLSH_START);
-#else
+	splashSet(SPLSH_START);
+    }
     //Start main Qt thread if no help and no daemon
-    if(!(runSt || hideMode)) {
+    else if(!(runSt || hideMode)) {
 	mEndRun = false;
 	SYS->taskCreate(nodePath('.',true), 0, Task, this);
     }
-#endif
 }
 
 void TUIMod::preDisable( int flag )
@@ -216,16 +211,15 @@ void TUIMod::preDisable( int flag )
 
 void TUIMod::postDisable( int flag )
 {
-#ifdef EN_QtMainThrd
-    if(hideMode) return;
+    if(!SYS->cmdOptPresent("QtInNotMainThread")) {
+	if(hideMode) return;
 
-    splashSet(SPLSH_NULL);
+	splashSet(SPLSH_NULL);
 
-    //Qt application object free
-    if(QtApp) delete QtApp;
-#else
-    if(runSt) SYS->taskDestroy(nodePath('.',true), &mEndRun, 10, true);
-#endif
+	//Qt application object free
+	if(QtApp) delete QtApp;
+    }
+    else if(runSt) SYS->taskDestroy(nodePath('.',true), &mEndRun, 10, true);
 }
 
 void TUIMod::load_( )
@@ -233,7 +227,7 @@ void TUIMod::load_( )
     mess_debug(nodePath().c_str(),_("Loading the module."));
 
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help")))
+    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help"))
 	fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
@@ -259,32 +253,33 @@ void TUIMod::save_( )
 
 void TUIMod::modStart( )
 {
-#ifdef EN_QtMainThrd
-    if(runSt || hideMode)	return;
-    mess_debug(nodePath().c_str(), _("Starting the module."));
+    if(!SYS->cmdOptPresent("QtInNotMainThread")) {
+	if(runSt || hideMode)	return;
+	mess_debug(nodePath().c_str(), _("Starting the module."));
 
-    runSt = true;
+	runSt = true;
 
-    //Start external modules
-    QtApp->stExec();
+	//Start external modules
+	QtApp->stExec();
 
-    splashSet(SPLSH_STOP);
+	splashSet(SPLSH_STOP);
 
-    runSt = false;
-#else
-    mess_debug(nodePath().c_str(), _("Starting the module."));
+	runSt = false;
+    }
+    else {
+	mess_debug(nodePath().c_str(), _("Starting the module."));
 
-    mStartCom = true;
-#endif
+	mStartCom = true;
+    }
 }
 
 void TUIMod::modStop( )
 {
-#ifndef EN_QtMainThrd
-    mess_debug(nodePath().c_str(), _("Stopping the module."));
+    if(SYS->cmdOptPresent("QtInNotMainThread")) {
+	mess_debug(nodePath().c_str(), _("Stopping the module."));
 
-    mStartCom = false;
-#endif
+	mStartCom = false;
+    }
 }
 
 void TUIMod::splashSet( SplashFlag flg )
@@ -302,12 +297,11 @@ void TUIMod::splashSet( SplashFlag flg )
 	QFont wFnt = splash->font();
 	wFnt.setPixelSize(10);
 	splash->setFont(wFnt);
-#ifdef EN_QtMainThrd
-	for(int iTr = 0; iTr < 10; iTr++) {
-	    QtApp->processEvents();
-	    TSYS::sysSleep(0.1);
-	}
-#endif
+	if(!SYS->cmdOptPresent("QtInNotMainThread"))
+	    for(int iTr = 0; iTr < 10; iTr++) {
+		QtApp->processEvents();
+		TSYS::sysSleep(0.1);
+	    }
     }
 }
 
@@ -317,6 +311,7 @@ string TUIMod::optDescr( )
 
     snprintf(buf, sizeof(buf), _(
 	"======================= Module <%s:%s> options =======================\n"
+	"    --QtInNotMainThread Starts Qt into a different from the main thread.\n"
 	"    --showWin=<0,1,2>   Window display mode, initial and which is allowed to change from: 0-typical window, 1-maximized window, 2-full screen.\n"
 	"----------- Qt debug commandline options ----------\n"
 	"    --noX11             Prevent the launch of Qt, preferably for a clean console.\n"
@@ -336,6 +331,7 @@ string TUIMod::optDescr( )
 	"StartMod   <moduls>     List of the modules that are started, separated ';'.\n"
 	"CloseToTray <0|1>       Closing all windows or starting without Qt modules to the system tray.\n"
 	"Style      <name>       The GUI style of Qt.\n"
+	"Font       <font>       Common Qt font.\n"
 	"Palette    <colors>     Twenty colors of the palette separated by symbol ',' in three lines for active, disabled and inactive groups.\n"
 	"StyleSheets <CSS>       Rules of the Cascade Style Sheets.\n\n"),
 	MOD_TYPE, MOD_ID, nodePath().c_str());
@@ -364,7 +360,6 @@ void TUIMod::toQtArg( const char *nm, const char *arg )
     }
 }
 
-#ifndef EN_QtMainThrd
 void *TUIMod::Task( void * )
 {
     vector<string> list;
@@ -423,7 +418,6 @@ void *TUIMod::Task( void * )
 
     return NULL;
 }
-#endif
 
 void TUIMod::cntrCmdProc( XMLNode *opt )
 {
@@ -433,7 +427,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Module options"))) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Qt modules for startup, separated by ';'"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQtMod");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/closeToTray",_("Collapse or startup to the system tray"),RWRWR_,"root",SUI_ID,1,"tp","bool");
-	    if(ctrMkNode("area",opt,-1,"/prm/LF",_("Look and feels"))) {
+	    if(ctrMkNode("area",opt,-1,"/prm/LF",_("Look and feel"))) {
 		ctrMkNode("fld",opt,-1,"/prm/LF/prfl",_("Known profiles"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/LF/prflLs");
 		ctrMkNode("fld",opt,-1,"/prm/LF/stl",_("Widgets style"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/LF/stlLs");
 		ctrMkNode("fld",opt,-1,"/prm/LF/font",_("Common font"),RWRWR_,"root",SUI_ID,1,"tp","str");
@@ -725,11 +719,11 @@ void StApp::timerEvent( QTimerEvent *event )
     }
 #endif
 
-#ifdef EN_QtMainThrd
-    if(!SYS->stopSignal()) return;
-#else
-    if(!mod->endRun() && mod->startCom()) return;
-#endif
+    if(!SYS->cmdOptPresent("QtInNotMainThread")) {
+	if(!SYS->stopSignal()) return;
+    }
+    else if(!mod->endRun() && mod->startCom()) return;
+
     QWidgetList wl = topLevelWidgets();
     for(int iW = 0; iW < wl.size(); iW++) wl[iW]->setProperty("forceClose", true);
     closeAllWindows();
@@ -832,11 +826,9 @@ void StApp::lastWinClose( )
 {
     if(topLevelWindows())	return;
 
-#ifdef EN_QtMainThrd
-    if(SYS->stopSignal())	quit();
-#else
-    if(!mod->startCom() || mod->endRun() || SYS->stopSignal())	quit();
-#endif
+    if((!SYS->cmdOptPresent("QtInNotMainThread") && SYS->stopSignal()) ||
+	    (SYS->cmdOptPresent("QtInNotMainThread") && (!mod->startCom() || mod->endRun() || SYS->stopSignal())))
+	quit();
     else if(mod->closeToTray())	createTray();
     else startDialog();
 }

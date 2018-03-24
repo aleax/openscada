@@ -211,10 +211,8 @@ protected:
     void postDisable( int flag );
 
 private:
-#ifndef EN_QtMainThrd
     //Methods
     static void *Task( void * );
-#endif
 
     //Methods
     string	optDescr( );

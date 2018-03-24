@@ -398,7 +398,7 @@ Information variables of the program:
 <li> <i>static float floatBE( float in ); static double doubleBE( double in );</i> — Real number <i>in</i> conversion from internal to format IEEE754 Big-Endian (BE).</li>
 <li> <i>static float floatBErev( float in ); static double doubleBErev( double in );</i> — Real number <i>in</i> conversion from format IEEE754 Big-Endian (BE) to internal.</li>
 <li> <i>string getCmdOpt( int &amp;curPos, string *argVal = NULL ); static string getCmdOpt_( int &amp;curPos, string *argVal, int argc, char **argv );</i> — Command line parameters parsing by cursor scanning <i>curPos</i>. Return argument name and it's possible value into <i>argVal</i>. Implement formats for short keys: "-v", "-v val", "-abcv", "-abcv val"; and long keys: "--var", "--var=val", "--var val".</li>
-<li> <i>bool cmdOptPresent( const string &amp;opt );</i> — Check the command-line option <i>opt</i> for presenting.</li>
+<li> <i>bool cmdOptPresent( const string &amp;opt );</i> — Check the command-line option <i>opt</i> for presence.</li>
 <li> <i>string cmdOpt( const string &amp;opt, const string &amp;setVl = "" );</i> — Get command-line option <i>opt</i>. Set it at <i>setVl</i> if pointing.</li>
 <li> <i>int permCrtFiles( bool exec = false );</i> — get permission for files created OpenSCADA in form 0777 (RWXRWXRWX), where <i>exec</i> is not mask the bit 01. </li>
 <li> <i>static void ctrListFS( XMLNode *nd, const string &amp;fsBase, const string &amp;fileExt = "" );</i> — Browsing list for file system's items from base <i>fsBase</i>, for the files with extensions <i>fileExt</i> in list "png;jpeg;gif;".</li>
@@ -2212,7 +2212,7 @@ Error values for the different data types (define):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Збільшити" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>

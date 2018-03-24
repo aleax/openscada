@@ -72,8 +72,8 @@ class Attr
 	    VizerSpec	= 0x80,		//Visualizer specified attribute, for allow it to modification control and transmit to the visualizer.
 					//Sets at and by a session of running project activation.
 
-	    SessAttrInh	= 0x10,		//Inherit attribute into running session
-	    IsInher	= 0x20		//Inherit attribute
+	    SessAttrInh	= 0x10,		//Inherited attribute into the running session
+	    IsInher	= 0x20		//Inherited attribute
 	};
 
 	//Methods

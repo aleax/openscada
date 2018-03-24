@@ -361,10 +361,10 @@ void Widget::inheritAttr( const string &iattr )
 	    continue;
 	}
 	if(pattr.freeStat()) pattr = parent().at().attrAt(ls[iL]);
-	if(!(attr.at().flgSelf()&Attr::IsInher)) attr.at().setFld(&pattr.at().fld(),true);
+	if(!(attr.at().flgSelf()&Attr::IsInher)) attr.at().setFld(&pattr.at().fld(), true);
 
-	if(attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh)) {
-	    //Force inherited flags processing
+	if(attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh) && !dynamic_cast<SessWdg*>(this)) {
+	    //Force inheritance flags processing
 	    int frcInherAtr = Attr::CfgConst | Attr::CfgLnkIn | Attr::CfgLnkOut | Attr::FromStyle;
 	    if((pattr.at().flgSelf()&frcInherAtr) && (attr.at().flgSelf()&frcInherAtr) != (pattr.at().flgSelf()&frcInherAtr)) {
 		attr.at().setFlgSelf((Attr::SelfAttrFlgs)((attr.at().flgSelf() & ~frcInherAtr) | (pattr.at().flgSelf() & frcInherAtr)), true);

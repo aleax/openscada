@@ -65,7 +65,8 @@ namespace VISION
     {
 	public:
 	    InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
-		    const QString &ndlg = _("Vision dialog"), bool with_id = false, bool with_nm = true, const string &lang = "" );
+		    const QString &ndlg = _("Vision dialog"), bool with_id = false, bool with_nm = true, const string &lang = "", const string &istCtxId = "" );
+	    ~InputDlg( );
 
 	    QString id( );
 	    QString name( );
@@ -85,6 +86,7 @@ namespace VISION
 	    QGridLayout *mEdLay;
 	    QLabel	*inpLab;
 	    QLineEdit	*mId, *mName;
+	    string	stCtxId;
     };
 
     //*********************************************

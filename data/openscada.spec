@@ -40,10 +40,12 @@ Open SCADA system.
 Das offene SCADA System.
 
 %post
-/sbin/chkconfig --add oscadad
+/sbin/chkconfig --add openscada-server
+/sbin/chkconfig --add openscada-plc
 
 %preun
-/sbin/chkconfig --del oscadad
+/sbin/chkconfig --del openscada-server
+/sbin/chkconfig --del openscada-plc
 
 %package docEN
 Summary: Open SCADA documents (EN)
@@ -225,10 +227,13 @@ autoreconf -ivf
 rm -f %buildroot/%_libdir/openscada/*.la
 install -m 755 -d %buildroot/%_datadir/openscada/{DATA,icons,docs,LibsDB,AGLKS,Boiler}
 %if %_vendor == "alt"
-install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
+install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/openscada-server
+install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/openscada-plc
 %else
-install -m 755 -pD data/oscada_RH.init %buildroot/%_initdir/oscadad
+install -m 755 -pD data/oscada_RH.init %buildroot/%_initdir/openscada-server
+install -m 755 -pD data/oscada_RH.init %buildroot/%_initdir/openscada-plc
 %endif
+sed -i "s/--projName=server/--projName=plc/" %buildroot/%_initdir/openscada-plc
 
 install -m 755 -d %buildroot/%_mandir/man1
 install -m 755 -d %buildroot/%_mandir/{uk,ru}/man1
@@ -254,7 +259,8 @@ ln -s %_defaultdocdir/%name-docUK-%version %buildroot/%_datadir/openscada/docs/u
 %config(noreplace) %_sysconfdir/oscada_start.xml
 %config(noreplace) %_sysconfdir/oscada_server.xml
 %config(noreplace) %_sysconfdir/oscada_plc.xml
-%config %_initdir/oscadad
+%config %_initdir/openscada-server
+%config %_initdir/openscada-plc
 %_bindir/openscada
 %_bindir/openscada_start
 %_bindir/openscada-proj
@@ -321,6 +327,9 @@ ln -s %_defaultdocdir/%name-docUK-%version %buildroot/%_datadir/openscada/docs/u
 %_datadir/openscada/Boiler/*.db
 
 %changelog
+* Sat Mar 24 2018 Roman Savochenko <rom_as@oscada.org>
+- The daemon mode init script "oscadad" renamed to "openscada-server" and separated to "openscada-plc".
+
 * Fri May 22 2015 Roman Savochenko <rom_as@oscada.org>
 - Move to new Work version scheme naming 0.9+rNNNN, sets by the AutoBuilder or manual.
 - Next LTS version will 0.8.N.

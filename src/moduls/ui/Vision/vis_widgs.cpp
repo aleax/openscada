@@ -61,8 +61,9 @@ int VISION::icoSize( float mult )	{ return (int)(mult * QFontMetrics(qApp->font(
 //*************************************************
 //* Id and name input dialog                      *
 //*************************************************
-InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg, bool with_id, bool with_nm, const string &lang ) :
-	QDialog(parent), mId(NULL), mName(NULL)
+InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg, bool with_id, bool with_nm,
+		    const string &lang, const string &istCtxId ) :
+	QDialog(parent), mId(NULL), mName(NULL), stCtxId(istCtxId)
 {
     //setMaximumSize(800, 600);
     setWindowTitle(ndlg);
@@ -125,7 +126,22 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
     dlg_lay->addWidget(but_box);
 
-    resize(400, 120+(40*with_nm)+(40*with_id));
+    //Restore the window state
+    if(parentWidget()->property("oscdUser").toString().size() && stCtxId.size()) {
+	int off = 0;
+	string rst = mod->uiPropGet("InDlgSt"+stCtxId, parentWidget()->property("oscdUser").toString().toStdString());
+	int	wH = s2i(TSYS::strParse(rst,0,":",&off)),
+	    wW = s2i(TSYS::strParse(rst,0,":",&off));
+	if(wH > 100 && wW > 100) resize(wH, wW);
+	else resize(400, 120+(40*with_nm)+(40*with_id));
+    }
+}
+
+InputDlg::~InputDlg( )
+{
+    //Save the window state
+    if(parentWidget()->property("oscdUser").toString().size() && stCtxId.size())
+	mod->uiPropSet("InDlgSt"+stCtxId, i2s(width())+":"+i2s(height()), parentWidget()->property("oscdUser").toString().toStdString());
 }
 
 QString InputDlg::id( )		{ return mId ? mId->text() : ""; }
@@ -275,6 +291,8 @@ void UserStBar::setUser( const string &val )
     MtxAlloc res(mod->dataRes(), true);
     setText(QString("<font color='%1'>%2</font>").arg((val=="root")?"red":"green").arg(val.size()?val.c_str():"*"));
     userTxt = val;
+
+    if(window()) window()->setProperty("oscdUser", val.c_str());
 }
 
 bool UserStBar::event( QEvent *event )
@@ -865,6 +883,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     bt_tm = new QTimer(this);
     connect(bt_tm, SIGNAL(timeout()), this, SLOT(applySlot()));
 }
+
 
 bool TextEdit::isEdited( )	{ return (but_box && but_box->isVisible()); }
 

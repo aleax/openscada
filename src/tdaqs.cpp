@@ -129,7 +129,7 @@ void TDAQS::ctrListPrmAttr( XMLNode *opt, const string &l_prm, bool toPrm, char 
 void TDAQS::load_( )
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
+    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     map<string, bool>	itReg;
     vector<vector<string> > full;

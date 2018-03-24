@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.3.1"
+#define MOD_VER		"2.4.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -272,7 +272,7 @@ string TWEB::optDescr( )
 void TWEB::load_( )
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
+    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
     setSessTime(s2i(TBDS::genDBGet(nodePath()+"SessTimeLife",i2s(sessTime()))));
@@ -462,12 +462,12 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    else if(zero_lev.compare(0,4,"ses_") == 0) {
 		ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
 		string sesnm = zero_lev.substr(4);
-		// Check for session present
+		// Check for the session presence
 		if(!ses.prm.size()) {
 		    XMLNode req("get"); req.setAttr("path",ses.url+"/%2fobj%2fst%2fen");
 		    if(cntrIfCmd(req,ses) || !s2i(req.text()))	{ HTTP_GET("", page, vars, user, iprt); return; }
 		}
-		// Call to session
+		// Call to the session
 		ResAlloc sesRes(mSesRes, false);
 		try { vcaSesAt(sesnm).at().getReq(ses); }
 		catch(...) {

@@ -121,7 +121,7 @@ void TUIMod::load_( )
     mess_debug(nodePath().c_str(), _("Loading the module."));
 
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
+    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file and DB
     setTmConChk(TBDS::genDBGet(nodePath()+"TmConChk",tmConChk()));

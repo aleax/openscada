@@ -575,7 +575,7 @@ void TMess::load( )
 {
     //Load params from command line
     string argVl;
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) return;
+    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) return;
     if((argVl=SYS->cmdOpt("lang")).size()) setLang(argVl, true);
     if((argVl=SYS->cmdOpt("messLev")).size()) {
 	int i = s2i(argVl);

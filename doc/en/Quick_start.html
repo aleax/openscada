@@ -10,13 +10,13 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Quick start</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Quick_start/ru" title="Документы/Быстрый старт (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="http://oscada.org/wiki/Documents/Quick_start/uk" title="Документи/Швидкий старт (4% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Quick_start/ru" title="Документы/Быстрый старт (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="http://oscada.org/wiki/Documents/Quick_start/uk" title="Документи/Швидкий старт (25% translated)">українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
 <td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
 </td>
-<td style="padding-left:5px;"> Common revision and translation
+<td style="padding-left:5px;"> Common revision, appending and translation
 </td></tr></table>
 </div>
 <p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, Maxim Lysenko (2010-2012)<br />
@@ -41,33 +41,41 @@
 <li class="toclevel-2"><a href="#Installing-building_from_the_source_texts"><span class="tocnumber">2.2</span> <span class="toctext">Installing-building from the source texts</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-3"><a href="#Initial_configuration_and_start"><span class="tocnumber">3</span> <span class="toctext">Initial configuration and start</span></a>
+<li class="toclevel-1 tocsection-3"><a href="#Initial_configuration_and_start_up"><span class="tocnumber">3</span> <span class="toctext">Initial configuration and start up</span></a>
 <ul>
-<li class="toclevel-2 tocsection-4"><a href="#Creation_the_user.27s_project_from_scratch"><span class="tocnumber">3.1</span> <span class="toctext"><span>Creation the user's project from scratch</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-5"><a href="#Working_with_Data_Sources"><span class="tocnumber">4</span> <span class="toctext">Working with Data Sources</span></a>
+<li class="toclevel-2 tocsection-4"><a href="#General_overview"><span class="tocnumber">3.1</span> <span class="toctext">General overview</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Background_and_remote_execution_.E2.80.94_server.2C_PLC_execution_environment_and_remote_development"><span class="tocnumber">3.2</span> <span class="toctext"><span>Background and remote execution — server, PLC execution environment and remote development</span></span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Your_own_project_creation"><span class="tocnumber">3.3</span> <span class="toctext"><span>Your own project creation</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-6"><a href="#Data_acquisition_from_the_TP_device"><span class="tocnumber">4.1</span> <span class="toctext">Data acquisition from the TP device</span></a></li>
-<li class="toclevel-2 tocsection-7"><a href="#TP_data_processing"><span class="tocnumber">4.2</span> <span class="toctext"><span>TP data processing</span></span></a></li>
-<li class="toclevel-2 tocsection-8"><a href="#Typified_Data_Sources_Parameters"><span class="tocnumber">4.3</span> <span class="toctext">Typified Data Sources Parameters</span></a></li>
-<li class="toclevel-2 tocsection-9"><a href="#Enabling_the_TP_data_archiving"><span class="tocnumber">4.4</span> <span class="toctext">Enabling the TP data archiving</span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-10"><a href="#Formation_of_visual_presentation"><span class="tocnumber">5</span> <span class="toctext">Formation of visual presentation</span></a>
-<ul>
-<li class="toclevel-2 tocsection-11"><a href="#Adding_the_template_page_in_the_project_and_linkage_of_the_dynamics"><span class="tocnumber">5.1</span> <span class="toctext">Adding the template page in the project and linkage of the dynamics</span></a></li>
-<li class="toclevel-2 tocsection-12"><a href="#The_creation_of_the_new_frame.2C_the_mnemonic_scheme"><span class="tocnumber">5.2</span> <span class="toctext">The creation of the new frame, the mnemonic scheme</span></a></li>
-<li class="toclevel-2 tocsection-13"><a href="#Creation_of_the_new_complex_element"><span class="tocnumber">5.3</span> <span class="toctext">Creation of the new complex element</span></a>
-<ul>
-<li class="toclevel-3 tocsection-14"><a href="#Creation_the_widget_.22Air_cooler.22_on_the_basis_of_the_primitive_.22Elementary_figures.22"><span class="tocnumber">5.3.1</span> <span class="toctext">Creation the widget "Air cooler" on the basis of the primitive "Elementary figures"</span></a></li>
-<li class="toclevel-3 tocsection-15"><a href="#Creation_the_final_complex_widget_.22Cooler.22_on_the_basis_of_the_primitive_.22Elements_box.22"><span class="tocnumber">5.3.2</span> <span class="toctext"><span>Creation the final complex widget "Cooler" on the basis of the primitive "Elements box"</span></span></a></li>
-<li class="toclevel-3 tocsection-16"><a href="#Adding_the_complex_element_to_the_mnemonic_scheme"><span class="tocnumber">5.3.3</span> <span class="toctext">Adding the complex element to the mnemonic scheme</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Connecting_and_using_remote_and_background_configurations"><span class="tocnumber">3.3.1</span> <span class="toctext">Connecting and using remote and background configurations</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Connecting_the_standard_OpenSCADA_libraries"><span class="tocnumber">3.3.2</span> <span class="toctext">Connecting the standard OpenSCADA libraries</span></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-17"><a href="#Conclusion"><span class="tocnumber">6</span> <span class="toctext">Conclusion</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Working_with_Data_Sources"><span class="tocnumber">4</span> <span class="toctext">Working with Data Sources</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Data_acquisition_from_the_TP_device"><span class="tocnumber">4.1</span> <span class="toctext">Data acquisition from the TP device</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#TP_data_processing"><span class="tocnumber">4.2</span> <span class="toctext"><span>TP data processing</span></span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Typified_Data_Sources_Parameters"><span class="tocnumber">4.3</span> <span class="toctext">Typified Data Sources Parameters</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Enabling_the_TP_data_archiving"><span class="tocnumber">4.4</span> <span class="toctext">Enabling the TP data archiving</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Formation_of_visual_presentation"><span class="tocnumber">5</span> <span class="toctext">Formation of visual presentation</span></a>
+<ul>
+<li class="toclevel-2 tocsection-15"><a href="#Adding_the_template_page_in_the_project_and_linkage_of_the_dynamics"><span class="tocnumber">5.1</span> <span class="toctext">Adding the template page in the project and linkage of the dynamics</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#The_creation_of_the_new_frame.2C_the_mnemonic_scheme"><span class="tocnumber">5.2</span> <span class="toctext">The creation of the new frame, the mnemonic scheme</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Creation_of_the_new_complex_element"><span class="tocnumber">5.3</span> <span class="toctext">Creation of the new complex element</span></a>
+<ul>
+<li class="toclevel-3 tocsection-18"><a href="#Creation_the_widget_.22Air_cooler.22_on_the_basis_of_the_primitive_.22Elementary_figures.22"><span class="tocnumber">5.3.1</span> <span class="toctext">Creation the widget "Air cooler" on the basis of the primitive "Elementary figures"</span></a></li>
+<li class="toclevel-3 tocsection-19"><a href="#Creation_the_final_complex_widget_.22Cooler.22_on_the_basis_of_the_primitive_.22Elements_box.22"><span class="tocnumber">5.3.2</span> <span class="toctext"><span>Creation the final complex widget "Cooler" on the basis of the primitive "Elements box"</span></span></a></li>
+<li class="toclevel-3 tocsection-20"><a href="#Adding_the_complex_element_to_the_mnemonic_scheme"><span class="tocnumber">5.3.3</span> <span class="toctext">Adding the complex element to the mnemonic scheme</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="#Conclusion"><span class="tocnumber">6</span> <span class="toctext">Conclusion</span></a></li>
+<li class="toclevel-1 tocsection-22"><a href="#Links"><span class="tocnumber">7</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -119,7 +127,6 @@
 <p>Installing OpenSCADA, in general, can be done in two ways. The first and simplest way is to get ready-made packages for the Linux distribution that you are using. The second is to compile OpenSCADA from the source code.
 </p><p>The installation procedure is highly dependent on the Linux distribution you are using and it is not possible to describe it exhaustively in this manual. Therefore, you may need to get a deep knowledge of the mechanisms of installing the software of the selected Linux distribution from its documentation. In the event that the user does not have such knowledge, skills and preferences for a Linux distribution, it is advisable to choose it according to the availability of OpenSCADA packages, which provides the simplest and most trouble free installation.
 </p><p>If the user is having trouble installing not only OpenSCADA, but also the Linux distribution, then for the first time, he can use the "live" Linux distribution with installed and ready to work and studying the demonstration and full-featured OpenSCADA. If this environment of rapid availability is suited for you then you can stop on it and install it. At this time, "live" builds based on the Debian and ALTLinux (deprecated) distributions are available as hybrid CD/DVD/USB stamps, at the page: <a class="external free" href="http://oscada.org/en/main/download/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/en/main/download/</a>. For more information, see the "How to ..." document <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">"Live disk CD/DVD/USB"</a>.
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The dynamic simulator of the compressor station on 6 gas compressors, which is the basis of the demo database, requires significant computing resources, that is a processor with a frequency of more than 1 GHz (x86). These resources are needed directly for the dynamic simulator and are not a general indicator of the program's resource intensity in the final tasks!
 </p>
 <h3><span class="mw-headline" id="Install_OpenSCADA_from_ready-made_packages"><span class="mw-headline-number">2.1</span> Install OpenSCADA from ready-made packages</span></h3>
 <p>Installing from the ready-made packages, in turn, can be done in two ways. The first one is simpler when OpenSCADA packages are already present in their own OpenSCADA package repositories or the official, additional repositories of the used Linux distribution. Installing these packages is a matter of running a typical distribution package management program with the subsequent selection of OpenSCADA packages. In addition to simple installation, the package repository generally allows you to simply keep the operating system updated, safe and up to date! The second method involves obtaining and installing OpenSCADA packages manually.
@@ -242,61 +249,107 @@ $ apt-get install -f</pre>
 <h3><span class="mw-headline" id="Installing-building_from_the_source_texts"><span class="mw-headline-number">2.2</span> Installing-building from the source texts</span></h3>
 <p>If there is no way to get ready-made OpenSCADA packages for the selected distribution, then only the variant of the OpenSCADA build from the source texts remains. This process is described in detail in <a href="How_to_Build_from_source.html" title="Special:MyLanguage/Documents/How to/Build from source">the manual of building OpenSCADA from the source texts</a>.
 </p>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> The common revision and translation goes here. Move some sentences from part 2 to 3.
-</td></tr></table>
-</div>
-<h2><span class="mw-headline" id="Initial_configuration_and_start"><span class="mw-headline-number">3</span> Initial configuration and start</span></h2>
-<p>After successful installation of the OpenSCADA with the database of "AGLKS" model no pre-configuration is required. If you want to perform a particular configuration, which differs from the base, then use <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">the document of description the OpenSCADA program</a>.
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The demonstration of OpenSCADA based on the "AGLKS" model database is not the same as that is usually provided by the commercial software vendors to demonstrate the possibilities, but to exclude or to complicate the normal operations by limiting the functions. Demonstration of OpenSCADA is fully-functional system that provides examples of implementation and configuration of various components. Based on the "AGLKS" model database and other OpenSCADA models one can easily create own projects, using the given resources.
-</p><p>You can execute the OpenSCADA with "AGLKS" model database from the menu of the desktop environment in the "Graphics" section, "Model 'AGLKS' on open SCADA system" with the characteristic icon (Fig. 3.1).
+<h2><span class="mw-headline" id="Initial_configuration_and_start_up"><span class="mw-headline-number">3</span> Initial configuration and start up</span></h2>
+<p>For our main tasks with OpenSCADA, within the limits of this document, it is necessary to install a package of DB of the simulator "AGLKS" — <b>openscada-model-aglks</b>, which can be found in detail in the previous section. Of course, if you use <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">the live disk</a> then you already have everything you need.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Do not consider OpenSCADA installation-building here from the source texts since the requirements of the user's qualification level for this task are much higher than the level of the document as a whole and there inevitably will be mismatches with the manual due to very likely differences in the initial configuration.
+</p><p>The installed DB of the simulator "AGLKS" does not require any pre-set up. If you want to perform a specific configuration, which differs from the base, then use <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">the program manual</a>. In the process, you may need information about typical OpenSCADA accounts and passwords (not related to OS accounts), although simulators and newly created configurations start from a privileged user and you can easily change any of them:
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:777px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_demenu_oscada.png"><img class="thumbimage" height="642" src="files/QuickStart_demenu_oscada.png" width="775" /></a>  <div class="thumbcaption">Fig. 3.1. Menu item of the desktop environment to start the demonstration of OpenSCADA.</div></div></div></div>
-<p>Start also can be done from the console by the command:
+<ul><li> Superuser (root), password "openscada".</li>
+<li> Ordinal user (user), password "user".</li>
+<li> Example of an individual user (roman), password "roman".</li></ul>
+<p>The OpenSCADA demo, based on the "AGLKS" simulator database, is not the same as that is usually provided by the commercial software vendors to demonstrate the possibilities, but to exclude or to complicate the normal operations by limiting the functions. Demo of OpenSCADA is fully-functional program that provides examples of implementation and configuration of various components. Basing on the "AGLKS" similator database and other OpenSCADA simulators you can easily create own projects, using the given working out. The fully-functional of the OpenSCADA demo has an exception for closed platforms and platforms with the advantage of closed software.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The dynamic simulator of the compressor station on 6 gas compressors, which is the basis of the demo database, requires significant resources, that is a processor with a frequency of more than 1 GHz (x86) and memory up to 200MB. These computing resources are needed directly for the dynamic simulator and are not a general indicator of the program's resource intensity in the final tasks! Memory requirements, on the contrary, are a typical indicator for a similar graphical AWP station.
+</p><p>The general process of the configuration of the SCADA system, for the implementation of the functions of the "top level" — operator AWP, can be divided into two stages:
+</p>
+<ul><li> Configuring the data sources, creating a database (DB) of parameters of these sources, and setting the history.</li>
+<li> Formation of visual representation of TP data, by creating an interface to the operator in the form of: mnemos, groups of graphs, groups of contours, documents, and others.</li></ul>
+<p>Therefore, our final goal and purpose of this document is to build a complete configuration of the local SCADA station, connected the server, and with the emulation of the data source based on this demo database (Fig. 3).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:461px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_SimpleStationAndServer.png"><img class="thumbimage" height="477" src="files/QuickStart_SimpleStationAndServer.png" width="459" /></a>  <div class="thumbcaption">Fig. 3. Simple united connecting of SCADA station and server with the data source in the demo database.</div></div></div></div>
+<p>Together, we will get acquainted with such important roles as OpenSCADA as: server of acquisition, archiving, visualization; PLC execution environment and remote development. But before that we will look at OpenSCADA and its capabilities in general.
+</p>
+<h3><span class="mw-headline" id="General_overview"><span class="mw-headline-number">3.1</span> General overview</span></h3>
+<p>Start up the local execution of OpenSCADA, from the DB simulator "AGLKS", you can from the section "Graphics" of the menu of the desktop environment for the item "Simulator "AGLKS" on the open SCADA system" with a characteristic icon (Fig. 3.1.1).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_demenu_oscada.png"><img class="thumbimage" height="768" src="files/QuickStart_demenu_oscada.png" width="1024" /></a>  <div class="thumbcaption">Fig. 3.1.1. Menu item of the desktop environment for local start up the demo of OpenSCADA.</div></div></div></div>
+<p>Local start up also can be done from the console by the command:
 </p>
 <pre style="white-space: pre-wrap;">
 $ openscada_AGLKS</pre>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> When you start OpenSCADA from the console with the command <b> "$ openscada" </b>, the system is launched without any configuration and the result is the request of the user name and password to login. By default, the system provides OpenSCADA super user "root" (password "openscada") and unprivileged "user" (password "user"), which have no relation to the users of the operating system. Starting the OpenSCADA in this way makes sense only if it is done from the OS administrator ("root") or in daemon mode.
-</p><p>After start we'll get the window of the OpenSCADA graphical configurator — QTCfg (Fig.3.2) with the opened root page. Demo database specifically configured so that the first window you'll see after start it is the configurator's window. You can then open the window for creating graphical user interfaces, as well as run the user interface project's execution.
+<p>After start up we'll get the window of the OpenSCADA graphical configurator — <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> (Fig.3.1.2) with the opened root page. The demo database specially configured so that the first window you'll see after the starting it is the configurator's window. You can then open a window for creating graphical user interfaces, as well as run the user interface project for execution.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_QTCfg_root.png"><img class="thumbimage" height="697" src="files/QuickStart_QTCfg_root.png" width="808" /></a>  <div class="thumbcaption">Fig. 3.2. OpenSCADA configurator — QTCfg, the root page.</div></div></div></div>
-<p>Configurator of OpenSCADA is the main and sufficient instrument for the configuration of any system's component. Like many other components of OpenSCADA, configurator is implemented as a module. Besides the QTCfg configurator there may be available other configurators that performs the same function, but implemented on the basis of other technologies. For example, these are the Web-configurators: <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> and <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.
-</p><p>All actions in the future, we will make only in the configuration tool QTCfg, although all of them can be done in other configurators.
-</p><p>The structure of the configurator's window interface can be considered in detail by <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">the reference</a>. It is more important now for us to examine all the available interfaces OpenSCADA, so click next to last icon in the top on the toolbar. After clicking on this icon the window of user interface development will be opened (Fig.3.3).
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_QTCfg_root.png"><img class="thumbimage" height="629" src="files/QuickStart_QTCfg_root.png" width="808" /></a>  <div class="thumbcaption">Fig. 3.1.2. OpenSCADA program configurator — QTCfg, the root page.</div></div></div></div>
+<p>The program configurator of OpenSCADA is the main and sufficient instrument for the configuration of any component of OpenSCADA. Like to many other components of OpenSCADA, the configurator is implemented as a module. Besides the QTCfg configurator there available other configurators those perform the same functions, but implemented on the basis of other technologies. For example, these are the Web-configurators: <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> and <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>.
+</p><p>All actions in the future, we will overview only in the configurator QTCfg, although all of them can be done in other configurators.
+</p><p>The structure of interface of the configurator window can be considered in detail by <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">the link</a>. It is more important now for us to overview all the available interfaces OpenSCADA, so click next to the last icon in the top on the toolbar. After clicking on this icon the window of development of the user interface will be opened (Fig.3.1.3).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:781px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Vision_dev.png"><img class="thumbimage" height="563" src="files/QuickStart_Vision_dev.png" width="779" /></a>  <div class="thumbcaption">Fig. 3.3. Window of the UI development.</div></div></div></div>
-<p>Then we can start the "AGLKS" project's execution. To do this, select it in the list of projects and run by clicking on the first left icon on the toolbar or in the the popup menu. The result will be the window of user interface (Fig.3.4).
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:855px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Vision_dev.png"><img class="thumbimage" height="591" src="files/QuickStart_Vision_dev.png" width="853" /></a>  <div class="thumbcaption">Fig. 3.1.3. Window of development of the user interface.</div></div></div></div>
+<p>Then we can start up execution of the "AGLKS" project. To do this, select it in the list of the projects and run by clicking on the first left icon on the toolbar or in the the popup menu. The result will be the window of the end interface of the user — the operator (Fig.3.1.4).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1042px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Vision_run.png"><img class="thumbimage" height="768" src="files/QuickStart_Vision_run.png" width="1040" /></a>  <div class="thumbcaption">Fig. 3.4. Window of the user interface of the "AGLKS" project.</div></div></div></div>
-<p>Building and executing of the user interfaces is implemented by the <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> module of the "User interfaces" subsystem. In addition to this module it can be accessed the other modules of visualization. For example, OpenSCADA provides the <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> module, which allows to execute projects, previously developed in the "Vision" interface module, through the Web-based technologies and standard Web-browser. All actions in the future we will make only in the interface of the "Vision" module.
-</p><p>So we ran the demonstration of OpenSCADA and familiarized with the main set of tools. In the future we will use them for configuration of OpenSCADA, creating the tasks of data acquisition, binding the collected data with the purpose of their processing and making the impacts, as well as to create the visualization user interface of the received data and to make the control actions.
-</p><p>Lets close the window of the "AGLKS" project's execution and the window of the user interface development to prepare for the study of the following chapters.
-</p><p>The whole process of SCADA-system's configuration to perform the "top level" functions can be divided into two stages:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_Vision_run.png"><img class="thumbimage" height="719" src="files/QuickStart_Vision_run.png" width="1024" /></a>  <div class="thumbcaption">Fig. 3.1.4. Window of the end interface of the user of the "AGLKS" project.</div></div></div></div>
+<p>Building and executing of the user interfaces is implemented by <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">the Vision module</a> of the "User interfaces" subsystem. In addition to this module the other modules of visualization is accessed. For example, OpenSCADA provides the <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision module</a>, which allows to execute projects, previously developed in the "Vision" interface module, through the Web-based technologies and by standard Web-browser.
+</p><p>All actions in the future, we will overview only only in the interface of the "Vision" module.
+</p><p>So we ran the demo of OpenSCADA and familiarized with the main set of the tools. In the future, we will use them in the OpenSCADA configuration to perform the functions of the "top level" — AWP operator, and other tasks.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Close the program through the appropriate menu item "File", which must be made obligatory, otherwise its further background launch will not be able to open ports already busied by this program.
 </p>
-<ul><li> The configuration of data sources and creation the database (DB) of the parameters from these sources.</li>
-<li> Formation of a visual presentation of technological process (TP) data by creating the operator's interface in the form of: mnemonic schemes, groups of graphs (trends), groups of contours, documents, etc.</li></ul>
-<h3><span class="mw-headline" id="Creation_the_user.27s_project_from_scratch"><span class="mw-headline-number">3.1</span> <span id="UserPrjCrt" title="#UserPrjCrt">Creation the user's project from scratch</span></span></h3>
-<p>All the actions in the following sections are described in the "AGLKS" (demonstration) model database environment with the purpose of the widest and the most descriptive presentation of the configuration process, with the ability to connect to a real-live data source, realized on the basis of the gas compressor station TP model. However, it is necessary to describe the process of creation a user project from scratch, which is obviously your final goal. On the basis of a new user's project you can perform all the following steps with the "AGLKS" model database, but with an eye to your own data sources of a new project.
-</p><p>To start a clean user's project there is the item "OpenSCADA System" with the characteristic icon in the desktop environment menu, the "Graphics" section (Fig.3.1.1).
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:878px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_demenu_oscada_start.png"><img class="thumbimage" height="639" src="files/QuickStart_demenu_oscada_start.png" width="876" /></a>  <div class="thumbcaption">Fig. 3.1.1. Menu item of the desktop environment to start the clean user's project.</div></div></div></div>
-<p>The start can also be done with the following command:
+<h3><span class="mw-headline" id="Background_and_remote_execution_.E2.80.94_server.2C_PLC_execution_environment_and_remote_development"><span class="mw-headline-number">3.2</span> <span id="Demon" title="#Demon">Background and remote execution — server, PLC execution environment and remote development</span></span></h3>
+<p>As you will see right now, there are no problems and needs of any additional configuration or addition of the existing configuration, demo one in our case, to run it in the background mode (demon mode) with the provision of server functions.
+</p><p>To run OpenSCADA in the background, we need to install the <b>openscada-server</b> package as described in <a href="#Installation">the installation part</a> and which will already be set in the case of <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">the live disk</a>. After the installing this package, we have to do the following steps, in the console terminal (for example, the program "konsole" in the live disk environment at the Alt+F2 startup dialog) and from the superuser:
 </p>
 <pre style="white-space: pre-wrap;">
-$ openscada_start</pre>
-<p>Starting from version 0.9 of OpenSCADA the command call cause creation the dialog for new project creation or using pre-installed and user's projects. For selection and new project name dialogs building supported the dialog programs, into the priority checking: dialog (for active terminal present), kdialog (Fig.3.1.2), "zenity" and "Xdialog". Let select the menu item "&lt;New project&gt;" and enter the project name "start" into next dialog.
+# Connect from the superuser
+$ su -
+# ... for the live disk environment and some other Linux environments
+$ sudo bash
+# Stop down of execution of the empty server configuration
+$ service openscada-server stop
+# Create a link of the server project to "AGLKS"
+$ rm -R /usr/share/openscada/server
+$ ln -s AGLKS /usr/share/openscada/server
+$ ln -s /etc/oscada_AGLKS.xml /usr/share/openscada/server/oscada.xml
+# Start up the server with the demo DB already
+$ service openscada-server start
+</pre>
+<p>In this way, you will get the demo database that works in the background, which, however, we will not see until we try to connect to this configuration, as below. Now, every time you start the computer, it will be launched in this way and run in the background. In general, this is the way tor starting up and execution the server configurations, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Embedding_and_PLC" title="Special:MyLanguage/Sub-projects/Embedding and PLC">PLC environments and one-board PCs</a> similar to <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Raspberry_Pi" title="Special:MyLanguage/Using/Raspberry Pi">RaspberyPi</a>.
+</p><p>If you still have problems working with the console-terminal, or you deliberately want a background run in the graphical environment — the so-called "start or close in the system tray", then at this stage you can re-run the demo configuration, as described in the beginning of this section (Fig. 3.1.1), set the "Collapse or startup to the system tray" option of the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/QTStarter#Cfg" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter module</a> and close the configuration window so that the AGLKS simulator project collapses to the system tray.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:697px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_demenu_oscada_start_dialog.png"><img class="thumbimage" height="259" src="files/QuickStart_demenu_oscada_start_dialog.png" width="695" /></a>  <div class="thumbcaption">Fig. 3.1.2. Dialog of selection of new project creation or using pre-installed and user's projects.</div></div></div></div>
-<p>A clean user's project does not contain any project-specific configuration and is configured to work in the user's directory "<b>/.openscada</b>", with the main SQLite database in the file "<b>DATA/MainSt.db</b>". It is easier to create a complex SCADA-system's project using the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs" title="Special:MyLanguage/Libs">libraries of API functions of the OpenSCADA object model and libraries of graphic elements</a>, as well as with the help of other OpenSCADA libraries. To use the OpenSCADA libraries, stored in a database file, they need to be connected, added in the "SQLite" database module's object (Fig.3.1.3), as well as it is necessary to set the address and the database charset to "UTF-8" (Fig.3.1.4).
+<h3><span class="mw-headline" id="Your_own_project_creation"><span class="mw-headline-number">3.3</span> <span id="UserPrjCrt" title="#UserPrjCrt">Your own project creation</span></span></h3>
+<p>In the window of the OpenSCADA project manager (Fig. 3.3), we will create our own project, which can be called from the desktop environment menu in the "Graphics" section, the general item "Open SCADA system" with the characteristic icon (Fig. 3.1.1) or the command from the console-terminal:
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1222px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_SQLite_add.png"><img class="thumbimage" height="632" src="files/QuickStart_SQLite_add.png" width="1220" /></a>  <div class="thumbcaption">Fig. 3.1.3. Add the "SQLite" DB object.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:667px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_SQLite_obj.png"><img class="thumbimage" height="720" src="files/QuickStart_SQLite_obj.png" width="665" /></a>  <div class="thumbcaption">Fig. 3.1.4. "SQLite" DB object of OpenSCADA library.</div></div></div></div>
-<p>OpenSCADA distributions supplied with a number of libraries in the form of "SQLite" database files (Table 3.1), which, when you run the clean user's project are placed to the "<b>LibsDB/</b>" directory. According to this list, lets add them in the "SQLite" database module's object, set the "Enabled" flag and save. Next, to load the library contents it is necessary to enable the database and click "Download this system from the database", but during the loading some of new objects are disabled so it's easier to complete a exit user's project and start over again.
-</p><p><b>Table 3.1.</b> OpenSCADA libraries included in the distribution.
+<pre style="white-space: pre-wrap;">
+$ openscada</pre>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:717px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ProjManager.png"><img class="thumbimage" height="509" src="files/QuickStart_ProjManager.png" width="715" /></a>  <div class="thumbcaption">Fig. 3.3. Window of the project manager of OpenSCADA.</div></div></div></div>
+<p>In this window, we can also check the background execution of server and demo configurations.
+</p><p>That is, press the corresponding "Create-update project" button and enter the name of the new project, for example "Start".
+</p>
+<h4><span class="mw-headline" id="Connecting_and_using_remote_and_background_configurations"><span class="mw-headline-number">3.3.1</span> Connecting and using remote and background configurations</span></h4>
+<p>Now we can try to connect remotely to the background demo project, look at its configuration and launch the demonstration project on the local execution from the visualization server.
+</p><p>On the transport page (Fig. 3.3.1.1), in the "User and System" mode, we will create a connection to our background demonstration "AGLKS" as an OpenSCADA station. We specify there the transport "Sockets", the address "TCP:localhost:10005", the user "root" and the password "openscada". After updating the configurator tree, at the command in the context menu, we must get a new root item of this connection and we can control the remote background station from this configuration.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> If the remote station item appears but displays a lack of connection, then you have made a mistake in the configuration above or the remote station is not available, which in our case can mean only that it does not work in the background, and then return to <a href="#Demon">the proper section</a> and repeat the operations in it.
+</p><p>If everything works then we will save this configuration by clicking the second icon on the left in the toolbar above, because we going to still use it to directly gating the data acquisition parameters from the demon project as PLC.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:907px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_TrRemStationsAndBrowse.png"><img class="thumbimage" height="629" src="files/QuickStart_TrRemStationsAndBrowse.png" width="905" /></a>  <div class="thumbcaption">Fig. 3.3.1.1. Page of the transports of the external OpenSCADA stations and browse the OpenSCADA tree of the remote-background station.</div></div></div></div>
+<p>On the configuration page of the UI.Vision visualizer (Fig. 3.3.1.2), we will select:
+</p>
+<ul><li> station of the VCA engine — AGLKS;</li>
+<li> starting user — leave blank;</li>
+<li> user password of this remote station — leave blank;</li>
+<li> project(s) for their automatic execution — also leave blank, because we want to see the possibility of remote development.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:704px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_RemoteVisionCfg.png"><img class="thumbimage" height="579" src="files/QuickStart_RemoteVisionCfg.png" width="702" /></a>  <div class="thumbcaption">Fig. 3.3.1.2. Configuration page of the visualizer UI.Vision.</div></div></div></div>
+<p>The next launch of the UI.Vision module, the second end icon on the toolbar above, should lead the visual development environment to a connection to the visualization project of the background demon project. Where you can perform remote development (fig.3.3.1.3) and run projects from this visualization server for execution (Fig. 3.3.1.4).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:789px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_RemoteVisionDev.png"><img class="thumbimage" height="556" src="files/QuickStart_RemoteVisionDev.png" width="787" /></a>  <div class="thumbcaption">Fig. 3.3.1.3. Screen of the remote development of UI.Vision for the visualizer server "AGLKS".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_RemoteVisionRun.png"><img class="thumbimage" height="719" src="files/QuickStart_RemoteVisionRun.png" width="1024" /></a>  <div class="thumbcaption">Fig. 3.3.1.4. Screen of the remote execution of UI.Vision for the visualizer server "AGLKS".</div></div></div></div>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This configuration of the remote connection to the visualizer server is not necessary to save and the configuration field "Station of the VCA engine" (Fig.3.3.1.2) should be returned to "Local" and the station user set to "root"; only then save.
+</p><p>The ability to remotely connect and develop is sometimes the only way to develop or correct not only server configurations with the WEB interface only, but also for configurations with the locale visualization, when the locale environment itself is not suitable or limited to execute the development environment of the UI.Vision module, such as smartphones, tablets, and other small screen mobile devices, exclusively with touch input (<a class="external" href="http://oscada.org/wiki/Sub-projects/Adaption_to_Android" title="Sub-projects/Adaption to Android">Android</a>) or restrictions such as the inability to open the system virtual keyboard (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Nokia_Linux" title="Special:MyLanguage/Using/Nokia Linux">Nokia N9</a>).
+</p>
+<h4><span class="mw-headline" id="Connecting_the_standard_OpenSCADA_libraries"><span class="mw-headline-number">3.3.2</span> Connecting the standard OpenSCADA libraries</span></h4>
+<p>The newly created OpenSCADA project does not contain any specific configuration, in fact it is empty and provides for the user to create a new configuration in the local SQLite database file "St.db", which is located in its own directory of the project with the same name. It is easier to create a complex project of the SCADA system using <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs" title="Special:MyLanguage/Libs">libraries of functions of the API of the OpenSCADA object model and libraries of the graphical elements</a>, as well as other OpenSCADA libraries. To use the OpenSCADA libraries, you need database files where the libraries are stored: connect - add in the object of the database module "SQLite" (Fig.3.3.2.1), install-select the address and specify the database encoding in "UTF-8" (Fig.3.3.2.2).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1117px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_SQLite_add.png"><img class="thumbimage" height="579" src="files/QuickStart_SQLite_add.png" width="1115" /></a>  <div class="thumbcaption">Fig. 3.3.2.1. Addition of an object of the DB "SQLite".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:727px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_SQLite_obj.png"><img class="thumbimage" height="604" src="files/QuickStart_SQLite_obj.png" width="725" /></a>  <div class="thumbcaption">Fig. 3.3.2.2. The DB "SQLite" object of the OpenSCADA library.</div></div></div></div>
+<p>OpenSCADA distributions are supplied with a number of libraries in the form of database files "SQLite" (table 3.3.2), which, when started-created a custom project, are located in the "LibsDB/" directory. According to this list, we add them all to the object of the database module "SQLite", we set the sign "To enable" and save. Next, to download the contents of the libraries, you can enable the database and click on the button "Load the program from this DB", however, when downloaded, a number of new objects are not enabled (the <b>loading</b> command), so it's easier to complete the new project and run it again, than turning on everything you need manually.
+</p><p><b>Table 3.3.2.</b> OpenSCADA libraries included in the distribution.
 </p>
 <table class="wikitable">
 
@@ -309,29 +362,37 @@ $ openscada_start</pre>
 <tr>
 <td> OscadaLibs </td>
 <td> Functions libraries </td>
-<td> ./LibsDB/OscadaLibs.db </td>
-<td> EN,RU,UK/UTF-8
+<td> LibsDB/OscadaLibs.db </td>
+<td> EN,UK,RU/UTF-8
 </td></tr>
 <tr>
 <td> vcaBase </td>
 <td> VCA: Main libraries </td>
-<td> ./LibsDB/vcaBase.db </td>
-<td> EN,RU,UK/UTF-8
+<td> LibsDB/vcaBase.db </td>
+<td> EN,UK,RU/UTF-8
 </td></tr>
 <tr>
 <td> vcaTest </td>
 <td> VCA: Tests </td>
-<td> ./LibsDB/vcaTest.db </td>
-<td> EN,RU,UK/UTF-8
+<td> LibsDB/vcaTest.db </td>
+<td> EN,UK,RU/UTF-8
 </td></tr>
 <tr>
 <td> vcaElectroEls </td>
 <td> VCA: Electrical elements library of the user interface </td>
-<td> ./LibsDB/vcaElectroEls.db </td>
-<td> EN,RU,UK/UTF-8
+<td> LibsDB/vcaElectroEls.db </td>
+<td> EN,UK,RU/UTF-8
 </td></tr></table>
-<p>After the addition of OpenSCADA libraries you'll get an environment ready for addition of data sources and the formation of the new SCADA-system project's interface.
+<p>As a result of adding OpenSCADA libraries you will get an environment ready for adding data sources, defining their history and forming the interface of your own SCADA-system project.
 </p>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The common revision, appending and translation are going here.
+</td></tr></table>
+</div>
 <h2><span class="mw-headline" id="Working_with_Data_Sources"><span class="mw-headline-number">4</span> Working with Data Sources</span></h2>
 <p>The main function of any SCADA-system is to work with data sources of realtime, namely the inquiry of programmable logic controllers (PLC) and simple modules of CPI. For more details see <a href="DAQ.html" title="Special:MyLanguage/Documents/DAQ">the document "Data acquisition in OpenSCADA"</a>.
 </p><p>Support of the one or another data source depends on the protocol or API, through which the source provides its data, and the availability for the protocol/API the module in the subsystem "Data acquisition" in OpenSCADA. The total list of modules of the subsystem "Data acquisition" and documentation on them can be found <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">here</a> in the appropriate table part.
@@ -723,6 +784,9 @@ cooler2_speed = Cw/5;
 <h2><span class="mw-headline" id="Conclusion"><span class="mw-headline-number">6</span> Conclusion</span></h2>
 <p>This document describes in detail the basic process of creating the user interface elements, with preparation and configuration of the data source. In general, you can quickly get an idea of the work with the OpenSCADA system, and purposefully look for solutions of associated problems.
 </p>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">7</span> Links</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:QuickStart_SimpleStationAndServer.odg" title="File:QuickStart SimpleStationAndServer.odg">Diagram: Simple united connecting of SCADA station and server with the data source in the demo database.</a></li></ul>
+
 
 
 

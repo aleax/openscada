@@ -134,15 +134,9 @@ Das offene SCADA System.
 
 %post
 /sbin/ldconfig
-/sbin/chkconfig --add openscadad
 
 %postun -p /sbin/ldconfig
 
-%preun
-if [ $1 = 0 ]; then
- /sbin/service openscadad stop > /dev/null 2>&1
- /sbin/chkconfig --del openscadad
-fi
 
 ################## DAQ-System ###########################
 %if 0%{?with_diamondboards}
@@ -1373,7 +1367,9 @@ chrpath --delete %buildroot/%_bindir/openscada
 
 %__install -m 755 -d %buildroot/%_includedir/openscada/
 %__install -m 644 src/*.h %buildroot/%_includedir/openscada
-%__install -m 755 -pD data/oscada_RH.init %buildroot/%_initrddir/openscadad
+%__install -m 755 -pD data/oscada_RH.init %buildroot/%_initrddir/openscada-server
+%__install -m 755 -pD data/oscada_RH.init %buildroot/%_initrddir/openscada-plc
+sed -i "s/--projName=server/--projName=plc/" %buildroot/%_initrddir/openscada-plc
 %__install -m 755 -d %buildroot/%_datadir/openscada/{DATA,icons,LibsDB,AGLKS,Boiler}
 
 ln -s openscada %buildroot/%_bindir/openscada_AGLKS
@@ -1391,7 +1387,7 @@ ln -s openscada %buildroot/%_bindir/openscada_Boiler
 %config(noreplace) %_sysconfdir/oscada_start.xml
 %dir %_libdir/openscada
 %dir %_datadir/openscada
-%_initrddir/openscadad
+
 %_bindir/openscada
 %_bindir/openscada_start
 %_bindir/openscada-proj
@@ -1448,13 +1444,33 @@ ln -s openscada %buildroot/%_bindir/openscada_Boiler
 %{_localstatedir}/spool/openscada/ARCHIVES/MESS/info
 %{_localstatedir}/spool/openscada/ARCHIVES/VAL/info
 
+%post plc
+/sbin/chkconfig --add openscada-plc
+
+%preun plc
+if [ $1 = 0 ]; then
+ /sbin/service openscada-plc stop > /dev/null 2>&1
+ /sbin/chkconfig --del openscada-plc
+fi
+
 %files plc
 %defattr(-,root,root)
 %config(noreplace) %_sysconfdir/oscada_plc.xml
+%_initrddir/openscada-plc
+
+%post server
+/sbin/chkconfig --add openscada-server
+
+%preun server
+if [ $1 = 0 ]; then
+ /sbin/service openscada-server stop > /dev/null 2>&1
+ /sbin/chkconfig --del openscada-server
+fi
 
 %files server
 %defattr(-,root,root)
 %config(noreplace) %_sysconfdir/oscada_server.xml
+%_initrddir/openscada-server
 
 %files visStation
 %defattr(-,root,root)
@@ -1871,6 +1887,9 @@ ln -s openscada %buildroot/%_bindir/openscada_Boiler
 %endif
 
 %changelog
+* Sat Mar 24 2018 Roman Savochenko <rom_as@oscada.org>
+- The daemon mode init script "openscadad" renamed to "openscada-server", separated to "openscada-plc" and moved to the coresponding package.
+
 * Wed May 14 2014 Aleksey Popkov <aleksey@oscada.org> - 0.8.0.10
 - Build the 0.8.0.10, LTS version.
 

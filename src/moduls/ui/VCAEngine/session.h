@@ -64,7 +64,7 @@ class Session : public TCntrNode
 	time_t	reqTm( )	{ return mReqTm; }		//Last request time from client
 	unsigned &calcClk( )	{ return mCalcClk; }		//Calc clock
 	AutoHD<Project> parent( ) const;
-	int stlCurent( )	{ return mStyleIdW; }
+	int	stlCurent( )	{ return mStyleIdW; }
 
 	void setProjNm( const string &vl )	{ mPrjnm = vl; }
 	void setUser( const string &vl );
