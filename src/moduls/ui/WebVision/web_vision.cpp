@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.4.0"
+#define MOD_VER		"2.5.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -726,12 +726,11 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	}
 
     //Content parse
+    size_t pos = 0, spos = 0;
     string boundary;
     const char *c_bound = "boundary=";
     const char *c_term = "\x0D\x0A";
     const char *c_end = "--";
-    const char *c_fd = "Content-Disposition";
-    const char *c_name = "name=\"";
 
     for(size_t iVr = 0, pos = 0; iVr < vars.size() && boundary.empty(); iVr++)
 	if(vars[iVr].compare(0,vars[iVr].find(":",0),"Content-Type") == 0 && (pos=vars[iVr].find(c_bound,0)) != string::npos) {
@@ -740,25 +739,24 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	}
     if(boundary.empty()) return;
 
-    for(size_t pos = 0, spos = 0, i_bnd = 0; true; ) {
+    for(pos = 0; true; ) {
 	pos = content.find(boundary,pos);
 	if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;
 	pos += boundary.size()+strlen(c_term);
 
-	// Process properties and get name
-	string p_name;
+	cnt.push_back(XMLNode("Content"));
+
+	// Get properties
 	while(pos < content.size()) {
 	    string c_head = content.substr(pos, content.find(c_term,pos)-pos);
 	    pos += c_head.size()+strlen(c_term);
 	    if(c_head.empty()) break;
 	    if((spos=c_head.find(":")) == string::npos) return;
-	    if(c_head.compare(0,spos,c_fd) == 0 && (i_bnd=c_head.find(c_name,spos)) != string::npos) {
-		i_bnd += strlen(c_name);
-		p_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
-	    }
+	    cnt.back().setAttr(sTrm(c_head.substr(0,spos)), sTrm(c_head.substr(spos+1)));
 	}
+
 	if(pos >= content.size()) return;
-	if(!p_name.empty()) cnt[p_name] = content.substr(pos,content.find(string(c_term)+c_end+boundary,pos)-pos);
+	cnt.back().setText(content.substr(pos, content.find(string(c_term)+c_end+boundary,pos)-pos));
     }
 }
 

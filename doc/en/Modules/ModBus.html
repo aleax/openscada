@@ -71,7 +71,7 @@
 </li>
 <li class="toclevel-1 tocsection-4"><a href="#Module_of_the_implementation_of_the_protocol"><span class="tocnumber">2</span> <span class="toctext">Module of the implementation of the protocol</span></a>
 <ul>
-<li class="toclevel-2 tocsection-5"><a href="#API_functions_of_outgoing_requests"><span class="tocnumber">2.1</span> <span class="toctext">API functions of outgoing requests</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#API_functions_of_output_requests"><span class="tocnumber">2.1</span> <span class="toctext">API functions of output requests</span></a></li>
 <li class="toclevel-2 tocsection-6"><a href="#Servicing_of_the_requests_for_ModBus_protocol"><span class="tocnumber">2.2</span> <span class="toctext">Servicing of the requests for ModBus protocol</span></a>
 <ul>
 <li class="toclevel-3 tocsection-7"><a href="#The_mode_of_the_node_of_the_protocol_.22Data.22"><span class="tocnumber">2.2.1</span> <span class="toctext">The mode of the node of the protocol "Data"</span></a></li>
@@ -142,8 +142,8 @@
 <h2><span class="mw-headline" id="Module_of_the_implementation_of_the_protocol"><span class="mw-headline-number">2</span> Module of the implementation of the protocol</span></h2>
 <p>ModBus protocol module contains the code implementing of the protocol part of ModBus, namely particular variants of protocols ModBus/TCP, ModBus/RTU and ModBus/ASCII. Module of the protocol in conjunction with the selected transport is actively used by the data acquisition module for direct queries implementation. Because of the module of the protocol is independent, by using of it you can create additional modules for data acquisition by non-standard functions of the expansion of ModBus of various automation equipment.
 </p>
-<h3><span class="mw-headline" id="API_functions_of_outgoing_requests"><span class="mw-headline-number">2.1</span> API functions of outgoing requests</span></h3>
-<p>API functions for outgoing queries (<a class="external" href="http://oscada.org/wiki/Documents/User_API#Subsystem_.22Transports.22_.28SYS.Transport.29" title="Documents/User API">messIO()</a>) operate with the exchange of blocks PDU, XML-wrapped in packages with the following structure:
+<h3><span class="mw-headline" id="API_functions_of_output_requests"><span class="mw-headline-number">2.1</span> API functions of output requests</span></h3>
+<p>API functions for output queries (<a class="external" href="http://oscada.org/wiki/Documents/User_API#Subsystem_.22Transports.22_.28SYS.Transport.29" title="Documents/User API">messIO()</a>) operate with the exchange of blocks PDU, XML-wrapped in packages with the following structure:
 </p>
 <ul><li> <b>&lt;prt id="sId" reqTm="reqTm" node="node" reqTry="reqTry"&gt;{pdu}&lt;/prt&gt;</b></li></ul>
 <dl><dd>Where:
@@ -158,7 +158,7 @@
 <h3><span class="mw-headline" id="Servicing_of_the_requests_for_ModBus_protocol"><span class="mw-headline-number">2.2</span> Servicing of the requests for ModBus protocol</span></h3>
 <p>Input part of servicing of the requests to the module of the protocol realizes verification and processing of the requests through objects of the nodes, provided by the module(Fig. 1). Actually, the mechanism is implemented, that allow OpenSCADA to perform the role of the ModBus/TCP server or the  slave device of ModBus/RTU and ModBus/ASCII. Thus the system OpenSCADA gets an opportunity to serve the role of any participant of the ModBus networks.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:583px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_nodes.png"><img class="thumbimage" height="457" src="../files/ModBus_prt_nodes.png" width="581" /></a>  <div class="thumbcaption">Fig.1. Tab of the list of the nodes of servicing incoming requests of the protocol.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:583px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_nodes.png"><img class="thumbimage" height="457" src="../files/ModBus_prt_nodes.png" width="581" /></a>  <div class="thumbcaption">Fig.1. Tab of the list of the nodes of servicing input requests of the protocol.</div></div></div></div>
 <p>The node of the protocol is equivalent to the physical node of the device of ModBus network. Node of the protocol can operate in three modes:
 </p>
 <ul><li> "Data" — mode of the reflection of data of OpenSCADA on arrays of registers and bits of ModBus to transfer them at the request of the client node or master.</li>
@@ -234,7 +234,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Inbound traffic, to the network of which the node is  belonged to. It is selected from the list of input transport of the subsystem "Transports" of OpenSCADA. Specifying as the transport the symbol "*" makes this node a participant of any ModBus network with the processing of requests from any transport.</li>
 <li> Variant of the ModBus protocol, requests in which must be processed by the node from the list: All, RTU, ASCII, TCP/IP.</li>
 <li> The choice of the mode, in this case the mode "Gateway of the node".</li>
-<li> Transport, in which the request must be redirected, from the list of outgoing transports of subsystem "Transports".</li>
+<li> Transport, in which the request must be redirected, from the list of output transports of subsystem "Transports".</li>
 <li> Protocol in which to redirect the request.</li>
 <li> Address of the node of ModBus network from 1 to 247, in which the request is forwarded to.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:631px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_nodeGwNode.png"><img class="thumbimage" height="636" src="../files/ModBus_prt_node_nodeGwNode.png" width="629" /></a>  <div class="thumbcaption">Fig.5. Tab "Node" of the configuration page of a node of the protocol in the "Gateway of the node" mode.</div></div></div></div>
@@ -244,10 +244,10 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <ul><li> The state of the node, as follows: "Enable" and the name of the database containing the configuration.</li>
 <li> Id, name and description of the node.</li>
 <li> The state, in which the node must be translated at boot: "To enable".</li>
-<li> Incoming transport of the network, from which the requests are transfered.It is selected from the list of input transport of the subsystem "Transports" of OpenSCADA.</li>
+<li> Input transport of the network, from which the requests are transfered.It is selected from the list of input transport of the subsystem "Transports" of OpenSCADA.</li>
 <li> Variant of the ModBus protocol, requests in which must be processed by the node from the list: All, RTU, ASCII, TCP/IP.</li>
 <li> The choice of the mode, in this case the mode "Gateway of the network".</li>
-<li> Transport, in which the request must be redirected, from the list of outgoing transports of subsystem "Transports".</li>
+<li> Transport, in which the request must be redirected, from the list of output transports of subsystem "Transports".</li>
 <li> Protocol in which to redirect the request.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:631px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_nodeGwNet.png"><img class="thumbimage" height="593" src="../files/ModBus_prt_node_nodeGwNet.png" width="629" /></a>  <div class="thumbcaption">Fig.6. Tab "Node" of the configuration page of a node of the protocol in the "Gateway of the network" mode.</div></div></div></div>
 <h3><span class="mw-headline" id="Report_of_the_ModBus_requests"><span class="mw-headline-number">2.3</span> Report of the ModBus requests</span></h3>

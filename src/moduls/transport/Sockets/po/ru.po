@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 14:11+0200\n"
+"POT-Creation-Date: 2018-04-01 13:42+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -89,9 +89,8 @@ msgstr "Запущен"
 msgid "Stopped"
 msgstr "Остановлен"
 
-#, c-format
-msgid "Restart by no ingoing activity to '%s'."
-msgstr "Перезапуск по причине отсутствия активности по '%s'."
+msgid "Restart by no input activity to '%s'."
+msgstr "Перезапуск по причине отсутствия входной активности по '%s'."
 
 #, c-format
 msgid "Write: wrote %s."

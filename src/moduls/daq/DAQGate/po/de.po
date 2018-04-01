@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 09:38+0200\n"
+"POT-Creation-Date: 2018-04-01 11:12+0300\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -39,8 +39,8 @@ msgstr "Einflussgrößen Cache-Tabelle"
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
 
-msgid "Gather task priority"
-msgstr "Priorität der Datenerfassung"
+msgid "Priority of the acquisition task"
+msgstr "Priorität der Erfassungsaufgabe"
 
 msgid "Restore timeout, seconds"
 msgstr "Zeitüberschreitung bei der Wiederherstellung, Sekunden"
@@ -89,6 +89,7 @@ msgstr "Erwerb. "
 msgid "Acquisition with the period: %s. "
 msgstr "Erwerb mit dem Zeitraum: %s. "
 
+#, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 
@@ -195,9 +196,3 @@ msgstr "Konfiguration einer entfernten Station"
 
 msgid "Controller is not started!"
 msgstr "Controller ist nicht gestartet!"
-
-#~ msgid "Call now. "
-#~ msgstr "Rufen Sie jetzt an. "
-
-#~ msgid "Call by period: %s. "
-#~ msgstr "Aufruf mit einer Periode: %s. "

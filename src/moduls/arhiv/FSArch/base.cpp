@@ -103,7 +103,7 @@ string ModArch::packArch( const string &anm, bool replace )
     //signal(SIGCHLD,prevs);
     if(sysres) {
 	remove(rez_nm.c_str());
-	throw err_sys(_("Compressing for '%s' error %d!"), anm.c_str(), sysres);
+	throw err_sys(_("Error compressing for '%s': %d!"), anm.c_str(), sysres);
     }
     if(replace) remove(anm.c_str());
 
@@ -119,7 +119,7 @@ string ModArch::unPackArch( const string &anm, bool replace )
     //signal(SIGCHLD,prevs);
     if(sysres) {
 	remove(rez_nm.c_str());
-	throw err_sys(_("Decompressing for '%s' error %d!"), anm.c_str(), sysres);
+	throw err_sys(_("Error decompressing for '%s': %d!"), anm.c_str(), sysres);
     }
     if(replace) remove(anm.c_str());
 
@@ -130,8 +130,8 @@ string ModArch::optDescr( )
 {
     return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
-	"    --noArchLimit       Disable the limit on number of files.\n"
-	"                        Use for archive the viewing mode, not for work.\n"
+	"    --noArchLimit       Disable limit on number of files.\n"
+	"                        Use for archive viewing mode, not for work.\n"
 	"\n"), MOD_TYPE,MOD_ID);
 }
 
@@ -157,7 +157,7 @@ void ModArch::perSYSCall( unsigned int cnt )
 		try { messAt(a_list[i_a]).at().checkArchivator(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Check message archivator '%s' error."), a_list[i_a].c_str());
+		    mess_sys(TMess::Error, _("Error checking the message archiver '%s'."), a_list[i_a].c_str());
 		}
 
 	//Check value archivators
@@ -167,7 +167,7 @@ void ModArch::perSYSCall( unsigned int cnt )
 		try { valAt(a_list[i_a]).at().checkArchivator(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Check value archivator '%s' error."), a_list[i_a].c_str());
+		    mess_sys(TMess::Error, _("Error checking the value archiver '%s'."), a_list[i_a].c_str());
 		}
 
 	//Check for not presented files of the archive

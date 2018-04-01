@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.7"
+#define MOD_VER		"1.7.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -647,7 +647,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
 {
     map<string, string>::iterator cntEl;
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,page);
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, page);
 
     //Commands process
     ses.page = pgHead();

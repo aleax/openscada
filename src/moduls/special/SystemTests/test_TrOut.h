@@ -27,7 +27,7 @@ namespace KernelTest
 {
 
 //********************************************************
-//* TestTrOut: Test of outgoing and/or ingoing transport.*
+//* TestTrOut: Test an output and/or input transport.    *
 //********************************************************
 class TestTrOut : public TFunction
 {
@@ -41,7 +41,7 @@ class TestTrOut : public TFunction
 	}
 
 	string name( )	{ return _("Transport"); }
-	string descr( )	{ return _("Test of outgoing and/or ingoing transport.\n"
+	string descr( )	{ return _("Test of output and/or input transport.\n"
 				   "Performs testing of the original transport by sending a request to the specified ingoing transport."); }
 
 	void calc( TValFunc *val )

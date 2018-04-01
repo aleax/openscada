@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 10:39+0200\n"
+"POT-Creation-Date: 2018-03-31 17:28+0300\n"
 "PO-Revision-Date: 2004-03-20 10:37+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -60,6 +60,7 @@ msgstr "Вихідний параметр"
 msgid "Calculation. "
 msgstr "Обчислення. "
 
+#, c-format
 msgid "Calculation with the period: %s. "
 msgstr "Обчислення за періодом: %s. "
 
@@ -84,13 +85,13 @@ msgstr "Витрачено часу: %s[%s]. "
 msgid "Parameter is disabled or is not based on the template."
 msgstr "Параметр вимкнено або він не ґрунтується на шаблоні."
 
-msgid "Parameter id error."
-msgstr "Помилковий id параметру."
+msgid "Error of parameter ID."
+msgstr "Помилковий ID параметру."
 
-msgid "Error calculate template."
+msgid "Error calculating template."
 msgstr "Помилка обчислення шаблону."
 
-msgid "No template parameter or error."
+msgid "Error or non-template parameter."
 msgstr "Помилка або нешаблонний параметр."
 
 msgid "Template configuration"
@@ -102,5 +103,5 @@ msgstr "Показувати тільки атрибути"
 msgid "Parameters"
 msgstr "Параметри"
 
-msgid "Self to self linking error."
+msgid "Error, recursive linking."
 msgstr "Помилка, рекурсивне підключення."

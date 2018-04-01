@@ -60,17 +60,17 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("PRM_BD_L",_("Logical parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("PROT",_("Modbus protocol"),TFld::String,TFld::Selected,"5","TCP","TCP;RTU;ASCII",_("TCP/IP;RTU;ASCII")));
+    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("PROT",_("ModBus protocol"),TFld::String,TFld::Selected,"5","TCP","TCP;RTU;ASCII","TCP/IP;RTU;ASCII"));
     fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"41",""));
     fldAdd(new TFld("NODE",_("Destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255"));
-    fldAdd(new TFld("FRAG_MERGE",_("Data fragments merge"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    fldAdd(new TFld("WR_MULTI",_("Use multi-items write functions (15,16)"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("FRAG_MERGE",_("Merging of the data fragments"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("WR_MULTI",_("Using the multi-items writing functions (15,16)"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("WR_ASYNCH",_("Asynchronous write"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    fldAdd(new TFld("TM_REQ",_("Connection timeout (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));
-    fldAdd(new TFld("TM_REST",_("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","30","1;3600"));
+    fldAdd(new TFld("TM_REQ",_("Timeout of connection, milliseconds"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));
+    fldAdd(new TFld("TM_REST",_("Timeout of restore, seconds"),TFld::Integer,TFld::NoFlag,"4","30","1;3600"));
     fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;9"));
-    fldAdd(new TFld("MAX_BLKSZ",_("Maximum request block size (bytes)"),TFld::Integer,TFld::NoFlag,"3","200","2;250"));
+    fldAdd(new TFld("MAX_BLKSZ",_("Maximum size of the request block, bytes"),TFld::Integer,TFld::NoFlag,"3","200","2;250"));
 
     //Parameter type bd structure
     // Standard parameter type by symple attributes list
@@ -140,14 +140,14 @@ string TMdContr::getStatus( )
     if(startStat() && !redntUse()) {
 	if(!prcSt) val += TSYS::strMess(_("Task terminated! "));
 	if(tmDelay > -1) {
-	    val += TSYS::strMess(_("Connection error. Restoring in %.6g s."), tmDelay);
+	    val += TSYS::strMess(_("Error of connection. Restoring in %.6g s."), tmDelay);
 	    val.replace(0, 1, "10");
 	}
 	else {
 	    if(callSt)	val += TSYS::strMess(_("Acquisition. "));
 	    if(period())val += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
 	    else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    val += TSYS::strMess(_("Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, %g coils. Errors of connection %g, of respond %g."),
+	    val += TSYS::strMess(_("Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, %g coils. Errors of connection %g, of response %g."),
 			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(),
 			numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
 	}
@@ -217,7 +217,7 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
-    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
+    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connection to data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
     alSt = -1;
 
     //Clear statistic
@@ -326,7 +326,7 @@ void TMdContr::regVal( int reg, const string &dt )
 TVariant TMdContr::getVal( const string &addr, MtxString &w_err )
 {
     if(tmDelay > 0) {
-	if(w_err.getVal().empty()) w_err.setVal(_("10:Connection error or no response."));
+	if(w_err.getVal().empty()) w_err.setVal(_("10:Error of connection or no response."));
 	return EVAL_REAL;
     }
 
@@ -447,7 +447,7 @@ char TMdContr::getValC( int addr, MtxString &err, bool in )
 bool TMdContr::setVal( const TVariant &val, const string &addr, MtxString &w_err, bool chkAssync )
 {
     if(tmDelay > 0) {
-	if(w_err.getVal().empty()) w_err.setVal(_("10:Connection error or no response."));
+	if(w_err.getVal().empty()) w_err.setVal(_("10:Error of connection or no response."));
 	return false;
     }
 
@@ -760,7 +760,7 @@ void *TMdContr::Task( void *icntr )
 		cntr.acqBlksCoil[i_b].err.setVal(cntr.modBusReq(pdu));
 		if(cntr.acqBlksCoil[i_b].err.getVal().empty()) {
 		    if((cntr.acqBlksCoil[i_b].val.size()/8+((cntr.acqBlksCoil[i_b].val.size()%8)?1:0)) != (pdu.size()-2))
-			cntr.acqBlksCoil[i_b].err.setVal(_("15:Response PDU size error."));
+			cntr.acqBlksCoil[i_b].err.setVal(_("15:Error in size of response PDU."));
 		    else {
 			for(unsigned i_c = 0; i_c < cntr.acqBlksCoil[i_b].val.size(); i_c++)
 			    cntr.acqBlksCoil[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
@@ -787,7 +787,7 @@ void *TMdContr::Task( void *icntr )
 		cntr.acqBlksCoilIn[i_b].err.setVal(cntr.modBusReq(pdu));
 		if(cntr.acqBlksCoilIn[i_b].err.getVal().empty()) {
 		    if((cntr.acqBlksCoilIn[i_b].val.size()/8+((cntr.acqBlksCoilIn[i_b].val.size()%8)?1:0)) != (pdu.size()-2))
-			cntr.acqBlksCoilIn[i_b].err.setVal(_("15:Response PDU size error."));
+			cntr.acqBlksCoilIn[i_b].err.setVal(_("15:Error in size of response PDU."));
 		    else {
 			for(unsigned i_c = 0; i_c < cntr.acqBlksCoilIn[i_b].val.size(); i_c++)
 			    cntr.acqBlksCoilIn[i_b].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
@@ -814,7 +814,7 @@ void *TMdContr::Task( void *icntr )
 		cntr.acqBlks[i_b].err.setVal(cntr.modBusReq(pdu));
 		if(cntr.acqBlks[i_b].err.getVal().empty()) {
 		    if(cntr.acqBlks[i_b].val.size() != (pdu.size()-2))
-			cntr.acqBlks[i_b].err.setVal(_("15:Response PDU size error."));
+			cntr.acqBlks[i_b].err.setVal(_("15:Error in size of response PDU."));
 		    else {
 			cntr.acqBlks[i_b].val.replace(0, cntr.acqBlks[i_b].val.size(), pdu.data()+2, cntr.acqBlks[i_b].val.size());
 			cntr.numRReg += cntr.acqBlks[i_b].val.size()/2;
@@ -840,7 +840,7 @@ void *TMdContr::Task( void *icntr )
 		cntr.acqBlksIn[i_b].err.setVal( cntr.modBusReq(pdu));
 		if(cntr.acqBlksIn[i_b].err.getVal().empty()) {
 		    if(cntr.acqBlksIn[i_b].val.size() != (pdu.size()-2))
-			cntr.acqBlksIn[i_b].err.setVal(_("15:Response PDU size error."));
+			cntr.acqBlksIn[i_b].err.setVal(_("15:Error in size of response PDU."));
 		    else {
 			cntr.acqBlksIn[i_b].val.replace(0, cntr.acqBlksIn[i_b].val.size(), pdu.data()+2, cntr.acqBlksIn[i_b].val.size());
 			cntr.numRRegIn += cntr.acqBlksIn[i_b].val.size()/2;
@@ -865,7 +865,7 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.tmDelay <= 0) {
 		if(cntr.alSt != 0) {
 		    cntr.alSt = 0;
-		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),
+		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connection to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),
 			TMess::Info);
 		}
 		cntr.tmDelay--;
@@ -892,7 +892,7 @@ void TMdContr::setCntrDelay( const string &err )
 {
     if(alSt <= 0) {
 	alSt = 1;
-	alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),
+	alarmSet(TSYS::strMess(_("DAQ.%s.%s: connection to data source: %s."),owner().modId().c_str(),id().c_str(),
 								TRegExp(":","g").replace(err,"=").c_str()));
     }
     tmDelay = restTm;
@@ -901,7 +901,7 @@ void TMdContr::setCntrDelay( const string &err )
 TVariant TMdContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     // string messIO(string pdu) - sending the PDU <pdu> through the controller transpot by ModBus protocol.
-    //  pdu - PDU request/respond
+    //  pdu - PDU request/response
     if(iid == "messIO" && prms.size() >= 1 && prms[0].type() == TVariant::String) {
 	string req = prms[0].getS();
 	string rez = modBusReq(req);
@@ -925,11 +925,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/FRAG_MERGE",cfg("FRAG_MERGE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,
-	    "help",_("Merge not adjacent fragments of registers to single block for request.\n"
-		    "Attention! Some devices don't support accompany request wrong registers into single block."));
+	    "help",_("Merge non-adjacent fragments of registers for request in a single block.\n"
+		    "WARNING! Some devices do not support the passing query of wrong registers in one block."));
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/TM_REQ",EVAL_STR,RWRWR_,"root",SDAQ_ID,1,
-	    "help",_("Individual connection timeout for device requested by the task.\n"
-		    "For zero value used generic connection timeout from used output transport."));
+	    "help",_("Individual connection timeout for the device polled by this task.\n"
+		    "For zero value, the total connection timeout is used from the used output transport."));
 	return;
     }
 
@@ -947,7 +947,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 TMdContr::SDataRec::SDataRec( int ioff, int v_rez ) : off(ioff), err(mod->dataRes())
 {
     val.assign(v_rez, 0);
-    err.setVal(_("11:Value not gathered."));
+    err.setVal(_("11:No value received."));
 }
 
 //******************************************************
@@ -1030,15 +1030,15 @@ void TMdPrm::enable( )
 	string m_attrLs = cfg("ATTR_LS").getS();
 	for(int ioff = 0; (sel=TSYS::strSepParse(m_attrLs,0,'\n',&ioff)).size(); ) {
 	    if(sel[0] == '#') continue;
-	    atp = TSYS::strSepParse(sel,0,':');
+	    atp = TSYS::strSepParse(sel, 0, ':');
 	    if(atp.empty()) atp = "R";
-	    atp_m = TSYS::strSepParse(atp,0,'_');
-	    atp_sub = TSYS::strSepParse(atp,1,'_');
-	    ai  = TSYS::strSepParse(sel,1,':');
-	    awr = TSYS::strSepParse(sel,2,':');
-	    aid = TSYS::strSepParse(sel,3,':');
+	    atp_m = TSYS::strSepParse(atp, 0, '_');
+	    atp_sub = TSYS::strSepParse(atp, 1, '_');
+	    ai  = TSYS::strSepParse(sel, 1, ':');
+	    awr = TSYS::strSepParse(sel, 2, ':');
+	    aid = TSYS::strSepParse(sel, 3, ':');
 	    if(aid.empty()) aid = ai;
-	    anm = TSYS::strSepParse(sel,4,':');
+	    anm = TSYS::strSepParse(sel, 4, ':');
 	    if(anm.empty()) anm = aid;
 
 	    if((vlPresent(aid) && !pEl.fldPresent(aid)) || als.find(aid) != als.end())	continue;
@@ -1328,7 +1328,7 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 	    }
 	} catch(TError &err) {
 	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_warning(nodePath().c_str(),_("Error calculate template."));
+	    mess_warning(nodePath().c_str(),_("Error of the calculation template."));
 	}
 
     //Alarm set
@@ -1458,23 +1458,23 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(isStd())
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/ATTR_LS",EVAL_STR,(owner().startStat()&&enableStat())?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
 		"rows","8","SnthHgl","1",
-		"help",_("Attributes configuration list. List must be written by lines in format: \"{dt}:{numb}:{rw}:{id}:{name}\".\n"
+		"help",_("Attributes configuration list. List must be written by lines in the format: \"{dt}:{numb}[:{rw}[:{id}[:{name}]]]\".\n"
 		    "Where:\n"
 		    "  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input register[4], CI-input coil[2]);\n"
-		    "       R and RI can be expanded by suffixes:\n"
+		    "       R and RI can be expanded by the suffixes:\n"
 		    "         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, s-String;\n"
-		    "       Start from symbol '#' for comment line;\n"
-		    "  numb - ModBus device's data address (dec, hex or octal) [0...65535];\n"
+		    "       Start from the symbol '#' for the commented line;\n"
+		    "  numb - ModBus data address of the device (dec, hex or octal) [0...65535];\n"
 		    "  rw - read/write mode (r-read; w-write; rw-readwrite);\n"
-		    "  id - created attribute identifier;\n"
-		    "  name - created attribute name.\n"
+		    "  id - identifier of the created attribute;\n"
+		    "  name - name of the created attribute.\n"
 		    "Examples:\n"
 		    "  \"R:0x300:rw:var:Variable\" - register access;\n"
-		    "  \"C:100:rw:var1:Variable 1\" - coin access;\n"
-		    "  \"R_f:200:r:float:Float\" - get float from registers 200 and 201;\n"
-		    "  \"R_i4:400,300:r:int32:Int32\" - get int32 from registers 400 and 300;\n"
-		    "  \"R_b10:25:r:rBit:Reg bit\" - get bit 10 from register 25;\n"
-		    "  \"R_s:15,20:r:str:Reg blk\" - get string, registers block, from register 15 and size 20."));
+		    "  \"C:100:rw:var1:Variable 1\" - coil access;\n"
+		    "  \"R_f:200:r:float:Float\" - get float from the registers 200 and 201;\n"
+		    "  \"R_i4:400,300:r:int32:Int32\" - get int32 from the registers 400 and 300;\n"
+		    "  \"R_b10:25:r:rBit:Reg bit\" - get the bit 10 from the register 25;\n"
+		    "  \"R_s:15,20:r:str:Reg blk\" - get string (registers block) from the register 15 and the size 20."));
 	if(isLogic()) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",EVAL_STR,RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/tmplList");
 	    if(enableStat() && ctrMkNode("area",opt,-1,"/cfg",_("Template configuration"))) {
@@ -1484,20 +1484,20 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    // Check select param
 		    if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+i2s(iIO)).c_str(),lCtx->func()->io(iIO)->name(),RWRWR_,"root",SDAQ_ID,2,"tp","str",
-			    "help",_("ModBus address in format: \"{dt}:{numb}:{rw}\".\n"
+			    "help",_("ModBus address in the format: \"{dt}:{numb}[:{rw}]\".\n"
 				"Where:\n"
 				"  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input register[4], CI-input coil[2]);\n"
-				"       R and RI can be expanded by suffixes:\n"
+				"       R and RI can be expanded by the suffixes:\n"
 				"         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, s-String;\n"
-				"  numb - ModBus device's data address (dec, hex or octal) [0...65535];\n"
+				"  numb - ModBus data address of the device (dec, hex or octal) [0...65535];\n"
 				"  rw - read/write mode (r-read; w-write; rw-readwrite).\n"
 				"Examples:\n"
 				"  \"R:0x300:rw\" - register access;\n"
-				"  \"C:100:rw\" - coin access;\n"
-				"  \"R_f:200:r\" - get float from registers 200 and 201;\n"
-				"  \"R_i4:400,300:r\" - get int32 from registers 400 and 300;\n"
-				"  \"R_b10:25:r\" - get bit 10 from register 25;\n"
-				"  \"R_s:15,20:r\" - get string, registers block, from register 15 and size 20."));
+				"  \"C:100:rw\" - coil access;\n"
+				"  \"R_f:200:r\" - get float from the registers 200 and 201;\n"
+				"  \"R_i4:400,300:r\" - get int32 from the registers 400 and 300;\n"
+				"  \"R_b10:25:r\" - get the bit 10 from the register 25;\n"
+				"  \"R_s:15,20:r\" - get string (registers block) from the register 15 and the size 20."));
 		    else {
 			const char *tip = "str";
 			bool fullTxt = false;
@@ -1578,7 +1578,7 @@ int TMdPrm::TLogCtx::lnkId( const string &id )
 
 TMdPrm::TLogCtx::SLnk &TMdPrm::TLogCtx::lnk( int num )
 {
-    if(num < 0 || num >= (int)plnk.size()) throw TError(mod->nodePath().c_str(),_("Parameter id error."));
+    if(num < 0 || num >= (int)plnk.size()) throw TError(mod->nodePath().c_str(),_("Error of parameter ID."));
     return plnk[num];
 }
 

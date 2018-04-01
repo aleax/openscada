@@ -1292,7 +1292,7 @@ msgstr "Сторінка '%s' вже присутня!"
 
 #, c-format
 msgid "All: %d; Enabled: %d"
-msgstr "Взагалі: %d; Включено: %d"
+msgstr "Загалом: %d; Ввімкнено: %d"
 
 msgid "New style"
 msgstr "Новий стиль"

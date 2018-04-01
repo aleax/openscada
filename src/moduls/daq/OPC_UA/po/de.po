@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 10:59+0200\n"
+"POT-Creation-Date: 2018-04-01 13:37+0300\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -22,8 +22,8 @@ msgstr "Parametertabelle"
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
 
-msgid "Gather task priority"
-msgstr "Niveau der Priorität der Datenempfangaufgabe"
+msgid "Priority of the acquisition task"
+msgstr "Priorität der Erfassungsaufgabe"
 
 msgid "Restore timeout, seconds"
 msgstr "Zeitüberschreitung bei der Wiederherstellung, Sekunden"
@@ -78,9 +78,11 @@ msgstr "Anschaltungsfehler. Wiederherstellung in %.6g s."
 msgid "Acquisition. "
 msgstr "Erwerb. "
 
+#, c-format
 msgid "Acquisition with the period: %s. "
 msgstr "Erwerb mit dem Zeitraum: %s. "
 
+#, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 

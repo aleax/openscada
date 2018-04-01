@@ -49,19 +49,19 @@
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#Incoming_transports"><span class="tocnumber">1</span> <span class="toctext">Incoming transports</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#Outgoing_transports"><span class="tocnumber">2</span> <span class="toctext">Outgoing transports</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#Input_transports"><span class="tocnumber">1</span> <span class="toctext">Input transports</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Output_transports"><span class="tocnumber">2</span> <span class="toctext">Output transports</span></a></li>
 </ul>
 </div>
 
-<p>Transport module Sockets provides support of transport based on the socket to the system. incoming and outgoing transport, based on internet sockets: TCP, UDP and UNIX sockets are supported. Addition of the new incoming and outgoing sockets can be done through the configuration of the transport subsystem in any system configurator of OpenSCADA.
+<p>Transport module Sockets provides support of transport based on the socket to the system. Input and output transport, based on the internet sockets: TCP, UDP and UNIX sockets are supported. Addition of the new input and output sockets can be done through the configuration of the transport subsystem in any system configurator of OpenSCADA.
 </p>
-<h2><span class="mw-headline" id="Incoming_transports"><span class="mw-headline-number">1</span> Incoming transports</span></h2>
-<p>Configured and running incoming transport opens the server socket for the expectation of connection of the clients, besides initiative connection. In the case of the UNIX socket, the UNIX socket file is created. TCP and UNIX sockets are multi-stream, ie when the client connects to a socket of these type, the client socket  and the new stream in which the client is served are created. Server socket in this moment switches to the waiting for the request from the new client. Thus the parallel service of the clients is achieved. RAWCAN socket realize receiving for CAN frames from the interface according to the configured filter.
-</p><p>Each incoming socket is associated with one of the available transport protocols, to which incoming messages are transmitted. In conjunction with the transport protocol is supported by a mechanism of the combining of pieces of requests, disparate while transferring.
-</p><p>Configuration dialog of the incoming socket is depicted in Figure 1.
+<h2><span class="mw-headline" id="Input_transports"><span class="mw-headline-number">1</span> Input transports</span></h2>
+<p>Configured and running input transport opens the server socket for the expectation of connection of the clients, besides initiative connection. In the case of the UNIX socket, the UNIX socket file is created. TCP and UNIX sockets are multi-stream, ie when the client connects to a socket of these type, the client socket  and the new stream in which the client is served are created. Server socket in this moment switches to the waiting for the request from the new client. Thus the parallel service of the clients is achieved. RAWCAN socket realize receiving for CAN frames from the interface according to the configured filter.
+</p><p>Each input socket is associated with one of the available transport protocols, to which input messages are transmitted. In conjunction with the transport protocol is supported by a mechanism of the combining of pieces of requests, disparate while transferring.
+</p><p>Configuration dialog of the input socket is depicted in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="717" src="../files/Sockets_in.png" width="808" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the incoming socket.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="717" src="../files/Sockets_in.png" width="808" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the input socket.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
 <ul><li> State of the transport, namely: "Status", "Running", name of the database (containing the configuration) and list with information about the active connections.</li>
@@ -78,7 +78,7 @@
 <li> Keep alive requests. Close the connection after specified requests. Zero value for disable (not close ever).</li>
 <li> Keep alive timeout (sek.). Close the connection after no requests at specified timeout. Zero value for disable (not close ever).</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> We do not recommend disable the function by the TCP/IP network's properties does not guarantee notice the server about the connection disable, for example after power supply lost on the client. As result the opened client connections will left <span style="color: red">forever</span> and after its number achieve to the limit server will drop new connections!</dd></dl>
-<p>Features of the formation of addresses of incoming sockets are shown in the table below:
+<p>Features of the formation of addresses of input sockets are shown in the table below:
 </p>
 <table class="wikitable">
 
@@ -94,7 +94,7 @@ where:
 </p>
 <ul><li> address – Address, on which the socket is opened. It must be one of the addresses of the host. If nothing is specified, the socket will be available in all the host interfaces. There may be as symbolic as well as IP presentation of address.</li>
 <li> port – Network port, on which the socket is opened. Indication of the character name of the port (according to /etc/services) is available.</li>
-<li> mode – mode of working of the incoming socket:
+<li> mode – mode of working of the input socket:
 <ul><li> '0' — Force closing the connection after the session reception-response.</li>
 <li> '1' — Do not close, only by KeepAlive parameters.</li>
 <li> '2' — Initiative connection. Enables mode for initiative the input transport connection to remote host (the address instead of locale) and go to waiting for requests from the host. Value "Keep alive timeout (sek.)" uses as timeout for the transport reconnection by activity lack, for restoring possible the connection lose.<br /></li></ul></li></ul>
@@ -134,11 +134,11 @@ where:
 <p>Example: "<i>UNIX:/tmp/oscada:1</i>" — UNIX-socket is available through the file "/tmp/oscada" and it doesn't close the connection.
 </p>
 </td></tr></table>
-<h2><span class="mw-headline" id="Outgoing_transports"><span class="mw-headline-number">2</span> Outgoing transports</span></h2>
-<p>Configured and running outgoing transport opens a connection to the specified server. In the case of destroying of the connection, outgoing transport is disconnected. In order to resume the connection transport must be re-run.
-</p><p>Main tab of the configuration page of outgoing socket is shown in Fig.2.
+<h2><span class="mw-headline" id="Output_transports"><span class="mw-headline-number">2</span> Output transports</span></h2>
+<p>Configured and running output transport opens a connection to the specified server. In the case of destroying of the connection, output transport is disconnected. In order to resume the connection transport must be re-run.
+</p><p>Main tab of the configuration page of output socket is shown in Fig.2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:663px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="542" src="../files/Sockets_out.png" width="661" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of the outgoing socket.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:663px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="542" src="../files/Sockets_out.png" width="661" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of the output socket.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
 <ul><li> The state of transport, namely: "Status", "Running" and the name of the database, containing the configuration.</li>
@@ -150,7 +150,7 @@ where:
 <ul><li> <i>conn</i> — maximum time for connection respond wait, in seconds;</li>
 <li> <i>next</i> — maximum time for continue respond wait, in seconds;</li>
 <li> <i>rep</i> — minimum repeat timeout, in seconds.</li></ul></li></ul>
-<p>The addresses of outgoing sockets of different types are formed as follows:
+<p>The addresses of output sockets of different types are formed as follows:
 </p>
 <table class="wikitable">
 

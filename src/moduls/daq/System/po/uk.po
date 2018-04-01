@@ -234,10 +234,10 @@ msgid "Table of system parameters"
 msgstr "Таблиця системних параметрів"
 
 msgid "Acquisition schedule"
-msgstr "Планування опитування"
+msgstr "Планування збору"
 
 msgid "Priority of the acquisition task"
-msgstr "Пріоритет задачі отримання даних"
+msgstr "Пріоритет задачі збору даних"
 
 msgid "Standard"
 msgstr "Стандартний"

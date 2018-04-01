@@ -79,12 +79,12 @@
 <dd>2. Interfaces — contains 23 objects necessary for the conduct of network interfaces of agents (the number of interfaces, the size of MTU, the rate of transmission, physical addresses, etc.).</dd>
 <dd>3. AT (3 objects) — are responsible for the broadcast address. No longer used. Was included in the MIB I. In SNMP v2 this information was transferred to the MIB for the relevant protocols.</dd>
 <dd>4. IP (42 objects) — data on the passing IP packets (number of requests, responses, offcast packages).</dd>
-<dd>5. ICMP (26 objects) — information about control messages (incoming/outgoing messages, errors, etc.).</dd>
+<dd>5. ICMP (26 objects) — information about control messages (input/output messages, errors, etc.).</dd>
 <dd>6. TCP (19) — all that relates to the same-name transport protocol (algorithms, constants, connections, open ports, etc.).</dd>
-<dd>7. UDP (6) — the same one for UDP protocol (incoming/outgoing datagram, ports, errors).</dd>
+<dd>7. UDP (6) — the same one for UDP protocol (input/output datagram, ports, errors).</dd>
 <dd>8. EGP (20) — data about the traffic Exterior Gateway Protocol (used by routers, object stores information about the received/sent/dropped frames).</dd>
 <dd>9. Transmission — is reserved for specific MIB.</dd>
-<dd>10. SNMP (29) — statistics on SNMP: incoming/outgoing packets, limiting package size, errors, data on the process request, and much more.</dd></dl>
+<dd>10. SNMP (29) — statistics on SNMP: input/output packets, limiting package size, errors, data on the process request, and much more.</dd></dl>
 <h3><span class="mw-headline" id="Addressing"><span class="mw-headline-number">1.2</span> Addressing</span></h3>
 <p>Each of the root alias appears in the form of a tree growing down. For example, to the address of the administrator you can contact by the means of the way: "system.sysContact.0", to the time of the system: "system.sysUpTime.0", to the description of the system (version, kernel and other information about the OS): "system.sysDescr.0". On the other hand, the same data can be specified in the point notation. So, "system.sysUpTime.0" value corresponds to "1.3.0", because "system" has an index "1" in groups of MIB II, and "sysUpTime" — "3" in the hierarchy of the group "system". Zero at the end of the path indicates the scalar type of data storage. During the work the symbolic names of the objects are not used, that is, if the manager asks the agent the contents of the parameter "system.sysDescr.0", then in the query string the link to the object will be converted to "1.1.0", and will not be handed over "as is".
 </p><p>In general, there are several ways to write the addresses of MIB-variable:

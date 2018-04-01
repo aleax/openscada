@@ -49,21 +49,21 @@
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#Incoming_transports"><span class="tocnumber">1</span> <span class="toctext">Incoming transports</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#Outgoing_transports"><span class="tocnumber">2</span> <span class="toctext">Outgoing transports</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#Input_transports"><span class="tocnumber">1</span> <span class="toctext">Input transports</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Output_transports"><span class="tocnumber">2</span> <span class="toctext">Output transports</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#Certificates_and_keys"><span class="tocnumber">3</span> <span class="toctext">Certificates and keys</span></a></li>
 </ul>
 </div>
 
-<p>The module SSL of the transport provides the support of transport based on secure sockets layer (SSL)  into the system. In the basis of the module there is the library <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a>. Incoming and outgoing transports of protocols SSLv3 and TLSv1 are supported.
-</p><p>It is possible to add new incoming and outgoing transports through the transport subsystem configuration in any configurator of OpenSCADA system.
+<p>The module SSL of the transport provides the support of transport based on secure sockets layer (SSL)  into the system. In the basis of the module there is the library <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a>. Input and output transports of protocols SSLv3 and TLSv1 are supported.
+</p><p>It is possible to add new input and output transports through the transport subsystem configuration in any configurator of OpenSCADA system.
 </p>
-<h2><span class="mw-headline" id="Incoming_transports"><span class="mw-headline-number">1</span> Incoming transports</span></h2>
-<p>The configured and running incoming transport opens server SSL-socket for the expectation of connection of the clients. SSL-socket is a multi-stream, i.e. when the client connects, the client SSL-connection and a new stream in which the client is served are created. Server SSL-socket in this moment switches to the waiting for the request from the new client. Thus the parallel service of the clients is achieved.
-</p><p>Each incoming transport is necessarily associated with one of the available transport protocols, to which incoming messages are transmitted. In conjunction with the transport protocol is supported by a mechanism of the combining of pieces of requests, disparate while transferring.
-</p><p>Configuration dialog of the incoming SSL-transport is depicted in Figure 1.
+<h2><span class="mw-headline" id="Input_transports"><span class="mw-headline-number">1</span> Input transports</span></h2>
+<p>The configured and running input transport opens server SSL-socket for the expectation of connection of the clients. SSL-socket is a multi-stream, i.e. when the client connects, the client SSL-connection and a new stream in which the client is served are created. Server SSL-socket in this moment switches to the waiting for the request from the new client. Thus the parallel service of the clients is achieved.
+</p><p>Each input transport is necessarily associated with one of the available transport protocols, to which input messages are transmitted. In conjunction with the transport protocol is supported by a mechanism of the combining of pieces of requests, disparate while transferring.
+</p><p>Configuration dialog of the input SSL-transport is depicted in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in.png"><img class="thumbimage" height="717" src="../files/SSL_in.png" width="808" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the incoming SSL-transport.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in.png"><img class="thumbimage" height="717" src="../files/SSL_in.png" width="808" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the input SSL-transport.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
 <ul><li> State of transport, namely: "Status", "Running", name of the database (containing the configuration) and list with information about the active connections.</li>
@@ -80,11 +80,11 @@
 <li> Keep alive timeout, seconds. Close the connection after no requests at specified timeout. Zero value for disable (not close ever).</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> We do not recommend disable the function by the TCP/IP network's properties does not guarantee notice the server about the connection disable, for example after power supply lost on the client. As result the opened client connections will left <span style="color: red">forever</span> and after its number achieve to the limit server will drop new connections!</dd></dl>
 <ul><li> Transport's tasks priority.</li></ul>
-<h2><span class="mw-headline" id="Outgoing_transports"><span class="mw-headline-number">2</span> Outgoing transports</span></h2>
-<p>Configured and running outgoing transport opens the SSL connection to the specified server. In the case of destroying of the connection, outgoing transport is disconnected. In order to resume the connection transport must be re-run.
-</p><p>Main tab of the configuration page of outgoing SSL-transport is shown in Fig.2.
+<h2><span class="mw-headline" id="Output_transports"><span class="mw-headline-number">2</span> Output transports</span></h2>
+<p>Configured and running output transport opens the SSL connection to the specified server. In the case of destroying of the connection, output transport is disconnected. In order to resume the connection transport must be re-run.
+</p><p>Main tab of the configuration page of output SSL-transport is shown in Fig.2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:714px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out.png"><img class="thumbimage" height="678" src="../files/SSL_out.png" width="712" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of the outgoing SSL-transport.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:714px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out.png"><img class="thumbimage" height="678" src="../files/SSL_out.png" width="712" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of the output SSL-transport.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
 <ul><li> The state of transport, namely: "Status", "Running" and the name of the database, containing the configuration.</li>
@@ -97,7 +97,7 @@
 <li> Certificates, private SSL key and password of private SSL key.</li>
 <li> Default timeout for connection and respond wait, separated.</li></ul>
 <h2><span class="mw-headline" id="Certificates_and_keys"><span class="mw-headline-number">3</span> Certificates and keys</span></h2>
-<p>For a valid module work certificates and private keys are required. In the case of the incoming SSL-transport (the server) they are compulsory. In the case of outgoing SSL-transport they can not be even installed though their using is desirable.
+<p>For a valid module work certificates and private keys are required. In the case of the input SSL-transport (the server) they are compulsory. In the case of output SSL-transport they can not be even installed though their using is desirable.
 </p><p>The simplest configuration of the certificate is self-subscription certificate and private key. The following describes how to create them using the tool <b>openssl</b>:
 </p>
 <pre style="white-space: pre-wrap;">

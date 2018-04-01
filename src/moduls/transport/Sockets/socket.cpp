@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.8.2"
+#define MOD_VER		"2.8.3"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -411,7 +411,7 @@ void TSocketIn::check( )
     try {
 	//Check for activity for initiative mode
 	if(mode() == 2 && (toStart() || startStat()) && (!startStat() || time(NULL) > (lastConn()+keepAliveTm()))) {
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Restart by no ingoing activity to '%s'."), addr().c_str());
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Restart by no input activity to '%s'."), addr().c_str());
 	    if(startStat()) stop();
 	    start();
 	}

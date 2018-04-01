@@ -234,7 +234,7 @@ msgid "Table of system parameters"
 msgstr "Таблица системных параметров"
 
 msgid "Acquisition schedule"
-msgstr "Планирование опроса"
+msgstr "Планирование сбора"
 
 msgid "Priority of the acquisition task"
 msgstr "Приоритет задачи получения данных"

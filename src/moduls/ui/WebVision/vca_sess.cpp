@@ -220,7 +220,9 @@ void VCASess::postReq( SSess &ses )
 	mod->cntrIfCmd(req, ses);
     }
     else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().postReq(ses);
-    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/html;charset="+Mess->charset());
+
+    ses.page = mod->pgCreator(ses.prt, string("<div class='error'>")+_("No a content.")+"</div>\n", "204 No Content");
+    //ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/html;charset="+Mess->charset());
 }
 
 void VCASess::objCheck( const string &rootId, const string &wPath )
@@ -314,6 +316,28 @@ void VCAFormEl::getReq( SSess &ses )
     else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource isn't found"))+"</div>\n", "404 Not Found");
 }
 
+void VCAFormEl::postReq( SSess &ses )
+{
+    if(type == F_BUTTON && btMode == FBT_LOAD && ses.cnt.size()) {
+	string fHead = TSYS::strLine(fCtx, 0);
+	int off = 0;
+	string	fTmpl	= TSYS::strParse(fHead, 0, "|", &off),
+		fTitle	= TSYS::strParse(fHead, 0, "|", &off),
+		fDefFile= TSYS::strParse(fHead, 0, "|", &off),
+		fMime	= TSYS::strParse(fHead, 0, "|", &off),
+		fRealFile = ses.cnt[0].attr("Content-Disposition");
+	size_t tPos = fRealFile.find("filename=\"");
+	fRealFile = (tPos != string::npos) ? fRealFile.substr(tPos+10, fRealFile.find("\"",tPos+10)-(tPos+10)) : fDefFile;
+	if(ses.cnt[0].attr("Content-Type").size())	fMime = ses.cnt[0].attr("Content-Type");
+
+	XMLNode req("set");
+	req.setAttr("path", ses.url+"/%2fserv%2fattr")->setText(ses.cnt[0].text());
+	req.childAdd("el")->setAttr("id","value")->setText(fTmpl+"|"+fTitle+"|"+fRealFile+"|"+fMime+"\n"+ses.cnt[0].text());
+	req.childAdd("el")->setAttr("id","event")->setText("ws_BtLoad");
+	mod->cntrIfCmd(req, ses);
+    }
+}
+
 void VCAFormEl::setAttrs( XMLNode &node, const SSess &ses )
 {
     for(unsigned iA = 0; iA < node.childSize(); iA++) {
@@ -327,7 +351,7 @@ void VCAFormEl::setAttrs( XMLNode &node, const SSess &ses )
 		if(type == F_BUTTON) btMode = s2i(reqEl->text());
 		break;
 	    case A_FormElValue:
-		if(type == F_BUTTON && btMode == FBT_SAVE && (fCtx=reqEl->text()).size())
+		if(type == F_BUTTON && (btMode == FBT_LOAD || btMode == FBT_SAVE) && (fCtx=reqEl->text()).size())
 		    reqEl->setText(TSYS::strLine(fCtx,0));
 		break;
 	}

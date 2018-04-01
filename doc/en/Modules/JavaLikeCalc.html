@@ -331,7 +331,7 @@ rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // r
 <li> <i>string path2sep( string sep = "." );</i> — converts path into this string to separated by <i>sep</i> string.</li>
 <li> <i>string trim( string cfg = " \n\t\r" );</i> — trims the string at the begin and the end for the symbols <i>cfg</i>.</li></ul></dd></dl>
 <p><br />
-For access to <a href="../User_API.html" title="Special:MyLanguage/Documents/User API">the system objects(nodes) of OpenSCADA</a> the corresponding object is provided which is created simply by specifying the enter point "SYS" of the root object OpenSCADA, and then with the point separator the sub-objects in accordance with the hierarchy are specified. For example, the call of the request function over the outgoing transport is carried out as follows: <b>SYS.Transport.Sockets.out_testModBus.messIO(Special.FLibSYS.strEnc2Bin("15 01 00 00 00 06 01 03 00 00 00 05"));</b>.
+For access to <a href="../User_API.html" title="Special:MyLanguage/Documents/User API">the system objects(nodes) of OpenSCADA</a> the corresponding object is provided which is created simply by specifying the enter point "SYS" of the root object OpenSCADA, and then with the point separator the sub-objects in accordance with the hierarchy are specified. For example, the call of the request function over the output transport is carried out as follows: <b>SYS.Transport.Sockets.out_testModBus.messIO(Special.FLibSYS.strEnc2Bin("15 01 00 00 00 06 01 03 00 00 00 05"));</b>.
 </p>
 <h3><span class="mw-headline" id="Examples_of_programs_on_this_language"><span class="mw-headline-number">1.6</span> Examples of programs on this language</span></h3>
 <p>Here are some examples of programs on the Java-like language:

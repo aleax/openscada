@@ -107,10 +107,10 @@ msgid "Protocol's object"
 msgstr "Об'єкт протоколу"
 
 msgid "Disabled. "
-msgstr "Виключено. "
+msgstr "Вимкнено. "
 
 msgid "Enabled. "
-msgstr "Включено. "
+msgstr "Ввімкнено. "
 
 msgid "Modified, re-enable to apply! "
 msgstr "Модифіковано, переувімкнути для застосування! "
@@ -129,7 +129,7 @@ msgid "Status"
 msgstr "Стан"
 
 msgid "Enabled"
-msgstr "Включено"
+msgstr "Ввімкнено"
 
 msgid "DB"
 msgstr "БД"

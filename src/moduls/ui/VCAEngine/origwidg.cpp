@@ -427,9 +427,10 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
     else if((cfg.flgGlob()&Attr::Active) && ((cfg.id() == "view" && cfg.owner()->attrAt("elType").at().getI() == F_LINE_ED) ||
 					     (cfg.id() == "mode" && cfg.owner()->attrAt("elType").at().getI() == F_BUTTON)))
     {
+	unsigned mdfSt = cfg.owner()->attrAt("value").at().modif();
 	TFld::Type	ntp = TFld::String;
 	int		flg = TFld::TransltText|Attr::Mutable;
-	Attr::SelfAttrFlgs	sflg = cfg.owner()->attrAt("value").at().flgSelf();
+	Attr::SelfAttrFlgs sflg = cfg.owner()->attrAt("value").at().flgSelf();
 	string		val = cfg.owner()->attrAt("value").at().getS();
 	string		cfgTmpl = cfg.owner()->attrAt("value").at().cfgTempl();
 	string		cfgVal = cfg.owner()->attrAt("value").at().cfgVal();
@@ -456,6 +457,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	cfg.owner()->attrAt("value").at().setS(val);
 	cfg.owner()->attrAt("value").at().setCfgTempl(cfgTmpl);
 	cfg.owner()->attrAt("value").at().setCfgVal(cfgVal);
+	cfg.owner()->attrAt("value").at().setModif(mdfSt);	//!!!! Restore the original modification state
     }
 
     return Widget::attrChange(cfg, prev);

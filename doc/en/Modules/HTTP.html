@@ -51,7 +51,7 @@
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Authentication"><span class="tocnumber">1</span> <span class="toctext">Authentication</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Modules_of_the_user_WEB-interface"><span class="tocnumber">2</span> <span class="toctext">Modules of the user WEB-interface</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Outgoing_requests_function.27s_API"><span class="tocnumber">3</span> <span class="toctext">Outgoing requests function's API</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Output_requests_function.27s_API"><span class="tocnumber">3</span> <span class="toctext">Output requests function's API</span></a></li>
 <li class="toclevel-1 tocsection-4"><a href="#User_programming_API"><span class="tocnumber">4</span> <span class="toctext">User programming API</span></a></li>
 </ul>
 </div>
@@ -109,8 +109,8 @@
 <dd><i>iprt</i> — pointer to an input part object of the protocol.</dd></dl></dd></dl>
 <p>Then, in the case of a HTTP GET request, the function HTTP_GET or HttpGet will be called, and in the case of the POST request, the function HTTP_POST or HttpPost will be called in the appropriate UI module.
 </p>
-<h2><span class="mw-headline" id="Outgoing_requests_function.27s_API"><span class="mw-headline-number">3</span> Outgoing requests function's API</span></h2>
-<p>The outgoing function (<a class="external" href="http://oscada.org/wiki/Documents/Program_manual#Subsystem_.22Transports.22_.28SYS.Transport.29" title="Documents/Program manual">messIO()</a>) of API operate by HTTP-request's content which wrapped to XML-packages. The request structure is:
+<h2><span class="mw-headline" id="Output_requests_function.27s_API"><span class="mw-headline-number">3</span> Output requests function's API</span></h2>
+<p>The output function (<a class="external" href="http://oscada.org/wiki/Documents/Program_manual#Subsystem_.22Transports.22_.28SYS.Transport.29" title="Documents/Program manual">messIO()</a>) of API operate by HTTP-request's content which wrapped to XML-packages. The request structure is:
 </p>
 <pre style="white-space: pre-wrap;">
 &lt;req Host="host" URI="uri"&gt;

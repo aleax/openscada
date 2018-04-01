@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 10:52+0200\n"
+"POT-Creation-Date: 2018-04-01 13:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,13 +26,10 @@ msgstr ""
 msgid "Acquisition schedule"
 msgstr ""
 
-msgid "Gather task priority"
+msgid "Priority of the acquisition task"
 msgstr ""
 
-msgid "Modbus protocol"
-msgstr ""
-
-msgid "TCP/IP;RTU;ASCII"
+msgid "ModBus protocol"
 msgstr ""
 
 msgid "Transport address"
@@ -41,25 +38,25 @@ msgstr ""
 msgid "Destination node"
 msgstr ""
 
-msgid "Data fragments merge"
+msgid "Merging of the data fragments"
 msgstr ""
 
-msgid "Use multi-items write functions (15,16)"
+msgid "Using the multi-items writing functions (15,16)"
 msgstr ""
 
 msgid "Asynchronous write"
 msgstr ""
 
-msgid "Connection timeout (ms)"
+msgid "Timeout of connection, milliseconds"
 msgstr ""
 
-msgid "Restore timeout, seconds"
+msgid "Timeout of restore, seconds"
 msgstr ""
 
 msgid "Request tries"
 msgstr ""
 
-msgid "Maximum request block size (bytes)"
+msgid "Maximum size of the request block, bytes"
 msgstr ""
 
 msgid "Standard"
@@ -87,7 +84,7 @@ msgid "Task terminated! "
 msgstr ""
 
 #, c-format
-msgid "Connection error. Restoring in %.6g s."
+msgid "Error of connection. Restoring in %.6g s."
 msgstr ""
 
 msgid "Acquisition. "
@@ -102,42 +99,42 @@ msgid "Next acquisition by the cron '%s'. "
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, %g coils. Errors of connection %g, of respond %g."
+msgid "Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, %g coils. Errors of connection %g, of response %g."
 msgstr ""
 
 #, c-format
-msgid "DAQ.%s.%s: connect to data source: %s."
+msgid "DAQ.%s.%s: connection to data source: %s."
 msgstr ""
 
 msgid "STOP"
 msgstr ""
 
-msgid "10:Connection error or no response."
+msgid "10:Error of connection or no response."
 msgstr ""
 
 msgid "4:Server failure."
 msgstr ""
 
-msgid "15:Response PDU size error."
+msgid "15:Error in size of response PDU."
 msgstr ""
 
 msgid "OK"
 msgstr ""
 
 msgid ""
-"Merge not adjacent fragments of registers to single block for request.\n"
-"Attention! Some devices don't support accompany request wrong registers into single block."
+"Merge non-adjacent fragments of registers for request in a single block.\n"
+"WARNING! Some devices do not support the passing query of wrong registers in one block."
 msgstr ""
 
 msgid ""
-"Individual connection timeout for device requested by the task.\n"
-"For zero value used generic connection timeout from used output transport."
+"Individual connection timeout for the device polled by this task.\n"
+"For zero value, the total connection timeout is used from the used output transport."
 msgstr ""
 
-msgid "11:Value not gathered."
+msgid "11:No value received."
 msgstr ""
 
-msgid "Error calculate template."
+msgid "Error of the calculation template."
 msgstr ""
 
 msgid "1:Parameter disabled."
@@ -147,23 +144,23 @@ msgid "2:Acquisition stopped."
 msgstr ""
 
 msgid ""
-"Attributes configuration list. List must be written by lines in format: \"{dt}:{numb}:{rw}:{id}:{name}\".\n"
+"Attributes configuration list. List must be written by lines in the format: \"{dt}:{numb}[:{rw}[:{id}[:{name}]]]\".\n"
 "Where:\n"
 "  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input register[4], CI-input coil[2]);\n"
-"       R and RI can be expanded by suffixes:\n"
+"       R and RI can be expanded by the suffixes:\n"
 "         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, s-String;\n"
-"       Start from symbol '#' for comment line;\n"
-"  numb - ModBus device's data address (dec, hex or octal) [0...65535];\n"
+"       Start from the symbol '#' for the commented line;\n"
+"  numb - ModBus data address of the device (dec, hex or octal) [0...65535];\n"
 "  rw - read/write mode (r-read; w-write; rw-readwrite);\n"
-"  id - created attribute identifier;\n"
-"  name - created attribute name.\n"
+"  id - identifier of the created attribute;\n"
+"  name - name of the created attribute.\n"
 "Examples:\n"
 "  \"R:0x300:rw:var:Variable\" - register access;\n"
-"  \"C:100:rw:var1:Variable 1\" - coin access;\n"
-"  \"R_f:200:r:float:Float\" - get float from registers 200 and 201;\n"
-"  \"R_i4:400,300:r:int32:Int32\" - get int32 from registers 400 and 300;\n"
-"  \"R_b10:25:r:rBit:Reg bit\" - get bit 10 from register 25;\n"
-"  \"R_s:15,20:r:str:Reg blk\" - get string, registers block, from register 15 and size 20."
+"  \"C:100:rw:var1:Variable 1\" - coil access;\n"
+"  \"R_f:200:r:float:Float\" - get float from the registers 200 and 201;\n"
+"  \"R_i4:400,300:r:int32:Int32\" - get int32 from the registers 400 and 300;\n"
+"  \"R_b10:25:r:rBit:Reg bit\" - get the bit 10 from the register 25;\n"
+"  \"R_s:15,20:r:str:Reg blk\" - get string (registers block) from the register 15 and the size 20."
 msgstr ""
 
 msgid "Template configuration"
@@ -173,23 +170,23 @@ msgid "Parameters"
 msgstr ""
 
 msgid ""
-"ModBus address in format: \"{dt}:{numb}:{rw}\".\n"
+"ModBus address in the format: \"{dt}:{numb}[:{rw}]\".\n"
 "Where:\n"
 "  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input register[4], CI-input coil[2]);\n"
-"       R and RI can be expanded by suffixes:\n"
+"       R and RI can be expanded by the suffixes:\n"
 "         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, s-String;\n"
-"  numb - ModBus device's data address (dec, hex or octal) [0...65535];\n"
+"  numb - ModBus data address of the device (dec, hex or octal) [0...65535];\n"
 "  rw - read/write mode (r-read; w-write; rw-readwrite).\n"
 "Examples:\n"
 "  \"R:0x300:rw\" - register access;\n"
-"  \"C:100:rw\" - coin access;\n"
-"  \"R_f:200:r\" - get float from registers 200 and 201;\n"
-"  \"R_i4:400,300:r\" - get int32 from registers 400 and 300;\n"
-"  \"R_b10:25:r\" - get bit 10 from register 25;\n"
-"  \"R_s:15,20:r\" - get string, registers block, from register 15 and size 20."
+"  \"C:100:rw\" - coil access;\n"
+"  \"R_f:200:r\" - get float from the registers 200 and 201;\n"
+"  \"R_i4:400,300:r\" - get int32 from the registers 400 and 300;\n"
+"  \"R_b10:25:r\" - get the bit 10 from the register 25;\n"
+"  \"R_s:15,20:r\" - get string (registers block) from the register 15 and the size 20."
 msgstr ""
 
-msgid "Parameter id error."
+msgid "Error of parameter ID."
 msgstr ""
 
 msgid "Name"
@@ -219,7 +216,7 @@ msgstr ""
 msgid "Data;Gateway node;Gateway net"
 msgstr ""
 
-msgid "Calculate data period, seconds"
+msgid "Period of the data calculation, seconds"
 msgstr ""
 
 msgid "Translate program"
@@ -232,9 +229,6 @@ msgid "To transport"
 msgstr ""
 
 msgid "To protocol"
-msgstr ""
-
-msgid "RTU;ASCII;TCP/IP"
 msgstr ""
 
 msgid "To address"
@@ -252,45 +246,45 @@ msgstr ""
 msgid "Real position"
 msgstr ""
 
-msgid "Search and create new node error."
+msgid "Error of searching and a new node creation."
 msgstr ""
 
-msgid "13:Error server respond"
+msgid "13:Error of the server response"
 msgstr ""
 
-msgid "Not full respond"
+msgid "Not full response"
 msgstr ""
 
 msgid "14:Device error: "
 msgstr ""
 
-msgid "13:Error respond: Too short."
+msgid "13:Error of the response: Too short."
 msgstr ""
 
-msgid "13:Error respond: CRC check error."
+msgid "13:Error of the response: CRC error."
 msgstr ""
 
-msgid "13:Error respond: Error format."
+msgid "13:Error of the response: Format error."
 msgstr ""
 
-msgid "13:Error respond: LRC check error."
+msgid "13:Error of the response: LRC error."
 msgstr ""
 
 #, c-format
-msgid "Protocol '%s' error."
+msgid "Error of the protocol '%s'."
 msgstr ""
 
-msgid "13:Error respond"
+msgid "13:Error of the response"
 msgstr ""
 
 #, c-format
 msgid "1:%02X:Function is not supported."
 msgstr ""
 
-msgid "2:Requested address not allow or request area too long."
+msgid "2:Request address is not allowed or the query range is too large."
 msgstr ""
 
-msgid "3:Illegal data value into request."
+msgid "3:Illegal value of the data in the request."
 msgstr ""
 
 msgid "5:Request requires too long time for execute."
@@ -299,7 +293,7 @@ msgstr ""
 msgid "6:Server is busy."
 msgstr ""
 
-msgid "7:Program function is error. By request functions 13 or 14."
+msgid "7:Error in program function. Requested by the function 13 or 14."
 msgstr ""
 
 msgid "10:Gateway problem."
@@ -343,19 +337,19 @@ msgid "Function stop flag"
 msgstr ""
 
 #, c-format
-msgid "Coil(%s) %d already registered for IO#%d. IO#%d will be disabled for process coil %d!"
+msgid "Coil(%s) %d already registered for IO#%d. IO#%d will be disabled for processing the coil %d!"
 msgstr ""
 
 #, c-format
-msgid "Register(%s) %d already registered for IO#%d. IO#%d will be disabled for process register %d!"
+msgid "Register(%s) %d already registered for IO#%d. IO#%d will be disabled for processing the register %d!"
 msgstr ""
 
 #, c-format
-msgid "ModBUS data type '%s' error!"
+msgid "Error of the ModBUS data type '%s'!"
 msgstr ""
 
 #, c-format
-msgid "Compile function by language '%s' error: %s"
+msgid "Error compiling function on the language '%s': %s"
 msgstr ""
 
 msgid "Disabled. "
@@ -370,14 +364,14 @@ msgstr ""
 #, c-format
 msgid ""
 "Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g, register inputs %.4g, coil inputs %.4g.\n"
-"Writed registers %.4g, coils %.4g."
+"Wrote registers %.4g, coils %.4g."
 msgstr ""
 
 #, c-format
 msgid "Requests %.4g."
 msgstr ""
 
-msgid "Calculate node's function error."
+msgid "Error calculation the node function."
 msgstr ""
 
 msgid "Node: "
@@ -405,23 +399,23 @@ msgid "IO"
 msgstr ""
 
 msgid ""
-"For \"Id\" field provide specific ModBus data form:\n"
-"  \"R{N}[w]\", \"RI{N}[w]\" - specific register (and input) form, can expanded by suffixes:\n"
+"For the \"Id\" field, a specific ModBus data record form is provided:\n"
+"  \"R{N}[w]\", \"RI{N}[w]\" - specific register (and input) form, can be expanded by the suffixes:\n"
 "                \"i\"-Int32, \"f\"-Float, \"d\"-Double, \"s\"-String;\n"
-"  \"R:{N}:[w]\", \"RI:{N}:[w]\" - classic register (and input) form, can expanded by suffixes:\n"
+"  \"R:{N}[:w]\", \"RI:{N}[:w]\" - classic register (and input) form, can be expanded by the suffixes:\n"
 "                \"i4\"-Int32, \"i8\"-Int64, \"f\"-Float, \"d\"-Double, \"s\"-String;\n"
-"  \"C{N}[w]\", \"CI{N}[w]\", \"C:{N}:[w]\", \"CI:{N}:[w]\" - coil (and input).\n"
+"  \"C{N}[w]\", \"CI{N}[w]\", \"C:{N}[:w]\", \"CI:{N}[:w]\" - coil (and input).\n"
 "Where:\n"
-"  {N} - ModBus device's data address (dec, hex or octal) [0...65535];\n"
-"  w   - optional symbol for writing allow indicate.\n"
+"  {N} - ModBus data address of the device (dec, hex or octal) [0...65535];\n"
+"  w   - optional character to indicate the writing capability.\n"
 "Examples:\n"
 "  \"R0x300w\" - register access;\n"
-"  \"C100w\" - coin access, allow for write;\n"
-"  \"R_f200\" - get float from registers 200 and 201;\n"
-"  \"R_i400,300\" - get int32 from registers 300 and 400;\n"
-"  \"R_s15,20\" - get string, registers block, from register 15 and size 20;\n"
-"  \"R_i8:0x10:w\" - get and set int64 into registers [0x10-0x13];\n"
-"  \"R_d:0x20,0x30\" - get double float point (8 byte) from registers [0x20,0x30-0x32]."
+"  \"C100w\" - coil access;\n"
+"  \"R_f200\" - get float from the registers 200 and 201;\n"
+"  \"R_i400,300\" - get int32 from the registers 300 and 400;\n"
+"  \"R_s15,20\" - get string (registers block) from the register 15 and size 20;\n"
+"  \"R_i8:0x10:w\" - get and set int64 into the registers [0x10-0x13];\n"
+"  \"R_d:0x20,0x30\" - get double float point (8 byte) from the registers [0x20,0x30-0x32]."
 msgstr ""
 
 msgid "Type"
@@ -439,29 +433,26 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-msgid "Disable node for this operation"
+msgid "Turn off the node for this operation"
 msgstr ""
 
 msgid "New IO"
 msgstr ""
 
-msgid "Deleting lock attribute is not allowed."
+msgid "Deleting a locked attribute is not allowed."
 msgstr ""
 
-msgid "Changing locked attribute is not allowed."
+msgid "Changing a locked attribute is not allowed."
 msgstr ""
 
-msgid "Empty value is not valid."
-msgstr ""
-
-msgid "ModBUS"
+msgid "Empty value is not allowed."
 msgstr ""
 
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
+msgid "Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported."
 msgstr ""
 
-msgid "Allow realization of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols."
+msgid "Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported."
 msgstr ""

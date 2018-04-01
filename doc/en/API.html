@@ -71,15 +71,15 @@ The document is intended for programmers wishing to understand the architecture 
 <ul>
 <li class="toclevel-2 tocsection-31"><a href="#The_object_of_the_.22Transports.22_subsystem_.28TTransportS.29"><span class="tocnumber">6.1</span> <span class="toctext"><span>The object of the "Transports" subsystem (TTransportS)</span></span></a></li>
 <li class="toclevel-2 tocsection-32"><a href="#The_modular_object_of_the_transports.27_type_.28TTypeTransport.29"><span class="tocnumber">6.2</span> <span class="toctext"><span>The modular object of the transports' type (TTypeTransport)</span></span></a></li>
-<li class="toclevel-2 tocsection-33"><a href="#The_object_of_the_incoming_transports_.28TTransportIn.29"><span class="tocnumber">6.3</span> <span class="toctext"><span>The object of the incoming transports (TTransportIn)</span></span></a></li>
-<li class="toclevel-2 tocsection-34"><a href="#The_object_of_the_outgoing_transports_.28TTransportOut.29"><span class="tocnumber">6.4</span> <span class="toctext"><span>The object of the outgoing transports (TTransportOut)</span></span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#The_object_of_the_input_transports_.28TTransportIn.29"><span class="tocnumber">6.3</span> <span class="toctext"><span>The object of the input transports (TTransportIn)</span></span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#The_object_of_the_output_transports_.28TTransportOut.29"><span class="tocnumber">6.4</span> <span class="toctext"><span>The object of the output transports (TTransportOut)</span></span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-35"><a href="#Subsystem_.22Communication_interfaces.27_protocols.22_.28TProtocolS.29"><span class="tocnumber">7</span> <span class="toctext"><span>Subsystem "Communication interfaces' protocols" (TProtocolS)</span></span></a>
 <ul>
 <li class="toclevel-2 tocsection-36"><a href="#The_object_of_the_.22Communication_interfaces.27_protocols.22_subsystem_.28TProtocolS.29"><span class="tocnumber">7.1</span> <span class="toctext"><span>The object of the "Communication interfaces' protocols" subsystem (TProtocolS)</span></span></a></li>
 <li class="toclevel-2 tocsection-37"><a href="#The_modular_object_of_the_protocol_.28TProtocol.29"><span class="tocnumber">7.2</span> <span class="toctext"><span>The modular object of the protocol (TProtocol)</span></span></a></li>
-<li class="toclevel-2 tocsection-38"><a href="#The_object_of_the_incoming_protocol.27s_session_.28TProtocolIn.29"><span class="tocnumber">7.3</span> <span class="toctext"><span>The object of the incoming protocol's session (TProtocolIn)</span></span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#The_object_of_the_input_protocol.27s_session_.28TProtocolIn.29"><span class="tocnumber">7.3</span> <span class="toctext"><span>The object of the input protocol's session (TProtocolIn)</span></span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-39"><a href="#Subsystem_.22User_interfaces.22_.28TUIS.29"><span class="tocnumber">8</span> <span class="toctext">Subsystem "User interfaces" (TUIS)</span></a>
@@ -1379,12 +1379,12 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>virtual void getValsProc( TValBuf &amp;buf, int64_t beg, int64_t end );</i> — Function of the processing the request of the module to get the data.</li>
 <li> <i>virtual void setValsProc( TValBuf &amp;buf, int64_t beg, int64_t end, bool toAccum );</i> — Function of the processing the request of the module to set the data, through the accumulation <i>toAccum</i>.</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Transports.22_.28TTransportS.29"><span class="mw-headline-number">6</span> <span id="TTransportS" title="#TTransportS">Subsystem "Transports" (TTransportS)</span></span></h2>
-<p>"Transports" subsystem is represented by the TTransportS object, which contains modular objects of the transports' types TTypeTransport on the subsystem-level. Each type of transport contains objects TTransportIn of the incoming and TTransportOut of the outgoing transports. The overall structure of the subsystem is shown in Fig. 6.
+<p>"Transports" subsystem is represented by the TTransportS object, which contains modular objects of the transports' types TTypeTransport on the subsystem-level. Each type of transport contains objects TTransportIn of the input and TTransportOut of the output transports. The overall structure of the subsystem is shown in Fig. 6.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:293px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_tr_str.png"><img class="thumbimage" height="296" src="files/Oscada_subsys_tr_str.png" width="291" /></a>  <div class="thumbcaption">Fig. 6. Hierarchical structure of the subsystem "Transports".</div></div></div></div>
 <p>The root object of the "Transports" subsystem's module provides information about the specific type of module and about the external OpenSCADA hosts/stations. As part of the single module it can be implemented the own general-module functionality. In general, for all modules, the access methods for both: inbound and outbound transports of the specific module are contained.
-</p><p>The object of the incoming transport TTransportIn provides an interface to the implementation of the modular method of incoming transport.
-</p><p>The object of the outgoing transport TTransportOut provides an interface to the implementation of the modular method of outgoing transport.
+</p><p>The object of the input transport TTransportIn provides an interface to the implementation of the modular method of input transport.
+</p><p>The object of the output transport TTransportOut provides an interface to the implementation of the modular method of output transport.
 </p>
 <h3><span class="mw-headline" id="The_object_of_the_.22Transports.22_subsystem_.28TTransportS.29"><span class="mw-headline-number">6.1</span> <span id="TTransportS" title="#TTransportS">The object of the "Transports" subsystem (TTransportS)</span></span></h3>
 <table class="wikitable">
@@ -1415,19 +1415,19 @@ External hosts mode (enum — ExtHost::Mode):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>int subVer( );</i> — Subsystem's version.</li>
-<li> <i>void inTrList( vector&lt;string&gt; &amp;ls );</i> — Full list of incoming transports.</li>
-<li> <i>void outTrList( vector&lt;string&gt; &amp;ls );</i> — Full list of outgoing transports.</li>
+<li> <i>void inTrList( vector&lt;string&gt; &amp;ls );</i> — Full list of input transports.</li>
+<li> <i>void outTrList( vector&lt;string&gt; &amp;ls );</i> — Full list of output transports.</li>
 <li> <i>string extHostsDB( );</i> — Database for the storing the list of external hosts.</li>
 <li> <i>void extHostList( const string &amp;user, vector&lt;ExtHost&gt; &amp;list, bool andSYS = false, int upRiseLev = -1 );</i> — The <i>list</i> of external hosts for <i>user</i>, include system <i>andSYS</i> and the uprising level <i>upRiseLev</i> (-1 - starting from the host's entry level).</li>
 <li> <i>ExtHost extHostGet( const string &amp;user, const string &amp;id, bool andSYS = false );</i> — Getting the information object from the external host <i>id</i> on behalf of the user <i>user</i>, include system <i>andSYS</i> ( "*" — for the system hosts).</li>
-<li> <i>AutoHD&lt;TTransportOut&gt; extHost( TTransportS::ExtHost host, const string &amp;pref = "" );</i> — Creation - request of the outgoing transport to service the external host <i>host</i> with the prefix of the identification of the system node <i>pref</i>.</li>
+<li> <i>AutoHD&lt;TTransportOut&gt; extHost( TTransportS::ExtHost host, const string &amp;pref = "" );</i> — Creation - request of the output transport to service the external host <i>host</i> with the prefix of the identification of the system node <i>pref</i>.</li>
 <li> <i>void extHostSet( const ExtHost &amp;host, bool andSYS = false );</i> — Setting of the external host/station <i>host</i>, include system <i>andSYS</i>.</li>
 <li> <i>void extHostDel( const string &amp;user, const string &amp;id, bool andSYS = false );</i> — Deleting of the external host/station <i>id</i> on behalf of the user <i>user</i>, include system <i>andSYS</i> ( "*" — for the system hosts).</li>
 <li> <i>int cntrIfCmd( XMLNode &amp;node, const string &amp;senderPref, const string &amp;user = "" );</i> — Transfer of the control area request of the OpenSCADA <i>node</i> to the remote station.  </li>
 <li> <i>void subStart( );</i> — Start of the subsystem.</li>
 <li> <i>void subStop( );</i> — Stop of the subsystem.</li>
-<li> <i>TElem &amp;inEl( );</i> — DB structure of the incoming transports</li>
-<li> <i>TElem &amp;outEl( );</i> — DB structure of the outgoing transports</li>
+<li> <i>TElem &amp;inEl( );</i> — DB structure of the input transports</li>
+<li> <i>TElem &amp;outEl( );</i> — DB structure of the output transports</li>
 <li> <i>AutoHD&lt;TTypeTransport&gt; at( const string &amp;id ) const;</i> — Addressing/connection to the type of transport <i>id</i>.</li></ul>
 <h3><span class="mw-headline" id="The_modular_object_of_the_transports.27_type_.28TTypeTransport.29"><span class="mw-headline-number">6.2</span> <span id="TTypeTransport" title="#TTypeTransport">The modular object of the transports' type (TTypeTransport)</span></span></h3>
 <table class="wikitable">
@@ -1442,22 +1442,22 @@ External hosts mode (enum — ExtHost::Mode):
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>void inList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the incoming transports.</li>
-<li> <i>bool inPresent( const string &amp;name ) const;</i> — Check for an incoming transport presence.</li>
-<li> <i>void inAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the incoming transport.</li>
-<li> <i>void inDel( const string &amp;name, bool complete = false );</i> — Deleting of the incoming transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
-<li> <i>AutoHD&lt;TTransportIn&gt; inAt( const string &amp;name ) const;</i> — Connection to the incoming transport.</li>
-<li> <i>void outList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the outgoing transports.</li>
-<li> <i>bool outPresent( const string &amp;name ) const;</i> — Check for an outgoing transport presence.</li>
-<li> <i>void outAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the outgoing transport.</li>
-<li> <i>void outDel( const string &amp;name, bool complete = false );</i> — Deleting of the outgoing transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
-<li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;name ) const;</i> — Connection to the outgoing transport.</li>
+<ul><li> <i>void inList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the input transports.</li>
+<li> <i>bool inPresent( const string &amp;name ) const;</i> — Check for an input transport presence.</li>
+<li> <i>void inAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the input transport.</li>
+<li> <i>void inDel( const string &amp;name, bool complete = false );</i> — Deleting of the input transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
+<li> <i>AutoHD&lt;TTransportIn&gt; inAt( const string &amp;name ) const;</i> — Connection to the input transport.</li>
+<li> <i>void outList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the output transports.</li>
+<li> <i>bool outPresent( const string &amp;name ) const;</i> — Check for an output transport presence.</li>
+<li> <i>void outAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the output transport.</li>
+<li> <i>void outDel( const string &amp;name, bool complete = false );</i> — Deleting of the output transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
+<li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;name ) const;</i> — Connection to the output transport.</li>
 <li> <i>TTransportS &amp;owner( ) const;</i> — "Transports" subsystem - the owner of the transport's type.</li></ul>
 <p><b>Protected methods:</b>
 </p>
-<ul><li> <i>virtual TTransportIn *In( const string &amp;name, const string &amp;db );</i> — The modular method of the creating/opening of the new "incoming" transport.</li>
-<li> <i>virtual TTransportOut *Out( const string &amp;name, const string &amp;db );</i> — The modular method of the creating/opening of the new "outgoing" transport.</li></ul>
-<h3><span class="mw-headline" id="The_object_of_the_incoming_transports_.28TTransportIn.29"><span class="mw-headline-number">6.3</span> <span id="TTransportIn" title="#TTransportIn">The object of the incoming transports (TTransportIn)</span></span></h3>
+<ul><li> <i>virtual TTransportIn *In( const string &amp;name, const string &amp;db );</i> — The modular method of the creating/opening of the new "input" transport.</li>
+<li> <i>virtual TTransportOut *Out( const string &amp;name, const string &amp;db );</i> — The modular method of the creating/opening of the new "output" transport.</li></ul>
+<h3><span class="mw-headline" id="The_object_of_the_input_transports_.28TTransportIn.29"><span class="mw-headline-number">6.3</span> <span id="TTransportIn" title="#TTransportIn">The object of the input transports (TTransportIn)</span></span></h3>
 <table class="wikitable">
 
 <tr>
@@ -1466,7 +1466,7 @@ External hosts mode (enum — ExtHost::Mode):
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
-<td>By the objects of incoming transports of the subsystem's "Transports" modules.
+<td>By the objects of input transports of the subsystem's "Transports" modules.
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -1477,7 +1477,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>string dscr( );</i> — Transport's description.</li>
 <li> <i>string addr( ) const;</i> — Address.</li>
 <li> <i>string protocol( );</i> — Linked transport protocol.</li>
-<li> <i>virtual string getStatus( );</i> — Getting the status of the incoming transport.</li>
+<li> <i>virtual string getStatus( );</i> — Getting the status of the input transport.</li>
 <li> <i>bool toStart( );</i> — The sign "To start".</li>
 <li> <i>bool startStat( );</i> — The status "Running".</li>
 <li> <i>string DB( );</i> — Transport's DB address.</li>
@@ -1496,14 +1496,14 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>int logLen( );</i> — length of the IO log.</li>
 <li> <i>void setLogLen( int vl );</i> — set length of the IO log.</li>
 <li> <i>void pushLogMess( const string &amp;vl );</i> — push the message <i>vl</i> to the log in format "<b>{Message}\n{BinData}</b>".</li>
-<li> <i>TTypeTransport &amp;owner( ) const;</i> — Transport's type – the owner of the incoming transport.</li></ul>
+<li> <i>TTypeTransport &amp;owner( ) const;</i> — Transport's type – the owner of the input transport.</li></ul>
 <p><b>Protected methods:</b>
 </p>
 <ul><li> <i>string assTrO( const string &amp;addr );</i> — The assigned output transport creation with address <i>addr</i>.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
 <ul><li> <i>bool run_st;</i> — The sign "Run".</li></ul>
-<h3><span class="mw-headline" id="The_object_of_the_outgoing_transports_.28TTransportOut.29"><span class="mw-headline-number">6.4</span> <span id="TTransportOut" title="#TTransportOut">The object of the outgoing transports (TTransportOut)</span></span></h3>
+<h3><span class="mw-headline" id="The_object_of_the_output_transports_.28TTransportOut.29"><span class="mw-headline-number">6.4</span> <span id="TTransportOut" title="#TTransportOut">The object of the output transports (TTransportOut)</span></span></h3>
 <table class="wikitable">
 
 <tr>
@@ -1512,7 +1512,7 @@ External hosts mode (enum — ExtHost::Mode):
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
-<td>By the objects of outgoing transports of the subsystem's "Transports" modules.
+<td>By the objects of output transports of the subsystem's "Transports" modules.
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
@@ -1547,14 +1547,14 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>int logLen( );</i> — length of the IO log.</li>
 <li> <i>void setLogLen( int vl );</i> — set length of the IO log.</li>
 <li> <i>void pushLogMess( const string &amp;vl );</i> — push the message <i>vl</i> to the log in format "<b>{Message}\n{BinData}</b>".</li>
-<li> <i>TTypeTransport &amp;owner( ) const;</i> — Type of transport - the owner of outgoing transport.</li>
+<li> <i>TTypeTransport &amp;owner( ) const;</i> — Type of transport - the owner of output transport.</li>
 <li> <i>ResMtx &amp;reqRes( );</i> — The requesting resource, needs to global lock into protocols with fragments receiving.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
 <ul><li> <i>bool run_st;</i> — The sign "Running".</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Communication_interfaces.27_protocols.22_.28TProtocolS.29"><span class="mw-headline-number">7</span> <span id="TProtocolS" title="#TProtocolS">Subsystem "Communication interfaces' protocols" (TProtocolS)</span></span></h2>
-<p>Subsystem "Communication interfaces' protocols" is presented by the TProtocolS object, which contains modular objects of the separate protocols TProtocol on the a subsystem's level. Each protocol contains objects of the opened sessions of the incoming protocols TProtocolIn.
-</p><p>TProtocolS object provides an access to the both: the incoming and the outgoing protocols of the individual types of transport protocols. The inner side of outgoing protocol based on the steaming principle with the individual structure of the stream for each implementation of the protocol.
+<p>Subsystem "Communication interfaces' protocols" is presented by the TProtocolS object, which contains modular objects of the separate protocols TProtocol on the a subsystem's level. Each protocol contains objects of the opened sessions of the input protocols TProtocolIn.
+</p><p>TProtocolS object provides an access to the both: the input and the output protocols of the individual types of transport protocols. The inner side of output protocol based on the steaming principle with the individual structure of the stream for each implementation of the protocol.
 </p>
 <h3><span class="mw-headline" id="The_object_of_the_.22Communication_interfaces.27_protocols.22_subsystem_.28TProtocolS.29"><span class="mw-headline-number">7.1</span> <span id="TProtocolS" title="#TProtocolS">The object of the "Communication interfaces' protocols" subsystem (TProtocolS)</span></span></h3>
 <table class="wikitable">
@@ -1582,13 +1582,13 @@ External hosts mode (enum — ExtHost::Mode):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>virtual void itemListIn( vector&lt;string&gt; &amp;ls, const string &amp;curIt = "" );</i> — Items list of protocol for individual addressing into transport.</li>
-<li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — The list of open incoming sessions.</li>
-<li> <i>bool openStat( const string &amp;name ) const;</i> — Check for the openness of the incoming session with the specified name.</li>
-<li> <i>void open( const string &amp;name, TTransportIn *tr = NULL, const string &amp;sender = "" );</i> — Opening of the session on behalf of the incoming transport <i>tr</i>.</li>
-<li> <i>void close( const string &amp;name );</i> — Closing of the incoming session.</li>
-<li> <i>AutoHD&lt;TProtocolIn&gt; at( const string &amp;name ) const;</i> — Connecting to the open incoming sessions.</li>
+<li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — The list of open input sessions.</li>
+<li> <i>bool openStat( const string &amp;name ) const;</i> — Check for the openness of the input session with the specified name.</li>
+<li> <i>void open( const string &amp;name, TTransportIn *tr = NULL, const string &amp;sender = "" );</i> — Opening of the session on behalf of the input transport <i>tr</i>.</li>
+<li> <i>void close( const string &amp;name );</i> — Closing of the input session.</li>
+<li> <i>AutoHD&lt;TProtocolIn&gt; at( const string &amp;name ) const;</i> — Connecting to the open input sessions.</li>
 <li> <i>virtual void outMess( XMLNode &amp;io, TTransportOut &amp;tro );</i> — Sending the data in the XML tree <i>in</i> over the protocol and transport <i>tro</i>.</li></ul>
-<h3><span class="mw-headline" id="The_object_of_the_incoming_protocol.27s_session_.28TProtocolIn.29"><span class="mw-headline-number">7.3</span> <span id="TProtocolIn" title="#TProtocolIn">The object of the incoming protocol's session (TProtocolIn)</span></span></h3>
+<h3><span class="mw-headline" id="The_object_of_the_input_protocol.27s_session_.28TProtocolIn.29"><span class="mw-headline-number">7.3</span> <span id="TProtocolIn" title="#TProtocolIn">The object of the input protocol's session (TProtocolIn)</span></span></h3>
 <table class="wikitable">
 
 <tr>
@@ -1597,20 +1597,20 @@ External hosts mode (enum — ExtHost::Mode):
 </td></tr>
 <tr>
 <td><b>Inherited:</b></td>
-<td>By the session objects of the incoming modules' protocol of the subsystem "Protocols".
+<td>By the session objects of the input modules' protocol of the subsystem "Protocols".
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TProtocolIn( const string &amp;name );</i> — Initializing constructor.</li>
-<li> <i>string name( );</i> — The name of the incoming session.</li>
-<li> <i>AutoHD&lt;TTransportIn&gt; &amp;srcTr( )</i> — The transport-source of the opening of the session of the incoming protocol.</li>
+<li> <i>string name( );</i> — The name of the input session.</li>
+<li> <i>AutoHD&lt;TTransportIn&gt; &amp;srcTr( )</i> — The transport-source of the opening of the session of the input protocol.</li>
 <li> <i>const string &amp;srcAddr( )</i> — The sender address; second line contains service part of the address for backward messages.</li>
 <li> <i>virtual unsigned waitReqTm( );</i> — A request waiting time on input transport (in milliseconds), after what call to the protocol with the empty message — the polling mode. Setting it to zero will disable the polling mode.</li>
-<li> <i>virtual void setSrcTr( TTransportIn *vl )</i> — Setting of the transport-source of the opening of the session of the incoming protocol.</li>
+<li> <i>virtual void setSrcTr( TTransportIn *vl )</i> — Setting of the transport-source of the opening of the session of the input protocol.</li>
 <li> <i>virtual void setSrcAddr( const string &amp;vl );</i> — Setting of the sender address.</li>
 <li> <i>int writeTo( const string &amp;data );</i> — Sending the messages <i>data</i> backward to the sender, into srcAddr().</li>
 <li> <i>virtual bool mess( const string &amp;request, string &amp;answer );</i> — Transfer of unstructured data to their processing by the protocol.</li>
-<li> <i>TProtocol &amp;owner( ) const;</i> — The protocol, the owner of incoming sessions.</li></ul>
+<li> <i>TProtocol &amp;owner( ) const;</i> — The protocol, the owner of input sessions.</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22User_interfaces.22_.28TUIS.29"><span class="mw-headline-number">8</span> Subsystem "User interfaces" (TUIS)</span></h2>
 <p>The subsystem "User Interfaces" is presented by the TUIS object, which contains modular objects of the TUI user interfaces' on the subsystem's level.
 </p>
@@ -2212,7 +2212,7 @@ Error values for the different data types (define):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Збільшити" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>
@@ -2247,8 +2247,8 @@ Where:
 <dd><i>06</i> — there is an access to read, and to write.</dd></dl>
 <pre style="white-space: pre-wrap;">
 &lt;branches id='br'&gt;
-  &lt;grp id='/br/in_' descr='Incoming transport' acs='04'/&gt;
-  &lt;grp id='/br/out_' descr='Outgoing transport' acs='04'/&gt;
+  &lt;grp id='/br/in_' descr='Input transport' acs='04'/&gt;
+  &lt;grp id='/br/out_' descr='Output transport' acs='04'/&gt;
 &lt;/branches&gt;
 </pre>
 <p>Actions over the group of elements coincide with the actions over the list of visual elements "list", which is described below.
@@ -3193,8 +3193,8 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <td>0
 </td></tr></table>
 <h3><span class="mw-headline" id="Tables_of_the_.22Transports.22_subsystem"><span class="mw-headline-number">17.3</span> Tables of the "Transports" subsystem</span></h3>
-<p>Subsystem "Transports" is divided into incoming and outgoing transports. For each type of transport there is its own table with its own structure. Table names, respectively: Transport_In and Transport_Out. Tables can be supplemented by fields, typical to the type of transport.
-</p><p><b>Table 14.</b> Structure of the incoming transport's table (Transport_in).
+<p>Subsystem "Transports" is divided into input and output transports. For each type of transport there is its own table with its own structure. Table names, respectively: Transport_In and Transport_Out. Tables can be supplemented by fields, typical to the type of transport.
+</p><p><b>Table 14.</b> Structure of the input transport's table (Transport_in).
 </p>
 <table class="wikitable">
 
@@ -3228,7 +3228,7 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <td>1</td>
 <td>...
 </td></tr></table>
-<p><b>Table 15.</b> Structure of the outgoing transport's table (Transport_out).
+<p><b>Table 15.</b> Structure of the output transport's table (Transport_out).
 </p>
 <table class="wikitable">
 
@@ -3855,18 +3855,18 @@ extern "C"
 </th></tr>
 <tr>
 <td><b>Transport's type (child from TTypeTransport):</b>
-<ul><li> <i>virtual TTransportIn  *In( const string &amp;name, const string &amp;db );</i> — Create/open new "incoming" transport.</li>
-<li> <i>virtual TTransportOut *Out( const string &amp;name, const string &amp;db );</i> — Create/open new "outgoing" transport.</li></ul>
+<ul><li> <i>virtual TTransportIn  *In( const string &amp;name, const string &amp;db );</i> — Create/open new "input" transport.</li>
+<li> <i>virtual TTransportOut *Out( const string &amp;name, const string &amp;db );</i> — Create/open new "output" transport.</li></ul>
 </td></tr>
 <tr>
-<td><b>Incoming transport (child from TTransportIn):</b>
+<td><b>Input transport (child from TTransportIn):</b>
 <ul><li> <i>virtual string getStatus( );</i> — Interface status.</li>
 <li> <i>virtual void setAddr( const string &amp;addr );</i> — The transport address set. It would be redefined for processing and checking for specific to the module transport's address format.</li>
 <li> <i>virtual void start();</i> — Transport's start.</li>
 <li> <i>virtual void stop();</i> — Transport's stop.</li></ul>
 </td></tr>
 <tr>
-<td><b>Outgoing transport (child from TTransportOut):</b>
+<td><b>Output transport (child from TTransportOut):</b>
 <ul><li> <i>virtual string getStatus( );</i> — Interface status.</li>
 <li> <i>virtual void setAddr( const string &amp;addr );</i> — The transport address set. It would be redefined for processing and checking for specific to the module transport's address format.</li>
 <li> <i>virtual void start( );</i> — Transport's start.</li>
@@ -3879,11 +3879,11 @@ extern "C"
 <tr>
 <td><b>Protocol (child from TProtocol):</b>
 <ul><li> <i>virtual void itemListIn( vector&lt;string&gt; &amp;ls, const string &amp;curIt = "" );</i> — The input protocol subelements list, at case the protocol allow. Used for select in object of input transport configuration.</li>
-<li> <i>virtual void outMess( XMLNode &amp;io, TTransportOut &amp;tro );</i> — Data transfer in the XML tree <i>in</i> to the remote system by means of transport <i>tro</i> and the current outgoing protocol.</li>
-<li> <i>virtual TProtocolIn *in_open( const string &amp;name )</i> — Open/create the incoming protocol.</li></ul>
+<li> <i>virtual void outMess( XMLNode &amp;io, TTransportOut &amp;tro );</i> — Data transfer in the XML tree <i>in</i> to the remote system by means of transport <i>tro</i> and the current output protocol.</li>
+<li> <i>virtual TProtocolIn *in_open( const string &amp;name )</i> — Open/create the input protocol.</li></ul>
 </td></tr>
 <tr>
-<td><b>Incoming protocol (child from TProtocolIn):</b>
+<td><b>Input protocol (child from TProtocolIn):</b>
 <ul><li> <i>virtual bool mess( const string &amp;request, string &amp;answer, const string &amp;sender );</i> — Transfer of unstructured message to the protocol.</li></ul>
 </td></tr>
 <tr>

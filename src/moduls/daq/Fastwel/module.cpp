@@ -222,7 +222,7 @@ void TTpContr::postEnable(int flag)
     fldAdd(new TFld("PRM_BD_DIM765", _("DIM765 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
 
     fldAdd(new TFld("SCHEDULE", _("Acquisition schedule"), TFld::String, TFld::NoFlag, "100", "1"));
-    fldAdd(new TFld("PRIOR", _("Gather task priority"), TFld::Integer, TFld::NoFlag, "2", "0", "-1;199"));
+    fldAdd(new TFld("PRIOR", _("Priority of the acquisition task"), TFld::Integer, TFld::NoFlag, "2", "0", "-1;199"));
     fldAdd(new TFld("NET_ID", _("Network number"), TFld::Integer, TFld::NoFlag, "0", "0", "0;63"));
 
     //> Parameter DIM762 bd structure

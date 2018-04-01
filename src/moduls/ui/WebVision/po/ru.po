@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 15:18+0200\n"
+"POT-Creation-Date: 2018-04-01 14:15+0300\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -18,9 +18,15 @@ msgstr ""
 msgid "Resource isn't found"
 msgstr "Ресурс не найден"
 
+msgid "Unknown object of the command: %s."
+msgstr "Неизвестный объект команды: %s."
+
 #, c-format
 msgid "Unknown command: %s."
 msgstr "Неизвестная команда: %s."
+
+msgid "No a content."
+msgstr "Содержимое отсутствует."
 
 msgid "Fill image type is not supported."
 msgstr "Тип изображения заполнения не поддерживается."
@@ -184,6 +190,7 @@ msgstr "Нет ни одного сеанса и проекта движка С�
 msgid "Sorry, opened sessions number reach limit!"
 msgstr "Извините, количество открытых сеансов достигло ограничения!"
 
+#, c-format
 msgid "Going to the session '%s' for the project '%s' ..."
 msgstr "Переход к сеансу '%s' для проекта '%s' ..."
 

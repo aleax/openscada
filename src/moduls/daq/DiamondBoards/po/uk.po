@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 2.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 09:49+0200\n"
+"POT-Creation-Date: 2018-04-01 11:15+0300\n"
 "PO-Revision-Date: 2007-10-28 09:43+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -81,10 +81,10 @@ msgid "Parameters table"
 msgstr "Таблиця параметров"
 
 msgid "Acquisition schedule"
-msgstr "Планування опитування"
+msgstr "Планування збору"
 
-msgid "Gather task priority"
-msgstr "Пріоритет задачі збору даних"
+msgid "Priority of the acquisition task"
+msgstr "Пріорітет задачі збору даних"
 
 msgid "Standard"
 msgstr "Стандарт"
@@ -116,9 +116,11 @@ msgstr "Додаткові параметри"
 msgid "Acquisition. "
 msgstr "Збір. "
 
+#, c-format
 msgid "Acquisition with the period: %s. "
 msgstr "Збір з періодом: %s. "
 
+#, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Наступний збір за cron '%s'. "
 
@@ -250,3 +252,6 @@ msgstr "DO %d: інверсія"
 #, c-format
 msgid "%s error: %s %s"
 msgstr "Помилка %s: %s %s"
+
+#~ msgid "Gather task priority"
+#~ msgstr "Пріоритет задачі збору даних"

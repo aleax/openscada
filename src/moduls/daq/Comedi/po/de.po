@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Comedi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 09:33+0200\n"
+"POT-Creation-Date: 2018-04-01 11:11+0300\n"
 "PO-Revision-Date: 2012-07-27 22:43+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -34,8 +34,8 @@ msgstr "Tabelle der Parameter"
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
 
-msgid "Gather task priority"
-msgstr "Priorität der Datenerfassung"
+msgid "Priority of the acquisition task"
+msgstr "Priorität der Erfassungsaufgabe"
 
 msgid "Standard"
 msgstr "Standard"
@@ -52,9 +52,11 @@ msgstr "Zusätzliche Parameter"
 msgid "Acquisition. "
 msgstr "Erwerb. "
 
+#, c-format
 msgid "Acquisition with the period: %s. "
 msgstr "Erwerb mit dem Zeitraum: %s. "
 
+#, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 

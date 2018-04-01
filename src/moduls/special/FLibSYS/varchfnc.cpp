@@ -46,7 +46,7 @@ bool VArchObj::open( const string &inm )
 
     try {
 	AutoHD<TVArchive> ta;
-	AutoHD<TCntrNode> nd = SYS->nodeAt(inm,0,'.');
+	AutoHD<TCntrNode> nd = SYS->nodeAt(inm, 0, '.');
 	if(dynamic_cast<TVal*>(&nd.at()))		ta = dynamic_cast<TVal&>(nd.at()).arch();
 	else if(dynamic_cast<TVArchive*>(&nd.at()))	ta = nd;
 	if(ta.freeStat()) return false;

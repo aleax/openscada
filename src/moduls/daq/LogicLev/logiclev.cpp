@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.8.2"
+#define MOD_VER		"1.8.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -722,7 +722,7 @@ int TMdPrm::lnkId( const string &id ) const
 TMdPrm::SLnk &TMdPrm::lnk( int num ) const
 {
     if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
-    if(num < 0 || num >= (int)tmpl->lnk.size()) throw TError(nodePath().c_str(),_("Parameter id error."));
+    if(num < 0 || num >= (int)tmpl->lnk.size()) throw TError(nodePath().c_str(),_("Error of parameter ID."));
     return tmpl->lnk[num];
 }
 
@@ -776,7 +776,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	if(idDscr >= 0)	setDescr(tmpl->val.getS(idDscr));
     } catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_warning(nodePath().c_str(),_("Error calculate template."));
+	mess_warning(nodePath().c_str(),_("Error calculating template."));
     }
 }
 
@@ -786,7 +786,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path.substr(0,6) == "/serv/") {
 	if(a_path == "/serv/tmplAttr") {
-	    if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("No template parameter or error."));
+	    if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("Error or non-template parameter."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 		for(int iA = 0; iA < tmpl->val.ioSize(); iA++)
 		    if(iA != idFreq && iA != idStart && iA != idStop /*&& iA != idErr*/ && iA != idSh && iA != idNm && iA != idDscr &&
@@ -899,7 +899,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    string no_set;
 	    string p_nm = TSYS::strSepParse(tmpl->val.func()->io(lnk(lnkId(s2i(a_path.substr(12)))).ioId)->def(),0,'|');
 	    string p_vl = TSYS::strParse(opt->text(), 0, " ");
-	    if(p_vl == DAQPath()) throw TError(nodePath().c_str(),_("Self to self linking error."));
+	    if(p_vl == DAQPath()) throw TError(nodePath().c_str(),_("Error, recursive linking."));
 	    AutoHD<TValue> prm = SYS->daq().at().prmAt(p_vl, '.', true);
 
 	    for(int iL = 0; iL < lnkSize(); iL++)
@@ -941,7 +941,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		if(TSYS::strSepParse(a_vl,0,'.') == owner().owner().modId() &&
 			TSYS::strSepParse(a_vl,1,'.') == owner().id() &&
 			TSYS::strSepParse(a_vl,2,'.') == id())
-		    throw TError(nodePath().c_str(),_("Self to self linking error."));
+		    throw TError(nodePath().c_str(),_("Error, recursive linking."));
 		lnk(lnkId(iIO)).prmAttr = a_vl;
 		initTmplLnks();
 	    }

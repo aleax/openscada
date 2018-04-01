@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BFN 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 09:15+0200\n"
+"POT-Creation-Date: 2018-04-01 11:09+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -30,10 +30,10 @@ msgstr ""
 "Dutchman\" (http://www.bigdutchman.com)."
 
 msgid "Acquisition schedule"
-msgstr "Планирование опроса"
+msgstr "Планирование сбора"
 
-msgid "Gather task priority"
-msgstr "Уровень приоритета задачи сбора данных"
+msgid "Priority of the acquisition task"
+msgstr "Приоритет задачи сбора данных"
 
 msgid "Sync inter remote station period, seconds"
 msgstr "Период синхронизации с удалённой станцией, секунд"
@@ -88,9 +88,11 @@ msgstr "Ошибка: '%s'. "
 msgid "Acquisition. "
 msgstr "Сбор. "
 
+#, c-format
 msgid "Acquisition with the period: %s. "
 msgstr "Сбор с периодом: %s. "
 
+#, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 
@@ -139,3 +141,6 @@ msgstr "1:Параметр отключен."
 
 msgid "2:Acquisition stopped."
 msgstr "2:Сбор остановлен."
+
+#~ msgid "Gather task priority"
+#~ msgstr "Уровень приоритета задачи сбора данных"

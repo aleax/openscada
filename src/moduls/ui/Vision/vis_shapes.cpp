@@ -1071,7 +1071,8 @@ void ShapeFormEl::buttonReleased( )
 	    off = 0;
 	    string  fTmpl	= TSYS::strParse(fHead, 0, "|", &off),
 		    fTitle	= TSYS::strParse(fHead, 0, "|", &off),
-		    fDefFile	= TSYS::strParse(fHead, 0, "|", &off);
+		    fDefFile	= TSYS::strParse(fHead, 0, "|", &off),
+		    fMime	= TSYS::strParse(fHead, 0, "|", &off);
 	    if(fTmpl.empty())	break;
 	    if(fTitle.empty())	fTitle = _("Load file");
 	    QString fn = w->mainWin()->getFileName(fTitle.c_str(), fDefFile.c_str(), fTmpl.c_str(), QFileDialog::AcceptOpen);
@@ -1089,7 +1090,7 @@ void ShapeFormEl::buttonReleased( )
 
 	    AttrValS attrs;
 	    attrs.push_back(std::make_pair("event","ws_BtLoad"));
-	    attrs.push_back(std::make_pair("value",fHead+"\n"+string(data.data(),data.size())));
+	    attrs.push_back(std::make_pair("value",fTmpl+"|"+fTitle+"|"+fn.toStdString()+"|"+fMime+"\n"+string(data.data(),data.size())));
 	    w->attrsSet(attrs);
 	    break;
 	}

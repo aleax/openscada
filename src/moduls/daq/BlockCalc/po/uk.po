@@ -233,7 +233,7 @@ msgstr "Блоки"
 
 #, c-format
 msgid "All: %u; Enabled: %u; Process: %u"
-msgstr "Всього: %u; Включено: %u; Обробляється: %u"
+msgstr "Загалом: %u; Ввімкнено: %u; Обробляється: %u"
 
 msgid "1:Parameter disabled."
 msgstr "1:Параметр вимкнено."

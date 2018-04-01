@@ -49,8 +49,8 @@
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#Incoming_transports"><span class="tocnumber">1</span> <span class="toctext">Incoming transports</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#Outgoing_transports"><span class="tocnumber">2</span> <span class="toctext">Outgoing transports</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#Input_transports"><span class="tocnumber">1</span> <span class="toctext">Input transports</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Output_transports"><span class="tocnumber">2</span> <span class="toctext">Output transports</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#User_programming_API"><span class="tocnumber">3</span> <span class="toctext">User programming API</span></a></li>
 <li class="toclevel-1 tocsection-4"><a href="#Notes"><span class="tocnumber">4</span> <span class="toctext">Notes</span></a>
 <ul>
@@ -61,15 +61,15 @@
 </ul>
 </div>
 
-<p>Module of transport Serial provides support of transports based on the type of serial interfaces RS232, RS485, GSM, and others to the system. Incoming and outgoing transports are supported. To add new incoming and outgoing interfaces is possible by means of configuration of the transport subsystem in the system configurator of OpenSCADA.
+<p>Module of transport Serial provides support of transports based on the type of serial interfaces RS232, RS485, GSM, and others to the system. Input and output transports are supported. To add new input and output interfaces is possible by means of configuration of the transport subsystem in the system configurator of OpenSCADA.
 </p><p>Into modem mode by the module support misc work mode. Misc mode mean an input transport allow, which wait ingoing connections, and also an output transport allow at idem device. That is the input transport will ignore all requests while the output transport's established connection allow, in idem time the output transport will not try make connection while the input transport have connection or other an output transport connected to other telephone, for example.
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In normal mode, the serial interface is not allowed to reuse one and the same port incoming and outgoing traffic. Global blocking of the serial device is not carried out in mind the ambiguity of this process at the system level, and re-use can lead to unexpected problems. If necessary, Organization of a local serial line with a pair of connected ports is recommended to use the command "<b>$ socat -d -d pty,raw,echo=0,perm=0666 pty,raw,echo=0,perm=0666</b>".
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In normal mode, the serial interface is not allowed to reuse one and the same port input and output traffic. Global blocking of the serial device is not carried out in mind the ambiguity of this process at the system level, and re-use can lead to unexpected problems. If necessary, Organization of a local serial line with a pair of connected ports is recommended to use the command "<b>$ socat -d -d pty,raw,echo=0,perm=0666 pty,raw,echo=0,perm=0666</b>".
 </p>
-<h2><span class="mw-headline" id="Incoming_transports"><span class="mw-headline-number">1</span> Incoming transports</span></h2>
-<p>The configured and running incoming transport opens port of serial interface for the expectation of the requests of the clients. Each incoming interface is necessarily associated with one of the available transport protocols, to which the incoming messages are transmitted.
-</p><p>Configuration dialog of the incoming serial interface is depicted in Figure 1.
+<h2><span class="mw-headline" id="Input_transports"><span class="mw-headline-number">1</span> Input transports</span></h2>
+<p>The configured and running input transport opens port of serial interface for the expectation of the requests of the clients. Each input interface is necessarily associated with one of the available transport protocols, to which the input messages are transmitted.
+</p><p>Configuration dialog of the input serial interface is depicted in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:647px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in.png"><img class="thumbimage" height="534" src="../files/Serial_in.png" width="645" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the incoming serial interface.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:647px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in.png"><img class="thumbimage" height="534" src="../files/Serial_in.png" width="645" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the input serial interface.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
 <ul><li> The state of transport, namely: "Status", "Running" and the name of the database, containing the configuration.</li>
@@ -96,9 +96,9 @@
 <li> <i>rtsDelay2</i> — the delay in milliseconds from the transferring finish and the transmitter disabling by the RTS signal.</li></ul></li>
 <li> Input flow task priority.</li></ul>
 <p>Transport supports the ability to work as a modem. This mode is activated by the fifth parameter of the address and includes call waiting from the remote modem (request "RING"), answering the call (command "ATA") and the subsequent transfer the requests from the remote station to the transport's protocol. Turning off the communication session is made by the initiator of the connection and leads to the reconnect of the modem-receiver for the waiting for new calls.
-</p><p>To configure the modem of the incoming transport the special tab "Modem" is provided (Fig. 2).
+</p><p>To configure the modem of the input transport the special tab "Modem" is provided (Fig. 2).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:581px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in_mod.png"><img class="thumbimage" height="476" src="../files/Serial_in_mod.png" width="579" /></a>  <div class="thumbcaption">Fig.2. "Modem" tab of the modem's configuration of the incoming serial interface.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:581px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in_mod.png"><img class="thumbimage" height="476" src="../files/Serial_in_mod.png" width="579" /></a>  <div class="thumbcaption">Fig.2. "Modem" tab of the modem's configuration of the input serial interface.</div></div></div></div>
 <p>With this dialog you can set the following properties of working with modem:
 </p>
 <ul><li> Requests timeout of the modem in seconds.</li>
@@ -107,14 +107,14 @@
 <li> The first initialization string typically contains the reset command of the modem "ATZ".</li>
 <li> The second initialization string.</li>
 <li> The result string of the modem's initialization, usually "OK", with which the modem answers for initializing and which must be expected.</li>
-<li> The call's request, usually is "RING", which is sent by the modem in the case of an outgoing call.</li>
+<li> The call's request, usually is "RING", which is sent by the modem in the case of an output call.</li>
 <li> The answer to the call, usually is "ATA", which is sent to the modem to answer the call.</li>
 <li> String result of the answer the call, usually is "CONNECT", with which the modem answers to the answer command, and that is to be expected.</li></ul>
-<h2><span class="mw-headline" id="Outgoing_transports"><span class="mw-headline-number">2</span> Outgoing transports</span></h2>
-<p>Configured and running outgoing transport opens port of the serial interface for the sending the requests through it.
-</p><p>Main tab of the configuration page of outgoing serial interface is shown in Fig.3.
+<h2><span class="mw-headline" id="Output_transports"><span class="mw-headline-number">2</span> Output transports</span></h2>
+<p>Configured and running output transport opens port of the serial interface for the sending the requests through it.
+</p><p>Main tab of the configuration page of output serial interface is shown in Fig.3.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:655px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out.png"><img class="thumbimage" height="559" src="../files/Serial_out.png" width="653" /></a>  <div class="thumbcaption">Fig.3. Main tab of the configuration page of outgoing serial interface.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:655px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out.png"><img class="thumbimage" height="559" src="../files/Serial_out.png" width="653" /></a>  <div class="thumbcaption">Fig.3. Main tab of the configuration page of output serial interface.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
 <ul><li> The state of transport, namely: "Status", "Running" and the name of the database, containing the configuration.</li>
@@ -143,9 +143,9 @@
 <li> No stop on proceed. Sometime opened device closing can be breakage, on ICP-DAS LP PLC for example, then you alowed to prevent it by that option.</li></ul>
 <p>Transport supports the ability to work as a modem. This mode is activated by the fifth parameter of the address, and implies the phone call making at the number, specified in the fifth parameter, at the moment of transport's start. After installation the connection with the remote modem all requests are sent to the station behind the remote modem. Turning off the communication session at the transport's stop is made using the activity timeout.
 </p><p>Transport allowed for work with the hardware bus I2С if you select "/dev/i2c-{N}" and the bus permits to set a slave device address by command I2C_SLAVE, from <b>the first byte of request</b>. Speed and format don't play a role in that mode. From the timeouts here in fact works only the symbol time and generically for next request timeout calculate.
-</p><p>To configure the modem of the outgoing transport the special tab "Modem" is provided (Fig. 4).
+</p><p>To configure the modem of the output transport the special tab "Modem" is provided (Fig. 4).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:608px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out_mod.png"><img class="thumbimage" height="560" src="../files/Serial_out_mod.png" width="606" /></a>  <div class="thumbcaption">Fig.4. "Modem" tab of the configuration of modem of outgoing serial interface.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:608px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out_mod.png"><img class="thumbimage" height="560" src="../files/Serial_out_mod.png" width="606" /></a>  <div class="thumbcaption">Fig.4. "Modem" tab of the configuration of modem of output serial interface.</div></div></div></div>
 <p>With this dialog you can set the following properties of working with modem:
 </p>
 <ul><li> Requests timeout of the modem in seconds.</li>
@@ -164,7 +164,7 @@
 <li> The command hang up, is usually "+++ATH". This command is called whenever there is need to break the connection.</li>
 <li> The string result of the hang up command, usually is "OK", with which the modem answers to the command and which must be expected.</li></ul>
 <h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">3</span> User programming API</span></h2>
-<p><b>Object "Outgoing transport" (SYS.Transport.Serial.out_{OutTransport})</b>
+<p><b>Object "Output transport" (SYS.Transport.Serial.out_{OutTransport})</b>
 </p>
 <ul><li> <i>bool TS( bool rts = EVAL )</i> — To Send control by set request <i>rts</i> and return Clear CTS state.</li>
 <li> <i>bool DR( bool dtr = EVAL )</i> — Device ready to communicate control by set Terminal Ready <i>dtr</i> and return Set Ready DSR state.</li>
@@ -173,7 +173,7 @@
 <li> <i>int sendbreak( int duration = 0 )</i> — Send to the stream a break by zero in <i>duration</i> (0 — some default duration).</li></ul>
 <h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">4</span> Notes</span></h2>
 <p>Communications via the serial interfaces have a number of features. The most important feature is the criterion for the end of the message and the waiting time of this criterion. In some protocols, such a criterion is a sign of the end or the specified message size. In other protocols, such a criterion is no data in the input stream for a specified time — the character time. In both cases, the waiting time of criterion or character is a crucial and strongly affects the overall exchange time. Consequently, the smaller this time, the better. Here the problem of hardware and its drivers latency happens.
-</p><p>To check the latency of communication channel and thus optimally to configure the waiting time, character time, you can use the interface tab "Request" of outgoing transport. To do this you need to specify a model request to the protocol, indicating "Wait timeout", send a request and check its integrity. To obtain the more representative result you should repeat the request a few times. If there is getting incomplete answers, the character time should be increased, else it can be reduced.
+</p><p>To check the latency of communication channel and thus optimally to configure the waiting time, character time, you can use the interface tab "Request" of output transport. To do this you need to specify a model request to the protocol, indicating "Wait timeout", send a request and check its integrity. To obtain the more representative result you should repeat the request a few times. If there is getting incomplete answers, the character time should be increased, else it can be reduced.
 </p><p>On embedded serial interfaces RS232/422/485 hardware you can achieve low latency, up to several milliseconds. However, the latency of the high-loaded systems with multiple tasks on a priority of real-time can be non-deterministic in connection with the execution of the events' service thread of the Linux kernel in the low priority. To solve this problem you should install a high priority to these threads that can be done with a script, placing it, for example, to "/etc/rc.local":
 </p>
 <pre style="white-space: pre-wrap;">

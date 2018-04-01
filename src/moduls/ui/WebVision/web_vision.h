@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: web_vision.h
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -64,7 +64,7 @@ struct SSess
 		lang;		//Language
 
     vector<string>	vars;	//request vars
-    map<string,string>	cnt;	//Parsed contain
+    vector<XMLNode>	cnt;	//Parsed contain
     map<string,string>	prm;	//URL parameters
 };
 

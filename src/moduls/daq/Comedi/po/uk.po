@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Comedi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 09:33+0200\n"
+"POT-Creation-Date: 2018-04-01 11:11+0300\n"
 "PO-Revision-Date: 2012-07-27 22:43+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -30,10 +30,10 @@ msgid "Parameters table"
 msgstr "Таблиця параметрів"
 
 msgid "Acquisition schedule"
-msgstr "Планування опитування"
+msgstr "Планування збору"
 
-msgid "Gather task priority"
-msgstr "Пріоритет задачі збору"
+msgid "Priority of the acquisition task"
+msgstr "Пріорітет задачі збору даних"
 
 msgid "Standard"
 msgstr "Стандарт"
@@ -50,9 +50,11 @@ msgstr "Додаткові параметри"
 msgid "Acquisition. "
 msgstr "Збір. "
 
+#, c-format
 msgid "Acquisition with the period: %s. "
 msgstr "Збір з періодом: %s. "
 
+#, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Наступний збір за cron '%s'. "
 
@@ -102,3 +104,6 @@ msgstr "Час встановлення аналогового входу (мк�
 #, c-format
 msgid "Channel %d.%d range"
 msgstr "Діапазон каналу %d.%d"
+
+#~ msgid "Gather task priority"
+#~ msgstr "Пріоритет задачі збору"

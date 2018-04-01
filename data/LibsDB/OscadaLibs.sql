@@ -1480,7 +1480,7 @@ INSERT INTO "tmplib_base_io" VALUES('digitBlock','cmdClose','Command "Close"',3,
 INSERT INTO "tmplib_base_io" VALUES('digitBlock','cmdStop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Стоп"','Кран|stop','Команда "Стоп"','Кран|stop');
 INSERT INTO "tmplib_base_io" VALUES('digitBlock','stOpen','State "Opened"',3,144,'Crane|st_open',3,'Стан "Відкрито"','Кран|st_open','Сост. "Открыто"','Кран|st_open');
 INSERT INTO "tmplib_base_io" VALUES('digitBlock','stClose','State "Closed"',3,144,'Crane|st_close',4,'Стан "Закрито"','Кран|st_close','Сост. "Закрыто"','Кран|st_close');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','tCmd','Hold command time (s)',1,32,'5',5,'Час утримання команди (с)','','Время удерж. команды (с)','');
+INSERT INTO "tmplib_base_io" VALUES('digitBlock','tCmd','Time for hold the command, seconds',1,32,'5',5,'Час утримання команди, секунди','','Время удерж. команды, секунды','');
 INSERT INTO "tmplib_base_io" VALUES('digitBlock','last_cmd','Last command',1,1,'0',6,'Остання команда','','Последняя команда','');
 INSERT INTO "tmplib_base_io" VALUES('digitBlock','w_tm','Process command counter',2,1,'0',7,'Лічильник опрацювання команди','','Счётчик отраб. команды','');
 INSERT INTO "tmplib_base_io" VALUES('gasPoint','DS','Density (kg/m3)',2,16,'0',5,'Щильність (кг/м3)','','Плотность (кг/м3)','');
@@ -1531,7 +1531,7 @@ INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','close','Command "Close"',3
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','stop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Зупинити"','Кран|stop','Команда "Стоп"','Кран|stop');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','st_open','State "Opened"',3,144,'Crane|st_open',3,'Стан "Відкрито"','Кран|st_open','Сост. "Открыто"','Кран|st_open');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','st_close','State "Closed"',3,144,'Crane|st_close',4,'Стан "Закрито"','Кран|st_close','Сост. "Закрыто"','Кран|st_close');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','tCmd','Hold command time (s)',1,64,'5',5,'Час утримання команди (с)','','Время удерж. команды (с)','');
+INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','tCmd','Time for hold the command, seconds',1,64,'5',5,'Час утримання команди, секунди','','Время удерж. команды, секунды','');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','last_cmd','Last command',1,1,'0',6,'Остання команда','','Последняя команда','');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','w_tm','Process command counter',2,1,'0',7,'Лічильнк обробки команди','','Счётчик отраб. команды','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','Signal|in');

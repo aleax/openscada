@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 09:43+0200\n"
+"POT-Creation-Date: 2018-04-01 11:14+0300\n"
 "PO-Revision-Date: 2011-02-28 16:29+0300\n"
 "Last-Translator: Almaz Karimov\n"
 "Language-Team:  <ru@li.org>\n"
@@ -36,10 +36,10 @@ msgid "Parameters table"
 msgstr "Таблица параметров"
 
 msgid "Acquisition schedule"
-msgstr "Планирование опроса"
+msgstr "Планирование сбора"
 
-msgid "Gather task priority"
-msgstr "Уровень приоритета задачи сбора данных"
+msgid "Priority of the acquisition task"
+msgstr "Приоритет задачи сбора данных"
 
 msgid "Transport"
 msgstr "Транспорт"
@@ -132,9 +132,11 @@ msgstr "Нет CI;2CI (#AA);3CI (#AA)"
 msgid "Acquisition. "
 msgstr "Сбор. "
 
+#, c-format
 msgid "Acquisition with the period: %s. "
 msgstr "Сбор с периодом: %s. "
 
+#, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 

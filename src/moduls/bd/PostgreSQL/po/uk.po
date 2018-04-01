@@ -107,10 +107,10 @@ msgstr ""
 "Для віддаленої БД: \"server.nm.org;;roman;123456;OpenSCADA;5432;10\"."
 
 msgid "Enabled. "
-msgstr "Включено. "
+msgstr "Ввімкнено. "
 
 msgid "Disabled. "
-msgstr "Виключено. "
+msgstr "Вимкнено. "
 
 #, c-format
 msgid "Connect: %s. "

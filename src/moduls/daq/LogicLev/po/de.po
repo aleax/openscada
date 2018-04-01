@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 10:39+0200\n"
+"POT-Creation-Date: 2018-03-31 17:28+0300\n"
 "PO-Revision-Date: 2009-08-17 12:33+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -65,9 +65,11 @@ msgstr "Ursprung Parameter"
 msgid "Calculation. "
 msgstr "Berechnung. "
 
+#, c-format
 msgid "Calculation with the period: %s. "
 msgstr "Berechnung mit einer Periode: %s. "
 
+#, c-format
 msgid "Next calculation by the cron '%s'. "
 msgstr "Berechnung nächsten durch cron '%s'. "
 
@@ -88,14 +90,14 @@ msgstr "Verbrauchte Zeit: %s[%s]. "
 msgid "Parameter is disabled or is not based on the template."
 msgstr "Parameter ist abgeschaltet oder basiert nicht auf der Vorlage."
 
-msgid "Parameter id error."
-msgstr "Fehler des Parameterbezeichners."
+msgid "Error of parameter ID."
+msgstr "Fehler der Parameter-ID."
 
-msgid "Error calculate template."
-msgstr "Fehler bei der Berechnung der Vorlage."
+msgid "Error calculating template."
+msgstr "Fehler beim Berechnen der Vorlage."
 
-msgid "No template parameter or error."
-msgstr "Kein Vorlagenparameter oder Fehler."
+msgid "Error or non-template parameter."
+msgstr "Fehler oder Nicht-Template-Parameter."
 
 msgid "Template configuration"
 msgstr "Konfiguration der Vorlage"
@@ -106,5 +108,5 @@ msgstr "Nur Attribute zeigen"
 msgid "Parameters"
 msgstr "Optionen"
 
-msgid "Self to self linking error."
-msgstr "Fehler beim Anschluss an sich selbst."
+msgid "Error, recursive linking."
+msgstr "Fehler, rekursives Verknüpfen."

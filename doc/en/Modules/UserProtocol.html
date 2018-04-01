@@ -49,14 +49,14 @@
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#Part_of_the_protocol_for_incoming_requests"><span class="tocnumber">1</span> <span class="toctext">Part of the protocol for incoming requests</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#Part_of_the_protocol_for_outgoing_requests"><span class="tocnumber">2</span> <span class="toctext">Part of the protocol for outgoing requests</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#Part_of_the_protocol_for_input_requests"><span class="tocnumber">1</span> <span class="toctext">Part of the protocol for input requests</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Part_of_the_protocol_for_output_requests"><span class="tocnumber">2</span> <span class="toctext">Part of the protocol for output requests</span></a></li>
 </ul>
 </div>
 
 <p>Module UserProtocol of the transport protocol is made to provide the user with the possibility of creation the implementations of different protocols by himself at one of the internal languages of OpenSCADA, usually <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, without necessity of low-level programming of OpenSCADA.
-</p><p>The main purpose of the module is to simplify the task of connecting devices of data sources to OpenSCADA, that have limited distribution and/or provide access to their own data on a specific protocol that is usually fairly simple to implement in the internal language of OpenSCADA. For implementation of this the mechanism for the formation of the outgoing request protocol is provided.
-</p><p>In addition to the mechanism of the outgoing request protocol the mechanism for incoming request protocol is provided, which allows OpenSCADA to process the requests for data get on specific protocols, which simply can be implemented in the internal language of OpenSCADA.
+</p><p>The main purpose of the module is to simplify the task of connecting devices of data sources to OpenSCADA, that have limited distribution and/or provide access to their own data on a specific protocol that is usually fairly simple to implement in the internal language of OpenSCADA. For implementation of this the mechanism for the formation of the output request protocol is provided.
+</p><p>In addition to the mechanism of the output request protocol the mechanism for input request protocol is provided, which allows OpenSCADA to process the requests for data get on specific protocols, which simply can be implemented in the internal language of OpenSCADA.
 </p><p>The module provides the ability to create multiple implementations of different protocols in the object "User protocol" (Fig. 1).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:694px;"><a class="image" href="http://oscada.org/wiki/File:UserProtocol_up_main.png"><img class="thumbimage" height="518" src="../files/UserProtocol_up_main.png" width="692" /></a>  <div class="thumbcaption">Fig.1. Main tab of an object of the module "User protocol".</div></div></div></div>
@@ -71,25 +71,25 @@
 <li> <i>Name</i> — specifies the name of the protocol. </li>
 <li> <i>Description</i> — brief description of the protocol and its purpose. </li>
 <li> <i>To enable</i> — indicates the status "Enable", in which to transfer the protocol at startup.</li></ul></li></ul>
-<h2><span class="mw-headline" id="Part_of_the_protocol_for_incoming_requests"><span class="mw-headline-number">1</span> Part of the protocol for incoming requests</span></h2>
-<p>Protocol of incoming requests is working in cooperation with the incoming transport and the separate object "User Protocol" is set in the configuration field of transport protocol, together with the UserProtocol module's name. In the future, all requests to the transport will be sent to the processing procedure of the protocol's request (Fig. 2).
+<h2><span class="mw-headline" id="Part_of_the_protocol_for_input_requests"><span class="mw-headline-number">1</span> Part of the protocol for input requests</span></h2>
+<p>Protocol of input requests is working in cooperation with the input transport and the separate object "User Protocol" is set in the configuration field of transport protocol, together with the UserProtocol module's name. In the future, all requests to the transport will be sent to the processing procedure of the protocol's request (Fig. 2).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:675px;"><a class="image" href="http://oscada.org/wiki/File:UserProtocol_up_in.png"><img class="thumbimage" height="524" src="../files/UserProtocol_up_in.png" width="673" /></a>  <div class="thumbcaption">Fig.2. Tab of a processing procedure of an incoming request.</div></div></div></div>
-<p>Tab of the processing procedures of the incoming request contains:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:675px;"><a class="image" href="http://oscada.org/wiki/File:UserProtocol_up_in.png"><img class="thumbimage" height="524" src="../files/UserProtocol_up_in.png" width="673" /></a>  <div class="thumbcaption">Fig.2. Tab of a processing procedure of an input request.</div></div></div></div>
+<p>Tab of the processing procedures of the input request contains:
 </p>
 <ul><li> Wait request timeout in milliseconds. Use it for pool mode enabling by set the timeout to a nonzero value. Into the pool mode an input transport will call the protocol by no a request with an empty message after that timeout.</li>
 <li> the field for selecting the internal programming language of OpenSCADA and the text entry field for the typing the processing procedure.</li></ul>
-<p>For the processing procedure the following exchange variables with incoming traffic are predetermined:
+<p>For the processing procedure the following exchange variables with input traffic are predetermined:
 </p>
 <ul><li> <i>rez</i> — processing result (false-full request;true-not full request);</li>
 <li> <i>request</i> — request message;</li>
 <li> <i>answer</i> — answer message;</li>
 <li> <i>sender</i> — request sender.</li></ul>
-<p>The overall scenario of processing of the incoming requests:
+<p>The overall scenario of processing of the input requests:
 </p>
 <ul><li> Request is formed by the remote station and through the network it gets on the transport of OpenSCADA.</li>
 <li> OpenSCADA transport sends the request to the selected in the protocol's field UserProtocol module and to the objects of the user's protocol in the form of the variable's "request" values — for the block of the request and "sender" — for the sender address of the request.</li>
-<li> The execution of the the procedure of protocol of the incoming request is started, during which the contents of the variable "request" is analyzed and the response in the variable "answer" is formed. At the end of the procedure's execution the variable "rez" is formed, which indicates the transport to the fact of reception of full request and the formation of the correct answer (false) or to the necessity for the transport to expect for the remaining data (true).</li>
+<li> The execution of the the procedure of protocol of the input request is started, during which the contents of the variable "request" is analyzed and the response in the variable "answer" is formed. At the end of the procedure's execution the variable "rez" is formed, which indicates the transport to the fact of reception of full request and the formation of the correct answer (false) or to the necessity for the transport to expect for the remaining data (true).</li>
 <li> If the result of the processing procedure is the variable "rez" with the 'false' and the response in the variable "answer" is not zero, then the transport sends the response and reset the accumulation of "request".</li>
 <li> If the result of the processing procedure is the variable "rez" with 'true' then the transport continues to expect for the data. When it receives the next portion of data they are added to the variable "request" and this procedure is repeated.</li></ul>
 <p>As an example, consider the implementation of query processing of protocol DCON, for some queries to a data source with the address "10":
@@ -117,24 +117,24 @@ answer += (CRC&amp;0xFF).toString(16)+"\r";
 //SYS.messDebug("TEST ANSV: "+answer.charCodeAt(0),answer);
 return 0;
 </pre>
-<h2><span class="mw-headline" id="Part_of_the_protocol_for_outgoing_requests"><span class="mw-headline-number">2</span> Part of the protocol for outgoing requests</span></h2>
-<p>The protocol of outgoing requests is working in cooperation with the outgoing transport and with the separate object of the "User Protocol". The source of the request through the protocol may be a function of the system-wide API of the user programming of the outgoing transport <i>int messIO(XMLNodeObj req, string prt );</i>, in the parameters of which it must be specified:
+<h2><span class="mw-headline" id="Part_of_the_protocol_for_output_requests"><span class="mw-headline-number">2</span> Part of the protocol for output requests</span></h2>
+<p>The protocol of output requests is working in cooperation with the output transport and with the separate object of the "User Protocol". The source of the request through the protocol may be a function of the system-wide API of the user programming of the output transport <i>int messIO(XMLNodeObj req, string prt );</i>, in the parameters of which it must be specified:
 </p>
 <ul><li> <i>req</i> — request as an XML tree with the structure corresponding to the input format of the implemented protocol;</li>
 <li> <i>prt</i> — the name of the "UserProtocol" module.</li></ul>
 <p>The request which is sent with the aforesaid way is directed to the processing procedure of the protocol's request (Fig. 3) with the user protocol's ID which is specified in the attribute req.attr("ProtIt").
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:834px;"><a class="image" href="http://oscada.org/wiki/File:UserProtocol_up_out.png"><img class="thumbimage" height="515" src="../files/UserProtocol_up_out.png" width="832" /></a>  <div class="thumbcaption">Fig.3. Tab of the processing procedures of the outgoing requests.</div></div></div></div>
-<p>The tab of the processing procedure for outgoing requests includes the field to select the internal programming language of OpenSCADA and text field for typing the processing procedure.
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:834px;"><a class="image" href="http://oscada.org/wiki/File:UserProtocol_up_out.png"><img class="thumbimage" height="515" src="../files/UserProtocol_up_out.png" width="832" /></a>  <div class="thumbcaption">Fig.3. Tab of the processing procedures of the output requests.</div></div></div></div>
+<p>The tab of the processing procedure for output requests includes the field to select the internal programming language of OpenSCADA and text field for typing the processing procedure.
 </p><p>For the processing procedure the following exchange variables are predetermined:
 </p>
 <ul><li> <i>io</i> — XML node of the exchange with the client, through which the protocol gets the requests and into which it puts the result with the format implemented in the procedure;</li>
 <li> <i>tr</i> — The transport object is provided for the call the transport function <i>string messIO( string mess, real timeOut = 1000 );</i> "tr.messIO(req)".</li></ul>
-<p>The overall scenario of the formation if the outgoing request:
+<p>The overall scenario of the formation if the output request:
 </p>
 <ul><li> Building of the XML-tree in accordance with the structure implemented by the protocol and setting of the user protocol identifier in the attribute "ProtIt".</li>
 <li> Sending the request to transport through the protocol <i>SYS.Transport["Modul"]["OutTransp"].messIO(req,"UserProtocol");</i>.</li>
-<li> Selection of the user interface in accordance with req.attr("ProtIt") and initialization of variables of outgoing transport io — respectively to the first argument messIO() and tr — object of the "OutTransp".</li>
+<li> Selection of the user interface in accordance with req.attr("ProtIt") and initialization of variables of output transport io — respectively to the first argument messIO() and tr — object of the "OutTransp".</li>
 <li> Calling the procedure for execution which after the processing the "io" structure forms the direct request to the transport <i>tr.messIO(req );</i>, result of which is processed and put back in io.</li></ul>
 <p>The essence of the allocation the protocol part of the code to the procedure of the user protocol is to facilitate the interface of the client exchange for multiple use and assumes the formation of the structure of XML-node of the exchange as the attributes of the addresses of remote stations, addresses of the read and write variables and the values of the variables themselves. The entire work of direct coding of the request and decoding of the response is assigned to procedure of the user protocol.
 </p><p>As an example, consider the implementation of the requests by protocol DCON, to the handler, implemented in the previous section. Let's start with the implementation of the protocol part:

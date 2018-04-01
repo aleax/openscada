@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 11:04+0200\n"
+"POT-Creation-Date: 2018-04-01 13:39+0300\n"
 "PO-Revision-Date: 2012-10-31 10:58+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -36,10 +36,10 @@ msgid "MR and MC bus parameters"
 msgstr "Параметри шин MR та MC"
 
 msgid "Acquisition schedule"
-msgstr "Планування опитування"
+msgstr "Планування збору"
 
-msgid "Gather task priority"
-msgstr "Пріоритет задачі збору"
+msgid "Priority of the acquisition task"
+msgstr "Пріорітет задачі збору даних"
 
 msgid "Shared memory variables file"
 msgstr "Файл змінних у поділюваній пам'яті"
@@ -62,9 +62,11 @@ msgstr "Тека з *.ini файлами пристроїв MR/MC"
 msgid "Acquisition. "
 msgstr "Збір. "
 
+#, c-format
 msgid "Acquisition with the period: %s. "
 msgstr "Збір з періодом: %s. "
 
+#, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Наступний збір за cron '%s'. "
 

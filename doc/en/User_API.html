@@ -84,7 +84,7 @@
 <li> Transport protocols allowed for user programming that is: <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">User protocol</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus nodes of the type "Data"</a>, <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">Web-interfaces from the user</a>, ...</li>
 <li> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">Visual Control Area (VCA)</a> in procedures of the widgets.</li></ul>
 <p>User programming API is the tree of the OpenSCADA objects (Fig.1), every object of which can provide own list of properties and functions. Properties and functions of the objects can be used by the user in procedures on the languages of the user programming of OpenSCADA.
-</p><p>Currently OpenSCADA provides only one language of the text programming — <a href="#JavaLikeCalc">JavaLikeCalc</a> then you must learn it also before the starting! The entry point for access to the objects of OpenSCADA (Fig.1) from the user programming language JavaLikeCalc is the reserved word "SYS" of the root OpenSCADA object. For example, to access the function of outgoing transport you should write: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
+</p><p>Currently OpenSCADA provides only one language of the text programming — <a href="#JavaLikeCalc">JavaLikeCalc</a> then you must learn it also before the starting! The entry point for access to the objects of OpenSCADA (Fig.1) from the user programming language JavaLikeCalc is the reserved word "SYS" of the root OpenSCADA object. For example, to access the function of output transport you should write: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
 </p><p>API of the objects provided by the modules is described in the own documentation of the modules and here links to their are provided.
 </p>
 <h2><span class="mw-headline" id="The_user_programming_language_JavaLikeCalc"><span class="mw-headline-number">1</span> <span id="JavaLikeCalc" title="#JavaLikeCalc"><a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">The user programming language JavaLikeCalc</a></span></span></h2>
@@ -653,7 +653,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>vl</i> — value;</li>
 <li> <i>arch</i> — archiver of the set request, set in an empty line for all archivers, set to "&lt;buffer&gt;" to handle only the buffer.</li></ul></li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Transports.22_.28SYS.Transport.29"><span class="mw-headline-number">9</span> <span id="SYSTransport" title="#SYSTransport">Subsystem "Transports" (SYS.Transport)</span></span></h2>
-<p>Functions of the ingoing transport object (SYS.Transport["Modul"]["in_Transp"]):
+<p>Functions of the input transport object (SYS.Transport["Modul"]["in_Transp"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
 <li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
@@ -661,7 +661,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>string addr( string vl = "" )</i> — address of the transport, sets the non-empty value <i>vl</i>.</li>
 <li> <i>string writeTo(string sender, string mess)</i> — sends the message <i>mess</i> to the sender <i>sender</i>, as a reply.</li>
 <li> <i>TArrayObj assTrsList()</i> — assigned output transports list to the input one.</li></ul>
-<p>Functions of the outgoing transport object (SYS.Transport["Modul"]["out_Transp"]):
+<p>Functions of the output transport object (SYS.Transport["Modul"]["out_Transp"]):
 </p>
 <ul>
 <li><i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>

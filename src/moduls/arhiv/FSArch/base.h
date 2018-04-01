@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Archiver on the file system")
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define MOD_VER		"3.0.1"
+#define MOD_VER		"3.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to the file system.")
 #define LICENSE		"GPL2"

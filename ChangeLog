@@ -1,3 +1,17 @@
+2018-04-01 Roman (stable)
+- !:DOC: "Quick Start" continued to revision ongoing of it translation to Ukrainian, in the part 4.
+- FIX:DB.LibsDB.OscadaLibs: Some original messages are fixed.
+- SYS: "Template library" renamed to "Templates library".
+    The expression "Gather task priority" replaced in whole to "Priority of the acquisition task".
+    The Ukrainian word "Включено" replaced in whole to "Ввімкнено" and "Виключено" to "Вимкнено".
+- !!:Archive.FSArch,DAQ.{LogicLev,ModBus}: Fully revised for the original text messages.
+- FIX:UI.VCAEngine: The attribute "value" of the primitive "FormEl" prevented from the modification flag set at the type change.
+- UI.Vision: The mode "Load" of the view "Button" of the primitive "FormEl" expanded for use mime and placing the selected file name to the header.
+- !!!:UI.WebVision: The modes "Menu", "Load" and "Save" of the view "Button" of the primitive "FormEl" are implemented.
+    Some properties of the primitive "FormEl" were fixed for detect the changes.
+    The tree view implementation was set the generic one for use in two places.
+
+
 2018-03-24 Roman (stable)
 - !:DOC: "Quick Start" continued to revision ongoing of it translation to Ukrainian, in the part 3.
 - !!!:SYS: The option --enable-QtMainThrd of the configure time of the building was replaced by
