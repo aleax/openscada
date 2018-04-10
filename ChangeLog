@@ -1,4 +1,5 @@
 2018-04-10 Roman (stable)
+- FIX:Archive.FSArch: Third argument of the function open() with the option O_CREAT.
 - !!!!:DOC: "Quick Start" revision and it translation to Ukrainian finished at last.
 - FIX:DB.LibsDB.vcaBase: The "Analog show" widget translation expanded for the whole expression. The widget "Cooler (cooler2)" renamed to "Cooler 2".
     Main.{grpGraph,ViewCadr,grpGraph10}: Direct links to "name" replaced by the dynamic one "this.attr("name")", due it processing can be lost sometime.

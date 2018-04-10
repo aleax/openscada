@@ -100,7 +100,7 @@ void ModMArch::start( )
 	string dbl = "";
 	MtxAlloc res(mod->dataRes(), true);
 	const char *fLock = "fsArchLock";
-	int hd = open((addr()+"/"+fLock).c_str(), O_CREAT|O_TRUNC|O_WRONLY);
+	int hd = open((addr()+"/"+fLock).c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles());
 	if(hd >= 0) {
 	    write(hd, "1", 1);
 	    vector<string> ls;
