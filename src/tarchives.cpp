@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: tarchives.cpp
+//OpenSCADA file: tarchives.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
@@ -1255,7 +1255,7 @@ TCntrNode &TMArchivator::operator=( const TCntrNode &node )
     if(!src_n) return *this;
 
     //Configuration copy
-    exclCopy(*src_n, "ID;");
+    exclCopy(*src_n, "ID;ADDR;");
     cfg("MODUL").setS(owner().modId());
     mDB = src_n->mDB;
 

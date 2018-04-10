@@ -93,7 +93,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
     mEdLay->setSpacing(6);
     //Id and name fields
     if(with_id) {
-	mEdLay->addWidget(new QLabel(_("ID:"),this), 0, 0);
+	mEdLay->addWidget(new QLabel(_("Identifier:"),this), 0, 0);
 	mId = new QLineEdit(this);
 	mEdLay->addWidget(mId, 0, 1);
     }
@@ -184,7 +184,7 @@ void InputDlg::showEvent( QShowEvent * event )
 DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent, const string &hint, const string &lang ) :
     QDialog(parent), VCAstat(iVCAstat)
 {
-    setWindowTitle(_("Select user"));
+    setWindowTitle(_("Selecting an user"));
 
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
     dlg_lay->setMargin(10);
@@ -315,7 +315,7 @@ bool UserStBar::userSel( const string &hint )
 	return true;
     }
     else if(rez == DlgUser::SelErr)
-	mod->postMess(mod->nodePath().c_str(), QString(_("Authentication error for user '%1'!!!")).arg(d_usr.user()), TVision::Warning, this);
+	mod->postMess(mod->nodePath().c_str(), QString(_("Error authenticating the user '%1'!!!")).arg(d_usr.user()), TVision::Warning, this);
 
     return false;
 }
@@ -328,7 +328,7 @@ bool UserStBar::userSel( const string &hint )
 //*********************************************
 FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
 {
-    setWindowTitle(_("Font select"));
+    setWindowTitle(_("Selecting a font"));
 
     QGridLayout *dlg_lay = new QGridLayout(this);
     dlg_lay->setMargin(10);
@@ -990,7 +990,7 @@ void TextEdit::find( )
     int fopt = (QTextDocument::FindFlag)actFind->objectName().section(':',false,false).toInt();
     QString fstr = actFind->objectName().section(':',1);
     if(sender() == actFind) {
-	InputDlg dlg(this,actFind->icon(),QString(_("Enter text string for search:")),_("String search"),0,0);
+	InputDlg dlg(this,actFind->icon(),QString(_("Enter a string to search:")),_("Search string"),0,0);
 	QLineEdit *le = new QLineEdit(fstr,&dlg);
 	dlg.edLay()->addWidget(le, 0, 0);
 	QCheckBox *bw = new QCheckBox(_("Backward"),&dlg);
@@ -1205,7 +1205,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	    cntrIfCmd(*aBr);
 	    reqBrCr = true;
 	    if(mess_lev() == TMess::Debug)
-		mess_debug(mod->nodePath().c_str(), _("Request to VCA engine '%s' time %f ms."), id().c_str(), 1e-3*(TSYS::curTime()-d_cnt));
+		mess_debug(mod->nodePath().c_str(), _("Time of requesting the VCA engine '%s': %f ms."), id().c_str(), 1e-3*(TSYS::curTime()-d_cnt));
 	}
 
 	setAllAttrLoad(true);
@@ -1263,7 +1263,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
     //Post load init for root widget
     if(wLevel() == 0) {
 	if(mess_lev() == TMess::Debug) {
-	    mess_debug(mod->nodePath().c_str(), _("Load '%s' time %f ms."), id().c_str(), 1e-3*(TSYS::curTime()-d_cnt));
+	    mess_debug(mod->nodePath().c_str(), _("Time of loading '%s': %f ms."), id().c_str(), 1e-3*(TSYS::curTime()-d_cnt));
 	    d_cnt = TSYS::curTime();
 	}
 
@@ -1277,7 +1277,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	//repaint();
 
 	if(mess_lev() == TMess::Debug)
-	    mess_debug(mod->nodePath().c_str(), _("Init '%s' time %f ms."), id().c_str(), 1e-3*(TSYS::curTime()-d_cnt));
+	    mess_debug(mod->nodePath().c_str(), _("Time of initiating '%s': %f ms."), id().c_str(), 1e-3*(TSYS::curTime()-d_cnt));
     }
 }
 

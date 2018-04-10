@@ -59,7 +59,7 @@ class MTable : public TTable
 	//Private methods
 	void postDisable( int flag );
 	bool isEmpty( );
-	void fieldFix( TConfig &cfg );
+	void fieldFix( TConfig &cfg, bool trPresent = false );
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt = 1 );
 
 	string getVal( TCfg &cfg, uint8_t RqFlg = 0 );

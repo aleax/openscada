@@ -64,7 +64,7 @@ class VisRun : public QMainWindow
 
 		//Methods
 		explicit Notify( ) : tp(-1), comIsExtScript(false),
-		    f_notify(false), f_resource(false), f_queue(false), f_quittanceRet(false), mOwner(NULL), actAlrm(NULL)	{ }
+		    f_notify(false), f_resource(false), f_queue(false), f_quietanceRet(false), mOwner(NULL), actAlrm(NULL)	{ }
 		Notify( uint8_t tp, const string &pgProps, VisRun *own );
 		~Notify( );
 
@@ -72,7 +72,7 @@ class VisRun : public QMainWindow
 		string	props( );
 
 		bool hasQueue( )	{ return f_queue; }
-		bool hasQuittanceRet( )	{ return f_quittanceRet; }
+		bool hasQuietanceRet( )	{ return f_quietanceRet; }
 		string curQueueWdg( );
 
 		void ntf( int alrmSt );	//Same notify for the alarm status
@@ -99,7 +99,7 @@ class VisRun : public QMainWindow
 		unsigned f_notify	:1;	//Notification enabled
 		unsigned f_resource	:1;	//Request the resource for notification: sound file, text or other data
 		unsigned f_queue	:1;	//Use queue of notifications by the priority-level
-		unsigned f_quittanceRet	:1;	//Return quittance mode - enable/disable the notification
+		unsigned f_quietanceRet	:1;	//Return quietance mode - enable/disable the notification
 
 		unsigned toDo		:1;	//Need to do some notification doings
 		unsigned alEn		:1;	//Alarm enabled
@@ -177,7 +177,7 @@ class VisRun : public QMainWindow
 
 	// Alarms-notification processing
 	unsigned alarmSt( )					{ return mAlrmSt; }
-	char alarmTp( char tmpl, bool quittance = false )	{ return (mAlrmSt>>(quittance?16:8)) & tmpl; }
+	char alarmTp( char tmpl, bool quietance = false )	{ return (mAlrmSt>>(quietance?16:8)) & tmpl; }
 	int  alarmLev( )					{ return mAlrmSt & 0xFF; }
 	void alarmSet( unsigned alarm );
 	//  Notification type <tp> register for no empty <props> else unregister, from the page-creator <pgCrtor>
@@ -292,7 +292,7 @@ class VisRun : public QMainWindow
 
 	// Alarm attributes
 	unsigned	mAlrmSt;		//Alarm status
-	bool		alrLevSet;		//For no quittance lamp blinking
+	bool		alrLevSet;		//For no quietance lamp blinking
 	unsigned	ntfSet;			//Allowed notificators set mask
 	map<uint8_t, Notify*>	mNotify;	//Notificators
 

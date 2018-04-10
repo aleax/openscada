@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Archive.DBArch file: val.h
+//OpenSCADA module Archive.DBArch file: val.h
 /***************************************************************************
  *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

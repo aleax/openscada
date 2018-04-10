@@ -707,7 +707,7 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <p><b>Объект "Сеанс" ( this.ownerSess() )</b>
 </p>
 <ul><li> <i>string user( )</i> — текущий пользователь сеанса.</li>
-<li> <i>int alrmQuittance( int quit_tmpl, string wpath = "", bool ret = false )</i> — квитирование нарушений <i>wpath</i> с шаблоном <i>quit_tmpl</i>. Если <i>wpath</i> пустая строка то производится глобальное квитирование. В строке <i>wpath</i>, через символ ';', могут быть перечислены адреса нескольких виджетов. При установке <i>ret</i> осуществляется возврат квитирования.</li>
+<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — квитирование нарушений <i>wpath</i> с шаблоном <i>quit_tmpl</i>. Если <i>wpath</i> пустая строка то производится глобальное квитирование. В строке <i>wpath</i>, через символ ';', могут быть перечислены адреса нескольких виджетов. При установке <i>ret</i> осуществляется возврат квитирования.</li>
 <li> <i>int reqTm( )</i> — время последнего запроса.</li>
 <li> <i>string reqUser( )</i> — пользователь последнего запроса.</li>
 <li> <i>string reqLang( )</i> — язык последнего запроса.</li>

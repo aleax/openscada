@@ -1,4 +1,4 @@
-//OpenSCADA system module Protocol.FT3 file: FT3_prt.h
+//OpenSCADA module Protocol.FT3 file: FT3_prt.h
 /***************************************************************************
  *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *

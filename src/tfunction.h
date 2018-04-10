@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: tfunction.h
+//OpenSCADA file: tfunction.h
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
@@ -264,7 +264,7 @@ class TValFunc
 	unsigned short	mMdfChk	:1;	//Modify attributes check
 
 	TFunction	*mFunc;
-	map<int,TValFunc* >	vctx;
+	map<int, TValFunc* >	vctx;
 	ResMtx mRes;
 };
 

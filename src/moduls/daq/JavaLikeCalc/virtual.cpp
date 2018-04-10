@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.8.0"
+#define MOD_VER		"3.8.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -259,7 +259,7 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 	    func.free();
 	    lbAt("sys_compile").at().del(funcId.c_str());
 	}
-	throw TError((nodePath()+"sys_compile/"+funcId).c_str(), _("Compile error: %s"), err.mess.c_str());
+	throw TError((nodePath()+"sys_compile/"+funcId).c_str(), _("Error compiling: %s"), err.mess.c_str());
     }
 
     return func.at().nodePath(0,true);
@@ -306,7 +306,7 @@ void TpContr::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Load function libraries error.")); 
+	mess_err(nodePath().c_str(),_("Error loading for function libraries."));
     }
 }
 
@@ -891,7 +891,7 @@ void Prm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/FLD",cfg("FLD").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"SnthHgl","1",
-	    "help",_("List of configuration of the attributes. List must be written by lines in format: \"{io}[:{aid}[:{anm}]]\"\n"
+	    "help",_("List of configuration of the attributes. List must be written by lines in the format: \"{io}[:{aid}[:{anm}]]\"\n"
 	    "Where:\n"
 	    "  io - IO of the computable function;\n"
 	    "  aid - identifier of the created attribute;\n"

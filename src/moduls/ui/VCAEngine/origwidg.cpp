@@ -33,9 +33,9 @@ PrWidget::PrWidget( const string &iid ) : LWidget(iid)
 
 }
 
-void PrWidget::preDisable(int flag)
+void PrWidget::preDisable( int flag )
 {
-    if(flag) throw TError(mod->nodePath().c_str(),_("Deleting the base primitive-widget error."));
+    if(flag) throw TError(mod->nodePath().c_str(),_("Impossible deleting the base primitive-widget."));
 
     Widget::preDisable(flag);
 }
@@ -74,8 +74,8 @@ bool PrWidget::cntrCmdGeneric( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	Widget::cntrCmdGeneric(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Base widget: ")+id());
-	ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,owner().c_str(),grp().c_str(),2,"tp","str","dest","");
+	ctrMkNode("oscada_cntr", opt, -1, "/", TSYS::strMess(_("Base widget '%s'."),id().c_str()));
+	ctrMkNode("fld", opt, -1, "/wdg/st/parent", _("Parent"), R_R_R_, owner().c_str(),grp().c_str(), 2, "tp","str", "dest","");
 	return true;
     }
 
@@ -110,13 +110,13 @@ void PrWidget::cntrCmdProc( XMLNode *opt )
 
 //*************************************************
 //* OrigElFigure:                                 *
-//*  Elementary figures original widget           *
+//*  Elementary figure original widget            *
 //*************************************************
 OrigElFigure::OrigElFigure( ) : PrWidget("ElFigure")	{ }
 
-string OrigElFigure::name( ) const	{ return _("Elementary figures"); }
+string OrigElFigure::name( ) const	{ return _("Elementary figure"); }
 
-string OrigElFigure::descr( ) const	{ return _("Elementary figures widget of the finite visualization."); }
+string OrigElFigure::descr( ) const	{ return _("Widget of the elementary figure of the finite visualization."); }
 
 void OrigElFigure::postEnable( int flag )
 {
@@ -153,7 +153,7 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_ElFigLineClr: case A_ElFigBordClr: case A_ElFigFillClr: el->setAttr("help",Widget::helpColor());	break;
 		    case A_ElFigFillImg: el->setAttr("help",Widget::helpImg());	break;
 		    case A_ElFigElLst: el->setAttr("SnthHgl","1")->setAttr("help",
-		    _("The list of elements can contain:\n"
+		    _("The elements list can contain:\n"
 		      "  line:({x}|{y}):({x}|{y})[:{width}[:{color}[:{bord_w}[:{bord_clr}[:{line_stl}]]]]]\n"
 		      "  line:{p1}:{p2}[:w{n}[:c{n}[:w{n}[:c{n}[:s{n}]]]]]\n"
 		      "  arc:({x}|{y}):({x}|{y}):({x}|{y}):({x}|{y}):({x}|{y})[:{width}[:{color}[:{bord_w}[:{bord_clr}[:{line_stl}]]]]]\n"
@@ -171,12 +171,12 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		      "  c{n}            - dynamic color 'n';\n"
 		      "  line_stl        - direct line style: 0-Solid, 1-Dashed, 2-Dotted;\n"
 		      "  s{n}            - dynamic style 'n';\n"
-		      "  fill_img        - direct fill image in form \"[{src}:]{name}\", where:\n"
+		      "  fill_img        - direct image of the filling in the form \"[{src}:]{name}\", where:\n"
 		      "     \"src\"      - image source:\n"
-		      "        file      - direct from local file by path;\n"
-		      "        res       - from DB mime resources table.\n"
-		      "     \"name\"     - file path or resource mime Id.\n"
-		      "  i{n}            - dynamic fill image 'n'.\n"
+		      "        file      - directly from a local file by the path;\n"
+		      "        res       - from table of DB-mime resources.\n"
+		      "     \"name\"     - file path or mime-resource identifier.\n"
+		      "  i{n}            - dynamic image of the filling 'n'.\n"
 		      "For example:\n"
 		      "  line:(50|25):(90.5|25):2:yellow:3:green:2\n"
 		      "  arc:(25|50):(25|50):1:4:(25|50)::#000000-0\n"
@@ -309,9 +309,9 @@ bool OrigElFigure::attrChange( Attr &cfg, TVariant prev )
 //*************************************************
 OrigFormEl::OrigFormEl( ) : PrWidget("FormEl")	{ }
 
-string OrigFormEl::name( ) const	{ return _("Form elements"); }
+string OrigFormEl::name( ) const	{ return _("Form element"); }
 
-string OrigFormEl::descr( ) const	{ return _("Form elements widget of the finite visualization."); }
+string OrigFormEl::descr( ) const	{ return _("Form element widget of the finite visualization."); }
 
 void OrigFormEl::postEnable( int flag )
 {
@@ -479,7 +479,7 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    if(!(el=ctrId(root,"/cfg",true)))	break;
 		    switch(src->attrAt("view").at().getI()) {
 			case FL_TEXT:
-			    el->setAttr("help",_("Enter text line by template with the char items:\n"
+			    el->setAttr("help",_("Enter text line by the template with the char items:\n"
 				"  'A' - ASCII alphabetic character required. A-Z, a-z.\n"
 				"  'a' - ASCII alphabetic character permitted but not required.\n"
 				"  'N' - ASCII alphanumeric character required. A-Z, a-z, 0-9.\n"
@@ -504,13 +504,13 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			    el->setAttr("help",_("List of values the editable combobox by lines."));
 			    break;
 			case FL_INTEGER:
-			    el->setAttr("help",_("Integer value configuration in form: \"{Min}:{Max}:{ChangeStep}:{Prefix}:{Suffix}\"."));
+			    el->setAttr("help",_("Integer value configuration in the form: \"{Min}:{Max}:{ChangeStep}:{Prefix}:{Suffix}\"."));
 			    break;
 			case FL_REAL:
-			    el->setAttr("help",_("Real value configuration in form: \"{Min}:{Max}:{ChangeStep}:{Prefix}:{Suffix}:{SignsAfterDot}\"."));
+			    el->setAttr("help",_("Real value configuration in the form: \"{Min}:{Max}:{ChangeStep}:{Prefix}:{Suffix}:{SignsAfterDot}\"."));
 			    break;
 			case FL_TIME: case FL_DATE: case FL_DATE_TM:
-			    el->setAttr("help",_("Enter date and/or time by template with the items:\n"
+			    el->setAttr("help",_("Enter date and/or time by the template with the items:\n"
 				"  \"d\" - number of the day (1-31);\n"
 				"  \"dd\" - number of the day (01-31);\n"
 				"  \"ddd\" - acronym of the day ('Mon' ... 'Sun');\n"
@@ -519,8 +519,8 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 				"  \"MM\" - number of the month (01-12);\n"
 				"  \"MMM\" - acronym of the month ('Jan' ... 'Dec');\n"
 				"  \"MMMM\" - the full name of the month ('January' ... 'December');\n"
-				"  \"yy\" - last two digits of the year;\n"
-				"  \"yyyy\" - full year;\n"
+				"  \"yy\" - the last two digits of the year;\n"
+				"  \"yyyy\" - the full year;\n"
 				"  \"h\" - hour (0-23);\n"
 				"  \"hh\" - hour (00-23);\n"
 				"  \"m\" - minutes (0-59);\n"
@@ -540,37 +540,38 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    if((el=ctrId(root,"/colorText",true))) el->setAttr("help",Widget::helpColor());
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    if((el=ctrId(root,"/mode",true)))	el->setAttr("help",
-			_("The button operation mode:\n"
-			  "  \"Standard\" - normal button which allow events repeat on it hold (the parameters into \"value\");\n"
-			  "  \"Checkable\" - fixed button (values into \"value\");\n"
-			  "  \"Menu\" - open menu on press (items list into \"value\");\n"
-			  "  \"Load\" - provides user-space small files loading through the visual interface;\n"
-			  "             on the mode the button press will open selection file dialog for loading and\n"
-			  "             the file content next saving to attribute \"value\";\n"
-			  "  \"Save\" - provides user-space small files saving through the visual interface;\n"
-			  "             on the file content writing to \"value\" attribute for user will open selection/set file dialog\n"
-			  "             and next saving the attribute \"value\" content to the file and next the attribute \"value\" will set clean."));
+			_("Operation modes of the button:\n"
+			  "  \"Standard\" - standard button with the ability to repeat the events when hold (the parameters in \"value\");\n"
+			  "  \"Checkable\" - checkable button (the value in \"value\");\n"
+			  "  \"Menu\" - opening menu by click (the list of items in \"value\");\n"
+			  "  \"Load\" - provides user downloading of small files through the visualization interface;\n"
+			  "             at the push of a button, in this mode, the dialog opens the file selection for download,\n"
+			  "             and the content of the selected file is loaded to the attribute \"value\";\n"
+			  "  \"Save\" - provides user saving small files through the interface of visualization;\n"
+			  "             after the contents of the file have been written to the \"value\" attribute,\n"
+			  "             a dialog will be opened for selecting-defining a file to save, after which the contents\n"
+			  "             of the attribute \"value\" will be saved to the file and it will be cleared itself."));
 		    if((el=ctrId(root,"/value",true)))
 			switch(src->attrAt("mode").at().getI()) {
-			    case FBT_STD:  el->setAttr("help", _("Repeating parameters of events on holding \"{delay}-{interval}\", time in milliseconds."));	break;
-			    case FBT_CHECK:el->setAttr("help", _("Toggle value."));	break;
-			    case FBT_MENU: el->setAttr("help", _("Addresses of menu elements list like \"/grp1/grp2/item1\"."));		break;
-			    case FBT_LOAD: el->setAttr("help", _("Description line \"{FilesTemplate}|{Header}|{FileByDefault}\" and loaded file content.\n"
-			                                         "Files template like \"Images (*.png *.xpm *.jpg);;CSV-file (*.csv)\"."));	break;
-			    case FBT_SAVE: el->setAttr("help", _("Description line \"{FilesTemplate}|{Header}|{FileByDefault}\" and saved file content.\n"
-			                                         "Files template like \"Images (*.png *.xpm *.jpg);;CSV-file (*.csv)\"."));	break;
+			    case FBT_STD:  el->setAttr("help", _("Parameters of the repeating of the events at holding the button \"{delay}-{interval}\", time in milliseconds."));	break;
+			    case FBT_CHECK:el->setAttr("help", _("Value of the toggle."));	break;
+			    case FBT_MENU: el->setAttr("help", _("List of menu items in the form \"/grp1/grp2/item1\"."));	break;
+			    case FBT_LOAD: el->setAttr("help", _("First line of the descriptor \"{FilesTemplate}|{Header}|{FileByDefaultAndLoaded}|{FileMime}\" and the loaded file content from the next line.\n"
+			                                         "The files template writing like to \"Images (*.png *.xpm *.jpg);;CSV-file (*.csv)\"."));	break;
+			    case FBT_SAVE: el->setAttr("help", _("First line of the descriptor \"{FilesTemplate}|{Header}|{FileByDefault}|{FileMime}\" and the saving file content from the next line.\n"
+			                                         "The files template writing like to \"Images (*.png *.xpm *.jpg);;CSV-file (*.csv)\"."));	break;
 			}
 		    break;
 		case F_COMBO: case F_LIST: case F_TREE:
 		    if((el=ctrId(root,"/items",true)))	el->setAttr("help",
-			(elTp==F_TREE)?_("List of hierarchical items in path \"/{DIR}/{DIR}/{ITEM}\" by lines."):_("List of items-values by lines."));
+			(elTp==F_TREE)?_("List of the hierarchical items by the path \"/{DIR}/{DIR}/{ITEM}\" per line."):_("List of items-values by lines."));
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    break;
 		case F_SLIDER: case F_SCROLL_BAR:
 		    if((el=ctrId(root,"/cfg",true))) el->setAttr("help",
 			_("Configuration of the slider in the format: \"{VertOrient}:{Min}:{Max}:{SinglStep}:{PageStep}\".\n"
 			  "Where:\n"
-			  "  \"VertOrient\" - sign of a vertical orientation, the default is the horizontal orientation;\n"
+			  "  \"VertOrient\" - sign of the vertical orientation, the default one is the horizontal orientation;\n"
 			  "  \"Min\" - minimum value;\n"
 			  "  \"Max\" - maximum value;\n"
 			  "  \"SinglStep\" - the size of a single step;\n"
@@ -584,31 +585,31 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			  "    <r><s>{Row1Column1String}</s><i>{Row1Column1Integer}</i></r>\n"
 			  "    <r><b>{Row2Column1Logical}</b><r>{Row2Column2Real}</r></r>\n"
 			  "  </tbl>\n"
-			  "The tags:\n"
+			  "Tags:\n"
 			  "  tbl - Table, the properties at all:\n"
-			  "    sel         - the selection mode of the table items:\n"
+			  "    sel         - selection mode of the table items:\n"
 			  "                 \"row\" - by rows, \"col\" - by columns, \"cell\" - by cells (by default);\n"
-			  "    keyID       - the key's row-column number, for the selection value get;\n"
-			  "    colsWdthFit - fit the columns (which size unfixed) size to fill for full the table width;\n"
-			  "    hHdrVis, vHdrVis - horizontal, vertical header visibility set;\n"
-			  "    sortEn - direct sorting by columns enable.\n"
-			  "  h   - The headers size, allowed attributes about cell-tag of the header, for the column as a whole:\n"
-			  "    width - the column width, in pixels or percents (10%);\n"
+			  "    keyID       - row-column number of the key, for the selection value get;\n"
+			  "    colsWdthFit - fits the columns (in the unfixed size) size to fill the full width of the table;\n"
+			  "    hHdrVis, vHdrVis - visibility of the headers, for horizontal and vertical;\n"
+			  "    sortEn - enables sorting directly by the columns.\n"
+			  "  h   - Row of the headers. Possible attributes of the header cell tag for the column as a whole:\n"
+			  "    width - column width, in pixels or percents (10%);\n"
 			  "    edit  - allowing to the cells of the row edition (0 or 1), by default - no (0);\n"
-			  "    color - the column color as a whole into the color name or code;\n"
-			  "    colorText - the column's text color as a whole into the color name or code;\n"
-			  "    font - the column's text font in typical OpenSCADA's string;\n"
+			  "    color - column color as a whole into the color name or code;\n"
+			  "    colorText - color of the column text as a whole into the color name or code;\n"
+			  "    font - font of the column text in the typical OpenSCADA string;\n"
 			  "    sort - sorting by the column [0 - Descending; 1 - Ascending].\n"
-			  "  r   - the row of values, allowed attributes:\n"
-			  "    color - the row color as a whole into the color name or code;\n"
-			  "    colorText - the row's text color as a whole into the color name or code;\n"
-			  "    font - the row's text font in typical OpenSCADA's string.\n"
-			  "  s, i, r, b - the data type's cells \"String\", \"Integer\", \"Real\" and \"Logical\". Allowed attributes:\n"
-			  "    color - the cell's background color;\n"
-			  "    colorText - the cell's text color into the color name or code;\n"
-			  "    font - the cell's text font in typical OpenSCADA's string;\n"
-			  "    img - the cell's image into form \"[{src}:]{name}\", the details above;\n"
-			  "    edit - allowing to the cell of the row edition (0 or 1), by default - no (0)."));
+			  "  r   - Row of the values. Possible attributes of the row cell tag for the row as a whole:\n"
+			  "    color - row color as a whole into the color name or code;\n"
+			  "    colorText - color of the row text as a whole into the color name or code;\n"
+			  "    font - font of the row text in the typical OpenSCADA string.\n"
+			  "  s, i, r, b - cells of the data types \"String\", \"Integer\", \"Real\" and \"Logical\". Possible attributes:\n"
+			  "    color - cell color;\n"
+			  "    colorText - color of the cell text into the color name or code;\n"
+			  "    font - font of the cell text in the typical OpenSCADA string;\n"
+			  "    img - image of the cell into the form \"[{src}:]{name}\";\n"
+			  "    edit - allowing the cell edition (0 or 1), by default - no (0)."));
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    break;
 	    }
@@ -667,9 +668,9 @@ bool OrigFormEl::eventProc( const string &ev, Widget *src )
 //************************************************
 OrigText::OrigText( ) : PrWidget("Text")	{ }
 
-string OrigText::name( ) const	{ return _("Text fields"); }
+string OrigText::name( ) const	{ return _("Text field"); }
 
-string OrigText::descr( ) const	{ return _("Text fields widget of the finite visualization."); }
+string OrigText::descr( ) const	{ return _("Text field widget of the finite visualization."); }
 
 void OrigText::postEnable( int flag )
 {
@@ -773,10 +774,10 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++) {
 		if(!(el=ctrId(root,"/arg"+i2s(i_arg)+"cfg",true))) continue;
 		switch(src->attrAt("arg"+i2s(i_arg)+"tp").at().getI()) {
-		    case A_TextArsVal:	el->setAttr("help",_("Integer value configuration in form \"{len}\"."));break;
-		    case A_TextArsTp:	el->setAttr("help",_("Real value configuration in form: \"{width};{form};{prec}\".\n"
-							     "Where \"form\" that 'g', 'e' or 'f'."));		break;
-		    case A_TextArsCfg:	el->setAttr("help",_("String value configuration in form \"{len}\"."));	break;
+		    case A_TextArsVal:	el->setAttr("help",_("Integer value configuration in the form \"{len}\"."));break;
+		    case A_TextArsTp:	el->setAttr("help",_("Real value configuration in the form: \"{width};{form};{prec}\".\n"
+							     "Where \"form\" is 'g', 'e' or 'f'."));		break;
+		    case A_TextArsCfg:	el->setAttr("help",_("String value configuration in the form \"{len}\"."));	break;
 		}
 	    }
 	}
@@ -858,10 +859,10 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 	    //Create specific attributes
 	    switch(cfg.getI()) {
 		case FM_IMG:
-		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
+		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to the widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
 		    break;
 		case FM_ANIM:
-		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
+		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to the widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
 		    cfg.owner()->attrAdd(new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"","100","1;900","",i2s(A_MediaSpeedPlay).c_str()));
 		    break;
 		case FM_FULL_VIDEO:
@@ -920,23 +921,23 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_BackColor: case A_BordColor: el->setAttr("help",Widget::helpColor());	break;
 		    case A_BackImg: el->setAttr("help",Widget::helpImg());		break;
 		    case A_MediaSrc: el->setAttr("dest","sel_ed")->setAttr("select","/attrImg/sel_"+el->attr("id"))->setAttr("help",
-			_("Media source name in form \"[{src}:]{name}\", where:\n"
+			_("Name of the media source in the form \"[{src}:]{name}\", where:\n"
 			"  \"src\" - source:\n"
-			"    file - direct from local (visualizator or engine) file by the path;\n"
-			"    res - from the DB mime resources table;\n"
-			"    stream - Stream URL for video and audio play.\n"
-			"  \"name\" - the file path or the resource mime Id.\n"
+			"    file - directly from a local file (for visualizator or engine) by the path;\n"
+			"    res - from table of DB-mime resources;\n"
+			"    stream - stream URL to play video and audio.\n"
+			"  \"name\" - file path or mime-resource identifier.\n"
 			"Examples:\n"
-			"  \"res:workMedia\" - from the DB mime resources table for Id \"workMedia\";\n"
-			"  \"workMedia\" - like previous;\n"
-			"  \"file:/var/tmp/workMedia.mng\" - from local file by the path \"/var/tmp/workMedia.mng\";\n"
-			"  \"stream:http://localhost.localhost:5050\" - video and audio stream play from URL."));
+			"  \"res:workMedia\" - from the table of DB-mime resources for the ID \"workMedia\";\n"
+			"  \"workMedia\" - like to the previous;\n"
+			"  \"file:/var/tmp/workMedia.mng\" - from a local file by the path \"/var/tmp/workMedia.mng\";\n"
+			"  \"stream:http://localhost.localhost:5050\" - playing the stream video and audio from the URL."));
 			break;
 		    case A_MediaType: el->setAttr("help",
 			_("Media type variant:\n"
-			"  \"Image\" - raster or vector(can not support) image, like: PNG, JPEG, GIF;\n"
-			"  \"Animation\" - simple animation image, like: GIF, MNG;\n"
-			"  \"Full video\" - full video, audio or stream, like: OGG, OGM, AVI, MKV, MPG, MP3, MP4."));
+			"  \"Image\" - raster or vector image, like to: PNG, JPEG, GIF, SVG;\n"
+			"  \"Animation\" - simple animation image, like to: GIF, MNG;\n"
+			"  \"Full video\" - full video, audio or stream, like to: OGG, OGM, AVI, MKV, MPG, MP3, MP4."));
 			break;
 		}
 	    }
@@ -944,9 +945,9 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		el = ctrId(root,TSYS::strMess("/area%dcoord",i_a),true);
 		if(!el) continue;
 		switch(src->attrAt(TSYS::strMess("area%dshp",i_a)).at().getI()) {
-		    case FM_RECT: el->setAttr("help",_("Rectangle area in form \"x1,y1,x2,y2\"."));	break;
-		    case FM_POLY: el->setAttr("help",_("Polygon area in form \"x1,y1,x2,y2,xN,yN\"."));	break;
-		    case FM_CIRCLE: el->setAttr("help",_("Circle area in form \"x,y,r\"."));		break;
+		    case FM_RECT: el->setAttr("help",_("Rectangle area in the form \"x1,y1,x2,y2\"."));	break;
+		    case FM_POLY: el->setAttr("help",_("Polygon area in the form \"x1,y1,x2,y2,xN,yN\".")); break;
+		    case FM_CIRCLE: el->setAttr("help",_("Circle area in the form \"x,y,r\"."));	break;
 		}
 	    }
 	}
@@ -1034,8 +1035,8 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd(new TFld("sclVerSclOff",_("Scale: vertical scale offset (%)"),TFld::Real,Attr::Mutable,"","0","-100;100","",i2s(A_DiagramSclVerSclOff).c_str()));
 		cfg.owner()->attrAdd(new TFld("sclMarkColor",_("Scale: Markers: color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramSclMarkColor).c_str()));
 		cfg.owner()->attrAdd(new TFld("sclMarkFont",_("Scale: Markers: font"),TFld::String,Attr::Font|Attr::Mutable,"","Arial 10","","",i2s(A_DiagramSclMarkFont).c_str()));
-		cfg.owner()->attrAdd(new TFld("valArch",_("Value archivator"),TFld::String,Attr::Mutable,"","","","",i2s(A_DiagramValArch).c_str()));
-		cfg.owner()->attrAdd(new TFld("valsForPix",_("Values for pixel"),TFld::Integer,Attr::Mutable,"","1","1;100","",i2s(A_DiagramValsForPix).c_str()));
+		cfg.owner()->attrAdd(new TFld("valArch",_("Value archiver"),TFld::String,Attr::Mutable,"","","","",i2s(A_DiagramValArch).c_str()));
+		cfg.owner()->attrAdd(new TFld("valsForPix",_("Values per pixel"),TFld::Integer,Attr::Mutable,"","1","1;100","",i2s(A_DiagramValsForPix).c_str()));
 		cfg.owner()->attrAdd(new TFld("parNum",_("Parameters number"),TFld::Integer,Attr::Mutable|Attr::Active,"","1","0;100","",i2s(A_DiagramParNum).c_str()));
 		break;
 	}
@@ -1104,34 +1105,34 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_DiagramSclMarkFont: el->setAttr("help",Widget::helpFont());	break;
 		    case A_BackImg: el->setAttr("help",Widget::helpImg());	break;
 		    case A_DiagramValArch:
-			el->setAttr("help",_("Value archivator in form \"{ArchMod}.{ArchivatorId}\"."));	break;
+			el->setAttr("help",_("Value archiver in the form \"{ArchMod}.{ArchiverId}\"."));	break;
 		    case A_DiagramValsForPix:
-			el->setAttr("help",_("The number of values per pixel. Increase to enhance the accuracy of export at large time intervals."));
+			el->setAttr("help",_("Number of the values per pixel. Increase to enhance the export accuracy at large time intervals."));
 			break;
 		}
 	    }
 	    for(int iP = 0; iP < src->attrAt("parNum").at().getI(); iP++) {
 		if((el=ctrId(root,TSYS::strMess("/prm%dcolor",iP),true))) el->setAttr("help",Widget::helpColor());
 		if((el=ctrId(root,TSYS::strMess("/prm%daddr",iP),true))) el->setAttr("help",
-		    _("Full address to DAQ attribute of a parameter or to an archive.\n"
-		      "Also supported direct data set by the prefixes:\n"
+		    _("Full address to the DAQ attribute of the parameter or to the archive.\n"
+		      "Data installation by the direct prefix is supported:\n"
 		      "  \"data:{XMLNodeData}\" - drawing from the direct set data;\n"
-		      "  \"line:{value}\" - drawing the horizontal line by the value, no sense have for type \"XY\".\n"
+		      "  \"line:{value}\" - drawing horizontal line by the value, no sense have for the type \"XY\".\n"
 		      "Example:\n"
-		      "  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute \"use\" of parameter \"MemInfo\"\n"
-		      "    of controller \"AutoDA\" of DAQ module \"System\";\n"
-		      "  \"/Archive/va_CPULoad_load\" - address to archive \"CPULoad_load\";\n"
+		      "  \"/DAQ/System/AutoDA/MemInfo/use\" - address to the attribute \"use\" of the parameter \"MemInfo\"\n"
+		      "    of the controller \"AutoDA\" of the DAQ module \"System\";\n"
+		      "  \"/Archive/va_CPULoad_load\" - address to the archive \"CPULoad_load\";\n"
 		      "  \"data:<d s=\"1\" tm=\"1369465209\" tm_grnd=\"1369465200\" per=\"1\">\n"
 		      "    0 3.14\n"
 		      "    1 3.141\n"
-		      "    5 3.1415</d> - data for 10 seconds and period 1 second from \"25.05.2013 10:00:00\";\n"
-		      "      at pass \"tm\" and \"tm_grnd\" it will sets values from the diagram range,\n"
-		      "      and also by set attribute \"s\" it will allows the time set into seconds;\n"
-		      "  \"line:3.14159265\" - horizontal line into value \"3.14159265\"."));
+		      "    5 3.1415</d> - data for 10 seconds and period in 1 second from \"25.05.2013 10:00:00\";\n"
+		      "      in the absence of \"tm\" and \"tm_grnd\" they will be set from the range of the diagram,\n"
+		      "      and setting the attribute \"s\" will allow you to specify the time in seconds;\n"
+		      "  \"line:3.14159265\" - horizontal line for the value \"3.14159265\"."));
 		if((el=ctrId(root,TSYS::strMess("/prm%dprop",iP),true))) el->setAttr("help",
-		    _("Real archive properties in form \"{BegArh}:{EndArh}:{DataPeriod}\", where:\n"
-		      "  \"BegArh\", \"EndArh\", \"DataPeriod\" - begin, end and period archive's data in seconds,\n"
-		      "                  real up to microseconds (1e-6)."));
+		    _("Actual archive properties in the form \"{BegArh}:{EndArh}:{DataPeriod}\", where:\n"
+		      "  \"BegArh\", \"EndArh\", \"DataPeriod\" - begin, end and period of data of the archive in seconds,\n"
+		      "                  it is the real value up to the microseconds deep (1e-6)."));
 	    }
 	}
 	return true;
@@ -1162,13 +1163,13 @@ void OrigProtocol::postEnable( int flag )
 	attrAdd(new TFld("time",_("Time, seconds"),TFld::Integer,Attr::DateTime,"","","","",i2s(A_ProtTime).c_str()));
 	attrAdd(new TFld("tSize",_("Size, seconds"),TFld::Integer,TFld::NoFlag,"","60","0;50000000","",i2s(A_ProtTSize).c_str()));
 	attrAdd(new TFld("trcPer",_("Tracing period, seconds"),TFld::Integer,TFld::NoFlag,"","0","0;360","",i2s(A_ProtTrcPer).c_str()));
-	attrAdd(new TFld("arch",_("Archivator"),TFld::String,0,"","","","",i2s(A_ProtArch).c_str()));
+	attrAdd(new TFld("arch",_("Archiver"),TFld::String,0,"","","","",i2s(A_ProtArch).c_str()));
 	attrAdd(new TFld("tmpl",_("Template"),TFld::String,0,"","","","",i2s(A_ProtTmpl).c_str()));
 	attrAdd(new TFld("lev",_("Level"),TFld::Integer,TFld::NoFlag,"","0","-7;7","",i2s(A_ProtLev).c_str()));
 	attrAdd(new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selected,"","0",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d",FP_ON_TM,FP_ON_LEV,FP_ON_CAT,FP_ON_MESS,FP_ON_TM_REV,FP_ON_LEV_REV,FP_ON_CAT_REV,FP_ON_MESS_REV).c_str(),
 	    _("On time;On level;On category;On messages;On time (reverse);On level (reverse);On category (reverse);On messages (reverse)"),i2s(A_ProtViewOrd).c_str()));
-	attrAdd(new TFld("col",_("View columns"),TFld::String,0,"","pos;tm;utm;lev;cat;mess","","",i2s(A_ProtCol).c_str()));
+	attrAdd(new TFld("col",_("Show columns"),TFld::String,0,"","pos;tm;utm;lev;cat;mess","","",i2s(A_ProtCol).c_str()));
 	attrAdd(new TFld("itProp",_("Item properties"),TFld::Integer,Attr::Active,"","","","",i2s(A_ProtItProp).c_str()));
     }
 }
@@ -1227,23 +1228,23 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_BackColor: el->setAttr("help",Widget::helpColor());	break;
 		    case A_BackImg: el->setAttr("help",Widget::helpImg());	break;
 		    case A_ProtFont: el->setAttr("help",Widget::helpFont());	break;
-		    case A_ProtArch: el->setAttr("help",_("Messages archivator in form \"{ArchMod}.{ArchivatorId}\"."));	break;
+		    case A_ProtArch: el->setAttr("help",_("Messages archiver in the form \"{ArchMod}.{ArchiverId}\"."));	break;
 		    case A_ProtLev: el->setAttr("help",_("Set value to \"< 0\" for get the current alarms."));	break;
 		    case A_ProtTSize: el->setAttr("help",_("Set value to \"0\" for get all alarms, for \"lev\" < 0."));	break;
 		    case A_ProtTmpl: el->setAttr("help",
-			_("Category template or regular expression \"/{re}/\". For template reserved special symbols:\n"
+			_("Category template or the regular expression \"/{re}/\". For the template there reserved the special symbols:\n"
 			"  '*' - any multiply symbols group;\n"
 			"  '?' - any one symbol;\n"
-			"  '\\' - use for shield special simbols."));
+			"  '\\' - use to shield the special simbols."));
 			break;
 		    case A_ProtCol: el->setAttr("help",
-			_("Visible and order columns list separated by symbol ';'. Supported columns:\n"
+			_("List of visible and the columns order separated by the symbol ';'. Supported columns:\n"
 			"  \"pos\" - row number;\n"
 			"  \"tm\" - date and time of the message;\n"
-			"  \"utm\" - microseconds part of time of the message;\n"
+			"  \"utm\" - microseconds part of the message time;\n"
 			"  \"lev\" - level of the message;\n"
 			"  \"cat\" - category of the message;\n"
-			"  \"mess\" - the message text."));
+			"  \"mess\" - text of the message."));
 			break;
 		}
 	    }
@@ -1251,10 +1252,10 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		if((el=ctrId(root,TSYS::strMess("/it%dcolor",iP),true))) el->setAttr("help",Widget::helpColor());
 		if((el=ctrId(root,TSYS::strMess("/it%dfnt",iP),true))) el->setAttr("help",Widget::helpFont());
 		if((el=ctrId(root,TSYS::strMess("/it%dtmpl",iP),true))) el->setAttr("help",
-		    _("Category template or regular expression \"/{re}/\". For template reserved special symbols:\n"
+		    _("Category template or the regular expression \"/{re}/\". For the template there reserved the special symbols:\n"
 		    "  '*' - any multiply symbols group;\n"
 		    "  '?' - any one symbol;\n"
-		    "  '\\' - use for shield special simbols."));
+		    "  '\\' - use to shield the special simbols."));
 	    }
 	}
 	return true;
@@ -1283,13 +1284,13 @@ void OrigDocument::postEnable( int flag )
     LWidget::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	attrAdd(new TFld("style",_("CSS"),TFld::String,TFld::FullText,"","","","",i2s(A_DocStyle).c_str()));
+	attrAdd(new TFld("style","CSS",TFld::String,TFld::FullText,"","","","",i2s(A_DocStyle).c_str()));
 	attrAdd(new TFld("tmpl",_("Template"),TFld::String,TFld::TransltText|TFld::FullText,"","","","",i2s(A_DocTmpl).c_str()));
 	attrAdd(new TFld("doc",_("Document"),TFld::String,TFld::TransltText|TFld::FullText,"","","","",i2s(A_DocDoc).c_str()));
 	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","",i2s(A_DocFont).c_str()));
 	attrAdd(new TFld("bTime",_("Time: begin"),TFld::Integer,Attr::DateTime,"","0","","",i2s(A_DocBTime).c_str()));
 	attrAdd(new TFld("time",_("Time: current"),TFld::Integer,Attr::DateTime|Attr::Active,"","0","","",i2s(A_DocTime).c_str()));
-	attrAdd(new TFld("process",_("Process"),TFld::Boolean,TFld::NoWrite,"","0","","",i2s(A_DocProcess).c_str()));
+	attrAdd(new TFld("process",_("In the process"),TFld::Boolean,TFld::NoWrite,"","0","","",i2s(A_DocProcess).c_str()));
 	attrAdd(new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0",TSYS::strMess("0;%d",DocArhSize).c_str(),"",i2s(A_DocN).c_str()));
     }
 }
@@ -1432,22 +1433,22 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		int p = s2i(el->attr("p"));
 		switch(p) {
 		    case A_DocStyle: el->setAttr("SnthHgl","1")->setAttr("help",
-			_("CSS rules in rows like \"body { background-color:#818181; }\""));
+			_("CSS rules in the rows like to \"body { background-color:#818181; }\""));
 			break;
 		    case A_DocTmpl: el->setAttr("SnthHgl","1")->setAttr("help",
-			_("Document's template in XHTML. Start from tag \"body\" and include procedures parts:\n"
+			_("Document template in XHTML. Starts from the tag \"body\" and include the procedures parts:\n"
 			"<body docProcLang=\"JavaLikeCalc.JavaScript\">\n<h1>Value<?dp return wCod+1.314;?></h1>\n</body>"));
 			break;
 		    case A_DocDoc:
-			el->setAttr("SnthHgl","1")->setAttr("help",_("Final document in XHTML. Start from tag \"body\"."));
+			el->setAttr("SnthHgl","1")->setAttr("help",_("Final document in XHTML, starting from the tag \"body\"."));
 			break;
 		    case A_DocTime:
-			el->setAttr("help",_("Write the time for document generation from that point or zero for regeneration."));
+			el->setAttr("help",_("Write the time for the document generation from the specified one or zero for regeneration."));
 			break;
 		    case A_DocFont: el->setAttr("help",Widget::helpFont());	break;
 		    default:
 			if(el->attr("id") == "aDoc")
-			    el->setAttr("SnthHgl","1")->setAttr("help",_("Current archive document in XHTML. Start from tag \"body\"."));
+			    el->setAttr("SnthHgl","1")->setAttr("help",_("Current archive document in XHTML, starting from the tag \"body\"."));
 		}
 	    }
 	return true;
@@ -1536,7 +1537,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	if(!tmpl.empty()) xdoc.load(XHTML_entity+tmpl, true, Mess->charset());
 	else return "";
     } catch(TError &err) {
-	mess_err(wdg->nodePath().c_str(),_("Document parsing error: %s."),err.mess.c_str());
+	mess_err(wdg->nodePath().c_str(),_("Error parsing the document: %s."),err.mess.c_str());
 	return "";
     }
 
@@ -1582,7 +1583,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	for(int i_a = 12; i_a < funcV.ioSize( ); i_a++)
 	    funcV.set(i_a,wdg->attrAt(funcV.func()->io(i_a)->id()).at().get());
     } catch(TError &err) {
-	mess_err(wdg->nodePath().c_str(),_("Compile function for document is error: %s"),err.mess.c_str());
+	mess_err(wdg->nodePath().c_str(),_("Error compiling function for the document: %s"),err.mess.c_str());
 	return "";
     }
 
@@ -1590,10 +1591,10 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     xdoc.childAdd()->load(TSYS::strMess(
 	_("<BODY>\n"
 	"  <H1>The document is forming now ...</H1>\n"
-	"  <P>The document is too big to generate into standard user interface timeout (%ds). "
-	"And for now the document is into building. "
-	"You can wait for forming finish or terminate the process by select lesser time interval for the document.</P>\n"
-	"  <P>Building progress:\n"
+	"  <P>The document is too big for generating into the standard user interface timeout (%ds). "
+	"And for now the document is into the building. "
+	"You can wait the forming finish or terminate the process by select lesser time interval for the document.</P>\n"
+	"  <P>The building progress:\n"
 	"    <ul id='progress' />\n"
 	"  </P>\n"
 	"</BODY>"),STD_INTERF_TM), false, Mess->charset());
@@ -1641,7 +1642,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		    *(xcur->childAdd()) = *xproc.childGet(i_tr);
 		if(instrDel)	xcur->childDel(i_t--);
 	    } catch(TError &err) {
-		mess_err(wdg->nodePath().c_str(),_("Instruction procedure '%s' error: %s"), TSYS::strSepParse(iLang,1,'.').c_str(), err.mess.c_str());
+		mess_err(wdg->nodePath().c_str(),_("Error executing instruction '%s': %s"), TSYS::strSepParse(iLang,1,'.').c_str(), err.mess.c_str());
 		mess_err(wdg->nodePath().c_str(),_("Error code: %s"), curPrc->text().c_str());
 	    }
 	}
@@ -1840,16 +1841,16 @@ string OrigFunction::descr( ) const	{ return _("Built-in function widget."); }
 //************************************************
 OrigBox::OrigBox( ) : PrWidget("Box")	{ }
 
-string OrigBox::name( ) const	{ return _("Elements box"); }
+string OrigBox::name( ) const	{ return _("Group of elements"); }
 
-string OrigBox::descr( ) const	{ return _("Elements box widget of the finite visualization."); }
+string OrigBox::descr( ) const	{ return _("Widget of the group of elements of the finite visualization."); }
 
 void OrigBox::postEnable( int flag )
 {
     LWidget::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	attrAdd(new TFld("pgOpenSrc",_("Page: open source"),TFld::String,0,"","","","",i2s(A_PG_OPEN_SRC).c_str()));
+	attrAdd(new TFld("pgOpenSrc",_("Page: source of the opening"),TFld::String,0,"","","","",i2s(A_PG_OPEN_SRC).c_str()));
 	attrAdd(new TFld("pgGrp",_("Page: group"),TFld::String,0,"","","","",i2s(A_PG_GRP).c_str()));
 	attrAdd(new TFld("backColor",_("Background: color"),TFld::String,Attr::Color,"","#FFFFFF","","",i2s(A_BackColor).c_str()));
 	attrAdd(new TFld("backImg",_("Background: image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));

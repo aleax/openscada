@@ -150,7 +150,7 @@ void WidgetLib::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
 
-    mess_debug(nodePath().c_str(),_("Load widget library."));
+    mess_debug(nodePath().c_str(),_("Loading widgets library."));
 
     if(icfg) *(TConfig*)this = *icfg;
     else SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
@@ -185,7 +185,7 @@ void WidgetLib::load_( TConfig *icfg )
 
 void WidgetLib::save_( )
 {
-    mess_debug(nodePath().c_str(),_("Save widget library."));
+    mess_debug(nodePath().c_str(),_("Saving widgets library."));
 
     SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
@@ -207,7 +207,7 @@ void WidgetLib::setEnable( bool val, bool force )
 {
     if(val == enable())	return;
 
-    mess_debug(nodePath().c_str(),val ? _("Enable widgets library.") : _("Disable widgets library."));
+    mess_debug(nodePath().c_str(),val ? _("Enabling widgets library.") : _("Disabling widgets library."));
 
     passAutoEn = true;
 
@@ -216,7 +216,7 @@ void WidgetLib::setEnable( bool val, bool force )
     for(unsigned i_ls = 0; i_ls < f_lst.size(); i_ls++) {
 	if(at(f_lst[i_ls]).at().enableByNeed)	continue;
 	try { at(f_lst[i_ls]).at().setEnable(val); }
-	catch(TError &err) { mess_err(nodePath().c_str(),_("Enable/disable widget '%s' error %s."),f_lst[i_ls].c_str(),err.mess.c_str()); }
+	catch(TError &err) { mess_err(nodePath().c_str(),_("Error enabling/disabling widget '%s': %s."),f_lst[i_ls].c_str(),err.mess.c_str()); }
     }
 
     passAutoEn = false;
@@ -331,6 +331,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		    "tp","str","dest","sel_ed","select",("/db/tblList:wlb_"+id()).c_str(),
 		    "help",_("DB address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the main working DB, set '*.*'."));
 		ctrMkNode("fld",opt,-1,"/obj/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
+		ctrMkNode("fld",opt,-1,"/obj/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Configuration"))) {
 		ctrMkNode("fld",opt,-1,"/obj/cfg/id",_("Identifier"),R_R_R_,"root",SUI_ID,1,"tp","str");
@@ -364,8 +365,17 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	vector<string> tls;
 	list(tls);
 	time_t maxTm = 0;
-	for(unsigned i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
+	for(unsigned iT = 0; iT < tls.size(); iT++)
+	    maxTm = vmax(maxTm, at(tls[iT]).at().timeStamp());
 	opt->setText(i2s(maxTm));
+    }
+    else if(a_path == "/obj/st/use" && ctrChkNode(opt)) {
+	vector<string> tls;
+	list(tls);
+	int cnt = 0;
+	for(unsigned iT = 0; iT < tls.size(); iT++)
+	    cnt += at(tls[iT]).at().herit().size();
+	opt->setText(i2s(cnt));
     }
     else if(a_path == "/obj/cfg/ico" || a_path == "/ico") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(ico());
@@ -389,7 +399,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    if(present(vid)) throw TError(nodePath().c_str(), _("Widget '%s' already present!"), vid.c_str());
+	    if(present(vid)) throw TError(nodePath().c_str(), _("Widget '%s' is already present!"), vid.c_str());
 	    add(vid, opt->text()); at(vid).at().setOwner(opt->attr("user"));
 	    opt->setAttr("id", vid);
 	}
@@ -897,7 +907,7 @@ void CWidget::setEnable( bool val, bool force )
 	for(unsigned iH = 0; iH < ownerLWdg().herit().size(); iH++)
 	    if(!ownerLWdg().herit()[iH].at().wdgAt(id()).at().enable() && ownerLWdg().herit()[iH].at().wdgPresent(id()))
 		try { ownerLWdg().herit()[iH].at().wdgAt(id()).at().setEnable(true); }
-		catch(...) { mess_err(nodePath().c_str(),_("Inheriting widget '%s' enable error."),id().c_str()); }
+		catch(...) { mess_err(nodePath().c_str(),_("Error enabling the inheriting widget '%s'."),id().c_str()); }
 }
 
 string CWidget::calcId( )	{ return parent().freeStat() ? "" : parent().at().calcId(); }
@@ -1009,7 +1019,7 @@ void CWidget::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	cntrCmdGeneric(opt);
 	cntrCmdAttributes(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Link to widget: ")+id(),RWRWR_,"root",SUI_ID);
+	ctrMkNode("oscada_cntr", opt, -1, "/", TSYS::strMess(_("Link to the widget '%s'."), id().c_str()).c_str(), RWRWR_, "root", SUI_ID);
 	return;
     }
     if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)))

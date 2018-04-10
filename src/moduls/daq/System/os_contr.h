@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.System file: os_contr.h
+//OpenSCADA module DAQ.System file: os_contr.h
 /***************************************************************************
  *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

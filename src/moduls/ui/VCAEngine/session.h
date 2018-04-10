@@ -101,7 +101,7 @@ class Session : public TCntrNode
 	// Alarms-notification processing
 	void alarmSet( const string &wpath, const string &alrm );	//Alarm set
 	int  alarmStat( );						//Alarm status
-	void alarmQuittance( const string &wpath, uint8_t quit_tmpl, bool ret = false );	//Alarm quittance send
+	void alarmQuietance( const string &wpath, uint8_t quit_tmpl, bool ret = false );	//Alarm quietance send
 	//  Notification type <tp> register for no empty <props> else unregister, from the page-creator <pgCrtor>
 	void ntfReg( uint8_t tp, const string &props, const string &pgCrtor );
 
@@ -137,12 +137,12 @@ class Session : public TCntrNode
 			//Methods
 			QueueIt( const string &ipath, uint8_t ilev, const string &icat, const string &imess,
 				const string &itpArg = "", unsigned iclc = 0 ) :
-			    lev(ilev), quittance(false), path(ipath), cat(icat), mess(imess), tpArg(itpArg), clc(iclc)	{ }
-			QueueIt( ) : lev(0), quittance(false)	{ }
+			    lev(ilev), quietance(false), path(ipath), cat(icat), mess(imess), tpArg(itpArg), clc(iclc)	{ }
+			QueueIt( ) : lev(0), quietance(false)	{ }
 
 			//Attributes
 			uint8_t	lev;		//Level
-			bool	quittance;	//Quitance
+			bool	quietance;	//Quitance
 			string	path,		//Widget path
 				cat,		//Category
 				mess,		//Message
@@ -163,7 +163,7 @@ class Session : public TCntrNode
 		string ntfRes( unsigned &tm, string &wpath, string &mess, string &lang );	//The notification resource request
 
 		void queueSet( const string &wpath, const string &alrm );
-		void queueQuittance( const string &wpath, uint8_t quitTmpl, bool ret = false );	//Notification quittance send
+		void queueQuietance( const string &wpath, uint8_t quitTmpl, bool ret = false );	//Notification quietance send
 
 		//Attributes
 		string	pgProps;			//Page-creator and it's properties
@@ -276,7 +276,7 @@ class SessWdg : public Widget, public TValFunc
 
 	// Alarms process
 	virtual void alarmSet( bool isSet = false );
-	virtual void alarmQuittance( uint8_t quit_tmpl, bool isSet = false, bool ret = false );
+	virtual void alarmQuietance( uint8_t quit_tmpl, bool isSet = false, bool ret = false );
 
 	// Access to mime resource
 	string resourceGet( const string &id, string *mime = NULL );
@@ -366,7 +366,7 @@ class SessPage : public SessWdg
 
 	// Alarms process
 	void alarmSet( bool isSet = false );
-	void alarmQuittance( uint8_t quit_tmpl, bool isSet = false, bool ret = false );
+	void alarmQuietance( uint8_t quit_tmpl, bool isSet = false, bool ret = false );
 
 	bool attrPresent( const string &attr ) const;
 	AutoHD<Attr> attrAt( const string &attr, int lev = -1 ) const;

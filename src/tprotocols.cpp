@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: tprotocols.cpp
+//OpenSCADA file: tprotocols.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

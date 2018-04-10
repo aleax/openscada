@@ -41,7 +41,7 @@ class sesUser : public TFunction
 	}
 
 	string name( )	{ return _("Session user"); }
-	string descr( )	{ return _("Return session user by session's widget path."); }
+	string descr( )	{ return _("Returns the session user by the session widget path."); }
 
 	void calc( TValFunc *val ) {
 	    try {
@@ -67,7 +67,7 @@ class wdgList : public TFunction
 	}
 
 	string name( )	{ return _("Widgets list"); }
-	string descr( )	{ return _("Return widgets list into widget container or child list. If set <pg> then return pages list for projects and sessions."); }
+	string descr( )	{ return _("Returns the widgets list into the widgets container or the childs list. If set <pg> then returns the pages list for projects and sessions."); }
 
 	void calc( TValFunc *val ) {
 	    TArrayObj *rez = new TArrayObj();
@@ -101,8 +101,8 @@ class nodePresent : public TFunction
 	    setStart(true);
 	}
 
-	string name( )	{ return _("Node present"); }
-	string descr( )	{ return _("Checking for node, include widgets, attributes and other present."); }
+	string name( )	{ return _("Node presence"); }
+	string descr( )	{ return _("Checking for a node presence, including widgets, attributes and other."); }
 
 	void calc( TValFunc *val ) {
 	    try {
@@ -122,12 +122,12 @@ class attrList : public TFunction
 	attrList( ) : TFunction("AttrList") {
 	    ioAdd(new IO("list",_("List"),IO::String,IO::Return|IO::FullText));
 	    ioAdd(new IO("addr",_("Address"),IO::String,IO::Default));
-	    ioAdd(new IO("noUser",_("Without user's"),IO::Boolean,IO::Default,"1"));
+	    ioAdd(new IO("noUser",_("Not user"),IO::Boolean,IO::Default,"1"));
 	    setStart(true);
 	}
 
 	string name( )	{ return _("Attributes list"); }
-	string descr( )	{ return _("Return attributes list for widget. If set <noUser> then return only not user's attributes."); }
+	string descr( )	{ return _("Returns an attributes list of the widget. If set <noUser> then returns only not user attributes."); }
 
 	void calc( TValFunc *val ) {
 	    string sls;
@@ -159,8 +159,8 @@ class attrGet : public TFunction
 	    setStart(true);
 	}
 
-	string name( )	{ return _("Attribute get"); }
-	string descr( )	{ return _("Getting widget's attribute value."); }
+	string name( )	{ return _("Get the attribute"); }
+	string descr( )	{ return _("Getting value of the widget attribute."); }
 
 	void calc( TValFunc *val ) {
 	    string a = val->getS(2);
@@ -204,8 +204,8 @@ class attrSet : public TFunction
 	    setStart(true);
 	}
 
-	string name( )	{ return _("Attribute set"); }
-	string descr( )	{ return _("Setup widget's attribute to value."); }
+	string name( )	{ return _("Set the attribute"); }
+	string descr( )	{ return _("Setting value of the widget attribute."); }
 
 	void calc( TValFunc *val ) {
 	    string a = val->getS(2);

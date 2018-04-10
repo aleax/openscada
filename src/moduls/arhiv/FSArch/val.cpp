@@ -99,12 +99,39 @@ void ModVArch::save_( )
 bool ModVArch::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "V_PER") time_size = vmax(0.2, 1e3*valPeriod());
+    else if(co.name() == "ADDR" && startStat())	return false;
 
     return TVArchivator::cfgChange(co, pc);
 }
 
 void ModVArch::start( )
 {
+    //Checking the archiver folders for duplicates
+    if(!startStat()) {
+	string dbl = "";
+	MtxAlloc res(mod->dataRes(), true);
+	const char *fLock = "fsArchLock";
+	int hd = open((addr()+"/"+fLock).c_str(), O_CREAT|O_TRUNC|O_WRONLY);
+	if(hd >= 0) {
+	    write(hd, "1", 1);
+	    vector<string> ls;
+	    mod->valList(ls);
+	    for(int iL = 0; iL < ls.size() && dbl.empty(); iL++) {
+		AutoHD<TVArchivator> vAt = mod->valAt(ls[iL]);
+		if(vAt.at().id() == id() || !vAt.at().startStat())	continue;
+		int hd1 = open((vAt.at().addr()+"/"+fLock).c_str(), O_RDONLY);
+		if(hd1 >= 0 || vAt.at().addr() == addr()) {
+		    dbl = vAt.at().addr();
+		    if(hd1 >= 0) close(hd1);
+		}
+	    }
+	    close(hd);
+	    remove((addr()+"/"+fLock).c_str());
+	}
+	res.unlock();
+	if(dbl.size()) { stop(); throw err_sys(_("The value archiver '%s' uses the same folder '%s' as an other archiver."), id().c_str(), addr().c_str()); }
+    }
+
     //Create and/or update the SQLite info file, special for the archiver and placed with main files of the archiver
     if(!startStat() && packInfoFiles()) {
 	try {

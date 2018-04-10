@@ -33,6 +33,7 @@ namespace VCA
 //* Project: VCA project                     	 *
 //************************************************
 class Page;
+class Session;
 
 class Project : public TCntrNode, public TConfig
 {
@@ -43,6 +44,7 @@ class Project : public TCntrNode, public TConfig
 	    FullScreen		= 0x02,	//Full screen project run
 	    KeepAspectRatio	= 0x04,	//Keep master page aspect ratio on scale
 	};
+
 	//Methods
 	Project( const string &id, const string &name, const string &lib_db = "*.*" );
 	~Project( );
@@ -107,6 +109,11 @@ class Project : public TCntrNode, public TConfig
 
 	string catsPat( );	//Individual the page's sessions' messages' categories pattern
 
+	// Sessions-heritors
+	void heritReg( Session *s );	//Register the heritator
+	void heritUnreg( Session *s );	//Unregister the heritator
+	void pageEnable( const string &pg, bool vl );	//Process for the page <pg> enabling for herit sessions
+
 	//Attributes
 	bool	enableByNeed;	//Load and enable by need
 	ResMtx &funcM( )		{ return mFuncM; }
@@ -143,6 +150,8 @@ class Project : public TCntrNode, public TConfig
 	map< string, vector<string> >	mStProp;	//Styles' properties
 
 	ResMtx	mFuncM;
+
+	vector< AutoHD<Session> > mHerit;	//Heritators
 };
 
 //************************************************
@@ -178,7 +187,7 @@ class Page : public Widget, public TConfig
 	string	ownerFullId( bool contr = false ) const;
 	int	prjFlags( ) const	{ return mFlgs; }
 	string	parentNm( ) const	{ return cfg("PARENT").getS(); }
-	string	proc( ) const	{ return cfg("PROC").getS(); }
+	string	proc( ) const		{ return cfg("PROC").getS(); }
 	int	timeStamp( );
 
 	void setIco( const string &iico )	{ cfg("ICO").setS(iico); }
@@ -285,7 +294,6 @@ class PageWdg : public Widget, public TConfig
 	string resourceGet( const string &id, string *mime = NULL );
 
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
-
 
 	void inheritAttr( const string &attr = "" );
 

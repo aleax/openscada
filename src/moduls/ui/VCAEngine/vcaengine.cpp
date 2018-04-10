@@ -31,13 +31,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"VCAEngine"
-#define MOD_NAME	_("Visual control area engine")
+#define MOD_NAME	_("Engine of the visual control area")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"4.4.3"
+#define MOD_VER		"5.0.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("The main visual control area engine.")
+#define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -125,35 +125,35 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
     wdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
     wdg_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
-    wdg_el.fldAdd(new TFld("PR_TR",_("Procedure translation allow"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    wdg_el.fldAdd(new TFld("PR_TR",_("Translate procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
     wdg_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
-    wdg_el.fldAdd(new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1"));
+    wdg_el.fldAdd(new TFld("PROC_PER",_("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5","-1"));
     wdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
     wdg_el.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //Make include widgets' DB structure: {LibWidgetIncl,ProjPageWIncl}(__IDW__, __ID__, PARENT, ATTRS)
-    inclwdg_el.fldAdd(new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"100"));
+    inclwdg_el.fldAdd(new TFld("IDW",_("Widget identifier"),TFld::String,TCfg::Key,"100"));
     inclwdg_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
     inclwdg_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
     inclwdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
 
     //Make widget's IO DB structure: {LibWidgetIO,ProjPageIO}(__IDW__, __ID__, __IDC__, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)
-    wdgio_el.fldAdd(new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100"));
+    wdgio_el.fldAdd(new TFld("IDW",_("Widget identifier"),TFld::String,TCfg::Key,"100"));
     wdgio_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"61"));
     wdgio_el.fldAdd(new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30"));
     wdgio_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::TransltText,"100000"));
-    wdgio_el.fldAdd(new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5"));
+    wdgio_el.fldAdd(new TFld("SELF_FLG",_("Attribute flags"),TFld::Integer,TFld::NoFlag,"5"));
     wdgio_el.fldAdd(new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TFld::TransltText,"30"));
     wdgio_el.fldAdd(new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::TransltText,"1000"));
 
     //Make widget's user IO DB structure: {ProjPageUserIO,LibWidgetUserIO}(__IDW__, __ID__, __IDC__, NAME, IO_TP, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)
-    wdguio_el.fldAdd(new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100"));
+    wdguio_el.fldAdd(new TFld("IDW",_("Widget identifier"),TFld::String,TCfg::Key,"100"));
     wdguio_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"61"));
     wdguio_el.fldAdd(new TFld("IDC",_("Child identifier"),TFld::String,TCfg::Key,"30"));
     wdguio_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,"100"));
     wdguio_el.fldAdd(new TFld("IO_TYPE",_("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10"));
     wdguio_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::TransltText,"100000"));
-    wdguio_el.fldAdd(new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5"));
+    wdguio_el.fldAdd(new TFld("SELF_FLG",_("Attribute flags"),TFld::Integer,TFld::NoFlag,"5"));
     wdguio_el.fldAdd(new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TFld::TransltText,"30"));
     wdguio_el.fldAdd(new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::TransltText,"1000"));
 
@@ -166,24 +166,24 @@ void Engine::postEnable( int flag )
     prj_el.fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,OBJ_ID_SZ,"root"));
     prj_el.fldAdd(new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,OBJ_ID_SZ,"UI"));
     prj_el.fldAdd(new TFld("PERMIT",_("Permission"),TFld::Integer,TFld::OctDec,"3","436"));
-    prj_el.fldAdd(new TFld("PER",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"4","100"));
+    prj_el.fldAdd(new TFld("PER",_("Period of calculating, milliseconds"),TFld::Integer,TFld::NoFlag,"4","100"));
     prj_el.fldAdd(new TFld("STYLE",_("Work style"),TFld::Integer,TFld::NoFlag,"2","-1"));
-    prj_el.fldAdd(new TFld("EN_BY_NEED",_("Enable by need"),TFld::Boolean,TFld::NoFlag,"1","1"));
+    prj_el.fldAdd(new TFld("EN_BY_NEED",_("Enable as needed"),TFld::Boolean,TFld::NoFlag,"1","1"));
 
     //Make page's DB structure: ProjPages(__OWNER__, __ID__, ICO, PARENT, PROC, PROC_PER, FLGS, ATTRS, TIMESTAMP)
     page_el.fldAdd(new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key,"100"));
     page_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
     page_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
     page_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
-    page_el.fldAdd(new TFld("PR_TR",_("Procedure translation allow"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    page_el.fldAdd(new TFld("PR_TR",_("Translate procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
     page_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
-    page_el.fldAdd(new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1"));
+    page_el.fldAdd(new TFld("PROC_PER",_("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5","-1"));
     page_el.fldAdd(new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0"));
     page_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
     page_el.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //Make sessions' IO values of projects DB structure: ProjSess(__IDW__, __ID__, IO_VAL)
-    prj_ses_el.fldAdd(new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"200"));
+    prj_ses_el.fldAdd(new TFld("IDW",_("Widget identifier"),TFld::String,TCfg::Key,"200"));
     prj_ses_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
     prj_ses_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000"));
 
@@ -281,7 +281,7 @@ void Engine::load_( )
 		wlbAt(lId).at().load(&cEl);
 		itReg[lId] = true;
 		if(mess_lev() == TMess::Debug) {
-		    mess_sys(TMess::Debug, _("Load library '%s' time: %f ms."), lId.c_str(), 1e-3*(TSYS::curTime()-d_tm));
+		    mess_sys(TMess::Debug, _("Time of the library '%s' loading: %f ms."), lId.c_str(), 1e-3*(TSYS::curTime()-d_tm));
 		    d_tm = TSYS::curTime();
 		}
 	    }
@@ -295,7 +295,7 @@ void Engine::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_sys(TMess::Error, _("Load widgets libraries error."));
+	mess_sys(TMess::Error, _("Error loading the widgets libraries."));
     }
 
     //Load projects
@@ -320,7 +320,7 @@ void Engine::load_( )
 		prjAt(prj_id).at().load(&cEl);
 		itReg[prj_id] = true;
 		if(mess_lev() == TMess::Debug) {
-		    mess_sys(TMess::Debug, _("Load project '%s' time: %f ms."), prj_id.c_str(), 1e-3*(TSYS::curTime()-d_tm));
+		    mess_sys(TMess::Debug, _("Time of the project '%s' loading: %f ms."), prj_id.c_str(), 1e-3*(TSYS::curTime()-d_tm));
 		    d_tm = TSYS::curTime();
 		}
 	    }
@@ -334,7 +334,7 @@ void Engine::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_sys(TMess::Error, _("Load projects error."));
+	mess_sys(TMess::Error, _("Error loading the projects."));
     }
 
     //Libraries enable
@@ -343,7 +343,7 @@ void Engine::load_( )
     for(unsigned l_id = 0; l_id < ls.size(); l_id++) {
 	wlbAt(ls[l_id]).at().setEnable(true);
 	if(mess_lev() == TMess::Debug) {
-	    mess_sys(TMess::Debug, _("Enable library '%s' time: %f ms."), ls[l_id].c_str(), 1e-3*(TSYS::curTime()-d_tm));
+	    mess_sys(TMess::Debug, _("Time of the library '%s' enabling: %f ms."), ls[l_id].c_str(), 1e-3*(TSYS::curTime()-d_tm));
 	    d_tm = TSYS::curTime();
 	}
     }
@@ -354,7 +354,7 @@ void Engine::load_( )
 	if(prjAt(ls[l_id]).at().enableByNeed)	continue;
 	prjAt(ls[l_id]).at().setEnable(true);
 	if(mess_lev() == TMess::Debug) {
-	    mess_sys(TMess::Debug, _("Enable project '%s' time: %f ms."), ls[l_id].c_str(), 1e-3*(TSYS::curTime()-d_tm));
+	    mess_sys(TMess::Debug, _("Time of the project '%s' enabling: %f ms."), ls[l_id].c_str(), 1e-3*(TSYS::curTime()-d_tm));
 	    d_tm = TSYS::curTime();
 	}
     }
@@ -645,13 +645,13 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    // User permission check
 	    AutoHD<Project> wprj = (!sess.empty()) ? sesAt(sess).at().parent() : prjAt(prj);
 	    if(!SYS->security().at().access(opt->attr("user"),SEC_RD,wprj.at().owner(),wprj.at().grp(),wprj.at().permit()))
-		throw TError(nodePath().c_str(),_("Connection to session is not permitted for '%s'."),opt->attr("user").c_str());
+		throw TError(nodePath().c_str(),_("Connecting to the session is not permitted for '%s'."),opt->attr("user").c_str());
 	    // Connect to present session
 	    if(!sess.empty()) {
 		opt->setAttr("conId", i2s(sesAt(sess).at().connect()));
 		opt->setAttr("prj", sesAt(sess).at().projNm());
 		if(s2i(opt->attr("userChange")))
-		    sesAt(sess).at().parent().at().mess_sys(TMess::Notice, _("User is changed to '%s', from '%s'."),
+		    sesAt(sess).at().parent().at().mess_sys(TMess::Notice, _("User was changed to '%s' on the station '%s'."),
 			opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
 	    }
 	    // Create session
@@ -664,16 +664,16 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		sesAt(sess).at().setStart(true);
 		opt->setAttr("conId", i2s(sesAt(sess).at().connect()));
 		opt->setAttr("sess", sess);
-		sesAt(sess).at().parent().at().mess_sys(TMess::Notice, _("User '%s' is connected, from '%s'."),
+		sesAt(sess).at().parent().at().mess_sys(TMess::Notice, _("User '%s' has been connected on '%s'."),
 		    opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
-	    } else throw TError(nodePath().c_str(),_("Connect/create session arguments error."));
+	    } else throw TError(nodePath().c_str(),_("Error arguments of the session connecting/creating."));
 	    opt->setAttr("userIsRoot", SYS->security().at().access(opt->attr("user"),SEC_WR,"root","root",RWRWR_)?"1":"0");
 	}
 	else if(ctrChkNode(opt,"disconnect",RWRWRW,"root",SUI_ID,SEC_WR)) {
 	    string sess = opt->attr("sess");
 	    sesAt(sess).at().disconnect(s2i(opt->attr("conId")));
 	    if(sesAt(sess).at().connects() == 0 && !sesAt(sess).at().backgrnd()) {
-		sesAt(sess).at().parent().at().mess_sys(TMess::Notice, _("User '%s' is disconnected, from '%s'."),
+		sesAt(sess).at().parent().at().mess_sys(TMess::Notice, _("User '%s' has been disconnected on '%s'."),
 		    opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
 		sesDel(sess);
 	    }
@@ -738,7 +738,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,1,"/ses",_("Sessions"),R_R_R_,"root",SUI_ID)) {
 	    ctrMkNode("list",opt,-1,"/ses/ses",_("Sessions"),RWRWR_,"root",SUI_ID,3,"tp","br","s_com","add,del","br_pref","ses_");
-	    if(ctrMkNode("table",opt,-1,"/ses/ast",_("Auto create and start"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id"))
+	    if(ctrMkNode("table",opt,-1,"/ses/ast",_("Auto created and started"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id"))
 	    {
 		ctrMkNode("list",opt,-1,"/ses/ast/id",_("Identifier"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/ses/ast/proj",_("Project"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/ses/prj_ls");
@@ -765,7 +765,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    if(prjPresent(vid)) throw TError(nodePath().c_str(), _("Project '%s' already present!"), vid.c_str());
+	    if(prjPresent(vid)) throw TError(nodePath().c_str(), _("Project '%s' is already present!"), vid.c_str());
 	    prjAdd(vid, opt->text()); prjAt(vid).at().setOwner(opt->attr("user"));
 	    opt->setAttr("id", vid);
 	}
@@ -780,7 +780,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
-	    if(wlbPresent(vid)) throw TError(nodePath().c_str(), _("Widgets library '%s' already present!"), vid.c_str());
+	    if(wlbPresent(vid)) throw TError(nodePath().c_str(), _("Widgets library '%s' is already present!"), vid.c_str());
 	    wlbAdd(vid, opt->text()); opt->setAttr("id", vid);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	wlbDel(opt->attr("id"),true);
@@ -805,7 +805,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->text(),TSYS::oscdID);
-	    if(sesPresent(vid)) throw TError(nodePath().c_str(), _("Session '%s' already present!"), vid.c_str());
+	    if(sesPresent(vid)) throw TError(nodePath().c_str(), _("Session '%s' is already present!"), vid.c_str());
 	    sesAdd(vid); sesAt(vid).at().setUser(opt->attr("user")); sesAt(vid).at().setBackgrnd(true);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	sesDel(opt->text(),true);

@@ -288,7 +288,7 @@ Documents/Terms:en,uk,ru:Terms.html
 Functions_and_demands:en,uk,ru:Functions_and_demands.html
 Works/To_do:en:To_do.html
 Documents/FAQ:en,uk,ru:FAQ.html
-Documents/Quick_start:en,ru:Quick_start.html
+Documents/Quick_start:en,uk,ru:Quick_start.html
 Documents/Program_manual:en,uk,ru:Program_manual.html
 Documents/How_to:en,ru,uk:How_to.html
 Documents/How_to/Install:en,ru,uk:How_to_Install.html

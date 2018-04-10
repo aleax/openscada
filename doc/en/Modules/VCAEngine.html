@@ -10,13 +10,13 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/VCAEngine</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine/ru" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="http://oscada.org/wiki/Modules/VCAEngine/uk" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (5% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine/ru" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="http://oscada.org/wiki/Modules/VCAEngine/uk" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (7% translated)">українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
 <td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
 </td>
-<td style="padding-left:5px;"> The translation checking and actualizing
+<td style="padding-left:5px;"> The translation checking and actualizing. Source texts have been already fully revised.
 </td></tr></table>
 </div>
 <table class="wikitable">
@@ -36,8 +36,9 @@
 
 <tr>
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
-<td> Visual control area engine </td>
-<td> 4.4 </td>
+<td> Visual control area engine
+</td>
+<td> 5.0 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -419,15 +420,15 @@
 <td> Double-click the left mouse button.
 </td></tr>
 <tr>
-<td colspan="2"> <i>Events of quittance on the side of the visualizer.</i>
+<td colspan="2"> <i>Events of quietance on the side of the visualizer.</i>
 </td></tr>
 <tr>
 <td> ws_alarmLev </td>
-<td> Quittance of all violations by all notices methods and types.
+<td> Quietance of all violations by all notices methods and types.
 </td></tr>
 <tr>
 <td> ws_alarmNtf{N} </td>
-<td> Quittance of all violations by the type {N} (0...7).
+<td> Quietance of all violations by the type {N} (0...7).
 </td></tr>
 <tr>
 <td colspan="2"> <i>Events of the primitive of elemental figure <b>ElFigure</b>:</i>
@@ -594,29 +595,29 @@ Where:
 <li> <i>2</i> — beep tone, is frequently made through the PC-speaker;</li>
 <li> <i>4</i> — sound signal from the sound file or the speech synthesis, and if in the <i>tp_arg</i> the name of the resource of the sound file is specified, then play it, or in other case the speech synthesis from the text specified in <i>message</i> is made.</li></ul></li>
 <li> <i>tp_arg</i> — argument of the type; it is used in the case of the audible signal to indicate the resource of the sound alarm (file of the sound format).</li></ul>
-<p>Attribute "alarmSt" is an integer number that represents the maximum alarm level and the fact of the quittance of the branch of the tree of the session of the project. Format of the number is as follows:
+<p>Attribute "alarmSt" is an integer number that represents the maximum alarm level and the fact of the quietance of the branch of the tree of the session of the project. Format of the number is as follows:
 </p>
 <ul><li> first bite (0...255) characterizes the level of the alarm of the branch;</li>
 <li> the second byte indicates the type of notification (as well as in the attribute "alarm");</li>
-<li> the third byte indicates the type of notification without quittance (as well as in the attribute "alarm");</li>
+<li> the third byte indicates the type of notification without quietance (as well as in the attribute "alarm");</li>
 <li> the four byte has special appointment, assigns different bites:
-<ul><li> bit 0 — indicates, by sets, to quittance fact of notification into first byte;</li>
-<li> bit 1 — indicates, by sets it and the bit 0, to the quittance return — enable back the quittance.</li></ul></li></ul>
+<ul><li> bit 0 — indicates, by sets, to quietance fact of notification into first byte;</li>
+<li> bit 1 — indicates, by sets it and the bit 0, to the quietance return — enable back the quietance.</li></ul></li></ul>
 <p><b>Alarm formation and receipt of it by the visualizer.</b><br />
 The alarm formation is performed by the widget by setting its own attribute "alarm" in appropriate way and in accordance with it the attribute "alarmSt" of current and the parent widget is set. Visualizers receive notification of the alarm using a standard mechanism for notifications of the changes of attributes of widgets.
 </p><p>Taking into account that the processing of conditions of the signaling is made in the widgets, the pages containing the objects of signaling should be performed in the background, regardless of their openness to the moment. This is done by setting a flag of the background execution of the page.
 </p><p>Although the mechanism of signaling is built in the visualization area the possibility of formation of visual signaling elements remains, for example by creating the page that will never be opened.
-</p><p><b>Quittance</b><br />
-Quittance is process of accepting the violation(s) to mind, disabling the notification and action to remove the violation(s). In the display of user's interface the quittance assume only the notification disable.
-</p><p>Quittance performs by specifying the root of the branch of the widgets and the types of notification. This allows to make quittance on the side of visualizer both as by groups, for example by the signaling objects as well as individually by the objects. It is possible to independently quittance different types of alarms. Setting of the quittance is made by the simple modification of the attribute "alarmSt".
+</p><p><b>Quietance</b><br />
+Quietance is process of accepting the violation(s) to mind, disabling the notification and action to remove the violation(s). In the display of user's interface the quietance assume only the notification disable.
+</p><p>Quietance performs by specifying the root of the branch of the widgets and the types of notification. This allows to make quietance on the side of visualizer both as by groups, for example by the signaling objects as well as individually by the objects. It is possible to independently quietance different types of alarms. Setting of the quietance is made by the simple modification of the attribute "alarmSt".
 </p><p>Example of the script to work with the signals gives below:
 </p>
 <pre style="white-space: pre-wrap;">
 //Secretion of the existence of alarms for different ways of notification
 cvt_light_en = alarmSt&amp;0x100; cvt_alarm_en = alarmSt&amp;0x200; cvt_sound_en = alarmSt&amp;0x400;
-//Secretion of the existence of alarms which not in quittance for different ways notification
+//Secretion of the existence of alarms which not in quietance for different ways notification
 cvt_light_active = alarmSt&amp;0x10000; cvt_alarm_active = alarmSt&amp;0x20000; cvt_sound_active = alarmSt&amp;0x40000;
-//Processing of the button's events of quittance and the quittance for different ways of notification
+//Processing of the button's events of quietance and the quietance for different ways of notification
 for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
   if(sval == "ws_BtPress:/cvt_light") alarmSt = 0x1000001;
   else if(sval == "ws_BtPress:/cvt_alarm") alarmSt = 0x1000002;
@@ -638,7 +639,7 @@ if(doNtf) { The command text to notify. }
 </pre>
 <ul><li> For a visualizer by the attribute "notifyVis[Vision|WebVision]{N}" into the format:</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
-//flags=notify[{DL}][|resource[|queue[|quittanceRet]]];
+//flags=notify[{DL}][|resource[|queue[|quietanceRet]]];
 //name={The notifier name}
 //ico={The icon name}
 { The notification command text to any or concrete visualizer. }
@@ -647,9 +648,9 @@ if(doNtf) { The command text to notify. }
 </p>
 <ul><li> <i>notify[{DL}]</i> — enables notification with repeat by time <i>DL</i>, if the set; for <i>DL</i> = 0 the repeat made once.</li>
 <li> <i>resource</i> — request-form (force) the notification resource from the visualization server, can be an audio file, a text or other data for the notification produce.</li>
-<li> <i>queue</i> — the notification resources appoint not only by global alarming sign and the quittance but follow to the priority queue of sources of the notification-resources. The queue forms on the visualization server side and for the visualizers set need of working with it at the resources request.</li>
+<li> <i>queue</i> — the notification resources appoint not only by global alarming sign and the quietance but follow to the priority queue of sources of the notification-resources. The queue forms on the visualization server side and for the visualizers set need of working with it at the resources request.</li>
 <li> <i>qMergeMess</i> — merging the notifications into the queue by equality its messages.</li>
-<li> <i>quittanceRet</i> — possibility of a visualizer for a quittance recall-return ie in fact the notification enable back.</li></ul>
+<li> <i>quietanceRet</i> — possibility of a visualizer for a quietance recall-return ie in fact the notification enable back.</li></ul>
 <p>The exchanging variables:
 </p>
 <ul><li> <i>en</i>[0,1] — the notification enable (1) or disable (0);</li>
@@ -2854,7 +2855,7 @@ Where:
 <p><b>Object "Session" ( this.ownerSess() )</b>
 </p>
 <ul><li> <i>string user( )</i> — current session user.</li>
-<li> <i>int alrmQuittance( int quit_tmpl, string wpath = "", bool ret = false )</i> — violations quittance <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then make global quittance. Into the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. The <i>ret</i> sets will cause the quittance return.</li>
+<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — violations quietance <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then make global quietance. Into the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. The <i>ret</i> sets will cause the quietance return.</li>
 <li> <i>int reqTm( )</i> — last request time.</li>
 <li> <i>string reqUser( )</i> — last request user.</li>
 <li> <i>string reqLang( )</i> — last request language.</li>
@@ -3150,9 +3151,9 @@ The deprecated API of the user programming of the visualization engine are repre
 </p><p>The result of the query is child elements <b>&lt;el&gt;{OpPage}&lt;/el&gt;</b> which contain the full path of the open page. In addition to the list of open pages, the query returns the value of the current counter for calculating the session in the attribute <i>tm</i>. If this attribute is set during the query, then for each open page it returns the list of changed, since the moment of the specified value of the counter, widgets of the open page.
 </p>
 <h5><span class="mw-headline" id="Signaling_.28alarm.29_management"><span class="mw-headline-number">3.11.2.4</span> Signaling (alarm) management</span></h5>
-<p>To provide a mechanism for global control of the signaling of the session the service function of the session "/serv/alarm" and commands of the query of the signals status <b>&lt;get path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b>; and of the quittance <b>&lt;quittance path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b> are provided.
-</p><p>Request for the status of signals returns generalized condition of the signals, as well as additional a notification resource by attribute "mode" sets to "resource". The notification resource request result is typically a sound file, for playback, and at that time it performs monitoring of the sequence of signaling and quittance of individual the notification resources of the messages.
-</p><p>Request for the quittance performs quittance of the specified widget, attribute <i>wdg</i>, in accordance with the template, attribute <i>tmpl</i>.
+<p>To provide a mechanism for global control of the signaling of the session the service function of the session "/serv/alarm" and commands of the query of the signals status <b>&lt;get path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b>; and of the quietance <b>&lt;quietance path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b> are provided.
+</p><p>Request for the status of signals returns generalized condition of the signals, as well as additional a notification resource by attribute "mode" sets to "resource". The notification resource request result is typically a sound file, for playback, and at that time it performs monitoring of the sequence of signaling and quietance of individual the notification resources of the messages.
+</p><p>Request for the quietance performs quietance of the specified widget, attribute <i>wdg</i>, in accordance with the template, attribute <i>tmpl</i>.
 </p>
 <h5><span class="mw-headline" id="Manipulation_with_the_sessions_of_the_projects"><span class="mw-headline-number">3.11.2.5</span> Manipulation with the sessions of the projects</span></h5>
 <p>To provide a unitize mechanism for manipulation of the sessions by the visualizers of VCA in the module of the VCA engine (VCAEngine) are provided the service function "/serv/sess" and the query commands of the list of open sessions, connection/creation of the new session and disconnection/deleting of the session: <b>&lt;list path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b>, <b>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b> and <b>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b> accordingly.

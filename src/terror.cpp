@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: terror.cpp
+//OpenSCADA file: terror.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

@@ -1048,20 +1048,21 @@ void ShapeFormEl::buttonReleased( )
 		    fTitle	= TSYS::strParse(fHead, 0, "|", &off),
 		    fDefFile	= TSYS::strParse(fHead, 0, "|", &off);
 	    if(fTmpl.empty())	break;
-	    if(fTitle.empty())	fTitle = _("Save file");
+	    if(fTitle.empty())	fTitle = _("Saving a file");
 	    QString fn = w->mainWin()->getFileName(fTitle.c_str(), fDefFile.c_str(), fTmpl.c_str(), QFileDialog::AcceptSave);
 	    if(fn.size()) {
 		QFile file(fn);
 		if(!file.open(QIODevice::WriteOnly|QIODevice::Truncate)) {
 		    mod->postMess(mod->nodePath().c_str(),
-			QString(_("Open file '%1' is fail: %2")).arg(fn).arg(file.errorString()), TVision::Error);
+			QString(_("Error opening the file '%1': %2")).arg(fn).arg(file.errorString()), TVision::Error);
 		    break;
 		}
 		if(file.write(fCtx.data(),fCtx.size()) != (int)fCtx.size())
 		    mod->postMess(mod->nodePath().c_str(),
-			QString(_("Write data to file '%1' is fail: %2")).arg(fn).arg(file.errorString()), TVision::Error);
+			QString(_("Error writing the data to the file '%1': %2")).arg(fn).arg(file.errorString()), TVision::Error);
 	    }
-	    w->attrSet("value", "", A_NO_ID, true);	//Clear previous
+	    //!!!! Clear the attribute "value". But it can be spare for multiple connections to one session.
+	    w->attrSet("value", "", A_NO_ID, true);
 	    break;
 	}
 	case FBT_LOAD: {
@@ -1074,16 +1075,16 @@ void ShapeFormEl::buttonReleased( )
 		    fDefFile	= TSYS::strParse(fHead, 0, "|", &off),
 		    fMime	= TSYS::strParse(fHead, 0, "|", &off);
 	    if(fTmpl.empty())	break;
-	    if(fTitle.empty())	fTitle = _("Load file");
+	    if(fTitle.empty())	fTitle = _("Loading a file");
 	    QString fn = w->mainWin()->getFileName(fTitle.c_str(), fDefFile.c_str(), fTmpl.c_str(), QFileDialog::AcceptOpen);
 	    if(!fn.size()) break;
 	    QFile file(fn);
 	    if(!file.open(QFile::ReadOnly)) {
-		mod->postMess(mod->nodePath().c_str(), QString(_("Open file '%1' is fail: %2")).arg(fn).arg(file.errorString()), TVision::Error);
+		mod->postMess(mod->nodePath().c_str(), QString(_("Error opening the file '%1': %2")).arg(fn).arg(file.errorString()), TVision::Error);
 		break;
 	    }
 	    if(file.size() >= USER_FILE_LIMIT) {
-		mod->postMess(mod->nodePath().c_str(), QString(_("Loadable file '%1' is too large.")).arg(fn), TVision::Error);
+		mod->postMess(mod->nodePath().c_str(), QString(_("The download file '%1' is very large.")).arg(fn), TVision::Error);
 		break;
 	    }
 	    QByteArray data = file.readAll();
@@ -1751,7 +1752,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 			int tfid = open(tfile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles());
 			if(tfid >= 0) {
 			    if(write(tfid, sdata.data(), sdata.size()) != (ssize_t)sdata.size())
-				mod->postMess(mod->nodePath().c_str(), QString(_("Write file '%1' is fail.")).arg(tfile.c_str()), TVision::Error);
+				mod->postMess(mod->nodePath().c_str(), QString(_("Error writing to the file '%1'.")).arg(tfile.c_str()), TVision::Error);
 			    close(tfid);
 			    mSrc = MediaSource(QUrl(("file:"+tfile).c_str()));
 			    //mSrc = MediaSource(QString(tfile.c_str()));
@@ -2618,7 +2619,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
     shD->pictRect = tAr;
     shD->tPict = tPict;
 
-    if(mess_lev() == TMess::Debug) mess_debug(mod->nodePath().c_str(), _("Trend build: %f ms."), 1e-3*(TSYS::curTime()-d_cnt));
+    if(mess_lev() == TMess::Debug) mess_debug(mod->nodePath().c_str(), _("Time of building the trend: %f ms."), 1e-3*(TSYS::curTime()-d_cnt));
 }
 
 void ShapeDiagram::makeSpectrumPicture( WdgView *w )
@@ -3391,7 +3392,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     shD->pictRect = tAr;
     shD->tPict = tPict;
 
-    if(mess_lev() == TMess::Debug) mess_debug(mod->nodePath().c_str(), _("Trend build: %f ms."), 1e-3*(TSYS::curTime()-d_cnt));
+    if(mess_lev() == TMess::Debug) mess_debug(mod->nodePath().c_str(), _("Time of building the trend: %f ms."), 1e-3*(TSYS::curTime()-d_cnt));
 }
 
 void ShapeDiagram::tracing( )
@@ -3471,7 +3472,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 		pnt.drawRect(QRect(shD->startPnt,shD->holdPnt));
 	    }
 
-	    if(mess_lev() == TMess::Debug) mess_debug(mod->nodePath().c_str(), _("Trend draw: %f ms."), 1e-3*(TSYS::curTime()-d_cnt));
+	    if(mess_lev() == TMess::Debug) mess_debug(mod->nodePath().c_str(), _("Time of drawing the trend: %f ms."), 1e-3*(TSYS::curTime()-d_cnt));
 
 	    return true;
 	}
@@ -4587,7 +4588,7 @@ string ShapeDocument::ShpDt::toHtml( )
     // Parse document
     XMLNode xproc("body");
     try{ if(!doc.empty()) xproc.load(string(XHTML_entity)+doc, true, Mess->charset()); }
-    catch(TError &err) { mess_err(mod->nodePath().c_str(), _("Document parsing error: %s"), err.mess.c_str()); }
+    catch(TError &err) { mess_err(mod->nodePath().c_str(), _("Error parsing the document: %s"), err.mess.c_str()); }
 
     nodeProcess(&xproc);
 

@@ -75,13 +75,13 @@ void Session::setEnable( bool val )
     vector<string> pg_ls;
 
     if(val) {
-	mess_debug(nodePath().c_str(),_("Enable session."));
+	mess_debug(nodePath().c_str(),_("Enabling the session."));
 	try {
 	    if(mess_lev() == TMess::Debug) d_tm = TSYS::curTime();
 
 	    //Connecting and registering to the project
 	    mParent	= mod->prjAt(mPrjnm);
-	    //????
+	    mParent.at().heritReg(this);
 
 	    //Getting data from the project
 	    mOwner	= parent().at().owner();
@@ -95,7 +95,7 @@ void Session::setEnable( bool val )
 	    stlCurentSet(s2i(stVl));
 
 	    if(mess_lev() == TMess::Debug) {
-		mess_debug(nodePath().c_str(), _("Load previous style time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
+		mess_debug(nodePath().c_str(), _("Time of the previous style loading: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
 		d_tm = TSYS::curTime();
 	    }
 
@@ -106,7 +106,7 @@ void Session::setEnable( bool val )
 		    add(pg_ls[i_p],parent().at().at(pg_ls[i_p]).at().path());
 
 	    if(mess_lev() == TMess::Debug) {
-		mess_debug(nodePath().c_str(), _("Create root pages time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
+		mess_debug(nodePath().c_str(), _("Time of the root pages creating: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
 		d_tm = TSYS::curTime();
 	    }
 
@@ -116,18 +116,18 @@ void Session::setEnable( bool val )
 		try{ at(pg_ls[iLs]).at().setEnable(true); }
 		catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Enable root pages time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Time of the root pages enabling: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
 
 	    modifGClr();
 	} catch(...) {
-	    //????
+	    mParent.at().heritUnreg(this);
 	    mParent.free();
 	}
     }
     else {
 	if(start()) setStart(false);
 
-	mess_debug(nodePath().c_str(),_("Disable session."));
+	mess_debug(nodePath().c_str(),_("Disabling the session."));
 
 	//Pages disable
 	list(pg_ls);
@@ -139,7 +139,7 @@ void Session::setEnable( bool val )
 	    del(pg_ls[iLs]);
 
 	//Unregistering and disconnecting for the project
-	//????
+	mParent.at().heritUnreg(this);
 	mParent.free();
     }
 
@@ -160,7 +160,7 @@ void Session::setStart( bool val )
 
 	if(mess_lev() == TMess::Debug)	d_tm = TSYS::curTime();
 
-	mess_debug(nodePath().c_str(),_("Start session."));
+	mess_debug(nodePath().c_str(),_("Starting the session."));
 
 	//Load Styles from project
 	mStProp.clear();
@@ -171,7 +171,7 @@ void Session::setStart( bool val )
 	}
 
 	if(mess_lev() == TMess::Debug) {
-	    mess_debug(nodePath().c_str(), _("Load styles from project time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
+	    mess_debug(nodePath().c_str(), _("Time of the styles loading from the project: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
 	    d_tm = TSYS::curTime();
 	}
 
@@ -181,7 +181,7 @@ void Session::setStart( bool val )
 	    at(pg_ls[iLs]).at().setProcess(true);
 
 	if(mess_lev() == TMess::Debug) {
-	    mess_debug(nodePath().c_str(), _("Process on for all root pages time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
+	    mess_debug(nodePath().c_str(), _("Time of the processing all the root pages: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
 	    d_tm = TSYS::curTime();
 	}
 
@@ -193,10 +193,10 @@ void Session::setStart( bool val )
 	//Start process task
 	if(!mStart) SYS->taskCreate(nodePath('.',true), 0, Session::Task, this);
 
-	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Start process task time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
+	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Time of the processing task starting: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
     }
     else {
-	mess_debug(nodePath().c_str(),_("Stop session."));
+	mess_debug(nodePath().c_str(),_("Stopping the session."));
 
 	//Stop process task
 	if(mStart) SYS->taskDestroy(nodePath('.',true), &endrunReq);
@@ -359,7 +359,7 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 	}
     }
     catch(TError &er) {
-	//throw TError(nodePath().c_str(), _("Command '%s' for parameters '%s' error: %s"), com.c_str(), prm.c_str(), er.mess.c_str());
+	//throw TError(nodePath().c_str(), _("Error command '%s' for the parameters '%s': %s"), com.c_str(), prm.c_str(), er.mess.c_str());
     }
 }
 
@@ -409,23 +409,23 @@ int Session::alarmStat( )
     return (aqtp<<16)|(atp<<8)|alev;
 }
 
-void Session::alarmQuittance( const string &wpath, uint8_t quit_tmpl, bool ret )
+void Session::alarmQuietance( const string &wpath, uint8_t quit_tmpl, bool ret )
 {
     string tStr;
     if(!wpath.empty())
 	for(int off = 0; (tStr=TSYS::strParse(wpath,0,";",&off)).size(); )
-	    ((AutoHD<SessWdg>)mod->nodeAt(tStr)).at().alarmQuittance(quit_tmpl, true, ret);
+	    ((AutoHD<SessWdg>)mod->nodeAt(tStr)).at().alarmQuietance(quit_tmpl, true, ret);
     else {
 	vector<string> ls;
 	list(ls);
 	for(unsigned i_p = 0; i_p < ls.size(); i_p++)
-	    at(ls[i_p]).at().alarmQuittance(quit_tmpl, true, ret);
+	    at(ls[i_p]).at().alarmQuietance(quit_tmpl, true, ret);
     }
 
-    //The notifications queue quittance
+    //The notifications queue quietance
     MtxAlloc resAl(mAlrmRes, true);
     for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN)
-	iN->second->queueQuittance(wpath, quit_tmpl, ret);
+	iN->second->queueQuietance(wpath, quit_tmpl, ret);
 }
 
 void Session::ntfReg( uint8_t tp, const string &props, const string &pgCrtor )
@@ -481,7 +481,7 @@ void *Session::Task( void *icontr )
 	    try { ses.at(pls[iL]).at().calc(false, false, iL); }
 	    catch(TError &err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(ses.nodePath().c_str(),_("Session '%s' calculate error."),pls[iL].c_str());
+		mess_err(ses.nodePath().c_str(),_("Error calculating the session '%s'."),pls[iL].c_str());
 	    }
 
 	//VCA server's notifications processing
@@ -552,13 +552,13 @@ TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 {
     // string user( ) - the session user or last command user
     if(iid == "user")	return user();
-    // int alrmQuittance( int quit_tmpl, string wpath = "", bool ret = false ) -
-    //        alarm quittance, or return for <ret>, <wpath> with template <quit_tmpl>. If <wpath> is empty string then make global quittance.
-    //  quit_tmpl - quittance template
+    // int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false ) -
+    //        alarm quietance, or return for <ret>, <wpath> with template <quit_tmpl>. If <wpath> is empty string then make global quietance.
+    //  quit_tmpl - quietance template
     //  wpath - path to widget
-    //  ret - return the quittance
-    else if(iid == "alrmQuittance" && prms.size() >= 1) {
-	alarmQuittance((prms.size()>=2) ? prms[1].getS() : "", ~prms[0].getI(), (prms.size()>=3) ? prms[2].getB() : false);
+    //  ret - return the quietance
+    else if(iid == "alrmQuietance" && prms.size() >= 1) {
+	alarmQuietance((prms.size()>=2) ? prms[1].getS() : "", ~prms[0].getI(), (prms.size()>=3) ? prms[2].getB() : false);
 	return 0;
     }
     // int reqTm( ) - Last request time
@@ -590,13 +590,13 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    unsigned tm = strtoul(opt->attr("tm").c_str(), NULL, 10);
 	    unsigned ntm = calcClk();
 	    vector<string> lst = openList();
-	    for(unsigned i_f = 0; i_f < lst.size(); i_f++) {
+	    for(unsigned iF = 0; iF < lst.size(); iF++) {
 		XMLNode *pel = opt->childAdd("pg");
-		pel->setText(lst[i_f]);
+		pel->setText(lst[iF]);
 
 		if(tm) {
 		    // Permission to view page check
-		    AutoHD<SessWdg> swdg = nodeAt(lst[i_f], 1, 0, 0, true);
+		    AutoHD<SessWdg> swdg = nodeAt(lst[iF], 1, 0, 0, true);
 		    if(swdg.freeStat() ||
 			    !SYS->security().at().access(opt->attr("user"),SEC_RD,swdg.at().owner(),swdg.at().grp(),swdg.at().permit()))
 			continue;
@@ -633,8 +633,8 @@ void Session::cntrCmdProc( XMLNode *opt )
 		opt->setAttr("tm", u2s(tm))->setAttr("wdg", wdg)->setAttr("mess", mess)->setAttr("lang", lang)->setText(res);
 	    }
 	}
-	else if(ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEC_WR))
-	    alarmQuittance(opt->attr("wdg"), ~s2i(opt->attr("tmpl")), s2i(opt->attr("ret")));
+	else if(ctrChkNode(opt,"quietance",permit(),owner().c_str(),grp().c_str(),SEC_WR))
+	    alarmQuietance(opt->attr("wdg"), ~s2i(opt->attr("tmpl")), s2i(opt->attr("ret")));
 	return;
     }
 
@@ -648,7 +648,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/obj",_("Session"))) {
 	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),permit(),owner().c_str(),grp().c_str(),1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/obj/st/start",_("Start"),permit(),owner().c_str(),grp().c_str(),1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/obj/st/start",_("Running"),permit(),owner().c_str(),grp().c_str(),1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/user",_("User"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/st/owner",_("Owner"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/st/grp",_("Group"),R_R_R_,"root",SUI_ID,1,"tp","str");
@@ -662,17 +662,17 @@ void Session::cntrCmdProc( XMLNode *opt )
 		    "tp","str","idm","1","dest","select","select","/obj/prj_ls");
 		ctrMkNode("fld",opt,-1,"/obj/st/backgrnd",_("Background execution mode"),R_R_R_,"root",SUI_ID,1,"tp","bool");
 		if(start()) {
-		    ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Calculate session time"),R_R_R_,"root",SUI_ID,1,"tp","str");
+		    ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Time of the session calculating"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("fld",opt,-1,"/obj/st/connect",_("Connections counter"),R_R_R_,"root",SUI_ID,1,"tp","int");
-		    ctrMkNode("fld",opt,-1,"/obj/st/reqTime",_("Last request time, user, language"),R_R_R_,"root",SUI_ID,1,"tp","time");
+		    ctrMkNode("fld",opt,-1,"/obj/st/reqTime",_("The last request time, user, language"),R_R_R_,"root",SUI_ID,1,"tp","time");
 		    ctrMkNode("fld",opt,-1,"/obj/st/reqUser","",R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("fld",opt,-1,"/obj/st/reqLang","",R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("fld",opt,-1,"/obj/st/userActTime",_("Last user action"),R_R_R_,"root",SUI_ID,1,"tp","time");
-		    if(!backgrnd()) ctrMkNode("fld",opt,-1,"/obj/st/leftToClose",_("Left to force close, seconds"),R_R_R_,"root",SUI_ID,1,"tp","dec");
+		    if(!backgrnd()) ctrMkNode("fld",opt,-1,"/obj/st/leftToClose",_("Remained to the forced closing, seconds"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 		}
 	    }
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Configuration"))) {
-		ctrMkNode("fld",opt,-1,"/obj/cfg/per",_("Period (ms)"),permit(),owner().c_str(),grp().c_str(),1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/per",_("Period, milliseconds"),permit(),owner().c_str(),grp().c_str(),1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/style",_("Style"),permit(),owner().c_str(),grp().c_str(),3,
 		    "tp","dec","dest","select","select","/obj/cfg/stLst");
 		ctrMkNode("list",opt,-1,"/obj/cfg/openPg",_("Opened pages"),R_R_R_,"root",SUI_ID,1,"tp","str");
@@ -717,8 +717,8 @@ void Session::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/obj/prj_ls" && ctrChkNode(opt)) {
 	vector<string> lst;
 	mod->prjList(lst);
-	for(unsigned i_f=0; i_f < lst.size(); i_f++)
-	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(mod->prjAt(lst[i_f]).at().name());
+	for(unsigned iF = 0; iF < lst.size(); iF++)
+	    opt->childAdd("el")->setAttr("id",lst[iF])->setText(mod->prjAt(lst[iF]).at().name());
     }
     else if(a_path == "/obj/cfg/per") {
 	if(ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD))	opt->setText(i2s(period()));
@@ -736,14 +736,14 @@ void Session::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/obj/cfg/openPg" && ctrChkNode(opt)) {
 	vector<string> lst = openList();
-	for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-	    opt->childAdd("el")->setText(lst[i_f]);
+	for(unsigned iF = 0; iF < lst.size(); iF++)
+	    opt->childAdd("el")->setText(lst[iF]);
     }
     else if((a_path == "/br/pg_" || a_path == "/page/page") && ctrChkNode(opt)) {
 	vector<string> lst;
 	list(lst);
-	for(unsigned i_f=0; i_f < lst.size(); i_f++)
-	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
+	for(unsigned iF = 0; iF < lst.size(); iF++)
+	    opt->childAdd("el")->setAttr("id",lst[iF])->setText(at(lst[iF]).at().name());
     }
     else TCntrNode::cntrCmdProc(opt);
 }
@@ -782,7 +782,7 @@ Session::Notify::Notify( uint8_t itp, const string &ipgProps, Session *iown ) : 
 	    close(hd);
 	}
 	if(!fOK) {
-	    mess_err(owner()->nodePath().c_str(), _("Function of the notificator '%s' error: %s"), comProc.c_str(), strerror(errno));
+	    mess_err(owner()->nodePath().c_str(), _("Error function '%s' of the notificator: %s"), comProc.c_str(), strerror(errno));
 	    comProc = "";
 	}
     }
@@ -791,14 +791,14 @@ Session::Notify::Notify( uint8_t itp, const string &ipgProps, Session *iown ) : 
 	TFunction funcIO("ses_"+owner()->id()+"_ntf"+i2s(tp));
 	//funcIO.setStor(DB());
 	funcIO.ioIns(new IO("en",_("Enabled notification"),IO::Boolean,IO::Default), IFA_en);
-	funcIO.ioIns(new IO("doNtf",_("Doing notification"),IO::Boolean,IO::Default), IFA_doNtf);
-	funcIO.ioIns(new IO("doRes",_("Doing resource"),IO::Boolean,IO::Default), IFA_doRes);
+	funcIO.ioIns(new IO("doNtf",_("Performing the notification"),IO::Boolean,IO::Default), IFA_doNtf);
+	funcIO.ioIns(new IO("doRes",_("Making the resource"),IO::Boolean,IO::Default), IFA_doRes);
 	funcIO.ioIns(new IO("res",_("Resource stream"),IO::String,IO::Output), IFA_res);
 	funcIO.ioIns(new IO("mess",_("Notification message"),IO::String,IO::Default), IFA_mess);
-	funcIO.ioIns(new IO("lang",_("Notification message's language"),IO::String,IO::Default), IFA_lang);
+	funcIO.ioIns(new IO("lang",_("Language of the notification message"),IO::String,IO::Default), IFA_lang);
 	try { comProc = SYS->daq().at().at("JavaLikeCalc").at().compileFunc("JavaScript", funcIO, props()); }
 	catch(TError &er) {
-	    mess_err(owner()->nodePath().c_str(), _("Function of the notificator '%s' error: %s"), funcIO.id().c_str(), er.mess.c_str());
+	    mess_err(owner()->nodePath().c_str(), _("Error function '%s' of the notificator: %s"), funcIO.id().c_str(), er.mess.c_str());
 	}
     }
 
@@ -862,7 +862,7 @@ string Session::Notify::ntfRes( unsigned &itm, string &wpath, string &mess, stri
 	MtxAlloc res(dataM, true);
 	int iQ, iFirst = -1, iNext = -1;
 	for(iQ = mQueue.size()-1; iQ >= 0; iQ--) {
-	    if(mQueue[iQ].quittance) continue;
+	    if(mQueue[iQ].quietance) continue;
 	    if(wpath.empty() || owner()->modifChk(tm,mQueue[iQ].clc) || iNext > 0)	break;	//First, new and next entries break
 	    if(iFirst < 0) iFirst = iQ;
 	    if(wpath == mQueue[iQ].path) iNext = iQ;
@@ -916,7 +916,7 @@ void Session::Notify::queueSet( const string &wpath, const string &alrm )
     if(iQ < mQueue.size() && f_qMergeMess && qIt.mess == mQueue[iQ].mess) {
 	if(mQueue[iQ].path.find(qIt.path) == string::npos) mQueue[iQ].path += qIt.path;
 	mQueue[iQ].lev = vmax(mQueue[iQ].lev, qIt.lev);
-	mQueue[iQ].quittance = false;
+	mQueue[iQ].quietance = false;
     }
     else if(iQ < mQueue.size() && qIt.lev == mQueue[iQ].lev) mQueue[iQ] = qIt;
     else {
@@ -938,9 +938,9 @@ void Session::Notify::queueSet( const string &wpath, const string &alrm )
     }
 }
 
-void Session::Notify::queueQuittance( const string &wpath, uint8_t quitTmpl, bool ret )
+void Session::Notify::queueQuietance( const string &wpath, uint8_t quitTmpl, bool ret )
 {
-    //Calls to the queue update from alarmQuittance()
+    //Calls to the queue update from alarmQuietance()
     if(!f_queue || (quitTmpl&(1<<tp))) return;
 
     pthread_mutex_lock(&dataM.mtx());
@@ -951,7 +951,7 @@ void Session::Notify::queueQuittance( const string &wpath, uint8_t quitTmpl, boo
 	else for(int off = 0; !toQuitt && (tStr=TSYS::strParse(wpath,0,";",&off)).size(); )
 	    for(int off1 = 0; !toQuitt && (tStr1=TSYS::strParse(mQueue[iQ].path,0,";",&off1)).size(); )
 		toQuitt = tStr1.compare(0,tStr.size(),tStr) == 0;
-	if(toQuitt) mQueue[iQ].quittance = !ret;
+	if(toQuitt) mQueue[iQ].quietance = !ret;
     }
 
     pthread_mutex_unlock(&dataM.mtx());
@@ -1065,7 +1065,7 @@ void SessPage::setEnable( bool val, bool force )
 
     //Page enable
     if(val) {
-	mess_sys(TMess::Debug, _("Enable page."));
+	mess_sys(TMess::Debug, _("Enabling the page."));
 	mToEn = true;
 	// Check for full enable need
 	bool pgOpen = (!(parent().at().prjFlags()&Page::Empty) && parent().at().attrAt("pgOpen").at().getB());
@@ -1090,7 +1090,7 @@ void SessPage::setEnable( bool val, bool force )
 	mToEn = false;
     }
     else if(enable()) {
-	mess_sys(TMess::Debug, _("Disable page."));
+	mess_sys(TMess::Debug, _("Disabling the page."));
 
 	//Unregister opened page
 	if(!(parent().at().prjFlags()&Page::Empty) && attrPresent("pgOpen") && attrAt("pgOpen").at().getB())
@@ -1323,26 +1323,26 @@ void SessPage::alarmSet( bool isSet )
     if(isSet) ownerSess()->alarmSet(path(), aCur);
 }
 
-void SessPage::alarmQuittance( uint8_t quit_tmpl, bool isSet, bool ret )
+void SessPage::alarmQuietance( uint8_t quit_tmpl, bool isSet, bool ret )
 {
     int alarmSt = attrAt("alarmSt").at().getI();
     if(!ret && !((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF)))return;
     if(ret && !(((~(alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>8)&0xFF)))	return;
 
-    //Self quittance
+    //Self quietance
     if(!ret) attrAt("alarmSt").at().setI(alarmSt & (quit_tmpl<<16|0xFFFF));
     else attrAt("alarmSt").at().setI(alarmSt | (((~quit_tmpl)<<16)&(alarmSt<<8)&0xFF0000));
 
     vector<string> lst;
-    //Included pages quittance
+    //Included pages quietance
     pageList(lst);
     for(unsigned i_p = 0; i_p < lst.size(); i_p++)
-	pageAt(lst[i_p]).at().alarmQuittance(quit_tmpl, false, ret);
+	pageAt(lst[i_p]).at().alarmQuietance(quit_tmpl, false, ret);
 
-    //Include widgets quittance
+    //Include widgets quietance
     wdgList( lst );
     for(unsigned i_w = 0; i_w < lst.size(); i_w++)
-	((AutoHD<SessWdg>)wdgAt(lst[i_w])).at().alarmQuittance(quit_tmpl, false, ret);
+	((AutoHD<SessWdg>)wdgAt(lst[i_w])).at().alarmQuietance(quit_tmpl, false, ret);
 
     if(isSet && ownerSessWdg(true))	ownerSessWdg(true)->alarmSet();
 }
@@ -1395,7 +1395,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 	SessWdg::cntrCmdGeneric(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Session page: ")+ownerFullId()+"/"+id());
 	if(enable() && !(parent().at().prjFlags()&Page::Empty))
-	    ctrMkNode("fld",opt,1,"/wdg/st/open",_("Open"),RWRWR_,owner().c_str(),grp().c_str(),1,"tp","bool");
+	    ctrMkNode("fld",opt,1,"/wdg/st/open",_("Opened"),RWRWR_,owner().c_str(),grp().c_str(),1,"tp","bool");
 	if(enable() && parent().at().prjFlags()&(Page::Template|Page::Container)) {
 	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))
 		ctrMkNode("list",opt,-1,"/page/page",_("Pages"),R_R_R_,"root","UI",3,"tp","br","idm","1","br_pref","pg_");
@@ -1416,8 +1416,8 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
     else if((a_path == "/br/pg_" || a_path == "/page/page") && ctrChkNode(opt)) {
 	vector<string> lst;
 	pageList(lst);
-	for(unsigned i_f=0; i_f < lst.size(); i_f++)
-	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(pageAt(lst[i_f]).at().name());
+	for(unsigned iF = 0; iF < lst.size(); iF++)
+	    opt->childAdd("el")->setAttr("id",lst[iF])->setText(pageAt(lst[iF]).at().name());
     }
     else return SessWdg::cntrCmdGeneric(opt);
 
@@ -1531,10 +1531,10 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	//   Self attributes check
 	attrList(als);
 	AutoHD<Widget> fulw = parentNoLink();
-	for(unsigned i_a = 0; i_a < als.size(); i_a++) {
-	    AutoHD<Attr> cattr = attrAt(als[i_a]);
-	    if((fulw.at().attrPresent(als[i_a])&&fulw.at().attrAt(als[i_a]).at().flgSelf()&Attr::ProcAttr) || als[i_a] == "focus")
-		fio.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),cattr.at().fld().typeIO(),IO::Output,"",false,("./"+als[i_a]).c_str()));
+	for(unsigned iA = 0; iA < als.size(); iA++) {
+	    AutoHD<Attr> cattr = attrAt(als[iA]);
+	    if((fulw.at().attrPresent(als[iA])&&fulw.at().attrAt(als[iA]).at().flgSelf()&Attr::ProcAttr) || als[iA] == "focus")
+		fio.ioAdd(new IO(als[iA].c_str(),cattr.at().name().c_str(),cattr.at().fld().typeIO(),IO::Output,"",false,("./"+als[iA]).c_str()));
 	}
 
 	//   Include attributes check
@@ -1542,11 +1542,11 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	for(unsigned i_w = 0; i_w < iwls.size(); i_w++) {
 	    AutoHD<Widget> curw = wdgAt(iwls[i_w]);
 	    curw.at().attrList(als);
-	    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
-		AutoHD<Attr> cattr = curw.at().attrAt(als[i_a]);
-		if(cattr.at().flgSelf()&Attr::ProcAttr || als[i_a] == "focus")
-		    fio.ioAdd(new IO((iwls[i_w]+"_"+als[i_a]).c_str(),(curw.at().name()+"."+cattr.at().name()).c_str(),
-			cattr.at().fld().typeIO(),IO::Output,"",false,(iwls[i_w]+"/"+als[i_a]).c_str()));
+	    for(unsigned iA = 0; iA < als.size(); iA++) {
+		AutoHD<Attr> cattr = curw.at().attrAt(als[iA]);
+		if(cattr.at().flgSelf()&Attr::ProcAttr || als[iA] == "focus")
+		    fio.ioAdd(new IO((iwls[i_w]+"_"+als[iA]).c_str(),(curw.at().name()+"."+cattr.at().name()).c_str(),
+			cattr.at().fld().typeIO(),IO::Output,"",false,(iwls[i_w]+"/"+als[iA]).c_str()));
 	    }
 	}
 	fio.ioAdd(new IO("event","Event",IO::String,IO::Output));
@@ -1565,7 +1565,7 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 		mWorkProg = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
 		    compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg(),mod->nodePath('.',true)+";");
 	    } catch(TError &err) {
-		mess_err(nodePath().c_str(),_("Compile function '%s' by language '%s' for widget error: %s"),
+		mess_err(nodePath().c_str(),_("Error compiling the function '%s' by the language '%s' for the widget: %s"),
 					    fio.id().c_str(),calcLang().c_str(),err.mess.c_str());
 	    }
 	}
@@ -1641,7 +1641,7 @@ void SessWdg::resourceSet( const string &id, const string &data, const string &m
 
 void SessWdg::wdgAdd( const string &iid, const string &name, const string &iparent, bool force )
 {
-    if(!isContainer())	throw TError(nodePath().c_str(), _("Widget is not a container!"));
+    if(!isContainer())	throw TError(nodePath().c_str(), _("The widget is not a container!"));
     if(wdgPresent(iid))	return;
 
     chldAdd(inclWdg, new SessWdg(iid,iparent,ownerSess()));
@@ -1780,21 +1780,21 @@ void SessWdg::alarmSet( bool isSet )
     if(isSet) ownerSess()->alarmSet(path(), aCur);
 }
 
-void SessWdg::alarmQuittance( uint8_t quit_tmpl, bool isSet, bool ret )
+void SessWdg::alarmQuietance( uint8_t quit_tmpl, bool isSet, bool ret )
 {
     int alarmSt = attrAt("alarmSt").at().getI();
     if(!ret && !((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF)))return;
     if(ret && !(((~(alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>8)&0xFF)))	return;
 
-    //Self quittance
+    //Self quietance
     if(!ret) attrAt("alarmSt").at().setI(alarmSt & (quit_tmpl<<16|0xFFFF));
     else attrAt("alarmSt").at().setI(alarmSt | (((~quit_tmpl)<<16)&(alarmSt<<8)&0xFF0000));
 
     vector<string> lst;
-    //Include widgets quittance
+    //Include widgets quietance
     wdgList(lst);
     for(unsigned iW = 0; iW < lst.size(); iW++)
-	((AutoHD<SessWdg>)wdgAt(lst[iW])).at().alarmQuittance(quit_tmpl, false, ret);
+	((AutoHD<SessWdg>)wdgAt(lst[iW])).at().alarmQuietance(quit_tmpl, false, ret);
 
     if(isSet && ownerSessWdg(true)) ownerSessWdg(true)->alarmSet();
 }
@@ -1813,10 +1813,10 @@ void SessWdg::prcElListUpdate( )
 
     attrList(ls);
     mAttrLnkLs.clear();
-    for(unsigned i_a = 0; i_a < ls.size(); i_a++) {
-	AutoHD<Attr> attr = attrAt(ls[i_a]);
+    for(unsigned iA = 0; iA < ls.size(); iA++) {
+	AutoHD<Attr> attr = attrAt(ls[iA]);
 	if(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn|Attr::CfgLnkOut))
-	    mAttrLnkLs.push_back(ls[i_a]);
+	    mAttrLnkLs.push_back(ls[iA]);
     }
 }
 
@@ -2008,12 +2008,12 @@ void SessWdg::calc( bool first, bool last, int pos )
 		    else {
 			vector<string> lst = ownerSess()->openList();
 			string prev;
-			for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-			    if(lst[i_f] == path()) {
+			for(unsigned iF = 0; iF < lst.size(); iF++)
+			    if(lst[iF] == path()) {
 				if(prev.size()) ((AutoHD<SessPage>)mod->nodeAt(prev)).at().eventAdd(sevup);
 				break;
 			    }
-			    else prev = lst[i_f];
+			    else prev = lst[iF];
 		    }
 		}
 	    }
@@ -2026,7 +2026,7 @@ void SessWdg::calc( bool first, bool last, int pos )
     } catch(TError &err) {
 	res.unlock();
 	mess_err(err.cat.c_str(), err.mess.c_str());
-	mess_err(nodePath().c_str(), _("Widget calculation error. Process is disabled."));
+	mess_err(nodePath().c_str(), _("Error calculating the widget. Process is disabled."));
 	if(!last) setProcess(false);
     }
 }
@@ -2045,7 +2045,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
     else if(cfg.id() == "alarmSt" && cfg.getI()&0x1000000) {
 	int tmpl = ~(cfg.getI()&0xFF);
 	cfg.setI(prev.getI(), false, true);
-	ownerSess()->alarmQuittance(path(), tmpl, cfg.getI()&0x2000000);
+	ownerSess()->alarmQuietance(path(), tmpl, cfg.getI()&0x2000000);
     }
 
     //External link process
@@ -2285,14 +2285,14 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    vector<string>	lst;
 	    wdgList(lst);
 
-	    for(unsigned i_f = 0; i_f < lst.size(); i_f++) {
-		AutoHD<SessWdg> iwdg = wdgAt(lst[i_f]);
+	    for(unsigned iF = 0; iF < lst.size(); iF++) {
+		AutoHD<SessWdg> iwdg = wdgAt(lst[iF]);
 		XMLNode *wn = new XMLNode("get");
 		wn->setAttr("path", a_path)->setAttr("user", u)->setAttr("lang", l)->setAttr("tm", opt->attr("tm"))->setAttr("FullTree", opt->attr("FullTree"));
 		iwdg.at().cntrCmdServ(wn);
 		if(wn->childSize() || fullTree) {
 		    wn->setName("w")->attrDel("path")->attrDel("user")->
-			attrDel("rez")->attrDel("tm")->attrDel("FullTree")->setAttr("id", lst[i_f]);
+			attrDel("rez")->attrDel("tm")->attrDel("FullTree")->setAttr("id", lst[iF]);
 		    opt->childAdd(wn);
 		}
 		else delete wn;

@@ -1,3 +1,30 @@
+2018-04-10 Roman (stable)
+- !!!!:DOC: "Quick Start" revision and it translation to Ukrainian finished at last.
+- FIX:DB.LibsDB.vcaBase: The "Analog show" widget translation expanded for the whole expression. The widget "Cooler (cooler2)" renamed to "Cooler 2".
+    Main.{grpGraph,ViewCadr,grpGraph10}: Direct links to "name" replaced by the dynamic one "this.attr("name")", due it processing can be lost sometime.
+    Main.RootPgSo: Prevented for locking all pages of selected signal object (SO).
+- FIX:DB.Model.AGLKS.vca: All links to the ball cranes were updated.
+- FIX:data/openscada-proj.in: Fixed for the negative result code of the return operation.
+- !!!!:SYS,UI.{VCAEngine,Vision}: The term "quittance" renamed to "quietance", from the word "quiet" which is a logical one for the alarms.
+- !:SYS: main.cpp improved for the original messages.
+    "OpenSCADA system" in headers of the source files mostly renamed to "OpenSCADA".
+- Archives: The archivers' objects copying prevented from copy the configuration field "ADDR".
+- !!!!:Archive.FSArch: Hardly prevented from the configuration field "ADDR" changing both for messages and values.
+    A procedure of the configuration field "ADDR" checking for duplicates added.
+- !!:FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}:
+    Translation collumns creation at the table fixing added for already and partial translated tables into the non multi-language mode.
+    An additional debug tracing label added.
+- !!:DAQ.{DAQGate},UI.{VCAEngine,Vision}: Fully revised for the original text messages.
+- DAQ.JavaLikeCalc,UI.QTStarter: Some revised for the original text messages.
+- UI.QTCfg: Appended by the navigation tree refreshing after the error copying.
+- !!!!:UI.{VCAEngine,Vision}: The projects expanded by the using sessions accounting for new projects hot enabling on the sessions.
+    The "Use" field also added for the widgets libraries, as a count of whole using of their widgets.
+- !!!!:UI.VCAEngine:
+    Fixed for accessing to the wrong created session items.
+    Attr::ProcAttr was also appended to the direct inheriting like to the links.
+- UI.WebVision: The attribute "value" clearance was added after accomplishing the mode "Save" of the view "Button" of the primitive "FormEl".
+
+
 2018-04-01 Roman (stable)
 - !:DOC: "Quick Start" continued to revision ongoing of it translation to Ukrainian, in the part 4.
 - FIX:DB.LibsDB.OscadaLibs: Some original messages are fixed.
@@ -1797,7 +1824,7 @@
 - DB.LibsDB.vcaBase.db: Main.TextLab: Context command's description into the operator's protocol fix.
 - !:FIX:DAQ.ICP_DAS: Possible crash fix into the OpenSCADA serial transport mode using and CRC enable on short (not full) messages receive and process.
 - Special.FLibComplex1: Some the source code cleaned.
-- !!:FIX:UI.VCAEngine: Queued notification's quittance for all and partial fix.
+- !!:FIX:UI.VCAEngine: Queued notification's quietance for all and partial fix.
 
 
 2015-12-12 Roman
@@ -2013,7 +2040,7 @@
 - Transport.Sockets: Default port set to 10005, default for the OpenSCADA control interface.
 - UI.QTCfg: List view widget is moved to ListView class, inherited from QListWidget for sizeHint() set to 5 rows for height.
 - UI.VCAEngine: Flag "qMergeMess" is added to queue's notification, for allow merge notifications into the queue by the message.
-    Quittance set allow by list, separated by symbol ';'.
+    Quietance set allow by list, separated by symbol ';'.
 
 
 2015-09-20 Roman
@@ -2179,7 +2206,7 @@
     "export" keyword miss before LANG=en_US.UTF-8 fixed, detected on PLC LP-8781 environment.
 - !!!!:FIX:SYS: User API function system() fixed for full reading popen's pipe, up to EOF.
 - DAQ.System.Sensors: Source code cleaned.
-- !:UI.{VCAEngine,Vision}: Alarm's notifications quittance return by flag 'quittanceRet' to the notificator is added.
+- !:UI.{VCAEngine,Vision}: Alarm's notifications quietance return by flag 'quietanceRet' to the notificator is added.
     Using global language for that user's miss is added to notification resource request.
     User API function of session of project alrmSndPlay() removed as deprecated and inconsistent for new notification concept.
 - FIX:UI.VCAEngine: The queued message removing fixed into the notification's resource part at the alarm real gone for the notification type.
@@ -7972,7 +7999,7 @@
 - FIX:DAQ.DAQGate: True status show is fixed on time connection try.
 - DAQ.ICP_DAS: Fast task priority is rose to 32.
 - Protocol.SelfSystem: Strong timeout set is removed for output transport's request.
-- !!:UI.VCAEngine: Object's functions of user's API is added: user(), alrmSndPlay() and alrmQuittance().
+- !!:UI.VCAEngine: Object's functions of user's API is added: user(), alrmSndPlay() and alrmQuietance().
 
 
 2009-11-05 Roman
@@ -8925,11 +8952,11 @@
 - !!!:/UI/VCAEngine,/UI/Vision: Widget's changes clearing mechanism is realised.
 - FIX:/UI/VCAEngine: Restoring attributes on reload to inherited or default values is fixed.
 - /UI/VCAEngine: Previous values on time attributes changing is made send into type TVariant.
-- FIX:/UI/VCAEngine: Alarm's quittance from widget's call procedures is fixed.
+- FIX:/UI/VCAEngine: Alarm's quietance from widget's call procedures is fixed.
 - FIX:/UI/VCAEngine: Copy widgets is fixed.
 - !!!:/UI/VCAEngine,/UI/Vision,/UI/WebVision: The RunTime context menu for active widgets is realised.
 - !!!:/DemoDB: Realised the full feature signal objects. The result graphics template cadr is created. Context and status tips is added.
-    The navigation panel is updated and quittance buttons is added. Volumed pipe elements is added to library and used for all mnemos.
+    The navigation panel is updated and quietance buttons is added. Volumed pipe elements is added to library and used for all mnemos.
     Context menu is added for digital taps. Value's text font is rose for input's views.
 
 

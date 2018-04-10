@@ -1431,12 +1431,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				menuWin = this.ownerDocument.createElement('div');
 				menuWin.id = 'menuwin';
 				menuWin.className = "ItemsTree active";
-				menuWin.style.cssText = 'font:'+this.wdgLnk.fontCfg+';';
+				menuWin.treeFont = 'font:'+this.wdgLnk.place.fontCfg+';';
 				if(getFont(this.wdgLnk.attrs['font'],Math.min(this.wdgLnk.xScale(true),this.wdgLnk.yScale(true)),2) > 14)
-				    menuWin.style.cssText += "font-size: 14px;"
+				    menuWin.treeFont += "font-size: 14px;"
 				menuWin.close = function( ) { this.style.visibility = 'hidden'; this.style.top = "-100px"; }
 				menuWin.setList = function(list) {
 				    if(!this.children.length) this.appendChild(getTree());
+				    this.children[0].style.cssText = this.treeFont;
 				    this.children[0].select = function(ipath) {
 					if(!ipath.length) return;
 					attrs = new Object();
@@ -1449,10 +1450,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				}
 				this.ownerDocument.body.appendChild(menuWin);
 			    }
+			    menuWin.style.cssText = 'left: '+posGetX(this,true)+'px; top: '+(posGetY(this,true)+this.offsetHeight)+'px; ';
 			    menuWin.onmouseleave = menuWin.close;
 			    menuWin.formObj = this;
 			    menuWin.setList(this.wdgLnk.attrs['value']);
-			    menuWin.style.cssText = 'left: '+posGetX(this,true)+'px; top: '+(posGetY(this,true)+this.offsetHeight)+'px; ';
 			}
 		    else if(this.place.isLoad && toInit) {
 			iformObj = this.place.ownerDocument.createElement('form');
@@ -2521,8 +2522,8 @@ function getTree( )
     formObj.setList = function(items) {
 	while(this.children.length) this.removeChild(this.children[0]);
 	formObj.itMdf = formObj.itMdf ? (formObj.itMdf+1) : 1;
-	var elLst = items.split('\n');
-	var cur_it = null;
+	elLst = items.split('\n');
+	cur_it = null;
 	for(iEl = 0; iEl < elLst.length; iEl++) {
 	    ipath = elLst[iEl];
 	    for(lev = 0, pathLev.off = 0; (item=pathLev(ipath,0,true)).length; lev++) {
@@ -2579,7 +2580,7 @@ document.body.onmouseup = function(e)
 window.onresize = function( ) {
     if(stTmReload) clearTimeout(stTmReload);
     if(window.innerHeight > document.body.clientHeight ||
-	((document.body.clientHeight-window.innerHeight)/document.body.clientHeight > 0.1 && wy_scale > 1))
+	((document.body.clientHeight-window.innerHeight)/document.body.clientHeight > 0.5 && wy_scale > 1))
 	    stTmReload = setTimeout('window.location.reload()', 1000);
 }
 

@@ -318,7 +318,7 @@ bool RunWdgView::event( QEvent *event )
 		    cfnt.setPointSize(16);
 		    pnt.setFont(cfnt);
 		}
-		pnt.drawText(rect(),QString(_("Page: '%1'.\nView access is not permitted.")).arg(id().c_str()),to);
+		pnt.drawText(rect(),QString(_("Page: '%1'.\nNo access to view.")).arg(id().c_str()),to);
 	    }
 	    return true;
 	case QEvent::MouseButtonPress:	trToUnderlay = true;	break;
@@ -734,7 +734,7 @@ bool StylesStBar::styleSel( )
 
     if(req.childSize() <= 1) return false;
 
-    InputDlg dlg(this, mainWin()->windowIcon(), _("Select your style from list."), _("Style select"), false, false, mainWin()->lang());
+    InputDlg dlg(this, mainWin()->windowIcon(), _("Select your style from the list."), _("Selecting a style"), false, false, mainWin()->lang());
     QLabel *lab = new QLabel(_("Style:"),&dlg);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
     dlg.edLay()->addWidget(lab, 0, 0);

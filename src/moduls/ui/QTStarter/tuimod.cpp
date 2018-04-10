@@ -55,7 +55,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.6.0"
+#define MOD_VER		"4.6.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -1118,7 +1118,7 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
 	gFrame->setFrameShadow(QFrame::Plain);
 	wnd_lay->addWidget(gFrame, 0, 0);
 
-	QPushButton *prjAddUpdt = new QPushButton(QIcon(":/images/it_add.png"), _("Create-update a project"), this);
+	QPushButton *prjAddUpdt = new QPushButton(QIcon(":/images/it_add.png"), _("Creating-updating a project"), this);
 	prjAddUpdt->setToolTip(_("New projects creating or updating of presented ones, like to desktop links"));
 	prjAddUpdt->setWhatsThis(_("The button for new projects creating or updating of presented ones, like to desktop links."));
 	QObject::connect(prjAddUpdt, SIGNAL(clicked(bool)), this, SLOT(projCreateUpdt()));

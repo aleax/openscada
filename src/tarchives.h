@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: tarchives.h
+//OpenSCADA file: tarchives.h
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

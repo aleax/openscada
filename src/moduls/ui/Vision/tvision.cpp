@@ -45,9 +45,9 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.1.1"
+#define MOD_VER		"5.2.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
-#define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
+#define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -218,12 +218,12 @@ QMainWindow *TVision::openWindow( )
 	    (VCAStation() != "." && !(err=mod->cntrIfCmd(req,userStart(),userPass(),VCAStation(),true)))))
 										//!!! But for remote same the request has the athentification
 	while(true) {
-	    if(err == 10)	{ postMess(nodePath().c_str(),_("Error connection to remote station!")); return NULL; }
+	    if(err == 10)	{ postMess(nodePath().c_str(),_("Error connecting to remote station!")); return NULL; }
 	    DlgUser d_usr(userStart().c_str(), userPass().c_str(), VCAStation().c_str());
 	    int rez = d_usr.exec();
 	    if(rez == DlgUser::SelCancel) return NULL;
 	    if(rez == DlgUser::SelErr) {
-		postMess(nodePath().c_str(), QString(_("Authentication error for user '%1'!!!")).arg(d_usr.user()));
+		postMess(nodePath().c_str(), QString(_("Error authenticating the user '%1'!!!")).arg(d_usr.user()));
 		continue;
 	    }
 	    user_open = d_usr.user().toStdString();
@@ -271,7 +271,7 @@ QMainWindow *TVision::openWindow( )
 
 void TVision::modStart( )
 {
-    mess_debug(nodePath().c_str(),_("Start module."));
+    mess_debug(nodePath().c_str(),_("Starting the module."));
 
     mEndRun = false;
     runSt  = true;
@@ -279,7 +279,7 @@ void TVision::modStart( )
 
 void TVision::modStop( )
 {
-    mess_debug(nodePath().c_str(),_("Stop module."));
+    mess_debug(nodePath().c_str(),_("Stopping the module."));
 
     mEndRun = true;
 
@@ -496,9 +496,9 @@ string TVision::modInfo( const string &iname )
     if(name == "SubType")	return SUB_TYPE;
 
     if(lang.size()) {
-	if(name == "Name")	return _("Operation user interface (Qt)");
-	if(name == "Author")	return _("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)");
-	if(name == "Description") return _("Visual operation user interface, based on Qt library - front-end to VCA engine.");
+	if(name == "Name")	return MOD_NAME;
+	if(name == "Author")	return AUTHORS;
+	if(name == "Description") return DESCRIPTION;
     }
 
     return TModule::modInfo(name);

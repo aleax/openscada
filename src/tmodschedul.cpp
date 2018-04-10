@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: tmodschedul.cpp
+//OpenSCADA file: tmodschedul.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 15:16+0200\n"
+"POT-Creation-Date: 2018-04-08 20:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)"
 msgstr ""
 
-msgid "Visual operation user interface, based on Qt library - front-end to VCA engine."
+msgid "Visual operation user interface, based on the Qt library - front-end to the VCA engine."
 msgstr ""
 
 #, c-format
@@ -46,16 +46,16 @@ msgstr ""
 msgid "Saving the module."
 msgstr ""
 
-msgid "Error connection to remote station!"
+msgid "Error connecting to remote station!"
 msgstr ""
 
-msgid "Authentication error for user '%1'!!!"
+msgid "Error authenticating the user '%1'!!!"
 msgstr ""
 
-msgid "Start module."
+msgid "Starting the module."
 msgstr ""
 
-msgid "Stop module."
+msgid "Stopping the module."
 msgstr ""
 
 msgid "Number of individual displays"
@@ -123,37 +123,37 @@ msgstr ""
 msgid "Full screen"
 msgstr ""
 
-msgid "Full screen toggle"
+msgid "Full screen mode toggling"
 msgstr ""
 
-msgid "The button for full screen toggle"
+msgid "The button for full screen mode toggling"
 msgstr ""
 
-msgid "Press for toggle full screen."
+msgid "Press for toggling the full screen mode."
 msgstr ""
 
 msgid "&Close"
 msgstr ""
 
-msgid "Close Vision window"
+msgid "Close the Vision window"
 msgstr ""
 
-msgid "The button for closing Vision developing window"
+msgid "The button for closing the Vision developing window"
 msgstr ""
 
-msgid "Press to close the current Vision developing window."
+msgid "Press to close of the current Vision developing window."
 msgstr ""
 
 msgid "&Quit"
 msgstr ""
 
-msgid "Quit from OpenSCADA"
+msgid "Quit the program"
 msgstr ""
 
-msgid "The button for full quit from OpenSCADA"
+msgid "The button for complete quit the program"
 msgstr ""
 
-msgid "Press for full quit from OpenSCADA system."
+msgid "Press for complete quit the program."
 msgstr ""
 
 msgid "&About"
@@ -162,10 +162,10 @@ msgstr ""
 msgid "Program and OpenSCADA information"
 msgstr ""
 
-msgid "The button for display the program and OpenSCADA information"
+msgid "The button of the information of the program and OpenSCADA"
 msgstr ""
 
-msgid "Press to display the program and OpenSCADA information."
+msgid "Press for information of the program and OpenSCADA."
 msgstr ""
 
 msgid "About &Qt"
@@ -174,79 +174,76 @@ msgstr ""
 msgid "Qt information"
 msgstr ""
 
-msgid "The button for getting the using QT information"
+msgid "The button for getting the using Qt information"
 msgstr ""
 
-msgid "Press to get the using QT information."
+msgid "Press for getting the using Qt information."
 msgstr ""
 
 msgid "%1 manual"
 msgstr ""
 
-msgid "The button for getting the using %1 manual"
+msgid "The button for getting the using '%1' manual"
 msgstr ""
 
-msgid "Press to get the using %1 manual."
+msgid "Press for getting the using '%1' manual."
 msgstr ""
 
 msgid "What's &This"
 msgstr ""
 
-msgid "The button for question about GUI elements"
+msgid "The button for requesting the information about GUI elements"
 msgstr ""
 
-msgid "Get respond about user interface elements"
+msgid "Requesting the information about GUI elements"
 msgstr ""
 
-msgid "Press to respond about user interface elements."
+msgid "Press for requesting the information about GUI elements."
 msgstr ""
 
-msgid "Load from DB"
+msgid "Load from the DB"
 msgstr ""
 
-msgid "Load item data from DB"
+msgid "Load the item data from the DB"
 msgstr ""
 
-msgid "The button for loading item data from DB"
+msgid "The button for loading the item data from the DB"
 msgstr ""
 
-msgid "Press to load item data from DB."
+msgid "Press for loading the item data from the DB."
 msgstr ""
 
-msgid "Save to DB"
+msgid "Save to the DB"
 msgstr ""
 
-msgid "Save item data to DB"
+msgid "Save the item data to the DB"
 msgstr ""
 
-msgid "The button for saving item data to DB"
+msgid "The button for saving the item data to the DB"
 msgstr ""
 
-msgid "Press to save item data to DB."
+msgid "Press for saving the item data to the DB."
 msgstr ""
 
-msgid "Run project execution"
+msgid "Run the project"
 msgstr ""
 
-msgid "Run project execution for selected item"
+msgid "Run the project execution for the selected item"
 msgstr ""
 
-msgid "The button for running project execution for selected item"
+msgid "The button for running the project execution for the selected item"
 msgstr ""
 
-msgid "Press to run project execution for selected item."
+msgid "Press for running the project execution for the selected item."
 msgstr ""
 
 msgid "New project"
 msgstr ""
 
-msgid "New project create"
+msgid "The button for creation a new project"
 msgstr ""
 
-msgid "The button for creation of the new project"
-msgstr ""
-
-msgid "Press to create the new project."
+msgid "Press for creation a new project."
 msgstr ""
 
 msgid "New library"
@@ -255,334 +252,334 @@ msgstr ""
 msgid "New widgets library creation"
 msgstr ""
 
-msgid "The button for creation of the new widgets library"
+msgid "The button for creation a new widgets library"
 msgstr ""
 
-msgid "Press to create the new widgets library."
+msgid "Press for creation a new widgets library."
 msgstr ""
 
-msgid "Add visual item"
+msgid "Add a visual item"
 msgstr ""
 
-msgid "Add visual item into library, container widget, project or page"
+msgid "Adding a visual item to the library, container widget, project or page"
 msgstr ""
 
-msgid "The button for addition of the visual item into library, container widget, project or page"
+msgid "The button for adding a visual item to the library, container widget, project or page"
 msgstr ""
 
-msgid "Press to add visual item into library, container widget, project or page."
+msgid "Press for adding a visual item to the library, container widget, project or page."
 msgstr ""
 
-msgid "Delete visual item"
+msgid "Delete the visual item"
 msgstr ""
 
-msgid "Delete visual item from library, container widget, project or page"
+msgid "Deleting the visual item from the library, container widget, project or page"
 msgstr ""
 
-msgid "The button for deleting visual item from library, container widget, project or page"
+msgid "The button for deleting the visual item from the library, container widget, project or page"
 msgstr ""
 
-msgid "Press to delete visual item from library, container widget, project or page."
+msgid "Press for deleting the visual item from the library, container widget, project or page."
 msgstr ""
 
-msgid "Visual item properties"
+msgid "Properties of the visual item"
 msgstr ""
 
-msgid "Get visual item properties"
+msgid "Getting the properties of the visual item"
 msgstr ""
 
-msgid "The button for getting the visual item properties"
+msgid "The button for getting the properties of the visual item"
 msgstr ""
 
-msgid "Press to get the visual item properties."
+msgid "Press for getting the properties of the visual item."
 msgstr ""
 
-msgid "Visual item edit"
+msgid "Edit the visual item"
 msgstr ""
 
-msgid "Goes visual item edit"
+msgid "Going to editing the visual item"
 msgstr ""
 
-msgid "The button for going to visual item edition"
+msgid "The button for going to editing the visual item"
 msgstr ""
 
-msgid "Press to go to visual item edition."
+msgid "Press for going to editing the visual item."
 msgstr ""
 
-msgid "Visual item changes clear"
+msgid "Clear the visual item changes"
 msgstr ""
 
-msgid "Goes visual item changes clear"
+msgid "Clearing the visual items changes"
 msgstr ""
 
-msgid "The button for going to visual item changes clear"
+msgid "The button for clearing the visual items changes"
 msgstr ""
 
-msgid "Press to go to visual item changes clear."
+msgid "Press for clearing the visual items changes."
 msgstr ""
 
-msgid "Visual item changes put down"
+msgid "Lower down the visual item changes"
 msgstr ""
 
-msgid "Goes visual item changes put down to the parent"
+msgid "Lowering down the visual item changes to the parent"
 msgstr ""
 
-msgid "The button for going to visual item changes put down to the parent"
+msgid "The button for lowering down the visual item changes to the parent"
 msgstr ""
 
-msgid "Press to go to visual item changes put down to the parent."
+msgid "Press for lowering down the visual item changes to the parent."
 msgstr ""
 
-msgid "Visual item changes UnDo"
+msgid "Undo the visual item changes"
 msgstr ""
 
-msgid "Make visual item changes UnDo:"
+msgid "Undoing the visual item changes:"
 msgstr ""
 
-msgid "The button for making visual item changes UnDo"
+msgid "The button for undoing the visual item changes"
 msgstr ""
 
-msgid "Press to make visual item changes UnDo."
+msgid "Press for undoing the visual item changes."
 msgstr ""
 
-msgid "Visual item changes ReDo"
+msgid "Redo the visual item changes"
 msgstr ""
 
-msgid "Make visual item changes ReDo:"
+msgid "Redoing the visual item changes:"
 msgstr ""
 
-msgid "The button for making visual item changes ReDo"
+msgid "The button for redoing the visual item changes"
 msgstr ""
 
-msgid "Press to make visual item changes ReDo."
+msgid "Press for redoing the visual item changes."
 msgstr ""
 
-msgid "Visual item cut"
+msgid "Copy the visual item"
 msgstr ""
 
-msgid "Make visual item cut"
+msgid "Copying the visual item"
 msgstr ""
 
-msgid "The button for making visual item cut"
+msgid "The button for copying the visual item"
 msgstr ""
 
-msgid "Press to make visual item cut."
+msgid "Press for copying the visual item."
 msgstr ""
 
-msgid "Visual item copy"
+msgid "Cut the visual item"
 msgstr ""
 
-msgid "Make visual item copy"
+msgid "Cutting the visual item"
 msgstr ""
 
-msgid "The button for making visual item copy"
+msgid "The button for cutting the visual item"
 msgstr ""
 
-msgid "Press to make visual item copy."
+msgid "Press for cutting the visual item."
 msgstr ""
 
-msgid "Visual item paste"
+msgid "Paste the visual item"
 msgstr ""
 
-msgid "Make visual item paste"
+msgid "Pasting the visual item"
 msgstr ""
 
-msgid "The button for making visual item paste"
+msgid "The button for pasting the visual item"
 msgstr ""
 
-msgid "Press to make visual item paste."
+msgid "Press for pasting the visual item."
 msgstr ""
 
-msgid "Up widget"
+msgid "Raise up to the top"
 msgstr ""
 
-msgid "Raise selected widget to the top"
+msgid "Raising up the selected widgets to the top"
 msgstr ""
 
-msgid "The button for raising the selected widget to the top"
+msgid "The button for raising up the selected widgets to the top"
 msgstr ""
 
-msgid "Press to raise the selected widget to the top."
+msgid "Press for raising up the selected widgets to the top."
 msgstr ""
 
-msgid "Down widget"
+msgid "Lower down to the bottom"
 msgstr ""
 
-msgid "Down selected widget to the bottom"
+msgid "Lowering down the selected widgets to the bottom"
 msgstr ""
 
-msgid "The button for downing the selected widget to the bottom"
+msgid "The button for lowering down the selected widgets to the bottom"
 msgstr ""
 
-msgid "Press to down the selected widget to the bottom."
+msgid "Press for lowering down the selected widgets to the bottom."
 msgstr ""
 
-msgid "Rise widget"
+msgid "Rise up"
 msgstr ""
 
-msgid "Raise selected widget"
+msgid "Raising up the selected widgets"
 msgstr ""
 
-msgid "The button for raising the selected widget"
+msgid "The button for raising up the selected widgets"
 msgstr ""
 
-msgid "Press to raise the selected widget."
+msgid "Press for raising up the selected widgets."
 msgstr ""
 
-msgid "Lower widget"
+msgid "Lower down"
 msgstr ""
 
-msgid "Down selected widget"
+msgid "Lowering down the selected widgets"
 msgstr ""
 
-msgid "The button for downing the selected widget"
+msgid "The button for lowering down the selected widgets"
 msgstr ""
 
-msgid "Press to down the selected widget."
+msgid "Press for lowering down the selected widgets."
 msgstr ""
 
-msgid "Align to left"
+msgid "Align to the left"
 msgstr ""
 
-msgid "Align selected widgets to the left"
+msgid "Aligning the selected widgets to the left"
 msgstr ""
 
-msgid "The button for alignment of selected widgets to the left"
+msgid "The button for aligning the selected widgets to the left"
 msgstr ""
 
-msgid "Press to align selected widgets to the left."
+msgid "Press for aligning the selected widgets to the left."
 msgstr ""
 
-msgid "Align to vertical center"
+msgid "Align vertically to the center"
 msgstr ""
 
-msgid "Align selected widgets to the vertical center"
+msgid "Aligning the selected widgets vertically to the center"
 msgstr ""
 
-msgid "The button for alignment of selected widgets to the vertical center"
+msgid "The button for aligning the selected widgets vertically to the center"
 msgstr ""
 
-msgid "Press to align selected widgets to the vertical center."
+msgid "Press for aligning the selected widgets vertically to the center."
 msgstr ""
 
-msgid "Align to right"
+msgid "Align to the right"
 msgstr ""
 
-msgid "Align selected widgets to the right"
+msgid "Aligning the selected widgets to the right"
 msgstr ""
 
-msgid "The button for alignment of selected widgets to the right"
+msgid "The button for aligning the selected widgets to the right"
 msgstr ""
 
-msgid "Press to align selected widgets to the right."
+msgid "Press for aligning the selected widgets to the right."
 msgstr ""
 
-msgid "Align to top"
+msgid "Align to the top"
 msgstr ""
 
-msgid "Align selected widgets to the top"
+msgid "Aligning the selected widgets to the top"
 msgstr ""
 
-msgid "The button for alignment of selected widgets to the top"
+msgid "The button for aligning the selected widgets to the top"
 msgstr ""
 
-msgid "Press to align selected widgets to the top."
+msgid "Press for aligning the selected widgets to the top."
 msgstr ""
 
-msgid "Align to horizontal center"
+msgid "Align horizontally to the center"
 msgstr ""
 
-msgid "Align selected widgets to the horizontal center"
+msgid "Aligning the selected widgets horizontally to the center"
 msgstr ""
 
-msgid "The button for alignment selected widgets to the horizontal center"
+msgid "The button for aligning the selected widgets horizontally to the center"
 msgstr ""
 
-msgid "Press to align selected widgets to the horizontal center."
+msgid "Press for aligning the selected widgets horizontally to the center."
 msgstr ""
 
-msgid "Align to bottom"
+msgid "Align to the bottom"
 msgstr ""
 
-msgid "Align selected widgets to the bottom"
+msgid "Aligning the selected widgets to the bottom"
 msgstr ""
 
-msgid "The button for alignment selected widgets to the bottom"
+msgid "The button for aligning the selected widgets to the bottom"
 msgstr ""
 
-msgid "Press to align selected widgets to the bottom."
+msgid "Press for aligning the selected widgets to the bottom."
 msgstr ""
 
-msgid "Cursor"
+msgid "Return the cursor"
 msgstr ""
 
-msgid "Unset cursor"
+msgid "Returning the cursor"
 msgstr ""
 
-msgid "The button for unset cursor"
+msgid "The button for returning the cursor"
 msgstr ""
 
-msgid "Press to unset cursor"
+msgid "Press for returning the cursor."
 msgstr ""
 
-msgid "Add line"
+msgid "Add a line"
 msgstr ""
 
-msgid "Add line to elementary figure"
+msgid "Adding a line to the elementary figure"
 msgstr ""
 
-msgid "The button for adding line to elementary figure"
+msgid "The button for adding a line to the elementary figure"
 msgstr ""
 
-msgid "Press to add line to elementary figure."
+msgid "Press for adding a line to the elementary figure."
 msgstr ""
 
-msgid "Add arc"
+msgid "Add an arc"
 msgstr ""
 
-msgid "Add arc to elementary figure"
+msgid "Adding an arc to the elementary figure"
 msgstr ""
 
-msgid "The button for adding arc to elementary figure"
+msgid "The button for adding an arc to the elementary figure"
 msgstr ""
 
-msgid "Press to add arc to elementary figure."
+msgid "Press for adding an arc to the elementary figure."
 msgstr ""
 
-msgid "Add Besier curve"
+msgid "Add a Besier curve"
 msgstr ""
 
-msgid "Add Besier curve to elementary figure"
+msgid "Adding a Besier curve to the elementary figure"
 msgstr ""
 
-msgid "The button for adding Besier curve to elementary figure"
+msgid "The button for adding a Besier curve to the elementary figure"
 msgstr ""
 
-msgid "Press to add Besier curve to elementary figure."
+msgid "Press for adding a Besier curve to the elementary figure."
 msgstr ""
 
 msgid "Connections"
 msgstr ""
 
-msgid "Enable connections"
+msgid "Enabling the connections"
 msgstr ""
 
-msgid "The button for enabling connections"
+msgid "The button for enabling the connections"
 msgstr ""
 
-msgid "Press to enable connections"
+msgid "Press for enabling the connections."
 msgstr ""
 
 msgid "Cl&ose"
 msgstr ""
 
-msgid "Close active window"
+msgid "Close the active window"
 msgstr ""
 
-msgid "The button for the active window closing"
+msgid "The button for closing the active window"
 msgstr ""
 
-msgid "Press to close active window."
+msgid "Press for closing the active window."
 msgstr ""
 
 msgid "Close &All"
@@ -591,10 +588,10 @@ msgstr ""
 msgid "Close all windows"
 msgstr ""
 
-msgid "The button for all windows closing"
+msgid "The button for closing all windows"
 msgstr ""
 
-msgid "Press to close all windows."
+msgid "Press for closing all windows."
 msgstr ""
 
 msgid "&Tile"
@@ -603,10 +600,10 @@ msgstr ""
 msgid "Tile all windows"
 msgstr ""
 
-msgid "The button for all windows tiling"
+msgid "The button for tiling all windows"
 msgstr ""
 
-msgid "Press to tile all windows."
+msgid "Press for tiling all windows."
 msgstr ""
 
 msgid "&Cascade"
@@ -615,34 +612,34 @@ msgstr ""
 msgid "Cascade all windows"
 msgstr ""
 
-msgid "The button for all windows cascading"
+msgid "The button for cascading all windows"
 msgstr ""
 
-msgid "Press to cascade all windows."
+msgid "Press for cascading all windows."
 msgstr ""
 
 msgid "Ne&xt"
 msgstr ""
 
-msgid "Activate next window"
+msgid "Activate the next window"
 msgstr ""
 
-msgid "The button for next window activation"
+msgid "The button for activating the next window"
 msgstr ""
 
-msgid "Press to activate next window."
+msgid "Press for activating the next window."
 msgstr ""
 
 msgid "Pre&vious"
 msgstr ""
 
-msgid "Activate previous window"
+msgid "Activate the previous window"
 msgstr ""
 
-msgid "The button for previous window activation"
+msgid "The button for activating the previous window"
 msgstr ""
 
-msgid "Press to activate previous window."
+msgid "Press for activating the previous window."
 msgstr ""
 
 msgid "&File"
@@ -669,61 +666,61 @@ msgstr ""
 msgid "Visual items toolbar"
 msgstr ""
 
-msgid "Widgets view functions"
+msgid "Functions of the widgets visibility"
 msgstr ""
 
-msgid "Elementars figure tools"
+msgid "Elementary figure tools"
 msgstr ""
 
-msgid "This label displays current user."
+msgid "This label displays the current user."
 msgstr ""
 
-msgid "Field for display the current user."
+msgid "Field for displaying the current user."
 msgstr ""
 
-msgid "Double click to change user."
+msgid "Double click to change the user."
 msgstr ""
 
-msgid "This label displays the using VCA engine station."
+msgid "This label displays the used VCA engine station."
 msgstr ""
 
-msgid "Field for display of the using VCA engine station."
+msgid "Field for displaying the used VCA engine station."
 msgstr ""
 
-msgid "This label displays widgets' scaling mode."
+msgid "This label displays the widgets scaling mode."
 msgstr ""
 
-msgid "Field for display widgets' scaling mode."
+msgid "Field for displaying the widgets scaling mode."
 msgstr ""
 
-msgid "Click to change widgets' scaling mode."
+msgid "Click to change the widgets scaling mode."
 msgstr ""
 
-msgid "This label displays modifying."
+msgid "This label indicates the fact of making changes."
 msgstr ""
 
-msgid "Field for display modifying."
+msgid "Field for indicating the fact of making changes."
 msgstr ""
 
-msgid "Click to save all modifyings."
+msgid "Click to save all the made changes."
 msgstr ""
 
-msgid "This label displays current widget's scale."
+msgid "This label displays the current widget scale."
 msgstr ""
 
-msgid "Field for display the scale of the current widget."
+msgid "Field for displaying the current widget scale."
 msgstr ""
 
-msgid "Dock window for projects management."
+msgid "Dock window of the projects manager."
 msgstr ""
 
-msgid "Dock window for widgets and their libraries management."
+msgid "Dock window of the manager of the widgets libraries."
 msgstr ""
 
-msgid "Dock window for widget's attributes inspection."
+msgid "Dock window of the inspector ot the widget attributes."
 msgstr ""
 
-msgid "Dock window for widget's links inspection."
+msgid "Dock window of the inspector ot the widget links."
 msgstr ""
 
 msgid "Ready"
@@ -744,12 +741,12 @@ msgstr ""
 msgid "Huge (48x48)"
 msgstr ""
 
-msgid "Visual items save"
+msgid "Saving of the visual items"
 msgstr ""
 
 msgid ""
-"Some visual items changed.\n"
-"Save the changes to DB on exit?"
+"Some visual items have been changed.\n"
+"Save the changes to the DB before exiting?"
 msgstr ""
 
 msgid ""
@@ -768,92 +765,89 @@ msgstr ""
 msgid "Manual"
 msgstr ""
 
-msgid "No the manual '%1' found offline or online!"
+msgid "The manual '%1' was not found offline or online!"
 msgstr ""
 
-msgid "Are you sure of loading visual items '%1' from DB?"
+msgid "Are you sure of loading visual items '%1' from the DB?"
 msgstr ""
 
-msgid "Load visual item's data from DB"
+msgid "Loading the visual items data from the DB"
 msgstr ""
 
-msgid "Are you sure of saving all modifications to DB?"
+msgid "Are you sure of saving all modifications to the DB?"
 msgstr ""
 
-msgid "Are you sure of saving visual items '%1' to DB?"
+msgid "Are you sure of saving the visual items '%1' to the DB?"
 msgstr ""
 
-msgid "Save visual item's data to DB"
+msgid "Saving the visual items data to the DB"
 msgstr ""
 
-msgid "Enter new project's identifier and name."
+msgid "Enter the identifier and the name of the new project."
 msgstr ""
 
-msgid "Enter new widget's library identifier and name."
+msgid "Enter the identifier and the name of the new widgets library."
 msgstr ""
 
-msgid "New widget's library"
+msgid "New widgets library"
 msgstr ""
 
-msgid "Enter new widget's/page's identifier and name."
+msgid "Enter the identifier and the name of the new widget/page."
 msgstr ""
 
-msgid "Create widget/page"
+msgid "Creating a widget/page"
 msgstr ""
 
-msgid "Are you sure of deleting visual items: '%1'?"
+msgid "Are you sure of deleting the visual items: '%1'?"
 msgstr ""
 
-msgid "Delete visual items"
+msgid "Deleting the visual items"
 msgstr ""
 
 msgid "Widget: %1"
 msgstr ""
 
-msgid "Widget's '%1' editing window is already opened."
+msgid "The widget '%1' editing window is already open."
 msgstr ""
 
 msgid ""
-"Are you sure of clear all changes for visual items: '%1'?\n"
-"All changes will be lost and variables are returning to default values or will be inherited!"
-msgstr ""
-
-msgid "Visual items' changes clear"
+"Are you sure of clear all changes of the visual items: '%1'?\n"
+"All changes will be lost and values will return to the previous state or will be inherited!"
 msgstr ""
 
 msgid ""
-"Are you sure for put down to parent all changes for visual items: '%1'?\n"
-"All other inherited from the parent visual items will use the changes!"
+"Are you sure for lowering down to the parent for all changes of the visual items: '%1'?\n"
+"All other visual elements, descendant from this ancestor, will use these changes!"
 msgstr ""
 
-msgid "Visual items move or copy"
+msgid "Moving or copying the visual items"
 msgstr ""
 
-msgid "Project '%1' move.\n"
+msgid "Moving the project '%1'.\n"
 msgstr ""
 
-msgid "Project '%1' copy.\n"
+msgid "Copying the project '%1'.\n"
 msgstr ""
 
-msgid "Widget's library '%1' move.\n"
+msgid "Moving the widgets library '%1'.\n"
 msgstr ""
 
-msgid "Widget's library '%1' copy.\n"
+msgid "Copying the widgets library '%1'.\n"
 msgstr ""
 
-msgid "Move page '%1' to '%2'.\n"
+msgid "Moving the page '%1' to '%2'.\n"
 msgstr ""
 
-msgid "Copy page '%1' to '%2'.\n"
+msgid "Copying the page '%1' to '%2'.\n"
 msgstr ""
 
-msgid "Move widget '%1' to '%2'.\n"
+msgid "Moving the widget '%1' to '%2'.\n"
 msgstr ""
 
-msgid "Copy widget '%1' to '%2'.\n"
+msgid "Copying the widget '%1' to '%2'.\n"
 msgstr ""
 
-msgid "Enter new widget's identifier and name."
+msgid "Enter the identifier and the name of the new widget."
 msgstr ""
 
 msgid "Copy/move scheme from '%1' to '%2' is not supported."
@@ -863,14 +857,14 @@ msgid "Inherit:"
 msgstr ""
 
 msgid ""
-"Target item '%1' already present!\n"
-"Any way paste to?"
+"The target item '%1' is already present!\n"
+"Paste to it anyway?"
 msgstr ""
 
-msgid "Try copy/move self to self for \"%1/%1\"!"
+msgid "Attempting to copy/move yourself for \"%1/%1\"!"
 msgstr ""
 
-msgid "Widget's library properties"
+msgid "Properties of the widgets library"
 msgstr ""
 
 msgid "Widgets library"
@@ -879,7 +873,7 @@ msgstr ""
 msgid "State"
 msgstr ""
 
-msgid "Item's icon. Click for download other."
+msgid "Item icon. Click to download another."
 msgstr ""
 
 msgid "Enabled:"
@@ -888,13 +882,16 @@ msgstr ""
 msgid "Container DB:"
 msgstr ""
 
+msgid "Used:"
+msgstr ""
+
 msgid "Date of modification:"
 msgstr ""
 
 msgid "Configuration"
 msgstr ""
 
-msgid "Id:"
+msgid "Identifier:"
 msgstr ""
 
 msgid "Name:"
@@ -909,7 +906,7 @@ msgstr ""
 msgid "Access:"
 msgstr ""
 
-msgid "Calculate period (ms):"
+msgid "Period of the calculating, milliseconds:"
 msgstr ""
 
 msgid "Mime data"
@@ -924,10 +921,10 @@ msgstr ""
 msgid "Data size"
 msgstr ""
 
-msgid "Add record"
+msgid "Add a record"
 msgstr ""
 
-msgid "Delete record"
+msgid "Delete a record"
 msgstr ""
 
 msgid "Load data"
@@ -946,6 +943,9 @@ msgid "Erase style"
 msgstr ""
 
 msgid "Value"
+msgstr ""
+
+msgid "Delete record"
 msgstr ""
 
 msgid "Diagnostics"
@@ -978,51 +978,54 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-msgid "Get node '%1' information error."
+msgid "Error getting the node '%1' information."
 msgstr ""
 
-msgid "No set"
+msgid "Not set"
 msgstr ""
 
-msgid "Load icon picture"
+msgid "Downloading the image icon"
 msgstr ""
 
 msgid "Images (*.png *.jpg)"
 msgstr ""
 
-msgid "Load icon image '%1' error."
+msgid "Error downloading the icon image '%1'."
 msgstr ""
 
-msgid "Changes apply"
+msgid "Saving the changes"
 msgstr ""
 
 msgid ""
-"Some changes you don't apply!\n"
-"Apply now or lost the?"
+"Some changes were made!\n"
+"Save the changes to the DB before exiting?"
 msgstr ""
 
-msgid "No one row is selected."
+msgid "No rows selected."
 msgstr ""
 
 msgid "Are you sure of loading a mime to selected item '%1'?"
 msgstr ""
 
+msgid "Loading the data"
+msgstr ""
+
 msgid "All files (*.*)"
 msgstr ""
 
-msgid "Open file '%1' is fail: %2"
+msgid "Error opening the file '%1': %2"
 msgstr ""
 
-msgid "Loadable file '%1' is too large."
+msgid "The download file '%1' is very large."
 msgstr ""
 
-msgid "Save data"
+msgid "Saving the data"
 msgstr ""
 
-msgid "Write data to file '%1' is fail: %2"
+msgid "Error writing the data to the file '%1': %2"
 msgstr ""
 
-msgid "Widget properties"
+msgid "Properties of the widget"
 msgstr ""
 
 msgid "Widget"
@@ -1032,9 +1035,6 @@ msgid "Parent widget:"
 msgstr ""
 
 msgid "Page type:"
-msgstr ""
-
-msgid "Used:"
 msgstr ""
 
 msgid "Root:"
@@ -1064,31 +1064,25 @@ msgstr ""
 msgid "Configuration template"
 msgstr ""
 
-msgid "Add attribute"
+msgid "Add an attribute"
 msgstr ""
 
-msgid "Delete attribute"
+msgid "Delete an attribute"
 msgstr ""
 
 msgid "Procedure language:"
 msgstr ""
 
-msgid "Procedure calculate (ms):"
-msgstr ""
-
-msgid "Translation:"
+msgid "Translate:"
 msgstr ""
 
 msgid "Links"
 msgstr ""
 
-msgid "Getting node '%1' information error."
+msgid "The correct widget is not selected"
 msgstr ""
 
-msgid "Valid widget is not selected"
-msgstr ""
-
-msgid "Valid attribute is not selected"
+msgid "The correct attribute is not selected"
 msgstr ""
 
 msgid "<Group>"
@@ -1106,22 +1100,22 @@ msgstr ""
 msgid "Clear changes"
 msgstr ""
 
-msgid "Press to clear attribute's changes."
+msgid "Press to clear changes of the attribute."
 msgstr ""
 
-msgid "Changes put down to the parent"
+msgid "Lower the widget changes to its parent"
 msgstr ""
 
-msgid "Press to put down attribute's changes to the parent."
+msgid "Press for lowering the widget changes to its parent."
 msgstr ""
 
-msgid "Full text of the attribute edit."
+msgid "Full-text editing of the attribute."
 msgstr ""
 
-msgid "Attribute '%1' edit for widget '%2'."
+msgid "Editing the attribute '%1' for the widget '%2'."
 msgstr ""
 
-msgid "Short help for text syntax description."
+msgid "Short help to describe the syntax of the text."
 msgstr ""
 
 msgid "Widgets"
@@ -1131,7 +1125,7 @@ msgid "Type"
 msgstr ""
 
 #, c-format
-msgid "Widgets' development tree '%s' request time %f ms."
+msgid "Time of requesting the widgets development tree '%s': %f ms."
 msgstr ""
 
 msgid "Library"
@@ -1140,26 +1134,26 @@ msgstr ""
 msgid "Library: %1"
 msgstr ""
 
-msgid "Add widget based at '%1'"
+msgid "Adding a widget based on '%1'"
 msgstr ""
 
-msgid "The button for addition widget based at '%1'"
+msgid "The button for adding a widget based on '%1'"
 msgstr ""
 
-msgid "Press to add widget based at '%1'."
+msgid "Press for adding a widget based on '%1'"
 msgstr ""
 
-msgid "Container's widget"
+msgid "Container widget"
 msgstr ""
 
 #, c-format
-msgid "Widgets' development tree '%s' load time %f ms."
+msgid "Time of loading the widgets development tree '%s': %f ms."
 msgstr ""
 
 msgid "Refresh libraries"
 msgstr ""
 
-msgid "Press to refresh present libraries."
+msgid "Press to refresh the present libraries."
 msgstr ""
 
 msgid "Projects"
@@ -1169,7 +1163,7 @@ msgid "Project"
 msgstr ""
 
 #, c-format
-msgid "Project's development tree '%s' load time %f ms."
+msgid "Time of loading the projects development tree '%s': %f ms."
 msgstr ""
 
 msgid "Page"
@@ -1178,7 +1172,7 @@ msgstr ""
 msgid "Refresh projects"
 msgstr ""
 
-msgid "Press to refresh present projects."
+msgid "Press to refresh the present projects."
 msgstr ""
 
 msgid "Scale"
@@ -1187,31 +1181,31 @@ msgstr ""
 msgid "Resize"
 msgstr ""
 
-msgid "Warning! Edit widget already set."
+msgid "WARNING! The widget is already set up for editing."
 msgstr ""
 
-msgid "Exit from widget editing"
+msgid "Exit the widget editing"
 msgstr ""
 
-msgid "Press to exit from widget editing."
+msgid "Press to exit the widget editing."
 msgstr ""
 
-msgid "Enter for the widget editing"
+msgid "Enter the widget editing"
 msgstr ""
 
-msgid "Press to enter for the widget editing."
+msgid "Press to enter the widget editing."
 msgstr ""
 
-msgid "Make icon from the widget"
+msgid "Make up an icon from the widget"
 msgstr ""
 
-msgid "Press to make icon from the widget."
+msgid "Press to make up an icon from the widget."
 msgstr ""
 
-msgid "Make image from the widget"
+msgid "Make up an image from the widget"
 msgstr ""
 
-msgid "Press to make image from the widget."
+msgid "Press to make up an image from the widget."
 msgstr ""
 
 msgid "Zoom in (+10%)"
@@ -1226,19 +1220,19 @@ msgstr ""
 msgid "Press to decrease the visual scale of the widget by 10%."
 msgstr ""
 
-msgid "Reset zoom (100%)"
+msgid "Reset the zoom (100%)"
 msgstr ""
 
-msgid "Press to set the visual scale of the widget to 100%."
+msgid "Press to reset the visual scale of the widget to 100%."
 msgstr ""
 
-msgid "Save widget's image"
+msgid "Saving the widget image"
 msgstr ""
 
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr ""
 
-msgid "Save to file '%1' is error."
+msgid "Error saving to the file '%1'."
 msgstr ""
 
 msgid "Selected elements --- xy(%2:%3) wh[%4:%5]"
@@ -1274,7 +1268,7 @@ msgstr ""
 msgid "unknown"
 msgstr ""
 
-msgid "Widget is not enabled or shape is not supported!"
+msgid "The widget is disabled or the widget shape is not supported!"
 msgstr ""
 
 msgid "Selected elements: '%1'"
@@ -1284,30 +1278,27 @@ msgid "Cursor --- xy(%1:%2)"
 msgstr ""
 
 msgid ""
-"Connection to visualization server '%1' error: %2.\n"
-"Will restore try after %3s!"
+"Error connecting to the visualization server '%1': %2.\n"
+"The next recovery attempt after %3s!"
 msgstr ""
 
 #, c-format
-msgid "Root page scale [%f:%f]."
+msgid "Scale of the root page [%f:%f]."
 msgstr ""
 
-msgid "Print page"
+msgid "Printing a page"
 msgstr ""
 
-msgid "No one page for print is present!"
+msgid "There is no page to print!"
 msgstr ""
 
-msgid "Select a page for print."
-msgstr ""
-
-msgid "Page print."
+msgid "Select a page to print."
 msgstr ""
 
 msgid "Pages:"
 msgstr ""
 
-msgid "Print page: \"%1\" (%2)"
+msgid "Printing the page: \"%1\" (%2)"
 msgstr ""
 
 msgid "OpenSCADA project: \"%1\""
@@ -1316,25 +1307,22 @@ msgstr ""
 msgid "User: \"%1\""
 msgstr ""
 
-msgid "Print diagram"
+msgid "Printing a diagram"
 msgstr ""
 
-msgid "No one page is present!"
+msgid "There is no page!"
 msgstr ""
 
-msgid "No one diagram is present!"
+msgid "There is no diagram!"
 msgstr ""
 
-msgid "Select diagram for print."
-msgstr ""
-
-msgid "Diagram print."
+msgid "Select a diagram to print."
 msgstr ""
 
 msgid "Diagrams:"
 msgstr ""
 
-msgid "Print diagram: \"%1\" (%2)"
+msgid "Printing the diagram: \"%1\" (%2)"
 msgstr ""
 
 msgid ""
@@ -1347,49 +1335,40 @@ msgid ""
 "%2"
 msgstr ""
 
-msgid "Print document"
+msgid "Printing a document"
 msgstr ""
 
-msgid "No one document is present!"
+msgid "There is no document!"
 msgstr ""
 
-msgid "Select document for print."
-msgstr ""
-
-msgid "Document print."
+msgid "Select a document to print."
 msgstr ""
 
 msgid "Document:"
 msgstr ""
 
-msgid "Print document: \"%1\" (%2)"
+msgid "Printing the document: \"%1\" (%2)"
 msgstr ""
 
-msgid "Export page"
+msgid "Exporting a page"
 msgstr ""
 
-msgid "No one page for export is present!"
+msgid "There is no page for exporting!"
 msgstr ""
 
-msgid "Select a page for export."
+msgid "Select a page to export."
 msgstr ""
 
-msgid "Page export."
+msgid "Saving the page image"
 msgstr ""
 
-msgid "Save page's image"
+msgid "Exporting a diagram"
 msgstr ""
 
-msgid "Export diagram"
+msgid "Select a diagram to export."
 msgstr ""
 
-msgid "Select diagram for export."
-msgstr ""
-
-msgid "Diagram export."
-msgstr ""
-
-msgid "Save diagram"
+msgid "Saving a diagram"
 msgstr ""
 
 #, c-format
@@ -1405,19 +1384,16 @@ msgstr ""
 msgid "\"Frequency (Hz)\""
 msgstr ""
 
-msgid "Error write to: %1."
+msgid "Error writing to: %1."
 msgstr ""
 
-msgid "Export document"
+msgid "Exporting a document"
 msgstr ""
 
-msgid "Select document for export."
+msgid "Select a document to export."
 msgstr ""
 
-msgid "Document export."
-msgstr ""
-
-msgid "Save document"
+msgid "Saving a document"
 msgstr ""
 
 #, c-format
@@ -1427,30 +1403,27 @@ msgstr ""
 msgid "XHTML (*.html);;CSV file (*.csv)"
 msgstr ""
 
-msgid "No data for export."
+msgid "No data to export."
 msgstr ""
 
 msgid ""
-"Several sessions are already opened on the project \"%1\".\n"
-"You can create new or connect to present session. Please, select needed or press \"Cancel\"."
+"Several sessions are already opened for the project \"%1\".\n"
+"You can create a new or connect to the present session. Please select the one you want or click \"Cancel\"."
 msgstr ""
 
-msgid "Select session for connection or new creation"
+msgid "Selecting a session for connection or a new one creating"
 msgstr ""
 
-msgid "<Create new session>"
+msgid "<Create a new session>"
 msgstr ""
 
 msgid "Running project: %1"
 msgstr ""
 
-msgid "The button for closing Vision runtime window"
+msgid "The button for closing the Vision runtime window"
 msgstr ""
 
 msgid "Press to close of the current Vision runtime window."
-msgstr ""
-
-msgid "Press for display the program and OpenSCADA information."
 msgstr ""
 
 msgid "&Alarm"
@@ -1462,19 +1435,19 @@ msgstr ""
 msgid "Print the master page"
 msgstr ""
 
-msgid "The button for printing of the master page by default"
+msgid "The button for printing the master page, by default"
 msgstr ""
 
-msgid "Press for printing of the master page by default."
+msgid "Press for printing the master page, by default."
 msgstr ""
 
 msgid "Print the selected page"
 msgstr ""
 
-msgid "The button for printing of the selected page"
+msgid "The button for printing the selected page"
 msgstr ""
 
-msgid "Press for printing of the selected page."
+msgid "Press for printing the selected page."
 msgstr ""
 
 msgid "Diagram"
@@ -1483,10 +1456,10 @@ msgstr ""
 msgid "Print the selected diagram"
 msgstr ""
 
-msgid "The button for printing of the selected diagram"
+msgid "The button for printing the selected diagram"
 msgstr ""
 
-msgid "Press for printing of the selected diagram."
+msgid "Press for printing the selected diagram."
 msgstr ""
 
 msgid "Document"
@@ -1495,10 +1468,10 @@ msgstr ""
 msgid "Print the selected document"
 msgstr ""
 
-msgid "The button for printing of the selected document"
+msgid "The button for printing the selected document"
 msgstr ""
 
-msgid "Press for printing of the selected document."
+msgid "Press for printing the selected document."
 msgstr ""
 
 msgid "&Export"
@@ -1507,37 +1480,37 @@ msgstr ""
 msgid "Export the master page"
 msgstr ""
 
-msgid "The button for exporting of the master page by default"
+msgid "The button for exporting the master page, by default"
 msgstr ""
 
-msgid "Press for exporting of the master page by default."
+msgid "Press for exporting the master page, by default."
 msgstr ""
 
 msgid "Export the selected page"
 msgstr ""
 
-msgid "The button for exporting of the selected page"
+msgid "The button for exporting the selected page"
 msgstr ""
 
-msgid "Press for exporting of the selected page."
+msgid "Press for exporting the selected page."
 msgstr ""
 
 msgid "Export the selected diagram"
 msgstr ""
 
-msgid "The button for exporting of the selected diagram"
+msgid "The button for exporting the selected diagram"
 msgstr ""
 
-msgid "Press for exporting of the selected diagram."
+msgid "Press for exporting the selected diagram."
 msgstr ""
 
 msgid "Export the selected document"
 msgstr ""
 
-msgid "The button for exporting of the selected document"
+msgid "The button for exporting the selected document"
 msgstr ""
 
-msgid "Press for exporting of the selected document."
+msgid "Press for exporting the selected document."
 msgstr ""
 
 msgid "Project '%1' manual"
@@ -1546,91 +1519,76 @@ msgstr ""
 msgid "The button for getting the using project '%1' manual"
 msgstr ""
 
-msgid "Press to get the using project '%1' manual."
+msgid "Press for getting the using project '%1' manual."
 msgstr ""
 
 msgid "'%1' manual"
 msgstr ""
 
-msgid "The button for getting the using '%1' manual"
-msgstr ""
-
-msgid "Press to get the using '%1' manual."
-msgstr ""
-
 msgid "Alarm level"
 msgstr ""
 
-msgid "The button for all alarms quittance"
+msgid "The button for quietance all alarms"
 msgstr ""
 
-msgid "Press for all alarms quittance."
+msgid "Press for quietance all alarms."
 msgstr ""
 
-msgid "Generic (status)"
+msgid "General (status)"
 msgstr ""
 
-msgid "This label displays current system's time."
+msgid "This label shows the current system time."
 msgstr ""
 
-msgid "Field for display of the current user."
+msgid "This label displays the used interface style."
 msgstr ""
 
-msgid "This label displays used VCA engine station."
+msgid "Field for displaying the used interface style."
 msgstr ""
 
-msgid "Field for display of the used VCA engine station."
-msgstr ""
-
-msgid "This label displays used interface style."
-msgstr ""
-
-msgid "Field for display the used interface style."
-msgstr ""
-
-msgid "Double click for style change."
+msgid "Double click to change the style."
 msgstr ""
 
 msgid "Status line items"
 msgstr ""
 
-msgid "Run window"
+msgid "Running window"
 msgstr ""
 
 msgid "Original size;Maximize;Full screen"
 msgstr ""
 
-msgid "Keep aspect ratio on scale"
+msgid "Keep aspect ratio on the scaling"
 msgstr ""
 
-msgid "Not show status bar"
+msgid "Do not show the status bar"
 msgstr ""
 
-msgid "Windows position control and save"
+msgid "Control and save window positions"
 msgstr ""
 
 msgid "Alarm level: %1"
 msgstr ""
 
 #, c-format
-msgid "Session creation restore for '%s'."
+msgid "Restore the session creation for '%s'."
 msgstr ""
 
 #, c-format
-msgid "Session '%s' update time %f ms."
+msgid "Time of updating the session '%s': %f ms."
 msgstr ""
 
 #, c-format
-msgid "Function of the notificator '%s' error: %s"
+msgid "Error function of the notificator '%s': %s"
 msgstr ""
 
 msgid "Enabled notification"
 msgstr ""
 
-msgid "Doing notification, always 1"
+msgid "Performing the notification, always 1"
 msgstr ""
 
-msgid "Doing resource, always 0"
+msgid "Making the resource, always 0"
 msgstr ""
 
 msgid "Resource stream"
@@ -1639,37 +1597,37 @@ msgstr ""
 msgid "Notification message"
 msgstr ""
 
-msgid "Notification message's language"
+msgid "Language of the notification message"
 msgstr ""
 
 #, c-format
-msgid "Notyfier %d"
+msgid "Notificator %d"
 msgstr ""
 
-msgid "The button for current \"%1\" quittance"
+msgid "The button for quietance the current \"%1\""
 msgstr ""
 
-msgid "Press for current \"%1\" quittance."
+msgid "Press for quietance the current \"%1\"."
 msgstr ""
 
-msgid "The button for all \"%1\" quittance"
+msgid "The button for quietance all \"%1\""
 msgstr ""
 
-msgid "Press for all \"%1\" quittance."
+msgid "Press for quietance all \"%1\"."
 msgstr ""
 
 msgid ""
 "Page: '%1'.\n"
-"View access is not permitted."
+"No access to view."
 msgstr ""
 
 msgid "No style"
 msgstr ""
 
-msgid "Select your style from list."
+msgid "Select your style from the list."
 msgstr ""
 
-msgid "Style select"
+msgid "Selecting a style"
 msgstr ""
 
 msgid "Elementary figure"
@@ -1954,17 +1912,17 @@ msgstr ""
 msgid "Widget's shape '%1' is not implemented yet!"
 msgstr ""
 
-msgid "Save file"
+msgid "Saving a file"
 msgstr ""
 
-msgid "Load file"
+msgid "Loading a file"
 msgstr ""
 
-msgid "Write file '%1' is fail."
+msgid "Error writing to the file '%1'."
 msgstr ""
 
 #, c-format
-msgid "Trend build: %f ms."
+msgid "Time of building the trend: %f ms."
 msgstr ""
 
 msgid "kHz"
@@ -1986,7 +1944,7 @@ msgid "%gms"
 msgstr ""
 
 #, c-format
-msgid "Trend draw: %f ms."
+msgid "Time of drawing the trend: %f ms."
 msgstr ""
 
 msgid "Date and time"
@@ -1999,13 +1957,10 @@ msgid "Export"
 msgstr ""
 
 #, c-format
-msgid "Document parsing error: %s"
+msgid "Error parsing the document: %s"
 msgstr ""
 
 msgid "Loading page: '%1'."
-msgstr ""
-
-msgid "ID:"
 msgstr ""
 
 msgid "Ok"
@@ -2014,7 +1969,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-msgid "Select user"
+msgid "Selecting an user"
 msgstr ""
 
 msgid "User:"
@@ -2023,7 +1978,7 @@ msgstr ""
 msgid "Password:"
 msgstr ""
 
-msgid "Font select"
+msgid "Selecting a font"
 msgstr ""
 
 msgid "Font:"
@@ -2059,10 +2014,10 @@ msgstr ""
 msgid "Cursor = (%1:%2)"
 msgstr ""
 
-msgid "Enter text string for search:"
+msgid "Enter a string to search:"
 msgstr ""
 
-msgid "String search"
+msgid "Search string"
 msgstr ""
 
 msgid "Backward"
@@ -2075,16 +2030,16 @@ msgid "Whole words"
 msgstr ""
 
 #, c-format
-msgid "Request to VCA engine '%s' time %f ms."
+msgid "Time of requesting the VCA engine '%s': %f ms."
 msgstr ""
 
 #, c-format
-msgid "Load '%s' time %f ms."
+msgid "Time of loading '%s': %f ms."
 msgstr ""
 
 #, c-format
-msgid "Init '%s' time %f ms."
+msgid "Time of initiating '%s': %f ms."
 msgstr ""
 
-msgid "Vision dialog"
+msgid "Input dialog of Vision"
 msgstr ""

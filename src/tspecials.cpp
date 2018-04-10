@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: tspecials.cpp
+//OpenSCADA file: tspecials.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

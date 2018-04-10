@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 11:12+0300\n"
+"POT-Creation-Date: 2018-04-10 16:32+0300\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -27,14 +27,13 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotscheko"
 
 msgid ""
-"Allows you to perform the locking of the data sources of the remote "
-"OpenSCADA stations in the local ones."
+"Allows to locate data sources of remote OpenSCADA stations to local ones."
 msgstr ""
-"Hier können Sie die Verriegelung der Datenquellen der Fern OpenSCADA "
-"Stationen in der lokalen diejenigen durchzuführen."
+"Ermöglicht das Lokalisieren von Datenquellen von Remote-OpenSCADA-Stationen "
+"zu lokalen."
 
-msgid "Parameters cache table"
-msgstr "Einflussgrößen Cache-Tabelle"
+msgid "Table of parameters cache"
+msgstr "Tabelle des Parametercaches"
 
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
@@ -42,14 +41,14 @@ msgstr "Planung der Befragung"
 msgid "Priority of the acquisition task"
 msgstr "Priorität der Erfassungsaufgabe"
 
-msgid "Restore timeout, seconds"
-msgstr "Zeitüberschreitung bei der Wiederherstellung, Sekunden"
+msgid "Timeout of restore, seconds"
+msgstr "Timeout der Wiederherstellung, Sekunden"
 
-msgid "Restore data depth time (hour)"
-msgstr "Wiederherstellen von Daten Tiefe der Zeit (Stunde)"
+msgid "Depth time of restore data, hours"
+msgstr "Tiefe der Wiederherstellungszeit, Stunden"
 
-msgid "Gather messages level"
-msgstr "Sammeln Meldungen Ebene"
+msgid "Level of requested messages"
+msgstr "Anzahl der angeforderten Nachrichten"
 
 msgid ""
 "==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);"
@@ -58,17 +57,17 @@ msgstr ""
 "==Deaktivieren==;Debuggen (0);Information (1);Bemerkung (2);Warnung (3);"
 "Fehler (4);Kritisch (5);Wach (6);Notfall (7)"
 
-msgid "Sync inter remote station period, seconds"
-msgstr "Wiederholungsrate Synchronisierung entfernte Station, Sekunden"
+msgid "Synchronization time with the remote station, seconds"
+msgstr "Synchronisationszeit mit der Gegenstelle, Sekunden"
 
 msgid "Remote stations list"
 msgstr "Liste von entfernten Stationen"
 
-msgid "Remote cotrollers and parameters list"
-msgstr "Liste von entfernten Controllern und Parametern"
+msgid "List of the remote controllers and parameters"
+msgstr "Liste der Fernsteuerungen und Parameter"
 
-msgid "Allow automatic remove parameters and attributes"
-msgstr "Automatische Entfernen von Parametern und Attributen zulassen"
+msgid "Allow the automatic removal of parameters and attributes"
+msgstr "Erlaube das automatische Entfernen von Parametern und Attributen"
 
 msgid "Standard"
 msgstr "Standard"
@@ -79,8 +78,8 @@ msgstr "Fernparameteradresse"
 msgid "Attributes configuration cache"
 msgstr "Attribute-Cache-Konfiguration"
 
-msgid "Presenting for stations"
-msgstr "Präsentation für Stationen"
+msgid "Presence at stations"
+msgstr "Präsenz an Stationen"
 
 msgid "Acquisition. "
 msgstr "Erwerb. "
@@ -98,69 +97,72 @@ msgid "Spent time: %s[%s]. "
 msgstr "Verbrauchte Zeit: %s[%s]. "
 
 #, c-format
-msgid "Station '%s' error, restoring in %.3g s."
-msgstr "Fehler der Station '%s', Wiederherstellung in %.6g s."
+msgid "Error the station '%s', restoring in %.3g s."
+msgstr "Fehler der Station '%s', Wiederherstellung in %.3g s."
 
 #, c-format
-msgid "Requests to station '%s': %.6g."
+msgid "Requests to the station '%s': %.6g."
 msgstr "Anfragen an die Station '%s': %.6g."
 
 #, c-format
-msgid "Enable: station '%s' processing item '%s' for parameters %d."
-msgstr "Enable: Stationen '%s' Verarbeitung Elemente '%s' für Parameter %d."
+msgid "Enabling: station '%s' processing item '%s' for parameters %d."
+msgstr ""
+"Aktivieren: Stationen '%s' Verarbeitung Elemente '%s' für Parameter %d."
 
 #, c-format
 msgid ""
-"Deletion parameter '%s' is error but it no present on the configuration or "
+"Error deleting parameter '%s' but it is not present on the configuration or "
 "remote station."
 msgstr ""
-"Löschen Parameter '%s' ist Fehler, aber es nicht, die auf der Konfiguration "
-"oder Remote-Station."
+"Fehler beim Löschen des Parameters '%s', aber nicht in der Konfiguration "
+"oder der Gegenstelle."
 
 #, c-format
-msgid "DAQ.%s.%s: connect to data source: %s."
-msgstr "DAQ.%s.%s: Verbindung zu Datenquelle: %s."
+msgid "DAQ.%s.%s: connecting to the data source: %s."
+msgstr "DAQ.%s.%s: Verbindung zur Datenquelle: %s."
 
 msgid "STOP"
 msgstr "STOP"
 
-msgid "10:Data is not allowed."
-msgstr "10:Daten nicht zulassen."
+msgid "10:Data not available."
+msgstr "10:Keine Daten verfügbar."
 
 msgid "OK"
 msgstr "OK"
 
 #, c-format
-msgid "DAQ.%s.%s: connect to data source '%s': %s."
-msgstr "DAQ.%s.%s: Verbindung zu Datenquelle '%s': %s."
+msgid "DAQ.%s.%s: connecting to the data source '%s': %s."
+msgstr "DAQ.%s.%s: Verbindung zur Datenquelle '%s': %s."
 
 #, c-format
 msgid "11:Station missed '%s'."
 msgstr "11:Station verpasst '%s'."
 
-msgid "Zero for disable archive access."
+msgid "Zero to disable access to the archive."
 msgstr "Null für Behinderte Archiv zugreifen."
 
-msgid "Zero for disable periodic sync."
+msgid "Zero to disable to the periodic sync."
 msgstr "Zero deaktivieren periodische Synchronisation."
 
-msgid "Remote OpenSCADA stations' identifiers list used into it controller."
-msgstr "Liste von verwendeten Bezeichnern aus entfernten OpenSCADA-Stationen."
+msgid "List of remote OpenSCADA station IDs used in this controller."
+msgstr ""
+"Liste der Remote-OpenSCADA-Stations-IDs, die in diesem Controller verwendet "
+"werden."
 
 msgid "Append station"
 msgstr "Anhängen Station"
 
-msgid "Go to remote stations list configuration"
-msgstr "Konfiguration der entfernten Stationen"
+msgid "Go to configuration of the remote stations list"
+msgstr "Wechseln Sie zur Konfiguration der Liste der entfernten Stationen"
 
 msgid ""
-"Remote OpenSCADA full controller's or separated controller's parameters "
-"list. Address example:\n"
-"  System.AutoDA - for controller;\n"
-"  System.AutoDA.UpTimeStation - for controller's parameter."
+"List of remote OpenSCADA full controllers or individual controller "
+"attributes. Address example:\n"
+"  System.AutoDA - for a controller;\n"
+"  System.AutoDA.UpTimeStation - for a controller's parameter."
 msgstr ""
-"Parameterliste von entfernten OpenSCADA Controllern oder einzelnen "
-"Controllern. Beispiel für die Angabe:\n"
+"Liste von Remote-OpenSCADA-Voll-Controllern oder individuellen Controller-"
+"Attributen. Adressbeispiel:\n"
 "  System.AutoDA - für den Kontroller;\n"
 "  System.AutoDA.UpTimeStation - für die Parameter des Controllers."
 

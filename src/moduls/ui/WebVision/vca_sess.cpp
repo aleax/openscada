@@ -312,6 +312,13 @@ void VCAFormEl::getReq( SSess &ses )
 	ses.page = fCtx.substr(off);
 	ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+TSYS::strParse(cntr,3,"|"));
 	fCtx = "";
+
+	//!!!! Clear the attribute "value". But it can be spare for multiple connections to one session.
+	XMLNode req("set");
+	size_t nURLoff = ses.url.rfind("/");
+	req.setAttr("path", ((nURLoff==string::npos)?ses.url:ses.url.substr(0,nURLoff))+"/%2fserv%2fattr");
+	req.childAdd("el")->setAttr("id","value")->setText("");
+	mod->cntrIfCmd(req, ses);
     }
     else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource isn't found"))+"</div>\n", "404 Not Found");
 }
@@ -331,7 +338,7 @@ void VCAFormEl::postReq( SSess &ses )
 	if(ses.cnt[0].attr("Content-Type").size())	fMime = ses.cnt[0].attr("Content-Type");
 
 	XMLNode req("set");
-	req.setAttr("path", ses.url+"/%2fserv%2fattr")->setText(ses.cnt[0].text());
+	req.setAttr("path", ses.url+"/%2fserv%2fattr");
 	req.childAdd("el")->setAttr("id","value")->setText(fTmpl+"|"+fTitle+"|"+fRealFile+"|"+fMime+"\n"+ses.cnt[0].text());
 	req.childAdd("el")->setAttr("id","event")->setText("ws_BtLoad");
 	mod->cntrIfCmd(req, ses);

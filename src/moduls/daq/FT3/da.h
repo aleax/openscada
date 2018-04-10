@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.FT3 file: da.h
+//OpenSCADA module DAQ.FT3 file: da.h
 /***************************************************************************
  *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *

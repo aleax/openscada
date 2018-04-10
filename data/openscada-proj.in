@@ -121,7 +121,7 @@ case "$1" in
 		rm $DESKTOP_DIR/openscada_$prjNm.desktop
 	    fi
 	fi
-    else exit -1;
+    else exit 1;
     fi
     ;;
 esac

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 11:12+0300\n"
+"POT-Creation-Date: 2018-04-10 16:32+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -22,13 +22,12 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allows you to perform the locking of the data sources of the remote "
-"OpenSCADA stations in the local ones."
+"Allows to locate data sources of remote OpenSCADA stations to local ones."
 msgstr ""
 "Дозволяє виконувати шлюзування джерел даних віддалених OpenSCADA станцій до "
 "локальних."
 
-msgid "Parameters cache table"
+msgid "Table of parameters cache"
 msgstr "Таблиця кеша параметрів"
 
 msgid "Acquisition schedule"
@@ -37,13 +36,13 @@ msgstr "Планування збору"
 msgid "Priority of the acquisition task"
 msgstr "Пріорітет задачі збору даних"
 
-msgid "Restore timeout, seconds"
+msgid "Timeout of restore, seconds"
 msgstr "Час відновлення, секунд"
 
-msgid "Restore data depth time (hour)"
-msgstr "Глибина часу відновлення даних (годин)"
+msgid "Depth time of restore data, hours"
+msgstr "Глибина часу відновлення даних, годин"
 
-msgid "Gather messages level"
+msgid "Level of requested messages"
 msgstr "Рівень запитуваних повідомлень"
 
 msgid ""
@@ -53,16 +52,16 @@ msgstr ""
 "==Вимкнути==;Налагодження (0);Інформація (1);Зауваження (2);Попередження (3);"
 "Помилка (4);Критично (5);Тривога (6);Аварія (7)"
 
-msgid "Sync inter remote station period, seconds"
+msgid "Synchronization time with the remote station, seconds"
 msgstr "Період синхронізації з віддаленою станцією, секунд"
 
 msgid "Remote stations list"
 msgstr "Перелік віддалених станцій"
 
-msgid "Remote cotrollers and parameters list"
+msgid "List of the remote controllers and parameters"
 msgstr "Перелік віддалених контролерів та параметрів"
 
-msgid "Allow automatic remove parameters and attributes"
+msgid "Allow the automatic removal of parameters and attributes"
 msgstr "Дозволяти автоматичне видалення параметрів та атрибутів"
 
 msgid "Standard"
@@ -74,7 +73,7 @@ msgstr "Адреса віддаленого параметру"
 msgid "Attributes configuration cache"
 msgstr "Кеш конфігурації атрибутів"
 
-msgid "Presenting for stations"
+msgid "Presence at stations"
 msgstr "Присутність за станціями"
 
 msgid "Acquisition. "
@@ -93,54 +92,54 @@ msgid "Spent time: %s[%s]. "
 msgstr "Витрачено часу: %s[%s]. "
 
 #, c-format
-msgid "Station '%s' error, restoring in %.3g s."
+msgid "Error the station '%s', restoring in %.3g s."
 msgstr "Помилка станції '%s', відновлення через %.6g с."
 
 #, c-format
-msgid "Requests to station '%s': %.6g."
+msgid "Requests to the station '%s': %.6g."
 msgstr "Запитів до станції '%s': %.6g."
 
 #, c-format
-msgid "Enable: station '%s' processing item '%s' for parameters %d."
+msgid "Enabling: station '%s' processing item '%s' for parameters %d."
 msgstr ""
 "Включення: станція '%s' опрацьовує елемент '%s' на предмет параметрів %d."
 
 #, c-format
 msgid ""
-"Deletion parameter '%s' is error but it no present on the configuration or "
+"Error deleting parameter '%s' but it is not present on the configuration or "
 "remote station."
 msgstr ""
 "Помилка видалення параметру '%s' оскільки він відсутній у конфігурації або "
 "на віддаленій станції."
 
 #, c-format
-msgid "DAQ.%s.%s: connect to data source: %s."
+msgid "DAQ.%s.%s: connecting to the data source: %s."
 msgstr "DAQ.%s.%s: підключення до джерела даних: %s."
 
 msgid "STOP"
 msgstr "ЗУПИНЕНО"
 
-msgid "10:Data is not allowed."
+msgid "10:Data not available."
 msgstr "10:Дані не доступні."
 
 msgid "OK"
 msgstr "НОРМА"
 
 #, c-format
-msgid "DAQ.%s.%s: connect to data source '%s': %s."
+msgid "DAQ.%s.%s: connecting to the data source '%s': %s."
 msgstr "DAQ.%s.%s: підключення до джерела даних '%s': %s."
 
 #, c-format
 msgid "11:Station missed '%s'."
 msgstr "11:Станція відсутня '%s'."
 
-msgid "Zero for disable archive access."
+msgid "Zero to disable access to the archive."
 msgstr "Нуль для виключення доступу до архіву."
 
-msgid "Zero for disable periodic sync."
+msgid "Zero to disable to the periodic sync."
 msgstr "Нуль для виключення періодичної синхронізації."
 
-msgid "Remote OpenSCADA stations' identifiers list used into it controller."
+msgid "List of remote OpenSCADA station IDs used in this controller."
 msgstr ""
 "Перелік ідентифікаторів віддалених OpenSCADA станцій використаних у цьому "
 "контролері."
@@ -148,14 +147,14 @@ msgstr ""
 msgid "Append station"
 msgstr "Додання станції"
 
-msgid "Go to remote stations list configuration"
+msgid "Go to configuration of the remote stations list"
 msgstr "Перехід до конфігурації переліку віддалених станцій"
 
 msgid ""
-"Remote OpenSCADA full controller's or separated controller's parameters "
-"list. Address example:\n"
-"  System.AutoDA - for controller;\n"
-"  System.AutoDA.UpTimeStation - for controller's parameter."
+"List of remote OpenSCADA full controllers or individual controller "
+"attributes. Address example:\n"
+"  System.AutoDA - for a controller;\n"
+"  System.AutoDA.UpTimeStation - for a controller's parameter."
 msgstr ""
 "Перелік віддалених OpenSCADA повних контролерів або окремих параметрів "
 "контролерів. Приклад адреси:\n"

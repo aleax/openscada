@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: tbds.h
+//OpenSCADA file: tbds.h
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

@@ -103,6 +103,7 @@ class LibProjProp: public QDialog
 			*obj_accother;	//Other access
 			//*prj_runw;	//Project's run window mode
 	QLabel		*obj_id,	//Id
+			*obj_used,	//Used
 			*obj_tmstmp;	//TimeStamp
 	LineEdit	*obj_name,	//Name
 			*prj_ctm;	//Calc time of project

@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: tfunction.cpp
+//OpenSCADA file: tfunction.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
@@ -478,15 +478,15 @@ void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 	    mFunc->AHDConnect();
 	    mFunc->valAtt(this);
 	}
-	for(int i_vl = 0; i_vl < mFunc->ioSize(); i_vl++) {
+	for(int iVl = 0; iVl < mFunc->ioSize(); iVl++) {
 	    SVl val;
-	    val.tp = mFunc->io(i_vl)->type();
+	    val.tp = mFunc->io(iVl)->type();
 	    val.mdf = false;
 	    switch(val.tp) {
-		case IO::String:	val.val.s = new string(mFunc->io(i_vl)->def());	break;
-		case IO::Integer:	val.val.i = s2ll(mFunc->io(i_vl)->def());	break;
-		case IO::Real:		val.val.r = s2r(mFunc->io(i_vl)->def());	break;
-		case IO::Boolean:	val.val.b = s2i(mFunc->io(i_vl)->def());	break;
+		case IO::String:	val.val.s = new string(mFunc->io(iVl)->def());	break;
+		case IO::Integer:	val.val.i = s2ll(mFunc->io(iVl)->def());	break;
+		case IO::Real:		val.val.r = s2r(mFunc->io(iVl)->def());	break;
+		case IO::Boolean:	val.val.b = s2i(mFunc->io(iVl)->def());	break;
 		case IO::Object:	val.val.o = new AutoHD<TVarObj>(new TVarObj);	break;
 	    }
 	    mVal.push_back(val);
@@ -499,10 +499,10 @@ void TValFunc::funcDisConnect( bool det )
     ctxClear();
 
     if(mFunc) {
-	for(unsigned i_vl = 0; i_vl < mVal.size(); i_vl++)
-	    switch( mVal[i_vl].tp ) {
-		case IO::String: delete mVal[i_vl].val.s;	break;
-		case IO::Object: delete mVal[i_vl].val.o;	break;
+	for(unsigned iVl = 0; iVl < mVal.size(); iVl++)
+	    switch( mVal[iVl].tp ) {
+		case IO::String: delete mVal[iVl].val.s;	break;
+		case IO::Object: delete mVal[iVl].val.o;	break;
 	    }
 
 	mVal.clear();

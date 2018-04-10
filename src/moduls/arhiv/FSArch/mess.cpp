@@ -87,8 +87,40 @@ void ModMArch::save_( )
     TMArchivator::save_();
 }
 
+bool ModMArch::cfgChange( TCfg &co, const TVariant &pc )
+{
+    if(co.name() == "ADDR" && startStat())	return false;
+
+    return TMArchivator::cfgChange(co, pc);
+}
+
 void ModMArch::start( )
 {
+    if(!startStat()) {
+	string dbl = "";
+	MtxAlloc res(mod->dataRes(), true);
+	const char *fLock = "fsArchLock";
+	int hd = open((addr()+"/"+fLock).c_str(), O_CREAT|O_TRUNC|O_WRONLY);
+	if(hd >= 0) {
+	    write(hd, "1", 1);
+	    vector<string> ls;
+	    mod->messList(ls);
+	    for(int iL = 0; iL < ls.size() && dbl.empty(); iL++) {
+		AutoHD<TMArchivator> mAt = mod->messAt(ls[iL]);
+		if(mAt.at().id() == id() || !mAt.at().startStat())	continue;
+		int hd1 = open((mAt.at().addr()+"/"+fLock).c_str(), O_RDONLY);
+		if(hd1 >= 0 || mAt.at().addr() == addr()) {
+		    dbl = mAt.at().addr();
+		    if(hd1 >= 0) close(hd1);
+		}
+	    }
+	    close(hd);
+	    remove((addr()+"/"+fLock).c_str());
+	}
+	res.unlock();
+	if(dbl.size()) { stop(); throw err_sys(_("The value archiver '%s' uses the same folder '%s' as an other archiver."), id().c_str(), addr().c_str()); }
+    }
+
     //Create and/or update the SQLite info file, special for the archivator and placed with main files of the archivator
     if(!startStat() && packInfoFiles()) {
 	try {

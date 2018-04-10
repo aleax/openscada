@@ -1,8 +1,8 @@
 
-//OpenSCADA system module DAQ.DCON file: DCON_client.h
+//OpenSCADA module DAQ.DCON file: DCON_client.h
 /***************************************************************************
  *   Copyright (C) 2008-2011 by Almaz Karimov                              *
- *		   2008-2017 by Roman Savochenko, rom_as@oscada.org        *
+ *		   2008-2018 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

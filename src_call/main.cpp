@@ -38,7 +38,7 @@ int main( int argc, char *argv[], char *envp[] )
     //Check for the daemon mode and switch to at first
     for(int argPos = 0; (argCom=TSYS::getCmdOpt_(argPos,&argVl,argc,argv)).size(); )
 	if(argCom == "demon" || argCom == "daemon") {
-	    if((pid=fork()) == -1) { printf("Error: fork error!\n"); return -1; }
+	    if((pid=fork()) == -1) { printf("Error forking!\n"); return -1; }
 	    if(pid != 0) return 0;	//Original process close
 
 	    // Prepare the demon environment
@@ -86,7 +86,7 @@ int main( int argc, char *argv[], char *envp[] )
 	while(true) {
 	    SYS->load();
 	    if((rez=SYS->stopSignal()) && rez != SIGUSR2)
-		throw TError(SYS->nodePath().c_str(), "Stop by signal %d on load.", rez);
+		throw TError(SYS->nodePath().c_str(), "Stopped by the signal %d on the loading.", rez);
 	    if(!rez) rez = SYS->start();
 	    if(rez != SIGUSR2)	break;
 	    SYS->unload();
@@ -96,7 +96,7 @@ int main( int argc, char *argv[], char *envp[] )
     //Free OpenSCADA system's root object
     if(SYS) delete SYS;
 
-    printf("OpenSCADA system correct exit by code %d.\n", rez);
+    printf("OpenSCADA successfully exited with the return code %d.\n", rez);
 
     if(pidFile.size()) remove(pidFile.c_str());
 

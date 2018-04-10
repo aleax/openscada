@@ -152,7 +152,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
     // Alarms actions
-    //  Alarm level display button and full alarms quittance
+    //  Alarm level display button and full alarms quietance
     if(!ico_t.load(TUIS::icoGet("alarmLev",NULL,true).c_str())) ico_t.load(":/images/alarmLev.png");
     actAlrmLev = new QAction(QPixmap::fromImage(ico_t), "", this);
     actAlrmLev->setObjectName("alarmLev");
@@ -336,7 +336,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 	if(conErr->property("tmRest").toInt() > 3) {
 	    if(!conErr->isVisible()) conErr->show();
 	    conErr->setProperty("labTmpl",
-		QString(_("Connection to visualization server '%1' error: %2.\nWill restore try after %3s!"))
+		QString(_("Error connecting to the visualization server '%1': %2.\nThe next recovery attempt after %3s!"))
 		    .arg(VCAStation().c_str()).arg(node.text().c_str()).arg("%1"));
 	    conErr->setText(conErr->property("labTmpl").toString().arg(conErr->property("tmRest").toInt()));
 	}
@@ -416,7 +416,7 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 		fmin(ws.height()-10,masterPg()->size().height()+(centralWidget()->parentWidget()->height()-centralWidget()->height())+5));
 	}
 
-	mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
+	mess_debug(mod->nodePath().c_str(), _("Scale of the root page [%f:%f]."), x_scale, y_scale);
     }
     mWTime->setVisible(windowState()==Qt::WindowFullScreen);
 }
@@ -455,14 +455,14 @@ void VisRun::printPg( const string &ipg )
     RunPageView *rpg;
     string pg = ipg;
 
-    if(pgList.empty())	{ QMessageBox::warning(this,_("Print page"),_("No one page for print is present!")); return; }
+    if(pgList.empty())	{ QMessageBox::warning(this,_("Printing a page"),_("There is no page to print!")); return; }
 
     if(pg.empty() && pgList.size() == 1)	pg = pgList[0];
     if(pg.empty() && pgList.size() > 1) {
 	//Make select page dialog
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/print.png");
-	InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select a page for print."), _("Page print."), false, false, lang().c_str());
+	InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select a page to print."), _("Printing a page"), false, false, lang().c_str());
 	sdlg.edLay()->addWidget(new QLabel(_("Pages:"),&sdlg), 2, 0);
 	QComboBox *spg = new QComboBox(&sdlg);
 	sdlg.edLay()->addWidget(spg, 2, 1);
@@ -481,7 +481,7 @@ void VisRun::printPg( const string &ipg )
     string pnm = rpg->name();
     if(!prPg)	prPg = new QPrinter(QPrinter::HighResolution);
     QPrintDialog dlg(prPg, this);
-    dlg.setWindowTitle(QString(_("Print page: \"%1\" (%2)")).arg(pnm.c_str()).arg(pg.c_str()));
+    dlg.setWindowTitle(QString(_("Printing the page: \"%1\" (%2)")).arg(pnm.c_str()).arg(pg.c_str()));
     if(dlg.exec() == QDialog::Accepted) {
 	int fntSize = 35;
 	QSize papl(2048,2048*prPg->paperRect().height()/prPg->paperRect().width());
@@ -524,7 +524,7 @@ void VisRun::printDiag( const string &idg )
     RunWdgView *rwdg;
     string dg = idg;
 
-    if(pgList.empty())	{ QMessageBox::warning(this,_("Print diagram"),_("No one page is present!")); return; }
+    if(pgList.empty())	{ QMessageBox::warning(this,_("Printing a diagram"),_("There is no page!")); return; }
 
     if(dg.empty()) {
 	RunPageView *rpg;
@@ -532,13 +532,13 @@ void VisRun::printDiag( const string &idg )
 	for(unsigned iP = 0; iP < pgList.size(); iP++)
 	    if((rpg=findOpenPage(pgList[iP])))
 		rpg->shapeList("Diagram",lst);
-	if(lst.empty())	{ QMessageBox::warning(this,_("Print diagram"),_("No one diagram is present!")); return; }
+	if(lst.empty())	{ QMessageBox::warning(this,_("Printing a diagram"),_("There is no diagram!")); return; }
 	if(lst.size() == 1)	dg = lst[0];
 	else {
 	    //Make select diagrams dialog
 	    QImage ico_t;
 	    if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/print.png");
-	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select diagram for print."), _("Diagram print."), false, false, lang().c_str());
+	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select a diagram to print."), _("Printing a diagram"), false, false, lang().c_str());
 	    sdlg.edLay()->addWidget(new QLabel(_("Diagrams:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget(spg, 2, 1);
@@ -555,7 +555,7 @@ void VisRun::printDiag( const string &idg )
     string dgnm = rwdg->name();
     if(!prDiag)	prDiag = new QPrinter(QPrinter::HighResolution);
     QPrintDialog dlg(prDiag, this);
-    dlg.setWindowTitle(QString(_("Print diagram: \"%1\" (%2)")).arg(dgnm.c_str()).arg(dg.c_str()));
+    dlg.setWindowTitle(QString(_("Printing the diagram: \"%1\" (%2)")).arg(dgnm.c_str()).arg(dg.c_str()));
     if(dlg.exec() == QDialog::Accepted) {
 	int fntSize = 35;
 	QSize papl(2048,2048*prDiag->paperRect().height()/prDiag->paperRect().width());
@@ -614,7 +614,7 @@ void VisRun::printDoc( const string &idoc )
     RunWdgView *rwdg;
     string doc = idoc;
 
-    if(pgList.empty())	{ QMessageBox::warning(this,_("Print document"),_("No one page is present!")); return; }
+    if(pgList.empty())	{ QMessageBox::warning(this,_("Printing a document"),_("There is no page!")); return; }
 
     if(doc.empty()) {
 	RunPageView *rpg;
@@ -622,13 +622,13 @@ void VisRun::printDoc( const string &idoc )
 	for(unsigned iP = 0; iP < pgList.size(); iP++)
 	    if((rpg=findOpenPage(pgList[iP])))
 		rpg->shapeList("Document",lst);
-	if(lst.empty())	{ QMessageBox::warning(this,_("Print document"),_("No one document is present!")); return; }
+	if(lst.empty())	{ QMessageBox::warning(this,_("Printing a document"),_("There is no document!")); return; }
 	if(lst.size() == 1)	doc = lst[0];
 	else {
 	    //Make select diagrams dialog
 	    QImage ico_t;
 	    if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/print.png");
-	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select document for print."), _("Document print."), false, false, lang().c_str());
+	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select a document to print."), _("Printing a document"), false, false, lang().c_str());
 	    sdlg.edLay()->addWidget(new QLabel(_("Document:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget(spg, 2, 1);
@@ -645,7 +645,7 @@ void VisRun::printDoc( const string &idoc )
     string docnm = rwdg->name();
     if(!prDoc) prDoc = new QPrinter(QPrinter::HighResolution);
     QPrintDialog dlg(prDoc, this);
-    dlg.setWindowTitle(QString(_("Print document: \"%1\" (%2)")).arg(docnm.c_str()).arg(doc.c_str()));
+    dlg.setWindowTitle(QString(_("Printing the document: \"%1\" (%2)")).arg(docnm.c_str()).arg(doc.c_str()));
     if(dlg.exec() == QDialog::Accepted) ((ShapeDocument::ShpDt*)rwdg->shpData)->print(prDoc);
 #endif
 }
@@ -678,14 +678,14 @@ void VisRun::exportPg( const string &ipg )
     RunPageView *rpg;
     string pg = ipg;
 
-    if(pgList.empty())	{ QMessageBox::warning(this,_("Export page"),_("No one page for export is present!")); return; }
+    if(pgList.empty())	{ QMessageBox::warning(this,_("Exporting a page"),_("There is no page for exporting!")); return; }
 
     if(pg.empty() && pgList.size() == 1)	pg = pgList[0];
     if(pg.empty() && pgList.size() > 1) {
 	//Make select page dialog
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoGet("export",NULL,true).c_str())) ico_t.load(":/images/export.png");
-	InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select a page for export."), _("Page export."), false, false, lang().c_str());
+	InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select a page to export."), _("Exporting a page"), false, false, lang().c_str());
 	sdlg.edLay()->addWidget(new QLabel(_("Pages:"),&sdlg), 2, 0);
 	QComboBox *spg = new QComboBox(&sdlg);
 	sdlg.edLay()->addWidget(spg, 2, 1);
@@ -706,8 +706,8 @@ void VisRun::exportPg( const string &ipg )
 #else
     QPixmap img = QPixmap::grabWidget(rpg);
 #endif
-    QString fn = getFileName(_("Save page's image"), (rpg->name()+".png").c_str(), _("Images (*.png *.xpm *.jpg)"), QFileDialog::AcceptSave);
-    if(fn.size() && !img.save(fn)) mod->postMess(mod->nodePath().c_str(), QString(_("Save to file '%1' is error.")).arg(fn), TVision::Error, this);
+    QString fn = getFileName(_("Saving the page image"), (rpg->name()+".png").c_str(), _("Images (*.png *.xpm *.jpg)"), QFileDialog::AcceptSave);
+    if(fn.size() && !img.save(fn)) mod->postMess(mod->nodePath().c_str(), QString(_("Error saving to the file '%1'.")).arg(fn), TVision::Error, this);
 }
 
 void VisRun::exportDiag( const string &idg )
@@ -715,7 +715,7 @@ void VisRun::exportDiag( const string &idg )
     RunWdgView *rwdg;
     string dg = idg;
 
-    if(pgList.empty())	{ QMessageBox::warning(this,_("Export diagram"),_("No one page is present!")); return; }
+    if(pgList.empty())	{ QMessageBox::warning(this,_("Exporting a diagram"),_("There is no page!")); return; }
 
     if(dg.empty()) {
 	RunPageView *rpg;
@@ -723,13 +723,13 @@ void VisRun::exportDiag( const string &idg )
 	for(unsigned iP = 0; iP < pgList.size(); iP++)
 	    if((rpg=findOpenPage(pgList[iP])))
 		rpg->shapeList("Diagram",lst);
-	if(lst.empty())	{ QMessageBox::warning(this,_("Export diagram"),_("No one diagram is present!")); return; }
+	if(lst.empty())	{ QMessageBox::warning(this,_("Exporting a diagram"),_("There is no diagram!")); return; }
 	if(lst.size() == 1) dg = lst[0];
 	else {
 	    //Make select diagrams dialog
 	    QImage ico_t;
 	    if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/export.png");
-	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select diagram for export."), _("Diagram export."), false, false, lang().c_str());
+	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select a diagram to export."), _("Exporting a diagram"), false, false, lang().c_str());
 	    sdlg.edLay()->addWidget(new QLabel(_("Diagrams:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget(spg, 2, 1);
@@ -748,7 +748,7 @@ void VisRun::exportDiag( const string &idg )
 #else
     QPixmap img = QPixmap::grabWidget(rwdg);
 #endif
-    QString fileName = getFileName(_("Save diagram"), QString(_("Trend %1.png")).arg(expDiagCnt++),
+    QString fileName = getFileName(_("Saving a diagram"), QString(_("Trend %1.png")).arg(expDiagCnt++),
 	_("Images (*.png *.xpm *.jpg);;CSV file (*.csv)"), QFileDialog::AcceptSave);
     if(!fileName.isEmpty()) {
 	// Export to CSV
@@ -756,7 +756,7 @@ void VisRun::exportDiag( const string &idg )
 	    //  Open destination file
 	    int fd = open(fileName.toStdString().c_str(), O_WRONLY|O_CREAT|O_TRUNC, SYS->permCrtFiles());
 	    if(fd < 0) {
-		mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
+		mod->postMess(mod->nodePath().c_str(),QString(_("Error saving to the file '%1'.")).arg(fileName),TVision::Error,this);
 		return;
 	    }
 
@@ -823,11 +823,11 @@ void VisRun::exportDiag( const string &idg )
 	    //  Save to file
 	    bool fOK = (write(fd,CSVr.data(),CSVr.size()) == (int)CSVr.size());
 	    ::close(fd);
-	    if(!fOK) mod->postMess(mod->nodePath().c_str(), QString(_("Error write to: %1.")).arg(fileName), TVision::Error, this);
+	    if(!fOK) mod->postMess(mod->nodePath().c_str(), QString(_("Error writing to: %1.")).arg(fileName), TVision::Error, this);
 	}
 	// Export to image
 	else if(!img.save(fileName))
-	    mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
+	    mod->postMess(mod->nodePath().c_str(),QString(_("Error saving to the file '%1'.")).arg(fileName),TVision::Error,this);
     }
 }
 
@@ -836,7 +836,7 @@ void VisRun::exportDoc( const string &idoc )
     RunWdgView *rwdg;
     string doc = idoc;
 
-    if(pgList.empty())	{ QMessageBox::warning(this,_("Export document"),_("No one page is present!")); return; }
+    if(pgList.empty())	{ QMessageBox::warning(this,_("Exporting a document"),_("There is no page!")); return; }
 
     if(doc.empty()) {
 	RunPageView *rpg;
@@ -844,13 +844,13 @@ void VisRun::exportDoc( const string &idoc )
 	for(unsigned iP = 0; iP < pgList.size(); iP++)
 	    if((rpg=findOpenPage(pgList[iP])))
 		rpg->shapeList("Document",lst);
-	if(lst.empty())	{ QMessageBox::warning(this,_("Export document"),_("No one document is present!")); return; }
+	if(lst.empty())	{ QMessageBox::warning(this,_("Exporting a document"),_("There is no document!")); return; }
 	if(lst.size() == 1) doc = lst[0];
 	else {
 	    //Make select diagrams dialog
 	    QImage ico_t;
 	    if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/export.png");
-	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select document for export."), _("Document export."), false, false, lang().c_str());
+	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select a document to export."), _("Exporting a document"), false, false, lang().c_str());
 	    sdlg.edLay()->addWidget(new QLabel(_("Document:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget( spg, 2, 1 );
@@ -863,12 +863,12 @@ void VisRun::exportDoc( const string &idoc )
     }
 
     if(!(rwdg=findOpenWidget(doc))) return;
-    QString fileName = getFileName(_("Save document"), QString(_("Document %1.html")).arg(expDocCnt++),
+    QString fileName = getFileName(_("Saving a document"), QString(_("Document %1.html")).arg(expDocCnt++),
 	_("XHTML (*.html);;CSV file (*.csv)"), QFileDialog::AcceptSave);
     if(!fileName.isEmpty()) {
 	int fd = open(fileName.toStdString().c_str(), O_WRONLY|O_CREAT|O_TRUNC, SYS->permCrtFiles());
 	if(fd < 0) {
-	    mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
+	    mod->postMess(mod->nodePath().c_str(),QString(_("Error saving to the file '%1'.")).arg(fileName),TVision::Error,this);
 	    return;
 	}
 	string rez;
@@ -932,10 +932,10 @@ void VisRun::exportDoc( const string &idoc )
 	else rez = ((ShapeDocument::ShpDt*)rwdg->shpData)->toHtml();
 
 	bool fOK = true;
-	if(rez.empty())	mod->postMess(mod->nodePath().c_str(),QString(_("No data for export.")),TVision::Error,this);
+	if(rez.empty())	mod->postMess(mod->nodePath().c_str(),QString(_("No data to export.")),TVision::Error,this);
 	else fOK = (write(fd,rez.data(),rez.size()) == (int)rez.size());
 	::close(fd);
-	if(!fOK) mod->postMess(mod->nodePath().c_str(), QString(_("Error write to: %1.")).arg(fileName), TVision::Error, this);
+	if(!fOK) mod->postMess(mod->nodePath().c_str(), QString(_("Error writing to: %1.")).arg(fileName), TVision::Error, this);
     }
 }
 
@@ -977,7 +977,7 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 	    if(x_scale > 1 && x_scale < 1.05) x_scale = 1;
 	    if(y_scale > 1 && y_scale < 1.05) y_scale = 1;
 	    if(keepAspectRatio()) x_scale = y_scale = vmin(x_scale, y_scale);
-	    mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
+	    mess_debug(mod->nodePath().c_str(), _("Scale of the root page [%f:%f]."), x_scale, y_scale);
 	}
 	isResizeManual = true;
 	fullUpdatePgs();
@@ -1020,31 +1020,31 @@ void VisRun::enterManual( )
     string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString());
     if(findDoc.size())	system(findDoc.c_str());
     else QMessageBox::information(this, _("Manual"),
-	QString(_("No the manual '%1' found offline or online!")).arg(sender()->property("doc").toString()));
+	QString(_("The manual '%1' was not found offline or online!")).arg(sender()->property("doc").toString()));
 }
 
 void VisRun::alarmAct( QAction *alrm )
 {
     if(alrm == NULL) return;
 
-    int quittance = 0;
-    bool quittanceRet = false;
+    int quietance = 0;
+    bool quietanceRet = false;
     string qwdg;
-    if(alrm->objectName() == "alarmLev")	quittance = 0xFF;
+    if(alrm->objectName() == "alarmLev")	quietance = 0xFF;
     else if(alrm->objectName().toStdString().compare(0,8,"alarmNtf") == 0) {
-	quittanceRet = alrm->property("quittanceRet").toBool();
-	quittanceRet = quittanceRet && !alrm->isChecked();
-	quittance = s2i(alrm->objectName().toStdString().substr(8));
-	map<uint8_t, Notify*>::iterator iN = mNotify.find(quittance);
-	if(!quittanceRet && iN != mNotify.end()) qwdg = iN->second->curQueueWdg();
-	quittance = (1<<quittance);
+	quietanceRet = alrm->property("quietanceRet").toBool();
+	quietanceRet = quietanceRet && !alrm->isChecked();
+	quietance = s2i(alrm->objectName().toStdString().substr(8));
+	map<uint8_t, Notify*>::iterator iN = mNotify.find(quietance);
+	if(!quietanceRet && iN != mNotify.end()) qwdg = iN->second->curQueueWdg();
+	quietance = (1<<quietance);
     }
     else return;
 
-    XMLNode req("quittance");
+    XMLNode req("quietance");
     req.setAttr("path", "/ses_"+work_sess+"/%2fserv%2falarm")->
-	setAttr("tmpl", u2s(quittance))->
-	setAttr("ret", i2s(quittanceRet))->
+	setAttr("tmpl", u2s(quietance))->
+	setAttr("ret", i2s(quietanceRet))->
 	setAttr("wdg", qwdg);
     cntrIfCmd(req);
 
@@ -1138,12 +1138,12 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoGet("vision_prj_run",NULL,true).c_str())) ico_t.load(":/images/prj_run.png");
 	InputDlg conreq(this,QPixmap::fromImage(ico_t),
-	    QString(_("Several sessions are already opened on the project \"%1\".\n"
-		"You can create new or connect to present session. Please, select needed or press \"Cancel\".")).arg(src_prj.c_str()),
-	    _("Select session for connection or new creation"), false, false, lang().c_str());
+	    QString(_("Several sessions are already opened for the project \"%1\".\n"
+		"You can create a new or connect to the present session. Please select the one you want or click \"Cancel\".")).arg(src_prj.c_str()),
+	    _("Selecting a session for connection or a new one creating"), false, false, lang().c_str());
 	QListWidget *ls_wdg = new QListWidget(&conreq);
 	conreq.edLay()->addWidget(ls_wdg, 0, 0);
-	ls_wdg->addItem(_("<Create new session>"));
+	ls_wdg->addItem(_("<Create a new session>"));
 	for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
 	    ls_wdg->addItem(req.childGet(i_ch)->text().c_str());
 	ls_wdg->setCurrentRow(0);
@@ -1273,29 +1273,29 @@ void VisRun::messUpd( )
 
     //Close
     actClose->setText(_("&Close"));
-    actClose->setToolTip(_("Close Vision window"));
-    actClose->setWhatsThis(_("The button for closing Vision runtime window"));
+    actClose->setToolTip(_("Close the Vision window"));
+    actClose->setWhatsThis(_("The button for closing the Vision runtime window"));
     actClose->setStatusTip(_("Press to close of the current Vision runtime window."));
     //Quit
     actQuit->setText(_("&Quit"));
-    actQuit->setToolTip(_("Quit from OpenSCADA"));
-    actQuit->setWhatsThis(_("The button for full quit from OpenSCADA"));
-    actQuit->setStatusTip(_("Press for full quit from OpenSCADA system."));
+    actQuit->setToolTip(_("Quit the program"));
+    actQuit->setWhatsThis(_("The button for complete quit the program"));
+    actQuit->setStatusTip(_("Press for complete quit the program."));
     //Full screen
     actFullScr->setText(_("Full screen"));
-    actFullScr->setToolTip(_("Full screen toggle"));
-    actFullScr->setWhatsThis(_("The button for full screen toggle"));
-    actFullScr->setStatusTip(_("Press for toggle full screen."));
+    actFullScr->setToolTip(_("Full screen mode toggling"));
+    actFullScr->setWhatsThis(_("The button for full screen mode toggling"));
+    actFullScr->setStatusTip(_("Press for toggling the full screen mode."));
     //About
     actAbout->setText(_("&About"));
     actAbout->setToolTip(_("Program and OpenSCADA information"));
-    actAbout->setWhatsThis(_("The button for display the program and OpenSCADA information"));
-    actAbout->setStatusTip(_("Press for display the program and OpenSCADA information."));
+    actAbout->setWhatsThis(_("The button of the information of the program and OpenSCADA"));
+    actAbout->setStatusTip(_("Press for information of the program and OpenSCADA."));
     //About Qt
     actQtAbout->setText(_("About &Qt"));
     actQtAbout->setToolTip(_("Qt information"));
-    actQtAbout->setWhatsThis(_("The button for getting the using QT information"));
-    actQtAbout->setStatusTip(_("Press to get the using QT information."));
+    actQtAbout->setWhatsThis(_("The button for getting the using Qt information"));
+    actQtAbout->setStatusTip(_("Press for getting the using Qt information."));
 
     //Menus
     menuFile.setTitle(_("&File"));
@@ -1306,79 +1306,79 @@ void VisRun::messUpd( )
     //Menu "Print"
     menuPrint->setTitle(_("&Print"));
     menuPrint->menuAction()->setToolTip(_("Print the master page"));
-    menuPrint->menuAction()->setWhatsThis(_("The button for printing of the master page by default"));
-    menuPrint->menuAction()->setStatusTip(_("Press for printing of the master page by default."));
+    menuPrint->menuAction()->setWhatsThis(_("The button for printing the master page, by default"));
+    menuPrint->menuAction()->setStatusTip(_("Press for printing the master page, by default."));
     actPrintPg->setText(_("Page"));
     actPrintPg->setToolTip(_("Print the selected page"));
-    actPrintPg->setWhatsThis(_("The button for printing of the selected page"));
-    actPrintPg->setStatusTip(_("Press for printing of the selected page."));
+    actPrintPg->setWhatsThis(_("The button for printing the selected page"));
+    actPrintPg->setStatusTip(_("Press for printing the selected page."));
     actPrintDiag->setText(_("Diagram"));
     actPrintDiag->setToolTip(_("Print the selected diagram"));
-    actPrintDiag->setWhatsThis(_("The button for printing of the selected diagram"));
-    actPrintDiag->setStatusTip(_("Press for printing of the selected diagram."));
+    actPrintDiag->setWhatsThis(_("The button for printing the selected diagram"));
+    actPrintDiag->setStatusTip(_("Press for printing the selected diagram."));
     actPrintDoc->setText(_("Document"));
     actPrintDoc->setToolTip(_("Print the selected document"));
-    actPrintDoc->setWhatsThis(_("The button for printing of the selected document"));
-    actPrintDoc->setStatusTip(_("Press for printing of the selected document."));
+    actPrintDoc->setWhatsThis(_("The button for printing the selected document"));
+    actPrintDoc->setStatusTip(_("Press for printing the selected document."));
 
     //Menu "Export"
     menuExport->setTitle(_("&Export"));
     menuExport->menuAction()->setToolTip(_("Export the master page"));
-    menuExport->menuAction()->setWhatsThis(_("The button for exporting of the master page by default"));
-    menuExport->menuAction()->setStatusTip(_("Press for exporting of the master page by default."));
+    menuExport->menuAction()->setWhatsThis(_("The button for exporting the master page, by default"));
+    menuExport->menuAction()->setStatusTip(_("Press for exporting the master page, by default."));
     actExpPg->setText(_("Page"));
     actExpPg->setToolTip(_("Export the selected page"));
-    actExpPg->setWhatsThis(_("The button for exporting of the selected page"));
-    actExpPg->setStatusTip(_("Press for exporting of the selected page."));
+    actExpPg->setWhatsThis(_("The button for exporting the selected page"));
+    actExpPg->setStatusTip(_("Press for exporting the selected page."));
     actExpDiag->setText(_("Diagram"));
     actExpDiag->setToolTip(_("Export the selected diagram"));
-    actExpDiag->setWhatsThis(_("The button for exporting of the selected diagram"));
-    actExpDiag->setStatusTip(_("Press for exporting of the selected diagram."));
+    actExpDiag->setWhatsThis(_("The button for exporting the selected diagram"));
+    actExpDiag->setStatusTip(_("Press for exporting the selected diagram."));
     actExpDoc->setText(_("Document"));
     actExpDoc->setToolTip(_("Export the selected document"));
-    actExpDoc->setWhatsThis(_("The button for exporting of the selected document"));
-    actExpDoc->setStatusTip(_("Press for exporting of the selected document."));
+    actExpDoc->setWhatsThis(_("The button for exporting the selected document"));
+    actExpDoc->setStatusTip(_("Press for exporting the selected document."));
 
     //Project's manual
     actProjManual->setText(QString(_("Project '%1' manual")).arg(srcProject().c_str()));
     actProjManual->setProperty("doc", srcProject().c_str());
     actProjManual->setWhatsThis(QString(_("The button for getting the using project '%1' manual")).arg(srcProject().c_str()));
-    actProjManual->setStatusTip(QString(_("Press to get the using project '%1' manual.")).arg(srcProject().c_str()));
+    actProjManual->setStatusTip(QString(_("Press for getting the using project '%1' manual.")).arg(srcProject().c_str()));
     //Module manual
     actManual->setText(QString(_("'%1' manual")).arg(mod->modId().c_str()));
     actManual->setProperty("doc", "Modules/Vision|Modules/Vision");
     actManual->setWhatsThis(QString(_("The button for getting the using '%1' manual")).arg(mod->modId().c_str()));
-    actManual->setStatusTip(QString(_("Press to get the using '%1' manual.")).arg(mod->modId().c_str()));
+    actManual->setStatusTip(QString(_("Press for getting the using '%1' manual.")).arg(mod->modId().c_str()));
     //OpenSCADA manual
     actManualSYS->setText(QString(_("'%1' manual")).arg(PACKAGE_STRING));
     actManualSYS->setProperty("doc", "index|Documents");
     actManualSYS->setWhatsThis(QString(_("The button for getting the using '%1' manual")).arg(PACKAGE_STRING));
-    actManualSYS->setStatusTip(QString(_("Press to get the using '%1' manual.")).arg(PACKAGE_STRING));
+    actManualSYS->setStatusTip(QString(_("Press for getting the using '%1' manual.")).arg(PACKAGE_STRING));
     //What is
     actWhatIs->setText(_("What's &This"));
-    actWhatIs->setToolTip(_("The button for question about GUI elements"));
-    actWhatIs->setWhatsThis(_("Get respond about user interface elements"));
-    actWhatIs->setStatusTip(_("Press to respond about user interface elements."));
+    actWhatIs->setToolTip(_("The button for requesting the information about GUI elements"));
+    actWhatIs->setWhatsThis(_("Requesting the information about GUI elements"));
+    actWhatIs->setStatusTip(_("Press for requesting the information about GUI elements."));
 
-    //Alarm level display button and full alarms quittance
+    //Alarm level display button and full alarms quietance
     actAlrmLev->setText(_("Alarm level"));
     actAlrmLev->setToolTip(_("Alarm level"));
-    actAlrmLev->setWhatsThis(_("The button for all alarms quittance"));
-    actAlrmLev->setStatusTip(_("Press for all alarms quittance."));
+    actAlrmLev->setWhatsThis(_("The button for quietance all alarms"));
+    actAlrmLev->setStatusTip(_("Press for quietance all alarms."));
 
     //Generic tools bar
-    toolBarStatus->setWindowTitle(_("Generic (status)"));
+    toolBarStatus->setWindowTitle(_("General (status)"));
 
     //Init status bar
-    mWTime->setWhatsThis(_("This label displays current system's time."));
-    mWUser->setWhatsThis(_("This label displays current user."));
-    mWUser->setToolTip(_("Field for display of the current user."));
-    mWUser->setStatusTip(_("Double click to change user."));
-    mWStat->setWhatsThis(_("This label displays used VCA engine station."));
-    mWStat->setToolTip(_("Field for display of the used VCA engine station."));
-    mStlBar->setWhatsThis(_("This label displays used interface style."));
-    mStlBar->setToolTip(_("Field for display the used interface style."));
-    mStlBar->setStatusTip(_("Double click for style change."));
+    mWTime->setWhatsThis(_("This label shows the current system time."));
+    mWUser->setWhatsThis(_("This label displays the current user."));
+    mWUser->setToolTip(_("Field for displaying the current user."));
+    mWUser->setStatusTip(_("Double click to change the user."));
+    mWStat->setWhatsThis(_("This label displays the used VCA engine station."));
+    mWStat->setToolTip(_("Field for displaying the used VCA engine station."));
+    mStlBar->setWhatsThis(_("This label displays the used interface style."));
+    mStlBar->setToolTip(_("Field for displaying the used interface style."));
+    mStlBar->setStatusTip(_("Double click to change the style."));
 
     //Style update
     setStyle(style());
@@ -1427,17 +1427,17 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 				     setAttr("aNm", _("Status line items"))->
 				     setAttr("aTp", i2s(TFld::String))->setAttr("aFlg", i2s(TFld::FullText));
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2frunWin")->
-				     setAttr("aNm", _("Run window"))->
+				     setAttr("aNm", _("Running window"))->
 				     setAttr("aTp", i2s(TFld::Integer))->setAttr("aFlg", i2s(TFld::Selected))->
 				     setAttr("aVls", "0;1;2")->setAttr("aNms", _("Original size;Maximize;Full screen"));
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fkeepAspectRatio")->
-				     setAttr("aNm", _("Keep aspect ratio on scale"))->
+				     setAttr("aNm", _("Keep aspect ratio on the scaling"))->
 				     setAttr("aTp", i2s(TFld::Boolean));
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fstBarNoShow")->
-				     setAttr("aNm", _("Not show status bar"))->
+				     setAttr("aNm", _("Do not show the status bar"))->
 				     setAttr("aTp", i2s(TFld::Boolean));
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fwinPosCntrSave")->
-				     setAttr("aNm", _("Windows position control and save"))->
+				     setAttr("aNm", _("Control and save window positions"))->
 				     setAttr("aTp", i2s(TFld::Boolean));
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fuserSetVis");
 	cntrIfCmd(reqSpc);
@@ -1558,8 +1558,8 @@ void VisRun::alarmSet( unsigned alarm )
 	if((ch_tp>>8)&(1<<nTp) && (newSt=(alarm>>8)&(1<<nTp)) != cO->isVisible()) cO->setVisible(newSt);
 	if((ch_tp>>16)&(1<<nTp)) {
 	    newSt = (alarm>>16)&(1<<nTp);
-	    if(cO->property("quittanceRet").toBool() && !newSt != cO->isChecked()) cO->setChecked(!newSt);
-	    if(!cO->property("quittanceRet").toBool() && newSt != cO->isEnabled()) cO->setEnabled(newSt);
+	    if(cO->property("quietanceRet").toBool() && !newSt != cO->isChecked()) cO->setChecked(!newSt);
+	    if(!cO->property("quietanceRet").toBool() && newSt != cO->isEnabled()) cO->setEnabled(newSt);
 	}
     }
 
@@ -1697,7 +1697,7 @@ void VisRun::updatePage( )
     }
     // Restore closed session of used project.
     else if(rez == 2) {
-	mess_warning(mod->nodePath().c_str(),_("Session creation restore for '%s'."),prjSes_it.c_str());
+	mess_warning(mod->nodePath().c_str(),_("Restore the session creation for '%s'."),prjSes_it.c_str());
 	updateTimer->stop();
 	initSess(prjSes_it, crSessForce);
 	return;
@@ -1730,7 +1730,7 @@ void VisRun::updatePage( )
     if(mess_lev() == TMess::Debug) {
 	upd_tm += 1e-3*(TSYS::curTime()-d_cnt);
 	if(!(1000/vmin(1000,period()) && wPrcCnt%(1000/vmin(1000,period())))) {
-	    mess_debug(mod->nodePath().c_str(), _("Session '%s' update time %f ms."), workSess().c_str(), upd_tm);
+	    mess_debug(mod->nodePath().c_str(), _("Time of updating the session '%s': %f ms."), workSess().c_str(), upd_tm);
 	    upd_tm = 0;
 	}
     }
@@ -1767,7 +1767,7 @@ void VisRun::updatePage( )
 //* Notify: Generic notifying object.		 *
 //************************************************
 VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pgProps(ipgProps),
-    tp(itp), alSt(0xFFFFFFFF), repDelay(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false), f_quittanceRet(false),
+    tp(itp), alSt(0xFFFFFFFF), repDelay(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false), f_quietanceRet(false),
     toDo(false), alEn(false), mQueueCurTm(0), dataM(true), mOwner(iown), actAlrm(NULL)
 {
     //Parse properties
@@ -1783,7 +1783,7 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 		}
 		else if(iOpt == "resource")	f_resource = true;
 		else if(iOpt == "queue")	{ f_queue = true; if(repDelay < 0) repDelay = 0; }
-		else if(iOpt == "quittanceRet")	f_quittanceRet = true;
+		else if(iOpt == "quietanceRet")	f_quietanceRet = true;
 	    hasFlags = true;
 	}
 	else if(ico.empty() && (size_t)(fPos=iLn.find("ico=")) != string::npos)	  ico = iLn.substr(fPos+4);
@@ -1800,7 +1800,7 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 	    ::close(hd);
 	}
 	if(!fOK) {
-	    mess_err((mod->nodePath()+"/sesRun_"+owner()->workSess()).c_str(), _("Function of the notificator '%s' error: %s"), comProc.c_str(), strerror(errno));
+	    mess_err((mod->nodePath()+"/sesRun_"+owner()->workSess()).c_str(), _("Error function of the notificator '%s': %s"), comProc.c_str(), strerror(errno));
 	    comProc = "";
 	}
     }
@@ -1809,14 +1809,14 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 	TFunction funcIO("sesRun_"+owner()->workSess()+"_ntf"+i2s(tp));
 	//funcIO.setStor(DB());
 	funcIO.ioIns(new IO("en",_("Enabled notification"),IO::Boolean,IO::Default), IFA_en);
-	funcIO.ioIns(new IO("doNtf",_("Doing notification, always 1"),IO::Boolean,IO::Default), IFA_doNtf);
-	funcIO.ioIns(new IO("doRes",_("Doing resource, always 0"),IO::Boolean,IO::Default), IFA_doRes);
+	funcIO.ioIns(new IO("doNtf",_("Performing the notification, always 1"),IO::Boolean,IO::Default), IFA_doNtf);
+	funcIO.ioIns(new IO("doRes",_("Making the resource, always 0"),IO::Boolean,IO::Default), IFA_doRes);
 	funcIO.ioIns(new IO("res",_("Resource stream"),IO::String,IO::Output), IFA_res);
 	funcIO.ioIns(new IO("mess",_("Notification message"),IO::String,IO::Default), IFA_mess);
-	funcIO.ioIns(new IO("lang",_("Notification message's language"),IO::String,IO::Default), IFA_lang);
+	funcIO.ioIns(new IO("lang",_("Language of the notification message"),IO::String,IO::Default), IFA_lang);
 	try { comProc = SYS->daq().at().at("JavaLikeCalc").at().compileFunc("JavaScript", funcIO, props()); }
 	catch(TError &er) {
-	    mess_err((mod->nodePath()+"/sesRun_"+owner()->workSess()).c_str(), _("Function of the notificator '%s' error: %s"),
+	    mess_err((mod->nodePath()+"/sesRun_"+owner()->workSess()).c_str(), _("Error function of the notificator '%s': %s"),
 		    funcIO.id().c_str(), er.mess.c_str());
 	}
     }
@@ -1829,33 +1829,33 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 	SYS->taskCreate(mod->nodePath('.',true)+".sesRun_"+owner()->workSess()+".ntf"+i2s(tp), 0, VisRun::Notify::Task, this);
     }
 
-    //The quittance action prepare and place
+    //The quietance action prepare and place
     QImage ico_t;
     if(!ico.empty()) {
 	ico = owner()->masterPg()->resGet(ico);
 	ico_t.loadFromData((const uchar*)ico.data(), ico.size());
     }
     if(ico_t.isNull() && !ico_t.load(TUIS::icoGet("alarmAlarm",NULL,true).c_str())) ico_t.load(":/images/alarmAlarm.png");
-    if(name.empty()) name = TSYS::strMess(_("Notyfier %d"), tp);
+    if(name.empty()) name = TSYS::strMess(_("Notificator %d"), tp);
     actAlrm = new QAction(QPixmap::fromImage(ico_t), name.c_str(), owner());
     actAlrm->setObjectName(("alarmNtf"+i2s(tp)).c_str());
     //actAlrm->setToolTip(_("Blink alarm"));
     if(f_queue) {
-	actAlrm->setWhatsThis(QString(_("The button for current \"%1\" quittance")).arg(name.c_str()));
-	actAlrm->setStatusTip(QString(_("Press for current \"%1\" quittance.")).arg(name.c_str()));
+	actAlrm->setWhatsThis(QString(_("The button for quietance the current \"%1\"")).arg(name.c_str()));
+	actAlrm->setStatusTip(QString(_("Press for quietance the current \"%1\".")).arg(name.c_str()));
     }
     else {
-	actAlrm->setWhatsThis(QString(_("The button for all \"%1\" quittance")).arg(name.c_str()));
-	actAlrm->setStatusTip(QString(_("Press for all \"%1\" quittance.")).arg(name.c_str()));
+	actAlrm->setWhatsThis(QString(_("The button for quietance all \"%1\"")).arg(name.c_str()));
+	actAlrm->setStatusTip(QString(_("Press for quietance all \"%1\".")).arg(name.c_str()));
     }
-    actAlrm->setProperty("quittanceRet", (bool)f_quittanceRet);
-    actAlrm->setCheckable(f_quittanceRet);
+    actAlrm->setProperty("quietanceRet", (bool)f_quietanceRet);
+    actAlrm->setCheckable(f_quietanceRet);
     owner()->menuAlarm.addAction(actAlrm);
     owner()->toolBarStatus->addAction(actAlrm);
 
     //Apply to the current alarm status
     actAlrm->setVisible((owner()->alarmSt()>>8)&(1<<tp));
-    if(f_quittanceRet) actAlrm->setChecked(!((owner()->alarmSt()>>16)&(1<<tp)));
+    if(f_quietanceRet) actAlrm->setChecked(!((owner()->alarmSt()>>16)&(1<<tp)));
     else actAlrm->setEnabled((owner()->alarmSt()>>16)&(1<<tp));
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter("UI:Vision:Notify", 1);
@@ -1871,7 +1871,7 @@ VisRun::Notify::~Notify( )
     //The command procedure remove
     if(comIsExtScript && comProc.size()) remove(comProc.c_str());
 
-    //The quittance action remove
+    //The quietance action remove
     if(actAlrm) actAlrm->deleteLater();
     actAlrm = NULL;
 

@@ -2261,7 +2261,7 @@ INSERT INTO "wlb_Main_io" VALUES('grpCadr','elLst','line:1:2::::
 ',32,'','','ElFigure','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','geomZ','10',32,'','','ElFigure','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','geomH','12',32,'','','ElFigure','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('anShow','name','Analog show',32,'','','','Відобр. аналог.','','Отобр аналог','','','');
+INSERT INTO "wlb_Main_io" VALUES('anShow','name','Analog show',32,'','','','Відображення аналогового','','Отображение аналогового','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow','geomH','40',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow','backColor','black',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow','bordWidth','1',40,'','','','','','','','','');
@@ -2399,7 +2399,7 @@ INSERT INTO "wlb_Main_io" VALUES('ViewCadr','geomZ','4',32,'','','el1_5','','','
 INSERT INTO "wlb_Main_io" VALUES('ViewCadr','geomY','30',32,'','','el1_5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ViewCadr','geomX','603',32,'','','el1_5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ViewCadr','addr','<EVAL>',42,'Parameter|var','','el1_5','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('anShow1','name','Analog show 1',32,'','','','Відобр. аналог. 1','','Отобр аналог 1','','','');
+INSERT INTO "wlb_Main_io" VALUES('anShow1','name','Analog show 1',32,'','','','Відображення аналогового 1','','Отображение аналогового 1','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow1','geomH','23',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow1','backColor','black',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow1','bordWidth','1',40,'','','','','','','','','');
@@ -6043,7 +6043,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','elType','0',32,'','','name','',''
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','value','',8,'','','name','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',32,'','','name','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','confirm','0',32,'','','name','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('anShow1s','name','Analog show 1 (short)',32,'','','','Відобр. аналог. 1 (короткий)','','Отобр аналог 1 (короткий)','','','');
+INSERT INTO "wlb_Main_io" VALUES('anShow1s','name','Analog show 1 (short)',32,'','','','Відображення аналогового 1 (короткий)','','Отображение аналогового 1 (короткий)','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow1s','geomW','65',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow1s','geomW','65',32,'','','val','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','en','0',32,'','','el1','','','','','','');
@@ -11566,7 +11566,7 @@ INSERT INTO "wlb_mnEls_incl" VALUES('Shkala','El_shkala','/wlb_originals/wdg_ElF
 INSERT INTO "wlb_mnEls_incl" VALUES('Shkala','El_max','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;alignment;text;',2);
 INSERT INTO "wlb_mnEls_incl" VALUES('Shkala','El_min','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;alignment;text;',2);
 CREATE TABLE 'wlb_mnEls_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO "wlb_mnEls_io" VALUES('cooler2','name','Cooler',32,'','','','Вентилятор','','Вентилятор','','','');
+INSERT INTO "wlb_mnEls_io" VALUES('cooler2','name','Cooler 2',32,'','','','Вентилятор 2','','Вентилятор 2','','','');
 INSERT INTO "wlb_mnEls_io" VALUES('cooler2','geomW','100',32,'','','','','','','','','');
 INSERT INTO "wlb_mnEls_io" VALUES('cooler2','geomH','100',32,'','','','','','','','','');
 INSERT INTO "wlb_mnEls_io" VALUES('cooler2','lineWdth','0',32,'','','','','','','','','');
@@ -18267,7 +18267,7 @@ if(trnd1_tSek < curTm) trnd1_trcPer = 0;
 else { trnd1_trcPer = 1; trnd1_tSek = 0; }
 
 //Generic
-name_arg0val = name;
+name_arg0val = this.attr("name");
 
 //Scale
 typeXY = (trnd1_type==2);
@@ -18623,6 +18623,7 @@ if(pgCont_pgOpenSrc != lastView) {
 			elNm += " ("+elLst[iEl].slice(3)+")";
 			pgSel_items += (pgSel_items.length?"\n":"") + elNm;
 			if(iM < 0 && elLst[iEl] == curEl) { pgSel_value = elNm; iM = iEl; }
+			delete oEl;
 		}
 		pgCntr_text = ""+(iM+1)+"\n("+elLst.length+")";
 		prev_active = next_active = pgSel_active = (elLst.length>1);
@@ -18877,7 +18878,7 @@ O/0S/smJ34BOBby2ArD/z3osu9dTs8+n7wgz8c0sVL9UI0dGyifR4Uj7t/qtEhU6pj8SHqHOP5zr
 BwWha5V/HjplCCF+iHImM/Grqg5cuSCBgR4eC7gzR0dZbUNzzv7K05GOvvQsyYrI2LWXx5vR/+3h
 4OFjFd3SIcI6mzrpKSVZSRjm4hdFDM5RlRCQhGHyuV071ntPkiB0CiAytsH3z3ibCICAAhmwbQDJ
 iTAT3wz/AQrXOAcOBXvwAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
-name_arg0val = name;
+name_arg0val = this.attr("name");
 
 if(f_start) {
 	el1_1_en = !el1_1_addr.isEVal(); el1_2_en = !el1_2_addr.isEVal(); el1_3_en = !el1_3_addr.isEVal(); 
@@ -20607,7 +20608,7 @@ if(trnd1_tSek < curTm) trnd1_trcPer = 0;
 else { trnd1_trcPer = 1; trnd1_tSek = 0; }
 
 //Generic
-name_arg0val = name;
+name_arg0val = this.attr("name");
 
 //Scale
 typeXY = (trnd1_type==2);

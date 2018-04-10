@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: tarchval.cpp
+//OpenSCADA file: tarchval.cpp
 /***************************************************************************
  *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
@@ -2162,7 +2162,7 @@ TCntrNode &TVArchivator::operator=( const TCntrNode &node )
     if(!src_n) return *this;
 
     //Configuration copy
-    exclCopy(*src_n, "ID;");
+    exclCopy(*src_n, "ID;ADDR;");
     mDB = src_n->mDB;
 
     if(src_n->startStat() && toStart() && !startStat()) start();

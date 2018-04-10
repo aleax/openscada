@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: tvariant.cpp
+//OpenSCADA file: tvariant.cpp
 /***************************************************************************
  *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

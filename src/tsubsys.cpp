@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: tsubsys.cpp
+//OpenSCADA file: tsubsys.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.4.3"
+#define MOD_VER		"2.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -184,7 +184,8 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     if(intoTrans && intoTrans != EVAL_BOOL) transOpen();
     else if(!intoTrans && reqCnt) transCommit();
 
-    //Put request
+    //Put the request
+    if(mess_lev() == TMess::Debug) mess_debug((nodePath()+"tracing/").c_str(), _("Request: \"%s\""), req.c_str());
     rc = sqlite3_get_table(m_db, Mess->codeConvOut(cd_pg.c_str(),req).c_str(), &result, &nrow, &ncol, &zErrMsg);
     if(rc != SQLITE_OK) {
 	string err = _("Unknown error");
@@ -459,7 +460,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    if(Mess->lang2Code() == Mess->lang2CodeBase() && !trDblDef && sid.compare(0,3,Mess->lang2CodeBase()+"#") == 0) trDblDef = true;
 	}
     }
-    if(trDblDef && !cfg.reqKeys()) fieldFix(cfg);
+    if(trDblDef && !cfg.reqKeys()) fieldFix(cfg, trPresent);
 
     //Get present fields list
     string req_where = "WHERE ";
@@ -483,7 +484,7 @@ void MTable::fieldSet( TConfig &cfg )
     }
     if(noKeyFld) {
 	if(cfg.reqKeys()) return;
-	fieldFix(cfg);
+	fieldFix(cfg, trPresent);
     }
 
     //Prepare query for presenting detect
@@ -535,7 +536,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    err.mess = err.mess + " " + _("The DB is into the Read only mode!");
 	    throw;
 	}
-	fieldFix(cfg);
+	fieldFix(cfg, trPresent);
 	owner().sqlReq(req, NULL, true);
     }
 }
@@ -567,11 +568,11 @@ void MTable::fieldDel( TConfig &cfg )
     }
 }
 
-void MTable::fieldFix( TConfig &cfg )
+void MTable::fieldFix( TConfig &cfg, bool trPresent )
 {
     bool toUpdate = false,
 	 appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !tblStrct.empty()),	//Only for append no present fields
-	 isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
+	 isVarTextTransl = trPresent || (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
 
     //Get config fields list
     vector<string> cf_el;
@@ -640,7 +641,7 @@ void MTable::fieldFix( TConfig &cfg )
 	}
 
 	// Other languages for translation process
-	if(cf.fld().flg()&TFld::TransltText) {
+	if((cf.fld().flg()&TFld::TransltText) && !cf.noTransl()) {
 	    bool col_cur = false;
 	    for(unsigned iC = 1; iC < tblStrct.size(); iC++)
 		if(tblStrct[iC][1].size() > 3 && tblStrct[iC][1].substr(2) == ("#"+cf_el[iCf])) {
@@ -663,8 +664,8 @@ void MTable::fieldFix( TConfig &cfg )
     for(unsigned iFld = 1, iCf; iFld < tblStrct.size() && !toUpdate && !appMode; iFld++) {
 	for(iCf = 0; iCf < cf_el.size(); iCf++)
 	    if(cf_el[iCf] == tblStrct[iFld][1] ||
-		    (cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText && tblStrct[iFld][1].size() > 3 &&
-		    tblStrct[iFld][1].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][1].compare(0,2,Mess->lang2Code()) != 0))
+		    ((cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText) && !cfg.cfg(cf_el[iCf]).noTransl() &&
+		    tblStrct[iFld][1].size() > 3 && tblStrct[iFld][1].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][1].compare(0,2,Mess->lang2Code()) != 0))
 		break;
 	if(iCf >= cf_el.size()) toUpdate = true;
     }

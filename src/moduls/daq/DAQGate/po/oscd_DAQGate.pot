@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 11:12+0300\n"
+"POT-Creation-Date: 2018-04-10 16:32+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,10 +23,10 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones."
+msgid "Allows to locate data sources of remote OpenSCADA stations to local ones."
 msgstr ""
 
-msgid "Parameters cache table"
+msgid "Table of parameters cache"
 msgstr ""
 
 msgid "Acquisition schedule"
@@ -35,28 +35,28 @@ msgstr ""
 msgid "Priority of the acquisition task"
 msgstr ""
 
-msgid "Restore timeout, seconds"
+msgid "Timeout of restore, seconds"
 msgstr ""
 
-msgid "Restore data depth time (hour)"
+msgid "Depth time of restore data, hours"
 msgstr ""
 
-msgid "Gather messages level"
+msgid "Level of requested messages"
 msgstr ""
 
 msgid "==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"
 msgstr ""
 
-msgid "Sync inter remote station period, seconds"
+msgid "Synchronization time with the remote station, seconds"
 msgstr ""
 
 msgid "Remote stations list"
 msgstr ""
 
-msgid "Remote cotrollers and parameters list"
+msgid "List of the remote controllers and parameters"
 msgstr ""
 
-msgid "Allow automatic remove parameters and attributes"
+msgid "Allow the automatic removal of parameters and attributes"
 msgstr ""
 
 msgid "Standard"
@@ -68,7 +68,7 @@ msgstr ""
 msgid "Attributes configuration cache"
 msgstr ""
 
-msgid "Presenting for stations"
+msgid "Presence at stations"
 msgstr ""
 
 msgid "Acquisition. "
@@ -87,61 +87,61 @@ msgid "Spent time: %s[%s]. "
 msgstr ""
 
 #, c-format
-msgid "Station '%s' error, restoring in %.3g s."
+msgid "Error the station '%s', restoring in %.3g s."
 msgstr ""
 
 #, c-format
-msgid "Requests to station '%s': %.6g."
+msgid "Requests to the station '%s': %.6g."
 msgstr ""
 
 #, c-format
-msgid "Enable: station '%s' processing item '%s' for parameters %d."
+msgid "Enabling: station '%s' processing item '%s' for parameters %d."
 msgstr ""
 
 #, c-format
-msgid "Deletion parameter '%s' is error but it no present on the configuration or remote station."
+msgid "Error deleting parameter '%s' but it is not present on the configuration or remote station."
 msgstr ""
 
 #, c-format
-msgid "DAQ.%s.%s: connect to data source: %s."
+msgid "DAQ.%s.%s: connecting to the data source: %s."
 msgstr ""
 
 msgid "STOP"
 msgstr ""
 
-msgid "10:Data is not allowed."
+msgid "10:Data not available."
 msgstr ""
 
 msgid "OK"
 msgstr ""
 
 #, c-format
-msgid "DAQ.%s.%s: connect to data source '%s': %s."
+msgid "DAQ.%s.%s: connecting to the data source '%s': %s."
 msgstr ""
 
 #, c-format
 msgid "11:Station missed '%s'."
 msgstr ""
 
-msgid "Zero for disable archive access."
+msgid "Zero to disable access to the archive."
 msgstr ""
 
-msgid "Zero for disable periodic sync."
+msgid "Zero to disable to the periodic sync."
 msgstr ""
 
-msgid "Remote OpenSCADA stations' identifiers list used into it controller."
+msgid "List of remote OpenSCADA station IDs used in this controller."
 msgstr ""
 
 msgid "Append station"
 msgstr ""
 
-msgid "Go to remote stations list configuration"
+msgid "Go to configuration of the remote stations list"
 msgstr ""
 
 msgid ""
-"Remote OpenSCADA full controller's or separated controller's parameters list. Address example:\n"
-"  System.AutoDA - for controller;\n"
-"  System.AutoDA.UpTimeStation - for controller's parameter."
+"List of remote OpenSCADA full controllers or individual controller attributes. Address example:\n"
+"  System.AutoDA - for a controller;\n"
+"  System.AutoDA.UpTimeStation - for a controller's parameter."
 msgstr ""
 
 msgid "Parameters tree"

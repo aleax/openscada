@@ -10,13 +10,13 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Движок Среды Визуализации и Управлений (СВУ)</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVCAEngine&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine">Modules/VCAEngine</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="http://oscada.org/wiki/Modules/VCAEngine/uk" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (5% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVCAEngine&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine">Modules/VCAEngine</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="http://oscada.org/wiki/Modules/VCAEngine/uk" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (7% translated)">українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
 <td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../../en/files/Constr.png" width="32" /></a>
 </td>
-<td style="padding-left:5px;"> The translation checking and actualizing
+<td style="padding-left:5px;"> The translation checking and actualizing. Source texts have been already fully revised.
 </td></tr></table>
 </div>
 <table class="wikitable">
@@ -36,8 +36,9 @@
 
 <tr>
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
-<td> Движок Среды Визуализации и Управления </td>
-<td> 4.4 </td>
+<td> Движок Среды Визуализации и Управления
+</td>
+<td> 5.0 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -638,7 +639,7 @@ if(doNtf) { Текст команды уведомления. }
 </pre>
 <ul><li> Для визуализатора атрибутом "notifyVis[Vision|WebVision]{N}" в формате:</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
-//flags=notify[{DL}][|resource[|queue[|quittanceRet]]];
+//flags=notify[{DL}][|resource[|queue[|quietanceRet]]];
 //name={Имя уведомителя}
 //ico={Имя иконки}
 { Текст команды уведомления для любого или конкретного визуализатора. }
@@ -649,7 +650,7 @@ if(doNtf) { Текст команды уведомления. }
 <li> <i>resource</i> — запрашивать-формировать (принудительно) ресурс уведомления у сервера визуализации, может быть звуковым файлом, текстом или другими данными для формирования уведомления.</li>
 <li> <i>queue</i> — ресурсы уведомления определяются не только по глобальному признаку нарушения и квитации, а и согласно приоритетной очереди источников уведомления-ресурсов. Очередь формируется на стороне сервера визуализации, а для визуализаторов указывается необходимость работы с ней при запросе ресурсов.</li>
 <li> <i>qMergeMess</i> — объединять уведомления в очереди по равенству сообщения.</li>
-<li> <i>quittanceRet</i> — возможность визуализатора отзыва-возврата квитирования, т.е. по сути обратного включения уведомления.</li></ul>
+<li> <i>quietanceRet</i> — возможность визуализатора отзыва-возврата квитирования, т.е. по сути обратного включения уведомления.</li></ul>
 <p>Переменные обмена:
 </p>
 <ul><li> <i>en</i>[0,1] — уведомление включить (1) или выключить (0);</li>
@@ -2918,7 +2919,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <p><b>Объект "Сеанс" ( this.ownerSess() )</b>
 </p>
 <ul><li> <i>string user( )</i> — текущий пользователь сеанса.</li>
-<li> <i>int alrmQuittance( int quit_tmpl, string wpath = "", bool ret = false )</i> — квитирование нарушений <i>wpath</i> с шаблоном <i>quit_tmpl</i>. Если <i>wpath</i> пустая строка то производится глобальное квитирование. В строке <i>wpath</i>, через символ ';', могут быть перечислены адреса нескольких виджетов. При установке <i>ret</i> осуществляется возврат квитирования.</li>
+<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — квитирование нарушений <i>wpath</i> с шаблоном <i>quit_tmpl</i>. Если <i>wpath</i> пустая строка то производится глобальное квитирование. В строке <i>wpath</i>, через символ ';', могут быть перечислены адреса нескольких виджетов. При установке <i>ret</i> осуществляется возврат квитирования.</li>
 <li> <i>int reqTm( )</i> — время последнего запроса.</li>
 <li> <i>string reqUser( )</i> — пользователь последнего запроса.</li>
 <li> <i>string reqLang( )</i> — язык последнего запроса.</li>
@@ -3215,7 +3216,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </p><p>Результатом запроса перечня открытых страниц являются дочерние элементы <b>&lt;el&gt;{OpPage}&lt;/el&gt;</b>, содержащие полный путь открытой страницы. Кроме перечня открытых страниц запрос возвращает значение текущего счётчика вычисления сеанса в атрибуте <i>tm</i>. Если данный атрибут устанавливается при запросе, то для каждой открытой страницы возвращается список изменённых с момента указанного значения счётчика виджетов открытой страницы.
 </p>
 <h5><span class="mw-headline" id=".D0.A3.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D0.B8.D0.B7.D0.B0.D1.86.D0.B8.D0.B5.D0.B9"><span class="mw-headline-number">3.11.2.4</span> Управление сигнализацией</span></h5>
-<p>Для предоставления механизма глобального контроля за сигнализацией сеанса предусмотрена сервисная функция сеанса "/serv/alarm" и команды запроса статуса сигналов <b>&lt;get path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b>; и квитирование сигналов <b>&lt;quittance path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b>.
+<p>Для предоставления механизма глобального контроля за сигнализацией сеанса предусмотрена сервисная функция сеанса "/serv/alarm" и команды запроса статуса сигналов <b>&lt;get path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b>; и квитирование сигналов <b>&lt;quietance path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b>.
 </p><p>Запрос статуса сигналов возвращает обобщённое состояние сигналов, а так-же ресурс уведомления, если атрибут "mode" равен "resource". Результатом запроса ресурса уведомления обычно является звуковой файл, для воспроизведения, в это-же время обеспечивается отслеживание последовательности сигнализации и квитирования отдельных ресурсов сообщений.
 </p><p>Запрос на квитирование выполняет квитирование указанного виджета, атрибут <i>wdg</i>, в соответствии с шаблоном, атрибут <i>tmpl</i>.
 </p>

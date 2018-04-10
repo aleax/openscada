@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Archive.FSArch file: mess.h
+//OpenSCADA module Archive.FSArch file: mess.h
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
@@ -152,6 +152,7 @@ class ModMArch: public TMArchivator
 	//Methods
 	void load_( );
 	void save_( );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods

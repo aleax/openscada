@@ -702,11 +702,11 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	if(it->modify()) {
 	    if(!ico_t.load(TUIS::icoGet("reload",NULL,true).c_str())) ico_t.load(":/images/reload.png");
 	    actClr = new QAction(QPixmap::fromImage(ico_t),_("Clear changes"),this);
-	    actClr->setStatusTip(_("Press to clear attribute's changes."));
+	    actClr->setStatusTip(_("Press to clear changes of the attribute."));
 	    popup.addAction(actClr);
 	    if(!ico_t.load(TUIS::icoGet("down",NULL,true).c_str())) ico_t.load(":/images/down.png");
-	    actChDown = new QAction(QPixmap::fromImage(ico_t),_("Changes put down to the parent"),this);
-	    actChDown->setStatusTip(_("Press to put down attribute's changes to the parent."));
+	    actChDown = new QAction(QPixmap::fromImage(ico_t),_("Lower the widget changes to its parent"),this);
+	    actChDown->setStatusTip(_("Press for lowering the widget changes to its parent."));
 	    popup.addAction(actChDown);
 	}
     }
@@ -715,15 +715,15 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	QAction *rez = popup.exec(QCursor::pos());
 	if(actCopy && rez == actCopy) QApplication::clipboard()->setText(it->data().toString());
 	else if(actEdit && rez == actEdit) {
-	    InputDlg dlg(window()/*this*/, actEdit->icon(), _("Full text of the attribute edit."),
-		QString(_("Attribute '%1' edit for widget '%2'.")).arg(it->name().c_str()).arg(nwdg.c_str()), false, false, "", "TextEd");
+	    InputDlg dlg(window()/*this*/, actEdit->icon(), _("Full-text editing of the attribute."),
+		QString(_("Editing the attribute '%1' for the widget '%2'.")).arg(it->name().c_str()).arg(nwdg.c_str()), false, false, "", "TextEd");
 
 	    if(it->help().size()) {
 		QTextEdit *helpView = new QTextEdit(&dlg);
 		helpView->setReadOnly(true);
 		helpView->setMaximumHeight(100);
 		helpView->setPlainText(it->help().c_str());
-		helpView->setToolTip(_("Short help for text syntax description."));
+		helpView->setToolTip(_("Short help to describe the syntax of the text."));
 		QPalette plt(helpView->palette());
 		plt.setColor(QPalette::Base, plt.color(QPalette::Window));
 		helpView->setPalette(plt);
@@ -1345,7 +1345,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
     owner()->cntrIfCmd(req);
 
     if(mess_lev() == TMess::Debug)
-	mess_debug(mod->nodePath().c_str(), _("Widgets' development tree '%s' request time %f ms."), vca_it.c_str(), 1e-3*(TSYS::curTime()-d_cnt));
+	mess_debug(mod->nodePath().c_str(), _("Time of requesting the widgets development tree '%s': %f ms."), vca_it.c_str(), 1e-3*(TSYS::curTime()-d_cnt));
 
     //Remove no present libraries
     for(iTop = 0; iTop < treeW->topLevelItemCount(); iTop++) {
@@ -1506,9 +1506,9 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		    //    Create new action
 		    cur_act = new QAction(wdgN->text().c_str(),owner());
 		    cur_act->setObjectName(wipath.c_str());
-		    cur_act->setToolTip(QString(_("Add widget based at '%1'")).arg(wipath.c_str()));
-		    cur_act->setWhatsThis(QString(_("The button for addition widget based at '%1'")).arg(wipath.c_str()));
-		    cur_act->setStatusTip(QString(_("Press to add widget based at '%1'.")).arg(wipath.c_str()));
+		    cur_act->setToolTip(QString(_("Adding a widget based on '%1'")).arg(wipath.c_str()));
+		    cur_act->setWhatsThis(QString(_("The button for adding a widget based on '%1'")).arg(wipath.c_str()));
+		    cur_act->setStatusTip(QString(_("Press for adding a widget based on '%1'")).arg(wipath.c_str()));
 		    cur_act->setEnabled(false);
 		    cur_act->setCheckable(true);
 		    //    Add action to toolbar and menu
@@ -1552,9 +1552,9 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		simg = TSYS::strDecode(cwdgN->childGet("ico")->text(), TSYS::base64);
 		img.loadFromData((const uchar*)simg.data(),simg.size());
 		if(!img.isNull()) nit_cw->setIcon(0,QPixmap::fromImage(img));
-		nit_cw->setText(0,cwdgN->text().c_str());
-		nit_cw->setText(1,_("Container's widget"));
-		nit_cw->setText(2,cwdgId.c_str());
+		nit_cw->setText(0, cwdgN->text().c_str());
+		nit_cw->setText(1, _("Container widget"));
+		nit_cw->setText(2, cwdgId.c_str());
 	    }
 	}
 	if(vca_lev != 3 && is_create) {
@@ -1564,7 +1564,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
     }
 
     if(mess_lev() == TMess::Debug)
-	mess_debug(mod->nodePath().c_str(), _("Widgets' development tree '%s' load time %f ms."), vca_it.c_str(), 1e-3*(TSYS::curTime()-d_cnt));
+	mess_debug(mod->nodePath().c_str(), _("Time of loading the widgets development tree '%s': %f ms."), vca_it.c_str(), 1e-3*(TSYS::curTime()-d_cnt));
 }
 
 void WdgTree::ctrTreePopup( )
@@ -1596,7 +1596,7 @@ void WdgTree::ctrTreePopup( )
     QImage ico_t;
     if(!ico_t.load(TUIS::icoGet("reload",NULL,true).c_str())) ico_t.load(":/images/reload.png");
     QAction *actRefresh = new QAction(QPixmap::fromImage(ico_t),_("Refresh libraries"),this);
-    actRefresh->setStatusTip(_("Press to refresh present libraries."));
+    actRefresh->setStatusTip(_("Press to refresh the present libraries."));
     connect(actRefresh, SIGNAL(triggered()), this, SLOT(updateTree()));
     popup.addAction(actRefresh);
     popup.exec(QCursor::pos());
@@ -1737,7 +1737,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it, bool initi
 	    updateTree(vca_it, nit);
 	}
 	if(mess_lev() == TMess::Debug)
-	    mess_debug(mod->nodePath().c_str(), _("Project's development tree '%s' load time %f ms."), vca_it.c_str(), 1e-3*(TSYS::curTime()-d_cnt));
+	    mess_debug(mod->nodePath().c_str(), _("Time of loading the projects development tree '%s': %f ms."), vca_it.c_str(), 1e-3*(TSYS::curTime()-d_cnt));
 	return;
     }
 
@@ -1832,7 +1832,7 @@ void ProjTree::ctrTreePopup( )
     QImage ico_t;
     if(!ico_t.load(TUIS::icoGet("reload",NULL,true).c_str())) ico_t.load(":/images/reload.png");
     QAction *actRefresh = new QAction(QPixmap::fromImage(ico_t),_("Refresh projects"),this);
-    actRefresh->setStatusTip(_("Press to refresh present projects."));
+    actRefresh->setStatusTip(_("Press to refresh the present projects."));
     connect(actRefresh, SIGNAL(triggered()), this, SLOT(updateTree()));
     popup.addAction(actRefresh);
     popup.exec(QCursor::pos());
@@ -2087,7 +2087,7 @@ void DevelWdgView::setEdit( bool vl )
     fWdgEdit = vl;
 
     if(vl) {
-	if(editWdg) mess_err(id().c_str(),_("Warning! Edit widget already set."));
+	if(editWdg) mess_err(id().c_str(),_("WARNING! The widget is already set up for editing."));
 	editWdg = this;
 	if(shape->isEditable()) shape->editEnter(this);
 
@@ -2292,8 +2292,8 @@ void DevelWdgView::wdgPopup( )
 	if(editWdg && editWdg->shape)	editWdg->shape->wdgPopup(editWdg, popup);
 
 	// Exit from widget edition
-	QAction *actExitEdit = new QAction(_("Exit from widget editing"),this);
-	actExitEdit->setStatusTip(_("Press to exit from widget editing."));
+	QAction *actExitEdit = new QAction(_("Exit the widget editing"),this);
+	actExitEdit->setStatusTip(_("Press to exit the widget editing."));
 	connect(actExitEdit, SIGNAL(triggered()), this, SLOT(editExit()));
 	popup.addAction(actExitEdit);
     }
@@ -2324,21 +2324,21 @@ void DevelWdgView::wdgPopup( )
 	// Make edit enter action
 	popup.addSeparator();
 	if((sel_wdgs.size() == 1 && sel_wdgs[0]->shape && sel_wdgs[0]->shape->isEditable()) || (shape && shape->isEditable())) {
-	    QAction *actEnterEdit = new QAction(_("Enter for the widget editing"),this);
-	    actEnterEdit->setStatusTip(_("Press to enter for the widget editing."));
+	    QAction *actEnterEdit = new QAction(_("Enter the widget editing"),this);
+	    actEnterEdit->setStatusTip(_("Press to enter the widget editing."));
 	    connect(actEnterEdit, SIGNAL(triggered()), this, SLOT(editEnter()));
 	    popup.addAction(actEnterEdit);
 	}
 
 	// Make widget icon
-	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Make icon from the widget"),this);
-	actMakeIco->setStatusTip(_("Press to make icon from the widget."));
+	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Make up an icon from the widget"),this);
+	actMakeIco->setStatusTip(_("Press to make up an icon from the widget."));
 	connect(actMakeIco, SIGNAL(triggered()), this, SLOT(makeIcon()));
 	popup.addAction(actMakeIco);
 
 	// Make widget image
-	QAction *actMakeImg = new QAction(_("Make image from the widget"),this);
-	actMakeImg->setStatusTip(_("Press to make image from the widget."));
+	QAction *actMakeImg = new QAction(_("Make up an image from the widget"),this);
+	actMakeImg->setStatusTip(_("Press to make up an image from the widget."));
 	connect(actMakeImg, SIGNAL(triggered()), this, SLOT(makeImage()));
 	popup.addAction(actMakeImg);
 	popup.addSeparator();
@@ -2354,9 +2354,9 @@ void DevelWdgView::wdgPopup( )
 	actDecVisScale->setStatusTip(_("Press to decrease the visual scale of the widget by 10%."));
 	connect(actDecVisScale, SIGNAL(triggered()), this, SLOT(incDecVisScale()));
 	popup.addAction(actDecVisScale);
-	QAction *actUnsetVisScale = new QAction(_("Reset zoom (100%)"),this);
+	QAction *actUnsetVisScale = new QAction(_("Reset the zoom (100%)"),this);
 	actUnsetVisScale->setObjectName("unset");
-	actUnsetVisScale->setStatusTip(_("Press to set the visual scale of the widget to 100%."));
+	actUnsetVisScale->setStatusTip(_("Press to reset the visual scale of the widget to 100%."));
 	connect(actUnsetVisScale, SIGNAL(triggered()), this, SLOT(incDecVisScale()));
 	popup.addAction(actUnsetVisScale);
 	popup.addSeparator();
@@ -2417,10 +2417,10 @@ void DevelWdgView::makeImage( )
 #endif
 
     //Call save file dialog
-    QString fileName = mainWin()->getFileName(_("Save widget's image"), (TSYS::path2sepstr(id())+".png").c_str(),
+    QString fileName = mainWin()->getFileName(_("Saving the widget image"), (TSYS::path2sepstr(id())+".png").c_str(),
 	_("Images (*.png *.xpm *.jpg)"), QFileDialog::AcceptSave);
     if(!fileName.isEmpty() && !img.save(fileName))
-	mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
+	mod->postMess(mod->nodePath().c_str(),QString(_("Error saving to the file '%1'.")).arg(fileName),TVision::Error,this);
 }
 
 void DevelWdgView::editEnter( )
@@ -2921,7 +2921,7 @@ bool DevelWdgView::event( QEvent *event )
 	// Check widget
 	if(!shape) {
 	    pnt.drawImage(rect(), QImage(":/images/attention.png"));
-	    setToolTip(QString(_("Widget is not enabled or shape is not supported!")));
+	    setToolTip(QString(_("The widget is disabled or the widget shape is not supported!")));
 	}
 
 	// Update selected widget data

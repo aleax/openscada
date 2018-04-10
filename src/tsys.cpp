@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: tsys.cpp
+//OpenSCADA file: tsys.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
@@ -3331,7 +3331,7 @@ int main( int argc, char *argv[] )
 	}
     } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
-    //Free OpenSCADA system's root object
+    //Free OpenSCADA root object
     if(SYS) delete SYS;
 
     return rez;

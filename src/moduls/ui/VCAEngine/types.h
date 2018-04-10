@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: types.h
 /***************************************************************************
- *   Copyright (C) 2013-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2013-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
