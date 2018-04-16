@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.Vision file: vis_widgs.cpp
+//OpenSCADA module UI.Vision file: vis_widgs.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

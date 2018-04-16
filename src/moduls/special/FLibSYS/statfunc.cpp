@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Special.FLibSYS file: statfunc.cpp
+//OpenSCADA module Special.FLibSYS file: statfunc.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

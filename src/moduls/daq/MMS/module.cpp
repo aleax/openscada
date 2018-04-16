@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.MMS file: module.cpp
+//OpenSCADA module DAQ.MMS file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2013-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

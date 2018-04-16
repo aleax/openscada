@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Protocol.SelfSystem file: self.cpp
+//OpenSCADA module Protocol.SelfSystem file: self.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

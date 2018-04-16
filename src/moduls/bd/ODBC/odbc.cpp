@@ -1,5 +1,5 @@
 
-//OpenSCADA system module BD.ODBC file: odbc.cpp
+//OpenSCADA module BD.ODBC file: odbc.cpp
 /***************************************************************************
  *   Copyright (C) 2015-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

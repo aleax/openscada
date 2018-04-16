@@ -1,5 +1,5 @@
 
-//OpenSCADA system module BD.PostgreSQL file: postgre.h
+//OpenSCADA module BD.PostgreSQL file: postgre.h
 /***************************************************************************
  *   Copyright (C) 2013-2017 by Roman Savochenko, rom_as@oscada.org        *
  *                 2010 by Maxim Lysenko, mlisenko@oscada.org              *

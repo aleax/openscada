@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.LogicLev file: logiclev.cpp
+//OpenSCADA module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
  *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

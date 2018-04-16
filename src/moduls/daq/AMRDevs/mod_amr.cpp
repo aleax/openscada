@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.AMRDevs file: mod_amr.cpp
+//OpenSCADA module DAQ.AMRDevs file: mod_amr.cpp
 /***************************************************************************
  *   Copyright (C) 2010-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

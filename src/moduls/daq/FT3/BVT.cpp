@@ -1,4 +1,4 @@
-//OpenSCADA system module DAQ.FT3 file: BVT.cpp
+//OpenSCADA module DAQ.FT3 file: BVT.cpp
 /***************************************************************************
  *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *

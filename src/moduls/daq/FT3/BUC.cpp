@@ -1,4 +1,4 @@
-//OpenSCADA system module DAQ.BUC file: BUC.cpp
+//OpenSCADA module DAQ.BUC file: BUC.cpp
 /***************************************************************************
  *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *

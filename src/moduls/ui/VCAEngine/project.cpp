@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.VCAEngine file: project.cpp
+//OpenSCADA module UI.VCAEngine file: project.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

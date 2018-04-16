@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.System file: da_hddstat.cpp
+//OpenSCADA module DAQ.System file: da_hddstat.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

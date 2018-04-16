@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Special.FLibSYS file: io.cpp
+//OpenSCADA module Special.FLibSYS file: io.cpp
 /***************************************************************************
  *   Copyright (C) 2013-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

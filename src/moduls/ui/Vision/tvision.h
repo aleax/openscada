@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.VISION file: tvision.h
+//OpenSCADA module UI.VISION file: tvision.h
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Evgen Zaichuk
  *                 2006-2016 by Roman Savochenko (rom_as@oscada.org)

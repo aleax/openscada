@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.System file: da_ups.cpp
+//OpenSCADA module DAQ.System file: da_ups.cpp
 /***************************************************************************
  *   Copyright (C) 2014-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

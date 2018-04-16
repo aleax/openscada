@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.DiamondBoards file: diamond.cpp
+//OpenSCADA module DAQ.DiamondBoards file: diamond.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

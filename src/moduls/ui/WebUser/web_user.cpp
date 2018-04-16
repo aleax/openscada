@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.WebUser file: web_user.cpp
+//OpenSCADA module UI.WebUser file: web_user.cpp
 /***************************************************************************
  *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
@@ -220,7 +220,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	if(up.freeStat()) {
 	    if(uPg == "*") {
 		page =	"<table class='work'>\n"
-			// " <tr><td class='content'><p>"+_("Welcome to Web-users pages of OpenSCADA system.")+"</p></td></tr>\n"
+			// " <tr><td class='content'><p>"+_("Welcome to Web-users pages of OpenSCADA.")+"</p></td></tr>\n"
 			" <tr><th>"+string(_("Presented user's WEB-pages."))+"</th></tr>\n"
 			" <tr><td class='content'><ul>\n";
 		for(unsigned iP = 0; iP < upLs.size(); iP++)

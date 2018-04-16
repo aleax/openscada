@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Archive.DBArch file: arch.cpp
+//OpenSCADA module Archive.DBArch file: arch.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

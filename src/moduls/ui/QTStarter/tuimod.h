@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.QTStarter file: tuimod.h
+//OpenSCADA module UI.QTStarter file: tuimod.h
 /***************************************************************************
  *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

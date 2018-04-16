@@ -1,5 +1,5 @@
 
-//OpenSCADA system module BD.MySQL file: my_sql.h
+//OpenSCADA module BD.MySQL file: my_sql.h
 /***************************************************************************
  *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

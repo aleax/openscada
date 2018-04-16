@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.WebCfgD file: web_cfg.h
+//OpenSCADA module UI.WebCfgD file: web_cfg.h
 /***************************************************************************
  *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

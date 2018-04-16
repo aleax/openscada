@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.h
+//OpenSCADA module DAQ.JavaLikeCalc file: freefunc.h
 /***************************************************************************
  *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.ModBus file: modbus_daq.cpp
+//OpenSCADA module DAQ.ModBus file: modbus_daq.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

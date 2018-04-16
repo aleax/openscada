@@ -1,6 +1,6 @@
 
 //!!! The module name, the file name and the module's license. Change for your need.
-//OpenSCADA system module DAQ.Tmpl file: module.cpp
+//OpenSCADA module DAQ.Tmpl file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2012 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *

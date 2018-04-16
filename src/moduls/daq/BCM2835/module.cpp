@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.BCM2835 file: module.cpp
+//OpenSCADA module DAQ.BCM2835 file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2016 by Roman Savochenko, <rom_as@oscada.org>           *
  *                                                                         *

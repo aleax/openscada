@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Protocol.HTTP file: http.cpp
+//OpenSCADA module Protocol.HTTP file: http.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
@@ -839,7 +839,7 @@ string TProtIn::getIndex( const string &user, const string &sender )
     string answer = string("<table class='work' width='50%'>\n")+
 	"<tr><th>"+_("Login")+"</th></tr>"
 	"<tr><td class='content'>";
-	// "<p>"+_("Welcome to the Web-interfaces of OpenSCADA system.")+"</p>";
+	// "<p>"+_("Welcome to the Web-interfaces of OpenSCADA.")+"</p>";
     if(!user.empty())
 	answer = answer +
 	    "<p style='color: green;'>"+TSYS::strMess(_("You are logged in as \"<b>%s</b>\"."),user.c_str())+"</p>"

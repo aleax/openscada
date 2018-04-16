@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.ICP_DAS file: da_LP_8x.cpp
+//OpenSCADA module DAQ.ICP_DAS file: da_LP_8x.cpp
 /***************************************************************************
  *   Copyright (C) 2012-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

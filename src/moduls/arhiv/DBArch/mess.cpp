@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Archive.DBArch file: mess.cpp
+//OpenSCADA module Archive.DBArch file: mess.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

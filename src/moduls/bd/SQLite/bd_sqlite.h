@@ -1,5 +1,5 @@
 
-//OpenSCADA system module BD.SQLite file: bd_sqlite.h
+//OpenSCADA module BD.SQLite file: bd_sqlite.h
 /***************************************************************************
  *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

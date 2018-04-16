@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Protocol.ModBus file: modbus_prt.cpp
+//OpenSCADA module Protocol.ModBus file: modbus_prt.cpp
 /***************************************************************************
  *   Copyright (C) 2008-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

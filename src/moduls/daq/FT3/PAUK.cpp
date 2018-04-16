@@ -1,4 +1,4 @@
-//OpenSCADA system module DAQ.FT3 file: PAUK.cpp
+//OpenSCADA module DAQ.FT3 file: PAUK.cpp
 /***************************************************************************
  *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *

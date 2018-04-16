@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.Siemens file: siemens.cpp
+//OpenSCADA module DAQ.Siemens file: siemens.cpp
 /***************************************************************************
  *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

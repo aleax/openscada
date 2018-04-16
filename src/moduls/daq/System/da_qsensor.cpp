@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.System file: da_qsensor.cpp
+//OpenSCADA module DAQ.System file: da_qsensor.cpp
 /***************************************************************************
  *   Copyright (C) 2018 by Roman Savochenko, <rom_as@oscada.org>           *
  *                                                                         *

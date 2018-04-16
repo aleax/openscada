@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.SNMP file: snmp.cpp
+//OpenSCADA module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
  *   Copyright (C) 2006-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Transport.Sockets file: socket.h
+//OpenSCADA module Transport.Sockets file: socket.h
 /***************************************************************************
  *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

@@ -1,5 +1,5 @@
 
-//OpenSCADA system module BD.DBF file: dbf.h
+//OpenSCADA module BD.DBF file: dbf.h
 /***************************************************************************
  *   Copyright (C) 2001-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.DAQGate file: daq_gate.cpp
+//OpenSCADA module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

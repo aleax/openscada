@@ -1,4 +1,4 @@
-//OpenSCADA system module DAQ.Fastwel file: module.cpp
+//OpenSCADA module DAQ.Fastwel file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2014-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *

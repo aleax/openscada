@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.System file: da_hddtemp.cpp
+//OpenSCADA module DAQ.System file: da_hddtemp.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

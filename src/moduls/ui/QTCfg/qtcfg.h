@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.QTCfg file: qtcfg.h
+//OpenSCADA module UI.QTCfg file: qtcfg.h
 /***************************************************************************
  *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

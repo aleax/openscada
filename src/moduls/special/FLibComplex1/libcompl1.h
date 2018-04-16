@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Special.FLibComplex1 file: libcompl1.h
+//OpenSCADA module Special.FLibComplex1 file: libcompl1.h
 /***************************************************************************
  *   Copyright (C) 2005-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.SoundCard file: sound.cpp
+//OpenSCADA module DAQ.SoundCard file: sound.cpp
 /***************************************************************************
  *   Copyright (C) 2008-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

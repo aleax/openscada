@@ -21,8 +21,8 @@ openscada-proj proc|create|remove {ProjName}
     exit 0;
 fi
 
+dPrjUser=${dPrjUser=~/.openscada}
 if test "x$dPrj" = "x"; then dPrj=@oscd_datadir_full@; fi
-if test "x$dPrjUser" = "x"; then dPrjUser=~/.openscada; fi
 if test "x$dSysCfg" = "x"; then dSysCfg=@sysconfdir_full@; fi
 if test "x$dData" = "x"; then dData=@datadir_full@; fi
 

@@ -1,4 +1,4 @@
-//OpenSCADA system module DAQ.BVI file: BVI.cpp
+//OpenSCADA module DAQ.BVI file: BVI.cpp
 /***************************************************************************
  *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *

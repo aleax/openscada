@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Transport.SSL file: modssl.cpp
+//OpenSCADA module Transport.SSL file: modssl.cpp
 /***************************************************************************
  *   Copyright (C) 2008-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

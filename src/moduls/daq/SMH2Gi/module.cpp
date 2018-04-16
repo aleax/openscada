@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.SMH2Gi file: module.cpp
+//OpenSCADA module DAQ.SMH2Gi file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2012-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

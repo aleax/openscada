@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.VCAEngine file: origwidg.h
+//OpenSCADA module UI.VCAEngine file: origwidg.h
 /***************************************************************************
  *   Copyright (C) 2006-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

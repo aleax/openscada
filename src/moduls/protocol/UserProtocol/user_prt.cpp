@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Protocol.UserProtocol file: user_prt.cpp
+//OpenSCADA module Protocol.UserProtocol file: user_prt.cpp
 /***************************************************************************
  *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

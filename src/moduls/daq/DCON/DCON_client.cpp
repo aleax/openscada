@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.DCON file: DCON_client.cpp
+//OpenSCADA module DAQ.DCON file: DCON_client.cpp
 /***************************************************************************
  *   Copyright (C) 2008-2011 by Almaz Karimov                              *
  *		   2008-2018 by Roman Savochenko, rom_as@oscada.org        *

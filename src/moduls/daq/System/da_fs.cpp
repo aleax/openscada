@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.System file: da_fs.cpp
+//OpenSCADA module DAQ.System file: da_fs.cpp
 /***************************************************************************
  *   Copyright (C) 2016 by Roman Savochenko, <rom_as@oscada.org>           *
  *                                                                         *

@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.WebVision file: vca_sess.cpp
+//OpenSCADA module UI.WebVision file: vca_sess.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
  *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
@@ -299,13 +299,14 @@ VCASess &VCAObj::owner( ) const	{ return *(VCASess*)nodePrev(); }
 //*************************************************
 //* VCAFormEl					  *
 //*************************************************
-VCAFormEl::VCAFormEl( const string &iid ) : VCAObj(iid), type(0), btMode(0)
+VCAFormEl::VCAFormEl( const string &iid ) : VCAObj(iid), type(0), btMode(0), mRes(true)
 {
 
 }
 
 void VCAFormEl::getReq( SSess &ses )
 {
+    MtxAlloc res(mRes, true);
     if(type == F_BUTTON && btMode == FBT_SAVE && fCtx.size()) {
 	int off = 0;
 	string cntr = TSYS::strLine(fCtx, 0, &off);
@@ -325,6 +326,7 @@ void VCAFormEl::getReq( SSess &ses )
 
 void VCAFormEl::postReq( SSess &ses )
 {
+    MtxAlloc res(mRes, true);
     if(type == F_BUTTON && btMode == FBT_LOAD && ses.cnt.size()) {
 	string fHead = TSYS::strLine(fCtx, 0);
 	int off = 0;

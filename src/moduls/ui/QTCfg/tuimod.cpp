@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.QTCfg file: tuimod.cpp
+//OpenSCADA module UI.QTCfg file: tuimod.cpp
 /***************************************************************************
  *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
@@ -39,7 +39,7 @@
 #define SUB_TYPE	"Qt"
 #define MOD_VER		"3.5.2"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the Qt-based configurator of the OpenSCADA system.")
+#define DESCRIPTION	_("Provides the Qt-based configurator of the OpenSCADA.")
 #define LICENSE		"GPL2"
 //*************************************************
 

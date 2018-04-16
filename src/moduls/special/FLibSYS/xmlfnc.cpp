@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Special.FLibSYS file: xmlfnc.cpp
+//OpenSCADA module Special.FLibSYS file: xmlfnc.cpp
 /***************************************************************************
  *   Copyright (C) 2009-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

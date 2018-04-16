@@ -1,6 +1,6 @@
 
 //!!! The module name, the file name and the module's license. Change for your need.
-//OpenSCADA system module BD.Tmpl file: module.h
+//OpenSCADA module BD.Tmpl file: module.h
 /***************************************************************************
  *   Copyright (C) 2017 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *

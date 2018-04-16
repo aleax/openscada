@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.Comedi file: module.cpp
+//OpenSCADA module DAQ.Comedi file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2012-2018 by Roman Savochenko                           *
  *   rom_as@oscada.org                                                     *

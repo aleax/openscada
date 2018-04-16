@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.VCAEngine file: vcaFuncs.h
+//OpenSCADA module UI.VCAEngine file: vcaFuncs.h
 /***************************************************************************
  *   Copyright (C) 2009-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

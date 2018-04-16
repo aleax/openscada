@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.WebUser file: web_user.h
+//OpenSCADA module UI.WebUser file: web_user.h
 /***************************************************************************
  *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

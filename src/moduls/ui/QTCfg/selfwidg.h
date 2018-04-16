@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.QTCfg file: selfwidg.h
+//OpenSCADA module UI.QTCfg file: selfwidg.h
 /***************************************************************************
  *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Special.FLibSYS file: varchfnc.cpp
+//OpenSCADA module Special.FLibSYS file: varchfnc.cpp
 /***************************************************************************
  *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

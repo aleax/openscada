@@ -1,5 +1,5 @@
 
-//OpenSCADA system module BD.FireBird file: firebird.h
+//OpenSCADA module BD.FireBird file: firebird.h
 /***************************************************************************
  *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

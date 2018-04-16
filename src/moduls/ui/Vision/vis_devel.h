@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.Vision file: vis_devel.h
+//OpenSCADA module UI.Vision file: vis_devel.h
 /***************************************************************************
  *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.Vision file: vis_run.cpp
+//OpenSCADA module UI.Vision file: vis_run.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

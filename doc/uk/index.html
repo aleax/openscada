@@ -33,7 +33,8 @@
 </div>
 
 <h2><span class="mw-headline" id=".D0.A0.D0.B5.D0.BB.D1.96.D0.B7.D0.B8_OpenSCADA"><span class="mw-headline-number">1</span> Релізи OpenSCADA</span></h2>
-<ul><li> 0.9 Робоча</li>
+<ul><li> 1 Робоча (на підході)</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Release_0.9" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS</a> (<a class="external text" href="http://oscada.org/ua/rozrobka/zavdannja/posts/core/release_of_the_openscada_09_lts/" rel="nofollow noreferrer noopener" target="_blank">на підході</a>)</li>
 <li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Release_0.8.0" title="Special:MyLanguage/Documents/Release 0.8.0">0.8.0 LTS</a> (<a class="external text" href="http://wiki.oscada.org/Works/Tests/release080" rel="nofollow noreferrer noopener" target="_blank">тести</a>)</li>
 <li> <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA070" rel="nofollow noreferrer noopener" target="_blank">0.7.0 LTS</a> (<a class="external text" href="http://wiki.oscada.org/Works/Tests/release070" rel="nofollow noreferrer noopener" target="_blank">тести</a>); <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA071" rel="nofollow noreferrer noopener" target="_blank">0.7.1</a>; <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA072" rel="nofollow noreferrer noopener" target="_blank">0.7.2</a></li>
 <li> <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA060" rel="nofollow noreferrer noopener" target="_blank">0.6.0</a> (<a class="external text" href="http://wiki.oscada.org/Works/Tests/release060" rel="nofollow noreferrer noopener" target="_blank">тести</a>); <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA061" rel="nofollow noreferrer noopener" target="_blank">0.6.1</a>; <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA061" rel="nofollow noreferrer noopener" target="_blank">0.6.2</a>; <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA061" rel="nofollow noreferrer noopener" target="_blank">0.6.3</a>; <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA061" rel="nofollow noreferrer noopener" target="_blank">0.6.4</a></li>
@@ -43,16 +44,16 @@
 <h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.BB.D1.96.D1.82.D0.B8.D0.BA.D0.B0_.28.D0.BF.D0.BE.D1.87.D0.B8.D0.BD.D0.B0.D1.8E.D1.87.D0.B8_.D1.96.D0.B7_0.8.29"><span class="mw-headline-number">1.1</span> Політика (починаючи із 0.8)</span></h3>
 <p>OpenSCADA версії формуються у двох гілках:
 </p>
-<ul><li> "<b>Робоча</b>": розроблювана-робоча версія з нічними збірками для деякого переліку та прямо визначених (підписка на підтримку) Linux дистрибутивів.</li></ul>
-<dl><dd><b>0.9+rNNNN</b>, де "NNNN" — SVN (SubVersion) номер ревізії.</dd></dl>
-<ul><li> "<b>LTS</b>" (Тривала Підтримка): Формальний та публічний випуск останньої "Робочої" версії, на час випуску, із підтримкою безпосередньо до наступної ітерації: "Робоча" -&gt; "LTS" (нульовий рівень оновлення), "Робоча"++.</li></ul>
-<dl><dd><b>0.8.U.S</b>, де:
-<dl><dd>"U" — Номер регулярного оновлення, 2-4 місяці. Після періоду регулярного оновлення із "Робочої" версії до "LTS" будуть перенесені всі виправлення та вдосконалення, також які дещо ламають сумісність API, але не ламають сумісність за функціями та даними, та U++.</dd>
-<dd>"S" (<span style="color: red;">не реалізовано ще</span>) — Номер сервісного оновлення. Для будь-яких гарячих виправлень автоматично або вручну (у спеціальних випадках) буде зібрано версію сервісного оновлення (S++) яку призначено тільки користувачам, підписаним на офіційну підтримку.</dd></dl></dd></dl>
+<ul><li> <b>Робоча</b>: розроблювана-робоча версія з нічними збірками для деякого переліку Linux дистрибутивів, та прямо визначених підпискою на підтримку.</li></ul>
+<dl><dd><b>1+rNNNN</b>, де "NNNN" — SVN (SubVersion) номер ревізії.</dd></dl>
+<ul><li> <b>LTS</b> (Тривала Підтримка): Формальний та публічний випуск останньої "Робочої" версії із підтримкою безпосередньо до наступної ітерації: "Робоча" -&gt; "LTS" (нульовий рівень оновлення), "Робоча"++.</li></ul>
+<dl><dd><b>0.9.U.S</b>, де:
+<dl><dd>"U" — Номер регулярного оновлення — 2-4 місяці. Після періоду регулярного оновлення, із "Робочої" версії до "LTS" будуть перенесені всі виправлення та вдосконалення, також ті, що дещо ламають сумісність API, але не ламають сумісність за функціями та даними, та U++.</dd>
+<dd>"S" (<span style="color: red;">не реалізовано ще</span>) — Номер сервісного оновлення. Для будь-яких гарячих виправлень, автоматично або вручну (у спеціальних випадках), буде зібрано версію сервісного оновлення (S++) яку призначено тільки користувачам, підписаним на офіційну підтримку.</dd></dl></dd></dl>
 <h2><span class="mw-headline" id=".D0.94.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82.D0.B8_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.87.D0.B0"><span class="mw-headline-number">2</span> Документи користувача</span></h2>
 <ul><li> <a href="About.html" title="Special:MyLanguage/About">Про OpenSCADA</a></li>
 <li> <a href="Terms.html" title="Special:MyLanguage/Documents/Terms">Терміни та скорочення</a></li>
-<li> <a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">Швидкий старт</a> (<a class="external text" href="ftp://ftp.oscada.org/OpenSCADA/0.8.0/doc/ru/QuickStart.mkv" rel="nofollow noreferrer noopener" target="_blank">відео-доповнення</a>)</li>
+<li> <a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">Швидкий старт</a></li>
 <li> <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">Посібник по програмі</a></li>
 <li> <a href="DAQ.html" title="Special:MyLanguage/Documents/DAQ">Збір даних в OpenSCADA</a></li>
 <li> <a href="User_API.html" title="Special:MyLanguage/Documents/User API">API користувача OpenSCADA</a></li>

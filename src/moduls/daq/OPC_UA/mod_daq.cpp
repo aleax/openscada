@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.OPC_UA file: mod_daq.cpp
+//OpenSCADA module DAQ.OPC_UA file: mod_daq.cpp
 /***************************************************************************
  *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

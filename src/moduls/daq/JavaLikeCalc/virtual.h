@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.JavaLikeCalc file: virtual.h
+//OpenSCADA module DAQ.JavaLikeCalc file: virtual.h
 /***************************************************************************
  *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

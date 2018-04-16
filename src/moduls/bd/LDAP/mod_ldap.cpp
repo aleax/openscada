@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DB.ODBC file: mod_ldap.cpp
+//OpenSCADA module DB.ODBC file: mod_ldap.cpp
 /***************************************************************************
  *   Copyright (C) 2017 by Roman Savochenko, <rom_as@oscada.org>           *
  *                                                                         *

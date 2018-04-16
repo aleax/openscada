@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Special.FLibSYS file: timefnc.h
+//OpenSCADA module Special.FLibSYS file: timefnc.h
 /***************************************************************************
  *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

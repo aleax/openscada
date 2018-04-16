@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Special.FLibMath file: stdmath.h
+//OpenSCADA module Special.FLibMath file: stdmath.h
 /***************************************************************************
  *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

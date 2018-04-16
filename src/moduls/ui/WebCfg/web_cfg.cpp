@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.WebCfg file: web_cfg.cpp
+//OpenSCADA module UI.WebCfg file: web_cfg.cpp
 /***************************************************************************
  *   Copyright (C) 2004-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
@@ -37,7 +37,7 @@
 #define SUB_TYPE	"WWW"
 #define MOD_VER		"1.7.8"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA system.")
+#define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -1187,7 +1187,7 @@ string TWEB::modInfo( const string &iname )
     if(lang.size()) {
 	if(name == "Name")	return _("System configurator (WEB)");
 	if(name == "Author")	return _("Roman Savochenko");
-	if(name == "Description") return _("Provides the WEB-based configurator of the OpenSCADA system.");
+	if(name == "Description") return _("Provides the WEB-based configurator of the OpenSCADA.");
     }
 
     return TModule::modInfo(name);

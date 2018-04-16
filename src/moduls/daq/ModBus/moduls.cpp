@@ -1,5 +1,5 @@
 
-//OpenSCADA system modules ModBus file: moduls.cpp
+//OpenSCADA modules ModBus file: moduls.cpp
 /***************************************************************************
  *   Copyright (C) 2008-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

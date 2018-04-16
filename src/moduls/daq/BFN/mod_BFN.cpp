@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.BFN file: mod_BFN.cpp
+//OpenSCADA module DAQ.BFN file: mod_BFN.cpp
 /***************************************************************************
  *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

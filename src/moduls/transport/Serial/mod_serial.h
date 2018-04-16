@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Transport.Serial file: mod_serial.h
+//OpenSCADA module Transport.Serial file: mod_serial.h
 /***************************************************************************
  *   Copyright (C) 2009-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

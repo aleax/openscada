@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.BlockCalc file: virtual.cpp
+//OpenSCADA module DAQ.BlockCalc file: virtual.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

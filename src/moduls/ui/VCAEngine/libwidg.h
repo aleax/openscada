@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.VCAEngine file: libwidg.h
+//OpenSCADA module UI.VCAEngine file: libwidg.h
 /***************************************************************************
  *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

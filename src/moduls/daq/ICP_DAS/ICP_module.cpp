@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.ICP_DAS file: ICP_module.cpp
+//OpenSCADA module DAQ.ICP_DAS file: ICP_module.cpp
 /***************************************************************************
  *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

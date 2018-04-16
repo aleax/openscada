@@ -1,4 +1,4 @@
-//OpenSCADA system module DAQ.BTE file: BTE.cpp
+//OpenSCADA module DAQ.BTE file: BTE.cpp
 /***************************************************************************
  *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *

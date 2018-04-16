@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Special.FLibMath file: statfunc.h
+//OpenSCADA module Special.FLibMath file: statfunc.h
 /***************************************************************************
  *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

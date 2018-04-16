@@ -1,6 +1,6 @@
 
 //!!! The module name, the file name and the module's license. Change for your need.
-//OpenSCADA system module Protocol.Tmpl file: module.cpp
+//OpenSCADA module Protocol.Tmpl file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2017 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
@@ -114,12 +114,12 @@ void TProt::load_( )
     // Load parameters from command line
     if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
-    //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA system DB or from main config-file
+    //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA DB or from main config-file
 }
 
 void TProt::save_( )
 {
-    //!!! Save addition your module specific data. For example, make saving addition module's parameters to OpenSCADA system DB
+    //!!! Save addition your module specific data. For example, make saving addition module's parameters to OpenSCADA DB
 }
 
 //!!! Main subsystem API function for self modules input protocol object creation. Change only your class names.

@@ -1,5 +1,5 @@
 
-//OpenSCADA system module DAQ.AMRDevs file: da_Kontar.cpp
+//OpenSCADA module DAQ.AMRDevs file: da_Kontar.cpp
 /***************************************************************************
  *   Copyright (C) 2014,2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

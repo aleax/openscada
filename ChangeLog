@@ -1,3 +1,9 @@
+2018-04-16 Roman (stable)
+- FIX:data/openscada-proj: "dPrjUser" fixed for set to "~/.openscada" at the variable missing.
+- !:SYS: "OpenSCADA system" in headers and sources fully renamed to "OpenSCADA".
+- FIX:UI.WebVision: Primitive "FormEl" processing into the server side moved into a critical section.
+
+
 2018-04-10 Roman (stable)
 - FIX:Archive.FSArch: Third argument of the function open() with the option O_CREAT.
 - !!!!:DOC: "Quick Start" revision and it translation to Ukrainian finished at last.
@@ -904,7 +910,7 @@
     !!!: External calls to the WEB submodules expanded by functions HTTP_GET(), HTTP_POST() with an argument TProtocolIn *iprt,
 	but the old calls HttpGet(), HttpPost() also continued to check and support.
     Current folder force added to the template's resources checking.
-- !!!!:UI.{WebUser,WebVision}: Expanded to using the unified service interface from Protocol.HTTP by pgCreator().
+- !!!!:UI.{WebUser,WebVision}: Expanded for using the unified service interface from Protocol.HTTP by pgCreator().
 - !:UI.WebUser: Semantics of the page's function expanded by two objects' arguments "This object" and "Protocol's object".
 - !!:UI.WebVision: Font's behaviour was expanded to support for text decorations "underline" and "line-through".
     The primitive "Text" representing for rotated texts moved to use CSS property "transform: rotate({X}deg)".

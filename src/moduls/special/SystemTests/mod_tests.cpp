@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Special.SystemTests file: test_kernel.cpp
+//OpenSCADA module Special.SystemTests file: test_kernel.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

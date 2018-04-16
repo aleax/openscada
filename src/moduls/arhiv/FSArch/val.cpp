@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Archive.FSArch file: val.cpp
+//OpenSCADA module Archive.FSArch file: val.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

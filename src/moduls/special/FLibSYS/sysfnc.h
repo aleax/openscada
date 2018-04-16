@@ -1,5 +1,5 @@
 
-//OpenSCADA system module Special.FLibSYS file: sysfnc.h
+//OpenSCADA module Special.FLibSYS file: sysfnc.h
 /***************************************************************************
  *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

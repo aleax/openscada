@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.VISION file: vis_shape_elfig.h
+//OpenSCADA module UI.VISION file: vis_shape_elfig.h
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Yashina Kseniya <ksu@oscada.org>
  *		   2007-2012 by Lysenko Maxim <mlisenko@oscada.org>

@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.WebVision file: web_vision.h
+//OpenSCADA module UI.WebVision file: web_vision.h
 /***************************************************************************
  *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

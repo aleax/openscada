@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: main.cpp
+//OpenSCADA file: main.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *                                                     *
  *                                                                         *
@@ -93,7 +93,7 @@ int main( int argc, char *argv[], char *envp[] )
 	}
     } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
-    //Free OpenSCADA system's root object
+    //Free OpenSCADA root object
     if(SYS) delete SYS;
 
     printf("OpenSCADA successfully exited with the return code %d.\n", rez);

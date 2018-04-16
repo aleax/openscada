@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.VCAEngine file: types.h
+//OpenSCADA module UI.VCAEngine file: types.h
 /***************************************************************************
  *   Copyright (C) 2013-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *

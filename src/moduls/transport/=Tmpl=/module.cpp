@@ -1,6 +1,6 @@
 
 //!!! The module name, the file name and the module's license. Change for your need.
-//OpenSCADA system module Transport.Tmpl file: module.cpp
+//OpenSCADA module Transport.Tmpl file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2012 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
@@ -115,7 +115,7 @@ void TTr::load_( )
     // Load parameters from command line
     if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
-    //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA system DB or from main config-file
+    //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA DB or from main config-file
 }
 
 //!!! Main subsystem API functions for self modules input and output transport objects creation. Change only your class names.

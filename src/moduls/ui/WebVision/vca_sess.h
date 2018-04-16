@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.WebVision file: vca_sess.h
+//OpenSCADA module UI.WebVision file: vca_sess.h
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
  *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
@@ -108,6 +108,8 @@ class VCAFormEl : public VCAObj
 	//Attributes
 	unsigned char	type, btMode;
 	string		fCtx;
+
+	ResMtx	mRes;
 };
 
 //*************************************************
@@ -152,7 +154,6 @@ class InundationItem
 	vector<int>	number_point;
 	int		P_color, index_color;
 	string		imgFill;
-
 };
 
 class VCAElFigure : public VCAObj
