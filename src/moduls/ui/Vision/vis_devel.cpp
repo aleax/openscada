@@ -91,7 +91,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actQuit->setWhatsThis(_("The button for complete quit the program"));
     actQuit->setStatusTip(_("Press for complete quit the program."));
     connect(actQuit, SIGNAL(triggered()), this, SLOT(quitSt()));
-    //  About "System info"
+    //  About "Program info"
     if(!ico_t.load(TUIS::icoGet("help",NULL,true).c_str())) ico_t.load(":/images/help.png");
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
     actAbout->setToolTip(_("Program and OpenSCADA information"));
@@ -128,9 +128,9 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
     QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
     actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
-    actWhatIs->setToolTip(_("The button for requesting the information about GUI elements"));
-    actWhatIs->setWhatsThis(_("Requesting the information about GUI elements"));
-    actWhatIs->setStatusTip(_("Press for requesting the information about GUI elements."));
+    actWhatIs->setToolTip(_("Requesting about GUI elements"));
+    actWhatIs->setWhatsThis(_("The button for requesting information about the user interface elements"));
+    actWhatIs->setStatusTip(_("Press for requesting information about the user interface elements."));
     connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
     // Page, project, widget and this library actions

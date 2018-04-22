@@ -3,7 +3,7 @@
 
 You can find the documentation for the program in the Project Knowledge Base online at http://oscada.org/wiki and install offline
 with the package "openscada-doc-{lng}", which usually contains:
-  Release_*.pdf - announce of the program version.
+  Release_*.html - announce of the program version.
   Terms.html - terms, definitions and abbreviations.
   FAQ.html - frequently asked questions about the program.
   About.html - information about the program as a whole.

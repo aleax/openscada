@@ -753,7 +753,7 @@ void LibProjProp::closeEvent( QCloseEvent *ce )
     bool notApplyPresent = false;
     for(int i_it = 0; !notApplyPresent && i_it < lnEdWs.size(); ++i_it) notApplyPresent = lnEdWs[i_it]->isEdited();
     for(int i_it = 0; !notApplyPresent && i_it < txtEdWs.size(); ++i_it) notApplyPresent = txtEdWs[i_it]->isEdited();
-    if(notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before exiting?"),
+    if(notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before the closing?"),
 	    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
     {
 	for(int i_it = 0; i_it < lnEdWs.size(); ++i_it) if(lnEdWs[i_it]->isEdited()) isModify(lnEdWs[i_it]);
@@ -1559,7 +1559,7 @@ void VisItProp::closeEvent( QCloseEvent *ce )
     for(int i_it = 0; !notApplyPresent && i_it < lnEdWs.size(); ++i_it) notApplyPresent = lnEdWs[i_it]->isEdited();
     for(int i_it = 0; !notApplyPresent && i_it < txtEdWs.size(); ++i_it) notApplyPresent = txtEdWs[i_it]->isEdited();
 
-    if(notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before exiting?"),
+    if(notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before the closing?"),
 	    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
     {
 	for(int i_it = 0; i_it < lnEdWs.size(); ++i_it) if(lnEdWs[i_it]->isEdited()) isModify(lnEdWs[i_it]);

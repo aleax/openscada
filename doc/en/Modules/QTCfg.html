@@ -16,7 +16,7 @@
 <tr>
 <td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
 </td>
-<td style="padding-left:5px;"> The translation checking and actualizing
+<td style="padding-left:5px;"> The translation checking and actualizing. Source texts have been already fully revised.
 </td></tr></table>
 </div>
 <table class="wikitable">
@@ -36,8 +36,9 @@
 
 <tr>
 <td> <a href="../Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> </td>
-<td> The program configurator (Qt) </td>
-<td> 3.3 </td>
+<td> Program configurator (Qt)
+</td>
+<td> 4.0 </td>
 <td> GPL2 </td>
 <td> ui_QTCfg.so </td>
 <td> en,uk,ru,de </td>
@@ -133,11 +134,12 @@
 <h2><span class="mw-headline" id="Configuration"><span class="mw-headline-number">1</span> Configuration</span></h2>
 <p>To adjust your own behavior in the not obvious situations module provides the ability to customize individual settings through the management interface of the OpenSCADA (Fig. 2). These parameters are:
 </p>
-<ul><li> Connection check timeouts in seconds '{fail}:{good}' — sometime (for SSH tunnels) the checking timeout at a good connection are useful to decrease to 30 seconds in point of the connection holding.</li>
-<li> Initial path to the configurator — allows to determine what local page to open when you start the configurator.</li>
+<ul><li> Timeouts of checking connections '{fail}:{good}' — sometime (for SSH tunnels) the checking timeout at a good connection are useful to decrease to 30 seconds in point of the connection holding.</li>
+<li> Initial path of the configurator — allows to determine what local page to open when you start the configurator.</li>
 <li> Initial user of the configurator — points on behalf of the which user to open configuration without requiring a password.</li>
+<li> ToolTip limit in chars to prevent of big emerging help windows, by default 150. Set zero for disable.</li>
 <li> The link to the configuration page of the external OpenSCADA stations used to enable the remote configuration.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:820px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg.png"><img class="thumbimage" height="518" src="../files/QTCfg.png" width="818" /></a>  <div class="thumbcaption">Fig.2. Configuration page of the configurator.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:860px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg.png"><img class="thumbimage" height="504" src="../files/QTCfg.png" width="858" /></a>  <div class="thumbcaption">Fig.2. Configuration page of the configurator.</div></div></div></div>
 <h2><span class="mw-headline" id="Basic_elements"><span class="mw-headline-number">2</span> Basic elements</span></h2>
 <p>Into the number of the basic elements are included: information elements, the field to input values, the elements of combo box, flags, text fields. In the case of absence of an element name, the basic element connects to the previous basic element. Examples of basic elements with the connection is shown in Figure 3.
 </p><p>For input elements that do not mean instant change and may be edited for a long time before a final conclusion, a confirmation mechanism is foretold. This mechanism eliminates the delay when editing, especially in the case of the configuration of remote stations, and to make changes on the confirmation. To elements of input with confirmation include: input line fields of text or numeric values and text fields. Confirmation is made by pressing the button that appears next to the input field after the start of editing.

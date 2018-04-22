@@ -16,7 +16,7 @@
 <tr>
 <td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../../en/files/Constr.png" width="32" /></a>
 </td>
-<td style="padding-left:5px;"> The translation checking and actualizing
+<td style="padding-left:5px;"> The translation checking and actualizing. Source texts have been already fully revised.
 </td></tr></table>
 </div>
 <table class="wikitable">
@@ -36,8 +36,9 @@
 
 <tr>
 <td> <a href="../Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> </td>
-<td> Програмний конфігуратор (Qt) </td>
-<td> 3.3 </td>
+<td> Конфігуратор програми (Qt)
+</td>
+<td> 4.0 </td>
 <td> GPL2 </td>
 <td> ui_QTCfg.so </td>
 <td> en,uk,ru,de </td>
@@ -136,8 +137,9 @@
 <ul><li> Таймаути перевірки підключення, у секундах, '{немає}:{є}' — інколи (для тунелю SSH) корисно зменшити таймаут перевірки на наявність підключення до 30 секунд з метою утримання підключення.</li>
 <li> Початковий шлях конфігуратору — дозволяє визначити, яку локальну сторінку відкривати при запуску конфігуратору.</li>
 <li> Початковий користувач конфігуратору — вказує, від ім'я якого користувача відкривати конфігуратор без запиту пароля.</li>
+<li> Обмеження ToolTip у символах для запобігання спливання великих вікон допомоги, по замовченню 150. Встановити нуль для вимкнення.</li>
 <li> Посилання на сторінку конфігурації переліку зовнішніх OpenSCADA станцій, яке використовується для надання можливості віддаленої конфігурації.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:928px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_uk.png"><img class="thumbimage" height="529" src="../files/QTCfg_uk.png" width="926" /></a>  <div class="thumbcaption">Рис.2. Сторінка конфігурації самого конфігуратору.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:920px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_uk.png"><img class="thumbimage" height="504" src="../files/QTCfg_uk.png" width="918" /></a>  <div class="thumbcaption">Рис.2. Сторінка конфігурації самого конфігуратору.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.96_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B8"><span class="mw-headline-number">2</span> Базові елементи</span></h2>
 <p>До числа базових елементів входять: інформаційні елементи, поля вводу значень, елементи обрання з переліку, прапорці-ознаки, текстові поля. У випадку відсутності ім'я елементу базовий елемент приєднується до попереднього базового елементу. Приклад групи базових елементів з приєднанням наведено на рисунку 3.
 </p><p>Для елементів вводу, які не передбачають миттєвих змін та можуть тривалий час редагуватися перед остаточним завершенням, передбачено механізм підтвердження. Цей механізм дозволяє виключити затримки при редагуванні, особливо у випадках конфігурації віддалених станцій, та вносити зміни за підтвердженням. До елементів вводу з підтвердженням відносяться: поля вводу рядків тексту або чисельних значень та текстові поля. Підтвердження здійснюється натиском кнопки, яка з'являється поряд з полем вводу після початку редагування.

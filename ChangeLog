@@ -1,3 +1,19 @@
+2018-04-22 Roman (stable)
+- !!!!:DOC: The document "Release_0.9" has formed and the document "DAQ.GPIO" added.
+- !!:SYS: DAQ.BCM2835 renamed to DAQ.GPIO and expanded for different boards support.
+- SYS: The DB selection item "*.*" removed for the main page.
+- DAQ: create() and destroy() of TTypeParam moved from constructor and destructor of TParamContr to postEnable() and preDisable() respectively,
+    to prevent access to unformed object of TParamContr.
+- !!!!:UI.QTCfg: Fully revised for the original text messages.
+    Representing for help unified for "StatusTip", "ToolTip" and "WhatsThis" in one function "setHelp()".
+    "ToolTip" limit set for control by a new configuration parameter "ToolTipLim", which is 150 by default.
+    "ToolTip" expanded for HTML labels.
+- FIX:UI.QTStarter: Fixed for original Qt-messages translation into the main-threading mode.
+- !!!:FIX:UI.VCAEngine: Prevented from saving not enabled yet items at "enableByNeed".
+- !!:FIX:UI.Vision: Scaling the main runtime window made absolute from the window original size.
+    Some original messages yet improved, sync with QTCfg and the translation to German advanced.
+
+
 2018-04-16 Roman (stable)
 - FIX:data/openscada-proj: "dPrjUser" fixed for set to "~/.openscada" at the variable missing.
 - !:SYS: "OpenSCADA system" in headers and sources fully renamed to "OpenSCADA".

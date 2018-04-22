@@ -690,6 +690,8 @@ void LWidget::loadIO( )
 
 void LWidget::save_( )
 {
+    if(enableByNeed)	return;
+
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl();
 

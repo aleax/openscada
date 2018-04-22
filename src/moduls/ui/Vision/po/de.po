@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-08 20:29+0300\n"
+"POT-Creation-Date: 2018-04-21 17:05+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -226,14 +226,16 @@ msgstr "Betätigen um das Handbuch '%1' zu erhalten."
 msgid "What's &This"
 msgstr "Was ist &das"
 
-msgid "The button for requesting the information about GUI elements"
-msgstr "Schaltfläche zum Anfordern von Informationen zu GUI-Elementen"
+msgid "Requesting about GUI elements"
+msgstr "Anfordern von GUI-Elementen"
 
-msgid "Requesting the information about GUI elements"
-msgstr "Anfordern von Informationen zu GUI-Elementen"
+msgid "The button for requesting information about the user interface elements"
+msgstr "Schaltfläche zum Anfordern von Informationen zu den Elementen der "
+"Benutzeroberfläche"
 
-msgid "Press for requesting the information about GUI elements."
-msgstr "Betätigen um Informationen zu GUI-Elementen anzufordern."
+msgid "Press for requesting information about the user interface elements."
+msgstr "Betätigen zum Anfordern von Informationen zu den Elementen der "
+"Benutzeroberfläche."
 
 msgid "Load from the DB"
 msgstr "Laden von der DB"
@@ -296,7 +298,9 @@ msgid "Add a visual item"
 msgstr "Fügen Sie ein visuelles Element hinzu"
 
 msgid "Adding a visual item to the library, container widget, project or page"
-msgstr "Hinzufügen eines visuellen Elements zur Bibliothek, zum Container-Widget, zum Projekt oder zur Seite"
+msgstr ""
+"Hinzufügen eines visuellen Elements zur Bibliothek, zum Container-Widget, "
+"zum Projekt oder zur Seite"
 
 msgid ""
 "The button for adding a visual item to the library, container widget, "
@@ -317,17 +321,23 @@ msgstr "Löschen Sie das visuelle Element"
 
 msgid ""
 "Deleting the visual item from the library, container widget, project or page"
-msgstr "Löschen des visuellen Elements aus der Bibliothek, dem Container-Widget, dem Projekt oder der Seite"
+msgstr ""
+"Löschen des visuellen Elements aus der Bibliothek, dem Container-Widget, dem "
+"Projekt oder der Seite"
 
 msgid ""
 "The button for deleting the visual item from the library, container widget, "
 "project or page"
-msgstr "Schaltfläche zum Löschen des visuellen Elements aus der Bibliothek, dem Container-Widget, dem Projekt oder der Seite"
+msgstr ""
+"Schaltfläche zum Löschen des visuellen Elements aus der Bibliothek, dem "
+"Container-Widget, dem Projekt oder der Seite"
 
 msgid ""
 "Press for deleting the visual item from the library, container widget, "
 "project or page."
-msgstr "Betätigen um das visuelle Objekt aus der Bibliothek, dem Container-Widget, dem Projekt oder der Seite zu löschen."
+msgstr ""
+"Betätigen um das visuelle Objekt aus der Bibliothek, dem Container-Widget, "
+"dem Projekt oder der Seite zu löschen."
 
 msgid "Properties of the visual item"
 msgstr "Eigenschaften des visuellen Elements"
@@ -344,100 +354,75 @@ msgstr "Betätigen um die Eigenschaften des visuellen Elements abzurufen."
 msgid "Edit the visual item"
 msgstr "Bearbeiten Sie das visuelle Element"
 
-#, fuzzy
 msgid "Going to editing the visual item"
-msgstr "Schaltfläche für die Eigenschaften des Elements"
+msgstr "Gehen Sie zum Bearbeiten des visuellen Elements"
 
-#, fuzzy
 msgid "The button for going to editing the visual item"
-msgstr "Schaltfläche zum Bearbeiten des Elements"
+msgstr "Schaltfläche zum Bearbeiten des visuellen Elements"
 
-#, fuzzy
 msgid "Press for going to editing the visual item."
-msgstr "Betätigen für die Eigenschaften des Elements."
+msgstr "Betätigen zum Bearbeiten des visuellen Elements."
 
-#, fuzzy
 msgid "Clear the visual item changes"
-msgstr "Machen Sie visuelle Element Änderungen rückgängig:"
+msgstr "Machen Sie das visuelle Element ändert"
 
-#, fuzzy
 msgid "Clearing the visual items changes"
-msgstr "Machen Sie visuelle Element Änderungen rückgängig:"
+msgstr "Machen Sie das visuelle Element ändert"
 
-#, fuzzy
 msgid "The button for clearing the visual items changes"
-msgstr "Schaltfläche zum machen Sie visuelle Element Änderungen rückgängig"
+msgstr "Schaltfläche zum Löschen der visuellen Elemente ändert sich"
 
-#, fuzzy
 msgid "Press for clearing the visual items changes."
-msgstr "Betätigen zum Zurücksetzen der Änderungen."
+msgstr "Betätigen zum Löschen der visuellen Elemente ändert sich."
 
-#, fuzzy
 msgid "Lower down the visual item changes"
-msgstr "Zum Zurücksetzen der Änderungen"
+msgstr "Senken Sie die visuellen Elementänderungen"
 
-#, fuzzy
 msgid "Lowering down the visual item changes to the parent"
-msgstr "Geht visuelle Element geändert legte auf das Mutter"
+msgstr "Absenken der visuellen Element Änderungen an den übergeordneten"
 
-#, fuzzy
 msgid "The button for lowering down the visual item changes to the parent"
 msgstr ""
-"Die Schaltfläche für den Gang zum visuellen Element geändert legte auf das "
-"Mutter"
+"Schaltfläche zum Absenken der visuellen Elements Änderungen an den übergeordneten unten"
 
-#, fuzzy
 msgid "Press for lowering down the visual item changes to the parent."
-msgstr ""
-"Drücken Sie, um visuelle Änderungen gehen Artikel legte auf das Mutter."
+msgstr "Betätigen zum Absenken der visuellen Elements Änderungen an den übergeordneten unten."
 
-#, fuzzy
 msgid "Undo the visual item changes"
-msgstr "Zum Zurücksetzen der Änderungen"
+msgstr "Machen Sie die Änderungen an den visuellen Elementen rückgängig"
 
-#, fuzzy
 msgid "Undoing the visual item changes:"
-msgstr "Machen Sie visuelle Element Änderungen rückgängig:"
+msgstr "Rückgängigmachen der visuellen Elementänderungen:"
 
-#, fuzzy
 msgid "The button for undoing the visual item changes"
-msgstr "Schaltfläche zum Zurücksetzen der Änderungen"
+msgstr "Schaltfläche zum Rückgängigmachen des visuellen Elements ändert sich"
 
-#, fuzzy
 msgid "Press for undoing the visual item changes."
-msgstr "Betätigen zum Zurücksetzen der Änderungen."
+msgstr "Betätigen zum Rückgängigmachen des visuellen Elements ändert sich."
 
-#, fuzzy
 msgid "Redo the visual item changes"
-msgstr "Zum Zurücksetzen der Änderungen"
+msgstr "Wiederholen Sie die visuelle Element ändert"
 
-#, fuzzy
 msgid "Redoing the visual item changes:"
-msgstr "Machen Sie visuelle Element Änderungen rückgängig:"
+msgstr "Redoing die visuellen Artikel Änderungen:"
 
-#, fuzzy
 msgid "The button for redoing the visual item changes"
-msgstr "Schaltfläche zum Zurücksetzen der Änderungen"
+msgstr "Schaltfläche zum Redoing die visuellen Artikel Änderungen"
 
-#, fuzzy
 msgid "Press for redoing the visual item changes."
-msgstr "Betätigen zum Zurücksetzen der Änderungen."
+msgstr "Betätigen zum Redoing die visuellen Artikel Änderungen."
 
-#, fuzzy
 msgid "Copy the visual item"
-msgstr "Element löschen"
+msgstr "Kopieren Sie das visuelle Element"
 
-#, fuzzy
 msgid "Copying the visual item"
-msgstr "Element löschen"
+msgstr "Kopieren des visuellen Elements"
 
-#, fuzzy
 msgid "The button for copying the visual item"
-msgstr "Schaltfläche zum Bearbeiten des Elements"
+msgstr "Schaltfläche zum Kopieren des visuellen Elements"
 
-#, fuzzy
 msgid "Press for copying the visual item."
-msgstr "Betätigen für die Eigenschaften des Elements."
+msgstr "Betätigen zum Kopieren des visuellen Elements."
 
 #, fuzzy
 msgid "Cut the visual item"
@@ -1237,7 +1222,7 @@ msgstr "Speichern des Moduls."
 #, fuzzy
 msgid ""
 "Some changes were made!\n"
-"Save the changes to the DB before exiting?"
+"Save the changes to the DB before the closing?"
 msgstr ""
 "Einige visuelle Elemente verändert.\n"
 "Speichern Sie die Änderungen DB an der Ausfahrt?"
@@ -1860,6 +1845,15 @@ msgstr "Betätigen um Projekt '%1' Handbuch."
 
 msgid "'%1' manual"
 msgstr "'%1' Handbuch"
+
+msgid "The button for requesting the information about GUI elements"
+msgstr "Schaltfläche zum Anfordern von Informationen zu GUI-Elementen"
+
+msgid "Requesting the information about GUI elements"
+msgstr "Anfordern von Informationen zu GUI-Elementen"
+
+msgid "Press for requesting the information about GUI elements."
+msgstr "Betätigen um Informationen zu GUI-Elementen anzufordern."
 
 msgid "Alarm level"
 msgstr "Störungsstufe"

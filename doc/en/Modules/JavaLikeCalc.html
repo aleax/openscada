@@ -483,7 +483,7 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 </td></tr></table>
 <p><b>24.04.2016:</b><br />
 <i>Reason:</i> Estimate performance of accessing to the low level IO lines on Raspberry Pi GPIO in different ways of the JavaLikeCalc language of OpenSCADA.<br />
-<i>Conditions:</i> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Raspberry_Pi" title="Special:MyLanguage/Using/Raspberry Pi">Raspberry Pi 3</a>, GPIO40, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/BCM2835" title="Special:MyLanguage/Modules/BCM2835">DAQ.BCM2835</a> (based on the library <a class="external text" href="http://www.airspayce.com/mikem/bcm2835" rel="nofollow noreferrer noopener" target="_blank">bcm2835</a>)
+<i>Conditions:</i> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Raspberry_Pi" title="Special:MyLanguage/Using/Raspberry Pi">Raspberry Pi 3</a>, GPIO40, <a href="../Modules/GPIO.html" title="Special:MyLanguage/Modules/GPIO">DAQ.GPIO</a> (based on the library <a class="external text" href="http://www.airspayce.com/mikem/bcm2835" rel="nofollow noreferrer noopener" target="_blank">bcm2835</a>)
 </p>
 <table class="wikitable">
 
@@ -517,46 +517,46 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <td colspan="2"> <i>Get a level of the GPIO pin</i>
 </td></tr>
 <tr>
-<td> From an attribute <b>res = BCM2835.pi2.pi2.gpio17;</b> </td>
+<td> From an attribute <b>res = GPIO.io.pi.gpio17;</b> </td>
 <td> 5.4
 </td></tr>
 <tr>
-<td> By the static accessing function <b>res = DAQ.BCM2835.pi2.pi2.fnc_get(17);</b> </td>
+<td> By the static accessing function <b>res = DAQ.GPIO.io.pi.fnc_get(17);</b> </td>
 <td> 1.6
 </td></tr>
 <tr>
-<td> By the static accessing function with the link preparation <b>function get = "DAQ.BCM2835.pi2.pi2.fnc_get"; for(i = 0; i &lt; 10000; i++) res = get(17);</b> </td>
+<td> By the static accessing function with the link preparation <b>function get = "DAQ.GPIO.io.pi.fnc_get"; for(i = 0; i &lt; 10000; i++) res = get(17);</b> </td>
 <td> 1.7
 </td></tr>
 <tr>
-<td> By the dynamic accessing function <b>res = SYS.DAQ.BCM2835.pi2.pi2.fnc_get.call(17);</b> </td>
+<td> By the dynamic accessing function <b>res = SYS.DAQ.GPIO.io.pi.fnc_get.call(17);</b> </td>
 <td> 80
 </td></tr>
 <tr>
-<td> By the dynamic accessing function with the end object preparation <b>tO = SYS.DAQ.BCM2835.pi2.pi2.fnc_get; for(i = 0; i &lt; 1000; i++) res = tO.call(17);</b> </td>
+<td> By the dynamic accessing function with the end object preparation <b>tO = SYS.DAQ.GPIO.io.pi.fnc_get; for(i = 0; i &lt; 1000; i++) res = tO.call(17);</b> </td>
 <td> 14.3
 </td></tr>
 <tr>
 <td colspan="2"> <i>Put a level to the GPIO pin</i>
 </td></tr>
 <tr>
-<td> To an attribute <b>BCM2835.pi2.pi2.gpio18 = true;</b> </td>
+<td> To an attribute <b>GPIO.io.pi.gpio18 = true;</b> </td>
 <td> 2.1
 </td></tr>
 <tr>
-<td> By the static accessing function <b>DAQ.BCM2835.pi2.pi2.fnc_put(18, true);</b> </td>
+<td> By the static accessing function <b>DAQ.GPIO.io.pi.fnc_put(18, true);</b> </td>
 <td> 1.4
 </td></tr>
 <tr>
-<td> By the static accessing function with the link preparation <b>function put = "DAQ.BCM2835.pi2.pi2.fnc_put"; for(i = 0; i &lt; 10000; i++) put(17, false);</b> </td>
+<td> By the static accessing function with the link preparation <b>function put = "DAQ.GPIO.io.pi.fnc_put"; for(i = 0; i &lt; 10000; i++) put(17, false);</b> </td>
 <td> 1.5
 </td></tr>
 <tr>
-<td> By the dynamic accessing function <b>SYS.DAQ.BCM2835.pi2.pi2.fnc_put.call(18, true);</b> </td>
+<td> By the dynamic accessing function <b>SYS.DAQ.GPIO.io.pi.fnc_put.call(18, true);</b> </td>
 <td> 79
 </td></tr>
 <tr>
-<td> By the dynamic accessing function with the end object preparation <b>tO = SYS.DAQ.BCM2835.pi2.pi2.fnc_put; for(i = 0; i &lt; 1000; i++) tO.call(18, true);</b> </td>
+<td> By the dynamic accessing function with the end object preparation <b>tO = SYS.DAQ.GPIO.io.pi.fnc_put; for(i = 0; i &lt; 1000; i++) tO.call(18, true);</b> </td>
 <td> 14.3
 </td></tr></table>
 <h2><span class="mw-headline" id="Links"><span class="mw-headline-number">8</span> Links</span></h2>

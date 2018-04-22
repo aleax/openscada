@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.BCM2835 translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.BCM2835 package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2016.
+# Roman Savochenko <rom_as@oscada.org>, 2016-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BCM2835\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-12 21:15+0200\n"
+"POT-Creation-Date: 2018-04-22 20:48+0300\n"
 "PO-Revision-Date: 2016-12-09 10:20+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -15,17 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Roman Savochenko"
-msgstr "Роман Савоченко"
-
-msgid "Broadcom BCM 2835 GPIO. Mostly for and used in Raspberry Pi."
-msgstr "Broadcom BCM 2835 GPIO. В основном для и используется в Raspberry Pi."
-
-msgid "Parameters table"
-msgstr "Таблица параметров"
-
-msgid "Standard"
-msgstr "Стандарт"
+msgid "BCM2835 and newer"
+msgstr "BCM2835 и новее"
 
 msgid "Module addition parameters"
 msgstr "Дополнительные параметры модуля"
@@ -37,11 +28,20 @@ msgstr ""
 "Ошибка инициализации библиотеки bcm2835 или через отсутствие bcm2835 или "
 "доступа к нему."
 
-msgid "1:Parameter disabled."
-msgstr "1:Параметр отключен."
+msgid "BCM2835 GPIO is already used."
+msgstr "BCM2835 GPIO уже используется."
 
-msgid "2:Acquisition/access is stopped."
-msgstr "2:Сбор/доступ остановлен."
+msgid "SUNXI (ALLWINNER H2 and newer)"
+msgstr "SUNXI (ALLWINNER H2 и новее)"
+
+msgid "SUNXI GPIO is already used."
+msgstr "SUNXI GPIO уже используется."
+
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+msgid "Broadcom BCM 2835 GPIO, mostly for and used in Raspberry Pi. ..."
+msgstr "Broadcom BCM 2835 GPIO, в основном для и используется в Raspberry Pi. ..."
 
 msgid "Function"
 msgstr "Функция"
@@ -52,9 +52,8 @@ msgstr "Функции"
 msgid "Configuration"
 msgstr "Конфигурация"
 
-#, c-format
-msgid "GPIO %d output and reverse"
-msgstr "Выход и инверсия GPIO %d"
+msgid "GPIO '%s' output and reverse"
+msgstr "Выход и инверсия GPIO '%s'"
 
 msgid "Disabled;Input;Input (pull up);Input (pull down);Output"
 msgstr "Отключен;Вход;Вход (pull up);Вход (pull down);Выход"

@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/GPIO - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/GPIO</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FGPIO&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/GPIO" title="Modules/GPIO">Modules/GPIO</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/GPIO" title="Modules/GPIO (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/GPIO/ru" title="Модули/GPIO (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../../en/files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/GPIO.html" title="Special:MyLanguage/Modules/GPIO">GPIO</a> </td>
+<td> GPIO
+</td>
+<td> 2.0 </td>
+<td> GPL2 </td>
+<td> daq_GPIO.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Роман Савоченко </td>
+<td> Broadcom BCM 2835 GPIO, переважно для та використовується у Raspberry Pi. ...
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="tocnumber">1</span> <span class="toctext">Об'єкт контролеру</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="tocnumber">2</span> <span class="toctext">Об'єкт параметру контролеру</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.8F_GPIO:_.D0.A0.D0.B5.D0.B6.D0.B8.D0.BC_.28mode.29"><span class="tocnumber">3</span> <span class="toctext">Функція GPIO: Режим (mode)</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.8F_GPIO:_.D0.9E.D1.82.D1.80.D0.B8.D0.BC.D0.B0.D1.82.D0.B8_.28get.29"><span class="tocnumber">4</span> <span class="toctext">Функція GPIO: Отримати (get)</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.8F_GPIO:_.D0.92.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.B8.D1.82.D0.B8_.28put.29"><span class="tocnumber">5</span> <span class="toctext">Функція GPIO: Встановити (put)</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Зауваження</span></a></li>
+</ul>
+</div>
+
+<p>Модуль надає до системи OpenSCADA підтримку джерел даних Входів/Виходів Загального Призначення (GPIO) плати <a class="external text" href="https://www.raspberrypi.org" rel="nofollow noreferrer noopener" target="_blank">Raspberry PI</a>, основаній на чипі BCM2835. BCM2835 GPIO на Raspberry Pi нараховує до 32 штирів деякі з яких можуть здійснювати альтернативні функції на кшталт: I2C, UART, SPIO. Для доступу до цього GPIO у загальних функціях використано бібліотеку <a class="external text" href="http://www.airspayce.com/mikem/bcm2835" rel="nofollow noreferrer noopener" target="_blank">libBCM2835</a>, яку включено та вона збирається разом з цим модулем.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="mw-headline-number">1</span> Об'єкт контролеру</span></h2>
+<p>GPIO у OpenSCADA конфігурується шляхом створення нового об'єкту контролеру (Рис.1) та об'єкту параметру контролеру — один параметр GPIO цієї плати.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:773px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_cntr_uk.png"><img class="thumbimage" height="569" src="../files/GPIO_obj_cntr_uk.png" width="771" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфігурації об'єкту контролеру.</div></div></div></div>
+<p>За цією вкладкою Ви можете встановити:
+</p>
+<ul><li> Стан контролера, а саме: Статус "Включено", "Запущено" та ім'я бази даних, що містить цю конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис контролеру.</li>
+<li> Стан, у який контролер має буту переведено при завантажені: "Включати" та "Запускати".</li>
+<li> Ім'я таблиці для збереження параметрів контролеру. </li></ul>
+<h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="mw-headline-number">2</span> Об'єкт параметру контролеру</span></h2>
+<p>Об'єкт параметру є безпосереднім представленням-відображенням GPIO, який містить перелік атрибутів логічного типу у загальної кількості 32. Вкладку конфігурації об'єкту параметра зображено на Рисунку 2. Збір даних здійснюється лише у синхронному режимі оскільки GPIO має бути швидким.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:773px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_prm_uk.png"><img class="thumbimage" height="584" src="../files/GPIO_obj_prm_uk.png" width="771" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфігурації параметру.</div></div></div></div>
+<p>За допомогою вкладки конфігурації параметру Ви можете встановити:
+</p>
+<ul><li> Стан параметру: тип, "Включений" та перелік статичних функцій.</li>
+<li> Ідентифікатор, ім'я та опис параметру.</li>
+<li> Стан, у який параметр має переводитися при завантажені: "Включати".</li></ul>
+<p>Вкладку "Атрибути" для GPIO зображено на Рисунку 3. Для GPIO також доступна вкладка "Конфігурація" (Рис.4) з режимом ВВ та станом інверсії.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:733px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_prmAttr_uk.png"><img class="thumbimage" height="717" src="../files/GPIO_obj_prmAttr_uk.png" width="731" /></a>  <div class="thumbcaption">Рис.3. Вкладка "Атрибути" параметру.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:733px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_prmCfg_uk.png"><img class="thumbimage" height="717" src="../files/GPIO_obj_prmCfg_uk.png" width="731" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Конфігурація" параметру.</div></div></div></div>
+<p>Для максимально швидкого доступу до GPIO об'єкт параметру надає три статичні функції: "mode", "get" та "put". Ці функції можуть бути використані у оточені програмування системи OpenSCADA для організації неординарних алгоритмів взаємодії. Для адресації функції ви можете використати статичний виклик адреси <b>GPIO.{cntr}.{prm}.{Func}()</b> або динамічний <b>SYS.DAQ.GPIO.{cntr}.{prm}["{Func}"].call()</b>. Де:
+</p>
+<ul><li> {cntr} — ідентифікатор об'єкту контролеру;</li>
+<li> {prm} — ідентифікатор об'єкту параметру;</li>
+<li> {Func} — ідентифікатор функції.</li></ul>
+<h2><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.8F_GPIO:_.D0.A0.D0.B5.D0.B6.D0.B8.D0.BC_.28mode.29"><span class="mw-headline-number">3</span> Функція GPIO: Режим (mode)</span></h2>
+<p><i>Опис</i>: GPIO режим, вхід або вихід.<br />
+<i>Параметри</i>:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Результат </td>
+<td> Ціле </td>
+<td> Повернення </td>
+<td>
+</td></tr>
+<tr>
+<td> pin </td>
+<td> Штир </td>
+<td> Ціле </td>
+<td> Вхід </td>
+<td>
+</td></tr>
+<tr>
+<td> set </td>
+<td> Встановлення режиму входу: 1-Вхід, 2-Вхід (pull up), 3-Вхід (pull down), 4-Вихід </td>
+<td> Ціле </td>
+<td> Вхід </td>
+<td> 0
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.8F_GPIO:_.D0.9E.D1.82.D1.80.D0.B8.D0.BC.D0.B0.D1.82.D0.B8_.28get.29"><span class="mw-headline-number">4</span> Функція GPIO: Отримати (get)</span></h2>
+<p><i>Опис</i>: Отримання рівня штиру GPIO.<br />
+<i>Параметри</i>:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> rez</td>
+<td> Результат </td>
+<td> Логічний </td>
+<td> Повернення </td>
+<td>
+</td></tr>
+<tr>
+<td> pin </td>
+<td> Штир </td>
+<td> Ціле </td>
+<td> Вхід </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.8F_GPIO:_.D0.92.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.B8.D1.82.D0.B8_.28put.29"><span class="mw-headline-number">5</span> Функція GPIO: Встановити (put)</span></h2>
+<p><i>Опис</i>: Встановлення рівня GPIO штиру.<br />
+<i>Параметри</i>:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> По замовченню
+</th></tr>
+<tr>
+<td> pin </td>
+<td> Штир </td>
+<td> Ціле </td>
+<td> Вхід </td>
+<td>
+</td></tr>
+<tr>
+<td> val </td>
+<td> Значення </td>
+<td> Логічне </td>
+<td> Вхід </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">6</span> Зауваження</span></h2>
+<p>Модуль випробувано на платах Raspberry Pi 2, 3 моделі B. Детальніше Ви можете подивитися на <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Raspberry_Pi" title="Special:MyLanguage/Using/Raspberry Pi">сторінці</a> та <a class="external text" href="http://oscada.org/en/development/tasks/posts/implementation_vnedrenie/raspberry_pi_2_workout" rel="nofollow noreferrer noopener" target="_blank">завдані</a>.
+</p><p>Час доступу до статичних функцій було виміряно у порівнянні із різними методами, що Ви можете подивитися <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/JavaLikeCalc#Productivity" title="Special:MyLanguage/Modules/JavaLikeCalc">тут</a>.
+</p><p>Для створення похідних DAQ шаблонів, із використаннями статичних функцій, Ви також можете застосувати динамічне підключення до них, на кшталт такого:
+</p>
+<pre style="white-space: pre-wrap;">
+function put = addr+".fnc_put";
+if(put) {
+  put(D4, vl&amp;0x10);
+  put(D5, vl&amp;0x20);
+  put(D6, vl&amp;0x40);
+  put(D7, vl&amp;0x80);
+}</pre>
+<p>У такий конфігурабельний спосіб наразі реалізовано наступні шаблони низькорівневих пристроїв:
+</p>
+<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices#DHT" title="Special:MyLanguage/Libs/User protocol devices">GPIO: DHT11,22 (AM23XX)</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices#1602A" title="Special:MyLanguage/Libs/User protocol devices">GPIO: 1602A(HD44780) (1602A)</a></li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

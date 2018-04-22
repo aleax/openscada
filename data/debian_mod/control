@@ -286,11 +286,11 @@ Description: Big Farm Net
  The openscada-daq-bfn package - provides Big Farm Net (BFN) modules support for
  Viper CT/BAS and other from "Big Dutchman" (http://www.bigdutchman.com).
 
-#Package: openscada-daq-bcm2835
+#Package: openscada-daq-gpio
 #Architecture: any
 #Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-#Description: BCM 2835
-# The openscada-daq-bcm2835 package - Broadcom BCM 2835 GPIO and other.
+#Description: GPIO
+# The openscada-daq-gpio package - Broadcom BCM 2835 GPIO and other.
 # Mostly for and used in Raspberry Pi.
 
 #===== Archiver subsystem modules =====

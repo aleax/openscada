@@ -34,7 +34,7 @@
 
 <h2><span class="mw-headline" id=".D0.A0.D0.B5.D0.BB.D1.96.D0.B7.D0.B8_OpenSCADA"><span class="mw-headline-number">1</span> Релізи OpenSCADA</span></h2>
 <ul><li> 1 Робоча (на підході)</li>
-<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Release_0.9" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS</a> (<a class="external text" href="http://oscada.org/ua/rozrobka/zavdannja/posts/core/release_of_the_openscada_09_lts/" rel="nofollow noreferrer noopener" target="_blank">на підході</a>)</li>
+<li> <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS</a> (<a class="external text" href="http://oscada.org/ua/rozrobka/zavdannja/posts/core/release_of_the_openscada_09_lts/" rel="nofollow noreferrer noopener" target="_blank">на підході</a>)</li>
 <li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Release_0.8.0" title="Special:MyLanguage/Documents/Release 0.8.0">0.8.0 LTS</a> (<a class="external text" href="http://wiki.oscada.org/Works/Tests/release080" rel="nofollow noreferrer noopener" target="_blank">тести</a>)</li>
 <li> <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA070" rel="nofollow noreferrer noopener" target="_blank">0.7.0 LTS</a> (<a class="external text" href="http://wiki.oscada.org/Works/Tests/release070" rel="nofollow noreferrer noopener" target="_blank">тести</a>); <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA071" rel="nofollow noreferrer noopener" target="_blank">0.7.1</a>; <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA072" rel="nofollow noreferrer noopener" target="_blank">0.7.2</a></li>
 <li> <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA060" rel="nofollow noreferrer noopener" target="_blank">0.6.0</a> (<a class="external text" href="http://wiki.oscada.org/Works/Tests/release060" rel="nofollow noreferrer noopener" target="_blank">тести</a>); <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA061" rel="nofollow noreferrer noopener" target="_blank">0.6.1</a>; <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA061" rel="nofollow noreferrer noopener" target="_blank">0.6.2</a>; <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA061" rel="nofollow noreferrer noopener" target="_blank">0.6.3</a>; <a class="external text" href="http://wiki.oscada.org/Doc/OpenSCADA061" rel="nofollow noreferrer noopener" target="_blank">0.6.4</a></li>
@@ -79,7 +79,7 @@
 <th> Платформи
 </th></tr>
 <tr>
-<td colspan="7" style="text-align: center;"> <b>Підсистема "БД"</b>
+<td colspan="7" style="text-align: center;"> <span id="DB" title="#DB"><b>Підсистема "БД"</b></span>
 </td></tr>
 
 <tr>
@@ -156,7 +156,7 @@
 <td> x86,x86_64,ARM
 </td></tr>
 <tr>
-<td colspan="7" style="text-align: center;"> <b>Підсистема "Транспорти"</b>
+<td colspan="7" style="text-align: center;"> <span id="Transports" title="#Transports"><b>Підсистема "Транспорти"</b></span>
 </td></tr>
 
 <tr>
@@ -447,16 +447,17 @@
 </td></tr>
 
 <tr>
-<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/BCM2835" title="Special:MyLanguage/Modules/BCM2835">BCM2835</a> </td>
-<td> BCM 2835 </td>
-<td> 1.2 </td>
+<td> <a href="Modules/GPIO.html" title="Special:MyLanguage/Modules/GPIO">GPIO</a> </td>
+<td> GPIO
+</td>
+<td> 2.0 </td>
 <td> GPL2 </td>
-<td> daq_BCM2835.so </td>
+<td> daq_GPIO.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td></tr>
 <tr>
-<td colspan="7" style="text-align: center;"> <b>Підсистема "Архіви/Історія"</b>
+<td colspan="7" style="text-align: center;"> <b>Підсистема "Архіви-Історія"</b>
 </td></tr>
 
 <tr>
@@ -506,8 +507,9 @@
 
 <tr>
 <td> <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> </td>
-<td> Програмний конфігуратор (Qt) </td>
-<td> 3.3 </td>
+<td> Конфігуратор програми (Qt)
+</td>
+<td> 4.0 </td>
 <td> GPL2 </td>
 <td> ui_QTCfg.so </td>
 <td> en,uk,ru,de </td>
@@ -527,7 +529,7 @@
 
 <tr>
 <td> <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> </td>
-<td> Динамічний WEB конфігуратор </td>
+<td> Конфігуратор програми (Динамічний WEB) </td>
 <td> 1.2 </td>
 <td> GPL2 </td>
 <td> ui_WebCfgD.so </td>
@@ -537,7 +539,7 @@
 
 <tr>
 <td> <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a> </td>
-<td> Системний конфігуратор (Web) </td>
+<td> Конфігуратор програми (WEB) </td>
 <td> 1.7 </td>
 <td> GPL2 </td>
 <td> ui_WebCfg.so </td>

@@ -38,14 +38,14 @@ TParamContr::TParamContr( const string &name, TTypeParam *tpprm ) : TConfig(tppr
 
     setName(name);
     if(type().isPrmCntr) mPrm = grpAdd("prm_");
-    type().create(this);
+    //type().create(this);
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 TParamContr::~TParamContr( )
 {
-    type().destroy(this);
+    //type().destroy(this);
     nodeDelAll();
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
@@ -91,11 +91,11 @@ TCntrNode &TParamContr::operator=( const TCntrNode &node )
 	//Archives creation and copy
 	vector<string> a_ls;
 	vlList(a_ls);
-	for(unsigned i_a = 0; i_a < a_ls.size(); i_a++) {
-	    if(!src_n->vlPresent(a_ls[i_a]) || src_n->vlAt(a_ls[i_a]).at().arch().freeStat()) continue;
+	for(unsigned iA = 0; iA < a_ls.size(); iA++) {
+	    if(!src_n->vlPresent(a_ls[iA]) || src_n->vlAt(a_ls[iA]).at().arch().freeStat()) continue;
 
-	    vlAt(a_ls[i_a]).at().setArch();
-	    (TCntrNode&)vlAt(a_ls[i_a]).at().arch().at() = (TCntrNode&)src_n->vlAt(a_ls[i_a]).at().arch().at();
+	    vlAt(a_ls[iA]).at().setArch();
+	    (TCntrNode&)vlAt(a_ls[iA]).at().arch().at() = (TCntrNode&)src_n->vlAt(a_ls[iA]).at().arch().at();
 	}
 
 	//Parameters copy
@@ -222,16 +222,20 @@ void TParamContr::postEnable( int flag )
     if(!vlCfg()) setVlCfg(this);
     if(!vlElemPresent(&SYS->daq().at().elErr()))
 	vlElemAtt(&SYS->daq().at().elErr());
+
+    type().create(this);
 }
 
 void TParamContr::preDisable( int flag )
 {
+    type().destroy(this);
+
     //Delete or stop the archives
     vector<string> a_ls;
     vlList(a_ls);
-    for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
-	if(!vlAt(a_ls[i_a]).at().arch().freeStat()) {
-	    string arh_id = vlAt(a_ls[i_a]).at().arch().at().id();
+    for(unsigned iA = 0; iA < a_ls.size(); iA++)
+	if(!vlAt(a_ls[iA]).at().arch().freeStat()) {
+	    string arh_id = vlAt(a_ls[iA]).at().arch().at().id();
 	    if((flag>>8) == RM_Full) SYS->archive().at().valDel(arh_id, true);
 	    else SYS->archive().at().valAt(arh_id).at().stop();
 	}
@@ -270,9 +274,9 @@ void TParamContr::save_( )
     //Save archives
     vector<string> a_ls;
     vlList(a_ls);
-    for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
-	if(!vlAt(a_ls[i_a]).at().arch().freeStat())
-	    vlAt(a_ls[i_a]).at().arch().at().save();
+    for(unsigned iA = 0; iA < a_ls.size(); iA++)
+	if(!vlAt(a_ls[iA]).at().arch().freeStat())
+	    vlAt(a_ls[iA]).at().arch().at().save();
 }
 
 bool TParamContr::cfgChange( TCfg &co, const TVariant &pc )
@@ -453,19 +457,19 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	vector<string> c_list;
 	list(c_list);
 	unsigned e_c = 0;
-	for(unsigned i_a = 0; i_a < c_list.size(); i_a++)
-	    if(at(c_list[i_a]).at().enableStat()) e_c++;
+	for(unsigned iA = 0; iA < c_list.size(); iA++)
+	    if(at(c_list[iA]).at().enableStat()) e_c++;
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else if((a_path == "/br/prm_" || a_path == "/iPrms/prm")) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> c_list;
 	    list(c_list);
-	    for(unsigned i_a = 0; i_a < c_list.size(); i_a++) {
-	        XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
+	    for(unsigned iA = 0; iA < c_list.size(); iA++) {
+	        XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[iA])->setText(at(c_list[iA]).at().name());
 		if(!s2i(opt->attr("recurs"))) continue;
 		cN->setName(opt->name())->setAttr("path",TSYS::strEncode(opt->attr("path"),TSYS::PathEl))->setAttr("recurs","1");
-		at(c_list[i_a]).at().cntrCmd(cN);
+		at(c_list[iA]).at().cntrCmd(cN);
 		cN->setName("el")->setAttr("path","")->setAttr("rez","")->setAttr("recurs","")->setText("");
 	    }
 	}

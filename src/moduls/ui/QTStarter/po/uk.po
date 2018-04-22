@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-10 16:41+0300\n"
+"POT-Creation-Date: 2018-04-21 17:03+0300\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -153,6 +153,9 @@ msgstr "Вставити Unicode керуючий символ"
 
 msgid "Size"
 msgstr "Розмір"
+
+msgid "Type"
+msgstr "Тип"
 
 msgid "Drive"
 msgstr "Диск"

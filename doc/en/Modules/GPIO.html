@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Modules/GPIO - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/GPIO</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/GPIO/ru" title="Модули/GPIO (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/GPIO/uk" title="Модулі/GPIO (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing
+</td></tr></table>
+</div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/GPIO.html" title="Special:MyLanguage/Modules/GPIO">GPIO</a> </td>
+<td> GPIO
+</td>
+<td> 2.0 </td>
+<td> GPL2 </td>
+<td> daq_GPIO.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Roman Savochenko </td>
+<td> Broadcom BCM 2835 GPIO, mostly for and used in Raspberry Pi. ...
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Controller_object"><span class="tocnumber">1</span> <span class="toctext">Controller object</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#The_controller.27s_parameter_object"><span class="tocnumber">2</span> <span class="toctext">The controller's parameter object</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Function_GPIO:_Mode_.28mode.29"><span class="tocnumber">3</span> <span class="toctext">Function GPIO: Mode (mode)</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Function_GPIO:_Get_.28get.29"><span class="tocnumber">4</span> <span class="toctext">Function GPIO: Get (get)</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Function_GPIO:_Put_.28put.29"><span class="tocnumber">5</span> <span class="toctext">Function GPIO: Put (put)</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Notes"><span class="tocnumber">6</span> <span class="toctext">Notes</span></a></li>
+</ul>
+</div>
+
+<p>The module provides OpenSCADA system with the support data sources of realtime, which based on <a class="external text" href="https://www.raspberrypi.org" rel="nofollow noreferrer noopener" target="_blank">Raspberry PI</a> board's General Purpose Input/Output (GPIO) grounded on BCM2835 chip. The BCM2835 GPIO of Raspberry Pi counts 32 pins in maximum some from its can also performs alternative functions like: I2C, UART, SPIO. For access to the GPIO in general functions there is used a library <a class="external text" href="http://www.airspayce.com/mikem/bcm2835" rel="nofollow noreferrer noopener" target="_blank">libBCM2835</a>, which included and builds together with the module.
+</p>
+<h2><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">1</span> Controller object</span></h2>
+<p>GPIO into OpenSCADA configured with new controller object creation (Fig.1) and the container parameters' objects — a single parameter of the board's GPIO.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:709px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_cntr.png"><img class="thumbimage" height="586" src="../files/GPIO_obj_cntr.png" width="707" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller object.</div></div></div></div>
+<p>From this tab you can set:
+</p>
+<ul><li> The state of the controller, as follows: Status "Enable", "Run" and the name of the database containing the configuration.</li>
+<li> Id, name and description of the controller.</li>
+<li> The state, in which the controller must be switched at boot: "To enable" and "To start".</li>
+<li> Name of table to store the configuration of the parameters of the controller. </li></ul>
+<h2><span class="mw-headline" id="The_controller.27s_parameter_object"><span class="mw-headline-number">2</span> The controller's parameter object</span></h2>
+<p>The parameter object is a direct representative-reflection for the GPIO, which contains attributes set with Boolean types and it whole quantity 32. Parameter's object configuration tab is shown in Figure 2. The acquisition data is done only in synchronous mode but GPIO must be fast.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:709px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_prm.png"><img class="thumbimage" height="586" src="../files/GPIO_obj_prm.png" width="707" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a parameter.</div></div></div></div>
+<p>With the parameter's object configuration tab you can set:
+</p>
+<ul><li> The state of the parameter: type, "Enable" and static functions list.</li>
+<li> Id, name and description of the parameter.</li>
+<li> The state, in which the parameter must be translated at boot: "To enable".</li></ul>
+<p>Tab "Attributes" for the GPIO is shown in Figure 3. For the GPIO there is accessed also "Configuration" tab (Fig.4) with IO mode and reverse state.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:709px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_prmAttr.png"><img class="thumbimage" height="717" src="../files/GPIO_obj_prmAttr.png" width="707" /></a>  <div class="thumbcaption">Fig.3. Tab "Attributes" of a parameter.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:709px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_prmCfg.png"><img class="thumbimage" height="717" src="../files/GPIO_obj_prmCfg.png" width="707" /></a>  <div class="thumbcaption">Fig.4. Tab "Configuration" of a parameter.</div></div></div></div>
+<p>For maximum fast access to the GPIO the parameter object provides three static functions: "mode", "get" and "put". These functions can be used in an user programming area of OpenSCADA system for the organization of not ordinary interaction algorithms. To address the functions you can use static call address <b>GPIO.{cntr}.{prm}.{Func}()</b> or dynamic <b>SYS.DAQ.GPIO.{cntr}.{prm}["{Func}"].call()</b>. Where:
+</p>
+<ul><li> {cntr} — identifier of the controller's object;</li>
+<li> {prm} — identifier of the parameter's object;</li>
+<li> {Func} — identifier of the function.</li></ul>
+<h2><span class="mw-headline" id="Function_GPIO:_Mode_.28mode.29"><span class="mw-headline-number">3</span> Function GPIO: Mode (mode)</span></h2>
+<p><i>Description</i>: GPIO mode, input or output.<br />
+<i>Parameters</i>:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> Integer </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> pin </td>
+<td> Pin </td>
+<td> Integer </td>
+<td> Input </td>
+<td>
+</td></tr>
+<tr>
+<td> set </td>
+<td> Force the input mode: 1-Input, 2-Input (pull up), 3-Input (pull down), 4-Output </td>
+<td> Integer </td>
+<td> Input </td>
+<td> 0
+</td></tr></table>
+<h2><span class="mw-headline" id="Function_GPIO:_Get_.28get.29"><span class="mw-headline-number">4</span> Function GPIO: Get (get)</span></h2>
+<p><i>Description</i>: GPIO get pin level.<br />
+<i>Parameters</i>:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> rez</td>
+<td> Result </td>
+<td> Bool </td>
+<td> Return </td>
+<td>
+</td></tr>
+<tr>
+<td> pin </td>
+<td> Pin </td>
+<td> Integer </td>
+<td> Input </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id="Function_GPIO:_Put_.28put.29"><span class="mw-headline-number">5</span> Function GPIO: Put (put)</span></h2>
+<p><i>Description</i>: GPIO put pin level.<br />
+<i>Parameters</i>:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> ID </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
+<tr>
+<td> pin </td>
+<td> Pin </td>
+<td> Integer </td>
+<td> Input </td>
+<td>
+</td></tr>
+<tr>
+<td> val </td>
+<td> Value </td>
+<td> Bool </td>
+<td> Input </td>
+<td>
+</td></tr></table>
+<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">6</span> Notes</span></h2>
+<p>The module has been tested on boards Raspberry Pi 2, 3 model B. For details you can see to <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Raspberry_Pi" title="Special:MyLanguage/Using/Raspberry Pi">the page</a> and <a class="external text" href="http://oscada.org/en/development/tasks/posts/implementation_vnedrenie/raspberry_pi_2_workout" rel="nofollow noreferrer noopener" target="_blank">the task</a>.
+</p><p>Access time to the static functions was measured comparing to the different methods which you can see <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/JavaLikeCalc#Productivity" title="Special:MyLanguage/Modules/JavaLikeCalc">here</a>.
+</p><p>For derivative DAQ templates creation using the static functions you can use also dynamic linking to its, like this:
+</p>
+<pre style="white-space: pre-wrap;">
+function put = addr+".fnc_put";
+if(put) {
+  put(D4, vl&amp;0x10);
+  put(D5, vl&amp;0x20);
+  put(D6, vl&amp;0x40);
+  put(D7, vl&amp;0x80);
+}</pre>
+<p>In this configurable way there for now have implemented next templates of the low-level devices:
+</p>
+<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices#DHT" title="Special:MyLanguage/Libs/User protocol devices">GPIO: DHT11,22 (AM23XX)</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices#1602A" title="Special:MyLanguage/Libs/User protocol devices">GPIO: 1602A(HD44780) (1602A)</a></li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

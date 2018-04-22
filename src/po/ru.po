@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-29 12:40+0300\n"
+"POT-Creation-Date: 2018-04-22 20:43+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1531,12 +1531,10 @@ msgstr "Специальный"
 msgid "Subsystem is not modular!"
 msgstr "Подсистема не модульная!"
 
-#, c-format
-msgid "Module '%s' connection."
+msgid "Module '%s' connecting."
 msgstr "Подключение модуля '%s'."
 
-#, c-format
-msgid "Module '%s' disconnection."
+msgid "Module '%s' disconnecting."
 msgstr "Отключение модуля '%s'."
 
 msgid "Subsystem starting."

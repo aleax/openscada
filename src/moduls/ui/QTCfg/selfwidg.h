@@ -276,7 +276,7 @@ class ReqIdNameDlg : public InputDlg
 
     public:
 	//Methods
-	ReqIdNameDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg = _("Node id and/or name select") );
+	ReqIdNameDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg = _("Selecting the identifier and the name of the node") );
 
 	string target( );
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BCM2835\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-12 21:15+0200\n"
+"POT-Creation-Date: 2018-04-22 20:48+0300\n"
 "PO-Revision-Date: 2016-12-09 10:16+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -16,17 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Roman Savochenko"
-msgstr "Roman Savotschenko"
-
-msgid "Broadcom BCM 2835 GPIO. Mostly for and used in Raspberry Pi."
-msgstr "Broadcom BCM 2835 GPIO. Vor allem für und verwendet in Raspberry Pi."
-
-msgid "Parameters table"
-msgstr "Tabelle der Parameter"
-
-msgid "Standard"
-msgstr "Standard"
+msgid "BCM2835 and newer"
+msgstr "BCM2835 und neuer"
 
 msgid "Module addition parameters"
 msgstr "Modulzusatzparameter"
@@ -38,11 +29,20 @@ msgstr ""
 "Init bcm2835 Bibliothek Fehler, ob das nicht bcm2835 oder es gibt keinen "
 "Zugriff."
 
-msgid "1:Parameter disabled."
-msgstr "1:Parameter ist abgeschaltet."
+msgid "BCM2835 GPIO is already used."
+msgstr "BCM2835 GPIO wird bereits verwendet."
 
-msgid "2:Acquisition/access is stopped."
-msgstr "2:Erfassung/Zugriff wird gestoppt."
+msgid "SUNXI (ALLWINNER H2 and newer)"
+msgstr "SUNXI (ALLWINNER H2 und neuer)"
+
+msgid "SUNXI GPIO is already used."
+msgstr "SUNXI GPIO wird bereits verwendet."
+
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+msgid "Broadcom BCM 2835 GPIO, mostly for and used in Raspberry Pi. ..."
+msgstr "Broadcom BCM 2835 GPIO, vor allem für und verwendet in Raspberry Pi. ..."
 
 msgid "Function"
 msgstr "Funktion"
@@ -53,9 +53,8 @@ msgstr "Funktionen"
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#, c-format
-msgid "GPIO %d output and reverse"
-msgstr "GPIO %d Ausgang und umgekehrt"
+msgid "GPIO '%s' output and reverse"
+msgstr "GPIO '%s' Ausgang und umgekehrt"
 
 msgid "Disabled;Input;Input (pull up);Input (pull down);Output"
 msgstr "Deaktiviert;Eingang;Eingang (Pull-Up);Eingang (Pull-Down);Ausgang"

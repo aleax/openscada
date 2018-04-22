@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-08 20:29+0300\n"
+"POT-Creation-Date: 2018-04-22 21:25+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,13 +192,13 @@ msgstr ""
 msgid "What's &This"
 msgstr ""
 
-msgid "The button for requesting the information about GUI elements"
+msgid "Requesting about GUI elements"
 msgstr ""
 
-msgid "Requesting the information about GUI elements"
+msgid "The button for requesting information about the user interface elements"
 msgstr ""
 
-msgid "Press for requesting the information about GUI elements."
+msgid "Press for requesting information about the user interface elements."
 msgstr ""
 
 msgid "Load from the DB"
@@ -998,7 +998,7 @@ msgstr ""
 
 msgid ""
 "Some changes were made!\n"
-"Save the changes to the DB before exiting?"
+"Save the changes to the DB before the closing?"
 msgstr ""
 
 msgid "No rows selected."
@@ -1523,6 +1523,15 @@ msgid "Press for getting the using project '%1' manual."
 msgstr ""
 
 msgid "'%1' manual"
+msgstr ""
+
+msgid "The button for requesting the information about GUI elements"
+msgstr ""
+
+msgid "Requesting the information about GUI elements"
+msgstr ""
+
+msgid "Press for requesting the information about GUI elements."
 msgstr ""
 
 msgid "Alarm level"

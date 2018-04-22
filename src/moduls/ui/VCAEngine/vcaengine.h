@@ -105,7 +105,7 @@ class Engine : public TUI
 	void save_( );
 	void postEnable( int flag );
 	void preDisable( int flag );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" ) const;
 

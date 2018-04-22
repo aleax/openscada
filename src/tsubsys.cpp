@@ -66,7 +66,7 @@ void TSubSYS::modAdd( TModule *modul )
 {
     if(!subModule()) throw err_sys(_("Subsystem is not modular!"));
     if(chldPresent(mMod,modul->modId())) return;
-    mess_sys(TMess::Info, _("Module '%s' connection."), modul->modId().c_str());
+    mess_sys(TMess::Info, _("Module '%s' connecting."), modul->modId().c_str());
     chldAdd(mMod, modul, s2i(modul->modInfo("HighPriority"))?0:-1);
     if(mess_lev() == TMess::Debug) {
 	vector<string> list;
@@ -80,7 +80,7 @@ void TSubSYS::modDel( const string &name )
 {
     if(!subModule()) throw err_sys(_("Subsystem is not modular!"));
     chldDel(mMod, name);
-    mess_sys(TMess::Info, _("Module '%s' disconnection."), name.c_str());
+    mess_sys(TMess::Info, _("Module '%s' disconnecting."), name.c_str());
 }
 
 AutoHD<TModule> TSubSYS::modAt( const string &name ) const

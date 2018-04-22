@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 14:21+0200\n"
+"POT-Creation-Date: 2018-04-21 20:42+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -24,11 +24,11 @@ msgstr "Тип"
 msgid "Path"
 msgstr "Шлях"
 
-msgid "The main navigation tree of the configurator."
+msgid "Main navigation tree of the configurator."
 msgstr "Основне дерево навігації конфігуратора."
 
-msgid "The main configurator frame."
-msgstr "Основне поле конфігуратора."
+msgid "Main frame of the configurator."
+msgstr "Основний простір конфігуратору."
 
 msgid "Tabulated configuration pages."
 msgstr "Табульовані конфігураційні сторінки."
@@ -36,188 +36,182 @@ msgstr "Табульовані конфігураційні сторінки."
 msgid "&Close"
 msgstr "&Закрити"
 
-msgid "Close configurator window"
+msgid "Close the configurator window"
 msgstr "Закрити вікно конфігуратора"
 
-msgid "The button for closing OpenSCADA configurator window"
-msgstr "Кнопка для закриття вікна конфігуратора OpenSCADA."
+msgid "The button for closing the configurator window"
+msgstr "Кнопка закриття вікна конфігуратора."
 
-msgid "Press to close OpenSCADA configurator window"
-msgstr "Натиснути для закриття вікна конфігуратора OpenSCADA."
+msgid "Press to close the configurator window."
+msgstr "Натиснути для закриття вікна конфігуратора."
 
 msgid "&Quit"
 msgstr "&Вихід"
 
-msgid "Quit OpenSCADA"
-msgstr "Закрити OpenSCADA"
+msgid "Quit the program"
+msgstr "Вихід з програми"
 
-msgid "The button for full quit from OpenSCADA"
-msgstr "Кнопка для повного виходу з OpenSCADA"
+msgid "The button for complete quit the program"
+msgstr "Кнопка повного виходу з програми"
 
-msgid "Press for full quit from OpenSCADA"
-msgstr "Натиснути для повного виходу з OpenSCADA"
+msgid "Press for complete quit the program."
+msgstr "Натиснути для повного виходу з програми."
 
 msgid "&Up"
-msgstr "&Вверх"
+msgstr "На&гору"
 
-msgid "Up page"
-msgstr "На сторінку вверх"
+msgid "Go to the parent page"
+msgstr "Перейти до батьківської сторінки"
 
-msgid "The button for going to level up"
-msgstr "Кнопка для переходу на рівень вгору"
+msgid "The button for going to the parent page"
+msgstr "Кнопка переходу до батьківської сторінки"
 
-msgid "Press for going to level up"
-msgstr "Натиснути для переходу на рівень вгору"
+msgid "Press for going to the parent page."
+msgstr "Натиснути для переходу до батьківської сторінки."
 
-msgid "&Previous"
-msgstr "&Попередня"
+msgid "&Back"
+msgstr "По&передня"
 
-msgid "Previous page"
-msgstr "Попередня сторінка"
+msgid "Go back"
+msgstr "Перейти назад"
 
-msgid "The button for going to previous page"
-msgstr "Кнопка для переходу на попередню сторінку"
+msgid "The button for going to the back page"
+msgstr "Кнопка переходу на попередню сторінку"
 
-msgid "Press for going to previous page"
-msgstr "Натиснути для переходу на попередню сторінку"
+msgid "Press for going to the back page."
+msgstr "Натиснути для переходу на попередню сторінку."
 
-msgid "&Next"
-msgstr "&Наступна"
+msgid "&Forward"
+msgstr "На&ступна"
 
-msgid "Next page"
-msgstr "Наступна сторінка"
+msgid "Go forward"
+msgstr "Перейти вперед"
 
-msgid "The button for going to next page"
-msgstr "Кнопка для переходу на наступну сторінку"
+msgid "The button for going to the forward page"
+msgstr "Кнопка переходу на наступну сторінку"
 
-msgid "Press for going to next page"
-msgstr "Натиснути для переходу на наступну сторінку"
+msgid "Press for going to the forward page."
+msgstr "Натиснути для переходу на наступну сторінку."
 
-msgid "Load from DB"
+msgid "Load from the DB"
 msgstr "Завантажити з БД"
 
-msgid "Load item data from DB"
+msgid "Load the item data from the DB"
 msgstr "Завантажити дані елементу з БД"
 
-msgid "The button for loading item data from DB"
-msgstr "Кнопка для завантаження даних елементу з БД"
+msgid "The button for loading the item data from the DB"
+msgstr "Кнопка завантаження даних елементу з БД"
 
-msgid "Press for loading item data from DB."
+msgid "Press for loading the item data from the DB."
 msgstr "Натиснути для завантаження даних елементу з БД."
 
-msgid "Save to DB"
+msgid "Save to the DB"
 msgstr "Зберегти у БД"
 
-msgid "Save item data to DB"
+msgid "Save the item data to the DB"
 msgstr "Зберегти дані елементу у БД"
 
-msgid "The button for saving item data to DB"
-msgstr "Кнопка для збереження даних елементу у БД"
+msgid "The button for saving the item data to the DB"
+msgstr "Кнопка збереження даних елементу у БД"
 
-msgid "Press for saving item data to DB."
+msgid "Press for saving the item data to the DB."
 msgstr "Натиснути для збереження даних елементу у БД."
 
 msgid "&Add"
 msgstr "&Додати"
 
-msgid "Add item"
+msgid "Add an item"
 msgstr "Додати елемент"
 
-msgid "The button for adding new item"
-msgstr "Кнопка для додання елементу"
+msgid "The button for adding a new item"
+msgstr "Кнопка додання елементу"
 
-msgid "Press for adding new item."
+msgid "Press for adding a new item."
 msgstr "Натиснути для додання елементу."
 
 msgid "&Delete"
 msgstr "&Видалити"
 
-msgid "Delete item"
+msgid "Delete the item"
 msgstr "Видалити елемент"
 
-msgid "The button for deleting item"
-msgstr "Кнопка для видалення елементу"
+msgid "The button for deleting the item"
+msgstr "Кнопка видалення елементу"
 
-msgid "Press for deleting item."
+msgid "Press for deleting the item."
 msgstr "Натиснути для видалення елементу."
 
-msgid "Item cut"
-msgstr "Вирізати елемент"
-
-msgid "Cutting of the item"
-msgstr "Вирізання елементу"
-
-msgid "The button for cutting of the item"
-msgstr "Кнопка для вирізання елементу"
-
-msgid "Press to cut the item."
-msgstr "Натиснути для виконання вирізання елементу."
-
-msgid "Item copy"
+msgid "Copy the item"
 msgstr "Копіювати елемент"
 
-msgid "Copying of the item"
+msgid "Copying the item"
 msgstr "Копіювання елементу"
 
-msgid "The button for copying of the item"
-msgstr "Кнопка для копіювання елементу"
+msgid "The button for copying the item"
+msgstr "Кнопка копіювання елементу"
 
-msgid "Press to copy the item."
-msgstr "Натиснути для виконання копіювання елементу."
+msgid "Press for copying the item."
+msgstr "Натиснути для копіювання елементу."
 
-msgid "Item paste"
+msgid "Cut the item"
+msgstr "Вирізати елемент"
+
+msgid "Cutting the item"
+msgstr "Вирізання елементу"
+
+msgid "The button for cutting the item"
+msgstr "Кнопка вирізання елементу"
+
+msgid "Press for cutting the item."
+msgstr "Натиснути для вирізання елементу."
+
+msgid "Paste the item"
 msgstr "Вставити елемент"
 
-msgid "Pasting of the item"
+msgid "Pasting the item"
 msgstr "Вставлення елементу"
 
-msgid "The button for pasting of the item"
-msgstr "Кнопка для вставки елементу"
+msgid "The button for pasting the item"
+msgstr "Кнопка вставки елементу"
 
-msgid "Press to paste the item."
+msgid "Press for pasting the item."
 msgstr "Натиснути для вставки елементу."
 
 msgid "&Refresh"
 msgstr "П&оновити"
 
-msgid "Refresh current page"
+msgid "Refresh the page"
 msgstr "Поновити поточну сторінку"
 
-msgid "The button for refreshing of the content of the current page."
-msgstr "Кнопка для поновлення вмісту поточної сторінки."
+msgid "The button for refreshing the page content"
+msgstr "Кнопка поновлення вмісту поточної сторінки"
 
-msgid "Press for refreshing of the content of the current page."
+msgid "Press for refreshing the page content."
 msgstr "Натиснути для поновлення вмісту поточної сторінки."
 
 msgid "&Start"
 msgstr "За&пустити"
 
-msgid "Start cycled refresh"
+msgid "Start the cycled refreshing"
 msgstr "Запустити періодичне поновлення"
 
-msgid ""
-"The button for starting of the cycled refresh of the content of the current "
-"page."
-msgstr "Кнопка для запуску періодичного поновлення вмісту поточної сторінки."
+msgid "The button for starting the cycled refreshing of the page content"
+msgstr "Кнопка запуску періодичного поновлення вмісту поточної сторінки."
 
-msgid "Press to start the cycled refresh of the content of the current page."
-msgstr ""
-"Натиснути для запуску періодичного поновлення вмісту поточної сторінки."
+msgid "Press for starting the cycled refreshing of the page content."
+msgstr "Натиснути для запуску періодичного оновлення вмісту поточної сторінки."
 
 msgid "&Stop"
 msgstr "&Зупинити"
 
-msgid "Stop cycled refresh"
+msgid "Stop the cycled refreshing"
 msgstr "Зупинити періодичне поновлення"
 
-msgid ""
-"The button for stopping of the cycled refresh of the content of the current "
-"page."
-msgstr "Кнопка для зупинки періодичного поновлення вмісту поточної сторінки."
+msgid "The button for stopping the cycled refreshing of the page content"
+msgstr "Кнопка зупинки періодичного оновлення вмісту поточної сторінки."
 
-msgid "Press to stop the cycled refresh of the content of the current page."
-msgstr ""
-"Натиснути для зупинки періодичного поновлення вмісту поточної сторінки."
+msgid "Press for stopping the cycled refreshing of the page content."
+msgstr "Натиснути для зупинки періодичного оновлення вмісту поточної сторінки."
 
 msgid "&About"
 msgstr "&Про ..."
@@ -225,11 +219,11 @@ msgstr "&Про ..."
 msgid "Program and OpenSCADA information"
 msgstr "Інформація про програму та OpenSCADA"
 
-msgid "The button for display program and OpenSCADA information"
-msgstr "Кнопка для відображення інформації про програму та OpenSCADA"
+msgid "The button of the information of the program and OpenSCADA"
+msgstr "Кнопка інформації про програму та OpenSCADA"
 
-msgid "Press to display program and OpenSCADA information"
-msgstr "Натиснути для відображення інформації про програму та OpenSCADA"
+msgid "Press for information of the program and OpenSCADA."
+msgstr "Натиснути для відображення інформації про програму та OpenSCADA."
 
 msgid "About &Qt"
 msgstr "Про &Qt"
@@ -240,7 +234,7 @@ msgstr "Qt інформація"
 msgid "The button for getting the using Qt information"
 msgstr "Кнопка для отримання інформації про використання Qt"
 
-msgid "Press to get the using Qt information."
+msgid "Press for getting the using Qt information."
 msgstr "Натиснути для отримання інформації про використання Qt."
 
 msgid "%1 manual"
@@ -267,14 +261,14 @@ msgstr "Натиснути для отримання обраної сторін
 msgid "What's &This"
 msgstr "Що &це"
 
-msgid "Question about GUI elements"
-msgstr "Питання про GUI елементи"
+msgid "Requesting about GUI elements"
+msgstr "Запит про GUI елементи"
 
-msgid "The button for requesting the information about user interface elements"
-msgstr "Кнопка для запиту інформації про елементи інтерфейсу користувача"
+msgid "The button for requesting information about the user interface elements"
+msgstr "Кнопка запиту інформації про елементи інтерфейсу користувача"
 
-msgid "Press for requesting about user interface elements"
-msgstr "Натисніть для запиту інформації про елементи інтерфейсу користувача"
+msgid "Press for requesting information about the user interface elements."
+msgstr "Натисніть для запиту інформації про елементи інтерфейсу користувача."
 
 msgid "&File"
 msgstr "&Файл"
@@ -288,83 +282,83 @@ msgstr "&Вигляд"
 msgid "&Help"
 msgstr "&Допомога"
 
-msgid "OpenSCADA toolbar"
-msgstr "Панель інструментів OpenSCADA"
+msgid "Main toolbar"
+msgstr "Головна панель інструментів"
 
-msgid "This label displays current user."
+msgid "This label displays the current user."
 msgstr "Ця мітка відображає поточного користувача."
 
-msgid "Field for display of the current user."
-msgstr "Поле для відображення поточного користувача."
+msgid "Field for displaying the current user."
+msgstr "Поле відображення поточного користувача."
 
-msgid "Double click to change user."
+msgid "Double click to change the user."
 msgstr "Подвійно клацніть для зміни користувача."
 
-msgid "This label displays the local station modifying."
-msgstr "Ця мітка відображає факт внесення змін у локальну станцію."
+msgid "This label indicates the fact of making changes."
+msgstr "Ця мітка відображає факт внесення змін."
 
-msgid "Field for display of the local station modifying."
-msgstr "Поле для відображення факту внесення змін у локальну станцію."
+msgid "Field for indicating the fact of making changes."
+msgstr "Мітка відображення факту внесення змін."
 
-msgid "This button for call status bar history."
-msgstr "Ця кнопка для виклику історії строки статусу."
+msgid "This button calls the status bar history."
+msgstr "Ця кнопка для виклику історії рядку статусу."
 
-msgid "Button for call status bar history."
-msgstr "Кнопка для виклику історії строки статусу."
+msgid "Button for calling the status bar history."
+msgstr "Кнопка виклику історії строки статусу."
 
 msgid "Ready"
 msgstr "Готовий"
 
-msgid "Changes save"
+msgid "Saving the changes"
 msgstr "Збереження змін"
 
 msgid ""
-"Some changes made.\n"
-"Save the changes to DB on exit?"
+"Some changes were made!\n"
+"Save the changes to the DB before exiting?"
 msgstr ""
-"Деякі зміни було зроблено.\n"
-"Зберегти зміни у БД перед виходом?"
+"Здійснено деякі зміни!\n"
+"Зберегти зміни у БД перед закриттям?"
 
-msgid "No one editable container is present."
-msgstr "Жодного редагованого контейнеру не присутньо."
+msgid "No edited container is present."
+msgstr "Немає жодного редагованого контейнеру."
 
-msgid "Add item to node: '%1'."
+msgid "Adding an item to the node '%1'."
 msgstr "Додання елементу у вузол: '%1'."
 
-msgid "Add node"
-msgstr "Додання елементу"
+msgid "Adding a node"
+msgstr "Додання вузлу"
 
-msgid "Node '%1' is already present."
+msgid "The node '%1' is already present."
 msgstr "Вузол '%1' вже присутній."
 
-msgid "Are you sure of deleting nodes: '%1'?"
-msgstr "Ви дійсно бажаєте видалити елементи: '%1'?"
+msgid "Are you sure of deleting the nodes '%1'?"
+msgstr "Ви дійсно бажаєте видалити вузли '%1'?"
 
-msgid "Delete node"
-msgstr "Видалення елементу"
+msgid "Deleting the nodes"
+msgstr "Видалення елементів"
 
-msgid "Copy is impossible."
+msgid "Copying is not possible."
 msgstr "Копіювання неможливе."
 
 msgid "Selected"
-msgstr "Вибраний"
+msgstr "Обраний"
 
-msgid "Move or copy node"
+msgid "Moving or copying the node"
 msgstr "Переміщення або копіювання вузлу"
 
-msgid "Move node '%1' to '%2'.\n"
+msgid "Moving the node '%1' to '%2'.\n"
 msgstr "Переміщення вузлу '%1' у '%2'.\n"
 
-msgid "Copy node '%1' to '%2'.\n"
-msgstr "Скопіювати вузол '%1' до '%2'.\n"
+msgid "Copying the node '%1' to '%2'.\n"
+msgstr "Копіювання вузлу '%1' до '%2'.\n"
 
-msgid "Do not the question anymore."
+msgid "Do not ask for more."
 msgstr "Не запитувати більш."
 
-msgid "Node '%1' is already present. Continue?"
+msgid "The node '%1' is already present. Continue?"
 msgstr "Вузол '%1' вже присутній. Продовжити?"
 
-msgid "Status bar messages list:"
+msgid "List of messages in the status bar:"
 msgstr "Перелік повідомлень рядка статусу:"
 
 msgid "Status messages"
@@ -397,8 +391,8 @@ msgstr ""
 msgid "Manual"
 msgstr "Підручник"
 
-msgid "No the manual '%1' found offline or online!"
-msgstr "Не знайдено підручника '%1' локально та у мережі!"
+msgid "The manual '%1' was not found offline or online!"
+msgstr "Не знайдено підручника '%1' локально або у мережі!"
 
 msgid "<EVAL>"
 msgstr ""
@@ -409,38 +403,38 @@ msgstr "Вкл"
 msgid "Off"
 msgstr "Викл"
 
-msgid "The changes apply"
+msgid "Applying the changes"
 msgstr "Прийняття змін"
 
 msgid ""
-"You don't apply some changes!\n"
-"Do you want its apply now or lost?"
+"Some changes were made!\n"
+"Accept the changes now or lose?"
 msgstr ""
-"Деякі зміни не прийнято!\n"
-"Прийняти зараз або втратити?"
+"Здійснено деякі зміни!\n"
+"Прийняти зміни зараз або втратити?"
 
-msgid "Broken info respond - no a child."
+msgid "Broken information request - there are no descendants."
 msgstr "Зламаний запит інформації - немає нащадків."
 
-msgid "Refresh items tree"
+msgid "Refresh the items tree"
 msgstr "Оновити елементи дерева"
 
 #, c-format
-msgid "Expand/update branch '%s' time %f ms."
-msgstr "Час розширення/поновлення гілки '%s' %f мс."
+msgid "Time of expanding/updating '%s': %f ms."
+msgstr "Час розширення/поновлення '%s': %f мс."
 
-msgid "Send changes to selections"
+msgid "Sending the changes to the selected ones"
 msgstr "Надсилання змін до обраних"
 
 #, c-format
-msgid "Send current command '%s' to other selected nodes \"%s\"?"
-msgstr "Надіслати поточну команду '%s' до інших обраних вузлів \"%s\"?"
+msgid "Send the command '%s' to other selected nodes \"%s\"?"
+msgstr "Надіслати команду '%s' до інших обраних вузлів \"%s\"?"
 
 #, c-format
 msgid "Unknown host '%s'."
 msgstr "Невідомий хост '%s'."
 
-msgid "Wait for reply from host '%1'"
+msgid "Waiting the reply from the host '%1'"
 msgstr "Очікування відповіді від хосту '%1'"
 
 msgid "Cancel"
@@ -457,18 +451,18 @@ msgid "%s| Set '%s' to '%s'!"
 msgstr "%s| Встановлено '%s' у '%s'!"
 
 #, c-format
-msgid "%s| Go to link '%s'!"
+msgid "%s| Went to the link '%s'!"
 msgstr "%s| Перехід за посиланням '%s'!"
 
 #, c-format
-msgid "%s| Press '%s'!"
+msgid "%s| Pressed down '%s'!"
 msgstr "%s| Натиснуто '%s'!"
 
-msgid "Value no valid: "
+msgid "Value is wrong: "
 msgstr "Значення помилкове: "
 
 #, c-format
-msgid "%s| Change '%s' from '%s' to '%s'!"
+msgid "%s| Changed '%s' from '%s' to '%s'!"
 msgstr "%s| Змінено '%s' з '%s' у '%s'!"
 
 msgid "Go"
@@ -492,37 +486,37 @@ msgstr "Вверх"
 msgid "Down"
 msgstr "Донизу"
 
-msgid "Item name set"
+msgid "Setting the item name"
 msgstr "Встановлення назви елементу"
 
-msgid "Add new element."
-msgstr "Додання нового елементу."
+msgid "Add a new element."
+msgstr "Додати новий елемент."
 
-msgid "Insert new element."
-msgstr "Вставлення нового елементу."
+msgid "Insert a new element."
+msgstr "Вставити новий елемент."
 
-msgid "Rename element."
-msgstr "Перейменування елементу."
-
-#, c-format
-msgid "%s| Add '%s' element <%s:%s>!"
-msgstr "%s| Додано '%s' елемент <%s:%s>!"
+msgid "Rename the element."
+msgstr "Перейменувати елемент."
 
 #, c-format
-msgid "%s| Insert '%s' element <%s:%s> to %d!"
-msgstr "%s| Вставлено '%s' елемент <%s:%s> до %d!"
+msgid "%s| '%s' added by the element <%s:%s>!"
+msgstr "%s| '%s' додано елемент <%s:%s>!"
 
 #, c-format
-msgid "%s| Set '%s' element %d to <%s:%s>!"
-msgstr "%s| Встановлено '%s' елемент %d у <%s:%s>!"
+msgid "%s| '%s' inserted by the element <%s:%s> to %d!"
+msgstr "%s| '%s' вставлено елемент <%s:%s> до %d!"
 
 #, c-format
-msgid "%s| Delete '%s' element <%s:%s>!"
-msgstr "%s| Видалення '%s' елементу <%s:%s>!"
+msgid "%s| '%s' set for the element %d to <%s:%s>!"
+msgstr "%s| '%s' встановлено елемент %d у <%s:%s>!"
 
 #, c-format
-msgid "%s| Move '%s' from %d to %d!"
-msgstr "%s| Пересування '%s' з %d до %d!"
+msgid "%s| '%s' deleted for the element <%s:%s>!"
+msgstr "%s| '%s' видалено елемент <%s:%s>!"
+
+#, c-format
+msgid "%s| '%s' moved for the element %d to %d!"
+msgstr "%s| '%s' пересування елементу %d до %d!"
 
 msgid "Add record"
 msgstr "Додати запис"
@@ -543,72 +537,72 @@ msgid "Copy"
 msgstr "Копіювати"
 
 #, c-format
-msgid "%s| Add '%s' record."
-msgstr "%s| Додано '%s' запис."
+msgid "%s| '%s' add by a record."
+msgstr "%s| '%s' додано запис."
 
 #, c-format
-msgid "%s| Insert '%s' record %d."
-msgstr "%s| Вставлення '%s' запису %d."
+msgid "%s| '%s' inserted for the record %d."
+msgstr "%s| '%s' вставлено запис %d."
 
 #, c-format
-msgid "%s| Delete '%s' record '%s'."
-msgstr "%s| Видалення '%s' запису '%s'."
+msgid "%s| '%s' deleted for the record '%s'."
+msgstr "%s| '%s' видалено запис '%s'."
 
 #, c-format
-msgid "%s| Move '%s' record from %d to %d."
-msgstr "%s| Пересування '%s' запису з %d до %d."
+msgid "%s| '%s' moved for the record %d to %d."
+msgstr "%s| '%s' перенесено запис з %d до %d."
 
-msgid "Save image"
-msgstr "Зберегти зображення"
+msgid "Saving an image"
+msgstr "Збереження зображення"
 
-msgid "Load image"
-msgstr "Завантажити зображення"
+msgid "Loading an image"
+msgstr "Завантаження зображення"
 
-msgid "Save picture"
+msgid "Saving the picture"
 msgstr "Збереження картинки"
 
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Зображення (*.png *.xpm *.jpg)"
 
 #, c-format
-msgid "Save to file %s error\n"
-msgstr "Помилка збереження до файлу %s\n"
+msgid "Error saving to the file '%s'\n"
+msgstr "Помилка збереження до файлу '%s'\n"
 
-msgid "Load picture"
+msgid "Loading the picture"
 msgstr "Завантаження картинки"
 
 msgid "Images (*.png *.jpg)"
 msgstr "Зображення (*.png *.jpg)"
 
 #, c-format
-msgid "Open file %s error\n"
-msgstr "Помилка відкриття файлу %s\n"
+msgid "Error opening the file '%s'\n"
+msgstr "Помилка відкриття файлу '%s'\n"
 
 #, c-format
-msgid "Image file %s error\n"
-msgstr "Помилковий файл зображення %s\n"
+msgid "Error image file '%s'\n"
+msgstr "Помилковий файл зображення '%s'\n"
 
 #, c-format
-msgid "%s| Upload picture '%s' to: %s."
-msgstr "%s| Завантаження картинки '%s' до: %s."
+msgid "%s| '%s' uploaded by the picture '%s'."
+msgstr "%s| '%s' завантажено картинку до '%s'."
 
 #, c-format
-msgid "Value '%s' is not valid!"
+msgid "The value '%s' is wrong!"
 msgstr "Значення '%s' помилкове!"
 
 #, c-format
-msgid "%s| Set '%s' cell ('%s':%s) to: %s."
-msgstr "%s| Встановлено '%s' чарунку ('%s':%s) у: %s."
+msgid "%s| '%s' set for cell ('%s':%s) to: %s."
+msgstr "%s| '%s' встановлено клітинку ('%s':%s) у: %s."
 
 #, c-format
-msgid "Selective element '%s' is not present!"
+msgid "Selective element '%s' is missing!"
 msgstr "Вибірковий елемент '%s' відсутній!"
 
 #, c-format
-msgid "%s| Change '%s' to: '%s'!"
-msgstr "%s| Змінено '%s' у: '%s'!"
+msgid "%s| '%s' changed to: '%s'!"
+msgstr "%s| '%s' змінено у: '%s'!"
 
-msgid "No a link set"
+msgid "No connection is established"
 msgstr "Не встановлено зв'язку"
 
 msgid "Picture is not set!"
@@ -626,11 +620,11 @@ msgstr "Прийняти"
 msgid "Cursor = (%1:%2)"
 msgstr "Курсор = (%1:%2)"
 
-msgid "Enter text string for search:"
-msgstr "Введіть строку тексту для пошуку:"
+msgid "Enter a string to search:"
+msgstr "Введіть рядок пошуку:"
 
-msgid "String search"
-msgstr "Пошук строки"
+msgid "Searching a string"
+msgstr "Пошук рядку"
 
 msgid "Backward"
 msgstr "Зворотній"
@@ -641,8 +635,8 @@ msgstr "Чутливий до регістру"
 msgid "Whole words"
 msgstr "Слово цілком"
 
-msgid "ID:"
-msgstr ""
+msgid "Identifier:"
+msgstr "Ідентифікатор:"
 
 msgid "Name:"
 msgstr "Ім'я:"
@@ -653,7 +647,7 @@ msgstr ""
 msgid "Item type:"
 msgstr "Тип елементу:"
 
-msgid "Select user"
+msgid "Selecting an user"
 msgstr "Вибір користувача"
 
 msgid "User:"
@@ -662,7 +656,7 @@ msgstr "Користувач:"
 msgid "Password:"
 msgstr "Пароль:"
 
-msgid "Auth is wrong!!!"
+msgid "Error authentication!!!"
 msgstr "Помилка аутентифікації!!!"
 
 msgid "Program configurator (Qt)"
@@ -671,8 +665,8 @@ msgstr "Конфігуратор програми (Qt)"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Provides the Qt-based configurator of the OpenSCADA system."
-msgstr "Надає базований на Qt конфігуратор системи OpenSCADA."
+msgid "Provides the Qt-based configurator of OpenSCADA."
+msgstr "Надає базований на Qt конфігуратор OpenSCADA."
 
 #, c-format
 msgid ""
@@ -680,12 +674,16 @@ msgid ""
 "---- Parameters of the module section '%s' of the configuration file ----\n"
 "StartPath  <path>       Initial page path of the configurator.\n"
 "StartUser  <user>       Starting user without password.\n"
+"ToolTipLim <chars>      ToolTip limit in chars, by default 150. Set zero for "
+"disable.\n"
 "\n"
 msgstr ""
 "======================= Опції модуля <%s:%s> =============================\n"
 "------ Параметри модульної секції '%s' конфігураційного файлу ------\n"
 "StartPath  <шлях>       Шлях первинної сторінки конфігуратору.\n"
 "StartUser  <корист>     Стартовий користувач, без паролю.\n"
+"ToolTipLim <символів>   Обмеження ToolTip у символах, по замовченню 150. "
+"Встановити нуль для вимкнення.\n"
 "\n"
 
 msgid "Loading the module."
@@ -694,29 +692,35 @@ msgstr "Завантаження модуля."
 msgid "Saving the module."
 msgstr "Збереження модуля."
 
-msgid "Start module."
+msgid "Starting the module."
 msgstr "Запуск модуля."
 
-msgid "Stop module."
+msgid "Stopping the module."
 msgstr "Зупинка модуля."
 
 msgid "Module options"
 msgstr "Параметри модуля"
 
-msgid "Connection check timeouts in seconds '{fail}:{good}'"
-msgstr "Таймаути перевірки підключення, у секундах, '{немає}:{є}'"
+msgid "Timeouts of checking connections '{fail}:{good}', seconds"
+msgstr "Таймаути перевірки підключення '{немає}:{є}', у секундах"
 
-msgid "Configurator start path"
+msgid "Initial path of the configurator"
 msgstr "Початковий шлях конфігуратору"
 
-msgid "Configurator start user"
+msgid "Initial user of the configurator"
 msgstr "Початковий користувач конфігуратору"
 
-msgid "Go to remote stations list configuration"
+msgid "ToolTip limit, zero to disable"
+msgstr "Обмеження ToolTip, ноль для вимкнення"
+
+msgid "Go to the configuration of the list of remote stations"
 msgstr "Перейти до конфігурації переліку віддалених станцій"
+
+msgid "Item"
+msgstr "Елемент"
 
 msgid "QTCfg dialog"
 msgstr "QTCfg діалог"
 
-msgid "Node id and/or name select"
-msgstr "Вибір ідентифікатора та/або ім'я вузлу"
+msgid "Selecting the identifier and the name of the node"
+msgstr "Обрання ідентифікатору та ім'я вузлу"

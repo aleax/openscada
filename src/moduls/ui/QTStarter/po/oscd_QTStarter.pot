@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-10 16:41+0300\n"
+"POT-Creation-Date: 2018-04-21 17:03+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,6 +150,9 @@ msgid "Insert Unicode control character"
 msgstr ""
 
 msgid "Size"
+msgstr ""
+
+msgid "Type"
 msgstr ""
 
 msgid "Drive"

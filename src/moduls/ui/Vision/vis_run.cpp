@@ -397,8 +397,8 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	float x_scale_old = x_scale;
 	float y_scale_old = y_scale;
 	if(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen)) {
-	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)masterPg()->size().width();
-	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)masterPg()->size().height();
+	    x_scale = (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(masterPg()->sizeOrigF().width()*masterPg()->xScale());
+	    y_scale = (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(masterPg()->sizeOrigF().height()*masterPg()->yScale());
 	    if(x_scale > 1 && x_scale < 1.02) x_scale = 1;
 	    if(y_scale > 1 && y_scale < 1.02) y_scale = 1;
 	    if(keepAspectRatio()) x_scale = y_scale = vmin(x_scale, y_scale);

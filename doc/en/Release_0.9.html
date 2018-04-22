@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Documents/Release 0.9 - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Documents/Release 0.9</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Release_0.9/ru" title="Документы/Релиз 0.9 (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Release_0.9/uk" title="Документи/Реліз 0.9 (100% translated)">українська</a></div></div>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Waiting the <a class="external text" href="http://oscada.org/ua/rozrobka/zavdannja/posts/core/release_of_the_openscada_09_lts/" rel="nofollow noreferrer noopener" target="_blank">coming up LTS release</a>
+</td></tr></table>
+</div>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Overall_information"><span class="tocnumber">1.1</span> <span class="toctext">Overall information</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Application"><span class="tocnumber">1.2</span> <span class="toctext">Application</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Results_of_the_previous_release_0.8.0_LTS"><span class="tocnumber">2</span> <span class="toctext">Results of the previous release 0.8.0 LTS</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Planned_tasks_of_the_release"><span class="tocnumber">3</span> <span class="toctext">Planned tasks of the release</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#System-wide_properties"><span class="tocnumber">4</span> <span class="toctext">System-wide properties</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Internal"><span class="tocnumber">4.1</span> <span class="toctext">Internal</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Improvements_and_adaptions_to_the_different_platforms"><span class="tocnumber">4.2</span> <span class="toctext">Improvements and adaptions to the different platforms</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Optimization.2C_stabilization_and_performance"><span class="tocnumber">4.3</span> <span class="toctext">Optimization, stabilization and performance</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Data_acquisition"><span class="tocnumber">4.4</span> <span class="toctext">Data acquisition</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Graphical_environment"><span class="tocnumber">4.5</span> <span class="toctext">Graphical environment</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#New_and_significantly_updated_modules"><span class="tocnumber">5</span> <span class="toctext">New and significantly updated modules</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Conclusion"><span class="tocnumber">6</span> <span class="toctext">Conclusion</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Links"><span class="tocnumber">7</span> <span class="toctext">Links</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction"><span class="mw-headline-number">1</span> Introduction</span></h2>
+<p>The release of OpenSCADA, an open SCADA (Supervisory Control and Data Acquisition) system, version 0.9 is a stable industrial release of the long-term support (LTS).
+</p><p>The main purpose of the release is to provide an updated and stable platform for building integrated automation systems and other adjacent solutions for the community of users and developers of the free software. Also, the release is intended to become an actual and solid foundation for commercial solutions building.
+</p><p>The release is the next release of the stable branch for which, over a long period of time, there provided the technical support from developers and releasing of updates in the form of public builds for the main and stable environments of Linux, as well as operational builds for holders of packages of the technical support. The life cycle of the previous release 0.8.0 LTS stops from its latest update, right before the first builds of 0.9 LTS packages.
+</p><p>It was at this version that the final transition to the Work/LTS development scheme took place, that is, the development is carried out within the working version and on its basis periodically released the stable releases, which, in turn and in parallel, are updated by the back-porting compatible changes from the working version. The initiating transition took place in 2013, when the current stable version was recognized as 0.8.0 LTS and the working as 0.9 Work. Currently, 0.9 LTS is announced as a stable version, and 1 Work as a working version.
+</p><p>In general, the new stable version is the result of six years of development, implementation to various solutions, stabilization and exploitation of OpenSCADA in its work branch, which is currently being released as a stable one. All this time updates for 0.8.0 LTS continued to be released and what will be done for the announced 0.9 LTS.
+</p><p>This document is a generalization of the Change Log, starting with the zero revision of the previous LTS version, through its updates and ending with the current one. The document is intended to briefly and clearly show the new features of OpenSCADA. You can read in detail the changes in the "ChangeLog" file of distributive packages or from the source: <a class="external free" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/svn/tags/openscada_0.9/ChangeLog</a>.
+</p>
+<h3><span class="mw-headline" id="Overall_information"><span class="mw-headline-number">1.1</span> Overall information</span></h3>
+<p>The OpenSCADA project was founded by Roman Savochenko in 2003 as a free implementation of the SCADA system or the Human Machine Interface (HMI), based on its thorough projecting during 2002 and the experience of using and developing a commercial SCADA system to this.
+</p><p>SCADA or HMI systems are generally designed and used to carry out human operational control over the work of complex and responsible technological equipment and processes of various manufacturing enterprises.
+</p><p>At the time of announcement of 0.9 LTS, OpenSCADA is a developed SCADA/HMI system, which is quite widely used as in the direct destination and, due to its flexibility, in many related industries and it can definitely be called more general — a dynamic system of working with data in the real time.
+</p><p>The number of the stable version of OpenSCADA is less than one only because its purpose was claimed multiplatform, to achieve which in the planned volume is scheduled for the next stable release number 1. In general, the objectives of OpenSCADA are:
+</p>
+<ul><li> <b>openness</b> — mostly GPLv2;</li>
+<li> <b>scalability, flexibility, extensibility</b> — modularity, multithreading and internal dynamism;</li>
+<li> <b>executive redundancy</b> — reservation;</li>
+<li> <b>accessibility</b> — opened source texts, automatic building and multilingual;</li>
+<li> <b>reliability</b> — practical application, quick problems solving;</li>
+<li> <b>security</b> — permissions distribution, SSL;</li>
+<li> <b>multiplatform</b> — x86_32, x86_64, ARM, Web, Android, QNX (scheduled), MS Windows (scheduled);</li>
+<li> <b>united, unified, user-friendly, dynamic and advanced user interface</b> — Qt, Web, transparent and multi-level remote dynamic control;</li>
+<li> <b>wide range of the data sources</b> — unified ones, DAQ boards and low-level buses, created into the environment of OpenSCADA.</li></ul>
+<h3><span class="mw-headline" id="Application"><span class="mw-headline-number">1.2</span> Application</span></h3>
+<p>For actual implementations, where at least one implementation is known and with a short list of which from the project participants you can read through <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">this link</a>, belong:
+</p>
+<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">ACS TP (SCADA/HMI)</a> or telemechanics systems — the main direction and there are many implementations;</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">dynamic models, imitators and training apparatus</a> of technological processes into the real-time;</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Vacuum_processing_unit" title="Special:MyLanguage/Using/Vacuum processing unit">machine tools and industrial robots</a>;</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Yaroslavskij_broiler" title="Special:MyLanguage/Using/Yaroslavskij broiler">agricultural dispatching and control systems, poultry-yards</a>;</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using#Devices" title="Special:MyLanguage/Using">embedded and mobile systems</a> — environments of execution Programming Logical Controllers (PLC), robots, ...;</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Server" title="Special:MyLanguage/Sub-projects/Server">server equipment monitoring</a>;</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/HouseSpirit" title="Special:MyLanguage/Using/HouseSpirit">smart houses and home automation</a>.</li></ul>
+<p>With some restrictions and improvements, largely in the user's internal environment, OpenSCADA can be used in the following areas:
+</p>
+<ul><li> medical diagnostic systems;</li>
+<li> trading systems;</li>
+<li> enterprise resources management (ERP);</li>
+<li> billing systems;</li>
+<li> accounting and bookkeeping.</li></ul>
+<h2><span class="mw-headline" id="Results_of_the_previous_release_0.8.0_LTS"><span class="mw-headline-number">2</span> Results of the previous release 0.8.0 LTS</span></h2>
+<p>The release 0.8.0 LTS was released in April 2012 and during these six years it received 20 updates, which, in total, corrected over 500 errors and added many improvements that do not violate the compatibility of library databases and configurations.
+</p><p>The configuration and library databases of 0.8.0 LTS were generally frozen due to large incompatible changes at 0.9 Work, for OpenSCADA launch methods, and the imperfection of distributing the library databases at the release date of 0.8.0 LTS. Therefore, the upgrade and transition to 0.9 LTS will be non-trivial, although 0.9 LTS provides everything possible for simplification <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Release_0.9/Updating_0.8.0_LTS" title="Special:MyLanguage/Documents/Release 0.9/Updating 0.8.0 LTS">this procedure</a>. Updating 0.9 LTS to the planned future 1 LTS will no longer be so complex and in fact can only turn into a formal change in the version of the working branch, since now it is planned to upgrade all, including the library databases.
+</p>
+<h2><span class="mw-headline" id="Planned_tasks_of_the_release"><span class="mw-headline-number">3</span> Planned tasks of the release</span></h2>
+<p>The development of OpenSCADA, after the previous LTS version and within the Work branch, was mainly through deep stabilization and through the practical adaptation with elements of the expansion of the existing functional, aimed to provide a stable and reliable environment for the industrial automation and related tasks, and therefore, there was no clearly defined plan. But three years before this release, such a plan appeared and made the following tasks, as seen from <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Works/Road_map" title="Special:MyLanguage/Works/Road map">the general development plan</a>:
+</p>
+<ul><li> Full revising the main documentation and preparing the release announce.</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Adaption_to_Android" title="Special:MyLanguage/Sub-projects/Adaption to Android">Adaptation for work on the software platform "Android"</a>.</li>
+<li> OpenSCADA knowledge and documenting WIKI-resource moving to a new engine with the structure unification for multi-languages into the priority: English, Ukrainian, Russian; and the off-line documentation generation at it changes.</li>
+<li> Main Web-modules revision, actualization and some expanding.</li>
+<li> OpenSCADA expanding and adapting for direct working with the low-level buses and their devices like to 1Wire, I2C. Implementation for "the Smart House" in my own apartments.</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a> formal creation and documenting.</li>
+<li> Creating the Automatic building system of the OpenSCADA packages.</li>
+<li> Moving the OpenSCADA server infrastructure to <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Server" title="Special:MyLanguage/Sub-projects/Server">its own equipment and Internet channel</a>.</li>
+<li> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">DAQ.OPC_UA</a>: Simplification, features rising and protocol's code moving to a separate library on LGPL v3.</li></ul>
+<p>These tasks are done and some details about them are given below.
+</p>
+<h2><span class="mw-headline" id="System-wide_properties"><span class="mw-headline-number">4</span> System-wide properties</span></h2>
+<p>The new stable version of OpenSCADA has gained significant system-wide extensions, increased stability in work and productivity, and also received significant improvements to the graphical user interface and its environment, such as: advanced configuration, documentation, accessible directly from the program (offline and online), and which significantly revised and updated.
+</p><p>The common part of documentation of the project has been moved to a new Wiki, based on MediaWiki, and a significant amount of this part has been revised and translated into three languages — English, Ukrainian, Russian. For the pages transferring from the WackoWiki engine dialect to MediaWiki, a converting procedure was created which was completely written in the internal programming language of OpenSCADA, and is used to transfer large volume of the old Wiki. Format the offline documentation has been changed from static PDF-files, that were not updated after the previous LTS version, to HTML-files which dynamically generated from the actual knowledge base (Wiki) of the project, and have actual cross-links between pages and links on the online-documentation, for exclusively external materials. The offline-documentation is also generated by a specially-written procedure in the internal language of OpenSCADA, which, along with the procedure of the Wiki-dialects converting, is a bright sign of power and the current level of development of the internal language of OpenSCADA.
+</p><p>Within the old Wiki, after the release 0.8.0 LTS, some documents were added and updated, and with the transferring to the new Wiki, in addition to revision and translation of the main part of the documentation, the overall unification of its structure was made for reasons of: multilingualism (English as a primary language), the logic of the organization, the convenience of translation and the ability to remove duplicate articles from the official site, which at the moment are simply used with the Wiki. We will separately note the significantly expanded main documents:
+</p>
+<ul><li> <a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">Quick start</a>;</li>
+<li> <a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">Program manual</a>;</li>
+<li> <a href="User_API.html" title="Special:MyLanguage/Documents/User API">User API of OpenSCADA</a>;</li>
+<li> <a href="FAQ.html" title="Special:MyLanguage/Documents/FAQ">FAQ</a> and <a href="How_to.html" title="Special:MyLanguage/Documents/How to">How to ...</a>;</li>
+<li> <a href="How_to_Create_module.html" title="Special:MyLanguage/Documents/How to/Create module">Creating OpenSCADA module</a>.</li></ul>
+<p>The original language (English) was completely revised in original messages of the program and mainly for the main articles of the documentation-Wiki OpenSCADA, which is currently making OpenSCADA an adequately favorable for an audience that does not understand the original language — Ukrainian or Russian. And, along with the full realization of the dynamic translation mechanism, it is possible to build on the basis of OpenSCADA the dynamically multilingual user interfaces that you can see, in particular, on the publicly available Web-interface of the dynamic simulators of TP: <a class="external text" href="http://oscada.org:10002" rel="nofollow noreferrer noopener" target="_blank">AGLKS</a>, <a class="external text" href="http://oscada.org:10003" rel="nofollow noreferrer noopener" target="_blank">Boiler</a>.
+</p><p>The Work version, based on this stable, for the first time defined the OpenSCADA projects conception and implemented a command line script for launching and creating OpenSCADA projects. Immediately before the release of this version, the concept of the OpenSCADA project was finally assigned to the folder with the data of the separate project and the configuration file of OpenSCADA, and the implementation of the project manager was integrated directly into OpenSCADA. Consequently, this LTS version has a developed concept for the project manager that allows to flexibly work with them and eliminate the dangerous possibility of multiple launches with the general data of one project.
+</p><p>The Work version also introduced modification of the modules versions at modification in the code of the module and just before they are uploaded to the source repository, and therefore, the versions of the OpenSCADA modules of this release clearly reflect the overall level of development and stability.
+</p><p>In the process of implementing works on the Work branch, based on this stable, there were introduced the repositories of Linux distribution packages with the OpenSCADA builds, which until now were only provided as separate packages. That significantly simplified the deployment of OpenSCADA and keeping it up to date. Then <a class="external text" href="http://oscada.org/en/development/tasks/posts/core/the_automatic_openscada_builder/" rel="nofollow noreferrer noopener" target="_blank">automatic builder of these packages</a> was created, which currently has up to 100 targets, and which greatly simplified the release of updates for both branches, that is the Work and this stable. Therefore, this LTS version provides packages collections for the main Linux environments and the entire history of public updates will be saved.
+</p><p>To the OpenSCADA packages collections there also provide builds of the <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">live disks</a> of the quick acquaintance and deployment of OpenSCADA together with the system environment. Currently, they have received a formal background in the form of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">the Linux Automation Distribution of OpenSCADA</a>.
+</p><p>OpenSCADA builds and packages are accompanied by a number of open and free materials of the internal environment of the program, that is, the development of the data acquisition and processing layer, graphic representation elements and whole-complex projects of the TP simulators. These materials are provided as SQLite database files and include:
+</p>
+<ul><li> <i>Functions libraries</i> (<b>OscadaLibs</b>), "LibsDB/OscadaLibs.db" — contains all the development of the OpenSCADA project in the data acquisition and processing layer, including <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices" title="Special:MyLanguage/Libs/User protocol devices">data source elements of the user protocol</a>.</li>
+<li> <i>VCA: Main libraries</i> (<b>vcaBase</b>), "LibsDB/vcaBase.db" — contains <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Main_elements" title="Special:MyLanguage/Libs/Main elements">main elements of the graphic representation</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Mnemo_elements" title="Special:MyLanguage/Libs/Mnemo elements">elements of the mnemonic schemes</a> of the OpenSCADA project.</li>
+<li> <i>VCA: Tests</i> (<b>vcaTest</b>), "LibsDB/vcaTest.db" — contains test elements of the graphic representation primitives.</li>
+<li> <i>VCA: Library of electrical-elements of the mnemonic schemes of the user interface</i> (<b>vcaElectroEls</b>), "LibsDB/vcaElectroEls.db" — contains elements of the graphical representation of the electrical schemes.</li></ul>
+<p>Hosting of the project in general and materials of 0.9 LTS in particular were transferred to <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Server" title="Special:MyLanguage/Sub-projects/Server">own project server</a>, where additionally were deployed: the demonstration Web-interfaces of OpenSCADA simulators, the project of server monitoring and smart home based on OpenSCADA and builder of the packages of the OpenSCADA repositories.
+</p>
+<h3><span class="mw-headline" id="Internal"><span class="mw-headline-number">4.1</span> Internal</span></h3>
+<p>The resolution of internal data of the integer type of the OpenSCADA environment is increased to 64 bits. In general, the internal data of OpenSCADA, with error value reservation (EVAL) for each, is unified by common types: logical, integer, real, string, and object. Which primarily concerns the data sources.
+</p><p>To the OpenSCADA core, <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">its own protocol</a> and all nodes that work with remote stations OpenSCADA; added the ability to "raise" the nodes of OpenSCADA that are located behind other nodes and, as a rule, in another network. What generally allows you to centrally manage the OpenSCADA network at any level of the hierarchy.
+</p>
+<h3><span class="mw-headline" id="Improvements_and_adaptions_to_the_different_platforms"><span class="mw-headline-number">4.2</span> Improvements and adaptions to the different platforms</span></h3>
+<p>This version of OpenSCADA has gained in-depth support and ability to adapt to different platforms. This was mainly due to the adaptation to work on the Android software platform and the restoration of the building and work with ucLibC, and that it is planned to be used for further adaptation to work on QNX and MS Windows software platforms.
+</p><p>In addition to direct work (natively) on different platforms, the Web-interface has been significantly expanded, which currently implements all the general features of the concept of the Visualization Control Area (VCA).
+</p>
+<h3><span class="mw-headline" id="Optimization.2C_stabilization_and_performance"><span class="mw-headline-number">4.3</span> Optimization, stabilization and performance</span></h3>
+<p>Significant stabilization of the OpenSCADA core, and the overall program, has been achieved through the unification of internal resources control and the expansion of <a href="How_to_Debug.html" title="Special:MyLanguage/Documents/How to/Debug">capabilities of the user debugging</a>. In general, the user diagnostic and debugging expanded:
+</p>
+<ul><li> general enabling-disabling of the debugging and target control of the debugging nodes;</li>
+<li> special debugging of the controller objects of the data sources;</li>
+<li> special debugging of execution of the VCA projects;</li>
+<li> in-depth statistics formation for execution of the dynamic objects OpenSCADA, such as: controller objects of the data sources and their parameters, incoming and outgoing traffic, VCA sessions with detail up to widgets;</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Transports" title="Special:MyLanguage/Documents/Program manual">logging of ingoing and outgoing traffic of the transports</a>.</li></ul>
+<p>Almost all of the OpenSCADA modules have been subjected to deep and comprehensive stabilization and many have been optimized, of which especially should be noted:
+</p>
+<ul><li> <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules#DB" title="Special:MyLanguage/Modules">All DB modules</a> — added processing and verification of database or DBMS errors, and issuance of messages about these errors in the case of user uploading and recording; increased productivity (up to ten times) DBs that support SQL, through the implementation of the pre-loading mode of the scan query;</i></li>
+<li> <i>Calculator on the Java-like language</i> (<a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a>) — increased productivity by: saving the context of the function execution, constants pre-loading and direct access to string.</li>
+<li> <i>Archiver to DB</i> (<a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">Archive.DBArch</a>) — significantly optimized for recording and reading of the database, that is: group recording of multiple archives to one table and block reading (multiples of ten) in one query.</li>
+<li> <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules#Transports" title="Special:MyLanguage/Modules">All transports</a></i> — increased for the overall productivity.</li>
+<li> <i>Operation user interface (WEB)</i> (<a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>) — sensitivity of the interface increased by using asynchronous queries in the overall updating cycle.</li></ul>
+<p>Reliability of the redundant station on an integrated solution scale, more precisely the preservation of the history data, was enhanced by the extension of the redundancy mechanism, which potentially involves reserving any subsystem and currently implements the subsystems "Data acquisition" and "Archives-History".
+</p>
+<h3><span class="mw-headline" id="Data_acquisition"><span class="mw-headline-number">4.4</span> Data acquisition</span></h3>
+<p>Given the key role of the data acquisition in this type of software, this feature, in the person of the subsystem "Data acquisition" and its modules, has received significant improvements, of which particular attention should be paid: shifting emphasis on the extending supported data sources from implementation of individual modules of the subsystem "Data acquisition" in the system language "C/C++", to their implementation in the OpenSCADA environment and in its internal language — <a href="DAQ.html" title="Special:MyLanguage/Documents/DAQ">logical level of OpenSCADA</a>. That is, at the logical level of OpenSCADA, can be and implements everything that: uses the network to access the data, does not require to use specific libraries and functions, and is not very complicated. Currently there implemented in this way:
+</p>
+<ul><li> Sending SMS (SMS) and Email (SMTP).</li>
+<li> Uninterruptible Power Supply (UPS), as a data object with attributes of values.</li>
+<li> Simple sensors:
+<ul><li> Елемер TM510x;</li>
+<li> EDWARDS TURBOMOLECULAR PUMPS (SCU750);</li>
+<li> Sycon Multi Drop Protocol (SMDP);</li>
+<li> Power supply of the turbo-molecular pump (TMP-xx03);</li>
+<li> Temperature measurement IT-3 (IT3);</li>
+<li> IVE-452HS-02;</li>
+<li> OPTRIS CT/CTL;</li>
+<li> CTR 100, 101.</li></ul></li>
+<li> Computer of the heat-counter VKT7.</li>
+<li> IEC-60870-104.</li>
+<li> Test implementations and examples: DCON, OWEN.</li>
+<li> Bus "One Wire" in help of {DS9097,DS9097U} (1W_{DS9097,DS9097}) for chips: DS1820, DS1820/DS18S20/DS1920, DS1822, DS2413, DS2408, DS2450, DS2438.</li>
+<li> Bus I2C: PCF8591, PCF8574, BMP180, DS3231, AT24C{32|64}.</li>
+<li> Generic ports IO (GPIO): DHT11,22 (AM23XX). GPIO|I2C: 1602A(HD44780).</li></ul>
+<p>Given the increased role of the logical level of OpenSCADA, there has been an increase in the requirements to the flexibility of the data model of the data source, which was satisfied by:
+</p>
+<ul><li> completion of the coverage of the internal data model by all the functions that are specific to the areas of application;</li>
+<li> adding hierarchy to the parameters of controller objects of the data sources;</li>
+<li> giving the possibility of an arbitrary and dynamic formation of the data model — a set of attributes of parameters.</li></ul>
+<p>The OpenSCADA internal programming language has made significant improvements and, at the moment, satisfies all the requirements of the areas of application OpenSCADA. Many of these enhancements came in the previous version of 0.8.0 LTS, and some could not get there because of the backward compatibility or lack of stability at that time. Of these significant improvements, it should be noted again: increasing the resolution of the data of the OpenSCADA internal environment of the integer type up to 64 bits and preserving the context of execution of the internal procedures.
+</p>
+<h3><span class="mw-headline" id="Graphical_environment"><span class="mw-headline-number">4.5</span> Graphical environment</span></h3>
+<p>In general, the graphical environment has been significantly developed, and the main one has been the extension of <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">the module of starting the Qt-interface</a>, as the basis for the rest local interface modules. First of all, this module and the core of OpenSCADA are adapted to allow the Qt-library to run in the main thread of the program, eliminating many of the problems associated with execution in the non-main thread, and also provides work with version 5 of this library. Secondly, this module took on the role of the selecting interface of the OpenSCADA projects when it launches and switches, as well as creating new ones. And thirdly, because of its primacy to launching Qt, it received the function of controlling the appearance of the program regardless of the graphical environment and the possibility of its launch-closing in the system tray. In general, it has made of the possibility to customize OpenSCADA to personal user requirements and to adapt it to very specific environments such as <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Android</a>.
+</p><p>Notable improvements have been made to the Qt and Web configuration modules, which are particularly noteworthy:
+</p>
+<ul><li> <i>Configurator-Qt</i> (<a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">UI.QTCfg</a>): querying remote stations in a separate thread from the Qt-thread made it more convenient and more predictable and even, along with one update, got into the previous stable versions of 0.8.0 LTS.</li>
+<li> <i>Configurator-WEB</i> (<a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">UI.WebCfgD</a>): in general, has been completely updated to the interface, which is now more dynamic, user-friendly and can be extended by themes.</li></ul>
+<p>Notable improvements were also made to the Visual Control Area (VCA), consisting of all its modules:
+</p>
+<ul><li> <i>VCA Engine and the visualizer modules at all</i> (<a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a>):
+<ul><li> allows to carry out a full-hot development, that is — editing the VCA project at the time of its execution by sessions;</li>
+<li> the original interface messages are fully corrected, grammatically and spelling correct for the English language;</li>
+<li> provided a number of additional types of the primitive "Form elements", "Diagram" and extended the primitive "HTML" by "HTML" displaying;</li>
+<li> the mechanism of the widget specific attributes to the visualizer was provided, which allowed to reveal and use their individual properties;</li>
+<li> new-flexible mechanism of user notification about extraordinary events in the process controlled by the system, which provides the possibility of free formation of custom announcers with the necessary properties, such as: mono-tone signal, synthesis of speech.</li></ul></li>
+<li> <i>Visualizer-Qt</i> (<a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a>):
+<ul><li> noticeably improved performance of execution the remote interfaces;</li>
+<li> forming the primitive "Document" can be performed at help WebKit.</li></ul></li>
+<li> <i>Visualizer-WEB</i> (<a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>):
+<ul><li> unified, optimized and expanded by using CSS3;</li>
+<li> provides the implementation for all elements-primitives of the unified interface;</li>
+<li> performs the scaling to allowed space of the browser window;</li>
+<li> increased for the working productivity and the interface sensibility, through using only the asynchronous mechanism at updating.</li></ul></li></ul>
+<p>All Web modules, in general, have the opportunity to change the view by topics, through the system-wide interfaces of <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">the protocol HTTP</a> and its mechanisms for query processing and response forming. Also, they all have the support of dynamic translation of the interface, which is especially relevant for multi-user Web-interfaces, and what you can see on the demo Web-interfaces of the OpenSCADA models: <a class="external text" href="http://oscada.org:10002" rel="nofollow noreferrer noopener" target="_blank">AGLKS</a>, <a class="external text" href="http://oscada.org:10003" rel="nofollow noreferrer noopener" target="_blank">Boiler</a>. There is also a mechanism for the distribution of access to the pages, which, in particular, allows to differentiate access to the Web-modules in general.
+</p>
+<h2><span class="mw-headline" id="New_and_significantly_updated_modules"><span class="mw-headline-number">5</span> New and significantly updated modules</span></h2>
+<p>The new version has added new modules and significantly updated a number of present ones:
+</p>
+<ul><li> New modules added:
+<ul><li> <i>MMS(IEC-9506)</i> (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/MMS" title="Special:MyLanguage/Modules/MMS">DAQ.MMS</a>) — a module of supporting for data exchanging at the protocol "Manufacturing Message Specification (MMS, IEC-9506)".</li>
+<li> <i>Comedi</i> (<a href="Modules/Comedi.html" title="Special:MyLanguage/Modules/Comedi">DAQ.Comedi</a>) — a module of supporting the data sources of the real time (library "Comedi"), which are based on the data acquisition boards of different manufacturers and are installed on the buses: ISA, PCI, PCMCIA and USB.</li>
+<li> <i>SMH2Gi</i> (<a href="Modules/SMH2Gi.html" title="Special:MyLanguage/Modules/SMH2Gi">DAQ.SMH2Gi</a>) — a module of implementation of access to hardware modules of the data sources of PLC Segnetics SMH2Gi,SMH4 for "MC", "MR", and also for interaction with the original environment "SMLogix".</li>
+<li> <i>Fastwel IO</i> (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Fastwel" title="Special:MyLanguage/Modules/Fastwel">DAQ.Fastwel</a>) — a module of data exchanging with the hardware modules of Fastwel IO.</li>
+<li> <i>FT3 (АПСТМ)</i> (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/FT3" title="Special:MyLanguage/Modules/FT3">DAQ.FT3</a>) — a module of data exchanging with the PLC АПСТМ, АСДКУ, СУАП.</li>
+<li> <i>GPIO</i> (<a href="Modules/GPIO.html" title="Special:MyLanguage/Modules/GPIO">DAQ.GPIO</a>) — a module of accessing to GPIO of the single-board PC like to Raspberry Pi, Orange Pi and other.</li></ul></li>
+<li> <i>Calculator on the Java-like language</i> (<a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a>) expanded for: support for internal functions, dynamic translation of messages and many other functions of the user programming interface in general.</li>
+<li> <i>Data sources gate</i> (<a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.DAQGate</a>) expanded by reflecting the messages associated with the selected data source.</li>
+<li> <i>Data acquisition of OS</i> (<a href="Modules/System.html" title="Special:MyLanguage/Modules/System">DAQ.System</a>) expanded for the data sources: "File System", UPS, QSensor and the ability to separate slow sources from fast ones.</li>
+<li> <i>ModBus</i> (<a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">{DAQ,Protocol}.ModBus</a>) expanded for support string, as a sequence of values of the registers.</li>
+<li> <i>Client DCON</i> (<a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DAQ.DCON</a>) significantly expanded for specific modules support.</li>
+<li> <i>OPC-UA</i> (<a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">DAQ.OPC_UA</a>) significantly expanded for Publishes and to support for "Chunks" into client part of the service, the specific protocol code is separated from the library.</li>
+<li> <i>Equipment of ICP_DAS</i> (<a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">DAQ.ICP_DAS</a>) significantly expanded, and in fact completely rewritten, for support all available ICP_DAS data acquisition boards for the series I8k, I-87k, on the ISA bus and unified types for standard modules of the I7k series.</li>
+<li> <i>Siemens S7 PLC</i> (<a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">DAQ.Siemens</a>) significantly expanded its own implementation of ISO-TSAP.</li>
+<li> <i>Diamond data acquisition boards</i> (<a href="Modules/DiamondBoards.html" title="Special:MyLanguage/Modules/DiamondBoards">DAQ.DiamondBoards</a>) significantly expanded, but in fact completely rewritten, to support all existing data acquisition boards from Diamond Systems.</li>
+<li> <i>AMR devices АСКО</i> (<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/AMRDevs" title="Special:MyLanguage/Modules/AMRDevs">DAQ.AMRDevs</a>) appended of support the counter Kontar (MZTA).</li>
+<li> <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules#DB" title="Special:MyLanguage/Modules">All DB modules</a></i> significantly expanded by the dynamic translation.</li>
+<li> <i>Archiver to DB</i> (<a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">Archive.DBArch</a>) expanded by archiving several archives into one table and restoring the list of archives from information in the database.</li>
+<li> <i>Archiver to FS</i> (<a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">Archive.FSArch</a>) added for supported the intermediate types "Int16", "Int32", "Int64", "Float", "Double", and appended by an absolute limit to the size of the archive on the disk.</li>
+<li> <i><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules#Transports" title="Special:MyLanguage/Modules">All transport modules</a></i> extended for the pooling mode of the input transports and protocols.</li>
+<li> <i>Sockets</i> (<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">DAQ.Sockets</a>) expanded by the RAWCAN bus support and initiated connections of the input transports.</li>
+<li> <i>Serial interfaces</i> (<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Transport.Serial</a>) expanded for the low-level bus I2C support; special user functions of the serial interface: "sendbreak", "TS", "DR", "DCD", "RI"; advanced control RTS for RS-485.</li>
+<li> <i>Security Sockets Layer</i> (<a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">Transport.SSL</a>) expanded by support: TLSv1.1, TLSv1.2, DTLSv1.</li>
+<li> <i>Own protocol of the program</i> (<a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">Protocol.SelfSystem</a>) expanded for hierarchical and multi-level targeting of requests to external hosts.</li>
+<li> <i>HTTP</i> (<a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>) expanded for adapting to the user interfaces in the system dialogs and providing a generic API for building HTTP interfaces for both the user and the modules behind it.</li>
+<li> <i>Program configurator (Qt)</i> (<a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">UI.QTCfg</a>) OpenSCADA control interface requests are moved to a different thread and improved for implementation of the control elements.</li>
+<li> <i>Program configurator (Dynamic WEB)</i> (<a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">UI.WebCfgD</a>) expanded with a new design using CSS3 and the features of modern WEB browsers.</li>
+<li> <i>Conception and the Visual Control Area (VCA)</i> (<a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a>) expanded by: support for specific visualizer attributes of the widgets, implementation of the new-flexible mechanism of the user's notification, background (in a separate thread) execution of the document forming task, increase of the number of trends in one frame to 100 and support of the logarithmic scale for the primitive "Diagram".</li>
+<li> <i>Operation user interface (Qt)</i> (<a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a>) expanded: to work on the network through the visualizer server; implementing a group of attributes specific to this visualizer; realization of the views "Tree", "Table" and extension of the type "Button", of the primitive "Form elements"; implementation of the view "XY" of the primitive "Diagram"; significant refactoring code of the primitive "Elementary figure".</li>
+<li> <i>Operation user interface (WEB)</i> (<a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>) expanded for using CSS3 and the capabilities of modern browsers, in particular: added zoom to the available window browser space, implemented all the primitives of the unified interface.</li>
+<li> <i>Functions library of the system API of the user programming environment</i> (<a href="Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>) expanded by the functions and objects: "floatExtract", "md5", "tmSleep", the object "IO"; significantly expanded for the actual functions and objects: "dbReqSQL", "FFT", "strParse", "strDec4Bin".</li></ul>
+<h2><span class="mw-headline" id="Conclusion"><span class="mw-headline-number">6</span> Conclusion</span></h2>
+<p>On the way to the new release 0.9 LTS of industrial use, much work has been done to stabilize, expand functionality, and expand adaptability to work on alternative platforms. All this in general has further expanded the scope of full use of OpenSCADA at all levels of industrial automation systems and related areas of automation and automatic.
+</p><p>LTS versions of OpenSCADA are not blank, they are really supported all the time until the next LTS version, and support for this version will be further expanded with the service updates. Also, the emphasis and implementation policy of the LTS version, which was previously recommended to upgrade configurations with frozen library databases, will be shifted to the using priority on a wide range of new solutions.
+</p><p>In the emergence of the new industrial version of OpenSCADA 0.9 LTS took part:
+</p>
+<ul><li> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>: the main volume of work on the development, testing, building, documenting and translation of the program and documentation in three languages.</li>
+<li> <i>Maxim Kochetkov</i>: implementing the modules DAQ.Fastwel, DAQ.FT3; expanding the module <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a> by support RAWCAN and the module <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Transport.Serial</a> by extended control RTS for RS-485.</li>
+<li> <i>Arsen Zakojan</i>: implementing for support the electricity counters "Mercury 200" and "Mercury 230".</li>
+<li> <i>Almaz Karimov</i>: expanding for the module of the protocol DCON implementation.</li>
+<li> <i>Arcadiy Kisel</i>: implementing for support the I2C temperature, barometric pressure and humidity sensor BME280.</li>
+<li> <i>Constantine (IrmIngeneer)</i>: support of the OpenSCADA build on the Linux distribution Gentoo.</li>
+<li> Many other users of OpenSCADA through implementation and exploiting.</li></ul>
+<p>Further development efforts will focus on:
+</p>
+<ul><li> Completion of revisions of the basic documentation, mainly for modules and libraries.</li>
+<li> Clear definition and update of the policy of providing commercial services around the OpenSCADA project:
+<ul><li> view and update the terms of package of the technical support;</li>
+<li> policy and organization of building updates to the stable branch: preserving the history of all public updates and organizing service ones;</li>
+<li> distribution of exclusively commercial builds with public demonstration on an example package for Android — development and formation of a mechanism for monitoring the term of the package of technical support and demonstration mode.</li></ul></li>
+<li> Mastering and adapting to Enterprise Resource Planning (ERP), focusing on:
+<ul><li> create a resource management interface on the project server;</li>
+<li> creating a common interface for tasks control and their funding, with the organization of developers to engage in the implementation of these tasks and technical support.</li></ul></li>
+<li> Expand the application functions in the areas: "Smart House", "Home Automation" and "Custom Robots".</li>
+<li> Adaptation to work in the environment of the operating systems QNX and MS Windows.</li></ul>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">7</span> Links</span></h2>
+<ul><li> <a class="new" href="http://oscada.org/wiki/index.php?title=Documents/Release_0.9/Tests&amp;action=edit&amp;redlink=1" title="Documents/Release 0.9/Tests (page does not exist)">Test report</a> of the industrial release 0.9 LTS.</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Release_0.9/Updating_0.8.0_LTS" title="Special:MyLanguage/Documents/Release 0.9/Updating 0.8.0 LTS">Manual of updating 0.8.0 LTS</a>.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-08 20:29+0300\n"
+"POT-Creation-Date: 2018-04-21 17:05+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -222,13 +222,13 @@ msgstr "Натиснути для отримання підручника '%1'."
 msgid "What's &This"
 msgstr "Що &це"
 
-msgid "The button for requesting the information about GUI elements"
-msgstr "Кнопка запиту інформації про GUI елементи"
-
-msgid "Requesting the information about GUI elements"
+msgid "Requesting about GUI elements"
 msgstr "Запит інформації про GUI елементи"
 
-msgid "Press for requesting the information about GUI elements."
+msgid "The button for requesting information about the user interface elements"
+msgstr "Кнопка запиту інформації про GUI елементи"
+
+msgid "Press for requesting information about the user interface elements."
 msgstr "Натиснути для запиту інформації про GUI елементи."
 
 msgid "Load from the DB"
@@ -1072,10 +1072,10 @@ msgstr "Збереження змін"
 
 msgid ""
 "Some changes were made!\n"
-"Save the changes to the DB before exiting?"
+"Save the changes to the DB before the closing?"
 msgstr ""
-"Здійснено деякі зміни.\n"
-"Зберегти зміни у БД перед виходом?"
+"Здійснено деякі зміни!\n"
+"Зберегти зміни у БД перед закриттям?"
 
 msgid "No rows selected."
 msgstr "Жодного рядку не обрано."
@@ -1613,6 +1613,15 @@ msgstr "Натиснути для отримання підручника про
 
 msgid "'%1' manual"
 msgstr "'%1' підручник"
+
+msgid "The button for requesting the information about GUI elements"
+msgstr "Кнопка запиту інформації про GUI елементи"
+
+msgid "Requesting the information about GUI elements"
+msgstr "Запит інформації про GUI елементи"
+
+msgid "Press for requesting the information about GUI elements."
+msgstr "Натиснути для запиту інформації про GUI елементи."
 
 msgid "Alarm level"
 msgstr "Рівень порушення"

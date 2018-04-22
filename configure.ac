@@ -272,7 +272,7 @@ AX_MOD_DAQ_EN(AMRDevs, [disable compilation module DAQ.AMRDevs], disable)
 if test $ix86 != yes -a $target_cpu != "ix86"; then enable_Fastwel=no; fi
 AX_MOD_DAQ_EN(Fastwel, [enable compilation module DAQ.Fastwel], enable)
 AX_MOD_DAQ_EN(FT3, [enable compilation module DAQ.FT3], enable)
-AX_MOD_DAQ_EN(BCM2835, [enable compilation module DAQ.BCM2835], enable)
+AX_MOD_DAQ_EN(GPIO, [enable compilation module DAQ.GPIO], enable)
 
 # Archive modules
 AX_MOD_Archive_EN(FSArch, [disable or enable[=incl] compilation module Archive.FSArch], disable, incl)

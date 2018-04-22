@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-10 16:41+0300\n"
+"POT-Creation-Date: 2018-04-21 17:03+0300\n"
 "PO-Revision-Date: 2011-07-19 20:56+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -155,6 +155,9 @@ msgstr "Hinzufügen von Unicode-Kontrollzeichen"
 
 msgid "Size"
 msgstr "Größe"
+
+msgid "Type"
+msgstr "Typ"
 
 msgid "Drive"
 msgstr "Disk"

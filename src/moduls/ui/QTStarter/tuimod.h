@@ -152,6 +152,7 @@ private slots:
 private:
     //Attributes
     bool	inExec;
+    I18NTranslator *transl;
     QMenu	*trayMenu;
     QSystemTrayIcon *tray;
     StartDialog	*stDlg;

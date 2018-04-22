@@ -207,6 +207,8 @@ void Project::load_( TConfig *icfg )
 
 void Project::save_( )
 {
+    if(enableByNeed)	return;
+
     SYS->db().at().dataSet(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this);
 
     //Check for need copy mime data and sessions data to other DB and same copy

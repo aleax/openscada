@@ -55,7 +55,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.6.1"
+#define MOD_VER		"4.6.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -106,7 +106,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), hideMode(false),
 	_("Look in:"),_("Computer"),_("File"),_("Folder"),_("File &name:"),_("Open"),_("&Open"),_("Cancel"),_("Save"),_("&Save"),_("Save As"),_("Date Modified"),_("All Files (*)"),
 	_("Create New Folder"),_("List View"),_("Detail View"),_("Files of type:"),_("New Folder"),_("&New Folder"),_("Show &hidden files"),_("&Delete"),_("&Rename"),_("Remove"),
 	_("&Undo"),_("&Redo"),_("Cu&t"),_("&Copy"),_("&Paste"),_("Delete"),_("Select All"),_("Insert Unicode control character"),
-	_("Size"),_("Drive"),_("Go back"),_("Go forward"),_("Go to the parent directory"),_("Create a New Folder"),_("Change to list view mode"),_("Change to detail view mode"),
+	_("Size"),_("Type"),_("Drive"),_("Go back"),_("Go forward"),_("Go to the parent directory"),_("Create a New Folder"),_("Change to list view mode"),_("Change to detail view mode"),
 	_("Destination file exists"),
 	_("%1 bytes"),_("%1 KB"),_("%1 MB"),
 	_("Are sure you want to delete '%1'?"),_("%1 already exists.\nDo you want to replace it?"),_("Recent Places"),
@@ -188,12 +188,6 @@ void TUIMod::postEnable( int flag )
 
 	//Qt application object init
 	QtApp = new StApp(mod->qtArgC, (char**)&mod->qtArgV);
-	QtApp->setApplicationName(PACKAGE_STRING);
-	QtApp->setQuitOnLastWindowClosed(false);
-
-	//Create I18N translator
-	I18NTranslator translator;
-	QtApp->installTranslator(&translator);
 
 	splashSet(SPLSH_START);
     }
@@ -372,13 +366,7 @@ void *TUIMod::Task( void * )
 
     //Qt application object init
     mod->QtApp = new StApp(mod->qtArgC, (char**)&mod->qtArgV);
-    mod->QtApp->setApplicationName(PACKAGE_STRING);
-    mod->QtApp->setQuitOnLastWindowClosed(false);
     mod->runSt = true;
-
-    //Create I18N translator
-    I18NTranslator translator;
-    mod->QtApp->installTranslator(&translator);
 
     ret:
     mod->splashSet(SPLSH_START);
@@ -567,8 +555,11 @@ TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 //* StApp                                         *
 //*************************************************
 StApp::StApp( int &argv, char **args ) : QApplication(argv, args), origStl(mod->dataRes()),
-    inExec(false), trayMenu(NULL), tray(NULL), stDlg(NULL), initExec(false)
+    inExec(false), transl(NULL), trayMenu(NULL), tray(NULL), stDlg(NULL), initExec(false)
 {
+    setApplicationName(PACKAGE_STRING);
+    setQuitOnLastWindowClosed(false);
+
     startTimer(STD_WAIT_DELAY);
 }
 
@@ -611,6 +602,7 @@ void StApp::stClear( )
     if(tray)		{ delete tray; tray = NULL; }
     if(trayMenu)	{ delete trayMenu; trayMenu = NULL; }
     if(stDlg)		{ delete stDlg; stDlg = NULL; }
+    if(transl)		{ removeTranslator(transl); delete transl; transl = NULL; }
 
 #ifdef HAVE_QTSENSORS
     for(int iS = 0; iS < sensors.size(); iS++) { sensors[iS]->stop(); delete sensors[iS]; }
@@ -625,6 +617,10 @@ void StApp::timerEvent( QTimerEvent *event )
     if(!inExec)	return;
     if(!initExec) {
 	initExec = true;	//!!: Set to the begin but here can be a multiple entry from processEvents() manual call, observed on QTCfg.
+
+	//Create I18N translator
+	transl = new I18NTranslator();
+	installTranslator(transl);
 
 	origStl = style()->objectName().toStdString();
 	updLookFeel();
