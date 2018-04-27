@@ -9,7 +9,8 @@ openscada-proj proc|create|remove {ProjName}
   list   - allowed projects list;
   proc   - proceed for copy RO projects to WR, create desktop links, process core dumps;
   create - create new projects or copy RO projects to WR, create desktop links;
-  remove - remove projects.
+  remove - remove project.
+  update - update from 0.8.0 LTS.
  Arguments:
   ProjName - project name;
  Environments:
@@ -123,6 +124,37 @@ case "$1" in
 	fi
     else exit 1;
     fi
+    ;;
+  update)
+    if test $# -lt 2; then echo "Not enough arguments!"; exit 1; fi
+    prjNm=$2
+    # OpenSCADA user folder presence
+    if test -z "$dPrjUser" -o ! -d $dPrjUser; then exit 1; fi
+    # Source directory checking whether it <prjNm> or "DATA"
+    if test -d $dPrjUser/$prjNm; then
+	if test ! -f $dPrjUser/$prjNm/oscada.xml; then srcDir=$prjNm; fi
+    elif test -d $dPrjUser/DATA -o -d $dPrjUser/.openscada_old/DATA; then srcDir=DATA; fi
+    if test -z "$srcDir"; then exit 1; fi
+
+    # Saving the old release data to ".openscada_old"
+    if test ! -d $dPrjUser/.openscada_old; then
+	mkdir $dPrjUser/.openscada_old
+	mv $dPrjUser/LibsDB $dPrjUser/ARCHIVES $dPrjUser/DATA $dPrjUser/*.xml $dPrjUser/*.db $dPrjUser/icons $dPrjUser/.openscada_old/
+	cp -R $dPrj/LibsDB $dPrjUser/LibsDB
+    fi
+    # New project folder creating
+    if test ! -d $dPrjUser/$prjNm; then
+	mkdir $dPrjUser/$prjNm
+	cp $dPrjUser/.openscada_old/DATA/* $dPrjUser/$prjNm
+    fi
+    # Other elements copying
+    cp $dSysCfg/oscada_start.xml $dPrjUser/$prjNm/oscada.xml
+    if test ! -f $dPrjUser/$prjNm/St.db -a -f $dPrjUser/$prjNm/MainSt.db; then
+	mv $dPrjUser/$prjNm/MainSt.db $dPrjUser/$prjNm/St.db
+    fi
+    cp -R $dPrjUser/.openscada_old/ARCHIVES $dPrjUser/$prjNm
+    ln -s ../LibsDB $dPrjUser/$prjNm/LibsDB
+    ln -s ./ $dPrjUser/$prjNm/$prjNm
     ;;
 esac
 

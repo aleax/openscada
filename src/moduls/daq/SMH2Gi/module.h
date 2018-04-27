@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SMH2Gi file: module.h
 /***************************************************************************
- *   Copyright (C) 2012-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2012-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -74,8 +74,8 @@ class DevMRCFeature
 	};
 
 	//Functions
-        DevMRCFeature( const string &iniFile );
-        DevMRCFeature( ) : HardID(0)	{ }
+	DevMRCFeature( const string &iniFile );
+	DevMRCFeature( ) : HardID(0)	{ }
 
 	bool load( const string &iniFile );
 
@@ -93,10 +93,10 @@ class MRCParam : public TTypeParam
 {
     public:
 	//Data
-        class tval
-        {
-            public:
-                tval( ) : SoftID(-1), SN(-1), DI(0), DO(0), AO(0), CNTR(0), diRev(0), doRev(0)	{ }
+	class tval
+	{
+	    public:
+		tval( ) : SoftID(-1), SN(-1), DI(0), DO(0), AO(0), CNTR(0), diRev(0), doRev(0)	{ }
 
 		int SoftID;
 		int SN;
@@ -104,14 +104,14 @@ class MRCParam : public TTypeParam
 		int DI, DO, AO, CNTR;
 		uint32_t diRev, doRev;
 
-                DevMRCFeature dev;
+		DevMRCFeature dev;
         };
 
 	//Methods
 	MRCParam( );
 
 	void enable( TParamContr *prm );
-        void disable( TParamContr *prm );
+	void disable( TParamContr *prm );
 
 	void getVals( TParamContr *prm );
 	void vlSet( TParamContr *prm, TVal &vo, const TVariant &vl, const TVariant &pvl );
@@ -145,7 +145,7 @@ class TMdPrm : public TParamContr
 	void setEval( );
 
 	string modPrm( const string &prm, const string &def = "" );
-        void setModPrm( const string &prm, const string &val );
+	void setModPrm( const string &prm, const string &val );
 
 	TMdContr &owner( ) const;
 
@@ -180,7 +180,7 @@ class TMdContr: public TController
 	string getStatus( );
 
 	int64_t	period( )	{ return mPer; }
-	string  cron( )         { return cfg("SCHEDULE").getS(); }
+	string	cron( )         { return cfg("SCHEDULE").getS(); }
 	int	prior( )	{ return m_prior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -208,7 +208,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	static uint8_t CRCHi[];
-        static uint8_t CRCLo[];
+	static uint8_t CRCLo[];
 	uint16_t CRC16( const string &mbap );
 
 	//Attributes

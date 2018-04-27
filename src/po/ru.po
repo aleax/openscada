@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-22 20:43+0300\n"
+"POT-Creation-Date: 2018-04-27 19:52+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -650,8 +650,14 @@ msgstr ""
 "Превышено время ожидания. Объект использован %d пользователями. Сначала "
 "освободите объект!"
 
-msgid "Error blocking node."
-msgstr "Ошибка блокирования узла."
+msgid ""
+"Error blocking node.\n"
+"The node forced to disable which can cause to crash.\n"
+"This problem mostly in user procedure, if the program exits!"
+msgstr ""
+"Ошибка блокирования узла.\n"
+"Узел принудительно выключен, что может привести к аварийному завершению программы.\n"
+"Эта проблема в основном в процедуре пользователя, если программа завершается!"
 
 msgid "Error turning off node. Turning on back the node."
 msgstr "Ошибка отключения узла. Восстановление включения узла."
@@ -1531,9 +1537,11 @@ msgstr "Специальный"
 msgid "Subsystem is not modular!"
 msgstr "Подсистема не модульная!"
 
+#, c-format
 msgid "Module '%s' connecting."
 msgstr "Подключение модуля '%s'."
 
+#, c-format
 msgid "Module '%s' disconnecting."
 msgstr "Отключение модуля '%s'."
 

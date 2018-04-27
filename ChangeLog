@@ -1,3 +1,19 @@
+2018-04-27 Roman (stable)
+- data/openscada-proj: Expanded by the command "update" of updating the configuration 0.8.0 LTS to 0.9.
+- !:FIX:SYS.Archives: Fixed for archivers loading at some archive module missing.
+- !:FIX:SYS.TCntrNode: Appended by the definition "DEF_TIMEOUT_EXIT(60)" for use the timeout of the nodes disable/remove at the program exit.
+    Mostly to prevent crashes at the exit when there some long-time procedures executed.
+- !:FIX:TRegExp: UTF8 flag force setting at UTF8 system locale is prevented at the reason of there impossible disable the flag for non-UTF8 source.
+    The attribute "err" added to the result array of the match() request.
+- DAQ.{DAQGate,MMS,ModBus,OPC_UA}: TSYS::sysSleep() in idle (missing connection) replaced to TSYS::taskSleep() for correcting the maximum requesting time.
+- !!!:DAQ.GPIO: Expanded by the OrangePi (SUNXI) support and unification the user static functions.
+- DAQ.ModBus: Some original messages expanded.
+- !!:DAQ.SMH2Gi: Expanded for SMH4 support.
+- FIX:UI.QTCfg: Take in account the item's description set after its zero value.
+    Forming iem's WhatsThis and ToolTip some improved.
+- FIX:UI.Vision: Translation some fixed.
+
+
 2018-04-22 Roman (stable)
 - !!!!:DOC: The document "Release_0.9" has formed and the document "DAQ.GPIO" added.
 - !!:SYS: DAQ.BCM2835 renamed to DAQ.GPIO and expanded for different boards support.

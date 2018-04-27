@@ -295,7 +295,9 @@ void TCntrNode::nodeDis( long tm, int flag )
 	    if(tm && time(NULL) > (t_cur+tm)) {
 		if(!TSYS::finalKill)
 		    throw err_sys(_("Waiting time exceeded. The object is used by %d users. Release the object first!"), mUse-1);
-		mess_sys(TMess::Error, _("Error blocking node."));
+		mess_sys(TMess::Error, _("Error blocking node.\n"
+		    "The node forced to disable which can cause to crash.\n"
+		    "This problem mostly in user procedure, if the program exits!"));
 		break;
 	    }
 	    res1.unlock();
@@ -544,7 +546,8 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )
 {
     if(!(nodeMode() == Enabled || nodeMode() == Disabled)) throw err_sys(_("Node is being processed now!"));
 
-    if(tm < 0)	tm = DEF_TIMEOUT;
+    if(SYS->stopSignal())	tm = DEF_TIMEOUT_EXIT;
+    else if(tm < 0)		tm = DEF_TIMEOUT;
 
     AutoHD<TCntrNode> chN = chldAt(igr, name);
     if(chN.at().nodeMode() == Enabled) chN.at().nodeDis(tm, (flag<<8));

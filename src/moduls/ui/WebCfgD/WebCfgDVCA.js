@@ -1733,56 +1733,54 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
  ***************************************************/
 function actEnable( act, vl )
 {
-  var actEl = document.getElementById(act);
-  if( !actEl ) return;
-  actEl.className = vl?'active':'inactive';
-  actEl.childNodes[0].src = vl ? actEl.childNodes[0].src.replace('filtr=unact','filtr=none') :
-				 actEl.childNodes[0].src.replace('filtr=none','filtr=unact');
+    var actEl = document.getElementById(act);
+    if(!actEl) return;
+    actEl.className = vl?'active':'inactive';
+    actEl.childNodes[0].src = vl ? actEl.childNodes[0].src.replace('filtr=unact','filtr=none') :
+				   actEl.childNodes[0].src.replace('filtr=none','filtr=unact');
 }
 /***************************************************
  * chkStruct - Info page tree check structure.     *
  ***************************************************/
 function chkStruct( w_nd, n_nd )
 {
-  //> Check access
-  if( w_nd.getAttribute('acs') != n_nd.getAttribute('acs') ) return true;
+    //Check access
+    if(w_nd.getAttribute('acs') != n_nd.getAttribute('acs')) return true;
 
-  //> Scan deleted nodes
-  for( var i_w = 0; i_w < w_nd.childNodes.length; i_w++ )
-  {
-    var i_n;
-    for( i_n = 0; i_n < n_nd.childNodes.length; i_n++ )
-      if( w_nd.childNodes[i_w].nodeName.toLowerCase() == n_nd.childNodes[i_n].nodeName.toLowerCase() &&
-	    w_nd.childNodes[i_w].getAttribute('id') == n_nd.childNodes[i_n].getAttribute('id') )
-	break;
-    if( i_n >= n_nd.childNodes.length && w_nd.nodeName.toLowerCase() != 'table' && w_nd.nodeName.toLowerCase() != 'list' )
+    //Scan deleted nodes
+    for(var i_w = 0; i_w < w_nd.childNodes.length; i_w++) {
+	var i_n;
+	for(i_n = 0; i_n < n_nd.childNodes.length; i_n++)
+	    if(w_nd.childNodes[i_w].nodeName.toLowerCase() == n_nd.childNodes[i_n].nodeName.toLowerCase() &&
+		    w_nd.childNodes[i_w].getAttribute('id') == n_nd.childNodes[i_n].getAttribute('id'))
+		break;
+	if(i_n >= n_nd.childNodes.length && w_nd.nodeName.toLowerCase() != 'table' && w_nd.nodeName.toLowerCase() != 'list')
 	return true;
-  }
+    }
 
-  //> Scan for new nodes and check present nodes
-  for( var i_n = 0; i_n < n_nd.childNodes.length; i_n++ )
-  {
-    var i_w;
-    for( i_w = 0; i_w < w_nd.childNodes.length; i_w++ )
-      if( w_nd.childNodes[i_w].nodeName.toLowerCase() == n_nd.childNodes[i_n].nodeName.toLowerCase() &&
-	    w_nd.childNodes[i_w].getAttribute('id') == n_nd.childNodes[i_n].getAttribute('id') )
-	break;
-    if( i_w >= w_nd.childNodes.length ) return true;
-    else if( chkStruct(w_nd.childNodes[i_w],n_nd.childNodes[i_n]) ) return true;
+    //Scan for new nodes and check present nodes
+    for(var i_n = 0; i_n < n_nd.childNodes.length; i_n++) {
+	var i_w;
+	for(i_w = 0; i_w < w_nd.childNodes.length; i_w++)
+	    if(w_nd.childNodes[i_w].nodeName.toLowerCase() == n_nd.childNodes[i_n].nodeName.toLowerCase() &&
+		    w_nd.childNodes[i_w].getAttribute('id') == n_nd.childNodes[i_n].getAttribute('id'))
+		break;
+	if(i_w >= w_nd.childNodes.length) return true;
+	else if(chkStruct(w_nd.childNodes[i_w],n_nd.childNodes[i_n])) return true;
 
-    //> Check of the description present
-    if( (w_nd.childNodes[i_w].getAttribute('dscr') && !n_nd.childNodes[i_n].getAttribute('dscr')) ||
-	(!w_nd.childNodes[i_w].getAttribute('dscr') && n_nd.childNodes[i_n].getAttribute('dscr')) )
-      return true;
+	//Check of the description present
+	if((w_nd.childNodes[i_w].getAttribute('dscr') && !n_nd.childNodes[i_n].getAttribute('dscr')) ||
+		(!w_nd.childNodes[i_w].getAttribute('dscr') && n_nd.childNodes[i_n].getAttribute('dscr')))
+	    return true;
 
-    //> Check base fields destination change
-    if( w_nd.childNodes[i_w].nodeName.toLowerCase() == 'fld' &&
-	(w_nd.childNodes[i_w].getAttribute('dest') != n_nd.childNodes[i_n].getAttribute('dest') ||
-	w_nd.childNodes[i_w].getAttribute('tp') != n_nd.childNodes[i_n].getAttribute('tp')) )
-      return true;
-  }
+	//Check base fields destination change
+	if(w_nd.childNodes[i_w].nodeName.toLowerCase() == 'fld' &&
+		(w_nd.childNodes[i_w].getAttribute('dest') != n_nd.childNodes[i_n].getAttribute('dest') ||
+		w_nd.childNodes[i_w].getAttribute('tp') != n_nd.childNodes[i_n].getAttribute('tp')))
+	    return true;
+    }
 
-  return false;
+    return false;
 }
 /***************************************************
  * tabSelect - Select page tab                     *

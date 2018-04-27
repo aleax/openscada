@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BCM2835\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-22 20:48+0300\n"
+"POT-Creation-Date: 2018-04-27 19:59+0300\n"
 "PO-Revision-Date: 2016-12-09 10:20+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -34,6 +34,13 @@ msgstr "BCM2835 GPIO уже используется."
 msgid "SUNXI (ALLWINNER H2 and newer)"
 msgstr "SUNXI (ALLWINNER H2 и новее)"
 
+msgid ""
+"Init SUNXI GPIO library error whether that is not SUNXI or there is not "
+"access."
+msgstr ""
+"Ошибка инициализации библиотеки SUNXI GPIO или через отсутствие SUNXI или "
+"доступа к нему."
+
 msgid "SUNXI GPIO is already used."
 msgstr "SUNXI GPIO уже используется."
 
@@ -41,7 +48,12 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid "Broadcom BCM 2835 GPIO, mostly for and used in Raspberry Pi. ..."
-msgstr "Broadcom BCM 2835 GPIO, в основном для и используется в Raspberry Pi. ..."
+msgstr ""
+"Broadcom BCM 2835 GPIO, в основном для и используется в Raspberry Pi. ..."
+
+#, c-format
+msgid "Function '%s' is busy by %d connections."
+msgstr "Функция '%s' занята %d подключениями."
 
 msgid "Function"
 msgstr "Функция"
@@ -52,6 +64,7 @@ msgstr "Функции"
 msgid "Configuration"
 msgstr "Конфигурация"
 
+#, c-format
 msgid "GPIO '%s' output and reverse"
 msgstr "Выход и инверсия GPIO '%s'"
 

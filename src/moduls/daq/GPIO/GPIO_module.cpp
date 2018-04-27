@@ -38,7 +38,7 @@
 #define MOD_NAME	"GPIO"
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.0"
+#define MOD_VER		"2.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Broadcom BCM 2835 GPIO, mostly for and used in Raspberry Pi. ...")
 #define LICENSE		"GPL2"
@@ -172,11 +172,17 @@ void TMdPrm::disable( )
 {
     if(!enableStat())	return;
 
-    //Functions stop
     vector<string> ls;
     fList(ls);
-    for(unsigned iL = 0; iL < ls.size(); iL++)
-	fAt(ls[iL]).at().setStart(false);
+    // Check the functions for busy, before
+    for(unsigned iF = 0; iF < ls.size(); iF++)
+	if(fAt(ls[iF]).at().nodeUse() > 1)
+	    throw TError(nodePath().c_str(), _("Function '%s' is busy by %d connections."), ls[iF].c_str(), fAt(ls[iF]).at().nodeUse()-1);
+    //Functions stop and unregister
+    for(unsigned iF = 0; iF < ls.size(); iF++) {
+	fAt(ls[iF]).at().setStart(false);
+	fUnreg(ls[iF]);
+    }
 
     TParamContr::disable();
 

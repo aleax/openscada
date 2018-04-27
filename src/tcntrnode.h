@@ -84,6 +84,7 @@ typedef hash_map<const char*, TCntrNode*, __gnu_cxx::hash<string> > TMap;
 #endif*/
 
 #define DEF_TIMEOUT 2
+#define DEF_TIMEOUT_EXIT 60
 
 //***************************************************************
 //* TCntrNode - Controll node					*

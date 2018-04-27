@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.0"
+#define MOD_VER		"2.0.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -411,9 +411,9 @@ void *TMdContr::Task( void *icntr )
 								iLM != cntr.mStatWork[iSt].second.lstMess.end(); ++iLM)
 			iLM->second = iLM->second ? s2i(prmNd->attr("tm")) : SYS->sysTm()-3600*cntr.restDtTm();
 		}
-		TSYS::sysSleep(SYS->rdTaskPer());
+		TSYS::taskSleep(SYS->rdTaskPer()*1e9);
 	    }
-	    else TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+	    else TSYS::taskSleep(STD_WAIT_DELAY*1e6);
 	    continue;
 	}
 
@@ -430,7 +430,7 @@ void *TMdContr::Task( void *icntr )
 		if(cntr.mStatWork[iSt].second.cntr <= 0)	isAccess = true;
 		if(cntr.mStatWork[iSt].second.cntr == 0)	needEnable = true;	//!!!! May be only for all == 0 stations
 	    }
-	    if(!isAccess) { tPrev = tCnt; TSYS::sysSleep(1); continue; }
+	    if(!isAccess) { tPrev = tCnt; TSYS::taskSleep(1e9); continue; }
 	    else {
 		if(cntr.syncPer()) {	//Enable sync
 		    div = cntr.period() ? vmax(2,(unsigned int)(cntr.syncPer()/(1e-9*cntr.period()))) : 0;

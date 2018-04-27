@@ -37,7 +37,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.16"
+#define MOD_VER		"1.3.17"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -117,7 +117,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem), enRes(true), cntrRes(true),
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")), mVarsRdReq(cfg("VARS_RD_REQ")),
-    prcSt(false), callSt(false), isReload(false), alSt(-1), acq_err(dataRes()), tmGath(0), tmDelay(0)
+    prcSt(false), callSt(false), isReload(false), alSt(-1), acq_err(dataRes()), tmDelay(0)
 {
     cfg("PRM_BD").setS("MMSPrm_"+name_c);
 
@@ -161,7 +161,8 @@ string TMdContr::getStatus( )
 	    if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
 	    if(period()) rez += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
 	    else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."), tm2s(1e-6*tmGath).c_str(),-tmDelay);
+	    rez += TSYS::strMess(_("Spent time: %s[%s]. Requests %.6g."),
+		tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(), -tmDelay);
 	}
     }
 
@@ -331,10 +332,8 @@ void *TMdContr::Task( void *icntr )
     cntr.prcSt = true;
 
     for(unsigned int it_cnt = cntr.pHD.size(); !TSYS::taskEndRun(); it_cnt++) {
-	if(cntr.redntUse()) { TSYS::sysSleep(1); continue; }
-	if(cntr.tmDelay > 0){ TSYS::sysSleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
-
-	int64_t t_cnt = TSYS::curTime();
+	if(cntr.redntUse()) { TSYS::taskSleep(1e9); continue; }
+	if(cntr.tmDelay > 0){ TSYS::taskSleep(1e9); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 
 	//Prepare and read block variables
 	MMS::XML_N valCtr("MMS"), *value = NULL;
@@ -472,7 +471,6 @@ void *TMdContr::Task( void *icntr )
 
 	cntr.callSt = firstCall = false;
 	res.unlock();
-	cntr.tmGath = TSYS::curTime()-t_cnt;
 
 	if(TSYS::taskEndRun()) break;
 	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());

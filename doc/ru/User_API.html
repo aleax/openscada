@@ -282,10 +282,10 @@ var rez = "Java123Script".search("script","i");  // rez = 7</pre>
 <dl><dd><ul><li> <i>int search( RegExp pat );</i> — ищет в строке по шаблону "RegExp" <i>pat</i>. Возвращает положение найденной подстроки иначе "-1".</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "Java123Script".search(new RegExp("script","i"));  // rez = 7</pre>
-<dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — ищет в строке по шаблону <i>pat</i> и флагами шаблона <i>flg</i>. Возвращает массив с найденной подстрокой (0) и подвыражениями (&gt;1). Атрибут "index" массива устанавливается в позицию найденной подстроки. Атрибут "input" устанавливается в исходную строку.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — ищет в строке по шаблону <i>pat</i> и флагами шаблона <i>flg</i>. Возвращает массив с найденной подстрокой (0) и подвыражениями (&gt;1). Атрибут "index" массива устанавливается в позицию найденной подстроки. Атрибут "input" устанавливается в исходную строку. Атрибут "err" устанавливается в код ошибки операции.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "1 плюс 2 плюс 3".match("\\d+","g");  // rez = [1], [2], [3]</pre>
-<dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — ищет в строке по шаблону "RegExp" <i>pat</i>. Возвращает массив с найденной подстрокой (0) и подвыражениями (&gt;1). Атрибут "index" массива устанавливается в позицию найденной подстроки. Атрибут "input" устанавливается в исходную строку.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — ищет в строке по шаблону "RegExp" <i>pat</i>. Возвращает массив с найденной подстрокой (0) и подвыражениями (&gt;1). Атрибут "index" массива устанавливается в позицию найденной подстроки. Атрибут "input" устанавливается в исходную строку. Атрибут "err" устанавливается в код ошибки операции.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "1 плюс 2 плюс 3".match(new RegExp("\\d+","g"));  // rez = [1], [2], [3]</pre>
 <dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — возвращает подстроку извлечённую из исходной, начиная с позиции <i>beg</i> и по <i>end</i> (не включая), нумерация с нуля. Если значение начала или конца отрицательно, то отсчёт ведётся с конца строки. Если конец не указан, то концом является конец строки. Например, конструкция <b>substring(-2)</b> вернет последние два символа строки.</li>
@@ -605,11 +605,11 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <ul><li> <i>string messIO(string pdu)</i> — отправка PDU <i>pdu</i> через транспорт объекта контроллера посредством ModBus протокола. PDU результата запроса помещается вместо запроса в <i>pdu</i>, а ошибка возвращается в результате функции.</li></ul>
 <p><b>Объект "Параметр" [this]</b>
 </p>
-<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">для включенного параметра логического типа</span>] — добавить атрибут <i>id</i> с именем <i>name</i> и для типа <i>tp</i>. Если атрибут уже присутствует, то будут применены свойства, которые возможно изменить "на ходу": имя, режим выбора и параметры выбора.
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">для включенного параметра логического типа</span>] — добавление атрибута <i>id</i> с именем <i>name</i> и типом <i>tp</i>. Если атрибут уже присутствует то будут применены свойства, которые возможно изменить "на ходу": имя, режим выбора и параметры выбора.
 <ul><li> <i>id, name</i> — идентификатор и имя нового атрибута;</li>
 <li> <i>tp</i> — тип атрибута [boolean | integer | real | string | text | object] + режим выбора [sel | seled] + только для чтения [ro];</li>
-<li> <i>selValsNms</i> — две строки со значениями в первой и их именами во второй (разделённые ";").</li></ul></li>
-<li> <i>bool attrDel( string id )</i> [<span style="color: red">для включенного параметра логического типа</span>] — удалить атрибут <i>id</i>.</li></ul>
+<li> <i>selValsNms</i> — две строки со значениями в первой и их именами во второй, разделённые ";".</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">для включенного параметра логического типа</span>] — удаление атрибута <i>id</i>.</li></ul>
 <p><br />
 </p>
 <h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D0.B8.D0.B2.D1.8B-.D0.98.D1.81.D1.82.D0.BE.D1.80.D0.B8.D1.8F.22_.28SYS.Archive.29"><span class="mw-headline-number">8</span> Подсистема "Архивы-История" (SYS.Archive)</span></h2>

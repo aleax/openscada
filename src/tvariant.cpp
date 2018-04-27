@@ -787,7 +787,7 @@ void TRegExp::setPattern( const string &rule, const string &flg )
     global = (flg.find('g')!=string::npos);
     ignoreCase = (flg.find('i')!=string::npos);
     multiline = (flg.find('m')!=string::npos);
-    UTF8 = Mess->isUTF8() || (flg.find('u')!=string::npos);
+    UTF8 = /*Mess->isUTF8() &&*/ (flg.find('u')!=string::npos);
     isSimplePat = false;
     pattern = rule;
     if(flg.find('p') != string::npos) {
@@ -824,6 +824,7 @@ TArrayObj *TRegExp::match( const string &vl, bool all )
 	    rez->arSet(iN, string(vl.data()+capv[iN*2],capv[iN*2+1]-capv[iN*2]));
 	if(global) lastIndex = (n>0) ? capv[1] : 0;
 	if(n > 0) { rez->propSet("index", capv[0]); rez->propSet("input", vl); }
+	else if(n < 0) { rez->propSet("err", i2s(n)); }
     }
 
     return rez;

@@ -134,21 +134,21 @@ void TArchiveS::load_( )
 	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+subId()+"_mess_proc",nodePath()+subId()+"_mess_proc",fldCnt++,cEl,false,&full); ) {
 		id = cEl.cfg("ID").getS();
 		type = cEl.cfg("MODUL").getS();
-		if(modPresent(type) && !at(type).at().messPresent(id))
-		    at(type).at().messAdd(id,(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		if(!modPresent(type))	continue;
+		if(!at(type).at().messPresent(id)) at(type).at().messAdd(id, (dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
 		at(type).at().messAt(id).at().load(&cEl);
 		itReg[type+"."+id] = true;
 	    }
 
 	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty()) {
-	    vector<string> m_ls;
-	    modList(m_ls);
-	    for(unsigned i_m = 0; i_m < m_ls.size(); i_m++) {
-		at(m_ls[i_m]).at().messList(dbLs);
-		for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		    if(itReg.find(m_ls[i_m]+"."+dbLs[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().messAt(dbLs[i_it]).at().DB()))
-			at(m_ls[i_m]).at().messDel(dbLs[i_it]);
+	    vector<string> mLs;
+	    modList(mLs);
+	    for(unsigned iM = 0; iM < mLs.size(); iM++) {
+		at(mLs[iM]).at().messList(dbLs);
+		for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+		    if(itReg.find(mLs[iM]+"."+dbLs[iIt]) == itReg.end() && SYS->chkSelDB(at(mLs[iM]).at().messAt(dbLs[iIt]).at().DB()))
+			at(mLs[iM]).at().messDel(dbLs[iIt]);
 	    }
 	}
     } catch(TError &err) {
@@ -170,21 +170,21 @@ void TArchiveS::load_( )
 	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+subId()+"_val_proc",nodePath()+subId()+"_val_proc",fldCnt++,cEl,false,&full); ) {
 		id = cEl.cfg("ID").getS();
 		type = cEl.cfg("MODUL").getS();
-		if(modPresent(type) && !at(type).at().valPresent(id))
-		    at(type).at().valAdd(id,(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		if(!modPresent(type))	continue;
+		if(!at(type).at().valPresent(id)) at(type).at().valAdd(id, (dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
 		at(type).at().valAt(id).at().load(&cEl);
 		itReg[type+"."+id] = true;
 	    }
 
 	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty()) {
-	    vector<string> m_ls;
-	    modList(m_ls);
-	    for(unsigned i_m = 0; i_m < m_ls.size(); i_m++) {
-		at(m_ls[i_m]).at().valList(dbLs);
-		for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		    if(itReg.find(m_ls[i_m]+"."+dbLs[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().valAt(dbLs[i_it]).at().DB()))
-			at(m_ls[i_m]).at().valDel(dbLs[i_it]);
+	    vector<string> mLs;
+	    modList(mLs);
+	    for(unsigned iM = 0; iM < mLs.size(); iM++) {
+		at(mLs[iM]).at().valList(dbLs);
+		for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+		    if(itReg.find(mLs[iM]+"."+dbLs[iIt]) == itReg.end() && SYS->chkSelDB(at(mLs[iM]).at().valAt(dbLs[iIt]).at().DB()))
+			at(mLs[iM]).at().valDel(dbLs[iIt]);
 	    }
 	}
     } catch(TError &err) {
@@ -215,9 +215,9 @@ void TArchiveS::load_( )
 	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty()) {
 	    valList(dbLs);
-	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(valAt(dbLs[i_it]).at().DB()))
-		    valDel(dbLs[i_it]);
+	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+		if(itReg.find(dbLs[iIt]) == itReg.end() && SYS->chkSelDB(valAt(dbLs[iIt]).at().DB()))
+		    valDel(dbLs[iIt]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());

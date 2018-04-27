@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SMH2Gi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2012-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,12 +38,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"SMH2Gi"
-#define MOD_NAME	_("Segnetics SMH2Gi")
+#define MOD_NAME	_("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.9"
+#define MOD_VER		"1.1.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/smh_2gi) hardware interfaces and modules.")
+#define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -101,6 +101,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("SHM_VARS",_("Shared memory variables file"),TFld::String,TFld::NoFlag,"255","/projects/load_files.srv"));
     fldAdd(new TFld("MR_DEV",_("MR bus device"),TFld::String,TFld::NoFlag,"50","/dev/mrext"));
     fldAdd(new TFld("MC_DEV",_("MC bus device"),TFld::String,TFld::NoFlag,"50","/dev/mrint"));
+    fldAdd(new TFld("MC_DEV_RGPIO",_("MC device reset GPIO"),TFld::Integer,TFld::NoFlag,"3","94"));
     fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;9"));
 
     //Parameters' types add
@@ -227,21 +228,22 @@ void TMdContr::enable_( )
     if(!smv) smv = new Shm(cfg("SHM_VARS").getS().c_str());
 
     //MC bus init by send reset to GPIO PC30
-    // Open GPIO PC30 (/sys/class/gpio/gpio94)
-    int hd = open("/sys/class/gpio/gpio94/value", O_WRONLY);
-    if(hd < 0) throw TError(nodePath().c_str(), _("Error GPIO PC30 open for MC reset."));
-    lseek(hd, 0, SEEK_SET);
-    if(write(hd,"1",1) != 1) mess_err(nodePath().c_str(), _("Write to gpio94 error!"));
-    TSYS::sysSleep(50e-3);	//50ms
+    if(cfg("MC_DEV_RGPIO").getI() >= 0) {
+	int hd = open(("/sys/class/gpio/gpio"+cfg("MC_DEV_RGPIO").getS()+"/value").c_str(), O_WRONLY);
+	if(hd < 0) throw TError(nodePath().c_str(), _("Error opening GPIO %s for MC reset."), cfg("MC_DEV_RGPIO").getS().c_str());
+	lseek(hd, 0, SEEK_SET);
+	if(write(hd,"1",1) != 1) mess_err(nodePath().c_str(), _("Write to gpio94 error!"));
+	TSYS::sysSleep(50e-3);	//50ms
 
-    lseek(hd, 0, SEEK_SET);
-    if(write(hd,"0",1) != 1) mess_err(nodePath().c_str(), _("Write to gpio94 error!"));
-    TSYS::sysSleep(200e-3);	//200ms
+	lseek(hd, 0, SEEK_SET);
+	if(write(hd,"0",1) != 1) mess_err(nodePath().c_str(), _("Write to gpio94 error!"));
+	TSYS::sysSleep(200e-3);	//200ms
 
-    close(hd);
+	close(hd);
+    }
 
     //MR bus init by send 250*0xCC symbols
-    string req(250,0xCC);
+    string req(250, 0xCC);
     modBusReq(req);
     TSYS::sysSleep(60e-3);
 }
@@ -405,12 +407,14 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
 		  "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SHM_VARS",cfg("SHM_VARS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","sel_ed","select","/cntr/cfg/fileShmL");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/MC_DEV",cfg("MC_DEV").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","sel_ed","select","/cntr/cfg/devMCLs");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/MR_DEV",cfg("MR_DEV").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","sel_ed","select","/cntr/cfg/devMRLs");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SHM_VARS",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","sel_ed","select","/cntr/cfg/fileShmL");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/MC_DEV",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","sel_ed","select","/cntr/cfg/devMCLs");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/MR_DEV",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","sel_ed","select","/cntr/cfg/devMRLs");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/MC_DEV_RGPIO",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,
+	    "help",_("Set <0 for disable the reset."));
 	return;
     }
 
@@ -1048,9 +1052,9 @@ bool MRCParam::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 
     //Get page info
     if(opt->name() == "info") {
-	p->ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_TP",p->cfg("MOD_TP").fld().descr(),(p->enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,2,
+	p->ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_TP",EVAL_STR,(p->enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,2,
 	    "dest","select","select","/prm/cfg/modLst");
-	p->ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_SLOT",p->cfg("MOD_SLOT").fld().descr(),(p->enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,1,
+	p->ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_SLOT",EVAL_STR,(p->enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,1,
 	    "help",_("-1  - for MC;\n0-7 - for MR."));
 	if(dMRC.HardID && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) {
 	    //Tune configuration
@@ -1191,8 +1195,8 @@ bool DevMRCFeature::load( const string &iniFile )
 
     //Parse file
     char buf[STR_BUF_LEN];
-    TRegExp re("^\\s*\\[([^\\]]+)|^\\s*([^\\s;]+)\\s*=\\s*([^\\r\\n]+)"  /* "\\[([^\\]]+)\\]|(\\S+)\\s*=\\s*([^\n\r]+)" */);
-    FILE *fp = fopen(iniFile.c_str(),"r");
+    TRegExp re("^\\s*\\[([^\\]]+)|^\\s*([^\\s;]+)\\s*=\\s*([^\\r\\n]+)" /* "\\[([^\\]]+)\\]|(\\S+)\\s*=\\s*([^\n\r]+)" */);
+    FILE *fp = fopen(iniFile.c_str(), "r");
     if(fp == NULL) return false;
     string iniGroup, iniGroupLC, propNm, propVal;
     map<string, SVal>::iterator cVar;

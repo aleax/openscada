@@ -722,7 +722,7 @@ void *TMdContr::Task( void *icntr )
 
 		if(isStop) break;
 
-		TSYS::sysSleep(1);
+		TSYS::taskSleep(1e9);
 
 		if(cntr.endrunReq) isStop = true;
 		isStart = false;
@@ -1465,7 +1465,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    "         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, s-String;\n"
 		    "       Start from the symbol '#' for the commented line;\n"
 		    "  numb - ModBus data address of the device (dec, hex or octal) [0...65535];\n"
-		    "  rw - read/write mode (r-read; w-write; rw-readwrite);\n"
+		    "  rw - read/write mode (r-read; w-write; rw-read and write);\n"
 		    "  id - identifier of the created attribute;\n"
 		    "  name - name of the created attribute.\n"
 		    "Examples:\n"

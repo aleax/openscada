@@ -280,10 +280,10 @@ var rez = "Java123Script".search("script","i");  // rez = 7</pre>
 <dl><dd><ul><li> <i>int search( RegExp pat );</i> — шукає у рядку за шаблоном "RegExp" <i>pat</i>. Повертає положення найденого підрядку інакше "-1".</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "Java123Script".search(new RegExp("script","i"));  // rez = 7</pre>
-<dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — шукає у рядку за шаблоном <i>pat</i> та ознаками шаблону <i>flg</i>. Повертає масив із знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — шукає у рядку за шаблоном <i>pat</i> та ознаками шаблону <i>flg</i>. Повертає масив із знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок. Атрибут "err" встановлюється у код помилки операції.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "1 плюс 2 плюс 3".match("\\d+","g");  // rez = [1], [2], [3]</pre>
-<dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — шукає у рядку за шаблоном "RegExp" <i>pat</i>. Повертає масив зі знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — шукає у рядку за шаблоном "RegExp" <i>pat</i>. Повертає масив зі знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок. Атрибут "err" встановлюється у код помилки операції.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "1 плюс 2 плюс 3".match(new RegExp("\\d+","g"));  // rez = [1], [2], [3]</pre>
 <dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — повертає підрядок вилучений з початкового, починаючи з позиції <i>beg</i> та до <i>end</i> (не включаючи), нумерація з нуля. Якщо значення початку або кінця негативне, то відлік ведеться з кінця рядку. Якщо кінець не вказано, то кінцем є кінець рядку. Наприклад, конструкція <b>substring(-2)</b> поверне останні два символи рядку.</li>
@@ -603,11 +603,11 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <ul><li> <i>string messIO(string pdu)</i> — відправка PDU <i>pdu</i> через транспорт об'єкту контролеру за посередництвом ModBus протоколу. PDU результату запиту розташовується замість запиту у <i>pdu</i>, а помилка повертається у результаті функції.</li></ul>
 <p><b>Об'єкт "Параметр" [this]</b>
 </p>
-<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">для включеного параметру логічного типу</span>] — додати атрибут <i>id</i> з іменем <i>name</i> та для типу <i>tp</i>. Якщо атрибут вже присутній, то будуть застосовані властивості, які можливо змінити "на ходу": ім'я, режим вибору та параметри вибору.
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">для включеного параметру логічного типу</span>] — додання атрибуту <i>id</i> з ім'ям <i>name</i> та типом <i>tp</i>. Якщо атрибут вже присутній то будуть застосовані властивості, які можливо змінити "на ходу": ім'я, режим вибору та параметри вибору.
 <ul><li> <i>id, name</i> — ідентифікатор та ім'я нового атрибуту;</li>
 <li> <i>tp</i> — тип атрибута [boolean | integer | real | string | text | object] + режим вибору [sel | seled] + тільки для читання [ro];</li>
-<li> <i>selValsNms</i> — два рядки зі значеннями у першому та їх іменами у другому (поділені ";").</li></ul></li>
-<li> <i>bool attrDel( string id )</i> [<span style="color: red">для включеного параметру логічного типу</span>] — видалити атрибут <i>id</i>.</li></ul>
+<li> <i>selValsNms</i> — два рядки зі значеннями у першому та їх іменами у другому, поділені ";".</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">для включеного параметру логічного типу</span>] — видалення атрибуту <i>id</i>.</li></ul>
 <p><br />
 </p>
 <h2><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D1.96.D0.B2.D0.B8-.D0.86.D1.81.D1.82.D0.BE.D1.80.D1.96.D1.8F.22_.28SYS.Archive.29"><span class="mw-headline-number">8</span> Підсистема "Архіви-Історія" (SYS.Archive)</span></h2>

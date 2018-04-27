@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 13:39+0300\n"
+"POT-Creation-Date: 2018-04-27 20:19+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,13 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Segnetics SMH2Gi"
+msgid "Segnetics SMH2Gi and SMH4"
 msgstr ""
 
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/smh_2gi) hardware interfaces and modules."
+msgid "Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules."
 msgstr ""
 
 msgid "Shared memory parameters"
@@ -45,6 +45,9 @@ msgid "MR bus device"
 msgstr ""
 
 msgid "MC bus device"
+msgstr ""
+
+msgid "MC device reset GPIO"
 msgstr ""
 
 msgid "Request tries"
@@ -71,7 +74,8 @@ msgstr ""
 msgid "Spent time: %s."
 msgstr ""
 
-msgid "Error GPIO PC30 open for MC reset."
+#, c-format
+msgid "Error opening GPIO %s for MC reset."
 msgstr ""
 
 msgid "Write to gpio94 error!"
@@ -97,6 +101,9 @@ msgstr ""
 
 #, c-format
 msgid "ModBUS ERR -> %s: %s"
+msgstr ""
+
+msgid "Set <0 for disable the reset."
 msgstr ""
 
 msgid "1:Parameter disabled."

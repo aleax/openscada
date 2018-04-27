@@ -1702,7 +1702,7 @@ msgid "Notificator %d"
 msgstr "Уведомитель %d"
 
 msgid "The button for quietance the current \"%1\""
-msgstr "Кнопка для возврата режима курсора"
+msgstr "Кнопка квитации текущего \"%1\""
 
 msgid "Press for quietance the current \"%1\"."
 msgstr "Нажать для квитации текущего \"%1\"."

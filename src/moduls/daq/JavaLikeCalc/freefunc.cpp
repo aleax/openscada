@@ -1411,9 +1411,9 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//  flg - regular expression flags.
 		if(prop == "match" && prms.size()) {
 		    AutoHD<TRegExp> re;
-		    if(prms[0].type() == TVariant::String) re = new TRegExp(prms[0].getS(),(prms.size()>=2)?prms[1].getS():string());
+		    if(prms[0].type() == TVariant::String) re = new TRegExp(prms[0].getS(), (prms.size()>=2)?prms[1].getS():string());
 		    else if(prms[0].type() != TVariant::Object || (re=prms[0].getO()).freeStat()) return -1;
-		    return re.at().match(vl.getS(),true);
+		    return re.at().match(vl.getS(), true);
 		}
 		// string slice(int beg, int end) - return the string extracted from the original one starting from the <beg> position
 		//       and ending be the <end>

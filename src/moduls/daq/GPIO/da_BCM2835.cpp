@@ -92,7 +92,7 @@ void BCM2835::enable( TParamContr *ip )
     TMdPrm *p = (TMdPrm *)ip;
 
     if(!bcm2835_init())
-	throw TError(p->nodePath().c_str(),_("Init bcm2835 library error whether that is not bcm2835 or there is not access."));
+	throw TError(p->nodePath().c_str(), _("Init bcm2835 library error whether that is not bcm2835 or there is not access."));
 
     MtxAlloc res(p->owner().dataRes(), true);
     if(use)	throw TError(p->nodePath().c_str(), _("BCM2835 GPIO is already used."));
@@ -140,14 +140,6 @@ void BCM2835::enable( TParamContr *ip )
 
 void BCM2835::disable( TParamContr *ip )
 {
-    TMdPrm *p = (TMdPrm *)ip;
-
-    //Unregistering the functions
-    vector<string> ls;
-    p->fList(ls);
-    for(unsigned iF = 0; iF < ls.size(); iF++)
-	p->fUnreg(ls[iF]);
-
     bcm2835_close();
     use = false;
 }
@@ -167,7 +159,7 @@ void BCM2835::vlSet( TParamContr *ip, TVal &vo, const TVariant &vl, const TVaria
 //*************************************************
 //* GPIO mode                                     *
 //*************************************************
-void GPIO_mode::calc( TValFunc *v ) {
+void BCM2835::GPIO_mode::calc( TValFunc *v ) {
     int pin = v->getI(1);
     switch(v->getI(2)) {
 	case 1:
@@ -192,9 +184,9 @@ void GPIO_mode::calc( TValFunc *v ) {
 //*************************************************
 //* Get GPIO value                                *
 //*************************************************
-void GPIO_get::calc( TValFunc *v )	{ v->setB(0, (bool)bcm2835_gpio_lev(v->getI(1))); }
+void BCM2835::GPIO_get::calc( TValFunc *v )	{ v->setB(0, (bool)bcm2835_gpio_lev(v->getI(1))); }
 
 //*************************************************
 //* Put value to GPIO                             *
 //*************************************************
-void GPIO_put::calc( TValFunc *v )	{ bcm2835_gpio_write(v->getI(0), v->getB(1)); }
+void BCM2835::GPIO_put::calc( TValFunc *v )	{ bcm2835_gpio_write(v->getI(0), v->getB(1)); }

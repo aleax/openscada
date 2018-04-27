@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.BCM2835 translate to German.
 # This file is distributed under the same license as the OpenSCADA.DAQ.BCM2835 package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2016.
+# Roman Savochenko <rom_as@oscada.org>, 2016-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BCM2835\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-22 20:48+0300\n"
+"POT-Creation-Date: 2018-04-27 19:59+0300\n"
 "PO-Revision-Date: 2016-12-09 10:16+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -35,6 +35,13 @@ msgstr "BCM2835 GPIO wird bereits verwendet."
 msgid "SUNXI (ALLWINNER H2 and newer)"
 msgstr "SUNXI (ALLWINNER H2 und neuer)"
 
+msgid ""
+"Init SUNXI GPIO library error whether that is not SUNXI or there is not "
+"access."
+msgstr ""
+"Init SUNXI GPIO Bibliothek Fehler, ob das nicht SUNXI oder es gibt keinen "
+"Zugriff."
+
 msgid "SUNXI GPIO is already used."
 msgstr "SUNXI GPIO wird bereits verwendet."
 
@@ -42,7 +49,12 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid "Broadcom BCM 2835 GPIO, mostly for and used in Raspberry Pi. ..."
-msgstr "Broadcom BCM 2835 GPIO, vor allem für und verwendet in Raspberry Pi. ..."
+msgstr ""
+"Broadcom BCM 2835 GPIO, vor allem für und verwendet in Raspberry Pi. ..."
+
+#, c-format
+msgid "Function '%s' is busy by %d connections."
+msgstr "Die Funktion '%s' ist mit %d-Verbindungen beschäftigt."
 
 msgid "Function"
 msgstr "Funktion"
@@ -53,6 +65,7 @@ msgstr "Funktionen"
 msgid "Configuration"
 msgstr "Konfiguration"
 
+#, c-format
 msgid "GPIO '%s' output and reverse"
 msgstr "GPIO '%s' Ausgang und umgekehrt"
 

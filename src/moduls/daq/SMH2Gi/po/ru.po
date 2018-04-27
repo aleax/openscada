@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 13:39+0300\n"
+"POT-Creation-Date: 2018-04-27 20:19+0300\n"
 "PO-Revision-Date: 2012-10-31 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -16,18 +16,17 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Segnetics SMH2Gi"
-msgstr ""
+msgid "Segnetics SMH2Gi and SMH4"
+msgstr "Segnetics SMH2Gi и SMH4"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/"
-"smh_2gi) hardware interfaces and modules."
+"Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware "
+"interfaces and modules."
 msgstr ""
-"Сбор данных и управление аппаратными интерфейсами и модулями Segnetics "
-"SMH2Gi (http://segnetics.com/smh_2gi)"
+"Сбор данных и управление аппаратными интерфейсами и модулями Segnetics и SMH4."
 
 msgid "Shared memory parameters"
 msgstr "Параметры разделяемой памяти"
@@ -49,6 +48,9 @@ msgstr "Устройство шины MR"
 
 msgid "MC bus device"
 msgstr "Устройство шины MC"
+
+msgid "MC device reset GPIO"
+msgstr "GPIO сброса MC устройства"
 
 msgid "Request tries"
 msgstr "Попыток запроса"
@@ -74,8 +76,8 @@ msgstr "Следующий сбор по cron '%s'. "
 msgid "Spent time: %s."
 msgstr "Затрачено времени: %s."
 
-msgid "Error GPIO PC30 open for MC reset."
-msgstr "Ошибка открытия GPIO PC30 для сброса MC."
+msgid "Error opening GPIO %s for MC reset."
+msgstr "Ошибка открытия GPIO %s для сброса MC."
 
 msgid "Write to gpio94 error!"
 msgstr "Ошибка записи в gpio94!"
@@ -101,6 +103,9 @@ msgstr "ModBUS Ответ -> '%s': %s"
 #, c-format
 msgid "ModBUS ERR -> %s: %s"
 msgstr "ModBUS Ошибка -> %s: %s"
+
+msgid "Set <0 for disable the reset."
+msgstr "Установить <0 для отключения сброса."
 
 msgid "1:Parameter disabled."
 msgstr "1:Параметр отключен."

@@ -2034,7 +2034,7 @@ bool ConfApp::upStruct( XMLNode &w_nd, const XMLNode &n_nd )
 	i_w++;
     }
 
-    //Scan for new nodes and check present nodes
+    //Scan for the new nodes and check present nodes
     for(unsigned i_n = 0, i_w; i_n < n_nd.childSize(); i_n++) {
 	for(i_w = 0; i_w < w_nd.childSize(); i_w++)
 	    if(w_nd.childGet(i_w)->name() == n_nd.childGet(i_n)->name() &&
@@ -2065,13 +2065,15 @@ bool ConfApp::upStruct( XMLNode &w_nd, const XMLNode &n_nd )
 	    (w_nd.childGet(i_w)->attr("dest") != n_nd.childGet(i_n)->attr("dest") ||
 	     w_nd.childGet(i_w)->attr("tp") != n_nd.childGet(i_n)->attr("tp")))
 	{
-	    w_nd.childGet(i_w)->setAttr("dest","");
-	    w_nd.childGet(i_w)->setAttr("tp","");
+	    w_nd.childGet(i_w)->setAttr("dest", "");
+	    w_nd.childGet(i_w)->setAttr("tp", "");
 	    str_ch = true;
 	}
 
 	//Sync node parameters (text and attributes)
 	w_nd.childGet(i_w)->setText(n_nd.childGet(i_n)->text());
+
+	w_nd.childGet(i_w)->setAttr("dscr", "");
 	vector<string> ls;
 	n_nd.childGet(i_n)->attrList(ls);
 	for(unsigned i_a = 0; i_a < ls.size(); i_a++)

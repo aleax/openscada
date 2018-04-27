@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-22 20:43+0300\n"
+"POT-Creation-Date: 2018-04-27 19:52+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -657,8 +657,14 @@ msgstr ""
 "Zeitüberschreitung ist aufgetreten. Objekt wird von %d Benutzern verwendet."
 "Zuerst Objekt freigeben!"
 
-msgid "Error blocking node."
-msgstr "Fehler beim Blockierung des Knotens."
+msgid ""
+"Error blocking node.\n"
+"The node forced to disable which can cause to crash.\n"
+"This problem mostly in user procedure, if the program exits!"
+msgstr ""
+"Fehler beim Blockieren des Knotens.\n"
+"Der Knoten wird zum Deaktivieren gezwungen, was zum Absturz führen kann.\n"
+"Dieses Problem tritt meistens in der Benutzerprozedur auf, wenn das Programm beendet wird!"
 
 msgid "Error turning off node. Turning on back the node."
 msgstr "Fehler beim Ausschalten des Knotens. Den Knoten zurückschalten."
@@ -1539,9 +1545,11 @@ msgstr "Zusatz"
 msgid "Subsystem is not modular!"
 msgstr "Das Subsystem ist nicht modular!"
 
+#, c-format
 msgid "Module '%s' connecting."
 msgstr "Modul '%s' Verbindung."
 
+#, c-format
 msgid "Module '%s' disconnecting."
 msgstr "Modul '%s' wird getrennt."
 

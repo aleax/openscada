@@ -178,7 +178,6 @@ class TMdContr: public TController, public MMS::Client
 
 	MtxString acq_err;
 
-	double	tmGath;		//Gathering time
 	float	tmDelay;	//Delay time for next try connect
 
 	AutoHD<TTransportOut>	tr;

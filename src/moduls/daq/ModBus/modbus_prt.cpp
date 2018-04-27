@@ -59,7 +59,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNodeEl.fldAdd(new TFld("DT_PR_TR",_("Translate program"),TFld::Boolean,TFld::NoFlag,"1","0"));
     mNodeEl.fldAdd(new TFld("DT_PROG",_("Program"),TFld::String,TFld::TransltText,"1000000"));
     // For "Gateway" mode
-    mNodeEl.fldAdd(new TFld("TO_TR",_("To transport"),TFld::String,0,OBJ_ID_SZ));
+    mNodeEl.fldAdd(new TFld("TO_TR",_("To output transport"),TFld::String,0,OBJ_ID_SZ));
     mNodeEl.fldAdd(new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selected,"5","RTU","RTU;ASCII;TCP","RTU;ASCII;TCP/IP"));
     mNodeEl.fldAdd(new TFld("TO_ADDR",_("To address"),TFld::Integer,0,"3","1","1;247"));
 
@@ -1331,7 +1331,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 			 "  w   - optional character to indicate the writing capability.\n"
 			 "Examples:\n"
 			 "  \"R0x300w\" - register access;\n"
-			 "  \"C100w\" - coil access;\n"
+			 "  \"C100w\" - coil access, allowed to write;\n"
 			 "  \"R_f200\" - get float from the registers 200 and 201;\n"
 			 "  \"R_i400,300\" - get int32 from the registers 300 and 400;\n"
 			 "  \"R_s15,20\" - get string (registers block) from the register 15 and size 20;\n"

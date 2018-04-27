@@ -47,8 +47,8 @@ XMLNode &XMLNode::operator=( const XMLNode &prm )
     mText = prm.mText;
     vector<string> ls;
     prm.attrList(ls);
-    for(unsigned i_a = 0; i_a < ls.size(); i_a++)
-	setAttr(ls[i_a],prm.attr(ls[i_a]));
+    for(unsigned iA = 0; iA < ls.size(); iA++)
+	setAttr(ls[iA],prm.attr(ls[iA]));
 
     //Recursive copy children
     for(unsigned iCh = 0; iCh < prm.childSize(); iCh++)
@@ -193,15 +193,15 @@ XMLNode* XMLNode::setText( const string &s, bool childs )
 void XMLNode::attrList( vector<string> & list ) const
 {
     list.clear();
-    for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-	list.push_back(mAttr[i_a].first);
+    for(unsigned iA = 0; iA < mAttr.size(); iA++)
+	list.push_back(mAttr[iA].first);
 }
 
 XMLNode* XMLNode::attrDel( const string &name )
 {
-    for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-	if(mAttr[i_a].first == name)
-	{ mAttr.erase(mAttr.begin()+i_a); break; }
+    for(unsigned iA = 0; iA < mAttr.size(); iA++)
+	if(mAttr[iA].first == name)
+	{ mAttr.erase(mAttr.begin()+iA); break; }
 
     return this;
 }
@@ -211,20 +211,20 @@ void XMLNode::attrClear( )	{ mAttr.clear(); }
 string XMLNode::attr( const string &name, bool caseSens ) const
 {
     if(caseSens) {
-	for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-	    if(mAttr[i_a].first == name) return mAttr[i_a].second;
+	for(unsigned iA = 0; iA < mAttr.size(); iA++)
+	    if(mAttr[iA].first == name) return mAttr[iA].second;
     }
-    else for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-	if(strcasecmp(mAttr[i_a].first.c_str(),name.c_str()) == 0) return mAttr[i_a].second;
+    else for(unsigned iA = 0; iA < mAttr.size(); iA++)
+	if(strcasecmp(mAttr[iA].first.c_str(),name.c_str()) == 0) return mAttr[iA].second;
 
     return "";
 }
 
 XMLNode* XMLNode::setAttr( const string &name, const string &val )
 {
-    for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-	if(mAttr[i_a].first == name) {
-	    mAttr[i_a].second = val;
+    for(unsigned iA = 0; iA < mAttr.size(); iA++)
+	if(mAttr[iA].first == name) {
+	    mAttr[iA].second = val;
 	    return this;
 	}
 
@@ -269,13 +269,13 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp ) const
     if(flg&MissTagEnc) xml.append(name());
     else encode(name(), xml, false, flg);
 
-    for(unsigned i_a = 0; i_a < mAttr.size(); i_a++) {
-	if(mAttr[i_a].second.empty()) continue;
+    for(unsigned iA = 0; iA < mAttr.size(); iA++) {
+	if(mAttr[iA].second.empty()) continue;
 	xml.append(" ");
-	if(flg&MissAttrEnc) xml.append(mAttr[i_a].first);
-	else encode(mAttr[i_a].first, xml, false, flg);
+	if(flg&MissAttrEnc) xml.append(mAttr[iA].first);
+	else encode(mAttr[iA].first, xml, false, flg);
 	xml.append("=\"");
-	encode(Mess->codeConvOut(cp,mAttr[i_a].second), xml, false, flg);
+	encode(Mess->codeConvOut(cp,mAttr[iA].second), xml, false, flg);
 	xml.append("\"");
     }
 

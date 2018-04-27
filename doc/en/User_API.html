@@ -283,10 +283,10 @@ var rez = "Java123Script".search("script","i");  // rez = 7</pre>
 <dl><dd><ul><li> <i>int search( RegExp pat );</i> — searches into the string by the "RegExp" pattern <i>pat</i>. Returns found substring position or "-1" for else.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "Java123Script".search(new RegExp("script","i"));  // rez = 7</pre>
-<dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — calls match for the string by the pattern <i>pat</i> and flags <i>flg</i>. Returns matched substring (0) and subexpressions (&gt;0) array. Sets "index" attribute of the array to the substring position. Sets the "input" attribute to the source string.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — calls match for the string by the pattern <i>pat</i> and flags <i>flg</i>. Returns matched substring (0) and subexpressions (&gt;0) array. Sets "index" attribute of the array to the substring position. Sets the "input" attribute to the source string. Sets the "err" attribute to the operation error code.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "1 plus 2 plus 3".match("\\d+","g");  // rez = [1], [2], [3]</pre>
-<dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — calls match for the string and "RegExp" pattern <i>pat</i>. Returns matched substring (0) and subexpressions (&gt;0) array. Sets the "index" attribute of the array to substring position. Sets the "input" attribute to the source string.</li></ul></dd></dl>
+<dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — calls match for the string and "RegExp" pattern <i>pat</i>. Returns matched substring (0) and subexpressions (&gt;0) array. Sets the "index" attribute of the array to substring position. Sets the "input" attribute to the source string. Sets the "err" attribute to the operation error code.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "1 plus 2 plus 3".match(new RegExp("\\d+","g"));  // rez = [1], [2], [3]</pre>
 <dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — returns the string extracted from the original one starting from the <i>beg</i> position and ending before the <i>end</i> (not included), numbering from zero. If the begin or end is negative, then the count is conducted from the end of the line. If the end is not specified, then the end is the end of the line. For example, the construction <b>substring(-2)</b> return two last symbols of the string.</li>
@@ -603,14 +603,14 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_ModBus.png" title="User object model of the module ModBus."><img alt="User object model of the module ModBus." height="215" src="files/Oscada_UserOM_ModBus.png" width="323" /></a></div>
 <p><b>The object "Controller" [this.cntr()]</b>
 </p>
-<ul><li> <i>string messIO(string pdu)</i> — sending <i>pdu</i> through the transport of controller object by means of ModBus protocol. PDU query result is placed instead of the query <i>pdu</i>, and the error returned by the function.</li></ul>
+<ul><li> <i>string messIO(string pdu)</i> — sends <i>pdu</i> through the transport of the controller object by means of the ModBus protocol. PDU query result is placed instead of the query <i>pdu</i>, and the error returned by the function.</li></ul>
 <p><b>The object "Parameter" [this]</b>
 </p>
-<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — attribute <i>id</i> and <i>name</i> for type <i>tp</i> add. If the attribute already present then will apply properties allowed to hot changing: name, selection mode and the selection mode parameters.
-<ul><li> <i>id, name</i> — new attribute id and name;</li>
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — adds the attribute <i>id</i> with the name <i>name</i> and the type <i>tp</i>. If the attribute is already present, the properties will be applied that can be changed on the go: name, selection mode and selection options.
+<ul><li> <i>id, name</i> — identifier and name of the new attribute;</li>
 <li> <i>tp</i> — attribute type [boolean | integer | real | string | text | object] + selection mode [sel | seled] + read-only [ro];</li>
-<li> <i>selValsNms</i> — two lines with values in first and it's names in first (separated by ";").</li></ul></li>
-<li> <i>bool attrDel( string id )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — attribute <i>id</i> remove.</li></ul>
+<li> <i>selValsNms</i> — two lines with values in first and their names in second, separated by ";".</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — removes the attribute <i>id</i>.</li></ul>
 <p><br />
 </p>
 <h2><span class="mw-headline" id="Subsystem_.22Archives-History.22_.28SYS.Archive.29"><span class="mw-headline-number">8</span> Subsystem "Archives-History" (SYS.Archive)</span></h2>
