@@ -71,7 +71,7 @@ public:
 
     // To the thread request function, return ready status (true).
     // First-init request will cause short waiting at the condition variable and next only the ready status return
-    bool reqDo( XMLNode &node );
+    bool reqDo( XMLNode &node, bool &done );
     // Only checking to done for <node>.
     bool reqBusy( );
 
@@ -97,6 +97,7 @@ private:
     time_t	tm;
 
     XMLNode	*req;
+    bool	*done;
     pthread_t	pid;		//Thread id
 };
 
@@ -200,7 +201,7 @@ private:
     void selectChildRecArea( const XMLNode &node, const string &a_path, QWidget *widget = NULL );
     void basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool comm = false );
 
-    // Controll system requests
+    // Control requests
     void initHosts( );
     int cntrIfCmd( XMLNode &node );
     int cntrIfCmdHosts( XMLNode &node );
@@ -241,6 +242,7 @@ private:
     map<string, SCADAHost*> hosts;
 
     bool	tblInit, pgDisplay;
+    bool	winClose;	//Closing window flag
 };
 
 }

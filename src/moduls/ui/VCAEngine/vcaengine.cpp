@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"5.0.1"
+#define MOD_VER		"5.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -495,7 +495,8 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 
 	if(!SYS->db().at().dataGet(wdb,nodePath()+tbl,cEl,false,true)) continue;
 
-	attr.at().setS(cEl.cfg("IO_VAL").getS(), true);
+	if(!(attr.at().flgGlob()&Attr::NotStored))
+	    attr.at().setS(cEl.cfg("IO_VAL").getS(), true);
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)cEl.cfg("SELF_FLG").getI());
 	attr.at().setCfgTempl(cEl.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(cEl.cfg("CFG_VAL").getS());
@@ -555,8 +556,8 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) m_attrs += als[i_a]+";";
 	if(ldGen != (bool)(attr.at().flgGlob()&Attr::Generic)) continue;
 
-	//Main attributes store
-	if(attr.at().flgSelf()&Attr::IsInher || !(attr.at().flgGlob()&Attr::IsUser)) {
+	//Main attributes storing
+	if((attr.at().flgSelf()&Attr::IsInher) || !(attr.at().flgGlob()&Attr::IsUser)) {
 	    cEl.cfg("ID").setS(als[i_a]);
 	    cEl.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
 	    cEl.cfg("IO_VAL").setS(attr.at().getS());

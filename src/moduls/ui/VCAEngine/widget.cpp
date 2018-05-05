@@ -89,7 +89,7 @@ TCntrNode &Widget::operator=( const TCntrNode &node )
 	}
 	attr  = attrAt(els[i_a]);
 	attr.at().setFlgSelf(pattr.at().flgSelf());
-	if(!(attr.at().flgGlob()&Attr::OnlyRead))
+	if(!(attr.at().flgGlob()&(Attr::OnlyRead|Attr::NotStored)))
 	    switch(attr.at().type()) {
 		case TFld::Boolean:	attr.at().setB(pattr.at().getB());	break;
 		case TFld::Integer:	attr.at().setI(pattr.at().getI());	break;
@@ -376,9 +376,11 @@ void Widget::inheritAttr( const string &iattr )
 	    if(pattr.at().flgGlob()&Attr::Mutable) continue;
 	    attrAdd(&pattr.at().fld(), -1, true);
 	}
+
 	attr = attrAt(ls[iL]);
 	if(loadDef) {
-	    attr.at().setS(attr.at().fld().def(), attr.at().flgGlob()&Attr::Active);
+	    if(!(attr.at().flgGlob()&Attr::NotStored))
+		attr.at().setS(attr.at().fld().def(), attr.at().flgGlob()&Attr::Active);
 	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)0);
 	    attr.at().setCfgTempl("");
 	    attr.at().setCfgVal("");
@@ -387,7 +389,6 @@ void Widget::inheritAttr( const string &iattr )
 	}
 	if(pattr.freeStat()) pattr = parent().at().attrAt(ls[iL]);
 	if(!(attr.at().flgSelf()&Attr::IsInher)) attr.at().setFld(&pattr.at().fld(), true);
-
 	if(attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh) && !dynamic_cast<SessWdg*>(this)) {
 	    //Force inheritance flags processing
 	    //!!!! Attr::ProcAttr also added 
@@ -398,8 +399,9 @@ void Widget::inheritAttr( const string &iattr )
 	    }
 	    continue;
 	}
+
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)pattr.at().flgSelf());
-	if(!(attr.at().flgGlob()&Attr::OnlyRead))
+	if(!(attr.at().flgGlob()&(Attr::OnlyRead|Attr::NotStored)))
 	    switch(attr.at().type()) {
 		case TFld::Boolean:	attr.at().setB(pattr.at().getB(), attr.at().flgGlob()&Attr::Active);	break;
 		case TFld::Integer:	attr.at().setI(pattr.at().getI(), attr.at().flgGlob()&Attr::Active);	break;
@@ -407,6 +409,7 @@ void Widget::inheritAttr( const string &iattr )
 		case TFld::String:	attr.at().setS(pattr.at().getS(), attr.at().flgGlob()&Attr::Active);	break;
 		default: break;
 	    }
+
 	// No inherit calc flag for links
 	if(isLink() && !parent().at().isLink())
 	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()&(~Attr::ProcAttr)));

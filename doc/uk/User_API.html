@@ -584,11 +584,11 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.LogicLev"><span class="mw-headline-number">7.2</span> Модуль <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a></span></h4>
 <p><b>Об'єкт "Параметр" [this]</b>
 </p>
-<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">для увімкненого параметру стандартного типу</span>] — додати атрибут <i>id</i> з ім'ям <i>name</i> та для типу <i>tp</i>. Якщо атрибут вже присутній, то будуть застосовані властивості, які можливо змінити "на ходу": ім'я, режим обрання та параметри обрання.
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">для включеного параметру логічного типу</span>] — додання атрибуту <i>id</i> з ім'ям <i>name</i> та типом <i>tp</i>. Якщо атрибут вже присутній то будуть застосовані властивості, які можливо змінити "на ходу": ім'я, режим вибору та параметри вибору.
 <ul><li> <i>id, name</i> — ідентифікатор та ім'я нового атрибуту;</li>
-<li> <i>tp</i> — тип атрибуту [boolean | integer | real | string | text | object] + режим обрання [sel | seled] + тільки для читання [ro];</li>
-<li> <i>selValsNms</i> — два рядки зі значеннями у першому та їх іменами у другому (поділені ";").</li></ul></li>
-<li> <i>bool attrDel( string id )</i> [<span style="color: red">для увімкненого параметру стандартного типу</span>] — видалити атрибут <i>id</i>.</li></ul>
+<li> <i>tp</i> — тип атрибута [boolean | integer | real | string | text | object] + режим вибору [sel | seled] + тільки для читання [ro];</li>
+<li> <i>selValsNms</i> — два рядки зі значеннями у першому та їх іменами у другому, поділені ";".</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">для включеного параметру логічного типу</span>] — видалення атрибуту <i>id</i>.</li></ul>
 <h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.BlockCalc"><span class="mw-headline-number">7.3</span> Модуль <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a></span></h4>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_BlockCalc_uk.png" title="Об&#039;єктна модель користувача модуля BlockCalc."><img alt="Об&#039;єктна модель користувача модуля BlockCalc." height="214" src="files/Oscada_UserOM_BlockCalc_uk.png" width="218" /></a></div>
 <p><b>Об'єкт "Блок" (SYS.DAQ.BlockCalc["cntr"]["blk_block"])</b>

@@ -81,8 +81,8 @@
 <li class="toclevel-2 tocsection-12"><a href="#Controller_object"><span class="tocnumber">3.1</span> <span class="toctext">Controller object</span></a></li>
 <li class="toclevel-2 tocsection-13"><a href="#Parameters"><span class="tocnumber">3.2</span> <span class="toctext">Parameters</span></a>
 <ul>
-<li class="toclevel-3 tocsection-14"><a href="#Standard_parameter_type_.28std.29"><span class="tocnumber">3.2.1</span> <span class="toctext">Standard parameter type (std)</span></a></li>
-<li class="toclevel-3 tocsection-15"><a href="#Logical_parameter_type_.28logic.29"><span class="tocnumber">3.2.2</span> <span class="toctext">Logical parameter type (logic)</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#Standard_.28std.29"><span class="tocnumber">3.2.1</span> <span class="toctext">Standard (std)</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Logical_.28logic.29"><span class="tocnumber">3.2.2</span> <span class="toctext">Logical (logic)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-2 tocsection-16"><a href="#User_programming_API"><span class="tocnumber">3.3</span> <span class="toctext"><span>User programming API</span></span></a></li>
@@ -94,7 +94,7 @@
 
 <p>ModBus — communication protocol based on the client-server architecture. It was developed by Modicon for using in the programmable logic controllers (PLC). It became the de facto standard in the industry and is widely used for the connection of industrial electronic equipment. Used to transfer data via serial line RS-485, RS-422, RS-232, and network TCP/IP. Currently supported non-profit organization ModBus-IDA.
 </p><p>There are three modes of the protocol: ModBus/RTU, ModBus/ASCII and ModBus/TCP. The first two use the serial communication lines (mostly RS-485, less RS-422/RS-232), the last uses TCP/IP network to transfer data.
-</p><p>The module of the data acquisition provides an opportunity to gather the information from various devices by means of the protocol ModBus in all modes. Also, the module implements the functions of the horizontal redundancy, that is working in conjunction with the remote station of the same level. At the same time, the module of the protocol allows you to create and issue data by means of the protocol ModBus in various modes, and through interfaces that are supported by modules of the subsystem "Transports".
+</p><p>The module of the data acquisition provides an opportunity to gather the information from various devices by means of the protocol ModBus in all modes. Also, the module implements the functions of the horizontal redundancy, that is working in conjunction with the remote station of the same level. At the same time, the module of the protocol allows you to create and issue data by means of the protocol ModBus in various modes, and through interfaces that are supported by modules of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Communication" title="Special:MyLanguage/Documents/Program manual">the subsystem "Transports"</a>.
 </p>
 <h2><span class="mw-headline" id="General_description_of_the_ModBus_protocol"><span class="mw-headline-number">1</span> General description of the ModBus protocol</span></h2>
 <p>Protocol ModBus/{RTU,ASCII} means one lead (requesting) device in the line (master), which can send commands to one or more driven devices (slave), referring to them by a unique address in the line. Syntax of the commands of the protocol allows to address 247 devices on the one connection line of standard RS-485 (less RS-422 or RS-232). In the case of TCP, the addressing excluded from the protocol, as it is implemented in the TCP/IP stack.
@@ -264,7 +264,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Identifier, name and description of the controller.</li>
 <li> The state "Enabled" and "Running", in which the controller must be translated at boot.</li>
 <li> Names of tables of storing the configuration of the parameters of the controller object for standard and logical types.</li>
-<li> Acquisition schedule policy and priority of the data acquisition task.</li>
+<li> Policy of scheduling and priority of the data acquisition task.</li>
 <li> ModBus protocol, used for requesting the real device (TCP/IP, RTU or ASCII).</li>
 <li> Address of the output transport from the list of configured <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportOut" title="Special:MyLanguage/Documents/Program manual">output transports</a> in the "Transports" subsystem of OpenSCADA.</li>
 <li> ModBus destination node. In the case of protocols RTU and ASCII this is the unique address of the physical device, and when TCP/IP this is the identifier of the unity.</li>
@@ -277,13 +277,13 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Request tries for the protocols RTU and ASCII. Indicates the number of attempts by the repetition of the request in case of incomplete or damaged answer.</li>
 <li> Maximum size of the request block in bytes. Useful for controllers with like limits.</li></ul>
 <h3><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3.2</span> Parameters</span></h3>
-<p>Data acquisition module provides two types of parameter: "Standard(std)" and "Logical(logic)". Additional configuration fields of the parameters of this module are:
+<p>Data acquisition module provides two types of parameter: "Standard (std)" and "Logical (logic)". Additional configuration fields of the parameters of this module are:
 </p>
-<ul><li> <b>Standard(std)</b>:
+<ul><li> <i><b>Standard (std)</b></i>:
 <ul><li> <i>Attributes list</i> — contains a structured list of configuration for the attributes ModBus.</li></ul></li>
-<li> <b>Logical(logic)</b>:
+<li> <i><b>Logical (logic)</b></i>:
 <ul><li> <i>Parameter template</i> — address of a DAQ parameter template.</li></ul></li></ul>
-<h4><span class="mw-headline" id="Standard_parameter_type_.28std.29"><span class="mw-headline-number">3.2.1</span> Standard parameter type (std)</span></h4>
+<h4><span class="mw-headline" id="Standard_.28std.29"><span class="mw-headline-number">3.2.1</span> Standard (std)</span></h4>
 <p>Main page of configuration parameters of the standard type is shown in Figure 9.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:670px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm.png"><img class="thumbimage" height="656" src="../files/ModBus_prm.png" width="668" /></a>  <div class="thumbcaption">Fig.9. Configuration tab of the standard parameter type.</div></div></div></div>
@@ -308,7 +308,7 @@ Where:
 </p><p>In accordance with the specified attributes list, an acquisition and creation of attributes of the parameter are performed (Fig. 10).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:640px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_atr.png"><img class="thumbimage" height="533" src="../files/ModBus_prm_atr.png" width="638" /></a>  <div class="thumbcaption">Fig.10. Tab of attributes of the standard parameter type.</div></div></div></div>
-<h4><span class="mw-headline" id="Logical_parameter_type_.28logic.29"><span class="mw-headline-number">3.2.2</span> Logical parameter type (logic)</span></h4>
+<h4><span class="mw-headline" id="Logical_.28logic.29"><span class="mw-headline-number">3.2.2</span> Logical (logic)</span></h4>
 <p>Main page of configuration parameters of the logical type is shown in Figure 11.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:ModBusLog_prm.png"><img class="thumbimage" height="526" src="../files/ModBusLog_prm.png" width="711" /></a>  <div class="thumbcaption">Рис.11. Configuration tab of the logical parameter type.</div></div></div></div>
@@ -333,7 +333,7 @@ Where:
 <ul><li> <i>f_frq</i> — frequency of the calculation of the template procedure or the time after the last calculation (negative in seconds) for planning by CRON, read-only.</li>
 <li> <i>f_start</i> — sign of the first execution of the template procedure — start-up, read-only.</li>
 <li> <i>f_stop</i> — sign of the last execution of the template procedure — stop, read only.</li>
-<li> <i>f_err</i> — parameter error, full access. The value of this attribute of the template falls into the error attribute of the parameter "err".</li>
+<li> <i>f_err</i> — parameter error, full access. The value of this attribute of the template falls into the error attribute of the parameter "err". Write here <b>EVAL</b> for the possibility of setting the attribute "err" from the outside and all others in the Read Only mode.</li>
 <li> <i>SHIFR</i> — code of the parameter, read-only.</li>
 <li> <i>NAME</i> — name of the parameter, read-only.</li>
 <li> <i>DESCR</i> — description of the parameter, read-only.</li>
@@ -342,7 +342,7 @@ Where:
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:ModbusLog_prm_atr.png"><img class="thumbimage" height="526" src="../files/ModbusLog_prm_atr.png" width="711" /></a>  <div class="thumbcaption">Fig.13. Tab of attributes of the logical parameter type.</div></div></div></div>
 <h3><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">3.3</span> <span id="UserAPI" title="#UserAPI">User programming API</span></span></h3>
-<p>Due to the support of the logical type parameters, it makes sense to provide a number of functions of the user API for calling from the template of the logical parameter.
+<p>Due to the support of the logical type parameters, it makes sense to provide a number of functions of the user API for calling them from the template of the logical parameter.
 </p>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_ModBus.png" title="User object model of the module ModBus."><img alt="User object model of the module ModBus." height="215" src="../files/Oscada_UserOM_ModBus.png" width="323" /></a></div>
 <p><b>The object "Controller" [this.cntr()]</b>

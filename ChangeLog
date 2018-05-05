@@ -1,3 +1,19 @@
+2018-05-05 Roman (stable)
+- !!:DOC: The documents fully revised: Archive.FSArch, DAQ.{LogicLev,DAQGate,ModBus,GPIO}, Transport.Sockets.
+- FIX:DB.Model.AGLKS.St: DAQ.LogicLev.experiment fixed for the reflection DB specifying as "LogLevPrmRefl_experiment".
+- !!:SYS,Archive.FSArch,DB.SQLite,DAQ.{DAQGate,GPIO,LogicLev},Transport.Sockets: Some original messages next improved.
+- Protocol.UserProtocol: Prevented from breaking all next starting protocols after one error starting.
+- !!!:FIX:UI.QTCfg: Fixed in the closing mostly for processing of requests into the different threads
+    in way of the function implementation for runtime mode of UI.Vision.
+    The fit of the vertically scalable items made more precision.
+    Added for HTML encoding into the HTML helps.
+- !!!:FIX:UI.VCAEngine: Archive mode of the primitive "Document" fixed by the specific atributes set to the new mode Attr::NotStored.
+- !!!:UI.Vision: Requests of the runtime mode moved to different thread.
+    Notificators switched to direct requests, behind the different thread.
+    The primitive "Diagram" and "Box" improved for late enabling (after whole loading) in the runtime mode, mostly for slow and bad remote connections.
+    Access to user's name and password moved under the critical section.
+
+
 2018-04-27 Roman (stable)
 - data/openscada-proj: Expanded by the command "update" of updating the configuration 0.8.0 LTS to 0.9.
 - !:FIX:SYS.Archives: Fixed for archivers loading at some archive module missing.

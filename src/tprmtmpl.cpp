@@ -184,14 +184,14 @@ void TPrmTempl::load_( TConfig *icfg )
     }
 
     //Remove holes
-    for(unsigned i_p = 0; i_p < u_pos.size(); )
-	if(u_pos[i_p].empty()) u_pos.erase(u_pos.begin()+i_p);
-	else i_p++;
+    for(unsigned iP = 0; iP < u_pos.size(); )
+	if(u_pos[iP].empty()) u_pos.erase(u_pos.begin()+iP);
+	else iP++;
 
     //Position fixing
-    for(int i_p = 0; i_p < (int)u_pos.size(); i_p++) {
-	int iid = ioId(u_pos[i_p]);
-	if(iid != i_p) try{ ioMove(iid,i_p); } catch(...){ }
+    for(int iP = 0; iP < (int)u_pos.size(); iP++) {
+	int iid = ioId(u_pos[iP]);
+	if(iid != iP) try{ ioMove(iid,iP); } catch(...){ }
     }
 }
 
@@ -440,9 +440,9 @@ TCntrNode &TPrmTmplLib::operator=( const TCntrNode &node )
     //Templates copy
     vector<string> ls;
     src_n->list(ls);
-    for(unsigned i_p = 0; i_p < ls.size(); i_p++) {
-	if(!present(ls[i_p])) add(ls[i_p].c_str());
-	(TCntrNode&)at(ls[i_p]).at() = (TCntrNode&)src_n->at(ls[i_p]).at();
+    for(unsigned iP = 0; iP < ls.size(); iP++) {
+	if(!present(ls[iP])) add(ls[iP].c_str());
+	(TCntrNode&)at(ls[iP]).at() = (TCntrNode&)src_n->at(ls[iP]).at();
     }
     if(src_n->startStat() && !startStat()) start(true);
 
@@ -525,11 +525,11 @@ void TPrmTmplLib::start( bool val )
     bool isErr = false;
     vector<string> lst;
     list(lst);
-    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-	try{ at(lst[i_f]).at().setStart(val); }
+    for(unsigned iF = 0; iF < lst.size(); iF++)
+	try{ at(lst[iF]).at().setStart(val); }
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Error starting the template '%s'."), lst[i_f].c_str());
+	    mess_sys(TMess::Error, _("Error starting the template '%s'."), lst[iF].c_str());
 	    isErr = true;
 	}
 
@@ -610,8 +610,8 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
-	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(at(lst[iF]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id").c_str(),true);

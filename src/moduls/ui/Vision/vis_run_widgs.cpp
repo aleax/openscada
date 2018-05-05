@@ -558,7 +558,7 @@ bool RunWdgView::event( QEvent *event )
 RunPageView::RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent, Qt::WindowFlags f ) :
     RunWdgView(iwid, 0, mainWind, parent, f), wx_scale(1), wy_scale(1)
 {
-    resize(50, 50);
+    //resize(50, 50);
     load("");
 
     //Restore external window position

@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"4.0.1"
+#define MOD_VER		"4.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -286,12 +286,12 @@ void TUIMod::setHelp( const string &help, const string &addr, QWidget *w )
 {
     w->setStatusTip(addr.c_str());
     size_t itPos = addr.rfind("/");
-    w->setWhatsThis(("<body style='white-space: pre-wrap;'>"+help+(help.size()?"\n":"")+
+    w->setWhatsThis(("<body style='white-space: pre-wrap;'>"+TSYS::strEncode(help,TSYS::Html)+(help.size()?"\n":"")+
 	"<i><b>"+_("Page")+"</b></i>:&nbsp;"+addr.substr(0,itPos)+"\n"+
 	"<i><b>"+_("Item")+"</b></i>:&nbsp;"+TSYS::strDecode((itPos==string::npos)?"":addr.substr(itPos+1),TSYS::PathEl)+"</body>").c_str());
     if(help.size()) {
 	if(toolTipLim() && help.size() > toolTipLim())
-	    w->setToolTip(("<body style='white-space: pre-wrap;'>"+TSYS::strMess(toolTipLim(),"%s",help.c_str())+"<i><b>Shift+F1</b></i></body>").c_str());
+	    w->setToolTip(("<body style='white-space: pre-wrap;'>"+TSYS::strEncode(TSYS::strMess(toolTipLim(),"%s",help.c_str()),TSYS::Html)+"<i><b>Shift+F1</b></i></body>").c_str());
 	else w->setToolTip(help.c_str());
     }
 }

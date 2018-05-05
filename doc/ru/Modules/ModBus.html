@@ -81,8 +81,8 @@
 <li class="toclevel-2 tocsection-12"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">3.1</span> <span class="toctext">Объект контроллера</span></a></li>
 <li class="toclevel-2 tocsection-13"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="tocnumber">3.2</span> <span class="toctext">Параметры</span></a>
 <ul>
-<li class="toclevel-3 tocsection-14"><a href="#.D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.8B.D0.B9_.D1.82.D0.B8.D0.BF_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B0_.28std.29"><span class="tocnumber">3.2.1</span> <span class="toctext">Стандартный тип параметра (std)</span></a></li>
-<li class="toclevel-3 tocsection-15"><a href="#.D0.9B.D0.BE.D0.B3.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B9_.D1.82.D0.B8.D0.BF_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B0_.28logic.29"><span class="tocnumber">3.2.2</span> <span class="toctext">Логический тип параметра (logic)</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#.D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.8B.D0.B9_.28std.29"><span class="tocnumber">3.2.1</span> <span class="toctext">Стандартный (std)</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#.D0.9B.D0.BE.D0.B3.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B9_.28logic.29"><span class="tocnumber">3.2.2</span> <span class="toctext">Логический (logic)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-2 tocsection-16"><a href="#API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">3.3</span> <span class="toctext"><span>API пользовательского программирования</span></span></a></li>
@@ -94,7 +94,7 @@
 
 <p>ModBus — коммуникационный протокол, основанный на клиент-серверной архитектуре. Разработан фирмой Modicon для использования в контроллерах с программируемой логикой (PLC). Стал стандартом де-факто в промышленности и широко применяется для организации связи промышленного электронного оборудования. Используется для передачи данных через последовательные линии связи RS-485, RS-422, RS-232, а также сети TCP/IP. В настоящее время поддерживается некоммерческой организацией ModBus-IDA.
 </p><p>Существуют три режима протокола: ModBus/RTU, ModBus/ASCII и ModBus/TCP. Первые два используют последовательные линии связи (в основном RS-485, реже RS-422/RS-232), последний использует сети TCP/IP для передачи данных.
-</p><p>Модуль сбора данных предоставляет возможность собирать информацию у различных устройств по протоколу ModBus во всех режимах. Также, модулем реализуются функции горизонтального резервирования, а именно — совместной работы с удалённой станцией этого-же уровня. В то же время, модуль протокола позволяет сформировать и выдать данные по протоколу ModBus в различных режимах и через интерфейсы, поддерживаемые модулями подсистемы "Транспорты".
+</p><p>Модуль сбора данных предоставляет возможность собирать информацию у различных устройств по протоколу ModBus во всех режимах. Также, модулем реализуются функции горизонтального резервирования, а именно — совместной работы с удалённой станцией этого-же уровня. В то же время, модуль протокола позволяет сформировать и выдать данные по протоколу ModBus в различных режимах и через интерфейсы, поддерживаемые модулями <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Communication" title="Special:MyLanguage/Documents/Program manual">подсистемы "Транспорты"</a>.
 </p>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.89.D0.B5.D0.B5_.D0.BE.D0.BF.D0.B8.D1.81.D0.B0.D0.BD.D0.B8.D0.B5_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0_ModBus"><span class="mw-headline-number">1</span> Общее описание протокола ModBus</span></h2>
 <p>Протокол ModBus/{RTU,ASCII} предполагает одно ведущее (запрашивающее) устройство в линии (master), которое может передавать команды одному или нескольким ведомым устройствам (slave), обращаясь к ним по уникальному адресу в линии. Синтаксис команд протокола позволяет адресовать 247 устройств на одной линии связи стандарта RS-485 (реже RS-422 или RS-232). В случае с режимом TCP, адресация исключена из протокола, поскольку выполняется на уровне TCP/IP стека.
@@ -277,13 +277,13 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Попыток запроса для протоколов RTU и ASCII. Указывает на количество попыток повторения запроса в случае получения неполного или повреждённого ответа.</li>
 <li> Максимальный размер блока запроса (байты). Устанавливает максимальный размер блока групповых запросов регистров и битов, в байтах. Полезен для контроллеров с подобным ограничением.</li></ul>
 <h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="mw-headline-number">3.2</span> Параметры</span></h3>
-<p>Модуль сбора данных предоставляет два типа параметра: "Стандартный(std)" и "Логический(logic)". Дополнительными конфигурационными полями параметров данного модуля являются:
+<p>Модуль сбора данных предоставляет два типа параметра: "Стандартный (std)" и "Логический (logic)". Дополнительными конфигурационными полями параметров данного модуля являются:
 </p>
-<ul><li> <b>Стандартный(std)</b>:
+<ul><li> <i><b>Стандартный (std)</b></i>:
 <ul><li> <i>Перечень атрибутов</i> — содержит структурированный список конфигурации атрибутов ModBus.</li></ul></li>
-<li> <b>Логический(logic)</b>:
+<li> <i><b>Логический (logic)</b></i>:
 <ul><li> <i>Шаблон параметра</i> — адрес шаблона параметра DAQ.</li></ul></li></ul>
-<h4><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.8B.D0.B9_.D1.82.D0.B8.D0.BF_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B0_.28std.29"><span class="mw-headline-number">3.2.1</span> Стандартный тип параметра (std)</span></h4>
+<h4><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.8B.D0.B9_.28std.29"><span class="mw-headline-number">3.2.1</span> Стандартный (std)</span></h4>
 <p>Главная страница конфигурации параметра стандартного типа представлена на рисунке 9.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:635px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_ru.png"><img class="thumbimage" height="659" src="../files/ModBus_prm_ru.png" width="633" /></a>  <div class="thumbcaption">Рис.9. Вкладка конфигурации параметра стандартного типа.</div></div></div></div>
@@ -308,7 +308,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 </p><p>В соответствии с указанным списком атрибутов выполняется опрос и создание атрибутов параметра (рис.10).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:635px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_atr_ru.png"><img class="thumbimage" height="533" src="../files/ModBus_prm_atr_ru.png" width="633" /></a>  <div class="thumbcaption">Рис.10. Вкладка атрибутов параметра стандартного типа.</div></div></div></div>
-<h4><span class="mw-headline" id=".D0.9B.D0.BE.D0.B3.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B9_.D1.82.D0.B8.D0.BF_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B0_.28logic.29"><span class="mw-headline-number">3.2.2</span> Логический тип параметра (logic)</span></h4>
+<h4><span class="mw-headline" id=".D0.9B.D0.BE.D0.B3.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B9_.28logic.29"><span class="mw-headline-number">3.2.2</span> Логический (logic)</span></h4>
 <p>Главная страница конфигурации параметра логического типа представлена на рисунке 11.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:ModBusLog_prm_ru.png"><img class="thumbimage" height="533" src="../files/ModBusLog_prm_ru.png" width="711" /></a>  <div class="thumbcaption">Рис.11. Вкладка конфигурации параметра логического типа.</div></div></div></div>
@@ -334,7 +334,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <ul><li> <i>f_frq</i> — частота вычисления процедуры шаблона или время после последнего вычисления (отрицательное в секундах) для планирования по CRON, только чтение.</li>
 <li> <i>f_start</i> — флаг первого выполнения процедуры шаблона — запуск, только чтение.</li>
 <li> <i>f_stop</i> — флаг последнего выполнения процедуры шаблона — останов, только чтение.</li>
-<li> <i>f_err</i> — ошибка параметра, полный доступ. Значение этого атрибута шаблона попадает в атрибут ошибки параметра "err".</li>
+<li> <i>f_err</i> — ошибка параметра, полный доступ. Значение этого атрибута шаблона попадает в атрибут ошибки параметра "err". Записать сюда <b>EVAL</b> для возможности установки извне атрибута "err" и всех других в режиме Только для Чтения.</li>
 <li> <i>SHIFR</i> — значение шифра параметра, только чтение.</li>
 <li> <i>NAME</i> — значение имени параметра, только чтение.</li>
 <li> <i>DESCR</i> — значение описания параметра, только чтение.</li>
@@ -343,7 +343,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:714px;"><a class="image" href="http://oscada.org/wiki/File:ModbusLog_prm_atr_ru.png"><img class="thumbimage" height="505" src="../files/ModbusLog_prm_atr_ru.png" width="712" /></a>  <div class="thumbcaption">Рис.13. Вкладка атрибутов параметра логического типа.</div></div></div></div>
 <h3><span class="mw-headline" id="API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">3.3</span> <span id="UserAPI" title="#UserAPI">API пользовательского программирования</span></span></h3>
-<p>В виду поддержки параметров логического типа, имеет смысл предоставление ряда функций пользовательского API для вызова из шаблона логического параметра.
+<p>В виду поддержки параметров логического типа, имеет смысл предоставление ряда функций пользовательского API для их вызова из шаблона логического параметра.
 </p>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_ModBus_ru.png" title="Объектная модель пользователя модуля ModBus."><img alt="Объектная модель пользователя модуля ModBus." height="213" src="../files/Oscada_UserOM_ModBus_ru.png" width="323" /></a></div>
 <p><b>Объект "Контроллер" [this.cntr()]</b>

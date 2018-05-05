@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 14:00+0200\n"
+"POT-Creation-Date: 2018-05-05 19:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,6 +54,10 @@ msgid "Date of modification"
 msgstr ""
 
 msgid "Search and create new user protocol error."
+msgstr ""
+
+#, c-format
+msgid "Error starting the protocol '%s'."
 msgstr ""
 
 msgid "User protocols"

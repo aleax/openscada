@@ -586,11 +586,11 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.LogicLev"><span class="mw-headline-number">7.2</span> Модуль <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a></span></h4>
 <p><b>Объект "Параметр" [this]</b>
 </p>
-<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">для включенного параметра стандартного типа</span>] — добавить атрибут <i>id</i> с именем <i>name</i> и для типа <i>tp</i>. Если атрибут уже присутствует, то будут применены свойства, которые возможно изменить "на ходу": имя, режим выбора и параметры выбора.
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">для включенного параметра логического типа</span>] — добавление атрибута <i>id</i> с именем <i>name</i> и типом <i>tp</i>. Если атрибут уже присутствует то будут применены свойства, которые возможно изменить "на ходу": имя, режим выбора и параметры выбора.
 <ul><li> <i>id, name</i> — идентификатор и имя нового атрибута;</li>
 <li> <i>tp</i> — тип атрибута [boolean | integer | real | string | text | object] + режим выбора [sel | seled] + только для чтения [ro];</li>
-<li> <i>selValsNms</i> — две строки со значениями в первой и их именами во второй (разделённые ";").</li></ul></li>
-<li> <i>bool attrDel( string id )</i> [<span style="color: red">для включенного параметра стандартного типа</span>] — удалить атрибут <i>id</i>.</li></ul>
+<li> <i>selValsNms</i> — две строки со значениями в первой и их именами во второй, разделённые ";".</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">для включенного параметра логического типа</span>] — удаление атрибута <i>id</i>.</li></ul>
 <h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.BlockCalc"><span class="mw-headline-number">7.3</span> Модуль <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a></span></h4>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_BlockCalc_ru.png" title="Объектная модель пользователя модуля BlockCalc."><img alt="Объектная модель пользователя модуля BlockCalc." height="214" src="files/Oscada_UserOM_BlockCalc_ru.png" width="218" /></a></div>
 <p><b>Объект "Блок" (SYS.DAQ.BlockCalc["cntr"]["blk_block"])</b>

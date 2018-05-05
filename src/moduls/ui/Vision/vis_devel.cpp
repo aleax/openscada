@@ -752,8 +752,7 @@ void VisDevelop::closeEvent( QCloseEvent* ce )
 {
     winClose = true;
 
-    if(!SYS->stopSignal() && !property("forceClose").toBool() && !mod->endRun() && !exitModifChk())
-    {
+    if(!SYS->stopSignal() && !property("forceClose").toBool() && !mod->endRun() && !exitModifChk()) {
 	ce->ignore();
 	winClose = false;
 	return;

@@ -60,6 +60,7 @@ class Attr
 	    Generic	= 0x10000,	//Generic atributes' flag. This atributes loaded independent from enabled state
 	    OnlyRead	= 0x20000,	//Only read attribute, through widget, no the attribute storing location
 	    PreRead	= 0x40000,	//Preprocessed read
+	    NotStored	= 0x80000	//Not stored and loaded - only dynamic
 	};
 
 	// Link types

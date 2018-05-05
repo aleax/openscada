@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-21 20:43+0300\n"
+"POT-Creation-Date: 2018-05-05 19:27+0300\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -320,6 +320,10 @@ msgstr "Schaltfläche zum Aufrufen des Statusleistenverlaufs."
 
 msgid "Ready"
 msgstr "Fertig"
+
+#, c-format
+msgid "Configurator using the remote host %d times."
+msgstr "Konfigurator verwendet den Remote-Host %d mal."
 
 msgid "Saving the changes"
 msgstr "Speichern der Änderungen"
@@ -730,6 +734,9 @@ msgstr "ToolTip-Limit, Null zum Deaktivieren"
 
 msgid "Go to the configuration of the list of remote stations"
 msgstr "Gehen Sie auf die Konfiguration der Liste der entfernten Stationen"
+
+msgid "Page"
+msgstr "Seite"
 
 msgid "Item"
 msgstr "Artikel"

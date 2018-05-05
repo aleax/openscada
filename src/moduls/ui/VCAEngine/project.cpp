@@ -1739,7 +1739,6 @@ void PageWdg::wClear( )
     cfg("ATTRS").setS("");
 }
 
-
 void PageWdg::inheritAttr( const string &attr )
 {
     bool mdf = isModify();

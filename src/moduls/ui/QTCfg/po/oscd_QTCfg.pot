@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-22 22:29+0300\n"
+"POT-Creation-Date: 2018-05-05 19:27+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -309,6 +309,10 @@ msgid "Button for calling the status bar history."
 msgstr ""
 
 msgid "Ready"
+msgstr ""
+
+#, c-format
+msgid "Configurator using the remote host %d times."
 msgstr ""
 
 msgid "Saving the changes"
@@ -694,6 +698,9 @@ msgid "ToolTip limit, zero to disable"
 msgstr ""
 
 msgid "Go to the configuration of the list of remote stations"
+msgstr ""
+
+msgid "Page"
 msgstr ""
 
 msgid "Item"

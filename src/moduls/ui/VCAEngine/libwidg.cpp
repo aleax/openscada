@@ -1010,7 +1010,7 @@ void CWidget::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
     Widget::inheritAttr(attr);
-    if(!mdf)  modifClr( );
+    if(!mdf) modifClr( );
 }
 
 void CWidget::cntrCmdProc( XMLNode *opt )

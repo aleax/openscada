@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.2.1"
+#define MOD_VER		"5.3.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -98,7 +98,7 @@ TVision::TVision( string name ) : TUI(MOD_ID), mVCAStation(dataRes()), mUserStar
 TVision::~TVision( )
 {
     //Free widget's shapes
-    for(unsigned i_sw = 0; i_sw < shapesWdg.size(); i_sw++) delete shapesWdg[i_sw];
+    for(unsigned iSw = 0; iSw < shapesWdg.size(); iSw++) delete shapesWdg[iSw];
     shapesWdg.clear();
 }
 
@@ -284,8 +284,8 @@ void TVision::modStop( )
     mEndRun = true;
 
     MtxAlloc res(dataRes(), true);
-    for(unsigned i_w = 0; i_w < mnWinds.size(); i_w++)
-	while(mnWinds[i_w]) {
+    for(unsigned iW = 0; iW < mnWinds.size(); iW++)
+	while(mnWinds[iW]) {
 	    res.unlock();
 	    TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 	    res.lock();
@@ -297,9 +297,9 @@ void TVision::modStop( )
 
 WdgShape *TVision::getWdgShape( const string &iid )
 {
-    for(unsigned i_sw = 0; i_sw < shapesWdg.size(); i_sw++)
-	if(shapesWdg[i_sw]->id() == iid)
-	    return shapesWdg[i_sw];
+    for(unsigned iSw = 0; iSw < shapesWdg.size(); iSw++)
+	if(shapesWdg[iSw]->id() == iid)
+	    return shapesWdg[iSw];
 
     return NULL;
 }
@@ -307,18 +307,18 @@ WdgShape *TVision::getWdgShape( const string &iid )
 void TVision::regWin( QMainWindow *mwd )
 {
     MtxAlloc res(dataRes(), true);
-    unsigned i_w;
-    for(i_w = 0; i_w < mnWinds.size(); i_w++)
-	if(mnWinds[i_w] == NULL) break;
-    if(i_w == mnWinds.size()) mnWinds.push_back((QMainWindow*)NULL);
-    mnWinds[i_w] = mwd;
+    unsigned iW;
+    for(iW = 0; iW < mnWinds.size(); iW++)
+	if(mnWinds[iW] == NULL) break;
+    if(iW == mnWinds.size()) mnWinds.push_back((QMainWindow*)NULL);
+    mnWinds[iW] = mwd;
 }
 
 void TVision::unregWin( QMainWindow *mwd )
 {
     MtxAlloc res(dataRes(), true);
-    for(unsigned i_w = 0; i_w < mnWinds.size(); i_w++)
-	if(mnWinds[i_w] == mwd) mnWinds[i_w] = NULL;
+    for(unsigned iW = 0; iW < mnWinds.size(); iW++)
+	if(mnWinds[iW] == mwd) mnWinds[iW] = NULL;
 }
 
 void TVision::cntrCmdProc( XMLNode *opt )

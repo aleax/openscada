@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.8.10"
+#define MOD_VER		"0.8.11"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
 #define LICENSE		"GPL2"
@@ -149,17 +149,21 @@ void TProt::modStart( )
 {
     vector<string> ls;
     uPrtList(ls);
-    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
-	if(uPrtAt(ls[i_n]).at().toEnable())
-	    uPrtAt(ls[i_n]).at().setEnable(true);
+    for(unsigned iN = 0; iN < ls.size(); iN++)
+	if(uPrtAt(ls[iN]).at().toEnable())
+	    try { uPrtAt(ls[iN]).at().setEnable(true); }
+	    catch(TError &err) {
+		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		mess_sys(TMess::Error, _("Error starting the protocol '%s'."), ls[iN].c_str());
+	    }
 }
 
 void TProt::modStop( )
 {
     vector<string> ls;
     uPrtList(ls);
-    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
-	uPrtAt(ls[i_n]).at().setEnable(false);
+    for(unsigned iN = 0; iN < ls.size(); iN++)
+	uPrtAt(ls[iN]).at().setEnable(false);
 }
 
 TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-02 19:44+0200\n"
+"POT-Creation-Date: 2018-05-05 18:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,6 +38,10 @@ msgstr ""
 msgid "Error open table '%s'. DB is disabled."
 msgstr ""
 
+#, c-format
+msgid "Request: \"%s\""
+msgstr ""
+
 msgid "Unknown error"
 msgstr ""
 
@@ -46,7 +50,7 @@ msgid "Request \"%s\" error: %s(%d)"
 msgstr ""
 
 msgid ""
-"SQLite DB address must be written as: [<FileDBPath>].\n"
+"SQLite DB address must be written as: \"{FileDBPath}\".\n"
 "Where:\n"
 "  FileDBPath - full path to DB file (./oscada/Main.db).\n"
 "               Use empty path for a private, temporary on-disk database create.\n"

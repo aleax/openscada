@@ -11,14 +11,6 @@
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/GPIO</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FGPIO&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/GPIO" title="Modules/GPIO">Modules/GPIO</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/GPIO" title="Modules/GPIO (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/GPIO/uk" title="Модулі/GPIO (100% translated)">українська</a></div></div>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../../en/files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> The translation checking and actualizing
-</td></tr></table>
-</div>
 <table class="wikitable">
 
 <tr>
@@ -38,7 +30,7 @@
 <td> <a href="../Modules/GPIO.html" title="Special:MyLanguage/Modules/GPIO">GPIO</a> </td>
 <td> GPIO
 </td>
-<td> 2.0 </td>
+<td> 2.1 </td>
 <td> GPL2 </td>
 <td> daq_GPIO.so </td>
 <td> en,uk,ru,de </td>
@@ -46,50 +38,73 @@
 </td>
 <td> DAQ </td>
 <td> Роман Савоченко </td>
-<td> Broadcom BCM 2835 GPIO, в основном для и используется в Raspberry Pi. ...
+<td> GPIO различных одноплатных ПК: Broadcom BCM 2835 и больше (Raspberry Pi, ...), SUNXI AllWinner H2 и больше (Orange Pi Zero, ...).
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">1</span> <span class="toctext">Объект контролера</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">2</span> <span class="toctext">Объект параметра контроллера</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_GPIO:_.D0.A0.D0.B5.D0.B6.D0.B8.D0.BC_.28mode.29"><span class="tocnumber">3</span> <span class="toctext">Функция GPIO: Режим (mode)</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_GPIO:_.D0.9F.D0.BE.D0.BB.D1.83.D1.87.D0.B8.D1.82.D1.8C_.28get.29"><span class="tocnumber">4</span> <span class="toctext">Функция GPIO: Получить (get)</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_GPIO:_.D0.A3.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.B8.D1.82.D1.8C_.28put.29"><span class="tocnumber">5</span> <span class="toctext">Функция GPIO: Установить (put)</span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#.D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Замечания</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B_.28BCM2835.2C_SUNXI.29"><span class="tocnumber">2</span> <span class="toctext">Параметры (BCM2835, SUNXI)</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_GPIO:_.D0.A0.D0.B5.D0.B6.D0.B8.D0.BC_.28mode.29"><span class="tocnumber">2.1</span> <span class="toctext">Функция GPIO: Режим (mode)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_GPIO:_.D0.9F.D0.BE.D0.BB.D1.83.D1.87.D0.B8.D1.82.D1.8C_.28get.29"><span class="tocnumber">2.2</span> <span class="toctext">Функция GPIO: Получить (get)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_GPIO:_.D0.A3.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.B8.D1.82.D1.8C_.28put.29"><span class="tocnumber">2.3</span> <span class="toctext">Функция GPIO: Установить (put)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">3</span> <span class="toctext">Замечания</span></a></li>
 </ul>
 </div>
 
-<p>Модуль предоставляет в систему OpenSCADA поддержку источников данных Входов/Выходов Общего Назначения (GPIO) платы <a class="external text" href="https://www.raspberrypi.org" rel="nofollow noreferrer noopener" target="_blank">Raspberry PI</a>, основанной на чипе BCM2835. BCM2835 GPIO на Raspberry Pi насчитывает до 32 штырей некоторый из которых могут осуществлять альтернативные функции вроде: I2C, UART, SPIO. Для доступа к этому GPIO в общих функциях использовано библиотеку <a class="external text" href="http://www.airspayce.com/mikem/bcm2835" rel="nofollow noreferrer noopener" target="_blank">libBCM2835</a>, которая включена и собирается вместе с этим модулем.
+<p>Модуль предоставляет в OpenSCADA поддержку Входов/Выходов общего назначения (GPIO), основанных на одноплатных ПК:
+</p>
+<ul><li> BCM2835 и выше — <a class="external text" href="https://www.raspberrypi.org" rel="nofollow noreferrer noopener" target="_blank">Raspberry PI, PI2, PI3</a>;</li>
+<li> SUNXI AllWinner H2 и выше — <a class="external text" href="http://www.orangepi.org" rel="nofollow noreferrer noopener" target="_blank">Orange Pi, Zero, One, Plus</a>.</li></ul>
+<p>GPIO на BCM2835 и выше, на Raspberry Pi, насчитывает до 32 штырей, некоторый из которых могут осуществлять альтернативные функции вроде: I2C, UART, SPIO. Для доступа к этому GPIO использовано GPIO часть библиотеки <a class="external text" href="http://www.airspayce.com/mikem/bcm2835" rel="nofollow noreferrer noopener" target="_blank">libBCM2835</a>, которая включена и собирается вместе с этим модулем.
+</p><p>GPIO на SUNXI AllWinner H2 и выше, на Orange Pi, может иметь 9 основных и 6 дополнительных банков с 32 штырями в каждом, некоторый из которых могут осуществлять альтернативные функции вроде: I2C, UART, SPIO. Для доступа к этому GPIO использовано GPIO часть библиотеки <a class="external text" href="https://github.com/duxingkei33/orangepi_PC_gpio_pyH3" rel="nofollow noreferrer noopener" target="_blank">orangepi_PC_gpio_pyH3</a>, которая включена и собирается вместе с этим модулем.
 </p>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">1</span> Объект контролера</span></h2>
-<p>GPIO в OpenSCADA конфигурируется путём создания нового объекта контролера (Рис.1) и объекта параметра контролера — один параметр GPIO этой платы.
+<p>GPIO в OpenSCADA конфигурируется путём создания нового объекта контролера (Рис.1) и параметра контролера — один параметр GPIO для одной платы.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:749px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_cntr_ru.png"><img class="thumbimage" height="570" src="../files/GPIO_obj_cntr_ru.png" width="747" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфигурации объекта контролера.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:781px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_cntr_ru.png"><img class="thumbimage" height="567" src="../files/GPIO_obj_cntr_ru.png" width="779" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфигурации объекта контролера.</div></div></div></div>
 <p>По этой вкладке Вы можете установить:
 </p>
-<ul><li> Состояние контроллера, а именно: Статус "Включен", "Запущен" и имя базы данных, которая содержит эту конфигурацию.</li>
+<ul><li> Состояние объекта контроллера, а именно: статус, "Включен", "Выполняется" и имя базы данных, которая содержит эту конфигурацию.</li>
 <li> Идентификатор, имя и описание контролера.</li>
-<li> Состояние, в которое контроллер должен быть переведен при загрузке: "Включать" и "Запускать".</li>
-<li> Имя таблицы для сохранения параметров контроллера. </li></ul>
-<h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">2</span> Объект параметра контроллера</span></h2>
-<p>Объект параметра является непосредственным представлением-отражением GPIO, который содержит перечень атрибутов логического типа в общем количестве 32. Вкладка конфигурации объекта параметра изображена на Рисунке 2. Сбор данных осуществляется только в синхронном режиме поскольку GPIO должен быть быстрым.
+<li> Состояние "Включен" и "Выполняется", в которое объект контроллера должен быть переведен при запуске.</li>
+<li> Имя таблицы для сохранения параметров контроллера.</li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B_.28BCM2835.2C_SUNXI.29"><span class="mw-headline-number">2</span> Параметры (BCM2835, SUNXI)</span></h2>
+<p>Параметр является непосредственным представителем-отражением GPIO, который содержит перечень атрибутов дискретного типа в количестве, которое соответствует этому типу GPIO. Вкладка конфигурации параметра изображена на рисунке 2. Сбор данных осуществляется только в синхронном режиме поскольку GPIO должен быть быстрым.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:749px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_prm_ru.png"><img class="thumbimage" height="581" src="../files/GPIO_obj_prm_ru.png" width="747" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфигурации параметра.</div></div></div></div>
-<p>С помощью вкладки конфигурации объекта параметра Вы можете установить:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:781px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_prm_ru.png"><img class="thumbimage" height="567" src="../files/GPIO_obj_prm_ru.png" width="779" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфигурации параметра.</div></div></div></div>
+<p>С помощью вкладки конфигурации параметра Вы можете установить:
 </p>
-<ul><li> Состояние параметра: тип, "Включенный" и перечень статических функций.</li>
+<ul><li> Состояние параметра: тип (BCM2835, SUNXI), "Включенный" и перечень статических функций.</li>
 <li> Идентификатор, имя и описание параметра.</li>
-<li> Состояние, в который параметр может переводиться при загрузке: "Включать".</li></ul>
-<p>Вкладка "Атрибуты" для GPIO изображена на Рисунке 3. Для GPIO также доступна вкладка "Конфигурация" (Рис.4) с режимом ВВ и состоянием инверсии.
+<li> Состояние "Включенный", в который параметр должен переводиться при запуске.</li></ul>
+<p>Вкладка "Атрибуты" GPIO изображена на рисунке 3, для BCM2835, и рисунке 4, для SUNXI. Для GPIO также доступна вкладка "Конфигурация" (Рис.5) с режимом ВВ и состоянием инверсии.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:749px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_prmAttr_ru.png"><img class="thumbimage" height="727" src="../files/GPIO_obj_prmAttr_ru.png" width="747" /></a>  <div class="thumbcaption">Рис.3. Вкладка "Атрибуты" параметра.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:749px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_prmCfg_ru.png"><img class="thumbimage" height="715" src="../files/GPIO_obj_prmCfg_ru.png" width="747" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Конфигурация" параметра.</div></div></div></div>
-<p>Для максимально быстрого доступа к GPIO параметр предоставляет три статические функции: "mode", "get" и "put". Эти функции могут быть использованы в окружении программирования системы OpenSCADA для организации неординарных алгоритмов взаимодействия. Для адресации функции вы можете использовать статический вызов адреса <b>GPIO.{cntr}.{prm}.{Func}()</b> или динамический <b>SYS.DAQ.GPIO.{cntr}.{prm}["{Func}"].call()</b>. Где:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:781px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_prmAttr_ru.png"><img class="thumbimage" height="656" src="../files/GPIO_obj_prmAttr_ru.png" width="779" /></a>  <div class="thumbcaption">Рис.3. Вкладка "Атрибуты" параметра "BCM2835".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:881px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_prmAttrSUNXI_ru.png"><img class="thumbimage" height="606" src="../files/GPIO_obj_prmAttrSUNXI_ru.png" width="879" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Атрибуты" параметра "SUNXI".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:781px;"><a class="image" href="http://oscada.org/wiki/File:GPIO_obj_prmCfg_ru.png"><img class="thumbimage" height="656" src="../files/GPIO_obj_prmCfg_ru.png" width="779" /></a>  <div class="thumbcaption">Рис.5. Вкладка "Конфигурация" параметра.</div></div></div></div>
+<p>Для максимально быстрого доступа к GPIO, параметр предоставляет три статические функции: "mode", "get" и "put". Эти функции могут быть использованы в окружении программирования системы OpenSCADA для организации неординарных алгоритмов взаимодействия. Для адресации функции вы можете использовать статический вызов адреса <b>GPIO.{cntr}.{prm}.{Func}()</b> или динамический <b>SYS.DAQ.GPIO.{cntr}.{prm}["{Func}"].call()</b>. Где:
 </p>
 <ul><li> {cntr} — идентификатор объекта контроллера;</li>
 <li> {prm} — идентификатор объекта параметра;</li>
 <li> {Func} — идентификатор функции.</li></ul>
-<h2><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_GPIO:_.D0.A0.D0.B5.D0.B6.D0.B8.D0.BC_.28mode.29"><span class="mw-headline-number">3</span> Функция GPIO: Режим (mode)</span></h2>
+<p>На данный момент, также предоставляется возможность динамического подключения статических функций, как самое быстрое и одновременно гибкое решение, например:
+</p>
+<pre style="white-space: pre-wrap;">
+function put = addr+".fnc_put";
+if(put) {
+  put(D4, vl&amp;0x10);
+  put(D5, vl&amp;0x20);
+  put(D6, vl&amp;0x40);
+  put(D7, vl&amp;0x80);
+}</pre>
+<p>И в такой конфигурабильный способ, на данный момент, реализованы следующие шаблоны низкоуровневых устройств:
+</p>
+<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices#DHT" title="Special:MyLanguage/Libs/User protocol devices">GPIO: DHT11,22 (AM23XX)</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices#1602A" title="Special:MyLanguage/Libs/User protocol devices">GPIO: 1602A(HD44780) (1602A)</a></li></ul>
+<h3><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_GPIO:_.D0.A0.D0.B5.D0.B6.D0.B8.D0.BC_.28mode.29"><span class="mw-headline-number">2.1</span> Функция GPIO: Режим (mode)</span></h3>
 <p><i>Описание</i>: GPIO режим, вход или выход.<br />
 <i>Параметры</i>:
 </p>
@@ -123,7 +138,7 @@
 <td> Вход </td>
 <td> 0
 </td></tr></table>
-<h2><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_GPIO:_.D0.9F.D0.BE.D0.BB.D1.83.D1.87.D0.B8.D1.82.D1.8C_.28get.29"><span class="mw-headline-number">4</span> Функция GPIO: Получить (get)</span></h2>
+<h3><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_GPIO:_.D0.9F.D0.BE.D0.BB.D1.83.D1.87.D0.B8.D1.82.D1.8C_.28get.29"><span class="mw-headline-number">2.2</span> Функция GPIO: Получить (get)</span></h3>
 <p><i>Описание</i>: Получение уровня штыря GPIO.<br />
 <i>Параметры</i>:
 </p>
@@ -150,7 +165,7 @@
 <td> Вход </td>
 <td>
 </td></tr></table>
-<h2><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_GPIO:_.D0.A3.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.B8.D1.82.D1.8C_.28put.29"><span class="mw-headline-number">5</span> Функция GPIO: Установить (put)</span></h2>
+<h3><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D1.8F_GPIO:_.D0.A3.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.B8.D1.82.D1.8C_.28put.29"><span class="mw-headline-number">2.3</span> Функция GPIO: Установить (put)</span></h3>
 <p><i>Описание</i>: Установка уровня GPIO штыря.<br />
 <i>Параметры</i>:
 </p>
@@ -177,23 +192,27 @@
 <td> Вход </td>
 <td>
 </td></tr></table>
-<h2><span class="mw-headline" id=".D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">6</span> Замечания</span></h2>
-<p>Модуль опробован на платах Raspberry Pi 2, 3 модели B. Детальнее Вы можете посмотреть на <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Raspberry_Pi" title="Special:MyLanguage/Using/Raspberry Pi">странице</a> и <a class="external text" href="http://oscada.org/en/development/tasks/posts/implementation_vnedrenie/raspberry_pi_2_workout" rel="nofollow noreferrer noopener" target="_blank">задаче</a>.
-</p><p>Время доступа к статичным функциям было измерено в сравнении с различными методами, что Вы можете посмотреть <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/JavaLikeCalc#Productivity" title="Special:MyLanguage/Modules/JavaLikeCalc">тут</a>.
-</p><p>Для создания производных DAQ шаблонов, с использованием статических функций, Вы также можете применить динамическое подключение к ним, вроде такого:
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">3</span> Замечания</span></h2>
+<p>Модуль опробован на платах <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Raspberry_Pi" title="Special:MyLanguage/Using/Raspberry Pi">Raspberry Pi 2, 3 модели B</a> и <a class="external" href="http://oscada.org/wiki/Using/Orange_Pi" title="Using/Orange Pi">Orange Pi Zero</a>.
+</p><p>Время доступа к статичным функциям было измерено в сравнении с различными методами, что Вы можете посмотреть <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/JavaLikeCalc#Productivity" title="Special:MyLanguage/Modules/JavaLikeCalc">тут</a>, а общие измерение производительности приведены в следующей таблице:
 </p>
-<pre style="white-space: pre-wrap;">
-function put = addr+".fnc_put";
-if(put) {
-  put(D4, vl&amp;0x10);
-  put(D5, vl&amp;0x20);
-  put(D6, vl&amp;0x40);
-  put(D7, vl&amp;0x80);
-}</pre>
-<p>В такой конфигурабильный способ на данный момент реализованы следующие шаблоны низкоуровневых устройств:
-</p>
-<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices#DHT" title="Special:MyLanguage/Libs/User protocol devices">GPIO: DHT11,22 (AM23XX)</a></li>
-<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/User_protocol_devices#1602A" title="Special:MyLanguage/Libs/User protocol devices">GPIO: 1602A(HD44780) (1602A)</a></li></ul>
+<table class="wikitable">
+
+<tr>
+<th> GPIO type </th>
+<th> get(), us </th>
+<th> put(), us
+</th></tr>
+<tr>
+<td> Raspberry Pi 3 </td>
+<td> 0.36 </td>
+<td> 0.27
+</td></tr>
+<tr>
+<td> Orange Pi Zero </td>
+<td> 1.2 </td>
+<td> 1.2
+</td></tr></table>
 
 
 

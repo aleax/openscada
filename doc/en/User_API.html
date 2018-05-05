@@ -587,11 +587,11 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <h3><span class="mw-headline" id="Module_DAQ.LogicLev"><span class="mw-headline-number">7.2</span> Module <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a></span></h3>
 <p><b>The object "Parameter" [this]</b>
 </p>
-<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">for enabled parameter of the standard type</span>] — attribute <i>id</i> and <i>name</i> for type <i>tp</i> add. If the attribute already present then will apply properties allowed to hot changing: name, selection mode and the selection mode parameters.
-<ul><li> <i>id, name</i> — new attribute id and name;</li>
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — adds the attribute <i>id</i> with the name <i>name</i> and the type <i>tp</i>. If the attribute is already present, the properties will be applied that can be changed on the go: name, selection mode and selection options.
+<ul><li> <i>id, name</i> — identifier and name of the new attribute;</li>
 <li> <i>tp</i> — attribute type [boolean | integer | real | string | text | object] + selection mode [sel | seled] + read-only [ro];</li>
-<li> <i>selValsNms</i> — two lines with values in first and it's names in first (separated by ";").</li></ul></li>
-<li> <i>bool attrDel( string id )</i> [<span style="color: red">for enabled parameter of the standard type</span>] — attribute <i>id</i> remove.</li></ul>
+<li> <i>selValsNms</i> — two lines with values in first and their names in second, separated by ";".</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — removes the attribute <i>id</i>.</li></ul>
 <h3><span class="mw-headline" id="Module_DAQ.BlockCalc"><span class="mw-headline-number">7.3</span> Module <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a></span></h3>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_BlockCalc.png" title="User object model of the module BlockCalc."><img alt="User object model of the module BlockCalc." height="214" src="files/Oscada_UserOM_BlockCalc.png" width="218" /></a></div>
 <p><b>The object "Block" (SYS.DAQ.BlockCalc["cntr"]["blk_block"])</b>

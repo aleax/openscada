@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 14:00+0200\n"
+"POT-Creation-Date: 2018-05-05 19:10+0300\n"
 "PO-Revision-Date: 2010-03-04 21:58+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -55,6 +55,10 @@ msgstr "Дата модифікації"
 
 msgid "Search and create new user protocol error."
 msgstr "Помилка пошуку та створення протоколу користувача."
+
+#, c-format
+msgid "Error starting the protocol '%s'."
+msgstr "Помилка запуску протоколу '%s'."
 
 msgid "User protocols"
 msgstr "Протоколи користувача"

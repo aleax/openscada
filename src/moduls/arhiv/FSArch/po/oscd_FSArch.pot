@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 11:02+0300\n"
+"POT-Creation-Date: 2018-05-05 15:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,10 @@ msgstr ""
 
 #, c-format
 msgid "Error checking the value archiver '%s'."
+msgstr ""
+
+#, c-format
+msgid "The value archiver '%s' uses the same folder '%s' as an other archiver."
 msgstr ""
 
 #, c-format
@@ -78,6 +82,25 @@ msgstr ""
 msgid ""
 "Enables messages archiving by files in the XML-format, rather than plain text.\n"
 "Using XML-archiving requires more RAM as it requires full file download, XML parsing and memory holding at the time of use."
+msgstr ""
+
+msgid "Prevent duplicates"
+msgstr ""
+
+msgid ""
+"Enables checking for duplicate messages at the time of putting a message into the archive.\n"
+"If there is a duplicate the message does not fit into the archive.\n"
+"This feature some increases the recording time to the archive, but in cases of placing messages in the archive by past time from external sources it allows to eliminate the duplicates."
+msgstr ""
+
+msgid "Consider duplicates and prevent, for equal time, category, level"
+msgstr ""
+
+msgid ""
+"Enables checking for duplicate messages at the time of putting a message into the archive.\n"
+"As the duplicates there considers messages which equal to time, category and level.\n"
+"If there is a duplicate then the new message will replace the old one into the archive.\n"
+"This feature mostly usable at message text changing in time, for alarm's state to example."
 msgstr ""
 
 msgid "Maximum size of archive's file, kB"
@@ -122,25 +145,6 @@ msgstr ""
 msgid ""
 "Specifies whether to create a file with information about the packed archive files by gzip-archiver.\n"
 "When copying the files of archive to another station, this info file can speed up the target station process of first run by eliminating the need to decompress by gzip-archiver in order to obtain the information."
-msgstr ""
-
-msgid "Prevent duplicates"
-msgstr ""
-
-msgid ""
-"Enables checking for duplicate messages at the time of putting a message into the archive.\n"
-"If there is a duplicate the message does not fit into the archive.\n"
-"This feature some increases the recording time to the archive, but in cases of placing messages in the archive by past time from external sources it allows to eliminate the duplicates."
-msgstr ""
-
-msgid "Consider duplicates and prevent, for equal time, category, level"
-msgstr ""
-
-msgid ""
-"Enables checking for duplicate messages at the time of putting a message into the archive.\n"
-"As the duplicates there considers messages which equal to time, category and level.\n"
-"If there is a duplicate then the new message will replace the old one into the archive.\n"
-"This feature mostly usable at message text changing in time, for alarm's state to example."
 msgstr ""
 
 msgid "Check now for the directory of the archiver"
@@ -250,7 +254,7 @@ msgstr ""
 msgid ""
 "Sets limit to maximum amount of the disk space of all arhive's files of the archiver.\n"
 "The check is carried out with periodicity of checking the archives, as a result, when the limit is exceeded, the oldest files of all archives are removed.\n"
-"To completely remove this restriction you can set it to value < 1."
+"To completely remove this restriction you can set it to zero."
 msgstr ""
 
 msgid "Rounding for numeric values (%)"
@@ -258,7 +262,7 @@ msgstr ""
 
 msgid ""
 "Sets the maximum percentage difference between the values of the parameters of the integer and the real types at which they are considered the same and are arranged in the archive as one value, through successive packaging.\n"
-"Allows you to pack lightly changing values beyond the limits of authenticity.\n"
+"Allows you to pack lightly changing values beyond the limits of validity.\n"
 "To disable this property you can it set to zero."
 msgstr ""
 

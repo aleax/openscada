@@ -69,7 +69,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     fileDlg(NULL),
     winClose(false), conErr(NULL), crSessForce(icrSessForce), mKeepAspectRatio(true), mWinPosCntrSave(false), prjSes_it(iprjSes_it),
     master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1),
-    mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0)
+    mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0), updPage(false), host(NULL)
 {
     QImage ico_t;
 
@@ -222,8 +222,10 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 
     if(!s2i(SYS->cmdOpt("showWin"))) resize(600, 400);
 
-    //Init session
-    initSess(prjSes_it, crSessForce);
+    //Establish connection to the remote station
+    initHost();
+
+    initSess(prjSes_it, crSessForce);	//init session
 
     messUpd();
 
@@ -272,6 +274,12 @@ VisRun::~VisRun( )
     if(prDoc)	delete prDoc;
     if(fileDlg)	delete fileDlg;
 #endif
+
+    if(host->inHostReq)
+	mess_err(mod->nodePath().c_str(), _("Session '%s(%s)' using the remote host %d times."),
+	    workSess().c_str(), srcProject().c_str(), host->inHostReq);
+
+    delete host;
 }
 
 bool VisRun::winMenu( )	{ return menuBar()->actions().length(); }
@@ -302,14 +310,41 @@ int VisRun::style( )		{ return mStlBar->style(); }
 
 void VisRun::setStyle( int istl )		{ mStlBar->setStyle(istl); }
 
+void VisRun::initHost( )
+{
+    if(!host) {
+	host = new SCADAHost(this);
+	host->start();
+    }
+}
+
 int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 {
     if(masterPg() && conErr && (!main || (time(NULL)-conErr->property("tm").toLongLong()) < conErr->property("tmRest").toInt())) {
-	if(main) conErr->setText(conErr->property("labTmpl").toString().arg(conErr->property("tmRest").toInt()-(time(NULL)-conErr->property("tm").toLongLong())));
+	if(main && conErr->property("labTmpl").toString().size())
+	    conErr->setText(conErr->property("labTmpl").toString().arg(conErr->property("tmRest").toInt()-(time(NULL)-conErr->property("tm").toLongLong())));
 	return 10;
     }
 
-    int rez = mod->cntrIfCmd(node, user(), password(), VCAStation(), glob);
+    host->inHostReq++;
+    while(host->reqBusy()) {
+	qApp->processEvents();
+	TSYS::sysSleep(0.01);
+    }
+    //Do and wait for the request
+    bool done = false;
+    if(!host->reqDo(node,done,glob))
+	while(!done) {
+	    qApp->processEvents();
+	    TSYS::sysSleep(0.01);
+	}
+    host->inHostReq--;
+    if(winClose && !host->inHostReq) close();
+
+    int rez = s2i(node.attr("rez"));
+
+    //int rez = mod->cntrIfCmd(node, user(), password(), VCAStation(), glob);
+
     //Display error message about connection error
     if(rez == 10 && main && masterPg()) {
 	if(!conErr) {
@@ -341,7 +376,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 	    conErr->setText(conErr->property("labTmpl").toString().arg(conErr->property("tmRest").toInt()));
 	}
     }
-    //Remove error message about connection error
+    //Remove the error message about the connection error
     else if(rez != 10 && main && conErr) {
 	if(masterPg()) conErr->deleteLater();
 	conErr = NULL;
@@ -368,26 +403,32 @@ QString VisRun::getFileName( const QString &caption, const QString &dir, const Q
 
 void VisRun::closeEvent( QCloseEvent* ce )
 {
-    //Save main window position
-    if(winPosCntrSave() && masterPg()) {
-	wAttrSet(masterPg()->id(), i2s(screen())+"geomX", i2s(pos().x()), true);
-	wAttrSet(masterPg()->id(), i2s(screen())+"geomY", i2s(pos().y()), true);
-    }
-
-    //Exit on close last run project
-    if(mod->exitLstRunPrjCls() && masterPg()) {
-	unsigned winCnt = 0;
-	for(int i_w = 0; i_w < QApplication::topLevelWidgets().size(); i_w++)
-	    if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[i_w]) && QApplication::topLevelWidgets()[i_w]->isVisible())
-		winCnt++;
-
-	if(winCnt <= 1 && !qApp->property("closeToTray").toBool()) SYS->stop();
-    }
-
-    endRunTimer->stop();
-    updateTimer->stop();
-
     winClose = true;
+
+    //Call for next processing by the events handler for the real closing after release all background requests
+    if(host->inHostReq) { ce->ignore(); /*QCoreApplication::postEvent(this, new QCloseEvent());*/ return; }
+
+    if(endRunTimer->isActive()) {
+	//Save main window position
+	if(winPosCntrSave() && masterPg()) {
+	    wAttrSet(masterPg()->id(), i2s(screen())+"geomX", i2s(pos().x()), true);
+	    wAttrSet(masterPg()->id(), i2s(screen())+"geomY", i2s(pos().y()), true);
+	}
+
+	//Exit on close last run project
+	if(mod->exitLstRunPrjCls() && masterPg()) {
+	    unsigned winCnt = 0;
+	    for(int iW = 0; iW < QApplication::topLevelWidgets().size(); iW++)
+		if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[iW]) && QApplication::topLevelWidgets()[iW]->isVisible())
+		    winCnt++;
+
+	    if(winCnt <= 1 && !qApp->property("closeToTray").toBool()) SYS->stop();
+	}
+
+	endRunTimer->stop();
+	updateTimer->stop();
+    }
+
     ce->accept();
 }
 
@@ -1144,8 +1185,8 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	QListWidget *ls_wdg = new QListWidget(&conreq);
 	conreq.edLay()->addWidget(ls_wdg, 0, 0);
 	ls_wdg->addItem(_("<Create a new session>"));
-	for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
-	    ls_wdg->addItem(req.childGet(i_ch)->text().c_str());
+	for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
+	    ls_wdg->addItem(req.childGet(iCh)->text().c_str());
 	ls_wdg->setCurrentRow(0);
 
 	if(conreq.exec() == QDialog::Accepted && ls_wdg->currentItem())
@@ -1226,9 +1267,9 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	// Open pages list
 	pN = req.childGet(5);
 	pgList.clear();
-	for(unsigned i_ch = 0; i_ch < pN->childSize(); i_ch++) {
-	    pgList.push_back(pN->childGet(i_ch)->text());
-	    callPage(pN->childGet(i_ch)->text()/*, toRestore*/);
+	for(unsigned iCh = 0; iCh < pN->childSize(); iCh++) {
+	    pgList.push_back(pN->childGet(iCh)->text());
+	    callPage(pN->childGet(iCh)->text()/*, toRestore*/);
 	}
 	reqtm = strtoul(pN->attr("tm").c_str(), NULL, 10);
     }
@@ -1541,9 +1582,9 @@ void VisRun::alarmSet( unsigned alarm )
     //Check for early this session running equalent project
     bool isMaster = true;
     MtxAlloc res(mod->dataRes(), true);
-    for(unsigned i_w = 0; i_w < mod->mnWinds.size(); i_w++)
-	if(qobject_cast<VisRun*>(mod->mnWinds[i_w]) && ((VisRun*)mod->mnWinds[i_w])->srcProject() == srcProject()) {
-	    if(((VisRun*)mod->mnWinds[i_w])->workSess() != workSess()) isMaster = false;
+    for(unsigned iW = 0; iW < mod->mnWinds.size(); iW++)
+	if(qobject_cast<VisRun*>(mod->mnWinds[iW]) && ((VisRun*)mod->mnWinds[iW])->srcProject() == srcProject()) {
+	    if(((VisRun*)mod->mnWinds[iW])->workSess() != workSess()) isMaster = false;
 	    break;
 	}
     res.unlock();
@@ -1657,9 +1698,11 @@ void VisRun::cacheResSet( const string &res, const string &val )
 void VisRun::updatePage( )
 {
     int64_t d_cnt = 0;
-    if(winClose) return;
+    if(winClose || updPage) return;
 
     int rez;
+
+    updPage = true;
 
     if(mess_lev() == TMess::Debug) d_cnt = TSYS::curTime();
 
@@ -1671,11 +1714,11 @@ void VisRun::updatePage( )
     if(!(rez=cntrIfCmd(req,false,true))) {
 	// Check for delete the pages
 	RunPageView *pg;
-	for(unsigned iP = 0, i_ch; iP < pgList.size(); iP++) {
-	    for(i_ch = 0; i_ch < req.childSize(); i_ch++)
-		if(pgList[iP] == req.childGet(i_ch)->text())
+	for(unsigned iP = 0, iCh; iP < pgList.size(); iP++) {
+	    for(iCh = 0; iCh < req.childSize(); iCh++)
+		if(pgList[iP] == req.childGet(iCh)->text())
 		    break;
-	    if(i_ch < req.childSize() || !(master_pg && (pg=master_pg->findOpenPage(pgList[iP])))) continue;
+	    if(iCh < req.childSize() || !(master_pg && (pg=master_pg->findOpenPage(pgList[iP])))) continue;
 	    if(!pg->property("cntPg").toString().isEmpty())
 		((RunWdgView*)TSYS::str2addr(pg->property("cntPg").toString().toStdString()))->setPgOpenSrc("");
 	    else {
@@ -1690,9 +1733,9 @@ void VisRun::updatePage( )
 
 	// Process the opened pages
 	pgList.clear();
-	for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
-	    pgList.push_back(req.childGet(i_ch)->text());
-	    callPage(req.childGet(i_ch)->text(), s2i(req.childGet(i_ch)->attr("updWdg")));
+	for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
+	    pgList.push_back(req.childGet(iCh)->text());
+	    callPage(req.childGet(iCh)->text(), s2i(req.childGet(iCh)->attr("updWdg")));
 	}
     }
     // Restore closed session of used project.
@@ -1700,6 +1743,7 @@ void VisRun::updatePage( )
 	mess_warning(mod->nodePath().c_str(),_("Restore the session creation for '%s'."),prjSes_it.c_str());
 	updateTimer->stop();
 	initSess(prjSes_it, crSessForce);
+	updPage = false;
 	return;
     }
 
@@ -1759,6 +1803,7 @@ void VisRun::updatePage( )
     }
 
     wPrcCnt++;
+    updPage = false;
 }
 
 #undef _
@@ -1923,7 +1968,8 @@ string VisRun::Notify::ntfRes( string &mess, string &lang )
 	setAttr("tp", i2s(tp))->
 	setAttr("tm", u2s(mQueueCurTm))->
 	setAttr("wdg", mQueueCurPath);
-    if(!owner()->cntrIfCmd(req)) {
+    //if(!owner()->cntrIfCmd(req)) {
+    if(!mod->cntrIfCmd(req,owner()->user(),owner()->password(),owner()->VCAStation())) {
 	mQueueCurTm = strtoul(req.attr("tm").c_str(), NULL, 10);
 	mQueueCurPath = req.attr("wdg");
 	rez = TSYS::strDecode(req.text(), TSYS::base64);
@@ -2001,3 +2047,81 @@ void *VisRun::Notify::Task( void *intf )
 
     return NULL;
 }
+
+//***********************************************
+// SHost - Host thread's control object         *
+SCADAHost::SCADAHost( QObject *p ) :
+    QThread(p), inHostReq(0), endRun(false), reqDone(false), glob(false), req(NULL), done(NULL), pid(0)
+{
+
+}
+
+SCADAHost::~SCADAHost( )
+{
+    endRun = true;
+    while(!wait(100)) sendSIGALRM();
+}
+
+void SCADAHost::sendSIGALRM( )
+{
+    if(pid) pthread_kill(pid, SIGALRM);
+}
+
+bool SCADAHost::reqDo( XMLNode &node, bool &idone, bool iglob )
+{
+    if(req) return false;
+
+    //Set the request
+    mtx.lock();
+    reqDone = false;
+    glob = iglob;
+    req = &node;
+    done = &idone; *done = false;
+    cond.wakeOne();
+    cond.wait(mtx, 10);
+    if(!reqDone) { mtx.unlock(); return false; }
+    *done = true;
+    done = NULL;
+    req = NULL;
+    reqDone = false;
+    mtx.unlock();
+
+    return true;
+}
+
+bool SCADAHost::reqBusy( )
+{
+    if(req && !reqDone)	return true;
+
+    //Free done status
+    if(reqDone) {
+	mtx.lock();
+	done = NULL;
+	req = NULL;
+	reqDone = false;
+	mtx.unlock();
+    }
+
+    return false;
+}
+
+void SCADAHost::run( )
+{
+    pid = pthread_self();
+
+    while(!endRun) {
+	//Interface's requests processing
+	mtx.lock();
+	if(!req || reqDone) cond.wait(mtx, 1000);
+	if(req && !reqDone) {
+	    mtx.unlock();
+	    mod->cntrIfCmd(*req, owner()->user(), owner()->password(), owner()->VCAStation(), glob);
+	    mtx.lock();
+	    reqDone = *done = true;
+	    cond.wakeOne();
+	}
+	mtx.unlock();
+    }
+}
+
+VisRun *SCADAHost::owner( ) const	{ return dynamic_cast<VisRun*>(parent()); }

@@ -162,12 +162,12 @@ namespace VISION
 	public:
 	    UserStBar( const string &iuser, const string &ipass, const string &iVCAstat, QWidget *parent = 0 );
 
-	    string user( )		{ return userTxt; }
-	    string pass( )		{ return userPass; }
+	    string user( );
+	    string pass( );
 	    string VCAStation( )	{ return VCAStat; }
 
 	    void setUser( const string &val );
-	    void setPass( const string &val )		{ userPass = val; }
+	    void setPass( const string &val );
 	    void setVCAStation( const string &val )	{ VCAStat = val.empty() ? "." : val; }
 
 	    bool userSel( const string &hint = "" );

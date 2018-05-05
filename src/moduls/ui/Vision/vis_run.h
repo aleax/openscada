@@ -28,6 +28,7 @@
 #include <map>
 
 #include <QMainWindow>
+#include <QThread>
 #include <QLabel>
 #include <QFileDialog>
 #include <QPrinter>
@@ -42,6 +43,49 @@ using std::map;
 
 namespace VISION
 {
+
+//***********************************************
+// SCADAHost - Host thread's control object     *
+class VisRun;
+
+class SCADAHost : public QThread
+{
+    Q_OBJECT
+
+    public:
+    //Methods
+    SCADAHost( QObject *parent = 0 );
+    ~SCADAHost( );
+
+    void sendSIGALRM( );
+
+    // To the thread request function, return ready status (true).
+    // First-init request will cause short waiting at the condition variable and next only the ready status return
+    bool reqDo( XMLNode &node, bool &done, bool glob = false );
+    // Only checking to done for <node>.
+    bool reqBusy( );
+
+    //Attributes
+    int inHostReq;
+
+    protected:
+    //Methods
+    void run( );
+
+    private:
+    //Methods
+    VisRun *owner( ) const;
+
+    //Attributes
+    ResMtx	mtx;
+    CondVar	cond;
+
+    bool	endRun, reqDone, glob;
+
+    XMLNode	*req;
+    bool	*done;
+    pthread_t	pid;	//Thread id
+};
 
 class UserStBar;
 class StylesStBar;
@@ -165,6 +209,8 @@ class VisRun : public QMainWindow
 	RunPageView *findOpenPage( const string &pg );
 	RunWdgView *findOpenWidget( const string &wdg );
 
+	// Control requests
+	void initHost( );
 	int cntrIfCmd( XMLNode &node, bool glob = false, bool main = false );
 
 	QString getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode = QFileDialog::AcceptOpen);
@@ -184,6 +230,7 @@ class VisRun : public QMainWindow
 	void ntfReg( uint8_t tp, const string &props, const string &pgCrtor );
 
 	//Public attributes
+	bool winClose;					//Closing window flag
 	bool isResizeManual;				//Manual resizing flag
 
     signals:
@@ -269,7 +316,7 @@ class VisRun : public QMainWindow
 	QPrinter	*prPg, *prDiag, *prDoc;
 #endif
 	QFileDialog	*fileDlg;
-	bool		winClose;		//Close window flag
+
 	UserStBar	*mWUser;		//User status widget
 	StylesStBar	*mStlBar;		//Style status widget
 	QLabel		*mWStat;		//VCA engine station
@@ -301,6 +348,9 @@ class VisRun : public QMainWindow
 	// Page and resource cache
 	deque<RunPageView*>	cachePg;	//Pages cache
 	map<string,CacheEl>	mCacheRes;	//Resources cache
+
+	bool		updPage;
+	SCADAHost	*host;
 };
 
 }

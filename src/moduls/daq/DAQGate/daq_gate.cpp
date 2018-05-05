@@ -31,9 +31,9 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.1"
+#define MOD_VER		"2.0.2"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allows to locate data sources of remote OpenSCADA stations to local ones.")
+#define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
 //******************************************************
 
@@ -96,7 +96,7 @@ void TTpContr::postEnable( int flag )
 	"-1;0;1;2;3;4;5;6;7",_("==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)")));
     fldAdd(new TFld("SYNCPER",_("Synchronization time with the remote station, seconds"),TFld::Integer,TFld::NoFlag,"4","0","0;1000"));
     fldAdd(new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100"));
-    fldAdd(new TFld("CNTRPRM",_("List of the remote controllers and parameters"),TFld::String,TFld::FullText,"200"));
+    fldAdd(new TFld("CNTRPRM",_("List of the remote controller objects and parameters"),TFld::String,TFld::FullText,"200"));
     fldAdd(new TFld("ALLOW_DEL_PA",_("Allow the automatic removal of parameters and attributes"),TFld::Boolean,TFld::NoFlag,"1","0"));
 
     //Parameter type bd structure
@@ -651,7 +651,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),RWRWR_,"root",SDAQ_ID,
 	    "dest","sel_ed", "sel_list",TMess::labSecCRONsel(), "help",TMess::labSecCRON(), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID, "help",TMess::labTaskPrior(), NULL);
-	ctrMkNode2("fld",opt,-1,"/cntr/cfg/TM_REST_DT",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero to disable access to the archive."), NULL);
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/TM_REST_DT",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero to disable the access to the remote archive."), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SYNCPER",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero to disable to the periodic sync."), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/STATIONS",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
 	    "help",_("List of remote OpenSCADA station IDs used in this controller."), "rows", "2", NULL);
@@ -660,9 +660,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode2("comm",opt,-2,"/cntr/cfg/host_lnk",_("Go to configuration of the remote stations list"),enableStat()?0:RWRW__,"root",SDAQ_ID,
 	    "tp","lnk", NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/CNTRPRM",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
-	    "help",_("List of remote OpenSCADA full controllers or individual controller attributes. Address example:\n"
-		     "  System.AutoDA - for a controller;\n"
-		     "  System.AutoDA.UpTimeStation - for a controller's parameter."), NULL);
+	    "help",_("List of remote OpenSCADA full controller objects or individual controller parameters. Address example:\n"
+		     "  System.AutoDA - for a controller object;\n"
+		     "  System.AutoDA.UpTimeStation - for a controller parameter."), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/CPRM_TREE",_("Parameters tree"),(enableStat()&&(!startStat()))?RWRW__:0,"root",SDAQ_ID,
 	    "dest","select", "select","/cntr/cfg/CPRM_lst", NULL);
 	return;

@@ -510,11 +510,11 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/add/maxCpct",_("Maximum size of all archives, MB"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
 		_("Sets limit to maximum amount of the disk space of all arhive's files of the archiver.\n"
 		  "The check is carried out with periodicity of checking the archives, as a result, when the limit is exceeded, "
-		  "the oldest files of all archives are removed.\nTo completely remove this restriction you can set it to value < 1."));
+		  "the oldest files of all archives are removed.\nTo completely remove this restriction you can set it to zero."));
 	    ctrMkNode("fld",opt,-1,"/prm/add/round",_("Rounding for numeric values (%)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
 		_("Sets the maximum percentage difference between the values of the parameters of the integer and the real types "
 		  "at which they are considered the same and are arranged in the archive as one value, through successive packaging.\n"
-		  "Allows you to pack lightly changing values beyond the limits of authenticity.\n"
+		  "Allows you to pack lightly changing values beyond the limits of validity.\n"
 		  "To disable this property you can it set to zero."));
 	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Timeout packaging archive files, minutes"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
 		_("Sets the time after which, in the absence of requests, the archive file will be packaged in a gzip archive.\n"

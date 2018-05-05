@@ -68,7 +68,7 @@
 </ul>
 </div>
 
-<p>The <i>JavaLikeCalc</i> data source module provides OpenSCADA for a mechanism of creating functions and their libraries on Java-like language. The writing of the function in the Java-like language is reduced to the binding of the parameters of the function by an algorithm.
+<p>The data source module provides OpenSCADA for a mechanism of creating functions and their libraries on Java-like language. The writing of the function in the Java-like language is reduced to the binding of the parameters of the function by an algorithm.
 </p><p>Direct computations are provided by the creation of controller object and linking it with the function of this module. For linked function it is created the frame of values (context), with which the periodically calculating is carried out.
 </p><p>The module implements the functions of the horizontal redundancy, that is working in conjunction with the remote station of the same level. In addition to the synchronization of the archives of values and archives of attributes of parameters, the module implements synchronization of computational function, in order to shockless holding of the algorithms.
 </p><p>Parameters of functions can be freely created, deleted or modified. The current version of the module supports up to 65535 parameters of the function, in the sum with the internal variables. The view of editing functions in the OpenSCADA configurator is shown in Figure 1.
@@ -104,7 +104,7 @@ for(var1 = 0, var2 = 0, var3 = -1; var1 &lt; 10; var1++, var2++) var3++;
 <pre style="white-space: pre-wrap;">
 function klapNotLin = "DAQ.JavaLikeCalc.lib_techApp.klapNotLin";
 rez = klapNotLin(prm1, prm2, ..., prmN);</pre>
-<p>To provide the writing of custom control procedures for various components of OpenSCADA, this module provides the implementation of the precompiling API of custom procedures for individual components of OpenSCADA in the Java-like language. These components for example are: templates of the parameters of the subsystem "Data acquisition" and the visual control area (VCA).
+<p>To provide the writing of custom control procedures for various components of OpenSCADA, this module provides the implementation of the precompiling API of custom procedures for individual components of OpenSCADA in the Java-like language. These components for example are: templates of the parameters of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#DAQ" title="Special:MyLanguage/Documents/Program manual">the subsystem "Data acquisition"</a> and <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">the visual control area (VCA)</a>.
 </p>
 <h2><span class="mw-headline" id="The_Java-like_language"><span class="mw-headline-number">1</span> The Java-like language</span></h2>
 <h3><span class="mw-headline" id="Elements_of_the_language"><span class="mw-headline-number">1.1</span> Elements of the language</span></h3>

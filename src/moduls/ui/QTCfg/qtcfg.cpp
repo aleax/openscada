@@ -72,7 +72,7 @@ using namespace QTCFG;
 //* ConfApp                                       *
 //*************************************************
 ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
-    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false), pgDisplay(false)
+    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false), pgDisplay(false), winClose(false)
 {
     connect(this, SIGNAL(makeStarterMenu(QWidget*)), qApp, SLOT(makeStarterMenu(QWidget*)));
 
@@ -471,17 +471,11 @@ ConfApp::~ConfApp( )
 
     mod->unregWin(this);
 
-    //Final left hosts' tasks stopping.
-    // Wait for a host request finish
-    while(inHostReq) qApp->processEvents();
-
-    // Threads delete
+    // Threads deleting
+    if(inHostReq)
+	mess_err(mod->nodePath().c_str(), _("Configurator using the remote host %d times."), inHostReq);
     for(map<string, SCADAHost*>::iterator iH = hosts.begin(); iH != hosts.end(); ++iH) delete iH->second;
     hosts.clear();
-
-    //Save generic state
-    QByteArray st = splitter->saveState();
-    TBDS::genDBSet(mod->nodePath()+"st", i2s(width())+":"+i2s(height())+":"+TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,""), wUser->user().toStdString());
 }
 
 void ConfApp::quitSt( )
@@ -968,18 +962,21 @@ void ConfApp::closeEvent( QCloseEvent* ce )
 	return;
     }
 
-    //Early hosts' tasks stopping by into the destructor sometime late.
-    // Wait for a host request finish
-    while(inHostReq) qApp->processEvents();
+    winClose = true;
 
-    // Timers early stop
-    endRunTimer->stop();
-    autoUpdTimer->stop();
-    reqPrgrsTimer->stop();
+    //Call for next processing by the events handler for the real closing after release all background requests
+    if(inHostReq) { ce->ignore(); return; }
 
-    // Threads delete
-    for(map<string, SCADAHost*>::iterator iH = hosts.begin(); iH != hosts.end(); ++iH) delete iH->second;
-    hosts.clear();
+    if(endRunTimer->isActive()) {
+	//Save the generic state
+	QByteArray st = splitter->saveState();
+	TBDS::genDBSet(mod->nodePath()+"st", i2s(width())+":"+i2s(height())+":"+TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,""), wUser->user().toStdString());
+
+	// Timers early stop
+	endRunTimer->stop();
+	autoUpdTimer->stop();
+	reqPrgrsTimer->stop();
+    }
 
     ce->accept();
 }
@@ -1113,7 +1110,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    int sclFitSz = lastW ? (scrl->maximumViewportSize().height() - (lastW->y()+lastW->height()) - 10): 0;
 
 		    //Same fitting
-		    for(int fitStp = vmax(5, sclFitSz/(4*vmax(1,texts.length()+tbls.length()+lsts.length()))), iScN = 0; sclFitSz > fitStp; ) {
+		    for(int fitStp = vmax(5, sclFitSz/(8*vmax(1,texts.length()+tbls.length()+lsts.length()))), iScN = 0; sclFitSz > fitStp; ) {
 			QAbstractScrollArea *sclIt = NULL, *tEl = NULL;
 			bool sclFromBeg = (iScN == 0);
 			for( ; iScN < (texts.length()+tbls.length()+lsts.length()) && !sclIt; iScN++) {
@@ -2326,12 +2323,13 @@ int ConfApp::cntrIfCmdHosts( XMLNode &node )
 	qApp->processEvents();
 	TSYS::sysSleep(0.01);
     }
-    if(!iHost->reqDo(node)) {
+    bool done = false;
+    if(!iHost->reqDo(node,done)) {
 	reqPrgrsSet(0, QString(_("Waiting the reply from the host '%1'")).arg(hostId.c_str()), iHost->reqTmMax);
 
 	//Wait for the request done
 	time_t stTm = SYS->sysTm();
-	while(iHost->reqBusy()) {
+	while(!done) {
 	    reqPrgrsSet(vmax(0,SYS->sysTm()-stTm));
 	    if(reqPrgrs && reqPrgrs->wasCanceled()) {
 		if(!actStartUpd->isEnabled()) pageCyclRefrStop();	//!!!! Could not check
@@ -2342,6 +2340,7 @@ int ConfApp::cntrIfCmdHosts( XMLNode &node )
 	}
     }
     inHostReq--;
+    if(winClose && !inHostReq) close();
 
     return s2i(node.attr("rez"));
 }
@@ -2358,7 +2357,8 @@ void ConfApp::reqPrgrsSet( int cur, const QString &lab, int max )
     //Close
     else if(reqPrgrs && cur < 0) {
 	reqPrgrsTimer->stop();
-	delete reqPrgrs;
+	reqPrgrs->deleteLater();
+	//delete reqPrgrs;
 	reqPrgrs = NULL;
     }
     //Set the progress value
@@ -3055,7 +3055,7 @@ void ConfApp::cancelButton( )
 //***********************************************
 // SHost - Host thread's control object         *
 SCADAHost::SCADAHost( const QString &iid, const QString &iuser, bool iIsRemote, QObject *p ) :
-    QThread(p), reqTmMax(0), id(iid), user(iuser), isRemote(iIsRemote), lnkOK(false), endRun(false), reqDone(false), tm(0), req(NULL), pid(0)
+    QThread(p), reqTmMax(0), id(iid), user(iuser), isRemote(iIsRemote), lnkOK(false), endRun(false), reqDone(false), tm(0), req(NULL), done(NULL), pid(0)
 {
 
 }
@@ -3079,7 +3079,7 @@ void SCADAHost::sendSIGALRM( )
     if(pid) pthread_kill(pid, SIGALRM);
 }
 
-bool SCADAHost::reqDo( XMLNode &node )
+bool SCADAHost::reqDo( XMLNode &node, bool &idone )
 {
     if(req) return false;
 
@@ -3087,9 +3087,12 @@ bool SCADAHost::reqDo( XMLNode &node )
     mtx.lock();
     reqDone = false;
     req = &node;
+    done = &idone; *done = false;
     cond.wakeOne();
     cond.wait(mtx, 100);
     if(!reqDone) { mtx.unlock(); return false; }
+    *done = true;
+    done = NULL;
     req = NULL;
     reqDone = false;
     mtx.unlock();
@@ -3104,6 +3107,7 @@ bool SCADAHost::reqBusy( )
     //Free done status
     if(reqDone) {
 	mtx.lock();
+	done = NULL;
 	req = NULL;
 	reqDone = false;
 	mtx.unlock();
@@ -3180,7 +3184,7 @@ void SCADAHost::run( )
 		req->setAttr("mcat",mod->nodePath()+"/"+id.toStdString())->setAttr("rez","10")->setText(_("No connection is established"));
 	    }
 	    mtx.lock();
-	    reqDone = true;
+	    reqDone = *done = true;
 	    cond.wakeOne();
 	}
 	mtx.unlock();

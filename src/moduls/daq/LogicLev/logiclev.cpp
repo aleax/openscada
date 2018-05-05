@@ -39,9 +39,9 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.8.3"
+#define MOD_VER		"1.8.4"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the logical level of parameters.")
+#define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
 //*************************************************
 

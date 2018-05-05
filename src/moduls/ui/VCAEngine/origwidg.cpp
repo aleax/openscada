@@ -1308,24 +1308,16 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	    cfg.owner()->attrDel("aSize");
 	}
 	else {
-	    if(!cfg.owner()->attrPresent("vCur")) {
-		cfg.owner()->attrAdd(new TFld("vCur",_("Archive: cursor: view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0",
+	    if(!cfg.owner()->attrPresent("vCur"))
+		cfg.owner()->attrAdd(new TFld("vCur",_("Archive: cursor: view"),TFld::Integer,Attr::NotStored|Attr::Mutable|Attr::Active,"","0",
 		    TSYS::strMess("-2;%d",DocArhSize-1).c_str()));
-		cfg.owner()->inheritAttr("vCur");
-	    }
-	    if(!cfg.owner()->attrPresent("aCur")) {
-		cfg.owner()->attrAdd(new TFld("aCur",_("Archive: cursor: current"),TFld::Integer,Attr::Mutable|Attr::Active,"","0",
+	    if(!cfg.owner()->attrPresent("aCur"))
+		cfg.owner()->attrAdd(new TFld("aCur",_("Archive: cursor: current"),TFld::Integer,Attr::NotStored|Attr::Mutable|Attr::Active,"","0",
 		    TSYS::strMess("-1;%d",DocArhSize-1).c_str()));
-		cfg.owner()->inheritAttr("aCur");
-	    }
-	    if(!cfg.owner()->attrPresent("aDoc")) {
-		cfg.owner()->attrAdd(new TFld("aDoc",_("Archive: current document"),TFld::String,TFld::FullText|Attr::Mutable|Attr::Active));
-		cfg.owner()->inheritAttr("aDoc");
-	    }
-	    if(!cfg.owner()->attrPresent("aSize")) {
-		cfg.owner()->attrAdd(new TFld("aSize",_("Archive: size"),TFld::Integer,Attr::Mutable));
-		cfg.owner()->inheritAttr("aSize");
-	    }
+	    if(!cfg.owner()->attrPresent("aDoc"))
+		cfg.owner()->attrAdd(new TFld("aDoc",_("Archive: current document"),TFld::String,Attr::NotStored|TFld::FullText|Attr::Mutable|Attr::Active));
+	    if(!cfg.owner()->attrPresent("aSize"))
+		cfg.owner()->attrAdd(new TFld("aSize",_("Archive: size"),TFld::Integer,Attr::NotStored|Attr::Mutable));
 	}
     }
 
@@ -1362,13 +1354,14 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	    if((tVl=sw->sessAttr("doc"+aCur.at().getS())).size()) aDoc.at().setS(tVl, false, true);
 	    // Set current document
 	    vCur.at().setI(aCur.at().getI(), false, true);
+
 	    cfg.owner()->attrAt("doc").at().setS(aDoc.at().getS(),false,true);
 	    // Parse current document and restore last document's time
 	    string cdoc = cfg.owner()->attrAt("doc").at().getS();
 	    if(!cdoc.empty()) {
 		XMLNode xdoc;
 		try { xdoc.load(XHTML_entity+cdoc, false, Mess->charset()); } catch(TError &err) { }
-		cfg.owner()->attrAt("time").at().setS(xdoc.attr("docTime"),false,true);
+		cfg.owner()->attrAt("time").at().setS(xdoc.attr("docTime"), false, true);
 	    }
 	    sizeUpdate(sw);
 	}
@@ -1393,27 +1386,29 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	sw->sessAttrSet("doc"+cfg.owner()->attrAt("aCur").at().getS(), cfg.getS());
     //Move archive view cursor
     else if(cfg.id() == "vCur" && cfg.getI() != prev.getI()) {
-	int aCur = cfg.owner()->attrAt("aCur").at().getI();
-	int n = cfg.owner()->attrAt("n").at().getI();
+	try {
+	    AutoHD<Attr> aCur = cfg.owner()->attrAt("aCur");
+	    int n = cfg.owner()->attrAt("n").at().getI();
 
-	if(cfg.getI() < 0) {
-	    int docN = prev.getI();
-	    // Search next document
-	    if(cfg.getI() == -1)
-		while(docN != aCur) {
-		    if(docN != prev.getI() && sw->sessAttr("doc"+i2s(docN),true).size()) break;
-		    if(++docN >= n) docN = 0;
+	    if(cfg.getI() < 0) {
+		int docN = prev.getI();
+		// Search next document
+		if(cfg.getI() == -1)
+		    while(docN != aCur.at().getI()) {
+			if(docN != prev.getI() && sw->sessAttr("doc"+i2s(docN),true).size()) break;
+			if(++docN >= n) docN = 0;
+		    }
+		// Search previous document
+		else {
+		    if(--docN < 0) docN = n-1;
+		    if(docN == aCur.at().getI()) docN = prev.getI();
+		    if(!sw->sessAttr("doc"+i2s(docN),true).size()) docN = prev.getI();
 		}
-	    // Search previous document
-	    else {
-		if(--docN < 0) docN = n-1;
-		if(docN == aCur) docN = prev.getI();
-		if(!sw->sessAttr("doc"+i2s(docN),true).size()) docN = prev.getI();
+		if(docN != cfg.getI())	cfg.setI(docN,false,true);
 	    }
-	    if(docN != cfg.getI())	cfg.setI(docN,false,true);
-	}
-	else if(cfg.getI() >= n)	cfg.setI(cfg.owner()->attrAt("aCur").at().getI(), false, true);
-	if(cfg.getI() != prev.getI())	cfg.owner()->attrAt("doc").at().setS(sw->sessAttr("doc"+cfg.getS()));
+	    else if(cfg.getI() >= n)	cfg.setI(aCur.at().getI(), false, true);
+	    if(cfg.getI() != prev.getI())	cfg.owner()->attrAt("doc").at().setS(sw->sessAttr("doc"+cfg.getS()));
+	} catch(TError &err) { }
     }
 
     return Widget::attrChange(cfg,prev);
@@ -1489,11 +1484,16 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 
 void OrigDocument::sizeUpdate( SessWdg *sw )
 {
-    int aCur = sw->attrAt("aCur").at().getI();
-    int n = sw->attrAt("n").at().getI();
-    int rSz = n;
-    if(aCur < n && (!sw->sessAttr("doc"+i2s(aCur+1),true).size() || !sw->sessAttr("doc"+i2s(n-1),true).size())) rSz = aCur+1;
-    sw->attrAt("aSize").at().setI(rSz);
+    try {
+	AutoHD<Attr> aCur = sw->attrAt("aCur");
+	AutoHD<Attr> aSize = sw->attrAt("aSize");
+
+	int n = sw->attrAt("n").at().getI();
+	int rSz = n;
+	if(aCur.at().getI() < n && (!sw->sessAttr("doc"+i2s(aCur.at().getI()+1),true).size() || !sw->sessAttr("doc"+i2s(n-1),true).size()))
+	    rSz = aCur.at().getI()+1;
+	aSize.at().setI(rSz);
+    } catch(TError &err) { }
 }
 
 TVariant OrigDocument::objFuncCall_w( const string &iid, vector<TVariant> &prms, const string &user, Widget *src )

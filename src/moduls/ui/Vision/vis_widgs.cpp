@@ -286,6 +286,22 @@ UserStBar::UserStBar( const string &iuser, const string &ipass, const string &iV
     setVCAStation(iVCAstat);
 }
 
+string UserStBar::user( )
+{
+    mod->dataRes().lock();
+    string rez = userTxt;
+    mod->dataRes().unlock();
+    return rez;
+}
+
+string UserStBar::pass( )
+{
+    mod->dataRes().lock();
+    string rez = userPass;
+    mod->dataRes().unlock();
+    return rez;
+}
+
 void UserStBar::setUser( const string &val )
 {
     MtxAlloc res(mod->dataRes(), true);
@@ -293,6 +309,13 @@ void UserStBar::setUser( const string &val )
     userTxt = val;
 
     if(window()) window()->setProperty("oscdUser", val.c_str());
+}
+
+void UserStBar::setPass( const string &val )
+{
+    mod->dataRes().lock();
+    userPass = val;
+    mod->dataRes().unlock();
 }
 
 bool UserStBar::event( QEvent *event )

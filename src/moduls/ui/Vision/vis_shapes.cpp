@@ -1898,6 +1898,9 @@ void ShapeDiagram::init( WdgView *w )
     //Activate vizualizer specific attributes
     RunWdgView *rw = qobject_cast<RunWdgView*>(w);
     if(rw) {
+	((ShpDt*)w->shpData)->en = false;
+	w->setVisible(false);
+
 	XMLNode reqSpc("activate"); reqSpc.setAttr("path", rw->id()+"/%2fserv%2fattr%2fsclWin");
 	rw->mainWin()->cntrIfCmd(reqSpc);
     }
@@ -1927,7 +1930,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const s
 	case A_EN:
 	    if(!qobject_cast<RunWdgView*>(w))	break;
 	    shD->en = (bool)s2i(val);
-	    w->setVisible(shD->en && ((RunWdgView*)w)->permView());
+	    //w->setVisible(shD->en && ((RunWdgView*)w)->permView());
 	    up = true;
 	    break;
 	case A_ACTIVE:
@@ -2053,12 +2056,13 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const s
     }
 
     if(!w->allAttrLoad()) {
-	if(reld_tr_dt)	{ loadData(w,reld_tr_dt==2); make_pct = true; }
+	if(reld_tr_dt)	{ loadData(w, reld_tr_dt==2); make_pct = true; }
 	if(make_pct)	{ makePicture(w); up = true; }
 	if(up && uiPrmPos != -1) {
 	    w->update();
 	    setCursor(w, shD->curTime);
 	}
+	if(up && qobject_cast<RunWdgView*>(w)) w->setVisible(shD->en && ((RunWdgView*)w)->permView());
     }
 
     return (reld_tr_dt || make_pct || up);
@@ -3398,6 +3402,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 void ShapeDiagram::tracing( )
 {
     WdgView *w = (WdgView*)((QTimer*)sender())->parent();
+    RunWdgView *runW = qobject_cast<RunWdgView*>(((QTimer*)sender())->parent());
+    if(runW->mainWin()->winClose) return;
     ShpDt *shD = (ShpDt*)w->shpData;
 
     if(!w->isEnabled()) return;
@@ -4311,6 +4317,8 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 void ShapeProtocol::tracing( )
 {
     WdgView *w = (WdgView *)((QTimer*)sender())->parent();
+    RunWdgView *runW = qobject_cast<RunWdgView*>(((QTimer*)sender())->parent());
+    if(runW->mainWin()->winClose) return;
     ShpDt *shD = (ShpDt*)w->shpData;
     if(!w->isEnabled()) return;
 
@@ -4663,7 +4671,15 @@ ShapeFunction::ShapeFunction( ) : WdgShape("Function")
 //************************************************
 ShapeBox::ShapeBox( ) : WdgShape("Box")	{ }
 
-void ShapeBox::init( WdgView *w )	{ w->shpData = new ShpDt(); }
+void ShapeBox::init( WdgView *w ) {
+    w->shpData = new ShpDt();
+
+    RunWdgView *rw = qobject_cast<RunWdgView*>(w);
+    if(rw) {
+	((ShpDt*)w->shpData)->en = false;
+	w->setVisible(false);
+    }
+}
 
 void ShapeBox::destroy( WdgView *w )	{ delete (ShpDt*)w->shpData; }
 
@@ -4683,7 +4699,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 	case A_EN:
 	    if(!runW)	{ up = false; break; }
 	    shD->en = (bool)s2i(val);
-	    w->setVisible(shD->en && (runW->permView() || runP));
+	    //w->setVisible(shD->en && (runW->permView() || runP));
 	    break;
 	case A_ACTIVE:
 	    if(!runW)	{ up = false; break; }
@@ -4813,7 +4829,10 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 	default: up = false;
     }
 
-    if(up && !w->allAttrLoad() && uiPrmPos != -1) w->update();
+    if(up && !w->allAttrLoad()) {
+	if(uiPrmPos != -1) w->update();
+	if(qobject_cast<RunWdgView*>(w)) w->setVisible(shD->en && (runW->permView() || runP));
+    }
 
     return up;
 }

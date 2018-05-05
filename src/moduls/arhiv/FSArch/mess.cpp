@@ -393,6 +393,16 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/add/xml",_("Files of the archive in XML"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
 		_("Enables messages archiving by files in the XML-format, rather than plain text.\n"
 		  "Using XML-archiving requires more RAM as it requires full file download, XML parsing and memory holding at the time of use."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/prev_dbl",_("Prevent duplicates"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
+		_("Enables checking for duplicate messages at the time of putting a message into the archive.\n"
+		  "If there is a duplicate the message does not fit into the archive.\n"
+		  "This feature some increases the recording time to the archive, but in cases of "
+		  "placing messages in the archive by past time from external sources it allows to eliminate the duplicates."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/prev_TmCatLev_dbl",_("Consider duplicates and prevent, for equal time, category, level"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
+		_("Enables checking for duplicate messages at the time of putting a message into the archive.\n"
+		  "As the duplicates there considers messages which equal to time, category and level.\n"
+		  "If there is a duplicate then the new message will replace the old one into the archive.\n"
+		  "This feature mostly usable at message text changing in time, for alarm's state to example."));
 	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Maximum size of archive's file, kB"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
 		_("Sets limit on the size of one archive file.\n"
 		  "Disabling the restriction can be performed by setting the parameter to zero."));
@@ -412,16 +422,6 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 		_("Specifies whether to create a file with information about the packed archive files by gzip-archiver.\n"
 		  "When copying the files of archive to another station, this info file can speed up the target station "
 		  "process of first run by eliminating the need to decompress by gzip-archiver in order to obtain the information."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/prev_dbl",_("Prevent duplicates"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
-		_("Enables checking for duplicate messages at the time of putting a message into the archive.\n"
-		  "If there is a duplicate the message does not fit into the archive.\n"
-		  "This feature some increases the recording time to the archive, but in cases of "
-		  "placing messages in the archive by past time from external sources it allows to eliminate the duplicates."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/prev_TmCatLev_dbl",_("Consider duplicates and prevent, for equal time, category, level"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
-		_("Enables checking for duplicate messages at the time of putting a message into the archive.\n"
-		  "As the duplicates there considers messages which equal to time, category and level.\n"
-		  "If there is a duplicate then the new message will replace the old one into the archive.\n"
-		  "This feature mostly usable at message text changing in time, for alarm's state to example."));
 	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check now for the directory of the archiver"),RWRW__,"root",SARH_ID,1,"help",
 		_("The command, which allows you to immediately start for checking the archives, "
 		  "for example, after some manual changes into the directory of the archiver."));
