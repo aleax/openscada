@@ -524,7 +524,7 @@ void LineEdit::setType( LType tp )
     if(tp == m_tp) return;
 
     //Delete previous
-    if(tp >= 0 && ed_fld) delete ed_fld;
+    if(tp >= 0 && ed_fld) ed_fld->deleteLater(); //delete ed_fld;
 
     //Create new widget
     switch(tp) {
@@ -772,21 +772,21 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 	if(curBlk && !i_t) { minRule = curBlk-1; minPos = 0; }
 	else minRule = -1;
 
-	for(int i_ch = 0; i_t != minPos && i_ch < (int)irl->childSize(); i_ch++) {
-	    if(!(minPos < i_t || rul_pos[i_ch] < i_t || rul_pos[i_ch] < minPos)) continue;
-	    if(rul_pos[i_ch] >= i_t && rul_pos[i_ch] < minPos)	{ minPos = rul_pos[i_ch]; minRule = i_ch; continue; }
-	    if(rul_pos[i_ch] == i_t && rul_pos[i_ch] == minPos)	{ minRule = i_ch; break; }
+	for(int iCh = 0; i_t != minPos && iCh < (int)irl->childSize(); iCh++) {
+	    if(!(minPos < i_t || rul_pos[iCh] < i_t || rul_pos[iCh] < minPos)) continue;
+	    if(rul_pos[iCh] >= i_t && rul_pos[iCh] < minPos)	{ minPos = rul_pos[iCh]; minRule = iCh; continue; }
+	    if(rul_pos[iCh] == i_t && rul_pos[iCh] == minPos)	{ minRule = iCh; break; }
 
 	    //Call rule
-	    rl = irl->childGet(i_ch);
+	    rl = irl->childGet(iCh);
 	    if(rl->name() == "rule")    expr.setPattern(rl->attr("expr").c_str());
 	    else if(rl->name() == "blk")expr.setPattern(rl->attr("beg").c_str());
 	    else continue;
 	    expr.setMinimal(s2i(rl->attr("min")));
-	    rul_pos[i_ch] = expr.indexIn(text,i_t);
+	    rul_pos[iCh] = expr.indexIn(text,i_t);
 	    if(expr.matchedLength() <= 0) continue;
-	    if(rul_pos[i_ch] < 0) rul_pos[i_ch] = text.length();
-	    if(minPos < i_t || rul_pos[i_ch] < minPos) { minPos = rul_pos[i_ch]; minRule = i_ch; }
+	    if(rul_pos[iCh] < 0) rul_pos[iCh] = text.length();
+	    if(minPos < i_t || rul_pos[iCh] < minPos) { minPos = rul_pos[iCh]; minRule = iCh; }
 	}
 	if(minRule < 0) break;
 
@@ -1004,7 +1004,7 @@ void TextEdit::custContextMenu( )
     menu->addAction(actFind);
     menu->addAction(actFindNext);
     menu->exec(QCursor::pos());
-    delete menu;
+    menu->deleteLater(); //delete menu;
 }
 
 void TextEdit::find( )
@@ -1088,9 +1088,9 @@ void WdgView::childsClear( )
 {
     //Child widgets remove before
     QObjectList chLst = children();
-    for(int i_c = 0; i_c < chLst.size(); i_c++) {
-	WdgView *cw = qobject_cast<WdgView*>(chLst[i_c]);
-	if(cw)	delete cw;
+    for(int iC = 0; iC < chLst.size(); iC++) {
+	WdgView *cw = qobject_cast<WdgView*>(chLst[iC]);
+	if(cw)	cw->deleteLater(); //delete cw;
     }
 }
 
@@ -1176,9 +1176,9 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos, bool
     if(up && !allAttrLoad()) {
 	if(wLevel() > 0) moveF(posF());
 	resizeF(sizeF());
-	for(int i_c = 0; upChlds && i_c < children().size(); i_c++)
-	    if(qobject_cast<WdgView*>(children().at(i_c)))
-		((WdgView*)children().at(i_c))->load("");
+	for(int iC = 0; upChlds && iC < children().size(); iC++)
+	    if(qobject_cast<WdgView*>(children().at(iC)))
+		((WdgView*)children().at(iC))->load("");
     }
 
     if(shape)	return shape->attrSet(this, uiPrmPos, val, attr);
@@ -1242,26 +1242,26 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	// Delete child widgets
 	string b_nm = aBr->attr("lnkPath");
 	if(b_nm.empty()) b_nm = id();
-	for(int i_c = 0, i_l = 0; i_c < children().size(); i_c++) {
-	    if(!qobject_cast<WdgView*>(children().at(i_c))) continue;
+	for(int iC = 0, i_l = 0; iC < children().size(); iC++) {
+	    if(!qobject_cast<WdgView*>(children().at(iC))) continue;
 	    for(i_l = 0; i_l < (int)aBr->childSize(); i_l++)
 		if(aBr->childGet(i_l)->name() == "w" &&
-			qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")))
+			qobject_cast<WdgView*>(children().at(iC))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")))
 		    break;
-	    if(i_l >= (int)aBr->childSize()) children().at(i_c)->deleteLater();
+	    if(i_l >= (int)aBr->childSize()) children().at(iC)->deleteLater();
 	}
 
 	// Create new child widget
-	for(int i_l = 0, i_c = 0; i_l < (int)aBr->childSize(); i_l++) {
+	for(int i_l = 0, iC = 0; i_l < (int)aBr->childSize(); i_l++) {
 	    if(aBr->childGet(i_l)->name() != "w") continue;
-	    for(i_c = 0; i_c < children().size(); i_c++)
-		if(qobject_cast<WdgView*>(children().at(i_c)) &&
-			qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")))
+	    for(iC = 0; iC < children().size(); iC++)
+		if(qobject_cast<WdgView*>(children().at(iC)) &&
+			qobject_cast<WdgView*>(children().at(iC))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")))
 		{
-		    ((WdgView*)children().at(i_c))->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(i_l));
+		    ((WdgView*)children().at(iC))->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(i_l));
 		    break;
 		}
-	    if(i_c < children().size()) continue;
+	    if(iC < children().size()) continue;
 	    WdgView *nwdg = newWdgItem(b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id"));
 	    nwdg->show();
 	    nwdg->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(i_l));
@@ -1274,8 +1274,8 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
     }
     //Going to children init
     else
-	for(int i_c = 0; i_c < children().size(); i_c++) {
-	    WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
+	for(int iC = 0; iC < children().size(); iC++) {
+	    WdgView *wdg = qobject_cast<WdgView*>(children().at(iC));
 	    if(wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())))
 		wdg->load((item==id())?"":item,false,(wLevel()>0)?isInit:false);
 	}
@@ -1291,8 +1291,8 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	}
 
 	attrSet("", "load", A_COM_LOAD);
-	for(int i_c = 0; i_c < children().size(); i_c++) {
-	    WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
+	for(int iC = 0; iC < children().size(); iC++) {
+	    WdgView *wdg = qobject_cast<WdgView*>(children().at(iC));
 	    if(wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())))
 		wdg->load((item==id())?"":item,false,true);
 	}

@@ -1497,8 +1497,8 @@ void ShapeMedia::clear( WdgView *w )
     QLabel *lab = dynamic_cast<QLabel*>(shD->addrWdg);
     if(lab) {
 	if(lab->movie()) {
-	    if(lab->movie()->device()) delete lab->movie()->device();
-	    delete lab->movie();
+	    if(lab->movie()->device()) lab->movie()->device()->deleteLater();	//delete lab->movie()->device();
+	    lab->movie()->deleteLater();	//delete lab->movie();
 	    lab->clear();
 	}
 #ifdef HAVE_PHONON
@@ -3403,7 +3403,7 @@ void ShapeDiagram::tracing( )
 {
     WdgView *w = (WdgView*)((QTimer*)sender())->parent();
     RunWdgView *runW = qobject_cast<RunWdgView*>(((QTimer*)sender())->parent());
-    if(runW->mainWin()->winClose) return;
+    if(runW && runW->mainWin()->winClose) return;
     ShpDt *shD = (ShpDt*)w->shpData;
 
     if(!w->isEnabled()) return;
@@ -4318,7 +4318,7 @@ void ShapeProtocol::tracing( )
 {
     WdgView *w = (WdgView *)((QTimer*)sender())->parent();
     RunWdgView *runW = qobject_cast<RunWdgView*>(((QTimer*)sender())->parent());
-    if(runW->mainWin()->winClose) return;
+    if(runW && runW->mainWin()->winClose) return;
     ShpDt *shD = (ShpDt*)w->shpData;
     if(!w->isEnabled()) return;
 
@@ -4563,7 +4563,7 @@ void ShapeDocument::custContextMenu( )
     QAction *rez = menu->exec(QCursor::pos());
     if(rez == actPrint) w->mainWin()->printDoc(w->id());
     else if(rez == actExp) w->mainWin()->exportDoc(w->id());
-    delete menu;
+    menu->deleteLater();	//delete menu;
 }
 
 void ShapeDocument::setFocus( WdgView *view, QWidget *wdg, bool en, bool devel )

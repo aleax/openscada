@@ -1368,7 +1368,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		if(req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == owner()->lb_toolbar[iT]->objectName().toStdString())
 		    break;
 	    if(i_l >= req.childSize()) {
-		delete owner()->lb_toolbar[iT];
+		owner()->lb_toolbar[iT]->deleteLater();	//delete owner()->lb_toolbar[iT];
 		owner()->lb_toolbar.erase(owner()->lb_toolbar.begin()+iT);
 		iT--;
 	    }
@@ -1381,7 +1381,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		if(req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == owner()->lb_menu[i_m]->objectName().toStdString())
 		    break;
 	    if(i_l >= req.childSize()) {
-		delete owner()->lb_menu[i_m];
+		owner()->lb_menu[i_m]->deleteLater();	//delete owner()->lb_menu[i_m];
 		owner()->lb_menu.erase(owner()->lb_menu.begin()+i_m);
 		i_m--;
 	    }
@@ -1458,7 +1458,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		for(i_w = 0; i_w < wlbN->childSize(); i_w++)
 		    if(wlbN->childGet(i_w)->name() == "w" && ("/wlb_"+wlbId+"/wdg_"+wlbN->childGet(i_w)->attr("id")) == use_act[iA]->objectName().toStdString())
 			break;
-		if(i_w >= wlbN->childSize()) { delete use_act[iA]; break; }
+		if(i_w >= wlbN->childSize()) { use_act[iA]->deleteLater(); /*delete use_act[iA];*/ break; }
 	    }
 	}
 

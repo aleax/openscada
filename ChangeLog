@@ -1,3 +1,13 @@
+2018-05-11 Roman (stable)
+- !!:DOC: The document "DAQ" is mostly revised.
+- !!!:FIX:Archive.FSArch: Cache access moved under a critical section, for preventing crashes at high load.
+- DAQ.GPIO: SUNXI part expanded by the ports J,K,L,M,N,O.
+- !!:DAQ.SNMP: Expanded for the connection error control at the parameter level.
+- !!!:FIX:UI.{QTStarter,QTCfg,Vision}: All Qt objects removing moved to use deleteLater(),
+    for safe removing under processEvents() call from the requesting in different thread.
+- !!!:FIX:UI.Vision: The primitive "Diagram" and "Box" fixed after wrong improving in the tracing call on close but for the development mode.
+
+
 2018-05-05 Roman (stable)
 - !!:DOC: The documents fully revised: Archive.FSArch, DAQ.{LogicLev,DAQGate,ModBus,GPIO}, Transport.Sockets.
 - FIX:DB.Model.AGLKS.St: DAQ.LogicLev.experiment fixed for the reflection DB specifying as "LogLevPrmRefl_experiment".

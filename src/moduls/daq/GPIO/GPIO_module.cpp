@@ -38,7 +38,7 @@
 #define MOD_NAME	"GPIO"
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.1"
+#define MOD_VER		"2.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("GPIO different single board PCs: Broadcom BCM 2835 and more (Raspberry Pi, ...), SUNXI AllWinner H2 and more (Orange Pi Zero, ...).")
 #define LICENSE		"GPL2"

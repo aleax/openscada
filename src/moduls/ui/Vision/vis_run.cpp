@@ -943,19 +943,19 @@ void VisRun::exportDoc( const string &idoc )
 			    for(unsigned i_n = 0; i_n < tblN->childSize(); i_n++) {
 				if(strcasecmp(tblN->childGet(i_n)->name().c_str(),"tr") != 0)	continue;
 				tblRow = tblN->childGet(i_n);
-				for(unsigned i_c = 0, i_cl = 0; i_c < tblRow->childSize(); i_c++) {
-				    if(!(strcasecmp(tblRow->childGet(i_c)->name().c_str(),"th") == 0 ||
-					    strcasecmp(tblRow->childGet(i_c)->name().c_str(),"td") == 0))
+				for(unsigned iC = 0, iCl = 0; iC < tblRow->childSize(); iC++) {
+				    if(!(strcasecmp(tblRow->childGet(iC)->name().c_str(),"th") == 0 ||
+					    strcasecmp(tblRow->childGet(iC)->name().c_str(),"td") == 0))
 					continue;
-				    while(rowSpn[i_cl] > 1) { rez += ";"; rowSpn[i_cl]--; i_cl++; }
-				    rowSpn[i_cl] = s2i(tblRow->childGet(i_c)->attr("rowspan",false));
-				    val = tblRow->childGet(i_c)->text(true,true);
+				    while(rowSpn[iCl] > 1) { rez += ";"; rowSpn[iCl]--; iCl++; }
+				    rowSpn[iCl] = s2i(tblRow->childGet(iC)->attr("rowspan",false));
+				    val = tblRow->childGet(iC)->text(true,true);
 				    for(size_t i_sz = 0; (i_sz=val.find("\"",i_sz)) != string::npos; i_sz += 2) val.replace(i_sz,1,2,'"');
 				    rez += "\""+sTrm(val)+"\";";
 				    //   Colspan process
-				    int colSpan = s2i(tblRow->childGet(i_c)->attr("colspan",false));
-				    for(int i_cs = 1; i_cs < colSpan; i_cs++) rez += ";";
-				    i_cl++;
+				    int colSpan = s2i(tblRow->childGet(iC)->attr("colspan",false));
+				    for(int iCs = 1; iCs < colSpan; iCs++) rez += ";";
+				    iCl++;
 				}
 				rez += "\x0D\x0A";
 			    }
@@ -1145,8 +1145,8 @@ void VisRun::usrStatus( const string &val, RunPageView *pg )
     for(int iC = 0; iC < statusBar()->children().size(); iC++)
 	if((userSt=qobject_cast<UserItStBar*>(statusBar()->children().at(iC))) && userSt->objectName().indexOf("usr_") == 0) {
 	    if(!userSt->property("usrStPresent").toBool())
-		delete userSt;
-		//userSt->deleteLater();
+		//delete userSt;
+		userSt->deleteLater();
 	    /*else for(int iC1 = iC; iC1 > 0 ; iC1--) {
 		if(!(userSt1=qobject_cast<UserItStBar*>(statusBar()->children().at(iC1-1))) ||
 		    userSt1->objectName().indexOf("usr_") != 0) continue;
@@ -1508,7 +1508,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 void VisRun::pgCacheClear( )
 {
     while(!cachePg.empty()) {
-	delete cachePg.front();
+	cachePg.front()->deleteLater();	//delete cachePg.front();
 	cachePg.pop_front();
     }
 }
@@ -1518,7 +1518,7 @@ void VisRun::pgCacheAdd( RunPageView *wdg )
     if(!wdg) return;
     cachePg.push_front(wdg);
     while(cachePg.size() > 100) {
-	delete cachePg.back();
+	cachePg.back()->deleteLater();	//delete cachePg.back();
 	cachePg.pop_back();
     }
 }
@@ -1766,7 +1766,7 @@ void VisRun::updatePage( )
     //Old pages from cache for close checking
     for(unsigned iPg = 0; iPg < cachePg.size(); )
 	if(mod->cachePgLife() > 0.01 && (period()*(reqTm()-cachePg[iPg]->reqTm())/1000) > (unsigned)(mod->cachePgLife()*60*60)) {
-	    delete cachePg[iPg];
+	    cachePg[iPg]->deleteLater();	//delete cachePg[iPg];
 	    cachePg.erase(cachePg.begin()+iPg);
 	}
 	else iPg++;

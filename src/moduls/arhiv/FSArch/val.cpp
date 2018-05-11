@@ -1339,8 +1339,8 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 	if((fOK=(read(hd,pid_b,i_end-i_beg) == (i_end-i_beg)))) {
 	    // Calc end offset
 	    voff_end = voff_beg;
-	    for(int i_pos = vpos_beg+1; i_pos <= vpos_end; i_pos++)
-		voff_end += vSize*(bool)((0x01<<(i_pos%8))&pid_b[(i_pos/8)-(vpos_beg/8)]);
+	    for(int iPos = vpos_beg+1; iPos <= vpos_end; iPos++)
+		voff_end += vSize*(bool)((0x01<<(iPos%8))&pid_b[(iPos/8)-(vpos_beg/8)]);
 	    // Get value block
 	    i_beg = voff_beg;
 	    i_end = voff_end+vSize;
@@ -1359,10 +1359,10 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 	    // Calc end offset
 	    voff_end = voff_beg;
 	    vlen_end = vlen_beg;
-	    for(int i_pos = (vpos_beg+1); i_pos <= vpos_end; i_pos++) {
+	    for(int iPos = (vpos_beg+1); iPos <= vpos_end; iPos++) {
 		int pk_vl = 0;
 		for(int i_e = 0; i_e < vSize; i_e++)
-		    pk_vl += pid_b[vSize*(i_pos-vpos_beg)+i_e]<<(8*i_e);
+		    pk_vl += pid_b[vSize*(iPos-vpos_beg)+i_e]<<(8*i_e);
 		if(pk_vl) {
 		    voff_end += vlen_end;
 		    vlen_end = pk_vl;
@@ -2028,11 +2028,14 @@ void VFileArch::repairFile( int hd )
 int VFileArch::cacheGet( int &pos, int *vsz )
 {
     CacheEl rez = {0, 0, 0};
-    for(int i_p = (int)cache.size()-1; i_p >= 0; i_p--)
-	if(pos >= cache[i_p].pos) { rez = cache[i_p]; break; }
+
+    dtRes.lock();
+    for(int iP = (int)cache.size()-1; iP >= 0; iP--)
+	if(pos >= cache[iP].pos) { rez = cache[iP]; break; }
 
     if(pos >= cach_pr_rd.pos && cach_pr_rd.pos > rez.pos) rez = cach_pr_rd;
     if(pos >= cach_pr_wr.pos && cach_pr_wr.pos > rez.pos) rez = cach_pr_wr;
+    dtRes.unlock();
 
     pos = rez.pos;
     if(vsz) *vsz = rez.vsz;
@@ -2043,10 +2046,11 @@ void VFileArch::cacheSet( int pos, int off, int vsz, bool last, bool wr  )
 {
     CacheEl el = { pos, off, vsz };
 
+    MtxAlloc res(dtRes, true);
     if(!last) {
-	for(unsigned i_p = 0; i_p < cache.size(); i_p++)
-	    if(el.pos == cache[i_p].pos)	{ cache[i_p] = el; return; }
-	    else if(el.pos < cache[i_p].pos)	{ cache.insert(cache.begin()+i_p,el); return; }
+	for(unsigned iP = 0; iP < cache.size(); iP++)
+	    if(el.pos == cache[iP].pos)	{ cache[iP] = el; return; }
+	    else if(el.pos < cache[iP].pos)	{ cache.insert(cache.begin()+iP,el); return; }
 	cache.push_back(el);
     }
     else if(wr) cach_pr_wr = el;
@@ -2055,10 +2059,12 @@ void VFileArch::cacheSet( int pos, int off, int vsz, bool last, bool wr  )
 
 void VFileArch::cacheDrop( int pos )
 {
-    for(unsigned i_p = 0; i_p < cache.size(); ) {
-	if(cache[i_p].pos >= pos) { cache.erase(cache.begin()+i_p); continue; }
-	i_p++;
+    dtRes.lock();
+    for(unsigned iP = 0; iP < cache.size(); ) {
+	if(cache[iP].pos >= pos) { cache.erase(cache.begin()+iP); continue; }
+	iP++;
     }
     if(cach_pr_rd.pos >= pos)	cach_pr_rd.off = cach_pr_rd.pos = cach_pr_rd.vsz = 0;
     if(cach_pr_wr.pos >= pos)	cach_pr_wr.off = cach_pr_wr.pos = cach_pr_wr.vsz = 0;
+    dtRes.unlock();
 }

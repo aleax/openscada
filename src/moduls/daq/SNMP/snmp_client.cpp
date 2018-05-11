@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.0"
+#define MOD_VER		"0.9.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -274,14 +274,14 @@ void TMdContr::stop_( )
 
 void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
-    unsigned i_prm;
+    unsigned iPrm;
 
     MtxAlloc res(enRes, true);
-    for(i_prm = 0; i_prm < pHd.size(); i_prm++)
-	if(&pHd[i_prm].at() == prm) break;
+    for(iPrm = 0; iPrm < pHd.size(); iPrm++)
+	if(&pHd[iPrm].at() == prm) break;
 
-    if(val && i_prm >= pHd.size()) pHd.push_back(prm);
-    if(!val && i_prm < pHd.size()) pHd.erase(pHd.begin()+i_prm);
+    if(val && iPrm >= pHd.size()) pHd.push_back(prm);
+    if(!val && iPrm < pHd.size()) pHd.erase(pHd.begin()+iPrm);
 }
 
 void *TMdContr::Task( void *icntr )
@@ -304,8 +304,8 @@ void *TMdContr::Task( void *icntr )
 	// Update controller's data
 	daqerr.clear();
 	MtxAlloc res(cntr.enRes, true);
-	for(unsigned i_p = 0; i_p < cntr.pHd.size() && !cntr.redntUse(); i_p++)
-	    try { cntr.pHd[i_p].at().upVal(ss); }
+	for(unsigned iP = 0; iP < cntr.pHd.size() && !cntr.redntUse(); iP++)
+	    try { cntr.pHd[iP].at().upVal(ss); }
 	    catch(TError &err) { daqerr = err.mess; }
 	res.unlock();
 	cntr.tmGath = TSYS::curTime()-t_cnt;
@@ -407,7 +407,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
-    TParamContr(name,tp_prm), p_el("w_attr")
+    TParamContr(name,tp_prm), p_el("w_attr"), acqErr(dataRes())
 {
 
 }
@@ -474,6 +474,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 
     vector<string> als;
 
+    try {
     for(unsigned ioid = 0; ioid < lsOID().size(); ioid++) {
 	oid_root_len = oid_next_len = lsOID()[ioid].size()/sizeof(oid);
 	memmove(oid_root,lsOID()[ioid].data(),oid_root_len*sizeof(oid));
@@ -612,21 +613,29 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 	    if(response) snmp_free_pdu(response);
 	}
     }
+    acqErr = "";
+    } catch(TError &err) { acqErr = err.mess; }
 
     //Check for delete DAQ parameter's attributes
-    for(int i_p = 0; onlyInit && i_p < (int)elem().fldSize(); i_p++)
-    {
-	unsigned i_l;
-	for(i_l = 0; i_l < als.size(); i_l++)
-	    if(elem().fldAt(i_p).name() == als[i_l])
-		break;
-	if(i_l >= als.size())
-	    try{ elem().fldDel(i_p); i_p--; }
-	    catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
-    }
+    if(onlyInit)
+	for(int iP = 0; iP < (int)elem().fldSize(); iP++) {
+	    unsigned iL;
+	    for(iL = 0; iL < als.size(); iL++)
+		if(elem().fldAt(iP).name() == als[iL])
+		    break;
+	    if(iL >= als.size())
+		try{ elem().fldDel(iP); iP--; }
+		catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	}
+    //Set the attributes to EVAL for error connection
+    else if(acqErr.getVal().size())
+	for(int iP = 0; iP < (int)elem().fldSize(); iP++)
+	    vlAt(elem().fldAt(iP).name()).at().setS(EVAL_STR, 0, true);
+
+    if(acqErr.getVal().size())	throw TError(owner().nodePath().c_str(), "%s", acqErr.getVal().c_str());
 }
 
-void TMdPrm::parseOIDList(const string &ioid)
+void TMdPrm::parseOIDList( const string &ioid )
 {
     cfg("OID_LS").setS(ioid);
 
@@ -703,6 +712,16 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(baseIt+"."+chtree->label);
     }
     else TParamContr::cntrCmdProc(opt);
+}
+
+void TMdPrm::vlGet( TVal &vo )
+{
+    TParamContr::vlGet(vo);
+
+    if(vo.name() == "err") {
+	if(acqErr.getVal().size()) vo.setS(acqErr.getVal(), 0, true);
+	else vo.setS("0",0,true);
+    }
 }
 
 void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )

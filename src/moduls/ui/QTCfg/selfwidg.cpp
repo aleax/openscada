@@ -148,7 +148,7 @@ void LineEdit::setType( LType tp )
     if(tp == mTp) return;
 
     //Delete previous
-    if(tp >= 0 && edFld) delete edFld;
+    if(tp >= 0 && edFld) edFld->deleteLater();	//delete edFld;
 
     //Create new widget
     switch(tp) {
@@ -630,7 +630,7 @@ void TextEdit::ctrTreePopup( )
     menu->addAction(actFind);
     menu->addAction(actFindNext);
     menu->exec(QCursor::pos());
-    delete menu;
+    menu->deleteLater();	//delete menu;
 }
 
 void TextEdit::find( )

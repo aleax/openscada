@@ -123,28 +123,28 @@ void RunWdgView::update( bool full, XMLNode *aBr, bool FullTree )
 
     //Delete child widgets check
     if(full || FullTree)
-	for(int iC = 0, i_l = 0; iC < children().size(); iC++) {
+	for(int iC = 0, iL = 0; iC < children().size(); iC++) {
 	    if(!qobject_cast<RunWdgView*>(children().at(iC)) || qobject_cast<RunPageView*>(children().at(iC))) continue;
-	    for(i_l = 0; i_l < (int)aBr->childSize(); i_l++)
-		if(aBr->childGet(i_l)->name() == "w" &&
-			((WdgView*)children().at(iC))->id() == (id()+"/wdg_"+aBr->childGet(i_l)->attr("id")))
+	    for(iL = 0; iL < (int)aBr->childSize(); iL++)
+		if(aBr->childGet(iL)->name() == "w" &&
+			((WdgView*)children().at(iC))->id() == (id()+"/wdg_"+aBr->childGet(iL)->attr("id")))
 		    break;
-	    if(i_l >= (int)aBr->childSize()) children().at(iC)->deleteLater();
+	    if(iL >= (int)aBr->childSize()) children().at(iC)->deleteLater();
 	}
 
     //Create new child widget
-    for(int i_l = 0, iC = 0; i_l < (int)aBr->childSize(); i_l++) {
-	if(aBr->childGet(i_l)->name() != "w") continue;
+    for(int iL = 0, iC = 0; iL < (int)aBr->childSize(); iL++) {
+	if(aBr->childGet(iL)->name() != "w") continue;
 
 	for(iC = 0; iC < children().size(); iC++)
 	    if(qobject_cast<RunWdgView*>(children().at(iC)) && !qobject_cast<RunPageView*>(children().at(iC)) &&
-		    ((RunWdgView*)children().at(iC))->id() == (id()+"/wdg_"+aBr->childGet(i_l)->attr("id")))
+		    ((RunWdgView*)children().at(iC))->id() == (id()+"/wdg_"+aBr->childGet(iL)->attr("id")))
 	    {
-		((RunWdgView*)children().at(iC))->update(full,aBr->childGet(i_l),FullTree);
+		((RunWdgView*)children().at(iC))->update(full,aBr->childGet(iL),FullTree);
 		break;
 	    }
 	if(iC < children().size()) continue;
-	WdgView *nwdg = newWdgItem(id()+"/wdg_"+aBr->childGet(i_l)->attr("id"));
+	WdgView *nwdg = newWdgItem(id()+"/wdg_"+aBr->childGet(iL)->attr("id"));
 	nwdg->show();
 	nwdg->load("");
     }

@@ -2133,21 +2133,21 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
     if(grps.empty()) return;
     else if(grps.size() > 1) {
 	//Add and update present
-	for(int i_g = 0; i_g < grps.size(); i_g++) {
-	    bool grpChCnt = s2i(TSYS::strSepParse(grps[i_g].toStdString(),0,'\n'));
-	    string grpId = TSYS::strSepParse(grps[i_g].toStdString(),1,'\n');
-	    string grpDscr = TSYS::strSepParse(grps[i_g].toStdString(),2,'\n');
+	for(int iG = 0; iG < grps.size(); iG++) {
+	    bool grpChCnt = s2i(TSYS::strSepParse(grps[iG].toStdString(),0,'\n'));
+	    string grpId = TSYS::strSepParse(grps[iG].toStdString(),1,'\n');
+	    string grpDscr = TSYS::strSepParse(grps[iG].toStdString(),2,'\n');
 	    QTreeWidgetItem *it = NULL;
 	    //Search present item
 	    if(upTree)
-		for(int i_it = 0; i_it < i->childCount(); i_it++)
-		    if(i->child(i_it)->text(2) == ("*"+grpId).c_str())
-		    { it = i->child(i_it); break; }
+		for(int iIt = 0; iIt < i->childCount(); iIt++)
+		    if(i->child(iIt)->text(2) == ("*"+grpId).c_str())
+		    { it = i->child(iIt); break; }
 	    if(!it) it = new QTreeWidgetItem(i);
 	    it->setText(0,(grpDscr+":").c_str());
 	    it->setText(1,grpDscr.c_str());
 	    it->setText(2,("*"+grpId).c_str());
-	    QStringList it_grp; it_grp.push_back(grps[i_g]);
+	    QStringList it_grp; it_grp.push_back(grps[iG]);
 	    it->setData(2,Qt::UserRole,it_grp);
 	    it->setFlags(Qt::ItemIsEnabled);
 	    it->setChildIndicatorPolicy(grpChCnt?QTreeWidgetItem::ShowIndicator:QTreeWidgetItem::DontShowIndicator);
@@ -2158,11 +2158,11 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    if(upTree && it->isExpanded()) viewChildRecArea(it,upTree);
 	}
 	//Delete no present
-	for(int i_it = 0, i_g = 0; upTree && i_it < i->childCount(); i_it++) {
-	    for(i_g = 0; i_g < grps.size(); i_g++)
-		if(i->child(i_it)->text(2) == ("*"+TSYS::strSepParse(grps[i_g].toStdString(),1,'\n')).c_str())
+	for(int iIt = 0, iG = 0; upTree && iIt < i->childCount(); iIt++) {
+	    for(iG = 0; iG < grps.size(); iG++)
+		if(i->child(iIt)->text(2) == ("*"+TSYS::strSepParse(grps[iG].toStdString(),1,'\n')).c_str())
 		    break;
-	    if(i_g >= grps.size()) { delete i->takeChild(i_it); i_it--; }
+	    if(iG >= grps.size()) { delete i->takeChild(iIt); iIt--; }
 	}
     }
     else {
@@ -2187,9 +2187,9 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    // Find item
 	    QTreeWidgetItem *it = NULL;
 	    if(upTree)
-		for(int i_it = 0; i_it < i->childCount(); i_it++)
-		    if(i->child(i_it)->text(2) == (path+"/"+br_path).c_str())
-		    { it = i->child(i_it); break; }
+		for(int iIt = 0; iIt < i->childCount(); iIt++)
+		    if(i->child(iIt)->text(2) == (path+"/"+br_path).c_str())
+		    { it = i->child(iIt); break; }
 	    if(!it) it = new QTreeWidgetItem(i);
 	    it->setText(0, chEl->text().c_str());
 	    it->setText(1, grpDscr.c_str());
@@ -2204,9 +2204,9 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    }
 	    // Set groups
 	    QStringList it_grp;
-	    for(unsigned i_g = 0; i_g < chEl->childSize(); i_g++)
-		if(chEl->childGet(i_g)->name() == "grp")
-		    it_grp.push_back((chEl->childGet(i_g)->attr("chPresent")+"\n"+chEl->childGet(i_g)->attr("id")+"\n"+chEl->childGet(i_g)->attr("dscr")).c_str());
+	    for(unsigned iG = 0; iG < chEl->childSize(); iG++)
+		if(chEl->childGet(iG)->name() == "grp")
+		    it_grp.push_back((chEl->childGet(iG)->attr("chPresent")+"\n"+chEl->childGet(iG)->attr("id")+"\n"+chEl->childGet(iG)->attr("dscr")).c_str());
 	    it->setData(2,Qt::UserRole,it_grp);
 	    // Check for childs present
 	    bool grpChCnt = it_grp.size() && (it_grp.size()>1 || s2i(TSYS::strSepParse(it_grp[0].toStdString(),0,'\n')));
@@ -2217,17 +2217,17 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	//Delete no present
 	if(upTree) {
 	    //CtrTree->blockSignals(true);
-	    for(unsigned i_it = 0, i_e; i_it < (unsigned)i->childCount(); ) {
+	    for(unsigned iIt = 0, i_e; iIt < (unsigned)i->childCount(); ) {
 		for(i_e = 0; i_e < req.childSize(); i_e++) {
 		    // Prepare branch patch
 		    string br_path = grpId;
 		    if(req.childGet(i_e)->attr("id").size()) br_path.append(req.childGet(i_e)->attr("id"));
 		    else br_path.append(req.childGet(i_e)->text());
 		    br_path = TSYS::strEncode(br_path,TSYS::PathEl);
-		    if(i->child(i_it)->text(2) == (path+"/"+br_path).c_str())	break;
+		    if(i->child(iIt)->text(2) == (path+"/"+br_path).c_str())	break;
 		}
-		if(i_e >= req.childSize()) { delete i->takeChild(i_it); continue; }
-		i_it++;
+		if(i_e >= req.childSize()) { delete i->takeChild(iIt); continue; }
+		iIt++;
 	    }
 	    //CtrTree->blockSignals(false);
 	}

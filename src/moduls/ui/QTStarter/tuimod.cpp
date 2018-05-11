@@ -55,7 +55,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.6.2"
+#define MOD_VER		"4.6.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -565,7 +565,7 @@ StApp::StApp( int &argv, char **args ) : QApplication(argv, args), origStl(mod->
 
 StApp::~StApp( )
 {
-    stClear();
+    stClear(true);
 }
 
 int StApp::topLevelWindows( )
@@ -595,17 +595,17 @@ int StApp::stExec( )
     return rez;
 }
 
-void StApp::stClear( )
+void StApp::stClear( bool inDestr )
 {
     QObject::disconnect(this, SIGNAL(lastWindowClosed()), this, SLOT(lastWinClose()));
 
-    if(tray)		{ delete tray; tray = NULL; }
-    if(trayMenu)	{ delete trayMenu; trayMenu = NULL; }
-    if(stDlg)		{ delete stDlg; stDlg = NULL; }
+    if(tray)		{ inDestr ? delete tray : tray->deleteLater(); tray = NULL; }
+    if(trayMenu)	{ inDestr ? delete trayMenu : trayMenu->deleteLater(); trayMenu = NULL; }
+    if(stDlg)		{ inDestr ? delete stDlg : stDlg->deleteLater(); stDlg = NULL; }
     if(transl)		{ removeTranslator(transl); delete transl; transl = NULL; }
 
 #ifdef HAVE_QTSENSORS
-    for(int iS = 0; iS < sensors.size(); iS++) { sensors[iS]->stop(); delete sensors[iS]; }
+    for(int iS = 0; iS < sensors.size(); iS++) { sensors[iS]->stop(); sensors[iS]->deleteLater(); /*delete sensors[iS];*/ }
     sensors.clear();
 #endif
 

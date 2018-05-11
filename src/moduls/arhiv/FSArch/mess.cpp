@@ -755,9 +755,9 @@ bool MFileArch::put( TMess::SRec mess )
     }
 
     if(xmlM()) {
-	unsigned i_ch;
-	for(i_ch = 0; i_ch < mNode->childSize(); i_ch++) {
-	    XMLNode *xIt = mNode->childGet(i_ch);
+	unsigned iCh;
+	for(iCh = 0; iCh < mNode->childSize(); iCh++) {
+	    XMLNode *xIt = mNode->childGet(iCh);
 	    long xTm = strtol(xIt->attr("tm").c_str(),(char **)NULL,16);
 	    if(xTm > mess.time)	break;
 	    else if((owner().prevDbl() || owner().prevDblTmCatLev()) && xTm == mess.time && s2i(xIt->attr("tmu")) == mess.utime &&
@@ -770,7 +770,7 @@ bool MFileArch::put( TMess::SRec mess )
 	    }
 	}
 
-	XMLNode *cl_node = mNode->childIns(i_ch, "m");
+	XMLNode *cl_node = mNode->childIns(iCh, "m");
 	cl_node->setAttr("tm", i2s(mess.time,TSYS::Hex))->
 		 setAttr("tmu", i2s(mess.utime))->
 		 setAttr("lv", i2s(mess.level))->
@@ -1059,9 +1059,12 @@ void MFileArch::check( bool free )
 long MFileArch::cacheGet( int64_t tm )
 {
     CacheEl rez = {0, 0};
-    for(int i_c = cache.size()-1; i_c >= 0; i_c--)
-	if(tm >= cache[i_c].tm) { rez = cache[i_c]; break; }
+
+    dtRes.lock();
+    for(int iC = cache.size()-1; iC >= 0; iC--)
+	if(tm >= cache[iC].tm) { rez = cache[iC]; break; }
     if(tm >= cach_pr.tm && cach_pr.tm >= rez.tm) rez = cach_pr;
+    dtRes.unlock();
 
     return rez.off;
 }
@@ -1070,10 +1073,11 @@ void MFileArch::cacheSet( int64_t tm, long off, bool last )
 {
     CacheEl el = { tm, off };
 
+    MtxAlloc res(dtRes, true);
     if(!last) {
-	for(unsigned i_c = 0; i_c < cache.size(); i_c++)
-	    if(el.tm == cache[i_c].tm)		{ cache[i_c] = el; return; }
-	    else if(el.tm < cache[i_c].tm)	{ cache.insert(cache.begin()+i_c, el); return; }
+	for(unsigned iC = 0; iC < cache.size(); iC++)
+	    if(el.tm == cache[iC].tm)		{ cache[iC] = el; return; }
+	    else if(el.tm < cache[iC].tm)	{ cache.insert(cache.begin()+iC, el); return; }
 	cache.push_back(el);
     }
     else cach_pr = el;
@@ -1081,7 +1085,9 @@ void MFileArch::cacheSet( int64_t tm, long off, bool last )
 
 void MFileArch::cacheUpdate( int64_t tm, long v_add )
 {
-    for(unsigned i_c = 0; i_c < cache.size(); i_c++)
-	if(cache[i_c].tm > tm) cache[i_c].off += v_add;
+    dtRes.lock();
+    for(unsigned iC = 0; iC < cache.size(); iC++)
+	if(cache[iC].tm > tm) cache[iC].off += v_add;
     if(cach_pr.tm > tm) cach_pr.off += v_add;
+    dtRes.unlock();
 }

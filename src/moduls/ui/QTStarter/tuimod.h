@@ -128,7 +128,7 @@ public:
     void saveState( QSessionManager &manager );
 
     int stExec( );
-    void stClear( );
+    void stClear( bool inDestr = false );
 
     //Attribute
     MtxString	origStl;

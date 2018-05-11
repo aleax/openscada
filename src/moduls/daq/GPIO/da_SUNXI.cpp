@@ -64,6 +64,25 @@ void SUNXI::create( TParamContr *ip )
     //GPIO Bank G
     for(int iGP = 0; iGP < SUNXI_GPIO_G_NR; iGP++)
 	p->pEl.fldAdd(new TFld(TSYS::strMess("gpio%d",SUNXI_GPG(iGP)).c_str(),(iGP==0)?"GPIO PG":"",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
+
+    //GPIO Bank J
+    for(int iGP = 0; iGP < SUNXI_GPIO_J_NR; iGP++)
+	p->pEl.fldAdd(new TFld(TSYS::strMess("gpio%d",SUNXI_GPJ(iGP)).c_str(),(iGP==0)?"GPIO PJ":"",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
+    //GPIO Bank K
+    for(int iGP = 0; iGP < SUNXI_GPIO_K_NR; iGP++)
+	p->pEl.fldAdd(new TFld(TSYS::strMess("gpio%d",SUNXI_GPK(iGP)).c_str(),(iGP==0)?"GPIO PK":"",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
+    //GPIO Bank L
+    for(int iGP = 0; iGP < SUNXI_GPIO_L_NR; iGP++)
+	p->pEl.fldAdd(new TFld(TSYS::strMess("gpio%d",SUNXI_GPL(iGP)).c_str(),(iGP==0)?"GPIO PL":"",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
+    //GPIO Bank M
+    for(int iGP = 0; iGP < SUNXI_GPIO_M_NR; iGP++)
+	p->pEl.fldAdd(new TFld(TSYS::strMess("gpio%d",SUNXI_GPM(iGP)).c_str(),(iGP==0)?"GPIO PM":"",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
+    //GPIO Bank N
+    for(int iGP = 0; iGP < SUNXI_GPIO_N_NR; iGP++)
+	p->pEl.fldAdd(new TFld(TSYS::strMess("gpio%d",SUNXI_GPN(iGP)).c_str(),(iGP==0)?"GPIO PN":"",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
+    //GPIO Bank O
+    for(int iGP = 0; iGP < SUNXI_GPIO_O_NR; iGP++)
+	p->pEl.fldAdd(new TFld(TSYS::strMess("gpio%d",SUNXI_GPO(iGP)).c_str(),(iGP==0)?"GPIO PO":"",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
 }
 
 void SUNXI::destroy( TParamContr *ip )
