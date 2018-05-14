@@ -1425,7 +1425,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/proc/attr/cfgtmpl",_("Configuration template"),RWRWR_,"root",SUI_ID,1,"tp","str");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/proc/calc",_("Calculation"))) {
-		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Procedure language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/proc/calc/plangLs");
+		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Procedure language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/plang/list");
 		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Period of the calculating, milliseconds"),RWRWR_,"root",SUI_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/proc/calc/prog_tr",_("Translate procedure"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Procedure"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","10","SnthHgl","1");
@@ -1589,32 +1589,6 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		SYS->daq().at().at(TSYS::strParse(calcLang(),0,".")).at().
 				compileFuncSynthHighl(TSYS::strParse(calcLang(),1,"."),*opt);
 	    } catch(...) { }
-    }
-    else if(a_path == "/proc/calc/plangLs" && ctrChkNode(opt)) {
-	string tplng = calcLang();
-	int c_lv = 0;
-	string c_path = "", c_el;
-	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++) {
-	    c_path += c_lv ? "."+c_el : c_el;
-	    opt->childAdd("el")->setText(c_path);
-	}
-	if(c_lv) c_path += ".";
-	vector<string> ls;
-	switch(c_lv) {
-	    case 0:
-		SYS->daq().at().modList(ls);
-		for(unsigned iL = 0; iL < ls.size(); )
-		    if(!SYS->daq().at().at(ls[iL]).at().compileFuncLangs()) ls.erase(ls.begin()+iL);
-		    else iL++;
-		break;
-	    case 1:
-		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
-		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
-		break;
-	}
-	for(unsigned iL = 0; iL < ls.size(); iL++)
-	    opt->childAdd("el")->setText(c_path+ls[iL]);
     }
     else if(a_path == "/proc/tp_ls" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setAttr("id",i2s(TFld::Boolean))->setText(_("Boolean"));

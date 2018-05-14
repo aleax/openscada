@@ -624,8 +624,8 @@ void TTypeBD::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
-	    for(unsigned i_l=0; i_l < lst.size(); i_l++)
-		opt->childAdd("el")->setAttr("id",lst[i_l])->setText(at(lst[i_l]).at().name());
+	    for(unsigned iL = 0; iL < lst.size(); iL++)
+		opt->childAdd("el")->setAttr("id",lst[iL])->setText(at(lst[iL]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDB_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
@@ -660,17 +660,17 @@ TCntrNode &TBD::operator=( const TCntrNode &node )
     if(src_n->enableStat() && enableStat()) {
 	vector<string> tbl_ls;
 	src_n->allowList(tbl_ls);
-	for(unsigned i_l = 0; i_l < tbl_ls.size(); i_l++) {
+	for(unsigned iL = 0; iL < tbl_ls.size(); iL++) {
 	    //Open source and destination tables
-	    const_cast<TBD*>(src_n)->open(tbl_ls[i_l], false);
-	    open(tbl_ls[i_l], true);
+	    const_cast<TBD*>(src_n)->open(tbl_ls[iL], false);
+	    open(tbl_ls[iL], true);
 
 	    //Copy table
-	    (TCntrNode&)at(tbl_ls[i_l]).at() = (TCntrNode&)src_n->at(tbl_ls[i_l]).at();
+	    (TCntrNode&)at(tbl_ls[iL]).at() = (TCntrNode&)src_n->at(tbl_ls[iL]).at();
 
 	    //Close source and destination tables
-	    const_cast<TBD*>(src_n)->close(tbl_ls[i_l]);
-	    close(tbl_ls[i_l]);
+	    const_cast<TBD*>(src_n)->close(tbl_ls[iL]);
+	    close(tbl_ls[iL]);
 	}
     }
 
@@ -716,8 +716,8 @@ void TBD::disable( )
     try {
 	vector<string> t_list;
 	list(t_list);
-	for(unsigned i_l = 0; i_l < t_list.size(); i_l++)
-	    close(t_list[i_l], false, 1);
+	for(unsigned iL = 0; iL < t_list.size(); iL++)
+	    close(t_list[iL], false, 1);
     } catch(...) { }	//Pass removing for locked
 
     mEn = false;
@@ -834,8 +834,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD)) {
 	    vector<string> lst;
 	    allowList(lst);
-	    for(unsigned i_l=0; i_l < lst.size(); i_l++)
-		opt->childAdd("el")->setText(lst[i_l]);
+	    for(unsigned iL = 0; iL < lst.size(); iL++)
+		opt->childAdd("el")->setText(lst[iL]);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDB_ID,SEC_WR)) {
 	    open(opt->text(), false);

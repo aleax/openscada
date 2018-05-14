@@ -1346,7 +1346,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/dt/io/lnk",_("Link"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/dt/io/vl",_("Value"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/dt/progLang",_("Program language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/dt/plang_ls");
+	    ctrMkNode("fld",opt,-1,"/dt/progLang",_("Program language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/plang/list");
 	    ctrMkNode("fld",opt,-1,"/dt/progTr",cfg("DT_PR_TR").fld().descr().c_str(),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/dt/prog",cfg("DT_PROG").fld().descr().c_str(),RWRWR_,"root",SPRT_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
@@ -1456,32 +1456,6 @@ void Node::cntrCmdProc( XMLNode *opt )
 		SYS->daq().at().at(TSYS::strParse(progLang(),0,".")).at().
 				compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
 	    } catch(...) { }
-    }
-    else if(a_path == "/dt/plang_ls" && ctrChkNode(opt)) {
-	string tplng = progLang();
-	int c_lv = 0;
-	string c_path = "", c_el;
-	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++) {
-	    c_path += c_lv ? "."+c_el : c_el;
-	    opt->childAdd("el")->setText(c_path);
-	}
-	if(c_lv) c_path+=".";
-	vector<string>  ls;
-	switch(c_lv) {
-	    case 0:
-		SYS->daq().at().modList(ls);
-		for(unsigned i_l = 0; i_l < ls.size(); )
-		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs()) ls.erase(ls.begin()+i_l);
-		    else i_l++;
-		break;
-	    case 1:
-		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
-		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
-		break;
-	}
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path.substr(0,8) == "/lnk/ls_" && ctrChkNode(opt))
 	SYS->daq().at().ctrListPrmAttr(opt, io(s2i(a_path.substr(8)))->rez(), false, '.');

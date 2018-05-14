@@ -486,10 +486,10 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setText("");
 	vector<string> lls, ls;
 	SYS->daq().at().tmplLibList(lls);
-	for(unsigned i_l = 0; i_l < lls.size(); i_l++) {
-	    SYS->daq().at().tmplLibAt(lls[i_l]).at().list(ls);
-	    for(unsigned i_t = 0; i_t < ls.size(); i_t++)
-		opt->childAdd("el")->setText(lls[i_l]+"."+ls[i_t]);
+	for(unsigned iL = 0; iL < lls.size(); iL++) {
+	    SYS->daq().at().tmplLibAt(lls[iL]).at().list(ls);
+	    for(unsigned iT = 0; iT < ls.size(); iT++)
+		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
 	}
     }
     else if(a_path == "/prm/tpLst" && ctrChkNode(opt))

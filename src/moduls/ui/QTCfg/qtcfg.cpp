@@ -965,7 +965,7 @@ void ConfApp::closeEvent( QCloseEvent* ce )
     winClose = true;
 
     //Call for next processing by the events handler for the real closing after release all background requests
-    if(inHostReq) { ce->ignore(); return; }
+    if(inHostReq || pgDisplay) { ce->ignore(); return; }
 
     if(endRunTimer->isActive()) {
 	//Save the generic state
@@ -1992,6 +1992,7 @@ loadGenReqDate:
 	    mod->postMess(genReqs.attr("mcat"), genReqs.text(), TUIMod::Error, this);
 	    genReqs.clear();
 	    pgDisplay = false;
+	    if(winClose) close();
 	    return;
 	}
 	goto loadGenReqDate;
@@ -2007,7 +2008,13 @@ loadGenReqDate:
     editToolUpdate();
 
     pgDisplay = false;
-    } catch(TError) { pgDisplay = false; throw; }
+    if(winClose) close();
+    }
+    catch(TError) {
+	pgDisplay = false;
+	if(winClose) close();
+	throw;
+    }
 }
 
 bool ConfApp::upStruct( XMLNode &w_nd, const XMLNode &n_nd )
@@ -2989,7 +2996,8 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
 	    }
 	if(!sel_ok) throw TError(mod->nodePath().c_str(), _("Selective element '%s' is missing!"), item->text().toStdString().c_str());
 
-	selPath = path;
+	selectPage(path);
+	//selPath = path;
 	pageRefresh(CH_REFR_TM);
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }

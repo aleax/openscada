@@ -223,7 +223,8 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     if(!s2i(SYS->cmdOpt("showWin"))) resize(600, 400);
 
     //Establish connection to the remote station
-    initHost();
+    // !!!! Disable by default the requesting into different thread before resolve the mouse release event in the same widget processing the press event.
+    if(SYS->cmdOptPresent("ReqInDifThread")) initHost();
 
     initSess(prjSes_it, crSessForce);	//init session
 
@@ -275,11 +276,11 @@ VisRun::~VisRun( )
     if(fileDlg)	delete fileDlg;
 #endif
 
-    if(host->inHostReq)
+    if(host && host->inHostReq)
 	mess_err(mod->nodePath().c_str(), _("Session '%s(%s)' using the remote host %d times."),
 	    workSess().c_str(), srcProject().c_str(), host->inHostReq);
 
-    delete host;
+    if(host) delete host;
 }
 
 bool VisRun::winMenu( )	{ return menuBar()->actions().length(); }
@@ -326,24 +327,26 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 	return 10;
     }
 
-    host->inHostReq++;
-    while(host->reqBusy()) {
-	qApp->processEvents();
-	TSYS::sysSleep(0.01);
-    }
-    //Do and wait for the request
-    bool done = false;
-    if(!host->reqDo(node,done,glob))
-	while(!done) {
+    int rez = 0;
+    if(host) {
+	host->inHostReq++;
+	while(host->reqBusy()) {
 	    qApp->processEvents();
 	    TSYS::sysSleep(0.01);
 	}
-    host->inHostReq--;
-    if(winClose && !host->inHostReq) close();
+	//Do and wait for the request
+	bool done = false;
+	if(!host->reqDo(node,done,glob))
+	    while(!done) {
+		qApp->processEvents();
+		TSYS::sysSleep(0.01);
+	    }
+	host->inHostReq--;
+	if(winClose && !host->inHostReq) close();
 
-    int rez = s2i(node.attr("rez"));
-
-    //int rez = mod->cntrIfCmd(node, user(), password(), VCAStation(), glob);
+	rez = s2i(node.attr("rez"));
+    }
+    else rez = mod->cntrIfCmd(node, user(), password(), VCAStation(), glob);
 
     //Display error message about connection error
     if(rez == 10 && main && masterPg()) {
@@ -406,7 +409,7 @@ void VisRun::closeEvent( QCloseEvent* ce )
     winClose = true;
 
     //Call for next processing by the events handler for the real closing after release all background requests
-    if(host->inHostReq) { ce->ignore(); /*QCoreApplication::postEvent(this, new QCloseEvent());*/ return; }
+    if(host && host->inHostReq) { ce->ignore(); /*QCoreApplication::postEvent(this, new QCloseEvent());*/ return; }
 
     if(endRunTimer->isActive()) {
 	//Save main window position

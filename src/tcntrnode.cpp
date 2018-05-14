@@ -1029,4 +1029,13 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_db = 0; i_db < c_list.size(); i_db++)
 	    opt->childAdd("el")->setText(tblList.size() ? c_list[i_db]+"."+tblList : c_list[i_db]);
     }
+    else if(a_path == "/plang/list" && ctrChkNode(opt)) {
+	vector<string>  ls, lls;
+	SYS->daq().at().modList(ls);
+	for(unsigned iM = 0; iM < ls.size(); iM++) {
+	    if(!SYS->daq().at().at(ls[iM]).at().compileFuncLangs(&lls))	continue;
+	    for(unsigned iL = 0; iL < lls.size(); iL++)
+		opt->childAdd("el")->setText(ls[iM]+"."+lls[iL]);
+	}
+    }
 }

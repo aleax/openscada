@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.8.1"
+#define MOD_VER		"3.9.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -300,9 +300,9 @@ void TpContr::load_( )
 	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty()) {
 	    lbList(dbLs);
-	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(lbAt(dbLs[i_it]).at().DB()))
-		    lbUnreg(dbLs[i_it]);
+	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+		if(itReg.find(dbLs[iIt]) == itReg.end() && SYS->chkSelDB(lbAt(dbLs[iIt]).at().DB()))
+		    lbUnreg(dbLs[iIt]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -366,8 +366,8 @@ void TpContr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    lbList(lst);
-	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
-		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(lbAt(lst[i_a]).at().name());
+	    for(unsigned iA = 0; iA < lst.size(); iA++)
+		opt->childAdd("el")->setAttr("id",lst[iA])->setText(lbAt(lst[iA]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbReg(new Lib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbUnreg(opt->attr("id"),1);
@@ -393,8 +393,9 @@ BFunc *TpContr::bFuncGet( const char *nm )
 //* Contr: Controller object                      *
 //*************************************************
 Contr::Contr(string name_c, const string &daq_db, ::TElem *cfgelem) :
-    ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), call_st(false), endrun_req(false),
-    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), id_freq(-1), id_start(-1), id_stop(-1), mPer(0)
+    ::TController(name_c, daq_db, cfgelem), TPrmTempl::Impl(name_c.c_str()),
+    prcSt(false), callSt(false), endrunReq(false), isDAQTmpl(false), chkLnkNeed(false),
+    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), idFreq(-1), idStart(-1), idStop(-1), mPer(0)
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
 }
@@ -422,8 +423,9 @@ string Contr::getStatus( )
 {
     string val = TController::getStatus();
 
+    if(isDAQTmpl)	val += _("From DAQ template. ");
     if(startStat() && !redntUse()) {
-	if(call_st)	val += TSYS::strMess(_("Calculation. "));
+	if(callSt)	val += TSYS::strMess(_("Calculation. "));
 	if(period())	val += TSYS::strMess(_("Calculation with the period: %s. "),tm2s(1e-9*period()).c_str());
 	else val += TSYS::strMess(_("Next calculation by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s[%s]."), tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(),
@@ -435,24 +437,42 @@ string Contr::getStatus( )
 
 void Contr::enable_( )
 {
-    string wfnc = fnc();
-    if(!mod->lbPresent(TSYS::strSepParse(wfnc,0,'.')))
-	throw TError(nodePath().c_str(),_("Library of the functions '%s' is not present. Please, create the one!"),TSYS::strSepParse(wfnc,0,'.').c_str());
-    if(!mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().present(TSYS::strSepParse(wfnc,1,'.'))) {
-	mess_info(nodePath().c_str(),_("Creating a new function '%s'."),wfnc.c_str());
-	mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().add(TSYS::strSepParse(wfnc,1,'.').c_str());
+    isDAQTmpl = false;
+    string  lfnc = TSYS::strSepParse(fnc(), 0, '.'),
+	    wfnc = TSYS::strSepParse(fnc(), 1, '.');
+    if(wfnc == _("{NewFunction}")) throw TError(nodePath().c_str(), _("Enter your new function name instead '%s'!"), wfnc.c_str());
+    if(lfnc.empty() || wfnc.empty() || !(mod->lbPresent(lfnc) || SYS->daq().at().tmplLibPresent(lfnc)))
+	throw TError(nodePath().c_str(),_("Path of the function or DAQ template '%s' is not present or empty."), fnc().c_str());
+
+    //Try JavaLikeCalc function
+    if(mod->lbPresent(lfnc) && mod->lbAt(lfnc).at().present(wfnc))
+	setFunc(&mod->lbAt(lfnc).at().at(wfnc).at());
+    //Try DAQ template
+    else if(SYS->daq().at().tmplLibPresent(lfnc) && SYS->daq().at().tmplLibAt(lfnc).at().present(wfnc)) {
+	setFunc(&SYS->daq().at().tmplLibAt(lfnc).at().at(wfnc).at().func().at());
+	isDAQTmpl = true;
     }
-    setFunc(&mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().at(TSYS::strSepParse(wfnc,1,'.')).at());
-    try{ loadFunc(); }
+    //Create new JavaLikeCalc function
+    else if(mod->lbPresent(lfnc)) {
+	mess_info(nodePath().c_str(), _("Creating a new function '%s'."), fnc().c_str());
+	mod->lbAt(lfnc).at().add(wfnc);
+	setFunc(&mod->lbAt(lfnc).at().at(wfnc).at());
+    }
+    else throw TError(nodePath().c_str(), _("Error path of the function or DAQ template '%s'."), fnc().c_str());
+
+    try {
+	setVfName(id()+"_JavaLikeCntr");
+	loadFunc();
+    }
     catch(TError &err) {
-	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_warning(nodePath().c_str(),_("Error loading function and its IO."));
+	mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
+	mess_warning(nodePath().c_str(), _("Error loading function and its IO."));
     }
 }
 
 void Contr::disable_( )
 {
-    setFunc(NULL);
+    lnkClear(true);
 }
 
 void Contr::load_( )
@@ -464,14 +484,25 @@ void Contr::load_( )
 
 void Contr::loadFunc( bool onlyVl )
 {
-    if(func() != NULL) {
-	if(!onlyVl) ((Func*)func())->load();
+    if(func()) {
+	if(!onlyVl && !isDAQTmpl) ((Func*)func())->load();
+
+	// Init attrubutes
+	if(isDAQTmpl)
+	    for(int iIO = 0; iIO < func()->ioSize(); iIO++) {
+		if((func()->io(iIO)->flg()&TPrmTempl::CfgLink) && lnkId(iIO) < 0) {
+		    lnkAdd(TPrmTempl::Impl::SLnk(iIO));
+		    setS(iIO, EVAL_STR);
+		}
+	    }
 
 	//Creating special IO
-	if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Frequency of calculation of the function (Hz)"),IO::Real,0,"1000",false),0);
-	if(func()->ioId("f_start") < 0)	func()->ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,0,"0",false),1);
-	if(func()->ioId("f_stop") < 0)	func()->ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,0,"0",false),2);
-	if(func()->ioId("this") < 0)	func()->ioIns(new IO("this",_("Link to the object of this controller"),IO::Object,0,"0",false),3);
+	if(!isDAQTmpl) {
+	    if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Frequency of calculation of the function (Hz)"),IO::Real,0,"1000",false),0);
+	    if(func()->ioId("f_start") < 0)	func()->ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,0,"0",false),1);
+	    if(func()->ioId("f_stop") < 0)	func()->ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,0,"0",false),2);
+	    if(func()->ioId("this") < 0)	func()->ioIns(new IO("this",_("Link to the object of this controller"),IO::Object,0,"0",false),3);
+	}
 
 	//Load values
 	TConfig cfg(&mod->elVal());
@@ -481,9 +512,16 @@ void Contr::loadFunc( bool onlyVl )
 
 	for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,&full); ) {
 	    int ioId = func()->ioId(cfg.cfg("ID").getS());
-	    if(ioId < 0 || func()->io(ioId)->flg()&Func::SysAttr) continue;
-	    setS(ioId, cfg.cfg("VAL").getS());
+	    if(ioId < 0 || (!isDAQTmpl && (func()->io(ioId)->flg()&Func::SysAttr))) continue;
+	    if(!isDAQTmpl) setS(ioId, cfg.cfg("VAL").getS());
+	    else {
+		if(func()->io(ioId)->flg()&TPrmTempl::CfgLink)
+		    lnk(lnkId(ioId)).prmAttr = cfg.cfg("VAL").getS(TCfg::ExtValOne);	//Force no translated
+		else if(func()->io(ioId)->type() != IO::String) setS(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));		//Force no translated
+		else setS(ioId, cfg.cfg("VAL").getS());
+	    }
 	}
+	if(isDAQTmpl) chkLnkNeed = initTmplLnks();
     }
 }
 
@@ -499,17 +537,22 @@ void Contr::save_( )
     TController::save_();
 
     if(func() != NULL) {
-	((Func*)func())->save();
+	if(!isDAQTmpl)	((Func*)func())->save();
 
 	//Save values
 	TConfig cfg(&mod->elVal());
 	string bd_tbl = id()+"_val";
 	string val_bd = DB()+"."+bd_tbl;
 	for(int iio = 0; iio < ioSize(); iio++) {
-	    if(func()->io(iio)->flg()&Func::SysAttr) continue;
+	    if(!isDAQTmpl && func()->io(iio)->flg()&Func::SysAttr) continue;
 	    cfg.cfg("ID").setS(func()->io(iio)->id());
-	    cfg.cfg("VAL").setS(getS(iio));
-	    SYS->db().at().dataSet(val_bd,mod->nodePath()+bd_tbl,cfg);
+	    if(!isDAQTmpl) cfg.cfg("VAL").setS(getS(iio));
+	    else {
+		cfg.cfg("VAL").setNoTransl(!(func()->io(iio)->type()==IO::String && !(func()->io(iio)->flg()&TPrmTempl::CfgLink)));
+		if(func()->io(iio)->flg()&TPrmTempl::CfgLink)	cfg.cfg("VAL").setS(lnk(lnkId(iio)).prmAttr);
+		else cfg.cfg("VAL").setS(getS(iio));
+	    }
+	    SYS->db().at().dataSet(val_bd, mod->nodePath()+bd_tbl, cfg);
 	}
 
 	//Clear VAL
@@ -525,13 +568,13 @@ void Contr::save_( )
 
 void Contr::start_( )
 {
-    call_st = false;
+    callSt = false;
     ((Func *)func())->setStart(true);
 
     //Link to special atributes
-    id_freq	= ioId("f_frq");
-    id_start	= ioId("f_start");
-    id_stop	= ioId("f_stop");
+    idFreq	= ioId("f_frq");
+    idStart	= ioId("f_start");
+    idStop	= ioId("f_stop");
     int id_this = ioId("this");
     if(id_this >= 0) setO(id_this,new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
@@ -545,15 +588,15 @@ void Contr::start_( )
 void Contr::stop_( )
 {
     //Stop the request and calc data task
-    SYS->taskDestroy(nodePath('.',true), &endrun_req);
+    SYS->taskDestroy(nodePath('.',true), &endrunReq);
 }
 
 void *Contr::Task( void *icntr )
 {
     Contr &cntr = *(Contr *)icntr;
 
-    cntr.endrun_req = false;
-    cntr.prc_st = true;
+    cntr.endrunReq = false;
+    cntr.prcSt = true;
 
     bool is_start = true;
     bool is_stop  = false;
@@ -561,31 +604,56 @@ void *Contr::Task( void *icntr )
 
     while(true) {
 	if(!cntr.redntUse()) {
-	    cntr.call_st = true;
+	    if(cntr.chkLnkNeed)	cntr.initTmplLnks();
+
+	    cntr.callSt = true;
 	    t_cnt = TSYS::curTime();
 	    //Setting special IO
-	    if(cntr.id_freq >= 0) cntr.setR(cntr.id_freq, cntr.period()?((float)cntr.iterate()*1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
-	    if(cntr.id_start >= 0) cntr.setB(cntr.id_start, is_start);
-	    if(cntr.id_stop >= 0) cntr.setB(cntr.id_stop, is_stop);
+	    if(cntr.idFreq >= 0) cntr.setR(cntr.idFreq, cntr.period()?((float)cntr.iterate()*1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
+	    if(cntr.idStart >= 0) cntr.setB(cntr.idStart, is_start);
+	    if(cntr.idStop >= 0) cntr.setB(cntr.idStop, is_stop);
 
-	    for(int i_it = 0; i_it < cntr.mIter; i_it++)
+	    //Get input links
+	    for(int iL = 0; cntr.isDAQTmpl && iL < cntr.lnkSize(); iL++)
+		if(cntr.lnk(iL).aprm.freeStat()) cntr.setS(cntr.lnk(iL).ioId, EVAL_STR);
+		else if(cntr.lnk(iL).aprm.at().fld().type() == TFld::Object &&
+			cntr.lnk(iL).detOff < (int)cntr.lnk(iL).prmAttr.size())
+		    cntr.set(cntr.lnk(iL).ioId, cntr.lnk(iL).aprm.at().getO().at().propGet(cntr.lnk(iL).prmAttr.substr(cntr.lnk(iL).detOff),'.'));
+		else cntr.set(cntr.lnk(iL).ioId, cntr.lnk(iL).aprm.at().get());
+
+	    for(int iIt = 0; iIt < cntr.mIter; iIt++)
 		try { cntr.calc(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str() );
 		    mess_err(cntr.nodePath().c_str(),_("Error calculating controller function."));
 		}
+
+	    //Put output links
+	    for(int iL = 0; cntr.isDAQTmpl && iL < cntr.lnkSize(); iL++)
+		if(!cntr.lnk(iL).aprm.freeStat() && cntr.ioMdf(cntr.lnk(iL).ioId) &&
+		    cntr.ioFlg(cntr.lnk(iL).ioId)&(IO::Output|IO::Return) && !(cntr.lnk(iL).aprm.at().fld().flg()&TFld::NoWrite))
+		{
+		    TVariant vl = cntr.get(cntr.lnk(iL).ioId);
+		    if(!vl.isEVal()) {
+			if(cntr.lnk(iL).aprm.at().fld().type() == TFld::Object && cntr.lnk(iL).detOff < (int)cntr.lnk(iL).prmAttr.size()) {
+			    cntr.lnk(iL).aprm.at().getO().at().propSet(cntr.lnk(iL).prmAttr.substr(cntr.lnk(iL).detOff), '.', vl);
+			    cntr.lnk(iL).aprm.at().setO(cntr.lnk(iL).aprm.at().getO());	//For modify object sign
+			}
+			else cntr.lnk(iL).aprm.at().set(vl);
+		    }
+		}
 	    t_prev = t_cnt;
-	    cntr.call_st = false;
+	    cntr.callSt = false;
 	}
 
 	if(is_stop) break;
 	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
-	if(cntr.endrun_req) is_stop = true;
+	if(cntr.endrunReq) is_stop = true;
 	is_start = false;
 	cntr.modif();
     }
 
-    cntr.prc_st = false;
+    cntr.prcSt = false;
 
     return NULL;
 }
@@ -616,13 +684,13 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if(a_path == "/serv/fncAttr") {
 	    if(!startStat() || !func()) throw TError(nodePath().c_str(),_("Function is missing or not started."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-		for(int i_a = 0; i_a < ioSize(); i_a++)
-		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));
+		for(int iA = 0; iA < ioSize(); iA++)
+		    opt->childAdd("a")->setAttr("id",func()->io(iA)->id())->setText(getS(iA));
 	    if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-		for(unsigned i_a = 0; i_a < opt->childSize(); i_a++) {
+		for(unsigned iA = 0; iA < opt->childSize(); iA++) {
 		    int io_id = -1;
-		    if(opt->childGet(i_a)->name() != "a" || (io_id=ioId(opt->childGet(i_a)->attr("id"))) < 0) continue;
-		    setS(io_id,opt->childGet(i_a)->text());
+		    if(opt->childGet(iA)->name() != "a" || (io_id=ioId(opt->childGet(iA)->attr("id"))) < 0) continue;
+		    setS(io_id,opt->childGet(iA)->text());
 		}
 	}
 	else TController::cntrCmdProc(opt);
@@ -637,6 +705,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
+	if(enableStat())
+	    ctrMkNode("comm",opt,-1,"/cntr/cfg/toFunc",_("Go to the used function"),R_R_R_,"root",SDAQ_ID,1,"tp","lnk");
 	if(enableStat() && ctrMkNode("area",opt,-1,"/fnc",_("Calculation"))) {
 	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),RWRWR_,"root",SDAQ_ID,1,"s_com","add,del,ins,move"/*,"rows","15"*/)) {
 		ctrMkNode("list",opt,-1,"/fnc/io/0",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
@@ -649,31 +719,35 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		    "sel_list",_("Read only;Read and Write;Read and Write"));
 		ctrMkNode("list",opt,-1,"/fnc/io/4",_("Value"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/fnc/prog",_("Program"),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
+	    if(!isDAQTmpl)
+		ctrMkNode("fld",opt,-1,"/fnc/prog",_("Program"),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
+	if(isDAQTmpl && func()) TPrmTempl::Impl::cntrCmdProc(opt);
 	return;
     }
 
     //Process command to page
-    if(a_path == "/cntr/flst" && ctrChkNode(opt)) {
-	vector<string> lst;
-	int c_lv = 0;
-	string c_path = "", cEl;
-	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (cEl=TSYS::strSepParse(fnc(),0,'.',&c_off)).size(); c_lv++) {
-	    c_path += c_lv ? "."+cEl : cEl;
-	    opt->childAdd("el")->setText(c_path);
+    if(a_path == "/cntr/cfg/toFunc" && enableStat() && ctrChkNode(opt,"get",R_R_R_,"root",SDAQ_ID,SEC_RD))
+	opt->setText(string("/DAQ/")+(isDAQTmpl?"tmplb_":MOD_ID "/lib_")+TSYS::strParse(fnc(),0,".")+"/"+TSYS::strParse(fnc(),1,"."));
+    else if(a_path == "/cntr/flst" && ctrChkNode(opt)) {
+	opt->childAdd("el")->setText("");
+	vector<string> lls, ls;
+	//Functions
+	mod->lbList(lls);
+	for(unsigned iL = 0; iL < lls.size(); iL++) {
+	    if(lls[iL] == "sys_compile") continue;
+	    opt->childAdd("el")->setText(lls[iL]+"."+_("{NewFunction}"));
+	    mod->lbAt(lls[iL]).at().list(ls);
+	    for(unsigned iT = 0; iT < ls.size(); iT++)
+		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
 	}
-	if(c_lv) c_path+=".";
-	switch(c_lv) {
-	    case 0:	mod->lbList(lst); break;
-	    case 1:
-		if(mod->lbPresent(TSYS::strSepParse(fnc(),0,'.')))
-		    mod->lbAt(TSYS::strSepParse(fnc(),0,'.')).at().list(lst);
-		break;
+	//Templates
+	SYS->daq().at().tmplLibList(lls);
+	for(unsigned iL = 0; iL < lls.size(); iL++) {
+	    SYS->daq().at().tmplLibAt(lls[iL]).at().list(ls);
+	    for(unsigned iT = 0; iT < ls.size(); iT++)
+		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
 	}
-	for(unsigned i_a=0; i_a < lst.size(); i_a++)
-	    opt->childAdd("el")->setText(c_path+lst[i_a]);
     }
     else if(a_path == "/fnc/io" && enableStat()) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
@@ -734,7 +808,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    if(!((Func *)func())->owner().DB().empty()) ((Func *)func())->modif();
 	}
     }
-    else if(a_path == "/fnc/prog" && enableStat()) {
+    else if(a_path == "/fnc/prog" && enableStat() && !isDAQTmpl) {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(((Func *)func())->prog());
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
 	    ((Func *)func())->setProg(opt->text().c_str());
@@ -743,6 +817,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD))	mod->compileFuncSynthHighl("JavaScript",*opt);
     }
+    else if(isDAQTmpl && func() && TPrmTempl::Impl::cntrCmdProc(opt))	;
     else TController::cntrCmdProc(opt);
 }
 

@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.8.11"
+#define MOD_VER		"0.8.12"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
 #define LICENSE		"GPL2"
@@ -487,7 +487,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 					"Into the pool mode an input transport will call the protocol by no "
 					"a request with an empty message after that timeout."));
 		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRW__,"root",SPRT_ID,3,
-		    "tp","str", "dest","sel_ed", "select","/up/cfg/plangIls");
+		    "tp","str", "dest","sel_ed", "select","/plang/list");
 		ctrMkNode("fld",opt,-1,"/in/PROG",_("Input program"),RWRW__,"root",SPRT_ID,4, "tp","str", "rows","10", "SnthHgl","1",
 		    "help",_("Next attributes has defined for input requests processing:\n"
 			    "   'rez' - processing result (false-full request;true-not full request);\n"
@@ -498,7 +498,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/out",_("Output"),RWRW__,"root",SPRT_ID)) {
 		ctrMkNode("fld",opt,-1,"/out/PROGLang",_("Output program language"),RWRW__,"root",SPRT_ID,3,
-		    "tp","str", "dest","sel_ed", "select","/up/cfg/plangOls");
+		    "tp","str", "dest","sel_ed", "select","/plang/list");
 		ctrMkNode("fld",opt,-1,"/out/PROG",_("Output program"),RWRW__,"root",SPRT_ID,4, "tp","str", "rows","10", "SnthHgl","1",
 		    "help",_("Next attributes has defined for output requests processing:\n"
 			    "   'io' - input/output interface's XMLNode object;\n"
@@ -519,32 +519,6 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setDB(opt->text());
     }
     else if(a_path == "/up/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
-    else if((a_path == "/up/cfg/plangIls" || a_path == "/up/cfg/plangOls") && ctrChkNode(opt)) {
-	string tplng = (a_path=="/up/cfg/plangIls") ? inProgLang() : outProgLang();
-	int c_lv = 0;
-	string c_path = "", c_el;
-	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++) {
-	    c_path += c_lv ? "."+c_el : c_el;
-	    opt->childAdd("el")->setText(c_path);
-	}
-	if(c_lv) c_path += ".";
-	vector<string>  ls;
-	switch(c_lv) {
-	    case 0:
-		SYS->daq().at().modList(ls);
-		for(unsigned i_l = 0; i_l < ls.size(); )
-		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs()) ls.erase(ls.begin()+i_l);
-		    else i_l++;
-		break;
-	    case 1:
-		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
-		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
-		break;
-	}
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(c_path+ls[i_l]);
-    }
     else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
     else if(a_path == "/in/WaitReqTm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(waitReqTm()));

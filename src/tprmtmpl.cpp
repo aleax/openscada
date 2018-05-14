@@ -275,7 +275,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		    "sel_list",_("Variable;Constant;Link"));
 		ctrMkNode("list",opt,-1,"/io/io/6",_("Value"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/io/prog_lang",_("Program language"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/io/plang_ls");
+	    ctrMkNode("fld",opt,-1,"/io/prog_lang",_("Program language"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/plang/list");
 	    ctrMkNode("fld",opt,-1,"/io/prog_tr",cfg("PR_TR").fld().descr().c_str(),RWRW__,"root",SDAQ_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/io/prog",cfg("PROGRAM").fld().descr().c_str(),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
@@ -382,33 +382,195 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 				compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
 	    } catch(...){ }
     }
-    else if(a_path == "/io/plang_ls" && ctrChkNode(opt)) {
-	string tplng = progLang();
-	int c_lv = 0;
-	string c_path = "", c_el;
-	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++) {
-	    c_path += c_lv ? "."+c_el : c_el;
-	    opt->childAdd("el")->setText(c_path);
-	}
-	if(c_lv) c_path += ".";
-	vector<string>  ls;
-	switch(c_lv) {
-	    case 0:
-		SYS->daq().at().modList(ls);
-		for(unsigned i_l = 0; i_l < ls.size(); )
-		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs()) ls.erase(ls.begin()+i_l);
-		    else i_l++;
-		break;
-	    case 1:
-		if( SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')) )
-		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
-		break;
-	}
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(c_path+ls[i_l]);
-    }
     else TCntrNode::cntrCmdProc(opt);
+}
+
+TPrmTempl::Impl::Impl( const string &iname, TCntrNode *iobj ) :
+    TValFunc(iname.c_str(),NULL,false), obj(iobj?iobj:(TCntrNode*)this)
+{
+
+}
+
+int TPrmTempl::Impl::lnkSize( )	{ return lnks.size(); }
+
+void TPrmTempl::Impl::lnkAdd( const SLnk &l )
+{
+    lnks.push_back(l);
+}
+
+void TPrmTempl::Impl::lnkClear( bool andFunc )
+{
+    lnks.clear();
+    if(andFunc) setFunc(NULL);
+}
+
+int TPrmTempl::Impl::lnkId( int id )
+{
+    for(int iL = 0; iL < lnkSize(); iL++)
+	if(lnk(iL).ioId == id)
+	    return iL;
+    return -1;
+}
+
+int TPrmTempl::Impl::lnkId( const string &id )
+{
+    for(int iL = 0; iL < lnkSize(); iL++)
+	if(func()->io(lnk(iL).ioId)->id() == id)
+	    return iL;
+    return -1;
+}
+
+TPrmTempl::Impl::SLnk &TPrmTempl::Impl::lnk( int num )
+{
+    if(num < 0 || num >= (int)lnks.size()) throw TError(obj->nodePath().c_str(), _("Error of parameter ID."));
+    return lnks[num];
+}
+
+
+bool TPrmTempl::Impl::initTmplLnks( bool checkNoLink )
+{
+    //Init links
+    string nmod, ncntr, nprm, nattr;
+
+    for(int iL = 0; iL < lnkSize(); iL++) {
+	if(checkNoLink && !lnk(iL).aprm.freeStat()) continue;
+	try {
+	    lnk(iL).aprm.free();
+	    lnk(iL).detOff = 0;
+	    lnk(iL).aprm = SYS->daq().at().attrAt(TSYS::strParse(lnk(iL).prmAttr,0,"#",&lnk(iL).detOff), '.', true);
+	    if(!lnk(iL).aprm.freeStat()) {
+		if(lnk(iL).aprm.at().fld().type() == TFld::Object && lnk(iL).detOff < (int)lnk(iL).prmAttr.size())
+		    setS(lnk(iL).ioId, lnk(iL).aprm.at().getO().at().propGet(lnk(iL).prmAttr.substr(lnk(iL).detOff),'.'));
+		else setS(lnk(iL).ioId, lnk(iL).aprm.at().getS());
+	    }
+	    else return true;
+	} catch(TError &err) { return true; }
+    }
+
+    return false;
+}
+
+bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt )
+{
+    //Get page info
+    if(opt->name() == "info" && ctrMkNode("area",opt,-1,"/cfg",_("Template configuration"))) {
+	vector<string> list;
+	ctrMkNode("fld",opt,-1,"/cfg/attr_only",_("Only attributes are to be shown"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+	if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
+	    for(int iIO = 0; iIO < ioSize(); iIO++) {
+		if(!(func()->io(iIO)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgConst)))
+		    continue;
+		// Check select param
+		bool is_lnk = func()->io(iIO)->flg()&TPrmTempl::CfgLink;
+		if(is_lnk && func()->io(iIO)->def().size() &&
+		    !s2i(TBDS::genDBGet(obj->nodePath()+"onlAttr","0",opt->attr("user"))))
+		{
+		    string nprm = TSYS::strSepParse(func()->io(iIO)->def(),0,'|');
+		    // Check already to present parameters
+		    bool f_ok = false;
+		    for(unsigned iL = 0; iL < list.size() && !f_ok; iL++)
+			if(list[iL] == nprm) f_ok = true;
+		    if(!f_ok) {
+			ctrMkNode("fld",opt,-1,(string("/cfg/prm/pr_")+i2s(iIO)).c_str(),nprm,RWRWR_,"root",SDAQ_ID,
+			    3,"tp","str","dest","sel_ed","select",(string("/cfg/prm/pl_")+i2s(iIO)).c_str());
+			list.push_back(nprm);
+		    }
+		}
+		else {
+		    const char *tip = "str";
+		    bool fullTxt = false;
+		    if(!is_lnk)
+			switch(ioType(iIO)) {
+			    case IO::Integer:	tip = "dec";	break;
+			    case IO::Real:		tip = "real";	break;
+			    case IO::Boolean:	tip = "bool";	break;
+			    case IO::String:
+				if(func()->io(iIO)->flg()&IO::FullText) fullTxt = true;
+				break;
+			    case IO::Object:	fullTxt = true;	break;
+			}
+		    XMLNode *wn = ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+i2s(iIO)).c_str(),
+			    func()->io(iIO)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
+		    if(wn && is_lnk) wn->setAttr("dest","sel_ed")->setAttr("select","/cfg/prm/ls_"+i2s(iIO));
+		    if(wn && fullTxt)wn->setAttr("cols","100")->setAttr("rows","4");
+		}
+	    }
+	return true;
+    }
+
+    //Process command to page
+    string a_path = opt->attr("path");
+    if(a_path == "/cfg/attr_only") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genDBGet(obj->nodePath()+"onlAttr","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genDBSet(obj->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
+    }
+    else if(a_path.substr(0,12) == "/cfg/prm/pr_") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
+	    string lnk_val = lnk(lnkId(s2i(a_path.substr(12)))).prmAttr;
+	    if(!SYS->daq().at().attrAt(TSYS::strParse(lnk_val,0,"#"),'.',true).freeStat()) {
+		opt->setText(lnk_val.substr(0,lnk_val.rfind(".")));
+		opt->setText(opt->text()+" (+)");
+	    }
+	    else opt->setText(lnk_val);
+	}
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
+	    TParamContr *pC = dynamic_cast<TParamContr*>(obj);
+	    string no_set;
+	    string p_nm = TSYS::strSepParse(func()->io(lnk(lnkId(s2i(a_path.substr(12)))).ioId)->def(),0,'|');
+	    string p_vl = TSYS::strParse(opt->text(), 0, " ");
+	    if(pC && p_vl == pC->DAQPath()) throw TError(obj->nodePath().c_str(),_("Error, recursive linking."));
+	    AutoHD<TValue> prm = SYS->daq().at().prmAt(p_vl, '.', true);
+
+	    for(int iL = 0; iL < lnkSize(); iL++)
+		if(p_nm == TSYS::strSepParse(func()->io(lnk(iL).ioId)->def(),0,'|')) {
+		    lnk(iL).prmAttr = p_vl;
+		    string p_attr = TSYS::strSepParse(func()->io(lnk(iL).ioId)->def(),1,'|');
+		    if(!prm.freeStat()) {
+			if(prm.at().vlPresent(p_attr)) {
+			    lnk(iL).prmAttr= p_vl+"."+p_attr;
+			    obj->modif();
+			}
+			else no_set += p_attr+",";
+		    }
+		}
+	    initTmplLnks();
+	}
+    }
+    else if((a_path.compare(0,12,"/cfg/prm/pl_") == 0 || a_path.compare(0,12,"/cfg/prm/ls_") == 0) && ctrChkNode(opt))
+    {
+	bool is_pl = (a_path.compare(0,12,"/cfg/prm/pl_") == 0);
+	string m_prm = lnk(lnkId(s2i(a_path.substr(12)))).prmAttr;
+	if(is_pl && !SYS->daq().at().attrAt(m_prm,'.',true).freeStat()) m_prm = m_prm.substr(0,m_prm.rfind("."));
+	SYS->daq().at().ctrListPrmAttr(opt, m_prm, is_pl, '.');
+    }
+    else if(a_path.substr(0,12) == "/cfg/prm/el_") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
+	    int iIO = s2i(a_path.substr(12));
+	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) {
+		opt->setText(lnk(lnkId(iIO)).prmAttr);
+		if(!SYS->daq().at().attrAt(TSYS::strParse(opt->text(),0,"#"),'.',true).freeStat()) opt->setText(opt->text()+" (+)");
+	    }
+	    else if(func()->io(iIO)->flg()&TPrmTempl::CfgConst)
+		opt->setText(getS(iIO));
+	}
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
+	    int iIO = s2i(a_path.substr(12));
+	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) {
+		string a_vl = TSYS::strParse(opt->text(), 0, " ");
+		//if(TSYS::strSepParse(a_vl,0,'.') == owner().owner().modId() &&
+		//	TSYS::strSepParse(a_vl,1,'.') == owner().id() &&
+		//	TSYS::strSepParse(a_vl,2,'.') == id())
+		//    throw TError(nodePath().c_str(),_("Error, recursive linking."));
+		lnk(lnkId(iIO)).prmAttr = a_vl;
+		initTmplLnks();
+	    }
+	    else if(func()->io(iIO)->flg()&TPrmTempl::CfgConst) setS(iIO, opt->text());
+	    obj->modif();
+	}
+    }
+    else return false;
+
+    return true;
 }
 
 //*************************************************

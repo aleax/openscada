@@ -37,6 +37,7 @@ namespace OSCADA
 //* TPrmTempl                                     *
 //*************************************************
 class TPrmTmplLib;
+class TVal;
 
 class TPrmTempl: public TFunction, public TConfig
 {
@@ -49,6 +50,39 @@ class TPrmTempl: public TFunction, public TConfig
 	    CfgConst	= 0x040,	//Configure as a constant
 	    CfgLink	= 0x080,	//Configure as a link
 	    LockAttr	= 0x100		//Lock attribute
+	};
+
+	// Object of implementations of the DAQ templates
+	class Impl: public TValFunc
+	{
+	    public:
+	    //Data
+	    class SLnk {
+		public:
+		SLnk( int id, const string &iprmAttr = "" ) : ioId(id), detOff(0), prmAttr(iprmAttr) { }
+		int	ioId, detOff;
+		string	prmAttr;
+		AutoHD<TVal> aprm;
+	    };
+
+	    //Functions
+	    Impl( const string &iname = "", TCntrNode *iobj = NULL );
+
+	    int lnkSize( );
+	    void lnkAdd( const SLnk &l );
+	    void lnkClear( bool andFunc = false );
+	    int lnkId( int id );
+	    int lnkId( const string &id );
+	    SLnk &lnk( int num );
+
+	    bool initTmplLnks( bool checkNoLink = false );
+
+	    bool cntrCmdProc( XMLNode *opt );
+
+	    private:
+	    vector<SLnk> lnks;
+
+	    TCntrNode	*obj;
 	};
 
 	//Methods

@@ -1,3 +1,18 @@
+2018-05-14 Roman (stable)
+- !!:DOC: The document "DAQ" is fully revised.
+- DAQ.{*.ModBus},Protocol.UserProtocol,UI.{VCAEngine,WebUser}:
+    Internal programming languages list made plain, moved to the generic request "/plang/list" and used everywhere.
+- !!:DAQ.TPrmTempl: Started for expanding of the using unification by the class TPrmTempl::Impl creation,
+    due the planes for exptend some OpenSCADA parts by the DAQ templates: DAQ.JavaLikeCalc, Protocol.{ModBus,UserPrt}, UI.WebUser;
+    and for parts already using the DAQ templates: DAQ.{LogicLev,ModBus,Siemens}.
+- !!:DAQ.JavaLikeCalc: Initially extended for using the DAQ templates.
+    The functions selection list made plain one and appended by the DAQ templates.
+- FIX:UI.QTCfg: Fixed for crashes at openned warning-error dialogs.
+    Going to branches through the list set for placing the previous address to the back list.
+- !!:UI.Vision: The requisting into different thread set to be enabled at the unpublic command line option "ReqInDifThread" but Qt loss releasing mouse events now,
+    into event(). Then, by default the requisting into different thread disabled now.
+
+
 2018-05-11 Roman (stable)
 - !!:DOC: The document "DAQ" is mostly revised.
 - !!!:FIX:Archive.FSArch: Cache access moved under a critical section, for preventing crashes at high load.
