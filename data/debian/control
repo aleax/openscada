@@ -32,6 +32,12 @@ Description: Open SCADA system project
  UI.WebUser, UI.WebVision,
  Special.FLibMath, Special.SystemTests
 
+Package: openscada-plc
+Architecture: all
+Depends: openscada
+Description: OpenSCADA - PLC virtual package
+ The openscada-plc is virtual package for PLC.
+
 Package: openscada-server
 Architecture: all
 Depends: openscada

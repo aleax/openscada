@@ -101,6 +101,10 @@ class XMLNode
 
     private:
 	//Methods
+	static bool isSpace( const char ch ) {
+	    switch(ch) { case ' ': case '\t': case '\x0D': case '\x0A': return true; }
+	    return false;
+	}
 	void saveNode( unsigned flg, string &xml, const string &cp ) const;
 	void encode( const string &s, string &rez, bool text = false, unsigned flg = 0 ) const;
 

@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.1.4"
+#define MOD_VER		"3.1.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -228,15 +228,22 @@ TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 		    }
 		}
 	    }
-	    if(answer.empty())
+	    if(answer.empty()) {
+		string icoNm;
+		TUIS::icoGet(SYS->name(), &icoNm);
+		if(icoNm.size()) icoNm = SYS->name() + "." + icoNm;
+		else {
+		    TUIS::icoGet(SYS->id(), &icoNm);
+		    if(icoNm.size()) icoNm = SYS->id() + "." + icoNm;
+		}
 		answer = "<?xml version='1.0' ?>\n"
 		    "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n"
 		    "<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 		    " <head>\n"
 		    "  <meta http-equiv='Content-Type' content='text/html; charset=" + Mess->charset() + "'/>\n" +
 		    ((prms.size() >= 4) ? prms[3].getS() : "" ) +
-		    "  <title>" PACKAGE_NAME ": " + SYS->id() + "</title>\n"
-		    "  <link rel='shortcut icon' href='/" + SYS->id() + ".png' type='image' />\n"
+		    "  <title>" PACKAGE_NAME ": " + SYS->name() + " (" + SYS->id() + ")</title>\n" +
+		    (icoNm.size()?"  <link rel='shortcut icon' href='/"+icoNm+"' type='image' />\n":"") +
 		//    "  <title>" PACKAGE_NAME "!</title>\n"
 		//    "  <link rel='shortcut icon' href='/" SPRT_ID "." MOD_ID ".png' type='image' />\n"
 		    "  <style type='text/css'>\n"
@@ -254,12 +261,13 @@ TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 		    "  </style>\n"
 		    " </head>\n"
 		    " <body>\n"
-		    "  <h1 class='head'>" PACKAGE_NAME ": " + SYS->id() + "</h1>\n"
+		    "  <h1 class='head'>" PACKAGE_NAME ": " + SYS->name() + " (" + SYS->id() + ")</h1>\n"
 		    "  <hr/><br/>\n"
 		    "<center>\n" CtxTmplMark "</center>\n"
 		    "  <hr/>\n"
 		    " </body>\n"
 		    "</html>\n";
+	    }
 
 	    size_t tmplPos = answer.find(CtxTmplMark);
 	    if(tmplPos != string::npos) answer = answer.replace(tmplPos, strlen(CtxTmplMark), prms[0].getS());

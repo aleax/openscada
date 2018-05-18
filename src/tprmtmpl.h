@@ -59,28 +59,30 @@ class TPrmTempl: public TFunction, public TConfig
 	    //Data
 	    class SLnk {
 		public:
-		SLnk( int id, const string &iprmAttr = "" ) : ioId(id), detOff(0), prmAttr(iprmAttr) { }
-		int	ioId, detOff;
+		SLnk( const string &iprmAttr = "" ) : detOff(0), prmAttr(iprmAttr) { }
+		int	detOff;
 		string	prmAttr;
 		AutoHD<TVal> aprm;
 	    };
 
 	    //Functions
-	    Impl( const string &iname = "", TCntrNode *iobj = NULL );
+	    Impl( TCntrNode *iobj, const string &iname = "" );
 
-	    int lnkSize( );
-	    void lnkAdd( const SLnk &l );
+	    bool lnkPresent( int num );
+	    void lnkAdd( int num, const SLnk &l );
+	    string lnkAttr( int num );
+	    void lnkAttrSet( int num, const string &vl );
 	    void lnkClear( bool andFunc = false );
-	    int lnkId( int id );
-	    int lnkId( const string &id );
-	    SLnk &lnk( int num );
 
 	    bool initTmplLnks( bool checkNoLink = false );
+	    void inputLinks( );
+	    void outputLinks( );
+	    bool outputLink( int num, const TVariant &vl );
 
 	    bool cntrCmdProc( XMLNode *opt );
 
 	    private:
-	    vector<SLnk> lnks;
+	    map<int,SLnk> lnks;
 
 	    TCntrNode	*obj;
 	};

@@ -1,3 +1,12 @@
+2018-05-18 Roman (stable)
+- !!:DOC: The document "VCAEngine (VCA)" is started for revision.
+- data/debian: Expanded by appending the package openscada-plc.
+- SYS.XMLNode: isspace() replaced by own implementation isSpace(), mostly for QNX where isspace() is broken for UTF-8.
+- !!:DAQ.{TPrmTempl,JavaLikeCalc}: Finished and tested of the implementing the class TPrmTempl::Impl of the using unification.
+    Access to the links moved under the critical section.
+- Protocol.HTTP: Expanded using the project icon as the main module icon.
+
+
 2018-05-14 Roman (stable)
 - !!:DOC: The document "DAQ" is fully revised.
 - DAQ.{*.ModBus},Protocol.UserProtocol,UI.{VCAEngine,WebUser}:

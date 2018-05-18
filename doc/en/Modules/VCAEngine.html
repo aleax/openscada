@@ -134,128 +134,128 @@
 </p><p>Although the mechanisms for the visual formation of the VCA the module doesn't provide the interface, implemented on the basis of the management interface of the OpenSCADA, to manage the logical structure is provided, and thus it is available for use in any system configurator of the OpenSCADA. Dialogues of this interface are considered further in the context of the architecture of the module and its data.
 </p>
 <h2><span class="mw-headline" id="Architecture"><span class="mw-headline-number">3</span> Architecture</span></h2>
-<p>Any VCA can operate in two modes — the development and running. In the development mode the VCA interface and its components are formed, the mechanisms of interaction are identified. While the running it is carried out the formation of VCA interface based on the developed VCA with the final user interaction is made.
-</p><p>VCA interface is formed of the frames, each of which, in its turn, formed from elements of the primitives, or user interface elements. In doing so, the user interface elements are also formed from the primitives or other user elements. That gives us a hierarchy and reuse of already developed components.
+<p>VCA, in whole, can operate in two modes — the development and running. In the mode of development, the interface of the VCA and its components is formed, the mechanisms of interaction are determined. In the execution mode, performes the formation of the UI interface and the interaction with the end user, based on the developed VCA.
+</p><p>VCA interface is formed of the frames, each of which, in its turn, formed from elements of the primitives, or user interface elements. Herewith, the user interface elements are also formed from the primitives or other user elements. That gives us a hierarchy and reuse of already developed components.
 </p><p>Frames and user elements are placed in the libraries of widgets. The projects of the interfaces of the final visualization of the VCA are formed from these libraries' elements. Based on these projects the visualization sessions are formed.
-</p><p>The structure of VCA is shown in the Figure.
+</p><p>The described VCA structure is shown in the Figure.
 </p>
 <div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:VCA_struct.png"><img alt="VCA struct.png" height="938" src="../files/VCA_struct.png" width="854" /></a></div></div>
-<p>This architecture of the VCA allows the support of three levels of complexity of the developing process of the management interface:
+<p>That architecture of the VCA allows the support of three levels of complexity of the developing process of the control interface:
 </p>
-<ul><li> Forming of the VC interface (visualization and control) using the library of template frames by placing the templates of the frames in the project and by the assignment of the dynamics.</li>
-<li> In addition to the first level the own creation of frames based on the library of derivatives and basic widgets is to be done. Perhaps as a direct appointment of the dynamics in the widget, and the subsequent appointment of it in the project.</li>
-<li> In addition to the second level is performed the independently forming of derivatives widgets, new template frames and also the frames with the use of mechanism of describing the logic of interaction and handling of events in one of the languages of a user programming of OpenSCADA system.</li></ul>
+<ul><li> Forming of the visualization and control (VC) interface using the library of template frames by placing the templates of the frames in the project and by the assignment of the dynamics.</li>
+<li> In addition to the first level, performing of the formation of own frames based on the library of derivatives and basic widgets. Perhaps as a direct appointment of the dynamics in the widget, and the subsequent appointment of it in the project.</li>
+<li> In addition to the second level, performing of the independently forming of derivatives widgets, new template frames and also the frames with the use of mechanism of describing the logic of interaction and handling of events in the user programming language of OpenSCADA.</li></ul>
 <p><br />
 </p>
 <h3><span class="mw-headline" id="Frames_and_elements_of_visualization_.28widgets.29"><span class="mw-headline-number">3.1</span> Frames and elements of visualization (widgets)</span></h3>
-<p>Frame is the window which directly provides information to the user in a graphical or text form. The group of interconnected frames creates whole user interface of VC.
-</p><p>Contents of the frame is forming from the elements of visualization (widgets). Widgets may be the basic primitives (different elementary shapes, text, trend, etc.) and derivatives (formed from the basic or other derivatives of widgets). All the widgets are grouped into the libraries. In the process, you can build your own library of derivative widgets.
-</p><p>Actually the frame is also a widget that is used as a final element of visualization. This means that the widget libraries can store the blanks of frames and the templates of the resulting pages of the user interface.
-</p><p>Frames and widgets are passive elements that do not normally contain links to the dynamics and other frames, but only provide information about the properties of the widget and the nature of the dynamics (configuration), connected to the properties of the frame. Activated frames, ie containing links to the dynamics and active connections, form the user interface and are stored in the projects. In some cases, it is possible the direct appointment of the dynamics in the blanks of frames.
-</p><p>Derivative frames/widgets can contain other widgets (attached), which can be glued (associated) with the logic of one another by one of the languages of programming available in the OpenSCADA system.
+<p>Frame is the window, which directly provides information to the user in graphical or text form. The group of interconnected frames creates whole user interface of VC.
+</p><p>Content of the frame forms from the visualization elements (widgets). Widgets may be the basic primitives (different elementary figures, text, trend, etc.) and derivative, formed from the basic or other derivative widgets. All widgets are grouped by libraries. In the process of the work, the user can create his own libraries of derivative widgets.
+</p><p>Actually the frame itself is also a widget that is used as a final element of visualization. This means that the widget libraries can store the blanks of frames and the templates of the resulting pages of the user interface.
+</p><p>Frames and widgets are passive elements that do not normally contain links to the dynamics and other frames, but only provide information about the properties and the nature of the dynamics (configuration), connected to the properties. Activated frames, i.e. containing links to the dynamics and active connections, form the user interface and are stored in the projects. In some cases, it is possible the direct appointment of the dynamics in the blanks of frames.
+</p><p>Derivative frames/widgets can contain included widgets, which can be glued-linked of one another with the logic by the user programming language of OpenSCADA.
 </p>
 <div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:VCA_widget.png"><img alt="VCA widget.png" height="585" src="../files/VCA_widget.png" width="800" /></a></div></div>
-<p>The widget is an element, by means of which it is provided:
+<p>The widget is an element through which the following is provided:
 </p>
 <ul><li> visualization of operational and archive information about TP;</li>
-<li> alarm about a violation of conduction of TP;</li>
+<li> alarming about violations of conduction the TP;</li>
 <li> switching between the frames of TP;</li>
-<li> management of technological equipment and the parameters of conduction of TP.</li></ul>
-<p>Tuning and linkage of the widgets is done through their properties. Parent widget and the widgets it contains, can be complemented by user properties. Then the user and static attributes are associated with the properties of embedded widget by internal logic. To show the dynamics (ie, current and archived data), properties of widgets are dynamized, that is linked with the attributes of the parameters of OpenSCADA or properties of other widgets. Using to link of the nested widgets by means of the internal logic with the available programming language of the OpenSCADA system eliminates the question of the implementation of complex logic of visualization, thus providing high flexibility. Practically, you can create fully dynamized frames with complex interactions at the level of the user.
+<li> control of the technological equipment and the parameters of conduction the TP.</li></ul>
+<p>Setting and linkage of the widgets is done through their properties. Parent widget and the widgets it contains, can be complemented by user properties. Then, the user and static attributes, are associated with the properties of included widgets by internal logic. To show the dynamics (current and archived data), properties of the widgets are dynamized, that is linked with the attributes of the parameters of OpenSCADA or properties of other widgets. Using, for linking nested widgets by internal logic, the user programming language of OpenSCADA relieves the issue of implementing a complex visualization logic, thus providing high flexibility. Practically, you can create fully dynamized frames with complex interactions at the user level.
 </p><p><br />
 </p>
 <h3><span class="mw-headline" id="Project"><span class="mw-headline-number">3.2</span> <span id="Project" title="#Project">Project</span></span></h3>
-<p>Direct configuration and properties of the final visualization interface are contained in the project of the visualization interface of the VCA, which may be created lot ones.
-</p><p>Each project includes pages from the libraries of the frames/widgets. In some modes the page allowed to include into nested pages as independent from the parent and in using the parent as template. The template's page-widget allows to extremely simplify the process of creating the same type of the frames by the ACS-TP engineer or by the user of OpenSCADA for easy monitoring. An example of such one-type frames may be: groups of contours, groups of graphs, reports and various tables. Mnemonic schemes of technological processes rarely come under this scheme and will be formed directly in the description of the frame.
-</p><p>Page like to a widget on which it is based provides a possibility for bind the dynamics to described into properties, which links at all can be set to dynamic or resolved as constants. Besides, links to the dynamics on the project's page level is preferable to the widget of libraries level.
+<p>The direct configuration, and the properties of the final visualization interface, are contained in the visualization interface project of VCA, which can be created a lot.
+</p><p>Each project includes pages from the libraries of the frames/widgets. For a number of modes, the page itself may include nested pages as parent-independent and using parent as a template. The template pages-widgets allow to extremely simplify the process of creating the same type of the frames for easy monitoring by the ACS-TP engineer or the user OpenSCADA. An example of such one-type frames may be: groups of contours, groups of graphs, reports and various summary tables. Mnemonic schemes of the technological processes rarely fall under such scheme and are formed on a separate page-widget.
+</p><p>The page, like the widget on which it is based, provides the ability to bind the dynamics to the properties described in it — links that can be set by dynamics or constants. In addition, linking directly at the project page level are more preferable than performing it at the library widget level.
 </p><p>Example of hierarchical representations of components of the project of the classical interface of VC of the technological process with the description of standard call expressions is given in Figure.
 </p>
 <div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:VCA_prog_tree.png"><img alt="VCA prog tree.png" height="681" src="../files/VCA_prog_tree.png" width="436" /></a></div></div>
-<p>Reserved next the special properties of pages:
+<p>The following special page properties are provided:
 </p>
-<ul><li> <i>Container</i> — page is a container for the underlying pages.</li>
-<li> <i>Template</i> — page is a template for the underlying pages.</li>
-<li> <i>Empty</i> — empty and inactive page. This property is used in conjunction with the property <i>Container</i> for logical containers organization.</li></ul>
-<p>Based on these properties combinations the following types of pages are realized:
+<ul><li> <i>Container</i> — page is the container for the underlying pages.</li>
+<li> <i>Template</i> — page is the template for the underlying pages.</li>
+<li> <i>Empty</i> — empty and inactive page. This property is used in conjunction with the property <i>Container</i> for organization the logical containers.</li></ul>
+<p>Based on combinations of these properties the following types of pages are realized:
 </p>
-<ul><li> <i>Standard</i> — the standard page (none property is set), it is the full final page.</li>
+<ul><li> <i>Standard</i> — the standard page (no property), it is the full-featured final page.</li>
 <li> <i>Container</i> — the full-featured page with the property of the container (<i>Container</i>).</li>
-<li> <i>Logical container</i> — the logical container is actually not a page (<i>Container</i>|<i>Empty</i>), but it performs property of the intermediate and bunching element in the tree of pages.</li>
-<li> <i>Template</i> — the template page (<i>Template</i>). Pure template page is used to describe the common properties and expand them definitions in privately order in nested pages.</li>
-<li> <i>Container and template</i> — the template and a container page (<i>Template</i>|<i>Container</i>), combines the functions of the template and the container.</li></ul>
-<p>On the side of the visualization (RunTime), on the following attributes of the basic element "Box", there is the logic regulating how to open the pages:
+<li> <i>Logical container</i> — the logical container is actually not a page (<i>Container</i>|<i>Empty</i>), acts as an intermediate and group element in the page tree.</li>
+<li> <i>Template</i> — the template page (<i>Template</i>). Pure template page that is used to describe common properties and to identify them in nested pages, privately.</li>
+<li> <i>Container and template</i> — the template and container page (<i>Template</i>|<i>Container</i>), combines the functions of the template and the container.</li></ul>
+<p>On the visualization side (RunTime) a logic is constructed that governs how to open pages based on the following attributes of the basic element "Box":
 </p>
 <ul><li> <i>pgOpen</i> — sign "The page is opened";</li>
 <li> <i>pgNoOpenProc</i> — sign "Execute the page, even if it is not opened";</li>
-<li> <i>pgOpenSrc</i> — contains the address of the widget or of the page which has opened the current; in the case of the nested container widget here it is contained the address of the included page; to open the pages from the script here it is enough to indicate the address of the widget-source of the opening;</li>
-<li> <i>pgGrp</i> — group of pages, used for conjunction of the containers of the pages with the pages in accordance with the general group.</li></ul>
-<p>The logic of the method of the opening the pages works in the following way:
+<li> <i>pgOpenSrc</i> — contains the widget address or the page that opened the current page; in the case of an included container widget, here is the address of the included page; to open a page from a script it is enough to specify the address of the widget-source of opening;</li>
+<li> <i>pgGrp</i> — group of pages used to link container pages to pages, according to a common group.</li></ul>
+<p>The logic of determining how to open pages works like this:
 </p>
-<ul><li> if the page has the group "main" or coincides with a group of the page in the main window or there is no page on the main window, then open the page in the main window;</li>
+<ul><li> if the page has the group "main" or coincides with the page group in the main window or there is no page on the main window, then open the page in the main window;</li>
 <li> if the page has a group which coincides with the group one of the containers of the current page, then open it in the container;</li>
-<li> if the source of the opening of the page coincides with the current page, then open it as an additional window over the current page;</li>
-<li> transmit a call for request for the opening to the additional windows with the processing in each of the first three paragraphs;</li>
-<li> if any one of the relative windows doesn't open a new page, then open it as a related window of the main window.</li></ul>
+<li> if the source of the opening page coincides with the current page, then open it as an additional window over the current page;</li>
+<li> send the call to the opening request for additional windows, processing each of the first three items;</li>
+<li> if any one of the relative windows doesn't open the new page, then open it as a related window of the main window.</li></ul>
 <p><br />
 </p>
 <h3><span class="mw-headline" id="Session_of_the_project_execution"><span class="mw-headline-number">3.3</span> Session of the project execution</span></h3>
-<p>The project's session is expanded tree of the project for direct it execution, which includes an individual task of hierarchical the widget's procedures execution. For each project can be opened many sessions. The end-user visual interface forming performs by the visualizers from data of the project's session, after the session creation by the request.
-</p><p>Between widgets at the different levels of hierarchy complex inheritance relations are arranged, which are defined by the possibility of using some widgets by other ones, beginning with the library widget, and finishing with the widget to the session. To clarify these features of the interaction in Figure comprehensive map of "uses" inheritance is shown.
+<p>The project session is expanded tree of the project for direct it execution, which includes an individual task of hierarchical the widget's procedures execution. For each project can be opened many sessions. The end-user visual interface forming performs by the visualizers from data of the project's session, after the session creation by the request.
+</p><p>Between the widgets, at different levels of the hierarchy, finally formed fairly complex hereditary links, which are determined by the possibility of using some widgets by others, ranging from the library widget to the session widget. To explain these features of interaction, the figure shows an exhaustive map of "using" inheritance.
 </p>
 <div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:VCA_map_inher.png"><img alt="VCA map inher.png" height="1123" src="../files/VCA_map_inher.png" width="794" /></a></div></div>
-<p>At the session level widget contains a object of values of calculation procedure. This object is initiated and used in the case of presence of the calculation procedure. At the time of the initialization the list of parameters of the procedure is created and a compilation of procedure is performed with these parameters in the module, implementing the selected programming language and encoded with the full name of the widget. A compiled function is connected to the object of values of the calculation procedure. Further the calculation is performed with the frequency of the session.
-</p><p>Calculation and processing of the widget on the whole runs in the following sequence:
+<p>At the session level widget contains a object of values of calculation procedure. This object is initiated and used in the case of presence of the calculation procedure itself. At the time of the initialization, the list of parameters of the procedure is created and a compilation of the procedure is performed with these parameters, in the module that implements the selected programming language and with the name of the resulting procedure in the form of a coded full name of the widget. The compiled function is connected to the object of values of the calculation procedure, and further the calculation is performed with the session period.
+</p><p>Calculation and processing of the widget runs in the following sequence:
 </p>
-<ul><li> the events, which are available at the time of computation, are selected from the attribute "event" of the widget;</li>
-<li> events are loaded into the parameter "event" of the object of computation;</li>
-<li> values of the input connections are loaded into the object of calculation;</li>
-<li> values of special variables are loaded into the computation object (f_frq, f_start and f_stop);</li>
+<ul><li> the messages available at the time of calculation are selected from the attribute "event" of the widget;</li>
+<li> the events are loaded into the parameter "event" of the object of computation;</li>
+<li> values of the input links are loaded into the object of calculation;</li>
+<li> values of special variables (f_frq, f_start and f_stop) are loaded into the computation object;</li>
 <li> values of selected parameters of the widget are loaded into the object of computation;</li>
 <li> computation; </li>
-<li> uploading of the computation object's values to the selected parameters of the widget;</li>
-<li> uploading of the event from the parameter "event" of the computation object;</li>
-<li> processing the events and transfer the unprocessed events at the level above.</li></ul>
-<p>The objects of the session of the project inherit from an abstract object "Widget" and use the appropriate objects of the project. Thus, the session ("Session") uses the project ("Project") and forms expand tree on its basis. Project page "Page" is directly used by the session page "SessPage". The remaining objects ("SessWdg") are deployed in accordance with the hierarchy of page elements.
-</p><p>In addition to the standard properties of an abstract widget ("Widget") elements of the pages of session themselves get the following properties: storage of the object of values of computational procedure, calculation of the procedures and mechanism for processing of the events. Pages of the session, in addition, contain a container of the following by the hierarchy pages. The session generally is computed with the frequency and in the consistency:
+<li> uploading the computation object's values to the selected parameters of the widget;</li>
+<li> uploading the events from the parameter "event" of the computation object;</li>
+<li> processing the events and transfer the unprocessed ones at the level above.</li></ul>
+<p>The session objects of the project inherit from an abstract object "Widget" and use the appropriate objects of the project. Thus, the session "Session" uses the project "Project" and forms expanded tree on its basis. Project page "Page" is directly used by the session page "SessPage". The remaining objects "SessWdg" are deployed in accordance with the hierarchy of page elements.
+</p><p>In addition to the standard properties of the abstract widget "Widget", elements of the pages and the session pages themselves get the following properties: storage of the object of values of the computational procedure, calculation of the procedures and mechanism for processing of the events. Pages of the session, in addition, contain a container of the following by the hierarchy pages. The session, in general, is calculated with the specified periodicity and in sequence:
 </p>
 <ul><li> "Page of the top level" -&gt; "Page of the lower level" </li>
 <li> "Widget of the lower level" -&gt; "Widget of the top level"</li></ul>
-<p>This policy allows you to circumvention the pages in accordance with the hierarchy, and to rise on the top during the one iteration for the widget events.
-</p><p>Sessions at the level of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/API#CntrNode" title="Special:MyLanguage/Documents/API">the control interface of OpenSCADA</a> supports multi-language depended from values of the generic attributes "lang" and next "user" and which visualizer can set in proper way of self language. This function enabled for <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>.
+<p>This policy allows to bypass the pages according to their hierarchy, and events in the widgets "climb up" during one iteration.
+</p><p>The sessions support multi-language at the level of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/API#CntrNode" title="Special:MyLanguage/Documents/API">the control interface of OpenSCADA</a>, which depended from values of the generic attributes "lang" and "user" and which visualizer can set in proper way of own language. This function is enabled by <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Config" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>.
 </p><p><br />
 </p>
 <h3><span class="mw-headline" id="Styles"><span class="mw-headline-number">3.4</span> Styles</span></h3>
-<p>It knows that people can have individual characteristics in the perception of graphical information. If these features are not taken into account, it is possible to obtain the rejection and abruption of the user to the interface of VC. This rejection and abruption can lead to fatal errors in the management of TP, as well as traumatize the human by the continuous work with the interface. In SCADA systems the agreements are adopted, which regulate the requirements for creating a unified interface of VC normally perceived by most people. This is practically eliminates the features of people with some deviations.
+<p>It knows that people can have individual features in the perception of graphical information. If these features are not taken into account, it is possible to obtain the rejection and abruption of the user to the interface of VC. This rejection and abruption can lead to fatal errors in the management of TP, as well as traumatize the human by the continuous work with the interface. In SCADA systems, arrangements have been made that regulate the requirements for creating the unified UI interface, which is normally perceived by most people. This is practically eliminates the features of people with some deviations.
 </p><p>In order to take this into account and allow centralized and easy to change the visual properties of the interface module is implementing a theme manager of the visualization interface.
-</p><p>User can create many themes, each of which will keep the color, font and other properties of the elements of the frame. Simple changing of the theme will allow you to change the interface of VC, and the possibility of appointing an individual theme in the user's profile allows to take into account his individual characteristics.
-</p><p>To realize this opportunity, when you create a frame, it is necessary for the properties of color, font and others set the "Config" (of the table in the "Process" tab) in the value of "From style". And in the parameter "Config template" to specify the identifier of the style field. Further, this field will automatically appear in the Style Manager and will be there to change. Style Manager is available on the project configuration page in the tab "Styles". On this tab you can create new styles, delete old ones, change the field of the style and delete unnecessary.
+</p><p>User can create many themes, each of which will keep the color, font and other properties of the frame elements. Simple changing of the theme will allow you to change the interface of VC, and the possibility of appointing an individual theme in the user's profile allows to take into account his individual features.
+</p><p>To realize this opportunity, when creating a frame, it is necessary for the properties of color, font and others set the "Configuration" (of the table in the "Process" tab) in the value of "From style". And in the parameter "Configuration template" to specify the identifier of the style field. Next, this field will automatically appear in the style manager and can be modified there. The style manager is available on the project configuration page in the tab "Styles". In this tab, you can the styles create, delete and edit their fields.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:707px;"><a class="image" href="http://oscada.org/wiki/File:VCA_prj_stl.png"><img class="thumbimage" height="535" src="../files/VCA_prj_stl.png" width="705" /></a>  <div class="thumbcaption">Figure. "Styles" tab of the configuration page of the project.</div></div></div></div>
-<p>In general the styles are available from the project level. At the level of libraries of widgets you can only define styles fields of widgets. At the project level, at the choice of style, it is started the work with styles, which includes access to the fields of styles instead of direct attribute values. In fact, this means that when reading or writing a widget attribute these operations will be carried out with the corresponding field of the chosen style.
-</p><p>When you run the project execution it will be used the set in the project style. Subsequently, the user can select a style from the list of available ones. The user's style will be saved and used next time you run the project.
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:707px;"><a class="image" href="http://oscada.org/wiki/File:VCA_prj_stl.png"><img class="thumbimage" height="535" src="../files/VCA_prj_stl.png" width="705" /></a>  <div class="thumbcaption">Figure. Tab "Styles" of the configuration page of the project.</div></div></div></div>
+<p>In general, the styles are available from the project level. At the level of the widget libraries you can only define the style fields for the widgets. At the project level, at the choice of style, it is started the work with styles, which includes access to the fields of styles instead of direct attribute values. In fact, this means that when reading or writing a widget attribute these operations will be carried out with the corresponding field of the chosen style.
+</p><p>When starting a project, the project-style will be used. In the future, the user can choose a style from the list of available. The user-selected style will be saved and used the next time the project is launched.
 </p><p><br />
 </p>
 <h3><span class="mw-headline" id="Events.2C_their_processing_and_the_events.27_maps"><span class="mw-headline-number">3.5</span> Events, their processing and the events' maps</span></h3>
-<p>Given the range of tasks for which the OpenSCADA system may be used, it is necessary to provide a tool for management of  interactive user events. This is due to the fact that in dealing with individual tasks of embedded systems, input and control devices can greatly vary. But it is enough to look at the regular office keyboard and notebook one, that would remove any doubt about the necessity for the manager of events.
-</p><p>The events manager must work using the maps of events. Map of the events — is the list of named events, indicating their origin. The origin of the events can be a keyboard, mouse, paddle, joystick, etc. At an event emerge the events manager is looking for it in the active map and compares with the name of the event. A comparison name of the event is placed in the queue for processing. Widgets in this case must process the given queue of events.
-</p><p>The active map of events is specified in the profile of each user or it is set by default (<span style="color: red">in planes</span>).
+<p>Given the range of tasks for which OpenSCADA may be used, it is necessary to provide a tool for control of interactive user events. This is due to the fact, that in dealing with individual tasks of embedded systems, input and control devices can greatly vary. But it is enough to look at the regular office keyboard and notebook one, that would remove any doubt about the necessity for the manager of events.
+</p><p>The events manager must work using the maps of events. Events map is a list of named events with indicating its origin. The origin of the events can be a keyboard, mouse, joystick, etc. At an event emerge the events manager is looking for it in the active map and compares with the name of the event. A comparison name of the event is placed in the queue for processing. Widgets in this case must process the given queue of events.
+</p><p>The active map of the events is specified in the profile of each user or it is set by default, <span style="color: red">in planes</span>.
 </p><p>In general, four types of events are provided:
 </p>
-<ul><li> events of the shapes-primitives of VCA (prefix: <b>ws_</b>), for example, pressing of the display button event — "ws_BtPress";</li>
+<ul><li> events of the VCA shapes-primitives (prefix: <b>ws_</b>), for example, the event of pressing of the screen button — "ws_BtPress";</li>
 <li> keyboard events (prefix: <b>key_</b>) — all events from mouse and keyboard in the form of — "key_presAlt1";</li>
-<li> user events (prefix: <b>usr_</b>) are generated by the user in the procedures of the calculation of widgets;</li>
-<li> mapping of the event (prefix: <b>map_</b>) — events from the map of events, <span style="color: red">in planes</span>.</li></ul>
-<p>Event itself represents deficiently information, especially if its processing occurs at higher level. For the unequivocal identification of the event and its source in the whole the event is recorded as follows: "ws_BtPress:/curtime". Where:
+<li> user events (prefix: <b>usr_</b>) are generated by the user in the procedures of the widgets calculation;</li>
+<li> mapping events (prefix: <b>map_</b>) — events from the events map, <span style="color: red">in planes</span>.</li></ul>
+<p>The event itself does not provide enough information, especially if it is processed at the levels above. To uniquely identify the event and its source, the event in the whole is written as follows: "ws_BtPress:/curtime". Where:
 </p>
-<dl><dd><i>ws_BtPress</i> — same event;</dd>
-<dd><i> /curtime</i> — the path to the child element that has generated the event.</dd></dl>
+<dl><dd><i>ws_BtPress</i> — event;</dd>
+<dd><i>/curtime</i> — path to the child element that has generated the event.</dd></dl>
 <p>Table 3.5 provides a list of standard events, the support of which should be provided in visualizers of VCA.
 </p><p><b>Table 3.5.</b> Standard events
 </p>
 <table class="wikitable">
 
 <tr>
-<th> Id </th>
+<th> Identifier </th>
 <th> Description
 </th></tr>
 <tr>
@@ -307,19 +307,19 @@
 </td></tr>
 <tr>
 <td> *Left </td>
-<td> Left — "&lt;-".
+<td> To the left — "&lt;-".
 </td></tr>
 <tr>
 <td> *Up </td>
-<td> Up — '^'.
+<td> To the up — '^'.
 </td></tr>
 <tr>
 <td> *Right </td>
-<td> Right — "-&gt;".
+<td> To the right — "-&gt;".
 </td></tr>
 <tr>
 <td> *Down </td>
-<td> Down — '\/'.
+<td> To the down — '\/'.
 </td></tr>
 <tr>
 <td> *PageUp </td>
@@ -343,11 +343,11 @@
 </td></tr>
 <tr>
 <td> *Asterisk </td>
-<td> Asterisk on an additional field of the keyboard — '*'.
+<td> Asterisk on the additional field of the keyboard — '*'.
 </td></tr>
 <tr>
 <td> *Plus </td>
-<td> Plus on an additional field of the keyboard — '+'.
+<td> Plus on the additional field of the keyboard — '+'.
 </td></tr>
 <tr>
 <td> *Comma </td>
@@ -402,11 +402,11 @@
 </td></tr>
 <tr>
 <td> ws_FocusIn </td>
-<td> Focus is obtained by a widget.
+<td> Focus is obtained by the widget.
 </td></tr>
 <tr>
 <td> ws_FocusOut </td>
-<td> Focus is lost by a widget.
+<td> Focus is lost by the widget.
 </td></tr>
 <tr>
 <td colspan="2"> <i>Mouse events:</i>
@@ -431,7 +431,7 @@
 <td> Quietance of all violations by the type {N} (0...7).
 </td></tr>
 <tr>
-<td colspan="2"> <i>Events of the primitive of elemental figure <b>ElFigure</b>:</i>
+<td colspan="2"> <i>Events of the elementary figure primitive <b>ElFigure</b>:</i>
 </td></tr>
 <tr>
 <td> ws_Fig[Left|Right|Midle|DblClick] </td>
@@ -442,7 +442,7 @@
 <td> Activating of the figure (fill) <i>N</i> by the mouse button.
 </td></tr>
 <tr>
-<td colspan="2"> <i>Events of the primitive of form elements <b>FormEl</b>:</i>
+<td colspan="2"> <i>Events of the form element primitive <b>FormEl</b>:</i>
 </td></tr>
 <tr>
 <td> ws_LnAccept </td>
@@ -470,7 +470,7 @@
 </td></tr>
 <tr>
 <td> ws_BtMenu={Item} </td>
-<td> Selection of the menu <i>Item</i>.
+<td> Selection of the menu <i>Item</i> on the button.
 </td></tr>
 <tr>
 <td> ws_BtLoad </td>
@@ -490,18 +490,18 @@
 </td></tr>
 <tr>
 <td> ws_TableChangeSel </td>
-<td> The table's item selection changed.
+<td> The table item selection is changed.
 </td></tr>
 <tr>
 <td> ws_TableEdit_{colN}_{rowN} </td>
-<td> The table's cell ({colN}:{rowN}) edited.
+<td> The table cell ({colN}:{rowN}) is edited.
 </td></tr>
 <tr>
 <td> ws_SliderChange </td>
-<td> The slider position changed.
+<td> The slider position is changed.
 </td></tr>
 <tr>
-<td colspan="2"> <i>Events of the primitive of media content <b>Media</b>:</i>
+<td colspan="2"> <i>Events of the media content primitive <b>Media</b>:</i>
 </td></tr>
 <tr>
 <td> ws_MapAct{N}[Left|Right|Midle] </td>
@@ -511,42 +511,43 @@
 <td> ws_MediaFinished </td>
 <td> Media-stream play is finished.
 </td></tr></table>
-<p>Events are the main mechanism of notification and is actively used for user interaction. For the event processing there are two mechanisms:
+<p>Events are the main notification mechanism and are actively used to interact with the user. There are two mechanisms for processing events:
 </p>
-<ul><li> Primary — the script uses to control the opening of the pages.</li>
+<ul><li> Primary — the script of management of pages opening.</li>
 <li> Secondary — the computational procedure of the widget.</li></ul>
-<p>The mechanism "Scripts for the control the opening of pages" based on the basic attribute of the widget "evProc", which can be used for switching, opening, substitution and navigation through the pages. The scenario of this attribute is stored as a list of commands with the syntax: "<b>{event}:{evSrc}:{com}:{prm}</b>". Where:
+<p>The mechanism "Script for the control the opening of pages" based on the basic attribute of the widget "evProc", which can be used for opening the pages. Scenario of this attribute is stored as a list of commands with the syntax: "<b>{event}:{evSrc}:{com}:{prm}</b>". Where:
 </p>
-<ul><li> <i>event</i> — the expected event;</li>
-<li> <i>evSrc</i> — the path of the nested widget-source of the event;</li>
-<li> <i>com</i> — the session command;</li>
-<li> <i>prm</i> — the parameter of the command.</li></ul>
+<ul><li> <i>event</i> — expected event;</li>
+<li> <i>evSrc</i> — path of the nested widget-source of the event;</li>
+<li> <i>com</i> — session command;</li>
+<li> <i>prm</i> — parameter of the command.</li></ul>
 <p>The following commands are implemented:
 </p>
-<ul><li> <i>open</i> — opening page; page to open is specified in the parameter <i>prm</i> both in direct way and as a template (example: /pg_so/1/*/*);</li>
-<li> <i>next</i> — opening of the next page; page to open is specified in the parameter <i>prm</i> as a template (example: /pg_so/*/*/$);</li>
-<li> <i>prev</i> — opening of the previous page; page to open is specified in the parameter <i>prm</i> as a template (example: /pg_so/*/*/$).</li></ul>
+<ul><li> <i>open</i> — opening page; page to open is specified in the parameter <i>prm</i> both in direct way and as a template, example: <b>/pg_so/1/*/*</b>;</li>
+<li> <i>next</i> — opening of the next page; page to open is specified in the parameter <i>prm</i> as a template, example: <b>/pg_so/*/*/$</b>;</li>
+<li> <i>prev</i> — opening of the previous page; page to open is specified in the parameter <i>prm</i> as a template, example: <b>/pg_so/*/*/$</b>.</li></ul>
 <p>Special characters of the template are deciphered as follows:
 </p>
 <ul><li> <i>pg_so</i> — direct name of the desired-static page (with the prefix), requires the compulsory accordance and is used to identify the last open page;</li>
 <li> <i>1</i> — name of a new page in a general way (without a prefix);</li>
 <li> <i>*</i> — the page is taken from the name of a previous opened page or the first available page is substituted, if the previous opened page is missing;</li>
 <li> <i>$</i> — points the place of the opened page relative to which you are to go to the next or to the previous one.</li></ul>
-<p>To more and true the mechanism of the templates understanding lets cite some real examples:
+<p>For a correct understanding of working the template mechanism, when choosing a page, we give a few real examples:
 </p>
 <ul><li> <i>Changing the signal object:</i></li></ul>
-<dl><dd><dl><dd>Initially: /pg_so/pg_1/pg_mn/pg_1</dd>
-<dd>Command: open:/pg_so/2/*/*</dd>
-<dd>Result: /pg_so/pg_2/pg_mn/pg_1</dd></dl></dd></dl>
-<ul><li> <i>Switching of the type:</i></li></ul>
-<dl><dd><dl><dd>Initially: /pg_so/pg_1/pg_mn/pg_1</dd>
-<dd>Command: open:/pg_so/*/gkadr/*</dd>
-<dd>Result: /pg_so/pg_1/pg_gkadr/pg_1</dd></dl></dd></dl>
-<ul><li> <i>Next/previous page of the type:</i></li></ul>
-<dl><dd><dl><dd>Initially: /pg_so/pg_1/pg_mn/pg_1</dd>
-<dd>Command: next:/pg_so/*/*/$</dd>
-<dd>Result: /pg_so/pg_1/pg_mn/pg_2</dd></dl></dd></dl>
-<p>As an example lets cite the scenario of operation of the main page of the user interface:
+<dl><dd><dl><dd>Initially: <b>/pg_so/pg_1/pg_mn/pg_1</b></dd>
+<dd>Command: <b>open:/pg_so/2/*/*</b></dd>
+<dd>Result: <b>/pg_so/pg_2/pg_mn/pg_1</b></dd></dl></dd></dl>
+<ul><li> <i>Switching of the view type:</i></li></ul>
+<dl><dd><dl><dd>Initially: <b>/pg_so/pg_1/pg_mn/pg_1</b></dd>
+<dd>Command: <b>open:/pg_so/*/gkadr/*</b></dd>
+<dd>Result: <b>/pg_so/pg_1/pg_gkadr/pg_1</b></dd></dl></dd></dl>
+<ul><li> <i>Next/previous page of the view type:</i></li></ul>
+<dl><dd><dl><dd>Initially: <b>/pg_so/pg_1/pg_mn/pg_1</b></dd>
+<dd>Command: <b>next:/pg_so/*/*/$</b></dd>
+<dd>Result: <b>/pg_so/pg_1/pg_mn/pg_2</b></dd></dl></dd></dl>
+<p>As an example, let's give a script to provide the work of the main page of the user interface:
+&lt;/translate&gt;
 </p>
 <pre style="white-space: pre-wrap;">
 ws_BtPress:/prev:prev:/pg_so/*/*/$
@@ -568,8 +569,10 @@ ws_BtPress:/so8:open:/pg_so/8/*/*
 ws_BtPress:/so9:open:/pg_so/9/*/*
 ws_BtPress:*:open:/pg_control/pg_terminator
 </pre>
-<p>The mechanism "Processing the events with the help of computational procedure of the widget" is based on the attribute "event" and the user procedure of calculating written with the help of the programming language of OpenSCADA. The events, in process of receipt, are accumulated in the attribute "event" till the moment of call of the computational procedure. The computational procedure is called with the specified frequency of calculating the widget and receives a value for the attribute "event" as the list of events. In the calculation procedure the user can: analyze, process and delete the processed events from the list, and add to the list new events. The remaining, after the procedure execution, and new events are analyzed for compliance with the conditions of the call by means of script of the primary mechanism, after which the remaining events are transmitted to the upper by the hierarchy widget to be processed by it, with the correction of the path of events in accordance with the hierarchy of the penetration of the event.
+<p>&lt;translate&gt;
+The mechanism "Processing the events with the help of computational procedure of the widget" is based on the attribute "event" and the user procedure of calculating written with the help of the programming language of OpenSCADA. The events, in process of receipt, are accumulated in the attribute "event" till the moment of call of the computational procedure. The computational procedure is called with the specified frequency of calculating the widget and receives the attribute "event" value as the list of events. In the calculation procedure the user can: analyze, process and delete the processed events from the list, and add to the list new events. The remaining, after the procedure execution, and new events are analyzed for compliance with the conditions of the call by means of script of the primary mechanism, after which the remaining events are transmitted to the upper by the hierarchy widget to be processed by it, with the appending of the events path in accordance with the hierarchy of the penetration.
 </p><p>The content of the attribute "event" is a list of events in the format "<b>{event}:{evSrc}</b>", with the event on the separate line. Here is an example of processing events in the Java-like programming language of the OpenSCADA:
+&lt;/translate&gt;
 </p>
 <pre style="white-space: pre-wrap;">
 for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {

@@ -124,6 +124,9 @@ class Contr: public TController, public TPrmTempl::Impl
 
 	void redntDataUpdate( );
 
+	//Attributes
+	bool	isDAQTmpl;	// DAQ template used
+
     protected:
 	//Methods
 	void postDisable( int flag );
@@ -149,7 +152,6 @@ class Contr: public TController, public TPrmTempl::Impl
 	bool	prcSt,		// Process task active
 		callSt,		// Calc now stat
 		endrunReq,	// Request to stop of the Process task
-		isDAQTmpl,	// DAQ template used
 		chkLnkNeed;	//Check lnk need flag
 	int64_t	&mPrior,	// Calc task priority
 		&mIter;		// iteration number

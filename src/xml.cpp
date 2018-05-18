@@ -347,7 +347,7 @@ nextTag:
     //Find for a tag start symbol
     for( ; pos < ctx.vl.size() && ctx.vl[pos] != '<'; pos++) {
 	if(initTag) continue;
-	if((ctx.flg&(LD_Full|LD_NoTxtSpcRemEnBeg)) || mText.size() || !isspace(ctx.vl[pos])) {
+	if((ctx.flg&(LD_Full|LD_NoTxtSpcRemEnBeg)) || mText.size() || !isSpace(ctx.vl[pos])) {
 	    if(!mText.size())	mText.reserve(100);
 	    if(ctx.vl[pos] != '&') mText += ctx.vl[pos]; else parseEntity(ctx, pos, mText);
 	}
@@ -379,12 +379,12 @@ nextTag:
 		    else if(ctx.vl.compare(cpos,9,"<!ENTITY ") == 0) {
 			for(cpos += 9; parseAttr(ctx,cpos,0); )
 			    if(ctx.aVl.size()) ctx.ent.insert(pair<string,string>(ctx.aNm,ctx.aVl));
-			while(isspace(ctx.vl[cpos])) cpos++;
+			while(isSpace(ctx.vl[cpos])) cpos++;
 			if(ctx.vl[cpos] != '>')	throw TError("XMLNode", _("Unexpected or error end tag. Pos: %d"), cpos);
 			cpos++;
 		    }
 		cpos++;
-		while(isspace(ctx.vl[cpos])) cpos++;
+		while(isSpace(ctx.vl[cpos])) cpos++;
 		if(ctx.vl[cpos] != '>')	throw TError("XMLNode", _("Unexpected or error end tag. Pos: %d"), cpos);
 		pos = cpos+1;
 	    }
@@ -396,11 +396,11 @@ nextTag:
 	    //Get program block's name
 	    // Get tag name
 	    cpos = bpos;
-	    while(cpos < tpos && !isspace(ctx.vl[cpos])) cpos++;
+	    while(cpos < tpos && !isSpace(ctx.vl[cpos])) cpos++;
 	    if(cpos < tpos) {
 		string nm(ctx.vl,bpos,cpos-bpos);
 		// Pass spaces
-		while(isspace(ctx.vl[cpos])) cpos++;
+		while(isSpace(ctx.vl[cpos])) cpos++;
 		// Place program block
 		if(!initTag) childAdd("<?"+nm)->mText = ctx.vl.substr(cpos,tpos-cpos);
 		// Process specific block <?xml ?>
@@ -413,7 +413,7 @@ nextTag:
 	case '/':	//End tag
 	    if(ctx.vl.compare(cpos+2,mName.size(),mName) == 0) {
 		cpos += 2+mName.size();
-		while(isspace(ctx.vl[cpos])) cpos++;
+		while(isSpace(ctx.vl[cpos])) cpos++;
 		if(ctx.vl[cpos] == '>') {
 		    if(mText.size() && (ctx.flg&LD_Full)) { childAdd("<*>")->mText = Mess->codeConvIn(ctx.enc, mText); mText.clear(); }
 		    if(mText.size()) {
@@ -421,7 +421,7 @@ nextTag:
 			else {
 			    //Remove spaces from end of the text, trim
 			    int iCh = mText.size()-1;
-			    while(iCh >= 0 && isspace(mText[iCh])) iCh--;
+			    while(iCh >= 0 && isSpace(mText[iCh])) iCh--;
 			    mText = Mess->codeConvIn(ctx.enc, mText.substr(0,iCh+1));
 			}
 		    }
@@ -435,7 +435,7 @@ nextTag:
     if(initTag) {
 	bpos = cpos+1;
 	//  Get the tag name
-	for(cpos = bpos; !isspace(ctx.vl[cpos]) && ctx.vl[cpos] != '>' && ctx.vl[cpos] != '/'; cpos++)
+	for(cpos = bpos; !isSpace(ctx.vl[cpos]) && ctx.vl[cpos] != '>' && ctx.vl[cpos] != '/'; cpos++)
 	    if(cpos >= ctx.vl.size()) throw TError("XMLNode", _("Unexpected end. Pos: %d"), pos);
 	mName.assign(ctx.vl, bpos, cpos-bpos);
 	initTag = false;
@@ -443,7 +443,7 @@ nextTag:
 	while(parseAttr(ctx,cpos))
 	    mAttr.push_back(pair<string,string>(ctx.aNm,ctx.aVl.size()?Mess->codeConvIn(ctx.enc,ctx.aVl):string("")));
 	//  Pass spaces
-	while(isspace(ctx.vl[cpos])) cpos++;
+	while(isSpace(ctx.vl[cpos])) cpos++;
 	//  Process close tag or the tag content
 	if(ctx.vl[cpos] == '>') { pos = cpos+1; goto nextTag; }
 	else if(ctx.vl.compare(cpos,2,"/>") == 0) return cpos+2;
@@ -463,23 +463,23 @@ bool XMLNode::parseAttr( LoadCtx &ctx, unsigned &pos, char sep )
 {
     //Get attribute name
     // Pass spaces
-    while(isspace(ctx.vl[pos])) pos++;
+    while(isSpace(ctx.vl[pos])) pos++;
     if(!isalpha(ctx.vl[pos]) && !isxdigit(ctx.vl[pos])) return false;
 
     unsigned bpos = pos;
-    for( ; !isspace(ctx.vl[pos]) && ctx.vl[pos] != '='; pos++)
+    for( ; !isSpace(ctx.vl[pos]) && ctx.vl[pos] != '='; pos++)
 	if(pos >= ctx.vl.size()) throw TError("XMLNode", _("Unexpected end. Pos: %d"), pos);
     ctx.aNm.assign(ctx.vl,bpos,pos-bpos);
     //Get symbol '='
     // Pass spaces
-    while(isspace(ctx.vl[pos])) pos++;
+    while(isSpace(ctx.vl[pos])) pos++;
     if(sep) {
 	if(ctx.vl[pos] != sep) throw TError("XMLNode", _("Unfinished attribute. Pos: %d"), bpos);
 	pos++;
     }
     //Get symbol "'" or '"'
     // Pass spaces
-    while(isspace(ctx.vl[pos])) pos++;
+    while(isSpace(ctx.vl[pos])) pos++;
     if(ctx.vl[pos] != '\'' && ctx.vl[pos] != '"') throw TError("XMLNode", _("Unfinished attribute. Pos: %d"), bpos);
     char brc = ctx.vl[pos];
     //Get value
