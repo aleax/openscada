@@ -67,7 +67,7 @@ class wdgList : public TFunction
 	}
 
 	string name( )	{ return _("Widgets list"); }
-	string descr( )	{ return _("Returns the widgets list into the widgets container or the childs list. If set <pg> then returns the pages list for projects and sessions."); }
+	string descr( )	{ return _("Returns a list of the widgets, into the widgets container, or the child list. If set <pg> then returns the pages list for projects and sessions."); }
 
 	void calc( TValFunc *val ) {
 	    TArrayObj *rez = new TArrayObj();
@@ -102,7 +102,7 @@ class nodePresent : public TFunction
 	}
 
 	string name( )	{ return _("Node presence"); }
-	string descr( )	{ return _("Checking for a node presence, including widgets, attributes and other."); }
+	string descr( )	{ return _("Checking for the node presence, including widgets, attributes and other."); }
 
 	void calc( TValFunc *val ) {
 	    try {
@@ -160,7 +160,9 @@ class attrGet : public TFunction
 	}
 
 	string name( )	{ return _("Get the attribute"); }
-	string descr( )	{ return _("Getting value of the widget attribute."); }
+	string descr( )	{ return _("Getting value of the widget attribute. "
+	    "The request can be done as by indicating the full address of the attribute in <addr>, and "
+	    "by: indicating separately the address of the widget in <addr> and the the attribute identifier in the <attr>."); }
 
 	void calc( TValFunc *val ) {
 	    string a = val->getS(2);
@@ -205,7 +207,9 @@ class attrSet : public TFunction
 	}
 
 	string name( )	{ return _("Set the attribute"); }
-	string descr( )	{ return _("Setting value of the widget attribute."); }
+	string descr( )	{ return _("Setting value of the widget attribute. "
+	    "Setting can be done as by indicating the full address of the attribute in <addr>, and "
+	    "by: indicating separately the address of the widget in <addr> and the the attribute identifier in the <attr>."); }
 
 	void calc( TValFunc *val ) {
 	    string a = val->getS(2);

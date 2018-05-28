@@ -125,7 +125,6 @@ char TSecurity::access( const string &user, char mode, const string &owner, cons
 void TSecurity::load_( )
 {
     //Load commandline data
-    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters
 
@@ -226,12 +225,9 @@ void TSecurity::load_( )
 
 string TSecurity::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-    snprintf(buf, sizeof(buf), _(
+    return TSYS::strMess(_(
 	"======================= Subsystem \"Security\" options ====================\n\n"
-	),nodePath().c_str());
-
-    return buf;
+	)) + TSubSYS::optDescr();
 }
 
 TVariant TSecurity::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

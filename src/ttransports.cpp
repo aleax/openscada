@@ -97,7 +97,6 @@ string TTransportS::extHostsDB( )	{ return SYS->workDB()+".CfgExtHosts"; }
 void TTransportS::load_( )
 {
     //Load parameters from command line
-    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
 
@@ -297,12 +296,9 @@ void TTransportS::subStop( )
 
 string TTransportS::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),_(
+    return TSYS::strMess(_(
 	"======================= Subsystem \"Transports\" options ==================\n\n"
-	),nodePath().c_str());
-
-    return buf;
+	)) + TSubSYS::optDescr();
 }
 
 void TTransportS::extHostList( const string &user, vector<ExtHost> &list, bool andSYS, int upRiseLev )

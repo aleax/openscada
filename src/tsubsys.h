@@ -70,6 +70,8 @@ class TSubSYS : public TCntrNode
 	virtual void perSYSCall( unsigned int cnt );
 	virtual bool rdProcess( XMLNode *reqSt = NULL )	{ return false; }	//Main redundancy processing function in the subsystem specific
 
+	virtual string optDescr( );
+
 	TSYS &owner( ) const;
 
     protected:

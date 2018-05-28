@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 10:39+0200\n"
+"POT-Creation-Date: 2018-05-28 23:15+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -16,51 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 #, c-format
-msgid "Internal function inaccessible by offset %d > %d"
-msgstr "Внутрення функция недоступна ввиду смещения %d > %d"
-
-#, c-format
 msgid "Variable '%s' is used but undefined"
 msgstr "Переменная '%s' не определена но использована"
-
-msgid "Error constant after constant"
-msgstr "Ошибка постоянной после постоянной"
-
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr "%s, позиция: (%d,%d)-(%d,%d)."
-
-msgid "Unexpected end program, expect end string symbol '\"', "
-msgstr ""
-"Неожиданное окончание программы, ожидается символ окончания строки '\"', "
-
-msgid "The next line symbol failed into string, "
-msgstr "Символ перевода линии недопустим в строке, "
-
-msgid "Using namespace is error or empty, "
-msgstr "Ошибка использования области имён или она пуста, "
-
-msgid "Internal function declaration error, "
-msgstr "Ошибка определения внутренней функции, "
-
-#, c-format
-msgid "Internal function '%s' defined early, "
-msgstr "Внутренняя функция '%s' ранее определена, "
-
-msgid "Do not include declaration of one internal function to other, "
-msgstr "Не включать определение одной внутренней функции в другую, "
-
-msgid "Build in function has too much parameters, "
-msgstr "Встроенная функция имеет слишком много параметров, "
-
-msgid "Function error, "
-msgstr "Ошибка функции, "
-
-msgid "Symbol error, "
-msgstr "Ошибка символа, "
-
-msgid "Object's properties too long, "
-msgstr "Свойства объекта очень длинные, "
 
 msgid "Array has more than 255 elements."
 msgstr "Массив имеет более 255 элементов."
@@ -255,10 +212,10 @@ msgid "Compilation with the help of the program language %s is not supported."
 msgstr "Компиляция на языке программирования %s не поддерживается."
 
 #, c-format
-msgid "Compile error: %s"
+msgid "Error compiling: %s"
 msgstr "Ошибка компиляции: %s"
 
-msgid "Load function libraries error."
+msgid "Error loading for function libraries."
 msgstr "Ошибка загрузки библиотеки функций."
 
 msgid "Safety timeout, seconds"
@@ -270,9 +227,13 @@ msgstr "Библиотеки функций"
 msgid "Libraries"
 msgstr "Библиотеки"
 
+msgid "From DAQ template. "
+msgstr "Из DAQ шаблона. "
+
 msgid "Calculation. "
 msgstr "Вычисление. "
 
+#, c-format
 msgid "Calculation with the period: %s. "
 msgstr "Вычисление с периодом: %s. "
 
@@ -284,14 +245,24 @@ msgstr "Следующее вычисление по cron '%s'. "
 msgid "Spent time: %s[%s]."
 msgstr "Затрачено времени: %s[%s]."
 
+msgid "{NewFunction}"
+msgstr "{НоваяФункция}"
+
 #, c-format
-msgid "Library of the functions '%s' is not present. Please, create the one!"
-msgstr ""
-"Библиотека функций '%s' отсутствует. Пожалуйста, создайте библиотеку функций!"
+msgid "Enter your new function name instead '%s'!"
+msgstr "Введите имя вашей новой функции вместо '%s'!"
+
+#, c-format
+msgid "Function or DAQ template '%s' is not present or empty."
+msgstr "Функция или DAQ шаблон '%s' отсутствует или пуста."
 
 #, c-format
 msgid "Creating a new function '%s'."
 msgstr "Создание новой функции '%s'."
+
+#, c-format
+msgid "Error path of the function or DAQ template '%s'."
+msgstr "Ошибка пути функции или DAQ шаблона '%s'."
 
 msgid "Error loading function and its IO."
 msgstr "Ошибка загрузки функции и её ВВ."
@@ -313,6 +284,9 @@ msgstr "Ошибка вычисления функции контроллера"
 
 msgid "Function is missing or not started."
 msgstr "Функция отсутствует или не запущена."
+
+msgid "Go to the used function"
+msgstr "Перейти к использованной функции"
 
 msgid "Calculation"
 msgstr "Вычисления"
@@ -343,7 +317,7 @@ msgstr "1:Параметр отключен"
 
 msgid ""
 "List of configuration of the attributes. List must be written by lines in "
-"format: \"{io}[:{aid}[:{anm}]]\"\n"
+"the format: \"{io}[:{aid}[:{anm}]]\"\n"
 "Where:\n"
 "  io - IO of the computable function;\n"
 "  aid - identifier of the created attribute;\n"
@@ -359,3 +333,46 @@ msgstr ""
 "  anm - имя создаваемого атрибута.\n"
 "Если 'aid' или 'anm' не установлены то они будут генерироваться из "
 "выбранного IO функции."
+
+#, c-format
+msgid "Internal function inaccessible by offset %d > %d"
+msgstr "Внутрення функция недоступна ввиду смещения %d > %d"
+
+msgid "Error constant after constant"
+msgstr "Ошибка постоянной после постоянной"
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr "%s, позиция: (%d,%d)-(%d,%d)."
+
+msgid "Unexpected end program, expect end string symbol '\"', "
+msgstr ""
+"Неожиданное окончание программы, ожидается символ окончания строки '\"', "
+
+msgid "The next line symbol failed into string, "
+msgstr "Символ перевода линии недопустим в строке, "
+
+msgid "Using namespace is error or empty, "
+msgstr "Ошибка использования области имён или она пуста, "
+
+msgid "Internal function declaration error, "
+msgstr "Ошибка определения внутренней функции, "
+
+#, c-format
+msgid "Internal function '%s' defined early, "
+msgstr "Внутренняя функция '%s' ранее определена, "
+
+msgid "Do not include declaration of one internal function to other, "
+msgstr "Не включать определение одной внутренней функции в другую, "
+
+msgid "Build in function has too much parameters, "
+msgstr "Встроенная функция имеет слишком много параметров, "
+
+msgid "Function error, "
+msgstr "Ошибка функции, "
+
+msgid "Symbol error, "
+msgstr "Ошибка символа, "
+
+msgid "Object's properties too long, "
+msgstr "Свойства объекта очень длинные, "

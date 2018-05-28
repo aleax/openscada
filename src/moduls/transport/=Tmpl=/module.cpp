@@ -99,13 +99,10 @@ TTr::~TTr( )
 //!!! Module's comandline options the print help function. Add your module commandline parameters info.
 string TTr::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),_(
+    return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
 	"---- Parameters of the module section '%s' of the configuration file ----\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
-
-    return buf;
 }
 
 //!!! Inherited (virtual) load object's node method. Append your module need data loadings
@@ -113,7 +110,6 @@ void TTr::load_( )
 {
     //!!! Load self module command line parameters' values. Append your addition parameters process.
     // Load parameters from command line
-    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA DB or from main config-file
 }

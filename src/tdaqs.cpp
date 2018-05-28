@@ -129,7 +129,7 @@ void TDAQS::ctrListPrmAttr( XMLNode *opt, const string &l_prm, bool toPrm, char 
 void TDAQS::load_( )
 {
     //Load parameters from command line
-    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
+
 
     map<string, bool>	itReg;
     vector<vector<string> > full;
@@ -558,7 +558,7 @@ string TDAQS::optDescr( )
 	"=================== Subsystem \"Data acquisition\" options ================\n"
 	"------ Parameters of the section '%s' of the configuration file ------\n"
 	"RdRestDtTm <hour>       Depth of recovery time of archive data from the reserve station, when startup, in hours.\n\n"
-	),nodePath().c_str());
+	),nodePath().c_str()) + TSubSYS::optDescr();
 }
 
 void TDAQS::cntrCmdProc( XMLNode *opt )

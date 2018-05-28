@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 19:45+0300\n"
+"POT-Creation-Date: 2018-05-28 23:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -963,7 +963,7 @@ msgstr ""
 msgid "Properties"
 msgstr ""
 
-msgid "Erase"
+msgid "Delete"
 msgstr ""
 
 msgid "Diagnostics"
@@ -1123,7 +1123,7 @@ msgstr ""
 msgid "Connections counter"
 msgstr ""
 
-msgid "The last request time, user, language"
+msgid "Last request time, user, language"
 msgstr ""
 
 msgid "Last user action"
@@ -1661,13 +1661,13 @@ msgstr ""
 msgid "Widgets list"
 msgstr ""
 
-msgid "Returns the widgets list into the widgets container or the childs list. If set <pg> then returns the pages list for projects and sessions."
+msgid "Returns a list of the widgets, into the widgets container, or the child list. If set <pg> then returns the pages list for projects and sessions."
 msgstr ""
 
 msgid "Node presence"
 msgstr ""
 
-msgid "Checking for a node presence, including widgets, attributes and other."
+msgid "Checking for the node presence, including widgets, attributes and other."
 msgstr ""
 
 msgid "Not user"
@@ -1685,11 +1685,11 @@ msgstr ""
 msgid "Get the attribute"
 msgstr ""
 
-msgid "Getting value of the widget attribute."
+msgid "Getting value of the widget attribute. The request can be done as by indicating the full address of the attribute in <addr>, and by: indicating separately the address of the widget in <addr> and the the attribute identifier in the <attr>."
 msgstr ""
 
 msgid "Set the attribute"
 msgstr ""
 
-msgid "Setting value of the widget attribute."
+msgid "Setting value of the widget attribute. Setting can be done as by indicating the full address of the attribute in <addr>, and by: indicating separately the address of the widget in <addr> and the the attribute identifier in the <attr>."
 msgstr ""

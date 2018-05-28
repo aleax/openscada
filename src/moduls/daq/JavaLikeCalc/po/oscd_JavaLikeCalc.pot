@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 10:39+0200\n"
+"POT-Creation-Date: 2018-05-28 23:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,49 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #, c-format
-msgid "Internal function inaccessible by offset %d > %d"
-msgstr ""
-
-#, c-format
 msgid "Variable '%s' is used but undefined"
-msgstr ""
-
-msgid "Error constant after constant"
-msgstr ""
-
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr ""
-
-msgid "Unexpected end program, expect end string symbol '\"', "
-msgstr ""
-
-msgid "The next line symbol failed into string, "
-msgstr ""
-
-msgid "Using namespace is error or empty, "
-msgstr ""
-
-msgid "Internal function declaration error, "
-msgstr ""
-
-#, c-format
-msgid "Internal function '%s' defined early, "
-msgstr ""
-
-msgid "Do not include declaration of one internal function to other, "
-msgstr ""
-
-msgid "Build in function has too much parameters, "
-msgstr ""
-
-msgid "Function error, "
-msgstr ""
-
-msgid "Symbol error, "
-msgstr ""
-
-msgid "Object's properties too long, "
 msgstr ""
 
 msgid "Array has more than 255 elements."
@@ -251,10 +209,10 @@ msgid "Compilation with the help of the program language %s is not supported."
 msgstr ""
 
 #, c-format
-msgid "Compile error: %s"
+msgid "Error compiling: %s"
 msgstr ""
 
-msgid "Load function libraries error."
+msgid "Error loading for function libraries."
 msgstr ""
 
 msgid "Safety timeout, seconds"
@@ -264,6 +222,9 @@ msgid "Functions libraries"
 msgstr ""
 
 msgid "Libraries"
+msgstr ""
+
+msgid "From DAQ template. "
 msgstr ""
 
 msgid "Calculation. "
@@ -281,12 +242,23 @@ msgstr ""
 msgid "Spent time: %s[%s]."
 msgstr ""
 
+msgid "{NewFunction}"
+msgstr ""
+
 #, c-format
-msgid "Library of the functions '%s' is not present. Please, create the one!"
+msgid "Enter your new function name instead '%s'!"
+msgstr ""
+
+#, c-format
+msgid "Function or DAQ template '%s' is not present or empty."
 msgstr ""
 
 #, c-format
 msgid "Creating a new function '%s'."
+msgstr ""
+
+#, c-format
+msgid "Error path of the function or DAQ template '%s'."
 msgstr ""
 
 msgid "Error loading function and its IO."
@@ -308,6 +280,9 @@ msgid "Error calculating controller function."
 msgstr ""
 
 msgid "Function is missing or not started."
+msgstr ""
+
+msgid "Go to the used function"
 msgstr ""
 
 msgid "Calculation"
@@ -338,10 +313,52 @@ msgid "1:Parameter is disabled"
 msgstr ""
 
 msgid ""
-"List of configuration of the attributes. List must be written by lines in format: \"{io}[:{aid}[:{anm}]]\"\n"
+"List of configuration of the attributes. List must be written by lines in the format: \"{io}[:{aid}[:{anm}]]\"\n"
 "Where:\n"
 "  io - IO of the computable function;\n"
 "  aid - identifier of the created attribute;\n"
 "  anm - name of the created attribute.\n"
 "If 'aid' or 'anm' is not set then they will be generated from the selected IO of the function."
+msgstr ""
+
+#, c-format
+msgid "Internal function inaccessible by offset %d > %d"
+msgstr ""
+
+msgid "Error constant after constant"
+msgstr ""
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr ""
+
+msgid "Unexpected end program, expect end string symbol '\"', "
+msgstr ""
+
+msgid "The next line symbol failed into string, "
+msgstr ""
+
+msgid "Using namespace is error or empty, "
+msgstr ""
+
+msgid "Internal function declaration error, "
+msgstr ""
+
+#, c-format
+msgid "Internal function '%s' defined early, "
+msgstr ""
+
+msgid "Do not include declaration of one internal function to other, "
+msgstr ""
+
+msgid "Build in function has too much parameters, "
+msgstr ""
+
+msgid "Function error, "
+msgstr ""
+
+msgid "Symbol error, "
+msgstr ""
+
+msgid "Object's properties too long, "
 msgstr ""

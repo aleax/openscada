@@ -566,12 +566,29 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	// Calculation of the main window/page scale
 	if(this == masterPage) {
+	    //  Own status bar reserve
+	    if(!parseInt(this.attrs["stBarNoShow"]) && !masterPage.status) {
+		masterPage.status = document.createElement('div');
+		masterPage.status.height = 25;
+		masterPage.status.setAttribute('id', 'gen-pnl-status');
+		this.place.appendChild(masterPage.status);
+		masterPage.status.innerHTML = "<table width='100%'><TR><td id='StatusBar' width='100%'/><td id='st_user'><a href='/login/"+MOD_ID+"/'>"+pgBr.getAttribute('user')+"</a></td></TR></table>";
+	    }
+
 	    var geomW = parseFloat(this.attrs['geomW']);
 	    var geomH = parseFloat(this.attrs['geomH']);
 	    wx_scale = Math.max(1, window.innerWidth/geomW);
-	    wy_scale = Math.max(1, window.innerHeight/geomH);
+	    wy_scale = Math.max(1, window.innerHeight/(geomH+(masterPage.status?masterPage.status.height:0)));
 	    if(parseInt(this.attrs['keepAspectRatio']))
 		wx_scale = wy_scale = Math.min(wx_scale, wy_scale);
+
+	    if(masterPage.status) {
+		masterPage.status.style.top = Math.floor(geomH*wy_scale)+"px";
+		masterPage.status.style.width = Math.floor(geomW*wx_scale)+"px";
+		masterPage.status.style.height = Math.floor((masterPage.status.height-1)*wy_scale)+"px";
+		masterPage.status.style.fontSize = Math.floor(masterPage.status.height*0.6*wy_scale)+"px";
+		elStyle += "overflow: visible; ";
+	    }
 	}
 
 	var xSc = this.xScale(true);
@@ -2456,7 +2473,9 @@ function makeUI( callBackRez )
  ***************************************************/
 function setStatus( mess, tm )
 {
-    window.status = mess ? mess : '###Ready###';
+    if(!mess) mess = '';
+    if(masterPage && masterPage.status)	document.getElementById('StatusBar').innerText = mess;
+    else window.status = mess;
     if(!mess) return;
     if(stTmID) clearTimeout(stTmID);
     if(!tm || tm > 0) stTmID = setTimeout('setStatus(null)', tm?tm:1000);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 18:50+0300\n"
+"POT-Creation-Date: 2018-05-28 23:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -566,10 +566,6 @@ msgid "The node is already being processed!"
 msgstr ""
 
 #, c-format
-msgid "Expecting release %d users!"
-msgstr ""
-
-#, c-format
 msgid "Waiting time exceeded. The object is used by %d users. Release the object first!"
 msgstr ""
 
@@ -577,6 +573,10 @@ msgid ""
 "Error blocking node.\n"
 "The node forced to disable which can cause to crash.\n"
 "This problem mostly in user procedure, if the program exits!"
+msgstr ""
+
+#, c-format
+msgid "Expecting release %d users!"
 msgstr ""
 
 msgid "Error turning off node. Turning on back the node."
@@ -1226,6 +1226,18 @@ msgstr ""
 msgid "Empty value is not allowed."
 msgstr ""
 
+msgid "Error of parameter ID."
+msgstr ""
+
+msgid "Template configuration"
+msgstr ""
+
+msgid "Only attributes are to be shown"
+msgstr ""
+
+msgid "Error, recursive linking."
+msgstr ""
+
 #, c-format
 msgid "Error starting the template '%s'."
 msgstr ""
@@ -1303,7 +1315,6 @@ msgstr ""
 msgid "Users group."
 msgstr ""
 
-#, c-format
 msgid ""
 "======================= Subsystem \"Security\" options ====================\n"
 "\n"
@@ -1472,6 +1483,7 @@ msgid ""
 "\t\t\t  0x2 - stdout;\n"
 "\t\t\t  0x4 - stderr;\n"
 "\t\t\t  0x8 - the messages archive.\n"
+"    --consoleCharSet={CharSet} Forcing to the console <CharSet> for the console messages, by default it is system one.\n"
 "    --demon, --daemon\tRun in the daemon mode.\n"
 "    --pidFile=<file>\tFile for the program process ID placing here.\n"
 "    --noCoreDump\tPrevents from the core dump creation at crashes - don't set the limit to the unlimited value.\n"
@@ -1931,7 +1943,6 @@ msgstr ""
 msgid "Error stopping the output transport '%s'."
 msgstr ""
 
-#, c-format
 msgid ""
 "======================= Subsystem \"Transports\" options ==================\n"
 "\n"

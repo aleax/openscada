@@ -1,3 +1,18 @@
+2018-05-29 Roman (stable)
+- !!:DOC: The document "UI.VCAEngine" is fully revised and translated to Ukrainian.
+- FIX:DB.Model.{AGLKS,Boiler}.St: Some original messages fixed.
+- SYS.*: Command line help unified in the function optDescr() for getting the hierarchical help in a string and
+    for its printing in single place of the function TSYS::load_().
+    TCntrNode: The message "Expecting release %d users!" appearing set seldom and with period 1 second.
+    A new command-line argument --consoleCharSet added for control the console charset, for console messages and help.
+- FIX:DAQ.JavaLikeCalc: Fixed for translation and output links setting from the table edition.
+- FIX:UI.{VCAEngine,Vision}: Fixed and expanded for original messages.
+- FIX:UI.Vision: Fixed for closing child windows on QNX, commenting pg->setAttribute(Qt::WA_DeleteOnClose)
+    FIX: Fixed for fit main page to the main window size on small screens - prevents from appearing scroll bars.
+    FIX: Fixed for crash on main runtime window close with palyback of the primitive "Media" in the types "Animation" and "Full video".
+- UI.WebVision: Expanded for own statusbar support, currently only with the user information and the status messages.
+
+
 2018-05-18 Roman (stable)
 - !!:DOC: The document "VCAEngine (VCA)" is started for revision.
 - data/debian: Expanded by appending the package openscada-plc.

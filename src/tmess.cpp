@@ -182,6 +182,8 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
 	}
 	syslog(level_sys, "%s", sMess.c_str());
     }
+    if(mLogDir&(DIR_STDOUT|DIR_STDERR) && SYS->cmdOpt("consoleCharSet").size())
+	sMess = Mess->codeConvOut(SYS->cmdOpt("consoleCharSet"), sMess);
     if(mLogDir&DIR_STDOUT)	fprintf(stdout, "%s %s\n", atm2s(SYS->sysTm(),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
     if(mLogDir&DIR_STDERR)	fprintf(stderr, "%s %s\n", atm2s(SYS->sysTm(),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
 #endif
@@ -575,7 +577,6 @@ void TMess::load( )
 {
     //Load params from command line
     string argVl;
-    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) return;
     if((argVl=SYS->cmdOpt("lang")).size()) setLang(argVl, true);
     if((argVl=SYS->cmdOpt("messLev")).size()) {
 	int i = s2i(argVl);

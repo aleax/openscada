@@ -39,14 +39,13 @@ TProtocolS::~TProtocolS( )
 
 string TProtocolS::optDescr(  )
 {
-    return(_(
-	"=============== Subsystem \"Transport protocols\" options =================\n\n"));
+    return TSYS::strMess(_(
+	"=============== Subsystem \"Transport protocols\" options =================\n\n")) + TSubSYS::optDescr();
 }
 
 void TProtocolS::load_( )
 {
     //Load parameters from command line
-    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
 }

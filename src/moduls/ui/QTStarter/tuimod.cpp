@@ -55,7 +55,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.6.3"
+#define MOD_VER		"4.6.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -221,8 +221,6 @@ void TUIMod::load_( )
     mess_debug(nodePath().c_str(),_("Loading the module."));
 
     //Load parameters from command line
-    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help"))
-	fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
     setStartMod(TBDS::genDBGet(nodePath()+"StartMod",startMod()));
@@ -301,9 +299,7 @@ void TUIMod::splashSet( SplashFlag flg )
 
 string TUIMod::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-
-    snprintf(buf, sizeof(buf), _(
+    return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
 	"    --QtInNotMainThread Starts Qt into a different from the main thread.\n"
 	"    --showWin=<0,1,2>   Window display mode, initial and which is allowed to change from: 0-typical window, 1-maximized window, 2-full screen.\n"
@@ -329,8 +325,6 @@ string TUIMod::optDescr( )
 	"Palette    <colors>     Twenty colors of the palette separated by symbol ',' in three lines for active, disabled and inactive groups.\n"
 	"StyleSheets <CSS>       Rules of the Cascade Style Sheets.\n\n"),
 	MOD_TYPE, MOD_ID, nodePath().c_str());
-
-    return buf;
 }
 
 void TUIMod::toQtArg( const char *nm, const char *arg )

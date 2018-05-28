@@ -708,39 +708,39 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <p><b>Object "Session" ( this.ownerSess() )</b>
 </p>
 <ul><li> <i>string user( )</i> — current session user.</li>
-<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — violations quietance <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then make global quietance. Into the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. The <i>ret</i> sets will cause the quietance return.</li>
+<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — quiets of the violations <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then the global quietance makes. Into the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. When set the <i>ret</i>, the quietance return is performed.</li>
 <li> <i>int reqTm( )</i> — last request time.</li>
 <li> <i>string reqUser( )</i> — last request user.</li>
 <li> <i>string reqLang( )</i> — last request language.</li>
 <li> <i>int userActTm( )</i> — last user action time.</li></ul>
 <p><b>Object "Widget" (this)</b>
 </p>
-<ul><li> <i>TCntrNodeObj ownerSess( )</i> — the session's object is getting for current widget.</li>
-<li> <i>TCntrNodeObj ownerPage( )</i> — the parent object's page is getting for current widget.</li>
-<li> <i>TCntrNodeObj ownerWdg( bool base = false )</i> — the parent widget is getting for current widget. If set <i>base</i> then will return the parent pages' objects also.</li>
-<li> <i>TCntrNodeObj wdgAdd( string wid, string wname, string parent )</i> — add new widget <i>wid</i> with the name <i>wname</i> and based on the library widget <i>parent</i>.</li></ul>
+<ul><li> <i>TCntrNodeObj ownerSess( )</i> — session object for the current widget.</li>
+<li> <i>TCntrNodeObj ownerPage( )</i> — parent page object for the current widget.</li>
+<li> <i>TCntrNodeObj ownerWdg( bool base = false )</i> — parent widget object for the current widget. If set <i>base</i> then returns the parent page objects also.</li>
+<li> <i>TCntrNodeObj wdgAdd( string wid, string wname, string parent )</i> — adds the new widget <i>wid</i> with the name <i>wname</i> and based on the library widget <i>parent</i>.</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
-//New widget adding, based at the text primitive
+//Adds the new widget, based at the text primitive
 nw = this.wdgAdd("nw", "New widget", "/wlb_originals/wdg_Text");
 nw.attrSet("geomX", 50).attrSet("geomY", 50);
 </pre>
-<ul><li> <i>bool wdgDel( string wid )</i> — delete the widget <i>wid</i>.</li>
-<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — attach to child or global, by <i>byPath</i>, widget. In the case of global connection, you can use absolute or relative path to the widget. For starting point of the absolute address acts the root object of the module "VCAEngine", which means the first element of the absolute address is session identifier, which is omitted. The relative address takes the countdown from the current widget. Special element of the relative address is an element of parent node "..".</li>
-<li> <i>bool attrPresent( string attr )</i> — the attribute <i>attr</i> of the widget checking to presence fact.</li>
-<li> <i>ElTp attr( string attr, bool fromSess = false )</i> — value of the attribute <i>attr</i> of the widget getting or from the session <i>fromSess</i>. For missing attributes will return empty string.</li>
-<li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — value of the attribute <i>attr</i> of the widget setting to <i>vl</i>, or to the session <i>toSess</i>. The object is returned for the function concatenation.</li>
-<li> <i>string link( string attr, bool prm = false )</i> — the link return for the widget's attribute <i>attr</i>. At set <i>prm</i> requests the link for the attributes block (parameter), represented by the attribute. </li>
-<li> <i>string linkSet( string attr, string vl, bool prm = false )</i> — the link set for the widget's attribute <i>attr</i>. At set <i>prm</i> makes the link set for the attributes block (parameter), represented by the attribute.</li></ul>
+<ul><li> <i>bool wdgDel( string wid )</i> — deletes the widget <i>wid</i>.</li>
+<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — attaches to child or global widget, by the path <i>byPath</i>. In the case of global connection, you can use absolute or relative path to the widget. For starting point of the absolute address acts the root object of the module "VCAEngine", which means the first element of the absolute address is session identifier, which is ignored. The relative address takes the countdown from the current widget. Special element of the relative address is an element of parent node "..".</li>
+<li> <i>bool attrPresent( string attr )</i> — checks to presence fact of the attribute <i>attr</i> of the widget.</li>
+<li> <i>ElTp attr( string attr, bool fromSess = false )</i> — value of the attribute <i>attr</i> of the widget or from the session <i>fromSess</i>. For missing attributes will be return empty string.</li>
+<li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — sets the value <i>vl</i> to the attribute <i>attr</i> of the widget or to the session, by <i>toSess</i>. The object is returned for the function concatenation.</li>
+<li> <i>string link( string attr, bool prm = false )</i> — link for the widget attribute <i>attr</i>. At set <i>prm</i> requests the link for the attributes block (parameter), represented by the attribute. </li>
+<li> <i>string linkSet( string attr, string vl, bool prm = false )</i> — sets the link for the widget attribute <i>attr</i>. At set <i>prm</i>, sets the link for the attributes block (parameter), represented by the attribute.</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
-//Set link for eight trend to the parameter
+//Sets the link to the parameter for the eight trend
 this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </pre>
-<ul><li> <i>string mime( string addr, string type = "" )</i> — the "mime" object by the address <i>addr</i> (the direct link to the resource or the widget's attribute contained the link) getting with the type to <i>type</i>, from the session table or the source. It is designed for the "mime" objects edition and that substitution to this session's context, for example, images SVG.</li>
-<li> <i>int mimeSet( string addr, string data, string type = "" )</i> — the "mime" object <i>data</i> with type <i>type</i> by address <i>addr</i> setting.</li>
-<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formation of the system message <i>mess</i> with the category as the widget path.</li></ul>
+<ul><li> <i>string mime( string addr, string type = "" )</i> — "mime" object by the address <i>addr</i> (the direct link to the resource or the widget attribute contained the link) with the type in <i>type</i>, from the session table or the source. It is designed for the "mime" objects edition and that substitution to this session's context, for example, images SVG.</li>
+<li> <i>int mimeSet( string addr, string data, string type = "" )</i> — sets the "mime" object to <i>data</i> with <i>type</i> by the address <i>addr</i>.</li>
+<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formats of the program message <i>mess</i> with the category — the widget path.</li></ul>
 <p><b>Object "Widget" of the primitive "Document" (this)</b>
 </p>
-<ul><li> <i>string getArhDoc( int nDoc)</i> — getting the archive document's text to "nDoc" (0-{aSize-1}) depth.</li></ul>
+<ul><li> <i>string getArhDoc( int nDoc)</i> — text of the archive document to "nDoc" depth (0-{aSize-1}).</li></ul>
 <p><br />
 </p>
 <h2><span class="mw-headline" id=".22Special.22_subsystem_.28SYS.Special.29"><span class="mw-headline-number">12</span> "Special" subsystem (SYS.Special)</span></h2>

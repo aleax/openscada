@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.9.1"
+#define MOD_VER		"3.9.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -442,7 +442,7 @@ void Contr::enable_( )
 	    wfnc = TSYS::strSepParse(fnc(), 1, '.');
     if(wfnc == _("{NewFunction}")) throw TError(nodePath().c_str(), _("Enter your new function name instead '%s'!"), wfnc.c_str());
     if(lfnc.empty() || wfnc.empty() || !(mod->lbPresent(lfnc) || SYS->daq().at().tmplLibPresent(lfnc)))
-	throw TError(nodePath().c_str(),_("Path of the function or DAQ template '%s' is not present or empty."), fnc().c_str());
+	throw TError(nodePath().c_str(),_("Function or DAQ template '%s' is not present or empty."), fnc().c_str());
 
     //Try JavaLikeCalc function
     if(mod->lbPresent(lfnc) && mod->lbAt(lfnc).at().present(wfnc))
@@ -798,7 +798,10 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		    if(isDAQTmpl)	break;
 		    func()->io(row)->setFlg(func()->io(row)->flg()^((s2i(opt->text())^func()->io(row)->flg())&(IO::Output|IO::Return)));
 		    break;
-		case 4:	setS(row,opt->text());	break;
+		case 4:
+		    setS(row, opt->text());
+		    if(isDAQTmpl) outputLink(row, opt->text());
+		    break;
 	    }
 	    modif();
 	    if(!((Func *)func())->owner().DB().empty()) ((Func *)func())->modif();

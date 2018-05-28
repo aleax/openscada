@@ -115,13 +115,10 @@ void Lib::postEnable( int flag )
 //!!! Module's comandline options the print help function. Add your module commandline parameters info.
 string Lib::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),_(
+    return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
 	"---- Parameters of the module section '%s' of the configuration file ----\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
-
-    return buf;
 }
 
 //!!! Module's start call. Place code for internal objects start.

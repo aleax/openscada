@@ -107,7 +107,6 @@ TArchiveS::~TArchiveS( )
 void TArchiveS::load_( )
 {
     //Load parameters from command line
-    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters
     setMessBufLen(s2i(TBDS::genDBGet(nodePath()+"MessBufSize",i2s(messBufLen()))));
@@ -244,8 +243,7 @@ void TArchiveS::valAdd( const string &iid, const string &idb )
 
 string TArchiveS::optDescr(  )
 {
-    char buf[STR_BUF_LEN];
-    snprintf(buf, sizeof(buf), _(
+    return TSYS::strMess(_(
 	"======================== Subsystem \"Archives-History\" options ===================\n"
 	"------ Parameters of the section '%s' of the configuration file ------\n"
 	"MessBufSize <items>     Size of the messages buffer.\n"
@@ -253,9 +251,7 @@ string TArchiveS::optDescr(  )
 	"ValPeriod  <msec>       Period of active archiving of values.\n"
 	"ValPriority <level>     Level of priority of the task of active archiving of values.\n"
 	"RdRestDtOverTm <hours>  Depth of the forced overloading of the reserve history at startup, in hours.\n\n"
-	), nodePath().c_str());
-
-    return buf;
+	), nodePath().c_str()) + TSubSYS::optDescr();
 }
 
 void TArchiveS::unload( )

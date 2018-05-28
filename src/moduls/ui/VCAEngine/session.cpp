@@ -664,7 +664,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		if(start()) {
 		    ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Time of the session calculating"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("fld",opt,-1,"/obj/st/connect",_("Connections counter"),R_R_R_,"root",SUI_ID,1,"tp","int");
-		    ctrMkNode("fld",opt,-1,"/obj/st/reqTime",_("The last request time, user, language"),R_R_R_,"root",SUI_ID,1,"tp","time");
+		    ctrMkNode("fld",opt,-1,"/obj/st/reqTime",_("Last request time, user, language"),R_R_R_,"root",SUI_ID,1,"tp","time");
 		    ctrMkNode("fld",opt,-1,"/obj/st/reqUser","",R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("fld",opt,-1,"/obj/st/reqLang","",R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("fld",opt,-1,"/obj/st/userActTime",_("Last user action"),R_R_R_,"root",SUI_ID,1,"tp","time");

@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.4.1"
+#define MOD_VER		"5.4.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -104,9 +104,7 @@ TVision::~TVision( )
 
 string TVision::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-
-    snprintf(buf,sizeof(buf),_(
+    return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
 	"---- Parameters of the module section '%s' of the configuration file ----\n"
 	"StartUser  <user>       Start-up, no-password, user.\n"
@@ -117,8 +115,6 @@ string TVision::optDescr( )
 	"VCAstation <id>         The station with the VCA engine ('.' Is local).\n"
 	"RestoreTime <seconds>   Connection recovery time.\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
-
-    return buf;
 }
 
 void TVision::load_( )
@@ -126,7 +122,6 @@ void TVision::load_( )
     mess_debug(nodePath().c_str(),_("Loading the module."));
 
     //Load parameters from command line
-    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file and DB
     setUserStart(TBDS::genDBGet(nodePath()+"StartUser",""));

@@ -447,7 +447,7 @@ string TSYS::optDescr( )
 {
     utsname buf;
     uname(&buf);
-    return TSYS::strMess(_(
+    string rez = TSYS::strMess(_(
 	"***************************************************************************\n"
 	"********** %s v%s (%s-%s). *********\n"
 	"***************************************************************************\n\n"
@@ -471,6 +471,7 @@ string TSYS::optDescr( )
 	"			  0x2 - stdout;\n"
 	"			  0x4 - stderr;\n"
 	"			  0x8 - the messages archive.\n"
+	"    --consoleCharSet={CharSet} Forcing to the console <CharSet> for the console messages, by default it is system one.\n"
 	"    --demon, --daemon	Run in the daemon mode.\n"
 	"    --pidFile=<file>	File for the program process ID placing here.\n"
 	"    --noCoreDump	Prevents from the core dump creation at crashes - don't set the limit to the unlimited value.\n"
@@ -501,6 +502,13 @@ string TSYS::optDescr( )
 	"RdStList   <list>	Redundant stations list, separated symbol ';' (st1;st2).\n"
 	"RdPrimCmdTr <0|1>	Enables the transmission of primary commands to the reserve stations.\n\n"),
 	PACKAGE_NAME, VERSION, buf.sysname, buf.release, name().c_str(), id().c_str());
+
+    vector<string> ls;
+    list(ls);
+    for(unsigned iM = 0; iM < ls.size(); iM++)
+	rez += at(ls[iM]).at().optDescr();
+
+    return rez;
 }
 
 string TSYS::getCmdOpt( int &curPos, string *argVal )	{ return getCmdOpt_(curPos, argVal, argc, (char **)argv); }
@@ -566,17 +574,10 @@ int TSYS::permCrtFiles( bool exec )
     return rez & (exec?0777:0666);
 }
 
-bool TSYS::cfgFileLoad( )
+void TSYS::cfgFileLoad( )
 {
-    bool cmd_help = false;
-
     //================ Load parameters from commandline =========================
     string tVl;
-    if(cmdOptPresent("h") || cmdOptPresent("help")) {
-	//fprintf(stdout, "%s", optDescr().c_str());
-	Mess->setMessLevel(7);
-	cmd_help = true;
-    }
     if((tVl=cmdOpt("config")).size())	mConfFile = tVl;
     if((tVl=cmdOpt("station")).size())	mId = tVl;
     if((tVl=cmdOpt("statName")).size())	mName = tVl;
@@ -621,10 +622,6 @@ bool TSYS::cfgFileLoad( )
 	    rootModifCnt = 0;
 	} catch(TError &err) { mess_sys(TMess::Error, _("Error loading the configuration file '%s'."), err.mess.c_str()); }
     }
-
-    if(cmd_help) fprintf(stdout, "%s", optDescr().c_str());
-
-    return cmd_help;
 }
 
 void TSYS::cfgFileSave( )
@@ -703,10 +700,12 @@ void TSYS::load_( )
 	return;
     }
 
-    bool cmd_help = cfgFileLoad();
+    bool cmd_help = (SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help"));
+    if(cmd_help) Mess->setMessLevel(7);
+    cfgFileLoad();
     mess_sys(TMess::Info, _("Loading."));
     cfgPrmLoad();
-    Mess->load();	//Messages load
+    if(!cmd_help) Mess->load();	//Messages load
 
     //Create subsystems
     if(!present("BD")) {
@@ -731,10 +730,12 @@ void TSYS::load_( )
 
 	//First DB subsystem load
 	db().at().load();
-	if(!cmd_help) modSchedul().at().modifG();	// For try reload from DB
+	if(!cmd_help) {
+	    modSchedul().at().modifG();	// For try reload from the DB
 
-	//Second load for load from generic DB
-	Mess->load();
+	    //Second load for load from the generic DB
+	    Mess->load();
+	}
 	cfgPrmLoad();
 
 	isLoaded = true;
@@ -750,7 +751,13 @@ void TSYS::load_( )
 	    mess_sys(TMess::Error, _("Error loading the subsystem '%s'."), lst[iA].c_str());
 	}
 
-    if(cmd_help) stop();
+    if(cmd_help) {
+	string cmdHelp = optDescr();
+	if(cmdOpt("consoleCharSet").size()) cmdHelp = Mess->codeConvOut(cmdOpt("consoleCharSet"), cmdHelp);
+	fprintf(stdout, "%s", cmdHelp.c_str());
+
+	stop();
+    }
 }
 
 void TSYS::save_( )

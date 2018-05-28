@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-21 17:05+0300\n"
+"POT-Creation-Date: 2018-05-20 18:34+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1134,8 +1134,8 @@ msgstr "Тип данных"
 msgid "Work area"
 msgstr "Рабочая область"
 
-msgid "Proc."
-msgstr "Обраб."
+msgid "Processing"
+msgstr "Обработка"
 
 msgid "Configuration template"
 msgstr "Конфигурационный шаблон"
@@ -1354,6 +1354,10 @@ msgstr "Выбраны элементы: '%1'"
 
 msgid "Cursor --- xy(%1:%2)"
 msgstr "Курсор --- xy(%1:%2)"
+
+#, c-format
+msgid "Session '%s(%s)' using the remote host %d times."
+msgstr ""
 
 msgid ""
 "Error connecting to the visualization server '%1': %2.\n"

@@ -290,7 +290,6 @@ void TCntrNode::nodeDis( long tm, int flag )
 	time_t t_cur = time(NULL);
 	MtxAlloc res1(dataRes(), true);		//!! Added to prevent a possible attach and it next disable and free the node, by mUse control
 	while(mUse > 1) {
-	    mess_sys(TMess::Debug, _("Expecting release %d users!"), mUse-1);
 	    // Check timeout
 	    if(tm && time(NULL) > (t_cur+tm)) {
 		if(!TSYS::finalKill)
@@ -301,8 +300,9 @@ void TCntrNode::nodeDis( long tm, int flag )
 		break;
 	    }
 	    res1.unlock();
-	    TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+	    TSYS::sysSleep(1/*STD_WAIT_DELAY*1e-3*/);
 	    res1.lock();
+	    if(mUse > 1) mess_sys(TMess::Warning, _("Expecting release %d users!"), mUse-1);
 	}
 
 	setNodeMode(Disabled);

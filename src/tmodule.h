@@ -100,6 +100,8 @@ class TModule : public TCntrNode
 	// Translate functions
 	const char *I18N( const char *mess, const char *mLang = NULL );
 
+	virtual string optDescr( )	{ return ""; }
+
 	TSubSYS &owner( ) const;
 
     protected:

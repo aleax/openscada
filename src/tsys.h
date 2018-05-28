@@ -194,7 +194,7 @@ class TSYS : public TCntrNode
 
 	bool	chkSelDB( const string& wDB, bool isStrong = false );
 
-	string	optDescr( );	//print comand line options
+
 
 	static void sighandler( int signal, siginfo_t *siginfo, void *context );
 
@@ -351,6 +351,8 @@ class TSYS : public TCntrNode
 	static double doubleBErev( double in );
 
 	// Reentrant commandline processing
+	string	optDescr( );	//get comand line options
+
 	string getCmdOpt( int &curPos, string *argVal = NULL );
 	static string getCmdOpt_( int &curPos, string *argVal, int argc, char **argv );
 
@@ -381,7 +383,7 @@ class TSYS : public TCntrNode
 	//Private methods
 	const char *nodeName( ) const		{ return mId.c_str(); }
 	const char *nodeNameSYSM( ) const	{ return mName.c_str(); }
-	bool	cfgFileLoad( );
+	void	cfgFileLoad( );
 	void	cfgFileSave( );
 	void	cfgPrmLoad( );
 	void	cfgFileScan( bool first = false, bool up = false );

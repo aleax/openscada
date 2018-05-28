@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-21 17:05+0300\n"
+"POT-Creation-Date: 2018-05-20 18:34+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -230,11 +230,13 @@ msgid "Requesting about GUI elements"
 msgstr "Anfordern von GUI-Elementen"
 
 msgid "The button for requesting information about the user interface elements"
-msgstr "Schaltfläche zum Anfordern von Informationen zu den Elementen der "
+msgstr ""
+"Schaltfläche zum Anfordern von Informationen zu den Elementen der "
 "Benutzeroberfläche"
 
 msgid "Press for requesting information about the user interface elements."
-msgstr "Betätigen zum Anfordern von Informationen zu den Elementen der "
+msgstr ""
+"Betätigen zum Anfordern von Informationen zu den Elementen der "
 "Benutzeroberfläche."
 
 msgid "Load from the DB"
@@ -383,10 +385,13 @@ msgstr "Absenken der visuellen Element Änderungen an den übergeordneten"
 
 msgid "The button for lowering down the visual item changes to the parent"
 msgstr ""
-"Schaltfläche zum Absenken der visuellen Elements Änderungen an den übergeordneten unten"
+"Schaltfläche zum Absenken der visuellen Elements Änderungen an den "
+"übergeordneten unten"
 
 msgid "Press for lowering down the visual item changes to the parent."
-msgstr "Betätigen zum Absenken der visuellen Elements Änderungen an den übergeordneten unten."
+msgstr ""
+"Betätigen zum Absenken der visuellen Elements Änderungen an den "
+"übergeordneten unten."
 
 msgid "Undo the visual item changes"
 msgstr "Machen Sie die Änderungen an den visuellen Elementen rückgängig"
@@ -1291,8 +1296,8 @@ msgstr "Datentyp"
 msgid "Work area"
 msgstr "Arbeitsbereich"
 
-msgid "Proc."
-msgstr "Bearbeit."
+msgid "Processing"
+msgstr "Verarbeitung"
 
 msgid "Configuration template"
 msgstr "Konfigurationvorlage"
@@ -1540,6 +1545,10 @@ msgstr "Ausgewählt sind die Elemente: '%1'"
 
 msgid "Cursor --- xy(%1:%2)"
 msgstr "Cursor --- xy(%1:%2)"
+
+#, fuzzy, c-format
+msgid "Session '%s(%s)' using the remote host %d times."
+msgstr "Sitzung '%s' Aktualisierungszeit %f ms."
 
 #, fuzzy
 msgid ""
@@ -2754,9 +2763,6 @@ msgstr ""
 
 #~ msgid "Windows position control and save"
 #~ msgstr "Windows-Lageregelung und sparen"
-
-#~ msgid "Session '%s' update time %f ms."
-#~ msgstr "Sitzung '%s' Aktualisierungszeit %f ms."
 
 #~ msgid "Notification message's language"
 #~ msgstr "Sprache Benachrichtigung"

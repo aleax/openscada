@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 18:50+0300\n"
+"POT-Creation-Date: 2018-05-28 23:10+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -646,10 +646,6 @@ msgid "The node is already being processed!"
 msgstr "Der Knoten wird bereits bearbeitet!"
 
 #, c-format
-msgid "Expecting release %d users!"
-msgstr "Erwartet Release %d Benutzer!"
-
-#, c-format
 msgid ""
 "Waiting time exceeded. The object is used by %d users. Release the object "
 "first!"
@@ -666,6 +662,10 @@ msgstr ""
 "Der Knoten wird zum Deaktivieren gezwungen, was zum Absturz führen kann.\n"
 "Dieses Problem tritt meistens in der Benutzerprozedur auf, wenn das Programm "
 "beendet wird!"
+
+#, c-format
+msgid "Expecting release %d users!"
+msgstr "Erwartet Release %d Benutzer!"
 
 msgid "Error turning off node. Turning on back the node."
 msgstr "Fehler beim Ausschalten des Knotens. Den Knoten zurückschalten."
@@ -1403,6 +1403,18 @@ msgstr "Änderung des blockierten Attributs ist nicht zulässig."
 msgid "Empty value is not allowed."
 msgstr "Ein leerer Wert ist nicht erlaubt."
 
+msgid "Error of parameter ID."
+msgstr "Fehler der Parameter-ID."
+
+msgid "Template configuration"
+msgstr "Konfiguration der Vorlage"
+
+msgid "Only attributes are to be shown"
+msgstr "Nur Attribute zeigen"
+
+msgid "Error, recursive linking."
+msgstr "Fehler, rekursives Verknüpfen."
+
 #, c-format
 msgid "Error starting the template '%s'."
 msgstr "Fehler beim Starten der Vorlage '%s'."
@@ -1485,7 +1497,6 @@ msgstr "Gruppe von Administratoren."
 msgid "Users group."
 msgstr "Gruppe von Benutzern."
 
-#, c-format
 msgid ""
 "======================= Subsystem \"Security\" options ====================\n"
 "\n"
@@ -1670,6 +1681,8 @@ msgid ""
 "\t\t\t  0x2 - stdout;\n"
 "\t\t\t  0x4 - stderr;\n"
 "\t\t\t  0x8 - the messages archive.\n"
+"    --consoleCharSet={CharSet} Forcing to the console <CharSet> for the "
+"console messages, by default it is system one.\n"
 "    --demon, --daemon\tRun in the daemon mode.\n"
 "    --pidFile=<file>\tFile for the program process ID placing here.\n"
 "    --noCoreDump\tPrevents from the core dump creation at crashes - don't "
@@ -1741,6 +1754,8 @@ msgstr ""
 "\t\t\t  0x2 - Standardausgang (stdout);\n"
 "\t\t\t  0x4 - Standardfehlerausgang (stderr);\n"
 "\t\t\t  0x8 - die Meldungen archivieren.\n"
+"    --consoleCharSet={CharSet} Erzwingen der Konsole <CharSet> für die "
+"Konsolenmeldungen, standardmäßig ist es System eins.\n"
 "    --demon, --daemon\tFühren Sie im Daemon-Modus.\n"
 "    --pidFile=<file>\tDatei für die Programm-Prozess-ID, die hier platziert "
 "wird.\n"
@@ -2248,7 +2263,6 @@ msgstr "Fehler beim Stoppen des Eingabetransports '%s'."
 msgid "Error stopping the output transport '%s'."
 msgstr "Fehler beim Stoppen des Ausgabetransports '%s'."
 
-#, c-format
 msgid ""
 "======================= Subsystem \"Transports\" options ==================\n"
 "\n"

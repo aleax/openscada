@@ -70,13 +70,16 @@ VisRun *RunWdgView::mainWin( )	{ return (VisRun *)WdgView::mainWin(); }
 
 void RunWdgView::resizeF( const QSizeF &size )
 {
-    WdgView::resizeF(size);
-
     RunPageView *holdPg = dynamic_cast<RunPageView*>(this);
     RunWdgView *cntW = NULL;
     if(holdPg && !holdPg->property("cntPg").toString().isEmpty())
 	cntW = (RunWdgView*)TSYS::str2addr(holdPg->property("cntPg").toString().toStdString());
     else if(!holdPg && root() == "Box" && (holdPg=((ShapeBox::ShpDt*)shpData)->inclPg)) cntW = this;
+
+    //Hard resize for main and external windows
+    if(holdPg && !cntW) { resize((mWSize=size).toSize()); }
+    else WdgView::resizeF(size);
+
     if(holdPg && cntW) {
 	bool wHold = (holdPg->sizeOrigF().width()*holdPg->xScale() <= cntW->sizeOrigF().width()*cntW->xScale());
 	bool hHold = (holdPg->sizeOrigF().height()*holdPg->yScale() <= cntW->sizeOrigF().height()*cntW->yScale());
@@ -646,7 +649,7 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
     //Check for open child page or for unknown and empty source pages open as master page child windows
     if((pgGrp.empty() && pgSrc == id()) || this == mainWin()->master_pg) {
 	RunPageView *pg = new RunPageView(pg_it, mainWin(), this, Qt::Tool);
-	pg->setAttribute(Qt::WA_DeleteOnClose);
+	//pg->setAttribute(Qt::WA_DeleteOnClose);
 	//pg->load("");
 	//pg->moveF(QCursor::pos());
 	//pg->moveF(QPointF(mapToGlobal(pos()).x()+sizeF().width()/2-pg->sizeF().width()/2,

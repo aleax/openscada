@@ -81,7 +81,7 @@
 </p>
 <ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#Virtual" title="Special:MyLanguage/Documents/DAQ">Джерела логічного рівня підсистеми "Збір даних"</a>.</li>
 <li> Транспортні протоколи, доступні для користувацького програмування, такі як: <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">Користувацький протокол</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus вузли типу "Данні"</a>, <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">Web-інтерфейси від користувача</a>, ...</li>
-<li> <a href="../en/Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">Середовище Візуалізації та Управління (СВУ)</a>, у процедурах віджетів.</li></ul>
+<li> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">Середовище Візуалізації та Управління (СВУ)</a>, у процедурах віджетів.</li></ul>
 <p>API користувацького програмування представляє собою дерево об'єктів OpenSCADA (Рис.1), кожний об'єкт якого може надавати власний перелік властивостей та функцій. Властивості та функції об'єктів можуть використовуватися користувачем у процедурах на мовах користувацького програмування OpenSCADA.
 </p><p>На цей час OpenSCADA надає тільки одну мову текстового програмування — <a href="#JavaLikeCalc">JavaLikeCalc</a>, відповідно Ви також повинні її вивчити перед початком. Точкою входу для доступу до об'єктів OpenSCADA (Рис.1) з мови користувацького програмування JavaLikeCalc є зарезервоване слово "SYS", кореневого об'єкту OpenSCADA. Наприклад, для доступу до функції вихідного транспорту треба записати: <b>SYS.Transport.Serial.out_ModBus.messIO(mess);</b>.
 </p><p>API об'єктів, які надаються модулями, описуються у власній документації модулів та тут до неї надаються посилання.
@@ -700,44 +700,44 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <p><b>Об'єкт модуля (SYS.UI.QTStarter)</b>
 </p>
 <ul><li> <i>Array sensors()</i> — отримати всі наявні сенсори від Qt mobility, повертає "false" якщо не доступно жодного сенсору.</li></ul>
-<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_UI.VCAEngine"><span class="mw-headline-number">11.2</span> Модуль <a href="../en/Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></span></h3>
-<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine.png" title="User object model of the module VCAEngine."><img alt="User object model of the module VCAEngine." height="238" src="../en/files/Oscada_UserOM_VCAEngine.png" width="352" /></a></div>
-<p><b>Object "Session" ( this.ownerSess() )</b>
+<h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_UI.VCAEngine"><span class="mw-headline-number">11.2</span> Модуль <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></span></h3>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine_uk.png" title="Об&#039;єктна модель користувача модуля VCAEngine."><img alt="Об&#039;єктна модель користувача модуля VCAEngine." height="238" src="files/Oscada_UserOM_VCAEngine_uk.png" width="360" /></a></div>
+<p><b>Об'єкт "Сеанс" ( this.ownerSess() )</b>
 </p>
-<ul><li> <i>string user( )</i> — current session user.</li>
-<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — violations quietance <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then make global quietance. Into the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. The <i>ret</i> sets will cause the quietance return.</li>
-<li> <i>int reqTm( )</i> — last request time.</li>
-<li> <i>string reqUser( )</i> — last request user.</li>
-<li> <i>string reqLang( )</i> — last request language.</li>
-<li> <i>int userActTm( )</i> — last user action time.</li></ul>
-<p><b>Object "Widget" (this)</b>
+<ul><li> <i>string user( )</i> — поточний користувач сеансу.</li>
+<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — квітує порушення <i>wpath</i> з шаблоном <i>quit_tmpl</i>. Якщо <i>wpath</i> це порожній рядок то здійснюється глобальна квітація. У рядку <i>wpath</i>, через символ ';', може бути перелічено адреси декількох віджетів. При встановлені <i>ret</i> здійснюється повернення квітації.</li>
+<li> <i>int reqTm( )</i> — час останнього запиту.</li>
+<li> <i>string reqUser( )</i> — користувач останнього запиту.</li>
+<li> <i>string reqLang( )</i> — мова останнього запиту.</li>
+<li> <i>int userActTm( )</i> — час останньої дії користувача.</li></ul>
+<p><b>Об'єкт "Віджет" (this)</b>
 </p>
-<ul><li> <i>TCntrNodeObj ownerSess( )</i> — the session's object is getting for current widget.</li>
-<li> <i>TCntrNodeObj ownerPage( )</i> — the parent object's page is getting for current widget.</li>
-<li> <i>TCntrNodeObj ownerWdg( bool base = false )</i> — the parent widget is getting for current widget. If set <i>base</i> then will return the parent pages' objects also.</li>
-<li> <i>TCntrNodeObj wdgAdd( string wid, string wname, string parent )</i> — add new widget <i>wid</i> with the name <i>wname</i> and based on the library widget <i>parent</i>.</li></ul>
+<ul><li> <i>TCntrNodeObj ownerSess( )</i> — об'єкт сеансу даного віджету.</li>
+<li> <i>TCntrNodeObj ownerPage( )</i> — об'єкт батьківської сторінки даного віджету.</li>
+<li> <i>TCntrNodeObj ownerWdg( bool base = false )</i> — об'єкт батьківського віджету даного віджету. При указанні <i>base</i> буде повернено й об'єкти сторінок.</li>
+<li> <i>TCntrNodeObj wdgAdd( string wid, string wname, string parent )</i> — додає віджет <i>wid</i> з ім'ям <i>wname</i> на основі бібліотечного віджету <i>parent</i>.</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
-//New widget adding, based at the text primitive
-nw = this.wdgAdd("nw", "New widget", "/wlb_originals/wdg_Text");
+//Додає новий віджет на основі віджету текстового примітиву
+nw = this.wdgAdd("nw", "Новий віджет", "/wlb_originals/wdg_Text");
 nw.attrSet("geomX", 50).attrSet("geomY", 50);
 </pre>
-<ul><li> <i>bool wdgDel( string wid )</i> — delete the widget <i>wid</i>.</li>
-<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — attach to child or global, by <i>byPath</i>, widget. In the case of global connection, you can use absolute or relative path to the widget. For starting point of the absolute address acts the root object of the module "VCAEngine", which means the first element of the absolute address is session identifier, which is omitted. The relative address takes the countdown from the current widget. Special element of the relative address is an element of parent node "..".</li>
-<li> <i>bool attrPresent( string attr )</i> — the attribute <i>attr</i> of the widget checking to presence fact.</li>
-<li> <i>ElTp attr( string attr, bool fromSess = false )</i> — value of the attribute <i>attr</i> of the widget getting or from the session <i>fromSess</i>. For missing attributes will return empty string.</li>
-<li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — value of the attribute <i>attr</i> of the widget setting to <i>vl</i>, or to the session <i>toSess</i>. The object is returned for the function concatenation.</li>
-<li> <i>string link( string attr, bool prm = false )</i> — the link return for the widget's attribute <i>attr</i>. At set <i>prm</i> requests the link for the attributes block (parameter), represented by the attribute. </li>
-<li> <i>string linkSet( string attr, string vl, bool prm = false )</i> — the link set for the widget's attribute <i>attr</i>. At set <i>prm</i> makes the link set for the attributes block (parameter), represented by the attribute.</li></ul>
+<ul><li> <i>bool wdgDel( string wid )</i> — видаляє віджет <i>wid</i>.</li>
+<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — підключається до дочірнього або глобального віджету, за посередництвом шляху <i>byPath</i>. У випадку глобального підключення можна використати абсолютний або відносний шлях до віджету. Точкою відліку абсолютної адреси виступає об'єкт кореня модуля "VCAEngine", а значить, першим елементом абсолютної адреси є ідентифікатор сеансу, який опускається. Відносна адреса бере відлік від поточного віджету. Спеціальним елементом відносної адреси є елемент вищестоящого вузла "..".</li>
+<li> <i>bool attrPresent( string attr )</i> — перевіряє атрибут віджета <i>attr</i> на факт присутності.</li>
+<li> <i>ElTp attr( string attr, bool fromSess = false )</i> — значення атрибуту віджету <i>attr</i> або з сеансу <i>fromSess</i>. Для відсутніх атрибутів повертає порожній рядок.</li>
+<li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — встановлює значення <i>vl</i> у атрибут віджету <i>attr</i> або сеанс, для <i>toSess</i>. Повертає поточний об'єкт, для конкатенації функцій встановлення.</li>
+<li> <i>string link( string attr, bool prm = false )</i> — посилання атрибуту віджету <i>attr</i>. При встановленні <i>prm</i> запитує посилання групи атрибутів (параметр), представлене вказаним атрибутом.</li>
+<li> <i>string linkSet( string attr, string vl, bool prm = false )</i> — встановлює посилання атрибуту віджету <i>attr</i>. При встановленні <i>prm</i> здійснює встановлення посилання групи атрибутів (параметр), представленого вказаним атрибутом.</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
-//Set link for eight trend to the parameter
+//Встановлює посилання восьмого тренду параметром
 this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </pre>
-<ul><li> <i>string mime( string addr, string type = "" )</i> — the "mime" object by the address <i>addr</i> (the direct link to the resource or the widget's attribute contained the link) getting with the type to <i>type</i>, from the session table or the source. It is designed for the "mime" objects edition and that substitution to this session's context, for example, images SVG.</li>
-<li> <i>int mimeSet( string addr, string data, string type = "" )</i> — the "mime" object <i>data</i> with type <i>type</i> by address <i>addr</i> setting.</li>
-<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formation of the system message <i>mess</i> with the category as the widget path.</li></ul>
-<p><b>Object "Widget" of the primitive "Document" (this)</b>
+<ul><li> <i>string mime( string addr, string type = "" )</i> — "mime" об'єкту за адресою <i>addr</i> (пряме посилання на ресурс або атрибут віджету з цим посиланням) з типом у <i>type</i>, з таблиці сеансу або джерела. Призначено для редагування "mime" об'єкта та підстановки його у контексті сеансу, наприклад, зображень SVG.</li>
+<li> <i>int mimeSet( string addr, string data, string type = "" )</i> — встановлює "mime" об'єкту у <i>data</i> з типом <i>type</i> за адресою <i>addr</i>.</li>
+<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — формує повідомлення програми <i>mess</i> з категорією — шлях до даного віджету.</li></ul>
+<p><b>Об'єкт "Віджет", примітиву "Документ" (this)</b>
 </p>
-<ul><li> <i>string getArhDoc( int nDoc)</i> — getting the archive document's text to "nDoc" (0-{aSize-1}) depth.</li></ul>
+<ul><li> <i>string getArhDoc( int nDoc)</i> — текст документу архіву на глибині <i>nDoc</i> (0-{aSize-1}).</li></ul>
 <p><br />
 </p>
 <h2><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A1.D0.BF.D0.B5.D1.86.D1.96.D0.B0.D0.BB.D1.8C.D0.BD.D1.96.22_.28SYS.Special.29"><span class="mw-headline-number">12</span> Підсистема "Спеціальні" (SYS.Special)</span></h2>
@@ -825,7 +825,7 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <td> en
 </td></tr>
 <tr>
-<td colspan="5"> <i>Бібліотеки графічних елементів OpenSCADA модуля <a href="../en/Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></i>
+<td colspan="5"> <i>Бібліотеки графічних елементів OpenSCADA модуля <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></i>
 </td></tr>
 
 <tr>

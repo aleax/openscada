@@ -65,8 +65,7 @@ void TModSchedul::preDisable( int flag )
 
 string TModSchedul::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),_(
+    return TSYS::strMess(_(
 	"=================== Subsystem \"Modules scheduler\" options =================\n"
 	"    --modPath=<path>    Directories with the modules, separated by ';', they can include a files' template at the end.\n"
 	"------ Parameters of the section '%s' of the configuration file ------\n"
@@ -76,9 +75,7 @@ string TModSchedul::optDescr( )
 	"                        Uses '*' value to allow all the modules.\n"
 	"ModDeny    <list>       List of the shared libraries denied for the automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
 	"ChkPer     <sec>        Period of the checking for new shared libraries(modules), in seconds. Set zero to disable.\n\n"
-	), nodePath().c_str());
-
-    return buf;
+	), nodePath().c_str()) + TSubSYS::optDescr();
 }
 
 void TModSchedul::setChkPer( int per )	{ mPer = vmax(0,per); modif(); }
@@ -89,7 +86,6 @@ void TModSchedul::load_( )
 {
     //Load parameters from command line
     string argVl;
-    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
     if((argVl=SYS->cmdOpt("modPath")).size()) SYS->setModDir(argVl, true);
 
     //Load parameters from command line

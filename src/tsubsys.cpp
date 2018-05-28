@@ -161,6 +161,19 @@ void TSubSYS::perSYSCall( unsigned int cnt )
 	catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
+string TSubSYS::optDescr( )
+{
+    if(!subModule()) return "";
+    string rez;
+
+    vector<string> list;
+    modList(list);
+    for(unsigned iM = 0; iM < list.size(); iM++)
+	rez += modAt(list[iM]).at().optDescr();
+
+    return rez;
+}
+
 void TSubSYS::cntrCmdProc( XMLNode *opt )
 {
     //Service commands process

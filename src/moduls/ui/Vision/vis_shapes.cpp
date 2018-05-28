@@ -1497,8 +1497,10 @@ void ShapeMedia::clear( WdgView *w )
     QLabel *lab = dynamic_cast<QLabel*>(shD->addrWdg);
     if(lab) {
 	if(lab->movie()) {
-	    if(lab->movie()->device()) lab->movie()->device()->deleteLater();	//delete lab->movie()->device();
-	    lab->movie()->deleteLater();	//delete lab->movie();
+	    if(lab->movie()->device())	delete lab->movie()->device();
+		//lab->movie()->device()->deleteLater();	//!!!! Crashes here for GIF playback
+	    delete lab->movie();
+	    //lab->movie()->deleteLater();	//!!!! Crashes here for GIF playback
 	    lab->clear();
 	}
 #ifdef HAVE_PHONON

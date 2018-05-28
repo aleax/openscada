@@ -44,14 +44,13 @@ TUIS::TUIS( ) : TSubSYS(SUI_ID,_("User Interfaces"), true)
 
 string TUIS::optDescr( )
 {
-    return(_(
-	"===================== Subsystem \"User interfaces\" options ===============\n\n"));
+    return TSYS::strMess(_(
+	"===================== Subsystem \"User interfaces\" options ===============\n\n")) + TSubSYS::optDescr();
 }
 
 void TUIS::load_( )
 {
     //Load parameters from command line
-    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
 }

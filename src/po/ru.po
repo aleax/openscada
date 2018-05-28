@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 18:50+0300\n"
+"POT-Creation-Date: 2018-05-28 23:10+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -639,10 +639,6 @@ msgid "The node is already being processed!"
 msgstr "Узел уже обрабатывается!"
 
 #, c-format
-msgid "Expecting release %d users!"
-msgstr "Ожидание освобождения %d пользователями!"
-
-#, c-format
 msgid ""
 "Waiting time exceeded. The object is used by %d users. Release the object "
 "first!"
@@ -659,6 +655,10 @@ msgstr ""
 "Узел принудительно выключен, что может привести к аварийному завершению "
 "программы.\n"
 "Эта проблема в основном в процедуре пользователя, если программа завершается!"
+
+#, c-format
+msgid "Expecting release %d users!"
+msgstr "Ожидание освобождения %d пользователями!"
 
 msgid "Error turning off node. Turning on back the node."
 msgstr "Ошибка отключения узла. Восстановление включения узла."
@@ -1397,6 +1397,18 @@ msgstr "Изменение заблокированного атрибута н�
 msgid "Empty value is not allowed."
 msgstr "Пустое значение недопустимо."
 
+msgid "Error of parameter ID."
+msgstr "Ошибка ID параметра."
+
+msgid "Template configuration"
+msgstr "Конфигурация шаблона"
+
+msgid "Only attributes are to be shown"
+msgstr "Показывать только атрибуты"
+
+msgid "Error, recursive linking."
+msgstr "Ошибка, рекурсивное подключение."
+
 #, c-format
 msgid "Error starting the template '%s'."
 msgstr "Ошибка запуска шаблона '%s'."
@@ -1478,7 +1490,6 @@ msgstr "Группа администраторов."
 msgid "Users group."
 msgstr "Группа пользователей."
 
-#, c-format
 msgid ""
 "======================= Subsystem \"Security\" options ====================\n"
 "\n"
@@ -1662,6 +1673,8 @@ msgid ""
 "\t\t\t  0x2 - stdout;\n"
 "\t\t\t  0x4 - stderr;\n"
 "\t\t\t  0x8 - the messages archive.\n"
+"    --consoleCharSet={CharSet} Forcing to the console <CharSet> for the "
+"console messages, by default it is system one.\n"
 "    --demon, --daemon\tRun in the daemon mode.\n"
 "    --pidFile=<file>\tFile for the program process ID placing here.\n"
 "    --noCoreDump\tPrevents from the core dump creation at crashes - don't "
@@ -1731,6 +1744,8 @@ msgstr ""
 "\t\t\t  0x2 - стандартный выход (stdout);\n"
 "\t\t\t  0x4 - стандартный выход ошибок (stderr);\n"
 "\t\t\t  0x8 - архив сообщений.\n"
+"    --consoleCharSet={CharSet} Принудительно установить кодовый набор "
+"символов консоли в <CharSet>, по умолчанию он системный.\n"
 "    --demon, --daemon\tЗапуск в режиме демона.\n"
 "    --pidFile=<файл>\tфайл для помещения ID процесса программы сюда.\n"
 "    --noCoreDump\tПредотвращать создание предсмертных дампов - не снимать "
@@ -2239,7 +2254,6 @@ msgstr "Ошибка останова входного транспорта '%s'
 msgid "Error stopping the output transport '%s'."
 msgstr "Ошибка останова выходного транспорта '%s'."
 
-#, c-format
 msgid ""
 "======================= Subsystem \"Transports\" options ==================\n"
 "\n"

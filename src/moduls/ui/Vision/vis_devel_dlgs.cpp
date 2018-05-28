@@ -1076,7 +1076,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_attr_cfg->setSelectionBehavior(QAbstractItemView::SelectRows);
     obj_attr_cfg->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     connect(obj_attr_cfg, SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(changeAttr(QTreeWidgetItem*,int)));
-    obj_attr_cfg->setHeaderLabels(QStringList() << _("Identifier") << _("Name") << _("Data type") << _("Work area") << _("Proc.")
+    obj_attr_cfg->setHeaderLabels(QStringList() << _("Identifier") << _("Name") << _("Data type") << _("Work area") << _("Processing")
 						<< _("Configuration") << _("Configuration template"));
     glay->addWidget(obj_attr_cfg,0,0,1,2);
 

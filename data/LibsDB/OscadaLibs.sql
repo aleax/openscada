@@ -334,7 +334,7 @@ Modules/SMH2Gi:en,uk,ru:Modules/SMH2Gi.html
 Modules/GPIO:en,uk,ru:Modules/GPIO.html
 Modules/FSArch:en,uk,ru:Modules/FSArch.html
 Modules/DBArch:en,uk,ru:Modules/DBArch.html
-Modules/VCAEngine:en,ru:Modules/VCAEngine.html
+Modules/VCAEngine:en,uk,ru:Modules/VCAEngine.html
 Modules/QTStarter:en,uk,ru:Modules/QTStarter.html
 Modules/QTCfg:en,uk,ru:Modules/QTCfg.html
 Modules/Vision:en,ru:Modules/Vision.html

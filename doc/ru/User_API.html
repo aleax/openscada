@@ -707,39 +707,39 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <p><b>Объект "Сеанс" ( this.ownerSess() )</b>
 </p>
 <ul><li> <i>string user( )</i> — текущий пользователь сеанса.</li>
-<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — квитирование нарушений <i>wpath</i> с шаблоном <i>quit_tmpl</i>. Если <i>wpath</i> пустая строка то производится глобальное квитирование. В строке <i>wpath</i>, через символ ';', могут быть перечислены адреса нескольких виджетов. При установке <i>ret</i> осуществляется возврат квитирования.</li>
+<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — квитирует нарушение <i>wpath</i> с шаблоном <i>quit_tmpl</i>. Если <i>wpath</i> это пустая строка то производится глобальное квитирование. В строке <i>wpath</i>, через символ ';', могут быть перечислены адреса нескольких виджетов. При установке <i>ret</i> осуществляется возврат квитирования.</li>
 <li> <i>int reqTm( )</i> — время последнего запроса.</li>
 <li> <i>string reqUser( )</i> — пользователь последнего запроса.</li>
 <li> <i>string reqLang( )</i> — язык последнего запроса.</li>
 <li> <i>int userActTm( )</i> — время последнего действия пользователя.</li></ul>
 <p><b>Объект "Виджет" (this)</b>
 </p>
-<ul><li> <i>TCntrNodeObj ownerSess( )</i> — получить объект сеанса данного виджета.</li>
-<li> <i>TCntrNodeObj ownerPage( )</i> — получить объект родительской страницы данного виджета.</li>
-<li> <i>TCntrNodeObj ownerWdg( bool base = false )</i> — получить родительский виджет данного виджета. При указании <i>base</i> будет возвращены и объекты страниц.</li>
-<li> <i>TCntrNodeObj wdgAdd( string wid, string wname, string parent )</i> — добавление виджета <i>wid</i> с именем <i>wname</i> на основе библиотечного виджета <i>parent</i>.</li></ul>
+<ul><li> <i>TCntrNodeObj ownerSess( )</i> — объект сеанса данного виджета.</li>
+<li> <i>TCntrNodeObj ownerPage( )</i> — объект родительской страницы данного виджета.</li>
+<li> <i>TCntrNodeObj ownerWdg( bool base = false )</i> — объект родительского виджета данного виджета. При указании <i>base</i> будут возвращены и объекты страниц.</li>
+<li> <i>TCntrNodeObj wdgAdd( string wid, string wname, string parent )</i> — добавляет виджет <i>wid</i> с именем <i>wname</i> на основе библиотечного виджета <i>parent</i>.</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
-//Добавить новый виджет на основе виджета текстового примитива
+//Добавляет новый виджет на основе виджета текстового примитива
 nw = this.wdgAdd("nw", "Новый виджет", "/wlb_originals/wdg_Text");
 nw.attrSet("geomX", 50).attrSet("geomY", 50);
 </pre>
-<ul><li> <i>bool wdgDel( string wid )</i> — удаление виджета <i>wid</i>.</li>
-<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — подключение к дочернему или глобальному, посредством пути <i>byPath</i>, виджету. В случае глобального подключения можно использовать абсолютный или относительный путь к виджету. Точкой отсчёта абсолютного адреса выступает объект корня модуля "VCAEngine", а значит первым элементом абсолютного адреса является идентификатор сеанса, который опускается. Относительный адрес берёт отсчёт от текущего виджета. Специальным элементом относительного адреса является элемент вышестоящего узла "..".</li>
-<li> <i>bool attrPresent( string attr )</i> — проверка атрибута виджета <i>attr</i> на факт присутствия.</li>
-<li> <i>ElTp attr( string attr, bool fromSess = false )</i> — получение значения атрибута виджета <i>attr</i> или из сеанса <i>fromSess</i>. Для отсутствующих атрибутов возвращается пустая строка.</li>
-<li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — установка атрибута виджета <i>attr</i> в значение <i>vl</i>, или в сеанс <i>toSess</i>. Возвращается текущий объект для конкатенации функций установки.</li>
-<li> <i>string link( string attr, bool prm = false )</i> — получение ссылки для атрибута виджета <i>attr</i>. При установке <i>prm</i> запрашивается ссылка для группы атрибутов (параметр), представленных указанным атрибутом.</li>
-<li> <i>string linkSet( string attr, string vl, bool prm = false )</i> — установка ссылки для атрибута виджета <i>attr</i>. При установке <i>prm</i> осуществляется установка ссылка для группы атрибутов (параметр), представленных указанным атрибутом.</li></ul>
+<ul><li> <i>bool wdgDel( string wid )</i> — удаляет виджет <i>wid</i>.</li>
+<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — подключается к дочернему или глобальному виджету, посредством пути <i>byPath</i>. В случае глобального подключения можно использовать абсолютный или относительный путь к виджету. Точкой отсчёта абсолютного адреса выступает объект корня модуля "VCAEngine", а значит, первым элементом абсолютного адреса является идентификатор сеанса, который опускается. Относительный адрес берёт отсчёт от текущего виджета. Специальным элементом относительного адреса является элемент вышестоящего узла "..".</li>
+<li> <i>bool attrPresent( string attr )</i> — проверяет атрибут виджета <i>attr</i> на факт присутствия.</li>
+<li> <i>ElTp attr( string attr, bool fromSess = false )</i> — значение атрибута виджета <i>attr</i> или из сеанса <i>fromSess</i>. Для отсутствующих атрибутов возвращается пустая строка.</li>
+<li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — устанавливает значение <i>vl</i> в атрибут виджета <i>attr</i> или в сеанс, для <i>toSess</i>. Возвращает текущий объект, для конкатенации функций установки.</li>
+<li> <i>string link( string attr, bool prm = false )</i> — ссылка атрибута виджета <i>attr</i>. При установке <i>prm</i> запрашивает ссылку группы атрибутов (параметр), представленную указанным атрибутом.</li>
+<li> <i>string linkSet( string attr, string vl, bool prm = false )</i> — устанавливает ссылку атрибута виджета <i>attr</i>. При установке <i>prm</i> осуществляется установка ссылки группы атрибутов (параметр), представленной указанным атрибутом.</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
-//Установить ссылку восьмого тренда параметром
+//Устанавливает ссылку восьмого тренда параметром
 this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </pre>
-<ul><li> <i>string mime( string addr, string type = "" )</i> — получение "mime" объекта по адресу <i>addr</i> (прямая ссылка на ресурс или атрибут виджета с этой ссылкой) с типом в <i>type</i>, из таблицы сеанса или источника. Предназначено для редактирования "mime" объекта и подстановки его в контексте сеанса, например, изображений SVG.</li>
-<li> <i>int mimeSet( string addr, string data, string type = "" )</i> — установка "mime" объекта <i>data</i> с типом <i>type</i> по адресу <i>addr</i>.</li>
-<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — формирование системного сообщения <i>mess</i> с категорией как путь к данному виджету.</li></ul>
+<ul><li> <i>string mime( string addr, string type = "" )</i> — "mime" объект по адресу <i>addr</i> (прямая ссылка на ресурс или атрибут виджета с этой ссылкой) с типом в <i>type</i>, из таблицы сеанса или источника. Предназначено для редактирования "mime" объекта и подстановки его в контексте сеанса, например, изображений SVG.</li>
+<li> <i>int mimeSet( string addr, string data, string type = "" )</i> — устанавливает "mime" объект в <i>data</i> с типом <i>type</i> по адресу <i>addr</i>.</li>
+<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — формирует сообщения программы <i>mess</i> с категорией — путь к данному виджету.</li></ul>
 <p><b>Объект "Виджет", примитива "Документ" (this)</b>
 </p>
-<ul><li> <i>string getArhDoc( int nDoc)</i> — получить текст документа архива на глубине <i>nDoc</i> (0-{aSize-1}).</li></ul>
+<ul><li> <i>string getArhDoc( int nDoc)</i> — текст документа архива на глубине <i>nDoc</i> (0-{aSize-1}).</li></ul>
 <p><br />
 </p>
 <h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A1.D0.BF.D0.B5.D1.86.D0.B8.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5.22_.28SYS.Special.29"><span class="mw-headline-number">12</span> Подсистема "Специальные" (SYS.Special)</span></h2>

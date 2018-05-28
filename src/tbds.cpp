@@ -516,20 +516,16 @@ string TBDS::genDBGet( const string &path, const string &oval, const string &use
 
 string TBDS::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),_(
+    return TSYS::strMess(_(
 	"========================= Subsystem \"DB\" options ========================\n"
 	"------ Parameters of the section '%s' of the configuration file ------\n"
 	"SYSStPref  <0|1>        Use the station ID in the common table (SYS).\n\n"
-	),nodePath().c_str());
-
-    return(buf);
+	),nodePath().c_str()) + TSubSYS::optDescr();
 }
 
 void TBDS::load_( )
 {
     //Load parameters from command line
-    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
     mSYSStPref = (bool)s2i(TBDS::genDBGet(nodePath()+"SYSStPref",(mSYSStPref?"1":"0"),"root",TBDS::OnlyCfg));
