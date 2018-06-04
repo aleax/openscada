@@ -322,7 +322,6 @@ Information variables of the program:
 <li> <i>void setSaveAtExit( bool vl );</i> — Setting of the sign - "Save configuration on exit".</li>
 <li> <i>void setSavePeriod( int vl );</i> — Set the frequency of the automatically saving of the station to the database (seconds).</li>
 <li> <i>bool chkSelDB( const string &amp;wDB );</i> — The function of checking for compliance of the specified database <i>wDB</i>  with the selected "selDB()".</li>
-<li> <i>string optDescr( );</i> — Localized help on the options of the command line and parameters of the configuration file. </li>
 <li> <i>static void sighandler( int signal );</i> — Function of the  default handler of the signals of the system as a whole.</li>
 <li> <i>unsigned long long sysClk( );</i> — The estimated frequency of the processor on which the system works (Hz). </li>
 <li> <i>void clkCalc( );</i> — Calculation of frequency of the processor on which the system works. It is called periodically for the systems with variable CPU  frequency.</li>
@@ -397,6 +396,7 @@ Information variables of the program:
 <li> <i>static float floatLErev( float in ); static double doubleLErev( double in );</i> — Real number <i>in</i> conversion from format IEEE754 Little-Endian (LE) to internal.</li>
 <li> <i>static float floatBE( float in ); static double doubleBE( double in );</i> — Real number <i>in</i> conversion from internal to format IEEE754 Big-Endian (BE).</li>
 <li> <i>static float floatBErev( float in ); static double doubleBErev( double in );</i> — Real number <i>in</i> conversion from format IEEE754 Big-Endian (BE) to internal.</li>
+<li> <i>string optDescr( );</i> — Full localized help on the options of the command line and parameters of the configuration file.</li>
 <li> <i>string getCmdOpt( int &amp;curPos, string *argVal = NULL ); static string getCmdOpt_( int &amp;curPos, string *argVal, int argc, char **argv );</i> — Command line parameters parsing by cursor scanning <i>curPos</i>. Return argument name and it's possible value into <i>argVal</i>. Implement formats for short keys: "-v", "-v val", "-abcv", "-abcv val"; and long keys: "--var", "--var=val", "--var val".</li>
 <li> <i>bool cmdOptPresent( const string &amp;opt );</i> — Check the command-line option <i>opt</i> for presence.</li>
 <li> <i>string cmdOpt( const string &amp;opt, const string &amp;setVl = "" );</i> — Get command-line option <i>opt</i>. Set it at <i>setVl</i> if pointing.</li>
@@ -539,6 +539,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>AutoHD &lt;TModule&gt; modAt( const string &amp;name ) const;</i> — Connection to the module <i>name</i>. </li>
 <li> <i>virtual void perSYSCall( unsigned int cnt );</i> —  Periodic call from system thread, with period 10 seconds and seconds counter <i>cnt</i>.</li>
 <li> <i>virtual bool rdProcess( XMLNode *reqSt = NULL );</i> — Processing of redundancy of the subsystem, calls from the system's task of redundancy. <i>reqSt</i> pass a result of a state request to the redundancy station for this subsystem.</li>
+<li> <i>virtual string optDescr( );</i> — Localized help on the options of the command line and parameters of the configuration file for the whole subsystem, includes its modules.</li>
 <li> <i>TSYS &amp;owner( ) const;</i> — The system - the owner of the subsystem. </li></ul>
 <h3><span class="mw-headline" id="Object_Module_.28TModule.29"><span class="mw-headline-number">2.4</span> <span id="TModule" title="#TModule">Object Module (TModule)</span></span></h3>
 <table class="wikitable">
@@ -579,6 +580,7 @@ The data structure which identifies the module (class — TModule::SAt):
 <li> <i>ExpFunc &amp;modFunc (const string &amp; prot);</i> — Get the information about exported function of the module <i>prot</i>.</li>
 <li> <i>bool modFunc( const string &amp;prot, void (TModule::**offptr)(), bool noex = false );</i> — Getting the relative address <i>offptr</i> of the exported function <i>prot</i>. Returns "true" for successful and the non-exceptional mode <i>noex</i>.</li>
 <li> <i>const char *I18N( const char *mess );</i> — Localization of modular message <i>mess</i> in accordance with the current locale.</li>
+<li> <i>virtual string optDescr( );</i> — Localized help on the options of the command line and parameters of the configuration file for the module.</li>
 <li> <i>TSubSYS &amp;owner( ) const;</i> — Subsystem - the owner of the module.</li></ul>
 <p><b>Protected Attributes:</b>
 </p>
@@ -629,8 +631,7 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <li> <i>string fullDBSYS( );</i> — The full name of the system table.</li>
 <li> <i>string fullDB( );</i> — The full name of the table with a description of the registered databases.</li>
 <li> <i>TElem &amp;openDB_E( )</i> — The structure of the table of registered databases.</li>
-<li> <i>AutoHD&lt;TTypeBD&gt; at( const string &amp;iid )</i> — Referencing to the DB module(DB type).</li>
-<li> <i>string optDescr( );</i> — Localized help on the command line options and parameters in the configuration file.</li></ul>
+<li> <i>AutoHD&lt;TTypeBD&gt; at( const string &amp;iid )</i> — Referencing to the DB module(DB type).</li></ul>
 <h3><span class="mw-headline" id="Modular_object_of_types_of_databases_.28TTypeBD.29"><span class="mw-headline-number">3.2</span> <span id="TTypeBD" title="#TTypeBD">Modular object of types of databases (TTypeBD)</span></span></h3>
 <table class="wikitable">
 
@@ -1566,8 +1567,7 @@ External hosts mode (enum — ExtHost::Mode):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>int subVer( );</i> — Subsystem's version.</li>
-<li> <i>AutoHD&lt;TProtocol&gt; at( const string &amp;id ) const;</i> — Connection to the protocol's <i>id</i> module.</li>
-<li> <i>string optDescr( );</i> — Localized help for command-line options and parameters of the configuration file.</li></ul>
+<li> <i>AutoHD&lt;TProtocol&gt; at( const string &amp;id ) const;</i> — Connection to the protocol's <i>id</i> module.</li></ul>
 <h3><span class="mw-headline" id="The_modular_object_of_the_protocol_.28TProtocol.29"><span class="mw-headline-number">7.2</span> <span id="TProtocol" title="#TProtocol">The modular object of the protocol (TProtocol)</span></span></h3>
 <table class="wikitable">
 

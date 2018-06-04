@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-20 18:34+0300\n"
+"POT-Creation-Date: 2018-06-04 20:32+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -214,8 +214,8 @@ msgstr "Schaltfläche für Informationen über Qt"
 msgid "Press for getting the using Qt information."
 msgstr "Betätigen um Informationen über QT zu erhalten."
 
-msgid "%1 manual"
-msgstr "%1 Handbuch"
+msgid "Manual on '%1'"
+msgstr "Handbuch zu '%1'"
 
 msgid "The button for getting the using '%1' manual"
 msgstr "Schaltfläche für '%1' Handbuch"
@@ -239,11 +239,11 @@ msgstr ""
 "Betätigen zum Anfordern von Informationen zu den Elementen der "
 "Benutzeroberfläche."
 
-msgid "Load from the DB"
-msgstr "Laden von der DB"
+msgid "Load from DB"
+msgstr "Laden von DB"
 
-msgid "Load the item data from the DB"
-msgstr "Laden Sie die Artikeldaten aus der DB"
+msgid "Load the item data from DB"
+msgstr "Laden Sie die Artikeldaten aus DB"
 
 msgid "The button for loading the item data from the DB"
 msgstr "Schaltfläche zum Laden der Artikeldaten aus der DB"
@@ -251,11 +251,11 @@ msgstr "Schaltfläche zum Laden der Artikeldaten aus der DB"
 msgid "Press for loading the item data from the DB."
 msgstr "Betätigen um die Artikeldaten aus der DB zu laden."
 
-msgid "Save to the DB"
-msgstr "In der DB speichern"
+msgid "Save to DB"
+msgstr "In DB speichern"
 
-msgid "Save the item data to the DB"
-msgstr "Sichern Sie die Elemente in der DB"
+msgid "Save the item data to DB"
+msgstr "Sichern Sie die Elemente in DB"
 
 msgid "The button for saving the item data to the DB"
 msgstr "Schaltfläche zum Speichern der Elemente in der Datenbank"
@@ -263,8 +263,8 @@ msgstr "Schaltfläche zum Speichern der Elemente in der Datenbank"
 msgid "Press for saving the item data to the DB."
 msgstr "Betätigen um die Elemente in der Datenbank zu speichern."
 
-msgid "Run the project"
-msgstr "Führen Sie das Projekt"
+msgid "Run project"
+msgstr "Projekt ausführen"
 
 msgid "Run the project execution for the selected item"
 msgstr "Starten des Projekts, für das ausgewählte Element"
@@ -287,8 +287,8 @@ msgstr "Betätigen, um ein neues Projekt zu erstellen."
 msgid "New library"
 msgstr "Neue Bibliothek"
 
-msgid "New widgets library creation"
-msgstr "Erstellen der Widgetsbibliothek"
+msgid "New widgets library"
+msgstr "Neue Widgetsbibliothek"
 
 msgid "The button for creation a new widgets library"
 msgstr "Schaltfläche zum Erstellen eine neue Widgets-Bibliothek"
@@ -296,8 +296,8 @@ msgstr "Schaltfläche zum Erstellen eine neue Widgets-Bibliothek"
 msgid "Press for creation a new widgets library."
 msgstr "Betätigen um eine neue Widgets-Bibliothek zu erstellen."
 
-msgid "Add a visual item"
-msgstr "Fügen Sie ein visuelles Element hinzu"
+msgid "Add visual item"
+msgstr "Fügen visuelles Element hinzu"
 
 msgid "Adding a visual item to the library, container widget, project or page"
 msgstr ""
@@ -318,8 +318,8 @@ msgstr ""
 "Betätigen zum Hinzufügen des Elements in die Bibliothek, den "
 "Widgetscontainer, das Projekt oder die Seite."
 
-msgid "Delete the visual item"
-msgstr "Löschen Sie das visuelle Element"
+msgid "Delete visual item"
+msgstr "Löschen visuelle Element"
 
 msgid ""
 "Deleting the visual item from the library, container widget, project or page"
@@ -353,8 +353,8 @@ msgstr "Schaltfläche zum Abrufen der Eigenschaften des visuellen Elements"
 msgid "Press for getting the properties of the visual item."
 msgstr "Betätigen um die Eigenschaften des visuellen Elements abzurufen."
 
-msgid "Edit the visual item"
-msgstr "Bearbeiten Sie das visuelle Element"
+msgid "Edit visual item"
+msgstr "Bearbeiten visuelle Element"
 
 msgid "Going to editing the visual item"
 msgstr "Gehen Sie zum Bearbeiten des visuellen Elements"
@@ -365,8 +365,8 @@ msgstr "Schaltfläche zum Bearbeiten des visuellen Elements"
 msgid "Press for going to editing the visual item."
 msgstr "Betätigen zum Bearbeiten des visuellen Elements."
 
-msgid "Clear the visual item changes"
-msgstr "Machen Sie das visuelle Element ändert"
+msgid "Clear visual item changes"
+msgstr "Machen Sie visuelle Element ändert"
 
 msgid "Clearing the visual items changes"
 msgstr "Machen Sie das visuelle Element ändert"
@@ -377,8 +377,8 @@ msgstr "Schaltfläche zum Löschen der visuellen Elemente ändert sich"
 msgid "Press for clearing the visual items changes."
 msgstr "Betätigen zum Löschen der visuellen Elemente ändert sich."
 
-msgid "Lower down the visual item changes"
-msgstr "Senken Sie die visuellen Elementänderungen"
+msgid "Lower down visual item changes"
+msgstr "Senken Sie visuellen Elementänderungen"
 
 msgid "Lowering down the visual item changes to the parent"
 msgstr "Absenken der visuellen Element Änderungen an den übergeordneten"
@@ -393,8 +393,8 @@ msgstr ""
 "Betätigen zum Absenken der visuellen Elements Änderungen an den "
 "übergeordneten unten."
 
-msgid "Undo the visual item changes"
-msgstr "Machen Sie die Änderungen an den visuellen Elementen rückgängig"
+msgid "Undo visual item changes"
+msgstr "Machen Sie Änderungen an den visuellen Elementen rückgängig"
 
 msgid "Undoing the visual item changes:"
 msgstr "Rückgängigmachen der visuellen Elementänderungen:"
@@ -405,8 +405,8 @@ msgstr "Schaltfläche zum Rückgängigmachen des visuellen Elements ändert sich
 msgid "Press for undoing the visual item changes."
 msgstr "Betätigen zum Rückgängigmachen des visuellen Elements ändert sich."
 
-msgid "Redo the visual item changes"
-msgstr "Wiederholen Sie die visuelle Element ändert"
+msgid "Redo visual item changes"
+msgstr "Wiederholen Sie visuelle Element ändert"
 
 msgid "Redoing the visual item changes:"
 msgstr "Redoing die visuellen Artikel Änderungen:"
@@ -417,8 +417,8 @@ msgstr "Schaltfläche zum Redoing die visuellen Artikel Änderungen"
 msgid "Press for redoing the visual item changes."
 msgstr "Betätigen zum Redoing die visuellen Artikel Änderungen."
 
-msgid "Copy the visual item"
-msgstr "Kopieren Sie das visuelle Element"
+msgid "Copy visual item"
+msgstr "Kopieren visuelle Element"
 
 msgid "Copying the visual item"
 msgstr "Kopieren des visuellen Elements"
@@ -429,291 +429,223 @@ msgstr "Schaltfläche zum Kopieren des visuellen Elements"
 msgid "Press for copying the visual item."
 msgstr "Betätigen zum Kopieren des visuellen Elements."
 
-#, fuzzy
-msgid "Cut the visual item"
-msgstr "Element löschen"
+msgid "Cut visual item"
+msgstr "Element ausschneiden"
 
-#, fuzzy
 msgid "Cutting the visual item"
-msgstr "Element löschen"
+msgstr "Ausschneiden des visuellen Element"
 
-#, fuzzy
 msgid "The button for cutting the visual item"
-msgstr "Schaltfläche für die Eigenschaften des Elements"
+msgstr "Schaltfläche für ausschneiden des visuellen Element"
 
-#, fuzzy
 msgid "Press for cutting the visual item."
-msgstr "Betätigen für die Eigenschaften des Elements."
+msgstr "Betätigen für ausschneiden des visuellen Element."
 
-#, fuzzy
-msgid "Paste the visual item"
-msgstr "Element löschen"
+msgid "Paste visual item"
+msgstr "Element einfügen"
 
-#, fuzzy
 msgid "Pasting the visual item"
-msgstr "Element löschen"
+msgstr "Einfügen des visuellen Element"
 
-#, fuzzy
 msgid "The button for pasting the visual item"
-msgstr "Schaltfläche zum Ausschneiden des Elements"
+msgstr "Schaltfläche für einfügen des visuellen Element"
 
-#, fuzzy
 msgid "Press for pasting the visual item."
-msgstr "Betätigen zum Ausschneiden des Elements."
+msgstr "Betätigen für einfügen des visuellen Element."
 
-#, fuzzy
 msgid "Raise up to the top"
-msgstr "Verschieben ausgewählten Widget an den Anfang"
+msgstr "Erhebe dich nach oben"
 
-#, fuzzy
 msgid "Raising up the selected widgets to the top"
-msgstr "Verschieben ausgewählten Widget an den Anfang"
+msgstr "Erhebe der ausgewählten Widgets an die Spitze"
 
-#, fuzzy
 msgid "The button for raising up the selected widgets to the top"
-msgstr "Schaltfläche zum Verschieben des ausgewählten Widgets an den Anfang"
+msgstr "Schaltfläche zum erhebe ausgewählten Widgets an die Spitze"
 
-#, fuzzy
 msgid "Press for raising up the selected widgets to the top."
-msgstr "Betätigen zum Verschieben des ausgewählten Widgets an den Anfang."
+msgstr "Betätigen zum erhebe ausgewählten Widgets an die Spitze."
 
-#, fuzzy
 msgid "Lower down to the bottom"
-msgstr "Verschieben ausgewählten Widget ans Ende"
+msgstr "Nach unten auf den Boden"
 
-#, fuzzy
 msgid "Lowering down the selected widgets to the bottom"
-msgstr "Betätigen zum Verschieben des ausgewählten Widgets ans Ende."
+msgstr "Absenken der ausgewählten Widgets nach unten"
 
-#, fuzzy
 msgid "The button for lowering down the selected widgets to the bottom"
-msgstr "Schaltfläche zum Verschieben des ausgewählten Widgets ans Ende"
+msgstr "Schaltfläche zum absenken der ausgewählten Widgets nach unten"
 
-#, fuzzy
 msgid "Press for lowering down the selected widgets to the bottom."
-msgstr "Betätigen zum Verschieben des ausgewählten Widgets ans Ende."
+msgstr "Betätigen zum absenken der ausgewählten Widgets nach unten."
 
 msgid "Rise up"
-msgstr ""
+msgstr "Aufgehen"
 
-#, fuzzy
 msgid "Raising up the selected widgets"
-msgstr "Verschieben den ausgewählten Widget nach oben"
+msgstr "Aufgehen der ausgewählten Widgets"
 
-#, fuzzy
 msgid "The button for raising up the selected widgets"
-msgstr "Schaltfläche zum Verschieben des ausgewählten Widgets nach oben"
+msgstr "Schaltfläche zum aufgehen der ausgewählten Widgets"
 
-#, fuzzy
 msgid "Press for raising up the selected widgets."
-msgstr "Betätigen zum Verschieben des ausgewählten Widgets nach oben."
+msgstr "Betätigen zum aufgehen der ausgewählten Widgets."
 
-#, fuzzy
 msgid "Lower down"
-msgstr "Widget nach unten"
+msgstr "Weiter unten"
 
-#, fuzzy
 msgid "Lowering down the selected widgets"
-msgstr "Betätigen zum Verschieben des ausgewählten Widgets nach unten."
+msgstr "Weiter unten der ausgewählten Widgets"
 
-#, fuzzy
 msgid "The button for lowering down the selected widgets"
-msgstr "Schaltfläche zum Verschieben des ausgewählten Widgets nach unten"
+msgstr "Schaltfläche zum weiter unten der ausgewählten Widgets"
 
-#, fuzzy
 msgid "Press for lowering down the selected widgets."
-msgstr "Betätigen zum Verschieben des ausgewählten Widgets nach unten."
+msgstr "Betätigen zum weiter unten der ausgewählten Widgets."
 
-#, fuzzy
 msgid "Align to the left"
 msgstr "Links ausrichten"
 
-#, fuzzy
 msgid "Aligning the selected widgets to the left"
 msgstr "Ausrichten der ausgewählten Widgets links"
 
-#, fuzzy
 msgid "The button for aligning the selected widgets to the left"
 msgstr "Schaltfläche für Ausrichtung der ausgewählten Widgets links"
 
-#, fuzzy
 msgid "Press for aligning the selected widgets to the left."
 msgstr "Betätigen für Ausrichtung der ausgewählten Widgets links."
 
-#, fuzzy
 msgid "Align vertically to the center"
 msgstr "Zur senkrechten Mitte ausrichten"
 
-#, fuzzy
 msgid "Aligning the selected widgets vertically to the center"
 msgstr "Ausrichten der ausgewählten Widgets zur senkrechten Mitte"
 
-#, fuzzy
 msgid "The button for aligning the selected widgets vertically to the center"
 msgstr ""
 "Schaltfläche für Ausrichtung der ausgewählten Widgets zur senkrechten Mitte"
 
-#, fuzzy
 msgid "Press for aligning the selected widgets vertically to the center."
 msgstr ""
 "Betätigen für Ausrichtung der ausgewählten Widgets zur senkrechten Mitte."
 
-#, fuzzy
 msgid "Align to the right"
 msgstr "Rechts ausrichten"
 
-#, fuzzy
 msgid "Aligning the selected widgets to the right"
 msgstr "Ausrichten der ausgewählten Widgets rechts"
 
-#, fuzzy
 msgid "The button for aligning the selected widgets to the right"
 msgstr "Schaltfläche für Ausrichtung der ausgewählten Widgets rechts"
 
-#, fuzzy
 msgid "Press for aligning the selected widgets to the right."
 msgstr "Betätigen für Ausrichtung der ausgewählten Widgets rechts."
 
-#, fuzzy
 msgid "Align to the top"
 msgstr "Oben ausrichten"
 
-#, fuzzy
 msgid "Aligning the selected widgets to the top"
 msgstr "Ausrichten der ausgewählten Widgets oben"
 
-#, fuzzy
 msgid "The button for aligning the selected widgets to the top"
-msgstr "Schaltfläche zum Verschieben des ausgewählten Widgets an den Anfang"
+msgstr "Schaltfläche für Ausrichtung der ausgewählten Widgets oben"
 
-#, fuzzy
 msgid "Press for aligning the selected widgets to the top."
 msgstr "Betätigen für Ausrichtung der ausgewählten Widgets oben."
 
-#, fuzzy
 msgid "Align horizontally to the center"
 msgstr "Zur waagerechten Mitte ausrichten"
 
-#, fuzzy
 msgid "Aligning the selected widgets horizontally to the center"
 msgstr "Ausrichten der ausgewählten Widgets zur waagerechten Mitte"
 
-#, fuzzy
 msgid "The button for aligning the selected widgets horizontally to the center"
 msgstr ""
 "Schaltfläche fur Ausrichtung der ausgewählten Widgets zur waagerechten Mitte"
 
-#, fuzzy
 msgid "Press for aligning the selected widgets horizontally to the center."
 msgstr ""
 "Betätigen fur Ausrichtung der ausgewählten Widgets zur waagerechten Mitte."
 
-#, fuzzy
 msgid "Align to the bottom"
 msgstr "Unten ausrichten"
 
-#, fuzzy
 msgid "Aligning the selected widgets to the bottom"
 msgstr "Ausrichten der ausgewählten Widgets unten"
 
-#, fuzzy
 msgid "The button for aligning the selected widgets to the bottom"
 msgstr "Schaltfläche für Ausrichtung der ausgewählten Widgets unten"
 
-#, fuzzy
 msgid "Press for aligning the selected widgets to the bottom."
 msgstr "Betätigen für Ausrichtung der ausgewählten Widgets unten."
 
-#, fuzzy
 msgid "Return the cursor"
-msgstr "Betätigen zum Rückstellen des Cursormodus"
+msgstr "Zurück den Cursor"
 
 msgid "Returning the cursor"
-msgstr ""
+msgstr "Zurückgeben des Cursors"
 
-#, fuzzy
 msgid "The button for returning the cursor"
-msgstr "Schaltfläche zum Rückstellen des Cursormodus"
+msgstr "Schaltfläche zum Zurückgeben des Cursors"
 
-#, fuzzy
 msgid "Press for returning the cursor."
-msgstr "Betätigen zum Rückstellen des Cursormodus"
+msgstr "Betätigen zum Zurückgeben des Cursors."
 
-#, fuzzy
-msgid "Add a line"
-msgstr "Eine Linie hinzufügen"
+msgid "Add line"
+msgstr "Zeile hinzufügen"
 
-#, fuzzy
 msgid "Adding a line to the elementary figure"
 msgstr "Hinzufügen einer Linie zur elementaren Figur"
 
-#, fuzzy
 msgid "The button for adding a line to the elementary figure"
 msgstr "Schaltfläche zum Hinzufügen einer Linie zur elementaren Figur"
 
-#, fuzzy
 msgid "Press for adding a line to the elementary figure."
 msgstr "Betätigen zum Hinzufügen einer Linie zur elementaren Figur."
 
-#, fuzzy
-msgid "Add an arc"
-msgstr "Einen Bogen hinzufügen"
+msgid "Add arc"
+msgstr "Bogen hinzufügen"
 
-#, fuzzy
 msgid "Adding an arc to the elementary figure"
 msgstr "Einen Bogen zur elementaren Figur hinzufügen"
 
-#, fuzzy
 msgid "The button for adding an arc to the elementary figure"
 msgstr "Schaltfläche zum Hinzufügen eines Bogens zur elementaren Figur"
 
-#, fuzzy
 msgid "Press for adding an arc to the elementary figure."
 msgstr "Betätigen zum Hinzufügen eines Bogens zur elementaren Figur."
 
-#, fuzzy
-msgid "Add a Besier curve"
-msgstr "Den Besie-Bogen hinzufügen"
+msgid "Add Besier curve"
+msgstr "Besie-Bogen hinzufügen"
 
-#, fuzzy
 msgid "Adding a Besier curve to the elementary figure"
 msgstr "Hinzufügen des Besie-Bogens zur elementaren Figur"
 
-#, fuzzy
 msgid "The button for adding a Besier curve to the elementary figure"
 msgstr "Schaltfläche zum Hinzufügen des Besie-Bogens zur elementaren Figur"
 
-#, fuzzy
 msgid "Press for adding a Besier curve to the elementary figure."
 msgstr "Betätigen zum Hinzufügen des Besie-Bogens zur elementaren Figur."
 
 msgid "Connections"
 msgstr "Verbindungen"
 
-#, fuzzy
 msgid "Enabling the connections"
 msgstr "Verbindungen einschalten"
 
-#, fuzzy
 msgid "The button for enabling the connections"
 msgstr "Schaltfläche zum Einschalten der Verbindungen"
 
-#, fuzzy
 msgid "Press for enabling the connections."
-msgstr "Betätigen zum Einschalten der Verbindungen"
+msgstr "Betätigen zum Einschalten der Verbindungen."
 
 msgid "Cl&ose"
 msgstr "&Schließen"
 
-#, fuzzy
 msgid "Close the active window"
 msgstr "Schließen des aktiven Fensters"
 
-#, fuzzy
 msgid "The button for closing the active window"
 msgstr "Schaltfläche zum Schliessen des Ausführungsfenster Vision"
 
-#, fuzzy
 msgid "Press for closing the active window."
 msgstr "Betätigen zum Schließen des aktiven Fensters."
 
@@ -723,11 +655,9 @@ msgstr "Schließen &alle"
 msgid "Close all windows"
 msgstr "Alle Fenster schließen"
 
-#, fuzzy
 msgid "The button for closing all windows"
-msgstr "Schaltfläche zum Aufschichten aller Fenster"
+msgstr "Schaltfläche zum Schließen aller Fenster"
 
-#, fuzzy
 msgid "Press for closing all windows."
 msgstr "Betätigen zum Schließen aller Fenster."
 
@@ -737,11 +667,9 @@ msgstr "&Aufschichten"
 msgid "Tile all windows"
 msgstr "Alle Fenster aufschichten"
 
-#, fuzzy
 msgid "The button for tiling all windows"
 msgstr "Schaltfläche zum Aufschichten aller Fenster"
 
-#, fuzzy
 msgid "Press for tiling all windows."
 msgstr "Betätigen zum Aufschichten aller Fenster."
 
@@ -751,41 +679,33 @@ msgstr "&Staffeln"
 msgid "Cascade all windows"
 msgstr "Staffeln aller Fenster"
 
-#, fuzzy
 msgid "The button for cascading all windows"
-msgstr "Schaltfläche zum Aufschichten aller Fenster"
+msgstr "Schaltfläche zum Staffeln aller Fenster"
 
-#, fuzzy
 msgid "Press for cascading all windows."
 msgstr "Betätigen zum Staffeln aller Fenster."
 
 msgid "Ne&xt"
 msgstr "&Nächstes"
 
-#, fuzzy
 msgid "Activate the next window"
 msgstr "Nächstes Fenster aktivieren"
 
-#, fuzzy
 msgid "The button for activating the next window"
-msgstr "Schaltfläche zum Verschieben des ausgewählten Widgets nach oben"
+msgstr "Schaltfläche zum Aktivieren des nächsten Fensters"
 
-#, fuzzy
 msgid "Press for activating the next window."
 msgstr "Betätigen zum Aktivieren des nächsten Fensters."
 
 msgid "Pre&vious"
 msgstr "&Vorheriges"
 
-#, fuzzy
 msgid "Activate the previous window"
 msgstr "Vorheriges Fenster aktivieren"
 
-#, fuzzy
 msgid "The button for activating the previous window"
 msgstr "Betätigen zum Aktivieren des vorherigen Fensters."
 
-#, fuzzy
 msgid "Press for activating the previous window."
 msgstr "Betätigen zum Aktivieren des vorherigen Fensters."
 
@@ -811,82 +731,64 @@ msgid "&Help"
 msgstr "&Hilfe"
 
 msgid "Visual items toolbar"
-msgstr "Toolbar der Elemente"
+msgstr "Visuelle Elemente Symbolleiste"
 
-#, fuzzy
-msgid "Functions of the widgets visibility"
-msgstr "Betätigen um die neue Bibliothek zu erstellen."
+msgid "Functions of the widgets location"
+msgstr "Funktionen des Widget-Standortes"
 
-#, fuzzy
 msgid "Elementary figure tools"
 msgstr "Werkzeuge der elementaren Figuren"
 
-#, fuzzy
 msgid "This label displays the current user."
 msgstr "Dieses Feld zeigt den aktuellen Benutzer."
 
-#, fuzzy
 msgid "Field for displaying the current user."
 msgstr "Feld für Anzeige des aktuellen Benutzers."
 
-#, fuzzy
 msgid "Double click to change the user."
 msgstr "Zweimal klicken um den Benutzers zu wechseln."
 
-#, fuzzy
 msgid "This label displays the used VCA engine station."
-msgstr "Dieses Zeichen zeigt die Station der VCA Maschine."
+msgstr "Dieses Feld zeigt die Station der VCA Maschine."
 
-#, fuzzy
 msgid "Field for displaying the used VCA engine station."
 msgstr "Feld für Anzeige der Station der VCA Maschine."
 
-#, fuzzy
 msgid "This label displays the widgets scaling mode."
 msgstr "Dieses Zeichen zeigt Maßstab des Widgets."
 
-#, fuzzy
 msgid "Field for displaying the widgets scaling mode."
-msgstr "Feld für Anzeige des Maßstab des Widgets . "
+msgstr "Feld für Anzeige des Maßstab des Widgets."
 
-#, fuzzy
 msgid "Click to change the widgets scaling mode."
 msgstr "Betätigen um Maßstab des Widgets zu ändern."
 
 msgid "This label indicates the fact of making changes."
-msgstr ""
+msgstr "Dieses Zeichen zeigt an, dass Änderungen vorgenommen wurden."
 
-#, fuzzy
 msgid "Field for indicating the fact of making changes."
-msgstr "Feld für Anzeige des aktuellen Benutzers."
+msgstr "Feld zum Anzeigen der Tatsache, Änderungen vorzunehmen."
 
-#, fuzzy
 msgid "Click to save all the made changes."
 msgstr "Klicken, um alle Änderungen speichern."
 
-#, fuzzy
 msgid "This label displays the current widget scale."
 msgstr "Dieses Zeichen zeigt den Bereich des aktuellen Widgets an."
 
-#, fuzzy
 msgid "Field for displaying the current widget scale."
-msgstr "Feld für Anzeige des aktuellen Benutzers."
+msgstr "Feld zum Anzeigen der aktuellen Widgetskala."
 
-#, fuzzy
 msgid "Dock window of the projects manager."
-msgstr "Fenster für Steuerung von Projekten."
+msgstr "Dock-Fenster des Projektmanagers."
 
-#, fuzzy
 msgid "Dock window of the manager of the widgets libraries."
-msgstr "Fenster für Steuerung von Widgets und Bibliotheken."
+msgstr "Dock-Fenster des Managers der Widgets-Bibliotheken."
 
-#, fuzzy
 msgid "Dock window of the inspector ot the widget attributes."
-msgstr "Fenster für Untersuchung der Widgetsattribute."
+msgstr "Dock-Fenster des Inspektors der Widget-Attribute."
 
-#, fuzzy
 msgid "Dock window of the inspector ot the widget links."
-msgstr "Fenster für Untersuchung der Widgetslinks."
+msgstr "Dock-Fenster des Inspektors der Widget-Links."
 
 msgid "Ready"
 msgstr "Fertig"
@@ -906,11 +808,9 @@ msgstr "Big (32x32)"
 msgid "Huge (48x48)"
 msgstr "Zu groß (48x48)"
 
-#, fuzzy
 msgid "Saving of the visual items"
-msgstr "Löschen der Elemente"
+msgstr "Speichern der visuellen Elemente"
 
-#, fuzzy
 msgid ""
 "Some visual items have been changed.\n"
 "Save the changes to the DB before exiting?"
@@ -944,134 +844,104 @@ msgstr ""
 msgid "Manual"
 msgstr "Handbuch"
 
-#, fuzzy
 msgid "The manual '%1' was not found offline or online!"
-msgstr "Nein das Handbuch '%1' gefunden, offline oder online!"
+msgstr "Das Handbuch '%1' wurde nicht offline oder online gefunden!"
 
-#, fuzzy
 msgid "Are you sure of loading visual items '%1' from the DB?"
 msgstr "Wollen Sie wirklich die Elemente '%1' aus der Datenbank laden?"
 
-#, fuzzy
 msgid "Loading the visual items data from the DB"
-msgstr "Element aus der Datenbank laden"
+msgstr "Laden der visuellen Elemente Daten aus der DB"
 
-#, fuzzy
 msgid "Are you sure of saving all modifications to the DB?"
-msgstr "Sind Sie sicher, alle zu retten Änderungen der DB?"
+msgstr "Sind Sie sicher, alle Änderungen an der DB zu speichern?"
 
-#, fuzzy
 msgid "Are you sure of saving the visual items '%1' to the DB?"
-msgstr "Wollen Sie wirklich die Elemente '%1' in die Datenbank speichern?"
+msgstr "Sind Sie sicher, dass die visuellen Elemente '%1' an die DB zu retten?"
 
-#, fuzzy
 msgid "Saving the visual items data to the DB"
-msgstr "Speichern des Elements in die Datenbank"
+msgstr "Speichern der visuellen Daten in der Datenbank"
 
-#, fuzzy
 msgid "Enter the identifier and the name of the new project."
-msgstr "Schaltfläche zum Erstellen des neuen Projekts"
+msgstr "Geben Sie die Kennung und den Namen des neuen Projekts."
 
-#, fuzzy
 msgid "Enter the identifier and the name of the new widgets library."
-msgstr "Schaltfläche zum Erstellen der neuen Bibliothek"
-
-#, fuzzy
-msgid "New widgets library"
-msgstr "Neue Widgetsbibliothek"
+msgstr "Geben Sie die Kennung und den Namen der neuen Widgets Bibliothek."
 
 msgid "Enter the identifier and the name of the new widget/page."
-msgstr ""
+msgstr "Geben Sie die Kennung und den Namen der neuen Widget/Seite."
 
-#, fuzzy
 msgid "Creating a widget/page"
 msgstr "Widget/Seite erstellen"
 
-#, fuzzy
 msgid "Are you sure of deleting the visual items: '%1'?"
-msgstr "Wollen Sie wirklich die Elemente '%1' löschen?"
+msgstr "Sind Sie sicher, dass die visuellen Elemente zu löschen: '%1'?"
 
-#, fuzzy
 msgid "Deleting the visual items"
-msgstr "Löschen der Elemente"
+msgstr "Löschen der visuellen Elemente"
 
 msgid "Widget: %1"
 msgstr "Widget: %1"
 
-#, fuzzy
 msgid "The widget '%1' editing window is already open."
-msgstr "Fenster für die Widgetbearbeitung '%1' ist schon geöffnet."
+msgstr "Das Widget '%1' Bearbeitungsfenster ist bereits geöffnet."
 
-#, fuzzy
 msgid ""
 "Are you sure of clear all changes of the visual items: '%1'?\n"
 "All changes will be lost and values will return to the previous state or "
 "will be inherited!"
 msgstr ""
-"Wollen Sie wirklich alle Änderungen Elements: '%1' zurücksetzen?\n"
-"Alle Änderungen gehen verloren und die Variablen erhalten Standardwerte oder "
-"vererbte Werte!"
+"Sind Sie sicher, klare alle Änderungen der visuellen Elemente: '%1'?\n"
+"Alle Änderungen gehen verloren und die Werte kehren in den vorherigen "
+"Zustand zurück oder werden vererbt!"
 
-#, fuzzy
 msgid ""
 "Are you sure for lowering down to the parent for all changes of the visual "
 "items: '%1'?\n"
 "All other visual elements, descendant from this ancestor, will use these "
 "changes!"
 msgstr ""
-"Sind Sie sicher, dass für bis zu Mutter alle Änderungen für visuelle "
-"Elemente setzen: '%1'?\n"
-"Alle anderen von den Mutter geerbt visuelle Elemente werden die Änderungen "
-"zu verwenden!"
+"Bist du sicher, dass du für alle Änderungen an den visuellen Elementen auf "
+"den Elternwert herunterkommst: '%1'?\n"
+"Alle anderen visuellen Elemente, die von diesem Vorfahren abstammen, werden "
+"diese Änderungen verwenden!"
 
-#, fuzzy
 msgid "Moving or copying the visual items"
-msgstr "Schaltfläche für die Eigenschaften des Elements"
+msgstr "Verschieben oder Kopieren der visuellen Elemente"
 
-#, fuzzy
 msgid "Moving the project '%1'.\n"
-msgstr "Ausführen Projekt: %1"
+msgstr "Verschieben des Projekts '%1'.\n"
 
-#, fuzzy
 msgid "Copying the project '%1'.\n"
-msgstr "Ausführen Projekt: %1"
+msgstr "Kopieren des Projekts '%1'.\n"
 
-#, fuzzy
 msgid "Moving the widgets library '%1'.\n"
 msgstr "Verschieben der Widgetsbibliothek '%1'.\n"
 
-#, fuzzy
 msgid "Copying the widgets library '%1'.\n"
-msgstr "Betätigen um die neue Bibliothek zu erstellen."
+msgstr "Kopieren der Widgetbibliothek '%1'.\n"
 
-#, fuzzy
 msgid "Moving the page '%1' to '%2'.\n"
 msgstr "Verschieben der Seite '%1' nach '%2'.\n"
 
-#, fuzzy
 msgid "Copying the page '%1' to '%2'.\n"
 msgstr "Kopieren der Seite '%1' nach '%2'.\n"
 
-#, fuzzy
 msgid "Moving the widget '%1' to '%2'.\n"
 msgstr "Verschieben des Widgets '%1' nach '%2'.\n"
 
-#, fuzzy
 msgid "Copying the widget '%1' to '%2'.\n"
 msgstr "Kopieren des Widgets '%1' nach '%2'.\n"
 
-#, fuzzy
 msgid "Enter the identifier and the name of the new widget."
-msgstr "Bezeichnung und Namen des neuen Widgets eingeben."
+msgstr "Geben Sie die Kennung und den Namen des neuen Widget."
 
 msgid "Copy/move scheme from '%1' to '%2' is not supported."
-msgstr ""
-"Kopieren / Verschieben des Schemas von '%1' nach '%2' wird nicht unterstützt."
+msgstr "Kopieren/Verschieben von '%1' nach '%2' wird nicht unterstützt."
 
 msgid "Inherit:"
 msgstr "Vererben:"
 
-#, fuzzy
 msgid ""
 "The target item '%1' is already present!\n"
 "Paste to it anyway?"
@@ -1079,13 +949,11 @@ msgstr ""
 "Zielpunkt '%1' ist bereits vorhanden!\n"
 "Jeder Weg eine Paste auf?"
 
-#, fuzzy
 msgid "Attempting to copy/move yourself for \"%1/%1\"!"
-msgstr "Versuchen Sie kopieren / verschieben Selbstselbst für \"%1/%1\"!"
+msgstr "Versuch, dich selbst zu kopieren/zu bewegen \"%1/%1\"!"
 
-#, fuzzy
 msgid "Properties of the widgets library"
-msgstr "Betätigen um die neue Bibliothek zu erstellen."
+msgstr "Eigenschaften der Widgetbibliothek"
 
 msgid "Widgets library"
 msgstr "Widgetsbibliothek"
@@ -1093,9 +961,8 @@ msgstr "Widgetsbibliothek"
 msgid "State"
 msgstr "Zustand"
 
-#, fuzzy
 msgid "Item icon. Click to download another."
-msgstr "Item-Symbol.Klicken Sie zum Download von anderen."
+msgstr "Artikel-Symbol. Klicken Sie, um eine andere herunterzuladen."
 
 msgid "Enabled:"
 msgstr "Eingeschaltet:"
@@ -1112,9 +979,8 @@ msgstr "Änderungsdatum:"
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#, fuzzy
 msgid "Identifier:"
-msgstr "Identifikator"
+msgstr "Identifikator:"
 
 msgid "Name:"
 msgstr "Name:"
@@ -1129,7 +995,7 @@ msgid "Access:"
 msgstr "Zugang:"
 
 msgid "Period of the calculating, milliseconds:"
-msgstr ""
+msgstr "Zeitraum der Berechnung, Millisekunden:"
 
 msgid "Mime data"
 msgstr "Mime Angaben"
@@ -1143,13 +1009,11 @@ msgstr "Mime Typ"
 msgid "Data size"
 msgstr "Datengrösse"
 
-#, fuzzy
-msgid "Add a record"
-msgstr "Datensatz hinzufügen"
+msgid "Add record"
+msgstr "Eintrag hinzufügen"
 
-#, fuzzy
-msgid "Delete a record"
-msgstr "Datensatz löschen"
+msgid "Delete record"
+msgstr "Eintrag löschen"
 
 msgid "Load data"
 msgstr "Daten laden"
@@ -1168,9 +1032,6 @@ msgstr "Erase Stil"
 
 msgid "Value"
 msgstr "Wert"
-
-msgid "Delete record"
-msgstr "Datensatz löschen"
 
 msgid "Diagnostics"
 msgstr "Diagnostik"
@@ -1202,69 +1063,58 @@ msgstr "Nachricht"
 msgid "Close"
 msgstr "Schliessen"
 
-#, fuzzy
 msgid "Error getting the node '%1' information."
-msgstr "Fehler bei der Knoteninformation '%1'."
+msgstr "Fehler beim Abrufen des Knoten '%1' Informationen."
 
-#, fuzzy
 msgid "Not set"
-msgstr "Kein Satz"
+msgstr "Nicht eingestellt"
 
 msgid "Downloading the image icon"
-msgstr ""
+msgstr "Herunterladen des Iconbildes"
 
 msgid "Images (*.png *.jpg)"
 msgstr "Bilder (*.png *.jpg)"
 
-#, fuzzy
 msgid "Error downloading the icon image '%1'."
 msgstr "Fehler beim Laden des Iconbildes '%1'."
 
-#, fuzzy
 msgid "Saving the changes"
-msgstr "Speichern des Moduls."
+msgstr "Speichern der Änderungen"
 
-#, fuzzy
 msgid ""
 "Some changes were made!\n"
 "Save the changes to the DB before the closing?"
 msgstr ""
-"Einige visuelle Elemente verändert.\n"
-"Speichern Sie die Änderungen DB an der Ausfahrt?"
+"Einige Änderungen wurden vorgenommen!\n"
+"Speichern Sie die Änderungen vor dem Schließen in der DB?"
 
-#, fuzzy
 msgid "No rows selected."
-msgstr "Keine Zeile ist ausgewählt."
+msgstr "Keine Zeilen ausgewählt."
 
 msgid "Are you sure of loading a mime to selected item '%1'?"
 msgstr ""
 "Sind Sie sicher, der das Laden einer MIME, um ausgewählte Element '%1'?"
 
-#, fuzzy
 msgid "Loading the data"
-msgstr "Laden des Moduls."
+msgstr "Laden der Daten."
 
 msgid "All files (*.*)"
 msgstr "Alle Dateien (*.*)"
 
 msgid "Error opening the file '%1': %2"
-msgstr ""
+msgstr "Fehler beim Öffnen der Datei '%1': %2"
 
-#, fuzzy
 msgid "The download file '%1' is very large."
-msgstr "Ladbarer Datei '%1' ist zu groß."
+msgstr "Die Download-Datei '%1' ist sehr groß."
 
-#, fuzzy
 msgid "Saving the data"
-msgstr "Daten speichern"
+msgstr "Speichern der Daten"
 
-#, fuzzy
 msgid "Error writing the data to the file '%1': %2"
 msgstr "Fehler beim Schreiben der Daten in die Datei '%1': %2"
 
-#, fuzzy
 msgid "Properties of the widget"
-msgstr "Eigenschaften für Figuren: %1."
+msgstr "Eigenschaften des Widgets"
 
 msgid "Widget"
 msgstr "Widget"
@@ -1302,31 +1152,26 @@ msgstr "Verarbeitung"
 msgid "Configuration template"
 msgstr "Konfigurationvorlage"
 
-#, fuzzy
-msgid "Add an attribute"
+msgid "Add attribute"
 msgstr "Attribut hinzufügen"
 
-#, fuzzy
-msgid "Delete an attribute"
+msgid "Delete attribute"
 msgstr "Attribut löschen"
 
 msgid "Procedure language:"
 msgstr "Verfahrenssprache:"
 
-#, fuzzy
 msgid "Translate:"
-msgstr "Übersetzung:"
+msgstr "Übersetzen:"
 
 msgid "Links"
 msgstr "Links"
 
-#, fuzzy
-msgid "The correct widget is not selected"
-msgstr "Kein gültiges Widget ist ausgewählt"
+msgid "Correct widget is not selected"
+msgstr "Richtige Widget ist nicht ausgewählt"
 
-#, fuzzy
-msgid "The correct attribute is not selected"
-msgstr "Kein gültiges Attribut ist ausgewählt"
+msgid "Correct attribute is not selected"
+msgstr "Korrektes Attribut ist nicht ausgewählt"
 
 msgid "<Group>"
 msgstr "<Gruppe>"
@@ -1343,29 +1188,23 @@ msgstr "Bearbeiten"
 msgid "Clear changes"
 msgstr "Klare Veränderungen"
 
-#, fuzzy
 msgid "Press to clear changes of the attribute."
 msgstr "Betätigen zum Zurücksetzen Änderungen des Attributs."
 
-#, fuzzy
 msgid "Lower the widget changes to its parent"
-msgstr "Geht visuelle Element geändert legte auf das Mutter"
+msgstr "Senken Sie die Widget Änderungen an der übergeordneten"
 
-#, fuzzy
 msgid "Press for lowering the widget changes to its parent."
-msgstr "Hier klicken um Änderungen Attribut auf das Mutter legte."
+msgstr "Betätigen zum Senken Sie die Widget Änderungen an der übergeordneten."
 
-#, fuzzy
 msgid "Full-text editing of the attribute."
-msgstr "Full-Text-Bearbeitung Attribut."
+msgstr "Volltextbearbeitung des Attributs."
 
-#, fuzzy
 msgid "Editing the attribute '%1' for the widget '%2'."
-msgstr "Attribut '%1' für die eigene WebSite '%2' zu editieren."
+msgstr "Bearbeiten Sie das Attribut '%1' für das Widget '%2'."
 
-#, fuzzy
 msgid "Short help to describe the syntax of the text."
-msgstr "Kurze Hilfe für die Syntax des Textes."
+msgstr "Kurze Hilfe zur Beschreibung der Syntax des Textes."
 
 msgid "Widgets"
 msgstr "Widget"
@@ -1373,9 +1212,9 @@ msgstr "Widget"
 msgid "Type"
 msgstr "Typ"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Time of requesting the widgets development tree '%s': %f ms."
-msgstr "Widget Entwicklung Baum '%s' Ladezeit %f ms."
+msgstr "Zeitpunkt der Anforderung des Widget-Entwicklungsbaums '%s': %f ms."
 
 msgid "Library"
 msgstr "Bibliothek"
@@ -1383,32 +1222,27 @@ msgstr "Bibliothek"
 msgid "Library: %1"
 msgstr "Bibliothek: %1"
 
-#, fuzzy
 msgid "Adding a widget based on '%1'"
 msgstr "Hinzufügen des Widgets basierend auf '%1'"
 
-#, fuzzy
 msgid "The button for adding a widget based on '%1'"
 msgstr "Schaltfläche zum Hinzufügen des Widgets basierend auf '%1'"
 
-#, fuzzy
-msgid "Press for adding a widget based on '%1'"
-msgstr "Betätigen um das Widgets basierend auf '%1' hinzuzufügen"
+msgid "Press for adding a widget based on '%1'."
+msgstr "Betätigen zum Hinzufügen des Widgets basierend auf '%1'."
 
-#, fuzzy
 msgid "Container widget"
 msgstr "Widgetscontainer"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Time of loading the widgets development tree '%s': %f ms."
-msgstr "Widget Entwicklung Baum '%s' Ladezeit %f ms."
+msgstr "Zeitpunkt des Ladens des Widget-Entwicklungsbaums '%s': %f ms."
 
 msgid "Refresh libraries"
 msgstr "Bibliotheken aktualisieren"
 
-#, fuzzy
 msgid "Press to refresh the present libraries."
-msgstr "Betätigen um die vorhandenen Bibliotheken zu aktualisiern."
+msgstr "Betätigen um die aktuellen Bibliotheken zu aktualisieren."
 
 msgid "Projects"
 msgstr "Projekte"
@@ -1416,9 +1250,9 @@ msgstr "Projekte"
 msgid "Project"
 msgstr "Projekt"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Time of loading the projects development tree '%s': %f ms."
-msgstr "Projektentwicklung Baum '%s' Ladezeit %f ms."
+msgstr "Zeitpunkt des Ladens des Projektentwicklungsbaums '%s': %f ms."
 
 msgid "Page"
 msgstr "Seite"
@@ -1426,7 +1260,6 @@ msgstr "Seite"
 msgid "Refresh projects"
 msgstr "Projekte aktualisieren"
 
-#, fuzzy
 msgid "Press to refresh the present projects."
 msgstr "Betätigen um die vorhandenen Projekte zu aktualisieren."
 
@@ -1437,39 +1270,31 @@ msgid "Resize"
 msgstr "Größe ändern"
 
 msgid "WARNING! The widget is already set up for editing."
-msgstr ""
+msgstr "WARNUNG! Das Widget ist bereits zum Bearbeiten eingerichtet."
 
-#, fuzzy
 msgid "Exit the widget editing"
 msgstr "Beenden der Widgetbearbeitung"
 
-#, fuzzy
 msgid "Press to exit the widget editing."
 msgstr "Betätigen zum Beenden der Widgetbearbeitung."
 
-#, fuzzy
 msgid "Enter the widget editing"
 msgstr "Starten der Widgetbearbeitung"
 
-#, fuzzy
 msgid "Press to enter the widget editing."
 msgstr "Betätigen zum Starten der Widgetbearbeitung."
 
-#, fuzzy
 msgid "Make up an icon from the widget"
-msgstr "Das Icon aus dem Widget erstellen"
+msgstr "Erstellen Sie ein Symbol aus dem Widget"
 
-#, fuzzy
 msgid "Press to make up an icon from the widget."
-msgstr "Betätigen zum Erstellen des Icons aus dem Widget."
+msgstr "Betätigen zum Erstellen Sie ein Symbol aus dem Widget."
 
-#, fuzzy
 msgid "Make up an image from the widget"
-msgstr "Das Bild aus dem Widget erstellen"
+msgstr "Erstellen Sie ein Bild aus dem Widget"
 
-#, fuzzy
 msgid "Press to make up an image from the widget."
-msgstr "Betätigen zum Erstellen des Bildes aus dem Widget."
+msgstr "Betätigen zum Erstellen Sie ein Bild aus dem Widget."
 
 msgid "Zoom in (+10%)"
 msgstr "Vergrössern (+10%)"
@@ -1483,23 +1308,21 @@ msgstr "Verkleinern (-10%)"
 msgid "Press to decrease the visual scale of the widget by 10%."
 msgstr "Betätigen um Massstab um 10% zu verkleinern."
 
-#, fuzzy
 msgid "Reset the zoom (100%)"
 msgstr "Reset Maßstab (100%)"
 
-#, fuzzy
 msgid "Press to reset the visual scale of the widget to 100%."
-msgstr "Betätigen um Maßstab auf 100% einzustellen."
+msgstr ""
+"Betätigen um die visuelle Skalierung des Widgets auf 100% zurückzusetzen."
 
-#, fuzzy
 msgid "Saving the widget image"
-msgstr "Speicherung des Widgetbildes"
+msgstr "Speichern des Widgetbildes"
 
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Bilder (*.png *.xpm *.jpg)"
 
 msgid "Error saving to the file '%1'."
-msgstr ""
+msgstr "Fehler beim Speichern in der Datei '%1'."
 
 msgid "Selected elements --- xy(%2:%3) wh[%4:%5]"
 msgstr "Ausgewählt sind die Elemente --- xy(%2:%3) wh[%4:%5]"
@@ -1536,7 +1359,6 @@ msgstr "Kopie vergangenen Widget '%s' von '%s'"
 msgid "unknown"
 msgstr "unbekannt"
 
-#, fuzzy
 msgid "The widget is disabled or the widget shape is not supported!"
 msgstr "Widget ist nicht eingeschaltet oder Widgetform wird nicht unterstützt!"
 
@@ -1546,40 +1368,35 @@ msgstr "Ausgewählt sind die Elemente: '%1'"
 msgid "Cursor --- xy(%1:%2)"
 msgstr "Cursor --- xy(%1:%2)"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Session '%s(%s)' using the remote host %d times."
-msgstr "Sitzung '%s' Aktualisierungszeit %f ms."
+msgstr "Sitzung '%s(%s)' verwendet den Remote-Host %d mal."
 
-#, fuzzy
 msgid ""
 "Error connecting to the visualization server '%1': %2.\n"
 "The next recovery attempt after %3s!"
 msgstr ""
-"Der Anschluss an Visualisierungs-Server '%1' Fehler: %2.\n"
-"Wird wiederherzustellen versuchen nach %3s!"
+"Fehler beim Verbinden mit dem Visualisierungsserver '%1': %2.\n"
+"Der nächste Wiederherstellungsversuch nach %3s!"
 
 #, c-format
 msgid "Scale of the root page [%f:%f]."
-msgstr ""
+msgstr "Maßstab der Root-Seite [%f:%f]."
 
-#, fuzzy
 msgid "Printing a page"
-msgstr "Seite drucken"
+msgstr "Drucken einer Seite"
 
-#, fuzzy
 msgid "There is no page to print!"
-msgstr "Seite zum Drucken auswählen."
+msgstr "Es gibt keine Seite zu drucken!"
 
-#, fuzzy
 msgid "Select a page to print."
 msgstr "Seite zum Drucken auswählen."
 
 msgid "Pages:"
 msgstr "Seiten:"
 
-#, fuzzy
 msgid "Printing the page: \"%1\" (%2)"
-msgstr "Drucken von Seiten \"%1\" (%2)"
+msgstr "Drucken der Seite: \"%1\" (%2)"
 
 msgid "OpenSCADA project: \"%1\""
 msgstr "Projekt OpenSCADA: \"%1\""
@@ -1587,27 +1404,23 @@ msgstr "Projekt OpenSCADA: \"%1\""
 msgid "User: \"%1\""
 msgstr "Benutzer: \"%1\""
 
-#, fuzzy
 msgid "Printing a diagram"
-msgstr "Diagramm drucken"
+msgstr "Drucken einer Diagramm"
 
 msgid "There is no page!"
-msgstr ""
+msgstr "Es gibt keine Seite!"
 
-#, fuzzy
 msgid "There is no diagram!"
-msgstr "Diagramm drucken"
+msgstr "Es gibt kein Diagramm!"
 
-#, fuzzy
 msgid "Select a diagram to print."
-msgstr "Diagramm zum Drucken auswählen."
+msgstr "Wählen Sie ein Diagramm zu drucken."
 
 msgid "Diagrams:"
 msgstr "Diagramme:"
 
-#, fuzzy
 msgid "Printing the diagram: \"%1\" (%2)"
-msgstr "Diagramme drucken: \"%1\" (%2)"
+msgstr "Drucken des Diagramms: \"%1\" (%2)"
 
 msgid ""
 "OpenSCADA project: \"%1\"\n"
@@ -1623,52 +1436,41 @@ msgstr ""
 "Benutzer: \"%1\"\n"
 "%2"
 
-#, fuzzy
 msgid "Printing a document"
-msgstr "Dokument drucken"
+msgstr "Drucken einer Dokument"
 
-#, fuzzy
 msgid "There is no document!"
-msgstr "Dokument drucken"
+msgstr "Es gibt kein Dokument!"
 
-#, fuzzy
 msgid "Select a document to print."
-msgstr "Dokument zum Drucken auswählen."
+msgstr "Wählen Sie ein Dokument zu drucken."
 
 msgid "Document:"
 msgstr "Dokument:"
 
-#, fuzzy
 msgid "Printing the document: \"%1\" (%2)"
 msgstr "Dokument drucken: \"%1\" (%2)"
 
-#, fuzzy
 msgid "Exporting a page"
-msgstr "Export der Seite"
+msgstr "Eine Seite exportieren"
 
-#, fuzzy
 msgid "There is no page for exporting!"
-msgstr "Seite für den Export auswählen."
+msgstr "Es gibt keine Seite zum Exportieren!"
 
-#, fuzzy
 msgid "Select a page to export."
-msgstr "Seite für den Export auswählen."
+msgstr "Wählen Sie eine Seite zu exportieren."
 
-#, fuzzy
 msgid "Saving the page image"
-msgstr "Speicherung des Bildes der Seite"
+msgstr "Speichern des Seitenbildes"
 
-#, fuzzy
 msgid "Exporting a diagram"
-msgstr "Export-Chart"
+msgstr "Exportieren eines Diagramms"
 
-#, fuzzy
 msgid "Select a diagram to export."
-msgstr "Chart für den Export auswählen."
+msgstr "Wählen Sie ein Diagramm zu exportieren."
 
-#, fuzzy
 msgid "Saving a diagram"
-msgstr "Chart speichern"
+msgstr "Ein Diagramm speichern"
 
 #, c-format
 msgid "Trend %1.png"
@@ -1683,21 +1485,17 @@ msgstr "\"Datum und Uhrzeit\";\"us\""
 msgid "\"Frequency (Hz)\""
 msgstr "\"Frequenz (Hz)\""
 
-#, fuzzy
 msgid "Error writing to: %1."
-msgstr "Fehler schreiben Sie an: %1."
+msgstr "Fehler beim Schreiben in: %1."
 
-#, fuzzy
 msgid "Exporting a document"
-msgstr "Export des Dokuments"
+msgstr "Exportieren eines Dokuments"
 
-#, fuzzy
 msgid "Select a document to export."
-msgstr "Dokument für den Export auswählen."
+msgstr "Wählen Sie ein Dokument zu exportieren."
 
-#, fuzzy
 msgid "Saving a document"
-msgstr "Speicherung des Dokumentes"
+msgstr "Ein Dokument speichern"
 
 #, c-format
 msgid "Document %1.html"
@@ -1706,11 +1504,9 @@ msgstr "Dokument %1.html"
 msgid "XHTML (*.html);;CSV file (*.csv)"
 msgstr "XHTML (*.html);;CSV File (*.csv)"
 
-#, fuzzy
 msgid "No data to export."
 msgstr "Keine Daten für Export."
 
-#, fuzzy
 msgid ""
 "Several sessions are already opened for the project \"%1\".\n"
 "You can create a new or connect to the present session. Please select the "
@@ -1721,20 +1517,17 @@ msgstr ""
 "Sitzung verbinden. Bitte wählen Sie die richtige oder klicken Sie \"Abbrechen"
 "\"."
 
-#, fuzzy
 msgid "Selecting a session for connection or a new one creating"
-msgstr "Sitzung für die Verbindung auswählen oder eine neue"
+msgstr "Auswählen einer Sitzung für die Verbindung oder eine neue Erstellung"
 
-#, fuzzy
-msgid "<Create a new session>"
+msgid "<Create new session>"
 msgstr "<Erstellen Sie eine neue Sitzung>"
 
 msgid "Running project: %1"
 msgstr "Ausführen Projekt: %1"
 
-#, fuzzy
 msgid "The button for closing the Vision runtime window"
-msgstr "Schaltfläche zum Schliessen des Ausführungsfenster Vision"
+msgstr "Schaltfläche zum Schließen des Vision-Laufzeitfensters"
 
 msgid "Press to close of the current Vision runtime window."
 msgstr "Betätigen zum Schliessen des Ausführungsfensters Vision."
@@ -1748,22 +1541,18 @@ msgstr "&Drucken"
 msgid "Print the master page"
 msgstr "Hauptseite drucken"
 
-#, fuzzy
 msgid "The button for printing the master page, by default"
-msgstr "Schaltfläche zum Drucken der Hauptseite standard"
+msgstr "Schaltfläche zum Drucken der Masterseite standardmäßig"
 
-#, fuzzy
 msgid "Press for printing the master page, by default."
 msgstr "Betätigen zum Drucken der Hauptseite standard."
 
 msgid "Print the selected page"
 msgstr "Ausgewählte Seite drucken"
 
-#, fuzzy
 msgid "The button for printing the selected page"
 msgstr "Schaltfläche zum Drucken der ausgewählten Seite"
 
-#, fuzzy
 msgid "Press for printing the selected page."
 msgstr "Betätigen zum Drucken der ausgewählten Seite."
 
@@ -1773,11 +1562,9 @@ msgstr "Diagramm"
 msgid "Print the selected diagram"
 msgstr "Drucken des ausgewählten Diagramms"
 
-#, fuzzy
 msgid "The button for printing the selected diagram"
 msgstr "Schaltfläche zum Drucken des ausgewählten Diagramms"
 
-#, fuzzy
 msgid "Press for printing the selected diagram."
 msgstr "Betätigen zum Drucken des ausgewählten Diagramms."
 
@@ -1787,11 +1574,9 @@ msgstr "Dokument"
 msgid "Print the selected document"
 msgstr "Drucken des ausgewählten Dokuments"
 
-#, fuzzy
 msgid "The button for printing the selected document"
 msgstr "Schaltfläche zum Drucken des ausgewählten Dokuments"
 
-#, fuzzy
 msgid "Press for printing the selected document."
 msgstr "Betätigen zum Drucken des ausgewählten Dokuments."
 
@@ -1801,44 +1586,36 @@ msgstr "&Export"
 msgid "Export the master page"
 msgstr "Export der Hauptseite"
 
-#, fuzzy
 msgid "The button for exporting the master page, by default"
 msgstr "Schaltfläche für den Export der Hauptseite, standard"
 
-#, fuzzy
 msgid "Press for exporting the master page, by default."
 msgstr "Betätigen für den Export der Hauptseite, standard."
 
 msgid "Export the selected page"
 msgstr "Export der ausgewählten Seite"
 
-#, fuzzy
 msgid "The button for exporting the selected page"
 msgstr "Schaltfläche für den Export der ausgewählten Seite"
 
-#, fuzzy
 msgid "Press for exporting the selected page."
 msgstr "Betätigen für den Export der ausgewählten Seite."
 
 msgid "Export the selected diagram"
 msgstr "Export des ausgewählten Diagrammes"
 
-#, fuzzy
 msgid "The button for exporting the selected diagram"
 msgstr "Schaltfläche für den Export des ausgewählten Diagrammes"
 
-#, fuzzy
 msgid "Press for exporting the selected diagram."
 msgstr "Betätigen für den Export des ausgewählten Diagrammes."
 
 msgid "Export the selected document"
 msgstr "Export des ausgewählten Dokuments"
 
-#, fuzzy
 msgid "The button for exporting the selected document"
 msgstr "Schaltfläche für den Export des ausgewählten Dokuments"
 
-#, fuzzy
 msgid "Press for exporting the selected document."
 msgstr "Betätigen für den Export des ausgewählten Dokuments."
 
@@ -1848,12 +1625,8 @@ msgstr "Handbuch von Projekt '%1'"
 msgid "The button for getting the using project '%1' manual"
 msgstr "Schaltfläche für Projekt '%1' Handbuch"
 
-#, fuzzy
 msgid "Press for getting the using project '%1' manual."
-msgstr "Betätigen um Projekt '%1' Handbuch."
-
-msgid "'%1' manual"
-msgstr "'%1' Handbuch"
+msgstr "Betätigen um das verwendete Projekt '%1' manuell aufzurufen."
 
 msgid "The button for requesting the information about GUI elements"
 msgstr "Schaltfläche zum Anfordern von Informationen zu GUI-Elementen"
@@ -1867,80 +1640,68 @@ msgstr "Betätigen um Informationen zu GUI-Elementen anzufordern."
 msgid "Alarm level"
 msgstr "Störungsstufe"
 
-#, fuzzy
 msgid "The button for quietance all alarms"
-msgstr "Schaltfläche für die Quittierung aller Störungen"
+msgstr "Schaltfläche für quietance alle Alarme"
 
-#, fuzzy
 msgid "Press for quietance all alarms."
-msgstr "Betätigen für die Quittierung aller Störungen."
+msgstr "Betätigen für quietance alle Alarme."
 
-#, fuzzy
 msgid "General (status)"
 msgstr "Generisches (Status)"
 
-#, fuzzy
 msgid "This label shows the current system time."
 msgstr "Dieses Zeichen zeigt die aktuelle Systemzeit."
 
-#, fuzzy
 msgid "This label displays the used interface style."
 msgstr "Dieses Zeichen zeigt verwendete Schnittstelle Stil."
 
-#, fuzzy
 msgid "Field for displaying the used interface style."
 msgstr "Feld für Anzeige verwendete Schnittstelle Stil."
 
-#, fuzzy
 msgid "Double click to change the style."
-msgstr "Zweimal klicken um den Benutzers zu wechseln."
+msgstr "Doppelklicken, um den Stil zu ändern."
 
 msgid "Status line items"
 msgstr "Statuszeile Elemente"
 
-#, fuzzy
 msgid "Running window"
-msgstr "Fenster des Ausführung"
+msgstr "Laufendes Fenster"
 
 msgid "Original size;Maximize;Full screen"
 msgstr "Originalgrösse;Maximieren;Vollbild"
 
-#, fuzzy
 msgid "Keep aspect ratio on the scaling"
-msgstr "Seitenverhältnis beibehalten auf der Skala"
+msgstr "Behalten Sie das Seitenverhältnis bei der Skalierung"
 
-#, fuzzy
 msgid "Do not show the status bar"
 msgstr "Keine Statusleiste anzeigen"
 
 msgid "Control and save window positions"
-msgstr ""
+msgstr "Fensterpositionen steuern und speichern"
 
 msgid "Alarm level: %1"
 msgstr "Stufe der Störung: %1"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the session creation for '%s'."
-msgstr "Wiederaufbau der Schaffung der Session für '%s'."
+msgstr "Wiederherstellen der Sitzung Erstellung für '%s'."
 
 #, c-format
 msgid "Time of updating the session '%s': %f ms."
-msgstr ""
+msgstr "Zeitpunkt der Aktualisierung der Sitzung '%s': %f ms."
 
-#, fuzzy, c-format
+#, c-format
 msgid "Error function of the notificator '%s': %s"
-msgstr "Funktion des Melder '%s' Fehler: %s"
+msgstr "Fehlerfunktion des notificator '%s': %s"
 
 msgid "Enabled notification"
 msgstr "Aktivieren Meldung"
 
-#, fuzzy
 msgid "Performing the notification, always 1"
 msgstr "Doing Meldung, immer 1"
 
-#, fuzzy
 msgid "Making the resource, always 0"
-msgstr "Doing Ressource, immer 0"
+msgstr "Herstellung der Ressource, immer 0"
 
 msgid "Resource stream"
 msgstr "Ressourcen-Stream"
@@ -1948,48 +1709,40 @@ msgstr "Ressourcen-Stream"
 msgid "Notification message"
 msgstr "Benachrichtigung"
 
-#, fuzzy
 msgid "Language of the notification message"
-msgstr "Benachrichtigung"
+msgstr "Sprache der Benachrichtigung"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Notificator %d"
 msgstr "Notyfier %d"
 
-#, fuzzy
 msgid "The button for quietance the current \"%1\""
-msgstr "Schaltfläche zum Rückstellen des Cursormodus"
+msgstr "Schaltfläche für Quietance die aktuelle \"%1\""
 
-#, fuzzy
 msgid "Press for quietance the current \"%1\"."
-msgstr "Betätigen, um Löschen der aktuellen füllen."
+msgstr "Betätigen, für Quietance die aktuelle \"%1\"."
 
-#, fuzzy
 msgid "The button for quietance all \"%1\""
-msgstr "Schaltfläche für die Quittierung aller \"%1\""
+msgstr "Schaltfläche für Quietance aller \"%1\""
 
-#, fuzzy
 msgid "Press for quietance all \"%1\"."
-msgstr "Betätigen für die Quittierung aller \"%1\"."
+msgstr "Betätigen für für Quietance aller \"%1\"."
 
-#, fuzzy
 msgid ""
 "Page: '%1'.\n"
 "No access to view."
 msgstr ""
 "Seite: '%1'.\n"
-"Ansicht Zugriff ist nicht erlaubt."
+"Kein Zugriff auf die Ansicht."
 
 msgid "No style"
 msgstr "Kein Stil"
 
-#, fuzzy
 msgid "Select your style from the list."
 msgstr "Wählen Sie Ihren Stil aus der Liste."
 
-#, fuzzy
 msgid "Selecting a style"
-msgstr "Benutzer auswählen"
+msgstr "Auswählen eines Stils"
 
 msgid "Elementary figure"
 msgstr "Elementare Figur"
@@ -2297,21 +2050,18 @@ msgstr "Gepunktet"
 msgid "Widget's shape '%1' is not implemented yet!"
 msgstr "Widgetsgestalt '%1' ist nicht verfügbar!"
 
-#, fuzzy
 msgid "Saving a file"
-msgstr "Datei speichern"
+msgstr "Eine Datei speichern"
 
-#, fuzzy
 msgid "Loading a file"
-msgstr "Datei laden"
+msgstr "Eine Datei laden"
 
-#, fuzzy
 msgid "Error writing to the file '%1'."
-msgstr "Fehler schreiben Sie an: %1."
+msgstr "Fehler beim Schreiben in die Datei '%1'."
 
-#, fuzzy, c-format
+#, c-format
 msgid "Time of building the trend: %f ms."
-msgstr "Trend zu bauen: %f ms."
+msgstr "Zeitpunkt der Trendbildung: %f ms."
 
 msgid "kHz"
 msgstr "kHz"
@@ -2331,9 +2081,9 @@ msgstr "%gs"
 msgid "%gms"
 msgstr "%gms"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Time of drawing the trend: %f ms."
-msgstr "Trend zu bauen: %f ms."
+msgstr "Zeitpunkt des Zeichnens des Trends: %f ms."
 
 msgid "Date and time"
 msgstr "Datum und Uhrzeit"
@@ -2344,9 +2094,9 @@ msgstr "Drucken"
 msgid "Export"
 msgstr "Export"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing the document: %s"
-msgstr "Fehler schreiben Sie an: %1."
+msgstr "Fehler beim Parsen des Dokuments: %s"
 
 msgid "Loading page: '%1'."
 msgstr "Lade Seite: '%1'."
@@ -2357,9 +2107,8 @@ msgstr ""
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#, fuzzy
 msgid "Selecting an user"
-msgstr "Benutzer auswählen"
+msgstr "Einen Benutzer auswählen"
 
 msgid "User:"
 msgstr "Benutzer:"
@@ -2367,9 +2116,8 @@ msgstr "Benutzer:"
 msgid "Password:"
 msgstr "Kennwort:"
 
-#, fuzzy
 msgid "Selecting a font"
-msgstr "Diagramm zum Drucken auswählen."
+msgstr "Auswählen einer Schriftart"
 
 msgid "Font:"
 msgstr "Schrift:"
@@ -2404,12 +2152,11 @@ msgstr "Annehmen"
 msgid "Cursor = (%1:%2)"
 msgstr "Cursor = (%1:%2)"
 
-#, fuzzy
 msgid "Enter a string to search:"
-msgstr "Geben Sie den Text-String für Suche:"
+msgstr "Geben Sie eine Zeichenfolge suchen:"
 
 msgid "Search string"
-msgstr ""
+msgstr "Suchbegriff"
 
 msgid "Backward"
 msgstr "Rückwärts"
@@ -2420,382 +2167,17 @@ msgstr "Case sensibel"
 msgid "Whole words"
 msgstr "Ganze Wörter"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Time of requesting the VCA engine '%s': %f ms."
-msgstr "Zeit der Anfrage an die VCA Maschine '%s' %f msek."
+msgstr "Zeitpunkt der Anforderung der VCA-Engine '%s': %f ms."
 
-#, fuzzy, c-format
+#, c-format
 msgid "Time of loading '%s': %f ms."
-msgstr "Zeit für Laden '%s' %f msek."
+msgstr "Zeit des Ladens '%s': %f ms."
 
 #, c-format
 msgid "Time of initiating '%s': %f ms."
-msgstr ""
+msgstr "Zeit zu initiieren '%s': %f ms."
 
 msgid "Input dialog of Vision"
-msgstr ""
-
-#, fuzzy
-#~ msgid "Clearing changes of the visual items"
-#~ msgstr "Betätigen zum Zurücksetzen Änderungen des Attributs."
-
-#, fuzzy
-#~ msgid "Lowering down of the visual items changes"
-#~ msgstr "Betätigen zum Zurücksetzen der Änderungen."
-
-#~ msgid "Full screen toggle"
-#~ msgstr "Umschalten Vollbild"
-
-#~ msgid "The button for full screen toggle"
-#~ msgstr "Schaltfläche zum Umschalten des Vollbilds"
-
-#~ msgid "Press for toggle full screen."
-#~ msgstr "Betätigen zum Umschalten des Vollbilds."
-
-#~ msgid "Close Vision window"
-#~ msgstr "Schliessen des Fensters Vision"
-
-#~ msgid "Quit from OpenSCADA"
-#~ msgstr "Beenden von OpenSCADA"
-
-#~ msgid "The button for full quit from OpenSCADA"
-#~ msgstr "Schaltfläche für das Beenden von OpenSCADA"
-
-#~ msgid "Press for full quit from OpenSCADA system."
-#~ msgstr "Betätigen um OpenSCADA zu beenden"
-
-#~ msgid "The button for display the program and OpenSCADA information"
-#~ msgstr "Schaltfläche Informationen über OpenSCADA-"
-
-#~ msgid "Press to display the program and OpenSCADA information."
-#~ msgstr "Betätigen um Informationen über OpenSCADA zu erhalten."
-
-#~ msgid "The button for getting the using QT information"
-#~ msgstr "Schaltfläche für Informationen über QT"
-
-#~ msgid "Press to get the using QT information."
-#~ msgstr "Betätigen um Informationen über QT zu erhalten."
-
-#~ msgid "The button for getting the using %1 manual"
-#~ msgstr "Schaltfläche für %1 Handbuch"
-
-#~ msgid "Press to get the using %1 manual."
-#~ msgstr "Betätigen um %1 Handbuch."
-
-#~ msgid "The button for question about GUI elements"
-#~ msgstr "Schaltfläche für Informationen über die Benutzerschnittstelle"
-
-#~ msgid "Get respond about user interface elements"
-#~ msgstr "Hilfe über die Elemente der Benutzerschnittstelle"
-
-#~ msgid "Press to respond about user interface elements."
-#~ msgstr ""
-#~ "Betätigen um Informationen über die Benutzerschnittstelle zu erhalten"
-
-#~ msgid "Run project execution"
-#~ msgstr "Projekt starten"
-
-#~ msgid "New project create"
-#~ msgstr "Neues Projekt erstellen"
-
-#~ msgid ""
-#~ "The button for addition of the visual item into library, container "
-#~ "widget, project or page"
-#~ msgstr ""
-#~ "Schaltfläche zum Hinzufügen des Elements in die Bibliothek, den "
-#~ "Widgetscontainer, das Projekt oder die Seite"
-
-#~ msgid "Visual item properties"
-#~ msgstr "Eigenschaften des Elements"
-
-#~ msgid "Get visual item properties"
-#~ msgstr "Laden der Eigenschaften des Elements"
-
-#~ msgid "Visual item edit"
-#~ msgstr "Element bearbeiten"
-
-#~ msgid "Goes visual item edit"
-#~ msgstr "Zum Bearbeiten des Elementes"
-
-#~ msgid "Press to go to visual item edition."
-#~ msgstr "Betätigen um Element zu bearbeiten."
-
-#~ msgid "Visual item changes clear"
-#~ msgstr "Änderungen zurücksetzen"
-
-#~ msgid "Visual item changes put down"
-#~ msgstr "Visuelle Element geändert legte"
-
-#~ msgid "Visual item changes UnDo"
-#~ msgstr "Visuelle Element Änderungen rückgängig"
-
-#~ msgid "Press to make visual item changes UnDo."
-#~ msgstr "Betätigen zum machen Sie visuelle Element Änderungen rückgängig."
-
-#~ msgid "Visual item changes ReDo"
-#~ msgstr "Visuelle Element ändert wiederholen Sie"
-
-#~ msgid "Make visual item changes ReDo:"
-#~ msgstr "Machen Sie visuelle Element ändert wiederholen Sie:"
-
-#~ msgid "The button for making visual item changes ReDo"
-#~ msgstr "Schaltfläche zum machen Sie visuelle Element ändert wiederholen Sie"
-
-#~ msgid "Press to make visual item changes ReDo."
-#~ msgstr "Betätigen zum machen Sie visuelle Element ändert wiederholen Sie."
-
-#~ msgid "Visual item copy"
-#~ msgstr "Element kopieren"
-
-#~ msgid "Make visual item copy"
-#~ msgstr "Kopieren des Elements"
-
-#~ msgid "The button for making visual item copy"
-#~ msgstr "Schaltfläche zum Kopieren des Elements"
-
-#~ msgid "Press to make visual item copy."
-#~ msgstr "Betätigen zum Kopieren des Elements."
-
-#~ msgid "Visual item cut"
-#~ msgstr "Element ausschneiden"
-
-#~ msgid "Make visual item cut"
-#~ msgstr "Ausschneiden des Elements"
-
-#~ msgid "Visual item paste"
-#~ msgstr "Element einfügen"
-
-#~ msgid "Make visual item paste"
-#~ msgstr "Einfügen des Elements"
-
-#~ msgid "The button for making visual item paste"
-#~ msgstr "Schaltfläche zum Einfügen des Elements"
-
-#~ msgid "Press to make visual item paste."
-#~ msgstr "Betätigen zum Einfügen des Elements."
-
-#~ msgid "Up widget"
-#~ msgstr "Widget an den Anfang verschieben"
-
-#~ msgid "Down widget"
-#~ msgstr "Widget ans Ende verschieben"
-
-#~ msgid "Rise widget"
-#~ msgstr "Widget nach oben"
-
-#~ msgid "Down selected widget"
-#~ msgstr "Verschieben ausgewählten Widget nach unten"
-
-#~ msgid "The button for alignment of selected widgets to the top"
-#~ msgstr "Schaltfläche für Ausrichtung der ausgewählten Widgets oben"
-
-#~ msgid "Cursor"
-#~ msgstr "Cursor"
-
-#~ msgid "Unset cursor"
-#~ msgstr "Rückstellung des Cursors"
-
-#~ msgid "The button for the active window closing"
-#~ msgstr "Schaltfläche zum Schließen des aktiven Fensters"
-
-#~ msgid "The button for all windows closing"
-#~ msgstr "Schaltfläche zum Schließen aller Fenster"
-
-#~ msgid "The button for all windows cascading"
-#~ msgstr "Schaltfläche zum Staffeln aller Fenster"
-
-#~ msgid "The button for next window activation"
-#~ msgstr "Schaltfläche zum Aktivieren des nächsten Fensters"
-
-#~ msgid "The button for previous window activation"
-#~ msgstr "Schaltfläche zum Aktivieren des vorherigen Fensters"
-
-#, fuzzy
-#~ msgid "Visibility widget functions"
-#~ msgstr "Widgetsansichtfunktionen"
-
-#~ msgid "This label displays current user."
-#~ msgstr "Dieses Feld zeigt den aktuellen Benutzer."
-
-#~ msgid "Field for display the current user."
-#~ msgstr "Feld für Anzeige des aktuellen Benutzers."
-
-#~ msgid "Double click to change user."
-#~ msgstr "Zweimal klicken um den Benutzers zu wechseln."
-
-#~ msgid "This label displays the using VCA engine station."
-#~ msgstr "Dieses Feld zeigt die Station der VCA Maschine."
-
-#~ msgid "Field for display of the using VCA engine station."
-#~ msgstr "Feld für Anzeige der Station der VCA Maschine."
-
-#~ msgid "This label displays modifying."
-#~ msgstr "Dieses Feld zeigt die Änderung."
-
-#~ msgid "Field for display modifying."
-#~ msgstr "Feld für Anzeige der Änderungen."
-
-#~ msgid "Field for display the scale of the current widget."
-#~ msgstr "Feld für Anzeige des Bereichs des aktuellen Widgets."
-
-#~ msgid "Visual items save"
-#~ msgstr "Speicherung der Elemente"
-
-#~ msgid "Enter new project's identifier and name."
-#~ msgstr "Bezeichnung und Namen des neuen Projekts eingeben."
-
-#~ msgid "Enter new widget's library identifier and name."
-#~ msgstr "Bezeichnung und Namen des neuen Widgetsbibliothek eingeben."
-
-#~ msgid "Enter new widget's/page's identifier and name."
-#~ msgstr "Bezeichnung und Namen des neuen Widgets/der neuen Seite eingeben."
-
-#~ msgid "Visual items' changes clear"
-#~ msgstr "Zurücksetzen der Änderungen"
-
-#~ msgid "Visual items move or copy"
-#~ msgstr "Kopieren oder Verschieben der Elementen"
-
-#~ msgid "Project '%1' move.\n"
-#~ msgstr "Verschieben von Projekt '%1'.\n"
-
-#~ msgid "Project '%1' copy.\n"
-#~ msgstr "Kopieren von Projekt '%1'.\n"
-
-#~ msgid "Widget's library '%1' copy.\n"
-#~ msgstr "Kopieren der Widgetsbibliohek '%1'.\n"
-
-#, fuzzy
-#~ msgid "Press for full quit from OpenSCADA."
-#~ msgstr "Betätigen um OpenSCADA zu beenden"
-
-#, fuzzy
-#~ msgid "Connecting"
-#~ msgstr "Verbindungen"
-
-#~ msgid "Start module."
-#~ msgstr "Modul starten."
-
-#~ msgid "Stop module."
-#~ msgstr "Modul anhalten."
-
-#~ msgid "Widget's library properties"
-#~ msgstr "Eigenschaften der Widgetsbibliothek"
-
-#~ msgid "Calculate period (ms):"
-#~ msgstr "Rechenzeit (ms):"
-
-#~ msgid "Get node '%1' information error."
-#~ msgstr "Fehler bei der Knoteninformation '%1'."
-
-#~ msgid "Load icon picture"
-#~ msgstr "Iconbild laden"
-
-#~ msgid "Changes apply"
-#~ msgstr "Änderungen gelten"
-
-#~ msgid ""
-#~ "Some changes you don't apply!\n"
-#~ "Apply now or lost the?"
-#~ msgstr ""
-#~ "Einige Änderungen nicht gelten!\n"
-#~ "Bewerben Sie sich jetzt oder verloren das?"
-
-#~ msgid "Open file '%1' is fail: %2"
-#~ msgstr "Fehler beim Öffnen der Datei '%1': %2"
-
-#~ msgid "Widget properties"
-#~ msgstr "Widgets Eigenschaften"
-
-#~ msgid "Procedure calculate (ms):"
-#~ msgstr "Rechenzeit der Funktion (ms):"
-
-#~ msgid "Changes put down to the parent"
-#~ msgstr "Änderungen legte auf das Mutter"
-
-#~ msgid "Widgets' development tree '%s' request time %f ms."
-#~ msgstr "Widget Entwicklung Baum '%s' Anfrage Zeitpunkt %f ms."
-
-#~ msgid "Warning! Edit widget already set."
-#~ msgstr "Achtung! Edit Widget bereits eingestellt."
-
-#~ msgid "Save to file '%1' is error."
-#~ msgstr "Fehler beim Speichern in die Datei '%1'."
-
-#~ msgid "No one page for print is present!"
-#~ msgstr "Keine Seite zum Drucken ist vorhanden!"
-
-#~ msgid "Page print."
-#~ msgstr "Seite drucken."
-
-#~ msgid "No one page is present!"
-#~ msgstr "Keine Seite ist vorhanden."
-
-#~ msgid "No one diagram is present!"
-#~ msgstr "Kein Diagramm ist vorhanden!"
-
-#~ msgid "Diagram print."
-#~ msgstr "Diagramm drucken."
-
-#~ msgid "No one document is present!"
-#~ msgstr "Kein Dokument ist vorhanden!"
-
-#~ msgid "Document print."
-#~ msgstr "Dokument drucken."
-
-#~ msgid "No one page for export is present!"
-#~ msgstr "Keine Seite für den Export ist vorhanden!"
-
-#~ msgid "Page export."
-#~ msgstr "Export der Seite."
-
-#~ msgid "Diagram export."
-#~ msgstr "Export-Chart."
-
-#~ msgid "Document export."
-#~ msgstr "Export des Dokumentes."
-
-#~ msgid "Field for display of the current user."
-#~ msgstr "Feld für Anzeige des aktuellen Beutzers."
-
-#~ msgid "Double click for style change."
-#~ msgstr "Zweimal klicken für Stil zu ändern."
-
-#~ msgid "Windows position control and save"
-#~ msgstr "Windows-Lageregelung und sparen"
-
-#~ msgid "Notification message's language"
-#~ msgstr "Sprache Benachrichtigung"
-
-#~ msgid "The button for current \"%1\" quittance"
-#~ msgstr "Schaltfläche für die Quittierung Strömung \"%1\""
-
-#~ msgid "Press for current \"%1\" quittance."
-#~ msgstr "Betätigen für die Quittierung Strömung \"%1\"."
-
-#~ msgid "Style select"
-#~ msgstr "Stil wählen"
-
-#~ msgid "Write file '%1' is fail."
-#~ msgstr "Fehler beim Schreiben in die Datei '%1'."
-
-#~ msgid "Trend draw: %f ms."
-#~ msgstr "Trend zu ziehen: %f ms."
-
-#~ msgid "Document parsing error: %s"
-#~ msgstr "Fehler der Dokumentanalyse: %s"
-
-#~ msgid "ID:"
-#~ msgstr "ID:"
-
-#~ msgid "Font select"
-#~ msgstr "Schrift auswählen"
-
-#~ msgid "String search"
-#~ msgstr "String-Suche"
-
-#~ msgid "Init '%s' time %f ms."
-#~ msgstr "Zeit der Initialisation '%s' %f ms."
-
-#~ msgid "Vision dialog"
-#~ msgstr "Vision-Dialog"
+msgstr "Eingabedialog von Vision"

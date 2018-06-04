@@ -344,19 +344,19 @@ void TFld::setSelNames( const string &slnms )
 const vector<string> &TFld::selValS( ) const
 {
     if(flg()&TFld::Selected && type() == TFld::String) return *mVal.s;
-    throw TError("Field", _("Field is not string."));
+    throw TError("Field", _("Field is not String."));
 }
 
 const vector<int> &TFld::selValI( ) const
 {
     if(type() == TFld::Integer) return *mVal.i;
-    throw TError("Field", _("Field is not integer."));
+    throw TError("Field", _("Field is not Integer."));
 }
 
 const vector<double> &TFld::selValR( ) const
 {
     if(type() == TFld::Real) return *mVal.r;
-    throw TError("Field", _("Field is not real."));
+    throw TError("Field", _("Field is not Real."));
 }
 
 const vector<bool> &TFld::selValB( ) const

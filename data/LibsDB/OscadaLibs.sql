@@ -337,7 +337,7 @@ Modules/DBArch:en,uk,ru:Modules/DBArch.html
 Modules/VCAEngine:en,uk,ru:Modules/VCAEngine.html
 Modules/QTStarter:en,uk,ru:Modules/QTStarter.html
 Modules/QTCfg:en,uk,ru:Modules/QTCfg.html
-Modules/Vision:en,ru:Modules/Vision.html
+Modules/Vision:en,uk,ru:Modules/Vision.html
 Modules/WebCfgD:en,uk,ru:Modules/WebCfgD.html
 Modules/WebCfg:en,uk,ru:Modules/WebCfg.html
 Modules/WebVision:en,uk,ru:Modules/WebVision.html

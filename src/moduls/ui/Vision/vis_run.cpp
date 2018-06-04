@@ -1187,7 +1187,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	    _("Selecting a session for connection or a new one creating"), false, false, lang().c_str());
 	QListWidget *ls_wdg = new QListWidget(&conreq);
 	conreq.edLay()->addWidget(ls_wdg, 0, 0);
-	ls_wdg->addItem(_("<Create a new session>"));
+	ls_wdg->addItem(_("<Create new session>"));
 	for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
 	    ls_wdg->addItem(req.childGet(iCh)->text().c_str());
 	ls_wdg->setCurrentRow(0);
@@ -1389,12 +1389,12 @@ void VisRun::messUpd( )
     actProjManual->setWhatsThis(QString(_("The button for getting the using project '%1' manual")).arg(srcProject().c_str()));
     actProjManual->setStatusTip(QString(_("Press for getting the using project '%1' manual.")).arg(srcProject().c_str()));
     //Module manual
-    actManual->setText(QString(_("'%1' manual")).arg(mod->modId().c_str()));
+    actManual->setText(QString(_("Manual on '%1'")).arg(mod->modId().c_str()));
     actManual->setProperty("doc", "Modules/Vision|Modules/Vision");
     actManual->setWhatsThis(QString(_("The button for getting the using '%1' manual")).arg(mod->modId().c_str()));
     actManual->setStatusTip(QString(_("Press for getting the using '%1' manual.")).arg(mod->modId().c_str()));
     //OpenSCADA manual
-    actManualSYS->setText(QString(_("'%1' manual")).arg(PACKAGE_STRING));
+    actManualSYS->setText(QString(_("Manual on '%1'")).arg(PACKAGE_STRING));
     actManualSYS->setProperty("doc", "index|Documents");
     actManualSYS->setWhatsThis(QString(_("The button for getting the using '%1' manual")).arg(PACKAGE_STRING));
     actManualSYS->setStatusTip(QString(_("Press for getting the using '%1' manual.")).arg(PACKAGE_STRING));

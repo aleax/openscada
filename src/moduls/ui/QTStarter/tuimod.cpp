@@ -42,6 +42,7 @@
 #include <QTreeWidgetItem>
 #include <QInputDialog>
 #include <QStyleFactory>
+#include <QStyle>
 #include <QScrollBar>
 
 #include <tsys.h>
@@ -55,7 +56,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.6.4"
+#define MOD_VER		"4.6.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"

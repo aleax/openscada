@@ -173,9 +173,9 @@ class TTypeArchivator: public TModule
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
 	virtual TMArchivator *AMess( const string &id, const string &db )
-	{ throw TError(nodePath().c_str(),_("Message archiver not supported!")); }
+	{ throw TError(nodePath().c_str(),_("Message archiver is not supported!")); }
 	virtual TVArchivator *AVal( const string &id, const string &db )
-	{ throw TError(nodePath().c_str(),_("Value archiver not supported!")); }
+	{ throw TError(nodePath().c_str(),_("Value archiver is not supported!")); }
 
     private:
 	//Private attributes

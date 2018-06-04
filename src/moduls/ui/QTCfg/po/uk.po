@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 19:27+0300\n"
+"POT-Creation-Date: 2018-06-01 16:36+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -96,7 +96,7 @@ msgstr "Натиснути для переходу на наступну сто�
 msgid "Load from the DB"
 msgstr "Завантажити з БД"
 
-msgid "Load the item data from the DB"
+msgid "Load the item data from DB"
 msgstr "Завантажити дані елементу з БД"
 
 msgid "The button for loading the item data from the DB"
@@ -108,7 +108,7 @@ msgstr "Натиснути для завантаження даних елеме
 msgid "Save to the DB"
 msgstr "Зберегти у БД"
 
-msgid "Save the item data to the DB"
+msgid "Save the item data to DB"
 msgstr "Зберегти дані елементу у БД"
 
 msgid "The button for saving the item data to the DB"
@@ -120,7 +120,7 @@ msgstr "Натиснути для збереження даних елемент
 msgid "&Add"
 msgstr "&Додати"
 
-msgid "Add an item"
+msgid "Add item"
 msgstr "Додати елемент"
 
 msgid "The button for adding a new item"
@@ -132,7 +132,7 @@ msgstr "Натиснути для додання елементу."
 msgid "&Delete"
 msgstr "&Видалити"
 
-msgid "Delete the item"
+msgid "Delete item"
 msgstr "Видалити елемент"
 
 msgid "The button for deleting the item"
@@ -141,7 +141,7 @@ msgstr "Кнопка видалення елементу"
 msgid "Press for deleting the item."
 msgstr "Натиснути для видалення елементу."
 
-msgid "Copy the item"
+msgid "Copy item"
 msgstr "Копіювати елемент"
 
 msgid "Copying the item"
@@ -153,7 +153,7 @@ msgstr "Кнопка копіювання елементу"
 msgid "Press for copying the item."
 msgstr "Натиснути для копіювання елементу."
 
-msgid "Cut the item"
+msgid "Cut item"
 msgstr "Вирізати елемент"
 
 msgid "Cutting the item"
@@ -165,7 +165,7 @@ msgstr "Кнопка вирізання елементу"
 msgid "Press for cutting the item."
 msgstr "Натиснути для вирізання елементу."
 
-msgid "Paste the item"
+msgid "Paste item"
 msgstr "Вставити елемент"
 
 msgid "Pasting the item"
@@ -237,8 +237,8 @@ msgstr "Кнопка для отримання інформації про ви�
 msgid "Press for getting the using Qt information."
 msgstr "Натиснути для отримання інформації про використання Qt."
 
-msgid "%1 manual"
-msgstr "%1 підручник"
+msgid "Manual on '%1'"
+msgstr "Підручник на '%1'"
 
 msgid "The button for getting the using %1 manual"
 msgstr "Кнопка для отримання підручника %1"
@@ -246,8 +246,8 @@ msgstr "Кнопка для отримання підручника %1"
 msgid "Press to get the using %1 manual."
 msgstr "Натиснути для отримання підручника %1."
 
-msgid "The page manual"
-msgstr "Підручник сторінки"
+msgid "Manual on the page"
+msgstr "Підручник на сторінку"
 
 msgid "Selected page manual"
 msgstr "Підручник обраної сторінки"

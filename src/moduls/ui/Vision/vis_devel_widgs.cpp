@@ -1508,7 +1508,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		    cur_act->setObjectName(wipath.c_str());
 		    cur_act->setToolTip(QString(_("Adding a widget based on '%1'")).arg(wipath.c_str()));
 		    cur_act->setWhatsThis(QString(_("The button for adding a widget based on '%1'")).arg(wipath.c_str()));
-		    cur_act->setStatusTip(QString(_("Press for adding a widget based on '%1'")).arg(wipath.c_str()));
+		    cur_act->setStatusTip(QString(_("Press for adding a widget based on '%1'.")).arg(wipath.c_str()));
 		    cur_act->setEnabled(false);
 		    cur_act->setCheckable(true);
 		    //    Add action to toolbar and menu

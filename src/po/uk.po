@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-28 23:10+0300\n"
+"POT-Creation-Date: 2018-06-04 23:30+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -111,10 +111,10 @@ msgstr "Заповнення прохідних точок останнім зн
 msgid "Process into archivers"
 msgstr "Обслуговування архіваторами"
 
-msgid "Message archivers load error."
+msgid "Error loading the message archivers."
 msgstr "Помилка завантаження архіваторів повідомлень."
 
-msgid "Value archivers load error."
+msgid "Error loading the value archivers."
 msgstr "Помилка завантаження архіваторів значень."
 
 msgid "Value archives load error."
@@ -150,23 +150,23 @@ msgid "Start/update subsystem."
 msgstr "Запуск/оновлення підсистеми."
 
 #, c-format
-msgid "Message archiver '%s' start error."
+msgid "Error starting the message archiver '%s'."
 msgstr "Помилка запуску архіватору повідомлень '%s'."
 
 #, c-format
-msgid "Value archiver '%s' start error."
+msgid "Error starting the value archiver '%s'."
 msgstr "Помилка запуску архіватору значень '%s'."
 
 #, c-format
-msgid "Value archive '%s' start error."
+msgid "Error starting the value archive '%s'."
 msgstr "Помилка запуску архіву значень '%s'."
 
 #, c-format
-msgid "Value archiver '%s' stop error."
+msgid "Error stopping the value archiver '%s'."
 msgstr "Помилка зупинки архіватору значень '%s'."
 
 #, c-format
-msgid "Message archiver '%s' stop error."
+msgid "Error stopping the message archiver '%s'."
 msgstr "Помилка зупинки архіватору повідомлень '%s'."
 
 #, c-format
@@ -897,20 +897,20 @@ msgid "Error adding controller '%s'."
 msgstr "Помилка додавання контролеру '%s'."
 
 #, c-format
-msgid "Error starting the template library '%s'."
+msgid "Error starting the templates library '%s'."
 msgstr "Помилка запуску бібліотеки шаблону '%s'."
 
 #, c-format
-msgid "Error enabling the template library '%s'."
-msgstr "Помилка включення бібліотеки шаблону '%s'."
+msgid "Error enabling the templates library '%s'."
+msgstr "Помилка увімкнення бібліотеки шаблону '%s'."
 
 #, c-format
-msgid "Error stopping the template library '%s'."
+msgid "Error stopping the templates library '%s'."
 msgstr "Помилка зупинки бібліотеки шаблону '%s'."
 
 #, c-format
-msgid "Error disabling the template library '%s'."
-msgstr "Помилка виключення бібліотеки шаблону '%s'."
+msgid "Error disabling the templates library '%s'."
+msgstr "Помилка вимкнення бібліотеки шаблону '%s'."
 
 #, c-format
 msgid "Missing the DAQ node '%s'."
@@ -963,13 +963,13 @@ msgstr "Елемент контейнеру вже під'єднано!"
 msgid "Element '%s' is not present!"
 msgstr "Елемент '%s' відсутній!"
 
-msgid "Field is not string."
+msgid "Field is not String."
 msgstr "Поле не рядок."
 
-msgid "Field is not integer."
+msgid "Field is not Integer."
 msgstr "Поле не ціле."
 
-msgid "Field is not real."
+msgid "Field is not Real."
 msgstr "Поле не реальне."
 
 msgid "Field is not Boolean."
@@ -2530,10 +2530,10 @@ msgstr "Помилка сутності. Поз: %d"
 msgid "Unknown entity '%s'. Pos: %d"
 msgstr "Невідома сутність '%s'. Поз: %d"
 
-msgid "Message archiver not supported!"
+msgid "Message archiver is not supported!"
 msgstr "Архів повідомлень не підтримується!"
 
-msgid "Value archiver not supported!"
+msgid "Value archiver is not supported!"
 msgstr "Архів значень не підтримується!"
 
 #, c-format

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-28 23:10+0300\n"
+"POT-Creation-Date: 2018-06-04 23:30+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -116,10 +116,10 @@ msgstr "Füllen der Durchgangspunkte mit dem letzten Wert"
 msgid "Process into archivers"
 msgstr "In Archiver verarbeiten"
 
-msgid "Message archivers load error."
+msgid "Error loading the message archivers."
 msgstr "Nachrichtenarchivierer laden Fehler."
 
-msgid "Value archivers load error."
+msgid "Error loading the value archivers."
 msgstr "Value-Archivierer laden Fehler."
 
 msgid "Value archives load error."
@@ -155,23 +155,23 @@ msgid "Start/update subsystem."
 msgstr "Subsystems starten/aktualisierung."
 
 #, c-format
-msgid "Message archiver '%s' start error."
+msgid "Error starting the message archiver '%s'."
 msgstr "Nachrichtenarchivierer '%s' startet Fehler."
 
 #, c-format
-msgid "Value archiver '%s' start error."
+msgid "Error starting the value archiver '%s'."
 msgstr "Wertarchivierer '%s' startet Fehler."
 
 #, c-format
-msgid "Value archive '%s' start error."
+msgid "Error starting the value archive '%s'."
 msgstr "Fehler beim Starten des Wertearchivs '%s'."
 
 #, c-format
-msgid "Value archiver '%s' stop error."
+msgid "Error stopping the value archiver '%s'."
 msgstr "Fehler beim Anhalten des Wertarchivierer '%s'."
 
 #, c-format
-msgid "Message archiver '%s' stop error."
+msgid "Error stopping the message archiver '%s'."
 msgstr "Fehler beim Anhalten des Nachrichtenarchivierer '%s'."
 
 #, c-format
@@ -905,19 +905,19 @@ msgid "Error adding controller '%s'."
 msgstr "Fehler beim Hinzufügen des Controllers '%s'."
 
 #, c-format
-msgid "Error starting the template library '%s'."
+msgid "Error starting the templates library '%s'."
 msgstr "Fehler beim Starten der Vorlagenbibliothek '%s'."
 
 #, c-format
-msgid "Error enabling the template library '%s'."
+msgid "Error enabling the templates library '%s'."
 msgstr "Fehler beim Aktivieren der Vorlagenbibliothek '%s'."
 
 #, c-format
-msgid "Error stopping the template library '%s'."
+msgid "Error stopping the templates library '%s'."
 msgstr "Fehler beim Stoppen der Vorlagenbibliothek '%s'."
 
 #, c-format
-msgid "Error disabling the template library '%s'."
+msgid "Error disabling the templates library '%s'."
 msgstr "Fehler beim Deaktivieren der Vorlagenbibliothek '%s'."
 
 #, c-format
@@ -972,13 +972,13 @@ msgstr "Containerelement ist bereits verbunden!"
 msgid "Element '%s' is not present!"
 msgstr "Element '%s' ist nicht vorhanden!"
 
-msgid "Field is not string."
+msgid "Field is not String."
 msgstr "Feld ist keine Zeichenfolge."
 
-msgid "Field is not integer."
+msgid "Field is not Integer."
 msgstr "Feld ist keine Ganzzahl."
 
-msgid "Field is not real."
+msgid "Field is not Real."
 msgstr "Feld ist keine reelle Zahl."
 
 msgid "Field is not Boolean."
@@ -2545,10 +2545,10 @@ msgstr "Entity Fehler. Pos: %d"
 msgid "Unknown entity '%s'. Pos: %d"
 msgstr "Unbekannte Entität '%s'. Pos: %d"
 
-msgid "Message archiver not supported!"
+msgid "Message archiver is not supported!"
 msgstr "Nachrichtarchiv wird nicht unterstützt!"
 
-msgid "Value archiver not supported!"
+msgid "Value archiver is not supported!"
 msgstr "Wertearchiv wird nicht unterstützt!"
 
 #, c-format

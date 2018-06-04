@@ -845,19 +845,6 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		    its[iT]->setSelected(false);
 		its[iT]->setData(Qt::UserRole, false);
 	    }
-
-	    /*while(wdg->selectedItems().size()) wdg->selectedItems()[0]->setSelected(false);
-
-	    string vl;
-	    for(int off = 0, cnt = 0; (vl=TSYS::strLine(val,0,&off)).size(); cnt++) {
-		QList<QListWidgetItem *> its = wdg->findItems(vl.c_str(), Qt::MatchExactly);
-		if(!its.size() && vl.size()) { wdg->addItem(vl.c_str()); its = wdg->findItems(vl.c_str(), Qt::MatchExactly); }
-		if(its.size()) {
-		    wdg->setCurrentItem(its[0], QItemSelectionModel::Select);
-		    if(cnt == 0) wdg->scrollToItem(its[0]);
-		}
-	    }*/
-
 	    break;
 	}
 	case F_TREE: {

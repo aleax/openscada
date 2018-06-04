@@ -1013,7 +1013,7 @@ void MFileArch::check( bool free )
     ResAlloc res(mRes, true);
     if(!mErr && mLoad && xmlM()) {
 	if(mWrite) {
-	    int hd = open(name().c_str(), O_RDWR|O_TRUNC, 0600);
+	    int hd = open(name().c_str(), O_RDWR|O_TRUNC, SYS->permCrtFiles());
 	    if(hd > 0) {
 		string x_cf = mNode->save(XMLNode::XMLHeader|XMLNode::BrOpenPrev);
 		mSize = x_cf.size();

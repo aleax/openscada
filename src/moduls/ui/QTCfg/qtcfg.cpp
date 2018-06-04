@@ -209,7 +209,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     //  Load item from db
     if(!ico_t.load(TUIS::icoGet("load",NULL,true).c_str())) ico_t.load(":/images/load.png");
     actDBLoad = new QAction(QPixmap::fromImage(ico_t),_("Load from the DB"),this);
-    actDBLoad->setToolTip(_("Load the item data from the DB"));
+    actDBLoad->setToolTip(_("Load the item data from DB"));
     actDBLoad->setWhatsThis(_("The button for loading the item data from the DB"));
     actDBLoad->setStatusTip(_("Press for loading the item data from the DB."));
     actDBLoad->setEnabled(false);
@@ -217,7 +217,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     //  Save item to db
     if(!ico_t.load(TUIS::icoGet("save",NULL,true).c_str())) ico_t.load(":/images/save.png");
     actDBSave = new QAction(QPixmap::fromImage(ico_t),_("Save to the DB"),this);
-    actDBSave->setToolTip(_("Save the item data to the DB"));
+    actDBSave->setToolTip(_("Save the item data to DB"));
     actDBSave->setWhatsThis(_("The button for saving the item data to the DB"));
     actDBSave->setStatusTip(_("Press for saving the item data to the DB."));
     actDBSave->setShortcut(QKeySequence("Ctrl+S"));
@@ -226,7 +226,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     // Add an item
     if(!ico_t.load(TUIS::icoGet("it_add",NULL,true).c_str())) ico_t.load(":/images/it_add.png");
     actItAdd = new QAction(QPixmap::fromImage(ico_t),_("&Add"),this);
-    actItAdd->setToolTip(_("Add an item"));
+    actItAdd->setToolTip(_("Add item"));
     actItAdd->setWhatsThis(_("The button for adding a new item"));
     actItAdd->setStatusTip(_("Press for adding a new item."));
     actItAdd->setEnabled(false);
@@ -234,7 +234,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     // Delete the item
     if(!ico_t.load(TUIS::icoGet("it_del",NULL,true).c_str())) ico_t.load(":/images/it_del.png");
     actItDel = new QAction(QPixmap::fromImage(ico_t),_("&Delete"),this);
-    actItDel->setToolTip(_("Delete the item"));
+    actItDel->setToolTip(_("Delete item"));
     actItDel->setWhatsThis(_("The button for deleting the item"));
     actItDel->setStatusTip(_("Press for deleting the item."));
     actItDel->setShortcut(QKeySequence("Ctrl+D"));
@@ -242,7 +242,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     connect(actItDel, SIGNAL(triggered()), this, SLOT(itDel()));
     //  Copy the item
     if(!ico_t.load(TUIS::icoGet("editcopy",NULL,true).c_str())) ico_t.load(":/images/editcopy.png");
-    actItCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy the item"),this);
+    actItCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy item"),this);
     actItCopy->setToolTip(_("Copying the item"));
     actItCopy->setWhatsThis(_("The button for copying the item"));
     actItCopy->setStatusTip(_("Press for copying the item."));
@@ -251,7 +251,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     connect(actItCopy, SIGNAL(triggered()), this, SLOT(itCopy()));
     //  Cut the item
     if(!ico_t.load(TUIS::icoGet("editcut",NULL,true).c_str())) ico_t.load(":/images/editcut.png");
-    actItCut = new QAction(QPixmap::fromImage(ico_t),_("Cut the item"),this);
+    actItCut = new QAction(QPixmap::fromImage(ico_t),_("Cut item"),this);
     actItCut->setToolTip(_("Cutting the item"));
     actItCut->setWhatsThis(_("The button for cutting the item"));
     actItCut->setStatusTip(_("Press for cutting the item."));
@@ -260,7 +260,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     connect(actItCut, SIGNAL(triggered()), this, SLOT(itCut()));
     //  Paste item
     if(!ico_t.load(TUIS::icoGet("editpaste",NULL,true).c_str())) ico_t.load(":/images/editpaste.png");
-    actItPaste = new QAction(QPixmap::fromImage(ico_t),_("Paste the item"),this);
+    actItPaste = new QAction(QPixmap::fromImage(ico_t),_("Paste item"),this);
     actItPaste->setToolTip(_("Pasting the item"));
     actItPaste->setWhatsThis(_("The button for pasting the item"));
     actItPaste->setStatusTip(_("Press for pasting the item."));
@@ -307,20 +307,20 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
     // QTCfg manual
     if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
-    QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(mod->modId().c_str()),this);
+    QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("Manual on '%1'")).arg(mod->modId().c_str()),this);
     actManual->setProperty("doc", "Modules/QTCfg|Modules/QTCfg");
     actManual->setShortcut(Qt::Key_F1);
     actManual->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(mod->modId().c_str()));
     actManual->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(mod->modId().c_str()));
     connect(actManual, SIGNAL(triggered()), this, SLOT(enterManual()));
     // OpenSCADA manual index
-    QAction *actManualSYS = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(PACKAGE_STRING),this);
+    QAction *actManualSYS = new QAction(QPixmap::fromImage(ico_t),QString(_("Manual on '%1'")).arg(PACKAGE_STRING),this);
     actManualSYS->setProperty("doc", "index|Documents");
     actManualSYS->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(PACKAGE_STRING));
     actManualSYS->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(PACKAGE_STRING));
     connect(actManualSYS, SIGNAL(triggered()), this, SLOT(enterManual()));
     // Page help
-    actManualPage = new QAction(QPixmap::fromImage(ico_t),_("The page manual"),this);
+    actManualPage = new QAction(QPixmap::fromImage(ico_t),_("Manual on the page"),this);
     actManualPage->setToolTip(_("Selected page manual"));
     actManualPage->setWhatsThis(_("The button for getting the using selected page manual."));
     actManualPage->setStatusTip(_("Press to get the using selected page manual."));

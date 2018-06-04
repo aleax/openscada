@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 19:27+0300\n"
+"POT-Creation-Date: 2018-06-04 23:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,7 +98,7 @@ msgstr ""
 msgid "Load from the DB"
 msgstr ""
 
-msgid "Load the item data from the DB"
+msgid "Load the item data from DB"
 msgstr ""
 
 msgid "The button for loading the item data from the DB"
@@ -110,7 +110,7 @@ msgstr ""
 msgid "Save to the DB"
 msgstr ""
 
-msgid "Save the item data to the DB"
+msgid "Save the item data to DB"
 msgstr ""
 
 msgid "The button for saving the item data to the DB"
@@ -122,7 +122,7 @@ msgstr ""
 msgid "&Add"
 msgstr ""
 
-msgid "Add an item"
+msgid "Add item"
 msgstr ""
 
 msgid "The button for adding a new item"
@@ -134,7 +134,7 @@ msgstr ""
 msgid "&Delete"
 msgstr ""
 
-msgid "Delete the item"
+msgid "Delete item"
 msgstr ""
 
 msgid "The button for deleting the item"
@@ -143,7 +143,7 @@ msgstr ""
 msgid "Press for deleting the item."
 msgstr ""
 
-msgid "Copy the item"
+msgid "Copy item"
 msgstr ""
 
 msgid "Copying the item"
@@ -155,7 +155,7 @@ msgstr ""
 msgid "Press for copying the item."
 msgstr ""
 
-msgid "Cut the item"
+msgid "Cut item"
 msgstr ""
 
 msgid "Cutting the item"
@@ -167,7 +167,7 @@ msgstr ""
 msgid "Press for cutting the item."
 msgstr ""
 
-msgid "Paste the item"
+msgid "Paste item"
 msgstr ""
 
 msgid "Pasting the item"
@@ -239,7 +239,7 @@ msgstr ""
 msgid "Press for getting the using Qt information."
 msgstr ""
 
-msgid "%1 manual"
+msgid "Manual on '%1'"
 msgstr ""
 
 msgid "The button for getting the using %1 manual"
@@ -248,7 +248,7 @@ msgstr ""
 msgid "Press to get the using %1 manual."
 msgstr ""
 
-msgid "The page manual"
+msgid "Manual on the page"
 msgstr ""
 
 msgid "Selected page manual"

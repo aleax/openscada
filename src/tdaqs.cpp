@@ -330,7 +330,7 @@ void TDAQS::subStart( )
 	    catch(TError &err) {
 		if(try_cnt) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Error starting the template library '%s'."), tmpl_lst[i_lb].c_str());
+		    mess_sys(TMess::Error, _("Error starting the templates library '%s'."), tmpl_lst[i_lb].c_str());
 		}
 		reply = true;
 	    }
@@ -347,7 +347,7 @@ void TDAQS::subStart( )
 		    catch(TError &err) {
 			if(try_cnt) {
 			    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-			    mess_sys(TMess::Error, _("Error enabling the template library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+			    mess_sys(TMess::Error, _("Error enabling the templates library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
 			}
 			reply = true;
 		    }
@@ -378,7 +378,7 @@ void TDAQS::subStop( )
 		try{ cntr.at().stop(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Error stopping the template library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_sys(TMess::Error, _("Error stopping the templates library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
 		}
 	}
     }
@@ -392,7 +392,7 @@ void TDAQS::subStop( )
 		try{ cntr.at().disable(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Error disabling the template library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_sys(TMess::Error, _("Error disabling the templates library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
 		}
 	}
     }

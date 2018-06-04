@@ -1,23 +1,30 @@
+2018-06-05 Roman (stable)
+- !!:DOC: The document "UI.Vision" is fully revised and translated to Ukrainian.
+- SYS,UI.{QTCfg,Vision}: Some original messages next improved.
+- Archive.FSArch: Last entry of the direct specified permition of the created file replaced to SYS->permCrtFiles().
+- UI.QTStarter: Some time need fo direct QStyle declaration is resolved.
+
+
 2018-05-29 Roman (stable)
 - !!:DOC: The document "UI.VCAEngine" is fully revised and translated to Ukrainian.
 - FIX:DB.Model.{AGLKS,Boiler}.St: Some original messages fixed.
-- SYS.*: Command line help unified in the function optDescr() for getting the hierarchical help in a string and
+- !!:SYS.*: Command line help unified in the function optDescr() for getting the hierarchical help in a string and
     for its printing in single place of the function TSYS::load_().
+    !!: A new command-line argument --consoleCharSet added for control the console charset, for console messages and help.
     TCntrNode: The message "Expecting release %d users!" appearing set seldom and with period 1 second.
-    A new command-line argument --consoleCharSet added for control the console charset, for console messages and help.
 - FIX:DAQ.JavaLikeCalc: Fixed for translation and output links setting from the table edition.
 - FIX:UI.{VCAEngine,Vision}: Fixed and expanded for original messages.
 - FIX:UI.Vision: Fixed for closing child windows on QNX, commenting pg->setAttribute(Qt::WA_DeleteOnClose)
     FIX: Fixed for fit main page to the main window size on small screens - prevents from appearing scroll bars.
     FIX: Fixed for crash on main runtime window close with palyback of the primitive "Media" in the types "Animation" and "Full video".
-- UI.WebVision: Expanded for own statusbar support, currently only with the user information and the status messages.
+- !!:UI.WebVision: Expanded for own statusbar support, currently only with the user information and the status messages.
 
 
 2018-05-18 Roman (stable)
 - !!:DOC: The document "VCAEngine (VCA)" is started for revision.
 - data/debian: Expanded by appending the package openscada-plc.
 - SYS.XMLNode: isspace() replaced by own implementation isSpace(), mostly for QNX where isspace() is broken for UTF-8.
-- !!:DAQ.{TPrmTempl,JavaLikeCalc}: Finished and tested of the implementing the class TPrmTempl::Impl of the using unification.
+- !!:DAQ.{TPrmTempl,JavaLikeCalc}: Finished and tested at the implementing the class TPrmTempl::Impl of the using unification of the DAQ templates.
     Access to the links moved under the critical section.
 - Protocol.HTTP: Expanded using the project icon as the main module icon.
 
@@ -34,7 +41,7 @@
 - FIX:UI.QTCfg: Fixed for crashes at openned warning-error dialogs.
     Going to branches through the list set for placing the previous address to the back list.
 - !!:UI.Vision: The requisting into different thread set to be enabled at the unpublic command line option "ReqInDifThread" but Qt loss releasing mouse events now,
-    into event(). Then, by default the requisting into different thread disabled now.
+    into event(). Then, by default the requisting into different thread is disabled now.
 
 
 2018-05-11 Roman (stable)
@@ -51,9 +58,9 @@
 - !!:DOC: The documents fully revised: Archive.FSArch, DAQ.{LogicLev,DAQGate,ModBus,GPIO}, Transport.Sockets.
 - FIX:DB.Model.AGLKS.St: DAQ.LogicLev.experiment fixed for the reflection DB specifying as "LogLevPrmRefl_experiment".
 - !!:SYS,Archive.FSArch,DB.SQLite,DAQ.{DAQGate,GPIO,LogicLev},Transport.Sockets: Some original messages next improved.
-- Protocol.UserProtocol: Prevented from breaking all next starting protocols after one error starting.
+- FIX:Protocol.UserProtocol: Prevented from breaking all next starting protocols after one error starting.
 - !!!:FIX:UI.QTCfg: Fixed in the closing mostly for processing of requests into the different threads
-    in way of the function implementation for runtime mode of UI.Vision.
+    in way of the function implementation for the runtime mode of UI.Vision.
     The fit of the vertically scalable items made more precision.
     Added for HTML encoding into the HTML helps.
 - !!!:FIX:UI.VCAEngine: Archive mode of the primitive "Document" fixed by the specific atributes set to the new mode Attr::NotStored.
@@ -112,7 +119,7 @@
 - !!!!:SYS,UI.{VCAEngine,Vision}: The term "quittance" renamed to "quietance", from the word "quiet" which is a logical one for the alarms.
 - !:SYS: main.cpp improved for the original messages.
     "OpenSCADA system" in headers of the source files mostly renamed to "OpenSCADA".
-- Archives: The archivers' objects copying prevented from copy the configuration field "ADDR".
+- FIX: Archives: The archivers' objects copying prevented from copy the configuration field "ADDR".
 - !!!!:Archive.FSArch: Hardly prevented from the configuration field "ADDR" changing both for messages and values.
     A procedure of the configuration field "ADDR" checking for duplicates added.
 - !!:FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}:
@@ -123,8 +130,8 @@
 - UI.QTCfg: Appended by the navigation tree refreshing after the error copying.
 - !!!!:UI.{VCAEngine,Vision}: The projects expanded by the using sessions accounting for new projects hot enabling on the sessions.
     The "Use" field also added for the widgets libraries, as a count of whole using of their widgets.
-- !!!!:UI.VCAEngine:
-    Fixed for accessing to the wrong created session items.
+- !!!!:FIX:UI.VCAEngine:
+    FIX: Fixed for accessing to the wrong created session items.
     Attr::ProcAttr was also appended to the direct inheriting like to the links.
 - UI.WebVision: The attribute "value" clearance was added after accomplishing the mode "Save" of the view "Button" of the primitive "FormEl".
 
@@ -139,7 +146,7 @@
 - FIX:UI.VCAEngine: The attribute "value" of the primitive "FormEl" prevented from the modification flag set at the type change.
 - UI.Vision: The mode "Load" of the view "Button" of the primitive "FormEl" expanded for use mime and placing the selected file name to the header.
 - !!!:UI.WebVision: The modes "Menu", "Load" and "Save" of the view "Button" of the primitive "FormEl" are implemented.
-    Some properties of the primitive "FormEl" were fixed for detect the changes.
+    Some properties of the primitive "FormEl" were fixed to detect the changes.
     The tree view implementation was set the generic one for use in two places.
 
 
@@ -173,9 +180,9 @@
 	setting the package version to 0.9.
     FIX: For condition variables where CLOCK_MONOTONIC was selected but CLOCK_REALTIME used.
     Setting for locale added as setlocale(LC_CTYPE, "C.UTF-8"); for Android >= 5.
-- !:SYS,UI.QTStarter: Generic font was added to the list of look control fields, initially for Android.
+- !:SYS,UI.QTStarter: Generic font was added to the list of the look control fields, initially for Android.
 - UI.QTCfg: Set adjustable to the generic font real size for: the control tree and the splitter width, the main window initial size.
-    Loading of the "endRunTimer" decrease.
+    Loading of the "endRunTimer" is decreased.
 - FIX:UI.QTStarter: Prevented from open the QTStarter main window after successful log in into the QTCfg module.
 - UI.VCAEngine: Prevented from the missing attributes warnings at switching the primitive "Document" to the dynamic mode.
 - UI.Vision: Set adjustable to the generic font real size for: the tree view.
@@ -204,7 +211,7 @@
 - UI.QTStarter: An icon "it_add.png" was added for the button "Create-update a project".
     Using of the native menu-bar of Android disabled by the attribute Qt::AA_DontUseNativeMenuBar.
 - !!!!:UI.{VCAEngine,Vision,WebVision}: The primitive "Text" was appended by an attribute "inHtml" and the support of display HTML.
-- UI.VCAEngine: The images "it_*.png" renamed to "v_it_*.png". The images "ok.png" removed and replaced.
+- UI.Vision: The images "it_*.png" renamed to "v_it_*.png". The images "ok.png" removed and replaced.
 
 
 2018-03-04 Roman (stable)
@@ -220,7 +227,7 @@
     data/debian[_mod]/*.init: Set for disable the user directory of OpenSCADA projects.
 - !!!!:SYS,DAQ.{*,JavaLikeCalc,SNMP},UI.QTStarter: Most original messages at last improved and corrected.
 - !!:SYS,DB.DBF,Archive.FSArch,UI.Vision: Generic control for permition of created files by OpenSCADA,
-    added by the command-line parameter "--noCoreDump" and the function TSYS::permCrtFiles().
+    added by the command-line parameter "--permCrtFiles" and the function TSYS::permCrtFiles().
 - !!:Archive.FSArch: New objects of archivers sets to the default path of storage "ARCHIVES/MESS/" for the projects of OpenSCADA.
     Archive files renamed from the format "%F %T" to "%F %H.%M.%S" to allow their creation on FAT.
 - FIX:DAQ.ModBus: Fix for copy parameters of the logical type at the links initiate after.
@@ -287,8 +294,8 @@
 - !!:SYS,Archive.{DBArch,FSArch}: Most original messages and help ones of the subsystem "Archives-History" and some others were fixed and improved.
 - FIX:UI.QTStarter: Prevent from a multiple entry from processEvents() manual call, observed on QTCfg.
 - !!:UI.VCAEngine: Implemented for hot update of the widget procedures of the runtime mode.
-- !:FIX:UI.Vision: Prevent from the runtime window manual resize drop at the user change.
-    !:The view "List" of the primitive "FormEl" rewrote to implement the light updating, gor mobile devices like to Maemo, MeeGo.
+- !:FIX:UI.Vision: Prevented from the runtime window manual resize drop at the user change.
+    !:The view "List" of the primitive "FormEl" rewrote to implement the light updating, for mobile devices like to Maemo, MeeGo.
 
 
 2018-01-13 Roman (stable)
@@ -306,7 +313,7 @@
 - UI.QTStarter: Qt Style and StyleSheets are temporary added, before full implementation of the custom look and fill control by itself.
     Icon of the system tray and the main selection dialog appended for the custom project icon by its identifier.
 - UI.Vision: Main window of the runtime mode set to readjust at the user change.
-    Main menu of the main window of the runtime mode set to the not disable mode.
+    Main menu of the main window of the runtime mode set to the not disabling mode.
 
 
 2017-12-27 Roman (stable)
@@ -1303,7 +1310,7 @@
 
 
 2016-09-12 Roman
-- DB: LibsDB.OscadaLibs.db: DAQ template of the protocol "Temperature measurement IT-3 (IT3)" were expanded for detect the external connection lost.
+- DB: LibsDB.OscadaLibs.db: DAQ template of the protocol "Temperature measurement IT-3 (IT3)" were expanded to detect the external connection lost.
     Template PCF8574 is added to the library DevLib. PCF8574 is I2C 8DIO.
 - FIX:SYS: data/oscada_gentoo.init is some fixed by IrmIngeneer.
 - !!:FIX:Archive: Value archivator is expanded for the accumulation mode support, mostly for Archive.DBArch.

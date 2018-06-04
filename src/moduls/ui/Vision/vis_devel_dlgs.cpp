@@ -210,10 +210,10 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     mimeDataTable->setHorizontalHeaderLabels(QStringList() << _("Identifier") << _("Mime type") << _("Data size"));
     dlg_lay->addWidget(mimeDataTable, 0, 0, 1, 4);
 
-    buttDataAdd = new QPushButton(_("Add a record"),tab_w);
+    buttDataAdd = new QPushButton(_("Add record"),tab_w);
     connect(buttDataAdd, SIGNAL(clicked()), this, SLOT(addMimeData()));
     dlg_lay->addWidget(buttDataAdd,1,0);
-    buttDataDel = new QPushButton(_("Delete a record"),tab_w);
+    buttDataDel = new QPushButton(_("Delete record"),tab_w);
     connect(buttDataDel, SIGNAL(clicked()), this, SLOT(delMimeData()));
     dlg_lay->addWidget(buttDataDel,1,1);
     buttDataLoad = new QPushButton(_("Load data"),tab_w);
@@ -1080,10 +1080,10 @@ VisItProp::VisItProp( VisDevelop *parent ) :
 						<< _("Configuration") << _("Configuration template"));
     glay->addWidget(obj_attr_cfg,0,0,1,2);
 
-    buttAttrAdd = new QPushButton(_("Add an attribute"),attr_cf_fr); 
+    buttAttrAdd = new QPushButton(_("Add attribute"),attr_cf_fr); 
     connect(buttAttrAdd, SIGNAL(clicked()), this, SLOT(addAttr()));
     glay->addWidget(buttAttrAdd,1,0);
-    buttAttrDel = new QPushButton(_("Delete an attribute"),attr_cf_fr);
+    buttAttrDel = new QPushButton(_("Delete attribute"),attr_cf_fr);
     connect(buttAttrDel, SIGNAL(clicked()), this, SLOT(delAttr()));
     glay->addWidget(buttAttrDel,1,1);
 
@@ -1595,7 +1595,7 @@ void VisItProp::addAttr( )
     }
     //Check current attribute
     if(swdg.empty()) {
-	mod->postMess(mod->nodePath().c_str(), _("The correct widget is not selected"),TVision::Warning,this);
+	mod->postMess(mod->nodePath().c_str(), _("Correct widget is not selected"),TVision::Warning,this);
 	return;
     }
 
@@ -1614,7 +1614,7 @@ void VisItProp::delAttr( )
     //Check current attribute
     if(!obj_attr_cfg->currentItem() || !obj_attr_cfg->currentItem()->parent())
     {
-	mod->postMess(mod->nodePath().c_str(), _("The correct attribute is not selected"),TVision::Warning,this);
+	mod->postMess(mod->nodePath().c_str(), _("Correct attribute is not selected"),TVision::Warning,this);
 	return;
     }
 
@@ -1636,7 +1636,7 @@ void VisItProp::changeAttr(QTreeWidgetItem *it, int col)
 
     //Check current attribute
     if(!it || !it->parent()) {
-	mod->postMess(mod->nodePath().c_str(), _("The correct attribute is not selected"),TVision::Warning,this);
+	mod->postMess(mod->nodePath().c_str(), _("Correct attribute is not selected"),TVision::Warning,this);
 	return;
     }
 

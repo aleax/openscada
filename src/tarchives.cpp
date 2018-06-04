@@ -152,7 +152,7 @@ void TArchiveS::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_sys(TMess::Error, _("Message archivers load error."));
+	mess_sys(TMess::Error, _("Error loading the message archivers."));
     }
 
     // Value archivers load
@@ -188,7 +188,7 @@ void TArchiveS::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_sys(TMess::Error, _("Value archivers load error."));
+	mess_sys(TMess::Error, _("Error loading the value archivers."));
     }
 
     // Value archives load
@@ -294,7 +294,7 @@ void TArchiveS::subStart( )
 		try { mess.at().start(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Message archiver '%s' start error."), oLst[iO].c_str());
+		    mess_sys(TMess::Error, _("Error starting the message archiver '%s'."), oLst[iO].c_str());
 		}
 	}
 	//Values
@@ -306,7 +306,7 @@ void TArchiveS::subStart( )
 		try { val.at().start(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Value archiver '%s' start error."), val.at().workId().c_str());
+		    mess_sys(TMess::Error, _("Error starting the value archiver '%s'."), val.at().workId().c_str());
 		}
 	}
     }
@@ -319,7 +319,7 @@ void TArchiveS::subStart( )
 	    try { aval.at().start(); }
 	    catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Value archive '%s' start error."), oLst[iO].c_str());
+		mess_sys(TMess::Error, _("Error starting the value archive '%s'."), oLst[iO].c_str());
 	    }
     }
 
@@ -334,7 +334,7 @@ void TArchiveS::subStart( )
 		try { mess.at().start(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Message archiver '%s' start error."), oLst[iO].c_str());
+		    mess_sys(TMess::Error, _("Error starting the message archiver '%s'."), oLst[iO].c_str());
 		}
 	}
 	//Values
@@ -345,7 +345,7 @@ void TArchiveS::subStart( )
 		try { val.at().start(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Value archiver '%s' start error."), val.at().workId().c_str());
+		    mess_sys(TMess::Error, _("Error starting the value archiver '%s'."), val.at().workId().c_str());
 		}
 	}
     }
@@ -381,7 +381,7 @@ void TArchiveS::subStop( )
 		try { val.at().stop(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Value archiver '%s' stop error."), oLst[iO].c_str());
+		    mess_sys(TMess::Error, _("Error stopping the value archiver '%s'."), oLst[iO].c_str());
 		}
 	}
 	// Message archivers stop
@@ -392,7 +392,7 @@ void TArchiveS::subStop( )
 		try { mess.at().stop(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Message archiver '%s' stop error."), oLst[iO].c_str());
+		    mess_sys(TMess::Error, _("Error stopping the message archiver '%s'."), oLst[iO].c_str());
 		}
 	}
     }

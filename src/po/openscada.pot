@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-28 23:10+0300\n"
+"POT-Creation-Date: 2018-06-04 23:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,10 +107,10 @@ msgstr ""
 msgid "Process into archivers"
 msgstr ""
 
-msgid "Message archivers load error."
+msgid "Error loading the message archivers."
 msgstr ""
 
-msgid "Value archivers load error."
+msgid "Error loading the value archivers."
 msgstr ""
 
 msgid "Value archives load error."
@@ -132,23 +132,23 @@ msgid "Start/update subsystem."
 msgstr ""
 
 #, c-format
-msgid "Message archiver '%s' start error."
+msgid "Error starting the message archiver '%s'."
 msgstr ""
 
 #, c-format
-msgid "Value archiver '%s' start error."
+msgid "Error starting the value archiver '%s'."
 msgstr ""
 
 #, c-format
-msgid "Value archive '%s' start error."
+msgid "Error starting the value archive '%s'."
 msgstr ""
 
 #, c-format
-msgid "Value archiver '%s' stop error."
+msgid "Error stopping the value archiver '%s'."
 msgstr ""
 
 #, c-format
-msgid "Message archiver '%s' stop error."
+msgid "Error stopping the message archiver '%s'."
 msgstr ""
 
 #, c-format
@@ -806,19 +806,19 @@ msgid "Error adding controller '%s'."
 msgstr ""
 
 #, c-format
-msgid "Error starting the template library '%s'."
+msgid "Error starting the templates library '%s'."
 msgstr ""
 
 #, c-format
-msgid "Error enabling the template library '%s'."
+msgid "Error enabling the templates library '%s'."
 msgstr ""
 
 #, c-format
-msgid "Error stopping the template library '%s'."
+msgid "Error stopping the templates library '%s'."
 msgstr ""
 
 #, c-format
-msgid "Error disabling the template library '%s'."
+msgid "Error disabling the templates library '%s'."
 msgstr ""
 
 #, c-format
@@ -866,13 +866,13 @@ msgstr ""
 msgid "Element '%s' is not present!"
 msgstr ""
 
-msgid "Field is not string."
+msgid "Field is not String."
 msgstr ""
 
-msgid "Field is not integer."
+msgid "Field is not Integer."
 msgstr ""
 
-msgid "Field is not real."
+msgid "Field is not Real."
 msgstr ""
 
 msgid "Field is not Boolean."
@@ -2198,10 +2198,10 @@ msgstr ""
 msgid "Unknown entity '%s'. Pos: %d"
 msgstr ""
 
-msgid "Message archiver not supported!"
+msgid "Message archiver is not supported!"
 msgstr ""
 
-msgid "Value archiver not supported!"
+msgid "Value archiver is not supported!"
 msgstr ""
 
 #, c-format

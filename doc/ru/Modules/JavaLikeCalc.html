@@ -28,8 +28,9 @@
 
 <tr>
 <td> <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
-<td> Вычислитель на Java-подобном языке. </td>
-<td> 3.8 </td>
+<td> Вычислитель на Java-подобном языке.
+</td>
+<td> 3.9 </td>
 <td> GPL2 </td>
 <td> daq_JavaLikeCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -359,7 +360,7 @@ Po = (Po&lt;0)&nbsp;? 0&nbsp;: (Po&gt;100)&nbsp;? 100&nbsp;: Po;
 To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*frq);
 </pre>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0_.D0.B8_.D0.B5.D0.B3.D0.BE_.D0.BA.D0.BE.D0.BD.D1.84.D0.B8.D0.B3.D1.83.D1.80.D0.B0.D1.86.D0.B8.D1.8F"><span class="mw-headline-number">2</span> <span id="Controller" title="#Controller">Объект контроллера и его конфигурация</span></span></h2>
-<p>Объект контроллера этого модуля связывается с функциями из библиотек, построенных с его помощью, для обеспечения непосредственных вычислений. Для предоставления вычисленных данных в OpenSCADA в контроллере могут создаваться параметры. Пример вкладки конфигурации объекта контроллера данного типа изображен на рисунке 2.
+<p>Объект контроллера этого модуля, для обеспечения непосредственных вычислений, связывается с функциями из библиотек, построенных с его помощью, или с <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">шаблоном сбора данных</a>. В случае с шаблоном сбора данных, добавляется возможность внешнего связывания, с другими параметрами и атрибутами подсистемы "Сбор данных". Для предоставления вычисленных данных в OpenSCADA, в объекте контроллера могут создаваться параметры. Пример вкладки конфигурации объекта контроллера данного типа изображен на рисунке 2.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:822px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr_ru.png"><img class="thumbimage" height="658" src="../files/JavaLikeCalc_cntr_ru.png" width="820" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфигурации объекта контроллера.</div></div></div></div>
 <p>С помощью этой вкладки можно установить:
@@ -368,7 +369,7 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <li> Идентификатор, имя и описание контроллера.</li>
 <li> Состояние, в которое переводить объект контроллера при запуске программы: "Включен" и "Выполняется".</li>
 <li> Имя таблицы для хранения параметров.</li>
-<li> Адрес вычислительной функции.</li>
+<li> Адрес вычислительной функции или <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">шаблона сбора данных</a>.</li>
 <li> Политика планирования вычисления, приоритет и число итераций в одном цикле задачи вычисления.</li></ul>
 <p>Вкладка "Вычисления" объекта контроллера (Рис. 3) содержит параметры и текст программы, непосредственно выполняемой контроллером. Модулем предусмотрена обработка ряда специальных параметров, доступных в программе контроллера:
 </p>

@@ -437,7 +437,7 @@
 <li> <i>Go to remote stations list configuration</i> — command to go to the configuration page of the remote OpenSCADA stations in the subsystem "Transports".</li></ul></li>
 <li> Tab "Tasks" contains a table with opened tasks of OpenSCADA components (Fig.4d). From the table you can get several information about the tasks, and also assign CPUs used by the tasks of multiprocessing systems.</li>
 <li> Tab "Debug" contains elements for control to debug (Fig.4e) and activates at select the messages level "Debug (0)" or at the objects counters using.</li>
-<li> Tab "Translations" contains elements of the manager of central translation of text messages of the program (Fig.4f) and activates at the multi-language mode enabling by the base language of text variables set. Elements of the translations manager:
+<li> <span id="ConfigTr" title="#ConfigTr">Tab "Translations" contains elements of the manager of central translation of text messages</span> of the program (Fig.4f) and activates at the multi-language mode enabling by the base language of text variables set. Elements of the translations manager:
 <ul><li> <i>Text variable's base language</i> — is used to activate the support of multilingual text variables by specifying a non-empty basic language. The value of the basic language is selected from the list of bi-character language code, usually only the current and the base language is in the list. Further for the text variables in the non basic language in the tables of the database it will be created the separate columns. Under the text variables the all text fields of configurator, which can be translated into another language are meant. Numbers and other symbolic values are not in their count and are not translated.</li>
 <li> <i>Dynamic translation</i> — current and planed state of the dynamic text messages translation. The dynamic text messages translation causes the text messages translation cache enabling and requests to the translations to the DB depends to the OpenSCADA part's language, mostly for multi-language dynamic user interfaces when user has self-preferred language and users of the program a lot, as a rule, are end-users-operators.</li>
 <li> <i>Enable manager</i> — enabling the translation manager. Cause the program reloading to form an index of built translations, however this does not form the full messages index by deny to reload some objects into their execution. For the full messages index loading you ought to save the manager into the enabled mode and to restart OpenSCADA. Ongoing next start the program will form the full the messages index.</li>
@@ -624,7 +624,7 @@
 <li> <b>&lt;Optimal&gt;</b> — choice for the running of the least loaded station this is the station which runs lowest number of the controller objects.</li></ul></li>
 <li> <i>Remote</i> — sign of indicating the running of the controller object on the remote station and work the local station in the mode of remote data synchronization.</li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_red.png"><img class="thumbimage" height="672" src="files/QTCfg_subsys_daq_red.png" width="900" /></a>  <div class="thumbcaption">Fig. 4.5a. Tab "Redundancy" of the subsystem "Data acquisition".</div></div></div></div>
-<p>Tab "Template libraries" (Fig.4.5b) contains a list of libraries of templates for the parameters of this subsystem. In the context menu of the list of template libraries the user can add, delete and move to the desired library. The tab "Modules" (Fig.4.1b) contains the list of modules in the subsystem "Transports" and it is identical for all modular subsystems.
+<p>Tab "<span id="DAQTmpl" title="#DAQTmpl">Template libraries</span>" (Fig.4.5b) contains a list of libraries of templates for the parameters of this subsystem. In the context menu of the list of template libraries the user can add, delete and move to the desired library. The tab "Modules" (Fig.4.1b) contains the list of modules in the subsystem "Transports" and it is identical for all modular subsystems.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:621px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl.png"><img class="thumbimage" height="397" src="files/QTCfg_subsys_daq_tmpl.png" width="619" /></a>  <div class="thumbcaption">Fig. 4.5b. Tab "Template libraries" of the subsystem "Data acquisition".</div></div></div></div>
 <p>Each template library of the subsystem "Data acquisition" provides a configuration page with the tabs "Library" and "Parameter templates". The tab "Library" (Fig.4.5d) contains the basic settings of the library:
@@ -1396,15 +1396,17 @@
     --station=&lt;id&gt;      Station identifier.
     --statName=&lt;name&gt;   Station name.
     --modDir=&lt;path&gt;	Directories with the modules, separated by ';', they can include a files' template at the end.
-    --demon, --daemon   Run in the daemon mode.
-    --pidFile=&lt;file&gt;    File for the program process ID placing here.
-    --noCoreDump        Prevents from the core dump creation at crashes - don't set the limit to the unlimited value.
     --messLev=&lt;level&gt;   Level of the processing messages (0-7).
     --log=&lt;direct&gt;      Direct messages to, by the bitfield:
                           0x1 - syslogd;
                           0x2 - stdout;
                           0x4 - stderr;
                           0x8 - the messages archive.
+    --consoleCharSet={CharSet} Forcing to the console &lt;CharSet&gt; for the console messages, by default it is system one.
+    --demon, --daemon   Run in the daemon mode.
+    --pidFile=&lt;file&gt;    File for the program process ID placing here.
+    --noCoreDump        Prevents from the core dump creation at crashes - don't set the limit to the unlimited value.
+    --permCrtFiles={perm} Permissions of the created OpenSCADA files, by default it is 0755 (RWXRW_RW_).
 ----------- Station 'AGLKS(SimulatorStation)' settings in the configuration file -----------
 StName     &lt;nm&gt; Station name.
 WorkDB     &lt;Type.Name&gt; Working DB (&lt;type&gt; and &lt;name&gt;).

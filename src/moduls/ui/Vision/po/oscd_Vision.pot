@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-28 23:44+0300\n"
+"POT-Creation-Date: 2018-06-04 23:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -180,7 +180,7 @@ msgstr ""
 msgid "Press for getting the using Qt information."
 msgstr ""
 
-msgid "%1 manual"
+msgid "Manual on '%1'"
 msgstr ""
 
 msgid "The button for getting the using '%1' manual"
@@ -201,10 +201,10 @@ msgstr ""
 msgid "Press for requesting information about the user interface elements."
 msgstr ""
 
-msgid "Load from the DB"
+msgid "Load from DB"
 msgstr ""
 
-msgid "Load the item data from the DB"
+msgid "Load the item data from DB"
 msgstr ""
 
 msgid "The button for loading the item data from the DB"
@@ -213,10 +213,10 @@ msgstr ""
 msgid "Press for loading the item data from the DB."
 msgstr ""
 
-msgid "Save to the DB"
+msgid "Save to DB"
 msgstr ""
 
-msgid "Save the item data to the DB"
+msgid "Save the item data to DB"
 msgstr ""
 
 msgid "The button for saving the item data to the DB"
@@ -225,7 +225,7 @@ msgstr ""
 msgid "Press for saving the item data to the DB."
 msgstr ""
 
-msgid "Run the project"
+msgid "Run project"
 msgstr ""
 
 msgid "Run the project execution for the selected item"
@@ -249,7 +249,7 @@ msgstr ""
 msgid "New library"
 msgstr ""
 
-msgid "New widgets library creation"
+msgid "New widgets library"
 msgstr ""
 
 msgid "The button for creation a new widgets library"
@@ -258,7 +258,7 @@ msgstr ""
 msgid "Press for creation a new widgets library."
 msgstr ""
 
-msgid "Add a visual item"
+msgid "Add visual item"
 msgstr ""
 
 msgid "Adding a visual item to the library, container widget, project or page"
@@ -270,7 +270,7 @@ msgstr ""
 msgid "Press for adding a visual item to the library, container widget, project or page."
 msgstr ""
 
-msgid "Delete the visual item"
+msgid "Delete visual item"
 msgstr ""
 
 msgid "Deleting the visual item from the library, container widget, project or page"
@@ -294,7 +294,7 @@ msgstr ""
 msgid "Press for getting the properties of the visual item."
 msgstr ""
 
-msgid "Edit the visual item"
+msgid "Edit visual item"
 msgstr ""
 
 msgid "Going to editing the visual item"
@@ -306,7 +306,7 @@ msgstr ""
 msgid "Press for going to editing the visual item."
 msgstr ""
 
-msgid "Clear the visual item changes"
+msgid "Clear visual item changes"
 msgstr ""
 
 msgid "Clearing the visual items changes"
@@ -318,7 +318,7 @@ msgstr ""
 msgid "Press for clearing the visual items changes."
 msgstr ""
 
-msgid "Lower down the visual item changes"
+msgid "Lower down visual item changes"
 msgstr ""
 
 msgid "Lowering down the visual item changes to the parent"
@@ -330,7 +330,7 @@ msgstr ""
 msgid "Press for lowering down the visual item changes to the parent."
 msgstr ""
 
-msgid "Undo the visual item changes"
+msgid "Undo visual item changes"
 msgstr ""
 
 msgid "Undoing the visual item changes:"
@@ -342,7 +342,7 @@ msgstr ""
 msgid "Press for undoing the visual item changes."
 msgstr ""
 
-msgid "Redo the visual item changes"
+msgid "Redo visual item changes"
 msgstr ""
 
 msgid "Redoing the visual item changes:"
@@ -354,7 +354,7 @@ msgstr ""
 msgid "Press for redoing the visual item changes."
 msgstr ""
 
-msgid "Copy the visual item"
+msgid "Copy visual item"
 msgstr ""
 
 msgid "Copying the visual item"
@@ -366,7 +366,7 @@ msgstr ""
 msgid "Press for copying the visual item."
 msgstr ""
 
-msgid "Cut the visual item"
+msgid "Cut visual item"
 msgstr ""
 
 msgid "Cutting the visual item"
@@ -378,7 +378,7 @@ msgstr ""
 msgid "Press for cutting the visual item."
 msgstr ""
 
-msgid "Paste the visual item"
+msgid "Paste visual item"
 msgstr ""
 
 msgid "Pasting the visual item"
@@ -522,7 +522,7 @@ msgstr ""
 msgid "Press for returning the cursor."
 msgstr ""
 
-msgid "Add a line"
+msgid "Add line"
 msgstr ""
 
 msgid "Adding a line to the elementary figure"
@@ -534,7 +534,7 @@ msgstr ""
 msgid "Press for adding a line to the elementary figure."
 msgstr ""
 
-msgid "Add an arc"
+msgid "Add arc"
 msgstr ""
 
 msgid "Adding an arc to the elementary figure"
@@ -546,7 +546,7 @@ msgstr ""
 msgid "Press for adding an arc to the elementary figure."
 msgstr ""
 
-msgid "Add a Besier curve"
+msgid "Add Besier curve"
 msgstr ""
 
 msgid "Adding a Besier curve to the elementary figure"
@@ -666,7 +666,7 @@ msgstr ""
 msgid "Visual items toolbar"
 msgstr ""
 
-msgid "Functions of the widgets visibility"
+msgid "Functions of the widgets location"
 msgstr ""
 
 msgid "Elementary figure tools"
@@ -787,9 +787,6 @@ msgid "Enter the identifier and the name of the new project."
 msgstr ""
 
 msgid "Enter the identifier and the name of the new widgets library."
-msgstr ""
-
-msgid "New widgets library"
 msgstr ""
 
 msgid "Enter the identifier and the name of the new widget/page."
@@ -921,10 +918,10 @@ msgstr ""
 msgid "Data size"
 msgstr ""
 
-msgid "Add a record"
+msgid "Add record"
 msgstr ""
 
-msgid "Delete a record"
+msgid "Delete record"
 msgstr ""
 
 msgid "Load data"
@@ -943,9 +940,6 @@ msgid "Erase style"
 msgstr ""
 
 msgid "Value"
-msgstr ""
-
-msgid "Delete record"
 msgstr ""
 
 msgid "Diagnostics"
@@ -1064,10 +1058,10 @@ msgstr ""
 msgid "Configuration template"
 msgstr ""
 
-msgid "Add an attribute"
+msgid "Add attribute"
 msgstr ""
 
-msgid "Delete an attribute"
+msgid "Delete attribute"
 msgstr ""
 
 msgid "Procedure language:"
@@ -1079,10 +1073,10 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-msgid "The correct widget is not selected"
+msgid "Correct widget is not selected"
 msgstr ""
 
-msgid "The correct attribute is not selected"
+msgid "Correct attribute is not selected"
 msgstr ""
 
 msgid "<Group>"
@@ -1140,7 +1134,7 @@ msgstr ""
 msgid "The button for adding a widget based on '%1'"
 msgstr ""
 
-msgid "Press for adding a widget based on '%1'"
+msgid "Press for adding a widget based on '%1'."
 msgstr ""
 
 msgid "Container widget"
@@ -1418,7 +1412,7 @@ msgstr ""
 msgid "Selecting a session for connection or a new one creating"
 msgstr ""
 
-msgid "<Create a new session>"
+msgid "<Create new session>"
 msgstr ""
 
 msgid "Running project: %1"
@@ -1524,9 +1518,6 @@ msgid "The button for getting the using project '%1' manual"
 msgstr ""
 
 msgid "Press for getting the using project '%1' manual."
-msgstr ""
-
-msgid "'%1' manual"
 msgstr ""
 
 msgid "The button for requesting the information about GUI elements"
