@@ -56,6 +56,8 @@ typedef vector<pair<string,string> > AttrValS;
 
 namespace VISION
 {
+    extern int icoSize( float mult = 1 );
+
     //*********************************************
     //* Id and name input dialog                  *
     //*********************************************
@@ -63,7 +65,8 @@ namespace VISION
     {
 	public:
 	    InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
-		    const QString &ndlg = _("Vision dialog"), bool with_id = false, bool with_nm = true );
+		    const QString &ndlg = _("Input dialog of Vision"), bool with_id = false, bool with_nm = true, const string &istCtxId = "" );
+	    ~InputDlg( );
 
 	    QString id( );
 	    QString name( );
@@ -83,6 +86,7 @@ namespace VISION
 	    QGridLayout *mEdLay;
 	    QLabel	*inpLab;
 	    QLineEdit	*mId, *mName;
+	    string	stCtxId;
     };
 
     //*********************************************
@@ -158,12 +162,12 @@ namespace VISION
 	public:
 	    UserStBar( const string &iuser, const string &ipass, const string &iVCAstat, QWidget *parent = 0 );
 
-	    string user( )		{ return userTxt; }
-	    string pass( )		{ return userPass; }
+	    string user( );
+	    string pass( );
 	    string VCAStation( )	{ return VCAStat; }
 
 	    void setUser( const string &val );
-	    void setPass( const string &val )		{ userPass = val; }
+	    void setPass( const string &val );
 	    void setVCAStation( const string &val )	{ VCAStat = val.empty() ? "." : val; }
 
 	    bool userSel( const string &hint = "" );

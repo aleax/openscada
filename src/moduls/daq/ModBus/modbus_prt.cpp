@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.ModBus file: modbus_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,7 +45,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNode = grpAdd("n_");
 
     //Node DB structure
-    mNodeEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    mNodeEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     mNodeEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     mNodeEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mNodeEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
@@ -55,16 +55,16 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNodeEl.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selected,"1","0",
 	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET).c_str(),_("Data;Gateway node;Gateway net")));
     // For "Data" mode
-    mNodeEl.fldAdd(new TFld("DT_PER",_("Calculate data period, seconds"),TFld::Real,0,"5.3","1","0.001;99"));
+    mNodeEl.fldAdd(new TFld("DT_PER",_("Period of the data calculation, seconds"),TFld::Real,0,"5.3","1","0.001;99"));
     mNodeEl.fldAdd(new TFld("DT_PROG",_("Program"),TFld::String,TFld::TransltText,"1000000"));
     // For "Gateway" mode
-    mNodeEl.fldAdd(new TFld("TO_TR",_("To transport"),TFld::String,0,OBJ_ID_SZ));
-    mNodeEl.fldAdd(new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selected,"5","RTU","RTU;ASCII;TCP",_("RTU;ASCII;TCP/IP")));
+    mNodeEl.fldAdd(new TFld("TO_TR",_("To output transport"),TFld::String,0,OBJ_ID_SZ));
+    mNodeEl.fldAdd(new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selected,"5","RTU","RTU;ASCII;TCP","RTU;ASCII;TCP/IP"));
     mNodeEl.fldAdd(new TFld("TO_ADDR",_("To address"),TFld::Integer,0,"3","1","1;247"));
 
     //Node data IO DB structure
     mNodeIOEl.fldAdd(new TFld("NODE_ID",_("Node ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    mNodeIOEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mNodeIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     mNodeIOEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     mNodeIOEl.fldAdd(new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1"));
     mNodeIOEl.fldAdd(new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
@@ -112,7 +112,7 @@ void TProt::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Search and create new node error."));
+	mess_err(nodePath().c_str(),_("Error of searching and a new node creation."));
     }
 }
 
@@ -268,14 +268,14 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    //Send request
 	    int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm);
 	    rez.assign(buf,resp_len);
-	    if(rez.size() < 7)	err = _("13:Error server respond");
+	    if(rez.size() < 7)	err = _("13:Error of the server response");
 	    else {
 		unsigned resp_sz = (unsigned short)(rez[4]<<8) | (unsigned char)rez[5];
 
 		//Wait tail
 		while(rez.size() < (resp_sz+6)) {
 		    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), reqTm);
-		    if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond"));
+		    if(!resp_len) throw TError(nodePath().c_str(),_("Not full response"));
 		    rez.append(buf, resp_len);
 		}
 		pdu = rez.substr(7);
@@ -305,9 +305,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    continue;
 		}
 
-		if(rez.size() < 2) { err = _("13:Error respond: Too short."); continue; }
+		if(rez.size() < 2) { err = _("13:Error of the response: Too short."); continue; }
 		if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
-		{ err = _("13:Error respond: CRC check error."); continue; }
+		{ err = _("13:Error of the response: CRC error."); continue; }
 		pdu = rez.substr(1, rez.size()-3);
 		err = "";
 		break;
@@ -337,29 +337,29 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		}
 
 		if(rez.size() < 3 || rez[0] != ':' || rez.substr(rez.size()-2,2) != "\x0D\x0A")
-		{ err = _("13:Error respond: Error format."); continue; }
+		{ err = _("13:Error of the response: Format error."); continue; }
 		string rezEnc = ASCIIToData(rez.substr(1,rez.size()-3));
 		if(LRC(rezEnc.substr(0,rezEnc.size()-1)) != (uint8_t)rezEnc[rezEnc.size()-1])
-		{ err = _("13:Error respond: LRC check error."); continue; }
+		{ err = _("13:Error of the response: LRC error."); continue; }
 		pdu = rezEnc.substr(1,rezEnc.size()-2);
 		err = "";
 		break;
 	    }
 	}
-	else err = TSYS::strMess(_("Protocol '%s' error."),prt.c_str());
+	else err = TSYS::strMess(_("Error of the protocol '%s'."),prt.c_str());
 
-	//Check respond pdu
+	//Check response pdu
 	if(err.empty()) {
-	    if(pdu.size() < 2) err = _("13:Error respond");
+	    if(pdu.size() < 2) err = _("13:Error of the response");
 	    if(pdu[0]&0x80)
 		switch(pdu[1]) {
 		    case 0x1: err = TSYS::strMess(_("1:%02X:Function is not supported."),(unsigned char)(pdu[0]&(~0x80)));	break;
-		    case 0x2: err = _("2:Requested address not allow or request area too long.");	break;
-		    case 0x3: err = _("3:Illegal data value into request.");		break;
+		    case 0x2: err = _("2:Request address is not allowed or the query range is too large.");	break;
+		    case 0x3: err = _("3:Illegal value of the data in the request.");		break;
 		    case 0x4: err = _("4:Server failure.");				break;
 		    case 0x5: err = _("5:Request requires too long time for execute.");	break;
 		    case 0x6: err = _("6:Server is busy.");				break;
-		    case 0x7: err = _("7:Program function is error. By request functions 13 or 14.");	break;
+		    case 0x7: err = _("7:Error in program function. Requested by the function 13 or 14.");	break;
 		    case 0xA: case 0xB: err = _("10:Gateway problem.");			break;
 		    default: err = TSYS::strMess(_("12:%02X:Unknown error."),(unsigned char)(pdu[1]));	break;
 		}
@@ -605,7 +605,7 @@ void Node::postEnable( int flag )
 {
     //Create default IOs
     if(flag&TCntrNode::NodeConnect) {
-	ioIns(new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Node::LockAttr,"1000",false), 0);
+	ioIns(new IO("f_frq",_("Frequency of calculation of the function (Hz)"),IO::Real,Node::LockAttr,"1000",false), 0);
 	ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,Node::LockAttr,"0",false), 1);
 	ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,Node::LockAttr,"0",false), 2);
     }
@@ -693,17 +693,17 @@ void Node::regCR( int id, const SIO &val, const string &tp, bool wr )
 	map<int,SIO> &blk = varSec ? data->coilI : (wr?data->coilW:data->coilR);
 	if((it=blk.find(id)) == blk.end()) blk[id] = val;
 	else mess_warning(nodePath().c_str(),
-	    _("Coil(%s) %d already registered for IO#%d. IO#%d will be disabled for process coil %d!"),
+	    _("Coil(%s) %d already registered for IO#%d. IO#%d will be disabled for processing the coil %d!"),
 	    tp.c_str(), id, it->second.id, val.id, id);
     }
     else if(tp == "R" || (varSec=(tp=="RI"))) {
 	map<int,SIO> &blk = varSec ? data->regI : (wr?data->regW:data->regR);
 	if((it=blk.find(id)) == blk.end()) blk[id] = val;
 	else mess_warning(nodePath().c_str(),
-	    _("Register(%s) %d already registered for IO#%d. IO#%d will be disabled for process register %d!"),
+	    _("Register(%s) %d already registered for IO#%d. IO#%d will be disabled for processing the register %d!"),
 	    tp.c_str(), id, it->second.id, val.id, id);
     }
-    else throw TError(nodePath().c_str(), _("ModBUS data type '%s' error!"), tp.c_str());
+    else throw TError(nodePath().c_str(), _("Error of the ModBUS data type '%s'!"), tp.c_str());
 }
 
 void Node::load_( TConfig *icfg )
@@ -814,7 +814,7 @@ void Node::setEnable( bool vl )
 		data->val.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg)).at());
 	    }
 	} catch(TError &err) {
-	    mess_err(nodePath().c_str(),_("Compile function by language '%s' error: %s"),progLang().c_str(),err.mess.c_str());
+	    mess_err(nodePath().c_str(),_("Error compiling function on the language '%s': %s"),progLang().c_str(),err.mess.c_str());
 	    throw;
 	}
 	// Links, registers and coins init
@@ -907,7 +907,7 @@ string Node::getStatus( )
 	switch(mode()) {
 	    case MD_DATA:
 		rez += TSYS::strMess(_("Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g, register inputs %.4g, coil inputs %.4g.\n"
-					"Writed registers %.4g, coils %.4g."),
+					"Wrote registers %.4g, coils %.4g."),
 		    tm2s(1e-6*tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->rRegI, data->rCoilI, data->wReg, data->wCoil);
 		break;
 	    case MD_GT_ND: case MD_GT_NET:
@@ -1270,7 +1270,7 @@ void *Node::Task( void *ind )
 			}
 	    } catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str() );
-		mess_err(nd.nodePath().c_str(), _("Calculate node's function error."));
+		mess_err(nd.nodePath().c_str(), _("Error calculation the node function."));
 	    }
 
 	    //Calc acquisition process time
@@ -1315,24 +1315,24 @@ void Node::cntrCmdProc( XMLNode *opt )
 	}
 	if(mode() == MD_DATA && ctrMkNode("area",opt,-1,"/dt",_("Data"))) {
 	    if(ctrMkNode("table",opt,-1,"/dt/io",_("IO"),RWRWR_,"root",SPRT_ID,3,"s_com","add,del,ins,move","rows","15",
-		"help",_("For \"Id\" field provide specific ModBus data form:\n"
-			 "  \"R{N}[w]\", \"RI{N}[w]\" - specific register (and input) form, can expanded by suffixes:\n"
+		"help",_("For the \"Id\" field, a specific ModBus data record form is provided:\n"
+			 "  \"R{N}[w]\", \"RI{N}[w]\" - specific register (and input) form, can be expanded by the suffixes:\n"
 			 "                \"i\"-Int32, \"f\"-Float, \"d\"-Double, \"s\"-String;\n"
-			 "  \"R:{N}:[w]\", \"RI:{N}:[w]\" - classic register (and input) form, can expanded by suffixes:\n"
+			 "  \"R:{N}[:w]\", \"RI:{N}[:w]\" - classic register (and input) form, can be expanded by the suffixes:\n"
 			 "                \"i4\"-Int32, \"f\"-Float, \"d\"-Double, \"s\"-String;\n"
-			 "  \"C{N}[w]\", \"CI{N}[w]\", \"C:{N}:[w]\", \"CI:{N}:[w]\" - coil (and input).\n"
+			 "  \"C{N}[w]\", \"CI{N}[w]\", \"C:{N}[:w]\", \"CI:{N}[:w]\" - coil (and input).\n"
 			 "Where:\n"
-			 "  {N} - ModBus device's data address (dec, hex or octal) [0...65535];\n"
-			 "  w   - optional symbol for writing allow indicate.\n"
+			 "  {N} - ModBus data address of the device (dec, hex or octal) [0...65535];\n"
+			 "  w   - optional character to indicate the writing capability.\n"
 			 "Examples:\n"
 			 "  \"R0x300w\" - register access;\n"
-			 "  \"C100w\" - coin access, allow for write;\n"
-			 "  \"R_f200\" - get float from registers 200 and 201;\n"
-			 "  \"R_i400,300\" - get int32 from registers 300 and 400;\n"
-			 "  \"R_s15,20\" - get string, registers block, from register 15 and size 20;\n"
-			 "  \"R_d:0x20,0x30\" - get double float point (8 byte) from registers [0x20,0x30-0x32].")))
+			 "  \"C100w\" - coil access, allowed to write;\n"
+			 "  \"R_f200\" - get float from the registers 200 and 201;\n"
+			 "  \"R_i400,300\" - get int32 from the registers 300 and 400;\n"
+			 "  \"R_s15,20\" - get string (registers block) from the register 15 and size 20;\n"
+			 "  \"R_d:0x20,0x30\" - get double float point (8 byte) from the registers [0x20,0x30-0x32].")))
 	    {
-		ctrMkNode("list",opt,-1,"/dt/io/id",_("Id"),RWRWR_,"root",SPRT_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/dt/io/id",_("Identifier"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/dt/io/nm",_("Name"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/dt/io/tp",_("Type"),RWRWR_,"root",SPRT_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String).c_str(),
@@ -1340,7 +1340,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/dt/io/lnk",_("Link"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/dt/io/vl",_("Value"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/dt/progLang",_("Program language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/dt/plang_ls");
+	    ctrMkNode("fld",opt,-1,"/dt/progLang",_("Program language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/plang/list");
 	    ctrMkNode("fld",opt,-1,"/dt/prog",_("Program"),RWRWR_,"root",SPRT_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	if(mode() == MD_DATA && ctrMkNode("area",opt,-1,"/lnk",_("Links")))
@@ -1393,14 +1393,14 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR)) {
-	    if(enableStat()) throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    if(enableStat()) throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
 	    IO *ioPrev = ioSize() ? io(ioSize()-1) : NULL;
 	    if(ioPrev) ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~Node::LockAttr)));
 	    else ioAdd(new IO("new",_("New IO"),IO::Integer,IO::Default));
 	    modif();
 	}
 	if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR)) {
-	    if(enableStat()) throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    if(enableStat()) throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
 	    int row = s2i(opt->attr("row"));
 	    IO *ioPrev = row ? io(row-1) : NULL;
 	    if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~Node::LockAttr)), row);
@@ -1408,23 +1408,23 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    modif();
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR)) {
-	    if(enableStat()) throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    if(enableStat()) throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
 	    int row = s2i(opt->attr("row"));
 	    if(io(row)->flg()&Node::LockAttr)
-		throw TError(nodePath().c_str(),_("Deleting lock attribute is not allowed."));
+		throw TError(nodePath().c_str(),_("Deleting a locked attribute is not allowed."));
 	    ioDel(row);
 	    modif();
 	}
 	if(ctrChkNode(opt,"move",RWRWR_,"root",SPRT_ID,SEC_WR)) {
-	    if(enableStat()) throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    if(enableStat()) throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
 	    ioMove(s2i(opt->attr("row")), s2i(opt->attr("to"))); modif();
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR)) {
 	    int row = s2i(opt->attr("row"));
 	    string col = opt->attr("col");
-	    if(enableStat() && col != "vl") throw TError(nodePath().c_str(),_("Disable node for this operation"));
-	    if(io(row)->flg()&Node::LockAttr)	throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
-	    if((col == "id" || col == "nm") && !opt->text().size())	throw TError(nodePath().c_str(),_("Empty value is not valid."));
+	    if(enableStat() && col != "vl") throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
+	    if(io(row)->flg()&Node::LockAttr)	throw TError(nodePath().c_str(),_("Changing a locked attribute is not allowed."));
+	    if((col == "id" || col == "nm") && !opt->text().size())	throw TError(nodePath().c_str(),_("Empty value is not allowed."));
 	    if(col == "id")		io(row)->setId(opt->text());
 	    else if(col == "nm")	io(row)->setName(opt->text());
 	    else if(col == "tp")	io(row)->setType((IO::Type)s2i(opt->text()));
@@ -1445,34 +1445,6 @@ void Node::cntrCmdProc( XMLNode *opt )
 		SYS->daq().at().at(TSYS::strParse(progLang(),0,".")).at().
 				compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
 	    } catch(...) { }
-    }
-    else if(a_path == "/dt/plang_ls" && ctrChkNode(opt)) {
-	string tplng = progLang();
-	int c_lv = 0;
-	string c_path = "", c_el;
-	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++)
-	{
-	    c_path += c_lv ? "."+c_el : c_el;
-	    opt->childAdd("el")->setText(c_path);
-	}
-	if(c_lv) c_path+=".";
-	vector<string>  ls;
-	switch(c_lv)
-	{
-	    case 0:
-		SYS->daq().at().modList(ls);
-		for(unsigned i_l = 0; i_l < ls.size(); )
-		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs()) ls.erase(ls.begin()+i_l);
-		    else i_l++;
-		break;
-	    case 1:
-		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
-		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
-		break;
-	}
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path.substr(0,8) == "/lnk/ls_" && ctrChkNode(opt))
 	SYS->daq().at().ctrListPrmAttr(opt, io(s2i(a_path.substr(8)))->rez(), false, '.');

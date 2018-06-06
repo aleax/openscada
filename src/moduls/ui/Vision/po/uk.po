@@ -1,13 +1,13 @@
 # OpenSCADA.UI.Vision translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2005-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-28 13:07+0200\n"
+"POT-Creation-Date: 2018-06-05 19:00+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -26,66 +26,68 @@ msgstr ""
 "Зайчук (2005-2006)"
 
 msgid ""
-"Visual operation user interface, based on Qt library - front-end to VCA "
-"engine."
+"Visual operation user interface, based on the Qt library - front-end to the "
+"VCA engine."
 msgstr ""
 "Робочий інтерфейс користувача, заснований на бібліотеці Qt - зовнішній "
-"інтерфейс до рущія візуалізації."
+"інтерфейс до рушія СВУ."
 
 #, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
-"---------- Parameters of the module section '%s' in config-file ----------\n"
-"StartUser   <user>    No password requested start user.\n"
-"UserPass    <pass>    User password for no local start.\n"
-"RunPrjs     <list>    Run projects list on the module start.\n"
+"---- Parameters of the module section '%s' of the configuration file ----\n"
+"StartUser  <user>       Start-up, no-password, user.\n"
+"UserPass   <pass>       User password for non-local start.\n"
+"RunPrjs    <list>       List of projects to be launched at the start of the "
+"module.\n"
 "RunPrjsSt    {0;1}    Display status for run projects (default = 1).\n"
 "WinPosCntrSave {0;1}  Windows position control and save (default = 1).\n"
-"ExitLstRunPrjCls {0;1}Exit on last run project close (default = 1).\n"
-"CachePgLife <hours>   Cached pages lifetime.\n"
-"VCAstation  <id>      VCA station id ('.' - local).\n"
-"RestoreTime <seconds> Restore connection time.\n"
-"PlayCom     <cmd>     Audio alarms' files play command.\n"
+"ExitLstRunPrjCls <0|1>  Exit closing the last completed project (default = "
+"1).\n"
+"CachePgLife <hours>     The lifetime of pages in the cache.\n"
+"VCAstation <id>         The station with the VCA engine ('.' Is local).\n"
+"RestoreTime <seconds>   Connection recovery time.\n"
+"PlayCom     <cmd>       Audio alarms' files play command.\n"
 "\n"
 msgstr ""
 "======================== Опції модуля <%s:%s> ============================\n"
 "------- Параметри модульної секції '%s' у конфігураційному файлі ---------\n"
-"StartUser   <корист>  Стартовий, безпарольний, користувач.\n"
-"UserPass    <пароль>  Пароль користувача для нелокального запуску.\n"
-"RunPrjs    <перелік>  Перелік проектів які мають запускатися при старті "
+"StartUser  <корист>     Стартовий, безпарольний, користувач.\n"
+"UserPass   <пароль>     Пароль користувача для нелокального запуску.\n"
+"RunPrjs    <перелік>    Перелік проектів які мають запускатися при старті "
 "модуля.\n"
-"RunPrjsSt      {0;1}  Відображати статус для проектів що запускаються (по "
+"RunPrjsSt      {0;1}    Відображати статус для проектів що запускаються (по "
 "замовченню = 1).\n"
-"WinPosCntrSave {0;1}  Керування та збереження положень вікон (по замовченню "
-"= 1).\n"
-"ExitLstRunPrjCls {0;1}Вихід при закритті останього проекту що виконується "
+"WinPosCntrSave {0;1}    Керування та збереження положень вікон (по "
+"замовченню = 1).\n"
+"ExitLstRunPrjCls <0|1>  Вихід при закритті останнього проекту що виконується "
 "(по замовченню = 1).\n"
-"CachePgLife <години>  Час життя сторінок у кешу.\n"
-"VCAstation      <id>  Станція з рушієм СВК ('.' - локальна).\n"
-"RestoreTime <секунди> Час відновлення підключення.\n"
-"PlayCom    <команда>  Команда програвання аудіо-файлів сигналізації.\n"
+"CachePgLife <години>    Час життя сторінок у кешу.\n"
+"VCAstation <id>         Станція з рушієм СВУ ('.' - локальна).\n"
+"RestoreTime <секунди>   Час відновлення підключення.\n"
+"PlayCom    <команда>    Команда програвання аудіо-файлів сигналізації.\n"
 "\n"
 
-msgid "Load module."
+msgid "Loading the module."
 msgstr "Завантаження модуля."
 
-msgid "Save module."
+msgid "Saving the module."
 msgstr "Збереження модуля."
 
-msgid "Error connection to remote station!"
+msgid "Error connecting to remote station!"
 msgstr "Помилка підключення до віддаленої станції!"
 
-msgid "Authentication error for user '%1'!!!"
+msgid "Error authenticating the user '%1'!!!"
 msgstr "Помилка автентифікації користувача '%1'!!!"
 
-msgid "Start module."
+msgid "Starting the module."
 msgstr "Старт модуля."
 
-msgid "Stop module."
+msgid "Stopping the module."
 msgstr "Зупинка модуля."
 
-msgid "Display number"
-msgstr "Кількість екранів"
+msgid "Number of individual displays"
+msgstr "Кількість окремих екранів"
 
 msgid "Main windows"
 msgstr "Основні вікна"
@@ -93,40 +95,41 @@ msgstr "Основні вікна"
 msgid "Module options"
 msgstr "Опції модуля"
 
-msgid "VCA engine station"
-msgstr "Станція рушія СВК"
+msgid "Station of the VCA engine"
+msgstr "Станція рушія СВУ"
 
-msgid "Go to remote stations list configuration"
+msgid "Go to the remote stations list configuration"
 msgstr "Перейти до конфігурації переліку віддалених станцій"
 
-msgid "Start user"
+msgid "Starting user"
 msgstr "Стартовий користувач"
 
-msgid "User password"
+msgid "Password of the user"
 msgstr "Пароль користувача"
 
-msgid "Restore connection timeout, s"
-msgstr "Час відновлення підключення, с"
+msgid "Connection recovery time, seconds"
+msgstr "Час відновлення підключення, секунд"
 
-msgid "Cached pages lifetime"
+msgid "Lifetime of the cached pages"
 msgstr "Час життя сторінок у кеші"
 
 msgid ""
-"The time in hours for close pages from cache by inactive.\n"
-"For zero time pages will not closed."
+"The time is specified in hours, which defines the inactivity interval for "
+"closing pages in the cache.\n"
+"A zero value of time excludes the closing of pages in the cache."
 msgstr ""
 "Час вказано у годинах, який визначає інтервал бездіяльності для закриття "
 "сторінок у кеші.\n"
 "Нульове значення часу виключає закриття сторінок у кеші."
 
-msgid "Run projects list"
+msgid "List of the projects for launch"
 msgstr "Перелік проектів для пуску"
 
 msgid ""
-"Automatic started projects separated by symbol ';'.\n"
-"For opening a project's window to need display (1) use the project name "
+"Automatically executed projects, divided by the symbol ';'.\n"
+"To open the project window on the desired display (1), use the project name "
 "format: 'PrjName-1'.\n"
-"For connect to background or other opened session use \"ses_{SesID}\"."
+"To connect to the background or another open session use \"ses_{SesID}\"."
 msgstr ""
 "Автоматично виконувані проекти, поділені символом ';'.\n"
 "Для відкриття вікна проекту на потрібному дисплеї (1) використовуйте формат "
@@ -140,8 +143,8 @@ msgstr "Відображення статусу проектів для пуск
 msgid "Windows position control and save"
 msgstr "Керування та збереження положень вікон"
 
-msgid "Exit on last run project close"
-msgstr "Вихід при закритті останього проекту що виконується"
+msgid "Exit when closing the last running project"
+msgstr "Вихід при закритті останнього проекту що виконується"
 
 msgid "Alarms"
 msgstr "Порушення"
@@ -162,6 +165,7 @@ msgstr ""
 msgid "Options help"
 msgstr "Допомога по опціям"
 
+#, c-format
 msgid "%d: Development by \"%s\""
 msgstr "%d: Розробка від \"%s\""
 
@@ -182,38 +186,38 @@ msgstr "OpenSCADA Vision-розробка: %s"
 msgid "Full screen"
 msgstr "Весь екран"
 
-msgid "Full screen toggle"
-msgstr "Перемикач режиму \"На весь екран\""
+msgid "Full screen mode toggling"
+msgstr "Перемикання режиму \"На весь екран\""
 
-msgid "The button for full screen toggle"
+msgid "The button for full screen mode toggling"
 msgstr "Кнопка для перемикання режиму \"На весь екран\""
 
-msgid "Press for toggle full screen."
+msgid "Press for toggling the full screen mode."
 msgstr "Натиснути для перемикання режиму \"На весь екран\"."
 
 msgid "&Close"
 msgstr "&Закрити"
 
-msgid "Close Vision window"
-msgstr "Закриття вікна Vision"
+msgid "Close the Vision window"
+msgstr "Закрити вікно Vision"
 
-msgid "The button for closing Vision developing window"
+msgid "The button for closing the Vision developing window"
 msgstr "Кнопка для закриття вікна розробки Vision"
 
-msgid "Press to close the current Vision developing window."
+msgid "Press to close of the current Vision developing window."
 msgstr "Натиснути для закриття вікна розробки Vision."
 
 msgid "&Quit"
 msgstr "&Вихід"
 
-msgid "Quit from OpenSCADA"
-msgstr "Вихід з OpenSCADA"
+msgid "Quit the program"
+msgstr "Вихід з програми"
 
-msgid "The button for full quit from OpenSCADA"
-msgstr "Кнопка для повного виходу з OpenSCADA"
+msgid "The button for complete quit the program"
+msgstr "Кнопка повного виходу з програми"
 
-msgid "Press for full quit from OpenSCADA system."
-msgstr "Натиснути для повного виходу з OpenSCADA."
+msgid "Press for complete quit the program."
+msgstr "Натиснути для повного виходу з програми."
 
 msgid "&About"
 msgstr "&Про"
@@ -221,11 +225,11 @@ msgstr "&Про"
 msgid "Program and OpenSCADA information"
 msgstr "Інформація про програму та OpenSCADA"
 
-msgid "The button for display the program and OpenSCADA information"
-msgstr "Кнопка для отримання інформації про програму та OpenSCADA"
+msgid "The button of the information of the program and OpenSCADA"
+msgstr "Кнопка інформації про програму та OpenSCADA"
 
-msgid "Press to display the program and OpenSCADA information."
-msgstr "Натиснути для отримання інформації про програму та OpenSCADA."
+msgid "Press for information of the program and OpenSCADA."
+msgstr "Натиснути для інформації про програму та OpenSCADA."
 
 msgid "About &Qt"
 msgstr "Про &Qt"
@@ -233,425 +237,424 @@ msgstr "Про &Qt"
 msgid "Qt information"
 msgstr "Інформація про Qt"
 
-msgid "The button for getting the using QT information"
-msgstr "Кнопка для отримання інформації про QT"
+msgid "The button for getting the using Qt information"
+msgstr "Кнопка для отримання інформації про Qt"
 
-msgid "Press to get the using QT information."
-msgstr "Натиснути для отримання інформації про QT."
+msgid "Press for getting the using Qt information."
+msgstr "Натиснути для отримання інформації про Qt."
 
 msgid "What's &This"
 msgstr "Що &це"
 
-msgid "The button for question about GUI elements"
-msgstr "Кнопка для запиту інформації про GUI елементи"
-
-msgid "Get respond about user interface elements"
+msgid "Requesting about GUI elements"
 msgstr "Запит інформації про GUI елементи"
 
-msgid "Press to respond about user interface elements."
+msgid "The button for requesting information about the user interface elements"
+msgstr "Кнопка запиту інформації про GUI елементи"
+
+msgid "Press for requesting information about the user interface elements."
 msgstr "Натиснути для запиту інформації про GUI елементи."
 
 msgid "Load from DB"
 msgstr "Завантажити з БД"
 
-msgid "Load item data from DB"
+msgid "Load the item data from DB"
 msgstr "Завантажити дані елементу з БД"
 
-msgid "The button for loading item data from DB"
-msgstr "Кнопка для завантаження даних елементу з БД"
+msgid "The button for loading the item data from the DB"
+msgstr "Кнопка завантаження даних елементу з БД"
 
-msgid "Press to load item data from DB."
+msgid "Press for loading the item data from the DB."
 msgstr "Натиснути для завантаження даних елементу з БД."
 
 msgid "Save to DB"
 msgstr "Зберегти у БД"
 
-msgid "Save item data to DB"
+msgid "Save the item data to DB"
 msgstr "Зберегти дані елементу у БД"
 
-msgid "The button for saving item data to DB"
-msgstr "Кнопка для збереження даних елементу у БД"
+msgid "The button for saving the item data to the DB"
+msgstr "Кнопка збереження даних елементу у БД"
 
-msgid "Press to save item data to DB."
+msgid "Press for saving the item data to the DB."
 msgstr "Натиснути для збереження даних елементу у БД."
 
-msgid "Run project execution"
-msgstr "Запуск виконання проекту"
+msgid "Run project"
+msgstr "Запустити проект"
 
-msgid "Run project execution for selected item"
-msgstr "Запуск виконання проекту, для вибраного елемента"
+msgid "Run the project execution for the selected item"
+msgstr "Запуск виконання проекту для обраного елемента"
 
-msgid "The button for running project execution for selected item"
-msgstr "Кнопка для запуску виконання проекту, для вибраного елемента"
+msgid "The button for running the project execution for the selected item"
+msgstr "Кнопка запуску виконання проекту для обраного елемента"
 
-msgid "Press to run project execution for selected item."
-msgstr "Натиснути для запуску виконання проекту, для вибраного елемента."
+msgid "Press for running the project execution for the selected item."
+msgstr "Натиснути для запуску виконання проекту для обраного елемента."
 
 msgid "New project"
 msgstr "Новий проект"
 
-msgid "New project create"
-msgstr "Створення нового проекту"
+msgid "The button for creation a new project"
+msgstr "Кнопка створення нового проекту"
 
-msgid "The button for creation of the new project"
-msgstr "Кнопка для створення нового проекту"
-
-msgid "Press to create the new project."
+msgid "Press for creation a new project."
 msgstr "Натиснути для створення нового проекту."
 
 msgid "New library"
 msgstr "Нова бібліотека"
 
-msgid "New widgets library creation"
-msgstr "Створення нової бібліотеки"
+msgid "New widgets library"
+msgstr "Нова бібліотека віджетів"
 
-msgid "The button for creation of the new widgets library"
-msgstr "Кнопка для створення нової бібліотеки"
+msgid "The button for creation a new widgets library"
+msgstr "Кнопка створення нової бібліотеки віджетів"
 
-msgid "Press to create the new widgets library."
-msgstr "Натиснути для створення нової бібліотеки."
+msgid "Press for creation a new widgets library."
+msgstr "Натиснути для створення нової бібліотеки віджетів."
 
 msgid "Add visual item"
 msgstr "Додати візуальний елемент"
 
-msgid "Add visual item into library, container widget, project or page"
+msgid "Adding a visual item to the library, container widget, project or page"
 msgstr ""
-"Додавання візуальних елементів до бібліотеки, контейнерного віджету, проекту "
+"Додавання візуального елементу до бібліотеки, контейнерного віджету, проекту "
 "або сторінки"
 
 msgid ""
-"The button for addition of the visual item into library, container widget, "
+"The button for adding a visual item to the library, container widget, "
 "project or page"
 msgstr ""
-"Кнопка для додавання візуальних елементів до бібліотеки, контейнерного "
-"віджету, проекту або сторінки"
+"Кнопка додавання візуального елементу до бібліотеки, контейнерного віджету, "
+"проекту або сторінки"
 
 msgid ""
-"Press to add visual item into library, container widget, project or page."
+"Press for adding a visual item to the library, container widget, project or "
+"page."
 msgstr ""
-"Натиснути для додавання візуальних елементів до бібліотеки, контейнерного "
+"Натиснути для додавання візуального елементу до бібліотеки, контейнерного "
 "віджету, проекту або сторінки."
 
 msgid "Delete visual item"
 msgstr "Видалити візуальний елемент"
 
-msgid "Delete visual item from library, container widget, project or page"
+msgid ""
+"Deleting the visual item from the library, container widget, project or page"
 msgstr ""
 "Видалення візуального елементу з бібліотеки, контейнерного віджета, проекту "
 "або сторінки"
 
 msgid ""
-"The button for deleting visual item from library, container widget, project "
-"or page"
+"The button for deleting the visual item from the library, container widget, "
+"project or page"
 msgstr ""
-"Кнопка для видалення візуального елементу з бібліотеки, контейнерного "
-"віджета, проекту або сторінки"
+"Кнопка видалення візуального елементу з бібліотеки, контейнерного віджета, "
+"проекту або сторінки"
 
 msgid ""
-"Press to delete visual item from library, container widget, project or page."
+"Press for deleting the visual item from the library, container widget, "
+"project or page."
 msgstr ""
 "Натиснути для видалення візуального елементу з бібліотеки, контейнерного "
 "віджета, проекту або сторінки."
 
-msgid "Visual item properties"
+msgid "Properties of the visual item"
 msgstr "Властивості візуального елементу"
 
-msgid "Get visual item properties"
+msgid "Getting the properties of the visual item"
 msgstr "Отримання властивостей візуального елементу"
 
-msgid "The button for getting the visual item properties"
-msgstr "Кнопка для отримання властивостей візуального елементу"
+msgid "The button for getting the properties of the visual item"
+msgstr "Кнопка отримання властивостей візуального елементу"
 
-msgid "Press to get the visual item properties."
+msgid "Press for getting the properties of the visual item."
 msgstr "Натиснути для отримання властивостей візуального елементу."
 
-msgid "Visual item edit"
+msgid "Edit visual item"
 msgstr "Редагувати візуальний елемент"
 
-msgid "Goes visual item edit"
+msgid "Going to editing the visual item"
 msgstr "Перехід до редагування візуального елементу"
 
-msgid "The button for going to visual item edition"
-msgstr "Кнопка для переходу до редагування візуального елементу"
+msgid "The button for going to editing the visual item"
+msgstr "Кнопка переходу до редагування візуального елементу"
 
-msgid "Press to go to visual item edition."
-msgstr "Натиснути для переходу до редагування візуального елементу."
+msgid "Press for going to editing the visual item."
+msgstr "Натиснути для переходу до редагування візуального елементу"
 
-msgid "Visual item changes clear"
+msgid "Clear visual item changes"
 msgstr "Очистити зміни візуального елементу"
 
-msgid "Goes visual item changes clear"
-msgstr "Перехід до очищення змін візуального елементу"
+msgid "Clearing the visual items changes"
+msgstr "Очищення змін візуального елементу"
 
-msgid "The button for going to visual item changes clear"
-msgstr "Кнопка для переходу до очищення змін візуального елементу"
+msgid "The button for clearing the visual items changes"
+msgstr "Кнопка виконання очищення змін візуального елементу"
 
-msgid "Press to go to visual item changes clear."
-msgstr "Натиснути для переходу до очищення змін візуального елементу."
+msgid "Press for clearing the visual items changes."
+msgstr "Натиснути для очищення змін візуального елементу."
 
-msgid "Visual item changes put down"
+msgid "Lower down visual item changes"
 msgstr "Опустити зміни візуального елементу"
 
-msgid "Goes visual item changes put down to the parent"
-msgstr "Перехід до опущення змін візуального елементу до предку"
+msgid "Lowering down the visual item changes to the parent"
+msgstr "Опущення змін візуального елементу до предку"
 
-msgid "The button for going to visual item changes put down to the parent"
-msgstr "Кнопка для переходу до опущення змін візуального елементу до предку"
+msgid "The button for lowering down the visual item changes to the parent"
+msgstr "Кнопка опущення змін візуального елементу до предку"
 
-msgid "Press to go to visual item changes put down to the parent."
-msgstr ""
-"Натиснути для переходу до опущення змін візуального елементу до предку."
+msgid "Press for lowering down the visual item changes to the parent."
+msgstr "Натиснути для опущення змін візуального елементу до предку."
 
-msgid "Visual item changes UnDo"
+msgid "Undo visual item changes"
 msgstr "Відмінити зміни візуального елементу"
 
-msgid "Make visual item changes UnDo:"
-msgstr "Виконання відміни змін візуального елементу:"
+msgid "Undoing the visual item changes:"
+msgstr "Відміна змін візуального елементу:"
 
-msgid "The button for making visual item changes UnDo"
-msgstr "Кнопка для виконання відміни змін візуального елементу"
+msgid "The button for undoing the visual item changes"
+msgstr "Кнопка відміни змін візуального елементу"
 
-msgid "Press to make visual item changes UnDo."
-msgstr "Натиснути для виконання відміни змін візуального елементу."
+msgid "Press for undoing the visual item changes."
+msgstr "Натиснути для відміни змін візуального елементу."
 
-msgid "Visual item changes ReDo"
+msgid "Redo visual item changes"
 msgstr "Повторити зміни візуального елементу"
 
-msgid "Make visual item changes ReDo:"
-msgstr "Виконати повтор змін візуального елементу:"
+msgid "Redoing the visual item changes:"
+msgstr "Повторення змін візуального елементу:"
 
-msgid "The button for making visual item changes ReDo"
-msgstr "Кнопка для виконання повтору змін візуального елементу"
+msgid "The button for redoing the visual item changes"
+msgstr "Кнопка для повторення змін візуального елементу"
 
-msgid "Press to make visual item changes ReDo."
-msgstr "Натиснути для виконання повтору змін візуального елементу."
+msgid "Press for redoing the visual item changes."
+msgstr "Натиснути для повторення змін візуального елементу."
 
-msgid "Visual item cut"
-msgstr "Вирізати візуальний елемент"
-
-msgid "Make visual item cut"
-msgstr "Виконати вирізання візуального елементу"
-
-msgid "The button for making visual item cut"
-msgstr "Кнопка для виконання вирізання візуального елементу"
-
-msgid "Press to make visual item cut."
-msgstr "Натиснути для виконання вирізання візуального елементу."
-
-msgid "Visual item copy"
+msgid "Copy visual item"
 msgstr "Копіювати візуальний елемент"
 
-msgid "Make visual item copy"
-msgstr "Виконання копіювання візуального елементу"
+msgid "Copying the visual item"
+msgstr "Копіювання візуального елементу"
 
-msgid "The button for making visual item copy"
-msgstr "Кнопка для виконання копіювання візуального елементу"
+msgid "The button for copying the visual item"
+msgstr "Кнопка копіювання візуального елементу"
 
-msgid "Press to make visual item copy."
-msgstr "Натиснути для виконання копіювання візуального елементу."
+msgid "Press for copying the visual item."
+msgstr "Натиснути для копіювання візуального елементу."
 
-msgid "Visual item paste"
+msgid "Cut visual item"
+msgstr "Вирізати візуальний елемент"
+
+msgid "Cutting the visual item"
+msgstr "Вирізання візуального елементу"
+
+msgid "The button for cutting the visual item"
+msgstr "Кнопка вирізання візуального елементу"
+
+msgid "Press for cutting the visual item."
+msgstr "Натиснути для вирізання візуального елементу."
+
+msgid "Paste visual item"
 msgstr "Вставити візуальний елемент"
 
-msgid "Make visual item paste"
-msgstr "Виконати вставку візуального елементу"
+msgid "Pasting the visual item"
+msgstr "Вставлення візуального елементу"
 
-msgid "The button for making visual item paste"
-msgstr "Кнопка для виконання вставки візуального елементу"
+msgid "The button for pasting the visual item"
+msgstr "Кнопка вставлення візуального елементу"
 
-msgid "Press to make visual item paste."
-msgstr "Натиснути для виконання вставки візуального елементу."
+msgid "Press for pasting the visual item."
+msgstr "Натиснути для вставлення візуального елементу."
 
-msgid "Up widget"
-msgstr "Підняти віджет"
+msgid "Raise up to the top"
+msgstr "Підняти догори"
 
-msgid "Raise selected widget to the top"
-msgstr "Підняти вибраний віджет догори"
+msgid "Raising up the selected widgets to the top"
+msgstr "Підняття обраних віджетів на гору"
 
-msgid "The button for raising the selected widget to the top"
-msgstr "Кнопка для підняття вибраного віджету догори"
+msgid "The button for raising up the selected widgets to the top"
+msgstr "Кнопка підняття обраних віджетів на гору"
 
-msgid "Press to raise the selected widget to the top."
-msgstr "Натиснути для підняття вибраного віджету догори."
+msgid "Press for raising up the selected widgets to the top."
+msgstr "Натиснути для підняття обраних віджетів на гору."
 
-msgid "Down widget"
-msgstr "Опустити віджет"
+msgid "Lower down to the bottom"
+msgstr "Опустити додолу"
 
-msgid "Down selected widget to the bottom"
-msgstr "Опустити вибраний віджет донизу"
+msgid "Lowering down the selected widgets to the bottom"
+msgstr "Опущення обраних віджетів додолу"
 
-msgid "The button for downing the selected widget to the bottom"
-msgstr "Кнопка для опускання вибраного віджету донизу"
+msgid "The button for lowering down the selected widgets to the bottom"
+msgstr "Кнопка опущення обраних віджетів додолу"
 
-msgid "Press to down the selected widget to the bottom."
-msgstr "Натиснути для опускання вибраного віджету донизу."
+msgid "Press for lowering down the selected widgets to the bottom."
+msgstr "Натиснути для опущення обраних віджетів додолу."
 
-msgid "Rise widget"
-msgstr "Віджет догори"
+msgid "Rise up"
+msgstr "Підняти"
 
-msgid "Raise selected widget"
-msgstr "Підняття вибраного віджета"
+msgid "Raising up the selected widgets"
+msgstr "Підняття обраних віджетів"
 
-msgid "The button for raising the selected widget"
-msgstr "Кнопка для підняття вибраного віджета"
+msgid "The button for raising up the selected widgets"
+msgstr "Кнопка підняття обраних віджетів"
 
-msgid "Press to raise the selected widget."
-msgstr "Натиснути для підняття вибраного віджета."
+msgid "Press for raising up the selected widgets."
+msgstr "Натиснути для підняття обраних віджетів."
 
-msgid "Lower widget"
-msgstr "Віджет донизу"
+msgid "Lower down"
+msgstr "Опустити"
 
-msgid "Down selected widget"
-msgstr "Опускання вибраного віджета"
+msgid "Lowering down the selected widgets"
+msgstr "Опущення обраних віджетів"
 
-msgid "The button for downing the selected widget"
-msgstr "Кнопка для опускання вибраного віджета"
+msgid "The button for lowering down the selected widgets"
+msgstr "Кнопка опущення обраних віджетів"
 
-msgid "Press to down the selected widget."
-msgstr "Натиснути для опускання вибраного віджета."
+msgid "Press for lowering down the selected widgets."
+msgstr "Натиснути для опущення обраних віджетів."
 
-msgid "Align to left"
+msgid "Align to the left"
 msgstr "Вирівняти ліворуч"
 
-msgid "Align selected widgets to the left"
-msgstr "Вирівнювання вибраних віджетів зліва"
+msgid "Aligning the selected widgets to the left"
+msgstr "Вирівнювання обраних віджетів ліворуч"
 
-msgid "The button for alignment of selected widgets to the left"
-msgstr "Кнопка для вирівнювання вибраних віджетів зліва"
+msgid "The button for aligning the selected widgets to the left"
+msgstr "Кнопка вирівнювання обраних віджетів ліворуч"
 
-msgid "Press to align selected widgets to the left."
-msgstr "Натиснути для вирівнювання вибраних віджетів зліва."
+msgid "Press for aligning the selected widgets to the left."
+msgstr "Натиснути для вирівнювання обраних віджетів ліворуч."
 
-msgid "Align to vertical center"
+msgid "Align vertically to the center"
 msgstr "Вирівняти у центрі вертикально"
 
-msgid "Align selected widgets to the vertical center"
-msgstr "Вирівнювання вибраних віджетів у центрі вертикально"
+msgid "Aligning the selected widgets vertically to the center"
+msgstr "Вирівнювання обраних віджетів у центрі вертикально"
 
-msgid "The button for alignment of selected widgets to the vertical center"
-msgstr "Кнопка для вирівнювання вибраних віджетів у центрі вертикально"
+msgid "The button for aligning the selected widgets vertically to the center"
+msgstr "Кнопка вирівнювання обраних віджетів у центрі вертикально"
 
-msgid "Press to align selected widgets to the vertical center."
-msgstr "Натиснути для вирівнювання вибраних віджетів у центрі вертикально."
+msgid "Press for aligning the selected widgets vertically to the center."
+msgstr "Натиснути для вирівнювання обраних віджетів у центрі вертикально."
 
-msgid "Align to right"
+msgid "Align to the right"
 msgstr "Вирівняти праворуч"
 
-msgid "Align selected widgets to the right"
-msgstr "Вирівнювання вибраних віджетів праворуч"
+msgid "Aligning the selected widgets to the right"
+msgstr "Вирівнювання обраних віджетів праворуч"
 
-msgid "The button for alignment of selected widgets to the right"
-msgstr "Кнопка для вирівнювання вибраних віджетів праворуч"
+msgid "The button for aligning the selected widgets to the right"
+msgstr "Кнопка вирівнювання обраних віджетів праворуч"
 
-msgid "Press to align selected widgets to the right."
-msgstr "Натиснути для вирівнювання вибраних віджетів праворуч."
+msgid "Press for aligning the selected widgets to the right."
+msgstr "Натиснути для вирівнювання обраних віджетів праворуч."
 
-msgid "Align to top"
+msgid "Align to the top"
 msgstr "Вирівняти догори"
 
-msgid "Align selected widgets to the top"
-msgstr "Вирівнювання вибраних віджетів догори"
+msgid "Aligning the selected widgets to the top"
+msgstr "Вирівнювання обраних віджетів догори"
 
-msgid "The button for alignment of selected widgets to the top"
-msgstr "Кнопка для вирівнювання вибраних віджетів догори"
+msgid "The button for aligning the selected widgets to the top"
+msgstr "Кнопка вирівнювання обраних віджетів догори"
 
-msgid "Press to align selected widgets to the top."
-msgstr "Натиснути для вирівнювання вибраних віджетів догори."
+msgid "Press for aligning the selected widgets to the top."
+msgstr "Натиснути для вирівнювання обраних віджетів догори."
 
-msgid "Align to horizontal center"
+msgid "Align horizontally to the center"
 msgstr "Вирівняти у центрі горизонтально"
 
-msgid "Align selected widgets to the horizontal center"
-msgstr "Вирівнювання вибраних віджетів у центрі горизонтально"
+msgid "Aligning the selected widgets horizontally to the center"
+msgstr "Вирівнювання обраних віджетів у центрі горизонтально"
 
-msgid "The button for alignment selected widgets to the horizontal center"
-msgstr "Кнопка для вирівнювання вибраних віджетів у центрі горизонтально"
+msgid "The button for aligning the selected widgets horizontally to the center"
+msgstr "Кнопка вирівнювання обраних віджетів у центрі горизонтально"
 
-msgid "Press to align selected widgets to the horizontal center."
-msgstr "Натиснути для вирівнювання вибраних віджетів у центрі горизонтально."
+msgid "Press for aligning the selected widgets horizontally to the center."
+msgstr "Натиснути для вирівнювання обраних віджетів у центрі горизонтально."
 
-msgid "Align to bottom"
+msgid "Align to the bottom"
 msgstr "Вирівняти додолу"
 
-msgid "Align selected widgets to the bottom"
-msgstr "Вирівнювання вибраних віджетів додолу"
+msgid "Aligning the selected widgets to the bottom"
+msgstr "Вирівнювання обраних віджетів додолу"
 
-msgid "The button for alignment selected widgets to the bottom"
-msgstr "Кнопка для вирівнювання вибраних віджетів додолу"
+msgid "The button for aligning the selected widgets to the bottom"
+msgstr "Кнопка вирівнювання обраних віджетів додолу"
 
-msgid "Press to align selected widgets to the bottom."
-msgstr "Натиснути для вирівнювання вибраних віджетів додолу."
+msgid "Press for aligning the selected widgets to the bottom."
+msgstr "Натиснути для вирівнювання обраних віджетів додолу."
 
-msgid "Cursor"
-msgstr "Курсор"
+msgid "Return the cursor"
+msgstr "Повернути курсор"
 
-msgid "Unset cursor"
+msgid "Returning the cursor"
 msgstr "Повернення курсору"
 
-msgid "The button for unset cursor"
-msgstr "Кнопка для повернення курсору"
+msgid "The button for returning the cursor"
+msgstr "Кнопка повернення курсору"
 
-msgid "Press to unset cursor"
-msgstr "Кнопка для повернення курсору"
+msgid "Press for returning the cursor."
+msgstr "Натиснути для повернення курсору."
 
 msgid "Add line"
 msgstr "Додати лінію"
 
-msgid "Add line to elementary figure"
+msgid "Adding a line to the elementary figure"
 msgstr "Додання лінії до елементарної фігури"
 
-msgid "The button for adding line to elementary figure"
-msgstr "Кнопка для додання лінії до елементарної фігури"
+msgid "The button for adding a line to the elementary figure"
+msgstr "Кнопка додання лінії до елементарної фігури"
 
-msgid "Press to add line to elementary figure."
+msgid "Press for adding a line to the elementary figure."
 msgstr "Натиснути для додання лінії до елементарної фігури."
 
 msgid "Add arc"
 msgstr "Додати дугу"
 
-msgid "Add arc to elementary figure"
+msgid "Adding an arc to the elementary figure"
 msgstr "Додання дуги до елементарної фігури"
 
-msgid "The button for adding arc to elementary figure"
-msgstr "Кнопка для додання дуги до елементарної фігури"
+msgid "The button for adding an arc to the elementary figure"
+msgstr "Кнопка додання дуги до елементарної фігури"
 
-msgid "Press to add arc to elementary figure."
+msgid "Press for adding an arc to the elementary figure."
 msgstr "Натиснути для додання дуги до елементарної фігури."
 
 msgid "Add Besier curve"
 msgstr "Додати криву Безьє"
 
-msgid "Add Besier curve to elementary figure"
+msgid "Adding a Besier curve to the elementary figure"
 msgstr "Додання кривої Безьє до елементарної фігури"
 
-msgid "The button for adding Besier curve to elementary figure"
-msgstr "Кнопка для додання кривої Безьє до елементарної фігури"
+msgid "The button for adding a Besier curve to the elementary figure"
+msgstr "Кнопка додання кривої Безьє до елементарної фігури"
 
-msgid "Press to add Besier curve to elementary figure."
+msgid "Press for adding a Besier curve to the elementary figure."
 msgstr "Натиснути для додання кривої Безьє до елементарної фігури."
 
 msgid "Connections"
-msgstr "Під'єднатися"
+msgstr "Прив'язки"
 
-msgid "Enable connections"
+msgid "Enabling the connections"
 msgstr "Включення прив'язок"
 
-msgid "The button for enabling connections"
-msgstr "Кнопка для включення прив'язок"
+msgid "The button for enabling the connections"
+msgstr "Кнопка включення прив'язок"
 
-msgid "Press to enable connections"
-msgstr "Включення прив'язок"
+msgid "Press for enabling the connections."
+msgstr "Натиснути для включення прив'язок."
 
 msgid "Cl&ose"
 msgstr "&Закрити"
 
-msgid "Close active window"
-msgstr "Закриття активного вікна"
+msgid "Close the active window"
+msgstr "Закрити активне вікно"
 
-msgid "The button for the active window closing"
-msgstr "Кнопка для закриття активного вікна"
+msgid "The button for closing the active window"
+msgstr "Кнопка закриття активного вікна"
 
-msgid "Press to close active window."
+msgid "Press for closing the active window."
 msgstr "Натиснути для закриття активного вікна."
 
 msgid "Close &All"
@@ -660,59 +663,59 @@ msgstr "Закрити &все"
 msgid "Close all windows"
 msgstr "Закриття всіх вікон"
 
-msgid "The button for all windows closing"
-msgstr "Кнопка для закриття всіх вікон"
+msgid "The button for closing all windows"
+msgstr "Кнопка закриття всіх вікон"
 
-msgid "Press to close all windows."
+msgid "Press for closing all windows."
 msgstr "Натиснути для закриття всіх вікон."
 
 msgid "&Tile"
 msgstr "&Укласти"
 
 msgid "Tile all windows"
-msgstr "Укладення всіх вікон"
+msgstr "Укласти всі вікна"
 
-msgid "The button for all windows tiling"
-msgstr "Кнопка для укладення всіх вікон"
+msgid "The button for tiling all windows"
+msgstr "Кнопка укладки всіх вікон"
 
-msgid "Press to tile all windows."
-msgstr "Натиснути для укладення всіх вікон."
+msgid "Press for tiling all windows."
+msgstr "Натиснути для укладки всіх вікон."
 
 msgid "&Cascade"
 msgstr "&Каскадувати"
 
 msgid "Cascade all windows"
-msgstr "Каскадування всіх вікон"
+msgstr "Каскадувати всі вікна"
 
-msgid "The button for all windows cascading"
-msgstr "Кнопка для каскадування всіх вікон"
+msgid "The button for cascading all windows"
+msgstr "Кнопка каскадування всіх вікон"
 
-msgid "Press to cascade all windows."
+msgid "Press for cascading all windows."
 msgstr "Натиснути для каскадування всіх вікон."
 
 msgid "Ne&xt"
-msgstr "&Наступний"
+msgstr "&Наступне"
 
-msgid "Activate next window"
+msgid "Activate the next window"
 msgstr "Активувати наступне вікно"
 
-msgid "The button for next window activation"
-msgstr "Кнопка для активування наступного вікна"
+msgid "The button for activating the next window"
+msgstr "Кнопка активування наступного вікна"
 
-msgid "Press to activate next window."
+msgid "Press for activating the next window."
 msgstr "Натиснути для активування наступного вікна."
 
 msgid "Pre&vious"
-msgstr "&Минулий"
+msgstr "&Попереднє"
 
-msgid "Activate previous window"
-msgstr "Активувати минуле вікно"
+msgid "Activate the previous window"
+msgstr "Активувати попереднє вікно"
 
-msgid "The button for previous window activation"
-msgstr "Кнопка для активування минулого вікна"
+msgid "The button for activating the previous window"
+msgstr "Кнопка активування попереднього вікна"
 
-msgid "Press to activate previous window."
-msgstr "Натиснути для активування минулого вікна."
+msgid "Press for activating the previous window."
+msgstr "Натиснути для активування попереднього вікна."
 
 msgid "&File"
 msgstr "&Файл"
@@ -738,62 +741,62 @@ msgstr "&Допомога"
 msgid "Visual items toolbar"
 msgstr "Панель візуальних елементів"
 
-msgid "Widgets view functions"
-msgstr "Функції видимості віджетів"
+msgid "Functions of the widgets location"
+msgstr "Функції розташування віджетів"
 
-msgid "Elementars figure tools"
-msgstr "Панель елементарних фігур"
+msgid "Elementary figure tools"
+msgstr "Інструменти елементарної фігури"
 
-msgid "This label displays current user."
+msgid "This label displays the current user."
 msgstr "Це маркування показує поточного користувача."
 
-msgid "Field for display the current user."
-msgstr "Поле для відображення поточного користувача."
+msgid "Field for displaying the current user."
+msgstr "Поле відображення поточного користувача."
 
-msgid "Double click to change user."
-msgstr "Подвійно клацнути для зміни користувача."
+msgid "Double click to change the user."
+msgstr "Подвійно клікнути для зміни користувача."
 
-msgid "This label displays the using VCA engine station."
-msgstr "Це маркування показує використану станцію рушія СВК"
+msgid "This label displays the used VCA engine station."
+msgstr "Це маркування показує використану станцію рущія СВУ."
 
-msgid "Field for display of the using VCA engine station."
-msgstr "Поле для відображення використаної станції рушія СВК"
+msgid "Field for displaying the used VCA engine station."
+msgstr "Поле відображення використаної станції рущія СВУ."
 
-msgid "This label displays widgets' scaling mode."
-msgstr "Це маркування показує поточний режим масштабування."
+msgid "This label displays the widgets scaling mode."
+msgstr "Це маркування показує поточний режим масштабування віджетів."
 
-msgid "Field for display widgets' scaling mode."
-msgstr "Поле для відображення поточного режиму масштабування."
+msgid "Field for displaying the widgets scaling mode."
+msgstr "Поле відображення поточного режиму масштабування віджетів."
 
-msgid "Click to change widgets' scaling mode."
+msgid "Click to change the widgets scaling mode."
 msgstr "Натиснути для зміни режиму масштабування віджетів."
 
-msgid "This label displays modifying."
+msgid "This label indicates the fact of making changes."
 msgstr "Це маркування показує факт внесення змін."
 
-msgid "Field for display modifying."
-msgstr "Поле для відображення факту внесення змін."
+msgid "Field for indicating the fact of making changes."
+msgstr "Поле відображення факту внесення змін."
 
-msgid "Click to save all modifyings."
-msgstr "Натиснути для збереження всіх змін."
+msgid "Click to save all the made changes."
+msgstr "Натиснути для збереження всіх внесених змін."
 
-msgid "This label displays current widget's scale."
-msgstr "Це маркування показує поточний режим масштабування."
+msgid "This label displays the current widget scale."
+msgstr "Це маркування показує поточний масштаб віджету."
 
-msgid "Field for display the scale of the current widget."
-msgstr "Поле для відображення поточного користувача."
+msgid "Field for displaying the current widget scale."
+msgstr "Поле відображення поточного масштабу віджету."
 
-msgid "Dock window for projects management."
-msgstr "Плаваюче вікно для керування проектами"
+msgid "Dock window of the projects manager."
+msgstr "Плаваюче вікно менеджеру проектів."
 
-msgid "Dock window for widgets and their libraries management."
-msgstr "Плаваюче вікно для керування віджетами та їх бібліотеками."
+msgid "Dock window of the manager of the widgets libraries."
+msgstr "Плаваюче вікно менеджеру бібліотек віджетів."
 
-msgid "Dock window for widget's attributes inspection."
-msgstr "Плаваюче вікно для інспектора атрибутів віджета."
+msgid "Dock window of the inspector ot the widget attributes."
+msgstr "Плаваюче вікно інспектору атрибутів віджета."
 
-msgid "Dock window for widget's links inspection."
-msgstr "Плаваюче вікно для інспектора посилань віджета."
+msgid "Dock window of the inspector ot the widget links."
+msgstr "Плаваюче вікно інспектору посилань віджета."
 
 msgid "Ready"
 msgstr "Готовий"
@@ -813,15 +816,15 @@ msgstr "Великі (32x32)"
 msgid "Huge (48x48)"
 msgstr "Дуже великі (48x48)"
 
-msgid "Visual items save"
+msgid "Saving of the visual items"
 msgstr "Збереження візуальних елементів"
 
 msgid ""
-"Some visual items changed.\n"
-"Save the changes to DB on exit?"
+"Some visual items have been changed.\n"
+"Save the changes to the DB before exiting?"
 msgstr ""
 "Деякі візуальні елементи було змінено.\n"
-"Зберегти зміни у БД при виході?"
+"Зберегти зміни у БД перед виходом?"
 
 msgid ""
 "%1 v%2.\n"
@@ -846,96 +849,92 @@ msgstr ""
 "Автор: %10\n"
 "Web сайт: %11"
 
-msgid "Are you sure of loading visual items '%1' from DB?"
+msgid "Are you sure of loading visual items '%1' from the DB?"
 msgstr "Ви дійсно бажаєте завантажити візуальні елементи '%1' з БД?"
 
-msgid "Load visual item's data from DB"
-msgstr "Завантаження даних візуального елементу з БД"
+msgid "Loading the visual items data from the DB"
+msgstr "Завантаження даних візуальних елементів з БД"
 
-msgid "Are you sure of saving all modifications to DB?"
+msgid "Are you sure of saving all modifications to the DB?"
 msgstr "Ви дійсно бажаєте зберегти всі зміни у БД?"
 
-msgid "Are you sure of saving visual items '%1' to DB?"
+msgid "Are you sure of saving the visual items '%1' to the DB?"
 msgstr "Ви дійсно бажаєте зберегти візуальні елементи '%1' у БД?"
 
-msgid "Save visual item's data to DB"
+msgid "Saving the visual items data to the DB"
 msgstr "Збереження даних візуальних елементів у БД"
 
-msgid "Enter new project's identifier and name."
+msgid "Enter the identifier and the name of the new project."
 msgstr "Введіть ідентифікатор та ім'я нового проекта."
 
-msgid "Enter new widget's library identifier and name."
+msgid "Enter the identifier and the name of the new widgets library."
 msgstr "Введіть ідентифікатор та ім'я нової бібліотеки віджетів."
 
-msgid "New widget's library"
-msgstr "Нова бібліотека віджетів"
-
-msgid "Enter new widget's/page's identifier and name."
+msgid "Enter the identifier and the name of the new widget/page."
 msgstr "Введіть ідентифікатор та ім'я нового віджета/сторінки."
 
-msgid "Create widget/page"
-msgstr "Створити віджет/сторінку"
+msgid "Creating a widget/page"
+msgstr "Створення віджету/сторінки"
 
-msgid "Are you sure of deleting visual items: '%1'?"
+msgid "Are you sure of deleting the visual items: '%1'?"
 msgstr "Ви дійсно бажаєте видалити візуальні елементи '%1'?"
 
-msgid "Delete visual items"
+msgid "Deleting the visual items"
 msgstr "Видалення візуальних елементів"
 
 msgid "Widget: %1"
 msgstr "Віджет: %1"
 
-msgid "Widget's '%1' editing window is already opened."
+msgid "The widget '%1' editing window is already open."
 msgstr "Вікно редагування віджету '%1' вже відкрито."
 
 msgid ""
-"Are you sure of clear all changes for visual items: '%1'?\n"
-"All changes will be lost and variables are returning to default values or "
+"Are you sure of clear all changes of the visual items: '%1'?\n"
+"All changes will be lost and values will return to the previous state or "
 "will be inherited!"
 msgstr ""
 "Ви дійсно бажаєте очищення всіх змін візуальних елементів: '%1'?\n"
 "Всі зміни буде втрачено та значення повернуться до попереднього стану або "
 "будуть успадковані!"
 
-msgid "Visual items' changes clear"
-msgstr "Очищення змін візуальних елементів"
-
 msgid ""
-"Are you sure for put down to parent all changes for visual items: '%1'?\n"
-"All other inherited from the parent visual items will use the changes!"
+"Are you sure for lowering down to the parent for all changes of the visual "
+"items: '%1'?\n"
+"All other visual elements, descendant from this ancestor, will use these "
+"changes!"
 msgstr ""
 "Ви дійсно бажаєте опустити предку всі зміни візуальних елементів: '%1'?\n"
-"Всі інші візуальні елементи, нашадки від даного предку, будуть "
+"Всі інші візуальні елементи, нащадки від даного предку, будуть "
 "використовувати ці зміни!"
 
-msgid "Visual items move or copy"
-msgstr "Копіювання або переміщення візуальних елементів"
+msgid "Moving or copying the visual items"
+msgstr "Переміщення або копіювання візуальних елементів"
 
-msgid "Project '%1' move.\n"
+msgid "Moving the project '%1'.\n"
 msgstr "Переміщення проекту '%1'.\n"
 
-msgid "Project '%1' copy.\n"
+msgid "Copying the project '%1'.\n"
 msgstr "Копіювання проекту '%1'.\n"
 
-msgid "Widget's library '%1' move.\n"
+msgid "Moving the widgets library '%1'.\n"
 msgstr "Переміщення бібліотеки віджетів '%1'.\n"
 
-msgid "Widget's library '%1' copy.\n"
+msgid "Copying the widgets library '%1'.\n"
 msgstr "Копіювання бібліотеки віджетів '%1'.\n"
 
-msgid "Move page '%1' to '%2'.\n"
+msgid "Moving the page '%1' to '%2'.\n"
 msgstr "Переміщення сторінки '%1' до '%2'.\n"
 
-msgid "Copy page '%1' to '%2'.\n"
+msgid "Copying the page '%1' to '%2'.\n"
 msgstr "Копіювання сторінки '%1' до '%2'.\n"
 
-msgid "Move widget '%1' to '%2'.\n"
+msgid "Moving the widget '%1' to '%2'.\n"
 msgstr "Переміщення віджету '%1' до '%2'.\n"
 
-msgid "Copy widget '%1' to '%2'.\n"
+msgid "Copying the widget '%1' to '%2'.\n"
 msgstr "Копіювання віджету '%1' до '%2'.\n"
 
-msgid "Enter new widget's identifier and name."
+msgid "Enter the identifier and the name of the new widget."
 msgstr "Введіть ідентифікатор та ім'я нового віджета."
 
 msgid "Copy/move scheme from '%1' to '%2' is not supported."
@@ -945,16 +944,16 @@ msgid "Inherit:"
 msgstr "Наслідувати:"
 
 msgid ""
-"Target item '%1' already present!\n"
-"Any way paste to?"
+"The target item '%1' is already present!\n"
+"Paste to it anyway?"
 msgstr ""
 "Цільовий елемент '%1' вже присутній!\n"
 "Всеодно вставити до нього?"
 
-msgid "Try copy/move self to self for \"%1/%1\"!"
-msgstr "Спроба копіювання/пересунення себе у себе для \"%1/%1\"!"
+msgid "Attempting to copy/move yourself for \"%1/%1\"!"
+msgstr "Спроба копіювання/переміщення у самого себе для \"%1/%1\"!"
 
-msgid "Widget's library properties"
+msgid "Properties of the widgets library"
 msgstr "Властивості бібліотеки віджетів"
 
 msgid "Widgets library"
@@ -963,7 +962,7 @@ msgstr "Бібліотека віджетів"
 msgid "State"
 msgstr "Стан"
 
-msgid "Item's icon. Click for download other."
+msgid "Item icon. Click to download another."
 msgstr "Іконка елементу. Натисніть для завантаження іншої."
 
 msgid "Enabled:"
@@ -972,11 +971,14 @@ msgstr "Ввімкнено:"
 msgid "Container DB:"
 msgstr "БД контейнера:"
 
+msgid "Used:"
+msgstr "Використано:"
+
 msgid "Configuration"
 msgstr "Конфігурація"
 
-msgid "Id:"
-msgstr ""
+msgid "Identifier:"
+msgstr "Ідентифікатор:"
 
 msgid "Name:"
 msgstr "Ім'я:"
@@ -990,8 +992,8 @@ msgstr "Власник, група:"
 msgid "Access:"
 msgstr "Доступ:"
 
-msgid "Calculate period (ms):"
-msgstr "Період обчислення (мс):"
+msgid "Period of the calculating, milliseconds:"
+msgstr "Період обчислення, мілісекунд:"
 
 msgid "Run window mode:"
 msgstr "Режим вікна виконання:"
@@ -1002,8 +1004,8 @@ msgstr "Зберігати пропорцію під час масштабува
 msgid "Mime data"
 msgstr "Mime дані"
 
-msgid "Id"
-msgstr ""
+msgid "Identifier"
+msgstr "Ідентифікатор"
 
 msgid "Mime type"
 msgstr "Mime тип"
@@ -1038,51 +1040,54 @@ msgstr "Значення"
 msgid "Close"
 msgstr "Закрити"
 
-msgid "Get node '%1' information error."
+msgid "Error getting the node '%1' information."
 msgstr "Помилка запиту інформації вузла '%1'."
 
-msgid "Load icon picture"
+msgid "Downloading the image icon"
 msgstr "Завантажити зображення іконки"
 
 msgid "Images (*.png *.jpg)"
 msgstr "Зображення (*.png *.jpg)"
 
-msgid "Load icon image '%1' error."
+msgid "Error downloading the icon image '%1'."
 msgstr "Помилка завантаження зображення іконки '%1'."
 
-msgid "Changes apply"
+msgid "Saving the changes"
 msgstr "Збереження змін"
 
 msgid ""
-"Some changes you don't apply!\n"
-"Apply now or lost the?"
+"Some changes were made!\n"
+"Save the changes to the DB before the closing?"
 msgstr ""
-"Деякі зміни було зроблено.\n"
-"Зберегти зміни у БД перед виходом?"
+"Здійснено деякі зміни!\n"
+"Зберегти зміни у БД перед закриттям?"
 
-msgid "No one row is selected."
-msgstr "Жодної строки не вибрано."
+msgid "No rows selected."
+msgstr "Жодного рядку не обрано."
 
 msgid "Are you sure of loading a mime to selected item '%1'?"
 msgstr ""
 "Ви дійсно бажаєте завантажити MIME до обраного візуального елементу '%1'?"
 
+msgid "Loading the data"
+msgstr "Завантаження модуля."
+
 msgid "All files (*.*)"
 msgstr "Всі файли (*.*)"
 
-msgid "Open file '%1' is fail: %2"
+msgid "Error opening the file '%1': %2"
 msgstr "Помилка відкриття файлу '%1': %2"
 
-msgid "Loadable file '%1' is too large."
+msgid "The download file '%1' is very large."
 msgstr "Завантажуваний файл '%1' дуже великий."
 
-msgid "Save data"
+msgid "Saving the data"
 msgstr "Збереження даних"
 
-msgid "Write data to file '%1' is fail: %2"
-msgstr "Помилка запису до файлу '%1': %2"
+msgid "Error writing the data to the file '%1': %2"
+msgstr "Помилка запису даних до файлу '%1': %2"
 
-msgid "Widget properties"
+msgid "Properties of the widget"
 msgstr "Властивості віджету"
 
 msgid "Widget"
@@ -1093,9 +1098,6 @@ msgstr "Батьківський віджет:"
 
 msgid "Page type:"
 msgstr "Тип сторінки:"
-
-msgid "Used:"
-msgstr "Використано:"
 
 msgid "Root:"
 msgstr "Корінь:"
@@ -1118,8 +1120,8 @@ msgstr "Тип даних"
 msgid "Work area"
 msgstr "Робоча ділянка"
 
-msgid "Proc."
-msgstr "Оброб."
+msgid "Processing"
+msgstr "Обробка"
 
 msgid "Configuration template"
 msgstr "Конфігураційний шаблон"
@@ -1133,20 +1135,14 @@ msgstr "Видалити атрибут"
 msgid "Procedure language:"
 msgstr "Мова процедури:"
 
-msgid "Procedure calculate (ms):"
-msgstr "Обчислення процедури (мс):"
-
 msgid "Links"
 msgstr "Зв'язки"
 
-msgid "Getting node '%1' information error."
-msgstr "Помилка запиту інформації вузла '%1'."
+msgid "Correct widget is not selected"
+msgstr "Не обрано коректного віджету"
 
-msgid "Valid widget is not selected"
-msgstr "Не вибрано коректного віджету"
-
-msgid "Valid attribute is not selected"
-msgstr "Не вибрано коректного атрибуту"
+msgid "Correct attribute is not selected"
+msgstr "Не обрано коректного атрибуту"
 
 msgid "<Group>"
 msgstr "<Група>"
@@ -1163,22 +1159,22 @@ msgstr "Редагувати"
 msgid "Clear changes"
 msgstr "Очистити зміни"
 
-msgid "Press to clear attribute's changes."
+msgid "Press to clear changes of the attribute."
 msgstr "Натиснути для очищення змін атрибуту."
 
-msgid "Changes put down to the parent"
-msgstr "Опущення змін до предку"
+msgid "Lower the widget changes to its parent"
+msgstr "Опустити зміни віджету до предку"
 
-msgid "Press to put down attribute's changes to the parent."
-msgstr "Натиснути для опущення змін атрибуту до предку."
+msgid "Press for lowering the widget changes to its parent."
+msgstr "Натиснути для опущення змін віджету до предку."
 
-msgid "Full text of the attribute edit."
+msgid "Full-text editing of the attribute."
 msgstr "Повнотекстове редагування атрибуту."
 
-msgid "Attribute '%1' edit for widget '%2'."
+msgid "Editing the attribute '%1' for the widget '%2'."
 msgstr "Редагування атрибуту '%1' для віджета '%2'."
 
-msgid "Short help for text syntax description."
+msgid "Short help to describe the syntax of the text."
 msgstr "Коротка допомога для опису синтаксису текста."
 
 msgid "Widgets"
@@ -1188,7 +1184,7 @@ msgid "Type"
 msgstr "Тип"
 
 #, c-format
-msgid "Widgets' development tree '%s' request time %f ms."
+msgid "Time of requesting the widgets development tree '%s': %f ms."
 msgstr "Час запиту дерева розробки віджетів '%s': %f мс."
 
 msgid "Library"
@@ -1197,26 +1193,26 @@ msgstr "Бібліотека"
 msgid "Library: %1"
 msgstr "Бібліотека: %1"
 
-msgid "Add widget based at '%1'"
-msgstr "Додання віджету базованого на '%1'"
+msgid "Adding a widget based on '%1'"
+msgstr "Додання віджету заснованого на '%1'"
 
-msgid "The button for addition widget based at '%1'"
-msgstr "Кнопка для додання віджету базованого на '%1'"
+msgid "The button for adding a widget based on '%1'"
+msgstr "Кнопка додання віджету заснованого на '%1'"
 
-msgid "Press to add widget based at '%1'."
-msgstr "Натиснути для додання віджету базованого на '%1'"
+msgid "Press for adding a widget based on '%1'."
+msgstr "Натиснути для додання віджету заснованого на '%1'."
 
-msgid "Container's widget"
-msgstr "Віджет контейнера"
+msgid "Container widget"
+msgstr "Віджет контейнеру"
 
 #, c-format
-msgid "Widgets' development tree '%s' load time %f ms."
+msgid "Time of loading the widgets development tree '%s': %f ms."
 msgstr "Час завантаження дерева розробки віджетів '%s': %f мс."
 
 msgid "Refresh libraries"
 msgstr "Оновити бібліотеки"
 
-msgid "Press to refresh present libraries."
+msgid "Press to refresh the present libraries."
 msgstr "Натиснути для оновлення наявних бібліотек."
 
 msgid "Projects"
@@ -1226,7 +1222,7 @@ msgid "Project"
 msgstr "Проект"
 
 #, c-format
-msgid "Project's development tree '%s' load time %f ms."
+msgid "Time of loading the projects development tree '%s': %f ms."
 msgstr "Час завантаження дерева розробки проектів '%s': %f мс."
 
 msgid "Page"
@@ -1235,7 +1231,7 @@ msgstr "Сторінка"
 msgid "Refresh projects"
 msgstr "Оновити проекти"
 
-msgid "Press to refresh present projects."
+msgid "Press to refresh the present projects."
 msgstr "Натиснути для оновлення наявних проектів."
 
 msgid "Scale"
@@ -1244,31 +1240,31 @@ msgstr "Масштаб"
 msgid "Resize"
 msgstr "Зміна розміру"
 
-msgid "Warning! Edit widget already set."
-msgstr "Увага! Віджет вже встановлено у редагування."
+msgid "WARNING! The widget is already set up for editing."
+msgstr "Увага! Віджет вже встановлено до редагування."
 
-msgid "Exit from widget editing"
+msgid "Exit the widget editing"
 msgstr "Вихід з редагування віджету"
 
-msgid "Press to exit from widget editing."
+msgid "Press to exit the widget editing."
 msgstr "Натиснути для виходу з редагування віджету."
 
-msgid "Enter for the widget editing"
+msgid "Enter the widget editing"
 msgstr "Вхід до редагування віджету"
 
-msgid "Press to enter for the widget editing."
+msgid "Press to enter the widget editing."
 msgstr "Натиснути для входу до редагування віджету."
 
-msgid "Make icon from the widget"
+msgid "Make up an icon from the widget"
 msgstr "Створити іконку з віджета"
 
-msgid "Press to make icon from the widget."
+msgid "Press to make up an icon from the widget."
 msgstr "Натиснути для створення іконки з віджета."
 
-msgid "Make image from the widget"
+msgid "Make up an image from the widget"
 msgstr "Створити зображення з віджету"
 
-msgid "Press to make image from the widget."
+msgid "Press to make up an image from the widget."
 msgstr "Натиснути для створення зображення з віджету."
 
 msgid "Zoom in (+10%)"
@@ -1283,19 +1279,19 @@ msgstr "Зменшити (-10%)"
 msgid "Press to decrease the visual scale of the widget by 10%."
 msgstr "Натисніть, щоб зменшити візуальний масштаб віджету на 10%."
 
-msgid "Reset zoom (100%)"
+msgid "Reset the zoom (100%)"
 msgstr "Скинути масштаб (100%)"
 
-msgid "Press to set the visual scale of the widget to 100%."
-msgstr "Натисніть, щоб встановитии візуальний масштаб віджету у 100%."
+msgid "Press to reset the visual scale of the widget to 100%."
+msgstr "Натисніть для встановлення візуального масштабу віджету у 100%."
 
-msgid "Save widget's image"
+msgid "Saving the widget image"
 msgstr "Збереження зображення віджету"
 
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Зображення (*.png *.xpm *.jpg)"
 
-msgid "Save to file '%1' is error."
+msgid "Error saving to the file '%1'."
 msgstr "Помилка збереження у файл '%1'."
 
 msgid "Selected elements --- xy(%2:%3) wh[%4:%5]"
@@ -1333,7 +1329,7 @@ msgstr "копіювання-вставка віджету '%s' з '%s'"
 msgid "unknown"
 msgstr "невідомо"
 
-msgid "Widget is not enabled or shape is not supported!"
+msgid "The widget is disabled or the widget shape is not supported!"
 msgstr "Віджет вимкнено або образ віджету не підтримується!"
 
 msgid "Selected elements: '%1'"
@@ -1429,31 +1425,28 @@ msgstr "Кнопка для експорту вибраного документ
 msgid "Press for exporting of the selected document."
 msgstr "Натиснути для експорту вибраного документу."
 
-msgid "The button for closing Vision runtime window"
-msgstr "Кнопка для закриття вікна виконання Vision"
+msgid "The button for closing the Vision runtime window"
+msgstr "Кнопка закриття вікна виконання Vision"
 
 msgid "Press to close of the current Vision runtime window."
 msgstr "Натиснути для закриття поточного вікна виконання Vision."
 
-msgid "Press for display the program and OpenSCADA information."
-msgstr "Натиснути для отримання інформації про програму та OpenSCADA."
-
 msgid "Alarm level"
 msgstr "Рівень порушення"
 
-msgid "The button for all alarms quittance"
-msgstr "Кнопка для квітації всіх порушень"
+msgid "The button for quietance all alarms"
+msgstr "Кнопка квітації всіх порушень"
 
-msgid "Press for all alarms quittance."
+msgid "Press for quietance all alarms."
 msgstr "Натиснути для квітації всіх порушень."
 
 msgid "Blink alarm"
 msgstr "Квітація миготіння"
 
-msgid "The button for all blink alarms quittance"
-msgstr "Кнопка для квітації всіх порушень миготінням"
+msgid "The button for all blink alarms quietance"
+msgstr "Кнопка квітації всіх порушень миготінням"
 
-msgid "Press for all blink alarms quittance."
+msgid "Press for all blink alarms quietance."
 msgstr "Натиснути для квітації всіх порушень миготінням."
 
 msgid "Speaker alarm"
@@ -1462,10 +1455,10 @@ msgstr "Квітація гудком"
 msgid "PC speaker alarm"
 msgstr "Квітація гудком"
 
-msgid "The button for all PC speaker alarms quittance"
-msgstr "Кнопка для квітації всіх порушень гудком"
+msgid "The button for all PC speaker alarms quietance"
+msgstr "Кнопка квітації всіх порушень гудком"
 
-msgid "Press for all PC speaker alarms quittance."
+msgid "Press for all PC speaker alarms quietance."
 msgstr "Натиснути для квітації всіх порушень гудком."
 
 msgid "Sound/speech alarm"
@@ -1474,10 +1467,10 @@ msgstr "Квітація звука/мови"
 msgid "Sound or speech alarm"
 msgstr "Квітація звука/мови"
 
-msgid "The button for all sound or speech alarms quittance"
-msgstr "Кнопка для квітації всіх порушень звуком або мовою"
+msgid "The button for all sound or speech alarms quietance"
+msgstr "Кнопка квітації всіх порушень звуком або мовою"
 
-msgid "Press for all sound or speech alarms quittance."
+msgid "Press for all sound or speech alarms quietance."
 msgstr "Натиснути для квітації всіх порушень звуком або мовою."
 
 msgid "&Alarm"
@@ -1486,54 +1479,46 @@ msgstr "Порушення"
 msgid "Generic (status)"
 msgstr "Загальний (статус)"
 
-msgid "This label displays current system's time."
+msgid "This label shows the current system time."
 msgstr "Це маркування показує поточний системний час."
 
-msgid "Field for display of the current user."
-msgstr "Поле для відображення поточного користувача."
-
-msgid "This label displays used VCA engine station."
-msgstr "Це маркування показує використану станцію рущія СВК"
-
-msgid "Field for display of the used VCA engine station."
-msgstr "Поле для відображення використаної станції рущія СВК"
-
-msgid "This label displays used interface style."
+msgid "This label displays the used interface style."
 msgstr "Це маркування показує використаний стиль інтерфейсу."
 
-msgid "Field for display the used interface style."
-msgstr "Поле для відображення використаного стилю інтерфейсу."
+msgid "Field for displaying the used interface style."
+msgstr "Поле відображення використаного стилю інтерфейсу."
 
-msgid "Double click for style change."
-msgstr "Подвійно клацнути для зміни стилю."
+msgid "Double click to change the style."
+msgstr "Подвійно клікнути для зміни користувача."
+
+#, c-format
+msgid "Session '%s(%s)' using the remote host %d times."
+msgstr "Сеанс '%s(%s)' використовує віддалений хост %d рази."
 
 msgid ""
-"Connection to visualization server '%1' error: %2.\n"
-"Will restore try after %3s!"
+"Error connecting to the visualization server '%1': %2.\n"
+"The next recovery attempt after %3s!"
 msgstr ""
 "Помилка підключення до сервера візуалізації '%1': %2.\n"
 "Наступна спроба відновлення після %3с!"
 
 #, c-format
-msgid "Root page scale [%f:%f]."
+msgid "Scale of the root page [%f:%f]."
 msgstr "Масштаб кореневої сторінки [%f:%f]."
 
-msgid "Print page"
+msgid "Printing a page"
 msgstr "Друк сторінки"
 
-msgid "No one page for print is present!"
+msgid "There is no page to print!"
 msgstr "Немає жодної сторінки для друку!"
 
-msgid "Select page for print."
-msgstr "Вибір сторінки для друку."
-
-msgid "Page print."
-msgstr "Друк сторінки."
+msgid "Select a page to print."
+msgstr "Оберіть сторінку для друку."
 
 msgid "Pages:"
 msgstr "Сторінки: "
 
-msgid "Print page: \"%1\" (%2)"
+msgid "Printing the page: \"%1\" (%2)"
 msgstr "Друк сторінки: \"%1\" (%2)"
 
 msgid "OpenSCADA project: \"%1\""
@@ -1542,25 +1527,22 @@ msgstr "Проект OpenSCADA: \"%1\""
 msgid "User: \"%1\""
 msgstr "Користувач: \"%1\""
 
-msgid "Print diagram"
+msgid "Printing a diagram"
 msgstr "Друк діаграми"
 
-msgid "No one page is present!"
+msgid "There is no page!"
 msgstr "Немає жодної сторінки!"
 
-msgid "No one diagram is present!"
+msgid "There is no diagram!"
 msgstr "Немає жодної діаграми!"
 
-msgid "Select diagram for print."
-msgstr "Вибір діаграми для друку."
-
-msgid "Diagram print."
-msgstr "Друк діаграми."
+msgid "Select a diagram to print."
+msgstr "Оберіть діаграму для друку."
 
 msgid "Diagrams:"
 msgstr "Діаграми:"
 
-msgid "Print diagram: \"%1\" (%2)"
+msgid "Printing the diagram: \"%1\" (%2)"
 msgstr "Друк діаграми: \"%1\" (%2)"
 
 msgid ""
@@ -1577,49 +1559,40 @@ msgstr ""
 "Користувач: \"%1\"\n"
 "%2"
 
-msgid "Print document"
+msgid "Printing a document"
 msgstr "Друк документа"
 
-msgid "No one document is present!"
+msgid "There is no document!"
 msgstr "Немає жодного документа!"
 
-msgid "Select document for print."
-msgstr "Вибір документа для друку."
-
-msgid "Document print."
-msgstr "Друк документа."
+msgid "Select a document to print."
+msgstr "Оберіть документ для друку."
 
 msgid "Document:"
 msgstr "Документ:"
 
-msgid "Print document: \"%1\" (%2)"
+msgid "Printing the document: \"%1\" (%2)"
 msgstr "Друк документа: \"%1\" (%2)"
 
-msgid "Export page"
+msgid "Exporting a page"
 msgstr "Експорт сторінки"
 
-msgid "No one page for export is present!"
+msgid "There is no page for exporting!"
 msgstr "Немає жодної сторінки для експорту!"
 
-msgid "Select page for export."
-msgstr "Вибір сторінки для експорту."
+msgid "Select a page to export."
+msgstr "Оберіть сторінку для експорту."
 
-msgid "Page export."
-msgstr "Експорт сторінки."
-
-msgid "Save page's image"
+msgid "Saving the page image"
 msgstr "Збереження зображення сторінки"
 
-msgid "Export diagram"
+msgid "Exporting a diagram"
 msgstr "Експорт діаграми"
 
-msgid "Select diagram for export."
-msgstr "Вибір діаграми для експорту."
+msgid "Select a diagram to export."
+msgstr "Оберіть діаграму для експорту."
 
-msgid "Diagram export."
-msgstr "Експорт діаграми."
-
-msgid "Save diagram"
+msgid "Saving a diagram"
 msgstr "Збереження діаграми"
 
 #, c-format
@@ -1635,19 +1608,16 @@ msgstr "\"Дата та час\";\"мкс\""
 msgid "\"Frequency (Hz)\""
 msgstr "\"Частота (Гц)\""
 
-msgid "Error write to: %1."
+msgid "Error writing to: %1."
 msgstr "Помилка запису до: %1."
 
-msgid "Export document"
+msgid "Exporting a document"
 msgstr "Експорт документа"
 
-msgid "Select document for export."
-msgstr "Вибір документа для експорту."
+msgid "Select a document to export."
+msgstr "Оберіть документ для експорту."
 
-msgid "Document export."
-msgstr "Експорт документа."
-
-msgid "Save document"
+msgid "Saving a document"
 msgstr "Збереження документа"
 
 #, c-format
@@ -1657,19 +1627,19 @@ msgstr "Документ %1.html"
 msgid "XHTML (*.html);;CSV file (*.csv)"
 msgstr "XHTML (*.html);;CSV файл (*.csv)"
 
-msgid "No data for export."
+msgid "No data to export."
 msgstr "Немає даних для експорту."
 
 msgid ""
-"Several sessions are already opened on the project \"%1\".\n"
-"You can create new or connect to present session. Please, select needed or "
-"press \"Cancel\"."
+"Several sessions are already opened for the project \"%1\".\n"
+"You can create a new or connect to the present session. Please select the "
+"one you want or click \"Cancel\"."
 msgstr ""
 "Вже відкрито декілька сеансів для проекту \"%1\".\n"
 "Ви можете створити новий сеанс або під'єднатися до існуючого. Будь ласка, "
 "оберіть потрібне або натисніть \"Скасувати\"."
 
-msgid "Select session for connection or new creation"
+msgid "Selecting a session for connection or a new one creating"
 msgstr "Вибір сеансу для підключення або створення нового"
 
 msgid "<Create new session>"
@@ -1693,16 +1663,16 @@ msgid "Alarm level: %1"
 msgstr "Рівень порушення: %1"
 
 #, c-format
-msgid "Session creation restore for '%s'."
+msgid "Restore the session creation for '%s'."
 msgstr "Відновлення створення сеансу для '%s'."
 
 #, c-format
-msgid "Session '%s' update time %f ms."
+msgid "Time of updating the session '%s': %f ms."
 msgstr "Час оновлення сеансу '%s' %f мс."
 
 msgid ""
 "Page: '%1'.\n"
-"View access is not permitted."
+"No access to view."
 msgstr ""
 "Сторінка: '%1'.\n"
 "Відсутній доступ для перегляду."
@@ -1710,10 +1680,10 @@ msgstr ""
 msgid "No style"
 msgstr "Немає стилю"
 
-msgid "Select your style from list."
+msgid "Select your style from the list."
 msgstr "Оберіть Ваш стиль з переліку."
 
-msgid "Style select"
+msgid "Selecting a style"
 msgstr "Вибір стилю"
 
 msgid "Elementary figure"
@@ -1881,7 +1851,7 @@ msgstr "Точка 5:"
 msgid ""
 "Include(checked)/Exclude(unchecked) the fill color from the properties list."
 msgstr ""
-"Включити(вибраний)/Виключити(невибраний) колір заповнення зі списку "
+"Включити(обраний)/Виключити(необраний) колір заповнення зі списку "
 "властивостей."
 
 msgid "Fill Color"
@@ -1893,7 +1863,7 @@ msgstr "Встановити колір заповнення за замовчу
 msgid ""
 "Include(checked)/Exclude(unchecked) the fill image from the properties list."
 msgstr ""
-"Включити(вибраний)/Виключити(невибраний) зображення заповнення зі списку "
+"Включити(обраний)/Виключити(необраний) зображення заповнення зі списку "
 "властивостей."
 
 msgid "Fill Image"
@@ -1903,19 +1873,18 @@ msgid "Set the default fill image."
 msgstr "Встановити зображення заповнення за замовчуванням."
 
 msgid "Make the fill color Dynamic(checked)/Static(unchecked)."
-msgstr "Зробити колір заповнення Динамічним(вибрана)/Статичним(невибрана)."
+msgstr "Зробити колір заповнення Динамічним(обрана)/Статичним(необрана)."
 
 msgid "Dyn/Stat"
 msgstr "Дін/Стат"
 
 msgid "Make the fill image Dynamic(checked)/Static(unchecked)."
-msgstr ""
-"Зробити зображення заповнення Динамічним(вибрана)/Статичним(невибрана)."
+msgstr "Зробити зображення заповнення Динамічним(обрана)/Статичним(необрана)."
 
 msgid ""
 "Include(checked)/Exclude(unchecked) the line width from the properties list."
 msgstr ""
-"Включити(вибраний)/Виключити(невибраний) ширину лінії зі списку властивостей."
+"Включити(обраний)/Виключити(необраний) ширину лінії зі списку властивостей."
 
 msgid "Line width"
 msgstr "Ширина лінії"
@@ -1924,12 +1893,12 @@ msgid "Set the default line width."
 msgstr "Встановити ширину лінії за замовчуванням."
 
 msgid "Make the line width Dynamic(checked)/Static(unchecked)."
-msgstr "Зробити ширину лінії Динамічною(вибрана)/Статичною(невибрана)."
+msgstr "Зробити ширину лінії Динамічною(обрана)/Статичною(необрана)."
 
 msgid ""
 "Include(checked)/Exclude(unchecked) the line color from the properties list."
 msgstr ""
-"Включити(вибраний)/Виключити(невибраний) колір лінії зі списку властивостей."
+"Включити(обраний)/Виключити(необраний) колір лінії зі списку властивостей."
 
 msgid "Line color"
 msgstr "Колір лінії"
@@ -1938,12 +1907,12 @@ msgid "Set the default line color."
 msgstr "Встановити колір лінії за замовчуванням."
 
 msgid "Make the line color Dynamic(checked)/Static(unchecked)."
-msgstr "Зробити колір лінії Динамічним(вибрана)/Статичним(невибрана)."
+msgstr "Зробити колір лінії Динамічним(обрана)/Статичним(необрана)."
 
 msgid ""
 "Include(checked)/Exclude(unchecked) the line style from the properties list."
 msgstr ""
-"Включити(вибраний)/Виключити(невибраний) стиль лінії зі списку властивостей."
+"Включити(обраний)/Виключити(необраний) стиль лінії зі списку властивостей."
 
 msgid "Line style"
 msgstr "Стиль лінії"
@@ -1952,14 +1921,13 @@ msgid "Set the default line style."
 msgstr "Встановити стиль лінії за замовчуванням."
 
 msgid "Make the line style Dynamic(checked)/Static(unchecked)."
-msgstr "Зробити стиль лінії Динамічним(вибрана)/Статичним(невибрана)."
+msgstr "Зробити стиль лінії Динамічним(обрана)/Статичним(необрана)."
 
 msgid ""
 "Include(checked)/Exclude(unchecked) the border width from the properties "
 "list."
 msgstr ""
-"Включити(вибраний)/Виключити(невибраний) ширину границі зі списку "
-"властивостей."
+"Включити(обраний)/Виключити(необраний) ширину границі зі списку властивостей."
 
 msgid "Border width"
 msgstr "Ширина границі"
@@ -1968,14 +1936,13 @@ msgid "Set the default line's border width."
 msgstr "Встановити ширину границі за замовчуванням."
 
 msgid "Make the border width Dynamic(checked)/Static(unchecked)."
-msgstr "Зробити ширину границі Динамічною(вибрана)/Статичною(невибрана)."
+msgstr "Зробити ширину границі Динамічною(обрана)/Статичною(необрана)."
 
 msgid ""
 "Include(checked)/Exclude(unchecked) the border color from the properties "
 "list."
 msgstr ""
-"Включити(вибраний)/Виключити(невибраний) колір границі зі списку "
-"властивостей."
+"Включити(обраний)/Виключити(необраний) колір границі зі списку властивостей."
 
 msgid "Border color"
 msgstr "Колір границі"
@@ -1984,28 +1951,28 @@ msgid "Set the default line's border color."
 msgstr "Встановити колір границі за замовчуванням."
 
 msgid "Make the border color Dynamic(checked)/Static(unchecked)."
-msgstr "Зробити колір границі Динамічним(вибрана)/Статичним(невибрана)."
+msgstr "Зробити колір границі Динамічним(обрана)/Статичним(необрана)."
 
 msgid "Point 1:"
 msgstr "Точка 1:"
 
 msgid "Make the 1 point Dynamic(checked)/Static(unchecked)."
-msgstr "Зробити 1 точку Динамічною(вибрана)/Статичною(невибрана)."
+msgstr "Зробити 1 точку Динамічною(обрана)/Статичною(необрана)."
 
 msgid "Point 2:"
 msgstr "Точка 2:"
 
 msgid "Make the 2 point Dynamic(checked)/Static(unchecked)."
-msgstr "Зробити 2 точку Динамічною(вибрана)/Статичною(невибрана)."
+msgstr "Зробити 2 точку Динамічною(обрана)/Статичною(необрана)."
 
 msgid "Make the 3 point Dynamic(checked)/Static(unchecked)."
-msgstr "Зробити 3 точку Динамічною(вибрана)/Статичною(невибрана)."
+msgstr "Зробити 3 точку Динамічною(обрана)/Статичною(необрана)."
 
 msgid "Make the 4 point Dynamic(checked)/Static(unchecked)."
-msgstr "Зробити 4 точку Динамічною(вибрана)/Статичною(невибрана)."
+msgstr "Зробити 4 точку Динамічною(обрана)/Статичною(необрана)."
 
 msgid "Make the 5 point Dynamic(checked)/Static(unchecked)."
-msgstr "Зробити 5 точку Динамічною(вибрана)/Статичною(невибрана)."
+msgstr "Зробити 5 точку Динамічною(обрана)/Статичною(необрана)."
 
 msgid "Solid"
 msgstr "Суцільна"
@@ -2019,11 +1986,17 @@ msgstr "Крапкова"
 msgid "Widget's shape '%1' is not implemented yet!"
 msgstr "Образ віджету '%1' ще не реалізовано!"
 
-msgid "Write file '%1' is fail."
+msgid "Saving a file"
+msgstr "Збереження файлу."
+
+msgid "Loading a file"
+msgstr "Завантаження файлу."
+
+msgid "Error writing to the file '%1'."
 msgstr "Помилка запису до файлу '%1'."
 
 #, c-format
-msgid "Trend build: %f ms."
+msgid "Time of building the trend: %f ms."
 msgstr "Час формування тренду: %f мс."
 
 msgid "kHz"
@@ -2045,7 +2018,7 @@ msgid "%gms"
 msgstr "%gмс"
 
 #, c-format
-msgid "Trend draw: %f ms."
+msgid "Time of drawing the trend: %f ms."
 msgstr "Час відображення тренду: %f мс."
 
 msgid "Date and time"
@@ -2070,7 +2043,7 @@ msgid "Export"
 msgstr "Експорт"
 
 #, c-format
-msgid "Document parsing error: %s"
+msgid "Error parsing the document: %s"
 msgstr "Помилка розбору документу: %s"
 
 msgid "Loading page: '%1'."
@@ -2085,7 +2058,7 @@ msgstr ""
 msgid "Cancel"
 msgstr "Скасувати"
 
-msgid "Select user"
+msgid "Selecting an user"
 msgstr "Вибір користувача"
 
 msgid "User:"
@@ -2094,7 +2067,7 @@ msgstr "Користувач:"
 msgid "Password:"
 msgstr "Пароль:"
 
-msgid "Font select"
+msgid "Selecting a font"
 msgstr "Вибір шрифту"
 
 msgid "Font:"
@@ -2133,10 +2106,10 @@ msgstr "Прийняти"
 msgid "Cursor = (%1:%2)"
 msgstr "Курсор = (%1:%2)"
 
-msgid "Enter text string for search:"
-msgstr "Введіть строку тексту для пошуку:"
+msgid "Enter a string to search:"
+msgstr "Введіть рядок для пошуку:"
 
-msgid "String search"
+msgid "Search string"
 msgstr "Рядок пошуку"
 
 msgid "Backward"
@@ -2149,16 +2122,16 @@ msgid "Whole words"
 msgstr "Слово цілком"
 
 #, c-format
-msgid "Request to VCA engine '%s' time %f ms."
-msgstr "Час запиту до рушія СВК '%s' %f мс."
+msgid "Time of requesting the VCA engine '%s': %f ms."
+msgstr "Час запиту до рушія СВУ '%s' %f мс."
 
 #, c-format
-msgid "Load '%s' time %f ms."
-msgstr "Час завантаження '%s' %f мс."
+msgid "Time of loading '%s': %f ms."
+msgstr "Час завантаження '%s': %f мс."
 
 #, c-format
-msgid "Init '%s' time %f ms."
-msgstr "Час ініціалізації '%s' %f мс."
+msgid "Time of initiating '%s': %f ms."
+msgstr "Час ініціалізації '%s': %f мс."
 
-msgid "Vision dialog"
-msgstr "Vision діалог"
+msgid "Input dialog of Vision"
+msgstr "Діалог вводу Vision"

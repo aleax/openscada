@@ -42,6 +42,7 @@
 #include <QStatusBar>
 #include <QToolTip>
 #include <QCompleter>
+#include <QDesktopWidget>
 
 #include <tsys.h>
 
@@ -51,11 +52,14 @@
 
 using namespace VISION;
 
+int VISION::icoSize( float mult )	{ return (int)(mult * QFontMetrics(qApp->font()).height()); }
+
 //*************************************************
 //* Id and name input dialog                      *
 //*************************************************
-InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg, bool with_id, bool with_nm ) :
-	QDialog(parent), mId(NULL), mName(NULL)
+InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg, bool with_id, bool with_nm,
+		    const string &istCtxId ) :
+	QDialog(parent), mId(NULL), mName(NULL), stCtxId(istCtxId)
 {
     //setMaximumSize(800, 600);
     setWindowTitle(ndlg);
@@ -116,9 +120,24 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
     if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
     but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
-    dlg_lay->addWidget( but_box );
+    dlg_lay->addWidget(but_box);
 
-    resize(400, 120+(40*with_nm)+(40*with_id));
+    //Restore the window state
+    if(parentWidget()->property("oscdUser").toString().size() && stCtxId.size()) {
+	int off = 0;
+	string rst = mod->uiPropGet("InDlgSt"+stCtxId, parentWidget()->property("oscdUser").toString().toStdString());
+	int	wH = s2i(TSYS::strParse(rst,0,":",&off)),
+	    wW = s2i(TSYS::strParse(rst,0,":",&off));
+	if(wH > 100 && wW > 100) resize(wH, wW);
+	else resize(400, 120+(40*with_nm)+(40*with_id));
+    }
+}
+
+InputDlg::~InputDlg( )
+{
+    //Save the window state
+    if(parentWidget()->property("oscdUser").toString().size() && stCtxId.size())
+	mod->uiPropSet("InDlgSt"+stCtxId, i2s(width())+":"+i2s(height()), parentWidget()->property("oscdUser").toString().toStdString());
 }
 
 QString InputDlg::id( )		{ return mId ? mId->text() : ""; }
@@ -157,7 +176,7 @@ void InputDlg::showEvent( QShowEvent * event )
 DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent, const string &hint ) :
     QDialog(parent), VCAstat(iVCAstat)
 {
-    setWindowTitle(_("Select user"));
+    setWindowTitle(_("Selecting an user"));
 
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
     dlg_lay->setMargin(10);
@@ -250,7 +269,7 @@ void DlgUser::showEvent( QShowEvent * event )
 //*********************************************
 FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
 {
-    setWindowTitle(_("Font select"));
+    setWindowTitle(_("Selecting a font"));
 
     QGridLayout *dlg_lay = new QGridLayout(this);
     dlg_lay->setMargin(10);
@@ -315,7 +334,7 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
     if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
     but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
-    dlg_lay->addWidget( but_box, 5, 0, 1, 2 );
+    dlg_lay->addWidget(but_box, 5, 0, 1, 2);
 
     setFont(ifnt);
 }
@@ -372,11 +391,36 @@ UserStBar::UserStBar( const string &iuser, const string &ipass, const string &iV
     setVCAStation(iVCAstat);
 }
 
+string UserStBar::user( )
+{
+    mod->dataRes().lock();
+    string rez = userTxt;
+    mod->dataRes().unlock();
+    return rez;
+}
+
+string UserStBar::pass( )
+{
+    mod->dataRes().lock();
+    string rez = userPass;
+    mod->dataRes().unlock();
+    return rez;
+}
+
 void UserStBar::setUser( const string &val )
 {
     MtxAlloc res(mod->dataRes(), true);
     setText(QString("<font color='%1'>%2</font>").arg((val=="root")?"red":"green").arg(val.size()?val.c_str():"*"));
     userTxt = val;
+
+    if(window()) window()->setProperty("oscdUser", val.c_str());
+}
+
+void UserStBar::setPass( const string &val )
+{
+    mod->dataRes().lock();
+    userPass = val;
+    mod->dataRes().unlock();
 }
 
 bool UserStBar::event( QEvent *event )
@@ -397,7 +441,7 @@ bool UserStBar::userSel( const string &hint )
 	return true;
     }
     else if(rez == DlgUser::SelErr)
-	mod->postMess(mod->nodePath().c_str(), QString(_("Authentication error for user '%1'!!!")).arg(d_usr.user()), TVision::Warning, this);
+	mod->postMess(mod->nodePath().c_str(), QString(_("Error authenticating the user '%1'!!!")).arg(d_usr.user()), TVision::Warning, this);
 
     return false;
 }
@@ -426,10 +470,10 @@ void LineEdit::viewApplyBt( bool view )
 
     if(view && !bt_fld) {
 	bt_fld = new QPushButton(this);
-	bt_fld->setIcon(QIcon(":/images/ok.png"));
-	bt_fld->setIconSize(QSize(12,12));
+	bt_fld->setIcon(QIcon(":/images/button_ok.png"));
+	bt_fld->setIconSize(QSize(icoSize(),icoSize()));
 	bt_fld->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-	bt_fld->setMaximumWidth(15);
+	bt_fld->setMaximumWidth(icoSize(1.2));
 	connect(bt_fld, SIGNAL(clicked()), this, SLOT(applySlot()));
 	layout()->addWidget(bt_fld);
     }
@@ -459,7 +503,7 @@ void LineEdit::setType( LType tp )
     if(tp == m_tp) return;
 
     //Delete previous
-    if(tp >= 0 && ed_fld) delete ed_fld;
+    if(tp >= 0 && ed_fld) ed_fld->deleteLater(); //delete ed_fld;
 
     //Create new widget
     switch(tp) {
@@ -707,21 +751,21 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 	if(curBlk && !i_t) { minRule = curBlk-1; minPos = 0; }
 	else minRule = -1;
 
-	for(int i_ch = 0; i_t != minPos && i_ch < (int)irl->childSize(); i_ch++) {
-	    if(!(minPos < i_t || rul_pos[i_ch] < i_t || rul_pos[i_ch] < minPos)) continue;
-	    if(rul_pos[i_ch] >= i_t && rul_pos[i_ch] < minPos)	{ minPos = rul_pos[i_ch]; minRule = i_ch; continue; }
-	    if(rul_pos[i_ch] == i_t && rul_pos[i_ch] == minPos)	{ minRule = i_ch; break; }
+	for(int iCh = 0; i_t != minPos && iCh < (int)irl->childSize(); iCh++) {
+	    if(!(minPos < i_t || rul_pos[iCh] < i_t || rul_pos[iCh] < minPos)) continue;
+	    if(rul_pos[iCh] >= i_t && rul_pos[iCh] < minPos)	{ minPos = rul_pos[iCh]; minRule = iCh; continue; }
+	    if(rul_pos[iCh] == i_t && rul_pos[iCh] == minPos)	{ minRule = iCh; break; }
 
 	    //Call rule
-	    rl = irl->childGet(i_ch);
+	    rl = irl->childGet(iCh);
 	    if(rl->name() == "rule")    expr.setPattern(rl->attr("expr").c_str());
 	    else if(rl->name() == "blk")expr.setPattern(rl->attr("beg").c_str());
 	    else continue;
 	    expr.setMinimal(s2i(rl->attr("min")));
-	    rul_pos[i_ch] = expr.indexIn(text,i_t);
+	    rul_pos[iCh] = expr.indexIn(text,i_t);
 	    if(expr.matchedLength() <= 0) continue;
-	    if(rul_pos[i_ch] < 0) rul_pos[i_ch] = text.length();
-	    if(minPos < i_t || rul_pos[i_ch] < minPos) { minPos = rul_pos[i_ch]; minRule = i_ch; }
+	    if(rul_pos[iCh] < 0) rul_pos[iCh] = text.length();
+	    if(minPos < i_t || rul_pos[iCh] < minPos) { minPos = rul_pos[iCh]; minRule = iCh; }
 	}
 	if(minRule < 0) break;
 
@@ -816,12 +860,12 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
 	but_box->button(QDialogButtonBox::Apply)->setText("");
 	if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
 	but_box->button(QDialogButtonBox::Apply)->setIcon(QPixmap::fromImage(ico_t));
-	but_box->button(QDialogButtonBox::Apply)->setIconSize(QSize(12,12));
+	but_box->button(QDialogButtonBox::Apply)->setIconSize(QSize(icoSize(),icoSize()));
 	connect(but_box->button(QDialogButtonBox::Apply), SIGNAL(pressed()), this, SLOT(applySlot()));
 	but_box->button(QDialogButtonBox::Cancel)->setText("");
 	if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
 	but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
-	but_box->button(QDialogButtonBox::Cancel)->setIconSize(QSize(12,12));
+	but_box->button(QDialogButtonBox::Cancel)->setIconSize(QSize(icoSize(),icoSize()));
 	connect(but_box->button(QDialogButtonBox::Cancel), SIGNAL(pressed()), this, SLOT(cancelSlot()));
 	but_box->setVisible(false);
 	but_box->setEnabled(false);
@@ -836,6 +880,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     bt_tm = new QTimer(this);
     connect(bt_tm, SIGNAL(timeout()), this, SLOT(applySlot()));
 }
+
 
 bool TextEdit::isEdited( )	{ return (but_box && but_box->isVisible()); }
 
@@ -933,7 +978,7 @@ void TextEdit::custContextMenu( )
     menu->addAction(actFind);
     menu->addAction(actFindNext);
     menu->exec(QCursor::pos());
-    delete menu;
+    menu->deleteLater(); //delete menu;
 }
 
 void TextEdit::find( )
@@ -942,7 +987,7 @@ void TextEdit::find( )
     int fopt = (QTextDocument::FindFlag)actFind->objectName().section(':',false,false).toInt();
     QString fstr = actFind->objectName().section(':',1);
     if(sender() == actFind) {
-	InputDlg dlg(this,actFind->icon(),QString(_("Enter text string for search:")),_("String search"),0,0);
+	InputDlg dlg(this,actFind->icon(),QString(_("Enter a string to search:")),_("Search string"),0,0);
 	QLineEdit *le = new QLineEdit(fstr,&dlg);
 	dlg.edLay()->addWidget(le, 0, 0);
 	QCheckBox *bw = new QCheckBox(_("Backward"),&dlg);
@@ -1014,9 +1059,9 @@ void WdgView::childsClear( )
 {
     //Child widgets remove before
     QObjectList chLst = children();
-    for(int i_c = 0; i_c < chLst.size(); i_c++) {
-	WdgView *cw = qobject_cast<WdgView*>(chLst[i_c]);
-	if(cw)	delete cw;
+    for(int iC = 0; iC < chLst.size(); iC++) {
+	WdgView *cw = qobject_cast<WdgView*>(chLst[iC]);
+	if(cw)	cw->deleteLater(); //delete cw;
     }
 }
 
@@ -1102,9 +1147,9 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos, bool
     if(up && !allAttrLoad()) {
 	if(wLevel() > 0) moveF(posF());
 	resizeF(sizeF());
-	for(int i_c = 0; upChlds && i_c < children().size(); i_c++)
-	    if(qobject_cast<WdgView*>(children().at(i_c)))
-		((WdgView*)children().at(i_c))->load("");
+	for(int iC = 0; upChlds && iC < children().size(); iC++)
+	    if(qobject_cast<WdgView*>(children().at(iC)))
+		((WdgView*)children().at(iC))->load("");
     }
 
     if(shape)	return shape->attrSet(this, uiPrmPos, val, attr);
@@ -1156,7 +1201,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	    cntrIfCmd(*aBr);
 	    reqBrCr = true;
 #if OSC_DEBUG >= 3
-	    mess_debug("VCA DEBUG",_("Request to VCA engine '%s' time %f ms."),id().c_str(),1e-3*(TSYS::curTime()-t_cnt));
+	    mess_debug("VCA DEBUG",_("Time of requesting the VCA engine '%s': %f ms."),id().c_str(),1e-3*(TSYS::curTime()-t_cnt));
 #endif
 	}
 
@@ -1171,26 +1216,26 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	// Delete child widgets
 	string b_nm = aBr->attr("lnkPath");
 	if( b_nm.empty() ) b_nm = id();
-	for(int i_c = 0, i_l = 0; i_c < children().size(); i_c++) {
-	    if(!qobject_cast<WdgView*>(children().at(i_c))) continue;
+	for(int iC = 0, i_l = 0; iC < children().size(); iC++) {
+	    if(!qobject_cast<WdgView*>(children().at(iC))) continue;
 	    for(i_l = 0; i_l < (int)aBr->childSize(); i_l++)
 		if(aBr->childGet(i_l)->name() == "w" &&
-			qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")))
+			qobject_cast<WdgView*>(children().at(iC))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")))
 		    break;
-	    if(i_l >= (int)aBr->childSize()) children().at(i_c)->deleteLater();
+	    if(i_l >= (int)aBr->childSize()) children().at(iC)->deleteLater();
 	}
 
 	// Create new child widget
-	for(int i_l = 0, i_c = 0; i_l < (int)aBr->childSize(); i_l++) {
-	    if( aBr->childGet(i_l)->name() != "w" ) continue;
-	    for( i_c = 0; i_c < children().size(); i_c++ )
-		if( qobject_cast<WdgView*>(children().at(i_c)) &&
-			qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")) )
+	for(int i_l = 0, iC = 0; i_l < (int)aBr->childSize(); i_l++) {
+	    if(aBr->childGet(i_l)->name() != "w") continue;
+	    for(iC = 0; iC < children().size(); iC++)
+		if(qobject_cast<WdgView*>(children().at(iC)) &&
+			qobject_cast<WdgView*>(children().at(iC))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")))
 		{
-		    ((WdgView*)children().at(i_c))->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(i_l));
+		    ((WdgView*)children().at(iC))->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(i_l));
 		    break;
 		}
-	    if( i_c < children().size() ) continue;
+	    if(iC < children().size()) continue;
 	    WdgView *nwdg = newWdgItem(b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id"));
 	    nwdg->show();
 	    nwdg->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(i_l));
@@ -1203,8 +1248,8 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
     }
     //Going to children init
     else
-	for(int i_c = 0; i_c < children().size(); i_c++) {
-	    WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
+	for(int iC = 0; iC < children().size(); iC++) {
+	    WdgView *wdg = qobject_cast<WdgView*>(children().at(iC));
 	    if( wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())) )
 		wdg->load((item==id())?"":item,false,(wLevel()>0)?isInit:false);
 	}
@@ -1215,13 +1260,13 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
     //Post load init for root widget
     if(wLevel() == 0) {
 #if OSC_DEBUG >= 3
-	mess_debug("VCA DEBUG",_("Load '%s' time %f ms."),id().c_str(),1e-3*(TSYS::curTime()-t_cnt));
+	mess_debug("VCA DEBUG",_("Time of loading '%s': %f ms."),id().c_str(),1e-3*(TSYS::curTime()-t_cnt));
 	t_cnt = TSYS::curTime();
 #endif
 
 	attrSet("", "load", A_COM_LOAD);
-	for(int i_c = 0; i_c < children().size(); i_c++) {
-	    WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
+	for(int iC = 0; iC < children().size(); iC++) {
+	    WdgView *wdg = qobject_cast<WdgView*>(children().at(iC));
 	    if( wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())) )
 		wdg->load((item==id())?"":item,false,true);
 	}
@@ -1229,7 +1274,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	//repaint();
 
 #if OSC_DEBUG >= 3
-	mess_debug("VCA DEBUG",_("Init '%s' time %f ms."),id().c_str(),1e-3*(TSYS::curTime()-t_cnt));
+	mess_debug("VCA DEBUG",_("Time of initiating '%s': %f ms."),id().c_str(),1e-3*(TSYS::curTime()-t_cnt));
 #endif
     }
 }

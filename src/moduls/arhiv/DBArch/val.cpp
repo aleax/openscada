@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +32,7 @@
 using namespace DBArch;
 
 //*************************************************
-//* DBArch::ModVArch - Value archivator           *
+//* DBArch::ModVArch - Value archiver             *
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
     TVArchivator(iid,idb,cf_el), needMeta(true), needRePushGrps(false), reqRes(true), mMaxSize(0), mTmAsStr(false), mGroupPrms(0)
@@ -44,6 +44,14 @@ ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
 ModVArch::~ModVArch( )
 {
     try { stop(); } catch(...) { }
+}
+
+TCntrNode &ModVArch::operator=( const TCntrNode &node )
+{
+    TVArchivator::operator=(node);
+    load_();
+
+    return *this;
 }
 
 void ModVArch::load_( )
@@ -582,7 +590,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
 	cf.cfgViewAll(false);
 	cf.cfg(vlFld).setView(true);
     }
-    cf.cfg("MARK").setKeyUse(false);
+    cf.cfg("MARK").setI(itm/10000000);
     cf.cfg("TM").setI(itm/1000000);
     //cf.cfg("TMU").setI(itm%1000000);
     if(SYS->db().at().dataGet(tblAddr,"",cf,false,true)) {

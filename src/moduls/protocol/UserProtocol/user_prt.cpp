@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.UserProtocol file: user_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.8.8"
+#define MOD_VER		"0.8.12"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
 #define LICENSE		"GPL2"
@@ -78,7 +78,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mPrtU = grpAdd("up_");
 
     // User protocol DB structure
-    mUPrtEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    mUPrtEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     mUPrtEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     mUPrtEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mUPrtEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
@@ -147,17 +147,21 @@ void TProt::modStart( )
 {
     vector<string> ls;
     uPrtList(ls);
-    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
-	if(uPrtAt(ls[i_n]).at().toEnable())
-	    uPrtAt(ls[i_n]).at().setEnable(true);
+    for(unsigned iN = 0; iN < ls.size(); iN++)
+	if(uPrtAt(ls[iN]).at().toEnable())
+	    try { uPrtAt(ls[iN]).at().setEnable(true); }
+	    catch(TError &err) {
+		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		mess_sys(TMess::Error, _("Error starting the protocol '%s'."), ls[iN].c_str());
+	    }
 }
 
 void TProt::modStop( )
 {
     vector<string> ls;
     uPrtList(ls);
-    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
-	uPrtAt(ls[i_n]).at().setEnable(false);
+    for(unsigned iN = 0; iN < ls.size(); iN++)
+	uPrtAt(ls[iN]).at().setEnable(false);
 }
 
 TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }
@@ -470,7 +474,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 					"Into the pool mode an input transport will call the protocol by no "
 					"a request with an empty message after that timeout."));
 		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRW__,"root",SPRT_ID,3,
-		    "tp","str", "dest","sel_ed", "select","/up/cfg/plangIls");
+		    "tp","str", "dest","sel_ed", "select","/plang/list");
 		ctrMkNode("fld",opt,-1,"/in/PROG",_("Input program"),RWRW__,"root",SPRT_ID,4, "tp","str", "rows","10", "SnthHgl","1",
 		    "help",_("Next attributes has defined for input requests processing:\n"
 			    "   'rez' - processing result (false-full request;true-not full request);\n"
@@ -481,7 +485,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/out",_("Output"),RWRW__,"root",SPRT_ID)) {
 		ctrMkNode("fld",opt,-1,"/out/PROGLang",_("Output program language"),RWRW__,"root",SPRT_ID,3,
-		    "tp","str", "dest","sel_ed", "select","/up/cfg/plangOls");
+		    "tp","str", "dest","sel_ed", "select","/plang/list");
 		ctrMkNode("fld",opt,-1,"/out/PROG",_("Output program"),RWRW__,"root",SPRT_ID,4, "tp","str", "rows","10", "SnthHgl","1",
 		    "help",_("Next attributes has defined for output requests processing:\n"
 			    "   'io' - input/output interface's XMLNode object;\n"
@@ -500,35 +504,6 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/up/st/db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setDB(opt->text());
-    }
-    else if((a_path == "/up/cfg/plangIls" || a_path == "/up/cfg/plangOls") && ctrChkNode(opt))
-    {
-	string tplng = (a_path=="/up/cfg/plangIls") ? inProgLang() : outProgLang();
-	int c_lv = 0;
-	string c_path = "", c_el;
-	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++)
-	{
-	    c_path += c_lv ? "."+c_el : c_el;
-	    opt->childAdd("el")->setText(c_path);
-	}
-	if(c_lv) c_path += ".";
-	vector<string>  ls;
-	switch(c_lv)
-	{
-	    case 0:
-		SYS->daq().at().modList(ls);
-		for(unsigned i_l = 0; i_l < ls.size(); )
-		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs()) ls.erase(ls.begin()+i_l);
-		    else i_l++;
-		break;
-	    case 1:
-		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
-		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
-		break;
-	}
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
     else if(a_path == "/in/WaitReqTm") {

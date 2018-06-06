@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: selfwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,6 +43,7 @@
 #endif
 #include <QScrollBar>
 #include <QCompleter>
+#include <QDesktopWidget>
 
 #include <tsys.h>
 
@@ -50,6 +51,8 @@
 #include "selfwidg.h"
 
 using namespace QTCFG;
+
+int QTCFG::icoSize( float mult )	{ return (int)(mult * QFontMetrics(qApp->font()).height()); }
 
 //************************************************
 //* ListView: List view widget                   *
@@ -128,8 +131,8 @@ void LineEdit::viewApplyBt( bool view )
 
     if(view && !btFld) {
 	btFld = new QPushButton(this);
-	btFld->setIcon(QIcon(":/images/ok.png"));
-	btFld->setIconSize(QSize(12,12));
+	btFld->setIcon(QIcon(":/images/button_ok.png"));
+	btFld->setIconSize(QSize(icoSize(),icoSize()));
 	btFld->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
 	//btFld->setMaximumWidth(15);
 	connect(btFld, SIGNAL(clicked()), this, SLOT(applySlot()));
@@ -145,7 +148,7 @@ void LineEdit::setType( LType tp )
     if(tp == mTp) return;
 
     //Delete previous
-    if(tp >= 0 && edFld) delete edFld;
+    if(tp >= 0 && edFld) edFld->deleteLater();	//delete edFld;
 
     //Create new widget
     switch(tp) {
@@ -462,11 +465,11 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     setObjectName(name);
 
     edFld = new QTextEdit(this);
-#if QT_VERSION < 0x050000
+/*#if QT_VERSION < 0x050000
     edFld->setStyle(new QPlastiqueStyle());	//Force style set for resize allow everywhere
 #else
     edFld->setStyle(new QCommonStyle());	//Force style set for resize allow everywhere
-#endif
+#endif*/
     edFld->setContextMenuPolicy(Qt::CustomContextMenu);
     edFld->setTabStopWidth(20);
     edFld->setAcceptRichText(false);
@@ -627,7 +630,7 @@ void TextEdit::ctrTreePopup( )
     menu->addAction(actFind);
     menu->addAction(actFindNext);
     menu->exec(QCursor::pos());
-    delete menu;
+    menu->deleteLater();	//delete menu;
 }
 
 void TextEdit::find( )
@@ -636,7 +639,7 @@ void TextEdit::find( )
     int fopt = (QTextDocument::FindFlag)actFind->objectName().section(':',0,0).toInt();
     QString fstr = actFind->objectName().section(':',1);
     if(sender() == actFind) {
-	InputDlg dlg(this,actFind->icon(), QString(_("Enter text string for search:")), _("String search"), 0, 0);
+	InputDlg dlg(this,actFind->icon(), QString(_("Enter a string to search:")), _("Searching a string"), 0, 0);
 	QLineEdit *le = new QLineEdit(fstr, &dlg);
 	dlg.edLay->addWidget(le, 0, 0);
 	QCheckBox *bw = new QCheckBox(_("Backward"), &dlg);
@@ -672,11 +675,11 @@ void TextEdit::find( )
 //************************************************
 CfgTable::CfgTable( QWidget *parent ) : QTableWidget(parent)
 {
-#if QT_VERSION < 0x050000
+/*#if QT_VERSION < 0x050000
     setStyle(new QPlastiqueStyle());	//Force style set for resize allow everywhere
 #else
     setStyle(new QCommonStyle());	//Force style set for resize allow everywhere
-#endif
+#endif*/
 }
 
 void CfgTable::resizeRowsToContentsLim( )
@@ -735,7 +738,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
     if(with_nm || with_id) {
 	edLay->setSpacing(6);
 	if(with_id) {
-	    mIdLab = new QLabel(_("ID:"), this);
+	    mIdLab = new QLabel(_("Identifier:"), this);
 	    edLay->addWidget(mIdLab, 3, 0);
 	    mId = new QLineEdit(this);
 	    mId->setMaxLength(with_id);
@@ -850,7 +853,7 @@ void ReqIdNameDlg::selectItTp( int it )
 //*************************************************
 DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
 {
-    setWindowTitle(_("Select user"));
+    setWindowTitle(_("Selecting an user"));
 
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
     dlg_lay->setMargin(10);
@@ -955,7 +958,7 @@ bool UserStBar::userSel( )
 	return true;
     }
     else if(rez == DlgUser::SelErr)
-	mod->postMess(mod->nodePath().c_str(),_("Auth is wrong!!!"),TUIMod::Warning,this);
+	mod->postMess(mod->nodePath().c_str(),_("Error authentication!!!"),TUIMod::Warning,this);
 
     return false;
 }
@@ -984,8 +987,8 @@ void TableDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option
 	case QVariant::Bool:
 	    //painter->save();
 	    if(value.toBool()) {
-		QImage img(":/images/ok.png");
-		painter->drawImage(option.rect.center().x()-img.width()/2,option.rect.center().y()-img.height()/2,img);
+		QImage img = QImage(":/images/button_ok.png").scaled(icoSize(), icoSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		painter->drawImage(option.rect.center().x()-img.width()/2, option.rect.center().y()-img.height()/2, img);
 	    }
 	    //painter->restore();
 	    break;

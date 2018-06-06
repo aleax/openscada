@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: libwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -150,7 +150,7 @@ void WidgetLib::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
 
-    mess_debug(nodePath().c_str(),_("Load widget library."));
+    mess_debug(nodePath().c_str(),_("Loading widgets library."));
 
     if(icfg) *(TConfig*)this = *icfg;
     else SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
@@ -185,7 +185,7 @@ void WidgetLib::load_( TConfig *icfg )
 
 void WidgetLib::save_( )
 {
-    mess_debug(nodePath().c_str(),_("Save widget library."));
+    mess_debug(nodePath().c_str(),_("Saving widgets library."));
 
     SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
@@ -207,7 +207,7 @@ void WidgetLib::setEnable( bool val, bool force )
 {
     if(val == enable())	return;
 
-    mess_debug(nodePath().c_str(),val ? _("Enable widgets library.") : _("Disable widgets library."));
+    mess_debug(nodePath().c_str(),val ? _("Enabling widgets library.") : _("Disabling widgets library."));
 
     passAutoEn = true;
 
@@ -216,7 +216,7 @@ void WidgetLib::setEnable( bool val, bool force )
     for(unsigned i_ls = 0; i_ls < f_lst.size(); i_ls++) {
 	if(at(f_lst[i_ls]).at().enableByNeed)	continue;
 	try { at(f_lst[i_ls]).at().setEnable(val); }
-	catch(TError &err) { mess_err(nodePath().c_str(),_("Enable/disable widget '%s' error %s."),f_lst[i_ls].c_str(),err.mess.c_str()); }
+	catch(TError &err) { mess_err(nodePath().c_str(),_("Error enabling/disabling widget '%s': %s."),f_lst[i_ls].c_str(),err.mess.c_str()); }
     }
 
     passAutoEn = false;
@@ -329,10 +329,11 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Library DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:wlb_"+id()).c_str(),
-		    "help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
+		    "help",_("DB address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the main working DB, set '*.*'."));
+		ctrMkNode("fld",opt,-1,"/obj/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Configuration"))) {
-		ctrMkNode("fld",opt,-1,"/obj/cfg/id",_("Id"),R_R_R_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/id",_("Identifier"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/name",_("Name"),RWRWR_,"root",SUI_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/obj/cfg/descr",_("Description"),RWRWR_,"root",SUI_ID,3,"tp","str","cols","100","rows","3");
 		ctrMkNode("img",opt,-1,"/obj/cfg/ico",_("Icon"),RWRWR_,"root",SUI_ID,2,"v_sz","64","h_sz","64");
@@ -342,7 +343,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/wdg/wdg",_("Widgets"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","wdg_","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
 	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id")) {
-		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Id"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Identifier"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/tp",_("Mime type"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/dt",_("Data"),RWRWR_,"root",SUI_ID,2,"tp","str","dest","data");
 	    }
@@ -358,6 +359,14 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/obj/st/db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(fullDB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setFullDB(opt->text());
+    }
+    else if(a_path == "/obj/st/use" && ctrChkNode(opt)) {
+	vector<string> tls;
+	list(tls);
+	int cnt = 0;
+	for(unsigned iT = 0; iT < tls.size(); iT++)
+	    cnt += at(tls[iT]).at().herit().size();
+	opt->setText(i2s(cnt));
     }
     else if(a_path == "/obj/cfg/ico" || a_path == "/ico") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(ico());
@@ -381,7 +390,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    if(present(vid)) throw TError(nodePath().c_str(), _("Widget '%s' already present!"), vid.c_str());
+	    if(present(vid)) throw TError(nodePath().c_str(), _("Widget '%s' is already present!"), vid.c_str());
 	    add(vid, opt->text()); at(vid).at().setOwner(opt->attr("user"));
 	    opt->setAttr("id", vid);
 	}
@@ -663,6 +672,8 @@ void LWidget::loadIO( )
 
 void LWidget::save_( )
 {
+    if(enableByNeed)	return;
+
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl();
 
@@ -756,11 +767,28 @@ string LWidget::resourceGet( const string &id, string *mime )
     return mimeData;
 }
 
+void LWidget::procChange( bool src )
+{
+    if(!src && proc().size()) return;
+
+    //Update heritors procedures
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().procChange(false);
+}
+
 void LWidget::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
-    Widget::inheritAttr( attr );
-    if(!mdf)	modifClr( );
+    Widget::inheritAttr(attr);
+    if(!mdf)	modifClr();
+}
+
+bool LWidget::cfgChange( TCfg &co, const TVariant &pc )
+{
+    if(co.name() == "PROC" && co.getS() != pc.getS()) procChange();
+    modif();
+    return true;
 }
 
 void LWidget::cntrCmdProc( XMLNode *opt )
@@ -779,6 +807,8 @@ void LWidget::cntrCmdProc( XMLNode *opt )
     if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt)))
 	TCntrNode::cntrCmdProc(opt);
 }
+
+
 
 //************************************************
 //* CWidget: Container stored widget             *
@@ -859,7 +889,7 @@ void CWidget::setEnable( bool val, bool force )
 	for(unsigned iH = 0; iH < ownerLWdg().herit().size(); iH++)
 	    if(!ownerLWdg().herit()[iH].at().wdgAt(id()).at().enable() && ownerLWdg().herit()[iH].at().wdgPresent(id()))
 		try { ownerLWdg().herit()[iH].at().wdgAt(id()).at().setEnable(true); }
-		catch(...) { mess_err(nodePath().c_str(),_("Inheriting widget '%s' enable error."),id().c_str()); }
+		catch(...) { mess_err(nodePath().c_str(),_("Error enabling the inheriting widget '%s'."),id().c_str()); }
 }
 
 string CWidget::calcId( )	{ return parent().freeStat() ? "" : parent().at().calcId(); }
@@ -958,7 +988,7 @@ void CWidget::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
     Widget::inheritAttr(attr);
-    if(!mdf)  modifClr( );
+    if(!mdf) modifClr( );
 }
 
 void CWidget::cntrCmdProc( XMLNode *opt )
@@ -969,7 +999,7 @@ void CWidget::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	cntrCmdGeneric(opt);
 	cntrCmdAttributes(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Link to widget: ")+id(),RWRWR_,"root",SUI_ID);
+	ctrMkNode("oscada_cntr", opt, -1, "/", TSYS::strMess(_("Link to the widget '%s'."), id().c_str()).c_str(), RWRWR_, "root", SUI_ID);
 	return;
     }
     if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)))

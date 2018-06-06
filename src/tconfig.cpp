@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tconfig.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -275,7 +275,7 @@ bool TCfg::isKey( ) const	{ return fld().flg()&TCfg::Key; }
 
 const char *TCfg::getSd( )
 {
-    if(type() != TVariant::String)	throw TError("Cfg", _("Element type is not string!"));
+    if(type() != TVariant::String)	throw TError("Cfg", _("Element type is not String!"));
     if(mStdString)	return val.s->c_str();
     if(mSize < sizeof(val.sMini)) return val.sMini;
     return val.sPtr;
@@ -283,13 +283,13 @@ const char *TCfg::getSd( )
 
 double &TCfg::getRd( )
 {
-    if(type() != TVariant::Real)	throw TError("Cfg",_("Element type is not real!"));
+    if(type() != TVariant::Real)	throw TError("Cfg",_("Element type is not Real!"));
     return val.r;
 }
 
 int &TCfg::getId( )
 {
-    if(type() != TVariant::Integer)	throw TError("Cfg",_("Element type is not int!"));
+    if(type() != TVariant::Integer)	throw TError("Cfg",_("Element type is not Integer!"));
     return val.i;
 }
 
@@ -301,7 +301,7 @@ char &TCfg::getBd( )
 
 string TCfg::getSEL( )
 {
-    if(!(mFld->flg()&TFld::Selected))	throw TError("Cfg", _("Element type is not selected!"));
+    if(!(mFld->flg()&TFld::Selected))	throw TError("Cfg", _("Element type is not selective!"));
     switch(type()) {
 	case TVariant::String:	return mFld->selVl2Nm(getS());
 	case TVariant::Integer:	return mFld->selVl2Nm(getI());
@@ -433,7 +433,7 @@ void TCfg::setB( char ival )
 
 void TCfg::setSEL( const string &ival, uint8_t RqFlg )
 {
-    if(!(mFld->flg()&TFld::Selected)) throw TError("Cfg", _("Element type is not selected!"));
+    if(!(mFld->flg()&TFld::Selected)) throw TError("Cfg", _("Element type is not selective!"));
     switch(type()) {
 	case TVariant::String:	setS(mFld->selNm2VlS(ival), RqFlg);	break;
 	case TVariant::Integer:	setI(mFld->selNm2VlI(ival), RqFlg);	break;

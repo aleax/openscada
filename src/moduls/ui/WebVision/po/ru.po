@@ -1,13 +1,13 @@
 # OpenSCADA.UI.WebVision translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.WebVision package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-28 13:25+0200\n"
+"POT-Creation-Date: 2018-04-01 14:15+0300\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -18,9 +18,15 @@ msgstr ""
 msgid "Resource isn't found"
 msgstr "Ресурс не найден"
 
+msgid "Unknown object of the command: %s."
+msgstr "Неизвестный объект команды: %s."
+
 #, c-format
 msgid "Unknown command: %s."
 msgstr "Неизвестная команда: %s."
+
+msgid "No a content."
+msgstr "Содержимое отсутствует."
 
 msgid "Fill image type is not supported."
 msgstr "Тип изображения заполнения не поддерживается."
@@ -155,13 +161,13 @@ msgstr "Декабрь"
 #, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
-"---------- Parameters of the module section '%s' in config-file ----------\n"
-"SessTimeLife <time>      Time of the session life, minutes (default 10).\n"
+"---- Parameters of the module section '%s' of the configuration file ----\n"
+"SessTimeLife <min>      Time of session life, in minutes (by default, 10).\n"
 "\n"
 msgstr ""
 "======================== Опции модуля <%s:%s> ============================\n"
-"------- Параметры модульной секции '%s' в конфигурационном файле ---------\n"
-"SessTimeLife <время>     Время жизни сессии, минуты (по умолчанию 10).\n"
+"------ Параметры модульной секции '%s' конфигурационного файла ------\n"
+"SessTimeLife <мин>      Время жизни сессии, в минутах (по умолчанию 10).\n"
 "\n"
 
 msgid "Connect to opened session"
@@ -177,7 +183,7 @@ msgid "Sorry, opened sessions number reach limit!"
 msgstr "Извините, количество открытых сеансов достигло ограничения!"
 
 #, c-format
-msgid "Go to session '%s' for project '%s' ..."
+msgid "Going to the session '%s' for the project '%s' ..."
 msgstr "Переход к сеансу '%s' для проекта '%s' ..."
 
 #, c-format

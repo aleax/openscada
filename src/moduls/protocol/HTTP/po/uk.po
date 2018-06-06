@@ -1,13 +1,13 @@
 # OpenSCADA.Protocol.HTTP translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Protocol.HTTP package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-28 12:53+0200\n"
+"POT-Creation-Date: 2018-01-28 09:49+0200\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -27,13 +27,15 @@ msgstr "Надає підтримку HTTP для WWW базованих кор�
 #, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
-"---------- Parameters of the module section '%s' in config-file ----------\n"
-"AuthTime <min>      Life time of the authentication, minutes (default 10).\n"
+"---- Parameters of the module section '%s' of the configuration file ----\n"
+"AuthTime   <min>        Life time of the authentication session, in minutes "
+"(default 10).\n"
 "\n"
 msgstr ""
 "======================= Опції модуля <%s:%s> =============================\n"
-"------- Параметри модульної секції '%s' у конфігураційному файлі ---------\n"
-"AuthTime <хвил>     Час життя аутентифікації, хвилин (по замовченню 10).\n"
+"------ Параметри модульної секції '%s' конфігураційного файлу ------\n"
+"AuthTime   <хвил>       Час життя сеансу аутентифікації, хвилин (по "
+"замовченню 10).\n"
 "\n"
 
 #, c-format

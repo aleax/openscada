@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freelib.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -165,7 +164,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id(),RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Library of the functions: ")+id(),RWRWR_,"root",SDAQ_ID);
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library"))) {
@@ -174,10 +173,10 @@ void Lib::cntrCmdProc( XMLNode *opt )
 		if(DB().size())
 		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
 			"tp","str","dest","sel_ed","select",("/db/tblList:flb_"+id()).c_str(),
-			"help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
+			"help",_("DB address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the main working DB, set '*.*'."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration"))) {
-		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Identifier"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
 		if(!DB().empty())

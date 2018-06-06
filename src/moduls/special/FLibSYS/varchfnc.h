@@ -79,7 +79,7 @@ class vArh : public TFunction
 	void calc( TValFunc *val ) {
 	    VArchObj *obj = new VArchObj();
 	    obj->open(val->getS(1));
-	    val->setO(0,obj);
+	    val->setO(0, obj);
 	}
 };
 

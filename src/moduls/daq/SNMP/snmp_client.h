@@ -66,6 +66,7 @@ class TMdPrm : public TParamContr
 	//Methods
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
+	void vlGet( TVal &vo );
 	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
@@ -75,6 +76,7 @@ class TMdPrm : public TParamContr
 	vector<string>	ls_oid;		//Parsed IOD list.
 
 	TElem	p_el;			//Work atribute elements
+	MtxString acqErr;
 };
 
 //*************************************************

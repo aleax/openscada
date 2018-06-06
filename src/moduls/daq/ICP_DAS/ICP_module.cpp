@@ -36,7 +36,7 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.4"
+#define MOD_VER		"0.8.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow realization of ICP DAS hardware support. Include I87000 and I-7000 DCON modules and I-8000 fast modules.")
 #define LICENSE		"GPL2"
@@ -90,7 +90,6 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("LP_PRMS",_("LinPAC parameters"),TFld::String,TFld::FullText,"1000") );
     fldAdd( new TFld("REQ_TRY",_("Serial request tries"),TFld::Integer,TFld::NoFlag,"1","3","1;10") );
 
-    // Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_TP",_("Module type"),TFld::Integer,TFld::HexDec|TCfg::NoVal,"10","552985") );
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_ADDR",_("Module address"),TFld::Integer,TCfg::NoVal,"3","0","0;255") );

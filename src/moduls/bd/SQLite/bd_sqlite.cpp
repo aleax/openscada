@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.SQLite file: bd_sqlite.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.4.2"
+#define MOD_VER		"2.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -184,7 +184,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     if(intoTrans && intoTrans != EVAL_BOOL) transOpen();
     else if(!intoTrans && reqCnt) transCommit();
 
-    //Put request
+    //Put the request
     rc = sqlite3_get_table(m_db, Mess->codeConvOut(cd_pg.c_str(),req).c_str(), &result, &nrow, &ncol, &zErrMsg);
     if(rc != SQLITE_OK) {
 	string err = _("Unknown error");
@@ -243,7 +243,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,3,
 	    "dest","sel_ed","select","/prm/cfg/dbFsList","help",
-		    _("SQLite DB address must be written as: [<FileDBPath>].\n"
+		    _("SQLite DB address must be written as: \"{FileDBPath}\".\n"
 		      "Where:\n"
 		      "  FileDBPath - full path to DB file (./oscada/Main.db).\n"
 		      "               Use empty path for a private, temporary on-disk database create.\n"
@@ -456,7 +456,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    if(Mess->lang2Code() == Mess->lang2CodeBase() && !trDblDef && sid.compare(0,3,Mess->lang2CodeBase()+"#") == 0) trDblDef = true;
 	}
     }
-    if(trDblDef) fieldFix(cfg);
+    if(trDblDef) fieldFix(cfg, trPresent);
 
     //Get present fields list
     string req_where = "WHERE ";
@@ -475,7 +475,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    if(u_cfg.name() == tblStrct[iFld][1]) break;
 	if(iFld >= tblStrct.size()) noKeyFld = true;
     }
-    if(noKeyFld) fieldFix(cfg);
+    if(noKeyFld) fieldFix(cfg, trPresent);
 
     //Prepare query for presenting detect
     string req;
@@ -522,8 +522,11 @@ void MTable::fieldSet( TConfig &cfg )
     //Query
     try { owner().sqlReq(req, NULL, true); }
     catch(TError &err) {
-	if((err.cod-100) == SQLITE_READONLY) throw;
-	fieldFix(cfg);
+	if((err.cod-100) == SQLITE_READONLY) {
+	    err.mess = err.mess + " " + _("The DB is into the Read only mode!");
+	    throw;
+	}
+	fieldFix(cfg, trPresent);
 	owner().sqlReq(req, NULL, true);
     }
 }
@@ -555,10 +558,10 @@ void MTable::fieldDel( TConfig &cfg )
     }
 }
 
-void MTable::fieldFix( TConfig &cfg )
+void MTable::fieldFix( TConfig &cfg, bool trPresent )
 {
     bool toUpdate = false,
-	 isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
+	 isVarTextTransl = trPresent || (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
 
     //Get config fields list
     vector<string> cf_el;
@@ -609,7 +612,7 @@ void MTable::fieldFix( TConfig &cfg )
 	if(iFld >= tblStrct.size()) toUpdate = true;
 
 	// Other languages for translation process
-	if(cf.fld().flg()&TFld::TransltText) {
+	if((cf.fld().flg()&TFld::TransltText) && !cf.noTransl()) {
 	    bool col_cur = false;
 	    for(unsigned iC = 1; iC < tblStrct.size(); iC++)
 		if(tblStrct[iC][1].size() > 3 && tblStrct[iC][1].substr(2) == ("#"+cf_el[iCf])) {
@@ -632,8 +635,8 @@ void MTable::fieldFix( TConfig &cfg )
     for(unsigned iFld = 1, iCf; iFld < tblStrct.size() && !toUpdate; iFld++) {
 	for(iCf = 0; iCf < cf_el.size(); iCf++)
 	    if(cf_el[iCf] == tblStrct[iFld][1] ||
-		    (cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText && tblStrct[iFld][1].size() > 3 &&
-		    tblStrct[iFld][1].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][1].compare(0,2,Mess->lang2Code()) != 0))
+		    ((cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText) && !cfg.cfg(cf_el[iCf]).noTransl() &&
+		    tblStrct[iFld][1].size() > 3 && tblStrct[iFld][1].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][1].compare(0,2,Mess->lang2Code()) != 0))
 		break;
 	if(iCf >= cf_el.size()) toUpdate = true;
     }

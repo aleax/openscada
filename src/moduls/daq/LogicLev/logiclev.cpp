@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,9 +39,9 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.10"
+#define MOD_VER		"1.8.4"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the logical level of parameters.")
+#define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -101,7 +101,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD",_("Parameters table by template"),TFld::String,TFld::NoFlag,"40",""));
     fldAdd(new TFld("PRM_BD_REFL",_("Parameters table for reflection"),TFld::String,TFld::NoFlag,"50",""));
     fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));	//!!!! Remove at further
-    fldAdd(new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100", "1"));
+    fldAdd(new TFld("SCHEDULE",_("Schedule of the calculation"),TFld::String,TFld::NoFlag,"100", "1"));
     fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
     //Parameter type bd structure
@@ -110,7 +110,7 @@ void TTpContr::postEnable( int flag )
     tpPrmAt(t_prm).fldAdd(new TFld("PRM",_("Parameter template"),TFld::String,TCfg::NoVal,"100",""));
     //  Logical level parameter IO BD structure
     elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(atoi(OBJ_ID_SZ)*6).c_str()));
-    elPrmIO.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"1000000"));
 
     // A parameter direct reflection
@@ -153,9 +153,9 @@ string TMdContr::getStatus( )
 {
     string rez = TController::getStatus( );
     if(startStat() && !redntUse()) {
-	if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	if(callSt)	rez += TSYS::strMess(_("Calculation. "));
+	if(period())	rez += TSYS::strMess(_("Calculation with the period: %s. "), tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Next calculation by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s[%s]. "),
 	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }
@@ -558,8 +558,8 @@ void TMdPrm::vlGet( TVal &val )
 {
     if(!enableStat() || !owner().startStat()) {
 	if(val.name() == "err") {
-	    if(!enableStat()) val.setS(_("1:Parameter is disabled."), 0, true);
-	    else if(!owner().startStat()) val.setS(_("2:Controller is stopped."), 0, true);
+	    if(!enableStat()) val.setS(_("1:Parameter disabled."), 0, true);
+	    else if(!owner().startStat()) val.setS(_("2:Calculation stopped."), 0, true);
 	}
 	else val.setS(EVAL_STR, 0, true);
 	return;
@@ -713,7 +713,7 @@ int TMdPrm::lnkId( const string &id ) const
 TMdPrm::SLnk &TMdPrm::lnk( int num ) const
 {
     if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
-    if(num < 0 || num >= (int)tmpl->lnk.size()) throw TError(nodePath().c_str(),_("Parameter id error."));
+    if(num < 0 || num >= (int)tmpl->lnk.size()) throw TError(nodePath().c_str(),_("Error of parameter ID."));
     return tmpl->lnk[num];
 }
 
@@ -767,7 +767,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	if(idDscr >= 0)	setDescr(tmpl->val.getS(idDscr));
     } catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_warning(nodePath().c_str(),_("Error calculate template."));
+	mess_warning(nodePath().c_str(),_("Error calculating template."));
     }
 }
 
@@ -777,7 +777,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path.substr(0,6) == "/serv/") {
 	if(a_path == "/serv/tmplAttr") {
-	    if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("No template parameter or error."));
+	    if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("Error or non-template parameter."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 		for(int iA = 0; iA < tmpl->val.ioSize(); iA++)
 		    if(iA != idFreq && iA != idStart && iA != idStop /*&& iA != idErr*/ && iA != idSh && iA != idNm && iA != idDscr &&
@@ -890,7 +890,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    string no_set;
 	    string p_nm = TSYS::strSepParse(tmpl->val.func()->io(lnk(lnkId(s2i(a_path.substr(12)))).ioId)->def(),0,'|');
 	    string p_vl = TSYS::strParse(opt->text(), 0, " ");
-	    if(p_vl == DAQPath()) throw TError(nodePath().c_str(),_("Self to self linking error."));
+	    if(p_vl == DAQPath()) throw TError(nodePath().c_str(),_("Error, recursive linking."));
 	    AutoHD<TValue> prm = SYS->daq().at().prmAt(p_vl, '.', true);
 
 	    for(int iL = 0; iL < lnkSize(); iL++)
@@ -932,7 +932,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		if(TSYS::strSepParse(a_vl,0,'.') == owner().owner().modId() &&
 			TSYS::strSepParse(a_vl,1,'.') == owner().id() &&
 			TSYS::strSepParse(a_vl,2,'.') == id())
-		    throw TError(nodePath().c_str(),_("Self to self linking error."));
+		    throw TError(nodePath().c_str(),_("Error, recursive linking."));
 		lnk(lnkId(iIO)).prmAttr = a_vl;
 		initTmplLnks();
 	    }

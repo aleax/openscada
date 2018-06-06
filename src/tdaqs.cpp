@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tdaqs.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,21 +38,21 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), mElErr("Error"),
     mTmpLib = grpAdd("tmplb_");
 
     //> Templates lib db structure
-    mElLib.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mElLib.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     mElLib.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     mElLib.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
     mElLib.fldAdd(new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30"));
 
     //> Template DB structure
-    mElTmpl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mElTmpl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     mElTmpl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     mElTmpl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
     mElTmpl.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
     mElTmpl.fldAdd(new TFld("PROGRAM",_("Program"),TFld::String,TFld::TransltText,"1000000"));
 
     //> Parameter template IO DB structure
-    mElTmplIO.fldAdd(new TFld("TMPL_ID",_("Template ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    mElTmplIO.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mElTmplIO.fldAdd(new TFld("TMPL_ID",_("Template identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mElTmplIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     mElTmplIO.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     mElTmplIO.fldAdd(new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1"));
     mElTmplIO.fldAdd(new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
@@ -135,7 +134,7 @@ void TDAQS::ctrListPrmAttr( XMLNode *opt, const string &l_prm, bool toPrm, char 
 void TDAQS::load_( )
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
+
 
     map<string, bool>	itReg;
     vector<vector<string> > full;
@@ -167,7 +166,7 @@ void TDAQS::load_( )
         }
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_sys(TMess::Error, _("Load template's libraries error."));
+	mess_sys(TMess::Error, _("Error loading template libraries."));
     }
 
     //> Load parameters
@@ -194,7 +193,7 @@ void TDAQS::load_( )
 			itReg[mId] = true;
 		    } catch(TError &err) {
 			mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-			mess_sys(TMess::Error, _("Add controller '%s' error."), mId.c_str());
+			mess_sys(TMess::Error, _("Error adding controller '%s'."), mId.c_str());
 		    }
 		}
 
@@ -341,7 +340,7 @@ void TDAQS::subStart( )
 	    catch(TError &err) {
 		if(try_cnt) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Start template library '%s' error."), tmpl_lst[i_lb].c_str());
+		    mess_sys(TMess::Error, _("Error starting the templates library '%s'."), tmpl_lst[i_lb].c_str());
 		}
 		reply = true;
 	    }
@@ -358,7 +357,7 @@ void TDAQS::subStart( )
 		    catch(TError &err) {
 			if(try_cnt) {
 			    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-			    mess_sys(TMess::Error, _("Enable controller '%s' error."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+			    mess_sys(TMess::Error, _("Error enabling the templates library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
 			}
 			reply = true;
 		    }
@@ -394,7 +393,7 @@ void TDAQS::subStop( )
 		try{ cntr.at().stop(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Stop controller '%s' error."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_sys(TMess::Error, _("Error stopping the templates library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
 		}
 	}
     }
@@ -408,7 +407,7 @@ void TDAQS::subStop( )
 		try{ cntr.at().disable(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Disable controller '%s' error."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_sys(TMess::Error, _("Error disabling the templates library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
 		}
 	}
     }
@@ -434,7 +433,7 @@ AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool wa
 	AutoHD<TCntrNode> tNd = DAQnd.at().nodeAt(c_grp+cEl, 0, sep, 0, true);
 	if(tNd.freeStat() && !(strcmp(c_grp,"a_") != 0 && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+cEl,0,sep,0,true)).freeStat())) {
 	    if(noex) return AutoHD<TValue>();
-	    else throw err_sys(_("No DAQ node present '%s'."), path.c_str());
+	    else throw err_sys(_("Missing the DAQ node '%s'."), path.c_str());
 	}
 	c_grp = (c_lv == 0) ? "cntr_" : "prm_";
 	DAQnd = tNd;
@@ -448,7 +447,7 @@ AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex ) const
     AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex);
     if(DAQnd.freeStat() || !dynamic_cast<TValue*>(&DAQnd.at())) {
 	if(noex) return AutoHD<TValue>();
-	else throw err_sys(_("Pointed node is not parameter '%s'."), path.c_str());
+	else throw err_sys(_("The specified node is not the parameter '%s'."), path.c_str());
     }
 
     return DAQnd;
@@ -459,7 +458,7 @@ AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex ) const
     AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex, true);
     if(DAQnd.freeStat() || !dynamic_cast<TVal*>(&DAQnd.at())) {
 	if(noex) return AutoHD<TVal>();
-	else throw err_sys(_("Pointed node is not attribute '%s'."), path.c_str());
+	else throw err_sys(_("The specified node is not the attribute '%s'."), path.c_str());
     }
 
     return DAQnd;
@@ -624,13 +623,13 @@ string TDAQS::optDescr( )
 {
     return TSYS::strMess(_(
 	"=================== Subsystem \"Data acquisition\" options ================\n"
-	"------------ Parameters of section '%s' in config-file -----------\n"
-	"RdStLevel    <lev>  The current station redundant level.\n"
-	"RdTaskPer    <s>    The redundant task call period.\n"
-	"RdRestConnTm <s>    Restore connection timeout to dead reserve stations.\n"
-	"RdRestDtTm   <hour> Restore data archive depth from a reserve station after deadline.\n"
-	"RdStList     <list> Redundant stations list, separated symbol ';' (st1;st2).\n\n"
-	),nodePath().c_str());
+	"------ Parameters of the section '%s' of the configuration file ------\n"
+	"RdStLevel    <lev>      The current station redundant level.\n"
+	"RdTaskPer    <s>        The redundant task call period.\n"
+	"RdRestConnTm <s>        Restore connection timeout to dead reserve stations.\n"
+	"RdRestDtTm   <hour>     Depth of recovery time of archive data from the reserve station, when startup, in hours.\n\n"
+	"RdStList     <list>     Redundant stations list, separated symbol ';' (st1;st2).\n\n"
+	),nodePath().c_str()) + TSubSYS::optDescr();
 }
 
 void TDAQS::cntrCmdProc( XMLNode *opt )
@@ -658,20 +657,20 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/tmplb_",_("Template library"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/tmplb_",_("Templates library"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/redund",_("Redundancy"))) {
 	    ctrMkNode("fld",opt,-1,"/redund/status",_("Status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/redund/statLev",_("Station level"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/redund/tskPer",_("Redundant task period, seconds"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/redund/restConn",_("Restore connection timeout, seconds"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/redund/restDtTm",_("Depth time of restoring data at start, hours"),RWRWR_,"root",SDAQ_ID,1, "tp","real");
+	    ctrMkNode("fld",opt,-1,"/redund/restDtTm",_("Depth time of restoring data at the starting, hours"),RWRWR_,"root",SDAQ_ID,1, "tp","real");
 	    if(ctrMkNode("table",opt,-1,"/redund/sts",_("Stations"),RWRWR_,"root",SDAQ_ID,2,"key","st","s_com","add,del"))
 	    {
-		ctrMkNode("list",opt,-1,"/redund/sts/st",_("ID"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/redund/lsSt");
+		ctrMkNode("list",opt,-1,"/redund/sts/st",_("Identifier"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/redund/lsSt");
 		ctrMkNode("list",opt,-1,"/redund/sts/name",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/sts/live",_("Live"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/redund/sts/lev",_("Lev."),R_R_R_,"root",SDAQ_ID,1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/redund/sts/cnt",_("Cntr."),R_R_R_,"root",SDAQ_ID,1,"tp","real");
+		ctrMkNode("list",opt,-1,"/redund/sts/lev",_("Level"),R_R_R_,"root",SDAQ_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/redund/sts/cnt",_("Counter"),R_R_R_,"root",SDAQ_ID,1,"tp","real");
 		ctrMkNode("list",opt,-1,"/redund/sts/run",_("Run"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to remote stations list configuration"),0660,"root","Transport",1,"tp","lnk");
@@ -680,10 +679,11 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/redund/cntr/id",_("Controller"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/cntr/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/cntr/start",_("Run."),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redund."),RWRWR_,"root",SDAQ_ID,4,"tp","dec","dest","select",
-		    "sel_id",(i2s(TController::Off)+";"+i2s(TController::Asymmetric)/*+";"+i2s(TController::Symmetric)*/).c_str(),
-		    "sel_list",_("Off;Asymmetric"/*;Symmetric"*/));
-		ctrMkNode("list",opt,-1,"/redund/cntr/prefRun",_("Pref. run"),RWRWR_,"root",SDAQ_ID,4,"tp","str","idm","1","dest","select","select","/redund/lsMode");
+		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redund."),RWRWR_,"root",SDAQ_ID,4, "tp","int", "dest","select",
+		    "sel_id",(i2s(TController::Off)+";"+i2s(TController::Asymmetric)/*+";"+i2s(TController::OnlyAlarms)*/).c_str(),
+		    "sel_list",_("Off;Asymmetric"/*;Only alarms"*/));
+		ctrMkNode("list",opt,-1,"/redund/cntr/prefRun",_("Pref. to run"),RWRWR_,"root",SDAQ_ID,4,"tp","str",
+		    "idm","1","dest","select","select","/redund/lsMode");
 		ctrMkNode("list",opt,-1,"/redund/cntr/remoted",_("Remote"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	}

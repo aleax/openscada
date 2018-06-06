@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.Sockets translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-28 12:59+0200\n"
+"POT-Creation-Date: 2018-06-05 11:45+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -22,11 +22,11 @@ msgid "Roman Savochenko, Maxim Kochetkov"
 msgstr "Роман Савоченко, Максим Кочетков"
 
 msgid ""
-"Provides sockets based transport. Support inet and unix sockets. Inet socket "
-"uses TCP, and UDP protocols."
+"Provides sockets based transport. Support network and UNIX sockets. Network "
+"socket supports TCP, UDP protocols."
 msgstr ""
-"Предоставляет транспорт основанный на сокетах. Поддерживаются интернет и "
-"UNIX сокеты. Интернет сокет использует TCP и UDP протоколы."
+"Предоставляет транспорт основанный на сокетах. Поддерживаются сетевые и UNIX "
+"сокеты. Сетевой сокет поддерживает TCP, UDP протоколы."
 
 msgid "Addition parameters"
 msgstr "Дополнительные параметры"
@@ -96,8 +96,8 @@ msgstr "Прочитано датаграму %s из '%s'!"
 msgid "Wrote datagram %s to '%s'!"
 msgstr "Записано датаграму %s в '%s'!"
 
-msgid " client task is stopping...."
-msgstr " клиентская задача остановлена...."
+msgid " stopping client tasks ..."
+msgstr " останов клиентских задач ..."
 
 #, c-format
 msgid "Has been connected by '%s'!"
@@ -281,12 +281,16 @@ msgid "Error creation UDP socket: '%s (%d)'!"
 msgstr "Ошибка создания UDP сокета: '%s (%d)'!"
 
 #, c-format
-msgid "Connect by timeout %s error: '%s (%d)'"
-msgstr "Ошибка подключения по таймауту %s: '%s (%d)'"
+msgid "Error connecting during the time %s: '%s (%d)'"
+msgstr "Ошибка подключения в течении времени %s: '%s (%d)'"
 
 #, c-format
-msgid "Connect to Internet socket error: '%s (%d)'!"
-msgstr "Ошибка подключения к Internet сокету: '%s (%d)'!"
+msgid ""
+"Error connection to the internet socket '%s:%s' during the timeout, it seems "
+"in down or inaccessible: '%s (%d)'!"
+msgstr ""
+"Ошибка подключения к интернет сокету '%s:%s' в течении таймаута, он похоже "
+"отключенный или недоступный: '%s (%d)'!"
 
 #, c-format
 msgid "Error creation UNIX socket: '%s (%d)'!"

@@ -39,7 +39,7 @@ TTipDAQ::TTipDAQ( const string &id ) : TModule(id)
 {
     mCntr = grpAdd("cntr_");
 
-    fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
     fldAdd(new TFld("ENABLE",_("To enable"),TFld::Boolean,0,"1","0"));
@@ -70,7 +70,7 @@ void TTipDAQ::postEnable( int flag )
 	fldAdd(new TFld("REDNT",_("Redundant"),TFld::Integer,TFld::Selected,"1","0",
 	    (i2s(TController::Off)+";"+i2s(TController::Asymmetric)/*+";"+i2s(TController::Symmetric)*/).c_str(),
 	    _("Off;Asymmetric"/*;Symmetric"*/)));
-	fldAdd(new TFld("REDNT_RUN",_("Preferable run"),TFld::String,0,"20","<high>"));
+	fldAdd(new TFld("REDNT_RUN",_("Preference for running"),TFld::String,0,"20","<high>"));
     }
 }
 
@@ -84,7 +84,7 @@ void TTipDAQ::modStart( )
 	    try{ at(lst[i_l]).at().start(); }
 	    catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Start controller '%s' error."), (modId()+"."+lst[i_l]).c_str());
+		mess_sys(TMess::Error, _("Error starting the controller '%s'."), (modId()+"."+lst[i_l]).c_str());
 	    }
 }
 
@@ -104,7 +104,7 @@ void TTipDAQ::add( const string &name, const string &daq_db )
 
 TTipParam &TTipDAQ::tpPrmAt( unsigned id )
 {
-    if(id >= paramt.size()/* || id < 0*/) throw err_sys(_("Id of parameter type error!"));
+    if(id >= paramt.size()/* || id < 0*/) throw err_sys(_("Error ID of the parameter type!"));
     return *paramt[id];
 }
 
@@ -123,7 +123,7 @@ int TTipDAQ::tpParmAdd( const char *id, const char *n_db, const char *name )
     int i_t = paramt.size();
     paramt.push_back(new TTipParam(id,name,n_db));
     //> Add structure fields
-    paramt[i_t]->fldAdd(new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    paramt[i_t]->fldAdd(new TFld("SHIFR",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     paramt[i_t]->fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     paramt[i_t]->fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
     paramt[i_t]->fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TCfg::NoVal,"1","0"));
@@ -140,12 +140,12 @@ int TTipDAQ::tpPrmToId( const string &name_t )
 
 TController *TTipDAQ::ContrAttach( const string &name, const string &daq_db )
 {
-    throw err_sys(_("Error attach new controller %s."), name.c_str());
+    throw err_sys(_("Error attaching the new controller '%s'."), name.c_str());
 }
 
 string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings, int maxCalcTm )
 {
-    throw err_sys(_("Module doesn't support the function for compilation programming languages."));
+    throw err_sys(_("Module does not support compilation of the programming language."));
 }
 
 void TTipDAQ::cntrCmdProc( XMLNode *opt )

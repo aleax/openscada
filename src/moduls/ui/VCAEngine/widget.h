@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: widget.h
 /***************************************************************************
- *   Copyright (C) 2006-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -60,6 +60,7 @@ class Attr
 	    Generic	= 0x10000,	//Generic atributes' flag. This atributes loaded independent from enabled state
 	    OnlyRead	= 0x20000,	//Only read attribute, through widget, no the attribute storing location
 	    PreRead	= 0x40000,	//Preprocessed read
+	    NotStored	= 0x80000	//Not stored and loaded - only dynamic
 	};
 
 	// Link types
@@ -72,8 +73,8 @@ class Attr
 	    VizerSpec	= 0x80,		//Visualizer specified attribute, for allow it to modification control and transmit to the visualizer.
 					//Sets at and by a session of running project activation.
 
-	    SessAttrInh	= 0x10,		//Inherit attribute into running session
-	    IsInher	= 0x20		//Inherit attribute
+	    SessAttrInh	= 0x10,		//Inherited attribute into the running session
+	    IsInher	= 0x20		//Inherited attribute
 	};
 
 	//Methods
@@ -214,6 +215,8 @@ class Widget : public TCntrNode
 	virtual void inheritAttr( const string &attr = "" );	//Inherit parent attributes
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
+	virtual void procChange( bool src = true )	{ }			//Process the procedure change
+
 	// Widget's attributes
 	void attrList( vector<string> &list ) const;
 	virtual void attrAdd( TFld *attr, int pos = -1, bool inher = false, bool forceMdf = false, bool allInher = false );
@@ -251,7 +254,7 @@ class Widget : public TCntrNode
 	virtual bool cntrCmdLinks( XMLNode *opt, bool lnk_ro = false );
 	virtual bool cntrCmdProcess( XMLNode *opt );
 
-	virtual bool attrChange( Attr &cfg, TVariant prev );   //Process attribute change local and into terminator
+	virtual bool attrChange( Attr &cfg, TVariant prev );	//Process an attribute change local and into the terminator
 	virtual unsigned int modifVal( Attr &cfg )	{ return 0; }
 	virtual TVariant vlGet( Attr &a );
 	virtual TVariant stlReq( Attr &a, const TVariant &vl, bool wr );

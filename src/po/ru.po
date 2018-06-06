@@ -1,13 +1,13 @@
 # OpenSCADA core translate to Russian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-28 11:48+0200\n"
+"POT-Creation-Date: 2018-06-05 07:57+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -15,20 +15,20 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Error open semaphore!"
+msgid "Error opening the semaphore!"
 msgstr "Ошибка открытия семафора!"
 
-msgid "Resource is try deadlock a thread!"
-msgstr "Ресурс пытается установить мёртвый блок на поток!"
+msgid "The resource tries to tightly block the thread!"
+msgstr "Ресурс пытается намертво заблокировать поток!"
 
 msgid "Resource is timeouted!"
 msgstr "Время ожидания ресурса исчерпано!"
 
-msgid "Archives"
-msgstr "Архивы"
+msgid "Archives-History"
+msgstr "Архивы-История"
 
-msgid "ID"
-msgstr ""
+msgid "Identifier"
+msgstr "Идентификатор"
 
 msgid "Module(plugin) name"
 msgstr "Имя модуля(плагина)"
@@ -58,10 +58,10 @@ msgstr ""
 msgid "Address"
 msgstr "Адрес"
 
-msgid "Value period, seconds"
-msgstr "Периодичность значений, секунд"
+msgid "Period of the values, seconds"
+msgstr "Период значений, секунд"
 
-msgid "Period archiving, seconds"
+msgid "Period of the archiving, seconds"
 msgstr "Период архивирования, секунд"
 
 msgid "Selection priority"
@@ -82,25 +82,25 @@ msgstr "Логический;Целый;Вещественный;Строка"
 msgid "Buffer period, seconds"
 msgstr "Период буфера, секунд"
 
-msgid "Buffer size (items)"
-msgstr "Размер буфера (единиц)"
+msgid "Buffer size, items"
+msgstr "Размер буфера, единиц"
 
-msgid "Buffer in hard time grid"
+msgid "Buffer in the hard time grid"
 msgstr "Жесткая сетка времени буфера"
 
-msgid "Buffer in high time resolution"
+msgid "Buffer in the high time resolution"
 msgstr "Высокое разрешение времени буфера"
 
-msgid "Fill pass points to a last value"
+msgid "Filling the passage points with the last value"
 msgstr "Заполнение проходных точек последним значением"
 
-msgid "Process into archivators"
+msgid "Process into archivers"
 msgstr "Обработка архиваторами"
 
-msgid "Message archivators load error."
+msgid "Error loading the message archivers."
 msgstr "Ошибка загрузки архиваторов сообщений."
 
-msgid "Value archivators load error."
+msgid "Error loading the value archivers."
 msgstr "Ошибка загрузки архиваторов значений."
 
 msgid "Value archives load error."
@@ -108,47 +108,46 @@ msgstr "Ошибка загрузки архивов значений."
 
 #, c-format
 msgid ""
-"======================== Subsystem \"Archives\" options ===================\n"
-"------------ Parameters of section '%s' in config-file -----------\n"
-"MessBufSize   <items>       Messages buffer size.\n"
-"MessPeriod    <sec>         Message archiving period.\n"
-"ValPeriod     <msec>        Values archiving period.\n"
-"ValPriority   <level>\t     Values task priority level.\n"
-"MaxReqMess    <items>       Maximum request messages.\n"
-"MaxReqVals    <items>       Maximum request values.\n"
+"======================== Subsystem \"Archives-History\" options "
+"===================\n"
+"------ Parameters of the section '%s' of the configuration file ------\n"
+"MessBufSize <items>     Size of the messages buffer.\n"
+"MessPeriod <sec>        Period of the messages archiving.\n"
+"ValPeriod  <msec>       Period of active archiving of values.\n"
+"ValPriority <level>     Level of priority of the task of active archiving of "
+"values.\n"
 "\n"
 msgstr ""
-"==================== Опции подсистемы \"Архивы\" ======================\n"
+"==================== Опции подсистемы \"Архивы-История\" "
+"======================\n"
 "---------- Параметры секции '%s' в конфигурационном файле --------\n"
 "MessBufSize   <ед.>     Размер буфера сообщений.\n"
 "MessPeriod    <сек>     Период архивирования сообщений.\n"
 "ValPeriod     <мсек>    Период архивирования значений.\n"
 "ValPriority   <уровень> Уровень приоритета задачи значений.\n"
-"MaxReqMess    <ед.>     Максимальное количество запрашиваемых сообщений.\n"
-"MaxReqVals    <ед.>     Максимальное количество запрашиваемых значений.\n"
 "\n"
 
 msgid "Start/update subsystem."
 msgstr "Пуск/обновление подсистемы."
 
 #, c-format
-msgid "Message archivator '%s' start error."
+msgid "Error starting the message archiver '%s'."
 msgstr "Ошибка запуска архиватора сообщений '%s'."
 
 #, c-format
-msgid "Value archivator '%s' start error."
+msgid "Error starting the value archiver '%s'."
 msgstr "Ошибка запуска архиватора значений '%s'."
 
 #, c-format
-msgid "Value archive '%s' start error."
+msgid "Error starting the value archive '%s'."
 msgstr "Ошибка запуска архива значений '%s'."
 
 #, c-format
-msgid "Value archivator '%s' stop error."
+msgid "Error stopping the value archiver '%s'."
 msgstr "Ошибка останова архиватора значений '%s'."
 
 #, c-format
-msgid "Message archivator '%s' stop error."
+msgid "Error stopping the message archiver '%s'."
 msgstr "Ошибка останова архиватора сообщений '%s'."
 
 #, c-format
@@ -168,14 +167,14 @@ msgstr "Архив значений"
 msgid "Messages"
 msgstr "Сообщения"
 
-msgid "Messages buffer size"
-msgstr "Размер буфера сообщений"
+msgid "Buffer size"
+msgstr "Размер буфера"
 
 msgid "Archiving period, seconds"
 msgstr "Период архивирования, секунд"
 
-msgid "View messages"
-msgstr "Просмотр сообщений"
+msgid "View"
+msgstr "Просмотр"
 
 msgid "Time, size (seconds) and level"
 msgstr "Время, размер (секунд) и уровень"
@@ -191,33 +190,20 @@ msgstr ""
 "(2), НАРУШЕНИЯ;Предупреждение (3), НАРУШЕНИЯ;Ошибка (4), НАРУШЕНИЯ;"
 "Критически (5), НАРУШЕНИЯ;Тревога (6), НАРУШЕНИЯ;Авария (7), НАРУШЕНИЯ"
 
-msgid "Get messages for level more and equal it."
-msgstr "Получать сообщения уровнем больше или равно указанному."
+msgid "Receiving messages with a level greater or equal to the specified."
+msgstr "Получение сообщений уровнем больше или равно указанному."
 
 msgid "Category pattern"
 msgstr "Шаблон категории"
 
-msgid ""
-"Messages category template or regular expression.\n"
-"Use template's symbols for group selection:\n"
-"  '*' - any substring;\n"
-"  '?' - any symbol.\n"
-"Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."
-msgstr ""
-"Шаблон или регулярное выражение категории сообщения.\n"
-"Используйте шаблонные символы для группового выбора:\n"
-"  '*' - любая подстрока;\n"
-"  '?' - любой символ.\n"
-"Регулярное выражение заключается между символами '/' (/mod_(System|"
-"LogicLev)/)."
-
-msgid "Archivators"
+msgid "Archivers"
 msgstr "Архиваторы"
 
 msgid ""
-"Message archivators.\n"
-"No set archivator for process by buffer and all archivators.\n"
-"Set '<buffer>' for process by buffer."
+"Message archivers.\n"
+"Do not set the field for processing the request by the buffer and all "
+"archivers.\n"
+"Set '<buffer>' for processing by the buffer."
 msgstr ""
 "Архиваторы сообщений.\n"
 "Не указывайте архиваторы для обработки запроса буфером и всеми "
@@ -233,22 +219,25 @@ msgstr "мкс"
 msgid "Category"
 msgstr "Категория"
 
-msgid "Lev."
-msgstr "Ур."
+msgid "Level"
+msgstr "Уровень"
 
 msgid "Message"
 msgstr "Сообщение"
 
+msgid "Clear the current alarms table"
+msgstr "Очистить таблицу текущих нарушений"
+
 msgid "Values"
 msgstr "Значения"
 
-msgid "Get data period (ms)"
-msgstr "Период получения данных (мс)"
+msgid "Period of the data receiving, milliseconds"
+msgstr "Период получения данных, миллисекунд"
 
-msgid "Get data task priority level"
+msgid "Level of priority of the data receiving task"
 msgstr "Уровень приоритета задачи получения данных"
 
-msgid "Variable timestamp force to current time"
+msgid "Forced to set timestampes in the current time"
 msgstr "Принудительно устанавливать метку времени в текущее время"
 
 msgid "Number"
@@ -264,22 +253,22 @@ msgstr "Помощь по опциям"
 msgid "All: %d; Enabled: %d"
 msgstr "Всего: %d; Включено: %d"
 
-msgid "Message archivator"
+msgid "Message archiver"
 msgstr "Архиватор сообщений"
 
-msgid "Value archivator"
+msgid "Value archiver"
 msgstr "Архиватор значений"
 
-msgid "Message archivators"
+msgid "Message archivers"
 msgstr "Архиваторы сообщений"
 
-msgid "Value archivators"
+msgid "Value archivers"
 msgstr "Архиваторы значений"
 
-msgid "Message archivator: "
+msgid "Message archiver: "
 msgstr "Архиватор сообщений: "
 
-msgid "Archivator"
+msgid "Archiver"
 msgstr "Архиватор"
 
 msgid "State"
@@ -288,7 +277,7 @@ msgstr "Состояние"
 msgid "Running"
 msgstr "Выполняется"
 
-msgid "Archivator DB"
+msgid "Archiver DB"
 msgstr "БД архиватора"
 
 msgid "End"
@@ -300,26 +289,7 @@ msgstr "Начало"
 msgid "Configuration"
 msgstr "Конфигурация"
 
-msgid ""
-"Messages category template or regular expression to processing by "
-"archivator, separated by symbol ';'.\n"
-"Use template's symbols for group selection:\n"
-"  '*' - any substring;\n"
-"  '?' - any symbol.\n"
-"Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."
-msgstr ""
-"Шаблон или регулярное выражение категории сообщений для обработки "
-"архиватором, разделённые символом ';'.\n"
-"Используйте шаблонные символы для групповой выборки:\n"
-"  '*' - любая подстрока;\n"
-"  '?' - любой символ.\n"
-"Регулярные выражения заключаются между символами '/' (/mod_(System|"
-"LogicLev)/)."
-
-msgid "Level"
-msgstr "Уровень"
-
-msgid "Value is not present."
+msgid "No value."
 msgstr "Значение отсутствует."
 
 #, c-format
@@ -331,20 +301,20 @@ msgstr ""
 msgid "Grid mode doesn't support inserting old values."
 msgstr "Режим привязки к сетке не поддерживает вставку старых значений."
 
-msgid "Set too old value to buffer."
+msgid "Insert a very old value to the buffer."
 msgstr "Вставка очень старых значений в буфер."
 
 #, c-format
-msgid "Connect to source '%s' error."
+msgid "Error connecting to source '%s'."
 msgstr "Ошибка подключения к источнику '%s'."
 
 #, c-format
-msgid "The archive '%s' was already connected to target parameter '%s'."
+msgid "Archive '%s' is already connected to the target parameter '%s'."
 msgstr "Архив '%s' уже подключен к целевому параметру '%s'."
 
 #, c-format
-msgid "gdImageStringFT for font '%s' error: %s."
-msgstr "Ошибка gdImageStringFT для шрифта '%s': %s."
+msgid "gdImageStringFT error for font '%s': %s."
+msgstr "gdImageStringFT ошибка для шрифта '%s': %s."
 
 #, c-format
 msgid "%ds"
@@ -362,10 +332,10 @@ msgid "Range error"
 msgstr "Ошибка диапазона"
 
 #, c-format
-msgid "No support data mode '%d'"
+msgid "Data mode '%d' is not supported"
 msgstr "Не поддерживается режим данных '%d'"
 
-msgid "Binary mode no support for string data"
+msgid "Binary mode is not supported for strings data"
 msgstr "Бинарный режим не поддерживается для строковых данных"
 
 msgid "Value archive: "
@@ -384,33 +354,31 @@ msgid "Archive DB"
 msgstr "БД архива"
 
 msgid ""
-"The values buffer size have to much enough for archivators periodicity.\n"
-"Typical the value automatic adjusts to the archive period and archivators "
-"periodicity in 60 seconds."
+"The size of the buffer of values should be large enough for the periodicity "
+"of the archivers.\n"
+"By default, this value is automatically configured for periodicity of the "
+"values of this archive and periodicity of archivers in 60 seconds."
 msgstr ""
 "Размер буфера значений должен быть достаточно большим для периодичности "
 "архиваторов.\n"
-"Типично это значение автоматически настраивается на периодичность этого "
-"архива и периодичность архиваторов в 60 секунд."
+"Типично это значение автоматически настраивается на периодичность значений "
+"этого архива и периодичность архиваторов в 60 секунд."
 
-msgid "Typical for fastest processing of values archivation."
+msgid "Default for fast processing of archiving values."
 msgstr "Типично для быстрой обработки архивации значений."
 
-msgid "Set for the values periodicity lesser to seconds."
+msgid "Set in case of periodicity of values in less than a second."
 msgstr "Установить в случае периодичности значений менее секунды."
 
 msgid ""
-"Mostly the pass values fill by EVAL but sometime\n"
-"the source's data periodicity greater to the archive's one and it is normal."
+"The passage values mostly fill by EVAL but sometime data periodicity of the "
+"source greater to the archive's one and it is normal."
 msgstr ""
 "В основном проходные значения заполняются EVAL однако иногда\n"
 "периодичность значений источника больше периодичности этого архива и это "
 "нормально."
 
-msgid "Start"
-msgstr "Запущен"
-
-msgid "Process"
+msgid "Processing"
 msgstr "Обработка"
 
 msgid "Period, seconds"
@@ -423,42 +391,46 @@ msgid "Size, seconds"
 msgstr "Размер, секунд"
 
 msgid ""
-"Values archivator.\n"
-"No set archivator for process by buffer and all archivators.\n"
-"Set '<buffer>' for process by buffer."
+"Values archiver.\n"
+"If the value is empty, the request will be processed for the buffer and for "
+"all archivers.\n"
+"If \"<buffer>\" is specified then the request will be processed only for the "
+"archive buffer."
 msgstr ""
 "Архиватор значений.\n"
-"Не указывайте архиватор для обработки запроса буфером и всеми архиваторами.\n"
-"Установите '<buffer>' для обработки запроса буфером."
+"Если значение отсутствует то запрос будет обработан для буфера и всех "
+"архиваторов.\n"
+"Если указано \"<buffer>\", то запрос будет обработан только для буфера "
+"архива."
 
 msgid "Show trend"
 msgstr "Показать график"
 
-msgid "Values table"
+msgid "Table of the values"
 msgstr "Таблица значений"
 
 msgid "Value"
 msgstr "Значение"
 
-msgid "Picture size"
+msgid "Image size"
 msgstr "Размер изображения"
 
-msgid "Picture width in pixels."
+msgid "Image width in pixels."
 msgstr "Ширина изображения в пикселах."
 
-msgid "Picture height in pixels."
+msgid "Image height in pixels."
 msgstr "Высота изображения в пикселах."
 
-msgid "Value scale"
-msgstr "Шкала значения"
+msgid "Scale of the values"
+msgstr "Шкала значений"
 
-msgid "Picture minimum value."
+msgid "Image minimum value."
 msgstr "Минимальное значение изображения."
 
-msgid "Picture maximum value."
+msgid "Image maximum value."
 msgstr "Максимальное значение изображения."
 
-msgid "Values trend"
+msgid "Trend of the values"
 msgstr "График значений"
 
 msgid "Boolean"
@@ -482,28 +454,28 @@ msgstr "Пассивный атрибут параметра"
 msgid "Active param. attribute"
 msgstr "Активный атрибут параметра"
 
-msgid "Value archivator: "
+msgid "Value archiver: "
 msgstr "Архиватор значений: "
 
 msgid "Archiving time"
 msgstr "Время архивирования"
 
 msgid ""
-"Set zero period for disable using the archiver for buffer processing, only "
-"for direct write."
+"Set a zero period to disable the use of the archiver in processing the "
+"buffer - just a direct recording."
 msgstr ""
 "Установить нулевой период для отключения использования архиватора в "
-"обработке буфера, только прямая запись."
+"обработке буфера - только прямая запись."
 
 msgid ""
-"Selection the archiver priority for \"All\" sources using mode. Set to zero "
-"for full the selection disable."
+"Selection of a priority of the archiver for using in the source mode \"All"
+"\". Set to zero for full the selection disabling."
 msgstr ""
 "Приоритет выбора архиватора для режима использования источника \"Все\". "
 "Установить в нуль для полного исключения из выбора."
 
-msgid "Buffer size"
-msgstr "Размер буфера"
+msgid "Archives"
+msgstr "Архивы"
 
 msgid "Last read buffer"
 msgstr "Последнее чтение буфера"
@@ -524,41 +496,40 @@ msgid "To enable"
 msgstr "Включать"
 
 #, c-format
-msgid "Close DB '%s' error!"
+msgid "Error closing database '%s'!"
 msgstr "Ошибка закрытия БД '%s'!"
 
-msgid "Requested row no present."
+msgid "The requested entry is missing."
 msgstr "Запрошенная запись отсутствует."
 
-msgid "Write row to DB or config file error."
+msgid "Error writing to DB or configuration file."
 msgstr "Ошибка записи в БД или конфигурационный файл."
 
 #, c-format
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
-"----------- The config-file station '%s' parameters -----------\n"
-"SYSStPref    <1>   The station id prefix using into the generic (SYS) "
-"table.\n"
+"------ Parameters of the section '%s' of the configuration file ------\n"
+"SYSStPref  <0|1>        Use the station ID in the common table (SYS).\n"
 "\n"
 msgstr ""
 "========================= Опции подсистемы \"БД\" =========================\n"
 "-------------- Параметры станции '%s' в конфигурационном файле ------------\n"
-"SYSStPref    <1>   Использовать идентификатор станции в общей (SYS) "
-"таблице.\n"
+"SYSStPref  <0|1>        Использовать идентификатор станции в общей таблице "
+"(SYS).\n"
 "\n"
 
-msgid "Search and open new DB error."
+msgid "Error finding and opening a new database."
 msgstr "Ошибка поиска и открытия новой БД."
 
 msgid "DB"
 msgstr "БД"
 
-msgid "Full DB delete"
+msgid "Complete DB removal"
 msgstr "Полное удаление БД"
 
 msgid ""
-"Select for full DB deletion at this DB closing, else the DB will be simply "
-"closed."
+"Select to completely remove the database when closing, otherwise the DB will "
+"simply be closed."
 msgstr ""
 "Выбрать для полного удаления БД при её закрытии, иначе БД будет просто "
 "закрыта."
@@ -602,9 +573,6 @@ msgstr ""
 "Операции добавления и удаления таблиц на самом деле являются операциями "
 "открытия и закрытия таблиц."
 
-msgid "SQL"
-msgstr ""
-
 msgid "Request"
 msgstr "Запрос"
 
@@ -633,98 +601,107 @@ msgid "Data"
 msgstr "Данные"
 
 #, c-format
-msgid "Field id = %s(%s) no present!"
+msgid "Field id = %s(%s) is missing!"
 msgstr "Поле id = %s(%s) отсутствует!"
 
 #, c-format
-msgid "%s:%s:> Control element '%s' error!"
+msgid "%s:%s:> Error in the control item '%s'!"
 msgstr "%s:%s:> Ошибка элемента управления '%s'!"
 
-msgid "Node already in process!"
+msgid "The node is already being processed!"
 msgstr "Узел уже обрабатывается!"
 
 #, c-format
-msgid "Waiting for freeing by %d users!"
-msgstr "Ожидание освобождения %d пользователями!"
-
-#, c-format
-msgid "Timeouted of wait. Object is used by %d users. Free object first!"
+msgid ""
+"Waiting time exceeded. The object is used by %d users. Release the object "
+"first!"
 msgstr ""
 "Превышено время ожидания. Объект использован %d пользователями. Сначала "
 "освободите объект!"
 
-msgid "Blocking node error. Inform developers please!"
-msgstr "Ошибка блокирования узла. Уведомьте пожалуйста разработчиков!"
+msgid ""
+"Error blocking node.\n"
+"The node forced to disable which can cause to crash.\n"
+"This problem mostly in user procedure, if the program exits!"
+msgstr ""
+"Ошибка блокирования узла.\n"
+"Узел принудительно выключен, что может привести к аварийному завершению "
+"программы.\n"
+"Эта проблема в основном в процедуре пользователя, если программа завершается!"
 
-msgid "Node disable error. Restore node enabling."
+#, c-format
+msgid "Expecting release %d users!"
+msgstr "Ожидание освобождения %d пользователями!"
+
+msgid "Error turning off node. Turning on back the node."
 msgstr "Ошибка отключения узла. Восстановление включения узла."
 
 msgid "Node is disabled!"
 msgstr "Узел отключен!"
 
 #, c-format
-msgid "Node '%s' no present!"
+msgid "The node '%s' is missing!"
 msgstr "Узел '%s' отсутствует!"
 
 #, c-format
-msgid "Copy from '%s' to '%s' impossible."
+msgid "Copy from '%s' to '%s' is not possible."
 msgstr "Копирование из '%s' в '%s' невозможно."
 
-msgid "Destination node doesn't have branches."
+msgid "Target node has no branches."
 msgstr "Целевой узел не имеет ветвей."
 
-msgid "Destination node doesn't have necessary branche."
+msgid "Target node does not have the required branch."
 msgstr "Целевой узел не имеет нужной ветви."
 
 #, c-format
-msgid "Branch group '%d' error."
+msgid "Error group of branches '%d'."
 msgstr "Ошибка группы веток '%d'."
 
 #, c-format
-msgid "Group of childs %d error!"
-msgstr "Ошибка группы %d дочерних узлов!"
+msgid "Error group of childs %d!"
+msgstr "Ошибка группы дочерних узлов %d!"
 
 msgid "Node is not enabled!"
 msgstr "Узел не включен!"
 
-msgid "Add child id is empty!"
+msgid "Id the child that is added is empty!"
 msgstr "Добавляемый дочерний идентификатор пуст!"
 
 #, c-format
-msgid "Node '%s' is already present."
+msgid "The node '%s' is already present."
 msgstr "Узел '%s' уже присутствует."
 
-msgid "Node is begin processed now!"
+msgid "Node is being processed now!"
 msgstr "Узел сейчас обрабатывается!"
 
-msgid "Node is the root or is not connected!"
+msgid "Node root or not connected!"
 msgstr "Узел корневой или не подключен!"
 
 #, c-format
-msgid "Element '%s' is not present!"
+msgid "Element '%s' is missing!"
 msgstr "Элемент '%s' отсутствует!"
 
 #, c-format
 msgid "Element '%s' is disabled!"
 msgstr "Элемент '%s' отключен!"
 
-msgid "Too more users for node!!!"
+msgid "Very many users at the node!!!"
 msgstr "Очень много пользователей у узла!!!"
 
 #, c-format
-msgid "Function '%s' error or not enough parameters."
+msgid "Error function '%s' or missing parameters for it."
 msgstr "Ошибка функции '%s' или не достаточно параметров для неё."
 
 #, c-format
-msgid "Entry %d of the path '%s' is missed!"
+msgid "Item %d of the path '%s' is missing!"
 msgstr "Элемент %d пути '%s' отсутствует!"
 
 #, c-format
-msgid "Error access to element '%s'!"
+msgid "Error accessing item '%s'!"
 msgstr "Ошибка доступа к элементу '%s'!"
 
 #, c-format
-msgid "Element '%s' warning! %s"
+msgid "Warning element '%s'! %s"
 msgstr "Предупреждение по элементу '%s'! %s"
 
 #, c-format
@@ -733,7 +710,7 @@ msgstr "Узел: %s"
 
 #, c-format
 msgid ""
-"Load error:\n"
+"Error loading:\n"
 "%s"
 msgstr ""
 "Ошибка загрузки:\n"
@@ -741,7 +718,7 @@ msgstr ""
 
 #, c-format
 msgid ""
-"Save error:\n"
+"Error saving:\n"
 "%s"
 msgstr ""
 "Ошибка сохранения:\n"
@@ -754,30 +731,30 @@ msgstr "[ИмяТаблицы]"
 msgid "Attribute '%s' is not present!"
 msgstr "Атрибут '%s' отсутствует!"
 
-msgid "Element type is not string!"
+msgid "Element type is not String!"
 msgstr "Тип элемента не строка!"
 
-msgid "Element type is not real!"
+msgid "Element type is not Real!"
 msgstr "Тип элемента не вещественное!"
 
-msgid "Element type is not int!"
+msgid "Element type is not Integer!"
 msgstr "Тип элемента не целый!"
 
 msgid "Element type is not Boolean!"
 msgstr "Тип элемента не логический!"
 
-msgid "Element type is not selected!"
-msgstr "Тип элемента не выбран!"
+msgid "Element type is not selective!"
+msgstr "Тип элемента не выбираем!"
 
-msgid "Started. "
-msgstr "Запущен. "
+msgid "Running. "
+msgstr "Выполняется. "
 
-msgid "Getting data from remote station: "
-msgstr "Получение данных из удалённой станции: "
+msgid "Acquisition data from a remote station: "
+msgstr "Сбор данных из удалённой станции: "
 
 msgid ""
-"Your redundancy configuration wrong and controller often enable-disable "
-"redundancy!"
+"Your redundancy settings are incorrect and the controller often enables-"
+"disables the redundancy!"
 msgstr ""
 "Ваши настройки резервирования некорректны и контроллер часто включает-"
 "выключает резервирование!"
@@ -788,40 +765,40 @@ msgstr "Включен. "
 msgid "Disabled. "
 msgstr "Выключен. "
 
-msgid "Load controller's configurations!"
-msgstr "Загрузка конфигурации контроллера!"
+msgid "Controller configuration loading."
+msgstr "Загрузка конфигурации контроллера."
 
-msgid "Save controller's configurations!"
-msgstr "Сохранение конфигурации контроллера!"
+msgid "Controller configuration saving."
+msgstr "Сохранение конфигурации контроллера."
 
-msgid "Start controller!"
-msgstr "Запуск контроллера!"
+msgid "Controller starting."
+msgstr "Запуск контроллера."
 
-msgid "Stop controller!"
-msgstr "Останов контроллера!"
+msgid "Controller stopping."
+msgstr "Останов контроллера."
 
-msgid "Enable controller!"
-msgstr "Включение контроллера!"
+msgid "Controller enabling."
+msgstr "Включение контроллера."
 
 #, c-format
-msgid "Enable parameter '%s' error."
+msgid "Error turning on the parameter '%s'."
 msgstr "Ошибка включения параметра '%s'."
 
-msgid "Some parameters enable error."
+msgid "Error turning on some parameters."
 msgstr "Ошибка включения некоторых параметров."
 
-msgid "Disable controller!"
-msgstr "Отключение контроллера!"
+msgid "Controller disabling."
+msgstr "Отключение контроллера."
 
 #, c-format
-msgid "Disable parameter '%s' error."
+msgid "Error turning off the parameter '%s'."
 msgstr "Ошибка отключения параметра '%s'."
 
 #, c-format
-msgid "Add parameter '%s' error."
+msgid "Error adding the parameter '%s'."
 msgstr "Ошибка добавления параметра '%s'."
 
-msgid "Search and create new parameters error."
+msgid "Error finding and creating new parameters."
 msgstr "Ошибка поиска и создание новых параметров."
 
 msgid "Controller: "
@@ -842,8 +819,8 @@ msgstr "Параметр"
 msgid "Parameters"
 msgstr "Параметры"
 
-msgid "To add parameters"
-msgstr "Добавлять параметры"
+msgid "Add parameters to the type"
+msgstr "Добавление параметров типа"
 
 msgid "Data acquisition"
 msgstr "Сбор Данных"
@@ -854,8 +831,8 @@ msgstr "Максимальное время вычисления, секунд"
 msgid "Program"
 msgstr "Программа"
 
-msgid "Template ID"
-msgstr "ID шаблона"
+msgid "Template identifier"
+msgstr "Идентификатор шаблона"
 
 msgid "Flags"
 msgstr "Флаги"
@@ -869,69 +846,71 @@ msgstr "Ошибка"
 msgid "=== Attributes ==="
 msgstr "=== Атрибуты ==="
 
-msgid "Load template's libraries error."
+msgid "Error loading template libraries."
 msgstr "Ошибка загрузки библиотек шаблонов."
 
 #, c-format
-msgid "Add controller '%s' error."
+msgid "Error adding controller '%s'."
 msgstr "Ошибка добавления контроллера '%s'."
 
 #, c-format
-msgid "Start template library '%s' error."
+msgid "Error starting the templates library '%s'."
 msgstr "Ошибка запуска библиотеки шаблонов '%s'."
 
 #, c-format
-msgid "Enable controller '%s' error."
-msgstr "Ошибка включения контроллера '%s'."
+msgid "Error enabling the templates library '%s'."
+msgstr "Ошибка включения библиотеки шаблонов '%s'."
 
 #, c-format
-msgid "Stop controller '%s' error."
-msgstr "Ошибка останова контроллера '%s'."
+msgid "Error stopping the templates library '%s'."
+msgstr "Ошибка остановки библиотеки шаблонов '%s'."
 
 #, c-format
-msgid "Disable controller '%s' error."
-msgstr "Ошибка отключения контроллера '%s'."
+msgid "Error disabling the templates library '%s'."
+msgstr "Ошибка отключения библиотеки шаблонов '%s'."
 
 #, c-format
-msgid "No DAQ node present '%s'."
+msgid "Missing the DAQ node '%s'."
 msgstr "Отсутствует DAQ узел '%s'."
 
 #, c-format
-msgid "Pointed node is not parameter '%s'."
+msgid "The specified node is not the parameter '%s'."
 msgstr "Указанный узел не параметр '%s'."
 
 #, c-format
-msgid "Pointed node is not attribute '%s'."
+msgid "The specified node is not the attribute '%s'."
 msgstr "Указанный узел не атрибут '%s'."
 
 #, c-format
 msgid ""
 "=================== Subsystem \"Data acquisition\" options ================\n"
-"------------ Parameters of section '%s' in config-file -----------\n"
-"RdStLevel    <lev>  The current station redundant level.\n"
-"RdTaskPer    <s>    The redundant task call period.\n"
-"RdRestConnTm <s>    Restore connection timeout to dead reserve stations.\n"
-"RdRestDtTm   <hour> Restore data archive depth from a reserve station after "
-"deadline.\n"
-"RdStList     <list> Redundant stations list, separated symbol ';' (st1;"
+"------ Parameters of the section '%s' of the configuration file ------\n"
+"RdStLevel    <lev>      The current station redundant level.\n"
+"RdTaskPer    <s>        The redundant task call period.\n"
+"RdRestConnTm <s>        Restore connection timeout to dead reserve "
+"stations.\n"
+"RdRestDtTm   <hour>     Depth of recovery time of archive data from the "
+"reserve station, when startup, in hours.\n"
+"\n"
+"RdStList     <list>     Redundant stations list, separated symbol ';' (st1;"
 "st2).\n"
 "\n"
 msgstr ""
 "=================== Опции подсистемы \"Сбор данных\" ======================\n"
 "--------------- Параметры секции '%s' в конфигурационном файле "
 "--------------\n"
-"RdStLevel    <уров>   Уровень текущей станции в схеме резервирования.\n"
-"RdTaskPer    <с>      Периодичность вызова задачи обслуживания "
+"RdStLevel    <уров>     Уровень текущей станции в схеме резервирования.\n"
+"RdTaskPer    <с>        Периодичность вызова задачи обслуживания "
 "резервирования.\n"
-"RdRestConnTm <с>      Интервал времени восстановления соединения с \"мёртвой"
-"\" резервной станцией.\n"
-"RdRestDtTm   <час>    Глубина восстановления данных архива из резервной "
+"RdRestConnTm <с>        Интервал времени восстановления соединения с "
+"\"мёртвой\" резервной станцией.\n"
+"RdRestDtTm   <час>      Глубина восстановления данных архива из резервной "
 "станции, при включении.\n"
-"RdStList     <список> Список резервных станций, разделённых символом "
+"RdStList     <список>   Список резервных станций, разделённых символом "
 "';' (st1;st2).\n"
 "\n"
 
-msgid "Template library"
+msgid "Templates library"
 msgstr "Библиотека шаблонов"
 
 msgid "Redundancy"
@@ -946,7 +925,7 @@ msgstr "Период задачи резервирования, секунд"
 msgid "Restore connection timeout, seconds"
 msgstr "Интервал времени восстановления соединения, секунд"
 
-msgid "Depth time of restoring data at start, hours"
+msgid "Depth time of restoring data at the starting, hours"
 msgstr "Глубина восстановления данных при запуске, часов"
 
 msgid "Stations"
@@ -955,8 +934,8 @@ msgstr "Станции"
 msgid "Live"
 msgstr "Жив"
 
-msgid "Cntr."
-msgstr "Счёт."
+msgid "Counter"
+msgstr "Счётчик"
 
 msgid "Run"
 msgstr "Исп."
@@ -976,7 +955,7 @@ msgstr "Резерв."
 msgid "Off;Asymmetric"
 msgstr "Выключено;Асимметричное"
 
-msgid "Pref. run"
+msgid "Pref. to run"
 msgstr "Предп. исп."
 
 msgid "Remote"
@@ -1001,11 +980,15 @@ msgstr "<Низкий уровень>"
 msgid "<Optimal>"
 msgstr "<Оптимально>"
 
-msgid "Id error!"
+msgid "Error ID!"
 msgstr "Ошибка идентификатора!"
 
-msgid "The element container is already attached!"
+msgid "Container element already connected!"
 msgstr "Элемент контейнера уже подключен!"
+
+#, c-format
+msgid "Element '%s' is not present!"
+msgstr "Элемент '%s' отсутствует!"
 
 msgid "Field is not String."
 msgstr "Поле не строка."
@@ -1019,26 +1002,18 @@ msgstr "Поле не вещественное."
 msgid "Field is not Boolean."
 msgstr "Поле не логическое."
 
-msgid "Field is not select type!"
+msgid "Field is not selective!"
 msgstr "Поле не выборочного типа!"
 
 msgid "Empty"
 msgstr "Пусто"
 
 #, c-format
-msgid "Select error! Val: '%s'."
+msgid "Error selecting! Value: '%s'."
 msgstr "Ошибка выбора! Значение: '%s'."
 
 #, c-format
-msgid "Select error! Val: '%d'."
-msgstr "Ошибка выбора! Значение: '%d'."
-
-#, c-format
-msgid "Select error! Val: '%f'."
-msgstr "Ошибка выбора! Значение: '%f'."
-
-#, c-format
-msgid "Function is used by: %s"
+msgid "Function used: %s"
 msgstr "Функция использована: %s"
 
 #, c-format
@@ -1046,19 +1021,19 @@ msgid "Index %d is broken!"
 msgstr "Индекс %d повреждён!"
 
 #, c-format
-msgid "Delete IO '%d' error."
+msgid "Error removing IO %d."
 msgstr "Ошибка удаления IO '%d'."
 
 #, c-format
-msgid "Move IO from %d to %d error."
+msgid "Error moving IO from %d to %d."
 msgstr "Ошибка перемещения IO из %d в %d."
 
 #, c-format
-msgid "Change is not permitted while function is used: %s"
+msgid "Changes are not possible because the function is used: %s"
 msgstr "Изменение не допустимо пока функция используется: %s"
 
 #, c-format
-msgid "Value '%s' is already attached!"
+msgid "The value '%s' is already connected!"
 msgstr "Значение '%s' уже подключено!"
 
 msgid "Function: "
@@ -1073,11 +1048,8 @@ msgstr "Доступен"
 msgid "Used"
 msgstr "Использовано"
 
-msgid "Id"
-msgstr ""
-
 msgid "IO"
-msgstr ""
+msgstr "ВВ"
 
 msgid "Type"
 msgstr "Тип"
@@ -1123,27 +1095,27 @@ msgid "Function is not attached!"
 msgstr "Функция не подключена!"
 
 #, c-format
-msgid "%s: Id or IO %d error!"
+msgid "%s: Error with ID or IO %d!"
 msgstr "%s: Ошибка идентификатора или IO %d!"
 
 #, c-format
-msgid "Get object from not object's IO %d error!"
+msgid "Error getting object from non-object IO %d!"
 msgstr "Ошибка получения объекта из не объектного IO %d!"
 
 #, c-format
-msgid "Error 'iconv' open: %s"
+msgid "Error opening 'iconv': %s"
 msgstr "Ошибка открытия 'iconv': %s"
 
 #, c-format
-msgid "Error input sequence convert: %s"
+msgid "Error converting input sequence: %s"
 msgstr "Ошибка преобразования входной последовательности: %s"
 
 msgid ""
 "DB address in format \"{DB module}.{DB name}\".\n"
-"For use the main work DB set '*.*'."
+"Set '*.*' for use the main work DB."
 msgstr ""
 "Адрес БД в формате \"{Модуль БД}.{Имя БД}\".\n"
-"Для использования основной рабочей БД вставлять '*.*'."
+"Вставить '*.*' для использования основной рабочей БД."
 
 msgid ""
 "Schedule wrotes in seconds periodic form or in the standard CRON form.\n"
@@ -1206,79 +1178,103 @@ msgstr ""
 "  100...199 - уровень приоритета реального времени (FIFO), часто доступно "
 "только для \"root\"."
 
-msgid "Modules Scheduler"
-msgstr "Управление Модулями"
+msgid ""
+"Specifies the category of the requested messages.\n"
+"Use template's symbols for group selection:\n"
+"  '*' - any substring;\n"
+"  '?' - any character.\n"
+"Regular expression enclosed between the symbols '/' (/mod_(System|"
+"LogicLev)/)."
+msgstr ""
+"Указывает категорию запрашиваемых сообщений.\n"
+"Используйте шаблонные символы для группового выбора:\n"
+"  '*' - любая подстрока;\n"
+"  '?' - любой символ.\n"
+"Регулярное выражение заключается между символами '/' (/mod_(System|"
+"LogicLev)/)."
+
+msgid "Modules scheduler"
+msgstr "Диспетчер модулей"
 
 #, c-format
 msgid ""
-"=================== Subsystem \"Module scheduler\" options "
+"=================== Subsystem \"Modules scheduler\" options "
 "=================\n"
-"    --modPath=<path>   Modules <path> (/var/os/modules/).\n"
-"------------ Parameters of section '%s' in config-file -----------\n"
-"ModPath  <path>        Path to shared libraries(modules).\n"
-"ModAllow <list>        List of shared libraries allowed for automatic "
-"loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
-"                       Use '*' value to allow all modules.\n"
-"ModDeny  <list>        List of shared libraries deny for automatic loading, "
-"attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
-"ChkPer   <sec>         Period of checking at new shared libraries(modules).\n"
+"    --modPath=<path>    Directories with the modules, separated by ';', they "
+"can include a files' template at the end.\n"
+"------ Parameters of the section '%s' of the configuration file ------\n"
+"ModPath    <path>       Directories with the modules, separated by ';', they "
+"can include a files' template at the end.\n"
+"                        This is a synonym of the system wide parameter "
+"\"ModDir\"\n"
+"ModAllow   <list>       List of the shared libraries allowed for the "
+"automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
+"                        Uses '*' value to allow all the modules.\n"
+"ModDeny    <list>       List of the shared libraries denied for the "
+"automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
+"ChkPer     <sec>        Period of the checking for new shared "
+"libraries(modules), in seconds. Set zero to disable.\n"
 "\n"
 msgstr ""
 "=================== Подсистема \"Планировщик модулей\" ====================\n"
-"    --ModPath=<путь>  Путь к модулям (/var/os/modules/).\n"
-"--------- Параметры секции '%s' в конфигурационном файле ---------\n"
-"ModPath  <путь>       Путь к разделяемым библиотекам (модулям).\n"
-"ModAllow <список>     Список разделяемых библиотек допустимых для "
+"    --modPath=<путь>    Директории модулей, разделённые ';', и в конце могут "
+"содержать шаблон файлов.\n"
+"---------- Параметры секции '%s' конфигурационного файла ----------\n"
+"ModPath    <путь>       Директории модулей, разделённые ';', и в конце могут "
+"содержать шаблон файлов.\n"
+"                        Это синоним параметра уровня станции \"ModDir\".\n"
+"ModAllow   <список>     Список разделяемых библиотек допустимых для "
 "автоматической загрузки, подключения и запуска (bd_DBF.so;daq_JavaLikeCalc."
 "so).\n"
-"                      Использовать значение '*' для разрешения всех "
+"                        Использовать значение '*' для разрешения всех "
 "модулей.\n"
-"ModDeny  <список>     Список разделяемых библиотек запрещённых для "
+"ModDeny    <список>     Список разделяемых библиотек запрещённых для "
 "автоматической загрузки, подключения и запуска (bd_DBF.so;daq_JavaLikeCalc."
 "so).\n"
-"ChkPer   <сек>        Период поиска новых разделяемых библиотек (модулей).\n"
+"ChkPer     <сек>        Период поиска новых разделяемых библиотек (модулей), "
+"в секундах. Установить в нуль для отключения.\n"
 "\n"
 
 #, c-format
-msgid "SO '%s' is not present!"
+msgid "SO '%s' is missing!"
 msgstr "SO '%s' отсутствует!"
 
 #, c-format
-msgid "SO '%s' is already attached!"
+msgid "SO '%s' is already connected!"
 msgstr "SO '%s' уже подключен!"
 
 #, c-format
-msgid "SO '%s' error: %s !"
-msgstr "SO '%s' ошибка: %s !"
+msgid "Error SO '%s': %s"
+msgstr "Ошибка SO '%s': %s"
 
 #, c-format
-msgid "%s for type '%s' doesn't support module version: %d!"
+msgid "%s for type '%s' does not support the version %d of the module!"
 msgstr "%s для типа '%s' не поддерживает версию модуля: %d!"
 
 #, c-format
-msgid "Module '%s' is already present!"
+msgid "Module '%s' already exists!"
 msgstr "Модуль '%s' уже присутствует!"
 
 #, c-format
-msgid "Attach module '%s' error!"
+msgid "Error connecting module '%s'!"
 msgstr "Ошибка подключения модуля '%s'!"
 
 #, c-format
-msgid "Can't detach library '%s'."
+msgid "Can not detach the library '%s'."
 msgstr "Невозможно отключить библиотеку '%s'."
 
 msgid "Subsystem"
 msgstr "Подсистема"
 
-msgid "Path to shared libs(modules)"
+msgid "Path to the shared libraries(modules)"
 msgstr "Путь к разделяемым библиотекам(модулям)"
 
 msgid "Denied modules"
 msgstr "Запрещённые модули"
 
 msgid ""
-"List of shared libs(modules) deny for auto connection.\n"
-"Elements separated by symbol ';'."
+"The list of shared libraries (modules) denied for automatic connection.\n"
+"Elements are separated by the symbol ';'."
 msgstr ""
 "Список разделяемых библиотек(модулей) запрещённых для автоматического "
 "подключения.\n"
@@ -1288,23 +1284,23 @@ msgid "Allowed modules"
 msgstr "Разрешённые модули"
 
 msgid ""
-"List of shared libs(modules) allowed for auto connection.\n"
-"Elements separated by symbol ';'.\n"
-"Value '*' used for allow all modules."
+"The list of shared libraries (modules) allowed for automatic connection.\n"
+"Elements are separated by the symbol ';'.\n"
+"The value '*' is used to allow all modules."
 msgstr ""
 "Список разделяемых библиотек(модулей) разрешённых для автоматического "
 "подключения.\n"
 "Элементы разделены символом ';'.\n"
 "Значение '*' используется для разрешения всех модулей."
 
-msgid "Check modules period, seconds"
+msgid "Period of checking of the modules, seconds"
 msgstr "Период проверки модулей, секунд"
 
-msgid "Check modules now."
+msgid "Check the modules now."
 msgstr "Проверить модули сейчас."
 
-msgid "Shared libs(modules)"
-msgstr "Разделяемые библиотеки (модули)"
+msgid "Shared libraries(modules)"
+msgstr "Разделяемые библиотеки(модули)"
 
 msgid "Path"
 msgstr "Путь"
@@ -1318,20 +1314,20 @@ msgstr "Автор"
 msgid "License"
 msgstr "Лицензия"
 
-msgid "Enable module."
+msgid "Module enabling."
 msgstr "Включение модуля."
 
-msgid "Disable module."
+msgid "Module disabling."
 msgstr "Отключение модуля."
 
-msgid "Start module."
+msgid "Module starting."
 msgstr "Запуск модуля."
 
-msgid "Stop module."
+msgid "Module stopping."
 msgstr "Останов модуля."
 
 #, c-format
-msgid "Function '%s' is not present in the module!"
+msgid "Function '%s' is not in the module!"
 msgstr "Функция '%s' отсутствует в модуле!"
 
 msgid "Module: "
@@ -1343,22 +1339,23 @@ msgstr "Помощь"
 msgid "Module information"
 msgstr "Информация о модуле"
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр отключен."
 
-msgid "2:Controller is stopped."
-msgstr "2:Контроллер остановлен."
+msgid "2:Acquisition stopped."
+msgstr "2:Сбор остановлен."
 
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid "Change type lead to data lost for specific configurations."
-msgstr "Смена типа повлечёт за собой потерю данных специфической конфигурации."
+msgid ""
+"The type changing leads to lose some data of the specific configurations."
+msgstr "Смена типа повлечёт за собой потерю данных специфических конфигураций."
 
-msgid "Controller is not started!"
+msgid "Controller is not running!"
 msgstr "Контроллер не запущен!"
 
-msgid "Function calculate frequency (Hz)"
+msgid "Frequency of calculation of the function (Hz)"
 msgstr "Частота обсчёта функции (Гц)"
 
 msgid "Function start flag"
@@ -1370,7 +1367,7 @@ msgstr "Флаг останова функции"
 msgid "Function error"
 msgstr "Ошибка функции"
 
-msgid "Template is disabled."
+msgid "Template is off."
 msgstr "Шаблон отключен."
 
 msgid "Parameter template: "
@@ -1400,20 +1397,32 @@ msgstr "Язык программы"
 msgid "New IO"
 msgstr "Новое IO"
 
-msgid "Deleting lock attribute in not allow."
+msgid "Deleting a locked attribute is not allowed."
 msgstr "Удаление заблокированного атрибута невозможно."
 
 msgid "Changing locked attribute is not allowed."
 msgstr "Изменение заблокированного атрибута невозможно."
 
-msgid "Empty value is not valid."
+msgid "Empty value is not allowed."
 msgstr "Пустое значение недопустимо."
 
+msgid "Error of parameter ID."
+msgstr "Ошибка ID параметра."
+
+msgid "Template configuration"
+msgstr "Конфигурация шаблона"
+
+msgid "Only attributes are to be shown"
+msgstr "Показывать только атрибуты"
+
+msgid "Error, recursive linking."
+msgstr "Ошибка, рекурсивное подключение."
+
 #, c-format
-msgid "Template '%s' start is error."
+msgid "Error starting the template '%s'."
 msgstr "Ошибка запуска шаблона '%s'."
 
-msgid "Some templates start error."
+msgid "Error starting some templates."
 msgstr "Ошибка запуска некоторых шаблонов."
 
 msgid "Parameter templates library: "
@@ -1426,11 +1435,11 @@ msgid "Library DB"
 msgstr "БД библиотеки"
 
 msgid ""
-"DB address in format [<DB module>.<DB name>.<Table name>].\n"
-"For use main work DB set '*.*'."
+"DB address in format \"{DB module}.{DB name}.{Table name}\".\n"
+"Set '*.*.{Table name}' for use the main work DB."
 msgstr ""
-"Адрес БД в формате [<Модуль БД>.<Имя БД>.<Имя таблицы>].\n"
-"Для использования основной рабочей БД вставлять '*.*'."
+"Адрес БД в формате \"{Модуль БД}.{Имя БД}.{Имя Таблицы}\".\n"
+"Вставить '*.*.{Имя Таблицы}' для использования основной рабочей БД."
 
 msgid "Parameter templates"
 msgstr "Шаблоны параметров"
@@ -1463,16 +1472,16 @@ msgstr "Изображение пользователя"
 msgid "Users"
 msgstr "Пользователи"
 
-msgid "Removal of system user is inadmissible."
+msgid "System user removal is not possible."
 msgstr "Удаление системного пользователя недопустимо."
 
-msgid "Removal of system group is inadmissible."
+msgid "System group removal is not possible."
 msgstr "Удаление системной группы недопустимо."
 
-msgid "Search and create new users error."
+msgid "Error finding and creating new users."
 msgstr "Ошибка поиска и создания новых пользователей."
 
-msgid "Search and create new user's groups error."
+msgid "Error finding and creating new user groups."
 msgstr "Ошибка поиска и создания новых групп пользователей."
 
 msgid "Administrator (superuser)!!!"
@@ -1487,7 +1496,6 @@ msgstr "Группа администраторов."
 msgid "Users group."
 msgstr "Группа пользователей."
 
-#, c-format
 msgid ""
 "======================= Subsystem \"Security\" options ====================\n"
 "\n"
@@ -1544,29 +1552,29 @@ msgstr ""
 msgid "Special"
 msgstr "Специальный модуль"
 
-msgid "The subsystem is not modular!"
+msgid "Subsystem is not modular!"
 msgstr "Подсистема не модульная!"
 
 #, c-format
-msgid "Connect module '%s'!"
-msgstr "Подключение модуля '%s'!"
+msgid "Module '%s' connecting."
+msgstr "Подключение модуля '%s'."
 
 #, c-format
-msgid "Disconnect module '%s'!"
-msgstr "Отключение модуля '%s'!"
+msgid "Module '%s' disconnecting."
+msgstr "Отключение модуля '%s'."
 
-msgid "Start subsystem."
+msgid "Subsystem starting."
 msgstr "Пуск подсистемы."
 
 #, c-format
-msgid "Start module '%s' error."
+msgid "Error starting the module '%s'."
 msgstr "Ошибка запуска модуля '%s'."
 
-msgid "Stop subsystem."
+msgid "Subsystem stopping."
 msgstr "Останов подсистемы."
 
 #, c-format
-msgid "Stop module '%s' error."
+msgid "Error stopping the module '%s'."
 msgstr "Ошибка останова модуля '%s'."
 
 msgid "Subsystem: "
@@ -1575,23 +1583,23 @@ msgstr "Подсистема: "
 msgid "Module"
 msgstr "Модуль"
 
-msgid "Empty Station"
-msgstr "Пустая станция"
+msgid "Initial Station"
+msgstr "Первичная станция"
 
 #, c-format
-msgid "System counters on exit: %s"
-msgstr "Системные счётчики при выходе: %s"
+msgid "Program counters at the exit time: %s"
+msgstr "Счётчики программы при выходе: %s"
 
 #, c-format
 msgid ""
-"Changing work directory to '%s' error: %s. Perhaps current directory already "
-"set correct to '%s'."
+"Error changing working directory in '%s': %s. Perhaps the current directory "
+"is already correctly set to %s'."
 msgstr ""
 "Ошибка изменения рабочей директории в '%s': %s. Возможно текущая директория "
 "уже корректно установлена в '%s'."
 
 #, c-format
-msgid "Read only access to file '%s'."
+msgid "Read-only access to file '%s'."
 msgstr "Доступ только на чтение к файлу '%s'."
 
 msgid "day"
@@ -1651,42 +1659,50 @@ msgid ""
 "===========================================================================\n"
 "==================== Generic options ======================================\n"
 "===========================================================================\n"
-"-h, --help\t\tInfo message about the program options.\n"
-"    --lang=<LANG>\tThe station language, in view \"uk_UA.UTF-8\".\n"
-"    --config=<file>\tThe station configuration file.\n"
-"    --station=<id>\tThe station identifier.\n"
-"    --statName=<name>\tThe station name.\n"
-"    --demon, --daemon\tStart into the daemon mode.\n"
-"    --pidFile=<file>\tThe file for the programm process ID place here.\n"
+"-h, --help\t\tThis help text about the program command-line options and "
+"configuration file parameters.\n"
+"    --lang=<LANG>\tStation language, in the view \"en_US.UTF-8\".\n"
+"    --config=<file>\tStation configuration file.\n"
+"    --station=<id>\tStation identifier.\n"
+"    --statName=<name>\tStation name.\n"
+"    --modDir=<path>\tDirectories with the modules, separated by ';', they "
+"can include a files' template at the end.\n"
+"    --messLev=<level>\tLevel of the processing messages (0-7).\n"
+"    --log=<direct>\tDirect messages to, by the bitfield:\n"
+"\t\t\t  0x1 - syslogd;\n"
+"\t\t\t  0x2 - stdout;\n"
+"\t\t\t  0x4 - stderr;\n"
+"\t\t\t  0x8 - the messages archive.\n"
+"    --consoleCharSet={CharSet} Forcing to the console <CharSet> for the "
+"console messages, by default it is system one.\n"
+"    --demon, --daemon\tRun in the daemon mode.\n"
+"    --pidFile=<file>\tFile for the program process ID placing here.\n"
 "    --coreDumpAllow\tSet the limits for a core dump creation allow on the "
 "crash.\n"
-"    --messLev=<level>\tProcess messages <level> (0-7).\n"
-"    --log=<direct>\tDirect messages to, by bitfield:\n"
-"\t\t\t  0x1 - syslogd;\n"
-"\t\t\t  0x2 - stdout;\n"
-"\t\t\t  0x4 - stderr;\n"
-"\t\t\t  0x8 - the messages archive.\n"
-"----------- The config-file station '%s' parameters -----------\n"
+"    --permCrtFiles={perm} Permissions of the created OpenSCADA files, by "
+"default it is 0755 (RWXRW_RW_).\n"
+"----------- Station '%s(%s)' settings in the configuration file -----------\n"
 "StName     <nm>\tStation name.\n"
-"WorkDB     <Type.Name> Work DB (type and name).\n"
-"WorkDir    <path>\tWork directory.\n"
+"WorkDB     <Type.Name> Working DB (<type> and <name>).\n"
+"WorkDir    <path>\tWorking directory.\n"
 "IcoDir     <path>\tIcons directory.\n"
-"ModDir     <path>\tDirectories with modules, separated by ';', they can "
-"include a files' template into the end.\n"
-"MessLev    <level>\tMessages <level> (0-7).\n"
-"LogTarget  <direction> Direct messages to, by bitfield:\n"
+"ModDir     <path>\tDirectories with the modules, separated by ';', they can "
+"include a files' template at the end.\n"
+"MessLev    <level>\tLevel of the processing messages (0-7).\n"
+"LogTarget  <direction> Direct messages to, by the bitfield:\n"
 "\t\t\t  0x1 - syslogd;\n"
 "\t\t\t  0x2 - stdout;\n"
 "\t\t\t  0x4 - stderr;\n"
 "\t\t\t  0x8 - the messages archive.\n"
-"Lang       <lang>\tWork-internal language, like \"en_US.UTF-8\".\n"
-"Lang2CodeBase <lang>\tBase language for variable texts translation, two "
-"symbols code.\n"
-"MainCPUs   <list>\tMain used CPUs list (separated by ':').\n"
-"ClockRT    <0|1>\tSet for use REALTIME (else MONOTONIC) clock, some "
-"problematic with the system clock modification.\n"
+"Lang       <lang>\tStation language, in the view \"uk_UA.UTF-8\".\n"
+"Lang2CodeBase <lang>\tBase language for variable texts translation, in the "
+"two symbols code.\n"
+"MainCPUs   <list>\tMain list of the using CPUs, separated by ':'.\n"
+"ClockRT    <0|1>\tSets the clock source to use to REALTIME (otherwise "
+"MONOTONIC), which is problematic one at the system clock modification.\n"
 "SaveAtExit <0|1>\tSave the program at exit.\n"
-"SavePeriod <sec>\tSave the program period.\n"
+"SavePeriod <sec>\tPeriod of the program saving, in seconds. Set zero to "
+"disable.\n"
 "\n"
 msgstr ""
 "***************************************************************************\n"
@@ -1701,17 +1717,24 @@ msgstr ""
 "    --config=<файл>\tКонфигурационный файл станции.\n"
 "    --station=<ид>\tИдентификатор станции.\n"
 "    --statName=<имя>\tИмя станции.\n"
-"    --demon, --daemon\tЗапуск в режиме демона.\n"
-"    --pidFile=<файл>\tфайл для помещения ID процесса программы сюда.\n"
-"    --coreDumpAllow\tУстановить ограничения для разрешения генерации дампа "
-"памяти при крушении программы.\n"
-"    --messLev=<уров>\tОбрабатываемый уровень сообщений (0-7).\n"
+"    --modDir=<path>\tДиректории модулей, разделённые ';', и в конце могут "
+"содержать шаблон файлов.\n"
+"    --messLev=<уров>\tУровень обробатываемых сообщений (0-7).\n"
 "    --log=<направл.>\tНаправление сообщений в, по битовому полю:\n"
 "\t\t\t  0x1 - системный логер (syslogd);\n"
 "\t\t\t  0x2 - стандартный выход (stdout);\n"
 "\t\t\t  0x4 - стандартный выход ошибок (stderr);\n"
 "\t\t\t  0x8 - архив сообщений.\n"
-"-------------- Параметры станции '%s' в конфигурационном файле ------------\n"
+"    --consoleCharSet={CharSet} Принудительно установить кодовый набор "
+"символов консоли в <CharSet>, по умолчанию он системный.\n"
+"    --demon, --daemon\tЗапуск в режиме демона.\n"
+"    --pidFile=<файл>\tфайл для помещения ID процесса программы сюда.\n"
+"    --coreDumpAllow\tУстановить ограничения для разрешения генерации дампа "
+"памяти при крушении программы.\n"
+"    --permCrtFiles={права} Права создаваемых OpenSCADA файлов, по умолчанию "
+"это 0755 (RWXRW_RW_).\n"
+"-------------- Параметры станции '%s(%s)' в конфигурационном файле "
+"------------\n"
 "StName     <имя>\tИмя станции.\n"
 "WorkDB     <Тип.Имя>\tРабочая БД (тип и имя).\n"
 "WorkDir    <path>\tРабочая директория.\n"
@@ -1736,71 +1759,67 @@ msgstr ""
 "\n"
 
 #, c-format
-msgid "Config-file '%s' error: %s"
+msgid "Error the configuration file '%s': %s"
 msgstr "Ошибка конфигурационного файла '%s': %s"
 
 #, c-format
-msgid "Config-file '%s' load error."
+msgid "Error loading the configuration file '%s'."
 msgstr "Ошибка загрузки конфигурационного файла '%s'."
 
 #, c-format
 msgid ""
-"Station '%s' is not present in the config-file. Using configuration for "
-"station '%s'!"
+"Station '%s' is not in the configuration file. The configuration of the "
+"station '%s' has been used!"
 msgstr ""
 "Станция '%s' отсутствует в конфигурационном файле. Использована конфигурация "
 "станции '%s'!"
 
 #, c-format
-msgid "Configuration '%s' error!"
+msgid "Error configuration '%s'!"
 msgstr "Ошибка конфигурации '%s'!"
 
 #, c-format
-msgid "Load config-file error: %s"
-msgstr "Ошибка загрузки конфигурационного файла: %s"
+msgid "Error writing the configuration file '%s': %s"
+msgstr "Ошибка записи в конфигурационный файл '%s': %s"
 
-#, c-format
-msgid "Configuration '%s' write error. %s"
-msgstr "Ошибка конфигурационного файла '%s': %s"
+msgid "Loading."
+msgstr "Загрузка."
 
-msgid "Load!"
-msgstr "Загрузка!"
-
-msgid "No one module is loaded. Your configuration is broken!"
+msgid "No module has been loaded, your configuration is likely to be broken!"
 msgstr "Ни одного модуля не загружено. Ваша конфигурация сломана!"
 
 #, c-format
-msgid "Error load subsystem '%s'."
+msgid "Error loading the subsystem '%s'."
 msgstr "Ошибка загрузки подсистемы '%s'."
 
-msgid "Save!"
-msgstr "Сохранение!"
+msgid "Saving."
+msgstr "Сохранение."
 
-msgid "Starting ..."
-msgstr "Запуск ..."
+msgid "Starting."
+msgstr "Запуск."
 
 #, c-format
-msgid "Error start subsystem '%s'."
+msgid "Error starting the subsystem '%s'."
 msgstr "Ошибка запуска подсистемы '%s'."
 
-msgid "Final starting!"
+msgid "Running is complete!"
 msgstr "Запуск завершён!"
 
-msgid "Stopping ..."
-msgstr "Останов ..."
+msgid "Stopping."
+msgstr "Останов."
 
 #, c-format
-msgid "Error for subsystem '%s' stopping."
+msgid "Error stopping the subsystem '%s'."
 msgstr "Ошибка останова подсистемы '%s'."
 
-msgid "Termination signal is received. Stop the station!"
+msgid "Termination signal is received. Stopping the program!"
 msgstr "Получен сигнал прерывания. Остановка станции!"
 
 msgid "Floating point exception is caught!"
 msgstr "Исключение операции с плавающей точкой!"
 
 #, c-format
-msgid "Free child process %d!"
+msgid "Close the process %d of the child!"
 msgstr "Закрытие дочернего процесса %d!"
 
 msgid "Segmentation fault signal!"
@@ -1816,31 +1835,31 @@ msgstr "Неизвестный сигнал %d!"
 msgid "Timeouted !!!"
 msgstr "Превышение времени ожидания !!!"
 
-msgid "Wait event..."
+msgid "Waiting for event ..."
 msgstr "Ожидание события..."
 
 #, c-format
-msgid "Task '%s' already present!"
+msgid "Task '%s' is already present!"
 msgstr "Задача '%s' уже присутствует!"
 
 #, c-format
 msgid ""
-"No permission for create a real-time policy for '%s'. Default thread is "
+"There is no access to create a real-time task for '%s'. An ordinal task is "
 "created!"
 msgstr ""
-"Нет доступа для создания политики реального времени для '%s'. Создан поток "
-"по умолчанию!"
+"Нет доступа для создания политики реального времени для '%s'. Создан обычный "
+"поток!"
 
 #, c-format
-msgid "Task creation error %d."
+msgid "Error %d creation a task."
 msgstr "Ошибка создания задачи %d."
 
 #, c-format
-msgid "Task '%s' start timeouted!"
-msgstr "Задача '%s' не запущена!"
+msgid "Timeout of starting the task '%s'!"
+msgstr "Исчерпано время запуска задачи '%s'!"
 
 #, c-format
-msgid "Task '%s' timeouted !!!"
+msgid "Timeout of the task '%s' !!!"
 msgstr "Исчерпано время задачи '%s' !!!"
 
 #, c-format
@@ -1848,21 +1867,21 @@ msgid "Task '%s' is not stopped!"
 msgstr "Задача '%s' не остановлена!"
 
 #, c-format
-msgid "Wait event of task '%s' ..."
+msgid "Waiting for an event of the task '%s' ..."
 msgstr "Ожидание события задачи '%s' ..."
 
 msgid "It isn't OpenSCADA task!"
 msgstr "Это не задача OpenSCADA!"
 
 #, c-format
-msgid "Task %u unexpected terminated by exception."
+msgid "Task %u unexpected terminated by an exception."
 msgstr "Задача %u неожиданно прервана исключением."
 
 #, c-format
 msgid "System clock changed to '%s'. Correction the cron '%s' target!"
 msgstr "Системные часы изменены в '%s'. Коррекция цели крона '%s'!"
 
-msgid "1:Request is not object!"
+msgid "1:Request is not an object!"
 msgstr "1:Запрос не объект!"
 
 #, c-format
@@ -1894,8 +1913,9 @@ msgid "Main CPUs set"
 msgstr "Основной набор процессоров"
 
 msgid ""
-"For using CPU set write processors numbers string separated by symbol ':'.\n"
-"CPU numbers started from 0."
+"To set up the processors you use, write a row of numbers separated by a ':' "
+"character.\n"
+"Processor numbers start at 0."
 msgstr ""
 "Для указания используемых процессоров записывайте строку номеров, "
 "разделённых символом ':'.\n"
@@ -1907,7 +1927,7 @@ msgstr "Часы планирования задач"
 msgid "Internal charset"
 msgstr "Внутренняя кодировка"
 
-msgid "Config-file"
+msgid "Configuration file"
 msgstr "Конфигурационный файл"
 
 msgid "Work directory"
@@ -1937,7 +1957,7 @@ msgstr "Сохранить программу при выходе"
 msgid "Select for the program automatic saving to DB on exit."
 msgstr "Выбрать для автоматического сохранения программы в БД при выходе."
 
-msgid "Save the program period"
+msgid "Period the program saving"
 msgstr "Период сохранения программы"
 
 msgid ""
@@ -1983,15 +2003,6 @@ msgstr "Подсистемы"
 msgid "Tasks"
 msgstr "Задачи"
 
-msgid ""
-"For an using CPU set write processors numbers string separated by symbol "
-"':'.\n"
-"CPU numbers started from 0."
-msgstr ""
-"Для указания используемых процессоров записывайте строку номеров, "
-"разделённых символом ':'.\n"
-"Номера процессоров начинаются с 0."
-
 msgid "Thread"
 msgstr "Поток"
 
@@ -2027,7 +2038,8 @@ msgstr "Закончен. "
 
 #, c-format
 msgid ""
-"Last: %s. Consume: %3.1f[%3.1f]%% (%s from %s). Lag: %s[%s]. Cycles lost: %g."
+"Last: %s. Consumed: %3.1f[%3.1f]%% (%s from %s). Lag: %s[%s]. Lost cycles: "
+"%g."
 msgstr ""
 "Посл.: %s. Использ. %3.1f[%3.1f]%% (%s из %s). Отстав.: %s[%s]. Потеря "
 "циклов: %g."
@@ -2045,26 +2057,26 @@ msgid "Style \"batch\""
 msgstr "Стиль \"batch\""
 
 #, c-format
-msgid "No present task '%s'."
-msgstr "Отсутствует задача '%s'."
+msgid "The task '%s' is missing."
+msgstr "Задача '%s' отсутствует."
 
-msgid "Set not allowed processors try."
+msgid "Attempt to set missing processor."
 msgstr "Попытка установки отсутствующего процессора."
 
-msgid "CPUs set for the thread error."
+msgid "Error installing processors for the thread."
 msgstr "Ошибка установки процессоров для потока."
 
 msgid "Redundant"
 msgstr "Резервирование"
 
-msgid "Preferable run"
+msgid "Preference for running"
 msgstr "Предпочтение исполнения"
 
 #, c-format
-msgid "Start controller '%s' error."
-msgstr "Ошибка запуска контроллера '%s'."
+msgid "Error starting the controller '%s'."
+msgstr "Ошибка подключения нового контроллера %s."
 
-msgid "Id of parameter type error!"
+msgid "Error ID of the parameter type!"
 msgstr "Ошибка идентификатора типа параметра!"
 
 #, c-format
@@ -2072,11 +2084,10 @@ msgid "Parameter type '%s' is not present."
 msgstr "Тип параметра '%s' отсутствует."
 
 #, c-format
-msgid "Error attach new controller %s."
-msgstr "Ошибка подключения нового контроллера %s."
+msgid "Error attaching the new controller '%s'."
+msgstr "Ошибка подключения нового контроллера '%s'."
 
-msgid ""
-"Module doesn't support the function for compilation programming languages."
+msgid "Module does not support compilation of the programming language."
 msgstr "Модуль не поддерживает функцию компиляции языков программирования."
 
 msgid "Transports"
@@ -2088,7 +2099,7 @@ msgstr "Тип транспорта"
 msgid "Transport protocol"
 msgstr "Транспортный протокол"
 
-msgid "Open user"
+msgid "User that opens"
 msgstr "Открывающий пользователь"
 
 msgid "Transport"
@@ -2097,38 +2108,40 @@ msgstr "Транспорт"
 msgid "Transport address"
 msgstr "Адрес транспорта"
 
-msgid "Request user"
-msgstr "Пользователь запроса"
+msgid "User of the requests"
+msgstr "Пользователь запросов"
 
-msgid "Request password"
-msgstr "Пароль запроса"
+msgid "Password of the requests"
+msgstr "Пароль запросов"
 
-msgid "Uprising level"
+msgid "Level of lifting"
 msgstr "Уровень поднятия"
 
-msgid "Search and create new input transports error."
+msgid "Error finding and creating new input transports."
 msgstr "Ошибка поиска и создания новых входных транспортов."
 
-msgid "Search and load external hosts DB error."
+msgid "Error finding and creating new output transports."
+msgstr "Ошибка поиска и создания новых выходных транспортов."
+
+msgid "Error finding and loading external hosts."
 msgstr "Ошибка поиска и загрузки БД внешних хостов."
 
 #, c-format
-msgid "Start input transport '%s' error."
-msgstr "Ошибка запуска входящего транспорта '%s'."
+msgid "Error starting the input transport '%s'."
+msgstr "Ошибка запуска входного транспорта '%s'."
 
 #, c-format
-msgid "Start output transport '%s' error."
-msgstr "Ошибка запуска исходящего транспорта '%s'."
+msgid "Error starting the output transport '%s'."
+msgstr "Ошибка запуска выходного транспорта '%s'."
 
 #, c-format
-msgid "Stop input transport '%s' error."
-msgstr "Ошибка останова входящего транспорта '%s'."
+msgid "Error stopping the input transport '%s'."
+msgstr "Ошибка останова входного транспорта '%s'."
 
 #, c-format
-msgid "Stop output transport '%s' error."
-msgstr "Ошибка останова исходящего транспорта '%s'."
+msgid "Error stopping the output transport '%s'."
+msgstr "Ошибка останова выходного транспорта '%s'."
 
-#, c-format
 msgid ""
 "======================= Subsystem \"Transports\" options ==================\n"
 "\n"
@@ -2137,7 +2150,7 @@ msgstr ""
 "\n"
 
 #, c-format
-msgid "Remote host '%s' error!"
+msgid "Error the remote host '%s'!"
 msgstr "Ошибка удалённого хоста '%s'!"
 
 msgid "External hosts poll"
@@ -2149,7 +2162,7 @@ msgstr "Пользов.;Системн.;Пользов. и Системн."
 msgid "New external host"
 msgstr "Новый внешний хост"
 
-msgid "Uprising hosts not allowed here for its management!"
+msgid "Lifted hosts are not available for control here!"
 msgstr "Поднятые хосты недоступны для контроля здесь!"
 
 msgid "Input transport"
@@ -2157,6 +2170,9 @@ msgstr "Входной транспорт"
 
 msgid "Output transport"
 msgstr "Выходной транспорт"
+
+msgid "Started. "
+msgstr "Запущен. "
 
 msgid "Stoped. "
 msgstr "Остановлен. "
@@ -2184,7 +2200,7 @@ msgid "Established: %s. "
 msgstr "Установлено: %s. "
 
 #, c-format
-msgid "Transport protocol '%s' no present"
+msgid "Transport protocol '%s' is missing"
 msgstr "Транспортный протокол '%s' отсутствует"
 
 msgid "Output transport: "
@@ -2252,7 +2268,7 @@ msgstr "-выбор"
 
 #, c-format
 msgid ""
-"Parameter's attribute\n"
+"Parameter attribute\n"
 "  ID: '%s'\n"
 "  Name: '%s'\n"
 "  Type: '%s'\n"
@@ -2273,7 +2289,7 @@ msgstr ""
 
 msgid ""
 "\n"
-"  Selected names: "
+"  Names for selection: "
 msgstr ""
 "\n"
 "  Выбираемые имена: "
@@ -2281,32 +2297,32 @@ msgstr ""
 msgid "Archiving"
 msgstr "Архивация"
 
-msgid "Not select type!"
+msgid "Not selective type!"
 msgstr "Не выборочный тип!"
 
 #, c-format
-msgid "Write value to archive error: %s"
+msgid "Error writing a value to the archive: %s"
 msgstr "Ошибка записи значения в архив: %s"
 
-msgid "Attribute doesn't have archive"
+msgid "Attribute does not have an archive"
 msgstr "Атрибут не имеет архива"
 
-msgid "Too big string forced to the not STL string (> 30 MB)!"
+msgid "Very large string for non STL string (> 30 MB)!"
 msgstr "Очень большая строка для не STL строки (> 30 МБ)!"
 
 #, c-format
-msgid "Memory alloc for big string length (%d) error!"
+msgid "Error allocating memory for large string (%d)!"
 msgstr "Ошибка выделения памяти для строки большого размера (%d)!"
 
-msgid "Double disconnection try!"
+msgid "Attempt to double disconnect!"
 msgstr "Попытка двойного отключения!"
 
 #, c-format
-msgid "Deletion child '%d' error."
+msgid "Error deleting the child '%d'."
 msgstr "Ошибка удаления потомка '%d'."
 
 #, c-format
-msgid "Child '%d' is not allow."
+msgid "Child '%d' is not allowed."
 msgstr "Потомок '%d' не доступен."
 
 #, c-format
@@ -2314,14 +2330,14 @@ msgid "Child %s:%d is not found!"
 msgstr "Потомок %s:%d не обнаружен!"
 
 #, c-format
-msgid "2:Open file '%s' error: %s"
+msgid "2:Error opening the file '%s': %s"
 msgstr "2:Ошибка открытия файла '%s': %s"
 
 #, c-format
-msgid "3:Load file '%s' error."
+msgid "3:Error loading the file '%s'."
 msgstr "3:Ошибка загрузки файла '%s'."
 
-msgid "The object don't attached to node of OpenSCADA tree."
+msgid "Object is not connected to a node of the OpenSCADA tree."
 msgstr "Объект не подключен к узлу дерева OpenSCADA."
 
 #, c-format
@@ -2329,7 +2345,7 @@ msgid "Child %d is not present."
 msgstr "Потомок %d отсутствует."
 
 #, c-format
-msgid "Child with attribut %s=%s is not present."
+msgid "Child with the attribute %s=%s is not present."
 msgstr "Потомок с атрибутом %s=%s отсутствует."
 
 #, c-format
@@ -2337,7 +2353,7 @@ msgid "Unexpected end. Pos: %d"
 msgstr "Неожиданный конец. Поз: %d"
 
 #, c-format
-msgid "No comment block end. Pos: %d"
+msgid "No comment block completion. Pos: %d"
 msgstr "Нет окончания блока комментария. Поз: %d"
 
 #, c-format
@@ -2353,7 +2369,7 @@ msgid "Unexpected or error end tag. Pos: %d"
 msgstr "Неожиданный или ошибочный тег завершения. Поз: %d"
 
 #, c-format
-msgid "Unfinished start comment or unknown block. Pos: %d"
+msgid "Unfinished start of comment or unknown block. Pos: %d"
 msgstr "Незавершённое начало комментария или неизвестный блок. Поз: %d"
 
 #, c-format
@@ -2365,21 +2381,21 @@ msgid "Unfinished attribute. Pos: %d"
 msgstr "Незавершённый атрибут. Поз: %d"
 
 #, c-format
-msgid "Entity error. Pos: %d"
+msgid "Error entity. Pos: %d"
 msgstr "Ошибка сущности. Поз: %d"
 
 #, c-format
 msgid "Unknown entity '%s'. Pos: %d"
 msgstr "Неизвестная сущность '%s'. Поз: %d"
 
-msgid "Message archive no support!"
+msgid "Message archiver is not supported!"
 msgstr "Архив сообщений не поддерживается!"
 
-msgid "Value archive no support!"
+msgid "Value archiver is not supported!"
 msgstr "Архив значений не поддерживается!"
 
 #, c-format
-msgid "Function '%s' no support!"
+msgid "Function '%s' is not supported!"
 msgstr "Функция '%s' не поддерживается!"
 
 #, c-format
@@ -2387,7 +2403,7 @@ msgid "%s: No function set!"
 msgstr "%s: Функция не установлена!"
 
 #, c-format
-msgid "%s: Id or IO %d error for function '%s'!"
+msgid "%s: Error with ID or IO %d for the function '%s'!"
 msgstr "%s: Ошибка идентификатора или IO %d для функции '%s'!"
 
 msgid "Open Supervisory Control And Data Acquisition"
@@ -2396,8 +2412,8 @@ msgstr "Открытая система диспетчерского контр�
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Input transport no support!"
+msgid "Input transport is not supported!"
 msgstr "Входной транспорт не поддерживается!"
 
-msgid "Output transport no support!"
+msgid "Output transport is not supported!"
 msgstr "Выходных транспорт не поддерживается!"

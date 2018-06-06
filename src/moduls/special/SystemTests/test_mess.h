@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_mess.h
 /***************************************************************************
- *   Copyright (C) 2005-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,13 +35,13 @@ class TestMess : public TFunction
 	TestMess( ) : TFunction("Mess",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
-	    ioAdd( new IO("arhtor",_("Archivator"),IO::String,IO::Default,"FSArch.StatErrors") );
-	    ioAdd( new IO("categ",_("Messages category pattern"),IO::String,IO::Default) );
+	    ioAdd( new IO("arhtor",_("Archiver"),IO::String,IO::Default,"FSArch.StatErrors") );
+	    ioAdd( new IO("categ",_("Message category template"),IO::String,IO::Default) );
 	    ioAdd( new IO("depth",_("Messages depth, seconds"),IO::Integer,IO::Default,"10") );
 	}
 
 	string name( )	{ return _("Messages"); }
-	string descr( )	{ return _("Messages archive test. Periodic read new messages from archive, for selected archivator."); }
+	string descr( )	{ return _("Test the archive of messages. Periodically reads new messages from the archive for the specified archiver."); }
 
 	void calc( TValFunc *val )
 	{

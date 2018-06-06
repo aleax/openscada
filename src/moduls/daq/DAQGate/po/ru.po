@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.DAQGate translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-28 12:38+0200\n"
+"POT-Creation-Date: 2018-06-05 09:53+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -22,40 +22,39 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allows you to perform the locking of the data sources of the remote "
-"OpenSCADA stations in the local ones."
+"Allows to locate data sources of the remote OpenSCADA stations to local ones."
 msgstr ""
 "Позволяет выполнять шлюзование источников данных удалённых OpenSCADA станций "
 "на локальные."
 
-msgid "Parameters cache table"
+msgid "Table of parameters cache"
 msgstr "Таблица кеша параметров"
 
 msgid "Gather data period (s)"
 msgstr "Период сбора данных (с)"
 
 msgid "Acquisition schedule"
-msgstr "Планирование опроса"
+msgstr "Планирование сбора"
 
-msgid "Gather task priority"
-msgstr "Уровень приоритета задачи сбора данных"
+msgid "Priority of the acquisition task"
+msgstr "Приоритет задачи сбора данных"
 
-msgid "Restore timeout, seconds"
+msgid "Timeout of restore, seconds"
 msgstr "Интервал восстановления, секунд"
 
-msgid "Restore data depth time (hour)"
-msgstr "Глубина времени восстановления данных (часов)"
+msgid "Depth time of restore data, hours"
+msgstr "Глубина времени восстановления данных, часов"
 
-msgid "Sync inter remote station period, seconds"
+msgid "Synchronization time with the remote station, seconds"
 msgstr "Периодичность синхронизации с удалённой станцией, секунд"
 
 msgid "Remote stations list"
 msgstr "Список удалённых станций"
 
-msgid "Remote cotrollers and parameters list"
-msgstr "Список удалённых контроллеров и параметров"
+msgid "List of the remote controller objects and parameters"
+msgstr "Список удалённых объектов контроллеров и параметров"
 
-msgid "Allow automatic remove parameters and attributes"
+msgid "Allow the automatic removal of parameters and attributes"
 msgstr "Разрешать автоматическое удаление параметров и атрибутов"
 
 msgid "Standard"
@@ -67,60 +66,60 @@ msgstr "Адрес удалённого параметра"
 msgid "Attributes configuration cache"
 msgstr "Кеш конфигурации атрибутов"
 
-msgid "Presenting for stations"
+msgid "Presence at stations"
 msgstr "Присутствие по станциям"
 
-msgid "Call now. "
-msgstr "Вызов сейчас. "
+msgid "Acquisition. "
+msgstr "Сбор. "
 
 #, c-format
-msgid "Call by period: %s. "
-msgstr "Вызовы с периодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Сбор с периодом: %s. "
 
 #, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Следующий вызов по cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Следующий сбор по cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s[%s]. "
 msgstr "Затрачено времени: %s[%s]. "
 
 #, c-format
-msgid "Station '%s' error, restoring in %.3g s."
+msgid "Error the station '%s', restoring in %.3g s."
 msgstr "Ошибка станции '%s', восстановление через %.6g с."
 
 #, c-format
-msgid "Requests to station '%s': %.6g."
+msgid "Requests to the station '%s': %.6g."
 msgstr "Запросов к станции '%s': %.6g."
 
 #, c-format
-msgid "DAQ.%s.%s: connect to data source: %s."
+msgid "DAQ.%s.%s: connecting to the data source: %s."
 msgstr "DAQ.%s.%s: подключение к источнику данных: %s."
 
 msgid "STOP"
 msgstr "ОСТАНОВЛЕН"
 
-msgid "10:Data is not allowed."
+msgid "10:Data not available."
 msgstr "10:Данные не доступны."
 
 msgid "OK"
 msgstr "НОРМА"
 
 #, c-format
-msgid "DAQ.%s.%s: connect to data source '%s': %s."
+msgid "DAQ.%s.%s: connecting to the data source '%s': %s."
 msgstr "DAQ.%s.%s: подключение к источнику данных '%s': %s."
 
 #, c-format
 msgid "11:Station missed '%s'."
 msgstr "11:Станция отсутствует '%s'."
 
-msgid "Zero for disable archive access."
-msgstr "Ноль для отключения доступа к архивам."
+msgid "Zero to disable the access to the remote archive."
+msgstr "Ноль для отключения доступа к удалённому архиву."
 
-msgid "Zero for disable periodic sync."
+msgid "Zero to disable to the periodic sync."
 msgstr "Ноль для отключения периодической синхронизации."
 
-msgid "Remote OpenSCADA stations' identifiers list used into it controller."
+msgid "List of remote OpenSCADA station IDs used in this controller."
 msgstr ""
 "Список идентификаторов удалённых OpenSCADA станций, используемых в этом "
 "контроллере."
@@ -128,18 +127,18 @@ msgstr ""
 msgid "Append station"
 msgstr "Добавление станции"
 
-msgid "Go to remote stations list configuration"
+msgid "Go to configuration of the remote stations list"
 msgstr "Переход к конфигурации перечня удалённых станций"
 
 msgid ""
-"Remote OpenSCADA full controller's or separated controller's parameters "
-"list. Address example:\n"
-"  System.AutoDA - for controller;\n"
-"  System.AutoDA.UpTimeStation - for controller's parameter."
+"List of remote OpenSCADA full controller objects or individual controller "
+"parameters. Address example:\n"
+"  System.AutoDA - for a controller object;\n"
+"  System.AutoDA.UpTimeStation - for a controller parameter."
 msgstr ""
-"Список удалённых OpenSCADA полных контроллеров или отдельных параметров "
-"контроллеров. Пример адреса:\n"
-"  System.AutoDA - для контроллера;\n"
+"Список удалённых OpenSCADA полных объектов контроллеров или отдельных "
+"параметров контроллеров. Пример адреса:\n"
+"  System.AutoDA - для объекта контроллера;\n"
 "  System.AutoDA.UpTimeStation - для параметра контроллера."
 
 msgid "Parameters tree"
@@ -160,8 +159,8 @@ msgstr "Тип"
 msgid "Enabled"
 msgstr "Включен"
 
-msgid "Id"
-msgstr ""
+msgid "Identifier"
+msgstr "Идентификатор"
 
 msgid "Name"
 msgstr "Имя"

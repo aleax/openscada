@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -87,6 +87,7 @@ void Project::postEnable( int flag )
 
 void Project::preDisable( int flag )
 {
+    if(mHerit.size())	throw TError(nodePath().c_str(), _("The project '%s' is used now by %d sessions!"), id().c_str(), mHerit.size());
     if(enable()) setEnable(false);
 }
 
@@ -158,7 +159,7 @@ void Project::load_( TConfig *icfg )
 
     if(!SYS->chkSelDB(DB())) throw TError();
 
-    mess_debug(nodePath().c_str(), _("Load project."));
+    mess_debug(nodePath().c_str(), _("Loading the project."));
 
     if(icfg) *(TConfig*)this = *icfg;
     else SYS->db().at().dataGet(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ/", *this);
@@ -206,6 +207,8 @@ void Project::load_( TConfig *icfg )
 
 void Project::save_( )
 {
+    if(enableByNeed)	return;
+
     SYS->db().at().dataSet(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this);
 
     //Check for need copy mime data and sessions data to other DB and same copy
@@ -255,7 +258,7 @@ void Project::setEnable( bool val )
 
     MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
 
-    mess_debug(nodePath().c_str(),val ? _("Enable project.") : _("Disable project."));
+    mess_debug(nodePath().c_str(),val ? _("Enabling the project.") : _("Disabling the project."));
 
     vector<string> f_lst;
     list(f_lst);
@@ -269,7 +272,8 @@ void Project::setEnable( bool val )
 void Project::add( const string &id, const string &name, const string &orig )
 {
     if(present(id)) return;
-    chldAdd(mPage, new Page(id,orig));
+    //chldAdd(mPage, new Page(id,orig));
+    add(new Page(id,orig));
     at(id).at().setName(name);
 }
 
@@ -439,6 +443,52 @@ bool Project::stlPropSet( const string &pid, const string &vl, int sid )
     return true;
 }
 
+void Project::heritReg( Session *s )
+{
+    //Search for already registered session-heritator
+    MtxAlloc res(dataRes(), true);
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(&mHerit[iH].at() == s)	return;
+    mHerit.push_back(AutoHD<Session>(s));
+}
+
+void Project::heritUnreg( Session *s )
+{
+    //Search the session-heritator
+    MtxAlloc res(dataRes(), true);
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(&mHerit[iH].at() == s) {
+	    mHerit.erase(mHerit.begin()+iH);
+	    return;
+	}
+}
+
+void Project::pageEnable( const string &pg, bool vl )
+{
+    //Process the path
+    int pL = 0;
+    string pPg, pPath;
+    for(int off = 0; (pPg=TSYS::pathLev(pg,0,false,&off)).size() && off < pg.size(); pL++)
+	if(pL) pPath += "/"+pPg;
+    if(pPg.compare(0,3,"pg_") == 0)	pPg = pPg.substr(3);
+
+    //Call the connected sessions for add-remove a page
+    MtxAlloc res(dataRes(), true);
+
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(pL > 1) {
+	    AutoHD<SessPage> sP = mHerit[iH].at().nodeAt(pPath, 0, 0, 0, true);
+	    if(!sP.freeStat() && vl && !sP.at().pagePresent(pPg)) {
+		sP.at().pageAdd(pPg, pg);
+		sP.at().pageAt(pPg).at().setEnable(true);
+	    }
+	}
+	else if(vl && !mHerit[iH].at().present(pPg)) {
+	    mHerit[iH].at().add(pPg, pg);
+	    mHerit[iH].at().at(pPg).at().setEnable(true);
+	}
+}
+
 void Project::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
@@ -453,10 +503,11 @@ void Project::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:prj_"+id()).c_str(),
-		    "help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
+		    "help",_("DB address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the main working DB, set '*.*'."));
+		ctrMkNode("fld",opt,-1,"/obj/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Configuration"))) {
-		ctrMkNode("fld",opt,-1,"/obj/cfg/id",_("Id"),R_R_R_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/id",_("Identifier"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/name",_("Name"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/descr",_("Description"),RWRWR_,"root",SUI_ID,3,"tp","str","cols","100","rows","3");
 		ctrMkNode("img",opt,-1,"/obj/cfg/ico",_("Icon"),RWRWR_,"root",SUI_ID,2,"v_sz","64","h_sz","64");
@@ -468,12 +519,12 @@ void Project::cntrCmdProc( XMLNode *opt )
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
 		ctrMkNode("fld",opt,-1,"/obj/cfg/o_a","",RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
-		ctrMkNode("fld",opt,-1,"/obj/cfg/per",_("Calculate period"),RWRWR_,"root",SUI_ID,2,"tp","dec",
+		ctrMkNode("fld",opt,-1,"/obj/cfg/per",_("Period of calculation"),RWRWR_,"root",SUI_ID,2,"tp","dec",
 		    "help",_("Project's session calculate period on milliseconds."));
 		ctrMkNode("fld",opt,-1,"/obj/cfg/runWin",_("Run window"),RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
 		    "sel_id","0;1;2","sel_list",_("Original size;Maximize;Full screen"));
 		ctrMkNode("fld",opt,-1,"/obj/cfg/keepAspRatio",_("Keep aspect ratio on scale"),RWRWR_,"root",SUI_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/obj/cfg/toEnByNeed",_("Enable by need"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/toEnByNeed",_("Enable as needed"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/page",_("Pages"))) {
@@ -482,7 +533,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
 	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id")) {
-		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Id"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Identifier"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/tp",_("Mime type"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/dt",_("Data"),RWRWR_,"root",SUI_ID,2,"tp","str","dest","data");
 	    }
@@ -491,10 +542,10 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    if(stlCurent() >= 0 && stlCurent() < stlSize()) {
 		ctrMkNode("fld",opt,-1,"/style/name",_("Name"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		if(ctrMkNode("table",opt,-1,"/style/props",_("Properties"),RWRWR_,"root",SUI_ID,2,"s_com","del","key","id")) {
-		    ctrMkNode("list",opt,-1,"/style/props/id",_("Id"),R_R_R_,"root",SUI_ID,1,"tp","str");
+		    ctrMkNode("list",opt,-1,"/style/props/id",_("Identifier"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("list",opt,-1,"/style/props/vl",_("Value"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		}
-		ctrMkNode("comm",opt,-1,"/style/erase",_("Erase"),RWRWR_,"root",SUI_ID);
+		ctrMkNode("comm",opt,-1,"/style/erase",_("Delete"),RWRWR_,"root",SUI_ID);
 	    }
 	}
 	return;
@@ -510,6 +561,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(fullDB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setFullDB(opt->text());
     }
+    else if(a_path == "/obj/st/use" && ctrChkNode(opt))	opt->setText(i2s(mHerit.size()));
     else if(a_path == "/obj/cfg/owner") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(owner());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setOwner(opt->text());
@@ -570,7 +622,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    if(present(vid)) throw TError(nodePath().c_str(), _("Page '%s' already present!"), vid.c_str());
+	    if(present(vid)) throw TError(nodePath().c_str(), _("Page '%s' is already present!"), vid.c_str());
 	    add(vid, opt->text());
 	    at(vid).at().setOwner(opt->attr("user"));
 	    at(vid).at().manCrt = true;
@@ -672,7 +724,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id","-1")->setText(_("No style"));
 	for(int iSt = 0; iSt < stlSize(); iSt++)
 	    opt->childAdd("el")->setAttr("id", i2s(iSt))->setText(TSYS::strSepParse(stlGet(iSt),0,';'));
-	if(stlSize() < 10) opt->childAdd("el")->setAttr("id","-2")->setText(_("Create new style"));
+	if(stlSize() < 10) opt->childAdd("el")->setAttr("id","-2")->setText(_("Create a new style"));
     }
     else if(a_path == "/style/name") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::strSepParse(stlGet(stlCurent()),0,';'));
@@ -787,10 +839,10 @@ void Page::postEnable( int flag )
 
     //Add main attributes
     if(flag&TCntrNode::NodeConnect) {
-	attrAdd(new TFld("pgOpen",_("Page: open state"),TFld::Boolean,TFld::NoFlag));
+	attrAdd(new TFld("pgOpen",_("Page: opened"),TFld::Boolean,TFld::NoFlag));
 	attrAdd(new TFld("pgNoOpenProc",_("Page: process not opened"),TFld::Boolean,TFld::NoFlag));
 	attrAdd(new TFld("pgGrp",_("Page: group"),TFld::String,TFld::NoFlag,"","","","",i2s(A_PG_GRP).c_str()));
-	attrAdd(new TFld("pgOpenSrc",_("Page: open source"),TFld::String,TFld::NoFlag,"","","","",i2s(A_PG_OPEN_SRC).c_str()));
+	attrAdd(new TFld("pgOpenSrc",_("Page: source of the opening"),TFld::String,TFld::NoFlag,"","","","",i2s(A_PG_OPEN_SRC).c_str()));
     }
 
     //Set owner key for this page
@@ -824,6 +876,13 @@ void Page::postDisable( int flag )
 	cEl.cfg("IDW").setS(path(),true);
 	SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", cEl);
     }
+}
+
+bool Page::cfgChange( TCfg &co, const TVariant &pc )
+{
+    if(co.name() == "PROC" && co.getS() != pc.getS()) procChange();
+    modif();
+    return true;
 }
 
 string Page::ico( ) const
@@ -1053,11 +1112,11 @@ void Page::setEnable( bool val, bool force )
     Widget::setEnable(val);
     if(val && !parent().freeStat() && parent().at().rootId() != "Box") {
 	Widget::setEnable(false);
-	throw TError(nodePath().c_str(),_("For page can use only Box-based widgets!"));
+	throw TError(nodePath().c_str(),_("As a page, only a box based widget can be used!"));
     }
 
     if(val) {
-	attrAdd(new TFld("pgOpen",_("Page: open state"),TFld::Boolean,TFld::NoFlag));
+	attrAdd(new TFld("pgOpen",_("Page: opened"),TFld::Boolean,TFld::NoFlag));
 	attrAdd(new TFld("pgNoOpenProc",_("Page: process not opened"),TFld::Boolean,TFld::NoFlag));
     }
 
@@ -1084,11 +1143,13 @@ void Page::setEnable( bool val, bool force )
 	    } catch(TError &err) { }
 	mParentNmPrev = parentNm();
     }
+
+    ownerProj()->pageEnable(path(), val);
 }
 
 void Page::wdgAdd( const string &wid, const string &name, const string &ipath, bool force )
 {
-    if(!isContainer())  throw TError(nodePath().c_str(),_("Widget is not container!"));
+    if(!isContainer())  throw TError(nodePath().c_str(),_("The widget is not a container!"));
     if(wdgPresent(wid)) return;
 
     bool toRestoreInher = false;
@@ -1145,7 +1206,7 @@ void Page::pageAdd( const string &id, const string &name, const string &orig )
 {
     if(pagePresent(id)) return;
     if(!(prjFlags()&(Page::Container|Page::Template)))
-	throw TError(nodePath().c_str(),_("Page is not container or template!"));
+	throw TError(nodePath().c_str(),_("Page is not a container or template!"));
     chldAdd(mPage, new Page(id,orig));
     pageAt(id).at().setName(name);
 }
@@ -1155,7 +1216,7 @@ void Page::pageAdd( Page *iwdg )
     if(pagePresent(iwdg->id()))	delete iwdg;
     if(!(prjFlags()&(Page::Container|Page::Template))) {
 	delete iwdg;
-	throw TError(nodePath().c_str(),_("Page is not container or template!"));
+	throw TError(nodePath().c_str(),_("Page is not a container or template!"));
     }
     else chldAdd(mPage,iwdg);
 }
@@ -1184,6 +1245,16 @@ string Page::resourceGet( const string &id, string *mime )
     if(mime) *mime = mimeType;
 
     return mimeData;
+}
+
+void Page::procChange( bool src )
+{
+    if(!src && proc().size()) return;
+
+    //Update heritors procedures
+    for(unsigned iH = 0; iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().procChange(false);
 }
 
 void Page::inheritAttr( const string &attr )
@@ -1264,12 +1335,12 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    vector<string> lst;
 	    pageList(lst);
-	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(pageAt(lst[i_f]).at().name());
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(pageAt(lst[iF]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
-	    if(pagePresent(vid)) throw TError(nodePath().c_str(), _("Page '%s' already present!"), vid.c_str());
+	    if(pagePresent(vid)) throw TError(nodePath().c_str(), _("Page '%s' is already present!"), vid.c_str());
 	    pageAdd(vid, opt->text());
 	    pageAt(vid).at().setOwner(opt->attr("user"));
 	    pageAt(vid).at().manCrt = true;
@@ -1326,7 +1397,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
 	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");
 	if(!(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut))) {
-	    if(!is_pl) throw TError(nodePath().c_str(),_("Variable is not link"));
+	    if(!is_pl) throw TError(nodePath().c_str(),_("The variable is not a link"));
 	    vector<string> a_ls;
 	    string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
 	    srcwdg.at().attrList(a_ls);
@@ -1335,7 +1406,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') &&
 		    !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst))
 		{ nattr = a_ls[i_a]; break; }
-	    if(i_a >= a_ls.size()) throw TError(nodePath().c_str(),_("Variable is not link"));
+	    if(i_a >= a_ls.size()) throw TError(nodePath().c_str(),_("The variable is not a link"));
 	}
 
 	string m_prm = srcwdg.at().attrAt(nattr).at().cfgVal();
@@ -1514,7 +1585,7 @@ void PageWdg::setEnable( bool val, bool force )
 	for(unsigned i_h = 0; i_h < ownerPage().herit().size(); i_h++)
 	    if(ownerPage().herit()[i_h].at().wdgPresent(id()) && !ownerPage().herit()[i_h].at().wdgAt(id()).at().enable())
 		try { ownerPage().herit()[i_h].at().wdgAt(id()).at().setEnable(true); }
-		catch(...) { mess_err(nodePath().c_str(),_("Inheriting widget '%s' enable error."),id().c_str()); }
+		catch(...) { mess_err(nodePath().c_str(),_("Error enabling the inheriting widget '%s'."),id().c_str()); }
 }
 
 string PageWdg::calcId( )	{ return parent().freeStat() ? "" : parent().at().calcId(); }
@@ -1634,3 +1705,4 @@ void PageWdg::cntrCmdProc( XMLNode *opt )
     if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)))
 	TCntrNode::cntrCmdProc(opt);
 }
+

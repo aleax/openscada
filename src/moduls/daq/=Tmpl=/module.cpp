@@ -100,21 +100,16 @@ TTpContr::~TTpContr( )
 //!!! Module's comandline options for print help function.
 string TTpContr::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-
-    snprintf(buf,sizeof(buf),_(
+    return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section '%s' in config-file ----------\n\n"),
+	"---- Parameters of the module section '%s' of the configuration file ----\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
-
-    return buf;
 }
 
 //!!! Processing virtual function for load Root module to DB
 void TTpContr::load_( )
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 }
 
 //!!! Processing virtual function for save Root module to DB
@@ -131,7 +126,7 @@ void TTpContr::postEnable( int flag )
     //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     //!!! Append here your's PLC specific configuration field stored into DB
 
     //Parameter types and it's bd structure form
@@ -168,9 +163,9 @@ string TMdContr::getStatus( )
     string rez = TController::getStatus();
     if(startStat() && !redntUse()) {
 	if(!prcSt)	val += TSYS::strMess(_("Task terminated! "));
-	if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
+	if(period())	rez += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s."), tm2s(1e-6*tmGath).c_str());
     }
     return rez;

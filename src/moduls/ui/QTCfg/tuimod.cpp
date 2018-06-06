@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,13 +33,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"QTCfg"
-#define MOD_NAME	_("System configurator (Qt)")
+#define MOD_NAME	_("Program configurator (Qt)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"3.4.1"
+#define MOD_VER		"4.2.3"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the Qt-based configurator of the OpenSCADA system.")
+#define DESCRIPTION	_("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -73,7 +73,7 @@ using namespace QTCFG;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), mTmConChk(dataRes()), mStartUser(dataRes()), mStartPath(dataRes()), mEndRun(false)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID), mTmConChk(dataRes()), mStartUser(dataRes()), mStartPath(dataRes()), mToolTipLim(150), mEndRun(false)
 {
     mod = this;
 
@@ -107,37 +107,39 @@ string TUIMod::optDescr( )
 {
     return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section '%s' in config-file ----------\n"
-	"StartPath  <path>    Configurator start path.\n"
-	"StartUser  <user>    No password requested start user.\n\n"),
+	"---- Parameters of the module section '%s' of the configuration file ----\n"
+	"StartPath  <path>       Initial page path of the configurator.\n"
+	"StartUser  <user>       Starting user without password.\n"
+	"ToolTipLim <chars>      ToolTip limit in chars, by default 150. Set zero for disable.\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 }
 
 void TUIMod::load_( )
 {
 #if OSC_DEBUG >= 1
-    mess_debug(nodePath().c_str(), _("Load module."));
+    mess_debug(nodePath().c_str(), _("Loading the module."));
 #endif
 
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file and DB
     setTmConChk(TBDS::genDBGet(nodePath()+"TmConChk",tmConChk()));
     setStartPath(TBDS::genDBGet(nodePath()+"StartPath",startPath()));
     setStartUser(TBDS::genDBGet(nodePath()+"StartUser",startUser()));
+    setToolTipLim(s2i(TBDS::genDBGet(nodePath()+"ToolTipLim",i2s(toolTipLim()))));
 }
 
 void TUIMod::save_( )
 {
 #if OSC_DEBUG >= 1
-    mess_debug(nodePath().c_str(),_("Save module."));
+    mess_debug(nodePath().c_str(),_("Saving the module."));
 #endif
 
     //Save parameters to DB
     TBDS::genDBSet(nodePath()+"TmConChk", tmConChk());
     TBDS::genDBSet(nodePath()+"StartPath", startPath());
     TBDS::genDBSet(nodePath()+"StartUser", startUser());
+    TBDS::genDBSet(nodePath()+"ToolTipLim",i2s(toolTipLim()));
 }
 
 void TUIMod::postEnable( int flag )
@@ -161,7 +163,7 @@ QMainWindow *TUIMod::openWindow( )
 	    int rez = d_usr.exec();
 	    if(rez == DlgUser::SelCancel) return NULL;
 	    if(rez == DlgUser::SelErr) {
-		postMess(nodePath().c_str(),_("Auth is wrong!!!"));
+		postMess(nodePath().c_str(), _("Error authentication!!!"));
 		continue;
 	    }
 	    user_open = d_usr.user().toStdString();
@@ -177,10 +179,12 @@ void TUIMod::setTmConChk( const string &vl )
     modif();
 }
 
+void TUIMod::setToolTipLim( int vl )	{ mToolTipLim = vmax(0, vl); modif(); }
+
 void TUIMod::modStart( )
 {
 #if OSC_DEBUG >= 1
-    mess_debug(nodePath().c_str(),_("Start module."));
+    mess_debug(nodePath().c_str(), _("Starting the module."));
 #endif
 
     mEndRun = false;
@@ -190,7 +194,7 @@ void TUIMod::modStart( )
 void TUIMod::modStop( )
 {
 #if OSC_DEBUG >= 1
-    mess_debug(nodePath().c_str(),_("Stop module."));
+    mess_debug(nodePath().c_str(), _("Stopping the module."));
 #endif
 
     mEndRun = true;
@@ -223,11 +227,12 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/tmConChk",_("Connection check timeouts in seconds '{fail}:{good}'"),RWRWR_,"root",SUI_ID,1, "tp","str");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/startPath",_("Configurator start path"),RWRWR_,"root",SUI_ID,1, "tp","str");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/startUser",_("Configurator start user"),RWRWR_,"root",SUI_ID,3,
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/tmConChk",_("Timeouts of checking connections '{fail}:{good}', seconds"),RWRWR_,"root",SUI_ID,1, "tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/startPath",_("Initial path of the configurator"),RWRWR_,"root",SUI_ID,1, "tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/startUser",_("Initial user of the configurator"),RWRWR_,"root",SUI_ID,3,
 		"tp","str", "dest","select", "select","/prm/cfg/u_lst");
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1, "tp","lnk");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/toolTipLim",_("ToolTip limit, zero to disable"),RWRWR_,"root",SUI_ID,1, "tp","int");
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to the configuration of the list of remote stations"),RWRW__,"root",SUI_ID,1, "tp","lnk");
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,3,"tp","str","cols","90","rows","5");
 	return;
@@ -243,9 +248,13 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startPath());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartPath(opt->text());
     }
-    else if(a_path == "/prm/cfg/startUser" ) {
+    else if(a_path == "/prm/cfg/startUser") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startUser());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartUser(opt->text());
+    }
+    else if(a_path == "/prm/cfg/toolTipLim") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(toolTipLim()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setToolTipLim(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD)) opt->setText("/Transport");
     else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID))	opt->setText(optDescr());
@@ -262,7 +271,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev type, QWidget *parent )
 {
     //Put the program message
-    message(cat.c_str(),(type==TUIMod::Crit)?TMess::Crit:
+    message(cat.c_str(), (type==TUIMod::Crit)?TMess::Crit:
 	(type==TUIMod::Error)?TMess::Error:
 	(type==TUIMod::Warning)?TMess::Warning:TMess::Info, "%s", mess.c_str());
 
@@ -277,4 +286,18 @@ void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev ty
 	case TUIMod::Crit:	msgBox.setIcon(QMessageBox::Critical);		break;
     }
     msgBox.exec();
+}
+
+void TUIMod::setHelp( const string &help, const string &addr, QWidget *w )
+{
+    w->setStatusTip(addr.c_str());
+    size_t itPos = addr.rfind("/");
+    w->setWhatsThis(("<body style='white-space: pre-wrap;'>"+TSYS::strEncode(help,TSYS::Html)+(help.size()?"\n":"")+
+	"<i><b>"+_("Page")+"</b></i>:&nbsp;"+addr.substr(0,itPos)+"\n"+
+	"<i><b>"+_("Item")+"</b></i>:&nbsp;"+TSYS::strDecode((itPos==string::npos)?"":addr.substr(itPos+1),TSYS::PathEl)+"</body>").c_str());
+    if(help.size()) {
+	if(toolTipLim() && help.size() > toolTipLim())
+	    w->setToolTip(("<body style='white-space: pre-wrap;'>"+TSYS::strEncode(TSYS::strMess(toolTipLim(),"%s",help.c_str()),TSYS::Html)+"<i><b>Shift+F1</b></i></body>").c_str());
+	else w->setToolTip(help.c_str());
+    }
 }

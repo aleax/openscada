@@ -1,7 +1,7 @@
 
-//OpenSCADA system module UI.WebVision file: web_vision.cpp
+//OpenSCADA module UI.WebVision file: web_vision.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.2.4"
+#define MOD_VER		"2.6.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -272,21 +272,16 @@ void TWEB::vcaSesAdd( const string &name, bool isCreate )
 
 string TWEB::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-
-    snprintf(buf,sizeof(buf),_(
+    return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section '%s' in config-file ----------\n"
-	"SessTimeLife <time>      Time of the session life, minutes (default 10).\n\n"),
+	"---- Parameters of the module section '%s' of the configuration file ----\n"
+	"SessTimeLife <min>      Time of session life, in minutes (by default, 10).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
-
-    return buf;
 }
 
 void TWEB::load_( )
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
     setSessTime(s2i(TBDS::genDBGet(nodePath()+"SessTimeLife",i2s(sessTime()))));
@@ -465,7 +460,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		    }
 		}
 		if(!sName.empty())
-		    page = pgCreator(iprt, TSYS::strMess(_("Go to session '%s' for project '%s' ..."),sName.c_str(),zero_lev.substr(4).c_str()),
+		    page = pgCreator(iprt, TSYS::strMess(_("Going to the session '%s' for the project '%s' ..."),sName.c_str(),zero_lev.substr(4).c_str()),
 			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "/ses_"+sName+"/"+ses.gPrms+"'/>", "", ses.lang);
 		else page = pgCreator(iprt, page, "200 OK", "", "", "", ses.lang);
 	    }
@@ -473,12 +468,12 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    else if(zero_lev.compare(0,4,"ses_") == 0) {
 		ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
 		string sesnm = zero_lev.substr(4);
-		// Check for session present
+		// Check for the session presence
 		if(!ses.prm.size()) {
 		    XMLNode req("get"); req.setAttr("path",ses.url+"/%2fobj%2fst%2fen");
 		    if(cntrIfCmd(req,ses) || !s2i(req.text()))	{ HTTP_GET("", page, vars, user, iprt); return; }
 		}
-		// Call to session
+		// Call to the session
 		ResAlloc sesRes(mSesRes, false);
 		try { vcaSesAt(sesnm).at().getReq(ses); }
 		catch(...) {
@@ -735,12 +730,11 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	}
 
     //Content parse
+    size_t pos = 0, spos = 0;
     string boundary;
     const char *c_bound = "boundary=";
     const char *c_term = "\x0D\x0A";
     const char *c_end = "--";
-    const char *c_fd = "Content-Disposition";
-    const char *c_name = "name=\"";
 
     for(size_t iVr = 0, pos = 0; iVr < vars.size() && boundary.empty(); iVr++)
 	if(vars[iVr].compare(0,vars[iVr].find(":",0),"Content-Type") == 0 && (pos=vars[iVr].find(c_bound,0)) != string::npos) {
@@ -749,24 +743,23 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	}
     if(boundary.empty()) return;
 
-    for(size_t pos = 0, spos = 0, i_bnd = 0; true; ) {
+    for(pos = 0; true; ) {
 	pos = content.find(boundary,pos);
 	if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;
 	pos += boundary.size()+strlen(c_term);
 
-	// Process properties and get name
-	string p_name;
+	cnt.push_back(XMLNode("Content"));
+
+	// Get properties
 	while(pos < content.size()) {
 	    string c_head = content.substr(pos, content.find(c_term,pos)-pos);
 	    pos += c_head.size()+strlen(c_term);
 	    if(c_head.empty()) break;
 	    if((spos=c_head.find(":")) == string::npos) return;
-	    if(c_head.compare(0,spos,c_fd) == 0 && (i_bnd=c_head.find(c_name,spos)) != string::npos) {
-		i_bnd += strlen(c_name);
-		p_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
-	    }
+	    cnt.back().setAttr(sTrm(c_head.substr(0,spos)), sTrm(c_head.substr(spos+1)));
 	}
+
 	if(pos >= content.size()) return;
-	if(!p_name.empty()) cnt[p_name] = content.substr(pos,content.find(string(c_term)+c_end+boundary,pos)-pos);
+	cnt.back().setText(content.substr(pos, content.find(string(c_term)+c_end+boundary,pos)-pos));
     }
 }

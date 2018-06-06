@@ -1,9 +1,9 @@
 
-//OpenSCADA system module UI.WebVision file: vca_sess.h
+//OpenSCADA module UI.WebVision file: vca_sess.h
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
  *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
- *		   2007-2017 by Roman Savochenko (rom_as@oscada.org)	   *
+ *		   2007-2018 by Roman Savochenko (rom_as@oscada.org)	   *
  *									   *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -90,6 +90,27 @@ class VCAObj : public TCntrNode
 	const string	mId;
 };
 
+//*************************************************
+//* VCAFormEl					  *
+//*************************************************
+class VCAFormEl : public VCAObj
+{
+    public:
+	//Methods
+	VCAFormEl( const string &iid );
+	~VCAFormEl( )			{ }
+
+	void getReq( SSess &ses );
+	void postReq( SSess &ses );
+	void setAttrs( XMLNode &node, const SSess &ses );
+
+    private:
+	//Attributes
+	unsigned char	type, btMode;
+	string		fCtx;
+
+	ResMtx	mRes;
+};
 
 //*************************************************
 //* ElFigure					  *
@@ -133,7 +154,6 @@ class InundationItem
 	vector<int>	number_point;
 	int		P_color, index_color;
 	string		imgFill;
-
 };
 
 class VCAElFigure : public VCAObj

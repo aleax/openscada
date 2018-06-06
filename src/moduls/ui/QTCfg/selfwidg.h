@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: selfwidg.h
 /***************************************************************************
- *   Copyright (C) 2004-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 
+#include <QApplication>
 #include <QLabel>
 #include <QWidget>
 #include <QImage>
@@ -40,7 +41,6 @@
 using std::string;
 using std::vector;
 
-
 class QPaintEvent;
 class QComboBox;
 class QLineEdit;
@@ -51,6 +51,8 @@ class QGridLayout;
 
 namespace QTCFG
 {
+
+extern int icoSize( float mult = 1 );
 
 //*********************************************************************************************
 //* Universal edit line widget. Contain support of: QLineEdit, QSpinBox, QDoubleSpinBox,      *
@@ -274,7 +276,7 @@ class ReqIdNameDlg : public InputDlg
 
     public:
 	//Methods
-	ReqIdNameDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg = _("Node id and/or name select") );
+	ReqIdNameDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg = _("Selecting the identifier and the name of the node") );
 
 	string target( );
 

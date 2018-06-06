@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.BFN file: mod_BFN.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.9"
+#define MOD_VER		"0.6.12"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Big Farm Net (BFN) modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -83,7 +83,7 @@ void TTpContr::postEnable( int flag )
     //Controler's bd structure
     //fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("SYNCPER",_("Sync inter remote station period, seconds"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
     fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"50",""));
@@ -197,11 +197,11 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/symbs/db",_("Symbols DB"),RWRWR_,"root",SDAQ_ID,4,
 		"tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    if(ctrMkNode("table",opt,-1,"/symbs/codes",_("Codes"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del","key","id")) {
-		ctrMkNode("list",opt,-1,"/symbs/codes/id",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/symbs/codes/id",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/symbs/codes/text",_("Text"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    if(ctrMkNode("table",opt,-1,"/symbs/alrms",_("Alarms"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del","key","id")) {
-		ctrMkNode("list",opt,-1,"/symbs/alrms/id",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/symbs/alrms/id",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/symbs/alrms/code",_("Code"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/symbs/alrms/text",_("Text"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
@@ -300,10 +300,10 @@ string TMdContr::getStatus( )
 	    rez.replace(0,1,"10");
 	}
 	//Display processing
-	if(acq_st) rez += TSYS::strMess(_("Call now. "));
+	if(acq_st) rez += TSYS::strMess(_("Acquisition. "));
 	//Display schedule
-	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	if(period()) rez += TSYS::strMess(_("Acquisition with the period: %s. "),tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	//Display spent time
 	if(acq_err.getVal().empty()) rez += TSYS::strMess(_("Spent time: %s."),tm2s(1e-6*tm_gath).c_str());
     }
@@ -719,8 +719,8 @@ void TMdPrm::vlGet( TVal &val )
     if(val.name() != "err")	return;
 
     if(!enableStat() || !owner().startStat()) {
-	if(!enableStat())		val.setS(_("1:Parameter is disabled."),0,true);
-	else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."),0,true);
+	if(!enableStat())		val.setS(_("1:Parameter disabled."),0,true);
+	else if(!owner().startStat())	val.setS(_("2:Acquisition stopped."),0,true);
 	return;
     }
     if(owner().redntUse())	return;

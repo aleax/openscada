@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,12 +38,12 @@ function pathLev( path, level, scan )
     while(an_dir < path.length && path.charAt(an_dir) == '/') an_dir++;
     if(an_dir >= path.length) return '';
     while(true) {
-	t_dir = path.indexOf('/',an_dir);
+	t_dir = path.indexOf('/', an_dir);
 	if(t_dir < 0)		{ pathLev.off = path.length; return (t_lev==level)?path.substr(an_dir):''; }
 	if(t_lev == level)	{ pathLev.off = t_dir; return path.substr(an_dir,t_dir-an_dir); }
 	an_dir = t_dir;
 	t_lev++;
-	while(an_dir<path.length && path.charAt(an_dir)=='/') an_dir++;
+	while(an_dir < path.length && path.charAt(an_dir) == '/') an_dir++;
     }
 }
 
@@ -228,7 +228,7 @@ function servGet( adr, prm, callBack, callBackPrm )
 	req.send(null);
 	if(req.status == 200 && req.responseXML.childNodes.length)
 	    return req.responseXML.childNodes[0];
-    } catch(e) { window.location = '/'+MOD_ID; }
+    } catch(e) { window.location.reload(); /*window.location = '/'+MOD_ID;*/ }
 
     return null;
 }
@@ -247,7 +247,7 @@ function servSet( adr, prm, body, waitRez )
 	//if(mainTmId) clearTimeout(mainTmId);
 	//mainTmId = setTimeout(makeUI, 1000);
 	//console.log("TEST 01: SET="+body);
-    } catch(e) { window.location = '/'+MOD_ID; }
+    } catch(e) { window.location.reload(); /*window.location = '/'+MOD_ID;*/ }
 
     return null;
 }
@@ -566,12 +566,29 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	// Calculation of the main window/page scale
 	if(this == masterPage) {
+	    //  Own status bar reserve
+	    /*if(!parseInt(this.attrs["stBarNoShow"]) && !masterPage.status) {
+		masterPage.status = document.createElement('div');
+		masterPage.status.height = 25;
+		masterPage.status.setAttribute('id', 'gen-pnl-status');
+		this.place.appendChild(masterPage.status);
+		masterPage.status.innerHTML = "<table width='100%'><TR><td id='StatusBar' width='100%'/><td id='st_user'><a href='/login/"+MOD_ID+"/'>"+pgBr.getAttribute('user')+"</a></td></TR></table>";
+	    }*/
+
 	    var geomW = parseFloat(this.attrs['geomW']);
 	    var geomH = parseFloat(this.attrs['geomH']);
 	    wx_scale = Math.max(1, window.innerWidth/geomW);
-	    wy_scale = Math.max(1, window.innerHeight/geomH);
+	    wy_scale = Math.max(1, window.innerHeight/(geomH+(masterPage.status?masterPage.status.height:0)));
 	    if(parseInt(this.attrs['keepAspectRatio']))
 		wx_scale = wy_scale = Math.min(wx_scale, wy_scale);
+
+	    /*if(masterPage.status) {
+		masterPage.status.style.top = Math.floor(geomH*wy_scale)+"px";
+		masterPage.status.style.width = Math.floor(geomW*wx_scale)+"px";
+		masterPage.status.style.height = Math.floor((masterPage.status.height-1)*wy_scale)+"px";
+		masterPage.status.style.fontSize = Math.floor(masterPage.status.height*0.6*wy_scale)+"px";
+		elStyle += "overflow: visible; ";
+	    }*/
 	}
 
 	var xSc = this.xScale(true);
@@ -687,7 +704,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		}
 	    }
 	    this.place.wdgLnk = this;
-	    this.place.onclick = (!elWr) ? null : function() { setFocus(this.wdgLnk.addr); return false; };
+	    this.place.onclick = (!elWr) ? null : function() { setFocus(this.wdgLnk.addr); return true; };	//Changed to return true for <input type="file">
 	}
 	else if(this.attrs['root'] == 'Text') {
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
@@ -729,11 +746,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    var argSize = Math.max(-1000,Math.min(1000,parseInt(argCfg[0])));
 		    var argPad = '';
-		    for(var j = argVal.length; j < Math.abs(argSize); j++) argPad += '&nbsp;';
+		    for(var j = argVal.length; j < Math.abs(argSize); j++) argPad += ' ';//&nbsp;';
 		    if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
 		    txtVal = txtVal.replace('%'+(i+1),argVal);
 		}
-		this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal+"</span>";
+		var spEl = this.place.children.length ? this.place.children[0] : this.place.ownerDocument.createElement('span');
+		this.place.appendChild(spEl);
+		if(parseInt(this.attrs['inHtml'])) spEl.innerHTML = txtVal;
+		else spEl.innerText = txtVal;
+		spEl.setAttribute('style', spanStyle);
+		//this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal+"</span>";
 	    //}
 	    //else this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+
 	    //				"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(3)+"&ySc="+ySc.toFixed(3)+"'/>";
@@ -1296,31 +1318,36 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var formObj = tblCell.childNodes.length ? tblCell.childNodes[0] : this.place.ownerDocument.createElement('input');
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['value']) formObj.checked = parseInt(this.attrs['value']);
-		    if(!toInit) break;
-		    formObj.type = 'checkbox';
-		    formObj.disabled = !elWr;
-		    formObj.wdgLnk = this;
-		    formObj.onclick = function( ) {
-			//console.log(this.addr+": TEST 00: ChkChange="+this.checked);
-			var attrs = new Object();
-			attrs.value = this.checked ? '1' : '0';	attrs.event = 'ws_ChkChange';
-			setWAttrs(this.wdgLnk.addr,attrs);
-			return true;
+		    if(toInit) {
+			formObj.type = 'checkbox';
+			formObj.disabled = !elWr;
+			formObj.wdgLnk = this;
+			formObj.onclick = function( ) {
+			    //console.log(this.addr+": TEST 00: ChkChange="+this.checked);
+			    var attrs = new Object();
+			    attrs.value = this.checked ? '1' : '0';	attrs.event = 'ws_ChkChange';
+			    setWAttrs(this.wdgLnk.addr,attrs);
+			    return true;
+			}
+			tblCell.appendChild(formObj);
+			tblCell.appendChild(this.place.ownerDocument.createTextNode(this.attrs['name']));
+			this.place.appendChild(tblCell);
 		    }
-		    tblCell.appendChild(formObj);
-		    tblCell.appendChild(this.place.ownerDocument.createTextNode(this.attrs['name']));
-		    this.place.appendChild(tblCell);
+		    if(this.attrsMdf['name'])	tblCell.childNodes[1].textContent = this.attrs['name'];
 		    break;
 		case 3:	//Button
 		    var formObj;
 		    var iconImg = this.attrs['img'];
-		    this.place.checkable = parseInt(this.attrs['checkable']);
+		    this.place.checkable = (parseInt(this.attrs['mode']) == 1);
+		    this.place.isMenu = (parseInt(this.attrs['mode']) == 2);
+		    this.place.isLoad = (parseInt(this.attrs['mode']) == 3);
+		    this.place.isSave = (parseInt(this.attrs['mode']) == 4);
 		    var custBut = (iconImg || this.place.checkable);
-		    if(custBut != this.place.custBut)
+		    if(custBut != this.place.custBut || this.attrsMdf['mode'])
 			while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
 		    this.place.custBut = custBut;
 		    var toInit = !this.place.childNodes.length;
-		    if(custBut) {
+		    if(custBut && !this.place.isLoad) {
 			formObj =  toInit ? this.place.ownerDocument.createElement('div') : this.place.childNodes[0];
 			// Container widget style
 			elStyle += 'border-style: '+((this.place.checkable && parseInt(this.attrs['value']))?'inset; ':'outset; ')+
@@ -1333,10 +1360,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(toInit || this.attrsMdf['font']) formObj.style.font = this.place.fontCfg;
 			var imgObj = formObj.childNodes.length ? formObj.childNodes[0] : this.place.ownerDocument.createElement('img');
 			var spanObj = formObj.childNodes.length ? formObj.childNodes[1] : this.place.ownerDocument.createElement('span');
+
 			spanObj.style.cssText = "display: table-cell; height: "+geomH+"px; line-height: 1; text-align: center; white-space: pre-line; word-break: break-word; width: "+geomW+"px; ";
 			if(toInit || this.attrsMdf['name']) {
 			    spanObj.disabled = !this.attrs['name'].length;
-			    spanObj.innerText = this.attrs['name'].replace('\\n','\n');
+			    spanObj.innerText = this.attrs['name'].replace('\\n','\n') + (this.place.isMenu?" ▾":"");
 			}
 			if(toInit || this.attrsMdf['img'] || this.attrsMdf['name']) {
 			    imgObj.hidden = !this.attrs['img'].length;
@@ -1362,55 +1390,105 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    };
 			}
 
-			if(!toInit) break;
-			formObj.className = 'vertalign';
-			//Disable drag mostly for FireFox
-			imgObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
-			if(elWr) {
-			    this.place.onmouseout = function( ) {
-				if(this.checkable || this.style.borderStyle == 'outset') return false;
-				this.style.borderStyle = 'outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease');
-				return false;
-			    };
-			    this.place.onclick = function( ) {
-				if(!this.checkable) return false;
-				var attrs = new Object();
-				if(this.style.borderLeftStyle == 'outset')
-				{ attrs.value = '1'; this.style.borderStyle = 'inset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); }
-				else { attrs.value = '0'; this.style.borderStyle = 'outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease'); }
-				setWAttrs(this.wdgLnk.addr,'event','ws_BtToggleChange');
-				setWAttrs(this.wdgLnk.addr,'value',attrs.value);
-				return false;
-			    };
-			    this.place.wdgLnk = this;
-			}
-			formObj.appendChild(imgObj);
-			formObj.appendChild(spanObj);
+			if(toInit) {
+			    formObj.className = 'vertalign';
+			    //Disable drag mostly for FireFox
+			    imgObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
+			    if(elWr) {
+				this.place.onmouseout = function( ) {
+				    if(this.checkable || this.style.borderStyle == 'outset') return false;
+				    this.style.borderStyle = 'outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease');
+				    return false;
+				};
+				this.place.onclick = function( ) {
+				    if(!this.checkable) return false;
+				    var attrs = new Object();
+				    if(this.style.borderLeftStyle == 'outset')
+				    { attrs.value = '1'; this.style.borderStyle = 'inset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); }
+				    else { attrs.value = '0'; this.style.borderStyle = 'outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease'); }
+				    setWAttrs(this.wdgLnk.addr,'event','ws_BtToggleChange');
+				    setWAttrs(this.wdgLnk.addr,'value',attrs.value);
+				    return false;
+				};
+				this.place.wdgLnk = this;
+			    }
+			    formObj.appendChild(imgObj);
+			    formObj.appendChild(spanObj);
 
-			formObj.style.position = "absolute";
-			formObj.style.top = "-2px"; formObj.style.left = "-2px";
-			formObj.style.width = (geomW+4)+'px'; formObj.style.height = (geomH+4)+'px';
-			formObj.style.overflow = "hidden";
-			this.place.appendChild(formObj);
+			    formObj.style.position = "absolute";
+			    formObj.style.top = "-2px"; formObj.style.left = "-2px";
+			    formObj.style.width = (geomW+4)+'px'; formObj.style.height = (geomH+4)+'px';
+			    formObj.style.overflow = "hidden";
+			    this.place.appendChild(formObj);
+			}
 		    }
 		    else {
 			formObj = toInit ? this.place.ownerDocument.createElement('button') : this.place.childNodes[0];
 			if(toInit || this.attrsMdf['geomZ'])	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 			if(toInit || this.attrsMdf['font'])	formObj.style.font = this.place.fontCfg;
-			if(toInit || this.attrsMdf['name'])	formObj.value = this.attrs['name'].replace('\\n','\n');
+			if(toInit || this.attrsMdf['name'])	formObj.innerText = this.attrs['name'].replace('\\n','\n') + (this.place.isMenu?" ▾":"");
 			if(toInit || this.attrsMdf['color'])	formObj.style.backgroundColor = getColor(this.attrs['color']);
 			if(toInit || this.attrsMdf['colorText'])formObj.style.color = getColor(this.attrs['colorText']);
 			this.mouseup[this.mouseup.length] = function(e,el)	{ setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease'); };
 			this.mousedown[this.mousedown.length] = function(e,el)	{ setWAttrs(el.wdgLnk.addr,'event','ws_BtPress'); };
-			if(!toInit) break;
-			formObj.style.cursor = elWr ? 'pointer' : '';
-			formObj.disabled = !elWr;
-			//formObj.type = 'button';
-			formObj.wdgLnk = this;
-			formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
-			formObj.style.padding = "0";
-			this.place.appendChild(formObj);
-			formObj.innerText = this.attrs['name'].replace('\\n','\n');	//Need for Opera after place to DOM
+			if(toInit) {
+			    formObj.style.cursor = elWr ? 'pointer' : '';
+			    formObj.disabled = !elWr;
+			    formObj.wdgLnk = this;
+			    formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
+			    formObj.style.padding = "0";
+			    this.place.appendChild(formObj);
+			}
+		    }
+
+		    if(this.place.isMenu)
+			formObj.onclick = function( ) {
+			    var menuWin = this.ownerDocument.getElementById('menuwin');
+			    if(!menuWin) {
+				menuWin = this.ownerDocument.createElement('div');
+				menuWin.id = 'menuwin';
+				menuWin.className = "ItemsTree active";
+				menuWin.treeFont = 'font:'+this.wdgLnk.place.fontCfg+';';
+				if(getFont(this.wdgLnk.attrs['font'],Math.min(this.wdgLnk.xScale(true),this.wdgLnk.yScale(true)),2) > 14)
+				    menuWin.treeFont += "font-size: 14px;"
+				menuWin.close = function( ) { this.style.visibility = 'hidden'; this.style.top = "-100px"; }
+				menuWin.setList = function(list) {
+				    if(!this.children.length) this.appendChild(getTree());
+				    this.children[0].style.cssText = this.treeFont;
+				    this.children[0].select = function(ipath) {
+					if(!ipath.length) return;
+					attrs = new Object();
+					attrs.event = 'ws_BtMenu='+ipath;
+					//console.log("Event="+attrs.event);
+					setWAttrs(this.parentNode.formObj.wdgLnk.addr, attrs);
+					this.parentNode.close();
+				    }
+				    this.children[0].setList(list);
+				}
+				this.ownerDocument.body.appendChild(menuWin);
+			    }
+			    menuWin.style.cssText = 'left: '+posGetX(this,true)+'px; top: '+(posGetY(this,true)+this.offsetHeight)+'px; ';
+			    menuWin.onmouseleave = menuWin.close;
+			    menuWin.formObj = this;
+			    menuWin.setList(this.wdgLnk.attrs['value']);
+			}
+		    else if(this.place.isLoad && toInit) {
+			iformObj = this.place.ownerDocument.createElement('form');
+			iformObj.method = 'post';
+			iformObj.action = "/"+MOD_ID+this.addr+"?com=obj"
+			iformObj.enctype = "multipart/form-data";
+			fHeader = this.attrs['value'].split("\n",1)[0].split("|");
+			iformObj.innerHTML = "<input type='file' style='display: none' name='File' accept='"+fHeader[3]+"' defaultValue='"+fHeader[2]+"'/>";
+			formObj.iformObj = iformObj;
+			formObj.onclick = function( ) { this.iformObj.children[0].click(); }
+			iformObj.children[0].wdgLnk = this;
+			iformObj.children[0].onchange = function( ) { if(this.value.length) this.form.submit(); }
+			this.place.appendChild(iformObj);
+		    }
+		    else if(this.place.isSave) {
+			if(this.attrs['value'].length && this.attrs['value'] != this.valuePrev)
+			    window.open('/'+MOD_ID+this.addr+"/"+this.attrs['value'].split("\n",1)[0].split("|")[2]+'?com=obj');
+			this.valuePrev = this.attrs['value'];
 		    }
 		    break;
 		case 4: case 5:	//Combo box, List
@@ -1499,93 +1577,28 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    this.place.appendChild(formObj);
 		    break;
 		case 8:	//Tree
-		    this.place.className += " Tree";
+		    this.place.className += " ItemsTree";
 		    if(elWr) this.place.className += " active";
 		    var toInit = !this.place.children.length;
-		    var formObj = toInit ? this.place.ownerDocument.createElement('ul') : this.place.children[0];
+		    var formObj = toInit ? getTree() : this.place.children[0];
 		    formObj.wdgLnk = this;
 		    formObj.elWr = elWr;
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['font']) {
-			formObj.style.cssText = 'font: '+this.place.fontCfg+'; font-style: italic; ';
+			formObj.style.cssText = 'font: '+this.place.fontCfg+';';
 			if(getFont(this.attrs['font'],Math.min(xSc,ySc),2) > 14) formObj.style.cssText += "font-size: 14px;"
 		    }
 		    //Events and the processings init
-		    if(toInit) {
-			formObj.finish = function( lit, selIt ) {
-			    if(selIt && !selIt.length) return false;
-			    var cnt = lit ? lit.children[2] : this;
-			    for(var iIt = cnt.children.length-1; iIt >= 0; iIt--) {
-				var oIt = cnt.children[iIt];
-				if(selIt) {
-				    if(selIt == oIt.itPath) { oIt.classList.add("select"); this.mSelIt = oIt; return true; }
-				    if(this.finish(oIt,selIt)) oIt.itExp = true;
-				}
-				else {
-				    if(oIt.itMdf != this.itMdf) { cnt.removeChild(oIt); continue; }
-				    this.finish(oIt);
-				    oIt.children[2].style.backgroundImage = (oIt!=cnt.lastChild?"url(/"+MOD_ID+"/img_treeLine)":"");
-				}
-				isExpandable = oIt.children[2].children.length;
-				oIt.children[0].src = "/"+MOD_ID+"/img_tree"+
-				    (isExpandable?(oIt.itExp?"Minus":"Plus"):"")+
-				    "Up"+(oIt!=cnt.lastChild?"Down":"");
-				if(isExpandable) oIt.children[2].style.display = oIt.itExp ? "" : "none";
-				if(isExpandable) oIt.classList.add("expandable"); else oIt.classList.remove("expandable");
-				if(selIt && this.mSelIt) return true;
-			    }
-			    return false;
+		    if(toInit)
+			formObj.select = function(ipath) {
+			    if(!ipath.length) return;
+			    attrs = new Object();
+			    attrs.value = ipath;
+			    attrs.event = 'ws_TreeChange';
+			    setWAttrs(this.wdgLnk.addr, attrs);
 			}
-			formObj.expand = function( lit ) {
-			    if(!lit || !lit.children[2].children.length) return;
-			    lit.itExp = !lit.itExp;
-			    lit.children[2].style.display = lit.itExp ? "" : "none";
-			    lit.children[0].src = "/"+MOD_ID+"/img_tree"+(lit.itExp?"Minus":"Plus")+"Up"+(lit!=lit.parentNode.lastChild?"Down":"");
-			}
-			formObj.selIt = function( ipath, sendEv ) {
-			    if(sendEv) {
-				if(!ipath.length) return;
-				attrs = new Object();
-				attrs.value = ipath;
-				attrs.event = 'ws_TreeChange';
-				setWAttrs(this.wdgLnk.addr, attrs);
-			    }
-			    if(this.mSelIt) { this.mSelIt.classList.remove("select"); this.mSelIt = null; }
-			    this.finish(null, ipath);
-			}
-		    }
 		    //Processing for fill and changes
-		    if(toInit || this.attrsMdf['items']) {
-			formObj.itMdf = formObj.itMdf ? (formObj.itMdf+1) : 1;
-			var elLst = this.attrs['items'].split('\n');
-			var cur_it = null;
-			for(iEl = 0; iEl < elLst.length; iEl++) {
-			    ipath = elLst[iEl];
-			    for(lev = 0, pathLev.off = 0; (item=pathLev(ipath,0,true)).length; lev++) {
-				if(lev == 0) {
-				    for(cur_it = null, iR = 0; !cur_it && iR < formObj.children.length; iR++)
-					if(formObj.children[iR].children[1].innerText == item) cur_it = formObj.children[iR];
-				    if(!cur_it) formObj.appendChild((cur_it=this.place.ownerDocument.createElement('li')));
-				    cur_it.itMdf = formObj.itMdf;
-				}
-				else {
-				    for(t_it = null, iR = 0; !t_it && iR < cur_it.children[2].children.length; iR++)
-					if(cur_it.children[2].children[iR].children[1].innerText == item) t_it = cur_it.children[2].children[iR];
-				    if(!t_it) cur_it.children[2].appendChild((t_it=this.place.ownerDocument.createElement('li')));
-				    cur_it = t_it;
-				    cur_it.itMdf = formObj.itMdf;
-				}
-				if(!cur_it.children.length) {
-				    cur_it.innerHTML = "<img onclick='this.parentNode.formObj.expand(this.parentNode)'/>"+
-							"<span onclick='this.parentNode.formObj.selIt(this.parentNode.itPath,true)'>"+item+"</span><ul\>";
-				    cur_it.formObj = formObj;
-				}
-			    }
-			    cur_it.classList.add("selectable");
-			    cur_it.itPath = ipath;
-			}
-			formObj.finish();
-		    }
+		    if(toInit || this.attrsMdf['items']) formObj.setList(this.attrs['items']);
 		    if(toInit || this.attrsMdf['value'] || this.attrsMdf['items']) formObj.selIt(this.attrs['value']);
 		    if(toInit) this.place.appendChild(formObj);
 		    break;
@@ -2202,7 +2215,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	if(this.mousedown.length)
 	    this.place.onmousedown = function(e) {
 		for(var i_on = 0; i_on < this.wdgLnk.mousedown.length; i_on++)
-		this.wdgLnk.mousedown[i_on](e,this);
+		    this.wdgLnk.mousedown[i_on](e, this);
 		return true;
 	    }
 	else delete this.mousedown;
@@ -2460,7 +2473,9 @@ function makeUI( callBackRez )
  ***************************************************/
 function setStatus( mess, tm )
 {
-    window.status = mess ? mess : '###Ready###';
+    if(!mess) mess = '';
+    if(masterPage && masterPage.status)	document.getElementById('StatusBar').innerText = mess;
+    else window.status = mess;
     if(!mess) return;
     if(stTmID) clearTimeout(stTmID);
     if(!tm || tm > 0) stTmID = setTimeout('setStatus(null)', tm?tm:1000);
@@ -2479,6 +2494,84 @@ function getPopup( )
 	popUpMenu.style.visibility = 'hidden';
     }
     return popUpMenu;
+}
+
+/**************************************************
+ * getTree - Get the items tree                   *
+ **************************************************/
+function getTree( )
+{
+    var formObj = document.createElement('ul');
+    formObj.style.cssText += 'font-style: italic;';
+    formObj.finish = function(lit, selIt) {
+	if(selIt && !selIt.length) return false;
+	var cnt = lit ? lit.children[2] : this;
+	for(var iIt = cnt.children.length-1; iIt >= 0; iIt--) {
+	    var oIt = cnt.children[iIt];
+	    if(selIt) {
+		if(selIt == oIt.itPath) { oIt.classList.add("select"); this.mSelIt = oIt; return true; }
+		if(this.finish(oIt,selIt)) oIt.itExp = true;
+	    }
+	    else {
+		if(oIt.itMdf != this.itMdf) { cnt.removeChild(oIt); continue; }
+		this.finish(oIt);
+		oIt.children[2].style.backgroundImage = (oIt!=cnt.lastChild?"url(/"+MOD_ID+"/img_treeLine)":"");
+	    }
+	    isExpandable = oIt.children[2].children.length;
+	    oIt.children[0].src = "/"+MOD_ID+"/img_tree"+
+		(isExpandable?(oIt.itExp?"Minus":"Plus"):"")+
+		"Up"+(oIt!=cnt.lastChild?"Down":"");
+	    if(isExpandable) oIt.children[2].style.display = oIt.itExp ? "" : "none";
+	    if(isExpandable) oIt.classList.add("expandable"); else oIt.classList.remove("expandable");
+	    if(selIt && this.mSelIt) return true;
+	}
+	return false;
+    }
+    formObj.expand = function(lit) {
+	if(!lit || !lit.children[2].children.length) return;
+	lit.itExp = !lit.itExp;
+	lit.children[2].style.display = lit.itExp ? "" : "none";
+	lit.children[0].src = "/"+MOD_ID+"/img_tree"+(lit.itExp?"Minus":"Plus")+"Up"+(lit!=lit.parentNode.lastChild?"Down":"");
+    }
+    formObj.selIt = function(ipath, sendEv) {
+	if(sendEv) this.select(ipath);
+	if(this.mSelIt) { this.mSelIt.classList.remove("select"); this.mSelIt = null; }
+	this.finish(null, ipath);
+    }
+    formObj.setList = function(items) {
+	while(this.children.length) this.removeChild(this.children[0]);
+	formObj.itMdf = formObj.itMdf ? (formObj.itMdf+1) : 1;
+	elLst = items.split('\n');
+	cur_it = null;
+	for(iEl = 0; iEl < elLst.length; iEl++) {
+	    ipath = elLst[iEl];
+	    for(lev = 0, pathLev.off = 0; (item=pathLev(ipath,0,true)).length; lev++) {
+		if(lev == 0) {
+		    for(cur_it = null, iR = 0; !cur_it && iR < formObj.children.length; iR++)
+			if(formObj.children[iR].children[1].innerText == item) cur_it = formObj.children[iR];
+		    if(!cur_it) formObj.appendChild((cur_it=this.ownerDocument.createElement('li')));
+		    cur_it.itMdf = formObj.itMdf;
+		}
+		else {
+		    for(t_it = null, iR = 0; !t_it && iR < cur_it.children[2].children.length; iR++)
+			if(cur_it.children[2].children[iR].children[1].innerText == item) t_it = cur_it.children[2].children[iR];
+		    if(!t_it) cur_it.children[2].appendChild((t_it=this.ownerDocument.createElement('li')));
+		    cur_it = t_it;
+		    cur_it.itMdf = formObj.itMdf;
+		}
+		if(!cur_it.children.length) {
+		    cur_it.innerHTML = "<img onclick='this.parentNode.formObj.expand(this.parentNode)'/>"+
+				       "<span onclick='this.parentNode.formObj.selIt(this.parentNode.itPath,true)'>"+item+"</span><ul\>";
+		    cur_it.formObj = formObj;
+		}
+	    }
+	    cur_it.classList.add("selectable");
+	    cur_it.itPath = ipath;
+	}
+	formObj.finish();
+    }
+
+    return formObj;
 }
 
 /***************************************************
@@ -2503,6 +2596,13 @@ document.body.onmouseup = function(e)
     //return false;	//!!!! It's buggy on <input type=range> for Chrome
 }
 
+window.onresize = function( ) {
+    if(stTmReload) clearTimeout(stTmReload);
+    if(window.innerHeight > document.body.clientHeight ||
+	((document.body.clientHeight-window.innerHeight)/document.body.clientHeight > 0.5 && wy_scale > 1))
+	    stTmReload = setTimeout('window.location.reload()', 1000);
+}
+
 var modelPer = 0;			//Model proc period
 var prcCnt = 0;				//Process counter
 var prcTm = 0;				//Process time
@@ -2514,6 +2614,7 @@ var perUpdtWdgs = new Object();		//Periodic updated widgets register
 var masterPage = new pwDescr('', true);	//Master page create
 var stTmID = null;			//Status line timer identifier
 var stTmMain = null;			//Main cycle start time
+var stTmReload = null;			//Main reload timeout at the main window resize
 var wx_scale = 1;			//Main window scale for fit, X axis
 var wy_scale = 1;			//Main window scale for fit, Y axis
 var clearTm = 10;			//Clear time of line edit fields, seconds

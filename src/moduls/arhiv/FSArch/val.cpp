@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@
 using namespace FSArch;
 
 //*************************************************
-//* FSArch::ModVArch - Value archivator           *
+//* FSArch::ModVArch - Value archiver             *
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
     TVArchivator(iid,idb,cf_el), chkANow(false), infoTbl(dataRes()),
@@ -49,6 +49,14 @@ ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
 ModVArch::~ModVArch( )
 {
     try { stop(); } catch(...) { }
+}
+
+TCntrNode &ModVArch::operator=( const TCntrNode &node )
+{
+    TVArchivator::operator=(node);
+    load_();
+
+    return *this;
 }
 
 string ModVArch::infoDBnm( )	{ return MOD_ID "_Val_"+id()+"_info"; }
@@ -98,19 +106,46 @@ void ModVArch::save_( )
 bool ModVArch::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "V_PER") time_size = vmax(0.2, 1e3*valPeriod());
+    else if(co.name() == "ADDR" && startStat())	return false;
 
     return TVArchivator::cfgChange(co, pc);
 }
 
 void ModVArch::start( )
 {
-    //Create and/or update the SQLite info file, special for the archivator and placed with main files of the archivator
+    //Checking the archiver folders for duplicates
+    if(!startStat()) {
+	string dbl = "";
+	MtxAlloc res(mod->dataRes(), true);
+	const char *fLock = "fsArchLock";
+	int hd = open((addr()+"/"+fLock).c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles());
+	if(hd >= 0) {
+	    write(hd, "1", 1);
+	    vector<string> ls;
+	    mod->valList(ls);
+	    for(int iL = 0; iL < ls.size() && dbl.empty(); iL++) {
+		AutoHD<TVArchivator> vAt = mod->valAt(ls[iL]);
+		if(vAt.at().id() == id() || !vAt.at().startStat())	continue;
+		int hd1 = open((vAt.at().addr()+"/"+fLock).c_str(), O_RDONLY);
+		if(hd1 >= 0 || vAt.at().addr() == addr()) {
+		    dbl = vAt.at().addr();
+		    if(hd1 >= 0) close(hd1);
+		}
+	    }
+	    close(hd);
+	    remove((addr()+"/"+fLock).c_str());
+	}
+	res.unlock();
+	if(dbl.size()) { stop(); throw err_sys(_("The value archiver '%s' uses the same folder '%s' as an other archiver."), id().c_str(), addr().c_str()); }
+    }
+
+    //Create and/or update the SQLite info file, special for the archiver and placed with main files of the archiver
     if(!startStat() && packInfoFiles()) {
 	try {
 	    if(!SYS->db().at().at("SQLite").at().openStat(infoDBnm())) SYS->db().at().at("SQLite").at().open(infoDBnm());
 	    AutoHD<TBD> tSQLite = SYS->db().at().at("SQLite").at().at(infoDBnm());
 	    tSQLite.at().setName(TSYS::strMess(_("%s: Val: %s: information"),MOD_ID,id().c_str()));
-	    tSQLite.at().setDscr(TSYS::strMess(_("Local info DB for the values archivator '%s'. "
+	    tSQLite.at().setDscr(TSYS::strMess(_("Local information DB for the value archiver '%s'. "
 		"Created automatically then don't modify, save and remove it!"),id().c_str()));
 	    tSQLite.at().setAddr(addr()+"/info.db");
 	    tSQLite.at().enable();
@@ -184,7 +219,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	if(infoOK) return true;
 
 	try {
-	    mess_sys(TMess::Info, _("Unpack '%s' for information get."), anm.c_str());
+	    mess_sys(TMess::Info, _("Unpacking '%s' for information."), anm.c_str());
 	    a_fnm = mod->unPackArch(anm, false);
 	} catch(TError&) { return false; }
 	unpck = true;
@@ -219,7 +254,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	    cEl.cfg("PRM3").setS(i2s(head.vtp));
 	    SYS->db().at().dataSet((infoTbl.size()?infoTbl:mod->filesDB()), mod->nodePath()+"Pack/", cEl, false, true);
 	}
-	else if((hd=open((anm+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,0666)) > 0) {
+	else if((hd=open((anm+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,SYS->permCrtFiles())) > 0) {
 	    // Write info to info file
 	    string si = TSYS::strMess("%llx %llx %s %llx %d", head.beg, head.end, buf, head.period, head.vtp);
 	    bool fOK = (write(hd,si.data(),si.size()) == (int)si.size());
@@ -259,7 +294,7 @@ void ModVArch::checkArchivator( bool now, bool toLimits )
 	// Open/create new directory
 	DIR *IdDir = opendir(addr().c_str());
 	if(IdDir == NULL) {
-	    if(mkdir(addr().c_str(),0777)) throw err_sys(_("Can not create directory '%s'."), addr().c_str());
+	    if(mkdir(addr().c_str(),SYS->permCrtFiles(true))) throw err_sys(_("Can not create the directory '%s'."), addr().c_str());
 	    IdDir = opendir(addr().c_str());
 	}
 
@@ -374,7 +409,7 @@ void ModVArch::expArch( const string &arch_nm, time_t beg, time_t end, const str
 	wv_form.nBlockAlign = 4;
 	wv_form.wBitsPerSample = 32;
 
-	int hd = open((file_nm+"."+file_tp).c_str(), O_RDWR|O_CREAT|O_TRUNC, 0666);
+	int hd = open((file_nm+"."+file_tp).c_str(), O_RDWR|O_CREAT|O_TRUNC, SYS->permCrtFiles());
 	if(hd == -1) return;
 	bool fOK = true;
 
@@ -432,8 +467,8 @@ void ModVArch::expArch( const string &arch_nm, time_t beg, time_t end, const str
     }
     else {
 	char c_val[40];
-	int hd=open((file_nm+"."+file_tp).c_str(),O_RDWR|O_CREAT|O_TRUNC, 0666);
-	if( hd == -1 ) return;
+	int hd = open((file_nm+"."+file_tp).c_str(), O_RDWR|O_CREAT|O_TRUNC, SYS->permCrtFiles());
+	if(hd == -1) return;
 	bool fOK = true;
 
 	c_tm = (int64_t)beg*1000000;
@@ -464,39 +499,39 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TVArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Overall size of archivator's files"),R_R_R_,"root",SARH_ID,1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Overall size of the archiver files"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
-	    "dest","sel_ed","select","/prm/cfg/dirList","help",_("Path to a directory for files of values of the archivator."));
+	    "dest","sel_ed","select","/prm/cfg/dirList","help",_("Path to a directory for files to the value archiver."));
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
-	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Time size of archive's file (hours)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
-		_("The parameter is set automatically when you change the values period by the archiver "
-		  "and generally proportional to values frequency of the archiver.\n"
-		  "Attention! Large files of the archive will be processed long by there is long unpacking for gzip-files "
-		  "and the primary indexing, when accessing to parts of deep in the archives of history."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/fn",_("Maximum number of the files to one archive"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Time size of the archive files, hours"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
+		_("The parameter is set automatically when changing the periodicity of the values of the archiver "
+		  "and in general proportional to the periodicity of the values of the archiver.\n"
+		  "WARNING! Large archive files will be longer processed due to the long unpacking of "
+		  "gzip files and primary indexing, while accessing archives is deeply in the history."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/fn",_("Maximum number of files per archive"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
 		_("Limits the maximum number for files of the archive and additional with the size of single file "
 		  "it determines the size of archive on disk.\nCompletely removing this restriction can be performed by setting the parameter to zero."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/maxCpct",_("Maximum capacity for all archives (MB)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
+	    ctrMkNode("fld",opt,-1,"/prm/add/maxCpct",_("Maximum size of all archives, MB"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
 		_("Sets limit to maximum amount of the disk space of all arhive's files of the archiver.\n"
-		  "The testing performs the periodically checking for the archives, which resulted in, on exceeding the limit, "
-		  "for the oldest files removing from all archives.\nTo completely remove this restriction you can set it to value < 1."));
+		  "The check is carried out with periodicity of checking the archives, as a result, when the limit is exceeded, "
+		  "the oldest files of all archives are removed.\nTo completely remove this restriction you can set it to zero."));
 	    ctrMkNode("fld",opt,-1,"/prm/add/round",_("Rounding for numeric values (%)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
-		_("Sets the percentage of boundary for values' difference of parameters into integer and real types "
-		  "where they are considered as identical and will be archived as a single value through the sequential packaging.\n"
-		  "Allows for well-packaging of slightly changing parameters which are outside certainty.\n"
+		_("Sets the maximum percentage difference between the values of the parameters of the integer and the real types "
+		  "at which they are considered the same and are arranged in the archive as one value, through successive packaging.\n"
+		  "Allows you to pack lightly changing values beyond the limits of validity.\n"
 		  "To disable this property you can it set to zero."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Timeout to pack files of the archive (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Timeout packaging archive files, minutes"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
 		_("Sets the time after which, in the absence of requests, the archive file will be packaged in a gzip archive.\n"
-		 "Set to zero for disabling the packing by gzip."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/tmout",_("Period of the archives checking (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
-		_("Sets for checking frequency of the archives for the files emergence or deletion "
-		  "into the directory of the archive, as well as exceeding the limits and removing for old files."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use an info file for the packed archives"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
+		  "Set to zero for disabling the packing by gzip."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/tmout",_("Period of the archives checking, minutes"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+		_("Sets the periodicity of checking the archives for the appearance or deletion files into the archive folder, "
+		  "as well as exceeding the limits and removing old archives files."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info file for packaged archives"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
 		_("Specifies whether to create a file with information about the packed archive files by gzip-archiver.\n"
-		  "When copying files of archive to another station, this info file can speed up the target station "
+		  "When copying the files of archive to another station, this info file can speed up the target station "
 		  "process of first run by eliminating the need to decompress by gzip-archiver in order to obtain the information."));
-	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check now for the directory of the archivator"),RWRW__,"root",SARH_ID,1,"help",
+	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check now for the directory of the archiver"),RWRW__,"root",SARH_ID,1,"help",
 		_("The command, which allows you to immediately start for checking the archives, "
 		  "for example, after some manual changes into the directory of the archiver."));
 	}
@@ -854,7 +889,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool to
 		time_t tm = n_beg/1000000;
 		struct tm tm_tm;
 		localtime_r(&tm, &tm_tm);
-		strftime(c_buf, sizeof(c_buf)," %F %T.val",&tm_tm);
+		strftime(c_buf, sizeof(c_buf), " %F %H.%M.%S.val", &tm_tm);
 		string AName = archivator().addr()+"/"+archive().id()+c_buf;
 
 		files.insert(files.begin()+iA, new VFileArch(AName,n_beg,n_end,v_per,archive().valType(),this));
@@ -885,7 +920,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool to
 	time_t tm = beg/1000000;
 	struct tm tm_tm;
 	localtime_r(&tm, &tm_tm);
-	strftime(c_buf, sizeof(c_buf), " %F %T.val", &tm_tm);
+	strftime(c_buf, sizeof(c_buf), " %F %H.%M.%S.val", &tm_tm);
 	string AName = archivator().addr() + "/" + archive().id() + c_buf;
 
 	int64_t n_end = beg + f_sz;
@@ -933,9 +968,9 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
     mEnd = (mEnd/mPer)*mPer+mPer;
 
     //Open/create new archive file
-    int hd = open( name().c_str(),O_RDWR|O_CREAT|O_TRUNC, 0666 );
+    int hd = open(name().c_str(), O_RDWR|O_CREAT|O_TRUNC, SYS->permCrtFiles());
     if(hd <= 0) {
-	owner().archivator().mess_sys(TMess::Error, _("File '%s' creation error: %s(%d)."), name().c_str(), strerror(errno), errno);
+	owner().archivator().mess_sys(TMess::Error, _("Error creating a file '%s': %s(%d)."), name().c_str(), strerror(errno), errno);
 	mErr = true;
 	return;
     }
@@ -1051,9 +1086,9 @@ void VFileArch::attach( const string &iname )
 	mPack = mod->filePack(name());
 	mErr  = !owner().archivator().filePrmGet(name(), NULL, &mTp, &mBeg, &mEnd, &mPer);
 	if(mErr)
-	    throw owner().archivator().err_sys(_("Read parameters of the archive file '%s' error!"), name().c_str());
+	    throw owner().archivator().err_sys(_("Error reading parameters of the archive file '%s'!"), name().c_str());
 	if(period() <= 0)
-	    throw owner().archivator().err_sys(_("Parameters of the archive file '%s' are error!"), name().c_str());
+	    throw owner().archivator().err_sys(_("Error parameters of the archive file '%s'!"), name().c_str());
 
 	//Init values type parameters
 	switch(type()) {
@@ -1112,7 +1147,7 @@ void VFileArch::attach( const string &iname )
 	    }
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	mod->mess_sys(TMess::Error, _("Attach file '%s' error."), name().c_str());
+	mod->mess_sys(TMess::Error, _("Error attaching the file '%s'."), name().c_str());
 	mErr = true;
     }
 }
@@ -1142,11 +1177,11 @@ void VFileArch::check( )
 	    SYS->db().at().dataSet((owner().archivator().infoTbl.size()?owner().archivator().infoTbl:mod->filesDB()),
 		mod->nodePath()+"Pack/",cEl, false, true);
 	}
-	else if((hd=open((name()+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,0666)) > 0) {
+	else if((hd=open((name()+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,SYS->permCrtFiles())) > 0) {
 	    // Write info to info file
 	    string si = TSYS::strMess("%llx %llx %s %llx %d",begin(),end(),owner().archive().id().c_str(),period(),type());
 	    if(write(hd,si.data(),si.size()) != (int)si.size())
-		mod->mess_sys(TMess::Error, _("Write to '%s' error!"), (name()+".info").c_str());
+		mod->mess_sys(TMess::Error, _("Error writing to '%s'!"), (name()+".info").c_str());
 	    close(hd);
 	}
     }
@@ -1157,7 +1192,7 @@ int64_t VFileArch::endData( )
     if(getVal(maxPos()).getS() != EVAL_STR) return end(); //vmin(SYS->curTime(), end());
 
     ResAlloc res(mRes,false);
-    if(mErr) throw owner().archivator().err_sys(_("Archive file error!"));
+    if(mErr) throw owner().archivator().err_sys(_("Error archive file!"));
     if(mPack) {
 	res.request(true);
 	try{ if(mPack) mName = mod->unPackArch(mName); } catch(TError&) { mErr = true; throw; }
@@ -1193,7 +1228,7 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
     char *pid_b, *val_b = NULL;
 
     ResAlloc res(mRes,false);
-    if(mErr) throw owner().archivator().err_sys(_("Archive file error!"));
+    if(mErr) throw owner().archivator().err_sys(_("Error archive file!"));
 
     //Get values block character
     vpos_beg = vmax(0, (beg-begin())/period());
@@ -1236,8 +1271,8 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 	if((fOK=(read(hd,pid_b,i_end-i_beg) == (i_end-i_beg)))) {
 	    // Calc end offset
 	    voff_end = voff_beg;
-	    for(int i_pos = vpos_beg+1; i_pos <= vpos_end; i_pos++)
-		voff_end += vSize*(bool)((0x01<<(i_pos%8))&pid_b[(i_pos/8)-(vpos_beg/8)]);
+	    for(int iPos = vpos_beg+1; iPos <= vpos_end; iPos++)
+		voff_end += vSize*(bool)((0x01<<(iPos%8))&pid_b[(iPos/8)-(vpos_beg/8)]);
 	    // Get value block
 	    i_beg = voff_beg;
 	    i_end = voff_end+vSize;
@@ -1256,10 +1291,10 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 	    // Calc end offset
 	    voff_end = voff_beg;
 	    vlen_end = vlen_beg;
-	    for(int i_pos = (vpos_beg+1); i_pos <= vpos_end; i_pos++) {
+	    for(int iPos = (vpos_beg+1); iPos <= vpos_end; iPos++) {
 		int pk_vl = 0;
 		for(int i_e = 0; i_e < vSize; i_e++)
-		    pk_vl += pid_b[vSize*(i_pos-vpos_beg)+i_e]<<(8*i_e);
+		    pk_vl += pid_b[vSize*(iPos-vpos_beg)+i_e]<<(8*i_e);
 		if(pk_vl) {
 		    voff_end += vlen_end;
 		    vlen_end = pk_vl;
@@ -1320,7 +1355,7 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 TVariant VFileArch::getVal( int vpos )
 {
     ResAlloc res(mRes, false);
-    if(mErr) throw owner().archivator().err_sys(_("Archive file error!"));
+    if(mErr) throw owner().archivator().err_sys(_("Error archive file!"));
 
     mAcces = time(NULL);
 
@@ -1376,7 +1411,7 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     string val_b, value, value_first, value_end = eVal;	//Set value
 
     ResAlloc res(mRes, false);
-    if(mErr) return false;	//throw owner().archivator().err_sys(_("Archive file error!"));
+    if(mErr) return false;	//throw owner().archivator().err_sys(_("Error archive file!"));
 
     ibeg = vmax(ibeg, begin());
     iend = vmin(iend, end());
@@ -1565,7 +1600,7 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 
     close(hd);
 
-    if(!fOK) owner().archivator().mess_sys(TMess::Error, _("Write to the archive '%s' file '%s' error: %s(%d)"),
+    if(!fOK) owner().archivator().mess_sys(TMess::Error, _("Error writing to the archive '%s' file '%s': %s(%d)"),
 			owner().archive().id().c_str(), name().c_str(), strerror(errno), errno);
 
     return fOK;
@@ -1586,7 +1621,7 @@ string VFileArch::getValue( int hd, int voff, int vsz )
     }
 
     if(!fOK) {
-	mod->mess_sys(TMess::Error, _("Read file '%s' for offset %d error!"), name().c_str(), voff);
+	mod->mess_sys(TMess::Error, _("Error reading the file '%s' for offset %d!"), name().c_str(), voff);
 	if(!intoRep) repairFile(hd);
     }
 
@@ -1684,7 +1719,7 @@ void VFileArch::setValue( int hd, int voff, const string &val )
 {
     lseek(hd, voff, SEEK_SET);
     if(write(hd,val.c_str(),val.size()) != (int)val.size())
-	mod->mess_sys(TMess::Error, _("Write to file '%s' error!"), name().c_str());
+	mod->mess_sys(TMess::Error, _("Error writing to the file '%s'!"), name().c_str());
 }
 
 void VFileArch::moveTail( int hd, int old_st, int new_st )
@@ -1794,8 +1829,8 @@ void VFileArch::repairFile( int hd )
 	if((dStat.st_mode&S_IFMT) == S_IFDIR && access(errsDir.c_str(),F_OK|W_OK|X_OK) == 0) {
 	    //  Copy the error file for observing next
 	    char cpBuf[4096];
-	    int ehd = open((errsDir+name().substr(name().rfind("/"))).c_str(), O_WRONLY|O_CREAT|O_TRUNC, 0666);
-	    if(ehd < 0) owner().archivator().mess_sys(TMess::Error, _("Error open/create archive file for copy here: %s"), strerror(errno));
+	    int ehd = open((errsDir+name().substr(name().rfind("/"))).c_str(), O_WRONLY|O_CREAT|O_TRUNC, SYS->permCrtFiles());
+	    if(ehd < 0) owner().archivator().mess_sys(TMess::Error, _("Error openning/creating an archive file for the copy here: %s"), strerror(errno));
 	    else {
 		lseek(hd, 0, SEEK_SET);
 		for(int rs = 0; fOK && (rs=read(hd, cpBuf, sizeof(cpBuf))) > 0; )
@@ -1830,7 +1865,7 @@ void VFileArch::repairFile( int hd )
 
     //Check to end value EVAL for actual archive file
     if(fOK && end() > TSYS::curTime() && getValue(hd,fOff,vSz) != eVal) {
-	owner().archivator().mess_sys(TMess::Error, _("Last value for actual archive file '%s' is not EVAL. Will try fix that!"), name().c_str());
+	owner().archivator().mess_sys(TMess::Error, _("Last value for the actual archive file '%s' is not EVAL. Will try fix that!"), name().c_str());
 
 	mSize = fOff + eVal.size();
 	if((fOK=(ftruncate(hd,mSize)==0))) {
@@ -1846,11 +1881,14 @@ void VFileArch::repairFile( int hd )
 int VFileArch::cacheGet( int &pos, int *vsz )
 {
     CacheEl rez = {0, 0, 0};
-    for(int i_p = (int)cache.size()-1; i_p >= 0; i_p--)
-	if(pos >= cache[i_p].pos) { rez = cache[i_p]; break; }
+
+    dtRes.lock();
+    for(int iP = (int)cache.size()-1; iP >= 0; iP--)
+	if(pos >= cache[iP].pos) { rez = cache[iP]; break; }
 
     if(pos >= cach_pr_rd.pos && cach_pr_rd.pos > rez.pos) rez = cach_pr_rd;
     if(pos >= cach_pr_wr.pos && cach_pr_wr.pos > rez.pos) rez = cach_pr_wr;
+    dtRes.unlock();
 
     pos = rez.pos;
     if(vsz) *vsz = rez.vsz;
@@ -1861,10 +1899,11 @@ void VFileArch::cacheSet( int pos, int off, int vsz, bool last, bool wr  )
 {
     CacheEl el = { pos, off, vsz };
 
+    MtxAlloc res(dtRes, true);
     if(!last) {
-	for(unsigned i_p = 0; i_p < cache.size(); i_p++)
-	    if(el.pos == cache[i_p].pos)	{ cache[i_p] = el; return; }
-	    else if(el.pos < cache[i_p].pos)	{ cache.insert(cache.begin()+i_p,el); return; }
+	for(unsigned iP = 0; iP < cache.size(); iP++)
+	    if(el.pos == cache[iP].pos)	{ cache[iP] = el; return; }
+	    else if(el.pos < cache[iP].pos)	{ cache.insert(cache.begin()+iP,el); return; }
 	cache.push_back(el);
     }
     else if(wr) cach_pr_wr = el;
@@ -1873,10 +1912,12 @@ void VFileArch::cacheSet( int pos, int off, int vsz, bool last, bool wr  )
 
 void VFileArch::cacheDrop( int pos )
 {
-    for(unsigned i_p = 0; i_p < cache.size(); ) {
-	if(cache[i_p].pos >= pos) { cache.erase(cache.begin()+i_p); continue; }
-	i_p++;
+    dtRes.lock();
+    for(unsigned iP = 0; iP < cache.size(); ) {
+	if(cache[iP].pos >= pos) { cache.erase(cache.begin()+iP); continue; }
+	iP++;
     }
     if(cach_pr_rd.pos >= pos)	cach_pr_rd.off = cach_pr_rd.pos = cach_pr_rd.vsz = 0;
     if(cach_pr_wr.pos >= pos)	cach_pr_wr.off = cach_pr_wr.pos = cach_pr_wr.vsz = 0;
+    dtRes.unlock();
 }

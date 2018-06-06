@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-28 12:59+0200\n"
+"POT-Creation-Date: 2018-06-05 11:45+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -23,11 +23,11 @@ msgid "Roman Savochenko, Maxim Kochetkov"
 msgstr "Roman Savotschenko, Maxim Kochetkov"
 
 msgid ""
-"Provides sockets based transport. Support inet and unix sockets. Inet socket "
-"uses TCP, and UDP protocols."
+"Provides sockets based transport. Support network and UNIX sockets. Network "
+"socket supports TCP, UDP protocols."
 msgstr ""
-"Gewährt den auf Sockets gebauten Transport. Internet und UNIX Sockets werden "
-"unterstützt. Internet Socket benutzt die TCP und UDP Protokolle."
+"Bietet sockelbasierten Transport. Unterstützen Sie Netzwerk- und UNIX-"
+"Sockets. Netzwerk-Socket unterstützt TCP-, UDP-Protokolle."
 
 msgid "Addition parameters"
 msgstr "Weitere Optionen"
@@ -100,8 +100,8 @@ msgstr "Lesen Datagramm %s aus '%s'!"
 msgid "Wrote datagram %s to '%s'!"
 msgstr "Schrieb Datagramm %s auf '%s'!"
 
-msgid " client task is stopping...."
-msgstr " Kundenaufgabe wird gestoppt...."
+msgid " stopping client tasks ..."
+msgstr " Client-Aufgaben stoppen ..."
 
 #, c-format
 msgid "Has been connected by '%s'!"
@@ -284,12 +284,16 @@ msgid "Error creation UDP socket: '%s (%d)'!"
 msgstr "Fehler der Schaffung des UDP Sockets: '%s (%d)'!"
 
 #, c-format
-msgid "Connect by timeout %s error: '%s (%d)'"
-msgstr "Verbinden von Timeout %s Fehler: '%s (%d)'"
+msgid "Error connecting during the time %s: '%s (%d)'"
+msgstr "Fehler beim Verbinden während der Zeit %s: '%s (%d)'"
 
 #, c-format
-msgid "Connect to Internet socket error: '%s (%d)'!"
-msgstr "Fehler der Internet Verbidung mit dem Socket: '%s (%d)'!"
+msgid ""
+"Error connection to the internet socket '%s:%s' during the timeout, it seems "
+"in down or inaccessible: '%s (%d)'!"
+msgstr ""
+"Fehler beim Verbinden mit dem Internet-Socket '%s:%s' während des Timeouts, "
+"es scheint nicht aktiv oder erreichbar zu sein: '%s (%d)'!"
 
 #, c-format
 msgid "Error creation UNIX socket: '%s (%d)'!"

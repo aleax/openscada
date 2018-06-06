@@ -1,7 +1,7 @@
 
-//OpenSCADA system module Protocol.HTTP file: http.cpp
+//OpenSCADA module Protocol.HTTP file: http.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.1.2"
+#define MOD_VER		"3.1.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -89,20 +89,16 @@ TProt::~TProt( )
 
 string TProt::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),_(
+    return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section '%s' in config-file ----------\n"
-	"AuthTime <min>      Life time of the authentication, minutes (default 10).\n\n"),
+	"---- Parameters of the module section '%s' of the configuration file ----\n"
+	"AuthTime   <min>        Life time of the authentication session, in minutes (default 10).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
-
-    return buf;
 }
 
 void TProt::load_( )
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
     setDeny(TBDS::genDBGet(nodePath()+"Deny",deny()));
@@ -228,15 +224,15 @@ TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 		    }
 		}
 	    }
-	    if(answer.empty())
+	    if(answer.empty()) {
 		answer = "<?xml version='1.0' ?>\n"
 		    "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n"
 		    "<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 		    " <head>\n"
 		    "  <meta http-equiv='Content-Type' content='text/html; charset=" + Mess->charset() + "'/>\n" +
 		    ((prms.size() >= 4) ? prms[3].getS() : "" ) +
-		    "  <title>" PACKAGE_NAME ": " + SYS->id() + "</title>\n"
-		    "  <link rel='shortcut icon' href='/" + SYS->id() + ".png' type='image' />\n"
+		    "  <title>" PACKAGE_NAME ": " + SYS->name() + " (" + SYS->id() + ")</title>\n" +
+		    "  <link rel='shortcut icon' href='/"+SYS->id()+"' type='image' />\n" +
 		//    "  <title>" PACKAGE_NAME "!</title>\n"
 		//    "  <link rel='shortcut icon' href='/" SPRT_ID "." MOD_ID ".png' type='image' />\n"
 		    "  <style type='text/css'>\n"
@@ -254,12 +250,13 @@ TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 		    "  </style>\n"
 		    " </head>\n"
 		    " <body>\n"
-		    "  <h1 class='head'>" PACKAGE_NAME ": " + SYS->id() + "</h1>\n"
+		    "  <h1 class='head'>" PACKAGE_NAME ": " + SYS->name() + " (" + SYS->id() + ")</h1>\n"
 		    "  <hr/><br/>\n"
 		    "<center>\n" CtxTmplMark "</center>\n"
 		    "  <hr/>\n"
 		    " </body>\n"
 		    "</html>\n";
+	    }
 
 	    size_t tmplPos = answer.find(CtxTmplMark);
 	    if(tmplPos != string::npos) answer = answer.replace(tmplPos, strlen(CtxTmplMark), prms[0].getS());
@@ -844,7 +841,7 @@ string TProtIn::getIndex( const string &user, const string &sender )
     string answer = string("<table class='work' width='50%'>\n")+
 	"<tr><th>"+_("Login")+"</th></tr>"
 	"<tr><td class='content'>";
-	// "<p>"+_("Welcome to the Web-interfaces of OpenSCADA system.")+"</p>";
+	// "<p>"+_("Welcome to the Web-interfaces of OpenSCADA.")+"</p>";
     if(!user.empty())
 	answer = answer +
 	    "<p style='color: green;'>"+TSYS::strMess(_("You are logged in as \"<b>%s</b>\"."),user.c_str())+"</p>"

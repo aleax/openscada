@@ -69,6 +69,8 @@ class TSubSYS : public TCntrNode
 
 	virtual void perSYSCall( unsigned int cnt );
 
+	virtual string optDescr( );
+
 	TSYS &owner( ) const;
 
     protected:
