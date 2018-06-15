@@ -188,7 +188,7 @@ private slots:
 private:
     //Methods
     // Page display
-    void selectPage( const string &path );
+    void selectPage( const string &path, int tm = 0 );
     void pageDisplay( const string &path );
 
     // View ListItem with recursive processing of the ControllArea

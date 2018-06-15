@@ -704,7 +704,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				selectPage(selPath+'/'+(this.parentNode.srcNode.getAttribute('br_pref')+this.parentNode.lsId).replace(/%/g,'%25').replace(/\//g,'%2f'));
 			    else if(posId == 'add' || posId == 'ins' || posId == 'edit') {
 				dlgWin = ReqIdNameDlg('/'+MOD_ID+'/ico');
-				setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Item name set###');
+				setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Setting item name###');
 				var idSz = parseInt(this.parentNode.srcNode.getAttribute('idSz'));
 				dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].maxLength = ((idSz > 0) ? idSz : 1000);
 				dlgWin.document.getElementById('wDlgType').style.display = 'none';
@@ -717,7 +717,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				actOkFld.lsId = this.parentNode.lsId;
 				actOkFld.lsText = this.parentNode.lsText;
 				if(posId == 'add') {
-				    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Add new element.###');
+				    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Adding an element.###');
 				    actOkFld.onclick = function() {
 					var idm = dlgWin.document.getElementById('wDlgName').style.display!='none';
 					var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
@@ -731,7 +731,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				    }
 				}
 				else if(posId == 'ins') {
-				    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Insert new element.###');
+				    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Inserting an element.###');
 				    actOkFld.onclick = function() {
 					var idm = dlgWin.document.getElementById('wDlgName').style.display!='none';
 					var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
@@ -746,7 +746,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				    }
 				}
 				else if(posId == 'edit') {
-				    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Rename element.###');
+				    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Renaming the element.###');
 				    dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value = idm ? this.parentNode.lsId : this.parentNode.lsText;
 				    if(idm) dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value = this.parentNode.lsText;
 				    actOkFld.onclick = function() {
@@ -829,8 +829,8 @@ function selectChildRecArea( node, aPath, cBlk )
 		if(wr) {
 		    val.style.cursor = 'pointer';
 		    val.onclick = function( ) {
-			dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_save','###Select image file for download to picture field.###','/'+MOD_ID+this.itPath+'?com=img',true);
-			setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Image set###');
+			dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_save','###Selecting an image file for download to the picture field.###','/'+MOD_ID+this.itPath+'?com=img',true);
+			setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Setting an image###');
 			dlgWin.document.getElementById('wDlgType').style.display = 'none';
 			dlgWin.document.getElementById('wDlgId').style.display = 'none';
 			dlgWin.document.getElementById('wDlgName').style.display = '';
@@ -1986,10 +1986,10 @@ function itAdd( )
 			"' gid='"+branchS.childNodes[i_b].getAttribute('id')+
 			"' idm='"+branchS.childNodes[i_b].getAttribute('idm')+"'>"+
 		branchS.childNodes[i_b].getAttribute('dscr')+"</option>";
-  if(!typeCfg.length) { alert('###No one editable container present.###'); return; }
+  if(!typeCfg.length) { alert('###There is no container for editing.###'); return; }
 
-  dlgWin = ReqIdNameDlg(document.getElementById('actAddIt').childNodes[0].src,("###Add item to node '%1'.###").replace('%1',selPath));
-  setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Add node###');
+  dlgWin = ReqIdNameDlg(document.getElementById('actAddIt').childNodes[0].src,("###Adding an item to the node '%1'.###").replace('%1',selPath));
+  setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Adding a node###');
   dlgWin.document.getElementById('wDlgType').style.display = '';
   dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].innerHTML = typeCfg;
   dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange = function( )
@@ -2017,7 +2017,7 @@ function itAdd( )
     for( var i_lel = 0; i_lel < req.childNodes.length; i_lel++ )
       if( (req.childNodes[i_lel].getAttribute('id') && req.childNodes[i_lel].getAttribute('id') == inpId) ||
 	(!req.childNodes[i_lel].getAttribute('id') && nodeText(req.childNodes[i_lel]) == inpId) )
-      { alert(("###Item '%1' already present.###").replace('%1',inpId)); document.body.dlgWin.close(); return; }
+      { alert(("###Item '%1' already exists.###").replace('%1',inpId)); document.body.dlgWin.close(); return; }
 
     //> Send command
     var rez = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com',"<add "+(idm?("id='"+inpId+"'"):"")+">"+inpName+"</add>",true);
@@ -2035,7 +2035,7 @@ function itDel( iit )
   var rmit = iit ? iit : selPath;
   if( !rmit || !rmit.length ) return;
 
-  if( !iit && !confirm(("###You sure for delete node '%1'?###").replace('%1',rmit)) ) return;
+  if( !iit && !confirm(("###Are you sure you want to remove the node '%1'?###").replace('%1',rmit)) ) return;
 
   var t_el, sel_own = '', sel_el;
   var n_obj = 0;
@@ -2122,7 +2122,7 @@ function itPaste( )
 
     //Make a request dialog
     dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_it_add');
-    setNodeText(dlgWin.document.getElementById('wDlgHeader'), '###Move or copy node###');
+    setNodeText(dlgWin.document.getElementById('wDlgHeader'), '###Moving or copying the node###');
     if(copyBuf.charAt(0) == '1')
 	setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],
 	    ("###Move node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',toPath));
@@ -2203,7 +2203,7 @@ function ReqIdNameDlg( ico, mess, actPath, nmFile )
 	"     this.offsetParent.style.left = (parseInt(this.offsetParent.style.left)+event.clientX-this.clX)+\"px\"; "+
 	"     this.offsetParent.style.top  = (parseInt(this.offsetParent.style.top)+event.clientY-this.clY)+\"px\"; "+
 	"     this.clX = event.clientX; this.clY = event.clientY; }'>"+
-	" <td id='wDlgHeader'>###Node id and/or name select###</td>\n"+
+	" <td id='wDlgHeader'>###Selecting node id and/or name###</td>\n"+
 	" <td style='color: red; cursor: pointer; text-align: right; width: 1px; ' onclick='document.body.dlgWin.close();'>X</td>\n"+
 	"</tr>\n"+
 	"<tr><td colspan='2' style='max-width: 400px;'>\n"+

@@ -31,7 +31,7 @@ using namespace OSCADA;
 //************************************************
 //* TTransportS					 *
 //************************************************
-TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true)
+TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true), extHostLoad(0)
 {
     //Input transport BD structure
     elIn.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
@@ -188,8 +188,9 @@ void TTransportS::load_( )
 	    host.user		= c_el.cfg("USER").getS();
 	    host.pass		= c_el.cfg("PASS").getS();
 	    host.upRiseLev	= c_el.cfg("UpRiseLev").getI();
-	    extHostSet(host);
+	    extHostSet(host, false, true);
 	}
+	extHostLoad = time(NULL);
     } catch(TError &err) {
 	mess_err(err.cat.c_str()," %s", err.mess.c_str());
 	mess_sys(TMess::Error, _("Error finding and loading external hosts."));
@@ -357,7 +358,7 @@ TTransportS::ExtHost TTransportS::extHostGet( const string &user, const string &
     return eh;
 }
 
-void TTransportS::extHostSet( const ExtHost &host, bool andSYS )
+void TTransportS::extHostSet( const ExtHost &host, bool andSYS, bool load )
 {
     ResAlloc res(extHostRes, true);
     int usrHstId = -1, sysHstId = -1;
@@ -367,6 +368,9 @@ void TTransportS::extHostSet( const ExtHost &host, bool andSYS )
 	    else if(extHostLs[iH].userOpen == host.userOpen)	usrHstId = iH;
 	    else if(extHostLs[iH].userOpen == "*")		sysHstId = iH;
 	}
+
+    time_t saveMdf = (load && usrHstId >= 0 && extHostLs[usrHstId].mdf <= extHostLoad) ? extHostLs[usrHstId].mdf : 0;
+
     if(host.mode < 0 || !andSYS) {
 	if(usrHstId < 0) extHostLs.push_back(host);
 	else extHostLs[usrHstId] = host;
@@ -385,6 +389,8 @@ void TTransportS::extHostSet( const ExtHost &host, bool andSYS )
 	if(host.mode == ExtHost::User && sysHstId >= 0) extHostLs.erase(extHostLs.begin() + sysHstId);
 	if(host.mode == ExtHost::System && usrHstId >= 0 && usrHstId != sysHstId) extHostLs.erase(extHostLs.begin() + usrHstId);
     }
+
+    if(saveMdf)	extHostLs[usrHstId].mdf = saveMdf;
 
     modif();
 }
@@ -464,7 +470,8 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),R_R_R_) &&
-	    ctrMkNode("table",opt,-1,"/sub/ehost",_("External hosts poll"),RWRWRW,"root",STR_ID,2,"s_com","add,del","key","id"))
+	    ctrMkNode("table",opt,-1,"/sub/ehost",TSYS::strMess(_("External hosts of %s"),PACKAGE_NAME).c_str(),RWRWRW,"root",STR_ID,2,
+		"s_com","add,del","key","id"))
 	{
 	    ctrMkNode("list",opt,-1,"/sub/ehost/id",_("Identifier"),RWRWRW,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/sub/ehost/name",_("Name"),RWRWRW,"root",STR_ID,1,"tp","str");

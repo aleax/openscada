@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-28 09:49+0200\n"
+"POT-Creation-Date: 2018-06-11 11:42+0300\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -40,25 +40,25 @@ msgstr ""
 "\n"
 
 #, c-format
-msgid "HTML template '%s' for language '%s' load error: %s"
+msgid "Error loading the HTML template '%s' for the language '%s': %s"
 msgstr "Ошибка загрузки HTML шаблона '%s' для языка '%s': %s"
 
 #, c-format
-msgid "Auth exit from user '%s'."
+msgid "Exiting the authentication for the user '%s'."
 msgstr "Выход аутентификации пользователя '%s'."
 
 #, c-format
-msgid "Auth session for user '%s' expired."
+msgid "The authentication session for the user '%s' is expired."
 msgstr "Сеанс аутентификации для пользователя '%s' устарел."
 
 #, c-format
-msgid "HTTP method '%s' error or don't support."
+msgid "Error or not supported the HTTP method '%s'."
 msgstr "Ошибка или не поддерживается HTTP-метод '%s'."
 
-msgid "HTTP respond error"
+msgid "Error the HTTP response"
 msgstr "Ошибка HTTP ответа"
 
-msgid "Not full respond."
+msgid "Not full response."
 msgstr "Неполный ответ."
 
 msgid "Protocol"
@@ -82,20 +82,20 @@ msgstr "Разрешено"
 msgid "HTML template"
 msgstr "HTML шаблон"
 
-msgid "HTML main page template"
+msgid "HTML template of the main page"
 msgstr "HTML шаблон главной страницы"
 
-msgid "Life time of the authentication (min)"
-msgstr "Время жизни аутентификации (мин)"
+msgid "Life time of the authentication, minutes"
+msgstr "Время жизни аутентификации, минут"
 
-msgid "List of users allowed for auth, separated by ';'"
+msgid "List of users allowed for authentication, separated by ';'"
 msgstr "Перечень пользователей допустимых для аутентификации, разделённые ';'"
 
 msgid "Auto login"
 msgstr "Автоматический вход"
 
 msgid ""
-"For address field you can use address templates list, for example "
+"A list of address templates can be used for the address field, for example "
 "\"192.168.1.*;192.168.2.*\"."
 msgstr ""
 "Для поля адреса возможно использование списка шаблонов адресов, для примера "
@@ -120,7 +120,7 @@ msgstr ""
 "%s"
 
 #, c-format
-msgid "Auth OK from user '%s'. Host: %s. User agent: %s."
+msgid "Successful authentication for the user '%s'. Host: %s. User agent: %s."
 msgstr ""
 "Успешная аутентификация пользователя '%s'. Узел: %s. Агент пользователя: %s."
 
@@ -129,29 +129,23 @@ msgid "Going to the page: <b>%s</b>"
 msgstr "Переход к странице: <b>%s</b>"
 
 #, c-format
-msgid "Auth wrong from user '%s'. Host: %s. User agent: %s."
+msgid "Wrong authentication from the user '%s'. Host: %s. User agent: %s."
 msgstr ""
 "Ошибка аутентификации пользователя '%s'. Узел: %s. Агент пользователя: %s."
 
-msgid "<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"
+msgid "<p style='color: #CF8122;'>Wrong authentication! Retry please.</p>"
 msgstr ""
 "<p style='color: #CF8122;'>Ошибка аутентификации! Повторите пожалуйста.</p>"
 
-msgid "No one WWW subtype module was found!"
+msgid "No WWW subtype module found!"
 msgstr "Не найдено модулей с подтипом WWW!"
 
 #, c-format
-msgid "Auto auth from user '%s'. Host: %s. User agent: %s."
-msgstr ""
-"Автоматическая аутентификация для пользователя '%s'. Узел: %s. Агент "
-"пользователя: %s."
-
-#, c-format
-msgid "No a HTTP GET function present for module '%s'!"
+msgid "No HTTP GET function in the module '%s'!"
 msgstr "Нет HTTP GET функции у модуля '%s'!"
 
 #, c-format
-msgid "No a HTTP POST function present for module '%s'!"
+msgid "No HTTP POST function in the module '%s'!"
 msgstr "Нет HTTP POST функции у модуля '%s'!"
 
 msgid "Login"
@@ -180,7 +174,7 @@ msgstr ""
 
 #, c-format
 msgid ""
-"You can auto-login from user \"<b>%s</b>\" by simple selecting the module."
+"You can auto-login from the user \"<b>%s</b>\" just selecting the module."
 msgstr ""
 "Вы можете автоматически подключиться от имени пользователя \"<b>%s</b>\" "
 "просто выбрав модуль."
@@ -188,7 +182,7 @@ msgstr ""
 msgid "Accessible web modules"
 msgstr "Доступные web-модули"
 
-msgid "Login to system"
+msgid "Login to the system"
 msgstr "Вход в систему"
 
 msgid "User name"

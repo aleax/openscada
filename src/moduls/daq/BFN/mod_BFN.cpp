@@ -36,9 +36,9 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.12"
+#define MOD_VER		"0.6.13"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Big Farm Net (BFN) modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
+#define DESCRIPTION	_("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -84,7 +84,7 @@ void TTpContr::postEnable( int flag )
     //fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period, seconds"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
+    fldAdd(new TFld("SYNCPER",_("Period of sync with the remote station, seconds"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
     fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"50",""));
     fldAdd(new TFld("PASS",_("Password"),TFld::String,TFld::NoFlag,"30",""));
@@ -389,7 +389,7 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
-    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
+    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to the data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
     alSt = -1;
 
     //Clear errors and set EVal
@@ -420,7 +420,7 @@ void TMdContr::reqBFN(XMLNode &io)
 
     AutoHD<TTransportOut> tr;
     try{ tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.')); }
-    catch(TError &err) { throw TError(nodePath().c_str(),_("Connect to transport '%s' error."),addr().c_str()); }
+    catch(TError &err) { throw TError(nodePath().c_str(),_("Error connecting to the transport '%s'."),addr().c_str()); }
 
     XMLNode req("POST");
     req.setAttr("URI","/cgi-bin/imwl_ws.cgi");
@@ -452,7 +452,7 @@ void TMdContr::reqBFN(XMLNode &io)
     if(req.attr("err").empty()) {
 	XMLNode rez;
 	try { rez.load(req.text()); }
-	catch(TError &err) { throw TError(nodePath().c_str(),_("Respond parsing error. Possible respond incomplete.")); }
+	catch(TError &err) { throw TError(nodePath().c_str(),_("Error parsing the respond. The respond seems incomplete.")); }
 	string rCod = rez.childGet("SOAP-ENV:Body")->childGet("imwlws:"+reqName+"Response")->childGet("res")->text();
 	if(s2i(rCod)) io.setAttr("err",rCod);
 	else {
@@ -585,12 +585,12 @@ void *TMdContr::Task( void *icntr )
 	//Generic alarm generate
 	if(tErr.size() && cntr.alSt <= 0) {
 	    cntr.alSt = 1;
-	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),
+	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to the data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),
 						TRegExp(":","g").replace(tErr,"=").c_str()));
 	}
 	else if(!tErr.size() && cntr.alSt != 0) {
 	    cntr.alSt = 0;
-	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),
+	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to the data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),
 			    TMess::Info);
 	}
 	cntr.acq_err.setVal(tErr);

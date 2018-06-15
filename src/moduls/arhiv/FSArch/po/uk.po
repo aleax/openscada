@@ -46,7 +46,7 @@ msgstr "Помилка перевірки архіватору значень '%
 
 #, c-format
 msgid "The value archiver '%s' uses the same folder '%s' as an other archiver."
-msgstr ""
+msgstr "Архіватор значень '%s' використовую ту саму теку '%s' що й інший."
 
 #, c-format
 msgid "%s: Mess: %s: information"

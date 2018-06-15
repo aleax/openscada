@@ -48,6 +48,14 @@ ModMArch::~ModMArch( )
     try { stop(); } catch(...) { }
 }
 
+TCntrNode &ModMArch::operator=( const TCntrNode &node )
+{
+    TMArchivator::operator=(node);
+    load_();
+
+    return *this;
+}
+
 string ModMArch::infoDBnm( )	{ return MOD_ID "_Mess_"+id()+"_info"; }
 
 void ModMArch::load_( )

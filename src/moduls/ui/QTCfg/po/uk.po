@@ -178,16 +178,16 @@ msgid "Press for pasting the item."
 msgstr "Натиснути для вставки елементу."
 
 msgid "&Refresh"
-msgstr "П&оновити"
+msgstr "О&новити"
 
 msgid "Refresh the page"
-msgstr "Поновити поточну сторінку"
+msgstr "Оновити поточну сторінку"
 
 msgid "The button for refreshing the page content"
-msgstr "Кнопка поновлення вмісту поточної сторінки"
+msgstr "Кнопка оновлення вмісту поточної сторінки"
 
 msgid "Press for refreshing the page content."
-msgstr "Натиснути для поновлення вмісту поточної сторінки."
+msgstr "Натиснути для оновлення вмісту поточної сторінки."
 
 msgid "&Start"
 msgstr "За&пустити"
@@ -277,7 +277,7 @@ msgid "&Edit"
 msgstr "Редагування"
 
 msgid "&View"
-msgstr "&Вигляд"
+msgstr "&Вид"
 
 msgid "&Help"
 msgstr "&Допомога"
@@ -670,7 +670,7 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid "Provides the Qt-based configurator of OpenSCADA."
-msgstr "Надає базований на Qt конфігуратор OpenSCADA."
+msgstr "Надає заснований на Qt конфігуратор OpenSCADA."
 
 #, c-format
 msgid ""

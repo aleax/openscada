@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-04 23:30+0300\n"
+"POT-Creation-Date: 2018-06-15 22:36+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -705,8 +705,8 @@ msgstr "Der hinzugefügte Kindbezeichner ist leer!"
 msgid "The node '%s' is already present."
 msgstr "Der Knoten '%s' ist schon vorhanden."
 
-msgid "Node is being processed now!"
-msgstr "Knoten wird jetzt bearbeitet!"
+msgid "Node is being processed now for enable!"
+msgstr "Knoten wird jetzt zur Aktivierung verarbeitet!"
 
 msgid "Node root or not connected!"
 msgstr "Knotenstamm oder nicht verbunden!"
@@ -768,17 +768,17 @@ msgstr "Attribut '%s' ist nicht vorhanden!"
 msgid "Element type is not selective!"
 msgstr "Elementtyp ist nicht selektiv!"
 
-msgid "Element type is not string!"
-msgstr "Elemententyp ist nicht Text!"
+msgid "Element type is not String!"
+msgstr "Elementtyp ist nicht String!"
 
-msgid "Element type is not real!"
-msgstr "Elemententyp ist nicht Reelle Zahl!"
+msgid "Element type is not Real!"
+msgstr "Elementtyp ist nicht Reelle Zahl!"
 
-msgid "Element type is not integer!"
-msgstr "Elemententyp ist nicht Ganzzahl!"
+msgid "Element type is not Integer!"
+msgstr "Elementtyp ist nicht Ganzzahl!"
 
 msgid "Element type is not Boolean!"
-msgstr "Elemententyp ist nicht Logisch!"
+msgstr "Elementtyp ist nicht Logisch!"
 
 msgid "Running. "
 msgstr "Laufen. "
@@ -1093,14 +1093,6 @@ msgstr "%s: Fehler des Bezeichners oder IO %d!"
 msgid "Error getting object from non-object IO %d!"
 msgstr "Fehler beim Empfang des Objekts vom anderen IO %d !"
 
-#, c-format
-msgid "Error opening 'iconv': %s"
-msgstr "Fehler beim Öffnen 'iconv': %s"
-
-#, c-format
-msgid "Error converting input sequence: %s"
-msgstr "Fehler beim Konvertieren der Eingangssequenz: %s"
-
 msgid ""
 "DB address in format \"{DB module}.{DB name}\".\n"
 "Set '*.*' for use the main work DB."
@@ -1207,7 +1199,7 @@ msgid ""
 msgstr ""
 "=================== Optionen des Subsystems \"Modul-Scheduler\" "
 "====================\n"
-"    --ModPath=<path>    Verzeichnisse mit den Modulen, getrennt durch ';', "
+"    --modPath=<path>    Verzeichnisse mit den Modulen, getrennt durch ';', "
 "können am Ende eine Dateivorlage enthalten.\n"
 "---------- Parameter des Abschnitts '%s' der Konfigurationsdatei ----------\n"
 "ModPath    <path>       Verzeichnisse mit den Modulen, getrennt durch ';', "
@@ -2274,8 +2266,9 @@ msgstr ""
 msgid "Error the remote host '%s'!"
 msgstr "Fehler beim Remote-Host '%s'!"
 
-msgid "External hosts poll"
-msgstr "Liste der entfernten Systeme"
+#, c-format
+msgid "External hosts of %s"
+msgstr "Externe Hosts von %s"
 
 msgid "User;System;User and System"
 msgstr "Benutzer;System;Benutzer und System"
@@ -2601,3 +2594,9 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
+
+#~ msgid "Error opening 'iconv': %s"
+#~ msgstr "Fehler beim Öffnen 'iconv': %s"
+
+#~ msgid "Error converting input sequence: %s"
+#~ msgstr "Fehler beim Konvertieren der Eingangssequenz: %s"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 19:14+0300\n"
+"POT-Creation-Date: 2018-06-15 22:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -114,7 +114,15 @@ msgid "Read datagram %s from '%s'!"
 msgstr ""
 
 #, c-format
+msgid "%d:Received from '%s'\n"
+msgstr ""
+
+#, c-format
 msgid "Wrote datagram %s to '%s'!"
+msgstr ""
+
+#, c-format
+msgid "%d:Transmitted to '%s'\n"
 msgstr ""
 
 #, c-format
@@ -137,19 +145,11 @@ msgid "Read message %s from '%s'."
 msgstr ""
 
 #, c-format
-msgid "%d:Received from '%s'\n"
-msgstr ""
-
-#, c-format
 msgid "Wrote message %s to '%s'."
 msgstr ""
 
 #, c-format
 msgid "Transmitting error: %s"
-msgstr ""
-
-#, c-format
-msgid "%d:Transmitted to '%s'\n"
 msgstr ""
 
 #, c-format

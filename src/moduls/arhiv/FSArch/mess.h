@@ -112,6 +112,8 @@ class ModMArch: public TMArchivator
 	ModMArch( const string &iid, const string &idb, TElem *cf_el );
 	~ModMArch( );
 
+	TCntrNode &operator=( const TCntrNode &node );
+
 	string infoDBnm( );
 
 	time_t begin();

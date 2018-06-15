@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"4.2.3"
+#define MOD_VER		"4.2.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -89,6 +89,8 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), mTmConChk(dataRes()), mStartUser(da
 TUIMod::~TUIMod( )
 {
     if(runSt) modStop();
+
+    if(!SYS->stopSignal()) TSYS::sysSleep(3);
 }
 
 void TUIMod::modInfo( vector<string> &list )
@@ -194,8 +196,8 @@ void TUIMod::modStop( )
 
     mEndRun = true;
 
-    for(unsigned i_w = 0; i_w < cfapp.size(); i_w++)
-	while(cfapp[i_w]) TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+    for(unsigned iW = 0; iW < cfapp.size(); iW++)
+	while(cfapp[iW]) TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
     TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 
     runSt = false;
@@ -203,17 +205,17 @@ void TUIMod::modStop( )
 
 void TUIMod::regWin( QMainWindow *win )
 {
-    unsigned i_w;
-    for(i_w = 0; i_w < cfapp.size(); i_w++)
-	if(cfapp[i_w] == NULL) break;
-    if(i_w == cfapp.size())	cfapp.push_back((QMainWindow*)NULL);
-    cfapp[i_w] = win;
+    unsigned iW;
+    for(iW = 0; iW < cfapp.size(); iW++)
+	if(cfapp[iW] == NULL) break;
+    if(iW == cfapp.size())	cfapp.push_back((QMainWindow*)NULL);
+    cfapp[iW] = win;
 }
 
 void TUIMod::unregWin( QMainWindow *win )
 {
-    for(unsigned i_w = 0; i_w < cfapp.size(); i_w++)
-	if(cfapp[i_w] == win) cfapp[i_w] = NULL;
+    for(unsigned iW = 0; iW < cfapp.size(); iW++)
+	if(cfapp[iW] == win) cfapp[iW] = NULL;
 }
 
 void TUIMod::cntrCmdProc( XMLNode *opt )

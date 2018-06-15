@@ -178,9 +178,9 @@ void Lib::cntrCmdProc( XMLNode *opt )
 		}
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration"))) {
-		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Identifier"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
-		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/ID",_("Identifier"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/NAME",_("Name"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
+		ctrMkNode("fld",opt,-1,"/lib/cfg/DESCR",_("Description"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/func",_("Functions")))
@@ -206,12 +206,12 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	for(size_t i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
 	opt->setText(i2s(maxTm));
     }
-    else if(a_path == "/lib/cfg/id" && ctrChkNode(opt))		opt->setText(id());
-    else if(a_path == "/lib/cfg/name") {
+    else if(a_path == "/lib/cfg/ID" && ctrChkNode(opt))		opt->setText(id());
+    else if(a_path == "/lib/cfg/NAME") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(name());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
     }
-    else if(a_path == "/lib/cfg/descr") {
+    else if(a_path == "/lib/cfg/DESCR") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
     }

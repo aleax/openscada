@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:28+0200\n"
+"POT-Creation-Date: 2018-06-15 22:51+0300\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -103,7 +103,7 @@ msgstr "Serial получил сообщение '%d'."
 msgid "Received from\n"
 msgstr "Получено\n"
 
-msgid "Error request to protocol."
+msgid "Error requesting the protocol."
 msgstr "Ошибка запроса к протоколу."
 
 #, c-format
@@ -119,6 +119,9 @@ msgstr "Запись: ошибка '%s (%d)'."
 
 msgid "Transmitted to\n"
 msgstr "Передано\n"
+
+msgid "Error closing the protocol."
+msgstr "Ошибка закрытия протокола."
 
 msgid ""
 "Serial transport has address format: \"dev:speed:format[:fc[:mdm]]\". "
@@ -225,6 +228,7 @@ msgstr "Ответ на звонок, результат"
 msgid "Traffic in %s, out %s. "
 msgstr "Трафик входящий %s, исходящий %s. "
 
+#, c-format
 msgid "Respond time %s[%s:%s/1.5]. "
 msgstr "Время ответа %s[%s:%s/1.5]. "
 

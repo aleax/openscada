@@ -544,10 +544,11 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 
 void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )
 {
-    if(!(nodeMode() == Enabled || nodeMode() == Disabled)) throw err_sys(_("Node is being processed now!"));
+    if(nodeMode() == DoDisable)	return;
+    if(nodeMode() == DoEnable) throw err_sys(_("Node is being processed now for enable!"));
 
-    if(SYS->stopSignal())	tm = DEF_TIMEOUT_EXIT;
-    else if(tm < 0)		tm = DEF_TIMEOUT;
+    if(SYS->stopSignal())	tm = STD_WAIT_TM*5;
+    else if(tm < 0)		tm = STD_WAIT_TM;
 
     AutoHD<TCntrNode> chN = chldAt(igr, name);
     if(chN.at().nodeMode() == Enabled) chN.at().nodeDis(tm, (flag<<8));

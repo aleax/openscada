@@ -46,6 +46,14 @@ ModVArch::~ModVArch( )
     try { stop(); } catch(...) { }
 }
 
+TCntrNode &ModVArch::operator=( const TCntrNode &node )
+{
+    TVArchivator::operator=(node);
+    load_();
+
+    return *this;
+}
+
 void ModVArch::load_( )
 {
     //TVArchivator::load_();

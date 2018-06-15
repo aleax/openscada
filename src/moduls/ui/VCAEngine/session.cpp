@@ -552,12 +552,12 @@ TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 {
     // string user( ) - the session user or last command user
     if(iid == "user")	return user();
-    // int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false ) -
+    // int {alrmQuietance,alrmQuittance}( int quit_tmpl, string wpath = "", bool ret = false ) -
     //        alarm quietance, or return for <ret>, <wpath> with template <quit_tmpl>. If <wpath> is empty string then make global quietance.
     //  quit_tmpl - quietance template
     //  wpath - path to widget
     //  ret - return the quietance
-    else if(iid == "alrmQuietance" && prms.size() >= 1) {
+    else if((iid == "alrmQuietance" || iid == "alrmQuittance") && prms.size() >= 1) {
 	alarmQuietance((prms.size()>=2) ? prms[1].getS() : "", ~prms[0].getI(), (prms.size()>=3) ? prms[2].getB() : false);
 	return 0;
     }
@@ -633,7 +633,8 @@ void Session::cntrCmdProc( XMLNode *opt )
 		opt->setAttr("tm", u2s(tm))->setAttr("wdg", wdg)->setAttr("mess", mess)->setAttr("lang", lang)->setText(res);
 	    }
 	}
-	else if(ctrChkNode(opt,"quietance",permit(),owner().c_str(),grp().c_str(),SEC_WR))
+	else if(ctrChkNode(opt,"quietance",permit(),owner().c_str(),grp().c_str(),SEC_WR) ||
+		ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEC_WR))
 	    alarmQuietance(opt->attr("wdg"), ~s2i(opt->attr("tmpl")), s2i(opt->attr("ret")));
 	return;
     }

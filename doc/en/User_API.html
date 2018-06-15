@@ -687,15 +687,15 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <h3><span class="mw-headline" id="Module_Protocol.HTTP"><span class="mw-headline-number">10.1</span> Module <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a></span></h3>
 <p><b>The module object (SYS.Protocol.HTTP)</b>
 </p>
-<ul><li> <i>bool pgAccess(string URL)</i> — checking for page access pointed by the <i>URL</i>.
+<ul><li> <i>bool pgAccess(string URL)</i> — checks for accessing the page, pointed by the <i>URL</i>.
 <ul><li> <i>URL</i> — URL of the checking page.</li></ul></li>
-<li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "", string lang = "" )</i> — forming page or resource from content <i>cnt</i>, wrapped to HTTP result <i>rcode</i>, with HTTP additional attributes <i>httpattrs</i>, HTML additional head's element <i>htmlHeadEls</i>, forced to template file <i>forceTmplFile</i> and language <i>lang</i>.
-<ul><li> <i>cnt</i> — a page or a resource (images, XML, CSS, JavaScript, ...) content;</li>
+<li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "", string lang = "" )</i> — forms for a page or a resource from the content <i>cnt</i>, wrapped to HTTP with the result <i>rcode</i>, with HTTP additional attributes <i>httpattrs</i>, HTML additional head's element <i>htmlHeadEls</i>, forced to template file <i>forceTmplFile</i> and language <i>lang</i>.
+<ul><li> <i>cnt</i> — content of the page or the resource (images, XML, CSS, JavaScript, ...)&nbsp;;</li>
 <li> <i>rcode</i> — HTTP result code, like to "200 OK"; empty value there disables addition of the HTTP header;</li>
-<li> <i>httpattrs</i> — additional HTTP-attributes, mostly this is "Content-Type" which by default sets to "text/html;charset={SYS}"; only for "Content-Type: text/html" will do wrapping to internal/service or force <i>forceTmplFile</i> HTML-template;</li>
-<li> <i>htmlHeadEls</i> — an additional HTML-header's tag, it's mostly META with "Refresh" to pointed URL;</li>
-<li> <i>forceTmplFile</i> — force template file for override the internal/service template by the main-page template or other.</li>
-<li> <i>lang</i> — forming interface's language.</li></ul></li></ul>
+<li> <i>httpattrs</i> — additional HTTP-attributes, mostly this is "Content-Type" which by default sets to "text/html;charset={SYS}"; only for "Content-Type: text/html" will be wrapped to internal/service or force <i>forceTmplFile</i> HTML-template;</li>
+<li> <i>htmlHeadEls</i> — additional HTML-header's tag, it's mostly META with "Refresh" to the specified URL;</li>
+<li> <i>forceTmplFile</i> — force template file to override the internal/service or the main-page template.</li>
+<li> <i>lang</i> — language of the forming interface.</li></ul></li></ul>
 <p><br />
 </p>
 <h2><span class="mw-headline" id="Subsystem_.22User_interfaces.22_.28SYS.UI.29"><span class="mw-headline-number">11</span> Subsystem "User interfaces" (SYS.UI)</span></h2>

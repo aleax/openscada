@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-04 23:30+0300\n"
+"POT-Creation-Date: 2018-06-15 22:36+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -698,8 +698,8 @@ msgstr "Добавляемый дочерний идентификатор пу�
 msgid "The node '%s' is already present."
 msgstr "Узел '%s' уже присутствует."
 
-msgid "Node is being processed now!"
-msgstr "Узел сейчас обрабатывается!"
+msgid "Node is being processed now for enable!"
+msgstr "Узел сейчас обрабатывается для включения!"
 
 msgid "Node root or not connected!"
 msgstr "Узел корневой или не подключен!"
@@ -761,13 +761,13 @@ msgstr "Атрибут '%s' отсутствует!"
 msgid "Element type is not selective!"
 msgstr "Тип элемента не выбираем!"
 
-msgid "Element type is not string!"
+msgid "Element type is not String!"
 msgstr "Тип элемента не строка!"
 
-msgid "Element type is not real!"
+msgid "Element type is not Real!"
 msgstr "Тип элемента не вещественное!"
 
-msgid "Element type is not integer!"
+msgid "Element type is not Integer!"
 msgstr "Тип элемента не целый!"
 
 msgid "Element type is not Boolean!"
@@ -1085,14 +1085,6 @@ msgstr "%s: Ошибка идентификатора или IO %d!"
 msgid "Error getting object from non-object IO %d!"
 msgstr "Ошибка получения объекта из не объектного IO %d!"
 
-#, c-format
-msgid "Error opening 'iconv': %s"
-msgstr "Ошибка открытия 'iconv': %s"
-
-#, c-format
-msgid "Error converting input sequence: %s"
-msgstr "Ошибка преобразования входной последовательности: %s"
-
 msgid ""
 "DB address in format \"{DB module}.{DB name}\".\n"
 "Set '*.*' for use the main work DB."
@@ -1201,7 +1193,7 @@ msgid ""
 msgstr ""
 "=================== Опции подсистемы \"Планировщик модулей\" "
 "====================\n"
-"    --ModPath=<путь>    Директории модулей, разделённые ';', и в конце могут "
+"    --modPath=<путь>    Директории модулей, разделённые ';', и в конце могут "
 "содержать шаблон файлов.\n"
 "---------- Параметры секции '%s' конфигурационного файла ----------\n"
 "ModPath    <путь>       Директории модулей, разделённые ';', и в конце могут "
@@ -2265,8 +2257,9 @@ msgstr ""
 msgid "Error the remote host '%s'!"
 msgstr "Ошибка удалённого хоста '%s'!"
 
-msgid "External hosts poll"
-msgstr "Перечень внешних хостов"
+#, c-format
+msgid "External hosts of %s"
+msgstr "Внешние хосты %s"
 
 msgid "User;System;User and System"
 msgstr "Пользов.;Системн.;Пользов. и Системн."
@@ -2590,3 +2583,9 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
+
+#~ msgid "Error opening 'iconv': %s"
+#~ msgstr "Ошибка открытия 'iconv': %s"
+
+#~ msgid "Error converting input sequence: %s"
+#~ msgstr "Ошибка преобразования входной последовательности: %s"

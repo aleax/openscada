@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.9.3"
+#define MOD_VER		"0.9.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -673,9 +673,9 @@ string TWEB::modInfo( const string &iname )
     if(name == "Auth")		return "0";
 
     if(lang.size()) {
-	if(name == "Name")	return _("Web interface from user");
-	if(name == "Author")	return _("Roman Savochenko");
-	if(name == "Description") return _("Allows you to create your own user web-interfaces in any language of OpenSCADA.");
+	if(name == "Name")	return MOD_NAME;
+	if(name == "Author")	return AUTHORS;
+	if(name == "Description") return DESCRIPTION;
     }
 
     return TModule::modInfo(name);

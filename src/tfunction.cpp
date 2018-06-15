@@ -257,13 +257,13 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/func/st/use",_("Used"),R_R_R_,"root",grp,1,"tp","dec");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/func/cfg",_("Configuration"))) {
-		ctrMkNode("fld",opt,-1,"/func/cfg/id",_("Identifier"),R_R_R_,"root",grp,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),R_R_R_,"root",grp,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),R_R_R_,"root",grp,3,"tp","str","cols","90","rows","5");
+		ctrMkNode("fld",opt,-1,"/func/cfg/ID",_("Identifier"),R_R_R_,"root",grp,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/func/cfg/NAME",_("Name"),R_R_R_,"root",grp,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/func/cfg/DESCR",_("Description"),R_R_R_,"root",grp,3,"tp","str","cols","90","rows","5");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/io",_("IO")))
-	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),R_R_R_,"root",grp)) {
+	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),R_R_R_,"root",grp,1,"rows","5")) {
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Identifier"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),R_R_R_,"root",grp,1,"tp","str");
@@ -308,9 +308,9 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",grp,SEC_WR))	setStart(s2i(opt->text()));
     }
     else if(a_path == "/func/st/use" && ctrChkNode(opt))	opt->setText(i2s(used.size()));
-    else if(a_path == "/func/cfg/id" && ctrChkNode(opt))	opt->setText(id());
-    else if(a_path == "/func/cfg/name" && ctrChkNode(opt))	opt->setText(name());
-    else if(a_path == "/func/cfg/descr" && ctrChkNode(opt))	opt->setText(descr());
+    else if(a_path == "/func/cfg/ID" && ctrChkNode(opt))	opt->setText(id());
+    else if(a_path == "/func/cfg/NAME" && ctrChkNode(opt))	opt->setText(name());
+    else if(a_path == "/func/cfg/DESCR" && ctrChkNode(opt))	opt->setText(descr());
     else if(a_path == "/io/io" && ctrChkNode(opt,"get",R_R_R_,"root",grp,SEC_RD)) {
 	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/io/io/0","");
 	XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/io/io/1","");

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-28 09:49+0200\n"
+"POT-Creation-Date: 2018-06-11 11:42+0300\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -45,26 +45,26 @@ msgstr ""
 "\n"
 
 #, c-format
-msgid "HTML template '%s' for language '%s' load error: %s"
-msgstr "HTML-Templates '%s' für die Sprache '%s' load error: %s"
+msgid "Error loading the HTML template '%s' for the language '%s': %s"
+msgstr "Fehler beim Laden der HTML-Vorlage '%s' für die Sprache '%s': %s"
 
 #, c-format
-msgid "Auth exit from user '%s'."
-msgstr "Auth Ausfahrt vom Benutzer '%s'."
+msgid "Exiting the authentication for the user '%s'."
+msgstr "Beenden der Authentifizierung für den Benutzer '%s'."
 
 #, c-format
-msgid "Auth session for user '%s' expired."
-msgstr "AuthSession für den Benutzer '%s' abgelaufen ist."
+msgid "The authentication session for the user '%s' is expired."
+msgstr "Die Authentifizierungssitzung für den Benutzer '%s' ist abgelaufen."
 
 #, c-format
-msgid "HTTP method '%s' error or don't support."
-msgstr "Fehler oder die HTTP-Methode wird nicht unterstützt '%s'."
+msgid "Error or not supported the HTTP method '%s'."
+msgstr "Fehler oder nicht unterstützt die HTTP-Methode '%s'."
 
-msgid "HTTP respond error"
-msgstr "Fehle der HTTP-Antwort "
+msgid "Error the HTTP response"
+msgstr "Fehler bei der HTTP-Antwort"
 
-msgid "Not full respond."
-msgstr "Nicht voll zu reagieren."
+msgid "Not full response."
+msgstr "Nicht vollständige Antwort."
 
 msgid "Protocol"
 msgstr "Protokoll"
@@ -87,24 +87,25 @@ msgstr "Zulassen"
 msgid "HTML template"
 msgstr "HTML-Template"
 
-msgid "HTML main page template"
-msgstr "HTML-Hauptseitevorlage"
+msgid "HTML template of the main page"
+msgstr "HTML-Vorlage der Hauptseite"
 
-msgid "Life time of the authentication (min)"
-msgstr "Lebensdauer der Authentifizierung (Min)"
+msgid "Life time of the authentication, minutes"
+msgstr "Lebenszeit der Authentifizierung, Minuten"
 
-msgid "List of users allowed for auth, separated by ';'"
-msgstr "Liste der Benutzer erlaubt für auth, getrennt durch ';'"
+msgid "List of users allowed for authentication, separated by ';'"
+msgstr ""
+"Liste der zur Authentifizierung zugelassenen Benutzer, getrennt durch ';'"
 
 msgid "Auto login"
 msgstr "Auto Login"
 
 msgid ""
-"For address field you can use address templates list, for example "
+"A list of address templates can be used for the address field, for example "
 "\"192.168.1.*;192.168.2.*\"."
 msgstr ""
-"Für Adressfeld können Sie Adresse Vorlagen Liste, zum Beispiel \"192.168.1."
-"*;192.168.2.*\"."
+"Eine Liste von Adressvorlagen kann für das Adressfeld verwendet werden, zum "
+"Beispiel \"192.168.1.*;192.168.2.*\"."
 
 msgid "Address"
 msgstr "Adresse"
@@ -125,35 +126,33 @@ msgstr ""
 "%s"
 
 #, c-format
-msgid "Auth OK from user '%s'. Host: %s. User agent: %s."
-msgstr "Auth OK vom Benutzer '%s'. Host: %s. User-Agent: %s."
+msgid "Successful authentication for the user '%s'. Host: %s. User agent: %s."
+msgstr ""
+"Erfolgreiche Authentifizierung für den Benutzer '%s'. Host: %s. User-Agent: "
+"%s."
 
 #, c-format
 msgid "Going to the page: <b>%s</b>"
 msgstr "Gehen zur Seite: <b>%s</b>"
 
 #, c-format
-msgid "Auth wrong from user '%s'. Host: %s. User agent: %s."
-msgstr "Auth falsch von Benutzer '%s'. Host: %s. User-Agent: %s."
+msgid "Wrong authentication from the user '%s'. Host: %s. User agent: %s."
+msgstr "Falsche Authentifizierung vom Benutzer '%s'. Host: %s. User-Agent: %s."
 
-msgid "<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"
+msgid "<p style='color: #CF8122;'>Wrong authentication! Retry please.</p>"
 msgstr ""
 "<p style='color: #CF8122;'>Fehler in der Authentifizierung! Versuchen Sie "
 "noch einmal.</p>"
 
-msgid "No one WWW subtype module was found!"
+msgid "No WWW subtype module found!"
 msgstr "Keine Modul mit dem Subtyp WWW gefunden!"
 
 #, c-format
-msgid "Auto auth from user '%s'. Host: %s. User agent: %s."
-msgstr "Auto auth von Benutzer '%s'. Host: %s. User-Agent: %s."
-
-#, c-format
-msgid "No a HTTP GET function present for module '%s'!"
+msgid "No HTTP GET function in the module '%s'!"
 msgstr "Keine HTTP-GET-Funktion für Modul '%s' vorhanden!"
 
 #, c-format
-msgid "No a HTTP POST function present for module '%s'!"
+msgid "No HTTP POST function in the module '%s'!"
 msgstr "Keine HTTP-POST-Funktion für Modul '%s' vorhanden!"
 
 msgid "Login"
@@ -182,13 +181,14 @@ msgstr ""
 
 #, c-format
 msgid ""
-"You can auto-login from user \"<b>%s</b>\" by simple selecting the module."
-msgstr "Sie können Auto-Login aus user \"<b>%s</b>\" einfachen Modul wählen."
+"You can auto-login from the user \"<b>%s</b>\" just selecting the module."
+msgstr ""
+"Sie können Auto-Login von dem Benutzer \"<b>%s</b>\" nur das Modul auswählen."
 
 msgid "Accessible web modules"
 msgstr "Verfügbare Web Module"
 
-msgid "Login to system"
+msgid "Login to the system"
 msgstr "Einloggen in das System"
 
 msgid "User name"

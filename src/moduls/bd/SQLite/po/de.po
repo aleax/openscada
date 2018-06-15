@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.SQLite 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 18:58+0300\n"
+"POT-Creation-Date: 2018-06-15 22:42+0300\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -30,17 +30,18 @@ msgid "BD module. Provides support of the BD SQLite."
 msgstr "Modul unterstützt die SQLite Datenbank."
 
 #, c-format
-msgid "Delete bd error: %s"
-msgstr "Fehler beim Löschen der Datenbank: %s"
+msgid "Error deleting DB: %s"
+msgstr "Fehler beim Löschen der DB: %s"
 
 #, c-format
-msgid "Open DB file error: %s"
-msgstr "Fehler beim Öffnen der Datenbank: %s"
+msgid "Error opening DB file: %s"
+msgstr "Fehler beim Öffnen der DB-Datei: %s"
 
 #, c-format
-msgid "Error open table '%s'. DB is disabled."
+msgid "Error opening the table '%s'. DB is disabled."
 msgstr "Fehler beim Öffnen der Tabelle '%s'. Datenbank ist abgeschaltet."
 
+#, c-format
 msgid "Request: \"%s\""
 msgstr "Anfrage: \"%s\""
 
@@ -48,25 +49,24 @@ msgid "Unknown error"
 msgstr "Unbekannter Fehler"
 
 #, c-format
-msgid "Request \"%s\" error: %s(%d)"
-msgstr "Request \"%s\" Fehler: %s(%d)"
+msgid "Error of the request \"%s\": %s(%d)"
+msgstr "Fehler der Anfrage \"%s\": %s(%d)"
 
 msgid ""
 "SQLite DB address must be written as: \"{FileDBPath}\".\n"
 "Where:\n"
 "  FileDBPath - full path to DB file (./oscada/Main.db).\n"
-"               Use empty path for a private, temporary on-disk database "
-"create.\n"
-"               Use \":memory:\" for a private, temporary in-memory database "
-"create."
+"               Use the empty path to create a temporary database on the "
+"disk.\n"
+"               Use \":memory:\" to create a temporary database in memory."
 msgstr ""
 "Die Adresse der Datenbank SQLite wird geschrieben als: \"{FileDBPath}\".\n"
 "Wo:\n"
 "  FileDBPath - Verzeichnispfad zur Datenbank (./oscada/Main.db).\n"
-"               Verwenden Sie leere Weg für eine private, temporäre On-Disk-"
-"Datenbank zu erstellen.\n"
-"               Verwenden Sie \":memory:\" für eine private, temporäre In-"
-"Memory-Datenbank zu erstellen."
+"               Verwenden Sie den leeren Pfad, um eine temporäre Datenbank "
+"auf dem Datenträger zu erstellen.\n"
+"               Verwenden Sie \":memory:\", um eine temporäre Datenbank im "
+"Speicher zu erstellen."
 
 msgid "Close opened transaction"
 msgstr "Geöffnete Transaktion schlissen"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 14:15+0300\n"
+"POT-Creation-Date: 2018-06-15 23:30+0300\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -20,9 +20,10 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Resource isn't found"
-msgstr "Ressource nicht gefunden wird"
+msgid "Resource not found"
+msgstr "Ressource nicht gefunden"
 
+#, c-format
 msgid "Unknown object of the command: %s."
 msgstr "Unbekanntes Objekt des Befehls: %s."
 
@@ -30,26 +31,22 @@ msgstr "Unbekanntes Objekt des Befehls: %s."
 msgid "Unknown command: %s."
 msgstr "Unbekanntes Kommando: %s."
 
-msgid "No a content."
-msgstr "Kein Inhalt."
+msgid "Content is missing."
+msgstr "Inhalt fehlt."
 
 msgid "Fill image type is not supported."
 msgstr "Füllen Bildtyp wird nicht unterstützt."
 
 msgid ""
-"At least one of the elementary figures from each the 'fill' consists of is "
-"out of drawing area."
+"At least one of the elementary figures, of which 'fill' is forming, is "
+"outside the boundary of the display area."
 msgstr ""
-"Mindestens eine Elementarfigur, die das 'Einfüllen' betrifft, ist ausserhalb "
-"der Grenzen des Feldes."
+"Mindestens eine der elementaren Figuren, von denen sich 'fill' bildet, liegt "
+"außerhalb der Grenze des Anzeigebereichs."
 
 #, c-format
-msgid "gdImageStringFTex for font '%s' error: %s."
-msgstr "gdImageStringFTex für Schrift '%s' Fehler: %s."
-
-#, c-format
-msgid "gdImageStringFTEx for font '%s' error: %s."
-msgstr "gdImageStringFTEx für Schrift '%s' Fehler: %s."
+msgid "gdImageStringFTEx: error for the font '%s': %s."
+msgstr "gdImageStringFTEx: Fehler für die Schriftart '%s': %s."
 
 #, c-format
 msgid "%ds"
@@ -64,12 +61,12 @@ msgid "%gms"
 msgstr "%gms"
 
 #, c-format
-msgid "Trend creation time %gms"
-msgstr "Trend Erstellungszeit %gms"
+msgid "Creating time of the trend %gms"
+msgstr "Erstellen Zeit der Trend %gms"
 
 #, c-format
-msgid "+ PNG-image(%d) creation time %gms"
-msgstr "+ PNG-Bild (%d) Erstellungszeit %gms"
+msgid "+ Creating time of the PNG-image(%d) %gms"
+msgstr "+ Erstellungszeit des PNG-Bildes (%d) %gms"
 
 msgid "kHz"
 msgstr "KHz"
@@ -78,8 +75,8 @@ msgid "Hz"
 msgstr "Hz"
 
 #, c-format
-msgid "Document '%s' parsing is error: %s"
-msgstr "Dokument '%s' ist Parsing-Fehler: %s"
+msgid "Error parsing the document '%s': %s"
+msgstr "Fehler beim Parsen des Dokuments '%s': %s"
 
 msgid "Operation user interface (WEB)"
 msgstr "Benutzerschnittstelle (WEB)"
@@ -89,10 +86,11 @@ msgstr ""
 "Roman Savotschenko, Maxim Lysjenko (2008-2012), Ksenija Jaschina (2007)"
 
 msgid ""
-"Visual operation user interface, based on WEB - front-end to VCA engine."
+"Visual operation user interface, based on the the WEB - front-end to the VCA "
+"engine."
 msgstr ""
-"Visuelle Betrieb Benutzeroberfläche basierend auf WEB - Front-End für VCA-"
-"Motor."
+"Visuelle Bedienung Benutzeroberfläche, basierend auf dem WEB - Front-End der "
+"VCA-Engine."
 
 msgid "Date and time"
 msgstr "Datum und Uhrzeit"
@@ -176,39 +174,42 @@ msgstr "Dezember"
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "---- Parameters of the module section '%s' of the configuration file ----\n"
-"SessTimeLife <min>      Time of session life, in minutes (by default, 10).\n"
+"SessTimeLife <min>      Lifetime of the sessions in minutes (by default, "
+"10).\n"
 "\n"
 msgstr ""
 "======================== Optionen des Moduls <%s:%s> "
 "============================\n"
 "------ Parameter des Modulabschnitts '%s' der Konfigurationsdatei ------\n"
-"SessTimeLife <Min>      Sitzungszeit in Minuten (standardmäßig 10).\n"
+"SessTimeLife <Min>      Lebensdauer der Sitzungen in Minuten (standardmäßig "
+"10).\n"
 "\n"
 
-msgid "Connect to opened session"
-msgstr "Verbindung zur geöffneten Sitzung"
+msgid "Connecting to the opened session"
+msgstr "Verbindung zur geöffneten Sitzung herstellen"
 
-msgid "Create new session for present project"
-msgstr "Neue Sitzung für das aktuelle Projekt erstellen"
+msgid "Creating a new session for the existing project"
+msgstr "Erstellen einer neuen Sitzung für das vorhandene Projekt"
 
-msgid "No one sessions and projects of VCA engine are present for user!"
+msgid "There is no session and project of the VCA engine for the user!"
 msgstr ""
-"Keine Sitzung und Projekte der VCA Maschine für den Benutzer vorhanden!"
+"Es gibt keine Sitzung und kein Projekt der VCA-Engine für den Benutzer!"
 
-msgid "Sorry, opened sessions number reach limit!"
-msgstr "Leider erreichen öffnen Sitzungen Anzahl unbegrenzt!"
+msgid "Sorry, the number of open sessions has reached a limit!"
+msgstr ""
+"Entschuldigung, die Anzahl der offenen Sitzungen hat ein Limit erreicht!"
 
 #, c-format
 msgid "Going to the session '%s' for the project '%s' ..."
 msgstr "Gehen Sie zu Session '%s' für Projekt '%s' ..."
 
 #, c-format
-msgid "Pointed project/session '%s' is wrong!"
+msgid "The specified project/session '%s' is false!"
 msgstr "Spitzes Projekt/Sitzung '%s' ist falsch!"
 
 #, c-format
-msgid "Page '%s' error: %s"
-msgstr "Seite '%s' Fehler: %s"
+msgid "Error the page '%s': %s"
+msgstr "Fehler auf der Seite '%s': %s"
 
 #, c-format
 msgid "Wrong session '%s'."
@@ -217,17 +218,17 @@ msgstr "Falsche Sitzung '%s'."
 msgid "Module options"
 msgstr "Optionen des Moduls"
 
-msgid "Life time of session (min)"
-msgstr "Lebensdauer der Sitzung (Min)"
+msgid "Lifetime of the sessions, minutes"
+msgstr "Lebensdauer der Sitzungen, Minuten"
 
 msgid "Sessions limit"
 msgstr "Session Limit"
 
-msgid "PNG compression level"
+msgid "Level of the PNG compression"
 msgstr "PNG Komprimierungsstufe"
 
 msgid ""
-"PNG (ZLib) compression level:\n"
+"Level of the PNG (ZLib) compression:\n"
 "  -1  - optimal speed-size;\n"
 "  0   - disable;\n"
 "  1-9 - direct level."

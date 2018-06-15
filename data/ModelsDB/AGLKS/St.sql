@@ -7,15 +7,6 @@ I:40000:var:Var
 </Attrs>
 </prms>
 ','testModBus');
-CREATE TABLE 'Archive_mess_proc' ("ID" TEXT DEFAULT '' ,"MODUL" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '' ,"CATEG" TEXT DEFAULT '' ,"LEVEL" INTEGER DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"DBArchSize" DOUBLE DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODUL"));
-INSERT INTO "Archive_mess_proc" VALUES('NetRequsts','FSArch','','Requests to server through transport Sockets.',1,'/sub_Transport/mod_Sockets*',1,'ARCHIVES/MESS/Net/',10000.0,'','Запити до сервера через транспорт Sockets.','','Запросы к серверу через транспорт Sockets.','<prms XML="0" MSize="1024" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
-');
-INSERT INTO "Archive_mess_proc" VALUES('test','FSArch','Test','',1,'*',0,'ARCHIVES/MESS/TEST/',10000.0,'Тест','','Тест','','<prms XML="0" MSize="1024" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
-');
-INSERT INTO "Archive_mess_proc" VALUES('StatErrors','FSArch','','Local errors'' archive',1,'/*',4,'ARCHIVES/MESS/stError/',10000.0,'','Архів локальних помилок','','Архив локальных ощибок','<prms XML="1" MSize="300" NFiles="10" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
-');
-INSERT INTO "Archive_mess_proc" VALUES('test','DBArch','','',0,'*',0,'MySQL.arch',0.0,'','','','','<prms Size="1" />
-');
 CREATE TABLE 'BFN_SymbAlarm' ("ID" INTEGER DEFAULT '' ,"CODE" INTEGER DEFAULT '' ,"TEXT" TEXT DEFAULT '' ,"ru#TEXT" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "BFN_SymbAlarm" VALUES(0,10,'Сбой датчика внутренней темп.','Сбой датчика внутренней темп.');
 INSERT INTO "BFN_SymbAlarm" VALUES(1,10,'Высокая темп., Лето','Высокая темп., Лето');
@@ -1084,6 +1075,73 @@ INSERT INTO "Transport_in" VALUES('testOPC','Sockets','','','TCP::4841','OPC_UA'
 ');
 INSERT INTO "Transport_in" VALUES('testModem','Serial','Test Modem',' ','/dev/ttyUSB0:115200:8N1::1','UserProtocol.test',0,0,'','Тест модему',' ','Тест модема','','<prms TMS="0.95:48" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitStr2="" MdmInitResp="OK" MdmRingReq="RING" MdmRingAnswer="ATA" MdmRingAnswerResp="CONNECT" MdmHangUp="+++ATH" MdmHangUpResp="OK"/>
 ');
+INSERT INTO "Transport_in" VALUES('testRelease','Sockets','','','TCP:localhost:10001','UserProtocol.test',1,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+');
+INSERT INTO "Transport_in" VALUES('testRelease1','Sockets','','','UDP:localhost:10001','UserProtocol.test',1,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+');
+INSERT INTO "Transport_in" VALUES('testRelease2','Sockets','','','UNIX:testRelease.socket','UserProtocol.test',1,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+');
+INSERT INTO "Transport_in" VALUES('testRelease','SSL','','','127.0.0.1:10041','UserProtocol.test',1,'','','','','','','<prms MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" PKeyPass="123456">
+<CertKey>
+-----BEGIN CERTIFICATE-----
+MIIEETCCAvmgAwIBAgIJAIgqZ1h4oyoBMA0GCSqGSIb3DQEBBQUAMIGeMQswCQYD
+VQQGEwJVQTEXMBUGA1UECAwORG5lcHJvcGV0cm92c2sxGDAWBgNVBAcMD0RuZXBy
+b2R6ZXJ6aW5zazESMBAGA1UECgwJT3BlblNDQURBMREwDwYDVQQLDAhTZWN1cml0
+eTETMBEGA1UEAwwKb3NjYWRhLm9yZzEgMB4GCSqGSIb3DQEJARYRb3NjYWRhQG9z
+Y2FkYS5vcmcwHhcNMTIwNjI1MDgzMDMxWhcNMjIwNjIzMDgzMDMxWjCBnjELMAkG
+A1UEBhMCVUExFzAVBgNVBAgMDkRuZXByb3BldHJvdnNrMRgwFgYDVQQHDA9EbmVw
+cm9kemVyemluc2sxEjAQBgNVBAoMCU9wZW5TQ0FEQTERMA8GA1UECwwIU2VjdXJp
+dHkxEzARBgNVBAMMCm9zY2FkYS5vcmcxIDAeBgkqhkiG9w0BCQEWEW9zY2FkYUBv
+c2NhZGEub3JnMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyr2D6VhO
+RYAF9qWS62lAzaTaZ6WHdHs4tjtYtd0Z9xY+UCHa/47bKHAeEyd3SM9DVpK7XwNP
+OmewH5Dn6USQyLrwW96WU6ZV0lqjMT4aZnuTdKaaodIvGp3HXD3nfqsXgOOTrBH5
+893aV2220VgaVL0QSOLUAylT0Venr6kXzY4YqCzz//NpFuCCOsvsTZXLD6utz7/z
+OaEpqnnZ76TkDZtCG3xxSS/PxjmejIcSFbl1rU8E1nCgfyV/ONRZ0cHPymRE08CN
+bE3mdEa1R0yw89ARFWGoh3/tQ63kgxT6ufG5j3GG+SOE1jtridGCayd8Mud2isPZ
+NG7gDNugYjMVewIDAQABo1AwTjAdBgNVHQ4EFgQUBKNudjoE+GZaKssVXmA44fG5
+AjEwHwYDVR0jBBgwFoAUBKNudjoE+GZaKssVXmA44fG5AjEwDAYDVR0TBAUwAwEB
+/zANBgkqhkiG9w0BAQUFAAOCAQEAYCSCN1K0Qoe8Zpdr3bLnFW19DfWYemuTGUmG
+mKLDQVswsNnUkqxoXrLU2fFQ98VncN268xt2cfW0WN0sN9Z1uX2YfUAxxzo5Uid+
+OEqadRqSbvUgNW6znkD83zzOWNtFb/nf/UTTKaEgYTwvezIqcGsnpAd8b2F6JW7p
+8zPsDgeNqXzv+kNvs8wJjpXkWIqGAC5YqkrN5jYUUBgj9nmk7VHaVUZa/YTRiarm
+GbI7tBJtJWvpgI1e1gAZGmYh8u0fn5a6tqDrONIkoJYMArLmDMiavSmTsh2bAEb9
+U/9OWDou6AtQesZq6lsf0xW0tl5Szj+D3PiHcokk7GRTua36rA==
+-----END CERTIFICATE-----
+-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: DES-EDE3-CBC,D5F8F856E237054A
+
+WfwrtuFxUIQaVgQ1LDRzbR/o4eldb7HPbraRv+or/uLJ2bZNeKtK1aQuXE8dTJS/
+t1MM3JjKBy0MyN4rpjeyhAkBBHn7pNiYGO5QlCfPJsbztdMWB+KkYSfMmzIUuGnH
+1ZsIYokc+D6uK7EYPoORMGE4qSmUj7cDtK9uTKODDdZfXaC+rKWYr0jTa8Nrvoac
+o6tTkBogJsZh6uVTQOh9hmIKMhrTepoSzxnTvLcw96GYWmOaapeOzGHy8Z5J4yyy
+47/GUQj1UjQ2GYxcya0/Lyii2qZBZrdngUndDZqbhVvPmN+pM3e6r/tx2R7a/btD
+TACriXtfqnn5DLdg3phA+nzuCsHP13Pw3MFJd5VB216UhXdKeD6bVl1NEIH6qaq2
+1TvtJHIvOaVJgfaPyuqMhMuZ6xKDEL2M9jmqlNOPY5L1kx7Nk47LVAnkoR6qh7c9
+E+8QLf8UuGNYLBeKdrIuCIjf/ul4zP3SS/kaaQO5VU35PkRkBaujidhdX5FEsP/C
+rb/MoLkxQPoUJ6300kP8PDx55LsVNr8Vw0ujYF4tiQ5uotMXfI+iX0CE6Su/gO0L
+pw2XvcklRqUeFPLjdYtJBNlrAnI/KHtCoZu+MezTn7VktNlUP2tAUvRWKEd/XMrX
++q9GCMXTOWOW+g/hMpBbpqc7OYOAYVIUWnuCQWrMOpttTRSsvAXtSx/R1GzDFLOQ
+t3yiuHrW+mcq5SlbyHUy5F+FiPBplDCwpwXOed1K5pLlepPbp5OHkCJosCoiEHjE
+xhFxoXh8pKr8jGaFiWcdNJnVJGQvDqowRDVOh9hMU7EyRbgkqUn416jyL4jtlzQP
+9wfcurNREDLPjOWn86yPdJFFVc6VRwEsRr/nblFEz+Oz+2a0WMw3iLcFAB+xIhNp
+G2uT6J/qC7NWmnQIOK90O5wrODFq7TuLMsm58jVeNylT4vBnY9jn1THvpghxCJg+
+KendTSkbrXNPUJM1IvL0TBNPI72kfH57poB2dYkj+R9fGFeq8QvIYJYFQe2vG77C
+RNViojoUJPAeYBBjTq2SkvLZkucQzV2oZgfQCSbhpyXXgonQ/Dj+XrU52iAVJOVJ
+EAVRqNfLvILttq54uAI1DLU10TdXyOJreh82Ci1wvCr2qKHbtFXKt0hVIpCrTdzU
+JdN12HCIz8b/+9U88qia2YhH8SGwuHyoz33hGzH3bH7hCiTt51sBkl2ERHBLTiGm
+tEv5UIvpTquq3iKaZZjr8kViM5TPNBISprKJ4FIq6wmyRYt6R1lyLMaXfAetYirZ
+5/iMJx5hFP/RHsE5x+OuNDBra8wzZtlgicT9QGYAiS4O9uDbxh1vn7DvAdyk+bxn
+FEB6Me2klM6lX0m99gRxjVrY646PrnexBweNs64g8tBAS7CfLEpLoatbOtDKPY2o
+gC2fW0PaxIugZ6DEBSpOlJFtxoFaa9rr+B6taOO/xv9CF1np0AKRhJG431qjELyl
+Ixp1PkOjs7COr0guxZEX8pM4wIF3uF77sbNYViv/5fil1JH8mfwusKljLF5pTs9e
+fdfa9weotHT55KrlRp06LxgUqckwoHoGjKDwR8bCk7s0QobgxuFufjEqUZg44VXw
+-----END RSA PRIVATE KEY-----
+</CertKey>
+</prms>
+');
+INSERT INTO "Transport_in" VALUES('testRelease','Serial','','/dev/pts/7:115200:8N1','/dev/pts/6:115200:8N1','UserProtocol.test',1,'','','','','','','<prms TMS="2.86:48" TaskPrior="0" MdmTm="20" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitResp="OK" MdmRingReq="RING" MdmRingAnswer="ATA" MdmRingAnswerResp="CONNECT" />
+');
 CREATE TABLE 'Transport_out' ("ID" TEXT DEFAULT '' ,"MODULE" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCRIPT" TEXT DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '' ,"SSLCertKey" TEXT DEFAULT '' ,"SSLKeyPass" TEXT DEFAULT '' ,"TMS" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCRIPT" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCRIPT" TEXT DEFAULT '' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODULE"));
 INSERT INTO "Transport_out" VALUES('testModBus','Serial','Test ModBus',' ','/dev/ttyS0:115200:8N1',0,'','','50:4','Тест ModBus',' ','Тест ModBus','','<prms TMS="97:0.95"/>
 ');
@@ -1787,7 +1845,7 @@ INSERT INTO "Archive_val_proc" VALUES('1m','FSArch','','','','Minute''s archive'
 ');
 INSERT INTO "Archive_val_proc" VALUES('1s','FSArch','','','','Second''s archive','Секундний архів','Секундный архив',1,'ARCHIVES/VAL/1s',1.0,60,10,'<prms TmSize="720" NFiles="100" MaxCapacity="5000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="1" />
 ');
-INSERT INTO "Archive_val_proc" VALUES('1s','DBArch','','','','','','',0,'MySQL.arch',1.0,60,10,'<prms Size="25" />
+INSERT INTO "Archive_val_proc" VALUES('1s','DBArch','','','','','','',1,'SQLite.arch',1.0,60,10,'<prms Size="25" TmAsStr="0" GroupPrms="0" />
 ');
 INSERT INTO "Archive_val_proc" VALUES('1h','FSArch','','','','Hour''s archive','Годинковий архів.','Часовой архив.',1,'ARCHIVES/VAL/1h',3600.0,60,10,'<prms TmSize="8600" NFiles="100" MaxCapacity="1000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="0" />
 ');
@@ -2137,4 +2195,13 @@ INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_stop','0','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_frq','5.00122404098511','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_err','0','0');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_start','0','');
+CREATE TABLE 'Archive_mess_proc' ("ID" TEXT DEFAULT '' ,"MODUL" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '0' ,"CATEG" TEXT DEFAULT '' ,"LEVEL" INTEGER DEFAULT '0' ,"ADDR" TEXT DEFAULT '' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODUL"));
+INSERT INTO "Archive_mess_proc" VALUES('NetRequsts','FSArch','','','','Requests to server through transport Sockets.','Запити до сервера через транспорт Sockets.','Запросы к серверу через транспорт Sockets.',1,'/sub_Transport/mod_Sockets*',1,'ARCHIVES/MESS/Net/',0,'<high>','<prms XML="0" MSize="1024" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
+');
+INSERT INTO "Archive_mess_proc" VALUES('test','FSArch','Test','Тест','Тест','','','',1,'*',0,'ARCHIVES/MESS/TEST/',0,'<high>','<prms XML="0" MSize="1024" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
+');
+INSERT INTO "Archive_mess_proc" VALUES('StatErrors','FSArch','','','','Local errors'' archive','Архів локальних помилок','Архив локальных ощибок',1,'/*',4,'ARCHIVES/MESS/stError/',0,'<high>','<prms XML="1" MSize="300" NFiles="10" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
+');
+INSERT INTO "Archive_mess_proc" VALUES('test','DBArch','','','','','','',1,'*',0,'SQLite.arch',0,'<high>','<prms Size="1" TmAsStr="0" />
+');
 COMMIT;

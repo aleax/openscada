@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 11:09+0300\n"
+"POT-Creation-Date: 2018-06-15 22:44+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Big Farm Net (BFN) modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com)."
+msgid "Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com)."
 msgstr ""
 
 msgid "Acquisition schedule"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "Priority of the acquisition task"
 msgstr ""
 
-msgid "Sync inter remote station period, seconds"
+msgid "Period of sync with the remote station, seconds"
 msgstr ""
 
 msgid "Transport address"
@@ -104,17 +104,17 @@ msgid "House computer:\n"
 msgstr ""
 
 #, c-format
-msgid "DAQ.%s.%s: connect to data source: %s."
+msgid "DAQ.%s.%s: connect to the data source: %s."
 msgstr ""
 
 msgid "STOP"
 msgstr ""
 
 #, c-format
-msgid "Connect to transport '%s' error."
+msgid "Error connecting to the transport '%s'."
 msgstr ""
 
-msgid "Respond parsing error. Possible respond incomplete."
+msgid "Error parsing the respond. The respond seems incomplete."
 msgstr ""
 
 #, c-format

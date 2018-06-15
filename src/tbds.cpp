@@ -542,19 +542,20 @@ void TBDS::load_( )
 
     // Open other DB stored into the table 'DB' and the config-file
     try {
-	string id,type;
-	if(SYS->chkSelDB(fullDB())) {
+	string id, type;
+	//if(SYS->chkSelDB(fullDB())) {	//!!!! Must be forced one for config file rescan, release test
 	    TConfig c_el(&elDB);
 	    //c_el.cfgViewAll(false);
 	    vector<vector<string> > full;
 	    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fldCnt++,c_el,true,&full); ) {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("TYPE").getS();
-		if((type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id))
+		if(!modPresent(type))	continue;
+		if((type+"."+id) != SYS->workDB() && !at(type).at().openStat(id))
 		    at(type).at().open(id);
 		try{ at(type).at().at(id).at().load(&c_el); } catch(TError&) { }
 	    }
-	}
+	//}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	mess_sys(TMess::Error, _("Error finding and opening a new database."));

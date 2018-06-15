@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.9.2"
+#define MOD_VER		"1.9.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -550,12 +550,17 @@ void *TSocketIn::ClTask( void *s_inf )
     BIO_free_all(s.bio);
 
     //Close protocol on broken connection
-    if(!prot_in.freeStat()) {
-	string n_pr = prot_in.at().name();
-	AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
-	prot_in.free();
-	proto.at().close(n_pr);
-    }
+    if(!prot_in.freeStat())
+	try {
+	    string n_pr = prot_in.at().name();
+	    AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
+	    prot_in.free();
+	    proto.at().close(n_pr);
+	} catch(TError &err) {
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by execution: %s"), err.mess.c_str());
+	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Has been terminated by execution: %s"),s.sock,err.mess.c_str()));
+	}
 
     s.s->clientUnreg(&s);
 

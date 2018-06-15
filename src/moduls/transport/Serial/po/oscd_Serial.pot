@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:28+0200\n"
+"POT-Creation-Date: 2018-06-15 22:51+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,7 +100,7 @@ msgstr ""
 msgid "Received from\n"
 msgstr ""
 
-msgid "Error request to protocol."
+msgid "Error requesting the protocol."
 msgstr ""
 
 #, c-format
@@ -115,6 +115,9 @@ msgid "Write: error '%s (%d)'."
 msgstr ""
 
 msgid "Transmitted to\n"
+msgstr ""
+
+msgid "Error closing the protocol."
 msgstr ""
 
 msgid ""

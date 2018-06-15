@@ -34,9 +34,9 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.6.0"
+#define MOD_VER		"2.6.1"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
-#define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
+#define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -261,7 +261,7 @@ string TWEB::optDescr( )
     return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
 	"---- Parameters of the module section '%s' of the configuration file ----\n"
-	"SessTimeLife <min>      Time of session life, in minutes (by default, 10).\n\n"),
+	"SessTimeLife <min>      Lifetime of the sessions in minutes (by default, 10).\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 }
 
@@ -386,7 +386,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		}
 		if(!prjSesEls.empty()) {
 		    page = page +
-			"<tr><th>" + _("Connect to opened session") + "</th></tr>\n"
+			"<tr><th>" + _("Connecting to the opened session") + "</th></tr>\n"
 			"<tr><td class='content'>\n"
 			"<table border='0' cellspacing='3px' width='100%'>\n" +
 			prjSesEls +
@@ -406,7 +406,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		}
 		if(!prjSesEls.empty()) {
 		    page = page +
-			"<tr><th>"+_("Create new session for present project")+"</th></tr>\n"
+			"<tr><th>"+_("Creating a new session for the existing project")+"</th></tr>\n"
 			"<tr><td class='content'>\n"
 			"<table border='0' cellspacing='3px' width='100%'>\n"+
 			prjSesEls+
@@ -415,7 +415,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		}
 		page += "</table>";
 
-		if(!sesPrjOk) page = messPost(nodePath(), _("No one sessions and projects of VCA engine are present for user!"), TWEB::Warning);
+		if(!sesPrjOk) page = messPost(nodePath(), _("There is no session and project of the VCA engine for the user!"), TWEB::Warning);
 		page = pgCreator(iprt, page, "200 OK", "", "", "", ses.lang);
 	    }
 	    //New session create
@@ -435,7 +435,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		    vector<string> vcaLs;
 		    vcaSesList(vcaLs);
 		    if((int)vcaLs.size() >= mod->sessLimit())
-			page = messPost(nodePath(), _("Sorry, opened sessions number reach limit!"), TWEB::Warning);
+			page = messPost(nodePath(), _("Sorry, the number of open sessions has reached a limit!"), TWEB::Warning);
 		    else {
 			sesRes.request(true);
 			req.setName("connect")->setAttr("path","/%2fserv%2fsess")->setAttr("prj",zero_lev.substr(4));
@@ -476,12 +476,12 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		page = ses.page;
 	    }
 	    else {
-		page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Pointed project/session '%s' is wrong!"),zero_lev.c_str())+"</div>\n",
+		page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("The specified project/session '%s' is false!"),zero_lev.c_str())+"</div>\n",
 				       "404 Not Found", "", "", "", ses.lang);
 	    }
 	}
     } catch(TError &err) {
-	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),ses.url.c_str(),err.mess.c_str())+"</div>\n",
+	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),ses.url.c_str(),err.mess.c_str())+"</div>\n",
 			       "404 Not Found", "", "", "", ses.lang);
     }
 }
@@ -511,7 +511,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	    page = ses.page;
 	}
     } catch(TError &err) {
-	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),url.c_str(),err.mess.c_str())+"</div>\n",
+	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),url.c_str(),err.mess.c_str())+"</div>\n",
 	    "404 Not Found", "", "", "", ses.lang);
     }
 }
@@ -552,10 +552,10 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"),R_R_R_)) {
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/lf_tm", _("Life time of session (min)"), RWRWR_, "root", SUI_ID, 1, "tp","dec");
+	    ctrMkNode("fld", opt, -1, "/prm/cfg/lf_tm", _("Lifetime of the sessions, minutes"), RWRWR_, "root", SUI_ID, 1, "tp","dec");
 	    ctrMkNode("fld", opt, -1, "/prm/cfg/sesLimit", _("Sessions limit"), RWRWR_, "root", SUI_ID, 1, "tp","dec");
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/PNGCompLev", _("PNG compression level"), RWRWR_, "root", SUI_ID, 4,
-		"tp","dec", "min","-1", "max","9", "help",_("PNG (ZLib) compression level:\n"
+	    ctrMkNode("fld", opt, -1, "/prm/cfg/PNGCompLev", _("Level of the PNG compression"), RWRWR_, "root", SUI_ID, 4,
+		"tp","dec", "min","-1", "max","9", "help",_("Level of the PNG (ZLib) compression:\n"
 			    "  -1  - optimal speed-size;\n"
 			    "  0   - disable;\n"
 			    "  1-9 - direct level."));
@@ -774,9 +774,9 @@ string TWEB::modInfo( const string &iname )
     if(name == "Auth")		return "1";
 
     if(lang.size()) {
-	if(name == "Name")	return _("Operation user interface (WEB)");
-	if(name == "Author")	return _("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)");
-	if(name == "Description") return _("Visual operation user interface, based on WEB - front-end to VCA engine.");
+	if(name == "Name")	return MOD_NAME;
+	if(name == "Author")	return AUTHORS;
+	if(name == "Description") return DESCRIPTION;
     }
 
     return TModule::modInfo(name);

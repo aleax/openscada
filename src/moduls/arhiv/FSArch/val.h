@@ -188,6 +188,8 @@ class ModVArch: public TVArchivator
 	ModVArch( const string &iid, const string &idb, TElem *cf_el );
 	~ModVArch( );
 
+	TCntrNode &operator=( const TCntrNode &node );
+
 	string infoDBnm( );
 	double curCapacity( );
 

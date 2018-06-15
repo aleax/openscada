@@ -92,6 +92,8 @@ class ModVArch: public TVArchivator
 	ModVArch( const string &iid, const string &idb, TElem *cf_el );
 	~ModVArch( );
 
+	TCntrNode &operator=( const TCntrNode &node );
+
 	double maxSize( )		{ return mMaxSize; }
 	bool tmAsStr( )			{ return mTmAsStr; }
 	int groupPrms( )		{ return mGroupPrms; }

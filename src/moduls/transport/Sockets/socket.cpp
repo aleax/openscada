@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.8.4"
+#define MOD_VER		"2.8.5"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -587,6 +587,8 @@ void *TSocketIn::Task( void *sock_in )
 
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(sock->nodePath().c_str(), _("Read datagram %s from '%s'!"), TSYS::cpct2str(r_len).c_str(), inet_ntoa(name_cl.sin_addr));
+	    if(sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:Received from '%s'\n"),sock->sockFd,inet_ntoa(name_cl.sin_addr)) + req);
+
 
 	    int64_t stTm = 0;
 	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
@@ -602,6 +604,8 @@ void *TSocketIn::Task( void *sock_in )
 
 	    r_len = sendto(sock->sockFd, answ.c_str(), answ.size(), 0, (sockaddr *)&name_cl, name_cl_len);
 	    sock->trOut += vmax(0, r_len);
+
+	    if(r_len > 0 && sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:Transmitted to '%s'\n"),sock->sockFd,inet_ntoa(name_cl.sin_addr)) + answ);
 	}
 #ifdef HAVE_LINUX_CAN_H
 	else if(sock->type == SOCK_RAWCAN) {
@@ -641,7 +645,7 @@ void *TSocketIn::Task( void *sock_in )
     //Find already registry
     MtxAlloc res(sock->sockRes, true);
     for(map<int, SSockIn*>::iterator iId = sock->clId.begin(); iId != sock->clId.end(); ++iId)
-	pthread_kill(iId->second->pid, SIGALRM);
+	if(iId->second->pid) pthread_kill(iId->second->pid, SIGALRM);
     res.unlock();
     TSYS::eventWait(sock->clFree, true, string(MOD_ID)+": "+sock->id()+_(" stopping client tasks ..."));
 
@@ -685,7 +689,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    }
 
 	    ssize_t r_len = 0;
-	    if(kz && (r_len=read(s.sock, buf, s.s->bufLen()*1000)) <= 0) break;
+	    if(kz && (r_len=read(s.sock,buf,s.s->bufLen()*1000)) <= 0) break;
 	    s.s->dataRes().lock();
 	    s.s->trIn += r_len; s.trIn += r_len;
 	    s.s->dataRes().unlock();
@@ -751,12 +755,17 @@ void *TSocketIn::ClTask( void *s_inf )
     }
 
     //Close protocol on broken connection
-    if(!prot_in.freeStat()) {
-	string n_pr = prot_in.at().name();
-	AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
-	prot_in.free();
-	proto.at().close(n_pr);
-    }
+    if(!prot_in.freeStat())
+	try {
+	    string n_pr = prot_in.at().name();
+	    AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
+	    prot_in.free();
+	    proto.at().close(n_pr);
+	} catch(TError &err) {
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(s.s->nodePath().c_str(), _("Has been terminated by execution: %s"), err.mess.c_str());
+	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Has been terminated by execution: %s"),s.sock,err.mess.c_str()));
+	}
 
     s.s->clientUnreg(&s);
 

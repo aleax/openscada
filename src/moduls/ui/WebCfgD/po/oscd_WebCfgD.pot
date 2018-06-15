@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-28 10:04+0200\n"
+"POT-Creation-Date: 2018-06-15 23:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology."
+msgid "Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript."
 msgstr ""
 
 msgid "Manual"
@@ -44,10 +44,10 @@ msgstr ""
 msgid "Up"
 msgstr ""
 
-msgid "Previous"
+msgid "Back"
 msgstr ""
 
-msgid "Next"
+msgid "Forward"
 msgstr ""
 
 msgid "Add item"
@@ -65,13 +65,13 @@ msgstr ""
 msgid "Paste item"
 msgstr ""
 
-msgid "Reload item and tree"
+msgid "Refresh the item and tree"
 msgstr ""
 
-msgid "Start periodic update"
+msgid "Start the cycled refreshing"
 msgstr ""
 
-msgid "Stop periodic update"
+msgid "Stop the cycled refreshing"
 msgstr ""
 
 msgid "Ready"
@@ -98,16 +98,16 @@ msgstr ""
 msgid "Item down"
 msgstr ""
 
-msgid "Add new element."
+msgid "Adding an element."
 msgstr ""
 
-msgid "Insert new element."
+msgid "Inserting an element."
 msgstr ""
 
-msgid "Rename element."
+msgid "Renaming the element."
 msgstr ""
 
-msgid "Select image file for download to picture field."
+msgid "Selecting an image file for download to the picture field."
 msgstr ""
 
 msgid "Add row"
@@ -125,16 +125,16 @@ msgstr ""
 msgid "Down row"
 msgstr ""
 
-msgid "No one editable container present."
+msgid "There is no container for editing."
 msgstr ""
 
-msgid "Add item to node '%1'."
+msgid "Adding an item to the node '%1'."
 msgstr ""
 
-msgid "Item '%1' already present."
+msgid "Item '%1' already exists."
 msgstr ""
 
-msgid "You sure for delete node '%1'?"
+msgid "Are you sure you want to remove the node '%1'?"
 msgstr ""
 
 msgid "Copy is impossible."
@@ -167,19 +167,19 @@ msgstr ""
 msgid "Page loaded."
 msgstr ""
 
-msgid "Node id and/or name select"
+msgid "Selecting node id and/or name"
 msgstr ""
 
-msgid "Item name set"
+msgid "Setting item name"
 msgstr ""
 
-msgid "Image set"
+msgid "Setting an image"
 msgstr ""
 
-msgid "Add node"
+msgid "Adding a node"
 msgstr ""
 
-msgid "Move or copy node"
+msgid "Moving or copying the node"
 msgstr ""
 
 msgid "Name: "
@@ -202,21 +202,18 @@ msgid "Unknown command: %s."
 msgstr ""
 
 #, c-format
-msgid "Call page/widget '%s' command '%s'!"
+msgid "The page/widget '%s' calling command '%s'!"
 msgstr ""
 
 #, c-format
-msgid "Page '%s' error: %s"
+msgid "Error the page '%s': %s"
 msgstr ""
 
-msgid "No a content."
+msgid "No content."
 msgstr ""
 
 msgid "Module options"
 msgstr ""
 
-msgid "Go to remote stations list configuration"
-msgstr ""
-
-msgid "Dynamic WEB configurator"
+msgid "Go to the configuration of the remote stations list"
 msgstr ""

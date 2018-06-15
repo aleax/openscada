@@ -503,7 +503,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
     if(hd == (iconv_t)(-1)) {
-	mess_crit("IConv", _("Error opening 'iconv': %s"), strerror(errno));
+	//mess_crit("IConv", _("Error opening 'iconv': %s"), strerror(errno));	//But there can be a recursion for a wrong charset.
 	return mess;
     }
 
@@ -515,7 +515,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 	olen = sizeof(outbuf)-1;
 	size_t rez = iconv(hd, &ibuf, &ilen, &obuf, &olen);
 	if(rez == (size_t)(-1) && (errno == EINVAL || errno == EBADF)) {
-	    mess_crit("IConv", _("Error converting input sequence: %s"), strerror(errno));
+	    //mess_crit("IConv", _("Error converting input sequence: %s"), strerror(errno));	//But there can be a recursion for a wrong charset.
 	    buf = mess;
 	    break;
 	}

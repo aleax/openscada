@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-04 23:30+0300\n"
+"POT-Creation-Date: 2018-06-15 22:36+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -697,8 +697,8 @@ msgstr "Id нащадку, який додається, порожнє!"
 msgid "The node '%s' is already present."
 msgstr "Вузол '%s' вже присутній."
 
-msgid "Node is being processed now!"
-msgstr "Вузол обробляється зараз!"
+msgid "Node is being processed now for enable!"
+msgstr "Вузол обробляється зараз для ввімкнення!"
 
 msgid "Node root or not connected!"
 msgstr "Вузол кореневий або не підключений!"
@@ -760,13 +760,13 @@ msgstr "Атрибут '%s' відсутній!"
 msgid "Element type is not selective!"
 msgstr "Тип елементу не вибірковий!"
 
-msgid "Element type is not string!"
+msgid "Element type is not String!"
 msgstr "Тип елементу не рядок!"
 
-msgid "Element type is not real!"
+msgid "Element type is not Real!"
 msgstr "Тип елементу не реальний!"
 
-msgid "Element type is not integer!"
+msgid "Element type is not Integer!"
 msgstr "Тип елементу не цілий!"
 
 msgid "Element type is not Boolean!"
@@ -1083,14 +1083,6 @@ msgstr "%s: Помилка ідентифікатору або IO %d!"
 #, c-format
 msgid "Error getting object from non-object IO %d!"
 msgstr "Помилка отримання об'єкту з не об'єктного IO %d!"
-
-#, c-format
-msgid "Error opening 'iconv': %s"
-msgstr "Помилка відкриття 'iconv': %s"
-
-#, c-format
-msgid "Error converting input sequence: %s"
-msgstr "Помилка перетворення вхідної послідовності: %s"
 
 msgid ""
 "DB address in format \"{DB module}.{DB name}\".\n"
@@ -2261,8 +2253,9 @@ msgstr ""
 msgid "Error the remote host '%s'!"
 msgstr "Помилка віддаленого хосту '%s'!"
 
-msgid "External hosts poll"
-msgstr "Перелік зовнішніх хостів"
+#, c-format
+msgid "External hosts of %s"
+msgstr "Зовнішні хости %s"
 
 msgid "User;System;User and System"
 msgstr "Корист.;Системн.;Корист. та Системн."
@@ -2586,3 +2579,9 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+
+#~ msgid "Error opening 'iconv': %s"
+#~ msgstr "Помилка відкриття 'iconv': %s"
+
+#~ msgid "Error converting input sequence: %s"
+#~ msgstr "Помилка перетворення вхідної послідовності: %s"

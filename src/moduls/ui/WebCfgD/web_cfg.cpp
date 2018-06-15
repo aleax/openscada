@@ -40,9 +40,9 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.2.8"
+#define MOD_VER		"1.2.9"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology.")
+#define DESCRIPTION	_("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -99,24 +99,24 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
 #if 0
     char mess[][100] = {
 	_("Manual"), _("About"), _("Drag to resize the Menu"),
-	_("Load"), _("Save"), _("Up"), _("Previous"), _("Next"), _("Add item"),_("Delete item"),
+	_("Load"), _("Save"), _("Up"), _("Back"), _("Forward"), _("Add item"),_("Delete item"),
 	_("Copy item"), _("Cut item"), _("Paste item"),
-	_("Reload item and tree"), _("Start periodic update"), _("Stop periodic update"),
+	_("Refresh the item and tree"), _("Start the cycled refreshing"), _("Stop the cycled refreshing"),
 	_("Ready"),
 	_("Go"), _("Add"), _("Insert"), _("Edit"), _("Delete"), _("Item up"), _("Item down"),
-	_("Add new element."), _("Insert new element."), _("Rename element."),
-	_("Select image file for download to picture field."),
+	_("Adding an element."), _("Inserting an element."), _("Renaming the element."),
+	_("Selecting an image file for download to the picture field."),
 	_("Add row"), _("Insert row"), _("Delete row"), _("Up row"), _("Down row"),
-	_("No one editable container present."), _("Add item to node '%1'."), _("Item '%1' already present."),
-	_("You sure for delete node '%1'?"),
+	_("There is no container for editing."), _("Adding an item to the node '%1'."), _("Item '%1' already exists."),
+	_("Are you sure you want to remove the node '%1'?"),
 	_("Copy is impossible."), _("Selected"), _("Move node '%1' to '%2'."), _("Copy node '%1' to '%2'."), _("Node '%1' already present. Continue?"),
 	_("Element type:", "ID:"), _("Name:"), _("Ok"), _("Close"),
 	_("Page loaded."),
-	_("Node id and/or name select"),
-	_("Item name set"),
-	_("Image set"),
-	_("Add node"),
-	_("Move or copy node"),
+	_("Selecting node id and/or name"),
+	_("Setting item name"),
+	_("Setting an image"),
+	_("Adding a node"),
+	_("Moving or copying the node"),
     };
 #endif
 }
@@ -336,13 +336,13 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	    }
 	    else {
 		mess_warning(nodePath().c_str(), _("Unknown command: %s."), wp_com.c_str());
-		page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Call page/widget '%s' command '%s'!"),
+		page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("The page/widget '%s' calling command '%s'!"),
 								ses.url.c_str(),wp_com.c_str())+"</div>\n",
 				       "200 OK");
 	    }
 	}
     } catch(TError &err) {
-	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),ses.url.c_str(),err.mess.c_str())+"</div>\n",
+	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),ses.url.c_str(),err.mess.c_str())+"</div>\n",
 			       "404 Not Found");
     }
 }
@@ -372,7 +372,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	    XMLNode req("set"); req.setAttr("path",ses.url)->setText(TSYS::strEncode(ses.files[cntEl->second],TSYS::base64));
 	    mod->cntrIfCmd(req,ses.user);
 	}
-	page = pgCreator(iprt, string("<div class='error'>")+_("No a content.")+"</div>\n", "204 No Content");
+	page = pgCreator(iprt, string("<div class='error'>")+_("No content.")+"</div>\n", "204 No Content");
     }
 }
 
@@ -419,7 +419,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to the configuration of the remote stations list"),RWRW__,"root",SUI_ID,1,"tp","lnk");
 	return;
     }
 
@@ -516,9 +516,9 @@ string TWEB::modInfo( const string &iname )
     if(name == "Auth")		return "1";
 
     if(lang.size()) {
-	if(name == "Name")	return _("Dynamic WEB configurator");
-	if(name == "Author")	return _("Roman Savochenko");
-	if(name == "Description") return _("Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology.");
+	if(name == "Name")	return MOD_NAME;
+	if(name == "Author")	return AUTHORS;
+	if(name == "Description") return DESCRIPTION;
     }
 
     return TModule::modInfo(name);

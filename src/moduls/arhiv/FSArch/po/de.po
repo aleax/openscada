@@ -53,7 +53,7 @@ msgstr "Fehler beim Überprüfen des Wertarchivers '%s'."
 
 #, c-format
 msgid "The value archiver '%s' uses the same folder '%s' as an other archiver."
-msgstr ""
+msgstr "Der Wertarchivierer '%s' verwendet denselben Ordner '%s' wie ein anderer Archivierer."
 
 #, c-format
 msgid "%s: Mess: %s: information"

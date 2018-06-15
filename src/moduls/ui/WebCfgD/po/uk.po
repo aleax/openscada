@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfgD 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-28 10:04+0200\n"
+"POT-Creation-Date: 2018-06-12 16:39+0300\n"
 "PO-Revision-Date: 2007-10-29 15:28+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -22,11 +22,11 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript "
-"technology."
+"Provides the WEB-based configurator of OpenSCADA. The technologies are used: "
+"XHTML, CSS and JavaScript."
 msgstr ""
-"Надає динамічний WEB базований конфігуратор. Використано XHTML, CSS та "
-"JavaScript технології."
+"Надає заснований на WEB динамічний конфігуратор OpenSCADA. Використано "
+"технології: XHTML, CSS та JavaScript."
 
 msgid "Manual"
 msgstr "Підручник"
@@ -46,11 +46,11 @@ msgstr "Зберегти"
 msgid "Up"
 msgstr "На рівень вище"
 
-msgid "Previous"
-msgstr "Попередній"
+msgid "Back"
+msgstr "Попередня"
 
-msgid "Next"
-msgstr "Наступний"
+msgid "Forward"
+msgstr "Наступна"
 
 msgid "Add item"
 msgstr "Додати елемент"
@@ -67,13 +67,13 @@ msgstr "Вирізати елемент"
 msgid "Paste item"
 msgstr "Вставити елемент"
 
-msgid "Reload item and tree"
-msgstr "Перевантажити елемент та дерево"
+msgid "Refresh the item and tree"
+msgstr "Оновити елемент та дерево"
 
-msgid "Start periodic update"
+msgid "Start the cycled refreshing"
 msgstr "Запуск періодичного оновлення"
 
-msgid "Stop periodic update"
+msgid "Stop the cycled refreshing"
 msgstr "Зупинка періодичного оновлення"
 
 msgid "Ready"
@@ -100,16 +100,16 @@ msgstr "Підняти"
 msgid "Item down"
 msgstr "Опустити"
 
-msgid "Add new element."
+msgid "Adding an element."
 msgstr "Додання нового елементу."
 
-msgid "Insert new element."
+msgid "Inserting an element."
 msgstr "Вставлення нового елементу."
 
-msgid "Rename element."
+msgid "Renaming the element."
 msgstr "Перейменування елементу."
 
-msgid "Select image file for download to picture field."
+msgid "Selecting an image file for download to the picture field."
 msgstr "Вибір файлу зображення для завантаження у поле зображення."
 
 msgid "Add row"
@@ -127,16 +127,16 @@ msgstr "Підняти строку"
 msgid "Down row"
 msgstr "Опустити строку"
 
-msgid "No one editable container present."
+msgid "There is no container for editing."
 msgstr "Немає жодного контейнера для редагування."
 
-msgid "Add item to node '%1'."
-msgstr "Додання елементу '%1' до вузла."
+msgid "Adding an item to the node '%1'."
+msgstr "Додання елементу до вузла '%1'."
 
-msgid "Item '%1' already present."
+msgid "Item '%1' already exists."
 msgstr "Елемент '%1' вже присутній."
 
-msgid "You sure for delete node '%1'?"
+msgid "Are you sure you want to remove the node '%1'?"
 msgstr "Ви дійсно бажаєте видалити вузол '%1'?"
 
 msgid "Copy is impossible."
@@ -169,19 +169,19 @@ msgstr "Закрити"
 msgid "Page loaded."
 msgstr "Сторінку завантажено."
 
-msgid "Node id and/or name select"
+msgid "Selecting node id and/or name"
 msgstr "Вибір ідентифікатору та/або назви"
 
-msgid "Item name set"
+msgid "Setting item name"
 msgstr "Встановлення назви елементу"
 
-msgid "Image set"
+msgid "Setting an image"
 msgstr "Встановлення зображення"
 
-msgid "Add node"
+msgid "Adding a node"
 msgstr "Додання елементу"
 
-msgid "Move or copy node"
+msgid "Moving or copying the node"
 msgstr "Переміщення або копіювання вузлу"
 
 msgid "Name: "
@@ -204,24 +204,18 @@ msgid "Unknown command: %s."
 msgstr "Невідома команда: %s."
 
 #, c-format
-msgid "Call page/widget '%s' command '%s'!"
+msgid "The page/widget '%s' calling command '%s'!"
 msgstr "Команда виклику сторінки/віджету '%s': '%s'!"
 
 #, c-format
-msgid "Page '%s' error: %s"
+msgid "Error the page '%s': %s"
 msgstr "Помилка сторінки '%s': %s"
 
-msgid "No a content."
-msgstr "Немає вмісту"
+msgid "No content."
+msgstr "Немає вмісту."
 
 msgid "Module options"
 msgstr "Опції модуля"
 
-msgid "Go to remote stations list configuration"
+msgid "Go to the configuration of the remote stations list"
 msgstr "Перейти до конфігурації переліку віддалених станцій"
-
-msgid "Dynamic WEB configurator"
-msgstr "Динамічний WEB конфігуратор"
-
-#~ msgid "OpenSCADA. Dynamic WEB configurator"
-#~ msgstr "OpenSCADA. Динамічний WEB конфігуратор"

@@ -223,6 +223,8 @@ class CfgTable : public QTableWidget
 	//Methods
 	CfgTable( QWidget *parent = 0 );
 
+	QSize sizeHint( ) const;
+
     public slots:
 	//Public slots
 	void resizeRowsToContentsLim( );

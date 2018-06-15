@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.1"
+#define MOD_VER		"2.5.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -111,7 +111,7 @@ void MBD::postDisable( int flag )
 
     if(flag && owner().fullDeleteDB())
 	if(remove(TSYS::strSepParse(addr(),0,';').c_str()) != 0)
-	    throw err_sys(_("Delete bd error: %s"), strerror(errno));
+	    throw err_sys(_("Error deleting DB: %s"), strerror(errno));
 }
 
 void MBD::enable( )
@@ -127,7 +127,7 @@ void MBD::enable( )
     if(rc) {
 	string err = sqlite3_errmsg(m_db);
 	sqlite3_close(m_db);
-	throw err_sys(_("Open DB file error: %s"), err.c_str());
+	throw err_sys(_("Error opening DB file: %s"), err.c_str());
     }
     trans_reqs = vmax(1, vmin(100,s2i(TSYS::strSepParse(addr(),1,';'))));
 
@@ -160,7 +160,7 @@ void MBD::allowList( vector<string> &list ) const
 
 TTable *MBD::openTable( const string &inm, bool create )
 {
-    if(!enableStat()) throw err_sys(_("Error open table '%s'. DB is disabled."), inm.c_str());
+    if(!enableStat()) throw err_sys(_("Error opening the table '%s'. DB is disabled."), inm.c_str());
 
     try { sqlReq("SELECT * FROM '" + TSYS::strEncode(inm,TSYS::SQL,"'") + "' LIMIT 0;"); }
     catch(...) { if(!create) throw; }
@@ -190,8 +190,8 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     if(rc != SQLITE_OK) {
 	string err = _("Unknown error");
 	if(zErrMsg) { err = zErrMsg; sqlite3_free(zErrMsg); }
-	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Request \"%s\" error: %s(%d)"), req.c_str(), err.c_str(), rc);
-	throw err_sys(100+rc, _("Request \"%s\" error: %s(%d)"), TSYS::strMess(50,"%s",req.c_str()).c_str(), err.c_str(), rc);
+	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Error of the request \"%s\": %s(%d)"), req.c_str(), err.c_str(), rc);
+	throw err_sys(100+rc, _("Error of the request \"%s\": %s(%d)"), TSYS::strMess(50,"%s",req.c_str()).c_str(), err.c_str(), rc);
     }
     if(tbl && ncol > 0) {
 	vector<string> row;
@@ -247,8 +247,8 @@ void MBD::cntrCmdProc( XMLNode *opt )
 		    _("SQLite DB address must be written as: \"{FileDBPath}\".\n"
 		      "Where:\n"
 		      "  FileDBPath - full path to DB file (./oscada/Main.db).\n"
-		      "               Use empty path for a private, temporary on-disk database create.\n"
-		      "               Use \":memory:\" for a private, temporary in-memory database create."));
+		      "               Use the empty path to create a temporary database on the disk.\n"
+		      "               Use \":memory:\" to create a temporary database in memory."));
 	if(reqCnt)
 	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close opened transaction"),RWRW__,"root",SDB_ID);
 	return;

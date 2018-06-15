@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BFN 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 11:09+0300\n"
+"POT-Creation-Date: 2018-06-15 22:44+0300\n"
 "PO-Revision-Date: 2011-07-19 20:40+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -27,7 +27,7 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Big Farm Net (BFN) modules support for Viper CT/BAS and other from \"Big "
+"Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big "
 "Dutchman\" (http://www.bigdutchman.com)."
 msgstr ""
 "Big Farm Net (BFN) Module für Viper CT/BAS und andere aus \"Big Dutchman "
@@ -39,7 +39,7 @@ msgstr "Planung der Befragung"
 msgid "Priority of the acquisition task"
 msgstr "Priorität der Erfassungsaufgabe"
 
-msgid "Sync inter remote station period, seconds"
+msgid "Period of sync with the remote station, seconds"
 msgstr "Periode der Synchronisieren mit der entfernten Station, Sekunden"
 
 msgid "Transport address"
@@ -111,17 +111,17 @@ msgid "House computer:\n"
 msgstr "Haus-Computer:\n"
 
 #, c-format
-msgid "DAQ.%s.%s: connect to data source: %s."
+msgid "DAQ.%s.%s: connect to the data source: %s."
 msgstr "DAQ.%s.%s: Anschluss an die Datenquelle: %s."
 
 msgid "STOP"
 msgstr "STOP"
 
 #, c-format
-msgid "Connect to transport '%s' error."
+msgid "Error connecting to the transport '%s'."
 msgstr "Verbinden Sie den Transport '%s' Fehler."
 
-msgid "Respond parsing error. Possible respond incomplete."
+msgid "Error parsing the respond. The respond seems incomplete."
 msgstr "Reagieren Parsing-Fehler. Mögliche reagieren unvollständig."
 
 #, c-format

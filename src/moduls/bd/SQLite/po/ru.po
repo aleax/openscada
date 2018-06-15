@@ -1,13 +1,13 @@
 # OpenSCADA.DB.SQLite translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DB.SQLite package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.SQLite 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 18:58+0300\n"
+"POT-Creation-Date: 2018-06-15 22:42+0300\n"
 "PO-Revision-Date: 2007-10-23 12:39+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -25,17 +25,18 @@ msgid "BD module. Provides support of the BD SQLite."
 msgstr "Модуль БД. Предоставляет поддержку БД SQLite."
 
 #, c-format
-msgid "Delete bd error: %s"
+msgid "Error deleting DB: %s"
 msgstr "Ошибка удаления БД: %s"
 
 #, c-format
-msgid "Open DB file error: %s"
+msgid "Error opening DB file: %s"
 msgstr "Ошибка открытия файла БД: %s"
 
 #, c-format
-msgid "Error open table '%s'. DB is disabled."
+msgid "Error opening the table '%s'. DB is disabled."
 msgstr "Ошибка открытия таблицы '%s'. БД отключена."
 
+#, c-format
 msgid "Request: \"%s\""
 msgstr "Запрос: \"%s\""
 
@@ -43,17 +44,16 @@ msgid "Unknown error"
 msgstr "Неизвестная ошибка"
 
 #, c-format
-msgid "Request \"%s\" error: %s(%d)"
+msgid "Error of the request \"%s\": %s(%d)"
 msgstr "Ошибка запроса \"%s\": %s(%d)"
 
 msgid ""
 "SQLite DB address must be written as: \"{FileDBPath}\".\n"
 "Where:\n"
 "  FileDBPath - full path to DB file (./oscada/Main.db).\n"
-"               Use empty path for a private, temporary on-disk database "
-"create.\n"
-"               Use \":memory:\" for a private, temporary in-memory database "
-"create."
+"               Use the empty path to create a temporary database on the "
+"disk.\n"
+"               Use \":memory:\" to create a temporary database in memory."
 msgstr ""
 "Адрес БД SQLite записывается как: \"{FileDBPath}\".\n"
 "Где:\n"

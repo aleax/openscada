@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 14:15+0300\n"
+"POT-Creation-Date: 2018-06-15 23:30+0300\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -15,9 +15,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Resource isn't found"
+msgid "Resource not found"
 msgstr "Ресурс не найден"
 
+#, c-format
 msgid "Unknown object of the command: %s."
 msgstr "Неизвестный объект команды: %s."
 
@@ -25,26 +26,22 @@ msgstr "Неизвестный объект команды: %s."
 msgid "Unknown command: %s."
 msgstr "Неизвестная команда: %s."
 
-msgid "No a content."
+msgid "Content is missing."
 msgstr "Содержимое отсутствует."
 
 msgid "Fill image type is not supported."
 msgstr "Тип изображения заполнения не поддерживается."
 
 msgid ""
-"At least one of the elementary figures from each the 'fill' consists of is "
-"out of drawing area."
+"At least one of the elementary figures, of which 'fill' is forming, is "
+"outside the boundary of the display area."
 msgstr ""
 "По крайней мере одна из элементарных фигур, из которых состоит 'заливка', "
 "вне пределов области рисования."
 
 #, c-format
-msgid "gdImageStringFTex for font '%s' error: %s."
-msgstr "gdImageStringFTex для шрифта '%s', ошибка: %s."
-
-#, c-format
-msgid "gdImageStringFTEx for font '%s' error: %s."
-msgstr "gdImageStringFTEx для шрифта '%s', ошибка: %s."
+msgid "gdImageStringFTEx: error for the font '%s': %s."
+msgstr "gdImageStringFTEx: ошибка для шрифта '%s': %s."
 
 #, c-format
 msgid "%ds"
@@ -59,11 +56,11 @@ msgid "%gms"
 msgstr "%gмс"
 
 #, c-format
-msgid "Trend creation time %gms"
+msgid "Creating time of the trend %gms"
 msgstr "Время создания тренда %gмс"
 
 #, c-format
-msgid "+ PNG-image(%d) creation time %gms"
+msgid "+ Creating time of the PNG-image(%d) %gms"
 msgstr "+ Время создания PNG-изображения (%d) %gмс"
 
 msgid "kHz"
@@ -73,7 +70,7 @@ msgid "Hz"
 msgstr "Гц"
 
 #, c-format
-msgid "Document '%s' parsing is error: %s"
+msgid "Error parsing the document '%s': %s"
 msgstr "Ошибка парсинга документа '%s': %s"
 
 msgid "Operation user interface (WEB)"
@@ -83,10 +80,11 @@ msgid "Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)"
 msgstr "Роман Савоченко, Лысенко Максим (2008-2012), Яшина Ксения (2007)"
 
 msgid ""
-"Visual operation user interface, based on WEB - front-end to VCA engine."
+"Visual operation user interface, based on the the WEB - front-end to the VCA "
+"engine."
 msgstr ""
 "Рабочий пользовательский интерфейс, основанный на WEB - внешний интерфейс к "
-"движку визуализации."
+"движку СВУ."
 
 msgid "Date and time"
 msgstr "Дата и время"
@@ -170,24 +168,25 @@ msgstr "Декабрь"
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "---- Parameters of the module section '%s' of the configuration file ----\n"
-"SessTimeLife <min>      Time of session life, in minutes (by default, 10).\n"
+"SessTimeLife <min>      Lifetime of the sessions in minutes (by default, "
+"10).\n"
 "\n"
 msgstr ""
 "======================== Опции модуля <%s:%s> ============================\n"
 "------ Параметры модульной секции '%s' конфигурационного файла ------\n"
-"SessTimeLife <мин>      Время жизни сессии, в минутах (по умолчанию 10).\n"
+"SessTimeLife <мин>      Время жизни сеансов в минутах (по умолчанию 10).\n"
 "\n"
 
-msgid "Connect to opened session"
+msgid "Connecting to the opened session"
 msgstr "Подключение к открытой сессии"
 
-msgid "Create new session for present project"
+msgid "Creating a new session for the existing project"
 msgstr "Создание новой сессии для доступного проекта"
 
-msgid "No one sessions and projects of VCA engine are present for user!"
+msgid "There is no session and project of the VCA engine for the user!"
 msgstr "Нет ни одного сеанса и проекта движка СВУ для пользователя!"
 
-msgid "Sorry, opened sessions number reach limit!"
+msgid "Sorry, the number of open sessions has reached a limit!"
 msgstr "Извините, количество открытых сеансов достигло ограничения!"
 
 #, c-format
@@ -195,11 +194,11 @@ msgid "Going to the session '%s' for the project '%s' ..."
 msgstr "Переход к сеансу '%s' для проекта '%s' ..."
 
 #, c-format
-msgid "Pointed project/session '%s' is wrong!"
+msgid "The specified project/session '%s' is false!"
 msgstr "Указанный проект/сеанс '%s' ошибочный!"
 
 #, c-format
-msgid "Page '%s' error: %s"
+msgid "Error the page '%s': %s"
 msgstr "Ошибка страницы '%s': %s"
 
 #, c-format
@@ -209,17 +208,17 @@ msgstr "Ошибочный сеанс '%s'."
 msgid "Module options"
 msgstr "Опции модуля"
 
-msgid "Life time of session (min)"
-msgstr "Время жизни сеанса (мин)"
+msgid "Lifetime of the sessions, minutes"
+msgstr "Время жизни сеансов, минут"
 
 msgid "Sessions limit"
 msgstr "Ограничение количества сеансов"
 
-msgid "PNG compression level"
+msgid "Level of the PNG compression"
 msgstr "Уровень сжатия PNG"
 
 msgid ""
-"PNG (ZLib) compression level:\n"
+"Level of the PNG (ZLib) compression:\n"
 "  -1  - optimal speed-size;\n"
 "  0   - disable;\n"
 "  1-9 - direct level."

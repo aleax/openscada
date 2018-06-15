@@ -1351,7 +1351,7 @@ msgstr "Курсор --- xy(%1:%2)"
 
 #, c-format
 msgid "Session '%s(%s)' using the remote host %d times."
-msgstr ""
+msgstr "Сеанс '%s(%s)' использует удалённый хост %d."
 
 msgid ""
 "Error connecting to the visualization server '%1': %2.\n"

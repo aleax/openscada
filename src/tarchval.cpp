@@ -2162,10 +2162,10 @@ TCntrNode &TVArchivator::operator=( const TCntrNode &node )
     if(!src_n) return *this;
 
     //Configuration copy
-    exclCopy(*src_n, "ID;ADDR;");
+    exclCopy(*src_n, "ID;ADDR;START;");
     mDB = src_n->mDB;
 
-    if(src_n->startStat() && toStart() && !startStat()) start();
+    //if(src_n->startStat() && toStart() && !startStat()) start();
 
     return *this;
 }

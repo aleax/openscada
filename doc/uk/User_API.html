@@ -684,14 +684,14 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_Protocol.HTTP"><span class="mw-headline-number">10.1</span> Модуль <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a></span></h3>
 <p><b>Об'єкт модуля (SYS.Protocol.HTTP)</b>
 </p>
-<ul><li> <i>bool pgAccess(string URL)</i> — перевірка доступності сторінки визначеної у <i>URL</i>.
-<ul><li> <i>URL</i> — URL сторінки що перевіряється.</li></ul></li>
-<li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "", string lang = "" )</i> — формування сторінки або ресурсу із вмісту <i>cnt</i>, загорнутого у HTTP з результатом <i>rcode</i>, із додатковими атрибутами HTTP <i>httpattrs</i>, додатковим елементом заголовку HTML <i>htmlHeadEls</i> та використанням файлу шаблону <i>forceTmplFile</i> та мова <i>lang</i>.
+<ul><li> <i>bool pgAccess(string URL)</i> — перевіряє доступність сторінки, визначеної у <i>URL</i>.
+<ul><li> <i>URL</i> — URL сторінки, що перевіряється.</li></ul></li>
+<li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "", string lang = "" )</i> — формує сторінку або ресурс із вмістом <i>cnt</i>, загорнутим у HTTP з результатом <i>rcode</i>, із додатковими атрибутами HTTP <i>httpattrs</i>, додатковим елементом заголовку HTML <i>htmlHeadEls</i> та використанням файлу шаблону <i>forceTmplFile</i> та для мови <i>lang</i>.
 <ul><li> <i>cnt</i> — вміст сторінки або ресурсу (зображення, XML, CSS, JavaScript, ...);</li>
 <li> <i>rcode</i> — результуючий код HTTP, на кшталт "200 OK"; порожнє значення вимикає додання HTTP заголовку;</li>
-<li> <i>httpattrs</i> — додаткові атрибути HTTP, переважно це "Content-Type" із значенням по замовченню "text/html;charset={SYS}"; тільки для "Content-Type: text/html" буде здійснюватися загортання у внутрішній/сервісний або визначений <i>forceTmplFile</i> HTML-шаблон;</li>
+<li> <i>httpattrs</i> — додаткові атрибути HTTP, переважно це "Content-Type" із значенням по замовченню "text/html;charset={SYS}"; тільки для "Content-Type: text/html" буде здійснюватися загортання у внутрішній/сервісний, або визначений <i>forceTmplFile</i>, HTML-шаблон;</li>
 <li> <i>htmlHeadEls</i> — додатковий тег заголовку HTML, переважно це META з "Refresh" для вказаного URL;</li>
-<li> <i>forceTmplFile</i> — файл прямо визначеного шаблону для перекриття внутрішнього/сервісного шаблоном головної сторінки або іншим.</li>
+<li> <i>forceTmplFile</i> — файл прямо визначеного шаблону для перекриття внутрішнього/сервісного або головної сторінки.</li>
 <li> <i>lang</i> — мова інтерфейсу, що формується.</li></ul></li></ul>
 <p><br />
 </p>

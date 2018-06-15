@@ -280,7 +280,12 @@ VisRun::~VisRun( )
 	mess_err(mod->nodePath().c_str(), _("Session '%s(%s)' using the remote host %d times."),
 	    workSess().c_str(), srcProject().c_str(), host->inHostReq);
 
-    if(host) delete host;
+    if(host) {
+	delete host;
+
+	// Push down all Qt events of the window to free the module
+	for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();
+    }
 }
 
 bool VisRun::winMenu( )	{ return menuBar()->actions().length(); }

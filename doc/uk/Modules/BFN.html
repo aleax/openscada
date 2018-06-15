@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Модулі/BFN - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="uk">Модулі/BFN</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FBFN&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/BFN" title="Modules/BFN">Modules/BFN</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/BFN" title="Modules/BFN (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/BFN/ru" title="Модули/BFN (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Ім'я </th>
+<th> Версія </th>
+<th> Ліцензія </th>
+<th> Джерело </th>
+<th> Мови </th>
+<th> Платформи </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Опис
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/BFN.html" title="Special:MyLanguage/Modules/BFN">BFN</a> </td>
+<td> Модуль BFN </td>
+<td> 0.6 </td>
+<td> GPL2 </td>
+<td> daq_BFN.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DAQ </td>
+<td> Роман Савоченко </td>
+<td> Підтримка Big Farm Net (BFN) модулів для Viper CT/BAS та інших від "Big Dutchman" (<a class="external free" href="http://www.bigdutchman.com" rel="nofollow noreferrer noopener" target="_blank">http://www.bigdutchman.com</a>).<br />Фінансування: <a class="external text" href="http://www.yarbroiler.ru" rel="nofollow noreferrer noopener" target="_blank">ВАТ "Ярославський бройлер"</a>
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="tocnumber">1</span> <span class="toctext">Об'єкт контролеру</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="tocnumber">2</span> <span class="toctext">Параметри</span></a></li>
+</ul>
+</div>
+
+<p>Модуль написано для отримання поточних даних та порушень модуля концентрації інформації BFN(BigFarmNet) автоматики птахівництва фірми "Big Dutchman" (<a class="external free" href="http://www.bigdutchman.com" rel="nofollow noreferrer noopener" target="_blank">http://www.bigdutchman.com</a>). До одного модуля концентрації інформації BFN може бути підключено декілька контролерів приміщень пташників, наприклад, Viper CT/BAS — комп'ютер з контролю за мікрокліматом та виробничими процесами, сконструйований за модульним принципом; призначений для підтримки оптимального мікроклімату та виробничої ефективності у пташнику.
+</p><p>Опитування модуля BFN здійснюється за протоколом SOAP/XML, у процесі якого може бути отримано одразу всі доступні дані комп'ютера одного приміщення. У результаті цього, та підключення до одного модуля BFN декількох комп'ютерів приміщень, загальний час запиту миттєвих даних може досягати 30 (тридцяти) секунд!
+</p><p>Дані та порушення передаються у вигляді кодів сигналів та порушень, відтак, для їх перетворення у текстові повідомлення, необхідні таблиці відповідності. Формування таблиці кодів сигналів та порушень надається даним модулем на рівні об'єкту модуля та у вкладці "Символи" (рис.1). При використанні у багатомовних проектах, дані таблиці можуть формуватися окремо для кожної мови.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:BFN_symb.png"><img class="thumbimage" height="629" src="../../en/files/BFN_symb.png" width="808" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфігурації символів сигналів та порушень.</div></div></div></div>
+<h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="mw-headline-number">1</span> Об'єкт контролеру</span></h2>
+<p>Для додання джерела даних у OpenSCADA створюється та конфігурується об'єкт контролеру. Приклад вкладки конфігурації об'єкту контролера даного типа зображено на рисунку 2.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:856px;"><a class="image" href="http://oscada.org/wiki/File:BFN_tr_cntr_uk.png"><img class="thumbimage" height="690" src="../files/BFN_tr_cntr_uk.png" width="854" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфігурації об'єкту контролера.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
+</p>
+<ul><li> Стан об'єкту контролера, а саме: статус, "Ввімкнено", "Виконується" та ім'я БД, що містить конфігурацію.</li>
+<li> Ідентифікатор, ім'я та опис контролеру.</li>
+<li> Стан "Ввімкнено" та "Виконується", у який переводити об'єкт контролеру при запуску.</li>
+<li> Політика планування та пріоритет задачі збору даних.</li>
+<li> Період синхронізації з віддаленою станцією.</li>
+<li> Адреса транспорту, за посередництвом якого здійснюється доступ до модулю BFN. Зазвичай використовуються TCP-сокети модуля транспортів "<a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Сокети</a>"</li>
+<li> Користувач та пароль підключення до модулю BFN.</li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">2</span> Параметри</span></h2>
+<p>Модуль не надає можливості створення параметрів вручну, всі параметри створюються автоматично з урахуванням переліку підключених контролерів приміщень до модуля BFN. Фактично, один параметр — це один контролер приміщення та всі його дані представляються атрибутами параметру. Один контролер-комп'ютер приміщення містить порядку 250 параметрів, а деякі упритул до 500. У результаті, загальний інформаційний об'єм одного BFN може сягати 2000 сигналів! Приклад вкладки "Атрибути" параметру комп'ютеру приміщення пташника наведено на рисунку 3.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:839px;"><a class="image" href="http://oscada.org/wiki/File:BFN_tr_prm_a.png"><img class="thumbimage" height="760" src="../../en/files/BFN_tr_prm_a.png" width="837" /></a>  <div class="thumbcaption">Рис.3. Вкладка "Атрибути" параметру комп'ютеру приміщення.</div></div></div></div>
+<p>Отримання порушення по комп'ютеру пташника поміщаються до переліку порушень та архів повідомлень з:
+</p>
+<ul><li> Категорією: <b>alBFN:{cntrId}:{house}:{nodeCode}:{alarmId}</b>, де:
+<ul><li> <i>cntrId</i> — ідентифікатор контролеру;</li>
+<li> <i>house</i> — ідентифікатор приміщення або об'єкту параметра;</li>
+<li> <i>nodeCode</i> — код вузла-сигналу, за яким сформовано порушення;</li>
+<li> <i>alarmId</i> — ідентифікатор порушення.</li></ul></li>
+<li> Назвою: <b>{HouseName} &gt; {NodeName}&nbsp;: {AlarmMess}</b>, де:
+<ul><li> <i>HouseName</i> — ім'я приміщення;</li>
+<li> <i>NodeName</i> — ім'я приміщення або об'єкту параметра;</li>
+<li> <i>AlarmMess</i> — повідомлення порушення.</li></ul></li>
+<li> Рівнем порушення: -4(Error) — порушення; 1(Info) — норма.</li></ul>
+
+
+
+
+
+
+</div></body>
+</html>

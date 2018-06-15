@@ -584,7 +584,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	    if(masterPage.status) {
 		masterPage.status.style.top = Math.floor(geomH*wy_scale)+"px";
-		masterPage.status.style.width = Math.floor(geomW*wx_scale)+"px";
+		masterPage.status.style.width = (Math.floor(geomW*wx_scale)-5)+"px";
 		masterPage.status.style.height = Math.floor((masterPage.status.height-1)*wy_scale)+"px";
 		masterPage.status.style.fontSize = Math.floor(masterPage.status.height*0.6*wy_scale)+"px";
 		elStyle += "overflow: visible; ";
@@ -670,7 +670,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	}
 	else if(this.attrs['root'] == 'Box') {
-	    if(this == masterPage && this.attrs['tipStatus'].length) setStatus(this.attrs['tipStatus'],10000);
+	    if(this == masterPage && this.attrs['tipStatus'].length) { setStatus(this.attrs['tipStatus'],10000); this.attrs['tipStatus'] = ""; }
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(!this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) ||
 		    (!this.inclOpen && this.attrs['pgOpenSrc'].length)))
@@ -1929,7 +1929,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			var colCfg = '';
 			var clm = this.curCols.split(';');
 			for(var c_off = 0; c_off < clm.length; c_off++) {
-			    if(!parseInt(this.attrs['headVis'])) colCfg += "<th/>";
+			    if(!parseInt(this.attrs['headVis'])) colCfg += "<th style='display: none' />";
 			    else colCfg += "<th ind='"+clm[c_off]+"' "+
 						"style='"+this.wFont+"'>"+((clm[c_off]=='pos') ? '#' :
 						    (clm[c_off]=='tm') ? '###Date and time###' :
@@ -2231,7 +2231,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
     }
     if(margBrdUpd || this.attrsMdf["geomXsc"] || this.attrsMdf["geomYsc"]) for(var i in this.wdgs) this.wdgs[i].makeEl();
     this.place.setAttribute('title',this.attrs['tipTool']);
-    this.place.onmouseover = function() { if( this.wdgLnk.attrs['tipStatus'] ) setStatus(this.wdgLnk.attrs['tipStatus'],10000); };
+    this.place.onmouseover = function(e) {
+	if(this.wdgLnk.attrs['tipStatus']) {
+	    setStatus(this.wdgLnk.attrs['tipStatus'], 10000);
+	    e.stopPropagation();
+	}
+    };
 
     //Delete child widgets check
     if(FullTree && pgBr)
@@ -2474,7 +2479,7 @@ function makeUI( callBackRez )
 function setStatus( mess, tm )
 {
     if(!mess) mess = '';
-    if(masterPage && masterPage.status)	document.getElementById('StatusBar').innerText = mess;
+    if(masterPage && masterPage.status && (stb=document.getElementById('StatusBar'))) stb.innerText = mess;
     else window.status = mess;
     if(!mess) return;
     if(stTmID) clearTimeout(stTmID);

@@ -341,7 +341,7 @@ string TCfg::getS( uint8_t RqFlg )
 
 const char *TCfg::getSd( )
 {
-    if(type() != TVariant::String)	throw TError("Cfg", _("Element type is not string!"));
+    if(type() != TVariant::String)	throw TError("Cfg", _("Element type is not String!"));
     if(mStdString)	return val.s->c_str();
     if(mSize < sizeof(val.sMini)) return val.sMini;
     return val.sPtr;
@@ -349,13 +349,13 @@ const char *TCfg::getSd( )
 
 double &TCfg::getRd( )
 {
-    if(type() != TVariant::Real)	throw TError("Cfg", _("Element type is not real!"));
+    if(type() != TVariant::Real)	throw TError("Cfg", _("Element type is not Real!"));
     return val.r;
 }
 
 int64_t &TCfg::getId( )
 {
-    if(type() != TVariant::Integer)	throw TError("Cfg", _("Element type is not integer!"));
+    if(type() != TVariant::Integer)	throw TError("Cfg", _("Element type is not Integer!"));
     return val.i;
 }
 

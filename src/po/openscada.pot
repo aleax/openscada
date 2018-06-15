@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-04 23:30+0300\n"
+"POT-Creation-Date: 2018-06-15 22:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -617,7 +617,7 @@ msgstr ""
 msgid "The node '%s' is already present."
 msgstr ""
 
-msgid "Node is being processed now!"
+msgid "Node is being processed now for enable!"
 msgstr ""
 
 msgid "Node root or not connected!"
@@ -676,13 +676,13 @@ msgstr ""
 msgid "Element type is not selective!"
 msgstr ""
 
-msgid "Element type is not string!"
+msgid "Element type is not String!"
 msgstr ""
 
-msgid "Element type is not real!"
+msgid "Element type is not Real!"
 msgstr ""
 
-msgid "Element type is not integer!"
+msgid "Element type is not Integer!"
 msgstr ""
 
 msgid "Element type is not Boolean!"
@@ -985,14 +985,6 @@ msgstr ""
 
 #, c-format
 msgid "Error getting object from non-object IO %d!"
-msgstr ""
-
-#, c-format
-msgid "Error opening 'iconv': %s"
-msgstr ""
-
-#, c-format
-msgid "Error converting input sequence: %s"
 msgstr ""
 
 msgid ""
@@ -1952,7 +1944,8 @@ msgstr ""
 msgid "Error the remote host '%s'!"
 msgstr ""
 
-msgid "External hosts poll"
+#, c-format
+msgid "External hosts of %s"
 msgstr ""
 
 msgid "User;System;User and System"

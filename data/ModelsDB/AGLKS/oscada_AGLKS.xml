@@ -19,6 +19,12 @@
 	    <prm id="SYSStPref">0</prm>
 	    <tbl id="DB">
 		<fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" NAME_uk="Основна БД" NAME_ru="Основная БД" ADDR="St.db" CODEPAGE="UTF-8" />
+		<fld ID="arch" TYPE="SQLite" ADDR="arch.db" CODEPAGE="UTF-8" EN="1" />
+		<fld ID="testRelease" TYPE="SQLite" ADDR="test.db" CODEPAGE="UTF-8" EN="0" />
+		<fld ID="testRelease" TYPE="MySQL" ADDR="db.oscada;test;123456;test;;;utf8" CODEPAGE="UTF-8" EN="0" />
+		<fld ID="testRelease" TYPE="PostgreSQL" ADDR="db.oscada;;postgres;123456;test" CODEPAGE="UTF-8" EN="0" />
+		<fld ID="testRelease" TYPE="FireBird" ADDR="db.oscada:/var/tmp/test.fbd;sysdba;123456" CODEPAGE="UTF-8" EN="0" />
+		<fld ID="testRelease" TYPE="DBF" ADDR="DBF" CODEPAGE="UTF-8" EN="0" />
 	    </tbl>
 	</node>
 

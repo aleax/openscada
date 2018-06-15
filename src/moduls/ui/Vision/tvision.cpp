@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.4.3"
+#define MOD_VER		"5.4.4"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -98,8 +98,12 @@ TVision::TVision( string name ) : TUI(MOD_ID), mVCAStation(dataRes()), mUserStar
 TVision::~TVision( )
 {
     //Free widget's shapes
-    for(unsigned iSw = 0; iSw < shapesWdg.size(); iSw++) shapesWdg[iSw]->deleteLater();	//delete shapesWdg[iSw];
+    for(unsigned iSw = 0; iSw < shapesWdg.size(); iSw++)
+	delete shapesWdg[iSw];
+	//shapesWdg[iSw]->deleteLater();	//!!!! Goes to crashes at the module disconnection
     shapesWdg.clear();
+
+    if(!SYS->stopSignal()) TSYS::sysSleep(5);
 }
 
 string TVision::optDescr( )
@@ -114,12 +118,12 @@ string TVision::optDescr( )
 	"CachePgLife <hours>     The lifetime of pages in the cache.\n"
 	"VCAstation <id>         The station with the VCA engine ('.' Is local).\n"
 	"RestoreTime <seconds>   Connection recovery time.\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
+	MOD_TYPE, MOD_ID, nodePath().c_str());
 }
 
 void TVision::load_( )
 {
-    mess_debug(nodePath().c_str(),_("Loading the module."));
+    mess_debug(nodePath().c_str(), _("Loading the module."));
 
     //Load parameters from command line
 

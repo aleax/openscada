@@ -30,7 +30,7 @@ License: GPL','techApp','Технологічні апарати','Моделі 
 Лицензия: GPL',0);
 INSERT INTO "UserFuncLibs" VALUES('servProc','Service procedures','Library of service procedures for different using.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.1
+Version: 1.2.0
 License: GPL','lib_servProc','Сервісні процедури','Бібліотека різноманітних сервісних процедур.','Сервисные процедуры','Библиотека различных сервисных процедур.',1);
 INSERT INTO "UserFuncLibs" VALUES('doc','Report''s documents','Library of functions to facilitate the implementation of typical computations the primitive form of reporting documentation VCA "Document".
 Founded: January 2008
@@ -270,15 +270,15 @@ INSERT INTO "lib_servProc_io" VALUES('procArh','begs','Begin time',0,0,'2006-08-
 INSERT INTO "lib_servProc_io" VALUES('procArh','ends','End time',0,0,'2006-08-08 11:21:55',0,3,'Час закінчення','','Время конца','');
 INSERT INTO "lib_servProc_io" VALUES('crc16','in','Input',0,0,'',0,0,'Вхід','','Вход','');
 INSERT INTO "lib_servProc_io" VALUES('crc16','out','Result',1,1,'',0,1,'Результат','','Результат','');
-INSERT INTO "lib_servProc_io" VALUES('releaseTests','sub','Subsystem (-1:All;0:SYS;1:Security;2:Transport;3:A',1,0,'-1',0,0,'Підсистема (-1:Всі;0:SYS;1:Безпека;2:Транспорти;...)','','Подсистема (-1:Все;0:SYS;1:Безопасность;2:Транспорты;...)','');
-INSERT INTO "lib_servProc_io" VALUES('releaseTests','rez','Result',0,1,'',0,1,'Результат','','Результат','');
+INSERT INTO "lib_servProc_io" VALUES('releaseTests','sub','Subsystem (-1:All;0:SYS;1:Security;2:Transport;...',1,0,'-1',0,0,'Підсистема (-1:Всі;0:SYS;1:Безпека;2:Транспорти;...)','','Подсистема (-1:Все;0:SYS;1:Безопасность;2:Транспорты;...)','');
+INSERT INTO "lib_servProc_io" VALUES('releaseTests','rez','Result',0,5,'',0,1,'Результат','','Результат','');
 INSERT INTO "lib_servProc_io" VALUES('crc16','poly','Polynomial (reversion)',1,0,'40961',0,2,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('archPackFStests','tm','Start time (14.03.2015 21:37)',1,0,'1426361839',0,0,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('archPackFStests','per','Period, seconds',1,0,'60',0,1,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('archPackFStests','addr','Archive address',0,0,'test123',0,2,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('archPackFStests','step','Step (0-8), -1 for all',1,0,'-1',0,4,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('archPackFStests','archiver','Archiver address',0,0,'FSArch.1m',0,3,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('wacko2media','ndb','DB',0,0,'wiki',0,0,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('wacko2media','ndb','MySQL DB id',0,0,'wiki',0,0,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('wacko2media','wpg','Wiki page',0,0,'HomePageUk/Doc/SQLite',0,1,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('wacko2media','rez','Result',0,6,'',0,2,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/roman/work/Проекти/OpenSCADA/doc/',0,2,'','','','');
@@ -329,7 +329,7 @@ Modules/Siemens:en,uk,ru:Modules/Siemens.html
 Modules/DiamondBoards:en,uk,ru:Modules/DiamondBoards.html
 Modules/Comedi:en,uk,ru:Modules/Comedi.html
 Modules/SoundCard:en,uk,ru:Modules/SoundCard.html
-Modules/BFN:en,ru:Modules/BFN.html
+Modules/BFN:en,uk,ru:Modules/BFN.html
 Modules/SMH2Gi:en,uk,ru:Modules/SMH2Gi.html
 Modules/GPIO:en,uk,ru:Modules/GPIO.html
 Modules/FSArch:en,uk,ru:Modules/FSArch.html
@@ -349,6 +349,7 @@ Modules/FLibComplex1:en,uk,ru:Modules/FLibComplex1.html',0,3,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,4,'',0,4,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('docOffLine','res','Result',0,1,'',0,0,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('docOffLine','reqTr','Tries of requests',1,1,'3',0,1,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('releaseTests','rezF','Result for HTML file',0,5,'',1,2,'','','','');
 CREATE TABLE 'techApp' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '' ,"FORMULA" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "techApp" VALUES('lag','Lag','Lag model. You can use this for sensors'' variables lag imitation.',10,'out-=(out-in)/(t_lg*f_frq);','Затримка','Модель затримки. Може використовуватися для імітації запізнення значень давачів.','Запаздывание','Модель задержки. Может использоваться для имитации запаздывания
 значений датчиков.
@@ -6555,7 +6556,7 @@ else {
 	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
 }','','',1480872892);
 CREATE TABLE 'lib_servProc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "lib_servProc" VALUES('procArh','Archives recalc','Перерахунок архівів','Пересчёт архивов','Value archives recalculation.
+INSERT INTO "lib_servProc" VALUES('procArh','Archives recalculation','Перерахунок архівів','Пересчёт архивов','Value archives recalculation.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.0','','',1,600,0,'using Special.FLibSYS;
 
@@ -6598,29 +6599,62 @@ while( begwtm<endtm )
 
     a_dst.copy(bf_dst,begwtm,0,endwtm,0);
     begwtm = endwtm;
-}','','',1479061485);
-INSERT INTO "lib_servProc" VALUES('crc16','CRC 16','','','Standard Cyclic Redundancy Check (CRC) with free polynomial set, by default it is 0x8005. It isn''t actual more by the common CRC implementing.
+}','','',1528952518);
+INSERT INTO "lib_servProc" VALUES('crc16','CRC 16','','','Standard Cyclic Redundancy Check (CRC) with free setting the polynomial, by default 0x8005. It isn''t actual more by the common CRC implementing.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.0','','',1,10,0,'out = 0xFFFF;
 for(i = 0; i < in.length; i++) {
   out = out^in.charCodeAt(i);
   for(j = 0; j < 8; j++) out = (out&1) ? ((out>>1)^poly) : out >> 1;
-}','','',1479061164);
-INSERT INTO "lib_servProc" VALUES('releaseTests','TEST: Release','Тести випуску','Тесты выпуска','OpenSCADA releases formal sets pack in list:
+}','','',1528952518);
+INSERT INTO "lib_servProc" VALUES('releaseTests','TEST: Release','Тести випуску','Тесты выпуска','Set of formal tests of the OpenSCADA releases:
   - 0:System
   - 1:Security User/Group tests
   - 2:Transport subsystem tests
-  - 3:Archive subsystem tests
-  - 4:DB subsystem tests
-  - 5:Protocol subsystem tests
+	- Data transferring through output and input transports by the test "TrOut":
+		means presence of the input transports with the name "testRelease[{N}]" and
+			the connected output transport adress into description or address field (if equal one).
+  - 3:Protocol subsystem tests
+	- Execution of the test controller object DAQ.ModBUS.testTCP:
+		means presence of the controller object DAQ.ModBUS.testTCP.
+	- Execution of the test controller object DAQ.OPC_UA.test:
+		means presence of the  controller object DAQ.OPC_UA.test.
+	- Send requests to a test-echo protocol from a transport:
+		means presence of the user protocol object Protocol.UserProtocol.up_test.
+  - 4:Archive subsystem tests
+	- Using the test "Mess" of the module "SystemTests" for archiving messages:
+		means presence the message archivers "test";
+	- Assign/Clear archiving from the parameter attribute:
+		means presence "/DAQ/LogicLev/experiment/F3" with the attribute "ed", and
+		the value archivers "1s"
+	- The tests "Archive" of the value archiver to verify the correctness of the functioning
+			of the sequential mechanism for packaging by "SystemTests":
+		means presence the archive "testArch_cntr" with the data period 1s and
+		processed by the archiver FSArch.1s.
+  - 5:DB subsystem tests
+	- The tests "BD" of the module "SystemTests":
+		means presence of the test DB with the name "testRelease".
   - 6:DAQ subsystem tests
+	- Test "Param" from the module "SystemTests":
+		presence of the DAQ parameter LogicLev.experiment.F3.
+	- Test "Val" of the module "SystemTests" for the parameter attribute:
+		presence of the DAQ parameter LogicLev.experiment.F3.var.
+	- Blocks create/remove, change, load, save and load from config and copy, set link:
+		presence the DAQ controller object "KM102cntr" for copy the block scheme.
+		presence the DAQ parameter LogicLev.experiment.F3.var.
   - 7:UI subsystem tests
   - 8:Special subsystem tests
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0','','',1,10,0,'nNm = "testNode";
+Version: 2.0.0','','',1,600,0,'nNm = "testNode";
 node  = false;		//Process node
 testREZ = "";		//Test rezult
 rez = "";
+rezF = "";
+
+function result(name, val) {
+	rez += name + "\n> " + val + "\n\n";
+	rezF += "<tr><td>"+name+"</td><td>"+val+"</td></tr>\n";
+}
 
 //**********************************
 //Get config file name
@@ -6635,30 +6669,34 @@ cfgTree.load(configPath,true,true);
 //**********************************
 //System
 if(sub <= 0) {
+	stTm = SYS.utime();
 	testREZ = SYS.Special.SystemTests.XML(configPath);
-	rez += "<tr><td>Control interface: Test of the XML file parsing</td><td>"+testREZ+"</td></tr>\n";
+	result("Control interface: Test parsing the XML file", testREZ);
 	testREZ = SYS.Special.SystemTests.SysContrLang("/Archive/FSArch/mess_StatErrors/%2fprm%2fst");
-	rez += "<tr><td>Control interface: Test of the control system language</td><td>"+testREZ+"</td></tr>\n";
+	result("Control interface: Test of the control interface", testREZ);
 	testREZ = SYS.Special.SystemTests.Base64Code();
-	rez += "<tr><td>SYS: Tests of the Mime Base64 encoding algorithm</td><td>"+testREZ+"</td></tr>\n";
+	result("SYS: Tests for encoding of the Mime Base64 algorithm", testREZ);
+	result("SYS: Time of the execution, seconds", (SYS.utime()-stTm)*1e-6);
 }
 
 //**********************************
 //Security User/Group tests
 if(sub < 0 || sub == 1) {
+	stTm = SYS.utime();
 	testREZ = "PASSED";
 	// User
 	nAddr = "/Security/usr_"+nNm;
 	if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/Security/%2fbr%2fusr_").setText(nNm)) != 0 || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: user add";
-	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fdscr").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change user";
+	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fDESCR").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change user";
 	else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: save user";
-	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fdscr").setText("Test 1")) != 0 || 
+	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fDESCR").setText("Test 1")) != 0 || 
 		SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: load user";
 	else {
 		node = false;
 		if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/Security/%2fbr%2fusr_").setText(nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: user delete";
 		else {
-			cfgTree.getElementBy("sub_Security").childAdd("tbl").setAttr("id","Security_user").childAdd("fld").setAttr("NAME",nNm+"_cfg");
+			if(!cfgTree.getElementBy("Security_user"))	cfgTree.getElementBy("sub_Security").childAdd("tbl").setAttr("id","Security_user");
+			cfgTree.getElementBy("Security_user").childAdd("fld").setAttr("NAME",nNm+"_cfg");
 			cfgTree.save(0x20, configPath);
 			SYS.cntrReq(SYS.XMLNode("scan").setAttr("path","/%2fgen%2fconfig"));		//Reload config command
 			if(!SYS.nodeAt(nAddr+"_cfg")) testREZ = "FAILED: load user from config";
@@ -6666,90 +6704,142 @@ if(sub < 0 || sub == 1) {
 	}
 	//Group
 	nAddr = "/Security/grp_"+nNm;
-	if(testREZ == "PASSED" && (SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/Security/%2fbr%2fgrp_").setText(nNm)) != 0 || !(node=SYS.nodeAt(nAddr)))) testREZ = "FAILED: group add";
-	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fdscr").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change group";
-	else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: save group";
-	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fdscr").setText("Test 1")) != 0 || 
-		SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: load group";
-	else {
-		node = false;
-		if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/Security/%2fbr%2fgrp_").setText(nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: group delete";
+	if(testREZ == "PASSED") {
+		if((SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/Security/%2fbr%2fgrp_").setText(nNm)) != 0 || !(node=SYS.nodeAt(nAddr)))) testREZ = "FAILED: group add";
+		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fDESCR").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change group";
+		else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: save group";
+		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fDESCR").setText("Test 1")) != 0 || 
+			SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: load group";
 		else {
-			cfgTree.getElementBy("sub_Security").childAdd("tbl").setAttr("id","Security_grp").childAdd("fld").setAttr("NAME",nNm+"_cfg").setAttr("USERS",nNm+"_cfg");
-			cfgTree.save(0x20, configPath);
-			SYS.cntrReq(SYS.XMLNode("scan").setAttr("path","/%2fgen%2fconfig"));		//Reload config command
-			if(!SYS.nodeAt(nAddr+"_cfg")) testREZ = "FAILED: load group from config";
+			node = false;
+			if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/Security/%2fbr%2fgrp_").setText(nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: group delete";
+			else {
+				if(!cfgTree.getElementBy("Security_grp"))	cfgTree.getElementBy("sub_Security").childAdd("tbl").setAttr("id","Security_grp");
+				cfgTree.getElementBy("Security_grp").childAdd("fld").setAttr("NAME",nNm+"_cfg").setAttr("USERS",nNm+"_cfg");
+				cfgTree.save(0x20, configPath);
+				SYS.cntrReq(SYS.XMLNode("scan").setAttr("path","/%2fgen%2fconfig"));		//Reload config command
+				if(!SYS.nodeAt(nAddr+"_cfg")) testREZ = "FAILED: load group from config";
+			}
 		}
 	}
-	rez += "<tr><td>Security: User/Group create/remove, change, load, save and load from config</td><td>"+testREZ+"</td></tr>\n";
+	result("Security: User/Group create/remove, change, load, save and load from the config", testREZ);
+	result("Security: Time of the execution, seconds", (SYS.utime()-stTm)*1e-6);
 }
 
 //**********************************
-//Transport subsystem tests
+//Transport subsystems tests
 if(sub < 0 || sub == 2) {
+	stTm = SYS.utime();
 	nList = SYS.Transport.nodeList("mod_");
-	cfgTree.getElementBy("sub_Transport").childAdd("tbl").setAttr("id","Transport_in");
-	cfgTree.getElementBy("sub_Transport").childAdd("tbl").setAttr("id","Transport_out");
-	for(i_n = 0; i_n < nList.length; i_n++) {
-		testREZ = "PASSED";
+	if(!cfgTree.getElementBy("Transport_in"))	cfgTree.getElementBy("sub_Transport").childAdd("tbl").setAttr("id","Transport_in");
+	if(!cfgTree.getElementBy("Transport_out"))	cfgTree.getElementBy("sub_Transport").childAdd("tbl").setAttr("id","Transport_out");
+	for(iN = 0; iN < nList.length; iN++) {
+		//Disconnect/Connect module
+		req = SYS.XMLNode("get").setAttr("path","/Transport/"+nList[iN]+"/%2fmodule%2fm_inf%2fSource");
+		SYS.cntrReq(req);
+		if(req.text()[0] != "*") {
+			testREZ = SYS.Special.SystemTests.SOAttach(req.text(),-1);
+			testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),1);
+			result("Transport."+nList[iN].slice(4)+": Disconnect/Connect", testREZ);
+		} else result("Transport."+nList[iN].slice(4)+": Disconnect/Connect", "Built-in");
+
 		//Input transport
-		nAddr = "/Transport/"+nList[i_n]+"/in_"+nNm;
-		if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/Transport/"+nList[i_n]+"/%2fbr%2fin_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: input add";
-		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fdscr").setText("Test")) != 0 || node.cfg("DESCRIPT") != "Test") testREZ = "FAILED: change input";
+		testREZ = "PASSED";
+		nAddr = "/Transport/"+nList[iN]+"/in_"+nNm;
+		if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/Transport/"+nList[iN]+"/%2fbr%2fin_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: input add";
+		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fDESCRIPT").setText("Test")) != 0 || node.cfg("DESCRIPT") != "Test") testREZ = "FAILED: change input";
 		else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: save input";
-		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fdscr").setText("Test 1")) != 0 || 
+		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fDESCRIPT").setText("Test 1")) != 0 || 
 			SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr+"/%2fobj")) != 0 || node.cfg("DESCRIPT") != "Test") testREZ = "FAILED: load input";
 		else {
 			node = false;
-			if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/Transport/"+nList[i_n]+"/%2fbr%2fin_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: input delete";
+			if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/Transport/"+nList[iN]+"/%2fbr%2fin_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: input delete";
 			else {
-				cfgTree.getElementBy("Transport_in").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("MODULE",nList[i_n].slice(4));
+				cfgTree.getElementBy("Transport_in").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("MODULE",nList[iN].slice(4));
 				cfgTree.save(0x20, configPath);
 				SYS.cntrReq(SYS.XMLNode("scan").setAttr("path","/%2fgen%2fconfig"));		//Reload config command
 				if(!SYS.nodeAt(nAddr+"_cfg")) testREZ = "FAILED: load input from config";
 			}
 		}
 		//Output transport
-		nAddr = "/Transport/"+nList[i_n]+"/out_"+nNm;
-		if(testREZ == "PASSED" && (SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/Transport/"+nList[i_n]+"/%2fbr%2fout_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr)))) testREZ = "FAILED: output add";
-		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fdscr").setText("Test")) != 0 || node.cfg("DESCRIPT") != "Test") testREZ = "FAILED: change output";
-		else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: save output";
-		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fdscr").setText("Test 1")) != 0 || 
-			SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr+"/%2fobj")) != 0 || node.cfg("DESCRIPT") != "Test") testREZ = "FAILED: load output";
-		else {
-			node = false;
-			if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/Transport/"+nList[i_n]+"/%2fbr%2fout_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: output delete";
+		nAddr = "/Transport/"+nList[iN]+"/out_"+nNm;
+		if(testREZ == "PASSED") { 
+			if((SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/Transport/"+nList[iN]+"/%2fbr%2fout_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr)))) testREZ = "FAILED: output add";
+			else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fDESCRIPT").setText("Test")) != 0 || node.cfg("DESCRIPT") != "Test") testREZ = "FAILED: change output";
+			else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: save output";
+			else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fDESCRIPT").setText("Test 1")) != 0 || 
+				SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr+"/%2fobj")) != 0 || node.cfg("DESCRIPT") != "Test") testREZ = "FAILED: load output";
 			else {
-				cfgTree.getElementBy("Transport_out").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("MODULE",nList[i_n].slice(4));
-				cfgTree.save(0x20, configPath);
-				SYS.cntrReq(SYS.XMLNode("scan").setAttr("path","/%2fgen%2fconfig"));		//Reload config command
-				if(!SYS.nodeAt(nAddr+"_cfg")) testREZ = "FAILED: load output from config";
+				node = false;
+				if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/Transport/"+nList[iN]+"/%2fbr%2fout_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: output delete";
+				else {
+					cfgTree.getElementBy("Transport_out").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("MODULE",nList[iN].slice(4));
+					cfgTree.save(0x20, configPath);
+					SYS.cntrReq(SYS.XMLNode("scan").setAttr("path","/%2fgen%2fconfig"));		//Reload config command
+					if(!SYS.nodeAt(nAddr+"_cfg")) testREZ = "FAILED: load output from config";
+				}
 			}
 		}
-		rez += "<tr><td>Transport."+nList[i_n].slice(4)+": Input/Output create/remove, change, load, save and load from config</td><td>"+testREZ+"</td></tr>\n";
+		result("Transport."+nList[iN].slice(4)+": Input/Output create/remove, change, load, save and load from config", testREZ);
+
+		//Transmission
+		iTrList = SYS.Transport[nList[iN]].nodeList("in_");
+		for(testREZ = "", iTr = 0; iTr < iTrList.length; iTr++) {
+			iTrO = SYS.Transport[nList[iN]][iTrList[iTr]];
+			if(!(iTrOutAddr=iTrO.cfg("DESCRIPT")).length) iTrOutAddr = iTrO.cfg("ADDR");
+			if(iTrList[iTr].slice(0,14) != "in_testRelease")	continue;
+			testREZ += (testREZ.length?"; ":"") + iTrOutAddr + ": " +
+				SYS.Special.SystemTests.TrOut(iTrOutAddr,nList[iN].slice(4),"1234567890");
+		}
+		iTrO = 0;
+		result("Transport."+nList[iN].slice(4)+": Data transferring through output and input transports by the test \"TrOut\"", testREZ.length?testREZ:"No test input transports");
+	}
+	result("Transport: Time of the execution, seconds", (SYS.utime()-stTm)*1e-6);
+}
+
+//**********************************
+//Protocol subsystems tests
+if(sub < 0 || sub == 3) {
+	stTm = SYS.utime();
+	nList = SYS.Protocol.nodeList("mod_");
+	for(iN = 0; iN < nList.length; iN++) {
+		if(nList[iN].slice(4) == "ModBus")
+			result("Protocol."+nList[iN].slice(4)+": Execution of the test controller object DAQ.ModBUS.testTCP",
+				(prmO=SYS.nodeAt("/DAQ/ModBus/testTCP"))?prmO.status():"missed");
+		else if(nList[iN].slice(4) == "OPC_UA")
+			result("Protocol."+nList[iN].slice(4)+": Execution of the test controller object DAQ.OPC_UA.test",
+				(prmO=SYS.nodeAt("/DAQ/OPC_UA/test"))?prmO.status():"missed");
+		else if(nList[iN].slice(4) == "UserProtocol") {
+			SYS.cntrReq((req=SYS.XMLNode("get").setAttr("path","/Protocol/UserProtocol/up_test/%2fup%2fst%2fstatus")));
+			result("Protocol."+nList[iN].slice(4)+": Send requests to a test-echo protocol from a transport", req.text());
+		}
 
 		//Disconnect/Connect module
-		req = SYS.XMLNode("get").setAttr("path","/Transport/"+nList[i_n]+"/%2fhelp%2fm_inf%2fSource");
+		req = SYS.XMLNode("get").setAttr("path","/Protocol/"+nList[iN]+"/%2fmodule%2fm_inf%2fSource");
 		SYS.cntrReq(req);
-		testREZ = SYS.Special.SystemTests.SOAttach(req.text(),0);
-		testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),0);
-		rez += "<tr><td>Transport."+nList[i_n].slice(4)+": Disconnect/Connect</td><td>"+testREZ+"</td></tr>\n";
+		if(req.text()[0] != "*") {
+			testREZ = SYS.Special.SystemTests.SOAttach(req.text(),-1);
+			testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),1);
+			result("Protocol."+nList[iN].slice(4)+": Disconnect/Connect", testREZ);
+		} else result("Protocol."+nList[iN].slice(4)+": Disconnect/Connect", "Built-in");
 	}
+	result("Protocol: Time of the execution, seconds", (SYS.utime()-stTm)*1e-6);
 }
 
 //**********************************
 //Archive subsystem tests
-if(sub < 0 || sub == 3) {
+if(sub < 0 || sub == 4) {
+	stTm = SYS.utime();
 	testREZ = SYS.Special.SystemTests.ValBuf();
-	rez += "<tr><td>Archive: Tests of the values'' buffer.</td><td>"+testREZ+"</td></tr>\n";
+	result("Archive: Tests for the value buffer.", testREZ);
 
 	// Value archive
 	testREZ = "PASSED";
 	nAddr = "/Archive/va_"+nNm;
 	if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/Archive/%2fbr%2fva_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: add";
-	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fdscr").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change";
+	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fDESCR").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change";
 	else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: save";
-	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fdscr").setText("Test 1")) != 0 || 
+	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fDESCR").setText("Test 1")) != 0 || 
 		SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: load";
 	else {
 		node = false;
@@ -6761,117 +6851,151 @@ if(sub < 0 || sub == 3) {
 			if(!SYS.nodeAt(nAddr+"_cfg")) testREZ = "FAILED: load from config";
 		}
 	}
-	rez += "<tr><td>Archive: Value archive create/remove, change, load, save and load from config</td><td>"+testREZ+"</td></tr>\n";
+	result("Archive: Value archive create/remove, change, load, save and load from config", testREZ);
 
-	// Archivators
+	// Archivers
 	nList = SYS.Archive.nodeList("mod_");
 	cfgTree.getElementBy("sub_Archive").childAdd("tbl").setAttr("id","Archive_mess_proc");
 	cfgTree.getElementBy("sub_Archive").childAdd("tbl").setAttr("id","Archive_val_proc");
-	for(i_n = 0; i_n < nList.length; i_n++) {
+	for(iN = 0; iN < nList.length; iN++) {
 		testREZ = "PASSED";
-		//Messages archivator
-		nAddr = "/Archive/"+nList[i_n]+"/mess_"+nNm;
-		if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/Archive/"+nList[i_n]+"/%2fbr%2fmess_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: messages add";
-		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fdscr").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change messages";
+		//Messages archiver
+		nAddr = "/Archive/"+nList[iN]+"/mess_"+nNm;
+		if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/Archive/"+nList[iN]+"/%2fbr%2fmess_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: messages add";
+		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fDESCR").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change messages";
 		else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: save messages";
-		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fdscr").setText("Test 1")) != 0 || 
+		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fDESCR").setText("Test 1")) != 0 || 
 			SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: load messages";
 		else {
 			node = false;
-			if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/Archive/"+nList[i_n]+"/%2fbr%2fmess_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: messages delete";
+			if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/Archive/"+nList[iN]+"/%2fbr%2fmess_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: messages delete";
 			else {
-				cfgTree.getElementBy("Archive_mess_proc").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("MODUL",nList[i_n].slice(4));
+				cfgTree.getElementBy("Archive_mess_proc").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("MODUL",nList[iN].slice(4));
 				cfgTree.save(0x20, configPath);
 				SYS.cntrReq(SYS.XMLNode("scan").setAttr("path","/%2fgen%2fconfig"));		//Reload config command
 				if(!SYS.nodeAt(nAddr+"_cfg")) testREZ = "FAILED: load messages from config";
 			}
 		}
-		//Value archivator
-		nAddr = "/Archive/"+nList[i_n]+"/val_"+nNm;
-		if(testREZ == "PASSED" && (SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/Archive/"+nList[i_n]+"/%2fbr%2fval_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr)))) testREZ = "FAILED: values add";
-		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fdscr").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change values";
-		else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: save values";
-		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fdscr").setText("Test 1")) != 0 || 
-			SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: load values";
-		else {
-			node = false;
-			if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/Archive/"+nList[i_n]+"/%2fbr%2fval_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: values delete";
+		//Value archiver
+		nAddr = "/Archive/"+nList[iN]+"/val_"+nNm;
+		if(testREZ == "PASSED") {
+			if((SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/Archive/"+nList[iN]+"/%2fbr%2fval_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr)))) testREZ = "FAILED: values add";
+			else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fDESCR").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change values";
+			else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: save values";
+			else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fDESCR").setText("Test 1")) != 0 || 
+				SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: load values";
 			else {
-				cfgTree.getElementBy("Archive_val_proc").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("MODUL",nList[i_n].slice(4));
-				cfgTree.save(0x20, configPath);
-				SYS.cntrReq(SYS.XMLNode("scan").setAttr("path","/%2fgen%2fconfig"));		//Reload config command
-				if(!SYS.nodeAt(nAddr+"_cfg")) testREZ = "FAILED: load values from config";
+				node = false;
+				if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/Archive/"+nList[iN]+"/%2fbr%2fval_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: values delete";
+				else {
+					cfgTree.getElementBy("Archive_val_proc").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("MODUL",nList[iN].slice(4));
+					cfgTree.save(0x20, configPath);
+					SYS.cntrReq(SYS.XMLNode("scan").setAttr("path","/%2fgen%2fconfig"));		//Reload config command
+					if(!SYS.nodeAt(nAddr+"_cfg")) testREZ = "FAILED: load values from config";
+				}
 			}
 		}
-		rez += "<tr><td>Archive."+nList[i_n].slice(4)+": Messages/Values create/remove, change, load, save and load from config</td><td>"+testREZ+"</td></tr>\n";
+		result("Archive."+nList[iN].slice(4)+": Message/Value archiver create/remove, change, load, save and load from config", testREZ);
+
+		//Using the test "Mess" of the module "SystemTests" for archiving messages
+		nNm1 = "test";
+		result("Archive."+nList[iN].slice(4)+": The test \"Mess\" of the module \"SystemTests\" for archiving messages",
+			SYS.Archive[nList[iN]]["mess_"+nNm1] ? SYS.Special.SystemTests.Mess(nList[iN].slice(4)+"."+nNm1,"",600) : "missed message archiver ''"+nNm1+"''");
+
+		//Assign/Clear archiving from the parameter attribute
+		nNm1 = "/DAQ/LogicLev/experiment/F3";
+		testREZ = "missed DAQ parameter ''"+nNm1+"''";
+		if(SYS.nodeAt(nNm1)) {
+			testREZ = "PASSED";
+			SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nNm1+"/%2farch%2farch").setAttr("key_atr","ed").setAttr("col",nList[iN].slice(4)+".1s").setText("1"));
+			if(!SYS.nodeAt("/Archive/va_F3_ed"))	testREZ = "error assigning";
+			else {
+				SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nNm1+"/%2farch%2farch").setAttr("key_atr","ed").setAttr("col","prc").setText("0"));
+				if(SYS.nodeAt("/Archive/va_F3_ed"))	testREZ = "error clearing";
+			}
+		}
+		result("Archive."+nList[iN].slice(4)+": Assign/Clear archiving from the parameter attribute", testREZ);
+
+		//The tests "Archive" of the value archiver to verify the correctness of the functioning of the sequential mechanism for packaging by "SystemTests".
+		if(nList[iN].slice(4) == "FSArch") {
+			nNm1 = "testArch_cntr";
+			result("Archive."+nList[iN].slice(4)+": The tests \"Archive\" of the module \"SystemTests\" for the value archiver to verify the correctness of the functioning of the sequential packaging mechanism",
+				SYS.nodeAt("/Archive/va_"+nNm1) ? SYS.Special.SystemTests.Archive(nNm1,1e6,nList[iN].slice(4)+".1s") : "missed archive "+nNm1);
+		}
 
 		//Disconnect/Connect module
-		req = SYS.XMLNode("get").setAttr("path","/Archive/"+nList[i_n]+"/%2fhelp%2fm_inf%2fSource");
+		req = SYS.XMLNode("get").setAttr("path","/Archive/"+nList[iN]+"/%2fmodule%2fm_inf%2fSource");
 		SYS.cntrReq(req);
-		testREZ = SYS.Special.SystemTests.SOAttach(req.text(),0);
-		testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),0);
-		rez += "<tr><td>Archive."+nList[i_n].slice(4)+": Disconnect/Connect</td><td>"+testREZ+"</td></tr>\n";
+		if(req.text()[0] != "*") {
+			testREZ = SYS.Special.SystemTests.SOAttach(req.text(),-1);
+			testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),1);
+			result("Archive."+nList[iN].slice(4)+": Disconnect/Connect", testREZ);
+		} else result("Archive."+nList[iN].slice(4)+": Disconnect/Connect", "Built-in");
 	}
+	result("Archive: Time of the execution, seconds", (SYS.utime()-stTm)*1e-6);
 }
 
 //**********************************
 //DB subsystem tests
-if(sub < 0 || sub == 4) {
+if(sub < 0 || sub == 5) {
+	stTm = SYS.utime();
 	nList = SYS.BD.nodeList("mod_");
-	for(i_n = 0; i_n < nList.length; i_n++) {
+	for(iN = 0; iN < nList.length; iN++) {
+		//Disconnect/Connect module
+		req = SYS.XMLNode("get").setAttr("path","/BD/"+nList[iN]+"/%2fmodule%2fm_inf%2fSource");
+		SYS.cntrReq(req);
+		if(req.text()[0] != "*") {
+			testREZ = SYS.Special.SystemTests.SOAttach(req.text(),-1);
+			testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),1);
+			result("DB."+nList[iN].slice(4)+": Disconnect/Connect", testREZ);
+		} else result("DB."+nList[iN].slice(4)+": Disconnect/Connect", "Built-in");
+
+		//DB object
 		testREZ = "PASSED";
-		//Messages archivator
-		nAddr = "/BD/"+nList[i_n]+"/db_"+nNm;
-		if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/BD/"+nList[i_n]+"/%2fbr%2fdb_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: add";
-		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fdscr").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change";
+		nAddr = "/BD/"+nList[iN]+"/db_"+nNm;
+		if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/BD/"+nList[iN]+"/%2fbr%2fdb_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: add";
+		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fDESCR").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change";
 		else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: save";
-		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fdscr").setText("Test 1")) != 0 || 
+		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fprm%2fcfg%2fDESCR").setText("Test 1")) != 0 || 
 			SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: load";
 		else {
 			node = false;
-			if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/BD/"+nList[i_n]+"/%2fbr%2fdb_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: delete";
+			if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/BD/"+nList[iN]+"/%2fbr%2fdb_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: delete";
 			else {
-				cfgTree.getElementBy("DB").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("TYPE",nList[i_n].slice(4)).setAttr("EN",0);
+				cfgTree.getElementBy("DB").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("TYPE",nList[iN].slice(4)).setAttr("EN",0);
 				cfgTree.save(0x20, configPath);
 				SYS.cntrReq(SYS.XMLNode("scan").setAttr("path","/%2fgen%2fconfig"));		//Reload config command
 				if(!SYS.nodeAt(nAddr+"_cfg")) testREZ = "FAILED: load from config";
 			}
 		}
-		rez += "<tr><td>DB."+nList[i_n].slice(4)+": create/remove, change, load, save and load from config</td><td>"+testREZ+"</td></tr>\n";
+		result("DB."+nList[iN].slice(4)+": create/remove, change, load, save and load from config", testREZ);
 
-		//Disconnect/Connect module
-		req = SYS.XMLNode("get").setAttr("path","/BD/"+nList[i_n]+"/%2fhelp%2fm_inf%2fSource");
-		SYS.cntrReq(req);
-		testREZ = SYS.Special.SystemTests.SOAttach(req.text(),0);
-		testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),0);
-		rez += "<tr><td>DB."+nList[i_n].slice(4)+": Disconnect/Connect</td><td>"+testREZ+"</td></tr>\n";
+		//The tests "BD" of the module "SystemTests"
+		nNm1 = "/BD/"+nList[iN]+"/testRelease";
+		testREZ = "missed DB ''"+nNm1+"''";
+		if((dbO=SYS.nodeAt(nNm1))) {
+			testREZ = "inaccessible DB ''"+nNm1+"''";
+			if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nNm1+"/%2fprm%2fst%2fst").setText("1")) == 0) {
+				SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nNm1+"/%2fprm%2fst%2fst").setText("0"));
+				testREZ = SYS.Special.SystemTests.DB(nList[iN].slice(4), SYS.nodeAt(nNm1).cfg("ADDR"), "test", 1000);
+			}
+		}
+		result("DB."+nList[iN].slice(4)+": The tests \"BD\" of the module \"SystemTests\"", testREZ);
 	}
-}
-
-//**********************************
-//Protocol subsystem tests
-if(sub < 0 || sub == 5) {
-	nList = SYS.Protocol.nodeList("mod_");
-	for(i_n = 0; i_n < nList.length; i_n++) {
-		//Disconnect/Connect module
-		req = SYS.XMLNode("get").setAttr("path","/Protocol/"+nList[i_n]+"/%2fhelp%2fm_inf%2fSource");
-		SYS.cntrReq(req);
-		testREZ = SYS.Special.SystemTests.SOAttach(req.text(),0);
-		testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),0);
-		rez += "<tr><td>Protocol."+nList[i_n].slice(4)+": Disconnect/Connect</td><td>"+testREZ+"</td></tr>\n";
-	}
+	result("DB: Time of the execution, seconds", (SYS.utime()-stTm)*1e-6);
 }
 
 //**********************************
 //DAQ subsystem tests
 if(sub < 0 || sub == 6) {
+	stTm = SYS.utime();
 	// Templates
 	testREZ = "PASSED";
 	nAddr = "/DAQ/tmplb_"+nNm;
 	if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/DAQ/%2fbr%2ftmplb_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: template library add";
-	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2flib%2fcfg%2fdescr").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change template library";
+	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2flib%2fcfg%2fDESCR").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change template library";
 	else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: save template library";
-	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2flib%2fcfg%2fdescr").setText("Test 1")) != 0 || 
+	else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2flib%2fcfg%2fDESCR").setText("Test 1")) != 0 || 
 		SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: load template library";
 	else {
 		node = false;
@@ -6879,9 +7003,9 @@ if(sub < 0 || sub == 6) {
 		// Template
 		nAddrLb = nAddr+"/tmpl_"+nNm;
 		if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path",nAddr+"/%2fbr%2ftmpl_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddrLb))) testREZ = "FAILED: template add";
-		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddrLb+"/%2ftmpl%2fcfg%2fdescr").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change template";
+		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddrLb+"/%2ftmpl%2fcfg%2fDESCR").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: change template";
 		else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddrLb+"/%2fobj")) != 0) testREZ = "FAILED: save template";
-		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddrLb+"/%2ftmpl%2fcfg%2fdescr").setText("Test 1")) != 0 || 
+		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddrLb+"/%2ftmpl%2fcfg%2fDESCR").setText("Test 1")) != 0 || 
 			SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddrLb+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: load template";
 		node = false;
 
@@ -6894,16 +7018,16 @@ if(sub < 0 || sub == 6) {
 			if(!SYS.nodeAt(nAddr+"_cfg") || !SYS.nodeAt(nAddr+"_cfg/tmpl_"+nNm+"_cfg")) testREZ = "FAILED: load template library from config";
 		}
 	}
-	rez += "<tr><td>DAQ: Templates library create/remove, change, load, save and load from config</td><td>"+testREZ+"</td></tr>\n";
+	result("DAQ: Templates library create/remove, change, load, save and load from config", testREZ);
 
 	// Modules
 	nList = SYS.DAQ.nodeList("mod_");
-	for(i_n = 0; i_n < nList.length; i_n++) {
+	for(iN = 0; iN < nList.length; iN++) {
 		testREZ = "PASSED";
 		testREZ_ = "PASSED";
-		//> Controller
-		nAddr = "/DAQ/"+nList[i_n]+"/cntr_"+nNm;
-		if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/DAQ/"+nList[i_n]+"/%2fbr%2fcntr_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: controller add";
+		//  Controller
+		nAddr = "/DAQ/"+nList[iN]+"/cntr_"+nNm;
+		if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/DAQ/"+nList[iN]+"/%2fbr%2fcntr_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: controller add";
 		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fcntr%2fcfg%2fDESCR").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: controller change";
 		else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: controller save";
 		else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fcntr%2fcfg%2fDESCR").setText("Test 1")) != 0 || 
@@ -6912,7 +7036,7 @@ if(sub < 0 || sub == 6) {
 			node = false;
 
 			// Parameter
-			if(nList[i_n] != "mod_DAQGate") {
+			if(nList[iN] != "mod_DAQGate") {
 				nAddr1 = nAddr+"/prm_"+nNm;
 				if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path",nAddr+"/%2fbr%2fprm_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr1))) testREZ = "FAILED: parameter add";
 				else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr1+"/%2fprm%2fcfg%2fDESCR").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: parameter change";
@@ -6921,22 +7045,27 @@ if(sub < 0 || sub == 6) {
 					SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr1+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ = "FAILED: parameter load";
 				node = false;
 			}
-
-			if(nList[i_n] == "mod_BlockCalc") {
+			if(nList[iN] == "mod_BlockCalc") {
 				nAddr1 = nAddr+"/blk_"+nNm;
 				if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path",nAddr+"/%2fbr%2fblk_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr1))) testREZ_ = "FAILED: block add";
-				else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr1+"/%2fblck%2fcfg%2fdescr").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ_ = "FAILED: block change";
+				else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr1+"/%2fblck%2fcfg%2fDESCR").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ_ = "FAILED: block change";
 				else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr1+"/%2fobj")) != 0) testREZ_ = "FAILED: block save";
-				else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr1+"/%2fblck%2fcfg%2fdescr").setText("Test 1")) != 0 || 
+				else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr1+"/%2fblck%2fcfg%2fDESCR").setText("Test 1")) != 0 || 
 					SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr1+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ_ = "FAILED: block load";
+				else if(SYS.cntrReq((req=SYS.XMLNode("copy").setAttr("path","/%2fobj").setAttr("src","/DAQ/"+nList[iN]+"/cntr_KM102cntr").setAttr("dst","/DAQ/"+nList[iN]+"/cntr_KM102cntr_copy"))) != 0 || req.attr("rez").toInt())
+					testREZ_ = "FAILED: block scheme copy: "+req.text();
+				else if(SYS.cntrReq((req=SYS.XMLNode("set").setAttr("path","/DAQ/BlockCalc/KM102cntr_copy/blk_КШ111/%2flnk%2fio%2f1|t_full").setText("3"))) != 0 || req.attr("rez").toInt())
+					testREZ_ = "FAILED: block scheme link type: "+req.text();
+				else if(SYS.cntrReq((req=SYS.XMLNode("set").setAttr("path","/DAQ/BlockCalc/KM102cntr_copy/blk_КШ111/%2flnk%2fio%2f2|t_full").setText("LogicLev.experiment.F3.var"))) != 0 || req.attr("rez").toInt())
+					testREZ_ = "FAILED: block scheme link value: "+req.text();
 				node = false;
 			}
-			if(nList[i_n] == "mod_JavaLikeCalc") {
-				nAddr_ = "/DAQ/"+nList[i_n]+"/lib_"+nNm;
-				if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/DAQ/"+nList[i_n]+"/%2fbr%2flib_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr_))) testREZ_ = "FAILED: library add";
-				else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr_+"/%2flib%2fcfg%2fdescr").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ_ = "FAILED: library change";
+			else if(nList[iN] == "mod_JavaLikeCalc") {
+				nAddr_ = "/DAQ/"+nList[iN]+"/lib_"+nNm;
+				if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/DAQ/"+nList[iN]+"/%2fbr%2flib_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr_))) testREZ_ = "FAILED: library add";
+				else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr_+"/%2flib%2fcfg%2fDESCR").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ_ = "FAILED: library change";
 				else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr_+"/%2fobj")) != 0) testREZ_ = "FAILED: library save";
-				else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr_+"/%2flib%2fcfg%2fdescr").setText("Test 1")) != 0 || 
+				else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr_+"/%2flib%2fcfg%2fDESCR").setText("Test 1")) != 0 || 
 					SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr_+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ_ = "FAILED: library load";
 				else {
 					node = false;
@@ -6944,29 +7073,31 @@ if(sub < 0 || sub == 6) {
 					// Function
 					nAddr_1 = nAddr_+"/fnc_"+nNm;
 					if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path",nAddr_+"/%2fbr%2ffnc_").setAttr("id",nNm)) != 0 || !(node=SYS.nodeAt(nAddr_1))) testREZ_ = "FAILED: function add";
-					else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr_1+"/%2ffunc%2fcfg%2fdescr").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ_ = "FAILED: function change";
+					else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr_1+"/%2ffunc%2fcfg%2fDESCR").setText("Test")) != 0 || node.cfg("DESCR") != "Test") testREZ_ = "FAILED: function change";
 					else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr_1+"/%2fobj")) != 0) testREZ_ = "FAILED: function save";
-					else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr_1+"/%2ffunc%2fcfg%2fdescr").setText("Test 1")) != 0 || 
+					else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr_1+"/%2ffunc%2fcfg%2fDESCR").setText("Test 1")) != 0 || 
 						SYS.cntrReq(SYS.XMLNode("load").setAttr("path",nAddr_1+"/%2fobj")) != 0 || node.cfg("DESCR") != "Test") testREZ_ = "FAILED: function load";
+					else if(SYS.cntrReq((req=SYS.XMLNode("copy").setAttr("path","/%2fobj").setAttr("src",nAddr_1).setAttr("dst",nAddr_1+"_copy"))) != 0 || req.attr("rez").toInt())
+						testREZ_ = "FAILED: function copy: "+req.text();
 					node = false;
-					if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/DAQ/"+nList[i_n]+"/%2fbr%2flib_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr_)) testREZ_ = "FAILED: function delete";
+					if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/DAQ/"+nList[iN]+"/%2fbr%2flib_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr_)) testREZ_ = "FAILED: function delete";
 				}			
 			}
 
-			if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/DAQ/"+nList[i_n]+"/%2fbr%2fcntr_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: controller delete";
+			if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/DAQ/"+nList[iN]+"/%2fbr%2fcntr_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: controller delete";
 			else {
 				treeNd = cfgTree.getElementBy("sub_DAQ");
-				if(!treeNd.getElementBy(nList[i_n])) treeNd.childAdd("node").setAttr("id",nList[i_n]);
-				treeNd = treeNd.getElementBy(nList[i_n]);
+				if(!treeNd.getElementBy(nList[iN])) treeNd.childAdd("node").setAttr("id",nList[iN]);
+				treeNd = treeNd.getElementBy(nList[iN]);
 
 				treeNd_t = treeNd.childAdd("tbl").setAttr("id","DAQ").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("PRM_BD",nNm+"_cfg_prm").setAttr("ENABLE",1);
-				if(nList[i_n] == "mod_JavaLikeCalc") treeNd_t.setAttr("FUNC","servProc.fnc_crc16");
+				if(nList[iN] == "mod_JavaLikeCalc") treeNd_t.setAttr("FUNC","servProc.fnc_crc16");
 				treeNd.childAdd("tbl").setAttr("id",nNm+"_cfg_prm").childAdd("fld").setAttr("SHIFR",nNm+"_cfg");
-				if(nList[i_n] == "mod_BlockCalc") {
+				if(nList[iN] == "mod_BlockCalc") {
 					treeNd_t.setAttr("BLOCK_SH",nNm+"_cfg_blcks");
 					treeNd.childAdd("tbl").setAttr("id",nNm+"_cfg_blcks").childAdd("fld").setAttr("ID",nNm+"_cfg");
 				}
-				if(nList[i_n] == "mod_JavaLikeCalc") {
+				if(nList[iN] == "mod_JavaLikeCalc") {
 					treeNd.childAdd("tbl").setAttr("id","lib").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("DB","lib_"+nNm+"_cfg");
 					treeNd.childAdd("tbl").setAttr("id","lib_"+nNm+"_cfg").childAdd("fld").setAttr("ID",nNm+"_cfg");
 				}
@@ -6976,45 +7107,55 @@ if(sub < 0 || sub == 6) {
 				SYS.nodeAt(nAddr+"_cfg").enable(true);
 				if(!SYS.nodeAt(nAddr+"_cfg")) testREZ = "FAILED: load controller from config";
 				else {
-					if(!SYS.nodeAt(nAddr+"_cfg/prm_"+nNm+"_cfg")) testREZ = "FAILED: load parameter from config";
-					if(nList[i_n] == "mod_BlockCalc" && !SYS.nodeAt(nAddr+"_cfg/blk_"+nNm+"_cfg")) testREZ_ = "FAILED: load block from config";
-					if(nList[i_n] == "mod_JavaLikeCalc") {
+					if(!SYS.nodeAt(nAddr+"_cfg/prm_"+nNm+"_cfg")) testREZ = "FAILED: load parameter from config. The field of the parameters table seems is not PRM_BD.";
+					if(nList[iN] == "mod_BlockCalc" && !SYS.nodeAt(nAddr+"_cfg/blk_"+nNm+"_cfg")) testREZ_ = "FAILED: load block from config";
+					if(nList[iN] == "mod_JavaLikeCalc") {
 						if(!SYS.nodeAt(nAddr_+"_cfg")) testREZ_ = "FAILED: load library from config";
 						else if(!SYS.nodeAt(nAddr_+"_cfg/fnc_"+nNm+"_cfg")) testREZ_ = "FAILED: load function from config";
 					}
 				}
 			}
 		}
-		rez += "<tr><td>DAQ."+nList[i_n].slice(4)+": create/remove, change, load, save and load from config</td><td>"+testREZ+"</td></tr>\n";
-		if(nList[i_n] == "mod_BlockCalc")
-			rez += "<tr><td>DAQ."+nList[i_n].slice(4)+": Blocks create/remove, change, load, save and load from config</td><td>"+testREZ_+"</td></tr>\n";
-		else if(nList[i_n] == "mod_JavaLikeCalc")
-			rez += "<tr><td>DAQ."+nList[i_n].slice(4)+": Functions and its libraries create/remove, change, load, save and load from config</td><td>"+testREZ_+"</td></tr>\n";
+		result("DAQ."+nList[iN].slice(4)+": Controller object, parameter and other main objects create/remove, change, load, save and load from config", testREZ);
+		if(nList[iN] == "mod_BlockCalc")
+			result("DAQ."+nList[iN].slice(4)+": Blocks create/remove, change, load, save and load from config and copy, set link", testREZ_);
+		else if(nList[iN] == "mod_JavaLikeCalc")
+			result("DAQ."+nList[iN].slice(4)+": Functions and its libraries create/remove, change, load, save and load from config and function copy", testREZ_);
+		else if(nList[iN] == "mod_LogicLev") {
+			result("DAQ."+nList[iN].slice(4)+": Test \"Param\" from the module \"SystemTests\"",
+				SYS.Special.SystemTests.Param("LogicLev.experiment.F3"));
+			result("DAQ."+nList[iN].slice(4)+": Test \"Val\" of the module \"SystemTests\" for the parameter attribute",
+				SYS.Special.SystemTests.Val("LogicLev.experiment.F3.var",100,1e6));
+		}
 
 		//Disconnect/Connect module
-		if(nList[i_n] != "mod_JavaLikeCalc") {
-			req = SYS.XMLNode("get").setAttr("path","/DAQ/"+nList[i_n]+"/%2fhelp%2fm_inf%2fSource");
+		if(nList[iN] != "mod_JavaLikeCalc") {
+			req = SYS.XMLNode("get").setAttr("path","/DAQ/"+nList[iN]+"/%2fmodule%2fm_inf%2fSource");
 			SYS.cntrReq(req);
-			testREZ = SYS.Special.SystemTests.SOAttach(req.text(),0);
-			testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),0);
-			rez += "<tr><td>DAQ."+nList[i_n].slice(4)+": Disconnect/Connect</td><td>"+testREZ+"</td></tr>\n";
+			if(req.text()[0] != "*") {
+				testREZ = SYS.Special.SystemTests.SOAttach(req.text(),-1);
+				testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),1);
+				result("DAQ."+nList[iN].slice(4)+": Disconnect/Connect", testREZ);
+			} else result("DAQ."+nList[iN].slice(4)+": Disconnect/Connect", "Built-in");
 		}
 	}
+	result("DAQ: Time of the execution, seconds", (SYS.utime()-stTm)*1e-6);
 }
 
 //**********************************
 //UI subsystem tests
 if(sub < 0 || sub == 7) {
+	stTm = SYS.utime();
 	nList = SYS.UI.nodeList("mod_");
-	for(i_n = 0; i_n < nList.length; i_n++) {
-		if(nList[i_n] == "mod_QTStarter" || nList[i_n] == "mod_QTCfg") continue;
+	for(iN = 0; iN < nList.length; iN++) {
+		if(nList[iN] == "mod_QTStarter" || nList[iN] == "mod_QTCfg") continue;
 
 		//UI.VCAEngine tests
-		if(nList[i_n] == "mod_VCAEngine") {
+		if(nList[iN] == "mod_VCAEngine") {
 			// Widgets library
 			testREZ = "PASSED";
-			nAddr = "/UI/"+nList[i_n]+"/wlb_"+nNm;
-			if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/UI/"+nList[i_n]+"/%2fbr%2fwlb_").setAttr("id",nNm)) || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: widgets library add";
+			nAddr = "/UI/"+nList[iN]+"/wlb_"+nNm;
+			if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/UI/"+nList[iN]+"/%2fbr%2fwlb_").setAttr("id",nNm)) || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: widgets library add";
 			else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fobj%2fcfg%2fdescr").setText("Test")) || 
 				SYS.cntrReq(req=SYS.XMLNode("get").setAttr("path",nAddr+"/%2fobj%2fcfg%2fdescr")) || req.text() != "Test") testREZ = "FAILED: change widgets library";
 			else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj"))) testREZ = "FAILED: save widgets library";
@@ -7035,7 +7176,7 @@ if(sub < 0 || sub == 7) {
 						req.text() != "Test") testREZ = "FAILED: load widget";
 				node = false;
 
-				if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/UI/"+nList[i_n]+"/%2fbr%2fwlb_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: widgets library delete";
+				if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/UI/"+nList[iN]+"/%2fbr%2fwlb_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: widgets library delete";
 				else {
 					cfgTree.getElementBy("mod_VCAEngine").childAdd("tbl").setAttr("id","LIB").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("DB_TBL","wlib_"+nNm+"_cfg");
 					cfgTree.getElementBy("mod_VCAEngine").childAdd("tbl").setAttr("id","wlib_"+nNm+"_cfg").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("PARENT","/wlb_originals/wdg_Box");
@@ -7044,12 +7185,12 @@ if(sub < 0 || sub == 7) {
 					if(!SYS.nodeAt(nAddr+"_cfg") || !SYS.nodeAt(nAddr+"_cfg/wdg_"+nNm+"_cfg")) testREZ = "FAILED: load widgets library from config";
 				}
 			}
-			rez += "<tr><td>UI.VCAEngine: Widgets and widgets'' library create/remove, change, load, save and load from config</td><td>"+testREZ+"</td></tr>\n";
+			result("UI.VCAEngine: Widgets and widgets'' library create/remove, change, load, save and load from config", testREZ);
 
 			// Project
 			testREZ = "PASSED";
-			nAddr = "/UI/"+nList[i_n]+"/prj_"+nNm;
-			if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/UI/"+nList[i_n]+"/%2fbr%2fprj_").setAttr("id",nNm)) || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: project add";
+			nAddr = "/UI/"+nList[iN]+"/prj_"+nNm;
+			if(SYS.cntrReq(SYS.XMLNode("add").setAttr("path","/UI/"+nList[iN]+"/%2fbr%2fprj_").setAttr("id",nNm)) || !(node=SYS.nodeAt(nAddr))) testREZ = "FAILED: project add";
 			else if(SYS.cntrReq(SYS.XMLNode("set").setAttr("path",nAddr+"/%2fobj%2fcfg%2fdescr").setText("Test"))  || 
 				SYS.cntrReq(req=SYS.XMLNode("get").setAttr("path",nAddr+"/%2fobj%2fcfg%2fdescr")) || req.text() != "Test") testREZ = "FAILED: change project";
 			else if(SYS.cntrReq(SYS.XMLNode("save").setAttr("path",nAddr+"/%2fobj")) != 0) testREZ = "FAILED: save project";
@@ -7081,7 +7222,7 @@ if(sub < 0 || sub == 7) {
 					req.text() != "Test") testREZ = "FAILED: load widget";
 				node = false;
 
-				if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/UI/"+nList[i_n]+"/%2fbr%2fprj_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: project delete";
+				if(SYS.cntrReq(SYS.XMLNode("del").setAttr("path","/UI/"+nList[iN]+"/%2fbr%2fprj_").setAttr("id",nNm)) != 0 || SYS.nodeAt(nAddr)) testREZ = "FAILED: project delete";
 				else {
 					cfgTree.getElementBy("mod_VCAEngine").childAdd("tbl").setAttr("id","PRJ").childAdd("fld").setAttr("ID",nNm+"_cfg").setAttr("DB_TBL","prj_"+nNm+"_cfg");
 					cfgTree.getElementBy("mod_VCAEngine").childAdd("tbl").setAttr("id","prj_"+nNm+"_cfg").childAdd("fld").setAttr("OWNER","/"+nNm+"_cfg").setAttr("ID",nNm+"_cfg").setAttr("PARENT","/wlb_originals/wdg_Box");//.setAttr("FLGS",1);
@@ -7093,42 +7234,49 @@ if(sub < 0 || sub == 7) {
 					else if(!SYS.nodeAt(nAddr+"_cfg/pg_"+nNm+"_cfg/wdg_"+nNm+"_cfg"))	testREZ = "FAILED: load widget from config";
 				}
 			}
-			rez += "<tr><td>UI.VCAEngine: Project, pages and widgets create/remove, change, load, save and load from config</td><td>"+testREZ+"</td></tr>\n";
+			result("UI.VCAEngine: Project, pages and widgets create/remove, change, load, save and load from config", testREZ);
 
 			//Session
 			testREZ = "PASSED";
-			nAddr = "/UI/"+nList[i_n]+"/ses_"+nNm;
-			req = SYS.XMLNode("CntrReqs").setAttr("path","/UI/"+nList[i_n]);
+			nAddr = "/UI/"+nList[iN]+"/ses_"+nNm;
+			req = SYS.XMLNode("CntrReqs").setAttr("path","/UI/"+nList[iN]);
 			req.childAdd("add").setAttr("path","/%2fbr%2fses_").setText(nNm);
 			req.childAdd("set").setAttr("path","/ses_"+nNm+"/%2fobj%2fst%2fprj").setText("tmplSO");
 			req.childAdd("set").setAttr("path","/ses_"+nNm+"/%2fobj%2fst%2fstart").setText(1);
 			if(SYS.cntrReq(req) != 0 || !SYS.nodeAt(nAddr)) testREZ = "FAILED: session add/start";
-			else if(SYS.cntrReq(req=SYS.XMLNode("del").setAttr("path","/UI/"+nList[i_n]+"/%2fbr%2fses_").setText(nNm)) || SYS.nodeAt(nAddr)) testREZ = "FAILED: session delete";
-			rez += "<tr><td>UI.VCAEngine: Session create, start and remove</td><td>"+testREZ+"</td></tr>\n";
+			else if(SYS.cntrReq(req=SYS.XMLNode("del").setAttr("path","/UI/"+nList[iN]+"/%2fbr%2fses_").setText(nNm)) || SYS.nodeAt(nAddr)) testREZ = "FAILED: session delete";
+			result("UI.VCAEngine: Session create, start and remove", testREZ);
 		}
 
 		//Disconnect/Connect module
-		req = SYS.XMLNode("get").setAttr("path","/UI/"+nList[i_n]+"/%2fhelp%2fm_inf%2fSource");
+		req = SYS.XMLNode("get").setAttr("path","/UI/"+nList[iN]+"/%2fmodule%2fm_inf%2fSource");
 		SYS.cntrReq(req);
-		testREZ = SYS.Special.SystemTests.SOAttach(req.text(),0);
-		testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),0);
-		rez += "<tr><td>UI."+nList[i_n].slice(4)+": Disconnect/Connect</td><td>"+testREZ+"</td></tr>\n";
+		if(req.text()[0] != "*") {
+			testREZ = SYS.Special.SystemTests.SOAttach(req.text(),-1);
+			testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),1);
+			result("UI."+nList[iN].slice(4)+": Disconnect/Connect", testREZ);
+		} else result("UI."+nList[iN].slice(4)+": Disconnect/Connect", "Built-in");
 	}
+	result("UI: Time of the execution, seconds", (SYS.utime()-stTm)*1e-6);
 }
 
 //**********************************
 //Special subsystem tests
 if(sub < 0 || sub == 8) {
+	stTm = SYS.utime();
 	nList = SYS.Special.nodeList("mod_");
-	for(i_n = 0; i_n < nList.length; i_n++) {
-		if(nList[i_n] == "mod_SystemTests") continue;
+	for(iN = 0; iN < nList.length; iN++) {
+		if(nList[iN] == "mod_SystemTests") continue;
 		//Disconnect/Connect module
-		req = SYS.XMLNode("get").setAttr("path","/Special/"+nList[i_n]+"/%2fhelp%2fm_inf%2fSource");
+		req = SYS.XMLNode("get").setAttr("path","/Special/"+nList[iN]+"/%2fmodule%2fm_inf%2fSource");
 		SYS.cntrReq(req);
-		testREZ = SYS.Special.SystemTests.SOAttach(req.text(),0);
-		testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),0);
-		rez += "<tr><td>Special."+nList[i_n].slice(4)+": Disconnect/Connect</td><td>"+testREZ+"</td></tr>\n";
+		if(req.text()[0] != "*") {
+			testREZ = SYS.Special.SystemTests.SOAttach(req.text(),-1);
+			testREZ += "/"+SYS.Special.SystemTests.SOAttach(req.text(),1);
+			result("Special."+nList[iN].slice(4)+": Disconnect/Connect", testREZ);
+		} else result("Special."+nList[iN].slice(4)+": Disconnect/Connect", "Built-in");
 	}
+	result("Special: Time of the execution, seconds", (SYS.utime()-stTm)*1e-6);
 }
 
 //Restore original config file
@@ -7146,20 +7294,20 @@ SYS.fileWrite("ReleaseTests.html", "<?xml version=''1.0'' ?>\n"
 	"<h1>Release tests report table</h1>\n"
 	"<TABLE border=\"1\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\">\n"
 	"  <TR align=\"center\"><TH>Test</TH><TH>Result</TH></TR>\n"+
-	rez+
+	rezF+
 	"</TABLE>\n"
 	"</body>"
-	"</html>");','','',1479062874);
-INSERT INTO "lib_servProc" VALUES('archPackFStests','TEST: FS archiver pack','','','Archiving to File System tests pack, for check the optimization algorithm.  The stages supported:
-  - Stage 0: Main values fill: "1,1,10,10,100,100,1000,1000,10000,10000,EVAL"
-  - Stage 1: Change to different value 20: "1,1,20,10,100,100,1000,1000,10000,10000,EVAL"
-  - Stage 2: Set value for merge, equal, to up 10: "1,1,20,10,10,100,1000,1000,10000,10000,EVAL"
-  - Stage 3: Set value for merge, equal, to down 1000: "1,1,20,10,10,1000,1000,1000,10000,10000,EVAL"
-  - Stage 4: Set different value to end 20000: "1,1,20,10,10,1000,1000,1000,10000,10000,20000,EVAL"
-  - Stage 5: Change end value for merge to up 10000: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"
-  - Stage 6: Set value to end for merge to up 10000: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,10000,EVAL"
-  - Stage 7: Set to end value EVAL: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"
-  - Stage 8: Set equal value to insert 10000: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"
+	"</html>");','','',1528950514);
+INSERT INTO "lib_servProc" VALUES('archPackFStests','TEST: Packing of the archiver on FS','','','Tests set for packing of the value archives to File System, to check the optimization algorithm. The stages are provided:
+  - Stage 0: Filling the main values: "1,1,10,10,100,100,1000,1000,10000,10000,EVAL"
+  - Stage 1: Changing to different value 20: "1,1,20,10,100,100,1000,1000,10000,10000,EVAL"
+  - Stage 2: Setting a value for merging (equal) to the up (10): "1,1,20,10,10,100,1000,1000,10000,10000,EVAL"
+  - Stage 3: Setting a value for merging (equal) to the down (1000): "1,1,20,10,10,1000,1000,1000,10000,10000,EVAL"
+  - Stage 4: Setting a different value to the end 20000: "1,1,20,10,10,1000,1000,1000,10000,10000,20000,EVAL"
+  - Stage 5: Changing the end value for merging to the up (10000): "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"
+  - Stage 6: Setting a value to the end for merging to the up (10000): "1,1,20,10,10,1000,1000,1000,10000,10000,10000,10000,EVAL"
+  - Stage 7: Setting the end value to EVAL: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"
+  - Stage 8: Setting an equal value for inserting 10000: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.0','','',1,10,0,'using Special.FLibSYS;
 arh = vArh("Archive.va_"+addr);
@@ -7217,8 +7365,10 @@ if(step < 0 || step == 7) {
 if(step < 0 || step == 8) {
 	buf = vArhBuf(1, 10, per*1000000, true, true);
 	buf.set(10000, tm+9*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
-}','','',1479062821);
-INSERT INTO "lib_servProc" VALUES('wacko2media','WackoWiki to MediaWiki','','','','','',1,10,0,'dbO = SYS.BD.MySQL[ndb];
+}','','',1528896921);
+INSERT INTO "lib_servProc" VALUES('wacko2media','EXT: WackoWiki to MediaWiki','','','Procedure of conversion Wiki-dialect from WackoWiki to MediaWiki. Used to move OpenSCADA Wiki to MediaWiki.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','','',1,10,0,'dbO = SYS.BD.MySQL[ndb];
 if(!dbO)	return "Error: DB ''"+ndb+"'' missed!";
 DBTbl = dbO.SQLReq("SELECT body FROM `wk_pages` WHERE `tag`=\""+wpg+"\";");
 if(DBTbl.err.length) return "Error: "+DBTbl.err;
@@ -7311,8 +7461,10 @@ for(pos = 0; pos < ibuf.length; ) {
 	obuf += ibuf[pos]; pos++;
 }
 
-return obuf;','','',1510947218);
-INSERT INTO "lib_servProc" VALUES('docOffLine','Off-line documentation','','','','','',1,300,0,'trNm = "offLine";
+return obuf;','','',1528951931);
+INSERT INTO "lib_servProc" VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, Russian.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','','',1,300,0,'trNm = "offLine";
 docHost = "oscada.org:80";
 docHost_ = "http://" + docHost.parse(0, ":");
 defLang = "en";
@@ -7467,7 +7619,7 @@ for(var ip in pgsOprc) {
 	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
 }
 
-res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1520179222);
+res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1528952516);
 CREATE TABLE 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library "FLibComplex1" (http://wiki.oscada.org/HomePageEn/Doc/FLibComplex1#h902-15) and the implementation of the PWM for the pulse part.','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" (http://wiki.oscada.org/Doc/FLibComplex1#h91-15) и реализация ШИМ для импульсной части.',1,10,0,'//Call standard analog PID
 outA = Special.FLibComplex1.pid(var,sp,max,min,manIn,auto,casc,Kp,Ti,Kd,Td,Tzd,Hup,Hdwn,Zi,followSp,K1,in1,K2,in2,K3,in3,K4,in4,f_frq,int,dif,lag);

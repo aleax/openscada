@@ -2746,11 +2746,11 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    "doc","Documents/User_API|Documents/User_API");
 	if(owner().DB().size())
 	    ctrMkNode("fld",opt,-1,"/func/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
-	ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
-	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	ctrMkNode("fld",opt,-1,"/func/cfg/NAME",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
+	ctrMkNode("fld",opt,-1,"/func/cfg/DESCR",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
 	    "tp","str","cols","100","rows","5");
-	ctrMkNode("fld",opt,-1,"/func/cfg/toStart",_("To start"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calculation time, seconds"),RWRWR_,"root",SDAQ_ID,3,
+	ctrMkNode("fld",opt,-1,"/func/cfg/START",_("To start"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/func/cfg/MAXCALCTM",_("Maximum calculation time, seconds"),RWRWR_,"root",SDAQ_ID,3,
 	    "tp","dec","min","0","max","3600");
 	if(ctrMkNode("area",opt,-1,"/io",_("Program"))) {
 	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,1,"s_com","add,del,ins,move")) {
@@ -2775,13 +2775,13 @@ void Func::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/func/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
-    else if(a_path == "/func/cfg/name" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
-    else if(a_path == "/func/cfg/descr" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
-    else if(a_path == "/func/cfg/toStart") {
+    else if(a_path == "/func/cfg/NAME" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
+    else if(a_path == "/func/cfg/DESCR" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
+    else if(a_path == "/func/cfg/START") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(toStart()?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setToStart(s2i(opt->text()));
     }
-    else if(a_path == "/func/cfg/m_calc_tm") {
+    else if(a_path == "/func/cfg/MAXCALCTM") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(maxCalcTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setMaxCalcTm(s2i(opt->text()));
     }

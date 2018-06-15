@@ -52,6 +52,14 @@ ModVArch::~ModVArch( )
     try { stop(); } catch(...) { }
 }
 
+TCntrNode &ModVArch::operator=( const TCntrNode &node )
+{
+    TVArchivator::operator=(node);
+    load_();
+
+    return *this;
+}
+
 string ModVArch::infoDBnm( )	{ return MOD_ID "_Val_"+id()+"_info"; }
 
 double ModVArch::curCapacity( )

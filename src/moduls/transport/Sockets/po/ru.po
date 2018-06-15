@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-03 09:54+0300\n"
+"POT-Creation-Date: 2018-06-15 22:58+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -25,8 +25,8 @@ msgid ""
 "Provides sockets based transport. Support network and UNIX sockets. Network "
 "socket supports TCP, UDP and RAWCAN protocols."
 msgstr ""
-"Предоставляет транспорт основанный на сокетах. Поддерживаются сетевые и "
-"UNIX сокеты. Сетевой сокет поддерживает TCP, UDP и RAWCAN протоколы."
+"Предоставляет транспорт основанный на сокетах. Поддерживаются сетевые и UNIX "
+"сокеты. Сетевой сокет поддерживает TCP, UDP и RAWCAN протоколы."
 
 msgid "Addition parameters"
 msgstr "Дополнительные параметры"
@@ -120,8 +120,16 @@ msgid "Read datagram %s from '%s'!"
 msgstr "Прочитано датаграму %s из '%s'!"
 
 #, c-format
+msgid "%d:Received from '%s'\n"
+msgstr "%d:Принято из '%s'\n"
+
+#, c-format
 msgid "Wrote datagram %s to '%s'!"
 msgstr "Записано датаграму %s в '%s'!"
+
+#, c-format
+msgid "%d:Transmitted to '%s'\n"
+msgstr "%d:Передано на '%s'\n"
 
 #, c-format
 msgid ""
@@ -146,20 +154,12 @@ msgid "Read message %s from '%s'."
 msgstr "Прочитано сообщение %s из '%s'."
 
 #, c-format
-msgid "%d:Received from '%s'\n"
-msgstr "%d:Принято из '%s'\n"
-
-#, c-format
 msgid "Wrote message %s to '%s'."
 msgstr "Записано сообщение %s на '%s'."
 
 #, c-format
 msgid "Transmitting error: %s"
 msgstr "Ошибка передачи: %s"
-
-#, c-format
-msgid "%d:Transmitted to '%s'\n"
-msgstr "%d:Передано на '%s'\n"
 
 #, c-format
 msgid "Has been disconnected by '%s'!"

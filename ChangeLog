@@ -1,8 +1,39 @@
+2018-06-15 Roman (stable)
+- DOC: The document "Modules/BFN" translated to Ukrainian and revised.
+- DB.OscadaLibs: servProc.releaseTests: Significantly expanded for the tests after their execution before 0.9 LTS.
+    servProc.{wacko2media,docOffLine}: Appended for description.
+- DB.Model.AGLKS.St: Appended by some nodes for the release tests:
+    Sockets.{in_testRelease,in_testRelease1,in_testRelease2}, SSL.in_testRelease, Serial.in_testRelease
+    DBArch.1s set to address "SQLite.arch" and to enabled at launch.
+- FIX:SYS:ChangeLog: Some fixed for the text after 0.8.20 LTS.
+    FIX:data/openscada_start.in: Fixed for the new busy checking.
+    data/ModelsDB/AGLKS/oscada_AGLKS.xml: Appended by some DB for the release tests: {SQLite,MySQL,PostgreSQL,FireBird,DBF}.testRelease.
+	The DB SQLite.arch is added, its address set to "arch.db" and, it set to enabled at launch.
+    TCntrNode: Changed for using the definition STD_WAIT_TM(10) instead DEF_TIMEOUT(2) and DEF_TIMEOUT_EXIT(60).
+    TCntrNode::chldDel() prevented from exceptions in the mode DoDisable.
+    FIX: Some original messages next improved.
+    Some control interface properties (ID, NAME, DESCR) set to relation with the DB configuration, for: TFunction, TPrmTmpl, JavaLikeCalc.FLib.
+    FIX: The function TMess::codeConv() prevented from error messages due a recursion at wrong codepage.
+- SYS.TFunction,UI.QTCfg: The control field "rows" of the control interface expanded for true processing, as a hint.
+- !:FIX:Archives: The archivers' objects copying prevented from startup and fixed for copying addition properties.
+- FIX:DB: Fixed for reloading databases at the configuration file reload.
+- Transports: The external hosts of OpenSCADA prevented from changing the modification time and reconnections at the loading.
+- !!!:DB.SQLite,DAQ.BFN,Protocol.HTTP,UI.{WebCfgD,WebVision}: Revised for all messages and the documentation.
+- !!:FIX:Transport.{Sockets,SSL,Serial}: Preventing, by processing, the executions at closing the input protocol.
+- Transport.Sockets: Appended by the IO log for UDP requests.
+- !:FIX:UI.QTCfg: Fixed for crashes at going to in the list by double-click.
+- FIX:UI.{QTCfg,Vision}: Fixed for crashes at the module detaching.
+- UI.VCAEngine: Duplicated for the user API function alrmQuietance() to the old one alrmQuittance() and the service "quietance" to the old one "quittance".
+- UI.{WebCfg,WebCfgD,WebUser,WebVision}: The module information fields "Name", "Author", "Description" prevented from duplication.
+- FIX:UI.WebVision: Fixed for the status bar scaling, checking for availability and help processing. Header of the protocol table set to hidden at its disabling.
+
+
 2018-06-05 Roman (stable)
 - !!:DOC: The document "UI.Vision" is fully revised and translated to Ukrainian.
 - SYS,UI.{QTCfg,Vision}: Some original messages next improved.
-- Archive.FSArch: Last entry of the direct specified permition of the created file replaced to SYS->permCrtFiles().
-- UI.QTStarter: Some time need fo direct QStyle declaration is resolved.
+- Archive.FSArch: Last entry of the direct specified permition of the creating file replaced to SYS->permCrtFiles().
+- UI.QTStarter: Resolved for QStyle direct declaration but it is needed some time.
+- UI.Vision: Finished for revision the translation to German.
 
 
 2018-05-29 Roman (stable)
@@ -38,7 +69,7 @@
     and for parts already using the DAQ templates: DAQ.{LogicLev,ModBus,Siemens}.
 - !!:DAQ.JavaLikeCalc: Initially extended for using the DAQ templates.
     The functions selection list made plain one and appended by the DAQ templates.
-- FIX:UI.QTCfg: Fixed for crashes at openned warning-error dialogs.
+- FIX:UI.QTCfg: Fixed for crashes at opened warning-error dialogs.
     Going to branches through the list set for placing the previous address to the back list.
 - !!:UI.Vision: The requisting into different thread set to be enabled at the unpublic command line option "ReqInDifThread" but Qt loss releasing mouse events now,
     into event(). Then, by default the requisting into different thread is disabled now.
@@ -59,11 +90,11 @@
 - FIX:DB.Model.AGLKS.St: DAQ.LogicLev.experiment fixed for the reflection DB specifying as "LogLevPrmRefl_experiment".
 - !!:SYS,Archive.FSArch,DB.SQLite,DAQ.{DAQGate,GPIO,LogicLev},Transport.Sockets: Some original messages next improved.
 - FIX:Protocol.UserProtocol: Prevented from breaking all next starting protocols after one error starting.
-- !!!:FIX:UI.QTCfg: Fixed in the closing mostly for processing of requests into the different threads
+- !!!:FIX:UI.QTCfg: Fixed, in the closing mostly, for processing of requests into the different threads
     in way of the function implementation for the runtime mode of UI.Vision.
     The fit of the vertically scalable items made more precision.
     Added for HTML encoding into the HTML helps.
-- !!!:FIX:UI.VCAEngine: Archive mode of the primitive "Document" fixed by the specific atributes set to the new mode Attr::NotStored.
+- !!!:FIX:UI.VCAEngine: Archive mode of the primitive "Document" fixed by the specific attributes set to the new mode Attr::NotStored.
 - !!!:UI.Vision: Requests of the runtime mode moved to different thread.
     Notificators switched to direct requests, behind the different thread.
     The primitive "Diagram" and "Box" improved for late enabling (after whole loading) in the runtime mode, mostly for slow and bad remote connections.
@@ -82,7 +113,7 @@
 - DAQ.ModBus: Some original messages expanded.
 - !!:DAQ.SMH2Gi: Expanded for SMH4 support.
 - FIX:UI.QTCfg: Take in account the item's description set after its zero value.
-    Forming iem's WhatsThis and ToolTip some improved.
+    Forming item's WhatsThis and ToolTip some improved.
 - FIX:UI.Vision: Translation some fixed.
 
 
@@ -123,12 +154,12 @@
 - !!!!:Archive.FSArch: Hardly prevented from the configuration field "ADDR" changing both for messages and values.
     A procedure of the configuration field "ADDR" checking for duplicates added.
 - !!:FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}:
-    Translation collumns creation at the table fixing added for already and partial translated tables into the non multi-language mode.
+    Translation columns creation at the table fixing added for already and partial translated tables into the non multi-language mode.
     An additional debug tracing label added.
 - !!:DAQ.{DAQGate},UI.{VCAEngine,Vision}: Fully revised for the original text messages.
 - DAQ.JavaLikeCalc,UI.QTStarter: Some revised for the original text messages.
 - UI.QTCfg: Appended by the navigation tree refreshing after the error copying.
-- !!!!:UI.{VCAEngine,Vision}: The projects expanded by the using sessions accounting for new projects hot enabling on the sessions.
+- !!!!:UI.{VCAEngine,Vision}: The projects expanded by the using sessions accounting for new pages hot enabling on the sessions.
     The "Use" field also added for the widgets libraries, as a count of whole using of their widgets.
 - !!!!:FIX:UI.VCAEngine:
     FIX: Fixed for accessing to the wrong created session items.
@@ -231,7 +262,7 @@
 - !!:Archive.FSArch: New objects of archivers sets to the default path of storage "ARCHIVES/MESS/" for the projects of OpenSCADA.
     Archive files renamed from the format "%F %T" to "%F %H.%M.%S" to allow their creation on FAT.
 - FIX:DAQ.ModBus: Fix for copy parameters of the logical type at the links initiate after.
-- FIX:UI.QTCfg: Vertically scalable elements fixed for guaranty the fit reset before the same fitting.
+- FIX:UI.QTCfg: Vertically scalable elements fixed for guaranty the previous fit reset before the same fitting.
 - UI.QTStarter: The look and feel are made for renewing on the go.
     The manager of the OpenSCADA projects merged the user and system directories of the projects and was set for the projects sorting.
     The function "Create-update a project" was moved as an independent button, after the projects list.
@@ -246,7 +277,7 @@
 - !!!!:SYS,UI.QTStarter,DAQ.System: QtSensors support was added for the sensors reading into UI.QTStarter and a shared object preparing for DAQ.System and the user API.
 - !!:SYS: The folder "data/Android" of configuration of the OpenSCADA building for Android was added.
     data/openscada-proj.in was adapted and its permition checking and setting to the executable was added for call from Android.
-    The command-line argument --modDir was added as a copy of the confuguration file parameter "ModDir".
+    The command-line argument --modDir was added as a copy of the configuration file parameter "ModDir".
 - SYS: The function cmdOptPresent() was added for the user projects directory role next expanding.
 - SYS: ARM CPU-frequency reading expanded in reading "scaling_cur_freq" which available for the ordinal users.
 - !:FIX:Archive.DBArch: Fixed for single-value request of the value archive.
@@ -424,7 +455,7 @@
     - the actual project manager in a BASH script yet allowed and here left to implement:
 	RW projects copy, new projects creation at template, locking from multiple starting of single project.
 - DAQ.JavaLikeCalc: "Compile error ..." information expanded by the function ID.
-- !:FIX:UI.Vision: State of openned windows appended by their users.
+- !:FIX:UI.Vision: State of opened windows appended by their users.
     Main dialogs of the developing mode size and splitter's properties storing and restoring were added.
     Qt > 5.3 fix for wrong QAbstractTableModel::sibling() implementation by it reverting to QAbstractItemModel implementation.
 
@@ -1363,7 +1394,7 @@
     FIX: Units removing after the preloaded seek is fixed.
     FIX: Session's pages force enabling, at a request, prevented after its manual disable.
     FIX: User attribute ID prevented to set for empty.
-    Visualizer specific atributes activation expanded for only present atributes activation, no creation.
+    Visualizer specific attributes activation expanded for only present attributes activation, no creation.
 - !!:UI.Vision: Visualizer specific attributes are alowed for the primitives and an attribute "sclWin" added and used
     for primitive "Diagram" for trends view in scale by window drawn by mouse.
 
@@ -1536,7 +1567,7 @@
     Connections management added for its connection ID, mostly to detect remoted VCAServer changes and to re-iniate need then.
 - !!:UI.Vision: "Developers" help field removed by merging it to the field "Author".
     Using of the connection ID is added.
-    Force to widgets update and restoring openned pages at a reconnection is added.
+    Force to widgets update and restoring opened pages at a reconnection is added.
 
 
 2016-06-23 Roman
@@ -2066,7 +2097,7 @@
 
 2015-11-01 Roman
 - DB.LibsDB.OscadaLibs.db: DevLib appended by item pare "CTR" for "CTR 100, 101 Oerlikon Leybold Vacuum CERAVAC".
-- Protocol.OPC_UA: libOPC_UA appended by function Server::clientAddr() for the openned connection re-establish
+- Protocol.OPC_UA: libOPC_UA appended by function Server::clientAddr() for the opened connection re-establish
     detection by the Secure Channel reusing. For the detection for now used:
 	messages sequence (more for minimum and no more for 10 to previous), the client address and certificate to equal.
     diagnosticInfos for everywhere fixed to replace empty string lengths (-1) to the empty array number (0).
@@ -3176,7 +3207,7 @@
 2014-07-31 Roman
 - !:DAQ.DAQGate: Remote source's messages acquisition disabling is added, for request time control.
     FIX: Processed parameters list clean up moved from stop to disable stage.
-    Pass empty parameter into separated atributes request mode is added, for traffic and overall request time decrease.
+    Pass empty parameter into separated attributes request mode is added, for traffic and overall request time decrease.
     Some requests profiled: Into common priority request's and respond's reaction is 3-8ms, into RealTime priority (10) it is 50-100us.
 - UI.{QTCfg,Vision}: Wait cursor set moved to already set and restore only after timeout 50 ms, for blink prevent and some DE load by that.
 - UI.Vision: The project manual call, also from status panel, is added by offline document name "{ProjName}.{pdf|html|odt}.
@@ -3740,7 +3771,7 @@
     FIX:I-8017 module processing fix for different channel's mode.
 - !:DAQ.System: New DA-type "UPS", by NUT-protocol is added.
     Active DA check and creation is fixed for same origin parameters test, no the parameter identifiers.
-    Self atributes support allowed and used into DA-sources "Smart" and "UPS".
+    Self attributes support allowed and used into DA-sources "Smart" and "UPS".
     Mostly code clean up.
 - Transport.Sockets: Status and limit of the input transports for assigned output transports is added.
     Default timeouts for output transports are set to "5:0.01".
@@ -5412,7 +5443,7 @@
 
 2012-02-10 Roman
 - DAQ: DAQPath() functions is added to DAQ subsystem objects for get internal DAQ path like "DAQMod.Cntr.Prm.attr".
-- !!:Archive: Link address to atribute of parameter of data source is make simpler by use DAQPath like "DAQMod.Cntr.Prm.attr".
+- !!:Archive: Link address to attribute of parameter of data source is make simpler by use DAQPath like "DAQMod.Cntr.Prm.attr".
     Old address left usable for backward compatibility.
 
 
@@ -5508,7 +5539,7 @@
 
 
 2012-01-12 Roman
-- FIX:UI.Vision: Crash on maximize runtime window for no one openned window project is fixed.
+- FIX:UI.Vision: Crash on maximize runtime window for no one opened window project is fixed.
 - FIX:UI.QTCfg: Crash on double mouse click processing in list items element which allowed for goto other page
     with the tab also present into new page.
 - FIX:SYS: All start scripts is fixed for core dumps processing.
@@ -5598,7 +5629,7 @@
 
 
 2011-12-10 Roman
-- FIX:DAQ: Wait to redundancy task start for archives' blocks of atributes DAQ parameters restore on start.
+- FIX:DAQ: Wait to redundancy task start for archives' blocks of attributes DAQ parameters restore on start.
 
 
 2011-12-09 Roman
@@ -5782,8 +5813,8 @@
 - UI.Vision: Falgs store for developed widgets is changed to uint8_t type.
     Child attributes process into change rule "attr" is added.
     Rule's name process is added for group attributes change into one rule "attr".
-- UI.Vision: Context record for widget atributes' value is moved to separated function and used also
-    for record context after active atribute value change.
+- UI.Vision: Context record for widget attributes' value is moved to separated function and used also
+    for record context after active attribute value change.
 
 
 2011-11-08 Roman
@@ -6338,7 +6369,7 @@
 - SYS: Default locale for init-scripts is changed to en_US.UTF-8. Debian-package's postinst script is fixed.
 - DAQ.BlockCalc: Set pass time after calls to "f_frq", by negative seconds, for cron schedule.
     Start and stop calc is added for enable/disable block of the run controller.
-    Linked status is added for function and block's atributes links.
+    Linked status is added for function and block's attributes links.
 - DAQ.JavaLikeCalc: Set pass time after calls to "f_frq", by negative seconds, for cron schedule.
 - !!!:DAQ.LogicLev: Moved to use system multitype parameters mechanism.
 - DAQ.ModBus, DAQ.Siemens: Special template attributes bind is added for "SHIFR", "NAME", "DESCR" and "this".
@@ -6370,7 +6401,7 @@
 - DAQ.LogicLev: Experimental linked status is added for direct link to mirrored parameter.
 - !!!!:DAQ.ModBus: Logical type parameter is realized for allow creation ModBus parameters by template.
 - FIX:DAQ.Siemens: Period config property type is fixed to Real. id_* template parameters clear on the parameter disable is fixed.
-    Get value request of atributes a parameter is fixed for "err" attribute try check ibto links is fixed.
+    Get value request of attributes a parameter is fixed for "err" attribute try check ibto links is fixed.
     Special parameter of a template "f_freq" set to call frequence is fixed.
 
 
@@ -8034,7 +8065,7 @@
 - SYS: Core dump creation is enabled into start scripts.
 - !!:SYS: User's API functions is added to OpenSCADA core object: messDebug, messInfo, messNote, messWarning, messErr, messCrit, messAlert and messEmerg.
 - DAQ.BlockCalc: Help is added to field the priority blocks list.
-- !!!:UI.Vision: An identical atributes of group widgets setup suport is added to the atributes inspector through group.
+- !!!:UI.Vision: An identical attributes of group widgets setup suport is added to the attributes inspector through group.
 
 
 2009-11-25 Roman
@@ -8094,7 +8125,7 @@
 - !!:DB: User's API functions SQLReq() is added to DB object.
 - !!:Archives: User's API function messGet() is added to Archive subsystem object.
 - FIX:UI.VCAEngine: Attributes type change is fixed for Mutable attributes of primitives "Text" and "FormEl".
-- FIX:UI.VCAEngine: Error message is added on time creation atribute with already present name.
+- FIX:UI.VCAEngine: Error message is added on time creation attribute with already present name.
 
 
 2009-11-10 Maxim
@@ -8513,7 +8544,7 @@
 2009-07-07 Roman
 - !!:/Special/FLibSYS: Interface translation to German is added by Irina Popkova.
 - /DAQ/JavaLikeCalc: Some code clear.
-- FIX:/UI/VCAEngine: Processing flag inherit is fixed for atributes "vCur" and "aCur" of primitive "Document".
+- FIX:/UI/VCAEngine: Processing flag inherit is fixed for attributes "vCur" and "aCur" of primitive "Document".
 
 
 2009-07-05 Roman
@@ -9077,7 +9108,7 @@
 
 
 2009-02-27 Roman
-- !!:/UI/VCAEngine,/UI/Vision,/UI/WebVision: The attribute 'root' moved to main attributes container. Added atribute 'parent' for parent widget info allow.
+- !!:/UI/VCAEngine,/UI/Vision,/UI/WebVision: The attribute 'root' moved to main attributes container. Added attribute 'parent' for parent widget info allow.
     Added attribute 'tipTool' and 'tipStatus' for tooltips and statustips support into widgets.
 
 
@@ -9092,7 +9123,7 @@
 
 2009-02-24 Roman
 - !!!:/SYS,/UI/VCAEngine: Realised object TVariant for storing different data types.
-    The object is used for direct access to system's ("id" and "path") atributes of widgets of UI.VCAEngine.
+    The object is used for direct access to system's ("id" and "path") attributes of widgets of UI.VCAEngine.
 - !:/SYS: TCntrNode::nodeAccess() is renamed to TCntrNode::nodeRes().
 
 
@@ -9593,7 +9624,7 @@
 - FIX:/Archive/FSArch: Scan values from holed archive is fixed.
 - /TFunction, /DAQ/JavaLikeCalc: Renamed functions from 'm_nm' view to mNm.
 - FIX:/UI/VCAEngine: Lost language after inherit widget procedure modify is fixed.
-- !:/UI/VCAEngine: Restore atribute 'time' from archived document on start is added.
+- !:/UI/VCAEngine: Restore attribute 'time' from archived document on start is added.
 - !!!!:/UI/Vision: Print and Export data of run project's is added. Include print and export by: pages, diagrams and documents.
 - !!!!:/UI/WebVision: Primitive "Document" support is added.
 - !!:/DemoDB: Is updated. Sum and average archives data functions is fixed. Primitive's document is updated and one is added.
@@ -9617,7 +9648,7 @@
 - !!!:/UI/VCAEngine, /UI/Vision: Improve the primitive "Document" realisation. Made more stabile archive mode.
   Storing archive to projects's DB (*_ses) is added. Repeat tags generation mechanism is changed.
 - !:/UI/VCAEngine: System mode is added to attributes' set value functions. For no prevent mode support into primitives' update.
-- FIX:/UI/VCAEngine: Inherit flag is added to an atribute add function for first inherit fix on creation.
+- FIX:/UI/VCAEngine: Inherit flag is added to an attribute add function for first inherit fix on creation.
 - !!:/UI/Vision: Link mode is added to copy widget's dialog.
 - !:/UI/Vision: Link apply on select is return for links inspector.
 - FIX:/UI/Vision: No update cached pages after open is fixed.
@@ -9636,7 +9667,7 @@
 
 2008-10-30 Roman
 - FIX:/DAQ/Siemens: Not set modify flag for template field change.
-- !:/Special/FLibSYS: Direct access to archive or atribute's value address field is added for functions: varhBeg(), varhEnd(), varhGetR(), varhGetB() and varhGetS().
+- !:/Special/FLibSYS: Direct access to archive or attribute's value address field is added for functions: varhBeg(), varhEnd(), varhGetR(), varhGetB() and varhGetS().
 - !!!:/Special/FLibSYS: Add user's functions: strPath2Sep(), strEnc2HTML() and real2str().
 - FIX:/UI/QTCfg: Blocking signals on time programm values set into LineEdit is fixed.
 - /UI/VCAEngine: Some attributes is renamed from m_attr to mAttr view.
@@ -9644,7 +9675,7 @@
 - FIX:/UI/VCAEngine: Make stats f_start and f_stop for session's scripts is fixed.
 - FIX:/UI/VCAEngine: Function Widget:calcId() is fixed for full session path support.
 - FIX:/UI/VCAEngine: Two level's widgets list generation is fixed for widgets's parent edition.
-- FIX:/UI/VCAEngine: Widget's user atributes edit name, type and selected list for heritor is fixed.
+- FIX:/UI/VCAEngine: Widget's user attributes edit name, type and selected list for heritor is fixed.
 - FIX:/UI/Vision: Cleaning root link's fields, without group, is fixed.
 - FIX:/UI/Vision: Blocking signals on time programm values set into LineEdit is fixed.
 - !!!:/UI/Vision: Post process XML-source of primitive "Document" is added. Dynamic documents support by primitive "Document" is improved and tested.
@@ -9696,7 +9727,7 @@
   New mechanism is included to all modules.
 - !:/SYS: New function TSYS::strMess() is added for in-line format string support.
 - !:/Transports: Added virtual function getStatus( ) to input and output transports interfaces for connection status get.
-- FIX:/DAQ/BlockClac: Small values seting allow into real block's atributes is fixed.
+- FIX:/DAQ/BlockClac: Small values seting allow into real block's attributes is fixed.
 - !!:/SYS: Demo DB is updated.
 
 
@@ -9731,7 +9762,7 @@
 
 2008-09-22 Roman
 - !!:/UI/VCAEngine: For primitive ElFigure: Dynamic and static points support is added. Dynamic width, colors and images support is added.
-- /UI/Vision: Disable word wrap for texts into attributes of the atributes inspector.
+- /UI/Vision: Disable word wrap for texts into attributes of the attributes inspector.
 
 
 2008-09-20 Roman
@@ -9760,7 +9791,7 @@
 - /DB/MySQL: For UTF codepages length multiplication to 2 is made for string.
 - FIX:/UI/QTCfg: Save on exit is fixed.
 - FIX:/SYS: Fixing DB fields set is fixed for TArchives, TBDS and TTransports.
-- FIX:/SYS/Elements: The short DB fields length atribute is fixed.
+- FIX:/SYS/Elements: The short DB fields length attribute is fixed.
 
 
 2008-09-16 Roman
@@ -9967,7 +9998,7 @@
 
 
 2008-07-16 Roman
-- FIX:/DAQ/BlockCalc: No clear old atributes after attribute identifier changing is fixed.
+- FIX:/DAQ/BlockCalc: No clear old attributes after attribute identifier changing is fixed.
 
 
 2008-07-15 Roman
@@ -9991,7 +10022,7 @@
 2008-07-10 Roman
 - FIX:/UI/Vision: Exit form included widgets edit is fixed.
 - !!:/UI/Vision: Resource cache support is added to runtime.
-- /UI/Vision: Work pages attributes moved to QT object's atributes store.
+- /UI/Vision: Work pages attributes moved to QT object's attributes store.
 - !:/UI/Vision: Include widget's scroll area support is added.
 - FIX:/UI/Vision: Maximize and full screen runtime window mode is fixed.
 - FIX:/UI/Vision: Update widgets runtime mechanism is fixed.
@@ -10033,7 +10064,7 @@
 
 2008-07-03 Maxim,Roman
 - FIX:/UI/Vision: Widget's update function fixed.
-- FIX:/UI/Vision: ElFigure update view on atributes change is fixed.
+- FIX:/UI/Vision: ElFigure update view on attributes change is fixed.
 
 
 2008-07-03 Roman
@@ -10477,7 +10508,7 @@
 - !!!!:/SYS: Add new files of generic documentations: FAQ.pdf, AboutOpenSCADA.pdf, release_0.6.0_uk.pdf, release_0.6.0.pdf and FAQ_uk.pdf.
 - /SYS: Update documentations: release_0.6.0_ru.pdf and FAQ_ru.pdf.
 - FIX:/DAQ/Value: EVAL_REAL values display is fixed.
-- !:/UI/VCAEngine: Support user atributes into included widget's is added.
+- !:/UI/VCAEngine: Support user attributes into included widget's is added.
 - !:/UI/Vision: Usable date attributes edit is added.
 
 
@@ -10541,10 +10572,10 @@
 - FIX:/Archive/DBArch: Open table once for archive frame flushing is made.
 - FIX:/DB/FireBird: FielSet() command is rewrote for made SQL INSERT optimize.
 - /DB/SQLite: Set up requests counter into transaction, into address field, is made (/var/tmp/arch.dp:20).
-- FIX:/DAQ/DiamondBoards: Commands to atributes process is disadled on time controller stop.
+- FIX:/DAQ/DiamondBoards: Commands to attributes process is disadled on time controller stop.
 - FIX:/DAQ/ModBus: Zero period crush is fixed. Timeout's ranges is hold.
 - FIX:/DAQ/SNMP, /DAQ/Transporter: Zero period crush is fixed.
-- /UI/QTCfg: Changed atributes storing on page update is made.
+- /UI/QTCfg: Changed attributes storing on page update is made.
 - !!:/UI/VCAEngine: Element's copy function is added.
 - FIX:/UI/Vision: ComboBox event process crash on value setup and item event change is fixed.
 
@@ -10555,7 +10586,7 @@
 - FIX:/DB: The exception generation on table close is fixed.
 - FIX:/Archive/DBArch: Long time archive's fields clear is fixed, after long downtime.
 - FIX:/DAQ/DiamondBoards: No changed gain for analog inputs is fixed.
-- !:/DAQ/ModBus: Tune serial port atributes support is added. Some performance fixes is made.
+- !:/DAQ/ModBus: Tune serial port attributes support is added. Some performance fixes is made.
 - /UI/Vision: Widgets' tab order control support is added.
 - FIX:/UI/Vision: Mouse selection and events generation is fixed for primitive "ElFigure".
 - /SYS: Updated Demo DB.
@@ -10587,12 +10618,12 @@
 2008-02-04 Roman
 - FIX:/Archive/FSArch: Message archivation is fixed for XML parsing error crash.
 - FIX:/DAQ/JavaLikeCalc: The message "Compile the program language %s is no support." format is fixed.
-- !!:/UI/Vision, /UI/VCAEngine: Focus atribute and events is added. Dynamic page linking support is added.
+- !!:/UI/Vision, /UI/VCAEngine: Focus attribute and events is added. Dynamic page linking support is added.
 - /UI/Vision: Make widget's disabling for no active state.
 
 
 2008-02-01 Roman
-- FIX:/UI/VCAEngine: No visual atributes update transfer cause is fixed.
+- FIX:/UI/VCAEngine: No visual attributes update transfer cause is fixed.
 - FIX:/UI/Vision: Odd picture painting is fixed for primitive "Diagram".
 - FIX:/UI/Vision, /UI/WebVision: Trends display on big periods and big trend's width is fixed.
 - FIX:/UI/WebVision: Widget's overflow is made hidden.
@@ -10606,7 +10637,7 @@
 
 2008-01-29 Roman
 - FIX:/Special/FLibComplex1: The cascade mode is disabling on time automate disabling is fixed for PID function.
-- FIX:/UI/VCAEngine: Deleting attributes of inheritable widgets on time deletion atributes of base widgets is fixed.
+- FIX:/UI/VCAEngine: Deleting attributes of inheritable widgets on time deletion attributes of base widgets is fixed.
 - FIX:/UI/Vision: Tracing mode and cursor display is fixed for primitive "Diagram".
 - FIX:/UI/Vision: Apply button size for primitive "FormEl" is fixed.
 - !:/UI/WebVision:The cursor support is added for primitive "Diagram".
@@ -10623,7 +10654,7 @@
 2008-01-22 Roman
 - !:/DAQ/JavaLikeCalc: The special simbols, like '\n', support to string is added.
 - !!:/Special/FLibSYS: The string parse functions, strParse() and strParsePath() is added.
-- FIX:/UI/VCAEngine: Change atributes processing is fixed.
+- FIX:/UI/VCAEngine: Change attributes processing is fixed.
 - !!:/UI/VCAEngine: Widget's attributes for events, event and evProc, made no mutable and allowed for all widgets.
 - FIX:/UI/VCAEngine: Compile widget's functions errors process is fixed.
 - FIX:/UI/VCAEngine: Attributes configs inherits, on modify, is fixed.
@@ -10668,7 +10699,7 @@
 - /UI/Vision: Group selection on drawing mouse rect is made.
 - /UI/Vision: Flag storing, for development widget object, is made unified.
 - FIX:/UI/Vision: The crash into primitive "FormEl", on elements type change, is fixed.
-- FIX:/UI/Vision: Some crash into atributes inspector on time group widgets access is fixed.
+- FIX:/UI/Vision: Some crash into attributes inspector on time group widgets access is fixed.
 - FIX:/UI/Vision: On every time widget selection all reload is fixed.
 - !!:/UI/Vision: Group widgets resizing is rewrote.
 - /SYS: Updated Demo DB.
@@ -10685,7 +10716,7 @@
 2007-12-24 Roman
 - !!!:/UI/VCAEngine, /UI/WebVision, /UI/Vision: Image links maping to primitive "Media" is added.
 - !!:/UI/VCAEngine, /UI/Vision: Geometry coordinates is moved to real type.
-- FIX:/UI/Vision: The size hint for text fields of the atributes inspector is fixed.
+- FIX:/UI/Vision: The size hint for text fields of the attributes inspector is fixed.
 - FIX:/UI/Vision: Select disabling on widget close is fixed.
 - FIX:/UI/Vision: Single parameter's scaling for primitive "Diagram" is fixed.
 - FIX:/UI/WebVision: Form elements vertical central align is fixed.
@@ -10730,7 +10761,7 @@
 - FIX:/UI/Vision: Primitive "ElFig" panel activation is fixed.
 - FIX:/UI/Vision: Enabling item containers, after creation, is made.
 - FIX:/UI/Vision: Resize widgets priority (box and children) is fixed.
-- FIX:/UI/Vision: Lost edit focus, on time atributes edit, is fixed.
+- FIX:/UI/Vision: Lost edit focus, on time attributes edit, is fixed.
 - FIX:/UI/Vision: Primitive "Protocol" edit and select ability is fixed.
 - FIX:/UI/WebVision: Some fixes is made.
 - !!!:/WebCfg: Modul most rewrote.
@@ -10825,7 +10856,7 @@
 - FIX:/DAQ/LogicLev: Self direct linking preventing is made.
 - FIX:/Transport/Sockets: Blocking input transport by opened client on stoping is fixed.
 - !!:/Transport/Sockets: Translation and documentation is updated and version 1.3.0 is relised.
-- FIX:/UI/VCAEngine: Writing some no active atributes is fixed. 
+- FIX:/UI/VCAEngine: Writing some no active attributes is fixed. 
     Try for process empty linked procedure's parameters on calc is fixed.
 
 
@@ -11015,7 +11046,7 @@ archive access (UI trend access).
 - FIX:/UI/VCAEngine: Primitives active attributes initialisation is fixed.
 - /UI/VCAEngine: An access to previous attrinute value, through attrChange() function, is added.
 - /UI/VCAEngine: The model data for primitive "Diagram", type "Trend", is prepared.
-- FIX:/UI/Vision: The atribute inspector is fixed for multilevel virtual groups process.
+- FIX:/UI/Vision: The attribute inspector is fixed for multilevel virtual groups process.
 - /SYS: Updated Demo DB.
 
 
@@ -11269,7 +11300,7 @@ archive access (UI trend access).
 - FIX:/Archive/Mess: Default value init time is fixed.
 - FIX:/SYS: Load, Start and Stop subsystem sequence is fixed.
 - FIX:/DB/MySQL: Restoring the lost server connection is added.
-- FIX:/DAQ/LogicLev: Pass removing blocked atributes is fixed.
+- FIX:/DAQ/LogicLev: Pass removing blocked attributes is fixed.
 - FIX:/DAQ/OperationSystem: HDD statistics values types is fixed.
 - /DAQ/OperationSystem: Gather data time control is added.
 - !!!:/FLibSYS: Access API to value buffers and archives is rebuilded.
@@ -11401,23 +11432,23 @@ archive access (UI trend access).
 - /Config: Rename element containers functions TValElem::addElem() and TValElem::delElem() to TValElem::addFld() and TValElem::delFld().
 - /DAQ: Add several new messages and it translations.
 - FIX:/DAQ: Fix sequence data search. Now, first check all DB and then config file.
-- FIX:/DAQ: Fix parameters connect/disconnect. Add checking at present of value atributes at enable parameter to object tree.
+- FIX:/DAQ: Fix parameters connect/disconnect. Add checking at present of value attributes at enable parameter to object tree.
 - /DAQ: Add function TTipDAQ::modStart( ) and TTipDAQ::modStop( ) for correct reload DAQ modules.
-- FIX:/DAQ/BlockCal: Fix parameters connect/disconnect. Add checking at present of value atributes at enable parameter to object tree.
+- FIX:/DAQ/BlockCal: Fix parameters connect/disconnect. Add checking at present of value attributes at enable parameter to object tree.
 - /DAQ/BlockCal: Add several new messages and it translations.
 - FIX:/DAQ/BlockCal: Fix parameter error attribute forming.
 - !!!!:/DAQ/DiamondBoards: Add interrupt acquisition mechanis support.
 - !!!!:/DAQ/DiamondBoards: Restore Diamond system driver using.
 - /DAQ/DiamondBoards: Add several new messages and it translations.
-- FIX:/DAQ/DiamondBoards: Fix parameters connect/disconnect. Add checking at present of value atributes at enable parameter to object tree.
-- FIX:/DAQ/JavaLikeCalc: Fix parameters connect/disconnect. Add checking at present of value atributes at enable parameter to object tree.
+- FIX:/DAQ/DiamondBoards: Fix parameters connect/disconnect. Add checking at present of value attributes at enable parameter to object tree.
+- FIX:/DAQ/JavaLikeCalc: Fix parameters connect/disconnect. Add checking at present of value attributes at enable parameter to object tree.
 - /DAQ/JavaLikeCalc: Add several new messages and it translations.
 - FIX:/DAQ/JavaLikeCalc: Fix sequence data search for libraries load. Now, first check all DB and then config file.
 - /DAQ/OperationSystem: Add several new messages and it translations.
-- FIX:/DAQ/OperationSystem: Fix parameters connect/disconnect. Add checking at present of value atributes at enable parameter to object tree.
+- FIX:/DAQ/OperationSystem: Fix parameters connect/disconnect. Add checking at present of value attributes at enable parameter to object tree.
 - FIX:/DAQ/OperationSystem: Fix no enabling parameters at starting.
-- FIX:/Parameter: Fix no deleting parameter atribute's values.
-- FIX:/Parameter: Fix parameters connect/disconnect. Add checking at present of value atributes at enable parameter to object tree.
+- FIX:/Parameter: Fix no deleting parameter attribute's values.
+- FIX:/Parameter: Fix parameters connect/disconnect. Add checking at present of value attributes at enable parameter to object tree.
 - FIX:/Parameter: Fix load from config file parameters and it templates.
 - FIX:/Parameter: Fix resource allocating to parameter's templates.
 - FIX:/Parameter: Fix sequence data search. Now, first check all DB and then config file.
@@ -11564,7 +11595,7 @@ archive access (UI trend access).
 - /DAQ: Remove TController::FreeParmCfg() function call from TController::disable( ).
 - !!!!:/DB: Made full name DB call everywhere.
 - !!:/TParam: Add all parametrs assigned into templates.
-- /TParam: Change logical level mechanism. Independent calc the template function and get a link atributes 
+- /TParam: Change logical level mechanism. Independent calc the template function and get a link attributes 
   direct from a link. Split the Input and Output links to simple link.
 - !!!!:/TParam: Make links description with path.
 - !!!!:/System: Change the interval timer events to the direct thread creating (timer_create()).
@@ -11593,7 +11624,7 @@ archive access (UI trend access).
     - Now the node and the UI script language adressing together. 
     - Removed everywhere user functions: AutoHD<TCntrNode> ctrAt( const string &br ). 
     - Add prefix for child nodes groups.
-    - Removed support the "mode" control scenario`s atribute.
+    - Removed support the "mode" control scenario`s attribute.
     - Add function TCntrNode::nodeType() for identify objects (use for DOM API). 
     - Remove TCntrNode::nodePref() function. 
     - Add function TCntrNode::nodeAt() for connecting to any node by the node path.
@@ -11613,7 +11644,7 @@ archive access (UI trend access).
 2005-12-19 Roman
 - !!!!:/Parameter: Made parameters logical level. Created parameter's templates and logical level parameters.
 - /Doc: Add umbrello uml diagram to repository.
-- /Parameter: Add base error info atributes: "err" and "err_mess".
+- /Parameter: Add base error info attributes: "err" and "err_mess".
 - !!!:/Parameter: Separate parameter name to Id, Name and Description.
 - !!:/Parameter: Remove export concept and use logical level for it.
 - /Value: Change mirroring config concept. Add set config function TValue::vlCfg().
@@ -11654,14 +11685,14 @@ archive access (UI trend access).
 
 2005-11-30 Roman
 - /Controller/JavaLikeCalc: Made the multi table fields mirorring to parameter.
-- /Controller/BlockCalc: Made the multi block atributes mirorring to parameter.
+- /Controller/BlockCalc: Made the multi block attributes mirorring to parameter.
 - /System/Demo: Update demo DB.
 
 2005-11-25 Evgen
 - !!!!:/System: Add UI subsystem module Vision 0.1.0 to repository.
 
 2005-11-25
-- Fix:/Value: Fixed atributes direct read and write.
+- Fix:/Value: Fixed attributes direct read and write.
 - /Functions: Translated all massages.
 - /Functions: Fixed not encoding libraries names.
 - /Subsystem: Fixed not encoding node(modules) names.
@@ -11675,7 +11706,7 @@ archive access (UI trend access).
 - /Special/StaticFuncLibs: Changed structure of PID regulator by Complex1 librarie's.
 - /Controller/OperationSystem: Add the output transport resource to the HDDTemp data source.
 - /Controller/OperationSystem: Config field "SUBT" type changed to string.
-- Fix:/Controller/DiamondBoards: Fixed the atributes direct writing.
+- Fix:/Controller/DiamondBoards: Fixed the attributes direct writing.
 - !!!!:/Controller/JavaLikeCalc: Add controller's parameters support.
 - /Controller/JavaLikeCalc: Translated all messages.
 - !!!!:/Controller/BlockCalc: Add controller's parameters support.
@@ -11716,7 +11747,7 @@ archive access (UI trend access).
 - /UI/QTStarter: Relised 0.5.0
 - !!!!:/Doc: Replace the module documents from *.sxw to *.pdf. Modules are creating into WIKI: http://diyaorg.dp.ua/oscadawiki
 - /Doc: Remove roadmap.sxw and to_do.sxw
-- !!!!:/Modules: Rename atributes: Source, Vers, Autors, DescrMod and License to mSource, mVers, mAuthor, mDescr and mLicense.
+- !!!!:/Modules: Rename attributes: Source, Vers, Autors, DescrMod and License to mSource, mVers, mAuthor, mDescr and mLicense.
 - !!!!:/System: Rename function <static string int2str( int val, char view = C_INT_DEC );> to <static string int2str( int val, IntView view = Dec );> 
 
 2005-10-18
@@ -11822,7 +11853,7 @@ archive access (UI trend access).
 
 2005-08-16
 - /Spec/test_kernel: Add the contol language test. Test used from debug access to elements of page.
-- !!!!: /System: Delete function TError::what(). Use public atributes cat and mess.
+- !!!!: /System: Delete function TError::what(). Use public attributes cat and mess.
 - !!!!: /System: Add the back link to TCntrNode object.
 - !!!!: /System: Subsystems were optimized and put to TCntrNode-container of TError object.
 - !!!!: /System: TGRPModule rename to TSubSYS and use as generic subsystem class. 
@@ -11859,7 +11890,7 @@ data types: bool,int,real,string. Add buildin functions. Delete generic access t
 local variables.
 - /Spec/FreeFunc: Update Russian and Ukranian translate.
 - /Controller/virtual: Add translate to Russian and Ukranian languages.
-- /UI/QTCfg: Add checking atribute "descr" to a size for the changing structure page detect.
+- /UI/QTCfg: Add checking attribute "descr" to a size for the changing structure page detect.
 
 2005-07-14
 - !!!!: AutoHD: Make no dependent from TContrNode. To AutoHD can connect to every
@@ -11967,7 +11998,7 @@ second config file)
 - TKernel, TGrpModule, TModule, TSYS: Add function cfgNodeName(). Use for make path to Object
 node into config file.
 - TMessage, TSYS: Fix no checking of a return value function getenv();
-- TKernel: Move atributes of the default DB to private section;
+- TKernel: Move attributes of the default DB to private section;
 - !!!!: Go to using default DB from all subsystems.
 - XMLNode: Add function attr_() for space saving.
 - UI:QTCfg: Add signal handler for pressing at the navigation tree. 
@@ -11978,7 +12009,7 @@ allow request internal branches.
 - TArhives: Go to new Controll API.
 - TSYS: Add the Config file seek function.
 - TTransportS: Use the config file seek function if DB no avoid.
-- XML::attr: Delete parameter 'add'. Now, always add atributes.
+- XML::attr: Delete parameter 'add'. Now, always add attributes.
 
 2005-03-17
 - Add Generic BD support. Add option to TKernel and adapted all subsystems.
@@ -12055,7 +12086,7 @@ modFreeFunc() to modFunc().
 - fix UI::QTCfg form widgets display.
 - fix Transport::socket Pthread flow memory bug. Use PTHREAD_CREATE_DETACHED metod!!!
 - fix TConfig, TCfg - no return object from operator=()!
-- fix TContr::SYS length of atribute "seconds full" for uptime more than 5 symbols. 
+- fix TContr::SYS length of attribute "seconds full" for uptime more than 5 symbols. 
 - add ru and uk localization:
     - BD::direct_dbf;
     - BD::my_sql;
@@ -12161,7 +12192,7 @@ modFreeFunc() to modFunc().
 - TContr: Change attach metod to metod with AutoHD;
 - TArchiveS: delete the bridge attach functions;
 - TTransportS: delete the bridge attach functions;
-- TValue: Add AutoHD resources for access to atribute;
+- TValue: Add AutoHD resources for access to attribute;
 - THD: Add function hd_hd() and hd_obj();
 - Update Test BD;
 
@@ -12386,7 +12417,7 @@ modFreeFunc() to modFunc().
 
 2004-02-05  OpenScada 0.1.12 (prot_http.so 0.1.0; ui_web_info.so 0.1.0)
 - TBDS: add function delete tables del();
-- TContr: add atribute "o_name";
+- TContr: add attribute "o_name";
 - TContr: make check "fld" nodes to ctr_opt_get and ctr_opt_set;
 - TContr: change brance name store from Node->text to Node->attr("id");
 - TContr: delete inf from ctr_opt_apply();
@@ -12443,7 +12474,7 @@ modFreeFunc() to modFunc().
 - TParamContr: del t_sync atribut;
 - TParamContr: change return type for "string &Name()";
 - !!!!: TParam: full rebuild;
-- TParamS: add owner and o_name atributes;
+- TParamS: add owner and o_name attributes;
 - Special::test_kernel: fix cycle time;
 - Special::test_kernel: update access into parameters;
 - Controller::virtual_v2: deleted;
@@ -12590,8 +12621,8 @@ modFreeFunc() to modFunc().
 - Add check type config file into TSYS->UpdateOpt();
 - Add intercepting signales SIGALRM and SIGPIPE into TSYS;
 - Add function TSYS->FixName() for convert path name to absolutely view;
-- Fix no cleaned atribute in function XMLNode::cleanup();
-- Fix no loading atributes of root XML node into XMLNode::load_xml();
+- Fix no cleaned attribute in function XMLNode::cleanup();
+- Fix no loading attributes of root XML node into XMLNode::load_xml();
 - add user mode for genarate XML file (XMLNode::get_xml());
 - add XMLNode::new_xml() for cleaning XMLNode tree;
 - Fix time answer into "self" protocol module;
@@ -12606,7 +12637,7 @@ modFreeFunc() to modFunc().
 - Move scan change config file to TSYS. Update system for change config file;
 - Move signal handler function to TSYS;
 - Add template description to TArchiveS (To next commit will have maked support Message Archives);
-- Clean n_opt atributes anywhere;
+- Clean n_opt attributes anywhere;
 - Update a message creating methodic (anywhere). Add category parameter for messages.  
 - Add Name() function and atribut name to TKernel;
 - Add Message buffer to TMessage, add a process function for it and add config file options;
@@ -12669,10 +12700,10 @@ modFreeFunc() to modFunc().
 - move deleting modules to TGrpModule (central)!
 - for generality "at" and "operator[]" function change return value to <&> 
   ( for simple use with operator[] and use <.> )
-- create method Owner() instead public atribute owner;
+- create method Owner() instead public attribute owner;
 - move owner children of TModule to TModule and set owner to TGRPModule;
 - delete gmd_AddM from children of TGRPModule;
-- change BD, Archive ... atributes of TKernel to BD(), Archive() ... function
+- change BD, Archive ... attributes of TKernel to BD(), Archive() ... function
 - delete checking version of module and delete mod_Version(); 
 - set updete module if change file's date;
 - change system geting and creating modules info with mod_info;

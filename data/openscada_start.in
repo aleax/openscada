@@ -107,6 +107,7 @@ pCmd="@bindir_full@/openscada --CoreDumpAllow --Config=$CfgFile --StatName=$Proj
 
 # Possible need using "flock" for race condition prevent
 # Check for already started programm present
+started=0
 if ps -C $TEXTDOMAIN -o command | grep "^${pCmd}" > /dev/null; then started=1; fi
 if test -f lock; then
     pid=`cat lock | sed -r 's/^0*([0-9]+).*/\1/'`

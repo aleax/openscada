@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.8"
+#define MOD_VER		"1.7.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -1185,9 +1185,9 @@ string TWEB::modInfo( const string &iname )
     if(name == "Auth")		return "1";
 
     if(lang.size()) {
-	if(name == "Name")	return _("System configurator (WEB)");
-	if(name == "Author")	return _("Roman Savochenko");
-	if(name == "Description") return _("Provides the WEB-based configurator of the OpenSCADA.");
+	if(name == "Name")	return MOD_NAME;
+	if(name == "Author")	return AUTHORS;
+	if(name == "Description") return DESCRIPTION;
     }
 
     return TModule::modInfo(name);

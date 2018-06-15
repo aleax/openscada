@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.1.6"
+#define MOD_VER		"3.1.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -218,7 +218,7 @@ TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 			    } else answer.clear();
 			}
 		    } catch(TError &err) {
-			mess_err(nodePath().c_str(), _("HTML template '%s' for language '%s' load error: %s"),
+			mess_err(nodePath().c_str(), _("Error loading the HTML template '%s' for the language '%s': %s"),
 				(forceTmpl.size()?(forceTmpl+forceTmplExt):(cTmpl+cTmplExt)).c_str(), lang.c_str(), err.mess.c_str());
 			answer.clear();
 		    }
@@ -303,7 +303,7 @@ void TProt::sesClose( int sid )
     MtxAlloc res(dataRes(), true);
     map<int,SAuth>::iterator authEl = mAuth.find(sid);
     if(authEl != mAuth.end()) {
-	mess_info(nodePath().c_str(),_("Auth exit from user '%s'."),authEl->second.name.c_str());
+	mess_info(nodePath().c_str(),_("Exiting the authentication for the user '%s'."),authEl->second.name.c_str());
 	mAuth.erase(authEl);
     }
 }
@@ -318,7 +318,7 @@ string TProt::sesCheck( int sid )
     if(cur_tm > lstSesChk+10) {
 	for(authEl = mAuth.begin(); authEl != mAuth.end(); )
 	    if(cur_tm > authEl->second.tAuth+authTime()*60) {
-		mess_info(nodePath().c_str(),_("Auth session for user '%s' expired."),authEl->second.name.c_str());
+		mess_info(nodePath().c_str(),_("The authentication session for the user '%s' is expired."),authEl->second.name.c_str());
 		mAuth.erase(authEl++);
 	    } else authEl++;
 	lstSesChk = cur_tm;
@@ -393,7 +393,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    } else cnt = io.text();
 	    io.childAdd("prm")->setAttr("id","Content-Length")->setText(i2s(cnt.size()));
 	}
-	else throw TError(nodePath().c_str(),TSYS::strMess(_("HTTP method '%s' error or don't support."),io.name().c_str()).c_str());
+	else throw TError(nodePath().c_str(),TSYS::strMess(_("Error or not supported the HTTP method '%s'."),io.name().c_str()).c_str());
 
 	//Place HTTP head
 	req = TSYS::strMess("%s %s HTTP/1.1\x0D\x0A",io.name().c_str(),uri.c_str());
@@ -424,7 +424,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	string rcod	= TSYS::strParse(tw, 1, " ");
 	string rstr	= TSYS::strParse(tw, 2, " ");
 	if((protocol != "HTTP/1.0" && protocol != "HTTP/1.1") || rcod.empty() || rstr.empty())
-	    throw TError(nodePath().c_str(),_("HTTP respond error"));
+	    throw TError(nodePath().c_str(),_("Error the HTTP response"));
 	io.setAttr("Protocol",protocol)->setAttr("RezCod",rcod)->setAttr("RezStr",rstr);
 
 	//Parse parameters
@@ -454,7 +454,7 @@ next_ch:
 	    (c_lng == -2 && ((int)(resp.size()-pos) < (ch_ln+5) || resp.find("\x0D\x0A",pos+ch_ln+2) == string::npos))))
 	{
 	    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf));
-	    if(!resp_len) throw TError(nodePath().c_str(), _("Not full respond."));
+	    if(!resp_len) throw TError(nodePath().c_str(), _("Not full response."));
 	    resp.append(buf, resp_len);
 	}
 
@@ -481,15 +481,15 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/allow",_("Allow"),RWRWR_,"root",SPRT_ID,2, "tp","str", "rows","2");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/tmpl",_("HTML template"),RWRWR_,"root",SPRT_ID,3,
 		    "tp","str", "dest","sel_ed", "select","/prm/cfg/tmplList");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/tmplMainPage",_("HTML main page template"),RWRWR_,"root",SPRT_ID,3,
+		ctrMkNode("fld",opt,-1,"/prm/cfg/tmplMainPage",_("HTML template of the main page"),RWRWR_,"root",SPRT_ID,3,
 		    "tp","str", "dest","sel_ed", "select","/prm/cfg/tmplMainPageList");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of the authentication (min)"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/aUsers",_("List of users allowed for auth, separated by ';'"),RWRWR_,"root",SPRT_ID,1,"tp","str");
-		if(ctrMkNode("table",opt,-1,"/prm/cfg/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins",
-		    "help",_("For address field you can use address templates list, for example \"192.168.1.*;192.168.2.*\".")))
+		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of the authentication, minutes"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/aUsers",_("List of users allowed for authentication, separated by ';'"),RWRWR_,"root",SPRT_ID,1,"tp","str");
+		if(ctrMkNode("table",opt,-1,"/prm/cfg/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,3, "s_com","add,del,ins", "rows","3",
+		    "help",_("A list of address templates can be used for the address field, for example \"192.168.1.*;192.168.2.*\".")))
 		{
 		    ctrMkNode("list",opt,-1,"/prm/cfg/alog/addrs",_("Address"),RWRWR_,"root",SPRT_ID,1,"tp","str");
-		    ctrMkNode("list",opt,-1,"/prm/cfg/alog/user",_("User"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","select","select","/prm/cfg/usr_ls");
+		    ctrMkNode("list",opt,-1,"/prm/cfg/alog/user",_("User"),RWRWR_,"root",SPRT_ID,3, "tp","str", "dest","select", "select","/prm/cfg/usr_ls");
 		}
 	    }
 	}
@@ -706,7 +706,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 			((!mod->allowUsersAuth().size() || TRegExp("(^|;)"+user+"(;|$)").test(mod->allowUsersAuth())) &&
 			    SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass)))
 		    {
-			mess_info(owner().nodePath().c_str(), _("Auth OK from user '%s'. Host: %s. User agent: %s."),
+			mess_info(owner().nodePath().c_str(), _("Successful authentication for the user '%s'. Host: %s. User agent: %s."),
 			    user.c_str(), sender.c_str(), userAgent.c_str());
 			answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),(uri+prms).c_str())+"</h2>\n", "200 OK",
 				"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;",
@@ -715,9 +715,9 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		    }
 		}
 
-		mess_warning(owner().nodePath().c_str(), _("Auth wrong from user '%s'. Host: %s. User agent: %s."),
+		mess_warning(owner().nodePath().c_str(), _("Wrong authentication from the user '%s'. Host: %s. User agent: %s."),
 		    user.c_str(), sender.c_str(), userAgent.c_str());
-		answer = getAuth(uri, _("<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"));
+		answer = getAuth(uri, _("<p style='color: #CF8122;'>Wrong authentication! Retry please.</p>"));
 		return mNotFull || KeepAlive;
 	    }
 	}
@@ -737,12 +737,12 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	//Send request to the module
 	try {
 	    AutoHD<TModule> wwwmod = SYS->ui().at().modAt(name_mod);
-	    if(wwwmod.at().modInfo("SubType") != "WWW") throw TError(nodePath().c_str(),_("No one WWW subtype module was found!"));
+	    if(wwwmod.at().modInfo("SubType") != "WWW") throw TError(nodePath().c_str(),_("No WWW subtype module found!"));
 	    if(s2i(wwwmod.at().modInfo("Auth")) && user.empty()) {
 		// Check for auto-login
 		user = mod->autoLogGet(sender);
 		if(!user.empty()) {
-		    mess_info(owner().nodePath().c_str(), _("Auto auth from user '%s'. Host: %s. User agent: %s."),
+		    mess_info(owner().nodePath().c_str(), _("Wrong authentication from the user '%s'. Host: %s. User agent: %s."),
 			user.c_str(), sender.c_str(), userAgent.c_str());
 		    answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),(uri+prms).c_str())+"</h2>\n", "200 OK",
 			"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;",
@@ -766,8 +766,8 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		else if(wwwmod.at().modFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
 			(void (TModule::**)()) &HttpGet,true))
 		    ((&wwwmod.at())->*HttpGet)(uri+prms, answer, sender, vars, user);
-		else throw TError(nodePath().c_str(), _("No a HTTP GET function present for module '%s'!"), name_mod.c_str());
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Get Content:\n%s", request.c_str());
+		else throw TError(nodePath().c_str(), _("No HTTP GET function in the module '%s'!"), name_mod.c_str());
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Get content:\n%s", request.c_str());
 	    }
 	    else if(method == "POST") {
 		void(TModule::*HttpPost)(const string &uri, string &page, const string &sender, vector<string> &vars, const string &user);
@@ -780,7 +780,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		else if(wwwmod.at().modFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
 			(void (TModule::**)()) &HttpPost,true))
 		    ((&wwwmod.at())->*HttpPost)(uri+prms, answer, sender, vars, user);
-		else throw TError(nodePath().c_str(), _("No a HTTP POST function present for module '%s'!"), name_mod.c_str());
+		else throw TError(nodePath().c_str(), _("No HTTP POST function in the module '%s'!"), name_mod.c_str());
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Post Content:\n%s", request.c_str());
 	    }
 	    else answer = pgCreator("<div class='error'>Method '"+method+"' isn't implemented by this server!</div>\n",
@@ -854,7 +854,7 @@ string TProtIn::getIndex( const string &user, const string &sender )
 	    "<p>"+TSYS::strMess(_("To use some modules you must be logged in. <a href='%s'>Login now</a>."),("/login"+prms).c_str())+"</p>";
 	string a_log = mod->autoLogGet(sender);
 	if(!a_log.empty())
-	    answer += "<p>"+TSYS::strMess(_("You can auto-login from user \"<b>%s</b>\" by simple selecting the module."),a_log.c_str())+"</p>";
+	    answer += "<p>"+TSYS::strMess(_("You can auto-login from the user \"<b>%s</b>\" just selecting the module."),a_log.c_str())+"</p>";
     }
     answer += "</td></tr>";
 
@@ -879,7 +879,7 @@ string TProtIn::getIndex( const string &user, const string &sender )
 string TProtIn::getAuth( const string& uri, const string &mess )
 {
     return pgCreator(string("<table class='work'>") +
-	"<tr><th>" + _("Login to system") + "</th></tr>\n"
+	"<tr><th>" + _("Login to the system") + "</th></tr>\n"
 	"<tr><td>\n"
 	"<form method='post' action='/login" + uri + prms + "' enctype='multipart/form-data'>\n"
 	"<table cellpadding='3px'>\n"

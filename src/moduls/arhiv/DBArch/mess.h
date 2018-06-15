@@ -39,6 +39,8 @@ class ModMArch: public TMArchivator
 	ModMArch( const string &id, const string &db, TElem *cf_el );
 	~ModMArch( );
 
+	TCntrNode &operator=( const TCntrNode &node );
+
 	string archTbl( )		{ return "DBAMsg_"+id(); }
 	double maxSize( )		{ return mMaxSize; }	//In days
 	bool tmAsStr( )			{ return mTmAsStr; }

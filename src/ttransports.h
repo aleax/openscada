@@ -298,7 +298,7 @@ class TTransportS : public TSubSYS
 	void extHostList( const string &user, vector<ExtHost> &list, bool andSYS = false, int upRiseLev = -1 );
 	ExtHost extHostGet( const string &user, const string &id, bool andSYS = false );
 	AutoHD<TTransportOut> extHost( TTransportS::ExtHost host, const string &pref = "" );
-	void extHostSet( const ExtHost &host, bool andSYS = false );
+	void extHostSet( const ExtHost &host, bool andSYS = false, bool load = false );
 	void extHostDel( const string &user, const string &id, bool andSYS = false );
 
 	// Request to remote or local OpenSCADA control interface
@@ -321,13 +321,14 @@ class TTransportS : public TSubSYS
     private:
 	//Methods
 	string optDescr( );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
 	TElem	elIn, elOut, elExt;
 
-	ResRW	extHostRes;             //External hosts resource
-	vector<ExtHost> extHostLs;      //External hosts list
+	ResRW	extHostRes;		//External hosts resource
+	vector<ExtHost> extHostLs;	//External hosts list
+	time_t	extHostLoad;		//Last hosts loading
 };
 
 }

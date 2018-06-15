@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 18:58+0300\n"
+"POT-Creation-Date: 2018-06-15 22:42+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,15 +27,15 @@ msgid "BD module. Provides support of the BD SQLite."
 msgstr ""
 
 #, c-format
-msgid "Delete bd error: %s"
+msgid "Error deleting DB: %s"
 msgstr ""
 
 #, c-format
-msgid "Open DB file error: %s"
+msgid "Error opening DB file: %s"
 msgstr ""
 
 #, c-format
-msgid "Error open table '%s'. DB is disabled."
+msgid "Error opening the table '%s'. DB is disabled."
 msgstr ""
 
 #, c-format
@@ -46,15 +46,15 @@ msgid "Unknown error"
 msgstr ""
 
 #, c-format
-msgid "Request \"%s\" error: %s(%d)"
+msgid "Error of the request \"%s\": %s(%d)"
 msgstr ""
 
 msgid ""
 "SQLite DB address must be written as: \"{FileDBPath}\".\n"
 "Where:\n"
 "  FileDBPath - full path to DB file (./oscada/Main.db).\n"
-"               Use empty path for a private, temporary on-disk database create.\n"
-"               Use \":memory:\" for a private, temporary in-memory database create."
+"               Use the empty path to create a temporary database on the disk.\n"
+"               Use \":memory:\" to create a temporary database in memory."
 msgstr ""
 
 msgid "Close opened transaction"

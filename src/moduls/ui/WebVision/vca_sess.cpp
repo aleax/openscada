@@ -182,7 +182,7 @@ void VCASess::getReq( SSess &ses )
 	    ses.page = resGet(prmEl->second, ses.url, ses, &mime);
 	    mod->imgConvert(ses);
 	    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+mime);
-	} else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource isn't found"))+"</div>\n", "404 Not Found");
+	} else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource not found"))+"</div>\n", "404 Not Found");
     }
     //Request to the primitive object. Used for data caching
     else if(wp_com == "obj") {
@@ -221,7 +221,7 @@ void VCASess::postReq( SSess &ses )
     }
     else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().postReq(ses);
 
-    ses.page = mod->pgCreator(ses.prt, string("<div class='error'>")+_("No a content.")+"</div>\n", "204 No Content");
+    ses.page = mod->pgCreator(ses.prt, string("<div class='error'>")+_("Content is missing.")+"</div>\n", "204 No Content");
     //ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/html;charset="+Mess->charset());
 }
 
@@ -321,7 +321,7 @@ void VCAFormEl::getReq( SSess &ses )
 	req.childAdd("el")->setAttr("id","value")->setText("");
 	mod->cntrIfCmd(req, ses);
     }
-    else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource isn't found"))+"</div>\n", "404 Not Found");
+    else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource not found"))+"</div>\n", "404 Not Found");
 }
 
 void VCAFormEl::postReq( SSess &ses )
@@ -3985,7 +3985,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 
 		    }
 		}
-		else mess_debug(nodePath().c_str(),_("At least one of the elementary figures from each the 'fill' consists of is out of drawing area."));
+		else mess_debug(nodePath().c_str(),_("At least one of the elementary figures, of which 'fill' is forming, is outside the boundary of the display area."));
 	    }
 	if( (int)rRnd( clickPnt.x, POS_PREC_DIG, true ) == -1 && (int)rRnd( clickPnt.y, POS_PREC_DIG, true ) == -1 )
 	{
@@ -4740,7 +4740,7 @@ void VCAText::getReq( SSess &ses )
 	    else if(alignHor == 4) offsetX = 0;
 	    int realY = hgt_wrap[k] - offsetY + y_new;
 	    char *rez = gdImageStringFTEx(im_txt, &brect[0], clr_txt, (char*)textFont.c_str(), txtFontSize, 0, offsetX, realY, (char*)str_wrap[k].c_str(), &strex);
-	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTex for font '%s' error: %s."),textFont.c_str(),rez);
+	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx: error for the font '%s': %s."),textFont.c_str(),rez);
 	    else {
 		int wdt = bold ? (int)rRnd(txtFontSize/6,POS_PREC_DIG,true) : (int)rRnd(txtFontSize/12,POS_PREC_DIG,true);
 		gdImageSetThickness(im_txt, wdt);
@@ -4975,7 +4975,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    clrMrk = TWEB::colorResolve(im, sclMarkColor);
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,(char*)"000000", &strex);
-	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
+	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx: error for the font '%s': %s."),sclMarkFont.c_str(),rez);
 	    else { mrkHeight = brect[3]-brect[7]; mrkWidth = brect[2]-brect[6]; }
 	    if(sclHor & FD_MARKS) {
 		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(FD_MARKS);
@@ -5378,13 +5378,13 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     }
 
     if(mess_lev() == TMess::Debug)
-	mess_debug(nodePath().c_str(), _("Trend creation time %gms"), 1e-3*(TSYS::curTime()-dbTm));
+	mess_debug(nodePath().c_str(), _("Creating time of the trend %gms"), 1e-3*(TSYS::curTime()-dbTm));
 
     //Get image and transfer it
     makeImgPng(ses, im);
 
     if(mess_lev() == TMess::Debug)
-	mess_debug(nodePath().c_str(), _("+ PNG-image(%d) creation time %gms"), ses.page.size(), 1e-3*(TSYS::curTime()-dbTm));
+	mess_debug(nodePath().c_str(), _("+ Creating time of the PNG-image(%d) %gms"), ses.page.size(), 1e-3*(TSYS::curTime()-dbTm));
 }
 
 void VCADiagram::makeSpectrumPicture( SSess &ses )
@@ -5446,7 +5446,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    clrMrk = TWEB::colorResolve(im, sclMarkColor);
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000", &strex);
-	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
+	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx: error for the font '%s': %s."),sclMarkFont.c_str(),rez);
 	    else { mrkHeight = brect[3]-brect[7]; mrkWidth = brect[2]-brect[6]; }
 	    if(sclHor&FD_MARKS) {
 		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(FD_MARKS);
@@ -5791,7 +5791,7 @@ void VCADiagram::makeXYPicture( SSess &ses )
 	    clrMrk = TWEB::colorResolve(im, sclMarkColor);
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000", &strex);
-	    if(rez) mess_err(nodePath().c_str(), _("gdImageStringFTEx for font '%s' error: %s."), sclMarkFont.c_str(), rez);
+	    if(rez) mess_err(nodePath().c_str(), _("gdImageStringFTEx: error for the font '%s': %s."), sclMarkFont.c_str(), rez);
 	    else { mrkHeight = brect[3] - brect[7]; mrkWidth = brect[2] - brect[6]; }
 	    if(sclHor&FD_MARKS) {
 		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(FD_MARKS);
@@ -6263,13 +6263,13 @@ void VCADiagram::makeXYPicture( SSess &ses )
     }
 
     if(mess_lev() == TMess::Debug)
-	mess_debug(nodePath().c_str(), _("Trend creation time %gms"), 1e-3*(TSYS::curTime()-dbTm));
+	mess_debug(nodePath().c_str(), _("Creating time of the trend %gms"), 1e-3*(TSYS::curTime()-dbTm));
 
     //Get image and transfer it
     makeImgPng(ses, im);
 
     if(mess_lev() == TMess::Debug)
-	mess_debug(nodePath().c_str(), _("+ PNG-image(%d) creation time %gms"), ses.page.size(), 1e-3*(TSYS::curTime()-dbTm));
+	mess_debug(nodePath().c_str(), _("+ Creating time of the PNG-image(%d) %gms"), ses.page.size(), 1e-3*(TSYS::curTime()-dbTm));
 }
 
 void VCADiagram::postReq( SSess &ses )
@@ -6767,7 +6767,7 @@ void VCADocument::setAttrs( XMLNode &node, const SSess &ses )
 		    reqEl->setText(xproc.save(XMLNode::Clean, Mess->charset()));
 		}
 		catch(TError &err)
-		{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),path().c_str(),err.mess.c_str()); }
+		{ mess_err(mod->nodePath().c_str(),_("Error parsing the document '%s': %s"),path().c_str(),err.mess.c_str()); }
 		break;
 	    }
 	}
