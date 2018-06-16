@@ -43,10 +43,8 @@ class TestSOAttach : public TFunction
 	string name( )	{ return _("Attach SO"); }
 	string descr( )	{ return _("Test attach/detach module."); }
 
-	void calc( TValFunc *val )
-	{
-	    try
-	    {
+	void calc( TValFunc *val ) {
+	    try {
 		mod->mess(id(),_("Test: Start"));
 
 		SYS->modSchedul();
@@ -54,19 +52,17 @@ class TestSOAttach : public TFunction
 		TModSchedul::SHD so_st = SYS->modSchedul().at().lib(SO_name);
 		if(val->getI(2) > 0)		SYS->modSchedul().at().libAtt(so_st.name, val->getB(3));
 		else if(val->getI(2) < 0)	SYS->modSchedul().at().libDet(so_st.name);
-		else
-		{
+		else {
 		    if(so_st.hd) SYS->modSchedul().at().libDet(so_st.name);
 		    else SYS->modSchedul().at().libAtt(so_st.name, val->getB(3));
 		}
 
-		mod->mess(id(),_("Test: Passed"));
-		val->setS(0,_("Passed"));
+		mod->mess(id(), _("Test: Passed"));
+		val->setS(0, _("Passed"));
 	    }
-	    catch( TError err )
-	    {
-		mod->mess(id(),_("Test: Failed: %s"),err.mess.c_str());
-		val->setS(0,TSYS::strMess(_("Failed: %s"),err.mess.c_str()));
+	    catch( TError err ) {
+		mod->mess(id(), _("Test: Failed: %s"),err.mess.c_str());
+		val->setS(0, TSYS::strMess(_("Failed: %s"),err.mess.c_str()));
 	    }
 	}
 };

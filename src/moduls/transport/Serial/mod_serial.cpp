@@ -51,7 +51,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.12.0"
+#define MOD_VER		"1.12.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -571,7 +571,7 @@ void *TTrIn::Task( void *tr_in )
 	    }
 	} catch(TError &err) {
 	    mess_err(tr->nodePath().c_str(),"%s",err.mess.c_str() );
-	    mess_err(tr->nodePath().c_str(),_("Error request to protocol."));
+	    mess_err(tr->nodePath().c_str(),_("Error requesting the protocol."));
 	}
 
 	//Send respond
@@ -632,12 +632,16 @@ void *TTrIn::Task( void *tr_in )
     }
 
     //Close protocol
-    if(!prot_in.freeStat()) {
-	string n_pr = prot_in.at().name();
-	AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
-	prot_in.free();
-	proto.at().close(n_pr);
-    }
+    if(!prot_in.freeStat())
+	try {
+	    string n_pr = prot_in.at().name();
+	    AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
+	    prot_in.free();
+	    proto.at().close(n_pr);
+	} catch(TError &err) {
+	    mess_err(tr->nodePath().c_str(), "%s", err.mess.c_str() );
+	    mess_err(tr->nodePath().c_str(), _("Error closing the protocol."));
+	}
 
     tr->runSt = false;
 

@@ -682,6 +682,12 @@ CfgTable::CfgTable( QWidget *parent ) : QTableWidget(parent)
 #endif*/
 }
 
+QSize CfgTable::sizeHint( ) const
+{
+    int rows = property("rows").toInt();
+    return QSize(QTableWidget::sizeHint().width(), rows?QFontMetrics(font()).height()*rows+1:QTableWidget::sizeHint().height());
+}
+
 void CfgTable::resizeRowsToContentsLim( )
 {
     QTableView::resizeRowsToContents();

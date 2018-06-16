@@ -1066,7 +1066,7 @@ TCntrNode &TMArchivator::operator=( const TCntrNode &node )
     cfg("MODUL").setS(owner().modId());
     mDB = src_n->mDB;
 
-    //if(src_n->startStat() && toStart() && !startStat())	start();
+    //if(src_n->startStat() && toStart() && !startStat()) start();
 
     return *this;
 }

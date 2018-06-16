@@ -11,12 +11,13 @@
   <style type='text/css'>
     hr { width: 95%; }
     body { background-color: #B0B0B0; margin: 0px; }
+    button { border-width: 2px; }
     h1.head { text-align: center; color: #ffff00; }
     h2.title { text-align: center; font-style: italic; margin: 0px; padding: 0px; border-width: 0; }
     table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px; }
     table.work td { background-color: #cccccc; text-align: left; }
     table.work td.content { padding: 5px; padding-bottom: 20px; }
-    //table.work td.content td { text-align: center; }
+    /*table.work td.content td { text-align: center; }*/
     table.work td.content img { vertical-align: middle; padding-right: 5px; }
     table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }
     .vertalign { display: table-cell; text-align: center; vertical-align: middle; }
@@ -27,7 +28,8 @@
     table.prot td.hd { background-color: #E6E6E6; font-weight: bold; text-align: center; }
     #gen-pnl-dlg { position: absolute; font-size: 12px; z-index: 9999; background-color: #8FA9FF; border: 1px solid darkblue; box-shadow: 10px 10px 5px rgba(68,68,68,0.6); }
     #gen-pnl-dlg tr.hd { font-size: 12pt; cursor: move; background: linear-gradient(#8FA9FF, #6F89DF, #8FA9FF); }
-    #gen-pnl-status { position: absolute; left: 0px; overflow: hidden; border-top: 1px solid darkblue; margin-left: 5px; }
+    #gen-pnl-status { position: absolute; left: 0px; overflow: hidden; border-top: 1px solid darkblue; }
+    #gen-pnl-status td { padding-left: 5px; padding-right: 5px; text-align: left; }
     #st_user { border-left: 1px solid black; padding-left: 2px; white-space: nowrap; }
     #popupmenu { position: absolute; border: 0; width: 150px; height: 150px; overflow : auto; z-index: 1000; }
     #popupmenu select { background-color: #E6E6E6; border: 1px solid black; padding: 1px; width: auto; }
@@ -57,7 +59,7 @@
     div.FormEl.Table table td * { vertical-align: middle; }
     div.FormEl.Table table td input { font: inherit; }
     div.FormEl.Table.active th, div.FormEl.Table.active td { cursor: pointer; }
-    //div.FormEl.Table table td img { float: left; margin-right: 3px; }
+    /*div.FormEl.Table table td img { float: left; margin-right: 3px; }*/
     div.ItemsTree ul { background-color: white; list-style-image: none; list-style-position: outside; list-style-type: none; background-repeat: repeat-y; background-attachment: scroll; background-position: left top; margin: 0; white-space: nowrap; }
     div.ItemsTree > ul { padding: 0; }
     div.ItemsTree > ul ul { padding: 0 0 0 17px; }
@@ -66,7 +68,7 @@
     div.ItemsTree li.selectable { font-style: normal; }
     div.ItemsTree li.select { background-color: #BDEBED; }
     div.ItemsTree.active li.expandable img, div.ItemsTree.active li.selectable span { cursor: pointer; }
-    //div.ItemsTree li.select span { cursor: pointer; }
+    /*div.ItemsTree li.select span { cursor: pointer; }*/
     div.Media { position: absolute; border-style: solid; overflow: hidden; }
     div.Media img { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; }
 }

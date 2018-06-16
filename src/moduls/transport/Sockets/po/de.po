@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-05 11:45+0300\n"
+"POT-Creation-Date: 2018-06-16 16:15+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -97,8 +97,16 @@ msgid "Read datagram %s from '%s'!"
 msgstr "Lesen Datagramm %s aus '%s'!"
 
 #, c-format
+msgid "%d:Received from '%s'\n"
+msgstr "%d:Empfangen von '%s'\n"
+
+#, c-format
 msgid "Wrote datagram %s to '%s'!"
 msgstr "Schrieb Datagramm %s auf '%s'!"
+
+#, c-format
+msgid "%d:Transmitted to '%s'\n"
+msgstr "%d:Übertragen in '%s'\n"
 
 msgid " stopping client tasks ..."
 msgstr " Client-Aufgaben stoppen ..."
@@ -116,10 +124,6 @@ msgid "Read message %s from '%s'."
 msgstr "Nachricht lesen %s aus '%s'."
 
 #, c-format
-msgid "%d:Received from '%s'\n"
-msgstr "%d:Empfangen von '%s'\n"
-
-#, c-format
 msgid "Wrote message %s to '%s'."
 msgstr "Schrieb Nachricht %s auf '%s'."
 
@@ -133,10 +137,6 @@ msgstr "Schreiben: Fehler '%s (%d)'!"
 #, c-format
 msgid "Transmitting error: %s"
 msgstr "Übertragungsfehler: %s"
-
-#, c-format
-msgid "%d:Transmitted to '%s'\n"
-msgstr "%d:Übertragen in '%s'\n"
 
 #, c-format
 msgid "Has been disconnected by '%s'!"

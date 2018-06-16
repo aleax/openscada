@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfgD 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-28 10:04+0200\n"
+"POT-Creation-Date: 2018-06-12 16:45+0300\n"
 "PO-Revision-Date: 2008-12-15 15:28+0200\n"
 "Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
 "Language-Team: <de@li.org>\n"
@@ -23,11 +23,11 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript "
-"technology."
+"Provides the WEB-based configurator of OpenSCADA. The technologies are used: "
+"XHTML, CSS and JavaScript."
 msgstr ""
-"Gewährt den dynamischen WEB begründeten Configurator. Benutzt XHTML, CSS und "
-"JavaScript Technologien."
+"Bietet den WEB-basierten Konfigurator von OpenSCADA. Die Technologien werden "
+"verwendet: XHTML, CSS und JavaScript."
 
 msgid "Manual"
 msgstr "Handbuch"
@@ -47,35 +47,35 @@ msgstr "Speichern"
 msgid "Up"
 msgstr "Eine Stufe höher"
 
-msgid "Previous"
-msgstr "Vorig"
+msgid "Back"
+msgstr "Zurück"
 
-msgid "Next"
-msgstr "Nächst"
+msgid "Forward"
+msgstr "Nach vorne"
 
 msgid "Add item"
-msgstr "Das Element addieren"
+msgstr "Hinzufügen Elements"
 
 msgid "Delete item"
-msgstr "Das Element löschen"
+msgstr "Löschen Elements"
 
 msgid "Copy item"
-msgstr "Das Element kopieren"
+msgstr "Kopieren Elements"
 
 msgid "Cut item"
-msgstr "Das Element ausschneiden"
+msgstr "Schneide Elements"
 
 msgid "Paste item"
-msgstr "Das Element einsetzen"
+msgstr "Fügen Elements"
 
-msgid "Reload item and tree"
-msgstr "Das Element und den Baum umladen"
+msgid "Refresh the item and tree"
+msgstr "Aktualisieren Sie den Artikel und Baum"
 
-msgid "Start periodic update"
-msgstr "Periodisches Update starten"
+msgid "Start the cycled refreshing"
+msgstr "Starten Sie die zyklische Aktualisierung"
 
-msgid "Stop periodic update"
-msgstr "Periodisches Update stoppen"
+msgid "Stop the cycled refreshing"
+msgstr "Stoppen Sie die zyklische Aktualisierung"
 
 msgid "Ready"
 msgstr "Fertig"
@@ -101,17 +101,17 @@ msgstr "Item nach oben"
 msgid "Item down"
 msgstr "Item nach unten"
 
-msgid "Add new element."
-msgstr "Das neue Element addieren."
+msgid "Adding an element."
+msgstr "Hinzufügen eines Elements."
 
-msgid "Insert new element."
-msgstr "Das neue Element einsetzen."
+msgid "Inserting an element."
+msgstr "Einfügen eines Elements."
 
-msgid "Rename element."
-msgstr "Benennen Element."
+msgid "Renaming the element."
+msgstr "Umbenennen des Elements."
 
-msgid "Select image file for download to picture field."
-msgstr "Die Imagedatei für das Laden ins Imagefeld wählen."
+msgid "Selecting an image file for download to the picture field."
+msgstr "Auswählen einer Bilddatei zum Download auf das Bildfeld."
 
 msgid "Add row"
 msgstr "Die Zeile addieren"
@@ -128,17 +128,17 @@ msgstr "Zeile nach oben"
 msgid "Down row"
 msgstr "Zeile nach unten"
 
-msgid "No one editable container present."
-msgstr "Es gibt keinen redigierenden Container."
+msgid "There is no container for editing."
+msgstr "Es gibt keinen Container zum Bearbeiten."
 
-msgid "Add item to node '%1'."
-msgstr "Das Element wird in den Knoten '%1' addiert."
+msgid "Adding an item to the node '%1'."
+msgstr "Hinzufügen eines Elements zum Knoten '%1'."
 
-msgid "Item '%1' already present."
-msgstr "Das Element '%1' ist schon vorhanden."
+msgid "Item '%1' already exists."
+msgstr "Artikel '%1' existiert bereits."
 
-msgid "You sure for delete node '%1'?"
-msgstr "Wollen Sie wirklich den Knoten '%1' löschen?"
+msgid "Are you sure you want to remove the node '%1'?"
+msgstr "Möchten Sie den Knoten '%1' wirklich entfernen?"
 
 msgid "Copy is impossible."
 msgstr "Kopierung ist unmöglich."
@@ -170,19 +170,19 @@ msgstr "Schliessen"
 msgid "Page loaded."
 msgstr "Die Seite ist geladet."
 
-msgid "Node id and/or name select"
-msgstr "Auswahl des Bezeichners und/oder des Namens"
+msgid "Selecting node id and/or name"
+msgstr "Auswahl der Knoten-ID und/oder des Namens"
 
-msgid "Item name set"
-msgstr "Installieren des Elementsnamen"
+msgid "Setting item name"
+msgstr "Einstellungselementname"
 
-msgid "Image set"
-msgstr "Bild gesetzt"
+msgid "Setting an image"
+msgstr "Ein Bild einstellen"
 
-msgid "Add node"
-msgstr "Knoten hinzufügen"
+msgid "Adding a node"
+msgstr "Hinzufügen eines Knotens"
 
-msgid "Move or copy node"
+msgid "Moving or copying the node"
 msgstr "Verschieben oder Kopieren des Knotens"
 
 msgid "Name: "
@@ -205,24 +205,18 @@ msgid "Unknown command: %s."
 msgstr "Unbekanntes Kommando: %s."
 
 #, c-format
-msgid "Call page/widget '%s' command '%s'!"
-msgstr "Rufen Seite/Widget '%s' Befehl '%s'!"
+msgid "The page/widget '%s' calling command '%s'!"
+msgstr "Die Seite / das Widget '%s' ruft den Befehl '%s' auf!"
 
 #, c-format
-msgid "Page '%s' error: %s"
-msgstr "Seite '%s' Fehler: %s"
+msgid "Error the page '%s': %s"
+msgstr "Fehler bei der Seite '%s': %s"
 
-msgid "No a content."
+msgid "No content."
 msgstr "Kein Inhalt."
 
 msgid "Module options"
 msgstr "Optionen des Moduls"
 
-msgid "Go to remote stations list configuration"
-msgstr "Zur Konfiguration der Liste von entfernten Stationen übergehen"
-
-msgid "Dynamic WEB configurator"
-msgstr "Dynamischer WEB Configurator"
-
-#~ msgid "OpenSCADA. Dynamic WEB configurator"
-#~ msgstr "OpenSCADA. Dynamischer WEB Configurator"
+msgid "Go to the configuration of the remote stations list"
+msgstr "Wechseln Sie zur Konfiguration der Liste der entfernten Stationen"

@@ -1,3 +1,21 @@
+2018-06-16 Roman 0.8.20
+- FIX:SYS: The function TMess::codeConv() prevented from error messages due a recursion at wrong codepage.
+    !!!:DB.SQLite,DAQ.BFN,Protocol.HTTP,UI.{WebCfgD,WebVision}: Revised for all original messages.
+    TCntrNode: Changed for using the definition STD_WAIT_TM(10) instead DEF_TIMEOUT(2) and DEF_TIMEOUT_EXIT(60).
+	chldDel() prevented from exceptions in the mode DoDisable.
+    TFunction,TPrmTmpl,DAQ.JavaLikeCalc.FLib: Some control interface properties (ID, NAME, DESCR) set to relation with the DB configuration.
+    TFunction,TPrmTmpl,UI.QTCfg: The control field "rows" of the control interface expanded for true processing, as a hint.
+- FIX:DB: Fixed for reloading databases at the configuration file reload.
+- Transports:
+    The external hosts of OpenSCADA prevented from changing the modification time and reconnections at the loading.
+    !!:FIX:{Sockets,SSL,Serial}: Preventing, by processing, the executions at closing the input protocol.
+    Sockets: Appended by the IO log for UDP requests.
+-UI:
+    FIX:{QTCfg,Vision}: Fixed for crashes at the module detaching.
+    !:FIX:QTCfg: Fixed for crashes at going to in the list by double-click.
+    FIX:WebVision: Header of the protocol table set to hidden at its disabling.
+
+
 2018-06-06 Roman 0.8.20
 - API:
     !!!!:Changes:

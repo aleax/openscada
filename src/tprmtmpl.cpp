@@ -250,16 +250,14 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/tmpl/cfg",_("Configuration")))
 	    {
-		ctrMkNode("fld",opt,-1,"/tmpl/cfg/id",_("Identifier"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/tmpl/cfg/name",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
-		ctrMkNode("fld",opt,-1,"/tmpl/cfg/descr",_("Description"),RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","4");
-		ctrMkNode("fld",opt,-1,"/tmpl/cfg/m_calc_tm",_("Maximum calculate time, seconds"),(startStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
+		ctrMkNode("fld",opt,-1,"/tmpl/cfg/ID",_("Identifier"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/tmpl/cfg/NAME",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
+		ctrMkNode("fld",opt,-1,"/tmpl/cfg/DESCR",_("Description"),RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","4");
+		ctrMkNode("fld",opt,-1,"/tmpl/cfg/MAXCALCTM",_("Maximum calculate time, seconds"),(startStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
 	    }
 	}
-	if(ctrMkNode("area",opt,-1,"/io",_("IO")))
-	{
-	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del,ins,move","rows","15"))
-	    {
+	if(ctrMkNode("area",opt,-1,"/io",_("IO"))) {
+	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del,ins,move","rows","5")) {
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
@@ -290,19 +288,16 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setStart(s2i(opt->text()));
     }
     else if(a_path == "/tmpl/st/use" && ctrChkNode(opt))	opt->setText(i2s(startStat()?func().at().use():0));
-    else if(a_path == "/tmpl/cfg/id" && ctrChkNode(opt))	opt->setText(id());
-    else if(a_path == "/tmpl/cfg/name")
-    {
+    else if(a_path == "/tmpl/cfg/ID" && ctrChkNode(opt))	opt->setText(id());
+    else if(a_path == "/tmpl/cfg/NAME") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(name());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
     }
-    else if(a_path == "/tmpl/cfg/descr")
-    {
+    else if(a_path == "/tmpl/cfg/DESCR") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
     }
-    else if(a_path == "/tmpl/cfg/m_calc_tm")
-    {
+    else if(a_path == "/tmpl/cfg/MAXCALCTM") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(maxCalcTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setMaxCalcTm(s2i(opt->text()));
     }
@@ -795,9 +790,9 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration")))
 	    {
-		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Identifier"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
-		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","3");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/ID",_("Identifier"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/lib/cfg/NAME",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
+		ctrMkNode("fld",opt,-1,"/lib/cfg/DESCR",_("Description"),RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","3");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/tmpl",_("Parameter templates")))
@@ -818,14 +813,12 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(fullDB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setFullDB(opt->text());
     }
-    else if(a_path == "/lib/cfg/id" && ctrChkNode(opt))		opt->setText(id());
-    else if(a_path == "/lib/cfg/name")
-    {
+    else if(a_path == "/lib/cfg/ID" && ctrChkNode(opt))		opt->setText(id());
+    else if(a_path == "/lib/cfg/NAME") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(name());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
     }
-    else if(a_path == "/lib/cfg/descr")
-    {
+    else if(a_path == "/lib/cfg/DESCR") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
     }

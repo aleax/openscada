@@ -451,6 +451,9 @@ ConfApp::~ConfApp( )
 	mess_err(mod->nodePath().c_str(), _("Configurator using the remote host %d times."), inHostReq);
     for(map<string, SCADAHost*>::iterator iH = hosts.begin(); iH != hosts.end(); ++iH) delete iH->second;
     hosts.clear();
+
+    // Push down all Qt events of the window to free the module
+    for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();
 }
 
 void ConfApp::quitSt( )
@@ -968,17 +971,20 @@ void ConfApp::selectItem( )
     }
 }
 
-void ConfApp::selectPage( const string &path )
+void ConfApp::selectPage( const string &path, int tm )
 {
     try
     {
 	//Prev and next
-	if(selPath.size())		prev.insert(prev.begin(),selPath);
+	if(selPath.size())		prev.insert(prev.begin(), selPath);
 	if((int)prev.size() >= queSz)	prev.pop_back();
 	next.clear();
 
 	//Display page
-	pageDisplay(path);
+	if(tm > 0) {
+	    selPath = path;
+	    pageRefresh(tm);
+	} else pageDisplay(path);
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
@@ -1227,6 +1233,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    }
 
 	    //  Fill the table
+	    tbl->setProperty("rows", s2i(t_s.attr("rows")));
 	    mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, tbl);
 	    XMLNode req("get"); req.setAttr("path",br_path);
 	    if((rez=cntrIfCmd(req)) > 0) mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
@@ -2400,7 +2407,7 @@ void ConfApp::initHosts( )
     SYS->transport().at().extHostList(wUser->user().toStdString(), stls);
     stls.insert(stls.begin(), TTransportS::ExtHost("",SYS->id()));
 
-    //Remove no present hosts
+    //Remove for not present hosts
     for(unsigned iTop = 0, iH; iTop < (unsigned)CtrTree->topLevelItemCount(); ) {
 	for(iH = 0; iH < stls.size(); iH++)
 	    if(stls[iH].id == TSYS::pathLev(CtrTree->topLevelItem(iTop)->text(2).toStdString(),0))
@@ -3001,9 +3008,9 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
 	    }
 	if(!sel_ok) throw TError(mod->nodePath().c_str(), _("Selective element '%s' is missing!"), item->text().toStdString().c_str());
 
-	selectPage(path);
+	selectPage(path, CH_REFR_TM);
 	//selPath = path;
-	pageRefresh(CH_REFR_TM);
+	//pageRefresh(CH_REFR_TM);
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 

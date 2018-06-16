@@ -2249,11 +2249,11 @@ TCntrNode &TVArchivator::operator=( const TCntrNode &node )
     const TVArchivator *src_n = dynamic_cast<const TVArchivator*>(&node);
     if( !src_n ) return *this;
 
-    //> Configuration copy
+    //Configuration copy
     exclCopy(*src_n, "ID;ADDR;START;");
     mDB = src_n->mDB;
 
-    //if(src_n->startStat() && toStart() && !startStat())	start( );
+    //if(src_n->startStat() && toStart() && !startStat()) start();
 
     return *this;
 }
