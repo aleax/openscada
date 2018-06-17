@@ -1,3 +1,9 @@
+openscada (0.9.0-1) experimental; urgency=low
+
+  * Release of OpenSCADA 0.9 LTS.
+
+ -- OpenSCADA <oscada@oscada.org>  Sun, 17 Jun 2018 20:00:00 +0200
+
 openscada (0.9-1) experimental; urgency=low
 
   * Work version scheme naming 0.9+rNNNN, sets by the AutoBuilder or manual.
