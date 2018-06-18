@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Документы/Релиз 0.9/Обновление 0.8.0 LTS - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Документы/Релиз 0.9/Обновление 0.8.0 LTS</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FRelease+0.9%2FUpdating+0.8.0+LTS&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Release_0.9/Updating_0.8.0_LTS" title="Documents/Release 0.9/Updating 0.8.0 LTS">Documents/Release 0.9/Updating 0.8.0 LTS</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Release_0.9/Updating_0.8.0_LTS" title="Documents/Release 0.9/Updating 0.8.0 LTS (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Release_0.9/Updating_0.8.0_LTS/uk" title="Документи/Реліз 0.9/Оновлення 0.8.0 LTS (100% translated)">українська</a></div></div>
+<p>Основными отличиями версии 0.9 LTS от 0.8.0 LTS являются:
+</p>
+<ol><li> Размещение данных проекта пользователя и отсутствие поддержки и понятия "Проект OpenSCADA" в 0.8.0 LTS.</li>
+<li> Старые БД библиотек в 0.8.0 LTS.</li>
+<li> Наличие ряда модулей, которые в 0.8.0 LTS на ранних версиях и были фактически полностью переписаны в 0.9 LTS, а соответственно, для них полностью отсутствует совместимость:</li></ol>
+<dl><dd><ul><li> <a href="Modules/DiamondBoards.html" title="Special:MyLanguage/Modules/DiamondBoards">DAQ.DiamondBoards</a> — полностью переписан и не является совместимым;</li>
+<li> <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">DAQ.ICP_DAS</a> — полностью переписан и не является совместимым;</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/AMRDevs" title="Special:MyLanguage/Modules/AMRDevs">DAQ.AMRDevs</a> — фактически можно считать новым, поскольку первый, и пока единственный, полноценный источник появился там после выпуска 0.8.0 LTS;</li>
+<li> <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">Archive.DBArch</a> — фактически можно считать новым и актуальным, поскольку его версия, при выпуске 0.8.0 LTS, была малополезной и поэтому обновлена одним из обновлений и сейчас является одинаковой с 0.9 LTS.</li></ul></dd></dl>
+<p>Во всём ином, версия 0.9 LTS может исполнять проекты пользователя версии 0.8.0 LTS и Вы даже можете оставить старые БД библиотек (пункт 2), если использование новых вызывает проблемы или они изменялись. Если Вы использовали что-то из пункта 3 то их конфигурацию нужно будет полностью, или частично заменить. Итак, рассмотрим пункты 1 и 2 этих отличий.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Обновления нужно осуществлять исключительно для конфигураций, которые предварительно были обновлены до последнего обновления 0.8.0 LTS!
+</p><p>Отличие в размещении пользовательских проектов (пункт 1) нужно решать обязательно, поскольку, для запуска проектов пользователя, в 0.8.0 LTS используются индивидуальные сценарии командной строки вроде <b>openscada_AGLKS</b>, <b>openscada_demo</b>, <b>openscada_start</b> и которые отсутствуют в 0.9 LTS или работают несколько по иному.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Разрешение отличия в размещении пользовательских проектов не происходит автоматически и для этого нужно умение пользоваться консолью, а для обновления и запуска "по старому" понадобится доступ суперпользователя.
+</p><p>Если Вы не желаете осуществлять полный перенос своего проекта в отдельный и специальный каталог то, перед обновлением, можно сохранить сценарий запуска проекта и конфигурационный файл, а потом вернуть их назад и продолжить запускать проект пользователя в 0.9 LTS, что в основном будет работать "ПО СТАРОМУ".
+</p><p>Итак, на примере <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">проекта модели ТП "АГЛКС"</a> и сохранив папку "~/.openscada", делаем:
+</p><p><br />
+</p>
+<dl><dt> 1. Подготовка и актуализация текущей конфигурации</dt></dl>
+<ul><li> обновляем OpenSCADA до последнего обновления 0.8.0 LTS, согласно использованному <a href="How_to_Install.html" title="Special:MyLanguage/Documents/How to/Install">способу установки</a>;</li>
+<li> актуализируем проект пользователя, можно пропустить для обновленных конфигураций:</li></ul>
+<dl><dd><ul><li> запускаем проект пользователя;</li>
+<li> запускаем разработку графического окружения;</li>
+<li> меняем рабочую базу данных на какую-то другую, а потом возвращаем её, что приведёт к отметке необходимости сохранения всего проекта;</li>
+<li> сохраняем.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Эта операция может привести к потере конфигурации графического окружения на непоследенй LTS версии.</dd>
+<dt> 1a. [ПО СТАРОМУ] Сохранение сценария запуска и конфигурационного файла, копируя в какую-то временную папку</dt></dl>
+<ul><li> исполняем процедуру:</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px;">
+$ cp /usr/bin/openscada_AGLKS /var/tmp
+$ cp /etc/oscada_AGLKS.xml /var/tmp
+</pre>
+<p><br />
+</p>
+<dl><dt> 2. Обновление OpenSCADA до новой версии 0.9 LTS</dt></dl>
+<ul><li> меняем обычного пользователя на суперпользователя;</li>
+<li> полностью удаляем 0.8.0 LTS, что на дистрибутивах основанных на Debian делается командой:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 30px;">
+$ apt-get purge openscada*
+</pre>
+<ul><li> устанавливаем 0.9 LTS, как пакет "openscada-model-aglks" или другой виртуальный, который больше соответствует Вашему проекту; детали читайте в "<a href="How_to_Install.html" title="Special:MyLanguage/Documents/How to/Install">Как установить</a>".</li></ul>
+<p><br />
+</p>
+<dl><dt> 3. Обновление и восстановление конфигурации</dt></dl>
+<dl><dd><dl><dt> 3a. [ПО СТАРОМУ] Восстановление старого сценария, конфигурации и замена ссылок некоторых каталогов</dt></dl>
+<ul><li> выполняем процедуру:</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px;">
+$ rm /usr/bin/openscada_AGLKS; cp /var/tmp/openscada_AGLKS /usr/bin
+$ cp /var/tmp/oscada_AGLKS.xml /etc
+# Покидаем суперпользователя и осуществляем
+$ ln -sf /usr/share/openscada/icons ~/.openscada/icons
+</pre>
+<dl><dd><dl><dt> 3b. [ПРОЕКТ] Перенос файлов проекта пользователя в отдельный каталог, предварительно покинув суперпользователя</dt></dl>
+<ul><li> вызываем команду обновления, которая делает всё необходимое:</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px;">
+$ openscada-proj update AGLKS
+# Для пользовательского проекта с данными в каталоге "~/.openscada/DATA"
+$ openscada-proj update MyProjectName
+</pre>
+<dl><dd><ul><li> или вручную и если исходная конфигурация очень специфична:</li></ul>
+<dl><dd><ul><li> собираем все файлы проекта в отдельный каталог, в каталоге проектов пользователя OpenSCADA, что типично "~/.openscada"; хотя 0.8.0 LTS не регламентирует и не обязываете так делать, и такая практика уже частично применялась, поэтому там нужно только положить отдельные части проекта:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 60px;">
+$ mv ~/.openscada/ARCHIVES ~/.openscada/AGLKS
+$ ln -s ../LibsDB ~/.openscada/AGLKS/LibsDB
+$ ln -s ./ ~/.openscada/AGLKS/AGLKS
+</pre>
+<dl><dd><dl><dd><ul><li> применяем конфигурационный файл типового проекта OpenSCADA 0.9 LTS, поскольку старый тут не подойдёт да и вся основная конфигурация сохранялась в главной БД:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 60px;">
+$ cp /etc/oscada_start.xml ~/.openscada/AGLKS/oscada.xml
+</pre>
+<dl><dd><dl><dd><ul><li> переименовываем файл главной БД в "St.db", если он не такой, поскольку именно такой записан в конфигурационном файле;</li>
+<li> заменяем старые БД библиотек или можем их оставить если Вы там что-то меняли:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 60px;">
+$ cp -R /usr/share/openscada/LibsDB/*.db ~/.openscada/LibsDB
+</pre>
+<p><br />
+</p>
+<dl><dt> 4. Запуск</dt></dl>
+<ul><li> [ПО СТАРОМУ] запускаем старый сценарий.</li>
+<li> [ПРОЕКТ] запускаем обновленный проект, даже выбором в менеджере проектов.</li></ul>
+<p><br />
+</p>
+<dl><dt> 5. Отличия и желаемые изменения полученного обновления</dt>
+<dd /></dl>
+<ul><li> [ПРОЕКТ] Сократить адрес к локальным <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#CfgDB" title="Special:MyLanguage/Documents/Program manual">файлам БД проекта</a>, который будет иметь вид "./AGLKS/Model.db" и его можно сократить до "Model.db".</li>
+<li> Проект визуализации:</li></ul>
+<dl><dd><ul><li> уведомитель был полностью переписан, поэтому, на главной странице Вашего проекта, нужно предусмотреть <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine#Alarms" title="Special:MyLanguage/Modules/VCAEngine">атрибуты описания желаемых уведомителей</a>, и типовые значения которых можно получить из проекта шаблона, конечно если библиотеки обновлены;</li>
+<li> свойства проекта визуализации, на предмет контроля параметров окна исполнения, в основном вынесены в <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision#SpecAttrs" title="Special:MyLanguage/Modules/Vision">отдельные атрибуты главной страницы</a> и которые, соответственно, и нужно определять.</li></ul></dd></dl>
+
+
+
+
+
+
+</div></body>
+</html>

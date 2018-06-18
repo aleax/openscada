@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<title>Documents/Release 0.9/Updating 0.8.0 LTS - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Documents/Release 0.9/Updating 0.8.0 LTS</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Release_0.9/Updating_0.8.0_LTS/ru" title="Документы/Релиз 0.9/Обновление 0.8.0 LTS (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/Release_0.9/Updating_0.8.0_LTS/uk" title="Документи/Реліз 0.9/Оновлення 0.8.0 LTS (100% translated)">українська</a></div></div>
+<p>Main differences between version 0.9 LTS and 0.8.0 LTS are:
+</p>
+<ol><li> Location of the user project data and the lack of support and the concept "OpenSCADA Project" in 0.8.0 LTS.</li>
+<li> Old DB libraries in 0.8.0 LTS.</li>
+<li> Presence of a number of modules that were earlier versions in 0.8.0 LTS and actually completely rewritten at 0.9 LTS, and therefore they are completely incompatible:</li></ol>
+<dl><dd><ul><li> <a href="Modules/DiamondBoards.html" title="Special:MyLanguage/Modules/DiamondBoards">DAQ.DiamondBoards</a> — completely rewritten and incompatible;</li>
+<li> <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">DAQ.ICP_DAS</a> — completely rewritten and incompatible;</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/AMRDevs" title="Special:MyLanguage/Modules/AMRDevs">DAQ.AMRDevs</a> — in fact, it can be considered new, since the first, but until the only one, a complete source appeared there after release of 0.8.0 LTS;</li>
+<li> <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">Archive.DBArch</a> — in fact, it can be considered new and actual, since its version at release 0.8.0 LTS was little use and therefore updated with one of the updates and is currently the same with 0.9 LTS.</li></ul></dd></dl>
+<p>In all other, version 0.9 LTS can execute user projects of the version 0.8.0 LTS and you can even leave old DB libraries (item 2) if the use of new causes problems or they have changed. If you used something from item 3 then their configuration should be fully or partially modified. So, overview paragraphs 1 and 2 of these differences.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Updates must be made exclusively for configurations that have been previously upgraded to the latest 0.8.0 LTS update!
+</p><p>The difference in the location of user projects (item 1) must be resolved, because for launching user projects, 0.8.0 LTS uses individual command line scripts such as <b>openscada_AGLKS</b>, <b>openscada_demo</b>, <b>openscada_start</b> and that are missing in 0.9 LTS or work somewhat differently.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Resolving the differences in the location of user projects does not occur automatically, for which you need to be able to use the console, and for the upgrade and start-up you will need the superuser access.
+</p><p>If you do not want to completely migrate your project to a separate and special folder you can, before the update, save the project startup script and the configuration file, and then return it and continue to run the user project at 0.9 LTS, which will mostly work "AS BEFORE" .
+</p><p>So, in the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">project model of the "AGLKS" TP</a> example and saving the folder "~/.openscada", we do:
+</p><p><br />
+</p>
+<dl><dt> 1. Preparing and updating the current configuration</dt></dl>
+<ul><li> update OpenSCADA to the latest 0.8.0 LTS update, according to the <a href="How_to_Install.html" title="Special:MyLanguage/Documents/How to/Install">installation method</a>;</li>
+<li> actualize the user project, you can skip for updated configurations:</li></ul>
+<dl><dd><ul><li> start up the user project;</li>
+<li> start up development the graphical environment;</li>
+<li> change the work DB to some other, and then return it, which will mark the need to save the entire project;</li>
+<li> save.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This operation may come in loss of the graphical environment configuration on the not latest LTS version.</dd>
+<dt> 1a. [AS BEFORE] Saving the startup script and configuration file by copying to some temporary folder</dt></dl>
+<ul><li> perform the procedure:</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px;">
+$ cp /usr/bin/openscada_AGLKS /var/tmp
+$ cp /etc/oscada_AGLKS.xml /var/tmp
+</pre>
+<p><br />
+</p>
+<dl><dt> 2. Upgrading OpenSCADA to the new version 0.9 LTS</dt></dl>
+<ul><li> change the ordinal user to the superuser;</li>
+<li> completely remove 0.8.0 LTS, which on Debian based distributions is made by the command:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 30px;">
+$ apt-get purge openscada*
+</pre>
+<ul><li> install 0.9 LTS, as the package "openscada-model-aglks" or other virtual that more suitable to your project; for details, see "<a href="How_to_Install.html" title="Special:MyLanguage/Documents/How to/Install">How to install</a>"</li></ul>
+<p><br />
+</p>
+<dl><dt> 3. Updating and restoring the configuration</dt></dl>
+<dl><dd><dl><dt> 3a. [AS BEFORE] Restoring the old script, configuration and modifying the links of some folders</dt></dl>
+<ul><li> perform the procedure:</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px;">
+$ rm /usr/bin/openscada_AGLKS; cp /var/tmp/openscada_AGLKS /usr/bin
+$ cp /var/tmp/oscada_AGLKS.xml /etc
+# Leave the superuser and perform
+$ ln -sf /usr/share/openscada/icons ~/.openscada/icons
+</pre>
+<dl><dd><dl><dt> 3b. [PROJECT] Transferring files of the user project to a separate folder, having previously left superuser</dt></dl>
+<ul><li> call an update command that does everything you need:</li></ul></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 30px;">
+$ openscada-proj update AGLKS
+# For a user project with data in the folder "~/.openscada/DATA"
+$ openscada-proj update MyProjectName
+</pre>
+<dl><dd><ul><li> or manually and if the initial configuration is very specific:</li></ul>
+<dl><dd><ul><li> gather all the project files into a separate folder, in the OpenSCADA user projects folder which is typically "~/.openscada"; although 0.8.0 LTS does not regulate or mandate doing so, this practice has already been partly applied, so there is only need to put some parts of the project there:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 60px;">
+$ mv ~/.openscada/ARCHIVES ~/.openscada/AGLKS
+$ ln -s ../LibsDB ~/.openscada/AGLKS/LibsDB
+$ ln -s ./ ~/.openscada/AGLKS/AGLKS
+</pre>
+<dl><dd><dl><dd><ul><li> use the configuration file of the typical project of OpenSCADA 0.9 LTS, since the old one does not fit here and all the main configurations are stored in the main database:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 60px;">
+$ cp /etc/oscada_start.xml ~/.openscada/AGLKS/oscada.xml
+</pre>
+<dl><dd><dl><dd><ul><li> rename the main database file in "St.db" if it is not, because it is exactly that written in the configuration file;</li>
+<li> replace old library databases or we can leave them if you have changed something there:</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 60px;">
+$ cp -R /usr/share/openscada/LibsDB/*.db ~/.openscada/LibsDB
+</pre>
+<p><br />
+</p>
+<dl><dt> 4. Starting</dt></dl>
+<ul><li> [AS BEFORE] run the old script.</li>
+<li> [PROJECT] run the updated project, even selecting into the project manager.</li></ul>
+<p><br />
+</p>
+<dl><dt> 5. Differences and desired changes to the received update</dt>
+<dd /></dl>
+<ul><li> [PROJECT] Reduce the address to the local <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#CfgDB" title="Special:MyLanguage/Documents/Program manual">database files of the project</a> that looks like "./AGLKS/Model.db" and can be shortened to "Model.db."</li>
+<li> Project of the visualization:</li></ul>
+<dl><dd><ul><li> the reporter was completely rewritten, therefore on the main page of your project must be foreseen <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/VCAEngine#Alarms" title="Special:MyLanguage/Modules/VCAEngine">attributes of description of desirable reporters</a> and the typical values can be obtained from the template project, of course if the libraries have been updated;</li>
+<li> properties of the visualization project for controlling the parameters of the runtime window are predominantly moved to <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/Vision#SpecAttrs" title="Special:MyLanguage/Modules/Vision">separate attributes of the home page</a> and which, accordingly, need to be defined.</li></ul></dd></dl>
+
+
+
+
+
+
+</div></body>
+</html>

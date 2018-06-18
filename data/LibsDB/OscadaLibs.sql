@@ -281,9 +281,10 @@ INSERT INTO "lib_servProc_io" VALUES('archPackFStests','archiver','Archiver addr
 INSERT INTO "lib_servProc_io" VALUES('wacko2media','ndb','MySQL DB id',0,0,'wiki',0,0,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('wacko2media','wpg','Wiki page',0,0,'HomePageUk/Doc/SQLite',0,1,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('wacko2media','rez','Result',0,6,'',0,2,'','','','');
-INSERT INTO "lib_servProc_io" VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/roman/work/Проекти/OpenSCADA/doc/',0,2,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/roman/work/Проекти/openscada_0.9/doc/',0,2,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('docOffLine','pages','Pages list of "{wiki}:{langs}:{dest}"',0,4,'Documents:en,uk,ru:index.html
 Documents/Release_0.9:en,uk,ru:Release_0.9.html
+Documents/Release_0.9/Updating_0.8.0_LTS:en,uk,ru:Updating_0.8.0.html
 About:en,uk,ru:About.html
 Documents/Terms:en,uk,ru:Terms.html
 Functions_and_demands:en,uk,ru:Functions_and_demands.html
@@ -7619,7 +7620,7 @@ for(var ip in pgsOprc) {
 	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
 }
 
-res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1528952516);
+res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1529292452);
 CREATE TABLE 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library "FLibComplex1" (http://wiki.oscada.org/HomePageEn/Doc/FLibComplex1#h902-15) and the implementation of the PWM for the pulse part.','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" (http://wiki.oscada.org/Doc/FLibComplex1#h91-15) и реализация ШИМ для импульсной части.',1,10,0,'//Call standard analog PID
 outA = Special.FLibComplex1.pid(var,sp,max,min,manIn,auto,casc,Kp,Ti,Kd,Td,Tzd,Hup,Hdwn,Zi,followSp,K1,in1,K2,in2,K3,in3,K4,in4,f_frq,int,dif,lag);
