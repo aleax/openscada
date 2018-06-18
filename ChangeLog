@@ -1,4 +1,5 @@
 2018-06-18 Roman 0.9.0
+- Build: Set ALTLinux repository packages to the name "openscada_LTS".
 - DOC: Updating "To do" and appending "Updating_0.8.0_LTS".
 
 

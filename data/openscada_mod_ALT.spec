@@ -3,7 +3,7 @@ Summary: Open SCADA system
 Summary(ru_RU.UTF8): Открытая SCADA система
 Summary(uk_UA.UTF8): Відкрита SCADA система
 Summary(de_DE.UTF8): Open SCADA-System
-Name: openscada
+Name: openscada_LTS
 Version: 0.9.0
 Release: 1
 Source: openscada-%version.tar.xz
