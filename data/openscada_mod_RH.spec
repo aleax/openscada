@@ -79,7 +79,7 @@
 
 Summary: Open SCADA system
 Name: openscada
-Version: 0.9
+Version: 1+r0000
 Release: 1%{?dist}
 Source0: ftp://oscada.org/OpenSCADA/Work/openscada-%version.tar.xz
 Source1: ftp://oscada.org/OpenSCADA/Work/openscada-res-%version.tar.xz
@@ -1887,6 +1887,9 @@ fi
 %endif
 
 %changelog
+* Sun Jun 17 2018 Roman Savochenko <rom_as@oscada.org>
+- The work branch switched to the version 1+r0000.
+
 * Sat Mar 24 2018 Roman Savochenko <rom_as@oscada.org>
 - The daemon mode init script "openscadad" renamed to "openscada-server", separated to "openscada-plc" and moved to the coresponding package.
 

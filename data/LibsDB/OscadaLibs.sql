@@ -7559,7 +7559,7 @@ for(var ip in pgsOprc) {
 		}
 		passPrev = false;
 		if(chO.name() == "script" || chO.name() == "style" ||
-				(chO.name() == "meta" && chO.attr("name") != "generator") ||
+				(chO.name() == "meta" && chO.attr("name") != "generator" && !chO.attr("charset").length) ||
 				(chO.name() == "link" && chO.attr("rel") != "copyright"))	{
 			head.childDel(iEl);
 			iEl--;

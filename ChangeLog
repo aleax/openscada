@@ -1,3 +1,8 @@
+2018-06-20 Roman (stable)
+- The work branch switched to the version 1+r0000.
+ DOC: Fix all documents for wrong deleting "<meta charset="UTF-8" />", detected on FireFox.
+
+
 2018-06-15 Roman (stable)
 - DOC: The document "Modules/BFN" translated to Ukrainian and revised.
 - DB.OscadaLibs: servProc.releaseTests: Significantly expanded for the tests after their execution before 0.9 LTS.
