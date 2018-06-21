@@ -3,7 +3,7 @@ Summary: Open SCADA system
 Summary(ru_RU.UTF8): Открытая SCADA система
 Summary(uk_UA.UTF8): Відкрита SCADA система
 Summary(de_DE.UTF8): Open SCADA-System
-Name: openscada_LTS
+Name: openscada
 Version: 0.9.0
 Release: 1
 Source: openscada-%version.tar.xz
@@ -1341,7 +1341,7 @@ ln -s `relative %_defaultdocdir/%name-docUK-%version %_datadir/openscada/docs/uk
 
 %files server
 %defattr(-,root,root)
-%config(noreplace) %_sysconfdir/oscada_start.xml
+%config(noreplace) %_sysconfdir/oscada_server.xml
 %config %_initdir/openscada-server
 
 %files visStation
