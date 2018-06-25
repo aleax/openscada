@@ -45,13 +45,14 @@
 <li> <b>openscada-server</b> — шаблонний проект серверу SCADA, що запускається у фоновому режимі — режим демону;</li>
 <li> <b>openscada-plc</b> — шаблонний проект ПЛК, що запускається у фоновому режимі — режим демону;</li>
 <li> <b>openscada</b> — типове-повне встановлення OpenSCADA.</li></ul>
-<p>Встановлення-оновлення з репозиторію є простим, але специфічним для дистрибутиву Linux, віконного менеджеру або окремої програми роботи з репозиторіями та пакетами, тому відішлемо читача до відповідної документації на дистрибутив або програму, які він використовує. Тут-же коротко розглянемо додання репозиторію та встановлення OpenSCADA за допомогою типових інструментів командного рядку:
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> У випадку із <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">дистрибутивом Linux автоматизації</a> та пакетами версії тривалої підтримки (LTS), до основної назви пакетів додається суфікс "-lts" — "openscada-lts", оскільки репозиторій один та він містить пакети обох гілок, робочої та LTS.
+</p><p>Встановлення-оновлення з репозиторію є простим, але специфічним для дистрибутиву Linux, віконного менеджеру або окремої програми роботи з репозиторіями та пакетами, тому відішлемо читача до відповідної документації на дистрибутив або програму, які він використовує. Тут-же коротко розглянемо додання репозиторію та встановлення OpenSCADA за допомогою типових інструментів командного рядку:
 </p><p><b>Репозиторії пакетів, основані на менеджері APT (Debian, Ubuntu, ALTLinux)</b> — додаються розташуванням завантаженого файлу "openscada.list" до теки "/etc/apt/sources.list.d" або редагуванням файлу /etc/apt/sources.list, вставкою одного рядка:<br />
 <i>Debian:</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.9.0/Debian/9" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.9.0/Debian/9</a> ./"<br />
 <i>Debian (робоча версія):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Debian/9" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Debian/9</a> ./"<br />
 <i>Debian (робоча версія, модулі окремо):</i> "deb <a class="external free" href="http://ftp.oscada.org/Debian/9/openscada" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/Debian/9/openscada</a> ./"<br />
-<i>Ubuntu:</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.9.0/Ubuntu/16.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.9.0/Ubuntu/16.04</a> ./"<br />
-<i>Ubuntu (робоча версія):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/16.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/16.04</a> ./"<br />
+<i>Ubuntu:</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.9.0/Ubuntu/18.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.9.0/Ubuntu/18.04</a> ./"<br />
+<i>Ubuntu (робоча версія):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04</a> ./"<br />
 Встановлення:
 </p>
 <pre style="white-space: pre-wrap;">

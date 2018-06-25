@@ -210,7 +210,7 @@ Fuers Starten wird Kommando <openscada_Boiler> benutzt.
 %setup -T -D -a 1 -n %srcname
 
 %build
-%if %_vendor == "redhat" || %_vendor == "Mandriva"
+%if %_vendor == "redhat" || %_vendor == "Mandriva" || %_vendor == "suse"
 autoreconf -ivf
 %endif
 

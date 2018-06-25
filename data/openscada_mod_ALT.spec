@@ -1341,7 +1341,7 @@ ln -s `relative %_defaultdocdir/%name-docUK-%version %_datadir/openscada/docs/uk
 
 %files server
 %defattr(-,root,root)
-%config(noreplace) %_sysconfdir/oscada_start.xml
+%config(noreplace) %_sysconfdir/oscada_server.xml
 %config %_initdir/openscada-server
 
 %files visStation

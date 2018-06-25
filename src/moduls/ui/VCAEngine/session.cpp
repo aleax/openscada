@@ -1934,6 +1934,8 @@ void SessWdg::calc( bool first, bool last, int pos )
 		if(evId >= 0)	setS(evId, wevent);
 
 		// Load the data to the calc area
+		TValFunc::setUser(ownerSess()->reqUser());
+		TValFunc::setLang(ownerSess()->reqLang());
 		setR(SpIO_Frq, 1000.0/(ownerSess()->period()*vmax(calcPer()/ownerSess()->period(),1)));
 		setB(SpIO_Start, first);
 		setB(SpIO_Stop, last);

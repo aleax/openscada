@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.8.0"
+#define MOD_VER		"2.8.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -106,7 +106,9 @@ void MBD::postDisable( int flag )
 
 	    MtxAlloc resource(connRes, true);
 	    if(!mysql_init(&tcon)) throw err_sys(_("Error initializing client."));
-	    tcon.reconnect = 1;
+	    //tcon.reconnect = 1;
+	    bool reconnect = 1;
+	    mysql_options(&tcon, MYSQL_OPT_RECONNECT, &reconnect);
 	    if(!mysql_real_connect(&tcon,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
 		throw err_sys(_("Connect to DB error: %s"), mysql_error(&tcon));
 
@@ -144,13 +146,15 @@ void MBD::enable( )
     off = 0;
     unsigned int tTm;
     if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 1;
-    mysql_options(&connect, MYSQL_OPT_CONNECT_TIMEOUT, (const char*)&tTm);
+    mysql_options(&connect, MYSQL_OPT_CONNECT_TIMEOUT, &tTm);
     if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 1;
-    mysql_options(&connect, MYSQL_OPT_READ_TIMEOUT, (const char*)&tTm);
+    mysql_options(&connect, MYSQL_OPT_READ_TIMEOUT, &tTm);
     if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 1;
-    mysql_options(&connect, MYSQL_OPT_WRITE_TIMEOUT, (const char*)&tTm);
+    mysql_options(&connect, MYSQL_OPT_WRITE_TIMEOUT, &tTm);
 
-    connect.reconnect = 1;
+    //connect.reconnect = 1;
+    bool reconnect = 1;
+    mysql_options(&connect, MYSQL_OPT_RECONNECT, &reconnect);
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
 	throw err_sys(_("Connect to DB error: %s"), mysql_error(&connect));
 

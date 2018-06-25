@@ -147,13 +147,14 @@
 <li> <b>openscada-server</b> — template project of the SCADA server, running in the background — the daemon mode;</li>
 <li> <b>openscada-plc</b> — PLC template project, running in the background — the daemon mode;</li>
 <li> <b>openscada</b> — typical-complete installation of OpenSCADA.</li></ul>
-<p>Installation-update from the repository is simple but specific to the Linux distribution, window manager or a separate program for working with repositories and packages, so we will send the reader to the appropriate documentation for the distribution or program that it uses. Here's a brief look at adding a repository and installing OpenSCADA with standard command line tools:
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> In the case of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive</a> and LTS packages, the suffix "-lts"  is added to the main package name — "openscada-lts", since the repository is one and it contains packages of both branches, Work and LTS.
+</p><p>Installation-update from the repository is simple but specific to the Linux distribution, window manager or a separate program for working with repositories and packages, so we will send the reader to the appropriate documentation for the distribution or program that it uses. Here's a brief look at adding a repository and installing OpenSCADA with standard command line tools:
 </p><p><b>Packages repositories based on the package manager APT (Debian, Ubuntu, ALTLinux)</b> — are added by the location of the downloaded file "openscada.list" to the /etc/apt/sources.list.d folder or by editing the /etc/apt/sources.list file by inserting one line:<br />
 <i>Debian:</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.9.0/Debian/9" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.9.0/Debian/9</a> ./"<br />
 <i>Debian (Work version):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Debian/9" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Debian/9</a> ./"<br />
 <i>Debian (Work version, modules separated):</i> "deb <a class="external free" href="http://ftp.oscada.org/Debian/9/openscada" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/Debian/9/openscada</a> ./"<br />
-<i>Ubuntu:</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.9.0/Ubuntu/16.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.9.0/Ubuntu/16.04</a> ./"<br />
-<i>Ubuntu (Work version):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/16.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/16.04</a> ./"<br />
+<i>Ubuntu:</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.9.0/Ubuntu/18.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.9.0/Ubuntu/18.04</a> ./"<br />
+<i>Ubuntu (Work version):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04</a> ./"<br />
 Installing:
 </p>
 <pre style="white-space: pre-wrap;">

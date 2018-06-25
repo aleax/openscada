@@ -1,6 +1,15 @@
+2018-06-25 Roman (stable)
+- FIX:data/openscada.spec: Fixed for building on SuSE.
+- FIX:data/openscada_mod_ALT.spec: The openscada-server package fixed for including the file oscada_server.xml.
+- DB.MySQL: tcon.reconnect replaced by mysql_options(&tcon, MYSQL_OPT_RECONNECT, ...); to provide building with MariaDB >= 2.4.
+- FIX:Transport.Serial: The extended parameter "reqRetrMult" of the char symbol time of the output transport is fixed in the processing.
+- !:UI.VCAEngine: The runtime procedures of the widgets are enabled for using the actual (for last request) user and language, for dynamic translation.
+- FIX:UI.WebVision: Fixed for hiding the overflowed context in the standard buttons, observed on Chrome.
+
+
 2018-06-20 Roman (stable)
 - The work branch switched to the version 1+r0000.
- DOC: Fix all documents for wrong deleting "<meta charset="UTF-8" />", detected on FireFox.
+- DOC: Fix all documents for wrong deleting "<meta charset="UTF-8" />", detected on FireFox.
 
 
 2018-06-15 Roman (stable)
