@@ -34,9 +34,9 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.8.1"
+#define MOD_VER		"2.9.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("BD module. Provides support of the BD MySQL.")
+#define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
 //************************************************
 
@@ -105,15 +105,15 @@ void MBD::postDisable( int flag )
 	    MYSQL tcon;
 
 	    MtxAlloc resource(connRes, true);
-	    if(!mysql_init(&tcon)) throw err_sys(_("Error initializing client."));
+	    if(!mysql_init(&tcon)) throw err_sys(_("Error initializing."));
 	    //tcon.reconnect = 1;
 	    bool reconnect = 1;
 	    mysql_options(&tcon, MYSQL_OPT_RECONNECT, &reconnect);
 	    if(!mysql_real_connect(&tcon,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
-		throw err_sys(_("Connect to DB error: %s"), mysql_error(&tcon));
+		throw err_sys(_("Error connecting to the DB: %s"), mysql_error(&tcon));
 
 	    string req = "DROP DATABASE `" + bd + "`";
-	    if(mysql_real_query(&tcon,req.c_str(),req.size())) throw err_sys(_("Query to DB error: %s"), mysql_error(&tcon));
+	    if(mysql_real_query(&tcon,req.c_str(),req.size())) throw err_sys(_("Error querying to the DB: %s"), mysql_error(&tcon));
 
 	    mysql_close(&tcon);
 	} catch(TError&) { }
@@ -140,7 +140,7 @@ void MBD::enable( )
     cd_pg  = codePage().size() ? codePage() : Mess->charset();
 
     //API init
-    if(!mysql_init(&connect)) throw err_sys(_("Error initializing client."));
+    if(!mysql_init(&connect)) throw err_sys(_("Error initializing."));
 
     //Timeouts parse
     off = 0;
@@ -156,7 +156,7 @@ void MBD::enable( )
     bool reconnect = 1;
     mysql_options(&connect, MYSQL_OPT_RECONNECT, &reconnect);
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
-	throw err_sys(_("Connect to DB error: %s"), mysql_error(&connect));
+	throw err_sys(_("Error connecting to the DB: %s"), mysql_error(&connect));
 
     TBD::enable();
 
@@ -203,7 +203,7 @@ void MBD::allowList( vector<string> &list ) const
 
 TTable *MBD::openTable( const string &inm, bool create )
 {
-    if(!enableStat()) throw err_sys(_("Error open table '%s'. DB is disabled."), inm.c_str());
+    if(!enableStat()) throw err_sys(_("Error opening the table '%s': the DB is disabled."), inm.c_str());
 
     if(create) sqlReq("CREATE TABLE IF NOT EXISTS `"+TSYS::strEncode(bd,TSYS::SQL)+"`.`"+
 			TSYS::strEncode(inm, TSYS::SQL)+"` (`<<empty>>` char(20) NOT NULL DEFAULT '' PRIMARY KEY)");
@@ -238,7 +238,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	{
 	    resource.unlock();
 	    disable();
-	    throw err_sys(_("Connect to DB error %d: %s"), irez, mysql_error(&connect));
+	    throw err_sys(_("Error connecting to the DB: '%s (%d)'!"), mysql_error(&connect), irez);
 	}
 	if(irez) {
 	    if(mysql_errno(&connect) == ER_NO_DB_ERROR) {
@@ -247,14 +247,14 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 		resource.lock();
 		goto rep;
 	    }
-	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Query '%s' is error."), ireq.c_str());
-	    throw err_sys(_("Query to DB error %d: %s"), irez, mysql_error(&connect));
+	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Error the query '%s'."), ireq.c_str());
+	    throw err_sys(_("Error querying the DB: '%s (%d)'!"), mysql_error(&connect), irez);
 	}
     }
 
     do {
 	if(!(res=mysql_store_result(&connect)) && mysql_field_count(&connect))
-	    throw err_sys(_("Store result error: %s"), mysql_error(&connect));
+	    throw err_sys(_("Error storing the result: %s"), mysql_error(&connect));
 
 	if(res && tbl && tbl->empty()) {	//Process only first statement's result
 	    int num_fields = mysql_num_fields(res);
@@ -317,18 +317,18 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"help",
-	    _("MySQL DB address must be written as: \"{host};{user};{pass};{db};{port}[;{u_sock}[;{charset-collation-engine}[;{tms}]]]\".\n"
+	    _("MySQL DBMS address must be written as: \"{host};{user};{pass};{db};{port}[;{u_sock}[;{charset-collation-engine}[;{tms}]]]\".\n"
 	      "Where:\n"
-	      "  host - MySQL server hostname;\n"
-	      "  user - DB user name;\n"
-	      "  pass - user's password for DB access;\n"
-	      "  db - DB name;\n"
-	      "  port - DB server port (default 3306);\n"
-	      "  u_sock - UNIX-socket name, for local access to DB (/var/lib/mysql/mysql.sock);\n"
+	      "  host - hostname on which the DBMS server MySQL works;\n"
+	      "  user - user name of the DB;\n"
+	      "  pass - password of the user for accessing the DB;\n"
+	      "  db   - name of the DB;\n"
+	      "  port - port, which listening by the DBMS server (default 3306);\n"
+	      "  u_sock - UNIX-socket name, for local accessing to the DBMS (/var/lib/mysql/mysql.sock);\n"
 	      "  charset-collation-engine - DB charset, collation and storage engine for CREATE DATABASE and SET;\n"
-	      "  tms - MySQL timeouts in form \"{connect},{read},{write}\" and in seconds.\n"
-	      "For local DB: \";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8-utf8_general_ci-MyISAM;5,2,2\".\n"
-	      "For remote DB: \"server.nm.org;roman;123456;OpenSCADA;3306\"."));
+	      "  tms - MySQL timeouts in the form \"{connect},{read},{write}\" and in seconds.\n"
+	      "For local DBMS: \";user;password;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8-utf8_general_ci-MyISAM;5,2,2\".\n"
+	      "For remote DBMS: \"server.nm.org;user;password;OpenSCADA;3306\"."));
 	if(reqCnt)
 	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close opened transaction"),RWRW__,"root",SDB_ID);
 	return;
@@ -518,7 +518,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     //Query
     owner().sqlReq(req, &tbl, false);
-    if(tbl.size() < 2) throw err_sys(_("Row \"%s\" is not present. Are you saved the object?"), req_where.c_str());
+    if(tbl.size() < 2) throw err_sys(_("The row \"%s\" is not present. Are you saved the object?"), req_where.c_str());
 
     //Processing of query
     for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {

@@ -496,7 +496,7 @@ TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
     // bool isEVal() - return "false" for EVAL detect
     if(id == "isEVal")	return false;
 
-    throw TError(TSYS::strMess("Obj%s",objName().c_str()).c_str(), _("Error function '%s' or missing parameters for it."), id.c_str());
+    throw TError(TSYS::strMess("Obj%s",objName().c_str()).c_str(), _("Error the function '%s' or missing its parameters."), id.c_str());
 }
 
 //*****************************************************************

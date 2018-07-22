@@ -29,12 +29,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"SelfSystem"
-#define MOD_NAME	_("Self protocol of OpenSCADA")
+#define MOD_NAME	_("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.2.2"
+#define MOD_VER		"1.3.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides self OpenSCADA protocol based at XML and one's control interface.")
+#define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -100,7 +100,7 @@ int TProt::sesOpen( const string &user, const string &pass, const string &src )
 	    ++aI;
 	}
     if((int)i_oCnt > singleUserHostLimit() && aOldI != mAuth.end()) {
-	mess_err(nodePath().c_str(), _("Connections from the user '%s' and the source '%s' reached to limit %d. Erasing spare!"),
+	mess_err(nodePath().c_str(), _("Connections from the user '%s' and the source '%s' reached to the limit %d. Erasing spare!"),
 	    user.c_str(), TSYS::strLine(src,0).c_str(), singleUserHostLimit());
 	mAuth.erase(aOldI);
     }
@@ -194,7 +194,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 		// Wait tail
 		while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A') {
-		    if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf)))) throw TError(nodePath().c_str(),_("Not full respond."));
+		    if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf)))) throw TError(nodePath().c_str(),_("Not full response."));
 		    resp.append(buf, resp_len);
 		}
 
@@ -205,10 +205,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    rez = s2i(TSYS::strParse(header,0," ",&off));
 		    if(rez > 0 || off >= (int)header.size()) {
 			if(rez == atoi(ERR_AUTH)) { io.setAttr("rez",i2s(rez))->setText(header.substr(off)); break; }
-			throw TError(nodePath().c_str(), _("Station '%s' error: %s!"), tro.id().c_str(), header.substr(off).c_str());
+			throw TError(nodePath().c_str(), _("Error the station '%s': %s."), tro.id().c_str(), header.substr(off).c_str());
 		    }
 		    tro.setPrm1(s2i(header.substr(off)));
-		} else throw TError(nodePath().c_str(), _("Station '%s' error: Respond format error!"), tro.id().c_str());
+		} else throw TError(nodePath().c_str(), _("Error the station '%s': error the response format."), tro.id().c_str());
 	    }
 
 	    //Request
@@ -226,18 +226,18 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    // Wait tail
 	    while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A') {
-		if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf)))) throw TError(nodePath().c_str(),_("Not full respond."));
+		if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf)))) throw TError(nodePath().c_str(),_("Not full response."));
 		resp.append(buf, resp_len);
 	    }
 
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ response first %d"), resp.size());
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ first response %d"), resp.size());
 
 	    // Get head
 	    head_end = header.size() + 1;
 	    off = 0;
 	    //header = TSYS::strLine(resp,0,&head_end);
 	    if(header.size() < 5 || TSYS::strParse(header,0," ",&off) != "REZ")
-		throw TError(nodePath().c_str(),_("Station respond '%s' error!"),tro.id().c_str());
+		throw TError(nodePath().c_str(),_("Error the station '%s' response."),tro.id().c_str());
 	    rez = s2i(TSYS::strParse(header,0," ",&off));
 	    if(rez == atoi(ERR_AUTH)) {
 		tro.setPrm1(-1);
@@ -245,7 +245,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		else continue;
 	    }
 	    if(rez > 0 || off >= (int)header.size())
-		throw TError(nodePath().c_str(),_("Station '%s' error: %s!"),tro.id().c_str(),buf+off);
+		throw TError(nodePath().c_str(),_("Error the station '%s': %s."), tro.id().c_str(), buf+off);
 	    int resp_size = s2i(header.substr(off));
 
 	    // Wait tail
@@ -255,7 +255,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		resp.append(buf, resp_len);
 	    }
 
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ response full %d"), resp.size());
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ full response %d"), resp.size());
 
 	    if(resp_size < 0) io.load(TSYS::strUncompr(resp.substr(head_end)), XMLNode::LD_NoTxtSpcRemEnBeg);
 	    else io.load(resp.substr(head_end), XMLNode::LD_NoTxtSpcRemEnBeg);
@@ -263,7 +263,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    return;
 	}
     } catch(TError &err) {
-	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Request error: %s"), err.mess.c_str());
+	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error the request: %s"), err.mess.c_str());
 	tro.stop();
 	throw;
     }
@@ -278,14 +278,14 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,1,"/prm/st",_("State")))
 		ctrMkNode("list",opt,-1,"/prm/st/auths",_("Active authentication sessions"),R_R_R_,"root",SPRT_ID);
 	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
-		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth session(min)"),RWRWR_,"root",SPRT_ID,2,"tp","dec","min","1");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/sUserHostLim",_("Single user and host connections limit"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of the authentication session, minutes"),RWRWR_,"root",SPRT_ID,2,"tp","dec","min","1");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/sUserHostLim",_("Limit of the connections for one user and host"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/compr",_("Compression level"),RWRWR_,"root",SPRT_ID,4,"tp","dec","min","-1","max","9",
 		    "help",_("ZLib compression level:\n"
 			     "  -1  - optimal speed-size;\n"
 			     "  0   - disable;\n"
 			     "  1-9 - direct level."));
-		ctrMkNode("fld",opt,-1,"/prm/cfg/comprBrd",_("Lower compression border"),RWRWR_,"root",SPRT_ID,3,"tp","dec","min","10",
+		ctrMkNode("fld",opt,-1,"/prm/cfg/comprBrd",_("Lower limit of compression"),RWRWR_,"root",SPRT_ID,3,"tp","dec","min","10",
 		    "help",_("Value in bytes."));
 	    }
 	}
@@ -297,7 +297,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/st/auths" && ctrChkNode(opt)) {
 	MtxAlloc res(dataRes(), true);
 	for(map<int,SAuth>::iterator authEl = mAuth.begin(); authEl != mAuth.end(); ++authEl)
-	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s)"),
+	    opt->childAdd("el")->setText(TSYS::strMess("%s %s(%s)",
 		atm2s(authEl->second.tAuth).c_str(),authEl->second.name.c_str(),authEl->second.src.c_str()));
     }
     else if(a_path == "/prm/cfg/lf_tm") {
@@ -350,7 +350,7 @@ bool TProtIn::mess( const string &request, string &answer )
     if(req.compare(0,8,"SES_OPEN") == 0) {
 	sscanf(req.c_str(), "SES_OPEN %255s %255s", user, pass);
 	if((ses_id=mod->sesOpen(user,pass,TSYS::strLine(srcAddr(),0))) < 0)
-	    answer = "REZ " ERR_AUTH " Auth error. User or password error.\x0A";
+	    answer = "REZ " ERR_AUTH " Error authentication: wrong the user or password.\x0A";
 	else answer = "REZ " ERR_NO " " + i2s(ses_id) + "\x0A";
     }
     else if(req.compare(0,9,"SES_CLOSE") == 0) {
@@ -360,7 +360,7 @@ bool TProtIn::mess( const string &request, string &answer )
     }
     else if(req.compare(0,3,"REQ") == 0) {
 	if(mess_lev() == TMess::Debug) {
-	    mess_debug(nodePath().c_str(), _("Get request: '%s': %d, time: %f ms."),
+	    mess_debug(nodePath().c_str(), _("Request received: '%s': %d, time: %g ms."),
 		req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
 	    d_tm = TSYS::curTime();
 	}
@@ -373,7 +373,7 @@ bool TProtIn::mess( const string &request, string &answer )
 	}
 	else { answer = "REZ " ERR_CMD " Command format error.\x0A"; reqBuf.clear(); return false; }
 
-	if(!auth.tAuth) { answer = "REZ " ERR_AUTH " Auth error. Session no valid.\x0A"; reqBuf.clear(); return false; }
+	if(!auth.tAuth) { answer = "REZ " ERR_AUTH " Error authentication: session not valid.\x0A"; reqBuf.clear(); return false; }
 
 	try {
 	    if(reqBuf.size() < (req.size()+1+abs(req_sz))) return true;
@@ -389,7 +389,7 @@ bool TProtIn::mess( const string &request, string &answer )
 	    string host = req_node.attr("reforwardHost");
 	    if(host.size()) {
 		if(mess_lev() == TMess::Debug) {
-		    mess_debug(nodePath().c_str(), _("Check and reforward request: '%s': %d, time: %f ms."),
+		    mess_debug(nodePath().c_str(), _("Request checked and redirected: '%s': %d, time: %g ms."),
 			req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
 		    d_tm = TSYS::curTime();
 		}
@@ -404,7 +404,7 @@ bool TProtIn::mess( const string &request, string &answer )
 		req_node.setAttr("user", auth.name);
 
 		if(mess_lev() == TMess::Debug) {
-		    mess_debug(nodePath().c_str(), _("Unpack and load request: '%s': %d, time: %f ms."),
+		    mess_debug(nodePath().c_str(), _("Request unpacked and loaded: '%s': %d, time: %g ms."),
 			req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
 		    d_tm = TSYS::curTime();
 		}
@@ -417,7 +417,7 @@ bool TProtIn::mess( const string &request, string &answer )
 		}
 
 		if(mess_lev() == TMess::Debug) {
-		    mess_debug(nodePath().c_str(), _("Process request: '%s', time: %f ms."), req.c_str(), 1e-3*(TSYS::curTime()-d_tm));
+		    mess_debug(nodePath().c_str(), _("Request processed: '%s', time: %g ms."), req.c_str(), 1e-3*(TSYS::curTime()-d_tm));
 		    d_tm = TSYS::curTime();
 		}
 	    }
@@ -429,13 +429,13 @@ bool TProtIn::mess( const string &request, string &answer )
 	    if(respCompr) resp = TSYS::strCompr(resp,((TProt&)owner()).comprLev());
 
 	    if(mess_lev() == TMess::Debug)
-		mess_debug(nodePath().c_str(), _("Save respond to stream and pack: '%s': %d, time: %f ms."),
+		mess_debug(nodePath().c_str(), _("Response saved to a stream and packed: '%s': %d, time: %g ms."),
 		    req.c_str(), resp.size(), 1e-3*(TSYS::curTime()-d_tm));
 
 	    answer = "REZ " ERR_NO " " + i2s(resp.size()*(respCompr?-1:1)) + "\x0A" + resp;
 	} catch(TError &err) { answer = "REZ " ERR_PRC " " + err.cat + ":" + err.mess + "\x0A"; }
     }
-    else answer = "REZ " ERR_CMD " Command format error.\x0A";
+    else answer = "REZ " ERR_CMD " Error the command format.\x0A";
 
     reqBuf.clear();
 

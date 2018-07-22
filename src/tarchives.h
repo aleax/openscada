@@ -37,7 +37,7 @@ namespace OSCADA
 {
 
 //************************************************
-//* Message archivator                           *
+//* Message archiver                             *
 //************************************************
 
 //************************************************
@@ -224,7 +224,7 @@ class TArchiveS : public TSubSYS
 	void setActMess( TMArchivator *a, bool val );
 	void setActVal( TVArchive *a, bool val );
 
-	// Archivators
+	// Archivers
 	AutoHD<TTypeArchivator> at( const string &name ) const		{ return modAt(name); }
 
 	// Message archive function
@@ -268,7 +268,7 @@ class TArchiveS : public TSubSYS
 	void setMessBufLen( unsigned len );
 
 	//Private attributes
-	TElem	elMess,			//Message archivator's DB elements
+	TElem	elMess,			//Message archiver's DB elements
 		elVal,			//Value archivator's DB elements
 		elAval;			//Value archives DB elements
 

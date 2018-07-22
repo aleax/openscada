@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 22:36+0300\n"
+"POT-Creation-Date: 2018-07-22 22:05+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -722,8 +722,7 @@ msgstr "Element '%s' ist abgeschaltet!"
 msgid "Very many users at the node!!!"
 msgstr "Zu viele Benutzer für Knoten!!!"
 
-#, c-format
-msgid "Error function '%s' or missing parameters for it."
+msgid "Error the function '%s' or missing its parameters."
 msgstr "Fehler in der Funktion '%s' oder nicht genug Parameter."
 
 #, c-format

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 22:36+0300\n"
+"POT-Creation-Date: 2018-07-22 22:05+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -714,8 +714,7 @@ msgstr "Елемент '%s' вимкнений!"
 msgid "Very many users at the node!!!"
 msgstr "Дуже багато користувачів у вузла!!!"
 
-#, c-format
-msgid "Error function '%s' or missing parameters for it."
+msgid "Error the function '%s' or missing its parameters."
 msgstr "Помилка функції '%s' або недостатньо параметрів для неї."
 
 #, c-format

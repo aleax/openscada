@@ -1,8 +1,8 @@
 // 
 //OpenSCADA module BD.PostgreSQL file: postgre.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2017 by Roman Savochenko, rom_as@oscada.org        *
- *                 2010 by Maxim Lysenko, mlisenko@oscada.org              *
+ *   Copyright (C) 2013-2018 by Roman Savochenko, rom_as@oscada.org        *
+ *                 2010-2011 by Maxim Lysenko, mlisenko@oscada.org         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,9 +33,9 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.10.0"
-#define AUTHORS		_("Roman Savochenko, Maxim Lysenko")
-#define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
+#define MOD_VER		"1.11.0"
+#define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2010-2011)")
+#define DESCRIPTION	_("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
 //************************************************
 
@@ -111,16 +111,16 @@ void MBD::postDisable( int flag )
 	    if((tcon=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
 		throw err_sys(_("Fatal error - unable to allocate connection."));
 	    if(PQstatus(tcon) != CONNECTION_OK)
-		throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(tcon));
+		throw err_sys(_("Error connecting the DB: %s"), PQerrorMessage(tcon));
 	    string req = "DROP DATABASE \"" + db + "\"";
 	    if((res=PQexec(tcon,req.c_str())) == NULL)
-		throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(tcon));
+		throw err_sys(_("Error connecting the DB: %s"), PQerrorMessage(tcon));
 	    if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK) {
 		string err, err1;
 		err = PQresStatus(PQresultStatus(res));
 		err1 = PQresultErrorMessage(res);
 		PQclear(res);
-		throw err_sys(_("Query to DB error: %s. %s"), err.c_str(), err1.c_str());
+		throw err_sys(_("Error querying the DB: '%s (%s)'!"), err1.c_str(), err.c_str());
 	    }
 	    else PQclear(res);
 	    PQfinish(tcon);
@@ -160,13 +160,13 @@ nextTry:
 	if((connection=PQconnectdb((conninfo+"dbname="+db).c_str())) == NULL)
 	    throw err_sys(_("Fatal error - unable to allocate connection."));
 	if(PQstatus(connection) != CONNECTION_OK) {
-	    if(dbCreateTry) throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(connection));
+	    if(dbCreateTry) throw err_sys(_("Error connecting the DB: %s"), PQerrorMessage(connection));
 	    //Try for connect to system DB, check for need DB present and create otherwise
 	    PQfinish(connection);
 	    if((connection=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
 		throw err_sys(_("Fatal error - unable to allocate connection."));
 	    if(PQstatus(connection) != CONNECTION_OK)
-		throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(connection));
+		throw err_sys(_("Error connecting the DB: %s"), PQerrorMessage(connection));
 	    TBD::enable();
 
 	    vector< vector<string> > tbl;
@@ -225,7 +225,7 @@ void MBD::allowList( vector<string> &list ) const
 
 TTable *MBD::openTable( const string &inm, bool icreate )
 {
-    if(!enableStat()) throw err_sys(_("Error open table '%s'. DB is disabled."), inm.c_str());
+    if(!enableStat()) throw err_sys(_("Error opening the table '%s': the DB is disabled."), inm.c_str());
 
     create(inm, icreate);
     vector< vector<string> > tblStrct;
@@ -281,7 +281,7 @@ void MBD::getStructDB( const string &nm, vector< vector<string> > &tblStrct )
 	    tblStrct[i_f].push_back((i_k<keyLst.size())?"PRI":"");
 	}
     }
-    else throw err_sys(_("Table '%s' is not present!"), nm.c_str());
+    else throw err_sys(_("The table '%s' is not present!"), nm.c_str());
 }
 
 void MBD::transOpen( )
@@ -309,9 +309,9 @@ void MBD::transOpen( )
 	res = PQexec(connection, "BEGIN");
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
 	    PQclear(res);
-	    mess_sys(TMess::Warning, _("Start transaction error!"));
+	    mess_sys(TMess::Warning, _("Error starting a transaction!"));
 	    return;
-	    //throw err_sys(_("Start transaction error!"));
+	    //throw err_sys(_("Error starting a transaction!"));
 	}
 	PQclear(res);
 	trOpenTm = SYS->sysTm();
@@ -340,9 +340,9 @@ void MBD::transCommit( )
 	res = PQexec(connection, "COMMIT");
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
 	    PQclear(res);
-	    mess_sys(TMess::Warning, _("Stop transaction error!"));
+	    mess_sys(TMess::Warning, _("Error stopping a transaction!"));
 	    return;
-	    //throw err_sys(_("Stop transaction error!"));
+	    //throw err_sys(_("Error stopping a transaction!"));
 	}
 	PQclear(res);
     }
@@ -377,7 +377,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 
     if((res=PQexec(connection,req.c_str())) == NULL) {
 	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("ERR CON for: %s"), ireq.c_str());
-	throw err_sys(SQL_CONN, _("Connect to DB error: %s"), PQerrorMessage(connection));
+	throw err_sys(SQL_CONN, _("Error connecting the DB: %s"), PQerrorMessage(connection));
     }
     if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK) {
 	string  err = PQresStatus(PQresultStatus(res)),
@@ -388,12 +388,12 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	    resource.unlock();
 	    disable();
 	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("ERR CON_st for: %s"), ireq.c_str());
-	    throw err_sys(SQL_CONN, _("Connect to DB error: %s. %s"), err.c_str(), err1.c_str());
+	    throw err_sys(SQL_CONN, _("Error connecting the DB: '%s (%s)'!"), err1.c_str(), err.c_str());
 	}
 	if(mess_lev() == TMess::Debug)
 	    mess_sys(TMess::Debug, _("ERR QUERY (con=%d;res=%d;tr=%d) for: %s"),
 		PQstatus(connection), PQresultStatus(res), PQtransactionStatus(connection), ireq.c_str());
-	throw err_sys(SQL_QUERY, _("Query to DB error: %s. %s"), err.c_str(), err1.c_str());
+	throw err_sys(SQL_QUERY, _("Error querying the DB: '%s (%s)'!"), err1.c_str(), err.c_str());
     }
     if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("OK (tr=%d) for: %s"), PQtransactionStatus(connection), ireq.c_str());
 
@@ -440,19 +440,19 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,0,"/prm/st/status",_("Status"),R_R_R_,"root",SDB_ID,1, "tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"help",
-	    _("PostgreSQL DB address must be written as: \"{host};{hostaddr};{user};{pass};{db}[;{port}[;{connect_timeout}]]\".\n"
+	    _("PostgreSQL DBMS address must be written as: \"{host};{hostaddr};{user};{pass};{db}[;{port}[;{connect_timeout}]]\".\n"
 	      "Where:\n"
-	      "  host - Name of the host (PostgreSQL server) to connect to. If this begins with a slash ('/'),\n"
-	      "         it specifies Unix domain communication rather than TCP/IP communication;\n"
-	      "         the value is the name of the directory in which the socket file is stored.\n"
-	      "  hostaddr - Numeric IP address of host to connect to;\n"
-	      "  user - DB user name;\n"
-	      "  pass - user's password for DB access;\n"
-	      "  db - DB name;\n"
-	      "  port - DB server port (default 5432);\n"
-	      "  connect_timeout - connection timeout\n"
-	      "For local DB: \";;roman;123456;OpenSCADA;5432;10\".\n"
-	      "For remote DB: \"server.nm.org;;roman;123456;OpenSCADA;5432;10\"."));
+	      "  host - hostname on which the DBMS server PostgreSQL works. If this begins with a slash ('/'),\n"
+	      "         it specifies Unix socket rather than TCP/IP communication;\n"
+	      "         the value is the name of the directory in which the socket file is stored;\n"
+	      "  hostaddr - numeric IP address of the host for connecting;\n"
+	      "  user - user name of the DB;\n"
+	      "  pass - password of the user for accessing the DB;\n"
+	      "  db   - name of the DB;\n"
+	      "  port - port, which listening by the DBMS server (default 5432);\n"
+	      "  connect_timeout - connection timeout, in seconds;\n"
+	      "For local DBMS: \";;user;password;OpenSCADA;5432;10\".\n"
+	      "For remote DBMS: \"server.nm.org;;user;password;OpenSCADA;5432;10\"."));
 	return;
     }
 
@@ -461,8 +461,8 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/st/status" && ctrChkNode(opt)) {
 	MtxAlloc resource(connRes, true);
 	opt->setText((enableStat()?_("Enabled. "):_("Disabled. ")) +
-	    TSYS::strMess(_("Connect: %s. "),atm2s(conTm,"%d-%m-%Y %H:%M:%S").c_str()) +
-	    (enableStat()?TSYS::strMess(_("Requests: %g; Request time: %s[%s,%s,%s]; Max time request: '%s'"),nReq,
+	    TSYS::strMess(_("Connected: %s. "),atm2s(conTm,"%d-%m-%Y %H:%M:%S").c_str()) +
+	    (enableStat()?TSYS::strMess(_("Requests: %g; Request time: %s[%s,%s,%s]; Max request time: '%s'"),nReq,
 			tm2s(rqTm).c_str(),tm2s(rqTmMin).c_str(),tm2s(nReq?(rqTmAll/nReq):0).c_str(),tm2s(rqTmMax).c_str(),rqTmMaxVl.getVal().c_str()):""));
     }
     else TBD::cntrCmdProc(opt);
@@ -630,7 +630,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     //Query
     owner().sqlReq(req, &tbl, false);
-    if(tbl.size() < 2) throw err_sys(_("Row \"%s\" is not present. Are you saved the object?"), req_where.c_str());
+    if(tbl.size() < 2) throw err_sys(_("The row \"%s\" is not present. Are you saved the object?"), req_where.c_str());
 
     //Processing of query
     for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {

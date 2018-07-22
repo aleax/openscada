@@ -50,7 +50,7 @@
 <li class="toclevel-2 tocsection-4"><a href="#Linkage_with_the_dynamics"><span class="tocnumber">2.2</span> <span class="toctext">Linkage with the dynamics</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-5"><a href="#Execution_of_the_VCA_interfaces"><span class="tocnumber">3</span> <span class="toctext">Execution of the VCA interfaces</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Execution_of_the_VCA_interfaces"><span class="tocnumber">3</span> <span class="toctext"><span>Execution of the VCA interfaces</span></span></a></li>
 <li class="toclevel-1 tocsection-6"><a href="#Presentation_of_the_basic_elements_.28primitives.29"><span class="tocnumber">4</span> <span class="toctext"><span>Presentation of the basic elements (primitives)</span></span></a>
 <ul>
 <li class="toclevel-2 tocsection-7"><a href="#Elementary_figure_primitive_.28ElFigure.29"><span class="tocnumber">4.1</span> <span class="toctext">Elementary figure primitive (ElFigure)</span></a></li>
@@ -400,7 +400,7 @@
 <td> - </td>
 <td> EVAL
 </td></tr></table>
-<h2><span class="mw-headline" id="Execution_of_the_VCA_interfaces"><span class="mw-headline-number">3</span> Execution of the VCA interfaces</span></h2>
+<h2><span class="mw-headline" id="Execution_of_the_VCA_interfaces"><span class="mw-headline-number">3</span> <span id="RunTime" title="#RunTime">Execution of the VCA interfaces</span></span></h2>
 <p>Execution of the IU interface consists in launching a new project session or connecting to the current one, at the level of the VCA engine. Then the module of direct visualization represents and controls the session data. The main window of the execution mode of this module has the view presented at Figure 3.
 </p><p>Update of the contents of the open pages of the visual interface with periodicity of the project session is implemented. During the upgrade process:
 </p>
@@ -419,9 +419,9 @@
 <li> "Diagram" — diagram on the user interface;</li>
 <li> "Document" — document on the user interface.</li></ul></li>
 <li> "Export" — export:
-<ul><li> "Page" — page of the user interface;</li>
-<li> "Diagram" — diagram on the user interface;</li>
-<li> "Document" — document on the user interface.</li></ul></li>
+<ul><li> "Page" — page of the user interface, to image;</li>
+<li> "Diagram" — diagram on the user interface, to image and CSV;</li>
+<li> "Document" — document on the user interface, to HTML and CSV for exporting tables.</li></ul></li>
 <li> "Close" — close the editor window.</li>
 <li> "Quit" — quit the program.</li></ul></li>
 <li> "Alarm" — Alarm quietance:
@@ -446,7 +446,10 @@
 <li> the current user, on whose behalf the VCA interface is executed — by a double-clicking this user can be changed, typing of the new username and password;</li>
 <li> the panel with buttons:
 <ul><li> alarms quietance — by a click the violations can be quieted completely or just the desired type of the notification;</li>
-<li> export and print — calls by a click for the dialog of exporting and printing the default element or selected from the menu;</li>
+<li> export and print — calls by a click for the dialog of exporting and printing the default element or selected from the menu, where the export for:
+<ul><li> "Page" — page of the user interface, to image;</li>
+<li> "Diagram" — diagram on the user interface, to image and CSV;</li>
+<li> "Document" — document on the user interface, to HTML and CSV for exporting tables.</li></ul></li>
 <li> manual on the VCA project — calls by a click the manual on the visualization project — a file with the name of the identifier of the VCA project.</li></ul></li>
 <li> the panel of user actions, if specified in <a href="#SpecAttrs">the attribute "statLine"</a> — by clicking the left, right and double click forms the even to the main interface page.</li></ul></li>
 <li> In the main field of the status line various messages and assistance messages are displayed.</li></ul>

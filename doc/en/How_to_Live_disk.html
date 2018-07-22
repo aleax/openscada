@@ -18,7 +18,7 @@
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Combined-hybrid_ISO-images_of_the_live_disk"><span class="tocnumber">1</span> <span class="toctext">Combined-hybrid ISO-images of the live disk</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Live_USB-Flash_disk_with_the_file-system_FAT_or_EXT"><span class="tocnumber">2</span> <span class="toctext">Live USB-Flash disk with the file-system FAT or EXT</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Saving_the_working_data_of_the_live_disk_to_the_USB-Flash_partition"><span class="tocnumber">3</span> <span class="toctext">Saving the working data of the live disk to the USB-Flash partition</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Saving_the_working_data_of_the_live_disk_to_the_USB-Flash_partition"><span class="tocnumber">3</span> <span class="toctext"><span>Saving the working data of the live disk to the USB-Flash partition</span></span></a></li>
 <li class="toclevel-1 tocsection-4"><a href="#Booting"><span class="tocnumber">4</span> <span class="toctext">Booting</span></a></li>
 </ul>
 </div>
@@ -77,7 +77,7 @@ $ dd if=/dev/sr0 of=/dev/sd{x} bs=4096
 <li> Initialize the boot loader: <b>$ syslinux /dev/sd{x}1</b></li></ul>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This method of the live disk deploying requires knowledge of Linux and the command line interface (console), as well as the basics of the disks partitioning because with an wrong initial partitioning of media the booting may not be passed.
 </p>
-<h3><span class="mw-headline" id="Saving_the_working_data_of_the_live_disk_to_the_USB-Flash_partition"><span class="mw-headline-number">3</span> Saving the working data of the live disk to the USB-Flash partition</span></h3>
+<h3><span class="mw-headline" id="Saving_the_working_data_of_the_live_disk_to_the_USB-Flash_partition"><span class="mw-headline-number">3</span> <span id="UserData" title="#UserData">Saving the working data of the live disk to the USB-Flash partition</span></span></h3>
 <p>The Live disk, as mentioned early, allow you full-featured work with saving the working data, and also updating the programs (excluding the system programs and the OS Linux kernel). Typically that possibility has sense only for USB, HDD, SSD storage.
 </p><p>In the case of Debian distributions, a separate section for storing work data, with the label "persistence", should always be created specially, and in the file "persistence.conf" on it also specify the file system or part of it to be reflected on the record (for example, "/home"). To reflect the entire root file system, you must write "/ union" in the file. As the file system of this partition, it is better to use "EXT3". To create a partition you can use the program partition manager, for example — <b>gparted</b>.
 </p><p>In the case of the ALTLinux (6) distribution, and the direct recording of the hybrid ISO image, such a section will be created at first startup. When creating a live disk on FAT and EXT, you need to create a separate partition labeled "alt-live-storage" and the file system "EXT3" that can be done in the partition manager program, for example — <b>gparted</b>.

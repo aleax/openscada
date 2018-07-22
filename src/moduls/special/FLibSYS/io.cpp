@@ -68,7 +68,7 @@ TVariant IOObj::propGet( const string &id )
     if(id == "mFormat")		return mFormat;
     if(id == "stringEncode")	return strEnc;
 
-    throw TError("IOObj", _("Properties no supported by the object."));
+    throw TError("IOObj", _("Properties are not supported by the object."));
 }
 
 void IOObj::propSet( const string &id, TVariant val )
@@ -80,7 +80,7 @@ void IOObj::propSet( const string &id, TVariant val )
     else if(id == "string" && !fhd)	{ str = val.getS(); pos = 0; }
     else if(id == "mFormat")		mFormat = val.getS();
     else if(id == "stringEncode")	strEnc = val.getS();
-    else throw TError("IOObj", _("Properties no supported by the object."));
+    else throw TError("IOObj", _("Properties are not supported by the object."));
 }
 
 TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
@@ -516,7 +516,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	return rez;
     }
 
-    throw TError("IOObj",_("Error function '%s' or missing parameters for it."),id.c_str());
+    throw TError("IOObj",_("Error the function '%s' or missing its parameters."),id.c_str());
 }
 
 IOObj::TpDescr &IOObj::getTp( const string &dtT )

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-23 18:23+0300\n"
+"POT-Creation-Date: 2018-07-02 12:18+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,24 +17,24 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Self protocol of OpenSCADA"
+msgid "Own protocol of OpenSCADA"
 msgstr ""
 
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Provides self OpenSCADA protocol based at XML and one's control interface."
+msgid "Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA."
 msgstr ""
 
 #, c-format
-msgid "Connections from the user '%s' and the source '%s' reached to limit %d. Erasing spare!"
+msgid "Connections from the user '%s' and the source '%s' reached to the limit %d. Erasing spare!"
 msgstr ""
 
 #, c-format
 msgid "SES_OPEN request: %d"
 msgstr ""
 
-msgid "Not full respond."
+msgid "Not full response."
 msgstr ""
 
 #, c-format
@@ -42,11 +42,11 @@ msgid "SES_OPEN response: %d"
 msgstr ""
 
 #, c-format
-msgid "Station '%s' error: %s!"
+msgid "Error the station '%s': %s."
 msgstr ""
 
 #, c-format
-msgid "Station '%s' error: Respond format error!"
+msgid "Error the station '%s': error the response format."
 msgstr ""
 
 #, c-format
@@ -54,19 +54,22 @@ msgid "REQ send: %d"
 msgstr ""
 
 #, c-format
-msgid "REQ response first %d"
+msgid "REQ first response %d"
 msgstr ""
 
 #, c-format
-msgid "Station respond '%s' error!"
+msgid "Error the station '%s' response."
+msgstr ""
+
+msgid "Not full respond."
 msgstr ""
 
 #, c-format
-msgid "REQ response full %d"
+msgid "REQ full response %d"
 msgstr ""
 
 #, c-format
-msgid "Request error: %s"
+msgid "Error the request: %s"
 msgstr ""
 
 msgid "Parameters"
@@ -81,10 +84,10 @@ msgstr ""
 msgid "Module options"
 msgstr ""
 
-msgid "Life time of auth session(min)"
+msgid "Life time of the authentication session, minutes"
 msgstr ""
 
-msgid "Single user and host connections limit"
+msgid "Limit of the connections for one user and host"
 msgstr ""
 
 msgid "Compression level"
@@ -97,32 +100,28 @@ msgid ""
 "  1-9 - direct level."
 msgstr ""
 
-msgid "Lower compression border"
+msgid "Lower limit of compression"
 msgstr ""
 
 msgid "Value in bytes."
 msgstr ""
 
 #, c-format
-msgid "%s %s(%s)"
+msgid "Request received: '%s': %d, time: %g ms."
 msgstr ""
 
 #, c-format
-msgid "Get request: '%s': %d, time: %f ms."
+msgid "Request checked and redirected: '%s': %d, time: %g ms."
 msgstr ""
 
 #, c-format
-msgid "Check and reforward request: '%s': %d, time: %f ms."
+msgid "Request unpacked and loaded: '%s': %d, time: %g ms."
 msgstr ""
 
 #, c-format
-msgid "Unpack and load request: '%s': %d, time: %f ms."
+msgid "Request processed: '%s', time: %g ms."
 msgstr ""
 
 #, c-format
-msgid "Process request: '%s', time: %f ms."
-msgstr ""
-
-#, c-format
-msgid "Save respond to stream and pack: '%s': %d, time: %f ms."
+msgid "Response saved to a stream and packed: '%s': %d, time: %g ms."
 msgstr ""

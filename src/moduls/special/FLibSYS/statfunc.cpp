@@ -32,13 +32,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"FLibSYS"
-#define MOD_NAME	_("System API functions")
+#define MOD_NAME	_("System functions")
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.5.3"
+#define MOD_VER		"1.6.0"
 #define MOD_AUTOR	_("Roman Savochenko")
-#define MOD_DESCR	_("Provides the library of system API functions of user programming area.")
+#define MOD_DESCR	_("Provides a library of the system functions of the user programming area of OpenSCADA.")
 #define MOD_LICENSE	"GPL2"
 //*************************************************
 

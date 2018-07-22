@@ -87,9 +87,9 @@ TValBuf *VArchObj::buf( )
     return mBuf;
 }
 
-TVariant VArchObj::propGet( const string &id )	{ throw TError("VArchObj", _("Properties no supported by the object.")); }
+TVariant VArchObj::propGet( const string &id )	{ throw TError("VArchObj", _("Properties are not supported by the object.")); }
 
-void VArchObj::propSet( const string &id, TVariant val ) { throw TError("VArchObj", _("Properties no supported by the object.")); }
+void VArchObj::propSet( const string &id, TVariant val ) { throw TError("VArchObj", _("Properties are not supported by the object.")); }
 
 TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 {
@@ -275,5 +275,5 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	return ao;
     }
 #endif
-    throw TError("VArchObj",_("Error function '%s' or missing parameters for it."),id.c_str());
+    throw TError("VArchObj",_("Error the function '%s' or missing its parameters."),id.c_str());
 }

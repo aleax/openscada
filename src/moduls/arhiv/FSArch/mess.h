@@ -33,7 +33,7 @@ using namespace OSCADA;
 namespace FSArch
 {
 //*************************************************
-//* FSArch::MFileArch - Messages archivator file  *
+//* FSArch::MFileArch - Message archiver file     *
 //*************************************************
 class ModMArch;
 
@@ -103,7 +103,7 @@ class MFileArch
     };
 
 //************************************************
-//* FSArch::ModMArch - Messages archivator       *
+//* FSArch::ModMArch - Messages archiver         *
 //************************************************
 class ModMArch: public TMArchivator
 {

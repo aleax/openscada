@@ -831,7 +831,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  mess - message text.
     if(iid == "messSys" && prms.size() >= 2) { mess_sys(prms[0].getI(), "%s", prms[1].getS().c_str()); return 0; }
 
-    throw err_sys(_("Error function '%s' or missing parameters for it."), iid.c_str());
+    throw err_sys(_("Error the function '%s' or missing its parameters."), iid.c_str());
 }
 
 XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,

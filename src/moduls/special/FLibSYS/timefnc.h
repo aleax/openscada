@@ -42,7 +42,7 @@ class tmFStr : public TFunction
 	}
 
 	string name( )	{ return _("Time: String time"); }
-	string descr( )	{ return _("Formatted string time."); }
+	string descr( )	{ return _("Getting the time in the formatted string. Recording of the format corresponds to the POSIX-function \"strftime()\"."); }
 
 	void calc( TValFunc *val ) {
 	    time_t tm_t = val->getI(1);
@@ -62,19 +62,19 @@ class tmDate : public TFunction
     public:
 	tmDate( ) : TFunction("tmDate",SSPC_ID) {
 	    ioAdd(new IO("fullsec",_("Full seconds"),IO::Integer,IO::Default,"0"));
-	    ioAdd(new IO("sec",_("Seconds"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("min",_("Minutes"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("hour",_("Hours"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("mday",_("Day of the month"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("month",_("Month"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("year",_("Year"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("wday",_("Day of the week"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("yday",_("Day of the year"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("sec",_("Seconds [0...59]"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("min",_("Minutes [0...59]"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("hour",_("Hours [0...23]"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("mday",_("Day of the month [1...31]"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("month",_("Month [0...11]"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("year",_("Year, from 1900"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("wday",_("Day of the week [0...6]"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("yday",_("Day of the year [0...365]"),IO::Integer,IO::Output,"0"));
 	    ioAdd(new IO("isdst",_("Daylight saving time"),IO::Integer,IO::Output,"0"));
 	}
 
-	string name( )	{ return _("Time: Date"); }
-	string descr( )	{ return _("Full date."); }
+	string name( )	{ return _("Time: Date and time"); }
+	string descr( )	{ return _("Full date and time in seconds, minutes, hours, etc., based on the absolute time in seconds from the epoch of 01-01-1970."); }
 
 	void calc( TValFunc *val ) {
 	    time_t tm_t = val->getI(0);
@@ -105,7 +105,7 @@ class tmTime : public TFunction
 	}
 
 	string name( )	{ return _("Time: Time"); }
-	string descr( )	{ return _("Full time (since 01.01.1970)."); }
+	string descr( )	{ return _("Getting the full time, in seconds since 01.01.1970, and in microseconds, if <usec> is installed in a non-negative value."); }
 
 	void calc( TValFunc *val ) {
 	    if(val->getI(1) < 0) val->setI(0, time(NULL));
@@ -130,7 +130,7 @@ class tmStr2Tm : public TFunction
 	}
 
 	string name( )	{ return _("Time: String to time"); }
-	string descr( )	{ return _("Convert a string representation of time to a time."); }
+	string descr( )	{ return _("Converting the string data and time, for the <form>, to the time in seconds since 01.01.1970."); }
 
 	void calc( TValFunc *val ) {
 	    struct tm stm;
@@ -148,12 +148,12 @@ class tmCron : public TFunction
     public:
 	tmCron( ) : TFunction("tmCron",SSPC_ID) {
 	    ioAdd(new IO("res",_("Result, seconds"),IO::Integer,IO::Return,"0"));
-	    ioAdd(new IO("str",_("Cron"),IO::String,IO::Default,"* * * * *"));
+	    ioAdd(new IO("str",_("CRON"),IO::String,IO::Default,"* * * * *"));
 	    ioAdd(new IO("base",_("Base time, seconds"),IO::Integer,IO::Default,"0"));
 	}
 
-	string name( )	{ return _("Time: Cron plane time"); }
-	string descr( )	{ return _("Plane time by cron standard."); }
+	string name( )	{ return _("Time: Schedule time at CRON"); }
+	string descr( )	{ return _("Scheduling the time at the CRON standard, returning the planned time from the <base> time or from the current time, if the base is not specified."); }
 
 	void calc( TValFunc *val )	{ val->setI(0, SYS->cron(val->getS(1),val->getI(2))); }
 };
@@ -166,11 +166,11 @@ class tmSleep : public TFunction
     public:
 	tmSleep( ) : TFunction("tmSleep",SSPC_ID) {
 	    ioAdd(new IO("res",_("Result"),IO::Integer,IO::Return,"0"));
-	    ioAdd(new IO("tm",_("Time"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("tm",_("Time, seconds"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Time: sleep"); }
-	string descr( )	{ return _("Short sleep from nanoseconds and up to STD_INTERF_TM (5 seconds)."); }
+	string descr( )	{ return _("Short sleeping from nanoseconds and up to STD_INTERF_TM (5 seconds)."); }
 
 	void calc( TValFunc *v )	{ v->setI(0, TSYS::sysSleep(vmin(STD_INTERF_TM,v->getR(1)))); }
 };

@@ -1,3 +1,9 @@
+2018-07-22 Roman (stable)
+- SYS,Archive.FSArch: "Archivator" renaming to "Archiver" is finished.
+- FIX: Some next original messages are fixed.
+- !!:DB.{MySQL,PostgreSQL},Protocol.SelfSystem,Special.FLibSYS: Revised for all messages and the documentation.
+
+
 2018-06-25 Roman (stable)
 - FIX:data/openscada.spec: Fixed for building on SuSE.
 - FIX:data/openscada_mod_ALT.spec: The openscada-server package fixed for including the file oscada_server.xml.

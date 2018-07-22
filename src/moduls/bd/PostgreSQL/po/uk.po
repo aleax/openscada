@@ -1,13 +1,13 @@
 # OpenSCADA.DB.PostgreSQL translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DB.PostgreSQL module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.PostgreSQL 0.9.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-27 17:21+0200\n"
+"POT-Creation-Date: 2018-07-05 15:30+0300\n"
 "PO-Revision-Date: 2010-07-30 09:10+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -18,35 +18,35 @@ msgstr ""
 msgid "DB PostgreSQL"
 msgstr "БД PostgreSQL"
 
-msgid "Roman Savochenko, Maxim Lysenko"
-msgstr "Роман Савоченко, Максим Лисенко"
+msgid "Roman Savochenko, Maxim Lysenko (2010-2011)"
+msgstr "Роман Савоченко, Максим Лисенко (2010-2011)"
 
-msgid "BD module. Provides support of the BD PostgreSQL."
-msgstr "Модуль БД. Надає підтримку БД PostgreSQL."
+msgid "DB module. Provides support of the DBMS PostgreSQL."
+msgstr "Модуль БД. Надає підтримку СУБД PostgreSQL."
 
 msgid "Fatal error - unable to allocate connection."
 msgstr "Фатальна помилка - неможливо встановити з'єднання."
 
 #, c-format
-msgid "Connect to DB error: %s"
-msgstr "Помилка підключення до БД: %s"
+msgid "Error connecting the DB: %s"
+msgstr "Помилка підключення БД: %s"
 
 #, c-format
-msgid "Query to DB error: %s. %s"
-msgstr "Помилка запиту до БД: %s. %s"
+msgid "Error querying the DB: '%s (%s)'!"
+msgstr "Помилка запиту БД: '%s (%s)'!"
 
 #, c-format
-msgid "Error open table '%s'. DB is disabled."
-msgstr "Помилка відкриття таблиці '%s'. БД вимкнено."
+msgid "Error opening the table '%s': the DB is disabled."
+msgstr "Помилка відкриття таблиці '%s': БД вимкнено."
 
 #, c-format
-msgid "Table '%s' is not present!"
+msgid "The table '%s' is not present!"
 msgstr "Таблиця '%s' відсутня!"
 
-msgid "Start transaction error!"
+msgid "Error starting a transaction!"
 msgstr "Помилка запуску транзакції!"
 
-msgid "Stop transaction error!"
+msgid "Error stopping a transaction!"
 msgstr "Помилка зупинки транзакції!"
 
 #, c-format
@@ -58,8 +58,8 @@ msgid "ERR CON_st for: %s"
 msgstr "ERR CON_st для: %s"
 
 #, c-format
-msgid "Connect to DB error: %s. %s"
-msgstr "Помилка підключення до БД: %s. %s"
+msgid "Error connecting the DB: '%s (%s)'!"
+msgstr "Помилка підключення БД: '%s (%s)'!"
 
 #, c-format
 msgid "ERR QUERY (con=%d;res=%d;tr=%d) for: %s"
@@ -73,38 +73,38 @@ msgid "Status"
 msgstr "Статус"
 
 msgid ""
-"PostgreSQL DB address must be written as: \"{host};{hostaddr};{user};{pass};"
-"{db}[;{port}[;{connect_timeout}]]\".\n"
+"PostgreSQL DBMS address must be written as: \"{host};{hostaddr};{user};"
+"{pass};{db}[;{port}[;{connect_timeout}]]\".\n"
 "Where:\n"
-"  host - Name of the host (PostgreSQL server) to connect to. If this begins "
+"  host - hostname on which the DBMS server PostgreSQL works. If this begins "
 "with a slash ('/'),\n"
-"         it specifies Unix domain communication rather than TCP/IP "
-"communication;\n"
+"         it specifies Unix socket rather than TCP/IP communication;\n"
 "         the value is the name of the directory in which the socket file is "
-"stored.\n"
-"  hostaddr - Numeric IP address of host to connect to;\n"
-"  user - DB user name;\n"
-"  pass - user's password for DB access;\n"
-"  db - DB name;\n"
-"  port - DB server port (default 5432);\n"
-"  connect_timeout - connection timeout\n"
-"For local DB: \";;roman;123456;OpenSCADA;5432;10\".\n"
-"For remote DB: \"server.nm.org;;roman;123456;OpenSCADA;5432;10\"."
+"stored;\n"
+"  hostaddr - numeric IP address of the host for connecting;\n"
+"  user - user name of the DB;\n"
+"  pass - password of the user for accessing the DB;\n"
+"  db   - name of the DB;\n"
+"  port - port, which listening by the DBMS server (default 5432);\n"
+"  connect_timeout - connection timeout, in seconds;\n"
+"For local DBMS: \";;user;password;OpenSCADA;5432;10\".\n"
+"For remote DBMS: \"server.nm.org;;user;password;OpenSCADA;5432;10\"."
 msgstr ""
-"Адреса PostgreSQL БД записується таким чином: \"{host};{hostaddr};{user};"
+"Адреса СУБД PostgreSQL записується таким чином: \"{host};{hostaddr};{user};"
 "{pass};{db}[;{port}[;{connect_timeout}]]\".\n"
 "Де:\n"
-"  host - ім'я хосту PostgreSQL сервера; Якщо починається зі слеша ('/'), то\n"
-"         використовується UNIX-сокет замість TCP,-\n"
-"         це ім'я каталогу, де зберігається файл сокета;\n"
+"  host - ім'я хосту на якому працює сервер СУБД PostgreSQL. Якщо починається "
+"зі слеша ('/'), то\n"
+"         використовується UNIX-сокет замість TCP;\n"
+"         значення це - ім'я каталогу де зберігається файл сокету;\n"
 "  hostaddr - чисельна адреса хосту PostgreSQL сервера;\n"
 "  user - ім'я користувача БД;\n"
 "  pass - пароль користувача для доступу до БД;\n"
-"  port - порт серверу БД (по замовченню 5432);\n"
-"  db - ім'я БД;\n"
-"  connect_timeout - час очікування з'єднання;\n"
-"Для локальної БД: \";;roman;123456;OpenSCADA;5432;10\".\n"
-"Для віддаленої БД: \"server.nm.org;;roman;123456;OpenSCADA;5432;10\"."
+"  db   - ім'я БД;\n"
+"  port - порт, який слухає сервер СУБД (по замовченню 5432);\n"
+"  connect_timeout - час очікування з'єднання, у секундах;\n"
+"Для локальної СУБД: \";;user;password;OpenSCADA;5432;10\".\n"
+"Для віддаленої СУБД: \"server.nm.org;;user;password;OpenSCADA;5432;10\"."
 
 msgid "Enabled. "
 msgstr "Ввімкнено. "
@@ -113,16 +113,16 @@ msgid "Disabled. "
 msgstr "Вимкнено. "
 
 #, c-format
-msgid "Connect: %s. "
-msgstr "Підключення: %s. "
+msgid "Connected: %s. "
+msgstr "Підключений: %s. "
 
 #, c-format
-msgid "Requests: %g; Request time: %s[%s,%s,%s]; Max time request: '%s'"
+msgid "Requests: %g; Request time: %s[%s,%s,%s]; Max request time: '%s'"
 msgstr "Запитів: %g; Час запиту: %s[%s,%s,%s]; Запит макс. часу: '%s'"
 
 msgid "Table is empty!"
 msgstr "Таблиця порожня!"
 
 #, c-format
-msgid "Row \"%s\" is not present. Are you saved the object?"
+msgid "The row \"%s\" is not present. Are you saved the object?"
 msgstr "Запис \"%s\" відсутній. Ви зберігали цей об'єкт?"

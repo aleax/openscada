@@ -37,7 +37,7 @@ namespace OSCADA
 {
 
 //*************************************************
-//* Value archivator                              *
+//* Value archiver                                *
 //*************************************************
 
 //*************************************************
@@ -234,7 +234,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	// Active get data from atribute
 	void getActiveData( const int64_t &tm = 0 );
 
-	// Phisical archivator's functions
+	// Phisical archiver's functions
 	void archivatorList( vector<string> &ls );
 	bool archivatorPresent( const string &arch );
 	void archivatorAttach( const string &arch );

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-07 17:09+0200\n"
+"POT-Creation-Date: 2018-07-22 22:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,38 +23,38 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "BD module. Provides support of the BD MySQL."
+msgid "DB module. Provides support of the DBMS MySQL."
 msgstr ""
 
-msgid "Error initializing client."
-msgstr ""
-
-#, c-format
-msgid "Connect to DB error: %s"
+msgid "Error initializing."
 msgstr ""
 
 #, c-format
-msgid "Query to DB error: %s"
+msgid "Error connecting to the DB: %s"
 msgstr ""
 
 #, c-format
-msgid "Error open table '%s'. DB is disabled."
+msgid "Error querying to the DB: %s"
 msgstr ""
 
 #, c-format
-msgid "Connect to DB error %d: %s"
+msgid "Error opening the table '%s': the DB is disabled."
 msgstr ""
 
 #, c-format
-msgid "Query '%s' is error."
+msgid "Error connecting to the DB: '%s (%d)'!"
 msgstr ""
 
 #, c-format
-msgid "Query to DB error %d: %s"
+msgid "Error the query '%s'."
 msgstr ""
 
 #, c-format
-msgid "Store result error: %s"
+msgid "Error querying the DB: '%s (%d)'!"
+msgstr ""
+
+#, c-format
+msgid "Error storing the result: %s"
 msgstr ""
 
 #, c-format
@@ -62,18 +62,18 @@ msgid "Could not execute statement: %s"
 msgstr ""
 
 msgid ""
-"MySQL DB address must be written as: \"{host};{user};{pass};{db};{port}[;{u_sock}[;{charset-collation-engine}[;{tms}]]]\".\n"
+"MySQL DBMS address must be written as: \"{host};{user};{pass};{db};{port}[;{u_sock}[;{charset-collation-engine}[;{tms}]]]\".\n"
 "Where:\n"
-"  host - MySQL server hostname;\n"
-"  user - DB user name;\n"
-"  pass - user's password for DB access;\n"
-"  db - DB name;\n"
-"  port - DB server port (default 3306);\n"
-"  u_sock - UNIX-socket name, for local access to DB (/var/lib/mysql/mysql.sock);\n"
+"  host - hostname on which the DBMS server MySQL works;\n"
+"  user - user name of the DB;\n"
+"  pass - password of the user for accessing the DB;\n"
+"  db   - name of the DB;\n"
+"  port - port, which listening by the DBMS server (default 3306);\n"
+"  u_sock - UNIX-socket name, for local accessing to the DBMS (/var/lib/mysql/mysql.sock);\n"
 "  charset-collation-engine - DB charset, collation and storage engine for CREATE DATABASE and SET;\n"
-"  tms - MySQL timeouts in form \"{connect},{read},{write}\" and in seconds.\n"
-"For local DB: \";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8-utf8_general_ci-MyISAM;5,2,2\".\n"
-"For remote DB: \"server.nm.org;roman;123456;OpenSCADA;3306\"."
+"  tms - MySQL timeouts in the form \"{connect},{read},{write}\" and in seconds.\n"
+"For local DBMS: \";user;password;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8-utf8_general_ci-MyISAM;5,2,2\".\n"
+"For remote DBMS: \"server.nm.org;user;password;OpenSCADA;3306\"."
 msgstr ""
 
 msgid "Close opened transaction"
@@ -83,5 +83,5 @@ msgid "Table is empty!"
 msgstr ""
 
 #, c-format
-msgid "Row \"%s\" is not present. Are you saved the object?"
+msgid "The row \"%s\" is not present. Are you saved the object?"
 msgstr ""

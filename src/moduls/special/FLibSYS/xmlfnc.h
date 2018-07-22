@@ -41,7 +41,7 @@ class xmlNode : public TFunction
 	}
 
 	string name( )	{ return _("XML: Node"); }
-	string descr( )	{ return _("XML node object creation."); }
+	string descr( )	{ return _("Creating a XML node object."); }
 
 	void calc( TValFunc *val )	{ val->setO(0, new XMLNodeObj(val->getS(1))); }
 };
@@ -59,7 +59,7 @@ class xmlCntrReq : public TFunction
 	}
 
 	string name( )	{ return _("XML: Control request"); }
-	string descr( )	{ return _("Control request to system by XML."); }
+	string descr( )	{ return _("Requesting for control the program, by XML."); }
 
 	void calc( TValFunc *val );
 };

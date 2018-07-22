@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 14:03+0200\n"
+"POT-Creation-Date: 2018-07-22 22:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,20 +17,20 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Properties no supported by the object."
+msgid "Properties are not supported by the object."
 msgstr ""
 
 #, c-format
-msgid "Error function '%s' or missing parameters for it."
+msgid "Error the function '%s' or missing its parameters."
 msgstr ""
 
-msgid "System API functions"
+msgid "System functions"
 msgstr ""
 
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Provides the library of system API functions of user programming area."
+msgid "Provides a library of the system functions of the user programming area of OpenSCADA."
 msgstr ""
 
 msgid "Function"
@@ -39,11 +39,11 @@ msgstr ""
 msgid "Functions"
 msgstr ""
 
-msgid "1:Request is not object!"
+msgid "1:The request is not the object!"
 msgstr ""
 
 #, c-format
-msgid "1:Request error: %s"
+msgid "1:Error the request: %s"
 msgstr ""
 
 msgid "Result"
@@ -67,13 +67,13 @@ msgstr ""
 msgid "File access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-append;...)"
 msgstr ""
 
-msgid "Machine data format ('n'-sys order;'b'-BigEndian;'l'-LittleEndian)"
+msgid "Machine data format ('n'-system order;'b'-BigEndian;'l'-LittleEndian)"
 msgstr ""
 
-msgid "String encoding in file"
+msgid "String encoding in the file/stream"
 msgstr ""
 
-msgid "IO"
+msgid "SYS: Input/Output"
 msgstr ""
 
 msgid "Input/Output to: file, string stream."
@@ -82,10 +82,10 @@ msgstr ""
 msgid "Command"
 msgstr ""
 
-msgid "Sys: Call"
+msgid "SYS: Call"
 msgstr ""
 
-msgid "System call commands."
+msgid "Calling the console commands of the OS. The function offers great opportunities to the OpenSCADA user by calling any system software, utilities and scripts, as well as getting the access to the huge volume of system data by means of them."
 msgstr ""
 
 msgid "DB address, \"{TypeDB}.{DB}\""
@@ -100,13 +100,13 @@ msgstr ""
 msgid "DB: SQL request"
 msgstr ""
 
-msgid "Formation of the SQL-request <req> to the DB <addr>, inside (<trans>=true), outside (<trans>=false) or no matter (<trans>=EVAL) to a transaction. At an error the result's property \"err\" sets to the error value."
+msgid "Formation of the SQL-request <req> to the DB <addr>, inside (<trans>=true), outside (<trans>=false) or no matter (<trans>=EVAL) to the transaction. At an error the result's property \"err\" sets to the error value."
 msgstr ""
 
-msgid "Begin time"
+msgid "Begin time, seconds"
 msgstr ""
 
-msgid "End time"
+msgid "End time, seconds"
 msgstr ""
 
 msgid "Category"
@@ -115,13 +115,13 @@ msgstr ""
 msgid "Level"
 msgstr ""
 
-msgid "Archivator"
+msgid "Archiver"
 msgstr ""
 
 msgid "Mess: Get"
 msgstr ""
 
-msgid "Get messages from system."
+msgid "Get messages of the program."
 msgstr ""
 
 msgid "Message"
@@ -130,7 +130,7 @@ msgstr ""
 msgid "Mess: Put"
 msgstr ""
 
-msgid "Put message to system."
+msgid "Put a message to the program."
 msgstr ""
 
 msgid "String"
@@ -139,7 +139,7 @@ msgstr ""
 msgid "String: Get size"
 msgstr ""
 
-msgid "Use for string size getting."
+msgid "Getting size of the string."
 msgstr ""
 
 msgid "Position"
@@ -151,25 +151,25 @@ msgstr ""
 msgid "String: Get substring"
 msgstr ""
 
-msgid "Use for substring getting."
+msgid "Getting of the substring."
 msgstr ""
 
-msgid "Insert string"
+msgid "String to insert"
 msgstr ""
 
-msgid "String: Insert string to other string"
+msgid "String: Insert a string to other string"
 msgstr ""
 
-msgid "Use for insertion string to other string."
+msgid "Inserting a string to another string."
 msgstr ""
 
-msgid "Replace string"
+msgid "String to replace"
 msgstr ""
 
-msgid "String: Replace part string on other string"
+msgid "String: Replace a part of the string by another string"
 msgstr ""
 
-msgid "Use for replacing part string on other string."
+msgid "Replacing a part of the string by another string."
 msgstr ""
 
 msgid "Separator"
@@ -178,19 +178,19 @@ msgstr ""
 msgid "Offset"
 msgstr ""
 
-msgid "String: Parse on separator"
+msgid "String: Parse with a separator"
 msgstr ""
 
-msgid "Use for parse string on separator."
+msgid "Parsing the string with a separator."
 msgstr ""
 
 msgid "Path"
 msgstr ""
 
-msgid "String: Path parse"
+msgid "String: Parse of the path"
 msgstr ""
 
-msgid "Use for parse path on elements."
+msgid "Parsing of the path for items."
 msgstr ""
 
 msgid "Source"
@@ -199,25 +199,25 @@ msgstr ""
 msgid "String: Path to separated string"
 msgstr ""
 
-msgid "Use for convert path to separated string."
+msgid "Converting the path to the separated string."
 msgstr ""
 
 msgid "String: Encode string to HTML"
 msgstr ""
 
-msgid "Use for encode string for use into HTML source."
+msgid "Encoding the string to use into the HTML source."
 msgstr ""
 
-msgid "String: Encode text to bin"
+msgid "String: Encode text to binary"
 msgstr ""
 
-msgid "Use for encode text to bin, from format <00 A0 FA DE>."
+msgid "Encoding the text to the binary, for the text format <00 A0 FA DE>."
 msgstr ""
 
-msgid "String: Decode text from bin"
+msgid "String: Decode text from binary"
 msgstr ""
 
-msgid "Use for decode text from bin to format <00 A0 FA DE>."
+msgid "Decoding the text from the binary, for the text format <00 A0 FA DE>."
 msgstr ""
 
 msgid "Value"
@@ -232,28 +232,31 @@ msgstr ""
 msgid "String: Real to string"
 msgstr ""
 
-msgid "Convert real to string."
+msgid "Converting the real value to the string format."
 msgstr ""
 
-msgid "Base"
+msgid "Base (8, 10, 16)"
 msgstr ""
 
 msgid "String: Integer to string"
 msgstr ""
 
-msgid "Convert integer to string."
+msgid "Converting the integer value to the string format."
 msgstr ""
 
 msgid "String: String to real"
 msgstr ""
 
-msgid "Convert string to real."
+msgid "Converting the string value to the real format."
+msgstr ""
+
+msgid "Base (2...36)"
 msgstr ""
 
 msgid "String: String to integer"
 msgstr ""
 
-msgid "Convert string to integer."
+msgid "Converting the string value to the integer format."
 msgstr ""
 
 msgid "Word 1"
@@ -262,16 +265,16 @@ msgstr ""
 msgid "Word 2"
 msgstr ""
 
-msgid "Float: Split to words"
+msgid "Float: Split to the words"
 msgstr ""
 
-msgid "Split float (4 byte) to words (2 byte)."
+msgid "Splitting the float value (4 bytes) to the two words (2 bytes)."
 msgstr ""
 
-msgid "Float: Merge from words"
+msgid "Float: Merge from the words"
 msgstr ""
 
-msgid "Merge float (4 byte) from words (2 byte)."
+msgid "Forming the float value (4 bytes) from the two words (2 bytes)."
 msgstr ""
 
 msgid "Magnitude"
@@ -283,7 +286,7 @@ msgstr ""
 msgid "Float: Extract"
 msgstr ""
 
-msgid "Extract mantissa and exponent from the float value."
+msgid "Extracting for mantissa and exponent from the float value."
 msgstr ""
 
 msgid "Data"
@@ -301,13 +304,13 @@ msgstr ""
 msgid "Cyclic Redundancy Code (CRC)"
 msgstr ""
 
-msgid "Unified Cyclic Redundancy Code implement for 8-64 bits width."
+msgid "Unified implementing of the Cyclic Redundancy Code for the width in 8-64 bits."
 msgstr ""
 
 msgid "Message Digest 5 (MD5)"
 msgstr ""
 
-msgid "Message Digest 5 calculation."
+msgid "Calculating for the message Digest 5 of the <data>."
 msgstr ""
 
 msgid "Date and time string"
@@ -322,40 +325,43 @@ msgstr ""
 msgid "Time: String time"
 msgstr ""
 
-msgid "Formatted string time."
+msgid "Getting the time in the formatted string. Recording of the format corresponds to the POSIX-function \"strftime()\"."
 msgstr ""
 
 msgid "Full seconds"
 msgstr ""
 
-msgid "Minutes"
+msgid "Seconds [0...59]"
 msgstr ""
 
-msgid "Hours"
+msgid "Minutes [0...59]"
 msgstr ""
 
-msgid "Day of the month"
+msgid "Hours [0...23]"
 msgstr ""
 
-msgid "Month"
+msgid "Day of the month [1...31]"
 msgstr ""
 
-msgid "Year"
+msgid "Month [0...11]"
 msgstr ""
 
-msgid "Day of the week"
+msgid "Year, from 1900"
 msgstr ""
 
-msgid "Day of the year"
+msgid "Day of the week [0...6]"
+msgstr ""
+
+msgid "Day of the year [0...365]"
 msgstr ""
 
 msgid "Daylight saving time"
 msgstr ""
 
-msgid "Time: Date"
+msgid "Time: Date and time"
 msgstr ""
 
-msgid "Full date."
+msgid "Full date and time in seconds, minutes, hours, etc., based on the absolute time in seconds from the epoch of 01-01-1970."
 msgstr ""
 
 msgid "Microseconds"
@@ -364,67 +370,70 @@ msgstr ""
 msgid "Time: Time"
 msgstr ""
 
-msgid "Full time (since 01.01.1970)."
+msgid "Getting the full time, in seconds since 01.01.1970, and in microseconds, if <usec> is installed in a non-negative value."
 msgstr ""
 
 msgid "Time: String to time"
 msgstr ""
 
-msgid "Convert a string representation of time to a time."
+msgid "Converting the string data and time, for the <form>, to the time in seconds since 01.01.1970."
 msgstr ""
 
 msgid "Result, seconds"
 msgstr ""
 
-msgid "Cron"
+msgid "CRON"
 msgstr ""
 
 msgid "Base time, seconds"
 msgstr ""
 
-msgid "Time: Cron plane time"
+msgid "Time: Schedule time at CRON"
 msgstr ""
 
-msgid "Plane time by cron standard."
+msgid "Scheduling the time at the CRON standard, returning the planned time from the <base> time or from the current time, if the base is not specified."
 msgstr ""
 
-msgid "Time"
+msgid "Time, seconds"
 msgstr ""
 
 msgid "Time: sleep"
 msgstr ""
 
-msgid "Short sleep from nanoseconds and up to STD_INTERF_TM (5 seconds)."
+msgid "Short sleeping from nanoseconds and up to STD_INTERF_TM (5 seconds)."
 msgstr ""
 
 msgid "Val: Archive"
 msgstr ""
 
-msgid "Get value archive object."
+msgid "Getting the value archive object (VArchObj) through connecting to the archive at its address."
 msgstr ""
 
-msgid "Size"
+msgid "Values type (0-Boolean, 1-Integer, 4-Real, 5-String)"
 msgstr ""
 
-msgid "Period (us)"
+msgid "Maximum buffer size"
+msgstr ""
+
+msgid "Values period, microseconds"
 msgstr ""
 
 msgid "Hard grid"
 msgstr ""
 
-msgid "High resolution"
+msgid "High time resolution (microseconds)"
 msgstr ""
 
 msgid "Val: Archive buffer"
 msgstr ""
 
-msgid "Get value buffer object for temporary values storing."
+msgid "Getting a value buffer object (VArchObj) for temporary values storing and performing the intermediate operations on frames of data."
 msgstr ""
 
 msgid "XML: Node"
 msgstr ""
 
-msgid "XML node object creation."
+msgid "Creating a XML node object."
 msgstr ""
 
 msgid "Request"
@@ -436,5 +445,5 @@ msgstr ""
 msgid "XML: Control request"
 msgstr ""
 
-msgid "Control request to system by XML."
+msgid "Requesting for control the program, by XML."
 msgstr ""

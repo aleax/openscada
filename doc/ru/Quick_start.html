@@ -160,20 +160,16 @@
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> В случае с <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">дистрибутивом Linux автоматизации</a> и пакетами версии продолжительной поддержки (LTS), к основному названию пакетов добавляется суффикс "-lts" — "openscada-lts", поскольку репозиторий один и он содержит пакеты обоих ветвей, рабочей и LTS.
 </p><p>Установка-обновление из репозитория является простым, но специфичным для дистрибутива Linux, оконного менеджера или отдельной программы работы с репозиториями и пакетами, поэтому отошлём читателя к соответствующей документации на дистрибутив или программу, которые он использует. Здесь-же вкратце рассмотрим добавление репозитория и установку OpenSCADA с помощью типовых инструментов командной строки:
 </p><p><b>Репозитории пакетов, основанные на менеджере APT (Debian, Ubuntu, ALTLinux)</b> — добавляются помещением загруженного файла "openscada.list" в директорию "/etc/apt/sources.list.d" или редактированием файла /etc/apt/sources.list, вставкой одной строки:<br />
-<i>Debian:</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.9.0/Debian/9" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.9.0/Debian/9</a> ./"<br />
-<i>Debian (рабочая версия):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Debian/9" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Debian/9</a> ./"<br />
-<i>Debian (рабочая версия, модули отдельно):</i> "deb <a class="external free" href="http://ftp.oscada.org/Debian/9/openscada" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/Debian/9/openscada</a> ./"<br />
-<i>Ubuntu:</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.9.0/Ubuntu/18.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.9.0/Ubuntu/18.04</a> ./"<br />
-<i>Ubuntu (рабочая версия):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04</a> ./"<br />
+<i>Debian (LTS и Work, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">репозиторий Linux автоматизації</a>):</i> "deb <a class="external free" href="http://ftp.oscada.org/Debian/9/openscada" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/Debian/9/openscada</a> ./"<br />
+<i>Ubuntu (LTS):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/LTS/Ubuntu/18.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/LTS/Ubuntu/18.04</a> ./"<br />
+<i>Ubuntu (Work):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04</a> ./"<br />
 Установка:
 </p>
 <pre style="white-space: pre-wrap;">
 $ apt-get update
 $ apt-get install openscada-model-aglks
 </pre>
-<p><i>ALTLinux:</i> "rpm <a class="external free" href="http://ftp.oscada.org/OpenSCADA/0.9.0/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/0.9.0/ALTLinux/7</a> openscada main"<br />
-<i>ALTLinux (рабочая версия):</i> "rpm <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/ALTLinux/6" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/ALTLinux/6</a> openscada main"<br />
-<i>ALTLinux (рабочая версия, модули отдельно):</i> "rpm <a class="external free" href="http://ftp.oscada.org/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/ALTLinux/7</a> openscada main"<br />
+<p><i>ALTLinux (LTS и Work, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">репозиторий Linux автоматизації</a>):</i> "rpm <a class="external free" href="http://ftp.oscada.org/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/ALTLinux/7</a> openscada main"<br />
 Установка:
 </p>
 <pre style="white-space: pre-wrap;">
@@ -189,14 +185,16 @@ $ apt-get install openscada-Model.AGLKS
 <pre style="white-space: pre-wrap;">
 [openscada]
 name=OpenSCADA
-#CentoOs
-baseurl=http://ftp.oscada.org/OpenSCADA/0.9.0/CentOs/7
-#CentoOs (рабочая версия)
+#CentoOs (LTS)
+baseurl=http://ftp.oscada.org/OpenSCADA/LTS/CentOs/7
+#CentoOs (Work)
 #baseurl=http://ftp.oscada.org/OpenSCADA/Work/CentOs/6
-#Fedora (рабочая версия)
+#Fedora (Work)
 #baseurl=http://ftp.oscada.org/OpenSCADA/Work/Fedora/12
 enabled=1
-gpgcheck=0
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=http://ftp.oscada.org/Misc/pkgSignKey
 </pre>
 <p>Установка:
 </p>
@@ -205,7 +203,7 @@ $ yum install openscada-Model.AGLKS </pre>
 <p><b>Репозитории пакетов SuSE YaST</b> — добавляются командой:
 </p>
 <pre style="white-space: pre-wrap;">
-$ zypper ar -f http://ftp.oscada.org/OpenSCADA/0.9.0/SuSE/13 OpenSCADA</pre>
+$ zypper ar -f http://ftp.oscada.org/OpenSCADA/LTS/SuSE/15 OpenSCADA</pre>
 <p>Установка:
 </p>
 <pre style="white-space: pre-wrap;">

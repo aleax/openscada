@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 14:03+0200\n"
+"POT-Creation-Date: 2018-07-22 19:57+0300\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -15,22 +15,25 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Properties no supported by the object."
+msgid "Properties are not supported by the object."
 msgstr "Властивості не підтримуються об'єктом."
 
-msgid "Error function '%s' or missing parameters for it."
+#, c-format
+msgid "Error the function '%s' or missing its parameters."
 msgstr "Помилка функції '%s' або недостатньо параметрів."
 
-msgid "System API functions"
-msgstr "Функції системного API"
+msgid "System functions"
+msgstr "Системні функції"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Provides the library of system API functions of user programming area."
+msgid ""
+"Provides a library of the system functions of the user programming area of "
+"OpenSCADA."
 msgstr ""
-"Надає в систему бібліотеку системного API середовища програмування "
-"користувача."
+"Надає бібліотеку системних функцій середовища програмування користувача "
+"OpenSCADA."
 
 msgid "Function"
 msgstr "Функція"
@@ -38,11 +41,11 @@ msgstr "Функція"
 msgid "Functions"
 msgstr "Функції"
 
-msgid "1:Request is not object!"
-msgstr "1:Запит не є об'єкт!"
+msgid "1:The request is not the object!"
+msgstr "1:Запит не є об'єктом!"
 
 #, c-format
-msgid "1:Request error: %s"
+msgid "1:Error the request: %s"
 msgstr "1:Помилка запиту: %s"
 
 msgid "Result"
@@ -70,15 +73,15 @@ msgstr ""
 "Доступ до файлу (''-сроковий поток;'r[+]'-читання;'w[+]'-запис з нуля;'a[+]'-"
 "додання;...)"
 
-msgid "Machine data format ('n'-sys order;'b'-BigEndian;'l'-LittleEndian)"
+msgid "Machine data format ('n'-system order;'b'-BigEndian;'l'-LittleEndian)"
 msgstr ""
 "Формат даних машини ('n'-сист.послідовн.;'b'-BigEndian;'l'-LittleEndian)"
 
-msgid "String encoding in file"
-msgstr "Кодування рядку у файлі"
+msgid "String encoding in the file/stream"
+msgstr "Кодування рядку у файлі/потоці"
 
-msgid "IO"
-msgstr "ВВ"
+msgid "SYS: Input/Output"
+msgstr "SYS: Ввід/Вивід"
 
 msgid "Input/Output to: file, string stream."
 msgstr "Ввід/Вивід до: файлу, поток у рядку."
@@ -86,11 +89,19 @@ msgstr "Ввід/Вивід до: файлу, поток у рядку."
 msgid "Command"
 msgstr "Команда"
 
-msgid "Sys: Call"
-msgstr "Сист: Виклик"
+msgid "SYS: Call"
+msgstr "SYS: Виклик"
 
-msgid "System call commands."
-msgstr "Виклик системних команд."
+msgid ""
+"Calling the console commands of the OS. The function offers great "
+"opportunities to the OpenSCADA user by calling any system software, "
+"utilities and scripts, as well as getting the access to the huge volume of "
+"system data by means of them."
+msgstr ""
+"Здійснює виклик консольних команд ОС. Функція відкриває широкі можливості "
+"користувачу OpenSCADA, шляхом виклику будь-яких системних програм, утиліт та "
+"скриптів, а також отримання за посередництвом них доступу до величезного "
+"об'єму системних даних."
 
 msgid "DB address, \"{TypeDB}.{DB}\""
 msgstr "Адреса БД, \"{TypeDB}.{DB}\""
@@ -106,18 +117,18 @@ msgstr "DB: SQL запит"
 
 msgid ""
 "Formation of the SQL-request <req> to the DB <addr>, inside (<trans>=true), "
-"outside (<trans>=false) or no matter (<trans>=EVAL) to a transaction. At an "
-"error the result's property \"err\" sets to the error value."
+"outside (<trans>=false) or no matter (<trans>=EVAL) to the transaction. At "
+"an error the result's property \"err\" sets to the error value."
 msgstr ""
 "Формування SQL-запиту <req> до БД <addr>, всередині (<trans>=true), назовні "
 "(<trans>=false) або без різниці (<trans>=EVAL) до транзакції. У випадку "
 "помилки її значення поміщається до властивості \"err\" результату."
 
-msgid "Begin time"
-msgstr "Час початку"
+msgid "Begin time, seconds"
+msgstr "Час початку, секунди"
 
-msgid "End time"
-msgstr "Час кінця"
+msgid "End time, seconds"
+msgstr "Час кінця, секунди"
 
 msgid "Category"
 msgstr "Категорія"
@@ -125,14 +136,14 @@ msgstr "Категорія"
 msgid "Level"
 msgstr "Рівень"
 
-msgid "Archivator"
+msgid "Archiver"
 msgstr "Архіватор"
 
 msgid "Mess: Get"
 msgstr "Mess: Отримання"
 
-msgid "Get messages from system."
-msgstr "Отримання повідомлення системи."
+msgid "Get messages of the program."
+msgstr "Отримати повідомлення програми."
 
 msgid "Message"
 msgstr "Повідомлення"
@@ -140,17 +151,17 @@ msgstr "Повідомлення"
 msgid "Mess: Put"
 msgstr "Mess: Розмістити"
 
-msgid "Put message to system."
-msgstr "Розмістити повідомлення у систему"
+msgid "Put a message to the program."
+msgstr "Розмістити повідомлення до програми"
 
 msgid "String"
-msgstr "Строка"
+msgstr "Рядок"
 
 msgid "String: Get size"
-msgstr "Строка: Отримати розмір"
+msgstr "Рядок: Отримати розмір"
 
-msgid "Use for string size getting."
-msgstr "Використовується для отримання розміру."
+msgid "Getting size of the string."
+msgstr "Отримання розміру рядка."
 
 msgid "Position"
 msgstr "Позиція"
@@ -159,28 +170,28 @@ msgid "Number"
 msgstr "Кількість"
 
 msgid "String: Get substring"
-msgstr "Строка: Отримати частину строки"
+msgstr "Рядок: Отримати частину рядка"
 
-msgid "Use for substring getting."
-msgstr "Використовується для отримання частини строки."
+msgid "Getting of the substring."
+msgstr "Отримання частини рядка."
 
-msgid "Insert string"
-msgstr "Вставити строку"
+msgid "String to insert"
+msgstr "Рядок для вставки"
 
-msgid "String: Insert string to other string"
-msgstr "Строка: Вставка строки у іншу"
+msgid "String: Insert a string to other string"
+msgstr "Рядок: Вставити рядок у інший"
 
-msgid "Use for insertion string to other string."
-msgstr "Використовується для вставки строки у іншу."
+msgid "Inserting a string to another string."
+msgstr "Вставка рядку до іншого рядку."
 
-msgid "Replace string"
+msgid "String to replace"
 msgstr "Рядок для заміни"
 
-msgid "String: Replace part string on other string"
-msgstr "Строка: Заміна частини строки іншою"
+msgid "String: Replace a part of the string by another string"
+msgstr "Рядок: Замінити частину рядка іншим"
 
-msgid "Use for replacing part string on other string."
-msgstr "Використовується для заміни строки іншою."
+msgid "Replacing a part of the string by another string."
+msgstr "Заміна частини рядку іншим рядком."
 
 msgid "Separator"
 msgstr "Розділювач"
@@ -188,51 +199,48 @@ msgstr "Розділювач"
 msgid "Offset"
 msgstr "Зміщення"
 
-msgid "String: Parse on separator"
-msgstr "Строка: Розбір за розділювачем"
+msgid "String: Parse with a separator"
+msgstr "Рядок: Розібрати за роздільником"
 
-msgid "Use for parse string on separator."
-msgstr "Використовується для розбору за розділювачем."
+msgid "Parsing the string with a separator."
+msgstr "Розбір рядка за роздільником."
 
 msgid "Path"
 msgstr "Шлях"
 
-msgid "String: Path parse"
-msgstr "Строка: Розбір шляху"
+msgid "String: Parse of the path"
+msgstr "Рядок: Розібрати шлях"
 
-msgid "Use for parse path on elements."
-msgstr "Використовується для розбору шляху на елементи."
+msgid "Parsing of the path for items."
+msgstr "Розбір шляху за елементами."
 
 msgid "Source"
 msgstr "Джерело"
 
 msgid "String: Path to separated string"
-msgstr "Строка: Шлях у рядок з розділювачем"
+msgstr "Рядок: Шлях у рядок з роздільником"
 
-msgid "Use for convert path to separated string."
-msgstr "Використовується для перетворення шляху у рядок з розділювачем."
+msgid "Converting the path to the separated string."
+msgstr "Перетворення шляху у рядок за роздільником."
 
 msgid "String: Encode string to HTML"
-msgstr "Строка: Кодування строки у HTML"
+msgstr "Рядок: Кодувати рядок у HTML"
 
-msgid "Use for encode string for use into HTML source."
-msgstr "Використовується для кодування рядка для використання у вихідних HTML."
+msgid "Encoding the string to use into the HTML source."
+msgstr "Кодування рядку для використання у вихідних HTML."
 
-msgid "String: Encode text to bin"
-msgstr "Строка: Кодування тексту у бінарний вигляд"
+msgid "String: Encode text to binary"
+msgstr "Рядок: Кодувати текст у бінарний вигляд"
 
-msgid "Use for encode text to bin, from format <00 A0 FA DE>."
+msgid "Encoding the text to the binary, for the text format <00 A0 FA DE>."
+msgstr "Кодування тексту у бінарний вигляд, для формату тексту <00 A0 FA DE>."
+
+msgid "String: Decode text from binary"
+msgstr "Рядок: Декодувати текст з бінарного вигляду"
+
+msgid "Decoding the text from the binary, for the text format <00 A0 FA DE>."
 msgstr ""
-"Використовується для кодування тексту у бінарний вигляд, з формату <00 A0 FA "
-"DE>."
-
-msgid "String: Decode text from bin"
-msgstr "Строка: Декодування тексту з бінарного вигляду"
-
-msgid "Use for decode text from bin to format <00 A0 FA DE>."
-msgstr ""
-"Використовується для декодування тексту з бінарного вигляду у формат <00 A0 "
-"FA DE>."
+"Декодування тексту з бінарного вигляду, для формату тексту <00 A0 FA DE>."
 
 msgid "Value"
 msgstr "Значення"
@@ -244,31 +252,34 @@ msgid "Type"
 msgstr "Тип"
 
 msgid "String: Real to string"
-msgstr "Строка: Реальне у строку"
+msgstr "Рядок: Реальне у рядок"
 
-msgid "Convert real to string."
-msgstr "Перетворення реального у строку."
+msgid "Converting the real value to the string format."
+msgstr "Перетворення реального значення у формат рядку."
 
-msgid "Base"
-msgstr "Основа"
+msgid "Base (8, 10, 16)"
+msgstr "База (8, 10, 16)"
 
 msgid "String: Integer to string"
-msgstr "Строка: Ціле у строку"
+msgstr "Рядок: Ціле у рядок"
 
-msgid "Convert integer to string."
-msgstr "Перетворення цілого у строку."
+msgid "Converting the integer value to the string format."
+msgstr "Перетворення цілого значення у формат рядку."
 
 msgid "String: String to real"
-msgstr "Строка: Строку у реальне"
+msgstr "Рядок: Рядок у реальне"
 
-msgid "Convert string to real."
-msgstr "Перетворення строки у реальне."
+msgid "Converting the string value to the real format."
+msgstr "Перетворення значення рядку у формат реального."
+
+msgid "Base (2...36)"
+msgstr "База (2...36)"
 
 msgid "String: String to integer"
-msgstr "Строка: Строка у ціле"
+msgstr "Рядок: Рядок у ціле"
 
-msgid "Convert string to integer."
-msgstr "Перетворення строки у ціле."
+msgid "Converting the string value to the integer format."
+msgstr "Перетворення значення рядку у формат цілого."
 
 msgid "Word 1"
 msgstr "Слово 1"
@@ -276,17 +287,17 @@ msgstr "Слово 1"
 msgid "Word 2"
 msgstr "Слово 2"
 
-msgid "Float: Split to words"
-msgstr "Float: Розподіл на слова"
+msgid "Float: Split to the words"
+msgstr "Float: Поділити на слова"
 
-msgid "Split float (4 byte) to words (2 byte)."
-msgstr "Розподіл float (4 байтів) на слова (2 байти)."
+msgid "Splitting the float value (4 bytes) to the two words (2 bytes)."
+msgstr "Поділ значення float (4 байтів) на два слова (2 байти)."
 
-msgid "Float: Merge from words"
-msgstr "Float: Об'єднання зі слів"
+msgid "Float: Merge from the words"
+msgstr "Float: Поєднати слова"
 
-msgid "Merge float (4 byte) from words (2 byte)."
-msgstr "Об'єднання float (4 байтів) зі слів (2 байти)."
+msgid "Forming the float value (4 bytes) from the two words (2 bytes)."
+msgstr "Формування значення float (4 байтів) з двох слів (2 байти)."
 
 msgid "Magnitude"
 msgstr "Розмір"
@@ -295,9 +306,9 @@ msgid "Exponent"
 msgstr "Експонента"
 
 msgid "Float: Extract"
-msgstr "Float: Вилучення"
+msgstr "Float: Вилучити"
 
-msgid "Extract mantissa and exponent from the float value."
+msgid "Extracting for mantissa and exponent from the float value."
 msgstr "Вилучення мантиси та експоненти з реального значення."
 
 msgid "Data"
@@ -315,17 +326,19 @@ msgstr "Поч. значення"
 msgid "Cyclic Redundancy Code (CRC)"
 msgstr "Циклічний Надмірний Код (CRC)"
 
-msgid "Unified Cyclic Redundancy Code implement for 8-64 bits width."
+msgid ""
+"Unified implementing of the Cyclic Redundancy Code for the width in 8-64 "
+"bits."
 msgstr "Уніфікована реалізація Циклічного Надмірного Коду для ширини 8-64 біт."
 
 msgid "Message Digest 5 (MD5)"
 msgstr "Зліпок повідомлення 5 (MD5)"
 
-msgid "Message Digest 5 calculation."
-msgstr "Обчислення зліпка повідомлення 5."
+msgid "Calculating for the message Digest 5 of the <data>."
+msgstr "Обчислення зліпка повідомлення 5 для даних <data>."
 
 msgid "Date and time string"
-msgstr "Строка дати та часу"
+msgstr "Рядок дати та часу"
 
 msgid "Seconds"
 msgstr "Секунди"
@@ -334,43 +347,54 @@ msgid "Date and time format"
 msgstr "Формат дати та часу"
 
 msgid "Time: String time"
-msgstr "Time: Строка повного часу."
+msgstr "Time: Рядок часу"
 
-msgid "Formatted string time."
-msgstr "Форматована строка часу."
+msgid ""
+"Getting the time in the formatted string. Recording of the format "
+"corresponds to the POSIX-function \"strftime()\"."
+msgstr ""
+"Отримання часу як форматований рядок. Запис формату відповідає POSIX-функції "
+"\"strftime()\"."
 
 msgid "Full seconds"
 msgstr "Повні секунди"
 
-msgid "Minutes"
-msgstr "Хвилини"
+msgid "Seconds [0...59]"
+msgstr "Секунди [0...59]"
 
-msgid "Hours"
-msgstr "Години"
+msgid "Minutes [0...59]"
+msgstr "Хвилини [0...59]"
 
-msgid "Day of the month"
-msgstr "День місяця"
+msgid "Hours [0...23]"
+msgstr "Години [0...23]"
 
-msgid "Month"
-msgstr "Місяць"
+msgid "Day of the month [1...31]"
+msgstr "День місяця [1...31]"
 
-msgid "Year"
-msgstr "Рік"
+msgid "Month [0...11]"
+msgstr "Місяць [0...11]"
 
-msgid "Day of the week"
-msgstr "День тижня"
+msgid "Year, from 1900"
+msgstr "Рік, від 1900"
 
-msgid "Day of the year"
-msgstr "День у році"
+msgid "Day of the week [0...6]"
+msgstr "День тижня [0...6]"
+
+msgid "Day of the year [0...365]"
+msgstr "День у року [0...365]"
 
 msgid "Daylight saving time"
 msgstr "Літній час"
 
-msgid "Time: Date"
-msgstr "Time: Дата"
+msgid "Time: Date and time"
+msgstr "Time: Дата та час"
 
-msgid "Full date."
-msgstr "Повна дата."
+msgid ""
+"Full date and time in seconds, minutes, hours, etc., based on the absolute "
+"time in seconds from the epoch of 01-01-1970."
+msgstr ""
+"Повна дата та час у секундах, хвилинах, годинах та інше, виходячи з "
+"абсолютного часу в секундах від епохи 1.1.1970."
 
 msgid "Microseconds"
 msgstr "Мікросекунди"
@@ -378,67 +402,90 @@ msgstr "Мікросекунди"
 msgid "Time: Time"
 msgstr "Time: Час"
 
-msgid "Full time (since 01.01.1970)."
-msgstr "Повний час (з 01.01.1970)."
+msgid ""
+"Getting the full time, in seconds since 01.01.1970, and in microseconds, if "
+"<usec> is installed in a non-negative value."
+msgstr ""
+"Отримання повного часу, у секундах з 01.01.1970, та мікросекундах, якщо "
+"<usec> встановлено у позитивне значення."
 
 msgid "Time: String to time"
-msgstr "Time: Строка у час."
+msgstr "Time: Рядок у час."
 
-msgid "Convert a string representation of time to a time."
-msgstr "Перетворення строкового представлення часу у абсолютний час."
+msgid ""
+"Converting the string data and time, for the <form>, to the time in seconds "
+"since 01.01.1970."
+msgstr ""
+"Перетворення строкового представлення дати та часу, за форматом <form>, у "
+"час в секундах з 01.01.1970."
 
 msgid "Result, seconds"
 msgstr "Результат, секунди"
 
-msgid "Cron"
+msgid "CRON"
 msgstr ""
 
 msgid "Base time, seconds"
 msgstr "Базовий час, секунди"
 
-msgid "Time: Cron plane time"
-msgstr "Time: Час планування за Cron."
+msgid "Time: Schedule time at CRON"
+msgstr "Time: Планувати час за CRON"
 
-msgid "Plane time by cron standard."
-msgstr "Час планування за стандартом cron."
+msgid ""
+"Scheduling the time at the CRON standard, returning the planned time from "
+"the <base> time or from the current time, if the base is not specified."
+msgstr ""
+"Планування часу за стандартом CRON, повертаючи спланований час починаючи від "
+"базового часу <base> або від поточного якщо базовий не вказаний."
 
-msgid "Time"
-msgstr "Час"
+msgid "Time, seconds"
+msgstr "Час, секунди"
 
 msgid "Time: sleep"
-msgstr "Час: сон"
+msgstr "Time: сон"
 
-msgid "Short sleep from nanoseconds and up to STD_INTERF_TM (5 seconds)."
+msgid "Short sleeping from nanoseconds and up to STD_INTERF_TM (5 seconds)."
 msgstr "Короткий сон від наносекунд та до STD_INTERF_TM (5 секунд)."
 
 msgid "Val: Archive"
 msgstr "Val: Архів"
 
-msgid "Get value archive object."
-msgstr "Отримання об'єкту архіву значень."
+msgid ""
+"Getting the value archive object (VArchObj) through connecting to the "
+"archive at its address."
+msgstr ""
+"Отримання об'єкту архіву значень (VArchObj) через підключення до архіву за "
+"його адресою."
 
-msgid "Size"
-msgstr "Розмір"
+msgid "Values type (0-Boolean, 1-Integer, 4-Real, 5-String)"
+msgstr "Тип значень (0-Логічний, 1-Цілий, 4-Реальний, 5-Рядок)"
 
-msgid "Period (us)"
-msgstr "Період (мкс)"
+msgid "Maximum buffer size"
+msgstr "Максимальний розмір буферу"
+
+msgid "Values period, microseconds"
+msgstr "Період значень буферу, мікросекунди"
 
 msgid "Hard grid"
 msgstr "Жорстка сітка"
 
-msgid "High resolution"
-msgstr "Висока роздільна здатність"
+msgid "High time resolution (microseconds)"
+msgstr "Висока роздільна здатність часу (мікросекунди)"
 
 msgid "Val: Archive buffer"
 msgstr "Val: Буфер архіву"
 
-msgid "Get value buffer object for temporary values storing."
-msgstr "Отримання об'єкту буфера значень для тимчасового збереження значень."
+msgid ""
+"Getting a value buffer object (VArchObj) for temporary values storing and "
+"performing the intermediate operations on frames of data."
+msgstr ""
+"Отримання об'єкту буфера значень для тимчасового збереження значень та "
+"виконання проміжних операцій над кадрами даних."
 
 msgid "XML: Node"
 msgstr "XML: Вузол"
 
-msgid "XML node object creation."
+msgid "Creating a XML node object."
 msgstr "Створення об'єкту XML вузла."
 
 msgid "Request"
@@ -450,5 +497,5 @@ msgstr "Станція"
 msgid "XML: Control request"
 msgstr "XML: Запит інтерфейсу керування"
 
-msgid "Control request to system by XML."
-msgstr "Запит інтерфейсу керування до системи за допомогою XML."
+msgid "Requesting for control the program, by XML."
+msgstr "Запит щодо контролю програми, за XML."

@@ -91,11 +91,11 @@ class IOCall : public TFunction
 	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
 	    ioAdd(new IO("name",_("File name or data (for string stream)"),IO::String,IO::Default));
 	    ioAdd(new IO("accs",_("File access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-append;...)"),IO::String,IO::Default));
-	    ioAdd(new IO("mFormat",_("Machine data format ('n'-sys order;'b'-BigEndian;'l'-LittleEndian)"),IO::String,IO::Default,"n"));
-	    ioAdd(new IO("enc",_("String encoding in file"),IO::String,IO::Default));
+	    ioAdd(new IO("mFormat",_("Machine data format ('n'-system order;'b'-BigEndian;'l'-LittleEndian)"),IO::String,IO::Default,"n"));
+	    ioAdd(new IO("enc",_("String encoding in the file/stream"),IO::String,IO::Default));
 	}
 
-	string name( )	{ return _("IO"); }
+	string name( )	{ return _("SYS: Input/Output"); }
 	string descr( )	{ return _("Input/Output to: file, string stream."); }
 
 	void calc( TValFunc *val )	{ val->setO(0, new IOObj(val->getS(1),val->getS(2),val->getS(3),val->getS(4))); }

@@ -98,7 +98,7 @@
 <td> <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a> </td>
 <td> DB MySQL
 </td>
-<td> 2.8 </td>
+<td> 2.9 </td>
 <td> GPL2 </td>
 <td> bd_MySQL.so </td>
 <td> en,uk,ru,de </td>
@@ -109,7 +109,7 @@
 <td> <a href="Modules/PostgreSQL.html" title="Special:MyLanguage/Modules/PostgreSQL">PostgreSQL</a> </td>
 <td> DB PostgreSQL
 </td>
-<td> 1.10 </td>
+<td> 1.11 </td>
 <td> GPL2 </td>
 <td> bd_PostgreSQL.so </td>
 <td> en,uk,ru,de </td>
@@ -196,8 +196,9 @@
 
 <tr>
 <td> <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a> </td>
-<td> Self protocol of OpenSCADA </td>
-<td> 1.2 </td>
+<td> Own protocol of OpenSCADA
+</td>
+<td> 1.3 </td>
 <td> GPL2 </td>
 <td> prot_SelfSystem.so </td>
 <td> en,uk,ru,de </td>
@@ -581,9 +582,9 @@
 
 <tr>
 <td> <a href="Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">FLibSYS</a> </td>
-<td> System API functions
+<td> System functions
 </td>
-<td> 1.5 </td>
+<td> 1.6 </td>
 <td> GPL2 </td>
 <td> spec_FLibSYS.so </td>
 <td> en,uk,ru,de </td>
@@ -749,28 +750,45 @@
 
 <tr>
 <td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Adaption_to_Android" title="Special:MyLanguage/Sub-projects/Adaption to Android">OpenSCADA adaption to the software platform "Android"</a> </td>
-<td> February 2017 </td>
-<td> Done
+<td> February 2017
+</td>
+<td> Implemented in these packages of irregular building by Roman Savochenko for the branch <a class="external text" href="http://ftp.oscada.org/OpenSCADA/Work/Android/" rel="nofollow noreferrer noopener" target="_blank">Work</a> and <a class="external text" href="http://ftp.oscada.org/OpenSCADA/LTS/Android/" rel="nofollow noreferrer noopener" target="_blank">LTS</a>:
+<ul><li> <b>OpenSCADA-{N}.apk</b> — Android &gt;= 5 (ABI 21, NDKr13)</li>
+<li> <b>OpenSCADA-{N}-ABI19.apk</b> — Android 4.4 only (ABI 19, CrystaxNDKr10)</li></ul>
+</td></tr>
+
+<tr>
+<td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automatic_Builder_of_OpenSCADA" title="Special:MyLanguage/Sub-projects/Automatic Builder of OpenSCADA">Automatic Builder of OpenSCADA</a> </td>
+<td> May 2015 </td>
+<td>
+<p>Implemented in the building (2) and syncing (1) scripts, building for up to 100 targets by: CHROOTs of the Linux repositories, VPS and different sub-environments.
+As the result of the Builder work is: <a class="external text" href="http://oscada.org/main/download/" rel="nofollow noreferrer noopener" target="_blank">the fresh and signed packages repositories of Linux, Live disk images and other binary archives of OpenSCADA</a>.
+</p>
 </td></tr>
 
 <tr>
 <td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Server" title="Special:MyLanguage/Sub-projects/Server">Server and hosting infrastructure of the OpenSCADA project</a> </td>
-<td> Jun 2014 </td>
-<td> Done
+<td> Jun 2014
+</td>
+<td> Implemented and exploiting now to store and present those and many other resources of the OpenSCADA project.
 </td></tr>
 
 <tr>
 <td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a> </td>
-<td> Mar 2012 </td>
-<td> Done
+<td> Mar 2012
+</td>
+<td> Implemented in these repositories of the Automation Linux distributive and these <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Live builds</a> are provided now for the branch <a class="external text" href="http://ftp.oscada.org/OpenSCADA/Work/Debian/Live" rel="nofollow noreferrer noopener" target="_blank">Work</a> and <a class="external text" href="http://ftp.oscada.org/OpenSCADA/LTS/Debian/Live" rel="nofollow noreferrer noopener" target="_blank">LTS</a>:
+<ul><li> <a class="external text" href="http://ftp.oscada.org/Debian/9" rel="nofollow noreferrer noopener" target="_blank">Debian 9</a>: x86_64, x86_32 (without guest Virtual Box)</li>
+<li> <a class="external text" href="http://ftp.oscada.org/Debian/8" rel="nofollow noreferrer noopener" target="_blank">Debian 8</a>: x86_64, x86_32</li>
+<li> <a class="external text" href="http://ftp.oscada.org/Debian/9" rel="nofollow noreferrer noopener" target="_blank">Debian 7</a>: x86_64, x86_32</li>
+<li> <a class="external text" href="http://ftp.oscada.org/ALTLinux/6" rel="nofollow noreferrer noopener" target="_blank">ALTinux 6</a>: x86_32 (only for compatibility of the old solutions)</li></ul>
 </td></tr>
 
 <tr>
 <td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Embedding_and_PLC" title="Special:MyLanguage/Sub-projects/Embedding and PLC">OpenSCADA generic embedding and programmable logical controllers (PLC)</a> </td>
-<td> October 2008 </td>
-<td> Done
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Continuously appending for:
-</p>
+<td> October 2008
+</td>
+<td> Implemented in many embedded solutions and continued to be implement in new ones, is appended for:
 <ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using#Devices" title="Special:MyLanguage/Using">new solutions</a>;</li>
 <li> performance measurements for <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Embedding_and_PLC#PerfSystems" title="Special:MyLanguage/Sub-projects/Embedding and PLC">the processing systems</a> used by OpenSCADA;</li>
 <li> properties for <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Embedding_and_PLC#PerfStorages" title="Special:MyLanguage/Sub-projects/Embedding and PLC">the storages</a> related to OpenSCADA.</li></ul>
@@ -785,26 +803,30 @@
 
 <tr>
 <td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Values_archivation" title="Special:MyLanguage/Sub-projects/Values archivation">Archiving of the values of continuous processes of OpenSCADA</a> </td>
-<td> 2006 </td>
-<td> Done
+<td> 2006
+</td>
+<td> Implemented in the module <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a> and <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a>.
 </td></tr>
 
 <tr>
 <td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Logical_level" title="Special:MyLanguage/Sub-projects/Logical level">Logical level of parameters of OpenSCADA</a> </td>
-<td> 2006 </td>
-<td> Done
+<td> 2006
+</td>
+<td> Implemented in templates of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#DAQ" title="Special:MyLanguage/Documents/Program manual">the subsystem DAQ</a>, the module <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a>, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.
 </td></tr>
 
 <tr>
 <td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Programming_environment" title="Special:MyLanguage/Sub-projects/Programming environment">Programming environment of the project OpenSCADA</a> </td>
-<td> 2006 </td>
-<td> Done
+<td> 2006
+</td>
+<td> Implemented in the module <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> and <a href="User_API.html" title="Special:MyLanguage/Documents/User API">the OpenSCADA object API of user programming</a>.
 </td></tr>
 
 <tr>
 <td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Diploma_Roman_Savochenko" title="Special:MyLanguage/Sub-projects/Diploma Roman Savochenko">Diploma project of developing of a programming environment of the project OpenSCADA for chemical-technological processes</a> </td>
-<td> Dec 2005 </td>
-<td> Done
+<td> Dec 2005
+</td>
+<td> Done. Sub-laid in the base of the sub-project "<a class="external" href="http://oscada.org/wiki/Sub-projects/Programming_environment" title="Sub-projects/Programming environment">Programming environment of the project OpenSCADA</a>".
 </td></tr>
 
 <tr>
@@ -815,12 +837,12 @@
 <tr>
 <td> <a class="external" href="http://oscada.org/wiki/File:Openscada_project_start_implementation_20030222.tar.bz2" title="File:Openscada project start implementation 20030222.tar.bz2">Materials of the OpenSCADA project of it implementation official starting</a> </td>
 <td> 2003 </td>
-<td> Done
+<td> Was used in the project implementation
 </td></tr>
 <tr>
 <td> <a class="external" href="http://oscada.org/wiki/File:Tz_scada_linux0807.sxw" title="File:Tz scada linux0807.sxw">Initial technical task of the OpenSCADA project, DIYA Ltd</a> </td>
 <td> 2002 </td>
-<td> Done
+<td> Was used in the project implementation
 </td></tr></table>
 
 
