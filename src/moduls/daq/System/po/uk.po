@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-01 20:14+0300\n"
+"POT-Creation-Date: 2018-06-05 10:12+0200\n"
 "PO-Revision-Date: 2007-10-29 11:52+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -206,23 +206,23 @@ msgstr ""
 "Надає збір даних операційної системи. Підтримуються джерела даних ОС Linux: "
 "HDDTemp, Sensors, Uptime, Memory, CPU, ДБЖ та інше."
 
-msgid "Auto create active DA"
-msgstr "Авт. створювати акт. джерела даних"
+msgid "Auto create active data sources"
+msgstr "Авт. створювати активні джерела даних"
 
 msgid "Manual;Fast sources;Slow sources;All sources"
 msgstr "Ручний;Швидкі джерела;Повільні джерела;Всі джерела"
 
-msgid "System parameters table"
+msgid "Table of system parameters"
 msgstr "Таблиця системних параметрів"
 
 msgid "Request data period (ms)"
 msgstr "Період опитування даних (мс)"
 
 msgid "Acquisition schedule"
-msgstr "Планування опитування"
+msgstr "Планування збору"
 
 msgid "Priority of the acquisition task"
-msgstr "Пріоритет задачі отримання даних"
+msgstr "Пріоритет задачі збору даних"
 
 msgid "Standard"
 msgstr "Стандартний"
@@ -233,16 +233,16 @@ msgstr "Частина системи"
 msgid "Additional parameters"
 msgstr "Додаткові параметри"
 
-msgid "Call now. "
-msgstr "Виклик зараз. "
+msgid "Acquisition. "
+msgstr "Збір. "
 
 #, c-format
-msgid "Call by period: %s. "
-msgstr "Виклик за періодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Збір з періодом: %s."
 
 #, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Наступний виклик за cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Наступний збір за cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s[%s]. "
@@ -255,7 +255,7 @@ msgid "1:Parameter disabled"
 msgstr "1:Параметр вимкнено"
 
 #, c-format
-msgid "Write value to attribute '%s' error: %s"
+msgid "Error writing value to attribute '%s': %s"
 msgstr "Помилка запису значення до атрибуту '%s': %s"
 
 msgid "CPU"
@@ -273,7 +273,7 @@ msgstr "Температура HDD"
 msgid "Memory"
 msgstr "Пам'ять"
 
-msgid "Net statistic"
+msgid "Network statistic"
 msgstr "Статистика мережі"
 
 msgid "Sensors"

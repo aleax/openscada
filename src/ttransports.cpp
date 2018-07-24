@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttransports.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,10 +31,10 @@ using namespace OSCADA;
 //************************************************
 //* TTransportS					 *
 //************************************************
-TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true)
+TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true), extHostLoad(0)
 {
     //Input transport BD structure
-    elIn.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    elIn.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     elIn.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     elIn.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     elIn.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
@@ -43,7 +43,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true)
     elIn.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //Output transport BD structure
-    elOut.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    elOut.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     elOut.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     elOut.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     elOut.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
@@ -51,14 +51,14 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true)
     elOut.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //External hosts' connection DB struct
-    elExt.fldAdd(new TFld("OP_USER",_("Open user"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    elExt.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    elExt.fldAdd(new TFld("OP_USER",_("User that opens"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    elExt.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     elExt.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     elExt.fldAdd(new TFld("TRANSP",_("Transport"),TFld::String,0,OBJ_ID_SZ));
     elExt.fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,0,"50"));
-    elExt.fldAdd(new TFld("USER",_("Request user"),TFld::String,0,OBJ_ID_SZ));
-    elExt.fldAdd(new TFld("PASS",_("Request password"),TFld::String,0,"30"));
-    elExt.fldAdd(new TFld("UpRiseLev",_("Uprising level"),TFld::Integer,0,"1"));
+    elExt.fldAdd(new TFld("USER",_("User of the requests"),TFld::String,0,OBJ_ID_SZ));
+    elExt.fldAdd(new TFld("PASS",_("Password of the requests"),TFld::String,0,"30"));
+    elExt.fldAdd(new TFld("UpRiseLev",_("Level of lifting"),TFld::Integer,0,"1"));
 }
 
 TTransportS::~TTransportS( )
@@ -97,7 +97,6 @@ string TTransportS::extHostsDB( )	{ return SYS->workDB()+".CfgExtHosts"; }
 void TTransportS::load_( )
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
 
@@ -137,7 +136,7 @@ void TTransportS::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_sys(TMess::Error, _("Search and create new input transports error."));
+	mess_sys(TMess::Error, _("Error finding and creating new input transports."));
     }
 
     // Search and create new output transports
@@ -173,7 +172,7 @@ void TTransportS::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_sys(TMess::Error, _("Search and create new input transports error."));
+	mess_sys(TMess::Error, _("Error finding and creating new output transports."));
     }
 
     // Load external hosts
@@ -189,11 +188,12 @@ void TTransportS::load_( )
 	    host.user		= c_el.cfg("USER").getS();
 	    host.pass		= c_el.cfg("PASS").getS();
 	    host.upRiseLev	= c_el.cfg("UpRiseLev").getI();
-	    extHostSet(host);
+	    extHostSet(host, false, true);
 	}
+	extHostLoad = time(NULL);
     } catch(TError &err) {
 	mess_err(err.cat.c_str()," %s", err.mess.c_str());
-	mess_sys(TMess::Error, _("Search and load external hosts DB error."));
+	mess_sys(TMess::Error, _("Error finding and loading external hosts."));
     }
 }
 
@@ -236,7 +236,7 @@ void TTransportS::subStart( )
 		if(!in.at().startStat() && in.at().toStart()) in.at().start();
 	    } catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Start input transport '%s' error."), o_lst[i_o].c_str());
+		mess_sys(TMess::Error, _("Error starting the input transport '%s'."), o_lst[i_o].c_str());
 	    }
 
 	o_lst.clear();
@@ -247,7 +247,7 @@ void TTransportS::subStart( )
 		if(!out.at().startStat() && out.at().toStart()) out.at().start();
 	    } catch(TError &err) {
 	        mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Start output transport '%s' error."), o_lst[i_o].c_str());
+		mess_sys(TMess::Error, _("Error starting the output transport '%s'."), o_lst[i_o].c_str());
 	    }
     }
 
@@ -269,7 +269,7 @@ void TTransportS::subStop( )
 		if(in.at().startStat()) in.at().stop();
 	    } catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Stop input transport '%s' error."), o_lst[i_o].c_str());
+		mess_sys(TMess::Error, _("Error stopping the input transport '%s'."), o_lst[i_o].c_str());
 	    }
 	o_lst.clear();
 	mod.at().outList(o_lst);
@@ -279,7 +279,7 @@ void TTransportS::subStop( )
 		if(out.at().startStat()) out.at().stop();
 	    } catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Stop output transport '%s' error."), o_lst[i_o].c_str());
+		mess_sys(TMess::Error, _("Error stopping the output transport '%s'."), o_lst[i_o].c_str());
 	    }
     }
 
@@ -288,12 +288,9 @@ void TTransportS::subStop( )
 
 string TTransportS::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),_(
+    return TSYS::strMess(_(
 	"======================= Subsystem \"Transports\" options ==================\n\n"
-	),nodePath().c_str());
-
-    return buf;
+	)) + TSubSYS::optDescr();
 }
 
 void TTransportS::extHostList( const string &user, vector<ExtHost> &list, bool andSYS, int upRiseLev )
@@ -352,7 +349,7 @@ TTransportS::ExtHost TTransportS::extHostGet( const string &user, const string &
     return eh;
 }
 
-void TTransportS::extHostSet( const ExtHost &host, bool andSYS )
+void TTransportS::extHostSet( const ExtHost &host, bool andSYS, bool load )
 {
     ResAlloc res(extHostRes, true);
     int usrHstId = -1, sysHstId = -1;
@@ -362,6 +359,9 @@ void TTransportS::extHostSet( const ExtHost &host, bool andSYS )
 	    else if(extHostLs[iH].userOpen == host.userOpen)	usrHstId = iH;
 	    else if(extHostLs[iH].userOpen == "*")		sysHstId = iH;
 	}
+
+    time_t saveMdf = (load && usrHstId >= 0 && extHostLs[usrHstId].mdf <= extHostLoad) ? extHostLs[usrHstId].mdf : 0;
+
     if(host.mode < 0 || !andSYS) {
 	if(usrHstId < 0) extHostLs.push_back(host);
 	else extHostLs[usrHstId] = host;
@@ -381,6 +381,8 @@ void TTransportS::extHostSet( const ExtHost &host, bool andSYS )
 	if(host.mode == ExtHost::System && usrHstId >= 0 && usrHstId != sysHstId) extHostLs.erase(extHostLs.begin() + usrHstId);
     }
 
+    if(saveMdf)	extHostLs[usrHstId].mdf = saveMdf;
+
     modif();
 }
 
@@ -398,7 +400,7 @@ void TTransportS::extHostDel( const string &user, const string &id, bool andSYS 
 AutoHD<TTransportOut> TTransportS::extHost( TTransportS::ExtHost host, const string &pref )
 {
     if(!host.id.size() || !modPresent(host.transp))
-	throw err_sys(_("Remote host '%s' error!"), host.id.c_str());
+	throw err_sys(_("Error the remote host '%s'!"), host.id.c_str());
 
     if(!at(host.transp).at().outPresent(pref+host.id)) at(host.transp).at().outAdd(pref+host.id);
     if(at(host.transp).at().outAt(pref+host.id).at().addr() != host.addr) {
@@ -437,9 +439,9 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
     AutoHD<TTransportOut> tr = extHost(host, senderPref);
     if(tr.at().startStat() && host.mdf > tr.at().startTm()) { tr.at().stop(); node.setAttr("rqAuthForce","1"); }
     if(!tr.at().startStat()) tr.at().start(s2i(node.attr("conTm")));
-    //if(mess_lev() == TMess::Debug) mess_debug((tr.at().nodePath()+senderPref).c_str(), _("REQ: %s"), node.save().c_str());
+    //if(mess_lev() == TMess::Debug) mess_debug((tr.at().nodePath()+senderPref).c_str(), "REQ: %s", node.save().c_str());
     tr.at().messProtIO(node, "SelfSystem");
-    //if(mess_lev() == TMess::Debug) mess_debug((tr.at().nodePath()+senderPref).c_str(), _("RESP: %s"), node.save().c_str());
+    //if(mess_lev() == TMess::Debug) mess_debug((tr.at().nodePath()+senderPref).c_str(), "RESP: %s", node.save().c_str());
     node.setAttr("path", path);
     //Password's hash processing
     if(!rqDir && node.attr("pHash").size()) {
@@ -459,9 +461,10 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),R_R_R_) &&
-	    ctrMkNode("table",opt,-1,"/sub/ehost",_("External hosts poll"),RWRWRW,"root",STR_ID,2,"s_com","add,del","key","id"))
+	    ctrMkNode("table",opt,-1,"/sub/ehost",TSYS::strMess(_("External hosts of %s"),PACKAGE_NAME).c_str(),RWRWRW,"root",STR_ID,2,
+		"s_com","add,del","key","id"))
 	{
-	    ctrMkNode("list",opt,-1,"/sub/ehost/id",_("Id"),RWRWRW,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/sub/ehost/id",_("Identifier"),RWRWRW,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/sub/ehost/name",_("Name"),RWRWRW,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/sub/ehost/transp",_("Transport"),RWRWRW,"root",STR_ID,4,"tp","str",
 		"idm","1","dest","select","select","/sub/transps");
@@ -471,7 +474,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/sub/ehost/mode",_("Mode"),RWRW__,"root",STR_ID,4,"tp","int","dest","select",
 		"sel_id",TSYS::strMess("%d;%d;%d",ExtHost::User,ExtHost::System,ExtHost::UserSystem).c_str(),
 		"sel_list",_("User;System;User and System"));
-	    ctrMkNode("list",opt,-1,"/sub/ehost/upRiseLev",_("Uprising level"),RWRWRW,"root",STR_ID,1,"tp","dec");
+	    ctrMkNode("list",opt,-1,"/sub/ehost/upRiseLev",_("Level of lifting"),RWRWRW,"root",STR_ID,1,"tp","dec");
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",STR_ID,3,"tp","str","cols","90","rows","10");
 	return;
@@ -516,12 +519,12 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWRW,"root",STR_ID,SEC_WR))	extHostSet(ExtHost(u,"newHost",_("New external host"),"","",u));
 	if(ctrChkNode(opt,"del",RWRWRW,"root",STR_ID,SEC_WR)) {
 	    if(TSYS::strParse(opt->attr("key_id"), 1, ".").size())
-		throw err_sys(_("Uprising hosts not allowed here for its management!"));
+		throw err_sys(_("Lifted hosts are not available for control here!"));
 	    extHostDel(u, opt->attr("key_id"), sysHostAcs);
 	}
 	if(ctrChkNode(opt,"set",RWRWRW,"root",STR_ID,SEC_WR)) {
 	    if(TSYS::strParse(opt->attr("key_id"), 1, ".").size())
-		throw err_sys(_("Uprising hosts not allowed here for its management!"));
+		throw err_sys(_("Lifted hosts are not available for control here!"));
 	    string col   = opt->attr("col");
 	    ExtHost host = extHostGet(u, opt->attr("key_id"), sysHostAcs);
 	    if(col == "id") {
@@ -886,7 +889,7 @@ void TTransportOut::preEnable( int flag )
 
 void TTransportOut::messProtIO( XMLNode &io, const string &prot )
 {
-    if(!SYS->protocol().at().modPresent(prot)) throw err_sys(_("Transport protocol '%s' no present"), prot.c_str());
+    if(!SYS->protocol().at().modPresent(prot)) throw err_sys(_("Transport protocol '%s' is missing"), prot.c_str());
     SYS->protocol().at().at(prot).at().outMess(io, *this);
 }
 

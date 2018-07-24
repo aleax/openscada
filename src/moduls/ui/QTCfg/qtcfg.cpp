@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,7 +22,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include <QApplication>
 #include <QToolTip>
 #include <QTreeWidget>
 #include <QHeaderView>
@@ -66,8 +65,6 @@
 #include "qtcfg.h"
 
 #define CH_REFR_TM	100
-#define TOOL_TIP_LIM	150
-#define TOOL_TIP_ADD	"Shift+F1"
 
 using namespace QTCFG;
 
@@ -75,8 +72,10 @@ using namespace QTCFG;
 //* ConfApp                                       *
 //*************************************************
 ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
-    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false), pgDisplay(false)
+    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false), pgDisplay(false), winClose(false)
 {
+    connect(this, SIGNAL(makeStarterMenu(QWidget*)), qApp, SLOT(makeStarterMenu(QWidget*)));
+
     //Main window settings
     setAttribute(Qt::WA_DeleteOnClose, true);
     QImage ico_t;
@@ -106,13 +105,13 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     //splitter->setSizeConstraint(QSplitter::KeepSize);
     CtrTree->setHeaderLabels(QStringList() << _("Name") << _("Type") << _("Path"));
     CtrTree->header()->setStretchLastSection(false);
-    CtrTree->header()->resizeSection(0, 200);
+    CtrTree->header()->resizeSection(0, icoSize(14));
     //CtrTree->header()->setSectionHidden(1,true);
     //CtrTree->header()->setSectionHidden(2,true);
     //CtrTree->header()->hide();
     //CtrTree->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding, 2, 0, CtrTree->sizePolicy().hasHeightForWidth() ) );
-    CtrTree->setMinimumSize(QSize(150,0));
-    CtrTree->setWhatsThis(_("The main navigation tree of the configurator."));
+    CtrTree->setMinimumSize(QSize(icoSize(10),0));
+    CtrTree->setWhatsThis(_("Main navigation tree of the configurator."));
     connect(CtrTree, SIGNAL(itemSelectionChanged()), this, SLOT(selectItem()));
     connect(CtrTree, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(viewChild(QTreeWidgetItem*)));
     connect(CtrTree, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ctrTreePopup()));
@@ -126,7 +125,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
 
     //Right frame add
     QFrame *gFrame = new QFrame(splitter);
-    gFrame->setWhatsThis(_("The main configurator frame."));
+    gFrame->setWhatsThis(_("Main frame of the configurator."));
     QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Expanding);
     sp.setHorizontalStretch(3);
     gFrame->setSizePolicy(sp);
@@ -141,9 +140,11 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
 
     titleLab = new QLabel(gFrame);
     //titleLab->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred) );
-    QFont titleLab_font(titleLab->font());
-    titleLab_font.setPointSize(14);
-    titleLab->setFont(titleLab_font);
+    QFont tFnt(titleLab->font());
+    if(tFnt.pointSizeF() > 0)	tFnt.setPointSizeF(tFnt.pointSizeF()*1.4);
+    else if(tFnt.pixelSize() > 0) tFnt.setPixelSize(tFnt.pixelSize()*1.4);
+    //tFnt.setPointSize(14);
+    titleLab->setFont(tFnt);
     titleLab->setWordWrap(true);
     gFrameLayout->addWidget(titleLab, 0, 1);
 
@@ -154,115 +155,115 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     gFrameLayout->addWidget(tabs, 1, 0, 1, 2);
 
     QList<int> splSz;
-    splSz.push_back(200);
-    splSz.push_back(600);
+    splSz.push_back(icoSize(14));
+    splSz.push_back(icoSize(40));
     splitter->setSizes(splSz);
     QTCfgLayout->addWidget(splitter, 0, 0);
 
-    resize(800, 600);
+    resize(icoSize(50), icoSize(40));
 
     //Create actions
     // Close
     if(!ico_t.load(TUIS::icoPath("close").c_str())) ico_t.load(":/images/close.png");
     QAction *actClose = new QAction(QPixmap::fromImage(ico_t),_("&Close"),this);
     actClose->setShortcut(Qt::CTRL+Qt::Key_W);
-    actClose->setToolTip(_("Close configurator window"));
-    actClose->setWhatsThis(_("The button for closing OpenSCADA configurator window"));
-    actClose->setStatusTip(_("Press to close OpenSCADA configurator window"));
+    actClose->setToolTip(_("Close the configurator window"));
+    actClose->setWhatsThis(_("The button for closing the configurator window"));
+    actClose->setStatusTip(_("Press to close the configurator window."));
     connect(actClose, SIGNAL(triggered()), this, SLOT(close()));
     // Quit
     if(!ico_t.load(TUIS::icoPath("exit").c_str())) ico_t.load(":/images/exit.png");
     QAction *actQuit = new QAction(QPixmap::fromImage(ico_t),_("&Quit"),this);
     actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
-    actQuit->setToolTip(_("Quit OpenSCADA"));
-    actQuit->setWhatsThis(_("The button for full quit from OpenSCADA"));
-    actQuit->setStatusTip(_("Press for full quit from OpenSCADA"));
+    actQuit->setToolTip(_("Quit the program"));
+    actQuit->setWhatsThis(_("The button for complete quit the program"));
+    actQuit->setStatusTip(_("Press for complete quit the program."));
     connect(actQuit, SIGNAL(triggered()), this, SLOT(quitSt()));
     // Up button
     if(!ico_t.load(TUIS::icoPath("up").c_str())) ico_t.load(":/images/up.png");
     actUp = new QAction(QPixmap::fromImage(ico_t),_("&Up"),this);
     actUp->setShortcut(Qt::ALT+Qt::Key_Up);
-    actUp->setToolTip(_("Up page"));
-    actUp->setWhatsThis(_("The button for going to level up"));
-    actUp->setStatusTip(_("Press for going to level up"));
+    actUp->setToolTip(_("Go to the parent page"));
+    actUp->setWhatsThis(_("The button for going to the parent page"));
+    actUp->setStatusTip(_("Press for going to the parent page."));
     actUp->setEnabled(false);
     connect(actUp, SIGNAL(triggered()), this, SLOT(pageUp()));
     // Previous page
     if(!ico_t.load(TUIS::icoPath("previous").c_str())) ico_t.load(":/images/previous.png");
-    actPrev = new QAction(QPixmap::fromImage(ico_t),_("&Previous"),this);
+    actPrev = new QAction(QPixmap::fromImage(ico_t),_("&Back"),this);
     actPrev->setShortcut(Qt::ALT+Qt::Key_Left);
-    actPrev->setToolTip(_("Previous page"));
-    actPrev->setWhatsThis(_("The button for going to previous page"));
-    actPrev->setStatusTip(_("Press for going to previous page"));
+    actPrev->setToolTip(_("Go back"));
+    actPrev->setWhatsThis(_("The button for going to the back page"));
+    actPrev->setStatusTip(_("Press for going to the back page."));
     actPrev->setEnabled(false);
     connect(actPrev, SIGNAL(triggered()), this, SLOT(pagePrev()));
     // Next page
     if(!ico_t.load(TUIS::icoPath("next").c_str())) ico_t.load(":/images/next.png");
-    actNext = new QAction(QPixmap::fromImage(ico_t),_("&Next"),this);
+    actNext = new QAction(QPixmap::fromImage(ico_t),_("&Forward"),this);
     actNext->setShortcut(Qt::ALT+Qt::Key_Right);
-    actNext->setToolTip(_("Next page"));
-    actNext->setWhatsThis(_("The button for going to next page"));
-    actNext->setStatusTip(_("Press for going to next page"));
+    actNext->setToolTip(_("Go forward"));
+    actNext->setWhatsThis(_("The button for going to the forward page"));
+    actNext->setStatusTip(_("Press for going to the forward page."));
     actNext->setEnabled(false);
     connect(actNext, SIGNAL(triggered()), this, SLOT(pageNext()));
     //  Load item from db
     if(!ico_t.load(TUIS::icoPath("load").c_str())) ico_t.load(":/images/load.png");
-    actDBLoad = new QAction(QPixmap::fromImage(ico_t),_("Load from DB"),this);
-    actDBLoad->setToolTip(_("Load item data from DB"));
-    actDBLoad->setWhatsThis(_("The button for loading item data from DB"));
-    actDBLoad->setStatusTip(_("Press for loading item data from DB."));
+    actDBLoad = new QAction(QPixmap::fromImage(ico_t),_("Load from the DB"),this);
+    actDBLoad->setToolTip(_("Load the item data from DB"));
+    actDBLoad->setWhatsThis(_("The button for loading the item data from the DB"));
+    actDBLoad->setStatusTip(_("Press for loading the item data from the DB."));
     actDBLoad->setEnabled(false);
     connect(actDBLoad, SIGNAL(triggered()), this, SLOT(itDBLoad()));
     //  Save item to db
     if(!ico_t.load(TUIS::icoPath("save").c_str())) ico_t.load(":/images/save.png");
-    actDBSave = new QAction(QPixmap::fromImage(ico_t),_("Save to DB"),this);
-    actDBSave->setToolTip(_("Save item data to DB"));
-    actDBSave->setWhatsThis(_("The button for saving item data to DB"));
-    actDBSave->setStatusTip(_("Press for saving item data to DB."));
+    actDBSave = new QAction(QPixmap::fromImage(ico_t),_("Save to the DB"),this);
+    actDBSave->setToolTip(_("Save the item data to DB"));
+    actDBSave->setWhatsThis(_("The button for saving the item data to the DB"));
+    actDBSave->setStatusTip(_("Press for saving the item data to the DB."));
     actDBSave->setShortcut(QKeySequence("Ctrl+S"));
     actDBSave->setEnabled(false);
     connect(actDBSave, SIGNAL(triggered()), this, SLOT(itDBSave()));
-    // Item add
+    // Add an item
     if(!ico_t.load(TUIS::icoPath("it_add").c_str())) ico_t.load(":/images/it_add.png");
     actItAdd = new QAction(QPixmap::fromImage(ico_t),_("&Add"),this);
     actItAdd->setToolTip(_("Add item"));
-    actItAdd->setWhatsThis(_("The button for adding new item"));
-    actItAdd->setStatusTip(_("Press for adding new item."));
+    actItAdd->setWhatsThis(_("The button for adding a new item"));
+    actItAdd->setStatusTip(_("Press for adding a new item."));
     actItAdd->setEnabled(false);
     connect(actItAdd, SIGNAL(triggered()), this, SLOT(itAdd()));
-    // Item delete
+    // Delete the item
     if(!ico_t.load(TUIS::icoPath("it_del").c_str())) ico_t.load(":/images/it_del.png");
     actItDel = new QAction(QPixmap::fromImage(ico_t),_("&Delete"),this);
     actItDel->setToolTip(_("Delete item"));
-    actItDel->setWhatsThis(_("The button for deleting item"));
-    actItDel->setStatusTip(_("Press for deleting item."));
+    actItDel->setWhatsThis(_("The button for deleting the item"));
+    actItDel->setStatusTip(_("Press for deleting the item."));
     actItDel->setShortcut(QKeySequence("Ctrl+D"));
     actItDel->setEnabled(false);
     connect(actItDel, SIGNAL(triggered()), this, SLOT(itDel()));
-    //  Cut item
-    if(!ico_t.load(TUIS::icoPath("editcut").c_str())) ico_t.load(":/images/editcut.png");
-    actItCut = new QAction(QPixmap::fromImage(ico_t),_("Item cut"),this);
-    actItCut->setToolTip(_("Cutting of the item"));
-    actItCut->setWhatsThis(_("The button for cutting of the item"));
-    actItCut->setStatusTip(_("Press to cut the item."));
-    actItCut->setShortcut(QKeySequence("Ctrl+X"));
-    actItCut->setEnabled(false);
-    connect(actItCut, SIGNAL(triggered()), this, SLOT(itCut()));
-    //  Copy item
+    //  Copy the item
     if(!ico_t.load(TUIS::icoPath("editcopy").c_str())) ico_t.load(":/images/editcopy.png");
-    actItCopy = new QAction(QPixmap::fromImage(ico_t),_("Item copy"),this);
-    actItCopy->setToolTip(_("Copying of the item"));
-    actItCopy->setWhatsThis(_("The button for copying of the item"));
-    actItCopy->setStatusTip(_("Press to copy the item."));
+    actItCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy item"),this);
+    actItCopy->setToolTip(_("Copying the item"));
+    actItCopy->setWhatsThis(_("The button for copying the item"));
+    actItCopy->setStatusTip(_("Press for copying the item."));
     actItCopy->setShortcut(QKeySequence("Ctrl+C"));
     actItCopy->setEnabled(false);
     connect(actItCopy, SIGNAL(triggered()), this, SLOT(itCopy()));
+    //  Cut the item
+    if(!ico_t.load(TUIS::icoPath("editcut").c_str())) ico_t.load(":/images/editcut.png");
+    actItCut = new QAction(QPixmap::fromImage(ico_t),_("Cut item"),this);
+    actItCut->setToolTip(_("Cutting the item"));
+    actItCut->setWhatsThis(_("The button for cutting the item"));
+    actItCut->setStatusTip(_("Press for cutting the item."));
+    actItCut->setShortcut(QKeySequence("Ctrl+X"));
+    actItCut->setEnabled(false);
+    connect(actItCut, SIGNAL(triggered()), this, SLOT(itCut()));
     //  Paste item
     if(!ico_t.load(TUIS::icoPath("editpaste").c_str())) ico_t.load(":/images/editpaste.png");
-    actItPaste = new QAction(QPixmap::fromImage(ico_t),_("Item paste"),this);
-    actItPaste->setToolTip(_("Pasting of the item"));
-    actItPaste->setWhatsThis(_("The button for pasting of the item"));
-    actItPaste->setStatusTip(_("Press to paste the item."));
+    actItPaste = new QAction(QPixmap::fromImage(ico_t),_("Paste item"),this);
+    actItPaste->setToolTip(_("Pasting the item"));
+    actItPaste->setWhatsThis(_("The button for pasting the item"));
+    actItPaste->setStatusTip(_("Press for pasting the item."));
     actItPaste->setShortcut(QKeySequence("Ctrl+V"));
     actItPaste->setEnabled(false);
     connect(actItPaste, SIGNAL(triggered()), this, SLOT(itPaste()));
@@ -270,25 +271,25 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
     QAction *actUpdate = new QAction(QPixmap::fromImage(ico_t),_("&Refresh"),this);
     actUpdate->setShortcut(Qt::Key_F5);
-    actUpdate->setToolTip(_("Refresh current page"));
-    actUpdate->setWhatsThis(_("The button for refreshing of the content of the current page."));
-    actUpdate->setStatusTip(_("Press for refreshing of the content of the current page."));
+    actUpdate->setToolTip(_("Refresh the page"));
+    actUpdate->setWhatsThis(_("The button for refreshing the page content"));
+    actUpdate->setStatusTip(_("Press for refreshing the page content."));
     connect(actUpdate, SIGNAL(triggered()), this, SLOT(pageRefresh()));
     // Start of "Auto update"
     if(!ico_t.load(TUIS::icoPath("start").c_str())) ico_t.load(":/images/start.png");
     actStartUpd = new QAction(QPixmap::fromImage(ico_t),_("&Start"),this);
     actStartUpd->setShortcut(Qt::CTRL+Qt::Key_B);
-    actStartUpd->setToolTip(_("Start cycled refresh"));
-    actStartUpd->setWhatsThis(_("The button for starting of the cycled refresh of the content of the current page."));
-    actStartUpd->setStatusTip(_("Press to start the cycled refresh of the content of the current page."));
+    actStartUpd->setToolTip(_("Start the cycled refreshing"));
+    actStartUpd->setWhatsThis(_("The button for starting the cycled refreshing of the page content"));
+    actStartUpd->setStatusTip(_("Press for starting the cycled refreshing of the page content."));
     connect(actStartUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStart()));
     // Stop of "Auto update"
     if(!ico_t.load(TUIS::icoPath("stop").c_str())) ico_t.load(":/images/stop.png");
     actStopUpd = new QAction(QPixmap::fromImage(ico_t),_("&Stop"),this);
     actStopUpd->setShortcut(Qt::CTRL+Qt::Key_E);
-    actStopUpd->setToolTip(_("Stop cycled refresh"));
-    actStopUpd->setWhatsThis(_("The button for stopping of the cycled refresh of the content of the current page."));
-    actStopUpd->setStatusTip(_("Press to stop the cycled refresh of the content of the current page."));
+    actStopUpd->setToolTip(_("Stop the cycled refreshing"));
+    actStopUpd->setWhatsThis(_("The button for stopping the cycled refreshing of the page content"));
+    actStopUpd->setStatusTip(_("Press for stopping the cycled refreshing of the page content."));
     actStopUpd->setEnabled(false);
     connect(actStopUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStop()));
     // About "System info"
@@ -296,22 +297,22 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
     actAbout->setShortcut(Qt::Key_F1);
     actAbout->setToolTip(_("Program and OpenSCADA information"));
-    actAbout->setWhatsThis(_("The button for display program and OpenSCADA information"));
-    actAbout->setStatusTip(_("Press to display program and OpenSCADA information"));
+    actAbout->setWhatsThis(_("The button of the information of the program and OpenSCADA"));
+    actAbout->setStatusTip(_("Press for information of the program and OpenSCADA."));
     connect(actAbout, SIGNAL(triggered()), this, SLOT(about()));
     // About Qt
     QAction *actQtAbout = new QAction(_("About &Qt"),this);
     actQtAbout->setToolTip(_("Qt information"));
     actQtAbout->setWhatsThis(_("The button for getting the using Qt information"));
-    actQtAbout->setStatusTip(_("Press to get the using Qt information."));
+    actQtAbout->setStatusTip(_("Press for getting the using Qt information."));
     connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
     // What is
     if(!ico_t.load(TUIS::icoPath("contexthelp").c_str())) ico_t.load(":/images/contexthelp.png");
     QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
     actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
-    actWhatIs->setToolTip(_("Question about GUI elements"));
-    actWhatIs->setWhatsThis(_("The button for requesting the information about user interface elements"));
-    actWhatIs->setStatusTip(_("Press for requesting about user interface elements"));
+    actWhatIs->setToolTip(_("Requesting about GUI elements"));
+    actWhatIs->setWhatsThis(_("The button for requesting information about the user interface elements"));
+    actWhatIs->setStatusTip(_("Press for requesting information about the user interface elements."));
     connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
     //Create menu
@@ -345,12 +346,15 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     help->addAction(actQtAbout);
     help->addSeparator( );
     help->addAction(actWhatIs);
+    // QTStarter
+    emit makeStarterMenu(NULL);
 
     //Create tool bars
     // Main tool bar
-    QToolBar *toolBar = new QToolBar(_("OpenSCADA toolbar"),this);
+    QToolBar *toolBar = new QToolBar(_("Main toolbar"), this);
+    toolBar->setIconSize(QSize(icoSize(1.7),icoSize(1.7)));
     toolBar->setAllowedAreas(Qt::AllToolBarAreas);
-    addToolBar(Qt::TopToolBarArea,toolBar);
+    addToolBar(Qt::TopToolBarArea, toolBar);
     toolBar->setMovable(true);
     toolBar->addAction(actDBLoad);
     toolBar->addAction(actDBSave);
@@ -369,25 +373,32 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     toolBar->addAction(actUpdate);
     toolBar->addAction(actStartUpd);
     toolBar->addAction(actStopUpd);
+    // QTStarter
+    QToolBar *tB = new QToolBar("QTStarter", this);
+    tB->setIconSize(QSize(icoSize(1.7),icoSize(1.7)));
+    tB->setObjectName("QTStarterTool");
+    addToolBar(Qt::TopToolBarArea, tB);
+    tB->setMovable(true);
+    emit makeStarterMenu(tB);
 
     //Init status bar
     connect(statusBar(), SIGNAL(messageChanged(const QString&)), this, SLOT(stMessChanged(const QString&)));
     wUser = new UserStBar(open_user.c_str(), this);
-    wUser->setWhatsThis(_("This label displays current user."));
-    wUser->setToolTip(_("Field for display of the current user."));
-    wUser->setStatusTip(_("Double click to change user."));
+    wUser->setWhatsThis(_("This label displays the current user."));
+    wUser->setToolTip(_("Field for displaying the current user."));
+    wUser->setStatusTip(_("Double click to change the user."));
     statusBar()->insertPermanentWidget(0, wUser);
     connect(wUser, SIGNAL(userChanged()), this, SLOT(userSel()));
 
     mStModify = new QLabel(" ",this);
-    mStModify->setWhatsThis(_("This label displays the local station modifying."));
-    mStModify->setToolTip(_("Field for display of the local station modifying."));
+    mStModify->setWhatsThis(_("This label indicates the fact of making changes."));
+    mStModify->setToolTip(_("Field for indicating the fact of making changes."));
     statusBar()->insertPermanentWidget(0,mStModify);
 
     if(!ico_t.load(TUIS::icoPath("combar").c_str())) ico_t.load(":/images/combar.png");
     QPushButton *stBt = new QPushButton(QPixmap::fromImage(ico_t),"",this);
-    stBt->setWhatsThis(_("This button for call status bar history."));
-    stBt->setToolTip(_("Button for call status bar history."));
+    stBt->setWhatsThis(_("This button calls the status bar history."));
+    stBt->setToolTip(_("Button for calling the status bar history."));
     stBt->setMaximumSize(QSize(16,18));
     stBt->setFlat(true);
     statusBar()->insertPermanentWidget(0,stBt);
@@ -412,14 +423,14 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     endRunTimer  = new QTimer(this);
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
-    endRunTimer->start(STD_WAIT_DELAY);
+    endRunTimer->start(1000/*STD_WAIT_DELAY*/);
     // Create Request progress closing timer
     reqPrgrsTimer = new QTimer(this);
     reqPrgrsTimer->setSingleShot(true);
     reqPrgrsTimer->setInterval(500);
     connect(reqPrgrsTimer, SIGNAL(timeout()), SLOT(reqPrgrsSet()));
 
-    menuBar()->setVisible(true);
+    //menuBar()->setVisible(true);	//!!!! Spare for Qt5 and the native menu bar
 
     // Display root page and init external pages
     initHosts();
@@ -435,17 +446,14 @@ ConfApp::~ConfApp( )
 
     mod->unregWin(this);
 
-    //Final left hosts' tasks stopping.
-    // Wait for a host request finish
-    while(inHostReq) qApp->processEvents();
-
-    // Threads delete
+    // Threads deleting
+    if(inHostReq)
+	mess_err(mod->nodePath().c_str(), _("Configurator using the remote host %d times."), inHostReq);
     for(map<string, SCADAHost*>::iterator iH = hosts.begin(); iH != hosts.end(); ++iH) delete iH->second;
     hosts.clear();
 
-    //Save generic state
-    QByteArray st = splitter->saveState();
-    TBDS::genDBSet(mod->nodePath()+"st", i2s(width())+":"+i2s(height())+":"+TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,""), wUser->user().toStdString());
+    // Push down all Qt events of the window to free the module
+    for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();
 }
 
 void ConfApp::quitSt( )
@@ -465,8 +473,8 @@ bool ConfApp::exitModifChk( )
 	req.setAttr("path","/"+SYS->id()+"/%2fgen%2fsavePeriod");
 	if(!cntrIfCmd(req))	saveExit |= atoi(req.text().c_str());
 	if(!saveExit) {
-	    int ret = QMessageBox::information(this,_("Changes save"),
-		_("Some changes made.\nSave the changes to DB on exit?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
+	    int ret = QMessageBox::information(this,_("Saving the changes"),
+		_("Some changes were made!\nSave the changes to the DB before exiting?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
 	    switch(ret) {
 		case QMessageBox::Yes:
 		    req.clear()->setName("save")->setAttr("path","/"+SYS->id()+"/%2fobj");
@@ -487,7 +495,7 @@ void ConfApp::hostStSet( const QString &hid, int lnkOK, const QImage &img, const
     for(unsigned iTop = 0; iTop < (unsigned)CtrTree->topLevelItemCount(); ++iTop) {
 	QTreeWidgetItem *nit = CtrTree->topLevelItem(iTop);
 	if(hid.toStdString() != TSYS::pathLev(nit->text(2).toStdString(),0)) continue;
-	nit->setIcon(0, img.isNull() ? QPixmap() : QPixmap::fromImage(img).scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+	nit->setIcon(0, img.isNull() ? QPixmap() : QPixmap::fromImage(img).scaled(icoSize(),icoSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation));
 	if(lnkOK > 0 && !nit->data(0,Qt::UserRole).toBool()) {
 	    //? Used for rechange status for fix indicator hide after all childs remove on bad connection
 	    nit->setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
@@ -604,9 +612,9 @@ void ConfApp::itAdd( )
 	if(s2i(branch->childGet(iB)->attr("acs"))&SEC_WR)
 	    brs.push_back(branch->childGet(iB)->attr("idSz")+"\n"+branch->childGet(iB)->attr("idm")+"\n"+
 			  branch->childGet(iB)->attr("id")+"\n"+branch->childGet(iB)->attr("dscr"));
-    if(!brs.size()) { mod->postMess(mod->nodePath().c_str(),_("No one editable container is present."),TUIMod::Info,this); return; }
+    if(!brs.size()) { mod->postMess(mod->nodePath().c_str(),_("No edited container is present."),TUIMod::Info,this); return; }
 
-    ReqIdNameDlg dlg(this, actItAdd->icon(), QString(_("Add item to node: '%1'.")).arg(selPath.c_str()),_("Add node"));
+    ReqIdNameDlg dlg(this, actItAdd->icon(), QString(_("Adding an item to the node '%1'.")).arg(selPath.c_str()),_("Adding a node"));
     dlg.setTargets(brs);
     if(dlg.exec() != QDialog::Accepted)	return;
 
@@ -618,7 +626,7 @@ void ConfApp::itAdd( )
 	    if((req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toStdString()) ||
 	       (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toStdString()))
 	    {
-		mod->postMess(mod->nodePath().c_str(), QString(_("Node '%1' is already present.")).arg(dlg.id()).toStdString(), TUIMod::Info, this);
+		mod->postMess(mod->nodePath().c_str(), QString(_("The node '%1' is already present.")).arg(dlg.id()).toStdString(), TUIMod::Info, this);
 		return;
 	    }
 
@@ -639,14 +647,14 @@ void ConfApp::itDel( const string &iit )
     if(iit.empty()) {
 	QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
 	if(sel_ls.size() <= 1) rmits = selPath;
-	else for(int i_el = 0; i_el < sel_ls.size(); i_el++)
-	    rmits += sel_ls.at(i_el)->text(2).toStdString() + "\n";
+	else for(int iEl = 0; iEl < sel_ls.size(); iEl++)
+	    rmits += sel_ls.at(iEl)->text(2).toStdString() + "\n";
     }
     if(rmits.empty())	return;
 
     if(iit.empty()) {
 	InputDlg dlg(this, actItDel->icon(),
-		QString(_("Are you sure of deleting nodes: '%1'?")).arg(rmits.c_str()),_("Delete node"), 0, 0);
+		QString(_("Are you sure of deleting the nodes '%1'?")).arg(rmits.c_str()),_("Deleting the nodes"), 0, 0);
 	if(dlg.exec() != QDialog::Accepted)	return;
     }
 
@@ -685,8 +693,8 @@ void ConfApp::itCut( )
     copyBuf = "1";
     QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
     if(sel_ls.size() <= 1) copyBuf += selPath;
-	else for(int i_el = 0; i_el < sel_ls.size(); i_el++)
-	    copyBuf += sel_ls.at(i_el)->text(2).toStdString()+"\n";
+	else for(int iEl = 0; iEl < sel_ls.size(); iEl++)
+	    copyBuf += sel_ls.at(iEl)->text(2).toStdString()+"\n";
     editToolUpdate();
 }
 
@@ -695,8 +703,8 @@ void ConfApp::itCopy( )
     copyBuf = "0";
     QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
     if(sel_ls.size() <= 1) copyBuf += selPath;
-    else for(int i_el = 0; i_el < sel_ls.size(); i_el++)
-	    copyBuf += sel_ls.at(i_el)->text(2).toStdString()+"\n";
+    else for(int iEl = 0; iEl < sel_ls.size(); iEl++)
+	    copyBuf += sel_ls.at(iEl)->text(2).toStdString()+"\n";
     editToolUpdate();
 }
 
@@ -721,7 +729,7 @@ void ConfApp::itPaste( )
 	{ if(nSel) sElp += ("/"+sEl); sEl = tEl; }
 
 	if(TSYS::pathLev(copyEl,0) != TSYS::pathLev(toPath,0))
-	{ mod->postMess(mod->nodePath().c_str(), _("Copy is impossible."), TUIMod::Error, this); return; }
+	{ mod->postMess(mod->nodePath().c_str(), _("Copying is not possible."), TUIMod::Error, this); return; }
 
 	vector<string> brs;
 	if(copyEl == toPath) {	//For copy into the branch and no select direct the parent node
@@ -741,12 +749,12 @@ void ConfApp::itPaste( )
 	    }
 
 	//Make request dialog
-	ReqIdNameDlg dlg(this, actItAdd->icon(), "", _("Move or copy node"));
+	ReqIdNameDlg dlg(this, actItAdd->icon(), "", _("Moving or copying the node"));
 	dlg.setTargets(brs);
-	dlg.setMess(QString(isCut?_("Move node '%1' to '%2'.\n"):_("Copy node '%1' to '%2'.\n")).arg(copyEl.c_str()).arg(toPath.c_str()));
+	dlg.setMess(QString(isCut?_("Moving the node '%1' to '%2'.\n"):_("Copying the node '%1' to '%2'.\n")).arg(copyEl.c_str()).arg(toPath.c_str()));
 	dlg.setId(sEl.substr(bGrp.size()).c_str());
 	if(isMult) {
-	    prcReq = new QCheckBox(_("Do not the question anymore."), &dlg);
+	    prcReq = new QCheckBox(_("Do not ask for more."), &dlg);
 	    dlg.edLay->addWidget(prcReq, 5, 0, 1, 2);
 	}
 	if(!prcReqMiss && dlg.exec() != QDialog::Accepted) return;
@@ -766,10 +774,10 @@ void ConfApp::itPaste( )
 		if((req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toStdString()) ||
 		   (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toStdString()))
 		{
-		    InputDlg dlg1(this, actItPaste->icon(), QString(_("Node '%1' is already present. Continue?")).arg(dst_nm.c_str()),
-					_("Move or copy node"), 0, 0);
+		    InputDlg dlg1(this, actItPaste->icon(), QString(_("The node '%1' is already present. Continue?")).arg(dst_nm.c_str()),
+					_("Moving or copying the node"), 0, 0);
 		    if(isMult) {
-			prcAlrPres = new QCheckBox(_("Do not the question anymore."),&dlg1);
+			prcAlrPres = new QCheckBox(_("Do not ask for more."),&dlg1);
 			dlg1.edLay->addWidget(prcAlrPres,5,0,5,1);
 		    }
 		    if(!prcAlrPresMiss && dlg1.exec() != QDialog::Accepted) return;
@@ -781,7 +789,7 @@ void ConfApp::itPaste( )
 	//Copy visual item
 	XMLNode req("copy");
 	req.setAttr("path", "/"+stat_nm+"/%2fobj")->setAttr("src", src_nm)->setAttr("dst", dst_nm);
-	if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
+	if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); pageRefresh(); return; }
 
 	//Remove source widget
 	if(isCut) {
@@ -888,7 +896,7 @@ void ConfApp::stMessChanged( const QString &mess )
 
 void ConfApp::stHistCall( )
 {
-    InputDlg dlg(this,QIcon(),QString(_("Status bar messages list:")),_("Status messages"),0,0,QDialogButtonBox::Ok);
+    InputDlg dlg(this,QIcon(),QString(_("List of messages in the status bar:")),_("Status messages"),0,0,QDialogButtonBox::Ok);
     QTextBrowser *tb = new QTextBrowser(&dlg);
     QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     sizePolicy.setVerticalStretch(10);
@@ -925,18 +933,21 @@ void ConfApp::closeEvent( QCloseEvent* ce )
 	return;
     }
 
-    //Early hosts' tasks stopping by into the destructor sometime late.
-    // Wait for a host request finish
-    while(inHostReq) qApp->processEvents();
+    winClose = true;
 
-    // Timers early stop
-    endRunTimer->stop();
-    autoUpdTimer->stop();
-    reqPrgrsTimer->stop();
+    //Call for next processing by the events handler for the real closing after release all background requests
+    if(inHostReq || pgDisplay) { ce->ignore(); return; }
 
-    // Threads delete
-    for(map<string, SCADAHost*>::iterator iH = hosts.begin(); iH != hosts.end(); ++iH) delete iH->second;
-    hosts.clear();
+    if(endRunTimer->isActive()) {
+	//Save the generic state
+	QByteArray st = splitter->saveState();
+	TBDS::genDBSet(mod->nodePath()+"st", i2s(width())+":"+i2s(height())+":"+TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,""), wUser->user().toStdString());
+
+	// Timers early stop
+	endRunTimer->stop();
+	autoUpdTimer->stop();
+	reqPrgrsTimer->stop();
+    }
 
     ce->accept();
 }
@@ -960,17 +971,20 @@ void ConfApp::selectItem( )
     }
 }
 
-void ConfApp::selectPage( const string &path )
+void ConfApp::selectPage( const string &path, int tm )
 {
     try
     {
 	//Prev and next
-	if(selPath.size())		prev.insert(prev.begin(),selPath);
+	if(selPath.size())		prev.insert(prev.begin(), selPath);
 	if((int)prev.size() >= queSz)	prev.pop_back();
 	next.clear();
 
 	//Display page
-	pageDisplay(path);
+	if(tm > 0) {
+	    selPath = path;
+	    pageRefresh(tm);
+	} else pageDisplay(path);
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
@@ -996,7 +1010,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		string simg = TSYS::strDecode(req.text(), TSYS::base64);
 		QImage img;
 		if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
-		    titleIco->setPixmap(QPixmap::fromImage(img.scaled(32,32,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+		    titleIco->setPixmap(QPixmap::fromImage(img.scaled(icoSize(2),icoSize(2),Qt::KeepAspectRatio,Qt::SmoothTransformation)));
 		else titleIco->clear();
 	    }
 	} else titleIco->clear();
@@ -1058,14 +1072,23 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 		// Elements of scalable by vertical get and their grow up to the scroll appear into the container
 		if(!s2i(genReqs.attr("fillMode"))) {
-		    qApp->processEvents();
 		    QScrollArea *scrl = (QScrollArea*)tabs->widget(i_area);
 		    QWidget *lastW = qobject_cast<QWidget*>(scrl->widget()->children().last());
-		    int sclFitSz = lastW ? (scrl->maximumViewportSize().height() - (lastW->y()+lastW->height()) - 10): 0;
 		    QList<TextEdit*> texts = scrl->findChildren<TextEdit*>();
 		    QList<QTableWidget*> tbls = scrl->findChildren<QTableWidget*>();
 		    QList<ListView*> lsts = scrl->findChildren<ListView*>();
-		    for(int fitStp = vmax(5, sclFitSz/(10*vmax(1,texts.length()+tbls.length()+lsts.length()))), iScN = 0; sclFitSz > fitStp; ) {
+
+		    //Fit reset
+		    for(int iL = 0; iL < texts.size(); iL++)	texts[iL]->setMinimumHeight(0);
+		    for(int iL = 0; iL < tbls.size(); iL++)	tbls[iL]->setMinimumHeight(0);
+		    for(int iL = 0; iL < lsts.size(); iL++)	lsts[iL]->setMinimumHeight(0);
+
+		    for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();	//Call all cascade events
+
+		    int sclFitSz = lastW ? (scrl->maximumViewportSize().height() - (lastW->y()+lastW->height()) - 10): 0;
+
+		    //Same fitting
+		    for(int fitStp = vmax(5, sclFitSz/(8*vmax(1,texts.length()+tbls.length()+lsts.length()))), iScN = 0; sclFitSz > fitStp; ) {
 			QAbstractScrollArea *sclIt = NULL, *tEl = NULL;
 			bool sclFromBeg = (iScN == 0);
 			for( ; iScN < (texts.length()+tbls.length()+lsts.length()) && !sclIt; iScN++) {
@@ -1135,7 +1158,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    if(widget) {
 		lab = new QLabel(widget);
 		lstbox = new ListView(widget);
-		lstbox->setStatusTip((selPath+"/"+br_path).c_str());
 		lstbox->setObjectName(br_path.c_str());
 		lstbox->setContextMenuPolicy(Qt::CustomContextMenu);
 		connect(lstbox, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(listBoxPopup()));
@@ -1164,20 +1186,16 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		lstbox->clear();
 	    }
 
-	    lstbox->setMinimumHeight(0);	//Fit reset
-
 	    //  Fill the list
 	    lab->setText((t_s.attr("dscr")+":").c_str());
-	    string helpVl = t_s.attr("help");
-	    lstbox->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
-	    if(helpVl.size() > TOOL_TIP_LIM) lstbox->setWhatsThis(helpVl.c_str());
+	    mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, lstbox);
 	    XMLNode req("get");
-	    req.setAttr("path",br_path);
+	    req.setAttr("path", br_path);
 	    if((rez=cntrIfCmd(req)) > 0) mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	    else if(rez == 0)
-		for(unsigned i_el = 0; i_el < req.childSize(); i_el++)
-		    if(req.childGet(i_el)->name() == "el")
-			lstbox->addItem(req.childGet(i_el)->text().c_str());
+		for(unsigned iEl = 0; iEl < req.childSize(); iEl++)
+		    if(req.childGet(iEl)->name() == "el")
+			lstbox->addItem(req.childGet(iEl)->text().c_str());
 	}
 	// View table elements
 	else if(t_s.name() == "table")
@@ -1194,7 +1212,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		tbl->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 		tbl->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 		//tbl->setTextElideMode(Qt::ElideNone);
-		tbl->setStatusTip((selPath+"/"+br_path).c_str());
 		tbl->setObjectName(br_path.c_str());
 		QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Minimum/*Expanding*/);
 		sp.setVerticalStretch(1);
@@ -1215,12 +1232,9 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		tbl = (CfgTable *)TSYS::str2addr(t_s.attr("addr_tbl"));
 	    }
 
-	    tbl->setMinimumHeight(0);	//Fit reset
-
 	    //  Fill the table
-	    string helpVl = t_s.attr("help");
-	    tbl->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
-	    if(helpVl.size() > TOOL_TIP_LIM) tbl->setWhatsThis(helpVl.c_str());
+	    tbl->setProperty("rows", s2i(t_s.attr("rows")));
+	    mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, tbl);
 	    XMLNode req("get"); req.setAttr("path",br_path);
 	    if((rez=cntrIfCmd(req)) > 0) mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	    else if(rez <= 0) {
@@ -1279,24 +1293,24 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 		    //   Set elements
 		    tblInit = true;
-		    for(unsigned i_el = 0; i_el < t_linf->childSize(); i_el++) {
-			thd_it = tbl->item(i_el,i_lst);
+		    for(unsigned iEl = 0; iEl < t_linf->childSize(); iEl++) {
+			thd_it = tbl->item(iEl,i_lst);
 			if(!thd_it) {
 			    thd_it = new QTableWidgetItem("");
-			    tbl->setItem(i_el,i_lst,thd_it);
+			    tbl->setItem(iEl,i_lst,thd_it);
 			}
 
 			//   Set element
-			if(t_linf->attr("tp") == "bool") thd_it->setData(Qt::DisplayRole,(bool)atoi(t_linf->childGet(i_el)->text().c_str()));
+			if(t_linf->attr("tp") == "bool") thd_it->setData(Qt::DisplayRole,(bool)s2i(t_linf->childGet(iEl)->text()));
 			else if(t_linf->attr("dest") == "select" || t_linf->attr("dest") == "sel_ed")
 			{
 			    int sel_n;
 			    for(sel_n = 0; sel_n < elms.size(); sel_n++)
-				if((elms.size() == elmi.size() && elmi[sel_n] == t_linf->childGet(i_el)->text().c_str()) ||
-					(elms.size() != elmi.size() && elms[sel_n] == t_linf->childGet(i_el)->text().c_str()))
+				if((elms.size() == elmi.size() && elmi[sel_n] == t_linf->childGet(iEl)->text().c_str()) ||
+					(elms.size() != elmi.size() && elms[sel_n] == t_linf->childGet(iEl)->text().c_str()))
 				    break;
 			    if(sel_n >= elms.size()) {
-				elms.insert(elms.begin(),t_linf->childGet(i_el)->text().c_str());
+				elms.insert(elms.begin(),t_linf->childGet(iEl)->text().c_str());
 				sel_n = 0;
 			    }
 
@@ -1304,8 +1318,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    thd_it->setData(Qt::UserRole,elms);
 			}
 			else if(t_linf->attr("tp") == "time")
-			    thd_it->setData(Qt::DisplayRole, atm2s(s2i(t_linf->childGet(i_el)->text()),"%d-%m-%Y %H:%M:%S").c_str());
-			else thd_it->setData(Qt::DisplayRole, getPrintVal(t_linf->childGet(i_el)->text()).c_str());
+			    thd_it->setData(Qt::DisplayRole, atm2s(s2i(t_linf->childGet(iEl)->text()),"%d-%m-%Y %H:%M:%S").c_str());
+			else thd_it->setData(Qt::DisplayRole, getPrintVal(t_linf->childGet(iEl)->text()).c_str());
 
 			//   Set access
 			if(!c_wr) thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
@@ -1348,7 +1362,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		lab = new QLabel(widget);
 		img = new ImgView(widget, 0, s2i(t_s.attr("h_sz")), s2i(t_s.attr("v_sz")));
 		img->setObjectName(br_path.c_str());
-		img->setStatusTip((selPath+"/"+br_path).c_str());
 		img->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 		img->setMinimumSize(200,200);
 		img->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -1375,9 +1388,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 	    //  Set image
 	    lab->setText((t_s.attr("dscr")+":").c_str());
-	    string helpVl = t_s.attr("help");
-	    img->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
-	    if(helpVl.size() > TOOL_TIP_LIM) img->setWhatsThis(helpVl.c_str());
+	    mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, img);
 
 	    XMLNode req("get");
 	    req.setAttr("path",br_path);
@@ -1399,7 +1410,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		if(!t_s.childSize()) {
 		    button = new QPushButton(widget);
 		    button->setObjectName(br_path.c_str());
-		    button->setStatusTip((selPath+"/"+br_path).c_str());
 		    connect(button, SIGNAL(clicked()), this, SLOT(buttonClicked()));
 		    button->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
 		    widget->layout()->addWidget(button);
@@ -1433,9 +1443,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 	    //  Fill command
 	    button->setText(t_s.attr("dscr").c_str());
-	    string helpVl = t_s.attr("help");
-	    button->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
-	    if(helpVl.size() > TOOL_TIP_LIM) button->setWhatsThis(helpVl.c_str());
+	    mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, button);
 	}
     }
 }
@@ -1463,7 +1471,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if(!wr) {
 		val_r = new QLabel(widget);
 		val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
-		val_r->setStatusTip((selPath+"/"+br_path).c_str());
 		//QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
 		//sp.setHorizontalStretch(1);
 		//val_r->setSizePolicy(sp);
@@ -1473,7 +1480,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_w->setMinimumSize(100, 0);
 		val_w->setObjectName(br_path.c_str());
 		val_w->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-		val_w->setStatusTip((selPath+"/"+br_path).c_str());
 		val_w->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
 		connect(val_w, SIGNAL(activated(const QString&)), this, SLOT(combBoxActivate(const QString&)));
 	    }
@@ -1507,9 +1513,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	// Fill combo
 	if(lab) lab->setText((t_s.attr("dscr")+":").c_str());
 	if(val_w || val_r) {
-	    string helpVl = t_s.attr("help");
-	    (val_w?(QWidget*)val_w:(QWidget*)val_r)->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
-	    if(helpVl.size() > TOOL_TIP_LIM) (val_w?(QWidget*)val_w:(QWidget*)val_r)->setWhatsThis(helpVl.c_str());
+	    mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_w?(QWidget*)val_w:(QWidget*)val_r);
 	    if(val_w) val_w->clear();
 
 	    bool sel_ok = false;
@@ -1532,16 +1536,16 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		XMLNode x_lst("get");
 		x_lst.setAttr("path",TSYS::strEncode(t_s.attr("select"),TSYS::PathEl));
 		if(!cntrIfCmd(x_lst))
-		    for(unsigned i_el = 0; i_el < x_lst.childSize(); i_el++) {
-			if(x_lst.childGet(i_el)->name() != "el") continue;
-			if(val_w)	val_w->insertItem(c_el++, x_lst.childGet(i_el)->text().c_str());
-			bool ind_ok = x_lst.childGet(i_el)->attr("id").size();	//Index present
-			if((ind_ok && x_lst.childGet(i_el)->attr("id") == data_req.text()) ||
-			    (!ind_ok && x_lst.childGet(i_el)->text() == data_req.text()))
+		    for(unsigned iEl = 0; iEl < x_lst.childSize(); iEl++) {
+			if(x_lst.childGet(iEl)->name() != "el") continue;
+			if(val_w)	val_w->insertItem(c_el++, x_lst.childGet(iEl)->text().c_str());
+			bool ind_ok = x_lst.childGet(iEl)->attr("id").size();	//Index present
+			if((ind_ok && x_lst.childGet(iEl)->attr("id") == data_req.text()) ||
+			    (!ind_ok && x_lst.childGet(iEl)->text() == data_req.text()))
 			{
 			    sel_ok = true;
 			    if(val_w)	val_w->setCurrentIndex(c_el-1);
-			    if(val_r)	val_r->setText((string("<b>")+TSYS::strEncode(x_lst.childGet(i_el)->text(),TSYS::Html)+"</b>").c_str());
+			    if(val_r)	val_r->setText((string("<b>")+TSYS::strEncode(x_lst.childGet(iEl)->text(),TSYS::Html)+"</b>").c_str());
 			}
 		    }
 	    }
@@ -1566,7 +1570,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		if(!wr) {
 		    val_r = new QLabel(widget);
 		    val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
-		    val_r->setStatusTip((selPath+"/"+br_path).c_str());
 		    //QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
 		    //sp.setHorizontalStretch(1);
 		    //val_r->setSizePolicy(sp);
@@ -1575,7 +1578,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		else {
 		    val_w = new QCheckBox(widget);
 		    val_w->setObjectName(br_path.c_str());
-		    val_w->setStatusTip((selPath+"/"+br_path).c_str());
 		    connect(val_w, SIGNAL(stateChanged(int)), this, SLOT(checkBoxStChange(int)));
 		    //if(!wr)	val_w->setDisabled(true);
 		}
@@ -1609,9 +1611,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    // Fill CheckBox
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if(val_w && rezReq >= 0) {
-		string helpVl = t_s.attr("help");
-		val_w->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
-		if(helpVl.size() > TOOL_TIP_LIM) val_w->setWhatsThis(helpVl.c_str());
+		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_w);
 		val_w->blockSignals(true);
 		if(data_req.text() == "<EVAL>") val_w->setCheckState(Qt::PartiallyChecked);
 		else if(atoi(data_req.text().c_str())) val_w->setCheckState(Qt::Checked);
@@ -1619,9 +1619,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_w->blockSignals(false);
 	    }
 	    if(val_r && rezReq >= 0) {
-		string helpVl = t_s.attr("help");
-		val_r->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
-		if(helpVl.size() > TOOL_TIP_LIM) val_r->setWhatsThis(helpVl.c_str());
+		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_r);
 		val_r->setText((string("<b>")+TSYS::strEncode((data_req.text() == "<EVAL>")?_("<EVAL>"):
 		    (s2i(data_req.text())?_("On"):_("Off")),TSYS::Html)+"</b>").c_str());
 	    }
@@ -1638,7 +1636,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		widget->layout()->addWidget(lab);
 
 		edit = new TextEdit(widget, br_path.c_str());
-		edit->setStatusTip((selPath+"/"+br_path).c_str());
 		edit->setRowsCols(s2i(t_s.attr("cols")), s2i(t_s.attr("rows")));
 		//edit->setMinimumHeight(QFontMetrics(edit->edit()->currentFont()).height()*(edit->rowsCols().height()+2));
 		    //2*edit->edit()->currentFont().pointSize()*(edit->rowsCols().height()+1));
@@ -1652,8 +1649,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    connect(edit, SIGNAL(cancel()), this, SLOT(cancelButton()));
 		}
 
-		edit->setMinimumHeight(0);	//Fit reset
-
 		t_s.setAttr("addr_lab", TSYS::addr2str(lab));
 		t_s.setAttr("addr_edit", TSYS::addr2str(edit));
 	    }
@@ -1663,15 +1658,11 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		edit = (TextEdit*)TSYS::str2addr(t_s.attr("addr_edit"));
 	    }
 
-	    edit->setMinimumHeight(0);	//Fit reset
-
 	    // Fill Edit
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if(edit && !edit->isChanged()) {
 		if(rezReq >= 0) {
-		    string helpVl = t_s.attr("help");
-		    edit->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
-		    if(helpVl.size() > TOOL_TIP_LIM) edit->setWhatsThis(helpVl.c_str());
+		    mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, edit);
 		    edit->setText(getPrintVal(data_req.text()).c_str());
 		}
 
@@ -1696,7 +1687,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		{
 		    val_r = new QLabel(widget);
 		    val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
-		    val_r->setStatusTip((selPath+"/"+br_path).c_str());
 		    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Preferred);
 		    sp.setHorizontalStretch(1);
 		    val_r->setSizePolicy(sp);
@@ -1707,7 +1697,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		{
 		    val_w = new LineEdit(widget, LineEdit::DateTime, comm);
 		    val_w->setObjectName(br_path.c_str());
-		    val_w->setStatusTip((selPath+"/"+br_path).c_str());
 		    val_w->setCfg("dd.MM.yyyy hh:mm:ss");
 		    connect(val_w, SIGNAL(valChanged(const QString&)), this, SLOT(editChange(const QString&)));
 		    connect(val_w, SIGNAL(apply()), this, SLOT(applyButton()));
@@ -1756,15 +1745,11 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		else tm_t = time(NULL);
 		QDateTime dtm;
 		dtm.setTime_t(tm_t);
-		string helpVl = t_s.attr("help");
-		val_r->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
-		if(helpVl.size() > TOOL_TIP_LIM) val_r->setWhatsThis(helpVl.c_str());
+		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_r);
 		val_r->setText( "<b>"+dtm.toString("dd.MM.yyyy hh:mm:ss")+"</b>" );
 	    }
 	    if(val_w && rezReq >= 0 && !val_w->isEdited()) {
-		string helpVl = t_s.attr("help");
-		val_w->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
-		if(helpVl.size() > TOOL_TIP_LIM) val_w->setWhatsThis(helpVl.c_str());
+		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_w);
 		val_w->setValue(data_req.text().c_str());
 	    }
 	}
@@ -1780,7 +1765,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		{
 		    val_r = new QLabel(widget);
 		    val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
-		    val_r->setStatusTip((selPath+"/"+br_path).c_str());
 		    QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
 		    sp.setHorizontalStretch(1);
 		    val_r->setSizePolicy(sp);
@@ -1793,7 +1777,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		{
 		    val_w = new LineEdit(widget, LineEdit::Text, comm);
 		    val_w->setObjectName(br_path.c_str());
-		    val_w->setStatusTip((selPath+"/"+br_path).c_str());
 		    QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Fixed);
 		    sp.setHorizontalStretch(1);
 		    val_w->setSizePolicy(sp);
@@ -1894,16 +1877,12 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if(val_r) {
-		string helpVl = t_s.attr("help");
-		val_r->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
-		if(helpVl.size() > TOOL_TIP_LIM) val_r->setWhatsThis(helpVl.c_str());
+		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_r);
 		val_r->setText((string("<b>")+TSYS::strEncode(sval,TSYS::Html)+"</b>").c_str());
 	    }
 	    if(val_w && !val_w->isEdited()) {
 		if(rezReq >= 0) {
-		    string helpVl = t_s.attr("help");
-		    val_w->setToolTip((TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str())+((helpVl.size()>TOOL_TIP_LIM)?TOOL_TIP_ADD:"")).c_str());
-		    if(helpVl.size() > TOOL_TIP_LIM) val_w->setWhatsThis(helpVl.c_str());
+		    mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_w);
 		    val_w->setValue(sval.c_str());
 		}
 
@@ -1919,9 +1898,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 			XMLNode x_lst("get");
 			x_lst.setAttr("path", TSYS::strEncode(t_s.attr("select"),TSYS::PathEl));
 			if(!cntrIfCmd(x_lst))
-			    for(unsigned i_el = 0; i_el < x_lst.childSize(); i_el++)
-				if(x_lst.childGet(i_el)->name() == "el")
-				    cfg_vls += x_lst.childGet(i_el)->text()+"\n";
+			    for(unsigned iEl = 0; iEl < x_lst.childSize(); iEl++)
+				if(x_lst.childGet(iEl)->name() == "el")
+				    cfg_vls += x_lst.childGet(iEl)->text()+"\n";
 		    }
 		    val_w->setCfg(cfg_vls.c_str());
 		}
@@ -1965,7 +1944,7 @@ void ConfApp::pageDisplay( const string &path )
 	QList<TextEdit*> texts = tabs->findChildren<TextEdit*>();
 	for(int iIt = 0; iIt < texts.size(); ++iIt)
 	    if(texts[iIt]->isChanged()) prcW.push_back(texts[iIt]);
-	if(prcW.size() && QMessageBox::information(this,_("The changes apply"),_("You don't apply some changes!\nDo you want its apply now or lost?"),
+	if(prcW.size() && QMessageBox::information(this,_("Applying the changes"),_("Some changes were made!\nAccept the changes now or lose?"),
 		QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
 	    for(vector<QWidget*>::iterator iW = prcW.begin(); iW != prcW.end(); ++iW) applyButton(*iW);
 
@@ -1973,7 +1952,7 @@ void ConfApp::pageDisplay( const string &path )
 	XMLNode n_node("info");
 	n_node.setAttr("path", path);
 	if(cntrIfCmd(n_node))		throw TError(s2i(n_node.attr("rez")), n_node.attr("mcat").c_str(), "%s", n_node.text().c_str());
-	if(!n_node.childGet(0,true))	throw TError(mod->nodePath().c_str(), _("Broken info respond - no a child."));
+	if(!n_node.childGet(0,true))	throw TError(mod->nodePath().c_str(), _("Broken information request - there are no descendants."));
 
 	selPath = path;
 	pgInfo = n_node;
@@ -2023,6 +2002,7 @@ loadGenReqDate:
 	    mod->postMess(genReqs.attr("mcat"), genReqs.text(), TUIMod::Error, this);
 	    genReqs.clear();
 	    pgDisplay = false;
+	    if(winClose) close();
 	    return;
 	}
 	goto loadGenReqDate;
@@ -2038,7 +2018,13 @@ loadGenReqDate:
     editToolUpdate();
 
     pgDisplay = false;
-    } catch(TError) { pgDisplay = false; throw; }
+    if(winClose) close();
+    }
+    catch(TError) {
+	pgDisplay = false;
+	if(winClose) close();
+	throw;
+    }
 }
 
 bool ConfApp::upStruct( XMLNode &w_nd, const XMLNode &n_nd )
@@ -2062,7 +2048,7 @@ bool ConfApp::upStruct( XMLNode &w_nd, const XMLNode &n_nd )
 	i_w++;
     }
 
-    //Scan for new nodes and check present nodes
+    //Scan for the new nodes and check present nodes
     for(unsigned i_n = 0, i_w; i_n < n_nd.childSize(); i_n++) {
 	for(i_w = 0; i_w < w_nd.childSize(); i_w++)
 	    if(w_nd.childGet(i_w)->name() == n_nd.childGet(i_n)->name() &&
@@ -2093,13 +2079,15 @@ bool ConfApp::upStruct( XMLNode &w_nd, const XMLNode &n_nd )
 	    (w_nd.childGet(i_w)->attr("dest") != n_nd.childGet(i_n)->attr("dest") ||
 	     w_nd.childGet(i_w)->attr("tp") != n_nd.childGet(i_n)->attr("tp")))
 	{
-	    w_nd.childGet(i_w)->setAttr("dest","");
-	    w_nd.childGet(i_w)->setAttr("tp","");
+	    w_nd.childGet(i_w)->setAttr("dest", "");
+	    w_nd.childGet(i_w)->setAttr("tp", "");
 	    str_ch = true;
 	}
 
 	//Sync node parameters (text and attributes)
 	w_nd.childGet(i_w)->setText(n_nd.childGet(i_n)->text());
+
+	w_nd.childGet(i_w)->setAttr("dscr", "");
 	vector<string> ls;
 	n_nd.childGet(i_n)->attrList(ls);
 	for(unsigned i_a = 0; i_a < ls.size(); i_a++)
@@ -2134,7 +2122,7 @@ void ConfApp::ctrTreePopup( )
 	//Main action add
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
-	QAction *actRemHostUp = new QAction(QPixmap::fromImage(ico_t), _("Refresh items tree"), this);
+	QAction *actRemHostUp = new QAction(QPixmap::fromImage(ico_t), _("Refresh the items tree"), this);
 	popup.addAction(actRemHostUp);
 	QAction *rez = popup.exec(QCursor::pos());
 	if(rez == actRemHostUp) {
@@ -2163,21 +2151,21 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
     if(grps.empty()) return;
     else if(grps.size() > 1) {
 	//Add and update present
-	for(int i_g = 0; i_g < grps.size(); i_g++) {
-	    bool grpChCnt = atoi(TSYS::strSepParse(grps[i_g].toStdString(),0,'\n').c_str());
-	    string grpId = TSYS::strSepParse(grps[i_g].toStdString(),1,'\n');
-	    string grpDscr = TSYS::strSepParse(grps[i_g].toStdString(),2,'\n');
+	for(int iG = 0; iG < grps.size(); iG++) {
+	    bool grpChCnt = s2i(TSYS::strSepParse(grps[iG].toStdString(),0,'\n'));
+	    string grpId = TSYS::strSepParse(grps[iG].toStdString(),1,'\n');
+	    string grpDscr = TSYS::strSepParse(grps[iG].toStdString(),2,'\n');
 	    QTreeWidgetItem *it = NULL;
 	    //Search present item
 	    if(upTree)
-		for(int i_it = 0; i_it < i->childCount(); i_it++)
-		    if(i->child(i_it)->text(2) == ("*"+grpId).c_str())
-		    { it = i->child(i_it); break; }
+		for(int iIt = 0; iIt < i->childCount(); iIt++)
+		    if(i->child(iIt)->text(2) == ("*"+grpId).c_str())
+		    { it = i->child(iIt); break; }
 	    if(!it) it = new QTreeWidgetItem(i);
 	    it->setText(0,(grpDscr+":").c_str());
 	    it->setText(1,grpDscr.c_str());
 	    it->setText(2,("*"+grpId).c_str());
-	    QStringList it_grp; it_grp.push_back(grps[i_g]);
+	    QStringList it_grp; it_grp.push_back(grps[iG]);
 	    it->setData(2,Qt::UserRole,it_grp);
 	    it->setFlags(Qt::ItemIsEnabled);
 	    it->setChildIndicatorPolicy(grpChCnt?QTreeWidgetItem::ShowIndicator:QTreeWidgetItem::DontShowIndicator);
@@ -2188,11 +2176,11 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    if(upTree && it->isExpanded()) viewChildRecArea(it,upTree);
 	}
 	//Delete no present
-	for(int i_it = 0, i_g = 0; upTree && i_it < i->childCount(); i_it++) {
-	    for(i_g = 0; i_g < grps.size(); i_g++)
-		if(i->child(i_it)->text(2) == ("*"+TSYS::strSepParse(grps[i_g].toStdString(),1,'\n')).c_str())
+	for(int iIt = 0, iG = 0; upTree && iIt < i->childCount(); iIt++) {
+	    for(iG = 0; iG < grps.size(); iG++)
+		if(i->child(iIt)->text(2) == ("*"+TSYS::strSepParse(grps[iG].toStdString(),1,'\n')).c_str())
 		    break;
-	    if(i_g >= grps.size()) { delete i->takeChild(i_it); i_it--; }
+	    if(iG >= grps.size()) { delete i->takeChild(iIt); iIt--; }
 	}
     }
     else {
@@ -2217,9 +2205,9 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    // Find item
 	    QTreeWidgetItem *it = NULL;
 	    if(upTree)
-		for(int i_it = 0; i_it < i->childCount(); i_it++)
-		    if(i->child(i_it)->text(2) == (path+"/"+br_path).c_str())
-		    { it = i->child(i_it); break; }
+		for(int iIt = 0; iIt < i->childCount(); iIt++)
+		    if(i->child(iIt)->text(2) == (path+"/"+br_path).c_str())
+		    { it = i->child(iIt); break; }
 	    if(!it) it = new QTreeWidgetItem(i);
 	    it->setText(0, chEl->text().c_str());
 	    it->setText(1, grpDscr.c_str());
@@ -2230,13 +2218,13 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 		string simg = TSYS::strDecode(chIco->text(),TSYS::base64);
 		QImage img;
 		if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
-		    it->setIcon(0,QPixmap::fromImage(img).scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+		    it->setIcon(0, QPixmap::fromImage(img).scaled(icoSize(),icoSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation));
 	    }
 	    // Set groups
 	    QStringList it_grp;
-	    for(unsigned i_g = 0; i_g < chEl->childSize(); i_g++)
-		if(chEl->childGet(i_g)->name() == "grp")
-		    it_grp.push_back((chEl->childGet(i_g)->attr("chPresent")+"\n"+chEl->childGet(i_g)->attr("id")+"\n"+chEl->childGet(i_g)->attr("dscr")).c_str());
+	    for(unsigned iG = 0; iG < chEl->childSize(); iG++)
+		if(chEl->childGet(iG)->name() == "grp")
+		    it_grp.push_back((chEl->childGet(iG)->attr("chPresent")+"\n"+chEl->childGet(iG)->attr("id")+"\n"+chEl->childGet(iG)->attr("dscr")).c_str());
 	    it->setData(2,Qt::UserRole,it_grp);
 	    // Check for childs present
 	    bool grpChCnt = it_grp.size() && (it_grp.size()>1 || atoi(TSYS::strSepParse(it_grp[0].toStdString(),0,'\n').c_str()));
@@ -2247,24 +2235,24 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	//Delete no present
 	if(upTree) {
 	    //CtrTree->blockSignals(true);
-	    for(unsigned i_it = 0, i_e; i_it < (unsigned)i->childCount(); ) {
+	    for(unsigned iIt = 0, i_e; iIt < (unsigned)i->childCount(); ) {
 		for(i_e = 0; i_e < req.childSize(); i_e++) {
 		    // Prepare branch patch
 		    string br_path = grpId;
 		    if(req.childGet(i_e)->attr("id").size()) br_path.append(req.childGet(i_e)->attr("id"));
 		    else br_path.append(req.childGet(i_e)->text());
 		    br_path = TSYS::strEncode(br_path,TSYS::PathEl);
-		    if(i->child(i_it)->text(2) == (path+"/"+br_path).c_str())	break;
+		    if(i->child(iIt)->text(2) == (path+"/"+br_path).c_str())	break;
 		}
-		if(i_e >= req.childSize()) { delete i->takeChild(i_it); continue; }
-		i_it++;
+		if(i_e >= req.childSize()) { delete i->takeChild(iIt); continue; }
+		iIt++;
 	    }
 	    //CtrTree->blockSignals(false);
 	}
     }
 
 #if OSC_DEBUG >= 3
-    mess_debug("QTCfg DEBUG",_("Expand/update branch '%s' time %f ms."),i->text(2).toAscii().data(),1e-3*(TSYS::curTime()-t_cnt));
+	mess_debug(mod->nodePath().c_str(), _("Time of expanding/updating '%s': %f ms."), i->text(2).toStdString().c_str(), 1e-3*(TSYS::curTime()-d_cnt));
 #endif
 }
 
@@ -2311,12 +2299,12 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	    {
 		reqPathEl = reqPath.substr(reqElPos+1); reqPath = reqPath.substr(0,reqElPos);
 		QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
-		for(int i_el = 0; i_el < sel_ls.size(); i_el++)
-		    if(sel_ls.at(i_el)->text(2).toStdString() != reqPath)
-			selNds += sel_ls.at(i_el)->text(2).toStdString()+"\n";
+		for(int iEl = 0; iEl < sel_ls.size(); iEl++)
+		    if(sel_ls.at(iEl)->text(2).toStdString() != reqPath)
+			selNds += sel_ls.at(iEl)->text(2).toStdString()+"\n";
 		if(selNds.size()) {
-		    int questRes = QMessageBox::question(this,_("Send changes to selections"),
-			    TSYS::strMess(_("Send current command '%s' to other selected nodes \"%s\"?"),node.name().c_str(),selNds.c_str()).c_str(),
+		    int questRes = QMessageBox::question(this, _("Sending the changes to the selected ones"),
+			    TSYS::strMess(_("Send the command '%s' to other selected nodes \"%s\"?"),node.name().c_str(),selNds.c_str()).c_str(),
 			    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply);
 		    for(int off = 0; questRes == QMessageBox::Apply && (reqPath=TSYS::strLine(selNds,0,&off)).size(); ) {
 			node.setAttr("path", reqPath+"/"+reqPathEl);
@@ -2350,16 +2338,17 @@ int ConfApp::cntrIfCmdHosts( XMLNode &node )
     //Main-first request
     inHostReq++;
     while(iHost->reqBusy()) {
-	reqPrgrsSet(0, QString(_("Wait for reply from host '%1'")).arg(hostId.c_str()), iHost->reqTmMax);
+	reqPrgrsSet(0, QString(_("Waiting the reply from the host '%1'")).arg(hostId.c_str()), iHost->reqTmMax);
 	qApp->processEvents();
 	TSYS::sysSleep(0.01);
     }
-    if(!iHost->reqDo(node)) {
-	reqPrgrsSet(0, QString(_("Wait for reply from host '%1'")).arg(hostId.c_str()), iHost->reqTmMax);
+    bool done = false;
+    if(!iHost->reqDo(node,done)) {
+	reqPrgrsSet(0, QString(_("Waiting the reply from the host '%1'")).arg(hostId.c_str()), iHost->reqTmMax);
 
 	//Wait for the request done
 	time_t stTm = time(NULL);
-	while(iHost->reqBusy()) {
+	while(!done) {
 	    reqPrgrsSet(vmax(0,time(NULL)-stTm));
 	    if(reqPrgrs && reqPrgrs->wasCanceled()) {
 		if(!actStartUpd->isEnabled()) pageCyclRefrStop();	//!!!! Could not check
@@ -2370,6 +2359,7 @@ int ConfApp::cntrIfCmdHosts( XMLNode &node )
 	}
     }
     inHostReq--;
+    if(winClose && !inHostReq) close();
 
     return s2i(node.attr("rez"));
 }
@@ -2386,7 +2376,8 @@ void ConfApp::reqPrgrsSet( int cur, const QString &lab, int max )
     //Close
     else if(reqPrgrs && cur < 0) {
 	reqPrgrsTimer->stop();
-	delete reqPrgrs;
+	reqPrgrs->deleteLater();
+	//delete reqPrgrs;
 	reqPrgrs = NULL;
     }
     //Set the progress value
@@ -2416,7 +2407,7 @@ void ConfApp::initHosts( )
     SYS->transport().at().extHostList(wUser->user().toStdString(), stls);
     stls.insert(stls.begin(), TTransportS::ExtHost("",SYS->id()));
 
-    //Remove no present hosts
+    //Remove for not present hosts
     for(unsigned iTop = 0, iH; iTop < (unsigned)CtrTree->topLevelItemCount(); ) {
 	for(iH = 0; iH < stls.size(); iH++)
 	    if(stls[iH].id == TSYS::pathLev(CtrTree->topLevelItem(iTop)->text(2).toStdString(),0))
@@ -2514,7 +2505,7 @@ void ConfApp::buttonClicked( )
 	    XMLNode req("get"); req.setAttr("path",selPath+"/"+button->objectName().toStdString());
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this); return; }
 	    string url = "/"+TSYS::pathLev(selPath,0)+req.text();
-	    mess_info(mod->nodePath().c_str(), _("%s| Go to link '%s'!"), wUser->user().toStdString().c_str(), url.c_str());
+	    mess_info(mod->nodePath().c_str(), _("%s| Went to the link '%s'!"), wUser->user().toStdString().c_str(), url.c_str());
 	    selectPage(url);
 	    return;
 	}
@@ -2524,7 +2515,7 @@ void ConfApp::buttonClicked( )
 	    for(unsigned i_ch = 0; i_ch < n_el->childSize(); i_ch++)
 		*(req.childAdd()) = *(n_el->childGet(i_ch));
 
-	    mess_info(mod->nodePath().c_str(), _("%s| Press '%s'!"),
+	    mess_info(mod->nodePath().c_str(), _("%s| Pressed down '%s'!"),
 		wUser->user().toStdString().c_str(), (selPath+"/"+button->objectName().toStdString()).c_str());
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
 	}
@@ -2564,13 +2555,13 @@ void ConfApp::combBoxActivate( const QString& ival )
 		x_lst.setAttr("path",selPath+"/"+TSYS::strEncode( n_el->attr("select"),TSYS::PathEl));
 		if(cntrIfCmd(x_lst)) { mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this); return; }
 
-		for(unsigned i_el = 0; i_el < x_lst.childSize(); i_el++)
-		    if(x_lst.childGet(i_el)->name() == "el" && x_lst.childGet(i_el)->text() == val) {
-			if(x_lst.childGet(i_el)->attr("id").size()) val = x_lst.childGet(i_el)->attr("id");
+		for(unsigned iEl = 0; iEl < x_lst.childSize(); iEl++)
+		    if(x_lst.childGet(iEl)->name() == "el" && x_lst.childGet(iEl)->text() == val) {
+			if(x_lst.childGet(iEl)->attr("id").size()) val = x_lst.childGet(iEl)->attr("id");
 			find_ok = true;
 		    }
 	    }
-	    if(!find_ok) { mod->postMess(mod->nodePath().c_str(),_("Value no valid: ")+val,TUIMod::Info,this); return; }
+	    if(!find_ok) { mod->postMess(mod->nodePath().c_str(),_("Value is wrong: ")+val,TUIMod::Info,this); return; }
 	}
 
 	//Check block element. Command box!
@@ -2580,7 +2571,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
 
 	    if(req.text() == val) return;
-	    mess_info(mod->nodePath().c_str(),_("%s| Change '%s' from '%s' to '%s'!"),
+	    mess_info(mod->nodePath().c_str(),_("%s| Changed '%s' from '%s' to '%s'!"),
 		    wUser->user().toStdString().c_str(), (selPath+"/"+path).c_str(), req.text().c_str(), val.c_str());
 
 	    req.setName("set")->setText(val);
@@ -2654,9 +2645,9 @@ void ConfApp::listBoxPopup( )
 
 		p_text = item->text().toStdString();
 		if(ind_m)
-		    for(unsigned i_el = 0; i_el < x_lst.childSize(); i_el++)
-			if(x_lst.childGet(i_el)->text() == item->text().toStdString()) {
-			    p_id = x_lst.childGet(i_el)->attr("id");
+		    for(unsigned iEl = 0; iEl < x_lst.childSize(); iEl++)
+			if(x_lst.childGet(iEl)->text() == item->text().toStdString()) {
+			    p_id = x_lst.childGet(iEl)->attr("id");
 			    break;
 			}
 	    }
@@ -2664,14 +2655,14 @@ void ConfApp::listBoxPopup( )
 	    QAction *rez = popup.exec(QCursor::pos());
 	    if(!rez)	{ popup.clear(); return; }
 	    if(rez == actAdd || rez == actIns || rez == actEd) {
-		ReqIdNameDlg dlg(this, this->windowIcon(), "", _("Item name set"));
+		ReqIdNameDlg dlg(this, this->windowIcon(), "", _("Setting the item name"));
 		vector<string> ils;
 		ils.push_back(n_el->attr("idSz")+"\n"+i2s(ind_m));
 		dlg.setTargets(ils);
-		if(rez == actAdd)	dlg.setMess(_("Add new element."));
-		else if(rez == actIns)	dlg.setMess(_("Insert new element."));
+		if(rez == actAdd)	dlg.setMess(_("Add a new element."));
+		else if(rez == actIns)	dlg.setMess(_("Insert a new element."));
 		if(rez == actEd) {
-		    dlg.setMess(_("Rename element."));
+		    dlg.setMess(_("Rename the element."));
 		    dlg.setId(p_id.c_str());
 		    dlg.setName(p_text.c_str());
 		}
@@ -2689,34 +2680,34 @@ void ConfApp::listBoxPopup( )
 		n_el1.setName("add");
 		if(ind_m) n_el1.setAttr("id",id);
 		n_el1.setText(text);
-		mess_info(mod->nodePath().c_str(),_("%s| Add '%s' element <%s:%s>!"),
+		mess_info(mod->nodePath().c_str(),_("%s| '%s' added by the element <%s:%s>!"),
 			wUser->user().toStdString().c_str(), el_path.c_str(), id.c_str(), text.c_str());
 	    }
 	    else if(rez == actIns) {
 		n_el1.setName("ins")->setAttr("pos", i2s(c_id))->setAttr("p_id",(ind_m)?p_id:p_text);
 		if(ind_m) n_el1.setAttr("id",id);
 		n_el1.setText(text);
-		mess_info(mod->nodePath().c_str(),_("%s| Insert '%s' element <%s:%s> to %d!"),
+		mess_info(mod->nodePath().c_str(),_("%s| '%s' inserted by the element <%s:%s> to %d!"),
 			wUser->user().toStdString().c_str(), el_path.c_str(), id.c_str(), text.c_str(),c_id);
 	    }
 	    else if(rez == actEd) {
 		n_el1.setName("edit")->setAttr("pos", i2s(c_id))->setAttr("p_id",(ind_m)?p_id:p_text);
 		if(ind_m) n_el1.setAttr("id",id);
 		n_el1.setText(text);
-		mess_info(mod->nodePath().c_str(),_("%s| Set '%s' element %d to <%s:%s>!"),
+		mess_info(mod->nodePath().c_str(),_("%s| '%s' set for the element %d to <%s:%s>!"),
 			wUser->user().toStdString().c_str(), el_path.c_str(), c_id, id.c_str(), text.c_str());
 	    }
 	    else if(rez == actDel) {
 		n_el1.setName("del")->setAttr("pos", i2s(c_id));
 		if(ind_m) n_el1.setAttr("id",p_id);
 		else n_el1.setText(item->text().toStdString());
-		mess_info(mod->nodePath().c_str(),_("%s| Delete '%s' element <%s:%s>!"),
+		mess_info(mod->nodePath().c_str(),_("%s| '%s' deleted for the element <%s:%s>!"),
 			wUser->user().toStdString().c_str(), el_path.c_str(), n_el1.attr("id").c_str(), n_el1.text().c_str());
 	    }
 	    else if(rez == actMoveUp || rez == actMoveDown) {
 		int c_new = (rez==actMoveDown) ? c_id+1 : c_id-1;
 		n_el1.setName("move")->setAttr("pos", i2s(c_id))->setAttr("to", i2s(c_new));
-		mess_info(mod->nodePath().c_str(),_("%s| Move '%s' from %d to %d!"),
+		mess_info(mod->nodePath().c_str(),_("%s| '%s' moved for the element %d to %d!"),
 			wUser->user().toStdString().c_str(), el_path.c_str(), c_id, c_new);
 	    }
 	    if(cntrIfCmd(n_el1)) {
@@ -2807,13 +2798,13 @@ void ConfApp::tablePopup( const QPoint &pos )
 	    n_el1.setAttr("path",el_path);
 	    if(rez == actAdd) {
 		n_el1.setName("add");
-		mess_info(mod->nodePath().c_str(), _("%s| Add '%s' record."),
+		mess_info(mod->nodePath().c_str(), _("%s| '%s' add by a record."),
 			wUser->user().toStdString().c_str(), el_path.c_str());
 	    }
 	    else if(rez == actIns) {
 		n_el1.setName("ins");
 		n_el1.setAttr("row", i2s(row));
-		mess_info(mod->nodePath().c_str(),_("%s| Insert '%s' record %d."),
+		mess_info(mod->nodePath().c_str(),_("%s| '%s' inserted for the record %d."),
 			wUser->user().toStdString().c_str(), el_path.c_str(), row);
 	    }
 	    else if(rez == actDel) {
@@ -2827,14 +2818,14 @@ void ConfApp::tablePopup( const QPoint &pos )
 		    // Get Key columns
 		    string key;
 		    for(int i_off = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&i_off)).size(); )
-			for(unsigned i_el = 0; i_el < n_el->childSize(); i_el++)
-			    if(n_el->childGet(i_el)->attr("id") == key) {
-				n_el1.setAttr("key_"+key,n_el->childGet(i_el)->childGet(row)->text());
+			for(unsigned iEl = 0; iEl < n_el->childSize(); iEl++)
+			    if(n_el->childGet(iEl)->attr("id") == key) {
+				n_el1.setAttr("key_"+key,n_el->childGet(iEl)->childGet(row)->text());
 				row_addr = row_addr+"key_"+key+"="+n_el1.attr("key_"+key)+",";
 				break;
 			    }
 		}
-		mess_info(mod->nodePath().c_str(),_("%s| Delete '%s' record '%s'."),
+		mess_info(mod->nodePath().c_str(),_("%s| '%s' deleted for the record '%s'."),
 			wUser->user().toStdString().c_str(), el_path.c_str(), row_addr.c_str());
 	    }
 	    else if(rez == actMoveUp || rez == actMoveDown) {
@@ -2842,7 +2833,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 		if(rez == actMoveDown)	r_new = row+1;
 		n_el1.setName("move");
 		n_el1.setAttr("row", i2s(row))->setAttr("to", i2s(r_new));
-		mess_info(mod->nodePath().c_str(),_("%s| Move '%s' record from %d to %d."),
+		mess_info(mod->nodePath().c_str(),_("%s| '%s' moved for the record %d to %d."),
 			wUser->user().toStdString().c_str(), el_path.c_str(), row, r_new);
 	    }
 	    if(cntrIfCmd(n_el1)) throw TError(n_el1.attr("mcat").c_str(), n_el1.text().c_str());
@@ -2866,11 +2857,11 @@ void ConfApp::imgPopup( const QPoint &pos )
     try {
 	XMLNode *n_el = SYS->ctrId(root, TSYS::strDecode(img->objectName().toStdString(),TSYS::PathEl));
 	if(!img->image().isNull()) {
-	    save_img = last_it = new QAction(_("Save image"),this);
+	    save_img = last_it = new QAction(_("Saving an image"),this);
 	    popup.addAction(save_img);
 	}
 	if(s2i(n_el->attr("acs"))&SEC_WR) {
-	    load_img = last_it = new QAction(_("Load image"),this);
+	    load_img = last_it = new QAction(_("Loading an image"),this);
 	    popup.addAction(load_img);
 	}
 
@@ -2878,13 +2869,13 @@ void ConfApp::imgPopup( const QPoint &pos )
 	    QAction *rez = popup.exec(QCursor::pos());
 	    if(!rez)	return;
 	    if(rez == save_img) {
-		QString fileName = QFileDialog::getSaveFileName(this,_("Save picture"),"img.png",_("Images (*.png *.xpm *.jpg)"));
+		QString fileName = QFileDialog::getSaveFileName(this,_("Saving the picture"),"img.png",_("Images (*.png *.xpm *.jpg)"));
 		if(!fileName.isEmpty() && !img->image().save(fileName))
-		    throw TError(mod->nodePath().c_str(),_("Save to file %s error\n"),fileName.toStdString().c_str());
+		    throw TError(mod->nodePath().c_str(), _("Error saving to the file '%s'\n"), fileName.toStdString().c_str());
 	    }
 	    else if(rez == load_img) {
 		//Get path to image file
-		QString fileName = QFileDialog::getOpenFileName(this,_("Load picture"),"",_("Images (*.png *.jpg)"));
+		QString fileName = QFileDialog::getOpenFileName(this,_("Loading the picture"),"",_("Images (*.png *.jpg)"));
 		if(fileName.isNull()) return;
 		int len;
 		char buf[STR_BUF_LEN];
@@ -2892,19 +2883,19 @@ void ConfApp::imgPopup( const QPoint &pos )
 
 		//Load image file
 		int hd = open(fileName.toStdString().c_str(), O_RDONLY);
-		if(hd < 0) throw TError(mod->nodePath().c_str(), _("Open file %s error\n"), fileName.toStdString().c_str());
+		if(hd < 0) throw TError(mod->nodePath().c_str(), _("Error opening the file '%s'\n"), fileName.toStdString().c_str());
 		while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf, len);
 		::close(hd);
 
 		//Set image to widget
 		if(!img->setImage(rez))
-		    throw TError(mod->nodePath().c_str(), _("Image file %s error\n"), fileName.toStdString().c_str());
+		    throw TError(mod->nodePath().c_str(), _("Error image file '%s'\n"), fileName.toStdString().c_str());
 
 		//Send image to system
 		XMLNode n_el1("set");
 		n_el1.setAttr("path",el_path)->setText(TSYS::strEncode(rez,TSYS::base64));
-		mess_info(mod->nodePath().c_str(),_("%s| Upload picture '%s' to: %s."),
-		    wUser->user().toStdString().c_str(), fileName.toStdString().c_str(), el_path.c_str());
+		mess_info(mod->nodePath().c_str(), _("%s| '%s' uploaded by the picture '%s'."),
+		    wUser->user().toStdString().c_str(), el_path.c_str(), fileName.toStdString().c_str());
 		if(cntrIfCmd(n_el1)) { mod->postMess(n_el1.attr("mcat"),n_el1.text(),TUIMod::Error,this); return; }
 	    }
 	}
@@ -2945,24 +2936,24 @@ void ConfApp::tableSet( int row, int col )
 		if(cntrIfCmd(x_lst)) { mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this); return; }
 
 		bool ind_ok = atoi(n_el->childGet(col)->attr("idm").c_str());
-		for(unsigned i_el = 0; i_el < x_lst.childSize(); i_el++) {
-		    if(!i_el) ind_ok = x_lst.childGet(i_el)->attr("id").size();
-		    if(x_lst.childGet(i_el)->text() == value) {
-			if(ind_ok) value = x_lst.childGet(i_el)->attr("id");
+		for(unsigned iEl = 0; iEl < x_lst.childSize(); iEl++) {
+		    if(!iEl) ind_ok = x_lst.childGet(iEl)->attr("id").size();
+		    if(x_lst.childGet(iEl)->text() == value) {
+			if(ind_ok) value = x_lst.childGet(iEl)->attr("id");
 			find_ok = true;
 		    }
 		}
 	    }
-	    if(!find_ok) throw TError(mod->nodePath().c_str(),_("Value '%s' is not valid!"),value.c_str());
+	    if(!find_ok) throw TError(mod->nodePath().c_str(),_("The value '%s' is wrong!"),value.c_str());
 	}
 	else value = val.toString().toStdString();
 
 	//Prepare request
 	XMLNode n_el1("set"); n_el1.setAttr("path",el_path)->setText(value);
 	// Get current column id
-	for(unsigned i_el = 0; i_el < n_el->childSize(); i_el++)
-	    if(tbl->horizontalHeaderItem(col)->data(Qt::DisplayRole).toString() == n_el->childGet(i_el)->attr("dscr").c_str())
-	    { n_el1.setAttr("col",n_el->childGet(i_el)->attr("id")); break; }
+	for(unsigned iEl = 0; iEl < n_el->childSize(); iEl++)
+	    if(tbl->horizontalHeaderItem(col)->data(Qt::DisplayRole).toString() == n_el->childGet(iEl)->attr("dscr").c_str())
+	    { n_el1.setAttr("col",n_el->childGet(iEl)->attr("id")); break; }
 	// Get row position
 	string row_addr;
 	if(!n_el->attr("key").size()) {
@@ -2973,16 +2964,16 @@ void ConfApp::tableSet( int row, int col )
 	    // Get Key columns
 	    string key;
 	    for(int i_off = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&i_off)).size(); )
-		for(unsigned i_el = 0; i_el < n_el->childSize(); i_el++)
-		    if(n_el->childGet(i_el)->attr("id") == key) {
-			n_el1.setAttr("key_"+key,n_el->childGet(i_el)->childGet(row)->text());
+		for(unsigned iEl = 0; iEl < n_el->childSize(); iEl++)
+		    if(n_el->childGet(iEl)->attr("id") == key) {
+			n_el1.setAttr("key_"+key,n_el->childGet(iEl)->childGet(row)->text());
 			row_addr = row_addr+"key_"+key+"="+n_el1.attr("key_"+key)+",";
 			break;
 		    }
 	}
 
 	// Put request
-	mess_info(mod->nodePath().c_str(),_("%s| Set '%s' cell ('%s':%s) to: %s."),
+	mess_info(mod->nodePath().c_str(),_("%s| '%s' set for cell ('%s':%s) to: %s."),
 	    wUser->user().toStdString().c_str(), el_path.c_str(), row_addr.c_str(), n_el1.attr("col").c_str(), value.c_str());
 	if(cntrIfCmd(n_el1))	throw TError(n_el1.attr("mcat").c_str(),n_el1.text().c_str());
 	noReload = s2i(n_el1.attr("noReload"));
@@ -3007,18 +2998,19 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
 
 	//Find selected index
 	bool sel_ok = false;
-	for(unsigned i_el = 0; i_el < req.childSize(); i_el++)
-	    if(req.childGet(i_el)->name() == "el" && req.childGet(i_el)->text() == item->text().toStdString()) {
-		if(req.childGet(i_el)->attr("id").size())
-		    path = selPath+"/"+TSYS::strEncode(br_pref+req.childGet(i_el)->attr("id"),TSYS::PathEl);
+	for(unsigned iEl = 0; iEl < req.childSize(); iEl++)
+	    if(req.childGet(iEl)->name() == "el" && req.childGet(iEl)->text() == item->text().toStdString()) {
+		if(req.childGet(iEl)->attr("id").size())
+		    path = selPath+"/"+TSYS::strEncode(br_pref+req.childGet(iEl)->attr("id"),TSYS::PathEl);
 		else
-		    path = selPath+"/"+TSYS::strEncode(br_pref+req.childGet(i_el)->text(),TSYS::PathEl);
+		    path = selPath+"/"+TSYS::strEncode(br_pref+req.childGet(iEl)->text(),TSYS::PathEl);
 		sel_ok = true;
 	    }
-	if(!sel_ok) throw TError(mod->nodePath().c_str(), _("Selective element '%s' is not present!"), item->text().toStdString().c_str());
+	if(!sel_ok) throw TError(mod->nodePath().c_str(), _("Selective element '%s' is missing!"), item->text().toStdString().c_str());
 
-	selPath = path;
-	pageRefresh(CH_REFR_TM);
+	selectPage(path, CH_REFR_TM);
+	//selPath = path;
+	//pageRefresh(CH_REFR_TM);
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
@@ -3058,7 +3050,7 @@ void ConfApp::applyButton( QWidget *src )
 	    sval = ll2s(vl);
 	}
 
-	mess_info(mod->nodePath().c_str(), _("%s| Change '%s' to: '%s'!"),
+	mess_info(mod->nodePath().c_str(), _("%s| '%s' changed to: '%s'!"),
 		wUser->user().toStdString().c_str(), (selPath+"/"+path).c_str(), sval.c_str());
 
 	XMLNode n_el("set");
@@ -3083,7 +3075,7 @@ void ConfApp::cancelButton( )
 //***********************************************
 // SHost - Host thread's control object         *
 SCADAHost::SCADAHost( const QString &iid, const QString &iuser, bool iIsRemote, QObject *p ) :
-    QThread(p), reqTmMax(0), id(iid), user(iuser), isRemote(iIsRemote), lnkOK(false), endRun(false), reqDone(false), tm(0), req(NULL), pid(0)
+    QThread(p), reqTmMax(0), id(iid), user(iuser), isRemote(iIsRemote), lnkOK(false), endRun(false), reqDone(false), tm(0), req(NULL), done(NULL), pid(0)
 {
 
 }
@@ -3107,7 +3099,7 @@ void SCADAHost::sendSIGALRM( )
     if(pid) pthread_kill(pid, SIGALRM);
 }
 
-bool SCADAHost::reqDo( XMLNode &node )
+bool SCADAHost::reqDo( XMLNode &node, bool &idone )
 {
     if(req) return false;
 
@@ -3115,9 +3107,12 @@ bool SCADAHost::reqDo( XMLNode &node )
     mtx.lock();
     reqDone = false;
     req = &node;
+    done = &idone; *done = false;
     cond.wakeOne();
     cond.wait(mtx, 100);
     if(!reqDone) { mtx.unlock(); return false; }
+    *done = true;
+    done = NULL;
     req = NULL;
     reqDone = false;
     mtx.unlock();
@@ -3132,6 +3127,7 @@ bool SCADAHost::reqBusy( )
     //Free done status
     if(reqDone) {
 	mtx.lock();
+	done = NULL;
 	req = NULL;
 	reqDone = false;
 	mtx.unlock();
@@ -3205,10 +3201,10 @@ void SCADAHost::run( )
 	    if(lnkOK) lnkOK = (rez=cntrIfCmd(*req,wuser)) != 10;
 	    else {
 		req->childClear();
-		req->setAttr("mcat",mod->nodePath()+"/"+id.toStdString())->setAttr("rez","10")->setText(_("No a link set"));
+		req->setAttr("mcat",mod->nodePath()+"/"+id.toStdString())->setAttr("rez","10")->setText(_("No connection is established"));
 	    }
 	    mtx.lock();
-	    reqDone = true;
+	    reqDone = *done = true;
 	    cond.wakeOne();
 	}
 	mtx.unlock();

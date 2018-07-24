@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tbds.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +38,7 @@ TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mSYSStPref(true)
     fldAdd(new TFld("val","Value"  ,TFld::String,TFld::TransltText,"1000"));
 
     //Open data bases DB structure
-    elDB.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    elDB.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     elDB.fldAdd(new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     elDB.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     elDB.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"2000"));
@@ -148,7 +148,7 @@ void TBDS::close( const string &bdn, bool del )
 	    obd.at().close(bdTbl, del);
     } catch(TError &err) {
 	mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_sys(TMess::Warning, _("Close DB '%s' error!"), bdn.c_str());
+	mess_sys(TMess::Warning, _("Error closing database '%s'!"), bdn.c_str());
     }
 }
 
@@ -268,8 +268,8 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool f
     }
 
     if(!db_true && !noEx) {
-	if(dbErr.cat.empty()) throw err_sys("%s", dbErr.mess.empty() ? _("Requested row no present.") : dbErr.mess.c_str());
-	throw TError(dbErr.cat.c_str(), "%s", dbErr.mess.empty() ? _("Requested row no present.") : dbErr.mess.c_str());
+	if(dbErr.cat.empty()) throw err_sys("%s", dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess.c_str());
+	throw TError(dbErr.cat.c_str(), "%s", dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess.c_str());
     }
 
     return db_true;
@@ -353,7 +353,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	}
     }
 
-    if(!noEx) throw err_sys(_("Write row to DB or config file error."));
+    if(!noEx) throw err_sys(_("Error writing to DB or configuration file."));
 
     return false;
 }
@@ -505,20 +505,16 @@ string TBDS::genDBGet( const string &path, const string &oval, const string &use
 
 string TBDS::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),_(
+    return TSYS::strMess(_(
 	"========================= Subsystem \"DB\" options ========================\n"
-	"----------- The config-file station '%s' parameters -----------\n"
-	"SYSStPref    <1>   The station id prefix using into the generic (SYS) table.\n\n"
-	),nodePath().c_str());
-
-    return(buf);
+	"------ Parameters of the section '%s' of the configuration file ------\n"
+	"SYSStPref  <0|1>        Use the station ID in the common table (SYS).\n\n"
+	),nodePath().c_str()) + TSubSYS::optDescr();
 }
 
 void TBDS::load_( )
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
     mSYSStPref = (bool)s2i(TBDS::genDBGet(nodePath()+"SYSStPref",(mSYSStPref?"1":"0"),"root",TBDS::OnlyCfg));
@@ -535,22 +531,23 @@ void TBDS::load_( )
 
     // Open other DB stored into the table 'DB' and the config-file
     try {
-	string id,type;
-	if(SYS->chkSelDB(fullDB())) {
+	string id, type;
+	//if(SYS->chkSelDB(fullDB())) {	//!!!! Must be forced one for config file rescan, release test
 	    TConfig c_el(&elDB);
 	    //c_el.cfgViewAll(false);
 	    vector<vector<string> > full;
 	    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fldCnt++,c_el,true,&full); ) {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("TYPE").getS();
-		if((type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id))
+		if(!modPresent(type))	continue;
+		if((type+"."+id) != SYS->workDB() && !at(type).at().openStat(id))
 		    at(type).at().open(id);
 		try{ at(type).at().at(id).at().load(&c_el); } catch(TError&) { }
 	    }
-	}
+	//}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_sys(TMess::Error, _("Search and open new DB error."));
+	mess_sys(TMess::Error, _("Error finding and opening a new database."));
     }
 }
 
@@ -597,8 +594,8 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
 	TModule::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),RWRWR_,"root",SDB_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),R_R_R_)) {
-	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Full DB delete"),RWRW__,"root",SDB_ID,2,
-		"tp","bool","help",_("Select for full DB deletion at this DB closing, else the DB will be simply closed."));
+	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Complete DB removal"),RWRW__,"root",SDB_ID,2,
+		"tp","bool","help",_("Select to completely remove the database when closing, otherwise the DB will simply be closed."));
 	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),RWRWR_,"root",SDB_ID,5,
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","db_","idSz",OBJ_ID_SZ);
 	}
@@ -615,8 +612,8 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
-	    for(unsigned i_l=0; i_l < lst.size(); i_l++)
-		opt->childAdd("el")->setAttr("id",lst[i_l])->setText(at(lst[i_l]).at().name());
+	    for(unsigned iL = 0; iL < lst.size(); iL++)
+		opt->childAdd("el")->setAttr("id",lst[iL])->setText(at(lst[iL]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDB_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
@@ -651,17 +648,17 @@ TCntrNode &TBD::operator=( const TCntrNode &node )
     if(src_n->enableStat() && enableStat()) {
 	vector<string> tbl_ls;
 	src_n->allowList(tbl_ls);
-	for(unsigned i_l = 0; i_l < tbl_ls.size(); i_l++) {
+	for(unsigned iL = 0; iL < tbl_ls.size(); iL++) {
 	    //Open source and destination tables
-	    const_cast<TBD*>(src_n)->open(tbl_ls[i_l], false);
-	    open(tbl_ls[i_l], true);
+	    const_cast<TBD*>(src_n)->open(tbl_ls[iL], false);
+	    open(tbl_ls[iL], true);
 
 	    //Copy table
-	    (TCntrNode&)at(tbl_ls[i_l]).at() = (TCntrNode&)src_n->at(tbl_ls[i_l]).at();
+	    (TCntrNode&)at(tbl_ls[iL]).at() = (TCntrNode&)src_n->at(tbl_ls[iL]).at();
 
 	    //Close source and destination tables
-	    const_cast<TBD*>(src_n)->close(tbl_ls[i_l]);
-	    close(tbl_ls[i_l]);
+	    const_cast<TBD*>(src_n)->close(tbl_ls[iL]);
+	    close(tbl_ls[iL]);
 	}
     }
 
@@ -704,8 +701,8 @@ void TBD::disable( )
     try {
 	vector<string> t_list;
 	list(t_list);
-	for(unsigned i_l = 0; i_l < t_list.size(); i_l++)
-	    close(t_list[i_l], false, 1);
+	for(unsigned iL = 0; iL < t_list.size(); iL++)
+	    close(t_list[iL], false, 1);
     } catch(...) { }	//Pass removing for locked
 
     mEn = false;
@@ -800,7 +797,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/tbls/otbl",_("Opened tables"),RWRW__,"root",SDB_ID,5,
 		"tp","br","idSz","255","s_com","add,del","br_pref","tbl_",
 		"help",_("Opened tables list.\nAdding and removing tables actually consists of opening and closing tables."));
-	if(enableStat() && ctrMkNode("area",opt,-1,"/sql",_("SQL"),R_R___,"root",SDB_ID)) {
+	if(enableStat() && ctrMkNode("area",opt,-1,"/sql","SQL",R_R___,"root",SDB_ID)) {
 	    ctrMkNode("fld",opt,-1,"/sql/req",_("Request"),RWRW__,"root",SDB_ID,3,"tp","str","cols","100","rows","2");
 	    ctrMkNode("fld",opt,-1,"/sql/trans",_("Transaction"),RWRW__,"root",SDB_ID,4,"tp","dec","dest","select",
 		"sel_id","0;1;2","sel_list",_("Out;Into;No matter"));
@@ -820,8 +817,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD)) {
 	    vector<string> lst;
 	    allowList(lst);
-	    for(unsigned i_l=0; i_l < lst.size(); i_l++)
-		opt->childAdd("el")->setText(lst[i_l]);
+	    for(unsigned iL = 0; iL < lst.size(); iL++)
+		opt->childAdd("el")->setText(lst[iL]);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDB_ID,SEC_WR)) {
 	    open(opt->text(), false);

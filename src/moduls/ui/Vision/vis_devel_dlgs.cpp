@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,6 +34,8 @@
 #include <QSplitter>
 #include <QScrollArea>
 #include <QMessageBox>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #include <tsys.h>
 
@@ -55,7 +56,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     QGroupBox *grp;
     QGridLayout *dlg_lay, *glay;
     QImage ico_t;
-    setWindowTitle(_("Widget's library properties"));
+    setWindowTitle(_("Properties of the widgets library"));
     setWindowIcon(owner()->actVisItProp->icon());
 
     //Create tabulator
@@ -86,12 +87,12 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
 
     obj_ico = new QPushButton(tab_w);
     obj_ico->setObjectName("/obj/cfg/ico");
-    obj_ico->setToolTip(_("Item's icon. Click for download other."));
+    obj_ico->setToolTip(_("Item icon. Click to download another."));
     obj_ico->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
-    obj_ico->setIconSize(QSize(60,60));
+    obj_ico->setIconSize(QSize(icoSize(5),icoSize(5)));
     obj_ico->setAutoDefault(false);
     connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
-    glay->addWidget(obj_ico, 0, 0, 2, 1);
+    glay->addWidget(obj_ico, 0, 0, 3, 1);
 
     lab = new QLabel(_("Enabled:"), tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
@@ -110,6 +111,14 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     connect(obj_db, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(obj_db, 1, 2);
 
+    lab = new QLabel(_("Used:"), tab_w);
+    glay->addWidget(lab, 2, 1);
+    obj_used = new QLabel(tab_w);
+    obj_used->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    obj_used->setObjectName("/obj/st/use");
+    obj_used->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    glay->addWidget(obj_used, 2, 2);
+
     grp->setLayout(glay);
     dlg_lay->addWidget(grp, 0, 0);
 
@@ -119,7 +128,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     glay->setMargin(4);
     glay->setSpacing(6);
 
-    glay->addWidget(new QLabel(_("Id:"),tab_w), 0, 0);
+    glay->addWidget(new QLabel(_("Identifier:"),tab_w), 0, 0);
     obj_id = new QLabel(tab_w);
     obj_id->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_id->setObjectName("/obj/cfg/id");
@@ -166,7 +175,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     glay->addWidget(obj_accother, 5, 3);
 
     // Specific parameter: project calc time
-    lab = new QLabel(_("Calculate period (ms):"), tab_w);
+    lab = new QLabel(_("Period of the calculating, milliseconds:"), tab_w);
     glay->addWidget(lab, 6, 0);
     prj_ctm = new LineEdit(tab_w, LineEdit::Integer, false, false);
     prj_ctm->setCfg("0:10000:10");
@@ -204,7 +213,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     mimeDataTable = new QTableWidget(0, 3, tab_w);
     mimeDataTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     connect(mimeDataTable, SIGNAL(cellChanged(int,int)), this, SLOT(mimeDataChange(int,int)));
-    mimeDataTable->setHorizontalHeaderLabels(QStringList() << _("Id") << _("Mime type") << _("Data size"));
+    mimeDataTable->setHorizontalHeaderLabels(QStringList() << _("Identifier") << _("Mime type") << _("Data size"));
     dlg_lay->addWidget(mimeDataTable, 0, 0, 1, 4);
 
     buttDataAdd = new QPushButton(_("Add record"),tab_w);
@@ -252,7 +261,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     stl_table->setObjectName("/style/props");
     stl_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     connect(stl_table, SIGNAL(cellChanged(int,int)), this, SLOT(stlTableChange(int,int)));
-    stl_table->setHorizontalHeaderLabels(QStringList() << _("Id") << _("Value"));
+    stl_table->setHorizontalHeaderLabels(QStringList() << _("Identifier") << _("Value"));
     dlg_lay->addWidget(stl_table, 4, 0, 1, 4);
 
     buttStlTableDel = new QPushButton(_("Delete record"),tab_w);
@@ -303,7 +312,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
     info_req.setAttr("path",ed_it);
 
     if(owner()->cntrIfCmd(info_req)) {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Get node '%1' information error.")).arg(ed_it.c_str()),TVision::Error, this);
+	mod->postMess(mod->nodePath().c_str(), QString(_("Error getting the node '%1' information.")).arg(ed_it.c_str()),TVision::Error, this);
 	return;
     }
     XMLNode *root = info_req.childGet(0),
@@ -337,6 +346,12 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		obj_db->setCfg(els.c_str());
 	    }
 	}
+	// Used
+	gnd = TCntrNode::ctrId(root, obj_used->objectName().toStdString(), true);
+	if(gnd) {
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_used->objectName().toStdString(),TSYS::PathEl));
+	    if(!owner()->cntrIfCmd(req)) obj_used->setText(req.text().c_str());
+	}else obj_used->setText("");
 	// User
 	gnd = TCntrNode::ctrId(root,obj_user->objectName().toStdString(),true);
 	obj_user->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
@@ -566,10 +581,10 @@ void LibProjProp::selectIco( )
 
     if(!ico_modif)	return;
 
-    QString fileName = owner()->getFileName(_("Load icon picture"),"",_("Images (*.png *.jpg)"));
+    QString fileName = owner()->getFileName(_("Downloading the image icon"),"",_("Images (*.png *.jpg)"));
     if(fileName.isEmpty())	return;
     if(!ico_t.load(fileName)) {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Load icon image '%1' error.")).arg(fileName), TVision::Warning, this);
+	mod->postMess(mod->nodePath().c_str(), QString(_("Error downloading the icon image '%1'.")).arg(fileName), TVision::Warning, this);
 	return;
     }
 
@@ -640,7 +655,7 @@ void LibProjProp::closeEvent( QCloseEvent *ce )
     bool notApplyPresent = false;
     for(int i_it = 0; !notApplyPresent && i_it < lnEdWs.size(); ++i_it) notApplyPresent = lnEdWs[i_it]->isEdited();
     for(int i_it = 0; !notApplyPresent && i_it < txtEdWs.size(); ++i_it) notApplyPresent = txtEdWs[i_it]->isEdited();
-    if(notApplyPresent && QMessageBox::information(this,_("Changes apply"),_("Some changes you don't apply!\nApply now or lost the?"),
+    if(notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before the closing?"),
 	    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
     {
 	for(int i_it = 0; i_it < lnEdWs.size(); ++i_it) if(lnEdWs[i_it]->isEdited()) isModify(lnEdWs[i_it]);
@@ -674,7 +689,7 @@ void LibProjProp::addMimeData( )
 void LibProjProp::delMimeData( )
 {
     int row = mimeDataTable->currentRow();
-    if(row < 0) { mod->postMess( mod->nodePath().c_str(),_("No one row is selected."),TVision::Warning,this ); return; }
+    if(row < 0) { mod->postMess( mod->nodePath().c_str(),_("No rows selected."),TVision::Warning,this ); return; }
 
     XMLNode req("del");
     req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl))->
@@ -689,20 +704,20 @@ void LibProjProp::loadMimeData( )
     if(!mimeDataTable->selectedItems().empty()) {
 	InputDlg dlg(this, windowIcon(),
 	    QString(_("Are you sure of loading a mime to selected item '%1'?")).arg(mimeDataTable->selectedItems()[0]->text()),
-		    _("Load data"), false, false);
+		    _("Loading the data"), false, false);
 	if(dlg.exec() != QDialog::Accepted) return;
     }
 
-    QString fileName = owner()->getFileName(_("Load data"),"",_("All files (*.*)"));
+    QString fileName = owner()->getFileName(_("Loading the data"),"",_("All files (*.*)"));
     if(fileName.isEmpty())	return;
 
     QFile file(fileName);
     if(!file.open(QFile::ReadOnly)) {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Open file '%1' is fail: %2")).arg(fileName).arg(file.errorString()), TVision::Error, this);
+	mod->postMess(mod->nodePath().c_str(), QString(_("Error opening the file '%1': %2")).arg(fileName).arg(file.errorString()), TVision::Error, this);
 	return;
     }
     if(file.size() >= USER_FILE_LIMIT) {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Loadable file '%1' is too large.")).arg(fileName), TVision::Error, this);
+	mod->postMess(mod->nodePath().c_str(), QString(_("The download file '%1' is very large.")).arg(fileName), TVision::Error, this);
 	return;
     }
     QByteArray data = file.readAll();
@@ -722,17 +737,17 @@ void LibProjProp::loadMimeData( )
 void LibProjProp::unloadMimeData( )
 {
     int row = mimeDataTable->currentRow();
-    if(row < 0) { mod->postMess( mod->nodePath().c_str(), _("No one row is selected."), TVision::Warning, this ); return; }
+    if(row < 0) { mod->postMess( mod->nodePath().c_str(), _("No rows selected."), TVision::Warning, this ); return; }
 
     string fext = (mimeDataTable->item(row,0)->text().toStdString().rfind(".") == string::npos) ?
 		    TSYS::pathLev(mimeDataTable->item(row,1)->text().toStdString(),1) : "";
-    QString fileName = owner()->getFileName(_("Save data"), mimeDataTable->item(row,0)->text()+(fext.size()?("."+fext).c_str():""),
+    QString fileName = owner()->getFileName(_("Saving the data"), mimeDataTable->item(row,0)->text()+(fext.size()?("."+fext).c_str():""),
 	_("All files (*.*)"), QFileDialog::AcceptSave);
     if(fileName.isEmpty())	return;
     QFile file(fileName);
     if(!file.open(QIODevice::WriteOnly|QIODevice::Truncate)) {
 	mod->postMess(mod->nodePath().c_str(),
-		QString(_("Open file '%1' is fail: %2")).arg(fileName).arg(file.errorString()), TVision::Error, this);
+		QString(_("Error opening the file '%1': %2")).arg(fileName).arg(file.errorString()), TVision::Error, this);
 	return;
     }
 
@@ -746,7 +761,7 @@ void LibProjProp::unloadMimeData( )
 	string mimeData = TSYS::strDecode(req.text(),TSYS::base64);
 	if(file.write(mimeData.data(),mimeData.size()) < 0)
 	    mod->postMess(mod->nodePath().c_str(),
-		QString(_("Write data to file '%1' is fail: %2")).arg(fileName).arg(file.errorString()), TVision::Error, this);
+		QString(_("Error writing the data to the file '%1': %2")).arg(fileName).arg(file.errorString()), TVision::Error, this);
     }
 }
 
@@ -767,7 +782,7 @@ void LibProjProp::mimeDataChange( int row, int column )
 void LibProjProp::delStlItem( )
 {
     int row = stl_table->currentRow();
-    if(row < 0) { mod->postMess(mod->nodePath().c_str(), _("No one row is selected."), TVision::Warning, this); return; }
+    if(row < 0) { mod->postMess(mod->nodePath().c_str(), _("No rows selected."), TVision::Warning, this); return; }
 
     XMLNode req("del");
     req.setAttr("path",ed_it+"/"+TSYS::strEncode(stl_table->objectName().toStdString(),TSYS::PathEl))->
@@ -801,7 +816,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     QGroupBox *grp;
     QGridLayout *dlg_lay, *glay;
     QImage ico_t;
-    setWindowTitle(_("Widget properties"));
+    setWindowTitle(_("Properties of the widget"));
     setWindowIcon(owner()->actVisItProp->icon());
 
     //Create tabulator
@@ -830,9 +845,9 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->setSpacing(6);
     obj_ico = new QPushButton(tab_w);
     obj_ico->setObjectName("/wdg/cfg/ico");
-    obj_ico->setToolTip(_("Item's icon. Click for download other."));
+    obj_ico->setToolTip(_("Item icon. Click to download another."));
     obj_ico->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    obj_ico->setIconSize(QSize(60,60));
+    obj_ico->setIconSize(QSize(icoSize(5),icoSize(5)));
     obj_ico->setAutoDefault(false);
     connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
     glay->addWidget(obj_ico,0,0,4,1);
@@ -845,31 +860,31 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(obj_enable, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
     glay->addWidget(obj_enable,0,2,1,4);
 
-    lab = new QLabel(_("Parent widget:"),tab_w);
+    lab = new QLabel(_("Parent widget:"), tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
-    glay->addWidget(lab,1,1);
+    glay->addWidget(lab, 1, 1);
     obj_parent = new QComboBox(tab_w);
     obj_parent->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
     obj_parent->setObjectName("/wdg/st/parent");
     connect(obj_parent, SIGNAL(activated(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_parent,1,2,1,4);
+    glay->addWidget(obj_parent, 1, 2, 1, 4);
 
     //  Specific parameter: page type
-    lab = new QLabel(_("Page type:"),tab_w);
-    glay->addWidget(lab,2,1);
+    lab = new QLabel(_("Page type:"), tab_w);
+    glay->addWidget(lab, 2, 1);
     pg_tp = new QComboBox(tab_w);
     pg_tp->setObjectName("/wdg/st/pgTp");
     pg_tp->setWindowIconText(TSYS::addr2str(lab).c_str());
     connect(pg_tp, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(pg_tp,2,2);
+    glay->addWidget(pg_tp, 2, 2);
 
-    lab = new QLabel(_("Used:"),tab_w);
-    glay->addWidget(lab,3,1);
+    lab = new QLabel(_("Used:"), tab_w);
+    glay->addWidget(lab, 3, 1);
     obj_used = new QLabel(tab_w);
     obj_used->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_used->setObjectName("/wdg/st/use");
     obj_used->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    glay->addWidget(obj_used,3,2,1,4);
+    glay->addWidget(obj_used, 3, 2, 1, 4);
 
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,0,0);
@@ -880,7 +895,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->setMargin(4);
     glay->setSpacing(6);
 
-    glay->addWidget(new QLabel(_("Id:"),tab_w),0,0);
+    glay->addWidget(new QLabel(_("Identifier:"),tab_w),0,0);
     obj_id = new QLabel(tab_w);
     obj_id->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_id->setObjectName("/wdg/cfg/id");
@@ -951,7 +966,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_attr_cfg->setSelectionBehavior(QAbstractItemView::SelectRows);
     obj_attr_cfg->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     connect(obj_attr_cfg, SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(changeAttr(QTreeWidgetItem*,int)));
-    obj_attr_cfg->setHeaderLabels(QStringList() << _("Id") << _("Name") << _("Data type") << _("Work area") << _("Proc.")
+    obj_attr_cfg->setHeaderLabels(QStringList() << _("Identifier") << _("Name") << _("Data type") << _("Work area") << _("Processing")
 						<< _("Configuration") << _("Configuration template"));
     glay->addWidget(obj_attr_cfg,0,0,1,2);
 
@@ -979,13 +994,14 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     proc_lang->setObjectName("/proc/calc/progLng");
     connect(proc_lang, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(proc_lang, 1, 1);
-    lab = new QLabel(_("Procedure calculate (ms):"),wdg_proc_fr);
+    lab = new QLabel(_("Period of the calculating, milliseconds:"),wdg_proc_fr);
     lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
     glay->addWidget(lab,1,2);
     proc_per = new LineEdit(wdg_proc_fr);
     proc_per->setObjectName("/proc/calc/per");
     connect( proc_per, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(proc_per,1,3);
+
     proc_text = new TextEdit(wdg_proc_fr);
     proc_text->setObjectName("/proc/calc/prog");
     connect(proc_text, SIGNAL(apply()), this, SLOT(isModify()));
@@ -1048,7 +1064,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
     XMLNode info_req("info");
     info_req.setAttr("path",ed_it);
     if(owner()->cntrIfCmd(info_req)) {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Getting node '%1' information error.")).arg(ed_it.c_str()), TVision::Error, this);
+	mod->postMess(mod->nodePath().c_str(), QString(_("Error getting the node '%1' information.")).arg(ed_it.c_str()), TVision::Error, this);
 	return;
     }
 
@@ -1187,7 +1203,7 @@ void VisItProp::tabChanged( int itb )
 	    info_req.setAttr("path",ed_it);
 	    if(owner()->cntrIfCmd(info_req)) {
 		mod->postMess(mod->nodePath().c_str(),
-			QString(_("Getting node '%1' information error.")).arg(ed_it.c_str()),TVision::Error, this);
+			QString(_("Error getting the node '%1' information.")).arg(ed_it.c_str()),TVision::Error, this);
 		return;
 	    }
 	    string sval;
@@ -1341,11 +1357,11 @@ void VisItProp::selectIco( )
 
     if(!ico_modif)	return;
 
-    QString fileName = owner()->getFileName(_("Load icon picture"),"",_("Images (*.png *.jpg)"));
+    QString fileName = owner()->getFileName(_("Downloading the image icon"),"",_("Images (*.png *.jpg)"));
 
     if(fileName.isEmpty())	return;
     if(!ico_t.load(fileName)) {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Load icon image '%1' error.")).arg(fileName), TVision::Warning, this);
+	mod->postMess(mod->nodePath().c_str(), QString(_("Error downloading the icon image '%1'.")).arg(fileName), TVision::Warning, this);
 	return;
     }
 
@@ -1416,7 +1432,8 @@ void VisItProp::closeEvent( QCloseEvent *ce )
     bool notApplyPresent = false;
     for(int i_it = 0; !notApplyPresent && i_it < lnEdWs.size(); ++i_it) notApplyPresent = lnEdWs[i_it]->isEdited();
     for(int i_it = 0; !notApplyPresent && i_it < txtEdWs.size(); ++i_it) notApplyPresent = txtEdWs[i_it]->isEdited();
-    if(notApplyPresent && QMessageBox::information(this,_("Changes apply"),_("Some changes you don't apply!\nApply now or lost the?"),
+
+    if(notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before the closing?"),
 	    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
     {
 	for(int i_it = 0; i_it < lnEdWs.size(); ++i_it) if(lnEdWs[i_it]->isEdited()) isModify(lnEdWs[i_it]);
@@ -1448,7 +1465,7 @@ void VisItProp::addAttr( )
     }
     //Check current attribute
     if(swdg.empty()) {
-	mod->postMess(mod->nodePath().c_str(), _("Valid widget is not selected"),TVision::Warning,this);
+	mod->postMess(mod->nodePath().c_str(), _("Correct widget is not selected"),TVision::Warning,this);
 	return;
     }
 
@@ -1467,7 +1484,7 @@ void VisItProp::delAttr( )
     //Check current attribute
     if(!obj_attr_cfg->currentItem() || !obj_attr_cfg->currentItem()->parent())
     {
-	mod->postMess(mod->nodePath().c_str(), _("Valid attribute is not selected"),TVision::Warning,this);
+	mod->postMess(mod->nodePath().c_str(), _("Correct attribute is not selected"),TVision::Warning,this);
 	return;
     }
 
@@ -1489,7 +1506,7 @@ void VisItProp::changeAttr(QTreeWidgetItem *it, int col)
 
     //Check current attribute
     if(!it || !it->parent()) {
-	mod->postMess(mod->nodePath().c_str(), _("Valid attribute is not selected"),TVision::Warning,this);
+	mod->postMess(mod->nodePath().c_str(), _("Correct attribute is not selected"),TVision::Warning,this);
 	return;
     }
 
@@ -1554,8 +1571,8 @@ void VisItProp::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 	if(index.column() == 4) {
 	    drawBackground(painter, option, index);
 	    if(index.data(Qt::DisplayRole).toBool()) {
-		QImage img(":/images/ok.png");
-		painter->drawImage(option.rect.center().x()-img.width()/2,option.rect.center().y()-img.height()/2,img);
+		QImage img = QImage(":/images/button_ok.png").scaled(icoSize(), icoSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		painter->drawImage(option.rect.center().x()-img.width()/2, option.rect.center().y()-img.height()/2, img);
 	    }
 	    drawFocus(painter, option, option.rect);
 	    return;

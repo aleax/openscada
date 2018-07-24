@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodschedul.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +38,7 @@ using namespace OSCADA;
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
-TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules Scheduler"),false), mAllow("*"), mPer(10), schM(true)
+TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules scheduler"),false), mAllow("*"), mPer(10), schM(true)
 {
 
 }
@@ -65,19 +65,17 @@ void TModSchedul::preDisable( int flag )
 
 string TModSchedul::optDescr( )
 {
-    char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),_(
-	"=================== Subsystem \"Module scheduler\" options =================\n"
-	"    --modPath=<path>   Modules <path> (/var/os/modules/).\n"
-	"------------ Parameters of section '%s' in config-file -----------\n"
-	"ModPath  <path>        Path to shared libraries(modules).\n"
-	"ModAllow <list>        List of shared libraries allowed for automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
-	"                       Use '*' value to allow all modules.\n"
-	"ModDeny  <list>        List of shared libraries deny for automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
-	"ChkPer   <sec>         Period of checking at new shared libraries(modules).\n\n"
-	),nodePath().c_str());
-
-    return buf;
+    return TSYS::strMess(_(
+	"=================== Subsystem \"Modules scheduler\" options =================\n"
+	"    --modPath=<path>    Directories with the modules, separated by ';', they can include a files' template at the end.\n"
+	"------ Parameters of the section '%s' of the configuration file ------\n"
+	"ModPath    <path>       Directories with the modules, separated by ';', they can include a files' template at the end.\n"
+	"                        This is a synonym of the system wide parameter \"ModDir\"\n"
+	"ModAllow   <list>       List of the shared libraries allowed for the automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
+	"                        Uses '*' value to allow all the modules.\n"
+	"ModDeny    <list>       List of the shared libraries denied for the automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
+	"ChkPer     <sec>        Period of the checking for new shared libraries(modules), in seconds. Set zero to disable.\n\n"
+	), nodePath().c_str()) + TSubSYS::optDescr();
 }
 
 void TModSchedul::setChkPer( int per )	{ mPer = vmax(0,per); modif(); }
@@ -88,7 +86,6 @@ void TModSchedul::load_( )
 {
     //Load parameters from command line
     string argVl;
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
     if((argVl=SYS->cmdOpt("modPath")).size()) SYS->setModDir(argVl, true);
 
     //Load parameters from command line
@@ -146,14 +143,6 @@ bool TModSchedul::fileCheck( const string &iname )
     if(access(iname.c_str(),F_OK|R_OK) != 0)  return false;
     modNm = iname;
 
-    /*void *h_lib = dlopen(iname.c_str(),RTLD_LAZY|RTLD_LOCAL);
-    if( h_lib == NULL )
-    {
-	//mess_sys(TMess::Warning, _("Module '%s' error: %s !"), iname.c_str(), dlerror());
-	return false;
-    }
-    else dlclose(h_lib);*/
-
     MtxAlloc res(schM, true);
     for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
 	if(schHD[iSh].name == iname) {
@@ -190,7 +179,7 @@ void TModSchedul::libUnreg( const string &iname )
 	    schHD.erase(schHD.begin()+iSh);
 	    return;
 	}
-    throw err_sys(_("SO '%s' is not present!"), iname.c_str());
+    throw err_sys(_("SO '%s' is missing!"), iname.c_str());
 }
 
 void TModSchedul::libAtt( const string &iname, bool full )
@@ -199,14 +188,14 @@ void TModSchedul::libAtt( const string &iname, bool full )
     MtxAlloc res(schM, true);
     for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
 	if(schHD[iSh].name == iname) {
-	    if(schHD[iSh].hd) throw err_sys(_("SO '%s' is already attached!"), iname.c_str());
+	    if(schHD[iSh].hd) throw err_sys(_("SO '%s' is already connected!"), iname.c_str());
 
 	    if(iname[0] != '*')	dlNm = iname.c_str();
 	    else dlNm = NULL;
 	    void *h_lib = dlopen(dlNm, RTLD_LAZY|RTLD_LOCAL);
 	    if(!h_lib) {
 		schHD[iSh].err = dlerror();
-		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[iSh].err.c_str());
+		throw err_sys(_("Error SO '%s': %s"), iname.c_str(), schHD[iSh].err.c_str());
 	    }
 
 	    //Connect to module function
@@ -215,7 +204,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    if((dlErr=dlerror()) != NULL) {
 		schHD[iSh].err = dlErr;
 		dlclose(h_lib);
-		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[iSh].err.c_str());
+		throw err_sys(_("Error SO '%s': %s"), iname.c_str(), schHD[iSh].err.c_str());
 	    }
 
 	    //Connect to attach function
@@ -224,7 +213,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    if((dlErr=dlerror()) != NULL) {
 		schHD[iSh].err = dlErr;
 		dlclose(h_lib);
-		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[iSh].err.c_str());
+		throw err_sys(_("Error SO '%s': %s"), iname.c_str(), schHD[iSh].err.c_str());
 	    }
 
 	    //Get allow modules from library and start it
@@ -237,18 +226,18 @@ void TModSchedul::libAtt( const string &iname, bool full )
 		    if(owner().at(list[i_sub]).at().subModule() && AtMod.type == owner().at(list[i_sub]).at().subId()) {
 			// Check type module version
 			if(AtMod.tVer != owner().at(list[i_sub]).at().subVer()) {
-			    mess_sys(TMess::Warning, _("%s for type '%s' doesn't support module version: %d!"),
+			    mess_sys(TMess::Warning, _("%s for type '%s' does not support the version %d of the module!"),
 				AtMod.id.c_str(), AtMod.type.c_str(), AtMod.tVer);
 			    break;
 			}
 			// Check module present
 			if(owner().at(list[i_sub]).at().modPresent(AtMod.id))
-			    mess_sys(TMess::Warning, _("Module '%s' is already present!"), AtMod.id.c_str());
+			    mess_sys(TMess::Warning, _("Module '%s' already exists!"), AtMod.id.c_str());
 			else {
 			    // Attach new module
 			    TModule *LdMod = (attach)(AtMod, iname);
 			    if(LdMod == NULL) {
-				mess_sys(TMess::Warning, _("Attach module '%s' error!"), AtMod.id.c_str());
+				mess_sys(TMess::Warning, _("Error connecting module '%s'!"), AtMod.id.c_str());
 				break;
 			    }
 			    // Add atached module
@@ -269,7 +258,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    else schHD[iSh].hd = h_lib;
 	    return;
 	}
-    throw err_sys(_("SO '%s' is not present!"), iname.c_str());
+    throw err_sys(_("SO '%s' is missing!"), iname.c_str());
 }
 
 void TModSchedul::libDet( const string &iname )
@@ -301,7 +290,7 @@ void TModSchedul::libDet( const string &iname )
 	    schHD[iSh].hd = NULL;
 	    return;
 	}
-    throw err_sys(_("SO '%s' is not present!"), iname.c_str());
+    throw err_sys(_("SO '%s' is missing!"), iname.c_str());
 }
 
 bool TModSchedul::chkAllowMod( const string &name )
@@ -339,7 +328,7 @@ TModSchedul::SHD TModSchedul::lib( const string &iname )
     for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
 	if(schHD[iSh].name == iname)
 	    return schHD[iSh];
-    throw err_sys(_("SO '%s' is not present!"), iname.c_str());
+    throw err_sys(_("SO '%s' is missing!"), iname.c_str());
 }
 
 int TModSchedul::libLoad( const string &iname, bool full )
@@ -378,7 +367,7 @@ int TModSchedul::libLoad( const string &iname, bool full )
 		if(st_auto) libDet(files[iF]);
 	    } catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Warning, _("Can't detach library '%s'."), files[iF].c_str());
+		mess_sys(TMess::Warning, _("Can not detach the library '%s'."), files[iF].c_str());
 		continue;
 	    }
 	}
@@ -401,17 +390,17 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/ms",_("Subsystem"),R_R_R_,"root",SMSH_ID)) {
-	    ctrMkNode("fld",opt,-1,"/ms/mod_path",_("Path to shared libs(modules)"),R_R_R_,"root",SMSH_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/ms/mod_path",_("Path to the shared libraries(modules)"),R_R_R_,"root",SMSH_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/ms/mod_deny",_("Denied modules"),RWRWR_,"root",SMSH_ID,2,"tp","str",
-		"help",_("List of shared libs(modules) deny for auto connection.\n"
-		         "Elements separated by symbol ';'."));
+		"help",_("The list of shared libraries (modules) denied for automatic connection.\n"
+		         "Elements are separated by the symbol ';'."));
 	    ctrMkNode("fld",opt,-1,"/ms/mod_allow",_("Allowed modules"),RWRWR_,"root",SMSH_ID,2,"tp","str",
-		"help",_("List of shared libs(modules) allowed for auto connection.\n"
-		         "Elements separated by symbol ';'.\n"
-		         "Value '*' used for allow all modules."));
-	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Check modules period, seconds"),RWRWR_,"root",SMSH_ID,1,"tp","dec");
-	    ctrMkNode("comm",opt,-1,"/ms/chk_now",_("Check modules now."),RWRW__,"root",SMSH_ID);
-	    if(ctrMkNode("table",opt,-1,"/ms/libs",_("Shared libs(modules)"),RWRWR_,"root",SMSH_ID,1,"key","path")) {
+		"help",_("The list of shared libraries (modules) allowed for automatic connection.\n"
+		         "Elements are separated by the symbol ';'.\n"
+		         "The value '*' is used to allow all modules."));
+	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Period of checking of the modules, seconds"),RWRWR_,"root",SMSH_ID,1,"tp","dec");
+	    ctrMkNode("comm",opt,-1,"/ms/chk_now",_("Check the modules now."),RWRW__,"root",SMSH_ID);
+	    if(ctrMkNode("table",opt,-1,"/ms/libs",_("Shared libraries(modules)"),RWRWR_,"root",SMSH_ID,1,"key","path")) {
 		ctrMkNode("list",opt,-1,"/ms/libs/path",_("Path"),R_R_R_,"root",SMSH_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/ms/libs/tm",_("Time"),R_R_R_,"root",SMSH_ID,1,"tp","time");
 		ctrMkNode("list",opt,-1,"/ms/libs/mods",_("Modules"),R_R_R_,"root",SMSH_ID,1,"tp","str");

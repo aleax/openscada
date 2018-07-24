@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -176,7 +176,7 @@ class TSYS : public TCntrNode
 
 	bool	chkSelDB( const string& wDB, bool isStrong = false );
 
-	string	optDescr( );	//print comand line options
+
 
 	static void sighandler( int signal, siginfo_t *siginfo, void *context );
 
@@ -213,7 +213,7 @@ class TSYS : public TCntrNode
 	//> Wait event with timeout support
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 
-	//> System counters
+	// Program counters
 	bool	cntrEmpty( );
 	double	cntrGet( const string &id );
 	void	cntrSet( const string &id, double vl );
@@ -312,12 +312,17 @@ class TSYS : public TCntrNode
 	static double doubleBErev( double in );
 
 	//> Reentrant commandline processing
+	string	optDescr( );	//get comand line options
+
 	string getCmdOpt( int &curPos, string *argVal = NULL );
 	static string getCmdOpt_( int &curPos, string *argVal, int argc, char **argv );
 
+	bool   cmdOptPresent( const string &opt );
 	string cmdOpt( const string &opt, const string &setVl = "" );
 
-	//>> System control interface functions
+	int permCrtFiles( bool exec = false );
+
+	// Control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
 	ResRW &cfgRes( )	{ return mCfgRes; }
@@ -342,7 +347,7 @@ class TSYS : public TCntrNode
 	//Private methods
 	const char *nodeName( ) const		{ return mId.c_str(); }
 	const char *nodeNameSYSM( ) const	{ return mName.c_str(); }
-	bool	cfgFileLoad( );
+	void	cfgFileLoad( );
 	void	cfgFileSave( );
 	void	cfgPrmLoad( );
 	void	cfgFileScan( bool first = false, bool up = false );

@@ -1,9 +1,9 @@
 
-//OpenSCADA system module UI.WebVision file: vca_sess.cpp
+//OpenSCADA module UI.WebVision file: vca_sess.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
  *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
- *		   2007-2017 by Roman Savochenko (rom_as@oscada.org)	   *
+ *		   2007-2018 by Roman Savochenko (rom_as@oscada.org)	   *
  *									   *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -62,6 +62,7 @@ void VCASess::postDisable( int flag )
 void VCASess::getReq( SSess &ses )
 {
     string oAddr;
+
     // Access time to session is updating
     lst_ses_req = time(NULL);
 
@@ -127,7 +128,7 @@ void VCASess::getReq( SSess &ses )
 	prmEl = ses.prm.find("attr");
 	string attr = (prmEl!=ses.prm.end()) ? prmEl->second : "";
 
-	XMLNode req("get"); req.setAttr("path",ses.url+"/%2fattr%2f"+attr);
+	XMLNode req("get"); req.setAttr("path", ses.url+"/%2fattr%2f"+attr);
 	mod->cntrIfCmd(req, ses);
 	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
@@ -136,8 +137,8 @@ void VCASess::getReq( SSess &ses )
 	prmEl = ses.prm.find("tm");
 	prmEl1 = ses.prm.find("FullTree");
 	XMLNode req("get");
-	req.setAttr("path",ses.url+"/%2fserv%2fattrBr")->setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0")->
-	    setAttr("FullTree",(prmEl1!=ses.prm.end())?prmEl1->second:"0");
+	req.setAttr("path", ses.url+"/%2fserv%2fattrBr")->setAttr("tm", (prmEl!=ses.prm.end())?prmEl->second:"0")->
+	    setAttr("FullTree", (prmEl1!=ses.prm.end())?prmEl1->second:"0");
 	mod->cntrIfCmd(req, ses);
 
 	// Backend objects' attributes set
@@ -178,10 +179,16 @@ void VCASess::getReq( SSess &ses )
 	    ses.page = resGet(prmEl->second, ses.url, ses, &mime);
 	    mod->imgConvert(ses);
 	    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+mime);
-	} else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource isn't found"))+"</div>\n", "404 Not Found");
+	} else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource not found"))+"</div>\n", "404 Not Found");
     }
     //Request to the primitive object. Used for data caching
-    else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().getReq(ses);
+    else if(wp_com == "obj") {
+	size_t tPos;
+	if(objPresent(oAddr=TSYS::path2sepstr(ses.url)))	objAt(oAddr).at().getReq(ses);
+	else if(ses.url.rfind(".") != string::npos && (tPos=ses.url.rfind("/")) != string::npos && objPresent(oAddr=TSYS::path2sepstr(ses.url.substr(0,tPos))))
+	    objAt(oAddr).at().getReq(ses);
+	else ses.page = mod->pgCreator(ses.prt, "<div class='warning'>"+TSYS::strMess(_("Unknown object of the command: %s."),wp_com.c_str())+"</div>\n", "200 OK");
+    }
     else ses.page = mod->pgCreator(ses.prt, "<div class='warning'>"+TSYS::strMess(_("Unknown command: %s."),wp_com.c_str())+"</div>\n", "200 OK");
 }
 
@@ -207,13 +214,16 @@ void VCASess::postReq( SSess &ses )
 	mod->cntrIfCmd(req, ses);
     }
     else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().postReq(ses);
-    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/html;charset="+Mess->charset());
+
+    ses.page = mod->pgCreator(ses.prt, string("<div class='error'>")+_("Content is missing.")+"</div>\n", "204 No Content");
+    //ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/html;charset="+Mess->charset());
 }
 
 void VCASess::objCheck( const string &rootId, const string &wPath )
 {
     if(objPresent(wPath)) return;
-    if(rootId == "ElFigure")		objAdd(new VCAElFigure(wPath));
+    if(rootId == "FormEl")		objAdd(new VCAFormEl(wPath));
+    else if(rootId == "ElFigure")	objAdd(new VCAElFigure(wPath));
     else if(rootId == "Text")		objAdd(new VCAText(wPath));
     else if(rootId == "Diagram")	objAdd(new VCADiagram(wPath));
     else if(rootId == "Document")	objAdd(new VCADocument(wPath));
@@ -279,6 +289,77 @@ VCAObj::VCAObj( const string &iid ) : mId(iid)
 
 VCASess &VCAObj::owner( ) const	{ return *(VCASess*)nodePrev(); }
 
+
+//*************************************************
+//* VCAFormEl					  *
+//*************************************************
+VCAFormEl::VCAFormEl( const string &iid ) : VCAObj(iid), type(0), btMode(0), mRes(true)
+{
+
+}
+
+void VCAFormEl::getReq( SSess &ses )
+{
+    MtxAlloc res(mRes, true);
+    if(type == F_BUTTON && btMode == FBT_SAVE && fCtx.size()) {
+	int off = 0;
+	string cntr = TSYS::strLine(fCtx, 0, &off);
+	ses.page = fCtx.substr(off);
+	ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+TSYS::strParse(cntr,3,"|"));
+	fCtx = "";
+
+	//!!!! Clear the attribute "value". But it can be spare for multiple connections to one session.
+	XMLNode req("set");
+	size_t nURLoff = ses.url.rfind("/");
+	req.setAttr("path", ((nURLoff==string::npos)?ses.url:ses.url.substr(0,nURLoff))+"/%2fserv%2fattr");
+	req.childAdd("el")->setAttr("id","value")->setText("");
+	mod->cntrIfCmd(req, ses);
+    }
+    else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource not found"))+"</div>\n", "404 Not Found");
+}
+
+void VCAFormEl::postReq( SSess &ses )
+{
+    MtxAlloc res(mRes, true);
+    if(type == F_BUTTON && btMode == FBT_LOAD && ses.cnt.size()) {
+	string fHead = TSYS::strLine(fCtx, 0);
+	int off = 0;
+	string	fTmpl	= TSYS::strParse(fHead, 0, "|", &off),
+		fTitle	= TSYS::strParse(fHead, 0, "|", &off),
+		fDefFile= TSYS::strParse(fHead, 0, "|", &off),
+		fMime	= TSYS::strParse(fHead, 0, "|", &off),
+		fRealFile = ses.cnt[0].attr("Content-Disposition");
+	size_t tPos = fRealFile.find("filename=\"");
+	fRealFile = (tPos != string::npos) ? fRealFile.substr(tPos+10, fRealFile.find("\"",tPos+10)-(tPos+10)) : fDefFile;
+	if(ses.cnt[0].attr("Content-Type").size())	fMime = ses.cnt[0].attr("Content-Type");
+
+	XMLNode req("set");
+	req.setAttr("path", ses.url+"/%2fserv%2fattr");
+	req.childAdd("el")->setAttr("id","value")->setText(fTmpl+"|"+fTitle+"|"+fRealFile+"|"+fMime+"\n"+ses.cnt[0].text());
+	req.childAdd("el")->setAttr("id","event")->setText("ws_BtLoad");
+	mod->cntrIfCmd(req, ses);
+    }
+}
+
+void VCAFormEl::setAttrs( XMLNode &node, const SSess &ses )
+{
+    for(unsigned iA = 0; iA < node.childSize(); iA++) {
+	XMLNode *reqEl = node.childGet(iA);
+	if(reqEl->name() != "el")	continue;
+	switch(s2i(reqEl->attr("p"))) {
+	    case A_FormElType:
+		type = s2i(reqEl->text());
+		break;
+	    case A_FormElMixP3:
+		if(type == F_BUTTON) btMode = s2i(reqEl->text());
+		break;
+	    case A_FormElValue:
+		if(type == F_BUTTON && (btMode == FBT_LOAD || btMode == FBT_SAVE) && (fCtx=reqEl->text()).size())
+		    reqEl->setText(TSYS::strLine(fCtx,0));
+		break;
+	}
+    }
+}
 
 //*************************************************
 //* ElFigure					  *
@@ -3898,7 +3979,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 
 		    }
 		}
-		else mess_debug(nodePath().c_str(),_("At least one of the elementary figures from each the 'fill' consists of is out of drawing area."));
+		else mess_debug(nodePath().c_str(),_("At least one of the elementary figures, of which 'fill' is forming, is outside the boundary of the display area."));
 	    }
 	if( (int)rRnd( clickPnt.x, POS_PREC_DIG, true ) == -1 && (int)rRnd( clickPnt.y, POS_PREC_DIG, true ) == -1 )
 	{
@@ -4031,46 +4112,46 @@ void VCAElFigure::postReq( SSess &ses )
 void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 {
     MtxAlloc res(mRes, true);
-    XMLNode *req_el;
+    XMLNode *reqEl;
     Point StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4;
     rel_list = false;
-    for(unsigned i_a = 0; i_a < node.childSize(); i_a++) {
-	req_el = node.childGet(i_a);
-	if(req_el->name() != "el") continue;
+    for(unsigned iA = 0; iA < node.childSize(); iA++) {
+	reqEl = node.childGet(iA);
+	if(reqEl->name() != "el") continue;
 
-	int uiPrmPos = s2i(req_el->attr("p"));
+	int uiPrmPos = s2i(reqEl->attr("p"));
 	switch(uiPrmPos)
 	{
-	    case A_ACTIVE: active = (bool)s2i(req_el->text());	break;
-	    case A_GEOM_W: width = s2r(req_el->text());		break;
-	    case A_GEOM_H: height = s2r(req_el->text());	break;
-	    case A_GEOM_MARGIN: geomMargin = s2i(req_el->text()); break;
+	    case A_ACTIVE: active = (bool)s2i(reqEl->text());	break;
+	    case A_GEOM_W: width = s2r(reqEl->text());		break;
+	    case A_GEOM_H: height = s2r(reqEl->text());	break;
+	    case A_GEOM_MARGIN: geomMargin = s2i(reqEl->text()); break;
 	    case A_GEOM_X_SC: rel_list = true;	break;
 	    case A_GEOM_Y_SC: rel_list = true;	break;
-	    case A_ElFigLineW: lineWdth = (int)rRnd(s2r(req_el->text())); rel_list = true;	break;
+	    case A_ElFigLineW: lineWdth = (int)rRnd(s2r(reqEl->text())); rel_list = true;	break;
 	    case A_ElFigLineClr:
-		lineClr = mod->colorParse(req_el->text());
+		lineClr = mod->colorParse(reqEl->text());
 		if(lineClr == -1) lineClr = (127<<24)+(0<<16)+(0<<8)+0;
 		if(lineClr == 0) lineClr = (0<<24)+(250<<16)+(0<<8)+0;
 		rel_list = true;
 		break;
-	    case A_ElFigLineStl: lineStyle = s2i(req_el->text()); rel_list = true;	break;
-	    case A_ElFigBordW: bordWdth = (int)rRnd(s2r(req_el->text())); rel_list = true;	break;
+	    case A_ElFigLineStl: lineStyle = s2i(reqEl->text()); rel_list = true;	break;
+	    case A_ElFigBordW: bordWdth = (int)rRnd(s2r(reqEl->text())); rel_list = true;	break;
 	    case A_ElFigBordClr:
-		bordClr = mod->colorParse(req_el->text());
+		bordClr = mod->colorParse(reqEl->text());
 		if(bordClr == -1) bordClr = 0x7F000000;
 		if(bordClr == 0)  bordClr = 0x00FA0000;
 		rel_list = true;
 		break;
 	    case A_ElFigFillClr:
-		fillClr = mod->colorParse(req_el->text());
+		fillClr = mod->colorParse(reqEl->text());
 		if(fillClr == -1) fillClr = 0x7F000000;
 		if(fillClr == 0)  fillClr = 0x00FA0000;
 		rel_list = true;
 		break;
-	    case A_ElFigFillImg: imgDef = req_el->text(); rel_list = true;	break;
-	    case A_ElFigOrient: orient = s2r(req_el->text()); rel_list = true;	break;
-	    case A_ElFigElLst: elLst = req_el->text(); rel_list = true;		break;
+	    case A_ElFigFillImg: imgDef = reqEl->text(); rel_list = true;	break;
+	    case A_ElFigOrient: orient = s2r(reqEl->text()); rel_list = true;	break;
+	    case A_ElFigElLst: elLst = reqEl->text(); rel_list = true;		break;
 	    default:
 		if(uiPrmPos >= A_ElFigIts)
 		{
@@ -4079,17 +4160,17 @@ void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 		    Point pnt_ = pnts[pnt];
 		    switch(patr)
 		    {
-			case A_ElFigItPntX: pnt_.x = s2r(req_el->text()); pnts[pnt] = pnt_; rel_list = true;	break;
-			case A_ElFigItPntY: pnt_.y = s2r(req_el->text()); pnts[pnt] = pnt_; rel_list = true;	break;
-			case A_ElFigItW: widths[pnt] = (int)rRnd(s2r(req_el->text())); rel_list = true;	break;
+			case A_ElFigItPntX: pnt_.x = s2r(reqEl->text()); pnts[pnt] = pnt_; rel_list = true;	break;
+			case A_ElFigItPntY: pnt_.y = s2r(reqEl->text()); pnts[pnt] = pnt_; rel_list = true;	break;
+			case A_ElFigItW: widths[pnt] = (int)rRnd(s2r(reqEl->text())); rel_list = true;	break;
 			case A_ElFigItClr:
-			    colors[pnt] = mod->colorParse(req_el->text());
+			    colors[pnt] = mod->colorParse(reqEl->text());
 			    if(colors[pnt] == -1) colors[pnt] = 0x7F000000;
 			    if(colors[pnt] == 0)  colors[pnt] = 0x00FA0000;
 			    rel_list = true;
 			    break;
-			case A_ElFigItImg: images[pnt] = req_el->text(); rel_list = true;		break;
-			case A_ElFigItStl: styles[pnt] = s2i(req_el->text()); rel_list = true;	break;
+			case A_ElFigItImg: images[pnt] = reqEl->text(); rel_list = true;		break;
+			case A_ElFigItStl: styles[pnt] = s2i(reqEl->text()); rel_list = true;	break;
 		    }
 		}
 	}
@@ -4653,7 +4734,7 @@ void VCAText::getReq( SSess &ses )
 	    else if(alignHor == 4) offsetX = 0;
 	    int realY = hgt_wrap[k] - offsetY + y_new;
 	    char *rez = gdImageStringFTEx(im_txt, &brect[0], clr_txt, (char*)textFont.c_str(), txtFontSize, 0, offsetX, realY, (char*)str_wrap[k].c_str(), &strex);
-	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTex for font '%s' error: %s."),textFont.c_str(),rez);
+	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx: error for the font '%s': %s."),textFont.c_str(),rez);
 	    else {
 		int wdt = bold ? (int)rRnd(txtFontSize/6,POS_PREC_DIG,true) : (int)rRnd(txtFontSize/12,POS_PREC_DIG,true);
 		gdImageSetThickness(im_txt, wdt);
@@ -4679,20 +4760,20 @@ void VCAText::getReq( SSess &ses )
 void VCAText::setAttrs( XMLNode &node, const SSess &ses )
 {
     MtxAlloc res(mRes, true);
-    XMLNode *req_el;
+    XMLNode *reqEl;
     bool reform = false;
-    for(unsigned i_a = 0; i_a < node.childSize(); i_a++) {
-	req_el = node.childGet(i_a);
-	if(req_el->name() != "el") continue;
-	unsigned uiPrmPos = s2i(req_el->attr("p"));
+    for(unsigned iA = 0; iA < node.childSize(); iA++) {
+	reqEl = node.childGet(iA);
+	if(reqEl->name() != "el") continue;
+	unsigned uiPrmPos = s2i(reqEl->attr("p"));
 	switch(uiPrmPos) {
-	    case A_GEOM_W: width = s2r(req_el->text());	break;
-	    case A_GEOM_H: height = s2r(req_el->text());break;
+	    case A_GEOM_W: width = s2r(reqEl->text());	break;
+	    case A_GEOM_H: height = s2r(reqEl->text());break;
 	    case A_TextFont: {
 		char family[101]; strcpy(family,"Arial");
 		int bld = 0, italic = 0, undLine = 0, strOut = 0;
 		textFontSize = 10;
-		sscanf(req_el->text().c_str(),"%100s %d %d %d %d %d",family,&textFontSize,&bld,&italic,&undLine,&strOut);
+		sscanf(reqEl->text().c_str(),"%100s %d %d %d %d %d",family,&textFontSize,&bld,&italic,&undLine,&strOut);
 		textFont = family;
 		for(unsigned p = 0; p < textFont.size(); p++) if( textFont[p] == '_' ) textFont[p] = ' ';
 		if(bld)	{ textFont += ":bold"; bold = true; }
@@ -4704,14 +4785,14 @@ void VCAText::setAttrs( XMLNode &node, const SSess &ses )
 		else		strikeout = false;
 		break;
 	    }
-	    case A_TextColor: textColor =  mod->colorParse(req_el->text());	break;
+	    case A_TextColor: textColor =  mod->colorParse(reqEl->text());	break;
 	    case A_TextOrient:
-		orient = s2r(req_el->text());
+		orient = s2r(reqEl->text());
 		if(orient < 0) orient = 360 + orient;
 		break;
-	    case A_TextWordWrap: wordWrap = s2i(req_el->text());	break;
+	    case A_TextWordWrap: wordWrap = s2i(reqEl->text());	break;
 	    case A_TextAlignment: {
-		int txtAlign = s2i(req_el->text());
+		int txtAlign = s2i(reqEl->text());
 		switch(txtAlign&0x3) {
 		    case 0: alignHor = 1; break;
 		    case 1: alignHor = 2; break;
@@ -4726,14 +4807,14 @@ void VCAText::setAttrs( XMLNode &node, const SSess &ses )
 		break;
 	    }
 	    case A_TextText: {
-		string newText = Mess->codeConvOut("UTF-8", req_el->text());
+		string newText = Mess->codeConvOut("UTF-8", reqEl->text());
 		if(text_tmpl == newText)	break;
 		text_tmpl = newText;
 		reform = true;
 		break;
 	    }
 	    case A_TextNumbArg: {
-		unsigned numbArg = s2i(req_el->text());
+		unsigned numbArg = s2i(reqEl->text());
 		while(args.size() < numbArg)	args.push_back(ArgObj());
 		while(args.size() > numbArg)	args.pop_back();
 		reform = true;
@@ -4744,9 +4825,9 @@ void VCAText::setAttrs( XMLNode &node, const SSess &ses )
 		if(uiPrmPos >= A_TextArs) {
 		    unsigned argN = (uiPrmPos-A_TextArs)/A_TextArsSz;
 		    if(argN >= args.size())	break;
-		    if((uiPrmPos%A_TextArsSz) == A_TextArsVal)		args[argN].setVal(req_el->text());
-		    else if((uiPrmPos%A_TextArsSz) == A_TextArsTp)	args[argN].setType(s2i(req_el->text()));
-		    else if((uiPrmPos%A_TextArsSz) == A_TextArsCfg)	args[argN].setCfg(req_el->text().c_str());
+		    if((uiPrmPos%A_TextArsSz) == A_TextArsVal)		args[argN].setVal(reqEl->text());
+		    else if((uiPrmPos%A_TextArsSz) == A_TextArsTp)	args[argN].setType(s2i(reqEl->text()));
+		    else if((uiPrmPos%A_TextArsSz) == A_TextArsCfg)	args[argN].setCfg(reqEl->text().c_str());
 		    reform = true;
 		}
 	}
@@ -4756,22 +4837,22 @@ void VCAText::setAttrs( XMLNode &node, const SSess &ses )
 	string txt = text_tmpl.c_str();
 	string argVal;
 	//Placing the arguments to the text
-	for(unsigned i_a = 0; i_a < args.size(); i_a++) {
-	    switch(args[i_a].type()) {
-		case FT_INT: case FT_STR: argVal = args[i_a].val();	break;
+	for(unsigned iA = 0; iA < args.size(); iA++) {
+	    switch(args[iA].type()) {
+		case FT_INT: case FT_STR: argVal = args[iA].val();	break;
 		case FT_REAL: {
-		    string atp = TSYS::strSepParse(args[i_a].cfg(),1,';');
-		    argVal = r2s(s2r(args[i_a].val()),
-			    s2i(TSYS::strSepParse(args[i_a].cfg(),2,';')), (atp.size()?atp[0]:'f'));
+		    string atp = TSYS::strSepParse(args[iA].cfg(),1,';');
+		    argVal = r2s(s2r(args[iA].val()),
+			    s2i(TSYS::strSepParse(args[iA].cfg(),2,';')), (atp.size()?atp[0]:'f'));
 		    break;
 		}
 	    }
-	    int argSize = s2i(TSYS::strSepParse(args[i_a].cfg(),0,';'));
+	    int argSize = s2i(TSYS::strSepParse(args[iA].cfg(),0,';'));
 	    argSize = vmax(-1000,vmin(1000,argSize));
 	    string argPad = "";
 	    for(int j = argVal.length(); j < VCAElFigure::ABS(argSize); j++) argPad += ' ';
 	    if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
-	    string rep = "%"+i2s(i_a+1);
+	    string rep = "%"+i2s(iA+1);
 	    size_t fnd = txt.find(rep);
 	    if(fnd != string::npos)
 		do {
@@ -4885,7 +4966,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    clrMrk = TWEB::colorResolve(im, sclMarkColor);
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,(char*)"000000", &strex);
-	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
+	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx: error for the font '%s': %s."),sclMarkFont.c_str(),rez);
 	    else { mrkHeight = brect[3]-brect[7]; mrkWidth = brect[2]-brect[6]; }
 	    if(sclHor & FD_MARKS) {
 		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(FD_MARKS);
@@ -5350,7 +5431,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    clrMrk = TWEB::colorResolve(im, sclMarkColor);
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000", &strex);
-	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
+	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx: error for the font '%s': %s."),sclMarkFont.c_str(),rez);
 	    else { mrkHeight = brect[3]-brect[7]; mrkWidth = brect[2]-brect[6]; }
 	    if(sclHor&FD_MARKS) {
 		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(FD_MARKS);
@@ -5692,7 +5773,7 @@ void VCADiagram::makeXYPicture( SSess &ses )
 	    clrMrk = TWEB::colorResolve(im, sclMarkColor);
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000", &strex);
-	    if(rez) mess_err(nodePath().c_str(), _("gdImageStringFTEx for font '%s' error: %s."), sclMarkFont.c_str(), rez);
+	    if(rez) mess_err(nodePath().c_str(), _("gdImageStringFTEx: error for the font '%s': %s."), sclMarkFont.c_str(), rez);
 	    else { mrkHeight = brect[3] - brect[7]; mrkWidth = brect[2] - brect[6]; }
 	    if(sclHor&FD_MARKS) {
 		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(FD_MARKS);
@@ -6195,56 +6276,56 @@ void VCADiagram::setAttrs( XMLNode &node, const SSess &ses )
 
     int	reld_tr_dt = 0;	//Reload trend's data (1-reload addons, 2-full reload)
 
-    XMLNode *req_el;
-    for(unsigned i_a = 0; i_a < node.childSize(); i_a++) {
-	req_el = node.childGet(i_a);
-	if(req_el->name() != "el") continue;
-	int uiPrmPos = s2i(req_el->attr("p"));
+    XMLNode *reqEl;
+    for(unsigned iA = 0; iA < node.childSize(); iA++) {
+	reqEl = node.childGet(iA);
+	if(reqEl->name() != "el") continue;
+	int uiPrmPos = s2i(reqEl->attr("p"));
 	switch(uiPrmPos) {
-	    case A_ACTIVE: active = (bool)s2i(req_el->text());		break;
-	    case A_GEOM_W: width = (int)(s2r(req_el->text())+0.5);	break;
-	    case A_GEOM_H: height = (int)(s2r(req_el->text())+0.5);	break;
-	    case A_GEOM_MARGIN: geomMargin = s2i(req_el->text());	break;
-	    case A_BordWidth: bordWidth = s2i(req_el->text());		break;
-	    case A_DiagramTrcPer: trcPer = s2i(req_el->text());	break;
-	    case A_DiagramType: type = s2i(req_el->text()); reld_tr_dt = 2;	break;
+	    case A_ACTIVE: active = (bool)s2i(reqEl->text());		break;
+	    case A_GEOM_W: width = (int)(s2r(reqEl->text())+0.5);	break;
+	    case A_GEOM_H: height = (int)(s2r(reqEl->text())+0.5);	break;
+	    case A_GEOM_MARGIN: geomMargin = s2i(reqEl->text());	break;
+	    case A_BordWidth: bordWidth = s2i(reqEl->text());		break;
+	    case A_DiagramTrcPer: trcPer = s2i(reqEl->text());	break;
+	    case A_DiagramType: type = s2i(reqEl->text()); reld_tr_dt = 2;	break;
 	    case A_DiagramTSek:
 		tTimeCurent = false;
-		if(s2ll(req_el->text()) == 0) {
+		if(s2ll(reqEl->text()) == 0) {
 		    tTime = (int64_t)time(NULL)*1000000;
 		    tTimeCurent = true;
-		} else tTime = s2ll(req_el->text())*1000000 + tTime%1000000;
+		} else tTime = s2ll(reqEl->text())*1000000 + tTime%1000000;
 		lstTrc = time(NULL);
 		reld_tr_dt = 1;
 		break;
 	    case A_DiagramTUSek:
-		tTime = 1000000ll*(tTime/1000000)+s2ll(req_el->text());
+		tTime = 1000000ll*(tTime/1000000)+s2ll(reqEl->text());
 		lstTrc = time(NULL);
 		reld_tr_dt = 1;
 		break;
-	    case A_DiagramTSize: tSize = vmax(1e-3,s2r(req_el->text())); reld_tr_dt = 2;	break;
+	    case A_DiagramTSize: tSize = vmax(1e-3,s2r(reqEl->text())); reld_tr_dt = 2;	break;
 	    case A_DiagramCurSek:
-		if((curTime/1000000) == s2i(req_el->text())) break;
-		curTime = s2ll(req_el->text())*1000000 + curTime%1000000;
+		if((curTime/1000000) == s2i(reqEl->text())) break;
+		curTime = s2ll(reqEl->text())*1000000 + curTime%1000000;
 		holdCur = (curTime>=tTime);
 		setCursor(curTime, ses.user);
 		break;
 	    case A_DiagramCurUSek:
-		if((curTime%1000000) == s2i(req_el->text())) break;
-		curTime = 1000000ll*(curTime/1000000)+s2ll(req_el->text());
+		if((curTime%1000000) == s2i(reqEl->text())) break;
+		curTime = 1000000ll*(curTime/1000000)+s2ll(reqEl->text());
 		holdCur = (curTime>=tTime);
 		setCursor(curTime, ses.user);
 		break;
-	    case A_DiagramCurColor: curColor = mod->colorParse(req_el->text());		break;
-	    case A_DiagramSclColor: sclColor = mod->colorParse(req_el->text());		break;
-	    case A_DiagramSclHor: sclHor = s2i(req_el->text());		break;
-	    case A_DiagramSclVer: sclVer = s2i(req_el->text());		break;
-	    case A_DiagramSclMarkColor: sclMarkColor = mod->colorParse(req_el->text());	break;
+	    case A_DiagramCurColor: curColor = mod->colorParse(reqEl->text());		break;
+	    case A_DiagramSclColor: sclColor = mod->colorParse(reqEl->text());		break;
+	    case A_DiagramSclHor: sclHor = s2i(reqEl->text());		break;
+	    case A_DiagramSclVer: sclVer = s2i(reqEl->text());		break;
+	    case A_DiagramSclMarkColor: sclMarkColor = mod->colorParse(reqEl->text());	break;
 	    case A_DiagramSclMarkFont: {
 		char family[101]; strcpy(family,"Arial");
 		int bold = 0, italic = 0;
 		sclMarkFontSize = 10;
-		sscanf(req_el->text().c_str(),"%100s %d %d %d",family,&sclMarkFontSize,&bold,&italic);
+		sscanf(reqEl->text().c_str(),"%100s %d %d %d",family,&sclMarkFontSize,&bold,&italic);
 		sclMarkFont = family;
 		for(unsigned p = 0; p < sclMarkFont.size(); p++) if(sclMarkFont[p] == '_') sclMarkFont[p] = ' ';
 		if(bold) sclMarkFont += ":bold";
@@ -6256,34 +6337,34 @@ void VCADiagram::setAttrs( XMLNode &node, const SSess &ses )
 		    sclMarkFontSize = (int)((float)sclMarkFontSize*((float)sclMarkFontSize/(float)(brect[3]-brect[7])));*/
 		break;
 	    }
-	    case A_DiagramValArch: valArch = req_el->text(); reld_tr_dt = 2;		break;
+	    case A_DiagramValArch: valArch = reqEl->text(); reld_tr_dt = 2;		break;
 	    case A_DiagramParNum: {
-		unsigned parNum = s2i(req_el->text());
+		unsigned parNum = s2i(reqEl->text());
 		if(parNum == trnds.size())	break;
 		while(trnds.size() > parNum)	trnds.pop_back();
 		while(parNum > trnds.size())	trnds.push_back(TrendObj(this));
 		break;
 	    }
-	    case A_DiagramSclVerScl:    sclVerScl = s2r(req_el->text());		break;
-	    case A_DiagramSclVerSclOff: sclVerSclOff = s2r(req_el->text());		break;
-	    case A_DiagramSclHorScl:    sclHorScl = s2r(req_el->text());		break;
-	    case A_DiagramSclHorSclOff: sclHorSclOff = s2r(req_el->text());		break;
-	    case A_DiagramSclHorPer:    sclHorPer = vmax(0,s2r(req_el->text()))*1e6;	break;
+	    case A_DiagramSclVerScl:    sclVerScl = s2r(reqEl->text());		break;
+	    case A_DiagramSclVerSclOff: sclVerSclOff = s2r(reqEl->text());		break;
+	    case A_DiagramSclHorScl:    sclHorScl = s2r(reqEl->text());		break;
+	    case A_DiagramSclHorSclOff: sclHorSclOff = s2r(reqEl->text());		break;
+	    case A_DiagramSclHorPer:    sclHorPer = vmax(0,s2r(reqEl->text()))*1e6;	break;
 	    default:
 		//> Individual trend's attributes process
 		if(uiPrmPos >= A_DiagramTrs) {
 		    unsigned trndN = (uiPrmPos-A_DiagramTrs)/A_DiagramTrsSz;
 		    if(trndN >= trnds.size())	break;
 		    switch(uiPrmPos%A_DiagramTrsSz) {
-			case A_DiagramTrAddr: trnds[trndN].setAddr(req_el->text());		break;
-			case A_DiagramTrBordL: trnds[trndN].setBordL(s2r(req_el->text()));	break;
-			case A_DiagramTrBordU: trnds[trndN].setBordU(s2r(req_el->text()));	break;
-			case A_DiagramTrClr: trnds[trndN].setColor(mod->colorParse(req_el->text()));	break;
+			case A_DiagramTrAddr: trnds[trndN].setAddr(reqEl->text());		break;
+			case A_DiagramTrBordL: trnds[trndN].setBordL(s2r(reqEl->text()));	break;
+			case A_DiagramTrBordU: trnds[trndN].setBordU(s2r(reqEl->text()));	break;
+			case A_DiagramTrClr: trnds[trndN].setColor(mod->colorParse(reqEl->text()));	break;
 			case A_DiagramTrVal:
-			    trnds[trndN].setCurVal((req_el->text()==EVAL_STR) ? EVAL_REAL : s2r(req_el->text()));
+			    trnds[trndN].setCurVal((reqEl->text()==EVAL_STR) ? EVAL_REAL : s2r(reqEl->text()));
 			    break;
-			case A_DiagramTrScl: trnds[trndN].setScale(s2i(req_el->text()));	break;
-			case A_DiagramTrWdth: trnds[trndN].setWidth(s2i(req_el->text()));	break;
+			case A_DiagramTrScl: trnds[trndN].setScale(s2i(reqEl->text()));	break;
+			case A_DiagramTrWdth: trnds[trndN].setWidth(s2i(reqEl->text()));	break;
 		    }
 		}
 	}
@@ -6646,23 +6727,23 @@ VCADocument::VCADocument( const string &iid ) : VCAObj(iid)
 
 void VCADocument::setAttrs( XMLNode &node, const SSess &ses )
 {
-    for(unsigned i_a = 0; i_a < node.childSize(); i_a++) {
-	XMLNode *req_el = node.childGet(i_a);
-	if(req_el->name() != "el")	continue;
-	switch(s2i(req_el->attr("p"))) {
+    for(unsigned iA = 0; iA < node.childSize(); iA++) {
+	XMLNode *reqEl = node.childGet(iA);
+	if(reqEl->name() != "el")	continue;
+	switch(s2i(reqEl->attr("p"))) {
 	    case A_DocTmpl: case A_DocDoc: {
-		if(sTrm(req_el->text()).empty())	break;
+		if(sTrm(reqEl->text()).empty())	break;
 		const char *XHTML_entity =
 		    "<!DOCTYPE xhtml [\n"
 		    "  <!ENTITY nbsp \"&#160;\" >\n"
 		    "]>\n";
 		XMLNode xproc("body");
 		try {
-		    xproc.load(string(XHTML_entity)+req_el->text(), true, Mess->charset());
-		    req_el->setText(xproc.save(XMLNode::Clean, Mess->charset()));
+		    xproc.load(string(XHTML_entity)+reqEl->text(), true, Mess->charset());
+		    reqEl->setText(xproc.save(XMLNode::Clean, Mess->charset()));
 		}
 		catch(TError &err)
-		{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),path().c_str(),err.mess.c_str()); }
+		{ mess_err(mod->nodePath().c_str(),_("Error parsing the document '%s': %s"),path().c_str(),err.mess.c_str()); }
 		break;
 	    }
 	}

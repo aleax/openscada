@@ -108,7 +108,7 @@ class Prm : public TParamContr
 //*************************************************
 //* Contr: Controller object                      *
 //*************************************************
-class Contr: public TController, public TValFunc
+class Contr: public TController, public TPrmTempl::Impl
 {
     public:
 	//Methods
@@ -123,6 +123,9 @@ class Contr: public TController, public TValFunc
 	int iterate( )		{ return mIter; }
 
 	void redntDataUpdate( );
+
+	//Attributes
+	bool	isDAQTmpl;	// DAQ template used
 
     protected:
 	//Methods
@@ -146,13 +149,14 @@ class Contr: public TController, public TValFunc
 	static void *Task( void *icntr );
 
 	//Attributes
-	bool	prc_st,		// Process task active
-		call_st,	// Calc now stat
-		endrun_req;	// Request to stop of the Process task
+	bool	prcSt,		// Process task active
+		callSt,		// Calc now stat
+		endrunReq,	// Request to stop of the Process task
+		chkLnkNeed;	//Check lnk need flag
 	int	&mPrior,	// Calc task priority
 		&mIter;		// iteration number
 
-	int	id_freq, id_start, id_stop;
+	int	idFreq, idStart, idStop;
 
 	int64_t	mPer;
 };

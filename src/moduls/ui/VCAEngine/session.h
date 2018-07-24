@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: session.h
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -63,7 +63,7 @@ class Session : public TCntrNode
 	time_t	reqTm( )	{ return mReqTm; }		//Last request time from client
 	unsigned &calcClk( )	{ return mCalcClk; }		//Calc clock
 	AutoHD<Project> parent( ) const;
-	int stlCurent( )	{ return mStyleIdW; }
+	int	stlCurent( )	{ return mStyleIdW; }
 
 	void setProjNm( const string &vl )	{ mPrjnm = vl; }
 	void setUser( const string &vl );
@@ -99,7 +99,7 @@ class Session : public TCntrNode
 	// Alarms process
 	void alarmSet( const string &wpath, const string &alrm );	//Alarm set
 	int  alarmStat( );						//Alarm status
-	void alarmQuittance( const string &wpath, uint8_t quit_tmpl );	//Alarm quittance send
+	void alarmQuietance( const string &wpath, uint8_t quit_tmpl );	//Alarm quittance send
 
 	// Style
 	string stlPropGet( const string &pid, const string &def = "" );
@@ -215,7 +215,7 @@ class SessWdg : public Widget, public TValFunc
 
 	// Alarms process
 	virtual void alarmSet( bool isSet = false );
-	virtual void alarmQuittance( uint8_t quit_tmpl, bool isSet = false );
+	virtual void alarmQuietance( uint8_t quit_tmpl, bool isSet = false );
 
 	// Access to mime resource
 	string resourceGet( const string &id, string *mime = NULL );
@@ -224,6 +224,8 @@ class SessWdg : public Widget, public TValFunc
 	SessWdg  *ownerSessWdg( bool base = false ) const;
 	SessPage *ownerPage( ) const;
 	Session  *ownerSess( ) const	{ return mSess; }
+
+	void procChange( bool src = true );
 
 	void inheritAttr( const string &attr = "" );
 
@@ -294,7 +296,7 @@ class SessPage : public SessWdg
 
 	// Alarms process
 	void alarmSet( bool isSet = false );
-	void alarmQuittance( uint8_t quit_tmpl, bool isSet = false );
+	void alarmQuietance( uint8_t quit_tmpl, bool isSet = false );
 
 	bool attrPresent( const string &attr ) const;
 	AutoHD<Attr> attrAt( const string &attr, int lev = -1 ) const;

@@ -1,7 +1,7 @@
 
-//OpenSCADA system module UI.WebUser file: web_user.cpp
+//OpenSCADA module UI.WebUser file: web_user.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.9.0"
+#define MOD_VER		"0.9.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -86,7 +86,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
     mPgU = grpAdd("up_");
 
     //User page DB structure
-    mUPgEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    mUPgEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     mUPgEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     mUPgEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mUPgEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
@@ -230,7 +230,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	if(up.freeStat()) {
 	    if(uPg == "*") {
 		page =	"<table class='work'>\n"
-			// " <tr><td class='content'><p>"+_("Welcome to Web-users pages of OpenSCADA system.")+"</p></td></tr>\n"
+			// " <tr><td class='content'><p>"+_("Welcome to Web-users pages of OpenSCADA.")+"</p></td></tr>\n"
 			" <tr><th>"+string(_("Presented user's WEB-pages."))+"</th></tr>\n"
 			" <tr><td class='content'><ul>\n";
 		for(unsigned iP = 0; iP < upLs.size(); iP++)
@@ -551,7 +551,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 		ctrRemoveNode(opt, "/up/cfg/PROG");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prgm",_("Program"))) {
-		ctrMkNode("fld",opt,-1,"/prgm/PROGLang",_("Program language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangLs");
+		ctrMkNode("fld",opt,-1,"/prgm/PROGLang",_("Program language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/plang/list");
 		ctrMkNode("fld",opt,-1,"/prgm/PROG",_("Program"),RWRWR_,"root",SUI_ID,4,"tp","str","SnthHgl","1","rows","10",
 		    "help",_("Next attributes has defined for requests processing:\n"
 			    "   'rez' - processing result (by default - 200 OK);\n"
@@ -579,32 +579,6 @@ void UserPg::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/up/st/db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDB(opt->text());
-    }
-    else if(a_path == "/up/cfg/plangLs" && ctrChkNode(opt)) {
-	string tplng = progLang();
-	int c_lv = 0;
-	string c_path = "", c_el;
-	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++) {
-	    c_path += c_lv ? "."+c_el : c_el;
-	    opt->childAdd("el")->setText(c_path);
-	}
-	if(c_lv) c_path+=".";
-	vector<string> ls;
-	switch(c_lv) {
-	    case 0:
-		SYS->daq().at().modList(ls);
-		for(unsigned iL = 0; iL < ls.size(); )
-		    if(!SYS->daq().at().at(ls[iL]).at().compileFuncLangs()) ls.erase(ls.begin()+iL);
-		    else iL++;
-		break;
-	    case 1:
-		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
-		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
-		break;
-	}
-	for(unsigned iL = 0; iL < ls.size(); iL++)
-	    opt->childAdd("el")->setText(c_path+ls[iL]);
     }
     else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SUI_ID,RWRWR_);
     else if(a_path == "/prgm/PROGLang") {

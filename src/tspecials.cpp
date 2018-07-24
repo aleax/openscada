@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tspecials.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,14 +34,13 @@ TSpecialS::TSpecialS( ) : TSubSYS(SSPC_ID,_("Specials"),true)
 
 string TSpecialS::optDescr( )
 {
-    return(_(
-	"======================= Subsystem \"Specials\" options =====================\n\n"));
+    return TSYS::strMess(_(
+	"======================= Subsystem \"Specials\" options =====================\n\n")) + TSubSYS::optDescr();
 }
 
 void TSpecialS::load_( )
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
 }

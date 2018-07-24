@@ -39,7 +39,7 @@ bool VArchObj::open( const string &inm )
 
     try {
 	AutoHD<TVArchive> ta;
-	AutoHD<TCntrNode> nd = SYS->nodeAt(inm,0,'.');
+	AutoHD<TCntrNode> nd = SYS->nodeAt(inm, 0, '.');
 	if(dynamic_cast<TVal*>(&nd.at()))		ta = dynamic_cast<TVal&>(nd.at()).arch();
 	else if(dynamic_cast<TVArchive*>(&nd.at()))	ta = nd;
 	if(ta.freeStat()) return false;
@@ -268,5 +268,5 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	return ao;
     }
 #endif
-    throw TError("VArchObj",_("Function '%s' error or not enough parameters."),id.c_str());
+    throw TError("VArchObj",_("Error function '%s' or missing parameters for it."),id.c_str());
 }

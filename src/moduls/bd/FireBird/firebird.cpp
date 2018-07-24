@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.5.2"
+#define MOD_VER		"1.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
@@ -656,7 +656,7 @@ void MTable::fieldSet( TConfig &cfg )
 		trDblDef = true;
 	}
     }
-    if(trDblDef) fieldFix(cfg);
+    if(trDblDef) fieldFix(cfg, trPresent);
 
     //Get present fields list
     string req_where = "WHERE ";
@@ -675,7 +675,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    if(u_cfg.name() == tblStrct[iFld][0]) break;
 	if(iFld >= tblStrct.size()) noKeyFld = true;
     }
-    if(noKeyFld) fieldFix(cfg);
+    if(noKeyFld) fieldFix(cfg, trPresent);
 
     //Prepare query
     string req;
@@ -720,7 +720,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     //Query
     try{ owner().sqlReq(req, NULL, true); }
-    catch(TError &err) { fieldFix(cfg); owner().sqlReq(req, NULL, true); }
+    catch(TError &err) { fieldFix(cfg, trPresent); owner().sqlReq(req, NULL, true); }
 }
 
 void MTable::fieldDel( TConfig &cfg )
@@ -744,7 +744,7 @@ void MTable::fieldDel( TConfig &cfg )
     owner().sqlReq("DELETE FROM \""+mod->sqlReqCode(name(),'"')+"\" "+req_where, NULL, true);
 }
 
-void MTable::fieldFix( TConfig &cfg )
+void MTable::fieldFix( TConfig &cfg, bool trPresent )
 {
     bool next = false, next_key = false;
 
@@ -761,8 +761,8 @@ void MTable::fieldFix( TConfig &cfg )
     for(unsigned iFld = 1, iCf; iFld < tblStrct.size(); iFld++) {
 	for(iCf = 0; iCf < cf_el.size(); iCf++)
 	    if(cf_el[iCf] == tblStrct[iFld][0] ||
-		    (cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText && tblStrct[iFld][0].size() > 3 &&
-		    tblStrct[iFld][0].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][0].compare(0,2,Mess->lang2CodeBase()) != 0))
+		    ((cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText) && !cfg.cfg(cf_el[iCf]).noTransl() &&
+		    tblStrct[iFld][0].size() > 3 && tblStrct[iFld][0].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][0].compare(0,2,Mess->lang2CodeBase()) != 0))
 	    {
 		TCfg &cf = cfg.cfg(cf_el[iCf]);
 		bool isEqual = false;
@@ -828,7 +828,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    next = true;
 	}
 	//Check other languages
-	if(cf.fld().flg()&TFld::TransltText) {
+	if(cf.fld().flg()&TFld::TransltText && !cf.noTransl()) {
 	    unsigned iC;
 	    for(iC = iFld; iC < tblStrct.size(); iC++)
 		if(tblStrct[iC][0].size() > 3 && tblStrct[iC][0].substr(2) == ("#"+cf_el[iCf]) &&

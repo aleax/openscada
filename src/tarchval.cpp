@@ -1,7 +1,7 @@
 
-//OpenSCADA system file: tarchval.cpp
+//OpenSCADA file: tarchval.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 using namespace OSCADA;
 
 //*************************************************
-//* Value archivator                              *
+//* Value archiver                                *
 //*************************************************
 
 //*************************************************
@@ -457,7 +457,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
 {
     int64_t tm = (itm)?(*itm):TSYS::curTime();
 
-    if((up_ord && tm > end) || (!up_ord && tm < beg))	throw TError("ValBuf", _("Value is not present."));
+    if((up_ord && tm > end) || (!up_ord && tm < beg))	throw TError("ValBuf", _("No value."));
 
     tm = up_ord ? vmax(tm, beg) : vmin(tm, end);
     //Process hard grid buffer
@@ -804,7 +804,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
     else {
 	if(hgResTm) {
 	    SHg b_el = { tm, value };
-	    if(tm < beg && size && (int)buf.tmHigh->size() >= size) throw TError("ValBuf", _("Set too old value to buffer."));
+	    if(tm < beg && size && (int)buf.tmHigh->size() >= size) throw TError("ValBuf", _("Insert a very old value to the buffer."));
 	    int c_pos = 0;
 
 	    //>> Half divider
@@ -839,7 +839,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	else
 	{
 	    SLw b_el = { (time_t)(tm/1000000ll), value };
-	    if(tm < beg && size && (int)buf.tmLow->size() >= size) throw TError("ValBuf", _("Set too old value to buffer."));
+	    if(tm < beg && size && (int)buf.tmLow->size() >= size) throw TError("ValBuf", _("Insert a very old value to the buffer."));
 	    int c_pos = 0;
 	    //>> Half divider
 	    int d_win = buf.tmLow->size()/2;
@@ -1047,7 +1047,7 @@ void TVArchive::start( )
 	    setSrcMode();
 	} catch(...) { runSt = false; throw; }
 
-    //> Attach to archivators
+    //Attach to the archivers
     string arch, archs = cfg("ArchS").getS();
     for(int i_off = 0; (arch = TSYS::strSepParse(archs,0,';',&i_off)).size(); )
 	if(!archivatorPresent(arch))
@@ -1059,7 +1059,7 @@ void TVArchive::stop( bool full_del )
 {
     runSt = false;
 
-    //> Detach all archivators
+    //Detach all the archivers
     vector<string> arch_ls;
     archivatorList(arch_ls);
     for(unsigned iL = 0; iL < arch_ls.size(); iL++)
@@ -1086,7 +1086,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
     if(runSt && vl == ActiveAttr)
     {
 	pattrSrc = srcPAttr(true,src);
-	if(pattrSrc.freeStat()) { if(!noex) throw err_sys(_("Connect to source '%s' error."),src.c_str()); }
+	if(pattrSrc.freeStat()) { if(!noex) throw err_sys(_("Error connecting to source '%s'."),src.c_str()); }
 	else
 	{
 	    //> Double link prevent
@@ -1094,7 +1094,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 		if(!noex)
 		{
 		    pattrSrc.free();
-		    throw err_sys( _("The archive '%s' was already connected to target parameter '%s'."),
+		    throw err_sys(_("Archive '%s' is already connected to the target parameter '%s'."),
 			srcPAttr(true,src).at().arch().at().id().c_str(), src.c_str());
 		}
 	    }
@@ -1109,7 +1109,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
     if(runSt && vl == PassiveAttr)
     {
 	pattrSrc = srcPAttr(true, src);
-	if(pattrSrc.freeStat()) { if(!noex) throw err_sys(_("Connect to source '%s' error."),src.c_str()); }
+	if(pattrSrc.freeStat()) { if(!noex) throw err_sys(_("Error connecting to source '%s'."),src.c_str()); }
 	else
 	{
 	    //> Double link prevent
@@ -1117,7 +1117,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 		if(!noex)
 		{
 		    pattrSrc.free();
-		    throw err_sys( _("The archive '%s' was already connected to target parameter '%s'."),
+		    throw err_sys(_("Archive '%s' is already connected to the target parameter '%s'."),
 			srcPAttr(true,src).at().arch().at().id().c_str(), src.c_str());
 		}
 	    }
@@ -1142,10 +1142,9 @@ TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool o
 	    case TFld::Boolean:	return TValBuf::getB(tm,up_ord);
 	    default: break;
 	}
-    //> Get from archivators
-    else
-    {
-	ResAlloc res(aRes,false);
+    //Get from the archivers
+    else {
+	ResAlloc res(aRes, false);
 	vector<pair<float,TVArchEl*> >	propArchs;
 	for(unsigned iA = 0; iA < archEl.size(); iA++) {
 	    TVArchivator &archPr = archEl[iA]->archivator();
@@ -1174,7 +1173,7 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 	if(arch == BUF_ARCH_NM) return;
     }
 
-    //Get priority archivators list for requested range
+    //Get priority archivers list for requested range
     ResAlloc res(aRes, false);
     vector<pair<float,TVArchEl*> >	propArchs;
     for(unsigned iA = 0; iA < archEl.size(); iA++) {
@@ -1187,7 +1186,7 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 
     //Process the range by priority
     for(vector<pair<float,TVArchEl*> >::reverse_iterator iA = propArchs.rbegin(); iA != propArchs.rend(); ++iA) {
-	if(iA->second->begin() > iend)	continue;	//Try the block from next archivator, !!!!
+	if(iA->second->begin() > iend)	continue;	//Try the block from next archiver, !!!!
 
 	// Decrease the range begin to the limit
 	int prevSz = buf.realSize();
@@ -1208,10 +1207,10 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     if(((arch.empty() && TValBuf::end()) || arch == BUF_ARCH_NM) && iend > TValBuf::begin()) {
 	bool onlyBuf = (ibeg >= TValBuf::end());
 	TValBuf::setVals(buf, vmax(ibeg,iend-TValBuf::size()*TValBuf::period()), iend);
-	if(arch == BUF_ARCH_NM || onlyBuf) return;	//To prevent spare writings direct to the archivators
+	if(arch == BUF_ARCH_NM || onlyBuf) return;	//To prevent spare writings direct to the archivers
     }
 
-    //Put to the archivators
+    //Put to the archivers
     ResAlloc res(aRes, false);
     for(unsigned iA = 0; iA < archEl.size(); iA++)
 	if((arch.empty() || arch == archEl[iA]->archivator().workId()))
@@ -1262,7 +1261,7 @@ void TVArchive::archivatorAttach( const string &arch )
 
     AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().valAt(TSYS::strSepParse(arch,1,'.'));
 
-    if(!archivat.at().startStat()) return;	//throw err_sys(_("Archivator '%s' error or it is not started."), arch.c_str());
+    if(!archivat.at().startStat()) return;
 
     if(startStat())	//Attach allow only to started archive
     {
@@ -1292,7 +1291,7 @@ void TVArchive::archivatorDetach( const string &arch, bool full, bool toModify )
 
     AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().
 					    valAt(TSYS::strSepParse(arch,1,'.'));
-    //> Find archivator
+    //Find the archiver
     for(unsigned iL = 0; iL < archEl.size(); )
 	if(&archEl[iL]->archivator() == &archivat.at()) {
 	    archivat.at().archiveRemove(id(),full);
@@ -1356,7 +1355,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 #if HAVE_GD_FORCE
     int brect[8];
     char *gdR = gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000");
-    if(gdR) mess_sys(TMess::Error, _("gdImageStringFT for font '%s' error: %s."), sclMarkFont.c_str(), gdR);
+    if(gdR) mess_sys(TMess::Error, _("gdImageStringFT error for font '%s': %s."), sclMarkFont.c_str(), gdR);
     else mrkHeight = brect[3]-brect[7];
     //if( mrkHeight <= 0 ) return rez;
     int hmax_ln = vsz / (mrkHeight?(brect[2]-brect[6]):15);
@@ -1409,7 +1408,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	while(hLen/h_div > hmax_ln)	h_div *= 10;
 	while(hLen/h_div < hmax_ln/2)	h_div /= 2;
 
-	//>> Select most like archivator
+	// Select most like archiver
 	string rarch = iarch;
 	if(rarch.empty() && !vOK(ibeg,iend))
 	{
@@ -1797,7 +1796,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    else
 	    {
 		ResAlloc res(aRes, false);
-		//Get priority archivators list for requested range
+		//Get priority archivers list for requested range
 		vector<pair<float,TVArchEl*> >	propArchs;
 		for(unsigned iA = 0; iA < archEl.size(); iA++) {
 		    TVArchivator &archPr = archEl[iA]->archivator();
@@ -1827,7 +1826,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    int64_t ibeg = buf.begin(), iend = buf.end();
 	    period = vmax(period,buf.period());
 	    int mode = s2i(opt->attr("mode"));
-	    if(mode < 0 || mode > 2) throw err_sys(_("No support data mode '%d'"),mode);
+	    if(mode < 0 || mode > 2) throw err_sys(_("Data mode '%d' is not supported"), mode);
 	    switch(buf.valType()) {
 		case TFld::Boolean: {
 		    char tval_pr = EVAL_BOOL, tval_pr1 = EVAL_BOOL;
@@ -1943,7 +1942,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 					text += i2s(vpos_end) + " " + TSYS::strEncode(tval_pr,TSYS::Custom,"\n") + "\n";
 				    tval_pr1 = tval_pr;
 				    break;
-				case 2: throw err_sys(_("Binary mode no support for string data"));
+				case 2: throw err_sys(_("Binary mode is not supported for strings data"));
 			    }
 			tval_pr = tval;
 			vpos_end = vpos_cur;
@@ -1994,24 +1993,22 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("fld",opt,-1,"/prm/cfg/Source","",RWRWR_,"root",SARH_ID,2,"dest","sel_ed","select","/cfg/prm_atr_ls");
 		else ctrRemoveNode(opt,"/prm/cfg/Source");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/BSIZE",EVAL_STR,RWRWR_,"root",SARH_ID,1,
-		    "help",_("The values buffer size have to much enough for archivators periodicity.\n"
-			     "Typical the value automatic adjusts to the archive period and archivators periodicity in 60 seconds."));
+		    "help",_("The size of the buffer of values should be large enough for the periodicity of the archivers.\n"
+			     "By default, this value is automatically configured for periodicity of the values of this archive and periodicity of archivers in 60 seconds."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/BHGRD",EVAL_STR,RWRWR_,"root",SARH_ID,1,
-		    "help",_("Typical for fastest processing of values archivation."));
+		    "help",_("Default for fast processing of archiving values."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/BHRES",EVAL_STR,RWRWR_,"root",SARH_ID,1,
-		    "help",_("Set for the values periodicity lesser to seconds."));
+		    "help",_("Set in case of periodicity of values in less than a second."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/FillLast",EVAL_STR,RWRWR_,"root",SARH_ID,1,
-		    "help",_("Mostly the pass values fill by EVAL but sometime\n"
-			     "the source's data periodicity greater to the archive's one and it is normal."));
+		    "help",_("The passage values mostly fill by EVAL but sometime data periodicity of the source greater to the archive's one and it is normal."));
 		ctrRemoveNode(opt,"/prm/cfg/ArchS");
 	    }
 	}
-	if(ctrMkNode("area",opt,-1,"/arch",_("Archivators"),R_R_R_,"root",SARH_ID))
-	{
-	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archivators"),RWRWR_,"root",SARH_ID,1,"key","arch")) {
-		ctrMkNode("list",opt,-1,"/arch/arch/arch",_("Archivator"),R_R_R_,"root",SARH_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/arch/arch/start",_("Start"),R_R_R_,"root",SARH_ID,1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/arch/arch/proc",_("Process"),RWRWR_,"root",SARH_ID,1,"tp","bool");
+	if(ctrMkNode("area",opt,-1,"/arch",_("Archivers"),R_R_R_,"root",SARH_ID)) {
+	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archivers"),RWRWR_,"root",SARH_ID,1,"key","arch")) {
+		ctrMkNode("list",opt,-1,"/arch/arch/arch",_("Archiver"),R_R_R_,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/arch/arch/start",_("Running"),R_R_R_,"root",SARH_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/arch/arch/proc",_("Processing"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/arch/arch/per",_("Period, seconds"),R_R_R_,"root",SARH_ID,1,"tp","real");
 		ctrMkNode("list",opt,-1,"/arch/arch/beg",_("Begin"),R_R_R_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/arch/arch/end",_("End"),R_R_R_,"root",SARH_ID,1,"tp","str");
@@ -2022,11 +2019,13 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/val/tm",_("Time"),RWRW__,"root",SARH_ID,1,"tp","time");
 	    ctrMkNode("fld",opt,-1,"/val/utm","",RWRW__,"root",SARH_ID,5,"tp","dec","len","6","min","0","max","999999","help",_("Microseconds"));
 	    ctrMkNode("fld",opt,-1,"/val/size",_("Size, seconds"),RWRW__,"root",SARH_ID,1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/val/arch",_("Archivator"),RWRW__,"root",SARH_ID,4,"tp","str","dest","select","select","/val/lstAVal",
-		"help",_("Values archivator.\nNo set archivator for process by buffer and all archivators.\nSet '<buffer>' for process by buffer."));
+	    ctrMkNode("fld",opt,-1,"/val/arch",_("Archiver"),RWRW__,"root",SARH_ID,4,"tp","str","dest","select","select","/val/lstAVal",
+		"help",_("Values archiver.\n"
+			 "If the value is empty, the request will be processed for the buffer and for all archivers.\n"
+			 "If \"<buffer>\" is specified then the request will be processed only for the archive buffer."));
 	    ctrMkNode("fld",opt,-1,"/val/sw_trend",_("Show trend"),RWRW__,"root",SARH_ID,1,"tp","bool");
 	    if(!s2i(TBDS::genDBGet(owner().nodePath()+"vShowTrnd","0",opt->attr("user")))) {
-		if(ctrMkNode("table",opt,-1,"/val/val",_("Values table"),R_R___,"root",SARH_ID)) {
+		if(ctrMkNode("table",opt,-1,"/val/val",_("Table of the values"),R_R___,"root",SARH_ID)) {
 		    ctrMkNode("list",opt,-1,"/val/val/0",_("Time"),R_R___,"root",SARH_ID,1,"tp","time");
 		    ctrMkNode("list",opt,-1,"/val/val/0a",_("mcsec"),R_R___,"root",SARH_ID,1,"tp","dec");
 		    ctrMkNode("list",opt,-1,"/val/val/1",_("Value"),R_R___,"root",SARH_ID,1,"tp","str");
@@ -2034,11 +2033,11 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    }
 	    else
 	    {
-		ctrMkNode("fld",opt,-1,"/val/pct_w",_("Picture size"),RWRW__,"root",SARH_ID,4,"tp","dec","min","100","max","1024","help",_("Picture width in pixels."));
-		ctrMkNode("fld",opt,-1,"/val/pct_h","",RWRW__,"root",SARH_ID,4,"tp","dec","min","50","max","800","help",_("Picture height in pixels."));
-		ctrMkNode("fld",opt,-1,"/val/min",_("Value scale"),RWRW__,"root",SARH_ID,2,"tp","dec","help",_("Picture minimum value."));
-		ctrMkNode("fld",opt,-1,"/val/max","",RWRW__,"root",SARH_ID,2,"tp","dec","help",_("Picture maximum value."));
-		ctrMkNode("img",opt,-1,"/val/trend",_("Values trend"),R_R___,"root",SARH_ID);
+		ctrMkNode("fld",opt,-1,"/val/pct_w",_("Image size"),RWRW__,"root",SARH_ID,4,"tp","dec","min","100","max","1024","help",_("Image width in pixels."));
+		ctrMkNode("fld",opt,-1,"/val/pct_h","",RWRW__,"root",SARH_ID,4,"tp","dec","min","50","max","800","help",_("Image height in pixels."));
+		ctrMkNode("fld",opt,-1,"/val/min",_("Scale of the values"),RWRW__,"root",SARH_ID,2,"tp","dec","help",_("Image minimum value."));
+		ctrMkNode("fld",opt,-1,"/val/max","",RWRW__,"root",SARH_ID,2,"tp","dec","help",_("Image maximum value."));
+		ctrMkNode("img",opt,-1,"/val/trend",_("Trend of the values"),R_R___,"root",SARH_ID);
 	    }
 	}
 	return;
@@ -2078,7 +2077,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SARH_ID,RWRWR_);
     else if(a_path == "/arch/arch") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {
-	    //Fill Archivators table
+	    //Fill archivers table
 	    XMLNode *n_arch = ctrMkNode("list",opt,-1,"/arch/arch/arch","",R_R_R_,"root",SARH_ID);
 	    XMLNode *n_start= ctrMkNode("list",opt,-1,"/arch/arch/start","",R_R_R_,"root",SARH_ID);
 	    XMLNode *n_prc  = ctrMkNode("list",opt,-1,"/arch/arch/proc","",RWRWR_,"root",SARH_ID);
@@ -2250,12 +2249,11 @@ TCntrNode &TVArchivator::operator=( const TCntrNode &node )
     const TVArchivator *src_n = dynamic_cast<const TVArchivator*>(&node);
     if( !src_n ) return *this;
 
-    //> Configuration copy
-    exclCopy(*src_n, "ID;");
+    //Configuration copy
+    exclCopy(*src_n, "ID;ADDR;START;");
     mDB = src_n->mDB;
 
-    if( src_n->startStat() && toStart() && !startStat() )
-        start( );
+    //if(src_n->startStat() && toStart() && !startStat()) start();
 
     return *this;
 }
@@ -2303,7 +2301,7 @@ string TVArchivator::workId( )	{ return owner().modId()+"."+id(); }
 
 void TVArchivator::start( )
 {
-    //> Start archivator thread
+    //Start archiver thread
     if(!runSt) {
 	if(archPeriod()) SYS->taskCreate(nodePath('.',true), 0, TVArchivator::Task, this, 2, NULL, &runSt);
 	owner().owner().setToUpdate();
@@ -2427,7 +2425,7 @@ void *TVArchivator::Task( void *param )
 
 TVariant TVArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // bool status( ) - get the archivator start status.
+    // bool status( ) - get the archiver start status.
     if(iid == "status")	return startStat();
 
     //Configuration functions call
@@ -2443,23 +2441,21 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Value archivator: ")+name(),RWRWR_,"root",SARH_ID);
-	if(ctrMkNode("area",opt,-1,"/prm",_("Archivator")))
-	{
-	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
-	    {
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Value archiver: ")+name(),RWRWR_,"root",SARH_ID);
+	if(ctrMkNode("area",opt,-1,"/prm",_("Archiver"))) {
+	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Running"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 		if(archPeriod()) ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time"),R_R_R_,"root",SARH_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archivator DB"),RWRWR_,"root","root",4,
+		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archiver DB"),RWRWR_,"root","root",4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SARH_ID,RWRWR_);
 		ctrMkNode("fld",opt,-1,"/prm/cfg/A_PER",EVAL_STR,RWRWR_,"root",SARH_ID,1,
-		    "help",_("Set zero period for disable using the archiver for buffer processing, only for direct write."));
+		    "help",_("Set a zero period to disable the use of the archiver in processing the buffer - just a direct recording."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/SEL_PR",EVAL_STR,RWRWR_,"root",SARH_ID,1,
-		    "help",_("Selection the archiver priority for \"All\" sources using mode. Set to zero for full the selection disable."));
+		    "help",_("Selection of a priority of the archiver for using in the source mode \"All\". Set to zero for full the selection disabling."));
 		ctrRemoveNode(opt,"/prm/cfg/MODUL");
 	    }
 	}

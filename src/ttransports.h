@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -235,9 +235,9 @@ class TTipTransport: public TModule
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	virtual TTransportIn  *In( const string &name, const string &db )
-	{ throw TError(nodePath().c_str(),_("Input transport no support!")); }
+	{ throw TError(nodePath().c_str(),_("Input transport is not supported!")); }
 	virtual TTransportOut *Out( const string &name, const string &db )
-	{ throw TError(nodePath().c_str(),_("Output transport no support!")); }
+	{ throw TError(nodePath().c_str(),_("Output transport is not supported!")); }
 
     private:
 	//Attributes
@@ -289,7 +289,7 @@ class TTransportS : public TSubSYS
 	void extHostList( const string &user, vector<ExtHost> &list, bool andSYS = false, int upRiseLev = -1 );
 	ExtHost extHostGet( const string &user, const string &id, bool andSYS = false );
 	AutoHD<TTransportOut> extHost( TTransportS::ExtHost host, const string &pref = "" );
-	void extHostSet( const ExtHost &host, bool andSYS = false );
+	void extHostSet( const ExtHost &host, bool andSYS = false, bool load = false );
 	void extHostDel( const string &user, const string &id, bool andSYS = false );
 
 	//> Request to remote or local OpenSCADA control interface
@@ -310,13 +310,14 @@ class TTransportS : public TSubSYS
     private:
 	//Methods
 	string optDescr( );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
 	TElem	elIn, elOut, elExt;
 
-	ResRW	extHostRes;             //External hosts resource
-	vector<ExtHost> extHostLs;      //External hosts list
+	ResRW	extHostRes;		//External hosts resource
+	vector<ExtHost> extHostLs;	//External hosts list
+	time_t	extHostLoad;		//Last hosts loading
 };
 
 }

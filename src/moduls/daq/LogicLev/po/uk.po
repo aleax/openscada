@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.LogicLev translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.LogicLev module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2006-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-02 17:43+0300\n"
+"POT-Creation-Date: 2018-06-05 10:02+0200\n"
 "PO-Revision-Date: 2004-03-20 10:37+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -21,8 +21,8 @@ msgstr "Логічний рівень"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Provides the logical level of parameters."
-msgstr "Надає логічний рівень параметрів."
+msgid "Provides the pure logical level of the DAQ parameters."
+msgstr "Надає чистий логічний рівень параметрів сбору даних."
 
 msgid "Parameters table by template"
 msgstr "Таблиця параметрів за шаблоном"
@@ -33,8 +33,8 @@ msgstr "Таблиця параметрів для відображення"
 msgid "Request data period (ms)"
 msgstr "Період отримання даних (мс)"
 
-msgid "Calculate schedule"
-msgstr "Політика планування"
+msgid "Schedule of the calculation"
+msgstr "Планування обчислення"
 
 msgid "Priority of the acquisition task"
 msgstr "Пріоритет задачі отримання даних"
@@ -48,49 +48,49 @@ msgstr "Шаблон параметру"
 msgid "Parameter ID"
 msgstr "ID параметру"
 
-msgid "ID"
-msgstr ""
+msgid "Identifier"
+msgstr "Ідентифікатор"
 
 msgid "Value"
 msgstr "Значення"
 
 msgid "Parameter reflection"
-msgstr "Відображення параметру"
+msgstr "Віддзеркалення параметру"
 
 msgid "Source parameter"
 msgstr "Вихідний параметр"
 
-msgid "Call now. "
-msgstr "Виклик зараз. "
+msgid "Calculation. "
+msgstr "Обчислення. "
 
 #, c-format
-msgid "Call by period: %s. "
-msgstr "Виклик за періодом: %s. "
+msgid "Calculation with the period: %s. "
+msgstr "Обчислення за періодом: %s. "
 
 #, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Наступний виклик за cron '%s'. "
+msgid "Next calculation by the cron '%s'. "
+msgstr "Наступне обчислення за cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s[%s]. "
 msgstr "Витрачено часу: %s[%s]. "
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр вимкнено."
 
-msgid "2:Controller is stopped."
-msgstr "2:Контролер зупинено."
+msgid "2:Calculation stopped."
+msgstr "2:Обчислення зупинено."
 
 msgid "Parameter is disabled or is not based on the template."
 msgstr "Параметр вимкнено або він не ґрунтується на шаблоні."
 
-msgid "Parameter id error."
-msgstr "Помилковий id параметру."
+msgid "Error of parameter ID."
+msgstr "Помилковий ID параметру."
 
-msgid "Error calculate template."
+msgid "Error calculating template."
 msgstr "Помилка обчислення шаблону."
 
-msgid "No template parameter or error."
+msgid "Error or non-template parameter."
 msgstr "Помилка або нешаблонний параметр."
 
 msgid "Template configuration"
@@ -102,5 +102,5 @@ msgstr "Показувати тільки атрибути"
 msgid "Parameters"
 msgstr "Параметри"
 
-msgid "Self to self linking error."
+msgid "Error, recursive linking."
 msgstr "Помилка, рекурсивне підключення."

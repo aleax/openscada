@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,9 +45,9 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.8.0"
+#define MOD_VER		"2.8.5"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
-#define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, and UDP protocols.")
+#define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP protocols.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -399,6 +399,8 @@ void *TSocketIn::Task( void *sock_in )
 #if OSC_DEBUG >= 5
 	    mess_debug(sock->nodePath().c_str(), _("Read datagram %s from '%s'!"), TSYS::cpct2str(r_len).c_str(), inet_ntoa(name_cl.sin_addr));
 #endif
+	    if(sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:Received from '%s'\n"),sock->sockFd,inet_ntoa(name_cl.sin_addr)) + req);
+
 
 	    int64_t stTm = 0;
 	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
@@ -415,6 +417,8 @@ void *TSocketIn::Task( void *sock_in )
 
 	    r_len = sendto(sock->sockFd, answ.c_str(), answ.size(), 0, (sockaddr *)&name_cl, name_cl_len);
 	    sock->trOut += vmax(0, r_len);
+
+	    if(r_len > 0 && sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:Transmitted to '%s'\n"),sock->sockFd,inet_ntoa(name_cl.sin_addr)) + answ);
 	}
     }
     pthread_attr_destroy(&pthr_attr);
@@ -427,9 +431,9 @@ void *TSocketIn::Task( void *sock_in )
     //Find already registry
     MtxAlloc res(sock->sockRes, true);
     for(map<int, SSockIn*>::iterator iId = sock->clId.begin(); iId != sock->clId.end(); ++iId)
-	pthread_kill(iId->second->pid, SIGALRM);
+	if(iId->second->pid) pthread_kill(iId->second->pid, SIGALRM);
     res.unlock();
-    TSYS::eventWait(sock->clFree, true, string(MOD_ID)+": "+sock->id()+_(" client task is stopping...."));
+    TSYS::eventWait(sock->clFree, true, string(MOD_ID)+": "+sock->id()+_(" stopping client tasks ..."));
 
     sock->runSt = false;
 
@@ -473,7 +477,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    }
 
 	    ssize_t r_len = 0;
-	    if(kz && (r_len=read(s.sock, buf, s.s->bufLen()*1000)) <= 0) break;
+	    if(kz && (r_len=read(s.sock,buf,s.s->bufLen()*1000)) <= 0) break;
 	    s.s->dataRes().lock();
 	    s.s->trIn += r_len; s.trIn += r_len;
 	    s.s->dataRes().unlock();
@@ -543,12 +547,17 @@ void *TSocketIn::ClTask( void *s_inf )
     }
 
     //Close protocol on broken connection
-    if(!prot_in.freeStat()) {
-	string n_pr = prot_in.at().name();
-	AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
-	prot_in.free();
-	proto.at().close(n_pr);
-    }
+    if(!prot_in.freeStat())
+	try {
+	    string n_pr = prot_in.at().name();
+	    AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
+	    prot_in.free();
+	    proto.at().close(n_pr);
+	} catch(TError &err) {
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(s.s->nodePath().c_str(), _("Has been terminated by execution: %s"), err.mess.c_str());
+	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Has been terminated by execution: %s"),s.sock,err.mess.c_str()));
+	}
 
     s.s->clientUnreg(&s);
 
@@ -851,7 +860,7 @@ void TSocketOut::start( int itmCon )
 	    if((sockFd=socket(PF_INET,SOCK_DGRAM,0)) == -1)
 		throw TError(nodePath().c_str(), _("Error creation UDP socket: '%s (%d)'!"), strerror(errno), errno);
 	}
-	//Connect to socket
+	//Connect to the socket
 	int flags = fcntl(sockFd, F_GETFL, 0);
 	fcntl(sockFd, F_SETFL, flags|O_NONBLOCK);
 	int rez = connect(sockFd, (sockaddr*)&nameIn, sizeof(nameIn));
@@ -868,9 +877,10 @@ void TSocketOut::start( int itmCon )
 	    close(sockFd);
 	    sockFd = -1;
 #if OSC_DEBUG >= 5
-	    mess_debug(nodePath().c_str(), _("Connect by timeout %s error: '%s (%d)'"), tm2s(1e-3*itmCon).c_str(), strerror(errno), errno);
+	    mess_debug(nodePath().c_str(), _("Error connecting during the time %s: '%s (%d)'"), tm2s(1e-3*itmCon).c_str(), strerror(errno), errno);
 #endif
-	    throw TError(nodePath().c_str(), _("Connect to Internet socket error: '%s (%d)'!"), strerror(errno), errno);
+	    throw TError(nodePath().c_str(), _("Error connection to the internet socket '%s:%s' during the timeout, it seems in down or inaccessible: '%s (%d)'!"),
+		host.c_str(), port.c_str(), strerror(errno), errno);
 	}
     }
     else if(type == SOCK_UNIX)

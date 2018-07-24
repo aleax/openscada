@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tprotocols.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,14 +39,13 @@ TProtocolS::~TProtocolS( )
 
 string TProtocolS::optDescr(  )
 {
-    return(_(
-	"=============== Subsystem \"Transport protocols\" options =================\n\n"));
+    return TSYS::strMess(_(
+	"=============== Subsystem \"Transport protocols\" options =================\n\n")) + TSubSYS::optDescr();
 }
 
 void TProtocolS::load_()
 {
     //Load parameters from command line
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) fprintf(stdout, "%s", optDescr().c_str());
 
     //Load parameters from config-file
 }

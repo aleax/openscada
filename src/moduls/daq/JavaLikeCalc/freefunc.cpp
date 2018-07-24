@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -442,7 +442,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	    break;
 	case Reg::String: {
 	    string sval = *rez->val().s;
-	    //if(sval.size() > 255) throw TError(nodePath().c_str(),_("String constant size is more 255 symbols."));
+	    //if(sval.size() > 255) throw TError(nodePath().c_str(),_("String-constant size is more for 255 symbols."));
 	    prg += (uint8_t)Reg::MviS;
 	    prg.append((char *)&addr,sizeof(uint16_t));
 	    prg += (uint8_t)vmin(255,sval.size());
@@ -488,7 +488,7 @@ Reg *Func::cdMviObject( )
 
 Reg *Func::cdMviArray( int p_cnt )
 {
-    if(p_cnt > 255) throw TError(nodePath().c_str(),_("Array have more 255 items."));
+    if(p_cnt > 255) throw TError(nodePath().c_str(),_("Array has more than 255 elements."));
     deque<int> p_pos;
 
     //Mvi all parameters
@@ -517,7 +517,7 @@ Reg *Func::cdMviArray( int p_cnt )
 
 Reg *Func::cdMviRegExp( int p_cnt )
 {
-    if(p_cnt < 1 || p_cnt > 2) throw TError(nodePath().c_str(),_("RegExp require one or two parameters."));
+    if(p_cnt < 1 || p_cnt > 2) throw TError(nodePath().c_str(),_("RegExp requires one or two parameters."));
 
     Reg *rg_expr = NULL;
     Reg *rg_arg  = NULL;
@@ -737,7 +737,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2, Reg *rez )
 	case Reg::LT: case Reg::GT:
 	case Reg::LEQ: case Reg::GEQ: case Reg::EQU: case Reg::NEQ:
 	    prg += (uint8_t)cod; rez->setType(Reg::Bool);	break;
-	default: throw TError(nodePath().c_str(),_("Don't support operation code %d."),cod);
+	default: throw TError(nodePath().c_str(),_("Operation code %d is not supported."),cod);
     }
 
     uint16_t addr;
@@ -835,7 +835,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 	case Reg::Not:		prg += (uint8_t)Reg::Not;	break;
 	case Reg::BitNot:	prg += (uint8_t)Reg::BitNot;	break;
 	case Reg::Neg:		prg += (uint8_t)Reg::Neg;	break;
-	default: throw TError(nodePath().c_str(),_("Don't support operation code %d."),cod);
+	default: throw TError(nodePath().c_str(),_("Operation code %d is not supported."),cod);
     }
     uint16_t addr;
     addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
@@ -957,7 +957,7 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
 
     //if( (prm1 && !prm1->objEl() && prm1->vType(this) == Reg::String) ||
     //	(prm2 && !prm2->objEl() && prm2->vType(this) == Reg::String) )
-    //	throw TError(nodePath().c_str(),_("Buildin functions don't support string type"));
+    //	throw TError(nodePath().c_str(),_("Built-in functions don't support the string type"));
 
     //Free parameter's registers
     if( prm1 )	{ prm1 = cdMvi( prm1 ); p1_pos = prm1->pos(); }
@@ -988,7 +988,7 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc, Reg *f_r )
 
     if(!f_r) {
 	if(f_id >= EXT_F_LIM)
-	    throw TError(nodePath().c_str(), _("External functions number exceeded limits to %d on function '%s'"), f_id, mFncs[f_id].at().id().c_str());
+	    throw TError(nodePath().c_str(), _("Number of external functions reached the limit of %d on the function '%s'"), f_id, mFncs[f_id].at().id().c_str());
 
 	//Check for return IO position
 	bool ret_ok = false;
@@ -998,12 +998,12 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc, Reg *f_r )
 
 	//Check IO and parameters count
 	if(p_cnt > mFncs[f_id].at().ioSize()-ret_ok)
-	    throw TError(nodePath().c_str(), _("More than %d(%d) parameters are specified for function '%s'"),
+	    throw TError(nodePath().c_str(), _("More than %d(%d) parameters are specified for the function '%s'"),
 		(mFncs[f_id].at().ioSize()-ret_ok), p_cnt, mFncs[f_id].at().id().c_str());
 
 	//Check the present return for fuction
 	if(!proc && !ret_ok)
-	    throw TError(nodePath().c_str(), _("Function is requested '%s', but it doesn't have return of IO"), mFncs[f_id].at().id().c_str());
+	    throw TError(nodePath().c_str(), _("Function '%s' is called, but it does not have the IO-return"), mFncs[f_id].at().id().c_str());
     }
 
     //Mvi all parameters
@@ -1075,8 +1075,8 @@ Reg *Func::cdIntFnc( int fOff, int pCnt, bool proc )
 
 Reg *Func::cdObjFnc( Reg *obj, const string &fNm, int p_cnt )
 {
-    if(fNm.size() > 254)throw TError(nodePath().c_str(), _("Function's name longer to 254."));
-    if(p_cnt > 255)	throw TError(nodePath().c_str(), _("Object's function have more 255 parameters."));
+    if(fNm.size() > 254)throw TError(nodePath().c_str(), _("Function name is longer than 254."));
+    if(p_cnt > 255)	throw TError(nodePath().c_str(), _("Object function contains more than 255 parameters."));
 
     Reg *rez = NULL;
     deque<int> p_pos;
@@ -1174,8 +1174,12 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if(prop == "isEVal")	return (vl.getB() == EVAL_BOOL);
 		// string toString( ) - performs the value as the string “true” or “false”
 		if(prop == "toString")	return string(vl.getB() ? "true" : "false");
+		// real toReal() - read this Boolean as a real number
+		if(prop == "toReal")	return vl.getR();
+		// int toInt() - read this Boolean as an integer number
+		if(prop == "toInt")	return (int)vl.getI();
 		return false;
-		//throw TError(nodePath().c_str(),_("Boolean type have not function '%s' or not enough parameters for it."),prop.c_str());
+		//throw TError(nodePath().c_str(),_("Boolean type has not the property '%s' or there are not enough parameters for it."),prop.c_str());
 	    case TVariant::Integer:
 		// bool isEVal( ) - check value to "EVAL"
 		if(prop == "isEVal")	return (vl.getI() == EVAL_INT);
@@ -1232,8 +1236,12 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 			rez += dsymb[c_vl%n];
 		    return TSYS::strEncode(rez, TSYS::Reverse);
 		}
+		// real toReal() - read this integer-real as a real number
+		if(prop == "toReal") return vl.getR();
+		// int toInt() - read this integer-real as an integer number
+		if(prop == "toInt") return (int)vl.getI();
 		return false;
-		//throw TError(nodePath().c_str(),_("Integer or real type have not function '%s' or not enough parameters for it."),prop.c_str());
+		//throw TError(nodePath().c_str(),_("Integer or real type has not the property '%s' or there are not enough parameters for it."),prop.c_str());
 	    case TVariant::String:
 		// bool isEVal( ) - check value to "EVAL"
 		if(prop == "isEVal")	return (vl.getS() == EVAL_STR);
@@ -1301,9 +1309,9 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//  flg - regular expression flags.
 		if(prop == "match" && prms.size()) {
 		    AutoHD<TRegExp> re;
-		    if(prms[0].type() == TVariant::String) re = new TRegExp(prms[0].getS(),(prms.size()>=2)?prms[1].getS():string());
+		    if(prms[0].type() == TVariant::String) re = new TRegExp(prms[0].getS(), (prms.size()>=2)?prms[1].getS():string());
 		    else if(prms[0].type() != TVariant::Object || (re=prms[0].getO()).freeStat()) return -1;
-		    return re.at().match(vl.getS(),true);
+		    return re.at().match(vl.getS(), true);
 		}
 		// string slice(int beg, int end) - return the string extracted from the original one starting from the <beg> position
 		//       and ending be the <end>
@@ -1380,7 +1388,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if(prop == "toReal") return s2r(vl.getS());
 		// int toInt(int base = 0) - convert this string to integer number
 		//  base - radix of subject sequence
-		if(prop == "toInt") return (int)strtol(vl.getS().c_str(),NULL,(prms.size()>=1?prms[0].getI():0));
+		if(prop == "toInt") return (int)strtol(vl.getS().c_str(), NULL, (prms.size()>=1?prms[0].getI():10));
 		// string parse(int pos, string sep = ".", int off = 0) - get token with number <pos> from the string when separated by <sep>
 		//       and from offset <off>
 		//  pos - item position
@@ -1421,11 +1429,11 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if(prop == "trim") return sTrm(vl.getS(), prms.size() ? prms[0].getS() : " \n\t\r");
 
 		return false;
-		//throw TError(nodePath().c_str(),_("String type have not properties '%s' or not enough parameters for it."),prop.c_str());
+		//throw TError(nodePath().c_str(),_("String type has not the property '%s' or there are not enough parameters for it."),prop.c_str());
 	    default:	break;
 	}
 	return false;
-	//throw TError(nodePath().c_str(),_("Unknown type '%d' for property '%s'."),vl.type(),prop.c_str());
+	//throw TError(nodePath().c_str(),_("Unknown type '%d' for the property '%s'."),vl.type(),prop.c_str());
     } catch(TError &err) { mess_debug(nodePath().c_str(), "%s", err.mess.c_str()); }
 
     return false;
@@ -1558,7 +1566,7 @@ AutoHD<TVarObj> Func::getValO( TValFunc *io, RegW &rg )
 		if(io->ioType(rg.val().io) == IO::Object) return io->getO(rg.val().io);
 	    default:	break;
 	}
-	throw TError(nodePath().c_str(),_("Get object from no object's register"));
+	throw TError(nodePath().c_str(),_("Obtaining an object from a non-object register"));
     }
     else return getVal(io,rg).getO();
 }
@@ -1913,7 +1921,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 				reg[ptr->rez].val().s->append(getValS(val,reg[ptr->a2]));
 			    else reg[ptr->rez] = getValS(val,reg[ptr->a1]) + getValS(val,reg[ptr->a2]);	break;
 			default:
-			    throw TError(nodePath().c_str(), _("Not supported type %d for operation 'Add'."), reg[ptr->a1].vType(this));
+			    throw TError(nodePath().c_str(), _("Type %d, which is not supported by the 'Add' operation."), reg[ptr->a1].vType(this));
 		    }
 		else {
 		    TVariant op1 = getVal(val,reg[ptr->a1]);
@@ -1923,7 +1931,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			case TVariant::String:
 			    reg[ptr->rez] = op1.getS() + getValS(val,reg[ptr->a2]);	break;
 			default:
-			    throw TError(nodePath().c_str(), _("Not supported type %d for operation 'Add'."), op1.type());
+			    throw TError(nodePath().c_str(), _("Type %d, which is not supported by the 'Add' operation."), op1.type());
 		    }
 		}
 		cprg += sizeof(SCode); continue;
@@ -1945,7 +1953,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			    else setValS(val, reg[ptr->rez], getValS(val,reg[ptr->a1]) + getValS(val,reg[ptr->a2]));
 			    break;
 			default:
-			    throw TError(nodePath().c_str(), _("Not supported type %d for operation 'Add'."), reg[ptr->a1].vType(this));
+			    throw TError(nodePath().c_str(), _("Type %d, which is not supported by the 'Add' operation."), reg[ptr->a1].vType(this));
 		    }
 		else {
 		    TVariant op1 = getVal(val,reg[ptr->a1]);
@@ -1955,7 +1963,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			case TVariant::String:
 			    setValS(val, reg[ptr->rez], op1.getS() + getValS(val,reg[ptr->a2])); break;
 			default:
-			    throw TError(nodePath().c_str(), _("Not supported type %d for operation 'Add'."), op1.type());
+			    throw TError(nodePath().c_str(), _("Type %d, which is not supported by the 'Add' operation."), op1.type());
 		    }
 		}
 		cprg += sizeof(SCode); continue;
@@ -2630,7 +2638,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 	    }
 	    default:
 		setStart(false);
-		throw TError(nodePath().c_str(),_("Operation %c(%xh) error. Function '%s' is stopped."),*cprg,*cprg,id().c_str());
+		throw TError(nodePath().c_str(),_("Error operation %c(%xh). Function '%s' stopped."),*cprg,*cprg,id().c_str());
 	}
     }
 }
@@ -2641,14 +2649,15 @@ void Func::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TFunction::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name(),/*owner().DB().empty()?R_R_R_:*/RWRWR_,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
-	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
-	ctrMkNode("fld",opt,-1,"/func/cfg/toStart",_("To start"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calculate time, seconds"),RWRWR_,"root",SDAQ_ID,3,
+	ctrMkNode("fld",opt,-1,"/func/cfg/NAME",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
+	ctrMkNode("fld",opt,-1,"/func/cfg/DESCR",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	    "tp","str","cols","100","rows","5");
+	ctrMkNode("fld",opt,-1,"/func/cfg/START",_("To start"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+	ctrMkNode("fld",opt,-1,"/func/cfg/MAXCALCTM",_("Maximum calculation time, seconds"),RWRWR_,"root",SDAQ_ID,3,
 	    "tp","dec","min","0","max","3600");
 	if(ctrMkNode("area",opt,-1,"/io",_("Program"))) {
 	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,1,"s_com","add,del,ins,move")) {
-		ctrMkNode("list",opt,-1,"/io/io/0",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/0",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::FullText<<8),IO::Object).c_str(),
@@ -2656,7 +2665,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,IO::Output,IO::Return).c_str(),
 		    "sel_list",_("Input;Output;Return"));
-		ctrMkNode("list",opt,-1,"/io/io/4",_("Hide"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/io/io/4",_("Hidden"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    ctrMkNode("fld",opt,-1,"/io/prog",_("Program"),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
@@ -2666,13 +2675,13 @@ void Func::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/func/cfg/name" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
-    else if(a_path == "/func/cfg/descr" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
-    else if(a_path == "/func/cfg/toStart") {
+    if(a_path == "/func/cfg/NAME" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
+    else if(a_path == "/func/cfg/DESCR" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
+    else if(a_path == "/func/cfg/START") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(toStart()?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setToStart(s2i(opt->text()));
     }
-    else if(a_path == "/func/cfg/m_calc_tm") {
+    else if(a_path == "/func/cfg/MAXCALCTM") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(maxCalcTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setMaxCalcTm(s2i(opt->text()));
     }
@@ -2710,7 +2719,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    int row = s2i(opt->attr("row"));
 	    int col = s2i(opt->attr("col"));
 	    if((col == 0 || col == 1) && !opt->text().size())
-		throw TError(nodePath().c_str(),_("Empty value is not valid."));
+		throw TError(nodePath().c_str(),_("Empty value is not allowed."));
 	    switch(col) {
 		case 0:	io(row)->setId(opt->text());	break;
 		case 1:	io(row)->setName(opt->text());	break;

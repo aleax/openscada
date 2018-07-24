@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: main.cpp
+//OpenSCADA file: main.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *                                                     *
  *                                                                         *
@@ -38,7 +38,7 @@ int main( int argc, char *argv[], char *envp[] )
     //Check for the daemon mode and switch to at first
     for(int argPos = 0; (argCom=TSYS::getCmdOpt_(argPos,&argVl,argc,argv)).size(); )
 	if(argCom == "demon" || argCom == "daemon") {
-	    if((pid=fork()) == -1) { printf("Error: fork error!\n"); return -1; }
+	    if((pid=fork()) == -1) { printf("Error forking!\n"); return -1; }
 	    if(pid != 0) return 0;	//Original process close
 
 	    // Prepare the demon environment
@@ -81,14 +81,14 @@ int main( int argc, char *argv[], char *envp[] )
     SYS = new TSYS(argc, argv, envp);
     try {
 	SYS->load();
-	if((rez=SYS->stopSignal()) > 0) throw TError(SYS->nodePath().c_str(),"Stop by signal %d on load.",rez);
+	if((rez=SYS->stopSignal()) > 0) throw TError(SYS->nodePath().c_str(),"Stopped by the signal %d on the loading.",rez);
 	rez = SYS->start();
     } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
-    //Free OpenSCADA system's root object
+    //Free OpenSCADA root object
     if(SYS) delete SYS;
 
-    printf("OpenSCADA system correct exit by code %d.\n", rez);
+    printf("OpenSCADA successfully exited with the return code %d.\n", rez);
 
     if(pidFile.size()) remove(pidFile.c_str());
 

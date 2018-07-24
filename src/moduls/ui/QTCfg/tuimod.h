@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2004-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,10 +54,12 @@ class TUIMod: public TUI
 	string tmConChk( )	{ return mTmConChk; }
 	string startPath( )	{ return mStartPath; }
 	string startUser( )	{ return mStartUser; }
+	int toolTipLim( )	{ return mToolTipLim; }
 
 	void setTmConChk( const string &vl );
 	void setStartPath( const string &vl )	{ mStartPath = vl; modif(); }
 	void setStartUser( const string &vl )	{ mStartUser = vl; modif(); }
+	void setToolTipLim( int vl );
 
 	void modStart( );
 	void modStop( );
@@ -72,8 +74,9 @@ class TUIMod: public TUI
 
 	QIcon icon( );
 
-	// Put message
+	// Common
 	void postMess( const string &cat, const string &mess, MessLev type = Info, QWidget *parent = 0 );
+	void setHelp( const string &help, const string &addr, QWidget *w );
 
     protected:
 	//Methods
@@ -94,6 +97,7 @@ class TUIMod: public TUI
 	MtxString mTmConChk,			//Connection check timeout in seconds "{fail}:{good}"
 		mStartUser,			//No password requested start user
 		mStartPath;			//Start path
+	int	mToolTipLim;			//ToolTip limit
 
 	bool	mEndRun;			//End run command. Close all windows
 };

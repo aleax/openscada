@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -147,6 +147,7 @@ class ShapeFormEl : public WdgShape
 	void buttonPressed( );
 	void buttonReleased( );
 	void buttonToggled( bool val );
+	void buttonMenuTrig( );
 	// Sliders' events
 	void sliderMoved( int val );
 
@@ -166,7 +167,7 @@ class ShapeFormEl : public WdgShape
 		short	setType	:1;
 		short	view	:4;
 		short	opt1	:1;
-		short	checkable:1;
+		short	mode	:5;
 		QWidget	*addrWdg;
 		QFont	font;
 		string	name;
@@ -222,20 +223,21 @@ class ShapeText : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), geomMargin(0), text_flg(0)	{ }
+		ShpDt( ) : en(true), active(true), inHtml(false), geomMargin(0)	{ }
 		//Attributes
 		short	en		:1;
 		short	active		:1;
+		short	inHtml		:1;
 		short	geomMargin	:8;
 		short	bordStyle	:5;
 		short int orient;
-		short int text_flg;
 		string	text_tmpl,
 			text;
 		QColor	color;
 		QBrush	backGrnd;
 		string	font;
 		QPen	border;
+		QTextOption options;
 		vector<ArgObj>	args;
 	};
 };

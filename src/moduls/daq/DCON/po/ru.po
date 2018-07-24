@@ -2,14 +2,14 @@
 # Copyright (C) 2008-2009 Almaz Karimov
 # This file is distributed under the same license as the OpenSCADA.DAQ.DCON package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2008-2011.
+# Roman Savochenko <rom_as@oscada.org>, 2008-2018.
 # Almaz Karimov, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 16:17+0300\n"
+"POT-Creation-Date: 2018-06-05 09:54+0200\n"
 "PO-Revision-Date: 2011-02-28 16:29+0300\n"
 "Last-Translator: Almaz Karimov\n"
 "Language-Team:  <ru@li.org>\n"
@@ -39,10 +39,10 @@ msgid "Gather data period (s)"
 msgstr "Период сбора данных (с)"
 
 msgid "Acquisition schedule"
-msgstr "Планирование опроса"
+msgstr "Планирование сбора"
 
-msgid "Gather task priority"
-msgstr "Уровень приоритета задачи сбора данных"
+msgid "Priority of the acquisition task"
+msgstr "Приоритет задачи сбора данных"
 
 msgid "Transport"
 msgstr "Транспорт"
@@ -132,16 +132,16 @@ msgstr "CI метод"
 msgid "No CI;2CI (#AA);3CI (#AA)"
 msgstr "Нет CI;2CI (#AA);3CI (#AA)"
 
-msgid "Call now. "
-msgstr "Вызов сейчас. "
+msgid "Acquisition. "
+msgstr "Сбор. "
 
 #, c-format
-msgid "Call by period: %s. "
-msgstr "Вызовы с периодом: %s. "
+msgid "Acquisition with the period: %s. "
+msgstr "Сбор с периодом: %s. "
 
 #, c-format
-msgid "Call next by cron '%s'. "
-msgstr "Следующий вызов по cron '%s'. "
+msgid "Next acquisition by the cron '%s'. "
+msgstr "Следующий сбор по cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. "
@@ -171,8 +171,8 @@ msgstr "24:Выход за пределы диапазона в модуле"
 msgid "25:Command ignored (host watchdog)."
 msgstr "25:Команда проигнорирована (сторожевой таймер)."
 
-msgid "1:Parameter is disabled."
+msgid "1:Parameter disabled."
 msgstr "1:Параметр отключен"
 
-msgid "2:Acquisition is stopped."
-msgstr "2:Опрос остановлен."
+msgid "2:Acquisition stopped."
+msgstr "2:Сбор остановлен."

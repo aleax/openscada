@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.SSL file: modssl.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.9.0"
+#define MOD_VER		"1.9.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -415,7 +415,7 @@ void *TSocketIn::Task( void *sock_in )
 
     //Client tasks stop command
     s.endrunCl = true;
-    TSYS::eventWait(s.clFree, true, string(MOD_ID)+": "+s.id()+_(" client tasks is stopping...."));
+    TSYS::eventWait(s.clFree, true, string(MOD_ID)+": "+s.id()+_(" stopping client tasks ..."));
 
     //Free context
     if(abio)	BIO_reset(abio);
@@ -553,12 +553,17 @@ void *TSocketIn::ClTask( void *s_inf )
     BIO_free_all(s.bio);
 
     //Close protocol on broken connection
-    if(!prot_in.freeStat()) {
-	string n_pr = prot_in.at().name();
-	AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
-	prot_in.free();
-	proto.at().close(n_pr);
-    }
+    if(!prot_in.freeStat())
+	try {
+	    string n_pr = prot_in.at().name();
+	    AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
+	    prot_in.free();
+	    proto.at().close(n_pr);
+	} catch(TError &err) {
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by execution: %s"), err.mess.c_str());
+	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Has been terminated by execution: %s"),s.sock,err.mess.c_str()));
+	}
 
     s.s->clientUnreg(&s);
 
@@ -859,7 +864,7 @@ void TSocketOut::start( int tmCon )
 	int vl = 1;
 	setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
 
-	//Connect to socket
+	//Connect to the socket
 	int flags = fcntl(sock_fd, F_GETFL, 0);
 	fcntl(sock_fd, F_SETFL, flags|O_NONBLOCK);
 	int res = connect(sock_fd, (sockaddr*)&nameIn, sizeof(nameIn));
@@ -872,7 +877,8 @@ void TSocketOut::start( int tmCon )
 	    if((res=select(sock_fd+1,NULL,&fdset,NULL,&tv)) > 0 && !getsockopt(sock_fd,SOL_SOCKET,SO_ERROR,&res,&slen) && !res) res = 0;
 	    else res = -1;
 	}
-	if(res)	throw TError(nodePath().c_str(), _("Connect to Internet socket error: %s!"), strerror(errno));
+	if(res)	throw TError(nodePath().c_str(), _("Error connection to the internet socket '%s:%s' during the timeout, it seems in down or inaccessible: '%s (%d)'!"),
+	    ssl_host.c_str(), ssl_port.c_str(), strerror(errno), errno);
 
 	//SSL processing
 	if((ctx=SSL_CTX_new(meth)) == NULL) {

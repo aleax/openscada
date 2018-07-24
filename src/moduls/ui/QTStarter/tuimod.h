@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTStarter file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,6 +28,7 @@
 #include <QSessionManager>
 #include <QSystemTrayIcon>
 
+#include "tbds.h"
 #include <tuis.h>
 
 #undef _
@@ -94,31 +95,40 @@ public:
     StApp( int &argv, char **args );
     ~StApp( );
 
+    int topLevelWindows( );
+
     bool trayPresent( )	{ return tray; }
 
     void createTray( );
     bool callQtModule( const string &nm );
 
+    bool updLookFeel( );
+
+    //bool notify( QObject *receiver, QEvent *event )	???? Try for mouse right click emulation on mobile only touch-screened devices
     void saveState( QSessionManager &manager );
 
     int stExec( );
-    void stClear( );
+    void stClear( bool inDestr = false );
+
+    //Attribute
+    MtxString	origStl;
 
 protected:
     //Methods
     void timerEvent( QTimerEvent *event );
 
 private slots:
-    void check( );
     void startDialog( );
     void callQtModule( );
+    void makeStarterMenu( QWidget *mn = NULL );
     void lastWinClose( );
     void trayAct( QSystemTrayIcon::ActivationReason reason );
 
 private:
     //Attributes
-    bool inExec;
-    QMenu	*menuStarter, *trayMenu;
+    bool	inExec;
+    I18NTranslator *transl;
+    QMenu	*trayMenu;
     QSystemTrayIcon *tray;
     StartDialog	*stDlg;
     bool	initExec;
@@ -139,10 +149,18 @@ public:
 
     bool endRun( )	{ return mEndRun; }
     bool startCom( )	{ return mStartCom; }
-    bool closeToTray( )	{ return mCloseToTray; }
     string startMod( )	{ return mStartMod; }
+    string font( )	{ return mFont; }
+    string style( bool mant = false );
+    string palette( )	{ return mPalette; }
+    string styleSheets( ) { return mStyleSheets; }
+    bool closeToTray( )	{ return mCloseToTray; }
 
     void setStartMod( const string &vl )	{ mStartMod = vl; modif(); }
+    void setStyle( const string &vl )		{ mStyle = vl; modif(); mQtLookMdf = true; }
+    void setFont( const string &vl )		{ mFont = vl; modif(); mQtLookMdf = true; }
+    void setPalette( const string &vl )		{ mPalette = vl; modif(); mQtLookMdf = true; }
+    void setStyleSheets( const string &vl )	{ mStyleSheets = vl; modif(); mQtLookMdf = true; }
     void setCloseToTray( bool vl )		{ mCloseToTray = vl; modif(); }
     void modStart( );
     void modStop( );
@@ -151,6 +169,7 @@ public:
 
 public:
     //Attributes
+    bool	mQtLookMdf;
     StApp	*QtApp;
 
 protected:
@@ -171,7 +190,9 @@ private:
 
     //Attributes
     bool	hideMode, mEndRun, mStartCom, mCloseToTray;
-    MtxString	mStartMod;
+    MtxString	mStartMod, mStyle, mFont, mPalette, mStyleSheets;
+
+    TElem	elLF;
 
     // Command line options binding to Qt
     int		qtArgC, qtArgEnd;		//Arguments counter and end position

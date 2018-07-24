@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.9.0"
+#define MOD_VER		"1.10.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -659,7 +659,7 @@ void MTable::fieldSet( TConfig &cfg )
 		trDblDef = true;
 	}
     }
-    if(trDblDef) fieldFix(cfg);
+    if(trDblDef) fieldFix(cfg, trPresent);
 
     //Get present fields list
     string req_where = "WHERE ";
@@ -678,7 +678,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    if(u_cfg.name() == tblStrct[iFld][0]) break;
 	if(iFld >= tblStrct.size()) noKeyFld = true;
     }
-    if(noKeyFld) fieldFix(cfg);
+    if(noKeyFld) fieldFix(cfg, trPresent);
 
     //Prepare query
     // Try for get already present field
@@ -686,7 +686,7 @@ void MTable::fieldSet( TConfig &cfg )
     if(!isForceUpdt) {
 	req = "SELECT 1 FROM \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" " + req_where;
 	try { owner().sqlReq(req, &tbl, true); }
-	catch(TError &err) { fieldFix(cfg); owner().sqlReq(req, &tbl, true); }
+	catch(TError &err) { fieldFix(cfg, trPresent); owner().sqlReq(req, &tbl, true); }
 	if(tbl.size() < 2) {
 	    // Add new record
 	    req = "INSERT INTO \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" ";
@@ -725,7 +725,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     //Query
     try{ owner().sqlReq(req, NULL, true); }
-    catch(TError &err) { fieldFix(cfg); owner().sqlReq(req, NULL, true); }
+    catch(TError &err) { fieldFix(cfg, trPresent); owner().sqlReq(req, NULL, true); }
 }
 
 void MTable::fieldDel( TConfig &cfg )
@@ -756,12 +756,12 @@ void MTable::fieldDel( TConfig &cfg )
     }
 }
 
-void MTable::fieldFix( TConfig &cfg, bool recurse )
+void MTable::fieldFix( TConfig &cfg, bool trPresent, bool recurse )
 {
     bool next = false, next_key = false;
     if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
 
-    bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
+    bool isVarTextTransl = trPresent || (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
     //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
@@ -773,8 +773,8 @@ void MTable::fieldFix( TConfig &cfg, bool recurse )
     for(unsigned iFld = 1, iCf; iFld < tblStrct.size(); iFld++) {
 	for(iCf = 0; iCf < cf_el.size(); iCf++)
 	    if(cf_el[iCf] == tblStrct[iFld][0] ||
-		    (cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText && tblStrct[iFld][0].size() > 3 &&
-		    tblStrct[iFld][0].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][0].compare(0,2,Mess->lang2CodeBase()) != 0))
+		((cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText) && !cfg.cfg(cf_el[iCf]).noTransl() &&
+		tblStrct[iFld][0].size() > 3 && tblStrct[iFld][0].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][0].compare(0,2,Mess->lang2CodeBase()) != 0))
 	    {
 		TCfg &cf = cfg.cfg(cf_el[iCf]);
 		bool isEqual = false;
@@ -848,7 +848,7 @@ void MTable::fieldFix( TConfig &cfg, bool recurse )
 	    next = true;
 	}
 	//Check other languages
-	if(cf.fld().flg()&TFld::TransltText) {
+	if((cf.fld().flg()&TFld::TransltText) && !cf.noTransl()) {
 	    unsigned iC;
 	    for(iC = iFld; iC < tblStrct.size(); iC++)
 		if(tblStrct[iC][0].size() > 3 && tblStrct[iC][0].substr(2) == ("#"+cf_el[iCf]) &&
@@ -873,7 +873,7 @@ void MTable::fieldFix( TConfig &cfg, bool recurse )
 	    owner().sqlReq("DROP TABLE \"" + TSYS::strEncode(name(),TSYS::SQL,"\"")+ "\"");
 	    owner().create(name(), true);
 	    owner().getStructDB(name(), tblStrct);
-	    fieldFix(cfg, true);
+	    fieldFix(cfg, trPresent, true);
 	}
     }
 }

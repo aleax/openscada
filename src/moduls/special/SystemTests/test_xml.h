@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_xml.h
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +41,7 @@ class TestXML : public TFunction
 	}
 
 	string name( )	{ return _("XML parsing"); }
-	string descr( )	{ return _("XML file parsing test. Parse and show selected file structure."); }
+	string descr( )	{ return _("XML parsing file test. Disassembles and displays the structure of the specified file."); }
 
 	void calc( TValFunc *val )
 	{

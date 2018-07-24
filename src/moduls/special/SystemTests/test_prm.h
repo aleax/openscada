@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_prm.h
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,7 +39,7 @@ class TestPrm : public TFunction
 	}
 
 	string name( )	{ return _("Parameter"); }
-	string descr( )	{ return _("DAQ parameters test. Make read a parameter's attributes and configuration fields."); }
+	string descr( )	{ return _("DAQ test parameters. Reads the attributes and configuration fields of the parameter."); }
 
 	void calc( TValFunc *val )
 	{

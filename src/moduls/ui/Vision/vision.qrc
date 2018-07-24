@@ -12,12 +12,12 @@
     <file>images/prj_run.png</file>
     <file>images/prj_new.png</file>
     <file>images/lib_new.png</file>
-    <file>images/it_add.png</file>
-    <file>images/it_del.png</file>
-    <file>images/it_prop.png</file>
-    <file>images/it_edit.png</file>
-    <file>images/it_clear.png</file>
-    <file>images/it_ChDown.png</file>
+    <file>images/v_it_add.png</file>
+    <file>images/v_it_del.png</file>
+    <file>images/v_it_prop.png</file>
+    <file>images/v_it_edit.png</file>
+    <file>images/v_it_clear.png</file>
+    <file>images/v_it_ChDown.png</file>
     <file>images/load.png</file>
     <file>images/save.png</file>
     <file>images/reload.png</file>
@@ -37,7 +37,6 @@
     <file>images/elfig_besie.png</file>
     <file>images/elfig_lock.png</file>
     <file>images/elfig_cursor.png</file>
-    <file>images/ok.png</file>
     <file>images/edit.png</file>
     <file>images/editcopy.png</file>
     <file>images/editcut.png</file>

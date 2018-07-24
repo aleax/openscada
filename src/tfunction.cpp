@@ -1,7 +1,7 @@
 
-//OpenSCADA system file: tfunction.cpp
+//OpenSCADA file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -73,7 +73,7 @@ void TFunction::preDisable( int flag )
 	string mess;
 	for(unsigned i = 0; i < used.size(); i++)
 	    mess += used[i]->vfName()+", ";
-	throw err_sys(_("Function is used by: %s"), mess.c_str());
+	throw err_sys(_("Function used: %s"), mess.c_str());
     }
 }
 
@@ -135,7 +135,7 @@ int TFunction::ioIns( IO *io, int pos )
 
 void TFunction::ioDel( int pos )
 {
-    if(pos < 0 || pos >= (int)mIO.size()) throw err_sys(_("Delete IO '%d' error."), pos);
+    if(pos < 0 || pos >= (int)mIO.size()) throw err_sys(_("Error removing IO %d."), pos);
 
     preIOCfgChange();
     mIO.erase(mIO.begin()+pos);
@@ -146,7 +146,7 @@ void TFunction::ioDel( int pos )
 void TFunction::ioMove( int pos, int to )
 {
     if(pos < 0 || pos >= (int)mIO.size() || to < 0 || to >= (int)mIO.size())
-	throw err_sys(_("Move IO from %d to %d error."), pos, to);
+	throw err_sys(_("Error moving IO from %d to %d."), pos, to);
 
     preIOCfgChange();
     IO *io = mIO[to];
@@ -170,7 +170,7 @@ void TFunction::preIOCfgChange()
     for(unsigned i = 0; i < used.size(); i++)
 	if(used[i]->blk()) blk_lst += used[i]->vfName()+",";
     if(blk_lst.size())
-	throw err_sys(_("Change is not permitted while function is used: %s"), blk_lst.c_str());
+	throw err_sys(_("Changes are not possible because the function is used: %s"), blk_lst.c_str());
 
     for(unsigned i = 0; i < used.size(); i++) used[i]->preIOCfgChange();
 }
@@ -188,7 +188,7 @@ void TFunction::valAtt( TValFunc *vfnc )
     MtxAlloc res(dataRes(), true);
     for(unsigned i = 0; i < used.size(); i++)
 	if(used[i] == vfnc)
-	    throw err_sys(_("Value '%s' is already attached!"), vfnc->vfName().c_str());
+	    throw err_sys(_("The value '%s' is already connected!"), vfnc->vfName().c_str());
     used.push_back(vfnc);
 }
 
@@ -251,14 +251,14 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/func/st/use",_("Used"),R_R_R_,"root",grp,1,"tp","dec");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/func/cfg",_("Configuration"))) {
-		ctrMkNode("fld",opt,-1,"/func/cfg/id",_("Id"),R_R_R_,"root",grp,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),R_R_R_,"root",grp,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),R_R_R_,"root",grp,3,"tp","str","cols","90","rows","5");
+		ctrMkNode("fld",opt,-1,"/func/cfg/ID",_("Identifier"),R_R_R_,"root",grp,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/func/cfg/NAME",_("Name"),R_R_R_,"root",grp,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/func/cfg/DESCR",_("Description"),R_R_R_,"root",grp,3,"tp","str","cols","90","rows","5");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/io",_("IO")))
-	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),R_R_R_,"root",grp)) {
-		ctrMkNode("list",opt,-1,"/io/io/0",_("Id"),R_R_R_,"root",grp,1,"tp","str");
+	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),R_R_R_,"root",grp,1,"rows","5")) {
+		ctrMkNode("list",opt,-1,"/io/io/0",_("Identifier"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),R_R_R_,"root",grp,1,"tp","str");
@@ -302,9 +302,9 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",grp,SEC_WR))	setStart(s2i(opt->text()));
     }
     else if(a_path == "/func/st/use" && ctrChkNode(opt))	opt->setText(i2s(used.size()));
-    else if(a_path == "/func/cfg/id" && ctrChkNode(opt))	opt->setText(id());
-    else if(a_path == "/func/cfg/name" && ctrChkNode(opt))	opt->setText(name());
-    else if(a_path == "/func/cfg/descr" && ctrChkNode(opt))	opt->setText(descr());
+    else if(a_path == "/func/cfg/ID" && ctrChkNode(opt))	opt->setText(id());
+    else if(a_path == "/func/cfg/NAME" && ctrChkNode(opt))	opt->setText(name());
+    else if(a_path == "/func/cfg/DESCR" && ctrChkNode(opt))	opt->setText(descr());
     else if(a_path == "/io/io" && ctrChkNode(opt,"get",R_R_R_,"root",grp,SEC_RD)) {
 	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/io/io/0","");
 	XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/io/io/1","");
@@ -473,16 +473,16 @@ void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 	    mFunc->AHDConnect();
 	    mFunc->valAtt(this);
 	}
-	for(int i_vl = 0; i_vl < mFunc->ioSize(); i_vl++) {
+	for(int iVl = 0; iVl < mFunc->ioSize(); iVl++) {
 	    SVl val;
-	    val.tp = mFunc->io(i_vl)->type();
+	    val.tp = mFunc->io(iVl)->type();
 	    val.mdf = false;
 	    switch(val.tp)
 	    {
-		case IO::String:	val.val.s = new string(mFunc->io(i_vl)->def());	break;
-		case IO::Integer:	val.val.i = s2i(mFunc->io(i_vl)->def());	break;
-		case IO::Real:		val.val.r = s2r(mFunc->io(i_vl)->def());	break;
-		case IO::Boolean:	val.val.b = s2i(mFunc->io(i_vl)->def());	break;
+		case IO::String:	val.val.s = new string(mFunc->io(iVl)->def());	break;
+		case IO::Integer:	val.val.i = s2i(mFunc->io(iVl)->def());	break;
+		case IO::Real:		val.val.r = s2r(mFunc->io(iVl)->def());	break;
+		case IO::Boolean:	val.val.b = s2i(mFunc->io(iVl)->def());	break;
 		case IO::Object:	val.val.o = new AutoHD<TVarObj>(new TVarObj);	break;
 	    }
 	    mVal.push_back(val);
@@ -495,11 +495,10 @@ void TValFunc::funcDisConnect( bool det )
     ctxClear();
 
     if(mFunc) {
-	for(unsigned i_vl = 0; i_vl < mVal.size(); i_vl++)
-	    switch( mVal[i_vl].tp )
-	    {
-		case IO::String: delete mVal[i_vl].val.s;	break;
-		case IO::Object: delete mVal[i_vl].val.o;	break;
+	for(unsigned iVl = 0; iVl < mVal.size(); iVl++)
+	    switch( mVal[iVl].tp ) {
+		case IO::String: delete mVal[iVl].val.s;	break;
+		case IO::Object: delete mVal[iVl].val.o;	break;
 	    }
 
 	mVal.clear();
@@ -531,7 +530,7 @@ int TValFunc::ioSize( )
 
 TVariant TValFunc::get( unsigned id )
 {
-    if(id >= mVal.size())	throw TError("ValFnc", _("%s: Id or IO %d error!"),"getS()", id);
+    if(id >= mVal.size())	throw TError("ValFnc", _("%s: Error with ID or IO %d!"), "getS()", id);
     switch(mVal[id].tp)
     {
 	case IO::Integer:	return getI(id);
@@ -545,7 +544,7 @@ TVariant TValFunc::get( unsigned id )
 
 string TValFunc::getS( unsigned id )
 {
-    if(id >= mVal.size()) throw TError("ValFnc", _("%s: Id or IO %d error!"),"getS()", id);
+    if(id >= mVal.size()) throw TError("ValFnc", _("%s: Error with ID or IO %d!"),"getS()", id);
     switch(mVal[id].tp)
     {
 	case IO::Integer: { int tvl = getI(id);return (tvl!=EVAL_INT) ? i2s(tvl) : EVAL_STR; }
@@ -565,7 +564,7 @@ string TValFunc::getS( unsigned id )
 
 int TValFunc::getI( unsigned id )
 {
-    if(id >= mVal.size()) throw TError("ValFnc", _("%s: Id or IO %d error!"), "getI()", id);
+    if(id >= mVal.size()) throw TError("ValFnc", _("%s: Error with ID or IO %d!"), "getI()", id);
     switch(mVal[id].tp)
     {
 	case IO::String:  { string tvl = getS(id); return (tvl!=EVAL_STR) ? s2i(tvl) : EVAL_INT; }
@@ -579,7 +578,7 @@ int TValFunc::getI( unsigned id )
 
 double TValFunc::getR( unsigned id )
 {
-    if(id >= mVal.size()) throw TError("ValFnc", _("%s: Id or IO %d error!"), "getR()", id);
+    if(id >= mVal.size()) throw TError("ValFnc", _("%s: Error with ID or IO %d!"), "getR()", id);
     switch(mVal[id].tp)
     {
 	case IO::String:  { string tvl = getS(id); return (tvl!=EVAL_STR) ? s2r(tvl) : EVAL_REAL; }
@@ -593,7 +592,7 @@ double TValFunc::getR( unsigned id )
 
 char TValFunc::getB( unsigned id )
 {
-    if(id >= mVal.size()) throw TError("ValFnc", _("%s: Id or IO %d error!"), "getB()", id);
+    if(id >= mVal.size()) throw TError("ValFnc", _("%s: Error with ID or IO %d!"), "getB()", id);
     switch(mVal[id].tp)
     {
 	case IO::String:  { string tvl = getS(id); return (tvl!=EVAL_STR) ? (bool)s2i(tvl) : EVAL_BOOL; }
@@ -607,8 +606,8 @@ char TValFunc::getB( unsigned id )
 
 AutoHD<TVarObj> TValFunc::getO( unsigned id )
 {
-    if(id >= mVal.size()) throw TError("ValFnc", _("%s: Id or IO %d error!"), "getO()", id);
-    if(mVal[id].tp != IO::Object) throw TError("ValFnc", _("Get object from not object's IO %d error!"), id);
+    if(id >= mVal.size()) throw TError("ValFnc", _("%s: Error with ID or IO %d!"), "getO()", id);
+    if(mVal[id].tp != IO::Object) throw TError("ValFnc", _("Error getting object from non-object IO %d!"), id);
     mRes.lock();
     AutoHD<TVarObj> rez = *mVal[id].val.o;
     mRes.unlock();
@@ -617,7 +616,7 @@ AutoHD<TVarObj> TValFunc::getO( unsigned id )
 
 void TValFunc::set( unsigned id, const TVariant &val )
 {
-    if(id >= mVal.size())	throw TError("ValFnc", _("%s: Id or IO %d error!"), "setS()", id);
+    if(id >= mVal.size())	throw TError("ValFnc", _("%s: Error with ID or IO %d!"), "setS()", id);
     switch(mVal[id].tp)
     {
 	case IO::Integer:	setI(id, val.getI());	break;
@@ -630,7 +629,7 @@ void TValFunc::set( unsigned id, const TVariant &val )
 
 void TValFunc::setS( unsigned id, const string &val )
 {
-    if(id >= mVal.size())	throw TError("ValFnc", _("%s: Id or IO %d error!"), "setS()", id);
+    if(id >= mVal.size())	throw TError("ValFnc", _("%s: Error with ID or IO %d!"), "setS()", id);
     switch(mVal[id].tp)
     {
 	case IO::Integer:	setI(id, (val!=EVAL_STR) ? s2i(val) : EVAL_INT);	break;
@@ -650,7 +649,7 @@ void TValFunc::setS( unsigned id, const string &val )
 
 void TValFunc::setI( unsigned id, int val )
 {
-    if(id >= mVal.size())	throw TError("ValFnc", _("%s: Id or IO %d error!"), "setI()", id);
+    if(id >= mVal.size())	throw TError("ValFnc", _("%s: Error with ID or IO %d!"), "setI()", id);
     switch(mVal[id].tp)
     {
 	case IO::String:	setS(id, (val!=EVAL_INT) ? i2s(val) : EVAL_STR);	break;
@@ -666,7 +665,7 @@ void TValFunc::setI( unsigned id, int val )
 
 void TValFunc::setR( unsigned id, double val )
 {
-    if(id >= mVal.size())	throw TError("ValFnc", _("%s: Id or IO %d error!"), "setR()", id);
+    if(id >= mVal.size())	throw TError("ValFnc", _("%s: Error with ID or IO %d!"), "setR()", id);
     switch(mVal[id].tp)
     {
 	case IO::String:	setS(id, (val!=EVAL_REAL) ? r2s(val) : EVAL_STR);	break;
@@ -683,7 +682,7 @@ void TValFunc::setR( unsigned id, double val )
 
 void TValFunc::setB( unsigned id, char val )
 {
-    if(id >= mVal.size())	throw TError("ValFnc", _("%s: Id or IO %d error!"), "setB()", id);
+    if(id >= mVal.size())	throw TError("ValFnc", _("%s: Error with ID or IO %d!"), "setB()", id);
     switch(mVal[id].tp)
     {
 	case IO::String:	setS(id, (val!=EVAL_BOOL) ? i2s((bool)val) : EVAL_STR);	break;
@@ -699,7 +698,7 @@ void TValFunc::setB( unsigned id, char val )
 
 void TValFunc::setO( unsigned id, AutoHD<TVarObj> val )
 {
-    if(id >= mVal.size()) throw TError("ValFnc", _("%s: Id or IO %d error!"), "setO()", id);
+    if(id >= mVal.size()) throw TError("ValFnc", _("%s: Error with ID or IO %d!"), "setO()", id);
     switch(mVal[id].tp)
     {
 	case IO::String:	setS(id, val.at().getStrXML());	break;

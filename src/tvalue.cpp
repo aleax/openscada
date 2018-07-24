@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tvalue.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -118,7 +118,6 @@ void TValue::vlElemDet( TElem *ValEl )
 	    elem.erase(elem.begin()+i_e);
 	    return;
 	}
-    //throw err_sys(_("Element '%s' no present!"), ValEl->elName().c_str());
 }
 
 TElem &TValue::vlElem( const string &name )
@@ -126,7 +125,7 @@ TElem &TValue::vlElem( const string &name )
     for(unsigned i_e = 0; i_e < elem.size(); i_e++)
 	if(elem[i_e]->elName() == name)
 	    return *elem[i_e];
-    throw err_sys(_("Element '%s' is not present!"), name.c_str());
+    throw err_sys(_("Element '%s' is missing!"), name.c_str());
 }
 
 void TValue::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
@@ -264,7 +263,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		    }
 		    if(vl.at().fld().flg()&TFld::Selected) sType += _("-select");
 		    n_e->setAttr("help",
-			TSYS::strMess(_("Parameter's attribute\n"
+			TSYS::strMess(_("Parameter attribute\n"
 			    "  ID: '%s'\n"
 			    "  Name: '%s'\n"
 			    "  Type: '%s'\n"
@@ -273,7 +272,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		    if(vl.at().fld().values().size())
 			n_e->setAttr("help",n_e->attr("help")+_("\n  Values: ")+vl.at().fld().values());
 		    if(vl.at().fld().selNames().size())
-			n_e->setAttr("help",n_e->attr("help")+_("\n  Selected names: ")+vl.at().fld().selNames());
+			n_e->setAttr("help",n_e->attr("help")+_("\n  Names for selection: ")+vl.at().fld().selNames());
 		}
 	    }
 	}
@@ -481,7 +480,7 @@ string TVal::setArch( const string &nm )
 
 string TVal::getSEL( int64_t *tm, bool sys )
 {
-    if(!(fld().flg()&TFld::Selected))	throw TError("Val", _("Not select type!"));
+    if(!(fld().flg()&TFld::Selected))	throw TError("Val", _("Not selective type!"));
     switch(fld().type()) {
 	case TFld::String:	return fld().selVl2Nm(getS(tm,sys));
 	case TFld::Integer:	return fld().selVl2Nm(getI(tm,sys));
@@ -639,7 +638,7 @@ AutoHD<TVarObj> TVal::getO( int64_t *tm, bool sys )
 
 void TVal::setSEL( const string &value, int64_t tm, bool sys )
 {
-    if(!(fld().flg()&TFld::Selected))	throw TError("Val", _("Not select type!"));
+    if(!(fld().flg()&TFld::Selected))	throw TError("Val", _("Not selective type!"));
     switch(fld().type()) {
 	case TFld::String:	setS(fld().selNm2VlS(value), tm, sys);	break;
 	case TFld::Integer:	setI(fld().selNm2VlI(value), tm, sys);	break;
@@ -674,7 +673,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    //Set value to config
 	    if(mCfg)	{ src.cfg->setS( value ); return; }
 	    //Check to write
-	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val", _("Write access is denied!"));
+	    if(!sys && fld().flg()&TFld::NoWrite) return;
 	    //Set current value and time
 	    dataRes().lock();
 	    string pvl = *val.s;
@@ -686,7 +685,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setS(value,time()); }
-		catch(TError &err) { mess_sys(TMess::Error, _("Write value to archive error: %s"), err.mess.c_str()); }
+		catch(TError &err) { mess_sys(TMess::Error, _("Error writing a value to the archive: %s"), err.mess.c_str()); }
 	    break;
 	}
 	default: break;
@@ -704,7 +703,7 @@ void TVal::setI( int value, int64_t tm, bool sys )
 	    //Set value to config
 	    if(mCfg)	{ src.cfg->setI(value); return; }
 	    //Check to write
-	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val", _("Write access is denied!"));
+	    if(!sys && fld().flg()&TFld::NoWrite) return;
 	    //Set current value and time
 	    if(!(fld().flg()&TFld::Selected) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT)
 		value = vmin(fld().selValI()[1], vmax(fld().selValI()[0],value));
@@ -715,7 +714,7 @@ void TVal::setI( int value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setI(value,time()); }
-		catch(TError &err) { mess_sys(TMess::Error, _("Write value to archive error: %s"), err.mess.c_str()); }
+		catch(TError &err) { mess_sys(TMess::Error, _("Error writing a value to the archive: %s"), err.mess.c_str()); }
 	    break;
 	}
 	default: break;
@@ -733,7 +732,7 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    //Set value to config
 	    if(mCfg)	{ src.cfg->setR(value); return; }
 	    //Check to write
-	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val", _("Write access is denied!"));
+	    if(!sys && fld().flg()&TFld::NoWrite) return;
 	    //Set current value and time
 	    if(!(fld().flg()&TFld::Selected) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL)
 		value = vmin(fld().selValR()[1], vmax(fld().selValR()[0],value));
@@ -744,7 +743,7 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setR(value, time()); }
-		catch(TError &err) { mess_sys(TMess::Error, _("Write value to archive error: %s"), err.mess.c_str()); }
+		catch(TError &err) { mess_sys(TMess::Error, _("Error writing a value to the archive: %s"), err.mess.c_str()); }
 	    break;
 	}
 	default: break;
@@ -762,7 +761,7 @@ void TVal::setB( char value, int64_t tm, bool sys )
 	    //Set value to config
 	    if(mCfg)	{ src.cfg->setB(value); return; }
 	    //Check to write
-	    if(!sys && fld().flg()&TFld::NoWrite) return; //throw TError("Val", _("Write access is denied!"));
+	    if(!sys && fld().flg()&TFld::NoWrite) return;
 	    //Set current value and time
 	    char pvl = val.b; val.b = value;
 	    mTime = tm;
@@ -771,7 +770,7 @@ void TVal::setB( char value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setB(value,time()); }
-		catch(TError &err) { mess_sys(TMess::Error, _("Write value to archive error: %s"), err.mess.c_str()); }
+		catch(TError &err) { mess_sys(TMess::Error, _("Error writing a value to the archive: %s"), err.mess.c_str()); }
 	    break;
 	}
 	default: break;
@@ -783,7 +782,7 @@ void TVal::setO( AutoHD<TVarObj> value, int64_t tm, bool sys )
     if(mCfg || fld().type() != TFld::Object) return;
     //Set value to config. Set object to config did not support
     //Check to write
-    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val",_("Write access is denied!"));
+    if(!sys && fld().flg()&TFld::NoWrite) return;
     //Set current value and time
     dataRes().lock();
     AutoHD<TVarObj> pvl = *val.o;
@@ -890,7 +889,7 @@ void TVal::cntrCmdProc( XMLNode *opt )
 		opt->setAttr("tm", ll2s(tm));
 	    }
 	    else if(!arch().freeStat()) arch().at().cntrCmdProc(opt);
-	    else throw err_sys(_("Attribute doesn't have archive"));
+	    else throw err_sys(_("Attribute does not have an archive"));
 	}
 	else if(ctrChkNode(opt,"name",RWRWRW,"root",SDAQ_ID,SEC_RD)) {	//Archive name request
 	    if(owner().vlPresent("NAME") && owner().vlAt("NAME").at().getS().size())

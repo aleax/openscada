@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -121,6 +121,8 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 	}
 	syslog(level_sys, "%s", sMess.c_str());
     }
+    if(mLogDir&(DIR_STDOUT|DIR_STDERR) && SYS->cmdOpt("consoleCharSet").size())
+	sMess = Mess->codeConvOut(SYS->cmdOpt("consoleCharSet"), sMess);
     if(mLogDir&DIR_STDOUT)	fprintf(stdout, "%s %s\n", atm2s(time(NULL),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
     if(mLogDir&DIR_STDERR)	fprintf(stderr, "%s %s\n", atm2s(time(NULL),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
 
@@ -186,7 +188,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
     if(hd == (iconv_t)(-1)) {
-	mess_crit("IConv", _("Error 'iconv' open: %s"), strerror(errno));
+	//mess_crit("IConv", _("Error opening 'iconv': %s"), strerror(errno));	//But there can be a recursion for a wrong charset.
 	return mess;
     }
 
@@ -198,7 +200,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 	olen = sizeof(outbuf)-1;
 	size_t rez = iconv(hd, &ibuf, &ilen, &obuf, &olen);
 	if(rez == (size_t)(-1) && (errno == EINVAL || errno == EBADF)) {
-	    mess_crit("IConv", _("Error input sequence convert: %s"), strerror(errno));
+	    //mess_crit("IConv", _("Error converting input sequence: %s"), strerror(errno));	//But there can be a recursion for a wrong charset.
 	    buf = mess;
 	    break;
 	}
@@ -208,7 +210,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     iconv_close(hd);
 
     //> Deadlock possible on the error message print
-    //if(chwrcnt)	mess_err("IConv", _("Error converting %d symbols from '%s' to '%s' for message part: '%s'(%d)"),
+    //if(chwrcnt)	mess_err("IConv", _("Error converting %d symbols from '%s' to '%s' for the message part: '%s'(%d)"),
     //		    chwrcnt, fromCH.c_str(), toCH.c_str(), mess.substr(0,20).c_str(), mess.size());
 
     return buf;
@@ -240,7 +242,6 @@ void TMess::load( )
 {
     //Load params from command line
     string argVl;
-    if(s2i(SYS->cmdOpt("h")) || s2i(SYS->cmdOpt("help"))) return;
     if((argVl=SYS->cmdOpt("lang")).size()) setLang(argVl, true);
     if((argVl=SYS->cmdOpt("messLev")).size()) {
 	int i = s2i(argVl);
@@ -266,7 +267,7 @@ void TMess::save( )
 const char *TMess::labDB( )
 {
     return _("DB address in format \"{DB module}.{DB name}\".\n"
-	     "For use the main work DB set '*.*'.");
+	     "Set '*.*' for use the main work DB.");
 }
 
 const char *TMess::labSecCRON( )
@@ -302,6 +303,13 @@ const char *TMess::labTaskPrior( )
 	     "  0         - standard userspace priority;\n"
 	     "  1...99    - realtime priority level (round-robin), often allowed only for \"root\";\n"
 	     "  100...199 - realtime priority level (FIFO), often allowed only for \"root\".");
+}
+
+const char *TMess::labMessCat( )
+{
+    return _("Specifies the category of the requested messages.\n"
+	     "Use template's symbols for group selection:\n  '*' - any substring;\n  '?' - any character.\n"
+	     "Regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/).");
 }
 
 int TMess::getUTF8( const string &str, int off, int32_t *symb )

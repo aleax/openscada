@@ -1,5 +1,5 @@
 
-//OpenSCADA system module UI.WebCfg file: web_cfg.cpp
+//OpenSCADA module UI.WebCfg file: web_cfg.cpp
 /***************************************************************************
  *   Copyright (C) 2004-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
@@ -31,13 +31,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"WebCfg"
-#define MOD_NAME	_("System configurator (WEB)")
+#define MOD_NAME	_("Program configurator (WEB)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.5"
+#define MOD_VER		"1.7.8"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA system.")
+#define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -661,7 +661,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
 {
     map<string, string>::iterator cntEl;
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,page);
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, page);
 
     //Commands process
     ses.page = pgHead();

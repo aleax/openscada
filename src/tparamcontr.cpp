@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tparamcontr.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -77,11 +77,11 @@ TCntrNode &TParamContr::operator=( const TCntrNode &node )
 	//Archives creation and copy
 	vector<string> a_ls;
 	vlList(a_ls);
-	for(unsigned i_a = 0; i_a < a_ls.size(); i_a++) {
-	    if(!src_n->vlPresent(a_ls[i_a]) || src_n->vlAt(a_ls[i_a]).at().arch().freeStat()) continue;
+	for(unsigned iA = 0; iA < a_ls.size(); iA++) {
+	    if(!src_n->vlPresent(a_ls[iA]) || src_n->vlAt(a_ls[iA]).at().arch().freeStat()) continue;
 
-	    vlAt(a_ls[i_a]).at().setArch();
-	    (TCntrNode&)vlAt(a_ls[i_a]).at().arch().at() = (TCntrNode&)src_n->vlAt(a_ls[i_a]).at().arch().at();
+	    vlAt(a_ls[iA]).at().setArch();
+	    (TCntrNode&)vlAt(a_ls[iA]).at().arch().at() = (TCntrNode&)src_n->vlAt(a_ls[iA]).at().arch().at();
 	}
     }
 
@@ -114,9 +114,9 @@ void TParamContr::preDisable(int flag)
     //Delete or stop the archives
     vector<string> a_ls;
     vlList(a_ls);
-    for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
-	if(!vlAt(a_ls[i_a]).at().arch().freeStat()) {
-	    string arh_id = vlAt(a_ls[i_a]).at().arch().at().id();
+    for(unsigned iA = 0; iA < a_ls.size(); iA++)
+	if(!vlAt(a_ls[iA]).at().arch().freeStat()) {
+	    string arh_id = vlAt(a_ls[iA]).at().arch().at().id();
 	    if((flag>>8) == RM_Full) SYS->archive().at().valDel(arh_id, true);
 	    else SYS->archive().at().valAt(arh_id).at().stop();
 	}
@@ -151,9 +151,9 @@ void TParamContr::save_( )
     //Save archives
     vector<string> a_ls;
     vlList(a_ls);
-    for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
-	if(!vlAt(a_ls[i_a]).at().arch().freeStat())
-	    vlAt(a_ls[i_a]).at().arch().at().save();
+    for(unsigned iA = 0; iA < a_ls.size(); iA++)
+	if(!vlAt(a_ls[iA]).at().arch().freeStat())
+	    vlAt(a_ls[iA]).at().arch().at().save();
 }
 
 bool TParamContr::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
@@ -171,8 +171,8 @@ void TParamContr::disable( )
 void TParamContr::vlGet( TVal &val )
 {
     if(val.name() == "err") {
-	if(!enableStat()) val.setS(_("1:Parameter is disabled."), 0, true);
-	else if(!owner().startStat()) val.setS(_("2:Controller is stopped."), 0, true);
+	if(!enableStat()) val.setS(_("1:Parameter disabled."), 0, true);
+	else if(!owner().startStat()) val.setS(_("2:Acquisition stopped."), 0, true);
 	else val.setS("0", 0, true);
     }
 }
@@ -240,7 +240,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		if(!enableStat() && owner().owner().tpPrmSize() > 1)
 		    ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","select","select","/prm/tpLst",
-			"help",_("Change type lead to data lost for specific configurations."));
+			"help",_("The type changing leads to lose some data of the specific configurations."));
 		else ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		if(owner().enableStat())
 		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enabled"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
@@ -258,7 +258,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    if(!owner().enableStat())	throw err_sys(_("Controller is not started!"));
+	    if(!owner().enableStat())	throw err_sys(_("Controller is not running!"));
 	    else s2i(opt->text()) ? enable() : disable();
 	}
     }
@@ -267,10 +267,10 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setText("");
         vector<string> lls, ls;
 	SYS->daq().at().tmplLibList(lls);
-	for(unsigned i_l = 0; i_l < lls.size(); i_l++) {
-	    SYS->daq().at().tmplLibAt(lls[i_l]).at().list(ls);
-	    for(unsigned i_t = 0; i_t < ls.size(); i_t++)
-		opt->childAdd("el")->setText(lls[i_l]+"."+ls[i_t]);
+	for(unsigned iL = 0; iL < lls.size(); iL++) {
+	    SYS->daq().at().tmplLibAt(lls[iL]).at().list(ls);
+	    for(unsigned iT = 0; iT < ls.size(); iT++)
+		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
 	}
     }
     else if(a_path == "/prm/tpLst" && ctrChkNode(opt))
