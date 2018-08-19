@@ -12,14 +12,6 @@
 </div>
 			<h1 id="firstHeading" lang="en">Modules/Siemens</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Siemens/ru" title="Модули/Siemens (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Siemens/uk" title="Модулі/Siemens (100% translated)">українська</a></div></div>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> The translation checking and actualizing
-</td></tr></table>
-</div>
 <table class="wikitable">
 
 <tr>
@@ -37,109 +29,128 @@
 
 <tr>
 <td> <a href="../Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a> </td>
-<td> Siemens DAQ </td>
-<td> 2.0 </td>
+<td> Siemens DAQ and Beckhoff
+</td>
+<td> 2.1 </td>
 <td> GPL2 </td>
 <td> daq_Siemens.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> DAQ </td>
-<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
-<td> Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol, and LibnoDave library, or self, for the rest.
+<td> Roman Savochenko<br /><font size="-2"><i>Maxim Lysenko (2009) — the page translation</i></font> </td>
+<td> Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol) and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the protocol TwinCAT ADS/AMS due it working with data blocks also.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Communication_controllers_CIF"><span class="tocnumber">1</span> <span class="toctext">Communication controllers CIF</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#Object_of_controller_of_the_data_source"><span class="tocnumber">2</span> <span class="toctext">Object of controller of the data source</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Object_of_parameter_of_the_data_source"><span class="tocnumber">3</span> <span class="toctext">Object of parameter of the data source</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#Asynchronous_recording_mode"><span class="tocnumber">4</span> <span class="toctext">Asynchronous recording mode</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Controller_object"><span class="tocnumber">2</span> <span class="toctext">Controller object</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Parameters"><span class="tocnumber">3</span> <span class="toctext">Parameters</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Asynchronous_writing_mode"><span class="tocnumber">4</span> <span class="toctext">Asynchronous writing mode</span></a></li>
 <li class="toclevel-1 tocsection-5"><a href="#Notes"><span class="tocnumber">5</span> <span class="toctext">Notes</span></a></li>
 <li class="toclevel-1 tocsection-6"><a href="#Links"><span class="tocnumber">6</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
-<p>The primary aim of creating the module is to provide support for industrial controllers of firm Siemens of series S7(S7-200,300,400). Historically, access to the controllers of the firm in the ProfiBus network is made only through its own communication processor (CP5412, CP5613, etc.) and the protocol S7. These communications processors and API to the protocol S7 are rather expensive, in addition to the drivers for the communication processors and S7 API are closed and are only available for the platform Intel + MS Windows (I met the information on opportunities to buy for Linux).
-</p><p>As an alternative to communication processors of the company Siemens, which allows you to fully work with the controllers of Siemens, is the range of communication products of firm Hilscher(<a class="external free" href="http://hilscher.com" rel="nofollow noreferrer noopener" target="_blank">http://hilscher.com</a>), through the communications processors CIF of series PB(Profibus) and the library LibnoDave (<a class="external free" href="http://libnodave.sourceforge.net" rel="nofollow noreferrer noopener" target="_blank">http://libnodave.sourceforge.net</a>).
-</p><p>Feature of the Hilscher products is completely open specification of the protocol of exchange with the communication processor, the unified driver for all cards CIF, the availability of drivers for many common operating systems(OS) and openness of the driver for OS Linux(GPL).
-</p><p>The basis of the module is the driver of version 2.621 of Hilsher, kindly provided by Hilsher in the face of <a class="external text" href="mailto:DTsaava@hilscher.com" rel="nofollow noreferrer noopener" target="_blank">Devid Tsaava</a> for the 2.6 series kernels of OS Linux. Everything needed files to building are included in the module and it is don't needed to satisfy any special dependencies. The driver version 2.621 for the CIF cards is available for download <a class="external" href="http://oscada.org/wiki/File:Siemens_cif2621.tgz" title="File:Siemens cif2621.tgz">cif2621.tgz</a>.
-</p><p>The range of boards of CIF family of firm Hilsher and unified driver supports the widest range of equipment. To lay support all these features in this module without having all the equipment on hands, it is not possible. Therefore, the support of the equipment will be added on demand and availability of the equipment. As of version 2.0.0 module provides support for data sources on the network via ProfiBus or MPI by means of MPI protocol at the network speed of 9600Bod to 12MBod. In particular, supported and it is carried out check on the controllers of the Siemens company of family S7 (S7-200,300,400).
-</p><p>Library LibnoDave is an implementation of the MPI, S7, ISO-TSAP and others protocols by means of revers-engineering, that are used in interaction with the controllers of Siemens. The library supports many MPI and USB adapters, as well as ProfiNet. Communication processors firm Siemens, on platforms other than MS Windows, the library doesn't support. At this stage, module support the protocol ISO-TSAP (ProfiNet) through the library LibnoDave. Library LibnoDave fully incorporated in this module and does not require a special permit of any dependencies during building and in the performance.
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Into the library LibnoDave presents hard-catches errors, which at all reproduced on a high loading, that causes to the process memory corruption and <a class="external" href="http://oscada.org/wiki/File:Siemens_crash_20160127_0911.crash.gz" title="File:Siemens crash 20160127 0911.crash.gz">crashes</a> into unexpected points. By this reason from version 2 of the module a process was started to rewrite need functions, and for now the ISO-TCP code rewrote and ready to use.
+<p>The primary goal of this module was to support the Siemens S7 industrial controllers (S7-200,300,400,1200). Historically, access to the controllers of this company in the ProfiBus network is carried out only through its own communication processors (CP5412, CP5613, etc.) and its own protocol S7. The specified communication processors and APIs for the S7 protocol are quite expensive, besides, the drivers for the communication processors and the S7 API are closed, and also available only for the Intel + MS Windows platform (there was some information about the possibility of purchasing it for Linux).
+</p><p>As an alternative to communication processors of the company Siemens, which allows you to fully work with the Siemens controllers, is the range of communication products of the firm <a class="external text" href="http://hilscher.com" rel="nofollow noreferrer noopener" target="_blank">Hilscher</a>, through the communications processors CIF of the series ProfiBus (PB) and the library <a class="external text" href="http://libnodave.sourceforge.net" rel="nofollow noreferrer noopener" target="_blank">LibnoDave</a>.
+</p><p>Feature of the Hilscher products is completely open specification of the protocol of exchange with the communication processor, the unified driver for all CIF cards, the availability of drivers for many common operating systems (OS) and openness of the driver for OS Linux (GPL).
+</p><p>The basis of the module is the driver of the version 2.621 of the firm Hilsher, kindly provided by Hilsher in the face of <a class="external text" href="mailto:DTsaava@hilscher.com" rel="nofollow noreferrer noopener" target="_blank">Devid Tsaava</a> for the 2.6 series kernels of OS Linux. All files needed for the assembly are included in the module and it does not require special dependencies. The driver version 2.621 of the CIF cards is available to download <a class="external" href="http://oscada.org/wiki/File:Siemens_cif2621.tgz" title="File:Siemens cif2621.tgz">here</a>.
+</p><p>The CIF family boards of the firm Hilsher and the unified driver support the widest range of equipment. To support all these features in this module without having all this equipment in the hands is not possible. Therefore, the support of this or that equipment will be added as needed and the availability of the equipment. In version 2.0.0, the module provides for support of the data sources in ProfiBus or MPI networks, via MPI, at network speeds from 9600Bod to 12MBod. In particular, the controllers of the firm Siemens of the family S7 (S7-200,300,400) are supported and verified.
+</p><p>The library LibnoDave is an implementation, by means of revers-engineering, of the MPI, S7, ISO-TSAP and others protocols, those are used in interaction with the Siemens controllers. The library supports many MPI and USB adapters, as well as ProfiNet. Siemens communication processors, on platforms other than MS Windows, are not supported by the library. Through the library LibnoDave, at this stage, the module has support for the protocol ISO-TSAP (ProfiNet). Library LibnoDave fully incorporated in this module and does not require a special permit of any dependencies during building and in the performance. The LibnoDave library is fully included in this module and it does not require dependencies to be resolved both during assembly and execution.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The LibnoDave library code contains sophisticated bugs, those are mostly reproduced under heavy load and at the time of connections, which result in damage to the process memory and <a class="external" href="http://oscada.org/wiki/File:Siemens_crash_20160127_0911.crash.gz" title="File:Siemens crash 20160127 0911.crash.gz">crashing</a> in unexpected locations. In this regard, from version 2 of this module, the process of rewriting the required functions is started and the connection code of ISO-TCP is ready for use.
 </p><p>Also, the module implements the functions of the horizontal redundancy, working in conjunction with the remote station of the same level. In addition to the synchronization of the archives of values and archives of attributes of parameters the module implements synchronization of computational templates, in order to shockless catch of the algorithms.
 </p>
 <h2><span class="mw-headline" id="Communication_controllers_CIF"><span class="mw-headline-number">1</span> Communication controllers CIF</span></h2>
-<p>CIF family card driver supports the ability to install up to 4 CIF boards. In order to control the availability of cards in the system and their possible configurations, the module provides a form of control and configuration of the CIF-cards(Fig. 1).
+<p>CIF family card driver supports the ability to install up to 4 CIF boards. In order to control the availability of cards in the system and their possible configurations, the module provides a form of control and configuration of the CIF-cards (Fig.1).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:786px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cif_dev.png"><img class="thumbimage" height="567" src="../files/Siemens_cif_dev.png" width="784" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of CIF-boards.</div></div></div></div>
-<p>Using this form you can verify the existence of communication processors and their configuration, and configure the network settings of PB ProfiBus in the form of addresses of communication processor and speeds of bus ProfiBus. In the other tab of the module(Fig.2) you can verify the presence of various stations in the network ProfiBus.
+<p>Using this form you can verify the existence of communication processors and their configuration, and configure the network settings of ProfiBus in the view of the PB address of the communication processor and speeds of the bus ProfiBus. In the other tab of the module (Fig.2) you can verify the presence of various stations in the network ProfiBus.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:634px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_pb.png"><img class="thumbimage" height="559" src="../files/Siemens_pb.png" width="632" /></a>  <div class="thumbcaption">Fig.2. Monitoring tab of a ProfiBus network.</div></div></div></div>
-<h2><span class="mw-headline" id="Object_of_controller_of_the_data_source"><span class="mw-headline-number">2</span> Object of controller of the data source</span></h2>
-<p>To add a data source it is created and configured an object of controller in the system OpenSCADA. Example of the configuration tab of the object controller of this type is shown in Figure 3.
+<h2><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">2</span> Controller object</span></h2>
+<p>To add a data source the controller object of OpenSCADA creates and configures. An example of a configuration tab for a controller object of this type is shown in Figure 3.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:718px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cntr.png"><img class="thumbimage" height="717" src="../files/Siemens_cntr.png" width="716" /></a>  <div class="thumbcaption">Fig.3. Configuration tab of a controller.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:718px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cntr.png"><img class="thumbimage" height="717" src="../files/Siemens_cntr.png" width="716" /></a>  <div class="thumbcaption">Fig.3. Configuration tab of a controller object.</div></div></div></div>
 <p>Using this tab you can set:
 </p>
-<ul><li> The state of the controller, as follows: State, "Enable", "Run" and the name of the database containing the configuration.</li>
-<li> Id, name and description of the controller.</li>
-<li> The state, in which the controller must be translated at boot: "Enable" and "Run".</li>
-<li> Name of table to store the configuration of the parameters of the controller.</li>
-<li> The acquisition schedule policy and the priority of the task of data acquisition.</li>
-<li> Restore timeout, in seconds, after the connection lost.</li>
-<li> Mode of asynchronous recording in the remote controllers.</li>
-<li> Connection type. Supported:
-<ul><li> <i>CIF_PB</i> — connection to controllers series S7, by firm Siemens, by communication unit CIF-50PB or like;</li>
-<li> <i>ISO_TCP</i>, <i>ISO_TCP243</i> — connection to controllers series S7, by firm Siemens, by Ethernet network (TCP243 by CP243);</li>
-<li> <i>ADS</i> — TwinCAT ADS/AMS protocol for connection to controllers firm Beckhoff.</li></ul></li>
-<li> Remote controller address. For connections:
-<ul><li> <i>CIF_PB</i> — controller address in "ProfiBus" network, digit 0-255;</li>
-<li> <i>ISO_TCP</i>, <i>ISO_TCP243</i> — IP-address into Ethernet network;</li>
-<li> <i>ADS</i> — Network identifier and port for target and source stations, in view <b>{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}</b> (for example: "192.168.0.1.1.1:801|82.207.88.73.1.1:801"), where:
-<ul><li> <i>AMSNetId</i> — network identifier, write into six digits 0-255, for example: "192.168.0.1.1.1";</li>
-<li> <i>AMSPort</i> — port, write into one digit 0-65535.</li></ul></li></ul></li>
-<li> Slot CPU in which the central processor of the controller is placed.</li>
+<ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li>
+<li> Identifier, name and description of the controller.</li>
+<li> The state "Enabled" and "Running", in which the controller object must be translated at boot.</li>
+<li> Name of table of storing the configuration of the parameters of the controller object.</li>
+<li> Policy of scheduling and priority of the data acquisition task.</li>
+<li> Connection recovery time, in seconds, after lost connection.</li>
+<li> Mode of asynchronous writing to the remote controller.</li>
+<li> Connection type, supported ones:
+<ul><li> <i>CIF_PB</i> — connection to S7 controllers of the firm Siemens via CIF-50PB communication processor or similar;</li>
+<li> <i>ISO_TCP</i>, <i>ISO_TCP243</i> — connection to S7 controllers of the firm Siemens via the Ethernet network (TCP243 by CP243);</li>
+<li> <i>ADS</i> — TwinCAT ADS/AMS protocol for connecting to controllers of the firm Beckhoff.</li></ul></li>
+<li> Remote controller address, for the connections:
+<ul><li> <i>CIF_PB</i> — controller address in the ProfiBus network, one digit 0-255;</li>
+<li> <i>ISO_TCP</i>, <i>ISO_TCP243</i> — IP-address into the Ethernet network;</li>
+<li> <i>ADS</i> — network identifier and port for the target and source stations, in view <b>{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}</b> (for example: "192.168.0.1.1.1:801|82.207.88.73.1.1:801"), where:
+<ul><li> <i>AMSNetId</i> — network identifier, writes in view of six digits 0-255, for example: "192.168.0.1.1.1";</li>
+<li> <i>AMSPort</i> — port, writes in view of one digit 0-65535.</li></ul></li></ul></li>
+<li> CPU slot of the PLC in which the central processor of the controller is placed.</li>
 <li> CIF card used for access to the industrial controller through CIF communication processors.</li>
-<li> Output transport OpenSCADA, used by protocol "ADS" (port 48898, 801 for AMS) and "ISO_TCP" (port 102) for requests transmission.</li></ul>
-<h2><span class="mw-headline" id="Object_of_parameter_of_the_data_source"><span class="mw-headline-number">3</span> Object of parameter of the data source</span></h2>
-<p>Given the high intellectuality of data sources in the face of industrial controllers of Siemens S7-200,300,400, the objects of parameter are executed on the basis of <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/LogicLevParam" rel="nofollow noreferrer noopener" target="_blank">templates</a>. This approach allows us to go beyond a rigid list of types of parameters, which limits the possibilities of the controllers, and provide users with the ability to build the necessary types of parameters independently or use the library of already been developed types of parameters (templates).
-</p><p>Accordingly, the module provides only one type of parameters — "Logical". Additional configuration fields of the parameters of the module (Figure 4) is the fields of selected template of the parameter.
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Transports" title="Special:MyLanguage/Documents/Program manual">OpenSCADA output transport</a> for the protocol ADS (port 48898, 801 for AMS) and ISO_TCP (port 102) for sending requests.</li></ul>
+<h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3</span> Parameters</span></h2>
+<p>Given the high intelligence of data sources, in the face of the industrial controllers of Siemens S7-200,300,400,1200, the parameter objects are executed on the basis of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev" title="Special:MyLanguage/Documents/DAQ">templates</a>. This approach allows you not to be restricted to a rigid list of types of parameters, which also restricts the capabilities of controllers, but to allow the user to create the required types of parameters independently, or to use libraries of earlier developed types of parameters — templates.
+</p><p>Based on this, the module provides only one type of parameters — "Logical". The additional configuration fields of the parameters of this module (Fig.4) is the selection field of the parameter template.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:718px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm.png"><img class="thumbimage" height="500" src="../files/Siemens_prm.png" width="716" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of a parameter.</div></div></div></div>
-<p>To configure a template of parameter it is made the appropriate tab. The contents of this tab is defined by the configuration of the template that is the corresponding link fields and fields of setting the constants are formed.
-</p><p>Types of links depend on the type of parameter in the template (boolean, integer, real and string) and the definition of link value(for the group of links). Definition of the group link in the template is written in the format: "{Name of the link}|{Offset in the database}|{Size of the value}", where:
+<p>To configure the parameter template a corresponding tab is provided, the content of which is determined by the configuration of the template, that is the corresponding link fields and constant ones are created.
+</p><p>The link types are determined by the parameter type in the template (Logical, Integer, Real, and String) and the definition of the link value (for group links). The definition of a group link in the template is written in the format: "<b>{Name of the link}|{Offset in the data block}[|{Size of the value}]</b>", where:
 </p>
-<dl><dd><i>Name of the link</i> — Name of the group link. All links with the same name are grouped and shown as a link to the database or database with the specified offset.</dd>
-<dd><i>Offset in the database</i> — Name of the offset in the data block (DB). If only database in the configuration of the template is specified the offset will be specified for the parameter, but if in the configuration of the template the offset will be specified too, the both offsets are summarized together. This approach allows to access a variety of structures in single data block. DB number and offset you can set into decimal (3245) and hexadecimal forms (0xCAD).</dd>
-<dd><i>Size of the value</i> — Optional field that specifies a custom size of the value in the controller. The following sizes of types of values are provided:
-<dl><dd><i>Integer:</i> — 1 byte(signed), 2 byte(signed by default) and 4 byte(signed).</dd>
-<dd><i>Real:</i> — 4 byte(float by default), 8 byte(double).</dd>
+<dl><dd><i>Name of the link</i> — group link name. All references with the same name are grouped and indicated as one reference to the data block or data block with the specified offset.</dd>
+<dd><i>Offset in the data block</i> — offset number in the data block. If you specify only the data block, when configuring the template, this offset will be specified for the parameter. If the configuration of the template also specifies an offset, both offsets will be summed together. This approach allows you to access several structures in one data block. The data block number and the offset can be specified in the decimal (3245) and hexadecimal format (0xCAD).</dd>
+<dd><i>Size of the value</i> — optional field that defines the non-standard size of the value in the controller. The following sizes of values types are provided:
+<dl><dd><i>Integer:</i> — 1 byte(signed), 2 bytes(signed by default) and 4 bytes(signed).</dd>
+<dd><i>Real:</i> — 4 bytes(float by default), 8 bytes(double).</dd>
 <dd><i>Boolean:</i> — always one byte (with a bit through the point - DB1.10.1).</dd>
 <dd><i>String:</i> — 10 byte(by default) and 1-200 can be set.</dd></dl></dd></dl>
-<p>An illustrative example of the overall process of the configuration of parameter form the template and to the values is shown in Figures from 5 to 8.
+<p>An illustrative example of the general process of configuring a parameter from a template to values is shown in Figures from 5 to 8.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_tmpl.png"><img class="thumbimage" height="595" src="../files/Siemens_tmpl.png" width="780" /></a>  <div class="thumbcaption">Fig.5. Example of a template with grouping.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:708px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm_tmpl.png"><img class="thumbimage" height="513" src="../files/Siemens_prm_tmpl.png" width="706" /></a>  <div class="thumbcaption">Fig.6. Configuration tab of a template of a parameter.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:708px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm_tmpl_off.png"><img class="thumbimage" height="513" src="../files/Siemens_prm_tmpl_off.png" width="706" /></a>  <div class="thumbcaption">Fig.7. Configuration tab of a template of a parameter with an indication of the parameters separately.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:708px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm_val.png"><img class="thumbimage" height="547" src="../files/Siemens_prm_val.png" width="706" /></a>  <div class="thumbcaption">Fig.8. Values of a parameter.</div></div></div></div>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The module supports only the data blocks(DB) of the controllers addressing.
-</p><p>The module provides a special treatment of a number of attributes of the template:
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The module supports only the data blocks (DB) addressing of the controllers.
+</p><p>The module provides special processing of a number of attributes of the template:
 </p>
-<ul><li> <i>f_frq</i> — Frequency computation the procedure template, or time after a last calculation, the negative, in seconds, for scheduling by CRON, read-only.</li>
-<li> <i>f_start</i> — First calculate of the template's procedure, like start, read-only.</li>
-<li> <i>f_stop</i> — Last calculate of the template's procedure, like stop, read-only.</li>
-<li> <i>f_err</i> — Parameter error, full access. Value of the attribute is set to the parameter's error attribute "err".</li>
-<li> <i>SHIFR</i> — Parameter code, read-only.</li>
-<li> <i>NAME</i> — Parameter name, read-only.</li>
-<li> <i>DESCR</i> — Parameter description, read-only.</li>
-<li> <i>this</i> — Parameter object, allow access to attributes of the parameter, for example to their archives access.</li></ul>
-<h2><span class="mw-headline" id="Asynchronous_recording_mode"><span class="mw-headline-number">4</span> Asynchronous recording mode</span></h2>
-<p>Standard recording mode for SCADA-systems interacting with the PLC, is the synchronous, because it allows to control the correctness of the conclusion of the record operation. However, in cases of recording multiple parameters at once and often, this approach is not justified in view of sending a multitude of small requests to the controller that overrides the PLC and has a large time interval. The solution is asynchronous recording of an adjacent values by means of the single block. This is supported by this module and it allows you to record all parameters immediately by the adjacent blocks of 240 byte. Read and write in this mode is performed by adjacent blocks with periodicity of survey of the controller.
+<ul><li> <i>f_frq</i> — the frequency of the calculation of the template procedure or the time after the last calculation (negative in seconds) for planning from CRON, read-only.</li>
+<li> <i>f_start</i> — first calculate of the template procedure — start, read-only.</li>
+<li> <i>f_stop</i> — last calculate of the template procedure — stop, read-only.</li>
+<li> <i>f_err</i> — parameter error, full access. Value of the attribute is set to the parameter's error attribute — "err".</li>
+<li> <i>SHIFR</i> — parameter code, read-only.</li>
+<li> <i>NAME</i> — parameter name, read-only.</li>
+<li> <i>DESCR</i> — parameter description, read-only.</li>
+<li> <i>this</i> — parameter object, allows access to the attributes of the parameter, for example, to access the archives.</li></ul>
+<h2><span class="mw-headline" id="Asynchronous_writing_mode"><span class="mw-headline-number">4</span> Asynchronous writing mode</span></h2>
+<p>The standard writing mode for SCADA systems, which interact with the PLC, is synchronous, because it allows you to control the correctness of the completion of the write operation. However, in the case of writing a set of parameters at once, such the approach is not efficient due to sending a lot of small queries to the controller that overloads it and takes a long range of time. Solving this problem is asynchronous writing of adjacent values by one block. This mode is supported by this module and allows you to write all parameters immediately by adjacent blocks of 240 bytes. Reading and writing in this mode are carried out by adjacent blocks with periodicity of the controller's polling.
 </p>
 <h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">5</span> Notes</span></h2>
 <p>After a targeted search was found a few solutions of the problem of communication with industrial controllers of firm Siemens through various communication interfaces:
 </p>
-<ul><li> Found a lot of solutions from the company Siemens, which supplied with solutions that support an open operating system "Linux" (<a class="external free" href="http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm" rel="nofollow noreferrer noopener" target="_blank">http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm</a>, ...).</li></ul>
+<ul><li> Found a lot of solutions from the company Siemens, which supplied with solutions that support the open operating system "Linux" (<a class="external free" href="http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm" rel="nofollow noreferrer noopener" target="_blank">http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm</a>, ...).</li></ul>
+<p>Some specific problems and their resolving about the communication with the Siemens PLCs:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Problem </th>
+<th> Resolving
+</th></tr>
+<tr>
+<td> The connection is broken down by the PLC </td>
+<td> The specified CPU slot of the PLC is wrong, try some other.
+</td></tr>
+<tr>
+<td> The connection seems established but the data is not read from the PLC. </td>
+<td> It looks like you are using S7-1200 which has different changes in the security policy:
+<ul><li> Create a data block with compatibility with S7-300/400 and/or disabling this block optimization to appear the offset column. Disable any protection of this data block. </li>
+<li> If you have the LibnoDave message "error 33028 context is not supported. Step7 says: Function not implemented or error in telegram.", you have S7-1200 V4.0 and you must <a class="external text" href="https://sourceforge.net/p/libnodave/discussion/205657/thread/7ec9f370/?limit=25" rel="nofollow noreferrer noopener" target="_blank">grant access for the interface functions Get/Put</a> into the PLC configuration.</li></ul>
+</td></tr></table>
 <h2><span class="mw-headline" id="Links"><span class="mw-headline-number">6</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Siemens_cif2621.tgz" title="File:Siemens cif2621.tgz">Firm's Hilscher driver for boards family CIF</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Siemens_lastkernels.patch" title="File:Siemens lastkernels.patch">The patch to build driver for kernel Linux 2.6.29</a></li>

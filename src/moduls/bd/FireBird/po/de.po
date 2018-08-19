@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.FireBird 0.9.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 15:26+0200\n"
+"POT-Creation-Date: 2018-08-15 11:54+0300\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -26,85 +26,90 @@ msgstr "Datenbank FireBird"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko "
 
-msgid "DB module. Provides support of the DB FireBird."
-msgstr "Modul unterstützt die FireBird Datenbank."
+msgid "DB module. Provides support of the DBMS FireBird."
+msgstr "DB-Modul. Bietet Unterstützung für das DBMS FireBird."
 
 #, c-format
-msgid "Drop DB '%s' error: %s"
-msgstr "Datenbank '%s', Fehler: %s beim Abschalten"
+msgid "Error dropping the DB '%s': %s"
+msgstr "Fehler beim Löschen des DB '%s': %s"
 
 #, c-format
-msgid "Create DB '%s' error: %s"
-msgstr "Datenbank '%s', Fehler %s bei der Erstellung"
+msgid "Error creating the DB '%s': %s"
+msgstr "Fehler beim Erstellen des DB '%s': %s"
 
 #, c-format
-msgid "Error open table '%s'. DB is disabled."
-msgstr "Fehler beim Öffnen der Tabelle '%s'. Datenbank ist abgeschaltet."
+msgid "Error opening the table '%s': the DB is disabled."
+msgstr "Fehler beim Öffnen der Tabelle '%s': Die DB ist deaktiviert."
 
 #, c-format
-msgid "Table '%s' is not present."
-msgstr "Tabelle '%s' ist nicht vorhanden."
+msgid "The table '%s' is not present."
+msgstr "Die Tabelle '%s' ist nicht vorhanden."
 
 #, c-format
-msgid "Start transaction error: %s"
-msgstr "Fehler: %s beim Start der Transaktion"
+msgid "Error starting a transaction: %s"
+msgstr "Fehler beim Starten einer Transaktion: %s"
 
 #, c-format
-msgid "DSQL close transaction error: %s"
-msgstr "Fehler beim Schliessen der Transaktion: %s"
+msgid "Error committing a transaction: %s"
+msgstr "Fehler beim Commit einer Transaktion: %s"
 
 #, c-format
-msgid "Allocate statement error: (%d)%s"
-msgstr "Fehler bei der Allokierung: (%d)%s"
+msgid "Error allocating a statement: (%d)%s"
+msgstr "Fehler beim Zuweisen einer Anweisung: (%d)%s"
 
 #, c-format
-msgid "Start transaction error: (%d)%s"
-msgstr "Fehler beim Start der Transaktion: (%d)%s"
+msgid "Error starting a transaction: (%d)%s"
+msgstr "Fehler beim Starten einer Transaktion: (%d)%s"
 
 #, c-format
-msgid "DSQL prepare error: (%d)%s"
-msgstr "Fehler bei der Vorbereitung DSQL: (%d)%s"
+msgid "DSQL: error preparing: (%d)%s"
+msgstr "DSQL: Fehlervorbereitung: (%d)%s"
 
 #, c-format
-msgid "DSQL describe error: (%d)%s"
-msgstr "Fehler bei der Beschreibung DSQL: (%d)%s"
+msgid "DSQL: error describing: (%d)%s"
+msgstr "DSQL: Fehlerbeschreibung: (%d)%s"
 
 #, c-format
-msgid "Connect to DB error: %s"
-msgstr "Fehler Verbindung zum DB: %s"
+msgid "Error connecting to a DB: %s"
+msgstr "Fehler beim Verbinden mit einem DB: %s"
 
 #, c-format
-msgid "Request error: %s"
-msgstr "Anfrage-Fehler: %s"
+msgid "Error requesting: %s"
+msgstr "Fehler beim Anfordern: %s"
 
 #, c-format
-msgid "DSQL execute error: %s"
-msgstr "Fehler bei der Ausführung DSQL: %s"
+msgid "DSQL: error executing: %s"
+msgstr "DSQL: Fehler beim Ausführen: %s"
 
 #, c-format
-msgid "DSQL free statement error: %s"
-msgstr "Fehler bei der Freigabe DSQL: %s"
+msgid "DSQL: error freeing a statement: %s"
+msgstr "DSQL: Fehler beim Freigeben einer Anweisung: %s"
+
+#, c-format
+msgid "DSQL: error closing a transaction: %s"
+msgstr "DSQL: Fehler beim Schließen einer Transaktion: %s"
 
 msgid ""
-"FireBird address to DB must be written as: \"{file};{user};{pass}[;"
+"Address to the FireBird DBMS must be written as: \"{file};{user};{pass}[;"
 "{conTm}]\".\n"
 "Where:\n"
-"  file - full path to DB file in form: \"[{host}:]{filePath}\";\n"
+"  file - full path to the DB file in the form: \"[{host}:]{filePath}\";\n"
 "  user - DB user;\n"
-"  pass - password of DB user;\n"
+"  pass - password of the DB user;\n"
 "  conTm- connection timeout, seconds."
 msgstr ""
-"Die Adresse Datenbank FireBird wird geschrieben als: \"{file};{user};{pass}[;"
-"{conTm}]\".\n"
+"Ansprache an die Firebird DBMS muss geschrieben werden als: \"{file};{user};"
+"{pass}[;{conTm}]\".\n"
 "Wo:\n"
-"  file - vollständigen Pfad zur Datei in DB Form: \"[{host}:]{filepath}\";\n"
+"  file - vollständiger Pfad zur DB-Datei im Formular: \"[{host}:]"
+"{filepath}\";\n"
 "  user - Benutzer der Datenbank;\n"
 "  pass - Kennwort des Datenbankbenutzers;\n"
 "  conTm- Verbindungs-Timeout, Sekunden."
 
-msgid "Table is empty."
-msgstr "Tabelle ist leer."
+msgid "The table is empty."
+msgstr "Der Tisch ist leer."
 
 #, c-format
-msgid "Row \"%s\" is not present. Are you saved the object?"
-msgstr "Datensatz \"%s\" ist nicht vorhanden. Sind Sie das Objekt gespeichert?"
+msgid "The row \"%s\" is not present. Are you saved the object?"
+msgstr "Die Zeile \"%s\" ist nicht vorhanden. Sind Sie das Objekt gerettet?"

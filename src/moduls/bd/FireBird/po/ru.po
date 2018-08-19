@@ -1,13 +1,13 @@
 # OpenSCADA.DB.FireBird translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DB.FireBird package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.FireBird 0.9.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 15:26+0200\n"
+"POT-Creation-Date: 2018-08-15 11:54+0300\n"
 "PO-Revision-Date: 2007-10-23 12:52+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -21,84 +21,88 @@ msgstr "БД FireBird"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "DB module. Provides support of the DB FireBird."
-msgstr "Модуль БД. Предоставляет поддержку БД FireBird."
+msgid "DB module. Provides support of the DBMS FireBird."
+msgstr "Модуль БД. Предоставляет поддержку СУБД FireBird."
 
 #, c-format
-msgid "Drop DB '%s' error: %s"
+msgid "Error dropping the DB '%s': %s"
 msgstr "Ошибка удаления БД '%s': %s"
 
 #, c-format
-msgid "Create DB '%s' error: %s"
+msgid "Error creating the DB '%s': %s"
 msgstr "Ошибка создания БД '%s': %s"
 
 #, c-format
-msgid "Error open table '%s'. DB is disabled."
-msgstr "Ошибка открытия таблицы '%s'. БД отключена."
+msgid "Error opening the table '%s': the DB is disabled."
+msgstr "Ошибка открытия таблицы '%s': БД отключена."
 
 #, c-format
-msgid "Table '%s' is not present."
+msgid "The table '%s' is not present."
 msgstr "Таблица '%s' отсутствует."
 
 #, c-format
-msgid "Start transaction error: %s"
+msgid "Error starting a transaction: %s"
 msgstr "Ошибка открытия транзакции: %s"
 
 #, c-format
-msgid "DSQL close transaction error: %s"
-msgstr "Ошибка закрытия транзакции: %s"
+msgid "Error committing a transaction: %s"
+msgstr "Ошибка осуществления транзакции: %s"
 
 #, c-format
-msgid "Allocate statement error: (%d)%s"
+msgid "Error allocating a statement: (%d)%s"
 msgstr "Ошибка размещения выражения: (%d)%s"
 
 #, c-format
-msgid "Start transaction error: (%d)%s"
+msgid "Error starting a transaction: (%d)%s"
 msgstr "Ошибка открытия транзакции: (%d)%s"
 
 #, c-format
-msgid "DSQL prepare error: (%d)%s"
-msgstr "Ошибка подготовки DSQL: (%d)%s"
+msgid "DSQL: error preparing: (%d)%s"
+msgstr "DSQL: ошибка подготовки: (%d)%s"
 
 #, c-format
-msgid "DSQL describe error: (%d)%s"
-msgstr "Ошибка описания DSQL: (%d)%s"
+msgid "DSQL: error describing: (%d)%s"
+msgstr "DSQL: ошибка описания: (%d)%s"
 
 #, c-format
-msgid "Connect to DB error: %s"
+msgid "Error connecting to a DB: %s"
 msgstr "Ошибка подключения к БД: %s"
 
 #, c-format
-msgid "Request error: %s"
+msgid "Error requesting: %s"
 msgstr "Ошибка запроса: %s"
 
 #, c-format
-msgid "DSQL execute error: %s"
-msgstr "Ошибка исполнения DSQL: %s"
+msgid "DSQL: error executing: %s"
+msgstr "DSQL: ошибка исполнения: %s"
 
 #, c-format
-msgid "DSQL free statement error: %s"
-msgstr "Ошибка освобождения выражения: %s"
+msgid "DSQL: error freeing a statement: %s"
+msgstr "DSQL: ошибка освобождения выражения: %s"
+
+#, c-format
+msgid "DSQL: error closing a transaction: %s"
+msgstr "DSQL: ошибка закрытия транзакции: %s"
 
 msgid ""
-"FireBird address to DB must be written as: \"{file};{user};{pass}[;"
+"Address to the FireBird DBMS must be written as: \"{file};{user};{pass}[;"
 "{conTm}]\".\n"
 "Where:\n"
-"  file - full path to DB file in form: \"[{host}:]{filePath}\";\n"
+"  file - full path to the DB file in the form: \"[{host}:]{filePath}\";\n"
 "  user - DB user;\n"
-"  pass - password of DB user;\n"
+"  pass - password of the DB user;\n"
 "  conTm- connection timeout, seconds."
 msgstr ""
-"Адрес БД FireBird записывается как: \"{file};{user};{pass}[;{conTm}]\".\n"
+"Адрес к СУБД FireBird записывается как: \"{file};{user};{pass}[;{conTm}]\".\n"
 "Где:\n"
 "  файл   - полный путь к файлу БД в формате: \"[{host}:]{filePath}\";\n"
 "  пользователь - пользователь БД;\n"
 "  пароль - пароль пользователя БД;\n"
 "  conTm  - таймаут подключения, секунд."
 
-msgid "Table is empty."
+msgid "The table is empty."
 msgstr "Таблица пуста."
 
 #, c-format
-msgid "Row \"%s\" is not present. Are you saved the object?"
+msgid "The row \"%s\" is not present. Are you saved the object?"
 msgstr "Запись \"%s\" отсутствует. Вы сохраняли этот объект?"

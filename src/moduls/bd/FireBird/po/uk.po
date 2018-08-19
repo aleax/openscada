@@ -1,13 +1,13 @@
 # OpenSCADA.DB.FireBird translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DB.FireBird module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2017.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.FireBird 0.9.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 15:26+0200\n"
+"POT-Creation-Date: 2018-08-15 11:54+0300\n"
 "PO-Revision-Date: 2007-10-23 12:52+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -21,75 +21,79 @@ msgstr "БД FireBird"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "DB module. Provides support of the DB FireBird."
-msgstr "Модуль БД. Надає підтримку БД FireBird."
+msgid "DB module. Provides support of the DBMS FireBird."
+msgstr "Модуль БД. Надає підтримку СУБД FireBird."
 
 #, c-format
-msgid "Drop DB '%s' error: %s"
+msgid "Error dropping the DB '%s': %s"
 msgstr "Помилка видалення БД '%s': %s"
 
 #, c-format
-msgid "Create DB '%s' error: %s"
+msgid "Error creating the DB '%s': %s"
 msgstr "Помилка створення БД '%s': %s"
 
 #, c-format
-msgid "Error open table '%s'. DB is disabled."
-msgstr "Помилка відкриття таблиці '%s'. БД виключено."
+msgid "Error opening the table '%s': the DB is disabled."
+msgstr "Помилка відкриття таблиці '%s': БД вимкнено."
 
 #, c-format
-msgid "Table '%s' is not present."
+msgid "The table '%s' is not present."
 msgstr "Таблиця '%s' відсутня."
 
 #, c-format
-msgid "Start transaction error: %s"
+msgid "Error starting a transaction: %s"
 msgstr "Помилка запуску транзакції: %s"
 
 #, c-format
-msgid "DSQL close transaction error: %s"
-msgstr "Помилка закриття транзакції: %s"
+msgid "Error committing a transaction: %s"
+msgstr "Помилка здійснення транзакції: %s"
 
 #, c-format
-msgid "Allocate statement error: (%d)%s"
+msgid "Error allocating a statement: (%d)%s"
 msgstr "Помилка розміщення запиту: (%d)%s"
 
 #, c-format
-msgid "Start transaction error: (%d)%s"
+msgid "Error starting a transaction: (%d)%s"
 msgstr "Помилка запуску транзакції: (%d)%s"
 
 #, c-format
-msgid "DSQL prepare error: (%d)%s"
-msgstr "Помилка приготування DSQL: (%d)%s"
+msgid "DSQL: error preparing: (%d)%s"
+msgstr "DSQL: помилка приготування: (%d)%s"
 
 #, c-format
-msgid "DSQL describe error: (%d)%s"
-msgstr "Помилка опису DSQL: (%d)%s"
+msgid "DSQL: error describing: (%d)%s"
+msgstr "DSQL: помилка опису: (%d)%s"
 
 #, c-format
-msgid "Connect to DB error: %s"
+msgid "Error connecting to a DB: %s"
 msgstr "Помилка підключення до БД: %s"
 
 #, c-format
-msgid "Request error: %s"
+msgid "Error requesting: %s"
 msgstr "Помилка запиту: %s"
 
 #, c-format
-msgid "DSQL execute error: %s"
-msgstr "Помилка виконання DSQL: %s"
+msgid "DSQL: error executing: %s"
+msgstr "DSQL: помилка виконання: %s"
 
 #, c-format
-msgid "DSQL free statement error: %s"
-msgstr "Помилка звільнення запиту DSQL: %s"
+msgid "DSQL: error freeing a statement: %s"
+msgstr "DSQL: помилка звільнення запиту: %s"
+
+#, c-format
+msgid "DSQL: error closing a transaction: %s"
+msgstr "DSQL: помилка закриття транзакції: %s"
 
 msgid ""
-"FireBird address to DB must be written as: \"{file};{user};{pass}[;"
+"Address to the FireBird DBMS must be written as: \"{file};{user};{pass}[;"
 "{conTm}]\".\n"
 "Where:\n"
-"  file - full path to DB file in form: \"[{host}:]{filePath}\";\n"
+"  file - full path to the DB file in the form: \"[{host}:]{filePath}\";\n"
 "  user - DB user;\n"
-"  pass - password of DB user;\n"
+"  pass - password of the DB user;\n"
 "  conTm- connection timeout, seconds."
 msgstr ""
-"Адреса БД FireBird записується таким чином: \"{file};{user};{pass}[;"
+"Адреса до СУБД FireBird записується таким чином: \"{file};{user};{pass}[;"
 "{conTm}]\".\n"
 "Де:\n"
 "  файл   - повний шлях до файлу БД у формі: \"[{host}:]{filePath}\";\n"
@@ -97,9 +101,9 @@ msgstr ""
 "  пароль - пароль БД;\n"
 "  conTm  - таймаут підключення, секунд."
 
-msgid "Table is empty."
+msgid "The table is empty."
 msgstr "Таблиця порожня."
 
 #, c-format
-msgid "Row \"%s\" is not present. Are you saved the object?"
+msgid "The row \"%s\" is not present. Are you saved the object?"
 msgstr "Запис \"%s\" відсутній. Ви зберігали цей об'єкт?"

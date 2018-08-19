@@ -1,3 +1,9 @@
+2018-08-19 Roman (stable)
+- Android/build.sh: Improved to build in environment with the system Qt5 development files.
+- !:DOC: "DAQ", "DAQ.DAQGate" expanded by links to the resources. "Release 0.9" expanded for the participants list. 
+- !!:DB.FireBird,DAQ.Siemens: Revised for all messages and the documentation.
+
+
 2018-07-22 Roman (stable)
 - SYS,Archive.FSArch: "Archivator" renaming to "Archiver" is finished.
 - FIX: Some next original messages are fixed.

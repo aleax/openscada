@@ -148,43 +148,43 @@ $ psql -U postgres -d template1 -c "ALTER USER postgres PASSWORD '123456'"</pre>
 <table class="wikitable">
 
 <tr>
-<th> Operation </th>
+<th> Operations for 1000 records, seconds </th>
 <th> Nokia N800, PostgreSQL 8.3 (remote) </th>
 <th> AMD Turion L625 1.6, 2G, PostgreSQL 9.1 [local; 100Base-TX] </th>
 <th> Intel(R) Core(TM) i3 CPU 1.33GHz, 3G, HDD [100Base-TX]
 </th></tr>
 <tr>
-<td> <i>Creation of the 1000 records (sec.):</i> </td>
+<td> <i>Creating:</i> </td>
 <td> 5 </td>
 <td> 1.08; 1.6; 3.8 </td>
 <td> 2.07
 </td></tr>
 <tr>
-<td> <i>Updating of the 1000 records (sec.):</i> </td>
+<td> <i>Updating:</i> </td>
 <td> 4.8 </td>
 <td> 1.12; 1.6; 3.9 </td>
 <td> 2.35
 </td></tr>
 <tr>
-<td> <i>Getting of the 1000 records (sec.):</i> </td>
+<td> <i>Getting:</i> </td>
 <td> 2.96 </td>
 <td> 0.64; 1.2; 2.1 </td>
 <td> 1.26
 </td></tr>
 <tr>
-<td> <i>Seeking of the 1000 records (sec.):</i> </td>
+<td> <i>Seeking:</i> </td>
 <td> - </td>
 <td> - </td>
 <td> <span style="color: red">7.9</span>
 </td></tr>
 <tr>
-<td> <i>Seeking in preload of the 1000 records (sec.):</i> </td>
+<td> <i>Seeking in preload:</i> </td>
 <td> - </td>
 <td> - </td>
 <td> 0.038
 </td></tr>
 <tr>
-<td> <i>Deleting of the 1000 record (sec.):</i> </td>
+<td> <i>Deleting:</i> </td>
 <td> 1.73 </td>
 <td> 0.39; 0.6; 1.6 </td>
 <td> 0.94

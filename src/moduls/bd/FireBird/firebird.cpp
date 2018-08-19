@@ -31,9 +31,9 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.6.0"
+#define MOD_VER		"1.6.1"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
+#define DESCRIPTION	_("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
 //******************************************************************************
 
@@ -118,7 +118,7 @@ void MBD::postDisable( int flag )
 	ISC_STATUS_ARRAY status;
 	if(isc_attach_database(status,0,fdb.c_str(),&hdb,dpb_length,dpb)) return;
 	if(isc_drop_database(status,&hdb))
-	    throw err_sys(_("Drop DB '%s' error: %s"), fdb.c_str(), getErr(status).c_str());
+	    throw err_sys(_("Error dropping the DB '%s': %s"), fdb.c_str(), getErr(status).c_str());
     }
 }
 
@@ -150,7 +150,7 @@ void MBD::enable( )
 	{
 	    isc_free(dpb);
 	    isc_detach_database(status, &hdb);
-	    throw err_sys(_("Create DB '%s' error: %s"), fdb.c_str(), getErr(status).c_str());
+	    throw err_sys(_("Error creating the DB '%s': %s"), fdb.c_str(), getErr(status).c_str());
 	}
     }
 
@@ -188,7 +188,7 @@ void MBD::allowList( vector<string> &list ) const
 
 TTable *MBD::openTable( const string &inm, bool create )
 {
-    if(!enableStat()) throw err_sys(_("Error open table '%s'. DB is disabled."), inm.c_str());
+    if(!enableStat()) throw err_sys(_("Error opening the table '%s': the DB is disabled."), inm.c_str());
 
     if(create) {
 	string req = "EXECUTE BLOCK AS BEGIN "
@@ -199,7 +199,7 @@ TTable *MBD::openTable( const string &inm, bool create )
     }
     vector< vector<string> > tblStrct;
     getStructDB(inm, tblStrct);
-    if(tblStrct.size() <= 1) throw err_sys(_("Table '%s' is not present."), name().c_str());
+    if(tblStrct.size() <= 1) throw err_sys(_("The table '%s' is not present."), name().c_str());
 
     return new MTable(inm, this, &tblStrct);
 }
@@ -226,9 +226,9 @@ void MBD::transOpen( )
     MtxAlloc res(connRes, true);
     if(!htrans) {
 	if(isc_start_transaction(status,&htrans,1,&hdb,0,NULL)) {
-	    mess_sys(TMess::Warning, _("Start transaction error: %s"), getErr(status).c_str());
+	    mess_sys(TMess::Warning, _("Error starting a transaction: %s"), getErr(status).c_str());
 	    return;
-	    //throw err_sys(_("Start transaction error: %s"), getErr(status).c_str());
+	    //throw err_sys(_("Error starting a transaction: %s"), getErr(status).c_str());
 	}
 	trOpenTm = SYS->sysTm();
     }
@@ -243,9 +243,9 @@ void MBD::transCommit( )
     MtxAlloc res(connRes, true);
     if(!htrans) return;
     if(isc_commit_transaction(status, &htrans)) {
-	mess_sys(TMess::Warning, _("DSQL close transaction error: %s"), getErr(status).c_str());
+	mess_sys(TMess::Warning, _("Error committing a transaction: %s"), getErr(status).c_str());
 	return;
-	//throw err_sys(_("DSQL close transaction error: %s"), getErr(status).c_str());
+	//throw err_sys(_("Error committing a transaction: %s"), getErr(status).c_str());
     }
     htrans = 0;
     reqCnt = reqCntTm = 0;
@@ -280,14 +280,14 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	ISC_STATUS rez = 0;
 	//Prepare statement
 	if((rez=isc_dsql_allocate_statement(status,&hdb,&stmt)))
-	    mess_sys(TMess::Debug, _("Allocate statement error: (%d)%s"), rez, getErr(status).c_str());
+	    mess_sys(TMess::Debug, _("Error allocating a statement: (%d)%s"), rez, getErr(status).c_str());
 	else if(!trans && (rez=isc_start_transaction(status,&trans,1,&hdb,0,NULL)))
-	    mess_sys(TMess::Debug, _("Start transaction error: (%d)%s"), rez, getErr(status).c_str());
+	    mess_sys(TMess::Debug, _("Error starting a transaction: (%d)%s"), rez, getErr(status).c_str());
 	//Prepare output data structure
 	else if((rez=isc_dsql_prepare(status,&trans,&stmt,0,Mess->codeConvOut(cd_pg.c_str(),ireq).c_str(),3,NULL)))
-	    mess_sys(TMess::Debug, _("DSQL prepare error: (%d)%s"), rez, getErr(status).c_str());
+	    mess_sys(TMess::Debug, _("DSQL: error preparing: (%d)%s"), rez, getErr(status).c_str());
 	else if(!rez && (rez=isc_dsql_describe(status,&stmt,1,out_sqlda)))
-	    mess_sys(TMess::Debug, _("DSQL describe error: (%d)%s"), rez, getErr(status).c_str());
+	    mess_sys(TMess::Debug, _("DSQL: error describing: (%d)%s"), rez, getErr(status).c_str());
 	//Reconnect try for error
 	if(rez)
 	    switch(rez) {
@@ -295,9 +295,9 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 		case isc_net_connect_err:
 		case isc_net_connect_listen_err:
 		    disable();
-		    throw err_sys(_("Connect to DB error: %s"), getErr(status).c_str());
+		    throw err_sys(_("Error connecting to a DB: %s"), getErr(status).c_str());
 		default:
-		    throw err_sys(_("Request error: %s"), getErr(status).c_str());
+		    throw err_sys(_("Error requesting: %s"), getErr(status).c_str());
 	    }
 	if(out_sqlda->sqld > out_sqlda->sqln) {
 	    int n = out_sqlda->sqld;
@@ -326,10 +326,10 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 
 	//  Get data
 	if(isc_dsql_execute(status,&trans,&stmt,1,NULL))
-	    throw err_sys(_("DSQL execute error: %s"), getErr(status).c_str());
+	    throw err_sys(_("DSQL: error executing: %s"), getErr(status).c_str());
 	if(tbl && out_sqlda->sqld) {
 	    //if( isc_dsql_set_cursor_name(status, &stmt,"dyn_cursor", 0) )
-	    //  throw err_sys(_("DSQL open cursor error: %s"),getErr(status).c_str());
+	    //  throw err_sys(_("DSQL: error opening a cursor: %s"),getErr(status).c_str());
 	    vector<string> row;
 	    long  fetch_stat;
 	    while((fetch_stat=isc_dsql_fetch(status,&stmt,1,out_sqlda)) == 0) {
@@ -383,11 +383,11 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	}
 	if(isc_dsql_free_statement(status,&stmt,DSQL_drop)) {
 	    stmt = 0;
-	    throw err_sys(_("DSQL free statement error: %s"), getErr(status).c_str());
+	    throw err_sys(_("DSQL: error freeing a statement: %s"), getErr(status).c_str());
 	}
 	if(trans && !htrans && isc_commit_transaction(status,&trans)) {
 	    stmt = trans = 0;
-	    throw err_sys(_("DSQL close transaction error: %s"), getErr(status).c_str());
+	    throw err_sys(_("DSQL: error closing a transaction: %s"), getErr(status).c_str());
 	}
     } catch(...) {
 	if(stmt) isc_dsql_free_statement(status, &stmt, DSQL_drop);
@@ -437,11 +437,11 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"help",
-	    _("FireBird address to DB must be written as: \"{file};{user};{pass}[;{conTm}]\".\n"
+	    _("Address to the FireBird DBMS must be written as: \"{file};{user};{pass}[;{conTm}]\".\n"
 	      "Where:\n"
-	      "  file - full path to DB file in form: \"[{host}:]{filePath}\";\n"
+	      "  file - full path to the DB file in the form: \"[{host}:]{filePath}\";\n"
 	      "  user - DB user;\n"
-	      "  pass - password of DB user;\n"
+	      "  pass - password of the DB user;\n"
 	      "  conTm- connection timeout, seconds."));
 	return;
     }
@@ -479,7 +479,7 @@ MBD &MTable::owner( ) const	{ return (MBD&)TTable::owner(); }
 
 void MTable::fieldStruct( TConfig &cfg )
 {
-    if(tblStrct.empty()) throw err_sys(_("Table is empty."));
+    if(tblStrct.empty()) throw err_sys(_("The table is empty."));
     mLstUse = SYS->sysTm();
 
     for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
@@ -516,7 +516,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     vector< vector<string> >	inTbl,
 				&tbl = full ? *full : inTbl;
 
-    if(tblStrct.empty()) throw err_sys(_("Table is empty."));
+    if(tblStrct.empty()) throw err_sys(_("The table is empty."));
     mLstUse = SYS->sysTm();
 
     //Check for no present and no empty keys allow
@@ -587,7 +587,7 @@ void MTable::fieldGet( TConfig &cfg )
 {
     vector< vector<string> > tbl;
 
-    if(tblStrct.empty()) throw err_sys(_("Table is empty."));
+    if(tblStrct.empty()) throw err_sys(_("The table is empty."));
     mLstUse = SYS->sysTm();
 
     //Prepare request
@@ -619,7 +619,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     //Query
     owner().sqlReq(req, &tbl, false);
-    if(tbl.size() < 2) throw err_sys(_("Row \"%s\" is not present. Are you saved the object?"), req_where.c_str());
+    if(tbl.size() < 2) throw err_sys(_("The row \"%s\" is not present. Are you saved the object?"), req_where.c_str());
 
     //Processing of query
     for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {

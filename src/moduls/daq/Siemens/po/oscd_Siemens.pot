@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 13:16+0200\n"
+"POT-Creation-Date: 2018-08-19 15:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,13 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Siemens DAQ"
+msgid "Siemens DAQ and Beckhoff"
 msgstr ""
 
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol, and Libnodave library, or self, for the rest."
+msgid "Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol) and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the protocol TwinCAT ADS/AMS due it working with data blocks also."
 msgstr ""
 
 msgid "Parameters table"
@@ -50,7 +50,7 @@ msgstr ""
 msgid "Output transport"
 msgstr ""
 
-msgid "Slot CPU"
+msgid "CPU slot of the PLC"
 msgstr ""
 
 msgid "CIF board"
@@ -81,43 +81,43 @@ msgid "No device"
 msgstr ""
 
 #, c-format
-msgid "CIF device %d or device driver error!"
+msgid "Error the CIF device %d or the device driver."
 msgstr ""
 
 #, c-format
-msgid "CIF device %d running (DevSetHostState(HOST_READY)) error!"
+msgid "Error starting up the CIF device %d (DevSetHostState(HOST_READY))."
 msgstr ""
 
 #, c-format
-msgid "CIF device %d. DevPutTaskParameter() error!"
+msgid "DevPutTaskParameter: error the CIF device %d."
 msgstr ""
 
 #, c-format
-msgid "CIF device %d. DevPutMessage() error!"
+msgid "DevPutMessage: error the CIF device %d."
 msgstr ""
 
 #, c-format
-msgid "CIF device %d. DevGetMessage() error!"
+msgid "DevGetMessage: error the CIF device %d."
 msgstr ""
 
 #, c-format
-msgid "Sending request error: %d."
+msgid "Error sending message: %d."
 msgstr ""
 
 #, c-format
-msgid "Getting request error: %d."
+msgid "Error getting message: %d."
 msgstr ""
 
 #, c-format
-msgid "%d:Board %d is not present."
+msgid "%d:The board %d is not present."
 msgstr ""
 
 #, c-format
-msgid "%d:Sending request error %d."
+msgid "%d:Error sending request: %d."
 msgstr ""
 
 #, c-format
-msgid "%d:Getting request error %d."
+msgid "%d:Error getting request: %d."
 msgstr ""
 
 msgid "CIF"
@@ -153,17 +153,14 @@ msgstr ""
 msgid "PB speed"
 msgstr ""
 
-msgid "Profibus"
-msgstr ""
-
 msgid "CIF device"
 msgstr ""
 
-msgid "Life stations list"
+msgid "Live stations list"
 msgstr ""
 
 #, c-format
-msgid "Board number %d error!"
+msgid "Error the board %d."
 msgstr ""
 
 msgid "9600Baud"
@@ -202,10 +199,10 @@ msgstr ""
 msgid " : Passive station"
 msgstr ""
 
-msgid "Task terminated! "
+msgid "Task is terminated! "
 msgstr ""
 
-msgid "Connect error."
+msgid "Error connecting."
 msgstr ""
 
 #, c-format
@@ -240,34 +237,34 @@ msgstr ""
 msgid "No one driver or board are present."
 msgstr ""
 
-msgid "Open socket of remote PLC error."
+msgid "Error opening the remote PLC socket."
 msgstr ""
 
-msgid "Connection to PLC error."
+msgid "Error connecting to the PLC."
 msgstr ""
 
 #, c-format
-msgid "Connection type '%d' is not supported."
-msgstr ""
-
-msgid "ReadDB"
+msgid "The connection type '%d' is not supported."
 msgstr ""
 
 msgid "Requested block is too big."
 msgstr ""
 
 #, c-format
-msgid "Board %d is not present."
+msgid "The board %d is not present."
 msgstr ""
 
-msgid "Sending request is timeouted."
+msgid "Timeout sending request."
 msgstr ""
 
 #, c-format
-msgid "Request to DB error, %d."
+msgid "Error requesting to DB: %d."
 msgstr ""
 
-msgid "Get request is timeouted."
+msgid "ReadDB"
+msgstr ""
+
+msgid "Timeout the get request."
 msgstr ""
 
 msgid "There is no response from the remote station."
@@ -276,45 +273,42 @@ msgstr ""
 msgid "Master is out of the logical token ring."
 msgstr ""
 
-msgid "Specified offset address or DB error."
-msgstr ""
-
-msgid "Connection error."
+msgid "Error the specified offset address or DB."
 msgstr ""
 
 #, c-format
-msgid "Read block '%d' error, %s."
+msgid "Error reading the block %d: %s."
 msgstr ""
 
 #, c-format
-msgid "DB '%d' error, %s."
+msgid "Error the DB %d: %s."
 msgstr ""
 
-msgid "Error server respond."
+msgid "Error the server response."
 msgstr ""
 
-msgid "Not full respond."
-msgstr ""
-
-#, c-format
-msgid "Error server respond, %d."
+msgid "Not full response."
 msgstr ""
 
 #, c-format
-msgid "Reply data block size, %d != %d."
+msgid "Error the server response: %d."
 msgstr ""
 
-msgid "WriteDB"
+#, c-format
+msgid "Size of the response data block %d != %d."
 msgstr ""
 
 msgid "Transmitted block is too big."
 msgstr ""
 
-msgid "Getting request is timeouted."
+msgid "Timeout getting request."
+msgstr ""
+
+msgid "WriteDB"
 msgstr ""
 
 #, c-format
-msgid "Write block '%d' error, %s."
+msgid "Error writing the block %d: %s."
 msgstr ""
 
 #, c-format
@@ -325,49 +319,49 @@ msgstr ""
 msgid "Unknown service '%s'."
 msgstr ""
 
-msgid "Respond size is not coincidence."
+msgid "Inconsistency in response size."
 msgstr ""
 
 msgid "Short."
 msgstr ""
 
 #, c-format
-msgid "PDU Type error, %d != %d."
+msgid "Error the PDU type, %d != %d."
 msgstr ""
 
-msgid "Inconsistent length."
+msgid "Inappropriate size."
 msgstr ""
 
 msgid "PDU header"
 msgstr ""
 
-msgid "No start from 0x32."
+msgid "Not started from 0x32."
 msgstr ""
 
 #, c-format
-msgid "Inconsistent respond's invoke ID to the request, %d != %d."
+msgid "Inconsistency of the response ID to his request one, %d != %d."
 msgstr ""
 
-msgid "Parameters + data parts size more to the respond size."
-msgstr ""
-
-#, c-format
-msgid "Parameters part size is not equal to expected, %d."
-msgstr ""
-
-msgid "Respond function mismatch."
+msgid "Size of the parameters + data more to the response size."
 msgstr ""
 
 #, c-format
-msgid "Try access beyond the DB '%s' range %s(%s)."
+msgid "Parameters part size does not match for expected value, %d."
+msgstr ""
+
+msgid "Inconsistency of the response function."
 msgstr ""
 
 #, c-format
-msgid "DB '%s' is not exist."
+msgid "An attempt to access outside the DB '%s', %s(%s)."
 msgstr ""
 
 #, c-format
-msgid "Data access unknown error, %xh."
+msgid "The DB '%s' doesn't exist."
+msgstr ""
+
+#, c-format
+msgid "Unknown error accessing to DB, %xh."
 msgstr ""
 
 #, c-format
@@ -375,14 +369,14 @@ msgid "Unknown data encoding type, %d."
 msgstr ""
 
 #, c-format
-msgid "Inconsistent data block size to the respond size, %d(%d)."
+msgid "Inconsistency in the size of the data block to the response size, %d(%d)."
 msgstr ""
 
 #, c-format
-msgid "%d:Value is not gathered."
+msgid "%d:The value is not gathered."
 msgstr ""
 
-msgid "Value type error."
+msgid "Error value type."
 msgstr ""
 
 msgid "Connecting."
@@ -392,21 +386,24 @@ msgid "OK"
 msgstr ""
 
 msgid ""
-"Connection type:\n"
-"  CIF_PB - connection to controllers series S7, by firm Siemens, by communication unit CIF-50PB or like;\n"
-"  ISO_TCP, ISO_TCP243 - connection to controllers series S7, by firm Siemens, by Ethernet network (TCP243 by CP243);\n"
-"  ADS - TwinCAT ADS/AMS protocol for connection to controllers firm Beckhoff."
+"Connection type, supported ones:\n"
+"  CIF_PB - connection to S7 controllers of the firm Siemens via CIF-50PB communication processor or similar;\n"
+"  ISO_TCP, ISO_TCP243 - connection to S7 controllers of the firm Siemens via the Ethernet network (TCP243 by CP243);\n"
+"  ADS - TwinCAT ADS/AMS protocol for connecting to controllers of the firm Beckhoff."
 msgstr ""
 
 msgid ""
-"Remote controller address. For connections:\n"
-"  CIF_PB - controller address in \"Profibus\" network, digit 0-255;\n"
-"  ISO_TCP, ISO_TCP243 - IP-address into Ethernet network;\n"
-"  ADS - Network identifier and port for target and source stations, in view\n"
+"Remote controller address, for the connections:\n"
+"  CIF_PB - controller address in the ProfiBus network, one digit 0-255;\n"
+"  ISO_TCP, ISO_TCP243 - IP-address into the Ethernet network;\n"
+"  ADS - network identifier and port for the target and source stations, in view\n"
 "      \"{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}\"\n"
 "      (for example: \"192.168.0.1.1.1:801|82.207.88.73.1.1:801\"), where:\n"
-"    AMSNetId - network identifier, write into view of six digits 0-255, for example: \"192.168.0.1.1.1\";\n"
-"    AMSPort - port, write into view digit 0-65535."
+"    AMSNetId - network identifier, writes in view of six digits 0-255, for example: \"192.168.0.1.1.1\";\n"
+"    AMSPort - port, writes in view of one digit 0-65535."
+msgstr ""
+
+msgid "OpenSCADA output transport for the protocol ADS (port 48898, 801 for AMS) and ISO_TCP (port 102) for sending requests."
 msgstr ""
 
 msgid "1:Parameter disabled."
@@ -418,10 +415,10 @@ msgstr ""
 msgid "Parameter disabled."
 msgstr ""
 
-msgid "Parameter is disabled or id error."
+msgid "Parameter disabled or error in ID."
 msgstr ""
 
-msgid "Error calculate template."
+msgid "Error calculating template."
 msgstr ""
 
 msgid "Parameter disabled or error."
