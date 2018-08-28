@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Sockets</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSockets&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets">Modules/Sockets</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/ru" title="Модули/Sockets (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSockets&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets">Modules/Sockets</a> and the translation is 93% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/ru" title="Модули/Sockets (93% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -133,17 +133,17 @@
 </p><p>Головну вкладка сторінки конфігурації вихідного сокету зображено на рисунку 2.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out_uk.png"><img class="thumbimage" height="593" src="../files/Sockets_out_uk.png" width="711" /></a>  <div class="thumbcaption">Рис.2. Головна вкладка сторінки конфігурації вихідного сокету.</div></div></div></div>
-<p>За допомогою цього діалогу можна встановити:
+<p>This dialog allows you to set:
 </p>
-<ul><li> Стан транспорту, а саме: статус, "Виконується" та ім'я БД, яка містить конфігурацію.</li>
-<li> Ідентифікатор, ім'я та опис транспорту.</li>
-<li> Адреса транспорту. Формат адреси описано у таблиці нижче.</li>
-<li> Стан "Виконується", у який переводити транспорт при запуску.</li>
-<li> Максимальний розмір сегменту (MSS), для обмеження розміру пакетів що відправляються (сегментів TCP) на поганих каналах зв'язку. Встановити у 0 для зняття користувацького обмеження розміру.</li>
-<li> Інтервали часу підключення у форматі: "<b>conn:next[:rep]</b>". Де:
-<ul><li> <i>conn</i> — максимальний час очікування відповіді підключення, у секундах;</li>
-<li> <i>next</i> — максимальний час очікування продовження відповіді, у секундах;</li>
-<li> <i>rep</i>  — мінімальний час затримки наступного запиту, в секундах.</li></ul></li></ul>
+<ul><li> State of the transport, that is: status, "Running" and the name of the database, containing the configuration.</li>
+<li> Identifier, name and description of the transport.</li>
+<li> Address of the transport. The format of the addresses is listed in the table below.</li>
+<li> The state "Running", in which the transport must be translated at start up. </li>
+<li> Maximum segment size (MSS), for limit the transmitted packages size (segments TCP) on bad link channels. Set to 0 for disabling the user limit for size.</li>
+<li> Connection timings in the format "<b>{conn}:{next}[:{rep}]</b>". Where:
+<ul><li> <i>conn</i> — maximum connection waiting time, in seconds;</li>
+<li> <i>next</i> — maximum time for waiting the continue of the response, in seconds;</li>
+<li> <i>rep</i> — minimum delay time for next request, in seconds.</li></ul></li></ul>
 <p>Адреса вихідних сокетів різного типу формуються наступним чином:
 </p>
 <table class="wikitable">

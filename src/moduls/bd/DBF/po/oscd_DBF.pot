@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:43+0200\n"
+"POT-Creation-Date: 2018-08-25 11:00+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,50 +23,50 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "BD module. Provides support of the *.dbf files, version 3.0."
+msgid "DB module. Provides support of the DBF files version 3.0."
 msgstr ""
 
-msgid "Delete DB error!"
-msgstr ""
-
-#, c-format
-msgid "Error create DB directory '%s'!"
-msgstr ""
-
-msgid "Restore previous directory as current error."
+msgid "Error deleting DB."
 msgstr ""
 
 #, c-format
-msgid "Error open table '%s'. DB is disabled."
+msgid "Error creating the DB directory '%s'."
+msgstr ""
+
+msgid "Error restoring previous directory as the current."
+msgstr ""
+
+#, c-format
+msgid "Error opening the table '%s': the DB is disabled."
+msgstr ""
+
+msgid "Error opening the table."
 msgstr ""
 
 msgid ""
-"For DBF address DB is the directory which contains files of tables (*.dbf).\n"
-"For example: /opt/dbf ."
+"For DBF, a DB address is the directory which contains files of the tables (*.dbf).\n"
+"For example: /opt/dbf."
 msgstr ""
 
-msgid "Open table error!"
+msgid "Error the cell."
 msgstr ""
 
-msgid "Cell error!"
-msgstr ""
-
-msgid "Field is not present!"
+msgid "The field is not present."
 msgstr ""
 
 #, c-format
-msgid "Read only access to file '%s'."
+msgid "Access to the file '%s' is read only."
 msgstr ""
 
-msgid "Column error!"
+msgid "Error the column."
 msgstr ""
 
-msgid "Delete field error!"
+msgid "Error deleting the field."
 msgstr ""
 
-msgid "Line error!"
+msgid "Error the field."
 msgstr ""
 
 #, c-format
-msgid "Key column '%s' is not present!"
+msgid "The key column '%s' is not present."
 msgstr ""

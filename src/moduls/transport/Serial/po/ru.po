@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 22:51+0300\n"
+"POT-Creation-Date: 2018-08-28 19:23+0300\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -18,39 +18,41 @@ msgstr ""
 msgid "Serial interfaces"
 msgstr "Последовательный интерфейс"
 
-msgid "Roman Savochenko, Maxim Kochetkov"
-msgstr "Роман Савоченко, Максим Кочетков"
+msgid "Roman Savochenko, Maxim Kochetkov (2016)"
+msgstr "Роман Савоченко, Максим Кочетков (2016)"
 
 msgid ""
-"Provides a serial interface. It is used to data exchange via the serial "
-"interfaces of type RS232, RS485, GSM and more."
+"Provides transport based on the serial interfaces. It is used for data "
+"exchanging via the serial interfaces of the type RS232, RS485, GSM and "
+"similar."
 msgstr ""
-"Предоставляет последовательный интерфейс. Используется для обмена данными "
-"через последовательные интерфейсы типа RS232, RS485, GSM и другое."
+"Предоставляет транспорт основанный на последовательных интерфейсах. "
+"Используется для обмена данными через последовательные интерфейсы типа "
+"RS232, RS485, GSM и похожие."
 
 msgid "Addition parameters"
 msgstr "Дополнительные параметры"
 
-msgid "Write line error."
+msgid "Error writing a line."
 msgstr "Ошибка записи строки."
 
 #, c-format
-msgid "Send to modem %d: '%s'."
+msgid "Sent to the modem %d: '%s'."
 msgstr "Отправлено на модем %d: '%s'."
 
-msgid "Read from serial error."
+msgid "Error reading from the serial interfaces."
 msgstr "Ошибка чтения последовательного интерфейса."
 
 #, c-format
-msgid "Receive from modem %d: '%s'."
+msgid "Received from the modem %d: '%s'."
 msgstr "Получено из модема %d: '%s'."
 
 #, c-format
-msgid "No any respond from modem %d."
+msgid "No response from the modem %d."
 msgstr "Нет ответа от модема %d."
 
 #, c-format
-msgid "No any expected respond but receive from modem %d: '%s'."
+msgid "No expected response, but receiving from the modem %d: '%s'."
 msgstr "Нет ожидаемого ответа, но получено из модема %d: '%s'."
 
 #, c-format
@@ -63,42 +65,42 @@ msgid "Processing time %s[%s]. "
 msgstr "Время обработки %s[%s]. "
 
 #, c-format
-msgid "Serial port '%s' %s error: %s."
-msgstr "Ошибка %s последовательного порта '%s': %s."
+msgid "Error the serial port '%s' %s: %s."
+msgstr "Ошибка последовательного порта '%s' %s: %s."
 
 #, c-format
-msgid "Speed '%s' error."
+msgid "Error the speed '%s'."
 msgstr "Ошибка скорости '%s'."
 
 #, c-format
-msgid "Asynchronous data format '%s' error."
+msgid "Error the asynchronous data format '%s'."
 msgstr "Ошибка формата асинхронных данных '%s'."
 
 #, c-format
-msgid "Char length '%d' error."
-msgstr "Ошибка в длине символа '%d'."
+msgid "Error char length %d."
+msgstr "Ошибка длины символа %d."
 
 #, c-format
-msgid "Parity checking mode '%c' error."
-msgstr "Ошибка в режиме '%c' проверки чётности."
+msgid "Error the parity checking mode '%c'."
+msgstr "Ошибка режима проверки чётности '%c'."
 
 #, c-format
-msgid "Stop bits '%d' error."
-msgstr "Ошибка в количестве стоп битов '%d'."
+msgid "Error the stop bits %d."
+msgstr "Ошибка количества стоп битов %d."
 
 #, c-format
-msgid "No response to initial request '%s'."
+msgid "No response to the initial request '%s'."
 msgstr "Нет ответа на запрос инициализации '%s'."
 
-msgid "Started"
-msgstr "Запущен"
+msgid "Started."
+msgstr "Запущен."
 
-msgid "Stopped"
-msgstr "Остановлен"
+msgid "Stopped."
+msgstr "Остановлен."
 
 #, c-format
-msgid "Serial received message '%d'."
-msgstr "Serial получил сообщение '%d'."
+msgid "The serial interface received the message '%d'."
+msgstr "Последовательный интерфейс получил сообщение '%d'."
 
 msgid "Received from\n"
 msgstr "Получено\n"
@@ -107,10 +109,10 @@ msgid "Error requesting the protocol."
 msgstr "Ошибка запроса к протоколу."
 
 #, c-format
-msgid "Serial is replied by message '%d'."
-msgstr "Serial ответил сообщением '%d'."
+msgid "The serial interface replied by the message '%d'."
+msgstr "Последовательный интерфейс ответил сообщением '%d'."
 
-msgid "Write: reply for zero bytes."
+msgid "Write: the answer is zero byte."
 msgstr "Запись: ответ ноль байт."
 
 #, c-format
@@ -124,8 +126,8 @@ msgid "Error closing the protocol."
 msgstr "Ошибка закрытия протокола."
 
 msgid ""
-"Serial transport has address format: \"dev:speed:format[:fc[:mdm]]\". "
-"Where:\n"
+"The serial transport has the address format \"{dev}:{speed}:{format}[:{fc}[:"
+"{mdm}]]\", where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
 "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, "
 "57600, 115200,\n"
@@ -143,11 +145,11 @@ msgid ""
 "checking for echo, for raw RS-485;\n"
 "      'rts1ne' - using of the RTS signal for transferring(true) and without "
 "checking for echo, for raw RS-485;\n"
-"      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
+"      'RS485' - using RS-485 mode, through TIOCSRS485.\n"
 "    mdm - modem mode, listen for 'RING'."
 msgstr ""
-"Последовательный транспорт имеет адрес в формате: \"dev:speed:format[:fc[:"
-"mdm]]\". Где:\n"
+"Последовательный транспорт имеет адрес в формате \"{dev}:{speed}:{format}[:"
+"{fc}[:{mdm}]]\", где:\n"
 "    dev - адрес последовательного устройства (/dev/ttyS0);\n"
 "    speed - скорость устройства (300, 600, 1200, 2400, 4800, 9600, 19200, "
 "38400, 57600, 115200,\n"
@@ -173,23 +175,25 @@ msgid "Timings"
 msgstr "Временные интервалы"
 
 msgid ""
-"Connection timings in format: \"symbol:frm[::rtsDelay1:rtsDelay2]\". Where:\n"
-"    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
-"    frm - maximum frame length, in ms;\n"
-"    rtsDelay1 - the delay from the transmitter enabling by the RTS signal "
-"and to same the transferring, in ms;\n"
-"    rtsDelay2 - the delay from the transferring finish and the transmitter "
-"disabling by the RTS signal, in ms."
+"Connection timings in the format \"{symbol}:{frm}[::{rtsDelay1}:"
+"{rtsDelay2}]\", where:\n"
+"    symbol - maximum time of one symbol, used for the frame end detection "
+"and for timeout of the next request, in milliseconds;\n"
+"    frm - maximum frame length, in milliseconds;\n"
+"    rtsDelay1 - delay between the transmitter activation with RTS signal and "
+"start up of the transmission, in milliseconds;\n"
+"    rtsDelay2 - delay between the transmitting and disconnecting the "
+"transmitter with RTS signal, in milliseconds."
 msgstr ""
-"Временные интервалы соединения в формате: \"symbol:frm[::rtsDelay1:"
-"rtsDelay2]\". Где:\n"
+"Временные интервалы соединения в формате \"{symbol}:{frm}[::{rtsDelay1}:"
+"{rtsDelay2}]\", где:\n"
 "    symbol - максимальное время одного символа, используется для обнаружения "
-"окончания фрейма, в мс;\n"
-"    frm - максимальная длина фрейма, в мс;\n"
+"окончания фрейма, в миллисекундах;\n"
+"    frm - максимальная длина фрейма, в миллисекундах\n"
 "    rtsDelay1 - задержка между включением передатчика сигналом RTS и началом "
-"передачи, в мс;\n"
+"передачи, в миллисекундах;\n"
 "    rtsDelay2 - задержка между окончанием передачи и отключением передатчика "
-"сигналом RTS, в мс."
+"сигналом RTS, в миллисекундах."
 
 msgid "Priority"
 msgstr "Приоритет"
@@ -221,20 +225,20 @@ msgstr "Запрос звонка"
 msgid "Ring answer"
 msgstr "Ответ на звонок"
 
-msgid "Ring answer response"
-msgstr "Ответ на звонок, результат"
+msgid "Result of the ring answer"
+msgstr "Результат ответа на звонок"
 
 #, c-format
 msgid "Traffic in %s, out %s. "
 msgstr "Трафик входящий %s, исходящий %s. "
 
 #, c-format
-msgid "Respond time %s[%s:%s/1.5]. "
+msgid "Response time %s[%s:%s/1.5]. "
 msgstr "Время ответа %s[%s:%s/1.5]. "
 
 #, c-format
-msgid "Device '%s' is used now."
-msgstr "Устройство '%s' использовано сейчас."
+msgid "The device '%s' is using now."
+msgstr "Устройство '%s' используется сейчас."
 
 msgid "Starting."
 msgstr "Запуск."
@@ -254,6 +258,9 @@ msgstr "Модем не подключился"
 msgid "Stopping."
 msgstr "Останов."
 
+msgid "Stopped"
+msgstr "Остановлен"
+
 msgid "Unknown error"
 msgstr "Неизвестная ошибка"
 
@@ -264,15 +271,15 @@ msgstr "Транспорт не запущен!"
 msgid "Restart by KeepAliveTm %gs."
 msgstr "Перезапуск по KeepAliveTm %gс."
 
-msgid "No data wrote"
+msgid "No wrote data"
 msgstr "Не записано данных"
 
 #, c-format
-msgid "Write error: %s"
+msgid "Error writing: %s"
 msgstr "Ошибка записи: %s"
 
 #, c-format
-msgid "Transmitting error: %s"
+msgid "Error transmitting: %s"
 msgstr "Ошибка передачи: %s"
 
 #, c-format
@@ -282,45 +289,37 @@ msgstr "Записано %s."
 msgid "Timeouted!"
 msgstr "Время исчерпано!"
 
-msgid "Echo request reading error."
+msgid "Error reading the echo request."
 msgstr "Ошибка чтения эхо запроса."
 
-msgid "Read timeouted."
-msgstr "Время ожидания чтения истекло!"
+msgid "Reading timeouted."
+msgstr "Время ожидания чтения истекло."
 
-msgid "Receiving timeouted"
-msgstr "Время ожидания получения истекло!"
+msgid "Reading timeouted"
+msgstr "Время ожидания чтения истекло"
 
 #, c-format
-msgid "Read (select) error: %s"
+msgid "Error reading (select): %s"
 msgstr "Ошибка чтения (select): %s"
-
-#, c-format
-msgid "Receiving (select) error: %s"
-msgstr "Ошибка получения (select): %s"
 
 msgid "No data"
 msgstr "Нет данных"
 
 #, c-format
-msgid "Read error: %s"
+msgid "Error reading: %s"
 msgstr "Ошибка чтения: %s"
-
-#, c-format
-msgid "Receiving error: %s"
-msgstr "Ошибка получения: %s"
 
 #, c-format
 msgid "Read %s."
 msgstr "Прочитано %s."
 
 msgid ""
-"Serial transport has address format: \"dev:speed:format[:fc[:modTel]]\". "
-"Where:\n"
+"The serial transport has the address format \"{dev}:{speed}:{format}[:{fc}[:"
+"{modTel}]]\", where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
 "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, "
 "57600, 115200,\n"
-"                          230400, 460800, 500000, 576000 or 921600 );\n"
+"                          230400, 460800, 500000, 576000 or 921600);\n"
 "    format - asynchronous data format '{size}{parity}{stop}' (8N1, 7E1, "
 "5O2);\n"
 "    fc - flow control:\n"
@@ -334,17 +333,17 @@ msgid ""
 "checking for echo, for raw RS-485;\n"
 "      'rts1ne' - using of the RTS signal for transferring(true) and without "
 "checking for echo, for raw RS-485;\n"
-"      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
+"      'RS485' - using RS-485 mode, through TIOCSRS485.\n"
 "    modTel - modem telephone, the field presence do switch transport to work "
 "with modem mode."
 msgstr ""
-"Последовательный транспорт имеет адрес в формате: \"dev:speed:format[:fc[:"
-"modTel]]\". Где:\n"
+"Последовательный транспорт имеет адрес в формате \"{dev}:{speed}:{format}[:"
+"{fc}[:{modTel}]]\", где:\n"
 "    dev - адрес последовательного устройства (/dev/ttyS0);\n"
 "    speed - скорость устройства (300, 600, 1200, 2400, 4800, 9600, 19200, "
 "38400, 57600, 115200,\n"
 "                                 230400, 460800, 500000, 576000 или "
-"921600 );\n"
+"921600);\n"
 "    format - формат асинхронных данных '{размер}{чётность}{стоп}' (8N1, 7E1, "
 "5O2);\n"
 "    fc - управление потоком:\n"
@@ -363,37 +362,39 @@ msgstr ""
 "работу в режиме модема."
 
 msgid ""
-"Connection timings in format: \"conn:symbol[-NextReqMult][:KeepAliveTm[:"
-"rtsDelay1:rtsDelay2]]\". Where:\n"
-"    conn - maximum time for connection respond wait, in ms;\n"
-"    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
-"    NextReqMult - next request's multiplicator to the {symbol} time, 4 by "
+"Connection timings in the format \"{conn}:{symbol}[-{NextReqMult}][:"
+"{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]\", where:\n"
+"    conn - maximum time of waiting the connecting response, in "
+"milliseconds;\n"
+"    symbol - maximum time of one symbol, used for the frame end detection, "
+"in milliseconds;\n"
+"    NextReqMult - next request's multiplicator to the <symbol> time, 4 by "
 "default;\n"
-"    KeepAliveTm - keep alive timeout in seconds for restart transport;\n"
-"    rtsDelay1 - the delay from the transmitter enabling by the RTS signal "
-"and to same the transferring, in ms;\n"
-"    rtsDelay2 - the delay from the transferring finish and the transmitter "
-"disabling by the RTS signal, in ms."
+"    KeepAliveTm - keep alive timeout to restart the transport, in seconds;\n"
+"    rtsDelay1 - delay between the transmitter activation with RTS signal and "
+"start up of the transmission, in milliseconds;\n"
+"    rtsDelay2 - delay between the transmitting and disconnecting the "
+"transmitter with RTS signal, in milliseconds."
 msgstr ""
-"Временные интервалы соединения в формате: \"conn:symbol[-NextReqMult][:"
-"KeepAliveTm[:rtsDelay1:rtsDelay2]]\". Где:\n"
-"    conn - максимальное время ожидания ответа соединения, в мс;\n"
+"Временные интервалы соединения в формате \"{conn}:{symbol}[-{NextReqMult}][:"
+"{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]\", где:\n"
+"    conn - максимальное время ожидания ответа соединения, в миллисекундах;\n"
 "    symbol - максимальное время одного символа, используется для обнаружения "
-"окончания фрейма, в мс;\n"
+"окончания фрейма и таймаута следующего запроса, в миллисекундах;\n"
 "    NextReqMult - множитель времени следующего запроса к времени символа "
 "{symbol}, 4 по умолчанию;\n"
-"    KeepAliveTm - таймаут жизни в секундах для перезапуска транспорта;\n"
+"    KeepAliveTm - таймаут жизни для перезапуска транспорта, в секундах;\n"
 "    rtsDelay1 - задержка между включением передатчика сигналом RTS и началом "
-"передачи, в мс;\n"
+"передачи, в миллисекундах;\n"
 "    rtsDelay2 - задержка между окончанием передачи и отключением передатчика "
-"сигналом RTS, в мс."
+"сигналом RTS, в миллисекундах."
 
 msgid "No stop on proceed"
 msgstr "Не останавливать при обработке"
 
 msgid ""
 "Sometime opened device closing can be breakage, on ICP-DAS LP PLC for "
-"example, then you alowed to prevent it by that option."
+"example, then you are alowed to prevent it by this option."
 msgstr ""
 "Иногда закрытие открытого устройства может быть разрушительным, например, на "
 "ПЛК LP от ICP-DAS, и Вы можете предотвратить это данной опцией."

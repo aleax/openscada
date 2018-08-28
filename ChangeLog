@@ -1,3 +1,15 @@
+2018-08-28 Roman (stable)
+- DB.OscadaLibs: base.{digitBlockUnif,digitBlockUnifSt}: The imitation expanded for random offset.
+- !!:DB.DBF,Transport.Serial: Revised for all messages and the documentation.
+- DAQ.JavaLikeCalc: Expanded for expressions with the keyword "var" processing at presence the same name variable "var".
+- Transport.{SSL,Sockets}: Some original messages is fixed.
+- FIX:UI.VCAEngine: Prevented from copy not modified attributes at widgets copying.
+- FIX:UI.Vision: Did for focus moving to the active subwindow at the drag and drop from the widgets inspector.
+    The field "Inherit" of the Widget addition dialog set to hide at copying/adding to the widgets container.
+- UI.WebVision: Expanded for setting for VCA visual elements, for "class" to "Primitive {WPrimitive}" and "id" to the widget identifier
+    like to "wdg_{id}" for simplifying the customisation.
+
+
 2018-08-19 Roman (stable)
 - Android/build.sh: Improved to build in environment with the system Qt5 development files.
 - !:DOC: "DAQ", "DAQ.DAQGate" expanded by links to the resources. "Release 0.9" expanded for the participants list. 

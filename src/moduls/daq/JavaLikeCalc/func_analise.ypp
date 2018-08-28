@@ -131,6 +131,11 @@ solve:  assign ';'
 	| '{' solver '}'
 var:	VAR			{ $$ = $1; }
 	| VAR_DIR VAR		{ $2->setType(Reg::Real/*String*/); $$ = $2; }
+	| VAR VAR
+	    {
+		if($1->name() == "var") { $2->setType(Reg::Real/*String*/); $$ = $2; }
+		else { sfErr(TSYS::strMess(_("Variable '%s' just after variable '%s'"),$2->name().c_str(),$1->name().c_str()),&@1); YYABORT; }
+	    }
 	| var O_PRP_F		{ $$ = pF->cdProp($1,$2); }
 	| var '[' expr ']'	{ $$ = pF->cdProp($1,"",$3); }
 	| var O_PRP_F '(' prmlst ')'

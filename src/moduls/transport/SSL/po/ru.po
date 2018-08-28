@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 14:06+0200\n"
+"POT-Creation-Date: 2018-08-28 22:46+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -200,8 +200,7 @@ msgstr "время обработки %s[%s]; "
 msgid "Traffic in %s, out %s."
 msgstr "Трафик входящий %s, исходящий %s."
 
-#, c-format
-msgid "Respond time %s[%s]. "
+msgid "Response time %s[%s]. "
 msgstr "Время ответа %s[%s]. "
 
 #, c-format

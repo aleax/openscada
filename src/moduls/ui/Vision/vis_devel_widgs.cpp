@@ -49,6 +49,7 @@
 #include <QBitmap>
 #include <QMimeData>
 #include <QCompleter>
+#include <QMdiSubWindow>
 
 #include <tsys.h>
 
@@ -2954,9 +2955,13 @@ bool DevelWdgView::event( QEvent *event )
 		    // Search need action
 		    QPoint curp = mapFromGlobal(cursor().pos());
 		    for(int iA = 0; iA < mainWin()->actGrpWdgAdd->actions().size(); iA++)
-			if(mainWin()->actGrpWdgAdd->actions().at(iA)->objectName() == lwdg)
+			if(mainWin()->actGrpWdgAdd->actions().at(iA)->objectName() == lwdg) {
+			    //Changing the active window selection to where the drop
+			    mainWin()->work_space->setActiveSubWindow(dynamic_cast<QMdiSubWindow*>(parentWidget()->parentWidget()->parentWidget()));
+			    //Adding a visual item
 			    mainWin()->visualItAdd(mainWin()->actGrpWdgAdd->actions().at(iA),
 				    QPointF((float)curp.x()/xScale(true),(float)curp.y()/yScale(true)));
+			}
 
 		    ev->accept();
 		    return true;

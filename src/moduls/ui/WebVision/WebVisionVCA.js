@@ -625,6 +625,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	if(this.attrs['focus'] && parseInt(this.attrs['focus'])) setFocus(this.addr,true);
 
+	this.place.className = "Primitive " + this.attrs['root'];
+	this.place.setAttribute("id", this.addr.slice(this.addr.lastIndexOf("/")+1));	// this.addr.replace("/"+sessId,"").replace(/\//g, "_"));
+
 	var isPrim = true;
 	if(!(parseInt(this.attrs['perm'])&SEC_RD)) {
 	    if(this.pg) {
@@ -695,9 +698,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			delete pgCache[this.inclOpen];
 		    }
 		    else {
-			var iPg = new pwDescr(this.inclOpen,true,this);
+			var iPg = new pwDescr(this.inclOpen, true, this);
 			iPg.place = this.place.ownerDocument.createElement('div');
-			iPg.makeEl(servGet(this.inclOpen,'com=attrsBr'),false,true);
+			iPg.makeEl(servGet(this.inclOpen,'com=attrsBr'), false, true);
+
 			this.pages[this.inclOpen] = iPg;
 			this.place.appendChild(iPg.place);
 		    }
@@ -748,7 +752,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var argPad = '';
 		    for(var j = argVal.length; j < Math.abs(argSize); j++) argPad += ' ';//&nbsp;';
 		    if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
-		    txtVal = txtVal.replace('%'+(i+1),argVal);
+		    txtVal = txtVal.replace('%'+(i+1), argVal);
 		}
 		var spEl = this.place.children.length ? this.place.children[0] : this.place.ownerDocument.createElement('span');
 		this.place.appendChild(spEl);
@@ -765,7 +769,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    else this.place.onclick = '';
 	}
 	else if(this.attrs['root'] == 'Media') {
-	    this.place.className = "Media";
 	    elStyle += 'border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(this.place.elWr != elWr || (parseInt(this.attrs['areas']) && this.place.children.length <= 1) ||
 					  (!parseInt(this.attrs['areas']) && this.place.children.length > 1) ||
@@ -826,7 +829,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	}
 	else if(this.attrs['root'] == 'FormEl' && !this.place.isModify) {
-	    this.place.className = "FormEl";	//Move to the proper style after HTML code moving to different file.
 	    var elTp = parseInt(this.attrs['elType']);
 	    if(this.attrsMdf['elType'] || this.place.elWr != elWr)
 		while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);

@@ -1201,7 +1201,8 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 		    if(dw) dw->chRecord(*XMLNode("chldAdd").setAttr("path", new_wdg)->setAttr("id", w_id)->setAttr("name", w_nm)->
 			setAttr("parent", par_nm)->setAttr("x",r2s(pnt.x()))->setAttr("y",r2s(pnt.y())));
 		}
-		work_space->setActiveSubWindow(actSubW);	//For set focus to target subwindow and the new widget select
+		if(actSubW) actSubW->setFocus(Qt::MouseFocusReason);	//To set the focus to target subwindow and the new widget selecting
+		//work_space->setActiveSubWindow(actSubW);
 	    }
 	    if(err) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	    emit modifiedItem(new_wdg);
@@ -1225,8 +1226,7 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 	if(dlg.exec() != QDialog::Accepted) return;
     }
 
-    for(int w_off = 0; (del_wdg=TSYS::strSepParse(work_wdg_loc,0,';',&w_off)).size(); )
-    {
+    for(int w_off = 0; (del_wdg=TSYS::strSepParse(work_wdg_loc,0,';',&w_off)).size(); ) {
 	//Get owner object path and deleted item identifier
 	string it_own, it_id;
 	int p_el_cnt = 0;
@@ -1455,6 +1455,8 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	for(int off = 0; !(t_el=TSYS::pathLev(copy_buf_el,0,true,&off)).empty(); n_sel++)
 	{ if(n_sel) s_elp += ("/"+s_el); s_el = t_el; }
 
+	string d_el_ = d_el;
+
 	//Copy visual item
 	XMLNode req("get");
 	// Project copy
@@ -1525,7 +1527,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	dlg.setMess(t_el.c_str());
 	dlg.setId(t1_el.c_str());
 	// Add Link flag for copy operation
-	if(copy_buf_w[0] != '1' && d_el.substr(0,4) != "prj_" && d_el.substr(0,4) != "wlb_") {
+	if(copy_buf_w[0] != '1' && d_el != "prj_" && d_el != "wlb_" && d_el_.substr(0,4) != "wdg_") {
 	    dlg.edLay()->addWidget(new QLabel(_("Inherit:"),&dlg), 2, 0);
 	    wInher = new QCheckBox(&dlg);
 	    dlg.edLay()->addWidget(wInher, 2, 1);

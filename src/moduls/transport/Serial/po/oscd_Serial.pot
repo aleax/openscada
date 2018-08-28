@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 22:51+0300\n"
+"POT-Creation-Date: 2018-08-28 22:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,35 +20,35 @@ msgstr ""
 msgid "Serial interfaces"
 msgstr ""
 
-msgid "Roman Savochenko, Maxim Kochetkov"
+msgid "Roman Savochenko, Maxim Kochetkov (2016)"
 msgstr ""
 
-msgid "Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more."
+msgid "Provides transport based on the serial interfaces. It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar."
 msgstr ""
 
 msgid "Addition parameters"
 msgstr ""
 
-msgid "Write line error."
+msgid "Error writing a line."
 msgstr ""
 
 #, c-format
-msgid "Send to modem %d: '%s'."
+msgid "Sent to the modem %d: '%s'."
 msgstr ""
 
-msgid "Read from serial error."
-msgstr ""
-
-#, c-format
-msgid "Receive from modem %d: '%s'."
+msgid "Error reading from the serial interfaces."
 msgstr ""
 
 #, c-format
-msgid "No any respond from modem %d."
+msgid "Received from the modem %d: '%s'."
 msgstr ""
 
 #, c-format
-msgid "No any expected respond but receive from modem %d: '%s'."
+msgid "No response from the modem %d."
+msgstr ""
+
+#, c-format
+msgid "No expected response, but receiving from the modem %d: '%s'."
 msgstr ""
 
 #, c-format
@@ -60,41 +60,41 @@ msgid "Processing time %s[%s]. "
 msgstr ""
 
 #, c-format
-msgid "Serial port '%s' %s error: %s."
+msgid "Error the serial port '%s' %s: %s."
 msgstr ""
 
 #, c-format
-msgid "Speed '%s' error."
+msgid "Error the speed '%s'."
 msgstr ""
 
 #, c-format
-msgid "Asynchronous data format '%s' error."
+msgid "Error the asynchronous data format '%s'."
 msgstr ""
 
 #, c-format
-msgid "Char length '%d' error."
+msgid "Error char length %d."
 msgstr ""
 
 #, c-format
-msgid "Parity checking mode '%c' error."
+msgid "Error the parity checking mode '%c'."
 msgstr ""
 
 #, c-format
-msgid "Stop bits '%d' error."
+msgid "Error the stop bits %d."
 msgstr ""
 
 #, c-format
-msgid "No response to initial request '%s'."
+msgid "No response to the initial request '%s'."
 msgstr ""
 
-msgid "Started"
+msgid "Started."
 msgstr ""
 
-msgid "Stopped"
+msgid "Stopped."
 msgstr ""
 
 #, c-format
-msgid "Serial received message '%d'."
+msgid "The serial interface received the message '%d'."
 msgstr ""
 
 msgid "Received from\n"
@@ -104,10 +104,10 @@ msgid "Error requesting the protocol."
 msgstr ""
 
 #, c-format
-msgid "Serial is replied by message '%d'."
+msgid "The serial interface replied by the message '%d'."
 msgstr ""
 
-msgid "Write: reply for zero bytes."
+msgid "Write: the answer is zero byte."
 msgstr ""
 
 #, c-format
@@ -121,7 +121,7 @@ msgid "Error closing the protocol."
 msgstr ""
 
 msgid ""
-"Serial transport has address format: \"dev:speed:format[:fc[:mdm]]\". Where:\n"
+"The serial transport has the address format \"{dev}:{speed}:{format}[:{fc}[:{mdm}]]\", where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
 "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 "                          230400, 460800, 500000, 576000 or 921600);\n"
@@ -133,7 +133,7 @@ msgid ""
 "      'rts1' - using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;\n"
 "      'rtsne' - using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;\n"
 "      'rts1ne' - using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;\n"
-"      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
+"      'RS485' - using RS-485 mode, through TIOCSRS485.\n"
 "    mdm - modem mode, listen for 'RING'."
 msgstr ""
 
@@ -141,11 +141,11 @@ msgid "Timings"
 msgstr ""
 
 msgid ""
-"Connection timings in format: \"symbol:frm[::rtsDelay1:rtsDelay2]\". Where:\n"
-"    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
-"    frm - maximum frame length, in ms;\n"
-"    rtsDelay1 - the delay from the transmitter enabling by the RTS signal and to same the transferring, in ms;\n"
-"    rtsDelay2 - the delay from the transferring finish and the transmitter disabling by the RTS signal, in ms."
+"Connection timings in the format \"{symbol}:{frm}[::{rtsDelay1}:{rtsDelay2}]\", where:\n"
+"    symbol - maximum time of one symbol, used for the frame end detection and for timeout of the next request, in milliseconds;\n"
+"    frm - maximum frame length, in milliseconds;\n"
+"    rtsDelay1 - delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;\n"
+"    rtsDelay2 - delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds."
 msgstr ""
 
 msgid "Priority"
@@ -178,7 +178,7 @@ msgstr ""
 msgid "Ring answer"
 msgstr ""
 
-msgid "Ring answer response"
+msgid "Result of the ring answer"
 msgstr ""
 
 #, c-format
@@ -186,11 +186,11 @@ msgid "Traffic in %s, out %s. "
 msgstr ""
 
 #, c-format
-msgid "Respond time %s[%s:%s/1.5]. "
+msgid "Response time %s[%s:%s/1.5]. "
 msgstr ""
 
 #, c-format
-msgid "Device '%s' is used now."
+msgid "The device '%s' is using now."
 msgstr ""
 
 msgid "Starting."
@@ -211,6 +211,9 @@ msgstr ""
 msgid "Stopping."
 msgstr ""
 
+msgid "Stopped"
+msgstr ""
+
 msgid "Unknown error"
 msgstr ""
 
@@ -221,15 +224,15 @@ msgstr ""
 msgid "Restart by KeepAliveTm %gs."
 msgstr ""
 
-msgid "No data wrote"
+msgid "No wrote data"
 msgstr ""
 
 #, c-format
-msgid "Write error: %s"
+msgid "Error writing: %s"
 msgstr ""
 
 #, c-format
-msgid "Transmitting error: %s"
+msgid "Error transmitting: %s"
 msgstr ""
 
 #, c-format
@@ -239,32 +242,24 @@ msgstr ""
 msgid "Timeouted!"
 msgstr ""
 
-msgid "Echo request reading error."
+msgid "Error reading the echo request."
 msgstr ""
 
-msgid "Read timeouted."
+msgid "Reading timeouted."
 msgstr ""
 
-msgid "Receiving timeouted"
-msgstr ""
-
-#, c-format
-msgid "Read (select) error: %s"
+msgid "Reading timeouted"
 msgstr ""
 
 #, c-format
-msgid "Receiving (select) error: %s"
+msgid "Error reading (select): %s"
 msgstr ""
 
 msgid "No data"
 msgstr ""
 
 #, c-format
-msgid "Read error: %s"
-msgstr ""
-
-#, c-format
-msgid "Receiving error: %s"
+msgid "Error reading: %s"
 msgstr ""
 
 #, c-format
@@ -272,10 +267,10 @@ msgid "Read %s."
 msgstr ""
 
 msgid ""
-"Serial transport has address format: \"dev:speed:format[:fc[:modTel]]\". Where:\n"
+"The serial transport has the address format \"{dev}:{speed}:{format}[:{fc}[:{modTel}]]\", where:\n"
 "    dev - serial device address (/dev/ttyS0);\n"
 "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
-"                          230400, 460800, 500000, 576000 or 921600 );\n"
+"                          230400, 460800, 500000, 576000 or 921600);\n"
 "    format - asynchronous data format '{size}{parity}{stop}' (8N1, 7E1, 5O2);\n"
 "    fc - flow control:\n"
 "      'h' - hardware (CRTSCTS);\n"
@@ -284,24 +279,24 @@ msgid ""
 "      'rts1' - using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;\n"
 "      'rtsne' - using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;\n"
 "      'rts1ne' - using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;\n"
-"      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
+"      'RS485' - using RS-485 mode, through TIOCSRS485.\n"
 "    modTel - modem telephone, the field presence do switch transport to work with modem mode."
 msgstr ""
 
 msgid ""
-"Connection timings in format: \"conn:symbol[-NextReqMult][:KeepAliveTm[:rtsDelay1:rtsDelay2]]\". Where:\n"
-"    conn - maximum time for connection respond wait, in ms;\n"
-"    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
-"    NextReqMult - next request's multiplicator to the {symbol} time, 4 by default;\n"
-"    KeepAliveTm - keep alive timeout in seconds for restart transport;\n"
-"    rtsDelay1 - the delay from the transmitter enabling by the RTS signal and to same the transferring, in ms;\n"
-"    rtsDelay2 - the delay from the transferring finish and the transmitter disabling by the RTS signal, in ms."
+"Connection timings in the format \"{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]\", where:\n"
+"    conn - maximum time of waiting the connecting response, in milliseconds;\n"
+"    symbol - maximum time of one symbol, used for the frame end detection, in milliseconds;\n"
+"    NextReqMult - next request's multiplicator to the <symbol> time, 4 by default;\n"
+"    KeepAliveTm - keep alive timeout to restart the transport, in seconds;\n"
+"    rtsDelay1 - delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;\n"
+"    rtsDelay2 - delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds."
 msgstr ""
 
 msgid "No stop on proceed"
 msgstr ""
 
-msgid "Sometime opened device closing can be breakage, on ICP-DAS LP PLC for example, then you alowed to prevent it by that option."
+msgid "Sometime opened device closing can be breakage, on ICP-DAS LP PLC for example, then you are alowed to prevent it by this option."
 msgstr ""
 
 msgid "Life time, seconds"

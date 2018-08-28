@@ -39,9 +39,9 @@
 #define MOD_NAME	_("DB DBF")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.2.8"
+#define MOD_VER		"2.3.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("BD module. Provides support of the *.dbf files, version 3.0.")
+#define DESCRIPTION	_("DB module. Provides support of the DBF files version 3.0.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -101,7 +101,7 @@ void MBD::postDisable( int flag )
     TBD::postDisable(flag);
 
     if(flag && owner().fullDeleteDB())
-	if(rmdir(addr().c_str()) != 0) mess_sys(TMess::Warning, _("Delete DB error!"));
+	if(rmdir(addr().c_str()) != 0) mess_sys(TMess::Warning, _("Error deleting DB."));
 }
 
 void MBD::enable( )
@@ -110,8 +110,8 @@ void MBD::enable( )
 
     char *rez = getcwd(buf, sizeof(buf));
     if(chdir(addr().c_str()) != 0 && mkdir(addr().c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0)
-	throw err_sys(_("Error create DB directory '%s'!"), addr().c_str());
-    if(rez && chdir(buf)) throw err_sys(_("Restore previous directory as current error."));
+	throw err_sys(_("Error creating the DB directory '%s'."), addr().c_str());
+    if(rez && chdir(buf)) throw err_sys(_("Error restoring previous directory as the current."));
 
     TBD::enable();
 }
@@ -154,7 +154,7 @@ void MBD::transCloseCheck( )
 
 TTable *MBD::openTable( const string &nm, bool create )
 {
-    if(!enableStat()) throw err_sys(_("Error open table '%s'. DB is disabled."), nm.c_str());
+    if(!enableStat()) throw err_sys(_("Error opening the table '%s': the DB is disabled."), nm.c_str());
 
     //Set file extend
     string tblNm = nm;
@@ -164,7 +164,7 @@ TTable *MBD::openTable( const string &nm, bool create )
     TBasaDBF *basa = new TBasaDBF();
     if(basa->LoadFile((char*)nTable.c_str()) == -1 && !create) {
 	delete basa;
-	throw err_sys(_("Open table error!"));
+	throw err_sys(_("Error opening the table."));
     }
 
     return new MTable(nm, this, nTable, basa);
@@ -178,8 +178,8 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	ctrRemoveNode(opt, "/sql");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,3,
 	    "dest","sel_ed","select","/prm/cfg/dbFsList","help",
-	    _("For DBF address DB is the directory which contains files of tables (*.dbf).\n"
-	      "For example: /opt/dbf ."));
+	    _("For DBF, a DB address is the directory which contains files of the tables (*.dbf).\n"
+	      "For example: /opt/dbf."));
 	return;
     }
     //Process command to page
@@ -241,7 +241,7 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg, vector< vector<string> > *full )
 
 	// Get table volume
 	string val;
-	if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw err_sys(_("Cell error!"));
+	if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw err_sys(_("Error the cell."));
 
 	// Write value
 	setVal(e_cfg, val);
@@ -258,7 +258,7 @@ void MTable::fieldGet( TConfig &cfg )
     ResAlloc res(mRes, false);
 
     //Get key line
-    if((i_ln=findKeyLine(cfg)) < 0) throw err_sys(_("Field is not present!"));
+    if((i_ln=findKeyLine(cfg)) < 0) throw err_sys(_("The field is not present."));
 
     //Get config fields list
     vector<string> cf_el;
@@ -276,7 +276,7 @@ void MTable::fieldGet( TConfig &cfg )
 
 	// Get table volume
 	string val;
-	if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw err_sys(_("Cell error!"));
+	if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw err_sys(_("Error the cell."));
 	// Write value
 	setVal(e_cfg, val);
     }
@@ -295,7 +295,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     //Check for write access
     if(!(access(nTable.c_str(),F_OK|W_OK) == 0 || (access(nTable.c_str(),F_OK) != 0 && access(owner().addr().c_str(),W_OK) == 0)))
-	throw err_sys(_("Read only access to file '%s'."), nTable.c_str());
+	throw err_sys(_("Access to the file '%s' is read only."), nTable.c_str());
 
     bool forceUpdt = cfg.reqKeys(),
 	appMode = forceUpdt || (cfg.incomplTblStruct() && !basa->isEmpty());	//Only for append no present fields
@@ -313,7 +313,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    db_str_rec n_rec;
 
 	    fieldPrmSet(e_cfg, n_rec);
-	    if(basa->addField(i_cf,&n_rec) < 0) throw err_sys(_("Column error!"));
+	    if(basa->addField(i_cf,&n_rec) < 0) throw err_sys(_("Error the column."));
 	}
 	else if(!appMode) {
 	    // Check collumn parameters
@@ -337,7 +337,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    db_str_rec n_rec;
 
 	    fieldPrmSet(e_cfg, n_rec);
-	    if(basa->setField(i_clm,&n_rec) < 0) throw err_sys(_("Column error!"));
+	    if(basa->setField(i_clm,&n_rec) < 0) throw err_sys(_("Error the column."));
 	}
     }
     //Del no used collumn
@@ -346,7 +346,7 @@ void MTable::fieldSet( TConfig &cfg )
 	unsigned i_cf;
 	for(i_cf = 0; i_cf < cf_el.size(); i_cf++)
 	    if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
-	if(i_cf >= cf_el.size() && basa->DelField(i_clm) < 0) throw err_sys(_("Delete field error!"));
+	if(i_cf >= cf_el.size() && basa->DelField(i_clm) < 0) throw err_sys(_("Error deleting the field."));
     }
 
     //Write to all records
@@ -370,7 +370,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    if(fld_rec == NULL) continue;
 
 	    // Set table volume
-	    if(basa->ModifiFieldIt(i_ln,i_clm,getVal(e_cfg,fld_rec).c_str()) < 0) throw err_sys(_("Cell error!"));
+	    if(basa->ModifiFieldIt(i_ln,i_clm,getVal(e_cfg,fld_rec).c_str()) < 0) throw err_sys(_("Error the cell."));
 	}
 	if(!forceUpdt) isEnd = true;
     }
@@ -388,8 +388,8 @@ void MTable::fieldDel( TConfig &cfg )
     int i_ln;
     while((i_ln = findKeyLine(cfg,0,true)) >= 0) {
 	if(!i_ok && !(access(nTable.c_str(),F_OK|W_OK) == 0 || (access(nTable.c_str(),F_OK) != 0 && mModify && access(owner().addr().c_str(),W_OK) == 0)))
-	    throw err_sys(_("Read only access to file '%s'."), nTable.c_str());
-	if(basa->DeleteItems(i_ln,1) < 0) throw err_sys(_("Line error!"));
+	    throw err_sys(_("Access to the file '%s' is read only."), nTable.c_str());
+	if(basa->DeleteItems(i_ln,1) < 0) throw err_sys(_("Error the field."));
 
 	i_ok = true;
 	mModify = SYS->sysTm();
@@ -422,10 +422,10 @@ int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey, int off )
 	    db_str_rec *fld_rec;
 	    for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++)
 		if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
-	    if(fld_rec == NULL) throw err_sys(_("Key column '%s' is not present!"), cf_el[i_cf].c_str());
+	    if(fld_rec == NULL) throw err_sys(_("The key column '%s' is not present."), cf_el[i_cf].c_str());
 	    // Get table volume
 	    string val;
-	    if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw err_sys(_("Cell error!"));
+	    if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw err_sys(_("Error the cell."));
 	    // Remove spaces from end
 	    int i;
 	    for(i = val.size(); i > 0 && val[i-1] == ' '; i--) ;

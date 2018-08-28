@@ -449,7 +449,7 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 	    unsigned wOff = 0;
 	    for( ; wOff != data.size() && wL > 0; wOff += wL) {
 		wL = write(sId, data.data()+wOff, data.size()-wOff);
-		if(wL == 0) { mess_err(nodePath().c_str(), _("Write: reply for zero bytes.")); break; }
+		if(wL == 0) { mess_err(nodePath().c_str(), _("Write: the answer is zero byte.")); break; }
 		else if(wL < 0) {
 		    if(errno == EAGAIN) {
 			tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time get?
@@ -716,7 +716,7 @@ void *TSocketIn::ClTask( void *s_inf )
 		ssize_t wL = 1;
 		for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL) {
 		    wL = write(s.sock, answ.data()+wOff, answ.size()-wOff);
-		    if(wL == 0) { mess_err(s.s->nodePath().c_str(), _("Write: reply for zero bytes.")); break; }
+		    if(wL == 0) { mess_err(s.s->nodePath().c_str(), _("Write: the answer is zero byte.")); break; }
 		    else if(wL < 0) {
 			if(errno == EAGAIN) {
 			    tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time get?
@@ -857,7 +857,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list", opt, -1, "/prm/st/conns", _("Active connections"), R_R_R_, "root", STR_ID);
 	ctrRemoveNode(opt, "/prm/cfg/A_PRMS");
 	ctrMkNode("fld", opt, -1, "/prm/cfg/ADDR", EVAL_STR, startStat()?R_R_R_:RWRWR_, "root", STR_ID, 1, "help",
-	    _("Socket's input transport has address format:\n"
+	    _("Socket's input transport has the address format:\n"
 	    "  TCP:{addr}:{port}:{mode} - TCP socket:\n"
 	    "    addr - address for socket to be opened, empty address opens socket for all interfaces;\n"
 	    "    port - network port (/etc/services);\n"
@@ -976,7 +976,7 @@ string TSocketOut::getStatus( )
     if(startStat()) {
 	rez += TSYS::strMess(_("Traffic in %s, out %s. "), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
 	if(mess_lev() == TMess::Debug && respTmMax)
-	    rez += TSYS::strMess(_("Respond time %s[%s]. "), tm2s(1e-6*respTm).c_str(), tm2s(1e-6*respTmMax).c_str());
+	    rez += TSYS::strMess(_("Response time %s[%s]. "), tm2s(1e-6*respTm).c_str(), tm2s(1e-6*respTmMax).c_str());
     }
 
     return rez;
@@ -1323,7 +1323,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	TTransportOut::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,1,"help",
-	    _("Socket's output transport has address format:\n"
+	    _("Socket's output transport has the address format:\n"
 	    "  TCP:{addr}:{port} - TCP socket:\n"
 	    "    addr - address for remote socket to be opened;\n"
 	    "    port - network port (/etc/services);\n"
@@ -1340,7 +1340,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/MSS",_("Maximum segment size (MSS)"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
 		"tp","str","help",_("Set 0 for system MSS."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Connection timings in format: \"conn:next[:rep]\". Where:\n"
+	    _("Connection timings in the format \"{conn}:{next}[:{rep}]\", where:\n"
 	    "    conn - maximum time for connection respond wait, in seconds;\n"
 	    "    next - maximum time for continue respond wait, in seconds;\n"
 	    "    rep  - minimum repeate timeout, in seconds."));

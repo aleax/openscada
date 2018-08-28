@@ -5594,10 +5594,12 @@ pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
 if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
 
 if(plcImit) {	//Data imitation
-  if(!plcImitIn.isEVal()) in = plcImitIn;
-  else {
-    plcDif = abs(pMax-pMin);
-    in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
+	if(!plcImitIn.isEVal()) in = plcImitIn;
+	else {
+		var plcOff;
+		plcDif = abs(pMax-pMin);
+		if(plcOff.isEVal())		plcOff = rand(plcDif/2);
+		in = pMin + plcDif/4 + plcOff + rand(plcDif/10)-plcDif/20;
   }
 }
 
@@ -5673,7 +5675,7 @@ else {
 	f_err = tErr;
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
-}','','',1481216651);
+}','','',1534928149);
 INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,0,'JavaLikeCalc.JavaScript
 set = false;
 if(!com.isEVal() && com && last_cmd != 1)		last_cmd = 1, set = true;
@@ -5755,8 +5757,10 @@ if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
 if(plcImit) {	//Data imitation
 	if(!plcImitIn.isEVal()) in = plcImitIn;
 	else {
+		var plcOff;
 		plcDif = abs(pMax-pMin);
-		in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
+		if(plcOff.isEVal())	plcOff = rand(plcDif/2);
+		in = pMin + plcDif/4 + plcOff + rand(plcDif/10)-plcDif/20;
 	}
 }
 
