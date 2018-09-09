@@ -1,3 +1,15 @@
+2018-09-09 Roman (stable)
+- !!:UI.QTStarter,Android: Right mouse key and context menu emulation is added at holding the left mouse key during the time
+    set by the command line option --simulRightMKeyTm. This time set to 2 seconds for Android.
+- FIX:DB.OscadaLibs: UserProtocol_uPrt.DCON fixed for guaranty CRC in two symbols.
+- !!:Transport.SSL: Revised for all messages and the documentation.
+- !!:UI.QTCfg: Hint to Node groups is added for the addition node command and this command is allowed now for node groups into the control tree.
+    Window title of the busy progress bar set directly.
+    tmess.h moved after qtcfg.h which must fix for building with Qt5.11.
+    Pages content updating at the item selection into the control tree moved to the timeouted update due releasing mouse events lost
+	for the right mouse key emulation.
+
+
 2018-08-28 Roman (stable)
 - DB.OscadaLibs: base.{digitBlockUnif,digitBlockUnifSt}: The imitation expanded for random offset.
 - !!:DB.DBF,Transport.Serial: Revised for all messages and the documentation.

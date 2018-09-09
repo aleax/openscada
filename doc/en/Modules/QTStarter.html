@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/QTStarter</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/QTStarter/ru" title="Модули/Пускатель Qt GUI (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/QTStarter/uk" title="Модулі/Пускач Qt GUI (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/QTStarter/ru" title="Модули/Пускатель Qt GUI (96% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/QTStarter/uk" title="Модулі/Пускач Qt GUI (96% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <tr>
 <td> <a href="../Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a> </td>
 <td> Qt GUI starter </td>
-<td> 4.5 </td>
+<td> 4.7 </td>
 <td> GPL2 </td>
 <td> ui_QTStarter.so </td>
 <td> en,uk,ru,de </td>
@@ -51,7 +51,7 @@
 </div>
 
 <p>The module provides OpenSCADA with the starter of the GUI modules on the multi-platform library <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> of the graphical user interface (GUI) of initially created by the firm <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>. Also, the module implements elements of the OpenSCADA project manager. A separate module of running the Qt GUI modules and elements of the OpenSCADA project manager is needed because of the need for single-flow execution of all visual components of Qt and centralized initialization of the main object of the Qt-library — QApplication.
-</p><p>From the beginning, this module creates a separate thread for the main Qt thread, where it is possible to create a dynamic splash screen (Fig.1), since the main OpenSCADA processes continue to run in the main thread. That version of Qt5 was sensitive to execution in a non-main thread, so for OpenSCADA it was added to this feature, but only with a static splash screen. To control this feature, the OpenSCADA build configuration parameter <i>--enable-QtMainThrd</i> is provided, which by default is disabled for Qt4 and enabled for Qt5.
+</p><p>From the beginning, this module creates a separate thread for the main Qt thread, where it is possible to create a dynamic splash screen (Fig.1), since the main OpenSCADA processes continue to run in the main thread. That version of Qt5 was sensitive to execution in a non-main thread, so for OpenSCADA it was added to this feature, but only with a static splash screen. To control this feature, the <i>--QtInNotMainThread</i> startup option, which enables thread execution in the non-main thread, is provided, for Qt4, so, by default, executing in the main thread is typical, for Qt5.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:606px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_splash.png"><img class="thumbimage" height="304" src="../files/QTStarter_splash.png" width="604" /></a>  <div class="thumbcaption">Fig.1. Dynamic splash screen of the module.</div></div></div></div>
 <p>The starter dialog window (Fig.2) in whole provides:
@@ -65,6 +65,7 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:348px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_systray.png"><img class="thumbimage" height="174" src="../files/QTStarter_systray.png" width="346" /></a>  <div class="thumbcaption">Fig.3. Project "AGLKS" started up or collapsed to the system tray.</div></div></div></div> 
 <p>The module disables the function of saving the program session when the system is shut down, in order to prevent attempts to restore this session at the system startup, since OpenSCADA does not need it.
+</p><p>The module provides support for emulating a right mouse button for touchscreen-like environments, like to Android, since the interface often provides control solely through the context menu. The emulation is enabled by setting the command line parameter <i>--simulRightMKeyTm=&lt;tm&gt;</i> at the program start, which specifies the hold time (typically two seconds) of the left mouse button (or on the screen) to generate events of the right mouse button and context help. Emulation of the right button does not turn off-postpones the primary events of the left key, so its general actions should work correctly, but there possible discrepancies in places where the primary events trigers something and the emulated event will not go to the address!
 </p>
 <h2><span class="mw-headline" id="Qt_modules_of_OpenSCADA"><span class="mw-headline-number">1</span> Qt modules of OpenSCADA</span></h2>
 <p>To run Qt GUI modules, an advanced interface for calling module functions is used. This interface involves exporting of functions by the external modules. In our case, Qt GUI modules must export the following functions:

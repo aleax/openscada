@@ -777,7 +777,7 @@ void TFuncArgsObj::propSet( const string &id, TVariant val )
     if(!vf.func()) return;
     if(id.size() && isdigit(id[0])) apos = s2i(id);
     if(apos < 0 || apos >= vf.ioSize()) apos = vf.ioId(id);
-    if(apos != -1) vf.set(apos,val);
+    if(apos != -1) vf.set(apos, val);
 }
 
 string TFuncArgsObj::getStrXML( const string &oid )

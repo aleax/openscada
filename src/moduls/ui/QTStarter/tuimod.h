@@ -124,7 +124,7 @@ public:
 
     bool updLookFeel( );
 
-    //bool notify( QObject *receiver, QEvent *event )	???? Try for mouse right click emulation on mobile only touch-screened devices
+    bool notify( QObject *receiver, QEvent *event );
     void saveState( QSessionManager &manager );
 
     int stExec( );
@@ -157,6 +157,10 @@ private:
     QSystemTrayIcon *tray;
     StartDialog	*stDlg;
     bool	initExec;
+
+    time_t	mouseBtPress;
+    QObject	*mouseBtRecv;
+    QMouseEvent	mouseBtHold;
 };
 
 //*************************************************
@@ -194,7 +198,7 @@ public:
     void modStart( );
     void modStop( );
 
-    void	splashSet( SplashFlag flg = SPLSH_NULL );
+    void splashSet( SplashFlag flg = SPLSH_NULL );
 
 public:
     //Attributes
@@ -216,8 +220,8 @@ private:
     static void *Task( void * );
 
     //Methods
-    string	optDescr( );
-    void	toQtArg( const char *nm, const char *arg = NULL );
+    string optDescr( );
+    void toQtArg( const char *nm, const char *arg = NULL );
 
     //Attributes
     bool	hideMode, mEndRun, mStartCom, mCloseToTray;

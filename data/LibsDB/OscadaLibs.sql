@@ -8085,7 +8085,7 @@ else answer = "?";
 if(enCRC) {
 	CRC = 0;
 	for(i=0; i < answer.length; i++) CRC += answer.charCodeAt(i);
-	answer += (CRC&0xFF).toString(16)+"\r";
+	answer += (CRC&0xFF).toString(16,2)+"\r";
 }
 //SYS.messDebug("/DCON/in","ANSV: "+answer[0]);
 return 0;','','','JavaLikeCalc.JavaScript
@@ -8101,7 +8101,7 @@ request = io.name().slice(0,1) + io.attr("addr").toInt().toString(16,2) + io.tex
 if(io.attr("CRC").toInt()) {
 	CRC = 0;
 	for(i = 0; i < request.length; i++) CRC += request.charCodeAt(i);
-	request += (CRC&0xFF).toString(16) + "\r";
+	request += (CRC&0xFF).toString(16,2) + "\r";
 }
 else request += "\r";
 //Send request

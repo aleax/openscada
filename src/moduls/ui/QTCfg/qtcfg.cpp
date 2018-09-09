@@ -633,10 +633,14 @@ void ConfApp::itAdd( )
 
     //Load branches list
     vector<string> brs;
+    string tVl, tHint = actItAdd->property("grpHint").toString().toStdString();
     for(unsigned iB = 0; iB < branch->childSize(); iB++)
-	if(s2i(branch->childGet(iB)->attr("acs"))&SEC_WR)
-	    brs.push_back(branch->childGet(iB)->attr("idSz")+"\n"+branch->childGet(iB)->attr("idm")+"\n"+
-			  branch->childGet(iB)->attr("id")+"\n"+branch->childGet(iB)->attr("dscr"));
+	if(s2i(branch->childGet(iB)->attr("acs"))&SEC_WR) {
+	    tVl = branch->childGet(iB)->attr("idSz") + "\n" + branch->childGet(iB)->attr("idm") + "\n" +
+		  branch->childGet(iB)->attr("id") + "\n" + branch->childGet(iB)->attr("dscr");
+	    if(tHint == branch->childGet(iB)->attr("id") && brs.size()) brs.insert(brs.begin(), tVl);
+	    else brs.push_back(tVl);
+	}
     if(!brs.size()) { mod->postMess(mod->nodePath().c_str(),_("No edited container is present."),TUIMod::Info,this); return; }
 
     ReqIdNameDlg dlg(this, actItAdd->icon(), QString(_("Adding an item to the node '%1'.")).arg(selPath.c_str()),_("Adding a node"));
@@ -993,7 +997,7 @@ void ConfApp::selectItem( )
 {
     QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
     if(sel_ls.size() == 1 && selPath != sel_ls.at(0)->text(2).toStdString()) {
-	selectPage(sel_ls.at(0)->text(2).toStdString());
+	selectPage(sel_ls.at(0)->text(2).toStdString(), CH_REFR_TM);
 
 	if((sel_ls=CtrTree->selectedItems()).size()) {	//Updating but it can be changed after "selectPage"
 	    int saveVl = CtrTree->horizontalScrollBar() ? CtrTree->horizontalScrollBar()->value() : 0;
@@ -2102,19 +2106,27 @@ void ConfApp::ctrTreePopup( )
     QTreeWidget *lview = (QTreeWidget *)sender();
 
     try {
-	if(lview && lview->currentItem() && lview->currentItem()->text(2)[0] != '*') {
-	    //Load and Save actions
-	    popup.addAction(actDBLoad);
-	    popup.addAction(actDBSave);
-	    popup.addSeparator();
-	    //Add and delete item action add
-	    popup.addAction(actItAdd);
-	    popup.addAction(actItDel);
-	    popup.addSeparator();
-	    popup.addAction(actItCut);
-	    popup.addAction(actItCopy);
-	    popup.addAction(actItPaste);
-	    popup.addSeparator();
+	if(lview && lview->currentItem()) {
+	    if(lview->currentItem()->text(2)[0] == '*') {
+		popup.addAction(actItAdd);
+		popup.addSeparator();
+		lview->currentItem()->parent()->setSelected(true);
+		actItAdd->setProperty("grpHint", lview->currentItem()->text(2).toStdString().substr(1).c_str());
+	    }
+	    else {
+		//Load and Save actions
+		popup.addAction(actDBLoad);
+		popup.addAction(actDBSave);
+		popup.addSeparator();
+		//Add and delete item action add
+		popup.addAction(actItAdd);
+		popup.addAction(actItDel);
+		popup.addSeparator();
+		popup.addAction(actItCut);
+		popup.addAction(actItCopy);
+		popup.addAction(actItPaste);
+		popup.addSeparator();
+	    }
 	}
 	//Main action add
 	QImage ico_t;
@@ -2286,15 +2298,15 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	    string reqPath = node.attr("path"), reqPathEl, selNds;
 	    size_t reqElPos = reqPath.rfind("/");
 	    if(reqElPos != string::npos) {
-		reqPathEl = reqPath.substr(reqElPos+1); reqPath = reqPath.substr(0,reqElPos);
+		reqPathEl = reqPath.substr(reqElPos+1); reqPath = reqPath.substr(0, reqElPos);
 		QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
 		for(int iEl = 0; iEl < sel_ls.size(); iEl++)
 		    if(sel_ls.at(iEl)->text(2).toStdString() != reqPath)
 			selNds += sel_ls.at(iEl)->text(2).toStdString()+"\n";
 		if(selNds.size()) {
 		    int questRes = QMessageBox::question(this, _("Sending the changes to the selected ones"),
-			    TSYS::strMess(_("Send the command '%s' to other selected nodes \"%s\"?"),node.name().c_str(),selNds.c_str()).c_str(),
-			    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply);
+			    TSYS::strMess(_("Send the command '%s' to other selected nodes \"%s\"?"), node.name().c_str(), selNds.c_str()).c_str(),
+			    QMessageBox::Apply|QMessageBox::Cancel, QMessageBox::Apply);
 		    for(int off = 0; questRes == QMessageBox::Apply && (reqPath=TSYS::strLine(selNds,0,&off)).size(); ) {
 			node.setAttr("path", reqPath+"/"+reqPathEl);
 			cntrIfCmdHosts(node);
@@ -2364,6 +2376,7 @@ void ConfApp::reqPrgrsSet( int cur, const QString &lab, int max )
     //Create
     if(!reqPrgrs && cur >= 0) {
 	reqPrgrs = new QProgressDialog(this);
+	reqPrgrs->setWindowTitle((PACKAGE_NAME " "+mod->modId()).c_str());
 	reqPrgrs->setWindowModality(Qt::WindowModal);
 	reqPrgrs->setCancelButtonText(_("Cancel"));
 	reqPrgrs->show();

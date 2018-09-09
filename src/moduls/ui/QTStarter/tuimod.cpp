@@ -56,7 +56,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.6.5"
+#define MOD_VER		"4.7.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -304,6 +304,7 @@ string TUIMod::optDescr( )
 	"======================= Module <%s:%s> options =======================\n"
 	"    --QtInNotMainThread Starts Qt into a different from the main thread.\n"
 	"    --showWin=<0,1,2>   Window display mode, initial and which is allowed to change from: 0-typical window, 1-maximized window, 2-full screen.\n"
+	"    --simulRightMKeyTm=<tm> Timeout, in seconds, to simulate the right mouse key and context menu at holding the left mouse key in this time - more to zero.\n"
 	"----------- Qt debug commandline options ----------\n"
 	"    --noX11             Prevent the launch of Qt, preferably for a clean console.\n"
 	"    --sync              Switch to Sync X11 for debugging.\n"
@@ -550,7 +551,8 @@ TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 //* StApp                                         *
 //*************************************************
 StApp::StApp( int &argv, char **args ) : QApplication(argv, args), origStl(mod->dataRes()),
-    inExec(false), transl(NULL), trayMenu(NULL), tray(NULL), stDlg(NULL), initExec(false)
+    inExec(false), transl(NULL), trayMenu(NULL), tray(NULL), stDlg(NULL), initExec(false),
+    mouseBtPress(0), mouseBtRecv(NULL), mouseBtHold(QEvent::None,QPointF(),Qt::NoButton,0,0)
 {
     setApplicationName(PACKAGE_STRING);
     setQuitOnLastWindowClosed(false);
@@ -571,6 +573,22 @@ int StApp::topLevelWindows( )
 	    winCnt++;
 
     return winCnt;
+}
+
+bool StApp::notify( QObject *receiver, QEvent *event )
+{
+    if(event && s2i(SYS->cmdOpt("simulRightMKeyTm")) > 0) {
+	if(event->type() == QEvent::MouseButtonPress && ((QMouseEvent*)event)->button() == Qt::LeftButton) {
+	    mouseBtRecv = receiver;
+	    mouseBtHold = *((QMouseEvent*)event);
+	    mouseBtPress = SYS->sysTm();
+	}
+	if(mouseBtPress && ((event->type() == QEvent::MouseButtonRelease && ((QMouseEvent*)event)->button() == Qt::LeftButton) ||
+		(event->type() == QEvent::MouseMove && (((QMouseEvent*)event)->globalPos()-mouseBtHold.globalPos()).manhattanLength() > QFontMetrics(font()).height())))
+	    mouseBtPress = 0;
+    }
+
+    return QApplication::notify(receiver, event);
 }
 
 void StApp::saveState( QSessionManager &manager )
@@ -670,6 +688,13 @@ void StApp::timerEvent( QTimerEvent *event )
     }
 
     if(mod->mQtLookMdf)	updLookFeel();
+
+    if(mouseBtPress && (SYS->sysTm()-mouseBtPress) >= s2i(SYS->cmdOpt("simulRightMKeyTm"))) {
+	QMouseEvent evPress(QEvent::MouseButtonPress, mouseBtHold.pos(), Qt::RightButton, 0, 0); sendEvent(mouseBtRecv, &evPress);
+	QMouseEvent evRels(QEvent::MouseButtonRelease, mouseBtHold.pos(), Qt::RightButton, 0, 0);sendEvent(mouseBtRecv, &evRels);
+	QContextMenuEvent evCtxMenu(QContextMenuEvent::Mouse, mouseBtHold.pos());		 sendEvent(mouseBtRecv, &evCtxMenu);
+	mouseBtPress = 0;
+    }
 
 #ifdef HAVE_QTSENSORS
     if(sensCnt.type() != TVariant::Object) sensCnt = new TArrayObj();

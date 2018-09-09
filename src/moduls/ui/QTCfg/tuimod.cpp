@@ -25,9 +25,9 @@
 #include <QIcon>
 
 #include <tsys.h>
-#include <tmess.h>
 #include "qtcfg.h"
 #include "selfwidg.h"
+#include <tmess.h>
 #include "tuimod.h"
 
 //*************************************************
@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"4.2.4"
+#define MOD_VER		"4.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"

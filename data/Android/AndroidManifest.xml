@@ -12,7 +12,7 @@
             </intent-filter>
 
             <!-- Application arguments -->
-            <meta-data android:name="android.app.arguments" android:value="--modDir=/data/data/org.oscada/lib/liboscada_*.so --projUserDir=/storage/sdcard0/.openscada --style=fusion"/>
+            <meta-data android:name="android.app.arguments" android:value="--modDir=/data/data/org.oscada/lib/liboscada_*.so --projUserDir=/storage/sdcard0/.openscada --style=fusion --simulRightMKeyTm=2"/>
             <!-- Application arguments -->
 
             <meta-data android:name="android.app.lib_name" android:value="oscada"/>

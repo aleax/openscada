@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-28 22:46+0300\n"
+"POT-Creation-Date: 2018-09-08 20:38+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -33,8 +33,8 @@ msgstr ""
 msgid "Addition parameters"
 msgstr "Weitere Optionen"
 
-msgid "Start error: "
-msgstr "Fehler beim Start: "
+msgid "Error starting: "
+msgstr "Fehler beim Starten: "
 
 #, c-format
 msgid ""
@@ -55,19 +55,19 @@ msgid "Stopped"
 msgstr "Gestoppt"
 
 #, c-format
-msgid "Open temporary file '%s' error: '%s'"
-msgstr "Fehler der Eröffnung der zeitweiligen Datei '%s': '%s'"
+msgid "Error opening the temporary file '%s': '%s'"
+msgstr "Fehler beim Öffnen der temporären Datei '%s': '%s'"
 
 #, c-format
-msgid "Error write to file '%s'."
-msgstr "Fehler Schreiben in '%s' einreichen."
+msgid "Error writing the file '%s'."
+msgstr "Fehler beim Schreiben der Datei '%s'."
 
 #, c-format
-msgid "Close input transport by error: %s"
-msgstr "Close-Eingang Transport durch Fehler: %s"
+msgid "The input transport closed by the error %s"
+msgstr "Der Eingabetransport wurde geschlossen durch den Fehler %s"
 
-msgid "Error creation of the thread!"
-msgstr "Fehler der Schaffung des Stroms!"
+msgid "Error creating the thread!"
+msgstr "Fehler beim Erstellen des Threads!"
 
 msgid " stopping client tasks ..."
 msgstr " Client-Aufgaben stoppen ..."
@@ -77,20 +77,20 @@ msgid "Socket has been connected by '%s'!"
 msgstr "Socket ist verbunden von '%s'!"
 
 #, c-format
-msgid "Socket has been terminated by error: %s"
-msgstr "Socket wurde von Fehler beendet: %s"
+msgid "Socket has been terminated by the error %s"
+msgstr "Socket wurde beendet mit dem Fehler %s"
 
 #, c-format
-msgid "The message is received with the size '%d'."
-msgstr "Die Nachricht ist bekommen von der Größe '%d'."
+msgid "The message is received in size %d."
+msgstr "Die Nachricht wird in der Größe %d empfangen."
 
 #, c-format
 msgid "%d:Received from '%s'\n"
 msgstr "%d:Empfangen von '%s'\n"
 
 #, c-format
-msgid "The message is replied with the size '%d'."
-msgstr "Es wurde beantwortet mit der Nachricht von der Größe  '%d'."
+msgid "The reply by the message in size %d."
+msgstr "Die Antwort der Nachricht in der Größe %d"
 
 #, c-format
 msgid "%d:Transmitted to '%s'\n"
@@ -101,26 +101,26 @@ msgid "Has been disconnected by '%s'!"
 msgstr "Wurde von abgeklemmt '%s'!"
 
 #, c-format
-msgid "Socket has been terminated by execution: %s"
-msgstr "Socket wurde durch die Ausführung beendet wurde: %s"
+msgid "The socket has been terminated by the exception %s"
+msgstr "Der Socket wurde beendet durch die Ausnahme %s"
 
 #, c-format
-msgid "%d:Has been terminated by execution: %s"
-msgstr "%d:Wurde durch die Ausführung beendet wurde: %s"
+msgid "%d:Has been terminated by the exception %s"
+msgstr "%d:Wurde beendet durch die Ausnahme %s"
 
 #, c-format
-msgid "New input protocol's object '%s' created!"
+msgid "The new input protocol's object '%s' is created!"
 msgstr "Neue Eingangsprotokoll-Objekt '%s' erstellt!"
 
-msgid "Error request to protocol."
+msgid "Error requesting the protocol."
 msgstr "Fehler der Anfrage ans Protokoll."
 
 #, c-format
-msgid "A new client %d from '%s' connected"
+msgid "New client %d of '%s' connected"
 msgstr "Ein neuer Kunde %d aus '%s' verbunden"
 
 #, c-format
-msgid "Client %d from '%s' disconnected"
+msgid "The client %d of '%s' disconnected"
 msgstr "Client %d aus '%s' getrennt"
 
 msgid "State"
@@ -130,21 +130,28 @@ msgid "Active connections"
 msgstr "Aktive Verbindungen"
 
 msgid ""
-"SSL input transport has address format:\n"
-"  {addr}:{port}[:{mode}] - where:\n"
-"    addr - address for SSL to be opened, '*' address opens for all "
-"interfaces;\n"
-"    port - network port (/etc/services);\n"
-"    mode - SSL mode and version (SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, "
-"DTLSv1)."
+"SSL input transport has the address format \"{addr}:{port}[:{mode}]\", "
+"where:\n"
+"    addr - address to open SSL, it must be one of the addresses of the host; "
+"if there specified \"*\" then SSL will be available in all the host's "
+"interfaces; there may be as the symbolic representation as well as IP one of "
+"the address;\n"
+"    port - network port on which the SSL is opened, indication of the "
+"character name of the port, according to /etc/services is available;\n"
+"    mode - SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1), by "
+"default and in error, the safest and most appropriate one is used."
 msgstr ""
-"Das Format der Adresse des SSL Eingangstransports:\n"
-"  {addr}:{port}[:{mode}] - wo:\n"
-"    addr - die Adresse der Eröffnung SSL, '*' Adresse eröffnet für alle "
-"Interfaces;\n"
-"    port - Netzwerk-Port (/etc/services);\n"
-"    mode - SSL Regime und Version (SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, "
-"DTLSv1)."
+"Das Format der Adresse des SSL Eingangstransports \"{addr}:{port}[:"
+"{mode}]\", wo:\n"
+"    addr - Adresse, um SSL zu öffnen, muss es eine der Adressen des Hosts "
+"sein; Wenn dort \"*\" angegeben wird, ist SSL in allen Schnittstellen des "
+"Hosts verfügbar; dort kann sowohl die symbolische Darstellung als auch IP "
+"eine der Adressen sein;\n"
+"    port - Netzwerkport, auf dem das SSL geöffnet ist, Angabe des "
+"Charakternamens des Ports gemäß /etc/services ist verfügbar;\n"
+"    mode - SSL-Modus und -Version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1), "
+"standardmäßig und irrtümlicherweise wird der sicherste und am besten "
+"geeignete verwendet."
 
 msgid "Certificates and private key"
 msgstr "Zertifikate und Privatschlüssel"
@@ -155,37 +162,37 @@ msgstr "Die Kette von SSL PAM Zertifikaten und Privatschlüssel."
 msgid "Private key password"
 msgstr "Das Kennwort des Privatschlüssels"
 
-msgid "Clients maximum"
-msgstr "Kunden Maximum"
+msgid "Maximum number of clients"
+msgstr "Maximale Anzahl von Clients"
 
-msgid "Clients maximum, per host"
-msgstr "Kunden Maximum, pro Host"
+msgid "Maximum number of clients, per host"
+msgstr "Maximale Anzahl der Clients, pro Host"
 
-msgid "Set to zero for disable that limit."
-msgstr "Wird auf null gesetzt für Behinderte, die zu begrenzen."
+msgid "Set to zero to disable that limit."
+msgstr "Auf Null setzen, um dieses Limit zu deaktivieren."
 
-msgid "Input buffer (kbyte)"
-msgstr "Eingangsbuffer (kbyte)"
+msgid "Input buffer, kbyte"
+msgstr "Eingangsbuffer, kbyte"
 
 msgid "Keep alive requests"
 msgstr "Keep alive Anfragen"
 
 msgid ""
-"Close the connection after specified requests.\n"
-"Zero value for disable (not close ever)."
+"Closing the connection after the specified requests.\n"
+"Zero value to disable - not close ever."
 msgstr ""
 "Schließen Sie die Verbindung nach bestimmten Anfragen.\n"
-"Null-Wert für disable (nicht immer schließen)."
+"Null-Wert für disable - nicht immer schließen."
 
 msgid "Keep alive timeout, seconds"
 msgstr "Keep alive Wartezeit, Sekunden"
 
 msgid ""
-"Close the connection after no requests at specified timeout.\n"
-"Zero value for disable (not close ever)."
+"Closing the connection after no requests at the specified timeout.\n"
+"Zero value to disable - not close ever."
 msgstr ""
 "Schließen Sie die Verbindung nach keine Anfragen zu bestimmten Timeout.\n"
-"Null-Wert für disable (nicht immer schließen)."
+"Null-Wert für disable - nicht immer schließen."
 
 msgid "Priority"
 msgstr "Priorität"
@@ -202,6 +209,7 @@ msgstr "Bearbeitungszeit %s[%s]; "
 msgid "Traffic in %s, out %s."
 msgstr "Eingangstraffik %s, Ausgangs %s."
 
+#, c-format
 msgid "Response time %s[%s]. "
 msgstr "Reaktionszeit %s[%s]. "
 
@@ -229,12 +237,12 @@ msgid "Unknown error code from gethostbyname_r for '%s'!"
 msgstr "Unbekannter Fehlercode aus gethostbyname_r für '%s'!"
 
 #, c-format
-msgid "Error creation TCP socket: %s!"
+msgid "Error creating TCP socket: %s!"
 msgstr "Fehler Schaffung TCP-Socket: %s!"
 
 #, c-format
 msgid ""
-"Error connection to the internet socket '%s:%s' during the timeout, it seems "
+"Error connecting to the internet socket '%s:%s' during the timeout, it seems "
 "in down or inaccessible: '%s (%d)'!"
 msgstr ""
 "Fehler beim Verbinden mit dem Internet-Socket '%s:%s' während des Timeouts, "
@@ -251,20 +259,16 @@ msgstr ""
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"
 
-msgid "Transport is not started!"
-msgstr "Der Transport  ist nicht gestartet!"
+msgid "The transport is not started!"
+msgstr "Der Transport ist nicht gestartet!"
 
 #, c-format
-msgid "Request error: %s"
-msgstr "Request-Fehler: %s"
+msgid "Error requesting: %s"
+msgstr "Fehler beim Anfordern: %s"
 
 #, c-format
-msgid "Write error: %s"
+msgid "Error writing: %s"
 msgstr "Fehler beim Schreiben: %s"
-
-#, c-format
-msgid "Transmitting error: %s"
-msgstr "Übertragungsfehler: %s"
 
 #, c-format
 msgid "Wrote %s."
@@ -277,26 +281,15 @@ msgid "No data"
 msgstr "Keine Daten"
 
 #, c-format
-msgid "Read error: %s"
-msgstr "Lesefehler: %s"
+msgid "Error reading: %s"
+msgstr "Fehler beim Lesen: %s"
 
-#, c-format
-msgid "Receiving error: %s"
-msgstr "Empfangsfehler: %s"
-
-msgid "Read timeouted."
+msgid "Reading timeouted."
 msgstr "Lesen timeouted."
 
-msgid "Timeouted!"
-msgstr "Die Wartezeit ist aus!"
-
 #, c-format
-msgid "Read (select) error: %s"
-msgstr "Lesefehler (select): %s"
-
-#, c-format
-msgid "Receiving (select) error: %s"
-msgstr "Empfangen (select) Fehler: %s"
+msgid "Error reading (select): %s"
+msgstr "Fehler beim Lesen (Auswählen): %s"
 
 #, c-format
 msgid "Read %s."
@@ -306,28 +299,28 @@ msgid "Received from\n"
 msgstr "Empfangen von\n"
 
 msgid ""
-"SSL output transport has address format:\n"
-"  {addr}:{port}[:{mode}] - where:\n"
-"    addr - remote SSL host address;\n"
-"    port - network port (/etc/services);\n"
-"    mode - SSL mode and version (SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, "
-"DTLSv1)."
+"SSL output transport has the address format \"{addr}:{port}[:{mode}]\", "
+"where:\n"
+"    addr - address with which the connection is made; there may be as the "
+"symbolic representation as well as IP one of the address;\n"
+"    port - network port with which the connection is made; indication of the "
+"character name of the port, according to /etc/services is available;\n"
+"    mode - SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1), by "
+"default and in error, the safest and most appropriate one is used."
 msgstr ""
-"Das Format der Adresse des SSL-Ausgangstransport:\n"
-"  {addr}:{port}[:{mode}] - wo:\n"
-"    addr - Die Adresse des entfernten SSL Hostes;\n"
-"    port - Der Netzwerk Port (/etc/services);\n"
-"    mode - Das SSL-Regime und Version (SSLv3, SSLv23, TLSv1, TLSv1_1, "
-"TLSv1_2, DTLSv1)."
+"Der SSL-Ausgabetransport hat das Adressformat \"{addr}:{port}[:{mode}]\", wob:\n"
+"    addr - Adresse, mit der die Verbindung hergestellt wird; Dort kann sowohl die symbolische Darstellung als auch IP eine der Adressen sein;\n"
+"    port - Netzwerk-Port, mit dem die Verbindung hergestellt wird; Angabe des Charakternamens des Ports gemäß /etc/services ist verfügbar;\n"
+"    mode - SSL-Modus und -Version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1), standardmäßig und irrtümlicherweise wird der sicherste und am besten geeignete verwendet."
 
 msgid "Timings"
 msgstr "Zeitabstände"
 
 msgid ""
-"Connection timings in format: \"[conn]:[next]\". Where:\n"
-"    conn - maximum time for connection respond wait, in seconds;\n"
-"    next - maximum time for continue respond wait, in seconds."
+"Connection timings in the format \"{conn}:{next}\", where:\n"
+"    conn - maximum time of waiting the connection, in seconds;\n"
+"    next - maximum time of waiting for continue the response, in seconds."
 msgstr ""
-"Die Zeitabstände sind Verbindung in das Format: \"[conn]:[next]\". Wo:\n"
+"Die Zeitabstände sind Verbindung in das Format: \"{conn}:{next}\", wo:\n"
 "    conn - maximale Wartezeit Verbindung in Sekunden;\n"
 "    next - maximale Wartezeit auf die Antwort in Sekunden weiter."

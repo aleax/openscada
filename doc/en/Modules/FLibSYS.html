@@ -361,7 +361,7 @@ req = xmlNode("set").setAttr("path","/sub_DAQ/mod_ModBus/cntr_1/prm_1/%2fprm%2fs
 rez = xmlCntrReq(req);</pre>
 <h2><span class="mw-headline" id="Functions_of_working_with_time"><span class="mw-headline-number">2</span> Functions of working with time</span></h2>
 <h3><span class="mw-headline" id="Time:_Time_.28tmTime.29"><span class="mw-headline-number">2.1</span> Time: Time (tmTime)</span></h3>
-<p><i>Description:</i> Getting the full time, in seconds since 01.01.1970, and in microseconds, if <i>usec</i> is installed in a non-negative value.<br />
+<p><i>Description:</i> Returns the absolute time in seconds from the epoch of 1/1/1970 and the microseconds part into <i>usec</i>, if such a variable is indicated and its value is negative.<br />
 <i>Parameters:</i>
 </p>
 <table class="wikitable">
