@@ -56,7 +56,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.7.0"
+#define MOD_VER		"4.7.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -552,7 +552,7 @@ TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 //*************************************************
 StApp::StApp( int &argv, char **args ) : QApplication(argv, args), origStl(mod->dataRes()),
     inExec(false), transl(NULL), trayMenu(NULL), tray(NULL), stDlg(NULL), initExec(false),
-    mouseBtPress(0), mouseBtRecv(NULL), mouseBtHold(QEvent::None,QPointF(),Qt::NoButton,0,0)
+    mouseBtPress(0), mouseBtRecv(NULL), mouseBtHold(QEvent::None,QPoint(),Qt::NoButton,0,0)
 {
     setApplicationName(PACKAGE_STRING);
     setQuitOnLastWindowClosed(false);

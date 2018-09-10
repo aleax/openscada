@@ -1,3 +1,7 @@
+2018-09-10 Roman (stable)
+- FIX:UI.QTStarter: Fix building with Qt4.
+
+
 2018-09-09 Roman (stable)
 - !!:UI.QTStarter,Android: Right mouse key and context menu emulation is added at holding the left mouse key during the time
     set by the command line option --simulRightMKeyTm. This time set to 2 seconds for Android.
