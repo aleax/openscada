@@ -194,8 +194,6 @@ class TSYS : public TCntrNode
 
 	bool	chkSelDB( const string& wDB, bool isStrong = false );
 
-
-
 	static void sighandler( int signal, siginfo_t *siginfo, void *context );
 
 	// Short time dimensions

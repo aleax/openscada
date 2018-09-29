@@ -1267,11 +1267,11 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		bool adjCol = widget || !tbl->rowCount();
 		bool adjRow = false;
 
-		//   Copy values to info tree
-		for(unsigned i_col = 0; i_col < req.childSize(); i_col++) {
-		    XMLNode *t_lsel = req.childGet(i_col);
-		    XMLNode *t_linf = t_s.childGet("id",t_lsel->attr("id"),true);
-		    if(!t_linf) { t_linf = t_s.childIns(i_col); *t_linf = *t_lsel; adjCol = true; }
+		//   Copy values to the info tree
+		for(unsigned iCol = 0; iCol < req.childSize(); iCol++) {
+		    XMLNode *t_lsel = req.childGet(iCol);
+		    XMLNode *t_linf = t_s.childGet("id", t_lsel->attr("id"), true);
+		    if(!t_linf) { t_linf = t_s.childIns(iCol); *t_linf = *t_lsel; adjCol = true; }
 		    t_linf->childClear();
 		    for(unsigned i_rw = 0; i_rw < t_lsel->childSize(); i_rw++)
 			*t_linf->childAdd() = *t_lsel->childGet(i_rw);
@@ -1284,17 +1284,22 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		if(rez == 0 && tbl->columnCount() != n_col)	tbl->setColumnCount(n_col);
 		if(rez == 0 && tbl->rowCount() != n_row)	{ tbl->setRowCount(n_row); adjRow = true; }
 
-		for(unsigned i_lst = 0; i_lst < t_s.childSize(); i_lst++) {
-		    XMLNode *t_linf = t_s.childGet(i_lst);
+		for(unsigned iLst = 0; iLst < t_s.childSize(); iLst++) {
+		    XMLNode *t_linf = t_s.childGet(iLst);
 		    if(!t_linf) continue;
 		    bool c_wr = wr && (s2i(t_linf->attr("acs"))&SEC_WR);
 
-		    QTableWidgetItem *thd_it = tbl->horizontalHeaderItem(i_lst);
+		    QTableWidgetItem *thd_it = tbl->horizontalHeaderItem(iLst);
 		    if(!thd_it) {
 			thd_it = new QTableWidgetItem("");
-			tbl->setHorizontalHeaderItem(i_lst,thd_it);
+			tbl->setHorizontalHeaderItem(iLst, thd_it);
 		    }
-		    thd_it->setData(Qt::DisplayRole,t_linf->attr("dscr").c_str());
+		    thd_it->setData(Qt::DisplayRole, t_linf->attr("dscr").c_str());
+		    string colHelp = t_linf->attr("help");
+		    if(colHelp.size()) {
+			thd_it->setData(Qt::ToolTipRole, mod->setHelp(colHelp).c_str());
+			thd_it->setData(Qt::WhatsThisRole, colHelp.c_str());
+		    }
 
 		    //   Once list process
 		    QStringList elms, elmi;
@@ -1319,16 +1324,23 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    //   Set elements
 		    tblInit = true;
 		    for(unsigned iEl = 0; iEl < t_linf->childSize(); iEl++) {
-			thd_it = tbl->item(iEl,i_lst);
+			thd_it = tbl->item(iEl, iLst);
 			if(!thd_it) {
 			    thd_it = new QTableWidgetItem("");
-			    tbl->setItem(iEl,i_lst,thd_it);
+			    tbl->setItem(iEl, iLst, thd_it);
+			    if(t_linf->childGet(iEl)->attr("help").size()) {
+				thd_it->setData(Qt::ToolTipRole, mod->setHelp(t_linf->childGet(iEl)->attr("help")).c_str());
+				thd_it->setData(Qt::WhatsThisRole, t_linf->childGet(iEl)->attr("help").c_str());
+			    }
+			    else if(colHelp.size()) {
+				thd_it->setData(Qt::ToolTipRole, mod->setHelp(colHelp).c_str());
+				thd_it->setData(Qt::WhatsThisRole, colHelp.c_str());
+			    }
 			}
 
 			//   Set element
 			if(t_linf->attr("tp") == "bool") thd_it->setData(Qt::DisplayRole,(bool)s2i(t_linf->childGet(iEl)->text()));
-			else if(t_linf->attr("dest") == "select" || t_linf->attr("dest") == "sel_ed")
-			{
+			else if(t_linf->attr("dest") == "select" || t_linf->attr("dest") == "sel_ed") {
 			    int sel_n;
 			    for(sel_n = 0; sel_n < elms.size(); sel_n++)
 				if((elms.size() == elmi.size() && elmi[sel_n] == t_linf->childGet(iEl)->text().c_str()) ||
@@ -1339,8 +1351,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 				sel_n = 0;
 			    }
 
-			    thd_it->setData(Qt::DisplayRole,elms.at(sel_n));
-			    thd_it->setData(Qt::UserRole,elms);
+			    thd_it->setData(Qt::DisplayRole, elms.at(sel_n));
+			    thd_it->setData(Qt::UserRole, elms);
 			}
 			else if(t_linf->attr("tp") == "time")
 			    thd_it->setData(Qt::DisplayRole, atm2s(s2i(t_linf->childGet(iEl)->text()),"%d-%m-%Y %H:%M:%S").c_str());

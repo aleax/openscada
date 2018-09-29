@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-28 22:45+0300\n"
+"POT-Creation-Date: 2018-09-29 18:46+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -32,59 +32,111 @@ msgstr ""
 msgid "Addition parameters"
 msgstr "Weitere Optionen"
 
-#, c-format
 msgid ""
-"Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed "
-"connections by limit %d. "
+"Socket's output transport has the address format:\n"
+"  [TCP:]{addr}[,{addrN}]:{port} - TCP socket:\n"
+"    addr - address with which the connection is made; there may be as the "
+"symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
+"    port - network port with which the connection is made; indication of the "
+"character name of the port according to /etc/services is available;\n"
+"  UDP:{addr}[,{addrN}]:{port} - UDP socket:\n"
+"    addr - address with which the connection is made; there may be as the "
+"symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
+"    port - network port with which the connection is made; indication of the "
+"character name of the port according to /etc/services is available.\n"
+"  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
+"    if - interface name;\n"
+"    mask - CAN mask;\n"
+"    id - CAN id.\n"
+"  UNIX:{name} - UNIX socket:\n"
+"    name - UNIX-socket's file name."
 msgstr ""
-"Verbindungen %d, eröffnet %d, letzte %s. Eingangstraffik %s, Ausgangs %s. "
-"Verbindungen geschlossen nach dem Limit %d. "
+"Ausgangstransport Socket hat das Format der Adresse:\n"
+"  [TCP:]{addr}[,{addrN}]:{port} - TCP Socket:\n"
+"    addr - Adresse, mit der die Verbindung hergestellt wird; Dort kann "
+"sowohl die symbolische Darstellung als auch IPv4 \"127.0.0.1\" oder IPv6 "
+"\"[::1]\" der Adressen sein;\n"
+"    port - Netzwerk-Port mit dem die Verbindung hergestellt wird; Angabe des "
+"Charakternamens des Ports gemäß /etc/services ist verfügbar;\n"
+"  UDP:{addr}[,{addrN}]:{port} - UDP Socket:\n"
+"    addr - Adresse, mit der die Verbindung hergestellt wird; Dort kann "
+"sowohl die symbolische Darstellung als auch IPv4 \"127.0.0.1\" oder IPv6 "
+"\"[::1]\" der Adressen sein;\n"
+"    port - Netzwerk-Port mit dem die Verbindung hergestellt wird; Angabe des "
+"Charakternamens des Ports gemäß /etc/services ist verfügbar;\n"
+"  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
+"    if - Schnittstellennamen;\n"
+"    mask - CAN-Maske;\n"
+"    id - CAN-ID.\n"
+"  UNIX:{name} - UNIX Socket:\n"
+"    name - Name der Datei des UNIX-Sockets."
+
+msgid ""
+"Connection timings in the format \"{conn}:{next}[:{rep}]\", where:\n"
+"    conn - maximum time of waiting the connection, in seconds;\n"
+"    next - maximum time of waiting for continue the response, in seconds;\n"
+"    rep  - minimum time of waiting the request repeating, in seconds.\n"
+"Can be prioritatile specified into the address field as the second global "
+"argument, as such \"localhost:123||5:1\"."
+msgstr ""
+"Zeitabschnitte der Verbindung im Format: \"{conn}:{next}[:{rep}]\". Wo:\n"
+"    conn - Maximale Zeit der Erwartung der Antwort der Verbindung, in "
+"Sekunden;\n"
+"    next - Maximale Zeit der Erwartung der Fortsetzung der Antwort, in "
+"Sekunden;\n"
+"    rep  - Minimum repeate Timeout, in Sekunden.\n"
+"Als zweites globales Argument kann priorityatile im Adressfeld angegeben "
+"werden, zB \"localhost:123||5:1\"."
+
+msgid ""
+"Attempts of the requesting both for this transport and protocol, for full "
+"requests.\n"
+"Can be prioritatile specified into the address field as the third global "
+"argument, as such \"localhost:123||5:1||3\"."
+msgstr ""
+"Versuche des Anforderns sowohl für diesen Transport als auch für das "
+"Protokoll, für vollständige Anfragen.\n"
+"Als das dritte globale Argument kann priorityatile in das Adressfeld "
+"angegeben werden, zB \"localhost:123||5:1||3\"."
+
+#, c-format
+msgid "Connections %d, opened %d, last %s, closed by the limit %d. "
+msgstr ""
+"Verbindungen %d, geöffnet %d, zuletzt %s, geschlossen durch das Limit %d. "
+
+#, c-format
+msgid "%s traffic in %s, out %s. "
+msgstr "%s Verkehr in %s, aus %s. "
 
 #, c-format
 msgid "Processing time %s[%s]. "
 msgstr "Bearbeitungszeit %s[%s]. "
 
 #, c-format
-msgid "Create %s socket error: '%s (%d)'!"
-msgstr "Erstellen %s socket Fehler: '%s (%d)'!"
+msgid "Error the socket type '%s'!"
+msgstr "Fehler beim Socket-Typ '%s'!"
 
 #, c-format
-msgid "Socket type '%s' error!"
-msgstr "Fehler des Typs '%s' des Sockets!"
+msgid "Error the address '%s': '%s (%d)'"
+msgstr "Fehler bei der Adresse '%s': '%s (%d)'"
+
+msgid "sockaddr to large."
+msgstr "sockaddr zu groß."
 
 #, c-format
-msgid "Host '%s' not found!"
-msgstr "Host '%s' wurde nicht gefunden!"
+msgid "Error creating the %s socket: '%s (%d)'!"
+msgstr "Fehler beim Erstellen des Sockets %s: '%s (%d)'!"
 
 #, c-format
-msgid "The requested name '%s' does not have an IP address!"
-msgstr "Der angeforderte Name '%s' hat keine IP-Adresse!"
+msgid "Error connecting the %s socket: '%s (%d)'!"
+msgstr "Fehler beim Verbinden des Sockets %s: '%s (%d)'!"
 
 #, c-format
-msgid "A non-recoverable name server error occurred while for '%s'!"
-msgstr ""
-"Ein nicht behebbarer Name-Server-Fehler ist aufgetreten, während für '%s'!"
+msgid "Error binding the %s socket: '%s (%d)'!"
+msgstr "Fehler beim Binden des Sockets %s: '%s (%d)'!"
 
 #, c-format
-msgid "A temporary error occurred on an authoritative name server for '%s'!"
-msgstr ""
-"Ein temporärer Fehler aufgetreten auf einem autoritativen Nameserver für "
-"'%s'!"
-
-#, c-format
-msgid "Unknown error code from gethostbyname_r for '%s'!"
-msgstr "Unbekannter Fehlercode aus gethostbyname_r für '%s'!"
-
-#, c-format
-msgid "Connect to %s socket error: '%s (%d)'!"
-msgstr "Eine Verbindung mit %s Socket Fehler: '%s (%d)'!"
-
-#, c-format
-msgid "Bind to %s socket error: '%s (%d)'!"
-msgstr "Binden %s Socket Fehler: '%s (%d)'!"
-
-#, c-format
-msgid "RAWCAN socket binded '%s'!"
+msgid "RAWCAN socket binded to '%s'!"
 msgstr "RAWCAN Socket ist verbunden mit '%s'!"
 
 msgid "Started"
@@ -94,8 +146,8 @@ msgid "Stopped"
 msgstr "Gestoppt"
 
 #, c-format
-msgid "Restart by no input activity to '%s'."
-msgstr "Neustart durch keine Eingabeaktivität auf '%s'."
+msgid "Restart due to lack of input activity to '%s'."
+msgstr "Neustart wegen fehlender Eingabeaktivität für '%s'."
 
 #, c-format
 msgid "Write: wrote %s."
@@ -113,11 +165,11 @@ msgid "%d:Transmitted directly to '%s'\n"
 msgstr "%d:Direkt zu '%s' übertragen\n"
 
 #, c-format
-msgid "Close input transport by error: '%s (%d)'"
-msgstr "Close-Eingang Transport durch Fehler: '%s (%d)'"
+msgid "Closing the input transport by the error \"%s (%d)\""
+msgstr "Schließen des Eingabetransports durch den Fehler \"%s (%d)\""
 
-msgid "Error creation of the thread!"
-msgstr "Fehler der Schaffung des Stroms!"
+msgid "Error creating a thread!"
+msgstr "Fehler beim Erstellen eines Threads!"
 
 #, c-format
 msgid "Read datagram %s from '%s'!"
@@ -146,12 +198,20 @@ msgid " stopping client tasks ..."
 msgstr " Client-Aufgaben stoppen ..."
 
 #, c-format
-msgid "Has been connected by '%s'!"
-msgstr "Verbunden von '%s'!"
+msgid "Connected by '%s'!"
+msgstr "Verbunden mit '%s'!"
 
 #, c-format
-msgid "Has been terminated by error: '%s (%d)'"
-msgstr "Von Fehler beendet: '%s (%d)'"
+msgid "Terminated by the error \"%s (%d)\""
+msgstr "Beendet durch den Fehler \"%s (%d)\""
+
+#, c-format
+msgid "%d:Terminated by the error \"%s (%d)\"\n"
+msgstr "%d:Beendet durch den Fehler \"%s (%d)\"\n"
+
+#, c-format
+msgid "%d:Terminated by the reading %d error \"%s (%d)\"\n"
+msgstr "%d:Beendet durch das Lesen %d Fehler \"%s (%d)\"\n"
 
 #, c-format
 msgid "Read message %s from '%s'."
@@ -162,35 +222,35 @@ msgid "Wrote message %s to '%s'."
 msgstr "Schrieb Nachricht %s auf '%s'."
 
 #, c-format
-msgid "Transmitting error: %s"
-msgstr "Übertragungsfehler: %s"
+msgid "Error transmitting: %s"
+msgstr "Fehler beim Senden: %s"
 
 #, c-format
-msgid "Has been disconnected by '%s'!"
-msgstr "Abgebunden vom '%s'!"
+msgid "Disconnected by '%s'!"
+msgstr "Getrennt durch '%s'!"
 
 #, c-format
-msgid "Has been terminated by execution: %s"
-msgstr "Ausführung beendet wurde: %s"
+msgid "Terminated by the execution '%s'"
+msgstr "Beendet durch die Ausführung '%s'"
 
 #, c-format
-msgid "%d:Has been terminated by execution: %s"
-msgstr "%d:Ausführung beendet wurde: %s"
+msgid "%d:Terminated by the execution '%s'"
+msgstr "%d:Beendet durch die Ausführung '%s'"
 
 #, c-format
-msgid "New input protocol's object '%s' created!"
-msgstr "Neue Eingangsprotokoll-Objekt '%s' erstellt!"
+msgid "The new input protocol's object '%s' is created!"
+msgstr "Das Objekt des neuen Eingangsprotokolls '%s' wird erstellt!"
 
 #, c-format
-msgid "Input protocol's object '%s' closed by self!"
-msgstr "Die Eingangsprotokoll-Objekt '%s' durch Selbst geschlossen!"
+msgid "The input protocol object '%s' has closed itself!"
+msgstr "Das Eingangsprotokollobjekt '%s' hat sich selbst geschlossen!"
 
-msgid "Error request to protocol."
-msgstr "Fehler der Anfrage ans Protokoll."
+msgid "Error requesting the protocol."
+msgstr "Fehler beim Anfordern des Protokolls."
 
 #, c-format
-msgid "A new client %d from '%s' connected"
-msgstr "Ein neuer Kunde %d aus '%s' verbunden"
+msgid "New client %d from '%s' connected"
+msgstr "Neuer Client %d von '%s' verbunden"
 
 #, c-format
 msgid "Client %d from '%s' disconnected"
@@ -204,54 +264,59 @@ msgstr "Aktive Verbindungen"
 
 msgid ""
 "Socket's input transport has the address format:\n"
-"  TCP:{addr}:{port}:{mode} - TCP socket:\n"
-"    addr - address for socket to be opened, empty address opens socket for "
-"all interfaces;\n"
-"    port - network port (/etc/services);\n"
-"    mode - work mode (0 - break connection; 1 - keep alive; 2 - initiative "
-"connection).\n"
+"  [TCP:]{addr}:{port}:{mode} - TCP socket:\n"
+"    addr - address for socket to be opened, empty or \"*\" address opens "
+"socket for all interfaces; there may be as the symbolic representation as "
+"well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
+"    port - network port on which the socket is opened, indication of the "
+"character name of the port, according to /etc/services is available;\n"
+"    mode - mode of operation: 0 - break connections; 1(default) - keep "
+"alive; 2 - initiative connections.\n"
 "  UDP:{addr}:{port} - UDP socket:\n"
-"    addr - address for socket to be opened, empty address opens socket for "
-"all interfaces;\n"
-"    port - network port (/etc/services).\n"
+"    addr - address for socket to be opened, empty or \"*\" address opens "
+"socket for all interfaces; there may be as the symbolic representation as "
+"well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
+"    port - network port on which the socket is opened, indication of the "
+"character name of the port, according to /etc/services is available.\n"
 "  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
 "    if - interface name;\n"
-"    mask - CAN frame id mask;\n"
+"    mask - CAN mask;\n"
 "    id - CAN id.\n"
 "  UNIX:{name}:{mode} - UNIX socket:\n"
 "    name - UNIX-socket's file name;\n"
-"    mode - work mode (0 - break connection; 1 - keep alive; 2 - initiative "
-"connection)."
+"    mode - mode of operation: 0 - break connections; 1(default) - keep "
+"alive; 2 - initiative connections."
 msgstr ""
 "Eingangstransport Socket hat das Format der Adresse:\n"
-"  TCP:{addr}:{port}:{mode} - TCP Socket:\n"
-"    addr - die Adresse der Eröffnung des Sockets, leere Adresse eröffnet den "
-"Socket in allen Interfaces;\n"
-"    port - Netzwerk Port (/etc/services);\n"
-"    mode - Arbeitsregime (0 - die Verbindung brechen; 1 - speichern die "
-"Verbidung; 2 - Initiative Verbindung).\n"
+"  [TCP:]{addr}:{port}:{mode} - TCP Socket:\n"
+"    addr - die Adresse der Eröffnung des Sockets, leere oder \"*\" Adresse öffnet den Socket für alle Schnittstellen; dort kann sowohl die symbolische Darstellung als "
+"auch IPv4 \"127.0.0.1\" oder IPv6 \"[::1]\" der Adressen sein;\n"
+"    port - Netzwerkanschluss, auf dem der Socket geöffnet ist, Angabe des "
+"Charakternamens des Ports gemäß /etc/services ist verfügbar;\n"
+"    mode - Arbeitsweise: 0 - die Verbindung brechen; 1(Default) - speichern "
+"die Verbidung; 2 - Initiative Verbindung.\n"
 "  UDP:{addr}:{port} - UDP Socket:\n"
-"    addr - die Adresse der Eröffnung des Sockets, leere Adresse eröffnet den "
-"Socket in allen Interfaces;\n"
-"    port - Netzwerk Port (/etc/services).\n"
+"    addr - die Adresse der Eröffnung des Sockets, leere oder \"*\" Adresse öffnet den Socket für alle Schnittstellen; dort kann sowohl die symbolische Darstellung als "
+"auch IPv4 \"127.0.0.1\" oder IPv6 \"[::1]\" der Adressen sein;\n"
+"    port - Netzwerkanschluss, auf dem der Socket geöffnet ist, Angabe des "
+"Charakternamens des Ports gemäß /etc/services ist verfügbar;\n"
 "  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
 "    if - Schnittstellennamen;\n"
-"    mask - CAN-ID Maskenrahmen;\n"
-"    id - CAN id.\n"
+"    mask - CAN-Maske;\n"
+"    id - CAN-ID.\n"
 "  UNIX:{name}:{mode} - UNIX Socket:\n"
 "    name - Name der Datei des UNIX-Sockets;\n"
-"    mode - Arbeitsregime (0 - die Verbindung brechen; 1 - die Verbindung "
-"speichern; 2 - Initiative Verbindung)."
+"    mode - Arbeitsweise: 0 - die Verbindung brechen; 1(Default) - speichern "
+"die Verbidung; 2 - Initiative Verbindung."
 
 msgid ""
-"Empty value for the protocol selection switchs the transport to mode\n"
-"of creation associated output transports for each connection to one."
+"Empty value for the protocol selection switchs the transport to a mode\n"
+"of creation associated output transports for each connection to this "
+"transport."
 msgstr ""
-"Leer Wert für die Protokollauswahl switchs den Transport nach Art der\n"
-"Schaffung zugehörige Ausgangstransporte für jede Verbindung zu einem."
-
-msgid "Input buffer (kbyte)"
-msgstr "Eingangsbuffer (kbyte)"
+"Ein leerer Wert für die Protokollauswahl schaltet den Transport zu einem\n"
+"Erstellungsmodus zugeordneten Ausgangstransporten für jede Verbindung zu "
+"diesem Transport um."
 
 msgid "Priority"
 msgstr "Priorität"
@@ -259,40 +324,43 @@ msgstr "Priorität"
 msgid "Maximum segment size (MSS)"
 msgstr "Maximale Segmentgröße (MSS)"
 
-msgid "Set 0 for system MSS."
+msgid "Set 0 for the system MSS."
 msgstr "Stellen Sie 0 für System MSS."
+
+msgid "Input buffer, KB"
+msgstr "Eingabepuffer, KB"
 
 msgid "Queue length"
 msgstr "Reihenlänge "
 
-msgid "Clients maximum"
-msgstr "Kunden Maximum"
+msgid "Maximum number of clients"
+msgstr "Maximale Anzahl von Clients"
 
-msgid "Clients maximum, per host"
-msgstr "Kunden Maximum, pro Host"
+msgid "Maximum number of clients per host"
+msgstr "Maximale Anzahl von Clients pro Host"
 
-msgid "Set to zero for disable that limit."
-msgstr "Wird auf null gesetzt für Behinderte, die zu begrenzen."
+msgid "Set to 0 to disable this limit."
+msgstr "Setzen Sie den Wert auf 0, um dieses Limit zu deaktivieren."
 
 msgid "Keep alive requests"
 msgstr "Keep alive Anfragen"
 
 msgid ""
-"Close the connection after specified requests.\n"
-"Zero value for disable (not close ever)."
+"Closing the connection after the specified requests.\n"
+"Zero value to disable - do not close ever."
 msgstr ""
 "Schließen Sie die Verbindung nach bestimmten Anfragen.\n"
-"Null-Wert für disable (nicht immer schließen)."
+"Null-Wert für disable - nicht immer schließen."
 
 msgid "Keep alive timeout, seconds"
 msgstr "Keep alive Timeout, Sekunden"
 
 msgid ""
-"Close the connection after no requests at specified timeout.\n"
-"Zero value for disable (not close ever)."
+"Closing the connection after no requests at the specified timeout.\n"
+"Zero value to disable - do not close ever."
 msgstr ""
 "Schließen Sie die Verbindung nach keine Anfragen zu bestimmten Timeout.\n"
-"Null-Wert für disable (nicht immer schließen)."
+"Null-Wert für disable - nicht immer schließen."
 
 #, c-format
 msgid "%s %d(%s): last %s; traffic in %s, out %s; client detachings %g; "
@@ -305,28 +373,12 @@ msgid "processing time %s[%s]; "
 msgstr "Bearbeitungszeit %s[%s]; "
 
 #, c-format
-msgid "Traffic in %s, out %s. "
-msgstr "Eingangstraffik %s, Ausgangs- %s. "
-
-#, c-format
 msgid "Response time %s[%s]. "
 msgstr "Reaktionszeit %s[%s]. "
 
 #, c-format
-msgid "Type socket '%s' error!"
-msgstr "Fehler im Typ '%s' des Sockets!"
-
-#, c-format
-msgid "Error force socket %d using: '%s (%d)'!"
-msgstr "Fehler Kraftsockel %d mit: '%s (%d)'!"
-
-#, c-format
-msgid "Error creation TCP socket: '%s (%d)'!"
-msgstr "Fehler der Schaffung des TCP Sockets: '%s (%d)'!"
-
-#, c-format
-msgid "Error creation UDP socket: '%s (%d)'!"
-msgstr "Fehler der Schaffung des UDP Sockets: '%s (%d)'!"
+msgid "Error the force socket %d using: '%s (%d)'!"
+msgstr "Error the force socket %d mit: '%s (%d)'!"
 
 #, c-format
 msgid "Error connecting during the time %s: '%s (%d)'"
@@ -334,27 +386,23 @@ msgstr "Fehler beim Verbinden während der Zeit %s: '%s (%d)'"
 
 #, c-format
 msgid ""
-"Error connection to the internet socket '%s:%s' during the timeout, it seems "
+"Error connecting to the internet socket '%s:%s' during the timeout, it seems "
 "in down or inaccessible: '%s (%d)'!"
 msgstr ""
 "Fehler beim Verbinden mit dem Internet-Socket '%s:%s' während des Timeouts, "
 "es scheint nicht aktiv oder erreichbar zu sein: '%s (%d)'!"
 
 #, c-format
-msgid "Error creation UNIX socket: '%s (%d)'!"
-msgstr "Fehler der Schaffung des UNIX Sockets: '%s (%d)'!"
-
-#, c-format
-msgid "Connect to UNIX error: '%s (%d)'!"
-msgstr "Fehler der Verbindung mit dem UNIX Socket: '%s (%d)'!"
-
-#, c-format
-msgid "Error create '%s' socket!"
-msgstr "Fehler der Schaffung des Sockets '%s'!"
+msgid "Error creating the %s socket!"
+msgstr "Fehler beim Erstellen des %s-Sockets!"
 
 #, c-format
 msgid "RAWCAN socket doesn't bind to '%s'!"
 msgstr "RAWCAN Socket ist nicht verbunden mit '%s'!"
+
+#, c-format
+msgid "Error starting: %s"
+msgstr "Fehler beim Starten: %s"
 
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"
@@ -363,14 +411,14 @@ msgid "Transport is not started!"
 msgstr "Transport ist nicht gestartet!"
 
 #, c-format
-msgid "Request error: %s"
-msgstr "Request-Fehler: %s"
+msgid "Error requesting: %s"
+msgstr "Fehler beim Anfordern: %s"
 
 msgid "No data wrote"
 msgstr "Keine Daten geschrieben"
 
 #, c-format
-msgid "Write error: %s"
+msgid "Error writing: %s"
 msgstr "Fehler beim Schreiben: %s"
 
 msgid "Transmitted to\n"
@@ -380,33 +428,23 @@ msgstr "Übertragen an\n"
 msgid "Wrote %s."
 msgstr "Schrieb %s."
 
-msgid "Read timeouted."
-msgstr "Lesen timeouted."
-
-msgid "Receiving timeouted"
-msgstr "Empfangen zeitgesteuert"
+msgid "Reading timeouted."
+msgstr "Lesezeitüberschreitung."
 
 msgid "Timeouted!"
 msgstr "Timeouted!"
 
 #, c-format
-msgid "Read (select) error: %s"
-msgstr "Lesefehler (select): %s"
+msgid "Error reading (select): %s"
+msgstr "Fehler beim Lesen (Auswählen): %s"
 
 #, c-format
-msgid "Receiving (select) error: %s"
-msgstr "Empfangen (select) Fehler: %s"
-
-msgid "No data"
-msgstr "Keine Daten"
+msgid "No data by: %s (%d)"
+msgstr "Keine Daten von: %s (%d)"
 
 #, c-format
-msgid "Read error: %s"
-msgstr "Lesefehler: %s"
-
-#, c-format
-msgid "Receiving error: %s"
-msgstr "Empfangsfehler: %s"
+msgid "Error reading: %s"
+msgstr "Fehler beim Lesen: %s"
 
 #, c-format
 msgid "Read %s."
@@ -415,47 +453,8 @@ msgstr "Lesen Sie %s."
 msgid "Received from\n"
 msgstr "Empfangen von\n"
 
-msgid ""
-"Socket's output transport has the address format:\n"
-"  TCP:{addr}:{port} - TCP socket:\n"
-"    addr - address for remote socket to be opened;\n"
-"    port - network port (/etc/services);\n"
-"  UDP:{addr}:{port} - UDP socket:\n"
-"    addr - address for remote socket to be opened;\n"
-"    port - network port (/etc/services).\n"
-"  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
-"    if - interface name;\n"
-"    mask - CAN frame id mask;\n"
-"    id - CAN id.\n"
-"  UNIX:{name} - UNIX socket:\n"
-"    name - UNIX-socket's file name."
-msgstr ""
-"Ausgangstransport Socket hat das Format der Adresse:\n"
-"  TCP:{addr}:{port} - TCP Socket:\n"
-"    addr - die Adresse für die Eröffnung des entfernten Sockets;\n"
-"    port - das Netzwerk Port (/etc/services);\n"
-"  UDP:{addr}:{port} - UDP Socket:\n"
-"    addr - die Adresse für die Eröffnung des entfernten Sockets ;\n"
-"    port - das Netzwerk Port (/etc/services);\n"
-"  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
-"    if - Schnittstellennamen;\n"
-"    mask - CAN-ID Maskenrahmen;\n"
-"    id - CAN id.\n"
-"  UNIX:{name} - UNIX Socket:\n"
-"    name - Name der Datei des UNIX-Sockets."
-
 msgid "Timings"
 msgstr "Zeitabstände"
 
-msgid ""
-"Connection timings in the format \"{conn}:{next}[:{rep}]\", where:\n"
-"    conn - maximum time for connection respond wait, in seconds;\n"
-"    next - maximum time for continue respond wait, in seconds;\n"
-"    rep  - minimum repeate timeout, in seconds."
-msgstr ""
-"Zeitabschnitte der Verbindung im Format: \"{conn}:{next}[:{rep}]\". Wo:\n"
-"    conn - Maximale Zeit der Erwartung der Antwort der Verbindung, in "
-"Sekunden;\n"
-"    next - Maximale Zeit der Erwartung der Fortsetzung der Antwort, in "
-"Sekunden;\n"
-"    rep  - Minimum repeate Timeout, in Sekunden."
+msgid "Attempts"
+msgstr "Versuche"

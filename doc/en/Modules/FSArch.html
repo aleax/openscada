@@ -38,7 +38,7 @@
 <td> x86,x86_64,ARM
 </td>
 <td> Archive </td>
-<td> Roman Savochenko<br />Maxim Lysenko (2009) — the page translation </td>
+<td> Roman Savochenko<br /><font size="-2"><i>Maxim Lysenko (2009) — the page translation</i></font> </td>
 <td> The archiver module. Provides functions for messages and values archiving to the file system.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -55,6 +55,7 @@
 </ul>
 </li>
 <li class="toclevel-1 tocsection-6"><a href="#Efficiency"><span class="tocnumber">3</span> <span class="toctext">Efficiency</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Links"><span class="tocnumber">4</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -72,7 +73,7 @@
 </p><p>Files of the archive can be limited in size and time. After exceeding the limit a new file is created. Maximum number of files in the archiver directory can also be restricted. After exceeding the limit on the number of files old files will be deleted!
 </p><p>In order to optimize the use of disk space, archivers support the packaging of old archives by the gzip packer. The packaging is carried out after a long non-use of the archive.
 </p><p>When you are using the archives in the form of XML, appropriate files are loaded entirely! For a long time unused archives unloading the timeout of access to the archive is used, after the exceeding of which the archive is unloaded from memory and then is packaged.
-</p><p>Module provides additional settings for the archiving process, Figure 1.
+</p><p>The module provides additional settings for the archiving process, Figure 1.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:768px;"><a class="image" href="http://oscada.org/wiki/File:FSArch_mess_a_prm.png"><img class="thumbimage" height="768" src="../files/FSArch_mess_a_prm.png" width="766" /></a>  <div class="thumbcaption">Fig.1. Additional settings of message archiving process.</div></div></div></div>
 <p>These additional parameters:
@@ -205,7 +206,7 @@ FSArch 3.2.0    UTF-8 5aec2095 5aec2097
 </p><p>In order to save disk space, archivers support packaging, in addition to the sequential packaging, of old archives by the gzip packer. Packaging is carried out after a long non-use of the archive. To allow fast connection of large archives to another station, it is possible to enable the use of an information file for the packaged files, which prevents the previous unpacking of all files at another station.
 </p><p>The module provides additional settings for the archiving process, Figure 4.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:830px;"><a class="image" href="http://oscada.org/wiki/File:FSArch_val_a_prm.png"><img class="thumbimage" height="783" src="../files/FSArch_val_a_prm.png" width="828" /></a>  <div class="thumbcaption">Fig.4. Additional settings of value archiving process.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:830px;"><a class="image" href="http://oscada.org/wiki/File:FSArch_val_a_prm.png"><img class="thumbimage" height="783" src="../files/FSArch_val_a_prm.png" width="828" /></a>  <div class="thumbcaption">Fig.4. Additional settings of the value archiving process.</div></div></div></div>
 <p>These additional parameters:
 </p>
 <ul><li> <i>Time size of the archive files, in hours</i> — the parameter is set automatically when the value periodicity of the archiver is changed and is generally proportional to the periodicity of the values of the archiver.</li></ul>
@@ -301,6 +302,11 @@ FSArch 3.2.0    UTF-8 5aec2095 5aec2097
 </p><p>The first mechanism is block (single-frame or transactional) location of data in the value archive file. Such a mechanism allows to achieve the maximum archiving speed, and, accordingly, allows simultaneous archiving of more data streams. Practical experience has shown that the K8-3000 system with a regular IDE hard drive can archive up to 300000 data streams with a period of 1 second, or, the K5-400 system with IDE disk (2.5") can archive up to 100 parameters with a period of 1 millisecond.
 </p><p>The second mechanism is to pack both current values and outdated archive files to optimize disk space usage. Two mechanisms of packaging are implemented: the sequential packaging mechanism (value archives) and the mechanism of compressing archives by the standard packer (gzip). This approach has made it possible to achieve high performance in the process of archiving current data with the efficient sequential compression mechanism, and finishing the outdated archives by the standard packer completes the overall picture of compact storage of large data arrays. The statistics of practical application in the conditions of the real noisy signal (the worst situation) showed that the degree of the sequential packaging was 10%, and the degree of the finishing packaging was 71%.
 </p>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">4</span> Links</span></h2>
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:Arch_val_sh.odg" title="File:Arch val sh.odg">Diagram: General schema of archiving values process.</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:FSArch_file_struct.dia" title="File:FSArch file struct.dia">Diagram: Overall structure of a value archive of the module Archive.FSArch.</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/File:FSArch_file_mpack.dia" title="File:FSArch file mpack.dia">Diagram: Mechanism of the sequential packaging of the values of the module Archive.FSArch.</a></li></ul>
+
 
 
 

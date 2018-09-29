@@ -31,14 +31,14 @@
 <td> <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a> </td>
 <td> SSL
 </td>
-<td> 2.0 </td>
+<td> 2.1 </td>
 <td> GPL2 </td>
 <td> tr_SSL.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> Transport </td>
-<td> Roman Savochenko<br /><font size="-2"><i>Maxim Lysenko (2009) — the page translation</i></font> </td>
+<td> Roman Savochenko<br /><font size="-2"><i>Maxim Lysenko (2009) — this page translation</i></font> </td>
 <td> Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -57,39 +57,45 @@
 </p><p>Each input transport is necessarily associated with one of the available transport protocols, to which input messages are transmitted. In conjunction with the transport protocol is supported by a mechanism of the combining of pieces of requests, disparate while transferring.
 </p><p>Configuration dialog of the input SSL-transport is shown in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:838px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in.png"><img class="thumbimage" height="730" src="../files/SSL_in.png" width="836" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the input SSL-transport.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:758px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in.png"><img class="thumbimage" height="718" src="../files/SSL_in.png" width="756" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the input SSL-transport.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
 <ul><li> State of the transport, that is: "Status", "Running", name of the database (containing the configuration) and a list with information about the active connections.</li>
 <li> Identifier, name and description of the transport.</li>
 <li> Address of the transport in the format "<b>{addr}:{port}[:{mode}]</b>", where:
-<ul><li> <i>addr</i> — address to open SSL, it must be one of the addresses of the host. If there specified "*" then SSL will be available in all the host's interfaces. There may be as the symbolic representation as well as IP one of the address.</li>
+<ul><li> <i>addr</i> — address to open SSL, it must be one of the addresses of the host. Empty or "*" address opens SSL for all interfaces. There may be as the symbolic representation as well as IPv4 "<b>127.0.0.1</b>" or IPv6 "<b>[::1]</b>".</li>
 <li> <i>port</i> — network port on which the SSL is opened, indication of the character name of the port, according to <i>/etc/services</i> is available.</li>
 <li> <i>mode</i> — SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1), by default and in error, the safest and most appropriate one is used.</li></ul></li>
 <li> Selecting of a transport protocol.</li>
 <li> State "Running", in which the transport must be translated at boot. </li>
 <li> Certificates, private SSL key and password of the private SSL key.</li>
-<li> Maximum number of clients, maximum number of clients per host and size of the input buffer.</li>
+<li> Maximum number of clients, Maximum number of clients per host and Size of the input buffer.</li>
 <li> Keep alive requests. Closing the connection after the specified requests. Zero value to disable - not close ever.</li>
 <li> Keep alive timeout, seconds. Closing the connection after no requests at the specified timeout. Zero value to disable - not close ever.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> We do not recommend disable the function by the TCP/IP network's properties does not guarantee notice the server about the connection disable, for example after power supply lost on the client. As result the opened client connections will left <span style="color: red">forever</span> and after their number achieve to the limit, server will drop new connections!</dd></dl>
 <ul><li> Transport's tasks priority.</li></ul>
 <h2><span class="mw-headline" id="Output_transports"><span class="mw-headline-number">2</span> Output transports</span></h2>
 <p>Configured and running output transport opens a connection to the specified server. In the case of destroying the connection, output transport is stopped. In order to resume the connection transport must be re-run, that all protocols do automatically.
+</p><p>The transport supports the direct definition of multiple server addresses and the processing of all IP addresses in which the symbolic address is resolved, which allows you to build <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#Redundancy" title="Special:MyLanguage/Documents/DAQ">vertical redundancy</a> directly by the transport that will be automatically connected to the first available server.
 </p><p>Main tab of the configuration page of the output SSL-transport is shown in Figure 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:865px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out.png"><img class="thumbimage" height="716" src="../files/SSL_out.png" width="863" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of the output SSL-transport.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:676px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out.png"><img class="thumbimage" height="755" src="../files/SSL_out.png" width="674" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of the output SSL-transport.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
 <ul><li> State of the transport, that is: "Status", "Running" and the name of the database, containing the configuration.</li>
 <li> Identifier, name and description of the transport.</li>
-<li> Address of the transport in the format "<b>{addr}:{port}[:{mode}]</b>", where:
-<ul><li> <i>addr</i> — address with which the connection is made. There may be as the symbolic representation as well as IP one of the address.</li>
-<li> <i>port</i> — network port with which the connection is made. Indication of the character name of the port, according to <i>/etc/services</i> is available.</li>
+<li> Address of the transport in the format "<b>{addr}[,{addrN}]:{port}[:{mode}]</b>", where:
+<ul><li> <i>addr</i> — address with which the connection is made. There may be as the symbolic representation as well as IPv4 "<b>127.0.0.1</b>" or IPv6 "<b>[::1]</b>".</li>
+<li> <i>port</i> — network port with which the connection is made. Indication of the character name of the port according to <i>/etc/services</i> is available.</li>
 <li> <i>mode</i> — SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1), by default and in error, the safest and most appropriate one is used.</li></ul></li>
 <li> The state "Running", in which the transport must be translated at boot. </li>
 <li> Certificates, private SSL key and password of the private SSL key.</li>
-<li> Default timeout, to wait for connecting and the response, separated.</li></ul>
+<li> Connection timings in the format "<b>{conn}:{next}</b>", where:
+<ul><li> <i>conn</i> — maximum time of waiting the connection, in seconds;</li>
+<li> <i>next</i> — maximum time of waiting for continue the response, in seconds.</li></ul></li></ul>
+<dl><dd> Can be prioritatile specified into the address field as the second global argument, as such "<b>localhost:123||5:1</b>".</dd></dl>
+<ul><li> Attempts of the requesting both for this transport and protocol, for full requests.</li></ul>
+<dl><dd> Can be prioritatile specified into the address field as the third global argument, as such "<b>localhost:123||5:1||3</b>".</dd></dl>
 <h2><span class="mw-headline" id="Certificates_and_keys"><span class="mw-headline-number">3</span> Certificates and keys</span></h2>
 <p>For the full function of the module, you need certificates and private keys. In the case of input SSL-transport (server), they are mandatory. In the case of the output SSL-transport, they may not be installed, although their use is desirable.
 </p><p>The simplest configuration of the certificate is self-subscription certificate and private key. The following describes how to create them using the tool <b>openssl</b>:

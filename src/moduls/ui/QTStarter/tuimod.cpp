@@ -56,7 +56,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.7.1"
+#define MOD_VER		"4.7.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -552,7 +552,7 @@ TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 //*************************************************
 StApp::StApp( int &argv, char **args ) : QApplication(argv, args), origStl(mod->dataRes()),
     inExec(false), transl(NULL), trayMenu(NULL), tray(NULL), stDlg(NULL), initExec(false),
-    mouseBtPress(0), mouseBtRecv(NULL), mouseBtHold(QEvent::None,QPoint(),Qt::NoButton,0,0)
+    simulRightMKeyTm(0), mouseBtPress(0), mouseBtRecv(NULL), mouseBtHold(QEvent::None,QPoint(),Qt::NoButton,0,0)
 {
     setApplicationName(PACKAGE_STRING);
     setQuitOnLastWindowClosed(false);
@@ -577,14 +577,15 @@ int StApp::topLevelWindows( )
 
 bool StApp::notify( QObject *receiver, QEvent *event )
 {
-    if(event && s2i(SYS->cmdOpt("simulRightMKeyTm")) > 0) {
+    if(event && simulRightMKeyTm > 0) {
 	if(event->type() == QEvent::MouseButtonPress && ((QMouseEvent*)event)->button() == Qt::LeftButton) {
 	    mouseBtRecv = receiver;
 	    mouseBtHold = *((QMouseEvent*)event);
 	    mouseBtPress = SYS->sysTm();
 	}
 	if(mouseBtPress && ((event->type() == QEvent::MouseButtonRelease && ((QMouseEvent*)event)->button() == Qt::LeftButton) ||
-		(event->type() == QEvent::MouseMove && (((QMouseEvent*)event)->globalPos()-mouseBtHold.globalPos()).manhattanLength() > QFontMetrics(font()).height())))
+		(event->type() == QEvent::MouseMove && (((QMouseEvent*)event)->globalPos()-mouseBtHold.globalPos()).manhattanLength() > QFontMetrics(font()).height()) ||
+		event->type() == QEvent::FocusOut))
 	    mouseBtPress = 0;
     }
 
@@ -630,6 +631,8 @@ void StApp::timerEvent( QTimerEvent *event )
     if(!inExec)	return;
     if(!initExec) {
 	initExec = true;	//!!: Set to the begin but here can be a multiple entry from processEvents() manual call, observed on QTCfg.
+
+	simulRightMKeyTm = s2i(SYS->cmdOpt("simulRightMKeyTm"));
 
 	//Create I18N translator
 	transl = new I18NTranslator();
@@ -689,7 +692,7 @@ void StApp::timerEvent( QTimerEvent *event )
 
     if(mod->mQtLookMdf)	updLookFeel();
 
-    if(mouseBtPress && (SYS->sysTm()-mouseBtPress) >= s2i(SYS->cmdOpt("simulRightMKeyTm"))) {
+    if(mouseBtPress && (SYS->sysTm()-mouseBtPress) >= simulRightMKeyTm) {
 	QMouseEvent evPress(QEvent::MouseButtonPress, mouseBtHold.pos(), Qt::RightButton, 0, 0); sendEvent(mouseBtRecv, &evPress);
 	QMouseEvent evRels(QEvent::MouseButtonRelease, mouseBtHold.pos(), Qt::RightButton, 0, 0);sendEvent(mouseBtRecv, &evRels);
 	QContextMenuEvent evCtxMenu(QContextMenuEvent::Mouse, mouseBtHold.pos());		 sendEvent(mouseBtRecv, &evCtxMenu);

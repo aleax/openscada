@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-27 20:11+0300\n"
+"POT-Creation-Date: 2018-09-29 20:39+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -253,6 +253,9 @@ msgid "13:Error of the server response"
 msgstr ""
 
 msgid "Not full response"
+msgstr ""
+
+msgid "13:Error of the response: Too large."
 msgstr ""
 
 msgid "14:Device error: "

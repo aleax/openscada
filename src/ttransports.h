@@ -138,6 +138,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	string	dscr( )			{ return cfg("DESCRIPT").getS(); }
 	string	addr( ) const		{ return cfg("ADDR").getS(); }
 	virtual	string timings( )	{ return ""; }
+	virtual	unsigned short attempts( ) { return 2; }
 	int64_t	prm1( )			{ return mPrm1; }
 	int64_t	prm2( )			{ return mPrm2; }
 	bool	toStart( )		{ return mStart; }
@@ -153,6 +154,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void setDscr( const string &idscr )		{ cfg("DESCRIPT").setS(idscr); }
 	void setAddr( const string &addr )		{ cfg("ADDR").setS(addr); }
 	virtual void setTimings( const string &vl )	{ }
+	virtual void setAttempts( unsigned short vl )	{ }
 	void setPrm1( int64_t vl )			{ mPrm1 = vl; }
 	void setPrm2( int64_t vl )			{ mPrm2 = vl; }
 	void setToStart( bool vl )			{ mStart = vl; modif(); }
@@ -236,6 +238,7 @@ class TTypeTransport: public TModule
 	void outAdd( const string &name, const string &idb = "*.*" );
 	void outDel( const string &name, bool complete = false ){ chldDel(mOut,name,-1,complete); }
 	AutoHD<TTransportOut> outAt( const string &name ) const	{ return chldAt(mOut,name); }
+	virtual	string outAddrHelp( )				{ return ""; }
 
 	TTransportS &owner( ) const;
 

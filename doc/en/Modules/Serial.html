@@ -38,7 +38,7 @@
 <td> x86,x86_64,ARM
 </td>
 <td> Transport </td>
-<td> Roman Savochenko<br /><font size="-2"><i>Maxim Kochetkov (2016), Maxim Lysenko (2009-2010) — the page translation</i></font> </td>
+<td> Roman Savochenko<br /><font size="-2"><i>Maxim Kochetkov (2016), Maxim Lysenko (2009-2010) — this page translation</i></font> </td>
 <td> Provides transport based on the serial interfaces. It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -136,7 +136,6 @@
 <li> <i>rtsDelay2</i> — delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds.</li></ul></li>
 <li> Do not stop at processing. Sometimes the closing of an open device can be destructive, for example, on an ICP-DAS LP PLC, and you can prevent it with this option.</li></ul>
 <p>The transport supports the ability to work in the modem mode. This mode is enabled by the fifth parameter presence of the address and it involves making a call on the phone specified by this parameter at the start time of the transport. After establishing a connection to the remote modem, all transmission requests are sent to the remote modem station. Disconnection of a communication session, with the transport stopping, is carried out according to the activity timeout.
-</p><p>The transport can work with the I2C hardware bus, if "/dev/i2c-{N}" is selected as the device and the bus will allow to set the slave device address by the I2C_SLAVE command from the <b>first request byte</b>. Speed and format do not play a role in this mode. From the timeouts here actually only the symbol time works and mainly for calculating the expectation of the request repetition.
 </p><p>To configure the modem of the output transport the special tab "Modem" is provided (Fig. 4).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:651px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out_mod.png"><img class="thumbimage" height="620" src="../files/Serial_out_mod.png" width="649" /></a>  <div class="thumbcaption">Fig.4. Tab "Modem" of the configuration of a modem of an output serial interface.</div></div></div></div>
@@ -157,6 +156,8 @@
 <li> Exit string from the data mode (usually "+++") and the "Delay time before initializing the modem" is used, after it.</li>
 <li> Hang up command (usually "+++ATH"). This command is called whenever there is need to break the connection.</li>
 <li> Result string of the hanging up command (usually "OK"), with which the modem answers to the command and which must be expected.</li></ul>
+<p>The transport can work with the I2C hardware bus, if "/dev/i2c-{N}" is selected as the device and the bus will allow to set the slave device address by the I2C_SLAVE command from the <b>first request byte</b>. Speed and format do not play a role in this mode. From the timeouts here actually only the symbol time works and mainly for calculating the expectation of the request repetition.
+</p>
 <h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">3</span> User programming API</span></h2>
 <p><b>Object "Output transport" (SYS.Transport.Serial.out_{OutTransport})</b>
 </p>

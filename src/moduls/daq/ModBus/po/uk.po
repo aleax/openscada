@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-26 17:02+0300\n"
+"POT-Creation-Date: 2018-09-29 20:39+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -312,6 +312,9 @@ msgstr "13:Помилка відповіді сервера"
 
 msgid "Not full response"
 msgstr "Неповна відповідь"
+
+msgid "13:Error of the response: Too large."
+msgstr "13:Помилка відповіді: Дуже довга."
 
 msgid "14:Device error: "
 msgstr "14:Помилка пристрою: "

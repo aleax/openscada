@@ -185,10 +185,12 @@ class TSocketOut: public TTransportOut
 	string getStatus( );
 
 	string timings( )		{ return mTimings; }
+	unsigned short attempts( )	{ return mAttemts; }
 	unsigned MSS( )			{ return mMSS; }
 	int tmCon( )			{ return mTmCon; }
 
 	void setTimings( const string &vl );
+	void setAttempts( unsigned short vl );
 	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(1000000,vl)) : 0; modif(); }
 	void setTmCon( int vl )		{ mTmCon = vmax(1,vmin(60000,vl)); }
 
@@ -199,6 +201,8 @@ class TSocketOut: public TTransportOut
 
     protected:
 	//Methods
+	bool cfgChange( TCfg &co, const TVariant &pc );
+
 	void load_( );
 	void save_( );
 
@@ -208,7 +212,8 @@ class TSocketOut: public TTransportOut
 
 	//Attributes
 	string		mTimings;
-	unsigned short	mMSS,			//MSS
+	unsigned short	mAttemts,
+			mMSS,			//MSS
 			mTmCon,
 			mTmNext,
 			mTmRep;
@@ -236,6 +241,10 @@ class TTransSock: public TTypeTransport
 
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
+
+	string outAddrHelp( );
+	string outTimingsHelp( );
+	string outAttemptsHelp( );
 
 	void perSYSCall( unsigned int cnt );
 

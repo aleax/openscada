@@ -920,6 +920,7 @@ function selectChildRecArea( node, aPath, cBlk )
 			    tblCell.isEdited = false; tblCell.cRow = iRow; tblCell.cCol = iCol;
 			    if(tblCell.isEnter) while(tblCell.childNodes.length) tblCell.removeChild(tblCell.lastChild);
 			    tblCell.isEnter = this.isEnter = false;
+			    tblCell.className = "";
 			    if(prcCol.getAttribute('tp') == 'bool') {
 				setNodeText(tblCell,parseInt(cval)?'On':'Off');
 				tblCell.style.fontWeight = parseInt(cval)?'bold':'normal';
@@ -974,6 +975,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		    for(var iRw = 0; iRw < dataReq.childNodes[iCl].childNodes.length; iRw++) {
 			var el = t_s.ownerDocument.createElement(dataReq.childNodes[iCl].childNodes[iRw].nodeName);
 			setNodeText(el, nodeText(dataReq.childNodes[iCl].childNodes[iRw]))
+			el.setAttribute('help', dataReq.childNodes[iCl].childNodes[iRw].getAttribute('help'));
 			t_s.childNodes[iCli].appendChild(el);
 		    }
 		}
@@ -1053,16 +1055,26 @@ function selectChildRecArea( node, aPath, cBlk )
 			}
 			else {
 			    var cCell = document.createElement(iRw?'td':'th');
+			    var iCol = table.childNodes[iRw].childNodes.length-1;
+			    if(!iRw) {
+				if((tVl=t_s.childNodes[iCol].getAttribute('help'))) cCell.title = tVl;
+			    }
+			    else {
+				if((tVl=t_s.childNodes[iCol].childNodes[iRw-1].getAttribute('help'))) cCell.title = tVl;
+				else if(table.childNodes[0].childNodes[iCol+1].title) cCell.title = table.childNodes[0].childNodes[iCol+1].title;
+			    }
+
 			    cCell.onclick = function( ) {
 				var cTbl = this.parentNode.parentNode;
 				if(cTbl.isEnter && !this.isEnter) cTbl.setElements();
 				return true;
 			    }
-			    if(iRw && wr && parseInt(t_s.childNodes[table.childNodes[iRw].childNodes.length-1].getAttribute('acs'))&SEC_WR)
+			    if(iRw && wr && parseInt(t_s.childNodes[iCol].getAttribute('acs'))&SEC_WR)
 			    cCell.ondblclick = function( ) {
 				var cTbl = this.parentNode.parentNode;
 				if(cTbl.isEnter) cTbl.setElements();
 				this.isEnter = cTbl.isEnter = true;
+				this.className = "edit";
 				var prcCol = cTbl.srcNode.childNodes[this.cCol];
 				var cval = nodeText(prcCol.childNodes[this.cRow]);
 
@@ -1220,7 +1232,7 @@ function selectChildRecArea( node, aPath, cBlk )
 			}
 			table.childNodes[iRw].appendChild(cCell);
 		    }
-		    if(table.childNodes[iRw].childNodes.length) setNodeText(table.childNodes[iRw].childNodes[0],iRw?iRw:'#');
+		    if(table.childNodes[iRw].childNodes.length) setNodeText(table.childNodes[iRw].childNodes[0], iRw?iRw:'#');
 		}
 		table.srcNode = t_s;
 		table.setElements();

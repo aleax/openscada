@@ -583,6 +583,9 @@ void TSYS::cfgFileLoad( )
     if((tVl=cmdOpt("statName")).size())	mName = tVl;
     if((tVl=cmdOpt("modDir")).size())	setModDir(tVl, true);
 
+    //Save changes before
+    cfgFileSave();
+
     //Load config-file
     int hd = open(mConfFile.c_str(), O_RDONLY);
     if(hd < 0) mess_sys(TMess::Error, _("Error the configuration file '%s': %s"), mConfFile.c_str(), strerror(errno));
@@ -2847,10 +2850,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to the configuration of the list of remote stations"),0660,"root","Transport",1,"tp","lnk");
 	}
 	if(ctrMkNode("area",opt,-1,"/tasks",_("Tasks"),R_R___))
-	    if(ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),RWRW__,"root","root",2,"key","path",
-		"help",(nCPU()<=1)?"":_("To set up the processors you use, write a row of numbers separated by a ':' character.\n"
-				       "Processor numbers start at 0.")))
-	    {
+	    if(ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),RWRW__,"root","root",1,"key","path")) {
 		ctrMkNode("list",opt,-1,"/tasks/tasks/path",_("Path"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/thrd",_("Thread"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/tid",_("TID"),R_R___,"root","root",1,"tp","dec");
@@ -2858,7 +2858,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/tasks/tasks/plc",_("Policy"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/prior",_("Prior."),R_R___,"root","root",1,"tp","dec");
 #if __GLIBC_PREREQ(2,4)
-		if(nCPU() > 1) ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",1,"tp","str");
+		if(nCPU() > 1) ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",2,"tp","str",
+		    "help",_("To set up the processors you use, write a row of numbers separated by a ':' character.\n"));
 #endif
 	    }
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {

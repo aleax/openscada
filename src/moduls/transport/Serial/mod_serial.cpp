@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.0.0"
+#define MOD_VER		"2.0.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -127,6 +127,24 @@ void TTr::load_( )
 TTransportIn *TTr::In( const string &name, const string &idb )	{ return new TTrIn(name,idb,&owner().inEl()); }
 
 TTransportOut *TTr::Out( const string &name, const string &idb ){ return new TTrOut(name,idb,&owner().outEl()); }
+
+string TTr::outAddrHelp( )
+{
+    return _("The serial transport has the address format \"{dev}:{speed}:{format}[:{fc}[:{modTel}]]\", where:\n"
+	"    dev - serial device address (/dev/ttyS0);\n"
+	"    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
+	"                          230400, 460800, 500000, 576000 or 921600);\n"
+	"    format - asynchronous data format '{size}{parity}{stop}' (8N1, 7E1, 5O2);\n"
+	"    fc - flow control:\n"
+	"      'h' - hardware (CRTSCTS);\n"
+	"      's' - software (IXON|IXOFF);\n"
+	"      'rts' - using of the RTS signal for transferring(false) and checking for echo, for raw RS-485;\n"
+	"      'rts1' - using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;\n"
+	"      'rtsne' - using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;\n"
+	"      'rts1ne' - using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;\n"
+	"      'RS485' - using RS-485 mode, through TIOCSRS485.\n"
+	"    modTel - modem telephone, the field presence do switch transport to work with modem mode.");
+}
 
 bool TTr::devLock( const string &dn, bool check )
 {
@@ -1358,21 +1376,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	TTransportOut::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,3,
-	    "dest","sel_ed","select","/prm/cfg/devLS","help",
-	    _("The serial transport has the address format \"{dev}:{speed}:{format}[:{fc}[:{modTel}]]\", where:\n"
-	    "    dev - serial device address (/dev/ttyS0);\n"
-	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
-	    "                          230400, 460800, 500000, 576000 or 921600);\n"
-	    "    format - asynchronous data format '{size}{parity}{stop}' (8N1, 7E1, 5O2);\n"
-	    "    fc - flow control:\n"
-	    "      'h' - hardware (CRTSCTS);\n"
-	    "      's' - software (IXON|IXOFF);\n"
-	    "      'rts' - using of the RTS signal for transferring(false) and checking for echo, for raw RS-485;\n"
-	    "      'rts1' - using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;\n"
-	    "      'rtsne' - using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;\n"
-	    "      'rts1ne' - using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;\n"
-	    "      'RS485' - using RS-485 mode, through TIOCSRS485.\n"
-	    "    modTel - modem telephone, the field presence do switch transport to work with modem mode."));
+	    "dest","sel_ed", "select","/prm/cfg/devLS", "help",owner().outAddrHelp().c_str());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in the format \"{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]\", where:\n"
 	    "    conn - maximum time of waiting the connecting response, in milliseconds;\n"

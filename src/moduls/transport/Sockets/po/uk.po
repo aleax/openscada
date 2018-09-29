@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-28 22:45+0300\n"
+"POT-Creation-Date: 2018-09-29 18:46+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -31,56 +31,105 @@ msgstr ""
 msgid "Addition parameters"
 msgstr "Додаткові параметри"
 
-#, c-format
 msgid ""
-"Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed "
-"connections by limit %d. "
+"Socket's output transport has the address format:\n"
+"  [TCP:]{addr}[,{addrN}]:{port} - TCP socket:\n"
+"    addr - address with which the connection is made; there may be as the "
+"symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
+"    port - network port with which the connection is made; indication of the "
+"character name of the port according to /etc/services is available;\n"
+"  UDP:{addr}[,{addrN}]:{port} - UDP socket:\n"
+"    addr - address with which the connection is made; there may be as the "
+"symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
+"    port - network port with which the connection is made; indication of the "
+"character name of the port according to /etc/services is available.\n"
+"  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
+"    if - interface name;\n"
+"    mask - CAN mask;\n"
+"    id - CAN id.\n"
+"  UNIX:{name} - UNIX socket:\n"
+"    name - UNIX-socket's file name."
 msgstr ""
-"Підключень %d, відкрито %d, останне %s. Трафік вхідний %s, вихідний %s. "
-"Закрито підключень за лімітом %d. "
+"Вихідний транспорт Socket має формат адреси:\n"
+"  [TCP:]{addr}[,{addrN}]:{port} - TCP сокет:\n"
+"    addr - адреса до якої здійснюється підключення; допускається як "
+"символьне так й IPv4 \"127.0.0.1\" або IPv6 \"[::1]\" представлення адреси;\n"
+"    port - мережевий порт до якого здійснюється підключення; можливе "
+"вказання символьного ім'я порту відповідно до /etc/services;\n"
+"  UDP:{addr}[,{addrN}]:{port} - UDP сокет:\n"
+"    addr - адреса до якої здійснюється підключення; допускається як "
+"символьне так й IPv4 \"127.0.0.1\" або IPv6 \"[::1]\" представлення адреси;\n"
+"    port - мережевий порт до якого здійснюється підключення; можливе "
+"вказання символьного ім'я порту відповідно до /etc/services;\n"
+"  RAWCAN:{if}:{mask}:{id} - CAN сокет:\n"
+"    if - ім'я інтерфейсу;\n"
+"    mask - маска CAN;\n"
+"    id - ідентифікатор CAN.\n"
+"  UNIX:{name} - UNIX сокет:\n"
+"    name - ім'я файлу UNIX-сокету."
+
+msgid ""
+"Connection timings in the format \"{conn}:{next}[:{rep}]\", where:\n"
+"    conn - maximum time of waiting the connection, in seconds;\n"
+"    next - maximum time of waiting for continue the response, in seconds;\n"
+"    rep  - minimum time of waiting the request repeating, in seconds.\n"
+"Can be prioritatile specified into the address field as the second global "
+"argument, as such \"localhost:123||5:1\"."
+msgstr ""
+"Інтервали часу підключення у форматі \"{conn}:{next}[:{rep}]\", де:\n"
+"    conn - максимальний час очікування відповіді з'єднання, у секундах;\n"
+"    next - максимальний час очікування продовження відповіді, у секундах;\n"
+"    rep  - мінімальний таймаут очікування повтору запиту, у секундах.\n"
+"Може бути пріоритетно визначено другим глобальним аргументом поля адреси, на "
+"кшталт \"localhost:123||5:1\"."
+
+msgid ""
+"Attempts of the requesting both for this transport and protocol, for full "
+"requests.\n"
+"Can be prioritatile specified into the address field as the third global "
+"argument, as such \"localhost:123||5:1||3\"."
+msgstr ""
+"Спроб запиту транспортом та протоколом, для повних запитів.\n"
+"Може бути пріоритетно визначено третім глобальним аргументом поля адреси, на "
+"кшталт \"localhost:123||5:1||3\"."
+
+#, c-format
+msgid "Connections %d, opened %d, last %s, closed by the limit %d. "
+msgstr "Підключень %d, відкрито %d, останне %s, закрито за лімітом %d. "
+
+#, c-format
+msgid "%s traffic in %s, out %s. "
+msgstr "%s трафік вхідний %s, вихідний %s. "
 
 #, c-format
 msgid "Processing time %s[%s]. "
 msgstr "Час обробки %s[%s]. "
 
 #, c-format
-msgid "Create %s socket error: '%s (%d)'!"
+msgid "Error the socket type '%s'!"
+msgstr "Помилка типу сокету '%s'!"
+
+#, c-format
+msgid "Error the address '%s': '%s (%d)'"
+msgstr "Помилка адреси '%s': '%s (%d)'"
+
+msgid "sockaddr to large."
+msgstr "sockaddr дуже великий."
+
+#, c-format
+msgid "Error creating the %s socket: '%s (%d)'!"
 msgstr "Помилка створення %s сокету: '%s (%d)'!"
 
 #, c-format
-msgid "Socket type '%s' error!"
-msgstr "Помилка у типу '%s' сокету!"
+msgid "Error connecting the %s socket: '%s (%d)'!"
+msgstr "Помилка підключення %s сокету: '%s (%d)'!"
 
 #, c-format
-msgid "Host '%s' not found!"
-msgstr "Не знайдено хоста '%s'!"
+msgid "Error binding the %s socket: '%s (%d)'!"
+msgstr "Помилка під'єднання %s сокету: '%s (%d)'!"
 
 #, c-format
-msgid "The requested name '%s' does not have an IP address!"
-msgstr "Запитане ім'я '%s' не має IP адрес!"
-
-#, c-format
-msgid "A non-recoverable name server error occurred while for '%s'!"
-msgstr "Виникла невиправна помилка серверу імен для '%s'!"
-
-#, c-format
-msgid "A temporary error occurred on an authoritative name server for '%s'!"
-msgstr "Виникла тимчасова помилка на авторитетному сервері імен для '%s'!"
-
-#, c-format
-msgid "Unknown error code from gethostbyname_r for '%s'!"
-msgstr "Невідомий код помилки gethostbyname_r для '%s'!"
-
-#, c-format
-msgid "Connect to %s socket error: '%s (%d)'!"
-msgstr "Помилка підключення до %s сокету: '%s (%d)'!"
-
-#, c-format
-msgid "Bind to %s socket error: '%s (%d)'!"
-msgstr "Помилка зв'язування із %s сокетом: '%s (%d)'!"
-
-#, c-format
-msgid "RAWCAN socket binded '%s'!"
+msgid "RAWCAN socket binded to '%s'!"
 msgstr "RAWCAN сокет під'єднався до '%s'!"
 
 msgid "Started"
@@ -90,8 +139,8 @@ msgid "Stopped"
 msgstr "Зупинено"
 
 #, c-format
-msgid "Restart by no input activity to '%s'."
-msgstr "Перевантаження у зв'язку із відсутністю вхідної активності до '%s'."
+msgid "Restart due to lack of input activity to '%s'."
+msgstr "Перевантаження через відсутність вхідної активності на '%s'."
 
 #, c-format
 msgid "Write: wrote %s."
@@ -109,10 +158,10 @@ msgid "%d:Transmitted directly to '%s'\n"
 msgstr "%d:Прямо передано до '%s'\n"
 
 #, c-format
-msgid "Close input transport by error: '%s (%d)'"
-msgstr "Закриття вхідного транспорту за помилкою: '%s (%d)'"
+msgid "Closing the input transport by the error \"%s (%d)\""
+msgstr "Закриття вхідного транспорту за помилкою \"%s (%d)\""
 
-msgid "Error creation of the thread!"
+msgid "Error creating a thread!"
 msgstr "Помилка створення потоку!"
 
 #, c-format
@@ -142,12 +191,20 @@ msgid " stopping client tasks ..."
 msgstr " зупинка клієнтських задач ..."
 
 #, c-format
-msgid "Has been connected by '%s'!"
+msgid "Connected by '%s'!"
 msgstr "Приєднано '%s'!"
 
 #, c-format
-msgid "Has been terminated by error: '%s (%d)'"
-msgstr "Перервано помилкою: '%s (%d)'"
+msgid "Terminated by the error \"%s (%d)\""
+msgstr "Перервано помилкою \"%s (%d)\""
+
+#, c-format
+msgid "%d:Terminated by the error \"%s (%d)\"\n"
+msgstr "%d:Перервано помилкою \"%s (%d)\"\n"
+
+#, c-format
+msgid "%d:Terminated by the reading %d error \"%s (%d)\"\n"
+msgstr "%d:Перервано помилкою читання %d: '%s (%d)'\n"
 
 #, c-format
 msgid "Read message %s from '%s'."
@@ -158,35 +215,35 @@ msgid "Wrote message %s to '%s'."
 msgstr "Записано повідомлення %s до '%s'."
 
 #, c-format
-msgid "Transmitting error: %s"
+msgid "Error transmitting: %s"
 msgstr "Помилка передавання: %s"
 
 #, c-format
-msgid "Has been disconnected by '%s'!"
-msgstr "Відєднано '%s'!"
+msgid "Disconnected by '%s'!"
+msgstr "Від'єднано '%s'!"
 
 #, c-format
-msgid "Has been terminated by execution: %s"
-msgstr "Перервано виключенням: %s"
+msgid "Terminated by the execution '%s'"
+msgstr "Перервано виключенням '%s'"
 
 #, c-format
-msgid "%d:Has been terminated by execution: %s"
-msgstr "%d:Перервано виключенням: %s"
+msgid "%d:Terminated by the execution '%s'"
+msgstr "%d:Перервано виключенням '%s'"
 
 #, c-format
-msgid "New input protocol's object '%s' created!"
-msgstr "Новий об'єкт вхідного протоколу '%s' створено!"
+msgid "The new input protocol's object '%s' is created!"
+msgstr "Створено новий об'єкт вхідного протоколу '%s'!"
 
 #, c-format
-msgid "Input protocol's object '%s' closed by self!"
+msgid "The input protocol object '%s' has closed itself!"
 msgstr "Об'єкт вхідного протоколу '%s' закрився сам!"
 
-msgid "Error request to protocol."
-msgstr "Помилка запиту до протоколу."
+msgid "Error requesting the protocol."
+msgstr "Помилка запиту протоколу."
 
 #, c-format
-msgid "A new client %d from '%s' connected"
-msgstr "Підключено новий клієнт %d з %s"
+msgid "New client %d from '%s' connected"
+msgstr "Підключено новий клієнт %d з '%s'"
 
 #, c-format
 msgid "Client %d from '%s' disconnected"
@@ -200,54 +257,60 @@ msgstr "Активні підключення"
 
 msgid ""
 "Socket's input transport has the address format:\n"
-"  TCP:{addr}:{port}:{mode} - TCP socket:\n"
-"    addr - address for socket to be opened, empty address opens socket for "
-"all interfaces;\n"
-"    port - network port (/etc/services);\n"
-"    mode - work mode (0 - break connection; 1 - keep alive; 2 - initiative "
-"connection).\n"
+"  [TCP:]{addr}:{port}:{mode} - TCP socket:\n"
+"    addr - address for socket to be opened, empty or \"*\" address opens "
+"socket for all interfaces; there may be as the symbolic representation as "
+"well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
+"    port - network port on which the socket is opened, indication of the "
+"character name of the port, according to /etc/services is available;\n"
+"    mode - mode of operation: 0 - break connections; 1(default) - keep "
+"alive; 2 - initiative connections.\n"
 "  UDP:{addr}:{port} - UDP socket:\n"
-"    addr - address for socket to be opened, empty address opens socket for "
-"all interfaces;\n"
-"    port - network port (/etc/services).\n"
+"    addr - address for socket to be opened, empty or \"*\" address opens "
+"socket for all interfaces; there may be as the symbolic representation as "
+"well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
+"    port - network port on which the socket is opened, indication of the "
+"character name of the port, according to /etc/services is available.\n"
 "  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
 "    if - interface name;\n"
-"    mask - CAN frame id mask;\n"
+"    mask - CAN mask;\n"
 "    id - CAN id.\n"
 "  UNIX:{name}:{mode} - UNIX socket:\n"
 "    name - UNIX-socket's file name;\n"
-"    mode - work mode (0 - break connection; 1 - keep alive; 2 - initiative "
-"connection)."
+"    mode - mode of operation: 0 - break connections; 1(default) - keep "
+"alive; 2 - initiative connections."
 msgstr ""
 "Вхідний транспорт Socket має формат адреси:\n"
-"  TCP:{addr}:{port}:{mode} - TCP сокет:\n"
-"    addr - адреса відкриття сокету, порожня адреса відкриває сокет на всіх "
-"інтерфейсах;\n"
-"    port - мережевий порт (/etc/services);\n"
-"    mode - режим роботи (0 - розривати з'єднання; 1 - зберігати з'єднання; 2 "
-"- ініціативне підключення).\n"
+"  [TCP:]{addr}:{port}:{mode} - TCP сокет:\n"
+"    addr - адреса відкриття сокету, порожня або \"*\" адреса відкриває сокет на всіх "
+"інтерфейсах; допускаються як символьне, так й IPv4 \"127.0.0.1\" або IPv6 "
+"\"[::1]\" представлення адреси;\n"
+"    port - мережевий порт на якому відкривається сокет, можливе вказання "
+"символьного ім'я порту відповідно до /etc/services;\n"
+"    mode - режим роботи: 0 - розривати з'єднання; 1(типово) - зберігати "
+"з'єднання; 2 - ініціативне підключення.\n"
 "  UDP:{addr}:{port} - UDP сокет:\n"
-"    addr - адреса відкриття сокету, порожня адреса відкриває сокет на всіх "
-"інтерфейсах;\n"
-"    port - мережевий порт (/etc/services);\n"
+"    addr - адреса відкриття сокету, порожня або \"*\" адреса відкриває сокет на всіх "
+"інтерфейсах; допускаються як символьне, так й IPv4 \"127.0.0.1\" або IPv6 "
+"\"[::1]\" представлення адреси;\n"
+"    port - мережевий порт на якому відкривається сокет, можливе вказання "
+"символьного ім'я порту відповідно до /etc/services;\n"
 "  RAWCAN:{if}:{mask}:{id} - CAN сокет:\n"
 "    if - ім'я інтерфейсу;\n"
 "    mask - маска CAN;\n"
 "    id - ідентифікатор CAN.\n"
 "  UNIX:{name}:{mode} - UNIX сокет:\n"
-"    name - Ім'я файлу UNIX-сокета;\n"
-"    mode - режим роботи (0 - розривати з'єднання; 1 - зберігати з'єднання; 2 "
-"- ініціативне підключення)."
+"    name - ім'я файлу UNIX-сокета;\n"
+"    mode - режим роботи: 0 - розривати з'єднання; 1(типово) - зберігати "
+"з'єднання; 2 - ініціативне підключення."
 
 msgid ""
-"Empty value for the protocol selection switchs the transport to mode\n"
-"of creation associated output transports for each connection to one."
+"Empty value for the protocol selection switchs the transport to a mode\n"
+"of creation associated output transports for each connection to this "
+"transport."
 msgstr ""
 "Порожне значення вибору протоколу перемикає транспорт у режим створення\n"
 "асоційованого вихідного транспорту для кожного підключення на цей вхідний."
-
-msgid "Input buffer (kbyte)"
-msgstr "Вхідний буфер (кбайт)"
 
 msgid "Priority"
 msgstr "Пріоритет"
@@ -255,40 +318,43 @@ msgstr "Пріоритет"
 msgid "Maximum segment size (MSS)"
 msgstr "Максимальний розмір сегменту (MSS)"
 
-msgid "Set 0 for system MSS."
+msgid "Set 0 for the system MSS."
 msgstr "Встановити 0 для системного MSS."
+
+msgid "Input buffer, KB"
+msgstr "Вхідний буфер, кБ"
 
 msgid "Queue length"
 msgstr "Довжина черги"
 
-msgid "Clients maximum"
-msgstr "Максимум клієнтів"
+msgid "Maximum number of clients"
+msgstr "Максимальна кількість клієнтів"
 
-msgid "Clients maximum, per host"
-msgstr "Максимум клієнтів, за хостами"
+msgid "Maximum number of clients per host"
+msgstr "Максимальна кількість клієнтів за хостами"
 
-msgid "Set to zero for disable that limit."
-msgstr "Встановити у нуль для вимкнення ліміту."
+msgid "Set to 0 to disable this limit."
+msgstr "Встановити у 0 для вимкнення цього обмеження."
 
 msgid "Keep alive requests"
 msgstr "Keep alive запитів"
 
 msgid ""
-"Close the connection after specified requests.\n"
-"Zero value for disable (not close ever)."
+"Closing the connection after the specified requests.\n"
+"Zero value to disable - do not close ever."
 msgstr ""
 "Закриття підключення після визначеної кількості запитів.\n"
-"Нульове значення для відключення (не закривається ніколи)."
+"Нульове значення для відключення - не закривається ніколи."
 
 msgid "Keep alive timeout, seconds"
 msgstr "Keep alive час очікування, секунд"
 
 msgid ""
-"Close the connection after no requests at specified timeout.\n"
-"Zero value for disable (not close ever)."
+"Closing the connection after no requests at the specified timeout.\n"
+"Zero value to disable - do not close ever."
 msgstr ""
 "Закриття підключення після відсутності запитів протягом визначеного часу.\n"
-"Нульове значення для відключення (не закривається ніколи)."
+"Нульове значення для відключення - не закривається ніколи."
 
 #, c-format
 msgid "%s %d(%s): last %s; traffic in %s, out %s; client detachings %g; "
@@ -301,28 +367,12 @@ msgid "processing time %s[%s]; "
 msgstr "час обробки %s[%s]; "
 
 #, c-format
-msgid "Traffic in %s, out %s. "
-msgstr "Трафік вхідний %s, вихідний %s. "
-
-#, c-format
 msgid "Response time %s[%s]. "
 msgstr "Час відповіді %s[%s]. "
 
 #, c-format
-msgid "Type socket '%s' error!"
-msgstr "Помилка у типу '%s' сокету!"
-
-#, c-format
-msgid "Error force socket %d using: '%s (%d)'!"
+msgid "Error the force socket %d using: '%s (%d)'!"
 msgstr "Помилка примусового використання сокету %d: '%s (%d)'!"
-
-#, c-format
-msgid "Error creation TCP socket: '%s (%d)'!"
-msgstr "Помилка створення TCP сокету: '%s (%d)'!"
-
-#, c-format
-msgid "Error creation UDP socket: '%s (%d)'!"
-msgstr "Помилка створення UDP сокету: '%s (%d)'!"
 
 #, c-format
 msgid "Error connecting during the time %s: '%s (%d)'"
@@ -330,27 +380,23 @@ msgstr "Помилка підключення протягом часу %s: '%s 
 
 #, c-format
 msgid ""
-"Error connection to the internet socket '%s:%s' during the timeout, it seems "
+"Error connecting to the internet socket '%s:%s' during the timeout, it seems "
 "in down or inaccessible: '%s (%d)'!"
 msgstr ""
 "Помилка підключення до інтернет сокету '%s:%s' протягом таймауту, він схоже "
 "відключений або недоступний: '%s (%d)'!"
 
 #, c-format
-msgid "Error creation UNIX socket: '%s (%d)'!"
-msgstr "Помилка створення UNIX сокету: '%s (%d)'!"
-
-#, c-format
-msgid "Connect to UNIX error: '%s (%d)'!"
-msgstr "Помилка підключення до UNIX сокету: '%s (%d)'!"
-
-#, c-format
-msgid "Error create '%s' socket!"
+msgid "Error creating the %s socket!"
 msgstr "Помилка створення %s сокету!"
 
 #, c-format
 msgid "RAWCAN socket doesn't bind to '%s'!"
 msgstr "RAWCAN сокет не під'єднався до '%s'!"
+
+#, c-format
+msgid "Error starting: %s"
+msgstr "Помилка запуску: %s"
 
 msgid "Unknown error"
 msgstr "Невідома помилка"
@@ -359,14 +405,14 @@ msgid "Transport is not started!"
 msgstr "Транспорт не запущено!"
 
 #, c-format
-msgid "Request error: %s"
+msgid "Error requesting: %s"
 msgstr "Помилка запиту: %s"
 
 msgid "No data wrote"
 msgstr "Не записано даних"
 
 #, c-format
-msgid "Write error: %s"
+msgid "Error writing: %s"
 msgstr "Помилка запису: %s"
 
 msgid "Transmitted to\n"
@@ -376,33 +422,23 @@ msgstr "Передано\n"
 msgid "Wrote %s."
 msgstr "Записано %s."
 
-msgid "Read timeouted."
-msgstr "Перевищено час очікування читання!"
-
-msgid "Receiving timeouted"
-msgstr "Перевищено час очікування отримання!"
+msgid "Reading timeouted."
+msgstr "Перевищено час читання."
 
 msgid "Timeouted!"
-msgstr "Перевищено час очікування!"
+msgstr "Перевищено час очікування."
 
 #, c-format
-msgid "Read (select) error: %s"
+msgid "Error reading (select): %s"
 msgstr "Помилка читання (select): %s"
 
 #, c-format
-msgid "Receiving (select) error: %s"
-msgstr "Помилка отримання (select): %s"
-
-msgid "No data"
-msgstr "Немає даних"
+msgid "No data by: %s (%d)"
+msgstr "Немає даних за: %s (%d)"
 
 #, c-format
-msgid "Read error: %s"
+msgid "Error reading: %s"
 msgstr "Помилка читання: %s"
-
-#, c-format
-msgid "Receiving error: %s"
-msgstr "Помилка отримання: %s"
 
 #, c-format
 msgid "Read %s."
@@ -411,45 +447,8 @@ msgstr "Прочитано %s."
 msgid "Received from\n"
 msgstr "Отримано\n"
 
-msgid ""
-"Socket's output transport has the address format:\n"
-"  TCP:{addr}:{port} - TCP socket:\n"
-"    addr - address for remote socket to be opened;\n"
-"    port - network port (/etc/services);\n"
-"  UDP:{addr}:{port} - UDP socket:\n"
-"    addr - address for remote socket to be opened;\n"
-"    port - network port (/etc/services).\n"
-"  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
-"    if - interface name;\n"
-"    mask - CAN frame id mask;\n"
-"    id - CAN id.\n"
-"  UNIX:{name} - UNIX socket:\n"
-"    name - UNIX-socket's file name."
-msgstr ""
-"Вихідний транспорт Socket має формат адреси:\n"
-"  TCP:{addr}:{port} - TCP сокет:\n"
-"    addr - адреса для відкриття віддаленого сокету;\n"
-"    port - мережевий порт (/etc/services);\n"
-"  UDP:{addr}:{port} - UDP сокет:\n"
-"    addr - адреса для відкриття віддаленого сокету;\n"
-"    port - мережевий порт (/etc/services);\n"
-"  RAWCAN:{if}:{mask}:{id} - CAN сокет:\n"
-"    if - ім'я інтерфейсу;\n"
-"    mask - маска CAN;\n"
-"    id - ідентифікатор CAN.\n"
-"  UNIX:{name} - UNIX сокет:\n"
-"    name - Ім'я файлу UNIX-сокету."
-
 msgid "Timings"
 msgstr "Інтервали часу"
 
-msgid ""
-"Connection timings in the format \"{conn}:{next}[:{rep}]\", where:\n"
-"    conn - maximum time for connection respond wait, in seconds;\n"
-"    next - maximum time for continue respond wait, in seconds;\n"
-"    rep  - minimum repeate timeout, in seconds."
-msgstr ""
-"Таймаути підключення у форматі: \"{conn}:{next}[:{rep}]\". Де:\n"
-"    conn - максимальний час очікування відповіді з'єднання, у секундах;\n"
-"    next - максимальний час очікування продовження відповіді, у секундах;\n"
-"    rep  - мінімальний таймаут очікування повтору запиту, у секундах."
+msgid "Attempts"
+msgstr "Спроб"

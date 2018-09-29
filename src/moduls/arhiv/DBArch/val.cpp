@@ -87,7 +87,7 @@ void ModVArch::start( )
     string wdb = TBDS::realDBName(addr());
     AutoHD<TBD> db = SYS->db().at().nodeAt(wdb,0,'.');
     try { if(!db.at().enableStat()) db.at().enable(); }
-    catch(TError &err) { mess_sys(TMess::Warning, _("Enable target DB error: %s"), err.mess.c_str()); }
+    catch(TError &err) { mess_sys(TMess::Warning, _("Error enabling the target DB: %s"), err.mess.c_str()); }
 
     //Start getting data cycle
     TVArchivator::start();
@@ -236,7 +236,7 @@ TValBuf &ModVArch::accmGetReg( const string &aNm, SGrp **grp, TFld::Type tp, int
 	accm.push_back(SGrp(accm.size()));
 	accm.back().tblEl.fldAdd(new TFld("MARK",_("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
 	accm.back().tblEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
-	//accm.back().tblEl.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10"));
+	//accm.back().tblEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"10"));
     }
 
     //Place the parameter to the selected group
@@ -408,13 +408,13 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
 	    "dest","select","select","/db/list","help",TMess::labDB());
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
-	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Archive size (days)"),RWRWR_,"root",SARH_ID,2,
-		"tp","real", "help",_("Set to 0 for the limit disable and some performance rise"));
-	    ctrMkNode("fld",opt,-1,"/prm/add/tmAsStr",_("Force time as string"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
-		"tp","bool", "help",_("Only for DBs it supports by a specific data type like to \"datetime\" into MySQL."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/groupPrms",_("Grouping parameters limit"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,4,
+	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Archive size, days"),RWRWR_,"root",SARH_ID,2,
+		"tp","real", "help",_("Set to 0 to disable this limit and to rise some the performance."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/tmAsStr",_("To form time as a string"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
+		"tp","bool", "help",_("Only for databases that support such by means of specific data types like \"datetime\" in MySQL."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/groupPrms",_("Grouping limit of the parameters"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,4,
 		"tp","dec", "min","0", "max","10000",
-		"help",_("Enable grouping arhivator's parameters into a single table. Set to '0' for one table per parameter."));
+		"help",_("Enables for grouping arhivator's parameters into single table. Set to '0' for one table per parameter."));
 	}
 	return;
     }
@@ -453,7 +453,7 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     if(!archivator().groupPrms()) {
 	reqEl.fldAdd(new TFld("MARK",_("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
 	reqEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(archivator().tmAsStr()?TFld::DateTimeDec:0),"20"));
-	//reqEl.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10"));
+	//reqEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"10"));
 	switch(archive().valType()) {
 	    case TFld::Boolean: reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));	break;
 	    case TFld::Integer: reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT).c_str()));break;

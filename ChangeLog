@@ -1,3 +1,30 @@
+2018-09-29 Roman (stable)
+- DB.LibsDB.vcaBase: wlb_doc.docAlarmsRep: Spare attributes removed "p*".
+- DB.Model.{AGLKS,Boiler}.St: Transport.Sockets addresses for the TCP type are set simplified.
+- !!:SYS,UI.{QTCfg,WebCfgS},Transports: Table of the control interface is expanded for different help per collumns and cells.
+    The generic help of the "Tasks" table moved to the concrete column "CPU set".
+    !!:Transports: Table of the external OpenSCADA hosts expanded for the context help to the transport address cell
+	dependent from selected transport type.
+- !:FIX:SYS: Lose of the configure file changes prevented by pre-saving all changes before it loading.
+- !!:Transports.{*,Sockets.SSL}: The output transports expanded by the attempts field for generic control.
+    The function outAddrHelp() of taken common address help for output transport modules was added.
+- !!:Archive.DBArch: Revised for all messages and the documentation.
+- DAQ.ModBus: Expanded for limiting ModBus frame size for workaround the bad hardware flood.
+- !:Protocol.SelfSystem: Expanded for the output transport attempts support.
+- !!!:Transport.{Sockets,SSL}: Expanded for support IPv6 both for input and output transports using getaddrinfo().
+    The output transport address expanded by global arguments which can be the timings and attempts.
+    Appended for processing (connecting) all IP addresses resolved from the symbolic one, especially for the output transports.
+    Output transports appended for direct definition several host adresses.
+    Output transports' IO log expanded for starting errors.
+- !:Transport.SSL: Appended by the last connection field of the output transport.
+    The default port set to 10045.
+- !:Transport.Sockets: "TCP:" prefix of the addresses set to nonobligatory-optional.
+    The address mode of the input transports set to 1(do not close, only by the KeepAlive parameters) by default.
+    The default port set to 10005.
+- UI.QTStarter: Some improved for the right mouse key emulation, terminating by the keyboard focus events.
+- FIX:UI.WebCfgD: Some fixed-improved for table cells editing.
+
+
 2018-09-10 Roman (stable)
 - FIX:UI.QTStarter: Fix building with Qt4.
 

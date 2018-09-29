@@ -1454,6 +1454,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>void outAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the output transport.</li>
 <li> <i>void outDel( const string &amp;name, bool complete = false );</i> — Deleting of the output transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
 <li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;name ) const;</i> — Connection to the output transport.</li>
+<li> <i>virtual string outAddrHelp( );</i> — Address format help of the output transport.</li>
 <li> <i>TTransportS &amp;owner( ) const;</i> — "Transports" subsystem - the owner of the transport's type.</li></ul>
 <p><b>Protected methods:</b>
 </p>
@@ -1525,6 +1526,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>string dscr( );</i> — Transport description.</li>
 <li> <i>string addr( ) const;</i> — Transport address.</li>
 <li> <i>virtual string timings( );</i> — Transport timeouts.</li>
+<li> <i>virtual unsigned short attempts( );</i> Connection attempts.</li>
 <li> <i>int prm1( );</i> — First backup parameter.</li>
 <li> <i>int prm2( );</i> — Second backup parameter.</li>
 <li> <i>bool toStart( );</i> — Sign "To start".</li>
@@ -1538,6 +1540,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the description of transport.</li>
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport.</li>
 <li> <i>virtual void setTimings( const string &amp;vl );</i> — Setting the transport timeouts.</li>
+<li> <i>virtual void setAttempts( unsigned short vl );</i> — Setting the connection attempts.</li>
 <li> <i>void setPrm1( int vl );</i> — Setting of the first backup parameter.</li>
 <li> <i>void setPrm2( int vl );</i> — Setting of the second backup parameter.</li>
 <li> <i>void setToStart( bool val );</i> — Setting of the sign "To start".</li>
@@ -2213,7 +2216,7 @@ Error values for the different data types (define):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Збільшити" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>

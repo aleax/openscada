@@ -1069,13 +1069,13 @@ fdfa9weotHT55KrlRp06LxgUqckwoHoGjKDwR8bCk7s0QobgxuFufjEqUZg44VXw
 ');
 INSERT INTO "Transport_in" VALUES('testModBus','Serial','Test ModBus',' ','/dev/ttyS1:115200:8N1','ModBus',0,5,'0.95:48','Тест ModBus',' ','Тест ModBus','','<prms TMS="0.95:48"/>
 ');
-INSERT INTO "Transport_in" VALUES('testModBus','Sockets','Test ModBus',' ','TCP::10502:1','ModBus',1,5,'0.57:320','Тест ModBus',' ','Тест ModBus','','<prms MaxQueue="10" MaxClients="10" BufLen="5" KeepAliveCnt="100" KeepAliveTm="5" TaskPrior="0"/>
+INSERT INTO "Transport_in" VALUES('testModBus','Sockets','Test ModBus',' ','*:10502','ModBus',1,5,'0.57:320','Тест ModBus',' ','Тест ModBus','','<prms MaxQueue="10" MaxClients="10" BufLen="5" KeepAliveCnt="100" KeepAliveTm="5" TaskPrior="0"/>
 ');
-INSERT INTO "Transport_in" VALUES('testOPC','Sockets','','','TCP::4841','OPC_UA',1,5,'','','','','','<prms MaxQueue="10" MaxClients="10" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+INSERT INTO "Transport_in" VALUES('testOPC','Sockets','','','*:4841','OPC_UA',1,5,'','','','','','<prms MaxQueue="10" MaxClients="10" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
 ');
 INSERT INTO "Transport_in" VALUES('testModem','Serial','Test Modem',' ','/dev/ttyUSB0:115200:8N1::1','UserProtocol.test',0,0,'','Тест модему',' ','Тест модема','','<prms TMS="0.95:48" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitStr2="" MdmInitResp="OK" MdmRingReq="RING" MdmRingAnswer="ATA" MdmRingAnswerResp="CONNECT" MdmHangUp="+++ATH" MdmHangUpResp="OK"/>
 ');
-INSERT INTO "Transport_in" VALUES('testRelease','Sockets','','','TCP:localhost:10001','UserProtocol.test',1,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+INSERT INTO "Transport_in" VALUES('testRelease','Sockets','','','localhost:10001','UserProtocol.test',1,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
 ');
 INSERT INTO "Transport_in" VALUES('testRelease1','Sockets','','','UDP:localhost:10001','UserProtocol.test',1,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
 ');
@@ -1145,23 +1145,23 @@ INSERT INTO "Transport_in" VALUES('testRelease','Serial','','/dev/pts/7:115200:8
 CREATE TABLE 'Transport_out' ("ID" TEXT DEFAULT '' ,"MODULE" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCRIPT" TEXT DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '' ,"SSLCertKey" TEXT DEFAULT '' ,"SSLKeyPass" TEXT DEFAULT '' ,"TMS" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCRIPT" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCRIPT" TEXT DEFAULT '' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODULE"));
 INSERT INTO "Transport_out" VALUES('testModBus','Serial','Test ModBus',' ','/dev/ttyS0:115200:8N1',0,'','','50:4','Тест ModBus',' ','Тест ModBus','','<prms TMS="97:0.95"/>
 ');
-INSERT INTO "Transport_out" VALUES('testModBus','Sockets','Test ModBus',' ','TCP:localhost:10502',1,'','','1000','Тест ModBus',' ','Тест ModBus','','<prms tms="6:1"/>
+INSERT INTO "Transport_out" VALUES('testModBus','Sockets','Test ModBus',' ','localhost:10502',1,'','','1000','Тест ModBus',' ','Тест ModBus','','<prms tms="6:1"/>
 ');
 INSERT INTO "Transport_out" VALUES('UIQtCfgloopSSL','SSL','','','localhost:10045',0,'','','','','','','','<prms PKeyPass="12" TMS="5:1">
 <CertKey/>
 </prms>
 ');
-INSERT INTO "Transport_out" VALUES('UIQtCfgloop','Sockets','','','TCP:localhost:10005',0,'','','1000','','','','','<prms tms="10:2" />
+INSERT INTO "Transport_out" VALUES('UIQtCfgloop','Sockets','','','localhost:10005',0,'','','1000','','','','','<prms tms="10:2" />
 ');
-INSERT INTO "Transport_out" VALUES('DAQRedundantloop','Sockets','','','TCP:localhost:10005',0,'','','1000','','','','','');
-INSERT INTO "Transport_out" VALUES('DAQGatetestloop','Sockets','','','TCP:localhost:10005',0,'','','1000','','','','','');
+INSERT INTO "Transport_out" VALUES('DAQRedundantloop','Sockets','','','localhost:10005',0,'','','1000','','','','','');
+INSERT INTO "Transport_out" VALUES('DAQGatetestloop','Sockets','','','localhost:10005',0,'','','1000','','','','','');
 INSERT INTO "Transport_out" VALUES('testModem','Serial','Test Modem',' ','/dev/ttyACM0:38400:8N1::0679859815',0,'','','','Тест модему',' ','Тест модема','','<prms TMS="5000:1000" MdmTm="30" MdmLifeTime="30" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitStr2="" MdmInitResp="OK" MdmDialStr="ATDT" MdmCnctResp="CONNECT" MdmBusyResp="BUSY" MdmNoCarResp="NO CARRIER" MdmNoDialToneResp="NO DIALTONE" MdmHangUp="+++ATH" MdmHangUpResp="OK"/>
 ');
-INSERT INTO "Transport_out" VALUES('HDDTemp','Sockets','Parameter Hddtemp','','TCP:127.0.0.1:7634',0,'','','','Параметр Hddtemp','','Параметр Hddtemp','','<prms tms="5:0.01" MSS="0" />
+INSERT INTO "Transport_out" VALUES('HDDTemp','Sockets','Parameter Hddtemp','','127.0.0.1:7634',0,'','','','Параметр Hddtemp','','Параметр Hddtemp','','<prms tms="5:0.01" MSS="0" />
 ');
-INSERT INTO "Transport_out" VALUES('OPCUAtest','Sockets','','OPC UA automatic created transport for controller ''test''.','TCP:127.0.0.1:4841',0,'','','','','OPC UA автоматично створений транспорт для контроллеру ''test''.','','OPC UA автоматически созданный транспорт для контроллера ''test''.','<prms tms="5:0.1" />
+INSERT INTO "Transport_out" VALUES('OPCUAtest','Sockets','','OPC UA automatic created transport for controller ''test''.','127.0.0.1:4841',0,'','','','','OPC UA автоматично створений транспорт для контроллеру ''test''.','','OPC UA автоматически созданный транспорт для контроллера ''test''.','<prms tms="5:0.1" />
 ');
-INSERT INTO "Transport_out" VALUES('sys_UPS','Sockets','UPS','','TCP:localhost:3493',0,'','','','ДБЖ','','ИБП','','<prms tms="3:0.1" />
+INSERT INTO "Transport_out" VALUES('sys_UPS','Sockets','UPS','','localhost:3493',0,'','','','ДБЖ','','ИБП','','<prms tms="3:0.1" />
 ');
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 CREATE TABLE 'WebUser_uPg' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"PROG" TEXT DEFAULT '' ,"uk#PROG" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#PROG" TEXT DEFAULT '' , PRIMARY KEY ("ID"));

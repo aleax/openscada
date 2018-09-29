@@ -74,10 +74,11 @@ class TSocketIn: public TTransportIn
 
 	string getStatus( );
 
-	unsigned bufLen( )		{ return mBufLen; }
-	unsigned maxFork( )		{ return mMaxFork; }
-	unsigned maxForkPerHost( )	{ return mMaxForkPerHost; }
-	unsigned keepAliveReqs( )	{ return mKeepAliveReqs; }
+	int lastConn( )		{ return connTm; }
+	unsigned bufLen( )	{ return mBufLen; }
+	unsigned maxFork( )	{ return mMaxFork; }
+	unsigned maxForkPerHost( ) { return mMaxForkPerHost; }
+	unsigned keepAliveReqs( )  { return mKeepAliveReqs; }
 	unsigned keepAliveTm( )	{ return mKeepAliveTm; }
 	int taskPrior( )	{ return mTaskPrior; }
 	string certKey( )	{ return mCertKey; }
@@ -140,7 +141,7 @@ class TSocketIn: public TTransportIn
 	string		stErr;			//Last error messages
 	uint64_t	trIn, trOut;		//Traffic in and out counter
 	float		prcTm, prcTmMax;
-	int		connNumb, clsConnByLim;	//Close connections by limit
+	int		connNumb, connTm, clsConnByLim;	//Close connections by limit
 };
 
 //************************************************
@@ -157,10 +158,12 @@ class TSocketOut: public TTransportOut
 	string certKey( )	{ return mCertKey; }
 	string pKeyPass( )	{ return mKeyPass; }
 	string timings( )	{ return mTimings; }
+	unsigned short attempts( )	{ return mAttemts; }
 
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 	void setTimings( const string &vl );
+	void setAttempts( unsigned short vl );
 
 	void start( int time = 0 );
 	void stop( );
@@ -180,8 +183,9 @@ class TSocketOut: public TTransportOut
 	string		mCertKey,		// SSL certificate
 			mKeyPass;		// SSL private key password
 	string		mTimings;
-	unsigned short	mTmCon;
-	unsigned short	mTmNext;
+	unsigned short	mAttemts,
+			mTmCon,
+			mTmNext;
 
 	SSL_CTX		*ctx;
 	BIO		*conn;
@@ -203,6 +207,10 @@ class TTransSock: public TTypeTransport
 
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
+
+	string outAddrHelp( );
+	string outTimingsHelp( );
+	string outAttemptsHelp( );
 
     protected:
 	void load_( );

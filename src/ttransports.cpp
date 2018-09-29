@@ -516,7 +516,9 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 		if(nId)		nId->childAdd("el")->setText(host.id);
 		if(nNm)		nNm->childAdd("el")->setText(trLU(host.name,l,u));
 		if(nTr)		nTr->childAdd("el")->setText(host.transp);
-		if(nAddr)	nAddr->childAdd("el")->setText(host.addr);
+		if(nAddr)
+		    nAddr->childAdd("el")->setAttr("help",modPresent(host.transp)?at(host.transp).at().outAddrHelp():"")->
+					   setText(host.addr);
 		if(nUser)	nUser->childAdd("el")->setText(host.user);
 		if(nPass)	nPass->childAdd("el")->setText(host.pass.size() ? "*******" : "");
 		if(nMode)	nMode->childAdd("el")->setText(i2s(host.mode));
@@ -1068,17 +1070,23 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 
 	return startStat();
     }
-    // string addr( string vl = "" ) - the transport address return, set it to no empty <vl>
+    // string addr( string vl = "" ) - the transport address return, set it to not empty <vl>
     if(iid == "addr") {
 	if(prms.size() && prms[0].getS().size())
 	    try{ setAddr(prms[0].getS()); } catch(TError&) { }
 	return addr();
     }
-    // string timings( string vl = "" ) - the transport timings return, set the to no empty <vl>
+    // string timings( string vl = "" ) - the transport timings return, set it to not empty <vl>
     if(iid == "timings") {
 	if(prms.size() && prms[0].getS().size())
 	    try{ setTimings(prms[0].getS()); } catch(TError&) { }
 	return timings();
+    }
+    // int attempts( int vl = EVAL ) - the transport requesting attempts return, set it to not EVAL <vl>
+    if(iid == "attempts") {
+	if(prms.size() && prms[0].getI() != EVAL_INT)
+	    try{ setAttempts(prms[0].getI()); } catch(TError&) { }
+	return attempts();
     }
 
     //Configuration functions call

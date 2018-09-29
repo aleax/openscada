@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/Sockets</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/ru" title="Модули/Sockets (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/uk" title="Модулі/Sockets (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/ru" title="Модули/Sockets (95% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/uk" title="Модулі/Sockets (95% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,14 +31,14 @@
 <td> <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> </td>
 <td> Sockets
 </td>
-<td> 2.8 </td>
+<td> 3.0 </td>
 <td> GPL2 </td>
 <td> tr_Sockets.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> Transport </td>
-<td> Roman Savochenko, Maxim Kochetkov<br /><font size="-2"><i>Maxim Lysenko (2009-2010) — the page translation</i></font> </td>
+<td> Roman Savochenko, Maxim Kochetkov<br /><font size="-2"><i>Maxim Lysenko (2009-2010) — this page translation</i></font> </td>
 <td> Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -48,7 +48,7 @@
 </ul>
 </div>
 
-<p>The module provides support for sockets based transports to the program. Input and output transports is supported, based on network sockets TCP, UDP and UNIX.
+<p>The module provides support for sockets based transports to the program. Input and output transports is supported, based on network sockets TCP, UDP, UNIX and RAWCAN.
 </p><p>You can add new input and output sockets through the configuration of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#Transports" title="Special:MyLanguage/Documents/Program manual">the transport subsystem</a> in any OpenSCADA configurator.
 </p>
 <h2><span class="mw-headline" id="Input_transports"><span class="mw-headline-number">1</span> Input transports</span></h2>
@@ -56,7 +56,7 @@
 </p><p>Each input transport is associated with one of the available transport protocols, to which input messages are transmitted. Together with the transport protocol, the mechanism of combining fragmented pieces when sending requests is supported.
 </p><p>Configuration dialog of the input socket is shown in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:811px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="698" src="../files/Sockets_in.png" width="809" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of an input socket.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:753px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="783" src="../files/Sockets_in.png" width="751" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of an input socket.</div></div></div></div>
 <p>This dialog allows you to set:
 </p>
 <ul><li> State of the transport, that is: status, "Running", name of the database (containing the configuration) and information about the active connections.</li>
@@ -67,9 +67,9 @@
 <dd>The associated output transports mode for the input transport demands for presence some external for the transport procedure, which serve as the protocol and which must go through all the associated output transports and do requests to read or write-read.</dd>
 <dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The procedure missing will necessarily come to growing the associated output transports by miss an essence, which stops transports with closed connections and the ability to next remove the stopped output transports by this input.</dd></dl>
 <ul><li> State "Running", in which the transport must be switched at start up. </li>
-<li> Length of the socket queue, maximum number of clients to serve, maximum number of clients to serve per host and the input buffer.</li>
 <li> Priority of the transport tasks .</li>
 <li> Maximum segment size (MSS), for limit the transmitted packages size (segments TCP) on bad link channels. Set to 0 for disabling the user limit for size.</li>
+<li> Input buffer size, Queue length of the sockets, Maximum number of clients and Maximum number of clients per host.</li>
 <li> Keep alive requests — closing the connection after specified number of the requests. Zero value for disabling — never closes.</li>
 <li> Keep alive timeout, seconds — closing the connection after missing requests within a specified time. Zero value for disabling — never closes.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Disabling this feature is not recommended because the TCP/IP network property does not guarantee the server notification about the disconnection, say in the event of a power failure on the client. As a result, the opened client connections can remain <span style="color:red">forever</span>, and when the limit is reached the server will stop accepting new ones!</dd></dl>
@@ -84,37 +84,37 @@
 <tr>
 <td>TCP</td>
 <td>
-<p><b>TCP:{address}:{port}:{mode}</b><br />
+<p><b>[TCP:]{addr}:{port}:{mode}</b><br />
 where:
 </p>
-<ul><li> <i>address</i> – address, on which the socket is opened. It must be one of the addresses of the host. If nothing is specified, the socket will be available in all the host interfaces. Both symbolic and IP representing of the address are allowed.</li>
-<li> <i>port</i> – network port, on which the socket is opened. Indication of the symbolic name of the port (according to "/etc/services") is available.</li>
+<ul><li> <i>addr</i> – address for socket to be opened, empty or "*" address opens socket for all interfaces. There may be as the symbolic representation as well as IPv4 "<b>127.0.0.1</b>" or IPv6 "<b>[::1]</b>".</li>
+<li> <i>port</i> – network port on which the socket is opened, indication of the character name of the port, according to <i>/etc/services</i> is available.</li>
 <li> <i>mode</i> – mode of the input socket working:
 <ul><li> <b>0</b> — force closing the connection after the session reception-response.</li>
-<li> <b>1</b> — do not close, only by the KeepAlive parameters.</li>
+<li> <b>1</b>(default) — do not close, only by the KeepAlive parameters.</li>
 <li> <b>2</b> — initiative connection. Enables the mode of connecting this input transport to the remote host (address instead of local) and switching to the listening state of this host. The "Keep alive timeout" value is used as the timeout of the re-connection of this transport in the absence of activity in order to restore the possibly lost connection.</li></ul></li></ul>
-<p>Example: "<b>TCP::10001:1</b>" — The TCP socket is available on all interfaces, opened on port 10001 and the connection does not break.
+<p>Example: "<b>TCP::10001:1</b>" — the TCP socket is available on all interfaces, opened on port 10001 and the connection does not break.
 </p>
 </td></tr>
 <tr>
 <td>UDP</td>
 <td>
-<p><b>UDP:{address}:{port}</b><br />
+<p><b>UDP:{addr}:{port}</b><br />
 where:
 </p>
-<ul><li> <i>address</i> — the same as in the TCP;</li>
+<ul><li> <i>addr</i> — the same as in the TCP;</li>
 <li> <i>port</i> — the same as in the TCP.<br /></li></ul>
-<p>Example: "<b>UDP:localhost:10001</b>" — The UDP-socket is only available on the "localhost" interface and opened on the port 10001.
+<p>Example: "<b>UDP:localhost:10001</b>" — the UDP-socket is only available on the "localhost" interface and opened on the port 10001.
 </p>
 </td></tr>
 <tr>
 <td>RAWCAN</td>
 <td>
-<p><b>RAWCAN:{interface}:{mask}:{identifier}</b><br />
+<p><b>RAWCAN:{if}:{mask}:{id}</b><br />
 where:
 </p>
-<ul><li> <i>interface</i> — name of the CAN interface;</li>
-<li> <i>mask, identifier</i> — mask and identifier for filtering CAN frames.<br /></li></ul>
+<ul><li> <i>if</i> — name of the CAN interface;</li>
+<li> <i>mask, id</i> — mask and identifier of filtering the CAN frames.<br /></li></ul>
 <p>Example: "<b>RAWCAN:can0:0:0</b>" — is receiving all CAN frames at the interface "can0".
 </p>
 </td></tr>
@@ -129,11 +129,16 @@ where:
 <p>Example: "<b>UNIX:/tmp/oscada:1</b>" — UNIX-socket is available through the file "/tmp/oscada" and it doesn't close the connection.
 </p>
 </td></tr></table>
+<p>RAWCAN has some peculiarities in forming the package, that is:
+</p>
+<ul><li> the identifier of the received CAN-frame is located at the <i>sender</i> field, and the data in the <i>request</i> field;</li>
+<li> the sign of the expanded identifier-sender is the presence of the most significant bit (0x80000000).</li></ul>
 <h2><span class="mw-headline" id="Output_transports"><span class="mw-headline-number">2</span> Output transports</span></h2>
 <p>Configured and running output transport opens a connection to the specified server. In the case of destroying the connection, output transport is stopped. In order to resume the connection transport must be re-run, that all protocols do automatically.
+</p><p>The transport supports the direct definition of multiple server addresses and the processing of all IP addresses in which the symbolic address is resolved, which allows you to build <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#Redundancy" title="Special:MyLanguage/Documents/DAQ">vertical redundancy</a> directly by the transport that will be automatically connected to the first available server.
 </p><p>Main tab of the configuration page of an output socket is shown in Figure 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:655px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="590" src="../files/Sockets_out.png" width="653" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of an output socket.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:649px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="598" src="../files/Sockets_out.png" width="647" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of an output socket.</div></div></div></div>
 <p>This dialog allows you to set:
 </p>
 <ul><li> State of the transport, that is: status, "Running" and the name of the database, containing the configuration.</li>
@@ -141,10 +146,13 @@ where:
 <li> Address of the transport. The format of the addresses is listed in the table below.</li>
 <li> The state "Running", in which the transport must be translated at start up. </li>
 <li> Maximum segment size (MSS), for limit the transmitted packages size (segments TCP) on bad link channels. Set to 0 for disabling the user limit for size.</li>
-<li> Connection timings in the format "<b>{conn}:{next}[:{rep}]</b>". Where:
+<li> Connection timings in the format "<b>{conn}:{next}[:{rep}]</b>", where:
 <ul><li> <i>conn</i> — maximum connection waiting time, in seconds;</li>
 <li> <i>next</i> — maximum time for waiting the continue of the response, in seconds;</li>
 <li> <i>rep</i> — minimum delay time for next request, in seconds.</li></ul></li></ul>
+<dl><dd> Can be prioritatile specified into the address field as the second global argument, as such "<b>localhost:123||5:1</b>".</dd></dl>
+<ul><li> Attempts of the requesting both for this transport and protocol, for full requests.</li></ul>
+<dl><dd> Can be prioritatile specified into the address field as the third global argument, as such "<b>localhost:123||5:1||3</b>".</dd></dl>
 <p>Addresses of output sockets of different types are formed as follows:
 </p>
 <table class="wikitable">
@@ -154,30 +162,30 @@ where:
 <th> Address
 </th></tr>
 <tr>
-<td>TCP/UDP</td>
+<td> TCP/UDP </td>
 <td>
-<p><b>TCP:{address}:{port}</b><br />
-<b>UDP:{address}:{port}</b><br />
+<p><b>[TCP:]{addr}[,{addrN}]:{port}</b><br />
+<b>UDP:{addr}[,{addrN}]:{port}</b><br />
 where:
 </p>
-<ul><li> <i>address</i> — address with which the connection is made. Both symbolic and IP representation of the address are allowed.</li>
-<li> <i>port</i> — network port, with which the connection is made. Indication of the symbolic name of the port is available (according to "/etc/services").</li></ul>
+<ul><li> <i>addr</i> — address with which the connection is made. There may be as the symbolic representation as well as IPv4 "<b>127.0.0.1</b>" or IPv6 "<b>[::1]</b>".</li>
+<li> <i>port</i> — network port with which the connection is made. Indication of the character name of the port according to <i>/etc/services</i> is available.</li></ul>
 <p>Example: "<b>TCP:127.0.0.1:7634</b>" — connecting to the port 7634 on the host 127.0.0.1.
 </p>
 </td></tr>
 <tr>
-<td>RAWCAN</td>
+<td> RAWCAN </td>
 <td>
-<p><b>RAWCAN:{interface}:{mask}:{identifier}</b><br />
+<p><b>RAWCAN:{if}:{mask}:{id}</b><br />
 where:
 </p>
-<ul><li> <i>interface</i> — name of the CAN interface;</li>
-<li> <i>mask, identifier</i> — mask and identifier of the CAN frames.</li></ul>
+<ul><li> <i>if</i> — name of the CAN interface;</li>
+<li> <i>mask, id</i> — mask and identifier of the CAN frames.</li></ul>
 <p>Example: "<b>RAWCAN:can0:0:0</b>" — receiving all CAN frames at the interface "can0".
 </p>
 </td></tr>
 <tr>
-<td>UNIX</td>
+<td> UNIX </td>
 <td>
 <p><b>UNIX:{name}</b><br />
 where:
@@ -186,6 +194,12 @@ where:
 <p>Example: "<b>UNIX:/tmp/oscada</b>" — connecting to the UNIX-socket through the file "/tmp/oscada".
 </p>
 </td></tr></table>
+<p>RAWCAN has some peculiarities in forming the paсkcage, that is:
+</p>
+<ul><li> sending CAN frames (transparently) to the transport is structured as the <i>struct can_frame</i>. The size of the structure is 16 bytes, where: 4 bytes — identifier, 4 bytes — length, 8 bytes — data. For example, the package: <b>15 CD 5B 07 08 00 00 00 11 12 13 14 15 16 17 18 </b>. Where:
+<ul><li> identifier: 123456789 (0x75BCD15) =&gt; <b>15 CD 5B 07</b>, append 0x80 to the last byte if you need for extended one;</li>
+<li> length: <b>08 00 00 00</b> (eight bytes);</li>
+<li> data: <b>11 12 13 14 15 16 17 18</b>.</li></ul></li></ul>
 
 
 

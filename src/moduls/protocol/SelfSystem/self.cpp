@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.3.0"
+#define MOD_VER		"1.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -182,7 +182,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     io.clear();
 
     try {
-	while(true) {
+	int reqTrs = tro.attempts(), iTr = 0;
+	string errTr;
+	for(iTr = 0; iTr < reqTrs; ) {
 	    //Session open
 	    if(!isDir && (tro.prm1() < 0 || authForce)) {
 		req = "SES_OPEN " + user + " " + pass + "\x0A";
@@ -194,7 +196,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 		// Wait tail
 		while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A') {
-		    if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf)))) throw TError(nodePath().c_str(),_("Not full response."));
+		    if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf)))) { errTr = _("Not full response."); iTr++; continue; }
 		    resp.append(buf, resp_len);
 		}
 
@@ -226,7 +228,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    // Wait tail
 	    while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A') {
-		if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf)))) throw TError(nodePath().c_str(),_("Not full response."));
+		if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf)))) { errTr = _("Not full response."); iTr++; continue; }
 		resp.append(buf, resp_len);
 	    }
 
@@ -251,7 +253,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    // Wait tail
 	    while((int)resp.size() < abs(resp_size)+head_end) {
 		resp_len = tro.messIO(NULL, 0, buf, sizeof(buf));
-		if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond."));
+		if(!resp_len) { errTr = _("Not full respond."); iTr++; continue; }
 		resp.append(buf, resp_len);
 	    }
 
@@ -262,6 +264,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    return;
 	}
+
+	if(iTr >= reqTrs) throw TError(nodePath().c_str(), "%s", errTr.c_str());
+
     } catch(TError &err) {
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error the request: %s"), err.mess.c_str());
 	tro.stop();

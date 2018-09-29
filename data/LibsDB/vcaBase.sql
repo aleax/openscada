@@ -11526,11 +11526,6 @@ INSERT INTO "wlb_doc_uio" VALUES('docRepSm2','p5_val','Parameter5: value',196613
 INSERT INTO "wlb_doc_uio" VALUES('docRepSm2','p6_val','Parameter6: value',196613,'<EVAL>',2,'Parameter 6|var','','doc','Параметр6: значення','','','Параметр6: значение','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docRepSm2','p7_val','Parameter7: value',196613,'<EVAL>',2,'Parameter 7|var','','doc','Параметр7: значення','','','Параметр7: значение','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docRepSm2','p8_val','Parameter8: value',196613,'<EVAL>',2,'Parameter 8|var','','doc','Параметр8: значення','','','Параметр8: значение','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docAlarmsRep','pDP','Node: differential',196613,'<EVAL>',2,'Node|dP','','doc','Вузол: перепад','','','Узел: перепад','','Node|dP','','');
-INSERT INTO "wlb_doc_uio" VALUES('docAlarmsRep','pF','Node: flow',196613,'<EVAL>',2,'Node|F','','doc','Вузол: витрати','','','Узел: расход','','Node|F','','');
-INSERT INTO "wlb_doc_uio" VALUES('docAlarmsRep','pP','Node: pressure',196613,'<EVAL>',2,'Node|P','','doc','Вузол: тиск','','','Узел: давление','','Node|P','','');
-INSERT INTO "wlb_doc_uio" VALUES('docAlarmsRep','pQ','Node: volume',196613,'<EVAL>',2,'Node|Q','','doc','Вузол: об''єм','','','Узел: объём','','Node|Q','','');
-INSERT INTO "wlb_doc_uio" VALUES('docAlarmsRep','pT','Node: temperature',196613,'<EVAL>',2,'Node|T','','doc','Вузол: температура','','','Узел: температура','','Node|T','','');
 INSERT INTO "wlb_doc_uio" VALUES('docMessRep','archLs','Archivers list, "{ArhMod}.{Arh}[;{ArhModN}.{ArhN}]"',131077,'FSArch.arch;FSArch.arch1',8,'','','','Перелік архіваторів, "{ArhMod}.{Arh}[;{ArhModN}.{ArhN}]"','','','Перечень архиваторов, "{ArhMod}.{Arh}[;{ArhModN}.{ArhN}]"','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docMessRep','messCat','Messages category',131077,'1:/^(al|OP|/sub_UI/mod_VCAEngine)/',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docMessRep','fltr','Filter: value',131077,NULL,2,'','wdg:../wdg_fltr/a_value','doc','Фільтр: значення','','','Фільтр: значение','','','','');
@@ -22671,7 +22666,7 @@ d0IIKeU4jgDl0aOTnNO9G6SQ9Ij+OJAPHjx4+vTprs347+D/TPmxsXdg19g7sGvsHdg19g7sGnsH
 do29A7vG3oFdY+/ArrF3YNeQ6/X6zl8pPxHW6/Vf51IEmfDmKAQAAAAASUVORK5CYII=','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
 if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-12*3600; }','','',-1,'name;dscr;geomXsc;geomYsc;',1503659478);
 INSERT INTO "wlb_doc" VALUES('docAlarmsRep','','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','','',-1,'name;dscr;',1503652583);
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','','',-1,'name;dscr;',1538125405);
 INSERT INTO "wlb_doc" VALUES('docMessRep','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAACc0lEQVRYhe2Vy27TQBSGz7EnNq2bOObipE0DEhECVaxAsCsIcEGwKk9C
 n6QvgES76iPQB0BI7FCpFC5Jm2IUpW0CLqGNL2N7WIwU3Jso3QyV5lt4cebYPt+vGRvn5+fL5TKc

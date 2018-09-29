@@ -275,11 +275,13 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		unsigned resp_sz = (unsigned short)(rez[4]<<8) | (unsigned char)rez[5];
 
 		//Wait tail
-		while(rez.size() < (resp_sz+6)) {
+		while(rez.size() < (resp_sz+6) && rez.size() < MODBUS_FRM_LIM) {
 		    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), reqTm);
 		    if(!resp_len) throw TError(nodePath().c_str(),_("Not full response"));
 		    rez.append(buf, resp_len);
 		}
+		if(rez.size() >= MODBUS_FRM_LIM)
+		    throw TError(nodePath().c_str(), _("13:Error of the response: Too large."));
 		pdu = rez.substr(7);
 	    }
 	}
@@ -297,7 +299,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm);
 		    rez.assign(buf, resp_len);
 		    //Wait tail
-		    while(resp_len) {
+		    while(resp_len && rez.size() < MODBUS_FRM_LIM) {
 			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf)); } catch(TError &err) { break; }
 			rez.append(buf, resp_len);
 		    }
@@ -308,6 +310,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		}
 
 		if(rez.size() < 2) { err = _("13:Error of the response: Too short."); continue; }
+		if(rez.size() >= MODBUS_FRM_LIM) { err = _("13:Error of the response: Too large."); continue; }
 		if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
 		{ err = _("13:Error of the response: CRC error."); continue; }
 		pdu = rez.substr(1, rez.size()-3);
@@ -328,7 +331,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm);
 		    rez.assign(buf, resp_len);
 		    //Wait tail
-		    while(resp_len && (rez.size() < 3 || rez.substr(rez.size()-2,2) != "\x0D\x0A")) {
+		    while(resp_len && (rez.size() < 3 || rez.substr(rez.size()-2,2) != "\x0D\x0A") && rez.size() < MODBUS_FRM_LIM) {
 			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf)); } catch(TError &err) { break; }
 			rez.append(buf, resp_len);
 		    }
@@ -338,6 +341,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    continue;
 		}
 
+		if(rez.size() >= MODBUS_FRM_LIM) { err = _("13:Error of the response: Too large."); continue; }
 		if(rez.size() < 3 || rez[0] != ':' || rez.substr(rez.size()-2,2) != "\x0D\x0A")
 		{ err = _("13:Error of the response: Format error."); continue; }
 		string rezEnc = ASCIIToData(rez.substr(1,rez.size()-3));

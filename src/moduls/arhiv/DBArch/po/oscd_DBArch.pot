@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-19 11:36+0200\n"
+"POT-Creation-Date: 2018-09-29 20:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "The archiver module. Provides functions for messages and values archiving
 msgstr ""
 
 #, c-format
-msgid "Check value archivator '%s' error."
+msgid "Error checking the value archiver '%s'."
 msgstr ""
 
 msgid "In minutes"
@@ -49,40 +49,37 @@ msgid "Level"
 msgstr ""
 
 #, c-format
-msgid "Enable target DB error: %s"
+msgid "Error enabling the target DB: %s"
 msgstr ""
 
-msgid "Archive is not started!"
+msgid "The archive is not started!"
 msgstr ""
 
-msgid "Archiving time (msek)"
+msgid "Archiving time, milliseconds"
 msgstr ""
 
 msgid "Additional options"
 msgstr ""
 
-msgid "Archive size (days)"
+msgid "Archive size, days"
 msgstr ""
 
-msgid "Set to 0 for the limit disable and some performance rise."
+msgid "Set to 0 to disable this limit and to rise some the performance."
 msgstr ""
 
-msgid "Force time as string"
+msgid "To form time as a string"
 msgstr ""
 
-msgid "Only for DBs it supports by a specific data type like to \"datetime\" into MySQL."
+msgid "Only for databases that support such by means of specific data types like \"datetime\" in MySQL."
 msgstr ""
 
 msgid "Mark, time/(10*per)"
 msgstr ""
 
-msgid "Set to 0 for the limit disable and some performance rise"
+msgid "Grouping limit of the parameters"
 msgstr ""
 
-msgid "Grouping parameters limit"
-msgstr ""
-
-msgid "Enable grouping arhivator's parameters into a single table. Set to '0' for one table per parameter."
+msgid "Enables for grouping arhivator's parameters into single table. Set to '0' for one table per parameter."
 msgstr ""
 
 msgid "Value"

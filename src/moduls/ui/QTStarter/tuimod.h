@@ -158,6 +158,7 @@ private:
     StartDialog	*stDlg;
     bool	initExec;
 
+    int		simulRightMKeyTm;
     time_t	mouseBtPress;
     QObject	*mouseBtRecv;
     QMouseEvent	mouseBtHold;
