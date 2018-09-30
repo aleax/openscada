@@ -588,7 +588,18 @@ void DECL2 daveAddToWriteRequest(PDU *p, int area, int DBnum, int start, int byt
     FLUSH;
 #endif
 
-    if ((area==daveTimer) || (area==daveCounter)||(area==daveTimer200) || (area==daveCounter200)) {    
+    if ((area==daveTimer) || (area==daveCounter)) {     /* TWI: Fix for S7 timer/counters from Thomas 2.1 */
+	pa[3]=area;
+	pa[4]=byteCount / 0x100;
+	pa[5]=byteCount & 0xff;
+	/* with timer/counters the byteCount parameter gives the number of t/c to write.
+	 * each timer/counter value needs 2 Bytes, adjust byteCount to number of bytes for _daveAddValue() 
+	 */
+	byteCount *= 2;										
+    } else if ((area==daveTimer200) || (area==daveCounter200)) {  
+ 	pa[3]=area;
+ 	pa[4]=((byteCount+1)/2) / 0x100;
+ 	pa[5]=((byteCount+1)/2) & 0xff;
 	pa[3]=area;
 	pa[4]=((byteCount+1)/2) / 0x100;
 	pa[5]=((byteCount+1)/2) & 0xff;
@@ -652,8 +663,13 @@ void DECL2 daveAddVarToWriteRequest(PDU *p, int area, int DBnum, int start, int 
 	p, daveAreaName(area), DBnum, start, byteCount, buffer);
     FLUSH;	
 #endif	    	
-		
-    daveAddToWriteRequest(p, area, DBnum, 8*start, byteCount,buffer,da,sizeof(da),pa,sizeof(pa));
+	/* TWI: Fix for S7 timer/counters */
+	if (area == daveCounter || area == daveTimer) {
+		da[1] = 0x09;	/* Transport-size Octet-String */
+		daveAddToWriteRequest(p, area, DBnum,   start, byteCount,buffer,da,sizeof(da),pa,sizeof(pa));
+	} else {
+		daveAddToWriteRequest(p, area, DBnum, 8*start, byteCount,buffer,da,sizeof(da),pa,sizeof(pa));
+	}
 }
 
 
@@ -5244,7 +5260,7 @@ int DECL2 _daveConnectPLC_IBH(daveConnection*dc) {
 
 	memcpy(pcha, dc->routingData.PLCadr, dc->routingData.PLCadrsize);
 	pcha+=dc->routingData.PLCadrsize;
-	*pcha=dc->communicationType;
+	*pcha=dc->communicationType; pcha++;	// fix bug reported by Gail Johann
         *pcha=(dc->slot | dc->rack<<5);
 	
 //	a=_daveInitStepIBH(dc->iface, chal8R, sizeof(chal8R), resp7R, sizeof(resp7R), b);
@@ -5561,10 +5577,9 @@ void DECL2 daveFree(void * dc) {
 }
 
 int DECL2 daveGetProgramBlock(daveConnection * dc, int blockType, int number, char* buffer, int * length) {
-    int res, uploadID, len, more, totlen;
+    int res, uploadID, len, more;
     uc *bb=(uc*)buffer;	//cs: is this right?
-    len=0;
-    totlen=0;
+    *length;
     if (dc->iface->protocol==daveProtoAS511) {	    
 	return daveGetS5ProgramBlock(dc, blockType, number, buffer, length);
     }
@@ -5572,12 +5587,10 @@ int DECL2 daveGetProgramBlock(daveConnection * dc, int blockType, int number, ch
     res=initUpload(dc, blockType, number, &uploadID); 
     if (res!=0) return res;
     do {
-	res=doUpload(dc,&more,&bb,&len,uploadID);
-	totlen+=len;
+	res=doUpload(dc,&more,&bb, length, uploadID);
 	if (res!=0) return res;
     } while (more);
     res=endUpload(dc,uploadID);
-    *length=totlen;
     return res;
 }
 
@@ -5689,7 +5702,9 @@ int DECL2 daveSetPLCTimeToSystime(daveConnection * dc) {
     ts[6]=daveToBCD(systime.tm_min);
     ts[7]=daveToBCD(systime.tm_sec);
     ts[8]=daveToBCD(t1.tv_usec/100);
-    ts[9]=daveToBCD(t1.tv_usec%100);
+//    ts[9]=daveToBCD(t1.tv_usec%100);
+    ts[9]=daveToBCD(t1.tv_usec%100) & 0xf0;
+    ts[9]|=((systime.tm_wday+1) & 0xF);
 //    _daveDump("timestamp: ",ts,10);
 //    LOG2("tm.sec:  %d\n", systime.tm_sec);
 //    LOG2("tm.min:  %d\n", systime.tm_min);
@@ -5721,12 +5736,14 @@ int DECL2 daveSetPLCTimeToSystime(daveConnection * dc) {
     ts[7]=daveToBCD(t1.wSecond);
     ts[8]=daveToBCD(t1.wMilliseconds/10);
     ts[9]=daveToBCD((t1.wMilliseconds%10)*10);
+    ts[9]|=((t1.wDayOfWeek+1) & 0xF);
 //    _daveDump("timestamp: ",ts,10);
 //    LOG2("tm.sec:  %d\n", t1.wSecond);
 //    LOG2("tm.min:  %d\n", t1.wMinute);
 //    LOG2("tm.hour: %d\n", t1.wHour);
 #endif    
-
+    if(daveDebug & daveDebugByte)
+        _daveDump("sending time ",ts,10);
 #ifdef DEBUG_CALLS
     LOG2("SetPLCTimeToSystime(dc:%p)\n", dc);
     FLUSH;
@@ -7154,4 +7171,7 @@ Version 0.8.5
     05/18/13  added routing support
     05/19/13  added communication type (PG, OP, S7-Basic)
     10/19/13  changed general code to be ARM compatible without ARM_FIX
+    01/16/14  fixed bug reported by Gail Johann
+    01/16/14  applied fix for writing S7 timers and counters published by Thomas_v2.1 in sps-forum.de
+    01/16/14  hope I fixed bug in setPLCTimeToSysTime reported by Pawel Hryniszak
 */

@@ -224,8 +224,7 @@ IO::Type TFld::typeIO( ) const
 void TFld::setFlg( unsigned iflg )
 {
     unsigned ch_flg = iflg^flg();
-    if(ch_flg&SelfFld)	iflg = iflg^(ch_flg&SelfFld);
-    if(ch_flg&Selected)	iflg = iflg^(ch_flg&Selected);
+    if(ch_flg&(SelfFld|Selected)) iflg = flg()^(ch_flg&(SelfFld|Selected));
     mFlg = iflg;
 }
 

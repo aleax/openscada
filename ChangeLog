@@ -1,3 +1,13 @@
+2018-09-30 Roman (stable)
+- DB.OscadaLibs: An implementation of the ModBus scanner added to the templates library "DevLib" as the template "ModBusScan".
+- DB.Model.{AGLKS,Boiler}.St,*.xml: Continue of the Transport.Sockets addresses for the TCP type simplifying.
+- FIX:SYS: Fixed for flags TFld::SelfFld and TFld::Selected setting into TFld::setFlg().
+- SYS,DAQ.{JavaLikeCalc,ModBus},Protocol.UserProtocol,UI.VCAEngine:
+    The message "Translate program" translated to "Completely translate the procedure" everywhere.
+- !!:DAQ.Siemens: LibnoDave updated to 0.8.5.1.
+    Own implementation of ISO-TSAP appended for errors processing of the functions requesting.
+
+
 2018-09-29 Roman (stable)
 - DB.LibsDB.vcaBase: wlb_doc.docAlarmsRep: Spare attributes removed "p*".
 - DB.Model.{AGLKS,Boiler}.St: Transport.Sockets addresses for the TCP type are set simplified.

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 19:10+0300\n"
+"POT-Creation-Date: 2018-09-30 10:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,16 +38,16 @@ msgstr ""
 msgid "To enable"
 msgstr ""
 
-msgid "Translate program"
+msgid "Completely translate the procedure"
 msgstr ""
 
 msgid "Wait request timeout, ms"
 msgstr ""
 
-msgid "Input program"
+msgid "Input procedure"
 msgstr ""
 
-msgid "Output program"
+msgid "Output procedure"
 msgstr ""
 
 msgid "Date of modification"
@@ -126,6 +126,9 @@ msgstr ""
 msgid "Input program language"
 msgstr ""
 
+msgid "Input program"
+msgstr ""
+
 msgid ""
 "Next attributes has defined for input requests processing:\n"
 "   'rez' - processing result (false-full request;true-not full request);\n"
@@ -139,6 +142,9 @@ msgid "Output"
 msgstr ""
 
 msgid "Output program language"
+msgstr ""
+
+msgid "Output program"
 msgstr ""
 
 msgid ""

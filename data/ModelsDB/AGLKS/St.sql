@@ -1008,7 +1008,7 @@ fdfa9weotHT55KrlRp06LxgUqckwoHoGjKDwR8bCk7s0QobgxuFufjEqUZg44VXw
 </CertKey>
 </prms>
 ');
-INSERT INTO "Transport_in" VALUES('Self','SSL','','','127.0.0.1:10045','SelfSystem',1,5,'1.88:320','Власний','','','','<prms MaxClients="10" BufLen="5" KeepAliveCnt="100" KeepAliveTm="5" TaskPrior="0" PKeyPass="123456">
+INSERT INTO "Transport_in" VALUES('Self','SSL','','','*:10045','SelfSystem',1,5,'1.88:320','Власний','','','','<prms MaxClients="10" BufLen="5" KeepAliveCnt="100" KeepAliveTm="5" TaskPrior="0" PKeyPass="123456">
 <CertKey>
 -----BEGIN CERTIFICATE-----
 MIIEETCCAvmgAwIBAgIJAIgqZ1h4oyoBMA0GCSqGSIb3DQEBBQUAMIGeMQswCQYD

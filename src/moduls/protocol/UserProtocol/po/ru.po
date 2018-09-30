@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.UserProtocol 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-05 19:10+0300\n"
+"POT-Creation-Date: 2018-09-30 10:28+0300\n"
 "PO-Revision-Date: 2010-03-04 21:26+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -39,17 +39,17 @@ msgstr "Описание"
 msgid "To enable"
 msgstr "Включать"
 
-msgid "Translate program"
-msgstr "Переводить программу"
+msgid "Completely translate the procedure"
+msgstr "Полностью переводить процедуру"
 
 msgid "Wait request timeout, ms"
 msgstr "Время ожидания запроса, мс"
 
-msgid "Input program"
-msgstr "Входная программа"
+msgid "Input procedure"
+msgstr "Входная процедура"
 
-msgid "Output program"
-msgstr "Выходная программа"
+msgid "Output procedure"
+msgstr "Выходная процедура"
 
 msgid "Date of modification"
 msgstr "Дата модификации"
@@ -132,6 +132,9 @@ msgstr ""
 msgid "Input program language"
 msgstr "Язык входной программы"
 
+msgid "Input program"
+msgstr "Входная программа"
+
 msgid ""
 "Next attributes has defined for input requests processing:\n"
 "   'rez' - processing result (false-full request;true-not full request);\n"
@@ -152,6 +155,9 @@ msgstr "Выход"
 
 msgid "Output program language"
 msgstr "Язык выходной программы"
+
+msgid "Output program"
+msgstr "Выходная программа"
 
 msgid ""
 "Next attributes has defined for output requests processing:\n"

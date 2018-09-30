@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-22 22:05+0300\n"
+"POT-Creation-Date: 2018-09-30 10:18+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -722,6 +722,7 @@ msgstr "Element '%s' ist abgeschaltet!"
 msgid "Very many users at the node!!!"
 msgstr "Zu viele Benutzer für Knoten!!!"
 
+#, c-format
 msgid "Error the function '%s' or missing its parameters."
 msgstr "Fehler in der Funktion '%s' oder nicht genug Parameter."
 
@@ -872,11 +873,11 @@ msgstr "Datenerfassung"
 msgid "Maximum calculate time, seconds"
 msgstr "Maximale Zeit der Berechnung, Sekunden"
 
-msgid "Translate program"
-msgstr "Programm übersetzen"
+msgid "Completely translate the procedure"
+msgstr "Übersetzen Sie das Verfahren vollständig"
 
-msgid "Program"
-msgstr "Programm"
+msgid "Procedure"
+msgstr "Verfahren"
 
 msgid "Date of modification"
 msgstr "Änderungsdatum"
@@ -1940,6 +1941,9 @@ msgstr "Station"
 msgid "Station name"
 msgstr "Stationsnamen"
 
+msgid "Program"
+msgstr "Programm"
+
 msgid "Version"
 msgstr "Version"
 
@@ -2084,6 +2088,15 @@ msgstr "Priorität"
 
 msgid "CPU set"
 msgstr "CPU Installation"
+
+#, fuzzy
+msgid ""
+"To set up the processors you use, write a row of numbers separated by a ':' "
+"character.\n"
+msgstr ""
+"Für eine Verwendung von CPU gesetzt Schreib Prozessoren Zahlen String mit "
+"dem Symbol ':' getrennt.\n"
+"Prozessorsnummer beginnen mit 0."
 
 msgid "Translations"
 msgstr "Übersetzungen"

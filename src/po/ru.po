@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-22 22:05+0300\n"
+"POT-Creation-Date: 2018-09-30 10:18+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -715,6 +715,7 @@ msgstr "Элемент '%s' отключен!"
 msgid "Very many users at the node!!!"
 msgstr "Очень много пользователей у узла!!!"
 
+#, c-format
 msgid "Error the function '%s' or missing its parameters."
 msgstr "Ошибка функции '%s' или не достаточно параметров для неё."
 
@@ -865,11 +866,11 @@ msgstr "Сбор Данных"
 msgid "Maximum calculate time, seconds"
 msgstr "Максимальное время вычисления, секунд"
 
-msgid "Translate program"
-msgstr "Переводить программу"
+msgid "Completely translate the procedure"
+msgstr "Полностью переводить процедуру"
 
-msgid "Program"
-msgstr "Программа"
+msgid "Procedure"
+msgstr "Процедура"
 
 msgid "Date of modification"
 msgstr "Дата модификации"
@@ -1930,6 +1931,9 @@ msgstr "Станция"
 msgid "Station name"
 msgstr "Имя станции"
 
+msgid "Program"
+msgstr "Программа"
+
 msgid "Version"
 msgstr "Версия"
 
@@ -2074,6 +2078,15 @@ msgstr "Приор."
 
 msgid "CPU set"
 msgstr "Уст. CPU"
+
+#, fuzzy
+msgid ""
+"To set up the processors you use, write a row of numbers separated by a ':' "
+"character.\n"
+msgstr ""
+"Для указания используемых процессоров записывайте строку номеров, "
+"разделённых символом ':'.\n"
+"Номера процессоров начинаются с 0."
 
 msgid "Translations"
 msgstr "Переводы"

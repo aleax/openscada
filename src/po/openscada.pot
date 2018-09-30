@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-22 22:05+0300\n"
+"POT-Creation-Date: 2018-09-30 10:18+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -774,10 +774,10 @@ msgstr ""
 msgid "Maximum calculate time, seconds"
 msgstr ""
 
-msgid "Translate program"
+msgid "Completely translate the procedure"
 msgstr ""
 
-msgid "Program"
+msgid "Procedure"
 msgstr ""
 
 msgid "Date of modification"
@@ -1648,6 +1648,9 @@ msgstr ""
 msgid "Station name"
 msgstr ""
 
+msgid "Program"
+msgstr ""
+
 msgid "Version"
 msgstr ""
 
@@ -1779,6 +1782,9 @@ msgid "Prior."
 msgstr ""
 
 msgid "CPU set"
+msgstr ""
+
+msgid "To set up the processors you use, write a row of numbers separated by a ':' character.\n"
 msgstr ""
 
 msgid "Translations"

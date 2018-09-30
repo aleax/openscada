@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.6"
+#define MOD_VER		"2.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -1202,6 +1202,26 @@ void TMdContr::protIO( XMLNode &io )
 	    uint16_t szData = iN(tpkt, off, 2);			//dlen: length of data which follow the parameters
 	    uint16_t iErr = 0;
 	    if(iHTp == 2 || iHTp == 3) iErr = iN(tpkt, off, 2);	//result[2]: only present in type 2 and 3 headers. This contains an error information.
+	    if(iErr) {
+		const char *errNm = "unknown error.";
+		switch(iErr) {
+		    case 0x8000: errNm = "function already occupied.";	break;
+		    case 0x8001: errNm = "not allowed in current operating status.";	break;
+		    case 0x8101: errNm = "hardware fault.";		break;
+		    case 0x8103: errNm = "object access not allowed.";	break;
+		    case 0x8104: errNm = "context is not supported. Step7 says:Function not implemented or error in telgram.";	break;
+		    case 0x8105: errNm = "invalid address.";		break;
+		    case 0x8106: errNm = "data type not supported.";	break;
+		    case 0x8107: errNm = "data type not consistent.";	break;
+		    case 0x810A: errNm = "object does not exist.";	break;
+		    case 0x8301: errNm = "insufficient CPU memory ?";	break;
+		    case 0x8402: errNm = "CPU already in RUN or already in STOP ?";	break;
+		    case 0x8404: errNm = "severe error ?";		break;
+		    case 0x8500: errNm = "incorrect PDU size.";		break;
+		    case 0x8702: errNm = "address invalid.";		break;
+		}
+		throw TError(_("PDU header"), _("PLC error: [%d] %s"), (int)iErr, errNm);
+	    }
 	    if((off+szPrm+szData) > (int)tpkt.size()) throw TError(_("PDU header"), _("Size of the parameters + data more to the response size."));
 
 	    switch(sCd) {

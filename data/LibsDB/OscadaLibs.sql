@@ -1266,6 +1266,12 @@ INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','this','Object',4,0,'',49,'Об
 INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','NAME','Name',0,16,'',50,'Имя','','Ім''я','');
 INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','SHIFR','Shifr',0,16,'',51,'Шифр','','Шифр','');
 INSERT INTO "tmplib_DevLib_io" VALUES('Nik2303I','DESCR','Description',0,16,'',52,'Описание','','Опис','');
+INSERT INTO "tmplib_DevLib_io" VALUES('ModBusScan','lim','Limit time, seconds',1,64,'10',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('ModBusScan','type','Type',1,32,'2',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('ModBusScan','begin','Begin (0...65535)',1,33,'',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('ModBusScan','end','End (0...65536)',1,33,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('ModBusScan','res','Result',0,21,'',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('ModBusScan','this','This object',4,0,'',5,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -5402,6 +5408,31 @@ if(tErr.length) {
 	f_err = tErr;
 }
 else f_err = "0";','','',1512241411);
+INSERT INTO "tmplib_DevLib" VALUES('ModBusScan','ModBus scanner','','','','','',240,0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	res = "";
+	begin = begin_ = end = 0;
+	type_ = type;
+	this.attrAdd("type", "", "integer|sel", "0;1;2;3\nCoils (1);Input Coils (2);Registers (3);Input Registers (4)");
+	return;
+}
+if(f_stop) return;
+
+if(type_ != type || begin < begin_)
+	type_ = type, begin_ = begin = max(0,min(65535,begin)), res = "";
+
+for(stTm = SYS.time(); begin < end && begin < 65536 && (SYS.time()-stTm) < lim; begin++) {
+	if(type == 0 || type == 1) {
+		pdu = SYS.strFromCharCode((type==0)?1:2, begin/256, begin%256, 0, 1);
+		rez = this.cntr().messIO(pdu);
+		res += begin.toString() + ":\t" + (rez.length?rez:pdu.charCodeAt(2)&0x01) + "\n";
+	}
+	else {
+		pdu = SYS.strFromCharCode((type==2)?3:4, begin/256, begin%256, 0, 1);
+		rez = this.cntr().messIO(pdu);
+		res += begin.toString() + ":\t" + (rez.length?rez:pdu.charCodeAt(2)*256+pdu.charCodeAt(3))  + "\n";
+	}
+}','','',1538328507);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
