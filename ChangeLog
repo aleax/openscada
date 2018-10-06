@@ -1,4 +1,5 @@
 2018-10-06 Roman (stable)
+- FIX:SYS: Resend true SVN-log information.
 - FIX:TSecurity: Prevented from empty users appending to groups and appended for the empty users processing in the group's users list.
 - !!:FIX:Archive.DBArch: Fixed for value archives including to an archiver for the not grouped archiving mode.
     Finally fixed for single-value request of the value archive, after the not full fix from 2018-02-23 only for the archiver data period 1 second.
