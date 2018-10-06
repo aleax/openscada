@@ -448,8 +448,6 @@ bool ModVArch::cfgChange( TCfg &co, const TVariant &pc )
 ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     TVArchEl(iachive, iarchivator), mBeg(0), mEnd(0), mPer(0), needMeta(false)
 {
-    needMeta = !readMeta();
-
     if(!archivator().groupPrms()) {
 	reqEl.fldAdd(new TFld("MARK",_("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
 	reqEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(archivator().tmAsStr()?TFld::DateTimeDec:0),"20"));
@@ -462,6 +460,8 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
 	    default: break;
 	}
     }
+
+    needMeta = !readMeta();
 }
 
 ModVArchEl::~ModVArchEl( )	{ }
@@ -590,7 +590,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
 	cf.cfgViewAll(false);
 	cf.cfg(vlFld).setView(true);
     }
-    cf.cfg("MARK").setI(itm/10000000);
+    cf.cfg("MARK").setI(itm/(10*period()));
     cf.cfg("TM").setI(itm/1000000);
     //cf.cfg("TMU").setI(itm%1000000);
     if(SYS->db().at().dataGet(tblAddr,"",cf,false,true)) {

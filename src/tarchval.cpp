@@ -1248,7 +1248,7 @@ void TVArchive::archivatorAttach( const string &arch )
 
     if(!archivat.at().startStat()) return;
 
-    if(startStat()) {	//Attach allow only to started archive
+    if(startStat()) {	//Attaching allowed only for started archive
 	int iL, i_ins = -1;
 	for(iL = 0; iL < (int)archEl.size(); iL++) {
 	    if(&archEl[iL]->archivator() == &archivat.at()) break;

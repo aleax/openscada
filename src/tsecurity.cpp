@@ -551,7 +551,7 @@ bool TGroup::user( const string &inm )
 {
     if(owner().usrPresent(inm)) {
 	string val;
-	for(int off = 0; (val=TSYS::strSepParse(users(),0,';',&off)).size(); )
+	for(int off = 0; (val=TSYS::strParse(users(),0,";",&off)).size() || off < users().size(); )
 	    if(val == inm) return true;
     }
     return false;
@@ -559,18 +559,15 @@ bool TGroup::user( const string &inm )
 
 void TGroup::userAdd( const string &name )
 {
-    if(!user(name)) cfg("USERS").setS(users()+name+";");
-    modif();
+    if(name.size() && !user(name)) cfg("USERS").setS(users()+name+";");
 }
 
 void TGroup::userDel( const string &name )
 {
     string tUsrs = users();
     size_t pos = tUsrs.find(name+";", 0);
-    if(pos != string::npos) {
+    if(pos != string::npos)
 	cfg("USERS").setS(tUsrs.erase(pos, name.size()+1));
-	modif();
-    }
 }
 
 TVariant TGroup::objFuncCall( const string &iid, vector<TVariant> &prms, const string &iuser )
@@ -609,7 +606,7 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/USERS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD)) {
 	    string val;
-	    for(int off = 0; (val=TSYS::strSepParse(users(),0,';',&off)).size(); )
+	    for(int off = 0; (val=TSYS::strParse(users(),0,";",&off)).size() || off < users().size(); )
 		opt->childAdd("el")->setText(val);
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	userAdd(opt->text());

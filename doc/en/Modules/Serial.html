@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> </td>
 <td> Serial interfaces
 </td>
-<td> 2.0 </td>
+<td> 2.1 </td>
 <td> GPL2 </td>
 <td> tr_Serial.so </td>
 <td> en,uk,ru,de </td>
@@ -131,7 +131,7 @@
 <ul><li> <i>conn</i> — maximum time of waiting the connecting response, in milliseconds;</li>
 <li> <i>symbol</i> — maximum time of one symbol, used for the frame end detection, in milliseconds;</li>
 <li> <i>NextReqMult</i> — next request's multiplicator to the <i>symbol</i> time, 4 by default;</li>
-<li> <i>KeepAliveTm</i> — keep alive timeout to restart the transport, in seconds;</li>
+<li> <i>KeepAliveTm</i> — keep alive timeout to restart the transport, in seconds; use the value &lt; 0 for stopping the transport after missing response at each request;</li>
 <li> <i>rtsDelay1</i> — delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;</li>
 <li> <i>rtsDelay2</i> — delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds.</li></ul></li>
 <li> Do not stop at processing. Sometimes the closing of an open device can be destructive, for example, on an ICP-DAS LP PLC, and you can prevent it with this option.</li></ul>

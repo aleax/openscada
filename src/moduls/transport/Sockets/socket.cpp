@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.0.0"
+#define MOD_VER		"3.0.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -1360,10 +1360,18 @@ repeate:
 		throw TError(nodePath().c_str(),_("Error reading (select): %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sockFd,&rw_fd)) {
+		//!! Reading in that way but some time read() return < 0 after the select() pass.
+		// * Force waiting any data in the request mode and not EAGAIN
+		for(int iRtr = 0; (iB=read(sockFd,iBuf,iLen)) < 0 && errno == EAGAIN && iRtr < /*time*/mTmNext; ++iRtr)
+		    TSYS::sysSleep(1e-3);
+
 		//!! Reading in that way but some time read() return 0 after the select() pass.
+		//!!> Commented due there is not any sense to wait any data after zero return, which proven on: VPN
 		// * Force wait any data in the request mode or EAGAIN
 		// * No wait any data in the not request mode but it can get the data later
-		for(int iRtr = 0; (((iB=read(sockFd,iBuf,iLen)) == 0 && !noReq) || (iB < 0 && errno == EAGAIN)) && iRtr < /*time*/mTmNext; ++iRtr) {
+		/*bool stZero = false;
+		for(int iRtr = 0; (((iB=read(sockFd,iBuf,iLen)) == 0 && !noReq) || (iB < 0 && errno == EAGAIN)) && iRtr < mTmNext; ++iRtr) {
+		    stZero = (iB == 0);
 		    if(iRtr == 1 && iB == 0) {	//Check for same socket's errors
 			int sockError = 0, sockLen = sizeof(sockError);
 			getsockopt(sockFd, SOL_SOCKET, SO_ERROR, (char*)&sockError, (socklen_t*)&sockLen);
@@ -1371,6 +1379,8 @@ repeate:
 		    }
 		    TSYS::sysSleep(1e-3);
 		}
+		if(stZero && iB > 0)	printf("TEST 00: Have waited after zero for %d.\n", iB);*/
+
 		// * Force errors
 		// * Retry if any data was wrote but no a reply there into the request mode
 		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode

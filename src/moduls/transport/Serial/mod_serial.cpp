@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.0.1"
+#define MOD_VER		"2.1.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -596,7 +596,7 @@ void *TTrIn::Task( void *tr_in )
 	    mess_err(tr->nodePath().c_str(),_("Error requesting the protocol."));
 	}
 
-	//Send respond
+	//Sending request
 	if(answ.size()) {
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(tr->nodePath().c_str(), _("The serial interface replied by the message '%d'."), answ.size());
@@ -1160,7 +1160,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 
     float wRtsDelay2 = 1e-3*s2r(TSYS::strParse(timings(),0,":",&off));
 
-    if(wKeepAliveTm && !noStopOnProceed() && (TSYS::curTime()-mKeepAliveLstTm) > wKeepAliveTm*1000000) {
+    if(wKeepAliveTm > 0 && !noStopOnProceed() && (TSYS::curTime()-mKeepAliveLstTm) > wKeepAliveTm*1000000) {
 	mess_debug(nodePath().c_str(), _("Restart by KeepAliveTm %gs."), wKeepAliveTm);
 	stop();
 	start();
@@ -1251,6 +1251,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 	kz = select(fd+1, &rw_fd, NULL, NULL, &tv);
 	if(kz == 0) {
 	    mLstReqTm = TSYS::curTime();
+	    if(wKeepAliveTm < 0 && !notReq && oLen > 0 && !noStopOnProceed()) stop();
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Reading timeouted."));
 	    if(logLen()) pushLogMess(_("Reading timeouted"));
 	    throw TError(nodePath().c_str(), _("Reading timeouted."));
@@ -1383,6 +1384,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "    symbol - maximum time of one symbol, used for the frame end detection, in milliseconds;\n"
 	    "    NextReqMult - next request's multiplicator to the <symbol> time, 4 by default;\n"
 	    "    KeepAliveTm - keep alive timeout to restart the transport, in seconds;\n"
+	    "                  use the value < 0 for stopping the transport after missing response at each request;\n"
 	    "    rtsDelay1 - delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;\n"
 	    "    rtsDelay2 - delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/noStopOnProceed",_("No stop on proceed"),RWRWR_,"root",STR_ID,2,"tp","bool", "help",

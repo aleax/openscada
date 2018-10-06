@@ -1267,6 +1267,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 		RunPageView *pg = master_pg->findOpenPage(pgList[iP]);
 		if(pg) { pg->deleteLater(); openPgs += pgList[iP] + ";"; }
 	    }
+	    ((QScrollArea *)centralWidget())->takeWidget();
 	    master_pg->deleteLater();
 	    master_pg = NULL;
 	    setXScale(1); setYScale(1);
@@ -1468,6 +1469,9 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	if(master_pg) {
 	    XMLNode req("close"); req.setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",master_pg->id());
 	    cntrIfCmd(req);
+	    //!!!! Without next rows the master page removing performs just into setWidget() of the scroll area
+	    ((QScrollArea *)centralWidget())->takeWidget();
+	    master_pg->deleteLater();
 	}
 
 	// Get and activate for specific attributes to the master-page
@@ -1501,7 +1505,10 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	    QRect ws = QApplication::desktop()->availableGeometry(this);
 	    resize(vmin(master_pg->size().width()+10,ws.width()-10), vmin(master_pg->size().height()+55,ws.height()-10));
 	}
-	else x_scale = y_scale = 1.0;
+	else {
+	    x_scale = y_scale = 1.0;
+	    resizeEvent(NULL);
+	}
     }
     //Put to check for include
     else master_pg->callPage(pg_it, pgGrp, pgSrc);

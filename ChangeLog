@@ -1,3 +1,11 @@
+2018-10-06 Roman (stable)
+- FIX:TSecurity: Prevented from empty users appending to groups and appended for the empty users processing in the group's users list.
+- !!:FIX:Archive.DBArch: Fixed for value archives including to an archiver for the not grouped archiving mode.
+    Finally fixed for single-value request of the value archive, after the not full fix from 2018-02-23 only for the archiver data period 1 second.
+- Transport.Sockets: The waiting of any data after zero reading disabled due it proven the senselessness on VPN and other.
+- !!:FIX:UI.Vision: Fixed for the master page regular replacing (crashing) and scaling into the run-time mode.
+
+
 2018-09-30 Roman (stable)
 - DB.OscadaLibs: An implementation of the ModBus scanner added to the templates library "DevLib" as the template "ModBusScan".
 - DB.Model.{AGLKS,Boiler}.St,*.xml: Continue of the Transport.Sockets addresses for the TCP type simplifying.
