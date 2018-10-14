@@ -85,34 +85,14 @@ class TMdPrm : public TParamContr
 
     private:
 	//Data
-	class SLnk {
-	    public:
-		SLnk( int iid, const string &iprmAttr = "" ) : ioId(iid), detOff(0), prmAttr(iprmAttr) { }
-		int	ioId, detOff;
-		string	prmAttr;
-		AutoHD<TVal> aprm;
-	};
-
-	struct STmpl {
-	    TValFunc	val;
-	    vector<SLnk> lnk;
-	};
-
 	union {
 	    AutoHD<TValue> *prmRefl;		//Direct reflection
-	    STmpl *tmpl;			//Template
+	    TPrmTempl::Impl *tmpl;		//Template
 	};
 
 	//Methods
-	// Template link operations
-	int lnkSize( ) const;
-	int lnkId( int id ) const;
-	int lnkId( const string &id ) const;
-	SLnk &lnk( int num ) const;
-
 	void loadIO( bool force = false );
 	void saveIO( );
-	void initTmplLnks( bool checkNoLink = false );
 
 	//Attributes
 	TElem	pEl;				//Work atribute elements

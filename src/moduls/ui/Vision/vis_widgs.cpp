@@ -65,6 +65,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
 		    const string &lang, const string &istCtxId ) :
 	QDialog(parent), mId(NULL), mName(NULL), stCtxId(istCtxId)
 {
+    setWindowModality(Qt::WindowModal);
     //setMaximumSize(800, 600);
     setWindowTitle(ndlg);
     setWindowIcon(icon);

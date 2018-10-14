@@ -528,7 +528,7 @@ void TValFunc::ioList( vector<string> &list )
     return mFunc->ioList(list);
 }
 
-int TValFunc::ioSize( )
+int TValFunc::ioSize( ) const
 {
     if(!mFunc)	throw TError("ValFnc", _("Function is not attached!"));
 

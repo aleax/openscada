@@ -904,18 +904,18 @@ void VisDevelop::applyWorkWdg( )
     modifyToolUpdate(work_wdg_new);
     modifyGlbStUpdate(true);
 
-    //Set/update attributes inspector
-    attrInsp->setWdg(work_wdg_new);
-    lnkInsp->setWdg(work_wdg_new);
-
-    //Update actions
     if(work_wdg == work_wdg_new) return;
     work_wdg = work_wdg_new;
 
-    string cur_wdg = TSYS::strSepParse(work_wdg,0,';');	//Get first select element
-    string sel1 = TSYS::pathLev(cur_wdg,0);
-    string sel2 = TSYS::pathLev(cur_wdg,1);
-    string sel3 = TSYS::pathLev(cur_wdg,2);
+    //Set/update attributes inspector
+    attrInsp->setWdg(work_wdg);
+    lnkInsp->setWdg(work_wdg);
+
+    //Update actions
+    string cur_wdg = TSYS::strSepParse(work_wdg, 0, ';');	//Get first select element
+    string sel1 = TSYS::pathLev(cur_wdg, 0);
+    string sel2 = TSYS::pathLev(cur_wdg, 1);
+    string sel3 = TSYS::pathLev(cur_wdg, 2);
 
     bool isProj = (sel1.substr(0,4)=="prj_");
     bool isLib  = (sel1.substr(0,4)=="wlb_");
@@ -999,9 +999,9 @@ void VisDevelop::updateMenuWindow( )
 
     //Add windows list
     if(!windows.isEmpty()) mn_window->addSeparator();
-    for(int i_w = 0; i_w < windows.size(); ++i_w) {
-	QMdiSubWindow *child = windows.at(i_w);
-	QAction *act = mn_window->addAction(QString((i_w<9)?"&%1 %2":"%1 %2").arg(i_w+1).arg(child->windowTitle()));
+    for(int iW = 0; iW < windows.size(); ++iW) {
+	QMdiSubWindow *child = windows.at(iW);
+	QAction *act = mn_window->addAction(QString((iW<9)?"&%1 %2":"%1 %2").arg(iW+1).arg(child->windowTitle()));
 	act->setCheckable(true);
 	act->setChecked(child == act_win);
 	connect(act, SIGNAL(triggered()), wMapper, SLOT(map()));
@@ -1141,10 +1141,10 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 	    //  Get parent widget id
 	    string base_nm = "item";
 	    if(!par_nm.empty())	base_nm = TSYS::pathLev(par_nm,1,true).substr(4);
-	    unsigned i_c = 1, i_w = 0;
-	    while(i_w < req.childSize())
-		if(req.childGet(i_w)->attr("id") == base_nm+i2s(i_c))	{ i_w = 0; i_c++; }
-		else i_w++;
+	    unsigned i_c = 1, iW = 0;
+	    while(iW < req.childSize())
+		if(req.childGet(iW)->attr("id") == base_nm+i2s(i_c))	{ iW = 0; i_c++; }
+		else iW++;
 	    dlg.setId((base_nm+i2s(i_c)).c_str());
 	}
     }
@@ -1304,16 +1304,16 @@ void VisDevelop::visualItEdit( )
 
 	//Check to already opened widget window
 	QList<QMdiSubWindow *> ws_wdg = work_space->subWindowList();
-	int i_w;
-	for(i_w = 0; i_w < ws_wdg.size(); i_w++)
-	    if(ws_wdg.at(i_w)->windowTitle() == w_title) {
+	int iW;
+	for(iW = 0; iW < ws_wdg.size(); iW++)
+	    if(ws_wdg.at(iW)->windowTitle() == w_title) {
 		mod->postMess(mod->nodePath().c_str(),
 		    QString(_("The widget '%1' editing window is already open.")).
 			    arg(ed_wdg.c_str()), TVision::Info, this );
-		work_space->setActiveSubWindow(ws_wdg.at(i_w));
+		work_space->setActiveSubWindow(ws_wdg.at(iW));
 		break;
 	    }
-	if(i_w < ws_wdg.size()) continue;
+	if(iW < ws_wdg.size()) continue;
 
 	QScrollArea *scrl = new QScrollArea;
 #if QT_VERSION >= 0x040400
@@ -1518,9 +1518,9 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	    else {
 		zLev = req.childSize();
-		for(unsigned i_w = 0; i_w < req.childSize(); )
-		    if(req.childGet(i_w)->attr("id") == t1_el) { i_w = 0; t1_el = TSYS::strLabEnum(t1_el); }
-		    else i_w++;
+		for(unsigned iW = 0; iW < req.childSize(); )
+		    if(req.childGet(iW)->attr("id") == t1_el) { iW = 0; t1_el = TSYS::strLabEnum(t1_el); }
+		    else iW++;
 	    }
 	}
 	// Make request dialog
@@ -1535,9 +1535,9 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	if(!wsrc.empty() || dlg.exec() == QDialog::Accepted) {
 	    dlg.setId(TSYS::strEncode(dlg.id().toStdString(),TSYS::oscdID).c_str());
 	    if(wdst.empty() && dlg.id().toStdString() != t1_el) {
-		unsigned i_w = 0;
-		for( ; i_w < req.childSize() && req.childGet(i_w)->attr("id") != dlg.id().toStdString(); i_w++) ;
-		if(i_w < req.childSize() &&
+		unsigned iW = 0;
+		for( ; iW < req.childSize() && req.childGet(iW)->attr("id") != dlg.id().toStdString(); iW++) ;
+		if(iW < req.childSize() &&
 			QMessageBox::question(this,_("Moving or copying the visual items"),
 			    QString(_("The target item '%1' is already present!\nPaste to it anyway?")).arg(dlg.id()),QMessageBox::Yes|QMessageBox::No) != QMessageBox::Yes)
 		    continue;

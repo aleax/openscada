@@ -55,15 +55,6 @@ enum ISOTCP_PDU_TAG { ISOTCP_OpenS7Connection = 0xF0, ISOTCP_Read = 0x04, ISOTCP
 //************************************************
 //* Value data structure                         *
 //************************************************
-class SValData
-{
-    public:
-	SValData( int idb, int ioff, int isz ) : db(idb), off(ioff), sz(isz) { }
-
-	int db;		//DB
-	int off;	//Data offset
-	int sz;		//Data size or Boolean bit
-};
 
 //************************************************
 //* TMdPrm                                       *
@@ -85,33 +76,19 @@ class SValData
 //************************************************
 class TMdContr;
 
-class TMdPrm : public TParamContr, public TValFunc
+class TMdPrm : public TParamContr, public TPrmTempl::Impl
 {
     public:
-	//Data
-	class SLnk {
-	    public:
-		SLnk( int iid, const string &idbAddr = "" ) : ioId(iid), dbAddr(idbAddr), val(-1, -1, 0) { }
-
-		int	ioId;	//Template function io index
-		string	dbAddr;	//DB full address: DB1.20.1
-		SValData val;	//Value address data
-	};
-
 	//Methods
 	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
+
+	TCntrNode &operator=( const TCntrNode &node );
 
 	void enable( );
 	void disable( );
 
 	void calc( bool first, bool last, double frq );	//Calc template's algoritmes
-
-	// Template link operations
-	int lnkSize( );
-	int lnkId( int id );
-	int lnkId( const string &id );
-	SLnk &lnk( int num );
 
 	TMdContr &owner( ) const;
 
@@ -133,13 +110,19 @@ class TMdPrm : public TParamContr, public TValFunc
 
 	void loadIO( bool force = false );
 	void saveIO( );
-	void initLnks( );
+
+	//Links specific
+	bool lnkInit( int num, bool checkNoLink = false );
+	bool lnkActive( int num );
+	TVariant lnkInput( int num );
+	bool lnkOutput( int num, const TVariant &vl );
+	string lnkHelp( );
 
 	//Attributes
 	TElem	pEl;				//Work atribute elements
 
+	bool	chkLnkNeed;
 	int	idFreq, idStart, idStop, idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
-	vector<SLnk>	plnk;			//Parameter's links
 
 	ResString	acqErr;
 	time_t		acqErrTm;
@@ -197,18 +180,11 @@ class TMdContr: public TController
 	void stop_( );
 
 	bool cfgChange( TCfg &co, const TVariant &pc );
-	void prmEn( const string &id, bool val );		//Enable parameter to process list
-	void regVal( SValData ival, IO::Type itp, bool wr );	//Register value for acquisition
+	void prmEn( const string &id, bool val );	//Enable parameter to process list
+	void regVal( const string &ival, bool wr );	//Register value for acquisition
 	// Values process
-	char getValB( SValData ival, ResString &err );
-	int64_t getValI( SValData ival, ResString &err );
-	double getValR( SValData ival, ResString &err );
-	string getValS( SValData ival, ResString &err );
-
-	void setValB( bool ivl, SValData ival, ResString &err );
-	void setValI( int64_t ivl, SValData ival, ResString &err );
-	void setValR( double ivl, SValData ival, ResString &err );
-	void setValS( const string &ivl, SValData ival, ResString &err );
+	TVariant getVal( const string &iaddr, ResString &err );
+	void setVal( const TVariant &ivl, const string &iaddr, ResString &err );
 
 	// Service
 	void postDisable( int flag );				//Delete all DB if flag 1
@@ -226,7 +202,7 @@ class TMdContr: public TController
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
 	void setCntrDelay( const string &err );
-	int valSize( IO::Type itp, int iv_sz );			//Prepare value sizes
+	int valSize( const string &itp );			//Prepare value sizes
 	string revers( const string &ibuf ) {
 	    if(type() == ADS) return ibuf;
 	    string obuf;

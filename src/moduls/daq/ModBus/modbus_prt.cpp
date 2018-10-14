@@ -51,8 +51,8 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNodeEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
     mNodeEl.fldAdd(new TFld("ADDR",_("Address"),TFld::Integer,0,"3","1","1;247"));
     mNodeEl.fldAdd(new TFld("InTR",_("Input transport"),TFld::String,0,OBJ_ID_SZ,"*"));
-    mNodeEl.fldAdd(new TFld("PRT",_("Protocol"),TFld::String,TFld::Selected,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
-    mNodeEl.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selected,"1","0",
+    mNodeEl.fldAdd(new TFld("PRT",_("Protocol"),TFld::String,TFld::Selectable,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
+    mNodeEl.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET).c_str(),_("Data;Gateway node;Gateway net")));
     // For "Data" mode
     mNodeEl.fldAdd(new TFld("DT_PER",_("Period of the data calculation, seconds"),TFld::Real,0,"5.3","1","0.001;99"));
@@ -60,7 +60,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNodeEl.fldAdd(new TFld("DT_PROG",_("Procedure"),TFld::String,TFld::TransltText,"1000000"));
     // For "Gateway" mode
     mNodeEl.fldAdd(new TFld("TO_TR",_("To output transport"),TFld::String,0,OBJ_ID_SZ));
-    mNodeEl.fldAdd(new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selected,"5","RTU","RTU;ASCII;TCP","RTU;ASCII;TCP/IP"));
+    mNodeEl.fldAdd(new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selectable,"5","RTU","RTU;ASCII;TCP","RTU;ASCII;TCP/IP"));
     mNodeEl.fldAdd(new TFld("TO_ADDR",_("To address"),TFld::Integer,0,"3","1","1;247"));
 
     //Node data IO DB structure

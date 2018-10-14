@@ -122,7 +122,7 @@ void Widget::postEnable( int flag )
 	attrAdd(new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
 	attrAdd(new TFld("parent",_("Parent"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
 	attrAdd(new TFld("owner",_("Owner"),TFld::String,Attr::Generic|Attr::PreRead,"","root:UI"));
-	attrAdd(new TFld("perm",_("Access"),TFld::Integer,TFld::OctDec|TFld::Selected|Attr::Generic|Attr::PreRead,"","01000",
+	attrAdd(new TFld("perm",_("Access"),TFld::Integer,TFld::OctDec|TFld::Selectable|Attr::Generic|Attr::PreRead,"","01000",
 	    "0;0400;0440;0444;0600;0640;0644;0660;0664;0666;"
 	    "01000;01400;01440;01444;01600;01640;01644;01660;01664;01666",
 	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW;"
@@ -1474,7 +1474,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		if(n_id)	n_id->childAdd("el")->setText(lst[i_el]);
 		if(n_name)	n_name->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().name());
 		if(n_type)	n_type->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().fld().type()+
-				    ((wdg.at().attrAt(lst[i_el]).at().fld().flg()&(TFld::FullText|TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address))<<4)));
+				    ((wdg.at().attrAt(lst[i_el]).at().fld().flg()&(TFld::FullText|TFld::Selectable|Attr::Color|Attr::Image|Attr::Font|Attr::Address))<<4)));
 		if(n_wa)	n_wa->childAdd("el")->setText( wdg.at().attrAt(lst[i_el]).at().fld().values()+"|"+
 							    wdg.at().attrAt(lst[i_el]).at().fld().selNames());
 		if(n_proc)	n_proc->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().flgSelf()&Attr::ProcAttr));
@@ -1533,7 +1533,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		}
 		else if(idcol == "type") {
 		    ttp = (TFld::Type)(s2i(opt->text())&0x0f);
-		    tflg = tflg^((tflg^((s2i(opt->text())>>4)|Attr::IsUser))&(TFld::FullText|TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address));
+		    tflg = tflg^((tflg^((s2i(opt->text())>>4)|Attr::IsUser))&(TFld::FullText|TFld::Selectable|Attr::Color|Attr::Image|Attr::Font|Attr::Address));
 		}
 		wdg.at().attrDel(idattr);
 		wdg.at().attrAdd(new TFld(tid.c_str(),tnm.c_str(),ttp,tflg,"","",tvals.c_str(),tsels.c_str()), -1, false, false, true);
@@ -1596,9 +1596,9 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",i2s(TFld::Real))->setText(_("Real"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::String))->setText(_("String"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::Object))->setText(_("Object"));
-	opt->childAdd("el")->setAttr("id",i2s(TFld::Integer+(TFld::Selected<<4)))->setText(_("Integer numbers selection"));
-	opt->childAdd("el")->setAttr("id",i2s(TFld::Real+(TFld::Selected<<4)))->setText(_("Real numbers selection"));
-	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(TFld::Selected<<4)))->setText(_("Strings selection"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::Integer+(TFld::Selectable<<4)))->setText(_("Integer numbers selection"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::Real+(TFld::Selectable<<4)))->setText(_("Real numbers selection"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(TFld::Selectable<<4)))->setText(_("Strings selection"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(TFld::FullText<<4)))->setText(_("Text"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(Attr::Color<<4)))->setText(_("Color"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(Attr::Image<<4)))->setText(_("Image"));
@@ -1691,7 +1691,7 @@ int Attr::flgGlob( )		{ return fld().flg(); }
 
 string Attr::getSEL( bool sys )
 {
-    if(!(fld().flg()&TFld::Selected)) throw TError("Cfg", _("Element type is not selective!"));
+    if(!(fld().flg()&TFld::Selectable)) throw TError("Cfg", _("Element type is not selective!"));
     switch(fld().type()) {
 	case TFld::String:	return fld().selVl2Nm(getS(sys));
 	case TFld::Integer:	return fld().selVl2Nm(getI(sys));
@@ -1796,7 +1796,7 @@ AutoHD<TVarObj> Attr::getO( bool sys )
 void Attr::setSEL( const string &val, bool strongPrev, bool sys )
 {
     if(flgGlob()&Attr::OnlyRead) return;
-    if(!(fld().flg()&TFld::Selected)) throw TError("Cfg",_("Element type is not selective!"));
+    if(!(fld().flg()&TFld::Selectable)) throw TError("Cfg",_("Element type is not selective!"));
     switch(fld().type()) {
 	case TFld::String:	setS(fld().selNm2VlS(val), strongPrev, sys);	break;
 	case TFld::Integer:	setI(fld().selNm2VlI(val), strongPrev, sys);	break;
@@ -1860,7 +1860,7 @@ void Attr::setI( int64_t val, bool strongPrev, bool sys )
 	case TFld::Boolean:	setB((val!=EVAL_INT) ? (bool)val : EVAL_BOOL, strongPrev, sys);		break;
 	case TFld::Object:	if(val == EVAL_INT) setO(new TEValObj(), strongPrev, sys);	break;
 	case TFld::Integer: {
-	    if(!(fld().flg()&TFld::Selected) && fld().selValI()[0] < fld().selValI()[1])
+	    if(!(fld().flg()&TFld::Selectable) && fld().selValI()[0] < fld().selValI()[1])
 		val = vmin(fld().selValI()[1],vmax(fld().selValI()[0],val));
 	    if((!strongPrev && mVal.i == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))	break;
@@ -1886,7 +1886,7 @@ void Attr::setR( double val, bool strongPrev, bool sys )
 	case TFld::Boolean:	setB((val!=EVAL_REAL) ? (bool)val : EVAL_BOOL, strongPrev, sys);break;
 	case TFld::Object:	if(val == EVAL_REAL) setO(new TEValObj(), strongPrev, sys);	break;
 	case TFld::Real: {
-	    if(!(fld().flg()&TFld::Selected) && fld().selValR()[0] < fld().selValR()[1])
+	    if(!(fld().flg()&TFld::Selectable) && fld().selValR()[0] < fld().selValR()[1])
 		val = vmin(fld().selValR()[1],vmax(fld().selValR()[0],val));
 	    if((!strongPrev && mVal.r == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))		break;

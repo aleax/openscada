@@ -151,6 +151,10 @@ TSYS::~TSYS( )
     //sigaction(SIGSEGV, &sigActOrig, NULL);
     sigaction(SIGABRT, &sigActOrig, NULL);
     sigaction(SIGUSR1, &sigActOrig, NULL);
+
+    //Common locks cleaning
+    for(map<string, ResMtx*>::iterator iCL = mCommonLocks.begin(); iCL != mCommonLocks.end(); ++iCL)
+	delete iCL->second;
 }
 
 string TSYS::host( )
@@ -572,6 +576,16 @@ int TSYS::permCrtFiles( bool exec )
 	rez = strtol(cmdOpt("permCrtFiles").c_str(),NULL,0);
 
     return rez & (exec?0777:0666);
+}
+
+ResMtx *TSYS::commonLock( const string &nm )
+{
+    MtxAlloc res(dataRes(), true);
+
+    if(mCommonLocks.find(nm) == mCommonLocks.end())
+	mCommonLocks[nm] = new ResMtx(true);
+
+    return mCommonLocks[nm];
 }
 
 void TSYS::cfgFileLoad( )
@@ -1392,7 +1406,7 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 	    sout.reserve(in.size()*2);
 	    if(opt1 == "<text>") {
 		char buf[3];
-		string txt, offForm = TSYS::strMess("%%0%dx  ", vmax(2,(int)ceil(log(in.size())/log(16))));
+		string txt, offForm = TSYS::strMess("%%0%dx: ", vmax(2,(int)ceil(log(in.size())/log(16))));
 		for(iSz = 0; iSz < in.size() || (iSz%16); ) {
 		    if(offForm.size() && (iSz%16) == 0) sout += TSYS::strMess(offForm.c_str(), iSz);
 		    if(iSz < in.size()) {
@@ -2859,7 +2873,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/tasks/tasks/prior",_("Prior."),R_R___,"root","root",1,"tp","dec");
 #if __GLIBC_PREREQ(2,4)
 		if(nCPU() > 1) ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",2,"tp","str",
-		    "help",_("To set up the processors you use, write a row of numbers separated by a ':' character.\n"));
+		    "help",_("To set up the processors you use, write a row of numbers separated by a ':' character."));
 #endif
 	    }
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {

@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	"ModBus"
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.9.2"
+#define DAQ_MVER	"2.0.0"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define DAQ_LICENSE	"GPL2"
@@ -81,6 +81,9 @@ class TMdPrm : public TParamContr
 
 	TMdContr &owner( ) const;
 
+	//Attributes
+	MtxString	acqErr;
+
     protected:
 	//Methods
 	void load_( );
@@ -98,45 +101,37 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem		pEl;		//Work atribute elements
-	MtxString	acqErr;
 
 	// Logical type by template
 	//Data
 	//***************************************************
 	//* Logical type parameter's context                *
-	class TLogCtx : public TValFunc
+	class TLogCtx : public TPrmTempl::Impl
 	{
 	    public:
-	    //Data
-	    // Link structure
-	    class SLnk
-	    {
-		public:
-		SLnk( );
-		SLnk( int iid, const string &iaddr = "" );
-
-		int	ioId;		//Template function io index
-		MtxString addr, real;	//Full item address: R:23
-	    };
-
 	    //Methods
-	    TLogCtx( const string &name );
+	    TLogCtx( TCntrNode *iobj, const string &name );
 
-	    // Link operations
-	    int lnkSize( )		{ return plnk.size(); }
-	    int lnkId( int id );
-	    int lnkId( const string &id );
-	    SLnk &lnk( int num );
+	    //void lnkAdd( int num, const SLnk &l );
+	    bool lnkInit( int num, bool checkNoLink = false );
+	    bool lnkActive( int num );
+	    TVariant lnkInput( int num );
+	    bool lnkOutput( int num, const TVariant &vl );
+
+	    void cleanLnks( bool andFunc = false );
 
 	    //Attributes
+	    bool chkLnkNeed;	// Check lnks need flag
 	    int	idFreq, idStart, idStop, idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
-	    vector<SLnk>	plnk;		//Parameter's links
+
+	    protected:
+	    //Methods
+	    string lnkHelp( );
 	};
 
 	//Methods
 	void loadIO( bool force = false );
 	void saveIO( );
-	void initLnks( );
 
 	//Attributes
 	TLogCtx	*lCtx;

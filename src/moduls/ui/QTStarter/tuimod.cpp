@@ -56,7 +56,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"MainThr"
-#define MOD_VER		"4.7.2"
+#define MOD_VER		"4.7.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -410,7 +410,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Module options"))) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Qt modules for startup, separated by ';'"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQtMod");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/closeToTray",_("Collapse or startup to the system tray"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/closeToTray",_("Collapse and startup to the system tray"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/prm/LF",_("Look and feel"))) {
 		ctrMkNode("fld",opt,-1,"/prm/LF/prfl",_("Known profiles"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/LF/prflLs");
 		ctrMkNode("fld",opt,-1,"/prm/LF/stl",_("Widgets style"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/LF/stlLs");

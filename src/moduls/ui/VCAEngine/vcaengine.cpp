@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"5.1.6"
+#define MOD_VER		"5.1.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -526,10 +526,10 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) continue;
 	string IO_VAL = Attr::isTransl(TFld::Type(type),flg) ? cEl.cfg("IO_VAL").getS() : cEl.cfg("IO_VAL").getS(TCfg::ExtValOne);
 	attr.at().setS(IO_VAL);
-	if(type == TFld::Integer || type == TFld::Real || (flg&(TFld::Selected|TFld::SelEdit))) {
+	if(type == TFld::Integer || type == TFld::Real || (flg&(TFld::Selectable|TFld::SelEdit))) {
 	    attr.at().setS(TSYS::strSepParse(IO_VAL,0,'|'));
 	    attr.at().fld().setValues(TSYS::strSepParse(IO_VAL,1,'|'));
-	    if(flg&(TFld::Selected|TFld::SelEdit)) attr.at().fld().setSelNames(TSYS::strSepParse(IO_VAL,2,'|'));
+	    if(flg&(TFld::Selectable|TFld::SelEdit)) attr.at().fld().setSelNames(TSYS::strSepParse(IO_VAL,2,'|'));
 	}
 	//!!!! Temporary placed for existing DBs clean up to early fix from using Values and Names to unproper types.
 	else if(IO_VAL.size() >= 2 && IO_VAL.compare(IO_VAL.size()-2,2,"||") == 0) attr.at().setS(IO_VAL.substr(0,IO_VAL.size()-2));
@@ -572,9 +572,9 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    cElu.cfg("ID").setS(als[i_a]);
 	    cElu.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
 	    cElu.cfg("IO_VAL").setS(attr.at().getS());
-	    if(attr.at().type() == TFld::Integer || attr.at().type() == TFld::Real || (attr.at().flgGlob()&(TFld::Selected|TFld::SelEdit))) {
+	    if(attr.at().type() == TFld::Integer || attr.at().type() == TFld::Real || (attr.at().flgGlob()&(TFld::Selectable|TFld::SelEdit))) {
 		cElu.cfg("IO_VAL").setS(cElu.cfg("IO_VAL").getS()+"|"+attr.at().fld().values());
-		if(attr.at().flgGlob()&(TFld::Selected|TFld::SelEdit)) cElu.cfg("IO_VAL").setS(cElu.cfg("IO_VAL").getS()+"|"+attr.at().fld().selNames());
+		if(attr.at().flgGlob()&(TFld::Selectable|TFld::SelEdit)) cElu.cfg("IO_VAL").setS(cElu.cfg("IO_VAL").getS()+"|"+attr.at().fld().selNames());
 	    }
 	    cElu.cfg("NAME").setS(attr.at().name());
 	    cElu.cfg("IO_TYPE").setI(attr.at().fld().type()+(attr.at().fld().flg()<<4));

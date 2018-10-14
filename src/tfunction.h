@@ -46,10 +46,11 @@ class IO
 	//Data
 	enum Type { String, Integer, Real, Boolean, Object };
 	enum IOFlgs {
-	    Default = 0x00,	//Default mode (Input IO)
-	    Output  = 0x01,
-	    Return  = 0x02,
-	    FullText= 0x04
+	    Default	= 0x00,	//Default mode (Input IO)
+	    Output	= 0x01,
+	    Return	= 0x02,
+	    FullText	= 0x04,
+	    Selectable	= 0x08
 	};
 
 	//Methods
@@ -182,12 +183,12 @@ class TValFunc
 
 	void ioList( vector<string> &list );
 	int  ioId( const string &id );
-	int  ioSize( );
+	int  ioSize( ) const;
 	IO::Type ioType( unsigned id ) {
 	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Error with ID or IO %d!"), "ioType()", id);
 	    return mFunc->io(id)->type();
 	}
-	unsigned ioFlg( unsigned id ) {
+	unsigned ioFlg( unsigned id ) const {
 	    if(!mFunc) throw TError("ValFunc", _("%s: No function set!"),"ioFlg()", id);
 	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Error with ID or IO %d for the function '%s'!"), "ioFlg()", id, mFunc->nodePath().c_str());
 	    return mFunc->io(id)->flg();

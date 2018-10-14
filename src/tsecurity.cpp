@@ -326,7 +326,7 @@ void TUser::setPass( const string &n_pass )
     if(!tRez)	throw TError(_("Error crypt_r(): %s (%d)"), strerror(errno), errno);
     tPass = tRez;
 # else
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc cRes(*SYS->commonLock("crypt"), true);
     tRez = crypt(n_pass.c_str(), salt.c_str());
     if(!tRez)	throw TError(_("Error crypt_r(): %s (%d)"), strerror(errno), errno);
     tPass = tRez;
@@ -355,7 +355,7 @@ bool TUser::auth( const string &ipass, string *hash )
     if(!tRez) { mess_sys(TMess::Error, _("Error crypt_r(): %s (%d)"), strerror(errno), errno); return false; }
     return (pass == tRez);
 # else
-    MtxAlloc res(dataRes(), true);
+    MtxAlloc cRes(*SYS->commonLock("crypt"), true);
     if(hash) {
 	tRez = crypt(ipass.c_str(), salt.c_str());
 	if(!tRez) { mess_sys(TMess::Error, _("Error crypt(): %s (%d)"), strerror(errno), errno); return false; }

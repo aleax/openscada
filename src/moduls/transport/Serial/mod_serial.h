@@ -21,8 +21,6 @@
 #ifndef MOD_SERIAL_H
 #define MOD_SERIAL_H
 
-#include <pthread.h>
-
 #include <ttransports.h>
 
 #undef _

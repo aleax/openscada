@@ -359,6 +359,8 @@ class TSYS : public TCntrNode
 
 	int permCrtFiles( bool exec = false );
 
+	ResMtx *commonLock( const string &nm );
+
 	// Control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
@@ -449,6 +451,8 @@ class TSYS : public TCntrNode
 			mRdRestConnTm;	//Redundant restore connection to reserve stations timeout in seconds
 	float		mRdTaskPer;	//Redundant task period in seconds
 	bool		mRdPrimCmdTr;	//Allow transfer local primary commands to redundant ones
+
+	map<string, ResMtx*>	mCommonLocks;
 
 	struct sigaction	sigActOrig;
 };

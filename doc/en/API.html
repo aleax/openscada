@@ -54,139 +54,143 @@ The document is intended for programmers wishing to understand the architecture 
 <li class="toclevel-2 tocsection-18"><a href="#Object_of_the_value_.28TValue.29"><span class="tocnumber">4.6</span> <span class="toctext"><span>Object of the value (TValue)</span></span></a></li>
 <li class="toclevel-2 tocsection-19"><a href="#Attribute.27s_object_.28TVal.29"><span class="tocnumber">4.7</span> <span class="toctext"><span>Attribute's object (TVal)</span></span></a></li>
 <li class="toclevel-2 tocsection-20"><a href="#Object_of_the_templates_library_of_parameters_of_the_.22DAQ.22_subsystem_.28TPrmTmplLib.29"><span class="tocnumber">4.8</span> <span class="toctext"><span>Object of the templates library of parameters of the "DAQ" subsystem (TPrmTmplLib)</span></span></a></li>
-<li class="toclevel-2 tocsection-21"><a href="#The_object_of_the_parameter.27s_template_of_the_.22DAQ.22_subsystem_.28TPrmTempl.29"><span class="tocnumber">4.9</span> <span class="toctext"><span>The object of the parameter's template of the "DAQ" subsystem (TPrmTempl)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-22"><a href="#Subsystem_.22Archives.22_.28TArchiveS.29"><span class="tocnumber">5</span> <span class="toctext"><span>Subsystem "Archives" (TArchiveS)</span></span></a>
+<li class="toclevel-2 tocsection-21"><a href="#The_object_of_the_parameter.27s_template_of_the_.22DAQ.22_subsystem_.28TPrmTempl.29"><span class="tocnumber">4.9</span> <span class="toctext"><span>The object of the parameter's template of the "DAQ" subsystem (TPrmTempl)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-23"><a href="#The_object_of_the_subsystem_.22Archives.22_.28TArchiveS.29"><span class="tocnumber">5.1</span> <span class="toctext"><span>The object of the subsystem "Archives" (TArchiveS)</span></span></a></li>
-<li class="toclevel-2 tocsection-24"><a href="#The_object_of_the_values.27_archive_.28TVArchive.29"><span class="tocnumber">5.2</span> <span class="toctext"><span>The object of the values' archive (TVArchive)</span></span></a></li>
-<li class="toclevel-2 tocsection-25"><a href="#Object_of_the_values.27_buffer_.28TValBuf.29"><span class="tocnumber">5.3</span> <span class="toctext"><span>Object of the values' buffer (TValBuf)</span></span></a></li>
-<li class="toclevel-2 tocsection-26"><a href="#The_modular_object_of_the_archiver.27s_type_.28TTypeArchivator.29"><span class="tocnumber">5.4</span> <span class="toctext"><span>The modular object of the archiver's type (TTypeArchivator)</span></span></a></li>
-<li class="toclevel-2 tocsection-27"><a href="#The_object_of_the_messages.27_archiver_.28TMArchivator.29"><span class="tocnumber">5.5</span> <span class="toctext"><span>The object of the messages' archiver (TMArchivator)</span></span></a></li>
-<li class="toclevel-2 tocsection-28"><a href="#The_object_of_the_values.27_archiver_.28TVArchivator.29"><span class="tocnumber">5.6</span> <span class="toctext"><span>The object of the values' archiver (TVArchivator)</span></span></a></li>
-<li class="toclevel-2 tocsection-29"><a href="#The_object_of_the_archive.27s_element_in_the_archiver_.28TVArchEl.29"><span class="tocnumber">5.7</span> <span class="toctext"><span>The object of the archive's element in the archiver (TVArchEl)</span></span></a></li>
+<li class="toclevel-3 tocsection-22"><a href="#The_object_of_the_implementation_of_the_template.27s_parameters_of_the_.22DAQ.22_subsystem_.28TPrmTempl::Impl.29"><span class="tocnumber">4.9.1</span> <span class="toctext"><span>The object of the implementation of the template's parameters of the "DAQ" subsystem (TPrmTempl::Impl)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-30"><a href="#Subsystem_.22Transports.22_.28TTransportS.29"><span class="tocnumber">6</span> <span class="toctext"><span>Subsystem "Transports" (TTransportS)</span></span></a>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-23"><a href="#Subsystem_.22Archives.22_.28TArchiveS.29"><span class="tocnumber">5</span> <span class="toctext"><span>Subsystem "Archives" (TArchiveS)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-31"><a href="#The_object_of_the_.22Transports.22_subsystem_.28TTransportS.29"><span class="tocnumber">6.1</span> <span class="toctext"><span>The object of the "Transports" subsystem (TTransportS)</span></span></a></li>
-<li class="toclevel-2 tocsection-32"><a href="#The_modular_object_of_the_transports.27_type_.28TTypeTransport.29"><span class="tocnumber">6.2</span> <span class="toctext"><span>The modular object of the transports' type (TTypeTransport)</span></span></a></li>
-<li class="toclevel-2 tocsection-33"><a href="#The_object_of_the_input_transports_.28TTransportIn.29"><span class="tocnumber">6.3</span> <span class="toctext"><span>The object of the input transports (TTransportIn)</span></span></a></li>
-<li class="toclevel-2 tocsection-34"><a href="#The_object_of_the_output_transports_.28TTransportOut.29"><span class="tocnumber">6.4</span> <span class="toctext"><span>The object of the output transports (TTransportOut)</span></span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#The_object_of_the_subsystem_.22Archives.22_.28TArchiveS.29"><span class="tocnumber">5.1</span> <span class="toctext"><span>The object of the subsystem "Archives" (TArchiveS)</span></span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#The_object_of_the_values.27_archive_.28TVArchive.29"><span class="tocnumber">5.2</span> <span class="toctext"><span>The object of the values' archive (TVArchive)</span></span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#Object_of_the_values.27_buffer_.28TValBuf.29"><span class="tocnumber">5.3</span> <span class="toctext"><span>Object of the values' buffer (TValBuf)</span></span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#The_modular_object_of_the_archiver.27s_type_.28TTypeArchivator.29"><span class="tocnumber">5.4</span> <span class="toctext"><span>The modular object of the archiver's type (TTypeArchivator)</span></span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#The_object_of_the_messages.27_archiver_.28TMArchivator.29"><span class="tocnumber">5.5</span> <span class="toctext"><span>The object of the messages' archiver (TMArchivator)</span></span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#The_object_of_the_values.27_archiver_.28TVArchivator.29"><span class="tocnumber">5.6</span> <span class="toctext"><span>The object of the values' archiver (TVArchivator)</span></span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#The_object_of_the_archive.27s_element_in_the_archiver_.28TVArchEl.29"><span class="tocnumber">5.7</span> <span class="toctext"><span>The object of the archive's element in the archiver (TVArchEl)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-35"><a href="#Subsystem_.22Communication_interfaces.27_protocols.22_.28TProtocolS.29"><span class="tocnumber">7</span> <span class="toctext"><span>Subsystem "Communication interfaces' protocols" (TProtocolS)</span></span></a>
+<li class="toclevel-1 tocsection-31"><a href="#Subsystem_.22Transports.22_.28TTransportS.29"><span class="tocnumber">6</span> <span class="toctext"><span>Subsystem "Transports" (TTransportS)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-36"><a href="#The_object_of_the_.22Communication_interfaces.27_protocols.22_subsystem_.28TProtocolS.29"><span class="tocnumber">7.1</span> <span class="toctext"><span>The object of the "Communication interfaces' protocols" subsystem (TProtocolS)</span></span></a></li>
-<li class="toclevel-2 tocsection-37"><a href="#The_modular_object_of_the_protocol_.28TProtocol.29"><span class="tocnumber">7.2</span> <span class="toctext"><span>The modular object of the protocol (TProtocol)</span></span></a></li>
-<li class="toclevel-2 tocsection-38"><a href="#The_object_of_the_input_protocol.27s_session_.28TProtocolIn.29"><span class="tocnumber">7.3</span> <span class="toctext"><span>The object of the input protocol's session (TProtocolIn)</span></span></a></li>
+<li class="toclevel-2 tocsection-32"><a href="#The_object_of_the_.22Transports.22_subsystem_.28TTransportS.29"><span class="tocnumber">6.1</span> <span class="toctext"><span>The object of the "Transports" subsystem (TTransportS)</span></span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#The_modular_object_of_the_transports.27_type_.28TTypeTransport.29"><span class="tocnumber">6.2</span> <span class="toctext"><span>The modular object of the transports' type (TTypeTransport)</span></span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#The_object_of_the_input_transports_.28TTransportIn.29"><span class="tocnumber">6.3</span> <span class="toctext"><span>The object of the input transports (TTransportIn)</span></span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#The_object_of_the_output_transports_.28TTransportOut.29"><span class="tocnumber">6.4</span> <span class="toctext"><span>The object of the output transports (TTransportOut)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-39"><a href="#Subsystem_.22User_interfaces.22_.28TUIS.29"><span class="tocnumber">8</span> <span class="toctext">Subsystem "User interfaces" (TUIS)</span></a>
+<li class="toclevel-1 tocsection-36"><a href="#Subsystem_.22Communication_interfaces.27_protocols.22_.28TProtocolS.29"><span class="tocnumber">7</span> <span class="toctext"><span>Subsystem "Communication interfaces' protocols" (TProtocolS)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-40"><a href="#The_object_of_the_.22User_interfaces.22_subsystem_.28TUIS.29"><span class="tocnumber">8.1</span> <span class="toctext"><span>The object of the "User interfaces" subsystem (TUIS)</span></span></a></li>
-<li class="toclevel-2 tocsection-41"><a href="#The_modular_object_of_the_user_interface_.28TUI.29"><span class="tocnumber">8.2</span> <span class="toctext"><span>The modular object of the user interface (TUI)</span></span></a></li>
+<li class="toclevel-2 tocsection-37"><a href="#The_object_of_the_.22Communication_interfaces.27_protocols.22_subsystem_.28TProtocolS.29"><span class="tocnumber">7.1</span> <span class="toctext"><span>The object of the "Communication interfaces' protocols" subsystem (TProtocolS)</span></span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#The_modular_object_of_the_protocol_.28TProtocol.29"><span class="tocnumber">7.2</span> <span class="toctext"><span>The modular object of the protocol (TProtocol)</span></span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#The_object_of_the_input_protocol.27s_session_.28TProtocolIn.29"><span class="tocnumber">7.3</span> <span class="toctext"><span>The object of the input protocol's session (TProtocolIn)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-42"><a href="#Subsystem_.22Specials.22_.28TSpecialS.29"><span class="tocnumber">9</span> <span class="toctext">Subsystem "Specials" (TSpecialS)</span></a>
+<li class="toclevel-1 tocsection-40"><a href="#Subsystem_.22User_interfaces.22_.28TUIS.29"><span class="tocnumber">8</span> <span class="toctext">Subsystem "User interfaces" (TUIS)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-43"><a href="#The_object_of_the_.22Specials.22_subsystem_.28TSpecialS.29"><span class="tocnumber">9.1</span> <span class="toctext"><span>The object of the "Specials" subsystem (TSpecialS)</span></span></a></li>
-<li class="toclevel-2 tocsection-44"><a href="#The_modular_object_of_the_specials_.28TSpecial.29"><span class="tocnumber">9.2</span> <span class="toctext"><span>The modular object of the specials (TSpecial)</span></span></a></li>
+<li class="toclevel-2 tocsection-41"><a href="#The_object_of_the_.22User_interfaces.22_subsystem_.28TUIS.29"><span class="tocnumber">8.1</span> <span class="toctext"><span>The object of the "User interfaces" subsystem (TUIS)</span></span></a></li>
+<li class="toclevel-2 tocsection-42"><a href="#The_modular_object_of_the_user_interface_.28TUI.29"><span class="tocnumber">8.2</span> <span class="toctext"><span>The modular object of the user interface (TUI)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-45"><a href="#Subsystem_.22Security.22_.28TSe.D1.81urity.29"><span class="tocnumber">10</span> <span class="toctext">Subsystem "Security" (TSeсurity)</span></a>
+<li class="toclevel-1 tocsection-43"><a href="#Subsystem_.22Specials.22_.28TSpecialS.29"><span class="tocnumber">9</span> <span class="toctext">Subsystem "Specials" (TSpecialS)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-46"><a href="#The_object_of_the_.22Security.22_subsystem_.28TSe.D1.81urity.29"><span class="tocnumber">10.1</span> <span class="toctext"><span>The object of the "Security" subsystem (TSeсurity)</span></span></a></li>
-<li class="toclevel-2 tocsection-47"><a href="#The_user.27s_object_.28TUser.29"><span class="tocnumber">10.2</span> <span class="toctext"><span>The user's object (TUser)</span></span></a></li>
-<li class="toclevel-2 tocsection-48"><a href="#The_users.27_group_object_.28TGroup.29"><span class="tocnumber">10.3</span> <span class="toctext"><span>The users' group object (TGroup)</span></span></a></li>
+<li class="toclevel-2 tocsection-44"><a href="#The_object_of_the_.22Specials.22_subsystem_.28TSpecialS.29"><span class="tocnumber">9.1</span> <span class="toctext"><span>The object of the "Specials" subsystem (TSpecialS)</span></span></a></li>
+<li class="toclevel-2 tocsection-45"><a href="#The_modular_object_of_the_specials_.28TSpecial.29"><span class="tocnumber">9.2</span> <span class="toctext"><span>The modular object of the specials (TSpecial)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-49"><a href="#Subsystem_.E2.80.9CModules.27_sheduling.E2.80.9D_.28TModSchedul.29"><span class="tocnumber">11</span> <span class="toctext">Subsystem “Modules' sheduling” (TModSchedul)</span></a>
+<li class="toclevel-1 tocsection-46"><a href="#Subsystem_.22Security.22_.28TSe.D1.81urity.29"><span class="tocnumber">10</span> <span class="toctext">Subsystem "Security" (TSeсurity)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-50"><a href="#The_object_of_the_subsystem_.22Modules.27_sheduling.22_.28TModSchedul.29"><span class="tocnumber">11.1</span> <span class="toctext"><span>The object of the subsystem "Modules' sheduling" (TModSchedul)</span></span></a></li>
+<li class="toclevel-2 tocsection-47"><a href="#The_object_of_the_.22Security.22_subsystem_.28TSe.D1.81urity.29"><span class="tocnumber">10.1</span> <span class="toctext"><span>The object of the "Security" subsystem (TSeсurity)</span></span></a></li>
+<li class="toclevel-2 tocsection-48"><a href="#The_user.27s_object_.28TUser.29"><span class="tocnumber">10.2</span> <span class="toctext"><span>The user's object (TUser)</span></span></a></li>
+<li class="toclevel-2 tocsection-49"><a href="#The_users.27_group_object_.28TGroup.29"><span class="tocnumber">10.3</span> <span class="toctext"><span>The users' group object (TGroup)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-51"><a href="#Components_of_the_object_model_of_OpenSCADA"><span class="tocnumber">12</span> <span class="toctext">Components of the object model of OpenSCADA</span></a>
+<li class="toclevel-1 tocsection-50"><a href="#Subsystem_.E2.80.9CModules.27_sheduling.E2.80.9D_.28TModSchedul.29"><span class="tocnumber">11</span> <span class="toctext">Subsystem “Modules' sheduling” (TModSchedul)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-52"><a href="#The_function_object_.28TFunction.29"><span class="tocnumber">12.1</span> <span class="toctext"><span>The function object (TFunction)</span></span></a></li>
-<li class="toclevel-2 tocsection-53"><a href="#The_object_of_the_function.27s_parameter_.28IO.29"><span class="tocnumber">12.2</span> <span class="toctext"><span>The object of the function's parameter (IO)</span></span></a></li>
-<li class="toclevel-2 tocsection-54"><a href="#The_object_of_the_function.27s_value_.28TValFunc.29"><span class="tocnumber">12.3</span> <span class="toctext"><span>The object of the function's value (TValFunc)</span></span></a></li>
+<li class="toclevel-2 tocsection-51"><a href="#The_object_of_the_subsystem_.22Modules.27_sheduling.22_.28TModSchedul.29"><span class="tocnumber">11.1</span> <span class="toctext"><span>The object of the subsystem "Modules' sheduling" (TModSchedul)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-55"><a href="#Data_in_OpenSCADA_and_their_storage_in_the_DB_.28TConfig.29"><span class="tocnumber">13</span> <span class="toctext">Data in OpenSCADA and their storage in the DB (TConfig)</span></a>
+<li class="toclevel-1 tocsection-52"><a href="#Components_of_the_object_model_of_OpenSCADA"><span class="tocnumber">12</span> <span class="toctext">Components of the object model of OpenSCADA</span></a>
 <ul>
-<li class="toclevel-2 tocsection-56"><a href="#Data_object_.28TConfig.29"><span class="tocnumber">13.1</span> <span class="toctext"><span>Data object (TConfig)</span></span></a></li>
-<li class="toclevel-2 tocsection-57"><a href="#Data_cell_.28TCfg.29"><span class="tocnumber">13.2</span> <span class="toctext"><span>Data cell (TCfg)</span></span></a></li>
-<li class="toclevel-2 tocsection-58"><a href="#Data_structure_object_.28TElem.29"><span class="tocnumber">13.3</span> <span class="toctext"><span>Data structure object (TElem)</span></span></a></li>
-<li class="toclevel-2 tocsection-59"><a href="#Data_structure_cell_.28TFld.29"><span class="tocnumber">13.4</span> <span class="toctext"><span>Data structure cell (TFld)</span></span></a></li>
-<li class="toclevel-2 tocsection-60"><a href="#The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="tocnumber">13.5</span> <span class="toctext"><span>The object which preacts about changing of the structure (TValElem)</span></span></a></li>
-<li class="toclevel-2 tocsection-61"><a href="#Data_cell_.28TVariant.29"><span class="tocnumber">13.6</span> <span class="toctext"><span>Data cell (TVariant)</span></span></a></li>
-<li class="toclevel-2 tocsection-62"><a href="#User_object_.28TVarObj.29"><span class="tocnumber">13.7</span> <span class="toctext"><span>User object (TVarObj)</span></span></a></li>
+<li class="toclevel-2 tocsection-53"><a href="#The_function_object_.28TFunction.29"><span class="tocnumber">12.1</span> <span class="toctext"><span>The function object (TFunction)</span></span></a></li>
+<li class="toclevel-2 tocsection-54"><a href="#The_object_of_the_function.27s_parameter_.28IO.29"><span class="tocnumber">12.2</span> <span class="toctext"><span>The object of the function's parameter (IO)</span></span></a></li>
+<li class="toclevel-2 tocsection-55"><a href="#The_object_of_the_function.27s_value_.28TValFunc.29"><span class="tocnumber">12.3</span> <span class="toctext"><span>The object of the function's value (TValFunc)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-63"><a href="#The_control_interface_of_the_system_and_the_dynamic_tree_of_the_system_objects_.28TCntrNode.29"><span class="tocnumber">14</span> <span class="toctext"><span>The control interface of the system and the dynamic tree of the system objects (TCntrNode)</span></span></a>
+<li class="toclevel-1 tocsection-56"><a href="#Data_in_OpenSCADA_and_their_storage_in_the_DB_.28TConfig.29"><span class="tocnumber">13</span> <span class="toctext">Data in OpenSCADA and their storage in the DB (TConfig)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-64"><a href="#The_syntax_of_the_request_and_response_of_the_control_interface"><span class="tocnumber">14.1</span> <span class="toctext">The syntax of the request and response of the control interface</span></a></li>
-<li class="toclevel-2 tocsection-65"><a href="#Tag_of_the_information_structure_for_describing_the_groups_of_child_branches_of_the_page"><span class="tocnumber">14.2</span> <span class="toctext">Tag of the information structure for describing the groups of child branches of the page</span></a></li>
-<li class="toclevel-2 tocsection-66"><a href="#Tags_of_the_description_of_the_information_structure_of_the_control_interface"><span class="tocnumber">14.3</span> <span class="toctext">Tags of the description of the information structure of the control interface</span></a>
+<li class="toclevel-2 tocsection-57"><a href="#Data_object_.28TConfig.29"><span class="tocnumber">13.1</span> <span class="toctext"><span>Data object (TConfig)</span></span></a></li>
+<li class="toclevel-2 tocsection-58"><a href="#Data_cell_.28TCfg.29"><span class="tocnumber">13.2</span> <span class="toctext"><span>Data cell (TCfg)</span></span></a></li>
+<li class="toclevel-2 tocsection-59"><a href="#Data_structure_object_.28TElem.29"><span class="tocnumber">13.3</span> <span class="toctext"><span>Data structure object (TElem)</span></span></a></li>
+<li class="toclevel-2 tocsection-60"><a href="#Data_structure_cell_.28TFld.29"><span class="tocnumber">13.4</span> <span class="toctext"><span>Data structure cell (TFld)</span></span></a></li>
+<li class="toclevel-2 tocsection-61"><a href="#The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="tocnumber">13.5</span> <span class="toctext"><span>The object which preacts about changing of the structure (TValElem)</span></span></a></li>
+<li class="toclevel-2 tocsection-62"><a href="#Data_cell_.28TVariant.29"><span class="tocnumber">13.6</span> <span class="toctext"><span>Data cell (TVariant)</span></span></a></li>
+<li class="toclevel-2 tocsection-63"><a href="#User_object_.28TVarObj.29"><span class="tocnumber">13.7</span> <span class="toctext"><span>User object (TVarObj)</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-64"><a href="#The_control_interface_of_the_system_and_the_dynamic_tree_of_the_system_objects_.28TCntrNode.29"><span class="tocnumber">14</span> <span class="toctext"><span>The control interface of the system and the dynamic tree of the system objects (TCntrNode)</span></span></a>
 <ul>
-<li class="toclevel-3 tocsection-67"><a href="#Area_tag_.22area.22"><span class="tocnumber">14.3.1</span> <span class="toctext">Area tag "area"</span></a></li>
-<li class="toclevel-3 tocsection-68"><a href="#Data_tags"><span class="tocnumber">14.3.2</span> <span class="toctext">Data tags</span></a>
+<li class="toclevel-2 tocsection-65"><a href="#The_syntax_of_the_request_and_response_of_the_control_interface"><span class="tocnumber">14.1</span> <span class="toctext">The syntax of the request and response of the control interface</span></a></li>
+<li class="toclevel-2 tocsection-66"><a href="#Tag_of_the_information_structure_for_describing_the_groups_of_child_branches_of_the_page"><span class="tocnumber">14.2</span> <span class="toctext">Tag of the information structure for describing the groups of child branches of the page</span></a></li>
+<li class="toclevel-2 tocsection-67"><a href="#Tags_of_the_description_of_the_information_structure_of_the_control_interface"><span class="tocnumber">14.3</span> <span class="toctext">Tags of the description of the information structure of the control interface</span></a>
 <ul>
-<li class="toclevel-4 tocsection-69"><a href="#Tag_.22fld.22"><span class="tocnumber">14.3.2.1</span> <span class="toctext">Tag "fld"</span></a></li>
-<li class="toclevel-4 tocsection-70"><a href="#Tag_.22list.22"><span class="tocnumber">14.3.2.2</span> <span class="toctext">Tag "list"</span></a></li>
-<li class="toclevel-4 tocsection-71"><a href="#Tag_.22table.22"><span class="tocnumber">14.3.2.3</span> <span class="toctext">Tag "table"</span></a></li>
-<li class="toclevel-4 tocsection-72"><a href="#Tag_.22img.22"><span class="tocnumber">14.3.2.4</span> <span class="toctext">Tag "img"</span></a></li>
-<li class="toclevel-4 tocsection-73"><a href="#Commands_with_the_parameters._Tag_.22comm.22"><span class="tocnumber">14.3.2.5</span> <span class="toctext">Commands with the parameters. Tag "comm"</span></a></li>
-<li class="toclevel-4 tocsection-74"><a href="#Branches_.28child_nodes.29"><span class="tocnumber">14.3.2.6</span> <span class="toctext">Branches (child nodes)</span></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toclevel-2 tocsection-75"><a href="#Hierarchical_dependences_of_the_information_elements_of_the_control_language"><span class="tocnumber">14.4</span> <span class="toctext">Hierarchical dependences of the information elements of the control language</span></a></li>
-<li class="toclevel-2 tocsection-76"><a href="#Object_of_the_dynamic_tree_node_.28TCntrNode.29"><span class="tocnumber">14.5</span> <span class="toctext"><span>Object of the dynamic tree node (TCntrNode)</span></span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-77"><a href="#XML_in_OpenSCADA_.28XMLNode.29"><span class="tocnumber">15</span> <span class="toctext">XML in OpenSCADA (XMLNode)</span></a>
+<li class="toclevel-3 tocsection-68"><a href="#Area_tag_.22area.22"><span class="tocnumber">14.3.1</span> <span class="toctext">Area tag "area"</span></a></li>
+<li class="toclevel-3 tocsection-69"><a href="#Data_tags"><span class="tocnumber">14.3.2</span> <span class="toctext">Data tags</span></a>
 <ul>
-<li class="toclevel-2 tocsection-78"><a href="#XML-tag_.28XMLNode.29"><span class="tocnumber">15.1</span> <span class="toctext"><span>XML-tag (XMLNode)</span></span></a></li>
+<li class="toclevel-4 tocsection-70"><a href="#Tag_.22fld.22"><span class="tocnumber">14.3.2.1</span> <span class="toctext">Tag "fld"</span></a></li>
+<li class="toclevel-4 tocsection-71"><a href="#Tag_.22list.22"><span class="tocnumber">14.3.2.2</span> <span class="toctext">Tag "list"</span></a></li>
+<li class="toclevel-4 tocsection-72"><a href="#Tag_.22table.22"><span class="tocnumber">14.3.2.3</span> <span class="toctext">Tag "table"</span></a></li>
+<li class="toclevel-4 tocsection-73"><a href="#Tag_.22img.22"><span class="tocnumber">14.3.2.4</span> <span class="toctext">Tag "img"</span></a></li>
+<li class="toclevel-4 tocsection-74"><a href="#Commands_with_the_parameters._Tag_.22comm.22"><span class="tocnumber">14.3.2.5</span> <span class="toctext">Commands with the parameters. Tag "comm"</span></a></li>
+<li class="toclevel-4 tocsection-75"><a href="#Branches_.28child_nodes.29"><span class="tocnumber">14.3.2.6</span> <span class="toctext">Branches (child nodes)</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-79"><a href="#Resources_in_OpenSCADA_.28Res.2C_ResAlloc.2C_ResMtx.2C_MtxAlloc.2C_AutoHD.29"><span class="tocnumber">16</span> <span class="toctext">Resources in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></a>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-76"><a href="#Hierarchical_dependences_of_the_information_elements_of_the_control_language"><span class="tocnumber">14.4</span> <span class="toctext">Hierarchical dependences of the information elements of the control language</span></a></li>
+<li class="toclevel-2 tocsection-77"><a href="#Object_of_the_dynamic_tree_node_.28TCntrNode.29"><span class="tocnumber">14.5</span> <span class="toctext"><span>Object of the dynamic tree node (TCntrNode)</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-78"><a href="#XML_in_OpenSCADA_.28XMLNode.29"><span class="tocnumber">15</span> <span class="toctext">XML in OpenSCADA (XMLNode)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-80"><a href="#Resource_R.2FW_lock_object_.28ResRW.29"><span class="tocnumber">16.1</span> <span class="toctext"><span>Resource R/W lock object (ResRW)</span></span></a></li>
-<li class="toclevel-2 tocsection-81"><a href="#Automatic_resource_RW_unlock_object_.28ResAlloc.29"><span class="tocnumber">16.2</span> <span class="toctext"><span>Automatic resource RW unlock object (ResAlloc)</span></span></a></li>
-<li class="toclevel-2 tocsection-82"><a href="#Template_.28AutoHD.29"><span class="tocnumber">16.3</span> <span class="toctext"><span>Template (AutoHD)</span></span></a></li>
-<li class="toclevel-2 tocsection-83"><a href="#Resources_allocation_object.2C_by_mutex_.28ResMtx.29"><span class="tocnumber">16.4</span> <span class="toctext"><span>Resources allocation object, by mutex (ResMtx)</span></span></a></li>
-<li class="toclevel-2 tocsection-84"><a href="#Object_of_the_string_with_the_access_shared_by_the_resource_.28ResString.29"><span class="tocnumber">16.5</span> <span class="toctext"><span>Object of the string with the access shared by the resource (ResString)</span></span></a></li>
-<li class="toclevel-2 tocsection-85"><a href="#Conditional_variable_object.2C_by_mutex_.28CondVar.29"><span class="tocnumber">16.6</span> <span class="toctext"><span>Conditional variable object, by mutex (CondVar)</span></span></a></li>
-<li class="toclevel-2 tocsection-86"><a href="#Object_of_automatic_unlock_POSIX_mutex_.28MtxAlloc.29"><span class="tocnumber">16.7</span> <span class="toctext"><span>Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></a></li>
-<li class="toclevel-2 tocsection-87"><a href="#Object_of_the_string_with_the_access_shared_by_the_global_the_data_resource_.28mutex.29_.28MtxString.29"><span class="tocnumber">16.8</span> <span class="toctext"><span>Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></a></li>
+<li class="toclevel-2 tocsection-79"><a href="#XML-tag_.28XMLNode.29"><span class="tocnumber">15.1</span> <span class="toctext"><span>XML-tag (XMLNode)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-88"><a href="#Organization_and_structure_of_the_database_of_the_system_components"><span class="tocnumber">17</span> <span class="toctext">Organization and structure of the database of the system components</span></a>
+<li class="toclevel-1 tocsection-80"><a href="#Resources_in_OpenSCADA_.28Res.2C_ResAlloc.2C_ResMtx.2C_MtxAlloc.2C_AutoHD.29"><span class="tocnumber">16</span> <span class="toctext">Resources in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></a>
 <ul>
-<li class="toclevel-2 tocsection-89"><a href="#System_tables"><span class="tocnumber">17.1</span> <span class="toctext">System tables</span></a></li>
-<li class="toclevel-2 tocsection-90"><a href="#Tables_of_the_.22Data_acquisition.22_subsystem"><span class="tocnumber">17.2</span> <span class="toctext">Tables of the "Data acquisition" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-91"><a href="#Tables_of_the_.22Transports.22_subsystem"><span class="tocnumber">17.3</span> <span class="toctext">Tables of the "Transports" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-92"><a href="#Tables_of_the_.22Archives.22_subsystem"><span class="tocnumber">17.4</span> <span class="toctext">Tables of the "Archives" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-93"><a href="#Tables_of_the_.22Security.22_subsystem"><span class="tocnumber">17.5</span> <span class="toctext">Tables of the "Security" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-94"><a href="#The_structure_of_the_databases_of_the_modules"><span class="tocnumber">17.6</span> <span class="toctext">The structure of the databases of the modules</span></a></li>
+<li class="toclevel-2 tocsection-81"><a href="#Resource_R.2FW_lock_object_.28ResRW.29"><span class="tocnumber">16.1</span> <span class="toctext"><span>Resource R/W lock object (ResRW)</span></span></a></li>
+<li class="toclevel-2 tocsection-82"><a href="#Automatic_resource_RW_unlock_object_.28ResAlloc.29"><span class="tocnumber">16.2</span> <span class="toctext"><span>Automatic resource RW unlock object (ResAlloc)</span></span></a></li>
+<li class="toclevel-2 tocsection-83"><a href="#Template_.28AutoHD.29"><span class="tocnumber">16.3</span> <span class="toctext"><span>Template (AutoHD)</span></span></a></li>
+<li class="toclevel-2 tocsection-84"><a href="#Resources_allocation_object.2C_by_mutex_.28ResMtx.29"><span class="tocnumber">16.4</span> <span class="toctext"><span>Resources allocation object, by mutex (ResMtx)</span></span></a></li>
+<li class="toclevel-2 tocsection-85"><a href="#Object_of_the_string_with_the_access_shared_by_the_resource_.28ResString.29"><span class="tocnumber">16.5</span> <span class="toctext"><span>Object of the string with the access shared by the resource (ResString)</span></span></a></li>
+<li class="toclevel-2 tocsection-86"><a href="#Conditional_variable_object.2C_by_mutex_.28CondVar.29"><span class="tocnumber">16.6</span> <span class="toctext"><span>Conditional variable object, by mutex (CondVar)</span></span></a></li>
+<li class="toclevel-2 tocsection-87"><a href="#Object_of_automatic_unlock_POSIX_mutex_.28MtxAlloc.29"><span class="tocnumber">16.7</span> <span class="toctext"><span>Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></a></li>
+<li class="toclevel-2 tocsection-88"><a href="#Object_of_the_string_with_the_access_shared_by_the_global_the_data_resource_.28mutex.29_.28MtxString.29"><span class="tocnumber">16.8</span> <span class="toctext"><span>Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-95"><a href="#Service_functions_of_the_OpenSCADA_control_interface"><span class="tocnumber">18</span> <span class="toctext">Service functions of the OpenSCADA control interface</span></a>
+<li class="toclevel-1 tocsection-89"><a href="#Organization_and_structure_of_the_database_of_the_system_components"><span class="tocnumber">17</span> <span class="toctext">Organization and structure of the database of the system components</span></a>
 <ul>
-<li class="toclevel-2 tocsection-96"><a href="#Group_access_to_the_values_of_the_parameter.27s_attributes_of_the_subsystem_.22Data_acquisition.22.2C_as_well_as_to_the_detailed_information"><span class="tocnumber">18.1</span> <span class="toctext">Group access to the values of the parameter's attributes of the subsystem "Data acquisition", as well as to the detailed information</span></a></li>
-<li class="toclevel-2 tocsection-97"><a href="#Access_to_archived_data_of_the_archives_of_messages"><span class="tocnumber">18.2</span> <span class="toctext">Access to archived data of the archives of messages</span></a></li>
-<li class="toclevel-2 tocsection-98"><a href="#Access_to_archived_data_of_the_values.27_archive"><span class="tocnumber">18.3</span> <span class="toctext">Access to archived data of the values' archive</span></a></li>
+<li class="toclevel-2 tocsection-90"><a href="#System_tables"><span class="tocnumber">17.1</span> <span class="toctext">System tables</span></a></li>
+<li class="toclevel-2 tocsection-91"><a href="#Tables_of_the_.22Data_acquisition.22_subsystem"><span class="tocnumber">17.2</span> <span class="toctext">Tables of the "Data acquisition" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-92"><a href="#Tables_of_the_.22Transports.22_subsystem"><span class="tocnumber">17.3</span> <span class="toctext">Tables of the "Transports" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-93"><a href="#Tables_of_the_.22Archives.22_subsystem"><span class="tocnumber">17.4</span> <span class="toctext">Tables of the "Archives" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-94"><a href="#Tables_of_the_.22Security.22_subsystem"><span class="tocnumber">17.5</span> <span class="toctext">Tables of the "Security" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-95"><a href="#The_structure_of_the_databases_of_the_modules"><span class="tocnumber">17.6</span> <span class="toctext">The structure of the databases of the modules</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-99"><a href="#API_of_modules_of_modular_subsystems"><span class="tocnumber">19</span> <span class="toctext"><span>API of modules of modular subsystems</span></span></a></li>
-<li class="toclevel-1 tocsection-100"><a href="#Debugging_and_Testing_OpenSCADA"><span class="tocnumber">20</span> <span class="toctext">Debugging and Testing OpenSCADA</span></a></li>
-<li class="toclevel-1 tocsection-101"><a href="#Rules_for_design_and_commenting_of_the_sources_of_OpenSCADA_and_its_modules"><span class="tocnumber">21</span> <span class="toctext">Rules for design and commenting of the sources of OpenSCADA and its modules</span></a></li>
-<li class="toclevel-1 tocsection-102"><a href="#.D0.A1onventional_signs_in_the_text_and_source_code"><span class="tocnumber">22</span> <span class="toctext">Сonventional signs in the text and source code</span></a></li>
-<li class="toclevel-1 tocsection-103"><a href="#Links"><span class="tocnumber">23</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-96"><a href="#Service_functions_of_the_OpenSCADA_control_interface"><span class="tocnumber">18</span> <span class="toctext">Service functions of the OpenSCADA control interface</span></a>
+<ul>
+<li class="toclevel-2 tocsection-97"><a href="#Group_access_to_the_values_of_the_parameter.27s_attributes_of_the_subsystem_.22Data_acquisition.22.2C_as_well_as_to_the_detailed_information"><span class="tocnumber">18.1</span> <span class="toctext">Group access to the values of the parameter's attributes of the subsystem "Data acquisition", as well as to the detailed information</span></a></li>
+<li class="toclevel-2 tocsection-98"><a href="#Access_to_archived_data_of_the_archives_of_messages"><span class="tocnumber">18.2</span> <span class="toctext">Access to archived data of the archives of messages</span></a></li>
+<li class="toclevel-2 tocsection-99"><a href="#Access_to_archived_data_of_the_values.27_archive"><span class="tocnumber">18.3</span> <span class="toctext">Access to archived data of the values' archive</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-100"><a href="#API_of_modules_of_modular_subsystems"><span class="tocnumber">19</span> <span class="toctext"><span>API of modules of modular subsystems</span></span></a></li>
+<li class="toclevel-1 tocsection-101"><a href="#Debugging_and_Testing_OpenSCADA"><span class="tocnumber">20</span> <span class="toctext">Debugging and Testing OpenSCADA</span></a></li>
+<li class="toclevel-1 tocsection-102"><a href="#Rules_for_design_and_commenting_of_the_sources_of_OpenSCADA_and_its_modules"><span class="tocnumber">21</span> <span class="toctext">Rules for design and commenting of the sources of OpenSCADA and its modules</span></a></li>
+<li class="toclevel-1 tocsection-103"><a href="#.D0.A1onventional_signs_in_the_text_and_source_code"><span class="tocnumber">22</span> <span class="toctext">Сonventional signs in the text and source code</span></a></li>
+<li class="toclevel-1 tocsection-104"><a href="#Links"><span class="tocnumber">23</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -401,7 +405,8 @@ Information variables of the program:
 <li> <i>string getCmdOpt( int &amp;curPos, string *argVal = NULL ); static string getCmdOpt_( int &amp;curPos, string *argVal, int argc, char **argv );</i> — Command line parameters parsing by cursor scanning <i>curPos</i>. Return argument name and it's possible value into <i>argVal</i>. Implement formats for short keys: "-v", "-v val", "-abcv", "-abcv val"; and long keys: "--var", "--var=val", "--var val".</li>
 <li> <i>bool cmdOptPresent( const string &amp;opt );</i> — Check the command-line option <i>opt</i> for presence.</li>
 <li> <i>string cmdOpt( const string &amp;opt, const string &amp;setVl = "" );</i> — Get command-line option <i>opt</i>. Set it at <i>setVl</i> if pointing.</li>
-<li> <i>int permCrtFiles( bool exec = false );</i> — get permission for files created OpenSCADA in form 0777 (RWXRWXRWX), where <i>exec</i> is not mask the bit 01. </li>
+<li> <i>int permCrtFiles( bool exec = false );</i> — get permission for files created OpenSCADA in form 0777 (RWXRWXRWX), where <i>exec</i> is not mask the bit 01.</li>
+<li> <i>ResMtx *commonLock( const string &amp;nm );</i> — creates and gets a lock for the name <i>nm</i> — for non multithread system functions, typically.</li>
 <li> <i>static void ctrListFS( XMLNode *nd, const string &amp;fsBase, const string &amp;fileExt = "" );</i> — Browsing list for file system's items from base <i>fsBase</i>, for the files with extensions <i>fileExt</i> in list "png;jpeg;gif;".</li>
 <li> <i>ResRW &amp;cfgRes( );</i> — Access to config file tree resource locking.</li></ul>
 <p><b>Public attributes:</b>
@@ -1060,6 +1065,45 @@ Additional flags to the attribute's object of the function IO (enum TPrmTempl::I
 <li> <i>void setStart( bool val );</i> — Start/stop of the parameter's template.</li>
 <li> <i>AutoHD&lt;TFunction&gt; func( );</i> — Connection to the function formed by the template.</li>
 <li> <i>TPrmTmplLib &amp;owner( ) const;</i> — Object of the templates' library - the owner of the template.</li></ul>
+<h4><span class="mw-headline" id="The_object_of_the_implementation_of_the_template.27s_parameters_of_the_.22DAQ.22_subsystem_.28TPrmTempl::Impl.29"><span class="mw-headline-number">4.9.1</span> <span id="TPrmTempl_Impl" title="#TPrmTempl_Impl">The object of the implementation of the template's parameters of the "DAQ" subsystem (TPrmTempl::Impl)</span></span></h4>
+<table class="wikitable">
+
+<tr>
+<td><b>Inherits:</b></td>
+<td><i><a href="#TValFunc">TValFunc</a></i>
+</td></tr></table>
+<p><b>Data:</b><br />
+Structure of template links (class — TPrmTempl::Impl::SLnk):
+</p>
+<ul><li> <i>int objOff;</i> — offset of an Object part to direct accessing by it;</li>
+<li> <i>string addr, addrSpec;</i> — original and special (like to ModBus final address) link address;</li>
+<li> <i>AutoHD&lt;TVal&gt; con;</i> — connection to the destination, DAQ attribute;</li>
+<li> <i>SLnk( const string &amp;iaddr = "" )</i> — structure constructor.</li></ul>
+<p><b>Public methods:</b><br />
+</p>
+<ul><li> <i>Impl( TCntrNode *iobj, const string &amp;iname = "" );</i> — constructs for the template implementation with the control node <i>iobj</i> and the name <i>iname</i>.</li>
+<li> <i>int  lnkId( const string &amp;nm );</i> — returns the link <i>nm</i> (function's IO) identifier/number.</li>
+<li> <i>bool lnkPresent( int num );</i> — checks the link number <i>num</i> to presence, returns "true" for accessibility the link.</li>
+<li> <i>virtual void lnkAdd( int num, const SLnk &amp;l );</i> — adds a link with the number <i>num</i> and the "SLnk" structure <i>l</i>.</li>
+<li> <i>string lnkAddr( int num, bool spec = false ) const;</i> — returns the link address for the number <i>num</i> and the special link address for <i>spec</i>.</li>
+<li> <i>void lnkAddrSet( int num, const string &amp;vl, bool spec = false );</i> — sets the link address to <i>vl</i> for number <i>num</i> and the special link address for <i>spec</i>.</li>
+<li> <i>virtual bool lnkInit( int num, bool checkNoLink = false );</i> — inits/connects the link for the number <i>num</i>, which means reading "addr" and forming "con" or "addrSpec". Set <i>checkNoLink</i> to prevent re-linking. Returns "true" at the link need for the initialization/activation repeating — does not initiated.</li>
+<li> <i>virtual bool lnkActive( int num );</i> — checks the link number <i>num</i> initialization/activation state.</li>
+<li> <i>virtual TVariant lnkInput( int num );</i> — returns a value by the link number <i>num</i>.</li>
+<li> <i>virtual bool lnkOutput( int num, const TVariant &amp;vl );</i> — sets the value <i>vl</i> by the link number <i>num</i>. Returns "true" at correct setting.</li>
+<li> <i>void addLinksAttrs( TElem *attrsCntr = NULL );</i> — adds links and DAQ parameter's attributes, at <i>attrsCntr</i> presence.</li>
+<li> <i>bool initLnks( bool checkNoLink = false );</i> — inits/connects all the links. Set <i>checkNoLink</i> to prevent re-linking. Returns "true" at presence at last one not initiated link — needs for the initialization/activation repeating.</li>
+<li> <i>virtual void cleanLnks( bool andFunc = false );</i> — cleans all the links and the function, for <i>andFunc</i>.</li>
+<li> <i>void inputLinks( );</i> — gets for values of all the links.</li>
+<li> <i>void outputLinks( );</i> — sets for values of all the links.</li>
+<li> <i>bool cntrCmdProc( XMLNode *opt );</i> — calls for control interface of the links.</li></ul>
+<p><b>Protected attributes:</b><br />
+</p>
+<ul><li> <i>map&lt;int,SLnk&gt; lnks;</i> — links contatiner;</li>
+<li> <i>TCntrNode *obj;</i> — associated control node;</li></ul>
+<p><b>Protected methods:</b><br />
+</p>
+<ul><li> <i>virtual string lnkHelp( );</i> — returns help for the links address' syntax.</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Archives.22_.28TArchiveS.29"><span class="mw-headline-number">5</span> <span id="TArchiveS" title="#TArchiveS">Subsystem "Archives" (TArchiveS)</span></span></h2>
 <p>Subsystem "Archives" is represented by an object TArchiveS, which contains at the subsystem level the modular objects of the archivers types TTypeArchivator. Each object of the archiver type contains objects of the messages' archivers  TMArchivator and values' archivers TVArchivator. In addition, the subsystem object contains the methods of the messages archive and objects of the values' archives TVArchive. The object of the values' archive TVArchive contains the buffer of values through the inheritance of the buffer object TValBuf. To connect the archive of values with the archivers the object of the value element TVArchEl is provided. This object is contained in the archiver and it is referenced by the archive. Structure of the subsystem "Archives" is presented in Fig. 5.
 </p>
@@ -1901,9 +1945,9 @@ Parameter's type (enum — IO::Type):
 <li> <i>void setMdfChk( bool set );</i> — Set/unset <i>set</i> of the sign - "To check attributes to modify".</li>
 <li> <i>void ioList( vector&lt;string&gt; &amp;list );</i> — The list of the function's parameters <i>list</i>.</li>
 <li> <i>int ioId( const string &amp;id );</i> — Getting the parameter's index <i>id</i>.</li>
-<li> <i>int ioSize( );</i> — The whole quantity of the parameters.</li>
+<li> <i>int ioSize( ) const;</i> — The whole quantity of the parameters.</li>
 <li> <i>IO::Type ioType( unsigned id );</i> — Parameter's type <i>id</i>.</li>
-<li> <i>unsigned ioFlg( unsigned id );</i> — Parameter's flags <i>id</i>.</li>
+<li> <i>unsigned ioFlg( unsigned id ) const;</i> — Parameter's flags <i>id</i>.</li>
 <li> <i>bool ioHide( unsigned id );</i> — Parameter's sign <i>id</i> - "Hide".</li>
 <li> <i>bool ioMdf( unsigned id );</i> — Parameter's sign <i>id</i> - "Modified".</li>
 <li> <i>TVariant get( unsigned id );</i> — Get the value of the parameter <i>id</i>.</li>
@@ -2008,13 +2052,13 @@ Additional flags to <i>TFld</i> (enum — TCfg::AttrFlg):
 <li> <i>void setReqKey( bool vl );</i> — Setting of the sign "Requests key".</li>
 <li> <i>void setExtVal( bool vw );</i> — Setting of the sign "Extended value".</li>
 <li> <i>TFld &amp;fld( ) const;</i> —  Configuration of the cell.</li>
-<li> <i>string getSEL( );</i> — Get the value of the selective type.</li>
+<li> <i>string getSEL( );</i> — Get the value of the selectable type.</li>
 <li> <i>string getS( ) const; string getS( uint8_t RqFlg );</i> — Get the value of the string type with the request flags <i>RqFlg</i>.</li>
 <li> <i>const char *getSd( );</i> — Get the direct access to the string type value.</li>
 <li> <i>double &amp;getRd( );</i> — Get the direct access to the real type value.</li>
 <li> <i>int64_t &amp;getId( );</i> — Get the direct access to the integer type value.</li>
 <li> <i>char &amp;getBd( );</i> — Get the direct access to the boolean type value.</li>
-<li> <i>void setSEL( const string &amp;val, uint8_t RqFlg = 0 );</i> — Set the value of the selective type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
+<li> <i>void setSEL( const string &amp;val, uint8_t RqFlg = 0 );</i> — Set the value of the selectable type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>void setS( const string &amp;val ); TCfg &amp;operator=( const string &amp;vl ); TCfg &amp;operator=( const char *vl ); void setS( const string &amp;val, uint8_t RqFlg );</i> — Set the value of the string type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>void setR( double val ); TCfg &amp;operator=( double vl ); void setR( double val, uint8_t RqFlg );</i> — Set the value of the real type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>void setI( int64_t val ); TCfg &amp;operator=( int64_t vl ); void setI( int64_t val, uint8_t RqFlg );</i> — Set the value of the integer type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
@@ -2062,7 +2106,7 @@ Cell's type (enum – TFld::Type):
 <p>Cell's flags (enum — TFld::AttrFlg):
 </p>
 <ul><li> <i>TFld::NoFlag</i>(0x00) — No flags;</li>
-<li> <i>TFld::Selected</i>(0x01) — selection mode from the available values, the selective type;</li>
+<li> <i>TFld::Selectable</i>(0x01) — selection mode from the available values, the selectable type;</li>
 <li> <i>TFld::SelfFld</i>(0x02) — To create the own copy of this cell;</li>
 <li> <i>TFld::NoWrite</i>(0x04) — unwritable;</li>
 <li> <i>TFld::HexDec</i>(0x08) — integer type: hexadecimal notation;</li>
@@ -2085,30 +2129,30 @@ Cell's type (enum – TFld::Type):
 <li> <i>IO::Type typeIO( ) const;</i> — Cell's type in IO::Type.</li>
 <li> <i>unsigned flg( ) const;</i> — Cell's flag.</li>
 <li> <i>const string &amp;def( ) const;</i> — Default value.</li>
-<li> <i>string values( ) const;</i> — Working range of the value or a list of possible values for the selective type (as — "vl1;vl2;vl3").</li>
-<li> <i>string selNames( ) const;</i> — List of names of values for the selective type (as — "Value 1;Value 2;Value 3").</li>
+<li> <i>string values( ) const;</i> — Working range of the value or a list of possible values for the selectable type (as — "vl1;vl2;vl3").</li>
+<li> <i>string selNames( ) const;</i> — List of names of values for the selectable type (as — "Value 1;Value 2;Value 3").</li>
 <li> <i>const string &amp;reserve( ) const;</i> — Reserve parameter.</li>
 <li> <i>void setDescr( const string &amp;dscr );</i> — Set the descrition to the <i>dscr</i>.</li>
 <li> <i>void setLen( int vl );</i> — Set the cell's size to the <i>vl</i>.</li>
 <li> <i>void setDec( int vl );</i> — Set the fraction part of the real to the <i>vl</i>.</li>
 <li> <i>void setDef( const string &amp;def );</i> — Set the default value to the <i>def</i>.</li>
 <li> <i>void setFlg( unsigned flg );</i> — Set the flags to <i>flg</i>.</li>
-<li> <i>void setValues( const string &amp;vls );</i> — Set the working range of value or the list of possible values for the selective type (as — "vl1;vl2;vl3") to the <i>vls</i>.</li>
-<li> <i>void setSelNames( const string &amp;slnms );</i> — Set the list of values' names for the selective type (as — "Value 1;Value 2;Value 3") to the <i>slnms</i>.</li>
+<li> <i>void setValues( const string &amp;vls );</i> — Set the working range of value or the list of possible values for the selectable type (as — "vl1;vl2;vl3") to the <i>vls</i>.</li>
+<li> <i>void setSelNames( const string &amp;slnms );</i> — Set the list of values' names for the selectable type (as — "Value 1;Value 2;Value 3") to the <i>slnms</i>.</li>
 <li> <i>void setReserve( const string &amp;ires );</i> — Set of the reserve parameter to <i>res</i>.</li>
 <li> <i>const vector&lt;string&gt; &amp;selValS() const;</i> — List of values' variants for the string type.</li>
 <li> <i>const vector&lt;int&gt;    &amp;selValI() const;</i> — List of values' variants for the integer type.</li>
 <li> <i>const vector&lt;double&gt; &amp;selValR() const;</i> — List of values' variants for the real type</li>
 <li> <i>const vector&lt;bool&gt;   &amp;selValB() const;</i> — List of values' variants for the boolean type</li>
 <li> <i>const vector&lt;string&gt; &amp;selNm() const;</i> — List of the names of values' variants.</li>
-<li> <i>string selVl2Nm( const string &amp;val );</i> — Get the selected name from the value <i>val</i> of the string type.</li>
-<li> <i>string selVl2Nm( int64_t val );</i> — Get the selected name from the value <i>val</i> of the integer type.</li>
-<li> <i>string selVl2Nm( double val );</i> — Get the selected name from the value <i>val</i> of the real type.</li>
-<li> <i>string selVl2Nm( bool val ); string selVl2Nm( char val );</i> — Get the selected name from the value <i>val</i>of the boolean type.</li>
-<li> <i>string selNm2VlS( const string &amp;name );</i> — Get the value of string type from the selected name <i>name</i>.</li>
-<li> <i>int64_t selNm2VlI( const string &amp;name );</i> — Get the value of integer type from the selected name <i>name</i>.</li>
-<li> <i>double selNm2VlR( const string &amp;name );</i> — Get the value of real type from the selected name <i>name</i>.</li>
-<li> <i>bool selNm2VlB( const string &amp;name );</i> — Get the value of boolean type from the selected name <i>name</i>.</li>
+<li> <i>string selVl2Nm( const string &amp;val );</i> — Get the selectable name from the value <i>val</i> of the string type.</li>
+<li> <i>string selVl2Nm( int64_t val );</i> — Get the selectable name from the value <i>val</i> of the integer type.</li>
+<li> <i>string selVl2Nm( double val );</i> — Get the selectable name from the value <i>val</i> of the real type.</li>
+<li> <i>string selVl2Nm( bool val ); string selVl2Nm( char val );</i> — Get the selectable name from the value <i>val</i>of the Boolean type.</li>
+<li> <i>string selNm2VlS( const string &amp;name );</i> — Get the value of string type from the selectable name <i>name</i>.</li>
+<li> <i>int64_t selNm2VlI( const string &amp;name );</i> — Get the value of integer type from the selectable name <i>name</i>.</li>
+<li> <i>double selNm2VlR( const string &amp;name );</i> — Get the value of real type from the selectable name <i>name</i>.</li>
+<li> <i>bool selNm2VlB( const string &amp;name );</i> — Get the value of boolean type from the selectable name <i>name</i>.</li>
 <li> <i>XMLNode *cntrCmdMake( XMLNode *opt, const string &amp;path, int pos, const string &amp;user = "root", const string &amp;grp = "root", int perm = 0664 );</i> — Create a form element in accordance with the parameters of the cell.</li></ul>
 <h3><span class="mw-headline" id="The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="mw-headline-number">13.5</span> <span id="TValElem" title="#TValElem">The object which preacts about changing of the structure (TValElem)</span></span></h3>
 <table class="wikitable">
@@ -2216,7 +2260,7 @@ Error values for the different data types (define):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Збільшити" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>
@@ -3499,8 +3543,8 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 </td></tr>
 <tr>
 <td>  names </td>
-<td> The names of the attribute's values for the selective type. </td>
-<td> The names of the single attribute's values for the selective type.
+<td> The names of the attribute's values for the selectable type. </td>
+<td> The names of the single attribute's values for the selectable type.
 </td></tr>
 <tr>
 <td> <i>Team request command of the all values of attributes of the parameter:</i> <b>&lt;get path="/sub_DAQ/mod_{SRC}/cntr_{CNTR}/prm_{PRM}/%2fserv%2fattr"/&gt;</b>

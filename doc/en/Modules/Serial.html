@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> </td>
 <td> Serial interfaces
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPL2 </td>
 <td> tr_Serial.so </td>
 <td> en,uk,ru,de </td>
@@ -68,18 +68,18 @@
 </p>
 <ul><li> State of transport, that is: "Status", "Running" and name of the database, containing the configuration.</li>
 <li> Identifier, name and description of the transport.</li>
-<li> Address of the transport in the format "<b>{dev}:{spd}:{format}[:{fc}[:{mdm}]]</b>", where:
+<li> Address of the transport in the format "<b>{dev}:{spd}:{format}[:{opts}[:{mdm}]]</b>", where:
 <ul><li> <i>dev</i> — address of the serial device (/dev/ttyS0);</li>
 <li> <i>spd</i> — speed of the serial devices from a number: 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000, 576000 or 921600;</li>
 <li> <i>format</i> — asynchronous data format "<b>{size}{parity}{stop}</b>" (8N1, 7E1, 5O2, ...);</li>
-<li> <i>fc</i> — flow control:
-<ul><li> "h" — hardware (CRTSCTS);</li>
-<li> "s" — software (IXON|IXOFF);</li>
+<li> <i>opts</i> — different options, mostly for flow control, separated by ',':
+<ul><li> "[-]h" — hardware (CRTSCTS);</li>
+<li> "[-]s" — software (IXON|IXOFF);</li>
 <li> "rts" — using of the RTS signal for transferring(false) and checking for echo, for raw RS-485;</li>
 <li> "rts1" — using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;</li>
 <li> "rtsne" — using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;</li>
 <li> "rts1ne" — using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;</li>
-<li> "RS485" — using RS-485 mode, through TIOCSRS485.</li></ul></li>
+<li> "[-]RS485" — using RS-485 mode, through TIOCSRS485.</li></ul></li>
 <li> <i>mdm</i> — modem mode, listen for "RING".</li></ul></li>
 <li> Choice of transport protocol.</li>
 <li> The state "Running", in which the transport must be translated at boot. </li>
@@ -113,18 +113,18 @@
 </p>
 <ul><li> The state of transport, that is: "Status", "Running" and name of the database, containing the configuration.</li>
 <li> Identifier, name and description of the transport.</li>
-<li> Address of the transport in the format "<b>{dev}:{spd}:{format}[:{fc}[:{modTel}]]</b>", where:
+<li> Address of the transport in the format "<b>{dev}:{spd}:{format}[:{opts}[:{modTel}]]</b>", where:
 <ul><li> <i>dev</i> — address of the serial device (/dev/ttyS0);</li>
 <li> <i>spd</i> — speed of the serial devices from a number: 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000, 576000 or 921600;</li>
 <li> <i>format</i> — asynchronous data format "<b>{size}{parity}{stop}</b>" (8N1, 7E1, 5O2, ...);</li>
-<li> <i>fc</i> — flow control:
-<ul><li> "h" — hardware (CRTSCTS);</li>
-<li> "s" — software (IXON|IXOFF);</li>
+<li> <i>opts</i> — different options, mostly for flow control, separated by ',':
+<ul><li> "[-]h" — hardware (CRTSCTS);</li>
+<li> "[-]s" — software (IXON|IXOFF);</li>
 <li> "rts" — using of the RTS signal for transferring(false) and checking for echo, for raw RS-485;</li>
 <li> "rts1" — using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;</li>
 <li> "rtsne" — using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;</li>
 <li> "rts1ne" — using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;</li>
-<li> "RS485" — using RS-485 mode, through TIOCSRS485.</li></ul></li>
+<li> "[-]RS485" — using RS-485 mode, through TIOCSRS485.</li></ul></li>
 <li> <i>modTel</i> — modem phone, presence of this field switches transport to work in the modem mode.</li></ul></li>
 <li> The state "Running", in which the transport must be translated at boot.</li>
 <li> Time intervals of the interface in format of the string "<b>{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]</b>", where:

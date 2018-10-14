@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.9"
+#define MOD_VER		"2.1.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -177,7 +177,7 @@ void TTpContr::postEnable( int flag )
     tPrm.fldAdd(new TFld("INT",_("Board: interrupt"),TFld::Integer,TCfg::NoVal,"2","5"));
     tPrm.fldAdd(new TFld("S_RATE",_("Sample rate (single channel)"),TFld::Integer,TCfg::NoVal,"7","0"));
     tPrm.fldAdd(new TFld("ASYNCH_RD",_("Asynchronous read"),TFld::Boolean,TCfg::NoVal,"1","0"));
-    tPrm.fldAdd(new TFld("AI_VAL",_("AI value mode"),TFld::Integer,TCfg::NoVal|TFld::Selected,"1","0",
+    tPrm.fldAdd(new TFld("AI_VAL",_("AI value mode"),TFld::Integer,TCfg::NoVal|TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d",TMdPrm::AIM_CODE,TMdPrm::AIM_PERC,TMdPrm::AIM_VOLT).c_str(),_("Code;%;Voltage")));
     tPrm.fldAdd(new TFld("PRMS",_("Addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000"));
 }

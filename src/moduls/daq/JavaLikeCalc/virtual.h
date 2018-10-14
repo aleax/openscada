@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: virtual.h
 /***************************************************************************
- *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -115,6 +115,8 @@ class Contr: public TController, public TPrmTempl::Impl
 	Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~Contr( );
 
+	TCntrNode &operator=( const TCntrNode &node );
+
 	string getStatus( );
 
 	int64_t period( )	{ return mPer; }
@@ -152,7 +154,7 @@ class Contr: public TController, public TPrmTempl::Impl
 	bool	prcSt,		// Process task active
 		callSt,		// Calc now stat
 		endrunReq,	// Request to stop of the Process task
-		chkLnkNeed;	//Check lnk need flag
+		chkLnkNeed;	// Check lnks need flag
 	int64_t	&mPrior,	// Calc task priority
 		&mIter;		// iteration number
 

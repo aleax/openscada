@@ -265,7 +265,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 			case TFld::Object:	sType = _("Object");	break;
 			default: break;
 		    }
-		    if(vl.at().fld().flg()&TFld::Selected) sType += _("-select");
+		    if(vl.at().fld().flg()&TFld::Selectable) sType += _("-select");
 		    n_e->setAttr("help",
 			TSYS::strMess(_("Parameter attribute\n"
 			    "  ID: '%s'\n"
@@ -485,7 +485,7 @@ string TVal::setArch( const string &nm )
 
 string TVal::getSEL( int64_t *tm, bool sys )
 {
-    if(!(fld().flg()&TFld::Selected))	throw TError("Val", _("Not selective type!"));
+    if(!(fld().flg()&TFld::Selectable))	throw TError("Val", _("Not selective type!"));
     switch(fld().type()) {
 	case TFld::String:	return fld().selVl2Nm(getS(tm,sys));
 	case TFld::Integer:	return fld().selVl2Nm(getI(tm,sys));
@@ -643,7 +643,7 @@ AutoHD<TVarObj> TVal::getO( int64_t *tm, bool sys )
 
 void TVal::setSEL( const string &value, int64_t tm, bool sys )
 {
-    if(!(fld().flg()&TFld::Selected))	throw TError("Val", _("Not selective type!"));
+    if(!(fld().flg()&TFld::Selectable))	throw TError("Val", _("Not selective type!"));
     switch(fld().type()) {
 	case TFld::String:	setS(fld().selNm2VlS(value), tm, sys);	break;
 	case TFld::Integer:	setI(fld().selNm2VlI(value), tm, sys);	break;
@@ -710,7 +710,7 @@ void TVal::setI( int64_t value, int64_t tm, bool sys )
 	    //Check to write
 	    if(!sys && fld().flg()&TFld::NoWrite) return;
 	    //Set current value and time
-	    if(!(fld().flg()&TFld::Selected) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT)
+	    if(!(fld().flg()&TFld::Selectable) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT)
 		value = vmin(fld().selValI()[1], vmax(fld().selValI()[0],value));
 	    int pvl = val.i; val.i = value;
 	    mTime = tm;
@@ -739,7 +739,7 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    //Check to write
 	    if(!sys && fld().flg()&TFld::NoWrite) return;
 	    //Set current value and time
-	    if(!(fld().flg()&TFld::Selected) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL)
+	    if(!(fld().flg()&TFld::Selectable) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL)
 		value = vmin(fld().selValR()[1], vmax(fld().selValR()[0],value));
 	    double pvl = val.r; val.r = value;
 	    mTime = tm;

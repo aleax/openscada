@@ -192,6 +192,7 @@ class TSocketOut: public TTransportOut
 	SSL		*ssl;
 
 	// Status atributes
+	string		connAddr;
 	uint64_t	trIn, trOut;		// Traffic in and out counter
 	float		respTm, respTmMax;
 };

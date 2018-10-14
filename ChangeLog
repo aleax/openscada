@@ -1,3 +1,29 @@
+2018-10-14 Roman (stable)
+- DB.OscadaLibs: DevLib.ModBusScan: the ModBus scanner implementation improved for the list attribute "type" direct creation
+    with the new DAQ-template's function. tmplib_S7.test: some expanded for testing new functions of the module "DAQ.Siemens".
+- !!!:SYS,*: TFld::Selected everywhere renamed to TFld::Selectable.
+- FIX:SYS: Internal program languages list, by the service "/plang/list" appended by the empty item "" to allow for reset the fields,
+    mostly for VCA.
+- !!!!:FIX:SYS.Transport.{Sockets,SSL}: Common locks mechanism is added by a locks container, the function commonLock() and for system functions like to getaddrinfo(),
+	which is not multithread one.
+	!!!!:FIX: Transport.{Sockets,SSL}: getaddrinfo() wrapped to a common lock to prevent the critical problems.
+    The function crypt() moved under the common locks.
+- !!!:SYS: The DAQ templates and all their implementations appended by a function of selectable attributes creation
+	from the template field "Value" two and three lines.
+    TFunction::IO appended by the flag IO::Selectable.
+- !!!!:DAQ.{*,ModBus,LogicLev,Siemens}: The new API of the unified DAQ templates implementation TPrmTempl::Impl is finshed and
+    all DAQ modules migrated to it.
+- DAQ.JavaLikeCalc: Appended by the copying functions of the controller objects.
+- !!!:DAQ.Siemens: Extended for direct specifying the link address type, which is not tested fully and may be buggy!!!
+- !:Transport.{Sockets,SSL}: Connection info of the output transports appended by the real connected IP-address.
+- !!:Transport.Serial: The flow control field moved to options field due to a need with direct disabling some options like to -RS485.
+- UI.{QTCfg,Vision}: Table forming improved for allowed width taking from maximumViewportSize().
+- !:FIX:UI.QTCfg: Prevented from the commands "set", "load" and "save" impact into the generic request and character warnings.
+    Make the cycle updating period slower after the busy dialog.
+- !:UI.Vision: Prevented from updating selection of the developing widget, mostly for slow channells.
+    !: Big texts editing dialog set for allowing access to other main windows.
+
+
 2018-10-06 Roman (stable)
 - FIX:SYS: Resend true SVN-log information.
 - FIX:TSecurity: Prevented from empty users appending to groups and appended for the empty users processing in the group's users list.

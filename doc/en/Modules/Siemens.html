@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a> </td>
 <td> Siemens DAQ and Beckhoff
 </td>
-<td> 2.2 </td>
+<td> 3.0 </td>
 <td> GPL2 </td>
 <td> daq_Siemens.so </td>
 <td> en,uk,ru,de </td>
@@ -100,15 +100,31 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:718px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm.png"><img class="thumbimage" height="500" src="../files/Siemens_prm.png" width="716" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of a parameter.</div></div></div></div>
 <p>To configure the parameter template a corresponding tab is provided, the content of which is determined by the configuration of the template, that is the corresponding link fields and constant ones are created.
-</p><p>The link types are determined by the parameter type in the template (Logical, Integer, Real, and String) and the definition of the link value (for group links). The definition of a group link in the template is written in the format: "<b>{Name of the link}|{Offset in the data block}[|{Size of the value}]</b>", where:
+</p><p>Siemens-DB end address writes in the form "<b>DB{N}.{off}[.{BOff}|{TpSz}]</b>", where:
 </p>
-<dl><dd><i>Name of the link</i> — group link name. All references with the same name are grouped and indicated as one reference to the data block or data block with the specified offset.</dd>
-<dd><i>Offset in the data block</i> — offset number in the data block. If you specify only the data block, when configuring the template, this offset will be specified for the parameter. If the configuration of the template also specifies an offset, both offsets will be summed together. This approach allows you to access several structures in one data block. The data block number and the offset can be specified in the decimal (3245) and hexadecimal format (0xCAD).</dd>
-<dd><i>Size of the value</i> — optional field that defines the non-standard size of the value in the controller. The following sizes of values types are provided:
-<dl><dd><i>Integer:</i> — 1 byte(signed), 2 bytes(signed by default) and 4 bytes(signed).</dd>
-<dd><i>Real:</i> — 4 bytes(float by default), 8 bytes(double).</dd>
-<dd><i>Boolean:</i> — always one byte (with a bit through the point - DB1.10.1).</dd>
-<dd><i>String:</i> — 10 byte(by default) and 1-200 can be set.</dd></dl></dd></dl>
+<ul><li> <i>N</i> — Data Block number;</li>
+<li> <i>off</i> — offset in the Data Block;</li>
+<li> <i>BOff</i> — bit of the byte for Boolean;</li>
+<li> <i>TpSz</i> — type and size for other to Boolean types in the form "<b>[{tp}]{sz}</b>", where:
+<ul><li> <i>tp</i> — type in one symbol from the list: b-Boolean, i-Signed integer, u-Unsigned integer, r-Real, s-String;</li>
+<li> <i>sz</i> — the type size: b=[0...7], iu=[1,2(def),4,8], r=[4(def).8], s=[0(def10)...100].</li></ul></li></ul>
+<p>Examples of the end addresses:
+</p>
+<ul><li> "DB1.12.2", "DB1.0xC.2", "DB1.12.b2" — Boolean in DB 1, offset 12 and bit 2;</li>
+<li> "DB2.24", "DB2.0x18.8" — Integer or Real, taken from the template's IO type, in DB 2, offset 24, size default and 8;</li>
+<li> "DB3.36.i4", "DB3.0x24.r8" — directly specified Integer and Real in DB 3, offset 36, size 4 and 8;</li>
+<li> "DB4.48.20", "DB4.0x30.s20" — implicitly, from the template IO type, and directly specified String in DB 4, offset 48 and size 20.</li></ul>
+<p>The link types by default are determined by the parameter type in the template (Logical, Integer, Real, and String) and the definition of the link value (for group links). The definition of a group link in the template is written in the format "<b>{LnkName}|{OffDB[.{bit}]}[|{TpSz}]</b>", where:
+</p>
+<ul><li> <i>LnkName</i> — name of the group link. All references with the same name are grouped and indicated as one reference to the data block or data block with the specified offset.</li>
+<li> <i>OffDB</i> — offset number in the data block. If you specify only the data block, when configuring the template, this offset will be specified for the parameter. If the configuration of the template also specifies an offset, both offsets will be summed together. This approach allows you to access several structures in one data block. The data block number and the offset can be specified in the decimal (3245) and hexadecimal format (0xCAD).</li>
+<li> <i>bit</i> — bit number for Boolean.</li>
+<li> <i>TpSz</i> — equal to the same field above.</li></ul>
+<p>Examples of the link types:
+</p>
+<ul><li> "Grp 1|0.0" — Boolean in "Grp 1", offset 0 and bit 0;</li>
+<li> "Grp 2|10|1", "Grp 2|0xA|i1" — Integer, from the template IO type and directly, in "Grp 2", offset 10 and size 1;</li>
+<li> "Grp 3|20|20", "Grp 3|0x13|s20" — String, from the template IO type and directly, in "Grp 3", offset 20 and size 20.</li></ul>
 <p>An illustrative example of the general process of configuring a parameter from a template to values is shown in Figures from 5 to 8.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_tmpl.png"><img class="thumbimage" height="595" src="../files/Siemens_tmpl.png" width="780" /></a>  <div class="thumbcaption">Fig.5. Example of a template with grouping.</div></div></div></div>

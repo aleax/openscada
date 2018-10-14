@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.1.0"
+#define MOD_VER		"2.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -165,7 +165,7 @@ string TTransSock::outAddrHelp( )
 	"    addr - address with which the connection is made; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 	"    port - network port with which the connection is made; indication of the character name of the port according to /etc/services is available;\n"
 	"    mode - SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1), by default and in error, the safest and most appropriate one is used.")) +
-	"\n|| " + outTimingsHelp() + "\n|| " + outAttemptsHelp();
+	"\n\n|| " + outTimingsHelp() + "\n\n|| " + outAttemptsHelp();
 }
 
 string TTransSock::outTimingsHelp( )
@@ -378,6 +378,7 @@ void *TSocketIn::Task( void *sock_in )
 	BIO_get_ssl(bio, &ssl);
 	SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
 
+	MtxAlloc aRes(*SYS->commonLock("getaddrinfo"), true);
 	abio = BIO_new_accept((char*)(ssl_host+":"+ssl_port).c_str());
 
 	//BIO_ctrl(abio,BIO_C_SET_ACCEPT,1,(void*)"a");
@@ -390,6 +391,7 @@ void *TSocketIn::Task( void *sock_in )
 	    ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
 	    throw TError(s.nodePath().c_str(), "BIO_do_accept: %s", err);
 	}
+	aRes.unlock();
 
 	s.runSt		= true;
 	s.endrun	= false;
@@ -421,6 +423,11 @@ void *TSocketIn::Task( void *sock_in )
 	    socklen_t		name_cl_len = sizeof(name_cl);
 	    getpeername(BIO_get_fd(cbio,NULL), (sockaddr*)&name_cl, &name_cl_len);
 	    string sender = inet_ntoa(name_cl.sin_addr);
+	    if(((sockaddr*)&name_cl)->sa_family == AF_INET6) {
+		char aBuf[INET6_ADDRSTRLEN];
+		getnameinfo((sockaddr*)&name_cl, name_cl_len, aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
+		sender = aBuf;
+	    }
 
 	    if(s.clId.size() >= s.maxFork() || (s.maxForkPerHost() && s.forksPerHost(sender) >= s.maxForkPerHost())) {
 		s.clsConnByLim++;
@@ -763,6 +770,7 @@ string TSocketOut::getStatus( )
     string rez = TTransportOut::getStatus();
 
     if(startStat()) {
+	rez += TSYS::strMess(_("To the host '%s'. "), connAddr.c_str());
 	rez += TSYS::strMess(_("Traffic in %s, out %s."), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
 	if(mess_lev() == TMess::Debug && respTmMax)
 	    rez += TSYS::strMess(_("Response time %s[%s]. "), tm2s(1e-6*respTm).c_str(), tm2s(1e-6*respTmMax).c_str());
@@ -871,21 +879,27 @@ void TSocketOut::start( int tmCon )
     string aErr;
     for(int off = 0; (ssl_host_=TSYS::strParse(ssl_host,0,",",&off)).size(); ) {
 	struct addrinfo hints, *res;
-	static struct sockaddr_storage ss;
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_socktype = SOCK_STREAM;
 	int error;
+
+	MtxAlloc aRes(*SYS->commonLock("getaddrinfo"), true);
 	if((error=getaddrinfo(ssl_host_.c_str(),(ssl_port.size()?ssl_port.c_str():"10045"),&hints,&res)))
 	    throw TError(nodePath().c_str(), _("Error the address '%s': '%s (%d)'"), addr_.c_str(), gai_strerror(error), error);
+	vector<sockaddr_storage> addrs;
+	for(struct addrinfo *iAddr = res; iAddr != NULL; iAddr = iAddr->ai_next) {
+	    static struct sockaddr_storage ss;
+	    if(iAddr->ai_addrlen > sizeof(ss)) { aErr = _("sockaddr to large."); continue; }
+	    memcpy(&ss, iAddr->ai_addr, iAddr->ai_addrlen);
+	    addrs.push_back(ss);
+	}
+	freeaddrinfo(res);
+	aRes.unlock();
 
 	// Try for all addresses
-	for(struct addrinfo *iAddr = res; iAddr != NULL; iAddr = iAddr->ai_next) {
+	for(int iA = 0; iA < addrs.size(); iA++) {
 	    try {
-		if(iAddr->ai_addrlen > sizeof(ss))	throw TError(nodePath().c_str(), _("sockaddr to large."));
-
-		memcpy(&ss, iAddr->ai_addr, iAddr->ai_addrlen);
-
-		if((sockFd=socket((((sockaddr*)&ss)->sa_family==AF_INET6)?PF_INET6:PF_INET,SOCK_STREAM,0)) == -1)
+		if((sockFd=socket((((sockaddr*)&addrs[iA])->sa_family==AF_INET6)?PF_INET6:PF_INET,SOCK_STREAM,0)) == -1)
 		    throw TError(nodePath().c_str(), _("Error creating TCP socket: %s!"), strerror(errno));
 		int vl = 1;
 		setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
@@ -893,7 +907,7 @@ void TSocketOut::start( int tmCon )
 		//Connect to the socket
 		int flags = fcntl(sockFd, F_GETFL, 0);
 		fcntl(sockFd, F_SETFL, flags|O_NONBLOCK);
-		int res = connect(sockFd, (sockaddr*)&ss, sizeof(ss));
+		int res = connect(sockFd, (sockaddr*)&addrs[iA], sizeof(addrs[iA]));
 		if(res == -1 && errno == EINPROGRESS) {
 		    struct timeval tv;
 		    socklen_t slen = sizeof(res);
@@ -968,6 +982,14 @@ void TSocketOut::start( int tmCon )
 		BIO_set_nbio(conn, 1);
 
 		fcntl(sockFd, F_SETFL, flags|O_NONBLOCK);
+
+		//Get the connected address
+		connAddr = inet_ntoa(((sockaddr_in*)&addrs[iA])->sin_addr);
+		if(((sockaddr*)&addrs[iA])->sa_family == AF_INET6) {
+		    char aBuf[INET6_ADDRSTRLEN];
+		    getnameinfo((sockaddr*)&addrs[iA], sizeof(addrs[iA]), aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
+		    connAddr = aBuf;
+		}
 	    } catch(TError &err) {
 		aErr = err.mess;
 		if(conn)	BIO_reset(conn);
@@ -982,7 +1004,6 @@ void TSocketOut::start( int tmCon )
 	    break;	//OK
 	}
 
-	freeaddrinfo(res);
 	if(sockFd >= 0) break;
     }
 

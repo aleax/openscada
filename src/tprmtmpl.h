@@ -59,29 +59,38 @@ class TPrmTempl: public TFunction, public TConfig
 	    //Data
 	    class SLnk {
 		public:
-		SLnk( const string &iprmAttr = "" ) : detOff(0), prmAttr(iprmAttr) { }
-		int	detOff;
-		string	prmAttr;
-		AutoHD<TVal> aprm;
+		SLnk( const string &iaddr = "" ) : objOff(0), addr(iaddr) { }
+		int	objOff;
+		string	addr, addrSpec;
+		AutoHD<TVal> con;
 	    };
 
-	    //Functions
+	    //Methods
 	    Impl( TCntrNode *iobj, const string &iname = "" );
 
+	    int  lnkId( const string &nm );
 	    bool lnkPresent( int num );
-	    void lnkAdd( int num, const SLnk &l );
-	    string lnkAttr( int num );
-	    void lnkAttrSet( int num, const string &vl );
-	    void lnkClear( bool andFunc = false );
+	    virtual void lnkAdd( int num, const SLnk &l );
+	    string lnkAddr( int num, bool spec = false ) const;
+	    void lnkAddrSet( int num, const string &vl, bool spec = false );
+	    virtual bool lnkInit( int num, bool checkNoLink = false );
+	    virtual bool lnkActive( int num );
+	    virtual TVariant lnkInput( int num );
+	    virtual bool lnkOutput( int num, const TVariant &vl );
 
-	    bool initTmplLnks( bool checkNoLink = false );
+	    void addLinksAttrs( TElem *attrsCntr = NULL );
+	    bool initLnks( bool checkNoLink = false );
+	    virtual void cleanLnks( bool andFunc = false );
 	    void inputLinks( );
 	    void outputLinks( );
-	    bool outputLink( int num, const TVariant &vl );
 
 	    bool cntrCmdProc( XMLNode *opt );
 
-	    private:
+	    protected:
+	    //Methods
+	    virtual string lnkHelp( );
+
+	    //Attributes
 	    map<int,SLnk> lnks;
 
 	    TCntrNode	*obj;

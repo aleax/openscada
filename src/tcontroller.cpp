@@ -394,7 +394,7 @@ void TController::redntDataUpdate( )
 		else {
 		    unsigned aId = prm.at().dynElCntr()->fldId(aNd->attr("id"), true);
 		    prm.at().dynElCntr()->fldAt(aId).setDescr(aNd->attr("name"));
-		    prm.at().dynElCntr()->fldAt(aId).setFlg(prm.at().dynElCntr()->fldAt(aId).flg()^((prm.at().dynElCntr()->fldAt(aId).flg()^flg)&(TFld::Selected|TFld::SelEdit)));
+		    prm.at().dynElCntr()->fldAt(aId).setFlg(prm.at().dynElCntr()->fldAt(aId).flg()^((prm.at().dynElCntr()->fldAt(aId).flg()^flg)&(TFld::Selectable|TFld::SelEdit)));
 		    prm.at().dynElCntr()->fldAt(aId).setValues(aNd->attr("values"));
 		    prm.at().dynElCntr()->fldAt(aId).setSelNames(aNd->attr("selNames"));
 		}

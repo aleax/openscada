@@ -362,11 +362,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		if(!wdg || !qobject_cast<QPushButton*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QPushButton("test", w);
-/*#if QT_VERSION < 0x050000
-		    wdg->setStyle(new QPlastiqueStyle());
-#else
-		    wdg->setStyle(new QCommonStyle());
-#endif*/
 		    wdg->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 		    if(runW) {
 			connect(wdg, SIGNAL(pressed()), this, SLOT(buttonPressed()));
@@ -643,30 +638,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		}
 		wdg->setColumnCount(maxCols);
 		wdg->setRowCount(maxRows);
-		if(maxCols > 1) wdg->resizeColumnsToContents();
-		if(colsWdthFit && maxRows) {
-		    int averWdth = w->size().width()/maxCols;
-		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
-		    //Count width params
-		    for(int iC = 0; iC < wdg->columnCount(); iC++) {
-			fullColsWdth += wdg->columnWidth(iC);
-			if(wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) {
-			    niceForceColsWdth += tVl;
-			    wdg->setColumnWidth(iC, tVl);
-			}
-			else if(wdg->columnWidth(iC) <= averWdth)	niceForceColsWdth += wdg->columnWidth(iC);
-			else busyCols++;
-		    }
-		    //Set busyCols
-		    if(fullColsWdth > w->size().width() && busyCols) {
-			int busyColsWdth = (w->size().width()-niceForceColsWdth)/busyCols;
-			for(int iC = 0; iC < wdg->columnCount(); iC++)
-			    if(wdg->columnWidth(iC) > averWdth && wdg->columnWidth(iC) > busyColsWdth)
-				wdg->setColumnWidth(iC, busyColsWdth);
-		    }
-		    wdg->resizeRowsToContents();
-		}
-		wdg->horizontalHeader()->setStretchLastSection(colsWdthFit);
+		wdg->setProperty("colsWdthFit", colsWdthFit);
 		shD->addrWdg->blockSignals(false);
 
 		setValue(w, shD->value, true);	//Value
@@ -704,6 +676,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    }
 	}
 	shD->setType = true;
+
 	if(mk_new) {
 	    // Install event's filter and disable focus
 	    eventFilterSet(w, shD->addrWdg, true);
@@ -715,6 +688,42 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    ((QVBoxLayout*)w->layout())->addWidget(shD->addrWdg);
 	}
 	if(wAlign) ((QVBoxLayout*)w->layout())->setAlignment(shD->addrWdg, wAlign);
+
+	//Postprocessing after taking real data and size
+	switch(shD->elType) {
+	    case F_TABLE: {
+		QTableWidget *wdg = (QTableWidget*)shD->addrWdg;
+		((QVBoxLayout*)w->layout())->activate();
+
+		if(wdg->columnCount() > 1) wdg->resizeColumnsToContents();
+		for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();	//Call all cascade events
+		if(wdg->property("colsWdthFit").toBool() && wdg->rowCount()) {
+		    int tblWdth = wdg->maximumViewportSize().width() - (wdg->verticalScrollBar()?wdg->verticalScrollBar()->size().width():0);
+		    int averWdth = tblWdth/wdg->columnCount();
+		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
+		    //Count width params
+		    for(int iC = 0; iC < wdg->columnCount(); iC++) {
+			fullColsWdth += wdg->columnWidth(iC);
+			if(wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) {
+			    niceForceColsWdth += tVl;
+			    wdg->setColumnWidth(iC, tVl);
+			}
+			else if(wdg->columnWidth(iC) <= averWdth)	niceForceColsWdth += wdg->columnWidth(iC);
+			else busyCols++;
+		    }
+		    //Set busyCols
+		    if(fullColsWdth > tblWdth && busyCols) {
+			int busyColsWdth = (tblWdth-niceForceColsWdth)/busyCols;
+			for(int iC = 0; iC < wdg->columnCount(); iC++)
+			    if(wdg->columnWidth(iC) > averWdth && wdg->columnWidth(iC) > busyColsWdth)
+				wdg->setColumnWidth(iC, busyColsWdth);
+		    }
+		    wdg->resizeRowsToContents();
+		}
+		wdg->horizontalHeader()->setStretchLastSection(wdg->property("colsWdthFit").toBool());
+		break;
+	    }
+	}
     }
 
     shD->evLock = false;

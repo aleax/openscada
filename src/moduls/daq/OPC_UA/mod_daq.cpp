@@ -62,8 +62,8 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("TM_REST",_("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;3600"));
     fldAdd(new TFld("SYNCPER",_("Sync inter remote station period, seconds"),TFld::Integer,TFld::NoFlag,"4","60","0;1000"));
     fldAdd(new TFld("EndPoint",_("End point"),TFld::String,TFld::NoFlag,"50","opc.tcp://localhost"));
-    fldAdd(new TFld("SecPolicy",_("Security policy"),TFld::String,TFld::Selected,"20","None","None;Basic128Rsa15;Basic256",_("None;Basic128Rsa15;Basic256")));
-    fldAdd(new TFld("SecMessMode",_("Message security mode"),TFld::Integer,TFld::Selected,"1","1",
+    fldAdd(new TFld("SecPolicy",_("Security policy"),TFld::String,TFld::Selectable,"20","None","None;Basic128Rsa15;Basic256",_("None;Basic128Rsa15;Basic256")));
+    fldAdd(new TFld("SecMessMode",_("Message security mode"),TFld::Integer,TFld::Selectable,"1","1",
 	TSYS::strMess("%d;%d;%d",MS_None,MS_Sign,MS_SignAndEncrypt).c_str(),_("None;Sign;Sign&Encrypt")));
     fldAdd(new TFld("Cert",_("Certificate (PEM)"),TFld::String,TFld::FullText,"10000"));
     fldAdd(new TFld("PvKey",_("Private key (PEM)"),TFld::String,TFld::FullText,"10000"));

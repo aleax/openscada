@@ -1031,6 +1031,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(tblList.size() ? c_list[i_db]+"."+tblList : c_list[i_db]);
     }
     else if(a_path == "/plang/list" && ctrChkNode(opt)) {
+	opt->childAdd("el")->setText("");
 	vector<string>  ls, lls;
 	SYS->daq().at().modList(ls);
 	for(unsigned iM = 0; iM < ls.size(); iM++) {

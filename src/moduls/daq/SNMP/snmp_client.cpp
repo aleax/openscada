@@ -47,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.9.0"
+#define MOD_VER		"0.9.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -104,7 +104,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost"));
     fldAdd(new TFld("RETR",_("Number of retries"),TFld::Integer,TFld::NoFlag,"1","1","0;10"));
     fldAdd(new TFld("TM",_("Responds timeout, seconds"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
-    fldAdd(new TFld("VER",_("SNMP version"),TFld::String,TFld::Selected,"2","1","1;2c;2u;3","SNMPv1;SNMPv2c;SNMPv2u;SNMPv3"));
+    fldAdd(new TFld("VER",_("SNMP version"),TFld::String,TFld::Selectable,"2","1","1;2c;2u;3","SNMPv1;SNMPv2c;SNMPv2u;SNMPv3"));
     fldAdd(new TFld("COMM",_("Server community/user"),TFld::String,TFld::NoFlag,"20","public"));
     fldAdd(new TFld("V3",_("V3 parameters"),TFld::String,TFld::NoFlag,"50","authNoPriv:MD5::DES:"));
     fldAdd(new TFld("PATTR_LIM",_("Limit of the attributes number"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
@@ -508,7 +508,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 			    if(!(subtree->access == MIB_ACCESS_READWRITE || subtree->access == MIB_ACCESS_WRITEONLY))
 				flg |= TFld::NoWrite;
 			    if(subtree->enums) {
-				flg |= TFld::Selected;
+				flg |= TFld::Selectable;
 				for(struct enum_list *enums = subtree->enums; enums; enums = enums->next) {
 				    selIds += i2s(enums->value)+";";
 				    selLabs += string(enums->label)+";";

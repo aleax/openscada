@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.1.0"
+#define MOD_VER		"2.2.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -130,19 +130,19 @@ TTransportOut *TTr::Out( const string &name, const string &idb ){ return new TTr
 
 string TTr::outAddrHelp( )
 {
-    return _("The serial transport has the address format \"{dev}:{speed}:{format}[:{fc}[:{modTel}]]\", where:\n"
+    return _("The serial transport has the address format \"{dev}:{speed}:{format}[:{opts}[:{modTel}]]\", where:\n"
 	"    dev - serial device address (/dev/ttyS0);\n"
 	"    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	"                          230400, 460800, 500000, 576000 or 921600);\n"
 	"    format - asynchronous data format '{size}{parity}{stop}' (8N1, 7E1, 5O2);\n"
-	"    fc - flow control:\n"
-	"      'h' - hardware (CRTSCTS);\n"
-	"      's' - software (IXON|IXOFF);\n"
+	"    opts - different options, mostly for flow control, separated by ',':\n"
+	"      '[-]h' - hardware (CRTSCTS);\n"
+	"      '[-]s' - software (IXON|IXOFF);\n"
 	"      'rts' - using of the RTS signal for transferring(false) and checking for echo, for raw RS-485;\n"
 	"      'rts1' - using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;\n"
 	"      'rtsne' - using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;\n"
 	"      'rts1ne' - using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;\n"
-	"      'RS485' - using RS-485 mode, through TIOCSRS485.\n"
+	"      '[-]RS485' - using RS-485 mode, through TIOCSRS485.\n"
 	"    modTel - modem telephone, the field presence do switch transport to work with modem mode.");
 }
 
@@ -387,32 +387,39 @@ void TTrIn::connect( )
 	    else throw TError(nodePath().c_str(),_("Error the stop bits %d."),stopbt);
 	}
 
-	// Set flow control
-	string fc = sTrm(TSYS::strParse(addr(),3,":"));
+	// Set options
 	mRTSfc = mRTSlvl = mRTSEcho = false;
-	tio.c_cflag &= ~CRTSCTS;
-	if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
-	else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
-	else if(strcasecmp(fc.c_str(),"rts") == 0)	{ mRTSfc = mRTSEcho = true; }
-	else if(strcasecmp(fc.c_str(),"rts1") == 0)	{ mRTSfc = mRTSlvl = mRTSEcho = true; }
-	else if(strcasecmp(fc.c_str(),"rts1ne") == 0)	{ mRTSfc = mRTSlvl = true; }
-	else if(strcasecmp(fc.c_str(),"rtsne") == 0)	{ mRTSfc = true; }
+	string opts = sTrm(TSYS::strParse(addr(),3,":")), opt;
+	for(int off = 0; (opt=TSYS::strParse(opts,0,",",&off)).size(); ) {
+	    if(strcasecmp(opt.c_str(),"h") == 0)	tio.c_cflag |= CRTSCTS;
+	    else if(strcasecmp(opt.c_str(),"-h") == 0)	tio.c_cflag &= ~CRTSCTS;
+
+	    if(strcasecmp(opt.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
+	    else if(strcasecmp(opt.c_str(),"-s") == 0)	tio.c_iflag &= ~(IXON|IXOFF|IXANY);
+
+	    if(strcasecmp(opt.c_str(),"rts") == 0)	{ mRTSfc = mRTSEcho = true; }
+	    else if(strcasecmp(opt.c_str(),"rts1") == 0){ mRTSfc = mRTSlvl = mRTSEcho = true; }
+	    else if(strcasecmp(opt.c_str(),"rts1ne") == 0) { mRTSfc = mRTSlvl = true; }
+	    else if(strcasecmp(opt.c_str(),"rtsne") == 0)  { mRTSfc = true; }
+
+#ifdef SER_RS485_ENABLED
+#ifndef TIOCSRS485
+#define TIOCSRS485      0x542f
+#endif
+	    // Standard RS-485 mode
+	    if(strcasecmp(opt.c_str(),"rs485") == 0 || strcasecmp(opt.c_str(),"-rs485") == 0) {
+		serial_rs485 rs485conf;
+		memset(&rs485conf, 0, sizeof(serial_rs485));
+		if(strcasecmp(opt.c_str(),"rs485") == 0) rs485conf.flags |= SER_RS485_ENABLED;
+		ioctl(fd, TIOCSRS485, &rs485conf);
+	    }
+#endif
+	}
 
 	// Set port's data
 	tcflush(fd, TCIOFLUSH);
 	if(tcsetattr(fd,TCSANOW,&tio) < 0)
 	    throw TError(nodePath().c_str(), _("Error the serial port '%s' %s: %s."), mDevPort.c_str(), "tcsetattr", strerror(errno));
-
-#ifdef SER_RS485_ENABLED
-# ifndef TIOCSRS485
-#  define TIOCSRS485      0x542f
-# endif
-	// Standard RS-485 mode
-	serial_rs485 rs485conf;
-	memset(&rs485conf, 0, sizeof(serial_rs485));
-	if(strcasecmp(fc.c_str(),"rs485") == 0)	rs485conf.flags |= SER_RS485_ENABLED;
-	ioctl(fd, TIOCSRS485, &rs485conf);
-#endif
 
 	//Modem init
 	mMdmMode = s2i(TSYS::strParse(addr(),4,":"));
@@ -677,19 +684,19 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID,3,
 	    "dest","sel_ed","select","/prm/cfg/devLS","help",
-	    _("The serial transport has the address format \"{dev}:{speed}:{format}[:{fc}[:{mdm}]]\", where:\n"
+	    _("The serial transport has the address format \"{dev}:{speed}:{format}[:{opts}[:{mdm}]]\", where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	    "                          230400, 460800, 500000, 576000 or 921600);\n"
 	    "    format - asynchronous data format '{size}{parity}{stop}' (8N1, 7E1, 5O2);\n"
-	    "    fc - flow control:\n"
-	    "      'h' - hardware (CRTSCTS);\n"
-	    "      's' - software (IXON|IXOFF);\n"
+	    "    opts - different options, mostly for flow control, separated by ',':\n"
+	    "      '[-]h' - hardware (CRTSCTS);\n"
+	    "      '[-]s' - software (IXON|IXOFF);\n"
 	    "      'rts' - using of the RTS signal for transferring(false) and checking for echo, for raw RS-485;\n"
 	    "      'rts1' - using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;\n"
 	    "      'rtsne' - using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;\n"
 	    "      'rts1ne' - using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;\n"
-	    "      'RS485' - using RS-485 mode, through TIOCSRS485.\n"
+	    "      '[-]RS485' - using RS-485 mode, through TIOCSRS485.\n"
 	    "    mdm - modem mode, listen for 'RING'."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
@@ -1001,31 +1008,38 @@ void TTrOut::start( int tmCon )
 		else throw TError(nodePath().c_str(),_("Error the stop bits %d."),stopbt);
 	    }
 
-	    // Set flow control
-	    string fc = sTrm(TSYS::strParse(addr(),3,":"));
-	    tio.c_cflag &= ~CRTSCTS;
-	    if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
-	    else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
-	    else if(strcasecmp(fc.c_str(),"rts") == 0)	{ mRTSfc = mRTSEcho = true; }
-	    else if(strcasecmp(fc.c_str(),"rts1") == 0)	{ mRTSfc = mRTSlvl = mRTSEcho = true; }
-	    else if(strcasecmp(fc.c_str(),"rts1ne") == 0) { mRTSfc = mRTSlvl = true; }
-	    else if(strcasecmp(fc.c_str(),"rtsne") == 0){ mRTSfc = true; }
+	    // Set options
+	    string opts = sTrm(TSYS::strParse(addr(),3,":")), opt;
+	    for(int off = 0; (opt=TSYS::strParse(opts,0,",",&off)).size(); ) {
+		if(strcasecmp(opt.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
+		else if(strcasecmp(opt.c_str(),"-h") == 0)	tio.c_cflag &= ~CRTSCTS;
 
-	    // Set port's data
-	    tcflush(fd, TCIOFLUSH);
-	    if(tcsetattr(fd,TCSANOW,&tio) < 0)
-		throw TError(nodePath().c_str(), _("Error the serial port '%s' %s: %s."), mDevPort.c_str(), "tcsetattr", strerror(errno));
+		if(strcasecmp(opt.c_str(),"s") == 0)		tio.c_iflag |= (IXON|IXOFF|IXANY);
+		else if(strcasecmp(opt.c_str(),"-s") == 0)	tio.c_iflag &= ~(IXON|IXOFF|IXANY);
+
+		if(strcasecmp(opt.c_str(),"rts") == 0)		{ mRTSfc = mRTSEcho = true; }
+		else if(strcasecmp(opt.c_str(),"rts1") == 0)	{ mRTSfc = mRTSlvl = mRTSEcho = true; }
+		else if(strcasecmp(opt.c_str(),"rts1ne") == 0)	{ mRTSfc = mRTSlvl = true; }
+		else if(strcasecmp(opt.c_str(),"rtsne") == 0)	{ mRTSfc = true; }
 
 #ifdef SER_RS485_ENABLED
 #ifndef TIOCSRS485
 #define TIOCSRS485      0x542f
 #endif
-	    // Standard RS-485 mode
-	    serial_rs485 rs485conf;
-	    memset(&rs485conf, 0, sizeof(serial_rs485));
-	    if(strcasecmp(fc.c_str(),"rs485") == 0)	rs485conf.flags |= SER_RS485_ENABLED;
-	    ioctl(fd, TIOCSRS485, &rs485conf);
+		// Standard RS-485 mode
+		if(strcasecmp(opt.c_str(),"rs485") == 0 || strcasecmp(opt.c_str(),"-rs485") == 0) {
+		    serial_rs485 rs485conf;
+		    memset(&rs485conf, 0, sizeof(serial_rs485));
+		    if(strcasecmp(opt.c_str(),"rs485") == 0) rs485conf.flags |= SER_RS485_ENABLED;
+		    ioctl(fd, TIOCSRS485, &rs485conf);
+		}
 #endif
+	    }
+
+	    // Set port's data
+	    tcflush(fd, TCIOFLUSH);
+	    if(tcsetattr(fd,TCSANOW,&tio) < 0)
+		throw TError(nodePath().c_str(), _("Error the serial port '%s' %s: %s."), mDevPort.c_str(), "tcsetattr", strerror(errno));
 
 	    //Modem connection establish
 	    string telNumb = sTrm(TSYS::strParse(addr(),4,":"));

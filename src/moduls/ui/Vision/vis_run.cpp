@@ -1481,7 +1481,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 				     setAttr("aTp", i2s(TFld::String))->setAttr("aFlg", i2s(TFld::FullText));
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2frunWin")->
 				     setAttr("aNm", _("Running window"))->
-				     setAttr("aTp", i2s(TFld::Integer))->setAttr("aFlg", i2s(TFld::Selected))->
+				     setAttr("aTp", i2s(TFld::Integer))->setAttr("aFlg", i2s(TFld::Selectable))->
 				     setAttr("aVls", "0;1;2")->setAttr("aNms", _("Original size;Maximize;Full screen"));
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fkeepAspectRatio")->
 				     setAttr("aNm", _("Keep aspect ratio on the scaling"))->

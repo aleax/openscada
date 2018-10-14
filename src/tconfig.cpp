@@ -299,7 +299,7 @@ void TCfg::setReqKey( bool vl )
 
 string TCfg::getSEL( )
 {
-    if(!(mFld->flg()&TFld::Selected))	throw TError("Cfg", _("Element type is not selective!"));
+    if(!(mFld->flg()&TFld::Selectable))	throw TError("Cfg", _("Element type is not selective!"));
     switch(type()) {
 	case TVariant::String:	return mFld->selVl2Nm(getS());
 	case TVariant::Integer:	return mFld->selVl2Nm(getI());
@@ -408,7 +408,7 @@ void TCfg::setR( double ival )
 	case TVariant::Integer:	setI((ival==EVAL_REAL) ? EVAL_INT : (int64_t)ival);	break;
 	case TVariant::Boolean:	setB((ival==EVAL_REAL) ? EVAL_BOOL : (bool)ival);	break;
 	case TVariant::Real: {
-	    if(!(mFld->flg()&TFld::Selected) && mFld->selValR()[0] < mFld->selValR()[1])
+	    if(!(mFld->flg()&TFld::Selectable) && mFld->selValR()[0] < mFld->selValR()[1])
 		ival = vmin(mFld->selValR()[1], vmax(mFld->selValR()[0],ival));
 	    double tVal = TVariant::getR();
 	    TVariant::setR(ival);
@@ -435,7 +435,7 @@ void TCfg::setI( int64_t ival )
 	case TVariant::Real:	setR((ival==EVAL_INT) ? EVAL_REAL : ival);	break;
 	case TVariant::Boolean:	setB((ival==EVAL_INT) ? EVAL_BOOL : (bool)ival);break;
 	case TVariant::Integer: {
-	    if(!(mFld->flg()&TFld::Selected) && mFld->selValI()[0] < mFld->selValI()[1])
+	    if(!(mFld->flg()&TFld::Selectable) && mFld->selValI()[0] < mFld->selValI()[1])
 		ival = vmin(mFld->selValI()[1], vmax(mFld->selValI()[0],ival));
 	    int tVal = TVariant::getI();
 	    TVariant::setI(ival);
@@ -482,7 +482,7 @@ void TCfg::setB( char ival )
 
 void TCfg::setSEL( const string &ival, uint8_t RqFlg )
 {
-    if(!(mFld->flg()&TFld::Selected)) throw TError("Cfg", _("Element type is not selective!"));
+    if(!(mFld->flg()&TFld::Selectable)) throw TError("Cfg", _("Element type is not selective!"));
     switch(type()) {
 	case TVariant::String:	setS(mFld->selNm2VlS(ival), RqFlg);	break;
 	case TVariant::Integer:	setI(mFld->selNm2VlI(ival), RqFlg);	break;

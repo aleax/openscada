@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.2"
+#define MOD_VER		"2.0.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -92,7 +92,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("TM_REST",_("Timeout of restore, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;1000"));
     fldAdd(new TFld("TM_REST_DT",_("Depth time of restore data, hours"),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
-    fldAdd(new TFld("GATH_MESS_LEV",_("Level of requested messages"),TFld::Integer,TFld::Selected,"1","1",
+    fldAdd(new TFld("GATH_MESS_LEV",_("Level of requested messages"),TFld::Integer,TFld::Selectable,"1","1",
 	"-1;0;1;2;3;4;5;6;7",_("==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)")));
     fldAdd(new TFld("SYNCPER",_("Synchronization time with the remote station, seconds"),TFld::Integer,TFld::NoFlag,"4","0","0;1000"));
     fldAdd(new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100"));
@@ -841,7 +841,7 @@ void TMdPrm::sync( )
 		if(vlPresent(ael->attr("id")))	continue;
 		TFld::Type tp = (TFld::Type)s2i(ael->attr("tp"));
 		pEl.fldAdd(new TFld(ael->attr("id").c_str(),ael->attr("nm").c_str(),tp,
-		    (s2i(ael->attr("flg"))&(TFld::Selected|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText))|TVal::DirWrite|TVal::DirRead,
+		    (s2i(ael->attr("flg"))&(TFld::Selectable|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText))|TVal::DirWrite|TVal::DirRead,
 		    "","",ael->attr("vals").c_str(),ael->attr("names").c_str()));
 		modif(true);
 	    }

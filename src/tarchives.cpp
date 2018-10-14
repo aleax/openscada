@@ -53,7 +53,7 @@ TArchiveS::TArchiveS( ) :
     elMess.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
     elMess.fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1"));
     elMess.fldAdd(new TFld("CATEG",_("Messages categories"),TFld::String,0,"100"));
-    elMess.fldAdd(new TFld("LEVEL",_("Messages level"),TFld::Integer,TFld::Selected,"1","0",
+    elMess.fldAdd(new TFld("LEVEL",_("Messages level"),TFld::Integer,TFld::Selectable,"1","0",
 	"0;1;2;3;4;5;6;7",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)")));
     elMess.fldAdd(new TFld("ADDR",_("Address"),TFld::String,0,"100"));
     elMess.fldAdd(new TFld("REDNT",_("Redundant"),TFld::Boolean,0,"1","0"));
@@ -75,14 +75,14 @@ TArchiveS::TArchiveS( ) :
     elAval.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     elAval.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
     elAval.fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1","0"));
-    elAval.fldAdd(new TFld("SrcMode",_("Source"),TFld::Integer,TFld::Selected,"1","0",
+    elAval.fldAdd(new TFld("SrcMode",_("Source"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d",TVArchive::Passive,TVArchive::PassiveAttr,TVArchive::ActiveAttr).c_str(),
 	_("Passive;Passive param. attribute;Active param. attribute")));
     elAval.fldAdd(new TFld("Source",_("Source"),TFld::String,0,"100"));
-    elAval.fldAdd(new TFld("CombMode",_("Data combining mode"),TFld::Integer,TFld::Selected,"1","0",
+    elAval.fldAdd(new TFld("CombMode",_("Data combining mode"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d;%d",TVArchive::MovAver,TVArchive::LastVal,TVArchive::MinVal,TVArchive::MaxVal).c_str(),
 	_("Moving average;Single;Minimum;Maximum")));
-    elAval.fldAdd(new TFld("VTYPE",_("Value type"),TFld::Integer,TFld::Selected,"1","0",
+    elAval.fldAdd(new TFld("VTYPE",_("Value type"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",TFld::Boolean,TFld::Integer,TFld::Real,TFld::String,TFld::Int16,TFld::Int32,TFld::Int64,TFld::Float,TFld::Double).c_str(),
 	_("Boolean;Integer;Real;String;Int16;Int32;Int64;Real(Float);Real(Double)")));
     elAval.fldAdd(new TFld("BPER",_("Buffer period, seconds"),TFld::Real,0,"9.6","1","0;10000"));

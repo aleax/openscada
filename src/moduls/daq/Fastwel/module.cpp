@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.12"
+#define MOD_VER		"0.1.13"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -228,13 +228,13 @@ void TTpContr::postEnable(int flag)
     //> Parameter DIM762 bd structure
     int t_prm = tpParmAdd("DIM762", "PRM_BD_DIM762", _("DIM762"), true);
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;63"));
-    tpPrmAt(t_prm).fldAdd(new TFld("DI_DEBOUNCE", _("Debounce"), TFld::Integer, TFld::Selected | TCfg::NoVal, "1", "0", "0;1;2", _("No;200us;3ms")));
+    tpPrmAt(t_prm).fldAdd(new TFld("DI_DEBOUNCE", _("Debounce"), TFld::Integer, TFld::Selectable | TCfg::NoVal, "1", "0", "0;1;2", _("No;200us;3ms")));
     tpPrmAt(t_prm).fldAdd(new TFld("DI_COUNT", _("Enable counting"), TFld::Boolean, TCfg::NoVal, "1", "0"));
 
     //> Parameter DIM716 bd structure
     t_prm = tpParmAdd("DIM716", "PRM_BD_DIM716", _("DIM716"), true);
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;63"));
-    tpPrmAt(t_prm).fldAdd(new TFld("DI_DEBOUNCE", _("Debounce"), TFld::Integer, TFld::Selected | TCfg::NoVal, "1", "0", "0;1;2", _("No;200us;3ms")));
+    tpPrmAt(t_prm).fldAdd(new TFld("DI_DEBOUNCE", _("Debounce"), TFld::Integer, TFld::Selectable | TCfg::NoVal, "1", "0", "0;1;2", _("No;200us;3ms")));
     tpPrmAt(t_prm).fldAdd(new TFld("DI_COUNT", _("Enable counting"), TFld::Boolean, TCfg::NoVal, "1", "0"));
 
     //> Parameter DIM718 bd structure
@@ -244,42 +244,42 @@ void TTpContr::postEnable(int flag)
     //> Parameter AIM791 bd structure
     t_prm = tpParmAdd("AIM791", "PRM_BD_AIM791", _("AIM791"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;63"));
-    tpPrmAt(t_prm).fldAdd(new TFld("AI_RANGE", _("Input range"), TFld::Integer, TFld::Selected | TCfg::NoVal, "1", "0", "0;1;2", _("0..5mA;0..20mA;4..20mA")));
+    tpPrmAt(t_prm).fldAdd(new TFld("AI_RANGE", _("Input range"), TFld::Integer, TFld::Selectable | TCfg::NoVal, "1", "0", "0;1;2", _("0..5mA;0..20mA;4..20mA")));
     tpPrmAt(t_prm).fldAdd(new TFld("AI_SCANRATE", _("Scan Rate"), TFld::Integer, TCfg::NoVal, "3", "1", "1;250"));
     tpPrmAt(t_prm).fldAdd(new TFld("AI_FILTER", _("Filter depth"), TFld::Integer, TCfg::NoVal, "3", "0", "0;255"));
 
     //> Parameter AIM726 bd structure
     t_prm = tpParmAdd("AIM726", "PRM_BD_AIM726", _("AIM726"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;63"));
-    tpPrmAt(t_prm).fldAdd(new TFld("AI_FILTER", _("Filter depth"), TFld::Integer, TFld::Selected | TCfg::NoVal, "1", "0", "0;1:2", _("50Hz;500Hz;1000Hz")));
+    tpPrmAt(t_prm).fldAdd(new TFld("AI_FILTER", _("Filter depth"), TFld::Integer, TFld::Selectable | TCfg::NoVal, "1", "0", "0;1:2", _("50Hz;500Hz;1000Hz")));
 
     //> Parameter AIM730 bd structure
     t_prm = tpParmAdd("AIM730", "PRM_BD_AIM730", _("AIM730"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;63"));
-    tpPrmAt(t_prm).fldAdd(new TFld("AO_RANGE", _("Output range"), TFld::Integer, TFld::Selected | TCfg::NoVal, "1", "0", "0;1", _("0..20mA;4..20mA")));
+    tpPrmAt(t_prm).fldAdd(new TFld("AO_RANGE", _("Output range"), TFld::Integer, TFld::Selectable | TCfg::NoVal, "1", "0", "0;1", _("0..20mA;4..20mA")));
 
     //> Parameter AIM725 bd structure
     t_prm = tpParmAdd("AIM725", "PRM_BD_AIM725", _("AIM725"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;63"));
     tpPrmAt(t_prm).fldAdd(
-	    new TFld("AI_RANGE", _("Sensor range"), TFld::Integer, TFld::Selected | TCfg::NoVal, "1", "0", "13;0;1;2;3;4;5;7;14;8;9;10;11;12",
+	    new TFld("AI_RANGE", _("Sensor range"), TFld::Integer, TFld::Selectable | TCfg::NoVal, "1", "0", "13;0;1;2;3;4;5;7;14;8;9;10;11;12",
 		    _("PT50;PT100;PT200;PT500;PT1000;NI100;NI120;CU100;CU50;0-150 Ohm;0-300 Ohm;0-600 Ohm;0-1500 Ohm; 0-3000 Ohm")));
-    tpPrmAt(t_prm).fldAdd(new TFld("AI_TYPE", _("Sensor type"), TFld::Integer, TFld::Selected | TCfg::NoVal, "1", "0", "0;1", _("2-wire;3-wire")));
+    tpPrmAt(t_prm).fldAdd(new TFld("AI_TYPE", _("Sensor type"), TFld::Integer, TFld::Selectable | TCfg::NoVal, "1", "0", "0;1", _("2-wire;3-wire")));
 
     t_prm = tpParmAdd("DIM765_766", "PRM_BD_DIM765", _("DIM765/766"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;63"));
     for(int i = 0; i < 8; i++) {
 	tpPrmAt(t_prm).fldAdd(
-		new TFld(TSYS::strMess("DI_TYPE_%d", i).c_str(), TSYS::strMess(_("Type %d"), i).c_str(), TFld::Integer, TFld::Selected | TCfg::NoVal, "1", "0",
+		new TFld(TSYS::strMess("DI_TYPE_%d", i).c_str(), TSYS::strMess(_("Type %d"), i).c_str(), TFld::Integer, TFld::Selectable | TCfg::NoVal, "1", "0",
 			"0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;255",
 			_("No break detection;1K8;2K2;2K7;3K3;3K9;4K7;5K6;6K8;8K2;10K;12K;15K;18K;20K;22K;24K;27K;30K;33K;Type 2")));
 	tpPrmAt(t_prm).fldAdd(
 		new TFld(TSYS::strMess("DI_DEBOUNCE_ON_%d", i).c_str(), TSYS::strMess(_("Debounce on %d"), i).c_str(), TFld::Integer,
-			TFld::Selected | TCfg::NoVal, "1", "0", "0;1;2;3;4;5;6;7;8;9", _("OFF;1.4ms;2.8ms;4.2ms;9.8ms;2"
+			TFld::Selectable | TCfg::NoVal, "1", "0", "0;1;2;3;4;5;6;7;8;9", _("OFF;1.4ms;2.8ms;4.2ms;9.8ms;2"
 				"0ms;50ms;100ms;200ms;300ms")));
 	tpPrmAt(t_prm).fldAdd(
 		new TFld(TSYS::strMess("DI_DEBOUNCE_OFF_%d", i).c_str(), TSYS::strMess(_("Debounce off %d"), i).c_str(), TFld::Integer,
-			TFld::Selected | TCfg::NoVal, "1", "0", "0;1;2;3;4;5;6;7;8;9", _("OFF;1.4ms;2.8ms;4.2ms;9.8ms;20ms;50ms;100ms;200ms;300ms")));
+			TFld::Selectable | TCfg::NoVal, "1", "0", "0;1;2;3;4;5;6;7;8;9", _("OFF;1.4ms;2.8ms;4.2ms;9.8ms;20ms;50ms;100ms;200ms;300ms")));
 
     }
 }

@@ -35,7 +35,7 @@
 #define MOD_NAME	_("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.1"
+#define MOD_VER		"0.8.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
@@ -87,7 +87,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD",_("Table of parameters"),TFld::String,0,"30"));
     fldAdd(new TFld("CARD",_("Card device"),TFld::String,0,"100","<default>"));
     fldAdd(new TFld("SMPL_RATE",_("Card sample rate (Hz)"),TFld::Integer,0,"5","8000","1;200000"));
-    fldAdd(new TFld("SMPL_TYPE",_("Card sample type"),TFld::Integer,TFld::Selected,"5",i2s(paFloat32).c_str(),
+    fldAdd(new TFld("SMPL_TYPE",_("Card sample type"),TFld::Integer,TFld::Selectable,"5",i2s(paFloat32).c_str(),
 	TSYS::strMess("%d;%d;%d",paFloat32,paInt32,paInt16).c_str(),_("Float 32;Int 32;Int 16")));
     fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 

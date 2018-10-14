@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-29 18:48+0300\n"
+"POT-Creation-Date: 2018-10-14 22:48+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -188,8 +188,9 @@ msgstr ""
 "Das Format der Adresse des SSL Eingangstransports \"{addr}:{port}[:"
 "{mode}]\", wo:\n"
 "    addr - Adresse, um SSL zu öffnen, muss es eine der Adressen des Hosts "
-"sein; leere oder \"*\" Adresse öffnet den SSL für alle Schnittstellen; dort kann sowohl die symbolische Darstellung als auch IPv4 "
-"\"127.0.0.1\" oder IPv6 \"[::1]\" der Adressen sein;\n"
+"sein; leere oder \"*\" Adresse öffnet den SSL für alle Schnittstellen; dort "
+"kann sowohl die symbolische Darstellung als auch IPv4 \"127.0.0.1\" oder "
+"IPv6 \"[::1]\" der Adressen sein;\n"
 "    port - Netzwerkport auf dem das SSL geöffnet ist, Angabe des "
 "Charakternamens des Ports gemäß /etc/services ist verfügbar;\n"
 "    mode - SSL-Modus und -Version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1), "
@@ -247,6 +248,10 @@ msgstr "%s %d(%s): letzte %s; eingangstraffik %s, Ausgangs- %s; "
 #, c-format
 msgid "processing time %s[%s]; "
 msgstr "Bearbeitungszeit %s[%s]; "
+
+#, c-format
+msgid "To the host '%s'. "
+msgstr "An den Host '%s'. "
 
 #, c-format
 msgid "Traffic in %s, out %s."
@@ -334,21 +339,3 @@ msgstr "Zeitabstände"
 
 msgid "Attempts"
 msgstr "Versuche"
-
-#~ msgid "Host '%s' not found!"
-#~ msgstr "Host '%s' wurde nicht gefunden!"
-
-#~ msgid "The requested name '%s' does not have an IP address!"
-#~ msgstr "Der angeforderte Name '%s' hat keine IP-Adresse!"
-
-#~ msgid "A non-recoverable name server error occurred while for '%s'!"
-#~ msgstr ""
-#~ "Ein nicht behebbarer Name-Server-Fehler ist aufgetreten, während für '%s'!"
-
-#~ msgid "A temporary error occurred on an authoritative name server for '%s'!"
-#~ msgstr ""
-#~ "Ein temporärer Fehler aufgetreten auf einem autoritativen Nameserver für "
-#~ "'%s'!"
-
-#~ msgid "Unknown error code from gethostbyname_r for '%s'!"
-#~ msgstr "Unbekannter Fehlercode aus gethostbyname_r für '%s'!"

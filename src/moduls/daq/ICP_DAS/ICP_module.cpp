@@ -39,7 +39,7 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.8.8"
+#define MOD_VER		"1.8.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides implementation for 'ICP DAS' hardware support.\
  Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
@@ -95,10 +95,10 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("BUS",_("Bus"),TFld::Integer,TFld::Selected,"2","1","-1;0;1;2;3;4;5;6;7;8;9;10",
+    fldAdd(new TFld("BUS",_("Bus"),TFld::Integer,TFld::Selectable,"2","1","-1;0;1;2;3;4;5;6;7;8;9;10",
 	    _("ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;COM 9;COM 10")));
     fldAdd(new TFld("TR_OSCD",_("Transport"),TFld::String,TFld::NoFlag,i2s(2*atoi(OBJ_ID_SZ)+5).c_str(),TrIcpDasNm));
-    fldAdd(new TFld("BAUD",_("Baudrate"),TFld::Integer,TFld::Selected,"6","115200",
+    fldAdd(new TFld("BAUD",_("Baudrate"),TFld::Integer,TFld::Selectable,"6","115200",
 	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600",
 	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600"));
     fldAdd(new TFld("LP_PRMS",_("LinPAC parameters"),TFld::String,TFld::FullText,"1000"));

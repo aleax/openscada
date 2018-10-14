@@ -435,8 +435,8 @@ void TTpContr::postEnable(int flag)
     TTypeDAQ::postEnable(flag);
 
     //> Controler's bd structure
-    fldAdd(new TFld("CTRTYPE", _("Type"), TFld::String, TFld::Selected, "5", "Logic", "Logic;DAQ", _("Logic;DAQ")));
-    fldAdd(new TFld("PRTTYPE", _("Protocol"), TFld::String, TFld::Selected, "5", "GRS", "GRS;KA", _("GRS;KA")));
+    fldAdd(new TFld("CTRTYPE", _("Type"), TFld::String, TFld::Selectable, "5", "Logic", "Logic;DAQ", _("Logic;DAQ")));
+    fldAdd(new TFld("PRTTYPE", _("Protocol"), TFld::String, TFld::Selectable, "5", "GRS", "GRS;KA", _("GRS;KA")));
     fldAdd(new TFld("PRM_BD_BUC", _("BUC Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("PRM_BD_BVTS", _("BVTS Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("PRM_BD_BVT", _("BVT Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
@@ -454,7 +454,7 @@ void TTpContr::postEnable(int flag)
     fldAdd(new TFld("PRM_BD_TANK", _("TANK Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("SCHEDULE", _("Acquisition schedule"), TFld::String, TFld::NoFlag, "100", "1"));
     fldAdd(new TFld("PRIOR", _("Priority of the acquisition task"), TFld::Integer, TFld::NoFlag, "2", "0", "-1;199"));
-    //fldAdd(new TFld("TO_PRTR",_("Blocs"),TFld::String,TFld::Selected,"5","BUC","BUC;BTR;BVT;BVTS;BPI",_("BUC;BTR;BVT;BVTS;BPI")));
+    //fldAdd(new TFld("TO_PRTR",_("Blocs"),TFld::String,TFld::Selectable,"5","BUC","BUC;BTR;BVT;BVTS;BPI",_("BUC;BTR;BVT;BVTS;BPI")));
     fldAdd(new TFld("NODE", _("Addres"), TFld::Integer, TFld::NoFlag, "2", "1", "1;63"));
     fldAdd(new TFld("ADDR", _("Transport address"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("NCHANNEL", _("Channels count/Stantion address"), TFld::Integer, TFld::NoFlag, "2", "1", "1;63"));
@@ -523,7 +523,7 @@ void TTpContr::postEnable(int flag)
     t_prm = tpParmAdd("tp_GZD", "PRM_BD_GZD", _("GZD"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "6", "0;15"));
     tpPrmAt(t_prm).fldAdd(new TFld("CHAN_COUNT", _("Channels count"), TFld::Integer, TCfg::NoVal, "3", "1", "0;48"));
-    tpPrmAt(t_prm).fldAdd(new TFld("VALVE_TYPE", _("Valve type"), TFld::Integer, TFld::Selected | TCfg::NoVal, "1", "0", "0;1", _("5 TU;6 TU")));
+    tpPrmAt(t_prm).fldAdd(new TFld("VALVE_TYPE", _("Valve type"), TFld::Integer, TFld::Selectable | TCfg::NoVal, "1", "0", "0;1", _("5 TU;6 TU")));
     tpPrmAt(t_prm).fldAdd(new TFld("WITH_PARAMS", _("With parameters"), TFld::Boolean, TCfg::NoVal, "1", "0"));
 
     t_prm = tpParmAdd("tp_GNS", "PRM_BD_GNS", _("GNS"));

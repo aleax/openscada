@@ -50,7 +50,7 @@
 #define MOD_NAME	_("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.3.2"
+#define MOD_VER		"2.3.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
 #define LICENSE		"GPL2"
@@ -124,7 +124,7 @@ void TTpContr::postEnable( int flag )
     daReg(new QSensor());
 
     //Controler's bd structure
-    fldAdd(new TFld("AUTO_FILL",_("Auto create active data sources"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3",_("Manual;Fast sources;Slow sources;All sources")));
+    fldAdd(new TFld("AUTO_FILL",_("Auto create active data sources"),TFld::Integer,TFld::Selectable,"1","0","0;1;2;3",_("Manual;Fast sources;Slow sources;All sources")));
     fldAdd(new TFld("PRM_BD",_("Table of system parameters"),TFld::String,TFld::NoFlag,"30","system"));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
@@ -140,8 +140,8 @@ void TTpContr::postEnable( int flag )
 	el_name = el_name+_(daGet(list[iLs])->name().c_str())+";";
     }
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("TYPE",_("System part"),TFld::String,TFld::Selected|TCfg::NoVal,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()));
-    tpPrmAt(t_prm).fldAdd(new TFld("SUBT" ,"",TFld::String,TFld::Selected|TCfg::NoVal|TFld::SelfFld,"255"));
+    tpPrmAt(t_prm).fldAdd(new TFld("TYPE",_("System part"),TFld::String,TFld::Selectable|TCfg::NoVal,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()));
+    tpPrmAt(t_prm).fldAdd(new TFld("SUBT" ,"",TFld::String,TFld::Selectable|TCfg::NoVal|TFld::SelfFld,"255"));
     tpPrmAt(t_prm).fldAdd(new TFld("ADD_PRMS",_("Additional parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
 }
 

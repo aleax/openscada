@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.9.5"
+#define MOD_VER		"3.9.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -405,7 +405,25 @@ Contr::~Contr( )
 
 }
 
-void Contr::postDisable(int flag)
+TCntrNode &Contr::operator=( const TCntrNode &node )
+{
+    TController::operator=(node);
+
+    Contr *src_n = const_cast<Contr*>(dynamic_cast<const Contr*>(&node));
+    if(!src_n || !src_n->enableStat() || !enableStat()) return *this;
+
+    //IO values copy
+    for(int iIO = 0; iIO < src_n->ioSize(); iIO++)
+	if(isDAQTmpl && src_n->ioFlg(iIO)&TPrmTempl::CfgLink)
+	    lnkAddrSet(iIO, src_n->lnkAddr(iIO));
+	else setS(iIO, src_n->getS(iIO));
+
+    if(isDAQTmpl) chkLnkNeed = initLnks();
+
+    return *this;
+}
+
+void Contr::postDisable( int flag )
 {
     try {
 	if(flag) {
@@ -472,7 +490,7 @@ void Contr::enable_( )
 
 void Contr::disable_( )
 {
-    lnkClear(true);
+    cleanLnks(true);
 }
 
 void Contr::load_( )
@@ -488,13 +506,7 @@ void Contr::loadFunc( bool onlyVl )
 	if(!onlyVl && !isDAQTmpl) ((Func*)func())->load();
 
 	// Init attrubutes
-	if(isDAQTmpl)
-	    for(int iIO = 0; iIO < func()->ioSize(); iIO++) {
-		if((func()->io(iIO)->flg()&TPrmTempl::CfgLink) && !lnkPresent(iIO)) {
-		    lnkAdd(iIO, TPrmTempl::Impl::SLnk());
-		    setS(iIO, EVAL_STR);
-		}
-	    }
+	if(isDAQTmpl)	addLinksAttrs();
 
 	//Creating special IO
 	if(!isDAQTmpl) {
@@ -516,12 +528,12 @@ void Contr::loadFunc( bool onlyVl )
 	    if(!isDAQTmpl) setS(ioId, cfg.cfg("VAL").getS());
 	    else {
 		if(func()->io(ioId)->flg()&TPrmTempl::CfgLink)
-		    lnkAttrSet(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));	//Force no translated
+		    lnkAddrSet(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));	//Force no translated
 		else if(func()->io(ioId)->type() != IO::String) setS(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));		//Force no translated
 		else setS(ioId, cfg.cfg("VAL").getS());
 	    }
 	}
-	if(isDAQTmpl) chkLnkNeed = initTmplLnks();
+	if(isDAQTmpl) chkLnkNeed = initLnks();
     }
 }
 
@@ -549,7 +561,7 @@ void Contr::save_( )
 	    if(!isDAQTmpl) cfg.cfg("VAL").setS(getS(iio));
 	    else {
 		cfg.cfg("VAL").setNoTransl(!(func()->io(iio)->type()==IO::String && !(func()->io(iio)->flg()&TPrmTempl::CfgLink)));
-		if(func()->io(iio)->flg()&TPrmTempl::CfgLink)	cfg.cfg("VAL").setS(lnkAttr(iio));
+		if(func()->io(iio)->flg()&TPrmTempl::CfgLink)	cfg.cfg("VAL").setS(lnkAddr(iio));
 		else cfg.cfg("VAL").setS(getS(iio));
 	    }
 	    SYS->db().at().dataSet(val_bd, mod->nodePath()+bd_tbl, cfg);
@@ -604,7 +616,7 @@ void *Contr::Task( void *icntr )
 
     while(true) {
 	if(!cntr.redntUse()) {
-	    if(cntr.chkLnkNeed)	cntr.chkLnkNeed = cntr.initTmplLnks();
+	    if(cntr.chkLnkNeed)	cntr.chkLnkNeed = cntr.initLnks(true);
 
 	    cntr.callSt = true;
 	    t_cnt = TSYS::curTime();
@@ -800,7 +812,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		    break;
 		case 4:
 		    setS(row, opt->text());
-		    if(isDAQTmpl) outputLink(row, opt->text());
+		    if(isDAQTmpl) lnkOutput(row, opt->text());
 		    break;
 	    }
 	    modif();
@@ -932,7 +944,7 @@ void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     try {
 	int io_id = ((Contr &)owner()).ioId(vo.fld().reserve());
 	if(io_id < 0) disable();
-	else if(!((Contr&)owner()).outputLink(io_id,vl)) ((Contr&)owner()).set(io_id, vl);
+	else if(!((Contr&)owner()).lnkOutput(io_id,vl)) ((Contr&)owner()).set(io_id, vl);
     } catch(TError &err) { disable(); }
 }
 

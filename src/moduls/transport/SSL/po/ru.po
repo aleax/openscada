@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-29 18:48+0300\n"
+"POT-Creation-Date: 2018-10-14 22:48+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -182,8 +182,9 @@ msgid ""
 "default and in error, the safest and most appropriate one is used."
 msgstr ""
 "Входной SSL транспорт имеет формат адреса \"{addr}:{port}[:{mode}]\", где:\n"
-"    addr - адрес открытия SSL, должен быть одним из адресов хоста; пустой адрес или \"*\" открывает SSL на всех "
-"интерфейсах; допускаются как символьное, так и IPv4 \"127.0.0.1\" или IPv6 \"[::1]\" представление "
+"    addr - адрес открытия SSL, должен быть одним из адресов хоста; пустой "
+"адрес или \"*\" открывает SSL на всех интерфейсах; допускаются как "
+"символьное, так и IPv4 \"127.0.0.1\" или IPv6 \"[::1]\" представление "
 "адреса;\n"
 "    port - сетевой порт на котором открывается SSL, возможно указание "
 "символьного имени порта согласно /etc/services;\n"
@@ -242,6 +243,10 @@ msgstr "%s %d(%s): последний %s; трафик входящий %s, ис
 #, c-format
 msgid "processing time %s[%s]; "
 msgstr "время обработки %s[%s]; "
+
+#, c-format
+msgid "To the host '%s'. "
+msgstr "К хосту '%s'. "
 
 #, c-format
 msgid "Traffic in %s, out %s."
@@ -329,18 +334,3 @@ msgstr "Временные интервалы"
 
 msgid "Attempts"
 msgstr "Попыток"
-
-#~ msgid "Host '%s' not found!"
-#~ msgstr "Хост '%s' не найден!"
-
-#~ msgid "The requested name '%s' does not have an IP address!"
-#~ msgstr "Запрошенное имя '%s' не имеет IP адресов!"
-
-#~ msgid "A non-recoverable name server error occurred while for '%s'!"
-#~ msgstr "Возникла неисправимая ошибка сервера имён для '%s'!"
-
-#~ msgid "A temporary error occurred on an authoritative name server for '%s'!"
-#~ msgstr "Возникла временная ошибка авторитетного сервера имён для '%s'!"
-
-#~ msgid "Unknown error code from gethostbyname_r for '%s'!"
-#~ msgstr "Неизвестная ошибка gethostbyname_r для '%s'!"
