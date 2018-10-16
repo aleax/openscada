@@ -1,3 +1,9 @@
+2018-10-16 Roman (stable)
+- UI.Vision: Table forming prevented from the fliclking.
+- !!:FIX:UI.WebVision: Control interface's pages prevented from overriding service attribute "id" of the main tag,
+    which causes to impossibility to open an external window.
+
+
 2018-10-14 Roman (stable)
 - DB.OscadaLibs: DevLib.ModBusScan: the ModBus scanner implementation improved for the list attribute "type" direct creation
     with the new DAQ-template's function. tmplib_S7.test: some expanded for testing new functions of the module "DAQ.Siemens".

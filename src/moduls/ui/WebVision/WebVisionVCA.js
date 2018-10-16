@@ -626,7 +626,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	if(this.attrs['focus'] && parseInt(this.attrs['focus'])) setFocus(this.addr,true);
 
 	this.place.className = "Primitive " + this.attrs['root'];
-	this.place.setAttribute("id", this.addr.slice(this.addr.lastIndexOf("/")+1));	// this.addr.replace("/"+sessId,"").replace(/\//g, "_"));
+	if(!this.place.getAttribute("id"))
+	    this.place.setAttribute("id", this.addr.slice(this.addr.lastIndexOf("/")+1));	// this.addr.replace("/"+sessId,"").replace(/\//g, "_"));
 
 	var isPrim = true;
 	if(!(parseInt(this.attrs['perm'])&SEC_RD)) {

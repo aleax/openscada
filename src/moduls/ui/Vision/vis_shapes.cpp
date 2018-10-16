@@ -695,8 +695,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		QTableWidget *wdg = (QTableWidget*)shD->addrWdg;
 		((QVBoxLayout*)w->layout())->activate();
 
-		if(wdg->columnCount() > 1) wdg->resizeColumnsToContents();
 		for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();	//Call all cascade events
+
+		if(wdg->columnCount() > 1) wdg->resizeColumnsToContents();
 		if(wdg->property("colsWdthFit").toBool() && wdg->rowCount()) {
 		    int tblWdth = wdg->maximumViewportSize().width() - (wdg->verticalScrollBar()?wdg->verticalScrollBar()->size().width():0);
 		    int averWdth = tblWdth/wdg->columnCount();
