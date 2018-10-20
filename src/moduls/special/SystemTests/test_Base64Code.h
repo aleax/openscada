@@ -44,25 +44,25 @@ class TestBase64Code : public TFunction
 	{
 	    try
 	    {
-		mod->mess(id(),_("Test: Start"));
+		mod->mess(id(), _("Test: Start"));
 
 		string inbuf, outbuf;
 		for(int i_s = 0; i_s < 256; i_s++) inbuf.push_back((unsigned char)i_s);
 
-		mod->mess(id(),_("Test1: Encoding."));
+		mod->mess(id(), _("Test1: Encoding."));
 		int64_t st_cnt = TSYS::curTime();
 		outbuf = TSYS::strEncode(inbuf,TSYS::base64);
-		mod->mess(id(),_("Encoded text by length %d for time %f ms."),inbuf.size(),1e-3*(TSYS::curTime()-st_cnt));
+		mod->mess(id(), _("Encoded text at length %d for time %f ms."),inbuf.size(),1e-3*(TSYS::curTime()-st_cnt));
 		mod->mess(id(),TSYS::strMess(_("Encoded text: %s"),outbuf.c_str()).c_str());
 		mod->mess(id(),_("Test1: Passed."));
 
 		mod->mess(id(),_("Test2: Decoding."));
 		st_cnt = TSYS::curTime();
 		inbuf = TSYS::strDecode(outbuf,TSYS::base64);
-		mod->mess(id(),_("Decoded text by length %d for time %f ms."),outbuf.size(),1e-3*(TSYS::curTime()-st_cnt));
+		mod->mess(id(),_("Decoded text at length %d for time %f ms."),outbuf.size(),1e-3*(TSYS::curTime()-st_cnt));
 		for(int i_s = 0; i_s < 256; i_s++) 
 		    if((unsigned char)inbuf[i_s] != i_s) 
-			throw TError(nodePath().c_str(),_("Test2: Failed. Decoding error."));
+			throw TError(nodePath().c_str(),_("Test2: Failed. Error decoding."));
 		mod->mess(id(),_("Test2: Passed."));
 
 		mod->mess(id(),_("Test: Passed"));

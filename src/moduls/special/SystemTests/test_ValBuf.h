@@ -38,7 +38,7 @@ class TestValBuf : public TFunction
 	}
 
 	string name( )	{ return _("Value buffer"); }
-	string descr( )	{ return _("The tests of the values buffer.\nContains 13 tests of all aspects of the value buffer (the subsystem \"Archives\")."); }
+	string descr( )	{ return _("Tests of the value buffer.\nContains 13 tests of all aspects of the value buffer (the subsystem \"Archives-History\")."); }
 
 	void calc( TValFunc *val )
 	{
@@ -57,24 +57,24 @@ class TestValBuf : public TFunction
 		buf = new TValBuf( TFld::String, 10, 1000000, true, false );
 		if( buf->valType() == TFld::String && buf->size() == 10 && buf->period() == 1000000 && buf->hardGrid() && !buf->highResTm() )
 		    mod->mess(id(),_("%s: Passed."),test.c_str());
-		else throw TError(nodePath().c_str(),_("Create buffer error."));
+		else throw TError(nodePath().c_str(),_("Error creating a buffer."));
 
 		//--------------------------- Test 2 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),2);
-		mod->mess(id(),_("%s: Change buffer mode."),test.c_str());
+		mod->mess(id(),_("%s: Change the buffer mode."),test.c_str());
 		buf->setHardGrid( false );
-		if( buf->hardGrid() == false )	mod->mess(id(),_("Disable hard grid ok."));
-		else throw TError(nodePath().c_str(),_("Disable hard grid failed."));
+		if( buf->hardGrid() == false )	mod->mess(id(),_("OK disabling the hard grid."));
+		else throw TError(nodePath().c_str(),_("Fail disabling the hard grid."));
 		buf->setHighResTm(true);
-		if( buf->highResTm() == true )	mod->mess(id(),_("Set high resolution time ok."));
-		else throw TError(nodePath().c_str(),_("Set high resolution time failed."));
+		if( buf->highResTm() == true )	mod->mess(id(),_("OK setting the high resolution time."));
+		else throw TError(nodePath().c_str(),_("Fail setting the high resolution time."));
 		buf->setSize( 500 );
 		buf->setSize( 2000 );
-		if( buf->size() == 2000 )	mod->mess(id(),_("Change buffer size ok."));
-		else throw TError(nodePath().c_str(),_("Change buffer size failed."));
+		if( buf->size() == 2000 )	mod->mess(id(),_("OK changing the buffer size."));
+		else throw TError(nodePath().c_str(),_("Fail changing the buffer size."));
 		buf->setPeriod(0);
-		if( buf->period() == 0 )	mod->mess(id(),_("Change period ok."));
-		else throw TError(nodePath().c_str(),_("Change period failed."));
+		if( buf->period() == 0 )	mod->mess(id(),_("OK changing the period."));
+		else throw TError(nodePath().c_str(),_("Fail changing the period."));
 		mod->mess(id(),_("%s: Passed."),test.c_str());
 
 		//--------------------------- Test 3 ----------------------------------
@@ -85,21 +85,21 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 4 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),4);
-		mod->mess(id(),_("%s: Fill and check hard time grid string buffer."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check the hard time grid string buffer."),test.c_str());
 		buf = new TValBuf( TFld::String, 10, 100000, true, true );
 		wtm = buf->period()*(TSYS::curTime()/buf->period());
 		//Not full fill
 		for(int i=0; i<buf->size()/2; i++)
 		    buf->setS("Test: "+i2s(i),wtm+i*buf->period());
 		if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin or/and end at filling a half buffer."));
 		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period() )
 		{
 		    rtm = i;
 		    if(buf->getS(&rtm) != "Test: "+i2s((i-wtm)/buf->period()))
-			throw TError(nodePath().c_str(),_("Write a half buffer values error."));
+			throw TError(nodePath().c_str(),_("Error writing to half of the value buffer."));
 		}
-		mod->mess(id(),_("Write a half buffer ok."));
+		mod->mess(id(),_("OK writing a half buffer."));
 		//Roll buff
 		for(int i=buf->size()/2; i<buf->size()+5; i++)
 		    switch(i)
@@ -112,7 +112,7 @@ class TestValBuf : public TFunction
 			default:buf->setS("Test: "+i2s(i),wtm+i*buf->period());
 		    }
 		if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+5))
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin and/or end when filling in a circle."));
 		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{
 		    rtm = i;
@@ -120,14 +120,14 @@ class TestValBuf : public TFunction
 			    ((i-wtm)/buf->period() == 10 && buf->getS(&rtm) == "Test: 11" ) ||
 			    ((i-wtm)/buf->period() == 11 && buf->getS(&rtm) == EVAL_STR) ||
 			    buf->getS(&rtm) == "Test: "+i2s((i-wtm)/buf->period())) )
-			throw TError(nodePath().c_str(),_("Write a roll buffer values error."));
+			throw TError(nodePath().c_str(),_("Error writing the value buffer in a circle."));
 		}
-		mod->mess(id(),_("Write a roll buffer ok."));
+		mod->mess(id(),_("OK writing the value buffer in a circle."));
 		rtm = buf->end();
 		buf->setS("Test up.",rtm);
 		if(buf->getS(&rtm) != "Test up.")
-		    throw TError(nodePath().c_str(),_("Update buffer end error."));
-		mod->mess(id(),_("Update buffer end ok."));
+		    throw TError(nodePath().c_str(),_("Error updating the buffer end."));
+		mod->mess(id(),_("OK updating the buffer end."));
 
 		wtm += buf->period()*(buf->size()+5);
 		st_cnt = TSYS::curTime();
@@ -146,21 +146,21 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 5 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),5);
-		mod->mess(id(),_("%s: Fill and check hard time grid integer buffer."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check the hard time grid integer buffer."),test.c_str());
 		buf = new TValBuf(TFld::Integer, 10, 100000, true, true);
 		wtm = buf->period()*(TSYS::curTime()/buf->period());
 		//Not full fill
 		for(int i=0; i<buf->size()/2; i++)
 		    buf->setI(i,wtm+i*buf->period());
 		if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin or/and end at filling a half buffer."));
 		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{
 		    rtm = i;
 		    if(buf->getI(&rtm) != (i-wtm)/buf->period())
-			throw TError(nodePath().c_str(),_("Write a half buffer values error."));
+			throw TError(nodePath().c_str(),_("Error writing to half of the value buffer."));
 		}
-		mod->mess(id(),_("Write a half buffer ok."));
+		mod->mess(id(),_("OK writing a half buffer."));
 		//Roll buff
 		for(int i=buf->size()/2; i<buf->size()+5; i++)
 		    switch(i)
@@ -173,7 +173,7 @@ class TestValBuf : public TFunction
 			default:buf->setI(i,wtm+i*buf->period());
 		    }
 		if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+5))
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin and/or end when filling in a circle."));
 		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{
 		    rtm = i;
@@ -181,14 +181,14 @@ class TestValBuf : public TFunction
 			    ((i-wtm)/buf->period() == 10 && buf->getI(&rtm) == 11 ) ||
 			    ((i-wtm)/buf->period() == 11 && buf->getI(&rtm) == EVAL_INT) ||
 			    buf->getI(&rtm) == (i-wtm)/buf->period()) )
-			throw TError(nodePath().c_str(),_("Write a roll buffer values error."));
+			throw TError(nodePath().c_str(),_("Error writing the value buffer in a circle."));
 		}
-		mod->mess(id(),_("Write a roll buffer ok."));
+		mod->mess(id(),_("OK writing the value buffer in a circle."));
 		rtm = buf->end();
 		buf->setI(100,rtm);
 		if(buf->getI(&rtm) != 100)
-		    throw TError(nodePath().c_str(),_("Update buffer end error."));
-		mod->mess(id(),_("Update buffer end ok."));
+		    throw TError(nodePath().c_str(),_("Error updating the buffer end."));
+		mod->mess(id(),_("OK updating the buffer end."));
 
 		wtm += buf->period()*(buf->size()+5);
 		st_cnt = TSYS::curTime();
@@ -207,25 +207,24 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 6 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),6);
-		mod->mess(id(),_("%s: Fill and check soft time grid string buffer (high time)."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check the soft time grid string buffer (high time)."),test.c_str());
 		buf = new TValBuf( TFld::String, 10, 100000, false, true );
 		wtm = buf->period()*(TSYS::curTime()/buf->period());
 		//Not full fill
 		for(int i=0; i<buf->size()/2; i++)
 		    buf->setS("Test: "+i2s(i),wtm+i*buf->period());
 		if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin or/and end at filling a half buffer."));
 		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period() )
 		{
 		    rtm = i;
 		    if(buf->getS(&rtm) != "Test: "+i2s((i-wtm)/buf->period()))
-			throw TError(nodePath().c_str(),_("Write a half buffer values error."));
+			throw TError(nodePath().c_str(),_("Error writing to half of the value buffer."));
 		}
-		mod->mess(id(),_("Write a half buffer ok."));
+		mod->mess(id(),_("OK writing a half buffer."));
 		//Roll buff
 		for(int i=buf->size()/2; i<buf->size()+5; i++)
-		    switch(i)
-		    {
+		    switch(i) {
 			//Pass one value
 			case 7: continue;
 			//Drift values
@@ -235,23 +234,22 @@ class TestValBuf : public TFunction
 			default:buf->setS("Test: "+i2s(i),wtm+i*buf->period());
 		    }
 		if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
-		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
-		{
+		    throw TError(nodePath().c_str(),_("Error the buffer begin and/or end when filling in a circle."));
+		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period()) {
 		    rtm = i;
 		    if( !(((i-wtm)/buf->period() == 7 && buf->getS(&rtm) == EVAL_STR) ||
 			    ((i-wtm)/buf->period() == 10 && buf->getS(&rtm) == "Test: 11" ) ||
 			    ((i-wtm)/buf->period() == 11 && buf->getS(&rtm) == EVAL_STR) ||
 			    ((i-wtm)/buf->period() == 13 && buf->getS(&rtm) == "Test: 12") ||
 			    buf->getS(&rtm) == "Test: "+i2s((i-wtm)/buf->period())) )
-			throw TError(nodePath().c_str(),_("Write a roll buffer values error."));
+			throw TError(nodePath().c_str(),_("Error writing the value buffer in a circle."));
 		}
-		mod->mess(id(),_("Write a roll buffer ok."));
+		mod->mess(id(),_("OK writing the value buffer in a circle."));
 		rtm = buf->end();
 		buf->setS("Test up.",rtm);
 		if(buf->getS(&rtm) != "Test up.")
-		    throw TError(nodePath().c_str(),_("Update buffer end error."));
-		mod->mess(id(),_("Update buffer end ok."));
+		    throw TError(nodePath().c_str(),_("Error updating the buffer end."));
+		mod->mess(id(),_("OK updating the buffer end."));
 
 		wtm += buf->period()*(buf->size()+5);
 		st_cnt = TSYS::curTime();
@@ -270,21 +268,21 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 7 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),7);
-		mod->mess(id(),_("%s: Fill and check soft time grid integer buffer (high time)."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check the soft time grid integer buffer (high time)."),test.c_str());
 		buf = new TValBuf( TFld::Integer, 10, 100000, false, true );
 		wtm = buf->period()*(TSYS::curTime()/buf->period());
 		//Not full fill
 		for(int i=0; i<buf->size()/2; i++)
 		    buf->setI(i,wtm+i*buf->period());
 		if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin or/and end at filling a half buffer."));
 		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period() )
 		{
 		    rtm = i;
 		    if(buf->getI(&rtm) != (i-wtm)/buf->period())
-			throw TError(nodePath().c_str(),_("Write a half buffer values error."));
+			throw TError(nodePath().c_str(),_("Error writing to half of the value buffer."));
 		}
-		mod->mess(id(),_("Write a half buffer ok."));
+		mod->mess(id(),_("OK writing a half buffer."));
 		//Roll buff
 		for(int i=buf->size()/2; i<buf->size()+5; i++)
 		    switch(i)
@@ -298,7 +296,7 @@ class TestValBuf : public TFunction
 			default:buf->setI(i,wtm+i*buf->period());
 		    }
 		if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin and/or end when filling in a circle."));
 		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{
 		    rtm = i;
@@ -307,14 +305,14 @@ class TestValBuf : public TFunction
 			    ((i-wtm)/buf->period() == 11 && buf->getI(&rtm) == EVAL_INT) ||
 			    ((i-wtm)/buf->period() == 13 && buf->getI(&rtm) == 12) ||
 			    buf->getI(&rtm) == (i-wtm)/buf->period()) )
-			throw TError(nodePath().c_str(),_("Write a roll buffer values error."));
+			throw TError(nodePath().c_str(),_("Error writing the value buffer in a circle."));
 		}
-		mod->mess(id(),_("Write a roll buffer ok."));
+		mod->mess(id(),_("OK writing the value buffer in a circle."));
 		rtm = buf->end();
 		buf->setI(1000,rtm);
 		if(buf->getI(&rtm) != 1000)
-		    throw TError(nodePath().c_str(),_("Update buffer end error."));
-		mod->mess(id(),_("Update buffer end ok."));
+		    throw TError(nodePath().c_str(),_("Error updating the buffer end."));
+		mod->mess(id(),_("OK updating the buffer end."));
 
 		wtm += buf->period()*(buf->size()+5);
 		st_cnt = TSYS::curTime();
@@ -333,21 +331,21 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 8 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),8);
-		mod->mess(id(),_("%s: Fill and check soft time grid string buffer (low time)."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check the soft time grid string buffer (low time)."),test.c_str());
 		buf = new TValBuf( TFld::String, 10, 1000000, false, false );
 		wtm = buf->period()*(TSYS::curTime()/buf->period());
 		//Not full fill
 		for(int i=0; i<buf->size()/2; i++)
 		    buf->setS("Test: "+i2s(i),wtm+i*buf->period());
 		if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin or/and end at filling a half buffer."));
 		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period() )
 		{
 		    rtm = i;
 		    if(buf->getS(&rtm) != "Test: "+i2s((i-wtm)/buf->period()))
-			throw TError(nodePath().c_str(),_("Write a half buffer values error."));
+			throw TError(nodePath().c_str(),_("Error writing to half of the value buffer."));
 		}
-		mod->mess(id(),_("Write a half buffer ok."));
+		mod->mess(id(),_("OK writing a half buffer."));
 		//Roll buff
 		for(int i=buf->size()/2; i<buf->size()+5; i++)
 		    switch(i)
@@ -361,7 +359,7 @@ class TestValBuf : public TFunction
 			default:buf->setS("Test: "+i2s(i),wtm+i*buf->period());
 		    }
 		if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin and/or end when filling in a circle."));
 		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{
 		    rtm = i;
@@ -370,13 +368,13 @@ class TestValBuf : public TFunction
 			    ((i-wtm)/buf->period() == 11 && buf->getS(&rtm) == EVAL_STR) ||
 			    ((i-wtm)/buf->period() == 13 && buf->getS(&rtm) == "Test: 12") ||
 			    buf->getS(&rtm) == "Test: "+i2s((i-wtm)/buf->period())) )
-			throw TError(nodePath().c_str(),_("Write a roll buffer values error.") );
+			throw TError(nodePath().c_str(),_("Error writing the value buffer in a circle.") );
 		}
-		mod->mess(id(),_("Write a roll buffer ok."));
+		mod->mess(id(),_("OK writing the value buffer in a circle."));
 		rtm = buf->end();
 		buf->setS("Test up.",rtm);
-		if(buf->getS(&rtm) != "Test up.") throw TError(nodePath().c_str(),_("Update buffer end error."));
-		mod->mess(id(),_("Update buffer end ok."));
+		if(buf->getS(&rtm) != "Test up.") throw TError(nodePath().c_str(),_("Error updating the buffer end."));
+		mod->mess(id(),_("OK updating the buffer end."));
 
 		wtm += buf->period()*(buf->size()+5);
 		st_cnt = TSYS::curTime();
@@ -395,20 +393,20 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 9 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),9);
-		mod->mess(id(),_("%s: Fill and check soft time grid integer buffer (low time)."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check the soft time grid integer buffer (low time)."),test.c_str());
 		buf = new TValBuf( TFld::Integer, 10, 1000000, false, false );
 		wtm = buf->period()*(TSYS::curTime()/buf->period());
 		//Not full fill
 		for(int i=0; i<buf->size()/2; i++)
 		    buf->setI(i,wtm+i*buf->period());
 		if(!(buf->end()/buf->period() == wtm/buf->period()+(buf->size()/2)-1 && buf->begin()/buf->period() == wtm/buf->period()))
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin or/and end at filling a half buffer."));
 		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period() )
 		{
 		    rtm = i;
-		    if(buf->getI(&rtm) != (i-wtm)/buf->period()) throw TError(nodePath().c_str(),_("Write a half buffer values error."));
+		    if(buf->getI(&rtm) != (i-wtm)/buf->period()) throw TError(nodePath().c_str(),_("Error writing to half of the value buffer."));
 		}
-		mod->mess(id(),_("Write a half buffer ok."));
+		mod->mess(id(),_("OK writing a half buffer."));
 		//Roll buff
 		for(int i=buf->size()/2; i<buf->size()+5; i++)
 		    switch(i)
@@ -422,7 +420,7 @@ class TestValBuf : public TFunction
 			default:buf->setI(i,wtm+i*buf->period());
 		    }
 		if(!(buf->end()/buf->period() == wtm/buf->period()+buf->size()+4 && buf->begin()/buf->period() == wtm/buf->period()+4))
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin and/or end when filling in a circle."));
 		for(int64_t i = buf->begin(); i <= buf->end(); i+=buf->period())
 		{
 		    rtm = i;
@@ -431,13 +429,13 @@ class TestValBuf : public TFunction
 			    ((i-wtm)/buf->period() == 11 && buf->getI(&rtm) == EVAL_INT) ||
 			    ((i-wtm)/buf->period() == 13 && buf->getI(&rtm) == 12) ||
 			    buf->getI(&rtm) == (i-wtm)/buf->period()) )
-			throw TError(nodePath().c_str(),_("Write a roll buffer values error."));
+			throw TError(nodePath().c_str(),_("Error writing the value buffer in a circle."));
 		}
-		mod->mess(id(),_("Write a roll buffer ok."));
+		mod->mess(id(),_("Error writing the value buffer in a circle."));
 		rtm = buf->end();
 		buf->setI(1000,rtm);
-		if(buf->getI(&rtm) != 1000) throw TError(nodePath().c_str(),_("Update buffer end error."));
-		mod->mess(id(),_("Update buffer end ok."));
+		if(buf->getI(&rtm) != 1000) throw TError(nodePath().c_str(),_("Error updating the buffer end."));
+		mod->mess(id(),_("OK updating the buffer end."));
 
 		wtm += buf->period()*(buf->size()+5);
 		st_cnt = TSYS::curTime();
@@ -456,7 +454,7 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 10 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),10);
-		mod->mess(id(),_("%s: Fill and check free time string buffer (high time)."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check the free time string buffer (high time)."),test.c_str());
 		buf = new TValBuf( TFld::String, 10, 0, false, true );
 		wtm = TSYS::curTime();
 		int wper = 100000;
@@ -464,12 +462,12 @@ class TestValBuf : public TFunction
 		for(int i=0; i<buf->size()/2; i++)
 		    buf->setS("Test: "+i2s(i),wtm+wper*i);
 		if(!(buf->end() == wtm+wper*((buf->size()/2)-1) && buf->begin() == wtm) )
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin or/and end at filling a half buffer."));
 		int icnt = buf->size()/2 - 1;
 		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt-- )
 		    if(buf->getS(&i) != "Test: "+i2s(icnt))
-			throw TError(nodePath().c_str(),_("Write a half buffer values error."));
-		mod->mess(id(),_("Write a half buffer ok."));
+			throw TError(nodePath().c_str(),_("Error writing to half of the value buffer."));
+		mod->mess(id(),_("OK writing a half buffer."));
 		//Roll buff
 		for(int i=buf->size()/2; i<buf->size()+5; i++)
 		    switch(i)
@@ -483,7 +481,7 @@ class TestValBuf : public TFunction
 			default:buf->setS("Test: "+i2s(i),wtm+wper*i);
 		    }
 		if(!(buf->end() == wtm+wper*(buf->size()+4) && buf->begin() == wtm+3*wper) )
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin and/or end when filling in a circle."));
 		icnt = buf->size()+4;
 		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt--)
 		{
@@ -491,13 +489,13 @@ class TestValBuf : public TFunction
 		    //printf("Value %lld: %s\n",rtm,val.c_str());
 		    if(icnt == 12 || icnt == 7)	icnt--;
 		    if( buf->getS(&i) != "Test: "+i2s(icnt) )
-			throw TError(nodePath().c_str(),_("Write a roll buffer values error."));
+			throw TError(nodePath().c_str(),_("Error writing the value buffer in a circle."));
 		}
-		mod->mess(id(),_("Write a roll buffer ok."));
+		mod->mess(id(),_("Error writing the value buffer in a circle."));
 		rtm = buf->end();
 		buf->setS("Test up.",rtm);
-		if(buf->getS(&rtm) != "Test up.") throw TError(nodePath().c_str(),_("Update buffer end error."));
-		mod->mess(id(),_("Update buffer end ok."));
+		if(buf->getS(&rtm) != "Test up.") throw TError(nodePath().c_str(),_("Error updating the buffer end."));
+		mod->mess(id(),_("OK updating the buffer end."));
 
 		wtm += wper*(buf->size()+5);
 		st_cnt = TSYS::curTime();
@@ -516,7 +514,7 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 11 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),11);
-		mod->mess(id(),_("%s: Fill and check free time integer buffer (high time)."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check the free time integer buffer (high time)."),test.c_str());
 		buf = new TValBuf( TFld::Integer, 10, 0, false, true );
 		wtm = TSYS::curTime();
 		wper = 100000;
@@ -524,11 +522,11 @@ class TestValBuf : public TFunction
 		for(int i=0; i<buf->size()/2; i++)
 		    buf->setI(i,wtm+wper*i);
 		if(!(buf->end() == wtm+wper*((buf->size()/2)-1) && buf->begin() == wtm) )
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin or/and end at filling a half buffer."));
 		icnt = buf->size()/2 - 1;
 		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt-- )
-		    if(buf->getI(&i) != icnt) throw TError(nodePath().c_str(),_("Write a half buffer values error."));
-		mod->mess(id(),_("Write a half buffer ok."));
+		    if(buf->getI(&i) != icnt) throw TError(nodePath().c_str(),_("Error writing to half of the value buffer."));
+		mod->mess(id(),_("OK writing a half buffer."));
 		//Roll buff
 		for(int i=buf->size()/2; i<buf->size()+5; i++)
 		    switch(i)
@@ -542,18 +540,18 @@ class TestValBuf : public TFunction
 			default:buf->setI(i,wtm+wper*i);
 		    }
 		if(!(buf->end() == wtm+wper*(buf->size()+4) && buf->begin() == wtm+3*wper) )
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin and/or end when filling in a circle."));
 		icnt = buf->size()+4;
 		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt--)
 		{
 		    if(icnt == 12 || icnt == 7)	icnt--;
-		    if( buf->getI(&i) != icnt ) throw TError(nodePath().c_str(),_("Write a roll buffer values error."));
+		    if( buf->getI(&i) != icnt ) throw TError(nodePath().c_str(),_("Error writing the value buffer in a circle."));
 		}
-		mod->mess(id(),_("Write a roll buffer ok."));
+		mod->mess(id(),_("OK writing the value buffer in a circle."));
 		rtm = buf->end();
 		buf->setI(1000,rtm);
-		if(buf->getI(&rtm) != 1000) throw TError(nodePath().c_str(),_("Update buffer end error."));
-		mod->mess(id(),_("Update buffer end ok."));
+		if(buf->getI(&rtm) != 1000) throw TError(nodePath().c_str(),_("Error updating the buffer end."));
+		mod->mess(id(),_("OK updating the buffer end."));
 
 		wtm += wper*(buf->size()+5);
 		st_cnt = TSYS::curTime();
@@ -572,7 +570,7 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 12 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),12);
-		mod->mess(id(),_("%s: Fill and check free time string buffer (low time)."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check the free time string buffer (low time)."),test.c_str());
 		buf = new TValBuf( TFld::String, 10, 0, false, false );
 		wper = 1000000;
 		wtm = wper*(TSYS::curTime()/wper);
@@ -580,12 +578,12 @@ class TestValBuf : public TFunction
 		for(int i=0; i<buf->size()/2; i++)
 		    buf->setS("Test: "+i2s(i),wtm+wper*i);
 		if(!(buf->end() == wtm+wper*((buf->size()/2)-1) && buf->begin() == wtm) )
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin or/and end at filling a half buffer."));
 		icnt = buf->size()/2 - 1;
 		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt-- )
 		    if(buf->getS(&i) != "Test: "+i2s(icnt))
-			throw TError(nodePath().c_str(),_("Write a half buffer values error."));
-		mod->mess(id(),_("Write a half buffer ok."));
+			throw TError(nodePath().c_str(),_("Error writing to half of the value buffer."));
+		mod->mess(id(),_("OK writing a half buffer."));
 		//Roll buff
 		for(int i=buf->size()/2; i<buf->size()+5; i++)
 		    switch(i)
@@ -599,19 +597,19 @@ class TestValBuf : public TFunction
 			default:buf->setS("Test: "+i2s(i),wtm+wper*i);
 		    }
 		if(!(buf->end() == wtm+wper*(buf->size()+4) && buf->begin() == wtm+2*wper) )
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin and/or end when filling in a circle."));
 		icnt = buf->size()+4;
 		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt--)
 		{
 		    if(icnt == 12 || icnt == 10 || icnt == 7)	icnt--;
 		    if( buf->getS(&i) != "Test: "+i2s(icnt) )
-			throw TError(nodePath().c_str(),_("Write a roll buffer values error."));
+			throw TError(nodePath().c_str(),_("Error writing the value buffer in a circle."));
 		}
-		mod->mess(id(),_("Write a roll buffer ok."));
+		mod->mess(id(),_("OK writing the value buffer in a circle."));
 		rtm = buf->end();
 		buf->setS("Test up.",rtm);
-		if(buf->getS(&rtm) != "Test up.") throw TError(nodePath().c_str(),_("Update buffer end error."));
-		mod->mess(id(),_("Update buffer end ok."));
+		if(buf->getS(&rtm) != "Test up.") throw TError(nodePath().c_str(),_("Error updating the buffer end."));
+		mod->mess(id(),_("OK updating the buffer end."));
 
 		wtm += wper*(buf->size()+5);
 		st_cnt = TSYS::curTime();
@@ -630,7 +628,7 @@ class TestValBuf : public TFunction
 
 		//--------------------------- Test 13 ----------------------------------
 		test = TSYS::strMess(_("Test%d"),13);
-		mod->mess(id(),_("%s: Fill and check free time integer buffer (low time)."),test.c_str());
+		mod->mess(id(),_("%s: Fill and check the free time integer buffer (low time)."),test.c_str());
 		buf = new TValBuf( TFld::Integer, 10, 0, false, false );
 		wper = 1000000;
 		wtm = wper*(TSYS::curTime()/wper);
@@ -638,11 +636,11 @@ class TestValBuf : public TFunction
 		for(int i=0; i<buf->size()/2; i++)
 		    buf->setI(i,wtm+wper*i);
 		if(!(buf->end() == wtm+wper*((buf->size()/2)-1) && buf->begin() == wtm) )
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at filling half buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin or/and end at filling a half buffer."));
 		icnt = buf->size()/2 - 1;
 		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt-- )
-		    if(buf->getI(&i) != icnt) throw TError(nodePath().c_str(),_("Write a half buffer values error."));
-		mod->mess(id(),_("Write a half buffer ok."));
+		    if(buf->getI(&i) != icnt) throw TError(nodePath().c_str(),_("Error writing to half of the value buffer."));
+		mod->mess(id(),_("OK writing a half buffer."));
 		//Roll buff
 		for(int i=buf->size()/2; i<buf->size()+5; i++)
 		    switch(i)
@@ -656,18 +654,18 @@ class TestValBuf : public TFunction
 			default:buf->setI(i,wtm+wper*i);
 		    }
 		if(!(buf->end() == wtm+wper*(buf->size()+4) && buf->begin() == wtm+2*wper) )
-		    throw TError(nodePath().c_str(),_("Buffer begin or/and end error, at roll filling buffer."));
+		    throw TError(nodePath().c_str(),_("Error the buffer begin and/or end when filling in a circle."));
 		icnt = buf->size()+4;
 		for(int64_t i = buf->end(); i >= buf->begin(); i--, icnt--)
 		{
 		    if(icnt == 12 || icnt == 10 || icnt == 7)	icnt--;
-		    if( buf->getI(&i) != icnt ) throw TError(nodePath().c_str(),_("Write a roll buffer values error."));
+		    if( buf->getI(&i) != icnt ) throw TError(nodePath().c_str(),_("Error writing the value buffer in a circle."));
 		}
-		mod->mess(id(),_("Write a roll buffer ok."));
+		mod->mess(id(),_("OK writing the value buffer in a circle."));
 		rtm = buf->end();
 		buf->setI(100,rtm);
-		if(buf->getI(&rtm) != 100) throw TError(nodePath().c_str(),_("Update buffer end error."));
-		mod->mess(id(),_("Update buffer end ok."));
+		if(buf->getI(&rtm) != 100) throw TError(nodePath().c_str(),_("Error updating the buffer end."));
+		mod->mess(id(),_("OK updating the buffer end."));
 
 		wtm += wper*(buf->size()+5);
 		st_cnt = TSYS::curTime();

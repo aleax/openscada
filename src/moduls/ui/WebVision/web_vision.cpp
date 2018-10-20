@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.6.2"
+#define MOD_VER		"2.7.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -303,24 +303,24 @@ void TWEB::perSYSCall( unsigned int cnt )
 string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode, const string &httpattrs,
     const string &htmlHeadEls, const string &forceTmplFile, const string &lang )
 {
-    if(httpattrs.size() && httpattrs.find("Content-Type: text/html") == string::npos)
+    /*if(httpattrs.size() && httpattrs.find("Content-Type: text/html") == string::npos)
 	return "HTTP/1.0 " + rcode + "\x0D\x0A"
 	    "Server: " + PACKAGE_STRING + "\x0D\x0A"
 	    "Accept-Ranges: bytes\x0D\x0A"
 	    "Content-Length: " + i2s(cnt.size()) + "\x0D\x0A" +
 //	    "Connection: close\x0D\x0A" +
-	    httpattrs + "\x0D\x0A\x0D\x0A" + cnt;
+	    httpattrs + "\x0D\x0A\x0D\x0A" + cnt;*/
 
     vector<TVariant> prms;
     prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile); prms.push_back(lang);
 
-    return iprt->owner().objFuncCall("pgCreator", prms, "root").getS();
+    return iprt->objFuncCall("pgCreator", prms, "root").getS();
 }
 
 bool TWEB::pgAccess( TProtocolIn *iprt, const string &URL )
 {
     vector<TVariant> prms; prms.push_back(URL);
-    return iprt->owner().objFuncCall("pgAccess", prms, "root").getB();
+    return iprt->objFuncCall("pgAccess", prms, "root").getB();
 }
 
 #undef _
@@ -345,7 +345,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		page = TSYS::strDecode(req.text(), TSYS::base64);
 	    }
 	    else page = TUIS::icoGet(zero_lev=="ico"?"UI." MOD_ID:zero_lev.substr(4), &itp);
-	    page = pgCreator(iprt, page, "200 OK", "Content-Type: image/"+itp+";");
+	    page = pgCreator(iprt, page, "200 OK", "Content-Type: image/"+itp);
 	}
 	//Check for main JavaScript code
 	else if(zero_lev == "script.js") {
@@ -357,7 +357,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    }
 	    else page = WebVisionVCA_js;
 	    page = trMessReplace(page);
-	    page = mod->pgCreator(iprt, page, "200 OK", "Content-Type: text/javascript;");
+	    page = mod->pgCreator(iprt, page, "200 OK", "Content-Type: text/javascript");	//Maybe application/javascript
 	}
 	else {
 	    //Session selection or a new session for the project creation

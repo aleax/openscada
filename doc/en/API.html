@@ -1524,6 +1524,8 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>string dscr( );</i> — Transport's description.</li>
 <li> <i>string addr( ) const;</i> — Address.</li>
 <li> <i>string protocol( );</i> — Linked transport protocol.</li>
+<li> <i>virtual unsigned keepAliveReqs( );</i> — Maximum Keep Alive requests.</li>
+<li> <i>virtual unsigned keepAliveTm( );</i> — Keep Alive time.</li>
 <li> <i>virtual string getStatus( );</i> — Getting the status of the input transport.</li>
 <li> <i>bool toStart( );</i> — The sign "To start".</li>
 <li> <i>bool startStat( );</i> — The status "Running".</li>

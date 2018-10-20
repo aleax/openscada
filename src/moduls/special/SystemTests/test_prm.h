@@ -35,16 +35,14 @@ class TestPrm : public TFunction
 	TestPrm( ) : TFunction("Param",SSPC_ID)
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
-	    ioAdd( new IO("name",_("DAQ parameter address"),IO::String,IO::Default,"System.AutoDA.CPULoad") );
+	    ioAdd( new IO("name",_("Address of the DAQ parameter"),IO::String,IO::Default,"System.AutoDA.CPULoad") );
 	}
 
 	string name( )	{ return _("Parameter"); }
-	string descr( )	{ return _("DAQ test parameters. Reads the attributes and configuration fields of the parameter."); }
+	string descr( )	{ return _("Test of the DAQ parameters. Reads the attributes and configuration fields of the parameter."); }
 
-	void calc( TValFunc *val )
-	{
-	    try
-	    {
+	void calc( TValFunc *val ) {
+	    try {
 		string paddr = val->getS(1);
 		AutoHD<TParamContr> prm = SYS->daq().at().at(TSYS::strSepParse(paddr,0,'.')).at().
 							  at(TSYS::strSepParse(paddr,1,'.')).at().
@@ -54,14 +52,12 @@ class TestPrm : public TFunction
 
 		vector<string> list_el;
 		prm.at().vlList(list_el);
-		mod->mess(id(),_("Value attributes present: %d"),list_el.size());
-		for(unsigned i = 0; i < list_el.size(); i++)
-		{
+		mod->mess(id(),_("Value attributes: %d"),list_el.size());
+		for(unsigned i = 0; i < list_el.size(); i++) {
 		    AutoHD<TVal> val = prm.at().vlAt(list_el[i]);
 		    if( val.at().fld().flg()&TFld::Selectable )
 			mod->mess(id(),_("%s(SELECT): %s"),list_el[i].c_str(), val.at().getSEL().c_str() );
-		    switch( val.at().fld().type() )
-		    {
+		    switch(val.at().fld().type()) {
 			case TFld::String:
 			    mod->mess(id(),_("%s(STRING): %s"),list_el[i].c_str(), val.at().getS().c_str() );
 			    break;
@@ -80,12 +76,10 @@ class TestPrm : public TFunction
 
 		prm.at().cfgList(list_el);
 		mod->mess(id(),_("Configuration fields: %d"),list_el.size());
-		for(unsigned i = 0; i < list_el.size(); i++)
-		{
+		for(unsigned i = 0; i < list_el.size(); i++) {
 		    if( prm.at().cfg(list_el[i]).fld().flg()&TFld::Selectable )
 			mod->mess(id(),_("%s(SELECT): %s"),list_el[i].c_str(), prm.at().cfg(list_el[i]).getSEL().c_str() );
-		    switch(prm.at().cfg(list_el[i]).fld().type())
-		    {
+		    switch(prm.at().cfg(list_el[i]).fld().type()) {
 			case TFld::String:
 			    mod->mess(id(),_("%s(STRING): %s"),list_el[i].c_str(), prm.at().cfg(list_el[i]).getS().c_str() );
 			    break;
@@ -108,10 +102,9 @@ class TestPrm : public TFunction
 		mod->mess(id(),_("Test: Passed"));
 		val->setS(0,_("Passed"));
 	    }
-	    catch( TError err )
-	    {
-		mod->mess(id(),_("Test: Failed: %s"),err.mess.c_str());
-		val->setS(0,TSYS::strMess(_("Failed: %s"),err.mess.c_str()));
+	    catch(TError err) {
+		mod->mess(id(), _("Test: Failed: %s"), err.mess.c_str());
+		val->setS(0, TSYS::strMess(_("Failed: %s"),err.mess.c_str()));
 	    }
 	}
 };

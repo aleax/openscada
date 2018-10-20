@@ -41,8 +41,8 @@ class TestTrOut : public TFunction
 	}
 
 	string name( )	{ return _("Transport"); }
-	string descr( )	{ return _("Test of output and/or input transport.\n"
-				   "Performs testing of the original transport by sending a request to the specified ingoing transport."); }
+	string descr( )	{ return _("Test of the output and/or input transports.\n"
+				   "Performs testing of the original transport sending a request to the specified input transport."); }
 
 	void calc( TValFunc *val )
 	{

@@ -12,14 +12,6 @@
 </div>
 			<h1 id="firstHeading" lang="en">Modules/SystemTests</h1>
 		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SystemTests/ru" title="Модули/Системные тесты (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/SystemTests/uk" title="Модулі/Системні тести (100% translated)">українська</a></div></div>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> The translation checking and actualizing
-</td></tr></table>
-</div>
 <table class="wikitable">
 
 <tr>
@@ -37,8 +29,9 @@
 
 <tr>
 <td> <a href="../Modules/SystemTests.html" title="Special:MyLanguage/Modules/SystemTests">SystemTests</a> </td>
-<td> OpenSCADA and its modules' tests </td>
-<td> 1.5 </td>
+<td> OpenSCADA and its modules' tests
+</td>
+<td> 1.7 </td>
 <td> GPL2 </td>
 <td> spec_SystemTests.so </td>
 <td> en,uk,ru,de </td>
@@ -53,28 +46,28 @@
 <li class="toclevel-1 tocsection-1"><a href="#Parameter_.28Param.29"><span class="tocnumber">1</span> <span class="toctext">Parameter (Param)</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#XML_parsing_.28XML.29"><span class="tocnumber">2</span> <span class="toctext">XML parsing (XML)</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#Messages_.28Mess.29"><span class="tocnumber">3</span> <span class="toctext">Messages (Mess)</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#SO_attaching_.28SOAttach.29"><span class="tocnumber">4</span> <span class="toctext">SO attaching (SOAttach)</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#Attribute_of_the_parameter_.28Val.29"><span class="tocnumber">5</span> <span class="toctext">Attribute of the parameter (Val)</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Attaching_SO_.28SOAttach.29"><span class="tocnumber">4</span> <span class="toctext">Attaching SO (SOAttach)</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Parameter_attribute_.28Val.29"><span class="tocnumber">5</span> <span class="toctext">Parameter attribute (Val)</span></a></li>
 <li class="toclevel-1 tocsection-6"><a href="#DB_test_.28DB.29"><span class="tocnumber">6</span> <span class="toctext">DB test (DB)</span></a></li>
 <li class="toclevel-1 tocsection-7"><a href="#Transport_.28TrOut.29"><span class="tocnumber">7</span> <span class="toctext">Transport (TrOut)</span></a></li>
 <li class="toclevel-1 tocsection-8"><a href="#Control_language_of_the_program_.28SysContrLang.29"><span class="tocnumber">8</span> <span class="toctext">Control language of the program (SysContrLang)</span></a></li>
-<li class="toclevel-1 tocsection-9"><a href="#Values_buffer_.28ValBuf.29"><span class="tocnumber">9</span> <span class="toctext">Values buffer (ValBuf)</span></a></li>
-<li class="toclevel-1 tocsection-10"><a href="#Values_archive_.28Archive.29"><span class="tocnumber">10</span> <span class="toctext">Values archive (Archive)</span></a></li>
-<li class="toclevel-1 tocsection-11"><a href="#Base64_code_.28Base64Code.29"><span class="tocnumber">11</span> <span class="toctext">Base64 code (Base64Code)</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Value_buffer_.28ValBuf.29"><span class="tocnumber">9</span> <span class="toctext">Value buffer (ValBuf)</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Value_archive_.28Archive.29"><span class="tocnumber">10</span> <span class="toctext">Value archive (Archive)</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Base64_encoding_.28Base64Code.29"><span class="tocnumber">11</span> <span class="toctext">Base64 encoding (Base64Code)</span></a></li>
 </ul>
 </div>
 
-<p>Special module "SystemTests" contains a set of tests designed to test various subsystems and components of OpenSCADA. Tests carried out in the form of user API functions. Hence the tests can be run as a one-time, in the "Execute" page of the function's object and from the procedures of the user as well, passing them the necessary arguments.
-</p><p>To address the functions of the library you can use static call address "<b>Special.FLibComplex1.{Func}()</b>" or dynamic "<b>SYS.Special.FLibComplex1["{Func}"].call()</b>", "<b>SYS.Special.FLibComplex1.{Func}()</b>". Where <i>{Func}</i> — function identifier in the library.
-</p><p>In addition to the usual mechanisms of user API execution an autonomous mechanism is provided. This mechanism is represented by a separate task, performed with the period of one second, and which calls the functions of tests in accordingly to the settings in the configuration file.
-</p><p>The configuration fields of the tests are placed in the section of the modulus SystemTests of subsystem "Special". The format of the configuration fields is: <b>&lt;prm id="Test Id" on="1" per="10" /&gt;</b><br />
+<p>The module contains a set of tests designed to test various subsystems and components of OpenSCADA. The tests are performed as functions of the user API, so they can run as a single time, in the "Execute" tab of the page object function, and from the user procedures, passing the necessary arguments to them.
+</p><p>To address the functions of the library you can use the static call address <b>Special.FLibComplex1.{Func}()</b> or dynamic <b>SYS.Special.FLibComplex1["{Func}"].call()</b>, <b>SYS.Special.FLibComplex1.{Func}()</b>. Where <i>Func</i> — identifier of the function in the library.
+</p><p>In addition to the usual mechanisms of user API execution, an autonomous mechanism is provided. This mechanism is represented by a separate task, performed with the period of one second, and which calls the functions of tests accordingly to the settings in the configuration file.
+</p><p>Configuration fields of the tests are placed in the module "SystemTests" section of the subsystem "Special". Format of the configuration fields is <b>&lt;prm id="Test Id" on="1" per="10" /&gt;</b><br />
 Where:
 </p>
-<ul><li> id - test ID;</li>
-<li> on - sign "Test is enabled";</li>
-<li> per - repetition period of the test (seconds).</li></ul>
-<p>In addition to the basic attributes the reflection of the input parameters of tests' functions on the same name attributes of tag "prm" is made. For example, the attribute "name" of function "Param", you can specify in the tag "prm".
-</p><p>It is allowed to indicate the set of tags "prm" for the same or different tests with the same or different parameters, thus indicating the separate test execution with the specified parameters. Here is an example of description of all available tests:
+<ul><li> <i>id</i> — test identifier;</li>
+<li> <i>on</i> — sign "Test is enabled";</li>
+<li> <i>per</i> — repetition period of the test (seconds).</li></ul>
+<p>In addition to the basic attributes, the reflection of the input parameters of tests' functions on the same attributes name of the tag "prm" is performed. For example, the attribute "name" of the function "Param" you can specify in the tag "prm".
+</p><p>It is possible to define many "prm" tags for one or several tests with the same or different parameters, thus specifying for a separate run of the test with the specified parameters. Here is an example of a description of all available tests:
 </p>
 <pre style="white-space: pre-wrap;">
 &lt;?xml version="1.0" encoding="UTF-8"&nbsp;?&gt;
@@ -112,7 +105,7 @@ Where:
 <table class="wikitable">
 
 <tr>
-<th> ID </th>
+<th> Identifier </th>
 <th> Name </th>
 <th> Type </th>
 <th> Mode </th>
@@ -133,13 +126,13 @@ Where:
 <td> System.AutoDA.CPULoad
 </td></tr></table>
 <h2><span class="mw-headline" id="XML_parsing_.28XML.29"><span class="mw-headline-number">2</span> XML parsing (XML)</span></h2>
-<p><i>Description:</i> Test of the XML file parsing. Parses and displays the structure of the file.<br />
+<p><i>Description:</i> Test for XML file parsing. Disassembles and displays the structure of the specified file.<br />
 <i>Parameters:</i>
 </p>
 <table class="wikitable">
 
 <tr>
-<th> ID </th>
+<th> Identifier </th>
 <th> Name </th>
 <th> Type </th>
 <th> Mode </th>
@@ -160,13 +153,13 @@ Where:
 <td>
 </td></tr></table>
 <h2><span class="mw-headline" id="Messages_.28Mess.29"><span class="mw-headline-number">3</span> Messages (Mess)</span></h2>
-<p><i>Description:</i> Test of a messages archive. Periodically reads new messages from the archive for the specified archiver.<br />
+<p><i>Description:</i> Test the archive of messages. Periodically reads new messages from the archive for the specified archiver.<br />
 <i>Parameters:</i>
 </p>
 <table class="wikitable">
 
 <tr>
-<th> ID </th>
+<th> Identifier </th>
 <th> Name </th>
 <th> Type </th>
 <th> Mode </th>
@@ -188,26 +181,26 @@ Where:
 </td></tr>
 <tr>
 <td> categ </td>
-<td> The template of the messages category  </td>
+<td> Template of the messages category  </td>
 <td> String </td>
 <td> Input </td>
 <td>
 </td></tr>
 <tr>
 <td> depth </td>
-<td> Message's depth, s </td>
+<td> Messages depth, seconds </td>
 <td> Integer </td>
 <td> Input </td>
 <td> 10
 </td></tr></table>
-<h2><span class="mw-headline" id="SO_attaching_.28SOAttach.29"><span class="mw-headline-number">4</span> SO attaching (SOAttach)</span></h2>
-<p><i>Description:</i> Test connection/disconnection of the modules.<br />
+<h2><span class="mw-headline" id="Attaching_SO_.28SOAttach.29"><span class="mw-headline-number">4</span> Attaching SO (SOAttach)</span></h2>
+<p><i>Description:</i> Test the module to attach/detach.<br />
 <i>Parameters:</i>
 </p>
 <table class="wikitable">
 
 <tr>
-<th> ID </th>
+<th> Identifier </th>
 <th> Name </th>
 <th> Type </th>
 <th> Mode </th>
@@ -229,26 +222,26 @@ Where:
 </td></tr>
 <tr>
 <td> mode </td>
-<td> Mode (1-connect;-1-disconnect;0-change) </td>
+<td> Mode (1-attach;-1-detach;0-change) </td>
 <td> Integer </td>
 <td> Input </td>
 <td> 0
 </td></tr>
 <tr>
 <td> full </td>
-<td> Full connection(when start) </td>
+<td> Complete attach (when start) </td>
 <td> Bool </td>
 <td> Input </td>
 <td> 1
 </td></tr></table>
-<h2><span class="mw-headline" id="Attribute_of_the_parameter_.28Val.29"><span class="mw-headline-number">5</span> Attribute of the parameter (Val)</span></h2>
-<p><i>Description:</i> Test the attribute values of the parameter. Performs periodic polling of the last value of the specified attribute, as well as a survey archive to the specified depth.<br />
+<h2><span class="mw-headline" id="Parameter_attribute_.28Val.29"><span class="mw-headline-number">5</span> Parameter attribute (Val)</span></h2>
+<p><i>Description:</i> Test for values of the parameter attribute. Performs the periodic acquisition of the last value of the specified attribute, as well as the archive questioning to the required depth.<br />
 <i>Parameters:</i>
 </p>
 <table class="wikitable">
 
 <tr>
-<th> ID </th>
+<th> Identifier </th>
 <th> Name </th>
 <th> Type </th>
 <th> Mode </th>
@@ -263,43 +256,46 @@ Where:
 </td></tr>
 <tr>
 <td> name </td>
-<td> Path to the attribute of the parameter </td>
+<td> Path to the parameter attribute </td>
 <td> String </td>
 <td> Input </td>
 <td> System.AutoDA.CPULoad.load
 </td></tr>
 <tr>
 <td> arch_len </td>
-<td> The depth of the query to the values' archive, s </td>
+<td> Depth of getting of archive values, seconds </td>
 <td> Integer </td>
 <td> Input </td>
 <td> 10
 </td></tr>
 <tr>
 <td> arch_per </td>
-<td> Period of query to the values' archive, us </td>
-<td> Integer	 </td>
+<td> Period of getting of archive values, microseconds </td>
+<td> Integer </td>
 <td> Input </td>
 <td> 1000000
 </td></tr></table>
 <h2><span class="mw-headline" id="DB_test_.28DB.29"><span class="mw-headline-number">6</span> DB test (DB)</span></h2>
-<p><i>Description:</i> Complete database test. Includes:
+<p><i>Description:</i> Complete database test. Performs:
 </p>
-<ul><li> creating/opening of the DB;</li>
-<li> creating/opening of the table;</li>
-<li> creation of set of records (rows) of the predetermined structure;</li>
-<li> modification of the set of records;</li>
-<li> receiving and verifying the values of the set of records;</li>
-<li> modifying the structure of records and table;</li>
-<li> delete of the records;</li>
-<li> closing/deleting of the table;</li>
-<li> closing/deleting of the database.</li></ul>
+<ul><li> create/open DB;</li>
+<li> create/open table;</li>
+<li> create multiple records for the determined structure;</li>
+<li> update multiple records;</li>
+<li> update multiple records by a request key;</li>
+<li> get and check values for multiple records;</li>
+<li> seek records;</li>
+<li> seek records in preload;</li>
+<li> modify a record and the table structure;</li>
+<li> remove multiple records;</li>
+<li> close/remove table;</li>
+<li> close/remove DB.</li></ul>
 <p><i>Parameters:</i>
 </p>
 <table class="wikitable">
 
 <tr>
-<th> ID </th>
+<th> Identifier </th>
 <th> Name </th>
 <th> Type </th>
 <th> Mode </th>
@@ -335,19 +331,19 @@ Where:
 </td></tr>
 <tr>
 <td> size </td>
-<td> Number of records </td>
+<td> Records number </td>
 <td> Integer </td>
 <td> Input </td>
 <td> 1000
 </td></tr></table>
 <h2><span class="mw-headline" id="Transport_.28TrOut.29"><span class="mw-headline-number">7</span> Transport (TrOut)</span></h2>
-<p><i>Description:</i> Test of the output and/or input transports. Performs testing of the output transport by sending the request to the specified input transport.<br />
+<p><i>Description:</i> Test of the output and/or input transports. Performs testing of the original transport sending a request to the specified input transport.<br />
 <i>Parameters:</i>
 </p>
 <table class="wikitable">
 
 <tr>
-<th> ID </th>
+<th> Identifier </th>
 <th> Name </th>
 <th> Type </th>
 <th> Mode </th>
@@ -369,26 +365,26 @@ Where:
 </td></tr>
 <tr>
 <td> type </td>
-<td> Transport's module </td>
+<td> Transport module </td>
 <td> String </td>
 <td> Input </td>
 <td> Sockets
 </td></tr>
 <tr>
 <td> req </td>
-<td> Query text </td>
+<td> Text of the request </td>
 <td> String </td>
 <td> Input </td>
 <td>
 </td></tr></table>
 <h2><span class="mw-headline" id="Control_language_of_the_program_.28SysContrLang.29"><span class="mw-headline-number">8</span> Control language of the program (SysContrLang)</span></h2>
-<p><i>Description:</i> Test of the control language of the program. Performs the query of the language elements through the full path. Full path to the element of language is of the form of system control  "/Archive/%2fbd%2fm_per". Full path consists of two sub-paths. The first one "Archive" is the path to the node of the control tree. The second one "/bd/m_per" is the path to a particular element of the node.<br />
+<p><i>Description:</i> Test of the control language of the program. Performs query of language elements through a complete path. The full path to the language element looks like "/Archive/%2fbd%2fm_per". The complete path consists of two nested paths. The first "/Archive/" is the path to the node of the control tree. The second "/bd/m_per" is the path to the specific node element.<br />
 <i>Parameters:</i>
 </p>
 <table class="wikitable">
 
 <tr>
-<th> ID </th>
+<th> Identifier </th>
 <th> Name </th>
 <th> Type </th>
 <th> Mode </th>
@@ -403,19 +399,19 @@ Where:
 </td></tr>
 <tr>
 <td> path </td>
-<td> Path to the element of language </td>
+<td> Path to the language element </td>
 <td> String </td>
 <td> Input </td>
 <td> /Archive/BaseArh/mess_StatErrors/%2fprm%2fst
 </td></tr></table>
-<h2><span class="mw-headline" id="Values_buffer_.28ValBuf.29"><span class="mw-headline-number">9</span> Values buffer (ValBuf)</span></h2>
-<p><i>Description:</i> Tests of the values' buffer. Contains 13 tests of the all aspects of the values' buffer (subsystem "Archives").<br />
+<h2><span class="mw-headline" id="Value_buffer_.28ValBuf.29"><span class="mw-headline-number">9</span> Value buffer (ValBuf)</span></h2>
+<p><i>Description:</i> Tests of the value buffer. Contains 13 tests of all aspects of the value buffer (the subsystem "Archives-History").<br />
 <i>Parameters:</i>
 </p>
 <table class="wikitable">
 
 <tr>
-<th> ID </th>
+<th> Identifier </th>
 <th> Name </th>
 <th> Type </th>
 <th> Mode </th>
@@ -428,19 +424,19 @@ Where:
 <td> Return </td>
 <td>
 </td></tr></table>
-<h2><span class="mw-headline" id="Values_archive_.28Archive.29"><span class="mw-headline-number">10</span> Values archive (Archive)</span></h2>
-<p><i>Description:</i> Tests of the placing of values in the archive. Contains 7 (8) tests of the values archiver to verify the correctness of the functioning of a coherent mechanism for packaging.<br />
+<h2><span class="mw-headline" id="Value_archive_.28Archive.29"><span class="mw-headline-number">10</span> Value archive (Archive)</span></h2>
+<p><i>Description:</i> Test of location in the value archives. Contains 7(8) tests of the value archiver to verify the correct functioning of the sequential packing mechanism.<br />
 <i>Parameters:</i>
 </p>
 <table class="wikitable">
 
 <tr>
-<td> <b>ID</b> </td>
-<td> <b>Name</b> </td>
-<td> <b>Type</b> </td>
-<td> <b>Mode</b> </td>
-<td> <b>By defaults</b>
-</td></tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> By defaults
+</th></tr>
 <tr>
 <td> rez </td>
 <td> Result </td>
@@ -450,33 +446,33 @@ Where:
 </td></tr>
 <tr>
 <td> arch </td>
-<td> Values archive </td>
+<td> Value archive </td>
 <td> String </td>
 <td> Input </td>
 <td>
 </td></tr>
 <tr>
 <td> period </td>
-<td> Values period, us </td>
+<td> Period of the values, microseconds </td>
 <td> Integer </td>
 <td> Input </td>
 <td> 1000000
 </td></tr>
 <tr>
 <td> archtor </td>
-<td> Archivator </td>
+<td> Archiver </td>
 <td> String </td>
 <td> Input </td>
 <td>
 </td></tr></table>
-<h2><span class="mw-headline" id="Base64_code_.28Base64Code.29"><span class="mw-headline-number">11</span> Base64 code (Base64Code)</span></h2>
-<p><i>Description:</i> Tests of the Mime Base64 encoding algorithm.<br />
+<h2><span class="mw-headline" id="Base64_encoding_.28Base64Code.29"><span class="mw-headline-number">11</span> Base64 encoding (Base64Code)</span></h2>
+<p><i>Description:</i> Mime Base64 algorithm encoding tests.<br />
 <i>Parameters:</i>
 </p>
 <table class="wikitable">
 
 <tr>
-<th> ID </th>
+<th> Identifier </th>
 <th> Name </th>
 <th> Type </th>
 <th> Mode </th>

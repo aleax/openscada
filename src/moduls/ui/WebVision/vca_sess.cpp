@@ -112,7 +112,7 @@ void VCASess::getReq( SSess &ses )
 	req.setAttr("path", ses.url+"/%2fico");
 	mod->cntrIfCmd(req, ses);
 	ses.page = TSYS::strDecode(req.text(), TSYS::base64);
-	ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: image/png;");
+	ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: image/png");
     }
     //Get open pages list
     else if(wp_com == "pgOpenList" && first_lev.empty()) {
@@ -181,7 +181,7 @@ void VCASess::getReq( SSess &ses )
 	    string mime;
 	    ses.page = resGet(prmEl->second, ses.url, ses, &mime);
 	    mod->imgConvert(ses);
-	    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+mime);
+	    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+TSYS::strParse(mime,0,";"));
 	} else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource not found"))+"</div>\n", "404 Not Found");
     }
     //Request to the primitive object. Used for data caching

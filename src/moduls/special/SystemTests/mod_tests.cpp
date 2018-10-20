@@ -49,7 +49,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
-#define MOD_VER		"1.6.5"
+#define MOD_VER		"1.7.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the group of tests to OpenSCADA and its modules.")
 #define LICENSE		"GPL2"
@@ -286,7 +286,7 @@ void TTest::cntrCmdProc( XMLNode *opt )
 	int enCnt = 0;
 	for(unsigned iT = 0; iT < lst.size(); iT++)
 	    if(testAt(lst[iT]).at().startStat()) enCnt++;
-	opt->setText(TSYS::strMess(_("All: %d; Accessing: %d"),lst.size(),enCnt));
+	opt->setText(TSYS::strMess(_("All: %d; Accessed: %d"),lst.size(),enCnt));
     }
     else TSpecial::cntrCmdProc(opt);
 }

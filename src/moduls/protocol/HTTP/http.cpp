@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.1.7"
+#define MOD_VER		"3.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -137,7 +137,7 @@ void TProt::save_( )
     TBDS::genDBSet(nodePath()+"AutoLogin", aLogNd.save());
 }
 
-TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     //bool pgAccess(string URL) - Checking for page access pointed by the <URL>.
     //  URL       - URL of the checking page.
@@ -147,14 +147,14 @@ TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 	TRegExp re;
 	string rules, rule;
 	// Check for deny
-	rules = deny();
+	rules = ((TProt&)owner()).deny();
 	for(int off = 0; (rule=TSYS::strLine(rules,0,&off)).size(); ) {
 	    if(rule.size() > 2 && rule[0] == '/' && rule[rule.size()-1] == '/') re.setPattern(rule.substr(1,rule.size()-2));
 	    else re.setPattern(rule, "p");
 	    if(re.test(prms[0].getS()))	return false;
 	}
 	// Check for allow
-	rules = allow();
+	rules = ((TProt&)owner()).allow();
 	for(int off = 0; (rule=TSYS::strLine(rules,0,&off)).size(); ) {
 	    if(rule.size() > 2 && rule[0] == '/' && rule[rule.size()-1] == '/') re.setPattern(rule.substr(1,rule.size()-2));
 	    else re.setPattern(rule, "p");
@@ -189,8 +189,12 @@ TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 	if(lang.size() > 2)	lang = lang.substr(0, 2);
 
 	string httpattrs = (prms.size() >= 3) ? prms[2].getS() : "";
+
 	if(httpattrs.find("Content-Type") == string::npos)
-	    httpattrs = "Content-Type: text/html;charset="+ Mess->charset() + (httpattrs.size()?"\x0D\x0A":"") + httpattrs;
+	    httpattrs = "Content-Type: text/html;charset="+Mess->charset() + (httpattrs.size()?"\x0D\x0A":"") + httpattrs;
+	if(KeepAlive)
+	    httpattrs = "Keep-Alive: timeout="+i2s(srcTr().at().keepAliveTm())+", max="+i2s(srcTr().at().keepAliveReqs())+"\x0D\x0A"+
+			"Connection: Keep-Alive" + (httpattrs.size()?"\x0D\x0A":"") + httpattrs;
 
 	string answer;
 
@@ -571,7 +575,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 #undef _
 #define _(mess) mod->I18N(mess, lang().c_str())
 
-TProtIn::TProtIn( string name ) : TProtocolIn(name), mNotFull(false)
+TProtIn::TProtIn( string name ) : TProtocolIn(name), mNotFull(false), KeepAlive(false)
 {
 
 }
@@ -586,18 +590,18 @@ string TProtIn::pgCreator( const string &cnt, const string &rcode, const string 
     vector<TVariant> prms;
     prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile); prms.push_back(lang());
 
-    return owner().objFuncCall("pgCreator", prms, "root").getS();
+    return objFuncCall("pgCreator", prms, "root").getS();
 }
 
 bool TProtIn::pgAccess( const string &URL )
 {
     vector<TVariant> prms; prms.push_back(URL);
-    return owner().objFuncCall("pgAccess", prms, "root").getB();
+    return objFuncCall("pgAccess", prms, "root").getB();
 }
 
 bool TProtIn::mess( const string &reqst, string &answer )
 {
-    bool KeepAlive = false;
+    KeepAlive = false;
     string req, sel, userAgent;
     int sesId = 0;
     vector<string> vars;
@@ -801,11 +805,11 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		    size_t ext_pos = uris.rfind(".");
 		    string fext = (ext_pos != string::npos) ? uris.substr(ext_pos+1) : "";
 		    if(fext == "png" || fext == "jpg" || fext == "ico")
-			answer = pgCreator(answer, "200 OK", "Content-Type: image/"+fext+";");
+			answer = pgCreator(answer, "200 OK", "Content-Type: image/"+fext);
 		    else if(fext == "css" || fext == "html" || fext == "xml")
-			answer = pgCreator(answer, "200 OK", "Content-Type: text/"+fext+";");
+			answer = pgCreator(answer, "200 OK", "Content-Type: text/"+fext);
 		    else if(fext == "js")
-			answer = pgCreator(answer, "200 OK", "Content-Type: text/javascript;");
+			answer = pgCreator(answer, "200 OK", "Content-Type: text/javascript");	//Maybe application/javascript
 		    else answer = pgCreator("<div class='error'>Bad Request!<br/>This server doesn't undersand your request.</div>\n",
 					    "400 Bad Request");
 		    return mNotFull || KeepAlive;
@@ -815,7 +819,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	    if(method == "GET" && name_mod.rfind(".") != string::npos) {
 		string icoTp, ico = TUIS::icoGet(name_mod.substr(0,name_mod.rfind(".")), &icoTp);
 		if(ico.size()) {
-		    answer = pgCreator(ico, "200 OK", "Content-Type: "+TUIS::mimeGet(name_mod,ico,"image/"+icoTp)+";");
+		    answer = pgCreator(ico, "200 OK", "Content-Type: "+TUIS::mimeGet(name_mod,ico,"image/"+icoTp));
 		    return mNotFull || KeepAlive;
 		}
 	    }

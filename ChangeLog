@@ -1,3 +1,13 @@
+2018-10-20 Roman (stable)
+- Transports: Input transports appended by the virtual functions keepAliveReqs(), keepAliveTm() for true KeepAlive on Web.
+- TUIS: Changed for the behaviour of determining the file extension "svg" as "image/svg+xml" for correct and multiple SVG files display on WEB.
+- !!!!:FIX:Protocol.HTTP,UI.{WebCfgD,WebUser,WebVision}: Fixed for KeepAlive true implementing then fast working on high latent channels storring the connection.
+    User API functions pgAccess(), pgCreator() moved from TProtocol to TProtocolIn.
+    Mime types cleaned from ";" and after it in the end.
+- !!:Special.SystemTests: Revised for all messages and the documentation.
+- !!:UI.WebVision: Prevented from spare and separate requesting of the included pages' content, in the starting.
+
+
 2018-10-16 Roman (stable)
 - UI.Vision: Table forming prevented from the fliclking.
 - !!:FIX:UI.WebVision: Control interface's pages prevented from overriding service attribute "id" of the main tag,

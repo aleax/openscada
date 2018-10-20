@@ -418,13 +418,13 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	return true;
     }
 
-    //Find for include page creation
+    //Find for included pages creation
     for(var i in this.wdgs)
 	if(this.wdgs[i].attrs['root'] == 'Box' && this.wdgs[i].isVisible) {
 	    if(pgGrp == this.wdgs[i].attrs['pgGrp'] && pgId != this.wdgs[i].attrs['pgOpenSrc']) {
 		this.wdgs[i].attrs['pgOpenSrc'] = pgId;
 		this.wdgs[i].makeEl(null, true);
-		setWAttrs(this.wdgs[i].addr,'pgOpenSrc',pgId);
+		setWAttrs(this.wdgs[i].addr, 'pgOpenSrc', pgId);
 		return true;
 	    }
 	    if(this.wdgs[i].inclOpen && this.wdgs[i].pages[this.wdgs[i].inclOpen].callPage(pgId,updWdg,pgGrp,pgOpenSrc)) return true;
@@ -435,7 +435,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     //Check for open child page or for unknown and empty source pages open as master page child windows
     if((!pgGrp.length && pgOpenSrc == this.addr) || this == masterPage) {
 	var iPg = new pwDescr(pgId, true, this);
-	var attrBrVal = servGet(pgId,'com=attrsBr');
+	var attrBrVal = servGet(pgId, 'com=attrsBr');
 
 	var winName = null;
 	var winWidth = 600;
@@ -2255,7 +2255,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 
     //Child widgets process
-    if(pgBr && !inclPg && parseInt(this.attrs['perm'])&SEC_RD)
+    if(pgBr && !inclPg && parseInt(this.attrs['perm'])&SEC_RD) {
 	for(var j = 0; j < pgBr.childNodes.length; j++) {
 	    if(pgBr.childNodes[j].nodeName != 'w') continue;
 	    var chEl = pgBr.childNodes[j].getAttribute('id');
@@ -2265,10 +2265,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		wdgO.place = this.place.ownerDocument.createElement('div');
 		this.place.appendChild(wdgO.place);
 		this.wdgs[chEl] = wdgO;
-		wdgO.makeEl(full?pgBr.childNodes[j]:servGet(wdgO.addr,'com=attrsBr'));
+		wdgO.makeEl(full?pgBr.childNodes[j]:servGet(wdgO.addr,'com=attrsBr'), false, full, FullTree);
 		//wdgO.makeEl(pgBr.childNodes[j]);		//!!!! Need full
 	    }
 	}
+    }
 }
 
 function pwClean( )

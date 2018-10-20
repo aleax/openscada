@@ -55,6 +55,8 @@ class TTransportIn : public TCntrNode, public TConfig
 	string	addr( ) const	{ return cfg("ADDR").getS(); }
 	string	protocolFull( )	{ return cfg("PROT").getS(); }
 	string	protocol( );
+	virtual unsigned keepAliveReqs( )	{ return 0; }
+	virtual unsigned keepAliveTm( )		{ return 0; }
 	virtual	string getStatus( );
 
 	bool toStart( )		{ return mStart; }

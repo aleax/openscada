@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.9.4"
+#define MOD_VER		"0.9.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -184,13 +184,13 @@ string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcod
     vector<TVariant> prms;
     prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile); prms.push_back(lang);
 
-    return iprt->owner().objFuncCall("pgCreator", prms, "root").getS();
+    return iprt->objFuncCall("pgCreator", prms, "root").getS();
 }
 
 bool TWEB::pgAccess( TProtocolIn *iprt, const string &URL )
 {
     vector<TVariant> prms; prms.push_back(URL);
-    return iprt->owner().objFuncCall("pgAccess", prms, "root").getB();
+    return iprt->objFuncCall("pgAccess", prms, "root").getB();
 }
 
 #undef _

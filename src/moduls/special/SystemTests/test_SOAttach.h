@@ -37,11 +37,11 @@ class TestSOAttach : public TFunction
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("name",_("Path to the module"),IO::String,IO::Default) );
 	    ioAdd( new IO("mode",_("Mode (1-attach;-1-detach;0-change)"),IO::Integer,IO::Default,"0") );
-	    ioAdd( new IO("full",_("Complete attach(startup)"),IO::Boolean,IO::Default,"1") );
+	    ioAdd( new IO("full",_("Complete attach (when start)"),IO::Boolean,IO::Default,"1") );
 	}
 
-	string name( )	{ return _("Attach SO"); }
-	string descr( )	{ return _("Test attach/detach module."); }
+	string name( )	{ return _("Attaching SO"); }
+	string descr( )	{ return _("Test the module to attach/detach."); }
 
 	void calc( TValFunc *val ) {
 	    try {

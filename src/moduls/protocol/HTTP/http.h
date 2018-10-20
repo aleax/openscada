@@ -53,6 +53,10 @@ class TProtIn: public TProtocolIn
 
 	string lang( );
 
+    protected:
+	//Methods
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     private:
 	//Methods
 	string getIndex( const string &user, const string &sender );
@@ -64,7 +68,7 @@ class TProtIn: public TProtocolIn
 	bool pgAccess( const string &URL );
 
 	//Attributes
-	bool	mNotFull;
+	bool	mNotFull, KeepAlive;
 	string	mBuf,
 		prms, user, prmLang, brLang;
 };
@@ -107,8 +111,6 @@ class TProt: public TProtocol
 	//Methods
 	void load_( );
 	void save_( );
-
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     private:
 	//Data

@@ -41,7 +41,7 @@ class TestArchive : public TFunction
 	}
 
 	string name( )	{ return _("Value archive"); }
-	string descr( )	{ return _("The tests of location in the value archives.\n"
+	string descr( )	{ return _("Test of location in the value archives.\n"
 				   "Contains 7(8) tests of the value archiver to verify the correct functioning of the sequential packing mechanism."); }
 
 	void calc( TValFunc *val )
@@ -72,7 +72,7 @@ class TestArchive : public TFunction
 		}
 		mod->mess(id(),_("Test1: Passed."));
 		//--------------------------- Test 2 ----------------------------------
-		mod->mess(id(),_("Test2: Internal insert double value (down)."));
+		mod->mess(id(),_("Test2: Internal insert for double value (to down)."));
 		buf.clear();
 		buf.setI((int)pow(10,2),wtm+3*per);
 		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,archtor);
@@ -86,7 +86,7 @@ class TestArchive : public TFunction
 		}
 		mod->mess(id(),_("Test2: Passed."));
 		//--------------------------- Test 3 ----------------------------------
-		mod->mess(id(),_("Test3: Internal insert double value (up)."));
+		mod->mess(id(),_("Test3: Internal insert for double value (to up)."));
 		buf.clear();
 		buf.setI((int)pow(10,4),wtm+3*per);
 		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,archtor);
@@ -100,7 +100,7 @@ class TestArchive : public TFunction
 		}
 		mod->mess(id(),_("Test3: Passed."));
 		//--------------------------- Test 4 ----------------------------------
-		mod->mess(id(),_("Test4: Internal insert double value (down)."));
+		mod->mess(id(),_("Test4: Internal insert for double value (to down)."));
 		buf.clear();
 		buf.setI((int)pow(10,2),wtm+3*per);
 		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,archtor);
@@ -114,7 +114,7 @@ class TestArchive : public TFunction
 		}
 		mod->mess(id(),_("Test4: Passed."));
 		//--------------------------- Test 5 ----------------------------------
-		mod->mess(id(),_("Test5: Internal insert no double value."));
+		mod->mess(id(),_("Test5: Internal insert for not double value."));
 		buf.clear();
 		buf.setI((int)pow(10,9),wtm+per);
 		o_arch.at().setVals(buf,wtm+per,wtm+per,archtor);
@@ -129,7 +129,7 @@ class TestArchive : public TFunction
 		}
 		mod->mess(id(),_("Test5: Passed."));
 		//--------------------------- Test 6 ----------------------------------
-		mod->mess(id(),_("Test6: Internal insert double value (up)."));
+		mod->mess(id(),_("Test6: Internal insert for double value (to up)."));
 		buf.clear();
 		buf.setI((int)pow(10,2),wtm+per);
 		o_arch.at().setVals(buf,wtm+per,wtm+per,archtor);
@@ -144,7 +144,7 @@ class TestArchive : public TFunction
 		}
 		mod->mess(id(),_("Test6: Passed."));
 		//--------------------------- Test 7 ----------------------------------
-		mod->mess(id(),_("Test7: Internal insert value instead double value."));
+		mod->mess(id(),_("Test7: Internal insert for a value instead double value."));
 		buf.clear();
 		buf.setI((int)pow(10,3),wtm+3*per);
 		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,archtor);
@@ -159,7 +159,7 @@ class TestArchive : public TFunction
 		mod->mess(id(),_("Test7: Passed."));
 		//--------------------------- Test 8 ----------------------------------
 		/*sleep(2);
-		mod->mess(id(),_("Test8: Set three values to end."));
+		mod->mess(id(),_("Test8: Set for three values to the end."));
 		wtm = o_arch.at().end("");
 		buf.clear();
 		for( int i_el = -1; i_el <= 1; i_el++ )

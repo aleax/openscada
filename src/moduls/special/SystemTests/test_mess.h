@@ -36,26 +36,23 @@ class TestMess : public TFunction
 	{
 	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
 	    ioAdd( new IO("arhtor",_("Archiver"),IO::String,IO::Default,"FSArch.StatErrors") );
-	    ioAdd( new IO("categ",_("Message category template"),IO::String,IO::Default) );
+	    ioAdd( new IO("categ",_("Template of the messages category"),IO::String,IO::Default) );
 	    ioAdd( new IO("depth",_("Messages depth, seconds"),IO::Integer,IO::Default,"10") );
 	}
 
 	string name( )	{ return _("Messages"); }
 	string descr( )	{ return _("Test the archive of messages. Periodically reads new messages from the archive for the specified archiver."); }
 
-	void calc( TValFunc *val )
-	{
-	    try
-	    {
+	void calc( TValFunc *val ) {
+	    try {
 		mod->mess(id(),_("Test: Start"));
 
 		char c_tm[26];
 		string n_arhtor = val->getS(1);
 		vector<TMess::SRec> buf_rec;
 		SYS->archive().at().messGet(time(NULL)-2*val->getI(3),time(NULL),buf_rec,val->getS(2),TMess::Debug,n_arhtor);
-		mod->mess(id(),_("New messages present %d."),buf_rec.size());
-		for(unsigned i_rec = 0; i_rec < buf_rec.size(); i_rec++)
-		{
+		mod->mess(id(),_("%d new messages present."),buf_rec.size());
+		for(unsigned i_rec = 0; i_rec < buf_rec.size(); i_rec++) {
 		    ctime_r(&buf_rec[i_rec].time, c_tm);
 		    mod->mess(id(),"'%s' : '%s' : '%s'",TSYS::strParse(c_tm,0,"\n").c_str(),
 			buf_rec[i_rec].categ.c_str(),buf_rec[i_rec].mess.c_str());
@@ -63,8 +60,7 @@ class TestMess : public TFunction
 		mod->mess(id(),_("Test: Passed"));
 		val->setS(0,_("Passed"));
 	    }
-	    catch( TError err )
-	    {
+	    catch( TError err ) {
 		mod->mess(id(),_("Test: Failed: %s"),err.mess.c_str());
 		val->setS(0,TSYS::strMess(_("Failed: %s"),err.mess.c_str()));
 	    }
