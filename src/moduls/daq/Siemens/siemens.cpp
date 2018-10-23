@@ -1314,23 +1314,23 @@ TVariant TMdContr::getVal( const string &iaddr, ResString &err)
 		    case 'b':		return (bool)(acqBlks[iB].val[off-acqBlks[iB].off]&(0x01<<atoi(tp+1)));
 		    case 'i':
 			switch(ivSz) {
-			    case 1:	return *(int8_t*)(acqBlks[iB].val.data()+off-acqBlks[iB].off);
+			    case 1:	return *(int8_t*)(acqBlks[iB].val.data()+(off-acqBlks[iB].off));
 						//acqBlks[iB].val[off-acqBlks[iB].off];
-			    case 2:	return *(int16_t*)TSYS::i16_BE(TSYS::getUnalign16(acqBlks[iB].val.data()+off-acqBlks[iB].off));
+			    case 2:	return (int16_t)TSYS::i16_BE(TSYS::getUnalign16(acqBlks[iB].val.data()+(off-acqBlks[iB].off)));
 						//*(int16_t*)revers(acqBlks[iB].val.substr(off-acqBlks[iB].off,ivSz)).c_str();
-			    case 4:	return *(int32_t*)TSYS::i32_BE(TSYS::getUnalign32(acqBlks[iB].val.data()+off-acqBlks[iB].off));
+			    case 4:	return (int32_t)TSYS::i32_BE(TSYS::getUnalign32(acqBlks[iB].val.data()+(off-acqBlks[iB].off)));
 						//*(int32_t*)revers(acqBlks[iB].val.substr(off-acqBlks[iB].off,ivSz)).c_str();
-			    case 8:	return *(int64_t*)TSYS::i64_BE(TSYS::getUnalign64(acqBlks[iB].val.data()+off-acqBlks[iB].off));
+			    case 8:	return (int64_t)TSYS::i64_BE(TSYS::getUnalign64(acqBlks[iB].val.data()+(off-acqBlks[iB].off)));
 						//*(int64_t*)revers(acqBlks[iB].val.substr(off-acqBlks[iB].off,ivSz)).c_str();
 			}
 			break;
 		    case 'u':
 			switch(ivSz) {
-			    case 1:	return *(uint8_t*)(acqBlks[iB].val.data()+off-acqBlks[iB].off);
+			    case 1:	return *(uint8_t*)(acqBlks[iB].val.data()+(off-acqBlks[iB].off));
 						//(uint8_t)acqBlks[iB].val[off-acqBlks[iB].off];
-			    case 2:	return *(uint16_t*)TSYS::i16_BE(TSYS::getUnalign16(acqBlks[iB].val.data()+off-acqBlks[iB].off));
+			    case 2:	return TSYS::i16_BE(TSYS::getUnalign16(acqBlks[iB].val.data()+(off-acqBlks[iB].off)));
 						//(int64_t)*(uint16_t*)revers(acqBlks[iB].val.substr(off-acqBlks[iB].off,ivSz)).c_str();
-			    case 4:	return (int64_t)*(uint32_t*)TSYS::i32_BE(TSYS::getUnalign32(acqBlks[iB].val.data()+off-acqBlks[iB].off));
+			    case 4:	return (int64_t)TSYS::i32_BE(TSYS::getUnalign32(acqBlks[iB].val.data()+(off-acqBlks[iB].off)));
 						//(int64_t)*(uint32_t*)revers(acqBlks[iB].val.substr(off-acqBlks[iB].off,ivSz)).c_str();
 			}
 			break;
@@ -1365,10 +1365,9 @@ void TMdContr::setVal( const TVariant &ivl, const string &iaddr, ResString &err 
     int ivSz = valSize(tp);	//Get real value's size
 
     string val;
-
     switch(tp[0]) {
 	case 'b': {
-	    char tval = getVal(TSYS::strMess("DB%d.%i.u1",db,off), err);
+	    char tval = getVal(TSYS::strMess("DB%d.%i.u1",db,off),err).getI();
 	    if((bool)(tval&(0x01<<atoi(tp+1))) != (bool)ivl.getB()) {
 		tval ^= (0x01<<atoi(tp+1));
 		val = tval;
@@ -1892,6 +1891,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	inputLinks();
 
 	//Calc template
+	setMdfChk(true);
 	TValFunc::calc();
 	modif();
 
@@ -1995,7 +1995,7 @@ bool TMdPrm::lnkInit( int num, bool checkNoLink )
     it->second.addrSpec = "";
     int rez = 0, db = -1, off = -1;
     char tp[11];
-    if(((rez=sscanf(it->second.addr.c_str(),"DB%d.%i.%10s",&db,&off)) == 2 || rez == 3) && db >= 0 && off >= 0) {
+    if(((rez=sscanf(it->second.addr.c_str(),"DB%d.%i.%10s",&db,&off,tp)) == 2 || rez == 3) && db >= 0 && off >= 0) {
 	string stp = (rez == 2) ? TSYS::strParse(TSYS::strLine(func()->io(num)->def(),0),2,"|") : tp;
 	if(stp.empty() || isdigit(stp[0]))
 	    switch(ioType(num)) {

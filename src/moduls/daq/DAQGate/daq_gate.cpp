@@ -786,6 +786,7 @@ void TMdPrm::load_( )
 	    if(vlPresent(aEl->attr("id"))) continue;
 	    pEl.fldAdd(new TFld(aEl->attr("id").c_str(),aEl->attr("nm").c_str(),(TFld::Type)s2i(aEl->attr("tp")),
 		s2i(aEl->attr("flg")),"","",aEl->attr("vals").c_str(),aEl->attr("names").c_str()));
+	    vlAt("err").at().setS(_("10:Data not available."), 0, true);
 	    //vlAt(aEl->attr("id")).at().setS(aEl->text());
 	}
     } catch(TError &err) { }

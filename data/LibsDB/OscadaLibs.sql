@@ -5530,18 +5530,21 @@ if(plcImit) {	//Data imitation
   }
 }
 
+levErr = 0;
+tErr = "0";
+
 //Call specific preprocessing procedure
 if(inProc.length)	{
 	inPrcArgs.f_frq = f_frq;
 	inPrcArgs.in = in; inPrcArgs.var = var; inPrcArgs.min = min; inPrcArgs.max = max;
 	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
 	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
+	inPrcArgs.levErr = levErr; inPrcArgs.tErr = tErr;
 	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc, inPrcId);
 	in = inPrcArgs.in;
+	levErr = inPrcArgs.levErr; tErr = inPrcArgs.tErr;
 }
 
-levErr = 0;
-tErr = "0";
 //Input data check and postprocess
 if(in.isEVal()) {
 	//if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
@@ -5562,7 +5565,7 @@ else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
 	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
 	else if(subMode == 2) var = subVar;
 }
-if(!tErr) {
+else {
 	vCalibr = iMult*(in+iAdd);
 	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
 	if(!passIn || scSqr) {
@@ -5575,16 +5578,18 @@ if(!tErr) {
 	var += varDt/max(1,Tf*f_frq);
 	prevVar = var;
 
-	bndVarHyst = (max-min)*HystBnd/100;
-	if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
-	{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; }
-	else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
-	{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; }
-	else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
-	{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; }
-	else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
-	{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; }
-	else if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
+	if(!tErr) {
+		bndVarHyst = (max-min)*HystBnd/100;
+		if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
+		{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; }
+		else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
+		{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; }
+		else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
+		{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; }
+		else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
+		{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; }
+		else if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
+	}
 }
 
 //Alarms forming
@@ -5602,7 +5607,7 @@ else {
 	f_err = tErr;
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
-}','','',1534928149);
+}','','',1540131917);
 INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,0,'JavaLikeCalc.JavaScript
 set = false;
 if(!com.isEVal() && com && last_cmd != 1)		last_cmd = 1, set = true;

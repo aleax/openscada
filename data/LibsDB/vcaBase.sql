@@ -9951,9 +9951,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayOrder','process','0',40,'','','doc
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','process','0',40,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','style','TABLE.data { border-collapse: collapse; }
 TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
-TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }','','','');
+TABLE.data TD { white-space: normal; border: 1px solid black;}',32,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','name','Protocol of violations',32,'','','','Протокол порушень','','Протокол нарушений','','','');
 INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','perm','438',32,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
@@ -9962,11 +9960,11 @@ INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLi
   <TR><TH colspan="5" align="left">Violations at <?dp return "Violations at "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
   <TR><TH>Date</TH><TH>Time</TH><TH>Parameter</TH><TH>Violation</TH><TH>Value</TH></TR>
   <TR docAMess="1:al*:*" docRevers="1">
-	<?dp return "<TD><center>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
-		"<TD><center>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
+	<?dp return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
+		"<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
 		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</center></TD>"+
-		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</center></TD>"+
-		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(2,":"))+"</center></TD>";?>
+		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</TD>"+
+		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(2,":"))+"</TD>";?>
   </TR>
 </TABLE>
 </body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
@@ -9975,11 +9973,11 @@ INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLi
   <TR><TH colspan="5" align="left">Порушення за <?dp return "Порушення за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
   <TR><TH>Дата</TH><TH>Час</TH><TH>Параметр</TH><TH>Порушення</TH><TH>Значення</TH></TR>
   <TR docAMess="1:al*:*" docRevers="1">
-	<?dp return "<TD><center>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
-		"<TD><center>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
+	<?dp return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
+		"<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
 		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</center></TD>"+
-		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</center></TD>"+
-		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(2,":"))+"</center></TD>";?>
+		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</TD>"+
+		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(2,":"))+"</TD>";?>
   </TR>
 </TABLE>
 </body>','','<body docProcLang="JavaLikeCalc.JavaScript">
@@ -9988,11 +9986,11 @@ INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLi
   <TR><TH colspan="5" align="left">Нарушения за <?dp return "Нарушения за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
   <TR><TH>Дата</TH><TH>Время</TH><TH>Параметр</TH><TH>Нарушение</TH><TH>Значение</TH></TR>
   <TR docAMess="1:al*:*" docRevers="1">
-	<?dp return "<TD><center>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
-		"<TD><center>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
+	<?dp return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
+		"<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
 		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</center></TD>"+
-		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</center></TD>"+
-		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(2,":"))+"</center></TD>";?>
+		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</TD>"+
+		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(2,":"))+"</TD>";?>
   </TR>
 </TABLE>
 </body>','','','');

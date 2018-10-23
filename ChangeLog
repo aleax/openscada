@@ -1,3 +1,11 @@
+2018-10-23 Roman (stable)
+- DB.LibsDB.OscadaLibs: base.manInUnif: Expanded for alarms setting from the preprocessing custom procedure.
+- DB.LibsDB.vcaBase: doc.docAlarmsRep: Improved for space wrapping in the last two columns.
+- DAQ.DAQGate: The parameters' attribute "err" set to "10:Data not available." after loading.
+- FIX:DAQ.LogicLev: Fixed for the template configuration field processing "Only attributes are to be shown".
+- FIX:DAQ.Siemens: Tested and fixed on the real PLC connection after migrating to the new API of the unified DAQ templates.
+
+
 2018-10-20 Roman (stable)
 - Transports: Input transports appended by the virtual functions keepAliveReqs(), keepAliveTm() for true KeepAlive on Web.
 - TUIS: Changed for the behaviour of determining the file extension "svg" as "image/svg+xml" for correct and multiple SVG files display on WEB.
