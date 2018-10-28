@@ -1,3 +1,13 @@
+2018-10-28 Roman (stable)
+- DB.LibsDB.{OscadaLibs,vcaBase}: Some translation updating.
+- !!!!:DB.LibsDB.vcaBase: Appended for Main.alarmsSt and Main.alarmsAct expanded for support quittance, comments and custom fields.
+- !!:Special.{FLibComplex1,FLibMath}: Revised for all messages and the documentation.
+- Transport.SSL: Prevented from twice SSL_library_init() call at OpenSCADA projects switch due it cause some time to crashes, seen on Ubuntu 16.04.
+- UI.VCAEngine: Widgets prevented from setting names double to identifier, at the copying mostly.
+- !!:UI.Vision: The focus control rewrote to VCA widgets specific and not Qt widgets, what pevents some problems. That is like to UI.WebVision now.
+- !!:FIX:UI.WebVision: Improved for the focus control behaviour and fixed to prevent mouse events to behind pages.
+
+
 2018-10-23 Roman (stable)
 - DB.LibsDB.OscadaLibs: base.manInUnif: Expanded for alarms setting from the preprocessing custom procedure.
 - DB.LibsDB.vcaBase: doc.docAlarmsRep: Improved for space wrapping in the last two columns.

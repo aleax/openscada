@@ -288,6 +288,23 @@ VisRun::~VisRun( )
     }
 }
 
+void VisRun::setFocus( const string &addr )
+{
+    if(focusWdf.size() && focusWdf == addr) return;
+    XMLNode req("set");
+    if(focusWdf.size()) {
+	req.setAttr("path", focusWdf+"/%2fserv%2fattr");
+	req.childAdd("el")->setAttr("id","focus")->setText("0");
+	req.childAdd("el")->setAttr("id","event")->setText("ws_FocusOut");
+	cntrIfCmd(req);
+    }
+    focusWdf = addr;
+    req.clear()->setAttr("path", focusWdf+"/%2fserv%2fattr");
+    req.childAdd("el")->setAttr("id","focus")->setText("1");
+    req.childAdd("el")->setAttr("id","event")->setText("ws_FocusIn");
+    cntrIfCmd(req);
+}
+
 bool VisRun::winMenu( )	{ return menuBar()->actions().length(); }
 
 void VisRun::setWinMenu( bool act )
@@ -1270,6 +1287,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	    ((QScrollArea *)centralWidget())->takeWidget();
 	    master_pg->deleteLater();
 	    master_pg = NULL;
+	    focusWdf = "";
 	    setXScale(1); setYScale(1);
 	}
 
@@ -1498,6 +1516,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	// Create widget view
 	master_pg = new RunPageView(pg_it, this, centralWidget());
 	conErr = NULL;			//possible a connection error status clean up
+	focusWdf = "";
 	//master_pg->load("");
 	master_pg->setFocusPolicy(Qt::StrongFocus);
 	((QScrollArea *)centralWidget())->setWidget(master_pg);
@@ -1742,6 +1761,7 @@ void VisRun::updatePage( )
 		    ((QScrollArea*)centralWidget())->setWidget(new QWidget());
 		    master_pg = NULL;
 		    conErr = NULL;		//possible a connection error status clean up
+		    focusWdf = "";
 		}
 	    }
 	}

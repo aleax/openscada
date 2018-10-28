@@ -166,7 +166,10 @@ string Widget::name( ) const
     return wnm.size() ? wnm : mId;
 }
 
-void Widget::setName( const string &inm )	{ attrAt("name").at().setS(inm); }
+void Widget::setName( const string &inm )
+{
+    attrAt("name").at().setS((inm==mId)?"":inm);
+}
 
 string Widget::descr( ) const
 {

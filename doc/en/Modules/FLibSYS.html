@@ -109,7 +109,7 @@
 </ul>
 </div>
 
-<p>The module provides the OpenSCADA for static library of functions for use in the user programming environment and the organization of extraordinary interaction algorithms.
+<p>The module provides OpenSCADA for static library of functions for use in the user programming environment and the organization of extraordinary interaction algorithms.
 </p><p>To address the functions of the library you can use the static call address <b>Special.FLibSYS.{Func}()</b> or dynamic <b>SYS.Special.FLibSYS["{Func}"].call()</b>, <b>SYS.Special.FLibSYS.{Func}()</b>. Where <i>{Func}</i> — function identifier in the library.
 </p>
 <h2><span class="mw-headline" id="System-wide_functions"><span class="mw-headline-number">1</span> System-wide functions</span></h2>
@@ -1514,10 +1514,10 @@ return val.isEval()&nbsp;? "Empty"&nbsp;: real2str(val,prec);</pre>
 </td></tr></table>
 <h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">6</span> User programming API</span></h2>
 <p>The module, as an object, provides user programming functions.
-</p><p><b>The object "Functions library" (SYS.Special.FLibMath)</b>
+</p><p><b>The object "Functions library" (SYS.Special.FLibSYS)</b>
 </p>
 <ul><li> <i>ElTp {funcID}(ElTp prm1, ...)</i> — call the library function <i>{funcID}</i>. Return result of the called function.</li></ul>
-<p><b>The object "User function" (SYS.Special.FLibMath["funcID"])</b>
+<p><b>The object "User function" (SYS.Special.FLibSYS["funcID"])</b>
 </p>
 <ul><li> <i>ElTp call(ElTp prm1, ...)</i> — call the function with parameters <i>prm{N}</i>. Return result of the called function.</li></ul>
 

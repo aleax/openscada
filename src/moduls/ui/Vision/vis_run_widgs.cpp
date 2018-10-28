@@ -513,8 +513,8 @@ bool RunWdgView::event( QEvent *event )
 		return true;
 	    }
 	    break;
-	case QEvent::FocusIn:
-	    attrs.push_back(std::make_pair("focus","1"));
+	case QEvent::FocusIn:	mainWin()->setFocus(id());	return true;
+	    /*attrs.push_back(std::make_pair("focus","1"));
 	    attrs.push_back(std::make_pair("event","ws_FocusIn"));
 	    attrsSet(attrs);
 	    return true;
@@ -522,7 +522,7 @@ bool RunWdgView::event( QEvent *event )
 	    attrs.push_back(std::make_pair("focus","0"));
 	    attrs.push_back(std::make_pair("event","ws_FocusOut"));
 	    attrsSet(attrs);
-	    return true;
+	    return true;*/
 	default: break;
     }
 

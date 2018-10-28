@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibMath file: stdmath.h
 /***************************************************************************
- *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,8 +51,8 @@ class MathAcos : public TFunction
 	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
-	string name( )	{ return _("ArcCos"); }
-	string descr( )	{ return _("Arc cosine math function."); }
+	string name( )	{ return _("Arccosine"); }
+	string descr( )	{ return _("Arccosine math function."); }
 
 	void calc( TValFunc *val ) { val->setR(0, acos(val->getR(1))); }
 };
@@ -69,8 +69,8 @@ class MathAsin : public TFunction
 	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
-	string name( )	{ return _("ArcSin"); }
-	string descr( )	{ return _("Arc sine math function."); }
+	string name( )	{ return _("Arcsine"); }
+	string descr( )	{ return _("Arcsine math function."); }
 
 	void calc( TValFunc *val ) { val->setR(0, asin(val->getR(1))); }
 };
@@ -87,8 +87,8 @@ class MathAtan : public TFunction
 	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
-	string name( )	{ return _("ArcTan"); }
-	string descr( )	{ return _("Arc tangent math function."); }
+	string name( )	{ return _("Arctangent"); }
+	string descr( )	{ return _("Arctangent math function."); }
 
 	void calc( TValFunc *val ) { val->setR(0, atan(val->getR(1))); }
 };
@@ -305,7 +305,7 @@ class MathCeil : public TFunction
 	}
 
 	string name( )	{ return _("Ceil"); }
-	string descr( )	{ return _("Ceil math function."); }
+	string descr( )	{ return _("Math function of rounding up to the largest integer."); }
 
 	void calc( TValFunc *val ) { val->setR(0,ceil(val->getR(1))); }
 };
@@ -341,7 +341,7 @@ class MathFloor : public TFunction
 	}
 
 	string name( )	{ return _("Floor"); }
-	string descr( )	{ return _("Floor math function."); }
+	string descr( )	{ return _("Math function of rounding down to the lowest integer."); }
 
 	void calc( TValFunc *val ) { val->setR(0, floor(val->getR(1))); }
 };
@@ -357,8 +357,8 @@ class MathRand : public TFunction
 	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
 	}
 
-	string name( )	{ return _("Rand"); }
-	string descr( )	{ return _("Rand math function."); }
+	string name( )	{ return _("Random number"); }
+	string descr( )	{ return _("Math function of the random numbers generation."); }
 
 	void calc( TValFunc *val ) { val->setR(0, 100.*rand()/RAND_MAX); }
 };
@@ -378,7 +378,7 @@ class MathIf : public TFunction
 	}
 
 	string name( )	{ return _("IF condition"); }
-	string descr( )	{ return _("Function's type 'if'-condition."); }
+	string descr( )	{ return _("Function of the type 'if'-condition."); }
 
 	void calc( TValFunc *val ) { val->setR(0,val->getR(1)?val->getR(2):val->getR(3)); }
 };

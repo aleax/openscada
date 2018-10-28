@@ -180,6 +180,8 @@ class VisRun : public QMainWindow
 	bool	connOK( )	{ return !conErr; }
 	QAction *aFullScr( )	{ return actFullScr; }
 
+	void setFocus( const string &addr );
+
 	bool	winMenu( );
 	void	setWinMenu( bool act );
 
@@ -326,6 +328,7 @@ class VisRun : public QMainWindow
 	bool		mKeepAspectRatio;	//Keep aspect ratio on scale
 	bool		mWinPosCntrSave;	//Windows position control and save
 	string 		prjSes_it, work_sess, src_prj;//Work session and source project
+	string		focusWdf;
 	RunPageView	*master_pg;		//Master page of runtime session
 	int		mPeriod;		//Clock's period
 	int		mConId;			//The connection to VCA ID

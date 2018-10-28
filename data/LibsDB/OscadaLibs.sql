@@ -1110,7 +1110,7 @@ INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','t3','Test timeout, s',2,64,'2'
 INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','k','Maximum unconfirmed',1,64,'12',6,'Максимально неподтверждённых','','Максимально непідтверджених','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','w','Maximum no ack',1,64,'8',7,'Максимальное отсутсвие "ack"','','Максимальна відсутність "ack"','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','itemsSet','Items set by: "ai|di|do:{IOA}[-{EndIOA}]:a[:{NameBase}]"',0,36,'',8,'Небор элементов по: "ai|di|do:{IOA}[-{EndIOA}]:a[:{NameBase}]"','','Набір елементів за: "ai|di|do:{IOA}[-{EndIOA}]:a[:{NameBase}]"','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','items','All items',4,33,'',9,'Все елементы','','Всі елементи','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','items','All items',4,33,'',9,'Все элементы','','Всі елементи','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','this','Object',4,0,'',10,'Объект','','Об''єкт','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','transport','Transport of the Ethernet network, Sockets',0,64,'SSCP',0,'Транспорт сети Ethernet, Сокеты','','Транспорт мережі Ethernet, Сокети','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','addr','Address [0...255]',1,64,'1',1,'Адрес [0...255]','','Адреса [0...255]','');
@@ -1609,8 +1609,8 @@ INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_open','State "Opened"',3,16,'
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_close','State "Closed"',3,16,'',5,'Стан "Закрито"','','Состояние "Закрыто"','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','log','Logarithmic scale',3,32,'0',23,'Логарифмічна шкала','','Логарифмическая шкала','');
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','inProc','Input processing procedure',0,68,'',3,'Процедура обробки входу','','Процедура обработки входа','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','alDelay','Alarms delay, s',2,32,'0',10,'Затримка порушення, с','','Задержка нарушения, с','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alDelay','Alarms delay, s',2,32,'',15,'Затримка порушення, с','','Задержка нарушения, с','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','alDelay','Alarms delay, s',2,32,'0',10,'Затримка сигналізації, с','','Задержка сигнализации, с','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alDelay','Alarms delay, s',2,32,'',15,'Затримка сигналізації, с','','Задержка сигнализации, с','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 CREATE TABLE 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 CREATE TABLE 'flb_web_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -2836,7 +2836,7 @@ INSERT INTO "Trs" VALUES('3:Incomplete response.','','');
 INSERT INTO "Trs" VALUES('4:Request error.','','');
 INSERT INTO "Trs" VALUES('Address ''%1'' out of range [0...255].','','');
 INSERT INTO "Trs" VALUES('Response','','');
-INSERT INTO "Trs" VALUES('Appending variable','','');
+INSERT INTO "Trs" VALUES('Appending variable','Додання змінної','Добавление переменной');
 INSERT INTO "Trs" VALUES('4:Unknown function.','','');
 INSERT INTO "Trs" VALUES('4:Insufficient rights.','','');
 INSERT INTO "Trs" VALUES('4:Invalid function received.','','');
@@ -2860,9 +2860,8 @@ INSERT INTO "Trs" VALUES('s','','');
 INSERT INTO "Trs" VALUES('ms','','');
 INSERT INTO "Trs" VALUES('us','','');
 INSERT INTO "Trs" VALUES('ns','','');
-INSERT INTO "Trs" VALUES('Allowed variables','','');
-INSERT INTO "Trs" VALUES('No data','','');
-INSERT INTO "Trs" VALUES('No a data','','');
+INSERT INTO "Trs" VALUES('Allowed variables','Наявно змінних','Доступно переменных');
+INSERT INTO "Trs" VALUES('No data','Немає даних','Нет данных');
 INSERT INTO "Trs" VALUES('Disable ECHO error: %1','','');
 INSERT INTO "Trs" VALUES('Check for PIN-code error: %1','','');
 INSERT INTO "Trs" VALUES('Set PIN error: %1','','');
@@ -2882,8 +2881,8 @@ INSERT INTO "Trs" VALUES('MAIL FROM error: %1.','','');
 INSERT INTO "Trs" VALUES('RCPT TO error: %1.','','');
 INSERT INTO "Trs" VALUES('DATA error: %1.','','');
 INSERT INTO "Trs" VALUES('DATA send error: %1.','','');
-INSERT INTO "Trs" VALUES('Alarm','','');
-INSERT INTO "Trs" VALUES('Norm','','');
+INSERT INTO "Trs" VALUES('Alarm','Сигнал','Сигнал');
+INSERT INTO "Trs" VALUES('Norm','Норма','Норма');
 INSERT INTO "Trs" VALUES('Sent %1. In queue %2.','','');
 INSERT INTO "Trs" VALUES('Error: %1.','','');
 INSERT INTO "Trs" VALUES('Wrong or empty respond to the calibration request.','','');
@@ -4017,7 +4016,7 @@ if(mdPass)	{
 	if(f_start) { f_err = EVAL; this.cnt.set(0, 0, 0, true); cnt_ = 0; tDl = 5; }
 	if((cnt=this.cnt.get()) != cnt_)	{ tDl = 5; cnt_ = cnt; }
 	else if(tDl > 0 && (tDl=tDl-1/f_frq) <= 0) {
-		this.err.set("1:"+tr("No a data"), 0, 0, true);
+		this.err.set("1:"+tr("No data"), 0, 0, true);
 		this.T.set(EVAL, 0, 0, true);
 		this.H.set(EVAL, 0, 0, true);
 		this.L.set(EVAL, 0, 0, true);

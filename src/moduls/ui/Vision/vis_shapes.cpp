@@ -960,8 +960,8 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
     else {
 	AttrValS attrs;
 	switch(event->type()) {
-	    case QEvent::FocusIn:
-		if(!w->hasFocus()) break;
+	    case QEvent::FocusIn: qobject_cast<RunWdgView*>(w)->mainWin()->setFocus(w->id());	break;
+		/*if(!w->hasFocus()) break;
 		attrs.push_back(std::make_pair("focus","1"));
 		attrs.push_back(std::make_pair("event","ws_FocusIn"));
 		w->attrsSet(attrs);
@@ -971,7 +971,7 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		attrs.push_back(std::make_pair("focus","0"));
 		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
-		break;
+		break;*/
 	    case QEvent::MouseButtonDblClick:
 	    case QEvent::MouseButtonPress:
 	    case QEvent::MouseButtonRelease: QApplication::sendEvent(w, event);	break;
@@ -4346,8 +4346,8 @@ bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
     else {
 	AttrValS attrs;
 	switch(event->type()) {
-	    case QEvent::FocusIn:
-		attrs.push_back(std::make_pair("focus","1"));
+	    case QEvent::FocusIn: qobject_cast<RunWdgView*>(w)->mainWin()->setFocus(w->id());	break;
+		/*attrs.push_back(std::make_pair("focus","1"));
 		attrs.push_back(std::make_pair("event","ws_FocusIn"));
 		w->attrsSet(attrs);
 		break;
@@ -4355,7 +4355,7 @@ bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		attrs.push_back(std::make_pair("focus","0"));
 		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
-		break;
+		break;*/
 	    default: break;
 	}
     }
@@ -4515,8 +4515,8 @@ bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
     else {
 	AttrValS attrs;
 	switch(event->type()) {
-	    case QEvent::FocusIn:
-		attrs.push_back(std::make_pair("focus","1"));
+	    case QEvent::FocusIn: qobject_cast<RunWdgView*>(w)->mainWin()->setFocus(w->id());	break;
+		/*attrs.push_back(std::make_pair("focus","1"));
 		attrs.push_back(std::make_pair("event","ws_FocusIn"));
 		w->attrsSet(attrs);
 		break;
@@ -4524,7 +4524,7 @@ bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		attrs.push_back(std::make_pair("focus","0"));
 		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
-		break;
+		break;*/
 	    default: break;
 	}
     }

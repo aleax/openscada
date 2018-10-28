@@ -623,7 +623,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    else this.window.resizeTo(geomW+20,geomH+40);
 	}
 
-	if(this.attrs['focus'] && parseInt(this.attrs['focus'])) setFocus(this.addr,true);
+	if(this.attrs['focus'] && parseInt(this.attrs['focus'])) setFocus(this.addr, true);
 
 	this.place.className = "Primitive " + this.attrs['root'];
 	if(!this.place.getAttribute("id"))
@@ -709,7 +709,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		}
 	    }
 	    this.place.wdgLnk = this;
-	    this.place.onclick = (!elWr) ? null : function() { setFocus(this.wdgLnk.addr); return true; };	//Changed to return true for <input type="file">
+	    //this.place.onclick = (!elWr) ? null : function() { setFocus(this.wdgLnk.addr); return true; };	//Changed to return true for <input type="file">
 	}
 	else if(this.attrs['root'] == 'Text') {
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
@@ -765,9 +765,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    //else this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+
 	    //				"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(3)+"&ySc="+ySc.toFixed(3)+"'/>";
 
-	    this.place.wdgLnk = this;
-	    if(elWr) this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };
-	    else this.place.onclick = '';
+	    //this.place.wdgLnk = this;
+	    //if(elWr) this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };
+	    //else this.place.onclick = '';
 	}
 	else if(this.attrs['root'] == 'Media') {
 	    elStyle += 'border-width: '+this.attrs['bordWidth']+'px; ';
@@ -1861,7 +1861,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    anchObj.isActive = elWr;
 	    anchObj.href = '#';
 	    anchObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-	    anchObj.onfocus = function( ) { if(this.isActive) setFocus(this.wdgLnk.addr); }
+	    //anchObj.onfocus = function( ) { if(this.isActive) setFocus(this.wdgLnk.addr); }
 	    anchObj.onkeydown = function(e) { if(this.isActive) setWAttrs(this.wdgLnk.addr,'event','key_pres'+evKeyGet(e?e:window.event)); }
 	    anchObj.onkeyup = function(e) { if(this.isActive) setWAttrs(this.wdgLnk.addr,'event','key_rels'+evKeyGet(e?e:window.even)); }
 	    anchObj.onclick = function(e) {
@@ -1870,7 +1870,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)))+
 							  '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)))+
 							  '&key='+evMouseGet(e),'');
-		setFocus(this.wdgLnk.addr);
+		//setFocus(this.wdgLnk.addr);
 		return false;
 	    }
 	    var dgrObj = anchObj.childNodes[0];
@@ -1894,7 +1894,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		this.place.firstChild.wdgLnk = this;
 		this.place.firstChild.isActive = elWr;
 		this.place.firstChild.onclick = function(e) {
-		    if(this.isActive) setFocus(this.wdgLnk.addr);
+		    //if(this.isActive) setFocus(this.wdgLnk.addr);
 		    return false;
 		}
 		this.place.firstChild.className='prot';
@@ -2170,13 +2170,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	//Generic mouse events process
 	if(elWr) {
-	    //console.log(this.addr+": TEST 03: mDownCnt="+this.mDownCnt);
 	    this.mousedown[this.mousedown.length] = function(e,el) {
-		if(!e) e = window.event;
 		setWAttrs(el.wdgLnk.addr,'event','key_mousePres'+evMouseGet(e));
+		setFocus(el.wdgLnk.addr);
 	    }
 	    this.mouseup[this.mouseup.length] = function(e,el) {
-		if(!e) e = window.event;
 		setWAttrs(el.wdgLnk.addr,'event','key_mouseRels'+evMouseGet(e));
 	    }
 	    this.place.ondblclick = function(e) { setWAttrs(this.wdgLnk.addr,'event','key_mouseDblClick'); return false; }
@@ -2214,18 +2212,24 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	else if(elWr) this.place.oncontextmenu = function(e) { return false; };
 	else this.place.oncontextmenu = null;
 
-	//Common mouse events process
+	//Common mouse events processing
 	if(this.mousedown.length)
 	    this.place.onmousedown = function(e) {
-		for(var i_on = 0; i_on < this.wdgLnk.mousedown.length; i_on++)
-		    this.wdgLnk.mousedown[i_on](e, this);
+		if(!e) e = window.event;
+		if(e.elPrc) return true;
+		e.elPrc = true;
+		for(var iOn = 0; iOn < this.wdgLnk.mousedown.length; iOn++)
+		    this.wdgLnk.mousedown[iOn](e, this);
 		return true;
 	    }
 	else delete this.mousedown;
 	if(this.mouseup.length)
 	    this.place.onmouseup = function(e) {
-		for(var i_on = 0; i_on < this.wdgLnk.mouseup.length; i_on++)
-		    this.wdgLnk.mouseup[i_on](e,this);
+		if(!e) e = window.event;
+		if(e.elPrc) return true;
+		e.elPrc = true;
+		for(var iOn = 0; iOn < this.wdgLnk.mouseup.length; iOn++)
+		    this.wdgLnk.mouseup[iOn](e,this);
 		return true;
 	    }
 	else delete this.mouseup;

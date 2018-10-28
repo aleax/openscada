@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.2.0"
+#define MOD_VER		"2.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -118,6 +118,12 @@ void TTransSock::postEnable( int flag )
 	owner().inEl().fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
 	owner().outEl().fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
     }
+}
+
+void TTransSock::preDisable( int flag )
+{
+    //!!!! Due to SSL_library_init() some time crashable at second call, seen on Ubuntu 16.04
+    if(SYS->stopSignal() == SIGUSR2) throw err_sys(_("Hold when overloaded to another project."));
 }
 
 unsigned long TTransSock::id_function( )	{ return (unsigned long)pthread_self(); }

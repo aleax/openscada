@@ -50,16 +50,18 @@ class DigitBlock : public TFunction
 	    ioAdd(new IO("cmdOpen",_("Command \"Open\""),IO::Boolean,IO::Output,"0"));
 	    ioAdd(new IO("cmdClose",_("Command \"Close\""),IO::Boolean,IO::Output,"0"));
 	    ioAdd(new IO("cmdStop",_("Command \"Stop\""),IO::Boolean,IO::Output,"0"));
-	    ioAdd(new IO("stOpen",_("Stat \"Opened\""),IO::Boolean,IO::Default,"0"));
-	    ioAdd(new IO("stClose",_("Stat \"Closed\""),IO::Boolean,IO::Default,"0"));
-	    ioAdd(new IO("tCmd",_("Command hold time (s)"),IO::Integer,IO::Default,"5"));
-	    ioAdd(new IO("frq",_("Calculation period (ms)"),IO::Integer,IO::Default,"1000"));
-	    ioAdd(new IO("w_tm",_("Process command clock"),IO::Real,IO::Output,"0",true));
+	    ioAdd(new IO("stOpen",_("State \"Opened\""),IO::Boolean,IO::Default,"0"));
+	    ioAdd(new IO("stClose",_("State \"Closed\""),IO::Boolean,IO::Default,"0"));
+	    ioAdd(new IO("tCmd",_("Time of commands holding, seconds"),IO::Integer,IO::Default,"5"));
+	    ioAdd(new IO("frq",_("Frequency of the calculating, Hz"),IO::Integer,IO::Default,"1"));
+	    ioAdd(new IO("w_tm",_("Counter of the commands processing"),IO::Real,IO::Output,"0",true));
 	    ioAdd(new IO("last_cmd",_("Last command"),IO::Integer,IO::Output,"0",true));
 	}
 
-	string name( )	{ return _("Digital block"); }
-	string descr( )	{ return _("Digital assemble block."); }	//!!!! make full description
+	string name( )	{ return _("Discrete block"); }
+	string descr( )	{ return _("The function contains a control algorithm for the collection of discrete signals "
+	    "for latches and pumps that contain: signs \"Opened\", \"Closed\", and commands \"Open\", \"Close\", and \"Stop\".\n"
+	    "The function supports the operation of pulsed commands, that is it can take a signal within a specified time interval."); }
 
 	void calc( TValFunc *val ) {
 	    bool set = false;
@@ -68,7 +70,7 @@ class DigitBlock : public TFunction
 	    if(val->getB(1) && val->getI(8) != 2) { val->setI(8, 2); set = true; }
 	    if(val->getB(2) && val->getI(8) != 3) { val->setI(8, 3); set = true; }
 	    if(set && val->getI(5) > 0)	val->setR(7, val->getI(5));
-	    if(val->getR(7) > 0)	val->setR(7, val->getR(7)-0.001*val->getI(6));
+	    if(val->getR(7) > 0)	val->setR(7, val->getR(7)-1/vmax(1e-3,val->getI(6)));
 	    else {
 		val->setR(7, 0);
 		if(val->getI(5) > 0) {
@@ -103,9 +105,9 @@ class Sum : public TFunction
 	    }
 	}
 
-	string name( )	{ return _("Simple summator"); }
+	string name( )	{ return _("Simple sumator"); }
 	string descr( )	{
-	    return _("Simple summator per formula:\n"
+	    return _("Simple sumator with multiplication:\n"
 		"out=in1_1*in1_2+in2_1*in2_2+in3_1*in3_2+in4_1*in4_2+\n"
 		"    in5_1*in5_2+in6_1*in6_2+in7_1*in7_2+in8_1*in8_2;");
 	}
@@ -124,7 +126,7 @@ class Sum : public TFunction
 };
 
 //*********************************************************************
-//* Simple multiplier                                                 *
+//* Simple multiplication                                             *
 //* Formula: out=(in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/               *
 //*              (in2_1*in2_2*in2_3*in2_4);                           *
 //*********************************************************************
@@ -139,9 +141,9 @@ class Mult : public TFunction
 		ioAdd(new IO(("in2_"+i2s(iC)).c_str(),(_("Input 2.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
 	}
 
-	string name( )	{ return _("Simple multiplier"); }
+	string name( )	{ return _("Simple multiplication"); }
 	string descr( )	{
-	    return _("Simple multiplier per formula:\n"
+	    return _("Simple multiplication with division:\n"
 		"out=(in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/(in2_1*in2_2*in2_3*in2_4);");
 	}
 
@@ -153,7 +155,7 @@ class Mult : public TFunction
 };
 
 //*********************************************************************
-//* Multiplier+divider                                             *
+//* Multiplier and divider                                            *
 //* Formula: out=(in1_1*in1_2*in1_3*in1_4*in1_5*(in2_1*in2_2*in2_3*in2_4*in2_5+
 //*              (in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5)))
 //*********************************************************************
@@ -172,9 +174,9 @@ class MultDiv : public TFunction
 		ioAdd(new IO(("in4_"+i2s(iC)).c_str(),(_("Input 4.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
 	}
 
-	string name( )	{ return _("Multiplier+divider"); }
+	string name( )	{ return _("Multiplication and division"); }
 	string descr( )	{
-	    return _("Multiplier+divider per formula:\n"
+	    return _("Branched multiplication and division:\n"
 		"out=in1_1*in1_2*in1_3*in1_4*in1_5*(in2_1*in2_2*in2_3*in2_4*in2_5+\n"
 		"          (in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5));");
 	}
@@ -211,7 +213,7 @@ class Exp : public TFunction
 
 	string name( )	{ return _("Exponent"); }
 	string descr( )	{
-	    return _("Exponent per formula:\n"
+	    return _("Calculate an exponent over a group of variables:\n"
 		"out=exp (in1_1*in1_2*in1_3*in1_4*in1_5 +\n"
 		"         (in2_1*in2_2*in2_3*in2_4*in2_5+in3) / (in4_1*in4_2*in4_3*in4_4*in4_5+in5) );");
 	}
@@ -248,7 +250,7 @@ class Pow : public TFunction
 
 	string name( )	{ return _("Power"); }
 	string descr( )	{
-	    return _("Power per formula:\n"
+	    return _("Raising to the power:\n"
 		"out=(in1_1*in1_2*in1_3*in1_4*in1_5)^(in2_1*in2_2*in2_3*in2_4*in2_5 +\n"
 		"	(in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5));");
 	}
@@ -286,7 +288,7 @@ class Cond1 : public TFunction
 
 	string name( )	{ return _("Condition '<'"); }
 	string descr( )	{
-	    return _("Condition '<' per formula:\n"
+	    return _("Operation of the branching according to the condition \"less\":\n"
 		"out=if( in1<(in2_1*in2_2*in2_3*in2_4) ) then in3_1*in3_2*in3_3*in3_4;\n"
 		"    else in4_1*in4_2*in4_3*in4_4;");
 	}
@@ -320,7 +322,7 @@ class Cond2 : public TFunction
 
 	string name( )	{ return _("Condition '>'"); }
 	string descr( )	{
-	    return _("Condition '>' per formula:\n"
+	    return _("Operation of the branching according to the condition \"great\":\n"
 		"out=if( in1>(in2_1*in2_2*in2_3*in2_4) ) then in3_1*in3_2*in3_3*in3_4;\n"
 		"    else in4_1*in4_2*in4_3*in4_4;");
 	}
@@ -360,7 +362,7 @@ class Cond3 : public TFunction
 
 	string name( )	{ return _("Full condition"); }
 	string descr( )	{
-	    return _("Full condition per formula:\n"
+	    return _("Full condition check including great, less and equal:\n"
 		"out = if( in1<(in2_1*in2_2*in2_3*in2_4) )    then in3_1*in3_2*in3_3*in3_4;\n"
 		"      else if( in1>(in4_1*in4_2*in4_3*in4_4) then in5_1*in5_2*in5_3*in5_4;\n"
 		"      else in6_1*in6_2*in6_3*in6_4;");
@@ -401,9 +403,9 @@ class Select : public TFunction
 		ioAdd(new IO(("in4_"+i2s(iC)).c_str(),(_("Input 4.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
 	}
 
-	string name( )	{ return _("Selector"); }
+	string name( )	{ return _("Selection"); }
 	string descr( )	{
-	    return _("Selector per formula:\n"
+	    return _("Choose one from the four options:\n"
 		"out = if( sel = 1 )  then in1_1*in1_2*in1_3*in1_4;\n"
 		"      if( sel = 2 )  then in2_1*in2_2*in2_3*in2_4;\n"
 		"      if( sel = 3 )  then in3_1*in3_2*in3_3*in3_4;\n"
@@ -438,9 +440,9 @@ class Increm : public TFunction
 	    ioAdd(new IO("k-",_("Negative coefficient"),IO::Real,IO::Default,"0.1"));
 	}
 
-	string name( )	{ return _("Increment"); }
+	string name( )	{ return _("Iterator"); }
 	string descr( )	{
-	    return _("Increment per formula:\n"
+	    return _("Iterative calculation with the increment specifying, gain ratio for different directions is different:\n"
 		"out = if( in > prev ) then prev + (k+)*(in-prev); else prev - (k-)*(prev-in);");
 	}
 
@@ -473,9 +475,9 @@ class Divider : public TFunction
 	    ioAdd(new IO("in6",_("Input 6"),IO::Real,IO::Default,"1"));
 	}
 
-	string name( )	{ return _("Divider"); }
+	string name( )	{ return _("Division"); }
 	string descr( )	{
-	    return _("Divider per formula:\n"
+	    return _("Divides assemblies of variables:\n"
 		"out = (in1_1*in1_2*in1_3*in1_4*in1_5 + in2_1*in2_2*in2_3*in2_4*in2_5 + in3) /\n"
 		"      (in4_1*in4_2*in4_3*in4_4*in4_5 + in5_1*in5_2*in5_3*in5_4*in5_5 + in6);");
 	}
@@ -529,22 +531,22 @@ class PID : public TFunction
 	PID( ) : TFunction("pid",SSPC_ID) {
 	    //Inputs
 	    ioAdd(new IO("var",_("Variable"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("sp",_("Set-point"),IO::Real,IO::Output,"0"));
-	    ioAdd(new IO("max",_("Max scale"),IO::Real,IO::Default,"100"));
-	    ioAdd(new IO("min",_("Min scale"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("manIn",_("Manual input (%)"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("out",_("Output (%)"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("sp",_("Setpoint"),IO::Real,IO::Output,"0"));
+	    ioAdd(new IO("max",_("Maximum of the scale"),IO::Real,IO::Default,"100"));
+	    ioAdd(new IO("min",_("Minimum of the scale"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("manIn",_("Manual input, %"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("out",_("Output, %"),IO::Real,IO::Return,"0"));
 	    ioAdd(new IO("auto",_("Auto mode"),IO::Boolean,IO::Default,"0"));
 	    ioAdd(new IO("casc",_("Cascade mode"),IO::Boolean,IO::Default,"0"));
 	    ioAdd(new IO("Kp",_("Kp"),IO::Real,IO::Default,"1"));
-	    ioAdd(new IO("Ti",_("Ti (ms)"),IO::Integer,IO::Default,"1000"));
+	    ioAdd(new IO("Ti",_("Ti, milliseconds"),IO::Integer,IO::Default,"1000"));
 	    ioAdd(new IO("Kd",_("Kd"),IO::Real,IO::Default,"1"));
-	    ioAdd(new IO("Td",_("Td (ms)"),IO::Integer,IO::Default,"0"));
-	    ioAdd(new IO("Tzd",_("Td lag (ms)"),IO::Integer,IO::Default,"0"));
-	    ioAdd(new IO("Hup",_("Out up limit (%)"),IO::Real,IO::Default,"100"));
-	    ioAdd(new IO("Hdwn",_("Out down limit (%)"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("Zi",_("Insensibility (%)"),IO::Real,IO::Default,"1"));
-	    ioAdd(new IO("followSp",_("Follow sp from var on manual"),IO::Boolean,IO::Default,"1"));
+	    ioAdd(new IO("Td",_("Td, milliseconds"),IO::Integer,IO::Default,"0"));
+	    ioAdd(new IO("Tzd",_("Td lag, milliseconds"),IO::Integer,IO::Default,"0"));
+	    ioAdd(new IO("Hup",_("Upper limit of the out, %"),IO::Real,IO::Default,"100"));
+	    ioAdd(new IO("Hdwn",_("Lower limit of the out, %"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("Zi",_("Insensibility, %"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("followSp",_("Follow setpoint from variable on the manual mode"),IO::Boolean,IO::Default,"1"));
 
 	    ioAdd(new IO("K1",_("K input 1"),IO::Real,IO::Default,"0"));
 	    ioAdd(new IO("in1",_("Input 1"),IO::Real,IO::Default,"0"));
@@ -555,7 +557,7 @@ class PID : public TFunction
 	    ioAdd(new IO("K4",_("K input 4"),IO::Real,IO::Default,"0"));
 	    ioAdd(new IO("in4",_("Input 4"),IO::Real,IO::Default,"0"));
 
-	    ioAdd(new IO("f_frq",_("Calculate frequency (Hz)"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("f_frq",_("Frequency of the calculating, Hz"),IO::Real,IO::Default,"1"));
 
 	    //Internal data:
 	    ioAdd(new IO("int",_("Integral value"),IO::Real,IO::Output,"0",true));
@@ -564,7 +566,7 @@ class PID : public TFunction
 	}
 
 	string name( )	{ return _("PID regulator"); }
-	string descr( )	{ return _("PID regulator"); }
+	string descr( )	{ return _("Proportional-integral-differential regulator."); }
 
 	void calc( TValFunc *v ) {
 	    double	val	= v->getR(0),
@@ -658,7 +660,7 @@ class Alarm : public TFunction
 
 	string name( )	{ return _("Alarm"); }
 	string descr( )	{
-	    return _("Scale parameter alarm:\n"
+	    return _("Setting an alarm sign in case of exceeding of the variable for the specified boundary:\n"
 		"out = if (val>max || val<min) then true; else false;");
 	}
 
@@ -690,7 +692,7 @@ class Flow : public TFunction
 
 	string name( )	{ return _("Flow"); }
 	string descr( )	{
-	    return _("Flow calculate per formula:\n"
+	    return _("Calculation of the gas flow:\n"
 		"f = K1*((K3+K4*x)^K2);");
 	}
 
@@ -720,9 +722,9 @@ class SumMult : public TFunction
 		ioAdd(new IO(("in4_"+i2s(iC)).c_str(),(_("Input 4.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
 	}
 
-	string name( )	{ return _("Summation and multiplication"); }
+	string name( )	{ return _("Sum and multiplicating"); }
 	string descr( )	{
-	    return _("Summation and multiplication per formula:\n"
+	    return _("Sum with multiplication of values group:\n"
 		"out = in1_1*in1_2*(in1_3*in1_4+in1_5) + in2_1*in2_2*(in2_3*in2_4+in2_5) +\n"
 		"      in3_1*in3_2*(in3_3*in3_4+in3_5) + in4_1*in4_2*(in4_3*in4_4+in4_5);");
 	}
@@ -760,9 +762,9 @@ class SumDiv : public TFunction
 		ioAdd(new IO(("in4_"+i2s(iC)).c_str(),(_("Input 4.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
 	}
 
-	string name( )	{ return _("Summation and divide"); }
+	string name( )	{ return _("Sum with division"); }
 	string descr( )	{
-	    return _("Summation and divide per formula:\n"
+	    return _("Sum with division of values group:\n"
 		"out = in1_1*in1_2*(in1_3+in1_4/in1_5) + in2_1*in2_2*(in2_3+in2_4/in2_5) +\n"
 		"      in3_1*in3_2*(in3_3+in3_4/in3_5) + in4_1*in4_2*(in4_3+in4_4/in4_5);");
 	}
@@ -792,7 +794,7 @@ class Lag : public TFunction
 
 	string name( )	{ return _("Lag"); }
 	string descr( )	{
-	    return _("Lag per formula:\n"
+	    return _("Delay of the change of a variable, practically it is a filter without binding to time:\n"
 		"y = y - Klag*( y - x );");
 	}
 

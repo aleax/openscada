@@ -1,13 +1,13 @@
 # OpenSCADA.Special.FLibMath translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Special.FLibMath package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2015,2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibMath 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 20:08+0300\n"
+"POT-Creation-Date: 2018-10-28 09:42+0200\n"
 "PO-Revision-Date: 2007-10-24 18:10+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -15,14 +15,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Math function's lib"
-msgstr "Библиотека математических функций"
+msgid "Math functions"
+msgstr "Математические функции"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Provides the library of standard mathematical functions."
-msgstr "Предоставляет библиотеку стандартных математические функций."
+msgid "Provides a library of the standard mathematical functions."
+msgstr "Предоставляет библиотеку стандартных математических функций."
 
 msgid "Function"
 msgstr "Функция"
@@ -36,23 +36,23 @@ msgstr "Y(рад.)"
 msgid "X"
 msgstr ""
 
-msgid "ArcCos"
+msgid "Arccosine"
 msgstr "Арккосинус"
 
-msgid "Arc cosine math function."
-msgstr "Мат. функция арккосинус."
+msgid "Arccosine math function."
+msgstr "Математическая функция арккосинус."
 
-msgid "ArcSin"
+msgid "Arcsine"
 msgstr "Арксинус"
 
-msgid "Arc sine math function."
-msgstr "Мат. функция арксинус."
+msgid "Arcsine math function."
+msgstr "Математическая функция арксинус."
 
-msgid "ArcTan"
+msgid "Arctangent"
 msgstr "Арктангенс"
 
-msgid "Arc tangent math function."
-msgstr "Мат. функция арктангенс."
+msgid "Arctangent math function."
+msgstr "Математическая функция арктангенс."
 
 msgid "Y"
 msgstr ""
@@ -64,91 +64,91 @@ msgid "Cosine"
 msgstr "Косинус"
 
 msgid "Cosine math function."
-msgstr "Мат. функция косинус."
+msgstr "Математическая функция косинус."
 
 msgid "Cosine hyperbolic"
 msgstr "Косинус гиперболический"
 
 msgid "Cosine hyperbolic math function."
-msgstr "Мат. функция косинус гиперболический."
+msgstr "Математическая функция косинус гиперболический."
 
 msgid "Exponent"
 msgstr "Экспонента"
 
 msgid "Exponent math function."
-msgstr "Мат. функция экспонента."
+msgstr "Математическая функция экспонента."
 
 msgid "Natural logarithm"
 msgstr "Натуральный логарифм"
 
 msgid "Natural logarithm math function."
-msgstr "Мат. функция натуральный логарифм."
+msgstr "Математическая функция натуральный логарифм."
 
 msgid "Decimal logarithm"
 msgstr "Десятичный логарифм"
 
 msgid "Decimal logarithm math function."
-msgstr "Мат. функция десятичный логарифм."
+msgstr "Математическая функция десятичный логарифм."
 
 msgid "Power"
 msgstr "Степень"
 
 msgid "Power math function."
-msgstr "Мат. функция возведение в степень."
+msgstr "Математическая функция возведение в степень."
 
 msgid "Sine"
 msgstr "Синус"
 
 msgid "Sine math function."
-msgstr "Мат. функция синус."
+msgstr "Математическая функция синус."
 
 msgid "Sine hyperbolic"
 msgstr "Синус гиперболический"
 
 msgid "Sine hyperbolic math function."
-msgstr "Мат. функция синус гиперболический."
+msgstr "Математическая функция синус гиперболический."
 
 msgid "Square root"
 msgstr "Корень квадратный"
 
 msgid "Square root math function."
-msgstr "Мат. функция корень квадратный."
+msgstr "Математическая функция корень квадратный."
 
 msgid "Tangent"
 msgstr "Тангенс"
 
 msgid "Tangent math function."
-msgstr "Мат. функция тангенс."
+msgstr "Математическая функция тангенс."
 
 msgid "Tangent hyperbolic"
 msgstr "Тангенс гиперболический"
 
 msgid "Tangent hyperbolic math function."
-msgstr "Мат. функция тангенс гиперболический."
+msgstr "Математическая функция тангенс гиперболический."
 
 msgid "Ceil"
-msgstr "Округление до большего"
+msgstr "Большее"
 
-msgid "Ceil math function."
-msgstr "Мат. функция округления до большего целого."
+msgid "Math function of rounding up to the largest integer."
+msgstr "Математическая функция округления до большего целого."
 
 msgid "Absolute"
 msgstr "Модуль"
 
 msgid "Absolute math function."
-msgstr "Мат. функция модуль от числа."
+msgstr "Математическая функция модуль от числа."
 
 msgid "Floor"
-msgstr "Округление до меньшего"
+msgstr "Меньшее"
 
-msgid "Floor math function."
-msgstr "Мат. функция округления до меньшего целого"
+msgid "Math function of rounding down to the lowest integer."
+msgstr "Математическая функция округления до меньшего целого."
 
-msgid "Rand"
+msgid "Random number"
 msgstr "Случайное число"
 
-msgid "Rand math function."
-msgstr "Мат. функция генератора случайных чисел."
+msgid "Math function of the random numbers generation."
+msgstr "Математическая функция генерации случайных чисел."
 
 msgid "Condition"
 msgstr "Условие"
@@ -162,5 +162,5 @@ msgstr "Ошибочное знач."
 msgid "IF condition"
 msgstr "Условие Если"
 
-msgid "Function's type 'if'-condition."
-msgstr "Функция условие Если."
+msgid "Function of the type 'if'-condition."
+msgstr "Функция типа 'если'-условие."

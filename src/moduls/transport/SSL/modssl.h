@@ -219,6 +219,7 @@ class TTransSock: public TTypeTransport
     private:
 	//Methods
 	void postEnable( int flag );
+	void preDisable( int flag );
 
 	static unsigned long id_function( );
 	static void locking_function( int mode, int n, const char * file, int line );
