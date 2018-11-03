@@ -371,7 +371,7 @@ retry:
 	goto retry;
     }
     if(prog.substr(pos,2) == "/*") {
-	pos += 2;
+	pos += 3;
 	while(pos < prog.size() && prog.substr(pos-1,2) != "*/") {
 	    if(prog[pos] == '\n')	{ yylloc.last_column = 1; yylloc.last_line++; }
 	    else yylloc.last_column++;

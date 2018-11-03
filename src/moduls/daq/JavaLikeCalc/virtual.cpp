@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.9.6"
+#define MOD_VER		"3.9.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -392,8 +392,8 @@ BFunc *TpContr::bFuncGet( const char *nm )
 //*************************************************
 //* Contr: Controller object                      *
 //*************************************************
-Contr::Contr(string name_c, const string &daq_db, ::TElem *cfgelem) :
-    ::TController(name_c, daq_db, cfgelem), TPrmTempl::Impl(this, name_c.c_str()),
+Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
+    ::TController(name_c, daq_db, cfgelem), TPrmTempl::Impl(this, ("JavaLikeCalc_"+name_c).c_str()),
     prcSt(false), callSt(false), endrunReq(false), isDAQTmpl(false), chkLnkNeed(false),
     mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), idFreq(-1), idStart(-1), idStop(-1), mPer(0)
 {
@@ -739,6 +739,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iT = 0; iT < ls.size(); iT++)
 		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
 	}
+	opt->childAdd("el")->setText("");
 	//Templates
 	SYS->daq().at().tmplLibList(lls);
 	for(unsigned iL = 0; iL < lls.size(); iL++) {

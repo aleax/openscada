@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-14 20:08+0300\n"
+"POT-Creation-Date: 2018-11-03 17:25+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -423,17 +423,14 @@ msgstr "Вимкнено. "
 msgid "Enabled. "
 msgstr "Ввімкнено. "
 
-msgid "Modified, re-enable to apply! "
-msgstr "Модифіковано, переувімкнути для застосування! "
-
 #, c-format
 msgid ""
-"Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g, register "
+"Spent time %s[%s]. Requests %.4g. Read registers %.4g, coils %.4g, register "
 "inputs %.4g, coil inputs %.4g.\n"
 "Wrote registers %.4g, coils %.4g."
 msgstr ""
-"Витрачено часу: %s. Запитів %.4g. Прочитано %.4g регістрів, %.4g бітів, %.4g "
-"регістрів входів, %.4g бітів входів.\n"
+"Витрачено часу %s[%s]. Запитів %.4g. Прочитано %.4g регістрів, %.4g бітів, "
+"%.4g регістрів входів, %.4g бітів входів.\n"
 "Записано %.4g регістрів, %.4g бітів."
 
 #, c-format
@@ -460,6 +457,9 @@ msgstr "БД"
 
 msgid "Configuration"
 msgstr "Конфігурація"
+
+msgid "DAQ template or direct procedure language"
+msgstr "DAQ шаблон або мова прямої процедури"
 
 msgid "Data"
 msgstr "Дані"
@@ -524,12 +524,6 @@ msgstr "Реальний;Цілий;Логічний;Рядок"
 
 msgid "Link"
 msgstr "Зв'язок"
-
-msgid "Program language"
-msgstr "Мова програми"
-
-msgid "Links"
-msgstr "Зв'язки"
 
 msgid "Turn off the node for this operation"
 msgstr "Вимкніть вузол для цієї операції"

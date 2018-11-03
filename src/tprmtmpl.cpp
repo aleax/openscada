@@ -520,6 +520,10 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
 		else {
 		    attrsCntr->fldAt(fId).setFlg(flg);
 		    attrsCntr->fldAt(fId).setDescr(func()->io(iIO)->name().c_str());
+		    if((flg&TFld::Selectable)) {
+			attrsCntr->fldAt(fId).setValues(selVals);
+			attrsCntr->fldAt(fId).setSelNames(selNms);
+		    }
 		}
 	    }
 

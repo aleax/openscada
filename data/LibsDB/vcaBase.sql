@@ -10151,6 +10151,7 @@ INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','digComs','Quittance: commands',131
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','digStts','Quittance: statuses',131077,'QUITT-blue',0,'','','alarms','Підтвердження: стани','ПІДТВ-blue','','Подтверждение: состояния','ПОДТВ-blue','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','st_open','Quittance: state',131072,'0',8,'','','alarms','Підтвердження: стан','','','Подтверждение: состояние','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','report','Report',131205,'',8,'','','go_report','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','messCat','Message category',131077,'al*:*',8,'','','','Категорія повідомлень','','','Категория сообщения','','','','');
 CREATE TABLE 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeDayA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeMonthA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
@@ -10418,7 +10419,7 @@ INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLi
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR><TH colspan="5" align="left">Violations at <?dp return "Violations at "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
   <TR><TH>Date</TH><TH>Time</TH><TH>Parameter</TH><TH>Violation</TH><TH>Value</TH></TR>
-  <TR docAMess="1:al*:*" docRevers="1">
+  <TR docAMess="@@messCat@@" docRevers="1">
 	<?dp return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
 		"<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
 		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</center></TD>"+
@@ -10426,12 +10427,12 @@ INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLi
 		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(2,":"))+"</TD>";?>
   </TR>
 </TABLE>
-</body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
+</body>',40,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Протокол порушень</h1>
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR><TH colspan="5" align="left">Порушення за <?dp return "Порушення за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
   <TR><TH>Дата</TH><TH>Час</TH><TH>Параметр</TH><TH>Порушення</TH><TH>Значення</TH></TR>
-  <TR docAMess="1:al*:*" docRevers="1">
+  <TR docAMess="@@messCat@@" docRevers="1">
 	<?dp return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
 		"<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
 		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</center></TD>"+
@@ -10444,7 +10445,7 @@ INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLi
 <TABLE border="1" cellpadding="2" cellspacing="0" width="100%" class="data">
   <TR><TH colspan="5" align="left">Нарушения за <?dp return "Нарушения за "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
   <TR><TH>Дата</TH><TH>Время</TH><TH>Параметр</TH><TH>Нарушение</TH><TH>Значение</TH></TR>
-  <TR docAMess="1:al*:*" docRevers="1">
+  <TR docAMess="@@messCat@@" docRevers="1">
 	<?dp return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
 		"<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
 		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</center></TD>"+
@@ -12010,6 +12011,7 @@ INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','time','Time: current',13926
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','bTime','Time: begin',139265,'0|',8,'','','','','','','','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','aSize','Archive: size',131073,'0|',2,'','wdg:wdg_doc/a_aSize','','Архів: розмір','','','Архив: размер','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','aCur','Archive: cursor: current',131073,'0|',2,'','wdg:wdg_doc/a_aCur','','Архів: курсор: поточний','','','Архив: курсор: текущий','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docAlarmsRep','messCat','Message category',131077,'1:al*:*',8,'','','','Категорія повідомлень','','','Категория сообщения','','','','');
 CREATE TABLE 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "wlb_mnEls_incl" VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO "wlb_mnEls_incl" VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -21539,7 +21541,7 @@ if(alarms_com) { event += "usr_qtc:/alarms\n"; alarms_st_open = true; }
 
 //Call per 1 seconds, start or force update
 if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
-	alMess = SYS.Archive.messGet(realPrTm, (wTm?wTm:SYS.time()), "al*:*", 1, alArch);
+	alMess = SYS.Archive.messGet(realPrTm, (wTm?wTm:SYS.time()), messCat, 1, alArch);
 
 	for(iM = 0, iRecv = 0, iAppend = 0; iM < alMess.length && iAppend < messLim; iM++) {
 		iMo = alMess[iM];
@@ -21852,7 +21854,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 }
 
 time_value = wTm ? wTm : SYS.time();
-//go_cur_active = wTm;','','',-1,'owner;name;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1540540667);
+//go_cur_active = wTm;','','',-1,'owner;name;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1540918527);
 CREATE TABLE 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_mnEls" VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -23604,7 +23606,11 @@ d0IIKeU4jgDl0aOTnNO9G6SQ9Ij+OJAPHjx4+vTprs347+D/TPmxsXdg19g7sGvsHdg19g7sGnsH
 do29A7vG3oFdY+/ArrF3YNeQ6/X6zl8pPxHW6/Vf51IEmfDmKAQAAAAASUVORK5CYII=','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
 if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-12*3600; }','','',-1,'name;dscr;geomXsc;geomYsc;',1503659478);
 INSERT INTO "wlb_doc" VALUES('docAlarmsRep','','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','','',-1,'name;dscr;',1538125405);
+if(f_start) {
+	doc_time = SYS.time();
+	doc_bTime = doc_time-24*3600;
+	doc_tmpl = doc_tmpl.replace("@@messCat@@", messCat);
+}','','',-1,'name;dscr;',1540918826);
 INSERT INTO "wlb_doc" VALUES('docMessRep','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAACc0lEQVRYhe2Vy27TQBSGz7EnNq2bOObipE0DEhECVaxAsCsIcEGwKk9C
 n6QvgES76iPQB0BI7FCpFC5Jm2IUpW0CLqGNL2N7WIwU3Jso3QyV5lt4cebYPt+vGRvn5+fL5TKc

@@ -1,3 +1,15 @@
+2018-11-03 Roman (stable)
+- !:DB.LibsDB.OscadaLibs: base.digAlarm: Prevented from alarms at the controller object errors.
+    LowDevLib.DS3231: Expanded for support DS1307.
+- DB.LibsDB.vcaBase: Main.alarmsSt,doc.docAlarmsRep: Expanded by the attribute "messCat".
+- DAQ: Expanded for early enabling the template libraries in the loading stage, initially for transport protocols based on the DAQ templates.
+- FIX:DAQ: The templates implementation fixed for the selectable attributes updating.
+- FIX:DAQ.JavaLikeCalc: Fixed for the comment expression "/*/" correct processing.
+- !!!!:FIX:DAQ.ModBus: The input part expanded for the DAQ templates using and fixed for links saving.
+- FIX:UI.Vision: Prevented from processing operations of the widgets arrangement into inactive windows.
+- FIX:UI.WebVision: Prevented from couple processing of the included pages and their opening both for including and as an external window.
+
+
 2018-10-28 Roman (stable)
 - DB.LibsDB.{OscadaLibs,vcaBase}: Some translation updating.
 - !!!!:DB.LibsDB.vcaBase: Appended for Main.alarmsSt and Main.alarmsAct expanded for support quittance, comments and custom fields.

@@ -41,7 +41,7 @@ using namespace OSCADA;
 #define PRT_NAME	"ModBus"
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.1.5"
+#define PRT_MVER	"2.0.0"
 #define PRT_AUTHORS	_("Roman Savochenko")
 #define PRT_DESCR	_("Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define PRT_LICENSE	"GPL2"
@@ -79,10 +79,9 @@ class TProtIn: public TProtocolIn
 class Node : public TFunction, public TConfig
 {
     public:
-	//> Addition flags for IO
+	// Addition flags for IO
 	enum IONodeFlgs {
-	    IsLink	= 0x10,	//Link to subsystem's "DAQ" data
-	    LockAttr	= 0x20	//Lock attribute
+	    IsLink	= 0x10,	//Link to subsystem's "DAQ" data, for compatibility the old configurations
 	};
 	// Node modes
 	enum NodeModes {
@@ -97,12 +96,12 @@ class Node : public TFunction, public TConfig
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string id( )			{ return mId; }
+	string id( )		{ return mId; }
 	string name( );
-	string descr( )			{ return mDscr; }
-	string stor( ) const		{ return DB(); }
-	bool toEnable( )		{ return mAEn; }
-	bool enableStat( ) const	{ return mEn; }
+	string descr( )		{ return mDscr; }
+	string stor( ) const	{ return DB(); }
+	bool toEnable( )	{ return mAEn; }
+	bool enableStat( ) const{ return mEn; }
 	int addr( ) const;
 	string inTransport( );
 	string prt( );
@@ -148,18 +147,21 @@ class Node : public TFunction, public TConfig
 		int id, pos;
 		char sTp;
 	};
-	class SData {
+	class SData : public TPrmTempl::Impl {
 	    public:
-		SData( ) : rReg(0), wReg(0), rCoil(0), wCoil(0), rCoilI(0), rRegI(0)	{ }
+		SData( TCntrNode *iobj, string name_c ) : TPrmTempl::Impl(iobj, name_c.c_str()),
+		    rReg(0), wReg(0), rCoil(0), wCoil(0), rCoilI(0), rRegI(0), chkLnkNeed(false) { }
 
-		TValFunc	val;
-		map<int,AutoHD<TVal> > lnk;
 		map<int,SIO> regR, regW, coilR, coilW, coilI, regI;
-		float rReg, wReg, rCoil, wCoil, rCoilI, rRegI;
+		float	rReg, wReg, rCoil, wCoil, rCoilI, rRegI;
+		bool	chkLnkNeed;	//Check lnk need flag
 	};
 
 	//Methods
 	const char *nodeName( ) const	{ return mId.getSd(); }
+
+	void loadIO( );
+	void saveIO( );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -173,14 +175,15 @@ class Node : public TFunction, public TConfig
 	//Attributes
 	ResRW	nRes;
 	SData	*data;
+	bool	isDAQTmpl;	// DAQ template used
 	TCfg	&mId, &mName, &mDscr;
 	double	&mPer;
 	char	&mAEn, mEn;
 	string	mDB;
 
-	bool	prcSt, endRun, prgChOnEn;
+	bool	prcSt, endRun;
 
-	float	tmProc, cntReq;
+	float	cntReq;
 };
 
 //*************************************************

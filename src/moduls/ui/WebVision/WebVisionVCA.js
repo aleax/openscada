@@ -421,10 +421,12 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     //Find for included pages creation
     for(var i in this.wdgs)
 	if(this.wdgs[i].attrs['root'] == 'Box' && this.wdgs[i].isVisible) {
-	    if(pgGrp == this.wdgs[i].attrs['pgGrp'] && pgId != this.wdgs[i].attrs['pgOpenSrc']) {
-		this.wdgs[i].attrs['pgOpenSrc'] = pgId;
-		this.wdgs[i].makeEl(null, true);
-		setWAttrs(this.wdgs[i].addr, 'pgOpenSrc', pgId);
+	    if(pgGrp == this.wdgs[i].attrs['pgGrp']) {
+		if(pgId != this.wdgs[i].attrs['pgOpenSrc']) {
+		    this.wdgs[i].attrs['pgOpenSrc'] = pgId;
+		    this.wdgs[i].makeEl(null, true);
+		    setWAttrs(this.wdgs[i].addr, 'pgOpenSrc', pgId);
+		}
 		return true;
 	    }
 	    if(this.wdgs[i].inclOpen && this.wdgs[i].pages[this.wdgs[i].inclOpen].callPage(pgId,updWdg,pgGrp,pgOpenSrc)) return true;

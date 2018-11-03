@@ -46,7 +46,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 1.1 </td>
+<td> 2.0 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -172,7 +172,8 @@
 <li> Input transport, to the network of which the node is belonged to. It is selected from the list of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#TransportIn" title="Special:MyLanguage/Documents/Program manual">input transports</a> of the subsystem "Transports" of OpenSCADA. Specifying the symbol "*" as the transport makes this node a participant of any ModBus network with the processing of requests from any transport.</li>
 <li> Variant of the ModBus protocol, requests in which must be processed by the node from the list: All, RTU, ASCII, TCP/IP.</li>
 <li> Choice of the mode, in this case the mode "Data".</li>
-<li> Period of calculation of the data in seconds. Specifies the processing period of the data, which forming for the requests, that is: data tables of ModBus, the program of data calculation and servicing of links to the data of OpenSCADA.</li></ul>
+<li> Period of calculation of the data in seconds. Specifies the processing period of the data, which forming for the requests, that is: data tables of ModBus, the program of data calculation and servicing of links to the data of OpenSCADA.</li>
+<li> DAQ template or direct procedure language. Provides the selection of a template or language for a direct procedure for the formation and computation of ModBus data tables, as well as for servicing external links to the data model of the subsystem "Data Acquisition".</li></ul>
 <p>Node in this mode processes the following standars commands of the ModBus protocol:
 </p>
 <ul><li> <b>1</b> — reading the group of bits;</li>
@@ -183,8 +184,8 @@
 <li> <b>6</b> — setting the single register;</li>
 <li> <b>15</b> — setting the group of bits;</li>
 <li> <b>16</b> — setting the group of registers.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:757px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_node.png"><img class="thumbimage" height="658" src="../files/ModBus_prt_node_node.png" width="755" /></a>  <div class="thumbcaption">Fig.2. Tab "Node" of the configuration page of a node of the protocol in the "Data" mode.</div></div></div></div>
-<p>To form the table of reflection the ModBus network data, that is registers and bits, the tab "Data" is provided (Fig.3). The tab "Data" contains a table of parameters and program of processing the parameters with the specified programming language, which is available in OpenSCADA. The table contains parameters with the properties:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:899px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_node.png"><img class="thumbimage" height="643" src="../files/ModBus_prt_node_node.png" width="897" /></a>  <div class="thumbcaption">Fig.2. Tab "Node" of the configuration page of a node of the protocol in the "Data" mode.</div></div></div></div>
+<p>To form the table of reflection the ModBus network data, that is registers and bits, the tab "Data" is provided (Fig.3). The tab "Data" contains a table of parameters and program of processing the parameters with the specified programming language which is available in OpenSCADA, but in the template there is only the table available and in the "Enabled" mode. The table contains parameters with the properties:
 </p>
 <ul><li> <i>Identifier</i> — identifier of the parameter. It is the key for formation of the tables of registers and bits of ModBus. Registers and bits of ModBus set as follows:</li></ul>
 <dl><dd><ul><li> <b>R{N}[w]</b>, <b>RI{N}[w]</b> — specific register and input register form, can be expanded by the suffixes: "i"—Int32, "f"—Float, "d"—Double, "s"—String (by default the size is 10 and up to 100 registers);</li>
@@ -204,7 +205,7 @@
 <dl><dt> All other parameters are internal and used for a variety of intermediate calculations, processing, conversion and their values can be operative controlled and changed from the table into execution mode.</dt></dl>
 <ul><li> <i>Name</i> — name of the parameter, is used for the naming of the connection.</li>
 <li> <i>Type</i> — type of the parameter from the list: "Real", "Integer", "Boolean" and "String". For the registers and bits of ModBus it makes sense to set the "Integer" and "Boolean" type, respectively. For registers, extended by "f" and "s" prefixes, you must specify the "Real" and "String" types respectively.</li>
-<li> <i>Link</i> — a sign that this parameter should be connected with the parameter attribute of the subsystem "Data acquisition". The links indicated by this sign are set in the "Links" tab.</li>
+<li> <i>Link</i> — a sign that this parameter should be connected with the parameter attribute of the subsystem "Data acquisition". The links indicated by this sign are set in the "Template configuration" tab.</li>
 <li> <i>Value</i> — original or current value of the parameter, if the node is switched on.</li></ul>
 <p>The table by default specifies several parameters of special appointment:
 </p>
@@ -215,10 +216,10 @@
 </p>
 <pre style="white-space: pre-wrap;">
 arguments["R_s10,5w"] = "9876543210";</pre>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:668px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_data.png"><img class="thumbimage" height="685" src="../files/ModBus_prt_node_data.png" width="666" /></a>  <div class="thumbcaption">Fig.3. Tab "Data" of the configuration page of a protocol node in the "Data" mode.</div></div></div></div>
-<p>For parameters specified as links, the links can be set only for the disabled protocol node and in the "Links" tab (Fig. 4).
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:793px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_data.png"><img class="thumbimage" height="655" src="../files/ModBus_prt_node_data.png" width="791" /></a>  <div class="thumbcaption">Fig.3. Tab "Data" of the configuration page of a protocol node in the "Data" mode.</div></div></div></div>
+<p>For the parameters specified as links, the links can be set for the enabled protocol node and in the "Template configuration" tab (Fig. 4).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:668px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_lnk.png"><img class="thumbimage" height="492" src="../files/ModBus_prt_node_lnk.png" width="666" /></a>  <div class="thumbcaption">Fig.4. Tab "Links" of the configuration page of a protocol node in the "Data" mode.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:679px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_lnk.png"><img class="thumbimage" height="581" src="../files/ModBus_prt_node_lnk.png" width="677" /></a>  <div class="thumbcaption">Fig.4. Tab "Template configuration" of the configuration page of a protocol node in the "Data" mode.</div></div></div></div>
 <h4><span class="mw-headline" id="The_mode_.22Gateway_of_the_node.22"><span class="mw-headline-number">2.2.2</span> The mode "Gateway of the node"</span></h4>
 <p>The mode is used to carryover the requests to a separate device in the other ModBus network, from the ModBus network in which this node is configured. The overall configuration of the node is made in the tab "Node"(Fig. 5) by the parameters:
 </p>
@@ -313,7 +314,7 @@ Where:
 <p>Main page of configuration parameters of the logical type is shown in Figure 11.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:ModBusLog_prm.png"><img class="thumbimage" height="526" src="../files/ModBusLog_prm.png" width="711" /></a>  <div class="thumbcaption">Рис.11. Configuration tab of the logical parameter type.</div></div></div></div>
-<p>When forming a template of the logical parameter type, in the "Value" field of the configuration "Link", you can preset the value of this link, as typical for this template. The same link value, when configuring the template (Fig.12) and in the template itself, is written in the format: <b>{dt}:{numb}[:{rw}]</b>.<br />
+<p>Link value, when configuring the template (Fig.12), is written in the format: <b>{dt}:{numb}[:{rw}]</b>.<br />
 Where:
 </p>
 <ul><li> <i>dt</i> — ModBus data type ("R"—register[3,6(16)], "C"—coil[1,5(15)], "RI"—input register[4], "CI"—input coil[2]);</li></ul>

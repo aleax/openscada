@@ -130,7 +130,6 @@ void TDAQS::load_( )
 {
     //Load parameters from command line
 
-
     map<string, bool>	itReg;
     vector<vector<string> > full;
 
@@ -202,6 +201,13 @@ void TDAQS::load_( )
 
     //Load parameters from config-file and SYS DB
     setRdRestDtTm(s2r(TBDS::genDBGet(nodePath()+"RdRestDtTm",r2s(rdRestDtTm()))));
+
+    //Early starting for template libraries
+    vector<string> tmpl_lst;
+    tmplLibList(tmpl_lst);
+    for(unsigned iLb = 0; iLb < tmpl_lst.size(); iLb++)
+	try { tmplLibAt(tmpl_lst[iLb]).at().start(true); }
+	catch(TError &err) { }
 }
 
 void TDAQS::save_( )
@@ -325,29 +331,29 @@ void TDAQS::subStart( )
     do {
 	//Start template's libraries
 	tmplLibList(tmpl_lst);
-	for(unsigned i_lb = 0; i_lb < tmpl_lst.size(); i_lb++)
-	    try { tmplLibAt(tmpl_lst[i_lb]).at().start(true); }
+	for(unsigned iLb = 0; iLb < tmpl_lst.size(); iLb++)
+	    try { tmplLibAt(tmpl_lst[iLb]).at().start(true); }
 	    catch(TError &err) {
 		if(try_cnt) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Error starting the templates library '%s'."), tmpl_lst[i_lb].c_str());
+		    mess_sys(TMess::Error, _("Error starting the templates library '%s'."), tmpl_lst[iLb].c_str());
 		}
 		reply = true;
 	    }
 
 	//Enable controllers
 	modList(m_l);
-	for(unsigned i_m = 0; i_m < m_l.size(); i_m++) {
+	for(unsigned iM = 0; iM < m_l.size(); iM++) {
 	    vector<string> c_l;
-	    at(m_l[i_m]).at().list(c_l);
-	    for(unsigned i_c = 0; i_c < c_l.size(); i_c++) {
-		AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
+	    at(m_l[iM]).at().list(c_l);
+	    for(unsigned iC = 0; iC < c_l.size(); iC++) {
+		AutoHD<TController> cntr = at(m_l[iM]).at().at(c_l[iC]);
 		if(/*!cntr.at().enableStat() &&*/ cntr.at().toEnable())
 		    try{ cntr.at().enable(); }
 		    catch(TError &err) {
 			if(try_cnt) {
 			    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-			    mess_sys(TMess::Error, _("Error enabling the templates library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+			    mess_sys(TMess::Error, _("Error enabling the templates library '%s'."), (m_l[iM]+"."+c_l[iC]).c_str());
 			}
 			reply = true;
 		    }
@@ -369,38 +375,38 @@ void TDAQS::subStop( )
 
     //Stop
     modList(m_l);
-    for(unsigned i_m = 0; i_m < m_l.size(); i_m++) {
+    for(unsigned iM = 0; iM < m_l.size(); iM++) {
 	vector<string> c_l;
-	at(m_l[i_m]).at().list(c_l);
-	for(unsigned i_c = 0; i_c < c_l.size(); i_c++) {
-	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
+	at(m_l[iM]).at().list(c_l);
+	for(unsigned iC = 0; iC < c_l.size(); iC++) {
+	    AutoHD<TController> cntr = at(m_l[iM]).at().at(c_l[iC]);
 	    if(cntr.at().startStat())
 		try{ cntr.at().stop(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Error stopping the templates library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_sys(TMess::Error, _("Error stopping the templates library '%s'."), (m_l[iM]+"."+c_l[iC]).c_str());
 		}
 	}
     }
     //Disable
-    for(unsigned i_m = 0; i_m < m_l.size(); i_m++) {
+    for(unsigned iM = 0; iM < m_l.size(); iM++) {
 	vector<string> c_l;
-	at(m_l[i_m]).at().list(c_l);
-	for(unsigned i_c = 0; i_c < c_l.size(); i_c++) {
-	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
+	at(m_l[iM]).at().list(c_l);
+	for(unsigned iC = 0; iC < c_l.size(); iC++) {
+	    AutoHD<TController> cntr = at(m_l[iM]).at().at(c_l[iC]);
 	    if(cntr.at().enableStat())
 		try{ cntr.at().disable(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_sys(TMess::Error, _("Error disabling the templates library '%s'."), (m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_sys(TMess::Error, _("Error disabling the templates library '%s'."), (m_l[iM]+"."+c_l[iC]).c_str());
 		}
 	}
     }
 
     //Stop template's libraries
     tmplLibList(m_l);
-    for(unsigned i_lb = 0; i_lb < m_l.size(); i_lb++)
-	tmplLibAt(m_l[i_lb]).at().start(false);
+    for(unsigned iLb = 0; iLb < m_l.size(); iLb++)
+	tmplLibAt(m_l[iLb]).at().start(false);
 
     TSubSYS::subStop();
 }

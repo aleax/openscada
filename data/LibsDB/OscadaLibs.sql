@@ -13,7 +13,7 @@ INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices','Бібліотека п�
 Version: 2.0.0','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 INSERT INTO "ParamTemplLibs" VALUES('LowDevLib','Low-level devices','','The templates library provides common templates and related functions for custom access to low-level devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 1.1.0','','tmplib_LowDevLib','','');
+Version: 1.1.1','','tmplib_LowDevLib','','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','The models of the technological process devices.
 Founded: october 2005
@@ -5385,6 +5385,7 @@ else {
 }
 
 //Alarms forming
+if(this.cntr().status().toInt())	return;
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
 else if(f_err.toInt() && !tErr.toInt())
@@ -10085,17 +10086,18 @@ else {
 
 if(t_err.toInt() && !f_err.toInt()) t = h = EVAL;
 f_err = t_err;',1509373346);
-INSERT INTO "tmplib_LowDevLib" VALUES('DS3231','I2C: DS3231','I2C RTC chip with Temperature sensor and calibration on it. Connect through a Serial output transport into the I2C mode.
+INSERT INTO "tmplib_LowDevLib" VALUES('DS3231','I2C: DS1307,DS3231','I2C RTC chips DS1307,DS3231 with Temperature sensor and calibration for DS3231. Connects through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
+Version: 1.1.0',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
 	f_err = "0";
 	transport_ = transport;
 	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	mode_ = -1;
 	tm_ = tm = "";
-	agOff_ = agOff = 0;
-	p32k_ = p32k = false;
+	agOff_ = 0;
+	p32k_ = false;
 	pSQW_ = pSQW = false;
 	pSQWf_ = pSQWf = 0;
 }
@@ -10111,6 +10113,21 @@ if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transpor
 else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
 else {
 	//Check for modification
+	if(mode != mode_) {
+		if(mode == 0) {
+			this.attrAdd("pSQWf", "", "integer|sel", "0;1;2;3\n1Hz;1.024kHz;4.096kHz;8.192kHz");
+			this.attrAdd("agOff", "Aging offset, [-128...127]", "integer");
+			this.attrAdd("t", "T, °С", "real|ro");
+			this.attrAdd("p32k", "Enable 32768Hz", "boolean");
+		}
+		else {
+			this.attrAdd("pSQWf", "", "integer|sel", "0;1;2;3\n1Hz;4.096kHz;8.192kHz;32.768kHz");
+			this.attrDel("agOff");
+			this.attrDel("t");
+			this.attrDel("p32k");
+		}
+		mode_ = mode;
+	}
 	if(tm != tm_) {
 		off = 0; sdt = tm.parse(0,"T",off); stm = tm.parse(0,"T",off);
 		off = 0; year = sdt.parse(0,"-",off).toInt(16); month = sdt.parse(0,"-",off).toInt(16); day = sdt.parse(0,"-",off).toInt(16);
@@ -10118,44 +10135,66 @@ else {
 		tr.messIO(SYS.strFromCharCode(addr,0,sec,min,hour,0,day,month+((year&0xF00)?0x80:0),year&0xFF), 0, 0);
 		tm_ = tm;
 	}
-	if(agOff != agOff_) {
-		tr.messIO(SYS.strFromCharCode(addr,16,agOff), 0, 0);
-		agOff_ = agOff;
+	if(mode == 0 && !(tVl=this.agOff.get()).isEVal() && tVl != agOff_) {
+		tr.messIO(SYS.strFromCharCode(addr,16,tVl), 0, 0);
+		agOff_ = tVl;
 	}
-	if(p32k != p32k_) {
+	if(mode == 0 && !(tVl=this.p32k.get()).isEVal() && tVl != p32k_) {
 		resp = tr.messIO(SYS.strFromCharCode(addr,15), 0, 1);
-		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty read respond.");
+		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
 		else {
 			cntrB = resp.charCodeAt(0);
-			cntrB = p32k ?	cntrB|0x08 : cntrB&(~0x08);
+			cntrB = tVl ?	cntrB|0x08 : cntrB&(~0x08);
 			tr.messIO(SYS.strFromCharCode(addr,15,cntrB), 0, 0);
 		}
-		p32k_ = p32k;
+		p32k_ = tVl;
 	}
 	if(pSQW != pSQW_) {
-		resp = tr.messIO(SYS.strFromCharCode(addr,14), 0, 1);
-		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty read respond.");
+		if(mode == 0) {
+			resp = tr.messIO(SYS.strFromCharCode(addr,14), 0, 1);
+			if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
+			else {
+				cntrB = resp.charCodeAt(0);
+				cntrB = pSQW ? cntrB&(~0x04) : cntrB|0x04;
+				tr.messIO(SYS.strFromCharCode(addr,14,cntrB), 0, 0);
+			}
+		}
 		else {
-			cntrB = resp.charCodeAt(0);
-			cntrB = pSQW ? cntrB&(~0x04) : cntrB|0x04;
-			tr.messIO(SYS.strFromCharCode(addr,14,cntrB), 0, 0);
+			resp = tr.messIO(SYS.strFromCharCode(addr,7), 0, 1);
+			if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
+			else {
+				cntrB = resp.charCodeAt(0);
+				cntrB = pSQW ? cntrB|0x10 : cntrB&(~0x10);
+				tr.messIO(SYS.strFromCharCode(addr,7,cntrB), 0, 0);
+			}
 		}
 		pSQW_ = pSQW;
 	}
 	if(pSQWf != pSQWf_) {
-		pSQWf = max(0,min(3,pSQWf));
-		resp = tr.messIO(SYS.strFromCharCode(addr,14), 0, 1);
-		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty read respond.");
+		pSQWf = max(0, min(3,pSQWf));
+		if(mode == 0) {
+			resp = tr.messIO(SYS.strFromCharCode(addr,14), 0, 1);
+			if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
+			else {
+				cntrB = (resp.charCodeAt(0)&(~0x18)) + (pSQWf<<3);
+				tr.messIO(SYS.strFromCharCode(addr,14,cntrB), 0, 0);
+			}
+		}
 		else {
-			cntrB = (resp.charCodeAt(0)&(~0x18)) + (pSQWf<<3);
-			tr.messIO(SYS.strFromCharCode(addr,14,cntrB), 0, 0);
+			resp = tr.messIO(SYS.strFromCharCode(addr,7), 0, 1);
+			if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
+			else {
+				cntrB = (resp.charCodeAt(0)&(~0x3)) + pSQWf;
+				tr.messIO(SYS.strFromCharCode(addr,7,cntrB), 0, 0);
+			}
 		}
 		pSQWf_ = pSQWf;
 	}
 
 	//Get current
-	resp = tr.messIO(SYS.strFromCharCode(addr,0), 0, 19);
-	if(resp.length != 19) t_err = "3:"+tr("Wrong or empty read respond.");
+	rSz = (mode == 0) ? 19 : 8;
+	resp = tr.messIO(SYS.strFromCharCode(addr,0), 0, rSz);
+	if(resp.length != rSz) t_err = "3:"+tr("Wrong or empty response.");
 	else {
 		// Get current time
 		tm_ = tm = (20+(resp.charCodeAt(5)>>7)).toString(10,2)+resp.charCodeAt(6).toString(16,2)+"-" +
@@ -10164,24 +10203,32 @@ else {
 				(resp.charCodeAt(2)&0x3F).toString(16,2)+":" +
 				resp.charCodeAt(1).toString(16,2)+":" + 
 				resp.charCodeAt(0).toString(16,2);
-		// Aging offset
-		if((agOff=resp.charCodeAt(16)) >= 128)	agOff = agOff-256;
-		agOff_ = agOff;
 
-		// Miscellaneous
-		p32k = p32k_ = resp.charCodeAt(15)&0x08;
-		pSQW = pSQW_ = !(resp.charCodeAt(14)&0x04);
-		pSQWf = pSQWf_ = (resp.charCodeAt(14)>>3)&0x3;
+		if(mode == 0) {
+			// Aging offset
+			if((tVl=resp.charCodeAt(16)) >= 128)	tVl = tVl-256;
+			this.agOff.set(agOff_=tVl, 0, 0, true);
 
-		// Get temperature
-		t = (resp.charCodeAt(17)<<2)+(resp.charCodeAt(18)>>6);
-		if(t >= 128) t = t-256;
-		t = t/4;
+			// Miscellaneous
+			this.p32k.set((p32k_=resp.charCodeAt(15)&0x08), 0, 0, true);
+
+			pSQW = pSQW_ = !(resp.charCodeAt(14)&0x04);
+			pSQWf = pSQWf_ = (resp.charCodeAt(14)>>3)&0x3;
+
+			// Get temperature
+			tVl = (resp.charCodeAt(17)<<2)+(resp.charCodeAt(18)>>6);
+			if(tVl >= 128) tVl = tVl-256;
+			this.t.set(tVl/4, 0, 0, true);
+		}
+		else {
+			pSQW = pSQW_ = resp.charCodeAt(7)&0x10;
+			pSQWf = pSQWf_ = resp.charCodeAt(7)&0x3;
+		}
 	}
 }
 
 if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
-f_err = t_err;',1509990639);
+f_err = t_err;',1541249292);
 INSERT INTO "tmplib_LowDevLib" VALUES('PCF8574','I2C: PCF8574','I2C 8-bit 8DIO. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
@@ -10417,12 +10464,8 @@ INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','t','T, °С',2,16,'',4);
 INSERT INTO "tmplib_LowDevLib_io" VALUES('DHT','h','H, %',2,16,'',5);
 INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','transport','Transport of the I2C, Serial',0,64,'i2c',0);
 INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','addr','Device address [0...119]',1,64,'104',1);
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','tm','Date and time, YYYY-MM-DDTHH:mm:SS',0,32,'',2);
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','agOff','Aging offset, [-128...127]',1,32,'',3);
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','t','T, °С',2,16,'',4);
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','p32k','Enable 32768Hz',3,32,'',5);
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','pSQW','Enable SQUARE-WAVE OUTPUT',3,32,'',6);
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','pSQWf','SQUARE-WAVE OUTPUT frequency: 0-1Hz, 1-1.024kHz, 2-4.096kHz, 3-8.192kHz',1,32,'',7);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','tm','Date and time, YYYY-MM-DDTHH:mm:SS',0,32,'',3);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','pSQW','Enable SQUARE-WAVE OUTPUT',3,32,'',4);
 INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','transport','Transport of the I2C, Serial',0,64,'i2c',0);
 INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','addr','Device address [0...119]',1,64,'39',1);
 INSERT INTO "tmplib_LowDevLib_io" VALUES('PCF8574','di0','DI0',3,16,'',2);
@@ -10455,6 +10498,11 @@ INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','oss','Oversampling setting (0
 INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','t','T, °С',2,16,'',3);
 INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','p','P, Pa',2,16,'',4);
 INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','h','H, %',2,16,'',5);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','mode','Mode',1,40,'0
+0;1
+DS3231;DS1307',2);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','this','Parameter',4,0,'',10);
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','pSQWf','SQUARE-WAVE OUTPUT frequency',1,32,'',5);
 CREATE TABLE 'tmplib_S7' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_S7" VALUES('ai_simple','Simple AI','Простий AI','Простой AI','Simple analog parameter.','Простий аналоговий параметр.','Простой аналоговый параметр.',10,0,'JavaLikeCalc.JavaScript
 val=val_cod;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-14 20:08+0300\n"
+"POT-Creation-Date: 2018-11-03 17:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -354,12 +354,9 @@ msgstr ""
 msgid "Enabled. "
 msgstr ""
 
-msgid "Modified, re-enable to apply! "
-msgstr ""
-
 #, c-format
 msgid ""
-"Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g, register inputs %.4g, coil inputs %.4g.\n"
+"Spent time %s[%s]. Requests %.4g. Read registers %.4g, coils %.4g, register inputs %.4g, coil inputs %.4g.\n"
 "Wrote registers %.4g, coils %.4g."
 msgstr ""
 
@@ -386,6 +383,9 @@ msgid "DB"
 msgstr ""
 
 msgid "Configuration"
+msgstr ""
+
+msgid "DAQ template or direct procedure language"
 msgstr ""
 
 msgid "Data"
@@ -421,12 +421,6 @@ msgid "Real;Integer;Boolean;String"
 msgstr ""
 
 msgid "Link"
-msgstr ""
-
-msgid "Program language"
-msgstr ""
-
-msgid "Links"
 msgstr ""
 
 msgid "Turn off the node for this operation"

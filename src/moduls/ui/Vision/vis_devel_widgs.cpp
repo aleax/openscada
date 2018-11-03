@@ -2186,7 +2186,7 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
 void DevelWdgView::wdgViewTool( QAction *act )
 {
     DevelWdgView *cwdg = NULL, *ewdg = NULL;
-    if(edit())    return;
+    if(edit() || this != (DevelWdgView*)((QScrollArea*)(mainWin()->work_space->activeSubWindow())->widget())->widget())	return;
     QStringList sact = act->objectName().split('_');
     if(sact.at(0) == "align") {
 	//Get selected rect
