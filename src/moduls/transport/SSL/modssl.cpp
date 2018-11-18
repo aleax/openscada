@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.2.1"
+#define MOD_VER		"2.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -123,7 +123,7 @@ void TTransSock::postEnable( int flag )
 void TTransSock::preDisable( int flag )
 {
     //!!!! Due to SSL_library_init() some time crashable at second call, seen on Ubuntu 16.04
-    if(SYS->stopSignal() == SIGUSR2) throw err_sys(_("Hold when overloaded to another project."));
+    if(SYS->stopSignal() == SIGUSR2) throw err_sys("Hold when overloaded to another project.");
 }
 
 unsigned long TTransSock::id_function( )	{ return (unsigned long)pthread_self(); }
@@ -424,16 +424,16 @@ void *TSocketIn::Task( void *sock_in )
 	    }
 
 	    BIO *cbio = BIO_pop(abio);
-
-	    struct sockaddr_in	name_cl;
-	    socklen_t		name_cl_len = sizeof(name_cl);
-	    getpeername(BIO_get_fd(cbio,NULL), (sockaddr*)&name_cl, &name_cl_len);
-	    string sender = inet_ntoa(name_cl.sin_addr);
-	    if(((sockaddr*)&name_cl)->sa_family == AF_INET6) {
+	    struct sockaddr_storage sockStor;
+	    struct sockaddr *sadr = (struct sockaddr*) &sockStor;;
+	    socklen_t sadrLen = sizeof(sockStor);
+	    getpeername(BIO_get_fd(cbio,NULL), sadr, &sadrLen);
+	    string sender;
+	    if(sadr->sa_family == AF_INET6) {
 		char aBuf[INET6_ADDRSTRLEN];
-		getnameinfo((sockaddr*)&name_cl, name_cl_len, aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
+		getnameinfo(sadr, sadrLen, aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
 		sender = aBuf;
-	    }
+	    } else sender = inet_ntoa(((sockaddr_in*)sadr)->sin_addr);
 
 	    if(s.clId.size() >= s.maxFork() || (s.maxForkPerHost() && s.forksPerHost(sender) >= s.maxForkPerHost())) {
 		s.clsConnByLim++;
@@ -990,12 +990,11 @@ void TSocketOut::start( int tmCon )
 		fcntl(sockFd, F_SETFL, flags|O_NONBLOCK);
 
 		//Get the connected address
-		connAddr = inet_ntoa(((sockaddr_in*)&addrs[iA])->sin_addr);
 		if(((sockaddr*)&addrs[iA])->sa_family == AF_INET6) {
 		    char aBuf[INET6_ADDRSTRLEN];
 		    getnameinfo((sockaddr*)&addrs[iA], sizeof(addrs[iA]), aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
 		    connAddr = aBuf;
-		}
+		} else connAddr = inet_ntoa(((sockaddr_in*)&addrs[iA])->sin_addr);
 	    } catch(TError &err) {
 		aErr = err.mess;
 		if(conn)	BIO_reset(conn);

@@ -1096,7 +1096,7 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <li> <i>virtual void cleanLnks( bool andFunc = false );</i> — cleans all the links and the function, for <i>andFunc</i>.</li>
 <li> <i>void inputLinks( );</i> — gets for values of all the links.</li>
 <li> <i>void outputLinks( );</i> — sets for values of all the links.</li>
-<li> <i>bool cntrCmdProc( XMLNode *opt );</i> — calls for control interface of the links.</li></ul>
+<li> <i>bool cntrCmdProc( XMLNode *opt, const string &amp;pref = "/cfg" );</i> — calls for control interface of the links with the prefix "pref".</li></ul>
 <p><b>Protected attributes:</b><br />
 </p>
 <ul><li> <i>map&lt;int,SLnk&gt; lnks;</i> — links contatiner;</li>
@@ -1882,8 +1882,8 @@ The structure of information about the shared library (struct – TModSchedul::S
 <li> <i>int ioId( const string &amp;id ) const;</i> — Getting the index of the function's parameter <i>id</i>.</li>
 <li> <i>int ioSize( ) const;</i> — The quantity of the function's parameters.</li>
 <li> <i>IO *io( int id ) const;</i> — Getting the function's parameter by the index <i>id</i>.</li>
-<li> <i>void ioAdd( IO *io );</i> — Addition of the function's parameter <i>io</i>.</li>
-<li> <i>int ioIns( IO *io, int pos );</i> — Insert of the function's parameter <i>io</i> into the position <i>pos</i>. Returns the actual position of the new parameter.</li>
+<li> <i>int ioAdd( IO *io );</i> — Addition of the function's parameter <i>io</i>. Returns the actual position of the new IO.</li>
+<li> <i>int ioIns( IO *io, int pos );</i> — Insert of the function's parameter <i>io</i> into the position <i>pos</i>. Returns the actual position of the new IO.</li>
 <li> <i>void ioDel( int pos );</i> — Deleting the function's parameter in the position <i>pos</i>.</li>
 <li> <i>void ioMove( int pos, int to );</i> — Moving the function's parameter from the position <i>pos</i> to the position <i>to</i>.</li>
 <li> <i>virtual void calc( TValFunc *val );</i> — The calculation of the function's algorithm of the specified values <i>val</i>.</li>
@@ -2262,7 +2262,7 @@ Error values for the different data types (define):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Збільшити" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>
@@ -3015,7 +3015,7 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <h3><span class="mw-headline" id="Resources_allocation_object.2C_by_mutex_.28ResMtx.29"><span class="mw-headline-number">16.4</span> <span id="ResMtx" title="#ResMtx">Resources allocation object, by mutex (ResMtx)</span></span></h3>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>ResMtx( bool isRecurs = false );</i> — Initialization of a mutex object with recursion <i>isRecurs</i>.</li>
+<ul><li> <i>ResMtx( bool isRecurs = true );</i> — Initialization of a mutex object with recursion <i>isRecurs</i>.</li>
 <li> <i>void lock( );</i> — Mutex lock. Return zero at the success.</li>
 <li> <i>void unlock( );</i> — Mutex unlock. Return zero at the success.</li>
 <li> <i>int tryLock( );</i> — Mutex try lock, without wait for free. Return zero at success.</li>

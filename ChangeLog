@@ -1,3 +1,30 @@
+2018-11-18 Roman (stable)
+- !!!:FIX:DB.LibsDB.OscadaLibs: The temlate library DevLib is appended by implementing of the counter modules Pulsar-M, invested by Zubarev Dmitry (IP INTEGRAL<http://kip-i-a.pro>).
+    !!!: The temlate library Base is appended by the "codeState" template of the state forming by a code.
+    !!!: The temlate library LowDevLib appended by the template "SHT3x" of the low-level humidity sensors implementation.
+    FIX:Most templates are fixed for attribute values in one space ' '.
+    !: base.digAlarm: Improved for custom errors forming from the custom procedures.
+- !!!:FIX:DB.LibsDB.vcaBase: The widget library Main is appended by the widget "ImgLab" - image labels.
+    !!: The widget "Main.{alarmsAct,alarmsSt}" and "doc.docMessRep" expanded by the source field, taking from the OpenSCADA remote station or the DAQ source.
+    !: Main.{anShow,anShow1}: Expanded for custom errors processing.
+- DB.Model.AGLKS.St: The ModBus protol nodes' table cleared.
+- !!:SYS: ResMtx set to true for "isRecurs" but it is the typical situation.
+    Some original messages improved.
+    TFunction::ioAdd() appended by the result for the appended IO position.
+    TPrmTempl::Impl::cntrCmdProc() expanded by the prefix "pref" argument.
+- FIX:Protocol.ModBus: Fixed to prevent linked attributes translation of the Nodes.
+    Expanded for time stamp of the Nodes.
+    The program language editable selection set to the pure selection.
+    Types list of the IO data table appended by the type "Object".
+- FIX:DAQ.ModBus: Fixed to process the Asynchronous mode in linked Logical parameters' list processing.
+    Appended by some context help.
+- FIX:DAQ.System: Fixed for some translations.
+- !!!!:Protocol.UserProtocol: Expanded by the DAQ-templates support. Revised for all messages and the documentation.
+- FIX:Special.FLibSYS: IO: write() fixed for the default data type obtain. Wrong data type obtaining set safe.
+- FIX:Transport.{SSL,Sockets}: Fixed for true address obtain, mostly for IPv6, from the input connections.
+- UI.WebVision: Expanded for SVG-files processing to set the attribute "preserveAspectRatio" to "none".
+
+
 2018-11-03 Roman (stable)
 - !:DB.LibsDB.OscadaLibs: base.digAlarm: Prevented from alarms at the controller object errors.
     LowDevLib.DS3231: Expanded for support DS1307.

@@ -43,7 +43,7 @@ class XMLNode
 	//Data
 	enum LoadFlgs {
 	    LD_Full		= 0x01,		//Load XML full
-	    LD_NoTxtSpcRemEnBeg	= 0x02,		//No remove spaces for begin and end tag's text, for not full mode
+	    LD_NoTxtSpcRemEnBeg	= 0x02,		//Do not remove spaces from begin and end tag's text, for not full mode
 	};
 	enum SaveView {
 	    BrOpenPrev		= 0x01,		//Break before open tag

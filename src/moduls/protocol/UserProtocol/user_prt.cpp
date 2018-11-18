@@ -33,9 +33,9 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.8.13"
+#define MOD_VER		"1.0.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
+#define DESCRIPTION	_("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -82,11 +82,17 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mUPrtEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     mUPrtEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mUPrtEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
-    mUPrtEl.fldAdd(new TFld("PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","1"));
-    mUPrtEl.fldAdd(new TFld("WaitReqTm",_("Wait request timeout, ms"),TFld::Integer,TFld::NoFlag,"6","0"));
+    mUPrtEl.fldAdd(new TFld("DAQTmpl",_("Representative DAQ template"),TFld::String,TFld::NoFlag,"50"));
+    mUPrtEl.fldAdd(new TFld("WaitReqTm",_("Timeout of a request waiting, milliseconds"),TFld::Integer,TFld::NoFlag,"6","0"));
     mUPrtEl.fldAdd(new TFld("InPROG",_("Input procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
     mUPrtEl.fldAdd(new TFld("OutPROG",_("Output procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
+    mUPrtEl.fldAdd(new TFld("PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
     mUPrtEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+
+    //User protocol data IO DB structure
+    mUPrtIOEl.fldAdd(new TFld("UPRT_ID",_("User protocol ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mUPrtIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mUPrtIOEl.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"100"));
 }
 
 TProt::~TProt( )
@@ -124,19 +130,20 @@ void TProt::load_( )
 		string id = gCfg.cfg("ID").getS();
 		if(!uPrtPresent(id)) uPrtAdd(id,(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
 		uPrtAt(id).at().load(&gCfg);
+		gCfg.cfg("DAQTmpl").setS("");	//!!!! To prevent the new field from duplicating on different not updated tables.
 		itReg[id] = true;
 	    }
 
 	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty()) {
 	    uPrtList(dbLs);
-	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
-		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(uPrtAt(dbLs[i_it]).at().DB()))
-		    uPrtDel(dbLs[i_it]);
+	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
+		if(itReg.find(dbLs[iIt]) == itReg.end() && SYS->chkSelDB(uPrtAt(dbLs[iIt]).at().DB()))
+		    uPrtDel(dbLs[iIt]);
 	}
     } catch(TError &err) {
-	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Search and create new user protocol error."));
+	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	mess_err(nodePath().c_str(), _("Error searching and creating a new user protocol."));
     }
 }
 
@@ -170,29 +177,8 @@ TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }
 
 void TProt::outMess( XMLNode &io, TTransportOut &tro )
 {
-    TValFunc funcV;
-
-    //Get user protocol for using
     string pIt = io.attr("ProtIt");
-    if(!uPrtPresent(pIt)) return;
-    AutoHD<UserPrt> up = uPrtAt(pIt);
-    funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workOutProg())).at());
-    // Restore starting the function for stopped early by safety timeout
-    if(funcV.func() && !funcV.func()->startStat()) funcV.func()->setStart(true);
-
-    MtxAlloc res(tro.reqRes(), true);
-
-    //Load inputs
-    AutoHD<XMLNodeObj> xnd(new XMLNodeObj());
-    funcV.setO(0, xnd);
-    xnd.at().fromXMLNode(io);
-    funcV.setO(1, new TCntrNodeObj(AutoHD<TCntrNode>(&tro),"root"));
-    //Call processing
-    funcV.calc();
-    //Get outputs
-    xnd.at().toXMLNode(io);
-
-    up.at().cntOutReq++;
+    if(uPrtPresent(pIt)) uPrtAt(pIt).at().outMess(io, tro);
 }
 
 void TProt::cntrCmdProc( XMLNode *opt )
@@ -251,36 +237,7 @@ void TProtIn::setSrcTr( TTransportIn *vl )
 
 bool TProtIn::mess( const string &reqst, string &answer )
 {
-    try {
-	//Find user protocol for using
-	if(!funcV.func()) {
-	    //Try enable, mostly for allow to use static functons into the procedures
-	    if(!up.freeStat() && !up.at().enableStat() && up.at().toEnable() && up.at().workInProg().size()) up.at().setEnable(true);
-
-	    //Malfunction input protocol checking
-	    if(up.freeStat() || !up.at().enableStat() || up.at().workInProg().empty()) return false;
-
-	    //The input function's execution context creation
-	    funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workInProg())).at());
-	    funcV.setO(4, new TCntrNodeObj(AutoHD<TCntrNode>(&srcTr().at()),"root"));
-	}
-
-	//Load inputs
-	funcV.setB(0, false);
-	funcV.setS(1, funcV.getS(1)+reqst);
-	funcV.setS(2, "");
-	funcV.setS(3, srcAddr());
-	//Call processing
-	funcV.calc();
-	//Get outputs
-	bool rez = funcV.getB(0);
-	if(!rez) funcV.setS(1, "");
-	answer = funcV.getS(2);
-
-	up.at().cntInReq++;
-
-	return rez;
-    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+    if(!up.freeStat())	return up.at().inMess(reqst, answer, this);
 
     return false;
 }
@@ -289,8 +246,9 @@ bool TProtIn::mess( const string &reqst, string &answer )
 //* UserPrt                                       *
 //*************************************************
 UserPrt::UserPrt( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), cntInReq(0), cntOutReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false),
-    mWaitReqTm(cfg("WaitReqTm").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb), prgChOnEn(false)
+    TConfig(el), TPrmTempl::Impl(this,("InUserProtocol_"+iid).c_str()), cntInReq(0), cntOutReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false),
+    mWaitReqTm(cfg("WaitReqTm").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb),
+    ioRez(-1), ioReq(-1), ioAnsw(-1), ioSend(-1), ioTr(-1), ioIO(-1), chkLnkNeed(false)
 {
     mId = iid;
     cfg("InPROG").setExtVal(true);
@@ -304,7 +262,7 @@ UserPrt::~UserPrt( )
 
 TCntrNode &UserPrt::operator=( const TCntrNode &node )
 {
-    const UserPrt *src_n = dynamic_cast<const UserPrt*>(&node);
+    UserPrt *src_n = const_cast<UserPrt*>(dynamic_cast<const UserPrt*>(&node));
     if(!src_n) return *this;
 
     if(enableStat())	setEnable(false);
@@ -312,6 +270,17 @@ TCntrNode &UserPrt::operator=( const TCntrNode &node )
     //Copy parameters
     exclCopy(*src_n, "ID;");
     setDB(src_n->DB());
+
+    //Copy for current values and links (by the templates)
+    if(src_n->DAQTmpl().size() && src_n->enableStat()) {
+	setEnable(true);
+	ResAlloc res(inCfgRes, false);
+	ResAlloc res1(src_n->inCfgRes, false);
+	for(int iIO = 0; iIO < src_n->func()->ioSize(); iIO++)
+	    if(src_n->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
+		lnkAddrSet(iIO, src_n->lnkAddr(iIO));
+	    else set(iIO, src_n->get(iIO));
+    }
 
     return *this;
 }
@@ -385,6 +354,84 @@ void UserPrt::setOutProg( const string &iprg )
     modif();
 }
 
+bool UserPrt::inMess( const string &reqst, string &answer, TProtIn *prt )
+{
+    try {
+	//Try enable, mostly for allow to use static functons into the procedures
+	if(!enableStat() && toEnable() && inProgLang().size()) setEnable(true);
+
+	MtxAlloc res1(inReqRes, true);
+	ResAlloc res2(inCfgRes, false);
+
+	//Malfunction input protocol checking
+	if(!enableStat() || !func()) return false;
+
+	if(chkLnkNeed) chkLnkNeed = initLnks(true);
+
+	//The input function's execution context creation
+	setO(ioTr, new TCntrNodeObj(AutoHD<TCntrNode>(&prt->srcTr().at()),"root"));
+
+	//Load inputs
+	inputLinks();
+	setB(ioRez, false);
+	setS(ioReq, prt->req+reqst);
+	setS(ioAnsw, "");
+	setS(ioSend, prt->srcAddr());
+	//Call processing
+	setMdfChk(true);
+	calc();
+	//Get outputs
+	setO(ioTr, new TEValObj());
+	outputLinks();
+	bool rez = getB(ioRez);
+	prt->req = getS(ioReq);
+	if(prt->req.size() > USER_FILE_LIMIT) {
+	    mess_sys(TMess::Warning, _("Size of the accumulated request exceeded for %s, but the user protocol must tend for removing processed data itself. Fix this!"),
+		TSYS::cpct2str(USER_FILE_LIMIT));
+	    prt->req = "";
+	}
+	answer = getS(ioAnsw);
+
+	cntInReq++;
+
+	return rez;
+    } catch(TError &err) {
+	MtxAlloc res1(inReqRes, true);
+	ResAlloc res2(inCfgRes, false);
+	if(func() && ioTr >= 0) setO(ioTr, new TEValObj());
+	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+    }
+
+    return false;
+}
+
+void UserPrt::outMess( XMLNode &io, TTransportOut &tro )
+{
+    TValFunc funcV;
+
+    //Get user protocol for using
+    if(DAQTmpl().size())
+	funcV.setFunc(&SYS->daq().at().tmplLibAt(TSYS::strParse(DAQTmpl(),0,".")).at().at(TSYS::strParse(DAQTmpl(),1,".")).at().func().at());
+    else funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(workOutProg())).at());
+
+    // Restoring the function running for stopping early by the safety timeout
+    if(funcV.func() && !funcV.func()->startStat()) funcV.func()->setStart(true);
+
+    MtxAlloc res(tro.reqRes(), true);
+
+    //Load inputs
+    AutoHD<XMLNodeObj> xnd(new XMLNodeObj());
+    funcV.setO(ioIO, xnd);
+    xnd.at().fromXMLNode(io);
+    funcV.setO(ioTr, new TCntrNodeObj(AutoHD<TCntrNode>(&tro),"root"));
+    //Call processing
+    funcV.calc();
+    //Get outputs
+    xnd.at().toXMLNode(io);
+
+    cntOutReq++;
+}
+
 void UserPrt::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
@@ -394,12 +441,70 @@ void UserPrt::load_( TConfig *icfg )
 	//cfgViewAll(true);
 	SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
     }
+
+    loadIO();
+}
+
+void UserPrt::loadIO( )
+{
+    if(func() && DAQTmpl().size()) {
+	ResAlloc res(inCfgRes, false);
+
+	//Load IO
+	vector<vector<string> > full;
+	vector<string> u_pos;
+	TConfig cf(&owner().uPrtIOEl());
+	cf.cfg("UPRT_ID").setS(id(), TCfg::ForceUse);
+	cf.cfg("VALUE").setExtVal(true);
+	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cf,false,&full); ) {
+	    string sid = cf.cfg("ID").getS();
+	    int iid = func()->ioId(sid);
+	    if(iid < 0)	continue;
+
+	    if(func()->io(iid)->flg()&TPrmTempl::CfgLink) lnkAddrSet(iid, cf.cfg("VALUE").getS());
+	    else setS(iid, cf.cfg("VALUE").getS());
+	}
+	chkLnkNeed = initLnks();
+    }
 }
 
 void UserPrt::save_( )
 {
     mTimeStamp = SYS->sysTm();
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
+
+    saveIO();
+}
+
+void UserPrt::saveIO( )
+{
+    if(func() && DAQTmpl().size()) {
+	ResAlloc res(inCfgRes, false);
+
+	//Save IO
+	TConfig cf(&owner().uPrtIOEl());
+	cf.cfg("UPRT_ID").setS(id(), true);
+	for(int iIO = 0; iIO < func()->ioSize(); iIO++) {
+	    if(iIO == ioRez || iIO == ioReq || iIO == ioAnsw || iIO == ioSend || iIO == ioTr || iIO == ioIO ||
+		func()->io(iIO)->flg()&TPrmTempl::LockAttr) continue;
+	    cf.cfg("ID").setS(func()->io(iIO)->id());
+	    cf.cfg("VALUE").setNoTransl(func()->io(iIO)->type() != IO::String || (func()->io(iIO)->flg()&TPrmTempl::CfgLink));
+	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) cf.cfg("VALUE").setS(lnkAddr(iIO));  //f->io(iIO)->rez());
+	    else cf.cfg("VALUE").setS(getS(iIO));
+	    SYS->db().at().dataSet(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf);
+	}
+
+	//Clear IO
+	vector<vector<string> > full;
+	cf.cfgViewAll(false);
+	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cf,false,&full); ) {
+	    string sio = cf.cfg("ID").getS();
+	    if(func()->ioId(sio) < 0) {
+		if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf,true,false,true)) break;
+		if(full.empty()) fldCnt--;
+	    }
+	}
+    }
 }
 
 bool UserPrt::cfgChange( TCfg &co, const TVariant &pc )
@@ -408,7 +513,11 @@ bool UserPrt::cfgChange( TCfg &co, const TVariant &pc )
 	cfg("InPROG").setNoTransl(!progTr());
 	cfg("OutPROG").setNoTransl(!progTr());
     }
-    else if((co.name() == "InPROG" || co.name() == "OutPROG") && enableStat())	prgChOnEn = true;
+    /*else if(co.name() == "InPROG") {
+	string  lfnc = TSYS::strParse(inProgLang(), 0, "."), wfnc = TSYS::strParse(inProgLang(), 1, ".");
+	isDAQTmpl = SYS->daq().at().tmplLibPresent(lfnc) && SYS->daq().at().tmplLibAt(lfnc).at().present(wfnc);
+    }*/
+    //else if((co.name() == "InPROG" || co.name() == "OutPROG") && enableStat())	prgChOnEn = true;
     modif();
     return true;
 }
@@ -419,33 +528,77 @@ void UserPrt::setEnable( bool vl )
 
     cntInReq = cntOutReq = 0;
 
+    ResAlloc res(inCfgRes, true);
+
     if(vl) {
-	//Prepare and compile input transport function
-	if(!inProg().empty()) {
-	    TFunction funcIO("uprt_"+id()+"_in");
-	    funcIO.setStor(DB());
-	    funcIO.ioIns(new IO("rez",_("Result"),IO::Boolean,IO::Return), 0);
-	    funcIO.ioIns(new IO("request",_("Request"),IO::String,IO::Default), 1);
-	    funcIO.ioIns(new IO("answer",_("Answer"),IO::String,IO::Output), 2);
-	    funcIO.ioIns(new IO("sender",_("Sender"),IO::String,IO::Default), 3);
-	    funcIO.ioIns(new IO("tr",_("Transport"),IO::Object,IO::Default), 4);
+	//Connect to a DAQ template or prepare and compile a function of the input part
+	//string  lfnc = TSYS::strParse(inProgLang(), 0, "."), wfnc = TSYS::strParse(inProgLang(), 1, ".");
+	//isDAQTmpl = SYS->daq().at().tmplLibPresent(lfnc) && SYS->daq().at().tmplLibAt(lfnc).at().present(wfnc);
 
-	    mWorkInProg = SYS->daq().at().at(TSYS::strSepParse(inProgLang(),0,'.')).at().
-		compileFunc(TSYS::strSepParse(inProgLang(),1,'.'),funcIO,inProg());
-	} else mWorkInProg = "";
-	//Prepare and compile output transport function
-	if(!outProg().empty()) {
-	    TFunction funcIO("uprt_"+id()+"_out");
-	    funcIO.setStor(DB());
-	    funcIO.ioIns(new IO("io",_("IO"),IO::Object,IO::Default), 0);
-	    funcIO.ioIns(new IO("tr",_("Transport"),IO::Object,IO::Default), 1);
+	// Trying the DAQ template
+	if(DAQTmpl().size()) {
+	    setFunc(&SYS->daq().at().tmplLibAt(TSYS::strParse(DAQTmpl(),0,".")).at().at(TSYS::strParse(DAQTmpl(),1,".")).at().func().at());
+	    addLinksAttrs();
+	    // Checking for requiered conditions to the template
+	    try {
+		//Generic
+		if((ioTr=func()->ioId("tr")) < 0 || func()->io(ioTr)->type() != IO::Object)
+		    throw err_sys(_("The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"),
+			inProgLang().c_str(), (string(_("Transport"))+"(tr)").c_str(), _("Object"));
+		//Input part
+		if((ioRez=func()->ioId("rez")) < 0 || func()->io(ioRez)->type() != IO::Boolean)
+		    throw err_sys(_("The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"),
+			inProgLang().c_str(), (string(_("Input result"))+"(rez)").c_str(), _("Boolean"));
+		if((ioReq=func()->ioId("request")) < 0 || func()->io(ioReq)->type() != IO::String)
+		    throw err_sys(_("The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"),
+			inProgLang().c_str(), (string(_("Input request"))+"(request)").c_str(), _("String"));
+		if((ioAnsw=func()->ioId("answer")) < 0 || func()->io(ioAnsw)->type() != IO::String)
+		    throw err_sys(_("The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"),
+			inProgLang().c_str(), (string(_("Input answer"))+"(answer)").c_str(), _("String"));
+		if((ioSend=func()->ioId("sender")) < 0 || func()->io(ioSend)->type() != IO::String)
+		    throw err_sys(_("The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"),
+			inProgLang().c_str(), (string(_("Input sender"))+"(sender)").c_str(), _("String"));
+		//Output part
+		if((ioIO=func()->ioId("io")) < 0 || func()->io(ioIO)->type() != IO::Object)
+		    throw err_sys(_("The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"),
+			inProgLang().c_str(), (string(_("Output IO"))+"(io)").c_str(), _("Object"));
+	    } catch(TError &err) { setFunc(NULL); throw; }
+	}
+	// Compiling the direct function
+	else {
+	    //Prepare and compile an input transport function
+	    if(inProg().size()) {
+		TFunction funcIO("uprt_"+id()+"_in");
+		funcIO.setStor(DB());
+		ioRez  = funcIO.ioAdd(new IO("rez",_("Input result"),IO::Boolean,IO::Return));
+		ioReq  = funcIO.ioAdd(new IO("request",_("Input request"),IO::String,IO::Default));
+		ioAnsw = funcIO.ioAdd(new IO("answer",_("Input answer"),IO::String,IO::Output));
+		ioSend = funcIO.ioAdd(new IO("sender",_("Input sender"),IO::String,IO::Default));
+		ioTr   = funcIO.ioAdd(new IO("tr",_("Transport"),IO::Object,IO::Default));
 
-	    mWorkOutProg = SYS->daq().at().at(TSYS::strSepParse(outProgLang(),0,'.')).at().
-		compileFunc(TSYS::strSepParse(outProgLang(),1,'.'),funcIO,outProg());
-	} else mWorkOutProg = "";
+		string workInProg = SYS->daq().at().at(TSYS::strSepParse(inProgLang(),0,'.')).at().
+		    compileFunc(TSYS::strSepParse(inProgLang(),1,'.'),funcIO,inProg());
+		setFunc(&((AutoHD<TFunction>)SYS->nodeAt(workInProg)).at());
+	    }
+
+	    //Prepare and compile an output transport function
+	    if(outProg().size()) {
+		TFunction funcIO("uprt_"+id()+"_out");
+		funcIO.setStor(DB());
+		ioIO = funcIO.ioAdd(new IO("io",_("Output IO"),IO::Object,IO::Default));
+		ioTr = funcIO.ioAdd(new IO("tr",_("Transport"),IO::Object,IO::Default));
+
+		mWorkOutProg = SYS->daq().at().at(TSYS::strSepParse(outProgLang(),0,'.')).at().
+		    compileFunc(TSYS::strSepParse(outProgLang(),1,'.'),funcIO,outProg());
+	    } else mWorkOutProg = "";
+	}
+
+	//Load IO
+	loadIO();
     }
+    else setFunc(NULL);
 
-    mEn = vl; prgChOnEn = false;
+    mEn = vl;
 }
 
 string UserPrt::getStatus( )
@@ -453,8 +606,7 @@ string UserPrt::getStatus( )
     string rez = _("Disabled. ");
     if(enableStat()) {
 	rez = _("Enabled. ");
-	if(prgChOnEn) rez += TSYS::strMess(_("Modified, re-enable to apply! "));
-	rez += TSYS::strMess( _("Requests input %.4g, output %.4g."), cntInReq, cntOutReq );
+	rez += TSYS::strMess(_("Requests input %.4g, output %.4g."), cntInReq, cntOutReq);
     }
 
     return rez;
@@ -480,28 +632,44 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 		ctrRemoveNode(opt,"/up/cfg/OutPROG");
 		ctrRemoveNode(opt,"/up/cfg/TIMESTAMP");
 		ctrRemoveNode(opt,"/up/cfg/WaitReqTm");
+		ctrMkNode("fld",opt,-1,"/up/cfg/DAQTmpl",_("DAQ template"),(enableStat()?R_R___:RWRW__),"root",SPRT_ID,3,
+		    "tp","str", "dest","select", "select","/up/cfg/listTmpl");
+		if(DAQTmpl().size())	ctrRemoveNode(opt,"/up/cfg/PR_TR");
+		else {
+		    ctrMkNode("fld",opt,-1,"/up/cfg/inPROGLang",_("Input procedure language"),(enableStat()?R_R___:RWRW__),"root",SPRT_ID,3,
+			"tp","str", "dest","select", "select","/plang/list");
+		    ctrMkNode("fld",opt,-1,"/up/cfg/outPROGLang",_("Output procedure language"),(enableStat()?R_R___:RWRW__),"root",SPRT_ID,3,
+			"tp","str", "dest","select", "select","/plang/list");
+		}
 	    }
-	    if(ctrMkNode("area",opt,-1,"/in",_("Input"),RWRW__,"root",SPRT_ID)) {
-		ctrMkNode("fld",opt,-1,"/in/WaitReqTm",_("Wait request timeout, ms"),RWRW__,"root",SPRT_ID,2,
-		    "tp","dec", "help",_("Use it for pool mode enabling by set the timeout to a nonzero value.\n"
-					"Into the pool mode an input transport will call the protocol by no "
-					"a request with an empty message after that timeout."));
-		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRW__,"root",SPRT_ID,3,
-		    "tp","str", "dest","sel_ed", "select","/plang/list");
-		ctrMkNode("fld",opt,-1,"/in/PROG",_("Input program"),RWRW__,"root",SPRT_ID,4, "tp","str", "rows","10", "SnthHgl","1",
-		    "help",_("Next attributes has defined for input requests processing:\n"
-			    "   'rez' - processing result (false-full request;true-not full request);\n"
-			    "   'request' - request message;\n"
-			    "   'answer' - answer message;\n"
-			    "   'sender' - request sender;\n"
-			    "   'tr' - sender transport."));
+	    if(ctrMkNode("area",opt,-1,"/in",_("Input"),(inProgLang().size()?RWRW__:0),"root",SPRT_ID)) {
+		ctrMkNode("fld",opt,-1,"/in/WaitReqTm",_("Timeout of a request waiting, milliseconds"),RWRW__,"root",SPRT_ID,2,
+		    "tp","dec", "help",_("Use this for the poolling mode enabling through setting this timeout to a nonzero value.\n"
+					"Into the poolling mode an input transport will call this protocol with the empty message at no request during this timeout."));
+		ResAlloc res(inCfgRes, false);
+		if(func() && chkLnkNeed) chkLnkNeed = initLnks(true);
+		if(func() && ctrMkNode("table",opt,-1,"/in/io",_("IO"),RWRW__,"root",SPRT_ID,1,"rows","5")) {
+		    ctrMkNode("list",opt,-1,"/in/io/id",_("Identifier"),R_R___,"root",SPRT_ID,1, "tp","str");
+		    ctrMkNode("list",opt,-1,"/in/io/nm",_("Name"),R_R___,"root",SPRT_ID,1,"tp","str");
+		    ctrMkNode("list",opt,-1,"/in/io/tp",_("Type"),R_R___,"root",SPRT_ID,5,"tp","dec","idm","1","dest","select",
+			"sel_id",TSYS::strMess("%d;%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String,IO::Object).c_str(),
+			"sel_list",_("Real;Integer;Boolean;String;Object"));
+		    ctrMkNode("list",opt,-1,"/in/io/vl",_("Value"),RWRW__,"root",SPRT_ID,1,"tp","str");
+		}
+		if(!DAQTmpl().size())
+		    ctrMkNode("fld",opt,-1,"/in/PROG",_("Input procedure"),(enableStat()?R_R___:RWRW__),"root",SPRT_ID,4, "tp","str", "rows","10", "SnthHgl","1",
+			"help",_("Next attributes define for the input requests processing:\n"
+				"   'rez' - result of the processing (false - full request; true - not full request);\n"
+				"   'request' - request message;\n"
+				"   'answer' - answer message;\n"
+				"   'sender' - request sender;\n"
+				"   'tr' - sender transport."));
+		else if(func()) TPrmTempl::Impl::cntrCmdProc(opt, "/in/cfg");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/out",_("Output"),RWRW__,"root",SPRT_ID)) {
-		ctrMkNode("fld",opt,-1,"/out/PROGLang",_("Output program language"),RWRW__,"root",SPRT_ID,3,
-		    "tp","str", "dest","sel_ed", "select","/plang/list");
-		ctrMkNode("fld",opt,-1,"/out/PROG",_("Output program"),RWRW__,"root",SPRT_ID,4, "tp","str", "rows","10", "SnthHgl","1",
-		    "help",_("Next attributes has defined for output requests processing:\n"
-			    "   'io' - input/output interface's XMLNode object;\n"
+	    if(ctrMkNode("area",opt,-1,"/out",_("Output"),(outProgLang().size()?RWRW__:0),"root",SPRT_ID)) {
+		ctrMkNode("fld",opt,-1,"/out/PROG",_("Output procedure"),(enableStat()?R_R___:RWRW__),"root",SPRT_ID,4, "tp","str", "rows","10", "SnthHgl","1",
+		    "help",_("Next attributes define for the output requests processing:\n"
+			    "   'io' - XMLNode object of the input/output interface;\n"
 			    "   'tr' - associated transport."));
 	    }
 	}
@@ -519,27 +687,66 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setDB(opt->text());
     }
     else if(a_path == "/up/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
+    else if(a_path == "/up/cfg/inPROGLang") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(inProgLang());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setInProgLang(opt->text());
+    }
+    else if(a_path == "/up/cfg/outPROGLang") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(outProgLang());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setOutProgLang(opt->text());
+    }
+    else if(a_path == "/up/cfg/listTmpl" && ctrChkNode(opt)) {
+	vector<string> lls, ls;
+	//Templates
+	SYS->daq().at().tmplLibList(lls);
+	for(unsigned iL = 0; iL < lls.size(); iL++) {
+	    SYS->daq().at().tmplLibAt(lls[iL]).at().list(ls);
+	    for(unsigned iT = 0; iT < ls.size(); iT++)
+		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
+	}
+	opt->childAdd("el")->setText("");
+    }
     else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
     else if(a_path == "/in/WaitReqTm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(waitReqTm()));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setWaitReqTm(s2i(opt->text()));
     }
-    else if(a_path == "/in/PROGLang") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(inProgLang());
-	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setInProgLang(opt->text());
-    }
-    else if(a_path == "/in/PROG") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(inProg());
-	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setInProg(opt->text());
-	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SPRT_ID,SEC_RD))
-	    try {
-		SYS->daq().at().at(TSYS::strParse(inProgLang(),0,".")).at().
+    else if(a_path.find("/in") == 0) {
+	ResAlloc res(inCfgRes, false);
+	if(func() && a_path == "/in/io") {
+	    if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD)) {
+		XMLNode *nId   = ctrMkNode("list",opt,-1,"/in/io/id","");
+		XMLNode *nNm   = ctrMkNode("list",opt,-1,"/in/io/nm","");
+		XMLNode *nType = ctrMkNode("list",opt,-1,"/in/io/tp","");
+		XMLNode *nVal  = ctrMkNode("list",opt,-1,"/in/io/vl","");
+
+		for(int id = 0; id < func()->ioSize(); id++) {
+		    if(nId)	nId->childAdd("el")->setText(func()->io(id)->id());
+		    if(nNm)	nNm->childAdd("el")->setText(func()->io(id)->name());
+		    if(nType) nType->childAdd("el")->setText(i2s(func()->io(id)->type()));
+		    if(nVal)  nVal->childAdd("el")->setText(getS(id));
+		}
+	    }
+	    if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR)) {
+		int row = s2i(opt->attr("row"));
+		string col = opt->attr("col");
+		if(col == "vl") {
+		    setS(row, opt->text());
+		    lnkOutput(row, opt->text());
+		}
+		modif();
+	    }
+	}
+	else if(a_path == "/in/PROG") {
+	    if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(inProg());
+	    if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setInProg(opt->text());
+	    if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SPRT_ID,SEC_RD))
+		try {
+		    SYS->daq().at().at(TSYS::strParse(inProgLang(),0,".")).at().
 				    compileFuncSynthHighl(TSYS::strParse(inProgLang(),1,"."),*opt);
-	    } catch(...) { }
-    }
-    else if(a_path == "/out/PROGLang") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(outProgLang());
-	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setOutProgLang(opt->text());
+		} catch(...) { }
+	}
+	else if(a_path.substr(0,7) == "/in/cfg" && DAQTmpl().size() && func()) TPrmTempl::Impl::cntrCmdProc(opt, "/in/cfg");
     }
     else if(a_path == "/out/PROG") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(outProg());
@@ -547,7 +754,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SPRT_ID,SEC_RD))
 	    try {
 		SYS->daq().at().at(TSYS::strParse(outProgLang(),0,".")).at().
-				    compileFuncSynthHighl(TSYS::strParse(outProgLang(),1,"."),*opt);
+				compileFuncSynthHighl(TSYS::strParse(outProgLang(),1,"."),*opt);
 	    } catch(...) { }
     }
     else TCntrNode::cntrCmdProc(opt);

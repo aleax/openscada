@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-03 17:25+0200\n"
+"POT-Creation-Date: 2018-11-18 20:01+0200\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -127,6 +127,9 @@ msgstr "15:Fehler in der Größe der Antwort-PDU."
 
 msgid "OK"
 msgstr "OK"
+
+msgid "Default port of the ModuBus/TCP is 502."
+msgstr ""
 
 msgid ""
 "Merge non-adjacent fragments of registers for request in a single block.\n"
@@ -279,6 +282,9 @@ msgstr "Modus"
 
 msgid "Data;Gateway node;Gateway net"
 msgstr "Daten;Knotenschnittstelle;Netzschnittstelle"
+
+msgid "Date of modification"
+msgstr "Datum der Änderung"
 
 msgid "Period of the data calculation, seconds"
 msgstr "Zeitraum der Datenberechnung, Sekunden"
@@ -531,8 +537,8 @@ msgstr ""
 msgid "Type"
 msgstr "Typ"
 
-msgid "Real;Integer;Boolean;String"
-msgstr "Reelle Zahl;Ganz Zahl;Logisch;Text"
+msgid "Real;Integer;Boolean;String;Object"
+msgstr "Reelle Zahl;Ganz Zahl;Logisch;Text;Objekt"
 
 msgid "Link"
 msgstr "Verbindung"

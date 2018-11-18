@@ -56,16 +56,19 @@ class TProtIn: public TProtocolIn
 
 	TProt &owner( ) const;
 
+	//Attributes
+	string	req;
+
     private:
 	//Attributes
-	TValFunc funcV;
+	//TValFunc funcV;
 	AutoHD<UserPrt> up;
 };
 
 //*************************************************
 //* UserProtocol::UserPrt:                        *
 //*************************************************
-class UserPrt : public TCntrNode, public TConfig
+class UserPrt : public TCntrNode, public TConfig, public TPrmTempl::Impl
 {
     public:
 	//Methods
@@ -74,18 +77,18 @@ class UserPrt : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string id( )			{ return mId; }
+	string id( )		{ return mId; }
 	string name( );
-	string descr( )			{ return cfg("DESCR").getS(); }
-	bool toEnable( )		{ return mAEn; }
-	bool enableStat( ) const	{ return mEn; }
-	bool progTr( )			{ return cfg("PR_TR"); }
-	unsigned waitReqTm( )		{ return mWaitReqTm; }
+	string descr( )		{ return cfg("DESCR").getS(); }
+	bool toEnable( )	{ return mAEn; }
+	bool enableStat( ) const{ return mEn; }
+	bool progTr( )		{ return cfg("PR_TR"); }
+	string DAQTmpl( )	{ return cfg("DAQTmpl"); }
+	unsigned waitReqTm( )	{ return mWaitReqTm; }
 	string inProgLang( );
 	string inProg( );
 	string outProgLang( );
 	string outProg( );
-	string workInProg( )	{ return mWorkInProg; }
 	string workOutProg( )	{ return mWorkOutProg; }
 	int64_t timeStamp( )	{ return mTimeStamp; }
 
@@ -100,6 +103,7 @@ class UserPrt : public TCntrNode, public TConfig
 	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
 	void setEnable( bool vl );
 	void setProgTr( bool vl )		{ cfg("PR_TR") = vl; }
+	void setDAQTmpl( const string &vl )	{ cfg("DAQTmpl").setS(vl); }
 	void setWaitReqTm( unsigned vl )	{ mWaitReqTm = vmax(0,vmin(100000,vl)); modif(); }
 	void setInProgLang( const string &ilng );
 	void setInProg( const string &iprg );
@@ -107,6 +111,9 @@ class UserPrt : public TCntrNode, public TConfig
 	void setOutProg( const string &iprg );
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+
+	bool inMess( const string &reqst, string &answer, TProtIn *prt );
+	void outMess( XMLNode &io, TTransportOut &tro );
 
 	TProt &owner( ) const;
 
@@ -116,7 +123,9 @@ class UserPrt : public TCntrNode, public TConfig
     protected:
 	//Methods
 	void load_( TConfig *cfg );
+	void loadIO( );
 	void save_( );
+	void saveIO( );
 
 	bool cfgChange( TCfg &co, const TVariant &pc );
 
@@ -132,8 +141,15 @@ class UserPrt : public TCntrNode, public TConfig
 	TCfg	&mId;
 	char	&mAEn, mEn;
 	int64_t	&mWaitReqTm, &mTimeStamp;
-	string	mDB, mWorkInProg, mWorkOutProg;
-	bool	prgChOnEn;
+	string	mDB, mWorkOutProg;
+
+	//bool	isDAQTmpl;	// DAQ template used for the input part
+	int	ioRez, ioReq, ioAnsw, ioSend, ioTr, ioIO;
+
+	bool	chkLnkNeed;	//Check lnk need flag
+
+	ResRW	inCfgRes;
+	ResMtx	inReqRes;
 };
 
 //*************************************************
@@ -159,6 +175,7 @@ class TProt: public TProtocol
 	AutoHD<UserPrt> uPrtAt( const string &id ) const	{ return chldAt(mPrtU, id); }
 
 	TElem &uPrtEl( )	{ return mUPrtEl; }
+	TElem &uPrtIOEl( )	{ return mUPrtIOEl; }
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 
@@ -176,7 +193,7 @@ class TProt: public TProtocol
 	//Attributes
 	int	mPrtU;
 
-	TElem	mUPrtEl;
+	TElem	mUPrtEl, mUPrtIOEl;
 };
 
 extern TProt *mod;

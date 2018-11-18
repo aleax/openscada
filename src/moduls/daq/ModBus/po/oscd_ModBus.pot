@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-03 17:25+0200\n"
+"POT-Creation-Date: 2018-11-18 20:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -121,6 +121,9 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
+msgid "Default port of the ModuBus/TCP is 502."
+msgstr ""
+
 msgid ""
 "Merge non-adjacent fragments of registers for request in a single block.\n"
 "WARNING! Some devices do not support the passing query of wrong registers in one block."
@@ -207,6 +210,9 @@ msgid "Mode"
 msgstr ""
 
 msgid "Data;Gateway node;Gateway net"
+msgstr ""
+
+msgid "Date of modification"
 msgstr ""
 
 msgid "Period of the data calculation, seconds"
@@ -417,7 +423,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-msgid "Real;Integer;Boolean;String"
+msgid "Real;Integer;Boolean;String;Object"
 msgstr ""
 
 msgid "Link"

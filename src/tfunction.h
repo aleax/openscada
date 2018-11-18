@@ -123,7 +123,7 @@ class TFunction : public TCntrNode
 	int ioId( const string &id ) const;
 	int ioSize( ) const;
 	IO *io( int id ) const;
-	void ioAdd( IO *io );
+	int ioAdd( IO *io );
 	int ioIns( IO *io, int pos );
 	void ioDel( int pos );
 	void ioMove( int pos, int to );

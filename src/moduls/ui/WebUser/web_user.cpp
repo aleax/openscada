@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.9.5"
+#define MOD_VER		"0.9.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -205,8 +205,6 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
     SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), sender, user, vars, "");
 
     try {
-	TValFunc funcV;
-
 	//Find user protocol for using
 	vector<string> upLs;
 	uPgList(upLs);
@@ -235,6 +233,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	    else throw TError(nodePath().c_str(), _("Page is missing"));
 	}
 
+	TValFunc funcV;
 	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workProg())).at());
 
 	//Load inputs

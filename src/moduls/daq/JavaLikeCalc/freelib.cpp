@@ -141,8 +141,8 @@ void Lib::setStart( bool val )
 {
     vector<string> lst;
     list(lst);
-    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-	try { if(!val || at(lst[i_f]).at().toStart()) at(lst[i_f]).at().setStart(val); }
+    for(unsigned iF = 0; iF < lst.size(); iF++)
+	try { if(!val || at(lst[iF]).at().toStart()) at(lst[iF]).at().setStart(val); }
 	catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     runSt = val;
@@ -219,8 +219,8 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
-	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(at(lst[iF]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mFnc,opt->attr("id"),-1,1);

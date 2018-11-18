@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.8.1"
+#define MOD_VER		"2.8.2"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -580,14 +580,27 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     else TUI::cntrCmdProc(opt);
 }
 
-void TWEB::imgConvert( SSess &ses )
+void TWEB::imgConvert( SSess &ses, const string &mime )
 {
     map<string,string>::iterator prmEl;
     gdImagePtr sim = NULL;
     string itp;
     int newImgH = 0, newImgW = 0;
 
-    if(ses.page.empty() || (ses.prm.find("size") == ses.prm.end() && ses.prm.find("filtr") == ses.prm.end()))   return;
+    //Checking for SVG and appending/removing "preserveAspectRatio" at the argument "size" presence, for true fitting.
+    if(mime.find("image/svg+xml") != string::npos && ses.page.size() && ses.prm.find("size") != ses.prm.end())
+	try {
+	    XMLNode nd;
+	    nd.load(ses.page, XMLNode::LD_Full);
+	    if(nd.name() == "svg") {
+		nd.setAttr("preserveAspectRatio","none");
+		ses.page = nd.save(XMLNode::XMLHeader);
+	    }
+	    return;
+	} catch(TError&) { }
+
+    //Raster images processing
+    if(ses.page.empty() || (ses.prm.find("size") == ses.prm.end() && ses.prm.find("filtr") == ses.prm.end()))	return;
 
     if((sim=gdImageCreateFromPngPtr(ses.page.size(),(char*)ses.page.data())))		itp = "png";
     else if((sim=gdImageCreateFromJpegPtr(ses.page.size(),(char*)ses.page.data())))	itp = "jpg";

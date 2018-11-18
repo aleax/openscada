@@ -296,7 +296,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 		    throw err_sys(_("Waiting time exceeded. The object is used by %d users. Release the object first!"), mUse-1);
 		mess_sys(TMess::Error, _("Error blocking node.\n"
 		    "The node forced to disable which can cause to crash.\n"
-		    "This problem mostly in user procedure, if the program exits!"));
+		    "This problem mostly in a user procedure, if the program exits!"));
 		break;
 	    }
 	    res1.unlock();

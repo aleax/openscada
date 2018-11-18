@@ -180,7 +180,7 @@ void VCASess::getReq( SSess &ses )
 	if(prmEl != ses.prm.end()) {
 	    string mime;
 	    ses.page = resGet(prmEl->second, ses.url, ses, &mime);
-	    mod->imgConvert(ses);
+	    mod->imgConvert(ses, mime);
 	    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+TSYS::strParse(mime,0,";"));
 	} else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource not found"))+"</div>\n", "404 Not Found");
     }

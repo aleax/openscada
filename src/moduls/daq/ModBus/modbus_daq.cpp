@@ -411,8 +411,7 @@ int64_t TMdContr::getValR( int addr, MtxString &err, bool in )
     ResAlloc res(reqRes, false);
     vector<SDataRec>	&workCnt = in ? acqBlksIn : acqBlks;
     for(unsigned i_b = 0; i_b < workCnt.size(); i_b++)
-	if((addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
-	{
+	if((addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size())) {
 	    string terr = workCnt[i_b].err.getVal();
 	    if(terr.empty())
 		rez = (unsigned short)(workCnt[i_b].val[addr*2-workCnt[i_b].off]<<8) |
@@ -429,8 +428,7 @@ char TMdContr::getValC( int addr, MtxString &err, bool in )
     ResAlloc res(reqRes, false);
     vector<SDataRec>	&workCnt = in ? acqBlksCoilIn : acqBlksCoil;
     for(unsigned i_b = 0; i_b < workCnt.size(); i_b++)
-	if(addr >= workCnt[i_b].off && (addr+1) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
-	{
+	if(addr >= workCnt[i_b].off && (addr+1) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size())) {
 	    string terr = workCnt[i_b].err.getVal();
 	    if(terr.empty()) rez = workCnt[i_b].val[addr-workCnt[i_b].off];
 	    else if(err.getVal().empty()) err.setVal(terr);
@@ -446,8 +444,6 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, MtxString &w_err
 	return false;
     }
 
-    if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(dataRes(), true); asynchWrs[addr] = val.getS(); return true; }
-
     int off = 0;
     string tp = TSYS::strParse(addr, 0, ":", &off);
     string atp_sub = TSYS::strParse(tp, 1, "_");
@@ -455,8 +451,9 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, MtxString &w_err
     int aid = strtol(aids.c_str(), NULL, 0);
     string mode = TSYS::strParse(addr, 0, ":", &off);
 
+    if(chkAssync && mAsynchWr && (mode == "w" || mode == "rw")) { MtxAlloc resAsWr(dataRes(), true); asynchWrs[addr] = val.getS(); return true; }
+    if(tp.empty() || (tp.size() >= 2 && tp[1] == 'I') || !(mode.empty() || mode == "w" || mode == "rw")) return true;
     bool wrRez = false;
-    if(tp.empty() || (tp.size() >= 2 && tp[1] == 'I') || !(mode.empty() || mode == "w" || mode == "rw")) return false;
     if(tp[0] == 'C')	wrRez = setValC(val.getB(), aid, w_err);
     if(tp[0] == 'R') {
 	atp_sub.resize(vmax(2,atp_sub.size()), 0);
@@ -913,7 +910,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
-	    3,"tp","str","dest","select","select","/cntr/cfg/trLst");
+	    4,"tp","str","dest","select","select","/cntr/cfg/trLst","help",_("Default port of the ModuBus/TCP is 502."));
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/NODE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/MAX_BLKSZ",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,/*startStat()?R_R_R_:*/RWRWR_,"root",SDAQ_ID,4,

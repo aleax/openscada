@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-30 10:28+0300\n"
+"POT-Creation-Date: 2018-11-12 19:35+0200\n"
 "PO-Revision-Date: 2010-03-04 21:58+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -22,9 +22,11 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allows you to create your own user protocols on any OpenSCADA's language."
+"Allows you to create your own user protocols on an internal OpenSCADA "
+"language."
 msgstr ""
-"Дозволяє створювати власні протоколи користувача на будь якій мові OpenSCADA."
+"Забезпечує створення власних протоколів користувача на внутрішній мові "
+"OpenSCADA."
 
 msgid "Identifier"
 msgstr "Ідентифікатор"
@@ -38,11 +40,11 @@ msgstr "Опис"
 msgid "To enable"
 msgstr "Вмикати"
 
-msgid "Completely translate the procedure"
-msgstr "Повністю перекладати процедуру"
+msgid "Representative DAQ template"
+msgstr "Представницький DAQ шаблон"
 
-msgid "Wait request timeout, ms"
-msgstr "Час очікування запиту, мс"
+msgid "Timeout of a request waiting, milliseconds"
+msgstr "Час очікування запиту, міллісекунд"
 
 msgid "Input procedure"
 msgstr "Вхідна процедура"
@@ -50,10 +52,19 @@ msgstr "Вхідна процедура"
 msgid "Output procedure"
 msgstr "Вихідна процедура"
 
+msgid "Completely translate the procedure"
+msgstr "Повністю перекладати процедуру"
+
 msgid "Date of modification"
 msgstr "Дата модифікації"
 
-msgid "Search and create new user protocol error."
+msgid "User protocol ID"
+msgstr "Ідентифікатор протоколу користувача"
+
+msgid "Value"
+msgstr "Значення"
+
+msgid "Error searching and creating a new user protocol."
 msgstr "Помилка пошуку та створення протоколу користувача."
 
 #, c-format
@@ -66,32 +77,52 @@ msgstr "Протоколи користувача"
 msgid "Protocols"
 msgstr "Протоколи"
 
-msgid "Result"
-msgstr "Результат"
+#, c-format
+msgid ""
+"Size of the accumulated request exceeded for %s, but the user protocol must "
+"tend for removing processed data itself. Fix this!"
+msgstr ""
+"Розмір акумульованого запиту досяг %s, та протокол користувача має забезпечувати видалення оброблених даних самостійно. Виправте це!"
 
-msgid "Request"
-msgstr "Запит"
-
-msgid "Answer"
-msgstr "Відповідь"
-
-msgid "Sender"
-msgstr "Відправник"
+#, c-format
+msgid ""
+"The template '%s' does not have the required attribute '%s' in the type "
+"'%s'. Append this!"
+msgstr ""
+"Шаблон '%s' не має потрібного атрибуту '%s' типу '%s'. Додайте його!"
 
 msgid "Transport"
 msgstr "Транспорт"
 
-msgid "IO"
-msgstr "ВВ"
+msgid "Object"
+msgstr "Об'єкт"
+
+msgid "Input result"
+msgstr "Вхідний результат"
+
+msgid "Boolean"
+msgstr "Логічний"
+
+msgid "Input request"
+msgstr "Вхідний запит"
+
+msgid "String"
+msgstr "Рядок"
+
+msgid "Input answer"
+msgstr "Вхідна відповідь"
+
+msgid "Input sender"
+msgstr "Вхідний відправник"
+
+msgid "Output IO"
+msgstr "Вихідний ВВ"
 
 msgid "Disabled. "
 msgstr "Вимкнений. "
 
 msgid "Enabled. "
 msgstr "Включений. "
-
-msgid "Modified, re-enable to apply! "
-msgstr "Модифіковано, переувімкнути для застосування! "
 
 #, c-format
 msgid "Requests input %.4g, output %.4g."
@@ -115,35 +146,49 @@ msgstr "БД"
 msgid "Configuration"
 msgstr "Конфігурація"
 
+msgid "DAQ template"
+msgstr "DAQ шаблон"
+
+msgid "Input procedure language"
+msgstr "Мова вхідної процедури"
+
+msgid "Output procedure language"
+msgstr "Мова вихідної процедури"
+
 msgid "Input"
 msgstr "Вхід"
 
 msgid ""
-"Use it for pool mode enabling by set the timeout to a nonzero value.\n"
-"Into the pool mode an input transport will call the protocol by no a request "
-"with an empty message after that timeout."
+"Use this for the poolling mode enabling through setting this timeout to a "
+"nonzero value.\n"
+"Into the poolling mode an input transport will call this protocol with the "
+"empty message at no request during this timeout."
 msgstr ""
 "Використовуйте це поле для включення режиму пулінгу, встановленням у "
 "ненульове значення.\n"
 "У режимі пулінгу вхідний транспорт буде викликати протокол із порожнім "
 "запитом, у випадку відсутності запиту протягом визначеного часу."
 
-msgid "Input program language"
-msgstr "Мова програми входу"
+msgid "IO"
+msgstr "ВВ"
 
-msgid "Input program"
-msgstr "Вхідна програма"
+msgid "Type"
+msgstr "Тип"
+
+msgid "Real;Integer;Boolean;String;Object"
+msgstr "Реальний;Цілий;Логічний;Рядок;Об'єкт"
 
 msgid ""
-"Next attributes has defined for input requests processing:\n"
-"   'rez' - processing result (false-full request;true-not full request);\n"
+"Next attributes define for the input requests processing:\n"
+"   'rez' - result of the processing (false - full request; true - not full "
+"request);\n"
 "   'request' - request message;\n"
 "   'answer' - answer message;\n"
 "   'sender' - request sender;\n"
 "   'tr' - sender transport."
 msgstr ""
 "Наступні атрибути визначені для обробки вхідних запитів:\n"
-"   'rez' - результат обробки (false-повний запит;true-неповний запит);\n"
+"   'rez' - результат обробки (false - повний запит; true - неповний запит);\n"
 "   'request' - повідомлення запиту;\n"
 "   'answer' - повідомлення відповіді;\n"
 "   'sender' - відправник запиту;\n"
@@ -152,15 +197,9 @@ msgstr ""
 msgid "Output"
 msgstr "Вихід"
 
-msgid "Output program language"
-msgstr "Мова програми виходу"
-
-msgid "Output program"
-msgstr "Вихідна програма"
-
 msgid ""
-"Next attributes has defined for output requests processing:\n"
-"   'io' - input/output interface's XMLNode object;\n"
+"Next attributes define for the output requests processing:\n"
+"   'io' - XMLNode object of the input/output interface;\n"
 "   'tr' - associated transport."
 msgstr ""
 "Наступні атрибути визначені для обробки вихідних запитів:\n"

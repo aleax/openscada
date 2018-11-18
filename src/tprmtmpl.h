@@ -84,7 +84,7 @@ class TPrmTempl: public TFunction, public TConfig
 	    void inputLinks( );
 	    void outputLinks( );
 
-	    bool cntrCmdProc( XMLNode *opt );
+	    bool cntrCmdProc( XMLNode *opt, const string &pref = "/cfg" );
 
 	    protected:
 	    //Methods

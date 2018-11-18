@@ -41,7 +41,7 @@ using namespace OSCADA;
 #define PRT_NAME	"ModBus"
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.0.0"
+#define PRT_MVER	"2.1.0"
 #define PRT_AUTHORS	_("Roman Savochenko")
 #define PRT_DESCR	_("Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define PRT_LICENSE	"GPL2"
@@ -106,6 +106,7 @@ class Node : public TFunction, public TConfig
 	string inTransport( );
 	string prt( );
 	NodeModes mode( );
+	int64_t timeStamp( )	{ return mTimeStamp; }
 
 	double period( )	{ return mPer; }
 	string progLang( );
@@ -179,6 +180,7 @@ class Node : public TFunction, public TConfig
 	TCfg	&mId, &mName, &mDscr;
 	double	&mPer;
 	char	&mAEn, mEn;
+	int64_t	&mTimeStamp;
 	string	mDB;
 
 	bool	prcSt, endRun;

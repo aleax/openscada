@@ -54,6 +54,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNodeEl.fldAdd(new TFld("PRT",_("Protocol"),TFld::String,TFld::Selectable,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
     mNodeEl.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET).c_str(),_("Data;Gateway node;Gateway net")));
+    mNodeEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
     // For "Data" mode
     mNodeEl.fldAdd(new TFld("DT_PER",_("Period of the data calculation, seconds"),TFld::Real,0,"5.3","1","0.001;99"));
     mNodeEl.fldAdd(new TFld("DT_PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
@@ -578,7 +579,7 @@ retry:
 //*************************************************
 Node::Node( const string &iid, const string &idb, TElem *el ) :
     TFunction("ModBusNode_"+iid), TConfig(el), data(NULL), isDAQTmpl(false),
-    mId(cfg("ID")), mName(cfg("NAME")), mDscr(cfg("DESCR")), mPer(cfg("DT_PER").getRd()), mAEn(cfg("EN").getBd()),
+    mId(cfg("ID")), mName(cfg("NAME")), mDscr(cfg("DESCR")), mPer(cfg("DT_PER").getRd()), mAEn(cfg("EN").getBd()), mTimeStamp(cfg("TIMESTAMP").getId()),
     mEn(false), mDB(idb), prcSt(false), endRun(false), cntReq(0)
 {
     mId = iid;
@@ -804,6 +805,7 @@ void Node::loadIO( )
 
 void Node::save_( )
 {
+    mTimeStamp = SYS->sysTm();
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(), *this);
 
     saveIO();
@@ -822,9 +824,9 @@ void Node::saveIO( )
 	    cfg.cfg("ID").setS(f->io(iIO)->id());
 	    cfg.cfg("NAME").setS(f->io(iIO)->name());
 	    cfg.cfg("TYPE").setI(f->io(iIO)->type());
-	    cfg.cfg("FLAGS").setI(f->io(iIO)->flg()&(TPrmTempl::CfgLink|TPrmTempl::LockAttr));
+	    cfg.cfg("FLAGS").setI(f->io(iIO)->flg()&TPrmTempl::CfgLink);
 	    cfg.cfg("POS").setI(iIO);
-	    cfg.cfg("VALUE").setNoTransl((f->io(iIO)->type()!=IO::String));
+	    cfg.cfg("VALUE").setNoTransl(f->io(iIO)->type() != IO::String || (f->io(iIO)->flg()&TPrmTempl::CfgLink));
 	    if(f->io(iIO)->flg()&TPrmTempl::CfgLink) cfg.cfg("VALUE").setS(data->lnkAddr(iIO));  //f->io(iIO)->rez());
 	    else if(data && data->func()) cfg.cfg("VALUE").setS(data->getS(iIO));
 	    else cfg.cfg("VALUE").setS(f->io(iIO)->def());
@@ -861,9 +863,9 @@ void Node::setEnable( bool vl )
 	string  lfnc = TSYS::strParse(progLang(), 0, "."), wfnc = TSYS::strParse(progLang(), 1, ".");
 	isDAQTmpl = SYS->daq().at().tmplLibPresent(lfnc) && SYS->daq().at().tmplLibAt(lfnc).at().present(wfnc);
 
-	// Try DAQ template
+	// Try the DAQ template
 	if(isDAQTmpl) data->setFunc(&SYS->daq().at().tmplLibAt(lfnc).at().at(wfnc).at().func().at());
-	// Compile function
+	// Compile the function
 	else try {
 	    if(progLang().empty()) data->setFunc(this);
 	    else {
@@ -1336,6 +1338,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/nd/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/nd/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str", "dest","select", "select","/db/list", "help",TMess::labDB());
+		ctrMkNode("fld",opt,-1,"/nd/st/timestamp",_("Date of modification"),R_R_R_,"root",SPRT_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/nd/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt, "/nd/cfg", 0, "root", SPRT_ID, RWRWR_);
@@ -1347,11 +1350,12 @@ void Node::cntrCmdProc( XMLNode *opt )
 		if(xt) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_otr");
 		ctrRemoveNode(opt, "/nd/cfg/DT_PROG");
 		ctrRemoveNode(opt, "/nd/cfg/DT_PR_TR");
+		ctrRemoveNode(opt, "/nd/cfg/TIMESTAMP");
 		/*xt = ctrId(opt->childGet(0),"/nd/cfg/DT_PROG",true);
 		if(xt) xt->parent()->childDel(xt);*/
 		if(mode() == MD_DATA)
 		    ctrMkNode("fld",opt,-1,"/nd/cfg/progLang",_("DAQ template or direct procedure language"),(enableStat()?R_R_R_:RWRWR_),"root",SPRT_ID,3,
-			"tp","str", "dest","sel_ed", "select","/plang/list");
+			"tp","str", "dest","select", "select","/plang/list");
 	    }
 	}
 	ResAlloc res(nRes, false);
@@ -1377,8 +1381,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 			 "  \"R_d:0x20,0x30\" - get double float point (8 byte) from the registers [0x20,0x30-0x32]."));
 		ctrMkNode("list",opt,-1,"/dt/io/nm",_("Name"),(enableStat()?R_R_R_:RWRWR_),"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/dt/io/tp",_("Type"),(enableStat()?R_R_R_:RWRWR_),"root",SPRT_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",TSYS::strMess("%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String).c_str(),
-		    "sel_list",_("Real;Integer;Boolean;String"));
+		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String,IO::Object).c_str(),
+		    "sel_list",_("Real;Integer;Boolean;String;Object"));
 		ctrMkNode("list",opt,-1,"/dt/io/lnk",_("Link"),(enableStat()?R_R_R_:RWRWR_),"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/dt/io/vl",_("Value"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 	    }
@@ -1387,7 +1391,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/dt/prog",cfg("DT_PROG").fld().descr().c_str(),RWRWR_,"root",SPRT_ID,3, "tp","str", "rows","10", "SnthHgl","1");
 	    }
 	}
-	if(data && data->func()) data->TPrmTempl::Impl::cntrCmdProc(opt);
+	if(data && data->func()) data->TPrmTempl::Impl::cntrCmdProc(opt, "/cfg");
 	return;
     }
 
@@ -1402,6 +1406,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/nd/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(a_path == "/nd/cfg/ls_itr" && ctrChkNode(opt)) {
 	if(mode() != MD_GT_NET) opt->childAdd("el")->setText("*");
 	vector<string> sls;
@@ -1420,20 +1425,20 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setProgLang(opt->text());
     }
     else if(a_path.substr(0,7) == "/nd/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
-    else {
-	ResAlloc res(nRes, false);
-	if(a_path == "/plang/list") {
-	    vector<string> lls, ls;
-	    //Templates
-	    SYS->daq().at().tmplLibList(lls);
-	    for(unsigned iL = 0; iL < lls.size(); iL++) {
-		SYS->daq().at().tmplLibAt(lls[iL]).at().list(ls);
-		for(unsigned iT = 0; iT < ls.size(); iT++)
-		    opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
-	    }
-	    TCntrNode::cntrCmdProc(opt);
+    else if(a_path == "/plang/list") {
+	vector<string> lls, ls;
+	//Templates
+	SYS->daq().at().tmplLibList(lls);
+	for(unsigned iL = 0; iL < lls.size(); iL++) {
+	    SYS->daq().at().tmplLibAt(lls[iL]).at().list(ls);
+	    for(unsigned iT = 0; iT < ls.size(); iT++)
+		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
 	}
-	else if(a_path == "/dt/io") {
+	TCntrNode::cntrCmdProc(opt);
+    }
+    else if(a_path.find("/dt") == 0 || a_path.find("/cfg") == 0) {
+	ResAlloc res(nRes, false);
+	if(a_path == "/dt/io") {
 	    TFunction *f = data && data->func() ? data->func() : this;
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD)) {
 		XMLNode *nId   = ctrMkNode("list",opt,-1,"/dt/io/id","");
@@ -1513,7 +1518,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 				    compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
 		} catch(...) { }
 	}
-	else if(data && data->func() && data->TPrmTempl::Impl::cntrCmdProc(opt))	;
-	else TCntrNode::cntrCmdProc(opt);
+	else if(data && data->func() && data->TPrmTempl::Impl::cntrCmdProc(opt,"/cfg"))	;
     }
+    else TCntrNode::cntrCmdProc(opt);
 }

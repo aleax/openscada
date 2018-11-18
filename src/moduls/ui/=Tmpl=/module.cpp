@@ -305,7 +305,7 @@ string TWEB::w_head( )
 	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 	"<head>\n"
 	"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n";
-    if( per_refr )
+    if(per_refr)
 	shead=shead+"<meta http-equiv='Refresh' content='1'/>\n<meta http-equiv='Cache-Control' content='no-cache'/>\n";
     shead=shead+"  <title>OpenSCADA debug web modul!</title>\n"
 	"</head>\n"

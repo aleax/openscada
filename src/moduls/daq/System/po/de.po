@@ -109,13 +109,13 @@ msgid "HD temperature: "
 msgstr "HD-Temperatur: "
 
 msgid "Free (KiB)"
-msgstr "Frei (GiB)"
+msgstr "Frei (KiB)"
 
 msgid "Total (KiB)"
-msgstr "Total (GiB)"
+msgstr "Total (KiB)"
 
 msgid "Used (KiB)"
-msgstr "Verwendete (GiB)"
+msgstr "Verwendete (KiB)"
 
 msgid "Buffers (KiB)"
 msgstr "Puffer (KiB)"

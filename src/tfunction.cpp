@@ -117,13 +117,15 @@ void TFunction::ioList( vector<string> &list )
 	list.push_back(mIO[iIO]->id());
 }
 
-void TFunction::ioAdd( IO *io )
+int TFunction::ioAdd( IO *io )
 {
     preIOCfgChange();
     mIO.push_back(io);
     io->owner = this;
     postIOCfgChange();
     modif();
+
+    return mIO.size()-1;
 }
 
 int TFunction::ioIns( IO *io, int pos )

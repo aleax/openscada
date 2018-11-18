@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.UserProtocol 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-30 10:28+0300\n"
+"POT-Creation-Date: 2018-11-12 19:35+0200\n"
 "PO-Revision-Date: 2010-09-07 19:16+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -23,10 +23,10 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Allows you to create your own user protocols on any OpenSCADA's language."
+"Allows you to create your own user protocols on an internal OpenSCADA "
+"language."
 msgstr ""
-"Ermöglicht die Schaffung der eigenen Nutzersprotokolle in jeder OpenSCADA-"
-"Sprache."
+"Ermöglicht das Erstellen eigener Benutzerprotokolle in einer internen Sprache von OpenSCADA."
 
 msgid "Identifier"
 msgstr "Identifikator"
@@ -40,23 +40,32 @@ msgstr "Beschreibung"
 msgid "To enable"
 msgstr "Aktivieren"
 
-msgid "Completely translate the procedure"
-msgstr "Übersetzen Sie das Verfahren vollständig"
+msgid "Representative DAQ template"
+msgstr "Repräsentative DAQ-Vorlage"
 
-msgid "Wait request timeout, ms"
-msgstr "Warten Anforderungs Timeout, ms"
+msgid "Timeout of a request waiting, milliseconds"
+msgstr "Wartezeit einer Anforderung, in Millisekunden"
 
 msgid "Input procedure"
-msgstr "Eingabeprozedur"
+msgstr "Eingabeverfahren"
 
 msgid "Output procedure"
 msgstr "Ausgabeverfahren"
 
+msgid "Completely translate the procedure"
+msgstr "Übersetzen Sie das Verfahren vollständig"
+
 msgid "Date of modification"
 msgstr "Änderungsdatum"
 
-msgid "Search and create new user protocol error."
-msgstr "Fehler der Suche und der Schaffung eines neuen Nutzersprotokolls."
+msgid "User protocol ID"
+msgstr "Benutzerprotokoll-ID"
+
+msgid "Value"
+msgstr "Wert"
+
+msgid "Error searching and creating a new user protocol."
+msgstr "Fehler beim Suchen und Erstellen eines neuen Benutzerprotokolls."
 
 #, c-format
 msgid "Error starting the protocol '%s'."
@@ -68,32 +77,51 @@ msgstr "Nutzersprotkolle"
 msgid "Protocols"
 msgstr "Protokolle"
 
-msgid "Result"
-msgstr "Ergebnis"
+#, c-format
+msgid ""
+"Size of the accumulated request exceeded for %s, but the user protocol must "
+"tend for removing processed data itself. Fix this!"
+msgstr ""
+"Die Größe der angehäuften Anforderung wurde für %s überschritten. Das Benutzerprotokoll muss jedoch zum Entfernen der verarbeiteten Daten selbst ausgewählt werden. Reparieren Sie das!"
 
-msgid "Request"
-msgstr "Anfrage"
-
-msgid "Answer"
-msgstr "Antwort"
-
-msgid "Sender"
-msgstr "Absender"
+#, c-format
+msgid ""
+"The template '%s' does not have the required attribute '%s' in the type "
+"'%s'. Append this!"
+msgstr "Die Vorlage '%s' hat nicht das erforderliche Attribut '%s' im Typ '%s'. Fügen Sie dies hinzu!"
 
 msgid "Transport"
 msgstr "Transport"
 
-msgid "IO"
-msgstr ""
+msgid "Object"
+msgstr "Objekt"
+
+msgid "Input result"
+msgstr "Eingabeergebnis"
+
+msgid "Boolean"
+msgstr "Boolean"
+
+msgid "Input request"
+msgstr "Eingabeaufforderung"
+
+msgid "String"
+msgstr "String"
+
+msgid "Input answer"
+msgstr "Antwort eingeben"
+
+msgid "Input sender"
+msgstr "Absender eingeben"
+
+msgid "Output IO"
+msgstr "Ausgabe IO"
 
 msgid "Disabled. "
 msgstr "Disaktiviert. "
 
 msgid "Enabled. "
 msgstr "Aktiviert. "
-
-msgid "Modified, re-enable to apply! "
-msgstr "Geändert, wieder freigeben zu bewerben! "
 
 #, c-format
 msgid "Requests input %.4g, output %.4g."
@@ -117,35 +145,47 @@ msgstr "DB"
 msgid "Configuration"
 msgstr "Konfiguration"
 
+msgid "DAQ template"
+msgstr "DAQ-Vorlage"
+
+msgid "Input procedure language"
+msgstr "Sprache des Eingabeverfahrens"
+
+msgid "Output procedure language"
+msgstr "Sprache für das Ausgabeverfahren"
+
 msgid "Input"
 msgstr "Eingang"
 
 msgid ""
-"Use it for pool mode enabling by set the timeout to a nonzero value.\n"
-"Into the pool mode an input transport will call the protocol by no a request "
-"with an empty message after that timeout."
+"Use this for the poolling mode enabling through setting this timeout to a "
+"nonzero value.\n"
+"Into the poolling mode an input transport will call this protocol with the "
+"empty message at no request during this timeout."
 msgstr ""
-"Verwenden Sie es für Pool-Modus ermöglicht durch den Timeout auf einen Wert "
-"ungleich Null.\n"
-"In den Pool-Modus ein Eingangstransport wird das Protokoll auf keinen Antrag "
-"mit einer leeren Nachricht nach diesem Timeout nennen."
+"Verwenden Sie diese Option für den Poolling-Modus, indem Sie das Zeitlimit auf einen Wert ungleich Null setzen.\n"
+"Im poolling-Modus ruft ein Eingabe-Transport dieses Protokoll ohne leere Anforderung während dieses Timeouts auf."
 
-msgid "Input program language"
-msgstr "Sprache des Eingangs-Programm"
+msgid "IO"
+msgstr "IO"
 
-msgid "Input program"
-msgstr "Inputprogramm"
+msgid "Type"
+msgstr "Typ"
+
+msgid "Real;Integer;Boolean;String;Object"
+msgstr "Real;Integer;Boolean;String;Object"
 
 msgid ""
-"Next attributes has defined for input requests processing:\n"
-"   'rez' - processing result (false-full request;true-not full request);\n"
+"Next attributes define for the input requests processing:\n"
+"   'rez' - result of the processing (false - full request; true - not full "
+"request);\n"
 "   'request' - request message;\n"
 "   'answer' - answer message;\n"
 "   'sender' - request sender;\n"
 "   'tr' - sender transport."
 msgstr ""
 "Folgende Attribute sind für die Bearbeitung von Inputsanfragen bestimmt:\n"
-"   'rez' - Ergebnis der Bearbeitung (false-volle Anfrage;true-unvolle "
+"   'rez' - Ergebnis der Bearbeitung (false - volle Anfrage; true - unvolle "
 "Anfrage);\n"
 "   'request' - Anfragenachricht;\n"
 "   'answer' - Antwortsnachricht;\n"
@@ -155,15 +195,9 @@ msgstr ""
 msgid "Output"
 msgstr "Output"
 
-msgid "Output program language"
-msgstr "Sprache des Outputprogramms"
-
-msgid "Output program"
-msgstr "Outputprogramm"
-
 msgid ""
-"Next attributes has defined for output requests processing:\n"
-"   'io' - input/output interface's XMLNode object;\n"
+"Next attributes define for the output requests processing:\n"
+"   'io' - XMLNode object of the input/output interface;\n"
 "   'tr' - associated transport."
 msgstr ""
 "Folgende Attribute sind für die Bearbeitung von Outputsanfragen bestimmt:\n"

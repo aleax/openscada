@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.UserProtocol 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-30 10:28+0300\n"
+"POT-Creation-Date: 2018-11-12 19:35+0200\n"
 "PO-Revision-Date: 2010-03-04 21:26+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -22,10 +22,11 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allows you to create your own user protocols on any OpenSCADA's language."
+"Allows you to create your own user protocols on an internal OpenSCADA "
+"language."
 msgstr ""
-"Позволяет создавать собственные пользовательские протоколы на любом "
-"OpenSCADA языке."
+"Обеспечивает создание собственных пользовательских протоколов на внутреннем "
+"языке OpenSCADA."
 
 msgid "Identifier"
 msgstr "Идентификатор"
@@ -39,11 +40,11 @@ msgstr "Описание"
 msgid "To enable"
 msgstr "Включать"
 
-msgid "Completely translate the procedure"
-msgstr "Полностью переводить процедуру"
+msgid "Representative DAQ template"
+msgstr "Представительский DAQ шаблон"
 
-msgid "Wait request timeout, ms"
-msgstr "Время ожидания запроса, мс"
+msgid "Timeout of a request waiting, milliseconds"
+msgstr "Время ожидания запроса, миллисекунд"
 
 msgid "Input procedure"
 msgstr "Входная процедура"
@@ -51,10 +52,19 @@ msgstr "Входная процедура"
 msgid "Output procedure"
 msgstr "Выходная процедура"
 
+msgid "Completely translate the procedure"
+msgstr "Полностью переводить процедуру"
+
 msgid "Date of modification"
 msgstr "Дата модификации"
 
-msgid "Search and create new user protocol error."
+msgid "User protocol ID"
+msgstr "Идентификатор пользовательского протокола"
+
+msgid "Value"
+msgstr "Значение"
+
+msgid "Error searching and creating a new user protocol."
 msgstr "Ошибка поиска и создания нового пользовательского протокола."
 
 #, c-format
@@ -67,32 +77,50 @@ msgstr "Пользовательские протоколы"
 msgid "Protocols"
 msgstr "Протоколы"
 
-msgid "Result"
-msgstr "Результат"
+#, c-format
+msgid ""
+"Size of the accumulated request exceeded for %s, but the user protocol must "
+"tend for removing processed data itself. Fix this!"
+msgstr "Размер аккумулированного запроса достиг %s, и протокол пользователя должен обеспечить удаление обработанных данных самостоятельно. Исправьте это!"
 
-msgid "Request"
-msgstr "Запрос"
-
-msgid "Answer"
-msgstr "Ответ"
-
-msgid "Sender"
-msgstr "Отправитель"
+#, c-format
+msgid ""
+"The template '%s' does not have the required attribute '%s' in the type "
+"'%s'. Append this!"
+msgstr "Шаблон '%s' не имеет необходимого атрибута '%s' типом '%s'. Добавьте его!"
 
 msgid "Transport"
 msgstr "Транспорт"
 
-msgid "IO"
-msgstr "ВВ"
+msgid "Object"
+msgstr "Объект"
+
+msgid "Input result"
+msgstr "Входной результат"
+
+msgid "Boolean"
+msgstr "Логический"
+
+msgid "Input request"
+msgstr "Входной запрос"
+
+msgid "String"
+msgstr "Строка"
+
+msgid "Input answer"
+msgstr "Входной ответ"
+
+msgid "Input sender"
+msgstr "Входной отправитель"
+
+msgid "Output IO"
+msgstr "Выходной ВВ"
 
 msgid "Disabled. "
 msgstr "Отключен. "
 
 msgid "Enabled. "
 msgstr "Включен. "
-
-msgid "Modified, re-enable to apply! "
-msgstr "Модифицирован, перевключить для применения! "
 
 #, c-format
 msgid "Requests input %.4g, output %.4g."
@@ -116,35 +144,49 @@ msgstr "БД"
 msgid "Configuration"
 msgstr "Конфигурация"
 
+msgid "DAQ template"
+msgstr "DAQ шаблон"
+
+msgid "Input procedure language"
+msgstr "Язык входной процедуры"
+
+msgid "Output procedure language"
+msgstr "Язык выходной процедуры"
+
 msgid "Input"
 msgstr "Вход"
 
 msgid ""
-"Use it for pool mode enabling by set the timeout to a nonzero value.\n"
-"Into the pool mode an input transport will call the protocol by no a request "
-"with an empty message after that timeout."
+"Use this for the poolling mode enabling through setting this timeout to a "
+"nonzero value.\n"
+"Into the poolling mode an input transport will call this protocol with the "
+"empty message at no request during this timeout."
 msgstr ""
 "Используйте это поле для включения режима пулинга, установкой в ненулевое "
 "значение.\n"
 "В режиме пулинга входной транспорт будет вызывать протокол с пустым "
 "запросом, в случае отсутствия запроса в течении указанного времени."
 
-msgid "Input program language"
-msgstr "Язык входной программы"
+msgid "IO"
+msgstr "ВВ"
 
-msgid "Input program"
-msgstr "Входная программа"
+msgid "Type"
+msgstr "Тип"
+
+msgid "Real;Integer;Boolean;String;Object"
+msgstr "Вещественный;Целый;Логический;Строка;Объект"
 
 msgid ""
-"Next attributes has defined for input requests processing:\n"
-"   'rez' - processing result (false-full request;true-not full request);\n"
+"Next attributes define for the input requests processing:\n"
+"   'rez' - result of the processing (false - full request; true - not full "
+"request);\n"
 "   'request' - request message;\n"
 "   'answer' - answer message;\n"
 "   'sender' - request sender;\n"
 "   'tr' - sender transport."
 msgstr ""
 "Следующие атрибуты определены для обработки входных запросов:\n"
-"   'rez' - результат обработки (false-полный запрос;true-неполный запрос);\n"
+"   'rez' - результат обработки (false - полный запрос; true - неполный запрос);\n"
 "   'request' - сообщение запроса;\n"
 "   'answer' - сообщение ответа;\n"
 "   'sender' - отправитель запроса;\n"
@@ -153,15 +195,9 @@ msgstr ""
 msgid "Output"
 msgstr "Выход"
 
-msgid "Output program language"
-msgstr "Язык выходной программы"
-
-msgid "Output program"
-msgstr "Выходная программа"
-
 msgid ""
-"Next attributes has defined for output requests processing:\n"
-"   'io' - input/output interface's XMLNode object;\n"
+"Next attributes define for the output requests processing:\n"
+"   'io' - XMLNode object of the input/output interface;\n"
 "   'tr' - associated transport."
 msgstr ""
 "Следующие атрибуты определены для обработки выходных запросов:\n"

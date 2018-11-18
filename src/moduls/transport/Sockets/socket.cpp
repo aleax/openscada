@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.1.0"
+#define MOD_VER		"3.1.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -571,17 +571,18 @@ void *TSocketIn::Task( void *sock_in )
 	}
 	if(kz <= 0 || !FD_ISSET(sock->sockFd, &rd_fd)) continue;
 
-	struct sockaddr_in name_cl;
-	socklen_t	   name_cl_len = sizeof(name_cl);
+	struct sockaddr_storage	sockStor;
+	struct sockaddr *sadr = (struct sockaddr*) &sockStor;;
+	socklen_t sadrLen = sizeof(sockStor);
 	if(sock->type == SOCK_TCP) {
-	    int sockFdCL = accept(sock->sockFd, (sockaddr *)&name_cl, &name_cl_len);
+	    int sockFdCL = accept(sock->sockFd, sadr, &sadrLen);
 	    if(sockFdCL != -1) {
-		string sender = inet_ntoa(name_cl.sin_addr);
-		if(((sockaddr*)&name_cl)->sa_family == AF_INET6) {
+		string sender;
+		if(sadr->sa_family == AF_INET6) {
 		    char aBuf[INET6_ADDRSTRLEN];
-		    getnameinfo((sockaddr*)&name_cl, name_cl_len, aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
+		    getnameinfo(sadr, sadrLen, aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
 		    sender = aBuf;
-		}
+		} else sender = inet_ntoa(((sockaddr_in*)sadr)->sin_addr);
 
 		if(sock->clId.size() >= sock->maxFork() || (sock->maxForkPerHost() && sock->forksPerHost(sender) >= sock->maxForkPerHost())) {
 		    sock->clsConnByLim++;
@@ -629,19 +630,25 @@ void *TSocketIn::Task( void *sock_in )
 	else if(sock->type == SOCK_UDP) {
 	    string req, answ;
 
-	    ssize_t r_len = recvfrom(sock->sockFd, buf, sock->bufLen()*1000, 0, (sockaddr*)&name_cl, &name_cl_len);
+	    ssize_t r_len = recvfrom(sock->sockFd, buf, sock->bufLen()*1000, 0, sadr, &sadrLen);
 	    if(r_len <= 0) continue;
 	    sock->trIn += r_len;
 	    req.assign(buf, r_len);
 
-	    if(mess_lev() == TMess::Debug)
-		mess_debug(sock->nodePath().c_str(), _("Read datagram %s from '%s'!"), TSYS::cpct2str(r_len).c_str(), inet_ntoa(name_cl.sin_addr));
-	    if(sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:Received from '%s'\n"),sock->sockFd,inet_ntoa(name_cl.sin_addr)) + req);
+	    string sender;
+	    if(sadr->sa_family == AF_INET6) {
+		char aBuf[INET6_ADDRSTRLEN];
+		getnameinfo(sadr, sadrLen, aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
+		sender = aBuf;
+	    } else sender = inet_ntoa(((sockaddr_in*)sadr)->sin_addr); //name_cl.sin_addr);
 
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(sock->nodePath().c_str(), _("Read datagram %s from '%s'!"), TSYS::cpct2str(r_len).c_str(), sender.c_str());
+	    if(sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:Received from '%s'\n"),sock->sockFd,sender.c_str()) + req);
 
 	    int64_t stTm = 0;
 	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
-	    sock->messPut(sock->sockFd, req, answ, inet_ntoa(name_cl.sin_addr), prot_in);
+	    sock->messPut(sock->sockFd, req, answ, sender, prot_in);
 	    if(mess_lev() == TMess::Debug && stTm) {
 		sock->prcTm = SYS->curTime() - stTm;
 		sock->prcTmMax = vmax(sock->prcTmMax, sock->prcTm);
@@ -649,12 +656,12 @@ void *TSocketIn::Task( void *sock_in )
 	    if(!prot_in.freeStat()) continue;
 
 	    if(mess_lev() == TMess::Debug)
-		mess_debug(sock->nodePath().c_str(), _("Wrote datagram %s to '%s'!"), TSYS::cpct2str(answ.size()).c_str(), inet_ntoa(name_cl.sin_addr));
+		mess_debug(sock->nodePath().c_str(), _("Wrote datagram %s to '%s'!"), TSYS::cpct2str(answ.size()).c_str(), sender.c_str());
 
-	    r_len = sendto(sock->sockFd, answ.c_str(), answ.size(), 0, (sockaddr *)&name_cl, name_cl_len);
+	    r_len = sendto(sock->sockFd, answ.c_str(), answ.size(), 0, sadr, sadrLen);
 	    sock->trOut += vmax(0, r_len);
 
-	    if(r_len > 0 && sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:Transmitted to '%s'\n"),sock->sockFd,inet_ntoa(name_cl.sin_addr)) + answ);
+	    if(r_len > 0 && sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:Transmitted to '%s'\n"),sock->sockFd,sender.c_str()) + answ);
 	}
 #ifdef HAVE_LINUX_CAN_H
 	else if(sock->type == SOCK_RAWCAN) {
@@ -1197,12 +1204,11 @@ void TSocketOut::start( int itmCon )
 		    }
 
 		    //Get the connected address
-		    connAddr = inet_ntoa(((sockaddr_in*)&addrs[iA])->sin_addr);
 		    if(((sockaddr*)&addrs[iA])->sa_family == AF_INET6) {
 			char aBuf[INET6_ADDRSTRLEN];
 			getnameinfo((sockaddr*)&addrs[iA], sizeof(addrs[iA]), aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
 			connAddr = aBuf;
-		    }
+		    } else connAddr = inet_ntoa(((sockaddr_in*)&addrs[iA])->sin_addr);
 		} catch(TError &err) {
 		    aErr = err.mess;
 		    if(sockFd >= 0) close(sockFd);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-30 10:28+0300\n"
+"POT-Creation-Date: 2018-11-18 16:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Allows you to create your own user protocols on any OpenSCADA's language."
+msgid "Allows you to create your own user protocols on an internal OpenSCADA language."
 msgstr ""
 
 msgid "Identifier"
@@ -38,10 +38,10 @@ msgstr ""
 msgid "To enable"
 msgstr ""
 
-msgid "Completely translate the procedure"
+msgid "Representative DAQ template"
 msgstr ""
 
-msgid "Wait request timeout, ms"
+msgid "Timeout of a request waiting, milliseconds"
 msgstr ""
 
 msgid "Input procedure"
@@ -50,10 +50,19 @@ msgstr ""
 msgid "Output procedure"
 msgstr ""
 
+msgid "Completely translate the procedure"
+msgstr ""
+
 msgid "Date of modification"
 msgstr ""
 
-msgid "Search and create new user protocol error."
+msgid "User protocol ID"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Error searching and creating a new user protocol."
 msgstr ""
 
 #, c-format
@@ -66,31 +75,45 @@ msgstr ""
 msgid "Protocols"
 msgstr ""
 
-msgid "Result"
+#, c-format
+msgid "Size of the accumulated request exceeded for %s, but the user protocol must tend for removing processed data itself. Fix this!"
 msgstr ""
 
-msgid "Request"
-msgstr ""
-
-msgid "Answer"
-msgstr ""
-
-msgid "Sender"
+#, c-format
+msgid "The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"
 msgstr ""
 
 msgid "Transport"
 msgstr ""
 
-msgid "IO"
+msgid "Object"
+msgstr ""
+
+msgid "Input result"
+msgstr ""
+
+msgid "Boolean"
+msgstr ""
+
+msgid "Input request"
+msgstr ""
+
+msgid "String"
+msgstr ""
+
+msgid "Input answer"
+msgstr ""
+
+msgid "Input sender"
+msgstr ""
+
+msgid "Output IO"
 msgstr ""
 
 msgid "Disabled. "
 msgstr ""
 
 msgid "Enabled. "
-msgstr ""
-
-msgid "Modified, re-enable to apply! "
 msgstr ""
 
 #, c-format
@@ -115,23 +138,35 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
+msgid "DAQ template"
+msgstr ""
+
+msgid "Input procedure language"
+msgstr ""
+
+msgid "Output procedure language"
+msgstr ""
+
 msgid "Input"
 msgstr ""
 
 msgid ""
-"Use it for pool mode enabling by set the timeout to a nonzero value.\n"
-"Into the pool mode an input transport will call the protocol by no a request with an empty message after that timeout."
+"Use this for the poolling mode enabling through setting this timeout to a nonzero value.\n"
+"Into the poolling mode an input transport will call this protocol with the empty message at no request during this timeout."
 msgstr ""
 
-msgid "Input program language"
+msgid "IO"
 msgstr ""
 
-msgid "Input program"
+msgid "Type"
+msgstr ""
+
+msgid "Real;Integer;Boolean;String;Object"
 msgstr ""
 
 msgid ""
-"Next attributes has defined for input requests processing:\n"
-"   'rez' - processing result (false-full request;true-not full request);\n"
+"Next attributes define for the input requests processing:\n"
+"   'rez' - result of the processing (false - full request; true - not full request);\n"
 "   'request' - request message;\n"
 "   'answer' - answer message;\n"
 "   'sender' - request sender;\n"
@@ -141,14 +176,8 @@ msgstr ""
 msgid "Output"
 msgstr ""
 
-msgid "Output program language"
-msgstr ""
-
-msgid "Output program"
-msgstr ""
-
 msgid ""
-"Next attributes has defined for output requests processing:\n"
-"   'io' - input/output interface's XMLNode object;\n"
+"Next attributes define for the output requests processing:\n"
+"   'io' - XMLNode object of the input/output interface;\n"
 "   'tr' - associated transport."
 msgstr ""
