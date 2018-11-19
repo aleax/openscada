@@ -1,3 +1,7 @@
+2018-11-19 Roman (stable)
+- FIX:Protocol.UserProtocol: Fixed for the limiting message.
+
+
 2018-11-18 Roman (stable)
 - !!!:FIX:DB.LibsDB.OscadaLibs: The temlate library DevLib is appended by implementing of the counter modules Pulsar-M, invested by Zubarev Dmitry (IP INTEGRAL<http://kip-i-a.pro>).
     !!!: The temlate library Base is appended by the "codeState" template of the state forming by a code.

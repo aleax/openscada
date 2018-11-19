@@ -387,7 +387,7 @@ bool UserPrt::inMess( const string &reqst, string &answer, TProtIn *prt )
 	prt->req = getS(ioReq);
 	if(prt->req.size() > USER_FILE_LIMIT) {
 	    mess_sys(TMess::Warning, _("Size of the accumulated request exceeded for %s, but the user protocol must tend for removing processed data itself. Fix this!"),
-		TSYS::cpct2str(USER_FILE_LIMIT));
+		TSYS::cpct2str(USER_FILE_LIMIT).c_str());
 	    prt->req = "";
 	}
 	answer = getS(ioAnsw);
