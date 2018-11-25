@@ -130,7 +130,7 @@ void TPrmTempl::setStart( bool vl )
 	    if(ioIds.find(io(id)->id()) != ioIds.end()) { ioDel(id); modif(); }
 	    else { ioIds[io(id)->id()] = true; id++; }
 
-	//Compile new function
+	//Compile the new function
 	if(prog().size())
 	    work_prog = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
 					compileFunc(TSYS::strSepParse(progLang(),1,'.'),*this,prog(),"",maxCalcTm());

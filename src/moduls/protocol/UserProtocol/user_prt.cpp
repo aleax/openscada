@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.0.0"
+#define MOD_VER		"1.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -274,12 +274,15 @@ TCntrNode &UserPrt::operator=( const TCntrNode &node )
     //Copy for current values and links (by the templates)
     if(src_n->DAQTmpl().size() && src_n->enableStat()) {
 	setEnable(true);
+
 	ResAlloc res(inCfgRes, false);
 	ResAlloc res1(src_n->inCfgRes, false);
 	for(int iIO = 0; iIO < src_n->func()->ioSize(); iIO++)
 	    if(src_n->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 		lnkAddrSet(iIO, src_n->lnkAddr(iIO));
 	    else set(iIO, src_n->get(iIO));
+
+	chkLnkNeed = initLnks();
     }
 
     return *this;
@@ -356,6 +359,8 @@ void UserPrt::setOutProg( const string &iprg )
 
 bool UserPrt::inMess( const string &reqst, string &answer, TProtIn *prt )
 {
+    if(ioRez < 0 || ioReq < 0 || ioAnsw < 0) return true;
+
     try {
 	//Try enable, mostly for allow to use static functons into the procedures
 	if(!enableStat() && toEnable() && inProgLang().size()) setEnable(true);
@@ -369,19 +374,19 @@ bool UserPrt::inMess( const string &reqst, string &answer, TProtIn *prt )
 	if(chkLnkNeed) chkLnkNeed = initLnks(true);
 
 	//The input function's execution context creation
-	setO(ioTr, new TCntrNodeObj(AutoHD<TCntrNode>(&prt->srcTr().at()),"root"));
+	if(ioTr >= 0) setO(ioTr, new TCntrNodeObj(AutoHD<TCntrNode>(&prt->srcTr().at()),"root"));
 
 	//Load inputs
 	inputLinks();
 	setB(ioRez, false);
 	setS(ioReq, prt->req+reqst);
 	setS(ioAnsw, "");
-	setS(ioSend, prt->srcAddr());
+	if(ioSend >= 0) setS(ioSend, prt->srcAddr());
 	//Call processing
 	setMdfChk(true);
 	calc();
 	//Get outputs
-	setO(ioTr, new TEValObj());
+	if(ioTr >= 0) setO(ioTr, new TEValObj());
 	outputLinks();
 	bool rez = getB(ioRez);
 	prt->req = getS(ioReq);
@@ -407,6 +412,8 @@ bool UserPrt::inMess( const string &reqst, string &answer, TProtIn *prt )
 
 void UserPrt::outMess( XMLNode &io, TTransportOut &tro )
 {
+    if(ioTr < 0 || ioIO < 0) return;
+
     TValFunc funcV;
 
     //Get user protocol for using
@@ -447,9 +454,8 @@ void UserPrt::load_( TConfig *icfg )
 
 void UserPrt::loadIO( )
 {
+    ResAlloc res(inCfgRes, false);
     if(func() && DAQTmpl().size()) {
-	ResAlloc res(inCfgRes, false);
-
 	//Load IO
 	vector<vector<string> > full;
 	vector<string> u_pos;
@@ -478,9 +484,8 @@ void UserPrt::save_( )
 
 void UserPrt::saveIO( )
 {
+    ResAlloc res(inCfgRes, false);
     if(func() && DAQTmpl().size()) {
-	ResAlloc res(inCfgRes, false);
-
 	//Save IO
 	TConfig cf(&owner().uPrtIOEl());
 	cf.cfg("UPRT_ID").setS(id(), true);
@@ -542,26 +547,20 @@ void UserPrt::setEnable( bool vl )
 	    // Checking for requiered conditions to the template
 	    try {
 		//Generic
-		if((ioTr=func()->ioId("tr")) < 0 || func()->io(ioTr)->type() != IO::Object)
-		    throw err_sys(_("The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"),
-			inProgLang().c_str(), (string(_("Transport"))+"(tr)").c_str(), _("Object"));
+		if((ioTr=func()->ioId("tr")) >= 0 && func()->io(ioTr)->type() != IO::Object)		ioTr = -1;
 		//Input part
-		if((ioRez=func()->ioId("rez")) < 0 || func()->io(ioRez)->type() != IO::Boolean)
-		    throw err_sys(_("The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"),
-			inProgLang().c_str(), (string(_("Input result"))+"(rez)").c_str(), _("Boolean"));
-		if((ioReq=func()->ioId("request")) < 0 || func()->io(ioReq)->type() != IO::String)
-		    throw err_sys(_("The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"),
-			inProgLang().c_str(), (string(_("Input request"))+"(request)").c_str(), _("String"));
-		if((ioAnsw=func()->ioId("answer")) < 0 || func()->io(ioAnsw)->type() != IO::String)
-		    throw err_sys(_("The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"),
-			inProgLang().c_str(), (string(_("Input answer"))+"(answer)").c_str(), _("String"));
-		if((ioSend=func()->ioId("sender")) < 0 || func()->io(ioSend)->type() != IO::String)
-		    throw err_sys(_("The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"),
-			inProgLang().c_str(), (string(_("Input sender"))+"(sender)").c_str(), _("String"));
+		if((ioRez=func()->ioId("rez")) >= 0 && func()->io(ioRez)->type() != IO::Boolean)	ioRez = -1;
+		if((ioReq=func()->ioId("request")) >= 0 && func()->io(ioReq)->type() != IO::String)	ioReq = -1;
+		if((ioAnsw=func()->ioId("answer")) >= 0 && func()->io(ioAnsw)->type() != IO::String)	ioAnsw = -1;
+		if((ioSend=func()->ioId("sender")) >= 0 && func()->io(ioSend)->type() != IO::String)	ioSend = -1;
 		//Output part
-		if((ioIO=func()->ioId("io")) < 0 || func()->io(ioIO)->type() != IO::Object)
-		    throw err_sys(_("The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"),
-			inProgLang().c_str(), (string(_("Output IO"))+"(io)").c_str(), _("Object"));
+		if((ioIO=func()->ioId("io")) >= 0 && func()->io(ioIO)->type() != IO::Object)		ioIO = -1;
+
+		if(!((ioTr >= 0 && ioIO >= 0) || (ioRez >= 0 && ioReq >= 0 && ioAnsw >= 0)))
+		    throw err_sys(_("The template '%s' does not have one or more required attribute in the needed type.\n"
+			"Input part: rez=%d, request=%d, answer=%d. Output part: tr=%d, io=%d.\n"
+			"See to the documentation and append their!"),
+			inProgLang().c_str(), ioRez, ioReq, ioAnsw, ioTr, ioIO);
 	    } catch(TError &err) { setFunc(NULL); throw; }
 	}
 	// Compiling the direct function
@@ -723,8 +722,8 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 		for(int id = 0; id < func()->ioSize(); id++) {
 		    if(nId)	nId->childAdd("el")->setText(func()->io(id)->id());
 		    if(nNm)	nNm->childAdd("el")->setText(func()->io(id)->name());
-		    if(nType) nType->childAdd("el")->setText(i2s(func()->io(id)->type()));
-		    if(nVal)  nVal->childAdd("el")->setText(getS(id));
+		    if(nType)	nType->childAdd("el")->setText(i2s(func()->io(id)->type()));
+		    if(nVal)	nVal->childAdd("el")->setText(getS(id));
 		}
 	    }
 	    if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR)) {
@@ -746,7 +745,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 				    compileFuncSynthHighl(TSYS::strParse(inProgLang(),1,"."),*opt);
 		} catch(...) { }
 	}
-	else if(a_path.substr(0,7) == "/in/cfg" && DAQTmpl().size() && func()) TPrmTempl::Impl::cntrCmdProc(opt, "/in/cfg");
+	else if(a_path.find("/in/cfg") == 0 && DAQTmpl().size() && func()) TPrmTempl::Impl::cntrCmdProc(opt, "/in/cfg");
     }
     else if(a_path == "/out/PROG") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(outProg());

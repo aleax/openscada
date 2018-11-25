@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.9.8"
+#define MOD_VER		"3.10.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -108,7 +108,7 @@ void TpContr::postEnable( int flag )
 
     //Controller db structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system"));
-    fldAdd(new TFld("FUNC",_("Controller function"),TFld::String,TFld::NoFlag,"40"));
+    fldAdd(new TFld("FUNC",_("Controller function or DAQ-template"),TFld::String,TFld::NoFlag,"40"));
     fldAdd(new TFld("SCHEDULE",_("Calculation schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Priority of the calculation task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("ITER",_("Number of iterations in single calculation"),TFld::Integer,TFld::NoFlag,"2","1","1;99"));
@@ -237,11 +237,11 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
     AutoHD<Func> func = lbAt("sys_compile").at().at(funcId);
     if(maxCalcTm > 0) func.at().setMaxCalcTm(maxCalcTm);
 
-    //Try hot config fields change for work function
+    //Try for hot config fields changing of the work function
     if(func.at().use() && func.at().startStat())
 	try {
 	    ((TFunction&)func.at()).operator=(fnc_cfg);
-	    if(prog_text == func.at().prog()) return func.at().nodePath(0,true);
+	    if(prog_text == func.at().prog()) return func.at().nodePath(0, true);
 	} catch(TError &err) {
 	    func.at().setStart(true);
 	    throw;
@@ -262,7 +262,7 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 	throw TError((nodePath()+"sys_compile/"+funcId).c_str(), _("Error compiling: %s"), err.mess.c_str());
     }
 
-    return func.at().nodePath(0,true);
+    return func.at().nodePath(0, true);
 }
 
 void TpContr::load_( )

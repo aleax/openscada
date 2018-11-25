@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.1.1"
+#define MOD_VER		"3.1.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -961,11 +961,10 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/st/conns" && ctrChkNode(opt)) {
 	MtxAlloc res(sockRes, true);
 	for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId) {
-	    string mess = TSYS::strMess(_("%s %d(%s): last %s; traffic in %s, out %s; client detachings %g; "),
+	    string mess = TSYS::strMess(_("%s %d(%s): last %s; traffic in %s, out %s; "),
 		atm2s(iId->second->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),iId->first,iId->second->sender.c_str(),
 		atm2s(iId->second->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
-		TSYS::cpct2str(iId->second->trIn).c_str(),TSYS::cpct2str(iId->second->trOut).c_str(),
-		iId->second->clntDetchCnt);
+		TSYS::cpct2str(iId->second->trIn).c_str(),TSYS::cpct2str(iId->second->trOut).c_str());
 	    if(mess_lev() == TMess::Debug)
 		mess += TSYS::strMess(_("processing time %s[%s]; "),
 		    tm2s(1e-6*iId->second->prcTm).c_str(), tm2s(1e-6*iId->second->prcTmMax).c_str());
@@ -1155,6 +1154,8 @@ void TSocketOut::start( int itmCon )
 	    hints.ai_socktype = (type == SOCK_TCP) ? SOCK_STREAM : SOCK_DGRAM;
 	    int error;
 
+	    if(logLen()) pushLogMess(TSYS::strMess(_("Resolving for '%s'"),host_.c_str()));
+
 	    MtxAlloc aRes(*SYS->commonLock("getaddrinfo"), true);
 	    if((error=getaddrinfo(host_.c_str(),(port.size()?port.c_str():"10005"),&hints,&res)))
 		throw TError(nodePath().c_str(), _("Error the address '%s': '%s (%d)'"), addr_.c_str(), gai_strerror(error), error);
@@ -1183,6 +1184,15 @@ void TSocketOut::start( int itmCon )
 			    throw TError(nodePath().c_str(), _("Error creating the %s socket: '%s (%d)'!"), "UDP", strerror(errno), errno);
 		    }
 
+		    //Get the connected address
+		    if(((sockaddr*)&addrs[iA])->sa_family == AF_INET6) {
+			char aBuf[INET6_ADDRSTRLEN];
+			getnameinfo((sockaddr*)&addrs[iA], sizeof(addrs[iA]), aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
+			connAddr = aBuf;
+		    } else connAddr = inet_ntoa(((sockaddr_in*)&addrs[iA])->sin_addr);
+
+		    if(logLen()) pushLogMess(TSYS::strMess(_("Connecting to '%s'"), connAddr.c_str()));
+
 		    //Connect to the socket
 		    int flags = fcntl(sockFd, F_GETFL, 0);
 		    fcntl(sockFd, F_SETFL, flags|O_NONBLOCK);
@@ -1202,13 +1212,6 @@ void TSocketOut::start( int itmCon )
 			throw TError(nodePath().c_str(), _("Error connecting to the internet socket '%s:%s' during the timeout, it seems in down or inaccessible: '%s (%d)'!"),
 			    host_.c_str(), port.c_str(), strerror(errno), errno);
 		    }
-
-		    //Get the connected address
-		    if(((sockaddr*)&addrs[iA])->sa_family == AF_INET6) {
-			char aBuf[INET6_ADDRSTRLEN];
-			getnameinfo((sockaddr*)&addrs[iA], sizeof(addrs[iA]), aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
-			connAddr = aBuf;
-		    } else connAddr = inet_ntoa(((sockaddr_in*)&addrs[iA])->sin_addr);
 		} catch(TError &err) {
 		    aErr = err.mess;
 		    if(sockFd >= 0) close(sockFd);

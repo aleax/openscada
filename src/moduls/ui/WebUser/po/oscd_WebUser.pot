@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 21:19+0200\n"
+"POT-Creation-Date: 2018-11-25 18:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,13 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Web interface from user"
+msgid "User WWW-page"
 msgstr ""
 
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Allows you to create your own user web-interfaces in any language of OpenSCADA."
+msgid "Provides for creating your own web-pages on internal OpenSCADA language."
 msgstr ""
 
 msgid "Identifier"
@@ -38,38 +38,51 @@ msgstr ""
 msgid "To enable"
 msgstr ""
 
-msgid "Program"
+msgid "Procedure"
 msgstr ""
 
 msgid "Date of modification"
 msgstr ""
 
-msgid "Search and create new user page error."
+msgid "User page ID"
 msgstr ""
 
-msgid "Presented user's WEB-pages."
+msgid "Value"
 msgstr ""
 
-msgid "Page is missing"
+msgid "Error searching and creating a new user page."
 msgstr ""
 
 #, c-format
-msgid "Page '%s' error: %s"
+msgid "Error starting the WWW-page '%s'."
 msgstr ""
 
-msgid "User page"
+msgid "Present WWW-pages of the users."
 msgstr ""
 
-msgid "User pages"
+msgid "The page is not present"
 msgstr ""
 
-msgid "Default page"
+#, c-format
+msgid "Error the page '%s': %s"
 msgstr ""
 
-msgid "Pages"
+msgid "User WWW-pages"
 msgstr ""
 
-msgid "<Page index display>"
+msgid "Default WWW-page"
+msgstr ""
+
+msgid "WWW-pages"
+msgstr ""
+
+msgid "<Show of index of the pages>"
+msgstr ""
+
+#, c-format
+msgid ""
+"The template '%s' does not have one or more required attribute in the needed type: rez=%d, HTTPreq=%d, url=%d, HTTPvars=%d.\n"
+"See to the documentation and append their!"
 msgstr ""
 
 msgid "Result"
@@ -81,7 +94,7 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
-msgid "Page"
+msgid "WWW-page"
 msgstr ""
 
 msgid "Sender"
@@ -111,14 +124,11 @@ msgstr ""
 msgid "Enabled. "
 msgstr ""
 
-msgid "Modified, re-enable to apply! "
-msgstr ""
-
 #, c-format
 msgid "Requests %.4g."
 msgstr ""
 
-msgid "User page: "
+msgid "User WWW-page: "
 msgstr ""
 
 msgid "State"
@@ -136,20 +146,29 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
-msgid "Program language"
+msgid "Procedure language or the DAQ-template"
+msgstr ""
+
+msgid "IO"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Real;Integer;Boolean;String;Object"
 msgstr ""
 
 msgid ""
-"Next attributes has defined for requests processing:\n"
+"Next attributes are defined to process the requests:\n"
 "   'rez' - processing result (by default - 200 OK);\n"
-"   'HTTPreq' - HTTP request method (GET,POST);\n"
+"   'HTTPreq' - HTTP-request method (GET,POST);\n"
 "   'url' - requested URI;\n"
-"   'page' - Get/Post page content;\n"
+"   'page' - Get/Post page's content;\n"
 "   'sender' - request sender;\n"
-"   'user' - auth user;\n"
+"   'user' - authenticated user;\n"
 "   'HTTPvars' - HTTP variables into Object;\n"
 "   'URLprms' - URL's parameters into Object;\n"
 "   'cnts' - content items for POST into Array<XMLNodeObj>;\n"
-"   'this' - pointer to this page's object;\n"
+"   'this' - pointer to object of this page;\n"
 "   'prt' - pointer to object of the input part of the HTTP protocol."
 msgstr ""

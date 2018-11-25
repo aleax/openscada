@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 21:18+0200\n"
+"POT-Creation-Date: 2018-11-25 18:26+0200\n"
 "PO-Revision-Date: 2010-03-05 15:57+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -15,18 +15,16 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Web interface from user"
-msgstr "Web-интерфейс от пользователя"
+msgid "User WWW-page"
+msgstr "WWW-страница пользователя"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allows you to create your own user web-interfaces in any language of "
-"OpenSCADA."
+"Provides for creating your own web-pages on internal OpenSCADA language."
 msgstr ""
-"Позволяет создавать собственные пользовательские web-интерфейсы на языке "
-"OpenSCADA."
+"Обеспечивает создание собственных WWW-страниц на внутреннем языке OpenSCADA."
 
 msgid "Identifier"
 msgstr "Идентификатор"
@@ -40,39 +38,56 @@ msgstr "Описание"
 msgid "To enable"
 msgstr "Включать"
 
-msgid "Program"
-msgstr "Программа"
+msgid "Procedure"
+msgstr "Процедура"
 
 msgid "Date of modification"
 msgstr "Дата модификации"
 
-msgid "Search and create new user page error."
+msgid "User page ID"
+msgstr "ID страницы пользователя"
+
+msgid "Value"
+msgstr "Значение"
+
+msgid "Error searching and creating a new user page."
 msgstr "Ошибка поиска и создание новой страницы пользователя."
 
-msgid "Presented user's WEB-pages."
-msgstr "Присутствующие пользовательские WEB-страницы."
+#, c-format
+msgid "Error starting the WWW-page '%s'."
+msgstr "Ошибка запуска WWW-страницы '%s'."
 
-msgid "Page is missing"
+msgid "Present WWW-pages of the users."
+msgstr "Присутствующие пользовательские WWW-страницы."
+
+msgid "The page is not present"
 msgstr "Страница отсутствует"
 
 #, c-format
-msgid "Page '%s' error: %s"
-msgstr "Страница '%s' ошибка: %s"
+msgid "Error the page '%s': %s"
+msgstr "Ошибка страницы '%s': %s"
 
-msgid "User page"
-msgstr "Страница пользователя"
+msgid "User WWW-pages"
+msgstr "WWW-страница пользователя"
 
-msgid "User pages"
-msgstr "Страницы пользователя"
+msgid "Default WWW-page"
+msgstr "WWW-страница по умолчанию"
 
-msgid "Default page"
-msgstr "Страница по умолчанию"
+msgid "WWW-pages"
+msgstr "WWW-страницы"
 
-msgid "Pages"
-msgstr "Страницы"
-
-msgid "<Page index display>"
+msgid "<Show of index of the pages>"
 msgstr "<Отображать индекс страниц>"
+
+#, c-format
+msgid ""
+"The template '%s' does not have one or more required attribute in the needed "
+"type: rez=%d, HTTPreq=%d, url=%d, HTTPvars=%d.\n"
+"See to the documentation and append their!"
+msgstr ""
+"Шаблон '%s' не имеет одного или нескольких необходимых атрибутов в нужных "
+"типах: rez=%d, HTTPreq=%d, url=%d, HTTPvars=%d.\n"
+"Пересмотрите документацию и добавьте их!"
 
 msgid "Result"
 msgstr "Результат"
@@ -81,10 +96,10 @@ msgid "HTTP request"
 msgstr "HTTP запрос"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
-msgid "Page"
-msgstr "Страница"
+msgid "WWW-page"
+msgstr "WWW-страница"
 
 msgid "Sender"
 msgstr "Отправитель"
@@ -113,15 +128,12 @@ msgstr "Отключен. "
 msgid "Enabled. "
 msgstr "Включен. "
 
-msgid "Modified, re-enable to apply! "
-msgstr "Модифицирован, перевключить для применения! "
-
 #, c-format
 msgid "Requests %.4g."
 msgstr "Запросов %.4g."
 
-msgid "User page: "
-msgstr "Страница пользователя: "
+msgid "User WWW-page: "
+msgstr "WWW-страница пользователя: "
 
 msgid "State"
 msgstr "Состояние"
@@ -138,21 +150,30 @@ msgstr "БД"
 msgid "Configuration"
 msgstr "Конфигурация"
 
-msgid "Program language"
-msgstr "Язык программы"
+msgid "Procedure language or the DAQ-template"
+msgstr "Язык процедуры или DAQ-шаблон"
+
+msgid "IO"
+msgstr "ВВ"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Real;Integer;Boolean;String;Object"
+msgstr "Вещественный;Целый;Логический;Строка;Объект"
 
 msgid ""
-"Next attributes has defined for requests processing:\n"
+"Next attributes are defined to process the requests:\n"
 "   'rez' - processing result (by default - 200 OK);\n"
-"   'HTTPreq' - HTTP request method (GET,POST);\n"
+"   'HTTPreq' - HTTP-request method (GET,POST);\n"
 "   'url' - requested URI;\n"
-"   'page' - Get/Post page content;\n"
+"   'page' - Get/Post page's content;\n"
 "   'sender' - request sender;\n"
-"   'user' - auth user;\n"
+"   'user' - authenticated user;\n"
 "   'HTTPvars' - HTTP variables into Object;\n"
 "   'URLprms' - URL's parameters into Object;\n"
 "   'cnts' - content items for POST into Array<XMLNodeObj>;\n"
-"   'this' - pointer to this page's object;\n"
+"   'this' - pointer to object of this page;\n"
 "   'prt' - pointer to object of the input part of the HTTP protocol."
 msgstr ""
 "Следующие атрибуты определены для обработки запросов:\n"

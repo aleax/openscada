@@ -58,7 +58,7 @@ class SSess
 //*************************************************
 class TWEB;
 
-class UserPg : public TCntrNode, public TConfig
+class UserPg : public TCntrNode, public TConfig, public TPrmTempl::Impl
 {
     public:
 	//Methods
@@ -74,7 +74,6 @@ class UserPg : public TCntrNode, public TConfig
 	bool	enableStat( ) const	{ return mEn; }
 	string	progLang( );
 	string	prog( );
-	string	workProg( )		{ return mWorkProg; }
 	int	timeStamp( )		{ return mTimeStamp; }
 
 	string	getStatus( );
@@ -92,15 +91,20 @@ class UserPg : public TCntrNode, public TConfig
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
+	void HTTP( const string &req, SSess &s, TProtocolIn *iprt );
+
 	TWEB &owner( ) const;
 
 	//Attributes
 	float	cntReq;
+	bool	isDAQTmpl;	// Using the DAQ-template
 
     protected:
 	//Methods
 	void load_( TConfig *cfg );
+	void loadIO( );
 	void save_( );
+	void saveIO( );
 
 	bool cfgChange( TCfg &co, const TVariant &pc );
 
@@ -116,8 +120,15 @@ class UserPg : public TCntrNode, public TConfig
 	TCfg	&mId;
 	char	&mAEn, mEn;
 	int64_t	&mTimeStamp;
-	string	mDB, mWorkProg;
-	bool	prgChOnEn;
+	string	mDB;
+
+	int	ioRez, ioHTTPreq, ioUrl, ioPage, ioSender, ioUser,
+		ioHTTPvars, ioURLprms, ioCnts, ioThis, ioPrt;
+
+	bool	chkLnkNeed;	//Check lnk need flag
+
+	ResRW	cfgRes;
+	ResMtx	reqRes;
 };
 
 //*************************************************
@@ -144,6 +155,9 @@ class TWEB: public TUI
 	AutoHD<UserPg> uPgAt( const string &id ) const	{ return chldAt(mPgU, id); }
 
 	TElem &uPgEl( )		{ return mUPgEl; }
+	TElem &uPgIOEl( )	{ return mUPgIOEl; }
+
+	string httpHead( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
 
     protected:
 	//Methods
@@ -153,8 +167,6 @@ class TWEB: public TUI
     private:
 	//Methods
 	void colontDown( SSess &ses );
-
-	string httpHead( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
 
 	string pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode = "", const string &httpattrs = "",
 		const string &htmlHeadEls = "", const string &forceTmplFile = "", const string &lang = "" );
@@ -172,7 +184,7 @@ class TWEB: public TUI
 	string	mDefPg;
 	int	mPgU;
 
-	TElem	mUPgEl;
+	TElem	mUPgEl, mUPgIOEl;
 };
 
 extern TWEB *mod;

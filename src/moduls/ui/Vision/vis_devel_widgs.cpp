@@ -1767,7 +1767,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it, bool initi
     for(unsigned iCh = 0; iCh < pg_req.childSize(); iCh++)
 	list_pg.push_back(pg_req.childGet(iCh)->attr("id"));
 
-    //  Remove no present pages
+    //  Remove not present pages
     for(int i_pit = 0; i_pit < nit->childCount(); i_pit++) {
 	unsigned i_p;
 	for(i_p = 0; i_p < list_pg.size(); i_p++)

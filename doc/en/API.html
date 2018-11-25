@@ -1934,16 +1934,15 @@ Parameter's type (enum — IO::Type):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TValFunc( const string &amp;iname = "", TFunction *ifunc = NULL, bool iblk = true );</i> — Initializing constructor.</li>
+<li> <i>bool blk( );</i> — The sign — "Blocking of the parameters' changes of the function".</li>
+<li> <i>bool mdfChk( );</i> — The sign — "To check attributes to modify".</li>
+<li> <i>bool isChangedProg( bool clear = false );</i> — The sign — "The program changing" with it clearing by <i>clear</i>.</li>
 <li> <i>string user( );</i> — User on whose behalf the function is executed.</li>
 <li> <i>string lang( );</i> — Language on whose the function is executed.</li>
 <li> <i>const string &amp;vfName( );</i> — Name of the values' object.</li>
-<li> <i>bool blk( );</i> — The sign - "Blocking of the parameters' changes of the function".</li>
-<li> <i>bool dimens( );</i> — The sign - "To measure the computation time".</li>
-<li> <i>bool mdfChk( );</i> — The sign - "To check attributes to modify".</li>
 <li> <i>void setUser( const string &amp;vl );</i> — Set the user on whose behalf the function will be executed.</li>
 <li> <i>void setLang( const string &amp;vl );</i> — Set the language on whose the function will be executed.</li>
 <li> <i>void setVfName( const string &amp;nm );</i> — Set the name of the values' object to <i>nm</i>.</li>
-<li> <i>void setDimens( bool set )</i> — Set/unset <i>set</i> of the sign - "To measure the computation time".</li>
 <li> <i>void setMdfChk( bool set );</i> — Set/unset <i>set</i> of the sign - "To check attributes to modify".</li>
 <li> <i>void ioList( vector&lt;string&gt; &amp;list );</i> — The list of the function's parameters <i>list</i>.</li>
 <li> <i>int ioId( const string &amp;id );</i> — Getting the parameter's index <i>id</i>.</li>
@@ -1971,6 +1970,7 @@ Parameter's type (enum — IO::Type):
 <li> <i>void setFunc( TFunction *func, bool att_det = true );</i> — To attach with the specified function <i>func</i>.</li>
 <li> <i>virtual void preIOCfgChange( );</i> — Is called before the configuration changes.</li>
 <li> <i>virtual void postIOCfgChange( );</i> — Is called after the configuration changes.</li>
+<li> <i>virtual void progChange( );</i> —  Is called at the program changing.</li>
 <li> <i>TValFunc *ctxGet( int key );</i> — Get context for key <i>key</i>.</li>
 <li> <i>void ctxSet( int key, TValFunc *val );</i> — Set context for key <i>key</i>.</li>
 <li> <i>void ctxClear( );</i> — External functions call context clear.</li></ul>

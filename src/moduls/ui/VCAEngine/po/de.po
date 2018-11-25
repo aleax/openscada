@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-30 10:22+0300\n"
+"POT-Creation-Date: 2018-11-25 17:49+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -1508,10 +1508,13 @@ msgid ""
 msgstr ""
 "Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
 
+msgid "It is a try of creating a widget in depth bigger to 10!"
+msgstr "Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu 10 zu erstellen!"
+
 msgid "Error calculating the widget. Process is disabled."
 msgstr "Fehler der Berechnung des Widgets. Bearbeitung ist abgeschaltet."
 
-msgid "Process"
+msgid "Processing"
 msgstr "Bearbeitung"
 
 msgid "Spent time"

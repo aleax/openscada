@@ -67,6 +67,7 @@ class LibProjProp: public QDialog
 
     protected:
 	//Protected methods
+	void keyPressEvent(QKeyEvent *e);
 	void closeEvent( QCloseEvent* );
 	void showEvent( QShowEvent * event );
 
@@ -153,6 +154,7 @@ class VisItProp : public QDialog
 
     protected:
 	//Protected methods
+	void keyPressEvent(QKeyEvent *e);
 	void closeEvent( QCloseEvent* );
 	void showEvent( QShowEvent * event );
 

@@ -1414,7 +1414,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 
     //Get page info
     if(opt->name() == "info") {
-	if(ctrMkNode("area",opt,-1,"/proc",_("Process"))) {
+	if(ctrMkNode("area",opt,-1,"/proc",_("Processing"))) {
 	    ctrMkNode("fld",opt,-1,"/proc/wdg",_("Widget"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/proc/w_lst");
 	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
 	    if(!wdgPresent(wattr))	wattr = ".";
@@ -1423,7 +1423,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/proc/attr/name",_("Name"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/proc/attr/type",_("Type"),RWRWR_,"root",SUI_ID,4,"tp","dec","idm","1","dest","select","select","/proc/tp_ls");
 		ctrMkNode("list",opt,-1,"/proc/attr/wa",_("Work area"),RWRWR_,"root",SUI_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/proc/attr/proc",_("Process"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/proc/attr/proc",_("Processing"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/proc/attr/cfg",_("Configuration"),RWRWR_,"root",SUI_ID,4,"tp","dec","idm","1","dest","select","select","/proc/lnk_ls");
 		ctrMkNode("list",opt,-1,"/proc/attr/cfgtmpl",_("Configuration template"),RWRWR_,"root",SUI_ID,1,"tp","str");
 	    }

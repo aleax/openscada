@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 21:18+0200\n"
+"POT-Creation-Date: 2018-11-25 18:26+0200\n"
 "PO-Revision-Date: 2010-03-16 16:43+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -15,17 +15,16 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Web interface from user"
-msgstr "Web-інтерфейс від користувача"
+msgid "User WWW-page"
+msgstr "WWW-сторінка користувача"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allows you to create your own user web-interfaces in any language of "
-"OpenSCADA."
+"Provides for creating your own web-pages on internal OpenSCADA language."
 msgstr ""
-"Дозволяє створювати користувачу власні web-інтерфейси на мові OpenSCADA."
+"Забезпечує створення власних WWW-сторінок на внутрішній мові OpenSCADA."
 
 msgid "Identifier"
 msgstr "Ідентифікатор"
@@ -39,39 +38,56 @@ msgstr "Опис"
 msgid "To enable"
 msgstr "Включати"
 
-msgid "Program"
-msgstr "Програма"
+msgid "Procedure"
+msgstr "Процедура"
 
 msgid "Date of modification"
 msgstr "Дата модифікації"
 
-msgid "Search and create new user page error."
+msgid "User page ID"
+msgstr "Ідентифікатор сторінки користувача"
+
+msgid "Value"
+msgstr "Значення"
+
+msgid "Error searching and creating a new user page."
 msgstr "Помилка пошуку та створення нової сторінки користувача."
 
-msgid "Presented user's WEB-pages."
-msgstr "Наявні Web-сторінки користувачів."
+#, c-format
+msgid "Error starting the WWW-page '%s'."
+msgstr "Помилка запуску WWW-сторінки '%s'."
 
-msgid "Page is missing"
+msgid "Present WWW-pages of the users."
+msgstr "Наявні WWW-сторінки користувачів."
+
+msgid "The page is not present"
 msgstr "Сторінка відсутня"
 
 #, c-format
-msgid "Page '%s' error: %s"
-msgstr "Сторінка '%s' помилка: %s"
+msgid "Error the page '%s': %s"
+msgstr "Помилка сторінки '%s': %s"
 
-msgid "User page"
-msgstr "Сторінка користувача"
+msgid "User WWW-pages"
+msgstr "WWW-сторінки користувача"
 
-msgid "User pages"
-msgstr "Сторінки користувача"
+msgid "Default WWW-page"
+msgstr "WWW-сторінка по замовченню"
 
-msgid "Default page"
-msgstr "Сторінка по замовченню"
+msgid "WWW-pages"
+msgstr "WWW-сторінки"
 
-msgid "Pages"
-msgstr "Сторінки"
-
-msgid "<Page index display>"
+msgid "<Show of index of the pages>"
 msgstr "<Відображати індекс сторінок>"
+
+#, c-format
+msgid ""
+"The template '%s' does not have one or more required attribute in the needed "
+"type: rez=%d, HTTPreq=%d, url=%d, HTTPvars=%d.\n"
+"See to the documentation and append their!"
+msgstr ""
+"Шаблон '%s' не має одного або декількох потрібних атрибутів у потрібних "
+"типах: rez=%d, HTTPreq=%d, url=%d, HTTPvars=%d.\n"
+"Переглянте документацію та додайте їх!"
 
 msgid "Result"
 msgstr "Результат"
@@ -80,10 +96,10 @@ msgid "HTTP request"
 msgstr "Запит HTTP"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
-msgid "Page"
-msgstr "Сторінка"
+msgid "WWW-page"
+msgstr "WWW-сторінка"
 
 msgid "Sender"
 msgstr "Відправник"
@@ -112,15 +128,12 @@ msgstr "Вимкнено. "
 msgid "Enabled. "
 msgstr "Ввімкнено. "
 
-msgid "Modified, re-enable to apply! "
-msgstr "Модифіковано, переувімкнути для застосування! "
-
 #, c-format
 msgid "Requests %.4g."
 msgstr "Запитів %.4g."
 
-msgid "User page: "
-msgstr "Сторінка користувача: "
+msgid "User WWW-page: "
+msgstr "WWW-сторінка користувача: "
 
 msgid "State"
 msgstr "Стан"
@@ -137,21 +150,30 @@ msgstr "БД"
 msgid "Configuration"
 msgstr "Конфігурація"
 
-msgid "Program language"
-msgstr "Мова програми"
+msgid "Procedure language or the DAQ-template"
+msgstr "Мова процедури або DAQ-шаблон"
+
+msgid "IO"
+msgstr "ВВ"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Real;Integer;Boolean;String;Object"
+msgstr "Реальний;Цілий;Логічний;Рядок;Об'єкт"
 
 msgid ""
-"Next attributes has defined for requests processing:\n"
+"Next attributes are defined to process the requests:\n"
 "   'rez' - processing result (by default - 200 OK);\n"
-"   'HTTPreq' - HTTP request method (GET,POST);\n"
+"   'HTTPreq' - HTTP-request method (GET,POST);\n"
 "   'url' - requested URI;\n"
-"   'page' - Get/Post page content;\n"
+"   'page' - Get/Post page's content;\n"
 "   'sender' - request sender;\n"
-"   'user' - auth user;\n"
+"   'user' - authenticated user;\n"
 "   'HTTPvars' - HTTP variables into Object;\n"
 "   'URLprms' - URL's parameters into Object;\n"
 "   'cnts' - content items for POST into Array<XMLNodeObj>;\n"
-"   'this' - pointer to this page's object;\n"
+"   'this' - pointer to object of this page;\n"
 "   'prt' - pointer to object of the input part of the HTTP protocol."
 msgstr ""
 "Наступні атрибути визначено для обробки запитів:\n"

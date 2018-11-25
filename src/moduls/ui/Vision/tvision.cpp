@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.7.1"
+#define MOD_VER		"5.8.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -353,13 +353,14 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	string rez;
 	MtxAlloc res(dataRes(), true);
 	for(unsigned iW = 0; iW < mnWinds.size(); iW++)
-	    if(dynamic_cast<VisDevelop*>(mnWinds[iW]))	opt->childAdd("el")->setText(TSYS::strMess(_("%d: Development by \"%s\""),iW,((VisDevelop*)mnWinds[iW])->user().c_str()));
+	    if(dynamic_cast<VisDevelop*>(mnWinds[iW]))	opt->childAdd("el")->setText(TSYS::strMess(_("%d: Development by \"%s\"."),iW,((VisDevelop*)mnWinds[iW])->user().c_str()));
 	    else if(dynamic_cast<VisRun*>(mnWinds[iW]))	{
-		opt->childAdd("el")->setText(TSYS::strMess(_("%d: Running \"%s:%s\" from \"%s\" - %s"),iW,
+		opt->childAdd("el")->setText(TSYS::strMess(_("%d: Running \"%s:%s\" from \"%s\" - %s, updating period %s(%s)."),iW,
 		    ((VisRun*)mnWinds[iW])->workSess().c_str(),
 		    ((VisRun*)mnWinds[iW])->srcProject().c_str(),
 		    ((VisRun*)mnWinds[iW])->user().c_str(),
-		    ((VisRun*)mnWinds[iW])->connOK()?_("Connected"):_("Disconnected")));
+		    ((VisRun*)mnWinds[iW])->connOK()?_("Connected"):_("Disconnected"),
+		    tm2s(((VisRun*)mnWinds[iW])->planePer*1e-3).c_str(),tm2s(((VisRun*)mnWinds[iW])->period()*1e-3).c_str()));
 	    }
     }
     else if(a_path == "/prm/cfg/start_user") {

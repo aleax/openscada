@@ -68,7 +68,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 #endif
     fileDlg(NULL),
     winClose(false), conErr(NULL), crSessForce(icrSessForce), mKeepAspectRatio(true), mWinPosCntrSave(false), prjSes_it(iprjSes_it),
-    master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1),
+    master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), updTmMax(0), planePer(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1),
     mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0), updPage(false), host(NULL)
 {
     QImage ico_t;
@@ -405,6 +405,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
     else if(rez != 10 && main && conErr) {
 	if(masterPg()) conErr->deleteLater();
 	conErr = NULL;
+	updTmMax = planePer = 0;
     }
 
     return rez;
@@ -1318,6 +1319,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
     QCoreApplication::processEvents();
 
     //Start timer
+    updTmMax = planePer = 0;
     updateTimer->start(period());
 }
 
@@ -1731,14 +1733,12 @@ void VisRun::cacheResSet( const string &res, const string &val )
 
 void VisRun::updatePage( )
 {
-    int64_t d_cnt = 0;
     if(winClose || updPage) return;
 
     int rez;
+    int64_t d_cnt = TSYS::curTime();
 
     updPage = true;
-
-    if(mess_lev() == TMess::Debug) d_cnt = TSYS::curTime();
 
     //Pages update
     XMLNode req("openlist");
@@ -1798,21 +1798,22 @@ void VisRun::updatePage( )
 	alarmSet(wAlrmSt);
     }
 
+    //Calc the planed executing period to correct the main one
+    float updTm = 1e-3*(TSYS::curTime()-d_cnt);
+    updTmMax = vmax(updTmMax, updTm);
+    if(!planePer) planePer = period();
+    planePer += (vmax(period(),updTm*3)-planePer)/100;
+    if(mess_lev() == TMess::Debug)
+	mess_debug(mod->nodePath().c_str(), _("Time of the session updating '%s': %s[%s]ms. Planer period %s(%s)ms"),
+	    workSess().c_str(), tm2s(1e-3*updTm).c_str(), tm2s(1e-3*updTmMax).c_str(), tm2s(1e-3*planePer).c_str(), tm2s(1e-3*period()).c_str());
+    updateTimer->start(vmax(0,planePer-updTm));
+
     //Old pages from cache for close checking
     for(unsigned iPg = 0; iPg < cachePg.size(); )
 	if(mod->cachePgLife() > 0.01 && (period()*(reqTm()-cachePg[iPg]->reqTm())/1000) > (unsigned)(mod->cachePgLife()*60*60)) {
 	    cachePg[iPg]->deleteLater();	//delete cachePg[iPg];
 	    cachePg.erase(cachePg.begin()+iPg);
-	}
-	else iPg++;
-
-    if(mess_lev() == TMess::Debug) {
-	upd_tm += 1e-3*(TSYS::curTime()-d_cnt);
-	if(!(1000/vmin(1000,period()) && wPrcCnt%(1000/vmin(1000,period())))) {
-	    mess_debug(mod->nodePath().c_str(), _("Time of updating the session '%s': %f ms."), workSess().c_str(), upd_tm);
-	    upd_tm = 0;
-	}
-    }
+	} else iPg++;
 
     //Time update
     if(mWTime->isVisible() && !(wPrcCnt%vmax(1000/vmin(1000,period()),1))) {

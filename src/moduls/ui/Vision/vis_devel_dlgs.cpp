@@ -144,7 +144,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     glay->addWidget(obj_id, 0, 1, 1, 3);
 
     glay->addWidget(new QLabel(_("Name:"),tab_w), 1, 0);
-    obj_name = new LineEdit(this);
+    obj_name = new LineEdit(this, LineEdit::Text, false, false);
     obj_name->setObjectName("/obj/cfg/name");
     connect(obj_name, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(obj_name, 1, 1, 1, 3);
@@ -246,7 +246,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     dlg_lay->addWidget(buttStlDel,0,3);
 
     dlg_lay->addWidget(new QLabel(_("Name:"),tab_w), 1, 0);
-    stl_name = new LineEdit(tab_w);
+    stl_name = new LineEdit(tab_w, LineEdit::Text, false, false);
     stl_name->setObjectName("/style/name");
     connect(stl_name, SIGNAL(apply()), this, SLOT(isModify()));
     dlg_lay->addWidget(stl_name, 1, 1, 1, 2);
@@ -272,7 +272,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     lab = new QLabel(_("Time:"), tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
     dlg_lay->addWidget(lab, 0, 0);
-    messTime = new LineEdit(tab_w, LineEdit::DateTime);
+    messTime = new LineEdit(tab_w, LineEdit::DateTime, false, false);
     messTime->setCfg("dd-MM-yyyy hh:mm:ss");
     messTime->setObjectName("/mess/tm");
     connect(messTime, SIGNAL(apply()), this, SLOT(isModify()));
@@ -287,7 +287,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     lab = new QLabel(_("Size:"), tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
     dlg_lay->addWidget(lab, 1, 0);
-    messSize = new LineEdit(tab_w, LineEdit::Integer);
+    messSize = new LineEdit(tab_w, LineEdit::Integer, false, false);
     messSize->setCfg("1:1000:1:: s");
     messSize->setObjectName("/mess/size");
     connect(messSize, SIGNAL(apply()), this, SLOT(isModify()));
@@ -745,19 +745,25 @@ void LibProjProp::isModify( QObject *snd )
     is_modif = true;
 }
 
+void LibProjProp::keyPressEvent( QKeyEvent *ce )
+{
+    if(ce->key() == Qt::Key_Escape) ce->ignore();
+    else QDialog::keyPressEvent(ce);
+}
+
 void LibProjProp::closeEvent( QCloseEvent *ce )
 {
     //Check for not apply LineEdit and TextEdit widgets
     QList<LineEdit*> lnEdWs = findChildren<LineEdit*>();
     QList<TextEdit*> txtEdWs = findChildren<TextEdit*>();
     bool notApplyPresent = false;
-    for(int i_it = 0; !notApplyPresent && i_it < lnEdWs.size(); ++i_it) notApplyPresent = lnEdWs[i_it]->isEdited();
-    for(int i_it = 0; !notApplyPresent && i_it < txtEdWs.size(); ++i_it) notApplyPresent = txtEdWs[i_it]->isEdited();
+    for(int iIt = 0; !notApplyPresent && iIt < lnEdWs.size(); ++iIt) notApplyPresent = lnEdWs[iIt]->isEdited();
+    for(int iIt = 0; !notApplyPresent && iIt < txtEdWs.size(); ++iIt) notApplyPresent = txtEdWs[iIt]->isEdited();
     if(notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before the closing?"),
 	    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
     {
-	for(int i_it = 0; i_it < lnEdWs.size(); ++i_it) if(lnEdWs[i_it]->isEdited()) isModify(lnEdWs[i_it]);
-	for(int i_it = 0; i_it < txtEdWs.size(); ++i_it) if(txtEdWs[i_it]->isEdited()) isModify(txtEdWs[i_it]);
+	for(int iIt = 0; iIt < lnEdWs.size(); ++iIt) if(lnEdWs[iIt]->isEdited()) isModify(lnEdWs[iIt]);
+	for(int iIt = 0; iIt < txtEdWs.size(); ++iIt) if(txtEdWs[iIt]->isEdited()) isModify(txtEdWs[iIt]);
     }
 
     if(is_modif) emit apply(ed_it);
@@ -869,7 +875,7 @@ void LibProjProp::unloadMimeData( )
 
 void LibProjProp::mimeDataChange( int row, int column )
 {
-    if( show_init ) return;
+    if(show_init) return;
 
     XMLNode req("set");
     req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl))->
@@ -1005,41 +1011,41 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->setMargin(4);
     glay->setSpacing(6);
 
-    glay->addWidget(new QLabel(_("Identifier:"),tab_w),0,0);
+    glay->addWidget(new QLabel(_("Identifier:"),tab_w), 0, 0);
     obj_id = new QLabel(tab_w);
     obj_id->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_id->setObjectName("/wdg/cfg/id");
     obj_id->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    glay->addWidget(obj_id,0,1,1,3);
+    glay->addWidget(obj_id, 0, 1, 1, 3);
 
-    glay->addWidget(new QLabel(_("Root:"),tab_w),1,0);
+    glay->addWidget(new QLabel(_("Root:"),tab_w), 1, 0);
     obj_root = new QLabel(tab_w);
     obj_root->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_root->setObjectName("/wdg/cfg/root");
     obj_root->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    glay->addWidget(obj_root,1,1,1,3);
+    glay->addWidget(obj_root, 1, 1, 1, 3);
 
-    glay->addWidget(new QLabel(_("Path:"),tab_w),2,0);
+    glay->addWidget(new QLabel(_("Path:"),tab_w), 2, 0);
     obj_path = new QLabel(tab_w);
     obj_path->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_path->setObjectName("/wdg/cfg/path");
     obj_path->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    glay->addWidget(obj_path,2,1,1,3);
+    glay->addWidget(obj_path, 2, 1, 1, 3);
 
-    glay->addWidget(new QLabel(_("Name:"),tab_w),3,0);
-    obj_name = new LineEdit(tab_w);
+    glay->addWidget(new QLabel(_("Name:"),tab_w), 3, 0);
+    obj_name = new LineEdit(tab_w, LineEdit::Text, false, false);
     obj_name->setObjectName("/wdg/cfg/name");
     connect(obj_name, SIGNAL(apply()), this, SLOT(isModify()));
-    glay->addWidget(obj_name,3,1,1,3);
+    glay->addWidget(obj_name, 3, 1, 1, 3);
 
-    glay->addWidget(new QLabel(_("Description:"),tab_w),4,0);
+    glay->addWidget(new QLabel(_("Description:"),tab_w), 4, 0);
     obj_descr = new TextEdit(tab_w);
     obj_descr->setObjectName("/wdg/cfg/descr");
     connect(obj_descr, SIGNAL(apply()), this, SLOT(isModify()));
-    glay->addWidget(obj_descr,5,0,1,4);
+    glay->addWidget(obj_descr, 5, 0, 1, 4);
 
     grp->setLayout(glay);
-    dlg_lay->addWidget(grp,1,0);
+    dlg_lay->addWidget(grp, 1, 0);
 
     //Add tab 'Attributes'
     wdg_tabs->addTab(new QWidget,_("Attributes"));
@@ -1052,7 +1058,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     // Add attributes view widget
     obj_attr = new InspAttr(tab_w,owner());
     connect(obj_attr, SIGNAL(modified(const string&)), this, SIGNAL(apply(const string&)));
-    dlg_lay->addWidget(obj_attr,0,0);
+    dlg_lay->addWidget(obj_attr, 0, 0);
 
     //Add tab 'Attribute cofiguration'
     proc_split = new QSplitter();
@@ -1098,7 +1104,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
 
     lab = new QLabel(_("Procedure language:"),wdg_proc_fr);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
-    glay->addWidget(lab,1,0);
+    glay->addWidget(lab, 1, 0);
     proc_lang = new QComboBox(wdg_proc_fr);
     proc_lang->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
     proc_lang->setObjectName("/proc/calc/progLng");
@@ -1107,11 +1113,11 @@ VisItProp::VisItProp( VisDevelop *parent ) :
 
     lab = new QLabel(_("Period of the calculating, milliseconds:"),wdg_proc_fr);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
-    glay->addWidget(lab,1,2);
-    proc_per = new LineEdit(wdg_proc_fr);
+    glay->addWidget(lab, 1, 2);
+    proc_per = new LineEdit(wdg_proc_fr, LineEdit::Text, false, false);
     proc_per->setObjectName("/proc/calc/per");
     connect(proc_per, SIGNAL(apply()), this, SLOT(isModify()));
-    glay->addWidget(proc_per,1,3);
+    glay->addWidget(proc_per, 1, 3);
 
     lab = new QLabel(_("Translate:"),wdg_proc_fr);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
@@ -1289,17 +1295,21 @@ void VisItProp::showDlg( const string &iit, bool reload )
 
     //Attributes dialog's page
     gnd = TCntrNode::ctrId(root,"/attr",true);
-    wdg_tabs->setTabEnabled(1,gnd);
-    if(gnd) wdg_tabs->setTabText(1,gnd->attr("dscr").c_str());
+    wdg_tabs->setTabEnabled(1, gnd);
+    if(gnd) wdg_tabs->setTabText(1, gnd->attr("dscr").c_str());
 
     gnd = TCntrNode::ctrId(root,"/links",true);
-    wdg_tabs->setTabEnabled(3,gnd);
-    if(gnd) wdg_tabs->setTabText(3,gnd->attr("dscr").c_str());
+    wdg_tabs->setTabEnabled(3, gnd);
+    if(gnd) wdg_tabs->setTabText(3, gnd->attr("dscr").c_str());
 
     //Process dialog's page
-    gnd=TCntrNode::ctrId(root,"/proc",true);
-    wdg_tabs->setTabEnabled(2,gnd);
-    if(gnd) wdg_tabs->setTabText(2,gnd->attr("dscr").c_str());
+    gnd = TCntrNode::ctrId(root,"/proc",true);
+    wdg_tabs->setTabEnabled(2, gnd);
+    if(gnd) wdg_tabs->setTabText(2, gnd->attr("dscr").c_str());
+
+    proc_per->setValue("");
+    proc_text->setText("");
+
     is_modif = false;
 
     //Show dialog
@@ -1408,11 +1418,13 @@ void VisItProp::tabChanged( int itb )
 	    if(obj_attr_cfg->topLevelItemCount()) obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole+1,atypes);
 
 	    //  Calculate period
-	    gnd = TCntrNode::ctrId(root,proc_per->objectName().toStdString(),true);
-	    proc_per->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
-	    if(gnd) {
-		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_per->objectName().toStdString(),TSYS::PathEl));
-		if(!owner()->cntrIfCmd(req)) proc_per->setValue(req.text().c_str());
+	    if(!proc_per->isEdited()) {
+		gnd = TCntrNode::ctrId(root,proc_per->objectName().toStdString(),true);
+		proc_per->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
+		if(gnd) {
+		    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_per->objectName().toStdString(),TSYS::PathEl));
+		    if(!owner()->cntrIfCmd(req)) proc_per->setValue(req.text().c_str());
+		}
 	    }
 	    //  Calc language
 	    gnd = TCntrNode::ctrId(root,proc_lang->objectName().toStdString(),true);
@@ -1438,15 +1450,17 @@ void VisItProp::tabChanged( int itb )
 		if(!owner()->cntrIfCmd(req)) proc_text_tr->setChecked(s2i(req.text()));
 	    }
 	    //  Calc procedure
-	    gnd = TCntrNode::ctrId(root,proc_text->objectName().toStdString(),true);
-	    proc_text->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
-	    if(gnd) {
-		req.clear()->setName("CntrReqs")->setAttr("path",ed_it);
-		req.childAdd("get")->setAttr("path",TSYS::strEncode(proc_text->objectName().toStdString(),TSYS::PathEl));
-		req.childAdd("SnthHgl")->setAttr("path",TSYS::strEncode(proc_text->objectName().toStdString(),TSYS::PathEl));
-		if(!owner()->cntrIfCmd(req)) {
-		    proc_text->setText(req.childGet(0)->text().c_str());
-		    proc_text->setSnthHgl(*req.childGet(1));
+	    if(!proc_text->isEdited()) {
+		gnd = TCntrNode::ctrId(root,proc_text->objectName().toStdString(),true);
+		proc_text->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
+		if(gnd) {
+		    req.clear()->setName("CntrReqs")->setAttr("path",ed_it);
+		    req.childAdd("get")->setAttr("path",TSYS::strEncode(proc_text->objectName().toStdString(),TSYS::PathEl));
+		    req.childAdd("SnthHgl")->setAttr("path",TSYS::strEncode(proc_text->objectName().toStdString(),TSYS::PathEl));
+		    if(!owner()->cntrIfCmd(req)) {
+			proc_text->setText(req.childGet(0)->text().c_str());
+			proc_text->setSnthHgl(*req.childGet(1));
+		    }
 		}
 	    }
 
@@ -1556,14 +1570,14 @@ void VisItProp::closeEvent( QCloseEvent *ce )
     QList<LineEdit*> lnEdWs = findChildren<LineEdit*>();
     QList<TextEdit*> txtEdWs = findChildren<TextEdit*>();
     bool notApplyPresent = false;
-    for(int i_it = 0; !notApplyPresent && i_it < lnEdWs.size(); ++i_it) notApplyPresent = lnEdWs[i_it]->isEdited();
-    for(int i_it = 0; !notApplyPresent && i_it < txtEdWs.size(); ++i_it) notApplyPresent = txtEdWs[i_it]->isEdited();
+    for(int iIt = 0; !notApplyPresent && iIt < lnEdWs.size(); ++iIt)  notApplyPresent = lnEdWs[iIt]->isEdited();
+    for(int iIt = 0; !notApplyPresent && iIt < txtEdWs.size(); ++iIt) notApplyPresent = txtEdWs[iIt]->isEdited();
 
     if(notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before the closing?"),
 	    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
     {
-	for(int i_it = 0; i_it < lnEdWs.size(); ++i_it) if(lnEdWs[i_it]->isEdited()) isModify(lnEdWs[i_it]);
-	for(int i_it = 0; i_it < txtEdWs.size(); ++i_it) if(txtEdWs[i_it]->isEdited()) isModify(txtEdWs[i_it]);
+	for(int iIt = 0; iIt < lnEdWs.size(); ++iIt) if(lnEdWs[iIt]->isEdited()) isModify(lnEdWs[iIt]);
+	for(int iIt = 0; iIt < txtEdWs.size(); ++iIt) if(txtEdWs[iIt]->isEdited()) isModify(txtEdWs[iIt]);
     }
 
     if(is_modif) emit apply(ed_it);
@@ -1572,6 +1586,12 @@ void VisItProp::closeEvent( QCloseEvent *ce )
     ed_it = "";
 
     ce->accept();
+}
+
+void VisItProp::keyPressEvent( QKeyEvent *ce )
+{
+    if(ce->key() == Qt::Key_Escape) ce->ignore();
+    else QDialog::keyPressEvent(ce);
 }
 
 void VisItProp::showEvent( QShowEvent * event )

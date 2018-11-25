@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-30 10:42+0300\n"
+"POT-Creation-Date: 2018-11-25 16:41+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -17,54 +17,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 #, c-format
-msgid "Internal function inaccessible by offset %d > %d"
-msgstr "Внутрішня функція недосяжна через зміщення %d > %d"
-
-#, c-format
-msgid "Variable '%s' just after variable '%s'"
-msgstr "Змінна '%s' одразу після змінної '%s'"
-
-#, c-format
 msgid "Variable '%s' is used but undefined"
 msgstr "Змінна '%s' не визначена але використана"
-
-msgid "Error constant after constant"
-msgstr "Помилка константи після константи"
-
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr "%s, позиція: (%d,%d)-(%d,%d)."
-
-msgid "Unexpected end program, expect end string symbol '\"', "
-msgstr "Неочікуване завершення програми, очікувався символ кінця строки '\"', "
-
-msgid "The next line symbol failed into string, "
-msgstr "Символ переведення лінії не дозволено у рядку, "
-
-msgid "Using namespace is error or empty, "
-msgstr "Помилка площини найменувань або вона порожня, "
-
-msgid "Internal function declaration error, "
-msgstr "Помилка декларації внутрішньої функцій, "
-
-#, c-format
-msgid "Internal function '%s' defined early, "
-msgstr "Внутрішню функцію '%s' визначено раніш, "
-
-msgid "Do not include declaration of one internal function to other, "
-msgstr "Не включайте визначення однієї внутрішньої функції до іншої, "
-
-msgid "Build in function has too much parameters, "
-msgstr "Вбудована функція має дуже багато параметрів, "
-
-msgid "Function error, "
-msgstr "Помилка функції, "
-
-msgid "Symbol error, "
-msgstr "Помилка символу, "
-
-msgid "Object's properties too long, "
-msgstr "Властивості об'єкту дуже довгі, "
 
 msgid "Array has more than 255 elements."
 msgstr "Масив має більш 255 елементів."
@@ -209,8 +163,8 @@ msgstr ""
 msgid "Parameters table"
 msgstr "Таблиця параметрів"
 
-msgid "Controller function"
-msgstr "Функція контролера"
+msgid "Controller function or DAQ-template"
+msgstr "Функція контролера або DAQ-шаблон"
 
 msgid "Calculation schedule"
 msgstr "Планування обчислення"
@@ -381,5 +335,48 @@ msgstr ""
 "Якщо 'aid' або 'anm' не встановлено тоді вони будуть згенеровані з обраного "
 "ВВ функції."
 
-#~ msgid "Translate program"
-#~ msgstr "Перекладати програму"
+#, c-format
+msgid "Internal function inaccessible by offset %d > %d"
+msgstr "Внутрішня функція недосяжна через зміщення %d > %d"
+
+#, c-format
+msgid "Variable '%s' just after variable '%s'"
+msgstr "Змінна '%s' одразу після змінної '%s'"
+
+msgid "Error constant after constant"
+msgstr "Помилка константи після константи"
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr "%s, позиція: (%d,%d)-(%d,%d)."
+
+msgid "Unexpected end program, expect end string symbol '\"', "
+msgstr "Неочікуване завершення програми, очікувався символ кінця строки '\"', "
+
+msgid "The next line symbol failed into string, "
+msgstr "Символ переведення лінії не дозволено у рядку, "
+
+msgid "Using namespace is error or empty, "
+msgstr "Помилка площини найменувань або вона порожня, "
+
+msgid "Internal function declaration error, "
+msgstr "Помилка декларації внутрішньої функцій, "
+
+#, c-format
+msgid "Internal function '%s' defined early, "
+msgstr "Внутрішню функцію '%s' визначено раніш, "
+
+msgid "Do not include declaration of one internal function to other, "
+msgstr "Не включайте визначення однієї внутрішньої функції до іншої, "
+
+msgid "Build in function has too much parameters, "
+msgstr "Вбудована функція має дуже багато параметрів, "
+
+msgid "Function error, "
+msgstr "Помилка функції, "
+
+msgid "Symbol error, "
+msgstr "Помилка символу, "
+
+msgid "Object's properties too long, "
+msgstr "Властивості об'єкту дуже довгі, "

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-14 22:53+0300\n"
+"POT-Creation-Date: 2018-11-25 17:28+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -366,11 +366,8 @@ msgstr ""
 "Schließen Sie die Verbindung nach keine Anfragen zu bestimmten Timeout.\n"
 "Null-Wert für disable - nicht immer schließen."
 
-#, c-format
-msgid "%s %d(%s): last %s; traffic in %s, out %s; client detachings %g; "
-msgstr ""
-"%s %d(%s): letzte %s; eingangstraffik %s, Ausgangs- %s; Client-Ablösungen "
-"%g; "
+msgid "%s %d(%s): last %s; traffic in %s, out %s; "
+msgstr "%s %d(%s): letzte %s; eingangstraffik %s, Ausgangs %s; "
 
 #, c-format
 msgid "processing time %s[%s]; "
@@ -387,6 +384,13 @@ msgstr "Reaktionszeit %s[%s]. "
 #, c-format
 msgid "Error the force socket %d using: '%s (%d)'!"
 msgstr "Error the force socket %d mit: '%s (%d)'!"
+
+#, c-format
+msgid "Resolving for '%s'"
+msgstr "Auflösen für '%s'"
+
+msgid "Connecting to '%s'"
+msgstr "Verbindung zu '%s'"
 
 #, c-format
 msgid "Error connecting during the time %s: '%s (%d)'"

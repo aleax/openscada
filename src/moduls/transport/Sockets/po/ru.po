@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-14 22:53+0300\n"
+"POT-Creation-Date: 2018-11-25 17:28+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -360,11 +360,8 @@ msgstr ""
 "времени.\n"
 "Нулевое значение для отключения - не закрывается никогда."
 
-#, c-format
-msgid "%s %d(%s): last %s; traffic in %s, out %s; client detachings %g; "
-msgstr ""
-"%s %d(%s): последний %s; трафик входящий %s, исходящий %s; отключений "
-"клиента %g; "
+msgid "%s %d(%s): last %s; traffic in %s, out %s; "
+msgstr "%s %d(%s): последний %s; трафик входящий %s, исходящий %s; "
 
 #, c-format
 msgid "processing time %s[%s]; "
@@ -381,6 +378,13 @@ msgstr "Время ответа %s[%s]. "
 #, c-format
 msgid "Error the force socket %d using: '%s (%d)'!"
 msgstr "Ошибка принудительного использования сокета %d: '%s (%d)'!"
+
+#, c-format
+msgid "Resolving for '%s'"
+msgstr "Разрешение '%s'"
+
+msgid "Connecting to '%s'"
+msgstr "Подключение к '%s'"
 
 #, c-format
 msgid "Error connecting during the time %s: '%s (%d)'"

@@ -31,7 +31,7 @@
 <td> <a href="../Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
 <td> User protocol
 </td>
-<td> 1.0 </td>
+<td> 1.1 </td>
 <td> GPL2 </td>
 <td> prot_UserProtocol.so </td>
 <td> en,uk,ru,de </td>
@@ -56,10 +56,10 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:705px;"><a class="image" href="http://oscada.org/wiki/File:UserProtocol_up_main.png"><img class="thumbimage" height="598" src="../files/UserProtocol_up_main.png" width="703" /></a>  <div class="thumbcaption">Fig.1. Main tab of an object of the module "User protocol".</div></div></div></div>
 <p>The main tab contains the basic settings of the user protocol:
 </p>
-<ul><li> Section "State" — contains properties that characterize the state of the protocol: Status, "Enabled" and the name of the database containing the configuration.</li>
+<ul><li> Section "State" — contains properties that characterize the state of the protocol: Status, "Enabled", the name of the database containing the configuration and date of the last modification.</li>
 <li> Identifier, name and description of the protocol.</li>
-<li> The state "Enabled", in which the node must be translated at boot.</li>
-<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ template</a> related to the protocol. Selecting a template here turns off the mode by the direct procedures and access the following options.</li>
+<li> The state "Enabled", in which the protocol must be translated at boot.</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ-template</a> related to the protocol. Selecting a template here turns off the mode by the direct procedures and access the following options. The DAQ-template mode can work in input, output or both of the requesting modes, related to the required attributes presence.</li>
 <li> An indication of the complete translation of the procedures text and the language of the input and output procedures. Selecting a language for the input and/or output procedure will enable the appropriate part of the protocol and access the corresponding configuration tabs.</li></ul>
 <h2><span class="mw-headline" id="Input_part_of_the_protocol"><span class="mw-headline-number">1</span> Input part of the protocol</span></h2>
 <p>The input requests protocol is working in cooperation with the input transport and the separate object "User Protocol" is pointing in the configuration field of the transport protocol, together with the UserProtocol module's name. Further, all transport requests will be directed to the direct procedure, or the template procedure, of the protocol request processing (Fig. 2).
@@ -71,11 +71,11 @@
 <li> Table of data context for the input request procedure. Preferably, it makes sense only when working on a template and where you can control this processing, including the possibility of intruding through the data values changing.</li>
 <li> The text of the direct procedure of the protocol, missed in the mode of work on the template.</li>
 <li> Links to the data of the "Data Acquisition" subsystem, which are visible and available for determination in the mode of work on the template and in the state "Enabled" of the protocol object.</li></ul>
-<p>For the direct processing procedure, and the required ones to create in the template, the following exchange attributes with the input transport are predetermined:
+<p>For the direct processing procedure, and the required or optional ones to create in the template, the following exchange attributes with the input transport are predetermined:
 </p>
-<ul><li> <i>Input result (rez)</i> &lt;Boolean&gt; — processing result (false — full request; true — not full one, holding the connection);</li>
-<li> <i>Input request (request)</i> &lt;String&gt; — full-accumulated request message, what protocol should clear about processed data;</li>
-<li> <i>Input answer (answer)</i> &lt;String&gt; — answer message;</li>
+<ul><li> <i><b>Input result (rez)</b></i> &lt;Boolean&gt; — processing result (false — full request; true — not full one, holding the connection); in the DAQ-template mode you must write thither directly, not by the operator "return";</li>
+<li> <i><b>Input request (request)</b></i> &lt;String&gt; — full-accumulated request message, what protocol should clear about processed data;</li>
+<li> <i><b>Input answer (answer)</b></i> &lt;String&gt; — answer message;</li>
 <li> <i>Input sender (sender)</i> &lt;String&gt; — request sender;</li>
 <li> <i>Transport (tr)</i> &lt;Object&gt; — input transport object.</li></ul>
 <p>The overall scenario of the input requests processing:
@@ -123,10 +123,10 @@ return 0;
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:863px;"><a class="image" href="http://oscada.org/wiki/File:UserProtocol_up_out.png"><img class="thumbimage" height="685" src="../files/UserProtocol_up_out.png" width="861" /></a>  <div class="thumbcaption">Fig.3. Tab of a direct procedure of the output requests processing.</div></div></div></div>
 <p>The processing procedure tab for output requests contains only text field of direct processing procedure for an internal programming language OpenSCADA, which are pointed in the previous tab. This tab is missing for the template mode.
-</p><p>For the direct processing procedure, and the required ones to create in the template, the following exchange attributes are predetermined:
+</p><p>For the direct processing procedure, and the required or optional ones to create in the template, the following exchange attributes are predetermined:
 </p>
-<ul><li> <i>Output IO (io)</i> &lt;Object::XMLNode&gt; — XML node of the exchange with the client, through which the protocol gets the requests and into which it puts the result with the format implemented in the procedure;</li>
-<li> <i>Transport (tr)</i> &lt;Object&gt; — the transport object, provided to call the transport function <i>string messIO( string mess, real timeOut = 1000 );</i> — <b>tr.messIO(req)</b>.</li></ul>
+<ul><li> <i><b>Output IO (io)</b></i> &lt;Object::XMLNode&gt; — XML node of the exchange with the client, through which the protocol gets the requests and into which it puts the result with the format implemented in the procedure;</li>
+<li> <i><b>Transport (tr)</b></i> &lt;Object&gt; — the transport object, provided to call the transport function <i>string messIO( string mess, real timeOut = 1000 );</i> — <b>tr.messIO(req)</b>.</li></ul>
 <p>The overall scenario of the output request formation:
 </p>
 <ul><li> Building of the XML-tree in accordance with the structure, implemented by the protocol, and setting of the user protocol identifier in the attribute "ProtIt".</li>

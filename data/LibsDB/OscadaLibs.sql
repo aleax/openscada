@@ -1615,7 +1615,7 @@ INSERT INTO "tmplib_base_io" VALUES('anUnifSt','log','Logarithmic scale',3,32,'0
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','inProc','Input processing procedure',0,68,'',3,'Вхідна процедура обробки','','Входная процедура обработки','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','alDelay','Alarms delay, s',2,32,'0',10,'Затримка сигналізації, с','','Задержка сигнализации, с','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alDelay','Alarms delay, s',2,32,'',15,'Затримка сигналізації, с','','Задержка сигнализации, с','');
-INSERT INTO "tmplib_base_io" VALUES('codeState','in','Input',3,144,'Input|in',0,'Вхід','','Вход','');
+INSERT INTO "tmplib_base_io" VALUES('codeState','in','Input',1,144,'Input|in',0,'Вхід','','Вход','');
 INSERT INTO "tmplib_base_io" VALUES('codeState','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
 INSERT INTO "tmplib_base_io" VALUES('codeState','st_text','State "Text"',0,16,'',2,'Стан "Текст"','','Состояние "Текст"','');
 INSERT INTO "tmplib_base_io" VALUES('codeState','stats','States, rows "{code}:{State}"',0,36,'',3,'Стан, рядки "{code}:{State}"','','Состояние, строки "{code}:{State}"','');
@@ -6131,7 +6131,7 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1542446124);
+f_err = tErr;','','',1542727978);
 CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_Controllers" VALUES('prescr','Prescriptions manager','','','Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
 Author: Roman Savochenko <rom_as@oscada.org>

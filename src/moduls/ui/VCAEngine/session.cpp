@@ -1645,6 +1645,11 @@ void SessWdg::wdgAdd( const string &iid, const string &name, const string &ipare
     if(!isContainer())	throw TError(nodePath().c_str(), _("The widget is not a container!"));
     if(wdgPresent(iid))	return;
 
+    //Limit for the deep
+    int depth = 0;
+    for(SessWdg *ownW = this; ownW->ownerSessWdg(); ownW = ownW->ownerSessWdg()) depth++;
+    if(depth > 10)	throw TError(nodePath().c_str(), _("It is a try of creating a widget in depth bigger to 10!"));
+
     chldAdd(inclWdg, new SessWdg(iid,iparent,ownerSess()));
 }
 
@@ -2117,8 +2122,10 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  wid - widget identifier
     //  byPath - attach by absolute or relative path. First item of absolute path (session or project id) is passed.
     if(iid == "wdgAt" && prms.size()) {
-	try { return new TCntrNodeObj(wdgAt(prms[0].getS(),(prms.size()>1&&prms[1].getB())?0:-1),user); }
-	catch(TError &err) { }
+	try {
+	    AutoHD<Widget> wO = wdgAt(prms[0].getS(), (prms.size()>1&&prms[1].getB())?0:-1);
+	    if(!wO.freeStat())	return new TCntrNodeObj(wO, user);
+	} catch(TError &err) { }
 	return false;
     }
     // bool attrPresent(string attr) - check for attribute <attr> present.
@@ -2332,7 +2339,8 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	Widget::cntrCmdGeneric(opt);
-	ctrMkNode("fld",opt,1,"/wdg/st/proc",_("Process"),RWRWR_,owner().c_str(),grp().c_str(),1,"tp","bool");
+	ctrRemoveNode(opt, "/wdg/st/use");
+	ctrMkNode("fld",opt,1,"/wdg/st/proc",_("Processing"),RWRWR_,owner().c_str(),grp().c_str(),1,"tp","bool");
 	if(mess_lev() == TMess::Debug)
 	    ctrMkNode("fld",opt,1,"/wdg/st/tmSpent",_("Spent time"),R_R_R_,owner().c_str(),grp().c_str(),1,"tp","str");
 	return true;

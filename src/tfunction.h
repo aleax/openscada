@@ -169,12 +169,14 @@ class TValFunc
 	TValFunc( const string &iname = "", TFunction *ifunc = NULL, bool iblk = true, const string &iuser = "root" );
 	virtual ~TValFunc( );
 
+	bool blk( )				{ return mBlk; }
+	bool mdfChk( )				{ return mMdfChk; }
+	bool isChangedProg( bool clear = false ) { bool mPrgCh_ = mPrgCh; if(clear) mPrgCh = false; return mPrgCh_; }
+
 	string user( )				{ return mUser; }
 	string lang( )				{ return mLang; }
 	const string &vfName( )			{ return mName; }
 
-	bool blk( )				{ return mBlk; }
-	bool mdfChk( )				{ return mMdfChk; }
 	void setUser( const string &vl )	{ mUser = vl; }
 	void setLang( const string &vl )	{ mLang = vl; }
 	void setVfName( const string &inm )	{ mName = inm; }
@@ -227,6 +229,7 @@ class TValFunc
 
 	virtual void preIOCfgChange( );
 	virtual void postIOCfgChange( );
+	virtual void progChange( )	{ mPrgCh = true; }
 
 	// Context operations
 	TValFunc *ctxGet( int key );
@@ -262,7 +265,8 @@ class TValFunc
 		mUser,			//Link to user
 		mLang;			//Force language
 	unsigned short	mBlk	:1;	//Blocked values screen
-	unsigned short	mMdfChk	:1;	//Modify attributes check
+	unsigned short	mMdfChk	:1;	//Checking for the IO modification
+	unsigned short	mPrgCh	:1;	//Changing the program text
 
 	TFunction	*mFunc;
 	map<int, TValFunc* >	vctx;

@@ -109,6 +109,8 @@ class TUIMod;
 
 class ConfApp: public QMainWindow
 {
+    friend class CfgTable;
+
     Q_OBJECT
 
 public:

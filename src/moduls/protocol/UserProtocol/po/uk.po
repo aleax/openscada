@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-12 19:35+0200\n"
+"POT-Creation-Date: 2018-11-25 17:21+0200\n"
 "PO-Revision-Date: 2010-03-04 21:58+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -82,38 +82,36 @@ msgid ""
 "Size of the accumulated request exceeded for %s, but the user protocol must "
 "tend for removing processed data itself. Fix this!"
 msgstr ""
-"Розмір акумульованого запиту досяг %s, та протокол користувача має забезпечувати видалення оброблених даних самостійно. Виправте це!"
+"Розмір акумульованого запиту досяг %s, та протокол користувача має "
+"забезпечувати видалення оброблених даних самостійно. Виправте це!"
 
 #, c-format
 msgid ""
-"The template '%s' does not have the required attribute '%s' in the type "
-"'%s'. Append this!"
+"The template '%s' does not have one or more required attribute in the needed "
+"type.\n"
+"Input part: rez=%d, request=%d, answer=%d. Output part: tr=%d, io=%d.\n"
+"See to the documentation and append their!"
 msgstr ""
-"Шаблон '%s' не має потрібного атрибуту '%s' типу '%s'. Додайте його!"
-
-msgid "Transport"
-msgstr "Транспорт"
-
-msgid "Object"
-msgstr "Об'єкт"
+"Шаблон '%s' не має одного або декількох потрібних атрибутів у потрібних "
+"типах.\n"
+"Вхідна частина: rez=%d, request=%d, answer=%d. Вихідна частина: tr=%d, io="
+"%d.\n"
+"Переглянте документацію та додайте їх!"
 
 msgid "Input result"
 msgstr "Вхідний результат"
 
-msgid "Boolean"
-msgstr "Логічний"
-
 msgid "Input request"
 msgstr "Вхідний запит"
-
-msgid "String"
-msgstr "Рядок"
 
 msgid "Input answer"
 msgstr "Вхідна відповідь"
 
 msgid "Input sender"
 msgstr "Вхідний відправник"
+
+msgid "Transport"
+msgstr "Транспорт"
 
 msgid "Output IO"
 msgstr "Вихідний ВВ"

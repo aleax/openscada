@@ -235,6 +235,8 @@ class VisRun : public QMainWindow
 	bool winClose;					//Closing window flag
 	bool isResizeManual;				//Manual resizing flag
 
+	float	updTmMax, planePer;
+
     signals:
 	void makeStarterMenu( );
 
@@ -334,7 +336,6 @@ class VisRun : public QMainWindow
 	int		mConId;			//The connection to VCA ID
 	unsigned	mScreen,		//Work screen, possible virtual
 			wPrcCnt;		//Process counter
-	float		upd_tm;
 	unsigned	reqtm;			//Requested time
 	unsigned	expDiagCnt, expDocCnt;
 

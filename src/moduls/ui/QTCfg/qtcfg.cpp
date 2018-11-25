@@ -2172,7 +2172,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
     QStringList grps = i->data(2,Qt::UserRole).toStringList();
     if(grps.empty()) return;
     else if(grps.size() > 1) {
-	//Add and update present
+	//Add and update present ones
 	for(int iG = 0; iG < grps.size(); iG++) {
 	    bool grpChCnt = s2i(TSYS::strSepParse(grps[iG].toStdString(),0,'\n'));
 	    string grpId = TSYS::strSepParse(grps[iG].toStdString(),1,'\n');
@@ -2184,11 +2184,11 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 		    if(i->child(iIt)->text(2) == ("*"+grpId).c_str())
 		    { it = i->child(iIt); break; }
 	    if(!it) it = new QTreeWidgetItem(i);
-	    it->setText(0,(grpDscr+":").c_str());
-	    it->setText(1,grpDscr.c_str());
-	    it->setText(2,("*"+grpId).c_str());
+	    it->setText(0, (grpDscr+":").c_str());
+	    it->setText(1, grpDscr.c_str());
+	    it->setText(2, ("*"+grpId).c_str());
 	    QStringList it_grp; it_grp.push_back(grps[iG]);
-	    it->setData(2,Qt::UserRole,it_grp);
+	    it->setData(2, Qt::UserRole,it_grp);
 	    it->setFlags(Qt::ItemIsEnabled);
 	    it->setChildIndicatorPolicy(grpChCnt?QTreeWidgetItem::ShowIndicator:QTreeWidgetItem::DontShowIndicator);
 	    QFont fnt = it->font(0);
@@ -2782,9 +2782,9 @@ void ConfApp::tablePopup( const QPoint &pos )
 	    }
 	    if(n_el->attr("s_com").find("move") != string::npos && row != -1) {
 		popup.addSeparator();
-		actMoveUp = last_it = new QAction(_("Move Up"),this);
+		actMoveUp = last_it = new QAction(_("Move Up (Ctrl+Up)"),this);
 		popup.addAction(actMoveUp);
-		actMoveDown = last_it = new QAction(_("Move Down"),this);
+		actMoveDown = last_it = new QAction(_("Move Down (Ctrl+Down)"),this);
 		popup.addAction(actMoveDown);
 	    }
 	}

@@ -1213,7 +1213,7 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 
 	    //Set fixed system attributes
 	    if(lCtx->idFreq >= 0)	lCtx->setR(lCtx->idFreq, frq);
-	    if(lCtx->idStart >= 0)	lCtx->setB(lCtx->idStart, first);
+	    if(lCtx->idStart >= 0)	lCtx->setB(lCtx->idStart, first || lCtx->isChangedProg(true));
 	    if(lCtx->idStop >= 0)	lCtx->setB(lCtx->idStop, last);
 	    if(lCtx->idSh >= 0)		lCtx->setS(lCtx->idSh, id());
 	    if(lCtx->idNm >= 0)		lCtx->setS(lCtx->idNm, name());

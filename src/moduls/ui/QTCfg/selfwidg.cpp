@@ -48,6 +48,7 @@
 #include <tsys.h>
 
 #include "tuimod.h"
+#include "qtcfg.h"
 #include "selfwidg.h"
 
 using namespace QTCFG;
@@ -691,13 +692,44 @@ QSize CfgTable::sizeHint( ) const
 void CfgTable::resizeRowsToContentsLim( )
 {
     QTableView::resizeRowsToContents();
-    for(int i_rw = 0; i_rw < rowCount(); i_rw++)
-	setRowHeight(i_rw, vmin(rowHeight(i_rw), size().height()/1.3));
+    for(int iRW = 0; iRW < rowCount(); iRW++)
+	setRowHeight(iRW, vmin(rowHeight(iRW), size().height()/1.3));
 }
 
 bool CfgTable::event( QEvent *e )
 {
-    if(e->type() == QEvent::MouseButtonPress)
+    if(e->type() == QEvent::KeyPress) {
+	QKeyEvent *key = static_cast<QKeyEvent*>(e);
+	bool toUp = false;
+	ConfApp *mainW = dynamic_cast<ConfApp *>(window());
+	if(mainW && (QApplication::keyboardModifiers()&Qt::ControlModifier) &&
+		((toUp=(key->key()==Qt::Key_Up)) || key->key() == Qt::Key_Down)) {
+	    try {
+		int row = currentRow();
+		int r_new = toUp ? row-1 : row+1;
+
+		XMLNode *n_el = SYS->ctrId(mainW->root, TSYS::strDecode(objectName().toStdString(),TSYS::PathEl));
+		if(n_el->attr("s_com").find("move") != string::npos && r_new >= 0 && r_new < rowCount()) {
+		    string el_path = mainW->selPath + "/" + objectName().toStdString();
+		    XMLNode n_el1;
+		    n_el1.setAttr("path", el_path);
+		    n_el1.setName("move");
+		    n_el1.setAttr("row", i2s(row))->setAttr("to", i2s(r_new));
+		    mess_info(mod->nodePath().c_str(), _("%s| '%s' moved for the record %d to %d."),
+			mainW->wUser->user().toStdString().c_str(), el_path.c_str(), row, r_new);
+		    if(mainW->cntrIfCmd(n_el1)) throw TError(n_el1.attr("mcat").c_str(), n_el1.text().c_str());
+		    mainW->tblInit = true;
+		    item(row,currentColumn())->setSelected(false);
+		    for(int iCol = 0; iCol < columnCount(); iCol++) {
+			QTableWidgetItem *tIt = takeItem(row, iCol), *tIt2 = takeItem(r_new, iCol);
+			setItem(r_new, iCol, tIt); setItem(row, iCol, tIt2);
+		    }
+		    mainW->tblInit = false;
+		}
+	    } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
+	}
+    }
+    else if(e->type() == QEvent::MouseButtonPress)
 	holdPnt = mapFromGlobal(cursor().pos());
     else if(e->type() == QEvent::MouseMove) {
 	QPoint curp = mapFromGlobal(cursor().pos());

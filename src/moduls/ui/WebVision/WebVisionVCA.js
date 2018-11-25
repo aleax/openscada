@@ -465,7 +465,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 		" <td title='"+winName+"' style='padding-left: 5px; overflow: hidden; white-space: nowrap;'>"+winName+"</td>"+
 		" <td style='color: red; cursor: pointer; text-align: right; width: 1px;' "+
 		"  onclick='servSet(this.offsetParent.iPg.addr,\"com=pgClose\",\"\"); "+
-		"   this.offsetParent.iPg.pwClean(); "+
+		"   //this.offsetParent.iPg.pwClean(); "+
 		"   delete this.offsetParent.iPg.parent.pages[this.offsetParent.iPg.addr]; "+
 		"   document.getElementById(\"mainCntr\").removeChild(this.offsetParent.iPg.window);'>X</td></tr>\n"+
 		"<tr><td colspan='2'><div/></td></tr>";

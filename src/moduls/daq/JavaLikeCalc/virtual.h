@@ -127,7 +127,7 @@ class Contr: public TController, public TPrmTempl::Impl
 	void redntDataUpdate( );
 
 	//Attributes
-	bool	isDAQTmpl;	// DAQ template used
+	bool	isDAQTmpl;	// Using the DAQ-template
 
     protected:
 	//Methods

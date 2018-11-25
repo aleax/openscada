@@ -480,8 +480,10 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis, bool resApply ) :
     box->setMargin(0);
     box->setSpacing(0);
 
-    bt_tm = new QTimer(this);
-    connect(bt_tm, SIGNAL(timeout()), this, SLOT(cancelSlot()));
+    if(resApply) {
+	bt_tm = new QTimer(this);
+	connect(bt_tm, SIGNAL(timeout()), this, SLOT(cancelSlot()));
+    }
 
     setType(tp);
 }
@@ -500,7 +502,7 @@ void LineEdit::viewApplyBt( bool view )
 	layout()->addWidget(bt_fld);
     }
     if(!view && bt_fld) {
-	bt_tm->stop(); //bt_tm->deleteLater(); bt_tm = NULL;
+	if(bt_tm) bt_tm->stop(); //bt_tm->deleteLater(); bt_tm = NULL;
 	bt_fld->deleteLater(); bt_fld = NULL;
 	mIsEdited = false;
     }
@@ -571,7 +573,7 @@ void LineEdit::setType( LType tp )
     }
     ((QBoxLayout*)layout())->insertWidget(0, ed_fld);
     if(applyReserve && needReserver) {
-	ed_fld->setMaximumWidth(width()-12); ed_fld->setMinimumWidth(width()-12);
+	ed_fld->setMaximumWidth(width()-icoSize(1.2)); ed_fld->setMinimumWidth(width()-icoSize(1.2));
 	((QBoxLayout*)layout())->setAlignment(ed_fld, Qt::AlignLeft);
     }
     setFocusProxy(ed_fld);
@@ -583,7 +585,7 @@ void LineEdit::changed( )
 {
     //Enable apply
     if(mPrev && !bt_fld) viewApplyBt(true);
-    bt_tm->start(mPrev ? 5000 : 500);
+    if(bt_tm) bt_tm->start(mPrev ? 5000 : 500);
     mIsEdited = true;
 
     emit valChanged(value());
@@ -729,7 +731,7 @@ bool LineEdit::event( QEvent * e )
 	else if(keyEvent->key() == Qt::Key_Escape )	{ cancelSlot(); return true; }
     }
     else if(e->type() == QEvent::Resize && applyReserve && needReserver) {
-	int btW = bt_fld ? bt_fld->width() : 12;
+	int btW = bt_fld ? bt_fld->width() : icoSize(1.2);
 	ed_fld->setMaximumWidth(width()-btW);
 	ed_fld->setMinimumWidth(width()-btW);
     }
@@ -909,7 +911,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
 }
 
 
-bool TextEdit::isEdited( )	{ return (but_box && but_box->isVisible()); }
+bool TextEdit::isEdited( )	{ return (but_box && but_box->isEnabled()); }	//isVisible() sometime wrong but it can be hidden commonly
 
 QString TextEdit::text( )	{ return ed_fld->toPlainText(); }
 

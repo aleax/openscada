@@ -134,7 +134,12 @@ void Func::setMaxCalcTm( int vl )
 void Func::setProg( const string &iprg )
 {
     cfg("FORMULA").setS(iprg);
+
     if(owner().DB().empty()) modifClr();
+
+    //Mark the users for the program changing
+    ResAlloc res1(fRes(), false);
+    for(unsigned i = 0; i < used.size(); i++) used[i]->progChange();
 }
 
 void Func::load_( TConfig *icfg )
@@ -251,14 +256,14 @@ void Func::delIO( )
 void Func::valAtt( TValFunc *vfnc )
 {
     TFunction::valAtt(vfnc);
-    ResAlloc res1(fRes(), true);
+    ResAlloc res1(fRes(), false);
     workRegControl(vfnc);
 }
 
 void Func::valDet( TValFunc *vfnc )
 {
     TFunction::valDet(vfnc);
-    ResAlloc res1(fRes(), true);
+    ResAlloc res1(fRes(), false);
     workRegControl(vfnc, true);
 }
 

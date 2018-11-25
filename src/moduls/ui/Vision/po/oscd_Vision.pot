@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-04 23:34+0300\n"
+"POT-Creation-Date: 2018-11-25 18:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -103,11 +103,11 @@ msgid "Exit when closing the last running project"
 msgstr ""
 
 #, c-format
-msgid "%d: Development by \"%s\""
+msgid "%d: Development by \"%s\"."
 msgstr ""
 
 #, c-format
-msgid "%d: Running \"%s:%s\" from \"%s\" - %s"
+msgid "%d: Running \"%s:%s\" from \"%s\" - %s, updating period %s(%s)."
 msgstr ""
 
 msgid "Connected"
@@ -1579,7 +1579,7 @@ msgid "Restore the session creation for '%s'."
 msgstr ""
 
 #, c-format
-msgid "Time of updating the session '%s': %f ms."
+msgid "Time of the session updating '%s': %s[%s]ms. Planer period %s(%s)ms"
 msgstr ""
 
 #, c-format

@@ -31,13 +31,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"WebUser"
-#define MOD_NAME	_("Web interface from user")
+#define MOD_NAME	_("User WWW-page")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.9.6"
+#define MOD_VER		"1.0.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
+#define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -90,8 +90,13 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
     mUPgEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     mUPgEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mUPgEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mUPgEl.fldAdd(new TFld("PROG",_("Program"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
+    mUPgEl.fldAdd(new TFld("PROG",_("Procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
     mUPgEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+
+    //User page data IO DB structure
+    mUPgIOEl.fldAdd(new TFld("PG_ID",_("User page ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mUPgIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mUPgIOEl.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"100"));
 }
 
 TWEB::~TWEB( )
@@ -135,7 +140,7 @@ void TWEB::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Search and create new user page error."));
+	mess_err(nodePath().c_str(),_("Error searching and creating a new user page."));
     }
 
     setDefPg(TBDS::genDBGet(nodePath()+"DefPg",defPg()));
@@ -152,7 +157,11 @@ void TWEB::modStart( )
     uPgList(ls);
     for(unsigned iN = 0; iN < ls.size(); iN++)
 	if(uPgAt(ls[iN]).at().toEnable())
-	    uPgAt(ls[iN]).at().setEnable(true);
+	    try { uPgAt(ls[iN]).at().setEnable(true); }
+	    catch(TError &err) {
+		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		mess_sys(TMess::Error, _("Error starting the WWW-page '%s'."), ls[iN].c_str());
+	    }
 
     runSt = true;
 }
@@ -198,11 +207,11 @@ bool TWEB::pgAccess( TProtocolIn *iprt, const string &URL )
 
 void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
-    string rez, httpIt, tstr, sender = TSYS::strLine(iprt->srcAddr(), 0);
+    string rez, sender = TSYS::strLine(iprt->srcAddr(), 0);
     AutoHD<UserPg> up, tup;
-    map<string,string>::iterator prmEl;
-    vector<string> sls;
-    SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), sender, user, vars, "");
+
+
+    SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), sender, user, vars, page);
 
     try {
 	//Find user protocol for using
@@ -212,14 +221,14 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	if(uPg.empty()) uPg = defPg();
 	for(unsigned iUp = 0; iUp < upLs.size(); iUp++) {
 	    tup = uPgAt(upLs[iUp]);
-	    if(!tup.at().enableStat() || tup.at().workProg().empty()) continue;
+	    if(!tup.at().enableStat() /*|| tup.at().workProg().empty()*/) continue;
 	    if(uPg == upLs[iUp]) { up = tup; break; }
 	}
 	if(up.freeStat()) {
 	    if(uPg == "*") {
 		page =	"<table class='work'>\n"
-			// " <tr><td class='content'><p>"+_("Welcome to Web-users pages of OpenSCADA.")+"</p></td></tr>\n"
-			" <tr><th>"+string(_("Presented user's WEB-pages."))+"</th></tr>\n"
+			// " <tr><td class='content'><p>"+_("Welcome to the WWW-pages of the OpenSCADA users.")+"</p></td></tr>\n"
+			" <tr><th>"+string(_("Present WWW-pages of the users."))+"</th></tr>\n"
 			" <tr><td class='content'><ul>\n";
 		for(unsigned iP = 0; iP < upLs.size(); iP++)
 		    if(uPgAt(upLs[iP]).at().enableStat() && pgAccess(iprt,sender+"/" MOD_ID "/"+upLs[iP]+"/"))
@@ -230,67 +239,24 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		return;
 	    }
 	    else if(!(uPg=defPg()).empty() && uPg != "*") up = uPgAt(uPg);
-	    else throw TError(nodePath().c_str(), _("Page is missing"));
+	    else throw TError(nodePath().c_str(), _("The page is not present"));
 	}
 
-	TValFunc funcV;
-	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workProg())).at());
+	up.at().HTTP("GET", ses, iprt);
 
-	//Load inputs
-	funcV.setS(1, "GET");
-	funcV.setS(2, ses.url);
-	funcV.setS(3, page);
-	funcV.setS(4, sender);
-	funcV.setS(5, user);
-	funcV.setO(6, new TVarObj());
-	for(prmEl = ses.vars.begin(); prmEl != ses.vars.end(); prmEl++)
-	    funcV.getO(6).at().propSet(prmEl->first, prmEl->second);
-	funcV.setO(7, new TVarObj());
-	for(prmEl = ses.prm.begin(); prmEl != ses.prm.end(); prmEl++)
-	    funcV.getO(7).at().propSet(prmEl->first, prmEl->second);
-	funcV.setO(8, new TArrayObj());
-	for(unsigned ic = 0; ic < ses.cnt.size(); ic++) {
-	    XMLNodeObj *xo = new XMLNodeObj();
-	    xo->fromXMLNode(ses.cnt[ic]);
-	    AutoHD<TArrayObj>(funcV.getO(8)).at().propSet(i2s(ic),xo);
-	}
-	funcV.setO(9, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
-	funcV.setO(10, new TCntrNodeObj(AutoHD<TCntrNode>(iprt),"root"));
+	page = ses.page;
 
-	//Call processing
-	funcV.calc();
-
-	//Get outputs
-	rez = funcV.getS(0);
-	page = funcV.getS(3);
-
-	//HTTP properties prepare
-	AutoHD<TVarObj> hVars = funcV.getO(6);
-	hVars.at().propList(sls);
-	bool cTp = false;
-	for(unsigned iL = 0; iL < sls.size(); iL++) {
-	    tstr = hVars.at().propGet(sls[iL]).getS();
-	    if(sls[iL] == "Date" || sls[iL] == "Server" || sls[iL] == "Accept-Ranges" || sls[iL] == "Content-Length" ||
-		((prmEl=ses.vars.find(sls[iL])) != ses.vars.end() && prmEl->second == tstr)) continue;
-	    if(sls[iL] == "Content-Type") cTp = true;
-	    httpIt += sls[iL] + ": " + tstr + "\x0D\x0A";
-	}
-
-	page = httpHead(rez, page.size(), (cTp?"":"text/html"), httpIt) + page;
-
-	up.at().cntReq++;
     } catch(TError &err) {
-	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),urli.c_str(),err.mess.c_str())+"</div>\n",
+	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),urli.c_str(),err.mess.c_str())+"</div>\n",
 			       "404 Not Found", "", "", "", ses.lang);
     }
 }
 
 void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
-    string rez, httpIt, tstr, sender = TSYS::strLine(iprt->srcAddr(), 0);
+    string rez, sender = TSYS::strLine(iprt->srcAddr(), 0);
     AutoHD<UserPg> up, tup;
     map<string,string>::iterator prmEl;
-    vector<string> sls;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, page);
 
     try {
@@ -302,59 +268,20 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	if(uPg.empty()) uPg = defPg();
 	for(unsigned iUp = 0; iUp < upLs.size(); iUp++) {
 	    tup = uPgAt(upLs[iUp]);
-	    if(!tup.at().enableStat() || tup.at().workProg().empty()) continue;
+	    if(!tup.at().enableStat() /*|| tup.at().workProg().empty()*/) continue;
 	    if(uPg == upLs[iUp]) { up = tup; break; }
 	}
 	if(up.freeStat()) {
 	    if(!(uPg=defPg()).empty() && uPg != "*") up = uPgAt(uPg);
-	    else throw TError(nodePath().c_str(), _("Page is missing"));
-	}
-	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workProg())).at());
-
-	//Load inputs
-	funcV.setS(1, "POST");
-	funcV.setS(2, ses.url);
-	funcV.setS(3, page);
-	funcV.setS(4, sender);
-	funcV.setS(5, user);
-	funcV.setO(6, new TVarObj());
-	for(prmEl = ses.vars.begin(); prmEl != ses.vars.end(); prmEl++)
-	    funcV.getO(6).at().propSet(prmEl->first, prmEl->second);
-	funcV.setO(7,new TVarObj());
-	for(prmEl = ses.prm.begin(); prmEl != ses.prm.end(); prmEl++)
-	    funcV.getO(7).at().propSet(prmEl->first, prmEl->second);
-	funcV.setO(8, new TArrayObj());
-	for(unsigned ic = 0; ic < ses.cnt.size(); ic++) {
-	    XMLNodeObj *xo = new XMLNodeObj();
-	    xo->fromXMLNode(ses.cnt[ic]);
-	    AutoHD<TArrayObj>(funcV.getO(8)).at().propSet(i2s(ic), xo);
-	}
-	funcV.setO(9, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
-	funcV.setO(10, new TCntrNodeObj(AutoHD<TCntrNode>(iprt),"root"));
-
-	//Call processing
-	funcV.calc();
-
-	//Get outputs
-	rez = funcV.getS(0);
-	page = funcV.getS(3);
-
-	//HTTP properties prepare
-	funcV.getO(6).at().propList(sls);
-	bool cTp = false;
-	for(unsigned iL = 0; iL < sls.size(); iL++) {
-	    tstr = funcV.getO(6).at().propGet(sls[iL]).getS();
-	    if(sls[iL] == "Date" || sls[iL] == "Server" || sls[iL] == "Accept-Ranges" || sls[iL] == "Content-Length" ||
-		((prmEl=ses.vars.find(sls[iL])) != ses.vars.end() && prmEl->second == tstr)) continue;
-	    if(sls[iL] == "Content-Type") cTp = true;
-	    httpIt += prmEl->first + ": " + tstr + "\x0D\x0A";
+	    else throw TError(nodePath().c_str(), _("The page is not present"));
 	}
 
-	page = httpHead(rez, page.size(), (cTp?"":"text/html"), httpIt) + page;
+	up.at().HTTP("POST", ses, iprt);
 
-	up.at().cntReq++;
+	page = ses.page;
+
     } catch(TError &err) {
-	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),url.c_str(),err.mess.c_str())+"</div>\n",
+	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),url.c_str(),err.mess.c_str())+"</div>\n",
 			       "404 Not Found", "", "", "", ses.lang);
     }
 }
@@ -367,10 +294,10 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/up_",_("User page"),RWRWR_,"root",SUI_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
-	if(ctrMkNode("area",opt,-1,"/prm/up",_("User pages"))) {
-	    ctrMkNode("fld",opt,-1,"/prm/up/dfPg",_("Default page"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/prm/up/cup");
-	    ctrMkNode("list",opt,-1,"/prm/up/up",_("Pages"),RWRWR_,"root",SUI_ID,5,
+	ctrMkNode("grp",opt,-1,"/br/up_",_("User WWW-page"),RWRWR_,"root",SUI_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	if(ctrMkNode("area",opt,-1,"/prm/up",_("User WWW-pages"))) {
+	    ctrMkNode("fld",opt,-1,"/prm/up/dfPg",_("Default WWW-page"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/prm/up/cup");
+	    ctrMkNode("list",opt,-1,"/prm/up/up",_("WWW-pages"),RWRWR_,"root",SUI_ID,5,
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","up_","idSz",OBJ_ID_SZ);
 	}
 	return;
@@ -385,7 +312,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/br/up_" || a_path == "/prm/up/up" || a_path == "/prm/up/cup") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    if(a_path == "/prm/up/cup")
-		opt->childAdd("el")->setAttr("id","*")->setText(_("<Page index display>"));
+		opt->childAdd("el")->setAttr("id","*")->setText(_("<Show of index of the pages>"));
 	    vector<string> lst;
 	    uPgList(lst);
 	    for(unsigned iF = 0; iF < lst.size(); iF++)
@@ -404,8 +331,11 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 //* UserPrt                                       *
 //*************************************************
 UserPg::UserPg( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), cntReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb),
-    prgChOnEn(false)
+    TConfig(el), TPrmTempl::Impl(this, ("WebUserPg_"+iid).c_str()), cntReq(0), isDAQTmpl(false),
+    mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb),
+    ioRez(-1), ioHTTPreq(-1), ioUrl(-1), ioPage(-1), ioSender(-1), ioUser(-1),
+    ioHTTPvars(-1), ioURLprms(-1), ioCnts(-1), ioThis(-1), ioPrt(-1),
+    chkLnkNeed(false)
 {
     mId = iid;
 }
@@ -417,7 +347,7 @@ UserPg::~UserPg( )
 
 TCntrNode &UserPg::operator=( const TCntrNode &node )
 {
-    const UserPg *src_n = dynamic_cast<const UserPg*>(&node);
+    UserPg *src_n = const_cast<UserPg*>(dynamic_cast<const UserPg*>(&node));
     if(!src_n) return *this;
 
     if(enableStat())	setEnable(false);
@@ -425,6 +355,19 @@ TCntrNode &UserPg::operator=( const TCntrNode &node )
     //Copy parameters
     exclCopy(*src_n, "ID;");
     setDB(src_n->DB());
+
+    if(isDAQTmpl && src_n->enableStat()) {
+	setEnable(true);
+
+	//IO values copy
+	ResAlloc res(cfgRes, false);
+	ResAlloc res1(src_n->cfgRes, false);
+	for(int iIO = 0; iIO < src_n->ioSize(); iIO++)
+	    if(src_n->ioFlg(iIO)&TPrmTempl::CfgLink) lnkAddrSet(iIO, src_n->lnkAddr(iIO));
+	    else setS(iIO, src_n->getS(iIO));
+
+	chkLnkNeed = initLnks();
+    }
 
     return *this;
 }
@@ -461,6 +404,79 @@ void UserPg::setProgLang( const string &ilng )	{ cfg("PROG").setS(ilng+"\n"+prog
 
 void UserPg::setProg( const string &iprg )	{ cfg("PROG").setS(progLang()+"\n"+iprg); modif(); }
 
+void UserPg::HTTP( const string &req, SSess &s, TProtocolIn *iprt )
+{
+    try {
+	string tstr, httpIt;
+	map<string,string>::iterator prmEl;
+
+	MtxAlloc res1(reqRes, true);
+	ResAlloc res2(cfgRes, false);
+
+	//Load inputs
+	inputLinks();
+	setS(ioHTTPreq, req);
+	setS(ioUrl, s.url);
+	setS(ioPage, s.page);
+	if(ioSender >= 0) setS(ioSender, s.sender);
+	if(ioUser >= 0) setS(ioUser, s.user);
+	setO(ioHTTPvars, new TVarObj());
+	for(prmEl = s.vars.begin(); prmEl != s.vars.end(); prmEl++)
+	    getO(ioHTTPvars).at().propSet(prmEl->first, prmEl->second);
+	if(ioURLprms >= 0) {
+	    setO(ioURLprms, new TVarObj());
+	    for(prmEl = s.prm.begin(); prmEl != s.prm.end(); prmEl++)
+		getO(ioURLprms).at().propSet(prmEl->first, prmEl->second);
+	}
+	if(ioCnts >= 0) {
+	    setO(ioCnts, new TArrayObj());
+	    for(unsigned ic = 0; ic < s.cnt.size(); ic++) {
+		XMLNodeObj *xo = new XMLNodeObj();
+		xo->fromXMLNode(s.cnt[ic]);
+		AutoHD<TArrayObj>(getO(ioCnts)).at().propSet(i2s(ic),xo);
+	    }
+	}
+	if(ioThis >= 0) setO(ioThis, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
+	if(ioPrt >= 0) setO(ioPrt, new TCntrNodeObj(AutoHD<TCntrNode>(iprt),"root"));
+
+	//Call processing
+	setMdfChk(true);
+	calc();
+
+	//Get outputs
+	if(ioThis >= 0) setO(ioThis, new TEValObj());
+	if(ioPrt >= 0) setO(ioPrt, new TEValObj());
+	outputLinks();
+
+	string rez = getS(ioRez);
+	s.page = getS(ioPage);
+
+	//HTTP properties prepare
+	AutoHD<TVarObj> hVars = getO(ioHTTPvars);
+	vector<string> sls;
+	hVars.at().propList(sls);
+	bool cTp = false;
+	for(unsigned iL = 0; iL < sls.size(); iL++) {
+	    tstr = hVars.at().propGet(sls[iL]).getS();
+	    if(sls[iL] == "Date" || sls[iL] == "Server" || sls[iL] == "Accept-Ranges" || sls[iL] == "Content-Length" ||
+		((prmEl=s.vars.find(sls[iL])) != s.vars.end() && prmEl->second == tstr)) continue;
+	    if(sls[iL] == "Content-Type") cTp = true;
+	    httpIt += sls[iL] + ": " + tstr + "\x0D\x0A";
+	}
+
+	s.page = mod->httpHead(rez, s.page.size(), (cTp?"":"text/html"), httpIt) + s.page;
+
+	cntReq++;
+
+    } catch(TError &err) {
+	MtxAlloc res1(reqRes, true);
+	ResAlloc res2(cfgRes, false);
+	if(func() && ioThis >= 0) setO(ioThis, new TEValObj());
+	if(func() && ioPrt >= 0) setO(ioPrt, new TEValObj());
+	throw;
+    }
+}
+
 void UserPg::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
@@ -470,17 +486,77 @@ void UserPg::load_( TConfig *icfg )
 	//cfgViewAll(true);
 	SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
     }
+
+    loadIO();
+}
+
+void UserPg::loadIO( )
+{
+    ResAlloc res(cfgRes, false);
+    if(func() && isDAQTmpl) {
+	//Load IO
+	vector<vector<string> > full;
+	vector<string> u_pos;
+	TConfig cf(&owner().uPgIOEl());
+	cf.cfg("PG_ID").setS(id(), TCfg::ForceUse);
+	cf.cfg("VALUE").setExtVal(true);
+	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cf,false,&full); ) {
+	    string sid = cf.cfg("ID").getS();
+	    int iid = func()->ioId(sid);
+	    if(iid < 0)	continue;
+
+	    if(func()->io(iid)->flg()&TPrmTempl::CfgLink) lnkAddrSet(iid, cf.cfg("VALUE").getS());
+	    else setS(iid, cf.cfg("VALUE").getS());
+	}
+	chkLnkNeed = initLnks();
+    }
 }
 
 void UserPg::save_( )
 {
     mTimeStamp = SYS->sysTm();
     SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
+
+    saveIO();
+}
+
+void UserPg::saveIO( )
+{
+    ResAlloc res(cfgRes, false);
+    if(func() && isDAQTmpl) {
+	//Save IO
+	TConfig cf(&owner().uPgIOEl());
+	cf.cfg("PG_ID").setS(id(), true);
+	for(int iIO = 0; iIO < func()->ioSize(); iIO++) {
+	    if(iIO == ioRez || iIO == ioHTTPreq || iIO == ioUrl || iIO == ioPage || iIO == ioSender || iIO == ioUser ||
+		iIO == ioHTTPvars || iIO == ioURLprms || iIO == ioCnts || iIO == ioThis || iIO == ioPrt ||
+		func()->io(iIO)->flg()&TPrmTempl::LockAttr) continue;
+	    cf.cfg("ID").setS(func()->io(iIO)->id());
+	    cf.cfg("VALUE").setNoTransl(func()->io(iIO)->type() != IO::String || (func()->io(iIO)->flg()&TPrmTempl::CfgLink));
+	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) cf.cfg("VALUE").setS(lnkAddr(iIO));  //f->io(iIO)->rez());
+	    else cf.cfg("VALUE").setS(getS(iIO));
+	    SYS->db().at().dataSet(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf);
+	}
+
+	//Clear IO
+	vector<vector<string> > full;
+	cf.cfgViewAll(false);
+	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cf,false,&full); ) {
+	    string sio = cf.cfg("ID").getS();
+	    if(func()->ioId(sio) < 0) {
+		if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf,true,false,true)) break;
+		if(full.empty()) fldCnt--;
+	    }
+	}
+    }
 }
 
 bool UserPg::cfgChange( TCfg &co, const TVariant &pc )
 {
-    if(co.name() == "PROG" && enableStat())	prgChOnEn = true;
+    if(co.name() == "PROG") {
+	string lfnc = TSYS::strParse(progLang(), 0, "."), wfnc = TSYS::strParse(progLang(), 1, ".");
+	isDAQTmpl = SYS->daq().at().tmplLibPresent(lfnc) && SYS->daq().at().tmplLibAt(lfnc).at().present(wfnc);
+    }
     modif();
     return true;
 }
@@ -491,28 +567,60 @@ void UserPg::setEnable( bool vl )
 
     cntReq = 0;
 
+    ResAlloc res(cfgRes, true);
+
     if(vl) {
-	//Prepare and compile page function
-	if(!prog().empty()) {
+	//Connect to a DAQ template or prepare and compile a function of the input part
+	string lfnc = TSYS::strParse(progLang(), 0, "."), wfnc = TSYS::strParse(progLang(), 1, ".");
+	isDAQTmpl = SYS->daq().at().tmplLibPresent(lfnc) && SYS->daq().at().tmplLibAt(lfnc).at().present(wfnc);
+	if(isDAQTmpl) {
+	    setFunc(&SYS->daq().at().tmplLibAt(lfnc).at().at(wfnc).at().func().at());
+	    addLinksAttrs();
+	    // Checking for requiered conditions to the template
+	    try {
+		if((ioRez=func()->ioId("rez")) >= 0 && func()->io(ioRez)->type() != IO::String)		ioRez = -1;
+		if((ioHTTPreq=func()->ioId("HTTPreq")) >= 0 && func()->io(ioHTTPreq)->type() != IO::String)	ioHTTPreq = -1;
+		if((ioUrl=func()->ioId("url")) >= 0 && func()->io(ioUrl)->type() != IO::String)		ioUrl = -1;
+		if((ioPage=func()->ioId("page")) >= 0 && func()->io(ioPage)->type() != IO::String)	ioPage = -1;
+		if((ioSender=func()->ioId("sender")) >= 0 && func()->io(ioSender)->type() != IO::String)ioSender = -1;
+		if((ioUser=func()->ioId("user")) >= 0 && func()->io(ioUser)->type() != IO::String)	ioUser = -1;
+		if((ioHTTPvars=func()->ioId("HTTPvars")) >= 0 && func()->io(ioHTTPvars)->type() != IO::Object)	ioHTTPvars = -1;
+		if((ioURLprms=func()->ioId("URLprms")) >= 0 && func()->io(ioURLprms)->type() != IO::Object)	ioURLprms = -1;
+		if((ioCnts=func()->ioId("cnts")) >= 0 && func()->io(ioCnts)->type() != IO::Object)	ioCnts = -1;
+		if((ioThis=func()->ioId("this")) >= 0 && func()->io(ioThis)->type() != IO::Object)	ioThis = -1;
+		if((ioPrt=func()->ioId("prt")) >= 0 && func()->io(ioPrt)->type() != IO::Object)		ioPrt = -1;
+
+		if(!(ioRez >= 0 && ioHTTPreq >= 0 && ioUrl >= 0 && ioPage >= 0 && ioHTTPvars >=0))
+		    throw err_sys(_("The template '%s' does not have one or more required attribute in the needed type: rez=%d, HTTPreq=%d, url=%d, HTTPvars=%d.\n"
+			"See to the documentation and append their!"),
+			progLang().c_str(), ioRez, ioHTTPreq, ioUrl, ioHTTPvars);
+	    } catch(TError &err) { setFunc(NULL); throw; }
+	}
+	else {
 	    TFunction funcIO("upg_"+id());
-	    funcIO.ioIns(new IO("rez",_("Result"),IO::String,IO::Return,"200 OK"), 0);
-	    funcIO.ioIns(new IO("HTTPreq",_("HTTP request"),IO::String,IO::Default,"GET"), 1);
-	    funcIO.ioIns(new IO("url",_("URL"),IO::String,IO::Default), 2);
-	    funcIO.ioIns(new IO("page",_("Page"),IO::String,IO::Output), 3);
-	    funcIO.ioIns(new IO("sender",_("Sender"),IO::String,IO::Default), 4);
-	    funcIO.ioIns(new IO("user",_("User"),IO::String,IO::Default), 5);
-	    funcIO.ioIns(new IO("HTTPvars",_("HTTP variables"),IO::Object,IO::Default), 6);
-	    funcIO.ioIns(new IO("URLprms",_("URL's parameters"),IO::Object,IO::Default), 7);
-	    funcIO.ioIns(new IO("cnts",_("Content items"),IO::Object,IO::Default), 8);
-	    funcIO.ioIns(new IO("this",_("This object"),IO::Object,IO::Default), 9);
-	    funcIO.ioIns(new IO("prt",_("Protocol's object"),IO::Object,IO::Default), 10);
+	    ioRez	= funcIO.ioAdd(new IO("rez",_("Result"),IO::String,IO::Return,"200 OK"));
+	    ioHTTPreq	= funcIO.ioAdd(new IO("HTTPreq",_("HTTP request"),IO::String,IO::Default,"GET"));
+	    ioUrl	= funcIO.ioAdd(new IO("url",_("URL"),IO::String,IO::Default));
+	    ioPage	= funcIO.ioAdd(new IO("page",_("WWW-page"),IO::String,IO::Output));
+	    ioSender	= funcIO.ioAdd(new IO("sender",_("Sender"),IO::String,IO::Default));
+	    ioUser	= funcIO.ioAdd(new IO("user",_("User"),IO::String,IO::Default));
+	    ioHTTPvars	= funcIO.ioAdd(new IO("HTTPvars",_("HTTP variables"),IO::Object,IO::Default));
+	    ioURLprms	= funcIO.ioAdd(new IO("URLprms",_("URL's parameters"),IO::Object,IO::Default));
+	    ioCnts	= funcIO.ioAdd(new IO("cnts",_("Content items"),IO::Object,IO::Default));
+	    ioThis	= funcIO.ioAdd(new IO("this",_("This object"),IO::Object,IO::Default));
+	    ioPrt	= funcIO.ioAdd(new IO("prt",_("Protocol's object"),IO::Object,IO::Default));
 
-	    mWorkProg = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
+	    string workProg = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(progLang(),1,'.'),funcIO,prog());
-	} else mWorkProg = "";
-    }
+	    setFunc(&((AutoHD<TFunction>)SYS->nodeAt(workProg)).at());
+	}
 
-    mEn = vl; prgChOnEn = false;
+	//Load IO
+	loadIO();
+    }
+    else setFunc(NULL);
+
+    mEn = vl;
 }
 
 string UserPg::getStatus( )
@@ -520,7 +628,6 @@ string UserPg::getStatus( )
     string rez = _("Disabled. ");
     if(enableStat()) {
 	rez = _("Enabled. ");
-	if(prgChOnEn) rez += TSYS::strMess(_("Modified, re-enable to apply! "));
 	rez += TSYS::strMess(_("Requests %.4g."), cntReq);
     }
 
@@ -532,8 +639,8 @@ void UserPg::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("User page: ")+name());
-	if(ctrMkNode("area",opt,-1,"/up",_("User page"))) {
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("User WWW-page: ")+name());
+	if(ctrMkNode("area",opt,-1,"/up",_("User WWW-page"))) {
 	    if(ctrMkNode("area",opt,-1,"/up/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/up/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
@@ -545,22 +652,34 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root",SUI_ID,RWRWR_);
 		ctrRemoveNode(opt, "/up/cfg/PROG");
 		ctrRemoveNode(opt, "/up/cfg/TIMESTAMP");
+		ctrMkNode("fld",opt,-1,"/up/cfg/PROGLang",_("Procedure language or the DAQ-template"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/plang/list");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/prgm",_("Program"))) {
-		ctrMkNode("fld",opt,-1,"/prgm/PROGLang",_("Program language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/plang/list");
-		ctrMkNode("fld",opt,-1,"/prgm/PROG",_("Program"),RWRWR_,"root",SUI_ID,4,"tp","str","SnthHgl","1","rows","10",
-		    "help",_("Next attributes has defined for requests processing:\n"
+	    ResAlloc res(cfgRes, false);
+	    if(ctrMkNode("area",opt,-1,"/prgm",_("Procedure"))) {
+		if(func() && chkLnkNeed) chkLnkNeed = initLnks(true);
+		if(func() && ctrMkNode("table",opt,-1,"/prgm/io",_("IO"),RWRW__,"root",SPRT_ID,1,"rows","5")) {
+		    ctrMkNode("list",opt,-1,"/prgm/io/id",_("Identifier"),R_R___,"root",SPRT_ID,1, "tp","str");
+		    ctrMkNode("list",opt,-1,"/prgm/io/nm",_("Name"),R_R___,"root",SPRT_ID,1,"tp","str");
+		    ctrMkNode("list",opt,-1,"/prgm/io/tp",_("Type"),R_R___,"root",SPRT_ID,5,"tp","dec","idm","1","dest","select",
+			"sel_id",TSYS::strMess("%d;%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String,IO::Object).c_str(),
+			"sel_list",_("Real;Integer;Boolean;String;Object"));
+		    ctrMkNode("list",opt,-1,"/prgm/io/vl",_("Value"),RWRW__,"root",SPRT_ID,1,"tp","str");
+		}
+		if(!isDAQTmpl)
+		    ctrMkNode("fld",opt,-1,"/prgm/PROG",_("Procedure"),(enableStat()?R_R_R_:RWRWR_),"root",SUI_ID,4,"tp","str","SnthHgl","1","rows","10",
+			"help",_("Next attributes are defined to process the requests:\n"
 			    "   'rez' - processing result (by default - 200 OK);\n"
-			    "   'HTTPreq' - HTTP request method (GET,POST);\n"
+			    "   'HTTPreq' - HTTP-request method (GET,POST);\n"
 			    "   'url' - requested URI;\n"
-			    "   'page' - Get/Post page content;\n"
+			    "   'page' - Get/Post page's content;\n"
 			    "   'sender' - request sender;\n"
-			    "   'user' - auth user;\n"
+			    "   'user' - authenticated user;\n"
 			    "   'HTTPvars' - HTTP variables into Object;\n"
 			    "   'URLprms' - URL's parameters into Object;\n"
 			    "   'cnts' - content items for POST into Array<XMLNodeObj>;\n"
-			    "   'this' - pointer to this page's object;\n"
+			    "   'this' - pointer to object of this page;\n"
 			    "   'prt' - pointer to object of the input part of the HTTP protocol."));
+		else if(func()) TPrmTempl::Impl::cntrCmdProc(opt, "/prgm/cfg");
 	    }
 	}
 	return;
@@ -577,19 +696,59 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDB(opt->text());
     }
     else if(a_path == "/up/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
-    else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SUI_ID,RWRWR_);
-    else if(a_path == "/prgm/PROGLang") {
+    else if(a_path == "/up/cfg/PROGLang") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(progLang());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setProgLang(opt->text());
     }
-    else if(a_path == "/prgm/PROG") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(prog());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setProg(opt->text());
-	if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
-	    try {
-		SYS->daq().at().at(TSYS::strParse(progLang(),0,".")).at().
-				    compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
-	    } catch(...){ }
+    else if(a_path == "/plang/list" && ctrChkNode(opt)) {
+	TCntrNode::cntrCmdProc(opt);
+	opt->childAdd("el")->setText("");
+	//Templates
+	vector<string> lls, ls;
+	SYS->daq().at().tmplLibList(lls);
+	for(unsigned iL = 0; iL < lls.size(); iL++) {
+	    SYS->daq().at().tmplLibAt(lls[iL]).at().list(ls);
+	    for(unsigned iT = 0; iT < ls.size(); iT++)
+		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
+	}
+    }
+    else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SUI_ID,RWRWR_);
+    else if(a_path.find("/prgm") == 0) {
+	ResAlloc res(cfgRes, false);
+	if(func() && a_path == "/prgm/io") {
+	    if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD)) {
+		XMLNode *nId   = ctrMkNode("list",opt,-1,"/prgm/io/id","");
+		XMLNode *nNm   = ctrMkNode("list",opt,-1,"/prgm/io/nm","");
+		XMLNode *nType = ctrMkNode("list",opt,-1,"/prgm/io/tp","");
+		XMLNode *nVal  = ctrMkNode("list",opt,-1,"/prgm/io/vl","");
+
+		for(int id = 0; id < func()->ioSize(); id++) {
+		    if(nId)	nId->childAdd("el")->setText(func()->io(id)->id());
+		    if(nNm)	nNm->childAdd("el")->setText(func()->io(id)->name());
+		    if(nType)	nType->childAdd("el")->setText(i2s(func()->io(id)->type()));
+		    if(nVal)	nVal->childAdd("el")->setText(getS(id));
+		}
+	    }
+	    if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR)) {
+		int row = s2i(opt->attr("row"));
+		string col = opt->attr("col");
+		if(col == "vl") {
+		    setS(row, opt->text());
+		    lnkOutput(row, opt->text());
+		}
+		modif();
+	    }
+	}
+	else if(a_path == "/prgm/PROG") {
+	    if(ctrChkNode(opt,"get",(enableStat()?R_R_R_:RWRWR_),"root",SUI_ID,SEC_RD))	opt->setText(prog());
+	    if(ctrChkNode(opt,"set",(enableStat()?R_R_R_:RWRWR_),"root",SUI_ID,SEC_WR))	setProg(opt->text());
+	    if(ctrChkNode(opt,"SnthHgl",(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,SEC_RD))
+		try {
+		    SYS->daq().at().at(TSYS::strParse(progLang(),0,".")).at().
+					compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
+		} catch(...){ }
+	}
+	else if(a_path.find("/prgm/cfg") == 0 && isDAQTmpl && func()) TPrmTempl::Impl::cntrCmdProc(opt, "/prgm/cfg");
     }
     else TCntrNode::cntrCmdProc(opt);
 }

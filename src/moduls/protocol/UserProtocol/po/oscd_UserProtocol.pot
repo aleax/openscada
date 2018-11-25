@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-18 16:47+0200\n"
+"POT-Creation-Date: 2018-11-25 17:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,31 +80,25 @@ msgid "Size of the accumulated request exceeded for %s, but the user protocol mu
 msgstr ""
 
 #, c-format
-msgid "The template '%s' does not have the required attribute '%s' in the type '%s'. Append this!"
-msgstr ""
-
-msgid "Transport"
-msgstr ""
-
-msgid "Object"
+msgid ""
+"The template '%s' does not have one or more required attribute in the needed type.\n"
+"Input part: rez=%d, request=%d, answer=%d. Output part: tr=%d, io=%d.\n"
+"See to the documentation and append their!"
 msgstr ""
 
 msgid "Input result"
 msgstr ""
 
-msgid "Boolean"
-msgstr ""
-
 msgid "Input request"
-msgstr ""
-
-msgid "String"
 msgstr ""
 
 msgid "Input answer"
 msgstr ""
 
 msgid "Input sender"
+msgstr ""
+
+msgid "Transport"
 msgstr ""
 
 msgid "Output IO"

@@ -1,3 +1,30 @@
+2018-11-25 Roman (stable)
+- FIX:data/*.init: Fixed for initial projects starting in the daemon mode, by the command-line argument "--projUserDir".
+    data/*.xml: Default KeepAliveTime of the WWW-transports set to 60 seconds.
+- FIX:DB.LibsDB.OscadaLibs: base.codeState: fixed for the type "Integer" of the IO "in".
+- !!:SYS.Function,DAQ.{JavaLikeCalc,LogicLev,ModBus,Siemens}: Expanded for tracing the function program changing and hot restarting the executing procedures setting the flag "f_start".
+- !!:FIX:DAQ.JavaLikeCalc: Fixed for the recursive call, observed on recursive widgets creating in UI.VCAEngine.
+    Some original messages expanded.
+- !!:FIX:Protocol.UserProtocol: Fixed for the DAQ-template links init after the protocol copy.
+    Some exchanging attributes of the DAQ-mode set to optional one.
+    Expanded for work only into input or output requesting mode, additionally to the both one.
+- Transport.Sockets: The session object cleaned from spare clntDetchCnt.
+    The "IO log" expanded for some extra messages to the output transport starting stages.
+- !:UI.QTCfg: The moving operations of the configuration table expanded by the hot keys "Ctrl+Up" and "Ctrl+Down".
+- !!:FIX:UI.VCAEngine: Expanded for limiting the project widgets depth in 10 levels, mostly for limiting the recursion.
+    FIX:User API function wdgAt() fixed for return zero at wrong connection.
+    Removed for the spare field "Use" on the session widgets.
+- !!!:FIX:UI.Vision: Expanded for the planning of the updating period depending to the real connection quality of the runtime mode, like to UI.WebVision.
+    FIX: Fixed in the properties edition dialogues of Pages/Libraries and Widgets for:
+	- preventing for closing at Esc;
+	- disabling for timeouted canceling of the LineEdit;
+	- unbinding the edited state from the visibility for TextEdit;
+	- preventing from lost changes into the tab "Process".
+    FIX: Fixed for LineEdit marging from the hidden icon size, for the spinned Real and Integer.
+- !!!!:UI.WebUser: Expanded by the DAQ-templates support. Revised for all messages and the documentation.
+- UI.WebVision: External windows of the interface prevented from flicking by it real closing after missing this page in the VCA-engine.
+
+
 2018-11-19 Roman (stable)
 - FIX:Protocol.UserProtocol: Fixed for the limiting message.
 
