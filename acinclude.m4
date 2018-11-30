@@ -1482,8 +1482,9 @@ AC_DEFUN([AX_LIB_Qt],
 	if test "x${Qt_use}" = "x"; then
 	    PKG_CHECK_MODULES([Qt5Widgets],[Qt5Widgets > 5.1.0],[],AC_MSG_ERROR([Neither QT4 or Qt5 library QtGui is not found! Install development packages of Qt4 or Qt5 library.]))
 	    PKG_CHECK_MODULES([Qt5PrintSupport],[Qt5PrintSupport > 5.1.0],[],AC_MSG_ERROR([Library Qt5PrintSupport of Qt5 is not found! Install development packages of Qt5 library.]))
-	    QtGui_CFLAGS="$Qt5Widgets_CFLAGS $Qt5PrintSupport_CFLAGS"
-	    QtGui_LIBS="$Qt5Widgets_LIBS $Qt5PrintSupport_LIBS"
+	    PKG_CHECK_MODULES([Qt5Quick],[Qt5Quick > 5.1.0],[],AC_MSG_ERROR([Library Qt5Quick of Qt5 is not found! Install development packages of Qt5 library.]))
+	    QtGui_CFLAGS="$Qt5Widgets_CFLAGS $Qt5PrintSupport_CFLAGS $Qt5Quick_CFLAGS"
+	    QtGui_LIBS="$Qt5Widgets_LIBS $Qt5PrintSupport_LIBS $Qt5Quick_LIBS"
 	    QtGui=Qt5Widgets
 	    Qt5_use=true
 	fi

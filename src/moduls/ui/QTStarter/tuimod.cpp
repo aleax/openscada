@@ -45,6 +45,8 @@
 #include <QStyle>
 #include <QScrollBar>
 
+#include <QQuickWindow>
+
 #include <tsys.h>
 #include <tmess.h>
 #include "tuimod.h"
@@ -567,9 +569,20 @@ int StApp::topLevelWindows( )
 {
     int winCnt = 0;
     for(int iW = 0; iW < topLevelWidgets().size(); iW++)
-	if(qobject_cast<QMainWindow*>(topLevelWidgets()[iW]) && topLevelWidgets()[iW]->isVisible())
-	    winCnt++;
-
+    {
+        if(qobject_cast<QMainWindow*>(topLevelWidgets()[iW]) && topLevelWidgets()[iW]->isVisible())
+        {
+            winCnt++;
+            //mess_debug(mod->nodePath().c_str(), "QMainWindow++: %s", topLevelWidgets()[iW]->windowTitle().toStdString().c_str());
+        }
+        //TODO: QQuickWindow not listed in topLevelWidgets, need to do something else...
+        //else if(qobject_cast<QQuickWindow*>(topLevelWidgets()[iW]) && topLevelWidgets()[iW]->isVisible())
+        //{
+        //    winCnt++;
+        //    //mess_debug(mod->nodePath().c_str(), "QQuickWindow++");
+        //}
+    }
+        //mess_debug(mod->nodePath().c_str(), "topLevelWindows=%d", winCnt);
     return winCnt;
 }
 
@@ -646,6 +659,17 @@ void StApp::timerEvent( QTimerEvent *event )
 		    string sEl;
 		    while((sEl=TSYS::strSepParse(mod->startMod(),0,';',&iOff)).size() && sEl != list[iL]) ;
 		    if(mod->startMod().size() && (!sEl.empty() || !iOff) && callQtModule(list[iL])) op_wnd++;
+		}
+		else if(mod->owner().modAt(list[iL]).at().modInfo("SubType") == "Qml" &&
+		    mod->owner().modAt(list[iL]).at().modFuncPresent("QQuickWindow *openWindow();"))
+		{
+		    AutoHD<TModule> QtMod = mod->owner().modAt(list[iL]);
+
+		    // Search module into the start list
+		    int iOff = 0;
+		    string sEl;
+		    while((sEl=TSYS::strSepParse(mod->startMod(),0,';',&iOff)).size() && sEl != list[iL]) ;
+		    if(mod->startMod().size() && (!sEl.empty() || !iOff) && callQmlModule(list[iL])) op_wnd++;
 		}
 
 	//delete splash;
@@ -741,6 +765,7 @@ void StApp::createTray( )
     tAct = trayMenu->addAction(QIcon(":/images/exit.png"), _("Exit the program"));
     tAct->setObjectName("*exit*");
     QObject::connect(tAct, SIGNAL(triggered()), this, SLOT(callQtModule()));
+    QObject::connect(tAct, SIGNAL(triggered()), this, SLOT(callQmlModule()));
     tray->setContextMenu(trayMenu);
     tray->show();
 }
@@ -751,6 +776,16 @@ void StApp::callQtModule( )
     if(obj->objectName() == "*exit*")	SYS->stop();
     else {
 	try{ callQtModule(obj->objectName().toStdString()); }
+	catch(TError &err) {  }
+    }
+}
+
+void StApp::callQmlModule( )
+{
+    QObject *obj = (QObject *)sender();
+    if(obj->objectName() == "*exit*")	SYS->stop();
+    else {
+	try{ callQmlModule(obj->objectName().toStdString()); }
 	catch(TError &err) {  }
     }
 }
@@ -811,6 +846,25 @@ void StApp::makeStarterMenu( QWidget *mn )
 	    QObject::connect(act, SIGNAL(triggered()), this, SLOT(callQtModule()));
 	    mn->addAction(act);
 	}
+    	else if(mod->owner().modAt(list[iL]).at().modInfo("SubType") == "Qml" &&
+	    mod->owner().modAt(list[iL]).at().modFuncPresent("QQuickWindow *openWindow();"))
+	{
+	    AutoHD<TModule> QtMod = mod->owner().modAt(list[iL]);
+
+	    QIcon icon;
+	    if(mod->owner().modAt(list[iL]).at().modFuncPresent("QIcon icon();")) {
+		QIcon(TModule::*iconGet)();
+		mod->owner().modAt(list[iL]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
+		icon = ((&mod->owner().modAt(list[iL]).at())->*iconGet)( );
+	    } else icon = QIcon(":/images/oscada_qt.png");
+	    QAction *act = new QAction(icon, QtMod.at().modName().c_str(), mn);
+	    act->setObjectName(list[iL].c_str());
+	    //act_1->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_1);
+	    act->setToolTip(QtMod.at().modName().c_str());
+	    act->setWhatsThis(QtMod.at().modInfo("Description").c_str());
+	    QObject::connect(act, SIGNAL(triggered()), this, SLOT(callQmlModule()));
+	    mn->addAction(act);
+	}
 }
 
 void StApp::lastWinClose( )
@@ -840,6 +894,27 @@ bool StApp::callQtModule( const string &nm )
     QMainWindow *(TModule::*openWindow)( );
     QtMod.at().modFunc("QMainWindow *openWindow();",(void (TModule::**)()) &openWindow);
     QMainWindow *new_wnd = ((&QtMod.at())->*openWindow)( );
+    if(!new_wnd) return false;
+
+    switch(s2i(SYS->cmdOpt("showWin"))) {
+	case 1:	new_wnd->showMaximized();	break;
+	case 2:	new_wnd->showFullScreen();	break;
+	default: new_wnd->show();
+    }
+
+    return true;
+}
+
+bool StApp::callQmlModule( const string &nm )
+{
+    vector<string> list;
+
+    setProperty("closeToTray", mod->closeToTray());
+
+    AutoHD<TModule> QtMod = mod->owner().modAt(nm);
+    QQuickWindow *(TModule::*openWindow)( );
+    QtMod.at().modFunc("QQuickWindow *openWindow();",(void (TModule::**)()) &openWindow);
+    QQuickWindow *new_wnd = ((&QtMod.at())->*openWindow)( );
     if(!new_wnd) return false;
 
     switch(s2i(SYS->cmdOpt("showWin"))) {
@@ -981,6 +1056,37 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
 			      .arg(QtMod.at().modInfo("Description").c_str())
 			      .arg(QtMod.at().modInfo("License").c_str()));
 	    QObject::connect(butt, SIGNAL(clicked(bool)), mod->QtApp, SLOT(callQtModule()));
+	    wnd_lay->addWidget(butt, 0, 0);
+	}
+	    else if(mod->owner().modAt(list[iL]).at().modInfo("SubType") == "Qml" &&
+		mod->owner().modAt(list[iL]).at().modFuncPresent("QQuickWindow *openWindow();"))
+	{
+	    QIcon icon;
+	    if(mod->owner().modAt(list[iL]).at().modFuncPresent("QIcon icon();")) {
+		QIcon (TModule::*iconGet)();
+		mod->owner().modAt(list[iL]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
+		icon = ((&mod->owner().modAt(list[iL]).at())->*iconGet)( );
+	    }
+	    else icon = QIcon(":/images/oscada_qt.png");
+
+	    AutoHD<TModule> QtMod = mod->owner().modAt(list[iL]);
+	    QPushButton *butt = new QPushButton(icon, QtMod.at().modName().c_str(), centralWidget());
+	    butt->setObjectName(list[iL].c_str());
+	    butt->setToolTip(QString(_("Call the Qml-based UI module '%1'")).arg(list[iL].c_str()));
+	    butt->setWhatsThis(QString(_("Module: %1\n"
+		"Name: %2\n"
+		"Source: %3\n"
+		"Version: %4\n"
+		"Author: %5\n"
+		"Description: %6\n"
+		"License: %7")).arg(QtMod.at().modInfo("Module").c_str())
+			      .arg(QtMod.at().modInfo("Name").c_str())
+			      .arg(QtMod.at().modInfo("Source").c_str())
+			      .arg(QtMod.at().modInfo("Version").c_str())
+			      .arg(QtMod.at().modInfo("Author").c_str())
+			      .arg(QtMod.at().modInfo("Description").c_str())
+			      .arg(QtMod.at().modInfo("License").c_str()));
+	    QObject::connect(butt, SIGNAL(clicked(bool)), mod->QtApp, SLOT(callQmlModule()));
 	    wnd_lay->addWidget(butt, 0, 0);
 	}
 
@@ -1129,6 +1235,7 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
     butt->setToolTip(_("Exit the program"));
     butt->setWhatsThis(_("The button for exit the program."));
     QObject::connect(butt, SIGNAL(clicked(bool)), mod->QtApp, SLOT(callQtModule()));
+    QObject::connect(butt, SIGNAL(clicked(bool)), mod->QtApp, SLOT(callQmlModule()));
     wnd_lay->addWidget(butt, 0, 0);
 }
 

@@ -121,6 +121,7 @@ public:
 
     void createTray( );
     bool callQtModule( const string &nm );
+    bool callQmlModule( const string &nm );
 
     bool updLookFeel( );
 
@@ -145,6 +146,7 @@ protected:
 private slots:
     void startDialog( );
     void callQtModule( );
+    void callQmlModule( );
     void makeStarterMenu( QWidget *mn = NULL );
     void lastWinClose( );
     void trayAct( QSystemTrayIcon::ActivationReason reason );
