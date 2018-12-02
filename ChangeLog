@@ -1,3 +1,21 @@
+2018-12-02 Roman (stable)
+- !!!!:DB.LibsDB.OscadaLibs: The full featured implementation of the protocol OWEN for data acquisition is added.
+    Currently there are problems yet with some configuration functions like "O.ALr", which initially return error 0x31 on their reading.
+- FIX:DB.Model.AGLKS.St: Fixed in the transport Serial.testRelease to prevent the writing to the system PTS /dev/pts/6, disabling it.
+- SYS.TBDS: The attribute "mEn" moved to the protected space.
+- FIX:SYS.DAQ.TParamContr,DAQ.DAQGate: Fixed for the copying operation, disabling the destination node before.
+    To copy attributes and their archives of DAQ.DAQGate mostly.
+- !!!!:DB.{MySQL,PostgreSQL,FireBird}: Improved and tested for hot restoring of the lost connections and without the data lost.
+- !!!!:FIX:DB.FireBird: Restored for the main work in the primary keys requesting and adapted to FireBird version 3.
+- !!!!:FIX:DB.MySQL: Resolved for crashing in the built-in reconnection (by MYSQL_OPT_RECONNECT), which replaced for the own and hot reconnection.
+- !:FIX:UI.VCAEngine: Fixed in forming the processed ellements list at the runtime function start (f_start).
+- !:FIX:UI.Vision: Fixed for properties of the geometry update on the graphical widgets editing.
+    Fixed to remove the selection dots at the included widget removing in the graphical widgets editing.
+    True prevented from spare requests to the remote station at the window moving.
+- FIX:UI.WebVision: Fixed for small selection list of the editable combobox.
+    Prevented from updating the editing tables.
+
+
 2018-11-25 Roman (stable)
 - FIX:data/*.init: Fixed for initial projects starting in the daemon mode, by the command-line argument "--projUserDir".
     data/*.xml: Default KeepAliveTime of the WWW-transports set to 60 seconds.

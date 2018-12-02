@@ -27,7 +27,7 @@
 #define PACKAGE_AUTHOR	_("Roman Savochenko")
 #define PACKAGE_SITE	"http://oscada.org"
 
-//Other system's constants
+//Other global constants
 #define OBJ_ID_SZ	"20"	// Typical object's ID size. Warning, the size can cause key limit on MySQL like DB.
 #define OBJ_NM_SZ	"100"	// Typical object's NAME size.
 #define USER_FILE_LIMIT	1048576	// Loading and processing files limit into userspace

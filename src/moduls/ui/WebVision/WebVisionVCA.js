@@ -898,8 +898,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    }
 				    if(combList.childNodes[0].childNodes.length) {
 					combList.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
-								 'width: '+formObj.offsetWidth+'px; height: '+Math.min(elLst.length*15,70)+'px; ';
-					combList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth+'px; height: '+Math.min(elLst.length*15,70)+'px; '+
+								 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,5)*parseInt(this.style.height))+'px; ';
+					combList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,5)*parseInt(this.style.height))+'px; '+
 									       'font: '+formObj.parentNode.fontCfg+'; ';
 					combList.childNodes[0].formObj = formObj;
 					combList.childNodes[0].focus();
@@ -1734,7 +1734,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['font'])  formObj.style.cssText = 'font: '+this.place.fontCfg+'; ';
 		    // Processing for fill and changes
-		    if(toInit || this.attrsMdf['items']) {
+		    if(toInit || (this.attrsMdf['items'] && !formObj.edIt)) {
 			hdrPresent = false, maxCols = 0, maxRows = 0;
 			items = (new DOMParser()).parseFromString(this.attrs['items'], "text/xml");
 			if(!items.children.length || (tX=items.children[0]).nodeName != "tbl") formObj.innerHTML = "";

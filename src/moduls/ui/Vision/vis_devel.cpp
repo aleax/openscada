@@ -904,7 +904,7 @@ void VisDevelop::applyWorkWdg( )
     modifyToolUpdate(work_wdg_new);
     modifyGlbStUpdate(true);
 
-    if(work_wdg == work_wdg_new) return;
+    //if(work_wdg == work_wdg_new) return;	//!!!! Commented for updating the geometry changing in the graphical development
     work_wdg = work_wdg_new;
 
     //Set/update attributes inspector
@@ -1265,7 +1265,7 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 	    if(!lst_wdg.empty() && lst_wdg != it_own)	emit modifiedItem(lst_wdg);
 	    lst_wdg = it_own;
 
-	    //Send change request to opened for edit widget
+	    //Send change request to opened for editing widget
 	    if(dw) dw->chRecord(chCtx);
 	}
     }

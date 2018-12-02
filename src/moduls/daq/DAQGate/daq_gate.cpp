@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.3"
+#define MOD_VER		"2.0.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -103,7 +103,7 @@ void TTpContr::postEnable( int flag )
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
     tpPrmAt(t_prm).fldAdd(new TFld("PRM_ADDR",_("Remote parameter address"),TFld::String,TFld::FullText|TCfg::NoVal,"100",""));
     tpPrmAt(t_prm).fldAdd(new TFld("ATTRS",_("Attributes configuration cache"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
-    tpPrmAt(t_prm).fldAdd(new TFld("STATS",_("Presence at stations"),TFld::String,TCfg::NoVal,"10000",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("STATS",_("Presence at the stations"),TFld::String,TCfg::NoVal,"10000",""));
     //Set to read only
     //for(unsigned iSz = 0; iSz < tpPrmAt(t_prm).fldSize(); iSz++)
     //	tpPrmAt(t_prm).fldAt(iSz).setFlg(tpPrmAt(t_prm).fldAt(iSz).flg()|TFld::NoWrite);
@@ -742,6 +742,8 @@ void TMdPrm::enable( )
 {
     if(enableStat())	return;
 
+    loadIO();
+
     TParamContr::enable();
 
     owner().prmEn(this, true);	//Put to process
@@ -774,10 +776,16 @@ void TMdPrm::setStats( const string &vl )
 
 void TMdPrm::load_( )
 {
-    //Load from cache
     //TParamContr::load_();
 
-    //Restore attributes from the cache
+    loadIO();
+
+    sync();	//Sync for the attributes list
+}
+
+void TMdPrm::loadIO( )
+{
+    //Restoring the attributes from the cache
     try {
 	XMLNode attrsNd;
 	attrsNd.load(cfg("ATTRS").getS());
@@ -790,9 +798,6 @@ void TMdPrm::load_( )
 	    //vlAt(aEl->attr("id")).at().setS(aEl->text());
 	}
     } catch(TError &err) { }
-
-    //Sync attributes list
-    sync();
 }
 
 void TMdPrm::save_( )

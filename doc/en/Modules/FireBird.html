@@ -31,7 +31,7 @@
 <td> <a href="../Modules/FireBird.html" title="Special:MyLanguage/Modules/FireBird">FireBird</a> </td>
 <td> DB FireBird
 </td>
-<td> 1.6 </td>
+<td> 2.0 </td>
 <td> GPL2 </td>
 <td> bd_FireBird.so </td>
 <td> en,uk,ru,de </td>
@@ -120,39 +120,40 @@ $ gsec -user sysdba -pass masterkey -mo sysdba -pw 123456</pre></li>
 <table class="wikitable">
 
 <tr>
-<th> Operations for 1000 records, seconds </th>
-<th> AMD Turion L625 1.6, 2G, FireBird [2.1.3 Local SuperServer; 100Base-TX; 2.5.2 100Base-TX SuperServer ForcedWrites=Off; ForcedWrites=On] </th>
-<th> Intel(R) Core(TM) i3 CPU 1.33GHz, 3G, HDD [2.5.2 100Base-TX SuperServer ForcedWrites=Off; ForcedWrites=On]
+<th> Operations for 1000 records, seconds
+</th>
+<th> FireBird 2.5<br />AMD Turion L625 1.6, 2G, FireBird [2.1.3 Local SuperServer; 100Base-TX; 2.5.2 100Base-TX SuperServer ForcedWrites=Off; ForcedWrites=On]<br /> Intel(R) Core(TM) i3 CPU 1.33GHz, 3G, HDD [2.5.2 100Base-TX SuperServer ForcedWrites=Off; ForcedWrites=On] </th>
+<th> FireBird 3<br />Intel(R) Core(TM) i7 CPU 2.6GHz, 12G, FastSSD, Local network
 </th></tr>
 <tr>
 <td> <i>Creating:</i> </td>
-<td> 0.93; 1.15; 4.4; 5.2 </td>
-<td> 3.68; 4.67
+<td> [0.93; 1.15; 4.4; 5.2]; [3.68; 4.67] </td>
+<td> 0.5
 </td></tr>
 <tr>
 <td> <i>Updating:</i> </td>
-<td> 2.74; 2.94; 5.1; 5.2 </td>
-<td> 3.88; 4.54
+<td> [2.74; 2.94; 5.1; 5.2]; [3.88; 4.54] </td>
+<td> 0.47
 </td></tr>
 <tr>
 <td> <i>Getting:</i> </td>
-<td> 1.64; 2.22; 5.0; <span style="color: red">27.8</span> </td>
-<td> 3.69; <span style="color: red">28.8</span>
+<td> [1.64; 2.22; 5.0; <span style="color: red">27.8</span>]; [3.69; <span style="color: red">28.8</span>] </td>
+<td> 2.95
 </td></tr>
 <tr>
 <td> <i>Seeking:</i> </td>
-<td> - </td>
-<td> 5.36; <span style="color: red">32</span>
+<td> -&nbsp;; [5.36; <span style="color: red">32</span>] </td>
+<td> 3.3
 </td></tr>
 <tr>
 <td> <i>Seeking in preload:</i> </td>
-<td> - </td>
-<td> 0.045; 0.065
+<td> -&nbsp;; [0.045; 0.065] </td>
+<td> 0.047
 </td></tr>
 <tr>
 <td> <i>Deleting:</i> </td>
-<td> 0.65; 1.04; 2.0; 2.4 </td>
-<td> 1.69; 1.66
+<td> [0.65; 1.04; 2.0; 2.4]; [1.69; 1.66] </td>
+<td> 0.17
 </td></tr></table>
 <h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">6</span> Notes</span></h2>
 <p>The DBMS FireBird has more architecture's limits and problems by the InterBase inheritance and from parent OS MS Windows which prevent it wide using for more tasks. Known limits and problems:

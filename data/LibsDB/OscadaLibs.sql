@@ -10,7 +10,7 @@ Allow realisation of the main templates.','Автор: Роман Савочен
 Версия: 1.0.1
 Предоставляет реализацию базовых шаблонов.');
 INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 2.1.0','','tmplib_DevLib','Библиотека устройств','');
+Version: 2.2.0','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 INSERT INTO "ParamTemplLibs" VALUES('LowDevLib','Low-level devices','Низькорівневі пристрої','The templates library provides common templates and related functions for custom access to low-level devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
 Version: 1.2.0','','tmplib_LowDevLib','Низкоуровневые устройства','');
@@ -1278,6 +1278,9 @@ INSERT INTO "tmplib_DevLib_io" VALUES('pulsarM','transport','Transport',0,64,'Se
 INSERT INTO "tmplib_DevLib_io" VALUES('pulsarM','addr','Address [0...99999999]',1,64,'12345678',1,'Адрес [0...99999999]','','Адреса [0...99999999]','');
 INSERT INTO "tmplib_DevLib_io" VALUES('pulsarM','this','Object',4,0,'',3,'Объект','','Об''єкт','');
 INSERT INTO "tmplib_DevLib_io" VALUES('pulsarM','nChnl','Channels number',1,32,'0',2,'Количество каналов','','Кількість каналів','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OWEN','transport','Transport',0,64,'Serial.out_owen',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OWEN','items','Items set "{addr}:{func}:{f|iu{8|16}|s}:{r|w}[:{id}[:{nm}]]"',0,36,'',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OWEN','this','Object',4,0,'',2,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2956,6 +2959,12 @@ INSERT INTO "Trs" VALUES('input','Вхід','Вход');
 INSERT INTO "Trs" VALUES('Error the output transport ''%1''.','Помилка вихідного транспорту ''%1''','Ошибка выходного транспорта ''%1''.');
 INSERT INTO "Trs" VALUES('The address ''%1'' is out of the range [0...99999999].','Адреса ''%1'' поза діапазоном [0...99999999].','Адрес ''%1'' за диапазоном [0...99999999].');
 INSERT INTO "Trs" VALUES('No data.','Немає даних.','Нет данных');
+INSERT INTO "Trs" VALUES('Address out of the range [-2047...255].','','');
+INSERT INTO "Trs" VALUES('Wrong or no response.','','');
+INSERT INTO "Trs" VALUES('Error CRC.','','');
+INSERT INTO "Trs" VALUES('Data size error.','','');
+INSERT INTO "Trs" VALUES('The data size is not equal to pointed one.','','');
+INSERT INTO "Trs" VALUES('Write','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -5506,6 +5515,236 @@ else {
 }
 
 f_err = t_err;','','',1542134045);
+INSERT INTO "tmplib_DevLib" VALUES('OWEN','OWEN','','','OWEN data sources implementation in the OWEN protocol. Implemented wholly in the template for the protocol requesting and for dynamic data model of the OWEN data sources'' data with support of the writing and original names of the parameters.
+Author: Roman Savochenko <rom_as@oscada.org>, Constantine (IrmIngeneer)
+Version: 0.8.0','','',30,0,'JavaLikeCalc.JavaScript
+function hash(data, isName) {
+	for(CRC = 0, i = 0; i < data.length; i++) {
+		b = data.charCodeAt(i);
+		for(j = 0; j < ((isName==true)?7:8); j++, b = b << 1)
+			CRC = ((b^(CRC>>8)&0x80)?(CRC<<1)^0x8F57:CRC<<1) & 0xFFFF;
+	}
+	return CRC;
+}
+
+function nmHash(name) {
+	for(srcF = name + "    ", hashF = "", iV = 0; iV < srcF.length; iV++) {
+		tVl = srcF[iV]; tVl2 = srcF.charCodeAt(iV);
+		if(tVl == "." && iV > 0)	{ hashF = hashF.slice(0,-1)+SYS.strFromCharCode(hashF.charCodeAt(hashF.length-1)+1); continue; }
+		if(tVl2 >= 0x30 && tVl2 <= 0x39)		tVl = tVl2-0x30;
+		else if(tVl2 >= 0x41 && tVl2 <= 0x5A)	tVl = tVl2-0x41+10;
+		else if(tVl2 >= 0x61 && tVl2 <= 0x7A)	tVl = tVl2-0x61+10;
+		else if(tVl == "-")	tVl = 10+26;
+		else if(tVl == "_")	tVl = 10+26+1;
+		else if(tVl == "/")	tVl = 10+26+2;
+		else if(tVl == " ")	tVl = 10+26+3;
+		else break;
+		hashF += SYS.strFromCharCode(tVl*2);
+	}
+	if(iV < name.length || hashF.length < 4)	return -1;
+	for(rez = "", iV = 0; iV < 4; iV++)
+		rez += SYS.strFromCharCode(hashF.charCodeAt(iV)*2);
+
+	//SYS.messDebug("/OWEN", "func="+name+"; code="+SYS.strDecode(rez));
+
+	return hash(rez, true);
+}
+
+//Same request to the device
+//  addr - negative for 11 bit type
+function req(tr, addr, data) {
+	if(addr < -2047 || addr > 255)	return "1:"+tr("Address out of the range [-2047...255].");
+	req = SYS.strFromCharCode((addr>=0)?abs(addr):abs(addr)>>3, ((addr>=0)?0:abs(addr<<5))|((data.length>2)?data.length-2:0x10)) + data;
+
+	// Appending CRC
+	CRC = hash(req);
+	req += SYS.strFromCharCode(CRC>>8, CRC&255);
+
+	SYS.messDebug("/OWEN", "req="+SYS.strDecode(req));
+
+	// Converting to ASCII
+	for(reqASCII = "", i = 0; i < req.length; i++)
+		reqASCII += SYS.strFromCharCode((req.charCodeAt(i)>>4)+71, (req.charCodeAt(i)&0x0F)+71);
+	req = "#" + reqASCII + "\r";
+
+	// Sending the request and getting response
+	for(resp = tr.messIO(req); resp[resp.length-1] != "\r" && (respTail=tr.messIO("")).length; )
+		resp += respTail;
+
+	// Processing the response
+	if(resp.length < req.length || resp[resp.length-1] != "\r" || resp[0] != "#" || (resp.length%2) != 0)
+		return "10:"+tr("Wrong or no response.");
+
+	//SYS.messDebug("/OWEN", "resp="+resp);
+
+	resp = resp.slice(1, resp.length-1);
+
+	// Converting to binary
+	for(respBin = "", b = 0, i = 0, fullB = false; i < resp.length; i++, fullB = !fullB) {
+		b += resp.charCodeAt(i) - 71;
+		if(fullB) { respBin += SYS.strFromCharCode(b); b = 0; } else b *= 16;
+	}
+	resp = respBin;
+
+	SYS.messDebug("/OWEN", "resp="+SYS.strDecode(resp));
+
+	// Checking for CRC
+	CRC = hash(resp.slice(0,-2));
+	if(CRC != ((resp.charCodeAt(resp.length-2)<<8)+resp.charCodeAt(resp.length-1)))
+		return "11:"+tr("Error CRC.");
+
+	if(resp.charCodeAt(1) != (resp.length-6))
+		return "12:"+tr("The data size is not equal to pointed one.");
+	else if(resp.slice(2,4) != data.slice(0,2) && ((resp.charCodeAt(2)<<8)+resp.charCodeAt(3)) != nmHash("n.Err"))
+		return "21:Unpaired function in the response.";
+
+	data = resp.slice(2, resp.length-2);
+	//if(data.length < 3)	return "49:"+tr("Data size error.");
+
+	return "0";
+}
+
+//Set transport and init
+if(f_start) {
+	dt = new Object();
+	items_ = "";
+	transport_ = transport;
+	tr = SYS.Transport.nodeAt(transport,".");
+
+	t_infW = ""; infWHoldTm = 0;
+}
+if(f_stop) return;
+
+//Parsing the items to set and to create the user attributes
+if(items != items_) {
+	items_ = items;
+	// Mark of checking to deletion needs
+	for(var iDt in dt)	dt[iDt].mark = false;
+	// Appending/Updating present ones
+	for(itOff = 0; (sIt=items.parseLine(0,itOff)).length; ) {
+		if(sIt[0] == "#")	continue;
+		off1 = 0;
+		itO = new Object();
+		itO.addr = sIt.parse(0, ":", off1).toInt();
+		itO.func = sIt.parse(0, ":", off1);
+		itO.tp = sIt.parse(0, ":", off1);
+		itO.md = sIt.parse(0, ":", off1);
+		itO.id = sIt.parse(0, ":", off1);
+		itO.nm = sIt.slice(off1);
+		if(!itO.nm.length)	itO.nm = itO.id.length ? itO.id : itO.func;
+		if(!itO.id.length)	itO.id = itO.func.replace(new RegExp("[.]"), "_");
+		SYS.messDebug("/OWEN", "id="+itO.id);
+		if(itO.tp[0] == "u" || itO.tp[0] == "i") {
+			wTp = "integer";
+			itO.sz = itO.tp.slice(1).toInt();
+			itO.sz = (itO.sz?itO.sz:16)/8;
+			if(!(itO.sz==1||itO.sz==2||itO.sz==4))	continue; 
+		}
+		else if(itO.tp == "s")	wTp = "string";
+		else if(itO.tp == "f")	wTp = "real";
+		else continue;
+		itO.rd = (itO.md.indexOf("r") >= 0); itO.wr = (itO.md.indexOf("w") >= 0);
+		if(!itO.wr)	wTp += "|ro";
+		if((itO.funcH=nmHash(itO.func)) < 0)	continue;
+		// Apending
+		dt[itO.id] = itO;
+		if(itO.rd || itO.wr) {
+			this.attrAdd(itO.id, itO.nm, wTp);
+			if(itO.wr)	itO.val = this[itO.id].get();
+			itO.mark = true;
+			//SYS.messDebug("/OWEN", "itO="+itO.id+"; tmpAddr="+tmpAddr+"; addr="+itO.addr);
+		}
+	}
+	// Check, remove item and set to EVAL the attribute
+	for(var iDt in dt) {
+		if(dt[iDt].mark)	continue;
+		this[dt[iDt].id].set(EVAL, 0, 0, true);	//If the attribute locked
+		this.attrDel(dt[iDt].id);
+		delete dt[iDt];
+	}
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	transport_ = transport;
+	tr = SYS.Transport.nodeAt(transport,".");
+}
+if(!tr)	t_err = "1:"+tr("Error the output transport ''%1''.").replace("%1",transport);
+else {
+	t_inf = "";
+	if(infWHoldTm && SYS.time() > infWHoldTm)	t_infW = "", infWHoldTm = 0;
+	
+	//The parameters processing
+	for(var iDt in dt) {
+		itO = dt[iDt];
+		if(!t_err.toInt()) {
+			SYS.messDebug("/OWEN", "iDt="+iDt);
+
+			// Writing
+			if(itO.wr && !(tVl=this[itO.id].get()).isEVal() && tVl != itO.val) {
+				data = SYS.strFromCharCode(itO.funcH>>8, itO.funcH&0xFF);
+				if(itO.tp == "f") {
+					tVl2 = tVl3 = 0;
+					Special.FLibSYS.floatSplitWord(tVl, tVl2, tVl3);
+					data += SYS.strFromCharCode(tVl3>>8, tVl3&0xFF, tVl2>>8) + ((tVl2&0xFF)?SYS.strFromCharCode(tVl2&0xFF):"");
+				}
+				else if(itO.tp[0] == "u" || itO.tp[0] == "i") {
+					for(tVl2 = SYS.strFromCharCode(tVl&0xFF), tVl = tVl>>8; tVl; tVl = tVl>>8)
+						tVl2 = SYS.strFromCharCode(tVl&0xFF) + tVl2;
+					data += tVl2;
+				}
+				else if(itO.tp == "s")
+					for(iV = tVl.length-1; iV >= 0; iV--)	data += tVl[iV];
+
+				if(!(t_err=req(tr,itO.addr,data)).toInt()) {
+					if(((data.charCodeAt(0)<<8)+data.charCodeAt(1)) == nmHash("n.Err")) {
+						t_infW += (t_infW.length?"; ":": ")+itO.nm+":nErr=0x"+data.charCodeAt(2).toString(16);
+						infWHoldTm = SYS.time()+10;
+					} else itO.val = tVl;
+				}
+			}
+
+			// Reading
+			data = SYS.strFromCharCode(itO.funcH>>8, itO.funcH&0xFF);
+			if(itO.rd && !(t_err=req(tr,itO.addr,data)).toInt()) {
+				if(((data.charCodeAt(0)<<8)+data.charCodeAt(1)) == nmHash("n.Err") && itO.funcH != nmHash("n.Err")) {
+					t_inf += (t_inf.length?"; ":": ")+itO.nm+":nErr=0x"+data.charCodeAt(2).toString(16);
+					this[itO.id].set(EVAL, 0, 0, true); itO.val = EVAL;
+				}
+				else {
+					data = data.slice(2);
+					if(itO.tp == "f") {
+						if(data.length == 1)
+							tVl = EVAL, t_inf += (t_inf.length?"; ":": ")+itO.nm+":err=0x"+data.charCodeAt(0).toString(16);
+						else if(data.length >= 3)
+							tVl = Special.FLibSYS.floatMergeWord(
+								data.charCodeAt(2)*256+((data.length < 4)?0:data.charCodeAt(3)),
+								data.charCodeAt(0)*256+data.charCodeAt(1));
+						else tVl = EVAL;
+						this[itO.id].set(tVl, 0, 0, true); itO.val = tVl;
+					}
+					else if(itO.tp[0] == "u" || itO.tp[0] == "i") {
+						for(tVl = 0, iV = 0; iV < data.length; iV++)
+							tVl = (tVl<<8) | data.charCodeAt(iV);
+						this[itO.id].set(tVl, 0, 0, true); itO.val = tVl;
+						//SYS.messDebug("/OWEN", "Integer data="+SYS.strDecode(data)+"; Sz="+itO.sz);
+					}
+					else if(itO.tp == "s")	{
+						for(tVl = "", iV = 0; iV < data.length; iV++)	tVl = data[iV] + tVl;
+						this[itO.id].set(tVl, 0, 0, true);	 itO.val = tVl;
+					}
+					continue;
+				}
+			}
+		}
+		this[itO.id].set(EVAL, 0, 0, true); itO.val = EVAL;
+	}
+}
+
+f_err = t_err;
+if(!f_err.toInt())	f_err += t_inf + (t_infW.length?" "+tr("Write")+t_infW:"");','','',1543757639);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -10026,66 +10265,6 @@ else if(errCd == 4) io.setAttr("err",""+(10+errCd)+":Err_range: "+tr("Data range
 else if(errCd == 5) io.setAttr("err",""+(10+errCd)+":Err_inhibited: "+tr("Inhibited."));
 else if(errCd == 6) io.setAttr("err",""+(10+errCd)+":Err_obso: "+tr("Obsolete command. No action taken, but not really an error."));
 else io.setAttr("err",""+(10+errCd)+":"+tr("Unknown error."));',0,1509283368);
-INSERT INTO "UserProtocol_uPrt" VALUES('OWEN','OWEN','','','Protocol level of mostly models of OWEN devices by specific protocol.
-Author: Constantine (IrmIngeneer)
-Refactoring: Roman Savochenko <rom_as@oscada.org>','','',1,'',0,'','JavaLikeCalc.JavaScript
-//Request form:
-//<mess addr="1" err="1:Error">{req}</mess> - message tag
-//  req - request/respond data;
-//  addr - remote station address (0...2047);
-//  err - sets for the request result.
-io.setAttr("err", "");
-addr = io.attr("addr").toInt();
-if(addr < 0 || addr > 2047) { io.setAttr("err", "1:"+tr("Device address out of range 0...2047")); return; }
-request = SYS.strFromCharCode((addr<256)?addr:addr>>3, ((addr<256)?0:addr<<5)|0x10) + io.text();
-
-// CRC append
-for(CRC = 0, i = 0; i < request.length; i++) {
-	b = request.charCodeAt(i);
-	for(j = 0; j < 8; j++, b = b << 1)
-		CRC = ((b^(CRC>>8)&0x80)?(CRC<<1)^0x8F57:CRC<<1) & 0xFFFF;
-}
-request += SYS.strFromCharCode(CRC>>8, CRC&255);
-
-// Convert to ASCII
-for(reqASCII = "", i = 0; i < request.length; i++)
-	reqASCII += SYS.strFromCharCode((request.charCodeAt(i)>>4)+71, (request.charCodeAt(i)&0x0F)+71);
-
-// Result request
-request = "#" + reqASCII + "\r";
-
-//Send the request and get respond
-for(resp = tr.messIO(request); resp[resp.length-1] != "\r" && (respTail=tr.messIO("")).length; ) resp += respTail;
-
-//Respond process
-if(resp.length < 14 || resp[resp.length-1] != "\r" || resp[0] != "#" || (resp.length%2) != 0) {
-	io.setAttr("err", "10:"+tr("Wrong or no a respond."));
-	return; 
-}
-
-// Remove markers
-resp = resp.slice(1, resp.length-1);
-
-// Convert to binary
-for(respBin = "", b = 0, i = 0, fullB = false; i < resp.length; i++, fullB = !fullB) {
-	b += resp.charCodeAt(i) - 71;
-	if(fullB) { respBin += SYS.strFromCharCode(b); b = 0; } else b *= 16;
-}
-resp = respBin;
-
-// Check for CRC
-for(CRC = 0, i = 0; i < resp.length-2; i++) {
-	b = resp.charCodeAt(i);
-	for(j = 0; j < 8; j++, b = b << 1)
-		CRC = ((b^(CRC>>8)&0x80)?(CRC<<1)^0x8F57:CRC<<1) & 0xFFFF;
-}
-if(CRC != ((resp.charCodeAt(resp.length-2)<<8)+resp.charCodeAt(resp.length-1))) {
-	io.setAttr("err", "11:"+tr("CRC error."));
-	return;
-}
-
-//Return result
-io.setText(resp.slice(0,resp.length-2));',0,1425737955);
 INSERT INTO "UserProtocol_uPrt" VALUES('IT3','Temperature measurement IT-3','','','Protocol level of temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".

@@ -1959,6 +1959,7 @@ DevelWdgView::~DevelWdgView( )
 	for(int iC = 0; iC < children().size(); iC++)
 	    if(qobject_cast<DevelWdgView*>(children().at(iC)))
 		((DevelWdgView*)children().at(iC))->setSelect(false, PrcChilds);
+	if(wLevel() != 0) levelWidget(0)->setSelect(false);
     }
 
     //Child widgets remove before
@@ -1982,10 +1983,10 @@ WdgView *DevelWdgView::newWdgItem( const string &iwid )
 
 void DevelWdgView::load( const string& item, bool load, bool init, XMLNode *aBr )
 {
-    //Check for single attribute update
+    //Checking to update single attribute
     size_t epos = item.rfind("/");
     if(epos != string::npos && item.compare(epos,3,"/a_") == 0) {
-	string tWdgNm = item.substr(0,epos);
+	string tWdgNm = item.substr(0, epos);
 	string tAttrNm = item.substr(epos+3);
 	XMLNode req("get");
 	req.setAttr("path",tWdgNm+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",tAttrNm);
@@ -3135,7 +3136,7 @@ bool DevelWdgView::event( QEvent *event )
 	    case QEvent::FocusIn:
 		setFocus(true);
 		if(edit()) break;
-		setSelect(true, PrcChilds);
+		if(mainWin()->workWdg() != id()) setSelect(true, PrcChilds);
 		mainWin()->setWdgScale(false);
 		mainWin()->setWdgVisScale(mVisScale);
 		return true;
@@ -3144,10 +3145,10 @@ bool DevelWdgView::event( QEvent *event )
 		if(QApplication::focusWidget() && (QApplication::focusWidget() == this || strncmp("QMenu",QApplication::focusWidget()->metaObject()->className(),5) == 0)) break;
 		if(!parentWidget()->hasFocus()) setFocus(false);
 		if(QApplication::focusWidget() != this && !mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() &&
-		    !fPrevEdExitFoc && (!editWdg || !editWdg->fPrevEdExitFoc) && !parentWidget()->hasFocus())
+			!fPrevEdExitFoc && (!editWdg || !editWdg->fPrevEdExitFoc) && !parentWidget()->hasFocus())
 		{
 		    if(editWdg)	editWdg->setSelect(false, PrcChilds);
-		    setSelect(false);
+		    //setSelect(false);	//!!!! To prevent spare requests for to the remote station at the window moving.
 		}
 		return true;
 	    case QEvent::MouseMove: {

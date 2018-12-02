@@ -1140,7 +1140,7 @@ fdfa9weotHT55KrlRp06LxgUqckwoHoGjKDwR8bCk7s0QobgxuFufjEqUZg44VXw
 </CertKey>
 </prms>
 ');
-INSERT INTO "Transport_in" VALUES('testRelease','Serial','','/dev/pts/7:115200:8N1','/dev/pts/6:115200:8N1','UserProtocol.test',1,'','','','','','','<prms TMS="2.86:48" TaskPrior="0" MdmTm="20" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitResp="OK" MdmRingReq="RING" MdmRingAnswer="ATA" MdmRingAnswerResp="CONNECT" />
+INSERT INTO "Transport_in" VALUES('testRelease','Serial','','/dev/pts/7:115200:8N1','/dev/pts/6:115200:8N1','UserProtocol.test',0,'','','','','','','<prms TMS="2.86:48" TaskPrior="0" MdmTm="20" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitResp="OK" MdmRingReq="RING" MdmRingAnswer="ATA" MdmRingAnswerResp="CONNECT" />
 ');
 CREATE TABLE 'Transport_out' ("ID" TEXT DEFAULT '' ,"MODULE" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCRIPT" TEXT DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '' ,"SSLCertKey" TEXT DEFAULT '' ,"SSLKeyPass" TEXT DEFAULT '' ,"TMS" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCRIPT" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCRIPT" TEXT DEFAULT '' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODULE"));
 INSERT INTO "Transport_out" VALUES('testModBus','Serial','Test ModBus',' ','/dev/ttyS0:115200:8N1',0,'','','50:4','Тест ModBus',' ','Тест ModBus','','<prms TMS="97:0.95"/>

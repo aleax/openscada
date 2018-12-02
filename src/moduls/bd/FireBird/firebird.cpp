@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.6.1"
+#define MOD_VER		"2.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
@@ -125,7 +125,13 @@ void MBD::postDisable( int flag )
 void MBD::enable( )
 {
     MtxAlloc res(connRes, true);
-    if(enableStat()) return;
+    if(enableStat()) {
+	ISC_STATUS_ARRAY status;
+	isc_detach_database(status, &hdb);
+	hdb = 0;
+	mEn = false;
+	//return;
+    }
 
     //DB address parsing
     int off = 0;
@@ -182,8 +188,8 @@ void MBD::allowList( vector<string> &list ) const
     const_cast<MBD*>(this)->sqlReq("SELECT rdb$relation_name FROM rdb$relations WHERE "
 	"((rdb$system_flag = 0) OR (rdb$system_flag IS NULL)) AND "
 	"(rdb$view_source IS NULL) ORDER BY rdb$relation_name", &tbl);
-    for(unsigned i_t = 1; i_t < tbl.size(); i_t++)
-	list.push_back(tbl[i_t][0]);
+    for(unsigned iT = 1; iT < tbl.size(); iT++)
+	list.push_back(tbl[iT][0]);
 }
 
 TTable *MBD::openTable( const string &inm, bool create )
@@ -277,6 +283,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     ISC_STATUS_ARRAY status;
 
     try {
+	rep:
 	ISC_STATUS rez = 0;
 	//Prepare statement
 	if((rez=isc_dsql_allocate_statement(status,&hdb,&stmt)))
@@ -294,6 +301,10 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 		case isc_network_error:
 		case isc_net_connect_err:
 		case isc_net_connect_listen_err:
+		case isc_net_write_err: case isc_net_read_err:
+		    //Try to reconnect
+		    try { enable(); goto rep; } catch(TError&) { }
+
 		    disable();
 		    throw err_sys(_("Error connecting to a DB: %s"), getErr(status).c_str());
 		default:
@@ -415,18 +426,19 @@ void MBD::getStructDB( const string &nm, vector< vector<string> > &tblStrct )
     sqlReq("SELECT R.RDB$FIELD_NAME, F.RDB$FIELD_TYPE, F.RDB$FIELD_LENGTH "
 	"FROM RDB$FIELDS F, RDB$RELATION_FIELDS R where F.RDB$FIELD_NAME = R.RDB$FIELD_SOURCE and "
 	"R.RDB$SYSTEM_FLAG = 0 and R.RDB$RELATION_NAME = '"+mod->sqlReqCode(nm)+"'", &tblStrct, false);
+
     if(tblStrct.size() > 1) {
 	//Get keys
 	vector< vector<string> > keyLst;
 	sqlReq("SELECT I.RDB$FIELD_NAME, C.RDB$CONSTRAINT_TYPE "
 	    "FROM RDB$RELATION_CONSTRAINTS C, RDB$INDEX_SEGMENTS I "
 	    "WHERE C.RDB$INDEX_NAME = I.RDB$INDEX_NAME AND C.RDB$RELATION_NAME = '"+
-	    mod->sqlReqCode(name())+"'", &keyLst, false);
+	    mod->sqlReqCode(nm)+"'", &keyLst, false);
 	tblStrct[0].push_back("Key");
-	for(unsigned i_f = 1, i_k; i_f < tblStrct.size(); i_f++) {
-	    for(i_k = 1; i_k < keyLst.size(); i_k++)
-		if(tblStrct[i_f][0] == keyLst[i_k][0]) break;
-	    tblStrct[i_f].push_back((i_k<keyLst.size()) ? keyLst[i_k][1] : "");
+	for(unsigned iF = 1, iK; iF < tblStrct.size(); iF++) {
+	    for(iK = 1; iK < keyLst.size(); iK++)
+		if(tblStrct[iF][0] == keyLst[iK][0]) break;
+	    tblStrct[iF].push_back((iK<keyLst.size()) ? keyLst[iK][1] : "");
 	}
     }
 }
@@ -663,11 +675,11 @@ void MTable::fieldSet( TConfig &cfg )
     // Add key list to queue
     bool next = false, noKeyFld = false,
 	 isForceUpdt = cfg.reqKeys();		//Force update by ReqKeys or reqKey() present
-    for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
-	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+    for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
+	TCfg &u_cfg = cfg.cfg(cf_el[iEl]);
 	if(!u_cfg.isKey()) continue;
 	if(!next) next = true; else req_where = req_where + "AND ";
-	req_where += "\"" + mod->sqlReqCode(cf_el[i_el],'"') + "\"=" + getVal(u_cfg,TCfg::ExtValTwo) + " ";
+	req_where += "\"" + mod->sqlReqCode(cf_el[iEl],'"') + "\"=" + getVal(u_cfg,TCfg::ExtValTwo) + " ";
 
 	if(!isForceUpdt && u_cfg.extVal()) isForceUpdt = true;
 
@@ -693,13 +705,13 @@ void MTable::fieldSet( TConfig &cfg )
 	    req = "INSERT INTO \"" + mod->sqlReqCode(name(),'"') + "\" ";
 	    string ins_name, ins_value;
 	    next = false;
-	    for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
-		TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+	    for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
+		TCfg &u_cfg = cfg.cfg(cf_el[iEl]);
 		if(!u_cfg.isKey() && !u_cfg.view()) continue;
 
 		bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && trPresent && !u_cfg.noTransl());
-		ins_name += (next?",\"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\" " +
-			(isTransl ? (",\""+mod->sqlReqCode(Mess->lang2Code()+"#"+cf_el[i_el],'"')+"\" ") : "");
+		ins_name += (next?",\"":"\"") + mod->sqlReqCode(cf_el[iEl],'"') + "\" " +
+			(isTransl ? (",\""+mod->sqlReqCode(Mess->lang2Code()+"#"+cf_el[iEl],'"')+"\" ") : "");
 		sval = getVal(u_cfg);
 		ins_value += (next?",":"") + sval + " " + (isTransl?(","+sval+" ") : "");
 		next = true;
@@ -712,11 +724,11 @@ void MTable::fieldSet( TConfig &cfg )
 	// Update present record
 	req = "UPDATE \"" + mod->sqlReqCode(name(),'"') + "\" SET ";
 	next = false;
-	for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
-	    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+	for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
+	    TCfg &u_cfg = cfg.cfg(cf_el[iEl]);
 	    if((u_cfg.isKey() && !u_cfg.extVal()) || !u_cfg.view()) continue;
 	    bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && trPresent && !u_cfg.noTransl());
-	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[i_el]) : cf_el[i_el];
+	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[iEl]) : cf_el[iEl];
 	    sval = getVal(u_cfg);
 	    req += (next?",\"":"\"") + mod->sqlReqCode(sid,'"') + "\"=" + sval + " ";
 	    next = true;
@@ -763,7 +775,7 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
 
     //Prepare request for fix structure
     string req = "ALTER TABLE \"" + mod->sqlReqCode(name(),'"') + "\" ";
-    if(!appMode) req += "DROP CONSTRAINT \"pk_" + mod->sqlReqCode(name(),'"') + "\", ";
+    if(!isEmpty()) req += "DROP CONSTRAINT \"pk_" + mod->sqlReqCode(name(),'"') + "\", ";
 
     //DROP fields
     for(unsigned iFld = 1, iCf; iFld < tblStrct.size() && !appMode; iFld++) {

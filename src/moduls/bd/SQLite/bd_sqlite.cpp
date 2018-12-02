@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.2"
+#define MOD_VER		"2.5.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -608,8 +608,8 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent )
 		switch(cf.fld().type()) {
 		    case TFld::String:	if(tblStrct[iFld][2] != "TEXT")	toUpdate = true;	break;
 		    case TFld::Integer: case TFld::Boolean:
-					if(tblStrct[iFld][2] != "INTEGER")	toUpdate = true;	break;
-		    case TFld::Real:	if(tblStrct[iFld][2] != "DOUBLE")	toUpdate = true;	break;
+					if(tblStrct[iFld][2] != "INTEGER")toUpdate = true;	break;
+		    case TFld::Real:	if(tblStrct[iFld][2] != "DOUBLE")toUpdate = true;	break;
 		    default: toUpdate = true;
 		}
 		all_flds += (all_flds.size()?",\"":"\"") + TSYS::strEncode(tblStrct[iFld][1],TSYS::SQL,"\"") + "\"";

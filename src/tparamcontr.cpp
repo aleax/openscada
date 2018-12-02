@@ -75,11 +75,11 @@ TCntrNode &TParamContr::operator=( const TCntrNode &node )
     const TParamContr *src_n = dynamic_cast<const TParamContr*>(&node);
     if(!src_n) return *this;
 
+    if(enableStat()) disable();
+
     //Check for parameter type and change it if different and alow
-    if(type().name != src_n->type().name && owner().owner().tpPrmToId(src_n->type().name) >= 0) {
-	if(enableStat()) disable();
+    if(type().name != src_n->type().name && owner().owner().tpPrmToId(src_n->type().name) >= 0)
 	setType(src_n->type().name);
-    }
 
     //Configuration copy
     exclCopy(*src_n, "SHIFR;");
@@ -89,23 +89,23 @@ TCntrNode &TParamContr::operator=( const TCntrNode &node )
 	enable();
 
 	//Archives creation and copy
-	vector<string> a_ls;
-	vlList(a_ls);
-	for(unsigned iA = 0; iA < a_ls.size(); iA++) {
-	    if(!src_n->vlPresent(a_ls[iA]) || src_n->vlAt(a_ls[iA]).at().arch().freeStat()) continue;
+	vector<string> aLs;
+	vlList(aLs);
+	for(unsigned iA = 0; iA < aLs.size(); iA++) {
+	    if(!src_n->vlPresent(aLs[iA]) || src_n->vlAt(aLs[iA]).at().arch().freeStat()) continue;
 
-	    vlAt(a_ls[iA]).at().setArch();
-	    (TCntrNode&)vlAt(a_ls[iA]).at().arch().at() = (TCntrNode&)src_n->vlAt(a_ls[iA]).at().arch().at();
+	    vlAt(aLs[iA]).at().setArch();
+	    (TCntrNode&)vlAt(aLs[iA]).at().arch().at() = (TCntrNode&)src_n->vlAt(aLs[iA]).at().arch().at();
 	}
 
-	//Parameters copy
+	//Included parameters copy
 	if(mPrm >= 0) {
 	    vector<string> prm_ls;
 	    src_n->list(prm_ls);
-	    for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++) {
-		if(!owner().owner().tpPrmPresent(src_n->at(prm_ls[i_p]).at().type().name)) continue;
-		if(!present(prm_ls[i_p])) add(prm_ls[i_p], owner().owner().tpPrmToId(src_n->at(prm_ls[i_p]).at().type().name));
-		(TCntrNode&)at(prm_ls[i_p]).at() = (TCntrNode&)src_n->at(prm_ls[i_p]).at();
+	    for(unsigned iP = 0; iP < prm_ls.size(); iP++) {
+		if(!owner().owner().tpPrmPresent(src_n->at(prm_ls[iP]).at().type().name)) continue;
+		if(!present(prm_ls[iP])) add(prm_ls[iP], owner().owner().tpPrmToId(src_n->at(prm_ls[iP]).at().type().name));
+		(TCntrNode&)at(prm_ls[iP]).at() = (TCntrNode&)src_n->at(prm_ls[iP]).at();
 		//if(toEnable() && !enableStat()) enable();
 	    }
 	}
@@ -209,9 +209,9 @@ void TParamContr::LoadParmCfg( )
     //Force load present parameters
     vector<string> prm_ls;
     list(prm_ls);
-    for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++) {
-	at(prm_ls[i_p]).at().modifG();
-	at(prm_ls[i_p]).at().load();
+    for(unsigned iP = 0; iP < prm_ls.size(); iP++) {
+	at(prm_ls[iP]).at().modifG();
+	at(prm_ls[iP]).at().load();
     }
 }
 
@@ -231,11 +231,11 @@ void TParamContr::preDisable( int flag )
     type().destroy(this);
 
     //Delete or stop the archives
-    vector<string> a_ls;
-    vlList(a_ls);
-    for(unsigned iA = 0; iA < a_ls.size(); iA++)
-	if(!vlAt(a_ls[iA]).at().arch().freeStat()) {
-	    string arh_id = vlAt(a_ls[iA]).at().arch().at().id();
+    vector<string> aLs;
+    vlList(aLs);
+    for(unsigned iA = 0; iA < aLs.size(); iA++)
+	if(!vlAt(aLs[iA]).at().arch().freeStat()) {
+	    string arh_id = vlAt(aLs[iA]).at().arch().at().id();
 	    if((flag>>8) == RM_Full) SYS->archive().at().valDel(arh_id, true);
 	    else SYS->archive().at().valAt(arh_id).at().stop();
 	}
@@ -272,11 +272,11 @@ void TParamContr::save_( )
     SYS->db().at().dataSet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
 
     //Save archives
-    vector<string> a_ls;
-    vlList(a_ls);
-    for(unsigned iA = 0; iA < a_ls.size(); iA++)
-	if(!vlAt(a_ls[iA]).at().arch().freeStat())
-	    vlAt(a_ls[iA]).at().arch().at().save();
+    vector<string> aLs;
+    vlList(aLs);
+    for(unsigned iA = 0; iA < aLs.size(); iA++)
+	if(!vlAt(aLs[iA]).at().arch().freeStat())
+	    vlAt(aLs[iA]).at().arch().at().save();
 }
 
 bool TParamContr::cfgChange( TCfg &co, const TVariant &pc )
@@ -293,12 +293,12 @@ void TParamContr::enable( )
     //Enable the parameters
     vector<string> prm_list;
     list(prm_list);
-    for(unsigned i_prm = 0; i_prm < prm_list.size(); i_prm++)
-	if(at(prm_list[i_prm]).at().toEnable())
-	    try{ at(prm_list[i_prm]).at().enable(); }
+    for(unsigned iPrm = 0; iPrm < prm_list.size(); iPrm++)
+	if(at(prm_list[iPrm]).at().toEnable())
+	    try{ at(prm_list[iPrm]).at().enable(); }
 	    catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Warning, _("Error turning on the parameter '%s'."), prm_list[i_prm].c_str());
+		mess_sys(TMess::Warning, _("Error turning on the parameter '%s'."), prm_list[iPrm].c_str());
 		enErr = true;
 	    }
 
@@ -312,12 +312,12 @@ void TParamContr::disable( )
     //Disable parameters
     vector<string> prm_list;
     list(prm_list);
-    for(unsigned i_prm = 0; i_prm < prm_list.size(); i_prm++)
-	if(at(prm_list[i_prm]).at().enableStat())
-	    try{ at(prm_list[i_prm]).at().disable(); }
+    for(unsigned iPrm = 0; iPrm < prm_list.size(); iPrm++)
+	if(at(prm_list[iPrm]).at().enableStat())
+	    try{ at(prm_list[iPrm]).at().disable(); }
 	    catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Warning, _("Error turning off the parameter '%s'."), prm_list[i_prm].c_str());
+		mess_sys(TMess::Warning, _("Error turning off the parameter '%s'."), prm_list[iPrm].c_str());
 	    }
 
     type().disable(this);
@@ -354,7 +354,7 @@ void TParamContr::setType( const string &tpId )
     if(mPrm >= 0 && !owner().owner().tpPrmAt(owner().owner().tpPrmToId(tpId)).isPrmCntr) {
 	vector<string> pls;
 	list(pls);
-	for(unsigned i_p = 0; i_p < pls.size(); i_p++) del(pls[i_p], true);
+	for(unsigned iP = 0; iP < pls.size(); iP++) del(pls[iP], true);
 	grpDel(mPrm); mPrm = -1;
     }
 

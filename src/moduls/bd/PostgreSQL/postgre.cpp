@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.11.0"
+#define MOD_VER		"2.0.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -134,7 +134,12 @@ void MBD::postDisable( int flag )
 void MBD::enable( )
 {
     MtxAlloc resource(connRes, true);
-    if(enableStat())	return;
+    //Reconnecting
+    if(enableStat()) {
+	PQfinish(connection);
+	mEn = false;
+	//return;
+    }
 
     int off = 0;
     host = sTrm(TSYS::strParse(addr(),0,";",&off));
@@ -373,8 +378,8 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     if(intoTrans && intoTrans != EVAL_BOOL)	transOpen();
     else if(!intoTrans && reqCnt)		transCommit();
 
+rep:
     int64_t tmBeg = SYS->curTime();
-
     if((res=PQexec(connection,req.c_str())) == NULL) {
 	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("ERR CON for: %s"), ireq.c_str());
 	throw err_sys(SQL_CONN, _("Error connecting the DB: %s"), PQerrorMessage(connection));
@@ -385,7 +390,10 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	PQclear(res);
 
 	if(PQstatus(connection) != CONNECTION_OK) {
-	    resource.unlock();
+	    //Try to reconnect
+	    try { enable(); goto rep; } catch(TError&) { }
+
+	    //resource.unlock();
 	    disable();
 	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("ERR CON_st for: %s"), ireq.c_str());
 	    throw err_sys(SQL_CONN, _("Error connecting the DB: '%s (%s)'!"), err1.c_str(), err.c_str());
@@ -462,7 +470,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	MtxAlloc resource(connRes, true);
 	opt->setText((enableStat()?_("Enabled. "):_("Disabled. ")) +
 	    TSYS::strMess(_("Connected: %s. "),atm2s(conTm,"%d-%m-%Y %H:%M:%S").c_str()) +
-	    (enableStat()?TSYS::strMess(_("Requests: %g; Request time: %s[%s,%s,%s]; Max request time: '%s'"),nReq,
+	    (enableStat()?TSYS::strMess(_("Requests: %g; Request time: %s[%s,%s,%s]; Max time request: '%s'"),nReq,
 			tm2s(rqTm).c_str(),tm2s(rqTmMin).c_str(),tm2s(nReq?(rqTmAll/nReq):0).c_str(),tm2s(rqTmMax).c_str(),rqTmMaxVl.getVal().c_str()):""));
     }
     else TBD::cntrCmdProc(opt);

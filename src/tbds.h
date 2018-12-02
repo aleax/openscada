@@ -161,6 +161,9 @@ class TBD : public TCntrNode, public TConfig
 
 	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" ) const;
 
+	//Protected attributes
+	bool	mEn;
+
     private:
 	//Private methods
 	void postEnable( int flag );
@@ -170,8 +173,6 @@ class TBD : public TCntrNode, public TConfig
 	// Base options
 	TCfg	&mId;	//ID
 	char	&mToEn;
-
-	bool	mEn;
 
 	// Special options
 	int	mTbl;

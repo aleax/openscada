@@ -34,12 +34,13 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.9.0"
+#define MOD_VER		"3.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
 //************************************************
 
+#define MYSQL_RECONNECT		0		//!!!! MySQL/MariaDB reconnect some time crashable due to a need of releasing some locks
 #define SEEK_PRELOAD_LIM	100
 
 BDMySQL::BDMod *BDMySQL::mod;
@@ -106,8 +107,7 @@ void MBD::postDisable( int flag )
 
 	    MtxAlloc resource(connRes, true);
 	    if(!mysql_init(&tcon)) throw err_sys(_("Error initializing."));
-	    //tcon.reconnect = 1;
-	    bool reconnect = 1;
+	    my_bool reconnect = MYSQL_RECONNECT;
 	    mysql_options(&tcon, MYSQL_OPT_RECONNECT, &reconnect);
 	    if(!mysql_real_connect(&tcon,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
 		throw err_sys(_("Error connecting to the DB: %s"), mysql_error(&tcon));
@@ -122,7 +122,12 @@ void MBD::postDisable( int flag )
 void MBD::enable( )
 {
     MtxAlloc resource(connRes, true);
-    if(enableStat())	return;
+    //Reconnecting
+    if(enableStat()) {
+	mysql_close(&connect);
+	mEn = false;
+	//return;
+    }
 
     //Address parse
     int off = 0;
@@ -152,8 +157,7 @@ void MBD::enable( )
     if(!(tTm=s2i(TSYS::strParse(tms,0,",",&off))))	tTm = 1;
     mysql_options(&connect, MYSQL_OPT_WRITE_TIMEOUT, &tTm);
 
-    //connect.reconnect = 1;
-    bool reconnect = 1;
+    my_bool reconnect = MYSQL_RECONNECT;
     mysql_options(&connect, MYSQL_OPT_RECONNECT, &reconnect);
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
 	throw err_sys(_("Error connecting to the DB: %s"), mysql_error(&connect));
@@ -236,15 +240,19 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	if(irez == CR_SERVER_GONE_ERROR || irez == CR_SERVER_LOST ||
 	    eNRez == CR_SERVER_GONE_ERROR || eNRez == CR_CONN_HOST_ERROR || eNRez == CR_SERVER_LOST || eNRez == CR_CONNECTION_ERROR)
 	{
-	    resource.unlock();
+#if !MYSQL_RECONNECT
+	    //Try to reconnect
+	    try { enable(); goto rep; } catch(TError&) { }
+#endif
+	    //resource.unlock();
 	    disable();
 	    throw err_sys(_("Error connecting to the DB: '%s (%d)'!"), mysql_error(&connect), irez);
 	}
 	if(irez) {
 	    if(mysql_errno(&connect) == ER_NO_DB_ERROR) {
-		resource.unlock();
+		//resource.unlock();
 		sqlReq("USE `"+TSYS::strEncode(bd,TSYS::SQL)+"`");
-		resource.lock();
+		//resource.lock();
 		goto rep;
 	    }
 	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Error the query '%s'."), ireq.c_str());

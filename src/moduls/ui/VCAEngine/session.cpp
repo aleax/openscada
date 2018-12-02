@@ -1310,9 +1310,9 @@ void SessPage::alarmSet( bool isSet )
 
     //Included widgets process
     wdgList(lst);
-    for(unsigned i_w = 0; i_w < lst.size(); i_w++) {
-	if(!wdgAt(lst[i_w]).at().enable()) continue;
-	int iacur = wdgAt(lst[i_w]).at().attrAt("alarmSt").at().getI();
+    for(unsigned iW = 0; iW < lst.size(); iW++) {
+	if(!wdgAt(lst[iW]).at().enable()) continue;
+	int iacur = wdgAt(lst[iW]).at().attrAt("alarmSt").at().getI();
 	alev = vmax(alev, iacur&0xFF);
 	atp |= (iacur>>8) & 0xFF;
 	aqtp |= (iacur>>16) & 0xFF;
@@ -1342,8 +1342,8 @@ void SessPage::alarmQuietance( uint8_t quit_tmpl, bool isSet, bool ret )
 
     //Include widgets quietance
     wdgList( lst );
-    for(unsigned i_w = 0; i_w < lst.size(); i_w++)
-	((AutoHD<SessWdg>)wdgAt(lst[i_w])).at().alarmQuietance(quit_tmpl, false, ret);
+    for(unsigned iW = 0; iW < lst.size(); iW++)
+	((AutoHD<SessWdg>)wdgAt(lst[iW])).at().alarmQuietance(quit_tmpl, false, ret);
 
     if(isSet && ownerSessWdg(true))	ownerSessWdg(true)->alarmSet();
 }
@@ -1540,14 +1540,14 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 
 	//   Include attributes check
 	wdgList(iwls);
-	for(unsigned i_w = 0; i_w < iwls.size(); i_w++) {
-	    AutoHD<Widget> curw = wdgAt(iwls[i_w]);
+	for(unsigned iW = 0; iW < iwls.size(); iW++) {
+	    AutoHD<Widget> curw = wdgAt(iwls[iW]);
 	    curw.at().attrList(als);
 	    for(unsigned iA = 0; iA < als.size(); iA++) {
 		AutoHD<Attr> cattr = curw.at().attrAt(als[iA]);
 		if(cattr.at().flgSelf()&Attr::ProcAttr || als[iA] == "focus")
-		    fio.ioAdd(new IO((iwls[i_w]+"_"+als[iA]).c_str(),(curw.at().name()+"."+cattr.at().name()).c_str(),
-			cattr.at().fld().typeIO(),IO::Output,"",false,(iwls[i_w]+"/"+als[iA]).c_str()));
+		    fio.ioAdd(new IO((iwls[iW]+"_"+als[iA]).c_str(),(curw.at().name()+"."+cattr.at().name()).c_str(),
+			cattr.at().fld().typeIO(),IO::Output,"",false,(iwls[iW]+"/"+als[iA]).c_str()));
 	    }
 	}
 	fio.ioAdd(new IO("event","Event",IO::String,IO::Output));
@@ -1571,7 +1571,7 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	    }
 	}
 
-	// Connect to compiled function
+	// Connect to the compiled function
 	if(mWorkProg.size()) {
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg)).at());
 	    TValFunc::setUser(ownerSess()->user());
@@ -1862,7 +1862,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 
     string sw_attr, s_attr, obj_tp;
 
-    if(!((ownerSess()->calcClk()+pos)%vmax(1,10000/ownerSess()->period()))) prcElListUpdate( );
+    if(!((ownerSess()->calcClk()+pos)%vmax(1,10000/ownerSess()->period())) || first) prcElListUpdate( );
 
     //Calculate include widgets
     MtxAlloc resDt(ownerSess()->dataRes(), true);

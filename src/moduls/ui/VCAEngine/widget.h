@@ -218,7 +218,7 @@ class Widget : public TCntrNode
 	virtual void inheritAttr( const string &attr = "" );	//Inherit parent attributes
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
-	virtual void procChange( bool src = true )	{ }			//Process the procedure change
+	virtual void procChange( bool src = true )	{ }	//Process the procedure change
 
 	// Widget's attributes
 	void attrList( vector<string> &list ) const;
