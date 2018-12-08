@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-25 18:17+0200\n"
+"POT-Creation-Date: 2018-12-08 23:26+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -136,9 +136,11 @@ msgstr ""
 msgid "Exit when closing the last running project"
 msgstr "Beenden, wenn das zuletzt ausgeführte Projekt geschlossen wird"
 
+#, c-format
 msgid "%d: Development by \"%s\"."
 msgstr "%d: Entwicklung durch \"%s\"."
 
+#, c-format
 msgid "%d: Running \"%s:%s\" from \"%s\" - %s, updating period %s(%s)."
 msgstr "%d: Laufen \"%s:%s\" von \"%s\" - %s, Aktualisierungszeitraum %s(%s)."
 
@@ -895,12 +897,12 @@ msgstr ""
 
 msgid ""
 "Are you sure for lowering down to the parent for all changes of the visual "
-"items: '%1'?\n"
+"items '%1'?\n"
 "All other visual elements, descendant from this ancestor, will use these "
 "changes!"
 msgstr ""
 "Bist du sicher, dass du für alle Änderungen an den visuellen Elementen auf "
-"den Elternwert herunterkommst: '%1'?\n"
+"den Elternwert herunterkommst '%1'?\n"
 "Alle anderen visuellen Elemente, die von diesem Vorfahren abstammen, werden "
 "diese Änderungen verwenden!"
 
@@ -1203,6 +1205,19 @@ msgstr "Bearbeiten Sie das Attribut '%1' für das Widget '%2'."
 
 msgid "Short help to describe the syntax of the text."
 msgstr "Kurze Hilfe zur Beschreibung der Syntax des Textes."
+
+msgid ""
+"Are you sure for lowering down to the parent for the selected attribute '%1' "
+"change of the visual item '%2'?\n"
+"At missing the visual item will be created in the parent and all other "
+"visual elements, descendant from this ancestor, will use this!"
+msgstr ""
+"Sind Sie sicher, dass Sie für das ausgewählte Attribut '%1' des Sichtelements '%2' zum übergeordneten Element wechseln möchten?\n"
+"Wenn das visuelle Element fehlt, wird es im übergeordneten Element erstellt, und alle anderen visuellen Elemente, die von diesem Vorfahren abstammen, werden dies verwenden!"
+
+msgid ""
+"Lowering down the selected attribute change of the visual item to the parent"
+msgstr "Die ausgewählte Attributänderung des visuellen Elements zum übergeordneten Element verringern"
 
 msgid "Widgets"
 msgstr "Widget"
@@ -1686,7 +1701,8 @@ msgstr "Wiederherstellen der Sitzung Erstellung für '%s'."
 
 #, c-format
 msgid "Time of the session updating '%s': %s[%s]ms. Planer period %s(%s)ms"
-msgstr "Uhrzeit der Aktualisierung der Sitzung '%s': %s[%s]ms. Planerperiode %s(%s)ms"
+msgstr ""
+"Uhrzeit der Aktualisierung der Sitzung '%s': %s[%s]ms. Planerperiode %s(%s)ms"
 
 #, c-format
 msgid "Error function of the notificator '%s': %s"

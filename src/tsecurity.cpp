@@ -78,7 +78,7 @@ void TSecurity::usrGrpList( const string &name, vector<string> &list )
 
 void TSecurity::usrAdd( const string &name, const string &idb )
 {
-    chldAdd(mUsr,new TUser(name,idb,&userEl));
+    chldAdd(mUsr, new TUser(name,idb,&userEl));
     if(grpPresent("users")) grpAt("users").at().userAdd(name);
 }
 
@@ -268,7 +268,8 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_a=0; i_a < list.size(); i_a++)
 		opt->childAdd("el")->setText(list[i_a]);
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	usrAdd(TSYS::strEncode(opt->text(),TSYS::oscdID));
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))
+	{ opt->setText(TSYS::strEncode(opt->text().substr(0,s2i(OBJ_ID_SZ)),TSYS::oscdID)); usrAdd(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SSEC_ID,SEC_WR))	usrDel(opt->text(), true);
     }
     else if(a_path == "/br/grp_" || a_path == "/usgr/grps") {
@@ -278,7 +279,8 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_a = 0; i_a < list.size(); i_a++)
 		opt->childAdd("el")->setText(list[i_a]);
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	grpAdd(TSYS::strEncode(opt->text(),TSYS::oscdID));
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))
+	{ opt->setText(TSYS::strEncode(opt->text().substr(0,s2i(OBJ_ID_SZ)),TSYS::oscdID)); grpAdd(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SSEC_ID,SEC_WR))	grpDel(opt->text(), true);
     }
     else TSubSYS::cntrCmdProc(opt);
@@ -434,7 +436,7 @@ TVariant TUser::objFuncCall( const string &iid, vector<TVariant> &prms, const st
     }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, name()+":"+SSEC_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);
@@ -576,7 +578,7 @@ TVariant TGroup::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     if(iid == "user" && prms.size())	return user(prms[0].getS());
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, iuser);
+    TVariant cfRez = objFunc(iid, prms, iuser, RWRWR_, "root:" SSEC_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, iuser);

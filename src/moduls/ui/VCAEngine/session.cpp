@@ -1862,7 +1862,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 
     string sw_attr, s_attr, obj_tp;
 
-    if(!((ownerSess()->calcClk()+pos)%vmax(1,10000/ownerSess()->period())) || first) prcElListUpdate( );
+    if(!((ownerSess()->calcClk()+pos)%vmax(1,10000/ownerSess()->period())) /*|| first*/) prcElListUpdate( );
 
     //Calculate include widgets
     MtxAlloc resDt(ownerSess()->dataRes(), true);
@@ -1944,12 +1944,12 @@ void SessWdg::calc( bool first, bool last, int pos )
 		setR(SpIO_Frq, 1000.0/(ownerSess()->period()*vmax(calcPer()/ownerSess()->period(),1)));
 		setB(SpIO_Start, first);
 		setB(SpIO_Stop, last);
-		for(int i_io = SpIO_Sz; i_io < ioSize(); i_io++) {
-		    if(func()->io(i_io)->rez().empty()) continue;
-		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(), 0);
-		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(), 1);
+		for(int iIO = SpIO_Sz; iIO < ioSize(); iIO++) {
+		    if(func()->io(iIO)->rez().empty()) continue;
+		    sw_attr = TSYS::pathLev(func()->io(iIO)->rez(), 0);
+		    s_attr  = TSYS::pathLev(func()->io(iIO)->rez(), 1);
 		    attr = (sw_attr==".") ? attrAt(s_attr) : wdgAt(sw_attr).at().attrAt(s_attr);
-		    set(i_io, attr.at().get());
+		    set(iIO, attr.at().get());
 		}
 
 		// Calc
@@ -1957,14 +1957,14 @@ void SessWdg::calc( bool first, bool last, int pos )
 		TValFunc::calc();
 
 		// Save the data from the calc area
-		for(int i_io = SpIO_Sz; i_io < ioSize(); i_io++) {
-		    if(func()->io(i_io)->rez().empty() || !ioMdf(i_io)) continue;
-		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(), 0);
-		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(), 1);
+		for(int iIO = SpIO_Sz; iIO < ioSize(); iIO++) {
+		    if(func()->io(iIO)->rez().empty() || !ioMdf(iIO)) continue;
+		    sw_attr = TSYS::pathLev(func()->io(iIO)->rez(), 0);
+		    s_attr  = TSYS::pathLev(func()->io(iIO)->rez(), 1);
 		    attr = (sw_attr==".") ? attrAt(s_attr) : wdgAt(sw_attr).at().attrAt(s_attr);
 
-		    if(s_attr == "pgOpen" && attr.at().getB() != getB(i_io)) { pgOpenPrc = i_io; continue; }
-		    attr.at().set(get(i_io));
+		    if(s_attr == "pgOpen" && attr.at().getB() != getB(iIO)) { pgOpenPrc = iIO; continue; }
+		    attr.at().set(get(iIO));
 		}
 		// Save events from calc procedure
 		if(evId >= 0) wevent = getS(evId);

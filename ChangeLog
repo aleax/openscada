@@ -1,3 +1,18 @@
+2018-12-08 Roman (stable)
+- SYS.configure.ac: Fixed for name of the required libldap library.
+- FIX:Archives: messGet() expanded to sort the buffer messages and prevent collisions at the clock correcting.
+- !!:SYS.{TConfig,*}: The user API functions cfg() and cfgSet() of the configuration expanded by the permition control.
+- Security: User and group adding expanded for limiting the identifier and returning the end one.
+- !:DAQ.JavaLikeCalc: Expanded to try of the restoring the previous procedure executing at the new one error, mostly from DAQ-templates.
+- UI.VCAEngine: Reverted for prcElListUpdate() first call from the calculating procedure due it performed into setProcess().
+- !!:FIX:UI.Vision: The operation of lowering down of the single attribute changes set for requesting to the confiramtion
+    due it can cause to the widget moving to its parent in whole at missing here.
+    FIX: Fixed for new created widgets selecting in the visual widgets developing mode.
+    FIX: The external windows are set to force closing before their deleting, for saving the window position.
+    FIX: Prevented from casual crashing into the view "Table" of the primitive "FormEl".
+- FIX:UI.WebVision: Improved for style of the PopUp menu and Calendar dialog window.
+
+
 2018-12-02 Roman (stable)
 - !!!!:DB.LibsDB.OscadaLibs: The full featured implementation of the protocol OWEN for data acquisition is added.
     Currently there are problems yet with some configuration functions like "O.ALr", which initially return error 0x31 on their reading.

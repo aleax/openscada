@@ -233,7 +233,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     //mWStat->setText(host.st_nm.c_str());
     statusBar()->showMessage(_("Ready"), 2000);
 
-    //Restore the main window position
+    //Restoring the main window position
     if(!s2i(SYS->cmdOpt("showWin")) && winPosCntrSave() && masterPg()) {
 	string xPos, yPos;
 	if((xPos=wAttrGet(masterPg()->id(),i2s(screen())+"geomX",true)).size() &&
@@ -1309,7 +1309,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	for(off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
 	    req.childAdd("open")->setAttr("path","/%2fserv%2fpg")->setAttr("pg",pIt);
 	cntrIfCmd(req);
-	// Force call for blinks prevent
+	// Force call to prevent blinking
 	for(off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
 	    callPage(pIt);
     }
@@ -1756,7 +1756,10 @@ void VisRun::updatePage( )
 	    if(!pg->property("cntPg").toString().isEmpty())
 		((RunWdgView*)TSYS::str2addr(pg->property("cntPg").toString().toStdString()))->setPgOpenSrc("");
 	    else {
-		if(pg != master_pg)	pg->deleteLater();
+		if(pg != master_pg) {
+		    if(pg->isWindow()) pg->close();
+		    pg->deleteLater();
+		}
 		else {
 		    ((QScrollArea*)centralWidget())->setWidget(new QWidget());
 		    master_pg = NULL;

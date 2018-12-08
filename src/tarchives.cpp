@@ -497,17 +497,25 @@ time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
 
     //Get records from buffer
     MtxAlloc res(mRes, true);
-    unsigned i_buf = headBuf;
+    unsigned iBuf = headBuf;
     while(level >= 0 && (archMap.empty() || archMap[BUF_ARCH_NM]) /*&& SYS->sysTm() < upTo*/) {
-	if(mBuf[i_buf].time >= bTm && mBuf[i_buf].time && mBuf[i_buf].time <= eTm &&
-		abs(mBuf[i_buf].level) >= level && re.test(mBuf[i_buf].categ))
-	    recs.push_back(mBuf[i_buf]);
-	if(++i_buf >= mBuf.size()) i_buf = 0;
-	if(i_buf == headBuf) break;
+	if(mBuf[iBuf].time >= bTm && mBuf[iBuf].time && mBuf[iBuf].time <= eTm &&
+		abs(mBuf[iBuf].level) >= level && re.test(mBuf[iBuf].categ)) {
+	    //Unsorted, but can be wrong for some internal procedures waiting for the last message in the end
+	    //recs.push_back(mBuf[iBuf]);
+	    //Sorted
+	    int iP = recs.size();
+	    for(int iM = recs.size()-1; iM >= 0; iM--)
+		if(FTM(recs[iM]) > FTM(mBuf[iBuf])) iP = iM;
+		else if(FTM(recs[iM]) < FTM(mBuf[iBuf])) break;
+	    recs.insert(recs.begin()+iP, mBuf[iBuf]);
+	}
+	if(++iBuf >= mBuf.size()) iBuf = 0;
+	if(iBuf == headBuf) break;
     }
     res.unlock();
 
-    //Get records from archives
+    //Get records from the archives
     vector<string> tLst, oLst;
     modList(tLst);
     for(unsigned iT = 0; level >= 0 && iT < tLst.size(); iT++) {
@@ -544,11 +552,11 @@ time_t TArchiveS::messBeg( const string &arch )
     time_t rez = 0;
     MtxAlloc res(mRes, true);
     if(arch.empty() || arch == BUF_ARCH_NM) {
-	unsigned i_buf = headBuf;
+	unsigned iBuf = headBuf;
 	while(!arch.size() || arch == BUF_ARCH_NM) {
-	    rez = rez ? vmin(rez,mBuf[i_buf].time) : mBuf[i_buf].time;
-	    if(++i_buf >= mBuf.size()) i_buf = 0;
-	    if(i_buf == headBuf) break;
+	    rez = rez ? vmin(rez,mBuf[iBuf].time) : mBuf[iBuf].time;
+	    if(++iBuf >= mBuf.size()) iBuf = 0;
+	    if(iBuf == headBuf) break;
 	}
 	if(!arch.empty()) return rez;
     }
@@ -575,11 +583,11 @@ time_t TArchiveS::messEnd( const string &arch )
     time_t rez = 0;
     MtxAlloc res(mRes, true);
     if(arch.empty() || arch == BUF_ARCH_NM) {
-	unsigned i_buf = headBuf;
+	unsigned iBuf = headBuf;
 	while(!arch.size() || arch == BUF_ARCH_NM) {
-	    rez = rez ? vmax(rez,mBuf[i_buf].time) : mBuf[i_buf].time;
-	    if(++i_buf >= mBuf.size()) i_buf = 0;
-	    if(i_buf == headBuf) break;
+	    rez = rez ? vmax(rez,mBuf[iBuf].time) : mBuf[iBuf].time;
+	    if(++iBuf >= mBuf.size()) iBuf = 0;
+	    if(iBuf == headBuf) break;
 	}
 	if(!arch.empty()) return rez;
     }
@@ -1412,7 +1420,7 @@ TVariant TMArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, c
     if(iid == "begin")	return (int64_t)begin();
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SARH_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);

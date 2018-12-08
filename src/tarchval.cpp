@@ -1703,7 +1703,7 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //!!!! setVals() - append after an internal represent object to TValBuf appending.
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SARH_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);
@@ -2331,7 +2331,7 @@ TVariant TVArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, c
     if(iid == "status")	return startStat();
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SARH_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user);

@@ -204,11 +204,13 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
     }
 }
 
-TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms,
+    const string &user, int perm, const string &owner )
 {
     // ElTp cfg(string nm) - config variable 'nm' get.
     //  nm - config variable name.
-    if(iid == "cfg" && prms.size() >= 1) {
+    if(iid == "cfg" && prms.size() >= 1 &&
+	    SYS->security().at().access(user,SEC_RD,TSYS::strParse(owner,0,":"),TSYS::strParse(owner,1,":"),perm)) {
 	TCfg *cf = at(prms[0].getS(), true);
 	if(!cf) return EVAL_REAL;
 	return *cf;
@@ -216,7 +218,8 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const stri
     // ElTp cfgSet(string nm, ElTp val) - set config variable 'nm' to 'val'.
     //  nm - config variable name;
     //  val - variable value.
-    if(iid == "cfgSet" && prms.size() >= 2) {
+    if(iid == "cfgSet" && prms.size() >= 2 &&
+	    SYS->security().at().access(user,SEC_WR,TSYS::strParse(owner,0,":"),TSYS::strParse(owner,1,":"),perm)) {
 	TCfg *cf = at(prms[0].getS(), true);
 	if(!cf || (cf->fld().flg()&TFld::NoWrite)) return false;
 	*(TVariant*)cf = prms[1];

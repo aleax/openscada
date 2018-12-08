@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.10.0"
+#define MOD_VER		"3.11.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -227,8 +227,7 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
     if(funcId == "<auto>") {
 	funcId = "Auto";
 	for(int iP = 1; lbAt("sys_compile").at().present(funcId); ++iP) funcId = TSYS::strMess("Auto%d",iP);
-    }
-    else funcId = fnc_cfg.nodePath('_', true);
+    } else funcId = fnc_cfg.nodePath('_', true);
 
     // Connect or use allowed compiled function object
     if(!lbAt("sys_compile").at().present(funcId)) lbAt("sys_compile").at().add(funcId, "");
@@ -247,8 +246,11 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 	    throw;
 	}
     //Standard compile
+    bool started = func.at().startStat();
+    string  prevProc = func.at().prog(),
+	    prevUsings = func.at().usings();
     try {
-	if(func.at().startStat()) func.at().setStart(false);
+	if(started) func.at().setStart(false);
 	func.at().setProg(prog_text.c_str());
 	func.at().setUsings(usings);
 	((TFunction&)func.at()).operator=(fnc_cfg);
@@ -259,6 +261,14 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 	    func.free();
 	    lbAt("sys_compile").at().del(funcId.c_str());
 	}
+	// Try of the restoring the previous procedure executing
+	else if(started)
+	    try {
+		func.at().setProg(prevProc);
+		func.at().setUsings(prevUsings);
+		func.at().setStart(true);
+	    } catch(TError&) { }
+
 	throw TError((nodePath()+"sys_compile/"+funcId).c_str(), _("Error compiling: %s"), err.mess.c_str());
     }
 

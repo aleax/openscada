@@ -693,6 +693,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	switch(shD->elType) {
 	    case F_TABLE: {
 		QTableWidget *wdg = (QTableWidget*)shD->addrWdg;
+		if(!wdg || !qobject_cast<QTableWidget*>(wdg))	break;
 		((QVBoxLayout*)w->layout())->activate();
 
 		for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();	//Call all cascade events

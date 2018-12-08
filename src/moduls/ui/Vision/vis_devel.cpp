@@ -1205,6 +1205,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 		//work_space->setActiveSubWindow(actSubW);
 	    }
 	    if(err) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+
 	    emit modifiedItem(new_wdg);
 	}
     }
@@ -1395,7 +1396,7 @@ void VisDevelop::visualItDownParent( const string &elWa )
 	workWdgLoc = work_wdg;
 
 	InputDlg dlg(this,actVisItChDown->icon(),
-		QString(_("Are you sure for lowering down to the parent for all changes of the visual items: '%1'?\n"
+		QString(_("Are you sure for lowering down to the parent for all changes of the visual items '%1'?\n"
 			  "All other visual elements, descendant from this ancestor, will use these changes!")).arg(QString(workWdgLoc.c_str()).replace(";","; ")),
 		_("Lowering down the visual item changes to the parent"),false,false);
 	if(dlg.exec() != QDialog::Accepted)	return;
@@ -1434,7 +1435,7 @@ void VisDevelop::visualItCopy( )
 
 void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const string &wnm, bool chNoWr )
 {
-    if(!actVisItPaste->property("wdgAddr").toString().isEmpty())return;
+    if(!actVisItPaste->property("wdgAddr").toString().isEmpty()) return;
     string copy_buf_el, del_els, last_del;
     string copy_buf_w = wsrc.empty() ? copy_buf : wsrc;
     string work_wdg_w = wdst.empty() ? work_wdg : wdst;
@@ -1595,9 +1596,9 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
     }
     if(!last_del.empty())	copy_els.push_back(last_del);
 
-    //Send events to created widgets
-    for(unsigned i_e = 0; i_e < copy_els.size(); i_e++)
-	emit modifiedItem(copy_els[i_e]);
+    //Send events to the created widgets
+    for(unsigned iE = 0; iE < copy_els.size(); iE++)
+	emit modifiedItem(copy_els[iE]);
     //Remove source widget
     if(copy_buf_w[0] == '1') 	{ visualItDel(del_els); if(wsrc.empty()) copy_buf = "0"; }
 }

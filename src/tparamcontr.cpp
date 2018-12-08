@@ -396,7 +396,7 @@ TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, co
     if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user);
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SDAQ_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TValue::objFuncCall(iid, prms, user);

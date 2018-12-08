@@ -751,8 +751,15 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	    modelData.setWdg(modelData.curWdg());
 	}
 	else if(actChDown && rez == actChDown) {
-	    modelData.mainWin()->visualItDownParent(nwdg+"/a_"+nattr);
-	    modelData.setWdg(modelData.curWdg());
+	    InputDlg dlg(this, actChDown->icon(),
+		QString(_("Are you sure for lowering down to the parent for the selected attribute '%1' change of the visual item '%2'?\n"
+		  "At missing the visual item will be created in the parent and all other visual elements, descendant from this ancestor, will use this!"))
+		    .arg(QString(nattr.c_str())).arg(QString(nwdg.c_str())),
+		_("Lowering down the selected attribute change of the visual item to the parent"), false, false);
+	    if(dlg.exec() == QDialog::Accepted) {
+		modelData.mainWin()->visualItDownParent(nwdg+"/a_"+nattr);
+		modelData.setWdg(modelData.curWdg());
+	    }
 	}
 	popup.clear();
     }
@@ -1937,7 +1944,10 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 	chTree = new XMLNode("ChangesTree");
     }
     //Select only created widgets by user
-    else if(wLevel() == 1 && ((WdgView*)parentWidget())->isReload) setSelect(true, PrcChilds);
+    else if(wLevel() == 1 && ((WdgView*)parentWidget())->isReload) {
+	setSelect(true, PrcChilds);
+	levelWidget(0)->setSelect(true);
+    }
 
     if(mMdiWin) {
 	mMdiWin->setFocusProxy(this);
@@ -2977,7 +2987,7 @@ bool DevelWdgView::event( QEvent *event )
 		// New widget inserting
 		QAction *act = mainWin()->actGrpWdgAdd->checkedAction();
 		if(act && act->isChecked() && (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton) {
-		    mainWin()->visualItAdd(act,QPointF((float)curp.x()/xScale(true),(float)curp.y()/yScale(true)));
+		    mainWin()->visualItAdd(act, QPointF((float)curp.x()/xScale(true),(float)curp.y()/yScale(true)));
 		    setCursor(Qt::ArrowCursor);
 		    event->accept();
 		    return true;
@@ -3256,11 +3266,10 @@ bool DevelWdgView::event( QEvent *event )
 bool DevelWdgView::eventFilter( QObject *object, QEvent *event )
 {
     if(object == mMdiWin) {
-	switch(event->type())
-	{
+	switch(event->type()) {
 	    case QEvent::MouseButtonRelease:
 		editExit();
-		setSelect(false,PrcChilds);
+		setSelect(false, PrcChilds);
 		setSelect(true);
 		break;
 	    default:	break;
