@@ -16,17 +16,11 @@ find_package( PCRE REQUIRED)
 #include_directories(${pcre_INCLUDE_DIRS})
 set(LIBS ${LIBS} ${PCRE_LIBRARIES})
 
+#symbols: dlopen, dlclose
+set(LIBS ${LIBS} ${CMAKE_DL_LIBS} )
 
 include_directories(
-  ${CMAKE_BINARY_DIR}
-  ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
-  #${TDE_INCLUDE_DIR}
-  #${TQT_INCLUDE_DIRS}
-)
-
-link_directories(
-  #${TQT_LIBRARY_DIRS}
 )
 
 
@@ -47,6 +41,9 @@ add_library( ${PROJECT_NAME} SHARED
 )
 
 target_link_libraries (${PROJECT_NAME}
-    ${CMAKE_DL_LIBS}                    ##dlopen/dlclose
     ${LIBS}
+)
+
+target_include_directories( ${PROJECT_NAME}
+    PUBLIC ${PROJECT_SOURCE_DIR}
 )

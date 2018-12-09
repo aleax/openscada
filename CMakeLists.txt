@@ -59,15 +59,8 @@ add_definitions(-DVERSION="${VERSION}")
 add_definitions(-DMODS_INCL="${ModsIncl}")  #TODO
 
 
-
-# Qt library
-# Instruct CMake to run moc automatically when needed
-#set(CMAKE_AUTOMOC ON)
-# Create code from a list of Qt designer ui files
-#set(CMAKE_AUTOUIC ON)
-# Find the QtWidgets library
-#find_package(Qt5Widgets CONFIG REQUIRED)
-
 add_subdirectory( src )
 add_subdirectory( src_call )
+add_subdirectory( src/moduls )
+
 

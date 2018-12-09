@@ -1,0 +1,7 @@
+#add_subdirectory( DBF )
+#add_subdirectory( FireBird )
+#add_subdirectory( LDAP )
+#add_subdirectory( MySQL )
+#add_subdirectory( ODBC )
+#add_subdirectory( PostgreSQL )
+add_subdirectory( SQLite )

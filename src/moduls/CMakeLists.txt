@@ -1,0 +1,7 @@
+#add_subdirectory( arhiv )
+add_subdirectory( bd )
+#add_subdirectory( daq )
+#add_subdirectory( protocol )
+#add_subdirectory( special )
+#add_subdirectory( transport )
+#add_subdirectory( ui )
