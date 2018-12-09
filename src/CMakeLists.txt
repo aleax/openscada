@@ -1,4 +1,4 @@
-project( oscada )
+project( oscada VERSION 3.6.0 )
 
 
 find_package( Threads REQUIRED)
@@ -52,6 +52,18 @@ target_link_libraries (${PROJECT_NAME}
     ${LIBS}
 )
 
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    SOVERSION 3
+    )
+
 target_include_directories( ${PROJECT_NAME}
     PUBLIC ${PROJECT_SOURCE_DIR}
 )
+
+###https://stackoverflow.com/questions/17511496/how-to-create-a-shared-library-with-cmake
+
+install(TARGETS ${PROJECT_NAME}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+

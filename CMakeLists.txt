@@ -48,7 +48,11 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
 
 include( GNUInstallDirs )
 
+set( prefix ${CMAKE_INSTALL_PREFIX} )
+
 add_definitions(-Dsysconfdir_full="${CMAKE_INSTALL_FULL_SYSCONFDIR}")
+set( libdir_full ${CMAKE_INSTALL_FULL_LIBDIR} )
+add_definitions(-Dlibdir_full="${libdir_full}")
 add_definitions(-Doscd_moddir_full="${CMAKE_INSTALL_FULL_LIBDIR}/${CMAKE_PROJECT_NAME}")
 add_definitions(-Doscd_datadir_full="${CMAKE_INSTALL_FULL_DATADIR}/${CMAKE_PROJECT_NAME}")
 add_definitions(-Ddatadir_full="${CMAKE_INSTALL_FULL_DATADIR}")
@@ -58,9 +62,34 @@ add_definitions(-DPACKAGE="${PACKAGE}")
 add_definitions(-DVERSION="${VERSION}")
 add_definitions(-DMODS_INCL="${ModsIncl}")  #TODO
 
+### https://gitlab.kitware.com/cmake/community/wikis/doc/cmake/RPATH-handling
+# use, i.e. don't skip the full RPATH for the build tree
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+
+# when building, don't use the install RPATH already
+# (but later on when installing)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+
+# the RPATH to be used when installing, but only if it's not a system directory
+LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+IF("${isSystemDir}" STREQUAL "-1")
+   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+ENDIF("${isSystemDir}" STREQUAL "-1")
+
+
 
 add_subdirectory( src )
 add_subdirectory( src_call )
 add_subdirectory( src/moduls )
 
-
+###https://stackoverflow.com/questions/17511496/how-to-create-a-shared-library-with-cmake
+configure_file(openscada.pc.in openscada.pc @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/openscada.pc
+    DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig)

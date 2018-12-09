@@ -27,3 +27,5 @@ add_executable( ${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     ${LIBS}
 )
+
+install (TARGETS ${PROJECT_NAME} DESTINATION bin)
