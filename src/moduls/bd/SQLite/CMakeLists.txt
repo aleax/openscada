@@ -22,10 +22,14 @@ set( SOURCES
     bd_sqlite.cpp
 )
 
+set( HEADERS
+    bd_sqlite.h
+)
+
 ##### oscada (shared) ###########################
 
 add_library( ${PROJECT_NAME} SHARED
-    ${SOURCES}
+    ${SOURCES} ${HEADERS}
 )
 
 target_link_libraries (${PROJECT_NAME}

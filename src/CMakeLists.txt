@@ -34,10 +34,18 @@ set( SOURCES
     tparamcontr.cpp tmodule.cpp xml.cpp tcntrnode.cpp tdaqs.cpp tfunction.cpp
 )
 
+set ( HEADERS
+    autohd.h ieee754.h resalloc.h tarchives.h tarchval.h tbds.h tcntrnode.h
+    tconfig.h tcontroller.h tdaqs.h telem.h terror.h tfunction.h tmess.h 
+    tmodschedul.h tmodule.h tparamcontr.h tprmtmpl.h tprotocols.h tsecurity.h
+    tspecials.h tsubsys.h tsys.h ttransports.h ttypedaq.h ttypeparam.h tuis.h
+    tvalue.h tvariant.h xml.h
+)
+
 ##### oscada (shared) ###########################
 
 add_library( ${PROJECT_NAME} SHARED
-    ${SOURCES}
+    ${SOURCES} ${HEADERS}
 )
 
 target_link_libraries (${PROJECT_NAME}
