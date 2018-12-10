@@ -64,6 +64,7 @@ target_include_directories( ${PROJECT_NAME}
 ###https://stackoverflow.com/questions/17511496/how-to-create-a-shared-library-with-cmake
 
 install(TARGETS ${PROJECT_NAME}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+    
+install(FILES ${HEADERS} DESTINATION include/openscada)
 
