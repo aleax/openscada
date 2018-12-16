@@ -1,4 +1,8 @@
 2018-12-16 Roman (stable)
+- FIX:SYS: Fixed for building Debian moduled.
+
+
+2018-12-16 Roman (stable)
 - !!!!:SYS: Version of the OpenSCADA core library rose to 4.0 and modules version of all subsystems rose to 20,
     to prevent collisions with the LTS version when the core library from LTS but all modules from Work.
 - DB.LibsDB.OscadaLibs: DevLib.OWEN: Closed to the implementing due to missing any feedback from the developper and these devices already.
