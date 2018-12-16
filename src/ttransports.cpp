@@ -574,9 +574,21 @@ TTypeTransport::~TTypeTransport()
 
 TTransportS &TTypeTransport::owner( ) const	{ return (TTransportS&)TModule::owner(); }
 
-void TTypeTransport::inAdd( const string &name, const string &idb )	{ chldAdd(mIn, In(name,idb)); }
+string TTypeTransport::inAdd( const string &iid, const string &idb )
+{
+    TTransportIn *tr = In(TSYS::strEncode(iid,TSYS::oscdID), idb);
+    chldAdd(mIn, tr);
 
-void TTypeTransport::outAdd( const string &name, const string &idb )	{ chldAdd(mOut, Out(name,idb)); }
+    return tr->id();
+}
+
+string TTypeTransport::outAdd( const string &iid, const string &idb )
+{
+    TTransportOut *tr = Out(TSYS::strEncode(iid,TSYS::oscdID), idb);
+    chldAdd(mOut, tr);
+
+    return tr->id();
+}
 
 void TTypeTransport::cntrCmdProc( XMLNode *opt )
 {
@@ -602,10 +614,7 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iA = 0; iA < list.size(); iA++)
 		opt->childAdd("el")->setAttr("id",list[iA])->setText(inAt(list[iA]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    inAdd(vid); inAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR))	{ opt->setAttr("id", inAdd(opt->attr("id"))); inAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",STR_ID,SEC_WR))	inDel(opt->attr("id"),true);
     }
     else if(a_path == "/br/out_" || a_path == "/tr/out") {
@@ -614,10 +623,7 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iA = 0; iA < list.size(); iA++)
 		opt->childAdd("el")->setAttr("id",list[iA])->setText(outAt(list[iA]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    outAdd(vid); outAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR))	{ opt->setAttr("id", outAdd(opt->attr("id"))); outAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",STR_ID,SEC_WR))	outDel(opt->attr("id"),true);
     }
     else TModule::cntrCmdProc(opt);

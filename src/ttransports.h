@@ -21,7 +21,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		13		//TransportS type modules version
+#define STR_VER		20		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>
@@ -228,18 +228,18 @@ class TTypeTransport: public TModule
 	virtual ~TTypeTransport( );
 
 	// Input transports
-	void inList( vector<string> &list ) const		{ chldList(mIn,list); }
-	bool inPresent( const string &name ) const		{ return chldPresent(mIn,name); }
-	void inAdd( const string &name, const string &db = "*.*" );
-	void inDel( const string &name, bool complete = false )	{ chldDel(mIn,name,-1,complete); }
-	AutoHD<TTransportIn> inAt( const string &name ) const	{ return chldAt(mIn,name); }
+	void inList( vector<string> &list ) const		{ chldList(mIn, list); }
+	bool inPresent( const string &id ) const		{ return chldPresent(mIn, id); }
+	string inAdd( const string &id, const string &db = "*.*" );
+	void inDel( const string &id, bool complete = false )	{ chldDel(mIn, id, -1, complete); }
+	AutoHD<TTransportIn> inAt( const string &id ) const	{ return chldAt(mIn, id); }
 
 	// Output transports
-	void outList( vector<string> &list ) const		{ chldList(mOut,list); }
-	bool outPresent( const string &name ) const		{ return chldPresent(mOut,name); }
-	void outAdd( const string &name, const string &idb = "*.*" );
-	void outDel( const string &name, bool complete = false ){ chldDel(mOut,name,-1,complete); }
-	AutoHD<TTransportOut> outAt( const string &name ) const	{ return chldAt(mOut,name); }
+	void outList( vector<string> &list ) const		{ chldList(mOut, list); }
+	bool outPresent( const string &id ) const		{ return chldPresent(mOut, id); }
+	string outAdd( const string &id, const string &idb = "*.*" );
+	void outDel( const string &id, bool complete = false )	{ chldDel(mOut, id, -1, complete); }
+	AutoHD<TTransportOut> outAt( const string &id ) const	{ return chldAt(mOut, id); }
 	virtual	string outAddrHelp( )				{ return ""; }
 
 	TTransportS &owner( ) const;

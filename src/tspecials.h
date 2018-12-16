@@ -21,7 +21,7 @@
 #ifndef TSPECIALS_H
 #define TSPECIALS_H
 
-#define SSPC_VER	11		//SpecialS type modules version
+#define SSPC_VER	20		//SpecialS type modules version
 #define SSPC_ID		"Special"
 
 #include <string>

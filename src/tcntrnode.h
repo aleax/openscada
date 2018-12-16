@@ -223,7 +223,8 @@ class TCntrNode
 	virtual void postDisable( int flag )	{ }
 
 	virtual void load_( TConfig *cfg )	{ }
-	virtual void load_( )			{ }
+	virtual void load_( )			{ }	//In the begin
+	virtual void load__( )			{ }	//In the end
 	virtual void save_( )			{ }
 
     private:

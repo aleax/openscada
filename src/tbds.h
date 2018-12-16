@@ -21,7 +21,7 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define SDB_VER		12		//BDS type modules version
+#define SDB_VER		20		//BDS type modules version
 #define SDB_ID		"BD"
 
 #include <stdio.h>
@@ -197,11 +197,11 @@ class TTypeBD : public TModule
 	bool fullDeleteDB( )	{ return fullDBDel; }
 
 	// Opened DB
-	void list( vector<string> &list ) const		{ chldList(mDB,list); }
-	bool openStat( const string &idb ) const	{ return chldPresent(mDB,idb); }
-	void open( const string &iid );
-	void close( const string &iid, bool erase = false ) { chldDel(mDB,iid,-1,erase); }
-	AutoHD<TBD> at( const string &name ) const	{ return chldAt(mDB,name); }
+	void list( vector<string> &list ) const		{ chldList(mDB, list); }
+	bool openStat( const string &idb ) const	{ return chldPresent(mDB, idb); }
+	string open( const string &id );
+	void close( const string &id, bool erase = false ) { chldDel(mDB, id, -1, erase); }
+	AutoHD<TBD> at( const string &id ) const	{ return chldAt(mDB, id); }
 
 	TBDS &owner( ) const;
 

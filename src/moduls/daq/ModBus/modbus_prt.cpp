@@ -79,7 +79,13 @@ TProt::~TProt( )
     nodeDelAll();
 }
 
-void TProt::nAdd( const string &iid, const string &db )	{ chldAdd(mNode, new Node(iid,db,&nodeEl())); }
+string TProt::nAdd( const string &iid, const string &db )
+{
+    Node *obj = new Node(TSYS::strEncode(iid,TSYS::oscdID), db, &nodeEl());
+    chldAdd(mNode, obj);
+
+    return obj->id();
+}
 
 void TProt::load_( )
 {
@@ -441,10 +447,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(nAt(lst[i_f]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    nAdd(vid); nAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", nAdd(opt->attr("id"))); nAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mNode,opt->attr("id"),-1,1);
     }
     else if(a_path == "/rep/repLen") {

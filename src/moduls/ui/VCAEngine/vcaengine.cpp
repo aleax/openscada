@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"5.2.2"
+#define MOD_VER		"5.2.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -443,18 +443,26 @@ void Engine::modStop( )
     runSt = false;
 }
 
-void Engine::wlbAdd( const string &iid, const string &inm, const string &idb )
+string Engine::wlbAdd( const string &iid, const string &inm, const string &idb )
 {
-    if(wlbPresent(iid))	return;
-    chldAdd(idWlb, new WidgetLib(iid,inm,idb));
+    if(wlbPresent(iid))	return "";
+
+    WidgetLib *obj = new WidgetLib(TSYS::strEncode(iid,TSYS::oscdID), inm, idb);
+    chldAdd(idWlb, obj);
+
+    return obj->id();
 }
 
 AutoHD<WidgetLib> Engine::wlbAt( const string &id ) const	{ return chldAt(idWlb,id); }
 
-void Engine::prjAdd( const string &iid, const string &inm, const string &idb )
+string Engine::prjAdd( const string &iid, const string &inm, const string &idb )
 {
-    if(prjPresent(iid))	return;
-    chldAdd(idPrj, new Project(iid,inm,idb));
+    if(prjPresent(iid))	return "";
+
+    Project *obj = new Project(TSYS::strEncode(iid,TSYS::oscdID), inm, idb);
+    chldAdd(idPrj, obj);
+
+    return obj->id();
 }
 
 AutoHD<Project> Engine::prjAt( const string &id ) const	{ return chldAt(idPrj,id); }
@@ -765,10 +773,8 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    if(prjPresent(vid)) throw TError(nodePath().c_str(), _("Project '%s' is already present!"), vid.c_str());
-	    prjAdd(vid, opt->text()); prjAt(vid).at().setOwner(opt->attr("user"));
-	    opt->setAttr("id", vid);
+	    opt->setAttr("id", prjAdd(opt->attr("id"), opt->text()));
+	    prjAt(opt->attr("id")).at().setOwner(opt->attr("user"));
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	prjDel(opt->attr("id"),true);
     }
@@ -779,11 +785,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
 		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(trLU(wlbAt(lst[i_a]).at().name(),l,u));
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
-	    if(wlbPresent(vid)) throw TError(nodePath().c_str(), _("Widgets library '%s' is already present!"), vid.c_str());
-	    wlbAdd(vid, opt->text()); opt->setAttr("id", vid);
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	opt->setAttr("id", wlbAdd(opt->attr("id"),opt->text()));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	wlbDel(opt->attr("id"),true);
     }
     else if(a_path == "/prm/cfg/cp/cp" && ctrChkNode(opt,"set",RWRW__,"root",SUI_ID,SEC_WR))

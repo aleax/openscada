@@ -96,10 +96,10 @@ class TController : public TCntrNode, public TConfig
 
 	// Parameters
 	void list( vector<string> &list ) const		{ chldList(mPrm,list); }
-	bool present( const string &name ) const	{ return chldPresent(mPrm,name); }
-	void add( const string &name, unsigned type );
-	void del( const string &name, int full = TParamContr::RM_Exit )	{ chldDel(mPrm,name,-1,full); }
-	AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" ) const	{ return chldAt(mPrm,name); }
+	bool present( const string &id ) const	{ return chldPresent(mPrm, id); }
+	string add( const string &id, unsigned type );
+	void del( const string &id, int full = TParamContr::RM_Exit )	{ chldDel(mPrm, id, -1, full); }
+	AutoHD<TParamContr> at( const string &id, const string &who = "th_contr" ) const	{ return chldAt(mPrm, id); }
 
 	// Redundancy
 	//  In redundancy now

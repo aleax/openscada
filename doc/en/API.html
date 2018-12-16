@@ -387,7 +387,7 @@ Information variables of the program:
 <li> <i>static string sepstr2path( const string &amp;str, char sep = '.' );</i> — Transformation of the string with the separator <i>sep</i> of the elements into the path.</li>
 <li> <i>static string strEncode( const string &amp;in, Code tp, const string &amp;opt1 = "" );</i> — Encoding of the string by the specified rule <i>tp</i> and option <i>opt1</i> (symbols by "Custom"). </li>
 <li> <i>static string strDecode( const string &amp;in, Code tp = Custom, const string &amp;opt1 = "" );</i> — Decoding of the string <i>in</i> by the specified rule <i>tp</i> and option <i>opt1</i> (separator or "&lt;text&gt;" for "Bin"). </li>
-<li> <i>static string strMess( const char *fmt, ... ); static string strMess( unsigned len, const char *fmt, ... );</i> — Formation of the string by the template <i>fmt</i> and arguments. It is implemented on the basis of "printf". For the length limit variant exceeding mark by append "...".</li>
+<li> <i>static string strMess( const char *fmt, ... );</i> — Formation of the string by the template <i>fmt</i> and arguments. It is implemented on the basis of "printf".</li>
 <li> <i>static string strLabEnum( const string &amp;base );</i> — Individual string labels from <i>base</i> forming by increment at end. Supported numbering into decimal, hexadecimal (prefix "0x") or octal (prefix "0") notation.</li>
 <li> <i>string strCompr( const string &amp;in, int lev=-1);</i> — Compression of the string <i>in</i> with the compression level <i>lev</i>.</li>
 <li> <i>string strUncompr( const string &amp;in );</i> — Decompression of the string <i>in</i>.</li>
@@ -516,7 +516,8 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>string translSet( const string &amp;base, const string &amp;lang, const string &amp;mess, bool *needReload = NULL ); string translSetU( const string &amp;base, const string &amp;user, const string &amp;mess, bool *needReload = NULL ); string translSetLU( const string &amp;base, const string &amp;lang, const string &amp;user, const string &amp;mess, bool *needReload = NULL );</i> — Setting translation for <i>base</i> text variable for language <i>lang</i> or <i>user</i> and optional source <i>src</i> to value <i>mess</i>.</li>
 <li> <i>void translReg( const string &amp;mess, const string &amp;src, const string &amp;prms = "" );</i> — Registering the translated message <i>mess</i> with source <i>src</i> and appended parameters <i>prms</i> into the translations index.</li>
 <li> <i>static const char *labDB( ); static const char *labSecCRON( ); static const char *labSecCRONsel( ); static const char *labTaskPrior( );</i> — Common help labels.</li>
-<li> <i>int getUTF8( const string &amp;str, int off = 0, int32_t *symb = NULL );</i> — Get and parse a UTF-8 symbol.</li></ul>
+<li> <i>int getUTF8( const string &amp;str, int off = 0, int32_t *symb = NULL );</i> — Get and parse a UTF-8 symbol.</li>
+<li> <i>static string setUTF8( int32_t symb );</i> — Set, form and return a UTF-8 symbol from their code <i>symb</i>.</li></ul>
 <h3><span class="mw-headline" id="Object_subsystem_.28TSubSYS.29"><span class="mw-headline-number">2.3</span> <span id="TSubSYS" title="#TSubSYS">Object subsystem (TSubSYS)</span></span></h3>
 <table class="wikitable">
 
@@ -654,9 +655,9 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <ul><li> <i>bool fullDeleteDB( );</i> — Sign of the complete removal of the database.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — The list of registered (opened) databases.</li>
 <li> <i>bool openStat( const string &amp;idb ) const;</i> — Check the availability of the specified opened database.</li>
-<li> <i>void open( const string &amp;iid );</i> — Opening of the database.</li>
-<li> <i>void close( const string &amp;iid, bool erase = false );</i> — Closing the database. If the sign <i>erase</i> is set, the database will be completely removed.</li>
-<li> <i>AutoHD&lt;TBD&gt; at( const string &amp;name ) const;</i> — Connection to the opened database.</li>
+<li> <i>string open( const string &amp;id );</i> — Opening of the database. Returns the end created identifier.</li>
+<li> <i>void close( const string &amp;id, bool erase = false );</i> — Closing the database. If the sign <i>erase</i> is set, the database will be completely removed.</li>
+<li> <i>AutoHD&lt;TBD&gt; at( const string &amp;id ) const;</i> — Connection to the opened database.</li>
 <li> <i>TBDS &amp;owner( ) const;</i> — Subsystem - the owner of the module.</li></ul>
 <h3><span class="mw-headline" id="The_object_of_the_database_.28TBD.29"><span class="mw-headline-number">3.3</span> <span id="TBD" title="#TBD">The object of the database (TBD)</span></span></h3>
 <table class="wikitable">
@@ -778,10 +779,10 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <li> <i>void modStart( );</i> — Start of the module.</li>
 <li> <i>void modStop( );</i> — Stop of the module.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — The list of the controllers.</li>
-<li> <i>bool present( const string &amp;name ) const;</i> — Check for the availability of the specified controller.</li>
-<li> <i>void add( const string &amp;name, const string &amp;daq_db = "*.*" );</i> — Add the controller.</li>
-<li> <i>void del( const string &amp;name );</i> — Delete the controller.</li>
-<li> <i>AutoHD&lt;TController&gt; at( const string &amp;name, const string &amp;who = "" ) const;</i> — Connect to the controller.</li>
+<li> <i>bool present( const string &amp;id ) const;</i> — Check for the availability of the specified controller object.</li>
+<li> <i>string add( const string &amp;id, const string &amp;daq_db = "*.*" );</i> — Add the controller object. Returns the end created identifier.</li>
+<li> <i>void del( const string &amp;id );</i> — Delete the controller object.</li>
+<li> <i>AutoHD&lt;TController&gt; at( const string &amp;id, const string &amp;who = "" ) const;</i> — Connect to the controller object.</li>
 <li> <i>bool tpPrmPresent( const string &amp;name_t );</i> — Check for the availability of the specified controller type.</li>
 <li> <i>unsigned tpPrmToId( const string &amp;name_t );</i> — Getting of the index of the parameters' types by their names.</li>
 <li> <i>int tpParmAdd( const char *id, const char *n_db, const char *name );</i> — Addition/registration of the parameters' types.</li>
@@ -838,10 +839,10 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>void enable( );</i> — Controller's enabling.</li>
 <li> <i>void disable( );</i> — Controller's stopping.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — Parameter's list in the controller.</li>
-<li> <i>bool present( const string &amp;name ) const;</i> — Check for the availability of the parameter <i>name</i>.</li>
-<li> <i>void add( const string &amp;name, unsigned type );</i> — Addition of the parameter <i>name</i> of the type <i>type</i>.</li>
-<li> <i>void del( const string &amp;name, bool full = false );</i> — Deleting of the parameter <i>name</i>. If the field <i>full</i> is specified the controller will be completely removed.</li>
-<li> <i>AutoHD&lt;TParamContr&gt; at( const string &amp;name, const string &amp;who = "th_contr" ) const;</i> — Connection to the controller's parameter <i>name</i>.</li>
+<li> <i>bool present( const string &amp;id ) const;</i> — Check for the availability of the parameter <i>id</i>.</li>
+<li> <i>string add( const string &amp;id, unsigned type );</i> — Addition of the parameter <i>id</i> of the type <i>type</i>. Returns the end created identifier.</li>
+<li> <i>void del( const string &amp;id, bool full = false );</i> — Deleting of the parameter <i>id</i>. If the field <i>full</i> is specified the controller will be completely removed.</li>
+<li> <i>AutoHD&lt;TParamContr&gt; at( const string &amp;id, const string &amp;who = "th_contr" ) const;</i> — Connection to the controller's parameter <i>id</i>.</li>
 <li> <i>bool redntUse( Redundant md = Asymmetric );</i> — Redundancy state for mode <i>md</i>.</li>
 <li> <i>void setRedntUse( bool vl );</i> — Changing of the getting the data from the backup station mode.</li>
 <li> <i>Redundant redntMode( );</i> — Redundancy mode ("&lt;high&gt;", "&lt;low&gt;", "&lt;optimal&gt;", {ForceStation}), enabling.</li>
@@ -916,10 +917,10 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>void setDescr( const string &amp;idsc );</i> — Setting of the parameter's description.</li>
 <li> <i>void setToEnable( bool vl );</i> — Setting of the sign "To enable the parameter".</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — Parameter's list in the parameter.</li>
-<li> <i>bool present( const string &amp;name ) const;</i> — Check for the availability of the parameter <i>name</i>.</li>
-<li> <i>void add( const string &amp;name, unsigned type = 0 );</i> — Addition of the parameter name of the type <i>type</i>.</li>
-<li> <i>void del( const string &amp;name, bool full = false );</i> — Deleting of the parameter <i>name</i>. If the field <i>full</i> is specified the controller will be completely removed.</li>
-<li> <i>AutoHD&lt;TParamContr&gt; at( const string &amp;name, const string &amp;who = "th_prm" ) const;</i> — Connection to the controller's parameter <i>name</i>.</li>
+<li> <i>bool present( const string &amp;id ) const;</i> — Check for the availability of the parameter <i>id</i>.</li>
+<li> <i>string add( const string &amp;id, unsigned type = 0 );</i> — Addition of the parameter <i>id</i> of the type <i>type</i>. Returns the end created identifier.</li>
+<li> <i>void del( const string &amp;id, bool full = false );</i> — Deleting of the parameter <i>id</i>. If the field <i>full</i> is specified the controller will be completely removed.</li>
+<li> <i>AutoHD&lt;TParamContr&gt; at( const string &amp;id, const string &amp;who = "th_prm" ) const;</i> — Connection to the controller's parameter <i>id</i>.</li>
 <li> <i>TTypeParam &amp;type( ) const;</i> — Parameter's type.</li>
 <li> <i>virtual TElem *dynElCntr( );</i> — Container of the dynamic elements of the DAQ attributes.</li>
 <li> <i>virtual void enable( );</i> — To enable parameter.</li>
@@ -1138,10 +1139,10 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <li> <i>void subStart( );</i> — Start of the subsystem.</li>
 <li> <i>void subStop( );</i> — Stop of the system.</li>
 <li> <i>void valList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the values'archives in the subsystem.</li>
-<li> <i>bool valPresent( const string &amp;iid ) const;</i> — Check for the availability of the values' archive <i>iid</i>.</li>
-<li> <i>void valAdd( const string &amp;iid, const string &amp;idb = "*.*" );</i> — Addition of the new values' archive <i>iid</i>.</li>
-<li> <i>void valDel( const string &amp;iid, bool db = false );</i> — Deleting of the values' archive <i>iid</i>.</li>
-<li> <i>AutoHD&lt;TVArchive&gt; valAt( const string &amp;iid ) const;</i> — Connection/addressing to the values' archive <i>iid</i>.</li>
+<li> <i>bool valPresent( const string &amp;id ) const;</i> — Check for the availability of the values' archive <i>id</i>.</li>
+<li> <i>string valAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Addition of the new values' archive <i>id</i>. Returns the end created identifier.</li>
+<li> <i>void valDel( const string &amp;id, bool db = false );</i> — Deleting of the values' archive <i>id</i>.</li>
+<li> <i>AutoHD&lt;TVArchive&gt; valAt( const string &amp;id ) const;</i> — Connection/addressing to the values' archive <i>id</i>.</li>
 <li> <i>void setActMess( TMArchivator *a, bool val );</i> — Setting of the messages archivator <i>a</i> into the active status <i>val</i>. Active archivator will be provided by the subsystem with the flow of messages.</li>
 <li> <i>void setActVal( TVArchive *a, bool val );</i> — Setting of the value archive <i>a</i> into the active status <i>val</i>. Active archive will be provided by the subsystem with the periodic flow of values (is determined by the periodicity of the archive).</li>
 <li> <i>AutoHD&lt;TTypeArchivator&gt; at( const string &amp;name );</i> — Connection/addressing to the archiver's type (module) <i>name</i>.</li>
@@ -1278,15 +1279,15 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>void messList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the messages' archivers.</li>
-<li> <i>bool messPresent( const string &amp;iid ) const;</i> — Check for the presence of the specified messages' archiver.</li>
-<li> <i>void messAdd( const string &amp;iid, const string &amp;idb = "*.*" );</i> — Adding of the messages' archiver.</li>
-<li> <i>void messDel( const string &amp;iid, bool full = false );</i> — Deleting of the messages' archiver.</li>
-<li> <i>AutoHD&lt;TMArchivator&gt; messAt( const string &amp;iid ) const;</i> — Connection to the messages' archiver.</li>
+<li> <i>bool messPresent( const string &amp;id ) const;</i> — Check for the presence of the specified messages' archiver.</li>
+<li> <i>string messAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Adding of the messages' archiver. Returns the end created identifier.</li>
+<li> <i>void messDel( const string &amp;id, bool full = false );</i> — Deleting of the messages' archiver.</li>
+<li> <i>AutoHD&lt;TMArchivator&gt; messAt( const string &amp;id ) const;</i> — Connection to the messages' archiver.</li>
 <li> <i>void valList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the values' archivers.</li>
-<li> <i>bool valPresent( const string &amp;iid ) const;</i> — Check for the presence of the specified values' archiver.</li>
-<li> <i>void valAdd( const string &amp;iid, const string &amp;idb = "*.*" );</i> — Adding of the values' archiver.</li>
-<li> <i>void valDel( const string &amp;iid, bool full = false );</i> — Deleting of the values' archiver.</li>
-<li> <i>AutoHD&lt;TVArchivator&gt; valAt( const string &amp;iid ) const;</i> — Connection to the values' archiver.</li>
+<li> <i>bool valPresent( const string &amp;id ) const;</i> — Check for the presence of the specified values' archiver.</li>
+<li> <i>string valAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Adding of the values' archiver. Returns the end created identifier.</li>
+<li> <i>void valDel( const string &amp;id, bool full = false );</i> — Deleting of the values' archiver.</li>
+<li> <i>AutoHD&lt;TVArchivator&gt; valAt( const string &amp;id ) const;</i> — Connection to the values' archiver.</li>
 <li> <i>TArchiveS &amp;owner( ) const;</i> — Subsystem "Archives" - the owner of the archiver's type.</li></ul>
 <p><b>Protected methods:</b>
 </p>
@@ -1489,15 +1490,15 @@ External hosts mode (enum — ExtHost::Mode):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>void inList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the input transports.</li>
-<li> <i>bool inPresent( const string &amp;name ) const;</i> — Check for an input transport presence.</li>
-<li> <i>void inAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the input transport.</li>
-<li> <i>void inDel( const string &amp;name, bool complete = false );</i> — Deleting of the input transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
-<li> <i>AutoHD&lt;TTransportIn&gt; inAt( const string &amp;name ) const;</i> — Connection to the input transport.</li>
+<li> <i>bool inPresent( const string &amp;id ) const;</i> — Check for an input transport presence.</li>
+<li> <i>string inAdd( const string &amp;id, const string &amp;db = "*.*" );</i> — Addition of the input transport. Returns the end created identifier.</li>
+<li> <i>void inDel( const string &amp;id, bool complete = false );</i> — Deleting of the input transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
+<li> <i>AutoHD&lt;TTransportIn&gt; inAt( const string &amp;id ) const;</i> — Connection to the input transport.</li>
 <li> <i>void outList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the output transports.</li>
-<li> <i>bool outPresent( const string &amp;name ) const;</i> — Check for an output transport presence.</li>
-<li> <i>void outAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the output transport.</li>
-<li> <i>void outDel( const string &amp;name, bool complete = false );</i> — Deleting of the output transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
-<li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;name ) const;</i> — Connection to the output transport.</li>
+<li> <i>bool outPresent( const string &amp;id ) const;</i> — Check for an output transport presence.</li>
+<li> <i>string outAdd( const string &amp;id, const string &amp;db = "*.*" );</i> — Addition of the output transport. Returns the end created identifier.</li>
+<li> <i>void outDel( const string &amp;id, bool complete = false );</i> — Deleting of the output transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
+<li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;id ) const;</i> — Connection to the output transport.</li>
 <li> <i>virtual string outAddrHelp( );</i> — Address format help of the output transport.</li>
 <li> <i>TTransportS &amp;owner( ) const;</i> — "Transports" subsystem - the owner of the transport's type.</li></ul>
 <p><b>Protected methods:</b>
@@ -1747,12 +1748,12 @@ Requests parameters (enum — GetOpts):
 <li> <i>void usrList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the users <i>list</i>.</li>
 <li> <i>void usrGrpList( const string &amp;name, vector&lt;string&gt; &amp;list );</i> — The list of the users' groups <i>list</i>, in which the user <i>name</i> is included.</li>
 <li> <i>bool usrPresent( const string &amp;name ) const;</i> — Check fro the presence of the specified user <i>name</i>.</li>
-<li> <i>int usrAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the user <i>name</i> with the saving to the DB <i>db</i>.</li>
+<li> <i>string usrAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the user <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user.</li>
 <li> <i>void usrDel( const string &amp;name, bool complete = false );</i> — Deleting of the user <i>name</i> with the possibility of the completely deleting <i>complete</i>.</li>
 <li> <i>AutoHD&lt;TUser&gt; usrAt( const string &amp;name ) const;</i> — Attaching of the user <i>name</i>.</li>
 <li> <i>void grpList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the users' groups <i>list</i>.</li>
 <li> <i>bool grpPresent( const string &amp;name ) const;</i> — Check fro the presence of the specified users' group <i>name</i>.</li>
-<li> <i>int grpAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the users' group <i>name</i> with the saving to the DB <i>db</i>.</li>
+<li> <i>string grpAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the users' group <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user group.</li>
 <li> <i>void grpDel( const string &amp;name, bool complete = false );</i> — Deleting of the users' group <i>name</i> with the possibility of the completely deleting <i>complete</i>.</li>
 <li> <i>AutoHD&lt;TGroup&gt; grpAt( const string &amp;name ) const;</i> — Connection to the users' group <i>name</i>.</li></ul>
 <h3><span class="mw-headline" id="The_user.27s_object_.28TUser.29"><span class="mw-headline-number">10.2</span> <span id="TUser" title="#TUser">The user's object (TUser)</span></span></h3>
@@ -2924,7 +2925,8 @@ Named rights of access to control elements (define):
 <li> <i>virtual void postEnable( int flag );</i> — The connection preact. It is called after the actual connection.</li>
 <li> <i>virtual void preDisable( int flag );</i> — The disconnection preact. It is called before the actual disconnection.</li>
 <li> <i>virtual void postDisable( int flag );</i> — The disconnection preact. It is called before the actual disconnection (before deleting).</li>
-<li> <i>virtual void load_( ); virtual void load_( TConfig *cfg );</i> — The function of the loading child node calling for ready configuration <i>cfg</i>.</li>
+<li> <i>virtual void load_( ); virtual void load_( TConfig *cfg );</i> — The function of the node specific loading, for ready configuration <i>cfg</i> also.</li>
+<li> <i>virtual void load__( );</i> — The function of the node specific loading in the loading end.</li>
 <li> <i>virtual void save_( );</i> — The function of the saving child node calling.</li></ul>
 <h2><span class="mw-headline" id="XML_in_OpenSCADA_.28XMLNode.29"><span class="mw-headline-number">15</span> XML in OpenSCADA (XMLNode)</span></h2>
 <p>XML in the OpenSACDA system is represented by the object of the XML-tag — XMLNode.

@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"4.6.0"
+#define MOD_VER		"4.6.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -285,9 +285,11 @@ void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev ty
 
 string TUIMod::setHelp( const string &help, const string &addr, QWidget *w )
 {
+    string helpL = TSYS::strEncode(help, TSYS::Limit, i2s(toolTipLim()));
+
     if(!w)
-	return (toolTipLim() && help.size() > toolTipLim()) ?
-	    "<body style='white-space: pre-wrap;'>"+TSYS::strEncode(TSYS::strMess(toolTipLim(),"%s",help.c_str()),TSYS::Html)+"<i><b>Shift+F1</b></i></body>" :
+	return (helpL != help) ?
+	    "<body style='white-space: pre-wrap;'>"+TSYS::strEncode(helpL+"...",TSYS::Html)+"<i><b>Shift+F1</b></i></body>" :
 	    help;
 
     w->setStatusTip(addr.c_str());
@@ -296,8 +298,8 @@ string TUIMod::setHelp( const string &help, const string &addr, QWidget *w )
 	"<i><b>"+_("Page")+"</b></i>:&nbsp;"+addr.substr(0,itPos)+"\n"+
 	"<i><b>"+_("Item")+"</b></i>:&nbsp;"+TSYS::strDecode((itPos==string::npos)?"":addr.substr(itPos+1),TSYS::PathEl)+"</body>").c_str());
     if(help.size()) {
-	if(toolTipLim() && help.size() > toolTipLim())
-	    w->setToolTip(("<body style='white-space: pre-wrap;'>"+TSYS::strEncode(TSYS::strMess(toolTipLim(),"%s",help.c_str()),TSYS::Html)+"<i><b>Shift+F1</b></i></body>").c_str());
+	if(helpL != help)
+	    w->setToolTip(("<body style='white-space: pre-wrap;'>"+TSYS::strEncode(helpL+"...",TSYS::Html)+"<i><b>Shift+F1</b></i></body>").c_str());
 	else w->setToolTip(help.c_str());
     }
     return "";

@@ -308,9 +308,15 @@ void TController::LoadParmCfg( )
     }
 }
 
-void TController::add( const string &name, unsigned type )	{ chldAdd(mPrm, ParamAttach(name,type)); }
+string TController::add( const string &iid, unsigned type )
+{
+    TParamContr *obj = ParamAttach(TSYS::strEncode(iid,TSYS::oscdID), type);
+    chldAdd(mPrm, obj);
 
-TParamContr *TController::ParamAttach( const string &name, int type)	{ return new TParamContr(name, &owner().tpPrmAt(type)); }
+    return obj->id();
+}
+
+TParamContr *TController::ParamAttach( const string &iid, int type)	{ return new TParamContr(iid, &owner().tpPrmAt(type)); }
 
 void TController::redntDataUpdate( )
 {
@@ -543,10 +549,8 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    add(vid,owner().tpPrmToId(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user"))));
-	    at(vid).at().setName(opt->text());
-	    opt->setAttr("id", vid);
+	    opt->setAttr("id", add(opt->attr("id"),owner().tpPrmToId(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")))));
+	    at(opt->attr("id")).at().setName(opt->text());
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"), true);
     }

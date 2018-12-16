@@ -378,9 +378,10 @@ void TCfg::setS( const string &ival )
 	    mOwner.mRes.lock();
 	    string tVal = TVariant::getS();
 	    if(extVal() && (fld().flg()&TFld::TransltText) && !noTransl() && ival.find(char(0)) == string::npos) {
-		if(Mess->lang2Code()==Mess->lang2CodeBase()) TVariant::setS(ival+string(2,0)+getS(ExtValThree));
+		if(Mess->lang2Code() == Mess->lang2CodeBase()) TVariant::setS(ival+string(2,0)+getS(ExtValThree));
 		else TVariant::setS(getS(ExtValOne)+string(1,0)+ival+string(1,0)+getS(ExtValThree));
 	    }
+	    else if(fld().flg()&TCfg::Key) TVariant::setS(TSYS::strEncode(ival,TSYS::Limit,i2s(fld().len())));
 	    else TVariant::setS(ival);
 	    mOwner.mRes.unlock();
 	    bool mInCfgCh_ = mInCfgCh;

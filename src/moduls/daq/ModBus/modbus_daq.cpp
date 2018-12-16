@@ -1481,7 +1481,7 @@ bool TMdPrm::TLogCtx::lnkInit( int num, bool checkNoLink )
 	    ai = TSYS::strMess("%d,%d", reg, rN);
 	}
     }
-    else if(atp != "C")	return false;
+    else if(atp != "C" && atp != "CI")	return false;
 
     it->second.addrSpec = atp+":"+ai+":"+mode;
 

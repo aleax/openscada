@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.0.0"
+#define MOD_VER		"1.0.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -104,9 +104,12 @@ TWEB::~TWEB( )
     nodeDelAll();
 }
 
-void TWEB::uPgAdd( const string &iid, const string &db )
+string TWEB::uPgAdd( const string &iid, const string &db )
 {
-    chldAdd(mPgU, new UserPg(iid,db,&uPgEl()));
+    UserPg *obj = new UserPg(iid, db, &uPgEl());
+    chldAdd(mPgU, obj);
+
+    return obj->id();
 }
 
 void TWEB::load_( )
@@ -318,10 +321,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iF = 0; iF < lst.size(); iF++)
 		opt->childAdd("el")->setAttr("id",lst[iF])->setText(uPgAt(lst[iF]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    uPgAdd(vid); uPgAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	{ opt->setAttr("id", uPgAdd(opt->attr("id"))); uPgAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	chldDel(mPgU,opt->attr("id"),-1,1);
     }
     else TUI::cntrCmdProc(opt);

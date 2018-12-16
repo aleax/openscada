@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/User API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/ru" title="Документация/API пользователя (98% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/uk" title="Документація/API користувача (98% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/ru" title="Документация/API пользователя (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/uk" title="Документація/API користувача (100% translated)">українська</a></div></div>
 <p><i>Author:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </p>
 <dl><dd><dl><dd>Maxim Lysenko (2012) — the page translation</dd></dl></dd></dl>
@@ -273,8 +273,8 @@ for(var i = 0; i &lt; arguments.length; i++)
 <ul><li> <i>int length</i> — string length. </li></ul>
 <dl><dt> <i>Functions:</i></dt></dl>
 <ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
-<li> <i>string charAt( int symb );</i> — extracts from the string the symbol <i>symb</i>, numbering from zero.</li>
-<li> <i>int charCodeAt( int symb );</i> — extracts from the string the symbol code <i>symb</i>.</li>
+<li> <i>string charAt( int symb, string type = "" );</i> — extracts from the string the symbol <i>symb</i> for the <i>type</i>. These types of the symbol are supported: ""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-32. In the case of UTF-8, the symbol position <i>symb</i> is changed to the next symbol position due to length of this symbols type is variable one.</li>
+<li> <i>int charCodeAt( int symb, string type = "" );</i> — extracts from the string the symbol code <i>symb</i> for the <i>type</i>. These types of the symbol are supported: ""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE. In the case of UTF-8, the symbol position <i>symb</i> is changed to the next symbol position due to length of this symbols type is variable one.</li>
 <li> <i>string concat( string val1, string val2, ... );</i> — returns a new string formed by joining the values <i>val1</i> etc. to the original one.</li>
 <li> <i>int indexOf( string substr, int start );</i> — returns the position of the required string <i>substr</i> in the original row from the position <i>start</i>. If the initial position is not specified then the search starts from the beginning. If the search string is not found then "-1" is returned.</li>
 <li> <i>int lastIndexOf( string substr, int start );</i> — returns the position of the search string <i>substr</i> in the original one beginning from the position of <i>start</i> when searching from the end. If the initial position is not specified then the search begins from the end. If the search string is not found then "-1" is returned.</li>
@@ -441,6 +441,7 @@ SYS.cntrReq(req); </pre></li>
 <li><i>int {strptime|strptimegm}( string str, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — returns the time in seconds from the epoch of 1/1/1970, based on the string record of time <i>str</i>, in accordance with the specified template <i>form</i>. For example the template "%Y-%m-%d&nbsp;%H:%M:%S" corresponds with the time "2006-08-08 11:21:55". Description of the template format can be obtained from the documentation on POSIX-function <i>strptime</i>. <i>strptimegm</i> works into GMT(UTC) time.</li>
 <li><i>int cron( string cronreq, int base = 0 );</i> — returns the time, planned in the format of the standard Cron, <i>cronreq</i>, beginning from the basic time <i>base</i> or current, if the basic is not specified.</li>
 <li><i>string strFromCharCode( int char1, int char2, int char3, ... );</i> — creates a string from symbol codes <i>char1</i>, <i>char2</i> ... <i>charN</i>.</li>
+<li><i>string strFromCharUTF([string type = "UTF-8",] int char1, int char2, int char3, ...);</i> — creates a string from UTF symbols <i>char1</i>, <i>char2</i> ... <i>charN</i>. These types of the symbol are supported: UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE.</li>
 <li><i>string strCodeConv( string src, string fromCP, string toCP );</i> — transcodes the text <i>src</i> from the encoding <i>fromCP</i> to <i>toCP</i>. If the encoding is omitted (empty string), it is used the internal one.</li>
 <li><i>string strEncode( string src, string tp = "Bin", string opt1 = "" );</i> — encodes the string <i>src</i> by the rule <i>tp</i> and option <i>opt1</i>. Allowed rules:
 <dl><dd>"PathEl" — symbols <b>[/%]</b> to "%2f" and "%25", respectively;</dd>
@@ -454,7 +455,9 @@ SYS.cntrReq(req); </pre></li>
 <dd>"OscdID" — almost all symbols like <b>[ /\&amp;(]</b> to '_';</dd>
 <dd>"Bin" — ASCII bytes list ("XX XX XX XX ...") to the binary represent;</dd>
 <dd>"Reverse" — reversion the sequence;</dd>
-<dd>"ShieldSimb" — shielded symbols like '\a', '\b', ..., '\0NNN', '\xNN' to the binary represent.</dd></dl>
+<dd>"ShieldSimb" — shielded symbols like '\a', '\b', ..., '\0NNN', '\xNN' to the binary represent;</dd>
+<dd>"ToLower" — symbols to the lower register;</dd>
+<dd>"Limit" — limiting the string to the length into <i>opt1</i>, counting UTF-8 variable length.</dd></dl>
 </li>
 <li><i>string strDecode( string src, string tp = "Bin", string opt1 = "" );</i> — decodes the string <i>src</i> by the rule <i>tp</i> and the option <i>opt1</i>. Allowed rules:
 <dl><dd>"PathEl", "HttpURL", "Custom" — symbols like "%NN" to the binary represent;</dd>

@@ -199,10 +199,13 @@ void TDAQS::load_( )
 	}
     } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
-    //Load parameters from config-file and SYS DB
+    //Load parameters from the config-file and SYS DB
     setRdRestDtTm(s2r(TBDS::genDBGet(nodePath()+"RdRestDtTm",r2s(rdRestDtTm()))));
+}
 
-    //Early starting for template libraries
+void TDAQS::load__( )
+{
+    //Early starting for template libraries, after the whole loading
     vector<string> tmpl_lst;
     tmplLibList(tmpl_lst);
     for(unsigned iLb = 0; iLb < tmpl_lst.size(); iLb++)

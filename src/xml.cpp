@@ -522,12 +522,12 @@ void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
 	}
 	//Value process		!!!! Rewrote
 	if(eVal < 0x80)	rez += (char)eVal;
-	else if(Mess->isUTF8())
-	    for(int iCh = 5, i_st = -1; iCh >= 0; iCh--) {
-		if(i_st < iCh && (eVal>>(iCh*6))) i_st = iCh;
-		if(iCh == i_st) rez += (char)(0xC0|(eVal>>(iCh*6)));
-		else if(iCh < i_st) rez += (char)(0x80|(0x3F&(eVal>>(iCh*6))));
-	    }
+	else if(Mess->isUTF8())	rez += TMess::setUTF8(eVal);
+	    /*for(int iCh = 5, iSt = -1; iCh >= 0; iCh--) {
+		if(iSt < iCh && (eVal>>(iCh*6))) iSt = iCh;
+		if(iCh == iSt) rez += (char)(0xC0|(eVal>>(iCh*6)));
+		else if(iCh < iSt) rez += (char)(0x80|(0x3F&(eVal>>(iCh*6))));
+	    }*/
     }
     //Check for loaded entities
     else {

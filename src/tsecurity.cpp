@@ -71,15 +71,18 @@ void TSecurity::usrGrpList( const string &name, vector<string> &list )
     vector<string> gls;
     list.clear();
     grpList(gls);
-    for(unsigned i_g = 0; i_g < gls.size(); i_g++)
-	if(name == "root" || grpAt(gls[i_g]).at().user(name))
-	    list.push_back(gls[i_g]);
+    for(unsigned iG = 0; iG < gls.size(); iG++)
+	if(name == "root" || grpAt(gls[iG]).at().user(name))
+	    list.push_back(gls[iG]);
 }
 
-void TSecurity::usrAdd( const string &name, const string &idb )
+string TSecurity::usrAdd( const string &name, const string &idb )
 {
-    chldAdd(mUsr, new TUser(name,idb,&userEl));
-    if(grpPresent("users")) grpAt("users").at().userAdd(name);
+    TUser *user = new TUser(TSYS::strEncode(name,TSYS::oscdID), idb, &userEl);
+    chldAdd(mUsr, user);
+    if(grpPresent("users")) grpAt("users").at().userAdd(user->name());
+
+    return user->name();
 }
 
 void TSecurity::usrDel( const string &name, bool complete )
@@ -88,9 +91,12 @@ void TSecurity::usrDel( const string &name, bool complete )
     chldDel(mUsr, name, -1, complete);
 }
 
-void TSecurity::grpAdd( const string &name, const string &idb )
+string TSecurity::grpAdd( const string &name, const string &idb )
 {
-    chldAdd(mGrp, new TGroup(name,idb,&grpEl));
+    TGroup *grp = new TGroup(TSYS::strEncode(name,TSYS::oscdID), idb, &grpEl);
+    chldAdd(mGrp, grp);
+
+    return grp->name();
 }
 
 void TSecurity::grpDel( const string &name, bool complete )
@@ -268,8 +274,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_a=0; i_a < list.size(); i_a++)
 		opt->childAdd("el")->setText(list[i_a]);
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))
-	{ opt->setText(TSYS::strEncode(opt->text().substr(0,s2i(OBJ_ID_SZ)),TSYS::oscdID)); usrAdd(opt->text()); }
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	opt->setText(usrAdd(opt->text()));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SSEC_ID,SEC_WR))	usrDel(opt->text(), true);
     }
     else if(a_path == "/br/grp_" || a_path == "/usgr/grps") {
@@ -279,8 +284,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_a = 0; i_a < list.size(); i_a++)
 		opt->childAdd("el")->setText(list[i_a]);
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))
-	{ opt->setText(TSYS::strEncode(opt->text().substr(0,s2i(OBJ_ID_SZ)),TSYS::oscdID)); grpAdd(opt->text()); }
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	opt->setText(grpAdd(opt->text()));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SSEC_ID,SEC_WR))	grpDel(opt->text(), true);
     }
     else TSubSYS::cntrCmdProc(opt);
@@ -379,8 +383,8 @@ void TUser::postDisable( int flag )
     //Remove the user from the groups
     vector<string> gls;
     owner().usrGrpList(name(), gls);
-    for(unsigned i_g = 0; i_g < gls.size(); i_g++)
-	owner().grpAt(gls[i_g]).at().userDel(name());
+    for(unsigned iG = 0; iG < gls.size(); iG++)
+	owner().grpAt(gls[iG]).at().userDel(name());
 }
 
 TSecurity &TUser::owner( ) const	{ return *(TSecurity*)nodePrev(); }
@@ -415,8 +419,8 @@ void TUser::save_( )
     //Save used groups
     vector<string> ls;
     owner().grpList(ls);
-    for(unsigned i_g = 0; i_g < ls.size(); i_g++)
-	owner().grpAt(ls[i_g]).at().save();
+    for(unsigned iG = 0; iG < ls.size(); iG++)
+	owner().grpAt(ls[iG]).at().save();
 }
 
 TVariant TUser::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

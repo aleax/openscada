@@ -73,7 +73,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	void list( vector<string> &ls ) const		{ chldList(mWdg,ls); }
 	bool present( const string &id ) const		{ return chldPresent(mWdg,id); }
 	AutoHD<LWidget> at( const string &id ) const;
-	void add( const string &id, const string &name, const string &orig = "" );
+	string add( const string &id, const string &name, const string &orig = "" );
 	void add( LWidget *iwdg );
 	void del( const string &id, bool full = false )	{ chldDel(mWdg, id, -1, full); }
 

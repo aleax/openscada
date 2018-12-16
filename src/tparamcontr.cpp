@@ -138,28 +138,32 @@ void TParamContr::list( vector<string> &list ) const
     chldList(mPrm, list);
 }
 
-bool TParamContr::present( const string &name ) const
+bool TParamContr::present( const string &iid ) const
 {
     if(mPrm < 0) return false;
-    return chldPresent(mPrm, name);
+    return chldPresent(mPrm, iid);
 }
 
-void TParamContr::add( const string &name, unsigned type )
+string TParamContr::add( const string &iid, unsigned type )
+{
+    if(mPrm < 0) return "";
+
+    TParamContr *obj = owner().ParamAttach(TSYS::strEncode(iid,TSYS::oscdID), type);
+    chldAdd(mPrm, obj);
+
+    return obj->id();
+}
+
+void TParamContr::del( const string &iid, int full )
 {
     if(mPrm < 0) return;
-    chldAdd(mPrm, owner().ParamAttach(name,type));
+    chldDel(mPrm, iid, -1, full);
 }
 
-void TParamContr::del( const string &name, int full )
-{
-    if(mPrm < 0) return;
-    chldDel(mPrm, name, -1, full);
-}
-
-AutoHD<TParamContr> TParamContr::at( const string &name, const string &who ) const
+AutoHD<TParamContr> TParamContr::at( const string &iid, const string &who ) const
 {
     if(mPrm < 0) return AutoHD<TParamContr>();
-    return chldAt(mPrm, name);
+    return chldAt(mPrm, iid);
 }
 
 void TParamContr::LoadParmCfg( )
@@ -473,11 +477,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 		cN->setName("el")->setAttr("path","")->setAttr("rez","")->setAttr("recurs","")->setText("");
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    add(vid);
-	    at(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) { opt->setAttr("id", add(opt->attr("id"))); at(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"),true);
     }
     else if(type().cntrCmdProc(this, opt)) /* Process OK */;

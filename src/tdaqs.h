@@ -21,7 +21,7 @@
 #ifndef TDAQS_H
 #define TDAQS_H
 
-#define SDAQ_VER	12	//ControllerS type modules version
+#define SDAQ_VER	20	//ControllerS type modules version
 #define SDAQ_ID		"DAQ"
 
 #include <string>
@@ -86,6 +86,7 @@ class TDAQS : public TSubSYS
 
     protected:
 	void load_( );
+	void load__( );
 	void save_( );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );

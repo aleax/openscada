@@ -588,10 +588,14 @@ TTypeBD::~TTypeBD( )
     nodeDelAll();
 }
 
-void TTypeBD::open( const string &iid )
+string TTypeBD::open( const string &iid )
 {
-    if(openStat(iid)) return;
-    chldAdd(mDB, openBD(iid));
+    if(openStat(iid)) return "";
+
+    TBD *obj = openBD(TSYS::strEncode(iid,TSYS::oscdID));
+    chldAdd(mDB, obj);
+
+    return obj->id();
 }
 
 TBDS &TTypeBD::owner( ) const	{ return (TBDS&)TModule::owner(); }
@@ -624,10 +628,7 @@ void TTypeBD::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iL = 0; iL < lst.size(); iL++)
 		opt->childAdd("el")->setAttr("id",lst[iL])->setText(at(lst[iL]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDB_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    open(vid); at(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDB_ID,SEC_WR))	{ opt->setAttr("id", open(opt->attr("id"))); at(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDB_ID,SEC_WR))	close(opt->attr("id"),true);
     }
     else TModule::cntrCmdProc(opt);

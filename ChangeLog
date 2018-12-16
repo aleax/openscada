@@ -1,3 +1,28 @@
+2018-12-16 Roman (stable)
+- !!!!:SYS: Version of the OpenSCADA core library rose to 4.0 and modules version of all subsystems rose to 20,
+    to prevent collisions with the LTS version when the core library from LTS but all modules from Work.
+- DB.LibsDB.OscadaLibs: DevLib.OWEN: Closed to the implementing due to missing any feedback from the developper and these devices already.
+    Switched to use charCodeAt() in "UTF-16BE" for access two bytes.
+    Finished for the data types.
+- !!!:DB.LibsDB.vcaBase: The widgets library was appended for an implementing of the users manager cadre, for runtime.
+- !:SYS:data/openscada.spec: Appended for the separate packages openscada-plc and openscada-server of the daemon mode executing.
+- !!:SYS.TCntrNode,DAQ,DAQ.JavaLikeCalc: Appended by the function load__() to treat some doings in the loading end.
+    DAQ: Fixed for the early starting of the template libraries, really after the whole loading and after the DAQ.JavaLikeCalc functions.
+- !!!!:SYS,TConfig,Security,DB.SQLite,UI.QTCfg: The function strEncode() appended by the variant "Limit" to limit the string size counting for variability of UTF-8.
+    SYS: The special function strMess() with such limit is removed.
+    !!:TConfig: The key fields appended for their size limiting before cutting on the DB side.
+    !!!!:DB,Security,Transports,DAQ,Archive,DAQ.{BlockCalc},Protocol.{ModBus,OPC_UA,UserProtocol},UI.{VCAEngine,WebUser}:
+	Adapted in the adding functions to treat the ID or name forming and to limit its size, returning the result name to the creator.
+    SYS: The user API function strEncode() appended for support the variants "ToLower" and "Limit".
+    DB.SQLite,UI.QTCfg: Moved to use the function strEncode() in the variant "Limit" instead strMess().
+- !:SYS.TMess,XMLNode: Appended for the function setUTF8() of forming UTF-8 from their code, taken from XMLNode to use in other places.
+    SYS: The user API functions appended for the function strFromCharUTF() of forming string from UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE.
+- !!:DAQ.JavaLikeValc: The functions charAt() and charCodeAt() is expanded to support UTF.
+- FIX:DAQ.ModBus: Fixed for the Input Coils identification into the Logical Level links.
+- FIX:UI.WebVision: The view "List" of the primitive "FormEl" prevented from creating items into their value at missing, as into UI.Vision.
+    The view "Table" of the primitive "FormEl" set to updating at the value changing, to take in acount the specific background color of the selected items.
+
+
 2018-12-08 Roman (stable)
 - SYS.configure.ac: Fixed for name of the required libldap library.
 - FIX:Archives: messGet() expanded to sort the buffer messages and prevent collisions at the clock correcting.

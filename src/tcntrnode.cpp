@@ -694,6 +694,7 @@ void TCntrNode::modifGClr( )
 
 void TCntrNode::load( TConfig *cfg, string *errs )
 {
+    bool loadOwn = false;
     //Self load
     if((isModify(Self)&Self))
 	try {
@@ -702,6 +703,7 @@ void TCntrNode::load( TConfig *cfg, string *errs )
 	    load_(cfg);
 	    load_();
 	    modifClr(nodeFlg()&SelfModifyS);	//Save modify or clear
+	    loadOwn = true;
 	} catch(TError &err) {
 	    if(errs && err.cat.size()) (*errs) += nodePath('.')+": "+err.mess+"\n";
 	    /*mess_err(err.cat.c_str(), "%s", err.mess.c_str());
@@ -725,6 +727,8 @@ void TCntrNode::load( TConfig *cfg, string *errs )
 	    }
 	}
     }
+
+    if(loadOwn) load__();
 }
 
 void TCntrNode::save( unsigned lev, string *errs )

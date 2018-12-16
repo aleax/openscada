@@ -300,11 +300,15 @@ void WidgetLib::mimeDataDel( const string &iid, const string &idb )
     SYS->db().at().dataDel(wdb+"."+wtbl, mod->nodePath()+wtbl, cEl, false, false, true);
 }
 
-void WidgetLib::add( const string &id, const string &name, const string &orig )
+string WidgetLib::add( const string &iid, const string &name, const string &orig )
 {
-    if(present(id))	return;
-    chldAdd(mWdg, new LWidget(id,orig));
-    at(id).at().setName(name);
+    if(present(iid))	return "";
+
+    LWidget *obj = new LWidget(TSYS::strEncode(iid,TSYS::oscdID), orig);
+    chldAdd(mWdg, obj);
+    obj->setName(name);
+
+    return obj->id();
 }
 
 void WidgetLib::add( LWidget *iwdg )
@@ -397,12 +401,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trLU(at(lst[i_f]).at().name(),l,u));
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    if(present(vid)) throw TError(nodePath().c_str(), _("Widget '%s' is already present!"), vid.c_str());
-	    add(vid, opt->text()); at(vid).at().setOwner(opt->attr("user"));
-	    opt->setAttr("id", vid);
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) { opt->setAttr("id", add(opt->attr("id"),opt->text())); at(opt->attr("id")).at().setOwner(opt->attr("user")); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR)) del(opt->attr("id"),true);
     }
     else if(a_path == "/mime/mime") {

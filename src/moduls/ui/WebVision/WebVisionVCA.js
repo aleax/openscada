@@ -1514,11 +1514,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    optEl.appendChild(this.place.ownerDocument.createTextNode(elLst[i]));
 			    if((selId=selVal.indexOf(elLst[i])) >= 0) {
 				optEl.defaultSelected = optEl.selected = true;
-				selVal.splice(selId,1);
+				selVal.splice(selId, 1);
 			    }
 			    formObj.appendChild(optEl);
 			}
-			for(i = 0; i < selVal.length; i++) {
+			for(i = 0; i < selVal.length && elTp == 4; i++) {
 			    var optEl = this.place.ownerDocument.createElement('option');
 			    optEl.textContent = selVal[i];
 			    optEl.selected = optEl.defaultSelected = true;
@@ -1734,7 +1734,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['font'])  formObj.style.cssText = 'font: '+this.place.fontCfg+'; ';
 		    // Processing for fill and changes
-		    if(toInit || (this.attrsMdf['items'] && !formObj.edIt)) {
+		    if(toInit || ((this.attrsMdf['items'] || this.attrsMdf['value']) && !formObj.edIt)) {
 			hdrPresent = false, maxCols = 0, maxRows = 0;
 			items = (new DOMParser()).parseFromString(this.attrs['items'], "text/xml");
 			if(!items.children.length || (tX=items.children[0]).nodeName != "tbl") formObj.innerHTML = "";

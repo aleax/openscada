@@ -21,7 +21,7 @@
 #ifndef TARCHIVES_H
 #define TARCHIVES_H
 
-#define SARH_VER	12		//ArchiveS type modules version
+#define SARH_VER	20		//ArchiveS type modules version
 #define SARH_ID		"Archive"
 
 #include <string>
@@ -153,18 +153,18 @@ class TTypeArchivator: public TModule
 	virtual ~TTypeArchivator( );
 
 	// Messages
-	void messList( vector<string> &list ) const		{ chldList(mMess,list); }
-	bool messPresent( const string &iid ) const		{ return chldPresent(mMess,iid); }
-	void messAdd( const string &iid, const string &idb = "*.*" );
-	void messDel( const string &iid, bool full = false )	{ chldDel(mMess,iid,-1,full); }
-	AutoHD<TMArchivator> messAt( const string &iid ) const	{ return chldAt(mMess,iid); }
+	void messList( vector<string> &list ) const		{ chldList(mMess, list); }
+	bool messPresent( const string &id ) const		{ return chldPresent(mMess, id); }
+	string messAdd( const string &id, const string &idb = "*.*" );
+	void messDel( const string &id, bool full = false )	{ chldDel(mMess, id, -1, full); }
+	AutoHD<TMArchivator> messAt( const string &id ) const	{ return chldAt(mMess, id); }
 
 	// Values
-	void valList( vector<string> &list ) const		{ chldList(mVal,list); }
-	bool valPresent( const string &iid ) const		{ return chldPresent(mVal,iid); }
-	void valAdd( const string &iid, const string &idb = "*.*" );
-	void valDel( const string &iid, bool full = false )	{ chldDel(mVal,iid,-1,full); }
-	AutoHD<TVArchivator> valAt( const string &iid ) const	{ return chldAt(mVal,iid); }
+	void valList( vector<string> &list ) const		{ chldList(mVal, list); }
+	bool valPresent( const string &id ) const		{ return chldPresent(mVal, id); }
+	string valAdd( const string &id, const string &idb = "*.*" );
+	void valDel( const string &id, bool full = false )	{ chldDel(mVal, id, -1, full); }
+	AutoHD<TVArchivator> valAt( const string &id ) const	{ return chldAt(mVal, id); }
 
 	TArchiveS &owner( ) const;
 
@@ -215,11 +215,11 @@ class TArchiveS : public TSubSYS
 	void perSYSCall( unsigned int cnt );
 
 	// Value archives functions
-	void valList( vector<string> &list ) const		{ chldList(mAval,list); }
-	bool valPresent( const string &iid ) const		{ return chldPresent(mAval,iid); }
-	void valAdd( const string &iid, const string &idb = "*.*" );
-	void valDel( const string &iid, bool db = false )	{ chldDel(mAval,iid,-1,db); }
-	AutoHD<TVArchive> valAt( const string &iid ) const	{ return chldAt(mAval,iid); }
+	void valList( vector<string> &list ) const		{ chldList(mAval, list); }
+	bool valPresent( const string &id ) const		{ return chldPresent(mAval, id); }
+	string valAdd( const string &id, const string &idb = "*.*" );
+	void valDel( const string &id, bool db = false )	{ chldDel(mAval, id, -1, db); }
+	AutoHD<TVArchive> valAt( const string &id ) const	{ return chldAt(mAval, id); }
 
 	void setActMess( TMArchivator *a, bool val );
 	void setActVal( TVArchive *a, bool val );

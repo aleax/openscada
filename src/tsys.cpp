@@ -414,7 +414,7 @@ string TSYS::strMess( const char *fmt, ... )
     return str;
 }
 
-string TSYS::strMess( unsigned len, const char *fmt, ... )
+/*string TSYS::strMess( unsigned len, const char *fmt, ... )
 {
     if(len <= 0) return "";
 
@@ -426,7 +426,7 @@ string TSYS::strMess( unsigned len, const char *fmt, ... )
     va_end(argptr);
 
     return (lenRez < (int)len) ? string(str) : string(str)+"...";
-}
+}*/
 
 string TSYS::strLabEnum( const string &base )
 {
@@ -1345,6 +1345,16 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	    for(iSz = 0; iSz < (int)in.size(); iSz++)
 		sout += (char)tolower(in[iSz]);
 	    break;
+	case TSYS::Limit: {
+	    int lVal = s2i(opt1), off = 0;
+	    if(!lVal) sout = in;
+	    else {
+		for(int oL = 0, cL = 0; off < in.size() && oL < lVal; oL++)
+		    off += (cL=Mess->getUTF8(in,off)) ? cL : 1;
+		sout = in.substr(0, off);
+	    }
+	    break;
+	}
     }
     return sout;
 }
@@ -2677,8 +2687,37 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  char1, char2. char3 - symbol's codes
     if(iid == "strFromCharCode") {
 	string rez;
-	for(unsigned i_p = 0; i_p < prms.size(); i_p++)
-	    rez += (unsigned char)prms[i_p].getI();
+	for(unsigned iP = 0; iP < prms.size(); iP++)
+	    rez += (unsigned char)prms[iP].getI();
+	return rez;
+    }
+    // string strFromCharUTF([string type = "UTF-8",] int char1, int char2, int char3, ...) - string creation from UTF codes
+    //  type - symbol type, (UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE)
+    //  char1, char2. char3 - symbol's codes
+    if(iid == "strFromCharUTF") {
+	string rez;
+	int st = 0;
+	string tp = "";
+	if(prms.size() && prms[0].type() == TVariant::String) st = 1, tp = prms[0].getS();
+	if(tp.find("utf-16") == 0) {
+	    uint16_t tvl = 0;
+	    for(unsigned iP = st; iP < prms.size(); iP++) {
+		if(tp.find("be") != string::npos) tvl = TSYS::i16_BE(prms[iP].getI());
+		else tvl = TSYS::i16_LE(prms[iP].getI());
+		rez += string((const char*)&tvl, 2);
+	    }
+	}
+	else if(tp.find("utf-32") == 0) {
+	    uint32_t tvl = 0;
+	    for(unsigned iP = st; iP < prms.size(); iP++) {
+		if(tp.find("be") != string::npos) tvl = TSYS::i32_BE(prms[iP].getI());
+		else tvl = TSYS::i32_LE(prms[iP].getI());
+		rez += string((const char*)&tvl, 4);
+	    }
+	}
+	else for(unsigned iP = st; iP < prms.size(); iP++)
+	    rez += TMess::setUTF8(prms[iP].getI());
+
 	return rez;
     }
     // string strCodeConv( string src, string fromCP, string toCP ) - String text encode from codepage <fromCP> to codepage <toCP>.
@@ -2708,6 +2747,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	else if(stp == "Bin")		tp = Bin;
 	else if(stp == "Reverse")	tp = Reverse;
 	else if(stp == "ShieldSimb")	tp = ShieldSimb;
+	else if(stp == "ToLower")	tp = ToLower;
+	else if(stp == "Limit")		tp = Limit;
 	else return "";
 	return strEncode(prms[0].getS(), tp, (prms.size()>2) ? prms[2].getS() : "");
     }

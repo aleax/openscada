@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Документація/API користувача</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FUser+API&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API">Documents/User API</a> and the translation is 98% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/ru" title="Документация/API пользователя (98% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FUser+API&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API">Documents/User API</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Documents/User_API/ru" title="Документация/API пользователя (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
 <p><i>Автор:</i> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -270,8 +270,8 @@ for(var i = 0; i &lt; arguments.length; i++)
 <ul><li> <i>int length</i> — довжина рядка.</li></ul>
 <dl><dt> <i>Функції:</i></dt></dl>
 <ul><li> <i>bool isEVal();</i> — перевіряє значення на "EVAL".</li>
-<li> <i>string charAt( int symb );</i> — вилучає із рядка символ номер <i>symb</i>, нумерація символів з нуля.</li>
-<li> <i>int charCodeAt( int symb );</i> — вилучає із рядка код символу <i>symb</i>.</li>
+<li> <i>string charAt( int symb, string type = "" );</i> — дістає із рядка символ за номером <i>symb</i> типу <i>type</i>. Наступні типи символу підтримуються: ""-ASCII та простий одно байтовий, UTF-8, UTF-16, UTF-32. У випадку із UTF-8, позиція символу <i>symb</i> змінюється у позицію наступного символу оскільки довжина символів цього типу змінна.</li>
+<li> <i>int charCodeAt( int symb, string type = "" );</i> — дістає із рядка код символу <i>symb</i> типу <i>type</i>. Наступні типи символу підтримуються: ""-ASCII та простий одно байтовий, UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE. У випадку із UTF-8, позиція символу <i>symb</i> змінюється у позицію наступного символу оскільки довжина символів цього типу змінна.</li>
 <li> <i>string concat( string val1, string val2, ... );</i> — повертає новий рядок, сформований шляхом приєднання значень <i>val1</i> та інші до початкового.</li>
 <li> <i>int indexOf( string substr, int start );</i> — повертає позицію пошукового рядка <i>substr</i> у вихідному рядку, починаючи з позиції <i>start</i>. Якщо вихідна позиція не вказана то пошук починається з початку. Якщо шуканого рядка не знайдено то повертається "-1".</li>
 <li> <i>int lastIndexOf( string substr, int start );</i> — повертає позицію шуканого рядка <i>substr</i> у вихідному рядку починаючи з позиції <i>start</i>, при пошуку з кінця. Якщо вихідна позиція не вказана то пошук починається з кінця. Якщо шуканого рядку не знайдено то повертається "-1".</li>
@@ -438,6 +438,7 @@ SYS.cntrReq(req); </pre></li>
 <li><i>int {strptime|strptimegm}( string str, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — повертає час у секундах від епохи 1.1.1970, виходячи з строкового запису часу <i>str</i>, відповідно до вказаного шаблону <i>form</i>. Наприклад, шаблону "%Y-%m-%d&nbsp;%H:%M:%S" відповідає час "2006-08-08 11:21:55". Опис формату шаблону можна отримати з документації на POSIX-функцію <i>strptime</i>. <i>strptimegm</i> працює з часом у GMT(UTC).</li>
 <li><i>int cron( string cronreq, int base = 0 );</i> — повертає час, спланований у форматі стандарту Cron, <i>cronreq</i>, починаючи від базового часу <i>base</i> або від поточного, якщо базовий не вказано.</li>
 <li><i>string strFromCharCode( int char1, int char2, int char3, ... );</i> — створює рядок з кодів символів <i>char1</i>, <i>char2</i> ... <i>charN</i>.</li>
+<li><i>string strFromCharUTF([string type = "UTF-8",] int char1, int char2, int char3, ...);</i> — створює рядок з UTF символів <i>char1</i>, <i>char2</i> ... <i>charN</i>. Наступні типи символу підтримуються: UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE.</li>
 <li><i>string strCodeConv( string src, string fromCP, string toCP );</i> — перекодовує текст <i>src</i> з кодування <i>fromCP</i> у <i>toCP</i>. Якщо кодування опущено (порожній рядок), то використовується внутрішнє.</li>
 <li><i>string strEncode( string src, string tp = "Bin", string opt1 = "" );</i> — кодує рядок <i>src</i> за правилом <i>tp</i> та опції <i>opt1</i>. Доступні правила:
 <dl><dd>"PathEl" — символи <b>[/%]</b> у "%2f" та "%25", відповідно;</dd>
@@ -451,7 +452,9 @@ SYS.cntrReq(req); </pre></li>
 <dd>"OscdID" — майже всі символи на кшталт <b>[ /\&amp;(]</b> у '_';</dd>
 <dd>"Bin" — перелік ASCII байтів ("XX XX XX XX ...") у бінарне представлення;</dd>
 <dd>"Reverse" — інверсія послідовності;</dd>
-<dd>"ShieldSimb" — захищені символи типу '\a', '\b', ..., '\0NNN', '\xNN' у бінарне представлення.</dd></dl>
+<dd>"ShieldSimb" — захищені символи типу '\a', '\b', ..., '\0NNN', '\xNN' у бінарне представлення;</dd>
+<dd>"ToLower" — символи до нижнього регістру;</dd>
+<dd>"Limit" — обмеження рядку довжиною у <i>opt1</i>, враховуючи змінну довжину UTF-8.</dd></dl>
 </li>
 <li><i>string strDecode( string src, string tp = "Bin", string opt1 = "" );</i> — декодує рядок <i>src</i> за правилом <i>tp</i> та опції <i>opt1</i>. Доступні правила:
 <dl><dd>"PathEl", "HttpURL", "Custom" — символи вигляду "%NN" у бінарне представлення;</dd>
@@ -659,23 +662,23 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>string addr( string vl = "" )</i> — адреса транспорту, встановлює у непорожнє значення <i>vl</i>.</li>
 <li> <i>string writeTo( string sender, string mess )</i> — відправляє повідомлення <i>mess</i> відправнику <i>sender</i>, як відповідь.</li>
 <li> <i>TArrayObj assTrsList( )</i> — перелік пов'язаних вихідних транспортів з цим вхідним.</li></ul>
-<p>Functions of the output transport object (SYS.Transport["Modul"]["out_Transp"]):
+<p>Функції об'єкту вихідного транспорту (SYS.Transport["Modul"]["out_Transp"]):
 </p>
 <ul>
-<li><i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li><i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
-<li><i>string status()</i> — string status of the transport.</li>
-<li><i>bool start( bool vl = EVAL, int tm = 0 )</i> — returns the transport status "Running", starts/stops it by <i>vl</i> (if it is not EVAL). For starting you can set the specific timeout <i>tm</i>.</li>
-<li><i>string addr( string vl = "" )</i> — address of the transport, sets the non-empty value <i>vl</i>.</li>
-<li><i>string timings( string vl = "" )</i> — timings of the transport, sets the non-empty value <i>vl</i>.</li>
-<li><i>int attempts( int vl = EVAL )</i> — attempts of the transport connection, sets the non-EVAL value <i>vl</i>.</li>
-<li><i>string messIO( string mess, real timeOut = 0, int inBufLen = -1 );</i> — sends the message <i>mess</i> via the transport with the waiting time of the response <i>timeOut</i> (in seconds) and reads an response (Buffer) in <i>inBufLen</i> byte. In the case of a zero timeout, this time is taken from the settings of the output transport. The <i>timeOut</i> in negative (&lt; -1e-3) disables the transport request/respond mode and allows for independent reading/writing to a buffer IO, with the reading timeout <i>timeOut</i> in absolute. For negative <i>inBufLen</i> the buffer size sets to STR_BUF_LEN(10000) and "0" disables the reading at all.<br />
-<a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> If your transport means getting data in parts for a request then for several devices on single bus-transport, use the function into single thread but there is not a way to lock the transport into the user API. Single thread that is any object of controller of DAQ and <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the module "User protocol"</a> locks the transport internally before self user procedures execution.
+<li><i>ElTp cfg(string nm)</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
+<li><i>bool cfgSet(string nm, ElTp val)</i> — встановлює конфігураційне поле <i>nm</i> об'єкту у значення <i>val</i>.</li>
+<li><i>string status()</i> — рядок статусу транспорту.</li>
+<li><i>bool start( bool vl = EVAL, int tm = 0 )</i> — повертає статус "Виконання", запускає/зупиняє за <i>vl</i> (якщо не &lt;EVAL&gt;). Для запуску можна вказувати особливий таймаут <i>tm</i>.</li>
+<li><i>string addr( string vl = "" )</i> — адреса транспорту, встановлює у непорожнє значення <i>vl</i>.</li>
+<li><i>string timings( string vl = "" )</i> — таймінги транспорту, встановлює у непорожнє значення <i>vl</i>.</li>
+<li><i>int attempts( int vl = EVAL )</i> — спроб підключень транспорту, встановлює у не-EVAL значення <i>vl</i>.</li>
+<li><i>string messIO( string mess, real timeOut = 0, int inBufLen = -1 );</i> — відправляє повідомлення <i>mess</i> через транспорт з таймаутом очікування відповіді <i>timeOut</i> (у секундах) та читає відповідь (буфер) розміром <i>inBufLen</i> байт. У випадку нульового таймауту цей час береться з налаштувань вихідного транспорту. Негативний час <i>timeOut</i> (&lt; -1e-3) вимикає роботу транспорту у режимі запит/відповідь та дозволяє незалежно читати/писати у буфер ВВ, з таймаутом читання <i>timeOut</i>, у абсолютному значенні. Для негативного <i>inBufLen</i> розмір буферу встановлюється у STR_BUF_LEN(10000), а "0" вимикає читання взагалі.<br />
+<a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Якщо Ваш транспорт у відповідь на запит передбачає отримання даних частинами тоді використовуйте цю функцію у одному потоці для декількох пристроїв на одній шині-транспорті оскільки тут не існує способу блокування транспорту з користувацького API. Один потік це об'єкт контролеру підсистеми "Збір даних", а <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модуль "Протокол користувача"</a> блокує транспорт всередині, перед виконанням своїх користувацьких процедур.
 <pre style="white-space: pre-wrap;">
 rez = SYS.Transport.Serial.out_ttyUSB0.messIO(SYS.strFromCharCode(0x4B,0x00,0x37,0x40),0.2);
 //Wait for all the message tail by timeout and empty result
 while((trez=SYS.Transport.Serial.out_ttyUSB0.messIO("")).length) rez += trez; </pre></li>
-<li><i>string messIO( XMLNodeObj req, string prt );</i> — sends the requests <i>req</i> to the protocol <i>prt</i> to perform a communication session through the transport and in assistance of the protocol.
+<li><i>string messIO( XMLNodeObj req, string prt );</i> — відправляє запити <i>req</i> до протоколу <i>prt</i> для здійснення сеансу зв'язку через транспорт за посередництвом протоколу.
 <pre style="white-space: pre-wrap;">
 req = SYS.XMLNode("TCP");
 req.setAttr("id","test").setAttr("reqTm",500).setAttr("node",1).setAttr("reqTry",2).setText(SYS.strFromCharCode(0x03,0x00,0x00,0x00,0x05));

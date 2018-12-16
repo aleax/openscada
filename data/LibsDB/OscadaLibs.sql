@@ -1279,7 +1279,7 @@ INSERT INTO "tmplib_DevLib_io" VALUES('pulsarM','addr','Address [0...99999999]',
 INSERT INTO "tmplib_DevLib_io" VALUES('pulsarM','this','Object',4,0,'',3,'Объект','','Об''єкт','');
 INSERT INTO "tmplib_DevLib_io" VALUES('pulsarM','nChnl','Channels number',1,32,'0',2,'Количество каналов','','Кількість каналів','');
 INSERT INTO "tmplib_DevLib_io" VALUES('OWEN','transport','Transport',0,64,'Serial.out_owen',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('OWEN','items','Items set "{addr}:{func}:{f|iu{8|16}|s}:{r|w}[:{id}[:{nm}]]"',0,36,'',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OWEN','items','Items set "{addr}:{func}:{f|i|u|s}:{r|w}[:{id}[:{nm}]]"',0,36,'',1,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('OWEN','this','Object',4,0,'',2,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
@@ -5516,8 +5516,12 @@ else {
 
 f_err = t_err;','','',1542134045);
 INSERT INTO "tmplib_DevLib" VALUES('OWEN','OWEN','','','OWEN data sources implementation in the OWEN protocol. Implemented wholly in the template for the protocol requesting and for dynamic data model of the OWEN data sources'' data with support of the writing and original names of the parameters.
+The field "addr" of the items can be wrote positive, for  the 8 bit address [0...255], and negative, for the 11 bit address[-2047...0].
+The protocol implementing is not finished due to missing for feedback from the developer to resolve this undocumented behavior:
+- МВ110-8А responds error 0x31 for reading "in-t" >1003023331932DCB43 <1010932D4791;
+- and error 0x34 for it writing >1003023334932D2A42 <1001932D0BEDBC.
 Author: Roman Savochenko <rom_as@oscada.org>, Constantine (IrmIngeneer)
-Version: 0.8.0','','',30,0,'JavaLikeCalc.JavaScript
+Version: 0.8.1','','',30,0,'JavaLikeCalc.JavaScript
 function hash(data, isName) {
 	for(CRC = 0, i = 0; i < data.length; i++) {
 		b = data.charCodeAt(i);
@@ -5595,7 +5599,7 @@ function req(tr, addr, data) {
 
 	if(resp.charCodeAt(1) != (resp.length-6))
 		return "12:"+tr("The data size is not equal to pointed one.");
-	else if(resp.slice(2,4) != data.slice(0,2) && ((resp.charCodeAt(2)<<8)+resp.charCodeAt(3)) != nmHash("n.Err"))
+	else if(resp.slice(2,4) != data.slice(0,2) && resp.charCodeAt(2,"UTF-16BE") != nmHash("n.Err"))
 		return "21:Unpaired function in the response.";
 
 	data = resp.slice(2, resp.length-2);
@@ -5634,7 +5638,7 @@ if(items != items_) {
 		if(!itO.nm.length)	itO.nm = itO.id.length ? itO.id : itO.func;
 		if(!itO.id.length)	itO.id = itO.func.replace(new RegExp("[.]"), "_");
 		SYS.messDebug("/OWEN", "id="+itO.id);
-		if(itO.tp[0] == "u" || itO.tp[0] == "i") {
+		if(itO.tp == "u" || itO.tp == "i") {
 			wTp = "integer";
 			itO.sz = itO.tp.slice(1).toInt();
 			itO.sz = (itO.sz?itO.sz:16)/8;
@@ -5690,7 +5694,7 @@ else {
 					Special.FLibSYS.floatSplitWord(tVl, tVl2, tVl3);
 					data += SYS.strFromCharCode(tVl3>>8, tVl3&0xFF, tVl2>>8) + ((tVl2&0xFF)?SYS.strFromCharCode(tVl2&0xFF):"");
 				}
-				else if(itO.tp[0] == "u" || itO.tp[0] == "i") {
+				else if(itO.tp == "u" || itO.tp == "i") {
 					for(tVl2 = SYS.strFromCharCode(tVl&0xFF), tVl = tVl>>8; tVl; tVl = tVl>>8)
 						tVl2 = SYS.strFromCharCode(tVl&0xFF) + tVl2;
 					data += tVl2;
@@ -5699,7 +5703,7 @@ else {
 					for(iV = tVl.length-1; iV >= 0; iV--)	data += tVl[iV];
 
 				if(!(t_err=req(tr,itO.addr,data)).toInt()) {
-					if(((data.charCodeAt(0)<<8)+data.charCodeAt(1)) == nmHash("n.Err")) {
+					if(data.charCodeAt(0,"UTF-16BE") == nmHash("n.Err")) {
 						t_infW += (t_infW.length?"; ":": ")+itO.nm+":nErr=0x"+data.charCodeAt(2).toString(16);
 						infWHoldTm = SYS.time()+10;
 					} else itO.val = tVl;
@@ -5709,7 +5713,7 @@ else {
 			// Reading
 			data = SYS.strFromCharCode(itO.funcH>>8, itO.funcH&0xFF);
 			if(itO.rd && !(t_err=req(tr,itO.addr,data)).toInt()) {
-				if(((data.charCodeAt(0)<<8)+data.charCodeAt(1)) == nmHash("n.Err") && itO.funcH != nmHash("n.Err")) {
+				if(data.charCodeAt(0,"UTF-16BE") == nmHash("n.Err") && itO.funcH != nmHash("n.Err")) {
 					t_inf += (t_inf.length?"; ":": ")+itO.nm+":nErr=0x"+data.charCodeAt(2).toString(16);
 					this[itO.id].set(EVAL, 0, 0, true); itO.val = EVAL;
 				}
@@ -5725,7 +5729,7 @@ else {
 						else tVl = EVAL;
 						this[itO.id].set(tVl, 0, 0, true); itO.val = tVl;
 					}
-					else if(itO.tp[0] == "u" || itO.tp[0] == "i") {
+					else if(itO.tp == "u" || itO.tp == "i") {
 						for(tVl = 0, iV = 0; iV < data.length; iV++)
 							tVl = (tVl<<8) | data.charCodeAt(iV);
 						this[itO.id].set(tVl, 0, 0, true); itO.val = tVl;
@@ -5744,7 +5748,7 @@ else {
 }
 
 f_err = t_err;
-if(!f_err.toInt())	f_err += t_inf + (t_infW.length?" "+tr("Write")+t_infW:"");','','',1543757639);
+if(!f_err.toInt())	f_err += t_inf + (t_infW.length?" "+tr("Write")+t_infW:"");','','',1544882666);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default

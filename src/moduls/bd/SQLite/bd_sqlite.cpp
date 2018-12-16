@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.3"
+#define MOD_VER		"2.5.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -191,7 +191,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
 	string err = _("Unknown error");
 	if(zErrMsg) { err = zErrMsg; sqlite3_free(zErrMsg); }
 	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Error of the request \"%s\": %s(%d)"), req.c_str(), err.c_str(), rc);
-	throw err_sys(100+rc, _("Error of the request \"%s\": %s(%d)"), TSYS::strMess(50,"%s",req.c_str()).c_str(), err.c_str(), rc);
+	throw err_sys(100+rc, _("Error of the request \"%s\": %s(%d)"), TSYS::strEncode(req,TSYS::Limit,"50").c_str(), err.c_str(), rc);
     }
     if(tbl && ncol > 0) {
 	vector<string> row;

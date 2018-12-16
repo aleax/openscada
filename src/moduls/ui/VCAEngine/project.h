@@ -86,7 +86,7 @@ class Project : public TCntrNode, public TConfig
 	void list( vector<string> &ls ) const		{ chldList(mPage,ls); }
 	bool present( const string &id ) const		{ return chldPresent(mPage,id); }
 	AutoHD<Page> at( const string &id ) const;
-	void add( const string &id, const string &name, const string &orig = "" );
+	string add( const string &id, const string &name, const string &orig = "" );
 	void add( Page *iwdg );
 	void del( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full ); }
 
@@ -212,7 +212,7 @@ class Page : public Widget, public TConfig
 	void pageList( vector<string> &ls ) const		{ chldList(mPage,ls); }
 	bool pagePresent( const string &id ) const		{ return chldPresent(mPage,id); }
 	AutoHD<Page> pageAt( const string &id ) const;
-	void pageAdd( const string &id, const string &name, const string &orig = "" );
+	string pageAdd( const string &id, const string &name, const string &orig = "" );
 	void pageAdd( Page *iwdg );
 	void pageDel( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full ); }
 

@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.8.5"
+#define MOD_VER		"1.8.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -425,9 +425,12 @@ void Contr::redntDataUpdate( )
 
 TParamContr *Contr::ParamAttach( const string &name, int type )	{ return new Prm(name,&owner().tpPrmAt(type)); }
 
-void Contr::blkAdd( const string &iid )
+string Contr::blkAdd( const string &iid )
 {
-    chldAdd(mBl, new Block(iid, this));
+    Block *obj = new Block(TSYS::strEncode(iid,TSYS::oscdID), this);
+    chldAdd(mBl, obj);
+
+    return obj->id();
 }
 
 void Contr::blkProc( const string &id, bool val )
@@ -468,10 +471,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", blkAdd(opt->attr("id"))); blkAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"),-1,1);
     }
     else if(a_path == "/scheme/sch") {
@@ -488,10 +488,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		    opt->childAdd("el")->setAttr("id",calcBlks[i_b].at().id())->setText(calcBlks[i_b].at().name());
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", blkAdd(opt->attr("id"))); blkAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"),-1,1);
     }
     else if(a_path == "/scheme/nmb" && ctrChkNode(opt)) {

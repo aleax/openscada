@@ -82,9 +82,12 @@ void TProt::clientMsgMaxSzSet( const string &inPrtId, uint32_t vl )	{ at(inPrtId
 
 void TProt::clientChunkMaxCntSet( const string &inPrtId, uint32_t vl )	{ at(inPrtId).at().mChunkMaxCnt = vl; }
 
-void TProt::epAdd( const string &iid, const string &db )
+string TProt::epAdd( const string &iid, const string &db )
 {
-    chldAdd(mEndPnt, new OPCEndPoint(iid,db,&endPntEl()));
+    OPCEndPoint *obj = new OPCEndPoint(TSYS::strEncode(iid,TSYS::oscdID), db, &endPntEl());
+    chldAdd(mEndPnt, obj);
+
+    return obj->id();
 }
 
 bool TProt::debug( )			{ return (mess_lev()==TMess::Debug); }
@@ -243,10 +246,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id", lst[i_f])->setText(epAt(lst[i_f]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
-	    epAdd(vid); epAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", epAdd(opt->attr("id"))); epAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mEndPnt,opt->attr("id"),-1,1);
     }
     else TProtocol::cntrCmdProc(opt);

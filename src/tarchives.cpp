@@ -235,10 +235,14 @@ void TArchiveS::save_( )
     TBDS::genDBSet(nodePath()+"RdRestDtOverTm",r2s(rdRestDtOverTm()));
 }
 
-void TArchiveS::valAdd( const string &iid, const string &idb )
+string TArchiveS::valAdd( const string &iid, const string &idb )
 {
-    if(valPresent(iid)) return;
-    chldAdd(mAval, new TVArchive(iid,idb,&aValE()));
+    if(valPresent(iid)) return "";
+
+    TVArchive *obj = new TVArchive(TSYS::strEncode(iid,TSYS::oscdID), idb, &aValE());
+    chldAdd(mAval, obj);
+
+    return obj->id();
 }
 
 string TArchiveS::optDescr(  )
@@ -1054,8 +1058,8 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	modList(lsm);
 	for(unsigned iM = 0; iM < lsm.size(); iM++) {
 	    at(lsm[iM]).at().messList(lsa);
-	    for(unsigned i_a = 0; i_a < lsa.size(); i_a++)
-		itsMap[lsm[iM]+"."+lsa[i_a]] = true;
+	    for(unsigned iA = 0; iA < lsa.size(); iA++)
+		itsMap[lsm[iM]+"."+lsa[iA]] = true;
 	}
 
 	string curVal = TBDS::genDBGet(nodePath()+"messArch","",opt->attr("user")), tVl, tVl1;
@@ -1109,21 +1113,18 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	vector<string> list;
 	valList(list);
 	unsigned e_c = 0;
-	for(unsigned i_a = 0; i_a < list.size(); i_a++)
-	    if(valAt(list[i_a]).at().startStat()) e_c++;
+	for(unsigned iA = 0; iA < list.size(); iA++)
+	    if(valAt(list[iA]).at().startStat()) e_c++;
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),list.size(),e_c));
     }
     else if(a_path == "/br/va_" || a_path == "/v_arch/archs") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {
 	    vector<string> list;
 	    valList(list);
-	    for(unsigned i_a=0; i_a < list.size(); i_a++)
-		opt->childAdd("el")->setAttr("id",list[i_a])->setText(valAt(list[i_a]).at().name());
+	    for(unsigned iA = 0; iA < list.size(); iA++)
+		opt->childAdd("el")->setAttr("id",list[iA])->setText(valAt(list[iA]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    valAdd(vid); valAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR))	{ opt->setAttr("id", valAdd(opt->attr("id"))); valAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	chldDel(mAval,opt->attr("id"),-1,1);
     }
     else if(a_path == "/redund/restDtOverTm") {
@@ -1189,9 +1190,21 @@ TTypeArchivator::~TTypeArchivator( )	{ nodeDelAll(); }
 
 TArchiveS &TTypeArchivator::owner( ) const	{ return (TArchiveS &)TModule::owner(); }
 
-void TTypeArchivator::messAdd(const string &name, const string &idb )	{ chldAdd(mMess, AMess(name,idb)); }
+string TTypeArchivator::messAdd( const string &iid, const string &idb )
+{
+    TMArchivator *obj = AMess(TSYS::strEncode(iid,TSYS::oscdID), idb);
+    chldAdd(mMess, obj);
 
-void TTypeArchivator::valAdd( const string &iid, const string &idb )	{ chldAdd(mVal, AVal(iid,idb)); }
+    return obj->id();
+}
+
+string TTypeArchivator::valAdd( const string &iid, const string &idb )
+{
+    TVArchivator *obj = AVal(TSYS::strEncode(iid,TSYS::oscdID), idb);
+    chldAdd(mVal, obj);
+
+    return obj->id();
+}
 
 void TTypeArchivator::cntrCmdProc( XMLNode *opt )
 {
@@ -1214,26 +1227,20 @@ void TTypeArchivator::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {
 	    vector<string> list;
 	    messList(list);
-	    for(unsigned i_a = 0; i_a < list.size(); i_a++)
-		opt->childAdd("el")->setAttr("id",list[i_a])->setText(messAt(list[i_a]).at().name());
+	    for(unsigned iA = 0; iA < list.size(); iA++)
+		opt->childAdd("el")->setAttr("id",list[iA])->setText(messAt(list[iA]).at().name());
 	}
-	else if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    messAdd(vid); messAt(vid).at().setName(opt->text());
-	}
+	else if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR))	{ opt->setAttr("id", messAdd(opt->attr("id"))); messAt(opt->attr("id")).at().setName(opt->text()); }
 	else if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	messDel(opt->attr("id"),true);
     }
     else if(a_path == "/br/val_" || a_path == "/arch/val") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {
 	    vector<string> list;
 	    valList(list);
-	    for(unsigned i_a = 0; i_a < list.size(); i_a++)
-		opt->childAdd("el")->setAttr("id",list[i_a])->setText(valAt(list[i_a]).at().name());
+	    for(unsigned iA = 0; iA < list.size(); iA++)
+		opt->childAdd("el")->setAttr("id",list[iA])->setText(valAt(list[iA]).at().name());
 	}
-	else if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    valAdd(vid); valAt(vid).at().setName(opt->text());
-	}
+	else if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR))	{ opt->setAttr("id", valAdd(opt->attr("id"))); valAt(opt->attr("id")).at().setName(opt->text()); }
 	else if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	valDel(opt->attr("id"),true);
     }
     else TModule::cntrCmdProc(opt);

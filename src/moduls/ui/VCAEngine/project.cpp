@@ -269,12 +269,15 @@ void Project::setEnable( bool val )
     mEnable = val;
 }
 
-void Project::add( const string &id, const string &name, const string &orig )
+string Project::add( const string &iid, const string &name, const string &orig )
 {
-    if(present(id)) return;
-    //chldAdd(mPage, new Page(id,orig));
-    add(new Page(id,orig));
-    at(id).at().setName(name);
+    if(present(iid)) return "";
+
+    Page *obj = new Page(TSYS::strEncode(iid,TSYS::oscdID), orig);
+    add(obj);
+    obj->setName(name);
+
+    return obj->id();
 }
 
 void Project::add( Page *iwdg )
@@ -637,12 +640,9 @@ void Project::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trLU(at(lst[i_f]).at().name(),l,u));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    if(present(vid)) throw TError(nodePath().c_str(), _("Page '%s' is already present!"), vid.c_str());
-	    add(vid, opt->text());
-	    at(vid).at().setOwner(opt->attr("user"));
-	    at(vid).at().manCrt = true;
-	    opt->setAttr("id", vid);
+	    opt->setAttr("id", add(opt->attr("id"),opt->text()));
+	    at(opt->attr("id")).at().setOwner(opt->attr("user"));
+	    at(opt->attr("id")).at().manCrt = true;
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	del(opt->attr("id"),true);
     }
@@ -1271,13 +1271,17 @@ AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off ) const
     return Widget::wdgAt(wdg, lev, off);
 }
 
-void Page::pageAdd( const string &id, const string &name, const string &orig )
+string Page::pageAdd( const string &iid, const string &name, const string &orig )
 {
-    if(pagePresent(id)) return;
+    if(pagePresent(iid)) return "";
     if(!(prjFlags()&(Page::Container|Page::Template)))
 	throw TError(nodePath().c_str(),_("Page is not a container or template!"));
-    chldAdd(mPage, new Page(id,orig));
-    pageAt(id).at().setName(name);
+
+    Page *obj = new Page(TSYS::strEncode(iid,TSYS::oscdID), orig);
+    chldAdd(mPage, obj);
+    obj->setName(name);
+
+    return obj->id();
 }
 
 void Page::pageAdd( Page *iwdg )
@@ -1410,12 +1414,9 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trLU(pageAt(lst[iF]).at().name(),l,u));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
-	    if(pagePresent(vid)) throw TError(nodePath().c_str(), _("Page '%s' is already present!"), vid.c_str());
-	    pageAdd(vid, opt->text());
-	    pageAt(vid).at().setOwner(opt->attr("user"));
-	    pageAt(vid).at().manCrt = true;
-	    opt->setAttr("id", vid);
+	    opt->setAttr("id", pageAdd(opt->attr("id"),opt->text()));
+	    pageAt(opt->attr("id")).at().setOwner(opt->attr("user"));
+	    pageAt(opt->attr("id")).at().manCrt = true;
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	pageDel(opt->attr("id"),true);
     }

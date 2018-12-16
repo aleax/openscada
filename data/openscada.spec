@@ -1,7 +1,7 @@
 #===== Generic Info ======
 Summary: Open SCADA system
-Summary(ru_RU.UTF8): Открытая SCADA система
 Summary(uk_UA.UTF8): Відкрита SCADA система
+Summary(ru_RU.UTF8): Открытая SCADA система
 Summary(de_DE.UTF8): Open SCADA-System
 Name: openscada
 Version: 1+r0000
@@ -32,91 +32,117 @@ BuildRoot: %_tmppath/%name-%version-root
 
 %description
 Open SCADA system.
-%description -l ru_RU.UTF8
-Открытая SCADA система.
 %description -l uk_UA.UTF8
 Відкрита SCADA система.
+%description -l ru_RU.UTF8
+Открытая SCADA система.
 %description -l de_DE.UTF8
 Das offene SCADA System.
 
-%post
-/sbin/chkconfig --add openscada-server
-/sbin/chkconfig --add openscada-plc
+%package plc
+Summary: Open SCADA PLC - daemon mode
+Summary(uk_UA.UTF8): ПЛК на основі відкритої SCADA - режим демону
+Summary(ru_RU.UTF8): ПЛК на основе открытой SCADA - режим демона
+Summary(de_DE.UTF8): PLC basierend auf offenem SCADA - Dämonmodus
+Group: Applications/Engineering
+BuildArch: noarch
+Requires: %name
+%description plc
+The %name-plc package is virtual package for PLC.
+%description plc -l uk_UA.UTF8
+Пакет %name-plc це віртуальний пакет для ПЛК.
+%description plc -l ru_RU.UTF8
+Пакет %name-plc это виртуальный пакет для ПЛК.
+%description plc -l de_RU.UTF8
+Пакет %name-plc ist das Virtualpaket für PLC.
 
-%preun
-/sbin/chkconfig --del openscada-server
-/sbin/chkconfig --del openscada-plc
+%package server
+Summary: OpenSCADA server - daemon mode
+Summary(uk_UA.UTF8): Сервер на основі відкритої SCADA - режим демону
+Summary(ru_RU.UTF8): Сервер на основе открытой SCADA - режим демона
+Summary(de_DE.UTF8): Server basierend auf offenem SCADA - Dämonmodus
+Group: Applications/Engineering
+BuildArch: noarch
+Requires: %name
+%description server
+The %name-server package is virtual package for OpenSCADA-server.
+%description server -l uk_UA.UTF8
+Пакет %name-server це віртуальний пакет для сервера OpenSCADA.
+%description server -l ru_RU.UTF8
+Пакет %name-server это виртуальный пакет для сервера OpenSCADA.
+%description server -l de_RU.UTF8
+Пакет %name-server это виртуальный пакет для сервера OpenSCADA.
 
 %package docEN
 Summary: Open SCADA documents (EN)
-Summary(ru_RU.UTF8): Документация открытой SCADA (EN)
 Summary(uk_UA.UTF8): Документація відкритої SCADA (EN)
+Summary(ru_RU.UTF8): Документация открытой SCADA (EN)
 Summary(de_DE.UTF8): Open SCADA Dokumente (EN)
 Group: Documentation
 BuildArch: noarch
 %description docEN
 The %name-docEN package include documents files (English).
-%description docEN -l ru_RU.UTF8
-Пакет %name-docEN включает файлы документации (Английский).
 %description docEN -l uk_UA.UTF8
 Пакет %name-docEN включає файли документації (Англійська).
+%description docEN -l ru_RU.UTF8
+Пакет %name-docEN включает файлы документации (Английский).
 %description docEN -l de_DE.UTF8
 Das Paket %name-docEN enthaelt Dokumentationsdateien (Englisch).
 
 %package docRU
 Summary: Open SCADA documents (RU)
-Summary(ru_RU.UTF8): Документация открытой SCADA (RU)
 Summary(uk_UA.UTF8): Документація відкритої SCADA (RU)
+Summary(ru_RU.UTF8): Документация открытой SCADA (RU)
 Summary(de_DE.UTF8): Open SCADA Dokumente (RU)
 Group: Documentation
 BuildArch: noarch
 Requires: %name-docEN
 %description docRU
 The %name-docRU package include documents files (Russian).
-%description docRU -l ru_RU.UTF8
-Пакет %name-docRU включает файлы документации (Русский).
 %description docRU -l uk_UA.UTF8
 Пакет %name-docRU включає файли документації (Російська).
+%description docRU -l ru_RU.UTF8
+Пакет %name-docRU включает файлы документации (Русский).
 %description docRU -l de_DE.UTF8
 Das Paket %name-docRU enthaelt Dokumentationsdateien (Russisch).
 
 %package docUK
 Summary: Open SCADA documents (UK)
-Summary(ru_RU.UTF8): Документация открытой SCADA (UK)
 Summary(uk_UA.UTF8): Документація відкритої SCADA (UK)
+Summary(ru_RU.UTF8): Документация открытой SCADA (UK)
 Summary(de_DE.UTF8): Open SCADA Dokumente (UK)
 Group: Documentation
 BuildArch: noarch
 Requires: %name-docEN
 %description docUK
 The %name-docUK package include documents files (Ukraine).
-%description docUK -l ru_RU.UTF8
-Пакет %name-docUK включает файлы документации (Украинский).
 %description docUK -l uk_UA.UTF8
 Пакет %name-docUK включає файли документації (Українська).
+%description docUK -l ru_RU.UTF8
+Пакет %name-docUK включает файлы документации (Украинский).
 %description docUK -l de_DE.UTF8
 Das Paket %name-docUK enthaelt Dokumentationsdateien (Ukrainisch).
 
 %package devel
 Summary: Open SCADA development
-Summary(ru_RU.UTF8): Разработка открытой SCADA
 Summary(uk_UA.UTF8): Розробка відкритої SCADA
+Summary(ru_RU.UTF8): Разработка открытой SCADA
 Summary(de_DE.UTF8): Open SCADA Entwicklung
 Group: Development/C++
 Requires: %name = %version-%release
 %description devel
 The %name-devel package includes library archives and include files.
-%description devel -l ru_RU.UTF8
-Пакет %name-devel включает архив библиотек и включаемые файлы.
 %description devel -l uk_UA.UTF8
 Пакет %name-devel включає архів бібліотек та включаємі файли.
+%description devel -l ru_RU.UTF8
+Пакет %name-devel включает архив библиотек и включаемые файлы.
 %description devel -l de_DE.UTF8
 Das Paket %name-devel enthaelt die Bibliotheken und Archive Include-Dateien.
 
 %package LibDB.Main
 Summary: Main OpenSCADA libraries for DAQ and other into SQLite DB
-Summary(ru_RU.UTF8): Основные библиотеки OpenSCADA для сбора данных и другого в БД SQLite
 Summary(uk_UA.UTF8): Основні бібліотеки OpenSCADA для збору даних та іншого у БД SQLite
+Summary(ru_RU.UTF8): Основные библиотеки OpenSCADA для сбора данных и другого в БД SQLite
 Summary(de_DE.UTF8): Hauptbibliothek OpenSCADA für die Datenerhebung und die anderen in der Datenbank SQLite
 Group: Graphics
 BuildArch: noarch
@@ -124,20 +150,20 @@ Requires: %name
 %description LibDB.Main
 The %{name}-LibDB.Main package includes main OpenSCADA libraries into SQLite DB.
 For use connect SQLite DB file LibsDB/OscadaLibs.db.
-%description LibDB.Main -l ru_RU.UTF8
-Пакет %{name}-LibDB.Main включает основные библиотеки OpenSCADA в БД SQLite.
-Для использования подключите файл БД SQLite LibsDB/OscadaLibs.db.
 %description LibDB.Main -l uk_UA.UTF8
 Пакет %{name}-LibDB.Main включає основні бібліотеки OpenSCADA у БД SQLite.
 Для використання підключіть файл БД SQLite LibsDB/OscadaLibs.db.
+%description LibDB.Main -l ru_RU.UTF8
+Пакет %{name}-LibDB.Main включает основные библиотеки OpenSCADA в БД SQLite.
+Для использования подключите файл БД SQLite LibsDB/OscadaLibs.db.
 %description LibDB.Main -l de_DE.UTF8
 Das Paket %{name}-LibDB.Main enthaelt die Hauptbibliothek OpenSCADA die Datenbank SQLite.
 So verwenden, verbinden Sie die Datei Datenbank SQLite LibsDB/OscadaLibs.db.
 
 %package LibDB.VCA
 Summary: Visual components libraries into SQLite DB
-Summary(ru_RU.UTF8): Библиотеки визуальных компонетов в БД SQLite
 Summary(uk_UA.UTF8): Бібліотеки візуальних компонентів у БД SQLite
+Summary(ru_RU.UTF8): Библиотеки визуальных компонетов в БД SQLite
 Summary(de_DE.UTF8): Visuelle Komponente in einer Bibliothek Datenbank SQLite
 Group: Graphics
 BuildArch: noarch
@@ -145,20 +171,20 @@ Requires: %name
 %description LibDB.VCA
 The %{name}-LibDB.VCA package includes visual components libraries into SQLite DB.
 For use connect SQLite DB file LibsDB/vcaBase.db and LibsDB/vcaTest.db.
-%description LibDB.VCA -l ru_RU.UTF8
-Пакет %{name}-LibDB.VCA включает библиотеки визуальных компонетов в БД SQLite.
-Для использования подключите файл БД SQLite LibsDB/vcaBase.db и LibsDB/vcaTest.db.
 %description LibDB.VCA -l uk_UA.UTF8
 Пакет %{name}-LibDB.VCA включає бібліотеки візуальних компонентів у БД SQLite.
 Для використання підключіть файл БД SQLite LibsDB/vcaBase.db та LibsDB/vcaTest.db.
+%description LibDB.VCA -l ru_RU.UTF8
+Пакет %{name}-LibDB.VCA включает библиотеки визуальных компонетов в БД SQLite.
+Для использования подключите файл БД SQLite LibsDB/vcaBase.db и LibsDB/vcaTest.db.
 %description LibDB.VCA -l de_DE.UTF8
 Das Paket %{name}-LibDB.VCA enthaelt Visuelle Komponente in einer Bibliothek Datenbank SQLite.
 So verwenden, verbinden Sie die Datei Datenbank SQLite LibsDB/vcaBase.db und LibsDB/vcaTest.db.
 
 %package Model.AGLKS
 Summary: Model "AGLKS" data bases and config (Demo: EN,UK,RU)
-Summary(ru_RU.UTF8): БД и конфигурация модели "АГЛКС" (Демо: EN,UK,RU)
 Summary(uk_UA.UTF8): БД та конфігурація моделі "АГЛКС" (Демо: EN,UK,RU)
+Summary(ru_RU.UTF8): БД и конфигурация модели "АГЛКС" (Демо: EN,UK,RU)
 Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "AGLKS" (Demo: EN,UK,RU)
 Group: Graphics
 BuildArch: noarch
@@ -167,14 +193,14 @@ Requires: %name %name-LibDB.Main %name-LibDB.VCA
 The %{name}-Model.AGLKS package includes model "AGLKS" data bases and config.
 The Model is used for OpenSCADA demo and allowed for English, Ukrainian and Russian languages.
 For start use command <openscada_AGLKS>.
-%description Model.AGLKS -l ru_RU.UTF8
-Пакет %{name}-Model.AGLKS включает БД и конфигурацию модели "АГЛКС".
-Модель используется для демонстрации OpenSCADA и доступна на Английском, Украинском и Российском языках.
-Для старта используйте команду <openscada_AGLKS>.
 %description Model.AGLKS -l uk_UA.UTF8
 Пакет %{name}-Model.AGLKS включає БД та конфігурацію моделі "АГЛКС".
 Модель використано для демонстрації OpenSCADA та доступно на Англійській, Українській та Російській мовах.
 Для старту використовуйте команду <openscada_AGLKS>.
+%description Model.AGLKS -l ru_RU.UTF8
+Пакет %{name}-Model.AGLKS включает БД и конфигурацию модели "АГЛКС".
+Модель используется для демонстрации OpenSCADA и доступна на Английском, Украинском и Российском языках.
+Для старта используйте команду <openscada_AGLKS>.
 %description Model.AGLKS -l de_DE.UTF8
 Das Paket %{name}-Model.AGLKS enthaelt Datenbanken und Konfigurationsdateien Modell "AGLKS".
 Das Modell wird verwendet, um OpenSCADA demonstrieren und ist verfügbar in Englisch, Ukrainisch und Russisch.
@@ -182,8 +208,8 @@ Fuers Starten wird Kommando <openscada_AGLKS> benutzt.
 
 %package Model.Boiler
 Summary: Model "Boiler" data bases and config (EN,UK,RU)
-Summary(ru_RU.UTF8): БД и конфигурация модели "Котёл" (EN,UK,RU)
 Summary(uk_UA.UTF8): БД та конфігурація моделі "Котел" (EN,UK,RU)
+Summary(ru_RU.UTF8): БД и конфигурация модели "Котёл" (EN,UK,RU)
 Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "Kessel" (EN,UK,RU)
 Group: Graphics
 BuildArch: noarch
@@ -192,14 +218,14 @@ Requires: %name %name-LibDB.Main %name-LibDB.VCA
 The %{name}-Model.Boiler package model "Boiler" data bases and config.
 The Model is allowed for English, Ukrainian and Russian languages.
 For start use command <openscada_Boiler>.
-%description Model.Boiler -l ru_RU.UTF8
-Пакет %{name}-Model.Boiler включает БД и конфигурацию модели "Котёл".
-Модель доступна на Английском, Украинском и Российском языках.
-Для старта используйте команду <openscada_Boiler>.
 %description Model.Boiler -l uk_UA.UTF8
 Пакет %{name}-Model.Boiler включає БД та конфігурацію моделі "Котел".
 Модель доступно на Англійській, Українській та Російській мовах.
 Для старту використовуйте команду <openscada_Boiler>.
+%description Model.Boiler -l ru_RU.UTF8
+Пакет %{name}-Model.Boiler включает БД и конфигурацию модели "Котёл".
+Модель доступна на Английском, Украинском и Российском языках.
+Для старта используйте команду <openscada_Boiler>.
 %description Model.Boiler -l de_DE.UTF8
 Das Paket %{name}-Model.Boiler enthaelt Datenbanken und Konfigurationsdateien Modell "Kessel".
 Das Modell ist verfügbar in Englisch, Ukrainisch und Russisch.
@@ -257,10 +283,6 @@ ln -s %_defaultdocdir/%name-docUK-%version %buildroot/%_datadir/openscada/docs/u
 %defattr(-,root,root)
 %config(noreplace) %_sysconfdir/oscada.xml
 %config(noreplace) %_sysconfdir/oscada_start.xml
-%config(noreplace) %_sysconfdir/oscada_server.xml
-%config(noreplace) %_sysconfdir/oscada_plc.xml
-%config %_initdir/openscada-server
-%config %_initdir/openscada-plc
 %_bindir/openscada
 %_bindir/openscada_start
 %_bindir/openscada-proj
@@ -277,6 +299,30 @@ ln -s %_defaultdocdir/%name-docUK-%version %buildroot/%_datadir/openscada/docs/u
 %_datadir/openscada/icons/*
 %exclude %_datadir/openscada/icons/AGLKS.png
 %exclude %_datadir/openscada/icons/Boiler.png
+
+%post plc
+/sbin/chkconfig --add openscada-plc
+/sbin/chkconfig openscada-plc on
+
+%preun plc
+/sbin/chkconfig --del openscada-plc
+
+%files plc
+%defattr(-,root,root)
+%config(noreplace) %_sysconfdir/oscada_plc.xml
+%config %_initdir/openscada-plc
+
+%post server
+/sbin/chkconfig --add openscada-server
+/sbin/chkconfig openscada-server on
+
+%preun server
+/sbin/chkconfig --del openscada-server
+
+%files server
+%defattr(-,root,root)
+%config(noreplace) %_sysconfdir/oscada_server.xml
+%config %_initdir/openscada-server
 
 %files docEN
 %defattr(-,root,root)

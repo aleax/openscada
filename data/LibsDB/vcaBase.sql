@@ -1884,6 +1884,24 @@ INSERT INTO "wlb_Main_incl" VALUES('alarmsSt','size','/wlb_originals/wdg_FormEl'
 INSERT INTO "wlb_Main_incl" VALUES('alarmsSt','sizeLim','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
 INSERT INTO "wlb_Main_incl" VALUES('alarmsSt','sort','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('alarmsSt','time','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','descr','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','fullName','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','grp','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomZ;elType;value;items;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','labDescr','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','labFullName','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','labGrp','/wlb_originals/wdg_Text','owner;perm;name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','labName','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','labPass','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','labUser','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','lib','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','name','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','pass','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;value;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','title','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','userAdd','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','userBox','/wlb_originals/wdg_Box','owner;perm;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','userDel','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','userNm','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;confirm;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','wPanel','/wlb_originals/wdg_Box','owner;perm;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;','');
 CREATE TABLE 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','name','Element cadr',32,'','','','Елемент кадр','','Элемент кадр','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','110',32,'','','','','','','','','');
@@ -7475,6 +7493,211 @@ INSERT INTO "wlb_Main_io" VALUES('ImgLab','bordColor','black',40,'','','','','',
 INSERT INTO "wlb_Main_io" VALUES('ImgLab','src','alarm',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ImgLab','fit','1',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','owner','root:ITW',32,'','','arch','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','432',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','name','Users manager',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','550',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','evProc','ws_BtPress:/userDel:open:/pg_control/pg_accept',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','descr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','descr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','417',32,'','','descr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','145',32,'','','descr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','455',32,'','','descr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','105',32,'','','descr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','14',32,'','','descr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','active','1',40,'','','descr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','elType','1',32,'','','descr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','value','',8,'','','descr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 15',0,'','','descr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','fullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','fullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','417',32,'','','fullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','111.5',32,'','','fullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','455',32,'','','fullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','22',32,'','','fullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','17',32,'','','fullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','active','1',40,'','','fullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','value','',8,'','','fullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 15',32,'','','fullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','grp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','grp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','417',32,'','','grp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','300',32,'','','grp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','280',32,'','','grp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','19',32,'','','grp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','active','1',32,'','','grp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','elType','9',32,'','','grp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','value','',8,'','','grp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','items','',8,'','','grp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 15',0,'','','grp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','labDescr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','labDescr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','324.077',32,'','','labDescr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','145',32,'','','labDescr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','92.25',32,'','','labDescr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','19',32,'','','labDescr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','15',32,'','','labDescr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 17',32,'','','labDescr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','alignment','8',32,'','','labDescr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','text','Description:',32,'','','labDescr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','labFullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','labFullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','326',32,'','','labFullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','111.5',32,'','','labFullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','91',32,'','','labFullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','22',32,'','','labFullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','18',32,'','','labFullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 17',32,'','','labFullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','alignment','8',32,'','','labFullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','text','Full name:',32,'','','labFullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','labGrp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','labGrp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','name','labDescr',32,'','','labGrp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','324.077',32,'','','labGrp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','300',32,'','','labGrp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','92.25',32,'','','labGrp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','19',32,'','','labGrp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','18',32,'','','labGrp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 17',32,'','','labGrp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','alignment','8',32,'','','labGrp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','text','Groups:',32,'','','labGrp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','326',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','81.5',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','66',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','22',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','15',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 17',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','alignment','8',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','text','Name:',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','labPass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','labPass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','326',32,'','','labPass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','261.5',32,'','','labPass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','91',32,'','','labPass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','22',32,'','','labPass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','17',32,'','','labPass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 17',32,'','','labPass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','alignment','8',32,'','','labPass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','text','Password:',32,'','','labPass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','labUser','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','labUser','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','324.077',32,'','','labUser','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','53',32,'','','labUser','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','107.25',32,'','','labUser','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','19',32,'','','labUser','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','14',32,'','','labUser','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomMargin','2',32,'','','labUser','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','backColor','gray',32,'','','labUser','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 17',32,'','','labUser','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','alignment','8',32,'','','labUser','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','text','User',32,'','','labUser','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','name','Користувачі',32,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','10',32,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','50',32,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','300',32,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','436',32,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','11',32,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','tipTool','List of users',32,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','active','1',32,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','elType','5',32,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','value','',8,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','items','',8,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 15',0,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','417',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','81.5',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','455',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','22',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','16',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','active','0',40,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','value','',8,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','confirm','0',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 15',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','pass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','pass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','name','name',32,'','','pass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','417',32,'','','pass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','261.5',32,'','','pass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','455',32,'','','pass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','22',32,'','','pass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','16',32,'','','pass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','active','1',40,'','','pass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','value','',8,'','','pass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 15',32,'','','pass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','5',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','4.563',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','891',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','27.75',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','1',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 25 0 0 1 0',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','alignment','10',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','text','Users manager',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','userAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','userAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','name','Add',32,'','','userAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','241',32,'','','userAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','515.102',32,'','','userAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','69',32,'','','userAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','23',32,'','','userAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','6',32,'','','userAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','tipTool','Add a new user',32,'','','userAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','active','1',32,'','','userAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','elType','3',32,'','','userAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 15',0,'','','userAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','userBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','userBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','316',32,'','','userBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','62',32,'','','userBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','573',32,'','','userBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','476',32,'','','userBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','13',32,'','','userBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','backColor','',32,'','','userBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','bordWidth','2',32,'','','userBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','bordColor','gray',32,'','','userBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','bordStyle','6',32,'','','userBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','userDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','userDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','name','Delete',32,'','','userDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','10',32,'','','userDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','489.532',32,'','','userDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','300',32,'','','userDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','23',32,'','','userDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','12',32,'','','userDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','tipTool','Видалити обрану програму',32,'','','userDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','active','1',40,'','','userDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','elType','3',32,'','','userDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 15',0,'','','userDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','userNm','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','userNm','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','10',32,'','','userNm','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','515.102',32,'','','userNm','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','229',32,'','','userNm','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','23',32,'','','userNm','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','10',32,'','','userNm','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','active','1',32,'','','userNm','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','value','NewUser',8,'','','userNm','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','view','1',32,'','','userNm','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','cfg','',40,'','','userNm','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','confirm','0',32,'','','userNm','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 15',32,'','','userNm','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','wPanel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','wPanel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','4',32,'','','wPanel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','36',32,'','','wPanel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','892',32,'','','wPanel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','510',32,'','','wPanel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','2',32,'','','wPanel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','backColor','',32,'','','wPanel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','bordWidth','2',32,'','','wPanel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','bordColor','gray',32,'','','wPanel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','bordStyle','8',32,'','','wPanel','','','','','','');
 CREATE TABLE 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main_mime" VALUES('cadr','image/png;8.93555','iVBORw0KGgoAAAANSUhEUgAAAGkAAABpCAYAAAA5gg06AAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
 WXMAAAx1AAAMdQEteJR1AAAAB3RJTUUH4QYPEgAI15Z4XQAAABl0RVh0Q29tbWVudABDcmVhdGVk
@@ -10193,6 +10416,11 @@ INSERT INTO "wlb_Main_uio" VALUES('ImgLab','st_open','Parameter: status-open',13
 INSERT INTO "wlb_Main_uio" VALUES('ImgLab','stop','Parameter: stop',131072,'0',14,'Parameter|stop','','','Параметр: зупинка','','','Параметр: останов','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ImgLab','imgs','Images, for "{true}-{bCol}:{false}-{bCol}:{EVAL}-{bCol}"',131077,'',9,'','','','Зображення, для "{true}-{bCol}:{false}-{bCol}:{EVAL}-{bCol}"','','','Изображение, для "{true}-{bCol}:{false}-{bCol}:{EVAL}-{bCol}"','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ImgLab','st_img','Parameter: status "{img}:{bCol}:{blink}"',131077,'',10,'Parameter|st_text','','','Параметр: статус "{img}:{bCol}:{blink}"','','','Параметр: статус "{img}:{bCol}:{blink}"','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('userManager','denyGroups','Deny to control: groups, separated by '';''',131077,'root;users;Archive;BD;DAQ;ModSched;Protocol;Security;Special;Transport;UI;',9,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('userManager','denyUsers','Deny to control: users, separated by '';''',131077,'root;',9,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('userManager','newUseGrps','Groups of new created user',131077,'UI;Guest',8,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('userManager','storeDB','DB of saving new users',131077,'',9,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('userManager','mess','Повідомлення діалогу',131077,'Are you sure to delete this user?',0,'','','userDel','','','','','','','','');
 CREATE TABLE 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeDayA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeMonthA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
@@ -22164,6 +22392,130 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	else ev_rez += sval+"\n";
 }
 event = ev_rez;','','',500,'owner;name;geomW;geomH;contextMenu;active;evProc;backColor;bordWidth;bordColor;src;fit;',1542462617);
+INSERT INTO "wlb_Main" VALUES('userManager','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
+/klEQVRYhe2Zy07bQBiFx+OxnYydC04h0K5ggRJub8ArAEuegrdgy2OwZcGGHS/AgghEKhEJobYh
+JUIE4kkm8Xj+LqwiBC5N0z9EkfhWo7kczxlf5tg2dnZ2UqkUQaLb7abTaSy1vyKlZKlUinOOpXh9
+fd3v95VSruu6rttut03TfHh4yGazQRBQSgkha2trjDGsIzLOOdaaAUC5XP5Tq1IKACzLchwndvL/
+SCkZ53xxcXFoCQCoVCoAYBjG2z2fVr3X6w19uBcIIdjU1NTm5ubQEkqpSqVyf3/f6XRyuVwmk8Ga
+3IDgXIu+7/u+/7zGsizP81DEEwGAVqtFsAzc3t6GYUgImZmZsSyLELKwsLC9vY0inohSand3l2AZ
+mJ6efnEb1Ov1g4MDFPFEtNZxAcdAq9WKoshxHCklAPi+Pzc3t7GxgSKeSBRF5+fnBMtALpfr9Xq2
+bdu2TQihlDabzePjYxTxRKIoigs4BtrtNqVUa621BoAwDIvFYrFYRBFPJL7lCJYB0zTDMLRtGwAo
+pYZhZDKZ1dVVFPFEpJSHh4cEy8BIn5hvg7Olj5EPA+Nm4g2g5fIXBEEQbzQjAvkxGoZhHIFiAEBK
+WavVUMQTQY4SQojHx8c48TPGOOelUmlrawtFPBGl1NnZGcEykM/n8/n885parba3t4cinggAxAW0
+MBcvP6U0nU4bhlEoFNbX14dTu7i4qFarA3bGMcAYo5RKKR3HiWs8z1tZWRlOrdlsvreBOEogft0Y
+nInfBz4MjJuJNzCqKNFoNPb394cbe3d3N3jnURnodDqXl5cjEn/OxF9CHwbGzcQbYEKIk5OTocc/
+5fJxwTzPXS6XEtu6slutfjUpZZa1vLSU2EdrfXR09BRu3x/W7/e/ff9hmlRr/frHyezsbFyo39wQ
+QgzD0FqLIOCca9CGQcc49RjGudsOAkqpbdta6/n5+Te+UvVk92ejYWaztm1fXV0VPhW+fP78ntN9
+DTs9Pf2nl1cAUGFIzd/nCkggxEimNgBCiF83DDWOMRA+MgAAAABJRU5ErkJggg==','/wlb_Main/wdg_RootPgSo/wdg_pgCont',0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	grpLs = new Array(); userSelVl = lib_value_ = "";
+	userLbUpdt = userSel = 0;
+}
+
+//Events for commands process
+for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
+	this.messInfo("Event: "+ev_cur);
+	if(ev_cur == "ws_ListChange:/lib") {
+		userSel = SYS.mtime();
+		userSelVl = ((userSelVl=lib_value.match("\\((.+)\\)$")).length > 1) ? userSelVl[1] : "";
+	}
+	if(ev_cur == "ws_BtPress:/userAdd") {
+		if(!userNm_value.length) userNm_value = tr("New user");
+		req = SYS.XMLNode("add").setAttr("path","/sub_Security/%2fbr%2fusr_").setText(userNm_value);
+		if(!SYS.cntrReq(req).toInt()) {
+			userNm_value = req.text();
+			if(storeDB.length)
+				SYS.cntrReq(SYS.XMLNode("set").setAttr("path","/sub_Security/"+userNm_value+"/%2fprm%2fdb").setText(storeDB));
+			for(off = 0; (iIt=newUseGrps.parse(0,";",off)).length; )
+				if((oIt=SYS.Security.nodeAt("grp_"+iIt)))
+					oIt.cfgSet("USERS", oIt.cfg("USERS")+userNm_value+";");
+			lib_value_ = userNm_value+" ("+userNm_value+")"; userSelVl = userNm_value;
+			userLbUpdt = userSel = SYS.mtime()+500;
+		}
+	}
+	else if(ev_cur == "dlg_Apply:/userDel" && userSelVl.length) {
+	//else if(ev_cur == "ws_BtPress:/userDel" && userSelVl.length) {
+		//SYS.BD.nodeAt(dbDB,".").SQLReq("DELETE FROM "+dbProgs+" WHERE name=''"+userSelVl+"'';");
+		req = SYS.XMLNode("del").setAttr("path","/sub_Security/%2fbr%2fusr_").setText(userSelVl);
+		rez = SYS.cntrReq(req);
+		this.messInfo("Result: "+rez+": "+req.save());
+		lib_value_ = userSelVl = "";
+		userLbUpdt = userSel = SYS.mtime()+500;
+	}
+	else if(ev_cur == "ws_LnAccept:/fullName" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
+		oIt.cfgSet("DESCR", fullName_value);
+		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj"));
+		lib_value_ = fullName_value + " ("+userSelVl+")";
+		userLbUpdt = userSel = SYS.mtime()+500;
+	}
+	else if(ev_cur == "ws_TxtAccept:/descr" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
+		oIt.cfgSet("LONGDESCR", descr_value);
+		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj"));
+		userSel = SYS.mtime()+500;
+	}
+	else if(ev_cur == "ws_LnAccept:/pass" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
+		oIt.cfgSet("PASS", pass_value);
+		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj")); 
+		userSel = SYS.mtime()+500;
+	}
+	else if(ev_cur == "ws_TableChangeSel:/grp" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl)) &&
+			grp_value.length && (oIt1=SYS.Security.nodeAt(grp_value))) {
+		grp_value = grp_value.slice(4);
+		users = oIt1.cfg("USERS");
+		this.messInfo("grp_value="+grp_value+"; users="+users);
+		oIt1.cfgSet("USERS", oIt1.user(userSelVl) ? users.replace(userSelVl+";","") : users+userSelVl+";");
+		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj")); 
+		userSel = SYS.mtime()+500;
+	}
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;
+
+//Get users and groups list
+if(f_start || (userLbUpdt && SYS.mtime() >= userLbUpdt)) {
+	userLbUpdt = 0;
+	rez = SYS.Security.nodeList("usr_");
+	//rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT name FROM "+dbProgs+";");
+	lib_items = userNm_cfg = "";
+	for(iIt = 0; iIt < rez.length; iIt++) {
+		if(denyUsers.indexOf(rez[iIt].slice(4)) >= 0 || !(oIt=SYS.Security.nodeAt(rez[iIt])))	continue;
+		lib_items += (lib_items.length?"\n":"")+((tVl=oIt.cfg("DESCR")).length?tVl:rez[iIt].slice(4))+" ("+rez[iIt].slice(4)+")";
+		userNm_cfg += (userNm_cfg.length?"\n":"")+rez[iIt].slice(4);
+	}
+	lib_value = lib_value_;
+
+	grpLs = SYS.Security.nodeList("grp_");
+	for(iL = 0; iL < grpLs.length; iL++)
+		if(denyGroups.indexOf(grpLs[iL].slice(4)) >= 0)
+		{ grpLs.splice(iL, 1); iL--; }
+}
+userDel_active = userSelVl.length;
+
+if(userSel && SYS.mtime() >= userSel) {
+	userSel = 0;
+	fullName_active = descr_active = pass_active = grp_active = false;
+	name_value = fullName_value = descr_value = pass_value = grp_items = "";
+
+	if(userSelVl.length && (oIt=SYS.Security.nodeAt(userSelVl))) {
+		this.messInfo("userSelVl="+userSelVl);
+		fullName_active = descr_active = pass_active = grp_active = true;
+		name_value = oIt.cfg("NAME");
+		fullName_value = oIt.cfg("DESCR");
+		descr_value = oIt.cfg("LONGDESCR");
+		pass_value = oIt.cfg("PASS");
+		//Groups
+		grp_items = "<tbl sel=''row'' colsWdthFit=''1'' vHdrVis=''0'' hHdrVis=''0'' keyID=''0''>\n"
+			"<h><s width=''0''>Ідентифікатор</s><s>Група</s></h>\n";
+		for(iIt = 0; iIt < grpLs.length; iIt++) {
+			if(!(oIt=SYS.Security.nodeAt(grpLs[iIt])))	continue;
+			grp_items += "<r"+(oIt.user(userSelVl)?" color=''#777799''":"")+">"
+				"<s>"+SYS.strEncode(grpLs[iIt],"HTML")+"</s>"
+				"<s>"+SYS.strEncode(oIt.cfg("DESCR")+" ("+grpLs[iIt].slice(4)+")","HTML")+"</s></r>";
+		}
+		grp_items += "</tbl>";
+		grp_value = "";
+	}
+}','','',500,'owner;perm;name;geomH;evProc;',1544898362);
 CREATE TABLE 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_mnEls" VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB

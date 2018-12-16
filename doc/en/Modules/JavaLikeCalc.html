@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/JavaLikeCalc</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/JavaLikeCalc/ru" title="Модули/Вычислитель похожий на Java (98% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/JavaLikeCalc/uk" title="Модулі/Обчислювач подібний до Java (98% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/JavaLikeCalc/ru" title="Модули/Вычислитель похожий на Java (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/JavaLikeCalc/uk" title="Модулі/Обчислювач подібний до Java (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
 <td> Calculator on the Java-like language
 </td>
-<td> 3.10 </td>
+<td> 4.0 </td>
 <td> GPL2 </td>
 <td> daq_JavaLikeCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -293,8 +293,8 @@ for(var i = 0; i &lt; arguments.length; i++)
 <ul><li> <i>int length</i> — string length. </li></ul>
 <dl><dt> <i>Functions:</i></dt></dl>
 <ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
-<li> <i>string charAt( int symb );</i> — extracts from the string the symbol <i>symb</i>, numbering from zero.</li>
-<li> <i>int charCodeAt( int symb );</i> — extracts from the string the symbol code <i>symb</i>.</li>
+<li> <i>string charAt( int symb, string type = "" );</i> — extracts from the string the symbol <i>symb</i> for the <i>type</i>. These types of the symbol are supported: ""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-32. In the case of UTF-8, the symbol position <i>symb</i> is changed to the next symbol position due to length of this symbols type is variable one.</li>
+<li> <i>int charCodeAt( int symb, string type = "" );</i> — extracts from the string the symbol code <i>symb</i> for the <i>type</i>. These types of the symbol are supported: ""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE. In the case of UTF-8, the symbol position <i>symb</i> is changed to the next symbol position due to length of this symbols type is variable one.</li>
 <li> <i>string concat( string val1, string val2, ... );</i> — returns a new string formed by joining the values <i>val1</i> etc. to the original one.</li>
 <li> <i>int indexOf( string substr, int start );</i> — returns the position of the required string <i>substr</i> in the original row from the position <i>start</i>. If the initial position is not specified then the search starts from the beginning. If the search string is not found then "-1" is returned.</li>
 <li> <i>int lastIndexOf( string substr, int start );</i> — returns the position of the search string <i>substr</i> in the original one beginning from the position of <i>start</i> when searching from the end. If the initial position is not specified then the search begins from the end. If the search string is not found then "-1" is returned.</li>

@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.11.0"
+#define MOD_VER		"4.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -332,8 +332,8 @@ void TpContr::modStart( )
 
     //Start functions
     lbList(lst);
-    for(unsigned i_lb = 0; i_lb < lst.size(); i_lb++)
-	lbAt(lst[i_lb]).at().setStart(true);
+    for(unsigned iLb = 0; iLb < lst.size(); iLb++)
+	lbAt(lst[iLb]).at().setStart(true);
 
     TTypeDAQ::modStart();
 }

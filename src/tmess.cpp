@@ -687,3 +687,16 @@ int TMess::getUTF8( const string &str, int off, int32_t *symb )
     if(symb) *symb = rez;
     return len;
 }
+
+string TMess::setUTF8( int32_t symb )
+{
+    string rez;
+    if(symb < 0x80) rez += (char)symb;
+    else for(int iCh = 5, iSt = -1; iCh >= 0; iCh--) {
+	if(iSt < iCh && (symb>>(iCh*6))) iSt = iCh;
+	if(iCh == iSt) rez += (char)(0xC0|(symb>>(iCh*6)));
+	else if(iCh < iSt) rez += (char)(0x80|(0x3F&(symb>>(iCh*6))));
+    }
+
+    return rez;
+}

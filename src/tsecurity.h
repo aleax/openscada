@@ -161,14 +161,14 @@ class TSecurity : public TSubSYS
 	void usrList( vector<string> &list ) const	{ chldList(mUsr,list); }
 	void usrGrpList( const string &name, vector<string> &list );
 	bool usrPresent( const string &name ) const	{ return chldPresent(mUsr,name); }
-	void usrAdd( const string &name, const string &db = "*.*" );
+	string usrAdd( const string &name, const string &db = "*.*" );
 	void usrDel( const string &name, bool complete = false );
 	AutoHD<TUser> usrAt( const string &name ) const	{ return chldAt(mUsr,name); }
 
 	// Groups
 	void grpList( vector<string> &list ) const		{ chldList(mGrp,list); }
 	bool grpPresent( const string &name ) const		{ return chldPresent(mGrp,name); }
-	void grpAdd( const string &name, const string &db = "*.*" );
+	string grpAdd( const string &name, const string &db = "*.*" );
 	void grpDel( const string &name, bool complete = false );
 	AutoHD<TGroup> grpAt( const string &name ) const	{ return chldAt(mGrp,name); }
 

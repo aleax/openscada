@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.1.0"
+#define MOD_VER		"1.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -106,9 +106,12 @@ void TProt::itemListIn( vector<string> &ls, const string &curIt )
     if(TSYS::strParse(curIt,1,".").empty())	uPrtList(ls);
 }
 
-void TProt::uPrtAdd( const string &iid, const string &db )
+string TProt::uPrtAdd( const string &iid, const string &db )
 {
-    chldAdd(mPrtU, new UserPrt(iid,db,&uPrtEl()));
+    UserPrt *obj = new UserPrt(TSYS::strEncode(iid,TSYS::oscdID), db, &uPrtEl());
+    chldAdd(mPrtU, obj);
+
+    return obj->id();
 }
 
 void TProt::load_( )
@@ -202,10 +205,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(uPrtAt(lst[i_f]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR)) {
-	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    uPrtAdd(vid); uPrtAt(vid).at().setName(opt->text());
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", uPrtAdd(opt->attr("id"))); uPrtAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mPrtU,opt->attr("id"),-1,1);
     }
     else TProtocol::cntrCmdProc(opt);

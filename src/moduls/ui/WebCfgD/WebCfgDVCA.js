@@ -2302,7 +2302,7 @@ function getSpareHeight( node ) {
     parseInt(compStl.getPropertyValue('border-bottom-width')) + parseInt(compStl.getPropertyValue('padding-bottom'));
 }
 
-//Reize processing
+//Resize processing
 function pageResize( horOnly ) {
     var w = Math.max(600, window.innerWidth);
     var h = Math.max(400, window.innerHeight);

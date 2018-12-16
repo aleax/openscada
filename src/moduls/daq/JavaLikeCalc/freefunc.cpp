@@ -1352,18 +1352,52 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 	    case TVariant::String:
 		// bool isEVal( ) - check value to "EVAL"
 		if(prop == "isEVal")	return (vl.getS() == EVAL_STR);
-		// string charAt(int symb) - extracts from the string the symbol <symb>
-		//  symb - symbol position
+		// string charAt(int symb, string type = "") - extracts from the string the symbol <symb> of the type <type>
+		//  symb - symbol position, changed to the next symbol position for UTF-8
+		//  type  - symbol type, (""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-32)
 		if(prop == "charAt" && prms.size()) {
-		    int n = prms[0].getI();
-		    if(n < 0 || n >= (int)vl.getS().size()) return string("");
-		    return vl.getS().substr(n,1);
+		    int n, n_;
+		    n = n_ = prms[0].getI();
+		    string tp = (prms.size() >= 2) ? TSYS::strEncode(prms[1].getS(),TSYS::ToLower) : "";
+		    string s = vl.getS();
+		    if(n < 0 || n >= (int)s.size()) return string("");
+		    if(tp == "utf-8") {
+			int l = Mess->getUTF8(s, n);
+			if((l=Mess->getUTF8(s,n))) n += l; else n += 1;
+			prms[0].setI(n); prms[0].setModify();
+			return l ? s.substr(n_, l) : string("");
+		    }
+		    if(tp == "utf-16") return s.substr(n, 2);
+		    if(tp == "utf-32") return s.substr(n, 4);
+		    return s.substr(n, 1);
 		}
-		// int charCodeAt(int symb) - extracts from the string the symbol code <symb>
-		//  symb - symbol position
+		// int charCodeAt(int symb, string type = "") - extracts the symbol code <symb> from the string of the type <type>
+		//  symb - symbol position, changed to the next symbol position for UTF-8
+		//  type  - symbol type, (""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE)
 		if(prop == "charCodeAt" && prms.size()) {
 		    int n = prms[0].getI();
-		    if(n < 0 || n >= (int)vl.getS().size())	return (int64_t)EVAL_INT;
+		    string tp = (prms.size() >= 2) ? TSYS::strEncode(prms[1].getS(),TSYS::ToLower) : "";
+		    string s = vl.getS();
+		    if(n < 0 || n >= (int)s.size())	return (int64_t)EVAL_INT;
+		    if(tp == "utf-8") {
+			int l;
+			int32_t symb;
+			if((l=Mess->getUTF8(s,n,&symb))) n += l; else n += 1;
+			prms[0].setI(n); prms[0].setModify();
+			return l ? (int64_t)symb : (int64_t)EVAL_INT;
+		    }
+		    if(tp.find("utf-16") == 0) {
+			if((s.size()-n) < 2) s.resize(s.size()+1, 0);
+			if(tp.find("be") != string::npos)
+			    return (int64_t)TSYS::i16_BE(TSYS::getUnalign16(s.data()+n));
+			return (int64_t)TSYS::i16_LE(TSYS::getUnalign16(s.data()+n));
+		    }
+		    if(tp.find("utf-32") == 0) {
+			if((s.size()-n) < 4) s.resize(s.size()+3, 0);
+			if(tp.find("be") != string::npos)
+			    return (int64_t)TSYS::i32_BE(TSYS::getUnalign32(s.data()+n));
+			return (int64_t)TSYS::i32_LE(TSYS::getUnalign32(s.data()+n));
+		    }
 		    return (int64_t)(unsigned char)vl.getS()[n];
 		}
 		// string concat(string val1, string val2, ...) - returns a new string formed by joining the values <val1> etc
