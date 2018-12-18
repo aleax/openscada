@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"5.2.3"
+#define MOD_VER		"5.2.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -447,7 +447,8 @@ string Engine::wlbAdd( const string &iid, const string &inm, const string &idb )
 {
     if(wlbPresent(iid))	return "";
 
-    WidgetLib *obj = new WidgetLib(TSYS::strEncode(iid,TSYS::oscdID), inm, idb);
+    WidgetLib *obj = new WidgetLib(TSYS::strEncode(sTrm(iid),TSYS::oscdID), inm, idb);
+    MtxAlloc res(chM(), true);
     chldAdd(idWlb, obj);
 
     return obj->id();
@@ -459,7 +460,8 @@ string Engine::prjAdd( const string &iid, const string &inm, const string &idb )
 {
     if(prjPresent(iid))	return "";
 
-    Project *obj = new Project(TSYS::strEncode(iid,TSYS::oscdID), inm, idb);
+    Project *obj = new Project(TSYS::strEncode(sTrm(iid),TSYS::oscdID), inm, idb);
+    MtxAlloc res(chM(), true);
     chldAdd(idPrj, obj);
 
     return obj->id();

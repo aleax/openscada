@@ -78,7 +78,8 @@ void TSecurity::usrGrpList( const string &name, vector<string> &list )
 
 string TSecurity::usrAdd( const string &name, const string &idb )
 {
-    TUser *user = new TUser(TSYS::strEncode(name,TSYS::oscdID), idb, &userEl);
+    TUser *user = new TUser(TSYS::strEncode(sTrm(name),TSYS::oscdID), idb, &userEl);
+    MtxAlloc res(chM(), true);
     chldAdd(mUsr, user);
     if(grpPresent("users")) grpAt("users").at().userAdd(user->name());
 
@@ -93,7 +94,8 @@ void TSecurity::usrDel( const string &name, bool complete )
 
 string TSecurity::grpAdd( const string &name, const string &idb )
 {
-    TGroup *grp = new TGroup(TSYS::strEncode(name,TSYS::oscdID), idb, &grpEl);
+    TGroup *grp = new TGroup(TSYS::strEncode(sTrm(name),TSYS::oscdID), idb, &grpEl);
+    MtxAlloc res(chM(), true);
     chldAdd(mGrp, grp);
 
     return grp->name();

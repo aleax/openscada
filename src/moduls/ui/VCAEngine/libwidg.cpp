@@ -304,7 +304,8 @@ string WidgetLib::add( const string &iid, const string &name, const string &orig
 {
     if(present(iid))	return "";
 
-    LWidget *obj = new LWidget(TSYS::strEncode(iid,TSYS::oscdID), orig);
+    LWidget *obj = new LWidget(TSYS::strEncode(sTrm(iid),TSYS::oscdID), orig);
+    MtxAlloc res(chM(), true);
     chldAdd(mWdg, obj);
     obj->setName(name);
 

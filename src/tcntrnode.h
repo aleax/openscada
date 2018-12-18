@@ -209,6 +209,8 @@ class TCntrNode
 	void setNodePrev( TCntrNode *node )	{ prev.node = node; }
 	void setNodeMode( char mode );
 
+	ResMtx &chM( )				{ return mChM; }	//Child nodes mutex
+
 	// Childs and containers
 	GrpEl	&grpAt( int8_t id );
 	unsigned grpAdd( const string &id, bool ordered = false );

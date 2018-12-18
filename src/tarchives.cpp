@@ -239,7 +239,8 @@ string TArchiveS::valAdd( const string &iid, const string &idb )
 {
     if(valPresent(iid)) return "";
 
-    TVArchive *obj = new TVArchive(TSYS::strEncode(iid,TSYS::oscdID), idb, &aValE());
+    TVArchive *obj = new TVArchive(TSYS::strEncode(sTrm(iid),TSYS::oscdID), idb, &aValE());
+    MtxAlloc res(chM(), true);
     chldAdd(mAval, obj);
 
     return obj->id();
@@ -1192,7 +1193,8 @@ TArchiveS &TTypeArchivator::owner( ) const	{ return (TArchiveS &)TModule::owner(
 
 string TTypeArchivator::messAdd( const string &iid, const string &idb )
 {
-    TMArchivator *obj = AMess(TSYS::strEncode(iid,TSYS::oscdID), idb);
+    TMArchivator *obj = AMess(TSYS::strEncode(sTrm(iid),TSYS::oscdID), idb);
+    MtxAlloc res(chM(), true);
     chldAdd(mMess, obj);
 
     return obj->id();
@@ -1200,7 +1202,8 @@ string TTypeArchivator::messAdd( const string &iid, const string &idb )
 
 string TTypeArchivator::valAdd( const string &iid, const string &idb )
 {
-    TVArchivator *obj = AVal(TSYS::strEncode(iid,TSYS::oscdID), idb);
+    TVArchivator *obj = AVal(TSYS::strEncode(sTrm(iid),TSYS::oscdID), idb);
+    MtxAlloc res(chM(), true);
     chldAdd(mVal, obj);
 
     return obj->id();

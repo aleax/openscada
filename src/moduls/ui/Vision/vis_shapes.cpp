@@ -3415,9 +3415,10 @@ void ShapeDiagram::tracing( )
     makePicture(w);
 
     //Trace cursors value
-    if(shD->tTimeCurent) shD->tTime = shD->arhEnd(shD->tTime);	//Force for cursor limit to real data
+    if(shD->tTimeCurent) shD->tTime = shD->arhEnd(shD->tTime);	//Force for cursor limit to the real data
     if(shD->type == 0 && shD->active && (shD->holdCur || shD->curTime <= (shD->tPict-(int64_t)(1e6*shD->tSize))))
 	setCursor(w, shD->tTime);
+
     w->update();
 }
 
@@ -3736,7 +3737,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 		arh_end = s2ll(req.attr("end"));
 		arh_per = s2ll(req.attr("per"));
 
-		//  Correct to real data
+		//  Correct to the real data
 		if(shD->tTimeCurent) tTimeGrnd = (tTime=shD->arhEnd(tTime)) - tSize;
 	    }
 	}
@@ -3744,7 +3745,8 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	// One request check and prepare
 	int trcPer = shD->trcPer*1e6;
 	if(shD->tTimeCurent && trcPer && shD->valArch.empty() &&
-	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
+	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd()) < 2*arh_per
+		/*(tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2*/)))	//!!!! Cause to uneven call for current and archive
 	{
 	    XMLNode req("get");
 	    req.setAttr("path", addr()+"/%2fserv%2fval")->
@@ -3758,8 +3760,9 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : s2r(req.text());
 		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
 		    curVal = EVAL_REAL;
-		if(valEnd_ && (lstTm-valEnd_)/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lstTm-trcPer,EVAL_REAL));
-		else if((lstTm-valEnd_) >= wantPer) vals.push_back(SHg(lstTm,curVal));
+
+		/*if(valEnd_ && (lstTm-valEnd_)/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lstTm-trcPer,EVAL_REAL));	//!!!! Can cause to flaws on slow remote channels
+		else*/ if((lstTm-valEnd_) >= wantPer) vals.push_back(SHg(lstTm,curVal));
 		else if((lstTm == valEnd_ && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
 		else if(curVal != EVAL_REAL) {
 		    int s_k = lstTm-wantPer*(lstTm/wantPer), n_k = trcPer;
@@ -3811,7 +3814,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     //Check for request to present in buffer data
     if(tTime/wantPer <= valEnd()/wantPer && tTimeGrnd/wantPer >= valBeg()/wantPer) return;
 
-    //Correcting request to present data
+    //Correcting request to the presented data
     if(valEnd() && tTime > valEnd())		tTimeGrnd = valEnd()+wantPer;//1;
     else if(valBeg() && tTimeGrnd < valBeg())	tTime = valBeg()-wantPer;//1;
 
@@ -3941,7 +3944,7 @@ int64_t ShapeDiagram::ShpDt::arhEnd( int64_t def )
     int64_t rez = 0, rez1 = 0;
     for(vector<TrendObj>::iterator iP = prms.begin(); iP != prms.end(); ++iP) {
 	rez = vmax(rez, iP->arhEnd());
-	rez1 = vmax(rez1, iP->arhEnd()+iP->arhPer());	//!!!! For allow curent values update on periodicity by minutes and hours.
+	rez1 = vmax(rez1, iP->arhEnd()+2*iP->arhPer());	//!!!! To allow for curent values update on the periodicity in minutes and hours.
     }
 
     return (rez && rez1 < def) ? rez : def;

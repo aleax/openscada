@@ -148,7 +148,8 @@ string TParamContr::add( const string &iid, unsigned type )
 {
     if(mPrm < 0) return "";
 
-    TParamContr *obj = owner().ParamAttach(TSYS::strEncode(iid,TSYS::oscdID), type);
+    TParamContr *obj = owner().ParamAttach(TSYS::strEncode(sTrm(iid),TSYS::oscdID), type);
+    MtxAlloc res(chM(), true);
     chldAdd(mPrm, obj);
 
     return obj->id();

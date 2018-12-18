@@ -310,7 +310,8 @@ void TController::LoadParmCfg( )
 
 string TController::add( const string &iid, unsigned type )
 {
-    TParamContr *obj = ParamAttach(TSYS::strEncode(iid,TSYS::oscdID), type);
+    TParamContr *obj = ParamAttach(TSYS::strEncode(sTrm(iid),TSYS::oscdID), type);
+    MtxAlloc res(chM(), true);
     chldAdd(mPrm, obj);
 
     return obj->id();

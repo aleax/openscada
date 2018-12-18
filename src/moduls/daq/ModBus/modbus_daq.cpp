@@ -1429,7 +1429,7 @@ TMdPrm::TLogCtx::TLogCtx( TCntrNode *iobj, const string &name ) : TPrmTempl::Imp
 {
     TPrmTempl::Impl::lnkAdd(num, l);
 
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it != lnks.end()) lnkAddrSet(num, func()->io(num)->def());
 }*/
@@ -1439,7 +1439,7 @@ bool TMdPrm::TLogCtx::lnkInit( int num, bool checkNoLink )
     //Common link forms
     if(!TPrmTempl::Impl::lnkInit(num,checkNoLink)) return false;
 
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end() || (checkNoLink && it->second.addrSpec.size())) return false;
 
@@ -1490,7 +1490,7 @@ bool TMdPrm::TLogCtx::lnkInit( int num, bool checkNoLink )
 
 bool TMdPrm::TLogCtx::lnkActive( int num )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it != lnks.end() && it->second.addrSpec.size())	return true;
     return TPrmTempl::Impl::lnkActive(num);
@@ -1498,7 +1498,7 @@ bool TMdPrm::TLogCtx::lnkActive( int num )
 
 TVariant TMdPrm::TLogCtx::lnkInput( int num )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end()) return EVAL_REAL;
 
@@ -1509,7 +1509,7 @@ TVariant TMdPrm::TLogCtx::lnkInput( int num )
 
 bool TMdPrm::TLogCtx::lnkOutput( int num, const TVariant &vl )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end()) return false;
 

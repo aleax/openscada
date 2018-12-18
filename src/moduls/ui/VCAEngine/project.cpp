@@ -273,7 +273,8 @@ string Project::add( const string &iid, const string &name, const string &orig )
 {
     if(present(iid)) return "";
 
-    Page *obj = new Page(TSYS::strEncode(iid,TSYS::oscdID), orig);
+    Page *obj = new Page(TSYS::strEncode(sTrm(iid),TSYS::oscdID), orig);
+    MtxAlloc res(chM(), true);
     add(obj);
     obj->setName(name);
 
@@ -1277,7 +1278,8 @@ string Page::pageAdd( const string &iid, const string &name, const string &orig 
     if(!(prjFlags()&(Page::Container|Page::Template)))
 	throw TError(nodePath().c_str(),_("Page is not a container or template!"));
 
-    Page *obj = new Page(TSYS::strEncode(iid,TSYS::oscdID), orig);
+    Page *obj = new Page(TSYS::strEncode(sTrm(iid),TSYS::oscdID), orig);
+    MtxAlloc res(chM(), true);
     chldAdd(mPage, obj);
     obj->setName(name);
 

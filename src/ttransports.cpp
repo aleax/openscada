@@ -576,7 +576,8 @@ TTransportS &TTypeTransport::owner( ) const	{ return (TTransportS&)TModule::owne
 
 string TTypeTransport::inAdd( const string &iid, const string &idb )
 {
-    TTransportIn *tr = In(TSYS::strEncode(iid,TSYS::oscdID), idb);
+    TTransportIn *tr = In(TSYS::strEncode(sTrm(iid),TSYS::oscdID), idb);
+    MtxAlloc res(chM(), true);
     chldAdd(mIn, tr);
 
     return tr->id();
@@ -584,7 +585,8 @@ string TTypeTransport::inAdd( const string &iid, const string &idb )
 
 string TTypeTransport::outAdd( const string &iid, const string &idb )
 {
-    TTransportOut *tr = Out(TSYS::strEncode(iid,TSYS::oscdID), idb);
+    TTransportOut *tr = Out(TSYS::strEncode(sTrm(iid),TSYS::oscdID), idb);
+    MtxAlloc res(chM(), true);
     chldAdd(mOut, tr);
 
     return tr->id();

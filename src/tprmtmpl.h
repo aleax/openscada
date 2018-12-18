@@ -93,6 +93,7 @@ class TPrmTempl: public TFunction, public TConfig
 	    //Attributes
 	    map<int,SLnk> lnks;
 
+	    ResMtx	lnkRes;
 	    TCntrNode	*obj;
 	};
 

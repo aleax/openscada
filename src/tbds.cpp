@@ -592,7 +592,8 @@ string TTypeBD::open( const string &iid )
 {
     if(openStat(iid)) return "";
 
-    TBD *obj = openBD(TSYS::strEncode(iid,TSYS::oscdID));
+    TBD *obj = openBD(TSYS::strEncode(sTrm(iid),TSYS::oscdID));
+    MtxAlloc res(chM(), true);
     chldAdd(mDB, obj);
 
     return obj->id();

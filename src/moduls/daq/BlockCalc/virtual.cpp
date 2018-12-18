@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.8.6"
+#define MOD_VER		"1.8.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -427,7 +427,8 @@ TParamContr *Contr::ParamAttach( const string &name, int type )	{ return new Prm
 
 string Contr::blkAdd( const string &iid )
 {
-    Block *obj = new Block(TSYS::strEncode(iid,TSYS::oscdID), this);
+    Block *obj = new Block(TSYS::strEncode(sTrm(iid),TSYS::oscdID), this);
+    MtxAlloc res(chM(), true);
     chldAdd(mBl, obj);
 
     return obj->id();

@@ -6551,7 +6551,8 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	//One request check and prepare
 	int trcPer = owner().trcPer*1000000;
 	if(owner().tTimeCurent && trcPer && owner().valArch.empty() &&
-	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
+	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd()) < 2*arh_per
+		/*(tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2*/)))	//!!!! Cause to uneven call for current and archive
 	{
 	    XMLNode req("get");
 	    req.setAttr("path", addr()+"/%2fserv%2fval")->
@@ -6565,8 +6566,8 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : s2r(req.text());
 		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
 		    curVal = EVAL_REAL;
-		if(valEnd_ && (lstTm-valEnd_)/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lstTm-trcPer,EVAL_REAL));
-		else if((lstTm-valEnd_) >= wantPer) vals.push_back(SHg(lstTm,curVal));
+		/*if(valEnd_ && (lstTm-valEnd_)/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lstTm-trcPer,EVAL_REAL));	//!!!! Can cause to flaws on slow remote channels
+		else*/ if((lstTm-valEnd_) >= wantPer) vals.push_back(SHg(lstTm,curVal));
 		else if((lstTm == valEnd_ && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
 		else if(curVal != EVAL_REAL) {
 		    int s_k = lstTm-wantPer*(lstTm/wantPer), n_k = trcPer;

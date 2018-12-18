@@ -103,7 +103,8 @@ void TTypeDAQ::modStop( )
 
 string TTypeDAQ::add( const string &iid, const string &daq_db )
 {
-    TController *cntr = ContrAttach(TSYS::strEncode(iid,TSYS::oscdID), daq_db);
+    TController *cntr = ContrAttach(TSYS::strEncode(sTrm(iid),TSYS::oscdID), daq_db);
+    MtxAlloc res(chM(), true);
     chldAdd(mCntr, cntr);
 
     return cntr->id();

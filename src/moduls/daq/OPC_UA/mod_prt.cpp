@@ -84,7 +84,8 @@ void TProt::clientChunkMaxCntSet( const string &inPrtId, uint32_t vl )	{ at(inPr
 
 string TProt::epAdd( const string &iid, const string &db )
 {
-    OPCEndPoint *obj = new OPCEndPoint(TSYS::strEncode(iid,TSYS::oscdID), db, &endPntEl());
+    OPCEndPoint *obj = new OPCEndPoint(TSYS::strEncode(sTrm(iid),TSYS::oscdID), db, &endPntEl());
+    MtxAlloc res(chM(), true);
     chldAdd(mEndPnt, obj);
 
     return obj->id();

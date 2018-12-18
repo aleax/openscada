@@ -207,15 +207,15 @@ void TPrmTempl::save_( )
     //Save IO
     TConfig cfg(&owner().owner().elTmplIO());
     cfg.cfg("TMPL_ID").setS(id(),true);
-    for(int i_io = 0; i_io < ioSize(); i_io++) {
-	if(io(i_io)->flg()&TPrmTempl::LockAttr) continue;
-	cfg.cfg("ID").setS(io(i_io)->id());
-	cfg.cfg("NAME").setS(io(i_io)->name());
-	cfg.cfg("TYPE").setI(io(i_io)->type());
-	cfg.cfg("FLAGS").setI(io(i_io)->flg());
-	cfg.cfg("VALUE").setNoTransl(!(io(i_io)->type()==IO::String || io(i_io)->flg()&TPrmTempl::CfgLink));
-	cfg.cfg("VALUE").setS(io(i_io)->def());
-	cfg.cfg("POS").setI(i_io);
+    for(int iIO = 0; iIO < ioSize(); iIO++) {
+	if(io(iIO)->flg()&TPrmTempl::LockAttr) continue;
+	cfg.cfg("ID").setS(io(iIO)->id());
+	cfg.cfg("NAME").setS(io(iIO)->name());
+	cfg.cfg("TYPE").setI(io(iIO)->type());
+	cfg.cfg("FLAGS").setI(io(iIO)->flg());
+	cfg.cfg("VALUE").setNoTransl(!(io(iIO)->type()==IO::String || io(iIO)->flg()&TPrmTempl::CfgLink));
+	cfg.cfg("VALUE").setS(io(iIO)->def());
+	cfg.cfg("POS").setI(iIO);
 	SYS->db().at().dataSet(w_db+"_io",w_cfgpath+"_io",cfg);
     }
     //Clear IO
@@ -354,8 +354,11 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    if((col == 0 || col == 1) && !opt->text().size())	throw err_sys(_("Empty value is not allowed."));
 	    modif();
 	    switch(col) {
-		case 0:	io(row)->setId(opt->text());	break;
-		case 1:	io(row)->setName(opt->text());	break;
+		case 0:
+		    opt->setText(TSYS::strEncode(sTrm(opt->text()),TSYS::Limit,i2s(owner().owner().elTmplIO().fldAt(owner().owner().elTmplIO().fldId("ID")).len())));
+		    io(row)->setId(opt->text());
+		    break;
+		case 1:	io(row)->setName(sTrm(opt->text()));	break;
 		case 2:
 		    io(row)->setType((IO::Type)(s2i(opt->text())&0xFF));
 		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(s2i(opt->text())>>8))&(IO::FullText|IO::Selectable)));
@@ -394,7 +397,7 @@ TPrmTempl::Impl::Impl( TCntrNode *iobj, const string &iname ) : TValFunc(iname.c
 
 int  TPrmTempl::Impl::lnkId( const string &nm )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     for(int iIO = 0; iIO < func()->ioSize(); iIO++)
 	if(func()->io(iIO)->id() == nm)
 	    return iIO;
@@ -403,21 +406,21 @@ int  TPrmTempl::Impl::lnkId( const string &nm )
 
 bool TPrmTempl::Impl::lnkPresent( int num )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     return (it != lnks.end());
 }
 
 void TPrmTempl::Impl::lnkAdd( int num, const SLnk &l )
 {
-    obj->dataRes().lock();
+    lnkRes.lock();
     lnks[num] = l;
-    obj->dataRes().unlock();
+    lnkRes.unlock();
 }
 
 string TPrmTempl::Impl::lnkAddr( int num, bool spec ) const
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(const_cast<ResMtx&>(lnkRes), true);
     map<int,SLnk>::const_iterator it = lnks.find(num);
     if(it == lnks.end()) throw TError(obj->nodePath().c_str(), _("Error of parameter ID."));
     return spec ? it->second.addrSpec : it->second.addr;
@@ -425,7 +428,7 @@ string TPrmTempl::Impl::lnkAddr( int num, bool spec ) const
 
 void TPrmTempl::Impl::lnkAddrSet( int num, const string &vl, bool spec )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end()) throw TError(obj->nodePath().c_str(), _("Error of parameter ID."));
     if(spec)	it->second.addrSpec = vl;
@@ -434,7 +437,7 @@ void TPrmTempl::Impl::lnkAddrSet( int num, const string &vl, bool spec )
 
 bool TPrmTempl::Impl::lnkInit( int num, bool checkNoLink )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
 
     if(it == lnks.end())	return false;
@@ -456,14 +459,14 @@ bool TPrmTempl::Impl::lnkInit( int num, bool checkNoLink )
 
 bool TPrmTempl::Impl::lnkActive( int num )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     return (it != lnks.end() && !it->second.con.freeStat());
 }
 
 TVariant TPrmTempl::Impl::lnkInput( int num )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
 
     if(it == lnks.end())	return EVAL_REAL;
@@ -477,7 +480,7 @@ TVariant TPrmTempl::Impl::lnkInput( int num )
 bool TPrmTempl::Impl::lnkOutput( int num, const TVariant &vl )
 {
     if(vl.isEVal()) return false;
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end() || it->second.con.freeStat() || (it->second.con.at().fld().flg()&TFld::NoWrite) ||
 	    !(ioFlg(num)&(IO::Output|IO::Return)))
@@ -495,7 +498,7 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
 {
     map<string, bool> als;
 
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     for(int iIO = 0; iIO < func()->ioSize(); iIO++) {
 	if((func()->io(iIO)->flg()&TPrmTempl::CfgLink) && !lnkPresent(iIO)) {
 	    lnkAdd(iIO, TPrmTempl::Impl::SLnk());
@@ -543,7 +546,7 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
 
 bool TPrmTempl::Impl::initLnks( bool checkNoLink )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     bool chkLnkNeed = false;
     for(map<int,SLnk>::iterator iL = lnks.begin(); iL != lnks.end(); ++iL)
 	if(lnkInit(iL->first,checkNoLink)) chkLnkNeed = true;
@@ -553,29 +556,29 @@ bool TPrmTempl::Impl::initLnks( bool checkNoLink )
 
 void TPrmTempl::Impl::cleanLnks( bool andFunc )
 {
-    obj->dataRes().lock();
+    lnkRes.lock();
     lnks.clear();
     if(andFunc) setFunc(NULL);
-    obj->dataRes().unlock();
+    lnkRes.unlock();
 }
 
 void TPrmTempl::Impl::inputLinks( )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     for(map<int,SLnk>::iterator iL = lnks.begin(); iL != lnks.end(); ++iL)
 	set(iL->first, lnkInput(iL->first));
 }
 
 void TPrmTempl::Impl::outputLinks( )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     for(map<int,SLnk>::iterator iL = lnks.begin(); iL != lnks.end(); ++iL)
 	if(ioMdf(iL->first)) lnkOutput(iL->first, get(iL->first));
 }
 
 bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     //Get page info
     if(opt->name() == "info" && ctrMkNode("area",opt,-1,pref.c_str(),_("Template configuration"))) {
 	vector<string> list;

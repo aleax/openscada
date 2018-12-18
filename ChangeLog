@@ -1,3 +1,12 @@
+2018-12-18 Roman (stable)
+- !:DB,Security,Transports,DAQ,Archive,DAQ.{BlockCalc},Protocol.{ModBus,OPC_UA,UserProtocol},UI.{VCAEngine,WebUser}:
+    Appended in the adding functions to treat the ID for trimming and locking the child access resource in time of reading the end identifier.
+- !!:DAQ: Identifiers of the logical level IO of the DAQ-templates expanded to the size limit up to 1.5*OBJ_ID_SZ=30 symbols and have added for these shrinking on creating.
+- !!!!:FIX:DAQ,DAQ.{ModBus,Siemens}: The DAQ-Templates implementation fixed using own lock "lnkRes" instead the node data lock,
+    due to that causes to locks into the links initialisation in the external access.
+- !!:UI.{Vision,WebVision}: The primitive "Diagram" improved in work on slow channels and with the value buffers period in 10 seconds.
+
+
 2018-12-16 Roman (stable)
 - FIX:SYS: Fixed for building Debian moduled.
 

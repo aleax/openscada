@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.1.0"
+#define MOD_VER		"3.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -1988,7 +1988,7 @@ bool TMdPrm::lnkInit( int num, bool checkNoLink )
     //Common link forms
     if(!TPrmTempl::Impl::lnkInit(num,checkNoLink)) return false;
 
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end() || (checkNoLink && it->second.addrSpec.size())) return false;
 
@@ -2018,7 +2018,7 @@ bool TMdPrm::lnkInit( int num, bool checkNoLink )
 
 bool TMdPrm::lnkActive( int num )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it != lnks.end() && it->second.addrSpec.size())	return true;
     return TPrmTempl::Impl::lnkActive(num);
@@ -2026,7 +2026,7 @@ bool TMdPrm::lnkActive( int num )
 
 TVariant TMdPrm::lnkInput( int num )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end()) return EVAL_REAL;
 
@@ -2037,7 +2037,7 @@ TVariant TMdPrm::lnkInput( int num )
 
 bool TMdPrm::lnkOutput( int num, const TVariant &vl )
 {
-    MtxAlloc res(obj->dataRes(), true);
+    MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end()) return false;
 

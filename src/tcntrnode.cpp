@@ -625,6 +625,7 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
     if(p == (*chGrp)[igr].elem.end()) throw err_sys(_("Element '%s' is missing!"), name.c_str());
     AutoHD<TCntrNode> chN(p->second, user);
     if(chN.at().nodeMode() == Disabled) throw err_sys(_("Element '%s' is disabled!"), name.c_str());
+    res.unlock();
 
     return chN;
 }
