@@ -685,7 +685,7 @@ msgid ""
 "Real value configuration in the form: \"{width};{form};{prec}\".\n"
 "Where \"form\" is 'g', 'e' or 'f'."
 msgstr ""
-"Конфігурація реального значення у формі: \"{ширина]};{форма};{точність}\".\n"
+"Конфігурація реального значення у формі: \"{ширина};{форма};{точність}\".\n"
 "Де \"форма\" це 'g', 'e' або 'f'."
 
 msgid "String value configuration in the form \"{len}\"."

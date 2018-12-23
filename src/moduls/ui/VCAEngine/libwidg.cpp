@@ -63,9 +63,9 @@ TCntrNode &WidgetLib::operator=( const TCntrNode &node )
     //Mime data copy
     src_n->mimeDataList(pls);
     string mimeType, mimeData;
-    for(unsigned i_m = 0; i_m < pls.size(); i_m++) {
-	src_n->mimeDataGet(pls[i_m], mimeType, &mimeData);
-	mimeDataSet(pls[i_m], mimeType, mimeData);
+    for(unsigned iM = 0; iM < pls.size(); iM++) {
+	src_n->mimeDataGet(pls[iM], mimeType, &mimeData);
+	mimeDataSet(pls[iM], mimeType, mimeData);
     }
 
     // Copy include pages
@@ -192,11 +192,11 @@ void WidgetLib::save_( )
     //Check for need copy mime data to other DB and same copy
     if(!mOldDB.empty() && mOldDB != TBDS::realDBName(DB())) {
 	vector<string> pls;
-	mimeDataList(pls,mOldDB);
+	mimeDataList(pls, mOldDB);
 	string mimeType, mimeData;
-	for(unsigned i_m = 0; i_m < pls.size(); i_m++) {
-	    mimeDataGet(pls[i_m], mimeType, &mimeData, mOldDB);
-	    mimeDataSet(pls[i_m], mimeType, mimeData, DB());
+	for(unsigned iM = 0; iM < pls.size(); iM++) {
+	    mimeDataGet(pls[iM], mimeType, &mimeData, mOldDB);
+	    mimeDataSet(pls[iM], mimeType, mimeData, DB());
 	}
     }
 
@@ -423,9 +423,9 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		vector<string> lst;
 		string mimeType;
 		mimeDataList(lst);
-		for(unsigned i_el = 0; i_el < lst.size(); i_el++)
-		    if(mimeDataGet("res:"+lst[i_el],mimeType)) {
-			if(n_id) n_id->childAdd("el")->setText(lst[i_el]);
+		for(unsigned iEl = 0; iEl < lst.size(); iEl++)
+		    if(mimeDataGet("res:"+lst[iEl],mimeType)) {
+			if(n_id) n_id->childAdd("el")->setText(lst[iEl]);
 			if(n_tp) n_tp->childAdd("el")->setText(TSYS::strSepParse(mimeType,0,';'));
 			if(n_dt) n_dt->childAdd("el")->setText(TSYS::strSepParse(mimeType,1,';'));
 		    }

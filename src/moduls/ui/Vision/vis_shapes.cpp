@@ -556,7 +556,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    if((wVl=tC->attr("width")).size()) {
 					int wdthCel = fmax(1, s2i(wVl));
 					hit->setData(Qt::UserRole,
-					    (wVl.find("%") == wVl.size()-1) ? w->size().width()*wdthCel/100 : wdthCel*w->xScale(true));
+					    (wVl.find("%") == wVl.size()-1) ? -wdthCel : wdthCel*w->xScale(true));
 				    } else hit->setData(Qt::UserRole, QVariant());
 				    hit->setData(Qt::UserRole+1, (bool)s2i(tC->attr("edit")));
 				    hit->setData(Qt::UserRole+2, ((wVl=tC->attr("color")).size()) ? QString::fromStdString(wVl) : QVariant());
@@ -598,8 +598,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    tit->setData(Qt::DecorationRole, QPixmap::fromImage(img));
 				else tit->setData(Qt::DecorationRole, QVariant());
 				// Modify set
-				if(hit->data(Qt::UserRole+1).toBool() || (tC && s2i(tC->attr("edit"))))
+				if(hit->data(Qt::UserRole+1).toBool() || (tC && s2i(tC->attr("edit")))) {
 				    tit->setFlags(tit->flags()|Qt::ItemIsEditable);
+				    tit->setData(Qt::UserRole+5, v);
+				}
 				tit->setData(Qt::UserRole+1, iC);
 				tit->setData(Qt::UserRole+2, iR);
 			    }
@@ -700,13 +702,15 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 
 		if(wdg->columnCount() > 1) wdg->resizeColumnsToContents();
 		if(wdg->property("colsWdthFit").toBool() && wdg->rowCount()) {
-		    int tblWdth = wdg->maximumViewportSize().width() - (wdg->verticalScrollBar()?wdg->verticalScrollBar()->size().width():0);
+		    int tblWdth = wdg->maximumViewportSize().width() -
+			((wdg->verticalScrollBar()/*&&wdg->verticalScrollBar()->isVisible()*/)?wdg->verticalScrollBar()->size().width():0);
 		    int averWdth = tblWdth/wdg->columnCount();
 		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
 		    //Count width params
 		    for(int iC = 0; iC < wdg->columnCount(); iC++) {
 			fullColsWdth += wdg->columnWidth(iC);
 			if(wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) {
+			    if(tVl < 0)	tVl = tblWdth*abs(tVl)/100;
 			    niceForceColsWdth += tVl;
 			    wdg->setColumnWidth(iC, tVl);
 			}
@@ -1159,7 +1163,14 @@ void ShapeFormEl::tableSelectChange( )
     QTableWidget *el = (QTableWidget*)sender();
     RunWdgView   *w  = (RunWdgView*)el->parentWidget();
 
-    if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size() || !(((ShpDt*)w->shpData)->active && w->permCntr())) return;
+    if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size()) return;
+
+    //Unselect the table due its inactivity
+    if(!(((ShpDt*)w->shpData)->active && w->permCntr())) {
+	for(int iS = 0; iS < el->selectedItems().size(); iS++)
+	    el->selectedItems()[iS]->setSelected(false);
+	return;
+    }
 
     AttrValS attrs;
     QTableWidgetItem *wIt = el->selectedItems()[0];
@@ -1188,9 +1199,16 @@ void ShapeFormEl::tableChange( int row, int col )
     QTableWidget *el = (QTableWidget*)sender();
     RunWdgView   *w  = (RunWdgView*)el->parentWidget();
 
-    if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size() || !(((ShpDt*)w->shpData)->active && w->permCntr())) return;
+    if(((ShpDt*)w->shpData)->evLock /*|| !el->selectedItems().size()*/) return;
 
-    QTableWidgetItem *wIt = el->item(row,col);
+    QTableWidgetItem *wIt = el->item(row, col);
+
+    //Restore the previous value
+    if(!(((ShpDt*)w->shpData)->active && w->permCntr())) {
+	wIt->setData(Qt::DisplayRole, wIt->data(Qt::UserRole+5));
+	return;
+    }
+
     QVariant val = wIt->data(Qt::DisplayRole);
     if(val.type() == QVariant::Bool) val = val.toInt();
 
@@ -2562,6 +2580,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	// X: Prepare XY data buffer and prepare border for percent trend, ONLY!
 	float xBordL = cPX.bordL();
 	float xBordU = cPX.bordU();
+	int maxVlX = -1;
 	vector< pair<double,double> > dBuf;
 	{
 	    bool xNeedRngChk = (hsPercT && xBordL >= xBordU);
@@ -2571,8 +2590,10 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 		if(ipos >= (int)cPX.val().size() || end_vl)	break;
 		if(cPX.val()[ipos].tm >= aVend) end_vl = true;
 		if(cPX.val()[ipos].val != EVAL_REAL) {
-		    if((iVpos=cP.val(cPX.val()[ipos].tm)) < (int)cP.val().size() && cP.val()[iVpos].val != EVAL_REAL)
+		    if((iVpos=cP.val(cPX.val()[ipos].tm)) < (int)cP.val().size() && cP.val()[iVpos].val != EVAL_REAL) {
 			dBuf.push_back(pair<double,double>(cPX.val()[ipos].val,cP.val()[iVpos].val));
+			if(maxVlX < 0 || cPX.val()[ipos].val >= cPX.val()[maxVlX].val) maxVlX = ipos;
+		    }
 		    if(xNeedRngChk) {
 			xBordL = vmin(xBordL, cPX.val()[ipos].val);
 			xBordU = vmax(xBordU, cPX.val()[ipos].val);
@@ -2602,14 +2623,14 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	// Draw curent point
 	int iVpos = cP.val(aVend);
 	int iVposX = cPX.val(aVend);
-	if(iVpos < (int)cP.val().size() && iVposX < (int)cPX.val().size() && cP.val()[iVpos].val != EVAL_REAL && cPX.val()[iVposX].val != EVAL_REAL)
+	if(iVpos < (int)cP.val().size() && iVposX < (int)cPX.val().size() && iVposX != maxVlX && cP.val()[iVpos].val != EVAL_REAL && cPX.val()[iVposX].val != EVAL_REAL)
 	{
 	    curVl = vsPercT ? 100*(cP.val()[iVpos].val-bordL)/(bordU-bordL) : cP.val()[iVpos].val;
 	    curVlX = hsPercT ? 100*(cPX.val()[iVposX].val-xBordL)/(xBordU-xBordL) : cPX.val()[iVposX].val;
 	    c_vpos = tAr.y() + tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,curVl)):curVl)-vsMinT)/(vsMaxT-vsMinT))));
 	    c_hpos = tAr.x() + (int)((double)tAr.width()*vmax(0,vmin(1,((isHLogT?log10(vmax(1e-100,curVlX)):curVlX)-hsMinT)/(hsMaxT-hsMinT))));
-	    pnt.drawLine(c_hpos-trpen.width()*5, c_vpos-trpen.width()*5, c_hpos+trpen.width()*5, c_vpos+trpen.width()*5);
-	    pnt.drawLine(c_hpos-trpen.width()*5, c_vpos+trpen.width()*5, c_hpos+trpen.width()*5, c_vpos-trpen.width()*5);
+	    pnt.drawLine(c_hpos-trpen.width()*3, c_vpos-trpen.width()*3, c_hpos+trpen.width()*3, c_vpos+trpen.width()*3);
+	    pnt.drawLine(c_hpos-trpen.width()*3, c_vpos+trpen.width()*3, c_hpos+trpen.width()*3, c_vpos-trpen.width()*3);
 
 	    AttrValS attrs;
 	    attrs.push_back(std::make_pair(TSYS::strMess("prm%dval",iT),r2s(cP.val()[iVpos].val,6)));
@@ -4696,7 +4717,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
     switch(uiPrmPos) {
 	case A_COM_LOAD:
 	    up = true;
-	    if(runW && shD->inclPg)	shD->inclPg->setMinimumSize(w->size());
+	    //if(runW && shD->inclPg) shD->inclPg->setMinimumSize(w->size());
 	    break;
 	case A_COM_FOCUS: break;
 	case A_EN:
@@ -4805,7 +4826,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 			shD->inclScrl->setWidget(shD->inclPg);
 			shD->inclPg->setEnabled(true);
 			shD->inclPg->setVisible(true);
-			shD->inclPg->setMinimumSize(w->size());
+			//shD->inclPg->setMinimumSize(w->size());
 			if(shD->inclPg->wx_scale != shD->inclPg->mainWin()->xScale() ||
 				shD->inclPg->wy_scale != shD->inclPg->mainWin()->yScale())
 			    shD->inclPg->load("");

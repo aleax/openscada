@@ -26,6 +26,7 @@
 #include <QComboBox>
 #include <QStatusBar>
 #include <QDesktopWidget>
+#include <QScrollBar>
 
 #include <tsys.h>
 
@@ -77,17 +78,25 @@ void RunWdgView::resizeF( const QSizeF &size )
     else if(!holdPg && root() == "Box" && (holdPg=((ShapeBox::ShpDt*)shpData)->inclPg)) cntW = this;
 
     //Hard resize for main and external windows
-    if(holdPg && !cntW) { resize((mWSize=size).toSize()); }
+    if(holdPg && !cntW)	resize((mWSize=size).toSize());
     else WdgView::resizeF(size);
 
     if(holdPg && cntW) {
+	QAbstractScrollArea *sa = (cntW->root() == "Box") ? ((ShapeBox::ShpDt*)cntW->shpData)->inclScrl : NULL;
 	bool wHold = (holdPg->sizeOrigF().width()*holdPg->xScale() <= cntW->sizeOrigF().width()*cntW->xScale());
 	bool hHold = (holdPg->sizeOrigF().height()*holdPg->yScale() <= cntW->sizeOrigF().height()*cntW->yScale());
-	holdPg->setMinimumSize(wHold ? cntW->size().width() : holdPg->size().width(), hHold ? cntW->size().height() : holdPg->size().height());
-	holdPg->setMaximumSize(wHold ? cntW->size().width() : 1000000, hHold ? cntW->size().height() : 1000000);
+
+	//holdPg->setMinimumSize(wHold ? cntW->size().width() : holdPg->size().width(), hHold ? cntW->size().height() : holdPg->size().height());
+	//holdPg->setMaximumSize(wHold ? cntW->size().width() : 1000000, hHold ? cntW->size().height() : 1000000);
+
+	//for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();	//Call all cascade events
+
+	QSize holdB = QSize(cntW->size().width()  - ((sa&&sa->verticalScrollBar()&&sa->verticalScrollBar()->isVisible())?sa->verticalScrollBar()->size().width():0),
+			    cntW->size().height() - ((sa&&sa->horizontalScrollBar()&&sa->horizontalScrollBar()->isVisible())?sa->horizontalScrollBar()->size().height():0));
+	holdPg->setMinimumSize(wHold ? holdB.width() : holdPg->size().width(), hHold ? holdB.height() : holdPg->size().height());
+	holdPg->setMaximumSize(wHold ? holdB.width() : 1000000, hHold ? holdB.height() : 1000000);
     }
 }
-
 
 string RunWdgView::pgGrp( )	{ return property("pgGrp").toString().toStdString(); }
 

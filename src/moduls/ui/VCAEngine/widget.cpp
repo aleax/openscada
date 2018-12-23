@@ -66,7 +66,8 @@ TCntrNode &Widget::operator=( const TCntrNode &node )
     if(!enable()) setEnable(true);
 
     //Copy generic configuration
-    if(srcN->parent().freeStat() || srcN->name() != srcN->parent().at().name())	setName(srcN->name());
+    if(srcN->parent().freeStat() || (srcN->name() != srcN->parent().at().name() && srcN->name() != srcN->id()))
+	setName(srcN->name());
     if(srcN->parent().freeStat() || srcN->descr() != srcN->parent().at().descr()) setDescr(srcN->descr());
     if(srcN->parent().freeStat() || srcN->ico() != srcN->parent().at().ico())	setIco(srcN->ico());
     setOwner(srcN->owner());

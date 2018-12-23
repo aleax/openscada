@@ -1,3 +1,12 @@
+2018-12-23 Roman (stable)
+- FIX:UI.VCAEngine: Size of the Mime identifiers increased to 40.
+    Widgets prevented at last from setting names double to identifier, at the copying mostly.
+- UI.Vision: The behaviour of forming scroll bars of the included widgets some improved to prevent one of the bar.
+    The view Table of the primitive FormEl improved in using the relative table collumn width.
+	The mode of inactivity improved to remove all selecting and to restore edited values.
+- UI.{Vision.WebVision}: The view XY of the primitive "Diagram" improved to remove the end position mark at the data natural order and its size decreased.
+
+
 2018-12-18 Roman (stable)
 - !:DB,Security,Transports,DAQ,Archive,DAQ.{BlockCalc},Protocol.{ModBus,OPC_UA,UserProtocol},UI.{VCAEngine,WebUser}:
     Appended in the adding functions to treat the ID for trimming and locking the child access resource in time of reading the end identifier.
