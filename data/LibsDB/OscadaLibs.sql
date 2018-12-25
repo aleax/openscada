@@ -220,7 +220,7 @@ CREATE TABLE 'lib_Controllers_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' 
 INSERT INTO "lib_Controllers_io" VALUES('prescr','dbDB','DB:DB with tables name',0,1,'',0,4,'БД:Имя БД с таблицами','','БД:Ім''я БД з таблицями','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','dbComs','DB:Table with commands',0,1,'',0,5,'БД:Таблица с коммандами','','БД:Таблиця з командами','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','dbProgs','DB:Table with programs',0,1,'',0,6,'БД:Таблица с программами','','БД:Таблиця з програмами','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','mode','Mode: Finish(-2); Error(-1); Stop(0); Run (1); Pause(2)',1,1,'',0,8,'Режим: Оконч.(-2); Ошибка(-1); Стоп(0); Исп.(1); П','','Режим: Окінч.(-2); Помилка(-1); Стоп(0); Вик.(1); ','');
+INSERT INTO "lib_Controllers_io" VALUES('prescr','mode','Mode: Finish(-2); Error(-1); Stop(0); Run (1); Pause(2); Pass com (3)',1,1,'',0,8,'Режим: Оконч.(-2); Ошибка(-1); Стоп(0); Исполн.(1); Пауза (2); Пропуст. ком. (3)','','Режим: Окінч.(-2); Помилка(-1); Стоп(0); Викон.(1); Пауза (2); Пропуст. ком. (3)','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','curMode','Current mode',1,0,'',0,9,'Текущий режим','','Поточний режим','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','prog','Name of selected program',0,1,'',0,10,'Имя выбранной программы','','Ім''я обраної програми','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','startTm','Start time (seconds)',1,0,'',0,11,'Время запуска (секунды)','','Час запуску (секунди)','');
@@ -6379,7 +6379,7 @@ CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"r
 INSERT INTO "lib_Controllers" VALUES('prescr','Prescriptions manager','','','Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsor: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
-Version: 1.1.0','','',1,10,0,'clcCnt++;
+Version: 1.1.1','','',1,10,0,'clcCnt++;
 
 if(f_start)	work = SYS.XMLNode("prg");
 
@@ -6485,6 +6485,7 @@ if(curMode == 1 || curMode == 2) {
 
 	//Internal commands call
 	if(!comCntrO) {
+		//????
 		if(mode == 3 && curCom >= 0 && curCom < work.childSize()) {
 			work.childGet(curCom).setAttr("rez", "-10:"+tr("Step missed"));
 			curCom++;
@@ -6602,12 +6603,13 @@ if(curMode == 1 || curMode == 2) {
 				// Start command
 				if(!comEl.attr("tm").length) {
 					curComPrm.run.set(false);	//Stop for possible background call
-					comEl.setAttr("tm",SYS.time());
+					comEl.setAttr("tm", SYS.time());
 					for(i_a = 1; i_a <= 5; i_a++)
 						if(!(comA=curComPrm["arg"+i_a]).isEVal())
 							comA.set(comEl.attr("arg"+i_a));
 					curComPrm.rez.set(0);
 					curComPrm.run.set(true);
+					if(mode == 2) curComPrm.pause.set(true);
 				}
 				isRun = true;
 			}
@@ -6706,7 +6708,7 @@ if(curMode == 1 || curMode == 2) {
 	}
 }
 curMode = mode;
-//mode = curMode;','','',1508607633);
+//mode = curMode;','','',1545733408);
 INSERT INTO "lib_Controllers" VALUES('test','test','test','','Different tests of the JavaLikeCalc language for execution into the controller mode.
 Author: Roman Savochenko
 Version: 1.0.0

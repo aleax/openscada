@@ -86,10 +86,10 @@ void RunWdgView::resizeF( const QSizeF &size )
 	bool wHold = (holdPg->sizeOrigF().width()*holdPg->xScale() <= cntW->sizeOrigF().width()*cntW->xScale());
 	bool hHold = (holdPg->sizeOrigF().height()*holdPg->yScale() <= cntW->sizeOrigF().height()*cntW->yScale());
 
-	//holdPg->setMinimumSize(wHold ? cntW->size().width() : holdPg->size().width(), hHold ? cntW->size().height() : holdPg->size().height());
-	//holdPg->setMaximumSize(wHold ? cntW->size().width() : 1000000, hHold ? cntW->size().height() : 1000000);
+	/*holdPg->setMinimumSize(wHold ? cntW->size().width() : holdPg->size().width(), hHold ? cntW->size().height() : holdPg->size().height());
+	holdPg->setMaximumSize(wHold ? cntW->size().width() : 1000000, hHold ? cntW->size().height() : 1000000);
 
-	//for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();	//Call all cascade events
+	for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();	//Call all cascade events*/
 
 	QSize holdB = QSize(cntW->size().width()  - ((sa&&sa->verticalScrollBar()&&sa->verticalScrollBar()->isVisible())?sa->verticalScrollBar()->size().width():0),
 			    cntW->size().height() - ((sa&&sa->horizontalScrollBar()&&sa->horizontalScrollBar()->isVisible())?sa->horizontalScrollBar()->size().height():0));

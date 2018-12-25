@@ -269,7 +269,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     connect(actItPaste, SIGNAL(triggered()), this, SLOT(itPaste()));
     // Update
     if(!ico_t.load(TUIS::icoGet("reload",NULL,true).c_str())) ico_t.load(":/images/reload.png");
-    QAction *actUpdate = new QAction(QPixmap::fromImage(ico_t),_("&Refresh"),this);
+    actUpdate = new QAction(QPixmap::fromImage(ico_t),_("&Refresh"),this);
     actUpdate->setShortcut(Qt::Key_F5);
     actUpdate->setToolTip(_("Refresh the page"));
     actUpdate->setWhatsThis(_("The button for refreshing the page content"));
@@ -900,6 +900,7 @@ void ConfApp::pageCyclRefrStart( )
 {
     actStartUpd->setEnabled(false);
     actStopUpd->setEnabled(true);
+    actUpdate->setEnabled(false);
 
     autoUpdTimer->setSingleShot(false);
     autoUpdTimer->start(1000);
@@ -909,6 +910,7 @@ void ConfApp::pageCyclRefrStop( )
 {
     actStopUpd->setEnabled(false);
     actStartUpd->setEnabled(true);
+    actUpdate->setEnabled(true);
 
     autoUpdTimer->stop();
 }

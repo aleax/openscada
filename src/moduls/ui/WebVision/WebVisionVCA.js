@@ -602,9 +602,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	this.mouseup = new Array;
 
 	if(this.pg && this.parent && this.parent.inclOpen && this.parent.inclOpen == this.addr) {
-	    var geomWpar = parseFloat(this.parent.attrs['geomW'])*this.parent.xScale(true);
-	    var geomHpar = parseFloat(this.parent.attrs['geomH'])*this.parent.yScale(true);
-	    this.parent.place.style.overflow = (geomW > geomWpar || geomH > geomHpar) ? 'scroll' : 'hidden';
+	    var geomWpar = parseFloat(this.parent.attrs['geomW'])*this.parent.xScale(true) - 20;	//!!!! 20 is most scrollbar width and clientWidth does not work here
+	    var geomHpar = parseFloat(this.parent.attrs['geomH'])*this.parent.yScale(true) - 20;
+	    this.parent.place.style.overflow = (geomW > geomWpar || geomH > geomHpar) ? 'auto' : 'hidden';
 	    geomW = Math.max(geomW, geomWpar);
 	    geomH = Math.max(geomH, geomHpar);
 	}
@@ -1614,7 +1614,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var formObj = toInit ? this.place.ownerDocument.createElement('table') : this.place.children[0];
 		    formObj.wdgLnk = this;
 		    formObj.elWr = elWr;
-		    //Events and the processings init
+		    // Events and the processings init
 		    if(toInit) {
 			formObj.onclick = function( ) {
 			    if(this.nodeName == "TABLE" || !(elTbl=this.offsetParent) || !elTbl.elWr) return true;
@@ -1725,7 +1725,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				switch(tit.outTp) {
 				    case 'b': val = parseInt(val) ? "true" : "false";	break;
 				    case 'i': val = parseInt(val);	break;
-				    case 'r': val = parseFloat(val);	break;
+				    case 'r': val = parseFloat(parseFloat(val).toPrecision(6));	break;
 				}
 				tit.innerText = val;
 			    }
@@ -2133,7 +2133,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    var geomHpar = parseFloat(this.attrs['geomH'])*this.yScale(true);
 	    var geomWch = parseFloat(this.pages[this.inclOpen].attrs['geomW'])*this.pages[this.inclOpen].xScale(true);
 	    var geomHch = parseFloat(this.pages[this.inclOpen].attrs['geomH'])*this.pages[this.inclOpen].yScale(true);
-	    elStyle += "overflow: "+((geomWch > geomWpar || geomHch > geomHpar) ? 'scroll' : 'hidden')+"; ";
+	    elStyle += "overflow: "+((geomWch > geomWpar || geomHch > geomHpar) ? 'auto' : 'hidden')+"; ";
 	}
 	else if(isPrim) {
 	    // Border processing in generic

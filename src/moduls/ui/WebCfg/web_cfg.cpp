@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.9"
+#define MOD_VER		"1.7.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -130,8 +130,7 @@ string TWEB::pgHead( string head_els )
 {
     return
 	"<?xml version='1.0' ?>\n"
-	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
-	"'DTD/xhtml1-transitional.dtd'>\n"
+	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n"
 	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 	"<head>\n"
 	"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"

@@ -1,3 +1,12 @@
+2018-12-25 Roman (stable)
+- DB.LibsDB.{OscadaLibs,vcaBase}: Controllers.prescr and Main.{prescrRun,prescrRunSimple} expanded to pass commands in the pause mode.
+- !:DAQ: Appended for the user API function daqAt().
+- FIX:UI.{Vision,WebCfg,WebCfgD,WebVision,=Tmpl=}: Fixed for the XHTML header on FireFox.
+- UI.QTCfg: Set to disable "actUpdate" at the periodic update.
+- UI.WebVision: Improved to scrolbar control of the included pages.
+    The view "Table" of the primitive "FormEl" improved for the real type represent.
+
+
 2018-12-23 Roman (stable)
 - FIX:UI.VCAEngine: Size of the Mime identifiers increased to 40.
     Widgets prevented at last from setting names double to identifier, at the copying mostly.

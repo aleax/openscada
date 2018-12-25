@@ -221,6 +221,15 @@ void TDAQS::save_( )
 
 TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // TCntrNodeObj daqAt(string path, string sep = "", waitForAttr = true) - attaches to a DAQ node (controller object, parameter, attribute) in the ''path''
+    //		or the separated string by the separator ''sep'', from the DAQ-subsystem. Check for an attribute in the path last element, at ''waitForAttr''.
+    //  path - path to the DAQ-node
+    //  sep - the symbol separator for separated string path
+    //  waitForAttr - wait for an attribute or other
+    if(iid == "daqAt" && prms.size() >= 1) {
+	AutoHD<TCntrNode> nd = daqAt(prms[0].getS(), (prms.size()>=2 && prms[1].getS().size())?prms[1].getS()[0]:0, true, (prms.size()>=3)?prms[2].getB():true);
+	return nd.freeStat() ? TVariant(false) : TVariant(new TCntrNodeObj(nd,user));
+    }
     // bool funcCall(string progLang, TVarObj args, string prog, string fixId = "") -
     //    Call function text <prog> whith arguments <args> for program language <progLang>
     //    and with the fixed identifier <fixId> (automatic for this empty). Return "true" on a well call.

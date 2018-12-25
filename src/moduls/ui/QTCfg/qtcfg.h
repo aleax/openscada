@@ -223,7 +223,7 @@ private:
     QProgressDialog *reqPrgrs;
 
     QAction	*actUp, *actPrev, *actNext,
-		*actStartUpd, *actStopUpd,
+		*actUpdate, *actStartUpd, *actStopUpd,
 		*actDBLoad, *actDBSave,
 		*actItAdd, *actItDel,
 		*actItCut, *actItCopy, *actItPaste,

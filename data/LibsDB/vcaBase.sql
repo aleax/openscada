@@ -47,18 +47,18 @@ INSERT INTO "PrescrProgs" VALUES('Библ1/Прог3','<prg><com arg1="10" arg2
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог4','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог5','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог6','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
-INSERT INTO "PrescrProgs" VALUES('abcd','<prg wtm="52"><com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Таймер уровень 1" id="Timer" name="Таймер ур.1"><com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" name="Таймер ур.2" /></com><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /></prg>');
+INSERT INTO "PrescrProgs" VALUES('abcd','<prg wtm="65"><com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Таймер уровень 1" id="Timer" name="Таймер ур.1"><com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" name="Таймер ур.2" /></com><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /></prg>');
 INSERT INTO "PrescrProgs" VALUES('Abcdef','');
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог123','');
 INSERT INTO "PrescrProgs" VALUES('Тест12','<prg id="Тест12" wtm="31"><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer" /><com id="New command"><com arg1="123" arg2="0" arg3="0" arg4="0" arg5="0" descr="123456" id="Timer" name="Test timer" /></com></com></com></prg>');
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('Main','Main elements','Main elements library of user interface.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.3.7','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
+Version: 1.4.1','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.3.7','Основные элементы','Библиотека основных элементов пользовательского интерфейса.
+Версія: 1.4.1','Основные элементы','Библиотека основных элементов пользовательского интерфейса.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.3.7');
+Версия: 1.4.1');
 INSERT INTO "VCALibs" VALUES('mnEls','Mnemo elements','User interface''s main elements library.','wlb_mnEls','','Елементи мнемосхеми','Бібліотека основних елементів інтерфейсу користувача.','Элементы мнемосхемы','Библиотека основных элементов пользовательского интерфейса.');
 INSERT INTO "VCALibs" VALUES('doc','Documents','Documents library.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -5313,7 +5313,7 @@ session time in graphics group. For history of reports of programms execution se
 document field and list into appear navigation panel on archived document.
 By default the document''s archive configured to 10 documents depth.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0',32,'','','','Елемент "Рецепт: виконання" є одним з двох кадрів роботи з рецептами,
+Version: 1.1.1',32,'','','','Елемент "Рецепт: виконання" є одним з двох кадрів роботи з рецептами,
 які слугують для безпосереднього виконання програм-рецептів,
 раніше сформованих у кадрі "Рецепт: редагування".
 
@@ -5328,7 +5328,7 @@ Version: 1.1.0',32,'','','','Елемент "Рецепт: виконання" �
 документа та погортати по архівному документу на панелі навігації що з''явилася праворуч.
 По замовченню архів документів налаштовано на глибину 10 документів.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.1.0','','Элемент "Рецепт: исполнение" является одним из двух кадров работы с рецептами,
+Версія: 1.1.1','','Элемент "Рецепт: исполнение" является одним из двух кадров работы с рецептами,
 который служит для непосредственного исполнения программ-рецептов,
 ранее сформированных в кадре "Рецепт: редактирование".
 
@@ -5343,7 +5343,7 @@ Version: 1.1.0',32,'','','','Елемент "Рецепт: виконання" �
 документа и полистать на появившейся справа панели навигации по архивному документу.
 По умолчанию архив документов настроен на глубину 10 документов.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.1.0','','','');
+Версия: 1.1.1','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomX','913',32,'','','logo','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomY','3',32,'','','logo','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','107',32,'','','logo','','','','','','');
@@ -7107,21 +7107,21 @@ Executed prescription-programm can been paused, pressing the button "Pause" in t
 or interrupt, pressing the button "Stop".
 
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0',32,'','','','Елемент "Рецепт: просте виконання" - простий варіант елементу "Рецепт: виконання" який розроблено
+Version: 1.1.1',32,'','','','Елемент "Рецепт: просте виконання" - простий варіант елементу "Рецепт: виконання" який розроблено
 для розташування як віджет мнемосхеми та роботи тільки разом з первинним елементом "Рецепт: виконання".
 
 Запущений рецепт-програма може бути призупинено, натиском кнопки "Пауза" у місці кнопки "Запуск",
 або перервати, натиском "Зупинити".
 
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.1.0','','Элемент "Рецепт: простое исполнение" - простой вариант элемента "Рецепт: выполнение" который разработан
+Версія: 1.1.1','','Элемент "Рецепт: простое исполнение" - простой вариант элемента "Рецепт: выполнение" который разработан
 для располажения как виджет мнемосхемы и работы только вместе с первичным элементом "Рецепт: исполнения".
 
 Запущенный рецепт-программа может быть приостановлен, нажатием кнопки "Пауза" в месте кнопки "Запуск",
 или прервать, нажатием "Остановить".
 
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.1.0','','','');
+Версия: 1.1.1','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsAct','contextMenu','Quittance:qtc',32,'','','','Підтвердження:qtc','','Подтверждение:qtc','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsAct','evProc','usr_goquitt::open:/pg_control/pg_ElCadr',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsAct','set','',8,'','','','','','','','','');
@@ -20637,11 +20637,11 @@ btStart_active = prExtProg.length;
 
 if(prExtMode <= 0)		{ btStart_img = "start"; btStart_value = false; btStop_active = btPass_active = false; }
 else if(prExtMode == 1){ btStart_img = "pause"; btStart_value = false; btStop_active = btPass_active = true; prEndRun = false; }
-else if(prExtMode == 2){ btStart_img = "start"; btStart_value = true; btStop_active = true; btPass_active = false; }
+else if(prExtMode == 2){ btStart_img = "start"; btStart_value = true; btStop_active = true; btPass_active = true; }
 
 //Prepare call status document
 pTxt = "";
-if((prExtMode == 1 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode <= 0))) {
+if((prExtMode == 1 || prExtMode == 2 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode <= 0))) {
 	pTxt = "<body>";
 	off = 0;
 	labProg_arg0val = prExtWork.attr("name");
@@ -20748,7 +20748,7 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		prExtMode = prExtCurCom = 0;
 		prog_vCur = prog_aCur;
 	}
-	else if(ev_cur == "ws_BtPress:/btPass" && prExtMode == 1)	prExtMode = 3;
+	else if(ev_cur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
 	else ev_rez += (ev_cur+"\n");
 }
 event = ev_rez;
@@ -20756,7 +20756,7 @@ event = ev_rez;
 //Programm select process
 if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
 	prExtProg = lib_value;
-else lib_value = prExtProg;','','',200,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1508607948);
+else lib_value = prExtProg;','','',200,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1545733465);
 INSERT INTO "wlb_Main" VALUES('prescrRunSimple','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAE0ElEQVRoge2Vy28TVxSHz525nvG8HNtjO2+TEBJqAoEoJBREqSLooqrK
 gj1do6Z/BH9EkYBVoMuyYAeqIkpbYlKkQNqkOAlJbEwcO37FnhnP2PPsghRBFsVQpCmSv9Xo3qtz
@@ -20806,11 +20806,11 @@ btStart_active = prExtProg.length;
 
 if(prExtMode <= 0)		{ btStart_img = "start"; btStart_value = false; btStop_active = btPass_active = false; }
 else if(prExtMode == 1){ btStart_img = "pause"; btStart_value = false; btStop_active = btPass_active = true; prEndRun = false; }
-else if(prExtMode == 2){ btStart_img = "start"; btStart_value = true; btStop_active = true; btPass_active = false; }
+else if(prExtMode == 2){ btStart_img = "start"; btStart_value = true; btStop_active = true; btPass_active = true; }
 
 //Prepare call status document
 pTxt = "";
-if((prExtMode == 1 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode <= 0))) {
+if((prExtMode == 1 || prExtMode == 2 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode <= 0))) {
 	pTxt = "<body>";
 	//off = 0;
 	labProg_arg0val = prExtWork.attr("name");
@@ -20928,7 +20928,7 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 	}
 	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
 	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0)	prExtMode = prExtCurCom = 0;
-	else if(ev_cur == "ws_BtPress:/btPass" && prExtMode == 1)	prExtMode = 3;
+	else if(ev_cur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
 	else ev_rez += (ev_cur+"\n");
 }
 event = ev_rez;
@@ -20936,7 +20936,7 @@ event = ev_rez;
 //Programm select process
 if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
 	prExtProg = lib_name;
-else lib_name = lib_selValue = prExtProg;','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1508607948);
+else lib_name = lib_selValue = prExtProg;','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1545733465);
 INSERT INTO "wlb_Main" VALUES('accept','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADx0lEQVRYhe2X3W/bVBjGX9vHTh27+XCSJWlamvSLds0qsY1O2kDbQIML
 LiYViRX1DgkEUoS44KITEn8LAuUGcVcxCQbthgasWwordEALydZpLW3WNHbjJE7OsQ8XiQrctI0L
@@ -23962,7 +23962,7 @@ INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1','doc','','root',0,'
 ','','',-1,5,'owner;perm;name;dscr;geomZ;',1495719828);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/doc','messRep','','/wlb_doc/wdg_docMessRep',0,'','','',-1,0,'owner;geomYsc;archLs;messCat;',1495719828);
 CREATE TABLE 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1508416665);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1545732796);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','

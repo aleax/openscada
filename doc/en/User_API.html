@@ -536,6 +536,7 @@ SYS.messDebug("TEST DB","Value: "+req.childGet(2).text());</pre></li>
 <p>Functions of the subsystem object (SYS.DAQ):
 </p>
 <ul>
+<li><i>TCntrNodeObj daqAt(string path, string sep = "", waitForAttr = true)</i> — attaches to a DAQ node (controller object, parameter, attribute) in the <i>path</i> or the separated string by the separator <i>sep</i>, from the DAQ-subsystem. Check for an attribute in the path last element, at <i>waitForAttr</i>.</li>
 <li><i>bool funcCall( string progLang, TVarObj args, string prog, string fixId = "" );</i> — executes the function text <i>prog</i> with the arguments <i>args</i> on the program language <i>progLang</i> and with the function fixing identifier <i>fixId</i> (automatic if it is empty). Returns "true" when it is executed correctly. The fixed function differ from the automatic one by it does not remove after execution and uses repeatedly by an address into <i>fixId</i>, which replaces that original identifier in first call. To recreate the function, you must change the program or clear the <i>fixId</i> in its original id.
 <pre style="white-space: pre-wrap;">
 var args = new Object();
