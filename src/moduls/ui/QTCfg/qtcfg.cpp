@@ -1369,8 +1369,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    tbl->resizeColumnsToContents();
 		    for(int iTr = 0; iTr < 5; iTr++)	qApp->processEvents();	//Call all cascade events
 
-		    int tblWdth = tbl->maximumViewportSize().width() -
-			((tbl->verticalScrollBar()/*&&tbl->verticalScrollBar()->isVisible()*/)?tbl->verticalScrollBar()->size().width():0);
+		    int tblWdth = tbl->maximumViewportSize().width();	//!!!! tbl->verticalScrollBar()->size().width() newer can be used here due it initially has 100 and does not update more
+			//- ((tbl->verticalScrollBar()/*&&tbl->verticalScrollBar()->isVisible()*/)?tbl->verticalScrollBar()->size().width():0);
 		    int averWdth = tblWdth/tbl->columnCount();
 		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0;
 		    //   Count width params

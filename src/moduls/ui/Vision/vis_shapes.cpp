@@ -644,6 +644,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		shD->addrWdg->blockSignals(false);
 
 		setValue(w, shD->value, true);	//Value
+
 		break;
 	    }
 	    case F_SLIDER: case F_SCROLL_BAR: {
@@ -694,16 +695,15 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	//Postprocessing after taking real data and size
 	switch(shD->elType) {
 	    case F_TABLE: {
+		//for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();	//!!!! Do not call all the cascade events here due the possibility of the widget going in the closing
+
 		QTableWidget *wdg = (QTableWidget*)shD->addrWdg;
 		if(!wdg || !qobject_cast<QTableWidget*>(wdg))	break;
 		((QVBoxLayout*)w->layout())->activate();
-
-		for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();	//Call all cascade events
-
 		if(wdg->columnCount() > 1) wdg->resizeColumnsToContents();
 		if(wdg->property("colsWdthFit").toBool() && wdg->rowCount()) {
-		    int tblWdth = wdg->maximumViewportSize().width() -
-			((wdg->verticalScrollBar()/*&&wdg->verticalScrollBar()->isVisible()*/)?wdg->verticalScrollBar()->size().width():0);
+		    int tblWdth = vmax(wdg->width(),wdg->maximumViewportSize().width()) -
+			(wdg->verticalScrollBar()?wdg->verticalScrollBar()->size().width():0);
 		    int averWdth = tblWdth/wdg->columnCount();
 		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
 		    //Count width params

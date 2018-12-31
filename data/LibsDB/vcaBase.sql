@@ -18273,9 +18273,9 @@ INSERT INTO "wlb_mnEls_uio" VALUES('El_Zadvizhka','com','Parameter: command - "O
 INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_polozh','out','Parameter:position',131076,'0|',10,'Parameter|out','','','Параметр:положення','','','Параметр:положение','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('El_box_Alarm','prmSignal','Parameter:signal',131073,'0|0;0|',8,'','','','Параметр:сигнал','','','Параметр:сигнал','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','com','Parameter: command - "Open"',131072,'0',14,'Parameter|com','','','Параметр: команда - "Відкрити"','','','Параметр: команда - "Открыть"','','','','');
-INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','st_open','Parameter: state - "Opened"',131072,'<EVAL>',10,'Parameter|st_open','','','Параметр: стан - "Відкрито"','','','Параметр: состояние - "Открыто"','','','','');
-INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','st_close','Parameter: state - "Closed"',131072,'<EVAL>',10,'Parameter|st_close','','','Параметр: стан - "Закрито"','','','Параметр: состояние - "Закрыто"','','','','');
-INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','shifr','Parameter: code',131077,'<EVAL>',10,'Parameter|NAME','','','Параметр: шифр','','','Параметр: шифр','<EVAL>','','','');
+INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','st_open','Parameter: state - "Opened"',131072,NULL,10,'Parameter|st_open','','','Параметр: стан - "Відкрито"','','','Параметр: состояние - "Открыто"','','','','');
+INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','st_close','Parameter: state - "Closed"',131072,NULL,10,'Parameter|st_close','','','Параметр: стан - "Закрито"','','','Параметр: состояние - "Закрыто"','','','','');
+INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','shifr','Parameter: code',131077,NULL,10,'Parameter|NAME','','','Параметр: шифр','','','Параметр: шифр','<EVAL>','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('Level','max','Maximum',131076,'100||',10,'Parameter|max','','','Максимум','','','Максимум','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('Zadvizhka','com','Parameter: command - "Open"',131072,'0||',14,'Parameter|com','','','Параметр: команда - "Відкрити"','','','Параметр: команда - "Открыть"','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('Kran_3_pos','out','Parameter:position',131076,'0|0;0|',10,'Parameter|out','','','Параметр:положення','','','Параметр:положение','','','','');
@@ -18306,7 +18306,7 @@ INSERT INTO "wlb_mnEls_uio" VALUES('Zadvizhka','digComs','Commands',131077,'||',
 INSERT INTO "wlb_mnEls_uio" VALUES('Zadvizhka','digStts','Statuses',131077,'||',10,'Parameter|digStts','','','Статуси','','','Статусы','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('Compressor','close','Parameter: command - "Close"',131072,'0',14,'Parameter|close','','','Параметр: команда - "Закрити"','','','Параметр: команда - "Закрыть"','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('Compressor_1','close','Parameter: command - "Close"',131072,'0||',14,'Parameter|close','','','Параметр: команда - "Закрити"','','','Параметр: команда - "Закрыть"','','','','');
-INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','close','Parameter: command - "Close"',131077,'',14,'Parameter|close','','','Параметр: команда - "Закрити"','','','Параметр: команда - "Закрыть"','','','','');
+INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','close','Parameter: command - "Close"',131072,'0',14,'Parameter|close','','','Параметр: команда - "Закрити"','','','Параметр: команда - "Закрыть"','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('El_Zadvizhka','close','Parameter: command - "Close"',131072,'0||',14,'Parameter|close','','','Параметр: команда - "Закрити"','','','Параметр: команда - "Закрыть"','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('Zadvizhka','close','Parameter: command - "Close"',131072,'0||',14,'Parameter|close','','','Параметр: команда - "Закрити"','','','Параметр: команда - "Закрыть"','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','stop','Parameter: command - "Stop"',131072,'0',14,'Parameter|stop','','','Параметр: команда - "Стоп"','','','Параметр: команда - "Стоп"','','','','');
@@ -23182,7 +23182,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;c1;',1443604128);
+event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;c1;',1546001532);
 INSERT INTO "wlb_mnEls" VALUES('El_Pipe_simple_vert_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAS9JREFUeJztm0FOwlAYBoe+iqRAPAI7DiE38QJ4JvZyB+9VmhALuigG
 0Z1dTIzfJH/en/eSZjL7ThjJasX7ZgNNM8y8gfli2JfL633TwGJxu89mUFXQ93A4QNfdnod22NvL

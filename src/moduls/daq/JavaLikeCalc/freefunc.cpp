@@ -1896,9 +1896,14 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 #endif
 		TArrayObj *ar = new TArrayObj();
 		//  Fill array by empty elements number
-		if(ptr->numb == 1)
-		    for(int iP = 0; iP < getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode))]); iP++)
-			ar->arSet(iP, EVAL_REAL);
+		if(ptr->numb == 1) {
+		    int itN = fmin(USER_ITS_LIMIT,getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode))]));
+		    try { for(int iP = 0; iP < itN; iP++) ar->arSet(iP, EVAL_REAL); }
+		    catch(...) {	//Remove the problematic array and create an empty one, for very big arrays mostly
+			delete ar; ar = new TArrayObj();
+			mess_err(nodePath().c_str(), _("Exception of creating %d items of the array."), itN);
+		    }
+		}
 		//  Fill array by parameters
 		else
 		    for(int iP = 0; iP < ptr->numb; iP++)

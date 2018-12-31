@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfg file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.10"
+#define MOD_VER		"1.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -667,7 +667,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	    ses.cnt.erase(cntEl);
 	    int kz = postArea(ses, *ses.root, prs_comm);
 
-	    if(!(kz&0x01)) messPost(ses.page,nodePath(),_("Post request broken!"),TWEB::Error);
+	    if(!(kz&0x01)) messPost(ses.page,nodePath(),_("The post request is broken!"),TWEB::Error);
 	    else if(!(kz&0x02)) {
 		ses.pg_info.setName("info");
 		ses.pg_info.setAttr("path",ses.url)->setAttr("user",ses.user);
@@ -718,7 +718,7 @@ int TWEB::postVal( SSess &ses, XMLNode &node, string prs_path)
 	XMLNode *t_c = node.childGet(i_cf);
 	if(t_c->name() == "fld" && (s2i(t_c->attr("acs"))&SEC_WR)) {
 	    if(!valPrepare(ses,*t_c,prs_path,true)) continue;
-	    mess_info(nodePath().c_str(),_("%s| Change <%s:%s> to %s"),
+	    mess_info(nodePath().c_str(),_("%s| Changed for <%s:%s> to %s"),
 			ses.user.c_str(), t_c->attr("id").c_str(), t_c->attr("dscr").c_str(), t_c->text().c_str());
 
 	    XMLNode req("set");
@@ -743,10 +743,10 @@ int TWEB::postCmd( SSess &ses, XMLNode &node, string prs_path )
 
 	    string url = string("/")+MOD_ID+"/"+TSYS::strEncode(req.text(),TSYS::HttpURL);
 
-	    mess_info(nodePath().c_str(),_("%s| Go to link '%s'"),ses.user.c_str(),url.c_str());
+	    mess_info(nodePath().c_str(),_("%s| Went to the link '%s'"),ses.user.c_str(),url.c_str());
 
 	    ses.page += "<meta http-equiv='Refresh' content='0; url="+url+"'>\n";
-	    messPost(ses.page, nodePath(), TSYS::strMess(_("Go to '%s'."),url.c_str()), TWEB::Info);
+	    messPost(ses.page, nodePath(), TSYS::strMess(_("Went to '%s'."),url.c_str()), TWEB::Info);
 	    return 0x01|0x02;  //No error. That no draw current page
 	}
 
@@ -755,7 +755,7 @@ int TWEB::postCmd( SSess &ses, XMLNode &node, string prs_path )
 	    if(t_c->name() == "fld") valPrepare(ses, *t_c, "", false);
 	}
 
-	mess_info(nodePath().c_str(),_("%s| Put command <%s:%s>"), ses.user.c_str(), node.attr("id").c_str(), node.attr("dscr").c_str());
+	mess_info(nodePath().c_str(),_("%s| Put the command <%s:%s>"), ses.user.c_str(), node.attr("id").c_str(), node.attr("dscr").c_str());
 
 	XMLNode req("set");
 	req.setAttr("path",ses.url+"/"+TSYS::strEncode(prs_path,TSYS::PathEl))->setAttr("user",ses.user);
@@ -827,7 +827,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 	//printf("GO URL: %s\n",url.c_str());
 
 	ses.page += "<meta http-equiv='Refresh' content='0; url="+url+"'/>\n";
-	messPost(ses.page, nodePath(), TSYS::strMess(_("Go to '%s'."),url.c_str()), TWEB::Info);
+	messPost(ses.page, nodePath(), TSYS::strMess(_("Went to '%s'."),url.c_str()), TWEB::Info);
 	return 0x01|0x02;  //No error. That no draw current page
     }
 
@@ -838,7 +838,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 	if(ind_m) n_el1.setAttr("id",i_el);
 	else n_el1.setText(l_el);
 
-	mess_info(nodePath().c_str(), _("%s| Delete '%s' element <%s:%s>."), ses.user.c_str(), f_path.c_str(), i_el.c_str(), l_el.c_str());
+	mess_info(nodePath().c_str(), _("%s| Deleted '%s' for the element <%s:%s>."), ses.user.c_str(), f_path.c_str(), i_el.c_str(), l_el.c_str());
     }
     else if(l_com == "ins") {
 	n_el1.setName("ins");
@@ -847,7 +847,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 	if(ind_m) n_el1.setAttr("id",ener_id);
 	n_el1.setText(ener_f);
 
-	mess_info(nodePath().c_str(), _("%s| Insert '%s' element <%s:%s> to %s."),
+	mess_info(nodePath().c_str(), _("%s| Inserted '%s' for the element <%s:%s> to %s."),
 	    ses.user.c_str(), f_path.c_str(), ener_id.c_str(), ener_f.c_str(), i_pos.c_str());
     }
     else if(l_com == "add") {
@@ -855,7 +855,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 	if(ind_m) n_el1.setAttr("id",ener_id);
 	n_el1.setText(ener_f);
 
-	mess_info(nodePath().c_str(), _("%s| Add '%s' element <%s:%s>."), ses.user.c_str(), f_path.c_str(), ener_id.c_str(), ener_f.c_str());
+	mess_info(nodePath().c_str(), _("%s| Added '%s' for the element <%s:%s>."), ses.user.c_str(), f_path.c_str(), ener_id.c_str(), ener_f.c_str());
     }
     else if(l_com == "edit") {
 	n_el1.setName("edit");
@@ -864,7 +864,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 	if(ind_m) n_el1.setAttr("id",ener_id);
 	n_el1.setText(ener_f);
 
-	mess_info(nodePath().c_str(), _("%s| Set '%s' element %s to <%s:%s>."),
+	mess_info(nodePath().c_str(), _("%s| Set '%s' for the element %s to <%s:%s>."),
 	    ses.user.c_str(), f_path.c_str(), i_pos.c_str(), ener_id.c_str(), ener_f.c_str());
     }
     else if(l_com == "up" || l_com == "down") {
@@ -875,7 +875,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 	n_el1.setAttr("pos",i_pos);
 	n_el1.setAttr("to",i_pos_to);
 
-	mess_info(nodePath().c_str(), _("%s| Move '%s' from %s to %s."), ses.user.c_str(), f_path.c_str(), i_pos.c_str(), i_pos_to.c_str());
+	mess_info(nodePath().c_str(), _("%s| Moved '%s' from %s to %s."), ses.user.c_str(), f_path.c_str(), i_pos.c_str(), i_pos_to.c_str());
     }
 
     if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
@@ -942,7 +942,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
 			    // Get current column id
 			    n_el1.setAttr("col",t_linf->attr("id"));
 			}
-			mess_info(nodePath().c_str(), _("%s| Set '%s' cell ('%s':%s) to: %s."),
+			mess_info(nodePath().c_str(), _("%s| Set '%s' for the cell <%s:%s> to %s."),
 			    ses.user.c_str(), f_path.c_str(), row_addr.c_str(), t_linf->attr("id").c_str(), new_val.c_str());
 
 			if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
@@ -952,7 +952,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
     }
     else if(l_com == "add") {
 	n_el1.setName("add");
-	mess_info(nodePath().c_str(), _("%s| Add '%s' record."), ses.user.c_str(), f_path.c_str() );
+	mess_info(nodePath().c_str(), _("%s| Added '%s' for a record."), ses.user.c_str(), f_path.c_str() );
 
 	if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
     }
@@ -961,7 +961,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
 	    if(cntGet(ses,"row:"+i2s(i_rw)) != "<empty>") {
 		n_el1.setName("ins");
 		n_el1.setAttr("row",i2s(i_rw+op_cnt));
-		mess_info(nodePath().c_str(), _("%s| Insert '%s' record %d."), ses.user.c_str(), f_path.c_str(), i_rw+op_cnt);
+		mess_info(nodePath().c_str(), _("%s| Inserted '%s' for the record %d."), ses.user.c_str(), f_path.c_str(), i_rw+op_cnt);
 
 		if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
 		op_cnt++;
@@ -982,7 +982,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
 				break;
 			    }
 		}
-		mess_info(nodePath().c_str(), _("%s| Delete '%s' record %d."), ses.user.c_str(), f_path.c_str(), i_rw-op_cnt);
+		mess_info(nodePath().c_str(), _("%s| Deleted '%s' for the record %d."), ses.user.c_str(), f_path.c_str(), i_rw-op_cnt);
 
 		if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
 		op_cnt++;
@@ -995,7 +995,7 @@ int TWEB::postTable( SSess &ses, XMLNode &node, string prs_path )
 		if(l_com == "down")	r_new = i_rw+1;
 		n_el1.setName("move");
 		n_el1.setAttr("row",i2s(i_rw))->setAttr("to",i2s(r_new));
-		mess_info(nodePath().c_str(),_("%s| Move '%s' record from %d to %d."), ses.user.c_str(), f_path.c_str(), i_rw, r_new);
+		mess_info(nodePath().c_str(),_("%s| Moved '%s' for a record from %d to %d."), ses.user.c_str(), f_path.c_str(), i_rw, r_new);
 
 		if(cntrIfCmd(n_el1)) ses.mess.push_back(n_el1.text().c_str());
 	    }

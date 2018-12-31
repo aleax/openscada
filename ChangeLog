@@ -1,3 +1,16 @@
+2018-12-31 Roman (stable)
+- FIX:DB.LibsDB.vcaBase: mnEls.El_Kran_Sh: Fixed for the attribute "close" type changing from the type "String" to "Boolean".
+- !:SYS,DAQ.JavaLikeCalc: The limits appended by USER_ITS_LIMIT (1000000) to limit the items number like to user arrays from DAQ.JavaLikeCalc.
+    The arrays creating limited for USER_ITS_LIMIT and appended of processing the system exceptions with an error message and freeing the wrong array.
+- UI.QTCfg: Tables fitting returned to use only the widget maximum view port size due to
+    the scrollbar size newer can be used here since it initially has 100 and does not update more.
+- !:FIX:UI.Vision: The widgets including fixed for resizing after his container resizing, has observed in a problem of direct opening included pages on the full screen.
+    Next time improved for control scrollbars of the included pages, taking that behaviour from UI.WebVision.
+    FIX: Tables fitting prevented from use processEvents() due the possibility of the widget going in the closing.
+    Tables fitting improved to use maximum width from the widget size and the maximum view port, but the maximum view port only can be uninitiated here yet.
+- UI.WebCfg: Revised for all messages and the documentation.
+
+
 2018-12-25 Roman (stable)
 - DB.LibsDB.{OscadaLibs,vcaBase}: Controllers.prescr and Main.{prescrRun,prescrRunSimple} expanded to pass commands in the pause mode.
 - !:DAQ: Appended for the user API function daqAt().

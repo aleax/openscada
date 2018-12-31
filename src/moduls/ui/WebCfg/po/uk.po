@@ -1,13 +1,13 @@
 # OpenSCADA.UI.WebCfg translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.WebCfg package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2004-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2004-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfg 1.5.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-23 16:44+0200\n"
+"POT-Creation-Date: 2018-12-31 16:25+0200\n"
 "PO-Revision-Date: 2007-10-29 22:29+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -21,8 +21,8 @@ msgstr "Конфігуратор програми (WEB)"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Provides the WEB-based configurator of the OpenSCADA system."
-msgstr "Надає WEB базований конфігуратор системи OpenSCADA."
+msgid "Provides the WEB-based configurator of the OpenSCADA."
+msgstr "Надає конфігуратор OpenSCADA, заснований на Web."
 
 msgid "Name: "
 msgstr "Ім'я: "
@@ -111,64 +111,61 @@ msgstr "Пересунути строку вгору"
 msgid "Move down row"
 msgstr "Пересунути строку донизу"
 
-msgid "Post request broken!"
+msgid "The post request is broken!"
 msgstr "Post запит пошкоджений!"
 
 #, c-format
-msgid "%s| Change <%s:%s> to %s"
+msgid "%s| Changed for <%s:%s> to %s"
 msgstr "%s| Змінено <%s:%s> у %s"
 
 #, c-format
-msgid "%s| Go to link '%s'"
+msgid "%s| Went to the link '%s'"
 msgstr "%s| Перехід за посиланням '%s'"
 
 #, c-format
-msgid "Go to '%s'."
+msgid "Went to '%s'."
 msgstr "Перехід до '%s'."
 
 #, c-format
-msgid "%s| Put command <%s:%s>"
-msgstr "%s| Команда <%s:%s>"
+msgid "%s| Put the command <%s:%s>"
+msgstr "%s| Видача команди <%s:%s>"
 
 #, c-format
-msgid "%s| Delete '%s' element <%s:%s>."
+msgid "%s| Deleted '%s' for the element <%s:%s>."
 msgstr "%s| Видалено '%s' елемент <%s:%s>."
 
 #, c-format
-msgid "%s| Insert '%s' element <%s:%s> to %s."
+msgid "%s| Inserted '%s' for the element <%s:%s> to %s."
 msgstr "%s| Вставлено '%s' елемент <%s:%s> у %s."
 
 #, c-format
-msgid "%s| Add '%s' element <%s:%s>."
+msgid "%s| Added '%s' for the element <%s:%s>."
 msgstr "%s| Додано '%s' елемент <%s:%s>."
 
 #, c-format
-msgid "%s| Set '%s' element %s to <%s:%s>."
+msgid "%s| Set '%s' for the element %s to <%s:%s>."
 msgstr "%s| Встановлено '%s' елемент %s у <%s:%s>."
 
 #, c-format
-msgid "%s| Move '%s' from %s to %s."
+msgid "%s| Moved '%s' from %s to %s."
 msgstr "%s| Пересунено '%s' з %s до %s."
 
 #, c-format
-msgid "%s| Set '%s' cell ('%s':%s) to: %s."
-msgstr "%s| Встановлено '%s' чарунку ('%s':%s) у: %s."
+msgid "%s| Set '%s' for the cell <%s:%s> to %s."
+msgstr "%s| Встановлено '%s' клітинку <%s:%s> у: %s."
 
 #, c-format
-msgid "%s| Add '%s' record."
-msgstr "%s| Додано '%s' запис."
+msgid "%s| Added '%s' for a record."
+msgstr "%s| Додано '%s' записом."
 
 #, c-format
-msgid "%s| Insert '%s' record %d."
-msgstr "%s| Вставлено '%s' запис %d."
+msgid "%s| Inserted '%s' for the record %d."
+msgstr "%s| Вставлено '%s' записом %d."
 
 #, c-format
-msgid "%s| Delete '%s' record %d."
+msgid "%s| Deleted '%s' for the record %d."
 msgstr "%s| Вилучено '%s' запис %d."
 
 #, c-format
-msgid "%s| Move '%s' record from %d to %d."
+msgid "%s| Moved '%s' for a record from %d to %d."
 msgstr "%s| Пересунено '%s' запис з %d у %d."
-
-msgid "System configurator (WEB)"
-msgstr "Системний конфігуратор (WEB)"

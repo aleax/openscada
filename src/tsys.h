@@ -30,7 +30,8 @@
 //Other global constants
 #define OBJ_ID_SZ	"20"	// Typical object's ID size. Warning, the size can cause key limit on MySQL like DB.
 #define OBJ_NM_SZ	"100"	// Typical object's NAME size.
-#define USER_FILE_LIMIT	1048576	// Loading and processing files limit into userspace
+#define USER_FILE_LIMIT	1048576	// Loading and processing files limit into the userspace
+#define USER_ITS_LIMIT	1000000	// Creating user items limit, like to array items
 #define STR_BUF_LEN	10000	// Length of string buffers (no string class)
 #define NSTR_BUF_LEN	100	// Length of string buffers for number
 #define STD_WAIT_DELAY	100	// Standard wait dalay (ms)
