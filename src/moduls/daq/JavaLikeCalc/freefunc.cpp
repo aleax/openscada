@@ -1356,7 +1356,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if(prop == "isEVal")	return (vl.getS() == EVAL_STR);
 		// bool isNaN( bool whole = true ) - check the string for Not A Number
 		if(prop == "isNaN")
-		    return TRegExp((prms.size()&&!prms[0].getB())?"^ *[+-]?\\d*\\.?\\d*(|[eE][+-]*\\d+)":"^ *[+-]?\\d*\\.?\\d*(|[eE][+-]*\\d+)$").test(vl.getS());
+		    return !TRegExp((prms.size()&&!prms[0].getB())?"^ *[+-]?\\d*\\.?\\d*(|[eE][+-]*\\d+)":"^ *[+-]?\\d*\\.?\\d*(|[eE][+-]*\\d+)$").test(vl.getS());
 		// string charAt(int symb, string type = "") - extracts from the string the symbol <symb> of the type <type>
 		//  symb - symbol position, changed to the next symbol position for UTF-8
 		//  type  - symbol type, (""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-32)

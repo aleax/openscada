@@ -1492,6 +1492,7 @@ void VisItProp::tabChanged( int itb )
 			proc_text->setSnthHgl(*req.childGet(1));
 			proc_text->setProperty("inherited", (bool)s2i(req.childGet(0)->attr("inherited")));
 			proc_text->setProperty("redefined", (bool)s2i(req.childGet(0)->attr("redefined")));
+			proc_text->setProperty("redefAccept", false);
 			connect(proc_text, SIGNAL(textChanged(const QString&)), this, SLOT(progChanged()));
 		    }
 		}

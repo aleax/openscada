@@ -1,4 +1,9 @@
 2019-01-06 Roman (stable)
+- FIX:UI.Vision: Fixed for the warning about the inherited calcualting procedure changing in cleaning the accepting state.
+- FIX:DAQ.JavaLikeCalc: isNaN() to string fixed for the RE test result inversion.
+
+
+2019-01-06 Roman (stable)
 - !!!!:FIX:DB.LibsDB.vcaBase:
     Main.RootPgSo: Improved to dynamically create signal objects, the number is limited only by the SO name length and two rows of the SO.
 	!!!!:The views also unified for ID "view[1..6]", when user can their assign in self way.
