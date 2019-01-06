@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -104,8 +104,9 @@ class LibProjProp: public QDialog
 			*obj_accother;	//Other access
 			//*prj_runw;	//Project's run window mode
 	QLabel		*obj_id,	//Id
-			*obj_used,	//Used
-			*obj_tmstmp;	//TimeStamp
+			*obj_st;	//Status
+//			*obj_used,	//Used
+//			*obj_tmstmp;	//TimeStamp
 	LineEdit	*obj_name,	//Name
 			*prj_ctm;	//Calc time of project
 	TextEdit	*obj_descr;	//Description
@@ -170,6 +171,8 @@ class VisItProp : public QDialog
 
 	void tabChanged( int itb );
 
+	void progChanged( );
+
     private:
 	//Private data
 	//* Attributes item delegate    *
@@ -189,8 +192,9 @@ class VisItProp : public QDialog
 	QLabel		*obj_id,	//Id
 			*obj_root,	//Root
 			*obj_path,	//Path
-			*obj_used,	//Used
-			*obj_tmstmp;	//TimeStamp
+			*obj_st;	//Status
+//			*obj_used,	//Used
+//			*obj_tmstmp;	//TimeStamp
 	QPushButton	*obj_ico;	//Icon
 	QCheckBox	*obj_enable;	//Enabled stat
 	QComboBox	*obj_parent,	//Parent widget

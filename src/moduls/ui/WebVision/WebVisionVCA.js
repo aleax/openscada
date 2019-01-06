@@ -602,11 +602,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	this.mouseup = new Array;
 
 	if(this.pg && this.parent && this.parent.inclOpen && this.parent.inclOpen == this.addr) {
-	    var geomWpar = parseFloat(this.parent.attrs['geomW'])*this.parent.xScale(true) - 20;	//!!!! 20 is most scrollbar width and clientWidth does not work here
-	    var geomHpar = parseFloat(this.parent.attrs['geomH'])*this.parent.yScale(true) - 20;
+	    var geomWpar = parseFloat(this.parent.attrs['geomW'])*this.parent.xScale(true);
+	    var geomHpar = parseFloat(this.parent.attrs['geomH'])*this.parent.yScale(true);
 	    this.parent.place.style.overflow = (geomW > geomWpar || geomH > geomHpar) ? 'auto' : 'hidden';
-	    geomW = Math.max(geomW, geomWpar);
-	    geomH = Math.max(geomH, geomHpar);
+	    geomW = Math.max(geomW, geomWpar-20);	//!!!! 20 is most scrollbar width and clientWidth does not work here
+	    geomH = Math.max(geomH, geomHpar-20);
 	}
 	//else elStyle += 'overflow: hidden; ';
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -92,26 +92,35 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     obj_ico->setIconSize(QSize(icoSize(5),icoSize(5)));
     obj_ico->setAutoDefault(false);
     connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
-    glay->addWidget(obj_ico, 0, 0, 4, 1);
+    glay->addWidget(obj_ico, 0, 0, 3, 1);
+
+    lab = new QLabel(_("Status:"), tab_w);
+    glay->addWidget(lab, 0, 1);
+    obj_st = new QLabel(tab_w);
+    obj_st->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    obj_st->setObjectName("/obj/st/status");
+    obj_st->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    obj_st->setWordWrap(true);
+    glay->addWidget(obj_st, 0, 2, 1, 4);
 
     lab = new QLabel(_("Enabled:"), tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
-    glay->addWidget(lab, 0, 1);
+    glay->addWidget(lab, 1, 1);
     obj_enable = new QCheckBox(tab_w);
     obj_enable->setObjectName("/obj/st/en");
     connect(obj_enable, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_enable, 0, 2);
+    glay->addWidget(obj_enable, 1, 2);
 
     lab = new QLabel(_("Container DB:"), tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
-    glay->addWidget(lab, 1, 1);
+    glay->addWidget(lab, 2, 1);
     obj_db = new LineEdit(tab_w, LineEdit::Combo);
     obj_db->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed));
     obj_db->setObjectName("/obj/st/db");
     connect(obj_db, SIGNAL(apply()), this, SLOT(isModify()));
-    glay->addWidget(obj_db, 1, 2);
+    glay->addWidget(obj_db, 2, 2);
 
-    lab = new QLabel(_("Used:"), tab_w);
+    /*lab = new QLabel(_("Used:"), tab_w);
     glay->addWidget(lab, 2, 1);
     obj_used = new QLabel(tab_w);
     obj_used->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -125,7 +134,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     obj_tmstmp->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_tmstmp->setObjectName("/obj/st/timestamp");
     obj_tmstmp->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    glay->addWidget(obj_tmstmp, 3, 2);
+    glay->addWidget(obj_tmstmp, 3, 2);*/
 
     grp->setLayout(glay);
     dlg_lay->addWidget(grp, 0, 0);
@@ -358,6 +367,12 @@ void LibProjProp::showDlg( const string &iit, bool reload )
     wdg_tabs->setTabEnabled(0,gnd);
     if(gnd) {
 	wdg_tabs->setTabText(0,gnd->attr("dscr").c_str());
+	// Status
+	gnd = TCntrNode::ctrId(root, obj_st->objectName().toStdString(), true);
+	if(gnd) {
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_st->objectName().toStdString(),TSYS::PathEl));
+	    if(!owner()->cntrIfCmd(req)) obj_st->setText(req.text().c_str());
+	}else obj_st->setText("");
 	// Enable stat
 	gnd = TCntrNode::ctrId(root,obj_enable->objectName().toStdString(),true);
 	obj_enable->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
@@ -380,7 +395,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    }
 	}
 	// Used
-	gnd = TCntrNode::ctrId(root, obj_used->objectName().toStdString(), true);
+	/*gnd = TCntrNode::ctrId(root, obj_used->objectName().toStdString(), true);
 	if(gnd) {
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_used->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_used->setText(req.text().c_str());
@@ -391,7 +406,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_tmstmp->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_tmstmp->setText(atm2s(s2i(req.text())).c_str());
 	    else obj_tmstmp->setText(_("Not set"));
-	}else obj_tmstmp->setText("");
+	}else obj_tmstmp->setText("");*/
 	// User
 	gnd = TCntrNode::ctrId(root,obj_user->objectName().toStdString(),true);
 	obj_user->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
@@ -958,35 +973,44 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_ico->setIconSize(QSize(icoSize(5),icoSize(5)));
     obj_ico->setAutoDefault(false);
     connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
-    glay->addWidget(obj_ico,0,0,5,1);
+    glay->addWidget(obj_ico,0,0,4,1);
+
+    lab = new QLabel(_("Status:"), tab_w);
+    glay->addWidget(lab, 0, 1);
+    obj_st = new QLabel(tab_w);
+    obj_st->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    obj_st->setObjectName("/wdg/st/status");
+    obj_st->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    obj_st->setWordWrap(true);
+    glay->addWidget(obj_st, 0, 2, 1, 4);
 
     lab = new QLabel(_("Enabled:"),tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
-    glay->addWidget(lab,0,1);
+    glay->addWidget(lab, 1, 1);
     obj_enable = new QCheckBox(tab_w);
     obj_enable->setObjectName("/wdg/st/en");
     connect(obj_enable, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_enable,0,2,1,4);
+    glay->addWidget(obj_enable, 1, 2, 1, 4);
 
     lab = new QLabel(_("Parent widget:"), tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
-    glay->addWidget(lab, 1, 1);
+    glay->addWidget(lab, 2, 1);
     obj_parent = new QComboBox(tab_w);
     obj_parent->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
     obj_parent->setObjectName("/wdg/st/parent");
     connect(obj_parent, SIGNAL(activated(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_parent, 1, 2, 1, 4);
+    glay->addWidget(obj_parent, 2, 2, 1, 4);
 
     //  Specific parameter: page type
     lab = new QLabel(_("Page type:"), tab_w);
-    glay->addWidget(lab, 2, 1);
+    glay->addWidget(lab, 3, 1);
     pg_tp = new QComboBox(tab_w);
     pg_tp->setObjectName("/wdg/st/pgTp");
     pg_tp->setWindowIconText(TSYS::addr2str(lab).c_str());
     connect(pg_tp, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(pg_tp, 2, 2);
+    glay->addWidget(pg_tp, 3, 2);
 
-    lab = new QLabel(_("Used:"), tab_w);
+    /*lab = new QLabel(_("Used:"), tab_w);
     glay->addWidget(lab, 3, 1);
     obj_used = new QLabel(tab_w);
     obj_used->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -1000,10 +1024,10 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_tmstmp->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_tmstmp->setObjectName("/wdg/st/timestamp");
     obj_tmstmp->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    glay->addWidget(obj_tmstmp, 4, 2, 1, 4);
+    glay->addWidget(obj_tmstmp, 4, 2, 1, 4);*/
 
     grp->setLayout(glay);
-    dlg_lay->addWidget(grp,0,0);
+    dlg_lay->addWidget(grp, 0, 0);
 
     //  Configuration parameters
     grp = new QGroupBox(_("Configuration"),tab_w);
@@ -1204,6 +1228,12 @@ void VisItProp::showDlg( const string &iit, bool reload )
     if(gnd) {
 	wdg_tabs->setTabText(0,gnd->attr("dscr").c_str());
 
+	// Status
+	gnd = TCntrNode::ctrId(root, obj_st->objectName().toStdString(), true);
+	if(gnd) {
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_st->objectName().toStdString(),TSYS::PathEl));
+	    if(!owner()->cntrIfCmd(req)) obj_st->setText(req.text().c_str());
+	}else obj_st->setText("");
 	// Enable stat
 	gnd = TCntrNode::ctrId(root,obj_enable->objectName().toStdString(),true);
 	obj_enable->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
@@ -1216,7 +1246,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	obj_parent->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) selectParent();
 	// Used
-	gnd = TCntrNode::ctrId(root, obj_used->objectName().toStdString(), true);
+	/*gnd = TCntrNode::ctrId(root, obj_used->objectName().toStdString(), true);
 	if(gnd) {
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_used->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_used->setText(req.text().c_str());
@@ -1226,7 +1256,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	if(gnd) {
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_tmstmp->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_tmstmp->setText(atm2s(s2i(req.text())).c_str());
-	}else obj_tmstmp->setText("");
+	}else obj_tmstmp->setText("");*/
 
 	// Icon
 	gnd = TCntrNode::ctrId(root,obj_ico->objectName().toStdString(),true);
@@ -1460,6 +1490,9 @@ void VisItProp::tabChanged( int itb )
 		    if(!owner()->cntrIfCmd(req)) {
 			proc_text->setText(req.childGet(0)->text().c_str());
 			proc_text->setSnthHgl(*req.childGet(1));
+			proc_text->setProperty("inherited", (bool)s2i(req.childGet(0)->attr("inherited")));
+			proc_text->setProperty("redefined", (bool)s2i(req.childGet(0)->attr("redefined")));
+			connect(proc_text, SIGNAL(textChanged(const QString&)), this, SLOT(progChanged()));
 		    }
 		}
 	    }
@@ -1468,6 +1501,17 @@ void VisItProp::tabChanged( int itb )
 	    break;
 	}
 	case 3:	obj_lnk->setWdg(ed_it);	break;
+    }
+}
+
+void VisItProp::progChanged( )
+{
+    TextEdit *et = (TextEdit*)sender();
+    if(et->property("inherited").toBool() && !et->property("redefined").toBool() && !et->property("redefAccept").toBool()) {
+	InputDlg dlg(this, windowIcon(), _("Are you sure of editing the inherited procedure, since that can cause for unexpectedly loss of the access to the original procedure?!"),
+	    _("Editing an inherited procedure"), false, false);
+	if(dlg.exec() == QDialog::Accepted) et->setProperty("redefAccept", true);
+	else et->cancelSlot();
     }
 }
 

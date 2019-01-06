@@ -1,3 +1,24 @@
+2019-01-06 Roman (stable)
+- !!!!:FIX:DB.LibsDB.vcaBase:
+    Main.RootPgSo: Improved to dynamically create signal objects, the number is limited only by the SO name length and two rows of the SO.
+	!!!!:The views also unified for ID "view[1..6]", when user can their assign in self way.
+	    The compatibility with the original names of the views was saved, for present projects!
+	The template project "tmplSO" adapted to the new views model.
+    FIX:Main.cntrPaspExt: Fixed for the tab "Data" forming (hung and generated more equal data) for bigger at 1 second periodicity of the data.
+    Main.{alarmsAct,alarmsSt},doc.docMessRep: Expanded by the property "Default source module (defSrcMod)" to hide the equal information of the source.
+- FIX:DB.Model.{AGLKS.vca,Boiler.St}: Some adapted to the new changes of the main page.
+- !:SYS: The user space Array expanded by the functions indexOf() and lastIndexOf().
+- !:DAQ.JavaLikeCalc: User API functions expanded by isNaN() for bool, integer, real, string (especially for checking numbers in the string).
+- !!:UI.{VCAEngine,Vision}: All information moved to the status field for widgets, libraries and projects.
+    The information appended by the calculating procedure state - inherited, redefined.
+    UI.Vision: Appended for the warning about the inherited calcualting procedure changing.
+- FIX:UI.VCAEngine: The user API function wdgAdd() fixed for the name setting after the new widget enabling.
+- !!:FIX:UI.Vision: Final of the improving for the scrollbars control of the included pages.
+    Final fix for tables fitting, moving the procedure in events: create, resize and show.
+- FIX:UI.WebVision: "word-break: break-all" removed from the table styles.
+    Final of the improving for the scrollbars control of the included pages.
+
+
 2018-12-31 Roman (stable)
 - FIX:DB.LibsDB.vcaBase: mnEls.El_Kran_Sh: Fixed for the attribute "close" type changing from the type "String" to "Boolean".
 - !:SYS,DAQ.JavaLikeCalc: The limits appended by USER_ITS_LIMIT (1000000) to limit the items number like to user arrays from DAQ.JavaLikeCalc.

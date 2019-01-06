@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -221,6 +221,14 @@ short Widget::permit( ) const
 }
 
 void Widget::setPermit( short iperm )		{ attrAt("perm").at().setI(iperm); }
+
+string Widget::getStatus( )
+{
+    string rez = enable() ? _("Enabled. ") : _("Disabled. ");
+    rez += TSYS::strMess(_("Used: %d. "), herit().size());
+
+    return rez;
+}
 
 bool Widget::isContainer( ) const	{ return parent().freeStat() ? false : parent().at().isContainer(); }
 
@@ -882,6 +890,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget: ")+id(),RWRWR_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget"))) {
 	    if(ctrMkNode("area",opt,-1,"/wdg/st",_("State"))) {
+		ctrMkNode("fld",opt,-1,"/wdg/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/wdg/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),RWRWR_,"root",SUI_ID,3,"tp","str", "dest","sel_ed", "select","/wdg/w_lst");
@@ -917,6 +926,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	opt->setText(resourceGet(opt->attr("id"),&mime));
 	opt->setAttr("mime",mime);
     }
+    else if(a_path == "/wdg/st/status" && ctrChkNode(opt))	opt->setText(getStatus());
     else if(a_path == "/wdg/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(s2i(opt->text()));
@@ -1586,7 +1596,12 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcProgTr(s2i(opt->text()));
     }
     else if(a_path == "/proc/calc/prog") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(calcProg());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
+	    opt->setText(calcProg());
+	    if(!parent().freeStat() && parent().at().calcProg().size())	opt->setAttr("inherited", "1");
+	    if(!parent().freeStat() && parent().at().calcProg().size() && calcProg() != parent().at().calcProg())
+		opt->setAttr("redefined", "1");
+	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcProg(opt->text());
 	if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
 	    try {

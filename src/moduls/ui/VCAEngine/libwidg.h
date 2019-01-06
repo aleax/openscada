@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: libwidg.h
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,6 +47,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	string name( ) const;					//Name
 	string descr( ) const	{ return cfg("DESCR").getS(); }	//Description
 	string ico( ) const	{ return cfg("ICO").getS(); }	//Icon
+	string getStatus( );
 
 	string DB( ) const	{ return workLibDB; }		//Current library DB
 	string tbl( ) const	{ return cfg("DB_TBL").getS(); }//Table of storing library data
@@ -118,6 +119,7 @@ class LWidget : public Widget, public TConfig
 	string	path( ) const;
 	string	ico( ) const;
 	string	type( )		{ return "LibWidget"; }
+	string	getStatus( );
 	string	calcId( );
 	string	calcLang( ) const;
 	bool	calcProgTr( );

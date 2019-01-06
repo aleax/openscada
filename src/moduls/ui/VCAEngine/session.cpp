@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1608,6 +1608,17 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 
 string SessWdg::ico( ) const		{ return parent().freeStat() ? "" : parent().at().ico(); }
 
+string SessWdg::getStatus( )
+{
+    string rez = Widget::getStatus();
+    if(process())	rez += _("Processing. ");
+    if(attrAt("pgOpen").at().getB())	rez += _("Opened. ");
+    if(mess_lev() == TMess::Debug)
+	rez += _("Spent time of the subtree: ")+tm2s(tmCalcAll())+"["+tm2s(tmCalcMaxAll())+"], "+_("the item: ")+tm2s(tmCalc)+"["+tm2s(tmCalcMax)+"]. ";
+
+    return rez;
+}
+
 string SessWdg::calcLang( ) const	{ return parent().freeStat() ? "" : parent().at().calcLang(); }
 
 string SessWdg::calcProg( ) const	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
@@ -2107,6 +2118,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	    //Enable widget
 	    AutoHD<SessWdg> nw = wdgAt(prms[0].getS());
 	    nw.at().setEnable(true);
+	    nw.at().setName(prms[1].getS());
 
 	    return new TCntrNodeObj(&nw.at(), user);
 	} catch(TError &err) { return false; }
@@ -2341,8 +2353,8 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
 	Widget::cntrCmdGeneric(opt);
 	ctrRemoveNode(opt, "/wdg/st/use");
 	ctrMkNode("fld",opt,1,"/wdg/st/proc",_("Processing"),RWRWR_,owner().c_str(),grp().c_str(),1,"tp","bool");
-	if(mess_lev() == TMess::Debug)
-	    ctrMkNode("fld",opt,1,"/wdg/st/tmSpent",_("Spent time"),R_R_R_,owner().c_str(),grp().c_str(),1,"tp","str");
+	//if(mess_lev() == TMess::Debug)
+	//    ctrMkNode("fld",opt,1,"/wdg/st/tmSpent",_("Spent time"),R_R_R_,owner().c_str(),grp().c_str(),1,"tp","str");
 	return true;
     }
 
@@ -2352,8 +2364,8 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,owner().c_str(),grp().c_str(),SEC_RD)) opt->setText(i2s(process()));
 	if(ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEC_WR)) setProcess(s2i(opt->text()));
     }
-    else if(a_path == "/wdg/st/tmSpent" && ctrChkNode(opt,"get"))
-	opt->setText(_("Subtree=")+tm2s(tmCalcAll())+"["+tm2s(tmCalcMaxAll())+"], "+_("Item=")+tm2s(tmCalc)+"["+tm2s(tmCalcMax)+"]");
+    //else if(a_path == "/wdg/st/tmSpent" && ctrChkNode(opt,"get"))
+    //	opt->setText(_("Subtree=")+tm2s(tmCalcAll())+"["+tm2s(tmCalcMaxAll())+"], "+_("Item=")+tm2s(tmCalc)+"["+tm2s(tmCalcMax)+"]");
     else return Widget::cntrCmdGeneric(opt);
 
     return true;

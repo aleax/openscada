@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -694,41 +694,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 
 	//Postprocessing after taking real data and size
 	switch(shD->elType) {
-	    case F_TABLE: {
-		//for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();	//!!!! Do not call all the cascade events here due the possibility of the widget going in the closing
-
-		QTableWidget *wdg = (QTableWidget*)shD->addrWdg;
-		if(!wdg || !qobject_cast<QTableWidget*>(wdg))	break;
+	    case F_TABLE:
 		((QVBoxLayout*)w->layout())->activate();
-		if(wdg->columnCount() > 1) wdg->resizeColumnsToContents();
-		if(wdg->property("colsWdthFit").toBool() && wdg->rowCount()) {
-		    int tblWdth = vmax(wdg->width(),wdg->maximumViewportSize().width()) -
-			(wdg->verticalScrollBar()?wdg->verticalScrollBar()->size().width():0);
-		    int averWdth = tblWdth/wdg->columnCount();
-		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
-		    //Count width params
-		    for(int iC = 0; iC < wdg->columnCount(); iC++) {
-			fullColsWdth += wdg->columnWidth(iC);
-			if(wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) {
-			    if(tVl < 0)	tVl = tblWdth*abs(tVl)/100;
-			    niceForceColsWdth += tVl;
-			    wdg->setColumnWidth(iC, tVl);
-			}
-			else if(wdg->columnWidth(iC) <= averWdth)	niceForceColsWdth += wdg->columnWidth(iC);
-			else busyCols++;
-		    }
-		    //Set busyCols
-		    if(fullColsWdth > tblWdth && busyCols) {
-			int busyColsWdth = (tblWdth-niceForceColsWdth)/busyCols;
-			for(int iC = 0; iC < wdg->columnCount(); iC++)
-			    if(wdg->columnWidth(iC) > averWdth && wdg->columnWidth(iC) > busyColsWdth)
-				wdg->setColumnWidth(iC, busyColsWdth);
-		    }
-		    wdg->resizeRowsToContents();
-		}
-		wdg->horizontalHeader()->setStretchLastSection(wdg->property("colsWdthFit").toBool());
+		tableFit(w);
 		break;
-	    }
 	}
     }
 
@@ -925,6 +894,42 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
     }
 }
 
+void ShapeFormEl::tableFit( WdgView *w )
+{
+    ShpDt *shD = (ShpDt*)w->shpData;
+    QTableWidget *wdg = (QTableWidget*)shD->addrWdg;
+    if(shD->elType != F_TABLE || !wdg || !qobject_cast<QTableWidget*>(wdg)) return;
+
+    if(wdg->columnCount() > 1) wdg->resizeColumnsToContents();
+    if(wdg->property("colsWdthFit").toBool() && wdg->rowCount()) {
+	int tblWdth = wdg->maximumViewportSize().width();
+		    //vmax(w->sizeF().width(),wdg->maximumViewportSize().width()); - (wdg->verticalScrollBar()?wdg->verticalScrollBar()->size().width():0);
+	int averWdth = tblWdth/wdg->columnCount();
+	int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
+	//Count width params
+	for(int iC = 0; iC < wdg->columnCount(); iC++) {
+	    fullColsWdth += wdg->columnWidth(iC);
+	    if(wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) {
+		if(tVl < 0)	tVl = tblWdth*abs(tVl)/100;
+		niceForceColsWdth += tVl;
+		wdg->setColumnWidth(iC, tVl);
+	    }
+	    else if(wdg->columnWidth(iC) <= averWdth)	niceForceColsWdth += wdg->columnWidth(iC);
+	    else busyCols++;
+	}
+	//Set busyCols
+	if(fullColsWdth > tblWdth && busyCols) {
+	    int busyColsWdth = (tblWdth-niceForceColsWdth)/busyCols;
+	    for(int iC = 0; iC < wdg->columnCount(); iC++)
+		if((!wdg->horizontalHeaderItem(iC) || !(tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) &&
+			wdg->columnWidth(iC) > averWdth && wdg->columnWidth(iC) > busyColsWdth)
+		    wdg->setColumnWidth(iC, busyColsWdth);
+	}
+	wdg->resizeRowsToContents();
+    }
+    wdg->horizontalHeader()->setStretchLastSection(wdg->property("colsWdthFit").toBool());
+}
+
 bool ShapeFormEl::event( WdgView *w, QEvent *event )
 {
     if(qobject_cast<RunWdgView*>(w))
@@ -965,6 +970,7 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
     else {
 	AttrValS attrs;
 	switch(event->type()) {
+	    case QEvent::Resize: case QEvent::Show: tableFit(w);	break;
 	    case QEvent::FocusIn: qobject_cast<RunWdgView*>(w)->mainWin()->setFocus(w->id());	break;
 		/*if(!w->hasFocus()) break;
 		attrs.push_back(std::make_pair("focus","1"));
@@ -1218,6 +1224,8 @@ void ShapeFormEl::tableChange( int row, int col )
     attrs.push_back(std::make_pair("event",TSYS::strMess("ws_TableEdit_%d_%d",wIt->data(Qt::UserRole+1).toInt(),wIt->data(Qt::UserRole+2).toInt())));
     w->attrsSet(attrs);
 }
+
+
 
 void ShapeFormEl::sliderMoved( int val )
 {

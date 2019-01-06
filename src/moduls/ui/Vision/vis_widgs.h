@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_widgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -275,13 +275,17 @@ namespace VISION
 	    void cancel( );
 	    void textChanged( const QString& );
 
+	public slots:
+	    void applySlot( );
+	    void cancelSlot( );
+
 	protected:
 	    bool event( QEvent * e );
 
 	private slots:
 	    void changed( );
-	    void applySlot( );
-	    void cancelSlot( );
+	    //void applySlot( );
+	    //void cancelSlot( );
 	    void curPosChange( );
 	    void custContextMenu( );
 	    void find( );

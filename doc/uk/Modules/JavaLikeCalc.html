@@ -31,7 +31,7 @@
 <td> <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
 <td> Обчислювач на мові подібній до Java
 </td>
-<td> 4.0 </td>
+<td> 4.1 </td>
 <td> GPL2 </td>
 <td> daq_JavaLikeCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -269,7 +269,7 @@ for(var i = 0; i &lt; arguments.length; i++)
 <ul><li> Нульовий тип, функції:
 <ul><li> <i>bool isEVal();</i> — повертає "true".</li></ul></li></ul>
 <ul><li> Логічний тип, функції:
-<ul><li> <i>bool isEVal();</i> — перевіряє значення на "EVAL".</li>
+<ul><li> <i>bool isEVal(); bool isNaN( );</i> — перевіряє значення на "EVAL".</li>
 <li> <i>string toString();</i> — надає значення у вигляді рядка "true" або "false".</li></ul></li></ul>
 <dl><dd><ul><li> <i>real toReal();</i> — читає логічне значення як реальне число.</li>
 <li> <i>int toInt();</i> — читає логічне значення як ціле число.</li></ul></dd></dl>
@@ -279,7 +279,7 @@ for(var i = 0; i &lt; arguments.length; i++)
 <li> <i>MIN_VALUE</i> — мінімальне значення;</li>
 <li> <i>NaN</i> — недостовірне значення.</li></ul>
 <dl><dt> <i>Функції:</i></dt></dl>
-<ul><li> <i>bool isEVal();</i> — перевіряє значення на "EVAL".</li>
+<ul><li> <i>bool isEVal(); bool isNaN( );</i> — перевіряє значення на "EVAL", та не число для Реального.</li>
 <li> <i>string toExponential( int numbs = -1 );</i> — повертає рядок відформатованого числа, у експоненціальній нотації та кількістю значущих цифр <i>numbs</i>. Якщо <i>numbs</i> відсутній то цифр буде стільки скільки потрібно.</li>
 <li> <i>string toFixed( int numbs = 0, int len = 0, bool sign = false );</i> — повертає рядок відформатованого числа в нотації з фіксованою точкою та кількістю цифр після десяткової точки <i>numbs</i>, з мінімальною довжиною <i>len</i> та обов'язковим знаком <i>sign</i>. Якщо <i>numbs</i> відсутній то кількість цифр після десяткової точки дорівнює нулю.</li>
 <li> <i>string toPrecision( int prec = -1 );</i> — повертає рядок відформатованого числа з кількістю значущих цифр <i>prec</i>. </li>
@@ -291,11 +291,12 @@ for(var i = 0; i &lt; arguments.length; i++)
 <ul><li> <i>int length</i> — довжина рядка.</li></ul>
 <dl><dt> <i>Функції:</i></dt></dl>
 <ul><li> <i>bool isEVal();</i> — перевіряє значення на "EVAL".</li>
+<li> <i>bool isNaN( bool whole = true );</i> — перевіряє рядок на не число, та загалом <i>whole</i>.</li>
 <li> <i>string charAt( int symb, string type = "" );</i> — дістає із рядка символ за номером <i>symb</i> типу <i>type</i>. Наступні типи символу підтримуються: ""-ASCII та простий одно байтовий, UTF-8, UTF-16, UTF-32. У випадку із UTF-8, позиція символу <i>symb</i> змінюється у позицію наступного символу оскільки довжина символів цього типу змінна.</li>
 <li> <i>int charCodeAt( int symb, string type = "" );</i> — дістає із рядка код символу <i>symb</i> типу <i>type</i>. Наступні типи символу підтримуються: ""-ASCII та простий одно байтовий, UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE. У випадку із UTF-8, позиція символу <i>symb</i> змінюється у позицію наступного символу оскільки довжина символів цього типу змінна.</li>
 <li> <i>string concat( string val1, string val2, ... );</i> — повертає новий рядок, сформований шляхом приєднання значень <i>val1</i> та інші до початкового.</li>
-<li> <i>int indexOf( string substr, int start );</i> — повертає позицію пошукового рядка <i>substr</i> у вихідному рядку, починаючи з позиції <i>start</i>. Якщо вихідна позиція не вказана то пошук починається з початку. Якщо шуканого рядка не знайдено то повертається "-1".</li>
-<li> <i>int lastIndexOf( string substr, int start );</i> — повертає позицію шуканого рядка <i>substr</i> у вихідному рядку починаючи з позиції <i>start</i>, при пошуку з кінця. Якщо вихідна позиція не вказана то пошук починається з кінця. Якщо шуканого рядку не знайдено то повертається "-1".</li>
+<li> <i>int indexOf( string substr, int start = 0 );</i> — повертає позицію пошукового рядка <i>substr</i> у вихідному рядку, починаючи з позиції <i>start</i>. Якщо вихідна позиція не вказана то пошук починається з початку. Якщо шуканого рядка не знайдено то повертається "-1".</li>
+<li> <i>int lastIndexOf( string substr, int start = {end} );</i> — повертає позицію шуканого рядка <i>substr</i> у вихідному рядку починаючи з позиції <i>start</i>, при пошуку з кінця. Якщо вихідна позиція не вказана то пошук починається з кінця. Якщо шуканого рядку не знайдено то повертається "-1".</li>
 <li> <i>int search( string pat, string flg = "" );</i> — шукає у рядку за шаблоном <i>pat</i> та ознаками шаблону <i>flg</i>. Повертає положення знайденого рядку інакше "-1".</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "Java123Script".search("script","i");  // rez = 7</pre>

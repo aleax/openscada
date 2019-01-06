@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1277,8 +1277,8 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		return false;
 	    case TVariant::Object:	return vl.getO().at().funcCall(prop, prms);
 	    case TVariant::Boolean:
-		// bool isEVal( ) - check value to "EVAL"
-		if(prop == "isEVal")	return (vl.getB() == EVAL_BOOL);
+		// bool isEVal( ); bool isNaN( ); - check value to "EVAL"
+		if(prop == "isEVal" || prop == "isNaN")	return (vl.getB() == EVAL_BOOL);
 		// string toString( ) - performs the value as the string “true” or “false”
 		if(prop == "toString")	return string(vl.getB() ? "true" : "false");
 		// real toReal() - read this Boolean as a real number
@@ -1289,10 +1289,12 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//throw TError(nodePath().c_str(),_("Boolean type has not the property '%s' or there are not enough parameters for it."),prop.c_str());
 	    case TVariant::Integer:
 		// bool isEVal( ) - check value to "EVAL"
-		if(prop == "isEVal")	return (vl.getI() == EVAL_INT);
+		if(prop == "isEVal" || prop == "isNaN")	return (vl.getI() == EVAL_INT);
 	    case TVariant::Real:
 		// bool isEVal( ) - check value to "EVAL"
 		if(prop == "isEVal")	return (vl.getR() == EVAL_REAL);
+		// bool isNaN( ) - check the real for Not A Number
+		if(prop == "isNaN")	return (vl.getR() == EVAL_REAL || isnan(vl.getR()));
 		// string toExponential(int numbs = -1) - return the string of the number, formatted in exponential notation, 
 		//      and with the number of significant digits <numbs>
 		//  numbs - number of significant digits, if is missing the number of digits will have as much as needed
@@ -1352,6 +1354,9 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 	    case TVariant::String:
 		// bool isEVal( ) - check value to "EVAL"
 		if(prop == "isEVal")	return (vl.getS() == EVAL_STR);
+		// bool isNaN( bool whole = true ) - check the string for Not A Number
+		if(prop == "isNaN")
+		    return TRegExp((prms.size()&&!prms[0].getB())?"^ *[+-]?\\d*\\.?\\d*(|[eE][+-]*\\d+)":"^ *[+-]?\\d*\\.?\\d*(|[eE][+-]*\\d+)$").test(vl.getS());
 		// string charAt(int symb, string type = "") - extracts from the string the symbol <symb> of the type <type>
 		//  symb - symbol position, changed to the next symbol position for UTF-8
 		//  type  - symbol type, (""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-32)
@@ -1421,7 +1426,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		// int lastIndexOf(string substr, int start) - returns the position of the search string <substr> in the original
 		//       one beginning from the position of <start> when searching from the end
 		//  substr - requested substring value
-		//  start - start position for search from end
+		//  start - start position for search from the end
 		if(prop == "lastIndexOf" && prms.size()) {
 		    size_t sp = string::npos;
 		    if(prms.size() > 1) sp = vmax(0,vmin(vl.getS().size()-1,(unsigned)prms[1].getI()));

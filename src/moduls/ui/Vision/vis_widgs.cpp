@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -865,7 +865,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     ed_fld->setAcceptRichText(false);
     ed_fld->setLineWrapMode(QTextEdit::NoWrap);
     setFocusProxy(ed_fld);
-    connect(ed_fld, SIGNAL(textChanged()), this, SLOT(changed()) );
+    connect(ed_fld, SIGNAL(textChanged()), this, SLOT(changed()));
     connect(ed_fld, SIGNAL(cursorPositionChanged()), this, SLOT(curPosChange()) );
     connect(ed_fld, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(custContextMenu()));
     box->addWidget(ed_fld);

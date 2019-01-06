@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -131,6 +131,24 @@ string Project::name( ) const
 string Project::owner( ) const	{ return SYS->security().at().usrPresent(cfg("USER").getS()) ? cfg("USER").getS() : string("root"); }
 
 string Project::grp( ) const	{ return SYS->security().at().grpPresent(cfg("GRP").getS()) ? cfg("GRP").getS() : string("UI"); }
+
+string Project::getStatus( )
+{
+    string rez = enable() ? _("Enabled. ") : _("Disabled. ");
+
+    vector<string> tls;
+    list(tls);
+    int cnt = 0;
+    time_t maxTm = 0;
+    for(unsigned iT = 0; iT < tls.size(); iT++) {
+	cnt += at(tls[iT]).at().herit().size();
+	maxTm = vmax(maxTm, at(tls[iT]).at().timeStamp());
+    }
+    rez += TSYS::strMess(_("Used: %d. "), cnt);
+    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(maxTm).c_str());
+
+    return rez;
+}
 
 void Project::setOwner( const string &it )
 {
@@ -514,6 +532,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("grp",opt,-1,"/br/pg_",_("Page"),RWRWR_,"root",SUI_ID,2,"idm","1","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/obj",_("Project"))) {
 	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State"))) {
+		ctrMkNode("fld",opt,-1,"/obj/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:prj_"+id()).c_str(),
@@ -576,7 +595,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
-    if(a_path == "/obj/st/en") {
+    if(a_path == "/obj/st/status" && ctrChkNode(opt))		opt->setText(getStatus());
+    else if(a_path == "/obj/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(s2i(opt->text()));
     }
@@ -965,6 +985,23 @@ void Page::setParentNm( const string &isw )
     if(ownerPage() && (ownerPage()->prjFlags()&Page::Template) && !(ownerPage()->prjFlags()&Page::Container))
 	cfg("PARENT").setS("..");
     modif();
+}
+
+string Page::getStatus( )
+{
+    string rez = Widget::getStatus();
+    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(timeStamp()).c_str());
+    if(calcProg().size()) {
+	rez += _("Calculating procedure: ");
+	if(!parent().freeStat() && parent().at().calcProg().size() && calcProg() != parent().at().calcProg())
+	    rez += _("!!redefined!!");
+	else if(!parent().freeStat() && parent().at().calcProg().size())
+	    rez += _("inherited");
+	else rez += _("presented");
+	rez += ". ";
+    }
+
+    return rez;
 }
 
 string Page::calcId( )

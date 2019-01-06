@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -60,6 +60,7 @@ class Project : public TCntrNode, public TConfig
 	short	permit( ) const	{ return mPermit; }		//Permission for access to library
 	int	period( )	{ return mPer; }		//Project's session calculate period
 	bool	toEnByNeed( )	{ return cfg("EN_BY_NEED").getB(); } //To enable the project by need
+	string	getStatus( );
 
 	string DB( ) const	{ return workPrjDB; }		//Current library DB
 	string tbl( ) const	{ return cfg("DB_TBL").getS(); }//Table of storing library data
@@ -178,6 +179,7 @@ class Page : public Widget, public TConfig
 	string	path( ) const;
 	string	ico( ) const;
 	string	type( )			{ return "ProjPage"; }
+	string	getStatus( );
 	string	calcId( );
 	string	calcLang( ) const;
 	bool	calcProgTr( );

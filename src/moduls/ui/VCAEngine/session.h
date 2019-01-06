@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -249,6 +249,7 @@ class SessWdg : public Widget, public TValFunc
 	string	ownerFullId( bool contr = false ) const;
 	string	type( )		{ return "SessWidget"; }
 	string	ico( ) const;
+	string	getStatus( );
 	string	calcLang( ) const;
 	string	calcProg( ) const;
 	string	calcProgStors( const string &attr = "" );

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -82,16 +82,18 @@ void RunWdgView::resizeF( const QSizeF &size )
     else WdgView::resizeF(size);
 
     if(holdPg && cntW) {
-	if(cntW != this) {
-	    QAbstractScrollArea *sa = (cntW->root() == "Box") ? ((ShapeBox::ShpDt*)cntW->shpData)->inclScrl : NULL;
-	    bool wHold = (holdPg->sizeOrigF().width()*holdPg->xScale() <= cntW->sizeOrigF().width()*cntW->xScale());
-	    bool hHold = (holdPg->sizeOrigF().height()*holdPg->yScale() <= cntW->sizeOrigF().height()*cntW->yScale());
+	QAbstractScrollArea *sa = (cntW->root() == "Box") ? ((ShapeBox::ShpDt*)cntW->shpData)->inclScrl : NULL;
+	bool wHold = (holdPg->sizeOrigF().width()*holdPg->xScale() <= cntW->sizeOrigF().width()*cntW->xScale());
+	bool hHold = (holdPg->sizeOrigF().height()*holdPg->yScale() <= cntW->sizeOrigF().height()*cntW->yScale());
 
+	holdPg->setMaximumSize(wHold ? cntW->size().width() : 1000000, hHold ? cntW->size().height() : 1000000);	//Needed to hide the spare scroll bar on big scale rates
+
+	if(cntW != this) {
 	    QSize holdB = QSize(cntW->size().width()  - ((sa&&sa->verticalScrollBar()/*&&sa->verticalScrollBar()->isVisible()*/)?sa->verticalScrollBar()->size().width():0),
 				cntW->size().height() - ((sa&&sa->horizontalScrollBar()/*&&sa->horizontalScrollBar()->isVisible()*/)?sa->horizontalScrollBar()->size().height():0));
 	    holdPg->setMinimumSize(wHold ? holdB.width() : holdPg->size().width(), hHold ? holdB.height() : holdPg->size().height());
-	    //holdPg->setMaximumSize(wHold ? holdB.width() : 1000000, hHold ? holdB.height() : 1000000);
-	} else  holdPg->resize(QSize(holdPg->sizeOrigF().width()*holdPg->xScale(),holdPg->sizeOrigF().height()*holdPg->yScale()));
+	}
+	else holdPg->resize(QSize(holdPg->sizeOrigF().width()*holdPg->xScale(),holdPg->sizeOrigF().height()*holdPg->yScale()));
     }
 }
 

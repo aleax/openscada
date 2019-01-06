@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.h
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -174,6 +174,7 @@ class Widget : public TCntrNode
 	string owner( ) const;					//Widget owner
 	string grp( ) const;					//Widget group
 	short  permit( ) const;					//Permission for access to widget
+	virtual string getStatus( );
 	virtual string calcId( );				//Compile function identifier
 	virtual string calcLang( ) const { return ""; }		//Calc procedure language
 	virtual bool   calcProgTr( )	{ return true; }	//Calc procedure translation

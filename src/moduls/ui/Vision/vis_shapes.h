@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -130,6 +130,8 @@ class ShapeFormEl : public WdgShape
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 	void setActive( WdgView *view, bool val );
 	void setValue( WdgView *view, const string &val, bool force = false );
+
+	void tableFit( WdgView *w );
 
     public slots:
 	//Public slots

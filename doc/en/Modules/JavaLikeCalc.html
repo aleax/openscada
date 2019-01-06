@@ -31,14 +31,14 @@
 <td> <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
 <td> Calculator on the Java-like language
 </td>
-<td> 4.0 </td>
+<td> 4.1 </td>
 <td> GPL2 </td>
 <td> daq_JavaLikeCalc.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> DAQ </td>
-<td> Roman Savochenko<br />Maxim Lysenko (2009-2010) — the page translation </td>
+<td> Roman Savochenko<br /><font size="-2"><i>Maxim Lysenko (2009-2010) — the page translation</i></font> </td>
 <td> Provides a calculator and libraries engine on the Java-like language. The user can create and modify functions and their libraries.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -271,7 +271,7 @@ for(var i = 0; i &lt; arguments.length; i++)
 <ul><li> NULL type, functions:
 <ul><li> <i>bool isEVal();</i> — returns "true".</li></ul></li></ul>
 <ul><li> Logical type, functions:
-<ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
+<ul><li> <i>bool isEVal(); bool isNaN( );</i> — checks the value to "EVAL".</li>
 <li> <i>string toString();</i> — performs the value as the string "true" or "false".</li></ul></li></ul>
 <dl><dd><ul><li> <i>real toReal();</i> — reads this Boolean as a real number.</li>
 <li> <i>int toInt();</i> — reads this Boolean as an integer number.</li></ul></dd></dl>
@@ -281,7 +281,7 @@ for(var i = 0; i &lt; arguments.length; i++)
 <li> <i>MIN_VALUE</i> — minimum value;</li>
 <li> <i>NaN</i> —  error value.</li></ul>
 <dl><dt> <i>Functions:</i></dt></dl>
-<ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
+<ul><li> <i>bool isEVal(); bool isNaN( );</i> — checks the value to "EVAL", and NaN for Real.</li>
 <li> <i>string toExponential( int numbs = -1 );</i> — returns the string of the number, formatted in the exponential notation, and with the number of significant digits <i>numbs</i>. If <i>numbs</i> is missing the number of digits will have as much as needed.</li>
 <li> <i>string toFixed( int numbs = 0, int len = 0, bool sign = false );</i> — returns the string of the number, formatted in the notation of fixed-point, and with the number of significant digits after the decimal point <i>numbs</i>, for minimum length <i>len</i> and compulsion to the presence of a <i>sign</i>. If <i>numbs</i> is missing, the number of digits after the decimal point is equal to zero.</li>
 <li> <i>string toPrecision( int prec = -1 );</i> — returns the string of the number, formatted with the number of significant digits <i>prec</i>.</li>
@@ -293,11 +293,12 @@ for(var i = 0; i &lt; arguments.length; i++)
 <ul><li> <i>int length</i> — string length. </li></ul>
 <dl><dt> <i>Functions:</i></dt></dl>
 <ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
+<li> <i>bool isNaN( bool whole = true );</i> — checks the string to Not A Number and in whole for <i>whole</i>. </li>
 <li> <i>string charAt( int symb, string type = "" );</i> — extracts from the string the symbol <i>symb</i> for the <i>type</i>. These types of the symbol are supported: ""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-32. In the case of UTF-8, the symbol position <i>symb</i> is changed to the next symbol position due to length of this symbols type is variable one.</li>
 <li> <i>int charCodeAt( int symb, string type = "" );</i> — extracts from the string the symbol code <i>symb</i> for the <i>type</i>. These types of the symbol are supported: ""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE. In the case of UTF-8, the symbol position <i>symb</i> is changed to the next symbol position due to length of this symbols type is variable one.</li>
 <li> <i>string concat( string val1, string val2, ... );</i> — returns a new string formed by joining the values <i>val1</i> etc. to the original one.</li>
-<li> <i>int indexOf( string substr, int start );</i> — returns the position of the required string <i>substr</i> in the original row from the position <i>start</i>. If the initial position is not specified then the search starts from the beginning. If the search string is not found then "-1" is returned.</li>
-<li> <i>int lastIndexOf( string substr, int start );</i> — returns the position of the search string <i>substr</i> in the original one beginning from the position of <i>start</i> when searching from the end. If the initial position is not specified then the search begins from the end. If the search string is not found then "-1" is returned.</li>
+<li> <i>int indexOf( string substr, int start = 0 );</i> — returns the position of the required string <i>substr</i> in the original row from the position <i>start</i>. If the initial position is not specified then the search starts from the beginning. If the search string is not found then "-1" is returned.</li>
+<li> <i>int lastIndexOf( string substr, int start = {end} );</i> — returns the position of the search string <i>substr</i> in the original one beginning from the position of <i>start</i> when searching from the end. If the initial position is not specified then the search begins from the end. If the search string is not found then "-1" is returned.</li>
 <li> <i>int search( string pat, string flg = "" );</i> — searches into the string by the pattern <i>pat</i> and pattern's flags <i>flg</i>. Returns found substring position or "-1" for else.</li></ul></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
 var rez = "Java123Script".search("script","i");  // rez = 7</pre>
