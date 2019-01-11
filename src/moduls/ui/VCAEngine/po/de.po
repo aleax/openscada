@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2013.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-25 17:49+0200\n"
+"POT-Creation-Date: 2019-01-07 10:04+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -19,6 +19,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Enabled. "
+msgstr "Aktiviert. "
+
+msgid "Disabled. "
+msgstr "Deaktiviert. "
+
+#, c-format
+msgid "Used: %d. "
+msgstr "Verwendet: %d. "
+
+#, c-format
+msgid "Date of modification: %s. "
+msgstr "Änderungsdatum: %s. "
 
 msgid "Loading widgets library."
 msgstr "Widgetsbibliothek laden."
@@ -47,6 +61,9 @@ msgstr "Bibliothek"
 
 msgid "State"
 msgstr "Zustand"
+
+msgid "Status"
+msgstr "Status"
 
 msgid "Enabled"
 msgstr "Aktiviert"
@@ -94,9 +111,17 @@ msgstr "Mime Typ"
 msgid "Data"
 msgstr "Daten"
 
-#, c-format
-msgid "Widget '%s' is already present!"
-msgstr "Widget '%s' ist bereits vorhanden!"
+msgid "Calculating procedure: "
+msgstr "Berechnungsverfahren: "
+
+msgid "!!redefined!!"
+msgstr "!!neu definiert!!"
+
+msgid "inherited"
+msgstr "vererbt"
+
+msgid "presented"
+msgstr "vorgeführt"
 
 msgid "Widget is not container!"
 msgstr "Widget ist kein Container!"
@@ -1315,10 +1340,6 @@ msgid "Message"
 msgstr "Nachricht"
 
 #, c-format
-msgid "Page '%s' is already present!"
-msgstr "Seite '%s' ist vorhanden!"
-
-#, c-format
 msgid "All: %d; Enabled: %d"
 msgstr "Alle: %d; Aktiviert: %d"
 
@@ -1508,23 +1529,27 @@ msgid ""
 msgstr ""
 "Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
 
+msgid "Processing. "
+msgstr "Wird bearbeitet. "
+
+msgid "Opened. "
+msgstr "Geöffnet. "
+
+msgid "Spent time on the branch: "
+msgstr "Verbrachte Zeit in der Branche: "
+
+msgid "the item: "
+msgstr "der Gegenstand: "
+
 msgid "It is a try of creating a widget in depth bigger to 10!"
-msgstr "Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu 10 zu erstellen!"
+msgstr ""
+"Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu 10 zu erstellen!"
 
 msgid "Error calculating the widget. Process is disabled."
 msgstr "Fehler der Berechnung des Widgets. Bearbeitung ist abgeschaltet."
 
 msgid "Processing"
 msgstr "Bearbeitung"
-
-msgid "Spent time"
-msgstr "Verbrachte Zeit"
-
-msgid "Subtree="
-msgstr "Subtree="
-
-msgid "Item="
-msgstr "Punkt="
 
 msgid "Engine of the visual control area"
 msgstr "Motor der visuellen Kontrollzone"
@@ -1677,14 +1702,6 @@ msgstr "Sitzungen"
 
 msgid "Auto created and started"
 msgstr "Automatisch erstellt und gestartet"
-
-#, c-format
-msgid "Project '%s' is already present!"
-msgstr "Projekt '%s' ist vorhanden!"
-
-#, c-format
-msgid "Widgets library '%s' is already present!"
-msgstr "Widgets Bibliothek '%s' ist vorhanden!"
 
 #, c-format
 msgid "Session '%s' is already present!"
@@ -1873,6 +1890,10 @@ msgstr "Verringern Sie das Widget nach unten zu seinem übergeordneten Element"
 
 msgid "Included widgets"
 msgstr "Enthaltene Widgets"
+
+#, c-format
+msgid "Widget '%s' is already present!"
+msgstr "Widget '%s' ist bereits vorhanden!"
 
 msgid "Path to the widget."
 msgstr "Pfad zum Widget."

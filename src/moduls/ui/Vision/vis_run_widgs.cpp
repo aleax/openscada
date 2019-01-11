@@ -89,8 +89,8 @@ void RunWdgView::resizeF( const QSizeF &size )
 	holdPg->setMaximumSize(wHold ? cntW->size().width() : 1000000, hHold ? cntW->size().height() : 1000000);	//Needed to hide the spare scroll bar on big scale rates
 
 	if(cntW != this) {
-	    QSize holdB = QSize(cntW->size().width()  - ((sa&&sa->verticalScrollBar()/*&&sa->verticalScrollBar()->isVisible()*/)?sa->verticalScrollBar()->size().width():0),
-				cntW->size().height() - ((sa&&sa->horizontalScrollBar()/*&&sa->horizontalScrollBar()->isVisible()*/)?sa->horizontalScrollBar()->size().height():0));
+	    QSize holdB = QSize(cntW->size().width()  - ((sa&&sa->verticalScrollBar()&&holdPg->size().height()>cntW->size().height())?sa->verticalScrollBar()->size().width():0),
+				cntW->size().height() - ((sa&&sa->horizontalScrollBar()&&holdPg->size().width()>cntW->size().width())?sa->horizontalScrollBar()->size().height():0));
 	    holdPg->setMinimumSize(wHold ? holdB.width() : holdPg->size().width(), hHold ? holdB.height() : holdPg->size().height());
 	}
 	else holdPg->resize(QSize(holdPg->sizeOrigF().width()*holdPg->xScale(),holdPg->sizeOrigF().height()*holdPg->yScale()));

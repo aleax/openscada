@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-08 23:26+0200\n"
+"POT-Creation-Date: 2019-01-11 10:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -873,16 +873,13 @@ msgstr ""
 msgid "Item icon. Click to download another."
 msgstr ""
 
+msgid "Status:"
+msgstr ""
+
 msgid "Enabled:"
 msgstr ""
 
 msgid "Container DB:"
-msgstr ""
-
-msgid "Used:"
-msgstr ""
-
-msgid "Date of modification:"
 msgstr ""
 
 msgid "Configuration"
@@ -973,9 +970,6 @@ msgid "Close"
 msgstr ""
 
 msgid "Error getting the node '%1' information."
-msgstr ""
-
-msgid "Not set"
 msgstr ""
 
 msgid "Downloading the image icon"
@@ -1073,6 +1067,12 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
+msgid "Are you sure of editing the inherited procedure, since that can cause for unexpectedly loss of the access to the original one?!"
+msgstr ""
+
+msgid "Editing an inherited procedure"
+msgstr ""
+
 msgid "Correct widget is not selected"
 msgstr ""
 
@@ -1126,10 +1126,6 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#, c-format
-msgid "Time of requesting the widgets development tree '%s': %f ms."
-msgstr ""
-
 msgid "Library"
 msgstr ""
 
@@ -1162,10 +1158,6 @@ msgid "Projects"
 msgstr ""
 
 msgid "Project"
-msgstr ""
-
-#, c-format
-msgid "Time of loading the projects development tree '%s': %f ms."
 msgstr ""
 
 msgid "Page"

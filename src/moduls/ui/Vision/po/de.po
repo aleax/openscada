@@ -4,13 +4,13 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-08 23:26+0200\n"
+"POT-Creation-Date: 2019-01-11 10:33+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -964,17 +964,14 @@ msgstr "Zustand"
 msgid "Item icon. Click to download another."
 msgstr "Artikel-Symbol. Klicken Sie, um eine andere herunterzuladen."
 
+msgid "Status:"
+msgstr "Status:"
+
 msgid "Enabled:"
 msgstr "Eingeschaltet:"
 
 msgid "Container DB:"
 msgstr "Datenbank des Containers:"
-
-msgid "Used:"
-msgstr "Verwendet:"
-
-msgid "Date of modification:"
-msgstr "Änderungsdatum:"
 
 msgid "Configuration"
 msgstr "Konfiguration"
@@ -1065,9 +1062,6 @@ msgstr "Schliessen"
 
 msgid "Error getting the node '%1' information."
 msgstr "Fehler beim Abrufen des Knoten '%1' Informationen."
-
-msgid "Not set"
-msgstr "Nicht eingestellt"
 
 msgid "Downloading the image icon"
 msgstr "Herunterladen des Iconbildes"
@@ -1167,6 +1161,17 @@ msgstr "Übersetzen:"
 msgid "Links"
 msgstr "Links"
 
+msgid ""
+"Are you sure of editing the inherited procedure, since that can cause for "
+"unexpectedly loss of the access to the original one?!"
+msgstr ""
+"Sind Sie sicher, dass Sie die geerbte Prozedur bearbeiten können, da dies zu "
+"einem unerwarteten Verlust des Zugriffs auf die ursprüngliche Prozedur "
+"führen kann?!"
+
+msgid "Editing an inherited procedure"
+msgstr "Eine vererbte Prozedur bearbeiten"
+
 msgid "Correct widget is not selected"
 msgstr "Richtige Widget ist nicht ausgewählt"
 
@@ -1212,22 +1217,23 @@ msgid ""
 "At missing the visual item will be created in the parent and all other "
 "visual elements, descendant from this ancestor, will use this!"
 msgstr ""
-"Sind Sie sicher, dass Sie für das ausgewählte Attribut '%1' des Sichtelements '%2' zum übergeordneten Element wechseln möchten?\n"
-"Wenn das visuelle Element fehlt, wird es im übergeordneten Element erstellt, und alle anderen visuellen Elemente, die von diesem Vorfahren abstammen, werden dies verwenden!"
+"Sind Sie sicher, dass Sie für das ausgewählte Attribut '%1' des "
+"Sichtelements '%2' zum übergeordneten Element wechseln möchten?\n"
+"Wenn das visuelle Element fehlt, wird es im übergeordneten Element erstellt, "
+"und alle anderen visuellen Elemente, die von diesem Vorfahren abstammen, "
+"werden dies verwenden!"
 
 msgid ""
 "Lowering down the selected attribute change of the visual item to the parent"
-msgstr "Die ausgewählte Attributänderung des visuellen Elements zum übergeordneten Element verringern"
+msgstr ""
+"Die ausgewählte Attributänderung des visuellen Elements zum übergeordneten "
+"Element verringern"
 
 msgid "Widgets"
 msgstr "Widget"
 
 msgid "Type"
 msgstr "Typ"
-
-#, c-format
-msgid "Time of requesting the widgets development tree '%s': %f ms."
-msgstr "Zeitpunkt der Anforderung des Widget-Entwicklungsbaums '%s': %f ms."
 
 msgid "Library"
 msgstr "Bibliothek"
@@ -1262,10 +1268,6 @@ msgstr "Projekte"
 
 msgid "Project"
 msgstr "Projekt"
-
-#, c-format
-msgid "Time of loading the projects development tree '%s': %f ms."
-msgstr "Zeitpunkt des Ladens des Projektentwicklungsbaums '%s': %f ms."
 
 msgid "Page"
 msgstr "Seite"

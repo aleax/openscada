@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -605,8 +605,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    var geomWpar = parseFloat(this.parent.attrs['geomW'])*this.parent.xScale(true);
 	    var geomHpar = parseFloat(this.parent.attrs['geomH'])*this.parent.yScale(true);
 	    this.parent.place.style.overflow = (geomW > geomWpar || geomH > geomHpar) ? 'auto' : 'hidden';
-	    geomW = Math.max(geomW, geomWpar-20);	//!!!! 20 is most scrollbar width and clientWidth does not work here
-	    geomH = Math.max(geomH, geomHpar-20);
+	    geomWScrl = (geomH > geomHpar) ? 20 : 0; geomHScrl = (geomW > geomWpar) ? 20 : 0;	//!!!! 20 is most scrollbar width and clientWidth does not work here
+	    geomW = Math.max(geomW, geomWpar-geomWScrl);
+	    geomH = Math.max(geomH, geomHpar-geomHScrl);
 	}
 	//else elStyle += 'overflow: hidden; ';
 

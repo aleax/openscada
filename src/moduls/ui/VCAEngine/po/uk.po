@@ -1,19 +1,33 @@
 # OpenSCADA.UI.VCAEngine translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-25 17:49+0200\n"
+"POT-Creation-Date: 2019-01-07 09:57+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Enabled. "
+msgstr "Ввімкнено. "
+
+msgid "Disabled. "
+msgstr "Вимкнено. "
+
+#, c-format
+msgid "Used: %d. "
+msgstr "Використано: %d. "
+
+#, c-format
+msgid "Date of modification: %s. "
+msgstr "Дата модифікації: %s. "
 
 msgid "Loading widgets library."
 msgstr "Завантаження бібліотеки віджетів."
@@ -42,6 +56,9 @@ msgstr "Бібліотека"
 
 msgid "State"
 msgstr "Стан"
+
+msgid "Status"
+msgstr "Статус"
 
 msgid "Enabled"
 msgstr "Включений"
@@ -89,9 +106,17 @@ msgstr "Mime тип"
 msgid "Data"
 msgstr "Дані"
 
-#, c-format
-msgid "Widget '%s' is already present!"
-msgstr "Віджет '%s' вже присутній!"
+msgid "Calculating procedure: "
+msgstr "Обчислювальна процедура: "
+
+msgid "!!redefined!!"
+msgstr "!!перевизначено!!"
+
+msgid "inherited"
+msgstr "успадковано"
+
+msgid "presented"
+msgstr "представлено"
 
 msgid "Widget is not container!"
 msgstr "Віджет не контейнер!"
@@ -1307,10 +1332,6 @@ msgid "Message"
 msgstr "Повідомлення"
 
 #, c-format
-msgid "Page '%s' is already present!"
-msgstr "Сторінка '%s' вже присутня!"
-
-#, c-format
 msgid "All: %d; Enabled: %d"
 msgstr "Загалом: %d; Ввімкнено: %d"
 
@@ -1500,6 +1521,18 @@ msgid ""
 "Error compiling the function '%s' by the language '%s' for the widget: %s"
 msgstr "Помилка компіляції функції '%s' на мові '%s' для віджета: %s"
 
+msgid "Processing. "
+msgstr "Обробка. "
+
+msgid "Opened. "
+msgstr "Відкрито. "
+
+msgid "Spent time on the branch: "
+msgstr "Витрачено часу на гілку: "
+
+msgid "the item: "
+msgstr "елемент: "
+
 msgid "It is a try of creating a widget in depth bigger to 10!"
 msgstr "Спроба створення віджету на глибину більш за 10!"
 
@@ -1508,15 +1541,6 @@ msgstr "Помилка обчислення віджета. Обробку ви�
 
 msgid "Processing"
 msgstr "Обробка"
-
-msgid "Spent time"
-msgstr "Використано часу"
-
-msgid "Subtree="
-msgstr "Піддерево="
-
-msgid "Item="
-msgstr "Елемент="
 
 msgid "Engine of the visual control area"
 msgstr "Рушій середовища візуалізації та керування"
@@ -1669,14 +1693,6 @@ msgstr "Сеанси"
 
 msgid "Auto created and started"
 msgstr "Автоматично створений та запущений"
-
-#, c-format
-msgid "Project '%s' is already present!"
-msgstr "Проект '%s' вже присутній!"
-
-#, c-format
-msgid "Widgets library '%s' is already present!"
-msgstr "Бібліотека віджетів '%s' вже присутня!"
 
 #, c-format
 msgid "Session '%s' is already present!"
@@ -1865,6 +1881,10 @@ msgstr "Опустити зміни віджету до його предка"
 
 msgid "Included widgets"
 msgstr "Вкладенні віджети"
+
+#, c-format
+msgid "Widget '%s' is already present!"
+msgstr "Віджет '%s' вже присутній!"
 
 msgid "Path to the widget."
 msgstr "Шлях до цього віджету."

@@ -1614,7 +1614,7 @@ string SessWdg::getStatus( )
     if(process())	rez += _("Processing. ");
     if(attrAt("pgOpen").at().getB())	rez += _("Opened. ");
     if(mess_lev() == TMess::Debug)
-	rez += _("Spent time of the subtree: ")+tm2s(tmCalcAll())+"["+tm2s(tmCalcMaxAll())+"], "+_("the item: ")+tm2s(tmCalc)+"["+tm2s(tmCalcMax)+"]. ";
+	rez += _("Spent time on the branch: ")+tm2s(tmCalcAll())+"["+tm2s(tmCalcMaxAll())+"], "+_("the item: ")+tm2s(tmCalc)+"["+tm2s(tmCalcMax)+"]. ";
 
     return rez;
 }

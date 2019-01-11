@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -655,8 +655,8 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
 
     //menuBar()->setVisible(true);	//!!!! Spare for Qt5 and the native menu bar
 
-    wdgTree->updateTree("", true);	//Initial for allow the widgets loading on the server side mostly
-    prjTree->updateTree("", NULL, true);//Initial for allow the projects loading on the server side mostly
+    wdgTree->updateTree("", true);	//Initial to allow the widgets loading on the server side mostly
+    prjTree->updateTree();
 
     //Restore main window state
     int off = 0;

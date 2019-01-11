@@ -1,13 +1,13 @@
 # OpenSCADA.UI.Vision translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-08 23:26+0200\n"
+"POT-Creation-Date: 2019-01-11 10:33+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -947,17 +947,14 @@ msgstr "Стан"
 msgid "Item icon. Click to download another."
 msgstr "Іконка елементу. Натисніть для завантаження іншої."
 
+msgid "Status:"
+msgstr "Статус:"
+
 msgid "Enabled:"
 msgstr "Ввімкнено:"
 
 msgid "Container DB:"
 msgstr "БД контейнера:"
-
-msgid "Used:"
-msgstr "Використано:"
-
-msgid "Date of modification:"
-msgstr "Дата модифікації:"
 
 msgid "Configuration"
 msgstr "Конфігурація"
@@ -1048,9 +1045,6 @@ msgstr "Закрити"
 
 msgid "Error getting the node '%1' information."
 msgstr "Помилка запиту інформації вузла '%1'."
-
-msgid "Not set"
-msgstr "Не встановлено"
 
 msgid "Downloading the image icon"
 msgstr "Завантажити зображення іконки"
@@ -1150,6 +1144,16 @@ msgstr "Перекладати:"
 msgid "Links"
 msgstr "Зв'язки"
 
+msgid ""
+"Are you sure of editing the inherited procedure, since that can cause for "
+"unexpectedly loss of the access to the original one?!"
+msgstr ""
+"Ви дійсно бажаєте редагувати успадковану процедуру, оскільки це може "
+"призвести до неочікуваної втрати доступу до оригінальної процедури?!"
+
+msgid "Editing an inherited procedure"
+msgstr "Редагування успадкованої процедури"
+
 msgid "Correct widget is not selected"
 msgstr "Не обрано коректного віджету"
 
@@ -1195,9 +1199,10 @@ msgid ""
 "At missing the visual item will be created in the parent and all other "
 "visual elements, descendant from this ancestor, will use this!"
 msgstr ""
-"Ви дійсно бажаєте опустити предку зміни обраного атрибуту '%1' візуального елементу '%1'?\n"
-"За відсутності цей візуальний елемент буде створено у предка та всі інші візуальні елементи, нащадки від даного предку, будуть "
-"використовувати його!"
+"Ви дійсно бажаєте опустити предку зміни обраного атрибуту '%1' візуального "
+"елементу '%1'?\n"
+"За відсутності цей візуальний елемент буде створено у предка та всі інші "
+"візуальні елементи, нащадки від даного предку, будуть використовувати його!"
 
 msgid ""
 "Lowering down the selected attribute change of the visual item to the parent"
@@ -1208,10 +1213,6 @@ msgstr "Віджети"
 
 msgid "Type"
 msgstr "Тип"
-
-#, c-format
-msgid "Time of requesting the widgets development tree '%s': %f ms."
-msgstr "Час запиту дерева розробки віджетів '%s': %f мс."
 
 msgid "Library"
 msgstr "Бібліотека"
@@ -1246,10 +1247,6 @@ msgstr "Проекти"
 
 msgid "Project"
 msgstr "Проект"
-
-#, c-format
-msgid "Time of loading the projects development tree '%s': %f ms."
-msgstr "Час завантаження дерева розробки проектів '%s': %f мс."
 
 msgid "Page"
 msgstr "Сторінка"

@@ -68,85 +68,14 @@ Version: 1.0.0','wlb_doc','','Документи','Бібліотека доку
 Автор: Роман Савоченко <rom_as@oscada.org>
 Версия: 1.0.0');
 CREATE TABLE 'prj_archBrowser_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','apply','/wlb_Main/wdg_graphSelPrm/wdg_apply','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','cancel','/wlb_Main/wdg_graphSelPrm/wdg_cancel','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','color','/wlb_Main/wdg_graphSelPrm/wdg_color','value;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','colorBox','/wlb_Main/wdg_graphSelPrm/wdg_colorBox','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','dim','/wlb_Main/wdg_graphSelPrm/wdg_dim','value;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','lab_color','/wlb_Main/wdg_graphSelPrm/wdg_lab_color','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','lab_dim','/wlb_Main/wdg_graphSelPrm/wdg_lab_dim','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','lab_name','/wlb_Main/wdg_graphSelPrm/wdg_lab_name','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','lab_sc','/wlb_Main/wdg_graphSelPrm/wdg_lab_sc','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','name','/wlb_Main/wdg_graphSelPrm/wdg_name','value;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','prm','/wlb_Main/wdg_graphSelPrm/wdg_prm','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','val_max','/wlb_Main/wdg_graphSelPrm/wdg_val_max','value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','val_min','/wlb_Main/wdg_graphSelPrm/wdg_val_min','value;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','Ramka','/wlb_Main/wdg_ElCadr/wdg_Ramka','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','com_close','/wlb_Main/wdg_ElCadr/wdg_com_close','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','com_open','/wlb_Main/wdg_ElCadr/wdg_com_open','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','com_stop','/wlb_Main/wdg_ElCadr/wdg_com_stop','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','down','/wlb_Main/wdg_ElCadr/wdg_down','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','downm','/wlb_Main/wdg_ElCadr/wdg_downm','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','greed_text','/wlb_Main/wdg_ElCadr/wdg_greed_text','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','greed_text1','/wlb_Main/wdg_ElCadr/wdg_greed_text1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','greed_text2','/wlb_Main/wdg_ElCadr/wdg_greed_text2','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','greed_text3','/wlb_Main/wdg_ElCadr/wdg_greed_text3','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','greed_text4','/wlb_Main/wdg_ElCadr/wdg_greed_text4','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','greed_text5','/wlb_Main/wdg_ElCadr/wdg_greed_text5','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','info_ed','/wlb_Main/wdg_ElCadr/wdg_info_ed','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','info_name','/wlb_Main/wdg_ElCadr/wdg_info_name','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','info_out','/wlb_Main/wdg_ElCadr/wdg_info_out','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','info_sp','/wlb_Main/wdg_ElCadr/wdg_info_sp','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','info_var','/wlb_Main/wdg_ElCadr/wdg_info_var','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','lev_out','/wlb_Main/wdg_ElCadr/wdg_lev_out','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','lev_sp','/wlb_Main/wdg_ElCadr/wdg_lev_sp','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','lev_var','/wlb_Main/wdg_ElCadr/wdg_lev_var','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','modAuto','/wlb_Main/wdg_ElCadr/wdg_modAuto','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','modCasc','/wlb_Main/wdg_ElCadr/wdg_modCasc','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','modMan','/wlb_Main/wdg_ElCadr/wdg_modMan','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','mode','/wlb_Main/wdg_ElCadr/wdg_mode','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','moveDwn','/wlb_Main/wdg_ElCadr/wdg_moveDwn','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','moveUp','/wlb_Main/wdg_ElCadr/wdg_moveUp','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','pnl_pid','/wlb_Main/wdg_ElCadr/wdg_pnl_pid','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','st_close','/wlb_Main/wdg_ElCadr/wdg_st_close','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','st_open','/wlb_Main/wdg_ElCadr/wdg_st_open','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','up','/wlb_Main/wdg_ElCadr/wdg_up','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','upm','/wlb_Main/wdg_ElCadr/wdg_upm','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','Text1','/wlb_Main/wdg_grph_panel/wdg_Text1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','Text2','/wlb_Main/wdg_grph_panel/wdg_Text2','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','Text3','/wlb_Main/wdg_grph_panel/wdg_Text3','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','arch','/wlb_Main/wdg_grph_panel/wdg_arch','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','cursor','/wlb_Main/wdg_grph_panel/wdg_cursor','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','curtime','/wlb_Main/wdg_grph_panel/wdg_curtime','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','date','/wlb_Main/wdg_grph_panel/wdg_date','value;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','line3','/wlb_Main/wdg_grph_panel/wdg_line3','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','next','/wlb_Main/wdg_grph_panel/wdg_next','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','next1','/wlb_Main/wdg_grph_panel/wdg_next1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','prev','/wlb_Main/wdg_grph_panel/wdg_prev','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','prev1','/wlb_Main/wdg_grph_panel/wdg_prev1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','scaleInfo','/wlb_Main/wdg_grph_panel/wdg_scaleInfo','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','size','/wlb_Main/wdg_grph_panel/wdg_size','value;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','tmTp','/wlb_Main/wdg_grph_panel/wdg_tmTp','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','zoomDef','/wlb_Main/wdg_grph_panel/wdg_zoomDef','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','zoomIn','/wlb_Main/wdg_grph_panel/wdg_zoomIn','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','zoomOffDown','/wlb_Main/wdg_grph_panel/wdg_zoomOffDown','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','zoomOffUp','/wlb_Main/wdg_grph_panel/wdg_zoomOffUp','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','zoomOut','/wlb_Main/wdg_grph_panel/wdg_zoomOut','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_terminator','Text1','/wlb_Main/wdg_terminator/wdg_Text1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','ElFigure1','/wlb_Main/wdg_grpGraph10/wdg_ElFigure1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','arh','/wlb_Main/wdg_grpGraph10/wdg_arh','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','el1','/wlb_Main/wdg_grpGraph10/wdg_el1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','el2','/wlb_Main/wdg_grpGraph10/wdg_el2','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','el3','/wlb_Main/wdg_grpGraph10/wdg_el3','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','el4','/wlb_Main/wdg_grpGraph10/wdg_el4','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','el5','/wlb_Main/wdg_grpGraph10/wdg_el5','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','el6','/wlb_Main/wdg_grpGraph10/wdg_el6','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','el7','/wlb_Main/wdg_grpGraph10/wdg_el7','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','el8','/wlb_Main/wdg_grpGraph10/wdg_el8','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','name','/wlb_Main/wdg_grpGraph10/wdg_name','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','trnd1','/wlb_Main/wdg_grpGraph10/wdg_trnd1','curSek;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_1','ElFigure1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_ElFigure1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_1','arh','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_arh','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_1','el1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el1','name;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_1','el2','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el2','name;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_1','el3','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el3','name;');
@@ -154,74 +83,10 @@ INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_1','el5','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el5','name;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_1','el6','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el6','name;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_1','el7','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el7','name;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_1','el8','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el8','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_1','name','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_name','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_1','trnd1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_trnd1','curSek;sclWin;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','ElFigure1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_ElFigure1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','arh','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_arh','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','el1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','el2','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el2','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','el3','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el3','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','el4','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el4','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','el5','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el5','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','el6','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el6','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','el7','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el7','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','el8','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el8','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','name','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_name','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','trnd1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_trnd1','sclWin;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','ElFigure1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_ElFigure1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','arh','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_arh','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','el1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','el2','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el2','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','el3','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el3','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','el4','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el4','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','el5','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el5','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','el6','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el6','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','el7','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el7','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','el8','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el8','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','name','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_name','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','trnd1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_trnd1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','ElFigure1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_ElFigure1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','arh','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_arh','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','el1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','el2','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el2','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','el3','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el3','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','el4','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el4','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','el5','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el5','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','el6','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el6','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','el7','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el7','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','el8','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el8','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','name','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_name','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','trnd1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_trnd1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','ElFigure1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_ElFigure1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','arh','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_arh','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','el1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','el2','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el2','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','el3','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el3','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','el4','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el4','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','el5','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el5','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','el6','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el6','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','el7','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el7','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','el8','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el8','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','name','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_name','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','trnd1','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_trnd1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','downMin','/wlb_Main/wdg_ElCadr/wdg_downMin','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','spToVar','/wlb_Main/wdg_ElCadr/wdg_spToVar','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','upMax','/wlb_Main/wdg_ElCadr/wdg_upMax','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','lab_log','/wlb_Main/wdg_graphSelPrm/wdg_lab_log','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','log','/wlb_Main/wdg_graphSelPrm/wdg_log','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','type','/wlb_Main/wdg_grph_panel/wdg_type','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','xScaleInfo','/wlb_Main/wdg_grph_panel/wdg_xScaleInfo','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','xZoomDef','/wlb_Main/wdg_grph_panel/wdg_xZoomDef','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','xZoomIn','/wlb_Main/wdg_grph_panel/wdg_xZoomIn','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','xZoomOut','/wlb_Main/wdg_grph_panel/wdg_xZoomOut','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','xZoomOffLeft','/wlb_Main/wdg_grph_panel/wdg_xZoomOffLeft','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','xZoomOffRight','/wlb_Main/wdg_grph_panel/wdg_xZoomOffRight','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','com_text','/wlb_Main/wdg_ElCadr/wdg_com_text','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','st_text','/wlb_Main/wdg_ElCadr/wdg_st_text','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','selWin','/wlb_Main/wdg_grph_panel/wdg_selWin','value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','prmSearch','/wlb_Main/wdg_graphSelPrm/wdg_prmSearch','value;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so','pgSel','/wlb_Main/wdg_RootPgSo/wdg_pgSel','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','data','/wlb_Main/wdg_cntrPaspExt/wdg_data','owner;perm;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','sel_data','/wlb_Main/wdg_cntrPaspExt/wdg_sel_data','owner;value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','sel_trends','/wlb_Main/wdg_cntrPaspExt/wdg_sel_trends','owner;value;');
@@ -232,18 +97,6 @@ INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_cntrPa
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','viewLabSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewLabSet','owner;perm;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','viewSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewSet','owner;perm;value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_cntrPaspOld','doc','/wlb_Main/wdg_cntrPasp/wdg_doc','owner;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','el10','/wlb_Main/wdg_grpGraph10/wdg_el10','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph','el9','/wlb_Main/wdg_grpGraph10/wdg_el9','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_1','el10','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el10','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_1','el9','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el9','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','el10','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el10','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_2','el9','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el9','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','el10','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el10','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_3','el9','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el9','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','el10','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el10','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_4','el9','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el9','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','el10','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el10','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so/pg_1/pg_ggraph/pg_5','el9','/prj_archBrowser/pg_so/pg_1/pg_ggraph/wdg_el9','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_panel','Text1','/wlb_Main/wdg_doc_panel/wdg_Text1','owner;perm;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_panel','Text2','/wlb_Main/wdg_doc_panel/wdg_Text2','owner;perm;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_panel','Text3','/wlb_Main/wdg_doc_panel/wdg_Text3','owner;perm;');
@@ -255,12 +108,6 @@ INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_pa
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_panel','prev1','/wlb_Main/wdg_doc_panel/wdg_prev1','owner;value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size','owner;value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_doc_panel','tmTp','/wlb_Main/wdg_doc_panel/wdg_tmTp','owner;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so','go_view1','/wlb_Main/wdg_RootPgSo/wdg_go_view1','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so','go_view2','/wlb_Main/wdg_RootPgSo/wdg_go_view2','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so','go_view3','/wlb_Main/wdg_RootPgSo/wdg_go_view3','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so','go_view4','/wlb_Main/wdg_RootPgSo/wdg_go_view4','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so','go_view5','/wlb_Main/wdg_RootPgSo/wdg_go_view5','');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so','go_view6','/wlb_Main/wdg_RootPgSo/wdg_go_view6','');
 CREATE TABLE 'prj_archBrowser_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control','name','','Control panels',0,'','','Панели управления','','','Панелі керування','','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','value','color','',8,'','','','','','','','');
@@ -406,156 +253,31 @@ INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_so/pg_1/pg_doc/pg_m
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_so/pg_1/pg_doc/pg_messRep','archLs','','',40,'','','','','','','','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_so/pg_1/pg_doc/pg_messRep','messCat','','1:*',40,'','','','','','','','');
 CREATE TABLE 'prj_tmplSO_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','so1','/wlb_Main/wdg_RootPgSo/wdg_so1','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','next','/wlb_Main/wdg_RootPgSo/wdg_next','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','pgCont','/wlb_Main/wdg_RootPgSo/wdg_pgCont','pgGrp;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','prev','/wlb_Main/wdg_RootPgSo/wdg_prev','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','infoW','/wlb_Main/wdg_RootPgSo/wdg_infoW','pgGrp;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','pgCntr','/wlb_Main/wdg_RootPgSo/wdg_pgCntr','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','cvt_alarm','/wlb_Main/wdg_RootPgSo/wdg_cvt_alarm','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','cvt_light','/wlb_Main/wdg_RootPgSo/wdg_cvt_light','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','h_line','/wlb_Main/wdg_RootPgSo/wdg_h_line','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','cvt_sound','/wlb_Main/wdg_RootPgSo/wdg_cvt_sound','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','com_open','/wlb_Main/wdg_ElCadr/wdg_com_open','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','lev_sp','/wlb_Main/wdg_ElCadr/wdg_lev_sp','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','mode','/wlb_Main/wdg_ElCadr/wdg_mode','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','info_out','/wlb_Main/wdg_ElCadr/wdg_info_out','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','info_name','/wlb_Main/wdg_ElCadr/wdg_info_name','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','greed_text1','/wlb_Main/wdg_ElCadr/wdg_greed_text1','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','moveDwn','/wlb_Main/wdg_ElCadr/wdg_moveDwn','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','greed_text2','/wlb_Main/wdg_ElCadr/wdg_greed_text2','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','greed_text3','/wlb_Main/wdg_ElCadr/wdg_greed_text3','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','greed_text4','/wlb_Main/wdg_ElCadr/wdg_greed_text4','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','Ramka','/wlb_Main/wdg_ElCadr/wdg_Ramka','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','greed_text5','/wlb_Main/wdg_ElCadr/wdg_greed_text5','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','info_ed','/wlb_Main/wdg_ElCadr/wdg_info_ed','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','com_stop','/wlb_Main/wdg_ElCadr/wdg_com_stop','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','modAuto','/wlb_Main/wdg_ElCadr/wdg_modAuto','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','pnl_pid','/wlb_Main/wdg_ElCadr/wdg_pnl_pid','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','com_close','/wlb_Main/wdg_ElCadr/wdg_com_close','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','moveUp','/wlb_Main/wdg_ElCadr/wdg_moveUp','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','lev_out','/wlb_Main/wdg_ElCadr/wdg_lev_out','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','info_var','/wlb_Main/wdg_ElCadr/wdg_info_var','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','st_open','/wlb_Main/wdg_ElCadr/wdg_st_open','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','greed_text','/wlb_Main/wdg_ElCadr/wdg_greed_text','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','info_sp','/wlb_Main/wdg_ElCadr/wdg_info_sp','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','lev_var','/wlb_Main/wdg_ElCadr/wdg_lev_var','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','st_close','/wlb_Main/wdg_ElCadr/wdg_st_close','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_doc_panel','date','/wlb_Main/wdg_doc_panel/wdg_date','value;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_doc_panel','prev1','/wlb_Main/wdg_doc_panel/wdg_prev1','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','zoomOffDown','/wlb_Main/wdg_grph_panel/wdg_zoomOffDown','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size','value;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_doc_panel','next1','/wlb_Main/wdg_doc_panel/wdg_next1','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_doc_panel','prev','/wlb_Main/wdg_doc_panel/wdg_prev','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_doc_panel','curtime','/wlb_Main/wdg_doc_panel/wdg_curtime','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_doc_panel','next','/wlb_Main/wdg_doc_panel/wdg_next','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_doc_panel','Text1','/wlb_Main/wdg_doc_panel/wdg_Text1','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_doc_panel','Text2','/wlb_Main/wdg_doc_panel/wdg_Text2','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_doc_panel','Text3','/wlb_Main/wdg_doc_panel/wdg_Text3','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_zn','/wlb_Main/wdg_cntrRegul/wdg_txt_zn','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k1','/wlb_Main/wdg_cntrRegul/wdg_k1','value;',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k2','/wlb_Main/wdg_cntrRegul/wdg_k2','value;',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k3','/wlb_Main/wdg_cntrRegul/wdg_k3','value;',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k4','/wlb_Main/wdg_cntrRegul/wdg_k4','value;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','box_info','/wlb_Main/wdg_cntrRegul/wdg_box_info','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_h1','/wlb_Main/wdg_cntrRegul/wdg_txt_h1','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_h2','/wlb_Main/wdg_cntrRegul/wdg_txt_h2','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','trnd','/wlb_Main/wdg_cntrRegul/wdg_trnd','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_k1','/wlb_Main/wdg_cntrRegul/wdg_txt_k1','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_k2','/wlb_Main/wdg_cntrRegul/wdg_txt_k2','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_k3','/wlb_Main/wdg_cntrRegul/wdg_txt_k3','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_k4','/wlb_Main/wdg_cntrRegul/wdg_txt_k4','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','kp','/wlb_Main/wdg_cntrRegul/wdg_kp','value;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','info','/wlb_Main/wdg_cntrRegul/wdg_info','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','td','/wlb_Main/wdg_cntrRegul/wdg_td','value;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_tiPer','/wlb_Main/wdg_cntrRegul/wdg_txt_tiPer','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','ti','/wlb_Main/wdg_cntrRegul/wdg_ti','value;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_pnlTitle','/wlb_Main/wdg_cntrRegul/wdg_txt_pnlTitle','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','box_kf','/wlb_Main/wdg_cntrRegul/wdg_box_kf','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_kp','/wlb_Main/wdg_cntrRegul/wdg_txt_kp','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_kfTitle','/wlb_Main/wdg_cntrRegul/wdg_txt_kfTitle','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','zn','/wlb_Main/wdg_cntrRegul/wdg_zn','value;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_td','/wlb_Main/wdg_cntrRegul/wdg_txt_td','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tiMin','/wlb_Main/wdg_cntrRegul/wdg_tiMin','value;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_ti','/wlb_Main/wdg_cntrRegul/wdg_txt_ti','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','h1','/wlb_Main/wdg_cntrRegul/wdg_h1','value;',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','h2','/wlb_Main/wdg_cntrRegul/wdg_h2','value;',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','size','/wlb_Main/wdg_grph_panel/wdg_size','value;',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','date','/wlb_Main/wdg_grph_panel/wdg_date','value;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','prev1','/wlb_Main/wdg_grph_panel/wdg_prev1','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_doc_panel','tmTp','/wlb_Main/wdg_doc_panel/wdg_tmTp','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','cursor','/wlb_Main/wdg_grph_panel/wdg_cursor','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','arch','/wlb_Main/wdg_grph_panel/wdg_arch','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','Text3','/wlb_Main/wdg_grph_panel/wdg_Text3','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','next1','/wlb_Main/wdg_grph_panel/wdg_next1','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','prev','/wlb_Main/wdg_grph_panel/wdg_prev','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','curtime','/wlb_Main/wdg_grph_panel/wdg_curtime','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','tmTp','/wlb_Main/wdg_grph_panel/wdg_tmTp','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','next','/wlb_Main/wdg_grph_panel/wdg_next','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','Text1','/wlb_Main/wdg_grph_panel/wdg_Text1','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','Text2','/wlb_Main/wdg_grph_panel/wdg_Text2','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_terminator','Text1','/wlb_Main/wdg_terminator/wdg_Text1','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','downm','/wlb_Main/wdg_ElCadr/wdg_downm','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','up','/wlb_Main/wdg_ElCadr/wdg_up','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','upm','/wlb_Main/wdg_ElCadr/wdg_upm','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','down','/wlb_Main/wdg_ElCadr/wdg_down','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','modCasc','/wlb_Main/wdg_ElCadr/wdg_modCasc','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','modMan','/wlb_Main/wdg_ElCadr/wdg_modMan','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_rfct','/wlb_Main/wdg_cntrRegul/wdg_txt_rfct','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_tzd','/wlb_Main/wdg_cntrRegul/wdg_txt_tzd','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','rfct','/wlb_Main/wdg_cntrRegul/wdg_rfct','value;',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tiPer','/wlb_Main/wdg_cntrRegul/wdg_tiPer','value;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_tiMin','/wlb_Main/wdg_cntrRegul/wdg_txt_tiMin','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','kd','/wlb_Main/wdg_cntrRegul/wdg_kd','value;',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','ki','/wlb_Main/wdg_cntrRegul/wdg_ki','value;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','doc','/wlb_Main/wdg_cntrRegul/wdg_doc','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_kd','/wlb_Main/wdg_cntrRegul/wdg_txt_kd','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','txt_ki','/wlb_Main/wdg_cntrRegul/wdg_txt_ki','',2);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tzd','/wlb_Main/wdg_cntrRegul/wdg_tzd','value;',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','zoomOut','/wlb_Main/wdg_grph_panel/wdg_zoomOut','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','zoomDef','/wlb_Main/wdg_grph_panel/wdg_zoomDef','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','zoomIn','/wlb_Main/wdg_grph_panel/wdg_zoomIn','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','zoomOffUp','/wlb_Main/wdg_grph_panel/wdg_zoomOffUp','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','scaleInfo','/wlb_Main/wdg_grph_panel/wdg_scaleInfo','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','line3','/wlb_Main/wdg_grph_panel/wdg_line3','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','logo','/wlb_Main/wdg_RootPgSo/wdg_logo','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','play','/wlb_Main/wdg_RootPgSo/wdg_play','',2);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_accept','apply','/wlb_Main/wdg_accept/wdg_apply','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_accept','cancel','/wlb_Main/wdg_accept/wdg_cancel','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_accept','mess','/wlb_Main/wdg_accept/wdg_mess','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','apply','/wlb_Main/wdg_graphSelPrm/wdg_apply','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','cancel','/wlb_Main/wdg_graphSelPrm/wdg_cancel','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','color','/wlb_Main/wdg_graphSelPrm/wdg_color','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','colorBox','/wlb_Main/wdg_graphSelPrm/wdg_colorBox','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','dim','/wlb_Main/wdg_graphSelPrm/wdg_dim','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','lab_color','/wlb_Main/wdg_graphSelPrm/wdg_lab_color','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','lab_dim','/wlb_Main/wdg_graphSelPrm/wdg_lab_dim','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','lab_sc','/wlb_Main/wdg_graphSelPrm/wdg_lab_sc','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','prm','/wlb_Main/wdg_graphSelPrm/wdg_prm','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','val_max','/wlb_Main/wdg_graphSelPrm/wdg_val_max','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','val_min','/wlb_Main/wdg_graphSelPrm/wdg_val_min','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','lab_name','/wlb_Main/wdg_graphSelPrm/wdg_lab_name','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','name','/wlb_Main/wdg_graphSelPrm/wdg_name','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','downMin','/wlb_Main/wdg_ElCadr/wdg_downMin','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','spToVar','/wlb_Main/wdg_ElCadr/wdg_spToVar','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','upMax','/wlb_Main/wdg_ElCadr/wdg_upMax','','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_treeSelect','apply','/wlb_Main/wdg_treeSelect/wdg_apply','value;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_treeSelect','cancel','/wlb_Main/wdg_treeSelect/wdg_cancel','value;','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_treeSelect','select','/wlb_Main/wdg_treeSelect/wdg_select','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','lab_log','/wlb_Main/wdg_graphSelPrm/wdg_lab_log','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','log','/wlb_Main/wdg_graphSelPrm/wdg_log','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','type','/wlb_Main/wdg_grph_panel/wdg_type','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','xScaleInfo','/wlb_Main/wdg_grph_panel/wdg_xScaleInfo','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','xZoomDef','/wlb_Main/wdg_grph_panel/wdg_xZoomDef','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','xZoomIn','/wlb_Main/wdg_grph_panel/wdg_xZoomIn','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','xZoomOut','/wlb_Main/wdg_grph_panel/wdg_xZoomOut','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','xZoomOffLeft','/wlb_Main/wdg_grph_panel/wdg_xZoomOffLeft','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','xZoomOffRight','/wlb_Main/wdg_grph_panel/wdg_xZoomOffRight','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','com_text','/wlb_Main/wdg_ElCadr/wdg_com_text','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','st_text','/wlb_Main/wdg_ElCadr/wdg_st_text','','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','selWin','/wlb_Main/wdg_grph_panel/wdg_selWin','value;','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','prmSearch','/wlb_Main/wdg_graphSelPrm/wdg_prmSearch','value;','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','pgSel','/wlb_Main/wdg_RootPgSo/wdg_pgSel','','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','data','/wlb_Main/wdg_cntrPaspExt/wdg_data','owner;perm;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_data','/wlb_Main/wdg_cntrPaspExt/wdg_sel_data','owner;value;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_trends','/wlb_Main/wdg_cntrPaspExt/wdg_sel_trends','owner;value;','');
@@ -566,12 +288,6 @@ INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','view'
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','viewLabSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewLabSet','owner;perm;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','viewSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewSet','owner;perm;value;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPaspOld','doc','/wlb_Main/wdg_cntrPasp/wdg_doc','owner;','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','go_view1','/wlb_Main/wdg_RootPgSo/wdg_go_view1','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','go_view2','/wlb_Main/wdg_RootPgSo/wdg_go_view2','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','go_view3','/wlb_Main/wdg_RootPgSo/wdg_go_view3','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','go_view4','/wlb_Main/wdg_RootPgSo/wdg_go_view4','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','go_view5','/wlb_Main/wdg_RootPgSo/wdg_go_view5','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','go_view6','/wlb_Main/wdg_RootPgSo/wdg_go_view6','','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','ElFigureTests1','/wlb_test/wdg_mn_gen/wdg_ElFigureTests1','owner;perm;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','FormEl','/wlb_test/wdg_mn_gen/wdg_FormEl','owner;perm;extValue;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','Pi_нд','/wlb_test/wdg_mn_gen/wdg_Pi_нд','owner;pErr;pModeA;pModeC;pName;pPrec;pVal;','');
@@ -2317,7 +2033,7 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph','varEl','<EVAL>',32,'','','el2','','
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','name','Root page (SO)',32,'','','','Корнева сторінка (ОС)','','Корневая страница (ОС)','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','dscr','Root page of visual interface of TP, builded on signal objects base.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 2.0.0',32,'','','','Корнева сторінка інтерфейсу візуалізації ТП, побудованого на основі об''єктів сигналізації.
+Version: 2.0.1',32,'','','','Корнева сторінка інтерфейсу візуалізації ТП, побудованого на основі об''єктів сигналізації.
 Автор: Роман Савоченко <rom_as@oscada.org>
 Версія: 2.0.0','','Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 Автор: Роман Савоченко <rom_as@oscada.org>
@@ -6832,7 +6548,7 @@ INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','value','',8,'','','prmSearch',''
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','confirm','0',32,'','','prmSearch','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','font','Arial 15',32,'','','prmSearch','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','dscr','Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.2',32,'','','','Автор: Роман Савоченко<rom_as@oscada.org>
+Version: 1.1.3',32,'','','','Автор: Роман Савоченко<rom_as@oscada.org>
 Версія: 1.1.2','','Автор: Роман Савоченко<rom_as@oscada.org>
 Версия: 1.1.2','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','dscr','Author: Roman Savochenko <rom_as@oscada.org>
@@ -7322,7 +7038,7 @@ INSERT INTO "wlb_Main_io" VALUES('ImgLab','fit','1',32,'','','','','','','','','
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','owner','root:ITW',32,'','','arch','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','perm','432',32,'','','','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('userManager','name','Users manager',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','name','Users manager',32,'','','','Менеджер користувачів','','Менеджер пользователей','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','550',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','evProc','ws_BtPress:/userDel:open:/pg_control/pg_accept',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','descr','','','','','','');
@@ -7376,7 +7092,7 @@ INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','22',32,'','','labFullNam
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','18',32,'','','labFullName','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 17',32,'','','labFullName','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','alignment','8',32,'','','labFullName','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('userManager','text','Full name:',32,'','','labFullName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','text','Full name:',32,'','','labFullName','Повне ім''я:','','Полное имя:','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','labGrp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','labGrp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','name','labDescr',32,'','','labGrp','','','','','','');
@@ -7387,7 +7103,7 @@ INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','19',32,'','','labGrp',''
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','18',32,'','','labGrp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 17',32,'','','labGrp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','alignment','8',32,'','','labGrp','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('userManager','text','Groups:',32,'','','labGrp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','text','Groups:',32,'','','labGrp','Групи:','','Групы:','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','labName','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','labName','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','326',32,'','','labName','','','','','','');
@@ -7407,7 +7123,7 @@ INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','22',32,'','','labPass','
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','17',32,'','','labPass','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 17',32,'','','labPass','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','alignment','8',32,'','','labPass','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('userManager','text','Password:',32,'','','labPass','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','text','Password:',32,'','','labPass','Пароль:','','Пароль:','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','labUser','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','labUser','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','324.077',32,'','','labUser','','','','','','');
@@ -7422,13 +7138,13 @@ INSERT INTO "wlb_Main_io" VALUES('userManager','alignment','8',32,'','','labUser
 INSERT INTO "wlb_Main_io" VALUES('userManager','text','User',32,'','','labUser','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','lib','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','lib','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('userManager','name','Користувачі',32,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','name','Users',32,'','','lib','Користувачі','','Пользователи','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomX','10',32,'','','lib','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','50',32,'','','lib','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','300',32,'','','lib','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','436',32,'','','lib','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','11',32,'','','lib','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('userManager','tipTool','List of users',32,'','','lib','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','tipTool','List of users',32,'','','lib','Перелік користувачів','','Перечень пользователей','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','active','1',32,'','','lib','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','elType','5',32,'','','lib','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','value','',8,'','','lib','','','','','','');
@@ -7465,7 +7181,7 @@ INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','27.75',32,'','','title',
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','1',32,'','','title','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 25 0 0 1 0',32,'','','title','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','alignment','10',32,'','','title','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('userManager','text','Users manager',32,'','','title','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','text','Users manager',32,'','','title','Менеджер користувачів','','Менеджер пользователей','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','owner','root:Security',32,'','','userAdd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','perm','944',32,'','','userAdd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','name','Add',32,'','','userAdd','','','','','','');
@@ -7474,7 +7190,7 @@ INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','515.102',32,'','','userA
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','69',32,'','','userAdd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','23',32,'','','userAdd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','6',32,'','','userAdd','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('userManager','tipTool','Add a new user',32,'','','userAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','tipTool','Add a new user',32,'','','userAdd','Додати нового користувача','','Добавить нового пользователя','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','active','1',32,'','','userAdd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','elType','3',32,'','','userAdd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 15',0,'','','userAdd','','','','','','');
@@ -7497,7 +7213,7 @@ INSERT INTO "wlb_Main_io" VALUES('userManager','geomY','489.532',32,'','','userD
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomW','300',32,'','','userDel','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomH','23',32,'','','userDel','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','geomZ','12',32,'','','userDel','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('userManager','tipTool','Видалити обрану програму',32,'','','userDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','tipTool','Remove selected user',32,'','','userDel','Видалити обраного користувача','','Удалить выбранного пользователя','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','active','1',40,'','','userDel','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','elType','3',32,'','','userDel','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('userManager','font','Arial 15',0,'','','userDel','','','','','','');
@@ -7534,8 +7250,8 @@ INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomY','122',32,'','','go_view1',''
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','54',32,'','','go_view1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomH','45',32,'','','go_view1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomZ','19',32,'','','go_view1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipTool','Mnemos (Ctrl+M)',33,'','','go_view1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipStatus','Press for mnemo switching',33,'','','go_view1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipTool','Mnemos (Ctrl+M)',33,'','','go_view1','Мнемосхеми (Ctrl+M)','','Мнемосхемы (Ctrl+M)','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipStatus','Press for mnemo switching',33,'','','go_view1','Натиснути для переходу до мнемосхем','','Нажать для перехода к мнемосхемам','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','active','1',40,'','','go_view1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','elType','3',32,'','','go_view1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','img','view1',1,'','','go_view1','','','','','','');
@@ -7547,8 +7263,8 @@ INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomY','122',32,'','','go_view2',''
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','54',32,'','','go_view2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomH','45',32,'','','go_view2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomZ','19',32,'','','go_view2','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipTool','Graphics (Ctrl+G)',33,'','','go_view2','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipStatus','Press for graphics switching',33,'','','go_view2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipTool','Graphics (Ctrl+G)',33,'','','go_view2','Графіки (Ctrl+G)','','Графики (Ctrl+G)','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipStatus','Press for graphics switching',33,'','','go_view2','Натиснути для переходу до графіків','','Нажать для перехода к графикам','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','active','1',40,'','','go_view2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','elType','3',32,'','','go_view2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','img','view2',1,'','','go_view2','','','','','','');
@@ -7560,8 +7276,8 @@ INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomY','169',32,'','','go_view3',''
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','36',32,'','','go_view3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomH','33',32,'','','go_view3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomZ','19',32,'','','go_view3','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipTool','Contours (Ctrl+C)',33,'','','go_view3','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipStatus','Press for contours switching',33,'','','go_view3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipTool','Contours (Ctrl+C)',33,'','','go_view3','Контури (Ctrl+C)','','Контура (Ctrl+C)','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipStatus','Press for contours switching',33,'','','go_view3','Натиснути для переходу до контурів','','Нажать для перехода к контурам','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','active','1',40,'','','go_view3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','elType','3',32,'','','go_view3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','img','view3',1,'','','go_view3','','','','','','');
@@ -7573,8 +7289,8 @@ INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomY','169',32,'','','go_view4',''
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','36',32,'','','go_view4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomH','33',32,'','','go_view4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomZ','19',32,'','','go_view4','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipTool','Views (Ctrl+V)',33,'','','go_view4','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipStatus','Press for views switching',33,'','','go_view4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipTool','Views (Ctrl+V)',33,'','','go_view4','Огляд (Ctrl+V)','','Обзор (Ctrl+V)','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipStatus','Press for views switching',33,'','','go_view4','Натиснути для переходу до оглядів','','Нажать для перехода к обзорам','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','active','1',40,'','','go_view4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','elType','3',32,'','','go_view4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','img','view4',1,'','','go_view4','','','','','','');
@@ -7586,25 +7302,31 @@ INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomY','169',32,'','','go_view5',''
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','36',32,'','','go_view5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomH','33',32,'','','go_view5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomZ','19',32,'','','go_view5','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipTool','Documents (Ctrl+D)',33,'','','go_view5','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipStatus','Press for documents switching',33,'','','go_view5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipTool','Documents (Ctrl+D)',33,'','','go_view5','Документи (Ctrl+D)','','Документы (Ctrl+D)','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipStatus','Press for documents switching',33,'','','go_view5','Натиснути для переходу до документів','','Нажать для перехода к документам','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','active','1',40,'','','go_view5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','elType','3',32,'','','go_view5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','img','view5',1,'','','go_view5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','owner','root:UI',32,'','','go_view6','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','perm','438',32,'','','go_view6','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','name','Result\ngraphics',33,'','','go_view6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','name','Result\ngraphics',33,'','','go_view6','Зведені\nграфіки','','Сводные\nграфики','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','en','1',40,'','','go_view6','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomX','911',32,'','','go_view6','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomY','203',32,'','','go_view6','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','110',32,'','','go_view6','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomH','33',32,'','','go_view6','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomZ','19',32,'','','go_view6','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipTool','Result graphics (Ctrl+R)',33,'','','go_view6','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipStatus','Press for result graphics switching',33,'','','go_view6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipTool','Result graphics (Ctrl+R)',33,'','','go_view6','Зведені графіки (Ctrl+R)','','Сводные графики (Ctrl+R)','','','');
+INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipStatus','Press for result graphics switching',33,'','','go_view6','Натиснути для переходу до результуючих графіків','','Нажать для перехода к результирующим графикам','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','active','1',40,'','','go_view6','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','elType','3',32,'','','go_view6','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','img','view6',1,'','','go_view6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','dscr','Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.1.0',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('alarmsAct','dscr','Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.1',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('alarmsSt','dscr','Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.1',32,'','','','','','','','','');
 CREATE TABLE 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main_mime" VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
 RADxQFue7AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9gDBQghJ2VBTzAAAAAddEVYdENv
@@ -10383,7 +10105,7 @@ INSERT INTO "wlb_Main_uio" VALUES('grpGraph10','sclWinCtx','Scale: by window sav
 ',0,'','','trnd1','Масштаб: контекст вікном','','','Масштаб: контекст окном','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','perUserSel','Select: save salection per user',131072,'0',0,'','','','Обрання: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph10','perUserSel','Select: save salection per user',131072,'0',0,'','','','Обрання: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','colms','Collumns, by '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)',131077,'atm,lev,prm,dscr,alrm',8,'','','','Стовпчики, за '','' (atm,lev,cat,mess,prm,dscr,alrm)','','','Колонки, по '','' (atm,lev,cat,mess,prm,dscr,alrm)','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','colms','Collumns, by '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)',131077,'atm,lev,prm,dscr,alrm',8,'','','','Стовпчики, за '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)','','','Колонки, по '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','expOnFocus','Expand on focus: pixels (0-disabled,>-down,<-up)',131073,'0|',8,'','','','Розширяти при фокусі: пікселів (0-відключено,>-донизу,<-догори)','','','Расширять при фокусе: пикселей (0-отключено,>-вниз,<-вверх)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','expOnItems','Expand on focus: items (<=0-disabled)',131073,'0|',8,'','','','Розширяти при фокусі: елементів (<=0-відключено)','','','Расширять при фокусе: елементов (<=0-отключено)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','formDtTm','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])',131077,'%Y-%m-%d %H.%M.%S.%MS',8,'','','','Формат дати та часу (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','Формат даты и времени (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','','');
@@ -10392,18 +10114,18 @@ INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','highLght','Highlight rules, {lev}
 4:red
 1:yellow',8,'','','','Правила підсвітлення, {lev}:{color}:{font}:{fontColor}','','','Правила подсветки, {lev}:{color}:{font}:{fontColor}','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','vHdrVis','Show header: vertical',131072,'0',8,'','','','Показув. заголовок: вертикальний','','','Показыв. заголовок: вертикальный','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','hideAttrs','Attributes list of the pasport to hide',131077,'',10,'<page>|paspHideAttrs','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','name_','For save original name',131077,'',8,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','hideAttrs','Attributes list of the pasport to hide',131077,'',10,'<page>|paspHideAttrs','','','Перелік атрибутів паспорту для приховування','','','Перечень атрибутов паспорта для скрытия','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','name_','For save original name',131077,'',8,'','','','Для збереження оригінальної назви','','','Для сохранения исходного наименования','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','com','Quittance: command',131072,'0',8,'','','','Підтвердження: команда','','','Подтверждение: команда','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','digStts','Quittance: statuses',131077,'QUITT-blue',0,'','','','Підтвердження: стани','ПІДТВ-blue','','Подтверждение: состояния','ПОДТВ-blue','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','digComs','Quittance: commands',131077,'QUITT-blue',8,'','','','Підтвердження: команди','ПІДТВ-blue','','Подтверждение: команды','ПОДТВ-blue','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','st_open','Quittance: state',131072,'0',8,'','','','Підтвердження: стан','','','Подтверждение: состояние','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','DESCR','Quittance: description',131077,'',8,'','','','Підтвердження: опис','','','Подтверждение: описание','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','NAME','Quittance: name',131077,'',8,'','','','Підтвердження: ім''я','','','Подтверждение: имя','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','colDscrCustNames','Custom collumns'' names list, separated by '';''',131077,'',8,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','colDscrCustNames','Names list of the custom fields, separated by '';''',131077,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','alArch','Alarms archiver, "{ArhMod}.{Arh}"',131077,'ArhMod.Arh',8,'','','','Архіватор сигналів, "{ArhMod}.{Arh}"','','','Архиватор сигналов, "{ArhMod}.{Arh}"','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','colDscrCustNames','Custom collumns'' names list, separated by '';''',131205,'',8,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','colms','Collumns, by '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)',131077,'atm,qttm,nrmtm,lev,prm,dscr,alrm,cmnt',8,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','colDscrCustNames','Names list of the custom fields, separated by '';''',131205,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','colms','Collumns, by '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)',131077,'atm,qttm,nrmtm,lev,prm,dscr,alrm,cmnt',8,'','','','Стовпчики, за '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)','','','Колонки, по '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt,src)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','formDtTm','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])',131077,'%Y-%m-%d %H.%M.%S.%MS',8,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','hHdrVis','Show header: horizontal',131072,'1',8,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','highLght','Highlight rules, {lev}{quitt}{act}:{color}:{font}:{fontColor}',131205,'501:gray
@@ -10411,8 +10133,8 @@ INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','highLght','Highlight rules, {lev}{
 101:yellow
 511:gray:Arial 11 0 1
 411:red:Arial 11 0 1
-111:yellow:Arial 11 0 1',8,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','messLim','Messages limit, quantity',131073,'1000|',8,'','','','','','','','','','','');
+111:yellow:Arial 11 0 1',8,'','','','Правила підсвітлення, {lev}{quitt}{act}:{color}:{font}:{fontColor}','','','Правила подсветки, {lev}{quitt}{act}:{color}:{font}:{fontColor}','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','messLim','Messages limit, quantity',131073,'1000|',8,'','','','Обмеження повідомлень, кількість','','','Ограничение сообщений, количество','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','vHdrVis','Show header: vertical',131072,'1',8,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','DESCR','Quittance: description',131077,'',8,'','','alarms','Підтвердження: опис','','','Подтверждение: описание','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','NAME','Quittance: name',131077,'',8,'','','alarms','Підтвердження: ім''я','','','Подтверждение: имя','','','','');
@@ -10420,7 +10142,7 @@ INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','com','Quittance: command',131072,'
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','digComs','Quittance: commands',131077,'QUITT-blue',8,'','','alarms','Підтвердження: команди','ПІДТВ-blue','','Подтверждение: команды','ПОДТВ-blue','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','digStts','Quittance: statuses',131077,'QUITT-blue',0,'','','alarms','Підтвердження: стани','ПІДТВ-blue','','Подтверждение: состояния','ПОДТВ-blue','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','st_open','Quittance: state',131072,'0',8,'','','alarms','Підтвердження: стан','','','Подтверждение: состояние','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','report','Report',131205,'',8,'','','go_report','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','report','Report',131205,'',8,'','','go_report','Звіт','','','Отчёт','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','messCat','Message category',131077,'al*:*',8,'','','','Категорія повідомлень','','','Категория сообщения','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ImgLab','DESCR','Description',131077,'',10,'Parameter|DESCR','','','Опис','','','Описание','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ImgLab','NAME','Name',131077,'',10,'Parameter|NAME','','','Ім''я','','','Имя','','','','');
@@ -10435,13 +10157,13 @@ INSERT INTO "wlb_Main_uio" VALUES('ImgLab','st_open','Parameter: status-open',13
 INSERT INTO "wlb_Main_uio" VALUES('ImgLab','stop','Parameter: stop',131072,'0',14,'Parameter|stop','','','Параметр: зупинка','','','Параметр: останов','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ImgLab','imgs','Images, for "{true}-{bCol}:{false}-{bCol}:{EVAL}-{bCol}"',131077,'',9,'','','','Зображення, для "{true}-{bCol}:{false}-{bCol}:{EVAL}-{bCol}"','','','Изображение, для "{true}-{bCol}:{false}-{bCol}:{EVAL}-{bCol}"','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ImgLab','st_img','Parameter: status "{img}:{bCol}:{blink}"',131077,'',10,'Parameter|st_text','','','Параметр: статус "{img}:{bCol}:{blink}"','','','Параметр: статус "{img}:{bCol}:{blink}"','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('userManager','denyGroups','Deny to control: groups, separated by '';''',131077,'root;users;Archive;BD;DAQ;ModSched;Protocol;Security;Special;Transport;UI;',9,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('userManager','denyUsers','Deny to control: users, separated by '';''',131077,'root;',9,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('userManager','newUseGrps','Groups of new created user',131077,'UI;Guest',8,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('userManager','storeDB','DB of saving new users',131077,'',9,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('userManager','mess','Повідомлення діалогу',131077,'Are you sure to delete this user?',0,'','','userDel','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','defSrcMod','Default source module, do not show that',131077,'',8,'','','','','','','','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','defSrcMod','Default source module, do not show that',131077,'',8,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('userManager','denyGroups','Deny to control: groups, separated by '';''',131077,'root;users;Archive;BD;DAQ;ModSched;Protocol;Security;Special;Transport;UI;',9,'','','','Заборонене до контролю: групи, поділені '';''','','','Запрещённые для редактирования: группы, разделённые '';''','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('userManager','denyUsers','Deny to control: users, separated by '';''',131077,'root;',9,'','','','Заборонене до контролю: користувачі, поділені '';''','','','Запрещённые для редактирования: пользователи, разделённые '';''','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('userManager','newUseGrps','Groups of new created user',131077,'UI;Guest',8,'','','','Групи новоствореного користувача','','','Группы новосозданного пользователя','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('userManager','storeDB','DB of saving new users',131077,'',9,'','','','БД зберігання нових користувачів','','','БД хранения новых пользоватей','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('userManager','mess','Dialog message',131077,'Are you sure to delete this user?',0,'','','userDel','Повідомлення діалогу','Ви дійсно бажаєте видалити користувача?','','Сообщение диалога','Вы действительно желаете удалить пользователя?','','','');
+INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','defSrcMod','Default source module, do not show that',131077,'',8,'','','','Типовий модуль джерела, не відображати його','','','Типовой модуль источника, не отображать его','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('alarmsSt','defSrcMod','Default source module, do not show that',131077,'',8,'','','','Типовий модуль джерела, не відображати його','','','Типовой модуль источника, не отображать его','','','','');
 CREATE TABLE 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeDayA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeMonthA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
@@ -12202,11 +11924,11 @@ Version: 2.1.0',32,'','','','Таблиця середніх за добу зн�
 Версия: 2.1.0','','','');
 INSERT INTO "wlb_doc_io" VALUES('docMessRep','dscr','Generic messages report allowed for filtering both in static and dynamic. Based on the dynamic document.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0',32,'','','','Загальний звіт повідомлень, допускає фільтрацію як статично так і динамічно. Заснований на динамічному документі.
+Version: 1.0.1',32,'','','','Загальний звіт повідомлень, допускає фільтрацію як статично так і динамічно. Заснований на динамічному документі.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.0.0','','Общий отчёт сообщений, допускает фильтрацию как статически так и динамически. Основан на динамическом документе.
+Версія: 1.0.1','','Общий отчёт сообщений, допускает фильтрацию как статически так и динамически. Основан на динамическом документе.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.0.0','','','');
+Версия: 1.0.1','','','');
 INSERT INTO "wlb_doc_io" VALUES('docRepSm2','dscr','2 shift report. Based on the dynamic document.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.0',32,'','','','Звіт на дві зміни. Заснований на динамічному документі.
@@ -12363,7 +12085,7 @@ INSERT INTO "wlb_doc_uio" VALUES('docMessRep','fullSrc','Placing the full source
 INSERT INTO "wlb_doc_uio" VALUES('docMessRep','sourceCache','Source cache',131078,'<TVarObj>
 </TVarObj>
 ',0,'','','doc','Кеш джерел','','','Кеш источников','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docMessRep','defSrcMod','Default source module, do not show that',131077,'',1,'','','doc','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docMessRep','defSrcMod','Default source module, do not show that',131077,'',1,'','','doc','Типовий модуль джерела, не відображати його','','','Типовой модуль источника, не отображать его','','','','');
 CREATE TABLE 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "wlb_mnEls_incl" VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO "wlb_mnEls_incl" VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -19247,7 +18969,7 @@ colorBox_backColor = color_value;
 
 //Events for commands process
 for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Prescription edit control","Event: "+evCur);
+	//this.messInfo("Event: "+evCur);
 	if(evCur == "ws_ListChange:/prm") {	//Parametr selected
 		//Set properties
 		itTmp = prm_value.match(".+''(.*)'' \\((.+?)\\)");
@@ -19270,7 +18992,7 @@ for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
 		}
 		else name_value = dim_value = "", val_min_value = val_max_value = 0, log_value = false;
 		apply_active = name_active = val_min_active = val_max_active = log_active = dim_active = true;
-		prmSearch_value = "";
+		//prmSearch_value = "";
 	}
 	else if(evCur == "key_relsReturn:/prmSearch" && prmSearch_value.length) {
 		sPos = (((sPos=prm_items.indexOf(prm_value))<0)?0:sPos) + prm_value.length;
@@ -19315,7 +19037,7 @@ for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
 	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else evRez += evCur+"\n";
 }
-event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1490019462);
+event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1547196584);
 INSERT INTO "wlb_Main" VALUES('RootPgSo','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADVklEQVRYhe2XS28jRRRGbz366U77ETu2Q6QomwCDDBIsZsFi/gISINbJ
 L4QtC1giQLCZSKMZMa9A7JkYP9vVXd1VdYtF24AEEoFN05LPrj7p072nVepWk4uLC6WU7GSA1F96
@@ -19356,10 +19078,14 @@ if(f_start) {
 	oldViewLs = new Array("mn", "ggraph", "gcadr", "gview", "doc", "rg");
 
 	//Processing SO and views
-	soInterSpecX = this.so1.attr("geomX"), soSymbSz = this.so1.attr("font").parse(1," ").toReal()*0.8;
-	soWdth = (this.logo.attr("en") ? this.logo.attr("geomX") : this.attr("geomW")) - soInterSpecX;
-	soY = this.so1.attr("geomY");
+	logoR = this.logo.attr("geomX") > this.so1.attr("geomX");
+	soInterSpecX = logoR ? this.so1.attr("geomX") : (this.logo.attr("en")?this.so1.attr("geomX")-this.logo.attr("geomX")-this.logo.attr("geomW"):2);
+	soX = logoR ? soInterSpecX : this.so1.attr("geomX");
+	soWdth =	logoR ?	((this.logo.attr("en")?this.logo.attr("geomX"):this.attr("geomW"))-soX) : (this.attr("geomW") - soX);
+	soSymbSz = this.so1.attr("font").parse(1," ").toReal()*0.8;
+
 	soInterSpecY = this.so1.attr("geomY");
+	soY = this.so1.attr("geomY");
 	soY2 = soY + this.so1.attr("geomH") + soInterSpecY;
 	row1 = 0, row2 = 0, row1w = 0, row2w = 0;
 	oldViews = false;
@@ -19407,7 +19133,7 @@ if(f_start) {
 	}
 
 	soWdthAdd = (soWdth-row1w)/row1;
-	soOff = soInterSpecX, i = 0;
+	soOff = soX, i = 0;
 	for(var iSO in soLstS) {
 		if(!(curSO=iSO.toInt()))	continue;
 		if(i > (row1+row2))	break;
@@ -19537,7 +19263,7 @@ if(play_value) {
 		stepTm = args.stepTm;
 		stepCur = args.stepCur;
 	}
-}','','',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1546762485);
+}','','',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1547196389);
 INSERT INTO "wlb_Main" VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7
@@ -21867,7 +21593,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		SYS.Archive.messPut(iM.tm, iM.utm, iM.categ, iM.level, iM.mess.parse(0,messItSep)+messItSep+iM.mess.parse(1,messItSep)+messItSep+iM.mess.parse(2,messItSep)+messItSep+
 										iM.mess.parse(3,messItSep)+messItSep+iM.mess.parse(4,messItSep)+messItSep+set);
 	}
-}','','',-1,'owner;name;active;geomY;geomW;geomH;contextMenu;evProc;elType;value;items;set;',1546762485);
+}','','',-1,'owner;name;dscr;active;geomY;geomW;geomH;contextMenu;evProc;elType;value;items;set;',1547196538);
 INSERT INTO "wlb_Main" VALUES('alarmsSt','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAE60lEQVRYhe2YTW8kRwGGn/qumpn2jJ1db+z1JpsEwgJCCkJw4PeQPwEX
 Llw5w50rd05RDhyQkDgmkdkQstpo7bXX3vXMdFd31wcHx4CEcjASGSLNc6y3q/p9qrtVUov33/9Z
@@ -22295,7 +22021,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 }
 
 time_value = wTm ? wTm : SYS.time();
-//go_cur_active = wTm;','','',-1,'owner;name;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1546762607);
+//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1547196539);
 INSERT INTO "wlb_Main" VALUES('ImgLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAN
 EklEQVR4nOWb6W5dyXWFv7XPcCfegRRHiZJIiZRavE31QLtjuQ1ET+GH8O88gB8gT2IgzxD/cAAD
 toLYgdyA3XHakhrd7pZkURTHe0+t/LiUqO5I1MBBRrKAQxI8VXVWrbNr195VdQSY/8fI93//M/Dr
@@ -22576,7 +22302,7 @@ if(userSel && SYS.mtime() >= userSel) {
 		grp_items += "</tbl>";
 		grp_value = "";
 	}
-}','','',500,'owner;perm;name;geomH;evProc;',1544898362);
+}','','',500,'owner;perm;name;dscr;geomH;evProc;',1547196477);
 CREATE TABLE 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_mnEls" VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -24005,7 +23731,7 @@ INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','graphSelPrm','','/w
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1426000648);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','grph_panel','','/wlb_Main/wdg_grph_panel',1,'','','',-1,0,'',1471972731);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','terminator','','/wlb_Main/wdg_terminator',1,'','','',-1,0,'','');
-INSERT INTO "prj_archBrowser" VALUES('/archBrowser','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1546701552);
+INSERT INTO "prj_archBrowser" VALUES('/archBrowser','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1546876596);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/ggraph','5','','..',1,'','','',-1,0,'name;',1495717615);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so','1','','root',1,'
 ','
@@ -24023,7 +23749,7 @@ INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1','doc','','root',0,'
 ','','',-1,5,'owner;perm;name;dscr;geomZ;',1495719828);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/doc','messRep','','/wlb_doc/wdg_docMessRep',0,'','','',-1,0,'owner;geomYsc;archLs;messCat;',1495719828);
 CREATE TABLE 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1546704070);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1546876596);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','
@@ -24034,14 +23760,14 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','2','','root',1,'
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO','control','','root',1,'
 ','
 ','
-',-1,5,'name;',1494598746);
+',-1,5,'name;',1546876596);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1426000648);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','doc_panel','','/wlb_Main/wdg_doc_panel',1,'','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrRegul','','/wlb_Main/wdg_cntrRegul',1,'','','',-1,0,'DESCR;Hdwn;Hup;K1;K2;K3;K4;Kp;NAME;SHIFR;Td;Ti;Zi;ed;max;min;out;out_addr;sp;sp_addr;var;var_addr;KImpRfact;Kd;Ki;TImpMin;TImpPer;Tzd;auto_addr;impQdwn_addr;impQup_addr;prec;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','grph_panel','','/wlb_Main/wdg_grph_panel',0,'','','',-1,0,'',1471972731);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','terminator','','/wlb_Main/wdg_terminator',1,'','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','accept','','/wlb_Main/wdg_accept',1,'','','',-1,0,'','');
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','graphSelPrm','','/wlb_Main/wdg_graphSelPrm',1,'','','',-1,0,'',1472571994);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','graphSelPrm','','/wlb_Main/wdg_graphSelPrm',1,'','','',-1,0,'',1546876596);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','treeSelect','','/wlb_Main/wdg_treeSelect',1,'','','',-1,0,'',1382881863);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrPasp','','/wlb_Main/wdg_cntrPaspExt',0,'','','',-1,0,'owner;perm;name;geomZ;pName;',1494598746);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrPaspOld','','/wlb_Main/wdg_cntrPasp',0,'','','',-1,0,'owner;perm;geomZ;pName;',1494596514);
@@ -24358,7 +24084,7 @@ for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; ) {
 	else if(sval == "ws_LnAccept:/fltr")		{ doc_doc = ""; doc_time = 0; }
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',-1,'owner;name;dscr;geomH;',1546763021);
+event = ev_rez;','','',-1,'owner;name;dscr;geomH;',1547196626);
 CREATE TABLE 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "VCAPrjs" VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <rom_as@oscada.org>

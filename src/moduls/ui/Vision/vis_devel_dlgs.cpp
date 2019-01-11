@@ -1154,6 +1154,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     proc_text = new TextEdit(wdg_proc_fr);
     proc_text->setObjectName("/proc/calc/prog");
     connect(proc_text, SIGNAL(apply()), this, SLOT(isModify()));
+    connect(proc_text, SIGNAL(textChanged(const QString&)), this, SLOT(progChanged()));
     glay->addWidget(proc_text, 2, 0, 1, 6);
 
     //Add tab 'Links'
@@ -1488,12 +1489,13 @@ void VisItProp::tabChanged( int itb )
 		    req.childAdd("get")->setAttr("path",TSYS::strEncode(proc_text->objectName().toStdString(),TSYS::PathEl));
 		    req.childAdd("SnthHgl")->setAttr("path",TSYS::strEncode(proc_text->objectName().toStdString(),TSYS::PathEl));
 		    if(!owner()->cntrIfCmd(req)) {
+			proc_text->blockSignals(true);
 			proc_text->setText(req.childGet(0)->text().c_str());
 			proc_text->setSnthHgl(*req.childGet(1));
 			proc_text->setProperty("inherited", (bool)s2i(req.childGet(0)->attr("inherited")));
 			proc_text->setProperty("redefined", (bool)s2i(req.childGet(0)->attr("redefined")));
 			proc_text->setProperty("redefAccept", false);
-			connect(proc_text, SIGNAL(textChanged(const QString&)), this, SLOT(progChanged()));
+			proc_text->blockSignals(false);
 		    }
 		}
 	    }
@@ -1509,7 +1511,7 @@ void VisItProp::progChanged( )
 {
     TextEdit *et = (TextEdit*)sender();
     if(et->property("inherited").toBool() && !et->property("redefined").toBool() && !et->property("redefAccept").toBool()) {
-	InputDlg dlg(this, windowIcon(), _("Are you sure of editing the inherited procedure, since that can cause for unexpectedly loss of the access to the original procedure?!"),
+	InputDlg dlg(this, windowIcon(), _("Are you sure of editing the inherited procedure, since that can cause for unexpectedly loss of the access to the original one?!"),
 	    _("Editing an inherited procedure"), false, false);
 	if(dlg.exec() == QDialog::Accepted) et->setProperty("redefAccept", true);
 	else et->cancelSlot();

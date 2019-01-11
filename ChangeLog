@@ -1,3 +1,27 @@
+2019-01-11 Roman (stable)
+- !!!:FIX:DB.LibsDB.vcaBase: Appended and fixed for the messages translation on Ukrainian and Russian into
+	Main.{RootPgSo,userManager,cntrPaspExt,alarmsAct,alarmsSt} and other ones.
+    !!!: Main.RootPgSo: Expanded to support the signal object buttons generating in the right of the logo.
+    prj_archBrowser_incl and prj_tmplSO_incl cleaned from spare records by a new function of UI.VCAEngine.
+    FIX: tmplSO.pg_control.pg_graphSelPrm fixed in the impossibility of searching into the parameters list, clearing the attribute "value" changes.
+    Main.{alarmsAct,alarmsSt}: Appended for the attribute 'defSrcMod' of preventing in show the default source module name in the source field.
+- FIX:DB.Model.Boiler.St: prj_kotel9_incl cleaned from spare records by a new function of UI.VCAEngine.
+    Fitted to the new Main.RootPgSo changes and the main page standard geometry.
+- !!!:FIX:UI.VCAEngine: The VCA pages loading procedure appended for a function of cleaning spare records and records of inherited but missed widgets of the "*_incl" table.
+    !!!:FIX: Fixed for full access to the attributes of the service control request "/serv/attr".
+    The info control services "/prm/cfg/prj", "/page/page" appended by getting of number of the child pages in the attribute "chPgN" at setting "getChPgN",
+	for requesting the projects' tree elements.
+    Appended for translation to the last changes.
+    Appended to ommit the widgets' icons transmitting in the control service "/serv/wlbBr" of the complete widgets' tree loading,
+	setting the attributes "disIconsW", "disIconsCW"
+- !!!:FIX:UI.Vision: Fixed in the warning about the inherited calcualting procedure changing, to prevent this warning the dialog tabs switching (reloading),
+	and the signal coneection moved just after the widget creating.
+    !!!: The projects tree switched to download the branches partially at expanding, to improve it work on slow connections.
+    !!!: The widgets tree improved in the work on slow connections, disabling the widgets' icons downloading at the thresold of
+	the complete tree downloading time more for 5 seconds and enabling that at the time less for 1 second.
+- FIX:UI.{Vision,WebVision}: Next final of the improving for the scrollbars control of the included pages. :)
+
+
 2019-01-06 Roman (stable)
 - FIX:UI.Vision: Fixed for the warning about the inherited calcualting procedure changing in cleaning the accepting state.
 - FIX:DAQ.JavaLikeCalc: isNaN() to string fixed for the RE test result inversion.

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_widgs.h
 /***************************************************************************
- *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -348,6 +348,8 @@ class WdgTree: public QDockWidget
 	//Private attributes
 	QTreeWidget	*treeW;
 	QPoint		dragStartPos;
+
+	bool		disIconsW, disIconsCW;
 };
 
 //****************************************
@@ -370,7 +372,8 @@ class ProjTree: public QDockWidget
 	void selectItem( const string &idwdg, bool force = false );
 
     public slots:
-	void updateTree( const string &vca_it = "", QTreeWidgetItem *it = NULL, bool initial = false );
+	void updateTree( QTreeWidgetItem *it = NULL );
+	void updateTree( const string &vca_it );
 
     protected:
 	//Protecten methods

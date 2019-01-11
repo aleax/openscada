@@ -655,10 +655,13 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/br/pg_" || a_path == "/page/page") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
-	    vector<string> lst;
+	    bool getChPgN = s2i(opt->attr("getChPgN"));
+	    vector<string> lst, lst1;
 	    list(lst);
-	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trLU(at(lst[i_f]).at().name(),l,u));
+	    for(unsigned iF = 0; iF < lst.size(); iF++) {
+		XMLNode *no = opt->childAdd("el")->setAttr("id",lst[iF])->setText(trLU(at(lst[iF]).at().name(),l,u));
+		if(getChPgN) { at(lst[iF]).at().pageList(lst1); no->setAttr("chPgN", i2s(lst1.size())); }
+	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    opt->setAttr("id", add(opt->attr("id"),opt->text()));
@@ -1157,9 +1160,24 @@ void Page::loadIO( )
     cEl.cfg("IDW").setS(path(), true);
     for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,false,&full); ) {
 	string sid  = cEl.cfg("ID").getS();
-	if(cEl.cfg("PARENT").getS() == "<deleted>") {
-	    if(wdgPresent(sid))	wdgDel(sid);
+	string spar = cEl.cfg("PARENT").getS();
+
+	// Directly marked as deleted one
+	if(spar == "<deleted>") {
+	    if(wdgPresent(sid)) wdgDel(sid);
 	    continue;
+	}
+	// Lost inherited widget due to it removing into the parent
+	else if(mod->nodeAt(spar,0,0,0,true).freeStat() && sid.size() < spar.size() && spar.compare(spar.size()-sid.size(),sid.size(),sid) == 0) {
+	    if(wdgPresent(sid)) wdgDel(sid);
+	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true);
+	    if(full.empty()) fldCnt--;
+	    continue;
+	}
+	// Record without any changes
+	else if(!cEl.cfg("ATTRS").getS().size()) {
+	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true);
+	    if(full.empty()) fldCnt--;
 	}
 	if(!wdgPresent(sid))
 	    try{ wdgAdd(sid, "", ""); }
@@ -1447,10 +1465,13 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
     else if(a_path == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
     else if(a_path == "/br/pg_" || a_path == "/page/page") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
-	    vector<string> lst;
+	    bool getChPgN = s2i(opt->attr("getChPgN"));
+	    vector<string> lst, lst1;
 	    pageList(lst);
-	    for(unsigned iF = 0; iF < lst.size(); iF++)
-		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trLU(pageAt(lst[iF]).at().name(),l,u));
+	    for(unsigned iF = 0; iF < lst.size(); iF++) {
+		XMLNode *no = opt->childAdd("el")->setAttr("id",lst[iF])->setText(trLU(pageAt(lst[iF]).at().name(),l,u));
+		if(getChPgN) { pageAt(lst[iF]).at().pageList(lst1); no->setAttr("chPgN", i2s(lst1.size())); }
+	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    opt->setAttr("id", pageAdd(opt->attr("id"),opt->text()));

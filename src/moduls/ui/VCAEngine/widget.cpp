@@ -820,7 +820,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
     string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
     //Service commands process
     if(a_path == "/serv/attr") {	//Attribute's access
-	if(ctrChkNode(opt,"get",RWRWRW,"root",SUI_ID,SEC_RD)) {		//Get values
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {		//Get values
 	    AutoHD<Attr> attr;
 	    if(!opt->childSize()) {
 		vector<string> ls;
@@ -842,7 +842,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 					    setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
 		    }
 	}
-	else if(ctrChkNode(opt,"set",RWRWRW,"root",SUI_ID,SEC_WR))	//Set values
+	else if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	//Set values
 	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++)
 		try{ attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text()); }
 		catch(TError&) { }

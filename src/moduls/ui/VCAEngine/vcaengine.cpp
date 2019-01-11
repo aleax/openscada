@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: vcaengine.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"5.3.0"
+#define MOD_VER		"5.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -560,15 +560,15 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
     cEl.cfg("IDC").setS(idc,true);
     TConfig cElu(&mod->elWdgUIO()); cElu.cfg("IDW").setS(idw,true);
     cElu.cfg("IDC").setS(idc,true);
-    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
-	AutoHD<Attr> attr = w.attrAt(als[i_a]);
+    for(unsigned iA = 0; iA < als.size(); iA++) {
+	AutoHD<Attr> attr = w.attrAt(als[iA]);
 	if(!attr.at().modif()) continue;
-	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) m_attrs += als[i_a]+";";
+	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) m_attrs += als[iA]+";";
 	if(ldGen != (bool)(attr.at().flgGlob()&Attr::Generic)) continue;
 
 	//Main attributes storing
 	if((attr.at().flgSelf()&Attr::IsInher) || !(attr.at().flgGlob()&Attr::IsUser)) {
-	    cEl.cfg("ID").setS(als[i_a]);
+	    cEl.cfg("ID").setS(als[iA]);
 	    cEl.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
 	    cEl.cfg("IO_VAL").setS(attr.at().getS());
 	    cEl.cfg("SELF_FLG").setI(attr.at().flgSelf());
@@ -579,7 +579,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	}
 	//User attributes store
 	else if(!ldGen) {
-	    cElu.cfg("ID").setS(als[i_a]);
+	    cElu.cfg("ID").setS(als[iA]);
 	    cElu.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
 	    cElu.cfg("IO_VAL").setS(attr.at().getS());
 	    if(attr.at().type() == TFld::Integer || attr.at().type() == TFld::Real || (attr.at().flgGlob()&(TFld::Selectable|TFld::SelEdit))) {
@@ -692,6 +692,8 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	return;
     }
     else if(a_path == "/serv/wlbBr" && ctrChkNode(opt,"get")) {
+	bool disIconsCW	= s2i(opt->attr("disIconsCW"));
+	bool disIconsW	= s2i(opt->attr("disIconsW"));
 	string item = opt->attr("item");
 	string upd_lb   = TSYS::pathLev(item,0);
 	if(upd_lb.size() > 4 && upd_lb.substr(0,4) != "wlb_")	return;
@@ -717,7 +719,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		if(!upd_wdg.empty() && upd_wdg != wls[i_w])	continue;
 		AutoHD<LWidget> w = wlb.at().at(wls[i_w]);
 		XMLNode *wN = wlbN->childAdd("w")->setAttr("id",wls[i_w])->setAttr("parent",w.at().parentNm())->setText(trLU(w.at().name(),l,u));
-		wN->childAdd("ico")->setText(w.at().ico());
+		wN->childAdd("ico")->setText(disIconsW?"":w.at().ico());
 
 		//  Child widgets
 		vector<string> cwls;
@@ -727,7 +729,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 			if(!upd_wdgi.empty() && upd_wdgi != cwls[i_c])	continue;
 			AutoHD<CWidget> cw = w.at().wdgAt(cwls[i_c]);
 			wN->childAdd("cw")->setAttr("id",cwls[i_c])->setText(trLU(cw.at().name(),l,u))->
-			    childAdd("ico")->setText((cwls.size()>=100)?"":cw.at().ico());
+			    childAdd("ico")->setText(disIconsCW?"":cw.at().ico());//   (cwls.size()>=100)?"":cw.at().ico());
 		    }
 	    }
 	}
@@ -762,16 +764,18 @@ void Engine::cntrCmdProc( XMLNode *opt )
     //Process command for page
     if(a_path == "/br/prj_" || a_path == "/prm/cfg/prj") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
-	    vector<string> lst;
+	    vector<string> lst, lst1;
 	    prjList(lst);
 	    bool chkUserPerm = s2i(opt->attr("chkUserPerm"));
-	    for(unsigned i_a = 0; i_a < lst.size(); i_a++) {
+	    bool getChPgN = s2i(opt->attr("getChPgN"));
+	    for(unsigned iA = 0; iA < lst.size(); iA++) {
 		if(chkUserPerm) {
-		    AutoHD<Project> prj = prjAt(lst[i_a]);
+		    AutoHD<Project> prj = prjAt(lst[iA]);
 		    if(!SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()))
 			continue;
 		}
-		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(trLU(prjAt(lst[i_a]).at().name(),l,u));
+		XMLNode *no = opt->childAdd("el")->setAttr("id", lst[iA])->setText(trLU(prjAt(lst[iA]).at().name(),l,u));
+		if(getChPgN) { prjAt(lst[iA]).at().list(lst1); no->setAttr("chPgN", i2s(lst1.size())); }
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
@@ -784,8 +788,8 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    vector<string> lst;
 	    wlbList(lst);
-	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
-		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(trLU(wlbAt(lst[i_a]).at().name(),l,u));
+	    for(unsigned iA = 0; iA < lst.size(); iA++)
+		opt->childAdd("el")->setAttr("id",lst[iA])->setText(trLU(wlbAt(lst[iA]).at().name(),l,u));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	opt->setAttr("id", wlbAdd(opt->attr("id"),opt->text()));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	wlbDel(opt->attr("id"),true);
@@ -797,15 +801,15 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    sesList(lst);
 	    bool chkUserPerm = s2i(opt->attr("chkUserPerm"));
-	    for(unsigned i_a=0; i_a < lst.size(); i_a++) {
+	    for(unsigned iA = 0; iA < lst.size(); iA++) {
 		if(chkUserPerm) {
-		    AutoHD<Project> prj = sesAt(lst[i_a]).at().parent();
+		    AutoHD<Project> prj = sesAt(lst[iA]).at().parent();
 		    if(!SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()))
 			continue;
 		}
-		opt->childAdd("el")->setAttr("user",sesAt(lst[i_a]).at().user())->
-				     setAttr("proj",sesAt(lst[i_a]).at().projNm())->
-				     setText(lst[i_a]);
+		opt->childAdd("el")->setAttr("user",sesAt(lst[iA]).at().user())->
+				     setAttr("proj",sesAt(lst[iA]).at().projNm())->
+				     setText(lst[iA]);
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {

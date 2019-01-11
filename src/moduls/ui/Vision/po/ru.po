@@ -1,13 +1,13 @@
 # OpenSCADA.UI.Vision translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-08 23:26+0200\n"
+"POT-Creation-Date: 2019-01-11 10:33+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -884,7 +884,8 @@ msgid ""
 "All other visual elements, descendant from this ancestor, will use these "
 "changes!"
 msgstr ""
-"Вы действительно желаете опустить предку все изменения визуальных элементов '%1'?\n"
+"Вы действительно желаете опустить предку все изменения визуальных элементов "
+"'%1'?\n"
 "Все другие визуальные элементы, наследники от данного предка, будут "
 "использовать эти изменения!"
 
@@ -946,17 +947,14 @@ msgstr "Состояние"
 msgid "Item icon. Click to download another."
 msgstr "Иконка элемента. Нажмите для загрузки другой."
 
+msgid "Status:"
+msgstr "Статус:"
+
 msgid "Enabled:"
 msgstr "Включен:"
 
 msgid "Container DB:"
 msgstr "БД контейнера:"
-
-msgid "Used:"
-msgstr "Использовано:"
-
-msgid "Date of modification:"
-msgstr "Дата модификации:"
 
 msgid "Configuration"
 msgstr "Конфигурация"
@@ -1047,9 +1045,6 @@ msgstr "Закрыть"
 
 msgid "Error getting the node '%1' information."
 msgstr "Ошибка запроса информации узла '%1'."
-
-msgid "Not set"
-msgstr "Не установлен"
 
 msgid "Downloading the image icon"
 msgstr "Загрузка изображения иконки"
@@ -1148,6 +1143,16 @@ msgstr "Переводить:"
 msgid "Links"
 msgstr "Связи"
 
+msgid ""
+"Are you sure of editing the inherited procedure, since that can cause for "
+"unexpectedly loss of the access to the original one?!"
+msgstr ""
+"Вы действительно желаете редактировать наследованную процедуру, поскольку "
+"это может привести к неожиданной потере доступа к оригинальной процедуре?!"
+
+msgid "Editing an inherited procedure"
+msgstr "Редактирование наследованной процедуры"
+
 msgid "Correct widget is not selected"
 msgstr "Не выбрано корректного виджета"
 
@@ -1193,23 +1198,21 @@ msgid ""
 "At missing the visual item will be created in the parent and all other "
 "visual elements, descendant from this ancestor, will use this!"
 msgstr ""
-"Вы действительно желаете опустить предку изменения выбранного атрибута '%1' визуального элемента '%1'?\n"
-"В случае отсутствия визуальный элемент будет создан у предка а все другие визуальные элементы, наследники от данного предка, будут "
-"использовать его!"
+"Вы действительно желаете опустить предку изменения выбранного атрибута '%1' "
+"визуального элемента '%1'?\n"
+"В случае отсутствия визуальный элемент будет создан у предка а все другие "
+"визуальные элементы, наследники от данного предка, будут использовать его!"
 
 msgid ""
 "Lowering down the selected attribute change of the visual item to the parent"
-msgstr "Опускание изменения выбранного атрибута визуального элемента к родителю"
+msgstr ""
+"Опускание изменения выбранного атрибута визуального элемента к родителю"
 
 msgid "Widgets"
 msgstr "Виджет"
 
 msgid "Type"
 msgstr "Тип"
-
-#, c-format
-msgid "Time of requesting the widgets development tree '%s': %f ms."
-msgstr "Время запроса дерева разработки виджетов '%s': %f мс."
 
 msgid "Library"
 msgstr "Библиотека"
@@ -1244,10 +1247,6 @@ msgstr "Проекты"
 
 msgid "Project"
 msgstr "Проект"
-
-#, c-format
-msgid "Time of loading the projects development tree '%s': %f ms."
-msgstr "Время загрузки дерева разработки проектов '%s': %f мс."
 
 msgid "Page"
 msgstr "Страница"
