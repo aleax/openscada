@@ -344,8 +344,11 @@ class SessPage : public SessWdg
 	~SessPage( );
 
 	string	path( ) const;
+	string	path( bool orig ) const;
 	string	type( )		{ return "SessPage"; }
+	string	getStatus( );
 
+	void setPathAsOpen( const string &ip );
 	void setEnable( bool val, bool force = false );
 	void setProcess( bool val, bool lastFirstCalc = true );
 
@@ -354,11 +357,16 @@ class SessPage : public SessWdg
 	AutoHD<Page> parent( ) const;
 
 	// Pages
-	void pageList( vector<string> &ls ) const		{ chldList(mPage,ls); }
-	bool pagePresent( const string &id ) const		{ return chldPresent(mPage,id); }
+	void pageList( vector<string> &ls ) const		{ chldList(mPage, ls); }
+	bool pagePresent( const string &id ) const		{ return chldPresent(mPage, id); }
 	AutoHD<SessPage> pageAt( const string &id ) const;
 	void pageAdd( const string &id, const string &parent = "" );
 	void pageDel( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
+
+	//  The access redirection for the links
+	void chldList( int8_t igr, vector<string> &list, bool noex = false, bool onlyEn = true ) const;
+	bool chldPresent( int8_t igr, const string &name ) const;
+	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" ) const;
 
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
 
@@ -388,6 +396,7 @@ class SessPage : public SessWdg
 	unsigned mClosePgCom	: 1;
 	unsigned mDisMan	: 1;		//Disable the page enabling at request by it's disabling in manual
 	ResMtx	mFuncM;
+	string	pathAsOpen, pathAsOpenPrev;
 };
 
 }

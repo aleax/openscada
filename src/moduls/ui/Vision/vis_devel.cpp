@@ -605,12 +605,12 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
 
     //Init dock windows
     prjTree = new ProjTree(this);
-    connect(this,SIGNAL(modifiedItem(const string&)),prjTree,SLOT(updateTree(const string&)));
-    connect(prjTree,SIGNAL(selectItem(const string&,bool)),this,SLOT(selectItem(const string&,bool)));
+    connect(this, SIGNAL(modifiedItem(const string&)), prjTree, SLOT(updateTree(const string&)));
+    connect(prjTree, SIGNAL(selectItem(const string&,bool)), this, SLOT(selectItem(const string&,bool)));
     prjTree->setWhatsThis(_("Dock window of the projects manager."));
     wdgTree = new WdgTree(this);
-    connect(this,SIGNAL(modifiedItem(const string&)),wdgTree,SLOT(updateTree(const string&)));
-    connect(wdgTree,SIGNAL(selectItem(const string&,bool)),this,SLOT(selectItem(const string&,bool)));
+    connect(this, SIGNAL(modifiedItem(const string&)), wdgTree, SLOT(updateTree(const string&)));
+    connect(wdgTree, SIGNAL(selectItem(const string&,bool)), this, SLOT(selectItem(const string&,bool)));
     wdgTree->setWhatsThis(_("Dock window of the manager of the widgets libraries."));
     addDockWidget(Qt::LeftDockWidgetArea, prjTree);
     addDockWidget(Qt::LeftDockWidgetArea, wdgTree);
@@ -631,7 +631,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     mn_view->addAction(lnkInsp->toggleViewAction());
     mn_view->addSeparator();
 
-    connect(this, SIGNAL(modifiedItem(const string&)), this, SLOT(modifyGlbStUpdate()));
+    connect(this, SIGNAL(modifiedItem(const string&)), this, SLOT(modifyGlbStUpdate(const string&)));
 
     //Create timers
     // Main widget's work timer
@@ -901,8 +901,8 @@ void VisDevelop::applyWorkWdg( )
 {
     if(winClose) return;
 
-    modifyToolUpdate(work_wdg_new);
-    modifyGlbStUpdate(true);
+    //modifyToolUpdate(work_wdg_new);
+    modifyGlbStUpdate(work_wdg_new, true);
 
     //if(work_wdg == work_wdg_new) return;	//!!!! Commented for updating the geometry changing in the graphical development
     work_wdg = work_wdg_new;
@@ -955,7 +955,9 @@ void VisDevelop::modifyToolUpdate( const string &wdgs )
     string cur_wdg;
     XMLNode req("modify");
     for(int i_off = 0; (cur_wdg=TSYS::strSepParse(wdgs,0,';',&i_off)).size(); ) {
-	req.setAttr("path",cur_wdg+"/%2fobj");
+	size_t aPos = cur_wdg.rfind("/a_");
+	if(aPos != string::npos) cur_wdg = cur_wdg.substr(0, aPos);
+	req.setAttr("path", cur_wdg+"/%2fobj");
 	if(!cntrIfCmd(req) && s2i(req.text())) {
 	    actDBLoad->setEnabled(true);
 	    actDBSave->setEnabled(true);
@@ -963,7 +965,7 @@ void VisDevelop::modifyToolUpdate( const string &wdgs )
     }
 }
 
-void VisDevelop::modifyGlbStUpdate( bool check )
+void VisDevelop::modifyGlbStUpdate( const string &it, bool check )
 {
     if(!check) mStModify->setText("*");
     else {
@@ -972,6 +974,9 @@ void VisDevelop::modifyGlbStUpdate( bool check )
 	req.setAttr("path", "/%2fobj");
 	mStModify->setText((!cntrIfCmd(req) && s2i(req.text()))?"*":" ");
     }
+
+    //if(!actDBLoad->isEnabled() && it.size())
+    modifyToolUpdate(it);
 }
 
 void VisDevelop::updateMenuWindow( )
@@ -1054,8 +1059,8 @@ void VisDevelop::itDBSave( )
 	    }
 	}
     }
-    modifyToolUpdate(own_wdg);
-    modifyGlbStUpdate(true);
+    //modifyToolUpdate(own_wdg);
+    modifyGlbStUpdate(own_wdg, true);
 }
 
 void VisDevelop::prjRun( )

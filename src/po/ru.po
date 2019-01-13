@@ -1,13 +1,13 @@
 # OpenSCADA core translate to Russian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-18 19:38+0200\n"
+"POT-Creation-Date: 2019-01-13 19:11+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -691,7 +691,7 @@ msgstr "Ошибка группы дочерних узлов %d!"
 msgid "Node is not enabled!"
 msgstr "Узел не включен!"
 
-msgid "Id the child that is added is empty!"
+msgid "Id of the child that is adding is empty!"
 msgstr "Добавляемый дочерний идентификатор пуст!"
 
 #, c-format

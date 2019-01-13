@@ -992,23 +992,24 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(obj_enable, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
     glay->addWidget(obj_enable, 1, 2, 1, 4);
 
-    lab = new QLabel(_("Parent widget:"), tab_w);
-    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
-    glay->addWidget(lab, 2, 1);
-    obj_parent = new QComboBox(tab_w);
-    obj_parent->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-    obj_parent->setObjectName("/wdg/st/parent");
-    connect(obj_parent, SIGNAL(activated(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_parent, 2, 2, 1, 4);
-
     //  Specific parameter: page type
     lab = new QLabel(_("Page type:"), tab_w);
-    glay->addWidget(lab, 3, 1);
+    glay->addWidget(lab, 2, 1);
     pg_tp = new QComboBox(tab_w);
     pg_tp->setObjectName("/wdg/st/pgTp");
     pg_tp->setWindowIconText(TSYS::addr2str(lab).c_str());
     connect(pg_tp, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(pg_tp, 3, 2);
+    glay->addWidget(pg_tp, 2, 2);
+
+    lab = new QLabel(_("Parent widget:"), tab_w);
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
+    glay->addWidget(lab, 3, 1);
+    obj_parent = new QComboBox(tab_w);
+    obj_parent->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+    obj_parent->setObjectName("/wdg/st/parent");
+    connect(obj_parent, SIGNAL(activated(int)), this, SLOT(isModify()));
+    glay->addWidget(obj_parent, 3, 2, 1, 4);
+
 
     /*lab = new QLabel(_("Used:"), tab_w);
     glay->addWidget(lab, 3, 1);

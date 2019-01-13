@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -224,7 +224,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	opt->setAttr("mcat", err.cat);
 	opt->setText(err.mess);
     }
-    opt->setAttr("path",path);
+    opt->setAttr("path", path);
 }
 
 //*************************************************
@@ -513,7 +513,7 @@ bool TCntrNode::chldPresent( int8_t igr, const string &name ) const
 void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 {
     if(nodeMode() != Enabled)		{ delete node; throw err_sys(_("Node is not enabled!")); }
-    if(sTrm(node->nodeName()).empty())	{ delete node; throw err_sys(_("Id the child that is added is empty!")); }
+    if(sTrm(node->nodeName()).empty())	{ delete node; throw err_sys(_("Id of the child that is adding is empty!")); }
 
     MtxAlloc res(mChM, true);
     if(!chGrp || igr >= (int)chGrp->size())	{ delete node; throw err_sys(_("Error group of childs %d!"), igr); }

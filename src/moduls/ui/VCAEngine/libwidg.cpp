@@ -320,7 +320,8 @@ void WidgetLib::mimeDataDel( const string &iid, const string &idb )
 
 string WidgetLib::add( const string &iid, const string &name, const string &orig )
 {
-    if(present(iid))	return "";
+    if(present(iid))	throw err_sys(_("The widget '%s' is already present!"), iid.c_str());
+	//return "";
 
     LWidget *obj = new LWidget(TSYS::strEncode(sTrm(iid),TSYS::oscdID), orig);
     MtxAlloc res(chM(), true);
@@ -762,7 +763,8 @@ void LWidget::wClear( )
 void LWidget::wdgAdd( const string &wid, const string &name, const string &path, bool force )
 {
     if(!isContainer())	throw TError(nodePath().c_str(),_("Widget is not container!"));
-    if(wdgPresent(wid))	return;
+    if(wdgPresent(wid))	throw err_sys(_("The widget '%s' is already present!"), wid.c_str());
+	//return;
 
     bool toRestoreInher = false;
 

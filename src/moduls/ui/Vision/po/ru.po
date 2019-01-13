@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-11 10:33+0200\n"
+"POT-Creation-Date: 2019-01-13 20:29+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1095,11 +1095,11 @@ msgstr "Свойства виджета"
 msgid "Widget"
 msgstr "Виджет"
 
-msgid "Parent widget:"
-msgstr "Родительский виджет:"
-
 msgid "Page type:"
 msgstr "Тип страницы:"
+
+msgid "Parent widget:"
+msgstr "Родительский виджет:"
 
 msgid "Root:"
 msgstr "Корень:"

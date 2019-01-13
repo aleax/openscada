@@ -259,7 +259,8 @@ void Widget::setEnable( bool val, bool force )
 	    try {
 		if(sTrm(parentNm()).empty() || parentNm() == path())
 		    throw TError(nodePath().c_str(),_("Parent item is empty or equal to itself!"));
-		if(parentNm() == "..") mParent = AutoHD<TCntrNode>(nodePrev());
+		if(!mParent.freeStat()) ;	//connected early due to the parent name/address specific
+		else if(parentNm() == "..") mParent = AutoHD<TCntrNode>(nodePrev());
 		else mParent = mod->nodeAt(parentNm());
 
 		if(isLink() && dynamic_cast<Widget*>(nodePrev()) && mParent.at().path() == ((Widget*)nodePrev())->path()) {
@@ -892,10 +893,10 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/wdg/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/wdg/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/wdg/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),RWRWR_,"root",SUI_ID,3,"tp","str", "dest","sel_ed", "select","/wdg/w_lst");
 		if(!parent().freeStat())
 		    ctrMkNode("comm",opt,-1,"/wdg/st/goparent",_("Go to the parent"),RWRWR_,"root",SUI_ID,1,"tp","lnk");
+		ctrMkNode("fld",opt,-1,"/wdg/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/wdg/cfg",_("Configuration"))) {
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/id",_("Identifier"),R_R_R_,"root",SUI_ID,1,"tp","str");

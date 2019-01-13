@@ -1,3 +1,19 @@
+2019-01-13 Roman (stable)
+- SYS: AutoHD::at() appended for the commented code of the crashes causing instead the exception "No init!", to observe the message cause in future.
+- SYS: chldList() and chldPresent() set to virtual.
+- FIX:DAQ.OPC-UA: reqService() prevented from accessing free transports and the exception "No init!".
+- !!!!:FIX:UI.VCAEngine: Pages of the projects appended for the type "Link", to optimize the memory consumption on
+	fully dynamic and high replicated pages, on the project's session side.
+    FIX: Projects, Widget liraries and Widgets are fixed for the error message of creating already presented node.
+    FIX: Fixed for the page status "Opened" only for the pages.
+    Pages list in the project set to access only for the page type "Template" or "Container".
+    List of the page types restricted by the not templated pages.
+- FIX:UI.Vision: Fixed for the global state updating, appending the selected item modify state.
+    FIX: Fixed for updating the projects tree items, firstly their are same projects.
+    FIX: Fixed for the context menu in the edition, for the item "Copy".
+    The projects tree and the widget libraries tree is disabled for the selection lost at the focus lost.
+
+
 2019-01-11 Roman (stable)
 - !!!:FIX:DB.LibsDB.vcaBase: Appended and fixed for the messages translation on Ukrainian and Russian into
 	Main.{RootPgSo,userManager,cntrPaspExt,alarmsAct,alarmsSt} and other ones.

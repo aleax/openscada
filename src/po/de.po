@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-18 19:38+0200\n"
+"POT-Creation-Date: 2019-01-13 19:11+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -698,8 +698,8 @@ msgstr "Gruppe der Kinder %d Fehler!"
 msgid "Node is not enabled!"
 msgstr "Knoten ist nicht eingeschaltet!"
 
-msgid "Id the child that is added is empty!"
-msgstr "Der hinzugefügte Kindbezeichner ist leer!"
+msgid "Id of the child that is adding is empty!"
+msgstr "Die ID des hinzuzufügenden Kindes ist leer!"
 
 #, c-format
 msgid "The node '%s' is already present."

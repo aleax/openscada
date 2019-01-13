@@ -6,7 +6,7 @@ AC_INIT(OpenSCADA, [1+r0000], rom_as@oscada.org)
 
 # Increase the major for next Work version.
 # Increase the minor after any significant changes into API of the Work/LTS version
-oscd_LIBREVISION="4:0:0"
+oscd_LIBREVISION="4:1:0"
 
 AC_PREFIX_DEFAULT(/usr)
 oscd_modulpref="oscd_"

@@ -101,9 +101,9 @@ void Session::setEnable( bool val )
 
 	    //Creation the root pages
 	    parent().at().list(pg_ls);
-	    for(unsigned i_p = 0; i_p < pg_ls.size(); i_p++)
-		if(!present(pg_ls[i_p]))
-		    add(pg_ls[i_p],parent().at().at(pg_ls[i_p]).at().path());
+	    for(unsigned iP = 0; iP < pg_ls.size(); iP++)
+		if(!present(pg_ls[iP]))
+		    add(pg_ls[iP],parent().at().at(pg_ls[iP]).at().path());
 
 	    if(mess_lev() == TMess::Debug) {
 		mess_debug(nodePath().c_str(), _("Time of the root pages creating: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
@@ -310,7 +310,7 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
     //Individual commands process
     try {
 	// Go to the destination page
-	string curPtEl;
+	string curPtEl, cpgAddr = "/ses_"+id();
 	AutoHD<SessPage> cpg;
 	for(unsigned iEl = 0; (curPtEl=TSYS::pathLev(prm,iEl++)).size(); ) {
 	    string opPg;
@@ -348,6 +348,7 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 
 	    // Go to the next page
 	    cpg = cpg.freeStat() ? at(opPg) : cpg.at().pageAt(opPg);
+	    cpgAddr += "/pg_"+opPg;
 	}
 
 	//Open founded page
@@ -355,7 +356,8 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 	    //!!!! <oppg> here mostly wrong for multiple container pages
 	    //if(!oppg.empty() && ((AutoHD<SessPage>)mod->nodeAt(oppg)).at().path() != cpg.at().path())
 	    //	((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpenSrc").at().setS("");
-	    cpg.at().attrAt("pgOpenSrc").at().setS(src->path());
+	    cpg.at().setPathAsOpen(cpgAddr);	//To descry links
+	    cpg.at().attrAt("pgOpenSrc").at().setS(src->path(), true);
 	}
     }
     catch(TError &er) {
@@ -399,8 +401,8 @@ int Session::alarmStat( )
     uint8_t alev = 0, atp = 0, aqtp = 0;
     vector<string> ls;
     list(ls);
-    for(unsigned i_p = 0; i_p < ls.size(); i_p++) {
-	int ast = at(ls[i_p]).at().attrAt("alarmSt").at().getI();
+    for(unsigned iP = 0; iP < ls.size(); iP++) {
+	int ast = at(ls[iP]).at().attrAt("alarmSt").at().getI();
 	alev = vmax(alev,ast&0xFF);
 	atp |= (ast>>8)&0xFF;
 	aqtp |= (ast>>16)&0xFF;
@@ -418,8 +420,8 @@ void Session::alarmQuietance( const string &wpath, uint8_t quit_tmpl, bool ret )
     else {
 	vector<string> ls;
 	list(ls);
-	for(unsigned i_p = 0; i_p < ls.size(); i_p++)
-	    at(ls[i_p]).at().alarmQuietance(quit_tmpl, true, ret);
+	for(unsigned iP = 0; iP < ls.size(); iP++)
+	    at(ls[iP]).at().alarmQuietance(quit_tmpl, true, ret);
     }
 
     //The notifications queue quietance
@@ -609,9 +611,9 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    opt->setAttr("tm", u2s(ntm));
 	}
 	else if(ctrChkNode(opt,"open",permit(),owner().c_str(),grp().c_str(),SEC_WR))		//Open pages
-	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(true);
+	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(true, true);
 	else if(ctrChkNode(opt,"close",RWRWRW,owner().c_str(),grp().c_str(),SEC_WR))		//Close open pages
-	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(false);
+	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(false, true);
 	mReqTm = time(NULL);
 	setReqUser(opt->attr("user"));
 	setReqLang(opt->attr("lang"));
@@ -1056,7 +1058,24 @@ SessPage::~SessPage( )
 
 }
 
-string SessPage::path( ) const	{ return ownerFullId(true)+"/pg_"+id(); }
+string SessPage::path( ) const		{ return path(false); }
+
+string SessPage::path( bool orig ) const{ return (!pathAsOpen.size() || orig) ? ownerFullId(true)+"/pg_"+id() : pathAsOpen; }
+
+string SessPage::getStatus( )
+{
+    string rez = SessWdg::getStatus();
+    if(attrAt("pgOpen").at().getB())	rez += _("Opened. ");
+
+    return rez;
+}
+
+void SessPage::setPathAsOpen( const string &ip )
+{
+    if((!pathAsOpen.size() && ip == path(true)) || ip == path()) return;
+    pathAsOpenPrev = attrAt("pgOpen").at().getB() ? path(): pathAsOpen;
+    pathAsOpen = ip;
+}
 
 void SessPage::setEnable( bool val, bool force )
 {
@@ -1078,9 +1097,9 @@ void SessPage::setEnable( bool val, bool force )
 	if(!force) {
 	    //Create included pages
 	    parent().at().pageList(pg_ls);
-	    for(unsigned i_p = 0; i_p < pg_ls.size(); i_p++)
-		if(!pagePresent(pg_ls[i_p]))
-		    pageAdd(pg_ls[i_p], parent().at().pageAt(pg_ls[i_p]).at().path());
+	    for(unsigned iP = 0; iP < pg_ls.size(); iP++)
+		if(!pagePresent(pg_ls[iP]))
+		    pageAdd(pg_ls[iP], parent().at().pageAt(pg_ls[iP]).at().path());
 
 	    //Enabling of the included pages
 	    pageList(pg_ls);
@@ -1097,12 +1116,12 @@ void SessPage::setEnable( bool val, bool force )
 	if(!(parent().at().prjFlags()&Page::Empty) && attrPresent("pgOpen") && attrAt("pgOpen").at().getB())
 	    ownerSess()->openUnreg(path());
 
-	//Disable include pages
+	//Disabling the include pages
 	pageList(pg_ls);
 	for(unsigned iL = 0; iL < pg_ls.size(); iL++)
 	    pageAt(pg_ls[iL]).at().setEnable(false);
 
-	//Delete included pages
+	//Deleting the included pages
 	for(unsigned iL = 0; iL < pg_ls.size(); iL++)
 	    pageDel(pg_ls[iL]);
 
@@ -1137,13 +1156,41 @@ AutoHD<Page> SessPage::parent( ) const
     return Widget::parent();
 }
 
+AutoHD<SessPage> SessPage::pageAt( const string &iid ) const	{ return chldAt(mPage, iid); }
+
 void SessPage::pageAdd( const string &iid, const string &iparent )
 {
     if(pagePresent(iid)) return;
     chldAdd(mPage,new SessPage(iid,iparent,ownerSess()));
 }
 
-AutoHD<SessPage> SessPage::pageAt( const string &iid ) const	{ return chldAt(mPage,iid); }
+void SessPage::chldList( int8_t igr, vector<string> &list, bool noex, bool onlyEn ) const
+{
+    AutoHD<TCntrNode> lNd;
+    if(!parent().freeStat() && (parent().at().prjFlags()&Page::Link) && igr == mPage)
+	lNd = ownerSess()->nodeAt(parent().at().parentNm(), 0, 0, 0, true);
+
+    if(!lNd.freeStat())	lNd.at().chldList(igr, list, noex, onlyEn);
+    else TCntrNode::chldList(igr, list, noex, onlyEn);
+}
+
+bool SessPage::chldPresent( int8_t igr, const string &name ) const
+{
+    AutoHD<TCntrNode> lNd;
+    if(!parent().freeStat() && (parent().at().prjFlags()&Page::Link) && igr == mPage)
+	lNd = ownerSess()->nodeAt(parent().at().parentNm(), 0, 0, 0, true);
+
+    return lNd.freeStat() ? TCntrNode::chldPresent(igr, name) : lNd.at().chldPresent(igr, name);
+}
+
+AutoHD<TCntrNode> SessPage::chldAt( int8_t igr, const string &name, const string &user ) const
+{
+    AutoHD<TCntrNode> lNd;
+    if(!parent().freeStat() && (parent().at().prjFlags()&Page::Link) && igr == mPage)
+	lNd = ownerSess()->nodeAt(parent().at().parentNm(), 0, 0, 0, true);
+
+    return lNd.freeStat() ? TCntrNode::chldAt(igr, name, user) : lNd.at().chldAt(igr, name, user);
+}
 
 AutoHD<Widget> SessPage::wdgAt( const string &wdg, int lev, int off ) const
 {
@@ -1209,13 +1256,17 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 	    if(cfg.getB()) {
 		mClosePgCom = false;
 		ownerSess()->openReg(path());	//Moved up for allow access and pages including from "f_start"
-		if(!process())	setProcess(true);
+		if(!process()) setProcess(true);
 	    }
 	    else {
-		ownerSess()->openUnreg(path());
-		if(process() && !attrAt("pgNoOpenProc").at().getB())	mClosePgCom = true;
-		if(!attrAt("pgOpenSrc").at().getS().empty()) attrAt("pgOpenSrc").at().setS("");
-		pgClose();
+		string lnkPath = pathAsOpenPrev.size() ? pathAsOpenPrev : (pathAsOpen.size()?path():"");
+		ownerSess()->openUnreg(lnkPath.size()?lnkPath:path());
+		if(!pathAsOpenPrev.size()) {
+		    if(process() && !attrAt("pgNoOpenProc").at().getB())	mClosePgCom = true;
+		    if(!attrAt("pgOpenSrc").at().getS().empty()) attrAt("pgOpenSrc").at().setS("");
+		    pgClose();
+		} else cfg.setB(true);
+		pathAsOpenPrev = "";
 	    }
 	}
 	else if(cfg.id() == "pgOpenSrc") {
@@ -1280,8 +1331,8 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 		    }
 		} catch(TError &err) { }
 	    }
-	    if(cfg.owner()->attrAt("pgOpen").at().getB() != !cfg.getS().empty())
-		cfg.owner()->attrAt("pgOpen").at().setB(!cfg.getS().empty());
+	    //if(cfg.owner()->attrAt("pgOpen").at().getB() != !cfg.getS().empty())
+		cfg.owner()->attrAt("pgOpen").at().setB(!cfg.getS().empty(), true);
 	}
     }
 
@@ -1300,9 +1351,9 @@ void SessPage::alarmSet( bool isSet )
 
     //Included pages process
     pageList(lst);
-    for(unsigned i_p = 0; i_p < lst.size(); i_p++) {
-	if(!pageAt(lst[i_p]).at().enable()) continue;
-	int iacur = pageAt(lst[i_p]).at().attrAt("alarmSt").at().getI();
+    for(unsigned iP = 0; iP < lst.size(); iP++) {
+	if(!pageAt(lst[iP]).at().enable()) continue;
+	int iacur = pageAt(lst[iP]).at().attrAt("alarmSt").at().getI();
 	alev = vmax(alev, iacur&0xFF);
 	atp |= (iacur>>8) & 0xFF;
 	aqtp |= (iacur>>16) & 0xFF;
@@ -1337,8 +1388,8 @@ void SessPage::alarmQuietance( uint8_t quit_tmpl, bool isSet, bool ret )
     vector<string> lst;
     //Included pages quietance
     pageList(lst);
-    for(unsigned i_p = 0; i_p < lst.size(); i_p++)
-	pageAt(lst[i_p]).at().alarmQuietance(quit_tmpl, false, ret);
+    for(unsigned iP = 0; iP < lst.size(); iP++)
+	pageAt(lst[iP]).at().alarmQuietance(quit_tmpl, false, ret);
 
     //Include widgets quietance
     wdgList( lst );
@@ -1397,7 +1448,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Session page: ")+ownerFullId()+"/"+id());
 	if(enable() && !(parent().at().prjFlags()&Page::Empty))
 	    ctrMkNode("fld",opt,1,"/wdg/st/open",_("Opened"),RWRWR_,owner().c_str(),grp().c_str(),1,"tp","bool");
-	if(enable() && parent().at().prjFlags()&(Page::Template|Page::Container)) {
+	if(enable() && parent().at().prjFlags()&(Page::Template|Page::Container|Page::Link)) {
 	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))
 		ctrMkNode("list",opt,-1,"/page/page",_("Pages"),R_R_R_,"root","UI",3,"tp","br","idm","1","br_pref","pg_");
 	    if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
@@ -1418,7 +1469,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 	vector<string> lst;
 	pageList(lst);
 	for(unsigned iF = 0; iF < lst.size(); iF++)
-	    opt->childAdd("el")->setAttr("id",lst[iF])->setText(pageAt(lst[iF]).at().name());
+	    opt->childAdd("el")->setAttr("id", lst[iF])->setText(pageAt(lst[iF]).at().name());
     }
     else return SessWdg::cntrCmdGeneric(opt);
 
@@ -1612,7 +1663,6 @@ string SessWdg::getStatus( )
 {
     string rez = Widget::getStatus();
     if(process())	rez += _("Processing. ");
-    if(attrAt("pgOpen").at().getB())	rez += _("Opened. ");
     if(mess_lev() == TMess::Debug)
 	rez += _("Spent time on the branch: ")+tm2s(tmCalcAll())+"["+tm2s(tmCalcMaxAll())+"], "+_("the item: ")+tm2s(tmCalc)+"["+tm2s(tmCalcMax)+"]. ";
 

@@ -1,13 +1,13 @@
 # OpenSCADA core translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-18 19:38+0200\n"
+"POT-Creation-Date: 2019-01-13 19:11+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -690,8 +690,8 @@ msgstr "Помилка групи нащадків %d!"
 msgid "Node is not enabled!"
 msgstr "Вузол не увімкнено!"
 
-msgid "Id the child that is added is empty!"
-msgstr "Id нащадку, який додається, порожнє!"
+msgid "Id of the child that is adding is empty!"
+msgstr "Id нащадку, що додається є порожнім!"
 
 #, c-format
 msgid "The node '%s' is already present."

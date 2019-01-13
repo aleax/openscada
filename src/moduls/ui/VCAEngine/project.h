@@ -167,7 +167,8 @@ class Page : public Widget, public TConfig
 	enum Flag {
 	    Container	= 0x01,	//Page is container included pages
 	    Template	= 0x02,	//Page is template for included pages
-	    Empty	= 0x04	//No page, use for logical containers
+	    Empty	= 0x04,	//No page, use for logical containers
+	    Link	= 0x08	//Links of the projects executing side
 	};
 
 	//Methods
@@ -211,7 +212,7 @@ class Page : public Widget, public TConfig
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
 
 	// Pages
-	void pageList( vector<string> &ls ) const		{ chldList(mPage,ls); }
+	void pageList( vector<string> &ls ) const;
 	bool pagePresent( const string &id ) const		{ return chldPresent(mPage,id); }
 	AutoHD<Page> pageAt( const string &id ) const;
 	string pageAdd( const string &id, const string &name, const string &orig = "" );

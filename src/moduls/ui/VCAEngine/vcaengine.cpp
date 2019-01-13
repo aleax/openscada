@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"5.4.0"
+#define MOD_VER		"5.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -445,7 +445,8 @@ void Engine::modStop( )
 
 string Engine::wlbAdd( const string &iid, const string &inm, const string &idb )
 {
-    if(wlbPresent(iid))	return "";
+    if(wlbPresent(iid))	throw err_sys(_("The widget library '%s' is already present!"), iid.c_str());
+	//return "";
 
     WidgetLib *obj = new WidgetLib(TSYS::strEncode(sTrm(iid),TSYS::oscdID), inm, idb);
     MtxAlloc res(chM(), true);
@@ -458,7 +459,8 @@ AutoHD<WidgetLib> Engine::wlbAt( const string &id ) const	{ return chldAt(idWlb,
 
 string Engine::prjAdd( const string &iid, const string &inm, const string &idb )
 {
-    if(prjPresent(iid))	return "";
+    if(prjPresent(iid))	throw err_sys(_("The project '%s' is already present!"), iid.c_str());
+	//return "";
 
     Project *obj = new Project(TSYS::strEncode(sTrm(iid),TSYS::oscdID), inm, idb);
     MtxAlloc res(chM(), true);

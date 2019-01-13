@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-07 10:04+0200\n"
+"POT-Creation-Date: 2019-01-13 20:03+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -49,6 +49,10 @@ msgstr "Widgetsbibliothek abschalten."
 #, c-format
 msgid "Error enabling/disabling widget '%s': %s."
 msgstr "Fehler beim Ein-/Abschaltens des Widgets '%s': %s."
+
+#, c-format
+msgid "The widget '%s' is already present!"
+msgstr "Das Widget '%s' ist bereits vorhanden!"
 
 msgid "Widgets library: "
 msgstr "Widgetsbibliothek: "
@@ -1273,6 +1277,10 @@ msgstr "Projekt einschalten."
 msgid "Disabling the project."
 msgstr "Projekt abschalten."
 
+#, c-format
+msgid "The page '%s' is already present!"
+msgstr "Die Seite '%s' ist bereits vorhanden!"
+
 msgid "Project: "
 msgstr "Projekt: "
 
@@ -1358,14 +1366,18 @@ msgstr "Seite: geöffnet"
 msgid "Page: process not opened"
 msgstr "Seite: Prozess nicht geöffnet"
 
+#, c-format
+msgid "The target page '%s' of the link is empty or recursive!"
+msgstr "Die Zielseite '%s' des Links ist leer oder rekursiv!"
+
 msgid "As a page, only a box based widget can be used!"
 msgstr "Für Seiten kann nur das Box-basierte Widget benutzt werden!"
 
 msgid "The widget is not a container!"
 msgstr "Widget ist kein Container!"
 
-msgid "Page is not a container or template!"
-msgstr "Seite ist kein Container oder Vorlage!"
+msgid "Page is not a container or a template!"
+msgstr "Seite ist kein Container oder eine Vorlage!"
 
 msgid "Project page: "
 msgstr "Seite des Projekts: "
@@ -1384,6 +1396,9 @@ msgstr "Logischer Container"
 
 msgid "Container and template"
 msgstr "Container und Vorlage"
+
+msgid "Link"
+msgstr "Link"
 
 msgid "The variable is not a link"
 msgstr "Die Variable ist kein Lnk"
@@ -1511,6 +1526,9 @@ msgstr "Benachrichtigung"
 msgid "Language of the notification message"
 msgstr "Sprache der Benachrichtigung"
 
+msgid "Opened. "
+msgstr "Geöffnet. "
+
 msgid "Enabling the page."
 msgstr "Aktivieren Seite."
 
@@ -1531,9 +1549,6 @@ msgstr ""
 
 msgid "Processing. "
 msgstr "Wird bearbeitet. "
-
-msgid "Opened. "
-msgstr "Geöffnet. "
 
 msgid "Spent time on the branch: "
 msgstr "Verbrachte Zeit in der Branche: "
@@ -1668,6 +1683,14 @@ msgstr "Zeit der Aktivierung der Bibliothek '%s': %f ms."
 #, c-format
 msgid "Time of the project '%s' enabling: %f ms."
 msgstr "Zeitpunkt der Aktivierung des Projekts '%s': %f ms."
+
+#, c-format
+msgid "The widget library '%s' is already present!"
+msgstr "Die Widget-Bibliothek '%s' ist bereits vorhanden!"
+
+#, c-format
+msgid "The project '%s' is already present!"
+msgstr "Das Projekt '%s' ist bereits vorhanden!"
 
 #, c-format
 msgid "Connecting to the session is not permitted for '%s'."

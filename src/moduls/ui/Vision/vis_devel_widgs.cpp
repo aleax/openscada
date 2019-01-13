@@ -684,7 +684,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	    else cit = cit->parent();
     }
 
-    if(!it || !it->edited())	return;
+    bool isEdited = (it && it->edited());
 
     QMenu popup;
 
@@ -695,14 +695,14 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	if(!ico_t.load(TUIS::icoGet("editcopy",NULL,true).c_str())) ico_t.load(":/images/editcopy.png");
 	actCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy"),this);
 	popup.addAction(actCopy);
-	if(it->flag()&ModInspAttr::Item::FullText) {
+	if(isEdited && (it->flag()&ModInspAttr::Item::FullText)) {
 	    if(!ico_t.load(TUIS::icoGet("edit",NULL,true).c_str())) ico_t.load(":/images/edit.png");
 	    actEdit = new QAction(QPixmap::fromImage(ico_t),_("Edit"),this);
 	    popup.addAction(actEdit);
 	}
 
 	// Changes clear action
-	if(it->modify()) {
+	if(isEdited && it->modify()) {
 	    if(!ico_t.load(TUIS::icoGet("reload",NULL,true).c_str())) ico_t.load(":/images/reload.png");
 	    actClr = new QAction(QPixmap::fromImage(ico_t),_("Clear changes"),this);
 	    actClr->setStatusTip(_("Press to clear changes of the attribute."));
@@ -1263,7 +1263,7 @@ bool WdgTree::hasFocus( )	{ return (QApplication::focusWidget() == treeW); }
 bool WdgTree::eventFilter( QObject *target, QEvent *event )
 {
     if(event->type() == QEvent::FocusIn)			selectItem( );
-    if(event->type() == QEvent::FocusOut && !hasFocus())	owner()->selectItem("");
+    //if(event->type() == QEvent::FocusOut && !hasFocus())	owner()->selectItem("");
     if(event->type() == QEvent::MouseButtonPress && ((QMouseEvent*)event)->button() == Qt::LeftButton)
 	dragStartPos = ((QMouseEvent*)event)->pos();
     if(event->type() == QEvent::MouseMove &&
@@ -1679,7 +1679,7 @@ bool ProjTree::eventFilter( QObject *target, QEvent *event )
 {
     if(target == treeW) {
 	if(event->type() == QEvent::FocusIn)	selectItem();
-	if(event->type() == QEvent::FocusOut && !hasFocus()) owner()->selectItem("");
+	//if(event->type() == QEvent::FocusOut && !hasFocus()) owner()->selectItem("");
     }
     return QDockWidget::eventFilter(target, event);
 }
@@ -1830,11 +1830,12 @@ void ProjTree::updateTree( const string &vca_it )
 {
     string pEl;
     QTreeWidgetItem *resIt = NULL, *fIt = NULL;
-    bool lastA = false;
+
+    //bool lastA = false;
     for(int lev = 0, off = 0; !(pEl=TSYS::pathLev(vca_it,0,true,&off)).empty(); lev++) {
 	if(lev == 0) { if(pEl.find("prj_") == 0) pEl = pEl.substr(4); else break; }
 	else if(pEl.find("pg_") == 0) pEl = pEl.substr(3);
-	else if(pEl.find("a_") == 0) { lastA = true; break; }
+	//else if(pEl.find("a_") == 0) { lastA = true; break; }
 	else break;
 
 	bool fOK = false;
@@ -1844,7 +1845,8 @@ void ProjTree::updateTree( const string &vca_it )
 	}
 	if(!fOK) break;
     }
-    if(resIt) updateTree(lastA?resIt->parent():resIt);
+
+    updateTree(resIt?resIt->parent():resIt);
 }
 
 void ProjTree::ctrTreePopup( )

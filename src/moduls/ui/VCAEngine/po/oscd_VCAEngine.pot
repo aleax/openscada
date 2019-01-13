@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-11 10:34+0200\n"
+"POT-Creation-Date: 2019-01-13 20:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,6 +45,10 @@ msgstr ""
 
 #, c-format
 msgid "Error enabling/disabling widget '%s': %s."
+msgstr ""
+
+#, c-format
+msgid "The widget '%s' is already present!"
 msgstr ""
 
 msgid "Widgets library: "
@@ -943,6 +947,10 @@ msgstr ""
 msgid "Disabling the project."
 msgstr ""
 
+#, c-format
+msgid "The page '%s' is already present!"
+msgstr ""
+
 msgid "Project: "
 msgstr ""
 
@@ -1028,13 +1036,17 @@ msgstr ""
 msgid "Page: process not opened"
 msgstr ""
 
+#, c-format
+msgid "The target page '%s' of the link is empty or recursive!"
+msgstr ""
+
 msgid "As a page, only a box based widget can be used!"
 msgstr ""
 
 msgid "The widget is not a container!"
 msgstr ""
 
-msgid "Page is not a container or template!"
+msgid "Page is not a container or a template!"
 msgstr ""
 
 msgid "Project page: "
@@ -1053,6 +1065,9 @@ msgid "Logical container"
 msgstr ""
 
 msgid "Container and template"
+msgstr ""
+
+msgid "Link"
 msgstr ""
 
 msgid "The variable is not a link"
@@ -1181,6 +1196,9 @@ msgstr ""
 msgid "Language of the notification message"
 msgstr ""
 
+msgid "Opened. "
+msgstr ""
+
 msgid "Enabling the page."
 msgstr ""
 
@@ -1198,9 +1216,6 @@ msgid "Error compiling the function '%s' by the language '%s' for the widget: %s
 msgstr ""
 
 msgid "Processing. "
-msgstr ""
-
-msgid "Opened. "
 msgstr ""
 
 msgid "Spent time on the branch: "
@@ -1334,6 +1349,14 @@ msgstr ""
 
 #, c-format
 msgid "Time of the project '%s' enabling: %f ms."
+msgstr ""
+
+#, c-format
+msgid "The widget library '%s' is already present!"
+msgstr ""
+
+#, c-format
+msgid "The project '%s' is already present!"
 msgstr ""
 
 #, c-format

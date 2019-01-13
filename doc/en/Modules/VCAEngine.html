@@ -31,7 +31,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 5.4 </td>
+<td> 5.5 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -170,14 +170,16 @@
 </p>
 <ul><li> <i>Container</i> — page is the container for the underlying pages.</li>
 <li> <i>Template</i> — page is the template for the underlying pages.</li>
-<li> <i>Empty</i> — empty and inactive page. This property is used in conjunction with the property <i>Container</i> for organization the logical containers.</li></ul>
+<li> <i>Empty</i> — empty and inactive page. This property is used in conjunction with the property <i>Container</i> for organization the logical containers.</li>
+<li> <i>Link</i> — link to other page as a container of sub-pages which will be used on the project execution side (sessions) without their different creation. </li></ul>
 <p>Based on combinations of these properties the following types of pages are realized:
 </p>
 <ul><li> <i>Standard</i> — the standard page (no property), it is the full-featured final page.</li>
 <li> <i>Container</i> — the full-featured page with the property of the container (<i>Container</i>).</li>
 <li> <i>Logical container</i> — the logical container is actually not a page (<i>Container</i>|<i>Empty</i>), acts as an intermediate and group element in the page tree.</li>
 <li> <i>Template</i> — the template page (<i>Template</i>). Pure template page that is used to describe common properties and to identify them in nested pages, privately.</li>
-<li> <i>Container and template</i> — the template and container page (<i>Template</i>|<i>Container</i>), combines the functions of the template and the container.</li></ul>
+<li> <i>Container and template</i> — the template and container page (<i>Template</i>|<i>Container</i>), combines the functions of the template and the container.</li>
+<li> <i>Link</i> — link to other page. The links can be used for fully dynamic and high replicated pages, to optimize the memory consumption. To different the linked pages opening you must use the attribute "path". </li></ul>
 <p>On the visualization side (RunTime) a logic is constructed that governs how to open pages based on the following attributes of the basic element "Box":
 </p>
 <ul><li> <i>pgOpen</i> — sign "The page is opened";</li>

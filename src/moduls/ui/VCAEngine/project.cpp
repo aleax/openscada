@@ -72,9 +72,9 @@ TCntrNode &Project::operator=( const TCntrNode &node )
 
     //Copy included pages
     src_n->list(pls);
-    for(unsigned i_p = 0; i_p < pls.size(); i_p++) {
-	if(!present(pls[i_p])) add(pls[i_p],"");
-	(TCntrNode&)at(pls[i_p]).at() = (TCntrNode&)src_n->at(pls[i_p]).at();
+    for(unsigned iP = 0; iP < pls.size(); iP++) {
+	if(!present(pls[iP])) add(pls[iP],"");
+	(TCntrNode&)at(pls[iP]).at() = (TCntrNode&)src_n->at(pls[iP]).at();
     }
 
     return *this;
@@ -200,9 +200,9 @@ void Project::load_( TConfig *icfg )
     if(!SYS->selDB().empty()) {
 	vector<string> it_ls;
 	list(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())
-		del(it_ls[i_it]);
+	for(unsigned iIt = 0; iIt < it_ls.size(); iIt++)
+	    if(itReg.find(it_ls[iIt]) == itReg.end())
+		del(it_ls[iIt]);
     }
 
     mOldDB = TBDS::realDBName(DB());
@@ -289,7 +289,8 @@ void Project::setEnable( bool val )
 
 string Project::add( const string &iid, const string &name, const string &orig )
 {
-    if(present(iid)) return "";
+    if(present(iid))	throw err_sys(_("The page '%s' is already present!"), iid.c_str());
+	//return "";
 
     Page *obj = new Page(TSYS::strEncode(sTrm(iid),TSYS::oscdID), orig);
     MtxAlloc res(chM(), true);
@@ -674,8 +675,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 	vector<string> c_list;
 	list(c_list);
 	unsigned e_c = 0;
-	for(unsigned i_p = 0; i_p < c_list.size(); i_p++)
-	    if(at(c_list[i_p]).at().enable()) e_c++;
+	for(unsigned iP = 0; iP < c_list.size(); iP++)
+	    if(at(c_list[iP]).at().enable()) e_c++;
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else if(a_path == "/obj/u_lst" && ctrChkNode(opt)) {
@@ -882,9 +883,9 @@ TCntrNode &Page::operator=( const TCntrNode &node )
     src_n->pageList(els);
     // Call recursive only for separated branches copy and for prevent to included copy
     if(path().find(src_n->path()+"/") != 0)
-	for(unsigned i_p = 0; i_p < els.size(); i_p++) {
-	    if(!pagePresent(els[i_p])) pageAdd(els[i_p], "");
-	    (TCntrNode&)pageAt(els[i_p]).at() = (TCntrNode&)src_n->pageAt(els[i_p]).at();
+	for(unsigned iP = 0; iP < els.size(); iP++) {
+	    if(!pagePresent(els[iP])) pageAdd(els[iP], "");
+	    (TCntrNode&)pageAt(els[iP]).at() = (TCntrNode&)src_n->pageAt(els[iP]).at();
 	}
 
     return *this;
@@ -1091,23 +1092,23 @@ void Page::load_( TConfig *icfg )
     else SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
     setParentNm(cfg("PARENT").getS());
 
-    //Inherit modify attributes
+    //Inheriting the modified attributes
     vector<string> als;
     attrList(als);
     string tAttrs = cfg("ATTRS").getS();
-    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
-	if(!attrPresent(als[i_a])) continue;
-	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos) {
+    for(unsigned iA = 0; iA < als.size(); iA++) {
+	if(!attrPresent(als[iA])) continue;
+	AutoHD<Attr> attr = attrAt(als[iA]);
+	if(attr.at().modif() && tAttrs.find(als[iA]+";") == string::npos) {
 	    attr.at().setModif(0);
-	    inheritAttr(als[i_a]);
+	    inheritAttr(als[iA]);
 	}
     }
 
-    //Load generic attributes
+    //Loading for the generic attributes
     mod->attrsLoad(*this, db+"."+tbl, path(), "", tAttrs, true);
 
-    //Create new pages
+    //Creating for new pages
     map<string, bool>	itReg;
     vector<vector<string> > full;
     TConfig cEl(&mod->elPage());
@@ -1126,9 +1127,9 @@ void Page::load_( TConfig *icfg )
     if(!SYS->selDB().empty()) {
 	vector<string> it_ls;
 	pageList(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())
-		pageDel(it_ls[i_it]);
+	for(unsigned iIt = 0; iIt < it_ls.size(); iIt++)
+	    if(itReg.find(it_ls[iIt]) == itReg.end())
+		pageDel(it_ls[iIt]);
     }
 
     //Load present pages
@@ -1191,9 +1192,9 @@ void Page::loadIO( )
     if(!SYS->selDB().empty()) {
 	vector<string> it_ls;
 	wdgList(it_ls);
-	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-	    if(itReg.find(it_ls[i_it]) == itReg.end())
-		wdgDel(it_ls[i_it]);
+	for(unsigned iIt = 0; iIt < it_ls.size(); iIt++)
+	    if(itReg.find(it_ls[iIt]) == itReg.end())
+		wdgDel(it_ls[iIt]);
     }
 }
 
@@ -1233,7 +1234,14 @@ void Page::setEnable( bool val, bool force )
     if(enable() == val) return;
 
     if(prjFlags()&Page::Empty) cfg("PARENT").setS("root");
+    else if(prjFlags()&Page::Link) {
+	//Checking for the recursion
+	if(parentNm().empty() || path().find(parentNm()) != string::npos)
+	    throw err_sys(_("The target page '%s' of the link is empty or recursive!"), parentNm().c_str());
 
+	mParent = ownerProj()->nodeAt(parentNm());
+    }
+ 
     Widget::setEnable(val);
     if(val && !parent().freeStat() && parent().at().rootId() != "Box") {
 	Widget::setEnable(false);
@@ -1275,7 +1283,7 @@ void Page::setEnable( bool val, bool force )
 void Page::wdgAdd( const string &wid, const string &name, const string &ipath, bool force )
 {
     if(!isContainer())  throw TError(nodePath().c_str(),_("The widget is not a container!"));
-    if(wdgPresent(wid)) return;
+    if(wdgPresent(wid)) throw err_sys(_("The widget '%s' is already present!"), wid.c_str());
 
     bool toRestoreInher = false;
 
@@ -1327,11 +1335,17 @@ AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off ) const
     return Widget::wdgAt(wdg, lev, off);
 }
 
+void Page::pageList( vector<string> &ls ) const
+{
+    if(prjFlags()&(Page::Template|Page::Container))
+	chldList(mPage, ls);
+}
+
 string Page::pageAdd( const string &iid, const string &name, const string &orig )
 {
-    if(pagePresent(iid)) return "";
+    if(pagePresent(iid)) throw err_sys(_("The page '%s' is already present!"), iid.c_str());
     if(!(prjFlags()&(Page::Container|Page::Template)))
-	throw TError(nodePath().c_str(),_("Page is not a container or template!"));
+	throw TError(nodePath().c_str(),_("Page is not a container or a template!"));
 
     Page *obj = new Page(TSYS::strEncode(sTrm(iid),TSYS::oscdID), orig);
     MtxAlloc res(chM(), true);
@@ -1346,7 +1360,7 @@ void Page::pageAdd( Page *iwdg )
     if(pagePresent(iwdg->id()))	delete iwdg;
     if(!(prjFlags()&(Page::Container|Page::Template))) {
 	delete iwdg;
-	throw TError(nodePath().c_str(),_("Page is not a container or template!"));
+	throw TError(nodePath().c_str(),_("Page is not a container or a template!"));
     }
     else chldAdd(mPage,iwdg);
 }
@@ -1430,9 +1444,9 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	Widget::cntrCmdGeneric(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+path(),RWRWR_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Configuration"))) {
+	    ctrMkNode("fld",opt,2,"/wdg/st/pgTp",_("Page type"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/wdg/st/pgTpLst");
 	    if((prjFlags()&Page::Empty) || (ownerPage() && (ownerPage()->prjFlags()&Page::Template) && !(ownerPage()->prjFlags()&Page::Container)))
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,"root",SUI_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,10,"/wdg/st/pgTp",_("Page type"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/wdg/st/pgTpLst");
 	    ctrMkNode("fld",opt,-1,"/wdg/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 	}
 	if(prjFlags()&(Page::Template|Page::Container)) {
@@ -1448,19 +1462,42 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
-    if(a_path == "/wdg/w_lst" && ctrChkNode(opt) && ownerPage() && (ownerPage()->prjFlags()&Page::Template))
-	opt->childIns(0,"el")->setText("..");
+    if(a_path == "/wdg/w_lst" && ctrChkNode(opt)) {
+	if(ownerPage() && (ownerPage()->prjFlags()&Page::Template)) opt->childIns(0,"el")->setText("..");
+	else if(prjFlags()&Page::Link) {
+	    int c_lv = 0;
+	    string c_path = "", c_el;
+	    string lnk = parentNm();
+
+	    opt->childAdd("el")->setText(c_path);
+	    for(int c_off = 0; (c_el=TSYS::pathLev(lnk,0,true,&c_off)).size(); c_lv++) {
+		c_path += "/"+c_el;
+		opt->childAdd("el")->setText(c_path);
+	    }
+	    try {
+		vector<string>	ls;
+		ownerProj()->nodeAt(lnk).at().nodeList(ls, "pg_");
+
+		for(unsigned iL = 0; iL < ls.size(); iL++)
+		    opt->childAdd("el")->setText(c_path+"/"+ls[iL]);
+	    } catch(TError&) { }
+	} else Widget::cntrCmdGeneric(opt);
+    }
     else if(a_path == "/wdg/st/pgTp") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(prjFlags()&(Page::Container|Page::Template|Page::Empty)));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
+	    opt->setText(i2s(prjFlags()&(Page::Container|Page::Template|Page::Empty|Page::Link)));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
-	    setPrjFlags(prjFlags()^((prjFlags()^s2i(opt->text()))&(Page::Container|Page::Template|Page::Empty)));
+	    setPrjFlags(prjFlags()^((prjFlags()^s2i(opt->text()))&(Page::Container|Page::Template|Page::Empty|Page::Link)));
     }
     else if(a_path == "/wdg/st/pgTpLst" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setAttr("id","0")->setText(_("Standard"));
-	opt->childAdd("el")->setAttr("id", i2s(Page::Container))->setText(_("Container"));
-	opt->childAdd("el")->setAttr("id", i2s(Page::Container|Page::Empty))->setText(_("Logical container"));
-	opt->childAdd("el")->setAttr("id", i2s(Page::Template))->setText(_("Template"));
-	opt->childAdd("el")->setAttr("id", i2s(Page::Container|Page::Template))->setText(_("Container and template"));
+	if(!ownerPage() || !(ownerPage()->prjFlags()&Page::Template)) {
+	    opt->childAdd("el")->setAttr("id", i2s(Page::Container))->setText(_("Container"));
+	    opt->childAdd("el")->setAttr("id", i2s(Page::Container|Page::Empty))->setText(_("Logical container"));
+	    opt->childAdd("el")->setAttr("id", i2s(Page::Template))->setText(_("Template"));
+	    opt->childAdd("el")->setAttr("id", i2s(Page::Container|Page::Template))->setText(_("Container and template"));
+	    opt->childAdd("el")->setAttr("id", i2s(Page::Link))->setText(_("Link"));
+	}
     }
     else if(a_path == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
     else if(a_path == "/br/pg_" || a_path == "/page/page") {
@@ -1484,8 +1521,8 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	vector<string> c_list;
 	pageList(c_list);
 	unsigned e_c = 0;
-	for(unsigned i_p = 0; i_p < c_list.size(); i_p++)
-	    if(pageAt(c_list[i_p]).at().enable()) e_c++;
+	for(unsigned iP = 0; iP < c_list.size(); iP++)
+	    if(pageAt(c_list[iP]).at().enable()) e_c++;
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else return Widget::cntrCmdGeneric(opt);
@@ -1533,12 +1570,12 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    vector<string> a_ls;
 	    string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
 	    srcwdg.at().attrList(a_ls);
-	    unsigned i_a;
-	    for(i_a = 0; i_a < a_ls.size(); i_a++)
-		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') &&
-		    !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst))
-		{ nattr = a_ls[i_a]; break; }
-	    if(i_a >= a_ls.size()) throw TError(nodePath().c_str(),_("The variable is not a link"));
+	    unsigned iA;
+	    for(iA = 0; iA < a_ls.size(); iA++)
+		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[iA]).at().cfgTempl(),0,'|') &&
+		    !(srcwdg.at().attrAt(a_ls[iA]).at().flgSelf()&Attr::CfgConst))
+		{ nattr = a_ls[iA]; break; }
+	    if(iA >= a_ls.size()) throw TError(nodePath().c_str(),_("The variable is not a link"));
 	}
 
 	string m_prm = srcwdg.at().attrAt(nattr).at().cfgVal();
@@ -1745,12 +1782,12 @@ void PageWdg::load_( TConfig *icfg )
     vector<string> als;
     attrList(als);
     string tAttrs = cfg("ATTRS").getS();
-    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
-	if(!attrPresent(als[i_a])) continue;
-	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos) {
+    for(unsigned iA = 0; iA < als.size(); iA++) {
+	if(!attrPresent(als[iA])) continue;
+	AutoHD<Attr> attr = attrAt(als[iA]);
+	if(attr.at().modif() && tAttrs.find(als[iA]+";") == string::npos) {
 	    attr.at().setModif(0);
-	    inheritAttr(als[i_a]);
+	    inheritAttr(als[iA]);
 	}
     }
 

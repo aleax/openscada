@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -188,8 +188,8 @@ class TCntrNode
 	int8_t	grpSize( );
 	int8_t	grpId( const string &sid );
 	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" ) const;
-	void chldList( int8_t igr, vector<string> &list, bool noex = false, bool onlyEn = true ) const;
-	bool chldPresent( int8_t igr, const string &name ) const;
+	virtual void chldList( int8_t igr, vector<string> &list, bool noex = false, bool onlyEn = true ) const;
+	virtual bool chldPresent( int8_t igr, const string &name ) const;
 
     protected:
 	//Data

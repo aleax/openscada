@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-07 09:57+0200\n"
+"POT-Creation-Date: 2019-01-13 20:03+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -44,6 +44,10 @@ msgstr "Отключение библиотеки виджетов."
 #, c-format
 msgid "Error enabling/disabling widget '%s': %s."
 msgstr "Ошибка включения/отключения виджета '%s': %s."
+
+#, c-format
+msgid "The widget '%s' is already present!"
+msgstr "Виджет '%s' уже присутствует!"
 
 msgid "Widgets library: "
 msgstr "Библиотека виджетов: "
@@ -1263,6 +1267,10 @@ msgstr "Включение проекта."
 msgid "Disabling the project."
 msgstr "Отключение проекта."
 
+#, c-format
+msgid "The page '%s' is already present!"
+msgstr "Страница '%s' уже присутствует!"
+
 msgid "Project: "
 msgstr "Проект: "
 
@@ -1348,13 +1356,17 @@ msgstr "Стр.: открыта"
 msgid "Page: process not opened"
 msgstr "Стр.: обрабатывать не открытой"
 
+#, c-format
+msgid "The target page '%s' of the link is empty or recursive!"
+msgstr "Целевая страница '%s' связи пуста или рекурсивна!"
+
 msgid "As a page, only a box based widget can be used!"
 msgstr "Для страниц может быть использован только основанный на Боксе виджет!"
 
 msgid "The widget is not a container!"
 msgstr "Виджет не контейнер!"
 
-msgid "Page is not a container or template!"
+msgid "Page is not a container or a template!"
 msgstr "Страница не контейнер или шаблон!"
 
 msgid "Project page: "
@@ -1374,6 +1386,9 @@ msgstr "Логический контейнер"
 
 msgid "Container and template"
 msgstr "Контейнер и шаблон"
+
+msgid "Link"
+msgstr "Связь"
 
 msgid "The variable is not a link"
 msgstr "Переменная не является связью"
@@ -1501,6 +1516,9 @@ msgstr "Сообщение уведомления"
 msgid "Language of the notification message"
 msgstr "Язык сообщения уведомления"
 
+msgid "Opened. "
+msgstr "Открыто. "
+
 msgid "Enabling the page."
 msgstr "Включение страницы."
 
@@ -1520,9 +1538,6 @@ msgstr "Ошибка компиляции функции '%s' на языке '%
 
 msgid "Processing. "
 msgstr "Обработка. "
-
-msgid "Opened. "
-msgstr "Открыто. "
 
 msgid "Spent time on the branch: "
 msgstr "Затрачено времени на ветвь: "
@@ -1656,6 +1671,14 @@ msgstr "Время включения библиотеки '%s': %f мс."
 #, c-format
 msgid "Time of the project '%s' enabling: %f ms."
 msgstr "Время включения проекта '%s': %f мс."
+
+#, c-format
+msgid "The widget library '%s' is already present!"
+msgstr "Библиотека виджетов '%s' уже присутствует!"
+
+#, c-format
+msgid "The project '%s' is already present!"
+msgstr "Проект '%s' уже присутствует!"
 
 #, c-format
 msgid "Connecting to the session is not permitted for '%s'."

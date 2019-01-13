@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -134,6 +134,8 @@ string TMdContr::authData( )
 
 void TMdContr::reqService( XML_N &io )
 {
+    if(tr.freeStat())	return;
+
     ResAlloc res(nodeRes(), true);
     io.setAttr("err", "");
 
