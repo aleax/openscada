@@ -684,8 +684,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    {
 		if(this.inclOpen) {
 		    servSet(this.inclOpen,'com=pgClose','');
-		    pgCache[this.inclOpen] = this.pages[this.inclOpen];
-		    pgCache[this.inclOpen].reqTm = tmCnt;
+		    //pgCache[this.inclOpen] = this.pages[this.inclOpen];
+		    //pgCache[this.inclOpen].reqTm = tmCnt;
 		    this.place.removeChild(this.pages[this.inclOpen].place);
 		    this.pages[this.inclOpen].perUpdtEn(false);
 		    delete this.pages[this.inclOpen];
@@ -693,22 +693,22 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		}
 		if(this.attrs['pgOpenSrc'].length) {
 		    this.inclOpen = this.attrs['pgOpenSrc'];
-		    if(pgCache[this.inclOpen]) {
+		    /*if(pgCache[this.inclOpen]) {
 			this.pages[this.inclOpen] = pgCache[this.inclOpen];
 			this.place.appendChild(this.pages[this.inclOpen].place);
-			pgBr = servGet(this.inclOpen,'com=attrsBr&tm='+pgCache[this.inclOpen].reqTm);
+			pgBr = servGet(this.inclOpen, 'com=attrsBr&tm='+pgCache[this.inclOpen].reqTm);
 			this.pages[this.inclOpen].perUpdtEn(true);
 			this.pages[this.inclOpen].makeEl(pgBr);
 			delete pgCache[this.inclOpen];
 		    }
-		    else {
+		    else {*/
 			var iPg = new pwDescr(this.inclOpen, true, this);
 			iPg.place = this.place.ownerDocument.createElement('div');
 			iPg.makeEl(servGet(this.inclOpen,'com=attrsBr'), false, true);
 
 			this.pages[this.inclOpen] = iPg;
 			this.place.appendChild(iPg.place);
-		    }
+		    //}
 		}
 	    }
 	    this.place.wdgLnk = this;
@@ -2625,7 +2625,7 @@ var prcTm = 0;				//Process time
 var planePer = 0;			//Planed update period
 var tmCnt = 0;				//Call counter
 var pgList = new Array();		//Opened pages list
-var pgCache = new Object();		//Cached pages' data
+//var pgCache = new Object();		//Cached pages' data
 var perUpdtWdgs = new Object();		//Periodic updated widgets register
 var masterPage = new pwDescr('', true);	//Master page create
 var stTmID = null;			//Status line timer identifier

@@ -3,7 +3,7 @@
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
  *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
- *		   2007-2018 by Roman Savochenko (rom_as@oscada.org)	   *
+ *		   2007-2019 by Roman Savochenko (rom_as@oscada.org)	   *
  *									   *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,7 +44,7 @@ using namespace VCA;
 //*************************************************
 VCASess::VCASess( const string &iid, bool isCreate ) : mId(iid), mIsCreate(isCreate)
 {
-    lst_ses_req	= time(NULL);
+    open_ses = lst_ses_req	= time(NULL);
     id_objs	= grpAdd("obj_");
 }
 
@@ -218,6 +218,15 @@ void VCASess::postReq( SSess &ses )
 	XMLNode req((wp_com=="pgOpen")?"open":"close");
 	req.setAttr("path","/"+TSYS::pathLev(ses.url,0)+"/%2fserv%2fpg")->setAttr("pg",ses.url);
 	mod->cntrIfCmd(req, ses);
+	// ???? Remove for objects of that page - pages cache
+	if(wp_com == "pgClose") {
+	    string oAddr = TSYS::path2sepstr(ses.url);
+	    vector<string> oLs;
+	    objList(oLs);
+	    for(int iO = 0; iO < oLs.size(); iO++)
+		if(oLs[iO].find(oAddr) == 0)
+		    objDel(oLs[iO]);
+	}
     }
     else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().postReq(ses);
 
@@ -263,26 +272,40 @@ string VCASess::resGet( const string &res, const string &path, const SSess &ses,
 
 string VCASess::cacheResGet( const string &res, string *mime )
 {
-    ResAlloc resAlc(nodeRes(),false);
+    ResAlloc resAlc(nodeRes(), false);
     map<string,CacheEl>::iterator ires = mCacheRes.find(res);
     if(ires == mCacheRes.end()) return "";
     ires->second.tm = time(NULL);
     if(mime) *mime = ires->second.mime;
+
     return ires->second.val;
 }
 
 void VCASess::cacheResSet( const string &res, const string &val, const string &mime )
 {
     if(val.size() > USER_FILE_LIMIT) return;
-    ResAlloc resAlc(nodeRes(),true);
-    mCacheRes[res] = CacheEl(time(NULL),val,mime);
+    ResAlloc resAlc(nodeRes(), true);
+    mCacheRes[res] = CacheEl(time(NULL), val, mime);
     if(mCacheRes.size() > (STD_CACHE_LIM+STD_CACHE_LIM/10)) {
 	vector< pair<time_t,string> > sortQueue;
 	for(map<string,CacheEl>::iterator itr = mCacheRes.begin(); itr != mCacheRes.end(); ++itr)
 	    sortQueue.push_back(pair<time_t,string>(itr->second.tm,itr->first));
 	sort(sortQueue.begin(), sortQueue.end());
-	for(unsigned i_del = 0; i_del < (STD_CACHE_LIM/10); ++i_del) mCacheRes.erase(sortQueue[i_del].second);
+	for(unsigned iDel = 0; iDel < (STD_CACHE_LIM/10); ++iDel)
+	    mCacheRes.erase(sortQueue[iDel].second);
     }
+}
+
+int VCASess::cacheResSize( )	{ return mCacheRes.size(); }
+
+float VCASess::cacheResLen( )
+{
+    ResAlloc resAlc(nodeRes(), false);
+    float len = 0;
+    for(map<string,CacheEl>::iterator itr = mCacheRes.begin(); itr != mCacheRes.end(); ++itr)
+	len += itr->second.val.size();
+
+    return len;
 }
 
 //*************************************************
@@ -5185,8 +5208,9 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    struct tm ttm, ttm1 = ttm;
 	    string lab_tm, lab_dt;
 
-	    localtime_r(&tm_t, &ttm);
-	    int64_t UTChourDt = (int64_t)ttm.tm_hour*3600000000ll;
+	    //localtime_r(&tm_t, &ttm);
+	    //int64_t UTChourDt = (int64_t)ttm.tm_hour*3600000000ll;	//This way is mostly wrong but returns the offset in the somer time
+	    int64_t UTChourDt = 1000000ll*TSYS::str2atime(TSYS::atime2str(tEnd/1000000),"",true) - tEnd;
 
 	    //  Draw generic grid line
 	    gdImageLine(im, tArX, tArY+tArH, tArX+tArW, tArY+tArH, clrGrid);

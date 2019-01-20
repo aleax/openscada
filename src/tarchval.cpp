@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchval.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -383,12 +383,12 @@ void TValBuf::getVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 	}
 	case TFld::Real: {
 	    double vl;
-	    for( ; ibeg <= iend; ibeg += t_step) { vl = getR(&ibeg,true); buf.setR(vl,ibeg); }
+	    for( ; ibeg <= iend; ibeg += t_step) { vl = getR(&ibeg, true); buf.setR(vl, ibeg); }
 	    break;
 	}
 	case TFld::String: {
 	    string vl;
-	    for( ; ibeg <= iend; ibeg += t_step) { vl = getS(&ibeg,true); buf.setS(vl,ibeg); }
+	    for( ; ibeg <= iend; ibeg += t_step) { vl = getS(&ibeg, true); buf.setS(vl, ibeg); }
 	    break;
 	}
 	default: break;
@@ -613,7 +613,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	    (*buf.grid)[wcur] = value;
 	    return;
 	}
-	else if(npos < 0) throw TError("ValBuf", _("Grid mode doesn't support inserting too old values %lld (%lld-%lld)."), tm, beg, end);
+	else if(npos < 0) throw TError("ValBuf", _("The grid mode doesn't support inserting too old values %lld (%lld-%lld)."), tm, beg, end);
 	else {
 	    TpVal fillVl = eval;
 	    if(fillLast && buf.grid->size()) fillVl = cur ? (*buf.grid)[cur-1] : (*buf.grid)[buf.grid->size()-1];
@@ -647,7 +647,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
     else if(per) {
 	int npos = (tm-end)/per;
 	// Set value
-	if(npos < 0) throw TError("ValBuf", _("Grid mode doesn't support inserting old values."));
+	if(npos < 0) throw TError("ValBuf", _("The grid mode doesn't support inserting old values."));
 	else {
 	    if(hgResTm) {
 		SHg b_el;
@@ -718,14 +718,14 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 			    }
 			}
 		    }
-		    //  Update end time
+		    //  Updating the end time
 		    end += per;
 		}
 	    }
 	    else {
 		SLw b_el;
 
-		// Update current end value
+		// Update the current end value
 		if(npos == 0) {
 		    b_el.tm = end/1000000; b_el.val = value;
 		    int h_el = cur ? cur-1 : buf.tmLow->size()-1;
@@ -1151,15 +1151,29 @@ TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool o
 
 void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string &arch, int limit, bool onlyLocal )
 {
-    //Get from buffer
+    //Free buffers fill directly but not free ones must be filled from the begin to the end,
+    //  then for their there a buffer array is used which is back replayed at the end.
+    //The function of the data requesting through the buffer and different archivers for a fixed period is significant one then implemented here.
+    bool isFreeBuf = !buf.period();
+    vector<TValBuf*> tBuf;
+    TValBuf	*wBuf = &buf;
+
+    try {
+
+    //Getting from the buffer
     if((arch.empty() || arch == BUF_ARCH_NM) && vOK(ibeg,iend)) {
-	ibeg = vmax(ibeg,iend-TValBuf::period()*limit);
-	TValBuf::getVals(buf,ibeg,iend);
-	iend = buf.begin()-1;
+	if(!isFreeBuf && arch != BUF_ARCH_NM) {
+	    wBuf = new TValBuf(buf.valType(), 0, buf.period(), true, true);
+	    tBuf.push_back(wBuf);
+	}
+
+	ibeg = vmax(ibeg, iend-TValBuf::period()*limit);
+	TValBuf::getVals(*wBuf, ibeg, iend);
+	iend = wBuf->begin()-1;
 	if(arch == BUF_ARCH_NM) return;
     }
 
-    //Get priority archivers list for requested range
+    //Getting the priority archivers list for requested range
     ResAlloc res(aRes, false);
     vector<pair<float,TVArchEl*> >	propArchs;
     for(unsigned iA = 0; iA < archEl.size(); iA++) {
@@ -1170,20 +1184,37 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     }
     std::sort(propArchs.begin(), propArchs.end());
 
-    //Process the range by priority
+    //Processing the range at the priority
     for(vector<pair<float,TVArchEl*> >::reverse_iterator iA = propArchs.rbegin(); iA != propArchs.rend(); ++iA) {
-	if(iA->second->begin() > iend)	continue;	//Try the block from next archiver, !!!!
+	if(iA->second->begin() > iend)	continue;	//Try the block from the next archiver, !!!!
+
+	if(!isFreeBuf && arch.empty()) {
+	    wBuf = new TValBuf(buf.valType(), 0, buf.period(), true, true);
+	    tBuf.push_back(wBuf);
+	} else wBuf = &buf;
 
 	// Decrease the range begin to the limit
-	int prevSz = buf.realSize();
-	if(!prevSz) ibeg = vmax(ibeg, iend-(int64_t)(1e6*iA->second->archivator().valPeriod())*(limit-buf.realSize()));
-	iA->second->getVals(buf, ibeg, iend, onlyLocal);
+	int prevSz = wBuf->realSize();
+	if(!prevSz) ibeg = vmax(ibeg, iend-(int64_t)(1e6*iA->second->archivator().valPeriod())*(limit-wBuf->realSize()));
+	iA->second->getVals(*wBuf, ibeg, iend, onlyLocal);
 
-	if(buf.realSize() != prevSz) {			// Request good
-	    iend = buf.begin()-1;
-	    if(iend <= ibeg)	break;	//All data requested
-	    iA = propArchs.rbegin();	//Next block check
+	if(wBuf->realSize() != prevSz) {// The request is good
+	    iend = wBuf->begin()-1;
+	    if(iend <= ibeg)	break;	// All data requested
+	    iA = propArchs.rbegin();	// Checking the next block
 	}
+    }
+
+    for(int iBf = tBuf.size()-1; iBf >= 0; iBf--) {
+	tBuf[iBf]->getVals(buf, tBuf[iBf]->begin(), tBuf[iBf]->end());
+	delete tBuf[iBf]; tBuf[iBf] = NULL;
+    }
+
+    } catch(TError &err) {
+	for(int iBf = tBuf.size()-1; iBf >= 0; iBf--)
+	    if(tBuf[iBf]) delete tBuf[iBf];
+	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	throw;
     }
 }
 
@@ -1668,10 +1699,9 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     }
     // VarType getVal(int tm, bool up_ord = false, string arch = "") -
     //         get one value from the archive for the time <tm>, up order <up_ord> and the archiver <arch>.
-    //  tm - the time for requested value, in microseconds. Set to 0 for end().
-    //  up_ord - fit the requested value time to up for the grid.
-    //  arch - the archiver for the request. Set to empty for buffer and all archivers try.
-    //         Set to "<buffer>" for the buffer only process.
+    //  tm     - the time for requested value, in microseconds. Set to 0 for end();
+    //  up_ord - fit the requested value time to up for the grid;
+    //  arch   - requesting archiver, set to empty to try for the buffer and all archivers, set to "<buffer>" to process only for the buffer.
     if(iid == "getVal" && prms.size()) {
 	int64_t tm = prms[0].getI();
 	string arch = (prms.size() >= 3) ? prms[2].getS() : string("");
@@ -1681,10 +1711,9 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	return rez;
     }
     // bool setVal(int tm, VarType vl, string arch = "") - set one value to the archive for the time <tm> and the archiver <arch>.
-    //  tm - the time for requested value, in microseconds. Set to 0 for end().
-    //  vl - the value.
-    //  arch - the archiver for the request. Set to empty for buffer and all archivers try.
-    //         Set to "<buffer>" for the buffer only process.
+    //  tm - the time for requested value, in microseconds. Set to 0 for end();
+    //  vl - the value;
+    //  arch - the archiver for the request, set to empty for buffer and all archivers try, set to "<buffer>" for the buffer only process.
     if(iid == "setVal" && prms.size() >= 2) {
 	int64_t tm = prms[0].getI();
 	string arch = (prms.size() >= 3) ? prms[2].getS() : string("");
@@ -1699,8 +1728,46 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	setVals(buf, buf.begin(), buf.end(), arch);
 	return true;
     }
-    //!!!! getVals() - append after an internal represent object to TValBuf appending.
-    //!!!! setVals() - append after an internal represent object to TValBuf appending.
+    // Array getVals( int begTm, int endTm, int period, string arch = "" ) -
+    //         gets for the archive/history values from <begTm> and up to <endTm> for the archiver <arch>
+    //  begTm  - begin time of the requesting data range, in microseconds, will be changed to the real data begin;
+    //  endTm  - end time of the requesting data range, in microseconds;
+    //  period - period of the data, in microseconds, must be necessarily specified and
+    //           will be used the maximum one from the archive, will be changed to the real data period;
+    //  arch   - requesting archiver, set to empty to try for the buffer and all archivers, set to "<buffer>" to process only the buffer.
+    if(iid == "getVals" && prms.size() >= 3) {
+	TValBuf buf(TValBuf::valType(), 0, vmax(TValBuf::period(),prms[2].getI()), true, true);
+	getVals(buf, prms[0].getI(), prms[1].getI(), (prms.size()>=4?prms[3].getS():""));
+	TArrayObj *rez = new TArrayObj();
+	int64_t btm = (buf.begin()/buf.period())*buf.period();
+	for(int64_t tm = btm; tm <= buf.end(); tm += buf.period()) {
+	    int64_t ttm = tm;
+	    rez->arSet(-1, buf.get(&ttm));
+	}
+	prms[0].setI(btm); prms[0].setModify();
+	prms[2].setI(buf.period()); prms[2].setModify();
+	return rez;
+    }
+    // bool setVals( Array buf, int tm, int period, string arch = "" ) -
+    //         sets for the archive/history values <buf> to the archive from the begin time <tm>, the values period <period> and the archiver <arch>.
+    //  buf    - array of the values to set;
+    //  tm     - begin time of the setting data range, in microseconds;
+    //  period - period of the setting data, in microseconds, must be necessarily specified and
+    //           will be used the maximum one from the archive, will be changed to the real data period;
+    //  arch   - setting archiver, set to empty to set for the buffer and all archivers, set to "<buffer>" to process only the buffer.
+    if(iid == "setVals" && prms.size() >= 3) {
+	AutoHD<TArrayObj> aBuf;
+	if(prms[0].type() != TVariant::Object || (aBuf=prms[0].getO()).freeStat())	return false;
+	int64_t btm = prms[1].getI(),
+		per = vmax(TValBuf::period(), prms[2].getI());
+	TValBuf buf(TValBuf::valType(), 0, per, true, true);
+	for(int iIt = 0; iIt < aBuf.at().arSize(); iIt++, btm += per)
+	    buf.set(aBuf.at().arGet(iIt), btm);
+	setVals(buf, buf.begin(), buf.end(), (prms.size()>=4?prms[3].getS():""));
+	prms[2].setI(per); prms[2].setModify();
+
+	return true;
+    }
 
     //Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SARH_ID);
@@ -1733,7 +1800,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    string	arch	= opt->attr("arch");
 	    bool	local	= s2i(opt->attr("local"));
 
-	    // Process one value request
+	    // Processing for requesting one value
 	    if(!tm) 	tm = TSYS::curTime();
 	    if(!tm_grnd) {
 		opt->setText(getVal(&tm,false,arch,local).getS());
@@ -1764,7 +1831,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		}
 		std::sort(propArchs.begin(), propArchs.end());
 
-		//Process the range by priority
+		//Processing the range at the priority
 		for(vector<pair<float,TVArchEl*> >::reverse_iterator iA = propArchs.rbegin(); iA != propArchs.rend(); ++iA) {
 		    buf.setPeriod(vmax((int64_t)(1e6*iA->second->archivator().valPeriod()),period));
 		    iA->second->getVals(buf, vmax(tm_grnd,iA->second->begin()), tm, local);		//vmax for allow access to next level archive
@@ -2414,7 +2481,7 @@ TVArchivator &TVArchEl::archivator( )	{ return mArchivator; }
 
 TVariant TVArchEl::getVal( int64_t *tm, bool up_ord, bool onlyLocal )
 {
-    TVariant vl = getValProc(tm,up_ord);
+    TVariant vl = getValProc(tm, up_ord);
 
     if(!onlyLocal && tm && archive().startStat() && vl.isEVal() && SYS->rdActive() &&
 	(archive().srcMode() == TVArchive::ActiveAttr || archive().srcMode() == TVArchive::PassiveAttr))

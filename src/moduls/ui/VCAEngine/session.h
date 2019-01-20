@@ -90,10 +90,11 @@ class Session : public TCntrNode
 	void del( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
 
 	vector<string> openList( );
+	bool openCheck( const string &id );
 	void openReg( const string &id );
-	void openUnreg( const string &id );
+	bool openUnreg( const string &id );
 
-	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
+	void uiCmd( const string &com, const string &prm, SessWdg *src = NULL );
 
 	string sessAttr( const string &idw, const string &id, bool onlyAllow = false );
 	void sessAttrSet( const string &idw, const string &id, const string &val );
@@ -396,7 +397,7 @@ class SessPage : public SessWdg
 	unsigned mClosePgCom	: 1;
 	unsigned mDisMan	: 1;		//Disable the page enabling at request by it's disabling in manual
 	ResMtx	mFuncM;
-	string	pathAsOpen, pathAsOpenPrev;
+	MtxString pathAsOpen, pathAsOpenPrev;
 };
 
 }

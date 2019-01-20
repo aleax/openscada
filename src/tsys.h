@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -273,12 +273,13 @@ class TSYS : public TCntrNode
 	    double rez = floor(val*pow(10,dig)+0.5)/pow(10,dig);
 	    return toint ? floor(rez+0.5) : rez;
 	}
-	static string atime2str( time_t tm, const string &format = "" );
+	static string atime2str( time_t tm, const string &format = "", bool gmt = false );
 	static string time2str( double tm );
 	static string cpct2str( double cnt );
 
-	// Convert value to string
+	// Convert string to value
 	static double str2real( const string &val );
+	static time_t str2atime( const string &val, const string &format = "", bool gmt = false );
 
 	// Adress convertors
 	static string addr2str( void *addr );
@@ -468,7 +469,7 @@ inline string u2s( unsigned val, TSYS::IntView view = TSYS::Dec ){ return TSYS::
 inline string ll2s( long long val, TSYS::IntView view = TSYS::Dec ){ return TSYS::ll2str(val, view); }
 inline string r2s( double val, int prec = 15, char tp = 'g' )	{ return TSYS::real2str(val, prec, tp); }
 inline double rRnd( double val, int dig = 0, bool toint = false ){ return TSYS::realRound(val, dig, toint); }
-inline string atm2s( time_t tm, const string &format = "" )	{ return TSYS::atime2str(tm, format); }
+inline string atm2s( time_t tm, const string &format = "", bool gmt = false )	{ return TSYS::atime2str(tm, format, gmt); }
 inline string tm2s( double tm )					{ return TSYS::time2str(tm); }
 
 inline int s2i( const string &val )		{ return atoi(val.c_str()); }

@@ -1243,7 +1243,7 @@ void Page::setEnable( bool val, bool force )
     }
  
     Widget::setEnable(val);
-    if(val && !parent().freeStat() && parent().at().rootId() != "Box") {
+    if(val && !parent().freeStat() && parent().at().rootId() != "Box" && !(prjFlags()&Page::Link)) {
 	Widget::setEnable(false);
 	throw TError(nodePath().c_str(),_("As a page, only a box based widget can be used!"));
     }
@@ -1337,6 +1337,7 @@ AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off ) const
 
 void Page::pageList( vector<string> &ls ) const
 {
+    ls.clear();
     if(prjFlags()&(Page::Template|Page::Container))
 	chldList(mPage, ls);
 }

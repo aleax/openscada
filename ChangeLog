@@ -1,3 +1,30 @@
+2019-01-20 Roman (stable)
+- !:FIX:DB.LibsDB.vcaBase: Main.{alarmsAct,alarmsSt},doc.docMessRep: Corrected for obtaining the source of messages of the DAQ controller objects.
+    !:FIX:Main.RootPgSo: Completed in the views unification for their accessibility control.
+	Moved to use the new function uiCmd() of the project sessions to open pages, from the combo,
+	    what is the singe true method now of the linked pages openning from the user space.
+- !!!:SYS.Archive: The common function TVArchive::getVals() improved to process not free buffers (for a fixed period) of the data requesting through the buffer and
+    different archivers since it is significant one, using a buffer array which is back replayed at the end.
+    The exceptions processing added here also.
+    !!!: The user API function getVals() added to implement generic archives/history requesting mechanism in an array and the fixed periodicity.
+- SYS: The function str2atime() is appended to convert from string time to the Unix epoch time supporting GMT.
+- FIX:SYS: The user function Array.concat() prevented from unlocked acces to the source array.
+- UI.QTCfg: Set fast for the closing time of the configurator window with more OpenSCADA inactive external hosts, by early notifying the host tasks.
+- !!:FIX:UI.VCAEngine: The linked pages to the logical container pages fixed in their enabling.
+    !!:FIX: The user API function uiCmd() added and its internal function uiComm() renamed to uiCmd() and fixed for empty source argument.
+    FIX: Fixed for the linked pages switching.
+    FIX: pageList() is appended in force cleaning the input argument since that can be passed for the container and template pages.
+    !!:The pages opening in the project's execution (sessions) improved to prevent spare and double opening and closing, which is critical one to manage the linked pages.
+    The linked pages managing properties "pathAsOpen", "pathAsOpenPrev" moved under a lock.
+- !:FIX:UI.{Vision,WebVision}: The days local time marging of the view "Trend" of the primitive "Diagram" improved using the time converting to GMT and
+	taking the difference with the Unix epoch time.
+- !:FIX:UI.Vision: The low threshold of enabling icons of the widget tree set to 0.1ms, in the tested value taken from a real remote environment.
+    The item indicators of the project tree forced to show and don't show.
+    Time of the automatic cancel of the line editable fields of the runtime increased to 10 seconds.
+- !!:UI.WebVision: Appended for the state of the oppened sessions.
+    !!: The pages cache disabled both on the module and WebBrowser side, before it will be improved for the limits of time and size.
+
+
 2019-01-13 Roman (stable)
 - SYS: AutoHD::at() appended for the commented code of the crashes causing instead the exception "No init!", to observe the message cause in future.
 - SYS: chldList() and chldPresent() set to virtual.

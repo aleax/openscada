@@ -1,13 +1,13 @@
 # OpenSCADA.UI.WebVision translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.WebVision package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 23:30+0300\n"
+"POT-Creation-Date: 2019-01-20 17:17+0200\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -205,6 +205,12 @@ msgstr "Ошибка страницы '%s': %s"
 msgid "Wrong session '%s'."
 msgstr "Ошибочный сеанс '%s'."
 
+msgid "State"
+msgstr "Статус"
+
+msgid "Sessions"
+msgstr "Сеансы"
+
 msgid "Module options"
 msgstr "Опции модуля"
 
@@ -227,3 +233,7 @@ msgstr ""
 "  -1  - оптимальный, скорость-размер;\n"
 "  0   - отключен;\n"
 "  1-9 - прямой уровень."
+
+#, c-format
+msgid "%s %s(%s): the last %s; cache %d, %s; session objects %d;"
+msgstr "%s %s(%s): последний %s; кеш %d, %s; объектов сеанса %d;"

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -289,10 +289,11 @@ string TSYS::real2str( double val, int prec, char tp )
     return buf;
 }
 
-string TSYS::atime2str( time_t itm, const string &format )
+string TSYS::atime2str( time_t itm, const string &format, bool gmt )
 {
     struct tm tm_tm;
-    localtime_r(&itm, &tm_tm);
+    if(gmt) gmtime_r(&itm, &tm_tm);
+    else localtime_r(&itm, &tm_tm);
     char buf[100];
     int ret = strftime(buf, sizeof(buf), format.empty()?"%d-%m-%Y %H:%M:%S":format.c_str(), &tm_tm);
     return (ret > 0) ? string(buf,ret) : string("");
@@ -376,6 +377,16 @@ double TSYS::str2real( const string &val )
 
     //Combine
     return tVl * pow(10, tAftRdx-nAftRdx);
+}
+
+time_t TSYS::str2atime( const string &val, const string &format, bool gmt )
+{
+    struct tm stm;
+    stm.tm_isdst = -1;
+    if(!strptime(val.c_str(),(format.empty()?"%d-%m-%Y %H:%M:%S":format.c_str()),&stm))
+	return 0;
+
+    return gmt ? timegm(&stm) : mktime(&stm);
 }
 
 string TSYS::addr2str( void *addr )

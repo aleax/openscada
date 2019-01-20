@@ -1010,7 +1010,6 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(obj_parent, SIGNAL(activated(int)), this, SLOT(isModify()));
     glay->addWidget(obj_parent, 3, 2, 1, 4);
 
-
     /*lab = new QLabel(_("Used:"), tab_w);
     glay->addWidget(lab, 3, 1);
     obj_used = new QLabel(tab_w);

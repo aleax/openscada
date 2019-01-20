@@ -1366,11 +1366,12 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
     if(disIconsCW)	req.setAttr("disIconsCW", "1");
     owner()->cntrIfCmd(req);
 
+    //!!!! Maybe take maximum from the requesting time
     if(1e-6*(TSYS::curTime()-d_cnt) > 5) {
 	if(disIconsCW) disIconsW = true;
 	else disIconsCW = true;
     }
-    else if(1e-6*(TSYS::curTime()-d_cnt) < 1) {
+    else if(1e-6*(TSYS::curTime()-d_cnt) < 0.1) {
 	if(disIconsW) disIconsW = false;
 	else disIconsCW = false;
     }
@@ -1718,7 +1719,7 @@ void ProjTree::updateTree( QTreeWidgetItem *it )
 
     if(!it) {
 	//Processing the top level items and the projects list
-	// Get the widget libraries list
+	// Get the projects list
 	XMLNode prj_req("get");
 	prj_req.setAttr("path", "/%2fprm%2fcfg%2fprj")->setAttr("getChPgN","1");//->setAttr("conTm", i2s(initial?mod->restoreTime()*1000:0));
 	if(owner()->cntrIfCmd(prj_req)) {
@@ -1758,8 +1759,8 @@ void ProjTree::updateTree( QTreeWidgetItem *it )
 	    nit->setText(1, _("Project"));
 	    nit->setText(2, list_pr[iL].c_str());
 
-	    if(!prj_req.childGet(iL)->attr("chPgN").size() || s2i(prj_req.childGet(iL)->attr("chPgN")))
-		nit->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
+	    nit->setChildIndicatorPolicy((!prj_req.childGet(iL)->attr("chPgN").size() || s2i(prj_req.childGet(iL)->attr("chPgN"))) ?
+		    QTreeWidgetItem::ShowIndicator : QTreeWidgetItem::DontShowIndicator);
 
 	    if(nit->isExpanded()) updateTree(nit);
 	}
@@ -1819,8 +1820,8 @@ void ProjTree::updateTree( QTreeWidgetItem *it )
 	nit_pg->setText(1, _("Page"));
 	nit_pg->setText(2, list_pg[iP].c_str());
 
-	if(!pg_req.childGet(iP)->attr("chPgN").size() || s2i(pg_req.childGet(iP)->attr("chPgN")))
-	    nit_pg->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
+	nit_pg->setChildIndicatorPolicy((!pg_req.childGet(iP)->attr("chPgN").size() || s2i(pg_req.childGet(iP)->attr("chPgN"))) ?
+		QTreeWidgetItem::ShowIndicator : QTreeWidgetItem::DontShowIndicator);
 
 	if(nit_pg->isExpanded()) updateTree(nit_pg);
     }

@@ -585,7 +585,7 @@ void LineEdit::changed( )
 {
     //Enable apply
     if(mPrev && !bt_fld) viewApplyBt(true);
-    if(bt_tm) bt_tm->start(mPrev ? 5000 : 500);
+    if(bt_tm) bt_tm->start(mPrev ? 10000 : 500);
     mIsEdited = true;
 
     emit valChanged(value());

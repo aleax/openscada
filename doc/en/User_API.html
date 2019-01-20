@@ -660,7 +660,17 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>bool setVal( int tm, VarType vl, string arch = "" )</i> — sets the value <i>vl</i> to the archive for the time <i>tm</i> and the archiver <i>arch</i>:
 <ul><li> <i>tm</i> — time of the set value, in microseconds;</li>
 <li> <i>vl</i> — value;</li>
-<li> <i>arch</i> — archiver of the set request, set in an empty line for all archivers, set to "&lt;buffer&gt;" to handle only the buffer.</li></ul></li></ul>
+<li> <i>arch</i> — archiver of the set request, set in an empty line for all archivers, set to "&lt;buffer&gt;" to handle only the buffer.</li></ul></li>
+<li> <i>Array getVals( int begTm, int endTm, int period, string arch = "" )</i> — gets for the archive/history values from <i>begTm</i> and up to <i>endTm</i> for the archiver <i>arch</i>:
+<ul><li> <i>begTm</i> — begin time of the requesting data range, in microseconds, will be changed to the real data begin;</li>
+<li> <i>endTm</i> — end time of the requesting data range, in microseconds;</li>
+<li> <i>period</i> — period of the data, in microseconds, must be necessarily specified and will be used the maximum one from the archive, will be changed to the real data period;</li>
+<li> <i>arch</i> — requesting archiver, set to empty to try for the buffer and all archivers, set to "&lt;buffer&gt;" to process only the buffer.</li></ul></li>
+<li> <i>bool setVals( Array buf, int tm, int period, string arch = "" )</i> — sets for the archive/history values <i>buf</i> to the archive from the begin time <i>tm</i>, the values period <i>period</i> and the archiver <i>arch</i>.
+<ul><li> <i>buf</i> — array of the values to set;</li>
+<li> <i>tm</i> — begin time of the setting data range, in microseconds;</li>
+<li> <i>period</i> — period of the setting data, in microseconds, must be necessarily specified and will be used the maximum one from the archive, will be changed to the real data period;</li>
+<li> <i>arch</i> — setting archiver, set to empty to set for the buffer and all archivers, set to "&lt;buffer&gt;" to set only the buffer.</li></ul></li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Transports.22_.28SYS.Transport.29"><span class="mw-headline-number">9</span> <span id="SYSTransport" title="#SYSTransport">Subsystem "Transports" (SYS.Transport)</span></span></h2>
 <p>Functions of the input transport object (SYS.Transport["Modul"]["in_Transp"]):
 </p>
@@ -722,7 +732,8 @@ test = Special.FLibSYS.strDec4Bin(req.text()); </pre></li>
 <li> <i>int reqTm( )</i> — last request time.</li>
 <li> <i>string reqUser( )</i> — last request user.</li>
 <li> <i>string reqLang( )</i> — last request language.</li>
-<li> <i>int userActTm( )</i> — last user action time.</li></ul>
+<li> <i>int userActTm( )</i> — last user action time.</li>
+<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — sends a UI command of the pages managing, that is: "open", "next", "prev"; for more details see in <a href="#Events">the events section</a>. This function must be in the priority of using to the pages managing before the direct writing to the page attributes "pgOpen" and "pgOpenSrc" due it is single method of the correct work with <a href="#Project">the linked pages</a>.</li></ul>
 <p><b>Object "Widget" (this)</b>
 </p>
 <ul><li> <i>TCntrNodeObj ownerSess( )</i> — session object for the current widget.</li>

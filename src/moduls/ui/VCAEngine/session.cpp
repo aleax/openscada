@@ -261,13 +261,25 @@ vector<string> Session::openList( )
     return rez;
 }
 
+bool Session::openCheck( const string &iid )
+{
+    bool rez = false;
+
+    dataRes().lock();
+    for(unsigned iOp = 0; iOp < mOpen.size() && !rez; iOp++)
+	rez = (iid == mOpen[iOp]);
+    dataRes().unlock();
+
+    return rez;
+}
+
 void Session::openReg( const string &iid )
 {
-    unsigned i_op;
+    unsigned iOp;
     dataRes().lock();
-    for(i_op = 0; i_op < mOpen.size(); i_op++)
-	if(iid == mOpen[i_op]) break;
-    if(i_op >= mOpen.size())	mOpen.push_back(iid);
+    for(iOp = 0; iOp < mOpen.size(); iOp++)
+	if(iid == mOpen[iOp]) break;
+    if(iOp >= mOpen.size())	mOpen.push_back(iid);
     dataRes().unlock();
 
     //Check for notifiers register
@@ -278,20 +290,23 @@ void Session::openReg( const string &iid )
     }
 }
 
-void Session::openUnreg( const string &iid )
+bool Session::openUnreg( const string &iid )
 {
+    bool rez = false;
     dataRes().lock();
-    for(unsigned i_op = 0; i_op < mOpen.size(); i_op++)
-	if(iid == mOpen[i_op]) mOpen.erase(mOpen.begin()+i_op);
+    for(unsigned iOp = 0; iOp < mOpen.size(); iOp++)
+	if(iid == mOpen[iOp]) { mOpen.erase(mOpen.begin()+iOp); rez = true; }
     dataRes().unlock();
 
     //Check for notifiers unregister of the page
     for(unsigned iNtf = 0; iNtf < 7; iNtf++) ntfReg(iNtf, "", iid);
+
+    return rez;
 }
 
 AutoHD<SessPage> Session::at( const string &id ) const	{ return chldAt(mPage, id); }
 
-void Session::uiComm( const string &com, const string &prm, SessWdg *src )
+void Session::uiCmd( const string &com, const string &prm, SessWdg *src )
 {
     //Find of pattern adequancy for opened page
     string oppg, pBase;		//Opened page according of pattern
@@ -357,7 +372,8 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 	    //if(!oppg.empty() && ((AutoHD<SessPage>)mod->nodeAt(oppg)).at().path() != cpg.at().path())
 	    //	((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpenSrc").at().setS("");
 	    cpg.at().setPathAsOpen(cpgAddr);	//To descry links
-	    cpg.at().attrAt("pgOpenSrc").at().setS(src->path(), true);
+	    if(src) cpg.at().attrAt("pgOpenSrc").at().setS(src->path(), true);
+	    else cpg.at().attrAt("pgOpen").at().setB(true, true);
 	}
     }
     catch(TError &er) {
@@ -571,8 +587,17 @@ TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     if(iid == "reqLang")	return reqLang();
     // int userActTm( ) - Last user action time
     if(iid == "userActTm")	return (int64_t)userActTm();
+    // bool uiCmd( string cmd, string prm, string src ) - sends a UI command of the pages managing, that is: "open", "next", "prev".
+    //  cmd - page command "open", "next" or "prev";
+    //  prm - parameter of the command that is whether just the opened page path or its searching mask;
+    //  src - source page/widget what cause to open a new page.
+    if(iid == "uiCmd" && prms.size() >= 2) {
+	AutoHD<SessWdg> swdg = (prms.size() >= 3) ? nodeAt(prms[2].getS(), 1, 0, 0, true) : NULL;
+	uiCmd(prms[0].getS(), prms[1].getS(), swdg.freeStat() ? NULL :  &swdg.at());
+	return true;
+    }
 
-    return TCntrNode::objFuncCall(iid,prms,cuser);
+    return TCntrNode::objFuncCall(iid, prms, cuser);
 }
 
 void Session::cntrCmdProc( XMLNode *opt )
@@ -610,10 +635,12 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    }
 	    opt->setAttr("tm", u2s(ntm));
 	}
-	else if(ctrChkNode(opt,"open",permit(),owner().c_str(),grp().c_str(),SEC_WR))		//Open pages
+	//Open pages
+	else if(ctrChkNode(opt,"open",permit(),owner().c_str(),grp().c_str(),SEC_WR) && !openCheck(opt->attr("pg")))
 	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(true, true);
-	else if(ctrChkNode(opt,"close",RWRWRW,owner().c_str(),grp().c_str(),SEC_WR))		//Close open pages
-	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(false, true);
+	//Close open pages
+	else if(ctrChkNode(opt,"close",RWRWRW,owner().c_str(),grp().c_str(),SEC_WR) && openCheck(opt->attr("pg")))
+	    ((AutoHD<SessWdg>)nodeAt(opt->attr("pg"),1)).at().attrAt("pgOpen").at().setB(false);
 	mReqTm = time(NULL);
 	setReqUser(opt->attr("user"));
 	setReqLang(opt->attr("lang"));
@@ -1048,7 +1075,7 @@ void *Session::Notify::Task( void *intf )
 //* SessPage: Page of Project's session          *
 //************************************************
 SessPage::SessPage( const string &iid, const string &ipage, Session *sess ) :
-    SessWdg(iid,ipage,sess), mClosePgCom(false), mDisMan(false), mFuncM(true)
+    SessWdg(iid,ipage,sess), mClosePgCom(false), mDisMan(false), mFuncM(true), pathAsOpen(dataRes()), pathAsOpenPrev(dataRes())
 {
     mPage = grpAdd("pg_");
 }
@@ -1060,7 +1087,7 @@ SessPage::~SessPage( )
 
 string SessPage::path( ) const		{ return path(false); }
 
-string SessPage::path( bool orig ) const{ return (!pathAsOpen.size() || orig) ? ownerFullId(true)+"/pg_"+id() : pathAsOpen; }
+string SessPage::path( bool orig ) const{ return (!pathAsOpen.getVal().size() || orig) ? ownerFullId(true)+"/pg_"+id() : pathAsOpen.getVal(); }
 
 string SessPage::getStatus( )
 {
@@ -1259,12 +1286,12 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 		if(!process()) setProcess(true);
 	    }
 	    else {
-		string lnkPath = pathAsOpenPrev.size() ? pathAsOpenPrev : (pathAsOpen.size()?path():"");
-		ownerSess()->openUnreg(lnkPath.size()?lnkPath:path());
+		ownerSess()->openUnreg(pathAsOpenPrev.size()?pathAsOpenPrev:path());
 		if(!pathAsOpenPrev.size()) {
 		    if(process() && !attrAt("pgNoOpenProc").at().getB())	mClosePgCom = true;
 		    if(!attrAt("pgOpenSrc").at().getS().empty()) attrAt("pgOpenSrc").at().setS("");
 		    pgClose();
+		    pathAsOpen = "";
 		} else cfg.setB(true);
 		pathAsOpenPrev = "";
 	    }
@@ -1331,7 +1358,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 		    }
 		} catch(TError &err) { }
 	    }
-	    //if(cfg.owner()->attrAt("pgOpen").at().getB() != !cfg.getS().empty())
+	    if(!cfg.getS().empty() || cfg.owner()->attrAt("pgOpen").at().getB() != !cfg.getS().empty())
 		cfg.owner()->attrAt("pgOpen").at().setB(!cfg.getS().empty(), true);
 	}
     }
@@ -2060,7 +2087,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 			    SessWdg *sev = this;
 			    if(!sev_path.empty()) sev = (TSYS::pathLev(sev_path,0).compare(0,4,"ses_") == 0) ?
 					    &((AutoHD<SessWdg>)mod->nodeAt(sev_path)).at() :  &((AutoHD<SessWdg>)nodeAt(sev_path)).at();
-			    ownerSess()->uiComm(sprc_path, TSYS::strSepParse(sprc,0,':',&t_off), sev);
+			    ownerSess()->uiCmd(sprc_path, TSYS::strSepParse(sprc,0,':',&t_off), sev);
 			    evProc = true;
 			}
 		    }

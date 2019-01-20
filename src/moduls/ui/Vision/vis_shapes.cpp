@@ -900,6 +900,8 @@ void ShapeFormEl::tableFit( WdgView *w )
     QTableWidget *wdg = (QTableWidget*)shD->addrWdg;
     if(shD->elType != F_TABLE || !wdg || !qobject_cast<QTableWidget*>(wdg)) return;
 
+    wdg->horizontalHeader()->setStretchLastSection(false);
+
     if(wdg->columnCount() > 1) wdg->resizeColumnsToContents();
     if(wdg->property("colsWdthFit").toBool() && wdg->rowCount()) {
 	int tblWdth = wdg->maximumViewportSize().width();
@@ -917,6 +919,7 @@ void ShapeFormEl::tableFit( WdgView *w )
 	    else if(wdg->columnWidth(iC) <= averWdth)	niceForceColsWdth += wdg->columnWidth(iC);
 	    else busyCols++;
 	}
+
 	//Set busyCols
 	if(fullColsWdth > tblWdth && busyCols) {
 	    int busyColsWdth = (tblWdth-niceForceColsWdth)/busyCols;
@@ -3230,8 +3233,9 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    struct tm ttm, ttm1 = ttm;
 	    string lab_tm, lab_dt;
 
-	    localtime_r(&tm_t, &ttm);
-	    int64_t UTChourDt = (int64_t)ttm.tm_hour*3600000000ll;
+	    //localtime_r(&tm_t, &ttm);
+	    //int64_t UTChourDt = (int64_t)ttm.tm_hour*3600000000ll;	//This way is mostly wrong but returns the offset in the somer time
+	    int64_t UTChourDt = 1000000ll*TSYS::str2atime(TSYS::atime2str(tEnd/1000000),"",true) - tEnd;
 
 	    //  Draw generic grid line
 	    pnt.setPen(grdPen);
@@ -3242,7 +3246,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    if(sclHor&FD_MARKS) {
 		pnt.setPen(mrkPen);
 		tm_t = tPict/1000000;
-		localtime_r(&tm_t,&ttm);
+		localtime_r(&tm_t, &ttm);
 		lab_dt = TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
 		if(ttm.tm_sec == 0 && tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		else if(tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
@@ -3254,10 +3258,10 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		endMarkBrd = vmin(endMarkBrd,markBrd);
 		pnt.drawText(markBrd,tAr.y()+tAr.height()+2*mrkHeight,lab_dt.c_str());
 	    }
-	    //  Draw grid and/or markers
+	    //  Drawing the grid and/or markers
 	    bool first_m = true;
 	    for(int64_t i_h = tBeg; true; ) {
-		//   Draw grid
+		//   Drawing the grid
 		pnt.setPen(grdPen);
 		int h_pos = tAr.x()+tAr.width()*(i_h-tBeg)/(tPict-tBeg);
 		if(sclHor&FD_GRD) pnt.drawLine(h_pos, tAr.y(), h_pos, tAr.y()+tAr.height());
@@ -3265,7 +3269,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
 		if(sclHor&FD_MARKS && !((i_h+UTChourDt)%hDiv) && i_h != tPict) {
 		    tm_t = i_h/1000000;
-		    localtime_r(&tm_t,&ttm);
+		    localtime_r(&tm_t, &ttm);
 		    int chLev = -1;
 		    if(!first_m) {
 			if(ttm.tm_mon > ttm1.tm_mon || ttm.tm_year > ttm1.tm_year) chLev = 5;

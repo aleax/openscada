@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-25 17:39+0200\n"
+"POT-Creation-Date: 2019-01-20 17:26+0200\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -321,9 +321,8 @@ msgstr "Schaltfläche zum Aufrufen des Statusleistenverlaufs."
 msgid "Ready"
 msgstr "Fertig"
 
-#, c-format
-msgid "Configurator using the remote host %d times."
-msgstr "Konfigurator verwendet den Remote-Host %d mal."
+msgid "The configurator is using the remote host %d times."
+msgstr "Der Konfigurator verwendet %d-Zeiten eines Remote-Hosts."
 
 msgid "Saving the changes"
 msgstr "Speichern der Änderungen"

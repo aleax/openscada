@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-13 19:11+0200\n"
+"POT-Creation-Date: 2019-01-20 17:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -309,10 +309,10 @@ msgid "No value."
 msgstr ""
 
 #, c-format
-msgid "Grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 
-msgid "Grid mode doesn't support inserting old values."
+msgid "The grid mode doesn't support inserting old values."
 msgstr ""
 
 msgid "Insert a very old value to the buffer."

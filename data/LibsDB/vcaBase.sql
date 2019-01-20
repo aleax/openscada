@@ -2033,11 +2033,11 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph','varEl','<EVAL>',32,'','','el2','','
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','name','Root page (SO)',32,'','','','Корнева сторінка (ОС)','','Корневая страница (ОС)','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','dscr','Root page of visual interface of TP, builded on signal objects base.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 2.0.1',32,'','','','Корнева сторінка інтерфейсу візуалізації ТП, побудованого на основі об''єктів сигналізації.
+Version: 2.1.0',32,'','','','Корнева сторінка інтерфейсу візуалізації ТП, побудованого на основі об''єктів сигналізації.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 2.0.0','','Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
+Версія: 2.1.0','','Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 2.0.0','','','');
+Версия: 2.1.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomH','670',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','backColor','gray',96,'','','','','backColor','','','','');
@@ -11663,7 +11663,7 @@ INSERT INTO "wlb_doc_io" VALUES('docMessRep','tmpl','<body docProcLang="JavaLike
 <?dp
 mValPrm = mVal.parse(0, ": "); mValDscr = mVal.parse(1, ": "); mValVal = mVal.parse(2, ": ");
 if(fullSrc) {
-	srcO = mCat.match("^al(.+):(.+)\\.|^(.+):al");
+	srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
 	tVl = "";
 	//From remote station
 	if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
@@ -11714,7 +11714,7 @@ return "<TD style=''white-space: nowrap; ''>"+SYS.strftime(mTime,"%d %m")+"</TD>
 <?dp
 mValPrm = mVal.parse(0, ": "); mValDscr = mVal.parse(1, ": "); mValVal = mVal.parse(2, ": ");
 if(fullSrc) {
-	srcO = mCat.match("^al(.+):(.+)\\.|^(.+):al");
+	srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
 	tVl = "";
 	//From remote station
 	if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
@@ -11765,7 +11765,7 @@ return "<TD style=''white-space: nowrap; ''>"+SYS.strftime(mTime,"%d %m")+"</TD>
 <?dp
 mValPrm = mVal.parse(0, ": "); mValDscr = mVal.parse(1, ": "); mValVal = mVal.parse(2, ": ");
 if(fullSrc) {
-	srcO = mCat.match("^al(.+):(.+)\\.|^(.+):al");
+	srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
 	tVl = "";
 	//From remote station
 	if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
@@ -19177,11 +19177,18 @@ if(pgCont_pgOpenSrc != lastView) {
 		if(curSO.length) {
 			this["wdg_so"+curSO].attrSet("color","#777799");
 			// Check for view modes active
-			go_mn_active = this["pg_"+curSO]["pg_mn"].nodeList("pg_").length;
-			go_ggraph_active = this["pg_"+curSO]["pg_ggraph"].nodeList("pg_").length;
-			go_gcadr_active = this["pg_"+curSO]["pg_gcadr"].nodeList("pg_").length;
-			go_gview_active = this["pg_"+curSO]["pg_gview"].nodeList("pg_").length;
-			go_doc_active = this["pg_"+curSO]["pg_doc"].nodeList("pg_").length;
+			for(iV = viewGrps[0].first; iV <= viewGrps[2].last; iV++) {
+				viewGrp = viewGrps[0];
+				if(iV >= viewGrps[2].first)		viewGrp = viewGrps[2];
+				else if(iV >= viewGrps[1].first)	viewGrp = viewGrps[1];
+				if(viewGrp[iV] == true) {
+					vNm = "";
+					isG = (viewGrp.global == true);
+					if(this.nodeList("pg_","/pg_"+(isG?"view"+iV:curSO)+"/pg_view"+iV).length)	vNm = "view"+iV;
+					else if(this.nodeList("pg_","/pg_"+(isG?oldViewLs[iV-1]:curSO)+"/pg_"+oldViewLs[iV-1]).length)	vNm = oldViewLs[iV-1];
+					this["wdg_go_view"+iV].attrSet("active", vNm.length);
+				}
+			}
 		}
 	}
 	//Checking for view selection change
@@ -19241,7 +19248,8 @@ if((calcCnt%f_frq) == 0) {
 //Events process
 for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; ) {
 	if(sval == "ws_CombChange:/pgSel" && (tPg=pgSel_value.match("\\((.+)\\)$")).length)
-		this[pgCont_pgOpenSrc.parsePath(2)][pgCont_pgOpenSrc.parsePath(3)]["pg_"+tPg[1]].attrSet("pgOpen",true);
+		this.ownerSess().uiCmd("open", "/pg_so/"+pgCont_pgOpenSrc.parsePath(2)+"/"+pgCont_pgOpenSrc.parsePath(3)+"/pg_"+tPg[1], this.attr("path"));
+		//this[pgCont_pgOpenSrc.parsePath(2)][pgCont_pgOpenSrc.parsePath(3)]["pg_"+tPg[1]].attrSet("pgOpen",true);
 	else if(sval == "ws_BtPress:/cvt_light")	alarmSt = 0x1000001;
 	else if(sval == "ws_BtPress:/cvt_alarm")	alarmSt = 0x1000002;
 	else if(sval == "ws_BtPress:/cvt_sound")	alarmSt = 0x1000004;
@@ -21507,7 +21515,7 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 			else if(vC == "alrm")	items += "<s>"+SYS.strEncode(iM.mess.parse(2,messItSep),"HTML")+"</s>";
 			else if(vC == "cmnt")	items += "<s>"+SYS.strEncode(iM.mess.parse(5,messItSep),"HTML")+"</s>";
 			else if(vC == "src") {
-				srcO = iM.categ.match("^al(.+):(.+)\\.|^(.+):al");
+				srcO = iM.categ.match("^al(.+):([^\\.]+)|^(.+):al");
 				tVl = "";
 				//From remote station
 				if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
@@ -21619,7 +21627,7 @@ BF2LsVCxzgcftOLiwj9+HLThB99nTP7JZyH27Oxweclkypj9bhNeLSmJMfPGm97ZcKv2pUzFr377
 u/fefbij63+jv2mOj49vd/L9H7IV2DRbgU2zFdg0W4FNsxXYNFuBTbMV2DRbgU2zFdg0W4FNsxXY
 NN94Af3qxfNnX+gr9Y38sXV+fv4PnB1oGOFeta8AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 function getSrc( categ, sourceCache ) {
-	srcO = categ.match("^al(.+):(.+)\\.|^(.+):al");
+	srcO = categ.match("^al(.+):([^\\.]+)|^(.+):al");
 	tVl = "";
 	//From remote station
 	if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {

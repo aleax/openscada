@@ -1,13 +1,13 @@
 # OpenSCADA.UI.QTCfg translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTCfg package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2004-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2004-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-25 17:39+0200\n"
+"POT-Creation-Date: 2019-01-20 17:26+0200\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -313,8 +313,7 @@ msgstr "Кнопка вызова истории строки статуса."
 msgid "Ready"
 msgstr "Готов"
 
-#, c-format
-msgid "Configurator using the remote host %d times."
+msgid "The configurator is using the remote host %d times."
 msgstr "Конфигуратор использует удалённые хосты %d раз."
 
 msgid "Saving the changes"

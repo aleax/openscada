@@ -614,7 +614,7 @@ AutoHD<TVarObj> TArrayObj::parseStrXML( XMLNode *nd )
 
 TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 {
-    // string join(string sep = ",") - join items to string
+    // string join( string sep = "," ) - join items to string
     //  sep - items separator
     if(id == "join" || id == "toString" || id == "valueOf") {
 	string rez, sep = prms.size() ? prms[0].getS() : ",";
@@ -624,16 +624,17 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	dataM.unlock();
 	return rez;
     }
-    // TArrayObj concat(TArrayObj arr) - concatenate array
+    // TArrayObj concat( TArrayObj arr ) - concatenate array
     //  arr - source array
-    if(id == "concat" && prms.size() && prms[0].type() == TVariant::Object && !AutoHD<TArrayObj>(prms[0].getO()).freeStat()) {
+    if(id == "concat" && prms.size()) {
+	AutoHD<TArrayObj> sArr;
+	if(prms[0].type() != TVariant::Object || (sArr=prms[0].getO()).freeStat())	return this;
 	dataM.lock();
-	TArrayObj *sArr = (TArrayObj*)&prms[0].getO().at();
-	for(unsigned iP = 0; iP < sArr->mEls.size(); iP++) mEls.push_back(sArr->mEls[iP]);
+	for(unsigned iP = 0; iP < sArr.at().arSize(); iP++) mEls.push_back(sArr.at().arGet(iP));
 	dataM.unlock();
 	return this;
     }
-    // int push(ElTp var, ...) - push variables to array
+    // int push( ElTp var, ... ) - push variables to array
     //  var - variable
     if(id == "push" && prms.size()) {
 	dataM.lock();
@@ -666,7 +667,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	dataM.unlock();
 	return val;
     }
-    // int unshift(ElTp var, ...) - shift items to array upward
+    // int unshift( ElTp var, ... ) - shift items to array upward
     //  var - variable
     if(id == "unshift" && prms.size()) {
 	dataM.lock();
@@ -674,7 +675,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	dataM.unlock();
 	return (int)mEls.size();
     }
-    // Array slice(int beg, int end) - get array part from positon <beg> to <end> (exclude)
+    // Array slice( int beg, int end ) - get array part from positon <beg> to <end> (exclude)
     //  beg - begin position
     //  end - end position
     if(id == "slice" && prms.size()) {
@@ -692,7 +693,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	dataM.unlock();
 	return rez;
     }
-    // Array splice(int beg, int remN, ElTp val1, ElTp val2, ...) - insert, remove or replace array's items
+    // Array splice( int beg, int remN, ElTp val1, ElTp val2, ... ) - insert, remove or replace array's items
     //  beg - start position
     //  remN - removed items number
     //  val1, val2, ... - values for insert
@@ -712,7 +713,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	dataM.unlock();
 	return rez;
     }
-    // int indexOf(ElTp var, int start = 0) - returns the array index of the required variable <var> in the original
+    // int indexOf( ElTp var, int start = 0 ) - returns the array index of the required variable <var> in the original
     //       row from the position <start>
     //  var - requested variable
     //  start - start position for search
@@ -727,7 +728,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	dataM.unlock();
 	return rez;
     }
-    // int lastIndexOf(ElTp var, int start) - returns the array index of the required variable <var> in the original
+    // int lastIndexOf( ElTp var, int start ) - returns the array index of the required variable <var> in the original
     //       row from the position <start> when searching from the end
     //  var - requested variable
     //  start - start position for search from the end
@@ -742,7 +743,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	dataM.unlock();
 	return rez;
     }
-    // double sum(int beg, int end) - sum of the array values part from the position <beg> to <end>, excluding
+    // double sum( int beg, int end ) - sum of the array values part from the position <beg> to <end>, excluding
     //  beg - begin position
     //  end - end position
     if(id == "sum" && prms.size()) {

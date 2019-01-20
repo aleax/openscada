@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: web_vision.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.8.9"
+#define MOD_VER		"2.9.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -551,10 +551,12 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
+	if(ctrMkNode("area",opt,1,"/prm/st",_("State")))
+	    ctrMkNode("list",opt,-1,"/prm/st/ses",_("Sessions"),R_R_R_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"),R_R_R_)) {
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/lf_tm", _("Lifetime of the sessions, minutes"), RWRWR_, "root", SUI_ID, 1, "tp","dec");
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/sesLimit", _("Sessions limit"), RWRWR_, "root", SUI_ID, 1, "tp","dec");
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/PNGCompLev", _("Level of the PNG compression"), RWRWR_, "root", SUI_ID, 4,
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Lifetime of the sessions, minutes"),RWRWR_,"root",SUI_ID,1, "tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/sesLimit",_("Sessions limit"),RWRWR_,"root",SUI_ID,1, "tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/PNGCompLev",_("Level of the PNG compression"),RWRWR_,"root",SUI_ID,4,
 		"tp","dec", "min","-1", "max","9", "help",_("Level of the PNG (ZLib) compression:\n"
 			    "  -1  - optimal speed-size;\n"
 			    "  0   - disable;\n"
@@ -565,7 +567,20 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/lf_tm") {
+    if(a_path == "/prm/st/ses" && ctrChkNode(opt)) {
+	vector<string> vSesLs, vSesObjs;
+	vcaSesList(vSesLs);
+	for(int iS = 0; iS < vSesLs.size(); iS++) {
+	    AutoHD<VCASess> ses = vcaSesAt(vSesLs[iS]);
+	    ses.at().objList(vSesObjs);
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s): the last %s; cache %d, %s; session objects %d;"),
+		atm2s(ses.at().openTm(),"%Y-%m-%dT%H:%M:%S").c_str(),
+		ses.at().id().c_str(), ses.at().sender().c_str(),
+		atm2s(ses.at().lstReq(),"%Y-%m-%dT%H:%M:%S").c_str(),
+		ses.at().cacheResSize(), TSYS::cpct2str(ses.at().cacheResLen()).c_str(), vSesObjs.size()));
+	}
+    }
+    else if(a_path == "/prm/cfg/lf_tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(sessTime()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSessTime(s2i(opt->text()));
     }

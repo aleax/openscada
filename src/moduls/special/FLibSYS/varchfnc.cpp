@@ -191,7 +191,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 		vb = &tarch.at();
 	    }
 	    else vb = buf();
-	    if(!vb)     return false;
+	    if(!vb)	return false;
 	    src.at().arch().at().getVals(*vb, prms[1].getI()*1000000+prms[2].getI(),
 					      prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
 	}

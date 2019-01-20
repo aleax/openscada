@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -473,8 +473,9 @@ ConfApp::~ConfApp( )
 
     // Threads deleting
     if(inHostReq)
-	mess_err(mod->nodePath().c_str(), _("Configurator using the remote host %d times."), inHostReq);
-    for(map<string, SCADAHost*>::iterator iH = hosts.begin(); iH != hosts.end(); ++iH) delete iH->second;
+	mess_err(mod->nodePath().c_str(), _("The configurator is using the remote host %d times."), inHostReq);
+    for(map<string, SCADAHost*>::iterator iH = hosts.begin(); iH != hosts.end(); ++iH)
+	delete iH->second;
     hosts.clear();
 
     // Push down all Qt events of the window to free the module
@@ -3179,7 +3180,7 @@ void SCADAHost::run( )
     stmp = TUIS::icoGet("disconnect"); imgDisConnect.loadFromData((const uchar*)stmp.c_str(), stmp.size());
     stmp = TUIS::icoGet("connected"); imgRemConnected.loadFromData((const uchar*)stmp.c_str(), stmp.size());
 
-    while(!endRun) {
+    while(!endRun && !((ConfApp*)parent())->winClose) {
 	mtx.lock(); wuser = user; mtx.unlock();
 	//Link status processing
 	if(isFirst || (!lnkOK && (SYS->sysTm()-tm) > s2i(TSYS::strParse(mod->tmConChk(),0,":"))) ||

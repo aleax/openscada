@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-13 19:11+0200\n"
+"POT-Creation-Date: 2019-01-20 10:07+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -345,12 +345,12 @@ msgstr "Fordert %d Datensätze für Zeit %s."
 msgid "No value."
 msgstr "Kein Wert."
 
-#, c-format
-msgid "Grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid ""
+"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Gittermodus unterstützt nicht das Einfügen sehr alter Werte %lld (%lld-%lld)."
 
-msgid "Grid mode doesn't support inserting old values."
+msgid "The grid mode doesn't support inserting old values."
 msgstr "Gittermodus unterstützt nicht das Einfügen alter Werte."
 
 msgid "Insert a very old value to the buffer."
@@ -713,7 +713,7 @@ msgstr "Knotenstamm oder nicht verbunden!"
 
 #, c-format
 msgid "Element '%s' is missing!"
-msgstr "Element '% s' fehlt!"
+msgstr "Das Element '%s' fehlt!"
 
 #, c-format
 msgid "Element '%s' is disabled!"
@@ -2504,7 +2504,7 @@ msgstr "Sehr große Zeichenfolge für Nicht-STL-Zeichenfolge (> 30 MB)!"
 
 #, c-format
 msgid "Error allocating memory for large string (%d)!"
-msgstr "Fehler beim Zuweisen von Speicher für große Zeichenfolge (% d)!"
+msgstr "Fehler beim Zuweisen von Speicher für große Zeichenfolge (%d)!"
 
 msgid "Attempt to double disconnect!"
 msgstr "Versuch, die Verbindung zu trennen!"

@@ -3,7 +3,7 @@
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
  *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
- *		   2007-2018 by Roman Savochenko (rom_as@oscada.org)	   *
+ *		   2007-2019 by Roman Savochenko (rom_as@oscada.org)	   *
  *									   *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -436,6 +436,7 @@ class VCASess : public TCntrNode
 
 	string id( )			{ return mId; }
 	const string &sender( )		{ return mSender; }
+	time_t openTm( )		{ return open_ses; }
 	time_t lstReq( )		{ return lst_ses_req; }
 
 	void senderSet(const string &val)	{ mSender = val; }
@@ -455,6 +456,8 @@ class VCASess : public TCntrNode
 
 	string cacheResGet( const string &res, string *mime = NULL );
 	void cacheResSet( const string &res, const string &val, const string &mime );
+	int cacheResSize( );
+	float cacheResLen( );
 
 	ResRW &nodeRes( )		{ return nRes; }
 
@@ -478,7 +481,7 @@ class VCASess : public TCntrNode
 	//Attributes
 	const string		mId;
 	int			id_objs;	//Primitive object's container identifier
-	time_t			lst_ses_req;
+	time_t			open_ses, lst_ses_req;
 	string			mSender;
 	bool			mIsCreate;
 	map<string,CacheEl>	mCacheRes;	//Resources cache

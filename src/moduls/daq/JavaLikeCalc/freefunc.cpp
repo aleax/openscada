@@ -1357,7 +1357,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		// bool isNaN( bool whole = true ) - check the string for Not A Number
 		if(prop == "isNaN")
 		    return !TRegExp((prms.size()&&!prms[0].getB())?"^ *[+-]?\\d*\\.?\\d*(|[eE][+-]*\\d+)":"^ *[+-]?\\d*\\.?\\d*(|[eE][+-]*\\d+)$").test(vl.getS());
-		// string charAt(int symb, string type = "") - extracts from the string the symbol <symb> of the type <type>
+		// string charAt( int symb, string type = "") - extracts from the string the symbol <symb> of the type <type>
 		//  symb - symbol position, changed to the next symbol position for UTF-8
 		//  type  - symbol type, (""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-32)
 		if(prop == "charAt" && prms.size()) {
@@ -1376,7 +1376,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(tp == "utf-32") return s.substr(n, 4);
 		    return s.substr(n, 1);
 		}
-		// int charCodeAt(int symb, string type = "") - extracts the symbol code <symb> from the string of the type <type>
+		// int charCodeAt( int symb, string type = "" ) - extracts the symbol code <symb> from the string of the type <type>
 		//  symb - symbol position, changed to the next symbol position for UTF-8
 		//  type  - symbol type, (""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE)
 		if(prop == "charCodeAt" && prms.size()) {
@@ -1405,7 +1405,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    }
 		    return (int64_t)(unsigned char)vl.getS()[n];
 		}
-		// string concat(string val1, string val2, ...) - returns a new string formed by joining the values <val1> etc
+		// string concat( string val1, string val2, ... ) - returns a new string formed by joining the values <val1> etc
 		//  val1, val2 - appended values
 		if(prop == "concat" && prms.size()) {
 		    string rez = vl.getS();
@@ -1413,7 +1413,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 			rez += prms[iP].getS();
 		    return rez;
 		}
-		// int indexOf(string substr, int start) - returns the position of the required string <substr> in the original
+		// int indexOf( string substr, int start ) - returns the position of the required string <substr> in the original
 		//       row from the position <start>
 		//  substr - requested substring value
 		//  start - start position for search
@@ -1423,7 +1423,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    sp = vl.getS().find(prms[0].getS(),sp);
 		    return (sp==string::npos) ? -1 : (int)sp;
 		}
-		// int lastIndexOf(string substr, int start) - returns the position of the search string <substr> in the original
+		// int lastIndexOf( string substr, int start ) - returns the position of the search string <substr> in the original
 		//       one beginning from the position of <start> when searching from the end
 		//  substr - requested substring value
 		//  start - start position for search from the end
@@ -1459,7 +1459,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    else if(prms[0].type() != TVariant::Object || (re=prms[0].getO()).freeStat()) return -1;
 		    return re.at().match(vl.getS(), true);
 		}
-		// string slice(int beg, int end) - return the string extracted from the original one starting from the <beg> position
+		// string slice( int beg, int end ) - return the string extracted from the original one starting from the <beg> position
 		//       and ending be the <end>
 		//  beg - begin position
 		//  end - end position
@@ -1474,10 +1474,10 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(beg >= end) return string("");
 		    return vl.getS().substr(beg,end-beg);
 		}
-		// Array split(string sep, int limit) - return the array of strings separated by <sep> with the limit of the number of elements <limit>.
+		// Array split( string sep, int limit ) - return the array of strings separated by <sep> with the limit of the number of elements <limit>.
 		//  sep - items separator
 		//  limit - items limit
-		// Array split(RegExp pat, int limit) - return the array of strings separated by RegExp pattern <pat> with the limit of the number of elements <limit>.
+		// Array split( RegExp pat, int limit ) - return the array of strings separated by RegExp pattern <pat> with the limit of the number of elements <limit>.
 		//  pat - regular expression pattern.
 		if(prop == "split" && prms.size()) {
 		    //  Use RegExp for split
@@ -1495,18 +1495,18 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    }
 		    return rez;
 		}
-		// string insert(int pos, string substr) - insert substring <substr> into this string's position <pos>
+		// string insert( int pos, string substr ) - insert substring <substr> into this string's position <pos>
 		//  pos - position for insert
 		//  substr - substring for insert
 		if(prop == "insert" && prms.size() >= 2)
 		    return vl.getS().insert(vmax(0,vmin(vl.getS().size(),(unsigned)prms[0].getI())), prms[1].getS() );
-		// string replace(int pos, int n, string str) - replace substring into position <pos> and length <n> to string <str>.
+		// string replace( int pos, int n, string str ) - replace substring into position <pos> and length <n> to string <str>.
 		//  pos - position for start replace
 		//  n - number symbols for replace
 		//  str - string for replace
-		// string replace(string substr, string str) - replace all substrings <substr> to string <str>.
+		// string replace( string substr, string str ) - replace all substrings <substr> to string <str>.
 		//  substr - substring into all string
-		// string replace(RegExp pat, string str) - replace substrings by pattern <pat> to string <str>.
+		// string replace( RegExp pat, string str ) - replace substrings by pattern <pat> to string <str>.
 		//  pat - regular expression pattern
 		if(prop == "replace" && prms.size() >= 2) {
 		    string cstr = vl.getS();
@@ -1530,12 +1530,12 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    //vl.setModify();
 		    return cstr;
 		}
-		// real toReal() - convert this string to real number
+		// real toReal( ) - convert this string to real number
 		if(prop == "toReal") return s2r(vl.getS());
-		// int toInt(int base = 0) - convert this string to integer number
+		// int toInt( int base = 0 ) - convert this string to integer number
 		//  base - radix of subject sequence
 		if(prop == "toInt") return (int64_t)strtoll(vl.getS().c_str(), NULL, (prms.size()>=1?prms[0].getI():10));
-		// string parse(int pos, string sep = ".", int off = 0) - get token with number <pos> from the string when separated by <sep>
+		// string parse( int pos, string sep = ".", int off = 0 ) - get token with number <pos> from the string when separated by <sep>
 		//       and from offset <off>
 		//  pos - item position
 		//  sep - items separator
@@ -1548,7 +1548,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(prms.size() >= 3) { prms[2].setI(off); prms[2].setModify(); }
 		    return rez;
 		}
-		// string parseLine(int pos, int off = 0) - get line with number <pos> from the string and from offset <off>
+		// string parseLine( int pos, int off = 0 ) - get line with number <pos> from the string and from offset <off>
 		//  pos - item position
 		//  off - start position
 		if(prop == "parseLine" && prms.size()) {
@@ -1557,7 +1557,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
 		    return rez;
 		}
-		// string parsePath(int pos, int off = 0) - get path token with number <pos> from the string and from offset <off>
+		// string parsePath( int pos, int off = 0 ) - get path token with number <pos> from the string and from offset <off>
 		//  pos - item position
 		//  off - start position
 		if(prop == "parsePath" && prms.size()) {
@@ -1566,11 +1566,11 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
 		    return rez;
 		}
-		// string path2sep(string sep = ".") - convert path into this string to separated by <sep> string.
+		// string path2sep( string sep = "." ) - convert path into this string to separated by <sep> string.
 		//  sep - item separator
 		if(prop == "path2sep")
 		    return TSYS::path2sepstr(vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.');
-		// string trim(string cfg = " \n\t\r") - string trimming at begin and end for symbols <cfg>.
+		// string trim( string cfg = " \n\t\r" ) - string trimming at begin and end for symbols <cfg>.
 		//  cfg - trimming symbols
 		if(prop == "trim") return sTrm(vl.getS(), prms.size() ? prms[0].getS() : " \n\t\r");
 
