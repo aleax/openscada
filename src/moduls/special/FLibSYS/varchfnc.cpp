@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: varchfnc.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2017,2019 by Roman Savochenko, <rom_as@oscada.org> *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,7 +29,7 @@ using namespace FLibSYS;
 //*************************************************
 //* VArchObj - Value archive object               *
 //*************************************************
-VArchObj::VArchObj( ) : mIsArch(false), mBuf(NULL)
+VArchObj::VArchObj( const string &user ) : mIsArch(false), mBuf(NULL), mUser(user)
 {
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
@@ -155,6 +155,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     //bool set( ValObj val, int sec, int usec, string archivator = "" ) - writing of the value <val> to the archive for the time <sec>:<usec> for the archivator <archivator>.
     if(id == "set" && prms.size() >= 3) {
 	if(isArch()) {
+	    if(!SYS->security().at().access(mUser,SEC_WR,"root",SARH_ID,RWRWR_)) return false;
 	    TFld::Type tp = TFld::String;
 	    switch(prms[0].type()) {
 		case TVariant::Boolean:	tp = TFld::Boolean;	break;
@@ -187,21 +188,21 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	if(src.at().isArch()) {
 	    TValBuf* vb = NULL;
 	    if(isArch()) {
+		if(!SYS->security().at().access(mUser,SEC_WR,"root",SARH_ID,RWRWR_)) return false;
 		tarch = arch();
 		vb = &tarch.at();
-	    }
-	    else vb = buf();
+	    } else vb = buf();
 	    if(!vb)	return false;
 	    src.at().arch().at().getVals(*vb, prms[1].getI()*1000000+prms[2].getI(),
 					      prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
 	}
 	else if(isArch()) {
+	    if(!SYS->security().at().access(mUser,SEC_WR,"root",SARH_ID,RWRWR_)) return false;
 	    TValBuf* vb = NULL;
 	    if(src.at().isArch()) {
 		tarch = src.at().arch();
 		vb = &tarch.at();
-	    }
-	    else vb = src.at().buf();
+	    } else vb = src.at().buf();
 	    if(!vb)	return false;
 	    arch().at().setVals(*vb, prms[1].getI()*1000000+prms[2].getI(),
 				     prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");

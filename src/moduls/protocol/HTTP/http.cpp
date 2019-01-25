@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.HTTP file: http.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.2.0"
+#define MOD_VER		"3.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -705,7 +705,6 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		    string pass;
 		    if((cntEl=cnt.find("user")) != cnt.end())	user = cntEl->second;
 		    if((cntEl=cnt.find("pass")) != cnt.end())	pass = cntEl->second;
-
 		    if(mod->autoLogGet(sender) == user ||
 			((!mod->allowUsersAuth().size() || TRegExp("(^|;)"+user+"(;|$)").test(mod->allowUsersAuth())) &&
 			    SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass)))
@@ -718,10 +717,10 @@ bool TProtIn::mess( const string &reqst, string &answer )
 			return mNotFull || KeepAlive;
 		    }
 		}
-
-		mess_warning(owner().nodePath().c_str(), _("Wrong authentication from the user '%s'. Host: %s. User agent: %s."),
+		mess_warning(owner().nodePath().c_str(), _("Wrong authentication of the user '%s'. Host: %s. User agent: %s."),
 		    user.c_str(), sender.c_str(), userAgent.c_str());
 		answer = getAuth(uri, _("<p style='color: #CF8122;'>Wrong authentication! Retry please.</p>"));
+
 		return mNotFull || KeepAlive;
 	    }
 	}
@@ -746,7 +745,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		// Check for auto-login
 		user = mod->autoLogGet(sender);
 		if(!user.empty()) {
-		    mess_info(owner().nodePath().c_str(), _("Wrong authentication from the user '%s'. Host: %s. User agent: %s."),
+		    mess_info(owner().nodePath().c_str(), _("Successful automatic authentication for the user '%s'. Host: %s. User agent: %s."),
 			user.c_str(), sender.c_str(), userAgent.c_str());
 		    answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),(uri+prms).c_str())+"</h2>\n", "200 OK",
 			"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;",

@@ -1757,7 +1757,8 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  arch   - setting archiver, set to empty to set for the buffer and all archivers, set to "<buffer>" to process only the buffer.
     if(iid == "setVals" && prms.size() >= 3) {
 	AutoHD<TArrayObj> aBuf;
-	if(prms[0].type() != TVariant::Object || (aBuf=prms[0].getO()).freeStat())	return false;
+	if(prms[0].type() != TVariant::Object || (aBuf=prms[0].getO()).freeStat() ||
+	    !SYS->security().at().access(user,SEC_WR,"root",SARH_ID,RWRWR_))	return false;
 	int64_t btm = prms[1].getI(),
 		per = vmax(TValBuf::period(), prms[2].getI());
 	TValBuf buf(TValBuf::valType(), 0, per, true, true);

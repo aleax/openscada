@@ -138,13 +138,10 @@ string Project::getStatus( )
 
     vector<string> tls;
     list(tls);
-    int cnt = 0;
     time_t maxTm = 0;
-    for(unsigned iT = 0; iT < tls.size(); iT++) {
-	cnt += at(tls[iT]).at().herit().size();
+    for(unsigned iT = 0; iT < tls.size(); iT++)
 	maxTm = vmax(maxTm, at(tls[iT]).at().timeStamp());
-    }
-    rez += TSYS::strMess(_("Used: %d. "), cnt);
+    rez += TSYS::strMess(_("Used: %d. "), mHerit.size());
     rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(maxTm).c_str());
 
     return rez;
@@ -609,7 +606,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	vector<string> tls;
 	list(tls);
 	time_t maxTm = 0;
-	for(unsigned i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
+	for(unsigned iT = 0; iT < tls.size(); iT++) maxTm = vmax(maxTm, at(tls[iT]).at().timeStamp());
 	opt->setText(i2s(maxTm));
     }
     else if(a_path == "/obj/st/use" && ctrChkNode(opt))	opt->setText(i2s(mHerit.size()));

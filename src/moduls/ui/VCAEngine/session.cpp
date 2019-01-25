@@ -1075,7 +1075,7 @@ void *Session::Notify::Task( void *intf )
 //* SessPage: Page of Project's session          *
 //************************************************
 SessPage::SessPage( const string &iid, const string &ipage, Session *sess ) :
-    SessWdg(iid,ipage,sess), mClosePgCom(false), mDisMan(false), mFuncM(true), pathAsOpen(dataRes()), pathAsOpenPrev(dataRes())
+    SessWdg(iid,ipage,sess), mClosePgCom(false), mDisMan(false), mCalcClk_(sess->calcClk()), mFuncM(true), pathAsOpen(dataRes()), pathAsOpenPrev(dataRes())
 {
     mPage = grpAdd("pg_");
 }
@@ -1262,7 +1262,10 @@ float SessPage::tmCalcMaxAll( )
 void SessPage::calc( bool first, bool last, int pos )
 {
     //Process self data
-    if(process()) SessWdg::calc(first, last, pos);
+    if(process() && (first || last || mCalcClk_ != mCalcClk))	//mCalcClk_ used here to prevent multiple execution of the linked pages
+	SessWdg::calc(first, last, pos);
+
+    mCalcClk_ = mCalcClk;
 
     if(mClosePgCom) { mClosePgCom = false; setProcess(false); return; }
 

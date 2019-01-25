@@ -373,10 +373,11 @@ Information variables of the program:
 <li> <i>static string ll2str( long long val, IntView view=Dec );</i> — Transformation of a long integer (64bit) to the string type of view <i>view</i>.</li>
 <li> <i>static string real2str( double val, int prec=15, char tp='g');</i> — Real transformation with an accuracy <i>prec</i> signs and type <i>tp</i> to the string.</li>
 <li> <i>static double realRound( double val, int dig=0, bool toint=false );</i> — Rounding the real number to the specified digit <i>dig</i> after the decimal point with the possibility of transformation to integer after rounding <i>toint</i>.</li>
-<li> <i>static string atime2str( time_t tm, const string &amp;format = "" );</i> — Astronomic UNIX time <i>tm</i> conversion to string, by format <i>format</i> of POSIX-function "strftime()".</li>
+<li> <i>static string atime2str( time_t tm, const string &amp;format = "", bool gmt = false );</i> — Astronomic UNIX time <i>tm</i> conversion to a string, in the <i>format</i> of the POSIX-function "strftime()" or "gmtime()", for <i>gmt</i>.</li>
 <li> <i>static string time2str( double tm );</i> — Convert time interval, in seconds, to string like "1hour 23min 10sec".</li>
 <li> <i>static string cpct2str( double cnt );</i> — Traffic counter <i>cnt</i> (bytes) convert to string like "12.5KiB".</li>
 <li> <i>static double str2real( const string &amp;val );</i> — String transformation to the real.</li>
+<li> <i>static time_t str2atime( const string &amp;val, const string &amp;format = "", bool gmt = false )</i> — String time <i>val</i> conversion to an astronomic UNIX time, in the <i>format</i> of the POSIX-function "strptime()", and by the function "mktime()" or "timegm()", for <i>gmt</i>.</li>
 <li> <i>static string addr2str( void *addr );</i> — Convert addresses into string.</li>
 <li> <i>static void *str2addr( const string &amp;str );</i> — Convert string into the address.</li>
 <li> <i>static string strTrim( const string &amp;val, const string &amp;cfg = " \n\t\r" );</i> — Deletes from the original string <i>val</i> pointed into <i>cfg</i> (mostly empty) characters at the beginning and end of it.</li>
@@ -421,7 +422,7 @@ Information variables of the program:
 <li> <i>inline string ll2s( long long val, TSYS::IntView view = TSYS::Dec )</i> —&gt; TSYS::ll2str(val, view);</li>
 <li> <i>inline string r2s( double val, int prec = 15, char tp = 'g' )</i> —&gt; TSYS::real2str(val, prec, tp);</li>
 <li> <i>inline double rRnd( double val, int dig = 0, bool toint = false )</i> —&gt; TSYS::realRound(val, dig, toint);</li>
-<li> <i>inline string atm2s( time_t tm, const string &amp;format = "" )</i> —&gt; TSYS::atime2str(tm, format);</li>
+<li> <i>inline string atm2s( time_t tm, const string &amp;format = "", bool gmt = false )</i> —&gt; TSYS::atime2str(tm, format, gmt);</li>
 <li> <i>inline string tm2s( double tm )</i> —&gt; TSYS::time2str(tm);</li>
 <li> <i>inline int s2i( const string &amp;val )</i> —&gt; atoi(val.c_str());</li>
 <li> <i>inline long long s2ll( const string &amp;val )</i> —&gt; atoll(val.c_str());</li>

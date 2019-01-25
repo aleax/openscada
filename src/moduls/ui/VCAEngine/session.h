@@ -321,11 +321,12 @@ class SessWdg : public Widget, public TValFunc
 	unsigned	inLnkGet: 1;
 	unsigned	mToEn	: 1;
 
+	unsigned int	&mCalcClk;
+
     private:
 	//Attributes
 	string		mWorkProg;
 	unsigned int	mMdfClc;
-	unsigned int	&mCalcClk;
 	ResMtx		mCalcRes;
 
 	vector<string>	mWdgChldAct,	//Active childs widget's list
@@ -396,6 +397,7 @@ class SessPage : public SessWdg
 	unsigned mPage		: 4;		//Pages container identifier
 	unsigned mClosePgCom	: 1;
 	unsigned mDisMan	: 1;		//Disable the page enabling at request by it's disabling in manual
+	unsigned int	mCalcClk_;
 	ResMtx	mFuncM;
 	MtxString pathAsOpen, pathAsOpenPrev;
 };

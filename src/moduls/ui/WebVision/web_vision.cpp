@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.9.0"
+#define MOD_VER		"3.0.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -72,7 +72,7 @@ using namespace WebVision;
 //************************************************
 //* TWEB                                         *
 //************************************************
-TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(1)
+TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mCachePgLife(1), mCachePgSz(10), mPNGCompLev(1)
 {
     mod = this;
 
@@ -261,8 +261,12 @@ string TWEB::optDescr( )
     return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
 	"---- Parameters of the module section '%s' of the configuration file ----\n"
-	"SessTimeLife <min>      Lifetime of the sessions in minutes (by default, 10).\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
+	"SessTimeLife <min>      Lifetime of the sessions in minutes (by default, 10).\n"
+	"SessLimit    <numb>     Maximum number of the sessions (by default 5).\n"
+	"CachePgLife  <hours>    Lifetime of the pages in the cache (by default 1).\n"
+	"CachePgSz    <numb>     Maximum number of the pages in the cache (by default 10).\n"
+	"PNGCompLev   <lev>      Compression level [-1..9] of the creating PNG-images.\n\n"),
+	MOD_TYPE, MOD_ID, nodePath().c_str());
 }
 
 void TWEB::load_( )
@@ -272,6 +276,8 @@ void TWEB::load_( )
     //Load parameters from config-file
     setSessTime(s2i(TBDS::genDBGet(nodePath()+"SessTimeLife",i2s(sessTime()))));
     setSessLimit(s2i(TBDS::genDBGet(nodePath()+"SessLimit",i2s(sessLimit()))));
+    setCachePgLife(s2r(TBDS::genDBGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
+    setCachePgSz(s2i(TBDS::genDBGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
     setPNGCompLev(s2i(TBDS::genDBGet(nodePath()+"PNGCompLev",i2s(PNGCompLev()))));
 }
 
@@ -279,6 +285,8 @@ void TWEB::save_( )
 {
     TBDS::genDBSet(nodePath()+"SessTimeLife",i2s(sessTime()));
     TBDS::genDBSet(nodePath()+"SessLimit",i2s(sessLimit()));
+    TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
+    TBDS::genDBSet(nodePath()+"CachePgSz", i2s(cachePgSz()));
     TBDS::genDBSet(nodePath()+"PNGCompLev",i2s(PNGCompLev()));
 }
 
@@ -554,8 +562,16 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,1,"/prm/st",_("State")))
 	    ctrMkNode("list",opt,-1,"/prm/st/ses",_("Sessions"),R_R_R_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"),R_R_R_)) {
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Lifetime of the sessions, minutes"),RWRWR_,"root",SUI_ID,1, "tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/sesLimit",_("Sessions limit"),RWRWR_,"root",SUI_ID,1, "tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Lifetime and maximum number of the sessions"),RWRWR_,"root",SUI_ID,2,"tp","dec",
+		"help",_("The time is specified in minutes, which defines the inactivity interval for closing the WEB-sessions."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/sesLimit","",RWRWR_,"root",SUI_ID,2,"tp","dec",
+		"help",_("The number defines a limit of opened WEB-sessions."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Lifetime and maximum number of the cached pages"),RWRWR_,"root",SUI_ID,2,"tp","real",
+		"help",_("The time is specified in hours, which defines the inactivity interval for closing pages in the cache.\n"
+			"Zero value of the time excludes the closing of pages in the cache."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgSz","",RWRWR_,"root",SUI_ID,2,"tp","dec",
+		"help",_("The number defines a limit of pages in the cache.\n"
+			"Zero value of the number excludes the cache limit."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/PNGCompLev",_("Level of the PNG compression"),RWRWR_,"root",SUI_ID,4,
 		"tp","dec", "min","-1", "max","9", "help",_("Level of the PNG (ZLib) compression:\n"
 			    "  -1  - optimal speed-size;\n"
@@ -573,11 +589,11 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	for(int iS = 0; iS < vSesLs.size(); iS++) {
 	    AutoHD<VCASess> ses = vcaSesAt(vSesLs[iS]);
 	    ses.at().objList(vSesObjs);
-	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s): the last %s; cache %d, %s; session objects %d;"),
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s): the last %s; cached pages %d and resources %d, %s; session objects %d."),
 		atm2s(ses.at().openTm(),"%Y-%m-%dT%H:%M:%S").c_str(),
 		ses.at().id().c_str(), ses.at().sender().c_str(),
 		atm2s(ses.at().lstReq(),"%Y-%m-%dT%H:%M:%S").c_str(),
-		ses.at().cacheResSize(), TSYS::cpct2str(ses.at().cacheResLen()).c_str(), vSesObjs.size()));
+		ses.at().pgCacheSize(), ses.at().cacheResSize(), TSYS::cpct2str(ses.at().cacheResLen()).c_str(), vSesObjs.size()));
 	}
     }
     else if(a_path == "/prm/cfg/lf_tm") {
@@ -587,6 +603,14 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/sesLimit") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(sessLimit()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSessLimit(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/cachePgLife") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(r2s(cachePgLife()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCachePgLife(s2r(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/cachePgSz") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(cachePgSz()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCachePgSz(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/PNGCompLev") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(PNGCompLev()));

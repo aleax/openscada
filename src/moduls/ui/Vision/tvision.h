@@ -65,7 +65,8 @@ class TVision : public TUI
 	bool exitLstRunPrjCls( )		{ return mExitLstRunPrjCls; }
 	string VCAStation( )			{ return mVCAStation; }
 	int restoreTime( )			{ return mRestTime; }
-	float cachePgLife( )			{ return mCachePgLife; }
+	double cachePgLife( )			{ return mCachePgLife; }
+	int cachePgSz( )			{ return mCachePgSz; }
 	string uiPropGet( const string &prop, const string &user = "root" );
 
 	void setUserStart( const string &user )	{ mUserStart = user; modif(); }
@@ -74,7 +75,8 @@ class TVision : public TUI
 	void setExitLstRunPrjCls( bool en )	{ mExitLstRunPrjCls = en; modif(); }
 	void setVCAStation( const string &stat ){ mVCAStation = stat; modif(); }
 	void setRestoreTime( int vl )		{ mRestTime = vl; modif(); }
-	void setCachePgLife( float vl )		{ mCachePgLife = vmax(0,vmin(1000,vl)); modif(); }
+	void setCachePgLife( double vl )	{ mCachePgLife = vmax(0, vmin(1000,vl)); modif(); }
+	void setCachePgSz( int vl )		{ mCachePgSz = vmax(0, vmin(100,vl)); modif(); }
 	void uiPropSet( const string &prop, const string &vl, const string &user = "root" );
 
 	void modStart( );
@@ -121,7 +123,8 @@ class TVision : public TUI
 	bool		mExitLstRunPrjCls,	//Exit program on last run project close
 			mEndRun;		//End run command. Close all windows
 	int		mRestTime;		//Restore connection time, seconds
-	float		mCachePgLife;		//Cached pages lifetime
+	double		mCachePgLife;		//Cached pages lifetime
+	int		mCachePgSz;		//Cached pages number
 
 	int		mScrnCnt;
 };

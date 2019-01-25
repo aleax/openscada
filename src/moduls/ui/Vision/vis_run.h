@@ -219,7 +219,10 @@ class VisRun : public QMainWindow
 
 	void usrStatus( const string &val, RunPageView *pg = NULL );
 
+	int cachePgSz( )	{ return cachePg.size(); }
+
 	// Resource cache commands
+	int cacheResSz( )	{ return mCacheRes.size(); }
 	string cacheResGet( const string &res );
 	void cacheResSet( const string &res, const string &val );
 

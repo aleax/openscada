@@ -2046,16 +2046,18 @@ void Attr::setFlgSelf( SelfAttrFlgs flg, bool sys )
 void Attr::AHDConnect( )
 {
     owner()->dataRes().lock();
-    if(mConn < ((1<<ATTR_CON_DEPTH)-1)) mConn++;
-    else mess_err(owner()->nodePath().c_str(),_("Connects to the attribute '%s' is more than %d!"),id().c_str(),(1<<ATTR_CON_DEPTH)-1);
+    bool noLim = (mConn < ((1<<ATTR_CON_DEPTH)-1));
+    if(noLim) mConn++;
     owner()->dataRes().unlock();
+    if(!noLim) mess_err(owner()->nodePath().c_str(),_("Connects to the attribute '%s' is more than %d!"),id().c_str(),(1<<ATTR_CON_DEPTH)-1);
 }
 
 bool Attr::AHDDisConnect( )
 {
     owner()->dataRes().lock();
-    if(mConn > 0) mConn--;
-    else mess_err(owner()->nodePath().c_str(),_("Disconnects from the attribute '%s' more than connections!"),id().c_str());
+    bool noLim = (mConn > 0);
+    if(noLim) mConn--;
     owner()->dataRes().unlock();
+    if(!noLim) mess_err(owner()->nodePath().c_str(),_("Disconnects from the attribute '%s' more than connections!"),id().c_str());
     return false;
 }

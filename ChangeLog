@@ -1,3 +1,18 @@
+2019-01-25 Roman (stable)
+- FIX:SYS: The console help call by the key --help or -h fixed for unlocking the early loaded objects, stopping the subsystems forcely.
+- User:Archive.setVals,Special.FLibSYS.VArchObj(): Access to the archive writing functions restricted only for users in the group "Archive".
+- FIX:DAQ.JavaLikeCalc: Fixed for the token name FUNCTION.
+- FIX:Protocol.HTTP: Fixed for the message "Wrong authentication from the user ..." not in a proper place.
+- FIX:UI.VCAEngine: Fixed for information of the heritors of the projects.
+    FIX: Prevented from the multiple execution of the linked pages.
+    Warning messages of the big number connections to the attributes moved behind the data lock.
+- UI.Vision: The pages cache of the sessions appended for the pages number limit control, its information appended to the sesion information and it improved in whole.
+- !!!:UI.WebVision: Appended for the pages cache controlled in the lifetime and the pages maximum number, both on the server and WebBrovser side.
+    The cache information appended to the sesion information.
+    Then the module is more suitable now to work in the operative mode!
+    The server side yet can work with old modified interface JS files, in the old unlimited cache mode!
+
+
 2019-01-20 Roman (stable)
 - !:FIX:DB.LibsDB.vcaBase: Main.{alarmsAct,alarmsSt},doc.docMessRep: Corrected for obtaining the source of messages of the DAQ controller objects.
     !:FIX:Main.RootPgSo: Completed in the views unification for their accessibility control.

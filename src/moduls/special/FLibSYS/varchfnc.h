@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: varchfnc.h
 /***************************************************************************
- *   Copyright (C) 2009-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2014,2019 by Roman Savochenko, <rom_as@oscada.org> *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@ class VArchObj : public TVarObj
 {
     public:
 	//Methods
-	VArchObj( );
+	VArchObj( const string &user = "" );
 	~VArchObj( );
 
 	string objName( )	{ return "arch"; }
@@ -59,6 +59,7 @@ class VArchObj : public TVarObj
 	    AutoHD<TVArchive> *mArch;
 	    TValBuf *mBuf;
 	};
+	string	mUser;
 };
 
 //*************************************************
@@ -101,9 +102,9 @@ class vArhBuf : public TFunction
 	string descr( )	{ return _("Getting a value buffer object (VArchObj) for temporary values storing and performing the intermediate operations on frames of data."); }
 
 	void calc( TValFunc *val ) {
-	    VArchObj *obj = new VArchObj();
-	    obj->open((TFld::Type)val->getI(1),val->getI(2),val->getI(3),val->getB(4),val->getB(5));
-	    val->setO(0,obj);
+	    VArchObj *obj = new VArchObj(val->user());
+	    obj->open((TFld::Type)val->getI(1), val->getI(2), val->getI(3), val->getB(4), val->getB(5));
+	    val->setO(0, obj);
 	}
 };
 

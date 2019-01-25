@@ -119,11 +119,18 @@ void VCASess::getReq( SSess &ses )
 	prmEl = ses.prm.find("tm");
 
 	XMLNode req("CntrReqs");
-	req.setAttr("path",ses.url);
-	req.childAdd("openlist")->setAttr("path","/%2fserv%2fpg")->setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
-	req.childAdd("get")->setAttr("path","/%2fobj%2fcfg%2fper");
+	req.setAttr("path", ses.url);
+	req.childAdd("openlist")->setAttr("path", "/%2fserv%2fpg")->setAttr("tm", (prmEl!=ses.prm.end())?prmEl->second:"0");
+	req.childAdd("get")->setAttr("path", "/%2fobj%2fcfg%2fper");
 	mod->cntrIfCmd(req, ses);
-	req.childGet(0)->setAttr("per",req.childGet(1)->text());
+	req.childGet(0)->setAttr("per", req.childGet(1)->text())->
+			setAttr("cachePgSz", i2s(mod->cachePgSz()))->
+			setAttr("cachePgLife", r2s(mod->cachePgLife()));
+
+	// Getting opened pages from the cache
+	for(int iP = 0; iP < req.childGet(0)->childSize(); iP++)
+	    pgCacheGet(TSYS::path2sepstr(req.childGet(0)->childGet(iP)->text()));
+
 	ses.page = mod->pgCreator(ses.prt, req.childGet(0)->save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     //Attribute get
@@ -194,6 +201,9 @@ void VCASess::getReq( SSess &ses )
     }
     else ses.page = mod->pgCreator(ses.prt, "<div class='warning'>"+TSYS::strMess(_("Unknown command: %s."),wp_com.c_str())+"</div>\n", "200 OK");
 
+    //Checking for the cache
+    pgCacheProc();
+
     //if(1e-3*(TSYS::curTime()-curTm) > 20)
     //	printf("TEST 00: %gms: '%s': '%s'\n",1e-3*(TSYS::curTime()-curTm),wp_com.c_str(),ses.url.c_str());
 }
@@ -210,7 +220,7 @@ void VCASess::postReq( SSess &ses )
     if(wp_com == "attrs") {
 	XMLNode req("set");
 	req.load(ses.content);
-	req.setAttr("path",ses.url+"/%2fserv%2fattr");
+	req.setAttr("path", ses.url+"/%2fserv%2fattr");
 	mod->cntrIfCmd(req, ses);
     }
     //Open page command
@@ -218,15 +228,11 @@ void VCASess::postReq( SSess &ses )
 	XMLNode req((wp_com=="pgOpen")?"open":"close");
 	req.setAttr("path","/"+TSYS::pathLev(ses.url,0)+"/%2fserv%2fpg")->setAttr("pg",ses.url);
 	mod->cntrIfCmd(req, ses);
-	// ???? Remove for objects of that page - pages cache
-	if(wp_com == "pgClose") {
-	    string oAddr = TSYS::path2sepstr(ses.url);
-	    vector<string> oLs;
-	    objList(oLs);
-	    for(int iO = 0; iO < oLs.size(); iO++)
-		if(oLs[iO].find(oAddr) == 0)
-		    objDel(oLs[iO]);
-	}
+	// Remove for objects of that page - pages' cache
+	string oAddr = TSYS::path2sepstr(ses.url);
+	if(wp_com == "pgOpen")	pgCacheGet(oAddr);
+	else if(ses.prm.find("cacheCntr") != ses.prm.end())
+	    pgCacheProc(oAddr, ses.prm.find("cachePg") == ses.prm.end());
     }
     else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().postReq(ses);
 
@@ -249,6 +255,48 @@ void VCASess::objAdd( VCAObj *obj )
     if(!obj) return;
     if(objPresent(obj->nodeName())) delete obj;
     else chldAdd(id_objs, obj);
+}
+
+void VCASess::pgCacheGet( const string &addr )
+{
+    MtxAlloc res(mod->dataRes(), true);
+
+    //Searching for the page <addr> in the cache
+    for(unsigned iPg = 0; iPg < mCachePg.size(); iPg++)
+	if(mCachePg[iPg].second == addr) {
+	    mCachePg.erase(mCachePg.begin()+iPg);
+	    break;
+	}
+}
+
+void VCASess::pgCacheProc( const string &addr, bool fClose )
+{
+    vector<string> oLs;
+
+    MtxAlloc res(mod->dataRes(), true);
+
+    //Appending the page <addr> to the cache
+    if(addr.size()) mCachePg.push_front(pair<time_t,string>(fClose?0:SYS->sysTm(),addr));
+
+    //Processing for the cache limits
+    for(int iPg = mCachePg.size()-1; iPg >= 0; iPg = fmin(iPg,mCachePg.size())-1)
+	if((mod->cachePgLife() > 0.01 && (SYS->sysTm()-mCachePg[iPg].first) > (unsigned)(mod->cachePgLife()*1.1*60*60)) ||
+		mCachePg[iPg].first == 0 || (mod->cachePgSz() && mCachePg.size() > mod->cachePgSz()))
+	{
+	    // Removing the same page record
+	    string tAddr = mCachePg[iPg].second;
+	    mCachePg.erase(mCachePg.begin()+iPg);
+
+	    res.unlock();
+
+	    // Removing page's objects - same the cached data
+	    objList(oLs);
+	    for(int iO = 0; iO < oLs.size(); iO++)
+		if(oLs[iO].find(tAddr) == 0)
+		    objDel(oLs[iO]);
+
+	    res.lock();
+	} else break;	//Due to this king of the order
 }
 
 string VCASess::resGet( const string &res, const string &path, const SSess &ses, string *mime )

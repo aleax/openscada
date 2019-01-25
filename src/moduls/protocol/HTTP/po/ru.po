@@ -1,13 +1,13 @@
 # OpenSCADA.Protocol.HTTP translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Protocol.HTTP package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-11 11:42+0300\n"
+"POT-Creation-Date: 2019-01-25 15:24+0200\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -128,8 +128,7 @@ msgstr ""
 msgid "Going to the page: <b>%s</b>"
 msgstr "Переход к странице: <b>%s</b>"
 
-#, c-format
-msgid "Wrong authentication from the user '%s'. Host: %s. User agent: %s."
+msgid "Wrong authentication of the user '%s'. Host: %s. User agent: %s."
 msgstr ""
 "Ошибка аутентификации пользователя '%s'. Узел: %s. Агент пользователя: %s."
 
@@ -139,6 +138,12 @@ msgstr ""
 
 msgid "No WWW subtype module found!"
 msgstr "Не найдено модулей с подтипом WWW!"
+
+msgid ""
+"Successful automatic authentication for the user '%s'. Host: %s. User agent: "
+"%s."
+msgstr ""
+"Успешная автоматическая аутентификация пользователя '%s'. Узел: %s. Агент пользователя: %s."
 
 #, c-format
 msgid "No HTTP GET function in the module '%s'!"

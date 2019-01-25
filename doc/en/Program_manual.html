@@ -1545,8 +1545,9 @@ Contains 7(8) tests of the value archiver to verify the correct functioning of t
 StartUser  &lt;user&gt;       Start-up, no-password, user.
 UserPass   &lt;pass&gt;       User password for non-local start.
 RunPrjs    &lt;list&gt;       List of projects to be launched at the start of the module.
-ExitLstRunPrjCls &lt;0|1&gt;  Exit closing the last completed project (default = 1).
-CachePgLife &lt;hours&gt;     The lifetime of pages in the cache.
+ExitLstRunPrjCls &lt;0|1&gt;  Exit closing the last completed project (by default 1).
+CachePgLife &lt;hours&gt;     Lifetime of the pages in the cache (by default 1).
+CachePgSz  &lt;numb&gt;       Maximum number of the pages in the cache (by default 10).
 VCAstation &lt;id&gt;         The station with the VCA engine ('.' Is local).
 RestoreTime &lt;seconds&gt;   Connection recovery time.
 
@@ -1583,7 +1584,11 @@ StartUser  &lt;user&gt;       Starting user without password.
 
 ======================= Module &lt;UI:WebVision&gt; options =======================
 ---- Parameters of the module section '/sub_UI/mod_WebVision/' of the configuration file ----
-SessTimeLife &lt;min&gt;      Time of session life, in minutes (by default, 10).
+SessTimeLife &lt;min&gt;      Lifetime of the sessions in minutes (by default, 10).
+SessLimit    &lt;numb&gt;     Maximum number of the sessions (by default 5).
+CachePgLife  &lt;hours&gt;    Lifetime of the pages in the cache (by default 1).
+CachePgSz    &lt;numb&gt;     Maximum number of the pages in the cache (by default 10).
+PNGCompLev   &lt;lev&gt;      Compression level [-1..9] of the creating PNG-images.
 </pre>
 <h2><span class="mw-headline" id="Startup_and_execution"><span class="mw-headline-number">5</span> <span id="Startup" title="#Startup">Startup and execution</span></span></h2>
 <p>OpenSCADA is from the beginning a program that can be started from the console or terminal by typing <b>openscada</b>. In this way, the program will start with its action messages in this console and the console lock on the user actions waiting, which is the default startup mode in the console-terminal and can be used to operative debugging and control the result of actions and errors. In addition to the typical mode, there are also two other modes that are defined by the transmission of <a href="#CfgFilePrm">options to the startup command</a>:

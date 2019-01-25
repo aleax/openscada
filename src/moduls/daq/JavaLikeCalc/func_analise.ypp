@@ -2,7 +2,7 @@
 %{
 //OpenSCADA system module DAQ.JavaLikeCalc file: func_analise.ypp
 /***************************************************************************
- *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,7 +54,7 @@ void sfErr( const string &mess, YYLTYPE *ps );
 %token	ERR VAR_DIR IF ELSE WHILE FOR IN BREAK CONTINUE ADDEQ SUBEQ MULEQ DIVEQ BITSHLEFT BITSHRIGHT RETURN NEW DELETE OBJECT ARRAY REGEXP
 %token	<id>	FUNC INT_FUNC B_FUNC B_FUNC1 B_FUNC2
 %token	<reg>	VAR CONST FUNC_R
-%token	<op>	O_PRP_F FUNCTON
+%token	<op>	O_PRP_F FUNCTION
 %type	<reg>	var expr
 %type	<prg_cd>	if if_expr OR_expr AND_expr end cycl fnc_in
 %type	<fp_cnt>	prmlst varlst
@@ -87,7 +87,7 @@ solve:  assign ';'
 	    { try{ pF->cdCycle($5,$6,$10,$13,$7); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| FOR '(' var IN cycl expr end ')' solve end
 	    { try{ pF->cdCycleObj($5,$6,$7,$10,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
-	| FUNCTON '(' varlst ')' fnc_in solve end
+	| FUNCTION '(' varlst ')' fnc_in solve end
 	    {
 		if($5 > 65535) { sfErr(TSYS::strMess(_("Internal function inaccessible by offset %d > %d"),$5,65535), &@1); YYABORT; }
 		uint16_t fSz = $7 - $5;
@@ -546,7 +546,7 @@ retry:
 	    if(pF->inFuncGet(yylval.op) >= 0) { yyerror(TSYS::strMess(_("Internal function '%s' defined early, "),yylval.op).c_str()); return ERR; }
 	    if(pF->mInFnc.size()) { yyerror(_("Do not include declaration of one internal function to other, ")); return ERR; }
 	    pF->inFuncDef(yylval.op, pF->prg.size());	//Early mark of the function context
-	    return FUNCTON;
+	    return FUNCTION;
 	}
 	//Boolean
 	if(smb_nm == "true" || smb_nm == "false") {
@@ -599,13 +599,13 @@ retry:
 	//Find internal, external or object's functions execution
 	if(c == '(') {
 	    // Internal functions
-	    if((yylval.id=pF->inFuncGet(smb_nm)) >= 0) return INT_FUNC;
+	    if((yylval.id=pF->inFuncGet(smb_nm)) >= 0)	return INT_FUNC;
 
 	    // Static linked external functions
 	    if((yylval.reg=pF->regAt(pF->regGet(EXT_F_AS_PREF+smb_nm)))) return FUNC_R;
 
 	    // External/static functions
-	    if((yylval.id=pF->funcGet(smb_nm)) >= 0) return FUNC;
+	    if((yylval.id=pF->funcGet(smb_nm)) >= 0)	return FUNC;
 
 	    // Check for object's functions and system object's function
 	    //string sel = TSYS::strSepParse(smb_nm,0,'.');

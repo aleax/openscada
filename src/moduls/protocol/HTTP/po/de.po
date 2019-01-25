@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-11 11:42+0300\n"
+"POT-Creation-Date: 2019-01-25 15:24+0200\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -135,8 +135,7 @@ msgstr ""
 msgid "Going to the page: <b>%s</b>"
 msgstr "Gehen zur Seite: <b>%s</b>"
 
-#, c-format
-msgid "Wrong authentication from the user '%s'. Host: %s. User agent: %s."
+msgid "Wrong authentication of the user '%s'. Host: %s. User agent: %s."
 msgstr "Falsche Authentifizierung vom Benutzer '%s'. Host: %s. User-Agent: %s."
 
 msgid "<p style='color: #CF8122;'>Wrong authentication! Retry please.</p>"
@@ -146,6 +145,13 @@ msgstr ""
 
 msgid "No WWW subtype module found!"
 msgstr "Keine Modul mit dem Subtyp WWW gefunden!"
+
+msgid ""
+"Successful automatic authentication for the user '%s'. Host: %s. User agent: "
+"%s."
+msgstr ""
+"Erfolgreiche automatische Authentifizierung für den Benutzer '%s'. Host: %s. User-Agent: "
+"%s."
 
 #, c-format
 msgid "No HTTP GET function in the module '%s'!"

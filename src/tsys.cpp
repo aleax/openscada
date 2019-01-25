@@ -863,7 +863,7 @@ int TSYS::start( )
     if(saveAtExit() || savePeriod()) save();
     cfgFileSave();
 
-    //Stop for subsystems
+    //Stop for the subsystems
     for(int iA = lst.size()-1; iA >= 0; iA--)
 	try { at(lst[iA]).at().subStop(); }
 	catch(TError &err) {
@@ -878,7 +878,23 @@ int TSYS::start( )
     return mStopSignal;
 }
 
-void TSYS::stop( int sig )	{ if(!mStopSignal) mStopSignal = sig; }
+void TSYS::stop( int sig )
+{
+    if(!mStopSignal) mStopSignal = sig;
+
+    if(SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help")) {
+	vector<string> lst;
+	list(lst);
+
+	//Stop for the subsystems
+	for(int iA = lst.size()-1; iA >= 0; iA--)
+	    try { at(lst[iA]).at().subStop(); }
+	    catch(TError &err) {
+		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		mess_sys(TMess::Error, _("Error stopping the subsystem '%s'."), lst[iA].c_str());
+	    }
+    }
+}
 
 void TSYS::unload( )
 {

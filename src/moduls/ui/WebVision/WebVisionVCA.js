@@ -371,6 +371,34 @@ function setFocus( wdg, onlyClr )
     if(!onlyClr) { attrs.focus = '1'; attrs.event = 'ws_FocusIn'; setWAttrs(masterPage.focusWdf,attrs); }
 }
 
+/****************************************************************************
+ * PageObj pgCacheGet( addr ) - Getting for the page <addr> from the cache. *
+ *   addr - address of the page.                                            *
+ ***************************************************************************/
+function pgCacheGet( addr )
+{
+    for(iPg = 0; iPg < pgCache.length; iPg++)
+	if(pgCache[iPg].addr == addr)
+	    return pgCache.splice(iPg,1)[0];
+    return null;
+}
+
+/*********************************************************************
+ * pgCacheProc( page ) - Processing the cache for the <page> or      *
+ *     the lifetime fo null <page>                                   *
+ *   addr - address of the page.                                     *
+ *********************************************************************/
+function pgCacheProc( page )
+{
+    if(page) { pgCache.unshift(page); page.cacheTm = (new Date()).getTime()/1000; }
+    //Removing the limited pages
+    for(iPg = pgCache.length-1; iPg >= 0; iPg--)
+	if((cachePgLife > 0.01 && ((((new Date()).getTime()/1000)-pgCache[iPg].cacheTm) > cachePgLife*60*60)) ||
+		(cachePgSz && pgCache.length > cachePgSz))
+	    delete pgCache.splice(iPg,1)[0];
+	else break;
+}
+
 /**********************************************************
  * callPage - call page 'pgId' for open update and other. *
  **********************************************************/
@@ -394,7 +422,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     if(!pgOpenSrc) pgOpenSrc = getWAttr(pgId,'pgOpenSrc');
     if(this == masterPage && (!this.addr.length || pgGrp == 'main' || pgGrp == this.attrs['pgGrp'])) {
 	if(this.addr.length) {
-	    servSet(this.addr,'com=pgClose','');
+	    servSet(this.addr,'com=pgClose&cacheCntr','');
 	    this.pwClean();
 	    document.body.removeChild(this.window);
 	}
@@ -464,7 +492,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 		" this.clX = event.clientX; this.clY = event.clientY; }'>"+
 		" <td title='"+winName+"' style='padding-left: 5px; overflow: hidden; white-space: nowrap;'>"+winName+"</td>"+
 		" <td style='color: red; cursor: pointer; text-align: right; width: 1px;' "+
-		"  onclick='servSet(this.offsetParent.iPg.addr,\"com=pgClose\",\"\"); "+
+		"  onclick='servSet(this.offsetParent.iPg.addr,\"com=pgClose&cacheCntr\",\"\"); "+
 		"   //this.offsetParent.iPg.pwClean(); "+
 		"   delete this.offsetParent.iPg.parent.pages[this.offsetParent.iPg.addr]; "+
 		"   document.getElementById(\"mainCntr\").removeChild(this.offsetParent.iPg.window);'>X</td></tr>\n"+
@@ -683,9 +711,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    (!this.inclOpen && this.attrs['pgOpenSrc'].length)))
 	    {
 		if(this.inclOpen) {
-		    servSet(this.inclOpen,'com=pgClose','');
-		    //pgCache[this.inclOpen] = this.pages[this.inclOpen];
-		    //pgCache[this.inclOpen].reqTm = tmCnt;
+		    servSet(this.inclOpen, 'com=pgClose&cacheCntr&cachePg', '');
+
+		    this.pages[this.inclOpen].reqTm = tmCnt;
+		    pgCacheProc(this.pages[this.inclOpen]);
 		    this.place.removeChild(this.pages[this.inclOpen].place);
 		    this.pages[this.inclOpen].perUpdtEn(false);
 		    delete this.pages[this.inclOpen];
@@ -693,22 +722,21 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		}
 		if(this.attrs['pgOpenSrc'].length) {
 		    this.inclOpen = this.attrs['pgOpenSrc'];
-		    /*if(pgCache[this.inclOpen]) {
-			this.pages[this.inclOpen] = pgCache[this.inclOpen];
+		    if((pgO=pgCacheGet(this.inclOpen))) {
+			this.pages[this.inclOpen] = pgO;
 			this.place.appendChild(this.pages[this.inclOpen].place);
-			pgBr = servGet(this.inclOpen, 'com=attrsBr&tm='+pgCache[this.inclOpen].reqTm);
+			pgBr = servGet(this.inclOpen, 'com=attrsBr&tm='+pgO.reqTm);
 			this.pages[this.inclOpen].perUpdtEn(true);
 			this.pages[this.inclOpen].makeEl(pgBr);
-			delete pgCache[this.inclOpen];
 		    }
-		    else {*/
+		    else {
 			var iPg = new pwDescr(this.inclOpen, true, this);
 			iPg.place = this.place.ownerDocument.createElement('div');
 			iPg.makeEl(servGet(this.inclOpen,'com=attrsBr'), false, true);
 
 			this.pages[this.inclOpen] = iPg;
 			this.place.appendChild(iPg.place);
-		    //}
+		    }
 		}
 	    }
 	    this.place.wdgLnk = this;
@@ -2421,6 +2449,8 @@ function makeUI( callBackRez )
     else { servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt,makeUI); return; }
     if(pgNode) {
 	modelPer = parseInt(pgNode.getAttribute("per"));
+	cachePgSz   = parseInt(pgNode.getAttribute("cachePgSz"));
+	cachePgLife = parseFloat(pgNode.getAttribute("cachePgLife"));
 	// Check for delete pages
 	for(var i_p = 0; i_p < pgList.length; i_p++) {
 	    var opPg; var i_ch;
@@ -2448,7 +2478,7 @@ function makeUI( callBackRez )
 		//  Check for closed window
 		var opPg = masterPage.findOpenPage(prPath);
 		if(opPg && opPg.window && opPg.windowExt && opPg.window.closed) {
-		    servSet(prPath,'com=pgClose','');
+		    servSet(prPath, 'com=pgClose&cacheCntr', '');
 		    opPg.pwClean();
 		    delete opPg.parent.pages[prPath];
 		    continue;
@@ -2461,6 +2491,9 @@ function makeUI( callBackRez )
     }
     //Update some widgets
     for(var i in perUpdtWdgs) perUpdtWdgs[i].perUpdt();
+
+    //Processing for the cache lifetime
+    pgCacheProc();
 
     //Elapsed time get and adjust for plane update period depends from the network speed
     var elTm = 1e-3*((new Date()).getTime()-stTmMain.getTime());
@@ -2625,7 +2658,9 @@ var prcTm = 0;				//Process time
 var planePer = 0;			//Planed update period
 var tmCnt = 0;				//Call counter
 var pgList = new Array();		//Opened pages list
-//var pgCache = new Object();		//Cached pages' data
+var cachePgLife = 0;			//Life time of the pages into the cache
+var cachePgSz = 0;			//Maximum number of the pages cache
+var pgCache = new Array();		//Cached pages' data
 var perUpdtWdgs = new Object();		//Periodic updated widgets register
 var masterPage = new pwDescr('', true);	//Master page create
 var stTmID = null;			//Status line timer identifier

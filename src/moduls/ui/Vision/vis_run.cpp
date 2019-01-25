@@ -1552,7 +1552,7 @@ void VisRun::pgCacheAdd( RunPageView *wdg )
 {
     if(!wdg) return;
     cachePg.push_front(wdg);
-    while(cachePg.size() > 100) {
+    while(mod->cachePgSz() && cachePg.size() > mod->cachePgSz()) {
 	cachePg.back()->deleteLater();	//delete cachePg.back();
 	cachePg.pop_back();
     }
@@ -1810,7 +1810,7 @@ void VisRun::updatePage( )
 	    workSess().c_str(), tm2s(1e-3*updTm).c_str(), tm2s(1e-3*updTmMax).c_str(), tm2s(1e-3*planePer).c_str(), tm2s(1e-3*period()).c_str());
     updateTimer->start(vmax(0,planePer-updTm));
 
-    //Old pages from cache for close checking
+    //Removing from the cache for old pages
     for(unsigned iPg = 0; iPg < cachePg.size(); )
 	if(mod->cachePgLife() > 0.01 && (period()*(reqTm()-cachePg[iPg]->reqTm())/1000) > (unsigned)(mod->cachePgLife()*60*60)) {
 	    cachePg[iPg]->deleteLater();	//delete cachePg[iPg];

@@ -452,6 +452,10 @@ class VCASess : public TCntrNode
 	void objDel( const string &name )			{ chldDel(id_objs, name); }
 	AutoHD<VCAObj> objAt( const string &name ) const	{ return chldAt(id_objs,name); }
 
+	int pgCacheSize( )		{ return mCachePg.size(); }
+	void pgCacheGet( const string &addr );
+	void pgCacheProc( const string &addr = "", bool fClose = false );	//Empty <addr> to check for the time limit
+
 	string resGet( const string &res, const string &path, const SSess &ses, string *mime = NULL );
 
 	string cacheResGet( const string &res, string *mime = NULL );
@@ -484,6 +488,8 @@ class VCASess : public TCntrNode
 	time_t			open_ses, lst_ses_req;
 	string			mSender;
 	bool			mIsCreate;
+
+	deque<pair<time_t,string> > mCachePg;	//Pages cache
 	map<string,CacheEl>	mCacheRes;	//Resources cache
 
 	ResRW	nRes;

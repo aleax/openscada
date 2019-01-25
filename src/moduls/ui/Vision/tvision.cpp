@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"6.0.2"
+#define MOD_VER		"6.0.3"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -83,7 +83,7 @@ using namespace VISION;
 //* QTCFG::TVision                                *
 //*************************************************
 TVision::TVision( string name ) : TUI(MOD_ID), mVCAStation(dataRes()), mUserStart(dataRes()), mUserPass(dataRes()),
-    mExitLstRunPrjCls(true), mEndRun(false), mRestTime(30), mCachePgLife(1), mScrnCnt(0)
+    mExitLstRunPrjCls(true), mEndRun(false), mRestTime(30), mCachePgLife(1), mCachePgSz(10), mScrnCnt(0)
 {
     mVCAStation = ".";
     mod = this;
@@ -114,9 +114,10 @@ string TVision::optDescr( )
 	"StartUser  <user>       Start-up, no-password, user.\n"
 	"UserPass   <pass>       User password for non-local start.\n"
 	"RunPrjs    <list>       List of projects to be launched at the start of the module.\n"
-	"ExitLstRunPrjCls <0|1>  Exit closing the last completed project (default = 1).\n"
-	"CachePgLife <hours>     The lifetime of pages in the cache.\n"
-	"VCAstation <id>         The station with the VCA engine ('.' Is local).\n"
+	"ExitLstRunPrjCls <0|1>  Exit closing the last completed project (by default 1).\n"
+	"CachePgLife <hours>     Lifetime of the pages in the cache (by default 1).\n"
+	"CachePgSz  <numb>       Maximum number of the pages in the cache (by default 10).\n"
+	"VCAstation <id>         The station with the VCA engine ('.' is local).\n"
 	"RestoreTime <seconds>   Connection recovery time.\n\n"),
 	MOD_TYPE, MOD_ID, nodePath().c_str());
 }
@@ -133,6 +134,7 @@ void TVision::load_( )
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
     setExitLstRunPrjCls(s2i(TBDS::genDBGet(nodePath()+"ExitLstRunPrjCls",i2s(exitLstRunPrjCls()))));
     setCachePgLife(s2r(TBDS::genDBGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
+    setCachePgSz(s2i(TBDS::genDBGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
     setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation","."));
     setRestoreTime(s2i(TBDS::genDBGet(nodePath()+"RestoreTime",i2s(restoreTime()))));
 }
@@ -147,6 +149,7 @@ void TVision::save_( )
     TBDS::genDBSet(nodePath()+"RunPrjs", runPrjs());
     TBDS::genDBSet(nodePath()+"ExitLstRunPrjCls", i2s(exitLstRunPrjCls()));
     TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
+    TBDS::genDBSet(nodePath()+"CachePgSz", i2s(cachePgSz()));
     TBDS::genDBSet(nodePath()+"VCAstation", VCAStation());
     TBDS::genDBSet(nodePath()+"RestoreTime",i2s(restoreTime()));
 }
@@ -335,8 +338,12 @@ void TVision::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/u_pass",_("Password of the user"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/restTm",_("Connection recovery time, seconds"),RWRWR_,"root",SUI_ID,3,"tp","dec","min","1","max","1000");
 	    }
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Lifetime of the cached pages"),RWRWR_,"root",SUI_ID,2,"tp","real",
-		"help",_("The time is specified in hours, which defines the inactivity interval for closing pages in the cache.\nA zero value of time excludes the closing of pages in the cache."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Lifetime and maximum number of the cached pages"),RWRWR_,"root",SUI_ID,2,"tp","real",
+		"help",_("The time is specified in hours, which defines the inactivity interval for closing pages in the cache.\n"
+			"Zero value of the time excludes the closing of pages in the cache."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgSz","",RWRWR_,"root",SUI_ID,2,"tp","dec",
+		"help",_("The number defines a limit of pages in the cache.\n"
+			"Zero value of the number excludes the cache limit."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("List of the projects for launch"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/prm/cfg/r_lst",
 		"help",_("Automatically executed projects, divided by the symbol ';'.\n"
 			 "To open the project window on the desired display (1), use the project name format: 'PrjName-1'.\n"
@@ -355,12 +362,13 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	for(unsigned iW = 0; iW < mnWinds.size(); iW++)
 	    if(dynamic_cast<VisDevelop*>(mnWinds[iW]))	opt->childAdd("el")->setText(TSYS::strMess(_("%d: Development by \"%s\"."),iW,((VisDevelop*)mnWinds[iW])->user().c_str()));
 	    else if(dynamic_cast<VisRun*>(mnWinds[iW]))	{
-		opt->childAdd("el")->setText(TSYS::strMess(_("%d: Running \"%s:%s\" from \"%s\" - %s, updating period %s(%s)."),iW,
+		opt->childAdd("el")->setText(TSYS::strMess(_("%d: Running \"%s:%s\" from \"%s\" - %s, updating period %s(%s), cached pages %d and resources %d."),iW,
 		    ((VisRun*)mnWinds[iW])->workSess().c_str(),
 		    ((VisRun*)mnWinds[iW])->srcProject().c_str(),
 		    ((VisRun*)mnWinds[iW])->user().c_str(),
 		    ((VisRun*)mnWinds[iW])->connOK()?_("Connected"):_("Disconnected"),
-		    tm2s(((VisRun*)mnWinds[iW])->planePer*1e-3).c_str(),tm2s(((VisRun*)mnWinds[iW])->period()*1e-3).c_str()));
+		    tm2s(((VisRun*)mnWinds[iW])->planePer*1e-3).c_str(),tm2s(((VisRun*)mnWinds[iW])->period()*1e-3).c_str(),
+		    ((VisRun*)mnWinds[iW])->cachePgSz(),((VisRun*)mnWinds[iW])->cacheResSz()));
 	    }
     }
     else if(a_path == "/prm/cfg/start_user") {
@@ -382,6 +390,10 @@ void TVision::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/cachePgLife") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(r2s(cachePgLife()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCachePgLife(s2r(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/cachePgSz") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(cachePgSz()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCachePgSz(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/run_prj") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(runPrjs());
