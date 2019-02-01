@@ -30,7 +30,12 @@
 <li class="toclevel-2 tocsection-8"><a href="#.D0.97.D0.B1.D1.96.D1.80.D0.BA.D0.B0"><span class="tocnumber">2.2</span> <span class="toctext"><span>Збірка</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-9"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">3</span> <span class="toctext">Посилання</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#.D0.9C.D0.B0.D1.81.D1.88.D1.82.D0.B0.D0.B1.D0.BE.D0.B2.D0.B0.D0.BD.D1.96.D1.81.D1.82.D1.8C"><span class="tocnumber">3</span> <span class="toctext">Масштабованість</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#.D0.A2.D0.B5.D1.81.D1.82.D0.B8"><span class="tocnumber">3.1</span> <span class="toctext">Тести</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">4</span> <span class="toctext">Посилання</span></a></li>
 </ul>
 </div>
 
@@ -1153,7 +1158,78 @@
 <p>* "опц: авт." — передбачає вимкнення використання бібліотеки під час збірки, у випадку відсутності її.
 
 </p>
-<h2><span class="mw-headline" id=".D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">3</span> Посилання</span></h2>
+<h2><span class="mw-headline" id=".D0.9C.D0.B0.D1.81.D1.88.D1.82.D0.B0.D0.B1.D0.BE.D0.B2.D0.B0.D0.BD.D1.96.D1.81.D1.82.D1.8C"><span class="mw-headline-number">3</span> Масштабованість</span></h2>
+<p><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Embedding_and_PLC#PerfSystems" title="Special:MyLanguage/Sub-projects/Embedding and PLC">Загальна продуктивність</a> прямих обчислень, обчислень у <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">Java-подібній мові</a> та комплексних обчислень моделей на різних апаратних та програмних платформах.
+</p><p>Споживання пам'яті, загальні параметри на <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">проекті "АГЛКС"</a>:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Рівні вимірювання </th>
+<th> Debian 9 X86_64, МБ </th>
+<th> Debian 9 686, МБ </th>
+<th> Debian 8 ARMHF (ARMv7), МБ
+</th></tr>
+<tr>
+<td colspan="4"> <i>2019.02.01: OpenSCADA 1+r2600</i>
+</td></tr>
+<tr>
+<td> 1. Виконання моделі та архівування </td>
+<td> 96 </td>
+<td> 71 </td>
+<td> 64
+</td></tr>
+<tr>
+<td> 2. Завантаження проектів СВУ </td>
+<td> 147 </td>
+<td> 104 </td>
+<td> 95
+</td></tr>
+<tr>
+<td> 3. Запуск сеансу проекту "АГЛКС" (як сервер візуалізації) </td>
+<td> 152 </td>
+<td> 108 </td>
+<td> 97
+</td></tr>
+<tr>
+<td> 3.1. Запуск сеансу проекту "АГЛКС" з UI.Vision, та для кадру першої мнемосхеми &gt; графіку </td>
+<td> 168 &gt; 175 </td>
+<td> 121 &gt; 126 </td>
+<td> 106 &gt; 109
+</td></tr>
+<tr>
+<td> 3.2. Запуск сеансу проекту "АГЛКС" з UI.WebVision, та для кадру першої мнемосхеми &gt; графіку </td>
+<td> 159 &gt; 167 </td>
+<td> 113 &gt; 125 </td>
+<td> 100 &gt; 106
+</td></tr></table>
+<p>Великі та складні проекти:
+</p>
+<ul><li> <i>2019.01.12:</i> Debian 9 686, OpenSCADA 1+r2595, Проект пташників з: ModBus DAQ із 38 об'єктами контролерів, з 75 складними параметрами та ~900 сигналами у кожному, сумарно це 2850 комплексних параметрів та 34200 сигналів; проект СВУ із 39 об'єктами сигналізації, з 19 сторінками у кожному, сумарно це 741 сторінок:</li></ul>
+<dl><dd><dl><dd> =&gt; Оптимізовано у UI.VCAEngine через реалізацію зв'язків на сторінки, що дозволило видалити 703 сторінки, перемкнувши типові сторінки у повністю динамічний режим.</dd>
+<dd> =&gt; Розширено у UI.WebVision через підтримку роботи у оперативному режимі, обмеживши кеш сторінок.</dd></dl>
+<ul><li> Виконання DAQ, обробка та архівація: <b>102 МБ</b></li>
+<li> Завантаження проектів СВУ: <b>271 МБ</b>, після оптимізації: <b>148 МБ</b></li>
+<li> Запуск сеансу проекту (як сервер візуалізації): <b>437 МБ</b>, після оптимізації: <b>174 МБ</b></li>
+<li> Запуск сеансу проекту з UI.WebVision: <b>460 МБ</b> (один сеанс), після оптимізації: <b>198 МБ</b></li></ul></dd></dl>
+<h3><span class="mw-headline" id=".D0.A2.D0.B5.D1.81.D1.82.D0.B8"><span class="mw-headline-number">3.1</span> Тести</span></h3>
+<p>Компонентів OpenSCADA:
+</p>
+<ul><li> Ядро:
+<ul><li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/ARM" rel="nofollow noreferrer noopener" target="_blank">Тестування ядра OpenSCADA та його модулів на апаратній платформі ARM</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Adaption_to_Android#Tests" title="Special:MyLanguage/Sub-projects/Adaption to Android">Розширені тести продуктивності для Android на Asus Nexus7 II з різними параметрами компіляції, особливо для Hard та Soft float.</a></li></ul></li>
+<li> БД: <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SQLite#Tests" title="Special:MyLanguage/Modules/SQLite">SQLite</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/MySQL#Tests" title="Special:MyLanguage/Modules/MySQL">MySQL</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/PostgreSQL#Tests" title="Special:MyLanguage/Modules/PostgreSQL">PostgreSQL</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/FireBird#Tests" title="Special:MyLanguage/Modules/FireBird">FireBird</a></li>
+<li> DAQ: <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/JavaLikeCalc#Productivity" title="Special:MyLanguage/Modules/JavaLikeCalc">Обчислювач на мові подібній на Java (JavaLikeCalc)</a></li>
+<li> UI: <a class="external text" href="http://wiki.oscada.org/Works/Tests/VCA" rel="nofollow noreferrer noopener" target="_blank">Vision, WebVision</a></li></ul>
+<p>Приймальні тести релізів OpenSCADA (LTS):
+</p>
+<ul><li> <a class="external" href="http://oscada.org/wiki/Documents/Release_0.9/Tests" title="Documents/Release 0.9/Tests">0.9</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/Documents/Release_0.8.0/Tests" title="Documents/Release 0.8.0/Tests">0.8.0</a></li>
+<li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/release070" rel="nofollow noreferrer noopener" target="_blank">0.7.0</a></li>
+<li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/release060" rel="nofollow noreferrer noopener" target="_blank">0.6.0</a></li>
+<li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/release050" rel="nofollow noreferrer noopener" target="_blank">0.5.0</a></li>
+<li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/release040" rel="nofollow noreferrer noopener" target="_blank">0.4.0</a></li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">4</span> Посилання</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use_uk.odg" title="File:Oscada use uk.odg">Діаграма: Ролі OpenSCADA</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use_opcua_uk.odg" title="File:Oscada use opcua uk.odg">Діаграма: Роль OpenSCADA Як "OPC-UA Сервер".</a></li></ul>
 

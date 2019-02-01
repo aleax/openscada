@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.2.1"
+#define MOD_VER		"3.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -217,8 +217,14 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 			    XMLNode *headEl = tree.childGet("head", 0, true);
 			    if(!headEl) headEl = tree.childGet("HEAD", 0, true);
 			    if(headEl) {
-				headEl->childAdd("META")->load(prms[3].getS());
-				answer = tree.save(XMLNode::XHTMLHeader);
+				try {
+				    headEl->childAdd("META")->load(prms[3].getS());
+				    answer = tree.save(XMLNode::XHTMLHeader);
+				}
+				catch(TError &err) {
+				    mess_err(nodePath().c_str(), _("Error loading the META header '%s': %s"), err.mess.c_str(), prms[3].getS().c_str());
+				    throw;
+				}
 			    } else answer.clear();
 			}
 		    } catch(TError &err) {

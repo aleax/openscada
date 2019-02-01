@@ -192,7 +192,7 @@ namespace VISION
 
 	public:
 	    //Data
-	    enum LType { Text, Integer, Real, Time, Date, DateTime, Combo };
+	    enum LType { Text, Integer, Real, Time, Date, DateTime, Combo, Password };
 
 	    //Methods
 	    LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false, bool resApply = true );

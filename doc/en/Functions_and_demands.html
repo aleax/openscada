@@ -30,7 +30,12 @@
 <li class="toclevel-2 tocsection-8"><a href="#Building"><span class="tocnumber">2.2</span> <span class="toctext"><span>Building</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-9"><a href="#Links"><span class="tocnumber">3</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Scalability"><span class="tocnumber">3</span> <span class="toctext">Scalability</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#Tests"><span class="tocnumber">3.1</span> <span class="toctext">Tests</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="#Links"><span class="tocnumber">4</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -1152,7 +1157,78 @@
 </td></tr></table>
 <p>* "opt: auto" — provides for disable of using the library at build time on it absence.
 </p>
-<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">3</span> Links</span></h2>
+<h2><span class="mw-headline" id="Scalability"><span class="mw-headline-number">3</span> Scalability</span></h2>
+<p><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Embedding_and_PLC#PerfSystems" title="Special:MyLanguage/Sub-projects/Embedding and PLC">Common productivity</a> of the direct calculations, calculations in <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the Java-like language</a> and complex calculations of the simulators on different hardware and software platforms.
+</p><p>Memory consumption, generic parameters on <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the project "AGLKS"</a>:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Levels of the measuring </th>
+<th> Debian 9 X86_64, MB </th>
+<th> Debian 9 686, MB </th>
+<th> Debian 8 ARMHF (ARMv7), MB
+</th></tr>
+<tr>
+<td colspan="4"> <i>2019.02.01: OpenSCADA 1+r2600</i>
+</td></tr>
+<tr>
+<td> 1. Executing of the simulator and archiving </td>
+<td> 96 </td>
+<td> 71 </td>
+<td> 64
+</td></tr>
+<tr>
+<td> 2. Loading for the VCA projects </td>
+<td> 147 </td>
+<td> 104 </td>
+<td> 95
+</td></tr>
+<tr>
+<td> 3. Starting a session of the project "AGLKS" (as a server of visualization) </td>
+<td> 152 </td>
+<td> 108 </td>
+<td> 97
+</td></tr>
+<tr>
+<td> 3.1. Starting a session of the project "AGLKS" from UI.Vision, and for the first mnemonic &gt; graph cadre </td>
+<td> 168 &gt; 175 </td>
+<td> 121 &gt; 126 </td>
+<td> 106 &gt; 109
+</td></tr>
+<tr>
+<td> 3.2. Starting a session of the project "AGLKS" from UI.WebVision, and for the first mnemonic &gt; graph cadre </td>
+<td> 159 &gt; 167 </td>
+<td> 113 &gt; 125 </td>
+<td> 100 &gt; 106
+</td></tr></table>
+<p>Big and complex projects:
+</p>
+<ul><li> <i>2019.01.12:</i> Debian 9 686, OpenSCADA 1+r2595, An aviaries project for: ModBus DAQ of 38 Controller objects, with 75 complex parameters and ~900 signals in each, summary it have 2850 complex parameters and 34200 signals; a VCA project of 39 signal objects, with 19 pages in each, summary it have 741 pages:</li></ul>
+<dl><dd><dl><dd> =&gt; Optimized in UI.VCAEngine for implementing links to pages, what allowed to remove 703 pages, moving the typical pages in the completely dynamic mode.</dd>
+<dd> =&gt; Expanded in UI.WebVision for support of working in the operative mode, limiting the pages cache.</dd></dl>
+<ul><li> Executing for DAQ, processing and archiving: <b>102 MB</b></li>
+<li> Loading for the VCA projects: <b>271 MB</b>, after the optimization: <b>148 MB</b></li>
+<li> Starting a session of the project (as a server of visualization): <b>437 MB</b>, after the optimization: <b>174 MB</b></li>
+<li> Starting a session of the project from UI.WebVision: <b>460 MB</b> (one session), after the optimization: <b>198 MB</b></li></ul></dd></dl>
+<h3><span class="mw-headline" id="Tests"><span class="mw-headline-number">3.1</span> Tests</span></h3>
+<p>Of OpenSCADA components:
+</p>
+<ul><li> Core:
+<ul><li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/ARM" rel="nofollow noreferrer noopener" target="_blank">OpenSCADA core and its modules testing on the hardware platform ARM</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Adaption_to_Android#Tests" title="Special:MyLanguage/Sub-projects/Adaption to Android">Extended performance tests for Android on Asus Nexus7 II with different options of the compilation, especially for Hard and Soft float.</a></li></ul></li>
+<li> DB: <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/SQLite#Tests" title="Special:MyLanguage/Modules/SQLite">SQLite</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/MySQL#Tests" title="Special:MyLanguage/Modules/MySQL">MySQL</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/PostgreSQL#Tests" title="Special:MyLanguage/Modules/PostgreSQL">PostgreSQL</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/FireBird#Tests" title="Special:MyLanguage/Modules/FireBird">FireBird</a></li>
+<li> DAQ: <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/JavaLikeCalc#Productivity" title="Special:MyLanguage/Modules/JavaLikeCalc">Calculator on the Java-like language (JavaLikeCalc)</a></li>
+<li> UI: <a class="external text" href="http://wiki.oscada.org/Works/Tests/VCA" rel="nofollow noreferrer noopener" target="_blank">Vision, WebVision</a></li></ul>
+<p>Acceptation tests of the OpenSCADA releases (LTS):
+</p>
+<ul><li> <a class="external" href="http://oscada.org/wiki/Documents/Release_0.9/Tests" title="Documents/Release 0.9/Tests">0.9</a></li>
+<li> <a class="external" href="http://oscada.org/wiki/Documents/Release_0.8.0/Tests" title="Documents/Release 0.8.0/Tests">0.8.0</a></li>
+<li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/release070" rel="nofollow noreferrer noopener" target="_blank">0.7.0</a></li>
+<li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/release060" rel="nofollow noreferrer noopener" target="_blank">0.6.0</a></li>
+<li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/release050" rel="nofollow noreferrer noopener" target="_blank">0.5.0</a></li>
+<li> <a class="external text" href="http://wiki.oscada.org/Works/Tests/release040" rel="nofollow noreferrer noopener" target="_blank">0.4.0</a></li></ul>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">4</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use.odg" title="File:Oscada use.odg">Diagram: Roles of OpenSCADA.</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Oscada_use_opcua.odg" title="File:Oscada use opcua.odg">Diagram: OpenSCADA roles as a "OPC-UA Server".</a></li></ul>
 

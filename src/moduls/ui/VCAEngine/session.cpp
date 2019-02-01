@@ -334,7 +334,7 @@ void Session::uiCmd( const string &com, const string &prm, SessWdg *src )
 		vector<string> pls;
 		if(cpg.freeStat()) list(pls); else cpg.at().pageList(pls);
 		if(pls.empty())	return;
-		string curEl = TSYS::pathLev(pBase,iEl);
+		string curEl = TSYS::pathLev(pBase, iEl);
 		if(curEl.empty()) {
 		    if(curPtEl == "$")	return;
 		    opPg = pls[0];

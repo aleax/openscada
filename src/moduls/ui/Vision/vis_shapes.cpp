@@ -318,6 +318,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		LineEdit::LType tp = LineEdit::Text;
 		switch(shD->view) {
 		    case FL_TEXT:	tp = LineEdit::Text;	break;
+		    case FL_PASS:	tp = LineEdit::Password;break;
 		    case FL_COMBO:	tp = LineEdit::Combo;	break;
 		    case FL_INTEGER:	tp = LineEdit::Integer;	break;
 		    case FL_REAL:	tp = LineEdit::Real;	break;

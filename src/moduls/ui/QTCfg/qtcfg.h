@@ -186,7 +186,7 @@ private slots:
     void tablePopup( const QPoint &pos );	//QTable popup menu
     void tableSet( int row, int col );		//QTable set
     void editChange( const QString& );		//Change Edit (LineEdit and TextEdit)
-    void applyButton( QWidget *src = NULL );	//Apply button
+    void applyButton( );			//Apply button
     void cancelButton( );			//Cancel button
     void imgPopup( const QPoint &pos );		//Image popup
 
@@ -194,7 +194,7 @@ private:
     //Methods
     // Page display
     void selectPage( const string &path, int tm = 0 );
-    void pageDisplay( const string &path );
+    void pageDisplay( const string path );
 
     // View ListItem with recursive processing of the ControllArea
     void viewChildRecArea( QTreeWidgetItem *i, bool upTree = false );

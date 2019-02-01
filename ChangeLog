@@ -1,3 +1,13 @@
+2019-02-01 Roman (stable)
+- FIX: Function.IO fixed for the default value loading in the selectable mode of IO, what had problems for the string value type.
+- Protocol.HTTP: A detailed message of "Error loading the META header" added to detect source of the rarely warning message of parsing the template.
+- !!:FIX:UI.QTCfg: Fixed for applying forgotten changes of the editable widgets at switching to a different node,
+    from using the new node path instead the previous one and missing changes of the hidden tabs.
+    FIX: The TextEdit items fixed for the editing sate detection unbinded from its visibility.
+- !!!:UI.{VCAEngine,Vision,WebVision}: The variant "LineEdit" of the primitive "FormEl" appended for the view "Password".
+- !:FIX:UI.Vision: The runtime executing was fixed from crashing in closing external windows at closing the main window.
+
+
 2019-01-25 Roman (stable)
 - FIX:SYS: The console help call by the key --help or -h fixed for unlocking the early loaded objects, stopping the subsystems forcely.
 - User:Archive.setVals,Special.FLibSYS.VArchObj(): Access to the archive writing functions restricted only for users in the group "Archive".

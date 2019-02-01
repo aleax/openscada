@@ -514,7 +514,8 @@ void LineEdit::setReadOnly( bool val )
 {
     if(!ed_fld)	return;
     switch(type()) {
-	case Text:	((QLineEdit*)ed_fld)->setReadOnly(val);		break;
+	case Text: case Password:
+	    ((QLineEdit*)ed_fld)->setReadOnly(val);			break;
 	case Integer: case Real: case Time: case Date: case DateTime:
 	    ((QAbstractSpinBox*)ed_fld)->setReadOnly(val);		break;
 	case Combo:	((QComboBox*)ed_fld)->setEnabled(!val);		break;
@@ -531,8 +532,9 @@ void LineEdit::setType( LType tp )
 
     //Create new widget
     switch(tp) {
-	case Text:
+	case Text: case Password:
 	    ed_fld = new QLineEdit(this);
+	    ((QLineEdit*)ed_fld)->setEchoMode((tp==Password)?QLineEdit::Password:QLineEdit::Normal);
 	    connect((QLineEdit*)ed_fld, SIGNAL(textEdited(const QString&)), SLOT(changed()));
 	    break;
 	case Integer:
@@ -595,7 +597,7 @@ void LineEdit::setValue( const QString &txt )
 {
     if(ed_fld) ed_fld->blockSignals(true);
     switch(type()) {
-	case Text:
+	case Text: case Password:
 	    if(txt == value())	break;
 	    ((QLineEdit*)ed_fld)->setText(txt);
 	    ((QLineEdit*)ed_fld)->setCursorPosition(0);
@@ -689,7 +691,8 @@ void LineEdit::setCfg( const QString &cfg )
 QString LineEdit::value( )
 {
     switch(type()) {
-	case Text:	return ((QLineEdit*)ed_fld)->text();
+	case Text: case Password:
+			return ((QLineEdit*)ed_fld)->text();
 	case Integer:	return QString::number(((QSpinBox*)ed_fld)->value());
 	case Real:	return QString::number(((QDoubleSpinBox*)ed_fld)->value());
 	case Time:	return QString::number(QTime().secsTo(((QTimeEdit*)ed_fld)->time()));
@@ -1093,7 +1096,7 @@ void WdgView::childsClear( )
     QObjectList chLst = children();
     for(int iC = 0; iC < chLst.size(); iC++) {
 	WdgView *cw = qobject_cast<WdgView*>(chLst[iC]);
-	if(cw)	cw->deleteLater(); //delete cw;
+	if(cw)	delete cw;//cw->deleteLater(); //!!!! direct deleting due to this step is last one mostly
     }
 }
 

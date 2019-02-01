@@ -47,7 +47,7 @@
 <li class="toclevel-1 tocsection-2"><a href="#Operations_over_the_table"><span class="tocnumber">2</span> <span class="toctext">Operations over the table</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#Operations_over_the_table_content"><span class="tocnumber">3</span> <span class="toctext">Operations over the table content</span></a></li>
 <li class="toclevel-1 tocsection-4"><a href="#DB_access"><span class="tocnumber">4</span> <span class="toctext">DB access</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#Productivity_of_the_DBMS"><span class="tocnumber">5</span> <span class="toctext">Productivity of the DBMS</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Productivity_of_the_DBMS"><span class="tocnumber">5</span> <span class="toctext"><span>Productivity of the DBMS</span></span></a></li>
 </ul>
 </div>
 
@@ -161,7 +161,7 @@ $ mysql -u root -p</pre>
 <li> Change the user password: "<b>UPDATE mysql.user SET Password=PASSWORD('newpass') WHERE User='newuser';</b>"</li>
 <li> Set the user privileges: "<b>GRANT ALL PRIVILEGES ON *.* TO 'newuser'@'%';</b>"</li>
 <li> Apply the privileges: "<b>FLUSH PRIVILEGES;</b>"</li></ul></dd></dl></dd></dl>
-<h2><span class="mw-headline" id="Productivity_of_the_DBMS"><span class="mw-headline-number">5</span> Productivity of the DBMS</span></h2>
+<h2><span class="mw-headline" id="Productivity_of_the_DBMS"><span class="mw-headline-number">5</span> <span id="Tests" title="#Tests">Productivity of the DBMS</span></span></h2>
 <p>Measurement of the DBMS productivity were carried out by the test "DB" of the tests module "SystemTests", performing operations over the records of the structure: "<b>name char (20), descr char (50), val double (10.2), id int (7), stat bool, reqKey string, reqVal string</b>".
 </p>
 <table class="wikitable">

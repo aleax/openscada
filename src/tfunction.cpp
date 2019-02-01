@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -484,11 +484,13 @@ void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 	    SVl val;
 	    val.tp = mFunc->io(iVl)->type();
 	    val.mdf = false;
+	    string def = mFunc->io(iVl)->def();
+	    if(mFunc->io(iVl)->flg()&IO::Selectable)	def = TSYS::strLine(def, 0);
 	    switch(val.tp) {
-		case IO::String:	val.val.s = new string(mFunc->io(iVl)->def());	break;
-		case IO::Integer:	val.val.i = s2ll(mFunc->io(iVl)->def());	break;
-		case IO::Real:		val.val.r = s2r(mFunc->io(iVl)->def());	break;
-		case IO::Boolean:	val.val.b = s2i(mFunc->io(iVl)->def());	break;
+		case IO::String:	val.val.s = new string(def);	break;
+		case IO::Integer:	val.val.i = s2ll(def);		break;
+		case IO::Real:		val.val.r = s2r(def);		break;
+		case IO::Boolean:	val.val.b = s2i(def);		break;
 		case IO::Object:	val.val.o = new AutoHD<TVarObj>(new TVarObj);	break;
 	    }
 	    mVal.push_back(val);

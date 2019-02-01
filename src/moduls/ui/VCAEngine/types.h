@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: types.h
 /***************************************************************************
- *   Copyright (C) 2013-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2013-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -203,7 +203,7 @@ namespace VCA
 
     //FormEl preset indexes
     enum FormEl_Views	{ F_LINE_ED = 0, F_TEXT_ED, F_CHECK_BOX, F_BUTTON, F_COMBO, F_LIST, F_SLIDER, F_SCROLL_BAR, F_TREE, F_TABLE };
-    enum FormEl_LineViews { FL_TEXT = 0, FL_COMBO, FL_INTEGER, FL_REAL, FL_TIME, FL_DATE, FL_DATE_TM };
+    enum FormEl_LineViews { FL_TEXT = 0, FL_COMBO, FL_INTEGER, FL_REAL, FL_TIME, FL_DATE, FL_DATE_TM, FL_PASS };
     enum FormEl_BtModes { FBT_STD = 0, FBT_CHECK, FBT_MENU, FBT_LOAD, FBT_SAVE };
 
     //Text preset indexes

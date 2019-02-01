@@ -286,6 +286,13 @@ VisRun::~VisRun( )
 	// Push down all Qt events of the window to free the module
 	for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();
     }
+
+    //Child widgets remove before
+    QObjectList chLst = children();
+    for(int iC = 0; iC < chLst.size(); iC++) {
+	WdgView *cw = qobject_cast<WdgView*>(chLst[iC]);
+	if(cw)	delete cw;//cw->deleteLater();	//!!!! direct deleting due to this step is last one
+    }
 }
 
 void VisRun::setFocus( const string &addr )

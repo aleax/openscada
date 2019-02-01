@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: selfwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -136,7 +136,7 @@ void LineEdit::viewApplyBt( bool view )
 	btFld->setIconSize(QSize(icoSize(),icoSize()));
 	btFld->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
 	//btFld->setMaximumWidth(15);
-	connect(btFld, SIGNAL(clicked()), this, SLOT(applySlot()));
+	connect(btFld, SIGNAL(clicked()), this, SLOT(btApply()));
 	layout()->addWidget(btFld);
     }
     if(!view && btFld) { btFld->deleteLater(); btFld = NULL; }
@@ -187,7 +187,7 @@ void LineEdit::setType( LType tp )
 	    edFld = new QComboBox(this);
 	    ((QComboBox*)edFld)->setEditable(true);
 	    connect((QComboBox*)edFld, SIGNAL(editTextChanged(const QString&)), SLOT(changed()));
-	    connect((QComboBox*)edFld, SIGNAL(activated(int)), this, SLOT(applySlot()));
+	    connect((QComboBox*)edFld, SIGNAL(activated(int)), this, SLOT(btApply()));
 	    break;
     }
     ((QBoxLayout*)layout())->insertWidget(0, edFld);
@@ -313,7 +313,7 @@ QString LineEdit::value( )
     return "";
 }
 
-void LineEdit::applySlot( )
+void LineEdit::btApply( )
 {
     viewApplyBt(false);
 
@@ -322,6 +322,12 @@ void LineEdit::applySlot( )
 
     emit valChanged(value());
     emit apply();
+}
+
+void LineEdit::btCancel( )
+{
+    emit cancel();
+    setValue(mVal);
 }
 
 bool LineEdit::event( QEvent * e )
@@ -333,8 +339,7 @@ bool LineEdit::event( QEvent * e )
 	    return true;
 	}
 	else if(keyEvent->key() == Qt::Key_Escape) {
-	    emit cancel();
-	    setValue(mVal);
+	    btCancel();
 	    return true;
 	}
     }
@@ -461,7 +466,7 @@ void SyntxHighl::highlightBlock( const QString &text )
 //* TextEdit: Text edit widget.                   *
 //*************************************************
 TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
-    QWidget(parent), isInit(false), sntHgl(NULL), butBox(NULL)
+    QWidget(parent), isInit(false), isCh(false), sntHgl(NULL), butBox(NULL)
 {
     setObjectName(name);
 
@@ -519,7 +524,7 @@ QSize TextEdit::minimumSizeHint( ) const
 						//2*edFld->currentFont().pointSize()*(mRowCol.height()+1));
 }
 
-bool TextEdit::isChanged( )		{ return (butBox && butBox->isVisible()); }
+bool TextEdit::isChanged( )		{ return isCh; /*(butBox && butBox->isVisible());*/ }
 
 QString TextEdit::text( )		{ return edFld->toPlainText(); }
 
@@ -562,7 +567,7 @@ void TextEdit::changed( )
 {
     if(isInit) return;
     if(butBox) {
-	butBox->setVisible(edFld->document()->isModified());
+	butBox->setVisible((isCh=edFld->document()->isModified()));
 	if(butBox->isVisible()) {
 	    butBox->move(width()-butBox->width(), height()-butBox->height());
 	    edFld->resize(edFld->width(), height()-butBox->height());
@@ -574,14 +579,14 @@ void TextEdit::changed( )
 void TextEdit::btApply( )
 {
     emit textChanged(text());
-    butBox->setVisible(false);
+    butBox->setVisible((isCh=false));
     edFld->resize(size());
     emit apply();
 }
 
 void TextEdit::btCancel( )
 {
-    butBox->setVisible(false);
+    butBox->setVisible((isCh=false));
     edFld->resize(size());
     emit cancel();
 }

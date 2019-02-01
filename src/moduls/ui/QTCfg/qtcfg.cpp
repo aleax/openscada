@@ -1936,7 +1936,7 @@ void ConfApp::viewChild( QTreeWidgetItem * i )
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
-void ConfApp::pageDisplay( const string &path )
+void ConfApp::pageDisplay( const string path )
 {
     if(pgDisplay) return;
     pgDisplay = true;
@@ -1950,20 +1950,28 @@ void ConfApp::pageDisplay( const string &path )
     actNext->setEnabled(next.size());
 
     if(path != pgInfo.attr("path")) {
-	// Stop refresh
+	if(path == selPath) selPath = pgInfo.attr("path");	//!!!! To ensure for proper working of the checking for not applied editable widgets
+
+	// Stop the refreshing
 	pageCyclRefrStop();
 
-	// Check for no apply editable widgets
-	vector<QWidget*> prcW;
+	// Check for not applied editable widgets
+	//vector<QWidget*> prcW;
+	int editIts = 0;
 	QList<LineEdit*> lines = tabs->findChildren<LineEdit*>();
-	for(int iIt = 0; iIt < lines.size(); ++iIt)
-	    if(lines[iIt]->isEdited()) prcW.push_back(lines[iIt]);
 	QList<TextEdit*> texts = tabs->findChildren<TextEdit*>();
+	for(int iIt = 0; iIt < lines.size(); ++iIt)
+	    if(lines[iIt]->isEdited())	editIts++;
 	for(int iIt = 0; iIt < texts.size(); ++iIt)
-	    if(texts[iIt]->isChanged()) prcW.push_back(texts[iIt]);
-	if(prcW.size() && QMessageBox::information(this,_("Applying the changes"),_("Some changes were made!\nAccept the changes now or lose?"),
-		QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
-	    for(vector<QWidget*>::iterator iW = prcW.begin(); iW != prcW.end(); ++iW) applyButton(*iW);
+	    if(texts[iIt]->isChanged())	editIts++;
+	if(editIts) {
+	    bool isOK = QMessageBox::information(this,_("Applying the changes"),_("Some changes were made!\nAccept the changes now or lose?"),
+		QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply;
+	    for(int iIt = 0; iIt < lines.size(); ++iIt)
+		if(lines[iIt]->isEdited()) isOK ? lines[iIt]->btApply() : lines[iIt]->btCancel();
+	    for(int iIt = 0; iIt < texts.size(); ++iIt)
+		if(texts[iIt]->isChanged()) isOK ? texts[iIt]->btApply() : texts[iIt]->btCancel();
+	}
 
 	// Request new page tree
 	XMLNode n_node("info");
@@ -1981,7 +1989,7 @@ void ConfApp::pageDisplay( const string &path )
     else {
 	// Check the new node structure and the old node
 	XMLNode n_node("info");
-	n_node.setAttr("path",selPath);
+	n_node.setAttr("path", selPath);
 	if(cntrIfCmd(n_node)) { throw TError(s2i(n_node.attr("rez")), n_node.attr("mcat").c_str(), "%s", n_node.text().c_str()); }
 	upStruct(*root, *n_node.childGet(0));
     }
@@ -3056,9 +3064,9 @@ void ConfApp::editChange( const QString& txt )
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
-void ConfApp::applyButton( QWidget *src )
+void ConfApp::applyButton( )
 {
-    QWidget *bwidg = src ? src : (QWidget*)sender();
+    QWidget *bwidg = (QWidget*)sender();
 
     string path = bwidg->objectName().toStdString();
 
@@ -3088,7 +3096,7 @@ void ConfApp::applyButton( QWidget *src )
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //Redraw only for changing into same this widget
-    if(!src) pageRefresh(CH_REFR_TM);
+    pageRefresh(CH_REFR_TM);
 }
 
 void ConfApp::cancelButton( )

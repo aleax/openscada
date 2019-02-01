@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: origwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -374,8 +374,8 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	    case F_LINE_ED:
 		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,TFld::TransltText|Attr::Mutable,"200","","","",i2s(A_FormElValue).c_str()));
 		cfg.owner()->attrAdd(new TFld("view",_("View"),TFld::Integer,TFld::Selectable|Attr::Mutable|Attr::Active,"1","0",
-		    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d",FL_TEXT,FL_COMBO,FL_INTEGER,FL_REAL,FL_TIME,FL_DATE,FL_DATE_TM).c_str(),
-		    _("Text;Combo;Integer;Real;Time;Date;Date and time"),i2s(A_FormElMixP1).c_str()));
+		    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d",FL_TEXT,FL_COMBO,FL_INTEGER,FL_REAL,FL_TIME,FL_DATE,FL_DATE_TM,FL_PASS).c_str(),
+		    _("Text;Combo;Integer;Real;Time;Date;Date and time;Password"),i2s(A_FormElMixP1).c_str()));
 		cfg.owner()->attrAdd(new TFld("cfg",_("Configuration"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Mutable,"","","","",i2s(A_FormElMixP2).c_str()));
 		cfg.owner()->attrAdd(new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","",i2s(A_FormElMixP3).c_str()));
 		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));

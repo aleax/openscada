@@ -30,7 +30,8 @@
 <li class="toclevel-1 tocsection-6"><a href="#Virtual_data_sources"><span class="tocnumber">2</span> <span class="toctext"><span>Virtual data sources</span></span></a></li>
 <li class="toclevel-1 tocsection-7"><a href="#Logic_level_of_the_data_processing"><span class="tocnumber">3</span> <span class="toctext"><span>Logic level of the data processing</span></span></a></li>
 <li class="toclevel-1 tocsection-8"><a href="#Redundancy_of_the_data_sources"><span class="tocnumber">4</span> <span class="toctext"><span>Redundancy of the data sources</span></span></a></li>
-<li class="toclevel-1 tocsection-9"><a href="#Links"><span class="tocnumber">5</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Timestamp_of_the_data_source"><span class="tocnumber">5</span> <span class="toctext"><span>Timestamp of the data source</span></span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Links"><span class="tocnumber">6</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -220,7 +221,16 @@
 <p>To control the time spent in the cycle of serving the redundancy, the status field is provided. When approaching the real execution time to the cycle of the redundancy tasks it's recommended to increase the periodicity of this task execution!
 </p><p>For the controller object of the subsystem "Data Acquisition", "Asymmetric" and "Only Alarms" reservation modes are provided. Asymmetric redundancy is working with the configuration of the controller of the remote station, as it is, and does not trying to generalize it. For this mode work all early presented functions and properties of the redundancy. The redundancy "Only Alarms" is working in fact without a redundancy, but with oppressing the alarms from the reserve controller object to exclude a duple messages into the alarms.
 </p>
-<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">5</span> Links</span></h2>
+<h2><span class="mw-headline" id="Timestamp_of_the_data_source"><span class="mw-headline-number">5</span> <span id="TimeStamp" title="#TimeStamp">Timestamp of the data source</span></span></h2>
+<p>In fact, all data sources supported by OpenSCADA use the time of the computer running OpenSCADA as the time-stamp of the operating-current data and polls this data source, even if it is possible to receive the server or source time in the data source, and often even in the case where such a source is a different station-PLC with OpenSCADA.
+</p><p>This approach has been identified for several reasons, that is:
+</p>
+<ul><li> appreciation and excretion the time difference of the data source and the data acquisition PC has no practical purpose other than the diagnostic to detect the very difference in time since the current data is archived in the archive of periodic values, where the time stamp one way or another is drawn and rounded to this periodicity, that is, the part time is more precise for the period of the archive data is lost;</li>
+<li> rarely which data source does have a real-time clock, and when it has something to it immediately the requirement is to synchronize time with an external source of the precision time, which in turn requires solving the difficulties with direct connection of the GPS receiver or access to the NTP server on the Internet or local network; by the definite approach, the precision time is the time of data acquisition PC, even when it is not synchronized itself, since it is one;</li>
+<li> the data source timestamp may change with its own periodicity, or this update may generally be aperiodic, that if this timestamp is used in the acquisition, it will lead to gaps in the archive, and even if the periodicity of the archiving and updating of the source timestamp is the same, such gaps will occur through the lack of synchronization, which will have to be compensated by a decrease in the periodicity of the acquisition and, accordingly, an increase in the load on the network and the source; so this will make the archive little useful, although it is now possible to take such gaps (passable) not by the fact of the absence or the erroneous nature of the data.</li></ul>
+<p>Currently, one method is known when there is practical value from the data source's timestamp, which is the work with the history-archive on the side of the data source, when the data area of the archive-history is asked corresponding to this gap instead of the current-operational data, for example, when there is no communication. And this method is implemented in the module <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.DAQGate</a>, when running OpenSCADA on the side of the data source or the PLC.
+</p>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">6</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_subsys_daq_str.odg" title="File:Oscada subsys daq str.odg">Diagram: Hierarchical structure of the subsystem "DAQ".</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Daq.xmi.gz" title="File:Daq.xmi.gz">UML: Sequence diagrams of the subsystem "DAQ".</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Daq_loglevel.dia" title="File:Daq loglevel.dia">Diagram: The mechanism of the "Logic Level" on the example of LogicLev module.</a></li>

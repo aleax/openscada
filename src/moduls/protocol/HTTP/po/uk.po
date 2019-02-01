@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-25 15:24+0200\n"
+"POT-Creation-Date: 2019-02-01 12:22+0200\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -37,6 +37,9 @@ msgstr ""
 "AuthTime   <хвил>       Час життя сеансу аутентифікації, хвилин (по "
 "замовченню 10).\n"
 "\n"
+
+msgid "Error loading the META header '%s': %s"
+msgstr "Помилка завантаження META заголовку '%s': %s"
 
 #, c-format
 msgid "Error loading the HTML template '%s' for the language '%s': %s"
@@ -127,6 +130,7 @@ msgstr ""
 msgid "Going to the page: <b>%s</b>"
 msgstr "Перехід до сторінки: <b>%s</b>"
 
+#, c-format
 msgid "Wrong authentication of the user '%s'. Host: %s. User agent: %s."
 msgstr ""
 "Помилка автентифікації користувача '%s'. Вузол: %s. Агент користувача: %s."
@@ -138,11 +142,13 @@ msgstr ""
 msgid "No WWW subtype module found!"
 msgstr "Не знайдено жодного модуля підтипу WWW!"
 
+#, c-format
 msgid ""
 "Successful automatic authentication for the user '%s'. Host: %s. User agent: "
 "%s."
 msgstr ""
-"Вдала автоматична автентифікація користувача '%s'. Вузол: %s. Агент користувача: %s."
+"Вдала автоматична автентифікація користувача '%s'. Вузол: %s. Агент "
+"користувача: %s."
 
 #, c-format
 msgid "No HTTP GET function in the module '%s'!"

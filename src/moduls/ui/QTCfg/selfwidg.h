@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: selfwidg.h
 /***************************************************************************
- *   Copyright (C) 2004-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -85,12 +85,15 @@ class LineEdit : public QWidget
 	void cancel( );
 	void valChanged( const QString& );
 
+    public slots:
+	void btApply( );
+	void btCancel( );
+
     protected:
 	bool event( QEvent * e );
 
     private slots:
 	void changed( );
-	void applySlot( );
 
     private:
 	LType		mTp;
@@ -150,6 +153,10 @@ class TextEdit : public QWidget
 	void cancel( );
 	void textChanged( const QString& );
 
+    public slots:
+	void btApply( );
+	void btCancel( );
+
     protected:
 	void resizeEvent( QResizeEvent *e );
 	bool event( QEvent *e );
@@ -157,15 +164,13 @@ class TextEdit : public QWidget
     private slots:
 	//Private slots
 	void changed( );
-	void btApply( );
-	void btCancel( );
 	void curPosChange( );
 	void ctrTreePopup( );
 	void find( );
 
     private:
 	//Private attributes
-	bool		isInit;
+	bool		isInit, isCh;
 	QAction		*actFind, *actFindNext;
 	QTextEdit	*edFld;
 	SyntxHighl	*sntHgl;

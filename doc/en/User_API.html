@@ -51,7 +51,7 @@
 <li class="toclevel-2 tocsection-14"><a href="#Module_DAQ.ModBus"><span class="tocnumber">7.4</span> <span class="toctext">Module DAQ.ModBus</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-15"><a href="#Subsystem_.22Archives-History.22_.28SYS.Archive.29"><span class="tocnumber">8</span> <span class="toctext">Subsystem "Archives-History" (SYS.Archive)</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Subsystem_.22Archives-History.22_.28SYS.Archive.29"><span class="tocnumber">8</span> <span class="toctext"><span>Subsystem "Archives-History" (SYS.Archive)</span></span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#Subsystem_.22Transports.22_.28SYS.Transport.29"><span class="tocnumber">9</span> <span class="toctext"><span>Subsystem "Transports" (SYS.Transport)</span></span></a></li>
 <li class="toclevel-1 tocsection-17"><a href="#Subsystem_.22Protocols.22_.28SYS.Protocols.29"><span class="tocnumber">10</span> <span class="toctext">Subsystem "Protocols" (SYS.Protocols)</span></a>
 <ul>
@@ -622,7 +622,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>bool attrDel( string id )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — removes the attribute <i>id</i>.</li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id="Subsystem_.22Archives-History.22_.28SYS.Archive.29"><span class="mw-headline-number">8</span> Subsystem "Archives-History" (SYS.Archive)</span></h2>
+<h2><span class="mw-headline" id="Subsystem_.22Archives-History.22_.28SYS.Archive.29"><span class="mw-headline-number">8</span> <span id="SYS.Archive" title="#SYS.Archive">Subsystem "Archives-History" (SYS.Archive)</span></span></h2>
 <p>Functions of the subsystem object:
 </p>
 <ul><li> <i>Array messGet( int btm, int etm, string cat = "", int lev = 0, string arch = "", int upTm = 0 );</i> — requests of the program messages or alarms for the time from <i>btm</i> to <i>etm</i> for the category <i>cat</i>, level <i>lev</i> (-7...7) and archivers <i>arch</i> (separated by the symbol ';'; "" — buffer and archivers; "&lt;buffer&gt;" — buffer; "{ArhMod}.{Arh}" — concrete archiver of the module). <i>upTm</i> sets the operation continuance limit to time; a negative value used as relative time; less to STD_INTERF_TM (5). Returns time of stopping of the reading (attribute "tm" of the array) and an array of the message objects with the preset attributes:

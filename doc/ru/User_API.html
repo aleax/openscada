@@ -50,7 +50,7 @@
 <li class="toclevel-2 tocsection-14"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.ModBus"><span class="tocnumber">7.4</span> <span class="toctext">Модуль DAQ.ModBus</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-15"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D0.B8.D0.B2.D1.8B-.D0.98.D1.81.D1.82.D0.BE.D1.80.D0.B8.D1.8F.22_.28SYS.Archive.29"><span class="tocnumber">8</span> <span class="toctext">Подсистема "Архивы-История" (SYS.Archive)</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D0.B8.D0.B2.D1.8B-.D0.98.D1.81.D1.82.D0.BE.D1.80.D0.B8.D1.8F.22_.28SYS.Archive.29"><span class="tocnumber">8</span> <span class="toctext"><span>Подсистема "Архивы-История" (SYS.Archive)</span></span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.8B.22_.28SYS.Transport.29"><span class="tocnumber">9</span> <span class="toctext"><span>Подсистема "Транспорты" (SYS.Transport)</span></span></a></li>
 <li class="toclevel-1 tocsection-17"><a href="#.D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9F.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.8B.22_.28SYS.Protocols.29"><span class="tocnumber">10</span> <span class="toctext">Подсистема "Протоколы" (SYS.Protocols)</span></a>
 <ul>
@@ -621,7 +621,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>bool attrDel( string id )</i> [<span style="color: red">для включенного параметра логического типа</span>] — удаление атрибута <i>id</i>.</li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D0.B8.D0.B2.D1.8B-.D0.98.D1.81.D1.82.D0.BE.D1.80.D0.B8.D1.8F.22_.28SYS.Archive.29"><span class="mw-headline-number">8</span> Подсистема "Архивы-История" (SYS.Archive)</span></h2>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.90.D1.80.D1.85.D0.B8.D0.B2.D1.8B-.D0.98.D1.81.D1.82.D0.BE.D1.80.D0.B8.D1.8F.22_.28SYS.Archive.29"><span class="mw-headline-number">8</span> <span id="SYS.Archive" title="#SYS.Archive">Подсистема "Архивы-История" (SYS.Archive)</span></span></h2>
 <p>Функции объекта подсистемы:
 </p>
 <ul><li> <i>Array messGet( int btm, int etm, string cat = "", int lev = 0, string arch = "", int upTm = 0 );</i> — запрашивает сообщения программы или нарушения (lev &lt; 0) за время от <i>btm</i> до <i>etm</i> для категории <i>cat</i>, уровня <i>lev</i> (-7...7) и архиваторов <i>arch</i> (разделены символом ';'; "" — буфер и архиваторы; "&lt;buffer&gt;" — буфер; "{ArhMod}.{Arh}" — конкретный архиватор модуля). <i>upTm</i> устанавливает ограничение продолжительности операции в указанное время; отрицательное значение используется как относительное время; менее чем STD_INTERF_TM (5). Возвращается время останова чтения (атрибут "tm" массива) и массив объектов сообщений/нарушений со свойствами:

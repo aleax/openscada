@@ -1065,6 +1065,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    return false;
 				}
 				break;
+			    case 7:	//Password
+				formObj.type = "password";
+				break;
 			}
 			formObj.onkeyup = function(e) {
 			    if(!e) e = window.event;
@@ -1099,7 +1102,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    formObj.valSet = function(val) {
 			switch(this.parentNode.view) {
-			    case 0: case 1: this.value = val; break;
+			    case 0: case 1: case 7: this.value = val; break;
 			    case 2:	//Integer
 				var argCfg = this.parentNode.cfg.split(':');
 				this.value = ((argCfg.length>3)?argCfg[3]:'')+
@@ -1145,7 +1148,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    formObj.valGet = function( ) {
 			switch(this.parentNode.view) {
-			    case 0: case 1: return this.value;
+			    case 0: case 1: case 7: return this.value;
 			    case 2:
 				var rez = this.value;
 				var argCfg = this.parentNode.cfg.split(':');
