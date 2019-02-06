@@ -36,7 +36,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.6.2"
+#define MOD_VER		"1.6.3"
 #define MOD_AUTOR	_("Roman Savochenko")
 #define MOD_DESCR	_("Provides a library of the system functions of the user programming area of OpenSCADA.")
 #define MOD_LICENSE	"GPL2"

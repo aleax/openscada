@@ -13,7 +13,7 @@ INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices','Бібліотека п�
 Version: 2.2.0','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 INSERT INTO "ParamTemplLibs" VALUES('LowDevLib','Low-level devices','Низькорівневі пристрої','The templates library provides common templates and related functions for custom access to low-level devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 1.2.0','','tmplib_LowDevLib','Низкоуровневые устройства','');
+Version: 1.3.0','','tmplib_LowDevLib','Низкоуровневые устройства','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','The models of the technological process devices.
 Founded: october 2005
@@ -307,8 +307,9 @@ Documents/API:en:API.html
 Modules/SQLite:en,uk,ru:Modules/SQLite.html
 Modules/MySQL:en,uk,ru:Modules/MySQL.html
 Modules/FireBird:en,uk,ru:Modules/FireBird.html
-Modules/DBF:en,uk,ru:Modules/DBF.html
 Modules/PostgreSQL:en,uk,ru:Modules/PostgreSQL.html
+Modules/DBF:en,uk,ru:Modules/DBF.html
+Modules/LDAP:en,uk,ru:Modules/LDAP.html
 Modules/Sockets:en,uk,ru:Modules/Sockets.html
 Modules/Serial:en,uk,ru:Modules/Serial.html
 Modules/SSL:en,uk,ru:Modules/SSL.html
@@ -6862,7 +6863,7 @@ Version: 1.0.0','','',1,10,0,'//clc=0;
 
 //Close value archive
 //Special.FLibSYS.avalClose(a_id);
-//p_tm=c_tm;','','',1488128862);
+//p_tm=c_tm;','','',1549292511);
 INSERT INTO "lib_Controllers" VALUES('ntfDispatch','Notifications dispatcher','','','Notifications dispatcher by EMail and SMS for pointed messages of OpenSCADA messages buffer.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsor: Oleksandr Knestyapin <olexanderrr@gmail.com>
@@ -9840,6 +9841,86 @@ else {
 }
 
 f_err = t_err;',1542469153);
+INSERT INTO "tmplib_LowDevLib" VALUES('ADS111x','I2C: ADS111x','I2C 12/16-bit 4xA/D converter. Connect through a Serial output transport into the I2C mode.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	for(i = 0; i < 4 && !t_err.toInt(); i++) {
+		//Selecting the channel and setting for needed options 
+		sw = 0xC000 + (i<<12) + (range<<9) + 0x100 + 0x83;
+		// Writing for the configuration
+		tr.messIO(SYS.strFromCharCode(addr,1,sw>>8,sw&0xFF), 0, 0);
+		//SYS.sleep(1e-3);
+		// Reading for the value
+		rez = tr.messIO(SYS.strFromCharCode(addr,0), 0, 2);
+		if(rez.length) {
+			tVl = (rez.charCodeAt(0)<<8) + rez.charCodeAt(1);
+			if(tVl&0x8000) tVl -= 65536;
+			range_ = (range == 0) ? 6.144 : 4.096/pow(2,range-1);
+			arguments["ai"+i] = range_*tVl/32768;
+		}
+		else t_err = "3:"+tr("No read result.");
+	}
+}
+
+if(t_err.toInt() && !f_err.toInt())
+	for(i = 0; i < 4; i++)
+		arguments["ai"+i] = EVAL;
+
+f_err = t_err;',1549487589);
+INSERT INTO "tmplib_LowDevLib" VALUES('MCP4725','I2C: MCP4725','I2C 12-bit D/A converter. Connect through a Serial output transport into the I2C mode.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	ao = 0;
+	ao_ = EVAL;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	//Writing the changes
+	if(!ao_.isEVal() && ao != ao_) {
+		code = max(0,min(1,ao/vRef)) * 4096;
+		tr.messIO(SYS.strFromCharCode(addr,code/256,code%256), 0, 0);
+	}
+
+	//Reading the current value	
+	rez = tr.messIO(SYS.strFromCharCode(addr), 0, 3);
+	if(rez.length)	ao = ao_ = vRef*(rez.charCodeAt(1)*255+rez.charCodeAt(2)>>4)/4096;
+	else t_err = "3:"+tr("No read result.");
+}
+
+if(t_err.toInt() && !f_err.toInt())	ao_ = EVAL;
+
+f_err = t_err;',1549488136);
 CREATE TABLE 'tmplib_S7' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_S7" VALUES('ai_simple','Simple AI','Простий AI','Простой AI','Simple analog parameter.','Простий аналоговий параметр.','Простой аналоговый параметр.',10,0,'JavaLikeCalc.JavaScript
 val=val_cod;
@@ -10887,4 +10968,17 @@ INSERT INTO "tmplib_LowDevLib_io" VALUES('SHT3x','transport','Transport of the I
 INSERT INTO "tmplib_LowDevLib_io" VALUES('SHT3x','addr','Device address [0...119]',1,64,'68',1,'','');
 INSERT INTO "tmplib_LowDevLib_io" VALUES('SHT3x','H','Humidity',2,16,'',2,'','');
 INSERT INTO "tmplib_LowDevLib_io" VALUES('SHT3x','T','Temperature',2,16,'',3,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','addr','Device address [0...119]',1,64,'72',1,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','range','Range, ±V',1,40,'2
+0;1;2;3;4;5
+6.144;4.096;2.048;1.024;0.512;0.256',2,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','ai0','AI0',2,16,'',3,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','ai1','AI1',2,16,'',4,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','ai2','AI2',2,16,'',5,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('ADS111x','ai3','AI3',2,16,'',6,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('MCP4725','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('MCP4725','addr','Device address [0...119]',1,64,'96',1,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('MCP4725','vRef','Reference voltage, V',2,64,'3.2',2,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('MCP4725','ao','AO',2,32,'',3,'','');
 COMMIT;

@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Modules/LDAP - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Modules/LDAP</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/LDAP/ru" title="Модули/LDAP (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/LDAP/uk" title="Модулі/LDAP (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Module </th>
+<th> Name </th>
+<th> Version </th>
+<th> License </th>
+<th> Source </th>
+<th> Languages </th>
+<th> Platforms </th>
+<th> Type </th>
+<th> Author </th>
+<th> Description
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a> </td>
+<td> Directory by LDAP
+</td>
+<td> 0.5 </td>
+<td> GPL2 </td>
+<td> bd_LDAP.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> DB </td>
+<td> Roman Savochenko </td>
+<td> BD module. Provides support of directories by LDAP.<br />Sponsored by: Alexander Kolesov, 2017
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Operations_over_the_database"><span class="tocnumber">1</span> <span class="toctext">Operations over the database</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Operations_over_the_table"><span class="tocnumber">2</span> <span class="toctext">Operations over the table</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Operations_over_the_table_content"><span class="tocnumber">3</span> <span class="toctext">Operations over the table content</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Access_rights"><span class="tocnumber">4</span> <span class="toctext">Access rights</span></a></li>
+</ul>
+</div>
+
+<p>The module gives to OpenSCADA support of directories by Lightweight Directory Access Protocol (<a class="extiw" href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol" title="wikipedia:Lightweight Directory Access Protocol">LDAP</a>). The module is based on the <a class="external text" href="https://www.openldap.org/" rel="nofollow noreferrer noopener" target="_blank">OpenLDAP</a> library on the programming language "C". Due conceptual difference the directory service from data bases (DB) the module allows you to perform mostly reading and modification entries represented as tables' records in the DB conception.
+</p><p>Directory service or name service maps the names of network resources to their respective network addresses. It is a shared information infrastructure for locating, managing, administering and organizing everyday items and network resources, which can include volumes, folders, files, printers, users, groups, devices, telephone numbers and other objects. A common use of LDAP is to provide a central place to store usernames and passwords. This allows many different applications and services to connect to the LDAP server to validate users. The protocol provides an interface with directories that follow the 1993 edition of the X.500 model:
+</p>
+<ul><li> An entry consists of a set of attributes.</li>
+<li> An attribute has a name (an attribute type or attribute description) and one or more values. The attributes are defined in a schema.</li>
+<li> Each entry has a unique identifier: its Distinguished Name (DN). This consists of its Relative Distinguished Name (RDN), constructed from some attribute(s), in pairs <i>{name}={value}</i> separated with the sign '+', in the entry, followed by the parent entry's DN, separated with the sign ','. Think of the DN as the full file path and the RDN as its relative filename in its parent folder.</li></ul>
+<h2><span class="mw-headline" id="Operations_over_the_database"><span class="mw-headline-number">1</span> Operations over the database</span></h2>
+<p>The module provides only opening database (representing in that way of a base entry) operation. In terms of the subsystem "DB" of OpenSCADA, opening of a DB is its registration for further using of the program. It also supports the operation of requesting the list of tables in the database.
+</p><p>LDAP database (connection) is addressed in the following format "<b>ldap[s]://{host}[:{port}];bdn[;{adn};{pass}[;{tm}]]</b>", where:
+</p>
+<ul><li> <i>host</i> — hostname of the directory service;</li>
+<li> <i>port</i> — port, default 389;</li>
+<li> <i>bdn</i> — base DN, an entry which sub-entries means as tables of the database with RDN attribute "ou" presence (usually it is the object class "organizationalUnit");</li>
+<li> <i>adn</i> — Distinguished Name of the authenticate user, omitting the user and next password will cause to anonymous connection;</li>
+<li> <i>pass</i> — password of the Distinguished Name of the authenticate user;</li>
+<li> <i>tm</i> — network and generic timeout in seconds by real number.</li></ul>
+<h2><span class="mw-headline" id="Operations_over_the_table"><span class="mw-headline-number">2</span> Operations over the table</span></h2>
+<p>The operations of opening and closing of the table (representing in that way of an entry into the base entry) only are supported. As a table is considered to be elements with existing the attribute "ou" (usually it is the object class "organizationalUnit") that are included in the base element.
+</p>
+<h2><span class="mw-headline" id="Operations_over_the_table_content"><span class="mw-headline-number">3</span> Operations over the table content</span></h2>
+<ul><li> scanning of the table records;</li>
+<li> requesting the values of specified records;</li>
+<li> setting the values of specified records.</li></ul>
+<p>API of the subsystem "DB" suppose the access to the contents of the table on the value of key(s) fields. Thus, the operation of requesting of the record implies the preset of key columns of the object TConfig, which will do the request. Creating a new record (row) is performed by setting the record values that are missing.
+</p><p>Before setting any value, the module loads the current value, compares them and then sends only the changed value.
+</p><p>The module currently does not differentiate the attribute types of the elements and considers all of their as strings.
+</p><p>To perform all this operations for the OpenSCADA nodes you need to create, load and use of the specific schemes of this nodes to the directory server. All known schemes of the OpenSCADA nodes provided into the followed table:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> OpenSCADA node </th>
+<th> Value of the Organizational Unit "ou" (table name) </th>
+<th> Structure </th>
+<th> Scheme, auxiliaries mostly
+</th></tr>
+<tr>
+<td> <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual#h932-3" rel="nofollow noreferrer noopener" target="_blank">User</a> </td>
+<td> ou=Security_user </td>
+<td> <u>NAME</u>, DESCR, LONGDESCR, PASS, LANG, PICTURE </td>
+<td> <a class="external" href="http://oscada.org/wiki/File:LDAP-oscada-user.schema" title="File:LDAP-oscada-user.schema">OSCADA-user</a>
+</td></tr>
+<tr>
+<td> <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual#h932-3" rel="nofollow noreferrer noopener" target="_blank">Users group</a> </td>
+<td> ou=Security_grp </td>
+<td> <u>NAME</u>, DESCR, LONGDESCR, USERS </td>
+<td> <a class="external" href="http://oscada.org/wiki/File:LDAP-oscada-grp.schema" title="File:LDAP-oscada-grp.schema">OSCADA-grp</a>
+</td></tr></table>
+<p>A subtree of LDAP entries of the typical tables of users and their groups looks like:
+</p>
+<ul><li> <i><b>dc=oscada,dc=org</b></i> — base DN (bdn) pointed into the DB object address
+<ul><li> <i><b>ou=Security_user</b></i> — RDN of the table "Security_user" of the OpenSCADA users, in the structural object class "organizationalUnit"
+<ul><li> <i><b>name=user1</b></i> — RDN of a record of the table "Security_user" for the user "user1", in the structural object "account" and the auxiliary class "OSCADA-user"</li>
+<li> <i><b>name=user2</b></i> — RDN of a record of the table "Security_user" for the user "user2", in the structural object "account" and the auxiliary class "OSCADA-user"</li></ul></li>
+<li> <i><b>ou=Security_grp</b></i> — RDN of the table "Security_grp" of the OpenSCADA groups, in the structural object class "organizationalUnit"
+<ul><li> <i><b>name=grp1</b></i> — RDN of a record of the table "Security_grp" for the user group "grp1", in the structural object "account" and the auxiliary class "OSCADA-grp"</li>
+<li> <i><b>name=grp2</b></i> — RDN of a record of the table "Security_grp" for the user group "grp2", in the structural object "account" and the auxiliary class "OSCADA-grp"</li></ul></li></ul></li></ul>
+<h2><span class="mw-headline" id="Access_rights"><span class="mw-headline-number">4</span> Access rights</span></h2>
+<p>Access rights to the database are determined by the user rights of the connection.
+</p>
+
+
+
+
+
+</div></body>
+</html>

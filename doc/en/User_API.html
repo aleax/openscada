@@ -488,19 +488,19 @@ SYS.cntrReq(req); </pre></li>
 <p>Functions of the object "User" (SYS.Security["usr_{User}"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>Array groups( )</i> — returns the groups list of the user</li></ul>
 <p>Functions of the object "Users group" (SYS.Security["grp_{Group}"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>bool user( string nm )</i> — checks for the user <i>nm</i> presence into the group.</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22DB.22_.28SYS.BD.29"><span class="mw-headline-number">6</span> <span id="SYS.BD" title="#SYS.BD">Subsystem "DB" (SYS.BD)</span></span></h2>
 <p>Functions of the database object (SYS.BD["TypeDB"]["DB"]):
 </p>
 <ul>
 <li><i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li><i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li><i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li><i>Array SQLReq( string req, bool tr = EVAL );</i> — performs the SQL-request <i>req</i> to the DB, inside (<i>tr</i>=true), outside (<i>tr</i>=false) or no matter (<i>tr</i>=EVAL) to the transaction. Returns an array of rows of the result table with the fields both per indexes and column names. At an error the result property "err" sets to the error value.
 <pre style="white-space: pre-wrap;">
 DBTbl = SYS.BD.MySQL.GenDB.SQLReq("SELECT * from DB;");
@@ -552,7 +552,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Functions of the controller object (SYS.DAQ["Modul"]["Controller"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>string name( )</i> — name of the controller object.</li>
 <li> <i>string descr( )</i> — description of the controller object and controller.</li>
 <li> <i>string status( )</i> — status of the controller.</li>
@@ -565,7 +565,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Functions of the parameter object of the controller (SYS.DAQ["Modul"]["Controller"]["Parameter"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>TCntrNodeObj cntr( )</i> — returns the controller object regardless of the nesting parameters.</li></ul>
 <p>Functions of the attribute object of the parameter of the controller (SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"]):
 </p>
@@ -584,7 +584,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Functions of object of templates library (SYS.DAQ[tmplb_Lib"]) and template (SYS.DAQ[tmplb_Lib"]["Tmpl"]) of controller's parameter:
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li></ul>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li></ul>
 <h3><span class="mw-headline" id="Module_DAQ.JavaLikeCalc"><span class="mw-headline-number">7.1</span> Module <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a></span></h3>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc.png" title="User object model of the module JavaLikeCalc."><img alt="User object model of the module JavaLikeCalc." height="214" src="files/Oscada_UserOM_JavaLikeCalc.png" width="223" /></a></div>
 <p><b>The object "Functions library" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
@@ -606,7 +606,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p><b>The object "Block" (SYS.DAQ.BlockCalc["cntr"]["blk_block"])</b>
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — get value of configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — set configuration field <i>nm</i> of the object to value <i>val</i>.</li>
 <li> <i>TCntrNodeObj cntr( )</i> — return the object of controller for the parameter nesting independent.</li></ul>
 <h3><span class="mw-headline" id="Module_DAQ.ModBus"><span class="mw-headline-number">7.4</span> Module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a></span></h3>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_ModBus.png" title="User object model of the module ModBus."><img alt="User object model of the module ModBus." height="215" src="files/Oscada_UserOM_ModBus.png" width="323" /></a></div>
@@ -635,19 +635,19 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Functions of object's archiver of messages (SYS.Archive["mod_Modul"]["mess_Archivator"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>bool status( )</i> — status "Running" of the archiver.</li>
 <li> <i>int end( )</i> — end time of data of the archiver.</li>
 <li> <i>int begin( )</i> — begin time of data of the archiver.</li></ul>
 <p>Functions of object's archiver of values (SYS.Archive["val_Modul"]["val_Archivator"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>bool status( )</i> — status "Running" of the archiver.</li></ul>
 <p><span id="SYS.Archive" title="#SYS.Archive">Functions of object's archive (SYS.Archive["va_Archive"]):</span>
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>bool status( )</i> — status "Running" of the archive.</li>
 <li> <i>int end( string arch = "" )</i> — end time of data of the archive for the archiver <i>arch</i>, in microseconds.</li>
 <li> <i>int begin( string arch = "" )</i> — begin time of data of the archive for the archiver <i>arch</i>, in microseconds.</li>
@@ -657,7 +657,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <ul><li> <i>tm</i> — time of the requested value, in microseconds, set to 0 for "end()"; this attribute is also an output, so the real time of the received value is placed here if it is a variable;</li>
 <li> <i>up_ord</i> — tighten the time of the requested value to the top of the grid;</li>
 <li> <i>arch</i> — request archiver, set in an empty line to check all archivers, set to "&lt;buffer&gt;" to handle only the buffer.</li></ul></li>
-<li> <i>bool setVal( int tm, VarType vl, string arch = "" )</i> — sets the value <i>vl</i> to the archive for the time <i>tm</i> and the archiver <i>arch</i>:
+<li> <i>bool setVal( int tm, VarType vl, string arch = "" )</i> [<span style="color:red">access to the Archive-History subsystem</span>] — sets the value <i>vl</i> to the archive for the time <i>tm</i> and the archiver <i>arch</i>:
 <ul><li> <i>tm</i> — time of the set value, in microseconds;</li>
 <li> <i>vl</i> — value;</li>
 <li> <i>arch</i> — archiver of the set request, set in an empty line for all archivers, set to "&lt;buffer&gt;" to handle only the buffer.</li></ul></li>
@@ -666,7 +666,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>endTm</i> — end time of the requesting data range, in microseconds;</li>
 <li> <i>period</i> — period of the data, in microseconds, must be necessarily specified and will be used the maximum one from the archive, will be changed to the real data period;</li>
 <li> <i>arch</i> — requesting archiver, set to empty to try for the buffer and all archivers, set to "&lt;buffer&gt;" to process only the buffer.</li></ul></li>
-<li> <i>bool setVals( Array buf, int tm, int period, string arch = "" )</i> — sets for the archive/history values <i>buf</i> to the archive from the begin time <i>tm</i>, the values period <i>period</i> and the archiver <i>arch</i>.
+<li> <i>bool setVals( Array buf, int tm, int period, string arch = "" )</i> [<span style="color:red">access to the Archive-History subsystem</span>] — sets for the archive/history values <i>buf</i> to the archive from the begin time <i>tm</i>, the values period <i>period</i> and the archiver <i>arch</i>.
 <ul><li> <i>buf</i> — array of the values to set;</li>
 <li> <i>tm</i> — begin time of the setting data range, in microseconds;</li>
 <li> <i>period</i> — period of the setting data, in microseconds, must be necessarily specified and will be used the maximum one from the archive, will be changed to the real data period;</li>
@@ -675,7 +675,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Functions of the input transport object (SYS.Transport["Modul"]["in_Transp"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li> <i>string status()</i> — string status of the transport.</li>
 <li> <i>string addr( string vl = "" )</i> — address of the transport, sets the non-empty value <i>vl</i>.</li>
 <li> <i>string writeTo(string sender, string mess)</i> — sends the message <i>mess</i> to the sender <i>sender</i>, as a reply.</li>
@@ -684,7 +684,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 </p>
 <ul>
 <li><i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
-<li><i>bool cfgSet( string nm, ElTp val )</i> — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
+<li><i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
 <li><i>string status()</i> — string status of the transport.</li>
 <li><i>bool start( bool vl = EVAL, int tm = 0 )</i> — returns the transport status "Running", starts/stops it by <i>vl</i> (if it is not EVAL). For starting you can set the specific timeout <i>tm</i>.</li>
 <li><i>string addr( string vl = "" )</i> — address of the transport, sets the non-empty value <i>vl</i>.</li>

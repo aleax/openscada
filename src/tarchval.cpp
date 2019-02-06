@@ -1682,22 +1682,22 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 
 TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // bool status() - get the archive start status.
+    // bool status( ) - get the archive start status.
     if(iid == "status")	return startStat();
-    // int end(string arch = "") - get the archive data end time for the archiver <arch>, in microseconds.
+    // int end( string arch = "" ) - get the archive data end time for the archiver <arch>, in microseconds.
     if(iid == "end")	return (int64_t)end(prms.size()?prms[0].getS():string(""));
-    // int begin(string arch = "") - get the archive data begin time for the archiver <arch>, in microseconds.
+    // int begin( string arch = "" ) - get the archive data begin time for the archiver <arch>, in microseconds.
     if(iid == "begin")	return (int64_t)begin(prms.size()?prms[0].getS():string(""));
-    // int period(string arch = "") - get the archive data period for the archiver <arch>, in microseconds.
+    // int period( string arch = "" ) - get the archive data period for the archiver <arch>, in microseconds.
     if(iid == "period")	return (int64_t)period(prms.size()?prms[0].getS():string(""));
-    // TArrayObj archivatorList() - get the archivers list which using the archive as source.
+    // TArrayObj archivatorList( ) - get the archivers list which using the archive as source.
     if(iid == "archivatorList") {
 	TArrayObj *rez = new TArrayObj();
 	vector<string> ls; archivatorList(ls);
 	for(unsigned iA = 0; iA < ls.size(); iA++) rez->arSet(iA, ls[iA]);
 	return rez;
     }
-    // VarType getVal(int tm, bool up_ord = false, string arch = "") -
+    // VarType getVal( int tm, bool up_ord = false, string arch = "" ) -
     //         get one value from the archive for the time <tm>, up order <up_ord> and the archiver <arch>.
     //  tm     - the time for requested value, in microseconds. Set to 0 for end();
     //  up_ord - fit the requested value time to up for the grid;
@@ -1710,11 +1710,13 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	prms[0].setI(tm); prms[0].setModify();
 	return rez;
     }
-    // bool setVal(int tm, VarType vl, string arch = "") - set one value to the archive for the time <tm> and the archiver <arch>.
+    // bool setVal( int tm, VarType vl, string arch = "" ) - set one value to the archive for the time <tm> and the archiver <arch>.
     //  tm - the time for requested value, in microseconds. Set to 0 for end();
     //  vl - the value;
     //  arch - the archiver for the request, set to empty for buffer and all archivers try, set to "<buffer>" for the buffer only process.
     if(iid == "setVal" && prms.size() >= 2) {
+	if(!SYS->security().at().access(user,SEC_WR,"root",SARH_ID,RWRWR_))	return false;
+
 	int64_t tm = prms[0].getI();
 	string arch = (prms.size() >= 3) ? prms[2].getS() : string("");
 	if(!tm) tm = end(arch);

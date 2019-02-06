@@ -2561,7 +2561,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	if(prms.size() >= 3 && prms[2].getB()) wflags = O_WRONLY|O_CREAT|O_APPEND;
 	int hd = open(prms[0].getS().c_str(), wflags, permCrtFiles());
 	if(hd >= 0) {
-	    wcnt = write(hd,val.data(),val.size());
+	    wcnt = write(hd, val.data(), val.size());
 	    close(hd);
 	}
 	return wcnt;

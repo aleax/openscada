@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Модули/LDAP - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="../../en/files/doc.css" rel="stylesheet" /></head>
+<body><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="ru">Модули/LDAP</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FLDAP&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/LDAP" title="Modules/LDAP">Modules/LDAP</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/LDAP" title="Modules/LDAP (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/LDAP/uk" title="Модулі/LDAP (100% translated)">українська</a></div></div>
+<table class="wikitable">
+
+<tr>
+<th> Модуль </th>
+<th> Имя </th>
+<th> Версия </th>
+<th> Лицензия </th>
+<th> Источник </th>
+<th> Языки </th>
+<th> Платформы </th>
+<th> Тип </th>
+<th> Автор </th>
+<th> Описание
+</th></tr>
+
+<tr>
+<td> <a href="../Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a> </td>
+<td> Директория по LDAP
+</td>
+<td> 0.5 </td>
+<td> GPL2 </td>
+<td> bd_LDAP.so </td>
+<td> en,uk,ru,de </td>
+<td> x86,x86_64,ARM
+</td>
+<td> БД </td>
+<td> Роман Савоченко </td>
+<td> Предоставляет поддержку директорий посредством LDAP.<br />Спонсирование: Александр Колесов, 2017
+</td></tr></table>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="tocnumber">1</span> <span class="toctext">Операции над БД</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D0.B5.D0.B9"><span class="tocnumber">2</span> <span class="toctext">Операции над таблицей</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D1.81.D0.BE.D0.B4.D0.B5.D1.80.D0.B6.D0.B8.D0.BC.D1.8B.D0.BC_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8B"><span class="tocnumber">3</span> <span class="toctext">Операции над содержимым таблицы</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.9F.D1.80.D0.B0.D0.B2.D0.B0_.D0.B4.D0.BE.D1.81.D1.82.D1.83.D0.BF.D0.B0"><span class="tocnumber">4</span> <span class="toctext">Права доступа</span></a></li>
+</ul>
+</div>
+
+<p>Модуль предоставляет в OpenSCADA поддержку директорий с помощью протокола лёгкого доступа к директориям (<a class="extiw" href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol" title="wikipedia:Lightweight Directory Access Protocol">LDAP</a>). Модуль основан на <a class="external text" href="https://www.openldap.org/" rel="nofollow noreferrer noopener" target="_blank">OpenLDAP</a> библиотеке на языке программирования "C". Из-за концептуального отличия сервиса директорий от баз данных (БД) этот модуль позволяет осуществлять в основном чтение и модификацию записей, представленных как табличные записи в концепции БД.
+</p><p>Служба каталогов или служба имён отражает названия сетевых ресурсов на соответствующие сетевые адреса. Это общая информационная инфраструктура для размещения, управления, администрирования и организации повседневных элементов и сетевых ресурсов, которые могут включать тома, каталоги, файлы, принтеры, пользователей, группы, устройства, телефонные номера и другие объекты. Распространённым использованием LDAP является предоставление центрального места хранения имён пользователей и паролей. Это позволяет многим различным приложениям и службам подключаться к LDAP серверу с целью проверки пользователей. Протокол предоставляет интерфейс с директориями, который соответствует редакции 1993 модели X.500:
+</p>
+<ul><li> Элемент содержит набор атрибутов.</li>
+<li> Атрибут имеет имя (тип или описание атрибута) и одно или множество значений. Атрибуты определяются в схеме.</li>
+<li> Каждый элемент имеет уникальный идентификатор — его Отличительное Имя (DN). Которое содержит его Относительное Отличительное Имя (RDN), что конструируется с некоторого атрибута(ов), парами <i>{название}={значение}</i> разделённые знаком '+', в этом элементе, после DN родительского элемента, через знак ','. Считайте DN полным путём и RDN относительным именем этого файла в родительском каталоге.</li></ul>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D0.91.D0.94"><span class="mw-headline-number">1</span> Операции над БД</span></h2>
+<p>Модулем предоставляется только операция открытия базы данных (представляя в такой способ базовый элемент). В терминах подсистемы "БД" OpenSCADA, открытием БД является её регистрация для последующего использования программой. Также, поддерживается операция запроса перечня таблиц в БД.
+</p><p>LDAP база данных (подключение) адресуется следующим образом "<b>ldap[s]://{host}[:{port}];bdn[;{adn};{pass}[;{tm}]]</b>", где:
+</p>
+<ul><li> <i>host</i> — адрес хоста со службой директорий;</li>
+<li> <i>port</i> — порт, по умолчанию 389;</li>
+<li> <i>bdn</i> — базовый DN, элемент под-элементы которого считаются как таблицы базы данных, при наличии RDN атрибута "ou", т.е. — "organizationalUnit";</li>
+<li> <i>adn</i> — Отличительное Имя пользователя для подключения, игнорирование определением пользователя и следующего пароля приведёт к анонимному подключению;</li>
+<li> <i>pass</i> — пароль Отличительного Имени пользователя для подключения;</li>
+<li> <i>tm</i> — сетевой и общий таймаут, вещественным числом в секундах.</li></ul>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D0.B5.D0.B9"><span class="mw-headline-number">2</span> Операции над таблицей</span></h2>
+<p>Поддерживаются только операции открытия и закрытия таблицы (представляя в такой способ елемент в базовом элементе). Таблицей считаются элементы с присутствующим атрибутом "ou" (обычно это класс объекта "organizationalUnit"), которые включены в базовый элемент.
+</p>
+<h2><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D0.BD.D0.B0.D0.B4_.D1.81.D0.BE.D0.B4.D0.B5.D1.80.D0.B6.D0.B8.D0.BC.D1.8B.D0.BC_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8B"><span class="mw-headline-number">3</span> Операции над содержимым таблицы</span></h2>
+<ul><li> сканирование записей таблицы;</li>
+<li> запрос значений указанных записей;</li>
+<li> установка значений указанных записей.</li></ul>
+<p>API подсистемы "БД" предполагает доступ к содержимому таблицы по значению ключевого(ых) полей. Так, операция запроса записи подразумевает предварительную установку ключевых колонок объекта TConfig, по которым будет выполнен запрос. Создание новой записи(строки) производится операцией установки значений записи, которая отсутствует.
+</p><p>Перед установкой любого значения модуль загружает текущее значение, сравнивает их и уже потом отправляет только изменённое значение.
+</p><p>Модуль на данное время не различает типов атрибутов элементов и считает всех их строками.
+</p><p>Для осуществления всех этих операций вокруг узлов OpenSCADA Вы должны создать, загрузить и использовать специфические схемы этих узлов в сервере директорий. Все известные схемы узлов OpenSCADA приведены в следующей таблице:
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Узел OpenSCADA </th>
+<th> Значение Organizational Unit "ou" (имя таблицы) </th>
+<th> Структура </th>
+<th> Схема, в основном вспомогательные
+</th></tr>
+<tr>
+<td> <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual#h932-3" rel="nofollow noreferrer noopener" target="_blank">Пользователь</a> </td>
+<td> ou=Security_user </td>
+<td> <u>NAME</u>, DESCR, LONGDESCR, PASS, LANG, PICTURE </td>
+<td> <a class="external" href="http://oscada.org/wiki/File:LDAP-oscada-user.schema" title="File:LDAP-oscada-user.schema">OSCADA-user</a>
+</td></tr>
+<tr>
+<td> <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual#h932-3" rel="nofollow noreferrer noopener" target="_blank">Группа пользователей</a> </td>
+<td> ou=Security_grp </td>
+<td> <u>NAME</u>, DESCR, LONGDESCR, USERS </td>
+<td> <a class="external" href="http://oscada.org/wiki/File:LDAP-oscada-grp.schema" title="File:LDAP-oscada-grp.schema">OSCADA-grp</a>
+</td></tr></table>
+<p>Поддерево LDAP элементов типовых таблиц пользователей и их групп имеет следующий вид:
+</p>
+<ul><li> <i><b>dc=oscada,dc=org</b></i> — базовый DN (bdn) указанный в адресе объекта БД
+<ul><li> <i><b>ou=Security_user</b></i> — RDN таблицы "Security_user" пользователей OpenSCADA, в структурном классе "organizationalUnit"
+<ul><li> <i><b>name=user1</b></i> — RDN записи таблицы "Security_user" для пользователя "user1", в структурном классе "account" и дополняющем классе "OSCADA-user"</li>
+<li> <i><b>name=user2</b></i> — RDN записи таблицы "Security_user" для пользователя "user2", в структурном классе "account" и дополняющем классе "OSCADA-user"</li></ul></li>
+<li> <i><b>ou=Security_grp</b></i> — RDN таблицы "Security_grp" пользователей OpenSCADA, в структурном классе "organizationalUnit"
+<ul><li> <i><b>name=grp1</b></i> — RDN записи таблицы "Security_grp" для группы пользователей "grp1", в структурном классе "account" и дополняющем классе "OSCADA-grp"</li>
+<li> <i><b>name=grp2</b></i> — RDN записи таблицы "Security_grp" для группы пользователей "grp2", в структурном классе "account" и дополняющем классе "OSCADA-grp"</li></ul></li></ul></li></ul>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B0.D0.B2.D0.B0_.D0.B4.D0.BE.D1.81.D1.82.D1.83.D0.BF.D0.B0"><span class="mw-headline-number">4</span> Права доступа</span></h2>
+<p>Права доступа к базе данных определяются правами пользователя подключения.
+</p>
+
+
+
+
+
+</div></body>
+</html>

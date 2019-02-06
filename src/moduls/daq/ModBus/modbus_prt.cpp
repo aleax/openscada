@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.ModBus file: modbus_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -831,7 +831,9 @@ void Node::saveIO( )
 	    cfg.cfg("FLAGS").setI(f->io(iIO)->flg()&TPrmTempl::CfgLink);
 	    cfg.cfg("POS").setI(iIO);
 	    cfg.cfg("VALUE").setNoTransl(f->io(iIO)->type() != IO::String || (f->io(iIO)->flg()&TPrmTempl::CfgLink));
-	    if(f->io(iIO)->flg()&TPrmTempl::CfgLink) cfg.cfg("VALUE").setS(data->lnkAddr(iIO));  //f->io(iIO)->rez());
+	    cfg.cfg("VALUE").setView(true);
+	    if(f->io(iIO)->flg()&TPrmTempl::CfgLink)	//f->io(iIO)->rez());
+	    { data ? cfg.cfg("VALUE").setS(data->lnkAddr(iIO)) : cfg.cfg("VALUE").setView(false); }
 	    else if(data && data->func()) cfg.cfg("VALUE").setS(data->getS(iIO));
 	    else cfg.cfg("VALUE").setS(f->io(iIO)->def());
 	    SYS->db().at().dataSet(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg);

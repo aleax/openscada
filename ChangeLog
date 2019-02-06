@@ -1,3 +1,11 @@
+2019-02-06 Roman (stable)
+- !!:DB.LibsDB.OscadaLibs: The templates library LowDevLib appended for I2C chips support implementation ADS111x and MCP4725.
+- User:Archive.setVal(): Access to the archive writing function restricted only for users in the group "Archive".
+- !!:DB.LDAP: Appended for the messages translation on Ukrainian and Russian into the document.
+- FIX:Protocol.ModBus: Fixed for crashes in accessing links of the DATA nodes.
+- FIX:Special.FLibSYS.vArh(): Appended for write accessing to archive of users in the group "Archive" of the object VArchObj.
+
+
 2019-02-01 Roman (stable)
 - FIX: Function.IO fixed for the default value loading in the selectable mode of IO, what had problems for the string value type.
 - Protocol.HTTP: A detailed message of "Error loading the META header" added to detect source of the rarely warning message of parsing the template.

@@ -54,7 +54,7 @@
 <li class="toclevel-2 tocsection-5"><a href="#Files_format_of_the_value_archive"><span class="tocnumber">2.1</span> <span class="toctext">Files format of the value archive</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-6"><a href="#Efficiency"><span class="tocnumber">3</span> <span class="toctext">Efficiency</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Efficiency"><span class="tocnumber">3</span> <span class="toctext"><span>Efficiency</span></span></a></li>
 <li class="toclevel-1 tocsection-7"><a href="#Links"><span class="tocnumber">4</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
@@ -297,7 +297,7 @@ FSArch 3.2.0    UTF-8 5aec2095 5aec2097
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:602px;"><a class="image" href="http://oscada.org/wiki/File:FSArch_file_mpack.png"><img class="thumbimage" height="327" src="../files/FSArch_file_mpack.png" width="600" /></a>  <div class="thumbcaption">Fig. 7. Mechanism of the sequential packaging of the values.</div></div></div></div>
 <p>Changing the values inside the existing archive is also provided. However, given the need to perform shifting the archive tail, it is recommended that this operation be performed as rarely as possible and as large size blocks as possible.
 </p>
-<h2><span class="mw-headline" id="Efficiency"><span class="mw-headline-number">3</span> Efficiency</span></h2>
+<h2><span class="mw-headline" id="Efficiency"><span class="mw-headline-number">3</span> <span id="Efficiency" title="#Efficiency">Efficiency</span></span></h2>
 <p>During the design and implementation of this module, mechanisms for increasing the efficiency of the archiving process were laid.
 </p><p>The first mechanism is block (single-frame or transactional) location of data in the value archive file. Such a mechanism allows to achieve the maximum archiving speed, and, accordingly, allows simultaneous archiving of more data streams. Practical experience has shown that the K8-3000 system with a regular IDE hard drive can archive up to 300000 data streams with a period of 1 second, or, the K5-400 system with IDE disk (2.5") can archive up to 100 parameters with a period of 1 millisecond.
 </p><p>The second mechanism is to pack both current values and outdated archive files to optimize disk space usage. Two mechanisms of packaging are implemented: the sequential packaging mechanism (value archives) and the mechanism of compressing archives by the standard packer (gzip). This approach has made it possible to achieve high performance in the process of archiving current data with the efficient sequential compression mechanism, and finishing the outdated archives by the standard packer completes the overall picture of compact storage of large data arrays. The statistics of practical application in the conditions of the real noisy signal (the worst situation) showed that the degree of the sequential packaging was 10%, and the degree of the finishing packaging was 71%.

@@ -77,7 +77,7 @@ class vArh : public TFunction
 	string descr( )	{ return _("Getting the value archive object (VArchObj) through connecting to the archive at its address."); }
 
 	void calc( TValFunc *val ) {
-	    VArchObj *obj = new VArchObj();
+	    VArchObj *obj = new VArchObj(val->user());
 	    obj->open(val->getS(1));
 	    val->setO(0, obj);
 	}

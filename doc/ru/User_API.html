@@ -487,19 +487,19 @@ SYS.cntrReq(req); </pre></li>
 <p>Функции объекта "Пользователь" (SYS.Security["usr_{User}"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">доступ к соответствующей подсистеме</span>] — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
 <li> <i>Array groups( )</i> — возвращает перечень групп пользователя.</li></ul>
 <p>Функции объекта "Группа пользователей" (SYS.Security["grp_{Group}"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">доступ к соответствующей подсистеме</span>] — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
 <li> <i>bool user( string nm )</i> — проверяет присутствие пользователя <i>nm</i> в данной группе.</li></ul>
 <h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.94.22_.28SYS.BD.29"><span class="mw-headline-number">6</span> <span id="SYS.BD" title="#SYS.BD">Подсистема "БД" (SYS.BD)</span></span></h2>
 <p>Функции объекта "БД" (SYS.BD["TypeDB"]["DB"]):
 </p>
 <ul>
 <li><i>ElTp cfg(string nm)</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
-<li><i>bool cfgSet(string nm, ElTp val)</i> — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
+<li><i>bool cfgSet(string nm, ElTp val)</i> [<span style="color:red">доступ к соответствующей подсистеме</span>] — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
 <li><i>Array SQLReq( string req, bool tr = EVAL );</i> — осуществляет SQL-запрос <i>req</i> к БД, внутри (<i>tr</i>=true), вне (<i>tr</i>=false) или безразлично (<i>tr</i>=EVAL) к транзакции. Возвращает массив строк таблицы результата с полями по индексам и по именам колонок. В случае ошибки её значение помещается в свойство "err" результата.
 <pre style="white-space: pre-wrap;">
 DBTbl = SYS.BD.MySQL.GenDB.SQLReq("SELECT * from DB;");
@@ -551,7 +551,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Функции объекта контроллера (SYS.DAQ["Modul"]["Controller"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">доступ к соответствующей подсистеме</span>] — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
 <li> <i>string name( )</i> — имя объекта контроллера.</li>
 <li> <i>string descr( )</i> — описание объекта и контроллера.</li>
 <li> <i>string status( )</i> — статус контроллера.</li>
@@ -564,7 +564,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Функции объекта параметра контроллера (SYS.DAQ["Modul"]["Controller"]["Parameter"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">доступ к соответствующей подсистеме</span>] — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
 <li> <i>TCntrNodeObj cntr( )</i> — возвращает объект контроллера этого параметра, независимо от вложенности.</li></ul>
 <p>Функции объекта атрибута параметра контроллера (SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"]):
 </p>
@@ -583,7 +583,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Функции объекта библиотеки шаблона (SYS.DAQ[tmplb_Lib"]) и шаблона (SYS.DAQ[tmplb_Lib"]["Tmpl"]) параметра контроллера:
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li></ul>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">доступ к соответствующей подсистеме</span>] — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li></ul>
 <h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.JavaLikeCalc"><span class="mw-headline-number">7.1</span> Модуль <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a></span></h4>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc_ru.png" title="Объектная модель пользователя модуля JavaLikeCalc."><img alt="Объектная модель пользователя модуля JavaLikeCalc." height="214" src="files/Oscada_UserOM_JavaLikeCalc_ru.png" width="223" /></a></div>
 <p><b>Объект "Библиотека функций" (SYS.DAQ.JavaLikeCalc["lib_Lfunc"])</b>
@@ -605,7 +605,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p><b>Объект "Блок" (SYS.DAQ.BlockCalc["cntr"]["blk_block"])</b>
 </p>
 <ul><li> <i>ElTp cfg(string nm)</i> — получение значения конфигурационного поля <i>nm</i> объекта.</li>
-<li> <i>bool cfgSet(string nm, ElTp val)</i> — установка конфигурационного поля <i>nm</i> объекта в значение <i>val</i>.</li>
+<li> <i>bool cfgSet(string nm, ElTp val)</i> [<span style="color:red">доступ к соответствующей подсистеме</span>] — установка конфигурационного поля <i>nm</i> объекта в значение <i>val</i>.</li>
 <li> <i>TCntrNodeObj cntr()</i> — возвращает объект контроллера этого параметра, независимо от вложенности.</li></ul>
 <h4><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_DAQ.ModBus"><span class="mw-headline-number">7.4</span> Модуль <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">DAQ.ModBus</a></span></h4>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_ModBus_ru.png" title="Объектная модель пользователя модуля ModBus."><img alt="Объектная модель пользователя модуля ModBus." height="213" src="files/Oscada_UserOM_ModBus_ru.png" width="323" /></a></div>
@@ -634,19 +634,19 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Функции объекта архиватора сообщений (SYS.Archive["mod_Modul"]["mess_Archivator"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">доступ к соответствующей подсистеме</span>] — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
 <li> <i>bool status( )</i> — статус архиватора "Исполнение".</li>
 <li> <i>int end( )</i> — время окончания данных архиватора.</li>
 <li> <i>int begin( )</i> — время начала данных архиватора.</li></ul>
 <p>Функции объекта архиватора значений (SYS.Archive["val_Modul"]["val_Archivator"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">доступ к соответствующей подсистеме</span>] — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
 <li> <i>bool status( )</i> — статус архиватора "Исполнение".</li></ul>
 <p><span id="SYS.Archive" title="#SYS.Archive">Функции объекта архива (SYS.Archive["va_Archive"]):</span>
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">доступ к соответствующей подсистеме</span>] — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
 <li> <i>bool status( )</i> — статус архиватора "Исполнение".</li>
 <li> <i>int end( string arch = "" )</i> — время конца данных архива для архиватора <i>arch</i>, в микросекундах.</li>
 <li> <i>int begin( string arch = "" )</i> — время начала данных архива для архиватора <i>arch</i>, в микросекундах.</li>
@@ -656,7 +656,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <ul><li> <i>tm</i> — время запрашиваемого значения, в микросекундах, установить в 0 для "end()"; этот атрибут также является выходом, соответственно реальное время полученного значения помещается сюда, если это переменная; </li>
 <li> <i>up_ord</i> — подтягивать время запрашиваемого значения к верху сетки;</li>
 <li> <i>arch</i> — архиватор запроса, установить в пустую строку для проверки всех архиваторов, установить в "&lt;buffer&gt;" для обработки только буфера.</li></ul></li>
-<li> <i>bool setVal( int tm, VarType vl, string arch = "" )</i> — устанавливает значение <i>vl</i> в архив на время <i>tm</i> и архиватор <i>arch</i>:
+<li> <i>bool setVal( int tm, VarType vl, string arch = "" )</i> [<span style="color:red">доступ к подсистеме Архивы-История</span>] — устанавливает значение <i>vl</i> в архив на время <i>tm</i> и архиватор <i>arch</i>:
 <ul><li> <i>tm</i> — время устанавливаемого значения, в микросекундах;</li>
 <li> <i>vl</i> — значение;</li>
 <li> <i>arch</i> — архиватор установки, установить в пустую строку для всех архиваторов, установить в "&lt;buffer&gt;" для обработки только буфера.</li></ul></li>
@@ -665,7 +665,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>endTm</i> — время окончания запрошенного диапазона данных, в микросекундах;</li>
 <li> <i>period</i> — период данных, в микросекундах, должно быть обязательно определено и будет использовано максимальное значение для этого архива, будет изменено в периодичность реальных данных;</li>
 <li> <i>arch</i> — архиватор запроса, установить в пустую строку для проверки всех архиваторов, установить в "&lt;buffer&gt;" для обработки только буфера.</li></ul></li>
-<li> <i>bool setVals( Array buf, int tm, int period, string arch = "" )</i> — устанавливает значение архиву/истории <i>buf</i> в архив от времени начала <i>tm</i>, для периода значений <i>period</i> и архиватора <i>arch</i>.
+<li> <i>bool setVals( Array buf, int tm, int period, string arch = "" )</i> [<span style="color:red">доступ к подсистеме Архивы-История</span>] — устанавливает значение архиву/истории <i>buf</i> в архив от времени начала <i>tm</i>, для периода значений <i>period</i> и архиватора <i>arch</i>.
 <ul><li> <i>buf</i> — массив значений к установке;</li>
 <li> <i>tm</i> — время начала устанавливаемого диапазона данных, в микросекундах;</li>
 <li> <i>period</i> — период устанавливаемых данных, в микросекундах, должно быть обязательно определено и будет использовано максимальное значение для этого архива, будет изменено в периодичность реальных данных;</li>
@@ -674,7 +674,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <p>Функции объекта входящего транспорта (SYS.Transport["Modul"]["in_Transp"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
-<li> <i>bool cfgSet( string nm, ElTp val )</i> — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
+<li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">доступ к соответствующей подсистеме</span>] — устанавливает конфигурационное поля <i>nm</i> объекта в значение <i>val</i>.</li>
 <li> <i>string status()</i> — строка статуса транспорта.</li>
 <li> <i>string addr( string vl = "" )</i> — адрес транспорта, устанавливает в непустое значение <i>vl</i>.</li>
 <li> <i>string writeTo( string sender, string mess )</i> — отправляет сообщение <i>mess</i> отправителю <i>sender</i>, как ответ.</li>
@@ -683,7 +683,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 </p>
 <ul>
 <li><i>ElTp cfg(string nm)</i> — получает значение конфигурационного поля <i>nm</i> объекта.</li>
-<li><i>bool cfgSet(string nm, ElTp val)</i> — устанавливает конфигурационное поле <i>nm</i> объекта в значение <i>val</i>.</li>
+<li><i>bool cfgSet(string nm, ElTp val)</i> [<span style="color:red">доступ к соответствующей подсистеме</span>] — устанавливает конфигурационное поле <i>nm</i> объекта в значение <i>val</i>.</li>
 <li><i>string status()</i> — строка статуса транспорта.</li>
 <li><i>bool start( bool vl = EVAL, int tm = 0 )</i> — возвращает статус исполнения, запускает/останавливает по <i>vl</i> (если не &lt;EVAL&gt;). Для запуска можно указывать особый таймаут <i>tm</i>.</li>
 <li><i>string addr( string vl = "" )</i> — адрес транспорта, устанавливает в непустое значение <i>vl</i>.</li>
