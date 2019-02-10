@@ -1920,7 +1920,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; text-align: left; ';
 	    geomW -= 6; geomH -= 6;
 
-	    this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc));
+	    this.wFont = getFont(this.attrs['font'], Math.min(xSc,ySc));
 
 	    if(!this.place.firstChild) {
 		this.place.appendChild(document.createElement('table'));
@@ -2102,7 +2102,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    if(this.messList[elPos][2] >= prpLev && prpLev > lst_lev &&
 				    chkPattern(this.messList[elPos][3],this.attrs['it'+i_it+'tmpl']))
 			    {
-				var tRowFnt = getFont(this.attrs['it'+i_it+'fnt'],Math.min(xSc,ySc));
+				var tRowFnt = getFont(this.attrs['it'+i_it+'fnt'], Math.min(xSc,ySc));
 				if(tRowFnt.length) rowFnt = tRowFnt;
 				rowColor = 'background-color: '+getColor(this.attrs['it'+i_it+'color'])+'; ';
 				if(this.messList[elPos][2] == parseInt(this.attrs['it'+i_it+'lev'])) break;
@@ -2141,7 +2141,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(this.attrsMdf["style"] || this.attrsMdf["font"] ||
 		(this.attrsMdf["doc"] && this.attrs["doc"].length) || (this.attrsMdf["tmpl"] && !this.attrs["doc"].length))
 	    {
-		this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc),1);
+		this.wFont = getFont(this.attrs['font'], Math.min(xSc,ySc),1);
 
 		var ifrmObj = this.place.childNodes[0];
 		try {

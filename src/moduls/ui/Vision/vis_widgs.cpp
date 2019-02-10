@@ -688,6 +688,19 @@ void LineEdit::setCfg( const QString &cfg )
     if(ed_fld) ed_fld->blockSignals(false);
 }
 
+void LineEdit::setFont( const QFont &f )
+{
+    if(!workWdg()) return;
+    workWdg()->setFont(f);
+    switch(type()) {
+	case Combo: {
+	    QList<QLineEdit*> lnEdWs = workWdg()->findChildren<QLineEdit*>();
+	    if(lnEdWs.size()) lnEdWs[0]->setFont(f);
+	}
+	break;
+    }
+}
+
 QString LineEdit::value( )
 {
     switch(type()) {

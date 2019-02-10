@@ -296,14 +296,17 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    }
 	    break;
 	case A_FormElMixP3: shD->mode = s2i(val); rel_cfg = true;	break;
-	case A_FormElFont: shD->font = getFont(val); rel_cfg = true;	break;
+	case A_FormElFont:
+	    shD->font = getFont(val,vmin(w->xScale(true),w->yScale(true)));
+	    rel_cfg = true;
+	    break;
 	case A_FormElMixP4: shD->colorText = val; rel_cfg = true;	break;
     }
     if(rel_cfg && !w->allAttrLoad()) {
 	bool mk_new = false;
 	Qt::Alignment wAlign = 0;
 	QFont elFnt = shD->font;
-	if(elFnt.pixelSize() > 0) elFnt.setPixelSize((int)((float)elFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true))));
+	//if(elFnt.pixelSize() > 0) elFnt.setPixelSize((int)((float)elFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true))));
 
 	switch(shD->elType) {
 	    case F_LINE_ED: {
@@ -340,7 +343,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		    if(runW) connect(wdg, SIGNAL(apply()), this, SLOT(textAccept()));
 		    mk_new = true;
 		}
-		wdg->setFont(elFnt);		//Font
+		wdg->workWdg()->setFont(elFnt);	//Font
 		setValue(w, shD->value, true);	//Value
 		wdg->workWdg()->setLineWrapMode(shD->opt1 ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);	//WordWrap
 		break;
@@ -553,6 +556,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 			    if(!(hit=wdg->horizontalHeaderItem(iC))) wdg->setHorizontalHeaderItem(iC, (hit=new QTableWidgetItem()));
 			    if(isH) {	//Header process
 				hit->setText(tC?tC->text().c_str():"");
+				hit->setData(Qt::FontRole, elFnt);
 				if(tC) {
 				    if((wVl=tC->attr("width")).size()) {
 					int wdthCel = fmax(1, s2i(wVl));
@@ -2036,7 +2040,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const s
 	case A_DiagramSclHor: shD->sclHor = s2i(val); make_pct = true;		break;
 	case A_DiagramSclVer: shD->sclVer = s2i(val); make_pct = true;		break;
 	case A_DiagramSclMarkColor: shD->sclMarkColor = getColor(val); make_pct = true;	break;
-	case A_DiagramSclMarkFont: shD->sclMarkFont = getFont(val); make_pct = true;	break;
+	case A_DiagramSclMarkFont: shD->sclMarkFont = getFont(val,vmin(w->xScale(true),w->yScale(true))); make_pct = true;	break;
 	case A_DiagramValArch: if(shD->valArch != val) { shD->valArch = val; reld_tr_dt = 2; }	break;
 	case A_DiagramParNum: {
 	    int parNum = s2i(val);
@@ -2164,7 +2168,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	if(sclHor&FD_MARKS || sclVer&FD_MARKS) {
 	    mrkPen.setColor(shD->sclMarkColor);
 	    QFont mrkFnt = shD->sclMarkFont;
-	    mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
+	    //mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height() - pnt.fontMetrics().descent();
 	    mrkWidth = pnt.fontMetrics().width("000000");
@@ -2691,7 +2695,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	if(sclHor&FD_MARKS || sclVer&FD_MARKS) {
 	    mrkPen.setColor(shD->sclMarkColor);
 	    QFont mrkFnt = shD->sclMarkFont;
-	    mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
+	    //mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height() - pnt.fontMetrics().descent();
 	    mrkWidth = pnt.fontMetrics().width("000000");
@@ -3018,7 +3022,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	if(sclHor&FD_MARKS || sclVer&FD_MARKS) {
 	    mrkPen.setColor(shD->sclMarkColor);
 	    QFont mrkFnt = shD->sclMarkFont;
-	    mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
+	    //mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height()-pnt.fontMetrics().descent();
 	    mrkWidth = pnt.fontMetrics().width("000000");
@@ -4028,7 +4032,12 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
     ShpDt *shD = (ShpDt*)w->shpData;
 
     switch(uiPrmPos) {
-	case A_COM_LOAD: reld_dt = 2;	break;
+	case A_COM_LOAD:
+	    reld_dt = 2;
+	    shD->addrWdg->clear();
+	    shD->addrWdg->setColumnCount(0);
+	    shD->addrWdg->setRowCount(0);
+	    break;
 	case A_EN:
 	    if(!qobject_cast<RunWdgView*>(w))	break;
 	    w->setVisible((bool)s2i(val) && ((RunWdgView*)w)->permView());
@@ -4115,7 +4124,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
 		    case A_ProtPropLev: shD->itProps[itNum].lev = s2i(val);	break;
 		    case A_ProtPropTmpl: shD->itProps[itNum].tmpl = val;	break;
 		    case A_ProtPropFnt:
-			shD->itProps[itNum].font = val.empty() ? shD->addrWdg->font() : getFont(val,vmin(w->xScale(true),w->yScale(true)));
+			shD->itProps[itNum].font = val.empty() ? shD->addrWdg->font() : getFont(val, vmin(w->xScale(true),w->yScale(true)));
 			break;
 		    case A_ProtPropClr: shD->itProps[itNum].clr = getColor(val);	break;
 		}
@@ -4172,6 +4181,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	shD->addrWdg->setHorizontalHeaderItem(ncl, new QTableWidgetItem());
 	shD->addrWdg->horizontalHeaderItem(ncl)->setText(clmNm.c_str());
 	shD->addrWdg->horizontalHeaderItem(ncl)->setData(Qt::UserRole, clm.c_str());
+	shD->addrWdg->horizontalHeaderItem(ncl)->setData(Qt::FontRole, shD->addrWdg->font());
 	newFill = true;
     }
 

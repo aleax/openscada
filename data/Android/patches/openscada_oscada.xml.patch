@@ -50,7 +50,7 @@
 -		<prm id="Font"></prm>
 -		<prm id="Palette"></prm>
 -		<prm id="StyleSheets"></prm>
-+		<prm id="Font">Helvetica,15,-1,5,50,0,0,0,0,0</prm>
++		<prm id="Font">Helvetica,12,-1,5,50,0,0,0,0,0</prm>
 +		<prm id="Palette">#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
 +#808080, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #808080, #bfe2f4, #808080, #c3c3c3, #9db9c8, #000000, #558097, #808080, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
 +#000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000</prm>
@@ -70,7 +70,7 @@
 -		<prm id="Font"></prm>
 -		<prm id="Palette"></prm>
 -		<prm id="StyleSheets"></prm>
-+		<prm id="Font">Helvetica,15,-1,5,50,0,0,0,0,0</prm>
++		<prm id="Font">Helvetica,12,-1,5,50,0,0,0,0,0</prm>
 +		<prm id="Palette">#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
 +#808080, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #808080, #bfe2f4, #808080, #c3c3c3, #9db9c8, #000000, #558097, #808080, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
 +#000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000</prm>
@@ -90,7 +90,7 @@
 -		<prm id="Font"></prm>
 -		<prm id="Palette"></prm>
 -		<prm id="StyleSheets"></prm>
-+		<prm id="Font">Helvetica,15,-1,5,50,0,0,0,0,0</prm>
++		<prm id="Font">Helvetica,12,-1,5,50,0,0,0,0,0</prm>
 +		<prm id="Palette">#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
 +#808080, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #808080, #bfe2f4, #808080, #c3c3c3, #9db9c8, #000000, #558097, #808080, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
 +#000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000</prm>
@@ -110,7 +110,7 @@
 -		<prm id="Font"></prm>
 -		<prm id="Palette"></prm>
 -		<prm id="StyleSheets"></prm>
-+		<prm id="Font">Helvetica,15,-1,5,50,0,0,0,0,0</prm>
++		<prm id="Font">Helvetica,12,-1,5,50,0,0,0,0,0</prm>
 +		<prm id="Palette">#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
 +#808080, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #808080, #bfe2f4, #808080, #c3c3c3, #9db9c8, #000000, #558097, #808080, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
 +#000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000</prm>

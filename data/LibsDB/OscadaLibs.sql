@@ -5340,7 +5340,7 @@ if(tErr.length) {
 else f_err = "0";','','',1512241411);
 INSERT INTO "tmplib_DevLib" VALUES('ModBusScan','ModBus scanner','','','ModBus scanner for Coils (1), Input Coils (2), Registers (3), Input Registers (4); in the range [0...65535].
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.1','','',240,0,'JavaLikeCalc.JavaScript
+Version: 1.0.2','','',240,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	res = "";
 	begin = begin_ = end = 0;
@@ -5351,7 +5351,7 @@ if(f_start) {
 if(f_stop) return;
 
 if(type_ != type || begin < begin_)
-	type_ = type, begin_ = begin = max(0,min(65535,begin)), res = "";
+	begin = max(0,min(65535,begin)), res = "";
 
 for(stTm = SYS.time(); begin < end && begin < 65536 && (SYS.time()-stTm) < lim; begin++) {
 	if(type == 0 || type == 1) {
@@ -5364,7 +5364,8 @@ for(stTm = SYS.time(); begin < end && begin < 65536 && (SYS.time()-stTm) < lim; 
 		rez = this.cntr().messIO(pdu);
 		res += begin.toString() + ":\t" + (rez.length?rez:pdu.charCodeAt(2)*256+pdu.charCodeAt(3))  + "\n";
 	}
-}','','',1539500942);
+}
+type_ = type, begin_ = begin;','','',1539500942);
 INSERT INTO "tmplib_DevLib" VALUES('pulsarM','Pulsar-M','Пульсар-М','Пульсар-М','Pulsar-M counters protocol
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Zubarev Dmitry (IP INTEGRAL<http://kip-i-a.pro>)
@@ -9841,9 +9842,9 @@ else {
 }
 
 f_err = t_err;',1542469153);
-INSERT INTO "tmplib_LowDevLib" VALUES('ADS111x','I2C: ADS111x','I2C 12/16-bit 4xA/D converter. Connect through a Serial output transport into the I2C mode.
+INSERT INTO "tmplib_LowDevLib" VALUES('ADS111x','I2C: ADS101x, ADS111x','I2C 12/16-bit 4xA/D converter. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
 	f_err = "0";
@@ -9866,7 +9867,9 @@ else {
 		sw = 0xC000 + (i<<12) + (range<<9) + 0x100 + 0x83;
 		// Writing for the configuration
 		tr.messIO(SYS.strFromCharCode(addr,1,sw>>8,sw&0xFF), 0, 0);
-		//SYS.sleep(1e-3);
+		// Waiting the conversion
+		for(iTr = 0; iTr < 10 && (rez=tr.messIO(SYS.strFromCharCode(addr,1),0,2)).length && !(rez.charCodeAt(0)&0x80); iTr++)
+			SYS.sleep(1e-3);
 		// Reading for the value
 		rez = tr.messIO(SYS.strFromCharCode(addr,0), 0, 2);
 		if(rez.length) {
@@ -9883,7 +9886,7 @@ if(t_err.toInt() && !f_err.toInt())
 	for(i = 0; i < 4; i++)
 		arguments["ai"+i] = EVAL;
 
-f_err = t_err;',1549487589);
+f_err = t_err;',1549528595);
 INSERT INTO "tmplib_LowDevLib" VALUES('MCP4725','I2C: MCP4725','I2C 12-bit D/A converter. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript

@@ -205,6 +205,7 @@ namespace VISION
 	    void setType( LType tp );
 	    void setValue( const QString& );
 	    void setCfg( const QString& );
+	    void setFont( const QFont& );
 
 	    QWidget *workWdg( )	{ return ed_fld; }
 	    void viewApplyBt( bool view );

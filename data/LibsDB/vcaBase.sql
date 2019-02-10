@@ -1829,7 +1829,7 @@ INSERT INTO "wlb_Main_incl" VALUES('userManager','labPass','/wlb_originals/wdg_T
 INSERT INTO "wlb_Main_incl" VALUES('userManager','labUser','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;alignment;text;','');
 INSERT INTO "wlb_Main_incl" VALUES('userManager','lib','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('userManager','name','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;','');
-INSERT INTO "wlb_Main_incl" VALUES('userManager','pass','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;value;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('userManager','pass','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;value;view;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('userManager','title','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
 INSERT INTO "wlb_Main_incl" VALUES('userManager','userAdd','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('userManager','userBox','/wlb_originals/wdg_Box','owner;perm;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;','');
@@ -7327,6 +7327,7 @@ INSERT INTO "wlb_Main_io" VALUES('alarmsAct','dscr','Author: Roman Savochenko <r
 Version: 1.0.1',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsSt','dscr','Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.1',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('userManager','view','7',32,'','','pass','','','','','','');
 CREATE TABLE 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main_mime" VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
 RADxQFue7AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9gDBQghJ2VBTzAAAAAddEVYdENv
@@ -22310,7 +22311,7 @@ if(userSel && SYS.mtime() >= userSel) {
 		grp_items += "</tbl>";
 		grp_value = "";
 	}
-}','','',500,'owner;perm;name;dscr;geomH;evProc;',1547196477);
+}','','',500,'owner;perm;name;dscr;geomH;evProc;',1549537720);
 CREATE TABLE 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_mnEls" VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB

@@ -1,3 +1,11 @@
+2019-02-10 Roman (stable)
+- SYS.Android: Size of the default font decreased from 15 to 12 pixels.
+- FIX:DB.LibsDB.OscadaLibs: DevLib.ModBusScan fixed for cleaning the result at decreasing the begin.
+    FIX: LowDevLib.ADS111x improved for ADS101x support.
+- !:FIX:DB.LibsDB.vcaBase: Main.userManager: The password editing field set to the view "Password".
+- UI.Vision: The primitive "FormEl", "Diagram", "Protocol" expanded for the font scaling and control, mostly to improve in Android.
+
+
 2019-02-06 Roman (stable)
 - !!:DB.LibsDB.OscadaLibs: The templates library LowDevLib appended for I2C chips support implementation ADS111x and MCP4725.
 - User:Archive.setVal(): Access to the archive writing function restricted only for users in the group "Archive".
