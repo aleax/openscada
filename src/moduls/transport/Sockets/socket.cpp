@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.1.2"
+#define MOD_VER		"3.2.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -198,7 +198,7 @@ string TSocketIn::getStatus( )
 	}
 	if(type == SOCK_TCP || type == SOCK_UDP)
 	    rez += TSYS::strMess(_("Connections %d, opened %d, last %s, closed by the limit %d. "),
-				connNumb, (protocol().empty()?assTrs().size():clId.size()), atm2s(lastConn()).c_str(), clsConnByLim);
+				connNumb, (protocols().empty()?assTrs().size():clId.size()), atm2s(lastConn()).c_str(), clsConnByLim);
 	rez += TSYS::strMess(_("%s traffic in %s, out %s. "),
 				s_type.c_str(), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
 	if(mess_lev() == TMess::Debug)
@@ -548,7 +548,7 @@ void *TSocketIn::Task( void *sock_in )
     fd_set		rd_fd;
     struct timeval	tv;
     TSocketIn *sock = (TSocketIn*)sock_in;
-    AutoHD<TProtocolIn> prot_in;
+    vector< AutoHD<TProtocolIn> > prot_in;
 
     pthread_attr_t pthr_attr;
     pthread_attr_init(&pthr_attr);
@@ -590,7 +590,7 @@ void *TSocketIn::Task( void *sock_in )
 		    continue;
 		}
 		//Create presenting the client connection output transport
-		if(sock->protocol().empty() && sock->assTrs(true).size() <= sock->maxFork()) {
+		if(sock->protocols().empty() && sock->assTrs(true).size() <= sock->maxFork()) {
 		    sock->assTrO("SOCK:"+i2s(sockFdCL));
 		    sock->connNumb++;
 		    continue;
@@ -653,7 +653,7 @@ void *TSocketIn::Task( void *sock_in )
 		sock->prcTm = SYS->curTime() - stTm;
 		sock->prcTmMax = vmax(sock->prcTmMax, sock->prcTm);
 	    }
-	    if(!prot_in.freeStat()) continue;
+	    if(answ.empty()) continue;
 
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(sock->nodePath().c_str(), _("Wrote datagram %s to '%s'!"), TSYS::cpct2str(answ.size()).c_str(), sender.c_str());
@@ -684,7 +684,7 @@ void *TSocketIn::Task( void *sock_in )
 		sock->prcTm = SYS->curTime() - stTm;
 		sock->prcTmMax = vmax(sock->prcTmMax, sock->prcTm);
 	    }
-	    if(!prot_in.freeStat()) continue;
+	    if(answ.empty()) continue;
 
 	    r_len = send(sock->sockFd, answ.c_str(), answ.size(), 0);
 	    sock->trOut += vmax(0, r_len);
@@ -727,14 +727,21 @@ void *TSocketIn::ClTask( void *s_inf )
     fd_set rw_fd;
     string req, answ;
     char   buf[s.s->bufLen()*1000 + 1];
-    AutoHD<TProtocolIn> prot_in;
+    vector< AutoHD<TProtocolIn> > prot_in;
     bool   sessOk = false;
+    int    actPrts = 0;
 
     try {
 	do {
 	    tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
-	    bool poolPrt = s.s->prtInit(prot_in, s.sock, s.sender, true) && prot_in.at().waitReqTm();
-	    if(poolPrt) { tv.tv_sec = prot_in.at().waitReqTm()/1000; tv.tv_usec = (prot_in.at().waitReqTm()%1000)*1000; }
+
+	    unsigned poolPrt = 0;
+	    if((actPrts=s.s->prtInit(prot_in,s.sock,s.sender)))
+		for(int iP = 0; iP < prot_in.size(); iP++)
+		    if(!prot_in[iP].freeStat() && (poolPrt=prot_in[iP].at().waitReqTm()))
+			break;
+	    if(poolPrt) { tv.tv_sec = poolPrt/1000; tv.tv_usec = (poolPrt%1000)*1000; }
+
 	    FD_ZERO(&rw_fd); FD_SET(s.sock, &rw_fd);
 	    int kz = select(s.sock+1, &rw_fd, NULL, NULL, &tv);
 	    if((kz == 0 && !poolPrt) || (kz == -1 && errno == EINTR) || (kz > 0 && !FD_ISSET(s.sock,&rw_fd))) continue;
@@ -761,7 +768,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
 	    int64_t stTm = 0;
 	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
-	    s.s->messPut(s.sock, req, answ, s.sender, prot_in);
+	    actPrts = s.s->messPut(s.sock, req, answ, s.sender, prot_in);
 	    if(mess_lev() == TMess::Debug && stTm) {
 		s.s->dataRes().lock();
 		s.prcTm = s.s->prcTm = SYS->curTime() - stTm;
@@ -804,7 +811,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    s.tmReq = s.s->connTm = tm = time(NULL);
 	    sessOk = true;
 	} while(!s.s->endrunCl && (s.s->mode() == 2 || ((!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()) &&
-		(!sessOk || ((s.s->mode() == 1 || !prot_in.freeStat()) && (!s.s->keepAliveReqs() || cnt < s.s->keepAliveReqs()))))));
+		(!sessOk || ((s.s->mode() == 1 || actPrts) && (!s.s->keepAliveReqs() || cnt < s.s->keepAliveReqs()))))));
 
 	if(mess_lev() == TMess::Debug)
 	    mess_debug(s.s->nodePath().c_str(), _("Disconnected by '%s'!"), s.sender.c_str());
@@ -815,65 +822,84 @@ void *TSocketIn::ClTask( void *s_inf )
     }
 
     //Close protocol on broken connection
-    if(!prot_in.freeStat())
+    for(int iP = 0; iP < prot_in.size(); iP++) {
+	if(prot_in[iP].freeStat())	continue;
 	try {
-	    string n_pr = prot_in.at().name();
-	    AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
-	    prot_in.free();
+	    string n_pr = prot_in[iP].at().name();
+	    AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in[iP].at().owner());
+	    prot_in[iP].free();
 	    proto.at().close(n_pr);
 	} catch(TError &err) {
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(s.s->nodePath().c_str(), _("Terminated by the execution '%s'"), err.mess.c_str());
 	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Terminated by the execution '%s'"),s.sock,err.mess.c_str()));
 	}
+    }
 
     s.s->clientUnreg(&s);
 
     return NULL;
 }
 
-bool TSocketIn::prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &sender, bool noex )
+int TSocketIn::prtInit( vector< AutoHD<TProtocolIn> > &prot_in, int sock, const string &sender )
 {
-    if(!prot_in.freeStat()) return true;
-
-    try {
-	AutoHD<TProtocol> proto = SYS->protocol().at().modAt(protocol());
-	string n_pr = id() + i2s(sock);
-	if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
-	prot_in = proto.at().at(n_pr);
-	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("The new input protocol's object '%s' is created!"), n_pr.c_str());
-    } catch(TError &err) {
-	if(!noex) throw;
-	return false;
+    bool initErr = false;
+    string prts = protocols(), prt, subPrt;
+    int iActP = 0;
+    for(int off = 0, iP = 0; (prt=TSYS::strParse(prts,0,";",&off)).size(); iP++) {
+	if(iP < prot_in.size() && !prot_in[iP].freeStat()) { iActP++; continue; }
+	try {
+	    AutoHD<TProtocol> proto = SYS->protocol().at().modAt(TSYS::strParse(prt,0,"."));
+	    subPrt = TSYS::strParse(prt, 1, ".");
+	    string n_pr = id() + i2s(sock) + (subPrt.size()?"#"+subPrt:"");
+	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
+	    prot_in.insert(prot_in.begin()+iP, proto.at().at(n_pr));
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("The new input protocol's object '%s' is created!"), n_pr.c_str());
+	    iActP++;
+	} catch(TError &err) {
+	    initErr = true;
+	    mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
+	}
     }
 
-    return !prot_in.freeStat();
+    if(initErr && !iActP)
+	mess_warning(nodePath().c_str(), _("All protocols is wrong for their initialization."));
+
+    return iActP;
 }
 
-void TSocketIn::messPut( int sock, string &request, string &answer, const string &sender, AutoHD<TProtocolIn> &prot_in )
+int TSocketIn::messPut( int sock, string &request, string &answer, const string &sender, vector< AutoHD<TProtocolIn> > &prot_in )
 {
-    AutoHD<TProtocol> proto;
-    string n_pr;
-    try {
-	prtInit(prot_in, sock, sender);
-	if(prot_in.at().mess(request,answer)) return;
-	if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
-	n_pr = prot_in.at().name();
-	prot_in.free();
-	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
-	if(mess_lev() == TMess::Debug)
-	    mess_debug(nodePath().c_str(), _("The input protocol object '%s' has closed itself!"), n_pr.c_str());
-    } catch(TError &err) {
-	if(!prot_in.freeStat()) {
-	    if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
-	    n_pr = prot_in.at().name();
-	}
-	prot_in.free();
-	if(!proto.freeStat() && proto.at().openStat(n_pr)) proto.at().close(n_pr);
+    if(!prtInit(prot_in,sock,sender))	return 0;
 
-	mess_err(nodePath().c_str(), "%s", err.mess.c_str());
-	mess_err(nodePath().c_str(), _("Error requesting the protocol."));
+    int iActP = 0;
+    string n_pr, tAnsw;
+
+    for(int iP = 0; iP < prot_in.size(); iP++, answer += tAnsw, tAnsw = "") {
+	if(prot_in[iP].freeStat())	continue;
+	AutoHD<TProtocol> proto;
+	try {
+	    if(prot_in[iP].at().mess(request,tAnsw)) { iActP++; continue; }
+	    proto = AutoHD<TProtocol>(&prot_in[iP].at().owner());
+	    n_pr = prot_in[iP].at().name();
+	    prot_in[iP].free();
+	    if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(nodePath().c_str(), _("The input protocol object '%s' has closed itself!"), n_pr.c_str());
+	} catch(TError &err) {
+	    if(!prot_in[iP].freeStat()) {
+		if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in[iP].at().owner());
+		n_pr = prot_in[iP].at().name();
+	    }
+	    prot_in[iP].free();
+	    if(!proto.freeStat() && proto.at().openStat(n_pr)) proto.at().close(n_pr);
+
+	    mess_err(nodePath().c_str(), "%s", err.mess.c_str());
+	    mess_err(nodePath().c_str(), _("Error requesting the protocol."));
+	}
     }
+
+    return iActP;
 }
 
 void TSocketIn::clientReg( SSockIn *so )
@@ -913,7 +939,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TTransportIn::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,1,"/prm/st",_("State")) && protocol().size() && clId.size())
+	if(ctrMkNode("area",opt,1,"/prm/st",_("State")) && protocols().size() && clId.size())
 	    ctrMkNode("list", opt, -1, "/prm/st/conns", _("Active connections"), R_R_R_, "root", STR_ID);
 	ctrRemoveNode(opt, "/prm/cfg/A_PRMS");
 	ctrMkNode("fld", opt, -1, "/prm/cfg/ADDR", EVAL_STR, startStat()?R_R_R_:RWRWR_, "root", STR_ID, 1, "help",

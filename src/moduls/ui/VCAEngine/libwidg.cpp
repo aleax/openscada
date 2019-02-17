@@ -323,12 +323,10 @@ string WidgetLib::add( const string &iid, const string &name, const string &orig
     if(present(iid))	throw err_sys(_("The widget '%s' is already present!"), iid.c_str());
 	//return "";
 
-    LWidget *obj = new LWidget(TSYS::strEncode(sTrm(iid),TSYS::oscdID), orig);
-    MtxAlloc res(chM(), true);
-    chldAdd(mWdg, obj);
-    obj->setName(name);
+    string id = chldAdd(mWdg, new LWidget(TSYS::strEncode(sTrm(iid),TSYS::oscdID),orig));
+    at(id).at().setName(name);
 
-    return obj->id();
+    return id;
 }
 
 void WidgetLib::add( LWidget *iwdg )

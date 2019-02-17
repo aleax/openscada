@@ -1345,12 +1345,10 @@ string Page::pageAdd( const string &iid, const string &name, const string &orig 
     if(!(prjFlags()&(Page::Container|Page::Template)))
 	throw TError(nodePath().c_str(),_("Page is not a container or a template!"));
 
-    Page *obj = new Page(TSYS::strEncode(sTrm(iid),TSYS::oscdID), orig);
-    MtxAlloc res(chM(), true);
-    chldAdd(mPage, obj);
-    obj->setName(name);
+    string id = chldAdd(mPage, new Page(TSYS::strEncode(sTrm(iid),TSYS::oscdID),orig));
+    pageAt(id).at().setName(name);
 
-    return obj->id();
+    return id;
 }
 
 void Page::pageAdd( Page *iwdg )
@@ -1359,8 +1357,7 @@ void Page::pageAdd( Page *iwdg )
     if(!(prjFlags()&(Page::Container|Page::Template))) {
 	delete iwdg;
 	throw TError(nodePath().c_str(),_("Page is not a container or a template!"));
-    }
-    else chldAdd(mPage,iwdg);
+    } else chldAdd(mPage, iwdg);
 }
 
 AutoHD<Page> Page::pageAt( const string &id ) const	{ return chldAt(mPage,id); }

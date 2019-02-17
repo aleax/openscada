@@ -81,11 +81,7 @@ TProt::~TProt( )
 
 string TProt::nAdd( const string &iid, const string &db )
 {
-    Node *obj = new Node(TSYS::strEncode(sTrm(iid),TSYS::oscdID), db, &nodeEl());
-    MtxAlloc res(chM(), true);
-    chldAdd(mNode, obj);
-
-    return obj->id();
+    return chldAdd(mNode, new Node(TSYS::strEncode(sTrm(iid),TSYS::oscdID),db,&nodeEl()));
 }
 
 void TProt::load_( )

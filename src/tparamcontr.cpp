@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tparamcontr.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -146,13 +146,7 @@ bool TParamContr::present( const string &iid ) const
 
 string TParamContr::add( const string &iid, unsigned type )
 {
-    if(mPrm < 0) return "";
-
-    TParamContr *obj = owner().ParamAttach(TSYS::strEncode(sTrm(iid),TSYS::oscdID), type);
-    MtxAlloc res(chM(), true);
-    chldAdd(mPrm, obj);
-
-    return obj->id();
+    return (mPrm < 0) ? "" : chldAdd(mPrm, owner().ParamAttach(TSYS::strEncode(sTrm(iid),TSYS::oscdID),type));
 }
 
 void TParamContr::del( const string &iid, int full )

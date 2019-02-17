@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Serial file: mod_serial.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.2.0"
+#define MOD_VER		"2.3.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -503,7 +503,7 @@ void *TTrIn::Task( void *tr_in )
     tr->runSt	= true;
     tr->endrun	= false;
 
-    AutoHD<TProtocolIn> prot_in;
+    vector< AutoHD<TProtocolIn> > prot_in;
     struct timeval tv;
     ssize_t r_len = 0;
     string req, answ;
@@ -582,25 +582,30 @@ void *TTrIn::Task( void *tr_in )
 		continue;
 	    }
 	}
-	//Send message to the protocol
-	try {
-	    if(prot_in.freeStat()) {
-		AutoHD<TProtocol> proto = SYS->protocol().at().modAt(tr->protocol());
-		string n_pr = tr->id()+i2s(tr->fd);
-		if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, tr, "\n"+i2s(tr->fd));
-		prot_in = proto.at().at(n_pr);
-	    }
+	//Send message to the protocols, ????
+	string prts = tr->protocols(), prt, subPrt, tAnsw;
+	for(int off = 0, iP = 0; (prt=TSYS::strParse(prts,0,";",&off)).size(); iP++, answ += tAnsw, tAnsw = "") {
+	    try {
+		if(iP >= prot_in.size() || prot_in[iP].freeStat()) {
+		    AutoHD<TProtocol> proto = SYS->protocol().at().modAt(TSYS::strParse(prt,0,"."));
+		    subPrt = TSYS::strParse(prt, 1, ".");
+		    string n_pr = tr->id() + i2s(tr->fd) + (subPrt.size()?"#"+subPrt:"");
+		    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, tr, "\n"+i2s(tr->fd));
+		    while(iP >= prot_in.size())	prot_in.push_back(AutoHD<TProtocolIn>());
+		    prot_in[iP] = proto.at().at(n_pr);
+		}
 
-	    int64_t stTm = 0;
-	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
-	    prot_in.at().mess(req, answ);
-	    if(mess_lev() == TMess::Debug && stTm) {
-		tr->prcTm = SYS->curTime() - stTm;
-		tr->prcTmMax = vmax(tr->prcTmMax, tr->prcTm);
+		int64_t stTm = 0;
+		if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
+		prot_in[iP].at().mess(req, tAnsw);
+		if(mess_lev() == TMess::Debug && stTm) {
+		    tr->prcTm = SYS->curTime() - stTm;
+		    tr->prcTmMax = vmax(tr->prcTmMax, tr->prcTm);
+		}
+	    } catch(TError &err) {
+		mess_err(tr->nodePath().c_str(),"%s",err.mess.c_str() );
+		mess_err(tr->nodePath().c_str(),_("Error requesting the protocol."));
 	    }
-	} catch(TError &err) {
-	    mess_err(tr->nodePath().c_str(),"%s",err.mess.c_str() );
-	    mess_err(tr->nodePath().c_str(),_("Error requesting the protocol."));
 	}
 
 	//Sending request
@@ -660,16 +665,18 @@ void *TTrIn::Task( void *tr_in )
     }
 
     //Close protocol
-    if(!prot_in.freeStat())
+    for(int iP = 0; iP < prot_in.size(); iP++) {
+	if(prot_in[iP].freeStat())	continue;
 	try {
-	    string n_pr = prot_in.at().name();
-	    AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
-	    prot_in.free();
+	    string n_pr = prot_in[iP].at().name();
+	    AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in[iP].at().owner());
+	    prot_in[iP].free();
 	    proto.at().close(n_pr);
 	} catch(TError &err) {
 	    mess_err(tr->nodePath().c_str(), "%s", err.mess.c_str() );
 	    mess_err(tr->nodePath().c_str(), _("Error closing the protocol."));
 	}
+    }
 
     tr->runSt = false;
 

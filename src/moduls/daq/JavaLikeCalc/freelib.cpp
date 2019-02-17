@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freelib.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -148,9 +148,9 @@ void Lib::setStart( bool val )
     runSt = val;
 }
 
-void Lib::add( const string &id, const string &name )	{ chldAdd(mFnc,new Func(id,name)); }
+void Lib::add( const string &id, const string &name )	{ chldAdd(mFnc, new Func(id,name)); }
 
-void Lib::del( const string &id )			{ chldDel(mFnc,id); }
+void Lib::del( const string &id )			{ chldDel(mFnc, id); }
 
 TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {

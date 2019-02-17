@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Sockets</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSockets&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets">Modules/Sockets</a> and the translation is 95% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/ru" title="Модули/Sockets (95% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSockets&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets">Modules/Sockets</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/ru" title="Модули/Sockets (100% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> </td>
 <td> Сокети
 </td>
-<td> 3.1 </td>
+<td> 3.2 </td>
 <td> GPL2 </td>
 <td> tr_Sockets.so </td>
 <td> en,uk,ru,de </td>
@@ -62,7 +62,7 @@
 <ul><li> Стан транспорту, а саме: статус, "Виконується", ім'я БД (яка містить конфігурацію) та інформація про поточні підключення.</li>
 <li> Ідентифікатор, ім'я та опис транспорту.</li>
 <li> Адреса транспорту. Формат адреси описано у таблиці нижче.</li>
-<li> Обрання транспортного протоколу.</li></ul>
+<li> Обрання транспортних протоколів.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Порожнє значення обрання протоколу перемикає транспорт у режим створення асоційованого вихідного транспорту для кожного підключення на цей вхідний.</dd>
 <dd>Режим асоційованих вихідних транспортів для вхідного передбачає наявність деякої зовнішньої до транспорту процедури, яка виконує роль протоколу, та яка має "обходити" всі асоційовані вихідні транспорти, та виконувати запит на читання або запис-читання.</dd>
 <dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Відсутність такої процедури неминуче призведе до росту асоційованих вихідних транспортів через відсутність сутності, яка зупиняє транспорти із закритими підключеннями та можливістю наступного видалення зупинених вихідних транспортів цим вхідним.</dd></dl>
@@ -73,60 +73,60 @@
 <li> Keep alive запитів — закриття підключення після визначеної кількості запитів. Нульове значення для вимкнення — не закривається ніколи.</li>
 <li> Keep alive час очікування, в секундах — закриття підключення після відсутності запитів протягом визначеного часу. Нульове значення для вимкнення — не закривається ніколи.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Вимикати цю функцію не рекомендується оскільки властивість мереж TCP/IP не гарантує повідомлення серверу про відключення з'єднання, скажемо у випадку зникнення живлення на клієнті. У результаті чого можуть <span style="color: red">назавжди</span> залишатися відкритими клієнтські підключення, а при досягненні ліміту сервер припинить приймати нові!</dd></dl>
-<p>Features of the formation of the input socket address are given in the table below:
+<p>Особливості формування адреси вхідних сокетів приведено у таблиці нижче:
 </p>
 <table class="wikitable">
 
 <tr>
-<th> Socket type </th>
-<th> Address
+<th> Тип сокету </th>
+<th> Адреса
 </th></tr>
 <tr>
-<td>TCP</td>
+<td> TCP </td>
 <td>
 <p><b>[TCP:]{addr}:{port}:{mode}</b><br />
-where:
+де:
 </p>
-<ul><li> <i>addr</i> – address for socket to be opened, empty or "*" address opens socket for all interfaces. There may be as the symbolic representation as well as IPv4 "<b>127.0.0.1</b>" or IPv6 "<b>[::1]</b>".</li>
-<li> <i>port</i> – network port on which the socket is opened, indication of the character name of the port, according to <i>/etc/services</i> is available.</li>
-<li> <i>mode</i> – mode of the input socket working:
-<ul><li> <b>0</b> — force closing the connection after the session reception-response.</li>
-<li> <b>1</b>(default) — do not close, only by the KeepAlive parameters.</li>
-<li> <b>2</b> — initiative connection. Enables the mode of connecting this input transport to the remote host (address instead of local) and switching to the listening state of this host. The "Keep alive timeout" value is used as the timeout of the re-connection of this transport in the absence of activity in order to restore the possibly lost connection.</li></ul></li></ul>
-<p>Example: "<b>TCP::10001:1</b>" — the TCP socket is available on all interfaces, opened on port 10001 and the connection does not break.
+<ul><li> <i>addr</i> — адреса відкриття сокету, порожня або "*" адреса відкриває сокет на всіх інтерфейсах. Допускаються як символьне, так й IPv4 "<b>127.0.0.1</b>" або IPv6 "<b>[::1]</b>" представлення адреси.</li>
+<li> <i>port</i> — мережевий порт на якому відкривається сокет, можливе вказання символьного ім'я порту відповідно до <i>/etc/services</i>.</li>
+<li> <i>mode</i> — режим роботи вхідного сокету:
+<ul><li> <b>0</b> — примусово розривати з'єднання після сеансу прийом-відповідь.</li>
+<li> <b>1</b>(типово) — не розривати з'єднання, тільки з урахуванням параметрів KeepAlive.</li>
+<li> <b>2</b> — ініціативне підключення. Включає режим ініціативи підключення цього вхідного транспорту до віддаленого хосту (адреса замість локального) та перехід у режим очікування запитів від цього хосту. Значення "Keep alive час очікування" використовується як таймаут перепідключення даного транспорту за відсутності активності з метою відновлення можливо втраченого підключення.</li></ul></li></ul>
+<p>Приклад: "<b>TCP::10001:1</b>" — TCP-сокет доступний на всіх інтерфейсах, відкритий на порту 10001 та з'єднання не розриває.
 </p>
 </td></tr>
 <tr>
-<td>UDP</td>
+<td> UDP </td>
 <td>
 <p><b>UDP:{addr}:{port}</b><br />
-where:
+де:
 </p>
-<ul><li> <i>addr</i> — the same as in the TCP;</li>
-<li> <i>port</i> — the same as in the TCP.<br /></li></ul>
-<p>Example: "<b>UDP:localhost:10001</b>" — the UDP-socket is only available on the "localhost" interface and opened on the port 10001.
+<ul><li> <i>addr</i> — теж що й у TCP;</li>
+<li> <i>port</i> — теж що й у TCP.</li></ul>
+<p>Приклад: "<b>UDP:localhost:10001</b>" — UDP-сокет доступний тільки на інтерфейсі "localhost" та відкритий на порту 10001.
 </p>
 </td></tr>
 <tr>
-<td>RAWCAN</td>
+<td> RAWCAN </td>
 <td>
 <p><b>RAWCAN:{if}:{mask}:{id}</b><br />
-where:
+де:
 </p>
-<ul><li> <i>if</i> — name of the CAN interface;</li>
-<li> <i>mask, id</i> — mask and identifier of filtering the CAN frames.<br /></li></ul>
-<p>Example: "<b>RAWCAN:can0:0:0</b>" — is receiving all CAN frames at the interface "can0".
+<ul><li> <i>if</i> — ім'я CAN інтерфейсу;</li>
+<li> <i>mask, id</i> — маска та ідентифікатор фільтрації CAN кадрів.</li></ul>
+<p>Приклад: "<b>RAWCAN:can0:0:0</b>" — приймати всі CAN кадри на інтерфейсі "can0".
 </p>
 </td></tr>
 <tr>
-<td>UNIX</td>
+<td> UNIX </td>
 <td>
 <p><b>UNIX:{name}:{mode}</b><br />
-where:
+де:
 </p>
-<ul><li> <i>name</i> — file name of the UNIX socket;</li>
-<li> <i>mode</i> — the same as in the TCP.<br /></li></ul>
-<p>Example: "<b>UNIX:/tmp/oscada:1</b>" — UNIX-socket is available through the file "/tmp/oscada" and it doesn't close the connection.
+<ul><li> <i>name</i> — ім'я файлу UNIX сокету;</li>
+<li> <i>mode</i> — те саме, що у TCP.</li></ul>
+<p>Приклад: "<b>UNIX:/tmp/oscada:1</b>" — UNIX-сокет доступний через файл "/tmp/oscada" та з'єднання не розриває.
 </p>
 </td></tr></table>
 <p>RAWCAN має деякі особливості у формуванні посилки, а саме:

@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.Sockets translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-25 17:28+0200\n"
+"POT-Creation-Date: 2019-02-17 22:08+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -236,6 +236,9 @@ msgstr "%d:Разорвано исключением '%s'"
 msgid "The new input protocol's object '%s' is created!"
 msgstr "Создано новый объект входящего протокола '%s'!"
 
+msgid "All protocols is wrong for their initialization."
+msgstr "Ошибка инициализации всех протоколов."
+
 #, c-format
 msgid "The input protocol object '%s' has closed itself!"
 msgstr "Объект входящего протокола '%s' закрылся сам!"
@@ -360,6 +363,7 @@ msgstr ""
 "времени.\n"
 "Нулевое значение для отключения - не закрывается никогда."
 
+#, c-format
 msgid "%s %d(%s): last %s; traffic in %s, out %s; "
 msgstr "%s %d(%s): последний %s; трафик входящий %s, исходящий %s; "
 
@@ -383,6 +387,7 @@ msgstr "Ошибка принудительного использования �
 msgid "Resolving for '%s'"
 msgstr "Разрешение '%s'"
 
+#, c-format
 msgid "Connecting to '%s'"
 msgstr "Подключение к '%s'"
 

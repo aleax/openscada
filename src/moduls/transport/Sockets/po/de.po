@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-25 17:28+0200\n"
+"POT-Creation-Date: 2019-02-17 22:08+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -241,6 +241,9 @@ msgstr "%d:Beendet durch die Ausführung '%s'"
 msgid "The new input protocol's object '%s' is created!"
 msgstr "Das Objekt des neuen Eingangsprotokolls '%s' wird erstellt!"
 
+msgid "All protocols is wrong for their initialization."
+msgstr "Alle Protokolle sind falsch für ihre Initialisierung."
+
 #, c-format
 msgid "The input protocol object '%s' has closed itself!"
 msgstr "Das Eingangsprotokollobjekt '%s' hat sich selbst geschlossen!"
@@ -366,6 +369,7 @@ msgstr ""
 "Schließen Sie die Verbindung nach keine Anfragen zu bestimmten Timeout.\n"
 "Null-Wert für disable - nicht immer schließen."
 
+#, c-format
 msgid "%s %d(%s): last %s; traffic in %s, out %s; "
 msgstr "%s %d(%s): letzte %s; eingangstraffik %s, Ausgangs %s; "
 
@@ -389,6 +393,7 @@ msgstr "Error the force socket %d mit: '%s (%d)'!"
 msgid "Resolving for '%s'"
 msgstr "Auflösen für '%s'"
 
+#, c-format
 msgid "Connecting to '%s'"
 msgstr "Verbindung zu '%s'"
 

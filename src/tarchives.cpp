@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchives.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -239,11 +239,7 @@ string TArchiveS::valAdd( const string &iid, const string &idb )
 {
     if(valPresent(iid)) return "";
 
-    TVArchive *obj = new TVArchive(TSYS::strEncode(sTrm(iid),TSYS::oscdID), idb, &aValE());
-    MtxAlloc res(chM(), true);
-    chldAdd(mAval, obj);
-
-    return obj->id();
+    return chldAdd(mAval, new TVArchive(TSYS::strEncode(sTrm(iid),TSYS::oscdID),idb,&aValE()));
 }
 
 string TArchiveS::optDescr(  )
@@ -1193,20 +1189,12 @@ TArchiveS &TTypeArchivator::owner( ) const	{ return (TArchiveS &)TModule::owner(
 
 string TTypeArchivator::messAdd( const string &iid, const string &idb )
 {
-    TMArchivator *obj = AMess(TSYS::strEncode(sTrm(iid),TSYS::oscdID), idb);
-    MtxAlloc res(chM(), true);
-    chldAdd(mMess, obj);
-
-    return obj->id();
+    return chldAdd(mMess, AMess(TSYS::strEncode(sTrm(iid),TSYS::oscdID),idb));
 }
 
 string TTypeArchivator::valAdd( const string &iid, const string &idb )
 {
-    TVArchivator *obj = AVal(TSYS::strEncode(sTrm(iid),TSYS::oscdID), idb);
-    MtxAlloc res(chM(), true);
-    chldAdd(mVal, obj);
-
-    return obj->id();
+    return chldAdd(mVal, AVal(TSYS::strEncode(sTrm(iid),TSYS::oscdID),idb));
 }
 
 void TTypeArchivator::cntrCmdProc( XMLNode *opt )

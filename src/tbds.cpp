@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -592,11 +592,7 @@ string TTypeBD::open( const string &iid )
 {
     if(openStat(iid)) return "";
 
-    TBD *obj = openBD(TSYS::strEncode(sTrm(iid),TSYS::oscdID));
-    MtxAlloc res(chM(), true);
-    chldAdd(mDB, obj);
-
-    return obj->id();
+    return chldAdd(mDB, openBD(TSYS::strEncode(sTrm(iid),TSYS::oscdID)));
 }
 
 TBDS &TTypeBD::owner( ) const	{ return (TBDS&)TModule::owner(); }
@@ -724,7 +720,7 @@ void TBD::disable( )
 
 void TBD::open( const string &table, bool create )
 {
-    if(!chldPresent(mTbl,table)) chldAdd(mTbl,openTable(table,create));
+    if(!chldPresent(mTbl,table)) chldAdd(mTbl, openTable(table,create));
 }
 
 void TBD::load_( TConfig *icfg )

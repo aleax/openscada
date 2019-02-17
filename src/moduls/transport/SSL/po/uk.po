@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.SSL translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2008-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2008-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-18 20:20+0200\n"
+"POT-Creation-Date: 2019-02-17 21:57+0200\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -151,6 +151,12 @@ msgstr "%d:Перервано виключенням %s"
 #, c-format
 msgid "The new input protocol's object '%s' is created!"
 msgstr "Новий об'єкт вхідного протоколу '%s' створено!"
+
+msgid "All protocols is wrong for their initialization."
+msgstr "Помилка ініціалізації всіх протоколів."
+
+msgid "The input protocol object '%s' has closed itself!"
+msgstr "Об'єкт вхідного протоколу '%s' закрився сам!"
 
 msgid "Error requesting the protocol."
 msgstr "Помилка запиту протоколу."

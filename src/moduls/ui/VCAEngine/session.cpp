@@ -1188,7 +1188,7 @@ AutoHD<SessPage> SessPage::pageAt( const string &iid ) const	{ return chldAt(mPa
 void SessPage::pageAdd( const string &iid, const string &iparent )
 {
     if(pagePresent(iid)) return;
-    chldAdd(mPage,new SessPage(iid,iparent,ownerSess()));
+    chldAdd(mPage, new SessPage(iid,iparent,ownerSess()));
 }
 
 void SessPage::chldList( int8_t igr, vector<string> &list, bool noex, bool onlyEn ) const

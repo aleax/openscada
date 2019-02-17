@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-18 20:20+0200\n"
+"POT-Creation-Date: 2019-02-17 21:57+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -156,6 +156,12 @@ msgstr "%d:Wurde beendet durch die Ausnahme %s"
 #, c-format
 msgid "The new input protocol's object '%s' is created!"
 msgstr "Neue Eingangsprotokoll-Objekt '%s' erstellt!"
+
+msgid "All protocols is wrong for their initialization."
+msgstr "Alle Protokolle sind falsch für ihre Initialisierung."
+
+msgid "The input protocol object '%s' has closed itself!"
+msgstr "Das Eingabeprotokollobjekt '%s' hat sich selbst geschlossen!"
 
 msgid "Error requesting the protocol."
 msgstr "Fehler der Anfrage ans Protokoll."

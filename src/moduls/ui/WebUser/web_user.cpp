@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.0.1"
+#define MOD_VER		"1.0.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -106,10 +106,7 @@ TWEB::~TWEB( )
 
 string TWEB::uPgAdd( const string &iid, const string &db )
 {
-    UserPg *obj = new UserPg(iid, db, &uPgEl());
-    chldAdd(mPgU, obj);
-
-    return obj->id();
+    return chldAdd(mPgU, new UserPg(iid,db,&uPgEl()));
 }
 
 void TWEB::load_( )

@@ -144,7 +144,7 @@ class UserPrt : public TCntrNode, public TConfig, public TPrmTempl::Impl
 	string	mDB, mWorkOutProg;
 
 	//bool	isDAQTmpl;	// DAQ template used for the input part
-	int	ioRez, ioReq, ioAnsw, ioSend, ioTr, ioIO;
+	int	ioTrIn, ioTrOut, ioRez, ioReq, ioAnsw, ioSend, ioIO;
 
 	bool	chkLnkNeed;	//Check lnk need flag
 

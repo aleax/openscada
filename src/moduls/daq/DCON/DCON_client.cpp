@@ -2,7 +2,7 @@
 //OpenSCADA module DAQ.DCON file: DCON_client.cpp
 /***************************************************************************
  *   Copyright (C) 2008-2011 by Almaz Karimov                              *
- *		   2008-2018 by Roman Savochenko, rom_as@oscada.org        *
+ *		   2008-2019 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.3"
+#define MOD_VER		"1.3.4"
 #define AUTHORS		_("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	_("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -209,10 +209,6 @@ void TMdContr::stop_( )
 {
     //Stop the request and calc data task
     if(prcSt) SYS->taskDestroy(nodePath('.',true), &endrunReq);
-
-    //Clear process parameters list
-    MtxAlloc res(enRes, true);
-    pHd.clear();
 }
 
 bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )	{ TController::cfgChange(co, pc); return true; }

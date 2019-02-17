@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttransports.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true), extHostLoa
     elIn.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     elIn.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
     elIn.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
-    elIn.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(s2i(OBJ_ID_SZ)*3).c_str()));
+    elIn.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(s2i(OBJ_ID_SZ)*10).c_str()));
     elIn.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //Output transport BD structure
@@ -576,20 +576,12 @@ TTransportS &TTypeTransport::owner( ) const	{ return (TTransportS&)TModule::owne
 
 string TTypeTransport::inAdd( const string &iid, const string &idb )
 {
-    TTransportIn *tr = In(TSYS::strEncode(sTrm(iid),TSYS::oscdID), idb);
-    MtxAlloc res(chM(), true);
-    chldAdd(mIn, tr);
-
-    return tr->id();
+    return chldAdd(mIn, In(TSYS::strEncode(sTrm(iid),TSYS::oscdID),idb));
 }
 
 string TTypeTransport::outAdd( const string &iid, const string &idb )
 {
-    TTransportOut *tr = Out(TSYS::strEncode(sTrm(iid),TSYS::oscdID), idb);
-    MtxAlloc res(chM(), true);
-    chldAdd(mOut, tr);
-
-    return tr->id();
+    return chldAdd(mOut, Out(TSYS::strEncode(sTrm(iid),TSYS::oscdID),idb));
 }
 
 void TTypeTransport::cntrCmdProc( XMLNode *opt )
@@ -689,8 +681,6 @@ string TTransportIn::workId( )		{ return owner().modId()+"."+id(); }
 
 string TTransportIn::tbl( )		{ return owner().owner().subId()+"_in"; }
 
-string TTransportIn::protocol( )	{ return TSYS::strParse(protocolFull(),0,"."); }
-
 string TTransportIn::getStatus( )	{ return startStat() ? _("Started. ") : _("Stoped. "); }
 
 void TTransportIn::load_( TConfig *icfg )
@@ -727,21 +717,21 @@ vector<AutoHD<TTransportOut> > TTransportIn::assTrs( bool checkForCleanDisabled 
 
     //Find proper for clean up stopped transports
     if(checkForCleanDisabled)
-	for(int i_ass = 0; i_ass < (int)mAssTrO.size(); i_ass++) {
-	    bool isFree = mAssTrO[i_ass].freeStat();
-	    if(!isFree && mAssTrO[i_ass].at().startStat()) continue;
+	for(int iAss = 0; iAss < (int)mAssTrO.size(); iAss++) {
+	    bool isFree = mAssTrO[iAss].freeStat();
+	    if(!isFree && mAssTrO[iAss].at().startStat()) continue;
 	    if(!isFree) {
-		string oTrId = mAssTrO[i_ass].at().id();
-		mAssTrO[i_ass].free();
+		string oTrId = mAssTrO[iAss].at().id();
+		mAssTrO[iAss].free();
 		try { owner().outDel(oTrId); }
 		catch(TError &er) {
-		    mAssTrO[i_ass] = owner().outAt(oTrId);
+		    mAssTrO[iAss] = owner().outAt(oTrId);
 		    mess_sys(TMess::Error, _("Error deletion the node: %s"), er.mess.c_str());
 		    continue;
 		}
 	    }
-	    mAssTrO.erase(mAssTrO.begin()+i_ass);
-	    i_ass--;
+	    mAssTrO.erase(mAssTrO.begin()+iAss);
+	    iAss--;
 	}
 
     rez = mAssTrO;
@@ -776,22 +766,22 @@ string TTransportIn::assTrO( const string &addr )
     MtxAlloc resN(assTrRes, true);
     int trFor = -1;
     //Find proper for replace and clean up stopped transports
-    for(int i_ass = 0; i_ass < (int)mAssTrO.size(); i_ass++) {
-	bool isFree = mAssTrO[i_ass].freeStat();
-	if(!isFree && mAssTrO[i_ass].at().startStat()) continue;
-	if(!isFree && trFor < 0) { trFor = i_ass; continue; }
+    for(int iAss = 0; iAss < (int)mAssTrO.size(); iAss++) {
+	bool isFree = mAssTrO[iAss].freeStat();
+	if(!isFree && mAssTrO[iAss].at().startStat()) continue;
+	if(!isFree && trFor < 0) { trFor = iAss; continue; }
 	if(!isFree) {
-	    string oTrId = mAssTrO[i_ass].at().id();
-	    mAssTrO[i_ass].free();
+	    string oTrId = mAssTrO[iAss].at().id();
+	    mAssTrO[iAss].free();
 	    try { owner().outDel(oTrId); }
 	    catch(TError &er) {
-		mAssTrO[i_ass] = owner().outAt(oTrId);
+		mAssTrO[iAss] = owner().outAt(oTrId);
 		mess_sys(TMess::Error, _("Error deletion the node: %s"), er.mess.c_str());
 		continue;
 	    }
 	}
-	mAssTrO.erase(mAssTrO.begin()+i_ass);
-	i_ass--;
+	mAssTrO.erase(mAssTrO.begin()+iAss);
+	iAss--;
     }
 
     //Create new assigned transport
@@ -884,21 +874,27 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setDB(opt->text());
     }
     else if(a_path == "/prm/cfg/p_mod" && ctrChkNode(opt)) {
-	vector<string> list;
-	int c_lv = 0;
-	string c_path = "", c_el;
-	for(int c_off = 0; (c_el=TSYS::strSepParse(protocolFull(),0,'.',&c_off)).size(); c_lv++) {
-	    opt->childAdd("el")->setText(c_path);
-	    c_path += c_lv ? "."+c_el : c_el;
+	string curPrt = protocols();
+	vector<string> mLst, itLst;
+	SYS->protocol().at().modList(mLst);
+	// Single protocol directly
+	for(unsigned iM = 0; curPrt.size() && iM < mLst.size(); iM++) {
+	    SYS->protocol().at().at(mLst[iM]).at().itemListIn(itLst);
+	    opt->childAdd("el")->setText(mLst[iM]);
+	    for(unsigned iIt = 0; iIt < itLst.size(); iIt++)
+		opt->childAdd("el")->setText(mLst[iM]+"."+itLst[iIt]);
 	}
-	opt->childAdd("el")->setText(c_path);
-	if(c_lv == 0) SYS->protocol().at().modList(list);
-	else {
-	    c_path += ".";
-	    SYS->protocol().at().at(protocol()).at().itemListIn(list,protocolFull());
+	opt->childAdd("el")->setText("");
+	// Combinated protocol
+	for(unsigned iM = 0; iM < mLst.size(); iM++) {
+	    SYS->protocol().at().at(mLst[iM]).at().itemListIn(itLst);
+	    if(!TRegExp("(^|;)"+mLst[iM]+"(;|$)","m").test(curPrt))
+		opt->childAdd("el")->setText((curPrt.size()?curPrt+";":"")+mLst[iM]);
+	    for(unsigned iIt = 0; iIt < itLst.size(); iIt++)
+		if(!TRegExp("(^|;)"+mLst[iM]+"\\."+itLst[iIt]+"(;|$)","m").test(curPrt))
+		    opt->childAdd("el")->setText((curPrt.size()?curPrt+";":"")+mLst[iM]+"."+itLst[iIt]);
 	}
-	for(unsigned i_a=0; i_a < list.size(); i_a++)
-	    opt->childAdd("el")->setText(c_path+list[i_a]);
+	opt->childAdd("el")->setText("");
     }
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",STR_ID,RWRWR_);
     else if(a_path == "/log/logLen") {

@@ -2,15 +2,15 @@ PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE 'ParamTemplLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "ParamTemplLibs" VALUES('S7','S7','','Templates library of parameters for PLC series S7 of firm Siemens.','Бібліотека шаблонів параметрів для контролерів фірми Siemens серії S7.','tmplib_S7','','Библиотека шаблонов параметров для контроллеров фирмы Siemens серии S7.');
-INSERT INTO "ParamTemplLibs" VALUES('base','Main templates','Базові шаблони','Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.1
-Allow realisation of the main templates.','Автор: Роман Савоченко <rom_as@oscada.org>
+INSERT INTO "ParamTemplLibs" VALUES('base','Main templates','Базові шаблони','Provides of implementation of the main templates.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.1.0','Автор: Роман Савоченко <rom_as@oscada.org>
 Версія: 1.0.1
 Надає реалізацію базових шаблонів.','tmplib_base','Базовые шаблоны','Автор: Роман Савоченко <rom_as@oscada.org>
 Версия: 1.0.1
 Предоставляет реализацию базовых шаблонов.');
 INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 2.2.0','','tmplib_DevLib','Библиотека устройств','');
+Version: 2.3.0','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 INSERT INTO "ParamTemplLibs" VALUES('LowDevLib','Low-level devices','Низькорівневі пристрої','The templates library provides common templates and related functions for custom access to low-level devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
 Version: 1.3.0','','tmplib_LowDevLib','Низкоуровневые устройства','');
@@ -1282,6 +1282,133 @@ INSERT INTO "tmplib_DevLib_io" VALUES('pulsarM','nChnl','Channels number',1,32,'
 INSERT INTO "tmplib_DevLib_io" VALUES('OWEN','transport','Transport',0,64,'Serial.out_owen',0,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('OWEN','items','Items set "{addr}:{func}:{f|i|u|s}:{r|w}[:{id}[:{nm}]]"',0,36,'',1,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('OWEN','this','Object',4,0,'',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','io','Output: IO',4,0,'',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','tr','Transport',4,0,'',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','rez','Input: result',3,1,'0',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','request','Input: request',0,0,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','answer','Input: answer',0,1,'',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','sender','Input: sender',0,0,'',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','enCRC','Enable CRC',3,64,'0',27,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai0','Input: AI0',2,128,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai1','Input: AI1',2,128,'',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai2','Input: AI2',2,128,'',9,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai3','Input: AI3',2,128,'',10,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai4','Input: AI4',2,128,'',11,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai5','Input: AI5',2,128,'',12,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai6','Input: AI6',2,128,'',13,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai7','Input: AI7',2,128,'',14,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai8','Input: AI8',2,128,'',15,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai9','Input: AI9',2,128,'',16,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','addr','Address [0...240]',1,64,'0',28,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','n','Input: number of AI',1,64,'8',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai10','Input: AI10',2,128,'',17,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai11','Input: AI11',2,128,'',18,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai12','Input: AI12',2,128,'',19,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai13','Input: AI13',2,128,'',20,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai14','Input: AI14',2,128,'',21,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai15','Input: AI15',2,128,'',22,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai16','Input: AI16',2,128,'',23,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai17','Input: AI17',2,128,'',24,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai18','Input: AI18',2,128,'',25,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt','ai19','Input: AI19',2,128,'',26,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','tr','Transport',4,0,'',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','io','Output: IO',4,0,'',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','rez','Input: result',3,1,'0',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','request','Input: request',0,0,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','answer','Input: answer',0,1,'',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','sender','Input: sender',0,0,'',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','n','Input: number of DI',1,64,'8',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','enCRC','Enable CRC',3,64,'0',39,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','addr','Address [0...240]',1,64,'0',40,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di0','Input: DI0',3,128,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di1','Input: DI1',3,128,'',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di2','Input: DI2',3,128,'',9,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di3','Input: DI3',3,128,'',10,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di4','Input: DI4',3,128,'',11,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di5','Input: DI5',3,128,'',12,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di6','Input: DI6',3,128,'',13,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di7','Input: DI7',3,128,'',14,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di8','Input: DI8',3,128,'',15,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di9','Input: DI9',3,128,'',16,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di10','Input: DI10',3,128,'',17,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di11','Input: DI11',3,128,'',18,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di12','Input: DI12',3,128,'',19,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di13','Input: DI13',3,128,'',20,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di14','Input: DI14',3,128,'',21,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di15','Input: DI15',3,128,'',22,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di16','Input: DI16',3,128,'',23,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di17','Input: DI17',3,128,'',24,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di18','Input: DI18',3,128,'',25,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di19','Input: DI19',3,128,'',26,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di20','Input: DI20',3,128,'',27,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di21','Input: DI21',3,128,'',28,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di22','Input: DI22',3,128,'',29,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di23','Input: DI23',3,128,'',30,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di24','Input: DI24',3,128,'',31,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di25','Input: DI25',3,128,'',32,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di26','Input: DI26',3,128,'',33,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di27','Input: DI27',3,128,'',34,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di28','Input: DI28',3,128,'',35,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di29','Input: DI29',3,128,'',36,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di30','Input: DI30',3,128,'',37,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DI','di31','Input: DI31',3,128,'',38,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','tr','Transport',4,0,'',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','io','Output: IO',4,0,'',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','rez','Input: result',3,1,'0',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','request','Input: request',0,0,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','answer','Input: answer',0,1,'',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','sender','Input: sender',0,0,'',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao0','Input: AO0',2,129,'',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao1','Input: AO1',2,129,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao2','Input: AO2',2,129,'',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao3','Input: AO3',2,129,'',9,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao4','Input: AO4',2,129,'',10,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao5','Input: AO5',2,129,'',11,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao6','Input: AO6',2,129,'',12,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','ao7','Input: AO7',2,129,'',13,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','enCRC','Enable CRC',3,64,'0',14,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_AO','addr','Address [0...240]',1,64,'0',15,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','tr','Transport',4,0,'',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','io','Output: IO',4,0,'',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','rez','Input: result',3,1,'0',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','request','Input: request',0,0,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','answer','Input: answer',0,1,'',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','sender','Input: sender',0,0,'',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','n','Input: number of DO, to read back',1,64,'8',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','enCRC','Enable CRC',3,64,'0',39,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','addr','Address [0...240]',1,64,'0',40,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do0','Input: DO0',3,129,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do1','Input: DO1',3,129,'',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do2','Input: DO2',3,129,'',9,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do3','Input: DO3',3,129,'',10,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do4','Input: DO4',3,129,'',11,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do5','Input: DO5',3,129,'',12,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do6','Input: DO6',3,129,'',13,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do7','Input: DO7',3,129,'',14,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do8','Input: DO8',3,129,'',15,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do9','Input: DO9',3,129,'',16,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do10','Input: DO10',3,129,'',17,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do11','Input: DO11',3,129,'',18,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do12','Input: DO12',3,129,'',19,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do13','Input: DO13',3,129,'',20,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do14','Input: DO14',3,129,'',21,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do15','Input: DO15',3,129,'',22,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do16','Input: DO16',3,129,'',23,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do17','Input: DO17',3,129,'',24,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do18','Input: DO18',3,129,'',25,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do19','Input: DO19',3,129,'',26,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do20','Input: DO20',3,129,'',27,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do21','Input: DO21',3,129,'',28,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do22','Input: DO22',3,129,'',29,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do23','Input: DO23',3,129,'',30,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do24','Input: DO24',3,129,'',31,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do25','Input: DO25',3,129,'',32,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do26','Input: DO26',3,129,'',33,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do27','Input: DO27',3,129,'',34,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do28','Input: DO28',3,129,'',35,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do29','Input: DO29',3,129,'',36,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do30','Input: DO30',3,129,'',37,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DCON_Prt_DO','do31','Input: DO31',3,129,'',38,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -1627,6 +1754,23 @@ INSERT INTO "tmplib_base_io" VALUES('codeState','SHIFR','Code',0,0,'',4,'Код'
 INSERT INTO "tmplib_base_io" VALUES('codeState','NAME','Name',0,0,'',5,'Ім''я','','Имя','');
 INSERT INTO "tmplib_base_io" VALUES('codeState','DESCR','Description',0,0,'',6,'Опис','','Описание','');
 INSERT INTO "tmplib_base_io" VALUES('codeState','this','Object',4,0,'',7,'Об''єкт','','Объект','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','tmOut','Maximum notification timeout, seconds',1,64,'5',2,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','messLev','Messages level, negative for alarms',1,64,'1',3,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','messCat','Messages category, template or regular expression',0,64,'al*:*',4,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','emailState','Email notification current state',0,17,'',5,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','emailAuth','Auth, empty for disable',0,64,'user:pass',7,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','emailSender','Sender',0,64,'noreply@oscada.org',8,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','emailReceiver','Destination receiver address',0,64,'test@oscada.org',9,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','emailTopic','EMail topic',0,64,'Notification',10,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','emailMess','EMail message',0,64,'',11,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','SMSState','SMS notification current state',0,17,'',12,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','SMSPin','SMS pin, empty for disable',0,64,'1111',14,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','SMSTel','SMS destination receiver, tel. number',0,64,'+380XXXXXXXXX',15,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','SMSTextMd','SMS in text mode, else PDU',3,64,'0',16,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','io','UserPrt: Output IO',4,0,'',0,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','tr','UserPrt: Transport',4,0,'',1,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','emailTrAddr','Output transport for SMTP connection, empty for disable',0,64,'Sockets.out_SMTP',6,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('ntf','SMSTrAddr','SMS serial transport, empty for disable',0,64,'Serial.out_SMS',13,'','','','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 CREATE TABLE 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 CREATE TABLE 'flb_web_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -5751,6 +5895,361 @@ else {
 
 f_err = t_err;
 if(!f_err.toInt())	f_err += t_inf + (t_infW.length?" "+tr("Write")+t_infW:"");','','',1544882666);
+INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt','DCON Protocol + Input AI','','','Input and output part of the protocol DCON implementation with the input part designed for typical AI module at up to 20 channels.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	io = tr = EVAL;
+
+function CRC( inS ) {
+	sumV = 0;
+	for(i = 0; i < inS.length; i++) sumV += inS.charCodeAt(i);
+
+	return sumV&0xFF;
+}
+
+//---------------------------------------
+//Output request form of the UserProtocol
+//---------------------------------------
+//<ReqSymb addr="{toAddr}" err="{err}" CRC="{CRC}">{req}</ReqSymb> - tag of the output message
+//  ReqSymb - symbol of the request type into the tag name, like to: ''#'', ''@'', etc;
+//  toAddr - remote host address [0...240];
+//  CRC - sign [0,1] of using CRC;
+//  req - data of the request and response;
+//  err - sets for the request result.
+if(!tr.isEVal() && !io.isEVal() && io.attr("ProtIt").length) {
+	io.setAttr("err", "0");
+
+	req = io.name().slice(0,1) + io.attr("addr").toInt().toString(16,2) + io.text();
+	if(io.attr("CRC").toInt())
+		req += (CRC(req)&0xFF).toString(16,2);
+	req += "\r";
+
+	//Sending the request
+	resp = tr.messIO(req);
+	while(resp.length && resp[resp.length-1] != "\r")
+		if((tresp=tr.messIO("")).length) resp += tresp;
+		else break;
+
+	//Analysis of the response
+	if(io.attr("CRC").toInt()) {
+		if(resp.length < 4 || resp[resp.length-1] != "\r")
+		{ io.setAttr("err","10:"+tr("Error or no response.")); return; }
+		//Checking the response to the integrity (CRC)
+		if(CRC(resp.slice(0,-3)) != resp.slice(-3,-1).toInt(16))
+		{ io.setAttr("err","11:"+tr("CRC error.")); return; }
+	}
+	else if(resp.length < 2 || resp[resp.length-1] != "\r")
+	{ io.setAttr("err","10:"+tr("Error or no response.")); return; }
+	if(resp[0] != ">") { io.setAttr("err","12:"+resp[0]+":"+tr("DCON error.")); return; }
+
+	//Returning the result
+	io.setText(resp.slice(1,(io.attr("CRC").toInt()?-3:-1)));
+
+	return;
+}
+
+//---------------------------------------------
+//Input requests processing of the UserProtocol
+//---------------------------------------------
+//Testing the request for completity
+if(request.length < 4 || request[request.length-1] != "\r") {
+	if(request.length > 10) request = "";
+	return true;
+}
+addr = max(0, min(240,addr));
+n = max(1, min(20,n));
+req = request; request = "";
+
+//SYS.messInfo("DCON/in", "TEST 01: "+req);
+
+//Checking the request for the integrity (CRC) and the address
+if((enCRC && CRC(req.slice(0,-3)) != req.slice(-3,-1).toInt(16)) || !(addr == 0 || req.slice(1,3).toInt(16) == addr))
+	return true;
+
+//Analysis the request and the response preparing
+if(req[0] == "#") {	//Commands #AA
+	answer = ">";
+	for(iA = 0; iA < n; iA++)
+		answer += ((tVl=arguments["ai"+iA]).isEVal()?0:tVl).toFixed(3,7,true);
+} else answer = "?";	//return true;
+
+//Finishing the response
+if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
+answer += "\r";
+
+return true;','','',1550422994);
+INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt_DI','DCON Protocol + Input DI','','','Input and output part of the protocol DCON implementation with the input part designed for typical DI module at up to 32 channels.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	io = tr = EVAL;
+
+function CRC( inS ) {
+	sumV = 0;
+	for(i = 0; i < inS.length; i++) sumV += inS.charCodeAt(i);
+
+	return sumV&0xFF;
+}
+
+//---------------------------------------
+//Output request form of the UserProtocol
+//---------------------------------------
+//<ReqSymb addr="{toAddr}" err="{err}" CRC="{CRC}">{req}</ReqSymb> - tag of the output message
+//  ReqSymb - symbol of the request type into the tag name, like to: ''#'', ''@'', etc;
+//  toAddr - remote host address [0...240];
+//  CRC - sign [0,1] of using CRC;
+//  req - data of the request and response;
+//  err - sets for the request result.
+if(!tr.isEVal() && !io.isEVal() && io.attr("ProtIt").length) {
+	io.setAttr("err", "0");
+
+	req = io.name().slice(0,1) + io.attr("addr").toInt().toString(16,2) + io.text();
+	if(io.attr("CRC").toInt())
+		req += (CRC(req)&0xFF).toString(16,2);
+	req += "\r";
+
+	//Sending the request
+	resp = tr.messIO(req);
+	while(resp.length && resp[resp.length-1] != "\r")
+		if((tresp=tr.messIO("")).length) resp += tresp;
+		else break;
+
+	//Analysis of the response
+	if(io.attr("CRC").toInt()) {
+		if(resp.length < 4 || resp[resp.length-1] != "\r")
+		{ io.setAttr("err","10:"+tr("Error or no response.")); return; }
+		//Checking the response to the integrity (CRC)
+		if(CRC(resp.slice(0,-3)) != resp.slice(-3,-1).toInt(16))
+		{ io.setAttr("err","11:"+tr("CRC error.")); return; }
+	}
+	else if(resp.length < 2 || resp[resp.length-1] != "\r")
+	{ io.setAttr("err","10:"+tr("Error or no response.")); return; }
+	if(resp[0] != ">") { io.setAttr("err","12:"+resp[0]+":"+tr("DCON error.")); return; }
+
+	//Returning the result
+	io.setText(resp.slice(1,(io.attr("CRC").toInt()?-3:-1)));
+
+	return;
+}
+
+//---------------------------------------------
+//Input requests processing of the UserProtocol
+//---------------------------------------------
+//Testing the request for completity
+if(request.length < 4 || request[request.length-1] != "\r") {
+	if(request.length > 10) request = "";
+	return true;
+}
+addr = max(0, min(240,addr));
+n = max(1, min(32,n));
+req = request; request = "";
+
+//SYS.messInfo("DCON/in", "TEST 01: "+req);
+
+//Checking the request for the integrity (CRC) and the address
+if((enCRC && CRC(req.slice(0,-3)) != req.slice(-3,-1).toInt(16)) || !(addr == 0 || req.slice(1,3).toInt(16) == addr))
+	return true;
+
+//Analysis the request and the response preparing
+if(req[0] == "@" || (req[0] == "$" && req[3] == "6")) {	//Commands @AA and $AA6
+	for(ib = 0; ib < n; ib++) {
+		if(ib%8 == 0)	tVl = 0;
+		tVl += ((arguments["di"+ib] == true)?1:0) << (ib%8);
+		if(ib%8 == 7 || (ib+1) == n)	answer = tVl.toString(16,2) + answer;
+	}
+	if(req[0] == "$")	answer += "00";
+	answer = "!" + answer;
+} else answer = "?";	//return true;
+
+
+//Finishing the response
+if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
+answer += "\r";
+
+return true;','','',1550423010);
+INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt_AO','DCON Protocol + Input AO','','','Input and output part of the protocol DCON implementation with the input part designed for typical AO module at up to 8 channels.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	io = tr = EVAL;
+
+function CRC( inS ) {
+	sumV = 0;
+	for(i = 0; i < inS.length; i++) sumV += inS.charCodeAt(i);
+
+	return sumV&0xFF;
+}
+
+//---------------------------------------
+//Output request form of the UserProtocol
+//---------------------------------------
+//<ReqSymb addr="{toAddr}" err="{err}" CRC="{CRC}">{req}</ReqSymb> - tag of the output message
+//  ReqSymb - symbol of the request type into the tag name, like to: ''#'', ''@'', etc;
+//  toAddr - remote host address [0...240];
+//  CRC - sign [0,1] of using CRC;
+//  req - data of the request and response;
+//  err - sets for the request result.
+if(!tr.isEVal() && !io.isEVal() && io.attr("ProtIt").length) {
+	io.setAttr("err", "0");
+
+	req = io.name().slice(0,1) + io.attr("addr").toInt().toString(16,2) + io.text();
+	if(io.attr("CRC").toInt())
+		req += (CRC(req)&0xFF).toString(16,2);
+	req += "\r";
+
+	//Sending the request
+	resp = tr.messIO(req);
+	while(resp.length && resp[resp.length-1] != "\r")
+		if((tresp=tr.messIO("")).length) resp += tresp;
+		else break;
+
+	//Analysis of the response
+	if(io.attr("CRC").toInt()) {
+		if(resp.length < 4 || resp[resp.length-1] != "\r")
+		{ io.setAttr("err","10:"+tr("Error or no response.")); return; }
+		//Checking the response to the integrity (CRC)
+		if(CRC(resp.slice(0,-3)) != resp.slice(-3,-1).toInt(16))
+		{ io.setAttr("err","11:"+tr("CRC error.")); return; }
+	}
+	else if(resp.length < 2 || resp[resp.length-1] != "\r")
+	{ io.setAttr("err","10:"+tr("Error or no response.")); return; }
+	if(resp[0] != ">") { io.setAttr("err","12:"+resp[0]+":"+tr("DCON error.")); return; }
+
+	//Returning the result
+	io.setText(resp.slice(1,(io.attr("CRC").toInt()?-3:-1)));
+
+	return;
+}
+
+//---------------------------------------------
+//Input requests processing of the UserProtocol
+//---------------------------------------------
+//Testing the request for completity
+if(request.length < 4 || request[request.length-1] != "\r") {
+	if(request.length > 10) request = "";
+	return true;
+}
+addr = max(0, min(240,addr));
+req = request; request = "";
+
+//SYS.messInfo("DCON/in", "TEST 01: "+req);
+
+//Checking the request for the integrity (CRC) and the address
+if((enCRC && CRC(req.slice(0,-3)) != req.slice(-3,-1).toInt(16)) || !(addr == 0 || req.slice(1,3).toInt(16) == addr))
+	return true;
+
+//Analysis the request and the response preparing
+if(req[0] == "$" && req[3] == "8") {	//Command $AA8N to read back the output value
+	answer = "!";
+	n = req.slice(4,5).toInt(16);
+	answer += req.slice(1,3) + ((tVl=arguments["ao"+n]).isEVal()?0:tVl).toFixed(3,7,true);
+}
+else if(req[0] == "#" && req.length >= 10) {	//Command #AAN{Data} to write the output
+	n = req.slice(3,4).toInt(16);
+	arguments["ao"+n] = req.slice(4,(enCRC?-3:-1)).toReal();
+	answer = ">";
+}
+else answer = "?";	//return true;
+
+//Finishing the response
+if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
+answer += "\r";
+
+return true;','','',1550423026);
+INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt_DO','DCON Protocol + Input DO','','','Input and output part of the protocol DCON implementation with the input part designed for typical DO module at up to 32 channels.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	io = tr = EVAL;
+
+function CRC( inS ) {
+	sumV = 0;
+	for(i = 0; i < inS.length; i++) sumV += inS.charCodeAt(i);
+
+	return sumV&0xFF;
+}
+
+//---------------------------------------
+//Output request form of the UserProtocol
+//---------------------------------------
+//<ReqSymb addr="{toAddr}" err="{err}" CRC="{CRC}">{req}</ReqSymb> - tag of the output message
+//  ReqSymb - symbol of the request type into the tag name, like to: ''#'', ''@'', etc;
+//  toAddr - remote host address [0...240];
+//  CRC - sign [0,1] of using CRC;
+//  req - data of the request and response;
+//  err - sets for the request result.
+if(!tr.isEVal() && !io.isEVal() && io.attr("ProtIt").length) {
+	io.setAttr("err", "0");
+
+	req = io.name().slice(0,1) + io.attr("addr").toInt().toString(16,2) + io.text();
+	if(io.attr("CRC").toInt())
+		req += (CRC(req)&0xFF).toString(16,2);
+	req += "\r";
+
+	//Sending the request
+	resp = tr.messIO(req);
+	while(resp.length && resp[resp.length-1] != "\r")
+		if((tresp=tr.messIO("")).length) resp += tresp;
+		else break;
+
+	//Analysis of the response
+	if(io.attr("CRC").toInt()) {
+		if(resp.length < 4 || resp[resp.length-1] != "\r")
+		{ io.setAttr("err","10:"+tr("Error or no response.")); return; }
+		//Checking the response to the integrity (CRC)
+		if(CRC(resp.slice(0,-3)) != resp.slice(-3,-1).toInt(16))
+		{ io.setAttr("err","11:"+tr("CRC error.")); return; }
+	}
+	else if(resp.length < 2 || resp[resp.length-1] != "\r")
+	{ io.setAttr("err","10:"+tr("Error or no response.")); return; }
+	if(resp[0] != ">") { io.setAttr("err","12:"+resp[0]+":"+tr("DCON error.")); return; }
+
+	//Returning the result
+	io.setText(resp.slice(1,(io.attr("CRC").toInt()?-3:-1)));
+
+	return;
+}
+
+//---------------------------------------------
+//Input requests processing of the UserProtocol
+//---------------------------------------------
+//Testing the request for completity
+if(request.length < 4 || request[request.length-1] != "\r") {
+	if(request.length > 10) request = "";
+	return true;
+}
+addr = max(0, min(240,addr));
+n = max(1, min(32,n));
+req = request; request = "";
+
+//SYS.messInfo("DCON/in", "TEST 01: "+req);
+
+//Checking the request for the integrity (CRC) and the address
+if((enCRC && CRC(req.slice(0,-3)) != req.slice(-3,-1).toInt(16)) || !(addr == 0 || req.slice(1,3).toInt(16) == addr))
+	return true;
+req = req.slice(0, (enCRC?-3:-1));
+
+//Analysis the request and the response preparing
+if(req[0] == "@" && req.length == 3) {	//Commands @AA
+	for(ib = 0; ib < n; ib++) {
+		if(ib%8 == 0)	tVl = 0;
+		tVl += ((arguments["do"+ib] == true)?1:0) << (ib%8);
+		if(ib%8 == 7 || (ib+1) == n)	answer = tVl.toString(16,2) + answer;
+	}
+	answer = ">" + answer;
+}
+else if(req[0] == "@" && req.length > 3) {	//Commands @AA{Data}
+	for(iB = req.length-2, iC = 0; iB >= 3; iB -= 2) {
+		tVl = req.slice(iB, iB+2).toInt(16);
+		for(ib = 0; ib < 8; ib++, iC++)
+			arguments["do"+iC] = tVl&(1<<ib);
+	}
+	answer = ">";
+}
+else answer = "?";	//return true;
+
+//Finishing the response
+if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
+answer += "\r";
+
+return true;','','',1550423039);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -6377,6 +6876,315 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;','','',1542727978);
+INSERT INTO "tmplib_base" VALUES('ntf','Notificator by SMS, EMail(SMTP)','','','The complex template of the notification, contains of parts of the dispatcher and the output user protocol of notification by EMail(SMTP) and SMS.
+
+The dispatcher can be performed for pointed messages of the message buffer of OpenSCADA and applied on the Logical level or the controller object of the module JavaLikeCalc.
+
+The output user protocol part "SMS" provides operations with SMS by a GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem. For sending there are supported: ECHO disable, PIN check and set, sending in PDU and Text mode.
+
+The output user protocol part "SMTP" provides operations with a SMTP server for receiving EMails.
+
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsor: Oleksandr Knestyapin <olexanderrr@gmail.com>
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	io = tr = EVAL;
+
+//-----------------------------------------------
+//Request form of the UserProtocol ProtIt="SMTP":
+//-----------------------------------------------
+//<send auth="{user}:{pass}" from="{FromAddr}" to="{ToAddr}" topic="{My Topic}" err="1:Error">{MessageText}</send>
+//  topic - topic of the message;
+//  from - sender address;
+//  to - destination address of the receiver;
+//  auth - authenticate user and password;
+//  MessageText - text of the message;
+//  err - sets for the request result.
+function SMTP( ) {
+	//Transport''s timings check
+	if(tr.timings() != "5:1")	tr.timings("5:1");
+	if(!tr.start(true))	{ io.setAttr("err", "10:"+tr("Impossible connect to the SMTP-server.")); return; }
+
+	//Wait for a greeting after the connection
+	rez = "";
+	for(iTr = 0; iTr < 5 && !rez.length; iTr++) rez += tr.messIO("");
+	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
+
+	auth = io.attr("auth");
+
+	//Send HELLO
+	rez = tr.messIO("EHLO "+SYS.system("hostname -f").parse(0,"\n")+"\x0D\x0A");
+	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
+	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+	for(off = 0; (sit=rez.parse(0,"\x0D\x0A",off)).length; )
+		if(sit.toInt() != 250)	{ io.setAttr("err", "101:"+tr("HELLO error: %1.").replace("%1",sit)); return; }
+		else if(sit.indexOf("AUTH LOGIN") >= 0) {
+			if(sit.indexOf("PLAIN") < 0)	{ io.setAttr("err", "101:"+tr("Unsupported auth methods: %1.").replace("%1",sit)); return; }
+			else if(!auth.length)			{ io.setAttr("err", "101:"+tr("Auth required: %1.").replace("%1",sit)); return; }
+		}
+
+	//Send AUTH
+	if(auth.length) {
+		rez = tr.messIO("AUTH LOGIN\x0D\x0A");
+		while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
+		if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+		if(rez.toInt() != 334)	{ io.setAttr("err", "102:"+tr("AUTH error: %1.").replace("%1",rez)); return; }
+
+		rez = tr.messIO(SYS.strEncode(io.attr("auth").parse(0,":"),"Base64")+"\x0D\x0A");
+		while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
+		if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+		if(rez.toInt() != 334)	{ io.setAttr("err", "102:"+tr("AUTH USER error: %1.").replace("%1",rez)); return; }
+
+		rez = tr.messIO(SYS.strEncode(io.attr("auth").parse(1,":"),"Base64")+"\x0D\x0A");
+		while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
+		if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+		if(rez.toInt() != 235)	{ io.setAttr("err", "102:"+tr("AUTH PASS error: %1.").replace("%1",rez)); return; }
+	}
+
+	//Send FROM
+	rez = tr.messIO("MAIL FROM:<"+io.attr("from")+">\x0D\x0A");
+	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
+	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+	if(rez.toInt() != 250)	{ io.setAttr("err", "103:"+tr("MAIL FROM error: %1.").replace("%1",rez)); return; }
+
+	//Send TO
+	rez = tr.messIO("RCPT TO:<"+io.attr("to")+">\x0D\x0A");
+	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
+	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+	if(rez.toInt() != 250)	{ io.setAttr("err", "104:"+tr("RCPT TO error: %1.").replace("%1",rez)); return; }
+
+	//Prepare and send DATA
+	rez = tr.messIO("DATA\x0D\x0A");
+	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
+	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+	if(rez.toInt() != 354)	{ io.setAttr("err", "105:"+tr("DATA error: %1.").replace("%1",rez)); return; }
+
+	// Req version
+	reqVer = SYS.XMLNode("get").setAttr("path","/%2fgen%2fver"); SYS.cntrReq(reqVer);
+
+	data = "Message-ID: <"+rand(999999).toString()+"."+rand(999999999).toString()+"-OpenSCADA@"+SYS.system("hostname").parse(0,"\n")+">\x0D\x0A"+
+				"From: \""+io.attr("from")+"\" <"+io.attr("from")+">\x0D\x0A"+
+				"To: \""+io.attr("to")+"\" <"+io.attr("to")+">\x0D\x0A"+
+				"Subject: =?utf8?B?"+SYS.strEncode(io.attr("topic"),"Base64")+"?=\x0D\x0A"+
+				"Date: "+SYS.system("LANG=en date \"+%a, %d %b %Y %T %z\"").parse(0,"\n")+"\x0D\x0A"+
+				//"Date: "+SYS.strftime(SYS.time(),"%a, %d %b %Y %T %z")+"\x0D\x0A"+
+				"X-Mailer: OpenSCADA "+reqVer.text()+"\x0D\x0A"+
+				"Content-type: text/plain;charset=utf-8\x0D\x0A\x0D\x0A"+
+				io.text()+"\x0D\x0A"+
+				"\x0D\x0A.\x0D\x0A";	//End for code 354
+	rez = tr.messIO(data);
+	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
+	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No a response.")); return; }
+	if(rez.toInt() != 250)	{ io.setAttr("err", "105:"+tr("DATA send error: %1.").replace("%1",rez)); return; }
+
+	//Send QUIT
+	rez = tr.messIO("QUIT\x0D\x0A");
+	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
+
+	//SYS.messInfo("SMTP", "Response: "+rez);
+
+	//Disconnect from the SMTP-server
+	tr.start(false);
+}
+
+if(!tr.isEVal() && !io.isEVal() && io.attr("ProtIt") == "SMTP") { SMTP(); return; }
+
+//--------------------------------------------
+//Request form of the UserProtocol ProtIt="SMS":
+//--------------------------------------------
+//<cmd pin="1111" tel="+380XXXXXXXXX" text="{0|1}" err="1:Error">{SMSText}</cmd>
+//  cmd - command, for now only "send" allowed;
+//  pin - PIN code to the SIM card access;
+//  tel - telephone number of the receiver (remote cell phone or GSM modem);
+//  text{0,1} - SMS in the text mode, only ASCII;
+//  SMSText - the message text;
+//  err - sets for the request result.
+function SMS( ) {
+	//Transport''s timings check
+	if(tr.timings() != "5000:100")	tr.timings("5000:100");
+
+	if(io.name() == "send") {
+		tel = io.attr("tel");
+		if(!tel.length || tel[0] != "+") { io.setAttr("err", "100:"+tr("Telephone number error.")); return; }
+
+		//Disable ECHO
+		rez = tr.messIO("ATE0\r");
+		while(rez.length && (trez=tr.messIO("")).length) rez += trez;
+		if(rez.indexOf("OK\r") < 0) {
+			io.setAttr("err", "101:"+tr("Disable ECHO error: %1").replace("%1",rez));
+			return;
+		}
+
+		//Set PIN
+		if(io.attr("pin").length) {
+			//Check for PIN
+			rez = tr.messIO("AT+CPIN?\r");
+			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
+			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "102:"+tr("Check for PIN-code error: %1").replace("%1",rez)); return; }
+			if(rez.indexOf("+CPIN: READY\r") < 0) {	//PIN is needed
+				rez = tr.messIO("AT+CPIN="+io.attr("pin")+"\r");
+				while(rez.length && (trez=tr.messIO("")).length) rez += trez;
+				if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "102:"+tr("Set PIN error: %1").replace("%1",rez)); return; }
+			}
+		}
+
+		if(io.attr("text").toInt()) {	//SMS in the text mode
+			//Switch to Text SMS mode
+			rez = tr.messIO("AT+CMGF=1\r");
+			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
+			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "103:"+tr("Set SMS Text mode error: %1").replace("%1",rez)); return; }
+
+			//Send the Telephone number
+			rez = tr.messIO("AT+CMGS=\""+tel+"\"\r");
+			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
+			if(rez.indexOf(">") < 0)	{ io.setAttr("err", "104:"+tr("Sent SMS error: %1").replace("%1",rez)); return; }
+			rez = tr.messIO(io.text()+"\x1A");
+			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
+			//for(var iTr = 0; iTr < 100 && rez.indexOf("OK\r") < 0; iTr++) rez += tr.messIO("");	//Up to 10 seconds wait for reply
+			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "104:"+tr("Sent SMS PDU error: %1").replace("%1",rez)); return; }
+		}
+		else {	//SMS in the PDU mode
+			// Switch to PDU SMS mode
+			rez = tr.messIO("AT+CMGF=0\r");
+			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
+			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "103:"+tr("Set SMS PDU mode error: %1").replace("%1",rez)); return; }
+
+			//Prepare PDU
+			pdu = "001100";	//SMS center number (default) + SMS-Submit
+			//Telephone number encode
+			tel = tel.slice(1);
+			pdu += tel.length.toString(16,2) + "91";	//Telephone length and type
+			while(tel.length < 12) tel += "F";
+			for(i = 0; i < 6; i++) pdu += tel[i*2+1]+tel[i*2];
+			//Message encode
+			text = SYS.strCodeConv(io.text(),"","UCS2");
+			if((text.length/2) > 70)	text = text.slice(0,140);
+			//{ io.setAttr("err", "104:"+tr("Too long length (%1) of the message.").replace("%1",(text.length/2).toString())); return; }
+			pdu += "0018C1"+(text.length).toString(16,2);
+			for(i = 0; i < text.length/2; i++) pdu += text.charCodeAt(i*2+1).toString(16,2)+text.charCodeAt(i*2).toString(16,2);
+			//SYS.messDebug("TEST SMS","PDU :"+pdu);
+
+			// Send the PDU message
+			rez = tr.messIO("AT+CMGS="+(pdu.length/2-1)+"\r");
+			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
+			if(rez.indexOf(">") < 0)	{ io.setAttr("err", "104:"+tr("Sent SMS error: %1").replace("%1",rez)); return; }
+			rez = tr.messIO(pdu+"\x1A");
+			while(rez.length && (trez=tr.messIO("")).length) rez += trez;
+			//for(var iTr = 0; iTr < 100 && rez.indexOf("OK\r") < 0; iTr++) rez += tr.messIO("");	//Up to 10 seconds wait for reply
+			if(rez.indexOf("OK\r") < 0)	{ io.setAttr("err", "104:"+tr("Sent SMS PDU error: %1").replace("%1",rez)); return; }
+			//SYS.messDebug("TEST SMS","PDU REZ :"+rez);
+		}
+		io.setAttr("err", "0");
+	}
+}
+
+if(!tr.isEVal() && !io.isEVal() && io.attr("ProtIt") == "SMS")	{ SMS(); return; }
+
+//---------------------------
+//The notification dispatcher
+//---------------------------
+if(f_start) {
+	queue = new Object();
+	queueSMS = new Object();
+	prTm = SYS.time();
+	prTmU = 0;
+	emailSentN = SMSSentN = 0;
+	emailTrAddr_ = emailTrAddr;
+	SMSTrAddr_ = SMSTrAddr;
+	SMTPTr = emailTrAddr.length ? SYS.Transport.nodeAt(emailTrAddr, ".") : false;
+	SMSTr = SMSTrAddr.length ? SYS.Transport.nodeAt(SMSTrAddr, ".") : false;
+	return;	//Don''t real process at start
+}
+if(f_stop)	{ emailState = SMSState = ""; return; }
+if(!SMTPTr || emailTrAddr_ != emailTrAddr) {
+	SMTPTr = emailTrAddr.length ? SYS.Transport.nodeAt(emailTrAddr, ".") : false;
+	emailTrAddr_ = emailTrAddr;
+}
+if(!SMSTr || SMSTrAddr_ != SMSTrAddr)	{
+	SMSTr = SMSTrAddr.length ? SYS.Transport.nodeAt(SMSTrAddr, ".") : false;
+	SMSTrAddr_ = SMSTrAddr;
+}
+
+//Current alarms reading, and the queue of dispatching update
+mess = SYS.Archive.messGet(prTm, SYS.time(), messCat, abs(messLev), "<buffer>");
+for(iM = 0; iM < mess.length; iM++) {
+	oM = mess[iM];
+	if((oM.tm == prTm && oM.utm <= prTmU) || (messLev < 0 && oM.level >= 0))	continue;
+
+	if(emailTrAddr.length)	queue[oM.level.toString()+oM.tm.toString()+oM.categ] = oM;
+	if(SMSTr)	queueSMS[oM.level.toString()+oM.tm.toString()+oM.categ] = oM;
+
+	prTm = oM.tm; prTmU = oM.utm;
+	//SYS.messInfo("NTF","Queue mess: "+oM.mess);
+}
+
+//The notifications mail queue process in a cycle limited by overall time
+stTm = SYS.time();
+emailQueueN = 0;
+emailErr = "";
+for(var nM in queue) {
+	if(!SMTPTr)	break;
+	if((SYS.time()-stTm) > tmOut)	{ emailQueueN++; continue; }
+	oM = queue[nM];
+	//SYS.messInfo("NTF","Send mess \""+nM+"\": "+oM.mess);
+
+	topic = emailTopic + " (" + ((oM.level < 0)?tr("Alarm"):tr("Norm")) + ")";
+	mess = emailMess + SYS.strftime(oM.tm) + ": " + oM.mess;
+
+	tr = SMTPTr, io = SYS.XMLNode("send");
+	io.setAttr("ProtIt", "SMTP").setAttr("auth", emailAuth).setAttr("from", emailSender).setAttr("to", emailReceiver).setAttr("topic", topic).setText(mess);
+	SMTP();
+	//SYS.messInfo("NTF", "Send error: "+io.attr("err"));
+	if(!io.attr("err").toInt()) { delete queue[nM]; emailSentN++; }
+	else {
+		emailQueueN++;
+		if(!emailErr.length)	emailErr = io.attr("err");
+	}
+	io = tr = EVAL;
+
+	/*req = "sendemail -q -f " + emailSender + " -t " + emailReceiver +
+			" -u \"=?utf8?B?" + SYS.strEncode(topic,"Base64") + "?=\" -m \"" + mess + "\" -s " + emailTrAddr;
+	if(emailAuth.length)	req += " -xu " + emailAuth.parse(0,":") + " -xp " + emailAuth.parse(1,":");
+	req += " -o tls=no -o message-charset=utf8";
+	//SYS.messInfo("NTF","Send mess: "+req);
+	rez = SYS.system(req, true);
+	if(!rez) { delete queue[nM]; emailSentN++; }
+	else {
+		emailQueueN++;
+		if(!emailErr.length)	emailErr = req.attr("err");
+	}*/
+}
+if(!SMTPTr)	emailState = "Disabled!";
+else {
+	emailState = tr("Sent %1. In queue %2.").replace("%1",emailSentN.toString()).replace("%2",emailQueueN.toString());
+	if(emailErr.length) emailState += " "+tr("Error: %1.").replace("%1",emailErr);
+}
+
+//The notifications SMS queue process in a cycle limited by overall time
+stTm = SYS.time();
+SMSQueueN = 0;
+SMSErr = "";
+for(var nM in queueSMS) {
+	if(!SMSTr)	break;
+	if((SYS.time()-stTm) > tmOut)	{ SMSQueueN++; continue; }
+	oM = queueSMS[nM];
+	//SYS.messInfo("NTF","Send SMS \""+nM+"\": "+oM.mess);
+
+	mess = oM.mess;
+	tr = SMSTr, io = SYS.XMLNode("send");
+	io.setAttr("ProtIt", "SMS").setAttr("pin", SMSPin).setAttr("text",SMSTextMd).setAttr("tel", SMSTel).setText(mess);
+	SMS();
+	if(!io.attr("err").toInt()) { delete queueSMS[nM]; SMSSentN++; }
+	else {
+		SMSQueueN++;
+		if(!SMSErr.length)	SMSErr = io.attr("err");
+	}
+	io = tr = EVAL;
+}
+if(!SMSTr)	SMSState = "Disabled!";
+else {
+	SMSState = tr("Sent %1. In queue %2.").replace("%1",SMSSentN.toString()).replace("%2",SMSQueueN.toString());
+	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
+}','','',1550428714);
 CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_Controllers" VALUES('prescr','Prescriptions manager','','','Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -6864,8 +7672,9 @@ Version: 1.0.0','','',1,10,0,'//clc=0;
 
 //Close value archive
 //Special.FLibSYS.avalClose(a_id);
-//p_tm=c_tm;','','',1549292511);
-INSERT INTO "lib_Controllers" VALUES('ntfDispatch','Notifications dispatcher','','','Notifications dispatcher by EMail and SMS for pointed messages of OpenSCADA messages buffer.
+//p_tm=c_tm;','','',1550423772);
+INSERT INTO "lib_Controllers" VALUES('ntfDispatch','Notifications dispatcher (obsolete)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
+Notifications dispatcher by EMail and SMS for pointed messages of OpenSCADA messages buffer.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsor: Oleksandr Knestyapin <olexanderrr@gmail.com>
 Version: 1.3.1','','',1,30,0,'//Initial
@@ -6968,7 +7777,7 @@ if(!SMSTr)	SMSState = "Disabled!";
 else {
 	SMSState = tr("Sent %1. In queue %2.").replace("%1",SMSSentN.toString()).replace("%2",SMSQueueN.toString());
 	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
-}','','',1480872892);
+}','','',1550073207);
 CREATE TABLE 'lib_servProc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_servProc" VALUES('procArh','Archives recalculation','Перерахунок архівів','Пересчёт архивов','Value archives recalculation.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -9964,7 +10773,8 @@ if(val!=EVAL_REAL)
 INSERT INTO "tmplib_S7" VALUES('test','Test','Тест','Тест','S7 controller testing','Тестування контролера S7','Тестирование контроллера S7',10,0,'
 ',1539451468);
 CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"DAQTmpl" TEXT DEFAULT '' ,"WaitReqTm" INTEGER DEFAULT '0' ,"InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '0' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO "UserProtocol_uPrt" VALUES('SMS','','','','Provides operations with SMS by GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem.
+INSERT INTO "UserProtocol_uPrt" VALUES('SMS','SMS (obsolete)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
+Provides operations with SMS by GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 2.1.1','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
@@ -10048,7 +10858,7 @@ if(io.name() == "send") {
 		//SYS.messDebug("TEST SMS","PDU REZ :"+rez);
 	}
 	io.setAttr("err", "0");
-}',0,1478107736);
+}',0,1550073193);
 INSERT INTO "UserProtocol_uPrt" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Protocol level of typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
@@ -10195,71 +11005,6 @@ if(KS != ((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)))
 if(resp.charCodeAt(1)&0x80)
 { io.setAttr("err","7:"+resp.charCodeAt(2)+":"+tr("Request error.")); return; }
 io.setText(resp.slice(1,-2));',0,1509283495);
-INSERT INTO "UserProtocol_uPrt" VALUES('DCON','DCON','','','Mostly aimed for example implement user protocols into OpenSCADA and contains only main functions into the protocol part.
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.2','','',1,'',0,'JavaLikeCalc.JavaScript
-//Processing: test implements only processing for requests ''#'' and ''@'' with fixed reply data.
-
-var enCRC = true;
-//SYS.messDebug("/DCON/in","REQ: "+request);
-//Testing the request for completity
-if(request.length < 4 || request[request.length-1] != "\r") {
-	if(request.length > 10) request = "";
-	return true;
-}
-//Checking the request for the integrity (CRC) and the address
-if(enCRC) {
-	CRC = 0;
-	for(i = 0; i < (request.length-3); i++) CRC += request.charCodeAt(i);
-	if(CRC != request.slice(request.length-3,request.length-1).toInt(16) || request.slice(1,3).toInt(16) != 10) return false;
-}
-//Analysis the request and the response preparing
-if(request[0] == "#") answer = ">+05.123+04.153+07.234-02.356+10.000-05.133+02.345+08.234";
-else if(request[0] == "@") answer = ">AB3C";
-else answer = "?";
-//Finishing the response
-if(enCRC) {
-	CRC = 0;
-	for(i=0; i < answer.length; i++) CRC += answer.charCodeAt(i);
-	answer += (CRC&0xFF).toString(16,2)+"\r";
-}
-//SYS.messDebug("/DCON/in","ANSV: "+answer[0]);
-return 0;','JavaLikeCalc.JavaScript
-//Request form:
-//<ReqSymb addr="1" err="1:Error">{req}</ReqSymb> - message tag
-//  ReqSymb - request type symbol into the tag name, like: ''#'', ''@'', etc
-//  req - request/respond data;
-//  addr - remote host address [1...240];
-//  err - sets for the request result.
-
-//Preparing the result request
-request = io.name().slice(0,1) + io.attr("addr").toInt().toString(16,2) + io.text();
-if(io.attr("CRC").toInt()) {
-	CRC = 0;
-	for(i = 0; i < request.length; i++) CRC += request.charCodeAt(i);
-	request += (CRC&0xFF).toString(16,2) + "\r";
-}
-else request += "\r";
-//Sending the request
-resp = tr.messIO(request);
-while(resp[resp.length-1] != "\r") {
-	tresp = tr.messIO("");
-	if(!tresp.length) break;
-	resp += tresp;
-}
-//Analysis the response
-if(io.attr("CRC").toInt()) {
-	if(resp.length < 4 || resp[resp.length-1] != "\r") { io.setAttr("err","10:"+tr("Error or no response.")); return; }
-	//Checking the response to the integrity (CRC)
-	CRC = 0;
-	for(i = 0; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
-	if(CRC != resp.slice(resp.length-3,resp.length-1).toInt(16)) { io.setAttr("err","11:"+tr("CRC error.")); return; }
-}
-else if(resp.length < 2 || resp[resp.length-1] != "\r") { io.setAttr("err","10:"+tr("Error or no response.")); return; }
-if(resp[0] != ">") { io.setAttr("err","12:"+resp[0]+":"+tr("DCON error.")); return; }
-//Returning the result
-io.setAttr("err","");
-io.setText(resp.slice(1,resp.length-3));',0,1542552023);
 INSERT INTO "UserProtocol_uPrt" VALUES('TM510x','Elemer TM510x','','','Protocol level of multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
@@ -10541,7 +11286,8 @@ if(resp.length > 9)	{ io.setAttr("err","4:"+tr("Respond too long, possible conti
 for(CS = 0, i = 1; i < resp.length-1; i++)	CS += resp.charCodeAt(i);
 if(resp.charCodeAt(resp.length-1) != (CS&0xFF))	{ io.setAttr("err","5:"+tr("CRC error")); return; }
 io.setText(resp.slice(1,resp.length-1));',0,1509287419);
-INSERT INTO "UserProtocol_uPrt" VALUES('SMTP','SMTP','SMTP','','Provides EMAIL sending by the protocol SMTP.
+INSERT INTO "UserProtocol_uPrt" VALUES('SMTP','SMTP (obsolete)','SMTP','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
+Provides EMAIL sending by the protocol SMTP.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.0','Provides EMAIL sending by the protocol SMTP.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -10638,7 +11384,7 @@ while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) 
 //SYS.messInfo("SMTP", "Response: "+rez);
 
 //Disconnect from the SMTP-server
-tr.start(false);',0,1477849632);
+tr.start(false);',0,1550073190);
 INSERT INTO "UserProtocol_uPrt" VALUES('AT24CXX','I2C: AT24C{32|64}','','','Provides operations with EEPROM memory based on I2C chips AT24C32 (4KB) and AT24C64 (8KB). Supported random reading and writing.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript

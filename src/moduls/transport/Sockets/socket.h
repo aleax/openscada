@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Sockets file: socket.h
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -124,8 +124,8 @@ class TSocketIn: public TTransportIn
 	static void *Task( void* );
 	static void *ClTask( void* );
 
-	bool prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &sender, bool noex = false );
-	void messPut( int sock, string &request, string &answer, const string &sender, AutoHD<TProtocolIn> &prot_in );
+	int prtInit( vector< AutoHD<TProtocolIn> > &prot_in, int sock, const string &sender );
+	int messPut( int sock, string &request, string &answer, const string &sender, vector< AutoHD<TProtocolIn> > &prot_in );
 
 	void clientReg( SSockIn *so );
 	void clientUnreg( SSockIn *so );

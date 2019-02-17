@@ -1084,7 +1084,7 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <li> <i>SLnk( const string &amp;iaddr = "" )</i> — structure constructor.</li></ul>
 <p><b>Public methods:</b><br />
 </p>
-<ul><li> <i>Impl( TCntrNode *iobj, const string &amp;iname = "" );</i> — constructs for the template implementation with the control node <i>iobj</i> and the name <i>iname</i>.</li>
+<ul><li> <i>Impl( TCntrNode *iobj, const string &amp;iname = "", bool blked = true );</i> — constructs for the template implementation with the control node <i>iobj</i> and the name <i>iname</i>.</li>
 <li> <i>int  lnkId( const string &amp;nm );</i> — returns the link <i>nm</i> (function's IO) identifier/number.</li>
 <li> <i>bool lnkPresent( int num );</i> — checks the link number <i>num</i> to presence, returns "true" for accessibility the link.</li>
 <li> <i>virtual void lnkAdd( int num, const SLnk &amp;l );</i> — adds a link with the number <i>num</i> and the "SLnk" structure <i>l</i>.</li>
@@ -1526,7 +1526,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>string name( );</i> — Transport's name.</li>
 <li> <i>string dscr( );</i> — Transport's description.</li>
 <li> <i>string addr( ) const;</i> — Address.</li>
-<li> <i>string protocol( );</i> — Linked transport protocol.</li>
+<li> <i>string protocols( );</i> — Linked transport protocols.</li>
 <li> <i>virtual unsigned keepAliveReqs( );</i> — Maximum Keep Alive requests.</li>
 <li> <i>virtual unsigned keepAliveTm( );</i> — Keep Alive time.</li>
 <li> <i>virtual string getStatus( );</i> — Getting the status of the input transport.</li>
@@ -1538,7 +1538,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>void setName( const string &amp;inm );</i> — Setting the name of transport in <i>inm</i>.</li>
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the description of transport in <i>idscr</i>.</li>
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport in <i>addr</i>.</li>
-<li> <i>void setProtocol( const string &amp;prt );</i> — Setting of the linked transport protocol.</li>
+<li> <i>void setProtocols( const string &amp;prt );</i> — Setting of the linked transport protocols.</li>
 <li> <i>void setToStart( bool val );</i> — Setting of the sign "To start".</li>
 <li> <i>void setDB( const string &amp;vl );</i> — Setting of the transport's DB address.</li>
 <li> <i>virtual void start( );</i> — Start of the transport.</li>
@@ -2265,7 +2265,7 @@ Error values for the different data types (define):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Збільшити" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>
@@ -2921,7 +2921,7 @@ Named rights of access to control elements (define):
 <li> <i>GrpEl	&amp;grpAt( int8_t id );</i> — Access to the structure of the group.</li>
 <li> <i>unsigned grpAdd( const string &amp;id, bool ordered = false );</i> — Adding the container of the child nodes with the prefix <i>id</i> and the possibility of an orderly storage <i>ordered</i>. Returns the ID of the new container.</li>
 <li> <i>void grpDel( int8_t id );</i> — Deleting the container of the child nodes <i>id</i>.</li>
-<li> <i>virtual void chldAdd( int8_t igr, TCntrNode *node, int pos = -1 );</i> — Adding the child node <i>node</i> to the container <i>gr</i> and position <i>pos</i>.</li>
+<li> <i>virtual string chldAdd( int8_t igr, TCntrNode *node, int pos = -1 );</i> — Adds the child node <i>node</i> to the container <i>gr</i> and position <i>pos</i>. Returns the actual node identifier or name, after it cleaning and shrinking.</li>
 <li> <i>void chldDel( int8_t igr, const string &amp;name, long tm = -1, int flag = 0 );</i> — Deleting the child node <i>name</i> from the container <i>gr</i> with the flag <i>flag</i>.</li>
 <li> <i>virtual void preEnable( int flag );</i> — The connection preact. It is called before the actual connection.</li>
 <li> <i>virtual void postEnable( int flag );</i> — The connection preact. It is called after the actual connection.</li>

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"5.7.0"
+#define MOD_VER		"5.7.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -448,11 +448,7 @@ string Engine::wlbAdd( const string &iid, const string &inm, const string &idb )
     if(wlbPresent(iid))	throw err_sys(_("The widget library '%s' is already present!"), iid.c_str());
 	//return "";
 
-    WidgetLib *obj = new WidgetLib(TSYS::strEncode(sTrm(iid),TSYS::oscdID), inm, idb);
-    MtxAlloc res(chM(), true);
-    chldAdd(idWlb, obj);
-
-    return obj->id();
+    return chldAdd(idWlb, new WidgetLib(TSYS::strEncode(sTrm(iid),TSYS::oscdID),inm,idb));
 }
 
 AutoHD<WidgetLib> Engine::wlbAt( const string &id ) const	{ return chldAt(idWlb,id); }
@@ -462,11 +458,7 @@ string Engine::prjAdd( const string &iid, const string &inm, const string &idb )
     if(prjPresent(iid))	throw err_sys(_("The project '%s' is already present!"), iid.c_str());
 	//return "";
 
-    Project *obj = new Project(TSYS::strEncode(sTrm(iid),TSYS::oscdID), inm, idb);
-    MtxAlloc res(chM(), true);
-    chldAdd(idPrj, obj);
-
-    return obj->id();
+    return chldAdd(idPrj, new Project(TSYS::strEncode(sTrm(iid),TSYS::oscdID),inm,idb));
 }
 
 AutoHD<Project> Engine::prjAt( const string &id ) const	{ return chldAt(idPrj,id); }

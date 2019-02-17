@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		20		//TransportS type modules version
+#define STR_VER		21		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>
@@ -53,8 +53,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	string	name( );
 	string	dscr( )		{ return cfg("DESCRIPT").getS(); }
 	string	addr( ) const	{ return cfg("ADDR").getS(); }
-	string	protocolFull( )	{ return cfg("PROT").getS(); }
-	string	protocol( );
+	string	protocols( )	{ return cfg("PROT").getS(); }
 	virtual unsigned keepAliveReqs( )	{ return 0; }
 	virtual unsigned keepAliveTm( )		{ return 0; }
 	virtual	string getStatus( );
@@ -66,13 +65,13 @@ class TTransportIn : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &inm )		{ cfg("NAME").setS(inm); }
-	void setDscr( const string &idscr )		{ cfg("DESCRIPT").setS(idscr); }
-	void setAddr( const string &addr )		{ cfg("ADDR").setS(addr); }
-	void setProtocolFull( const string &prt )	{ cfg("PROT").setS(prt); }
-	void setToStart( bool val )			{ mStart = val; modif(); }
+	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
+	void setDscr( const string &idscr )	{ cfg("DESCRIPT").setS(idscr); }
+	void setAddr( const string &addr )	{ cfg("ADDR").setS(addr); }
+	void setProtocols( const string &prt )	{ cfg("PROT").setS(prt); }
+	void setToStart( bool val )		{ mStart = val; modif(); }
 
-	void setDB( const string &vl )			{ mDB = vl; modifG(); }
+	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
 	virtual void start( )	{ }
 	virtual void stop( );

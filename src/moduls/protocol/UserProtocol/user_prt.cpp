@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.UserProtocol file: user_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.1.2"
+#define MOD_VER		"1.1.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -108,11 +108,7 @@ void TProt::itemListIn( vector<string> &ls, const string &curIt )
 
 string TProt::uPrtAdd( const string &iid, const string &db )
 {
-    UserPrt *obj = new UserPrt(TSYS::strEncode(sTrm(iid),TSYS::oscdID), db, &uPrtEl());
-    MtxAlloc res(chM(), true);
-    chldAdd(mPrtU, obj);
-
-    return obj->id();
+    return chldAdd(mPrtU, new UserPrt(TSYS::strEncode(sTrm(iid),TSYS::oscdID),db,&uPrtEl()));
 }
 
 void TProt::load_( )
@@ -232,7 +228,7 @@ unsigned TProtIn::waitReqTm( )	{ return !up.freeStat() ? up.at().waitReqTm() : 0
 void TProtIn::setSrcTr( TTransportIn *vl )
 {
     TProtocolIn::setSrcTr(vl);
-    string selNode = TSYS::strParse(vl->protocolFull(), 1, ".");
+    string selNode = TSYS::strParse(name(), 1, "#");
     if(owner().uPrtPresent(selNode)) up = owner().uPrtAt(selNode);
 }
 
@@ -249,7 +245,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 UserPrt::UserPrt( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), TPrmTempl::Impl(this,("InUserProtocol_"+iid).c_str()), cntInReq(0), cntOutReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false),
     mWaitReqTm(cfg("WaitReqTm").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb),
-    ioRez(-1), ioReq(-1), ioAnsw(-1), ioSend(-1), ioTr(-1), ioIO(-1), chkLnkNeed(false)
+    ioTrIn(-1), ioTrOut(-1), ioRez(-1), ioReq(-1), ioAnsw(-1), ioSend(-1), ioIO(-1), chkLnkNeed(false)
 {
     mId = iid;
     cfg("InPROG").setExtVal(true);
@@ -375,7 +371,7 @@ bool UserPrt::inMess( const string &reqst, string &answer, TProtIn *prt )
 	if(chkLnkNeed) chkLnkNeed = initLnks(true);
 
 	//The input function's execution context creation
-	if(ioTr >= 0) setO(ioTr, new TCntrNodeObj(AutoHD<TCntrNode>(&prt->srcTr().at()),"root"));
+	if(ioTrIn >= 0) setO(ioTrIn, new TCntrNodeObj(AutoHD<TCntrNode>(&prt->srcTr().at()),"root"));
 
 	//Load inputs
 	inputLinks();
@@ -386,10 +382,12 @@ bool UserPrt::inMess( const string &reqst, string &answer, TProtIn *prt )
 	//Call processing
 	setMdfChk(true);
 	calc();
+
 	//Get outputs
-	if(ioTr >= 0) setO(ioTr, new TEValObj());
+	if(ioTrIn >= 0) setO(ioTrIn, new TEValObj());
 	outputLinks();
 	bool rez = getB(ioRez);
+
 	prt->req = getS(ioReq);
 	if(prt->req.size() > USER_FILE_LIMIT) {
 	    mess_sys(TMess::Warning, _("Size of the accumulated request exceeded for %s, but the user protocol must tend for removing processed data itself. Fix this!"),
@@ -404,7 +402,7 @@ bool UserPrt::inMess( const string &reqst, string &answer, TProtIn *prt )
     } catch(TError &err) {
 	MtxAlloc res1(inReqRes, true);
 	ResAlloc res2(inCfgRes, false);
-	if(func() && ioTr >= 0) setO(ioTr, new TEValObj());
+	if(func() && ioTrIn >= 0) setO(ioTrIn, new TEValObj());
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
     }
 
@@ -413,7 +411,7 @@ bool UserPrt::inMess( const string &reqst, string &answer, TProtIn *prt )
 
 void UserPrt::outMess( XMLNode &io, TTransportOut &tro )
 {
-    if(ioTr < 0 || ioIO < 0) return;
+    if(ioTrOut < 0 || ioIO < 0) return;
 
     TValFunc funcV;
 
@@ -431,7 +429,7 @@ void UserPrt::outMess( XMLNode &io, TTransportOut &tro )
     AutoHD<XMLNodeObj> xnd(new XMLNodeObj());
     funcV.setO(ioIO, xnd);
     xnd.at().fromXMLNode(io);
-    funcV.setO(ioTr, new TCntrNodeObj(AutoHD<TCntrNode>(&tro),"root"));
+    funcV.setO(ioTrOut, new TCntrNodeObj(AutoHD<TCntrNode>(&tro),"root"));
     //Call processing
     funcV.calc();
     //Get outputs
@@ -491,7 +489,7 @@ void UserPrt::saveIO( )
 	TConfig cf(&owner().uPrtIOEl());
 	cf.cfg("UPRT_ID").setS(id(), true);
 	for(int iIO = 0; iIO < func()->ioSize(); iIO++) {
-	    if(iIO == ioRez || iIO == ioReq || iIO == ioAnsw || iIO == ioSend || iIO == ioTr || iIO == ioIO ||
+	    if(iIO == ioRez || iIO == ioReq || iIO == ioAnsw || iIO == ioSend || iIO == ioTrIn || iIO == ioTrOut || iIO == ioIO ||
 		func()->io(iIO)->flg()&TPrmTempl::LockAttr) continue;
 	    cf.cfg("ID").setS(func()->io(iIO)->id());
 	    cf.cfg("VALUE").setNoTransl(func()->io(iIO)->type() != IO::String || (func()->io(iIO)->flg()&TPrmTempl::CfgLink));
@@ -548,7 +546,7 @@ void UserPrt::setEnable( bool vl )
 	    // Checking for requiered conditions to the template
 	    try {
 		//Generic
-		if((ioTr=func()->ioId("tr")) >= 0 && func()->io(ioTr)->type() != IO::Object)		ioTr = -1;
+		if((ioTrIn=ioTrOut=func()->ioId("tr")) >= 0 && func()->io(ioTrIn)->type() != IO::Object)ioTrIn = ioTrOut = -1;
 		//Input part
 		if((ioRez=func()->ioId("rez")) >= 0 && func()->io(ioRez)->type() != IO::Boolean)	ioRez = -1;
 		if((ioReq=func()->ioId("request")) >= 0 && func()->io(ioReq)->type() != IO::String)	ioReq = -1;
@@ -557,11 +555,11 @@ void UserPrt::setEnable( bool vl )
 		//Output part
 		if((ioIO=func()->ioId("io")) >= 0 && func()->io(ioIO)->type() != IO::Object)		ioIO = -1;
 
-		if(!((ioTr >= 0 && ioIO >= 0) || (ioRez >= 0 && ioReq >= 0 && ioAnsw >= 0)))
+		if(!((ioTrIn >= 0 && ioIO >= 0) || (ioRez >= 0 && ioReq >= 0 && ioAnsw >= 0)))
 		    throw err_sys(_("The template '%s' does not have one or more required attribute in the needed type.\n"
 			"Input part: rez=%d, request=%d, answer=%d. Output part: tr=%d, io=%d.\n"
 			"See to the documentation and append their!"),
-			inProgLang().c_str(), ioRez, ioReq, ioAnsw, ioTr, ioIO);
+			inProgLang().c_str(), ioRez, ioReq, ioAnsw, ioTrIn, ioIO);
 	    } catch(TError &err) { setFunc(NULL); throw; }
 	}
 	// Compiling the direct function
@@ -574,7 +572,7 @@ void UserPrt::setEnable( bool vl )
 		ioReq  = funcIO.ioAdd(new IO("request",_("Input request"),IO::String,IO::Default));
 		ioAnsw = funcIO.ioAdd(new IO("answer",_("Input answer"),IO::String,IO::Output));
 		ioSend = funcIO.ioAdd(new IO("sender",_("Input sender"),IO::String,IO::Default));
-		ioTr   = funcIO.ioAdd(new IO("tr",_("Transport"),IO::Object,IO::Default));
+		ioTrIn = funcIO.ioAdd(new IO("tr",_("Transport"),IO::Object,IO::Default));
 
 		string workInProg = SYS->daq().at().at(TSYS::strSepParse(inProgLang(),0,'.')).at().
 		    compileFunc(TSYS::strSepParse(inProgLang(),1,'.'),funcIO,inProg());
@@ -586,7 +584,7 @@ void UserPrt::setEnable( bool vl )
 		TFunction funcIO("uprt_"+id()+"_out");
 		funcIO.setStor(DB());
 		ioIO = funcIO.ioAdd(new IO("io",_("Output IO"),IO::Object,IO::Default));
-		ioTr = funcIO.ioAdd(new IO("tr",_("Transport"),IO::Object,IO::Default));
+		ioTrOut = funcIO.ioAdd(new IO("tr",_("Transport"),IO::Object,IO::Default));
 
 		mWorkOutProg = SYS->daq().at().at(TSYS::strSepParse(outProgLang(),0,'.')).at().
 		    compileFunc(TSYS::strSepParse(outProgLang(),1,'.'),funcIO,outProg());
@@ -595,8 +593,7 @@ void UserPrt::setEnable( bool vl )
 
 	//Load IO
 	loadIO();
-    }
-    else setFunc(NULL);
+    } else cleanLnks(true);
 
     mEn = vl;
 }
@@ -642,13 +639,13 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 			"tp","str", "dest","select", "select","/plang/list");
 		}
 	    }
-	    if(ctrMkNode("area",opt,-1,"/in",_("Input"),(inProgLang().size()?RWRW__:0),"root",SPRT_ID)) {
+	    if(ctrMkNode("area",opt,-1,"/in",_("Input"),(DAQTmpl().size()||inProgLang().size()?RWRW__:0),"root",SPRT_ID)) {
 		ctrMkNode("fld",opt,-1,"/in/WaitReqTm",_("Timeout of a request waiting, milliseconds"),RWRW__,"root",SPRT_ID,2,
 		    "tp","dec", "help",_("Use this for the poolling mode enabling through setting this timeout to a nonzero value.\n"
 					"Into the poolling mode an input transport will call this protocol with the empty message at no request during this timeout."));
 		ResAlloc res(inCfgRes, false);
 		if(func() && chkLnkNeed) chkLnkNeed = initLnks(true);
-		if(func() && ctrMkNode("table",opt,-1,"/in/io",_("IO"),RWRW__,"root",SPRT_ID,1,"rows","5")) {
+		if(func() && ctrMkNode("table",opt,-1,"/in/io",_("IO"),RWRW__,"root",SPRT_ID,1,"rows","10")) {
 		    ctrMkNode("list",opt,-1,"/in/io/id",_("Identifier"),R_R___,"root",SPRT_ID,1, "tp","str");
 		    ctrMkNode("list",opt,-1,"/in/io/nm",_("Name"),R_R___,"root",SPRT_ID,1,"tp","str");
 		    ctrMkNode("list",opt,-1,"/in/io/tp",_("Type"),R_R___,"root",SPRT_ID,5,"tp","dec","idm","1","dest","select",

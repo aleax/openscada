@@ -390,7 +390,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     else TCntrNode::cntrCmdProc(opt);
 }
 
-TPrmTempl::Impl::Impl( TCntrNode *iobj, const string &iname ) : TValFunc(iname.c_str(),NULL,false), obj(iobj)
+TPrmTempl::Impl::Impl( TCntrNode *iobj, const string &iname, bool blked ) : TValFunc(iname.c_str(),NULL,blked), obj(iobj)
 {
 
 }

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.h
 /***************************************************************************
- *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -111,8 +111,8 @@ class TSocketIn: public TTransportIn
 	void clientReg( SSockIn *so );
 	void clientUnreg( SSockIn *so );
 
-	bool prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &sender, bool noex = false );
-	void messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in );
+	int prtInit( vector< AutoHD<TProtocolIn> > &prot_in, int sock, const string &sender );
+	int messPut( int sock, string &request, string &answer, string sender, vector< AutoHD<TProtocolIn> > &prot_in );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 

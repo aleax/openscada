@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttypedaq.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -103,11 +103,7 @@ void TTypeDAQ::modStop( )
 
 string TTypeDAQ::add( const string &iid, const string &daq_db )
 {
-    TController *cntr = ContrAttach(TSYS::strEncode(sTrm(iid),TSYS::oscdID), daq_db);
-    MtxAlloc res(chM(), true);
-    chldAdd(mCntr, cntr);
-
-    return cntr->id();
+    return chldAdd(mCntr, ContrAttach(TSYS::strEncode(sTrm(iid),TSYS::oscdID),daq_db));
 }
 
 TTypeParam &TTypeDAQ::tpPrmAt( unsigned id )

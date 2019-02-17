@@ -1,3 +1,22 @@
+2019-02-17 Roman (stable)
+- !!!!:DB.LibsDB.OscadaLibs: The templates library "DevLib" appended for the true DCON implementation in the templates DCON_Prt, DCON_Prt_DI, DCON_Prt_AO, DCON_Prt_DO,
+	the user protocol object "DCON" is removed.
+    The templates library "base" appended for the complex notifier implementation in the template "ntf",
+	the separate JavaLikeCalc function and the user protocol objects "SMS" and "SMTP" are marked for obsolete.
+- FIX:DB.Model.AGLKS.St: UserProtocol_uPrt.test is fixed for clearing the request.
+- SYS:ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}: Increased for WEB-transports' KeepAliveTm=60.
+- !!!:SYS: Obtaining for actual created node ID of the node function chldAdd() changed to direct return the ID and to just remove the new node for equal ones.
+- !:FIX:SYS: The DAQ-Templates implementation restored for blocking the templates by the execution context.
+- !!!!:Transports.*,Protocol.UserProtocol: Expanded to support for multiple protocols selecting and the function protocol() renamed to protocols().
+    Items identification of the protocols, mostly for Protocol.UserProtocol, moved into the input protocol name after removing protocolFull().
+- FIX:DAQ.DCON: Prevented from removing parameters from their processing at the controller object stopping.
+- FIX:DAQ.JavaLikeCalc: Applied for the controller object procedure restarting at the template procedure changing.
+- !!:FIX:Protocol.UserProtocol: Fixed for processing both presented and direct procedures, separating the transport objects' identifiers.
+    Fixed for the links clearing at the disabling.
+    Fixed to show the tab "Input" in the DAQ-tempalte mode.
+- FIX:Special.SystemTests: Fixed for the test TrOut, means of the node ID possible changing.
+
+
 2019-02-10 Roman (stable)
 - SYS.Android: Size of the default font decreased from 15 to 12 pixels.
 - FIX:DB.LibsDB.OscadaLibs: DevLib.ModBusScan fixed for cleaning the result at decreasing the begin.

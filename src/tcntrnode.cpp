@@ -510,7 +510,7 @@ bool TCntrNode::chldPresent( int8_t igr, const string &name ) const
     return false;
 }
 
-void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
+string TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 {
     if(nodeMode() != Enabled)		{ delete node; throw err_sys(_("Node is not enabled!")); }
     if(sTrm(node->nodeName()).empty())	{ delete node; throw err_sys(_("Id of the child that is adding is empty!")); }
@@ -524,8 +524,8 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 	res.unlock();
 	delete node;
 	if(chN.at().nodeMode() == Disabled) chN.at().nodeEn(TCntrNode::NodeRestore);
-	if(!noExp) throw err_sys(_("The node '%s' is already present."), p->first);
-	return;
+	//if(!noExp) throw err_sys(_("The node '%s' is already present."), p->first);
+	return p->first;
     }
 
     node->prev.node = this;
@@ -540,6 +540,8 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
     res.unlock();
 
     if(node->nodeMode() == Disabled) node->nodeEn(TCntrNode::NodeConnect);
+
+    return node->nodeName();
 }
 
 void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )

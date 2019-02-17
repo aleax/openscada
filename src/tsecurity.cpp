@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsecurity.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -78,12 +78,10 @@ void TSecurity::usrGrpList( const string &name, vector<string> &list )
 
 string TSecurity::usrAdd( const string &name, const string &idb )
 {
-    TUser *user = new TUser(TSYS::strEncode(sTrm(name),TSYS::oscdID), idb, &userEl);
-    MtxAlloc res(chM(), true);
-    chldAdd(mUsr, user);
-    if(grpPresent("users")) grpAt("users").at().userAdd(user->name());
+    string nm = chldAdd(mUsr, new TUser(TSYS::strEncode(sTrm(name),TSYS::oscdID),idb,&userEl));
+    if(grpPresent("users")) grpAt("users").at().userAdd(nm);
 
-    return user->name();
+    return nm;
 }
 
 void TSecurity::usrDel( const string &name, bool complete )
@@ -94,11 +92,7 @@ void TSecurity::usrDel( const string &name, bool complete )
 
 string TSecurity::grpAdd( const string &name, const string &idb )
 {
-    TGroup *grp = new TGroup(TSYS::strEncode(sTrm(name),TSYS::oscdID), idb, &grpEl);
-    MtxAlloc res(chM(), true);
-    chldAdd(mGrp, grp);
-
-    return grp->name();
+    return chldAdd(mGrp, new TGroup(TSYS::strEncode(sTrm(name),TSYS::oscdID),idb,&grpEl));
 }
 
 void TSecurity::grpDel( const string &name, bool complete )

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprmtmpl.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -66,7 +66,7 @@ class TPrmTempl: public TFunction, public TConfig
 	    };
 
 	    //Methods
-	    Impl( TCntrNode *iobj, const string &iname = "" );
+	    Impl( TCntrNode *iobj, const string &iname = "", bool blked = true );
 
 	    int  lnkId( const string &nm );
 	    bool lnkPresent( int num );

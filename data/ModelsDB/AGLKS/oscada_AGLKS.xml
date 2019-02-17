@@ -75,11 +75,11 @@
 		</fld>
 		<fld ID="WEB_1" MODULE="Sockets" NAME="WEB 1" DESCRIPT="Main transport of the WEB interfaces."
 			DESCRIPT_uk="Основний транспорт WEB інтерфейсів." DESCRIPT_ru="Основной транспорт WEB интерфейсов." ADDR="*:10002" PROT="HTTP" START="1">
-		    <A_PRMS>&lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="5" /&gt;</A_PRMS>
+		    <A_PRMS>&lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" /&gt;</A_PRMS>
 		</fld>
 		<fld ID="WEB_2" MODULE="Sockets" NAME="WEB 2" DESCRIPT="Reserve transport of the WEB interfaces."
 			DESCRIPT_uk="Резервний транспорт WEB інтерфейсів." DESCRIPT_ru="Резервный транспорт WEB интерфейсов." ADDR="*:10004" PROT="HTTP" START="1">
-		    <A_PRMS>&lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="5" /&gt;</A_PRMS>
+		    <A_PRMS>&lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" /&gt;</A_PRMS>
 		</fld>
 	    </tbl>
 	    <!--
