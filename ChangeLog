@@ -1,3 +1,7 @@
+2019-02-19 Roman (stable)
+- !!:FIX:Transports.*: Prevented from duplication of different protocols' connections.
+
+
 2019-02-17 Roman (stable)
 - !!!!:DB.LibsDB.OscadaLibs: The templates library "DevLib" appended for the true DCON implementation in the templates DCON_Prt, DCON_Prt_DI, DCON_Prt_AO, DCON_Prt_DO,
 	the user protocol object "DCON" is removed.

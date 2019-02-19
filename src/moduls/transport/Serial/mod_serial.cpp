@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.3.0"
+#define MOD_VER		"2.3.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -591,8 +591,8 @@ void *TTrIn::Task( void *tr_in )
 		    subPrt = TSYS::strParse(prt, 1, ".");
 		    string n_pr = tr->id() + i2s(tr->fd) + (subPrt.size()?"#"+subPrt:"");
 		    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, tr, "\n"+i2s(tr->fd));
-		    while(iP >= prot_in.size())	prot_in.push_back(AutoHD<TProtocolIn>());
-		    prot_in[iP] = proto.at().at(n_pr);
+		    if(iP < prot_in.size()) prot_in[iP] = proto.at().at(n_pr);
+		    else prot_in.push_back(proto.at().at(n_pr));
 		}
 
 		int64_t stTm = 0;

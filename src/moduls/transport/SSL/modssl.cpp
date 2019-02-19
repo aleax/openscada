@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.3.0"
+#define MOD_VER		"2.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -628,7 +628,8 @@ int TSocketIn::prtInit( vector< AutoHD<TProtocolIn> > &prot_in, int sock, const 
 	    subPrt = TSYS::strParse(prt, 1, ".");
 	    string n_pr = id() + i2s(sock) + (subPrt.size()?"#"+subPrt:"");
 	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
-	    prot_in.insert(prot_in.begin()+iP, proto.at().at(n_pr));
+	    if(iP < prot_in.size()) prot_in[iP] = proto.at().at(n_pr);
+	    else prot_in.push_back(proto.at().at(n_pr));
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("The new input protocol's object '%s' is created!"), n_pr.c_str());
 	} catch(TError &err) {
 	    initErr = true;

@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.2.0"
+#define MOD_VER		"3.2.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -853,7 +853,8 @@ int TSocketIn::prtInit( vector< AutoHD<TProtocolIn> > &prot_in, int sock, const 
 	    subPrt = TSYS::strParse(prt, 1, ".");
 	    string n_pr = id() + i2s(sock) + (subPrt.size()?"#"+subPrt:"");
 	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
-	    prot_in.insert(prot_in.begin()+iP, proto.at().at(n_pr));
+	    if(iP < prot_in.size()) prot_in[iP] = proto.at().at(n_pr);
+	    else prot_in.push_back(proto.at().at(n_pr));
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("The new input protocol's object '%s' is created!"), n_pr.c_str());
 	    iActP++;
 	} catch(TError &err) {
