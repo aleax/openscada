@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-20 10:07+0200\n"
+"POT-Creation-Date: 2019-02-24 11:08+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -289,6 +289,11 @@ msgstr "Prioritätsstufe der Datenempfangsaufgabe"
 msgid "Forced to set timestampes in the current time"
 msgstr "Gezwungen, Zeitstempel in der aktuellen Zeit festzulegen"
 
+msgid "Add the attribute identifier to name of the automatic created archives"
+msgstr ""
+"Fügen Sie den Attributbezeichner zum Namen der automatisch erstellten "
+"Archive hinzu"
+
 msgid "Number"
 msgstr "Anzahl"
 
@@ -345,6 +350,7 @@ msgstr "Fordert %d Datensätze für Zeit %s."
 msgid "No value."
 msgstr "Kein Wert."
 
+#, c-format
 msgid ""
 "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
@@ -700,10 +706,6 @@ msgstr "Knoten ist nicht eingeschaltet!"
 
 msgid "Id of the child that is adding is empty!"
 msgstr "Die ID des hinzuzufügenden Kindes ist leer!"
-
-#, c-format
-msgid "The node '%s' is already present."
-msgstr "Der Knoten '%s' ist schon vorhanden."
 
 msgid "Node is being processed now for enable!"
 msgstr "Knoten wird jetzt zur Aktivierung verarbeitet!"
@@ -2637,6 +2639,9 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
+
+#~ msgid "The node '%s' is already present."
+#~ msgstr "Der Knoten '%s' ist schon vorhanden."
 
 #~ msgid "Error opening 'iconv': %s"
 #~ msgstr "Fehler beim Öffnen 'iconv': %s"

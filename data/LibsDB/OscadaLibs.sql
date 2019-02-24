@@ -13,7 +13,7 @@ INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices','Бібліотека п�
 Version: 2.3.0','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 INSERT INTO "ParamTemplLibs" VALUES('LowDevLib','Low-level devices','Низькорівневі пристрої','The templates library provides common templates and related functions for custom access to low-level devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 1.3.0','','tmplib_LowDevLib','Низкоуровневые устройства','');
+Version: 1.4.0','','tmplib_LowDevLib','Низкоуровневые устройства','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','The models of the technological process devices.
 Founded: october 2005
@@ -3110,6 +3110,7 @@ INSERT INTO "Trs" VALUES('Error CRC.','','');
 INSERT INTO "Trs" VALUES('Data size error.','','');
 INSERT INTO "Trs" VALUES('The data size is not equal to pointed one.','','');
 INSERT INTO "Trs" VALUES('Write','','');
+INSERT INTO "Trs" VALUES('uh oh, no thermocouple attached!','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -5896,8 +5897,9 @@ else {
 f_err = t_err;
 if(!f_err.toInt())	f_err += t_inf + (t_infW.length?" "+tr("Write")+t_infW:"");','','',1544882666);
 INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt','DCON Protocol + Input AI','','','Input and output part of the protocol DCON implementation with the input part designed for typical AI module at up to 20 channels.
+The DCON commands are supported: #AA
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
 function CRC( inS ) {
@@ -5977,10 +5979,11 @@ if(req[0] == "#") {	//Commands #AA
 if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
-return true;','','',1550422994);
+return true;','','',1551028560);
 INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt_DI','DCON Protocol + Input DI','','','Input and output part of the protocol DCON implementation with the input part designed for typical DI module at up to 32 channels.
+The DCON commands are supported: @AA, $AA6
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
 function CRC( inS ) {
@@ -6065,10 +6068,11 @@ if(req[0] == "@" || (req[0] == "$" && req[3] == "6")) {	//Commands @AA and $AA6
 if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
-return true;','','',1550423010);
+return true;','','',1551028549);
 INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt_AO','DCON Protocol + Input AO','','','Input and output part of the protocol DCON implementation with the input part designed for typical AO module at up to 8 channels.
+The DCON commands are supported: $AA8N, #AAN{Data}
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
 function CRC( inS ) {
@@ -6153,10 +6157,11 @@ else answer = "?";	//return true;
 if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
-return true;','','',1550423026);
+return true;','','',1551028555);
 INSERT INTO "tmplib_DevLib" VALUES('DCON_Prt_DO','DCON Protocol + Input DO','','','Input and output part of the protocol DCON implementation with the input part designed for typical DO module at up to 32 channels.
+The DCON commands are supported: @AA, @AA{Data}
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
 function CRC( inS ) {
@@ -6249,7 +6254,7 @@ else answer = "?";	//return true;
 if(enCRC) answer += (CRC(answer)&0xFF).toString(16,2);
 answer += "\r";
 
-return true;','','',1550423039);
+return true;','','',1551028536);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -10733,6 +10738,55 @@ else {
 if(t_err.toInt() && !f_err.toInt())	ao_ = EVAL;
 
 f_err = t_err;',1549488136);
+INSERT INTO "tmplib_LowDevLib" VALUES('MAX6675','GPIO: MAX6675','Cold-Junction-Compensated K-Thermocouple-to-Digital Converter (0°C to +1024°C). The module designed for the sensors connect through softSPI by GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
+Conditions: Exclusively realtime planing in the priority 199 (FIFO-99).
+Author: Arcadiy Kisel <arcsin@online.ua>
+Version: 0.1.0',10,0,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//Set link to fast external functions
+if(f_start)	f_err = "0", addr_ = "";
+
+t_err = "0";
+
+//Check for the address change and link
+if(addr != addr_)	{
+	addr_ = addr;
+	function mode = addr+".fnc_mode";
+	function get = addr+".fnc_get";
+	function put = addr+".fnc_put";
+}
+
+if(f_start){
+	mode(pin_cs, 4); put(pin_cs, true); 	//Set pin to output mode and next to true for 500us
+	mode(pin_sclk, 4); put(pin_sclk, false); //Set pin to output mode and next to true for 500ms
+	mode(pin_miso, 1); 
+	tmSleep(1e-3);
+}
+
+//Read sensor''s data function declaration
+function spiread() {
+	d = 0;
+	for(i = 7; i >= 0; i--) {
+		put(pin_sclk, false); tmSleep(1e-3);							//Set output to false for 20ms
+		if(get(pin_miso))	d = d | (1 << i);
+  		put(pin_sclk, true); tmSleep(1e-3);
+	}
+	return d;
+}
+
+//Read
+put(pin_cs, false); tmSleep(1e-3);		
+v = spiread();
+v = v << 8;
+v = v | spiread();
+
+put(pin_cs, true); 		
+if(v&0x4)	t_err = "1:"+tr("uh oh, no thermocouple attached!"); 
+else	t = (v>>3)*0.25;
+
+if(t_err.toInt() && !f_err.toInt()) t = EVAL;
+f_err = t_err;',1550995458);
 CREATE TABLE 'tmplib_S7' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_S7" VALUES('ai_simple','Simple AI','Простий AI','Простой AI','Simple analog parameter.','Простий аналоговий параметр.','Простой аналоговый параметр.',10,0,'JavaLikeCalc.JavaScript
 val=val_cod;
@@ -11711,7 +11765,7 @@ INSERT INTO "tmplib_LowDevLib_io" VALUES('BME280','h','H, %',2,16,'',5,'','');
 INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','mode','Mode',1,40,'0
 0;1
 DS3231;DS1307',2,'','');
-INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','this','Parameter',4,0,'',10,'Параметр','Параметр');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','this','Parameter',4,0,'',6,'Параметр','Параметр');
 INSERT INTO "tmplib_LowDevLib_io" VALUES('DS3231','pSQWf','SQUARE-WAVE OUTPUT frequency',1,32,'',5,'','');
 INSERT INTO "tmplib_LowDevLib_io" VALUES('SHT3x','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','');
 INSERT INTO "tmplib_LowDevLib_io" VALUES('SHT3x','addr','Device address [0...119]',1,64,'68',1,'','');
@@ -11730,4 +11784,9 @@ INSERT INTO "tmplib_LowDevLib_io" VALUES('MCP4725','transport','Transport of the
 INSERT INTO "tmplib_LowDevLib_io" VALUES('MCP4725','addr','Device address [0...119]',1,64,'96',1,'','');
 INSERT INTO "tmplib_LowDevLib_io" VALUES('MCP4725','vRef','Reference voltage, V',2,64,'3.2',2,'','');
 INSERT INTO "tmplib_LowDevLib_io" VALUES('MCP4725','ao','AO',2,32,'',3,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('MAX6675','addr','GPIO address with functions mode(), get() and put(), mostly it''s BCM2835',0,64,'DAQ.GPIO.io.pi',0,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('MAX6675','pin_cs','CS pin number of the GPIO',1,64,'8',1,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('MAX6675','pin_sclk','SCLK pin number of the GPIO',1,64,'11',2,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('MAX6675','pin_miso','MISO pin number of the GPIO',1,64,'9',3,'','');
+INSERT INTO "tmplib_LowDevLib_io" VALUES('MAX6675','t','T, °С',2,17,'',4,'','');
 COMMIT;

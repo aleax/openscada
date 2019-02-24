@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-20 17:29+0200\n"
+"POT-Creation-Date: 2019-02-24 11:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -250,6 +250,9 @@ msgid "Level of priority of the data receiving task"
 msgstr ""
 
 msgid "Forced to set timestampes in the current time"
+msgstr ""
+
+msgid "Add the attribute identifier to name of the automatic created archives"
 msgstr ""
 
 msgid "Number"
@@ -611,10 +614,6 @@ msgid "Node is not enabled!"
 msgstr ""
 
 msgid "Id of the child that is adding is empty!"
-msgstr ""
-
-#, c-format
-msgid "The node '%s' is already present."
 msgstr ""
 
 msgid "Node is being processed now for enable!"

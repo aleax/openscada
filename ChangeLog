@@ -1,3 +1,16 @@
+2019-02-24 Roman (stable)
+- !!:DB.LibsDB.OscadaLibs: The temlate library LowDevLib appended by the template "MAX6675" of the low-level
+    SPI Cold-Junction-Compensated K-Thermocouple-to-Digital Converter, from Arcadiy Kisel.
+- FIX:SYS.TCntrNode: OpenSCADA nodes TCntrNode prevented from left the modification mark after loading from a selected DB.
+- SYS.Transports: Size of the output transports ID set to OBJ_ID_SZ*2, since it can be cobined from an ordinal node ID and some prefix, in the automatic mode.
+- !!:SYS.Archives: The value archives are appended by the common option "Add the attribute identifier to names of the automatic created archives" for
+	the possibility of naming the archives just in the DAQ parameter ID.
+    Size limit of the archive names defined as the constant ARCH_ID_SZ int tsys.h.
+- !:FIX:DB.MySQL: Fixed for the error "BLOB/TEXT can't have a default value (1)" on modern MariaDB server versions.
+- FIX:UI.VCAEngine: The allowed size for icons expanded to 100000.
+    The DB field "ATTRS" cleaned from the default value "*".
+
+
 2019-02-19 Roman (stable)
 - !!:FIX:Transports.*: Prevented from duplication of different protocols' connections.
 

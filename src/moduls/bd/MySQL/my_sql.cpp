@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.MySQL file: my_sql.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.0"
+#define MOD_VER		"3.0.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -784,11 +784,12 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt
     switch(cfg.fld().type()) {
 	case TFld::String:
 	    if((cfg.fld().len() && cfg.fld().len() < 256) || cfg.fld().flg()&TCfg::Key)
-		req += "varchar(" + i2s(vmax(1,vmin((cfg.fld().flg()&TCfg::Key)?(333/(2*keyCnt)):255,cfg.fld().len()))) + ") " +
-			((cfg.fld().flg()&TCfg::Key)?"BINARY ":" ");
-	    else if(cfg.fld().len() < 65536) req += "text ";
-	    else req += "mediumtext ";
-	    req += ((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '"+TSYS::strEncode(cfg.fld().def(),TSYS::SQL)+"' ");
+		req += "varchar(" + i2s(vmax(1,vmin((cfg.fld().flg()&TCfg::Key)?(333/(2*keyCnt)):255,cfg.fld().len()))) + ") " + ((cfg.fld().flg()&TCfg::Key)?"BINARY ":" ") +
+			((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '"+TSYS::strEncode(cfg.fld().def(),TSYS::SQL)+"' ");
+	    // Due to "BLOB/TEXT can't have a default value (1)"
+	    else if(cfg.fld().len() < 65536)
+		req += string("text ") + ((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '' ");
+	    else req += string("mediumtext ") + ((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '' ");
 	    break;
 	case TFld::Integer:
 	    if(cfg.fld().flg()&TFld::DateTimeDec)

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"5.7.1"
+#define MOD_VER		"5.7.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -123,19 +123,19 @@ void Engine::postEnable( int flag )
 
     //Make widgets' DB structure: LibWigets(__ID__, ICO, PARENT, PROC, PROC_PER, ATTRS, TIMESTAMP)
     wdg_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
-    wdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
+    wdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"100000"));
     wdg_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
     wdg_el.fldAdd(new TFld("PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
     wdg_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
     wdg_el.fldAdd(new TFld("PROC_PER",_("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5","-1"));
-    wdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
+    wdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
     wdg_el.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //Make include widgets' DB structure: {LibWidgetIncl,ProjPageWIncl}(__IDW__, __ID__, PARENT, ATTRS)
     inclwdg_el.fldAdd(new TFld("IDW",_("Widget identifier"),TFld::String,TCfg::Key,"100"));
     inclwdg_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
     inclwdg_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
-    inclwdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
+    inclwdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
 
     //Make widget's IO DB structure: {LibWidgetIO,ProjPageIO}(__IDW__, __ID__, __IDC__, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)
     wdgio_el.fldAdd(new TFld("IDW",_("Widget identifier"),TFld::String,TCfg::Key,"100"));
@@ -162,7 +162,7 @@ void Engine::postEnable( int flag )
     prj_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     prj_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     prj_el.fldAdd(new TFld("DB_TBL",_("DB table"),TFld::String,TFld::NoFlag,"30"));
-    prj_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
+    prj_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"100000"));
     prj_el.fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,OBJ_ID_SZ,"root"));
     prj_el.fldAdd(new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,OBJ_ID_SZ,"UI"));
     prj_el.fldAdd(new TFld("PERMIT",_("Permission"),TFld::Integer,TFld::OctDec,"3","436"));
@@ -173,13 +173,13 @@ void Engine::postEnable( int flag )
     //Make page's DB structure: ProjPages(__OWNER__, __ID__, ICO, PARENT, PROC, PROC_PER, FLGS, ATTRS, TIMESTAMP)
     page_el.fldAdd(new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key,"100"));
     page_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
-    page_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
+    page_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"100000"));
     page_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
     page_el.fldAdd(new TFld("PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
     page_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
     page_el.fldAdd(new TFld("PROC_PER",_("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5","-1"));
     page_el.fldAdd(new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0"));
-    page_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
+    page_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
     page_el.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //Make sessions' IO values of projects DB structure: ProjSess(__IDW__, __ID__, IO_VAL)

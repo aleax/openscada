@@ -41,7 +41,7 @@ using namespace OSCADA;
 //************************************************
 TArchiveS::TArchiveS( ) :
     TSubSYS(SARH_ID,_("Archives-History"),true), elMess(""), elVal(""), elAval(""), mMessPer(10), prcStMess(false), mRes(true),
-    headBuf(0), vRes(true), mValPer(1000), mValPrior(10), mValForceCurTm(false),
+    headBuf(0), vRes(true), mValPer(1000), mValPrior(10), mValForceCurTm(false), mAppendAttrIdToNm(true),
     prcStVal(false), endrunReqVal(false), toUpdate(false), mRdRestDtOverTm(0), mRdFirst(true)
 {
     mAval = grpAdd("va_");
@@ -71,7 +71,7 @@ TArchiveS::TArchiveS( ) :
     elVal.fldAdd(new TFld("SEL_PR",_("Selection priority"),TFld::Integer,0,"4","10","0;1000"));
 
     //Value archive DB structure
-    elAval.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,"20"));
+    elAval.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,ARCH_ID_SZ));
     elAval.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     elAval.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
     elAval.fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1","0"));
@@ -114,6 +114,7 @@ void TArchiveS::load_( )
     setValPeriod(s2i(TBDS::genDBGet(nodePath()+"ValPeriod",i2s(valPeriod()))));
     setValPrior(s2i(TBDS::genDBGet(nodePath()+"ValPriority",i2s(valPrior()))));
     setValForceCurTm(s2i(TBDS::genDBGet(nodePath()+"ValForceCurTm",i2s(valForceCurTm()))));
+    setAppendAttrIdToNm(s2i(TBDS::genDBGet(nodePath()+"AppendAttrIdToNm",i2s(appendAttrIdToNm()))));
     setRdRestDtOverTm(s2r(TBDS::genDBGet(nodePath()+"RdRestDtOverTm",r2s(rdRestDtOverTm()))));
 
     //LidDB
@@ -232,6 +233,7 @@ void TArchiveS::save_( )
     TBDS::genDBSet(nodePath()+"ValPeriod", i2s(valPeriod()));
     TBDS::genDBSet(nodePath()+"ValPriority", i2s(valPrior()));
     TBDS::genDBSet(nodePath()+"ValForceCurTm",i2s(valForceCurTm()));
+    TBDS::genDBSet(nodePath()+"AppendAttrIdToNm",i2s(appendAttrIdToNm()));
     TBDS::genDBSet(nodePath()+"RdRestDtOverTm",r2s(rdRestDtOverTm()));
 }
 
@@ -269,7 +271,7 @@ void TArchiveS::unload( )
     mRes.unlock();
     setMessBufLen(BUF_SIZE_DEF);
 
-    mMessPer = 10, mValPer = 1000, mValPrior = 10, mValForceCurTm = false;
+    mMessPer = 10, mValPer = 1000, mValPrior = 10, mValForceCurTm = mAppendAttrIdToNm = false;
 }
 
 void TArchiveS::subStart( )
@@ -966,7 +968,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),RWRWR_,"root",SARH_ID,2,"idm",OBJ_NM_SZ,"idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),RWRWR_,"root",SARH_ID,2,"idm",OBJ_NM_SZ,"idSz",ARCH_ID_SZ);
 	if(SYS->rdEnable() && ctrMkNode("area",opt,0,"/redund",_("Redundancy"))) {
 	    ctrMkNode("fld",opt,-1,"/redund/restDtOverTm",_("Overtime of the reserve history reload at start, days"),RWRWR_,"root",SARH_ID,1, "tp","real");
 	    if(ctrMkNode("table",opt,-1,"/redund/mArch",_("Message archivers"),RWRWR_,"root",SARH_ID,1,"key","id")) {
@@ -1009,8 +1011,9 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/v_arch/per",_("Period of the data receiving, milliseconds"),RWRWR_,"root",SARH_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/v_arch/prior",_("Level of priority of the data receiving task"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",TMess::labTaskPrior());
 	    ctrMkNode("fld",opt,-1,"/v_arch/fCurTm",_("Forced to set timestampes in the current time"),RWRWR_,"root",SARH_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/v_arch/appAttrIdToNm",_("Add the attribute identifier to name of the automatic created archives"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/v_arch/nmb",_("Number"),R_R_R_,"root",SARH_ID,1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/v_arch/archs",_("Value archives"),RWRWR_,"root",SARH_ID,5,"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","va_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/v_arch/archs",_("Value archives"),RWRWR_,"root",SARH_ID,5,"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","va_","idSz",ARCH_ID_SZ);
 	}
 	return;
     }
@@ -1106,6 +1109,10 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(valForceCurTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setValForceCurTm(s2i(opt->text()));
     }
+    else if(a_path == "/v_arch/appAttrIdToNm") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(appendAttrIdToNm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setAppendAttrIdToNm(s2i(opt->text()));
+    }
     else if(a_path == "/v_arch/nmb" && ctrChkNode(opt)) {
 	vector<string> list;
 	valList(list);
@@ -1145,12 +1152,12 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		at(mls[iM]).at().messList(cls);
 		for(unsigned iC = 0; iC < cls.size(); iC++) {
 		    arh = at(mls[iM]).at().messAt(cls[iC]);
-		    if(nId)		nId->childAdd("el")->setText(mls[iM]+"."+cls[iC]);
-		    if(nNm)		nNm->childAdd("el")->setText(arh.at().name());
-		    if(nStart)		nStart->childAdd("el")->setText(arh.at().startStat()?"1":"0");
-		    if(nRdndt)		nRdndt->childAdd("el")->setText(i2s(arh.at().redntMode()));
-		    if(nPrefRun)	nPrefRun->childAdd("el")->setText(arh.at().redntRun());
-		    if(nRem)		nRem->childAdd("el")->setText(arh.at().redntUse()?"1":"0");
+		    if(nId)	nId->childAdd("el")->setText(mls[iM]+"."+cls[iC]);
+		    if(nNm)	nNm->childAdd("el")->setText(arh.at().name());
+		    if(nStart)	nStart->childAdd("el")->setText(arh.at().startStat()?"1":"0");
+		    if(nRdndt)	nRdndt->childAdd("el")->setText(i2s(arh.at().redntMode()));
+		    if(nPrefRun)nPrefRun->childAdd("el")->setText(arh.at().redntRun());
+		    if(nRem)	nRem->childAdd("el")->setText(arh.at().redntUse()?"1":"0");
 		}
 	    }
 	}

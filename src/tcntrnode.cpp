@@ -708,6 +708,7 @@ void TCntrNode::load( TConfig *cfg, string *errs )
 	    modifClr(nodeFlg()&SelfModifyS);	//Save modify or clear
 	    loadOwn = true;
 	} catch(TError &err) {
+	    if(err.cat.empty())	modifClr();	//Clearing the modification at the loading for not selected DB
 	    if(errs && err.cat.size()) (*errs) += nodePath('.')+": "+err.mess+"\n";
 	    /*mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	    mess_sys(TMess::Error, _("Error node loading: %s"), err.mess.c_str());*/

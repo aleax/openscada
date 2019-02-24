@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchives.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -200,11 +200,13 @@ class TArchiveS : public TSubSYS
 	int valPeriod( )	{ return vmax(1, mValPer); }
 	int valPrior( )		{ return mValPrior; }
 	bool valForceCurTm( )	{ return mValForceCurTm; }
+	bool appendAttrIdToNm( ){ return mAppendAttrIdToNm; }
 
 	void setMessPeriod( int ivl )	{ mMessPer = ivl; modif(); }
 	void setValPeriod( int ivl )	{ mValPer = ivl; modif(); }
 	void setValPrior( int ivl )	{ mValPrior = vmax(-1, vmin(199,ivl)); modif(); }
 	void setValForceCurTm( bool vl ){ mValForceCurTm = vl; modif(); }
+	void setAppendAttrIdToNm( bool vl ) { mAppendAttrIdToNm = vl; modif(); }
 	void setToUpdate( )		{ toUpdate = true; }
 
 	void unload( );
@@ -288,6 +290,7 @@ class TArchiveS : public TSubSYS
 		mAval;
 
 	bool	mValForceCurTm,		//Time of taken values force to current and overide it's source from
+		mAppendAttrIdToNm,	//Add the attribute identifier to names of the automatic created archives
 		prcStVal,		//Process value flag
 		endrunReqVal,		//Endrun value request
 		toUpdate;

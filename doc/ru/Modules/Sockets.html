@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Sockets</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSockets&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets">Modules/Sockets</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/uk" title="Модулі/Sockets (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSockets&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets">Modules/Sockets</a> and the translation is 95% complete.</div><hr /><div class="mw-pt-languages noprint" dir="ltr" lang="en"><div class="mw-pt-languages-label">Other languages:</div><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="http://oscada.org/wiki/Modules/Sockets/uk" title="Модулі/Sockets (95% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -57,22 +57,22 @@
 </p><p>Диалог конфигурации входного сокета изображён на рисунке 1.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:823px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in_ru.png"><img class="thumbimage" height="800" src="../files/Sockets_in_ru.png" width="821" /></a>  <div class="thumbcaption">Рис.1. Диалог конфигурации входного сокета.</div></div></div></div>
-<p>С помощью этого диалога можно установить:
+<p>This dialog allows you to set:
 </p>
-<ul><li> Состояние транспорта, а именно: статус, "Выполняется", имя БД (содержащей конфигурацию) и информация о текущих подключениях.</li>
-<li> Идентификатор, имя и описание транспорта.</li>
-<li> Адрес транспорта. Формат адреса описан в таблице ниже.</li>
-<li> Выбор транспортных протоколов.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Пустое значение выбора протокола переключает транспорт в режим создания ассоциированного выходного транспорта для каждого подключения на данный входной.</dd>
-<dd>Режим ассоциированных выходных транспортов для входного предусматривает наличие некоей внешней для транспорта процедуры, выполняющей роль протокола, которая должна "обходить" все ассоциированные выходные транспорты, и выполнять запросы на чтение или запись-чтение.</dd>
-<dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Отсутствие такой процедуры неизбежно приведёт к росту ассоциированных выходных транспортов из-за отсутствия сущности, останавливающей транспорты с закрытыми соединениями и возможности последующего удаления остановленных выходных транспортов данным входным.</dd></dl>
-<ul><li> Состояние "Выполняется", в которое переводить транспорт при загрузке.</li>
-<li> Приоритет задач транспорта.</li>
-<li> Максимальный размер сегмента (MSS), для ограничения размера отправляемых пакетов (сегментов TCP) на плохих каналах связи. Установить в 0 для снятия пользовательского ограничения размера.</li>
-<li> Размер входного буфера, Длина очереди сокетов, Максимальное число клиентов и Максимальное число клиентов по хостам (для TCP).</li>
-<li> Keep alive запросов — закрытие подключения после указанного количества запросов. Нулевое значение для отключения — не закрывается никогда.</li>
-<li> Keep alive время ожидания, секунд — закрытие подключения после отсутствия запросов в течении указанного времени. Нулевое значение для отключения — не закрывается никогда.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Отключать данную функцию не рекомендуется поскольку свойство сетей TCP/IP не гарантирует уведомления сервера об отключении соединения, скажем в случае пропадания питания на клиенте. В результате чего могут <span style="color: red">навсегда</span> оставаться открытые клиентские подключения, а при достижении лимита сервер перестанет принимать новые!</dd></dl>
+<ul><li> State of the transport, that is: status, "Running", name of the database (containing the configuration) and information about the active connections.</li>
+<li> Identifier, name and description of the transport.</li>
+<li> Address of the transport. The format of the address is listed in the table below.</li>
+<li> Selecting of the transport protocols.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Empty value of the protocols selection switches the transport mode to creating the associated output transports for each connection to that input.</dd>
+<dd>The associated output transports mode for the input transport demands for presence some external for the transport procedure, which serve as the protocol and which must go through all the associated output transports and do requests to read or write-read.</dd>
+<dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> The procedure missing will necessarily come to growing the associated output transports by miss an essence, which stops transports with closed connections and the ability to next remove the stopped output transports by this input.</dd></dl>
+<ul><li> State "Running", in which the transport must be switched at start up. </li>
+<li> Priority of the transport tasks .</li>
+<li> Maximum segment size (MSS), for limit the transmitted packages size (segments TCP) on bad link channels. Set to 0 for disabling the user limit for size.</li>
+<li> Input buffer size, Queue length of the sockets, Maximum number of clients and Maximum number of clients per host.</li>
+<li> Keep alive requests — closing the connection after specified number of the requests. Zero value for disabling — never closes.</li>
+<li> Keep alive timeout, seconds — closing the connection after missing requests within a specified time. Zero value for disabling — never closes.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Disabling this feature is not recommended because the TCP/IP network property does not guarantee the server notification about the disconnection, say in the event of a power failure on the client. As a result, the opened client connections can remain <span style="color:red">forever</span>, and when the limit is reached the server will stop accepting new ones!</dd></dl>
 <p>Особенности формирования адреса входных сокетов приведены в таблице ниже:
 </p>
 <table class="wikitable">

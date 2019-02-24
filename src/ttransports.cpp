@@ -43,7 +43,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true), extHostLoa
     elIn.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //Output transport BD structure
-    elOut.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    elOut.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(s2i(OBJ_ID_SZ)*2).c_str()));
     elOut.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     elOut.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     elOut.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));

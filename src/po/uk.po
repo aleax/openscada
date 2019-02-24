@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-20 10:07+0200\n"
+"POT-Creation-Date: 2019-02-24 11:08+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -283,6 +283,10 @@ msgstr "Рівень пріоритету задачі отримання дан
 msgid "Forced to set timestampes in the current time"
 msgstr "Примусово встановлювати мітку часу у поточний час"
 
+msgid "Add the attribute identifier to name of the automatic created archives"
+msgstr ""
+"Додавати ідентифікатор атрибуту до назви автоматично створюваних архівів"
+
 msgid "Number"
 msgstr "Кількість"
 
@@ -339,6 +343,7 @@ msgstr "Запитано %d записів протягом %s."
 msgid "No value."
 msgstr "Значення відсутнє."
 
+#, c-format
 msgid ""
 "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
@@ -692,10 +697,6 @@ msgstr "Вузол не увімкнено!"
 
 msgid "Id of the child that is adding is empty!"
 msgstr "Id нащадку, що додається є порожнім!"
-
-#, c-format
-msgid "The node '%s' is already present."
-msgstr "Вузол '%s' вже присутній."
 
 msgid "Node is being processed now for enable!"
 msgstr "Вузол обробляється зараз для ввімкнення!"
@@ -2621,6 +2622,9 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+
+#~ msgid "The node '%s' is already present."
+#~ msgstr "Вузол '%s' вже присутній."
 
 #~ msgid "Error opening 'iconv': %s"
 #~ msgstr "Помилка відкриття 'iconv': %s"

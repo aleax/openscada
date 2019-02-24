@@ -30,6 +30,8 @@
 //Other global constants
 #define OBJ_ID_SZ	"20"	// Typical object's ID size. Warning, the size can cause key limit on MySQL like DB.
 #define OBJ_NM_SZ	"100"	// Typical object's NAME size.
+#define ARCH_ID_SZ	"20"	// Size of the archive identifier,
+				// !!!! Must be related to Archive.FSArch identifier size of the archive to store in the files
 #define USER_FILE_LIMIT	1048576	// Loading and processing files limit into the userspace
 #define USER_ITS_LIMIT	1000000	// Creating user items limit, like to array items
 #define STR_BUF_LEN	10000	// Length of string buffers (no string class)
