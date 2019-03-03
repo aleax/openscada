@@ -867,6 +867,16 @@ void LWidget::cntrCmdProc( XMLNode *opt )
     else TCntrNode::cntrCmdProc(opt);
 }
 
+TVariant LWidget::stlReq( Attr &a, const TVariant &vl, bool wr )
+{
+    //To register the property on the project side
+    for(unsigned iH = 0; !wr && iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().stlReq(a, vl, wr);
+
+    return vl;
+}
+
 //************************************************
 //* CWidget: Container stored widget             *
 //************************************************

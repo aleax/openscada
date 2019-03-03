@@ -888,8 +888,9 @@ void ConfApp::pageRefresh( int tm )
     }
 
     try {
-	//Tree part update
-	if(CtrTree->currentItem() && !pgDisplay)
+	//Tree part update.
+	//!!!! That is bad here for big items number, at last for about 2000 ones, in updating at selecting any item
+	if(CtrTree->currentItem() && !pgDisplay && dynamic_cast<QAction*>(sender()))
 	    viewChildRecArea(CtrTree->currentItem()->parent() ? CtrTree->currentItem()->parent() : CtrTree->currentItem(), true);
 
 	//Same page update

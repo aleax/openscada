@@ -230,6 +230,8 @@ class Page : public Widget, public TConfig
 	Page	*ownerPage( ) const;
 	Project	*ownerProj( ) const;
 
+	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
+
     public:
 	//Attributes
 	bool	manCrt;		//Manual created, mostly for child widget's modification clear after it's inheritance
@@ -247,7 +249,6 @@ class Page : public Widget, public TConfig
 
 	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
 	TVariant vlGet( Attr &a );
-	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
 	bool cntrCmdGeneric( XMLNode *opt );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process

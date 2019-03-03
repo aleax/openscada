@@ -384,13 +384,14 @@ class SessPage : public SessWdg
 
 	ResMtx &funcM( )	{ return mFuncM; }
 
+	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
+
     protected:
 	//Methods
 	bool cntrCmdGeneric( XMLNode *opt );
 
 	bool attrChange( Attr &cfg, TVariant prev );
 	TVariant vlGet( Attr &a );
-	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
     private:
 	//Attributes

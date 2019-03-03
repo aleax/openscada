@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-25 16:40+0200\n"
+"POT-Creation-Date: 2019-03-01 17:26+0200\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -164,6 +164,12 @@ msgstr "Ноябрь"
 msgid "December"
 msgstr "Декабрь"
 
+msgid "Field for displaying and changing the current user."
+msgstr "Поле отображения и изменения текущего пользователя."
+
+msgid "Field for displaying and changing the used interface style."
+msgstr "Поле отображения и изменения используемого стиля интерфейса."
+
 #, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
@@ -271,7 +277,10 @@ msgstr ""
 "  0   - отключен;\n"
 "  1-9 - прямой уровень."
 
+#, c-format
 msgid ""
 "%s %s(%s): the last %s; cached pages %d and resources %d, %s; session "
 "objects %d."
-msgstr "%s %s(%s): последний %s; кешированных страниц %d и ресурсов %d, %s; объектов сеанса %d."
+msgstr ""
+"%s %s(%s): последний %s; кешированных страниц %d и ресурсов %d, %s; объектов "
+"сеанса %d."

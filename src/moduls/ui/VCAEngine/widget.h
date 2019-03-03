@@ -245,6 +245,8 @@ class Widget : public TCntrNode
 	static string helpColor( );
 	static string helpFont( );
 
+	virtual TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
+
     protected:
 	//Methods
 	const char *nodeName( ) const	{ return mId.c_str(); }
@@ -261,7 +263,6 @@ class Widget : public TCntrNode
 	virtual bool attrChange( Attr &cfg, TVariant prev );	//Process an attribute change local and into the terminator
 	virtual unsigned int modifVal( Attr &cfg )	{ return 0; }
 	virtual TVariant vlGet( Attr &a );
-	virtual TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 	virtual bool eventProc( const string &ev, Widget *src = NULL );	//Return "true" for terminate next processing
 
 	virtual void disable( Widget *base );

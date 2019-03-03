@@ -89,7 +89,7 @@ void Session::setEnable( bool val )
 	    mPermit	= parent().at().permit();
 	    setPeriod(parent().at().period());
 
-	    //Loading a previous style
+	    //Loading the previous style
 	    string stVl = sessAttr("<Style>", user());
 	    if(stVl.empty()) stVl = i2s(parent().at().stlCurent());
 	    stlCurentSet(s2i(stVl));
@@ -162,7 +162,7 @@ void Session::setStart( bool val )
 
 	mess_debug(nodePath().c_str(),_("Starting the session."));
 
-	//Load Styles from project
+	//Load Styles from the project
 	mStProp.clear();
 	if(stlCurent() >= 0) {
 	    parent().at().stlPropList(pg_ls);
@@ -756,7 +756,7 @@ void Session::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/obj/cfg/style") {
 	if(ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD))	opt->setText(i2s(stlCurent()));
-	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	stlCurentSet(s2i(opt->text()));
+	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_RD))	stlCurentSet(s2i(opt->text()));
     }
     else if(a_path == "/obj/cfg/stLst" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setAttr("id","-1")->setText(_("No style"));

@@ -257,7 +257,7 @@ function servSet( adr, prm, body, waitRez )
  ***************************************************/
 function getWAttr( wId, attr )
 {
-    var rNode = servGet(wId,'com=attr&attr='+attr);
+    var rNode = servGet(wId, 'com=attr&attr='+attr);
     if(!rNode) return null;
 
     return rNode.textContent;
@@ -602,7 +602,19 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		masterPage.status.height = 25;
 		masterPage.status.setAttribute('id', 'gen-pnl-status');
 		this.place.appendChild(masterPage.status);
-		masterPage.status.innerHTML = "<table width='100%'><TR><td id='StatusBar' width='100%'/><td id='st_user'><a href='/login/"+MOD_ID+"/'>"+pgBr.getAttribute('user')+"</a></td></TR></table>";
+		stBar = "<table width='100%'><TR><td id='StatusBar' width='100%'/>";
+		if(modelStyles) {
+		    stBar += "<td id='st_style' title='###Field for displaying and changing the used interface style.###'>";
+		    stBar += "<select onchange='styleSet(this.selectedOptions[0].getAttribute(\"itId\"))'>";
+		    for(iSt = 0; iSt < modelStyles.childNodes.length; iSt++)
+			stBar += "<option itId='"+modelStyles.childNodes[iSt].getAttribute("id")+"' "+
+			    ((modelStyles.childNodes[iSt].getAttribute("id")==modelStyles.getAttribute('curStlId'))?"selected='1'":"")+">"+
+				modelStyles.childNodes[iSt].textContent+"</option>";
+		    stBar += "</select></td>";
+		}
+		stBar += "<td id='st_user' title='###Field for displaying and changing the current user.###'><a href='/login/"+MOD_ID+"/'>"+pgBr.getAttribute('user')+"</a></td>";
+		stBar += "</TR></table>";
+		masterPage.status.innerHTML = stBar;
 	    }
 
 	    var geomW = parseFloat(this.attrs['geomW']);
@@ -2451,6 +2463,9 @@ function makeUI( callBackRez )
     if(callBackRez) pgNode = (callBackRez == -1) ? null : callBackRez;
     else { servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt,makeUI); return; }
     if(pgNode) {
+	// Get for the styles
+	if(tmCnt == 0)	modelStyles = servGet('/'+sessId,'com=style');
+
 	modelPer = parseInt(pgNode.getAttribute("per"));
 	cachePgSz   = parseInt(pgNode.getAttribute("cachePgSz"));
 	cachePgLife = parseFloat(pgNode.getAttribute("cachePgLife"));
@@ -2639,6 +2654,11 @@ for(var i_el = sessId.length-1; i_el >= 0; i_el--)
     if( sessId[i_el].length )
     { sessId = sessId[i_el]; break; }
 
+function styleSet(sid) {
+    servSet("/UI/VCAEngine/"+sessId+"/%2fobj%2fcfg%2fstyle", "com=com", "<set>"+sid+"</set>", true);
+    stTmReload = setTimeout('window.location.reload()', 1000);
+}
+
 document.body.onmouseup = function(e)
 {
     if(!e) e = window.event;
@@ -2656,6 +2676,7 @@ window.onresize = function( ) {
 }
 
 var modelPer = 0;			//Model proc period
+var modelStyles = null;			//Model styles
 var prcCnt = 0;				//Process counter
 var prcTm = 0;				//Process time
 var planePer = 0;			//Planed update period

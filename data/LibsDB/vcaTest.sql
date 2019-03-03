@@ -42,7 +42,7 @@ INSERT INTO "wlb_test_incl" VALUES('test1','tr1','/wlb_originals/wdg_Diagram','g
 INSERT INTO "wlb_test_incl" VALUES('test1','Text2','/wlb_originals/wdg_Text','geomX;geomY;alignment;',2);
 INSERT INTO "wlb_test_incl" VALUES('test1','newText','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;bordWidth;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;',2);
 INSERT INTO "wlb_test_incl" VALUES('DiagramTest','tr1','/wlb_originals/wdg_Diagram','perm;active;geomX;geomY;geomH;backColor;bordWidth;bordColor;trcPer;prm0addr;prm0bordU;prm0color;prm0val;prm0prop;curSek;',2);
-INSERT INTO "wlb_test_incl" VALUES('DiagramTest','tr2','/wlb_originals/wdg_Diagram','geomX;geomY;geomW;geomH;geomZ;trcPer;tSize;sclHor;sclVer;parNum;prm0addr;prm0bordU;prm0color;prm0prop;prm1addr;prm1color;prm1prop;prm2addr;prm2bordU;prm2color;',2);
+INSERT INTO "wlb_test_incl" VALUES('DiagramTest','tr2','/wlb_originals/wdg_Diagram','geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;tSize;sclHor;sclVer;sclMarkColor;parNum;prm0addr;prm0bordU;prm0color;prm0val;prm0prop;prm1addr;prm1color;prm1val;prm1prop;prm2addr;prm2bordU;prm2color;prm2val;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','lst1','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','FormEl1','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','FormEl2','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;',2);
@@ -182,18 +182,18 @@ INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomX','105',32,'','','tr2','','
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomY','3',32,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomW','342',32,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomH','144',32,'','','tr2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','curSek','1498219481',0,'','','tr1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0val','4.18848',32,'','','tr1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','curSek','1551621641',0,'','','tr1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0val','11.0553',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomX','3',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomY','3',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','active','1',32,'','','tr1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','backColor','grey',32,'','','tr1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','backColor','grey',96,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','bordWidth','1',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','bordColor','black',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','trcPer','1',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0addr','/DAQ/System/AutoDA/CPULoad/load',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0bordU','100',32,'','','tr1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0color','lightgreen',32,'','','tr1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0color','lightgreen',96,'labColorGood','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','name','Tests "FormEl"',32,'','','','Тести "FormEl"','','Тесты "FormEl"','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','445',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','250',32,'','','','','','','','','');
@@ -407,7 +407,7 @@ INSERT INTO "wlb_test_io" VALUES('mn_gen','dscr','Mnemo: "Tests collection"',32,
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','0',40,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomW','900',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomH','570',32,'','','','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','backColor','#5A5A5A',32,'','','','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','bordWidth','1',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','bordColor','black',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','253',32,'','','media','','','','','','');
@@ -466,7 +466,7 @@ INSERT INTO "wlb_test_io" VALUES('test1','arg0cfg','5;f;1',0,'','','newText','',
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','parNum','3',32,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0addr','/DAQ/System/AutoDA/CPULoad/load',32,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0bordU','100',32,'','','tr2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0color','yellow',32,'','','tr2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0color','orange',32,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1addr','/DAQ/System/AutoDA/MemInfo/use',0,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1color','red',0,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm2addr','/DAQ/System/AutoDA/SensorsData/TEMP0',0,'','','tr2','','','','','','');
@@ -590,9 +590,9 @@ INSERT INTO "wlb_test_io" VALUES('TextEltests','alignment','10',32,'','','text7'
 INSERT INTO "wlb_test_io" VALUES('test1','alignment','10',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('test1','alignment','10',32,'','','newText','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','FormEl1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1421852989:1498219480:1',32,'','','tr1','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1421852989:1498219480:1',32,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1prop','1415818374:1498219480:1',0,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1421852989:1551621641:1',32,'','','tr1','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1421852989:1551621641:1',32,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1prop','1415818374:1551621641:1',0,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','5',32,'','','Pi_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','4',32,'','','TextEl','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','6',32,'','','Ti_нд','','','','','','');
@@ -688,6 +688,11 @@ INSERT INTO "wlb_test_io" VALUES('FormElTests','items','<tbl colsWdthFit="1">
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','tbl','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','105',32,'','','tree','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('TextEltests','inHtml','1',32,'','','text1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','backColor','black',96,'backColorVal','','tr2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','sclMarkColor','white',96,'labColor','','tr2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0val','6.5',32,'','','tr2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1val','1695060',0,'','','tr2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm2val',NULL,0,'','','tr2','','','','','','');
 CREATE TABLE 'wlb_test_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_test_mime" VALUES('bake','image/png;9.79492','iVBORw0KGgoAAAANSUhEUgAAAKAAAADICAYAAABvaOoaAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
 WXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH1wcEDiUDhclhJwAAAB10RVh0Q29tbWVudABDcmVhdGVk
@@ -1617,7 +1622,7 @@ VuEcZAEovUkYP+ScjurhYC9pM3flyhXHGdx7v4IVWIE/IH5XnhcnmHwKjSR6KknfAcMwgiAwDKPX
 T08XCoXl5eXFxcW3ZoMguHHjxs7OzsLCwt7e3sAMs7OzUsrLly8/evSoVCoN5FiWdfv27Uqlsr+/
 v7m5+das4zjz8/NbW1tzc3Obuy3x/Y8/v/cfmfzt11/e0+q/i3w+f+3atXq9rpSK4zgIgu3t7SAI
 nJEJs2c5obBPCQ7DfYQNiLT92RdffSTJb8L3fX90VGeGfN9vNBrDw8NmbsT3/Z4w/gaGGJVZL2Zi
-hgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;geomW;geomH;backColor;bordWidth;bordColor;',1498220567);
+hgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;geomW;geomH;backColor;bordWidth;bordColor;',1551621646);
 INSERT INTO "wlb_test" VALUES('FormElTests','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAjCAYAAAAkCQwqAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAADAdJREFUaIHlmdtvHEd2xn/VXd09PffhDC/Di3jThbKcdWRZWq1lC0gC
 Iw8BFlkjcRIkCBIgyfs+5jXIS178Euzmb1jsU5DFBog2wCZGAnlty5Yty7pRlCgNh+RcyLn2vSsP
@@ -1937,7 +1942,7 @@ Y0yJjGCMwCCDDRjb4mlClNZbG2unFxfJ7FsfAME4zc1wEtP19fXBYOB5HgDU6/U8z5VSlmXFcWxZ
 G0BgDCDUmJsTQiKEwCBm2fUGN1ojjKZpOg4j+sorr1iW9WFh/ZyCENre2jjoW0obSikjREiJECKM
 2dxijAZBMJlMHNdVUihtMCEqzzEhGIExCBBYjCVpShnTStXr9el0Gk+nnNJCsZQaLJL4l/V9YCYY
 4xs/+ckvb/0syx58Lf4rJr/yDtDHoPb/PyKE+D+7lpz88BufGQAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
-//if(geomX++ > 10) geomX=0;','','',-1,'name;dscr;geomX;geomW;geomH;backColor;bordWidth;bordColor;',1498219479);
+//if(geomX++ > 10) geomX=0;','','',-1,'name;dscr;geomX;geomW;geomH;backColor;bordWidth;bordColor;',1551599366);
 INSERT INTO "wlb_test" VALUES('ElFigureTests','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAKYElEQVRoge1ZfUxT5x4+XQsto6cfQIt2SAXWLqZoFb0i092NxbAYp5Fk
 ubLgcDNuC9NN4nbjvGjYBZxW9kFQwzIMMWombAvDXRwIZMgM9mO0tEA/aItSPgpt8bT09POUnt4/

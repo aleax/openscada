@@ -1,3 +1,12 @@
+2019-03-03 Roman (stable)
+- !!!!:FIX:DB.{LibsDB.vcaBase,Model.AGLKS.St,Model.Boiler.St}: Mostly standard cadres and widgets adapted to styles and the style "Light" is created for all projects.
+- FIX:SYS: Some original messages fixed.
+- UI.QTCfg: Prevented from the navigation tree updating at selecting any item.
+- !!!:FIX:UI.VCAEngine: Significantly fixed and mostly finished in the VCA-styles implementation, adapting most cadres and widgets at the style "Light".
+- FIX:UI.Vision: Fixed for the pages cache clean up at the VCA-style change.
+- !!!:UI.WebVision: Expanded for the VCA-styles support in their display and changing into the status bar.
+
+
 2019-02-24 Roman (stable)
 - !!:DB.LibsDB.OscadaLibs: The temlate library LowDevLib appended by the template "MAX6675" of the low-level
     SPI Cold-Junction-Compensated K-Thermocouple-to-Digital Converter, from Arcadiy Kisel.

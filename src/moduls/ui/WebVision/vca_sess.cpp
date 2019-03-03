@@ -133,6 +133,21 @@ void VCASess::getReq( SSess &ses )
 
 	ses.page = mod->pgCreator(ses.prt, req.childGet(0)->save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
+    else if(wp_com == "style") {
+	XMLNode req("get"); req.setAttr("path", ses.url+"/%2fobj%2fcfg%2fstLst");
+	mod->cntrIfCmd(req, ses);
+	if(req.childSize()) {
+	    XMLNode reqCur("get"); reqCur.setAttr("path", ses.url+"/%2fobj%2fcfg%2fstyle");
+	    mod->cntrIfCmd(reqCur, ses);
+	    req.setAttr("curStlId", reqCur.text());
+	    for(int iCh = 0; iCh < req.childSize(); iCh++)
+		if(req.childGet(iCh)->attr("id") == req.attr("curStlId")) {
+		    req.setAttr("curStlName", req.childGet(iCh)->text());
+		    break;
+		}
+	}
+	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+    }
     //Attribute get
     else if(wp_com == "attr") {
 	prmEl = ses.prm.find("attr");

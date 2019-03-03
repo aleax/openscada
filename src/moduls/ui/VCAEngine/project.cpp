@@ -65,10 +65,17 @@ TCntrNode &Project::operator=( const TCntrNode &node )
     vector<string> pls;
     src_n->mimeDataList(pls);
     string mimeType, mimeData;
-    for(unsigned i_m = 0; i_m < pls.size(); i_m++) {
-	src_n->mimeDataGet(pls[i_m], mimeType, &mimeData);
-	mimeDataSet(pls[i_m], mimeType, mimeData);
+    for(unsigned iM = 0; iM < pls.size(); iM++) {
+	src_n->mimeDataGet(pls[iM], mimeType, &mimeData);
+	mimeDataSet(pls[iM], mimeType, mimeData);
     }
+
+    //Styles copy
+    const_cast<Project*>(this)->mStRes.lock(true);
+    const_cast<Project*>(src_n)->mStRes.lock(false);
+    mStProp = src_n->mStProp;
+    const_cast<Project*>(this)->mStRes.unlock();
+    const_cast<Project*>(src_n)->mStRes.unlock();
 
     //Copy included pages
     src_n->list(pls);
@@ -232,9 +239,9 @@ void Project::save_( )
 	vector<string> pls;
 	mimeDataList(pls,mOldDB);
 	string mimeType, mimeData;
-	for(unsigned i_m = 0; i_m < pls.size(); i_m++) {
-	    mimeDataGet(pls[i_m], mimeType, &mimeData, mOldDB);
-	    mimeDataSet(pls[i_m], mimeType, mimeData, DB());
+	for(unsigned iM = 0; iM < pls.size(); iM++) {
+	    mimeDataGet(pls[iM], mimeType, &mimeData, mOldDB);
+	    mimeDataSet(pls[iM], mimeType, mimeData, DB());
 	}
 	// Session's data copy
 	vector<vector<string> > full;
@@ -246,7 +253,7 @@ void Project::save_( )
 
     mOldDB = TBDS::realDBName(DB());
 
-    //Save styles
+    //Saving the styles
     ResAlloc res(mStRes, false);
     TConfig cStl(&mod->elPrjStl());
     for(map<string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++) {
@@ -256,15 +263,16 @@ void Project::save_( )
 	SYS->db().at().dataSet(fullDB()+"_stl",nodePath()+tbl()+"_stl",cStl);
     }
 
-    // Check for removed properties
+    // Checking for the removed properties
     vector<vector<string> > full;
     res.request(true);
     cStl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,false,&full); )
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,false,&full); ) {
 	if(mStProp.find(cStl.cfg("ID").getS()) == mStProp.end()) {
-	    if(!SYS->db().at().dataDel(fullDB()+"_stl",nodePath()+tbl()+"_stl",cStl,false,false,true))	break;
+	    if(!SYS->db().at().dataDel(fullDB()+"_stl",nodePath()+tbl()+"_stl",cStl,true,false,true))	break;
 	    if(full.empty()) fldCnt--;
 	}
+    }
 }
 
 void Project::setEnable( bool val )
@@ -435,17 +443,20 @@ void Project::stlPropList( vector<string> &ls )
 
 string Project::stlPropGet( const string &pid, const string &def, int sid )
 {
+    if(pid.empty() || pid == "<Styles>")	return def;
+
     ResAlloc res(mStRes, false);
     if(sid < 0) sid = stlCurent();
-    if(pid.empty() || sid < 0 || sid >= stlSize() || pid == "<Styles>") return def;
-
-    map<string, vector<string> >::iterator iStPrp = mStProp.find(pid);
-    if(iStPrp != mStProp.end()) return iStPrp->second[sid];
-    vector<string> vl;
-    for(int i_v = 0; i_v < stlSize(); i_v++) vl.push_back(def);
-    res.request(true);
-    mStProp[pid] = vl;
-    modif();
+    map<string, vector<string> >::iterator iStPrp = mStProp.end();
+    if((iStPrp=mStProp.find(pid)) == mStProp.end()) {
+	vector<string> vl;
+	for(int iV = 0; iV < vmax(1,stlSize()); iV++) vl.push_back(def);
+	res.request(true);
+	mStProp[pid] = vl;
+	modif();
+	return def;
+    }
+    if(iStPrp != mStProp.end() && sid >= 0 && sid < stlSize()) return iStPrp->second[sid];
 
     return def;
 }
@@ -748,8 +759,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 		map< string, vector<string> >::iterator iStPrp;
 		for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
 		    if(iStPrp->first == "<Styles>") continue;
-		    else if(iStPrp->second.size()) iStPrp->second.push_back(iStPrp->second[iStPrp->second.size()-1]);
-		    else mStProp.erase(iStPrp--);
+		    else if(stlSize() > iStPrp->second.size()) iStPrp->second.push_back(iStPrp->second[iStPrp->second.size()-1]);
+		    //else mStProp.erase(iStPrp--);
 		iStPrp = mStProp.find("<Styles>");
 		if(iStPrp == mStProp.end()) mStProp["<Styles>"] = vector<string>(1,_("New style"));
 		else iStPrp->second.push_back(_("New style"));
@@ -768,18 +779,16 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::strSepParse(stlGet(stlCurent()),0,';'));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string sprv = stlGet(stlCurent());
-	    stlSet(stlCurent(),opt->text());
+	    stlSet(stlCurent(), opt->text());
 	}
     }
     else if(a_path == "/style/props") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD) && stlCurent() >=0 && stlCurent() < stlSize())
-	{
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD) && stlCurent() >= 0 && stlCurent() < stlSize()) {
 	    XMLNode *n_id = ctrMkNode("list",opt,-1,"/style/props/id","");
 	    XMLNode *n_vl = ctrMkNode("list",opt,-1,"/style/props/vl","");
 
 	    ResAlloc res(mStRes, false);
-	    for(map< string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
-	    {
+	    for(map<string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++) {
 		if(iStPrp->first == "<Styles>") continue;
 		if(n_id)	n_id->childAdd("el")->setText(iStPrp->first);
 		if(n_vl)	n_vl->childAdd("el")->setText(iStPrp->second[stlCurent()]);
@@ -798,10 +807,11 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/style/erase" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR) && stlCurent() >=0 && stlCurent() < stlSize())
     {
-	ResAlloc res( mStRes, true );
+	ResAlloc res(mStRes, true);
 	map< string, vector<string> >::iterator iStPrp;
 	for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
-	    iStPrp->second.erase(iStPrp->second.begin()+stlCurent());
+	    if(iStPrp->second.size() > 1)
+		iStPrp->second.erase(iStPrp->second.begin()+stlCurent());
 	stlCurentSet(-1);
     }
     else if(a_path == "/mess/tm") {

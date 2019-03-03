@@ -160,6 +160,8 @@ class LWidget : public Widget, public TConfig
 	bool	enableByNeed;	//Load and enable by need
 	ResMtx &funcM( )	{ return mFuncM; }
 
+	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
+
     protected:
 	//Methods
 	void postDisable( int flag );

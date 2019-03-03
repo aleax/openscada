@@ -170,7 +170,7 @@ INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','tiMin'
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','h1','/wlb_Main/wdg_cntrRegul/wdg_h1','value;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','h2','/wlb_Main/wdg_cntrRegul/wdg_h2','value;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_el8','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','trnd1','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_trnd1','curSek;',2);
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','trnd1','/prj_AGLKS/pg_so/pg_2/pg_ggraph/wdg_trnd1','curSek;sclWin;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el4','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el4','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el5','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el5','name;aMax;aMin;addr;color;digComs;digStts;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','trnd1','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_trnd1','curSek;',2);
@@ -451,60 +451,60 @@ ws_FocusIn:/el8:open:/pg_control/pg_ElCadr','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph','curSek','1247474043',40,'','','trnd1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Generic',41,'','','','Графіки 1','','','Графики 1','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin','<EVAL>',34,'Parameter|wMin','prm:/LogicLev/experiment/T_PP1/wMin','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/LogicLev/experiment/F_PP1/var','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/LogicLev/experiment/F_PP1/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/LogicLev/experiment/P_PP5/min','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/var','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/ed','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/LogicLev/experiment/P_PP5/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/LogicLev/experiment/P_PP5/var','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/LogicLev/experiment/P_PP5/ed','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/var','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/ed','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/max','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/LogicLev/experiment/P_PP3/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/LogicLev/experiment/P_PP3/var','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/LogicLev/experiment/P_PP3/ed','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/LogicLev/experiment/P_PP3/max','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/LogicLev/experiment/P_PP3/min','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/LogicLev/experiment/P_PP1/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/LogicLev/experiment/P_PP1/var','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/LogicLev/experiment/P_PP1/ed','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/LogicLev/experiment/P_PP1/max','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/var','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/ed','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/max','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeC','<EVAL>',34,'Parameter|casc','prm:/LogicLev/experiment/T_PP1','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/LogicLev/experiment/Pi/max','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/LogicLev/experiment/Pi/ed','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/LogicLev/experiment/Pi/var','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/LogicLev/experiment/Pi/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA','<EVAL>',34,'Parameter|auto','prm:/LogicLev/experiment/T_PP3','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeC','<EVAL>',34,'Parameter|casc','prm:/LogicLev/experiment/T_PP3','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMax','<EVAL>',34,'Parameter|wMax','prm:/LogicLev/experiment/T_PP1/wMax','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec','<EVAL>',34,'Parameter|prec','prm:/LogicLev/experiment/T_PP1','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','ed','<EVAL>',34,'Parameter|ed','prm:/LogicLev/experiment/Ti/ed','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','max','<EVAL>',42,'Parameter|max','prm:/LogicLev/experiment/Ti/max','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','min','<EVAL>',42,'Parameter|min','prm:/LogicLev/experiment/Ti/min','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA','<EVAL>',34,'Parameter|auto','prm:/LogicLev/experiment/Ti','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeC','<EVAL>',34,'Parameter|casc','prm:/LogicLev/experiment/Ti','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec','<EVAL>',34,'Parameter|prec','prm:/LogicLev/experiment/Ti','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMax','<EVAL>',34,'Parameter|wMax','prm:/LogicLev/experiment/Ti/wMax','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin','<EVAL>',34,'Parameter|wMin','prm:/LogicLev/experiment/Ti/wMin','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Graphics group element',34,'Parameter|NAME','prm:/LogicLev/experiment/T_PP1/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMax','<EVAL>',34,'Parameter|aMax','prm:/LogicLev/experiment/T_PP1/aMax','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMin','<EVAL>',34,'Parameter|aMin','prm:/LogicLev/experiment/T_PP1/aMin','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','addr','<EVAL>',42,'Parameter|var','prm:/LogicLev/experiment/T_PP1/var','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','ed','<EVAL>',34,'Parameter|ed','prm:/LogicLev/experiment/T_PP1/ed','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','max','<EVAL>',42,'Parameter|max','prm:/LogicLev/experiment/T_PP1/max','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM101/PT1006_1/prec','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','addr','<EVAL>',42,'Parameter|var','prm:/LogicLev/experiment/T_PP3/var','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','ed','<EVAL>',34,'Parameter|ed','prm:/LogicLev/experiment/T_PP3/ed','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','max','<EVAL>',42,'Parameter|max','prm:/LogicLev/experiment/T_PP3/max','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','min','<EVAL>',42,'Parameter|min','prm:/LogicLev/experiment/T_PP3/min','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/T_PP1/wMin','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/F_PP1/var','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/experiment/F_PP1/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/LogicLev/experiment/P_PP5/min','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/var','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/ed','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/experiment/P_PP5/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/P_PP5/var','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/LogicLev/experiment/P_PP5/ed','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/var','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/ed','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/max','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/experiment/P_PP3/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/P_PP3/var','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/LogicLev/experiment/P_PP3/ed','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/LogicLev/experiment/P_PP3/max','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/LogicLev/experiment/P_PP3/min','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/experiment/P_PP1/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/P_PP1/var','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/LogicLev/experiment/P_PP1/ed','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/LogicLev/experiment/P_PP1/max','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/var','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/ed','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/max','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/T_PP1','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/LogicLev/experiment/Pi/max','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/LogicLev/experiment/Pi/ed','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/Pi/var','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/experiment/Pi/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/T_PP3','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/T_PP3','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/T_PP1/wMax','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/T_PP1','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','ed',NULL,34,'Parameter|ed','prm:/LogicLev/experiment/Ti/ed','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','max',NULL,42,'Parameter|max','prm:/LogicLev/experiment/Ti/max','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','min',NULL,42,'Parameter|min','prm:/LogicLev/experiment/Ti/min','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/Ti','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/Ti','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/Ti','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/Ti/wMax','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/Ti/wMin','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/experiment/T_PP1/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/T_PP1/aMax','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/T_PP1/aMin','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','addr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/T_PP1/var','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','ed',NULL,34,'Parameter|ed','prm:/LogicLev/experiment/T_PP1/ed','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','max',NULL,42,'Parameter|max','prm:/LogicLev/experiment/T_PP1/max','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM101/PT1006_1/prec','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','addr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/T_PP3/var','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','ed',NULL,34,'Parameter|ed','prm:/LogicLev/experiment/T_PP3/ed','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','max',NULL,42,'Parameter|max','prm:/LogicLev/experiment/T_PP3/max','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','min',NULL,42,'Parameter|min','prm:/LogicLev/experiment/T_PP3/min','el3','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc','name','Documents',0,'','','','Документи','','','Документы','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc','dscr','Logical container of page group: "Documents"',0,'','','','Логічний контейнер групи сторінок: "Документи"','','','Логический контейнер группы страниц: "Документы"','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_doc/pg_1','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
@@ -926,45 +926,45 @@ ws_FocusIn:/el7:open:/pg_control/pg_ElCadr
 ws_FocusIn:/el8:open:/pg_control/pg_ElCadr','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph','curSek','1205241018',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM101/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM101/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM101/ST8612/max','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM101/ST8612/min','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM101/ST8612/prec','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM101/F101/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM101/F101/var','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM101/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM101/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM101/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM101/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM101/F101/ed','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM101/F101/max','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM101/F101/min','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM101/F101/prec','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM101/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM101/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM101/P101/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM101/P101/var','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM101/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM101/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM101/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM101/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM101/P101/ed','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM101/P101/max','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM101/P101/min','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM101/P101/prec','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM101/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM101/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM101/PT1006_1/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM101/PT1006_1/var','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM101/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM101/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM101/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM101/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM101/PT1006_1/ed','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM101/PT1006_1/max','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM101/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM101/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM101/ST8612/max','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM101/ST8612/min','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM101/ST8612/prec','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM101/F101/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM101/F101/var','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM101/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM101/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM101/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM101/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM101/F101/ed','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM101/F101/max','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM101/F101/min','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM101/F101/prec','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM101/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM101/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM101/P101/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM101/P101/var','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM101/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM101/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM101/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM101/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM101/P101/ed','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM101/P101/max','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM101/P101/min','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM101/P101/prec','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM101/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM101/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM101/PT1006_1/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM101/PT1006_1/var','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM101/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM101/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM101/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM101/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM101/PT1006_1/ed','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM101/PT1006_1/max','el4','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn','name','Mnemos',0,'','','','Мнемосхеми','','','Мнемосхемы','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn','dscr','Logical containers of page group: "Mnemos"',0,'','','','Логічний контейнер групи сторінок: "Мнемосхеми"','','','Логический контейнер группы страниц: "Мнемосхемы"','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_KM101','pgGrp','so',32,'','','','','','','','','');
@@ -1007,24 +1007,24 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','pVal','0'
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','pName','',34,'Parameter|NAME','prm:/LogicLev/experiment/F3/NAME','Pi_нд','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','pErr','<EVAL>',34,'Parameter|err','prm:/LogicLev/experiment/F3/err','Pi_нд','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','pgNoOpenProc','1',0,'','','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/LogicLev/experiment/F_PP1/ed','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/max','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/min','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/LogicLev/experiment/P_PP5/max','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/min','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/LogicLev/experiment/P_PP1/min','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/min','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/LogicLev/experiment/Pi/min','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Graphics group element',34,'Parameter|NAME','prm:/LogicLev/experiment/T_PP3/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMax','<EVAL>',34,'Parameter|aMax','prm:/LogicLev/experiment/T_PP3/aMax','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMin','<EVAL>',34,'Parameter|aMin','prm:/LogicLev/experiment/T_PP3/aMin','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM101/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM101/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM101/PT0204/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM101/PT0204/var','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM101/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM101/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/LogicLev/experiment/F_PP1/ed','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/max','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/min','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/LogicLev/experiment/P_PP5/max','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/min','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/LogicLev/experiment/P_PP1/min','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/min','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/LogicLev/experiment/Pi/min','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/experiment/T_PP3/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/T_PP3/aMax','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/T_PP3/aMin','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM101/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM101/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM101/PT0204/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM101/PT0204/var','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM101/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM101/PT0204','el5','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','st_close',NULL,38,'Parameter|st_close','prm:/BlockCalc/Anast1to2node/КШ7/st_close','KSH7','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_doc_panel','value','0',8,'','','size','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_doc_panel','value','0',8,'','','date','','','','','','');
@@ -1168,44 +1168,43 @@ ws_FocusIn:/el7:open:/pg_control/pg_ElCadr
 ws_FocusIn:/el8:open:/pg_control/pg_ElCadr','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph','curSek','1205241018',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','KM102',40,'','','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','grpName','KM102',41,'','KM102','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM102/TE1314_1/var','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM102/TE1314_1/ed','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM102/TE1314_1/max','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM102/TE1314_1/min','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM102/TE1314_2/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM102/TE1313_1/var','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM102/TE1313_1/ed','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM102/TE1313_1/max','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM102/TE1313_1/min','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM102/TE1314_1/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM102/PT0204/ed','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM102/PT0204/max','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM102/PT0204/min','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM102/TE1313_1/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM102/PT1006_1/max','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM102/PT1006_1/min','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM102/PT0204/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM102/PT0204/var','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM102/P103/max','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM102/P103/min','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM102/PT1006_1/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM102/PT1006_1/var','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM102/PT1006_1/ed','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM102/F103/min','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM102/P103/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM102/P103/var','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM102/P103/ed','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM102/F103/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM102/F103/var','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM102/F103/ed','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM102/F103/max','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM102/ST8612/var','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM102/ST8612/ed','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM102/ST8612/max','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM102/ST8612/min','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM102/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','KM102',41,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM102/TE1314_1/var','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM102/TE1314_1/ed','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM102/TE1314_1/max','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM102/TE1314_1/min','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM102/TE1314_2/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM102/TE1313_1/var','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM102/TE1313_1/ed','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM102/TE1313_1/max','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM102/TE1313_1/min','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM102/TE1314_1/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM102/PT0204/ed','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM102/PT0204/max','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM102/PT0204/min','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM102/TE1313_1/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM102/PT1006_1/max','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM102/PT1006_1/min','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM102/PT0204/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM102/PT0204/var','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM102/P103/max','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM102/P103/min','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM102/PT1006_1/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM102/PT1006_1/var','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM102/PT1006_1/ed','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM102/F103/min','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM102/P103/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM102/P103/var','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM102/P103/ed','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM102/F103/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM102/F103/var','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM102/F103/ed','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM102/F103/max','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM102/ST8612/var','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM102/ST8612/ed','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM102/ST8612/max','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM102/ST8612/min','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM102/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn','name','Mnemos',0,'','','','Мнемосхеми','','','Мнемосхемы','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn','dscr','Logical containers of page group: "Mnemos"',0,'','','','Логічний контейнер групи сторінок: "Мнемосхеми"','','','Логический контейнер группы страниц: "Мнемосхемы"','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn/pg_KM101','name','KM102',32,'','','','','','','','','');
@@ -1422,7 +1421,7 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmCasc
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmAuto','0',38,'Parameter|auto','prm:/LogicLev/experiment/Pi','el1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','max','100',42,'Parameter|max','prm:/LogicLev/experiment/Pi/max','el1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','min','0',42,'Parameter|min','prm:/LogicLev/experiment/Pi/min','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/LogicLev/experiment/F_PP1/max','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/LogicLev/experiment/F_PP1/max','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','shifr',NULL,38,'Parameter|NAME','prm:/BlockCalc/Anast1to2node/КШ22/NAME','KSH22','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','st_close',NULL,38,'Parameter|st_close','prm:/BlockCalc/Anast1to2node/КШ21/st_close','KSH21','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','shifr',NULL,38,'Parameter|NAME','prm:/BlockCalc/Anast1to2node/КШ7/NAME','KSH7','','','','','','');
@@ -1445,11 +1444,11 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn/pg_KM101','pName'
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_grph_panel','value','0.01',8,'','','size','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_grph_panel','value','0',8,'','','date','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gview/pg_1','dscr','Pages template: "Overview frames group"',32,'','','','Шаблон сторінок: "Група оглядових кадрів"','','','Pages'' template: "Overview frames group"','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/LogicLev/experiment/F_PP1/min','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/LogicLev/experiment/F_PP1/min','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','curSek','1285253917',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA','<EVAL>',34,'Parameter|auto','prm:/LogicLev/experiment/T_PP1','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','min','<EVAL>',42,'Parameter|min','prm:/LogicLev/experiment/T_PP1/min','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Temperatures',40,'','','','Графіки 2','','','Графики 2','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/T_PP1','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','min',NULL,42,'Parameter|min','prm:/LogicLev/experiment/T_PP1/min','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Temperatures',41,'','','','Графіки 2','','','Графики 2','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmAuto','0',38,'Parameter|auto','prm:/LogicLev/experiment/F_PP1','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmCasc','0',38,'Parameter|casc','prm:/LogicLev/experiment/F_PP1','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmClose','<EVAL>',38,'Parameter|close','prm:/LogicLev/experiment/F_PP1','el8','','','','','','');
@@ -1464,13 +1463,13 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmStop
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmVar','0',38,'Parameter|var','prm:/LogicLev/experiment/F_PP1/var','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmAddr','<EVAL>',42,'Parameter|var','prm:/LogicLev/experiment/F_PP1/var','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gview/pg_1','var','<EVAL>',34,'Parameter|var','prm:/LogicLev/experiment/P4/var','el1_4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM101/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM101/ST8612/var','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','KM101',40,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM101/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM101/ST8612/var','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','KM101',41,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_KM101','pErr','<EVAL>',34,'Parameter|err','prm:/BlockCalc/KM101/TE1314_2/err','TAT101_2','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_KM101','pName','',34,'Parameter|NAME','prm:/BlockCalc/KM101/TE1314_2/NAME','TAT101_2','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_KM101','pVal','0',34,'Parameter|var','prm:/BlockCalc/KM101/TE1314_2/var','TAT101_2','','','','','','');
@@ -1478,10 +1477,10 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_KM101','pName'
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_KM101','pVal','0',34,'Parameter|var','prm:/BlockCalc/KM101/PT0202/var','P_KM101_1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_KM101','pName','P',33,'Parameter|NAME','P','P_KM101_2','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_KM101','pVal','0',34,'Parameter|var','prm:/BlockCalc/KM101/PT0204/var','P_KM101_2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM102/TE1314_2/var','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM102/TE1314_2/ed','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM102/TE1314_2/max','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM102/TE1314_2/min','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM102/TE1314_2/var','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM102/TE1314_2/ed','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM102/TE1314_2/max','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM102/TE1314_2/min','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','curSek','1283328064',40,'','','trnd1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn/pg_KM101','pErr','<EVAL>',34,'Parameter|err','prm:/BlockCalc/KM102/TE1314_2/err','TAT101_2','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn/pg_KM101','pName','',34,'Parameter|NAME','prm:/BlockCalc/KM102/TE1314_2/NAME','TAT101_2','','','','','','');
@@ -1499,34 +1498,32 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmVarI
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmVarIn','<EVAL>',38,'Parameter|varIn','prm:/LogicLev/experiment/P_PP3','el4','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmVarIn','<EVAL>',38,'Parameter|varIn','prm:/LogicLev/experiment/P_PP5','el6','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmVarIn','<EVAL>',38,'Parameter|varIn','prm:/LogicLev/experiment/F_PP1','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM101/PT0204/min','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM101/PT0204/prec','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM101/PT0204/max','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM101/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM101/PT0204/ed','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM101/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMax','<EVAL>',34,'Parameter|wMax','prm:/LogicLev/experiment/T_PP3/wMax','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM101/ST8612/ed','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin','<EVAL>',34,'Parameter|wMin','prm:/LogicLev/experiment/T_PP3/wMin','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM101/PT1006_1/min','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','grpName','KM101',41,'','KM101','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Graphics group element',34,'Parameter|NAME','prm:/LogicLev/experiment/T_PP5/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM101/PT0204/min','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM101/PT0204/prec','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM101/PT0204/max','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM101/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM101/PT0204/ed','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM101/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/T_PP3/wMax','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM101/ST8612/ed','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/T_PP3/wMin','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM101/PT1006_1/min','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/experiment/T_PP5/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so','backColor','ivory',96,'backColor','','','','backColor','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_ElCadr','prmManIn','<EVAL>',46,'<page>|manIn','','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM101/TE1313_1/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM101/TE1313_1/var','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM101/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM101/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM101/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec','<EVAL>',34,'Parameter|prec','prm:/LogicLev/experiment/T_PP3','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM101/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM101/TE1313_1/ed','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM101/TE1313_1/max','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','addr','<EVAL>',42,'Parameter|var','prm:/LogicLev/experiment/Ti/var','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMin','<EVAL>',34,'Parameter|aMin','prm:/LogicLev/experiment/Ti/aMin','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMax','<EVAL>',34,'Parameter|aMax','prm:/LogicLev/experiment/Ti/aMax','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','grpName','Temperatures',41,'','Temperatures','','Температури','','Температури','Температуры','','Температуры');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Graphics group element',34,'Parameter|NAME','prm:/LogicLev/experiment/Ti/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM101/TE1313_1/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM101/TE1313_1/var','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM101/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM101/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM101/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/T_PP3','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM101/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM101/TE1313_1/ed','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM101/TE1313_1/max','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','addr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/Ti/var','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/Ti/aMin','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/Ti/aMax','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/experiment/Ti/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/auto','PC1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','PC1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pPrec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/prec','PC1','','','','','','');
@@ -1735,170 +1732,170 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','value','
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','value','0',8,'','','tiMin','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','value','0',8,'','','h1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','value','0',8,'','','h2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/LogicLev/experiment/Pi','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/LogicLev/experiment/Pi','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/LogicLev/experiment/Pi/aMax','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/LogicLev/experiment/Pi/aMin','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/LogicLev/experiment/Pi/prec','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/LogicLev/experiment/Pi/wMax','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/LogicLev/experiment/Pi/wMin','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/auto','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/prec','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/LogicLev/experiment/P_PP1','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/LogicLev/experiment/P_PP1','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/LogicLev/experiment/P_PP1/aMax','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/LogicLev/experiment/P_PP1/aMin','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/LogicLev/experiment/P_PP1','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/LogicLev/experiment/P_PP1/wMax','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/LogicLev/experiment/P_PP1/wMin','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/LogicLev/experiment/P_PP3','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/LogicLev/experiment/P_PP3','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/LogicLev/experiment/P_PP3/aMax','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/LogicLev/experiment/P_PP3/aMin','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/LogicLev/experiment/P_PP3','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/LogicLev/experiment/P_PP3/wMax','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/LogicLev/experiment/P_PP3/wMin','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/auto','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/prec','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/LogicLev/experiment/P_PP5','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/LogicLev/experiment/P_PP5','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/LogicLev/experiment/P_PP5/aMax','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/LogicLev/experiment/P_PP5/aMin','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/LogicLev/experiment/P_PP5','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/LogicLev/experiment/P_PP5/wMax','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/LogicLev/experiment/P_PP5/wMin','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/auto','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/prec','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/LogicLev/experiment/F_PP1','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/LogicLev/experiment/F_PP1','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/LogicLev/experiment/F_PP1/aMax','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/LogicLev/experiment/F_PP1/aMin','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/LogicLev/experiment/F_PP1','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/LogicLev/experiment/F_PP1/wMax','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/LogicLev/experiment/F_PP1/wMin','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM102/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM102/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM102/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM102/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM102/ST8612/prec','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM102/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM102/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM102/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM102/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM102/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM102/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM102/F103/prec','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM102/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM102/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM102/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM102/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM102/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM102/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM102/P103/prec','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM102/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM102/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM102/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM102/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM102/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM102/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM102/PT1006_1/prec','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM102/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM102/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM102/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM102/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM102/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM102/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM102/PT0204/prec','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM102/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM102/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM102/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM102/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM102/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM102/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM102/TE1313_1/prec','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM102/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM102/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM102/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM102/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM102/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM102/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM102/TE1314_1/prec','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM102/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM102/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM102/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM102/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM102/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM102/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM102/TE1314_2/prec','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM102/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM102/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM101/TE1313_1/min','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM101/TE1313_1/prec','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM101/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM101/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM101/TE1314_1/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM101/TE1314_1/var','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM101/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM101/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM101/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM101/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM101/TE1314_1/ed','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM101/TE1314_1/max','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM101/TE1314_1/min','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM101/TE1314_1/prec','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM101/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM101/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM101/TE1314_2/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM101/TE1314_2/var','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM101/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM101/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM101/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM101/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM101/TE1314_2/ed','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM101/TE1314_2/max','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM101/TE1314_2/min','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM101/TE1314_2/prec','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM101/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM101/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/Pi','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/Pi','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/Pi/aMax','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/Pi/aMin','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/Pi/prec','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/Pi/wMax','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/Pi/wMin','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/auto','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/prec','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/P_PP1','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/P_PP1','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/P_PP1/aMax','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/P_PP1/aMin','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/P_PP1','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/P_PP1/wMax','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/P_PP1/wMin','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/P_PP3','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/P_PP3','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/P_PP3/aMax','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/P_PP3/aMin','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/P_PP3','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/P_PP3/wMax','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/P_PP3/wMin','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/auto','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/prec','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/P_PP5','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/P_PP5','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/P_PP5/aMax','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/P_PP5/aMin','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/P_PP5','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/P_PP5/wMax','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/P_PP5/wMin','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/auto','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/prec','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/F_PP1','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/F_PP1','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/F_PP1/aMax','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/F_PP1/aMin','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/F_PP1','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/F_PP1/wMax','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/F_PP1/wMin','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM102/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM102/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM102/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM102/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM102/ST8612/prec','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM102/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM102/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM102/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM102/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM102/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM102/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM102/F103/prec','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM102/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM102/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM102/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM102/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM102/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM102/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM102/P103/prec','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM102/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM102/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM102/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM102/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM102/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM102/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM102/PT1006_1/prec','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM102/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM102/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM102/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM102/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM102/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM102/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM102/PT0204/prec','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM102/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM102/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM102/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM102/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM102/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM102/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM102/TE1313_1/prec','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM102/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM102/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM102/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM102/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM102/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM102/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM102/TE1314_1/prec','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM102/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM102/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM102/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM102/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM102/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM102/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM102/TE1314_2/prec','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM102/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM102/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM101/TE1313_1/min','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM101/TE1313_1/prec','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM101/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM101/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM101/TE1314_1/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM101/TE1314_1/var','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM101/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM101/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM101/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM101/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM101/TE1314_1/ed','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM101/TE1314_1/max','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM101/TE1314_1/min','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM101/TE1314_1/prec','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM101/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM101/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM101/TE1314_2/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM101/TE1314_2/var','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM101/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM101/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM101/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM101/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM101/TE1314_2/ed','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM101/TE1314_2/max','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM101/TE1314_2/min','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM101/TE1314_2/prec','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM101/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM101/TE1314_2','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','curSek','1415550014',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMax','<EVAL>',34,'Parameter|aMax','prm:/LogicLev/experiment/T_PP5/aMax','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMin','<EVAL>',34,'Parameter|aMin','prm:/LogicLev/experiment/T_PP5/aMin','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','addr','<EVAL>',42,'Parameter|var','prm:/LogicLev/experiment/T_PP5/var','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','ed','<EVAL>',34,'Parameter|ed','prm:/LogicLev/experiment/T_PP5/ed','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','max','<EVAL>',42,'Parameter|max','prm:/LogicLev/experiment/T_PP5/max','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','min','<EVAL>',42,'Parameter|min','prm:/LogicLev/experiment/T_PP5/min','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA','<EVAL>',34,'Parameter|auto','prm:/LogicLev/experiment/T_PP5','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeC','<EVAL>',34,'Parameter|casc','prm:/LogicLev/experiment/T_PP5','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec','<EVAL>',34,'Parameter|prec','prm:/LogicLev/experiment/T_PP5','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMax','<EVAL>',34,'Parameter|wMax','prm:/LogicLev/experiment/T_PP5/wMax','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin','<EVAL>',34,'Parameter|wMin','prm:/LogicLev/experiment/T_PP5/wMin','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM102cntr/КШ112/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM102cntr/КШ112/com','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','max','<EVAL>',42,'Parameter|max','val:5','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','min','<EVAL>',42,'Parameter|min','val:-1','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/T_PP5/aMax','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/T_PP5/aMin','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','addr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/T_PP5/var','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','ed',NULL,34,'Parameter|ed','prm:/LogicLev/experiment/T_PP5/ed','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','max',NULL,42,'Parameter|max','prm:/LogicLev/experiment/T_PP5/max','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','min',NULL,42,'Parameter|min','prm:/LogicLev/experiment/T_PP5/min','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/T_PP5','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/T_PP5','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/T_PP5','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/T_PP5/wMax','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/T_PP5/wMin','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM102cntr/КШ112/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM102cntr/КШ112/com','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','max',NULL,42,'Parameter|max','val:5','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','min',NULL,42,'Parameter|min','val:-1','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM102cntr/КШ112','el5','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','color','cyan-127',41,'','cyan-127','el5','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','digComs','OPEN;CLOSE',33,'','OPEN;CLOSE','el5','ВІДКР;ЗАКР','','ВІДКР;ЗАКР','ОТКР;ЗАКР','','ОТКР;ЗАКР');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','digRevers','0',33,'','','el5','','','','','','');
@@ -1943,16 +1940,15 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn/pg_KM101','prec',
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4','name','KM201',0,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph','curSek','1205241018',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','KM201',40,'','','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','grpName','KM201',41,'','KM201','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM201/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM201/F101/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM201/P101/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM201/PT1006_1/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM201/PT0204/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM201/TE1313_1/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM201/TE1314_1/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM201/TE1314_2/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','KM201',41,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM201/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM201/F101/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM201/P101/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM201/PT1006_1/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM201/PT0204/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM201/TE1313_1/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM201/TE1314_1/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM201/TE1314_2/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_mn','name','Mnemos',0,'','','','Мнемосхеми','','','Мнемосхемы','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_mn','dscr','Logical containers of page group: "Mnemos"',0,'','','','Логічний контейнер групи сторінок: "Мнемосхеми"','','','Логический контейнер группы страниц: "Мнемосхемы"','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_mn/pg_1','name','KM201',32,'','','','','','','','','');
@@ -2047,94 +2043,94 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_mn/pg_1','pVal','0',
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_mn/pg_1','prec','1',34,'Parameter|prec','prm:/BlockCalc/KM201/PT0204/prec','P_KM101_2','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_mn/pg_1','text','PP201',32,'','','txtPP101','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_mn/pg_1','text','PP202',32,'','','txtPP102','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM201/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM201/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM201/ST8612/var','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM201/ST8612/ed','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM201/ST8612/max','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM201/ST8612/min','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM201/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM201/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM201/ST8612/prec','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM201/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM201/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM201/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM201/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM201/F101/var','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM201/F101/ed','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM201/F101/max','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM201/F101/min','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM201/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM201/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM201/F101/prec','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM201/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM201/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM201/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM201/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM201/P101/var','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM201/P101/ed','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM201/P101/max','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM201/P101/min','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM201/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM201/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM201/P101/prec','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM201/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM201/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM201/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM201/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM201/PT1006_1/var','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM201/PT1006_1/ed','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM201/PT1006_1/max','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM201/PT1006_1/min','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM201/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM201/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM201/PT1006_1/prec','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM201/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM201/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM201/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM201/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM201/PT0204/var','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM201/PT0204/ed','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM201/PT0204/max','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM201/PT0204/min','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM201/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM201/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM201/PT0204/prec','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM201/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM201/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM201/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM201/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM201/TE1313_1/var','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM201/TE1313_1/ed','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM201/TE1313_1/max','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM201/TE1313_1/min','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM201/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM201/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM201/TE1313_1/prec','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM201/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM201/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM201/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM201/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM201/TE1314_1/var','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM201/TE1314_1/ed','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM201/TE1314_1/max','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM201/TE1314_1/min','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM201/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM201/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM201/TE1314_1/prec','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM201/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM201/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM201/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM201/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM201/TE1314_2/var','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM201/TE1314_2/ed','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM201/TE1314_2/max','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM201/TE1314_2/min','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM201/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM201/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM201/TE1314_2/prec','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM201/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM201/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM201/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM201/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM201/ST8612/var','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM201/ST8612/ed','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM201/ST8612/max','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM201/ST8612/min','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM201/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM201/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM201/ST8612/prec','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM201/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM201/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM201/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM201/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM201/F101/var','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM201/F101/ed','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM201/F101/max','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM201/F101/min','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM201/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM201/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM201/F101/prec','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM201/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM201/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM201/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM201/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM201/P101/var','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM201/P101/ed','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM201/P101/max','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM201/P101/min','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM201/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM201/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM201/P101/prec','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM201/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM201/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM201/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM201/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM201/PT1006_1/var','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM201/PT1006_1/ed','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM201/PT1006_1/max','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM201/PT1006_1/min','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM201/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM201/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM201/PT1006_1/prec','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM201/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM201/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM201/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM201/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM201/PT0204/var','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM201/PT0204/ed','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM201/PT0204/max','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM201/PT0204/min','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM201/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM201/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM201/PT0204/prec','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM201/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM201/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM201/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM201/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM201/TE1313_1/var','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM201/TE1313_1/ed','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM201/TE1313_1/max','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM201/TE1313_1/min','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM201/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM201/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM201/TE1313_1/prec','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM201/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM201/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM201/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM201/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM201/TE1314_1/var','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM201/TE1314_1/ed','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM201/TE1314_1/max','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM201/TE1314_1/min','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM201/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM201/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM201/TE1314_1/prec','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM201/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM201/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM201/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM201/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM201/TE1314_2/var','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM201/TE1314_2/ed','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM201/TE1314_2/max','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM201/TE1314_2/min','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM201/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM201/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM201/TE1314_2/prec','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM201/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM201/TE1314_2','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','spName','Pressure after first stage',33,'','Pressure after first stage','Pi_нд','Тиск після першої ступені','','Тиск після першої ступені','Давление после первой ступени','','Давление после первой ступени');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','spName','Temperature after first stage',33,'','Temperature after first stage','Ti_нд','Температура після першої ступені','','Температура після першої ступені','Температура после первой ступени','','Температура после первой ступени');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_mn/pg_KM101','name','KM202',32,'','','','','','','','','');
@@ -2235,207 +2231,205 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_mn/pg_KM101','text',
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5','name','KM202',0,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph','curSek','1205241018',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','KM202',40,'','','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','grpName','KM202',41,'','KM202','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/КМ202/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/КМ202/F103/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/КМ202/P103/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/КМ202/PT1006_1/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/КМ202/PT0204/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/КМ202/TE1313_1/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/КМ202/TE1314_1/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/КМ202/TE1314_2/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','KM202',41,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/КМ202/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/КМ202/F103/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/КМ202/P103/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/КМ202/PT1006_1/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/КМ202/PT0204/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/КМ202/TE1313_1/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/КМ202/TE1314_1/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/КМ202/TE1314_2/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_mn','name','Mnemos',0,'','','','Мнемосхеми','','','Мнемосхемы','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_mn','dscr','Logical containers of page group: "Mnemos"',0,'','','','Логічний контейнер групи сторінок: "Мнемосхеми"','','','Логический контейнер группы страниц: "Мнемосхемы"','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/КМ202/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/КМ202/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/КМ202/ST8612/var','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/КМ202/ST8612/ed','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/КМ202/ST8612/max','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/КМ202/ST8612/min','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/КМ202/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/КМ202/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/КМ202/ST8612/prec','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/КМ202/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/КМ202/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/КМ202/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/КМ202/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/КМ202/F103/var','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/КМ202/F103/ed','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/КМ202/F103/max','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/КМ202/F103/min','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/КМ202/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/КМ202/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/КМ202/F103/prec','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/КМ202/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/КМ202/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/КМ202/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/КМ202/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/КМ202/P103/var','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/КМ202/P103/ed','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/КМ202/P103/max','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/КМ202/P103/min','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/КМ202/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/КМ202/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/КМ202/P103/prec','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/КМ202/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/КМ202/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/КМ202/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/КМ202/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/КМ202/PT1006_1/var','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/КМ202/PT1006_1/ed','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/КМ202/PT1006_1/max','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/КМ202/PT1006_1/min','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/КМ202/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/КМ202/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/КМ202/PT1006_1/prec','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/КМ202/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/КМ202/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/КМ202/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/КМ202/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/КМ202/PT0204/var','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/КМ202/PT0204/ed','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/КМ202/PT0204/max','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/КМ202/PT0204/min','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/КМ202/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/КМ202/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/КМ202/PT0204/prec','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/КМ202/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/КМ202/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/КМ202/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/КМ202/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/КМ202/TE1313_1/var','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/КМ202/TE1313_1/ed','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/КМ202/TE1313_1/max','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/КМ202/TE1313_1/min','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/КМ202/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/КМ202/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/КМ202/TE1313_1/prec','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/КМ202/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/КМ202/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/КМ202/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/КМ202/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/КМ202/TE1314_1/var','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/КМ202/TE1314_1/ed','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/КМ202/TE1314_1/max','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/КМ202/TE1314_1/min','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/КМ202/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/КМ202/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/КМ202/TE1314_1/prec','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/КМ202/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/КМ202/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/КМ202/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/КМ202/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/КМ202/TE1314_2/var','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/КМ202/TE1314_2/ed','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/КМ202/TE1314_2/max','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/КМ202/TE1314_2/min','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/КМ202/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/КМ202/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/КМ202/TE1314_2/prec','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/КМ202/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/КМ202/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/КМ202/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/КМ202/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/КМ202/ST8612/var','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/КМ202/ST8612/ed','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/КМ202/ST8612/max','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/КМ202/ST8612/min','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/КМ202/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/КМ202/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/КМ202/ST8612/prec','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/КМ202/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/КМ202/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/КМ202/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/КМ202/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/КМ202/F103/var','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/КМ202/F103/ed','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/КМ202/F103/max','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/КМ202/F103/min','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/КМ202/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/КМ202/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/КМ202/F103/prec','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/КМ202/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/КМ202/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/КМ202/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/КМ202/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/КМ202/P103/var','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/КМ202/P103/ed','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/КМ202/P103/max','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/КМ202/P103/min','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/КМ202/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/КМ202/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/КМ202/P103/prec','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/КМ202/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/КМ202/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/КМ202/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/КМ202/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/КМ202/PT1006_1/var','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/КМ202/PT1006_1/ed','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/КМ202/PT1006_1/max','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/КМ202/PT1006_1/min','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/КМ202/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/КМ202/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/КМ202/PT1006_1/prec','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/КМ202/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/КМ202/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/КМ202/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/КМ202/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/КМ202/PT0204/var','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/КМ202/PT0204/ed','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/КМ202/PT0204/max','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/КМ202/PT0204/min','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/КМ202/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/КМ202/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/КМ202/PT0204/prec','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/КМ202/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/КМ202/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/КМ202/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/КМ202/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/КМ202/TE1313_1/var','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/КМ202/TE1313_1/ed','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/КМ202/TE1313_1/max','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/КМ202/TE1313_1/min','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/КМ202/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/КМ202/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/КМ202/TE1313_1/prec','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/КМ202/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/КМ202/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/КМ202/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/КМ202/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/КМ202/TE1314_1/var','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/КМ202/TE1314_1/ed','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/КМ202/TE1314_1/max','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/КМ202/TE1314_1/min','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/КМ202/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/КМ202/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/КМ202/TE1314_1/prec','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/КМ202/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/КМ202/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/КМ202/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/КМ202/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/КМ202/TE1314_2/var','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/КМ202/TE1314_2/ed','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/КМ202/TE1314_2/max','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/КМ202/TE1314_2/min','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/КМ202/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/КМ202/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/КМ202/TE1314_2/prec','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/КМ202/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/КМ202/TE1314_2','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6','name','KM301',0,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph','curSek','1205241018',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','KM301',40,'','','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','grpName','KM301',41,'','KM301','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM301/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM301/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM301/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM301/ST8612/var','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM301/ST8612/ed','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM301/ST8612/max','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM301/ST8612/min','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM301/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM301/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM301/ST8612/prec','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM301/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM301/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM301/F101/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM301/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM301/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM301/F101/var','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM301/F101/ed','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM301/F101/max','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM301/F101/min','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM301/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM301/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM301/F101/prec','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM301/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM301/F101','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM301/P101/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM301/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM301/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM301/P101/var','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM301/P101/ed','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM301/P101/max','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM301/P101/min','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM301/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM301/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM301/P101/prec','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM301/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM301/P101','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM301/PT1006_1/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM301/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM301/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM301/PT1006_1/var','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM301/PT1006_1/ed','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM301/PT1006_1/max','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM301/PT1006_1/min','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM301/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM301/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM301/PT1006_1/prec','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM301/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM301/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM301/PT0204/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM301/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM301/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM301/PT0204/var','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM301/PT0204/ed','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM301/PT0204/max','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM301/PT0204/min','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM301/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM301/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM301/PT0204/prec','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM301/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM301/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM301/TE1313_1/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM301/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM301/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM301/TE1313_1/var','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM301/TE1313_1/ed','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM301/TE1313_1/max','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM301/TE1313_1/min','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM301/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM301/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM301/TE1313_1/prec','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM301/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM301/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM301/TE1314_1/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM301/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM301/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM301/TE1314_1/var','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM301/TE1314_1/ed','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM301/TE1314_1/max','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM301/TE1314_1/min','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM301/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM301/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM301/TE1314_1/prec','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM301/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM301/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM301/TE1314_2/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM301/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM301/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM301/TE1314_2/var','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM301/TE1314_2/ed','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM301/TE1314_2/max','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM301/TE1314_2/min','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM301/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM301/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM301/TE1314_2/prec','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM301/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM301/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','KM301',41,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM301/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM301/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM301/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM301/ST8612/var','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM301/ST8612/ed','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM301/ST8612/max','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM301/ST8612/min','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM301/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM301/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM301/ST8612/prec','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM301/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM301/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM301/F101/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM301/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM301/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM301/F101/var','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM301/F101/ed','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM301/F101/max','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM301/F101/min','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM301/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM301/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM301/F101/prec','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM301/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM301/F101','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM301/P101/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM301/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM301/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM301/P101/var','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM301/P101/ed','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM301/P101/max','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM301/P101/min','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM301/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM301/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM301/P101/prec','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM301/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM301/P101','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM301/PT1006_1/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM301/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM301/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM301/PT1006_1/var','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM301/PT1006_1/ed','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM301/PT1006_1/max','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM301/PT1006_1/min','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM301/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM301/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM301/PT1006_1/prec','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM301/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM301/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM301/PT0204/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM301/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM301/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM301/PT0204/var','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM301/PT0204/ed','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM301/PT0204/max','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM301/PT0204/min','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM301/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM301/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM301/PT0204/prec','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM301/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM301/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM301/TE1313_1/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM301/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM301/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM301/TE1313_1/var','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM301/TE1313_1/ed','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM301/TE1313_1/max','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM301/TE1313_1/min','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM301/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM301/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM301/TE1313_1/prec','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM301/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM301/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM301/TE1314_1/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM301/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM301/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM301/TE1314_1/var','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM301/TE1314_1/ed','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM301/TE1314_1/max','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM301/TE1314_1/min','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM301/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM301/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM301/TE1314_1/prec','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM301/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM301/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM301/TE1314_2/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM301/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM301/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM301/TE1314_2/var','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM301/TE1314_2/ed','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM301/TE1314_2/max','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM301/TE1314_2/min','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM301/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM301/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM301/TE1314_2/prec','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM301/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM301/TE1314_2','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','curSek','1282204340',40,'','','trnd1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_mn','name','Mnemos',0,'','','','Мнемосхеми','','','Мнемосхемы','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_mn','dscr','Logical containers of page group: "Mnemos"',0,'','','','Логічний контейнер групи сторінок: "Мнемосхеми"','','','Логический контейнер группы страниц: "Мнемосхемы"','','');
@@ -2533,104 +2527,103 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_mn/pg_KM101','text',
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7','name','KM302',0,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph','curSek','1205241018',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','KM302',40,'','','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','grpName','KM302',41,'','KM302','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM302/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM302/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM302/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM302/ST8612/var','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM302/ST8612/ed','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM302/ST8612/max','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM302/ST8612/min','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM302/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM302/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM302/ST8612/prec','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM302/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM302/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM302/F103/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM302/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM302/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM302/F103/var','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM302/F103/ed','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM302/F103/max','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM302/F103/min','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM302/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM302/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM302/F103/prec','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM302/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM302/F103','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM302/P103/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM302/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM302/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM302/P103/var','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM302/P103/ed','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM302/P103/max','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM302/P103/min','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM302/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM302/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM302/P103/prec','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM302/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM302/P103','el3','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM302/PT1006_1/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM302/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM302/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM302/PT1006_1/var','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM302/PT1006_1/ed','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM302/PT1006_1/max','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM302/PT1006_1/min','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM302/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM302/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM302/PT1006_1/prec','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM302/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM302/PT1006_1','el4','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM302/PT0204/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM302/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM302/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM302/PT0204/var','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM302/PT0204/ed','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM302/PT0204/max','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM302/PT0204/min','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM302/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM302/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM302/PT0204/prec','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM302/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM302/PT0204','el5','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM302/TE1313_1/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM302/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM302/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM302/TE1313_1/var','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM302/TE1313_1/ed','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM302/TE1313_1/max','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM302/TE1313_1/min','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM302/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM302/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM302/TE1313_1/prec','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM302/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM302/TE1313_1','el6','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM302/TE1314_1/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM302/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM302/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM302/TE1314_1/var','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM302/TE1314_1/ed','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM302/TE1314_1/max','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM302/TE1314_1/min','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM302/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM302/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM302/TE1314_1/prec','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM302/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM302/TE1314_1','el7','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM302/TE1314_2/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM302/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM302/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM302/TE1314_2/var','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM302/TE1314_2/ed','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','prm:/BlockCalc/KM302/TE1314_2/max','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','prm:/BlockCalc/KM302/TE1314_2/min','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM302/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM302/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM302/TE1314_2/prec','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/BlockCalc/KM302/TE1314_2','el8','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/BlockCalc/KM302/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','KM302',41,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM302/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM302/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM302/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM302/ST8612/var','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM302/ST8612/ed','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM302/ST8612/max','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM302/ST8612/min','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM302/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM302/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM302/ST8612/prec','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM302/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM302/ST8612','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM302/F103/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM302/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM302/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM302/F103/var','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM302/F103/ed','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM302/F103/max','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM302/F103/min','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM302/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM302/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM302/F103/prec','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM302/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM302/F103','el2','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM302/P103/NAME','el3','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM302/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM302/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM302/P103/var','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM302/P103/ed','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM302/P103/max','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM302/P103/min','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM302/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM302/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM302/P103/prec','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM302/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM302/P103','el3','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM302/PT1006_1/NAME','el4','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM302/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM302/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM302/PT1006_1/var','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM302/PT1006_1/ed','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM302/PT1006_1/max','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM302/PT1006_1/min','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM302/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM302/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM302/PT1006_1/prec','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM302/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM302/PT1006_1','el4','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM302/PT0204/NAME','el5','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM302/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM302/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM302/PT0204/var','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM302/PT0204/ed','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM302/PT0204/max','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM302/PT0204/min','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM302/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM302/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM302/PT0204/prec','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM302/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM302/PT0204','el5','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM302/TE1313_1/NAME','el6','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM302/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM302/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM302/TE1313_1/var','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM302/TE1313_1/ed','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM302/TE1313_1/max','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM302/TE1313_1/min','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM302/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM302/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM302/TE1313_1/prec','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM302/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM302/TE1313_1','el6','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM302/TE1314_1/NAME','el7','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM302/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM302/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM302/TE1314_1/var','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM302/TE1314_1/ed','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM302/TE1314_1/max','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM302/TE1314_1/min','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM302/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM302/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM302/TE1314_1/prec','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM302/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM302/TE1314_1','el7','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/KM302/TE1314_2/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/KM302/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/BlockCalc/KM302/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','addr',NULL,42,'Parameter|var','prm:/BlockCalc/KM302/TE1314_2/var','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','ed',NULL,34,'Parameter|ed','prm:/BlockCalc/KM302/TE1314_2/ed','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','max',NULL,42,'Parameter|max','prm:/BlockCalc/KM302/TE1314_2/max','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','min',NULL,42,'Parameter|min','prm:/BlockCalc/KM302/TE1314_2/min','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/BlockCalc/KM302/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/BlockCalc/KM302/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','prec',NULL,34,'Parameter|prec','prm:/BlockCalc/KM302/TE1314_2/prec','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/KM302/TE1314_2','el8','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/KM302/TE1314_2','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','curSek','1262701252',40,'','','trnd1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_mn','name','Mnemos',0,'','','','Мнемосхеми','','','Мнемосхемы','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_mn','dscr','Logical containers of page group: "Mnemos"',0,'','','','Логічний контейнер групи сторінок: "Мнемосхеми"','','','Логический контейнер группы страниц: "Мнемосхемы"','','');
@@ -3177,9 +3170,19 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_mn/pg_KM101','digCom
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_mn/pg_KM101','digStts','',34,'Parameter|digStts','prm:/BlockCalc/KM302/КШ116','KS106','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_mn/pg_KM101','stop','0',38,'Parameter|stop','prm:/BlockCalc/KM302/КШ116','KS106','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so','geomY','59',32,'','','pgCont','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','sclWin','0',160,'','','trnd1','','','','','','');
 CREATE TABLE 'prj_AGLKS_stl' ("ID" TEXT DEFAULT '' ,"V_0" TEXT DEFAULT '' ,"V_1" TEXT DEFAULT '' ,"V_2" TEXT DEFAULT '' ,"V_3" TEXT DEFAULT '' ,"V_4" TEXT DEFAULT '' ,"V_5" TEXT DEFAULT '' ,"V_6" TEXT DEFAULT '' ,"V_7" TEXT DEFAULT '' ,"V_8" TEXT DEFAULT '' ,"V_9" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "prj_AGLKS_stl" VALUES('<Styles>','Default;root;UI;0444','Ivory','','','','','','','','');
-INSERT INTO "prj_AGLKS_stl" VALUES('backColor','gray','ivory','','','','','','','','');
+INSERT INTO "prj_AGLKS_stl" VALUES('<Styles>','Light','','','','','','','','','');
+INSERT INTO "prj_AGLKS_stl" VALUES('backColor','ivory','','','','','','','','','');
+INSERT INTO "prj_AGLKS_stl" VALUES('backColorFrame','#E1E1D4','','','','','','','','','');
+INSERT INTO "prj_AGLKS_stl" VALUES('backColorButton','#D8D8CB','','','','','','','','','');
+INSERT INTO "prj_AGLKS_stl" VALUES('backColorButtonSel','#AEAEE0','','','','','','','','','');
+INSERT INTO "prj_AGLKS_stl" VALUES('labColorAlarm','#FF0000','','','','','','','','','');
+INSERT INTO "prj_AGLKS_stl" VALUES('labColorGood','#008600','','','','','','','','','');
+INSERT INTO "prj_AGLKS_stl" VALUES('labColorWarning','#B4B400','','','','','','','','','');
+INSERT INTO "prj_AGLKS_stl" VALUES('labColor','black','','','','','','','','','');
+INSERT INTO "prj_AGLKS_stl" VALUES('backColorVal','white','','','','','','','','','');
+INSERT INTO "prj_AGLKS_stl" VALUES('labColorVal','black','','','','','','','','','');
 CREATE TABLE 'wlb_AGLKS_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "wlb_AGLKS_incl" VALUES('KCH_MN1','El_Pipe_simple_gr1','/wlb_mnEls/wdg_El_Pipe_simple_gr','geomX;geomY;geomXsc;geomYsc;geomZ;',2);
 INSERT INTO "wlb_AGLKS_incl" VALUES('KCH_MN1','El_StrelaVB_gr1','/wlb_mnEls/wdg_El_StrelaVB_gr','geomX;geomY;geomXsc;geomYsc;geomZ;fillColor;',2);
@@ -3468,7 +3471,7 @@ CREATE TABLE 'wlb_AGLKS_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VA
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','name','KM101',32,'','','','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomW','900',32,'','','','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomH','580',32,'','','','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KM101','backColor','#5A5A5A',32,'','','','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KM101','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','bordWidth','1',32,'','','','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','bordColor','black',32,'','','','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomXsc','0.2',32,'','','El_Troinik_gr7','','','','','','');
@@ -3556,8 +3559,8 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomY','304',32,'','','El_Pipe_simple
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','text','From PP1',32,'','','Text1','З PP1','','Из PP1','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomH','20',32,'','','Text1','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomZ','81',32,'','','Text1','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KM101','font','Arial 12 0 0 0 0',32,'','','Text1','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KM101','color','yellow',32,'','','Text1','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KM101','font','Arial 12 1',32,'','','Text1','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KM101','color','#B4B400',32,'','','Text1','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','name','T PP101',32,'','','T_PP101','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomX','129',32,'','','T_PP101','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomY','278',32,'','','T_PP101','','','','','','');
@@ -3604,8 +3607,8 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomX','577',32,'','','El_Pipe_simple
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomY','331',32,'','','El_Pipe_simple_gr11','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomZ','27',32,'','','El_Pipe_simple_gr10','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomZ','92',32,'','','Text8','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KM101','font','Arial 12 0 0 0 0',32,'','','Text8','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KM101','color','lightblue',32,'','','Text8','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KM101','font','Arial 12 1',32,'','','Text8','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KM101','color','blue',32,'','','Text8','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','text','Liquid drop',32,'','','Text8','Злив рідини','','Слив жидкости','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomX','726',32,'','','El_Pipe_simple_gr10','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomY','132',32,'','','El_Pipe_simple_gr10','','','','','','');
@@ -3616,8 +3619,8 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomW','93.03',32,'','','Text8','',''
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomH','20.17',32,'','','Text8','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomX','746',32,'','','Text8','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomY','483',32,'','','Text8','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KM101','font','Arial 12 0 0 0 0',32,'','','Text6','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KM101','color','yellow',32,'','','Text6','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KM101','font','Arial 12 1',32,'','','Text6','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KM101','color','#B4B400',32,'','','Text6','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','text','To PP3',32,'','','Text6','До PP3','','На PP3','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomX','147',32,'','','Text7','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomY','332',32,'','','Text7','','','','','','');
@@ -3673,8 +3676,8 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomY','69',32,'','','Text2','','',''
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomW','64',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomH','24.17',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomZ','82',32,'','','Text2','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KM101','font','Arial 12 0 0 0 0',32,'','','Text2','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KM101','color','yellow',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KM101','font','Arial 12 1',32,'','','Text2','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KM101','color','#B4B400',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','text','To torch',32,'','','Text2','На факел','','На свечу','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomX','709',32,'','','El_Pipe_simple_vert_gr7','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomY','102',32,'','','El_Pipe_simple_vert_gr7','','','','','','');
@@ -4128,7 +4131,7 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomY','331',32,'','','El_Pipe_simple
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomX','320',32,'','','El_Pipe_simple_gr1','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomW','900',32,'','','','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomH','580',32,'','','','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','backColor','#5A5A5A',32,'','','','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','bordWidth','1',32,'','','','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','bordColor','black',32,'','','','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomX','657',32,'','','ElFigure6','','','','','','');
@@ -4486,7 +4489,7 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomZ','65',32,'','','El_pipe_1_gr4
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_pipe_1_gr4','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomX','703',32,'','','Text10','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','text','Mainstation',32,'','','Title','Загальностанційка','','Общестанционка','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','color','white',32,'','','Title','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','color','white',96,'labColor','','Title','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','p6y','50',0,'','','ElFigure9','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','p7x','10',0,'','','ElFigure9','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','p7y','50',0,'','','ElFigure9','','','','','','');
@@ -4686,7 +4689,7 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomY','476',32,'','','Text5','',''
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomW','41',32,'','','Text5','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomH','20',32,'','','Text5','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomZ','91',32,'','','Text5','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','font','Arial 12',32,'','','Text5','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','font','Arial 12 1',32,'','','Text5','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','color','blue',32,'','','Text5','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','text','Drop',32,'','','Text5','Злив','','Слив','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomX','230.5',32,'','','Text6','','','','','','');
@@ -4706,8 +4709,8 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomY','181',32,'','','Text8','',''
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomW','73',32,'','','Text8','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomH','20',32,'','','Text8','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomZ','96',32,'','','Text8','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','font','Arial 17',32,'','','Text8','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','color','yellow',32,'','','Text8','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','font','Arial 17 1',32,'','','Text8','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','color','#B4B400',32,'','','Text8','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','text','Gas LP',32,'','','Text8','Газ НТ','','Газ НД','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomX','703',32,'','','Text9','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomY','237',32,'','','Text9','','','','','','');
@@ -5011,8 +5014,8 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomY','61',32,'','','Text21','',''
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomW','73',32,'','','Text21','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomH','20',32,'','','Text21','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomZ','90',32,'','','Text21','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','font','Arial 12',32,'','','Text21','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','color','yellow',32,'','','Text21','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','font','Arial 12 1',32,'','','Text21','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','color','#B4B400',32,'','','Text21','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','text','To torch',32,'','','Text21','На факел','','На факел','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomX','279.5',32,'','','Text16','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomY','236',32,'','','Text16','','','','','','');
@@ -5032,8 +5035,8 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomY','105',32,'','','Text22','','
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomW','103',32,'','','Text22','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomH','20',32,'','','Text22','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomZ','94',32,'','','Text22','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','font','Arial 12',32,'','','Text22','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','color','yellow',32,'','','Text22','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','font','Arial 12 1',32,'','','Text22','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','color','#B4B400',32,'','','Text22','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','text','Gas to Glinsk',32,'','','Text22','Газ на Глінск','','Газ на Глинск','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomX','432.5',32,'','','Text17','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomY','298',32,'','','Text17','','','','','','');
@@ -5106,8 +5109,8 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomY','334',32,'','','Text26','','
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomW','74',32,'','','Text26','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomH','19',32,'','','Text26','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomZ','97',32,'','','Text26','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','font','Arial 12',32,'','','Text26','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','color','yellow',32,'','','Text26','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','font','Arial 12 1',32,'','','Text26','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','color','#B4B400',32,'','','Text26','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','text','Gas to GHP',32,'','','Text26','Газ у ГВТ','','Газ в ГВД','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomX','532',32,'','','KSH21','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomY','311',32,'','','KSH21','','','','','','');
@@ -5386,7 +5389,7 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomXsc','1.6',32,'','','KM101','',''
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomYsc','1.56',32,'','','KM101','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomZ','71',32,'','','KM101','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','font','Arial 20 0 1 1 0',32,'','','KM101','','','','','','');
-INSERT INTO "wlb_AGLKS_io" VALUES('KM101','color','white',32,'','','KM101','','','','','','');
+INSERT INTO "wlb_AGLKS_io" VALUES('KM101','color','white',96,'labColor','','KM101','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','text','KM101',32,'','','KM101','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','name','P PP101',32,'','','P_PP101','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KM101','geomX','129',32,'','','P_PP101','','','','','','');
@@ -5648,6 +5651,195 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomZ','47',32,'','','El_angleTR_gr
 CREATE TABLE 'wlb_AGLKS_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 CREATE TABLE 'wlb_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
 INSERT INTO "wlb_AGLKS_uio" VALUES('comprEn','','pVar','Variable',131073,'<EVAL>|0;0|',10,'Parameter|var','','Переменная','','','','Змінна','','','');
+CREATE TABLE 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','2','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','doc','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1503590517);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','1','','/wlb_doc/wdg_docGasNodeMgn',1,'','','',-1,0,'name;geomYsc;',1503584811);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','2','','/wlb_doc/wdg_docUsersSet',1,'','','',-1,0,'geomYsc;',1400852515);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docGasNodeDayA',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1503585460);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docGasNodeMonthA',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1503585460);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','5','','/wlb_doc/wdg_docGasNodeDayOrder',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1503589930);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','mn','','root',1,'','','',-1,5,'name;dscr;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','1','','/wlb_AGLKS/wdg_KCH_MN1',1,'','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','10','','/wlb_test/wdg_mn_gen',1,'','','',-1,0,'pgNoOpenProc;pgGrp;',1414521219);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','gcadr','','/wlb_Main/wdg_grpCadr',1,'','','',-1,2,'geomYsc;evProc;pgGrp;',1400851728);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/gcadr','1','','..',1,'','','',-1,0,'name;grpName;','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','rg','','root',1,'','','',-1,5,'name;',1400851728);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/rg','rg','','/wlb_Main/wdg_ResultGraph',1,'','','',-1,2,'name;geomYsc;pgGrp;grpName;',1400851728);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','gview','','/wlb_Main/wdg_ViewCadr',1,'','','',-1,2,'dscr;geomYsc;evProc;pgGrp;',1400851728);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/gview','1','','..',1,'','','',-1,0,'name;dscr;','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','2','','root',1,'','','',-1,5,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2','mn','','root',1,'','','',-1,5,'name;dscr;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'pgGrp;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS','control','','root',1,'','','',-1,5,'name;',1494598746);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1426000648);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','terminator','','/wlb_Main/wdg_terminator',1,'','','',-1,0,'','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','doc_panel','','/wlb_Main/wdg_doc_panel',1,'','','',-1,0,'','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrRegul','','/wlb_Main/wdg_cntrRegul',1,'','','',-1,0,'geomYsc;DESCR;Hdwn;Hup;K1;K2;K3;K4;KImpRfact;Kd;Ki;Kp;NAME;SHIFR;TImpMin;TImpPer;Td;Ti;Tzd;Zi;auto_addr;ed;impQdwn_addr;impQup_addr;max;min;out;out_addr;prec;sp;sp_addr;var;var_addr;',1400851728);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','grph_panel','','/wlb_Main/wdg_grph_panel',1,'','','',-1,0,'','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/rg/rg','1','','..',1,'','','',-1,0,'name;grpName;','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','3','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3','mn','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','4','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4','mn','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4/mn','1','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','5','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5','mn','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','6','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6','mn','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','7','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1551624161);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7','mn','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1522592964);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','accept','','/wlb_Main/wdg_accept',1,'','','',-1,0,'','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','6','','/wlb_doc/wdg_docAlarmsRep',1,'','','',-1,0,'geomYsc;',1400852515);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','treeSelect','','/wlb_Main/wdg_treeSelect',1,'','','',-1,0,'',1383147124);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPasp','','/wlb_Main/wdg_cntrPaspExt',0,'','','',-1,0,'owner;name;geomZ;pName;',1494598746);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPaspOld','','/wlb_Main/wdg_cntrPasp',0,'','','',-1,0,'owner;geomZ;pName;',1494521098);
+CREATE TABLE 'prj_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
+INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','statLine','','Status line items',131205,'',128,'','');
+INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','runWin','','Run window',131089,'0|0;1;2|Original size;Maximize;Full screen',128,'','');
+INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',128,'','');
+INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','stBarNoShow','','Not show status bar',131072,'0',128,'','');
+INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',128,'','');
+CREATE TABLE 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
+INSERT INTO "VCAPrjs" VALUES('AGLKS','AGLKS','АГЛКС','АГЛКС','The project of visualisation AGLKS.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.1.0','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версія: 1.1.0','Проект визуализации Анастасиевской Газо-Лифтной компрессорной станции.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.1.0','prj_AGLKS','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
+HXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBUaGUgR0lNUO9kJW4AABEsSURBVHic7Vp7cFzVef+d
+c+/duw/tQ6u1bEn2rh8YSwbHYIuHecQmgkBVCG1pnKYUA8Mr00JppqUkHdq0mUzaNPxFOulMO4Fm
+ilsIhRYbsBvigmXAtWWZyLIl6+WHXqtdvXb12L177z3n9I9777KSJXltWTiZ+pvZ0eicc8893+/8
+vsf5zgWuyBW5Ilfkivz/FamYQXV1ddf19PQ8IYRYBSAGIA4gt6gr+5ykKABkWf6BEOJpl8t1N6X0
+N/x+f0TTtCCAawGswa8xIEUBEI1Gbx0fH7959erVYmpqykcIuVFV1fskSfqyEOIuIYQHwFL8GoIh
+FzNIkiQNAGpqanK1tbWarusEAOLxuNrY2BgUQjyv63pG1/UMY+wVxthxAFkAHwIYX6zFXwopCgAh
+BAcARVGwefNmzWnPZDIkFosZuq6TeDyuNDY2LgXwvGEYWV3XM4SQn2az2U/xKwxGUQBwzvls7V6v
+VziAzABDbmxsjAD4U5fLpem6nnG5XDvT6fQh+9FfGUAWBEChnAeMMIBnQqHQU46pmKb5CoA2XGYw
+igWAXcikc4EBAPF43N3Y2BgSQnyrAIyXOecncBnAuGQMmEsKwQBm9xtCiLzfEEL8i67rzficwFh0
+AGbKeUxlCYDnHDAURXl1YmKiEYsIRlEAMMYuyASKlfOAUQbg2VAopOu6nvF6va8PDw8fsB+9ZIB8
+7gyYS84DRkgI8VRpaeljhX5DCNGKBYJRdB5ACIEkSZBlubD9fM9dVL/P5xO1tbWaEGI2J+pqbGwM
+FDpRzvkrpmm24CLAuCAGzASgWIWK7Z9tTDAYFDfffHPeiU5NTZHVq1cbuq6TgYEB+fDhw+Wwk69s
+Njuu6/qPAfwDigThghmgKMqCFFpofzAYFFu2bMmbyurVqw3DMEh/f7/c0NDg13X9UQDHAew67+Jw
+gU6QUjovA2Zb8GL2BwIBceutt2qAxYzx8fH+hoaGIADPvJMUSLEAzMqAC13wYvYHg0GxYsWKFIDg
+vA/MkKJ9ACEEsixfdgbMN0aSijrdT5N5tRGpei+s833gyT/pZkIIUEpBKQUhJL+Y2pq3wmXBPnXu
+BRPs2v/E4K3XvVMaCQ3MOW5orDL3SfO9Y5RSseULu8ORUL+6u+Eb8cL3lgYGlPWrDgT9vhGlJ149
+1dxx+wQAIUkSJImQpx5d4X/hz656YXmV5x8B+DkXg4yJD3r6sn9/1fX7TwJgAPIIno8BvwMgoOtc
++4PtEfXl10eksbExKRQKcVVVhQOC8/ejpk0T2WyWnJs2EHR3dyubq61QduDIdROapk0bd/cXO0oy
+mQzt7u5WAoFAPvVIJpMyYwxlZWU8EubkhvXvlOV0D/tl2/UTZ/vdrH+wV/b7/bx8iYq/eW5s0/KK
+a0PdpzMDZ3oyP0oO6SgLKzWxqPd3V8a82/e+ecMz9zzQ+F+wIoQOQJwPgEc4F4mPD6X6t91Wuuml
+f+5QT56Mmhs2bDC8Xi+bSbk33h7nZ8+elSVJQiFAACDLw65778hQAHjtrRTv7++XKaVwu93CAgBI
+pdK0oaHBHY1GzfqtJgGAEydOuDRNw8aNG40bN5zyUmqS/zm0Nd306SDt6zstSZLkisWiZv3WrpJS
+vynf//Wmwd17k28COA1gGYDmuq1liV2v1T627fayl7beFs7u/2j0E1jM1uhcmotU/QoAd6THzU92
+/qw/QQjBnV9k8qlTp5RUKkWFEMTxCY6iQ0ND0ujoqKSqqli2bBmrrKxklZWVrKqqilVWVjJFUYQz
+bmRkRHK73WLp0qWssrLSjjISRkZGpGQyKTkMSCQSUjwelw19klZEOtzJkZh2oi1FOjs7lfHxcerz
++cTmL2TkJaVJ194P1J7de5MMQA2A9QBcAMb27R9p/fc3Bn6huqj70d9f/iSAm2GV8JT5GLADAP3k
+8NjBf329/5a//c46PPCVEP3v/Wk6NDQkRaNR5vP5xEx/4PP5eHV1tVFdXW26XK68rRFCUFIy7AXS
+oJSipKSEV1dXG+vWrbPHtcHn83KfL8cJIfk5OedgjJH1awddsqTTE12rtP7+s7Ku62Tt2rVGTU2N
+cf01BwNCAG+8bYwBiMKKBGcAtAIYBsBf+qczLW/vSXy0e0+yElYxNw5gbD4AHuZCTD7+9LEzus7r
+/vOdIfHkI1Xkpk1c6o/HpYmJCVpaWipkWRbUXqwkSXC73YhEIryqqoqpqjoNAAcQ20RQVlY2bZyi
+KHC73aCUArAmJYTApRBsvva0Z3S8Qj/R7uKpVEoOh8N87dq1ZiwWY6HAbjmjBdjps/0uWIXeUQBH
+AHQD0ACIY8cnBo4dnxgFcBOACAAFgDKrCYhU/S0A1o6MGL8YTOqVAKS3do8IAKi/k8pDQ0PS8PAw
+NU3T2qkCZ1h4ZnC5XPmfoij5XXU8uizLUBQFqqrmn58ZZe75kqF893nmzmRV8eHhreODg4OSEALR
+aJRVVlbykpISoUhZKZNV+cTEhBsAATAEoA/AFAADgAnrnNAD4CMAHwDoBDA1FwMeAYB3f578CMBy
+AMbho1N8NEXJhhouedRxeubMGbmqqorJssycuMw5hxACjDEwxpAHyAF2xjjOef43bQOEgBOpdnw1
+Y4fNFK0IN5QkEtwIhUJ8xYoVZiAQ4JRSCBDBuICu64r94IStfOHEAkDGBoHCCofGOQCIVL0HwHYA
+piKT6u98a+1aXefeiUmZjqUVHg7lpLvvEMru93tZIpGggUCAC1sBRxlHedM0Z1FsOlCmacIwjHy/
+M4cz9tFnfZlbNg+5ntjhlbdsGnB/2kxob2JDNhAIcEKIYIxBN0q4R81S0zQdtI0ZyjvCMePOYjYG
+/DbsdPLB7VWPT++ynr1rK5F+8mpc6u3tlZYtW8Z4gWKc87xSTpgsdJJcfKaoM87JLqcDYL1xckqI
+H7+cYm43xUPb3fLDX2OuF/6uT08mV1G/38+9Xq+YyCzTI8F2TzgkURQkOdPAT9WXANjPuHhLDu/5
+gT2Oz+YDHgaA5/6y7Q9J6L1XSOi990novT3+5Q3s7u1mprVDYmVhQq6tzsg9PT3y8PAw5fMwwFHS
+2mVGGJPEhTBACIGSkhLx/oFl2qmzlPu8FPV1CU9LS4sSj8elbDZLBobXaYQAD3416IXlAxRYNC+U
+hwBsymRYBYAVACoAuKcNEqn6KgB36jpve/FHpxmAECznQTnnSKfTdM8+mADwwH1eKR6PS/F4nDLG
+iQOAo5ijtGEYeSBc8hTVcgq3lRTOOMdUhBB5EAryfeH1enk0usrY33jduMmAu7YqkkI61M7OTnl0
+dJTEh6K55Eip8cSO0tA9dREFgB+A1wFBpOqvB/B9LsT4E3/cshfANgAbAZTONIEdAGhL68ReWLfA
+UwCaAZQpivKlWCxm6vya3ORUo+uWG93U55mgfX19smkaczIAAKqWtHr83mHZ50nJ7afKc4yl8mZR
+yADgXAZwzkEphdfr5YoaZYd/mcjesrnf841HhOuvX2w3y8rKWCwWMz/+dGv6xmve9L/3Hzf4DjWl
+v6bIhK2MeuLBoHIdgN8DwN7Zm/zm62/FY7DuMI8BkGbS5GEA5jf/orUZQBmABIBGAJ2yLPMlS5aw
+1WvWGad6o1lKCe67xyUPDAxIhmHkGeDYdiH1r45+HFhZ2VySzbn4rp8HtUwmQ61YjzwLLAZgVgCc
+n9vt5l19N00mhhV29RqF1m5Iql1dXfLo6Cg1ech8+ts4/lff78yEgrJ/wzX+Z0tLlRc5E19OJHO7
+nvnzEw/d//UmE0A1rAgQx8wwSELvXWvbxz02fc7AiqdVAASlVEiSJI51bhl/452wdujQIZWxcfrS
+T1ZN+nxrOCEtKqVUOCA4TnDfoXuHDT2hHG4aJq2t3XImkyGRSMRUVVVwzoVpmnh9747B9vZ2hdKD
+bkopXtu9IW2dAhvdzpwWCH72b7u2jjY1NamnTo0pS5f2yhUVFebKlSu5JJVkvvfDrtT3fth1AFa4
+S9s/YSsegZUYfQqgA8DkbFGAwLL7DgAnAIzADilOfCeEiHA4zKLRqJlOpykAyLKMcDjMTNOE2+2e
+trOa5mbJpAfJZFrN5XKkrKyMLV++3PT5fJwxlrd7t9stysvLTVVV81ljJBJhuVwOHo9HMMYgy7II
+h8N8zZo1hhP2NE0jqVSKJpNJH6xQ1WZv3BIAYXszOYCzALrs/kHMkgdwWLnzQVieNAnLD4hCpyWE
+QCAQYDU1NblsNku9Xi93uVzC4/FwzjlCoRAXQgjHB3DOoaqqqKqqMkKhEPN6vby8vJy5XC5RQHER
+CoXY+vXrhSRJCAaDDADWrVunM8byc9ogcAfAyclJ0tfXpzQ1NSlHjhxZAeuo2w7gf2E5cSc7NGAl
+SCP231mPwxzAJIBT9kMmChIKh9oAQCkVoVCI2dmYIITA4/Fwuy/PFkdUVeWVlZWOApBlWQDIs4QQ
+AlVVeXl5eX4OAAiHw6bzP+cck5MTpL2jxW0YWZ5OZ3uONbeNHD9+fJ1pmjlYVH8FwB5bjwF8Fg6F
+rQsr1Gk2E+CYJYtydrRwwfZf4YQvRxhj56S3ACBJUv70OCPUnSO2qSGTyZDW1lZV13Wi61o8kexI
+q77etctjimhrT5W1tU36TZNrAHYCOIrp9wLnvdEqqiY4myyktjdfXyaTIW1tbaqu64Rznjl58mRv
+c3NzTNO0SUUhro2b/Muffizm2nJbKWs+mv7ku9/ufv/4sckhXOTtUNEAiGKqlRcpjtK5XC7X2dmZ
+OHr0aIVhGJppmjosJzYBYKfHSzu33RWu3nxD8CuBoLx0252RkW13RvaWq/v6L/bdF82AhUiBwkzT
+tLNtbW0jra2t6w3DyAHwwdrJnbC8NWBfeXUlt2kAboOVyVUBmLPAWqxcCAAXzYBCWuu6PnDy5Mnh
+lpaWq3Rdz8A6eAVhxWdH6bnu+Fz2OrL2+CxmP/UVLYvCgEKFTdNMdXR0JJqbm2O6rmc55y4AlbDO
+5ufsMua3YwJr14MASmGxZc66ZjFySXzADMeV7erqShw9erRC1/UsY8yElVZP4sIVnnUpsMKzjgXu
+PrAABjhKG4bGevtOjx4+3BTOTOWyhmHqmMeOsbCPGhzlDVgZ34I/3LggH9DX1ycfPHjQncvlBtrb
+24fb2o5ftSIm83Xrff7q9bJ25rTx6lACxzjP2+mHuPSftQhYhU8ZRX7pOp8UC0BW1/XsgQMHRC6X
+ywghVABVpWFZf/yPVrbX379kTXJQ79B1sev62sCRcnWfed4ZL14uixP8UNO0JzHj2nnjJr93+4MV
+t3u8Uu2ScrXE7l+QUzqPXDYnOI5ZPjj42bubqmDdsji2uJjKO3JJneClWLAEa1cUWICS+YcvSC6r
+E5xLKKwEZbGVd6TQCSoAXMlcnavg3YXherY2AYCVq/s4AMjJXB2FZbsl9oS84EEGC3GzoI3YkwgA
+AVi7kYJVeXGOpIspAhb9Tfv9tQBWwmKhwxBnfTPbGCzneTaZq0uWq/u4DOuwsQXAF2E5liysIgKz
+FRqDddfm3Lo4O52BVWKqgeWMShZVbUscxUrstW6GdXM1DssxOuYh2XrMbJu0/98J4F0AE7KtxG8C
++C1Y5eRRWIwwYSmt2W1uu81lt6fshTiefxIWKIv5USWDVeQ4AeBqe70BW9lSWMzIwdokbZa2jL3m
+IwDeh904DqtEHINVQpq0leX24DDmprVTQUrBunTsxSVwTHNJubqPJ3N1vQB+CquqG8Fnu+3DZxWf
+udomYZX4PoQFBkgyV6fA+lhgpf2ADmtHJVgILrXfr9qTFZqAak8+CuAwgM5ydZ9T5F80SebqVFib
+47abOM6NaHO1mQAmy9V9WcB2bLYjdBQr3G3F/hV6d+f+rXCcCSC7yBngFbkiiyD/B5CDW0pgBswY
+AAAAAElFTkSuQmCC','root','op',436,100,-1,1);
 CREATE TABLE 'wlb_AGLKS' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_AGLKS" VALUES('KM101','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAI
 pklEQVRYhdVYzXMcxRV//THfM7szsiytLAsZ2bIRjmSoFAaKVLlwRMEh4ZCqHFKcUuSQCpfc+VNy
@@ -5758,193 +5950,4 @@ if( pVar.isEVal() ) c1 = "grey";
 else c1 = (pVar<1) ? "red" : "green";','JavaLikeCalc.JavaScript
 if( pVar.isEVal() ) c1 = "grey";
 else c1 = (pVar<1) ? "red" : "green";',1000,'name;geomW;geomH;fillColor;elLst;c1;','');
-CREATE TABLE 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1546445597);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1494527301);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1494527301);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','2','','..',1,'','','',-1,0,'name;dscr;grpName;',1414589842);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','doc','','root',1,'
-','
-','
-',-1,5,'name;dscr;',1503590517);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','1','','/wlb_doc/wdg_docGasNodeMgn',1,'','','',-1,0,'name;geomYsc;',1503584811);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','2','','/wlb_doc/wdg_docUsersSet',1,'','','',-1,0,'geomYsc;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docGasNodeDayA',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1503585460);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docGasNodeMonthA',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1503585460);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','5','','/wlb_doc/wdg_docGasNodeDayOrder',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;',1503589930);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','mn','','root',1,'','','',-1,5,'name;dscr;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','1','','/wlb_AGLKS/wdg_KCH_MN1',1,'','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','10','','/wlb_test/wdg_mn_gen',1,'','','',-1,0,'pgNoOpenProc;pgGrp;',1414521219);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','gcadr','','/wlb_Main/wdg_grpCadr',1,'','','',-1,2,'geomYsc;evProc;pgGrp;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/gcadr','1','','..',1,'','','',-1,0,'name;grpName;','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','rg','','root',1,'','','',-1,5,'name;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/rg','rg','','/wlb_Main/wdg_ResultGraph',1,'','','',-1,2,'name;geomYsc;pgGrp;grpName;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','gview','','/wlb_Main/wdg_ViewCadr',1,'','','',-1,2,'dscr;geomYsc;evProc;pgGrp;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/gview','1','','..',1,'','','',-1,0,'name;dscr;','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','2','','root',1,'','','',-1,5,'name;dscr;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2','mn','','root',1,'','','',-1,5,'name;dscr;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'pgGrp;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS','control','','root',1,'','','',-1,5,'name;',1494598746);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1426000648);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','terminator','','/wlb_Main/wdg_terminator',1,'','','',-1,0,'','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','doc_panel','','/wlb_Main/wdg_doc_panel',1,'','','',-1,0,'','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrRegul','','/wlb_Main/wdg_cntrRegul',1,'','','',-1,0,'geomYsc;DESCR;Hdwn;Hup;K1;K2;K3;K4;KImpRfact;Kd;Ki;Kp;NAME;SHIFR;TImpMin;TImpPer;Td;Ti;Tzd;Zi;auto_addr;ed;impQdwn_addr;impQup_addr;max;min;out;out_addr;prec;sp;sp_addr;var;var_addr;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','grph_panel','','/wlb_Main/wdg_grph_panel',1,'','','',-1,0,'','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/rg/rg','1','','..',1,'','','',-1,0,'name;grpName;','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','3','','root',1,'
-','
-','
-',-1,5,'name;dscr;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3','mn','','root',1,'
-','
-','
-',-1,5,'name;dscr;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','4','','root',1,'
-','
-','
-',-1,5,'name;dscr;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4','mn','','root',1,'
-','
-','
-',-1,5,'name;dscr;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4/mn','1','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','5','','root',1,'
-','
-','
-',-1,5,'name;dscr;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5','mn','','root',1,'
-','
-','
-',-1,5,'name;dscr;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','6','','root',1,'
-','
-','
-',-1,5,'name;dscr;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6','mn','','root',1,'
-','
-','
-',-1,5,'name;dscr;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','7','','root',1,'
-','
-','
-',-1,5,'name;dscr;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7','mn','','root',1,'
-','
-','
-',-1,5,'name;dscr;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1522592964);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','accept','','/wlb_Main/wdg_accept',1,'','','',-1,0,'','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','6','','/wlb_doc/wdg_docAlarmsRep',1,'','','',-1,0,'geomYsc;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','treeSelect','','/wlb_Main/wdg_treeSelect',1,'','','',-1,0,'',1383147124);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPasp','','/wlb_Main/wdg_cntrPaspExt',0,'','','',-1,0,'owner;name;geomZ;pName;',1494598746);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPaspOld','','/wlb_Main/wdg_cntrPasp',0,'','','',-1,0,'owner;geomZ;pName;',1494521098);
-CREATE TABLE 'prj_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','statLine','','Status line items',131205,'',128,'','');
-INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','runWin','','Run window',131089,'0|0;1;2|Original size;Maximize;Full screen',128,'','');
-INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',128,'','');
-INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','stBarNoShow','','Not show status bar',131072,'0',128,'','');
-INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',128,'','');
-CREATE TABLE 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
-INSERT INTO "VCAPrjs" VALUES('AGLKS','AGLKS','АГЛКС','АГЛКС','The project of visualisation AGLKS.
-Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.
-Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.1.0','Проект визуализации Анастасиевской Газо-Лифтной компрессорной станции.
-Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.1.0','prj_AGLKS','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
-HXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBUaGUgR0lNUO9kJW4AABEsSURBVHic7Vp7cFzVef+d
-c+/duw/tQ6u1bEn2rh8YSwbHYIuHecQmgkBVCG1pnKYUA8Mr00JppqUkHdq0mUzaNPxFOulMO4Fm
-ilsIhRYbsBvigmXAtWWZyLIl6+WHXqtdvXb12L177z3n9I9777KSJXltWTiZ+pvZ0eicc8893+/8
-vsf5zgWuyBW5Ilfkivz/FamYQXV1ddf19PQ8IYRYBSAGIA4gt6gr+5ykKABkWf6BEOJpl8t1N6X0
-N/x+f0TTtCCAawGswa8xIEUBEI1Gbx0fH7959erVYmpqykcIuVFV1fskSfqyEOIuIYQHwFL8GoIh
-FzNIkiQNAGpqanK1tbWarusEAOLxuNrY2BgUQjyv63pG1/UMY+wVxthxAFkAHwIYX6zFXwopCgAh
-BAcARVGwefNmzWnPZDIkFosZuq6TeDyuNDY2LgXwvGEYWV3XM4SQn2az2U/xKwxGUQBwzvls7V6v
-VziAzABDbmxsjAD4U5fLpem6nnG5XDvT6fQh+9FfGUAWBEChnAeMMIBnQqHQU46pmKb5CoA2XGYw
-igWAXcikc4EBAPF43N3Y2BgSQnyrAIyXOecncBnAuGQMmEsKwQBm9xtCiLzfEEL8i67rzficwFh0
-AGbKeUxlCYDnHDAURXl1YmKiEYsIRlEAMMYuyASKlfOAUQbg2VAopOu6nvF6va8PDw8fsB+9ZIB8
-7gyYS84DRkgI8VRpaeljhX5DCNGKBYJRdB5ACIEkSZBlubD9fM9dVL/P5xO1tbWaEGI2J+pqbGwM
-FDpRzvkrpmm24CLAuCAGzASgWIWK7Z9tTDAYFDfffHPeiU5NTZHVq1cbuq6TgYEB+fDhw+Wwk69s
-Njuu6/qPAfwDigThghmgKMqCFFpofzAYFFu2bMmbyurVqw3DMEh/f7/c0NDg13X9UQDHAew67+Jw
-gU6QUjovA2Zb8GL2BwIBceutt2qAxYzx8fH+hoaGIADPvJMUSLEAzMqAC13wYvYHg0GxYsWKFIDg
-vA/MkKJ9ACEEsixfdgbMN0aSijrdT5N5tRGpei+s833gyT/pZkIIUEpBKQUhJL+Y2pq3wmXBPnXu
-BRPs2v/E4K3XvVMaCQ3MOW5orDL3SfO9Y5RSseULu8ORUL+6u+Eb8cL3lgYGlPWrDgT9vhGlJ149
-1dxx+wQAIUkSJImQpx5d4X/hz656YXmV5x8B+DkXg4yJD3r6sn9/1fX7TwJgAPIIno8BvwMgoOtc
-+4PtEfXl10eksbExKRQKcVVVhQOC8/ejpk0T2WyWnJs2EHR3dyubq61QduDIdROapk0bd/cXO0oy
-mQzt7u5WAoFAPvVIJpMyYwxlZWU8EubkhvXvlOV0D/tl2/UTZ/vdrH+wV/b7/bx8iYq/eW5s0/KK
-a0PdpzMDZ3oyP0oO6SgLKzWxqPd3V8a82/e+ecMz9zzQ+F+wIoQOQJwPgEc4F4mPD6X6t91Wuuml
-f+5QT56Mmhs2bDC8Xi+bSbk33h7nZ8+elSVJQiFAACDLw65778hQAHjtrRTv7++XKaVwu93CAgBI
-pdK0oaHBHY1GzfqtJgGAEydOuDRNw8aNG40bN5zyUmqS/zm0Nd306SDt6zstSZLkisWiZv3WrpJS
-vynf//Wmwd17k28COA1gGYDmuq1liV2v1T627fayl7beFs7u/2j0E1jM1uhcmotU/QoAd6THzU92
-/qw/QQjBnV9k8qlTp5RUKkWFEMTxCY6iQ0ND0ujoqKSqqli2bBmrrKxklZWVrKqqilVWVjJFUYQz
-bmRkRHK73WLp0qWssrLSjjISRkZGpGQyKTkMSCQSUjwelw19klZEOtzJkZh2oi1FOjs7lfHxcerz
-+cTmL2TkJaVJ194P1J7de5MMQA2A9QBcAMb27R9p/fc3Bn6huqj70d9f/iSAm2GV8JT5GLADAP3k
-8NjBf329/5a//c46PPCVEP3v/Wk6NDQkRaNR5vP5xEx/4PP5eHV1tVFdXW26XK68rRFCUFIy7AXS
-oJSipKSEV1dXG+vWrbPHtcHn83KfL8cJIfk5OedgjJH1awddsqTTE12rtP7+s7Ku62Tt2rVGTU2N
-cf01BwNCAG+8bYwBiMKKBGcAtAIYBsBf+qczLW/vSXy0e0+yElYxNw5gbD4AHuZCTD7+9LEzus7r
-/vOdIfHkI1Xkpk1c6o/HpYmJCVpaWipkWRbUXqwkSXC73YhEIryqqoqpqjoNAAcQ20RQVlY2bZyi
-KHC73aCUArAmJYTApRBsvva0Z3S8Qj/R7uKpVEoOh8N87dq1ZiwWY6HAbjmjBdjps/0uWIXeUQBH
-AHQD0ACIY8cnBo4dnxgFcBOACAAFgDKrCYhU/S0A1o6MGL8YTOqVAKS3do8IAKi/k8pDQ0PS8PAw
-NU3T2qkCZ1h4ZnC5XPmfoij5XXU8uizLUBQFqqrmn58ZZe75kqF893nmzmRV8eHhreODg4OSEALR
-aJRVVlbykpISoUhZKZNV+cTEhBsAATAEoA/AFAADgAnrnNAD4CMAHwDoBDA1FwMeAYB3f578CMBy
-AMbho1N8NEXJhhouedRxeubMGbmqqorJssycuMw5hxACjDEwxpAHyAF2xjjOef43bQOEgBOpdnw1
-Y4fNFK0IN5QkEtwIhUJ8xYoVZiAQ4JRSCBDBuICu64r94IStfOHEAkDGBoHCCofGOQCIVL0HwHYA
-piKT6u98a+1aXefeiUmZjqUVHg7lpLvvEMru93tZIpGggUCAC1sBRxlHedM0Z1FsOlCmacIwjHy/
-M4cz9tFnfZlbNg+5ntjhlbdsGnB/2kxob2JDNhAIcEKIYIxBN0q4R81S0zQdtI0ZyjvCMePOYjYG
-/DbsdPLB7VWPT++ynr1rK5F+8mpc6u3tlZYtW8Z4gWKc87xSTpgsdJJcfKaoM87JLqcDYL1xckqI
-H7+cYm43xUPb3fLDX2OuF/6uT08mV1G/38+9Xq+YyCzTI8F2TzgkURQkOdPAT9WXANjPuHhLDu/5
-gT2Oz+YDHgaA5/6y7Q9J6L1XSOi990novT3+5Q3s7u1mprVDYmVhQq6tzsg9PT3y8PAw5fMwwFHS
-2mVGGJPEhTBACIGSkhLx/oFl2qmzlPu8FPV1CU9LS4sSj8elbDZLBobXaYQAD3416IXlAxRYNC+U
-hwBsymRYBYAVACoAuKcNEqn6KgB36jpve/FHpxmAECznQTnnSKfTdM8+mADwwH1eKR6PS/F4nDLG
-iQOAo5ijtGEYeSBc8hTVcgq3lRTOOMdUhBB5EAryfeH1enk0usrY33jduMmAu7YqkkI61M7OTnl0
-dJTEh6K55Eip8cSO0tA9dREFgB+A1wFBpOqvB/B9LsT4E3/cshfANgAbAZTONIEdAGhL68ReWLfA
-UwCaAZQpivKlWCxm6vya3ORUo+uWG93U55mgfX19smkaczIAAKqWtHr83mHZ50nJ7afKc4yl8mZR
-yADgXAZwzkEphdfr5YoaZYd/mcjesrnf841HhOuvX2w3y8rKWCwWMz/+dGv6xmve9L/3Hzf4DjWl
-v6bIhK2MeuLBoHIdgN8DwN7Zm/zm62/FY7DuMI8BkGbS5GEA5jf/orUZQBmABIBGAJ2yLPMlS5aw
-1WvWGad6o1lKCe67xyUPDAxIhmHkGeDYdiH1r45+HFhZ2VySzbn4rp8HtUwmQ61YjzwLLAZgVgCc
-n9vt5l19N00mhhV29RqF1m5Iql1dXfLo6Cg1ech8+ts4/lff78yEgrJ/wzX+Z0tLlRc5E19OJHO7
-nvnzEw/d//UmE0A1rAgQx8wwSELvXWvbxz02fc7AiqdVAASlVEiSJI51bhl/452wdujQIZWxcfrS
-T1ZN+nxrOCEtKqVUOCA4TnDfoXuHDT2hHG4aJq2t3XImkyGRSMRUVVVwzoVpmnh9747B9vZ2hdKD
-bkopXtu9IW2dAhvdzpwWCH72b7u2jjY1NamnTo0pS5f2yhUVFebKlSu5JJVkvvfDrtT3fth1AFa4
-S9s/YSsegZUYfQqgA8DkbFGAwLL7DgAnAIzADilOfCeEiHA4zKLRqJlOpykAyLKMcDjMTNOE2+2e
-trOa5mbJpAfJZFrN5XKkrKyMLV++3PT5fJwxlrd7t9stysvLTVVV81ljJBJhuVwOHo9HMMYgy7II
-h8N8zZo1hhP2NE0jqVSKJpNJH6xQ1WZv3BIAYXszOYCzALrs/kHMkgdwWLnzQVieNAnLD4hCpyWE
-QCAQYDU1NblsNku9Xi93uVzC4/FwzjlCoRAXQgjHB3DOoaqqqKqqMkKhEPN6vby8vJy5XC5RQHER
-CoXY+vXrhSRJCAaDDADWrVunM8byc9ogcAfAyclJ0tfXpzQ1NSlHjhxZAeuo2w7gf2E5cSc7NGAl
-SCP231mPwxzAJIBT9kMmChIKh9oAQCkVoVCI2dmYIITA4/Fwuy/PFkdUVeWVlZWOApBlWQDIs4QQ
-AlVVeXl5eX4OAAiHw6bzP+cck5MTpL2jxW0YWZ5OZ3uONbeNHD9+fJ1pmjlYVH8FwB5bjwF8Fg6F
-rQsr1Gk2E+CYJYtydrRwwfZf4YQvRxhj56S3ACBJUv70OCPUnSO2qSGTyZDW1lZV13Wi61o8kexI
-q77etctjimhrT5W1tU36TZNrAHYCOIrp9wLnvdEqqiY4myyktjdfXyaTIW1tbaqu64Rznjl58mRv
-c3NzTNO0SUUhro2b/Muffizm2nJbKWs+mv7ku9/ufv/4sckhXOTtUNEAiGKqlRcpjtK5XC7X2dmZ
-OHr0aIVhGJppmjosJzYBYKfHSzu33RWu3nxD8CuBoLx0252RkW13RvaWq/v6L/bdF82AhUiBwkzT
-tLNtbW0jra2t6w3DyAHwwdrJnbC8NWBfeXUlt2kAboOVyVUBmLPAWqxcCAAXzYBCWuu6PnDy5Mnh
-lpaWq3Rdz8A6eAVhxWdH6bnu+Fz2OrL2+CxmP/UVLYvCgEKFTdNMdXR0JJqbm2O6rmc55y4AlbDO
-5ufsMua3YwJr14MASmGxZc66ZjFySXzADMeV7erqShw9erRC1/UsY8yElVZP4sIVnnUpsMKzjgXu
-PrAABjhKG4bGevtOjx4+3BTOTOWyhmHqmMeOsbCPGhzlDVgZ34I/3LggH9DX1ycfPHjQncvlBtrb
-24fb2o5ftSIm83Xrff7q9bJ25rTx6lACxzjP2+mHuPSftQhYhU8ZRX7pOp8UC0BW1/XsgQMHRC6X
-ywghVABVpWFZf/yPVrbX379kTXJQ79B1sev62sCRcnWfed4ZL14uixP8UNO0JzHj2nnjJr93+4MV
-t3u8Uu2ScrXE7l+QUzqPXDYnOI5ZPjj42bubqmDdsji2uJjKO3JJneClWLAEa1cUWICS+YcvSC6r
-E5xLKKwEZbGVd6TQCSoAXMlcnavg3YXherY2AYCVq/s4AMjJXB2FZbsl9oS84EEGC3GzoI3YkwgA
-AVi7kYJVeXGOpIspAhb9Tfv9tQBWwmKhwxBnfTPbGCzneTaZq0uWq/u4DOuwsQXAF2E5liysIgKz
-FRqDddfm3Lo4O52BVWKqgeWMShZVbUscxUrstW6GdXM1DssxOuYh2XrMbJu0/98J4F0AE7KtxG8C
-+C1Y5eRRWIwwYSmt2W1uu81lt6fshTiefxIWKIv5USWDVeQ4AeBqe70BW9lSWMzIwdokbZa2jL3m
-IwDeh904DqtEHINVQpq0leX24DDmprVTQUrBunTsxSVwTHNJubqPJ3N1vQB+CquqG8Fnu+3DZxWf
-udomYZX4PoQFBkgyV6fA+lhgpf2ADmtHJVgILrXfr9qTFZqAak8+CuAwgM5ydZ9T5F80SebqVFib
-47abOM6NaHO1mQAmy9V9WcB2bLYjdBQr3G3F/hV6d+f+rXCcCSC7yBngFbkiiyD/B5CDW0pgBswY
-AAAAAElFTkSuQmCC','root','op',436,100,-1,1);
 COMMIT;

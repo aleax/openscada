@@ -1073,6 +1073,7 @@ void VisRun::styleChanged( )
 	return;
     }
     fullUpdatePgs();
+    pgCacheClear();
 }
 
 void VisRun::aboutQt( )		{ QMessageBox::aboutQt(this, mod->modInfo("Name").c_str()); }

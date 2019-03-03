@@ -849,7 +849,7 @@ int TSYS::start( )
     //Start for ordinal service task
     taskCreate("SYS_Service", 0, TSYS::ServTask, NULL, 10);
 
-    mess_sys(TMess::Info, _("Running is complete!"));
+    mess_sys(TMess::Info, _("Running is completed!"));
 
     //Call in monopoly for main thread module or wait for a signal.
     if(!mainThr.freeStat()) { mainThr.at().modStart(); mainThr.free(); }
