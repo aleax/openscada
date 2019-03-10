@@ -406,7 +406,7 @@
 	    </node>
 	    <node id="mod_Vision">
 		<prm id="StartUser">roman</prm>
-		<prm id="RunPrjs">kotel9</prm>
+		<prm id="RunPrjs">boiler9</prm>
 	    </node>
 	    <node id="mod_WebCfg">
 		<prm id="SessTimeLife">20</prm>

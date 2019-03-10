@@ -38,7 +38,7 @@
 <td> x86,x86_64,ARM
 </td>
 <td> Пользовательские интерфейсы </td>
-<td> Роман Савоченко<br /><font size="-2"><i>Максим Лысенко (2007-2012), Ксения Яшина (2007-2008)</i></font> </td>
+<td> Роман Савоченко<br />&nbsp;&nbsp;<font size="-2"><i>Максим Лысенко (2007-2012), Ксения Яшина (2007-2008)</i></font> </td>
 <td> Рабочий пользовательский интерфейс, основанный на WEB - внешний интерфейс к движку СВУ.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -109,7 +109,13 @@
 <li> обновление содержимого модифицированных страниц и их виджетов в соответствии с полученными измененными данными.</li></ul>
 <p>Механизм запроса только изменённых данных основан на абсолютном счётчике исполнения сессии. При внесении реальных изменений в атрибуты виджетов выполняется запоминание значения этого счётчика, что и позволяет идентифицировать изменённые атрибуты. Такой подход позволяет повысить производительность и уменьшить трафик, в случае доступа к движку СВУ через сеть.
 </p><p>Иерархически, модулем предусматривается возможность размещения страниц проекта как на главном окне исполнения (рис.3), так и вкладывая внутрь виджетов контейнеров, а также путем открытия дополнительных окон поверх основного.
-</p><p>Модулем поддерживается многоязычность, которая включается <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#ConfigTr" title="Special:MyLanguage/Documents/Program manual">динамическим переводом сообщений OpenSCADA</a>. Полученный язык передаётся модулем <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> и определяется путём и в последовательности:
+</p><p>На строке статуса размещаются:
+</p>
+<ul><li> С правой стороны:
+<ul><li> текущий пользователь, от имени которого исполняется интерфейс СВУ — кликом можно сменить этого пользователя, введя новое имя и пароль;</li>
+<li> текущий стиль интерфейса, который можно сменить выбрав из комбобокса нужный;</li></ul></li>
+<li> В главном поле строки статуса выводятся различные информационные сообщения и сообщения помощи.</li></ul>
+<p>Модулем поддерживается многоязычность, которая включается <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#ConfigTr" title="Special:MyLanguage/Documents/Program manual">динамическим переводом сообщений OpenSCADA</a>. Полученный язык передаётся модулем <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> и определяется путём и в последовательности:
 </p>
 <ul><li> URL параметр "lang".</li>
 <li> Язык пользователя, который вошёл.</li>
@@ -117,7 +123,7 @@
 <li> Общий язык процесса OpenSCADA.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:624px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth_ru.png"><img class="thumbimage" height="278" src="../files/HTTP_auth_ru.png" width="622" /></a>  <div class="thumbcaption">Рис.1. Страница аутентификации.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:622px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect_ru.png"><img class="thumbimage" height="409" src="../files/WebVision_wvis_connect_ru.png" width="620" /></a>  <div class="thumbcaption">Рис.2. Подключение или создание нового сеанса исполнения проекта СВУ.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1048px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_ru.png"><img class="thumbimage" height="784" src="../files/WebVision_wvis_run_ru.png" width="1046" /></a>  <div class="thumbcaption">Рис.3. Главное окно режима исполнения.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1041px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_ru.png"><img class="thumbimage" height="782" src="../files/WebVision_wvis_run_ru.png" width="1039" /></a>  <div class="thumbcaption">Рис.3. Главное окно режима исполнения.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B5.D0.B4.D1.81.D1.82.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5_.D0.B1.D0.B0.D0.B7.D0.BE.D0.B2.D1.8B.D1.85_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.BE.D0.B2_.28.D0.BF.D1.80.D0.B8.D0.BC.D0.B8.D1.82.D0.B8.D0.B2.D0.BE.D0.B2.29"><span class="mw-headline-number">3</span> Представление базовых элементов (примитивов)</span></h2>
 <p>Данной версией модуля реализованы не все образы примитивов, заложенные проектом. В целом, проектом заложены примитивы:
 </p>

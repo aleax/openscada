@@ -462,12 +462,14 @@ string TVal::setArch( const string &nm )
     string rez_nm = nm, n_nm, a_nm;
     //Make archive name
     if(rez_nm.empty()) {
-	if(SYS->archive().at().appendAttrIdToNm()) {
+	if(SYS->archive().at().autoIdMode() == TArchiveS::OnlyPrmId) rez_nm = owner().nodeName();
+	else if(SYS->archive().at().autoIdMode() == TArchiveS::OnlyAttrId) rez_nm = name();
+	else {
 	    n_nm = owner().nodeName();
 	    a_nm = n_nm+"_"+name();
 	    if(a_nm.size() > 20) a_nm = (n_nm.substr(0,n_nm.size()-n_nm.size()*(a_nm.size()-19)/21)+"_"+name()).substr(0,20);
 	    rez_nm = a_nm;
-	} else rez_nm = owner().nodeName();
+	}
     }
     a_nm = rez_nm;
     for(int p_cnt = 2; SYS->archive().at().valPresent(rez_nm); p_cnt++) {

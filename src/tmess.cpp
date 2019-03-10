@@ -62,6 +62,10 @@ TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_A
 {
     openlog(PACKAGE, 0, LOG_USER);
 
+    //Cleaning the LC_ALL since it overides the proper LC_NUMERIC
+    char *lc = getenv("LC_ALL");
+    if(lc) { setenv("LANG", lc, 0); unsetenv("LC_ALL"); }
+
     setenv("LC_NUMERIC", "C", 1);
     setlocale(LC_ALL, "");
 #ifdef HAVE_LANGINFO_H

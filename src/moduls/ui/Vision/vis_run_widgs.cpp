@@ -724,15 +724,15 @@ VisRun *StylesStBar::mainWin( )	{ return (VisRun *)window(); }
 void StylesStBar::setStyle( int istl, const string &nm )
 {
     mStyle = istl;
-    if(mStyle < 0) setText(_("No style"));
+    if(mStyle < 0) setText(_("<Disabled>"));
     else if(!nm.empty()) setText(nm.c_str());
     else {
 	XMLNode req("get");
 	req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fobj%2fcfg%2fstLst");
 	mainWin()->cntrIfCmd(req);
-	for(unsigned i_s = 0; i_s < req.childSize(); i_s++)
-	    if(s2i(req.childGet(i_s)->attr("id")) == istl)
-		setText(req.childGet(i_s)->text().c_str());
+	for(unsigned iS = 0; iS < req.childSize(); iS++)
+	    if(s2i(req.childGet(iS)->attr("id")) == istl)
+		setText(req.childGet(iS)->text().c_str());
     }
 }
 
@@ -751,10 +751,11 @@ bool StylesStBar::styleSel( )
     dlg.edLay()->addWidget(lab, 0, 0);
     QComboBox *stls = new QComboBox(&dlg);
     dlg.edLay()->addWidget(stls, 0, 1);
-    for(unsigned iS = 0; iS < req.childSize(); iS++) {
-	stls->addItem(req.childGet(iS)->text().c_str(),s2i(req.childGet(iS)->attr("id")));
-	if(s2i(req.childGet(iS)->attr("id")) == style())
-	    stls->setCurrentIndex(iS);
+    for(unsigned iS = 0, iSls = 0; iS < req.childSize(); iS++) {
+	if(s2i(req.childGet(iS)->attr("id")) < 0) continue;
+	stls->addItem(req.childGet(iS)->text().c_str(), s2i(req.childGet(iS)->attr("id")));
+	if(s2i(req.childGet(iS)->attr("id")) == style()) stls->setCurrentIndex(iSls);
+	iSls++;
     }
     dlg.resize(300, 120);
     if(dlg.exec() == QDialog::Accepted && stls->currentIndex() >= 0) {

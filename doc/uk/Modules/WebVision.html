@@ -38,7 +38,7 @@
 <td> x86,x86_64,ARM
 </td>
 <td> Користувацькі інтерфейси </td>
-<td> Роман Савоченко<br /><font size="-2"><i>Максим Лисенко (2007-2012), Ксенія Яшина (2007-2008)</i></font> </td>
+<td> Роман Савоченко<br />&nbsp;&nbsp;<font size="-2"><i>Максим Лисенко (2007-2012), Ксенія Яшина (2007-2008)</i></font> </td>
 <td> Робочий інтерфейс користувача, заснований на WEB — зовнішній інтерфейс до рушія СВУ.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -109,7 +109,13 @@
 <li> оновлення вмісту модифікованих сторінок та їх віджетів у відповідності до отриманих змінених даних.</li></ul>
 <p>Механізм запиту тільки змінених даних засновано на абсолютному лічильнику виконання сеансу. При внесенні реальних змін до атрибутів віджетів здійснюється запам'ятовування значення цього лічильника, що й дозволяє ідентифікувати змінені атрибути. Такий підхід дозволяє підвищити продуктивність та зменшити трафік, у випадку доступу до рушія СВУ через мережу.
 </p><p>Ієрархічно, модулем передбачається можливість розташування сторінок проекту як на головному вікні виконання (рис.3), так і вкладаючи всередину віджетів контейнерів, а також шляхом відкриття додаткових вікон поверх основного.
-</p><p>Модуль підтримує багатомовність, яка вмикається <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#ConfigTr" title="Special:MyLanguage/Documents/Program manual">динамічним перекладом повідомлень OpenSCADA</a>. Отримана мова передається модулем <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> та визначається шляхом та у послідовності:
+</p><p>На рядку статусу розташовуються:
+</p>
+<ul><li> Праворуч:
+<ul><li> поточний користувач, від ім'я якого виконується інтерфейс СВУ — кліком можна змінити цього користувача, ввівши нове ім'я та пароль;</li>
+<li> поточний стиль інтерфейсу, який можна змінити обравши з комбобоксу потрібний;</li></ul></li>
+<li> У головному полі рядка статусу виводяться різні інформаційні повідомлення та повідомлення допомоги.</li></ul>
+<p>Модуль підтримує багатомовність, яка вмикається <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#ConfigTr" title="Special:MyLanguage/Documents/Program manual">динамічним перекладом повідомлень OpenSCADA</a>. Отримана мова передається модулем <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> та визначається шляхом та у послідовності:
 </p>
 <ul><li> URL параметр "lang".</li>
 <li> Мова користувача, що увійшов.</li>
@@ -117,7 +123,7 @@
 <li> Загальна мова процесу OpenSCADA.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth_uk.png"><img class="thumbimage" height="286" src="../files/HTTP_auth_uk.png" width="617" /></a>  <div class="thumbcaption">Рис.1. Сторінка аутентифікації.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:625px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect_uk.png"><img class="thumbimage" height="420" src="../files/WebVision_wvis_connect_uk.png" width="623" /></a>  <div class="thumbcaption">Рис.2. Підключення або створення нового сеансу виконання проекту СВУ.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1048px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_uk.png"><img class="thumbimage" height="784" src="../files/WebVision_wvis_run_uk.png" width="1046" /></a>  <div class="thumbcaption">Рис.3. Головне вікно режиму виконання.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1041px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_uk.png"><img class="thumbimage" height="782" src="../files/WebVision_wvis_run_uk.png" width="1039" /></a>  <div class="thumbcaption">Рис.3. Головне вікно режиму виконання.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B5.D0.B4.D1.81.D1.82.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B1.D0.B0.D0.B7.D0.BE.D0.B2.D0.B8.D1.85_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2_.28.D0.BF.D1.80.D0.B8.D0.BC.D1.96.D1.82.D0.B8.D0.B2.D1.96.D0.B2.29"><span class="mw-headline-number">3</span> Представлення базових елементів (примітивів)</span></h2>
 <p>Даною версією модуля реалізовано не всі образи примітивів, закладені проектом. Загалом, проектом закладено примітиви:
 </p>

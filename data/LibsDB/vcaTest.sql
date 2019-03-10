@@ -1,7 +1,9 @@
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "VCALibs" VALUES('test','Tests','Tests library','wlb_test','iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
+INSERT INTO "VCALibs" VALUES('test','Tests','Tests library
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.1.0','wlb_test','iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
 WXMAAAsQAAALEAGtI711AAAAB3RJTUUH0wkJFDADdQaFPwAABcBJREFUeNrFl01sG9cRx3+7XH5z
 rZXkyHKcKlKAJkaa2lSE1GmbFhYgB2lRJAWaIkAOWQOGe+jF6LkoJPTSq90ee/Gil6JIUbR1WsRo
 K6GJAzuFYiZ2UjWCLdqq9UFSISWSu/xYvtfDkhQpkiabSx4wxPK9mff/77zZmXmKlJIvcmgApmkO
@@ -182,8 +184,8 @@ INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomX','105',32,'','','tr2','','
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomY','3',32,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomW','342',32,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomH','144',32,'','','tr2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','curSek','1551621641',0,'','','tr1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0val','11.0553',32,'','','tr1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','curSek','1552224236',0,'','','tr1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0val','7',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomX','3',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomY','3',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','active','1',32,'','','tr1','','','','','','');
@@ -466,12 +468,12 @@ INSERT INTO "wlb_test_io" VALUES('test1','arg0cfg','5;f;1',0,'','','newText','',
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','parNum','3',32,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0addr','/DAQ/System/AutoDA/CPULoad/load',32,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0bordU','100',32,'','','tr2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0color','orange',32,'','','tr2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0color','orange',96,'labColorGrph2','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1addr','/DAQ/System/AutoDA/MemInfo/use',0,'','','tr2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1color','red',0,'','','tr2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1color','magenta',64,'labColorGrph7','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm2addr','/DAQ/System/AutoDA/SensorsData/TEMP0',0,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm2bordU','100',0,'','','tr2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm2color','lightgreen',0,'','','tr2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm2color','lightgreen',64,'labColorGrph4','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','6',32,'','','line6','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','line6','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','1182710881',0,'','','line6','','','','','','');
@@ -590,9 +592,9 @@ INSERT INTO "wlb_test_io" VALUES('TextEltests','alignment','10',32,'','','text7'
 INSERT INTO "wlb_test_io" VALUES('test1','alignment','10',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('test1','alignment','10',32,'','','newText','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','FormEl1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1421852989:1551621641:1',32,'','','tr1','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1421852989:1551621641:1',32,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1prop','1415818374:1551621641:1',0,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1421852989:1552224236:1',32,'','','tr1','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1421852989:1552224236:1',32,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1prop','1415818374:1552224236:1',0,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','5',32,'','','Pi_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','4',32,'','','TextEl','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','6',32,'','','Ti_нд','','','','','','');
@@ -690,9 +692,12 @@ INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','105',32,'','','tree','',
 INSERT INTO "wlb_test_io" VALUES('TextEltests','inHtml','1',32,'','','text1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','backColor','black',96,'backColorVal','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','sclMarkColor','white',96,'labColor','','tr2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0val','6.5',32,'','','tr2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1val','1695060',0,'','','tr2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0val','7.07071',32,'','','tr2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1val','1684350',0,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm2val',NULL,0,'','','tr2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','dscr','The test cadre "Diagrams"
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.1.0',32,'','','','','','','','','');
 CREATE TABLE 'wlb_test_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_test_mime" VALUES('bake','image/png;9.79492','iVBORw0KGgoAAAANSUhEUgAAAKAAAADICAYAAABvaOoaAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
 WXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH1wcEDiUDhclhJwAAAB10RVh0Q29tbWVudABDcmVhdGVk
@@ -1622,7 +1627,7 @@ VuEcZAEovUkYP+ScjurhYC9pM3flyhXHGdx7v4IVWIE/IH5XnhcnmHwKjSR6KknfAcMwgiAwDKPX
 T08XCoXl5eXFxcW3ZoMguHHjxs7OzsLCwt7e3sAMs7OzUsrLly8/evSoVCoN5FiWdfv27Uqlsr+/
 v7m5+das4zjz8/NbW1tzc3Obuy3x/Y8/v/cfmfzt11/e0+q/i3w+f+3atXq9rpSK4zgIgu3t7SAI
 nJEJs2c5obBPCQ7DfYQNiLT92RdffSTJb8L3fX90VGeGfN9vNBrDw8NmbsT3/Z4w/gaGGJVZL2Zi
-hgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;geomW;geomH;backColor;bordWidth;bordColor;',1551621646);
+hgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;dscr;geomW;geomH;backColor;bordWidth;bordColor;',1552226019);
 INSERT INTO "wlb_test" VALUES('FormElTests','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAjCAYAAAAkCQwqAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAADAdJREFUaIHlmdtvHEd2xn/VXd09PffhDC/Di3jThbKcdWRZWq1lC0gC
 Iw8BFlkjcRIkCBIgyfs+5jXIS178Euzmb1jsU5DFBog2wCZGAnlty5Yty7pRlCgNh+RcyLn2vSsP

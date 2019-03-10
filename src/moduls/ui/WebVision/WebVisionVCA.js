@@ -603,13 +603,15 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		masterPage.status.setAttribute('id', 'gen-pnl-status');
 		this.place.appendChild(masterPage.status);
 		stBar = "<table width='100%'><TR><td id='StatusBar' width='100%'/>";
-		if(modelStyles) {
+		if(modelStyles && parseInt(modelStyles.getAttribute('curStlId')) >= 0 && modelStyles.childNodes.length > 1) {
 		    stBar += "<td id='st_style' title='###Field for displaying and changing the used interface style.###'>";
 		    stBar += "<select onchange='styleSet(this.selectedOptions[0].getAttribute(\"itId\"))'>";
-		    for(iSt = 0; iSt < modelStyles.childNodes.length; iSt++)
+		    for(iSt = 0; iSt < modelStyles.childNodes.length; iSt++) {
+			if(parseInt(modelStyles.childNodes[iSt].getAttribute("id")) < 0) continue;
 			stBar += "<option itId='"+modelStyles.childNodes[iSt].getAttribute("id")+"' "+
 			    ((modelStyles.childNodes[iSt].getAttribute("id")==modelStyles.getAttribute('curStlId'))?"selected='1'":"")+">"+
 				modelStyles.childNodes[iSt].textContent+"</option>";
+		    }
 		    stBar += "</select></td>";
 		}
 		stBar += "<td id='st_user' title='###Field for displaying and changing the current user.###'><a href='/login/"+MOD_ID+"/'>"+pgBr.getAttribute('user')+"</a></td>";

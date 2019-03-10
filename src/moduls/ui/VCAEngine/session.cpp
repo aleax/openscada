@@ -759,7 +759,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_RD))	stlCurentSet(s2i(opt->text()));
     }
     else if(a_path == "/obj/cfg/stLst" && ctrChkNode(opt)) {
-	opt->childAdd("el")->setAttr("id","-1")->setText(_("No style"));
+	opt->childAdd("el")->setAttr("id","-1")->setText(_("<Disabled>"));
 	if(enable())
 	    for(int iSt = 0; iSt < parent().at().stlSize(); iSt++)
 		opt->childAdd("el")->setAttr("id", i2s(iSt))->setText(TSYS::strSepParse(parent().at().stlGet(iSt),0,';'));

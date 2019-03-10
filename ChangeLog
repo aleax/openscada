@@ -1,5 +1,21 @@
+2019-03-10 Roman (stable)
+- !!:FIX:DB.{LibsDB.vcaBase,Model.AGLKS.St,Model.Boiler.St}:
+    The styles moved under a scheme of disabling styles at their presence instead "No style" and the style "Default" is appended.
+    !!:Extra standard cadres of the graphics adapted to the styles.
+    Main.userManager: finished for the translation.
+    FIX:Main.graphSelPrm: Fixed for the item "<Clear>" appending and the "event" generating.
+    Main.ElViewGraph: Expanded for the item color processing, from the style.
+- !!!!:FIX:Model.Boiler.{St,Model}: Significantly cleaned and all original identificators renamed to English for the documentation revision.
+- !!!:SYS.Mess: Appended for the environment variable LC_ALL cleaning and setting "LANG" if empty, to prevent from overriding LC_NUMERIC=C at last.
+- !!:SYS.Archives: The common option "Add the attribute identifier to names of the automatic created archives" changed to
+    "Mode of forming ID of the automatic created archives" with selecition from the modes: "Both parameter and attribute ID", "Only parameter ID", "Only attribute ID".
+- !:FIX:DB.MySQL: Fixed completly for the error "BLOB/TEXT can't have a default value (1)" on modern MySQL server versions, wholly removing the DEFAULT for TEXT.
+- FIX:UI.{VCAEngine,Vision,WebVision}: Styles fixed for creating new items.
+    The styles moved under a scheme of disabling styles at their presence instead "No style".
+
+
 2019-03-03 Roman (stable)
-- !!!!:FIX:DB.{LibsDB.vcaBase,Model.AGLKS.St,Model.Boiler.St}: Mostly standard cadres and widgets adapted to styles and the style "Light" is created for all projects.
+- !!!!:FIX:DB.{LibsDB.vcaBase,Model.AGLKS.St,Model.Boiler.St}: Most standard cadres and widgets adapted to styles and the style "Light" is created for all projects.
 - FIX:SYS: Some original messages fixed.
 - UI.QTCfg: Prevented from the navigation tree updating at selecting any item.
 - !!!:FIX:UI.VCAEngine: Significantly fixed and mostly finished in the VCA-styles implementation, adapting most cadres and widgets at the style "Light".

@@ -190,6 +190,9 @@ class TVArchive;
 class TArchiveS : public TSubSYS
 {
     public:
+	//Public data
+	enum AutoIdMode { BothPrmAttrId = 0, OnlyPrmId, OnlyAttrId };
+
 	//Public methods
 	TArchiveS( );
 	~TArchiveS( );
@@ -200,13 +203,13 @@ class TArchiveS : public TSubSYS
 	int valPeriod( )	{ return vmax(1, mValPer); }
 	int valPrior( )		{ return mValPrior; }
 	bool valForceCurTm( )	{ return mValForceCurTm; }
-	bool appendAttrIdToNm( ){ return mAppendAttrIdToNm; }
+	AutoIdMode autoIdMode( ){ return (AutoIdMode)mAutoIdMode; }
 
 	void setMessPeriod( int ivl )	{ mMessPer = ivl; modif(); }
 	void setValPeriod( int ivl )	{ mValPer = ivl; modif(); }
 	void setValPrior( int ivl )	{ mValPrior = vmax(-1, vmin(199,ivl)); modif(); }
 	void setValForceCurTm( bool vl ){ mValForceCurTm = vl; modif(); }
-	void setAppendAttrIdToNm( bool vl ) { mAppendAttrIdToNm = vl; modif(); }
+	void setAutoIdMode( AutoIdMode vl ) { mAutoIdMode = vl; modif(); }
 	void setToUpdate( )		{ toUpdate = true; }
 
 	void unload( );
@@ -287,10 +290,10 @@ class TArchiveS : public TSubSYS
 	ResMtx	vRes;			//Value access resource
 	int	mValPer,		//Value archiving period
 		mValPrior,		//Value archive task priority
-		mAval;
+		mAval,
+		mAutoIdMode;
 
 	bool	mValForceCurTm,		//Time of taken values force to current and overide it's source from
-		mAppendAttrIdToNm,	//Add the attribute identifier to names of the automatic created archives
 		prcStVal,		//Process value flag
 		endrunReqVal,		//Endrun value request
 		toUpdate;

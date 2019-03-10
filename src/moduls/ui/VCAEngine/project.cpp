@@ -756,24 +756,27 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    if(s2i(opt->text()) >= -1) stlCurentSet(s2i(opt->text()));
 	    else {
 		ResAlloc res(mStRes, true);
-		map< string, vector<string> >::iterator iStPrp;
-		for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
-		    if(iStPrp->first == "<Styles>") continue;
-		    else if(stlSize() > iStPrp->second.size()) iStPrp->second.push_back(iStPrp->second[iStPrp->second.size()-1]);
-		    //else mStProp.erase(iStPrp--);
-		iStPrp = mStProp.find("<Styles>");
+
+		// Appending for the style name
+		map< string, vector<string> >::iterator iStPrp = mStProp.find("<Styles>");
 		if(iStPrp == mStProp.end()) mStProp["<Styles>"] = vector<string>(1,_("New style"));
 		else iStPrp->second.push_back(_("New style"));
+
+		// Appending for the properties
+		for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
+		    if(iStPrp->first != "<Styles>" && stlSize() > iStPrp->second.size())
+			iStPrp->second.push_back(iStPrp->second[(mStyleIdW>=0)?mStyleIdW:iStPrp->second.size()-1]);
+
 		mStyleIdW = mStProp["<Styles>"].size()-1;
 		modif();
 	    }
 	}
     }
     else if(a_path == "/style/stLst" && ctrChkNode(opt)) {
-	opt->childAdd("el")->setAttr("id","-1")->setText(_("No style"));
+	opt->childAdd("el")->setAttr("id","-1")->setText(_("<Disabled>"));
+	if(stlSize() < 10) opt->childAdd("el")->setAttr("id","-2")->setText(_("<Create a new style>"));
 	for(int iSt = 0; iSt < stlSize(); iSt++)
 	    opt->childAdd("el")->setAttr("id", i2s(iSt))->setText(TSYS::strSepParse(stlGet(iSt),0,';'));
-	if(stlSize() < 10) opt->childAdd("el")->setAttr("id","-2")->setText(_("Create a new style"));
     }
     else if(a_path == "/style/name") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::strSepParse(stlGet(stlCurent()),0,';'));
@@ -810,7 +813,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	ResAlloc res(mStRes, true);
 	map< string, vector<string> >::iterator iStPrp;
 	for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
-	    if(iStPrp->second.size() > 1)
+	    if(iStPrp->second.size() > 1 || iStPrp->first == "<Styles>")
 		iStPrp->second.erase(iStPrp->second.begin()+stlCurent());
 	stlCurentSet(-1);
     }

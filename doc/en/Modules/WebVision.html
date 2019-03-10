@@ -38,7 +38,7 @@
 <td> x86,x86_64,ARM
 </td>
 <td> UI </td>
-<td> Roman Savochenko<br /><font size="-2"><i>Maxim Lysenko (2007-2012), Ksenia Yashina (2007-2008)</i></font> </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2007-2012), Ksenia Yashina (2007-2008)</i></font> </td>
 <td> Visual operation user interface, based on the the WEB — front-end to the VCA engine.
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -108,7 +108,13 @@
 <dd>- updating content of the pages and their widgets in accordance with the received modified data.</dd></dl>
 <p>The mechanism of the request for only modified data is based on the absolute counter of the session execution. When you make real changes in the attributes of widgets the remembering of the value of this counter is made, which allows us to identify the modified attributes. This approach allows to increase productivity and reduce the load on the traffic in case of access to the model through the network.
 </p><p>Hierarchically, the module assumes the possibility of placing pages of the project as in the main window of execution (Fig. 3), and by placing inside the container widgets, as well as by opening additional windows over the main one.
-</p><p>The module supports multi-language which one enabled by the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#ConfigTr" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>. The gotten language passes by the module <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> and detects in way and by the order:
+</p><p>On the status line locates:
+</p>
+<ul><li> On the right side:
+<ul><li> the current user, on whose behalf the VCA interface is executed — by a clicking this user can be changed, typing of the new username and password;</li>
+<li> the current interface style, which can be changed selecting need one in the combobox.</li></ul></li>
+<li> In the main field of the status line various messages and assistance messages are displayed.</li></ul>
+<p>The module supports multi-language which one enabled by the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Program_manual#ConfigTr" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>. The gotten language passes by the module <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> and detects in way and by the order:
 </p>
 <ul><li> URL's parameter "lang".</li>
 <li> Authenticated user's language.</li>
@@ -116,7 +122,7 @@
 <li> Generic language of the OpenSCADA process.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth.png"><img class="thumbimage" height="302" src="../files/HTTP_auth.png" width="617" /></a>  <div class="thumbcaption">Fig.1. Authentication page.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:618px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect.png"><img class="thumbimage" height="423" src="../files/WebVision_wvis_connect.png" width="616" /></a>  <div class="thumbcaption">Fig.2. Connection or creation of a new session of the execution project of the VCA.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1048px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="784" src="../files/WebVision_wvis_run.png" width="1046" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1041px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="782" src="../files/WebVision_wvis_run.png" width="1039" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
 <h2><span class="mw-headline" id="Presentation_of_the_basic_elements_.28primitives.29"><span class="mw-headline-number">3</span> Presentation of the basic elements (primitives)</span></h2>
 <p>This version of the module does not implement all the shapes of the primitives laid by the project. In general, the project provides the following primitives:
 </p>

@@ -1282,7 +1282,8 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	pN = req.childGet(3);
 	setStyle(s2i(pN->text()));
 	pN = req.childGet(4);
-	if(style() < 0 && pN->childSize() <= 1) mStlBar->setVisible(false);
+	mStlBar->setVisible(style() >= 0 && pN->childSize() > 1);
+	//if(style() < 0 && pN->childSize() <= 1) mStlBar->setVisible(false);
 
 	// Clean up the previous pages for clean reconnection
 	if(toRestore) {

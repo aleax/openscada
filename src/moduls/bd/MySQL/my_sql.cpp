@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.1"
+#define MOD_VER		"3.0.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -788,8 +788,8 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt
 			((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '"+TSYS::strEncode(cfg.fld().def(),TSYS::SQL)+"' ");
 	    // Due to "BLOB/TEXT can't have a default value (1)"
 	    else if(cfg.fld().len() < 65536)
-		req += string("text ") + ((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '' ");
-	    else req += string("mediumtext ") + ((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '' ");
+		req += string("text "); //+ ((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '' ");
+	    else req += string("mediumtext ");// + ((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '' ");
 	    break;
 	case TFld::Integer:
 	    if(cfg.fld().flg()&TFld::DateTimeDec)
