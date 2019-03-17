@@ -1,3 +1,10 @@
+2019-03-17 Roman (stable)
+- SYS: The user API function cntrReq() improved for processing results of the remote requests.
+- !!!:FIX:DAQ.JavaLikeCalc: Fixed for crashing in hot compiling, in returning the correct procedure mostly at wrong one compiling,
+    in case of the procedure uses internal functions and possible external ones also due to missing for clearing "fPrmst".
+    All these clearings are unified in the functions buildClear(), workClear().
+
+
 2019-03-10 Roman (stable)
 - !!:FIX:DB.{LibsDB.vcaBase,Model.AGLKS.St,Model.Boiler.St}:
     The styles moved under a scheme of disabling styles at their presence instead "No style" and the style "Default" is appended.

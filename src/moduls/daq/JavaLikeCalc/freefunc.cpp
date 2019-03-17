@@ -298,15 +298,12 @@ void Func::workRegControl( TValFunc *vfnc, bool toFree )
 void Func::setStart( bool val )
 {
     if(val == runSt) return;
-    //Start calc
+    //Start calcing
     if(val) progCompile();
-    //Stop calc
+    //Stop calcing
     else {
 	ResAlloc res(fRes(), true);
-	prg = mUsings = "";
-	regClear();
-	regTmpClean();
-	mFncs.clear();
+	workClear();
     }
     TFunction::setStart(val);
 }
@@ -343,32 +340,22 @@ void Func::progCompile( )
     //Context clear for usings
     for(unsigned i = 0; i < used.size(); i++) used[i]->ctxClear();
 
+    buildClear();
+    workClear();
+
     pF     = this;	//Parse func
-    pErr   = "";	//Clear error messages
-    laPos  = 0;		//LA position
     sprg   = cfg("FORMULA").getS();
-    prg.clear();	//Clear program
-    regClear();		//Clear registers list
-    regTmpClean();	//Clear temporary registers list
-    mFncs.clear();	//Clear static linked external functions list
-    mInFnc = "";
-    mInFncs.clear();
 
     if(yyparse()) {
-	prg.clear();
-	sprg.clear();
-	regClear();
-	regTmpClean();
-	mFncs.clear();
-	mInFncs.clear();
+	string tErr = pErr;
+	buildClear();
+	workClear();
 	runSt = false;
-	throw TError(nodePath().c_str(), "%s", pErr.c_str());
+	throw TError(nodePath().c_str(), "%s", tErr.c_str());
     }
-    sprg.clear();
-    mInFncs.clear();
-    regTmpClean();
+    buildClear();
 
-    //Work registers update for calc contexts
+    //Work registers update for the calculating contexts
     for(unsigned i = 0; i < used.size(); i++) workRegControl(used[i]);
 }
 
@@ -449,6 +436,23 @@ int Func::ioGet( const string &nm )
     return rez;
 }
 
+void Func::buildClear( )
+{
+    laPos  = 0;		//LA position
+    pErr   = "";
+    sprg.clear();
+    regTmpClear();	//Clear temporary registers list
+    mInFnc = ""; mInFncs.clear();
+    fPrmst.clear();
+}
+
+void Func::workClear( )
+{
+    prg.clear();	//Clear program
+    mFncs.clear();	//Clear static linked external functions list
+    regClear();		//Clear registers list
+}
+
 void Func::regClear( )
 {
     for(unsigned iRg = 0; iRg < mRegs.size(); iRg++)
@@ -466,7 +470,7 @@ Reg *Func::regTmpNew( )
     return mTmpRegs[iRg];
 }
 
-void Func::regTmpClean( )
+void Func::regTmpClear( )
 {
     for(unsigned iRg = 0; iRg < mTmpRegs.size(); iRg++)
 	delete mTmpRegs[iRg];
@@ -2770,7 +2774,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			(iF >= ptr->n) ? TVariant() : getVal(val, reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t))]);
 		// Make calc
 		exec(val, (const uint8_t*)ptrF+sizeof(SFCode)+ptrF->n*sizeof(uint16_t), dt);
-		dt.flg = 0;	//Clean all flags
+		dt.flg = 0;	//Clean up all flags
 		// Process outputs
 		for(int iF = 0; iF < vmin(ptrF->n,ptr->n); iF++)
 		    setVal(val, reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t))],

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-03 22:43+0200\n"
+"POT-Creation-Date: 2019-03-17 18:48+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -289,10 +289,11 @@ msgstr "Prioritätsstufe der Datenempfangsaufgabe"
 msgid "Forced to set timestampes in the current time"
 msgstr "Gezwungen, Zeitstempel in der aktuellen Zeit festzulegen"
 
-msgid "Add the attribute identifier to name of the automatic created archives"
-msgstr ""
-"Fügen Sie den Attributbezeichner zum Namen der automatisch erstellten "
-"Archive hinzu"
+msgid "Mode of forming ID of the automatic created archives"
+msgstr "Art der Bildung der ID der automatisch erstellten Archive"
+
+msgid "Both parameter and attribute ID;Only parameter ID;Only attribute ID"
+msgstr "Beide Parameter und ID-Attribut;Nur ID-Parameter;Nur ID-Attribut"
 
 msgid "Number"
 msgstr "Anzahl"
@@ -1965,6 +1966,9 @@ msgstr "Der Systemtakt geändert '%s'. Korrektur der cron '%s' Ziel!"
 
 msgid "1:Request is not an object!"
 msgstr "1:Die Anfrage ist kein Objekt!"
+
+msgid "10:Error remote request: %s"
+msgstr "10:Fehler Remote-Anforderung: %s"
 
 #, c-format
 msgid "%s station: \"%s\""

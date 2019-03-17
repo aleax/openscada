@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freefunc.h
 /***************************************************************************
- *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -298,11 +298,13 @@ class Func : public TConfig, public TFunction
 	int regGet( const string &nm, bool inFncNS = false );
 	int ioGet( const string &nm );
 	Reg *regAt( int id )	{ return (id>=0) ? mRegs.at(id) : NULL; }
+	void buildClear( );
+	void workClear( );
 	void regClear( );
 
 	// Temporary registers' list functions
 	Reg *regTmpNew( );
-	void regTmpClean( );
+	void regTmpClear( );
 
 	// Parse function
 	void progCompile( );

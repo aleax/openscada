@@ -435,11 +435,11 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
 	return s2i(node.attr("rez"));
     }
 
-    //Check for reforward
+    //Checking to reforward
     off = 0; TSYS::strParse(station, 0, ".", &off);
     if(off && off < (int)station.size()) { node.setAttr("reforwardHost", station.substr(off)); station.erase(off-1); }
 
-    //Connect to the transport
+    //Connection to the transport
     off = 0;
     string user = TSYS::strLine(iuser, 0, &off), rqUser = TSYS::strLine(iuser, 0, &off), rqPass = TSYS::strLine(iuser, 0, &off);
     TTransportS::ExtHost host = extHostGet(user.empty()?"*":user, station);

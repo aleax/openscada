@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-03 22:43+0200\n"
+"POT-Creation-Date: 2019-03-17 18:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -252,7 +252,10 @@ msgstr ""
 msgid "Forced to set timestampes in the current time"
 msgstr ""
 
-msgid "Add the attribute identifier to name of the automatic created archives"
+msgid "Mode of forming ID of the automatic created archives"
+msgstr ""
+
+msgid "Both parameter and attribute ID;Only parameter ID;Only attribute ID"
 msgstr ""
 
 msgid "Number"
@@ -1645,6 +1648,10 @@ msgid "System clock changed to '%s'. Correction the cron '%s' target!"
 msgstr ""
 
 msgid "1:Request is not an object!"
+msgstr ""
+
+#, c-format
+msgid "10:Error remote request: %s"
 msgstr ""
 
 #, c-format

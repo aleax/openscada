@@ -2578,20 +2578,20 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "cntrReq" && prms.size() >= 1) {
 	XMLNode req;
 	AutoHD<XMLNodeObj> xnd = prms[0].getO();
-	if(xnd.freeStat()) return string(_("1:Request is not an object!"));
+	if(xnd.freeStat()) return _("1:Request is not an object!");
 	xnd.at().toXMLNode(req);
 	string path = req.attr("path");
 	if(prms.size() < 2 || prms[1].getS().empty()) {
 	    req.setAttr("user",user);
 	    cntrCmd(&req);
 	}
-	else {
-	    req.setAttr("path","/"+prms[1].getS()+path);
+	else try {
+	    req.setAttr("path", "/"+prms[1].getS()+path);
 	    transport().at().cntrIfCmd(req, "cntrReq");
-	    req.setAttr("path",path);
-	}
+	    req.setAttr("path", path);
+	} catch(TError &err) { return TSYS::strMess(_("10:Error remote request: %s"), err.mess.c_str()); }
 	xnd.at().fromXMLNode(req);
-	return string("0");
+	return "0";
     }
     // int sleep(real tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
     //  tm - wait time in seconds (precised up to nanoseconds), up to STD_INTERF_TM(5 seconds)

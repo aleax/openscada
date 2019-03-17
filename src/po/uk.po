@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-03 22:43+0200\n"
+"POT-Creation-Date: 2019-03-17 18:48+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -283,9 +283,11 @@ msgstr "Рівень пріоритету задачі отримання дан
 msgid "Forced to set timestampes in the current time"
 msgstr "Примусово встановлювати мітку часу у поточний час"
 
-msgid "Add the attribute identifier to name of the automatic created archives"
-msgstr ""
-"Додавати ідентифікатор атрибуту до назви автоматично створюваних архівів"
+msgid "Mode of forming ID of the automatic created archives"
+msgstr "Режим формування ID атрибуту автоматично створюваних архівів"
+
+msgid "Both parameter and attribute ID;Only parameter ID;Only attribute ID"
+msgstr "Обидва ID параметру та атрибуту;Тільки ID параметру;Тільки ID атрибуту"
 
 msgid "Number"
 msgstr "Кількість"
@@ -1950,6 +1952,9 @@ msgstr "Системний годинник змінено у '%s'. Корекц
 
 msgid "1:Request is not an object!"
 msgstr "1:Запит не є об'єкт!"
+
+msgid "10:Error remote request: %s"
+msgstr "10:Помилка віддаленого запиту: %s"
 
 #, c-format
 msgid "%s station: \"%s\""
