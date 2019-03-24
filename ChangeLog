@@ -1,3 +1,20 @@
+2019-03-24 Roman (stable)
+- !!!!:FIX:Model.AGLKS.{St,Model,vca}: Significantly cleaned and all original identificators renamed to English for the documentation revision.
+- !!!:FIX:SYS.DB,DB.{SQLite,MySQL,PostgreSQL,FireBird}: TBD::postEnable() moved from private to protected.
+    The network DBMS improved to handle up the transaction closing as fast as that possible (after 2-10 seconds) but it holding locks access from other sources,
+	that function placed in a different task due to a down connection can lock for long this significant task.
+    SQLite: Also speeded up in the transaction handling but into the standard service task (after 10-60 seconds).
+- !!!:FIX:DAQ.DAQGate: Fixed in storing duple parameters from different controller objects, preventing the RO attribute "SHIFR" reading.
+    !!!:Expanded by an option and a function of placing different controllers to the different virtual parameters.
+- FIX:DAQ.ModBus: Fixed for EVAL in the string type.
+- !!!!:Protocol.HTTP: Expanded for the DB table "HTTP_AuthSessions" of the external authentication sessions.
+- UI.QTCfg: The approving dialog of the nodes removing limited in big lists of the selected nodes.
+- FIX:UI.VCAEngine: Some fixed in copying the projects with the linked pages.
+- !!!:UI.VCAEngine: Expanded for the direct defying of the visualiser specific atributes, marking their by the prefix "vs_".
+- UI.WebVision: Expanded for NaN and EVAL processing into "Text" and "FormEl" integer.
+    The view "Button" of the primitive "FormEl" appended for the visualiser specific attribute "vs_goHttpUrl" for going by the external link.
+
+
 2019-03-17 Roman (stable)
 - SYS: The user API function cntrReq() improved for processing results of the remote requests.
 - !!!:FIX:DAQ.JavaLikeCalc: Fixed for crashing in hot compiling, in returning the correct procedure mostly at wrong one compiling,

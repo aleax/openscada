@@ -404,8 +404,8 @@ void Widget::inheritAttr( const string &iattr )
 	if(!(attr.at().flgSelf()&Attr::IsInher)) attr.at().setFld(&pattr.at().fld(), true);
 	if(attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh) && !dynamic_cast<SessWdg*>(this)) {
 	    //Force inheritance flags processing
-	    //!!!! Attr::ProcAttr also added 
-	    int frcInherAtr = Attr::CfgConst | Attr::CfgLnkIn | Attr::CfgLnkOut | Attr::FromStyle | Attr::ProcAttr;
+	    //!!!! Attr::ProcAttr also added
+	    int frcInherAtr = Attr::CfgConst | Attr::CfgLnkIn | Attr::CfgLnkOut | Attr::FromStyle | Attr::ProcAttr | Attr::VizerSpec;
 	    if((pattr.at().flgSelf()&frcInherAtr) && (attr.at().flgSelf()&frcInherAtr) != (pattr.at().flgSelf()&frcInherAtr)) {
 		attr.at().setFlgSelf((Attr::SelfAttrFlgs)((attr.at().flgSelf() & ~frcInherAtr) | (pattr.at().flgSelf() & frcInherAtr)), true);
 		modif(true);
@@ -597,6 +597,10 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allIn
 	for(p = mAttrs.begin(); p != mAttrs.end(); p++)
 	    if(p->second->mOi >= pos) p->second->mOi++;
 	mAttrs.insert(std::pair<string,Attr*>(a->id(),a));
+
+	if(a->id().compare(0,3,"vs_") == 0)
+	    a->setFlgSelf((Attr::SelfAttrFlgs)(a->flgSelf()|Attr::VizerSpec), true);
+
 	//Set modif for new attribute reload allow
 	if(forceMdf) a->setModif(modifVal(*a));
     } catch(...) { }
@@ -1553,7 +1557,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		wdg.at().attrDel(idattr);
 		wdg.at().attrAdd(new TFld(tid.c_str(),tnm.c_str(),ttp,tflg,"","",tvals.c_str(),tsels.c_str()), -1, false, false, true);
 		wdg.at().attrAt(tid).at().setS(tvl);
-		wdg.at().attrAt(tid).at().setFlgSelf(sflgs);
+		wdg.at().attrAt(tid).at().setFlgSelf((Attr::SelfAttrFlgs)((sflgs&(~Attr::VizerSpec))|(wdg.at().attrAt(tid).at().flgSelf()&Attr::VizerSpec)));
 		wdg.at().attrAt(tid).at().setCfgVal(cfgval);
 		wdg.at().attrAt(tid).at().setCfgTempl(tmpl);
 		wdg.at().attrAt(tid).at().setModif(1);

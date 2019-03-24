@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.DAQGate translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2018.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-02 16:32+0200\n"
+"POT-Creation-Date: 2019-03-23 15:11+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -63,6 +63,9 @@ msgstr "Перелік віддалених об'єктів контролері
 
 msgid "Allow the automatic removal of parameters and attributes"
 msgstr "Дозволяти автоматичне видалення параметрів та атрибутів"
+
+msgid "Placing different controllers to the separate virtual parameters"
+msgstr "Розташування різних контролерів до окремих віртуальних параметрів"
 
 msgid "Standard"
 msgstr "Стандарт"

@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.PostgreSQL file: postgre.h
 /***************************************************************************
- *   Copyright (C) 2013-2018 by Roman Savochenko, rom_as@oscada.org        *
+ *   Copyright (C) 2013-2019 by Roman Savochenko, rom_as@oscada.org        *
  *                 2010-2011 by Maxim Lysenko, mlisenko@oscada.org         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -63,7 +63,6 @@ class MTable : public TTable
 	void fieldFix( TConfig &cfg, bool trPresent = false, bool recurse = false );
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
 
-
 	string getVal( TCfg &cfg, uint8_t RqFlg = 0 );
 	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
 
@@ -109,8 +108,11 @@ class MBD : public TBD
 
     private:
 	//Private methods
+	void postEnable( int flag );
 	void postDisable( int flag );
 	TTable *openTable( const string &name, bool create );
+
+	static void *Task( void * );
 
 	//Private attributes
 	string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg, conninfo;

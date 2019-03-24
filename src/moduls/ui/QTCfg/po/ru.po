@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-20 17:26+0200\n"
+"POT-Creation-Date: 2019-03-23 16:16+0200\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -313,6 +313,7 @@ msgstr "Кнопка вызова истории строки статуса."
 msgid "Ready"
 msgstr "Готов"
 
+#, c-format
 msgid "The configurator is using the remote host %d times."
 msgstr "Конфигуратор использует удалённые хосты %d раз."
 
@@ -337,6 +338,10 @@ msgstr "Добавление узла"
 
 msgid "The node '%1' is already present."
 msgstr "Узел '%1' уже присутствует."
+
+#, c-format
+msgid "... and yet %d nodes"
+msgstr "... и ещё %d узла"
 
 msgid "Are you sure of deleting the nodes '%1'?"
 msgstr "Вы действительно желаете удалить узлы '%1'?"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-01 12:22+0200\n"
+"POT-Creation-Date: 2019-03-23 15:41+0200\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -44,6 +44,7 @@ msgstr ""
 "(Standard 10).\n"
 "\n"
 
+#, c-format
 msgid "Error loading the META header '%s': %s"
 msgstr "Fehler beim Laden des META-Headers '%s': %s"
 
@@ -92,6 +93,14 @@ msgstr "HTML-Template"
 
 msgid "HTML template of the main page"
 msgstr "HTML-Vorlage der Hauptseite"
+
+msgid "DB of the active authentication sessions"
+msgstr "DB der aktiven Authentifizierungssitzungen"
+
+msgid ""
+"Set to empty to disable using the external table of the active "
+"authentication sessions."
+msgstr "Auf leer setzen, um die Verwendung der externen Tabelle der aktiven Authentifizierungssitzungen zu deaktivieren."
 
 msgid "Life time of the authentication, minutes"
 msgstr "Lebenszeit der Authentifizierung, Minuten"

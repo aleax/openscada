@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -149,6 +149,7 @@ class TBD : public TCntrNode, public TConfig
 	virtual TTable *openTable( const string &table, bool create )
 	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"openTable"); }
 
+	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );
 	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
@@ -166,7 +167,6 @@ class TBD : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	void postEnable( int flag );
 	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	//Private attributes

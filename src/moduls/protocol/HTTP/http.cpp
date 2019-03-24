@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.2.2"
+#define MOD_VER		"3.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -72,7 +72,7 @@ using namespace PrHTTP;
 //* TProt                                         *
 //*************************************************
 TProt::TProt( string name ) : TProtocol(MOD_ID),
-    mDeny(dataRes()), mAllow(dataRes()), mTmpl(dataRes()), mTmplMainPage(dataRes()), mAllowUsersAuth(dataRes()),
+    mDeny(dataRes()), mAllow(dataRes()), mTmpl(dataRes()), mTmplMainPage(dataRes()), mAllowUsersAuth(dataRes()), mAuthSessDB(dataRes()),
     mTAuth(10), lstSesChk(0)
 {
     mod = this;
@@ -80,6 +80,13 @@ TProt::TProt( string name ) : TProtocol(MOD_ID),
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
     mAllow = "*";
+
+    //Structure of a table of the external authentication sessions
+    elAuth.fldAdd(new TFld("ID","Identificator",TFld::Integer,TCfg::Key));
+    elAuth.fldAdd(new TFld("USER","User name",TFld::String,TFld::NoFlag,OBJ_ID_SZ));
+    elAuth.fldAdd(new TFld("TIME","Time of the authentication and updating",TFld::Integer,TFld::NoFlag));
+    elAuth.fldAdd(new TFld("ADDR","User address",TFld::String,TFld::NoFlag,"256"));
+    elAuth.fldAdd(new TFld("AGENT","User agent",TFld::String,TFld::NoFlag,"1000"));
 }
 
 TProt::~TProt( )
@@ -105,6 +112,7 @@ void TProt::load_( )
     setAllow(TBDS::genDBGet(nodePath()+"Allow",allow()));
     setTmpl(TBDS::genDBGet(nodePath()+"Tmpl",tmpl()));
     setTmplMainPage(TBDS::genDBGet(nodePath()+"TmplMainPage",tmplMainPage()));
+    setAuthSessDB(TBDS::genDBGet(nodePath()+"AuthSessDB",authSessDB()));
     setAllowUsersAuth(TBDS::genDBGet(nodePath()+"AllowUsersAuth",allowUsersAuth()));
     setAuthTime(s2i(TBDS::genDBGet(nodePath()+"AuthTime",i2s(authTime()))));
     // Load auto-login config
@@ -126,6 +134,7 @@ void TProt::save_( )
     TBDS::genDBSet(nodePath()+"Allow", allow());
     TBDS::genDBSet(nodePath()+"Tmpl", tmpl());
     TBDS::genDBSet(nodePath()+"TmplMainPage", tmplMainPage());
+    TBDS::genDBSet(nodePath()+"AuthSessDB", authSessDB());
     TBDS::genDBSet(nodePath()+"AllowUsersAuth",allowUsersAuth());
     TBDS::genDBSet(nodePath()+"AuthTime", i2s(authTime()));
 
@@ -305,6 +314,18 @@ int TProt::sesOpen( const string &name, const string &srcAddr, const string &use
     //Add new session authentification
     mAuth[sess_id] = SAuth(name, time(NULL), srcAddr, userAgent);
 
+    //Appending to the table of the external authentication sessions
+    if(authSessTbl().size())
+	try {
+	    TConfig cEl(&elAuth);
+	    cEl.cfg("ID").setI(sess_id);
+	    cEl.cfg("USER").setS(name);
+	    cEl.cfg("TIME").setI(time(NULL));
+	    cEl.cfg("ADDR").setS(srcAddr);
+	    cEl.cfg("AGENT").setS(userAgent);
+	    SYS->db().at().dataSet(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, false, true);
+	} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+
     return sess_id;
 }
 
@@ -313,9 +334,17 @@ void TProt::sesClose( int sid )
     MtxAlloc res(dataRes(), true);
     map<int,SAuth>::iterator authEl = mAuth.find(sid);
     if(authEl != mAuth.end()) {
-	mess_info(nodePath().c_str(),_("Exiting the authentication for the user '%s'."),authEl->second.name.c_str());
+	mess_info(nodePath().c_str(), _("Exiting the authentication for the user '%s'."), authEl->second.name.c_str());
 	mAuth.erase(authEl);
     }
+
+    //Removing from the table of the external authentication sessions
+    if(authSessTbl().size())
+	try {
+	    TConfig cEl(&elAuth);
+	    cEl.cfg("ID").setI(sid);
+	    SYS->db().at().dataDel(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, true, false, true);
+	} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
 string TProt::sesCheck( int sid )
@@ -323,20 +352,61 @@ string TProt::sesCheck( int sid )
     time_t cur_tm = time(NULL);
     map<int,SAuth>::iterator authEl;
 
-    //Check for close old sessions
+    //Checking to close of old sessions
     MtxAlloc res(dataRes(), true);
     if(cur_tm > lstSesChk+10) {
+	// Loading all sessions into the table of the external authentication sessions
+	if(authSessTbl().size())
+	    try {
+		vector<vector<string> > full;
+		TConfig cEl(&elAuth);
+		for(int fldCnt = 0; SYS->db().at().dataSeek(authSessTbl(),mod->nodePath()+"AuthSessions/",fldCnt++,cEl,false,&full); ) {
+		    authEl = mAuth.find(cEl.cfg("ID").getI());
+		    // Appending entries of the external authentication sessions
+		    if(authEl == mAuth.end() && SYS->security().at().usrPresent(cEl.cfg("USER").getS()))
+			mAuth[cEl.cfg("ID").getI()] = SAuth(cEl.cfg("USER").getS(), cEl.cfg("TIME").getI(), cEl.cfg("ADDR").getS(), cEl.cfg("AGENT").getS());
+		    // Removing for inconsistent duples for re-login
+		    else if(cEl.cfg("USER").getS() != authEl->second.name) {
+			if(!SYS->db().at().dataDel(authSessTbl(),mod->nodePath()+"AuthSessions/",cEl,true,false,true)) break;
+			if(full.empty()) fldCnt--;
+		    }
+		    // Updating for the authentication session time
+		    else if(cEl.cfg("TIME").getI() > authEl->second.tAuth)
+			authEl->second.tAuth = cEl.cfg("TIME").getI();
+		}
+	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+
+	// Checking for the time limit and closing
 	for(authEl = mAuth.begin(); authEl != mAuth.end(); )
 	    if(cur_tm > authEl->second.tAuth+authTime()*60) {
+		if(authSessTbl().size())
+		    try {
+			TConfig cEl(&elAuth);
+			cEl.cfg("ID").setI(authEl->first);
+			SYS->db().at().dataDel(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, true, false, true);
+		    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+
 		mess_info(nodePath().c_str(),_("The authentication session for the user '%s' is expired."),authEl->second.name.c_str());
 		mAuth.erase(authEl++);
 	    } else authEl++;
 	lstSesChk = cur_tm;
     }
 
-    //Check for session
+    //Checking for the session
     authEl = mAuth.find(sid);
     if(authEl != mAuth.end()) {
+	if(authSessTbl().size() && (cur_tm=(cur_tm/10)*10) > authEl->second.tAuth)
+	    try {
+		TConfig cEl(&elAuth);
+		cEl.cfgViewAll(false);
+		cEl.cfg("ID").setI(sid, true);
+		cEl.cfg("TIME").setI(cur_tm, true);
+		//cEl.cfg("USER").setS(authEl->second.name);
+		//cEl.cfg("ADDR").setS(authEl->second.addr);
+		//cEl.cfg("AGENT").setS(authEl->second.agent);
+		SYS->db().at().dataSet(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, false, true);
+	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+
 	authEl->second.tAuth = cur_tm;
 	return authEl->second.name;
     }
@@ -493,6 +563,9 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		    "tp","str", "dest","sel_ed", "select","/prm/cfg/tmplList");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/tmplMainPage",_("HTML template of the main page"),RWRWR_,"root",SPRT_ID,3,
 		    "tp","str", "dest","sel_ed", "select","/prm/cfg/tmplMainPageList");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/authSesDB",_("DB of the active authentication sessions"),RWRWR_,"root",SPRT_ID,4,
+		    "tp","str", "dest","select", "select","/db/list",
+		    "help",(string(TMess::labDB())+"\n"+_("Set to empty to disable using the external table of the active authentication sessions.")).c_str());
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of the authentication, minutes"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/aUsers",_("List of users allowed for authentication, separated by ';'"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		if(ctrMkNode("table",opt,-1,"/prm/cfg/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,3, "s_com","add,del,ins", "rows","3",
@@ -532,6 +605,14 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setTmplMainPage(opt->text());
     }
     else if(a_path == "/prm/cfg/tmplMainPageList" && ctrChkNode(opt))	TSYS::ctrListFS(opt, tmplMainPage(), "html;xhtml;xml;");
+    else if(a_path == "/prm/cfg/authSesDB") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(authSessDB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAuthSessDB(opt->text());
+    }
+    else if(a_path == "/db/list" && ctrChkNode(opt)) {
+	TProtocol::cntrCmdProc(opt);
+	opt->childAdd("el")->setText("");
+    }
     else if(a_path == "/prm/cfg/lf_tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(authTime()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAuthTime(s2i(opt->text()));

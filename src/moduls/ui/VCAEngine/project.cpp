@@ -886,17 +886,24 @@ TCntrNode &Page::operator=( const TCntrNode &node )
     setPrjFlags(src_n->prjFlags());
 
     //Widget copy
-    Widget::operator=(node);
+    try {
+	Widget::operator=(node);
 
-    //Include widgets copy
-    vector<string> els;
-    src_n->pageList(els);
-    // Call recursive only for separated branches copy and for prevent to included copy
-    if(path().find(src_n->path()+"/") != 0)
-	for(unsigned iP = 0; iP < els.size(); iP++) {
-	    if(!pagePresent(els[iP])) pageAdd(els[iP], "");
-	    (TCntrNode&)pageAt(els[iP]).at() = (TCntrNode&)src_n->pageAt(els[iP]).at();
-	}
+	//Include widgets copy
+	vector<string> els;
+	src_n->pageList(els);
+	// Call recursive only for separated branches copy and for prevent to included copy
+	if(path().find(src_n->path()+"/") != 0)
+	    for(unsigned iP = 0; iP < els.size(); iP++) {
+		if(!pagePresent(els[iP])) pageAdd(els[iP], "");
+		(TCntrNode&)pageAt(els[iP]).at() = (TCntrNode&)src_n->pageAt(els[iP]).at();
+	    }
+    }
+    catch(TError &err) {
+	if(prjFlags()&Page::Link)
+	    mess_err(err.cat.c_str(),"%s The copying operation is ommited then you must repeat that or just enable the page.",err.mess.c_str());
+	else throw;
+    }
 
     return *this;
 }

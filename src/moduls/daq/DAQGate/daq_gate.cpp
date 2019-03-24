@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.4"
+#define MOD_VER		"2.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -98,6 +98,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100"));
     fldAdd(new TFld("CNTRPRM",_("List of the remote controller objects and parameters"),TFld::String,TFld::FullText,"200"));
     fldAdd(new TFld("ALLOW_DEL_PA",_("Allow the automatic removal of parameters and attributes"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("CNTR_TO_VPRM",_("Placing different controllers to the separate virtual parameters"),TFld::Boolean,TFld::NoFlag,"1","0"));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
@@ -118,7 +119,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     TController(name_c,daq_db,cfgelem), enRes(true),
     mSched(cfg("SCHEDULE")), mMessLev(cfg("GATH_MESS_LEV")), mRestDtTm(cfg("TM_REST_DT").getRd()),
     mSync(cfg("SYNCPER").getId()), mRestTm(cfg("TM_REST").getId()),
-    mPrior(cfg("PRIOR").getId()), mAllowToDelPrmAttr(cfg("ALLOW_DEL_PA").getBd()),
+    mPrior(cfg("PRIOR").getId()), mAllowToDelPrmAttr(cfg("ALLOW_DEL_PA").getBd()), mPlaceCntrToVirtPrm(cfg("CNTR_TO_VPRM").getBd()),
     prcSt(false), callSt(false), endrunReq(false), alSt(-1), mPer(1e9)
 {
     cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
@@ -186,7 +187,7 @@ void TMdContr::enable_( )
 		cntrId = TSYS::strParse(cpEl,0,".",&pOff);
 		if(daqTp.empty() || cntrId.empty()) continue;
 
-		//  Parse parameter's path
+		//  Parse the parameter path
 		for(prmPath = prmId = ""; (pIt=TSYS::strParse(cpEl,0,".",&pOff)).size(); ) {
 		    if(prmId.size()) prmPath += "prm_"+prmId+"/";
 		    prmId = pIt;
@@ -194,8 +195,8 @@ void TMdContr::enable_( )
 
 		// Get the top parameters list
 		prmLs.clear();
-		if(!prmId.empty() && prmId != "*") prmLs.push_back(daqTp+"/"+cntrId+"/"+prmPath+"prm_"+prmId);	//Concrete parameter to root
-		else {	//Parameters group to root
+		if(!prmId.empty() && prmId != "*") prmLs.push_back(daqTp+"/"+cntrId+"/"+prmPath+"prm_"+prmId);	//Concrete parameter to the root
+		else {	//Parameters group to the root
 		    req.clear()->setName("get")->setAttr("path", "/"+mStatWork[iSt].first+"/DAQ/"+daqTp+"/"+cntrId+"/"+prmPath+"%2fbr%2fprm_");
 		    if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), "%s", req.text().c_str());
 		    else for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
@@ -206,7 +207,7 @@ void TMdContr::enable_( )
 		    mess_debug_(nodePath().c_str(), _("Enabling: station '%s' processing item '%s' for parameters %d."),
 						mStatWork[iSt].first.c_str(), cpEl.c_str(), prmLs.size());
 
-		// Process root parameters
+		// Processing the root parameters
 		for(unsigned iP = 0; iP < prmLs.size(); iP++) {
 		    //  The root parameter ID, NAME and included parameters list request
 		    XMLNode *nT = req.clear()->setName("CntrReqs")->setAttr("path","/"+mStatWork[iSt].first+"/DAQ/"+prmLs[iP]);
@@ -219,17 +220,49 @@ void TMdContr::enable_( )
 		    prmId = req.childGet(0)->text();
 		    AutoHD<TMdPrm> curP, curW;
 
-		    //  Find for the parameter
-		    list(prmLs1);
-		    unsigned iP1 = 0;
-		    while(iP1 < prmLs1.size() && at(prmLs1[iP1]).at().prmAddr() != prmLs[iP]) iP1++;
-		    if(iP1 >= prmLs1.size()) {
-			while(present(prmId) && at(prmId).at().prmAddr().size()) prmId = TSYS::strLabEnum(prmId);
-			if(!present(prmId)) add(prmId, owner().tpPrmToId("std"));
-			curP = at(prmId);
-			curP.at().setName(req.childGet(1)->text());
-			curP.at().setPrmAddr(prmLs[iP]);
-		    } else curP = at(prmId);
+		    //  Finding up for the virtual parameter of representing the remote controller object
+		    if(mPlaceCntrToVirtPrm) {
+			list(prmLs1);
+			unsigned iP1 = 0;
+			while(iP1 < prmLs1.size() && at(prmLs1[iP1]).at().prmAddr() != cntrId) iP1++;
+			if(iP1 >= prmLs1.size()) {
+			    while(present(cntrId) && at(cntrId).at().prmAddr().size()) cntrId = TSYS::strLabEnum(cntrId);
+			    if(!present(cntrId)) add(cntrId, owner().tpPrmToId("std"));
+			    curP = at(cntrId);
+			    //curP.at().setName(_("DAQ-controller ")+cntrId);
+			    curP.at().setPrmAddr(cntrId);
+			} else curP = at(cntrId);
+
+			if(!curP.at().enableStat()) {
+			    curP.at().enable();
+			    if(enableStat()) curP.at().load();
+			}
+
+			//   Placing the parameter to the virtual parameter
+			curP.at().list(prmLs1);
+			iP1 = 0;
+			while(iP1 < prmLs1.size() && curP.at().at(prmLs1[iP1]).at().prmAddr() != prmLs[iP]) iP1++;
+			if(iP1 >= prmLs1.size()) {
+			    while(curP.at().present(prmId) && curP.at().at(prmId).at().prmAddr().size()) prmId = TSYS::strLabEnum(prmId);
+			    if(!curP.at().present(prmId)) curP.at().add(prmId, owner().tpPrmToId("std"));
+			    curP = curP.at().at(prmId);
+			    curP.at().setName(req.childGet(1)->text());
+			    curP.at().setPrmAddr(prmLs[iP]);
+			} else curP = curP.at().at(prmId);
+		    }
+		    //  Finding up for the parameter directly
+		    else {
+			list(prmLs1);
+			unsigned iP1 = 0;
+			while(iP1 < prmLs1.size() && at(prmLs1[iP1]).at().prmAddr() != prmLs[iP]) iP1++;
+			if(iP1 >= prmLs1.size()) {
+			    while(present(prmId) && at(prmId).at().prmAddr().size()) prmId = TSYS::strLabEnum(prmId);
+			    if(!present(prmId)) add(prmId, owner().tpPrmToId("std"));
+			    curP = at(prmId);
+			    curP.at().setName(req.childGet(1)->text());
+			    curP.at().setPrmAddr(prmLs[iP]);
+			} else curP = at(prmId);
+		    }
 
 		    if(!curP.at().enableStat()) {
 			curP.at().enable();
@@ -242,18 +275,18 @@ void TMdContr::enable_( )
 		    string prmPath = prmLs[iP], prmPathW = prmPath, prmPathW_;
 		    XMLNode *prmN = req.childGet(2), *prmW;
 		    vector<SPrmsStack> stack;
-		    for(unsigned i_ip = 0; true; ) {
-			if(i_ip >= prmN->childSize()) {
+		    for(unsigned iIp = 0; true; ) {
+			if(iIp >= prmN->childSize()) {
 			    //   Pop from the stack
 			    if(stack.size()) {
-				prmN = stack.back().nd; i_ip = stack.back().pos+1; curP = stack.back().prm; prmPathW = stack.back().path;
+				prmN = stack.back().nd; iIp = stack.back().pos+1; curP = stack.back().prm; prmPathW = stack.back().path;
 				stack.pop_back();
 				continue;
 			    }
 			    else break;
 			}
 
-			prmW = prmN->childGet(i_ip);
+			prmW = prmN->childGet(iIp);
 			prmId = prmW->attr("id");
 			prmPathW_ = prmPathW + "/prm_" + prmId;
 
@@ -278,9 +311,9 @@ void TMdContr::enable_( )
 
 			//   Next level process
 			if(prmW->childSize()) {
-			    stack.push_back(SPrmsStack(prmN,i_ip,curP,prmPathW));
-			    prmN = prmW; i_ip = 0; curP = curW; prmPathW = prmPathW_;
-			} else i_ip++;
+			    stack.push_back(SPrmsStack(prmN,iIp,curP,prmPathW));
+			    prmN = prmW; iIp = 0; curP = curW; prmPathW = prmPathW_;
+			} else iIp++;
 		    }
 		}
 	    } catch(TError &err) { if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", err.mess.c_str()); }
@@ -481,6 +514,7 @@ void *TMdContr::Task( void *icntr )
 			    prm.vlList(listV);
 			    unsigned rC = 0;
 			    for(unsigned iV = 0; iV < listV.size(); iV++) {
+				if(listV[iV] == "SHIFR") continue;
 				AutoHD<TVal> vl = prm.vlAt(listV[iV]);
 				if(sepReq && (!vl.at().arch().freeStat() || vl.at().reqFlg())) {
 				    prmNd->childAdd("el")->setAttr("id",listV[iV]);
@@ -523,6 +557,7 @@ void *TMdContr::Task( void *icntr )
 			string aMod	= TSYS::pathLev(prmNd->attr("path"), 0);
 			string aCntr	= TSYS::pathLev(prmNd->attr("path"), 1);
 			string pId	= TSYS::pathLev(prmNd->attr("path"), 2);
+			string tVl;
 			if(pId == "/serv/mess") {
 			    for(unsigned i_m = 0; i_m < prmNd->childSize(); i_m++) {
 				XMLNode *m = prmNd->childGet(i_m);
@@ -544,19 +579,21 @@ void *TMdContr::Task( void *icntr )
 
 			    for(unsigned iA = 0; iA < prmNd->childSize(); iA++) {
 				XMLNode *aNd = prmNd->childGet(iA);
-				if(!prm.vlPresent(aNd->attr("id"))) continue;
-				AutoHD<TVal> vl = prm.vlAt(aNd->attr("id"));
+				tVl = aNd->attr("id");
+				if(tVl == "SHIFR")	continue;
 
+				if(!prm.vlPresent(tVl)) continue;
+				AutoHD<TVal> vl = prm.vlAt(tVl);
 				if(aNd->name() == "el") {
-				    vl.at().setS(aNd->text(),cntr.restDtTm()?atoll(aNd->attr("tm").c_str()):0,true);
+				    vl.at().setS(aNd->text(), cntr.restDtTm()?atoll(aNd->attr("tm").c_str()):0, true);
 				    vl.at().setReqFlg(false);
 				}
 				else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize()) {
 				    int64_t btm = atoll(aNd->attr("tm").c_str());
 				    int64_t per = atoll(aNd->attr("per").c_str());
-				    TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
-				    for(unsigned i_v = 0; i_v < aNd->childSize(); i_v++)
-					buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
+				    TValBuf buf(vl.at().arch().at().valType(), 0, per, false, true);
+				    for(unsigned iV = 0; iV < aNd->childSize(); iV++)
+					buf.setS(aNd->childGet(iV)->text(),btm+per*iV);
 				    vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
 				}
 			    }
@@ -570,9 +607,9 @@ void *TMdContr::Task( void *icntr )
 		    if(prm.isPrcOK || prm.isEVAL) continue;
 		    vector<string> vLs;
 		    prm.elem().fldList(vLs);
-		    for(unsigned i_v = 0; i_v < vLs.size(); i_v++) {
-			if(vLs[i_v] == "SHIFR" || vLs[i_v] == "NAME" || vLs[i_v] == "DESCR") continue;
-			AutoHD<TVal> vl = prm.vlAt(vLs[i_v]);
+		    for(unsigned iV = 0; iV < vLs.size(); iV++) {
+			if(vLs[iV] == "SHIFR" || vLs[iV] == "NAME" || vLs[iV] == "DESCR") continue;
+			AutoHD<TVal> vl = prm.vlAt(vLs[iV]);
 			if(vl.at().getS() == EVAL_STR) continue;
 			vl.at().setS(EVAL_STR, vl.at().arch().freeStat() ? 0 :
 			    vmin(TSYS::curTime(),vmax(vl.at().arch().at().end(""),TSYS::curTime()-(int64_t)(3.6e9*cntr.restDtTm()))), true);
@@ -655,15 +692,15 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SYNCPER",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero to disable to the periodic sync."), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/STATIONS",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
 	    "help",_("List of remote OpenSCADA station IDs used in this controller."), "rows", "2", NULL);
-	ctrMkNode2("fld",opt,-2,"/cntr/cfg/SEL_STAT",_("Append station"),enableStat()?0:RWRW__,"root",SDAQ_ID,
+	ctrMkNode2("fld",opt,-4,"/cntr/cfg/SEL_STAT",_("Append station"),enableStat()?0:RWRW__,"root",SDAQ_ID,
 	    "dest","select", "select","/cntr/cfg/SEL_STAT_lst", NULL);
-	ctrMkNode2("comm",opt,-2,"/cntr/cfg/host_lnk",_("Go to configuration of the remote stations list"),enableStat()?0:RWRW__,"root",SDAQ_ID,
+	ctrMkNode2("comm",opt,-4,"/cntr/cfg/host_lnk",_("Go to configuration of the remote stations list"),enableStat()?0:RWRW__,"root",SDAQ_ID,
 	    "tp","lnk", NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/CNTRPRM",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
 	    "help",_("List of remote OpenSCADA full controller objects or individual controller parameters. Address example:\n"
 		     "  System.AutoDA - for a controller object;\n"
 		     "  System.AutoDA.UpTimeStation - for a controller parameter."), NULL);
-	ctrMkNode2("fld",opt,-1,"/cntr/cfg/CPRM_TREE",_("Parameters tree"),(enableStat()&&(!startStat()))?RWRW__:0,"root",SDAQ_ID,
+	ctrMkNode2("fld",opt,-3,"/cntr/cfg/CPRM_TREE",_("Parameters tree"),(enableStat()&&(!startStat()))?RWRW__:0,"root",SDAQ_ID,
 	    "dest","select", "select","/cntr/cfg/CPRM_lst", NULL);
 	return;
     }
@@ -948,8 +985,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
     //Get page info
     if(opt->name() == "info") {
+	bool isEmpty = (!prmAddr().size() || !TSYS::pathLev(prmAddr(),1).size());
+
 	TParamContr::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm");
+	if(isEmpty) { ctrRemoveNode(opt,"/val"); ctrRemoveNode(opt,"/arch"); }
 
 	if(ctrMkNode("area",opt,0,"/prm",_("Parameter"))) {
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
@@ -960,7 +1000,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    XMLNode *cfgN = ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"));
-	    if(cfgN) {
+	    if(cfgN && !isEmpty) {
 		// Get remote parameter's config section
 		string scntr;
 		XMLNode req("info");
@@ -975,6 +1015,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    cfgN->setAttr("dscr",_("Remote station configuration"));
 		}
 	    }
+	    if(isEmpty && cfgN) ctrRemoveNode(opt, "/prm/cfg");
 	}
 	return;
     }

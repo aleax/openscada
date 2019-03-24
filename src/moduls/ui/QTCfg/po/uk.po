@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-20 17:26+0200\n"
+"POT-Creation-Date: 2019-03-23 16:16+0200\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -309,6 +309,7 @@ msgstr "Кнопка виклику історії строки статусу."
 msgid "Ready"
 msgstr "Готовий"
 
+#, c-format
 msgid "The configurator is using the remote host %d times."
 msgstr "Конфігуратор використовує віддалені хости %d разів."
 
@@ -334,11 +335,15 @@ msgstr "Додання вузлу"
 msgid "The node '%1' is already present."
 msgstr "Вузол '%1' вже присутній."
 
+#, c-format
+msgid "... and yet %d nodes"
+msgstr "... та ще %d вузли"
+
 msgid "Are you sure of deleting the nodes '%1'?"
 msgstr "Ви дійсно бажаєте видалити вузли '%1'?"
 
 msgid "Deleting the nodes"
-msgstr "Видалення елементів"
+msgstr "Видалення вузлів"
 
 msgid "Copying is not possible."
 msgstr "Копіювання неможливе."

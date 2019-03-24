@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.MySQL file: my_sql.h
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -101,8 +101,11 @@ class MBD : public TBD
 
     private:
 	//Private methods
+	void postEnable( int flag );
 	void postDisable( int flag );
 	TTable *openTable( const string &name, bool create );
+
+	static void *Task( void * );
 
 	//Private attributes
 	string	host, user, pass, bd, u_sock, cd_pg;

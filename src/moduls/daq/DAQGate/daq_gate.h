@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DAQGate file: daq_gate.h
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -181,7 +181,8 @@ class TMdContr: public TController
 						//configuration update, attributes list update, local and remote archives sync.
 		&mRestTm,			//Restore timeout in s
 		&mPrior;			//Process task priority
-	char	&mAllowToDelPrmAttr;		//Allow automatic remove parameters and attributes
+	char	&mAllowToDelPrmAttr,		//Allow automatic remove parameters and attributes
+		&mPlaceCntrToVirtPrm;		//Placing different controllers to the different virtual parameters
 
 	bool	prcSt,				//Process task active
 		callSt,				//Calc now stat

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-01 12:22+0200\n"
+"POT-Creation-Date: 2019-03-23 15:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,6 +82,12 @@ msgid "HTML template"
 msgstr ""
 
 msgid "HTML template of the main page"
+msgstr ""
+
+msgid "DB of the active authentication sessions"
+msgstr ""
+
+msgid "Set to empty to disable using the external table of the active authentication sessions."
 msgstr ""
 
 msgid "Life time of the authentication, minutes"

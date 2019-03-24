@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.FireBird file: firebird.h
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -62,7 +62,6 @@ class MTable : public TTable
 	void postDisable( int flag );
 	void fieldFix( TConfig &cfg, bool trPresent = false );
 
-
 	string getVal( TCfg &cfg, uint8_t RqFlg = 0 );
 	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
 
@@ -100,8 +99,11 @@ class MBD : public TBD
 
     private:
 	//Private methods
+	void postEnable( int flag );
 	void postDisable( int flag );
 	TTable *openTable( const string &name, bool create );
+
+	static void *Task( void * );
 
 	string getErr( ISC_STATUS_ARRAY status );
 

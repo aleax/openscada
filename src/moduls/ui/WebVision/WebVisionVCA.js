@@ -781,9 +781,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var argVal;
 		    var argCfg = new Array();
 		    switch(parseInt(this.attrs['arg'+i+'tp'])) {
-			case 0: case 2:
+			case 0:
 			    argCfg[0] = this.attrs['arg'+i+'cfg'];
-			    argVal = this.attrs['arg'+i+'val'];
+			    argVal = parseInt(this.attrs['arg'+i+'val']);
+			    if(isNaN(argVal)) argVal = 0;
 			    break;
 			case 1:
 			    argCfg = this.attrs['arg'+i+'cfg'].split(';');
@@ -792,6 +793,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    else if(argCfg[1] == 'f')	argVal = parseFloat(this.attrs['arg'+i+'val']).toFixed(Math.max(0,argCfg[2]));
 			    else argVal = this.attrs['arg'+i+'val'];
 			    if(isNaN(argVal)) argVal = 0;
+			    break;
+			case 2:
+			    argCfg[0] = this.attrs['arg'+i+'cfg'];
+			    argVal = this.attrs['arg'+i+'val'];
 			    break;
 		    }
 		    var argSize = Math.max(-1000,Math.min(1000,parseInt(argCfg[0])));
@@ -1118,13 +1123,15 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			switch(this.parentNode.view) {
 			    case 0: case 1: case 7: this.value = val; break;
 			    case 2:	//Integer
+				if(isNaN(tVal=parseInt(val))) tVal = 0;
 				var argCfg = this.parentNode.cfg.split(':');
 				this.value = ((argCfg.length>3)?argCfg[3]:'')+
-				    Math.max((argCfg.length>1)?parseInt(argCfg[0]):0,Math.min((argCfg.length>1)?parseInt(argCfg[1]):100,parseInt(val)))+((argCfg.length>4)?argCfg[4]:'');
+				    Math.max((argCfg.length>1)?parseInt(argCfg[0]):0,Math.min((argCfg.length>1)?parseInt(argCfg[1]):100,parseInt(tVal)))+((argCfg.length>4)?argCfg[4]:'');
 				break;
 			    case 3:	//Real
+				if(isNaN(tVal=parseFloat(val))) tVal = 0;
 				var argCfg = this.parentNode.cfg.split(':');
-				this.value = ((argCfg.length>3)?argCfg[3]:'')+Math.max((argCfg.length>1)?parseFloat(argCfg[0]):0,Math.min((argCfg.length>1)?parseFloat(argCfg[1]):100,parseFloat(val))).toFixed((argCfg.length>5)?parseInt(argCfg[5]):2)+((argCfg.length>4)?argCfg[4]:'');
+				this.value = ((argCfg.length>3)?argCfg[3]:'')+Math.max((argCfg.length>1)?parseFloat(argCfg[0]):0,Math.min((argCfg.length>1)?parseFloat(argCfg[1]):100,parseFloat(tVal))).toFixed((argCfg.length>5)?parseInt(argCfg[5]):2)+((argCfg.length>4)?argCfg[4]:'');
 				break;
 			    case 4:	//Time
 				var rez = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'hh:mm';
@@ -1437,6 +1444,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    };
 			    this.mousedown[this.mousedown.length] = function(e,el) {
 				if(el.checkable) return;
+				if(el.wdgLnk.attrs["vs_goHttpUrl"]) window.location = el.wdgLnk.attrs["vs_goHttpUrl"];
 				el.style.borderStyle = "inset"; setWAttrs(el.wdgLnk.addr,'event','ws_BtPress');
 			    };
 			}
@@ -1480,7 +1488,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(toInit || this.attrsMdf['name'])	formObj.innerText = this.attrs['name'].replace('\\n','\n') + (this.place.isMenu?" ▾":"");
 			if(toInit || this.attrsMdf['color'])	formObj.style.backgroundColor = getColor(this.attrs['color']);
 			if(toInit || this.attrsMdf['colorText'])formObj.style.color = getColor(this.attrs['colorText']);
-			this.mouseup[this.mouseup.length] = function(e,el)	{ setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease'); };
+			this.mouseup[this.mouseup.length] = function(e,el) {
+			    if(el.wdgLnk.attrs["vs_goHttpUrl"]) window.location = el.wdgLnk.attrs["vs_goHttpUrl"];
+			    setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease');
+			}
 			this.mousedown[this.mousedown.length] = function(e,el)	{ setWAttrs(el.wdgLnk.addr,'event','ws_BtPress'); };
 			if(toInit) {
 			    formObj.style.cursor = elWr ? 'pointer' : '';
@@ -2653,7 +2664,7 @@ var SEC_RD = 0x04;	//Read access
 //Call session identifier
 var sessId = location.pathname.split('/');
 for(var i_el = sessId.length-1; i_el >= 0; i_el--)
-    if( sessId[i_el].length )
+    if(sessId[i_el].length)
     { sessId = sessId[i_el]; break; }
 
 function styleSet(sid) {

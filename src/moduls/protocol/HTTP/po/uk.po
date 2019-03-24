@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-01 12:22+0200\n"
+"POT-Creation-Date: 2019-03-23 15:41+0200\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -38,6 +38,7 @@ msgstr ""
 "замовченню 10).\n"
 "\n"
 
+#, c-format
 msgid "Error loading the META header '%s': %s"
 msgstr "Помилка завантаження META заголовку '%s': %s"
 
@@ -86,6 +87,14 @@ msgstr "HTML шаблон"
 
 msgid "HTML template of the main page"
 msgstr "HTML шаблон головної сторінки"
+
+msgid "DB of the active authentication sessions"
+msgstr "БД активних сеансів аутентифікації"
+
+msgid ""
+"Set to empty to disable using the external table of the active "
+"authentication sessions."
+msgstr "Встановити у порожне для вимкнення зовнішньої таблиці активних сеансів автентифікації."
 
 msgid "Life time of the authentication, minutes"
 msgstr "Час життя аутентифікації, хвилин"

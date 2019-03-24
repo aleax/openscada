@@ -31,7 +31,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 5.8 </td>
+<td> 5.9 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -1248,7 +1248,7 @@ Where:
 <td> Virtual attribute of the rights of the active user to view and control the widget.
 </td></tr></table>
 <dl><dd> * — Special function of the widget attribute which executing in the project session at any user's modification.</dd></dl>
-<p>The engine of the visualization environment provides activation of the visualizer specific attributes. The activation process performs at opening a session of the project and means for the project: creation of the specific attribute with the specified properties, at case it lack, and activation for tracing its modification by the engine of the visualization environment, like to the attributes of forming primitive's shapes. For the specific attributes list of the visualizer you can see the documentation of the proper visualizer.
+<p>The engine of the visualization environment provides activation of the visualizer specific attributes. The activation process performs at opening a session of the project and means for the project: creation of the specific attribute with the specified properties, at case it lack, and activation for tracing its modification by the engine of the visualization environment, like to the attributes of forming primitive's shapes. To direct specifying such attribute you can also use the prefix "vs_" to the attribute identifiers, what is mach faster and excludes of the activation stage. For the specific attributes list of the visualizer you can see the documentation of the proper visualizer.
 </p>
 <h4><span class="mw-headline" id="Elementary_graphical_figure_.28ElFigure.29"><span class="mw-headline-number">3.9.1</span> <span id="ElFigure" title="#ElFigure">Elementary graphical figure (ElFigure)</span></span></h4>
 <p>The primitive is the basis for drawing basic graphical shapes with their possible combinations in a single object. Taking into account the wide range of various shapes, which must be maintained by the primitive, and at the same time the primitive must be simple enough for using and, if possible, for implementation, it was decided to limit the list of the basic figures used for the construction of the resulting graphics to these figures: line, arc, Bézier curve and fill of the enclosed spaces. Based at these basic figures, it is possible to construct derived figures by combining the basic. In the context of the primitive, there is a possibility to set the transparency of the color in the range [0...255], where '0' — complete transparency.

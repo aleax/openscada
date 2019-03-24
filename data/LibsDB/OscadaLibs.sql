@@ -352,18 +352,16 @@ INSERT INTO "lib_servProc_io" VALUES('docOffLine','res','Result',0,1,'',0,0,'','
 INSERT INTO "lib_servProc_io" VALUES('docOffLine','reqTr','Tries of requests',1,1,'3',0,1,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('releaseTests','rezF','Result for HTML file',0,5,'',1,2,'','','','');
 CREATE TABLE 'techApp' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '' ,"FORMULA" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "techApp" VALUES('lag','Lag','Lag model. You can use this for sensors'' variables lag imitation.',10,'out-=(out-in)/(t_lg*f_frq);','Затримка','Модель затримки. Може використовуватися для імітації запізнення значень давачів.','Запаздывание','Модель задержки. Может использоваться для имитации запаздывания
-значений датчиков.
-');
-INSERT INTO "techApp" VALUES('noise','Noise (2 harmonic + rand)','Noise model. Contain three parts:
+INSERT INTO "techApp" VALUES('lag','Lag','Lag model. You can use this for sensors'' variables lag imitation.',10,'out-=(out-in)/(t_lg*f_frq);','Затримка','Модель затримки. Може використовуватися для імітації запізнення значень давачів.','Запаздывание','Модель задержки. Может использоваться для имитации запаздывания значений датчиков.');
+INSERT INTO "techApp" VALUES('noise','Noise, 2 harmonic + rand','Noise model. Contain three parts:
 - first harmonic part;
 - second harmonic part;
 - noise based on randomize generator of numbers.',10,'tmp_g1=(tmp_g1>6.28)?0:tmp_g1+6.28/(per_g1*f_frq);
 tmp_g2=(tmp_g2>6.28)?0:tmp_g2+6.28/(per_g2*f_frq);
-out=off+a_g1*sin(tmp_g1)+a_g2*sin(tmp_g2)+a_rnd*(rand(2)-1);','Шум (2 гарм. + випадк.)','Модель шуму. Містить три складові:
+out=off+a_g1*sin(tmp_g1)+a_g2*sin(tmp_g2)+a_rnd*(rand(2)-1);','Шум, 2 гарм. + випадк.','Модель шуму. Містить три складові:
 - перша гармоніка;
 - друга гармоніка;
-- шум на основі генератору випадкових чисел.','Шум (2 гарм. + случ)','Модель шума. Содержит три составляющие:
+- шум на основі генератору випадкових чисел.','Шум, 2 гарм. + случ','Модель шума. Содержит три составляющие:
 - первая гармоника;
 - вторая гармоника;
 - шум на основе генератора случайных чисел.');
@@ -412,8 +410,8 @@ INSERT INTO "techApp" VALUES('lagClean','Lag (clear)','Model of clear lag (trans
 cl2-=(cl2-cl1)/(t_lg*f_frq/4);
 cl3-=(cl3-cl2)/(t_lg*f_frq/4);
 out-=(out-cl3)/(t_lg*f_frq/4);','Затримка (чиста)','Модель чистої(транспортної) затримки. Реалізується шляхом включення декількох ланок простої затримки. Призначено для імітації затримок у довгих трубопроводах.','Запаздывание (чистое)','Модель чистого(транспортного) запаздывания. Реализуется путём включения нескольких простых звеньев запаздывания. Предназначен для имитации запаздывания в длинных трубопроводах.');
-INSERT INTO "techApp" VALUES('net','Network (loading)','Loading with constant preasure on network. Contain parameter for noise connection.',10,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi,Pi,293,So,EVAL_REAL,Po,293,So,10,Q0,Kpr,0.01,f_frq);','Мережа (навантаження)','Навантаження з фіксованим тиском мережі. Містить параметр для підключення шуму.','Сеть (нагрузка)','Нагрузка с фиксированным давлением сети. Содержит параметр для подключения шума.');
-INSERT INTO "techApp" VALUES('src_press','Source (pressure)','Source pressure with constant pressure. Contained the parameter for noise connection.',10,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fit,Pi*Noise,293,So,Fo,Po,293,So,lo,Q0,Kpr,0.01,f_frq);','Джерело (тиск)','Джерело з фіксованим тиском. Містить параметр для підключення шуму.','Источник (давление)','Источник с фиксированным давлением. Содержит параметр для подключения шума.');
+INSERT INTO "techApp" VALUES('net','Network, load','Loading with constant preasure on network. Contain parameter for noise connection.',10,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi,Pi,293,So,EVAL_REAL,Po,293,So,10,Q0,Kpr,0.01,f_frq);','Мережа, навантаження','Навантаження з фіксованим тиском мережі. Містить параметр для підключення шуму.','Сеть, нагрузка','Нагрузка с фиксированным давлением сети. Содержит параметр для подключения шума.');
+INSERT INTO "techApp" VALUES('src_press','Source, pressure','Source pressure with constant pressure. Contained the parameter for noise connection.',10,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fit,Pi*Noise,293,So,Fo,Po,293,So,lo,Q0,Kpr,0.01,f_frq);','Джерело, тиск','Джерело з фіксованим тиском. Містить параметр для підключення шуму.','Источник, давление','Источник с фиксированным давлением. Содержит параметр для подключения шума.');
 INSERT INTO "techApp" VALUES('cooler','Air cooler','Model of the air cooler for gas flow.',10,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi,Pi,293,Si,Fo,Po,293,So,lo,Q0,0.95,0.01,f_frq);
 Qr = Q0+Q0*0.95*(Pi-1);
 To+=(Fi*(Ti-To)+Wc*(Tair-To)/Rt)/(Ct*(Si*li+So*lo)*Qr*f_frq);','Повітряний холодильник','Модель повітряного охолоджувача газового потоку.','Возд. холодильник','Модель воздушного охладителя газового потока.');

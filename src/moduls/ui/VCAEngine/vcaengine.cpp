@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"5.8.1"
+#define MOD_VER		"5.9.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -537,7 +537,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	}
 	//!!!! Temporary placed for existing DBs clean up to early fix from using Values and Names to unproper types.
 	else if(IO_VAL.size() >= 2 && IO_VAL.compare(IO_VAL.size()-2,2,"||") == 0) attr.at().setS(IO_VAL.substr(0,IO_VAL.size()-2));
-	attr.at().setFlgSelf((Attr::SelfAttrFlgs)selfFlg);
+	attr.at().setFlgSelf((Attr::SelfAttrFlgs)((selfFlg&(~Attr::VizerSpec))|(attr.at().flgSelf()&Attr::VizerSpec)));
 	attr.at().setCfgTempl(cEl.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(Attr::isTransl(TFld::Type(type),flg,selfFlg)?cEl.cfg("CFG_VAL").getS():cEl.cfg("CFG_VAL").getS(TCfg::ExtValOne));
     }

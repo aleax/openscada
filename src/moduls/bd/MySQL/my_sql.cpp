@@ -34,13 +34,15 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.2"
+#define MOD_VER		"3.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
 //************************************************
 
 #define MYSQL_RECONNECT		0		//!!!! MySQL/MariaDB reconnect some time crashable due to a need of releasing some locks
+#define TRANS_CLOSE_TM_AFT_REQ	2
+#define TRANS_CLOSE_TM_AFT_OPEN	10
 #define SEEK_PRELOAD_LIM	100
 
 BDMySQL::BDMod *BDMySQL::mod;
@@ -97,9 +99,18 @@ MBD::~MBD( )
 
 }
 
+void MBD::postEnable( int flag )
+{
+    TBD::postEnable(flag);
+
+    SYS->taskCreate(nodePath('.',true), 0, Task, this);
+}
+
 void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
+
+    SYS->taskDestroy(nodePath('.',true));
 
     if(flag && owner().fullDeleteDB())
 	try {
@@ -218,6 +229,19 @@ TTable *MBD::openTable( const string &inm, bool create )
     return new MTable(inm, this, &tblStrct);
 }
 
+void *MBD::Task( void *param )
+{
+    MBD &db = *(MBD *)param;
+
+    while(!TSYS::taskEndRun()) {
+	if(db.enableStat()) db.transCloseCheck();
+
+	TSYS::taskSleep(1000000000);
+    }
+
+    return NULL;
+}
+
 void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans )
 {
     MYSQL_RES *res = NULL;
@@ -285,7 +309,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	if(res) mysql_free_result(res);
 
 	if((irez=mysql_next_result(&connect)) > 0) throw err_sys(_("Could not execute statement: %s"), mysql_error(&connect));
-    }while(irez == 0);
+    } while(irez == 0);
 }
 
 void MBD::transOpen( )
@@ -315,7 +339,8 @@ void MBD::transCommit( )
 
 void MBD::transCloseCheck( )
 {
-    if(enableStat() && reqCnt && ((SYS->sysTm()-reqCntTm) > 60 || (SYS->sysTm()-trOpenTm) > 10*60)) transCommit();
+    if(enableStat() && reqCnt && ((SYS->sysTm()-reqCntTm) > TRANS_CLOSE_TM_AFT_REQ || (SYS->sysTm()-trOpenTm) > TRANS_CLOSE_TM_AFT_OPEN))
+	transCommit();
     if(!enableStat() && toEnable()) enable();
 }
 

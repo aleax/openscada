@@ -31,7 +31,7 @@
 <td> <a href="../Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> </td>
 <td> Gateway of the data sources
 </td>
-<td> 2.0 </td>
+<td> 2.1 </td>
 <td> GPL2 </td>
 <td> daq_DAQGate.so </td>
 <td> en,uk,ru,de </td>
@@ -81,7 +81,8 @@
 <li> List of the reflected remote stations. Several stations in the list enable the vertical redundancy mechanism.</li>
 <li> List of the reflected controller objects and parameters. The list can be used as for controller objects for the reflection of all their parameters, and for individual parameters too.</li>
 <li> Command to go to configuration of the remote stations list.</li>
-<li> Allow the automatic removal of parameters and attributes to update to the actual state.</li></ul>
+<li> Allow the automatic removal of parameters and attributes to update to the actual state.</li>
+<li> Placing different controllers to the different virtual parameters.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In the production mode, it's better to turn this off!</dd></dl>
 <h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
 <p>The module, though, provides the ability to create parameters manually, but it is meaningless, since such a parameter, in the absence of it at the remote station, will be empty. All parameters are created automatically, taking into account the list of reflection controller objects and parameters. Parameters can be stored in the cache for subsequent creation even in the absence of communication with the remote station. An example of a mirrored parameter is shown in Figure 3.

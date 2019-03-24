@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.SQLite file: bd_sqlite.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,12 +33,14 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.4"
+#define MOD_VER		"2.5.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
 //******************************************************************************
 
+#define TRANS_CLOSE_TM_AFT_REQ	10
+#define TRANS_CLOSE_TM_AFT_OPEN	60
 #define SEEK_PRELOAD_LIM	100
 
 BDSQLite::BDMod *BDSQLite::mod;
@@ -234,7 +236,8 @@ void MBD::transCommit( )
 
 void MBD::transCloseCheck( )
 {
-    if(enableStat() && reqCnt && ((SYS->sysTm()-reqCntTm) > 60 || (SYS->sysTm()-trOpenTm) > 10*60)) transCommit();
+    if(enableStat() && reqCnt && ((SYS->sysTm()-reqCntTm) > TRANS_CLOSE_TM_AFT_REQ || (SYS->sysTm()-trOpenTm) > TRANS_CLOSE_TM_AFT_OPEN))
+	transCommit();
 }
 
 void MBD::cntrCmdProc( XMLNode *opt )

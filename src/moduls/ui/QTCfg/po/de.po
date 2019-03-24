@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-20 17:26+0200\n"
+"POT-Creation-Date: 2019-03-23 16:16+0200\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -321,6 +321,7 @@ msgstr "Schaltfläche zum Aufrufen des Statusleistenverlaufs."
 msgid "Ready"
 msgstr "Fertig"
 
+#, c-format
 msgid "The configurator is using the remote host %d times."
 msgstr "Der Konfigurator verwendet %d-Zeiten eines Remote-Hosts."
 
@@ -345,6 +346,10 @@ msgstr "Hinzufügen eines Knotens"
 
 msgid "The node '%1' is already present."
 msgstr "Der Knoten '%1' ist bereits vorhanden."
+
+#, c-format
+msgid "... and yet %d nodes"
+msgstr "... und noch %d Knoten"
 
 msgid "Are you sure of deleting the nodes '%1'?"
 msgstr "Sind Sie sicher, die Knoten '%1' zu löschen?"

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ModBus file: modbus_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -393,8 +393,9 @@ TVariant TMdContr::getVal( const string &addr, MtxString &w_err )
 		int rSz = strtol(TSYS::strParse(aids,1,",").c_str(), NULL, 0);
 		string rez;
 		for(int iR = aid; iR < (aid+rSz); iR++) {
-		    vl = TSYS::i16_BE(getValR(iR, w_err, isInputs));
+		    vl = getValR(iR, w_err, isInputs);
 		    if(vl == EVAL_INT) return EVAL_STR;
+		    vl = TSYS::i16_BE(vl);
 		    rez.append((char*)&vl, 2);
 		}
 		return rez;

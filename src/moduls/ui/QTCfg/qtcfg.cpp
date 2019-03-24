@@ -677,8 +677,9 @@ void ConfApp::itDel( const string &iit )
     if(iit.empty()) {
 	QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
 	if(sel_ls.size() <= 1) rmits = selPath;
-	else for(int iEl = 0; iEl < sel_ls.size(); iEl++)
-	    rmits += sel_ls.at(iEl)->text(2).toStdString() + "\n";
+	else for(int iEl = 0; iEl < vmin(10,sel_ls.size()); iEl++)
+	    rmits += sel_ls.at(iEl)->text(2).toStdString() + ((iEl<(sel_ls.size()-1))?"\n":"");
+	if(sel_ls.size() > 10) rmits += TSYS::strMess(_("... and yet %d nodes"), sel_ls.size()-10);
     }
     if(rmits.empty())	return;
 
