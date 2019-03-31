@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.3.0"
+#define MOD_VER		"3.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -350,11 +350,11 @@ void TProt::sesClose( int sid )
 string TProt::sesCheck( int sid )
 {
     time_t cur_tm = time(NULL);
-    map<int,SAuth>::iterator authEl;
+    map<int,SAuth>::iterator authEl = mAuth.find(sid);
 
     //Checking to close of old sessions
     MtxAlloc res(dataRes(), true);
-    if(cur_tm > lstSesChk+10) {
+    if(cur_tm > lstSesChk+10 || (authEl == mAuth.end() && cur_tm > lstSesChk)) {
 	// Loading all sessions into the table of the external authentication sessions
 	if(authSessTbl().size())
 	    try {
@@ -366,12 +366,12 @@ string TProt::sesCheck( int sid )
 		    if(authEl == mAuth.end() && SYS->security().at().usrPresent(cEl.cfg("USER").getS()))
 			mAuth[cEl.cfg("ID").getI()] = SAuth(cEl.cfg("USER").getS(), cEl.cfg("TIME").getI(), cEl.cfg("ADDR").getS(), cEl.cfg("AGENT").getS());
 		    // Removing for inconsistent duples for re-login
-		    else if(cEl.cfg("USER").getS() != authEl->second.name) {
+		    else if(authEl != mAuth.end() && cEl.cfg("USER").getS() != authEl->second.name) {
 			if(!SYS->db().at().dataDel(authSessTbl(),mod->nodePath()+"AuthSessions/",cEl,true,false,true)) break;
 			if(full.empty()) fldCnt--;
 		    }
 		    // Updating for the authentication session time
-		    else if(cEl.cfg("TIME").getI() > authEl->second.tAuth)
+		    else if(authEl != mAuth.end() && cEl.cfg("TIME").getI() > authEl->second.tAuth)
 			authEl->second.tAuth = cEl.cfg("TIME").getI();
 		}
 	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
@@ -398,12 +398,12 @@ string TProt::sesCheck( int sid )
 	if(authSessTbl().size() && (cur_tm=(cur_tm/10)*10) > authEl->second.tAuth)
 	    try {
 		TConfig cEl(&elAuth);
-		cEl.cfgViewAll(false);
-		cEl.cfg("ID").setI(sid, true);
-		cEl.cfg("TIME").setI(cur_tm, true);
-		//cEl.cfg("USER").setS(authEl->second.name);
-		//cEl.cfg("ADDR").setS(authEl->second.addr);
-		//cEl.cfg("AGENT").setS(authEl->second.agent);
+		//cEl.cfgViewAll(false);
+		cEl.cfg("ID").setI(sid);
+		cEl.cfg("TIME").setI(cur_tm);
+		cEl.cfg("USER").setS(authEl->second.name);
+		cEl.cfg("ADDR").setS(authEl->second.addr);
+		cEl.cfg("AGENT").setS(authEl->second.agent);
 		SYS->db().at().dataSet(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, false, true);
 	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 

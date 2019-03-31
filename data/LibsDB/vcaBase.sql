@@ -54,11 +54,11 @@ INSERT INTO "PrescrProgs" VALUES('Тест12','<prg id="Тест12" wtm="31"><co
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('Main','Main elements','Main elements library of user interface.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.5.0','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
+Version: 1.5.1','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.4.1','Основные элементы','Библиотека основных элементов пользовательского интерфейса.
+Версія: 1.5.1','Основные элементы','Библиотека основных элементов пользовательского интерфейса.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.4.1');
+Версия: 1.5.1');
 INSERT INTO "VCALibs" VALUES('mnEls','Mnemo elements','User interface''s main elements library.','wlb_mnEls','','Елементи мнемосхеми','Бібліотека основних елементів інтерфейсу користувача.','Элементы мнемосхемы','Библиотека основных элементов пользовательского интерфейса.');
 INSERT INTO "VCALibs" VALUES('doc','Documents','Documents library.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -671,21 +671,21 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','owner
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','perm','944',32,'','','FormEl','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','extValue','0',38,'','prm:/System/AutoDA/CPULoad/load','FormEl','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','owner','root:UI',32,'','','Pi_нд','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pErr',NULL,34,'Parameter|err','prm:/LogicLev/experiment/F3/err','Pi_нд','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/F3','Pi_нд','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/F3','Pi_нд','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pName','',34,'Parameter|NAME','prm:/LogicLev/experiment/F3/NAME','Pi_нд','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pErr',NULL,34,'Parameter|err','prm:/LogicLev/gen/F3/err','Pi_нд','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/gen/F3','Pi_нд','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/gen/F3','Pi_нд','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pName','',34,'Parameter|NAME','prm:/LogicLev/gen/F3/NAME','Pi_нд','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pPrec',NULL,34,'Parameter|prec','val:2','Pi_нд','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pVal','0',34,'Parameter|var','prm:/LogicLev/experiment/F3/var','Pi_нд','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pVal','0',34,'Parameter|var','prm:/LogicLev/gen/F3/var','Pi_нд','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','owner','root:op',32,'','','TextEl','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','perm','944',32,'','','TextEl','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','owner','root:UI',32,'','','Ti_нд','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pErr',NULL,34,'Parameter|err','prm:/LogicLev/experiment/P3/err','Ti_нд','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/P3','Ti_нд','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/P3','Ti_нд','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pName','',34,'Parameter|NAME','prm:/LogicLev/experiment/P3/NAME','Ti_нд','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pErr',NULL,34,'Parameter|err','prm:/LogicLev/gen/P3/err','Ti_нд','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/gen/P3','Ti_нд','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/gen/P3','Ti_нд','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pName','',34,'Parameter|NAME','prm:/LogicLev/gen/P3/NAME','Ti_нд','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pPrec',NULL,34,'Parameter|prec','val:2','Ti_нд','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pVal','0',34,'Parameter|var','prm:/LogicLev/experiment/P3/var','Ti_нд','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','pVal','0',34,'Parameter|var','prm:/LogicLev/gen/P3/var','Ti_нд','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','owner','root:op',32,'','','diagTests','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','perm','944',32,'','','diagTests','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','owner','root:op',32,'','','media','','','','','','');
@@ -841,18 +841,18 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','owner
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','owner','root:op',32,'','','ElFigure1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','owner','root:UI',32,'','','arh','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','owner','root:UI',32,'','','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/experiment/Pi/NAME','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/Pi/aMax','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/Pi/aMin','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','addr',NULL,34,'Parameter|var','prm:/LogicLev/experiment/Pi/var','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','ed',NULL,34,'Parameter|ed','prm:/LogicLev/experiment/Pi/ed','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','max',NULL,34,'Parameter|max','prm:/LogicLev/experiment/Pi/max','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','min',NULL,34,'Parameter|min','prm:/LogicLev/experiment/Pi/min','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/Pi','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/Pi','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/Pi','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/Pi/wMax','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/Pi/wMin','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/gen/Pi/NAME','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/gen/Pi/aMax','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/gen/Pi/aMin','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','addr',NULL,34,'Parameter|var','prm:/LogicLev/gen/Pi/var','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','ed',NULL,34,'Parameter|ed','prm:/LogicLev/gen/Pi/ed','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','max',NULL,34,'Parameter|max','prm:/LogicLev/gen/Pi/max','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','min',NULL,34,'Parameter|min','prm:/LogicLev/gen/Pi/min','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/gen/Pi','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/gen/Pi','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/Pi','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/Pi/wMax','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/Pi/wMin','el1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','owner','root:UI',32,'','','el2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/NAME','el2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','el2','','','','','','');
@@ -867,31 +867,31 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','prec'
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','el2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1','el2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','owner','root:UI',32,'','','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/experiment/P_PP1/NAME','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/P_PP1/aMax','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/P_PP1/aMin','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','addr',NULL,34,'Parameter|var','prm:/LogicLev/experiment/P_PP1/var','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','ed',NULL,34,'Parameter|ed','prm:/LogicLev/experiment/P_PP1/ed','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','max',NULL,34,'Parameter|max','prm:/LogicLev/experiment/P_PP1/max','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','min',NULL,34,'Parameter|min','prm:/LogicLev/experiment/P_PP1/min','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/P_PP1','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/P_PP1','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/P_PP1','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/P_PP1/wMax','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/P_PP1/wMin','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/gen/P_PP1/NAME','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/gen/P_PP1/aMax','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/gen/P_PP1/aMin','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','addr',NULL,34,'Parameter|var','prm:/LogicLev/gen/P_PP1/var','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','ed',NULL,34,'Parameter|ed','prm:/LogicLev/gen/P_PP1/ed','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','max',NULL,34,'Parameter|max','prm:/LogicLev/gen/P_PP1/max','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','min',NULL,34,'Parameter|min','prm:/LogicLev/gen/P_PP1/min','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/gen/P_PP1','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/gen/P_PP1','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/P_PP1','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/P_PP1/wMax','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/P_PP1/wMin','el3','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','owner','root:UI',32,'','','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/experiment/P_PP3/NAME','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/P_PP3/aMax','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/P_PP3/aMin','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','addr',NULL,34,'Parameter|var','prm:/LogicLev/experiment/P_PP3/var','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','ed',NULL,34,'Parameter|ed','prm:/LogicLev/experiment/P_PP3/ed','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','max',NULL,34,'Parameter|max','prm:/LogicLev/experiment/P_PP3/max','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','min',NULL,34,'Parameter|min','prm:/LogicLev/experiment/P_PP3/min','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/P_PP3','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/P_PP3','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/P_PP3','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/P_PP3/wMax','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/P_PP3/wMin','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/gen/P_PP3/NAME','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/gen/P_PP3/aMax','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/gen/P_PP3/aMin','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','addr',NULL,34,'Parameter|var','prm:/LogicLev/gen/P_PP3/var','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','ed',NULL,34,'Parameter|ed','prm:/LogicLev/gen/P_PP3/ed','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','max',NULL,34,'Parameter|max','prm:/LogicLev/gen/P_PP3/max','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','min',NULL,34,'Parameter|min','prm:/LogicLev/gen/P_PP3/min','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/gen/P_PP3','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/gen/P_PP3','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/P_PP3','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/P_PP3/wMax','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/P_PP3/wMin','el4','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','owner','root:UI',32,'','','el5','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/NAME','el5','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2','el5','','','','','','');
@@ -906,18 +906,18 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','prec'
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2','el5','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2','el5','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','owner','root:UI',32,'','','el6','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/experiment/P_PP5/NAME','el6','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/P_PP5/aMax','el6','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/P_PP5/aMin','el6','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','addr',NULL,34,'Parameter|var','prm:/LogicLev/experiment/P_PP5/var','el6','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','ed',NULL,34,'Parameter|ed','prm:/LogicLev/experiment/P_PP5/ed','el6','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','max',NULL,34,'Parameter|max','prm:/LogicLev/experiment/P_PP5/max','el6','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','min',NULL,34,'Parameter|min','prm:/LogicLev/experiment/P_PP5/min','el6','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/experiment/P_PP5','el6','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/experiment/P_PP5','el6','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/P_PP5','el6','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/P_PP5/wMax','el6','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/P_PP5/wMin','el6','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/LogicLev/gen/P_PP5/NAME','el6','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/LogicLev/gen/P_PP5/aMax','el6','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMin',NULL,34,'Parameter|aMin','prm:/LogicLev/gen/P_PP5/aMin','el6','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','addr',NULL,34,'Parameter|var','prm:/LogicLev/gen/P_PP5/var','el6','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','ed',NULL,34,'Parameter|ed','prm:/LogicLev/gen/P_PP5/ed','el6','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','max',NULL,34,'Parameter|max','prm:/LogicLev/gen/P_PP5/max','el6','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','min',NULL,34,'Parameter|min','prm:/LogicLev/gen/P_PP5/min','el6','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeA',NULL,34,'Parameter|auto','prm:/LogicLev/gen/P_PP5','el6','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','pModeC',NULL,34,'Parameter|casc','prm:/LogicLev/gen/P_PP5','el6','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','prec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/P_PP5','el6','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/P_PP5/wMax','el6','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','wMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/P_PP5/wMin','el6','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','owner','root:UI',32,'','','el7','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','Graphics group element',42,'Parameter|NAME','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/NAME','el7','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','aMax',NULL,34,'Parameter|aMax','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3','el7','','','','','','');
@@ -965,121 +965,121 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','name'
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','grpName','Test group',41,'','Test group','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','owner','root:op',32,'','','ElFigure','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','owner','root:op',32,'','','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digComs','OPEN;CLOSE;STOP',34,'Parameter|digComs','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digStts',NULL,34,'Parameter|digStts','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','max','100',42,'Parameter|max','prm:/LogicLev/experiment/F3/max','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','min','0',42,'Parameter|min','prm:/LogicLev/experiment/F3/min','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/F3/aMax','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/F3/aMin','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAnalog',NULL,34,'Parameter|analog','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAuto','0',38,'Parameter|auto','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCasc','0',38,'Parameter|casc','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmClose',NULL,38,'Parameter|close','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCloseSt',NULL,34,'Parameter|st_close','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCom',NULL,38,'Parameter|com','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDemention','',34,'Parameter|ed','prm:/LogicLev/experiment/F3/ed','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDescr',NULL,34,'Parameter|DESCR','prm:/LogicLev/experiment/F3/DESCR','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmId',NULL,34,'Parameter|SHIFR','prm:/LogicLev/experiment/F3/SHIFR','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQdwnTm',NULL,34,'Parameter|impQdwn','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQupTm',NULL,34,'Parameter|impQup','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmManIn',NULL,38,'Parameter|manIn','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOpenSt',NULL,34,'Parameter|st_open','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOut','0',38,'Parameter|out','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmPrec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmShifr','',34,'Parameter|NAME','prm:/LogicLev/experiment/F3/NAME','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmSp','0',38,'Parameter|sp','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmStop',NULL,38,'Parameter|stop','prm:/LogicLev/experiment/F3','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmVar','0',38,'Parameter|var','prm:/LogicLev/experiment/F3/var','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/F3/wMax','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/F3/wMin','el1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAddr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/F3/var','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digComs','OPEN;CLOSE;STOP',34,'Parameter|digComs','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digStts',NULL,34,'Parameter|digStts','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','max','100',42,'Parameter|max','prm:/LogicLev/gen/F3/max','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','min','0',42,'Parameter|min','prm:/LogicLev/gen/F3/min','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMax',NULL,34,'Parameter|aMax','prm:/LogicLev/gen/F3/aMax','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMin',NULL,34,'Parameter|aMin','prm:/LogicLev/gen/F3/aMin','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAnalog',NULL,34,'Parameter|analog','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAuto','0',38,'Parameter|auto','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCasc','0',38,'Parameter|casc','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmClose',NULL,38,'Parameter|close','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCloseSt',NULL,34,'Parameter|st_close','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCom',NULL,38,'Parameter|com','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDemention','',34,'Parameter|ed','prm:/LogicLev/gen/F3/ed','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDescr',NULL,34,'Parameter|DESCR','prm:/LogicLev/gen/F3/DESCR','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmId',NULL,34,'Parameter|SHIFR','prm:/LogicLev/gen/F3/SHIFR','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQdwnTm',NULL,34,'Parameter|impQdwn','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQupTm',NULL,34,'Parameter|impQup','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmManIn',NULL,38,'Parameter|manIn','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOpenSt',NULL,34,'Parameter|st_open','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOut','0',38,'Parameter|out','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmPrec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmShifr','',34,'Parameter|NAME','prm:/LogicLev/gen/F3/NAME','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmSp','0',38,'Parameter|sp','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmStop',NULL,38,'Parameter|stop','prm:/LogicLev/gen/F3','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmVar','0',38,'Parameter|var','prm:/LogicLev/gen/F3/var','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/F3/wMax','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/F3/wMin','el1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAddr',NULL,42,'Parameter|var','prm:/LogicLev/gen/F3/var','el1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','owner','root:op',32,'','','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digComs','OPEN;CLOSE;STOP',34,'Parameter|digComs','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digStts',NULL,34,'Parameter|digStts','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','max','100',42,'Parameter|max','prm:/LogicLev/experiment/F4/max','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','min','0',42,'Parameter|min','prm:/LogicLev/experiment/F4/min','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/F4/aMax','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/F4/aMin','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAnalog',NULL,34,'Parameter|analog','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAuto','0',38,'Parameter|auto','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCasc','0',38,'Parameter|casc','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmClose',NULL,38,'Parameter|close','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCloseSt',NULL,34,'Parameter|st_close','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCom',NULL,38,'Parameter|com','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDemention','',34,'Parameter|ed','prm:/LogicLev/experiment/F4/ed','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDescr',NULL,34,'Parameter|DESCR','prm:/LogicLev/experiment/F4/DESCR','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmId',NULL,34,'Parameter|SHIFR','prm:/LogicLev/experiment/F4/SHIFR','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQdwnTm',NULL,34,'Parameter|impQdwn','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQupTm',NULL,34,'Parameter|impQup','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmManIn',NULL,38,'Parameter|manIn','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOpenSt',NULL,34,'Parameter|st_open','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOut','0',38,'Parameter|out','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmPrec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmShifr','',34,'Parameter|NAME','prm:/LogicLev/experiment/F4/NAME','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmSp','0',38,'Parameter|sp','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmStop',NULL,38,'Parameter|stop','prm:/LogicLev/experiment/F4','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmVar','0',38,'Parameter|var','prm:/LogicLev/experiment/F4/var','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/F4/wMax','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/F4/wMin','el2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAddr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/F4/var','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digComs','OPEN;CLOSE;STOP',34,'Parameter|digComs','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digStts',NULL,34,'Parameter|digStts','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','max','100',42,'Parameter|max','prm:/LogicLev/gen/F4/max','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','min','0',42,'Parameter|min','prm:/LogicLev/gen/F4/min','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMax',NULL,34,'Parameter|aMax','prm:/LogicLev/gen/F4/aMax','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMin',NULL,34,'Parameter|aMin','prm:/LogicLev/gen/F4/aMin','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAnalog',NULL,34,'Parameter|analog','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAuto','0',38,'Parameter|auto','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCasc','0',38,'Parameter|casc','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmClose',NULL,38,'Parameter|close','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCloseSt',NULL,34,'Parameter|st_close','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCom',NULL,38,'Parameter|com','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDemention','',34,'Parameter|ed','prm:/LogicLev/gen/F4/ed','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDescr',NULL,34,'Parameter|DESCR','prm:/LogicLev/gen/F4/DESCR','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmId',NULL,34,'Parameter|SHIFR','prm:/LogicLev/gen/F4/SHIFR','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQdwnTm',NULL,34,'Parameter|impQdwn','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQupTm',NULL,34,'Parameter|impQup','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmManIn',NULL,38,'Parameter|manIn','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOpenSt',NULL,34,'Parameter|st_open','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOut','0',38,'Parameter|out','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmPrec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmShifr','',34,'Parameter|NAME','prm:/LogicLev/gen/F4/NAME','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmSp','0',38,'Parameter|sp','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmStop',NULL,38,'Parameter|stop','prm:/LogicLev/gen/F4','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmVar','0',38,'Parameter|var','prm:/LogicLev/gen/F4/var','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/F4/wMax','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/F4/wMin','el2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAddr',NULL,42,'Parameter|var','prm:/LogicLev/gen/F4/var','el2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','owner','root:op',32,'','','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digComs','OPEN;CLOSE;STOP',34,'Parameter|digComs','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digStts',NULL,34,'Parameter|digStts','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','max','100',42,'Parameter|max','prm:/LogicLev/experiment/P3/max','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','min','0',42,'Parameter|min','prm:/LogicLev/experiment/P3/min','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/P3/aMax','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/P3/aMin','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAnalog',NULL,34,'Parameter|analog','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAuto','0',38,'Parameter|auto','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCasc','0',38,'Parameter|casc','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmClose',NULL,38,'Parameter|close','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCloseSt',NULL,34,'Parameter|st_close','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCom',NULL,38,'Parameter|com','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDemention','',34,'Parameter|ed','prm:/LogicLev/experiment/P3/ed','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDescr',NULL,34,'Parameter|DESCR','prm:/LogicLev/experiment/P3/DESCR','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmId',NULL,34,'Parameter|SHIFR','prm:/LogicLev/experiment/P3/SHIFR','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQdwnTm',NULL,34,'Parameter|impQdwn','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQupTm',NULL,34,'Parameter|impQup','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmManIn',NULL,38,'Parameter|manIn','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOpenSt',NULL,34,'Parameter|st_open','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOut','0',38,'Parameter|out','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmPrec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmShifr','',34,'Parameter|NAME','prm:/LogicLev/experiment/P3/NAME','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmSp','0',38,'Parameter|sp','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmStop',NULL,38,'Parameter|stop','prm:/LogicLev/experiment/P3','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmVar','0',38,'Parameter|var','prm:/LogicLev/experiment/P3/var','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/P3/wMax','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/P3/wMin','el3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAddr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/P3/var','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digComs','OPEN;CLOSE;STOP',34,'Parameter|digComs','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digStts',NULL,34,'Parameter|digStts','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','max','100',42,'Parameter|max','prm:/LogicLev/gen/P3/max','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','min','0',42,'Parameter|min','prm:/LogicLev/gen/P3/min','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMax',NULL,34,'Parameter|aMax','prm:/LogicLev/gen/P3/aMax','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMin',NULL,34,'Parameter|aMin','prm:/LogicLev/gen/P3/aMin','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAnalog',NULL,34,'Parameter|analog','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAuto','0',38,'Parameter|auto','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCasc','0',38,'Parameter|casc','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmClose',NULL,38,'Parameter|close','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCloseSt',NULL,34,'Parameter|st_close','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCom',NULL,38,'Parameter|com','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDemention','',34,'Parameter|ed','prm:/LogicLev/gen/P3/ed','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDescr',NULL,34,'Parameter|DESCR','prm:/LogicLev/gen/P3/DESCR','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmId',NULL,34,'Parameter|SHIFR','prm:/LogicLev/gen/P3/SHIFR','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQdwnTm',NULL,34,'Parameter|impQdwn','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQupTm',NULL,34,'Parameter|impQup','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmManIn',NULL,38,'Parameter|manIn','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOpenSt',NULL,34,'Parameter|st_open','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOut','0',38,'Parameter|out','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmPrec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmShifr','',34,'Parameter|NAME','prm:/LogicLev/gen/P3/NAME','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmSp','0',38,'Parameter|sp','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmStop',NULL,38,'Parameter|stop','prm:/LogicLev/gen/P3','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmVar','0',38,'Parameter|var','prm:/LogicLev/gen/P3/var','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/P3/wMax','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/P3/wMin','el3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAddr',NULL,42,'Parameter|var','prm:/LogicLev/gen/P3/var','el3','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','owner','root:op',32,'','','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digComs','OPEN;CLOSE;STOP',34,'Parameter|digComs','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digStts',NULL,34,'Parameter|digStts','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','max','100',42,'Parameter|max','prm:/LogicLev/experiment/P4/max','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','min','0',42,'Parameter|min','prm:/LogicLev/experiment/P4/min','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMax',NULL,34,'Parameter|aMax','prm:/LogicLev/experiment/P4/aMax','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMin',NULL,34,'Parameter|aMin','prm:/LogicLev/experiment/P4/aMin','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAnalog',NULL,34,'Parameter|analog','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAuto','0',38,'Parameter|auto','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCasc','0',38,'Parameter|casc','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmClose',NULL,38,'Parameter|close','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCloseSt',NULL,34,'Parameter|st_close','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCom',NULL,38,'Parameter|com','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDemention','',34,'Parameter|ed','prm:/LogicLev/experiment/P4/ed','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDescr',NULL,34,'Parameter|DESCR','prm:/LogicLev/experiment/P4/DESCR','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmId',NULL,34,'Parameter|SHIFR','prm:/LogicLev/experiment/P4/SHIFR','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQdwnTm',NULL,34,'Parameter|impQdwn','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQupTm',NULL,34,'Parameter|impQup','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmManIn',NULL,38,'Parameter|manIn','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOpenSt',NULL,34,'Parameter|st_open','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOut','0',38,'Parameter|out','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmPrec',NULL,34,'Parameter|prec','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmShifr','',34,'Parameter|NAME','prm:/LogicLev/experiment/P4/NAME','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmSp','0',38,'Parameter|sp','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmStop',NULL,38,'Parameter|stop','prm:/LogicLev/experiment/P4','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmVar','0',38,'Parameter|var','prm:/LogicLev/experiment/P4/var','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMax',NULL,34,'Parameter|wMax','prm:/LogicLev/experiment/P4/wMax','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMin',NULL,34,'Parameter|wMin','prm:/LogicLev/experiment/P4/wMin','el4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAddr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/P4/var','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digComs','OPEN;CLOSE;STOP',34,'Parameter|digComs','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','digStts',NULL,34,'Parameter|digStts','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','max','100',42,'Parameter|max','prm:/LogicLev/gen/P4/max','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','min','0',42,'Parameter|min','prm:/LogicLev/gen/P4/min','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMax',NULL,34,'Parameter|aMax','prm:/LogicLev/gen/P4/aMax','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAMin',NULL,34,'Parameter|aMin','prm:/LogicLev/gen/P4/aMin','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAnalog',NULL,34,'Parameter|analog','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAuto','0',38,'Parameter|auto','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCasc','0',38,'Parameter|casc','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmClose',NULL,38,'Parameter|close','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCloseSt',NULL,34,'Parameter|st_close','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmCom',NULL,38,'Parameter|com','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDemention','',34,'Parameter|ed','prm:/LogicLev/gen/P4/ed','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmDescr',NULL,34,'Parameter|DESCR','prm:/LogicLev/gen/P4/DESCR','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmId',NULL,34,'Parameter|SHIFR','prm:/LogicLev/gen/P4/SHIFR','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQdwnTm',NULL,34,'Parameter|impQdwn','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmImpQupTm',NULL,34,'Parameter|impQup','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmManIn',NULL,38,'Parameter|manIn','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOpenSt',NULL,34,'Parameter|st_open','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmOut','0',38,'Parameter|out','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmPrec',NULL,34,'Parameter|prec','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmShifr','',34,'Parameter|NAME','prm:/LogicLev/gen/P4/NAME','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmSp','0',38,'Parameter|sp','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmStop',NULL,38,'Parameter|stop','prm:/LogicLev/gen/P4','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmVar','0',38,'Parameter|var','prm:/LogicLev/gen/P4/var','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMax',NULL,34,'Parameter|wMax','prm:/LogicLev/gen/P4/wMax','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmWMin',NULL,34,'Parameter|wMin','prm:/LogicLev/gen/P4/wMin','el4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','prmAddr',NULL,42,'Parameter|var','prm:/LogicLev/gen/P4/var','el4','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','owner','root:op',32,'','','el5','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','owner','root:op',32,'','','el6','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','owner','root:op',32,'','','el7','','','','','','');
@@ -1168,21 +1168,21 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','perm','944
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','owner','root:op',32,'','','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','name','View 1',41,'','View 1','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','owner','root:op',32,'','','el1_1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','name','Views page''s element',34,'Parameter|NAME','prm:/LogicLev/experiment/F3/NAME','el1_1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','addr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/F3/var','el1_1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','var',NULL,34,'Parameter|var','prm:/LogicLev/experiment/F3/var','el1_1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','name','Views page''s element',34,'Parameter|NAME','prm:/LogicLev/gen/F3/NAME','el1_1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','addr',NULL,42,'Parameter|var','prm:/LogicLev/gen/F3/var','el1_1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','var',NULL,34,'Parameter|var','prm:/LogicLev/gen/F3/var','el1_1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','owner','root:op',32,'','','el1_2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','name','Views page''s element',34,'Parameter|NAME','prm:/LogicLev/experiment/F4/NAME','el1_2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','addr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/F4/var','el1_2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','var',NULL,34,'Parameter|var','prm:/LogicLev/experiment/F4/var','el1_2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','name','Views page''s element',34,'Parameter|NAME','prm:/LogicLev/gen/F4/NAME','el1_2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','addr',NULL,42,'Parameter|var','prm:/LogicLev/gen/F4/var','el1_2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','var',NULL,34,'Parameter|var','prm:/LogicLev/gen/F4/var','el1_2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','owner','root:op',32,'','','el1_3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','name','Views page''s element',34,'Parameter|NAME','prm:/LogicLev/experiment/P3/NAME','el1_3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','addr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/P3/var','el1_3','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','var',NULL,34,'Parameter|var','prm:/LogicLev/experiment/P3/var','el1_3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','name','Views page''s element',34,'Parameter|NAME','prm:/LogicLev/gen/P3/NAME','el1_3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','addr',NULL,42,'Parameter|var','prm:/LogicLev/gen/P3/var','el1_3','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','var',NULL,34,'Parameter|var','prm:/LogicLev/gen/P3/var','el1_3','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','owner','root:op',32,'','','el1_4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','name','Views page''s element',34,'Parameter|NAME','prm:/LogicLev/experiment/P4/NAME','el1_4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','addr',NULL,42,'Parameter|var','prm:/LogicLev/experiment/P4/var','el1_4','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','var',NULL,34,'Parameter|var','prm:/LogicLev/experiment/P4/var','el1_4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','name','Views page''s element',34,'Parameter|NAME','prm:/LogicLev/gen/P4/NAME','el1_4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','addr',NULL,42,'Parameter|var','prm:/LogicLev/gen/P4/var','el1_4','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','var',NULL,34,'Parameter|var','prm:/LogicLev/gen/P4/var','el1_4','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','owner','root:op',32,'','','el1_5','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','owner','root:op',32,'','','el1_6','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','owner','root:op',32,'','','el2_1','','','','','','');
@@ -1361,23 +1361,23 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','o
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','name','Page 1',32,'','','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','grpName','Page 1',41,'','Page 1','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','owner','root:op',32,'','','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_addr',NULL,34,'Parameter 1|var','prm:/LogicLev/experiment/Pi/var','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_clr','#b000b0',33,'Parameter 1','#b000b0','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_max',NULL,34,'Parameter 1|max','prm:/LogicLev/experiment/Pi/max','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_min',NULL,34,'Parameter 1|min','prm:/LogicLev/experiment/Pi/min','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_name',NULL,34,'Parameter 1|NAME','prm:/LogicLev/experiment/Pi/NAME','e1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_addr',NULL,34,'Parameter 1|var','prm:/LogicLev/gen/Pi/var','e1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_clr','#b000b0',96,'Parameter 1','#b000b0','e1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_max',NULL,34,'Parameter 1|max','prm:/LogicLev/gen/Pi/max','e1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_min',NULL,34,'Parameter 1|min','prm:/LogicLev/gen/Pi/min','e1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_name',NULL,34,'Parameter 1|NAME','prm:/LogicLev/gen/Pi/NAME','e1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p2_addr',NULL,34,'Parameter 2|var','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/var','e1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p2_max',NULL,34,'Parameter 2|max','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/max','e1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p2_min',NULL,34,'Parameter 2|min','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/min','e1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p2_name',NULL,34,'Parameter 2|NAME','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/NAME','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_addr',NULL,34,'Parameter 3|var','prm:/LogicLev/experiment/P_PP1/var','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_max',NULL,34,'Parameter 3|max','prm:/LogicLev/experiment/P_PP1/max','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_min',NULL,34,'Parameter 3|min','prm:/LogicLev/experiment/P_PP1/min','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_name',NULL,34,'Parameter 3|NAME','prm:/LogicLev/experiment/P_PP1/NAME','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p4_addr',NULL,34,'Parameter 4|var','prm:/LogicLev/experiment/P_PP3/var','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p4_max',NULL,34,'Parameter 4|max','prm:/LogicLev/experiment/P_PP3/max','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p4_min',NULL,34,'Parameter 4|min','prm:/LogicLev/experiment/P_PP3/min','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p4_name',NULL,34,'Parameter 4|NAME','prm:/LogicLev/experiment/P_PP3/NAME','e1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_addr',NULL,34,'Parameter 3|var','prm:/LogicLev/gen/P_PP1/var','e1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_max',NULL,34,'Parameter 3|max','prm:/LogicLev/gen/P_PP1/max','e1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_min',NULL,34,'Parameter 3|min','prm:/LogicLev/gen/P_PP1/min','e1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_name',NULL,34,'Parameter 3|NAME','prm:/LogicLev/gen/P_PP1/NAME','e1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p4_addr',NULL,34,'Parameter 4|var','prm:/LogicLev/gen/P_PP3/var','e1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p4_max',NULL,34,'Parameter 4|max','prm:/LogicLev/gen/P_PP3/max','e1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p4_min',NULL,34,'Parameter 4|min','prm:/LogicLev/gen/P_PP3/min','e1','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p4_name',NULL,34,'Parameter 4|NAME','prm:/LogicLev/gen/P_PP3/NAME','e1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p5_addr',NULL,34,'Parameter 5|var','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/var','e1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p5_max',NULL,34,'Parameter 5|max','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/max','e1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p5_min',NULL,34,'Parameter 5|min','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД2/min','e1','','','','','','');
@@ -1391,18 +1391,18 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','o
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','owner','root:op',32,'','','e15','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','owner','root:op',32,'','','e16','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','owner','root:op',32,'','','e2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_addr',NULL,34,'Parameter 1|var','prm:/LogicLev/experiment/P_PP5/var','e2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_max',NULL,34,'Parameter 1|max','prm:/LogicLev/experiment/P_PP5/max','e2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_min',NULL,34,'Parameter 1|min','prm:/LogicLev/experiment/P_PP5/min','e2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_name',NULL,34,'Parameter 1|NAME','prm:/LogicLev/experiment/P_PP5/NAME','e2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_addr',NULL,34,'Parameter 1|var','prm:/LogicLev/gen/P_PP5/var','e2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_max',NULL,34,'Parameter 1|max','prm:/LogicLev/gen/P_PP5/max','e2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_min',NULL,34,'Parameter 1|min','prm:/LogicLev/gen/P_PP5/min','e2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p1_name',NULL,34,'Parameter 1|NAME','prm:/LogicLev/gen/P_PP5/NAME','e2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p2_addr',NULL,34,'Parameter 2|var','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/var','e2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p2_max',NULL,34,'Parameter 2|max','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/max','e2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p2_min',NULL,34,'Parameter 2|min','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/min','e2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p2_name',NULL,34,'Parameter 2|NAME','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД3/NAME','e2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_addr',NULL,34,'Parameter 3|var','prm:/LogicLev/experiment/F_PP1/var','e2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_max',NULL,34,'Parameter 3|max','prm:/LogicLev/experiment/F_PP1/max','e2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_min',NULL,34,'Parameter 3|min','prm:/LogicLev/experiment/F_PP1/min','e2','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_name',NULL,34,'Parameter 3|NAME','prm:/LogicLev/experiment/F_PP1/NAME','e2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_addr',NULL,34,'Parameter 3|var','prm:/LogicLev/gen/F_PP1/var','e2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_max',NULL,34,'Parameter 3|max','prm:/LogicLev/gen/F_PP1/max','e2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_min',NULL,34,'Parameter 3|min','prm:/LogicLev/gen/F_PP1/min','e2','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p3_name',NULL,34,'Parameter 3|NAME','prm:/LogicLev/gen/F_PP1/NAME','e2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p4_addr',NULL,34,'Parameter 4|var','prm:','e2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p4_max',NULL,34,'Parameter 4|max','prm:','e2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','p4_min',NULL,34,'Parameter 4|min','prm:','e2','','','','','','');
@@ -1464,7 +1464,7 @@ INSERT INTO "wlb_Main_incl" VALUES('grpCadr','el5','/wlb_Main/wdg_ElCadr','en;ge
 INSERT INTO "wlb_Main_incl" VALUES('grpCadr','el6','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;max;min;prmColor;',2);
 INSERT INTO "wlb_Main_incl" VALUES('grpCadr','el7','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;max;min;prmColor;',2);
 INSERT INTO "wlb_Main_incl" VALUES('grpCadr','el8','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;max;min;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmDemention;prmManIn;prmOpenSt;prmOut;prmShifr;prmSp;prmStop;prmVar;',2);
-INSERT INTO "wlb_Main_incl" VALUES('grpCadr','trnd1','/wlb_originals/wdg_Diagram','perm;active;geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;tSek;tSize;sclHor;sclVer;sclMarkColor;parNum;prm0addr;prm0bordL;prm0bordU;prm0color;prm0val;curSek;curColor;prm1addr;prm1bordL;prm1bordU;prm1color;prm1val;prm2addr;prm2bordL;prm2bordU;prm2color;prm2val;prm3addr;prm3bordL;prm3bordU;prm3color;prm3val;prm4addr;prm4bordL;prm4bordU;prm4color;prm4val;prm5addr;prm5bordL;prm5bordU;prm5color;prm5val;prm6addr;prm6bordL;prm6bordU;prm6color;prm6val;prm7addr;prm7bordL;prm7bordU;prm7color;prm7val;',2);
+INSERT INTO "wlb_Main_incl" VALUES('grpCadr','trnd1','/wlb_originals/wdg_Diagram','perm;active;geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;tSek;tSize;sclHor;sclVer;sclMarkColor;parNum;prm0addr;prm0bordL;prm0bordU;prm0color;prm0width;prm0val;curSek;curColor;prm1addr;prm1bordL;prm1bordU;prm1color;prm1width;prm1val;prm2addr;prm2bordL;prm2bordU;prm2color;prm2width;prm2val;prm3addr;prm3bordL;prm3bordU;prm3color;prm3width;prm3val;prm4addr;prm4bordL;prm4bordU;prm4color;prm4width;prm4val;prm5addr;prm5bordL;prm5bordU;prm5color;prm5width;prm5val;prm6addr;prm6bordL;prm6bordU;prm6color;prm6width;prm6val;prm7addr;prm7bordL;prm7bordU;prm7color;prm7width;prm7val;',2);
 INSERT INTO "wlb_Main_incl" VALUES('anShow','name','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomMargin;font;color;alignment;text;',2);
 INSERT INTO "wlb_Main_incl" VALUES('anShow','val','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomMargin;font;color;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;',2);
 INSERT INTO "wlb_Main_incl" VALUES('ViewCadr','el1_1','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;addr;',2);
@@ -1877,11 +1877,11 @@ INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomY','98',32,'','','st_open','','',
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','name','Graphics group',41,'','','','Група графіків','','Группа графиков','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','dscr','The template cadre "Graphics group".
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.3.0',32,'','','','Шаблон сторінок: "Група графіків"
+Version: 1.4.0',32,'','','','Шаблон сторінок: "Група графіків"
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.1.0','','Шаблон страниц: "Группа графиков"
+Версія: 1.4.0','','Шаблон страниц: "Группа графиков"
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.1.0','','','');
+Версия: 1.4.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','geomW','900',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','geomH','600',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
@@ -2091,7 +2091,11 @@ INSERT INTO "wlb_Main_io" VALUES('ElViewCadr','geomH','36',32,'','','text','',''
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','name','Contours group',32,'','','','Група контурів','','Группа контуров','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','dscr','The template cadre "Contours group".
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0',32,'','','','Шаблон сторінок: "Група контурів"','','Шаблон страниц: "Группа контуров"','','','');
+Version: 1.2.0',32,'','','','Шаблон сторінок: "Група контурів".
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версія: 1.2.0','','Шаблон страниц: "Группа контуров".
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.2.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','geomW','900',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','geomH','600',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','');
@@ -3518,7 +3522,7 @@ INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm0addr','',40,'','','trnd1','','',
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm0bordL','0',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm0bordU','0',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm0color','',40,'','','trnd1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','curSek','1552221393',8,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','curSek','1554013690',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm1addr','',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm1bordL','0',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm1bordU','0',8,'','','trnd1','','','','','','');
@@ -5149,7 +5153,7 @@ darkcyan
 tomato
 magenta
 yellow
-lightyellow',32,'','','color','','','','','','');
+lightyellow',40,'','','color','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','active','0',40,'','','dim','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','active','1',32,'','','prm','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','active','0',40,'','','val_max','','','','','','');
@@ -5527,11 +5531,11 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','value','',8,'','','trendsList','
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','name','Graphics group 10',41,'','','','Група графіків 10','','Группа графиков 10','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','dscr','The template cadre "Graphics group 10".
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.3.0',32,'','','','Шаблон сторінок: "Група графіків 10"
+Version: 1.4.0',32,'','','','Шаблон сторінок: "Група графіків 10"
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.1.0','','Шаблон страниц: "Группа графиков 10"
+Версія: 1.4.0','','Шаблон страниц: "Группа графиков 10"
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.1.0','','','');
+Версия: 1.4.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomW','1160',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomH','600',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','evProc','ws_FocusIn:/trnd1:open:/pg_control/pg_grph_panel',32,'','','','','','','','','');
@@ -6556,11 +6560,11 @@ INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','confirm','0',32,'','','prmSearch
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','font','Arial 15',32,'','','prmSearch','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','dscr','The cadre "Selection of the graph params".
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.2.0',32,'','','','Кадр "Обрання параметрів графіку".
+Version: 1.3.0',32,'','','','Кадр "Обрання параметрів графіку".
 Автор: Роман Савоченко<rom_as@oscada.org>
-Версія: 1.2.0','','Кадр "Выбор параметров графиков".
+Версія: 1.3.0','','Кадр "Выбор параметров графиков".
 Автор: Роман Савоченко<rom_as@oscada.org>
-Версия: 1.2.0','','','');
+Версия: 1.3.0','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','dscr','The cadre "Graph control panel".
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.2.0',32,'','','','Кадр "Панель контролю графіків".
@@ -7406,6 +7410,14 @@ Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('terminator','dscr','The cadre "Terminator panel".
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.1.0',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm0width','2',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm1width','2',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm2width','2',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm3width','2',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm4width','2',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm5width','2',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm6width','2',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm7width','2',0,'','','trnd1','','','','','','');
 CREATE TABLE 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main_mime" VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
 RADxQFue7AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9gDBQghJ2VBTzAAAAAddEVYdENv
@@ -9918,11 +9930,11 @@ INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_name','Parameter5: name',1
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_max','Parameter5: maximum',131076,'<EVAL>|',10,'Parameter 5|max','','','Параметр5: максимум','','','Параметр5: максимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_min','Parameter5: minimum',131076,'<EVAL>|',10,'Parameter 5|min','','','Параметр5: мінімум','','','Параметр5: минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','title','Title',131077,NULL,9,'','','','Заголовок','','','Заголовок','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p1_clr','Parameter1: color',147461,'#b000b0',9,'Parameter 1','','','Параметр1: колір','','Параметр 1','Параметр1: цвет','','Параметр 1','','');
-INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p2_clr','Parameter2: color',147461,'#c75300',9,'Parameter 2','','','Параметр2: колір','','Параметр 2','Параметр2: цвет','','Параметр 2','','');
-INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p3_clr','Parameter3: color',147461,'blue',9,'Parameter 3','','','Параметр3: колір','','Параметр 3','Параметр3: цвет','','Параметр 3','','');
-INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p4_clr','Parameter4: сolor',147461,'#00ff00',9,'Parameter 4','','','Параметр4: колір','','Параметр 4','Параметр4: цвет','','Параметр 4','','');
-INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_clr','Parameter5: color',147461,'#06fbff',9,'Parameter 5','','','Параметр5: колір','','Параметр 5','Параметр5: цвет','','Параметр 5','','');
+INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p1_clr','Parameter1: color',147461,'#b000b0',72,'labColorGrph1','','','Параметр1: колір','','Параметр 1','Параметр1: цвет','','Параметр 1','','');
+INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p2_clr','Parameter2: color',147461,'#c75300',72,'labColorGrph2','','','Параметр2: колір','','Параметр 2','Параметр2: цвет','','Параметр 2','','');
+INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p3_clr','Parameter3: color',147461,'blue',72,'labColorGrph3','','','Параметр3: колір','','Параметр 3','Параметр3: цвет','','Параметр 3','','');
+INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p4_clr','Parameter4: сolor',147461,'#00ff00',72,'labColorGrph4','','','Параметр4: колір','','Параметр 4','Параметр4: цвет','','Параметр 4','','');
+INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_clr','Parameter5: color',147461,'#06fbff',72,'labColorGrph5','','','Параметр5: колір','','Параметр 5','Параметр5: цвет','','Параметр 5','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','bTime','Document begin',139265,'0|',14,'<page>|bTime','','','Початок документа','','','Начало документа','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','doc','Document',131077,NULL,14,'<page>|doc','','','Документ','','','Документ','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','n','Archive size',131073,'<EVAL>|',10,'<page>|n','','','Розмір архіву','','','Размер архива','','','','');
@@ -18687,7 +18699,7 @@ for(i_el = 0; i_el < 8; i_el++) {
 		cTr.attrSet(cTrPrm+"bordL",cEl.attr("min"));
 		cTr.attrSet(cTrPrm+"bordU",cEl.attr("max"));
 		cTr.attrSet(cTrPrm+"color",cEl.attr("color"));
-		cTr.attrSet(cTrPrm+"width",cEl.attr("bordWidth"));
+		cTr.attrSet(cTrPrm+"width",cEl.attr("bordWidth")*2);
 		cEl.attrSet("varEl",cTr.attr(cTrPrm+"val"));
 		//Enable/disable of the mode''s indication in the regulators ???
 		cEl.attrSet("enMode",((curTm-trnd1_curSek) <= 2));
@@ -18715,7 +18727,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1552226019);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1554017298);
 INSERT INTO "wlb_Main" VALUES('graphSelPrm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAD/klEQVRYhe2Z224bRRiA57gHr8/H2MEpLSCRovYGiXsE4qJ9gEq8RR+A
 23LDg0TiFSJ6Ty8hvSEJJSRqnMb2endnZ2dPPxdxTZq6jllMlkr+rmakmX//z/96ZjSLv/v+Bx9p
@@ -18743,7 +18755,7 @@ if(f_start) {
 	//Connect to linked widget 
 	if(pgOpenSrc.length) lWdg = this.wdgAt(pgOpenSrc, true);
 	if(lWdg) {
-		//Get allowed graphic''s sources for selection
+		//Get allowed graphic''s sources for the selection
 		tmplLst = "";
 		prm_items = "<Clear>\n";
 		if(lWdg.attrPresent("allowSelLst")) tmplLst = lWdg.attr("allowSelLst");
@@ -18773,7 +18785,7 @@ if(f_start) {
 				prm_items += "DAQ ''"+itNm+(pathAbs?"'' (":"'' (/DAQ")+(pIt.parse(0,":")+":"+pIt.parse(2,":")+":"+pIt.parse(3,":")+":"+pIt.parse(4,":")).replace(new RegExp(":*$"),"")+")\n";
 			}
 
-		//Current value process
+		//Current value processing
 		itAddr = lWdg.link("addr").match("(prm|arh):([^ ]+) \\(\\+\\)");
 		if(itAddr.length == 3) {
 			//Get Name
@@ -18806,6 +18818,13 @@ if(f_start) {
 
 		//Load current properties
 		color_value = lWdg.attr("color");
+
+		//Load the colors list
+		color_cfg = "";
+		parLs = lWdg.nodePrev().nodeList("wdg_");
+		for(iLs = 0; iLs < parLs.length; iLs++)
+			 if((tVl=lWdg.nodePrev()[parLs[iLs]].attr("colorDef")).length)
+				color_cfg += tVl+"\n";
 	}
 }
 
@@ -18881,7 +18900,7 @@ for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
 	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else evRez += evCur+"\n";
 }
-event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1552230847);
+event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1554017298);
 INSERT INTO "wlb_Main" VALUES('RootPgSo','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADVklEQVRYhe2XS28jRRRGbz366U77ETu2Q6QomwCDDBIsZsFi/gISINbJ
 L4QtC1giQLCZSKMZMa9A7JkYP9vVXd1VdYtF24AEEoFN05LPrj7p072nVepWk4uLC6WU7GSA1F96
@@ -19215,7 +19234,7 @@ for(i = 0; i < 8; i++) {
 						.attrSet("prm"+i+"bordL",el.attr("min")).attrSet("prm"+i+"bordU",el.attr("max"))
 						.attrSet("prm"+i+"color",el.attr("bordColor"));
 	}
-}','','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1552226019);
+}','','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1554017298);
 INSERT INTO "wlb_Main" VALUES('anShow','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAZCAIAAAAOir+2AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAF/0lEQVRYhdWW/08bdRjHn8/n7nrXu2tpy1ootmUtDChsK2snk62AsMnG
 5pj1a6LRH4w/+cMS/xT/g4lLNJkxxmjinIvFKduy4QbKgCJQ+pUCLdD1rndt784f6jadQxMDmL1/
@@ -19617,7 +19636,7 @@ trnd_prm0addr = p1_addr; trnd_prm0bordL = p1_min; trnd_prm0bordU = p1_max; trnd_
 trnd_prm1addr = p2_addr; trnd_prm1bordL = p2_min; trnd_prm1bordU = p2_max; trnd_prm1color = p2_clr;
 trnd_prm2addr = p3_addr; trnd_prm2bordL = p3_min; trnd_prm2bordU = p3_max; trnd_prm2color = p3_clr;
 trnd_prm3addr = p4_addr; trnd_prm3bordL = p4_min; trnd_prm3bordU = p4_max; trnd_prm3color = p4_clr;
-trnd_prm4addr = p5_addr; trnd_prm4bordL = p5_min; trnd_prm4bordU = p5_max; trnd_prm4color = p5_clr;','','',1000,'name;dscr;en;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;',1552226019);
+trnd_prm4addr = p5_addr; trnd_prm4bordL = p5_min; trnd_prm4bordU = p5_max; trnd_prm4color = p5_clr;','','',1000,'name;dscr;en;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;',1554061756);
 INSERT INTO "wlb_Main" VALUES('doc_panel','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAF
 3klEQVRYhe2WS28b1xXH771z50FSfFMjqhRpShREx7Wthw0pVlbNywWKxknttnCKIt14X6D9AEVR
 fwjXCyPZ2Nl4kxYJEq8iKK2chxIFsErZFsxENEuRQ3KG5Ii8zy7GpVhblivXu/q/OvfMnN+dc+bM
@@ -21099,7 +21118,7 @@ for(i_el = 0; i_el < 10; i_el++) {
 		cTr.attrSet(cTrPrm+"bordL",cEl.attr("min"));
 		cTr.attrSet(cTrPrm+"bordU",cEl.attr("max"));
 		cTr.attrSet(cTrPrm+"color",cEl.attr("color"));
-		cTr.attrSet(cTrPrm+"width",cEl.attr("bordWidth"));
+		cTr.attrSet(cTrPrm+"width",cEl.attr("bordWidth")*2);
 		cEl.attrSet("varEl",cTr.attr(cTrPrm+"val"));
 		//Enable/disable of the mode''s indication in the regulators ???
 		cEl.attrSet("enMode",((curTm-trnd1_curSek) <= 2));
@@ -21127,7 +21146,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1552226019);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1554017298);
 INSERT INTO "wlb_Main" VALUES('anShow1s','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAWCAIAAAD/3A1jAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAG50lEQVRYhdVXWWwb1xW9bxYOOdzERRTFVbtEWRIlWY5dWbHdqI2auC3Q
 nyDoR4EW8H+B+qctYOjDRVC4CBAU7UdRFG4LNAWCRj8tWtiwnTiKHFkRJSaUrJUUtXARZXK4zsJZ
@@ -23599,7 +23618,7 @@ INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','graphSelPrm','','/w
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1426000648);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','grph_panel','','/wlb_Main/wdg_grph_panel',1,'','','',-1,0,'',1471972731);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','terminator','','/wlb_Main/wdg_terminator',1,'','','',-1,0,'','');
-INSERT INTO "prj_archBrowser" VALUES('/archBrowser','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1552219421);
+INSERT INTO "prj_archBrowser" VALUES('/archBrowser','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1554015998);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/ggraph','5','','..',1,'','','',-1,0,'name;',1495717615);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so','1','','root',1,'
 ','
@@ -23617,7 +23636,7 @@ INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1','doc','','root',0,'
 ','','',-1,5,'owner;perm;name;dscr;geomZ;',1495719828);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/doc','messRep','','/wlb_doc/wdg_docMessRep',0,'','','',-1,0,'owner;geomYsc;archLs;messCat;',1495719828);
 CREATE TABLE 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1552219421);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1554062066);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','
@@ -23659,9 +23678,9 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/2','view1','','root',0,'
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/2','view2','','/wlb_Main/wdg_grpGraph',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546704070);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/2/view2','1','','..',0,'','','',-1,0,'owner;name;',1546704070);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','view6','','root',0,'
-','','',-1,5,'owner;perm;name;geomZ;',1546703988);
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/view6','view6','','/wlb_Main/wdg_ResultGraph',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546703988);
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/view6/view6','1','','..',0,'','','',-1,0,'owner;name;grpName;',1546703988);
+','','',-1,5,'owner;perm;name;geomZ;',1554062066);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/view6','view6','','/wlb_Main/wdg_ResultGraph',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1554062066);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/view6/view6','1','','..',0,'','','',-1,0,'owner;name;grpName;',1554062066);
 CREATE TABLE 'wlb_doc' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_doc" VALUES('docGasNodeDayA','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
 if(f_start) {
@@ -23956,11 +23975,11 @@ event = ev_rez;','','',-1,'owner;name;dscr;geomH;backColor;',1552226019);
 CREATE TABLE 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "VCAPrjs" VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.2.0','Шаблон проекту візуалізації, який базовано на групах сигналізації.
+Version: 1.2.1','Шаблон проекту візуалізації, який базовано на групах сигналізації.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.1.0','Шаблон проекта визуализации основанного на группах сигнализации.
+Версія: 1.2.1','Шаблон проекта визуализации основанного на группах сигнализации.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.1.0','prj_tmplSO','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
+Версия: 1.2.1','prj_tmplSO','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
 HXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBUaGUgR0lNUO9kJW4AABcpSURBVHicxXtbjCTXed73
 /+fUrav6Ot093bNLcsndnRUjUdbFlCkFDhEEhiMoUOxADwnyFgQwlABEXiw4fslD4AfnUYjNXBHH
 eggCJ5FtJVbiOIiCQCZFipQtMRa5612Su8vpue1c+1KXc86fh+ru6Zmd2Qt3aR2gpqeqq/rU9/2X
@@ -24066,11 +24085,10 @@ K32lays6aPZU2GnpoBWzimNSYYW9OFBeVbOKWZh5FkTM4UMcOeecHTlbHBpXjDKx6djZ0chkOyOb
 bu2YbHfdmoM1MeOBeUyvzj7qOnWCiLAGrrbYr3S8oN5Sqp6wDhvEeol1pa50NWIda2KthJjnWiAi
 JM6JM9aZkbHmcOLMeF+cueNcumeL/aHL9neKfLwF93hfnn5cC/UCEQiBegyvGmkVx6KlSUR9It1T
 KkpIBz5YMUTx0VIhArIO1jprs1zsZChi1kVkQIZ2jR2NUBxOgMf/+vz/BxKBWMs6b8DcAAAAAElF
-TkSuQmCC','root','op',432,100,-1,1);
+TkSuQmCC','root','op',432,100,0,1);
 INSERT INTO "VCAPrjs" VALUES('archBrowser','Archives browser','Огляд архівів','Обзор архивов','Project of value archives browsing.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.2.0
-','','','prj_archBrowser','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+Version: 1.2.1','','','prj_archBrowser','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAABKtSURB
 VHic5ZtZbFzXecd/59x7Z+FwuImLSGuxJVkSJWrxIkWb18iOjSRN0hSx46YpkJcWaFEUaZ8KBC3Q
 9rV5aQqkAQK0TdOkblwnRpvYjpvYshxrl0yJEiNqp0RS3MnZ73L6cO6duXNnhqQcI3nIAS5m5q7n
@@ -24171,8 +24189,8 @@ INSERT INTO "prj_tmplSO_stl" VALUES('backColorVal','black','white','','','','','
 INSERT INTO "prj_tmplSO_stl" VALUES('labColorGrph1','#ae77c3-200','#ae77c3-200','','','','','','','','');
 INSERT INTO "prj_tmplSO_stl" VALUES('labColorGrph2','orange-200','orange-200','','','','','','','','');
 INSERT INTO "prj_tmplSO_stl" VALUES('labColorGrph3','blue-200','blue-200','','','','','','','','');
-INSERT INTO "prj_tmplSO_stl" VALUES('labColorGrph4','lightgreen-200','#75C275-200','','','','','','','','');
-INSERT INTO "prj_tmplSO_stl" VALUES('labColorGrph5','cyan-200','cyan-200','','','','','','','','');
+INSERT INTO "prj_tmplSO_stl" VALUES('labColorGrph4','lightgreen-200','#199696-200','','','','','','','','');
+INSERT INTO "prj_tmplSO_stl" VALUES('labColorGrph5','cyan-200','#3264C8-200','','','','','','','','');
 INSERT INTO "prj_tmplSO_stl" VALUES('labColorGrph6','tomato-200','tomato-200','','','','','','','','');
 INSERT INTO "prj_tmplSO_stl" VALUES('labColorGrph7','magenta-200','magenta-200','','','','','','','','');
 INSERT INTO "prj_tmplSO_stl" VALUES('labColorGrph8','yellow-200','#B6B600-200','','','','','','','','');
@@ -24193,8 +24211,8 @@ INSERT INTO "prj_archBrowser_stl" VALUES('labColorGrph1','#ae77c3-200','#ae77c3-
 INSERT INTO "prj_archBrowser_stl" VALUES('labColorGrph10','darkcyan-200','darkcyan-200','','','','','','','','');
 INSERT INTO "prj_archBrowser_stl" VALUES('labColorGrph2','orange-200','orange-200','','','','','','','','');
 INSERT INTO "prj_archBrowser_stl" VALUES('labColorGrph3','blue-200','blue-200','','','','','','','','');
-INSERT INTO "prj_archBrowser_stl" VALUES('labColorGrph4','lightgreen-200','#75C275-200','','','','','','','','');
-INSERT INTO "prj_archBrowser_stl" VALUES('labColorGrph5','cyan-200','cyan-200','','','','','','','','');
+INSERT INTO "prj_archBrowser_stl" VALUES('labColorGrph4','lightgreen-200','#199696-200','','','','','','','','');
+INSERT INTO "prj_archBrowser_stl" VALUES('labColorGrph5','cyan-200','#3264C8-200','','','','','','','','');
 INSERT INTO "prj_archBrowser_stl" VALUES('labColorGrph6','tomato-200','tomato-200','','','','','','','','');
 INSERT INTO "prj_archBrowser_stl" VALUES('labColorGrph7','magenta-200','magenta-200','','','','','','','','');
 INSERT INTO "prj_archBrowser_stl" VALUES('labColorGrph8','yellow-200','#B6B600-200','','','','','','','','');
@@ -24275,13 +24293,13 @@ INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el4','w
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el4','pModeA','');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el4','pModeC','');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el4','color','#75C275-200');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','addr','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','name','');
+INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','addr','arh:MemInfo_use (+)');
+INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','name','val:DAQ.System.AutoDA.MemInfo.use');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','dscr','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','min','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','max','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','log','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','ed','');
+INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','min','val:0');
+INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','max','val:0');
+INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','log','val:0');
+INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','ed','val:');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','prec','');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','aMax','');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','aMin','');
@@ -24289,7 +24307,7 @@ INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','w
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','wMin','');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','pModeA','');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','pModeC','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','color','cyan-200');
+INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','color','#3264C8-200');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el6','addr','');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el6','name','');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el6','dscr','');

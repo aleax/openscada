@@ -1,3 +1,21 @@
+2019-04-01 Roman (stable)
+- !!:FIX:DB.LibsDB.{vcaBase,vcaTest},Model.{AGLKS.vca,Boiler.St}:
+    Accomplished for the previous significantly cleaning and all original identificators renaming to English of AGLKS.
+    DB.LibsDB.vcaBase: Main.{grpGraph,grpCadr,grpGraph10}: The trends width increased to 2 pixels.
+    DB.LibsDB.vcaBase: Main.graphSelPrm: Appended for the colors obtaining from the linked cadre.
+    The light scheme improved for two colors labColorGrph4=#199696-200 and labColorGrph5=#3264C8-200.
+- !!!!:FIX:Model.Boiler.St: Significantly cleaned and all original identificators renamed-pages to English for the documentation revision.
+- !!:FIX:DAQ.ModBus: Fixed for crashing at the logical pararameter template hot changing.
+    !!:Expanded for the flag "s" of the strict requesting at the complex data.
+- DAQ.Siemens: The errors appended by the read code 0x3 - "An attempt to access outside the DB 'N' (200 family)".
+- FIX:Protocol.HTTP: Accelerated to load missing authentication sessions from the DB and fixed some in that context.
+- FIX:UI.QTCfg: Fixed for processing of selection lists of the combo.
+- FIX:UI.VCAEngine: Fixed in the attribute "value" of the view "Edit line" of the primitive "FormEl" for the spare flag TFld::TransltText for not string types.
+    FIX: Fixed for disabling styles in the runtime at the style "Disabled (-1)".
+- FIX:UI.Vision: Fixed for crashing at setting configuration of the view "Data" of the primitive "FormEl".
+    FIX: Fixed for the view "Time" of the primitive "FormEl".
+
+
 2019-03-24 Roman (stable)
 - !!!!:FIX:Model.AGLKS.{St,Model,vca}: Significantly cleaned and all original identificators renamed to English for the documentation revision.
 - !!!:FIX:SYS.DB,DB.{SQLite,MySQL,PostgreSQL,FireBird}: TBD::postEnable() moved from private to protected.

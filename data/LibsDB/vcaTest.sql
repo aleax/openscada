@@ -430,8 +430,8 @@ INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','2',32,'','','FormEl','','',''
 INSERT INTO "wlb_test_io" VALUES('mn_gen','name','Pi_нд',32,'','','Pi_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','472',32,'','','Pi_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','111',32,'','','Pi_нд','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','pName','',34,'Параметр|NAME','prm:/LogicLev/experiment/F3/NAME','Pi_нд','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','pVal','0',34,'Параметр|var','prm:/LogicLev/experiment/F3/var','Pi_нд','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','pName','',34,'Параметр|NAME','prm:/LogicLev/gen/F3/NAME','Pi_нд','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','pVal','0',34,'Параметр|var','prm:/LogicLev/gen/F3/var','Pi_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','1182710881',0,'','','line5','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('kompr','sclVer','1',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('kompr','parNum','3',32,'','','tr1','','','','','','');
@@ -450,8 +450,8 @@ INSERT INTO "wlb_test_io" VALUES('protTest','tSize','360',32,'','','prt2','','',
 INSERT INTO "wlb_test_io" VALUES('protTest','trcPer','1',32,'','','prt2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','472',32,'','','Ti_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','152',32,'','','Ti_нд','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','pName','',34,'Параметр|NAME','prm:/LogicLev/experiment/P3/NAME','Ti_нд','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','pVal','0',34,'Параметр|var','prm:/LogicLev/experiment/P3/var','Ti_нд','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','pName','',34,'Параметр|NAME','prm:/LogicLev/gen/P3/NAME','Ti_нд','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','pVal','0',34,'Параметр|var','prm:/LogicLev/gen/P3/var','Ti_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('test1','geomX','212',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('test1','geomY','70',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('test1','geomX','81',32,'','','newText','','','','','','');

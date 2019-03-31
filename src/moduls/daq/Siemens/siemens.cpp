@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.1.1"
+#define MOD_VER		"3.1.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -1243,9 +1243,11 @@ void TMdContr::protIO( XMLNode &io )
 		    // Data part
 		    uint8_t iDErr = iN(tpkt, off, 1);
 		    if(iDErr != 0xFF) {
-			if(iDErr == 5) throw TError(12, io.attr("id").c_str(), _("An attempt to access outside the DB '%s', %s(%s)."),
+			if(iDErr == 3)		throw TError(12, io.attr("id").c_str(), _("An attempt to access outside the DB '%s' (200 family), %s(%s)."),
 					io.attr("db").c_str(), io.attr("off").c_str(), io.attr("size").c_str());
-			else if(iDErr == 10) throw TError(11, io.attr("id").c_str(), _("The DB '%s' doesn't exist."), io.attr("db").c_str());
+			else if(iDErr == 5)	throw TError(12, io.attr("id").c_str(), _("An attempt to access outside the DB '%s', %s(%s)."),
+					io.attr("db").c_str(), io.attr("off").c_str(), io.attr("size").c_str());
+			else if(iDErr == 10)	throw TError(11, io.attr("id").c_str(), _("The DB '%s' doesn't exist."), io.attr("db").c_str());
 			else throw TError(13, io.attr("id").c_str(), _("Unknown error accessing to DB, %xh."), iDErr);
 		    }
 		    char iDLenTp = iN(tpkt, off, 1);

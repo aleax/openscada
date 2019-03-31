@@ -608,11 +608,13 @@ void LineEdit::setValue( const QString &txt )
 	case Real:
 	    ((QDoubleSpinBox*)ed_fld)->setValue(txt.toDouble());
 	    break;
-	case Time:
-	    ((QTimeEdit*)ed_fld)->setTime(QTime().addSecs(txt.toInt()));
+	case Time: {
+	    int secs = txt.toInt();
+	    ((QTimeEdit*)ed_fld)->setTime(QTime(secs/3600,(secs/60)%60,secs%60)/*.addSecs(txt.toInt())*/);
 	    break;
+	}
 	case Date: case DateTime:
-	    if(((QDateTimeEdit*)ed_fld)->calendarWidget()->isVisible()) break;
+	    if(((QDateTimeEdit*)ed_fld)->calendarWidget() && ((QDateTimeEdit*)ed_fld)->calendarWidget()->isVisible()) break;
 	    ((QDateTimeEdit*)ed_fld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
 	    break;
 	case Combo:
@@ -708,7 +710,10 @@ QString LineEdit::value( )
 			return ((QLineEdit*)ed_fld)->text();
 	case Integer:	return QString::number(((QSpinBox*)ed_fld)->value());
 	case Real:	return QString::number(((QDoubleSpinBox*)ed_fld)->value());
-	case Time:	return QString::number(QTime().secsTo(((QTimeEdit*)ed_fld)->time()));
+	case Time: {
+	    QTime tm = ((QTimeEdit*)ed_fld)->time();
+	    return QString::number(tm.hour()*3600 + tm.minute()*60 + tm.second() /*QTime().secsTo(((QTimeEdit*)ed_fld)->time())*/);
+	}
 	case Date: case DateTime:
 			return QString::number(((QDateTimeEdit*)ed_fld)->dateTime().toTime_t());
 	case Combo:	return ((QComboBox*)ed_fld)->currentText();

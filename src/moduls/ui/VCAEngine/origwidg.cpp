@@ -429,7 +429,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
     {
 	unsigned mdfSt = cfg.owner()->attrAt("value").at().modif();
 	TFld::Type	ntp = TFld::String;
-	int		flg = TFld::TransltText|Attr::Mutable;
+	int		flg = Attr::Mutable;
 	Attr::SelfAttrFlgs sflg = cfg.owner()->attrAt("value").at().flgSelf();
 	string		val = cfg.owner()->attrAt("value").at().getS();
 	string		cfgTmpl = cfg.owner()->attrAt("value").at().cfgTempl();
@@ -440,6 +440,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		case FL_INTEGER: case FL_TIME:	ntp = TFld::Integer;	break;
 		case FL_REAL:			ntp = TFld::Real;	break;
 		case FL_DATE: case FL_DATE_TM:	ntp = TFld::Integer; flg |= Attr::DateTime;	break;
+		default: flg |= TFld::TransltText;			break;
 	    }
 	else	// mode
 	    switch(cfg.getI()) {

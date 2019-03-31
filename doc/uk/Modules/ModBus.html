@@ -31,7 +31,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -289,13 +289,13 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <p>Головну сторінку конфігурації параметру стандартного типу представлено на рисунку 9.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:647px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_uk.png"><img class="thumbimage" height="659" src="../files/ModBus_prm_uk.png" width="645" /></a>  <div class="thumbcaption">Рис.9. Вкладка конфігурації параметру стандартного типу.</div></div></div></div>
-<p>Атрибут, у параметрі переліку атрибутів, записується наступним чином: <b>{dt}:{numb}[:{rw}[:{id}[:{name}]]]</b>.<br />
+<p>Атрибут, у параметрі переліку атрибутів, записується наступним чином: <b>{dt}:{numb}[:{flg}[:{id}[:{name}]]]</b>.<br />
 Де:
 </p>
 <ul><li> <i>dt</i> — тип даних ModBus ("R"—регістр[3,6(16)], "C"—біт[1,5(15)], "RI"—регістр входу[4], "CI"—біт входу[2]);</li></ul>
 <dl><dd>"R" та "RI" можуть бути розширені суфіксами: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "s"—Рядок (розмір по умовчанню 10 та до 100 регістрів);</dd></dl>
 <ul><li> <i>numb</i> — адреса ModBus пристрою (десяткова, шістнадцяткова або вісімкова) [0...65535];</li>
-<li> <i>rw</i> — режим читання/запису ("r"—читання; "w"—запис, "rw"—запис та читання);</li>
+<li> <i>flg</i> — прапорці: режим читання/запису ("r"—читання; "w"—запис, "rw"—запис та читання), суворий режим запиту (без комбінування) 's';</li>
 <li> <i>id</i> — ідентифікатор атрибуту що створюється;</li>
 <li> <i>name</i> — ім'я атрибуту що створюється.</li></ul>
 <p>Приклади:

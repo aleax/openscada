@@ -91,7 +91,7 @@ void Session::setEnable( bool val )
 
 	    //Loading the previous style
 	    string stVl = sessAttr("<Style>", user());
-	    if(stVl.empty()) stVl = i2s(parent().at().stlCurent());
+	    if(stVl.empty() || parent().at().stlCurent() < 0) stVl = i2s(parent().at().stlCurent());
 	    stlCurentSet(s2i(stVl));
 
 	    if(mess_lev() == TMess::Debug) {

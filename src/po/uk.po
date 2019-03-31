@@ -297,7 +297,7 @@ msgstr "Архіви значень"
 
 #, c-format
 msgid "All: %d; Enabled: %d"
-msgstr "Всього: %d; Ввімкнено: %d"
+msgstr "Разом: %d; Ввімкнено: %d"
 
 msgid "<High level>"
 msgstr "<Високий рівень>"

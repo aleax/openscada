@@ -1555,7 +1555,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    val_w = (QComboBox*)TSYS::str2addr(t_s.attr("addr_val_w"));
 	}
 
-	// Fill combo
+	// Filling the combo
 	if(lab) lab->setText((t_s.attr("dscr")+":").c_str());
 	if(val_w || val_r) {
 	    mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_w?(QWidget*)val_w:(QWidget*)val_r);
@@ -2583,18 +2583,18 @@ void ConfApp::combBoxActivate( const QString& ival )
 	    if(n_el->attr("select").empty()) {
 		bool ind_ok = n_el->attr("sel_id").size();
 		string s_nm;
-		for(int ls_off = 0, c_el = 0; !(s_nm=TSYS::strSepParse(n_el->attr("sel_list"),0,';',&ls_off)).empty(); c_el++)
+		for(int ls_off = 0, c_el = 0; !find_ok && !(s_nm=TSYS::strSepParse(n_el->attr("sel_list"),0,';',&ls_off)).empty(); c_el++)
 		    if(s_nm == val) {
-			if(ind_ok)	val = TSYS::strSepParse(n_el->attr("sel_id"),c_el,';');
+			if(ind_ok)	val = TSYS::strSepParse(n_el->attr("sel_id"), c_el, ';');
 			find_ok = true;
 		    }
 	    }
 	    else {
 		XMLNode x_lst("get");
-		x_lst.setAttr("path",selPath+"/"+TSYS::strEncode( n_el->attr("select"),TSYS::PathEl));
+		x_lst.setAttr("path",selPath+"/"+TSYS::strEncode(n_el->attr("select"),TSYS::PathEl));
 		if(cntrIfCmd(x_lst)) { mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this); return; }
 
-		for(unsigned iEl = 0; iEl < x_lst.childSize(); iEl++)
+		for(unsigned iEl = 0; !find_ok && iEl < x_lst.childSize(); iEl++)
 		    if(x_lst.childGet(iEl)->name() == "el" && x_lst.childGet(iEl)->text() == val) {
 			if(x_lst.childGet(iEl)->attr("id").size()) val = x_lst.childGet(iEl)->attr("id");
 			find_ok = true;
@@ -2603,7 +2603,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 	    if(!find_ok) { mod->postMess(mod->nodePath().c_str(),_("Value is wrong: ")+val,TUIMod::Info,this); return; }
 	}
 
-	//Check block element. Command box!
+	//Checking the block element. Command box!
 	if(block) { n_el->setText(val); return; }
 	else {
 	    XMLNode req("get"); req.setAttr("path",selPath+"/"+path);

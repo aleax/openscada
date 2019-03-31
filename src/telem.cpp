@@ -1,7 +1,7 @@
 
 //OpenSCADA file: telem.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2019 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -417,11 +417,11 @@ string TFld::selVl2Nm( const string &val )
     if(flg()&TFld::Selectable && type() == TFld::String) {
 	int sz = vmin(mSel->size(), mVal.s->size());
 	if(!sz) return _("Empty");
-	int i_val = 0;
-	for(i_val = 0; i_val < sz; i_val++)
-	    if((*mVal.s)[i_val] == val) break;
-	if(i_val >= sz) return val;
-	return (*mSel)[i_val];
+	int iVal = 0;
+	for(iVal = 0; iVal < sz; iVal++)
+	    if((*mVal.s)[iVal] == val) break;
+	if(iVal >= sz) return val;
+	return (*mSel)[iVal];
     }
     throw TError("Field", _("Error selecting! Value: '%s'."), val.c_str());
 }
@@ -431,11 +431,11 @@ string TFld::selVl2Nm( int64_t val )
     if(flg()&TFld::Selectable && type() == TFld::Integer) {
 	int sz = vmin(mSel->size(), mVal.i->size());
 	if(!sz) return _("Empty");
-	int i_val = 0;
-	for(i_val = 0; i_val < sz; i_val++)
-	    if((*mVal.i)[i_val] == val) break;
-	if(i_val >= sz) return i2s(val);
-	return (*mSel)[i_val];
+	int iVal = 0;
+	for(iVal = 0; iVal < sz; iVal++)
+	    if((*mVal.i)[iVal] == val) break;
+	if(iVal >= sz) return i2s(val);
+	return (*mSel)[iVal];
     }
     throw TError("Field", _("Error selecting! Value: '%s'."), val);
 }
@@ -445,11 +445,11 @@ string TFld::selVl2Nm( double val )
     if(flg()&TFld::Selectable && type() == TFld::Real) {
 	int sz = vmin(mSel->size(), mVal.r->size());
 	if(!sz) return _("Empty");
-	int i_val = 0;
-	for(i_val = 0; i_val < sz; i_val++)
-	    if((*mVal.r)[i_val] == val) break;
-	if(i_val >= sz) return r2s(val);
-	return (*mSel)[i_val];
+	int iVal = 0;
+	for(iVal = 0; iVal < sz; iVal++)
+	    if((*mVal.r)[iVal] == val) break;
+	if(iVal >= sz) return r2s(val);
+	return (*mSel)[iVal];
     }
     throw TError("Field", _("Error selecting! Value: '%s'."), val);
 }
@@ -459,11 +459,11 @@ string TFld::selVl2Nm( bool val )
     if(flg()&TFld::Selectable && type() == TFld::Boolean) {
 	int sz = vmin(mSel->size(), mVal.b->size());
 	if(!sz) return _("Empty");
-	int i_val;
-	for(i_val = 0; i_val < sz; i_val++)
-	    if((*mVal.b)[i_val] == val) break;
-	if(i_val >= sz) return i2s(val);
-	return (*mSel)[i_val];
+	int iVal;
+	for(iVal = 0; iVal < sz; iVal++)
+	    if((*mVal.b)[iVal] == val) break;
+	if(iVal >= sz) return i2s(val);
+	return (*mSel)[iVal];
     }
     throw TError("Field", _("Error selecting! Value: '%s'."), val);
 }
@@ -471,36 +471,36 @@ string TFld::selVl2Nm( bool val )
 string TFld::selNm2VlS( const string &name )
 {
     if(flg()&TFld::Selectable && type() == TFld::String)
-	for(unsigned i_val = 0; i_val < vmin(mSel->size(), mVal.s->size()); i_val++)
-	    if(name == (*mSel)[i_val])
-		return (*mVal.s)[i_val];
+	for(unsigned iVal = 0; iVal < vmin(mSel->size(), mVal.s->size()); iVal++)
+	    if(name == (*mSel)[iVal])
+		return (*mVal.s)[iVal];
     return name;
 }
 
 int64_t TFld::selNm2VlI( const string &name )
 {
     if(flg()&TFld::Selectable && type() == TFld::Integer)
-	for(unsigned i_val = 0; i_val < vmin(mSel->size(), mVal.i->size()); i_val++)
-	    if(name == (*mSel)[i_val])
-		return (*mVal.i)[i_val];
+	for(unsigned iVal = 0; iVal < vmin(mSel->size(), mVal.i->size()); iVal++)
+	    if(name == (*mSel)[iVal])
+		return (*mVal.i)[iVal];
     return s2i(name);
 }
 
 double TFld::selNm2VlR( const string &name )
 {
     if(flg()&TFld::Selectable && type() == TFld::Real)
-	for(unsigned i_val = 0; i_val < vmin(mSel->size(), mVal.r->size()); i_val++)
-	    if(name == (*mSel)[i_val])
-		return (*mVal.r)[i_val];
+	for(unsigned iVal = 0; iVal < vmin(mSel->size(), mVal.r->size()); iVal++)
+	    if(name == (*mSel)[iVal])
+		return (*mVal.r)[iVal];
     return s2r(name);
 }
 
 bool TFld::selNm2VlB( const string &name )
 {
     if(flg()&TFld::Selectable && type() == TFld::Boolean)
-	for(unsigned i_val = 0; i_val < vmin(mSel->size(), mVal.b->size()); i_val++)
-	    if(name == (*mSel)[i_val])
-		return (*mVal.b)[i_val];
+	for(unsigned iVal = 0; iVal < vmin(mSel->size(), mVal.b->size()); iVal++)
+	    if(name == (*mSel)[iVal])
+		return (*mVal.b)[iVal];
     return s2i(name);
 }
 
