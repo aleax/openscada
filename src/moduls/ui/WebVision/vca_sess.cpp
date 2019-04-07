@@ -5429,7 +5429,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		averLstTm = curTm;
 		continue;
 	    }
-	    //Write point and line
+	    //Writing a point and a line
 	    if(averVl != EVAL_REAL) {
 		if(cP.valTp() == 0)
 		    z_vpos = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,((vsPercT?(100*(0-bordL)/(bordU-bordL)):0)-vsMinT)/(vsMaxT-vsMinT))));
@@ -5439,10 +5439,12 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		    else gdImageLine(im, averPos, z_vpos, averPos, vmin(z_vpos-lnWdth,c_vpos), clr_t);
 		}
 		else {
-		    int c_vpos_prv = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,prevVl)):prevVl)-vsMinT)/(vsMaxT-vsMinT))));
-		    if(cP.valTp() != 0) gdImageLine(im, prevPos, c_vpos_prv, averPos, c_vpos, clr_t);
-		    else for(int sps = prevPos+1; sps <= averPos; sps++)
-			gdImageLine(im, sps, z_vpos, sps, vmin(z_vpos-lnWdth,c_vpos), clr_t);
+		    if(cP.valTp() != 0) {
+			int c_vpos_prv = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,prevVl)):prevVl)-vsMinT)/(vsMaxT-vsMinT))));
+			gdImageLine(im, prevPos, c_vpos_prv, averPos, c_vpos, clr_t);
+		    } else
+			for(int sps = prevPos+1; sps <= averPos; sps++)
+			    gdImageLine(im, sps, z_vpos, sps, vmin(z_vpos-lnWdth,c_vpos), clr_t);
 		}
 	    }
 	    prevVl  = averVl;

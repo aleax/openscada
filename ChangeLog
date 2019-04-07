@@ -1,3 +1,10 @@
+2019-04-07 Roman (stable)
+- !!:FIX:Archive.DBArch: Fixed to remove the archives group tables at removing the archiver.
+    !!:Adapted to work in the only direct archive writing mode on the archives group mode for updating the meta at writing.
+- !:FIX:UI.Vision: Fixed in starting to the full-screen mode and not full scaling at restoring to not zero window position, preventing the restoring.
+    FIX:Fixed for drawing trends in big width on Qt5.
+
+
 2019-04-01 Roman (stable)
 - !!:FIX:DB.LibsDB.{vcaBase,vcaTest},Model.{AGLKS.vca,Boiler.St}:
     Accomplished for the previous significantly cleaning and all original identificators renaming to English of AGLKS.

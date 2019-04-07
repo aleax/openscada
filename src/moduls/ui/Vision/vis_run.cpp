@@ -234,7 +234,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     statusBar()->showMessage(_("Ready"), 2000);
 
     //Restoring the main window position
-    if(!s2i(SYS->cmdOpt("showWin")) && winPosCntrSave() && masterPg()) {
+    if(!s2i(SYS->cmdOpt("showWin")) && winPosCntrSave() && masterPg() && !(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen))) {
 	string xPos, yPos;
 	if((xPos=wAttrGet(masterPg()->id(),i2s(screen())+"geomX",true)).size() &&
 		(yPos=wAttrGet(masterPg()->id(),i2s(screen())+"geomY",true)).size())

@@ -54,6 +54,28 @@ TCntrNode &ModVArch::operator=( const TCntrNode &node )
     return *this;
 }
 
+void ModVArch::postDisable( int flag )
+{
+    TVArchivator::postDisable(flag);
+
+    if(flag) {
+	//Removing the grouping mode tables and records
+	vector<vector<string> > full;
+	TConfig cfg(&mod->archEl());
+	for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg,false,&full); ) {
+	    string vTbl = cfg.cfg("TBL").getS(), aNm;
+	    if(vTbl.find(archTbl()+"_") == string::npos) continue;
+
+	    //Removing for groups table of the grouping mode
+	    SYS->db().at().open(addr()+"."+vTbl);
+	    SYS->db().at().close(addr()+"."+vTbl, true);
+
+	    if(!SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg,true,false,true)) break;
+	    if(full.empty()) aCnt--;
+	}
+    }
+}
+
 void ModVArch::load_( )
 {
     //TVArchivator::load_();
@@ -118,7 +140,7 @@ void ModVArch::checkArchivator( unsigned int cnt )
     //Clear the accummulator's groups
     if(groupPrms()) accm.clear();
 
-    //Load and process the main table with the meta-information.
+    //Loading and processing the main table with the meta-information.
     vector<vector<string> > full;
     TConfig cfg(&mod->archEl());
     for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg,false,&full); ) {
@@ -658,7 +680,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 	tbl.free();
 	//SYS->db().at().close(archivator().addr()+"."+archTbl());		//!!! No close the table manually
 
-	//Update archive info
+	//Updating the archive info
 	cfg.setElem(&mod->archEl());
 	cfg.cfgViewAll(false);
 	cfg.cfg("TBL").setS(archTbl(), true);
@@ -692,6 +714,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
     cfg.cfg(vlFld).setView(true);
 
     //Write data to the table
+    bool updMeta = false;
     int64_t lstWrTm = 0;
     for(int64_t ctm; ibeg <= iend; ibeg++) {
 	switch(archive().valType()) {
@@ -711,10 +734,23 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 	//Archive's range update
 	mBeg = mBeg ? vmin(mBeg,ctm) : ctm;
 	mEnd = mEnd ? vmax(mEnd,ctm) : ctm;
+
+	if(!gO->per || !gO->beg || mBeg < gO->beg || mEnd > gO->end) {
+	    gO->per = (archivator().valPeriod()*1e6);
+	    gO->beg = gO->beg ? vmin(gO->beg, mBeg) : mBeg;
+	    gO->end = vmax(gO->end, mEnd);
+	    updMeta = true;
+	}
     }
 
     //Archive size limit process
-    if(archivator().grpLimits(*gO,&mBeg,&mEnd)) archivator().grpMetaUpd(*gO);
+    if(archivator().grpLimits(*gO,&mBeg,&mEnd) || updMeta) {
+	string	pLs;
+	for(map<string,TValBuf>::iterator iP = gO->els.begin(); updMeta && iP != gO->els.end(); ++iP)
+	    pLs += i2s(iP->second.valType(true)) + ":" + iP->first + "\n";
+
+	archivator().grpMetaUpd(*gO, pLs.size()?&pLs:NULL);
+    }
 
     return lstWrTm;
 }

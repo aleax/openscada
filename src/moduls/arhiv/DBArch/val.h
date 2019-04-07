@@ -121,6 +121,8 @@ class ModVArch: public TVArchivator
 
     protected:
 	//Methods
+	void postDisable( int flag );
+
 	void load_( );
 	void save_( );
 

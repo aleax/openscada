@@ -3342,7 +3342,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 #if QT_VERSION < 0x050000
 	if(cP.valTp() != 0 && trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
 #else
-	trpen.setCapStyle(Qt::FlatCap);
+	trpen.setCapStyle((cP.valTp() != 0 && trpen.width() > 1)?Qt::RoundCap:Qt::FlatCap);
 #endif
 	pnt.setRenderHint(QPainter::Antialiasing, (trpen.width()>=2));
 	pnt.setPen(trpen);
@@ -3405,21 +3405,22 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		continue;
 	    }
 
-	    //Write point and line
+	    //Writing a point and a line
 	    if(averVl != EVAL_REAL) {
 		if(cP.valTp() == 0)
 		    z_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((vsPercT?(100.*(0-bordL)/(bordU-bordL)):0)-vsMinT)/(vsMaxT-vsMinT))));
 		c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,averVl)):averVl)-vsMinT)/(vsMaxT-vsMinT))));
 		if(prevVl == EVAL_REAL) {
-		    if(cP.valTp() != 0) pnt.drawPoint(averPos,c_vpos);
-		    else pnt.drawLine(averPos,z_vpos,averPos,vmin(z_vpos-trpen.width(),c_vpos));
+		    if(cP.valTp() != 0) pnt.drawPoint(averPos, c_vpos);
+		    else pnt.drawLine(averPos, z_vpos, averPos, vmin(z_vpos-trpen.width(),c_vpos));
 		}
 		else {
-		    int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,prevVl)):prevVl)-vsMinT)/(vsMaxT-vsMinT))));
-		    if(cP.valTp() != 0) pnt.drawLine(prevPos,c_vpos_prv,averPos,c_vpos);
-		    else
+		    if(cP.valTp() != 0) {
+			int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,prevVl)):prevVl)-vsMinT)/(vsMaxT-vsMinT))));
+			pnt.drawLine(prevPos, c_vpos_prv, averPos, c_vpos);
+		    } else
 			for(int sps = prevPos+1; sps <= averPos; sps++)
-			    pnt.drawLine(sps,z_vpos,sps,vmin(z_vpos-trpen.width(),c_vpos));
+			    pnt.drawLine(sps, z_vpos, sps, vmin(z_vpos-trpen.width(),c_vpos));
 		}
 	    }
 	    prevVl  = averVl;
