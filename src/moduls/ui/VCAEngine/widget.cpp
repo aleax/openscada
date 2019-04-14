@@ -832,7 +832,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 		attrList(ls);
 		for(unsigned iL = 0; iL < ls.size(); iL++) {
 		    attr = attrAt(ls[iL]);
-		    if(attr.at().flgGlob()&Attr::IsUser) continue;
+		    if(attr.at().flgGlob()&Attr::IsUser && !(attr.at().flgSelf()&Attr::VizerSpec)) continue;
 		    opt->childAdd("el")->setAttr("id",ls[iL].c_str())->
 					 setAttr("p",attr.at().fld().reserve())->
 					 setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
@@ -859,7 +859,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 	AutoHD<Attr> attr;
 	for(unsigned iL = 0; iL < ls.size(); iL++) {
 	    attr = attrAt(ls[iL]);
-	    if(attr.at().flgGlob()&Attr::IsUser) continue;
+	    if(attr.at().flgGlob()&Attr::IsUser && !(attr.at().flgSelf()&Attr::VizerSpec)) continue;
 	    opt->childAdd("el")->setAttr("id",ls[iL].c_str())->
 			     setAttr("p",attr.at().fld().reserve())->
 			     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());

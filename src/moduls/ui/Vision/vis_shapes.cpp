@@ -236,6 +236,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
     shD->evLock = true;
     switch(uiPrmPos) {
 	case A_COM_LOAD:	rel_cfg = true;	break;
+	case A_NO_ID:
+	    rel_cfg = true;
+	    if(attr == "vs_background")	w->setProperty("vs_background", val.c_str());
+	    else if(attr == "vs_border")w->setProperty("vs_border", val.c_str());
+	    else rel_cfg = false;
+	    break;
 	case A_EN:
 	    if(!runW)	break;
 	    shD->en = (bool)s2i(val);
@@ -706,6 +712,33 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	}
     }
 
+    if(rel_cfg && !w->allAttrLoad() && shD->addrWdg)
+	switch(shD->elType) {
+	    case F_LINE_ED: case F_TEXT_ED: case F_COMBO: case F_LIST: case F_TREE: case F_TABLE: {
+		string tVl, tVl1;
+		if((tVl=w->property("vs_background").toString().toStdString()).size()) {
+		    tVl1 = TSYS::strParse(tVl, 0, " ");
+
+		    QPalette plt(shD->addrWdg->palette());
+		    QBrush brsh = plt.brush(QPalette::Base);
+		    brsh.setColor(getColor(tVl1));
+		    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Base).color());
+
+		    QImage img;
+		    tVl1 = w->resGet(TSYS::strParse(tVl,1," "));
+		    if(tVl1.size()) img.loadFromData((const uchar*)tVl1.data(), tVl1.size());
+		    brsh.setTextureImage(img);
+
+		    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
+		    plt.setBrush(QPalette::Base, brsh);
+		    shD->addrWdg->setPalette(plt);
+		}
+
+		tVl = w->property("vs_border").toString().toStdString();
+		shD->addrWdg->setStyleSheet(tVl.size()?QString("border: %1").arg(tVl.c_str()):"");
+	    }
+	}
+
     shD->evLock = false;
 
     return true;
@@ -782,8 +815,8 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 			    }
 
 			    cur_act = NULL;
-			    for(int i_a = 0; i_a < menu->actions().size(); i_a++)
-				if(menu->actions()[i_a]->text() == item.c_str()) cur_act = menu->actions()[i_a];
+			    for(int iA = 0; iA < menu->actions().size(); iA++)
+				if(menu->actions()[iA]->text() == item.c_str()) cur_act = menu->actions()[iA];
 			    if(!cur_act) {
 				cur_act = new QAction(item.c_str(), wdg);
 				connect(cur_act, SIGNAL(triggered()), this, SLOT(buttonMenuTrig()));
@@ -1233,8 +1266,6 @@ void ShapeFormEl::tableChange( int row, int col )
     w->attrsSet(attrs);
 }
 
-
-
 void ShapeFormEl::sliderMoved( int val )
 {
     QAbstractSlider *el = (QAbstractSlider*)sender();
@@ -1302,11 +1333,13 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 	    shD->en = (bool)s2i(val);
 	    w->setVisible(s2i(val) && ((RunWdgView*)w)->permView());
 	    break;
-	case A_ACTIVE:
+	case A_ACTIVE: {
 	    if(!qobject_cast<RunWdgView*>(w))	break;
 	    shD->active = (bool)s2i(val);
-	    w->setFocusPolicy((s2i(val)&&((RunWdgView*)w)->permCntr()) ? Qt::StrongFocus : Qt::NoFocus);
+	    shD->realAct = (shD->active && ((RunWdgView*)w)->permCntr());
+	    w->setFocusPolicy(shD->realAct ? Qt::StrongFocus : Qt::NoFocus);
 	    break;
+	}
 	case A_GEOM_MARGIN: shD->geomMargin = s2i(val); up = true;	break;
 	case A_BackColor: {
 	    shD->backGrnd.setColor(getColor(val));
@@ -1316,7 +1349,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 	    brsh.setColor(shD->backGrnd.color());
 	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
 	    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
-	    plt.setBrush(QPalette::Background,brsh);
+	    plt.setBrush(QPalette::Background, brsh);
 	    w->setPalette(plt);
 
 	    up = true;
@@ -1404,25 +1437,31 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
     //Text reformation
     if(reform && !w->allAttrLoad()) {
 	QString text = shD->text_tmpl.c_str();
-	for(unsigned i_a = 0; i_a < shD->args.size(); i_a++) {
-	    switch(shD->args[i_a].val().type()) {
+	for(unsigned iA = 0; iA < shD->args.size(); iA++) {
+	    switch(shD->args[iA].val().type()) {
 		case QVariant::String:
-		    text = text.arg(shD->args[i_a].val().toString(), vmax(-1000,vmin(1000,s2i(shD->args[i_a].cfg()))));
+		    text = text.arg(shD->args[iA].val().toString(), vmax(-1000,vmin(1000,s2i(shD->args[iA].cfg()))));
 		    break;
 		case QVariant::Double: {
 		    int off = 0;
-		    int wdth = s2i(TSYS::strSepParse(shD->args[i_a].cfg(),0,';',&off));
-		    string form = TSYS::strSepParse(shD->args[i_a].cfg(),0,';',&off);
-		    int prec = s2i(TSYS::strSepParse(shD->args[i_a].cfg(),0,';',&off));
-		    text = text.arg(shD->args[i_a].val().toDouble(),vmax(-1000,vmin(1000,wdth)),form.empty()?0:form[0],vmax(0,prec),' ');
+		    int wdth = s2i(TSYS::strSepParse(shD->args[iA].cfg(),0,';',&off));
+		    string form = TSYS::strSepParse(shD->args[iA].cfg(),0,';',&off);
+		    int prec = s2i(TSYS::strSepParse(shD->args[iA].cfg(),0,';',&off));
+		    text = text.arg(shD->args[iA].val().toDouble(),vmax(-1000,vmin(1000,wdth)),form.empty()?0:form[0],vmax(0,prec),' ');
 		    break;
 		}
 		default:
-		    text = text.arg(shD->args[i_a].val().toInt(), vmax(-1000,vmin(1000,s2i(shD->args[i_a].cfg()))));
+		    text = text.arg(shD->args[iA].val().toInt(), vmax(-1000,vmin(1000,s2i(shD->args[iA].cfg()))));
 		    break;
 	    }
 	}
 	if(text != shD->text.c_str())	{ shD->text = text.toStdString(); up = true; }
+    }
+
+    if(up) {
+	if(shD->realAct && shD->text.size() && shD->backGrnd.color().isValid() && shD->backGrnd.color().alpha())
+	    w->setCursor(Qt::PointingHandCursor);
+	else w->unsetCursor();
     }
 
     if(up && !w->allAttrLoad() && uiPrmPos != -1) w->update();
@@ -1581,8 +1620,9 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 	case A_ACTIVE:
 	    if(!qobject_cast<RunWdgView*>(w))	break;
 	    shD->active = s2i(val);
-	    if(shD->addrWdg) shD->addrWdg->setMouseTracking(shD->active && ((RunWdgView*)w)->permCntr());
-	    w->setMouseTracking(shD->active && ((RunWdgView*)w)->permCntr());
+	    shD->realActive = shD->active && ((RunWdgView*)w)->permCntr();
+	    if(shD->addrWdg) shD->addrWdg->setMouseTracking(shD->realActive);
+	    w->setMouseTracking(shD->realActive);
 	    break;
 	case A_GEOM_MARGIN:
 	    shD->geomMargin = s2i(val);
@@ -1831,7 +1871,7 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	    QPainter pnt(w);
 
 	    //Prepare draw area
-	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
+	    QRect dA = w->rect().adjusted(0, 0, -2*shD->geomMargin, -2*shD->geomMargin);
 	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 
@@ -1846,22 +1886,27 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	}
 	case QEvent::MouseMove: {
 	    Qt::CursorShape new_shp = Qt::ArrowCursor;
-	    for(unsigned i_a = 0; i_a < shD->maps.size(); i_a++)
-		if(shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos()))) {
+	    if(shD->realActive && !shD->maps.size() && shD->backGrnd.color().isValid() && shD->backGrnd.color().alpha() && shD->mediaSrc.size())
+		new_shp = Qt::PointingHandCursor;
+	    for(unsigned iA = 0; iA < shD->maps.size(); iA++)
+		if(shD->maps[iA].containsPoint(w->mapFromGlobal(w->cursor().pos()))) {
 		    new_shp = Qt::PointingHandCursor;
-		    if(!shD->maps[i_a].title.empty()) QToolTip::showText(w->cursor().pos(),shD->maps[i_a].title.c_str());
+		    if(!shD->maps[iA].title.empty()) QToolTip::showText(w->cursor().pos(),shD->maps[iA].title.c_str());
 		    break;
 		}
 
-	    if(new_shp != w->cursor().shape()) w->setCursor(new_shp);
+	    if(new_shp != w->cursor().shape()) {
+		if(new_shp != Qt::ArrowCursor)	w->setCursor(new_shp);
+		else w->unsetCursor();
+	    }
 
 	    return true;
 	}
 	case QEvent::MouseButtonPress: {
 	    string sev;
-	    for(unsigned i_a = 0; i_a < shD->maps.size(); i_a++)
-	        if(shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())))
-	        { sev = "ws_MapAct"+i2s(i_a); break; }
+	    for(unsigned iA = 0; iA < shD->maps.size(); iA++)
+	        if(shD->maps[iA].containsPoint(w->mapFromGlobal(w->cursor().pos())))
+	        { sev = "ws_MapAct"+i2s(iA); break; }
 	    if(!sev.empty()) {
 		switch(((QMouseEvent*)event)->button()) {
 		    case Qt::LeftButton:	sev += "Left";	break;
@@ -4750,8 +4795,9 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 	    break;
 	case A_ACTIVE:
 	    if(!runW)	{ up = false; break; }
-	    if(s2i(val) && runW->permCntr()) w->setFocusPolicy(Qt::TabFocus /*Qt::StrongFocus*/);
-	    else w->setFocusPolicy(Qt::NoFocus);
+	    shD->active = (bool)s2i(val);
+	    shD->realAct = (shD->active && ((RunWdgView*)w)->permCntr());
+	    w->setFocusPolicy(shD->realAct ? Qt::TabFocus : Qt::NoFocus);
 	    break;
 	case A_GEOM_MARGIN:
 	    shD->geomMargin = s2i(val);
@@ -4874,6 +4920,12 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 	    } else up = false;
 	    break;
 	default: up = false;
+    }
+
+    if(up) {
+	if(shD->realAct && shD->backGrnd.color().isValid() && shD->backGrnd.color().alpha())
+	    w->setCursor(Qt::PointingHandCursor);
+	else w->setCursor(Qt::ArrowCursor);	// w->unsetCursor();
     }
 
     if(up && !w->allAttrLoad()) {

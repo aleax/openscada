@@ -31,7 +31,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Рабочий пользовательский интерфейс (WEB)
 </td>
-<td> 3.3 </td>
+<td> 3.4 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -222,6 +222,16 @@
 <td> vs_goHttpUrl (вид "Кнопка" примитива "FormEl") </td>
 <td> Переход по HTTP URL </td>
 <td> Переход на указанный URL по нажатию кнопки
+</td></tr>
+<tr>
+<td> vs_background (виды "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" примитива "FormEl") </td>
+<td> Пользовательский фон </td>
+<td> Определяет пользовательский фон в форме <b>{color}-{transp} {image}</b>
+</td></tr>
+<tr>
+<td> vs_border (виды "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" примитива "FormEl") </td>
+<td> Пользовательская граница </td>
+<td> Определяет пользовательскую границу в стандартной форме CSS <b>{wdth}px {style} {color}</b>
 </td></tr></table>
 <p>Рассмотрим реализацию каждого примитива более детально.
 </p>
@@ -274,8 +284,11 @@
 <li> <i>Слайдер</i> — Элемент слайдера.</li>
 <li> <i>Прогрес-бар</i> — Полоска прогресс-бара (идентично Слайдер).</li>
 <li> <i>Пароль</i> — Скрытый ввод пароля.</li></ul>
-<p>Реализованы режимы "Включен" и "Активен", а также передача изменений и событий в модель данных СВУ — движок.
-</p><p>На рисунке представлена часть экрана с кадром, содержащим вышеперечисленные элементы формы.
+<p>Реализованы режимы "Включен" и "Активен", а также передача изменений и событий в модель данных СВУ — движок. Режим "Активный" приводит к установке курсора активности для непустого фона и дополнительных условий различных видов "Text", "Media" и "Box":
+</p>
+<ul><li> <i>Text</i> — не пустой текст;</li>
+<li> <i>Media</i> — не пустой источник изображения.</li></ul>
+<p>На рисунке представлена часть экрана с кадром, содержащим вышеперечисленные элементы формы.
 </p>
 <div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_formel_ru.png"><img alt="WebVision wvis run formel ru.png" height="256" src="../files/WebVision_wvis_run_formel_ru.png" width="595" /></a></div></div>
 <p><br />

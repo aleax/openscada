@@ -1503,9 +1503,11 @@ TVariant TMdPrm::TLogCtx::lnkInput( int num )
     MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end()) return EVAL_REAL;
+    string addrSpec = it->second.addrSpec;
+    res.unlock();
 
-    return it->second.addrSpec.size() ?
-	((TMdPrm*)obj)->owner().getVal(it->second.addrSpec,((TMdPrm*)obj)->acqErr) :
+    return addrSpec.size() ?
+	((TMdPrm*)obj)->owner().getVal(addrSpec,((TMdPrm*)obj)->acqErr) :
 	TPrmTempl::Impl::lnkInput(num);
 }
 
@@ -1514,9 +1516,11 @@ bool TMdPrm::TLogCtx::lnkOutput( int num, const TVariant &vl )
     MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end()) return false;
+    string addrSpec = it->second.addrSpec;
+    res.unlock();
 
-    if(it->second.addrSpec.size())
-	((TMdPrm*)obj)->owner().setVal(vl, it->second.addrSpec, ((TMdPrm*)obj)->acqErr, true);
+    if(addrSpec.size())
+	((TMdPrm*)obj)->owner().setVal(vl, addrSpec, ((TMdPrm*)obj)->acqErr, true);
     else return TPrmTempl::Impl::lnkOutput(num, vl);
 
     return true;

@@ -289,7 +289,7 @@ bool RunWdgView::isVisible( QPoint pos )
     //Clear background and draw transparent
     QPalette pltSave, plt;
     pltSave = plt = palette();
-    plt.setBrush(QPalette::Window,QColor(0,0,0,0));
+    plt.setBrush(QPalette::Window, QColor(0,0,0,0));
     setPalette(plt);
 
     //Grab widget and check it for no zero

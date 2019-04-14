@@ -975,7 +975,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		    for(var iRw = 0; iRw < dataReq.childNodes[iCl].childNodes.length; iRw++) {
 			var el = t_s.ownerDocument.createElement(dataReq.childNodes[iCl].childNodes[iRw].nodeName);
 			setNodeText(el, nodeText(dataReq.childNodes[iCl].childNodes[iRw]))
-			el.setAttribute('help', dataReq.childNodes[iCl].childNodes[iRw].getAttribute('help'));
+			if((tVl=dataReq.childNodes[iCl].childNodes[iRw].getAttribute('help'))) el.setAttribute('help', tVl);
 			t_s.childNodes[iCli].appendChild(el);
 		    }
 		}

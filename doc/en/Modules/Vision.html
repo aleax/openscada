@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Operation user interface (Qt)
 </td>
-<td> 6.1 </td>
+<td> 6.2 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -588,6 +588,16 @@
 <ul><li> "*" — call for a selecting dialog of the user; </li>
 <li> "$" — change the user to the default one;</li>
 <li> "{user}" — direct change to <i>user</i>, if available.</li></ul>
+</td></tr>
+<tr>
+<td> vs_background (views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
+<td> Custom background </td>
+<td> Specifies for the custom background in the form <b>{color}-{transp} {image}</b>
+</td></tr>
+<tr>
+<td> vs_border (views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
+<td> Custom border </td>
+<td> Specifies for the custom border in the standard CSS-form <b>{wdth}px {style} {color}</b>
 </td></tr></table>
 <p>Consider the implementation of each primitive in more detail.
 </p>
@@ -672,8 +682,11 @@
 <li> <i>Slider</i> — Slider element.</li>
 <li> <i>Scroll bar</i> — Scroll bar.</li>
 <li> <i>Password</i> — Hidden password typing.</li></ul>
-<p>The "Enabled" and "Active" modes are implemented, as well as the transfer of changes and events to the data model of the VCA — engine.
-</p><p>Figure represents a part of the screen with the frame containing the above-listed elements of the form.
+<p>The "Enabled" and "Active" modes are implemented, as well as the transfer of changes and events to the data model of the VCA — engine. The mode "Active" cause to the activity cursor set for not empty background and the addition conditions of the different views "Text", "Media" and "Box":
+</p>
+<ul><li> <i>Text</i> — not empty text;</li>
+<li> <i>Media</i> — not empty source image.</li></ul>
+<p>Figure represents a part of the screen with the frame containing the above-listed elements of the form.
 </p>
 <div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_run_formel.png"><img alt="Vision run formel.png" height="255" src="../files/Vision_run_formel.png" width="452" /></a></div></div>
 <p><br />

@@ -70,6 +70,7 @@ class TPrmTempl: public TFunction, public TConfig
 
 	    int  lnkId( const string &nm );
 	    bool lnkPresent( int num );
+	    void lnkList( vector<int> &ls ) const;
 	    virtual void lnkAdd( int num, const SLnk &l );
 	    string lnkAddr( int num, bool spec = false ) const;
 	    void lnkAddrSet( int num, const string &vl, bool spec = false );

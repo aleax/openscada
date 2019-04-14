@@ -1215,12 +1215,12 @@ void WdgView::attrsSet( AttrValS &attrs )
     XMLNode req("set");
     req.setAttr("path", id()+"/%2fserv%2fattr");
     string attrId, attrPos;
-    for(AttrValS::iterator i_a = attrs.begin(); i_a != attrs.end(); i_a++) {
+    for(AttrValS::iterator iA = attrs.begin(); iA != attrs.end(); iA++) {
 	int off = 0;
-	attrId = TSYS::strParse(i_a->first, 0, ":", &off);
-	attrPos = TSYS::strParse(i_a->first, 0, ":", &off);
-	if(!attrId.empty())	req.childAdd("el")->setAttr("id",attrId)->setText(i_a->second);
-	if(!attrPos.empty())	attrSet("", i_a->second, s2i(attrPos));
+	attrId = TSYS::strParse(iA->first, 0, ":", &off);
+	attrPos = TSYS::strParse(iA->first, 0, ":", &off);
+	if(!attrId.empty())	req.childAdd("el")->setAttr("id",attrId)->setText(iA->second);
+	if(!attrPos.empty())	attrSet("", iA->second, s2i(attrPos));
     }
     if(req.childSize())	cntrIfCmd(req);
 }

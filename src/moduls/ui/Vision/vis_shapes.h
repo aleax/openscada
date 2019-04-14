@@ -230,10 +230,11 @@ class ShapeText : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), inHtml(false), geomMargin(0)	{ }
+		ShpDt( ) : en(true), active(true), realAct(false), inHtml(false), geomMargin(0)	{ }
 		//Attributes
 		short	en		:1;
 		short	active		:1;
+		short	realAct		:1;
 		short	inHtml		:1;
 		short	geomMargin	:8;
 		short	bordStyle	:5;
@@ -294,10 +295,11 @@ class ShapeMedia : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(false), geomMargin(0), mediaType(-1), addrWdg(NULL)	{ }
+		ShpDt( ) : en(true), active(false), realActive(false), geomMargin(0), mediaType(-1), addrWdg(NULL)	{ }
 		//Attributes
 		short	en		:1;
 		short	active		:1;
+		short	realActive	:1;
 		short	geomMargin	:8;
 		short	bordStyle	:5;
 		short	mediaType	:3;
@@ -602,9 +604,11 @@ class ShapeBox : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), geomMargin(0), bordStyle(0), inclPg(NULL), inclScrl(NULL)	{ }
+		ShpDt( ) : en(true), active(false), realAct(false), geomMargin(0), bordStyle(0), inclPg(NULL), inclScrl(NULL)	{ }
 		//Attributes
 		short	en		:1;
+		short	active		:1;
+		short	realAct		:1;
 		short	geomMargin	:8;
 		short	bordStyle	:5;
 		QPen		border;

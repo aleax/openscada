@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.1.2"
+#define MOD_VER		"3.1.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -2031,10 +2031,10 @@ TVariant TMdPrm::lnkInput( int num )
     MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end()) return EVAL_REAL;
+    string addrSpec = it->second.addrSpec;
+    res.unlock();
 
-    return it->second.addrSpec.size() ?
-	owner().getVal(it->second.addrSpec, acqErr) :
-	TPrmTempl::Impl::lnkInput(num);
+    return addrSpec.size() ? owner().getVal(addrSpec, acqErr) : TPrmTempl::Impl::lnkInput(num);
 }
 
 bool TMdPrm::lnkOutput( int num, const TVariant &vl )
@@ -2042,9 +2042,10 @@ bool TMdPrm::lnkOutput( int num, const TVariant &vl )
     MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end()) return false;
+    string addrSpec = it->second.addrSpec;
+    res.unlock();
 
-    if(it->second.addrSpec.size())
-	owner().setVal(vl, it->second.addrSpec, acqErr);
+    if(addrSpec.size()) owner().setVal(vl, addrSpec, acqErr);
     else return TPrmTempl::Impl::lnkOutput(num, vl);
 
     return true;

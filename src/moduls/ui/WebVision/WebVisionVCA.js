@@ -621,8 +621,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	    var geomW = parseFloat(this.attrs['geomW']);
 	    var geomH = parseFloat(this.attrs['geomH']);
-	    wx_scale = Math.max(1, window.innerWidth/geomW);
-	    wy_scale = Math.max(1, window.innerHeight/(geomH+(masterPage.status?masterPage.status.height:0)));
+	    if(window.devicePixelRatio && window.devicePixelRatio != 1)	wx_scale = wy_scale = 1;
+	    else {
+		wx_scale = Math.max(1, window.innerWidth/geomW);
+		wy_scale = Math.max(1, window.innerHeight/(geomH+(masterPage.status?masterPage.status.height:0)));
+	    }
 	    if(parseInt(this.attrs['keepAspectRatio']))
 		wx_scale = wy_scale = Math.min(wx_scale, wy_scale);
 
@@ -678,7 +681,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	if(!(parseInt(this.attrs['perm'])&SEC_RD)) {
 	    if(this.pg) {
 		elStyle += 'background-color: #B0B0B0; border: 1px solid black; color: red; overflow: auto; ';
-		this.place.innerHTML = "<div class='vertalign' style='width: "+(geomW-2)+"px; height: "+(geomH-2)+"px;'>Page: '"+this.addr+"'.<br/>View access is no permitted.</div>";
+		this.place.innerHTML = "<div class='vertalign' style='width: "+(geomW-2)+"px; height: "+(geomH-2)+"px;'>Page: '"+this.addr+"'.<br/>View access is not permitted.</div>";
 	    }
 	    isPrim = false;
 	}
@@ -721,6 +724,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	else if(this.attrs['root'] == 'Box') {
 	    if(this == masterPage && this.attrs['tipStatus'].length) { setStatus(this.attrs['tipStatus'],10000); this.attrs['tipStatus'] = ""; }
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
+	    if(elWr && this.attrs['backColor'].length && getColor(this.attrs['backColor'],true)) elStyle += 'cursor: pointer; ';
+
 	    if(!this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) ||
 		    (!this.inclOpen && this.attrs['pgOpenSrc'].length)))
 	    {
@@ -758,6 +763,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	else if(this.attrs['root'] == 'Text') {
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
+	    if(elWr && this.attrs['text'].length && this.attrs['backColor'].length && getColor(this.attrs['backColor'],true)) elStyle += 'cursor: pointer; ';
 	    if(elMargin) { elStyle += 'padding: '+elMargin+'px; '; elMargin = 0; }
 	    //if(parseInt(this.attrs['orient']) == 0) {
 		var txtAlign = parseInt(this.attrs['alignment']);
@@ -821,6 +827,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	else if(this.attrs['root'] == 'Media') {
 	    elStyle += 'border-width: '+this.attrs['bordWidth']+'px; ';
+	    if(elWr && !parseInt(this.attrs['areas']) && this.attrs['src'].length && this.attrs['backColor'].length && getColor(this.attrs['backColor'],true))
+		elStyle += 'cursor: pointer; ';
 	    if(this.place.elWr != elWr || (parseInt(this.attrs['areas']) && this.place.children.length <= 1) ||
 					  (!parseInt(this.attrs['areas']) && this.place.children.length > 1) ||
 					  ((this.attrsMdf["src"] || this.attrsMdf["fit"]) && this.attrs['fit'] != 1))
@@ -885,17 +893,45 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
 
 	    if(this.attrsMdf['font'])	this.place.fontCfg = getFontCond(this.attrs['font'], Math.min(xSc,ySc));
-	    var fntSz = Math.min(geomH,(getFont(this.attrs['font'],Math.min(xSc,ySc),2)*1.4).toFixed(0));
+	    var fntSz = Math.min(geomH, (getFont(this.attrs['font'],Math.min(xSc,ySc),2)*1.4).toFixed(0));
+	    var applySz = Math.max(16, fntSz);
+
+	    // Processing the custom behaviour attributes
+	    bordStyle = backStyle = null;
+	    if(this.attrs['vs_border'])	bordStyle = this.attrs['vs_border'];
+	    if(this.attrs['vs_background']) {	//!!!! Must be moved to a separate function for the transparent background of the included items
+		if((backClr=this.attrs['vs_background'].split(' ')[0]) && (backOp=getColor(backClr,true))) {
+		    if(backOp == 1) {
+			backStyle = 'background-color: '+getColor(backClr)+'; ';
+			if(this.placeTr) this.placeTr.style.cssText = elStyle;
+		    }
+		    else {
+			backStyle = '';
+			if(!this.placeTr) {
+			    this.placeTr = this.place.ownerDocument.createElement('div');
+			    this.place.parentNode.appendChild(this.placeTr);
+			}
+			this.placeTr.style.cssText = elStyle + 'width: ' + geomW + 'px; height: ' + geomH + 'px; background-color: '+getColor(backClr)+'; opacity: '+backOp+"; z-index: "+(parseInt(this.attrs['geomZ'])-1)+"; ";
+		    }
+		}
+		if((backImg=this.attrs['vs_background'].split(' ')[1]))	backStyle = (backStyle?backStyle:'') + 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+backImg+'\'); ';
+	    }
+
+	    var comElMdf = (this.attrs['vs_border'] && this.attrsMdf['vs_border']) || (this.attrs['vs_background'] && this.attrsMdf['vs_background']);
+
 	    switch(elTp) {
 		case 0:	//Line edit
 		    var toInit = !this.place.childNodes.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.childNodes[0];
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-		    if(toInit || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font']) {
-			var geomWint = geomW-4;
+		    if(toInit || comElMdf || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font']) {
+			brdW = (bordStyle?parseInt(bordStyle):1) + 1;
+			var geomWint = geomW - 2*brdW;
 			formObj.className = "LineEd";
-			formObj.style.cssText = 'top: '+((geomH-fntSz)/2)+'px; width: '+geomWint+'px; '+
-						'height: '+(fntSz-2)+'px; font: '+this.place.fontCfg+';';
+			formObj.style.cssText = 'padding: 1px; top: '+((geomH-fntSz)/2)+'px; width: '+geomWint+'px; '+
+						'height: '+(fntSz-brdW)+'px; font: '+this.place.fontCfg+';';
+			formObj.style.cssText += "border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
+			formObj.style.cssText += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');
 		    }
 		    if(formObj.valSet && this.attrsMdf['value']) formObj.valSet(this.attrs['value']);
 		    this.place.view = parseInt(this.attrs['view']);
@@ -1102,16 +1138,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    var posOkImg = this.parentNode.children.length-1;
 			    var okImg = this.parentNode.children[posOkImg];
 			    if(on) {
-				this.style.width = (parseInt(this.style.width)-16)+'px';
+				this.style.width = (parseInt(this.style.width)-applySz)+'px';
 				if(posOkImg == 2)
-				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)-16)+'px';
+				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)-applySz)+'px';
 				okImg.style.visibility = 'visible';
 				this.wdgLnk.perUpdtEn(true); this.clearTm = clearTm;
 			    }
 			    else {
-				this.style.width = (parseInt(this.style.width)+16)+'px';
+				this.style.width = (parseInt(this.style.width)+applySz)+'px';
 				if(posOkImg == 2)
-				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)+16)+'px';
+				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)+applySz)+'px';
 				okImg.style.visibility = 'hidden';
 				this.wdgLnk.perUpdtEn(false); this.clearTm = 0;
 				if(this.cldrDlg) this.onclick();
@@ -1315,17 +1351,23 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var okImg = this.place.ownerDocument.createElement('img');
 		    okImg.className = "ok";
 		    okImg.src = '/'+MOD_ID+'/img_button_ok';
-		    okImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-16)/2)+'px;';
+		    okImg.style.cssText = 'left: '+(geomW-applySz)+'px; top: '+((geomH-applySz)/2)+'px; height: '+applySz+'px; width: '+applySz+'px; ';
 		    okImg.onclick = function() { this.parentNode.childNodes[0].chApply(); return false; };
 		    this.place.appendChild(okImg);
 		    formObj.valSet(this.attrs['value']);
 		    break;
 		case 1:	//Text edit
+		    var fntSz = (getFont(this.attrs['font'],Math.min(xSc,ySc),2)*1.4).toFixed(0);
+		    var applySz = Math.max(16, fntSz);
+
 		    var toInit = !this.place.childNodes.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('textarea') : this.place.childNodes[0];
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-		    if(toInit || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font'])
-			formObj.style.cssText = 'width: '+(geomW-5)+'px; height: '+(geomH-5)+'px; font: '+this.place.fontCfg+'; ';
+		    if(toInit || comElMdf || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font']) {
+			formObj.style.cssText = 'padding: 1px; width: '+(geomW-5)+'px; height: '+(geomH-5)+'px; font: '+this.place.fontCfg+'; ';
+			formObj.style.cssText += "border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
+			formObj.style.cssText += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');
+		    }
 		    if(this.attrsMdf['value']) formObj.saveVal = formObj.value = this.attrs['value'];
 		    if(!toInit) break;
 		    formObj.disabled = !elWr;
@@ -1336,18 +1378,18 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.setModify = function(on) {
 			if(this.modify() == on) return;
 			if(on) {
-			    this.style.height = (parseInt(this.style.height)-16)+'px';
+			    this.style.height = (parseInt(this.style.height)-applySz)+'px';
 			    this.parentNode.childNodes[1].style.visibility = this.parentNode.childNodes[2].style.visibility = 'visible';
 			}
 			else {
-			    this.style.height = (parseInt(this.style.height)+16)+'px';
+			    this.style.height = (parseInt(this.style.height)+applySz)+'px';
 			    this.parentNode.childNodes[1].style.visibility = this.parentNode.childNodes[2].style.visibility = 'hidden';
 			}
 		    }
 		    var okImg = this.place.ownerDocument.createElement('img');
 		    okImg.src = '/'+MOD_ID+'/img_button_ok';
-		    okImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-35)+'px; '+
-					  'top: '+(geomH-16)+'px; width: 16px; height: 16px; cursor: pointer;';
+		    okImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-2*applySz)+'px; '+
+					  'top: '+(geomH-applySz)+'px; width: '+applySz+'px; height: '+applySz+'px; cursor: pointer;';
 		    okImg.onclick = function( ) {
 			var attrs = new Object();
 			attrs.value = this.parentNode.childNodes[0].value; attrs.event = 'ws_TxtAccept';
@@ -1357,7 +1399,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    };
 		    var cancelImg = this.place.ownerDocument.createElement('img');
 		    cancelImg.src = '/'+MOD_ID+'/img_button_cancel';
-		    cancelImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-16)+'px; top: '+(geomH-16)+'px; width: 16px; height: 16px; cursor: pointer;';
+		    cancelImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-applySz)+'px; top: '+(geomH-applySz)+'px; width: '+applySz+'px; height: '+applySz+'px; cursor: pointer;';
 		    cancelImg.onclick = function( ) {
 			this.parentNode.childNodes[0].value = this.parentNode.childNodes[0].saveVal;
 			this.parentNode.childNodes[0].setModify(false);
@@ -1381,7 +1423,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.disabled = !elWr;
 			formObj.wdgLnk = this;
 			formObj.onclick = function( ) {
-			    //console.log(this.addr+": TEST 00: ChkChange="+this.checked);
 			    var attrs = new Object();
 			    attrs.value = this.checked ? '1' : '0';	attrs.event = 'ws_ChkChange';
 			    setWAttrs(this.wdgLnk.addr,attrs);
@@ -1510,9 +1551,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				menuWin = this.ownerDocument.createElement('div');
 				menuWin.id = 'menuwin';
 				menuWin.className = "ItemsTree active";
-				menuWin.treeFont = 'font:'+this.wdgLnk.place.fontCfg+';';
-				if(getFont(this.wdgLnk.attrs['font'],Math.min(this.wdgLnk.xScale(true),this.wdgLnk.yScale(true)),2) > 14)
-				    menuWin.treeFont += "font-size: 14px;"
+				menuWin.treeFont = 'font:'+this.wdgLnk.place.fontCfg+'; ';
 				menuWin.close = function( ) { this.style.visibility = 'hidden'; this.style.top = "-100px"; }
 				menuWin.setList = function(list) {
 				    if(!this.children.length) this.appendChild(getTree());
@@ -1557,10 +1596,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var toInit = !this.place.childNodes.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('select') : this.place.childNodes[0];
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-		    if(toInit || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font'])
-			formObj.style.cssText = 'top: '+((elTp==4)?(geomH-fntSz)/2:0)+'px; '+
-					    'height: '+((elTp==4)?fntSz:(geomH-4))+'px; width: '+geomW+'px; '+
+		    if(toInit || comElMdf || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font']) {
+			formObj.style.cssText = 'padding: 0; top: '+((elTp==4)?(geomH-fntSz)/2:0)+'px; '+
+					    'height: '+((elTp==4)?fntSz:geomH)+'px; width: '+geomW+'px; '+
 					    'font: '+this.place.fontCfg+'; ';
+			formObj.style.cssText += "border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
+			formObj.style.cssText += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');
+		    }
 		    formObj.multiple = parseInt(this.attrs['mult']) ? true : null;
 		    if(this.attrsMdf['items'] || this.attrsMdf['value']) {
 			while(formObj.childNodes.length) formObj.removeChild(formObj.childNodes[0]);
@@ -1609,6 +1651,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    break;
 		case 6: case 7:	//Slider and Scroll bar
 		    isProgr = false;	//(elTp == 7);
+		    var applySz = Math.floor(Math.max(16, Math.min(xSc,ySc)*16));
 		    var toInit = !this.place.children.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.children[0];
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
@@ -1626,8 +1669,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.type = 'range';
 		    formObj.disabled = !elWr;
 		    formObj.wdgLnk = this;
-		    formObj.style.cssText = "width: "+(formObj.vOr?16:(isProgr?geomW-2*16:geomW))+"px; "+
-			"height: "+(formObj.vOr?(isProgr?geomH-2*16:geomH):16)+"px; ";
+		    formObj.style.cssText = "width: "+(formObj.vOr?applySz:(isProgr?geomW-2*applySz:geomW))+"px; "+
+			"height: "+(formObj.vOr?(isProgr?geomH-2*applySz:geomH):applySz)+"px; ";
 		    formObj.onclick = formObj.onkeyup = function( ) {
 			if(this.value == parseInt(this.wdgLnk.attrs['value']))	return;
 			var attrs = new Object();
@@ -1639,21 +1682,22 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    this.place.appendChild(formObj);
 		    break;
 		case 8:	//Tree
+		    elStyle += "border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
+		    elStyle += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');
+		    geomW -= 2; geomH -= 2;
+		    //elStyle += "border: 1px solid gray; padding: 1px; ";
 		    this.place.className += " ItemsTree";
 		    if(elWr) this.place.className += " active";
 		    var toInit = !this.place.children.length;
 		    var formObj = toInit ? getTree() : this.place.children[0];
 		    formObj.wdgLnk = this;
 		    formObj.elWr = elWr;
-		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-		    if(toInit || this.attrsMdf['font']) {
-			formObj.style.cssText = 'font: '+this.place.fontCfg+';';
-			if(getFont(this.attrs['font'],Math.min(xSc,ySc),2) > 14) formObj.style.cssText += "font-size: 14px;"
-		    }
+		    if(toInit || this.attrsMdf['geomZ'])formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+		    if(toInit || this.attrsMdf['font'])	formObj.style.cssText = 'font: '+this.place.fontCfg+'; ';
 		    //Events and the processings init
 		    if(toInit)
 			formObj.select = function(ipath) {
-			    if(!ipath.length) return;
+			    if(!ipath || !ipath.length) return;
 			    attrs = new Object();
 			    attrs.value = ipath;
 			    attrs.event = 'ws_TreeChange';
@@ -1665,6 +1709,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(toInit) this.place.appendChild(formObj);
 		    break;
 		case 9:	//Table
+		    elStyle += "padding: 1px; border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
+		    elStyle += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');
+		    geomW -= 4; geomH -= 4;
 		    this.place.className += " Table";
 		    if(elWr) this.place.className += " active";
 		    var toInit = !this.place.children.length;
@@ -1906,6 +1953,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    break;
 	    }
+
+
+
 	}
 	else if(this.attrs['root'] == 'Diagram') {
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
@@ -2582,10 +2632,11 @@ function getPopup( )
 function getTree( )
 {
     var formObj = document.createElement('ul');
-    formObj.style.cssText += 'font-style: italic;';
     formObj.finish = function(lit, selIt) {
+	this.style.cssText += 'font-style: italic; ';
 	if(selIt && !selIt.length) return false;
 	var cnt = lit ? lit.children[2] : this;
+	imgSz = Math.floor(Math.max(16,parseInt(this.style.fontSize)*1.14));
 	for(var iIt = cnt.children.length-1; iIt >= 0; iIt--) {
 	    var oIt = cnt.children[iIt];
 	    if(selIt) {
@@ -2601,6 +2652,7 @@ function getTree( )
 	    oIt.children[0].src = "/"+MOD_ID+"/img_tree"+
 		(isExpandable?(oIt.itExp?"Minus":"Plus"):"")+
 		"Up"+(oIt!=cnt.lastChild?"Down":"");
+	    oIt.children[0].style = "height: "+imgSz+"px; ";
 	    if(isExpandable) oIt.children[2].style.display = oIt.itExp ? "" : "none";
 	    if(isExpandable) oIt.classList.add("expandable"); else oIt.classList.remove("expandable");
 	    if(selIt && this.mSelIt) return true;
@@ -2645,8 +2697,10 @@ function getTree( )
 		    cur_it.formObj = formObj;
 		}
 	    }
-	    cur_it.classList.add("selectable");
-	    cur_it.itPath = ipath;
+	    if(cur_it) {
+		cur_it.classList.add("selectable");
+		cur_it.itPath = ipath;
+	    }
 	}
 	formObj.finish();
     }
@@ -2683,9 +2737,13 @@ document.body.onmouseup = function(e)
 
 window.onresize = function( ) {
     if(stTmReload) clearTimeout(stTmReload);
-    if(window.innerHeight > document.body.clientHeight ||
-	((document.body.clientHeight-window.innerHeight)/document.body.clientHeight > 0.5 && wy_scale > 1))
-	    stTmReload = setTimeout('window.location.reload()', 1000);
+
+    brwsSc = (window.devicePixelRatio && window.devicePixelRatio != 1);
+
+    if((!brwsSc && (window.innerHeight > document.body.clientHeight ||
+		((document.body.clientHeight-window.innerHeight)/document.body.clientHeight > 0.5 && wy_scale > 1))) ||
+	    (brwsSc && (wy_scale != 1 || wx_scale != 1)))
+	stTmReload = setTimeout('window.location.reload()', 1000);
 }
 
 var modelPer = 0;			//Model proc period

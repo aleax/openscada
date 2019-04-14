@@ -1507,10 +1507,12 @@ string TSYS::strUncompr( const string &in )
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
     strm.opaque = Z_NULL;
+    strm.avail_in = 0;
+    strm.next_in = Z_NULL;
 
     if(in.empty() || inflateInit(&strm) != Z_OK) return "";
 
-    unsigned char out[vmax(100,vmin(((in.size()*2)/10)*10,STR_BUF_LEN))];
+    unsigned char out[fmax(100,fmin((((int)in.size()*2)/10)*10,STR_BUF_LEN))];
 
     strm.avail_in = in.size();
     strm.next_in = (Bytef*)in.data();

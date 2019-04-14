@@ -411,6 +411,13 @@ bool TPrmTempl::Impl::lnkPresent( int num )
     return (it != lnks.end());
 }
 
+void TPrmTempl::Impl::lnkList( vector<int> &ls ) const
+{
+    MtxAlloc res(const_cast<ResMtx&>(lnkRes), true);
+    for(map<int,SLnk>::const_iterator iL = lnks.begin(); iL != lnks.end(); ++iL)
+	ls.push_back(iL->first);
+}
+
 void TPrmTempl::Impl::lnkAdd( int num, const SLnk &l )
 {
     lnkRes.lock();
@@ -440,19 +447,31 @@ bool TPrmTempl::Impl::lnkInit( int num, bool checkNoLink )
     MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
 
-    if(it == lnks.end())	return false;
-    else if(it->second.addr.compare(0,4,"val:") == 0)return true;
-    else if(checkNoLink && !it->second.con.freeStat())	return false;
+    if(it == lnks.end() || it->second.addr.empty() || it->second.addr.compare(0,4,"val:") == 0 || (checkNoLink && !it->second.con.freeStat()))
+	return false;
+    it->second.con.free();
+    it->second.objOff = 0;
+    string addr = it->second.addr, aAddr;
+    res.unlock();
+
+    AutoHD<TVal> con;
+    int objOff = 0;
     try {
-	it->second.con.free();
-	it->second.objOff = 0;
-	it->second.con = SYS->daq().at().attrAt(TSYS::strParse(it->second.addr,0,"#",&it->second.objOff), '.', true);
-	if(!it->second.con.freeStat()) {
-	    if(it->second.con.at().fld().type() == TFld::Object && it->second.objOff < (int)it->second.addr.size())
-		setS(it->first, it->second.con.at().getO().at().propGet(it->second.addr.substr(it->second.objOff),'.'));
-	    else setS(it->first, it->second.con.at().getS());
-	} else return true;
+	con = SYS->daq().at().attrAt((aAddr=TSYS::strParse(addr,0,"#",&objOff)), '.', true);
+	if(!con.freeStat()) {
+	    if(con.at().fld().type() == TFld::Object && objOff < (int)addr.size())
+		setS(num, con.at().getO().at().propGet(addr.substr(objOff),'.'));
+	    else setS(num, con.at().getS());
+	}
+	else if(!SYS->daq().at().prmAt(aAddr,'.',true).freeStat()) return false;	//just a parameter
+	else return true;
     } catch(TError &err) { return true; }
+
+    //Set the connection result
+    res.lock();
+    if((it=lnks.find(num)) == lnks.end() || it->second.addr.compare(0,4,"val:") == 0)	return false;
+    it->second.con = con;
+    it->second.objOff = objOff;
 
     return false;
 }
@@ -470,11 +489,17 @@ TVariant TPrmTempl::Impl::lnkInput( int num )
     map<int,SLnk>::iterator it = lnks.find(num);
 
     if(it == lnks.end())	return EVAL_REAL;
-    else if(it->second.addr.compare(0,4,"val:") == 0)	return it->second.addr.substr(4);
-    else if(it->second.con.freeStat()) return EVAL_REAL;
-    else if(it->second.con.at().fld().type() == TFld::Object && it->second.objOff < (int)it->second.addr.size())
-	return it->second.con.at().getO().at().propGet(it->second.addr.substr(it->second.objOff),'.');
-    else return it->second.con.at().get();
+    if(it->second.addr.compare(0,4,"val:") == 0)return it->second.addr.substr(4);
+    if(it->second.con.freeStat())		return EVAL_REAL;
+    AutoHD<TVal> con = it->second.con;
+    int objOff = it->second.objOff;
+    string addr = it->second.addr;
+    res.unlock();
+
+    if(con.at().fld().type() == TFld::Object && objOff < (int)addr.size())
+	return con.at().getO().at().propGet(addr.substr(objOff),'.');
+
+    return con.at().get();
 }
 
 bool TPrmTempl::Impl::lnkOutput( int num, const TVariant &vl )
@@ -485,11 +510,15 @@ bool TPrmTempl::Impl::lnkOutput( int num, const TVariant &vl )
     if(it == lnks.end() || it->second.con.freeStat() || (it->second.con.at().fld().flg()&TFld::NoWrite) ||
 	    !(ioFlg(num)&(IO::Output|IO::Return)))
 	return false;
-    if(it->second.con.at().fld().type() == TFld::Object && it->second.objOff < (int)it->second.addr.size()) {
-	it->second.con.at().getO().at().propSet(it->second.addr.substr(it->second.objOff), '.', vl);
-	it->second.con.at().setO(it->second.con.at().getO());	//For modify object sign
-    }
-    else it->second.con.at().set(vl);
+    AutoHD<TVal> con = it->second.con;
+    int objOff = it->second.objOff;
+    string addr = it->second.addr;
+    res.unlock();
+
+    if(con.at().fld().type() == TFld::Object && objOff < (int)addr.size()) {
+	con.at().getO().at().propSet(addr.substr(objOff), '.', vl);
+	con.at().setO(con.at().getO());	//For the modifying object sign
+    } else con.at().set(vl);
 
     return true;
 }
@@ -498,7 +527,7 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
 {
     map<string, bool> als;
 
-    MtxAlloc res(lnkRes, true);
+    //MtxAlloc res(lnkRes, true);	//!!!! There is not a direct access to links
     for(int iIO = 0; iIO < func()->ioSize(); iIO++) {
 	if((func()->io(iIO)->flg()&TPrmTempl::CfgLink) && !lnkPresent(iIO)) {
 	    lnkAdd(iIO, TPrmTempl::Impl::SLnk());
@@ -546,10 +575,12 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
 
 bool TPrmTempl::Impl::initLnks( bool checkNoLink )
 {
-    MtxAlloc res(lnkRes, true);
+    vector<int> ls;
     bool chkLnkNeed = false;
-    for(map<int,SLnk>::iterator iL = lnks.begin(); iL != lnks.end(); ++iL)
-	if(lnkInit(iL->first,checkNoLink)) chkLnkNeed = true;
+
+    lnkList(ls);
+    for(int iL = 0; iL < ls.size(); ++iL)
+	if(lnkInit(ls[iL],checkNoLink)) chkLnkNeed = true;
 
     return chkLnkNeed;
 }
@@ -564,16 +595,18 @@ void TPrmTempl::Impl::cleanLnks( bool andFunc )
 
 void TPrmTempl::Impl::inputLinks( )
 {
-    MtxAlloc res(lnkRes, true);
-    for(map<int,SLnk>::iterator iL = lnks.begin(); iL != lnks.end(); ++iL)
-	set(iL->first, lnkInput(iL->first));
+    vector<int> ls;
+    lnkList(ls);
+    for(int iL = 0; iL < ls.size(); ++iL)
+	set(ls[iL], lnkInput(ls[iL]));
 }
 
 void TPrmTempl::Impl::outputLinks( )
 {
-    MtxAlloc res(lnkRes, true);
-    for(map<int,SLnk>::iterator iL = lnks.begin(); iL != lnks.end(); ++iL)
-	if(ioMdf(iL->first)) lnkOutput(iL->first, get(iL->first));
+    vector<int> ls;
+    lnkList(ls);
+    for(int iL = 0; iL < ls.size(); ++iL)
+	if(ioMdf(ls[iL])) lnkOutput(ls[iL], get(ls[iL]));
 }
 
 bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )

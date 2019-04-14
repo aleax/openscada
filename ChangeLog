@@ -1,3 +1,25 @@
+2019-04-14 Roman (stable)
+- !!:DB.LibsDB.vcaBase: cntrRegul.trnd: The trends width increased to 2 pixels.
+    Main.{doc_panel,grph_panel}: Expanded for the begin time, calculated from and to the depth.
+    Main.RootPgSo: Set to not active to disable the activity cursor.
+    Main.graphSelPrm: The DAQ items expanded for information of the controller object name.
+    Main.{TextLab,ImgLab}: Expanded for the activity cursor support.
+- !!:DAQ,DAQ.{ModBus,Siemens}: TPrmTempl::Impl is set optimal in the links lock control, moving out most external calls,
+    the locking problem detected on high loaded ModBus and DAQGate activities.
+- SYS: The decompression function some appended for the initialization.
+- UI.VCAEngine: Expanded for reading the visualiser specific attributes in the developing mode.
+- !:UI.{Vision,WebVision}: The primitives "Text", "Media" and "Box" expanded to display the activity cursor.
+- UI.{Vision,WebVision}: Some views of the primitive "FormEl" (Line edit, Text edit, Combo box, List, Tree, Table) expanded for custom background and border by
+    the visualiser specific attributes "vs_background", "vs_border".
+- FIX:UI.WebCfgD: The tables help in cells is fixed.
+- !!:FIX:UI.WebVision: The built-in scaling mode set to use-enable in relation from window.devicePixelRatio equal to 1.
+    FIX: Some original messages are fixed.
+    FIX: The view "Tree" of the primitive "FormEl" appended to scale the control tree images, fixed for the default italic style of the font,
+	fixed in processing wrong current values.
+    FIX: The view "Tree" and "Table" are fixed for true counting the border width and padding in the result geometry.
+    The FormEl apply button set for adaptive from the built-in scale rate.
+
+
 2019-04-07 Roman (stable)
 - !!:FIX:Archive.DBArch: Fixed to remove the archives group tables at removing the archiver.
     !!:Adapted to work in the only direct archive writing mode on the archives group mode for updating the meta at writing.
