@@ -1,3 +1,9 @@
+2019-04-22 Roman (stable)
+- !!!:FIX:SYS: The function nodeDis() waiting fixed for zero time and the function chldDel() set to no waiting by default.
+- SYS: The standard waiting time decreased to 5 seconds (from 10) and the standard interface waiting time set slightly more, that is 7 seconds.
+- !!:FIX:DAQ.LogicLev: Prevented from crashing at switching between the two types of the parameters, calling calc() only for the standard type.
+
+
 2019-04-14 Roman (stable)
 - !!:DB.LibsDB.vcaBase: cntrRegul.trnd: The trends width increased to 2 pixels.
     Main.{doc_panel,grph_panel}: Expanded for the begin time, calculated from and to the depth.
@@ -318,7 +324,7 @@
 - !:SYS:data/openscada.spec: Appended for the separate packages openscada-plc and openscada-server of the daemon mode executing.
 - !!:SYS.TCntrNode,DAQ,DAQ.JavaLikeCalc: Appended by the function load__() to treat some doings in the loading end.
     DAQ: Fixed for the early starting of the template libraries, really after the whole loading and after the DAQ.JavaLikeCalc functions.
-- !!!!:SYS,TConfig,Security,DB.SQLite,UI.QTCfg: The function strEncode() appended by the variant "Limit" to limit the string size counting for variability of UTF-8.
+- !!!!:SYS,TConfig,Security,DB.SQLite,UI.QTCfg: The function strEncode() appended by the variant "Limit" to limit the string size counting for the UTF-8 variability.
     SYS: The special function strMess() with such limit is removed.
     !!:TConfig: The key fields appended for their size limiting before cutting on the DB side.
     !!!!:DB,Security,Transports,DAQ,Archive,DAQ.{BlockCalc},Protocol.{ModBus,OPC_UA,UserProtocol},UI.{VCAEngine,WebUser}:

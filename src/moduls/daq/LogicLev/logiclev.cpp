@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.10.0"
+#define MOD_VER		"2.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -434,7 +434,7 @@ void TMdPrm::enable( )
 	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
-    if(isFullEn && owner().startStat()) calc(true, false, 0);
+    if(isStd() && isFullEn && owner().startStat()) calc(true, false, 0);
     if(isFullEn) owner().prmEn(this, true);
 }
 
@@ -444,10 +444,11 @@ void TMdPrm::disable( )
 
     owner().prmEn(this, false);
 
-    if(owner().startStat()) calc(false, true, 0);
-
     if(isPRefl() && prmRefl) prmRefl->free();
-    else if(isStd() && tmpl) tmpl->cleanLnks(true);
+    else if(isStd() && tmpl) {
+	if(owner().startStat()) calc(false, true, 0);
+	tmpl->cleanLnks(true);
+    }
 
     idFreq = idStart = idStop = idErr = -1;
 

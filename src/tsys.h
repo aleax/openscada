@@ -38,8 +38,8 @@
 #define NSTR_BUF_LEN	100	// Length of string buffers for number
 #define STD_WAIT_DELAY	100	// Standard wait dalay (ms)
 #define STD_CACHE_LIM	100	// Standard caches limit
-#define STD_WAIT_TM	10	// Standard timeouts length (s), and interface wait for long
-#define STD_INTERF_TM	5	// Interface wait for long (s)
+#define STD_WAIT_TM	5	// Standard timeouts length (s), and interface wait for long
+#define STD_INTERF_TM	7	// Interface wait for long (s)
 #define BUF_ARCH_NM	"<buffer>"
 #define ALRM_ARCH_NM	"<alarms>"
 #define DB_CFG		"<cfg>"

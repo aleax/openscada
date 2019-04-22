@@ -551,8 +551,8 @@ void *TMdContr::Task( void *icntr )
 		    }
 
 		    //Result process
-		    for(unsigned i_r = 0; i_r < req.childSize(); ++i_r) {
-			XMLNode *prmNd = req.childGet(i_r);
+		    for(unsigned iR = 0; iR < req.childSize(); ++iR) {
+			XMLNode *prmNd = req.childGet(iR);
 			if(s2i(prmNd->attr("err"))) continue;
 			string aMod	= TSYS::pathLev(prmNd->attr("path"), 0);
 			string aCntr	= TSYS::pathLev(prmNd->attr("path"), 1);

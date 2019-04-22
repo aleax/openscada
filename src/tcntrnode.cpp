@@ -291,7 +291,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 	MtxAlloc res1(dataRes(), true);		//!! Added to prevent a possible attach and it next disable and free the node, by mUse control
 	while(mUse > 1) {
 	    // Check timeout
-	    if(tm && time(NULL) > (t_cur+tm)) {
+	    if(/*tm &&*/ time(NULL) >= (t_cur+tm)) {
 		if(!TSYS::finalKill)
 		    throw err_sys(_("Waiting time exceeded. The object is used by %d users. Release the object first!"), mUse-1);
 		mess_sys(TMess::Error, _("Error blocking node.\n"
@@ -550,7 +550,7 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )
     if(nodeMode() == DoEnable) throw err_sys(_("Node is being processed now for enable!"));
 
     if(SYS->stopSignal())	tm = STD_WAIT_TM*5;
-    else if(tm < 0)		tm = STD_WAIT_TM;
+    else if(tm < 0)		tm = 0;	//STD_WAIT_TM;	//Do not wait anything by default
 
     AutoHD<TCntrNode> chN = chldAt(igr, name);
     if(chN.at().nodeMode() == Enabled) chN.at().nodeDis(tm, (flag<<8));
